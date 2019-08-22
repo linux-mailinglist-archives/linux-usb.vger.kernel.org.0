@@ -2,999 +2,1214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FFC98921
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 03:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D80989D4
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 05:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730765AbfHVBxE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Aug 2019 21:53:04 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:40888 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729940AbfHVBxE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Aug 2019 21:53:04 -0400
-Received: by mail-pl1-f193.google.com with SMTP id h3so2417252pls.7;
-        Wed, 21 Aug 2019 18:53:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=JBVuQQs1DCAGQLaxxm5M6UXdYI2JQwq1r4bAW/YTarU=;
-        b=suB1yddZ/LGhEoHvhl3ab3ozpTJ3YXXAA/J+ACUn8JkMKSqurhIN6sJiIeUsh565hm
-         +T+c6TNTob3hGKz4a1OThyDR0+aosDSevyrnOalaHLiiO4JOfAp5cTtzOto8iOgY7atO
-         8YxihojNdxFLHH6w0ZjqRRGbtX1ZuUewUpPZjWYiXIOZzUIvrpAHKXzR2JWZ2AV286Nu
-         slI/JTe2CxhkzfVmgsQWlk9HeaUmrtSmhl3XSP8pe59ElmvqQlBrFpW9LUKwNmOd6LBN
-         +UUSoeSQ2TTjFjOwVhzDRPPII/h80x0qOv9YzL+1I/i5qP18bLBcRF5TZxYpT5qxSLtL
-         splg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=JBVuQQs1DCAGQLaxxm5M6UXdYI2JQwq1r4bAW/YTarU=;
-        b=isuimu0yrfcLmWQUdCFcTR+IZkb4NU/FSENL4CqurDP4VgbXyMRd4YSvZn7asR2/he
-         qI62NJxhIbMeicUe5HJKI9W4sUnF2tkJiReDjLwg+91w0oc7NCEn7GUeurZYOLoKwesC
-         D3gBDIE8KT/lG+OZM7mtfbbFXMe7qymGW8LnE3HECFtqWD4ZrQM2a0Iy4vChh3Wvet0b
-         JfJPWzKeZaVOAPh2z4uRLRWk7DM5LBzAz4okn8A5rmoWGDx0CfilRxpuZCcbfWsi5oh7
-         ZkMG5UHQGqYbTGv5rj8uhu/+p/9d0gMWdNyg3DbjyHA9WxrIyOz7fqFJ3sNYRadIaUy6
-         RRUw==
-X-Gm-Message-State: APjAAAWrl4CGJAf1RMnne0BsRdDktlvUqGIisVJIDephvmeOvmUJ2m6R
-        02Ho2ykRD/YwfsDMwOlpcmDM4P4v
-X-Google-Smtp-Source: APXvYqxKkeKcIuEfXcP1CUyznnczk38CrXg9Zun/Nbw0HHLCfxitOLbdxRRlx+gJsVWPUn05nFVveA==
-X-Received: by 2002:a17:902:7108:: with SMTP id a8mr5868200pll.1.1566438782497;
-        Wed, 21 Aug 2019 18:53:02 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id q4sm32111190pff.183.2019.08.21.18.52.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2019 18:53:01 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 10:52:57 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] usbip: Implement SG support to vhci-hcd and stub
- driver
-Message-ID: <20190822015257.GA4346@localhost.localdomain>
-References: <20190808155435.10050-1-suwan.kim027@gmail.com>
- <20190808155435.10050-3-suwan.kim027@gmail.com>
- <d7377b4f-b5c7-13e4-2107-c9170f312ddf@kernel.org>
+        id S1728188AbfHVD2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Aug 2019 23:28:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45992 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727894AbfHVD2t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Aug 2019 23:28:49 -0400
+Received: from zzz.localdomain (unknown [67.218.105.90])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 500C622CF7;
+        Thu, 22 Aug 2019 03:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566444523;
+        bh=FM7SfHohX1wFbU59vqF35HXu1pL/7oqEVJjkP7iHoyc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gG2sibjTXcRkNaLNCZIXYxc8wP+0yspmOpxAQbVNdOPf63QZ3gVGGM/hHYCveB8AL
+         PWCV0iSgWsUodZYzZId5c/pNYMdePZotek/5LiU3l0ocRp/OhdqzjODUZ5OHpyNuPC
+         q4UyWrsQmMaaQhEi9a6mS90q8VZxzlZD12NNP2Cg=
+Date:   Wed, 21 Aug 2019 20:28:41 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Reminder: 52 active syzbot reports in usb subsystem
+Message-ID: <20190822032841.GC6111@zzz.localdomain>
+Mail-Followup-To: linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d7377b4f-b5c7-13e4-2107-c9170f312ddf@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 10:21:42AM -0600, shuah wrote:
-> On 8/8/19 9:54 AM, Suwan Kim wrote:
-> > There are bugs on vhci with usb 3.0 storage device. In USB, each SG
-> > list entry buffer should be divisible by the bulk max packet size.
-> > But with native SG support, this problem doesn't matter because the
-> > SG buffer is treated as contiguous buffer. But without native SG
-> > support, USB storage driver breaks SG list into several URBs and the
-> > error occurs because of a buffer size of URB that cannot be divided
-> > by the bulk max packet size. The error situation is as follows.
-> > 
-> > When USB Storage driver requests 31.5 KB data and has SG list which
-> > has 3584 bytes buffer followed by 7 4096 bytes buffer for some
-> > reason. USB Storage driver splits this SG list into several URBs
-> > because VHCI doesn't support SG and sends them separately. So the
-> > first URB buffer size is 3584 bytes. When receiving data from device,
-> > USB 3.0 device sends data packet of 1024 bytes size because the max
-> > packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
-> > But the first URB buffer has only 3584 bytes buffer size. So host
-> > controller terminates the transfer even though there is more data to
-> > receive. So, vhci needs to support SG transfer to prevent this error.
-> > 
-> > In this patch, vhci supports SG regardless of whether the server's
-> > host controller supports SG or not, because stub driver splits SG
-> > list into several URBs if the server's host controller doesn't
-> > support SG.
-> > 
-> > To support SG, vhci_map_urb_for_dma() sets URB_DMA_MAP_SG flag in
-> > urb->transfer_flags if URB has SG list and this flag will tell stub
-> > driver to use SG list.
-> > 
-> > vhci sends each SG list entry to stub driver. Then, stub driver sees
-> > the total length of the buffer and allocates SG table and pages
-> > according to the total buffer length calling sgl_alloc(). After stub
-> > driver receives completed URB, it again sends each SG list entry to
-> > vhci.
-> > 
-> > If the server's host controller doesn't support SG, stub driver
-> > breaks a single SG request into several URBs and submits them to
-> > the server's host controller. When all the split URBs are completed,
-> > stub driver reassembles the URBs into a single return command and
-> > sends it to vhci.
-> > 
-> > Moreover, in the situation where vhci supports SG, but stub driver
-> > does not, or vice versa, usbip works normally. Because there is no
-> > protocol modification, there is no problem in communication between
-> > server and client even if the one has a kernel without SG support.
-> > 
-> > In the case of vhci supports SG and stub driver doesn't, because
-> > vhci sends only the total length of the buffer to stub driver as
-> > it did before the patch applied, stub driver only needs to allocate
-> > the required length of buffers using only kmalloc() regardless of
-> > whether vhci supports SG or not. But stub driver has to allocate
-> > buffer with kmalloc() as much as the total length of SG buffer which
-> > is quite huge when vhci sends SG request, so it has overhead in
-> > buffer allocation in this situation.
-> > 
-> > If stub driver needs to send data buffer to vhci because of IN pipe,
-> > stub driver also sends only total length of buffer as metadata and
-> > then sends real data as vhci does. Then vhci receive data from stub
-> > driver and store it to the corresponding buffer of SG list entry.
-> > 
-> > And for the case of stub driver supports SG and vhci doesn't, since
-> > the USB storage driver checks that vhci doesn't support SG and sends
-> > the request to stub driver by splitting the SG list into multiple
-> > URBs, stub driver allocates a buffer for each URB with kmalloc() as
-> > it did before this patch.
-> > 
-> > * Test environment
-> > 
-> > Test uses two difference machines and two different kernel version
-> > to make mismatch situation between the client and the server where
-> > vhci supports SG, but stub driver does not, or vice versa. All tests
-> > are conducted in both full SG support that both vhci and stub support
-> > SG and half SG support that is the mismatch situation.
-> > 
-> >   - Test kernel version
-> >      - 5.2-rc6 with SG support
-> >      - 5.1.20-200.fc29.x86_64 without SG support
-> > 
-> > * SG support test
-> > 
-> >   - Test devices
-> >      - Super-speed storage device - SanDisk Ultra USB 3.0
-> >      - High-speed storage device - SMI corporation USB 2.0 flash drive
-> > 
-> >   - Test description
-> > 
-> > Test read and write operation of mass storage device that uses the
-> > BULK transfer. In test, the client reads and writes files whose size
-> > is over 1G and it works normally.
-> > 
-> > * Regression test
-> > 
-> >   - Test devices
-> >      - Super-speed device - Logitech Brio webcam
-> >      - High-speed device - Logitech C920 HD Pro webcam
-> >      - Full-speed device - Logitech bluetooth mouse
-> >                          - Britz BR-Orion speaker
-> >      - Low-speed device - Logitech wired mouse
-> > 
-> >   - Test description
-> > 
-> > Moving and click test for mouse. To test the webcam, use gnome-cheese.
-> > To test the speaker, play music and video on the client. All works
-> > normally.
-> > 
-> > * VUDC compatibility test
-> > 
-> > VUDC also works well with this patch. Tests are done with two USB
-> > gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
-> > 
-> >          1. Serial gadget
-> >          2. Mass storage gadget
-> > 
-> >   - Serial gadget test
-> > 
-> > Serial gadget on the host sends and receives data using cat command
-> > on the /dev/ttyGS<N>. The client uses minicom to communicate with
-> > the serial gadget.
-> > 
-> >   - Mass storage gadget test
-> > 
-> > After connecting the gadget with vhci, use "dd" to test read and
-> > write operation on the client side.
-> > 
-> > Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
-> > Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
-> > 
-> 
-> Thanks for including the detailed test description.
-> 
-> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > ---
-> > v4 - v5
-> > - Add the test description about SG support test and regression test
-> >    for other USB devices which have various speed.
-> > - Fix list_del() error in stub_device_cleanup_urbs()
-> >    - when stub_device_cleanup_urbs() calls stub_pirv_pop() to get a
-> >    stub_priv, stub_priv_pop() uses list_del_init() instead of
-> >    list_del(). After getting the stub_priv, stub_device_cleanup_urbs()
-> >    calls stub_free_priv_and_urb() and it checks if list of the
-> >    stub_priv is empty. Because stub_priv_pop() calls list_del_init(),
-> >    stub_free_priv_and_urb() doesn't call list_del()
-> > 
-> > v3 - v4
-> > - Rewrite the description about the vhci bug with USB 3.0 storage
-> >    device.
-> > - Add the description about the test with VUDC.
-> > - Fix the error message in stub_recv_cmd_unlink().
-> > 
-> > v2 - v3
-> > - Rewrite the commit log to make it more clear.
-> > - Add the description about the mismatch situation in commit log.
-> > - Run chechpatch.pl and fix errors with coding style and typos.
-> > - Fix the error path of usbip_recv_xbuff() to stop receiving data
-> >    after TCP error occurs.
-> > - Consolidate the duplicated error path in usbip_recv_xbuff() and
-> >    vhci_send_cmd_submit().
-> > - Undo the unnecessary changes
-> >    * Undo the deletion of empty line in stub_send_ret_submit()
-> >    * Move memset() lines in stub_send_ret_submit() to the original
-> >      position.
-> > 
-> > v1 - v2
-> > - Add the logic that splits single SG request into several URBs in
-> >    stub driver if server’s HC doesn’t support SG.
-> > ---
-> >   drivers/usb/usbip/stub.h         |   7 +-
-> >   drivers/usb/usbip/stub_main.c    |  57 ++++++---
-> >   drivers/usb/usbip/stub_rx.c      | 204 ++++++++++++++++++++++---------
-> >   drivers/usb/usbip/stub_tx.c      |  99 +++++++++++----
-> >   drivers/usb/usbip/usbip_common.c |  59 ++++++---
-> >   drivers/usb/usbip/vhci_hcd.c     |  15 ++-
-> >   drivers/usb/usbip/vhci_tx.c      |  63 ++++++++--
-> >   7 files changed, 377 insertions(+), 127 deletions(-)
-> > 
-> > diff --git a/drivers/usb/usbip/stub.h b/drivers/usb/usbip/stub.h
-> > index 35618ceb2791..d11270560c24 100644
-> > --- a/drivers/usb/usbip/stub.h
-> > +++ b/drivers/usb/usbip/stub.h
-> > @@ -52,7 +52,11 @@ struct stub_priv {
-> >   	unsigned long seqnum;
-> >   	struct list_head list;
-> >   	struct stub_device *sdev;
-> > -	struct urb *urb;
-> > +	struct urb **urbs;
-> > +	struct scatterlist *sgl;
-> > +	int num_urbs;
-> > +	int completed_urbs;
-> > +	int urb_status;
-> >   	int unlinking;
-> >   };
-> > @@ -86,6 +90,7 @@ extern struct usb_device_driver stub_driver;
-> >   struct bus_id_priv *get_busid_priv(const char *busid);
-> >   void put_busid_priv(struct bus_id_priv *bid);
-> >   int del_match_busid(char *busid);
-> > +void stub_free_priv_and_urb(struct stub_priv *priv);
-> >   void stub_device_cleanup_urbs(struct stub_device *sdev);
-> >   /* stub_rx.c */
-> > diff --git a/drivers/usb/usbip/stub_main.c b/drivers/usb/usbip/stub_main.c
-> > index 2e4bfccd4bfc..c1c0bbc9f8b1 100644
-> > --- a/drivers/usb/usbip/stub_main.c
-> > +++ b/drivers/usb/usbip/stub_main.c
-> > @@ -6,6 +6,7 @@
-> >   #include <linux/string.h>
-> >   #include <linux/module.h>
-> >   #include <linux/device.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "stub.h"
-> > @@ -281,13 +282,49 @@ static struct stub_priv *stub_priv_pop_from_listhead(struct list_head *listhead)
-> >   	struct stub_priv *priv, *tmp;
-> >   	list_for_each_entry_safe(priv, tmp, listhead, list) {
-> > -		list_del(&priv->list);
-> > +		list_del_init(&priv->list);
-> >   		return priv;
-> >   	}
-> >   	return NULL;
-> >   }
-> > +void stub_free_priv_and_urb(struct stub_priv *priv)
-> > +{
-> > +	struct urb *urb;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < priv->num_urbs; i++) {
-> > +		urb = priv->urbs[i];
-> > +
-> > +		if (!urb)
-> > +			return;
-> > +
-> > +		kfree(urb->setup_packet);
-> > +		urb->setup_packet = NULL;
-> > +
-> > +
-> > +		if (urb->transfer_buffer && !priv->sgl) {
-> > +			kfree(urb->transfer_buffer);
-> > +			urb->transfer_buffer = NULL;
-> > +		}
-> > +
-> > +		if (urb->num_sgs) {
-> > +			sgl_free(urb->sg);
-> > +			urb->sg = NULL;
-> > +			urb->num_sgs = 0;
-> > +		}
-> > +
-> > +		usb_free_urb(urb);
-> > +	}
-> > +	if (!list_empty(&priv->list))
-> > +		list_del(&priv->list);
-> > +	if (priv->sgl)
-> > +		sgl_free(priv->sgl);
-> > +	kfree(priv->urbs);
-> > +	kmem_cache_free(stub_priv_cache, priv);
-> > +}
-> > +
-> >   static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
-> >   {
-> >   	unsigned long flags;
-> > @@ -314,25 +351,15 @@ static struct stub_priv *stub_priv_pop(struct stub_device *sdev)
-> >   void stub_device_cleanup_urbs(struct stub_device *sdev)
-> >   {
-> >   	struct stub_priv *priv;
-> > -	struct urb *urb;
-> > +	int i;
-> >   	dev_dbg(&sdev->udev->dev, "Stub device cleaning up urbs\n");
-> >   	while ((priv = stub_priv_pop(sdev))) {
-> > -		urb = priv->urb;
-> > -		dev_dbg(&sdev->udev->dev, "free urb seqnum %lu\n",
-> > -			priv->seqnum);
-> > -		usb_kill_urb(urb);
-> > -
-> > -		kmem_cache_free(stub_priv_cache, priv);
-> > +		for (i = 0; i < priv->num_urbs; i++)
-> > +			usb_kill_urb(priv->urbs[i]);
-> > -		kfree(urb->transfer_buffer);
-> > -		urb->transfer_buffer = NULL;
-> > -
-> > -		kfree(urb->setup_packet);
-> > -		urb->setup_packet = NULL;
-> > -
-> > -		usb_free_urb(urb);
-> > +		stub_free_priv_and_urb(priv);
-> >   	}
-> >   }
-> > diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> > index b0a855acafa3..66edfeea68fe 100644
-> > --- a/drivers/usb/usbip/stub_rx.c
-> > +++ b/drivers/usb/usbip/stub_rx.c
-> > @@ -7,6 +7,7 @@
-> >   #include <linux/kthread.h>
-> >   #include <linux/usb.h>
-> >   #include <linux/usb/hcd.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "stub.h"
-> > @@ -201,7 +202,7 @@ static void tweak_special_requests(struct urb *urb)
-> >   static int stub_recv_cmd_unlink(struct stub_device *sdev,
-> >   				struct usbip_header *pdu)
-> >   {
-> > -	int ret;
-> > +	int ret, i;
-> >   	unsigned long flags;
-> >   	struct stub_priv *priv;
-> > @@ -246,12 +247,14 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
-> >   		 * so a driver in a client host will know the failure
-> >   		 * of the unlink request ?
-> >   		 */
-> > -		ret = usb_unlink_urb(priv->urb);
-> > -		if (ret != -EINPROGRESS)
-> > -			dev_err(&priv->urb->dev->dev,
-> > -				"failed to unlink a urb # %lu, ret %d\n",
-> > -				priv->seqnum, ret);
-> > -
-> > +		for (i = priv->completed_urbs; i < priv->num_urbs; i++) {
-> > +			ret = usb_unlink_urb(priv->urbs[i]);
-> > +			if (ret != -EINPROGRESS)
-> > +				dev_err(&priv->urbs[i]->dev->dev,
-> > +					"failed to unlink %d/%d urb of seqnum %lu, ret %d\n",
-> > +					i + 1, priv->num_urbs,
-> > +					priv->seqnum, ret);
-> > +		}
-> >   		return 0;
-> >   	}
-> > @@ -433,14 +436,36 @@ static void masking_bogus_flags(struct urb *urb)
-> >   	urb->transfer_flags &= allowed;
-> >   }
-> > +static int stub_recv_xbuff(struct usbip_device *ud, struct stub_priv *priv)
-> > +{
-> > +	int ret;
-> > +	int i;
-> > +
-> > +	for (i = 0; i < priv->num_urbs; i++) {
-> > +		ret = usbip_recv_xbuff(ud, priv->urbs[i]);
-> > +		if (ret < 0)
-> > +			break;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >   static void stub_recv_cmd_submit(struct stub_device *sdev,
-> >   				 struct usbip_header *pdu)
-> >   {
-> > -	int ret;
-> >   	struct stub_priv *priv;
-> >   	struct usbip_device *ud = &sdev->ud;
-> >   	struct usb_device *udev = sdev->udev;
-> > +	struct scatterlist *sgl = NULL, *sg;
-> > +	void *buffer = NULL;
-> > +	unsigned long long buf_len;
-> > +	int nents;
-> > +	int num_urbs = 1;
-> >   	int pipe = get_pipe(sdev, pdu);
-> > +	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
-> > +	int support_sg = 1;
-> > +	int np = 0;
-> > +	int ret, i;
-> >   	if (pipe == -1)
-> >   		return;
-> > @@ -449,76 +474,139 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
-> >   	if (!priv)
-> >   		return;
-> > -	/* setup a urb */
-> > -	if (usb_pipeisoc(pipe))
-> > -		priv->urb = usb_alloc_urb(pdu->u.cmd_submit.number_of_packets,
-> > -					  GFP_KERNEL);
-> > -	else
-> > -		priv->urb = usb_alloc_urb(0, GFP_KERNEL);
-> > +	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
-> > -	if (!priv->urb) {
-> > -		usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
-> > -		return;
-> > +	/* allocate urb transfer buffer, if needed */
-> > +	if (buf_len) {
-> > +		if (use_sg) {
-> > +			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
-> > +			if (!sgl)
-> > +				goto err_malloc;
-> > +		} else {
-> > +			buffer = kzalloc(buf_len, GFP_KERNEL);
-> > +			if (!buffer)
-> > +				goto err_malloc;
-> > +		}
-> >   	}
-> > -	/* allocate urb transfer buffer, if needed */
-> > -	if (pdu->u.cmd_submit.transfer_buffer_length > 0) {
-> > -		priv->urb->transfer_buffer =
-> > -			kzalloc(pdu->u.cmd_submit.transfer_buffer_length,
-> > -				GFP_KERNEL);
-> > -		if (!priv->urb->transfer_buffer) {
-> > +	/* Check if the server's HCD supports SG */
-> > +	if (use_sg && !udev->bus->sg_tablesize) {
-> > +		/*
-> > +		 * If the server's HCD doesn't support SG, break a single SG
-> > +		 * request into several URBs and map each SG list entry to
-> > +		 * corresponding URB buffer. The previously allocated SG
-> > +		 * list is stored in priv->sgl (If the server's HCD support SG,
-> > +		 * SG list is stored only in urb->sg) and it is used as an
-> > +		 * indicator that the server split single SG request into
-> > +		 * several URBs. Later, priv->sgl is used by stub_complete() and
-> > +		 * stub_send_ret_submit() to reassemble the divied URBs.
-> > +		 */
-> > +		support_sg = 0;
-> > +		num_urbs = nents;
-> > +		priv->completed_urbs = 0;
-> > +		pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
-> > +	}
-> > +
-> > +	/* allocate urb array */
-> > +	priv->num_urbs = num_urbs;
-> > +	priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), GFP_KERNEL);
-> > +	if (!priv->urbs)
-> > +		goto err_urbs;
-> > +
-> > +	/* setup a urb */
-> > +	if (support_sg) {
-> > +		if (usb_pipeisoc(pipe))
-> > +			np = pdu->u.cmd_submit.number_of_packets;
-> > +
-> > +		priv->urbs[0] = usb_alloc_urb(np, GFP_KERNEL);
-> > +		if (!priv->urbs[0])
-> > +			goto err_urb;
-> > +
-> > +		if (buf_len) {
-> > +			if (use_sg) {
-> > +				priv->urbs[0]->sg = sgl;
-> > +				priv->urbs[0]->num_sgs = nents;
-> > +				priv->urbs[0]->transfer_buffer = NULL;
-> > +			} else {
-> > +				priv->urbs[0]->transfer_buffer = buffer;
-> > +			}
-> > +		}
-> > +
-> > +		/* copy urb setup packet */
-> > +		priv->urbs[0]->setup_packet = kmemdup(&pdu->u.cmd_submit.setup,
-> > +					8, GFP_KERNEL);
-> > +		if (!priv->urbs[0]->setup_packet) {
-> >   			usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
-> >   			return;
-> >   		}
-> > -	}
-> > -	/* copy urb setup packet */
-> > -	priv->urb->setup_packet = kmemdup(&pdu->u.cmd_submit.setup, 8,
-> > -					  GFP_KERNEL);
-> > -	if (!priv->urb->setup_packet) {
-> > -		dev_err(&udev->dev, "allocate setup_packet\n");
-> > -		usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
-> > -		return;
-> > +		usbip_pack_pdu(pdu, priv->urbs[0], USBIP_CMD_SUBMIT, 0);
-> > +	} else {
-> > +		for_each_sg(sgl, sg, nents, i) {
-> > +			priv->urbs[i] = usb_alloc_urb(0, GFP_KERNEL);
-> > +			/* The URBs which is previously allocated will be freed
-> > +			 * in stub_device_cleanup_urbs() if error occurs.
-> > +			 */
-> > +			if (!priv->urbs[i])
-> > +				goto err_urb;
-> > +
-> > +			usbip_pack_pdu(pdu, priv->urbs[i], USBIP_CMD_SUBMIT, 0);
-> > +			priv->urbs[i]->transfer_buffer = sg_virt(sg);
-> > +			priv->urbs[i]->transfer_buffer_length = sg->length;
-> > +		}
-> > +		priv->sgl = sgl;
-> >   	}
-> > -	/* set other members from the base header of pdu */
-> > -	priv->urb->context                = (void *) priv;
-> > -	priv->urb->dev                    = udev;
-> > -	priv->urb->pipe                   = pipe;
-> > -	priv->urb->complete               = stub_complete;
-> > +	for (i = 0; i < num_urbs; i++) {
-> > +		/* set other members from the base header of pdu */
-> > +		priv->urbs[i]->context = (void *) priv;
-> > +		priv->urbs[i]->dev = udev;
-> > +		priv->urbs[i]->pipe = pipe;
-> > +		priv->urbs[i]->complete = stub_complete;
-> > -	usbip_pack_pdu(pdu, priv->urb, USBIP_CMD_SUBMIT, 0);
-> > +		/* no need to submit an intercepted request, but harmless? */
-> > +		tweak_special_requests(priv->urbs[i]);
-> > +		masking_bogus_flags(priv->urbs[i]);
-> > +	}
-> > -	if (usbip_recv_xbuff(ud, priv->urb) < 0)
-> > +	if (stub_recv_xbuff(ud, priv) < 0)
-> >   		return;
-> > -	if (usbip_recv_iso(ud, priv->urb) < 0)
-> > +	if (usbip_recv_iso(ud, priv->urbs[0]) < 0)
-> >   		return;
-> > -	/* no need to submit an intercepted request, but harmless? */
-> > -	tweak_special_requests(priv->urb);
-> > -
-> > -	masking_bogus_flags(priv->urb);
-> >   	/* urb is now ready to submit */
-> > -	ret = usb_submit_urb(priv->urb, GFP_KERNEL);
-> > -
-> > -	if (ret == 0)
-> > -		usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
-> > -				  pdu->base.seqnum);
-> > -	else {
-> > -		dev_err(&udev->dev, "submit_urb error, %d\n", ret);
-> > -		usbip_dump_header(pdu);
-> > -		usbip_dump_urb(priv->urb);
-> > -
-> > -		/*
-> > -		 * Pessimistic.
-> > -		 * This connection will be discarded.
-> > -		 */
-> > -		usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
-> > +	for (i = 0; i < priv->num_urbs; i++) {
-> > +		ret = usb_submit_urb(priv->urbs[i], GFP_KERNEL);
-> > +
-> > +		if (ret == 0)
-> > +			usbip_dbg_stub_rx("submit urb ok, seqnum %u\n",
-> > +					pdu->base.seqnum);
-> > +		else {
-> > +			dev_err(&udev->dev, "submit_urb error, %d\n", ret);
-> > +			usbip_dump_header(pdu);
-> > +			usbip_dump_urb(priv->urbs[i]);
-> > +
-> > +			/*
-> > +			 * Pessimistic.
-> > +			 * This connection will be discarded.
-> > +			 */
-> > +			usbip_event_add(ud, SDEV_EVENT_ERROR_SUBMIT);
-> > +			break;
-> > +		}
-> >   	}
-> >   	usbip_dbg_stub_rx("Leave\n");
-> > +	return;
-> > +
-> > +err_urb:
-> > +	kfree(priv->urbs);
-> > +err_urbs:
-> > +	kfree(buffer);
-> > +	sgl_free(sgl);
-> > +err_malloc:
-> > +	usbip_event_add(ud, SDEV_EVENT_ERROR_MALLOC);
-> >   }
-> >   /* recv a pdu */
-> > diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
-> > index f0ec41a50cbc..36010a82b359 100644
-> > --- a/drivers/usb/usbip/stub_tx.c
-> > +++ b/drivers/usb/usbip/stub_tx.c
-> > @@ -5,25 +5,11 @@
-> >   #include <linux/kthread.h>
-> >   #include <linux/socket.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "stub.h"
-> > -static void stub_free_priv_and_urb(struct stub_priv *priv)
-> > -{
-> > -	struct urb *urb = priv->urb;
-> > -
-> > -	kfree(urb->setup_packet);
-> > -	urb->setup_packet = NULL;
-> > -
-> > -	kfree(urb->transfer_buffer);
-> > -	urb->transfer_buffer = NULL;
-> > -
-> > -	list_del(&priv->list);
-> > -	kmem_cache_free(stub_priv_cache, priv);
-> > -	usb_free_urb(urb);
-> > -}
-> > -
-> >   /* be in spin_lock_irqsave(&sdev->priv_lock, flags) */
-> >   void stub_enqueue_ret_unlink(struct stub_device *sdev, __u32 seqnum,
-> >   			     __u32 status)
-> > @@ -85,6 +71,22 @@ void stub_complete(struct urb *urb)
-> >   		break;
-> >   	}
-> > +	/*
-> > +	 * If the server breaks single SG request into the several URBs, the
-> > +	 * URBs must be reassembled before sending completed URB to the vhci.
-> > +	 * Don't wake up the tx thread until all the URBs are completed.
-> > +	 */
-> > +	if (priv->sgl) {
-> > +		priv->completed_urbs++;
-> > +
-> > +		/* Only save the first error status */
-> > +		if (urb->status && !priv->urb_status)
-> > +			priv->urb_status = urb->status;
-> > +
-> > +		if (priv->completed_urbs < priv->num_urbs)
-> > +			return;
-> > +	}
-> > +
-> >   	/* link a urb to the queue of tx. */
-> >   	spin_lock_irqsave(&sdev->priv_lock, flags);
-> >   	if (sdev->ud.tcp_socket == NULL) {
-> > @@ -156,18 +158,22 @@ static int stub_send_ret_submit(struct stub_device *sdev)
-> >   	size_t total_size = 0;
-> >   	while ((priv = dequeue_from_priv_tx(sdev)) != NULL) {
-> > -		int ret;
-> > -		struct urb *urb = priv->urb;
-> > +		struct urb *urb = priv->urbs[0];
-> >   		struct usbip_header pdu_header;
-> >   		struct usbip_iso_packet_descriptor *iso_buffer = NULL;
-> >   		struct kvec *iov = NULL;
-> > +		struct scatterlist *sg;
-> > +		u32 actual_length = 0;
-> >   		int iovnum = 0;
-> > +		int ret;
-> > +		int i;
-> >   		txsize = 0;
-> >   		memset(&pdu_header, 0, sizeof(pdu_header));
-> >   		memset(&msg, 0, sizeof(msg));
-> > -		if (urb->actual_length > 0 && !urb->transfer_buffer) {
-> > +		if (urb->actual_length > 0 && !urb->transfer_buffer &&
-> > +		   !urb->num_sgs) {
-> >   			dev_err(&sdev->udev->dev,
-> >   				"urb: actual_length %d transfer_buffer null\n",
-> >   				urb->actual_length);
-> > @@ -176,6 +182,11 @@ static int stub_send_ret_submit(struct stub_device *sdev)
-> >   		if (usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS)
-> >   			iovnum = 2 + urb->number_of_packets;
-> > +		else if (usb_pipein(urb->pipe) && urb->actual_length > 0 &&
-> > +			urb->num_sgs)
-> > +			iovnum = 1 + urb->num_sgs;
-> > +		else if (usb_pipein(urb->pipe) && priv->sgl)
-> > +			iovnum = 1 + priv->num_urbs;
-> >   		else
-> >   			iovnum = 2;
-> > @@ -192,6 +203,15 @@ static int stub_send_ret_submit(struct stub_device *sdev)
-> >   		setup_ret_submit_pdu(&pdu_header, urb);
-> >   		usbip_dbg_stub_tx("setup txdata seqnum: %d\n",
-> >   				  pdu_header.base.seqnum);
-> > +
-> > +		if (priv->sgl) {
-> > +			for (i = 0; i < priv->num_urbs; i++)
-> > +				actual_length += priv->urbs[i]->actual_length;
-> > +
-> > +			pdu_header.u.ret_submit.status = priv->urb_status;
-> > +			pdu_header.u.ret_submit.actual_length = actual_length;
-> > +		}
-> > +
-> >   		usbip_header_correct_endian(&pdu_header, 1);
-> >   		iov[iovnum].iov_base = &pdu_header;
-> > @@ -200,12 +220,47 @@ static int stub_send_ret_submit(struct stub_device *sdev)
-> >   		txsize += sizeof(pdu_header);
-> >   		/* 2. setup transfer buffer */
-> > -		if (usb_pipein(urb->pipe) &&
-> > +		if (usb_pipein(urb->pipe) && priv->sgl) {
-> > +			/* If the server split a single SG request into several
-> > +			 * URBs because the server's HCD doesn't support SG,
-> > +			 * reassemble the split URB buffers into a single
-> > +			 * return command.
-> > +			 */
-> > +			for (i = 0; i < priv->num_urbs; i++) {
-> > +				iov[iovnum].iov_base =
-> > +					priv->urbs[i]->transfer_buffer;
-> > +				iov[iovnum].iov_len =
-> > +					priv->urbs[i]->actual_length;
-> > +				iovnum++;
-> > +			}
-> > +			txsize += actual_length;
-> > +		} else if (usb_pipein(urb->pipe) &&
-> >   		    usb_pipetype(urb->pipe) != PIPE_ISOCHRONOUS &&
-> >   		    urb->actual_length > 0) {
-> > -			iov[iovnum].iov_base = urb->transfer_buffer;
-> > -			iov[iovnum].iov_len  = urb->actual_length;
-> > -			iovnum++;
-> > +			if (urb->num_sgs) {
-> > +				unsigned int copy = urb->actual_length;
-> > +				int size;
-> > +
-> > +				for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-> > +					if (copy == 0)
-> > +						break;
-> > +
-> > +					if (copy < sg->length)
-> > +						size = copy;
-> > +					else
-> > +						size = sg->length;
-> > +
-> > +					iov[iovnum].iov_base = sg_virt(sg);
-> > +					iov[iovnum].iov_len = size;
-> > +
-> > +					iovnum++;
-> > +					copy -= size;
-> > +				}
-> > +			} else {
-> > +				iov[iovnum].iov_base = urb->transfer_buffer;
-> > +				iov[iovnum].iov_len  = urb->actual_length;
-> > +				iovnum++;
-> > +			}
-> >   			txsize += urb->actual_length;
-> >   		} else if (usb_pipein(urb->pipe) &&
-> >   			   usb_pipetype(urb->pipe) == PIPE_ISOCHRONOUS) {
-> > diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-> > index 45da3e01c7b0..6532d68e8808 100644
-> > --- a/drivers/usb/usbip/usbip_common.c
-> > +++ b/drivers/usb/usbip/usbip_common.c
-> > @@ -680,8 +680,12 @@ EXPORT_SYMBOL_GPL(usbip_pad_iso);
-> >   /* some members of urb must be substituted before. */
-> >   int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
-> >   {
-> > -	int ret;
-> > +	struct scatterlist *sg;
-> > +	int ret = 0;
-> > +	int recv;
-> >   	int size;
-> > +	int copy;
-> > +	int i;
-> >   	if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC) {
-> >   		/* the direction of urb must be OUT. */
-> > @@ -701,29 +705,48 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
-> >   	if (!(size > 0))
-> >   		return 0;
-> > -	if (size > urb->transfer_buffer_length) {
-> > +	if (size > urb->transfer_buffer_length)
-> >   		/* should not happen, probably malicious packet */
-> > -		if (ud->side == USBIP_STUB) {
-> > -			usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
-> > -			return 0;
-> > -		} else {
-> > -			usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
-> > -			return -EPIPE;
-> > -		}
-> > -	}
-> > +		goto error;
-> > -	ret = usbip_recv(ud->tcp_socket, urb->transfer_buffer, size);
-> > -	if (ret != size) {
-> > -		dev_err(&urb->dev->dev, "recv xbuf, %d\n", ret);
-> > -		if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC) {
-> > -			usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
-> > -		} else {
-> > -			usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
-> > -			return -EPIPE;
-> > +	if (urb->num_sgs) {
-> > +		copy = size;
-> > +		for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-> > +			int recv_size;
-> > +
-> > +			if (copy < sg->length)
-> > +				recv_size = copy;
-> > +			else
-> > +				recv_size = sg->length;
-> > +
-> > +			recv = usbip_recv(ud->tcp_socket, sg_virt(sg),
-> > +						recv_size);
-> > +
-> > +			if (recv != recv_size)
-> > +				goto error;
-> > +
-> > +			copy -= recv;
-> > +			ret += recv;
-> >   		}
-> > +
-> > +		if (ret != size)
-> > +			goto error;
-> > +	} else {
-> > +		ret = usbip_recv(ud->tcp_socket, urb->transfer_buffer, size);
-> > +		if (ret != size)
-> > +			goto error;
-> >   	}
-> >   	return ret;
-> > +
-> > +error:
-> > +	dev_err(&urb->dev->dev, "recv xbuf, %d\n", ret);
-> > +	if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC)
-> > +		usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
-> > +	else
-> > +		usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
-> > +
-> > +	return -EPIPE;
-> >   }
-> >   EXPORT_SYMBOL_GPL(usbip_recv_xbuff);
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index ea82b932a2f9..e64ab50cbe2b 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -697,7 +697,8 @@ static int vhci_urb_enqueue(struct usb_hcd *hcd, struct urb *urb, gfp_t mem_flag
-> >   	}
-> >   	vdev = &vhci_hcd->vdev[portnum-1];
-> > -	if (!urb->transfer_buffer && urb->transfer_buffer_length) {
-> > +	if (!urb->transfer_buffer && !urb->num_sgs &&
-> > +	     urb->transfer_buffer_length) {
-> >   		dev_dbg(dev, "Null URB transfer buffer\n");
-> >   		return -EINVAL;
-> >   	}
-> > @@ -1143,6 +1144,15 @@ static int vhci_setup(struct usb_hcd *hcd)
-> >   		hcd->speed = HCD_USB3;
-> >   		hcd->self.root_hub->speed = USB_SPEED_SUPER;
-> >   	}
-> > +
-> > +	/*
-> > +	 * Support SG.
-> > +	 * sg_tablesize is an arbitrary value to alleviate memory pressure
-> > +	 * on the host.
-> > +	 */
-> > +	hcd->self.sg_tablesize = 32;
-> > +	hcd->self.no_sg_constraint = 1;
-> > +
-> >   	return 0;
-> >   }
-> > @@ -1296,6 +1306,9 @@ static int vhci_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
-> >   		return -EINVAL;
-> >   	}
-> > +	if (urb->num_sgs)
-> > +		urb->transfer_flags |= URB_DMA_MAP_SG;
-> > +
-> >   	return 0;
-> >   }
-> > diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
-> > index 2fa26d0578d7..865eb1276b6c 100644
-> > --- a/drivers/usb/usbip/vhci_tx.c
-> > +++ b/drivers/usb/usbip/vhci_tx.c
-> > @@ -5,6 +5,7 @@
-> >   #include <linux/kthread.h>
-> >   #include <linux/slab.h>
-> > +#include <linux/scatterlist.h>
-> >   #include "usbip_common.h"
-> >   #include "vhci.h"
-> > @@ -50,19 +51,23 @@ static struct vhci_priv *dequeue_from_priv_tx(struct vhci_device *vdev)
-> >   static int vhci_send_cmd_submit(struct vhci_device *vdev)
-> >   {
-> > +	struct usbip_iso_packet_descriptor *iso_buffer = NULL;
-> >   	struct vhci_priv *priv = NULL;
-> > +	struct scatterlist *sg;
-> >   	struct msghdr msg;
-> > -	struct kvec iov[3];
-> > +	struct kvec *iov;
-> >   	size_t txsize;
-> >   	size_t total_size = 0;
-> > +	int iovnum;
-> > +	int err = -ENOMEM;
-> > +	int i;
-> >   	while ((priv = dequeue_from_priv_tx(vdev)) != NULL) {
-> >   		int ret;
-> >   		struct urb *urb = priv->urb;
-> >   		struct usbip_header pdu_header;
-> > -		struct usbip_iso_packet_descriptor *iso_buffer = NULL;
-> >   		txsize = 0;
-> >   		memset(&pdu_header, 0, sizeof(pdu_header));
-> > @@ -72,18 +77,42 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
-> >   		usbip_dbg_vhci_tx("setup txdata urb seqnum %lu\n",
-> >   				  priv->seqnum);
-> > +		if (urb->num_sgs && usb_pipeout(urb->pipe))
-> > +			iovnum = 2 + urb->num_sgs;
-> > +		else
-> > +			iovnum = 3;
-> > +
-> > +		iov = kcalloc(iovnum, sizeof(*iov), GFP_KERNEL);
-> > +		if (!iov) {
-> > +			usbip_event_add(&vdev->ud, SDEV_EVENT_ERROR_MALLOC);
-> > +			return -ENOMEM;
-> > +		}
-> > +
-> >   		/* 1. setup usbip_header */
-> >   		setup_cmd_submit_pdu(&pdu_header, urb);
-> >   		usbip_header_correct_endian(&pdu_header, 1);
-> > +		iovnum = 0;
-> > -		iov[0].iov_base = &pdu_header;
-> > -		iov[0].iov_len  = sizeof(pdu_header);
-> > +		iov[iovnum].iov_base = &pdu_header;
-> > +		iov[iovnum].iov_len  = sizeof(pdu_header);
-> >   		txsize += sizeof(pdu_header);
-> > +		iovnum++;
-> >   		/* 2. setup transfer buffer */
-> >   		if (!usb_pipein(urb->pipe) && urb->transfer_buffer_length > 0) {
-> > -			iov[1].iov_base = urb->transfer_buffer;
-> > -			iov[1].iov_len  = urb->transfer_buffer_length;
-> > +			if (urb->num_sgs &&
-> > +				      !usb_endpoint_xfer_isoc(&urb->ep->desc)) {
-> > +				for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-> > +					iov[iovnum].iov_base = sg_virt(sg);
-> > +					iov[iovnum].iov_len = sg->length;
-> > +					iovnum++;
-> > +				}
-> > +			} else {
-> > +				iov[iovnum].iov_base = urb->transfer_buffer;
-> > +				iov[iovnum].iov_len  =
-> > +						urb->transfer_buffer_length;
-> > +				iovnum++;
-> > +			}
-> >   			txsize += urb->transfer_buffer_length;
-> >   		}
-> > @@ -95,23 +124,26 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
-> >   			if (!iso_buffer) {
-> >   				usbip_event_add(&vdev->ud,
-> >   						SDEV_EVENT_ERROR_MALLOC);
-> > -				return -1;
-> > +				goto err_iso_buffer;
-> >   			}
-> > -			iov[2].iov_base = iso_buffer;
-> > -			iov[2].iov_len  = len;
-> > +			iov[iovnum].iov_base = iso_buffer;
-> > +			iov[iovnum].iov_len  = len;
-> > +			iovnum++;
-> >   			txsize += len;
-> >   		}
-> > -		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, 3, txsize);
-> > +		ret = kernel_sendmsg(vdev->ud.tcp_socket, &msg, iov, iovnum,
-> > +				     txsize);
-> >   		if (ret != txsize) {
-> >   			pr_err("sendmsg failed!, ret=%d for %zd\n", ret,
-> >   			       txsize);
-> > -			kfree(iso_buffer);
-> >   			usbip_event_add(&vdev->ud, VDEV_EVENT_ERROR_TCP);
-> > -			return -1;
-> > +			err = -EPIPE;
-> > +			goto err_tx;
-> >   		}
-> > +		kfree(iov);
-> >   		kfree(iso_buffer);
-> >   		usbip_dbg_vhci_tx("send txdata\n");
-> > @@ -119,6 +151,13 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
-> >   	}
-> >   	return total_size;
-> > +
-> > +err_tx:
-> > +	kfree(iso_buffer);
-> > +err_iso_buffer:
-> > +	kfree(iov);
-> > +
-> > +	return err;
-> >   }
-> >   static struct vhci_unlink *dequeue_from_unlink_tx(struct vhci_device *vdev)
-> > 
-> 
-> Thanks for doing this work.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+[This email was generated by a script.  Let me know if you have any suggestions
+to make it better, or if you want it re-generated with the latest status.]
 
-Hi Shuah,
+Of the syzbot reports that have (re-)occurred in the last 7 days, I've manually
+marked 52 of them as possibly being bugs in the usb subsystem.  This category
+mostly includes USB driver bugs, but it might include some core USB bugs too. 
+I've listed these bug reports below.
 
-Can I attach your Reviewed-by tag in my v6 patch?
-It is ready to submit.
+If you believe a bug is no longer valid, please close it by sending a '#syz
+fix', '#syz dup', or '#syz invalid' command in reply to the original thread, as
+explained at https://goo.gl/tpsmEJ#status
 
-Regards
-Suwan Kim
+If you believe I misattributed a bug to the usb subsystem, please let me know
+and (if possible) forward it to the correct place.
+
+Note: in total, I've actually assigned 80 open syzbot reports to this subsystem.
+But to help focus people's efforts, I've only listed the 52 that have
+(re-)occurred in the last week.  Let me know if you want the full list.
+
+Here are the bug reports:
+
+--------------------------------------------------------------------------------
+Title:              possible deadlock in mon_bin_vma_fault
+Last occurred:      0 days ago
+Reported:           352 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=2b061d1fabd9760e98f92163543189b637c4af36
+Original thread:    https://lore.kernel.org/lkml/0000000000006ad6030574fead2e@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000006ad6030574fead2e@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in rollback_registered_many (2)
+Last occurred:      0 days ago
+Reported:           287 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=d39aca7a05a76d146ba96cddbb3242075d9171a7
+Original thread:    https://lore.kernel.org/lkml/000000000000d9f094057a17b97b@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug received 2 replies; the last was 14 days ago.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+40918e4d826fb2ff9b96@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 14 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/000000000000d9f094057a17b97b@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in ath6kl_usb_alloc_urb_from_pipe
+Last occurred:      0 days ago
+Reported:           131 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=cd8b9cfe50a0bf36ee19eda2d7e2e06843dfbeaf
+Original thread:    https://lore.kernel.org/lkml/0000000000008e825105865615e3@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+ead4037ec793e025e66f@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000008e825105865615e3@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in flexcop_usb_probe
+Last occurred:      0 days ago
+Reported:           131 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=c0203bd72037d07493f4b7562411e4f5f4553a8f
+Original thread:    https://lore.kernel.org/lkml/00000000000010fe260586536e86@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000010fe260586536e86@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING: ODEBUG bug in rsi_probe
+Last occurred:      0 days ago
+Reported:           129 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=3b35267abf182bd98ba95c0943bc0f957e021101
+Original thread:    https://lore.kernel.org/lkml/00000000000024bbd7058682eda1@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1d1597a5aa3679c65b9f@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000024bbd7058682eda1@google.com
+
+--------------------------------------------------------------------------------
+Title:              INFO: trying to register non-static key in del_timer_sync (2)
+Last occurred:      0 days ago
+Reported:           131 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=26525f643f454dd7be0078423e3cdb0d57744959
+Original thread:    https://lore.kernel.org/lkml/000000000000927a7b0586561537@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug received 8 replies; the last was 7 days ago.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+dc4127f950da51639216@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 7 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/000000000000927a7b0586561537@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in zd_mac_clear
+Last occurred:      0 days ago
+Reported:           131 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=46e5ae5074764b5f0eed428a8c4989d9efbe9146
+Original thread:    https://lore.kernel.org/lkml/00000000000075a7a6058653d977@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug received 3 replies; the last was 14 days ago.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+74c65761783d66a9c97c@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 14 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/00000000000075a7a6058653d977@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: invalid-free in rsi_91x_deinit
+Last occurred:      0 days ago
+Reported:           120 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=426fbebc1eac728afa08e52b1bcf8171c9413e29
+Original thread:    https://lore.kernel.org/lkml/0000000000005ae4cd058731d407@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+7c72edfb407b2bd866ce@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000005ae4cd058731d407@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in spi_register_controller
+Last occurred:      0 days ago
+Reported:           131 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=c2f000b7826e712b064b66b32ed73e21ee09d7a5
+Original thread:    https://lore.kernel.org/lkml/00000000000089dace058653b58e@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one replied to the original thread for this bug.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c60ddb60b685777d9d59@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000089dace058653b58e@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in submit_rx_urb/usb_submit_urb
+Last occurred:      1 day ago
+Reported:           84 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=97fff2c33c48264fba4d185f5f0f0961bdcd2ae2
+Original thread:    https://lore.kernel.org/lkml/0000000000004da71e058a06318b@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 1 reply, 84 days ago.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c2a1fa67c02faa0de723@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000004da71e058a06318b@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in ar5523_submit_rx_cmd/usb_submit_urb
+Last occurred:      1 day ago
+Reported:           79 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=d4cdc65d1db112b294b568e0cff47bca7cd3edbd
+Original thread:    https://lore.kernel.org/lkml/000000000000f4900f058a69d6c5@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 1 reply, 79 days ago.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6101b0c732dea13ea55b@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000f4900f058a69d6c5@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in vmk80xx_write_packet
+Last occurred:      1 day ago
+Reported:           43 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=526603b22a9bce6aa5626fe52b936c41af948a18
+Original thread:    https://lore.kernel.org/lkml/000000000000d5d567058d3eadcf@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+009f546aa1370056b1c2@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d5d567058d3eadcf@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in iowarrior_disconnect
+Last occurred:      0 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=c59a8f0485cd6634443cdf23cdbf3ea264dd888d
+Original thread:    https://lore.kernel.org/lkml/00000000000090564a0590796d2f@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 6 replies; the last was 1 day ago.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 1 day ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/00000000000090564a0590796d2f@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in adu_disconnect
+Last occurred:      0 days ago
+Reported:           16 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=a8593e333f207fe272db7fff3bbc651d52562c9d
+Original thread:    https://lore.kernel.org/lkml/000000000000d12d24058f5d6b65@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+0243cb250a51eeefb8cc@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d12d24058f5d6b65@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in dvb_usb_device_exit (2)
+Last occurred:      0 days ago
+Reported:           15 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=4af73c50b55e80c610efa6cab1a536d83b094a75
+Original thread:    https://lore.kernel.org/lkml/000000000000d128c2058f72a73b@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 1 reply, 13 days ago.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c58e976e022432ee60b4@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 13 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/000000000000d128c2058f72a73b@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in sisusb_send_bulk_msg/usb_submit_urb
+Last occurred:      1 day ago
+Reported:           50 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=fa9be2f72b2aee60b3acbbcffecc698d8b160b10
+Original thread:    https://lore.kernel.org/lkml/000000000000a0b1df058cb460c8@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 1 reply, 43 days ago.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+23be03b56c5259385d79@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000a0b1df058cb460c8@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: slab-out-of-bounds Read in hidraw_ioctl
+Last occurred:      0 days ago
+Reported:           22 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=0141bd6b37153edec9c4ffa0f0e990c7228897f9
+Original thread:    https://lore.kernel.org/lkml/00000000000008b8c6058ee52407@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 9 replies; the last was 10 hours
+ago.
+
+This looks like a bug in a hid USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+5a6c4ec678a0c6ee84ba@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 10 hours ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/00000000000008b8c6058ee52407@google.com
+
+--------------------------------------------------------------------------------
+Title:              general protection fault in __pm_runtime_resume
+Last occurred:      0 days ago
+Reported:           28 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=34347c7df01b54088dfd6804da22c6cd19c112ea
+Original thread:    https://lore.kernel.org/lkml/0000000000003acc06058e6d6b70@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 2 replies; the last was 6 days
+ago.
+
+This looks like a bug in a hid USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 6 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/0000000000003acc06058e6d6b70@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in r871xu_drv_init
+Last occurred:      1 day ago
+Reported:           76 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=3cd92b1d85428b128503bfa7a250294c9ae00bd8
+Original thread:    https://lore.kernel.org/lkml/000000000000417702058aa80506@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000417702058aa80506@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in dlfb_submit_urb/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           51 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=9c2df342be9d102da75f9532e168a95b9c379ae4
+Original thread:    https://lore.kernel.org/lkml/000000000000cd404e058c9de28b@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+53ce4a4246d0fe0fee34@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000cd404e058c9de28b@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in smsc95xx_read_eeprom (2)
+Last occurred:      1 day ago
+Reported:           42 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=0629febb76ae17ff78874aa68991e542506b1351
+Original thread:    https://lore.kernel.org/lkml/000000000000e38991058d54c35f@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+0dfe788c0e7be7c95931@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000e38991058d54c35f@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in rt2500usb_bbp_read
+Last occurred:      0 days ago
+Reported:           76 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=f35d123de7d393019c1ed4d4e60dc66596ed62cd
+Original thread:    https://lore.kernel.org/lkml/000000000000cf6a70058aa48695@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 1 reply, 76 days ago.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+a106a5b084a6890d2607@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000cf6a70058aa48695@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in smsc75xx_bind
+Last occurred:      0 days ago
+Reported:           12 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=45ee70ca00699d61239bbf9ebc790e33f83add6a
+Original thread:    https://lore.kernel.org/lkml/0000000000009f4316058fab3bd7@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 3 replies; the last was 7 days
+ago.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6966546b78d050bb0b5d@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 7 days ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/0000000000009f4316058fab3bd7@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in port100_send_cmd_async/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           42 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=35239406043679c64322c827d427cfae2f24b1fc
+Original thread:    https://lore.kernel.org/lkml/000000000000971061058d51ad15@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+711468aa5c3a1eabf863@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000971061058d51ad15@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in gp8psk_power_ctrl
+Last occurred:      2 days ago
+Reported:           3 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=72986e2472b8f0d31160d84f46fe1a52d695d42a
+Original thread:    https://lore.kernel.org/lkml/00000000000041d63f05906e6486@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+fa2759b292234f21d29f@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000041d63f05906e6486@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in gtco_probe
+Last occurred:      0 days ago
+Reported:           9 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=50901916bd70bd4f83f5d41f02373b6293a431a4
+Original thread:    https://lore.kernel.org/lkml/0000000000007a3d3b058fea6016@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in an input USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+bb54195a43a54b1e5e5e@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000007a3d3b058fea6016@google.com
+
+--------------------------------------------------------------------------------
+Title:              INFO: trying to register non-static key in ida_destroy
+Last occurred:      0 days ago
+Reported:           23 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=81d64408e8ffdbe2e7685561e34fe5de33877acb
+Original thread:    https://lore.kernel.org/lkml/000000000000d2b175058ed4cb3f@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c86454eb3af9e8a4da20@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d2b175058ed4cb3f@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in i2400mu_bus_bm_wait_for_ack/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           42 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=78aca5360820e5e91ba12dec842dabeb5349b431
+Original thread:    https://lore.kernel.org/lkml/0000000000009b6e7f058d51adba@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net/wireless USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+7886801de1cc3958a0d1@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000009b6e7f058d51adba@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in wdm_int_callback
+Last occurred:      3 days ago
+Reported:           14 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=e236bab6c3d8f2d8f373130a2594897fc593b3fc
+Original thread:    https://lore.kernel.org/lkml/000000000000dece03058f87bf11@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1a3765ef3c0d49d36a75@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000dece03058f87bf11@google.com
+
+--------------------------------------------------------------------------------
+Title:              possible deadlock in display_open
+Last occurred:      0 days ago
+Reported:           12 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=f20f4b9a1e81b5066616ce98e64264c6198d8762
+Original thread:    https://lore.kernel.org/lkml/00000000000043b599058faf0145@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c558267ad910fc494497@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000043b599058faf0145@google.com
+
+--------------------------------------------------------------------------------
+Title:              INFO: task hung in wdm_flush
+Last occurred:      0 days ago
+Reported:           9 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=e7b761593b23eb50855b9ea31e3be5472b711186
+Original thread:    https://lore.kernel.org/lkml/0000000000003313f0058fea8435@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000003313f0058fea8435@google.com
+
+--------------------------------------------------------------------------------
+Title:              INFO: task hung in usb_bulk_msg
+Last occurred:      1 day ago
+Reported:           349 days ago
+Branches:           Mainline and others
+Dashboard link:     https://syzkaller.appspot.com/bug?id=bf172344c5f1d3487a4feff67c3dd30e08d5b635
+Original thread:    https://lore.kernel.org/lkml/000000000000d3c499057536ce86@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one replied to the original thread for this bug.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+7a7613e5ba9ae7bd15f9@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d3c499057536ce86@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in wa_nep_create/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           42 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=a07f49ea1871dcb4a34ff5aff5a46b0fcd8b3523
+Original thread:    https://lore.kernel.org/lkml/000000000000acb38c058d51ad4f@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+5da93055dfbb6bc54963@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000acb38c058d51ad4f@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in friio_power_ctrl
+Last occurred:      4 days ago
+Reported:           42 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=cad92e4d55bb8904e263a7342259804a2b7797f6
+Original thread:    https://lore.kernel.org/lkml/00000000000041eeb7058d53ed4c@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+9e6bf7282557bd1fc80d@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000041eeb7058d53ed4c@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in iowarrior_release
+Last occurred:      4 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=2a85e01e6f3d6e7e59a2020ac1767ca238096fda
+Original thread:    https://lore.kernel.org/lkml/00000000000093a9110590796dc4@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+fa4fa544487e9d02b211@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000093a9110590796dc4@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: slab-out-of-bounds Write in ax_probe
+Last occurred:      1 day ago
+Reported:           9 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=eb5178ecd9a6e715fb8af3552d4c03245126c464
+Original thread:    https://lore.kernel.org/lkml/00000000000040184c058fea8467@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a hid USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1e86e2ccce227cca899b@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000040184c058fea8467@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in shark_write_reg/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           36 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=b3aed9d0d30854162adde1311cb3b7d26040f2a0
+Original thread:    https://lore.kernel.org/lkml/000000000000d06dc2058dc9f8f2@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 2 replies; the last was 34 days
+ago.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+4b3f8190f6e13b3efd74@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d06dc2058dc9f8f2@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in mii_nway_restart
+Last occurred:      6 days ago
+Reported:           78 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=835562bfa4dd92c72f323f29ad388c9cb4b0e63f
+Original thread:    https://lore.kernel.org/lkml/000000000000f71859058a7cfdc8@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1f53a30781af65d2c955@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000f71859058a7cfdc8@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in kmem_cache_alloc_trace
+Last occurred:      0 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=0b37b0c24bc95eb3ed6bf096b19b504ecd3f7144
+Original thread:    https://lore.kernel.org/lkml/000000000000621bc305907aaf02@google.com/T/#u
+
+This bug has a C reproducer.
+
+The original thread for this bug has received 5 replies; the last was 1 day ago.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+0e7b6b6001ca8ed655f6@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread, which had activity only 1 day ago.  For the git send-email command to
+use, or tips on how to reply if the thread isn't in your mailbox, see the "Reply
+instructions" at https://lore.kernel.org/r/000000000000621bc305907aaf02@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in __uwb_rc_neh_rm
+Last occurred:      1 day ago
+Reported:           27 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=7c78c458390073821d4d7f8841b6c7cf1cde5126
+Original thread:    https://lore.kernel.org/lkml/000000000000448f5a058e804752@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c44bb3aca1a5e07c76df@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000448f5a058e804752@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in wdm_write/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=0971819d27047ef9eddc3d9ca691efd9cab3640a
+Original thread:    https://lore.kernel.org/lkml/00000000000098afd80590796d14@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000098afd80590796d14@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in usbvision_write_reg/usb_submit_urb
+Last occurred:      2 days ago
+Reported:           29 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=323cf33afff0156e5c926803d69cb7d06e450645
+Original thread:    https://lore.kernel.org/lkml/000000000000c3b67c058e589ada@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1fe821ea9f66c0df9cbf@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000c3b67c058e589ada@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in ati_remote_sendpacket/usb_submit_urb
+Last occurred:      1 day ago
+Reported:           29 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=650cb8ccaa3571c3342b32a6f5f4dbf4c6bfde1c
+Original thread:    https://lore.kernel.org/lkml/000000000000d16cc7058e589afa@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+998261c2ae5932458f6c@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d16cc7058e589afa@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in smsusb_start_streaming/usb_submit_urb
+Last occurred:      0 days ago
+Reported:           0 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=fd5dc09bea648f957d40969ebb66656f109101f5
+Original thread:    https://lore.kernel.org/lkml/000000000000d529bc0590a01f5f@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+12002a39b8c60510f8fb@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d529bc0590a01f5f@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in mxl111sf_ctrl_msg
+Last occurred:      3 days ago
+Reported:           22 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=3972554833ffd5c0897b312d8e2749ecbca4770d
+Original thread:    https://lore.kernel.org/lkml/00000000000005ae9c058ee5245c@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+48eb85867b8a4c16adf0@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000005ae9c058ee5245c@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING: ODEBUG bug in __free_pages_ok
+Last occurred:      6 days ago
+Reported:           27 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=3f7623dfe5c3e2810e94b0e43ce4535ef3f9fdae
+Original thread:    https://lore.kernel.org/lkml/000000000000490d4c058e8047e6@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a hid USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+6ff9bba63b987471b8be@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000490d4c058e8047e6@google.com
+
+--------------------------------------------------------------------------------
+Title:              WARNING in flexcop_usb_probe/usb_submit_urb
+Last occurred:      1 day ago
+Reported:           0 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=0b807651388fdfa71008d7df197d54a0bcd2fa0f
+Original thread:    https://lore.kernel.org/lkml/000000000000d8e41d0590a01fc7@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+26a8e8c838ca7937dc9e@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000d8e41d0590a01fc7@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: slab-out-of-bounds Read in mceusb_dev_recv
+Last occurred:      7 days ago
+Reported:           9 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=345aff423c4ad1a7fc904c911aa13d2040d78718
+Original thread:    https://lore.kernel.org/lkml/00000000000043d7e6058fea8482@google.com/T/#u
+
+This bug has a C reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a media USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+c7fdb6cb36e65f2fe8c9@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/00000000000043d7e6058fea8482@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: invalid-free in iowarrior_disconnect
+Last occurred:      0 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=95d32434bf1e34b03b382d390eb4425c6a1bc9b5
+Original thread:    https://lore.kernel.org/lkml/0000000000009c42670590796d1d@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+68a449e448766880a109@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/0000000000009c42670590796d1d@google.com
+
+--------------------------------------------------------------------------------
+Title:              KMSAN: uninit-value in smsc95xx_wait_eeprom
+Last occurred:      3 days ago
+Reported:           22 days ago
+Branches:           https://github.com/google/kmsan.git master
+Dashboard link:     https://syzkaller.appspot.com/bug?id=42f244631dc4de563e20e36cb89a5e55b53701ce
+Original thread:    https://lore.kernel.org/lkml/000000000000302d82058ee5002d@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a net USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+136c17d735f025fc86a7@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please consider replying to the
+original thread.  For the git send-email command to use, or tips on how to reply
+if the thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000302d82058ee5002d@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in wdm_out_callback
+Last occurred:      4 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=07a5f1529b95adcb80cbf8729f9cb499b980991d
+Original thread:    https://lore.kernel.org/lkml/000000000000a4a6e90590796d93@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+9a22af9cbb07280ce9cf@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000a4a6e90590796d93@google.com
+
+--------------------------------------------------------------------------------
+Title:              KASAN: use-after-free Read in iowarrior_callback
+Last occurred:      5 days ago
+Reported:           2 days ago
+Branches:           Mainline (with usb-fuzzer patches)
+Dashboard link:     https://syzkaller.appspot.com/bug?id=b973fa97d1c118ca7fb25bdebe03d894acf5d176
+Original thread:    https://lore.kernel.org/lkml/000000000000a039300590796dc4@google.com/T/#u
+
+Unfortunately, this bug does not have a reproducer.
+
+No one has replied to the original thread for this bug yet.
+
+This looks like a bug in a USB driver.
+
+If you fix this bug, please add the following tag to the commit:
+    Reported-by: syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com
+
+If you send any email or patch for this bug, please reply to the original
+thread.  For the git send-email command to use, or tips on how to reply if the
+thread isn't in your mailbox, see the "Reply instructions" at
+https://lore.kernel.org/r/000000000000a039300590796dc4@google.com
+
