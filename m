@@ -2,158 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FA298EDF
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E3098F0D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733019AbfHVJMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 05:12:54 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50552 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730869AbfHVJMy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:12:54 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v15so4861894wml.0;
-        Thu, 22 Aug 2019 02:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=XKRo6mMmk6UTDUxA82Y4sbQTofDypb2gfF6/SKwjllg=;
-        b=ViU7qvn4LOu80yrZBOeLky9q4V8zVOYnloA/VyCUWJPodlV7gtEIaifwyy0nqdhNL/
-         XbLpccfu/t11Ysoz7358n+Bfgw27R6hiFIQFEZiZdhAq5sbpNtZNSx7piPExHwybJztI
-         WrQC3yv6Wv8xYNJ/qugCSDe2FPma2f1jyN2FLcAkNz9Vy2Z7M0ATwiCFpGeeTS2VidLN
-         nvL6dhTnuBY/UVDZvssNyGCSoPEXkUpqdy3OSQBb+UypRhy/qfucATIOulsBfASD88II
-         aih1IB7Y+SCP+qhM8Ia4WwdgHjZMaKdGfe1oTlmcjrZt3/kY33qorbz+wqqGSSnH865t
-         pHfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XKRo6mMmk6UTDUxA82Y4sbQTofDypb2gfF6/SKwjllg=;
-        b=TzIzPrZFJ2gweiMvFfK4KmKp6lwhY48o3QtWsWFR2J3aHz249LVUq14er81+jUU0lb
-         dYuBenB0GlAn1uYkZeU6D4E4K46xJIRqGh3UAvmPuyqxhejm8Y3C4F+dVjwPC5hUPgUk
-         YCag4W7A8ZBGLo7f3DvOeuxw+E8qtLNxiIY0MqMQ1icx563v3sus5i0TKLXzS6HVPYnl
-         WC2gmWhvltZ+vjwzJPb8mhHS1leKlYCtcOvGqcZoxc8Sw5IR9tyfnnz9eNNamfyQSSE2
-         hDG5k3+y1LDuwYha53dX0lU8yc/XDpGHXGpLc1R/x6YOVRuon58XSms4UA1kOU2v7/U0
-         +U3A==
-X-Gm-Message-State: APjAAAW0TSAiq3AM+DQdrh5WxvilGyObwYcby9pcpewsAavfRJRPEQRN
-        zKYjYCc/wHSXZjAEqd+mefM=
-X-Google-Smtp-Source: APXvYqxfzmjdcyix5W+xrmns0Ftiu58QY56zX8/xsguSlFvKa3Liy+fik16KI0K4A4i2381rZsalVw==
-X-Received: by 2002:a1c:a008:: with SMTP id j8mr5045320wme.57.1566465171513;
-        Thu, 22 Aug 2019 02:12:51 -0700 (PDT)
-Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id k124sm9221350wmk.47.2019.08.22.02.12.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 02:12:50 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 11:12:48 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [Patch V6 7/8] usb: gadget: Add UDC driver for tegra XUSB device
- mode controller
-Message-ID: <20190822091248.GD23873@ulmo>
-References: <1565257046-9890-1-git-send-email-nkristam@nvidia.com>
- <1565257046-9890-8-git-send-email-nkristam@nvidia.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="k4f25fnPtRuIRUb3"
-Content-Disposition: inline
-In-Reply-To: <1565257046-9890-8-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1731437AbfHVJRx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 05:17:53 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57412 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727910AbfHVJRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:17:53 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1i0jE4-0002cq-JO; Thu, 22 Aug 2019 09:17:49 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com
+Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] HID: quirks: Disable runtime suspend on Microsoft Corp. Basic Optical Mouse v2.0
+Date:   Thu, 22 Aug 2019 17:17:44 +0800
+Message-Id: <20190822091744.3451-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The optical sensor of the mouse gets turned off when it's runtime
+suspended, so moving the mouse can't wake the mouse up, despite that
+USB remote wakeup is successfully set.
 
---k4f25fnPtRuIRUb3
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Introduce a new quirk to prevent the mouse from getting runtime
+suspended.
 
-On Thu, Aug 08, 2019 at 03:07:25PM +0530, Nagarjuna Kristam wrote:
-> This patch adds UDC driver for tegra XUSB 3.0 device mode controller.
-> XUSB device mode controller supports SS, HS and FS modes
->=20
-> Based on work by:
->   Mark Kuo <mkuo@nvidia.com>
->   Hui Fu <hfu@nvidia.com>
->   Andrew Bresticker <abrestic@chromium.org>
->=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/usb/gadget/udc/Kconfig      |   11 +
->  drivers/usb/gadget/udc/Makefile     |    1 +
->  drivers/usb/gadget/udc/tegra_xudc.c | 3808 +++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 3820 insertions(+)
->  create mode 100644 drivers/usb/gadget/udc/tegra_xudc.c
->=20
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kcon=
-fig
-> index ef0259a..fe6028e 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -440,6 +440,17 @@ config USB_GADGET_XILINX
->  	  dynamically linked module called "udc-xilinx" and force all
->  	  gadget drivers to also be dynamically linked.
-> =20
-> +config USB_TEGRA_XUDC
-> +	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
-> +	depends on ARCH_TEGRA
-> +	select USB_ROLE_SWITCH
-> +	help
-> +	 Enables NVIDIA Tegra USB 3.0 device mode controller driver.
-> +
-> +	 Say "y" to link the driver statically, or "m" to build a
-> +	 dynamically linked module called "tegra_xudc" and force all
-> +	 gadget drivers to also be dynamically linked.
-> +
->  source "drivers/usb/gadget/udc/aspeed-vhub/Kconfig"
-> =20
->  #
-> diff --git a/drivers/usb/gadget/udc/Makefile b/drivers/usb/gadget/udc/Mak=
-efile
-> index 897f648..1c55c96 100644
-> --- a/drivers/usb/gadget/udc/Makefile
-> +++ b/drivers/usb/gadget/udc/Makefile
-> @@ -24,6 +24,7 @@ obj-$(CONFIG_USB_BCM63XX_UDC)	+=3D bcm63xx_udc.o
->  obj-$(CONFIG_USB_FSL_USB2)	+=3D fsl_usb2_udc.o
->  fsl_usb2_udc-y			:=3D fsl_udc_core.o
->  fsl_usb2_udc-$(CONFIG_ARCH_MXC)	+=3D fsl_mxc_udc.o
-> +obj-$(CONFIG_USB_TEGRA_XUDC)	+=3D tegra_xudc.o
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/hid/hid-quirks.c      | 2 +-
+ drivers/hid/usbhid/hid-core.c | 3 ++-
+ include/linux/hid.h           | 1 +
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-Nit: I have a slight preference for tegra-xudc.o over tegra_xudc.o. We
-use dashes rather than underscores pretty consistently on Tegra, so it
-would be good to keep the same pattern here, unless somebody feels
-strongly about the underscore.
+diff --git a/drivers/hid/hid-quirks.c b/drivers/hid/hid-quirks.c
+index 166f41f3173b..40574f856a93 100644
+--- a/drivers/hid/hid-quirks.c
++++ b/drivers/hid/hid-quirks.c
+@@ -108,7 +108,7 @@ static const struct hid_device_id hid_quirks[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_MOUSE_C05A), HID_QUIRK_ALWAYS_POLL },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_LOGITECH, USB_DEVICE_ID_LOGITECH_MOUSE_C06A), HID_QUIRK_ALWAYS_POLL },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MCS, USB_DEVICE_ID_MCS_GAMEPADBLOCK), HID_QUIRK_MULTI_INPUT },
+-	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_PIXART_MOUSE), HID_QUIRK_ALWAYS_POLL },
++	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_PIXART_MOUSE), HID_QUIRK_NO_RUNTIME_PM },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_POWER_COVER), HID_QUIRK_NO_INIT_REPORTS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_SURFACE_PRO_2), HID_QUIRK_NO_INIT_REPORTS },
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_MICROSOFT, USB_DEVICE_ID_MS_TOUCH_COVER_2), HID_QUIRK_NO_INIT_REPORTS },
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index c7bc9db5b192..08a6b4f5cfb2 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -713,7 +713,8 @@ static int usbhid_open(struct hid_device *hid)
+ 		}
+ 	}
+ 
+-	usb_autopm_put_interface(usbhid->intf);
++	if (!(hid->quirks & HID_QUIRK_NO_RUNTIME_PM))
++		usb_autopm_put_interface(usbhid->intf);
+ 
+ 	/*
+ 	 * In case events are generated while nobody was listening,
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index d770ab1a0479..bec413226146 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -342,6 +342,7 @@ struct hid_item {
+ /* BIT(9) reserved for backward compatibility, was NO_INIT_INPUT_REPORTS */
+ #define HID_QUIRK_ALWAYS_POLL			BIT(10)
+ #define HID_QUIRK_INPUT_PER_APP			BIT(11)
++#define HID_QUIRK_NO_RUNTIME_PM			BIT(12)
+ #define HID_QUIRK_SKIP_OUTPUT_REPORTS		BIT(16)
+ #define HID_QUIRK_SKIP_OUTPUT_REPORT_ID		BIT(17)
+ #define HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP	BIT(18)
+-- 
+2.17.1
 
-It doesn't matter that much because module utilities treat them the same
-way I think, so the Acked-by remains valid either way.
-
-Thierry
-
---k4f25fnPtRuIRUb3
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1eXJAACgkQ3SOs138+
-s6Fo0A/+PcXssvrJYWWYKpxgFdlOkAIIxEyJ/AS4fYY2prFqg02XnHeXAB5qviis
-7sifgfXRt7WIrD+7k4FlNZuIMG8+MlzyyJoL7OHACrNnsszL+8d38ex+IF3+jqie
-DbR4HafAU+yGeRzGApZV1eADlFYws6VpKHLHYq5cCpei6OEajBYl+fjJNKixbg44
-qdC/Sekg1gZs4cpezwZmmD6Z6bK+l0qIkmWWFpf1N+l7Sqj3lJXZnnxjEEpfkAVB
-awHvYSzBlcnl2aGLNQbFHxh5IuU8gpFmeK5TAmywpcVZ1ZgYlIC6RzXs0E/avCCJ
-RrvKNkx2BI3eowo4cWVDQEOsZu5BH3HA62P2VEahJDzOB2D92nJ5lcIPQO+e/dge
-PmMUbnMRAR0K/OaPzwgiaUeswH68ZcM5HHzGF01etp4chGgcvScFTXgPpbwgO/si
-+w6yDW517EiQ/cWleUssClqC+RRkEeSgOQxVHMMYLCFoO472N1RUrKxFgIzgxnHW
-MJ7miFhoBO3VAz5puIxfdpVNEKxVD0GUQ3d0b4TIwTUReCIFsSWYkTxw80CmgQc6
-2lbtcgkCGLWvXfmkcI4sHrAHLNnaHx4aFrH8QWtfqktvZuYAoxS0n46LVLto5NiV
-wSUsu0tRK8hrfy5FpWU0vWyPhXbKr5lqXqTlEtcOpBuR/RTvPLc=
-=xJFJ
------END PGP SIGNATURE-----
-
---k4f25fnPtRuIRUb3--
