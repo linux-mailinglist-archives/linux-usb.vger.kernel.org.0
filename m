@@ -2,107 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1134E991A2
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 13:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E00D8993A0
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 14:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388007AbfHVLGh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 07:06:37 -0400
-Received: from mga18.intel.com ([134.134.136.126]:31568 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730733AbfHVLGg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Aug 2019 07:06:36 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Aug 2019 04:06:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,416,1559545200"; 
-   d="scan'208";a="203373413"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by fmsmga004.fm.intel.com with ESMTP; 22 Aug 2019 04:06:34 -0700
-Subject: Re: [PATCH 1/1] usb: xhci: avoid VBus glitch during controller reset
- operation
-To:     Peter Chen <peter.chen@nxp.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-References: <20190821031602.1030-1-peter.chen@nxp.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <ce4fc3ec-2290-2902-1cf9-95add5b428b9@linux.intel.com>
-Date:   Thu, 22 Aug 2019 14:08:26 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2387540AbfHVMcY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 08:32:24 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41916 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731114AbfHVMcY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 08:32:24 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 196so3866200pfz.8
+        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2019 05:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SKL8TxtSGR1xh6Rm6HthtkLxMhr5XICCs5R9GfmOgRQ=;
+        b=JVaSs/krmNeweIel/BONbqSv7AWh8tTVM4n11lsIgGtr4wC9TgzicAuVtg+BGYOk2x
+         dSUloCPn8Fw9KTq/V+3JjVVh3WnpVCukYXwAmLxRU8iz/uyb+8FXM8ei8ZosEXe8MhE5
+         5HqaRLCk2OGoT1dCsaftzVp1rHov1Sm0HpbXCiPjiWbSchYeLJjcJH/MieSKRPJwND2l
+         aSVCbmhOGQew8VGK+Q7Y1wRhQkvGehXBquyjEUS/1bPSDxNzTXeDq0OgKvjYP0nYRG1f
+         Hln/JcZ7GYi0bYOdvCTGhKkaTHbWY8dWJP6ASaBy6fUYci9a4meHb69//jmfTlVD8hKj
+         k2cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SKL8TxtSGR1xh6Rm6HthtkLxMhr5XICCs5R9GfmOgRQ=;
+        b=L3VSpyUlf7CRR9QkLSHaOZGzL6KluH2deD5REFVI6yEIRInYm0t+x1WZc75BNJnQul
+         k6Ts3yN0I6K2AQkKNKVpzzs4EsBovozDdFiWl/jT0LpFqj41ju0s6xfv+FqTJs4ruiat
+         gLk/KBHnu5Qr3x3bD+zpWBC5/lXHWCNlN1WARoAa9ya+HL2SvSdMjMrg8gkDJnh1iuua
+         LtzmX3EbZ0iLwBU2398k9lf5p7pd4VHq3UCKnpfxmPKYN1b3VAoMz0H9Eb7hBg3SFIoa
+         UZ2aqBnCqtDIOKVUmHB/4MfCQrAQgbht/AW7wScQTLdCur19T+XDTeZZdoTGHEMnPtK1
+         u9eQ==
+X-Gm-Message-State: APjAAAW0dX/4mA8TSTZPuAitYavRFGFc75sLKTFShD9wRjIv7dAwyilz
+        Z0g+zk1I3fodYhIshmF3cM2+q5vUNh1EMCdCIaIJaw==
+X-Google-Smtp-Source: APXvYqxlc7Pwv6KWhLsZzIEHhlG05BKEjXtZNVjSUKnB0qJ10MqkCeGyu8NTHfj2ynCJ0sGk9krUYX3hQiRt4YeCSCQ=
+X-Received: by 2002:a65:4b8b:: with SMTP id t11mr33470439pgq.130.1566477142791;
+ Thu, 22 Aug 2019 05:32:22 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190821031602.1030-1-peter.chen@nxp.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <Pine.LNX.4.44L0.1908151333220.1343-100000@iolanthe.rowland.org> <Pine.LNX.4.44L0.1908201557220.1573-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1908201557220.1573-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 22 Aug 2019 14:32:11 +0200
+Message-ID: <CAAeHK+zarjL9AWcOTMMfMgE7+vk8W2HQTvjR1x3n6H6QPYC1aQ@mail.gmail.com>
+Subject: Re: [PATCH] HID: USB: Fix general protection fault caused by Logitech driver
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        linux-input@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21.8.2019 6.18, Peter Chen wrote:
-> According to xHCI 1.1 CH4.19.4 Port Power:
-> 	While Chip Hardware Reset or HCRST is asserted,
->         	the value of PP is undefined. If the xHC supports
->         	power switches (PPC = ‘1’) then VBus may be deasserted
->         	during this time. PP (and VBus) shall be enabled immediately
->         	upon exiting the reset condition.
-> 
-> The VBus glitch may cause some USB devices work abnormal, we observe
-> it at NXP LS1012AFWRY/LS1043ARDB/LX2160AQDS/LS1088ARDB platforms. To
-> avoid this Vbus glitch, we could set PP as 0 before HCRST, and the PP
-> will back to 1 after HCRST according to spec.
-
-Is this glitch causing issues already at the first xHC reset when we are
-loading the xhci driver,  or only later resets, like xHC reset at resume?
-
-> 
-> Reported-by: Ran Wang <ran.wang_1@nxp.com>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+On Tue, Aug 20, 2019 at 10:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> The syzbot fuzzer found a general protection fault in the HID subsystem:
+>
+> kasan: CONFIG_KASAN_INLINE enabled
+> kasan: GPF could be caused by NULL-ptr deref or user memory access
+> general protection fault: 0000 [#1] SMP KASAN
+> CPU: 0 PID: 3715 Comm: syz-executor.3 Not tainted 5.2.0-rc6+ #15
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:__pm_runtime_resume+0x49/0x180 drivers/base/power/runtime.c:1069
+> Code: ed 74 d5 fe 45 85 ed 0f 85 9a 00 00 00 e8 6f 73 d5 fe 48 8d bd c1 02
+> 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <0f> b6 04 02 48
+> 89 fa 83 e2 07 38 d0 7f 08 84 c0 0f 85 fe 00 00 00
+> RSP: 0018:ffff8881d99d78e0 EFLAGS: 00010202
+> RAX: dffffc0000000000 RBX: 0000000000000020 RCX: ffffc90003f3f000
+> RDX: 0000000416d8686d RSI: ffffffff82676841 RDI: 00000020b6c3436a
+> RBP: 00000020b6c340a9 R08: ffff8881c6d64800 R09: fffffbfff0e84c25
+> R10: ffff8881d99d7940 R11: ffffffff87426127 R12: 0000000000000004
+> R13: 0000000000000000 R14: ffff8881d9b94000 R15: ffffffff897f9048
+> FS:  00007f047f542700(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b30f21000 CR3: 00000001ca032000 CR4: 00000000001406f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+>   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1707
+>   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
+>   hid_hw_power include/linux/hid.h:1038 [inline]
+>   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+>   chrdev_open+0x219/0x5c0 fs/char_dev.c:413
+>   do_dentry_open+0x497/0x1040 fs/open.c:778
+>   do_last fs/namei.c:3416 [inline]
+>   path_openat+0x1430/0x3ff0 fs/namei.c:3533
+>   do_filp_open+0x1a1/0x280 fs/namei.c:3563
+>   do_sys_open+0x3c0/0x580 fs/open.c:1070
+>   do_syscall_64+0xb7/0x560 arch/x86/entry/common.c:301
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+>
+> It turns out the fault was caused by a bug in the HID Logitech driver,
+> which violates the requirement that every pathway calling
+> hid_hw_start() must also call hid_hw_stop().  This patch fixes the bug
+> by making sure the requirement is met.
+>
+> Reported-and-tested-by: syzbot+3cbe5cd105d2ad56a1df@syzkaller.appspotmail.com
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> CC: <stable@vger.kernel.org>
+>
 > ---
->   drivers/usb/host/xhci.c | 15 ++++++++++++++-
->   1 file changed, 14 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 6b34a573c3d9..f5a7b5d63031 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -167,7 +167,8 @@ int xhci_reset(struct xhci_hcd *xhci)
->   {
->   	u32 command;
->   	u32 state;
-> -	int ret;
-> +	int ret, i;
-> +	u32 portsc;
->   
->   	state = readl(&xhci->op_regs->status);
->   
-> @@ -181,6 +182,18 @@ int xhci_reset(struct xhci_hcd *xhci)
->   		return 0;
->   	}
->   
-> +	/*
-> +	 * Keep PORTSC.PP as 0 before HCRST to eliminate
-> +	 * Vbus glitch, see CH 4.19.4.
-> +	 */
-> +	for (i = 0; i < HCS_MAX_PORTS(xhci->hcs_params1); i++) {
-> +		__le32 __iomem *port_addr = &xhci->op_regs->port_status_base +
-> +				NUM_PORT_REGS * i;
-> +		portsc = readl(port_addr);
-> +		portsc &= ~PORT_POWER;
-> +		writel(portsc, port_addr);
+>
+> [as1909]
+>
+>
+>  drivers/hid/hid-lg.c    |   10 ++++++----
+>  drivers/hid/hid-lg4ff.c |    1 -
+>  2 files changed, 6 insertions(+), 5 deletions(-)
+>
+> Index: usb-devel/drivers/hid/hid-lg.c
+> ===================================================================
+> --- usb-devel.orig/drivers/hid/hid-lg.c
+> +++ usb-devel/drivers/hid/hid-lg.c
+> @@ -818,7 +818,7 @@ static int lg_probe(struct hid_device *h
+>
+>                 if (!buf) {
+>                         ret = -ENOMEM;
+> -                       goto err_free;
+> +                       goto err_stop;
+>                 }
+>
+>                 ret = hid_hw_raw_request(hdev, buf[0], buf, sizeof(cbuf),
+> @@ -850,9 +850,12 @@ static int lg_probe(struct hid_device *h
+>                 ret = lg4ff_init(hdev);
+>
+>         if (ret)
+> -               goto err_free;
+> +               goto err_stop;
+>
+>         return 0;
+> +
+> +err_stop:
+> +       hid_hw_stop(hdev);
+>  err_free:
+>         kfree(drv_data);
+>         return ret;
+> @@ -863,8 +866,7 @@ static void lg_remove(struct hid_device
+>         struct lg_drv_data *drv_data = hid_get_drvdata(hdev);
+>         if (drv_data->quirks & LG_FF4)
+>                 lg4ff_deinit(hdev);
+> -       else
+> -               hid_hw_stop(hdev);
+> +       hid_hw_stop(hdev);
+>         kfree(drv_data);
+>  }
+>
+> Index: usb-devel/drivers/hid/hid-lg4ff.c
+> ===================================================================
+> --- usb-devel.orig/drivers/hid/hid-lg4ff.c
+> +++ usb-devel/drivers/hid/hid-lg4ff.c
+> @@ -1477,7 +1477,6 @@ int lg4ff_deinit(struct hid_device *hid)
+>                 }
+>         }
+>  #endif
+> -       hid_hw_stop(hid);
+>         drv_data->device_props = NULL;
+>
+>         kfree(entry);
+>
 
-Not all bits read from PORTSC should be written back, you might need
-portsc = xhci_port_state_to_neutral(portsc) here.
+Hi Alan,
 
-Normally I'd recommend using the xhci_set_port_power() helper instead, but
-if this is is needed at driver load time then port arrays may not be set up yet.
-xhci_set_port_power() would take care of possible ACPI method calls, and add some debugging.
+I've ran the fuzzer with your patches applied overnight and noticed
+another fallout of similar bugs. I think they are caused by a similar
+issue in the sony HID driver. There's no hid_hw_stop() call in the "if
+(!(hdev->claimed & HID_CLAIMED_INPUT))" case in sony_probe(). Does it
+look like a bug to you?
 
-Not sure if this will impact some other platforms, maybe it would be better to move this to
-a separate function, and call it before xhci_reset() if a quirk is set.
-
--Mathias
-
+Thanks!
