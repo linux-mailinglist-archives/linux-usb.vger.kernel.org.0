@@ -2,126 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8B899723
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 16:43:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A179D9975A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388621AbfHVOnD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 10:43:03 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:52234 "HELO
+        id S1731572AbfHVOt6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 10:49:58 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:52252 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2388611AbfHVOnC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 10:43:02 -0400
-Received: (qmail 1313 invoked by uid 2102); 22 Aug 2019 10:43:01 -0400
+        with SMTP id S1731231AbfHVOt6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 10:49:58 -0400
+Received: (qmail 1325 invoked by uid 2102); 22 Aug 2019 10:49:57 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 22 Aug 2019 10:43:01 -0400
-Date:   Thu, 22 Aug 2019 10:43:01 -0400 (EDT)
+  by localhost with SMTP; 22 Aug 2019 10:49:57 -0400
+Date:   Thu, 22 Aug 2019 10:49:57 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Roger Quadros <rogerq@ti.com>
-cc:     balbi@kernel.org, <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: gadget: udc: core: Fix segfault if udc_bind_to_driver()
- for pending driver fails
-In-Reply-To: <20190822134028.2623-1-rogerq@ti.com>
-Message-ID: <Pine.LNX.4.44L0.1908221042440.1311-100000@iolanthe.rowland.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     Oliver Neukum <oneukum@suse.com>, <jikos@kernel.org>,
+        <benjamin.tissoires@redhat.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] HID: quirks: Disable runtime suspend on Microsoft Corp.
+ Basic Optical Mouse v2.0
+In-Reply-To: <D6E31CB0-BC2B-4B52-AF18-4BE990D3FDA5@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.1908221043080.1311-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 22 Aug 2019, Roger Quadros wrote:
+On Thu, 22 Aug 2019, Kai-Heng Feng wrote:
 
-> If a gadget driver is in the pending drivers list, a UDC
-> becomes available and udc_bind_to_driver() fails, then it
-> gets deleted from the pending list.
-> i.e. list_del(&driver->pending) in check_pending_gadget_drivers().
+> at 18:38, Oliver Neukum <oneukum@suse.com> wrote:
 > 
-> Then if that gadget driver is unregistered,
-> usb_gadget_unregister_driver() does a list_del(&driver->pending)
-> again thus causing a page fault as that list entry has been poisoned
-> by the previous list_del().
+> > Am Donnerstag, den 22.08.2019, 18:04 +0800 schrieb Kai-Heng Feng:
+> >> Hi Oliver,
+> >>
+> >> at 17:45, Oliver Neukum <oneukum@suse.com> wrote:
+> >>
+> >>> Am Donnerstag, den 22.08.2019, 17:17 +0800 schrieb Kai-Heng Feng:
+> >>>> The optical sensor of the mouse gets turned off when it's runtime
+> >>>> suspended, so moving the mouse can't wake the mouse up, despite that
+> >>>> USB remote wakeup is successfully set.
+> >>>>
+> >>>> Introduce a new quirk to prevent the mouse from getting runtime
+> >>>> suspended.
+> >>>
+> >>> Hi,
+> >>>
+> >>> I am afraid this is a bad approach in principle. The device
+> >>> behaves according to spec.
+> >>
+> >> Can you please point out which spec it is? Is it USB 2.0 spec?
+> >
+> > Well, sort of. The USB spec merely states how to enter and exit
+> > a suspended state and that device state must not be lost.
+> > It does not tell you what a suspended device must be able to do.
 > 
-> Fix this by using list_del_init() instead of list_del() in
-> check_pending_gadget_drivers().
+> But shouldn’t remote wakeup signaling wakes the device up and let it exit  
+> suspend state?
+> Or it’s okay to let the device be suspended when remote wakeup is needed  
+> but broken?
 > 
-> Test case:
+> >
+> >>> And it behaves like most hardware.
+> >>
+> >> So seems like most hardware are broken.
+> >> Maybe a more appropriate solution is to disable RPM for all USB mice.
+> >
+> > That is a decision a distro certainly can make. However, the kernel
+> > does not, by default, call usb_enable_autosuspend() for HID devices
+> > for this very reason. It is enabled by default only for hubs,
+> > BT dongles and UVC cameras (and some minor devices)
+> >
+> > In other words, if on your system it is on, you need to look
+> > at udev, not the kernel.
 > 
-> - Make sure no UDC is available
-> - modprobe g_mass_storage file=wrongfile
-> - Load UDC driver so it becomes available
-> 	lun0: unable to open backing file: wrongfile
-> - modprobe -r g_mass_storage
+> So if a device is broken when “power/control” is flipped by user, we should  
+> deal it at userspace? That doesn’t sound right to me.
 > 
-> [   60.900431] Unable to handle kernel paging request at virtual address dead000000000108
-> [   60.908346] Mem abort info:
-> [   60.911145]   ESR = 0x96000044
-> [   60.914227]   Exception class = DABT (current EL), IL = 32 bits
-> [   60.920162]   SET = 0, FnV = 0
-> [   60.923217]   EA = 0, S1PTW = 0
-> [   60.926354] Data abort info:
-> [   60.929228]   ISV = 0, ISS = 0x00000044
-> [   60.933058]   CM = 0, WnR = 1
-> [   60.936011] [dead000000000108] address between user and kernel address ranges
-> [   60.943136] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [   60.948691] Modules linked in: g_mass_storage(-) usb_f_mass_storage libcomposite xhci_plat_hcd xhci_hcd usbcore ti_am335x_adc kfifo_buf omap_rng cdns3 rng_core udc_core crc32_ce xfrm_user crct10dif_ce snd_so6
-> [   60.993995] Process modprobe (pid: 834, stack limit = 0x00000000c2aebc69)
-> [   61.000765] CPU: 0 PID: 834 Comm: modprobe Not tainted 4.19.59-01963-g065f42a60499 #92
-> [   61.008658] Hardware name: Texas Instruments SoC (DT)
-> [   61.014472] pstate: 60000005 (nZCv daif -PAN -UAO)
-> [   61.019253] pc : usb_gadget_unregister_driver+0x7c/0x108 [udc_core]
-> [   61.025503] lr : usb_gadget_unregister_driver+0x30/0x108 [udc_core]
-> [   61.031750] sp : ffff00001338fda0
-> [   61.035049] x29: ffff00001338fda0 x28: ffff800846d40000
-> [   61.040346] x27: 0000000000000000 x26: 0000000000000000
-> [   61.045642] x25: 0000000056000000 x24: 0000000000000800
-> [   61.050938] x23: ffff000008d7b0d0 x22: ffff0000088b07c8
-> [   61.056234] x21: ffff000001100000 x20: ffff000002020260
-> [   61.061530] x19: ffff0000010ffd28 x18: 0000000000000000
-> [   61.066825] x17: 0000000000000000 x16: 0000000000000000
-> [   61.072121] x15: 0000000000000000 x14: 0000000000000000
-> [   61.077417] x13: ffff000000000000 x12: ffffffffffffffff
-> [   61.082712] x11: 0000000000000030 x10: 7f7f7f7f7f7f7f7f
-> [   61.088008] x9 : fefefefefefefeff x8 : 0000000000000000
-> [   61.093304] x7 : ffffffffffffffff x6 : 000000000000ffff
-> [   61.098599] x5 : 8080000000000000 x4 : 0000000000000000
-> [   61.103895] x3 : ffff000001100020 x2 : ffff800846d40000
-> [   61.109190] x1 : dead000000000100 x0 : dead000000000200
-> [   61.114486] Call trace:
-> [   61.116922]  usb_gadget_unregister_driver+0x7c/0x108 [udc_core]
-> [   61.122828]  usb_composite_unregister+0x10/0x18 [libcomposite]
-> [   61.128643]  msg_cleanup+0x18/0xfce0 [g_mass_storage]
-> [   61.133682]  __arm64_sys_delete_module+0x17c/0x1f0
-> [   61.138458]  el0_svc_common+0x90/0x158
-> [   61.142192]  el0_svc_handler+0x2c/0x80
-> [   61.145926]  el0_svc+0x8/0xc
-> [   61.148794] Code: eb03003f d10be033 54ffff21 a94d0281 (f9000420)
-> [   61.154869] ---[ end trace afb22e9b637bd9a7 ]---
-> Segmentation fault
+> >
+> >>> If you do not want runtime PM for such devices, do not switch
+> >>> it on.
+> >>
+> >> A device should work regardless of runtime PM status.
+> >
+> > Well, no. Runtime PM is a trade off. You lose something if you use
+> > it. If it worked just as well as full power, you would never use
+> > full power, would you?
 > 
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> ---
-> Changelog:
-> v2
-> - Retain policy behaviour if pending gadget driver fails to bind.
+> I am not asking the suspended state to work as full power, but to prevent a  
+> device enters suspend state because of broken remote wakeup.
 > 
->  drivers/usb/gadget/udc/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > Whether the loss of functionality or performance is worth the energy
+> > savings is a policy decision. Hence it belongs into udev.
+> > Ideally the kernel would tell user space what will work in a
+> > suspended state. Unfortunately HID does not provide support for that.
 > 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 7cf34beb50df..92af8dc98c3d 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1143,7 +1143,7 @@ static int check_pending_gadget_drivers(struct usb_udc *udc)
->  						dev_name(&udc->dev)) == 0) {
->  			ret = udc_bind_to_driver(udc, driver);
->  			if (ret != -EPROBE_DEFER)
-> -				list_del(&driver->pending);
-> +				list_del_init(&driver->pending);
->  			break;
->  		}
->  
+> I really don’t think “loss of functionally” belongs to policy decision. But  
+> that’s just my opinion.
+> 
+> >
+> > This is a deficiency of user space. The kernel has an ioctl()
+> > to let user space tell it, whether a device is fully needed.
+> > X does not use them.
+> 
+> Ok, I’ll take a look at other device drivers that use it.
+> 
+> >
+> >>> The refcounting needs to be done correctly.
+> >>
+> >> Will do.
+> >
+> > Well, I am afraid your patch breaks it and if you do not break
+> > it, the patch is reduced to nothing.
+> 
+> Maybe just calling usb_autopm_put_interface() in usbhid_close() to balance  
+> the refcount?
+> 
+> >
+> >>> This patch does something that udev should do and in a
+> >>> questionable manner.
+> >>
+> >> IMO if the device doesn’t support runtime suspend, then it needs to be
+> >> disabled in kernel but not workaround in userspace.
+> >
+> > You switch it on from user space. Of course the kernel default
+> > must be safe, as you said. It already is.
+> 
+> I’d also like to hear maintainers' opinion on this issue.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+I agree with Oliver.  There is no formal requirement on what actions
+should cause a mouse to generate a remote wakeup request.  Some mice
+will do it when they are moved and some mice won't.
+
+If you don't like the way a particular mouse behaves then you should
+not allow it to go into runtime suspend.  By default, the kernel
+prevents _all_ USB mice from being runtime suspended; the only way a
+mouse can be suspended is if some userspace program tells the kernel to
+allow it.
+
+It might be a udev script which does this, or a powertop setting, or
+something else.  Regardless, what the kernel does is correct.  
+Furthermore, the kernel has to accomodate users who don't mind pressing
+a mouse button to wake up their mice.  For their sake, the kernel
+should not forbid a mouse from ever going into runtime suspend merely
+because it won't generate a wakeup request when it is moved.
+
+Alan Stern
 
