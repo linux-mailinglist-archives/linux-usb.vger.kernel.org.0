@@ -2,86 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60C3499A2C
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 19:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3E8A99A3A
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 19:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390897AbfHVRLK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 13:11:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32896 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389135AbfHVRLJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Aug 2019 13:11:09 -0400
-Received: from localhost (wsip-184-188-36-2.sd.sd.cox.net [184.188.36.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 821062089E;
-        Thu, 22 Aug 2019 17:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566493868;
-        bh=Eu5zYHsgZr/DzgkYZtrV8Xf3yPbZrB6F/5Aa3SVutiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YgpviCCuEYOqne1wsEWgd6l+Gzkw+5xYBwggmYQtDll2PjCPqB1qmScWDXN1P/B5K
-         B/RNg/icssWR6AjcDPdeqSlGGxWCAS2rl4YBtOQnalt5AVfZm3e4ze3if6d5gFRY2x
-         +KvCpV/lo8jNDpZObQ1PLinLdtTKiva/GCEIEsL4=
-Date:   Thu, 22 Aug 2019 10:11:08 -0700
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        Gavin Li <git@thegavinli.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Geoff Levand <geoff@infradead.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Bin Liu <b-liu@ti.com>, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-m68k@lists.linux-m68k.org, iommu@lists.linux-foundation.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: next take at setting up a dma mask by default for platform
- devices v2
-Message-ID: <20190822171108.GA17471@kroah.com>
-References: <20190816062435.881-1-hch@lst.de>
+        id S1732502AbfHVRLm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 13:11:42 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:52680 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2390937AbfHVRLi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 13:11:38 -0400
+Received: (qmail 3512 invoked by uid 2102); 22 Aug 2019 13:11:37 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 22 Aug 2019 13:11:37 -0400
+Date:   Thu, 22 Aug 2019 13:11:37 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Jiri Kosina <jikos@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        <linux-input@vger.kernel.org>, USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] HID: USB: Fix general protection fault caused by Logitech
+ driver
+In-Reply-To: <CAAeHK+zarjL9AWcOTMMfMgE7+vk8W2HQTvjR1x3n6H6QPYC1aQ@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1908221253180.1311-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190816062435.881-1-hch@lst.de>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 08:24:29AM +0200, Christoph Hellwig wrote:
-> Hi all,
+On Thu, 22 Aug 2019, Andrey Konovalov wrote:
+
+> Hi Alan,
 > 
-> this is another attempt to make sure the dma_mask pointer is always
-> initialized for platform devices.  Not doing so lead to lots of
-> boilerplate code, and makes platform devices different from all our
-> major busses like PCI where we always set up a dma_mask.  In the long
-> run this should also help to eventually make dma_mask a scalar value
-> instead of a pointer and remove even more cruft.
-> 
-> The bigger blocker for this last time was the fact that the usb
-> subsystem uses the presence or lack of a dma_mask to check if the core
-> should do dma mapping for the driver, which is highly unusual.  So we
-> fix this first.  Note that this has some overlap with the pending
-> desire to use the proper dma_mmap_coherent helper for mapping usb
-> buffers.  The first two patches have already been queued up by Greg
-> and are only included for completeness.
+> I've ran the fuzzer with your patches applied overnight and noticed
+> another fallout of similar bugs. I think they are caused by a similar
+> issue in the sony HID driver. There's no hid_hw_stop() call in the "if
+> (!(hdev->claimed & HID_CLAIMED_INPUT))" case in sony_probe(). Does it
+> look like a bug to you?
 
-Note to everyone.  The first two patches in this series is already in
-5.3-rc5.
+It looks like the relevant hid_hw_stop() call is the one at the end of
+sony_configure_input().  But I can't tell if doing that way is valid or
+not -- in practice the code would end up calling hid_disconnect() while
+hid_connect() was still running, which doesn't seem like a good idea.
 
-I've applied the rest of the series to my usb-next branch (with the 6th
-patch landing there later today.)  They are scheduled to be merge to
-Linus in 5.4-rc1.
+There's a comment about this near the end of sony_probe().  I suspect
+it would be better to call hid_hw_stop() in the conditional code
+following that comment rather than in sony_configure_input().
 
-Christoph, thanks so much for these cleanups.
+Either way, these are all things Jiri should know about or check up on.
 
-greg k-h
+Have you gotten any test results from syzbot exercising these pathways?  
+You ought to be able to tell which HID driver is involved by looking
+through the console output.
+
+Alan Stern
+
