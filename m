@@ -2,67 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3510998D05
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 10:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5947098DC2
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 10:32:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729936AbfHVIIS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 04:08:18 -0400
-Received: from mx2.suse.de ([195.135.220.15]:45826 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725987AbfHVIIS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Aug 2019 04:08:18 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0BDBFAF18;
-        Thu, 22 Aug 2019 08:08:17 +0000 (UTC)
-Message-ID: <1566461295.8347.19.camel@suse.com>
-Subject: Re: [RFC 1/4] Add usb_get_address and usb_set_address support
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Charles.Hyde@dellteam.com, gregkh@linuxfoundation.org
-Cc:     Mario.Limonciello@dell.com, nic_swsd@realtek.com,
-        linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Date:   Thu, 22 Aug 2019 10:08:15 +0200
-In-Reply-To: <1566430506442.20925@Dellteam.com>
-References: <1566339522507.45056@Dellteam.com>
-        ,<20190820222602.GC8120@kroah.com> <1566430506442.20925@Dellteam.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1731122AbfHVIcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 04:32:32 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:39560 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731114AbfHVIcb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 04:32:31 -0400
+Received: by mail-wr1-f66.google.com with SMTP id t16so4556227wra.6
+        for <linux-usb@vger.kernel.org>; Thu, 22 Aug 2019 01:32:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
+        b=E8c1BVe7EBu6yhtFK7db335Fb1S6eHZXaT/G0r9s6o7yCfITCEzNdfIuD0wirYp7vb
+         MjBwnsVUgiHDSiSTUkyjG1wIB9iwROJpD58qta21td0tKHQDUmwhpZdduxFB2zp6sebi
+         jvUrA8A2D58nA2kFTgHoHam8Ya25z0Z5isgC5uLEVljRxOWdTmXYFCNu7V4jDwDYcxXO
+         Tn/AhSkcu56p/oJC8gZNa9b0VNYEfc0WGmMiTJsmx6lTnUJ/u4ugOnZ+1Lqv9VyOuAkr
+         NNngborlwcNM9CtXvqO9XoNQpVYvf7o4NuBeerxAGsY42aYL3eOxwqRmbKc320uBtg6u
+         wCNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4b70yh01yux8LseDePSC/DiDISC+4IVFYV73p/rz2+o=;
+        b=OmlqT6g7cWM8lz6MDRqlR7rEXsH/jE0D9YplYfu26/RvP/hJ6F0ru+2iPW0JM54BOP
+         rEndy/driiOwYcBRTB+a3UGBXiqOXR8O8+v5dCUp/zKGULFPqilrCwQRKxmZAS5owwK/
+         2uLQqIOUJmierwq4VHRRDen5bMvxxBVV1ERwaNCeiecTvv8Ll3mpqIi/sWDqmZediCa/
+         tVp/7bTZrcuouvYtMFjd2FxIIGl60mxN/+NepdEdvcTlyPW4r1a7BksA33xnPstIaDWz
+         OFB4BX2zqHixfvZGp5Z4EQppwJp2p626FJD61ZcczjpPDQl9Nz2OXF2RgjVHwUduO2PJ
+         TL4g==
+X-Gm-Message-State: APjAAAXutESxrsNqUMGLbtRyc10qOOpwe2636VSpjbGxflpBDo8gR2kw
+        +XqockJvbLtE+Mjkjr8kyyicng==
+X-Google-Smtp-Source: APXvYqzhncQ2sLyFAXkyHMIdbyY5WIElP1PH9XUf0yABxgLd2l6QYEsJKT4aB0mYksaQ3+iKPSinPA==
+X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr7356600wrv.327.1566462748883;
+        Thu, 22 Aug 2019 01:32:28 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
+        by smtp.gmail.com with ESMTPSA id p4sm22917436wrs.6.2019.08.22.01.32.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 01:32:27 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 09:32:23 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        hpa@zytor.com, jeyu@kernel.org, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com
+Subject: Re: [PATCH v3 10/11] RFC: usb-storage: export symbols in USB_STORAGE
+ namespace
+Message-ID: <20190822083223.GA15709@google.com>
+References: <20190813121733.52480-1-maennich@google.com>
+ <20190821114955.12788-1-maennich@google.com>
+ <20190821114955.12788-11-maennich@google.com>
+ <20190821231329.GA369@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190821231329.GA369@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 21.08.2019, 23:35 +0000 schrieb
-Charles.Hyde@dellteam.com:
-> <snipped>
-> > 
-> > This is a VERY cdc-net-specific function.  It is not a "generic" USB
-> > function at all.  Why does it belong in the USB core?  Shouldn't it live
-> > in the code that handles the other cdc-net-specific logic?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> 
-> Thank you for this feedback, Greg.  I was not sure about adding this to message.c, because of the USB_CDC_GET_NET_ADDRESS.  I had found references to SET_ADDRESS in the USB protocol at https://wiki.osdev.org/Universal_Serial_Bus#USB_Protocol.  If one wanted a generic USB function for SET_ADDRESS, to be used for both sending a MAC address and receiving one, how would you suggest this be implemented?  This is a legit question because I am curious.
+On Wed, Aug 21, 2019 at 04:13:29PM -0700, Christoph Hellwig wrote:
+>On Wed, Aug 21, 2019 at 12:49:25PM +0100, Matthias Maennich wrote:
+>> Modules using these symbols are required to explicitly import the
+>> namespace. This patch was generated with the following steps and serves
+>> as a reference to use the symbol namespace feature:
+>>
+>>  1) Define DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile
+>>  2) make  (see warnings during modpost about missing imports)
+>>  3) make nsdeps
+>>
+>> Instead of a DEFAULT_SYMBOL_NAMESPACE definition, the EXPORT_SYMBOL_NS
+>> variants can be used to explicitly specify the namespace. The advantage
+>> of the method used here is that newly added symbols are automatically
+>> exported and existing ones are exported without touching their
+>> respective EXPORT_SYMBOL macro expansion.
+>
+>So what is USB_STORAGE here?  It isn't a C string, so where does it
+>come from?  To me using a C string would seem like the nicer interface
+>vs a random cpp symbol that gets injected somewhere.
 
-Your implementation was, except for missing error handling, usable.
-The problem is where you put it. CDC messages exist only for CDC
-devices. Now it is true that there is no generic CDC driver.
-Creating a module just for that would cost more memory than it saves
-in most cases.
-But MACs are confined to network devices. Hence the functionality
-can be put into usbnet. It should not be put into any individual
-driver, so that every network driver can use it without duplication.
+To be honest, I would also prefer an interface that uses C strings or
+literals for the new EXPORT_SYMBOLS* macros:
 
-> Your feedback led to moving the functionality into cdc_ncm.c for today's testing, and removing all changes from messages.c, usb.h, usbnet.c, and usbnet.h.  This may be where I end up long term, but I would like to learn if there is a possible solution that could live in message.c and be callable from other USB-to-Ethernet aware drivers.
+  EXPORT_SYMBOL_NS(mysym, "USB_STORAGE");
 
-All those drivers use usbnet. Hence there it should be.
+  or
 
-	Regards
-		Oliver
+  const char USB_STORAGE_NS[] = "USB_STORAGE";
+  EXPORT_SYMBOL_NS(mysym, USB_STORAGE_NS);
 
+The DEFAULT_SYMBOL_NAMESPACE define within Makefiles would get a bit
+more verbose in that case to express the literal:
+  ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE="\"USB_STORAGE\""
+
+
+The main reason against that, is, that in the expansion of
+EXPORT_SYMBOL_NS, we define the ksymtab entry, which name is
+constructed partly by the name of the namespace:
+
+   static const struct kernel_symbol __ksymtab_##sym##__##ns  ...
+                                                        ^^^^
+
+For that we depend on a cpp symbol to construct the name. I am not sure
+there is a reasonable way of getting rid of that without ending up
+constructing the ksymtab entries completely in asm as it is already done
+in case of PREL32_RELOCATIONS. But I am happy to be corrected.
+
+For reference that is done in patch 03/11 of this series:
+https://lore.kernel.org/lkml/20190821114955.12788-4-maennich@google.com/
+
+Cheers,
+Matthias
