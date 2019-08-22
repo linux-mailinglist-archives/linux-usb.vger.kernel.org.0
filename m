@@ -2,65 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 974DE98EAE
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BE498EC5
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Aug 2019 11:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732913AbfHVJEz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 05:04:55 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:37368 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732071AbfHVJEz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:04:55 -0400
-Received: by mail-wm1-f53.google.com with SMTP id d16so4938854wme.2;
-        Thu, 22 Aug 2019 02:04:54 -0700 (PDT)
+        id S1729644AbfHVJHv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 05:07:51 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:37030 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728903AbfHVJHv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 05:07:51 -0400
+Received: by mail-wm1-f67.google.com with SMTP id d16so4948248wme.2;
+        Thu, 22 Aug 2019 02:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=NnJbFQaYPTPxuDad0em8BVEVOOFuU1SABXnC9tM8iPs=;
-        b=ogIqq1PGoMuLjcFxV3aTXnewEGR31pwUSoxDwHYwzxvmTTN7JzlLTQMSAcN+Hsv/SC
-         RoyHHSx/luxxUxlb9jQmfvuEHhCjLSemalZvXIj0GnonwzOXS+wew7j66NA5PPqyA1gI
-         gYVQd2qcHBZUvOdNt0NsbjlA+wjfF+Nr/luNcaG2/Yia7IdcdHtZN8KDU87Su8nJAkcs
-         yo/pMAuro/c4fDYkEAQIvjItyIvDlFAFXcoy0K2yRRklyLrg5TeYxfLXR90EsEziDAoB
-         2quBq0M5YZbPDnvuIIFzTYirbEkr/haMlD77SUqM5bF7FfR4cRxP8fsfWprizdEVyz67
-         2Mkg==
+        bh=anZxiHUSK863ya9dmMTzujdG5ylmaCDlZaEGIY0R7Vo=;
+        b=KVi3DEvCyRCxT+OMDwSOcluBwNqUd+CKCxEnL2QWyKBu5+WDw1xmDHRJZs4Zy7+6i1
+         XHD6BBwECcjg4J+1jpDt+AfsgaGus/Xc+hqKwjLMIeuPBvfKMOpNz383PaSWoU1Sdggl
+         TjHRdMF3I1jjrsCM/wOpBQvX3XBovnLSoMONIZCIITcD6X8Pv8oWdSLq5xxYv0vmENVf
+         u2nJULzPq9taX+EKeKdvUGVGGY5eW8HQyOQ8XOVOJbIDjqw3Jf7Kfws8VpR1edO9AJZf
+         GlI8dT52/PGiLUlI8Hf2DxUlpnyEtK1ISXW/vME7Qgv5eDSGHiyhBmzfX0C97+C2Kkvn
+         yYpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NnJbFQaYPTPxuDad0em8BVEVOOFuU1SABXnC9tM8iPs=;
-        b=Qkxh8ORqKbHeVgwNRRosTYiDHe19cCG1TPX5Q7MfSkFQljrXpkp2RPZ06fjeKOqXN9
-         SLQFBymhWPg2NBs50orXoS5Qdhl8gjeeOzRvy8FjxFbs1qzfg2BYqwoWXL7pEs0PErhk
-         WrGyOyEeILZ3yGTT5PTe49Fuisn1ukP00BS5TLI2iaCmd2YnkjrpLJIEhir84WnqEHrK
-         aJDOeQHYTeQKhugFMcEkLfdztnIHeCk5qGqMaaUFkLn1YWD0b28HsKkOFdyYEqYpiBf6
-         kILeUe4aihxziRfU9B8ZorDtWd5/Jm8cAuyGCFd/GLVF79ik/PgKzyCAh4Yt6EOrFlI/
-         3Z0Q==
-X-Gm-Message-State: APjAAAU2t4pJiiGjR1YwYFkFBzbvLRzaf+GupTjj+iG288+eCR6+s8EW
-        Mz0T8+X++nmpgIrzfdLLuaQ=
-X-Google-Smtp-Source: APXvYqx7GBwZmj7yZnSMjVc5xDpzfZ1DB5DZUVp2db1hX9BZF69+CpLZLkw9t9v/ba97wRcqLRApfw==
-X-Received: by 2002:a1c:4b15:: with SMTP id y21mr5020536wma.53.1566464693241;
-        Thu, 22 Aug 2019 02:04:53 -0700 (PDT)
+        bh=anZxiHUSK863ya9dmMTzujdG5ylmaCDlZaEGIY0R7Vo=;
+        b=Z2o3Jz0i/dk6nEGKxDSO3RRtbtFA2D3ujkJ8YWj8WdVAhfndb4nBeKXext8crEYQ2U
+         5cKbVj3kKvRYhlEIew4HPuZ2uz58x8ti+Lknzz4TW5s1TsdGp5O9KUusmwODOIvKFiMl
+         K9UP5At7/hhwlLngbm1XKANuSjk9RZumApivDigp3V2HEWCSd8i3xWP7slqQjdgl7Ovd
+         ZDicN/JKoRAd3SDjmH3akxCicdixF18UQbW71V42TfQ9t0gp+vGCe7Q2Mg+4OvqZE4Yl
+         p5+dsJpXenjBDCo3OS4BKoypaAx9UhGQEkhx6+LZ2TIP1CxxnEtXBzktYJDcYYmc1L5J
+         0AGQ==
+X-Gm-Message-State: APjAAAVDDZy9v/ZeKN/VhHRI+25wFfnAiDUIxWUcq6lRk4oHPKdjVlmB
+        KbAd+FldcdQUfhjPwtXBx2E=
+X-Google-Smtp-Source: APXvYqy9i2O7+ZIOf0JBNsFxRKqlHorCHUBTLtHVLp7ySbJmb3+Zq7JS3XMfFsHbPTfliZSwaGuAhA==
+X-Received: by 2002:a1c:cc09:: with SMTP id h9mr4913750wmb.32.1566464868084;
+        Thu, 22 Aug 2019 02:07:48 -0700 (PDT)
 Received: from localhost (pD9E51890.dip0.t-ipconnect.de. [217.229.24.144])
-        by smtp.gmail.com with ESMTPSA id b136sm7170619wme.18.2019.08.22.02.04.51
+        by smtp.gmail.com with ESMTPSA id f10sm21542180wrm.31.2019.08.22.02.07.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 02:04:51 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 11:04:49 +0200
+        Thu, 22 Aug 2019 02:07:46 -0700 (PDT)
+Date:   Thu, 22 Aug 2019 11:07:45 +0200
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Nagarjuna Kristam <nkristam@nvidia.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
         mark.rutland@arm.com, robh+dt@kernel.org,
         devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: Re: [Patch V6 4/8] dt-bindings: usb: Add NVIDIA Tegra XUSB device
- mode controller binding
-Message-ID: <20190822090449.GB23873@ulmo>
+Subject: Re: [Patch V6 0/8] Tegra XUSB gadget driver support
+Message-ID: <20190822090745.GC23873@ulmo>
 References: <1565257046-9890-1-git-send-email-nkristam@nvidia.com>
- <1565257046-9890-5-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="MW5yreqqjyrRcusr"
+        protocol="application/pgp-signature"; boundary="E13BgyNx05feLLmH"
 Content-Disposition: inline
-In-Reply-To: <1565257046-9890-5-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <1565257046-9890-1-git-send-email-nkristam@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -68,45 +66,155 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---MW5yreqqjyrRcusr
+--E13BgyNx05feLLmH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 08, 2019 at 03:07:22PM +0530, Nagarjuna Kristam wrote:
-> Add device-tree binding documentation for the XUSB device mode controller
-> present on Tegra210 SoC. This controller supports the USB 3.0
-> specification.
+On Thu, Aug 08, 2019 at 03:07:18PM +0530, Nagarjuna Kristam wrote:
+> This is the sixth version of series "Tegra XUSB gadget driver support"
 >=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> Reviewed-by: JC Kuo <jckuo@nvidia.com>
+> Patches 1-3 are phy driver changes to add support for device
+> mode.
+> Patches 4-7 are changes related to XUSB device mode
+> controller driver.
+> Patch 8 is to enable XUDC driver in defconfig
+>=20
+> Test Steps(USB 2.0):
+> - Enable "USB Gadget precomposed configurations" in defconfig
+> - Build, flash and boot Jetson TX1
+> - Connect Jetson TX1 and Ubuntu device using USB A to Micro B
+>   cable
+> - After boot on Jetson TX1 terminal usb0 network device should be
+>   enumerated
+> - Assign static ip to usb0 on Jetson TX1 and corresponding net
+>   device on ubuntu
+> - Run ping test and transfer test(used scp) to check data transfer
+>   communication
+>=20
+> SS mode is verified by enabling Type A port as peripheral
+>=20
+> This patch series is dependent[1] on
+> https://patchwork.kernel.org/cover/11056429/
+>=20
+> [1] Dependent series doesnot compile on Master branch due to removal of
+>     switch_fwnode_match() in file drivers/usb/roles/class.c.
+>     Hence verified current series changes on 5.3-RC3 branch.
 > ---
->  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  | 110 +++++++++++++++=
+> v6:
+> * Patches 1,2,3,7,8 - No changes
+> * Patch 4,5,6 - Comments from Rob addressed, updated usb connector driver
+>   compatibility string.
+> ---
+> v5:
+> * Patches 1-3 - Commit subject updated as per inputs from Thierry
+> * Patch 4 - Added reg-names used on Tegra210 in the bindings doc
+> * Enabled xudc driver as module instead of part of kernel in patch 8
+> * Patched 5-8 - No changes
+> ---
+> v4:
+> * patch 1 - no changes
+> * corrected companion device search based on inputs from Thierry in patch=
+ 2
+> * removed unneeded dev variable and corrected value read in
+>   tegra210_utmi_port_reset function in patch 3
+> * dt binding doc and dtb files are corrected for alignments.
+>   Replaced extcon-usb-gpio with usb role switch.
+> * Added support for USB role switch instead of extcon-usb-gpio and other =
+minor
+>   comments as suggested by Chunfeng.
+> * Enabled xudc driver as module instead of part of kernel in patch 8
+> ---
+> V3:
+> * Rebased patch 1 to top of tree.
+> * Fixed bug in patch 2, where xudc interrupts dont get generated if USB h=
+ost
+>   mode fails to probe. Moved fake port detection logic to generic xusb.c.=
+ fake
+>   usb port data is updated based on soc flag need_fake_usb3_port.
+> * Added extra lines whereever necessary to make code more readable in pat=
+ch 3
+>   and 7.
+> * dt binding doc is corrected for typos and extcon references. Also added
+>   details for clocks and removed xusb_ references to clock and power-doma=
+in
+>   names and accordingly patch 5 is updated.
+> * removed avdd-pll-utmip-supply in patch 6, as its now part of padctl dri=
+ver.
+> * Patch 8 has no changes.
+> ---
+> V2:
+> * Patches 1-3 are new patches in this series, which splits unified featur=
+es
+>   patch to speprated features and removes need of port-fake entry in DT.
+> * Patch 4 is re-arragend dt-bindings patch which incorporates previous
+>   patch comments to sort DT entries alphabetically, addresses name changes
+>   and PM domain details added.
+> * Patch 5-6 are re-arranged DT patches with major changes - sort entries
+>   alphabetically, and adds clock names.
+> * Patch 7 is UDC driver tegra XUSB device mode controller with major
+>   changes - remove un-used module params, lockinng for device_mode flag,
+>   moving un-needed info logs to debug level, making changes feature flag
+>   dependent rather than SOC based macros and other error handling in prob=
+e.
+> * Patch 8 has no changes.
+>=20
+> Nagarjuna Kristam (8):
+>   phy: tegra: xusb: Add XUSB dual mode support on Tegra210
+>   phy: tegra: xusb: Add usb3 port fake support on Tegra210
+>   phy: tegra: xusb: Add vbus override support on Tegra210
+
+I just noticed that you haven't Cc'ed the PHY framework maintainer
+(Kishon) on these patches. Please make sure to Cc him (on the whole set)
+when you send out v7.
+
+Thierry
+
+>   dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
+>   arm64: tegra: Add xudc node for Tegra210
+>   arm64: tegra: Enable xudc on Jetson TX1
+>   usb: gadget: Add UDC driver for tegra XUSB device mode controller
+>   arm64: defconfig: Enable tegra XUDC driver
+>=20
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  |  110 +
+>  arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   31 +-
+>  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   19 +
+>  arch/arm64/configs/defconfig                       |    1 +
+>  drivers/phy/tegra/xusb-tegra210.c                  |  133 +-
+>  drivers/phy/tegra/xusb.c                           |   87 +
+>  drivers/phy/tegra/xusb.h                           |    4 +
+>  drivers/usb/gadget/udc/Kconfig                     |   11 +
+>  drivers/usb/gadget/udc/Makefile                    |    1 +
+>  drivers/usb/gadget/udc/tegra_xudc.c                | 3808 ++++++++++++++=
 ++++++
->  1 file changed, 110 insertions(+)
+>  include/linux/phy/tegra/xusb.h                     |    4 +-
+>  11 files changed, 4205 insertions(+), 4 deletions(-)
 >  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xu=
 dc.txt
+>  create mode 100644 drivers/usb/gadget/udc/tegra_xudc.c
+>=20
+> --=20
+> 2.7.4
+>=20
 
-Acked-by: Thierry Reding <treding@nvidia.com>
-
---MW5yreqqjyrRcusr
+--E13BgyNx05feLLmH
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1eWrEACgkQ3SOs138+
-s6HCgA/+P0KOdIRGToKGv75qZZTKyiLgAYXyeU11HjMEsa+B3Vjb9hXDgN784tvH
-3mvdR1fPfRR4KishaQv775hATmz/ah5Qts5UJ78syybB25jrS/OB9BHqp3Ei5be6
-CW13xC2WhpInCW/WCnjE0c+xdDUHhrj6RaucQ7lavn+AvQnVWCsOoEgW/O8Xjdyr
-4A3sNVC1cbJ+Ir6t3T9kV9vnynDEgBI84fAfBf2jKpW2jlXZ061jLxwuQ8iIzgJp
-SOMldCNIzV4b6RW+qb/L9y0eoaG9RMYukgj9/SHFPgwmTMd60gY950xRDU/9M4np
-4/A9L0auS3nVNM6SwxmqE7pqgFi1PPplpttLb885MXJ9a1vjIXBaDfjDX68pe93b
-czpswuHdYKyVWQJmn7Qnv+X1ztb+yRZchCLHXNFeDZDFUAIOVLWas8Tk+5rmX7kR
-1ERvarK32Fg+/PoTLOQ88Dgmq6qmBBmvdZsxF8t1aXzdBOTRF+5F9a07LBKe9sEh
-w4sQ0VRAVbMbZjB5ecwZsdYZQYw4BI0tZKJn8ITGeT768kZGTcukBO0CdPy4ZtIs
-R6vrMZ95NTqH2c+r31KkTEhIxr5yZvtuhpJmezzuc+SwXUj37KgUtRuxmSQjpu9j
-LIHLVXqfSWPFPABLKRN2ulHN7wm9FKDxEt2lIKOStVu13E6XMXg=
-=8i7g
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl1eW2EACgkQ3SOs138+
+s6H0bQ/7BC/tb8Co4+PoPFXZ5uXpTayVsQTCbNAUjIR7rB+TIJHAIRrAkt2iBApD
+wL/YCbKCLSBWu/NuMNzLEnZydBwOxYbgjtOBjWD+4UpIfpsedbzj51QeeXYSc83k
+t7+k8GZ+SbLITwJstSALxib5d77Odhng41j3amB7YaO0pYqMQn4AxT1GK2Gzn1rk
+SZ0MrlZpVqGh4xPM7VfDQ6O3fGP2WMOlmTP1gjofIAhRMCyCuA6X3xw5gvBdq32J
+TiIG6CfL3Hksa5hf9laBJ9D9J9wqd+5wrMqKmh6GwjpSq0aPZgMsYUVN8dZ47i2c
+BVzTcI1p5479wMxfyxx5Xt5THqVxwgrmtNxRGsLfFmV5JGEyc7tjPg8CU2yRTh96
++oDF9QAcrMzl+XjA637GGWMoG7i4ePN8kADQRII9EGl/gafXNbznVsJQxkFEQkYK
+TF1T7KxqbKUpR5GIY5FQV90283oPrNbedje0B7OkcjSZJMKhhoo9wolrLMSN4Wc5
+9q0mcR/1lG70Vjb5kI4n1XkKqpP/0h4Qi1QtYKED1FwutQJziKmNXkV2B+Mgcbcp
+NZgazAvkBIogC3W4vLeKLGVvf2F3bfq+hEF6m86NrbGKw0HYvhPZT37qDkbee+oP
+cAXxpiRd3SvSSRbDbsUwYVO+djeCounvyFN/EBjhEepliNiYnAk=
+=f0zu
 -----END PGP SIGNATURE-----
 
---MW5yreqqjyrRcusr--
+--E13BgyNx05feLLmH--
