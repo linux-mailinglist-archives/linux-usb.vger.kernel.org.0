@@ -2,131 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA109AABD
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 10:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ACF59AB55
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 11:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392931AbfHWIx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 04:53:26 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:53572 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389120AbfHWIx0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 04:53:26 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7N8rL2n039346;
-        Fri, 23 Aug 2019 03:53:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1566550401;
-        bh=AygYke9eev/ace09mklN8ehfRR+GaHjHMEoeOSlv2ko=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=RuDlomvHA+ozFBm2seWvqjWHsD4d5bUc8SLiA3BbFf31RdvtoNgulPq4c/Hy6faz8
-         gWSFWMsgTBvBYyRe+Qzd1l92xIRKzwbVpP2r7ViAAkjvDlrjhus7mpEUfE9HT8O8Ry
-         dfT0y1b+FY5K0YOhYcWyODGZ1n3qnHyy4JSuDC3s=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7N8rLhh112033
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 23 Aug 2019 03:53:21 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 23
- Aug 2019 03:53:21 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 23 Aug 2019 03:53:21 -0500
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7N8rGdo010932;
-        Fri, 23 Aug 2019 03:53:16 -0500
-Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
-To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <rogerq@ti.com>, <linux-kernel@vger.kernel.org>,
-        <jbergsagel@ti.com>, <nsekhar@ti.com>, <nm@ti.com>,
-        <sureshp@cadence.com>, <jpawar@cadence.com>, <kurahul@cadence.com>,
-        <aniljoy@cadence.com>
-References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
- <1563733939-21214-6-git-send-email-pawell@cadence.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-Message-ID: <c5067780-9dfe-2a3e-3498-22f3c1dadb87@ti.com>
-Date:   Fri, 23 Aug 2019 14:23:55 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1732034AbfHWJ3f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 05:29:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52126 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731961AbfHWJ3f (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Aug 2019 05:29:35 -0400
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C76EA21726;
+        Fri, 23 Aug 2019 09:29:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566552574;
+        bh=XenzbbR3aGpSz8r7B1SXYn9xAm7cNzeX0FUnGdLYkqs=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=FdDx7TANHjCBSkoMzhQhlztLcWAU6ALKr5+4yX6EwqKKmAX7B3Cu8bw9rnc7yIN4A
+         Y3DZuYRfoAUmOX+GuCoOIWkEp2NZ6kD1PKVakdTdfU5JFHjJHpFDmd8KGQW7fkMMNI
+         RieqpzgBzkAAA5T/vR1PdBCo+oDbifRDGjHZcY1Q=
+Date:   Fri, 23 Aug 2019 11:29:22 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+cc:     Andrey Konovalov <andreyknvl@google.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Hillf Danton <hdanton@sina.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        linux-input@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>
+Subject: Re: [PATCH] HID: USB: Fix general protection fault caused by Logitech
+ driver
+In-Reply-To: <Pine.LNX.4.44L0.1908221619370.1311-100000@iolanthe.rowland.org>
+Message-ID: <nycvar.YFH.7.76.1908231128260.27147@cbobk.fhfr.pm>
+References: <Pine.LNX.4.44L0.1908221619370.1311-100000@iolanthe.rowland.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-In-Reply-To: <1563733939-21214-6-git-send-email-pawell@cadence.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, 22 Aug 2019, Alan Stern wrote:
 
-On 22/07/19 12:02 AM, Pawel Laszczak wrote:
-> +
-> +/**
-> + * cdns3_req_ep0_get_status - Handling of GET_STATUS standard USB request
-> + * @priv_dev: extended gadget object
-> + * @ctrl_req: pointer to received setup packet
-> + *
-> + * Returns 0 if success, error code on error
-> + */
-> +static int cdns3_req_ep0_get_status(struct cdns3_device *priv_dev,
-> +				    struct usb_ctrlrequest *ctrl)
-> +{
-> +	__le16 *response_pkt;
-> +	u16 usb_status = 0;
-> +	u32 recip;
-> +	u32 reg;
-> +
-> +	recip = ctrl->bRequestType & USB_RECIP_MASK;
-> +
-> +	switch (recip) {
-> +	case USB_RECIP_DEVICE:
-> +		/* self powered */
-> +		if (priv_dev->is_selfpowered)
-> +			usb_status = BIT(USB_DEVICE_SELF_POWERED);
-> +
-> +		if (priv_dev->wake_up_flag)
-> +			usb_status |= BIT(USB_DEVICE_REMOTE_WAKEUP);
-> +
-> +		if (priv_dev->gadget.speed != USB_SPEED_SUPER)
-> +			break;
-> +
-> +		reg = readl(&priv_dev->regs->usb_sts);
+> > > > I've ran the fuzzer with your patches applied overnight and noticed
+> > > > another fallout of similar bugs. I think they are caused by a similar
+> > > > issue in the sony HID driver. There's no hid_hw_stop() call in the "if
+> > > > (!(hdev->claimed & HID_CLAIMED_INPUT))" case in sony_probe(). Does it
+> > > > look like a bug to you?
+> > >
+> > > It looks like the relevant hid_hw_stop() call is the one at the end of
+> > > sony_configure_input().  But I can't tell if doing that way is valid or
+> > > not -- in practice the code would end up calling hid_disconnect() while
+> > > hid_connect() was still running, which doesn't seem like a good idea.
+> > >
+> > > There's a comment about this near the end of sony_probe().  I suspect
+> > > it would be better to call hid_hw_stop() in the conditional code
+> > > following that comment rather than in sony_configure_input().
+> > >
+> > > Either way, these are all things Jiri should know about or check up on.
+> > >
+> > > Have you gotten any test results from syzbot exercising these pathways?
+> > > You ought to be able to tell which HID driver is involved by looking
+> > > through the console output.
+> > 
+> > Yes, a typical crash is below, that's why I thought it's the sony
+> > driver. Adding hid_hw_stop() in sony_probe() stops the issue from
+> > happening, but I don't know whether it's the right fix.
+> 
+> Probably you have to add hid_hw_stop() in sony_probe() and remove it 
+> from sony_configure_input().  But like I said above, Jiri should look 
+> into this.
 
-I see usb_sts is read, but never used in this function?
+It almost certainly is, thanks.
 
-> +
-> +		if (priv_dev->u1_allowed)
-> +			usb_status |= BIT(USB_DEV_STAT_U1_ENABLED);
-> +
-> +		if (priv_dev->u2_allowed)
-> +			usb_status |= BIT(USB_DEV_STAT_U2_ENABLED);
-> +
-> +		break;
-> +	case USB_RECIP_INTERFACE:
-> +		return cdns3_ep0_delegate_req(priv_dev, ctrl);
-> +	case USB_RECIP_ENDPOINT:
-> +		/* check if endpoint is stalled */
-> +		cdns3_select_ep(priv_dev, ctrl->wIndex);
-> +		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)))
-> +			usb_status =  BIT(USB_ENDPOINT_HALT);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	response_pkt = (__le16 *)priv_dev->setup_buf;
-> +	*response_pkt = cpu_to_le16(usb_status);
-> +
-> +	cdns3_ep0_run_transfer(priv_dev, priv_dev->setup_dma,
-> +			       sizeof(*response_pkt), 1, 0);
-> +	return 0;
-> +}
-> +
+Adding Roderick to CC ... Roderick, will you be able to test and submit 
+a patch fixing that?
 
 -- 
-Regards
-Vignesh
+Jiri Kosina
+SUSE Labs
+
