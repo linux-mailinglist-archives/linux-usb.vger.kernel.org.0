@@ -2,99 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8731B9B34A
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 17:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9CF9B359
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 17:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405353AbfHWP2C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 11:28:02 -0400
-Received: from mx01-fr.bfs.de ([193.174.231.67]:18665 "EHLO mx01-fr.bfs.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405351AbfHWP2C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Aug 2019 11:28:02 -0400
-Received: from mail-fr.bfs.de (mail-fr.bfs.de [10.177.18.200])
-        by mx01-fr.bfs.de (Postfix) with ESMTPS id B1069202D0;
-        Fri, 23 Aug 2019 17:27:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bfs.de; s=dkim201901;
-        t=1566574076; h=from:from:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=i3cEHWHV9INLKxovFOfy8b4lks5tBLwox2om3x6UsI4=;
-        b=tlnMpL3aXRfxaIlIDoyYYcE9DRyv95U3hLK86oSvgvC524oMSFHjPpcZEczIZk/zFd140h
-        4h+k1N81azMjsGxiMXOTamhJCzegZen8yVU0pgc5DJPTTbRAcDkEGGR8qP6wH7OC1Dv89x
-        BSHWQx2ky1gbSoo8Z86LSMGLGYiC1+qv2s/yYHRPtV3WwQNPjvm5DnKEFEZd8L1vu5A+Rt
-        NoXLRS9ldmnqEvfrP0JD+Cg72oHl00tukGguwwmJ7zgYGdd5V+xhphfzWxL+nGwXtkL85u
-        FYCDDurWMNVzLbS85ESqMbMG8AkPmDXfS/s7yTaeuVq57tQNJpDS7f8u0JYq2Q==
-Received: from [134.92.181.33] (unknown [134.92.181.33])
-        by mail-fr.bfs.de (Postfix) with ESMTPS id 940E3BEEBD;
-        Fri, 23 Aug 2019 17:27:56 +0200 (CEST)
-Message-ID: <5D6005FC.1060002@bfs.de>
-Date:   Fri, 23 Aug 2019 17:27:56 +0200
-From:   walter harms <wharms@bfs.de>
-Reply-To: wharms@bfs.de
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.1.16) Gecko/20101125 SUSE/3.0.11 Thunderbird/3.0.11
+        id S2405523AbfHWPdF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 11:33:05 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39306 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2405326AbfHWPdF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 11:33:05 -0400
+Received: (qmail 4343 invoked by uid 2102); 23 Aug 2019 11:33:04 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Aug 2019 11:33:04 -0400
+Date:   Fri, 23 Aug 2019 11:33:04 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] usb: host: ohci: fix a race condition between shutdown
+ and irq
+In-Reply-To: <1566556357-24897-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Message-ID: <Pine.LNX.4.44L0.1908231124410.1628-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: problems with Edgeport/416
-References: <5D5D1C8C.9080000@bfs.de> <20190821112009.GA5228@kroah.com> <5D5D2F9E.7050805@bfs.de> <20190821122028.GA19107@kroah.com> <5D5D4170.4070001@bfs.de> <eb4392d938654d99a3f37820b279c839@SVR-IES-MBX-03.mgc.mentorg.com> <5D5D49DF.1040800@bfs.de> <631418d3c1814830820db0c66f82b17e@SVR-IES-MBX-03.mgc.mentorg.com> <5D5D51FF.5010400@bfs.de> <2ae1fb935c2041f8b0d54e311e730ba5@SVR-IES-MBX-03.mgc.mentorg.com>
-In-Reply-To: <2ae1fb935c2041f8b0d54e311e730ba5@SVR-IES-MBX-03.mgc.mentorg.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.10
-Authentication-Results: mx01-fr.bfs.de
-X-Spamd-Result: default: False [-3.10 / 7.00];
-         ARC_NA(0.00)[];
-         TO_DN_EQ_ADDR_SOME(0.00)[];
-         HAS_REPLYTO(0.00)[wharms@bfs.de];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         BAYES_HAM(-3.00)[100.00%];
-         MIME_GOOD(-0.10)[text/plain];
-         REPLYTO_ADDR_EQ_FROM(0.00)[];
-         DKIM_SIGNED(0.00)[];
-         RCPT_COUNT_TWO(0.00)[2];
-         NEURAL_HAM(-0.00)[-0.999,0];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         RCVD_TLS_ALL(0.00)[]
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Fri, 23 Aug 2019, Yoshihiro Shimoda wrote:
 
-
-Am 21.08.2019 16:24, schrieb Schmid, Carsten:
->>
->> this should it be,
->>
-> Suspicious: line 141 of the log:
-> [765647.193393] usb 7-1.1.2: reset full-speed USB device number 15 using uhci_hcd
+> This patch fixes an issue that the following error is
+> possible to happen when ohci hardware causes an interruption
+> and the system is shutting down at the same time.
 > 
-> Can you please collect another log around reset, additionally enabling uhci dyndbg using
-> echo -n 'module uhci_hcd =p' > /sys/kernel/debug/dynamic_debug/control
+> [   34.851754] usb 2-1: USB disconnect, device number 2
+> [   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
+> [   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
+> [   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+> [   35.187886] Workqueue: usb_hub_wq hub_event
+> [   35.192063] Call trace:
+> [   35.194509]  dump_backtrace+0x0/0x150
+> [   35.198165]  show_stack+0x14/0x20
+> [   35.201475]  dump_stack+0xa0/0xc4
+> [   35.204785]  __report_bad_irq+0x34/0xe8
+> [   35.208614]  note_interrupt+0x2cc/0x318
+> [   35.212446]  handle_irq_event_percpu+0x5c/0x88
+> [   35.216883]  handle_irq_event+0x48/0x78
+> [   35.220712]  handle_fasteoi_irq+0xb4/0x188
+> [   35.224802]  generic_handle_irq+0x24/0x38
+> [   35.228804]  __handle_domain_irq+0x5c/0xb0
+> [   35.232893]  gic_handle_irq+0x58/0xa8
+> [   35.236548]  el1_irq+0xb8/0x180
+> [   35.239681]  __do_softirq+0x94/0x23c
+> [   35.243253]  irq_exit+0xd0/0xd8
+> [   35.246387]  __handle_domain_irq+0x60/0xb0
+> [   35.250475]  gic_handle_irq+0x58/0xa8
+> [   35.254130]  el1_irq+0xb8/0x180
+> [   35.257268]  kernfs_find_ns+0x5c/0x120
+> [   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
+> [   35.265361]  sysfs_unmerge_group+0x20/0x68
+> [   35.269454]  dpm_sysfs_remove+0x2c/0x68
+> [   35.273284]  device_del+0x80/0x370
+> [   35.276683]  hid_destroy_device+0x28/0x60
+> [   35.280686]  usbhid_disconnect+0x4c/0x80
+> [   35.284602]  usb_unbind_interface+0x6c/0x268
+> [   35.288867]  device_release_driver_internal+0xe4/0x1b0
+> [   35.293998]  device_release_driver+0x14/0x20
+> [   35.298261]  bus_remove_device+0x110/0x128
+> [   35.302350]  device_del+0x148/0x370
+> [   35.305832]  usb_disable_device+0x8c/0x1d0
+> [   35.309921]  usb_disconnect+0xc8/0x2d0
+> [   35.313663]  hub_event+0x6e0/0x1128
+> [   35.317146]  process_one_work+0x1e0/0x320
+> [   35.321148]  worker_thread+0x40/0x450
+> [   35.324805]  kthread+0x124/0x128
+> [   35.328027]  ret_from_fork+0x10/0x18
+> [   35.331594] handlers:
+> [   35.333862] [<0000000079300c1d>] usb_hcd_irq
+> [   35.338126] [<0000000079300c1d>] usb_hcd_irq
+> [   35.342389] Disabling IRQ #156
 > 
+> The ohci_shutdown() should hold the spin lock while disabling
+> the interruption and changing the rh_state flag. Note that
+> io_watchdog_func() also calls the ohci_shutdown() and it
+> already held the spin lock, so that the patch makes a new
+> function as _ohci_shutdown().
 
+I don't understand this description.  It sounds like the OHCI
+controller generates an interrupt request, and then ohci_shutdown()  
+disables the interrupt request before the handler can run.  When the
+handler does run, it sees that no interrupts are enabled and so it
+returns IRQ_NOTMINE, leading to the error shown above.
 
-Just to close the problem:
-I have installed the  Edgeport/416 on a different pc
+How will holding the spinlock fix this problem?
 
-Linux  4.12.14-lp150.12.25-default #1 SMP Thu Nov 1 06:14:23 UTC 2018 (3fcf457) x86_64 x86_64 x86_64 GNU/Linux
-With opensuse 15.0
+Alan Stern
 
-the one with the problem was:
-Linux  4.12.14-lp151.28.10-vanilla #1 SMP Sat Jul 13 17:59:31 UTC 2019 (0ab03b7) x86_64 x86_64 x86_64 GNU/Linux
-
-
-the far the device works as expected (to my surprise). So it seems to be a broken USB, why it fails
-with the edgeport but not with the pl2303 (usb->rs232 someone) i used for comparison; no idea.
-
-sorry for the noise,
-
-re,
- wh
