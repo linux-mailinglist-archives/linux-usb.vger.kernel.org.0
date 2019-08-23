@@ -2,115 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2DB9B125
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 15:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022A59B1A9
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 16:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405682AbfHWNnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 09:43:14 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:35300 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731553AbfHWNnO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 09:43:14 -0400
-Received: by mail-wm1-f50.google.com with SMTP id l2so9195450wmg.0
-        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2019 06:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:openpgp:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JI2lq0WANO/N0vEHSJjAFUI7K4Bra/QdGekzJYqJiR0=;
-        b=lF1JF5QIs5VX4WwgBxrjjmc/Kc7pzpnx+WG36M9FPYJ1bmXQ8jx+thtDDoIiWZ1sOG
-         wVIuGC1PIFovPpkdnWXncEmbPKevw8viVH9+7Q8WESvc6p5VUQAcWC39pqbc1h24WKan
-         9P+P6JYqNvXqFpVmTgAmycbniQ5gvOYH/DOowHykeQLwLeEVD9qtITNBXOzbuVh8N61p
-         +iEL5lFkiTLOBb0rQWlesv0tqeVvS8U3zNnuEWA19PXo95pD9cHl01ncM7cGO3SQIQLi
-         Iw6xh9u/DmE48T+5oBRFjgYGN238eSGCeuhqzSEYHJdnQX41InBhW4lOL5PckVr5jdVN
-         nUww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=JI2lq0WANO/N0vEHSJjAFUI7K4Bra/QdGekzJYqJiR0=;
-        b=qZSCvCzU5Dvfr0ZzJVw7FtbTzZ7FvYRTKK5derbLY+dD6T1jkdbPo51xrTRHxxerwj
-         ScRXYoDMvfuwoINyeYrRKAZxCembq1WynSXSNREvq1kdtuzRT61SjsWg7x+MBnujwAQ+
-         VR6pX4U7EvDfSyGNyMwoZqc8lOth39k2WvK8QC4vnbe2mwY4xlEinvNN0QFlZ9IMrJ3I
-         CIS0joyY1C/yExmXJ0k3Ih2xCJ7bl2ThyydkCRnlbcQWXTZqeX2hyDc4j9fawHGijhkl
-         jCLJftNScEvLPNWafYW7Ap8XdF9ss7h04kz4eS9xsfW3shIofPo8F3yL/QPcFbP8BhA8
-         UPPQ==
-X-Gm-Message-State: APjAAAXO2RZsXq4FGJ0QxfkW+GteS89AMnVN0QzW2MxQ5Ua9NgiIh5/5
-        XYIXF+RHVcO40AfhvUz21UCi/rVl
-X-Google-Smtp-Source: APXvYqxKuBpP+CE8wMsM9h7TnT6e9B79SzL08GLtLLlvoQu0YvUJvGklcPrxW/SSNhIHAkUOBzfiQg==
-X-Received: by 2002:a1c:2582:: with SMTP id l124mr5661765wml.153.1566567791986;
-        Fri, 23 Aug 2019 06:43:11 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1964:6740:aee1:2beb:2fd0:abbc? ([2a02:908:1964:6740:aee1:2beb:2fd0:abbc])
-        by smtp.googlemail.com with ESMTPSA id w7sm2313253wrn.11.2019.08.23.06.43.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2019 06:43:11 -0700 (PDT)
-Subject: Re: Lacie Rugged USB3-FW does not work with UAS
-To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
- <1566567572.8347.54.camel@suse.com>
-From:   Julian Sikorski <belegdol@gmail.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=belegdol@gmail.com; prefer-encrypt=mutual; keydata=
- mQENBE40CmIBCACj+gI1pIMD0VGrZD4ugde8f3usLc0OE0OnPDXjqelxsC3B/x9BFoQrzfnP
- qJEtcB6F4V5MuEYutnteeuFsIkLHx6UIe9vr1Ze01XtN7Emsya/AKXaEcXYzUUjVmWn1NjJF
- ZlX0ML3mIQPERBDEY/aXAj7cVDGvkFVeKWIWE5KRqQWV2rYo0nizZTRYGB0z6KpMninG4hqF
- KvvpzhDS5ZnxijEYs0YAx0QllI4LjLTH3xLuYMnSbHzFRBh9zUsMttMnZdCudLZC6ZllkjtM
- ov/kIO35P5ygFJ9xlLyxMFkhXsARDWe3qwJCEHfJgtcblQD/LHuY200fTmrbwTK9Q4uNABEB
- AAG0JEp1bGlhbiBTaWtvcnNraSA8YmVsZWdkb2xAZ21haWwuY29tPokBOAQTAQIAIgUCTjQK
- YgIbAwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQLdUZIcIlWSuFYwf+J5lKOXWz+FJW
- Vn4b8Q237R/SOlZVwVfT9u/EjxGkploecihuzRadwXDMu030zdgo0m4lwEubOD5eMvzpBSYu
- Dc3fDPT/T5/O7avybt2w83hptPuwU4O0EmNrkgr6pHql1nxEvBpeB8KkJnexJww95Kl1YmBX
- c1kdRrAShNxiVQDpPnskGtnfK2eTqyuyhECApIVLxMIX5IsqGCpslRUR6e90iHd591iJgRT+
- Ji74QjkCQzJJVcKbX5T7HzbUd6mmkZjNbtog3g6WEPkI4Qdw+ZeDlSViN/SKPS2ptMMzxCOT
- neVuw3c6qM/VUo6AUTPSl+1c1rO2X7ZY5/Z9dCMP9rkBDQRONApiAQgAmurakWU/VVEKiPcM
- o5IsActeWERRTxgUXmliSp02YtBLYwOBQ6WUmJyhywOR8s3Wh93cHEPgEPI/n+cfytNxvpol
- liSXp3PZGJAmBSIq13d1lDYJBzDzNjUz6dj9YMV56zcsWbYF25grXbPY4acy/5RQXHWjQ4R9
- dtGCMd48dhMH6O0DvsiriRxJQrcXz0mgLSi79KVns4VgIuUuPCwPyF1zNUBs/srbgTuL+On0
- GjbK40GnJq/Zw2LhEGeicp0npoc4jshgVTtUXRQrGo04plJNpNg9Tl1UIbsHrjA1qz9yo8GR
- 4MLgXzcyfM6h+wz6qC8eI7jx4VEZxMhXtalvywARAQABiQEfBBgBAgAJBQJONApiAhsMAAoJ
- EC3VGSHCJVkrpl0IAJJd8qETlL0XzNZsguk8LwXi0c++iTTbotw/zn1f7CgGsZErm58KqNhR
- UltAZvK+lOclNPbZRsGzoEdg4TIvSymWVLN6jyblhcqH4G9mxmf6QOLvYR5I02UQiIbKvTvv
- mFA8bgr2vXPFc8rBmFXrwyC3DOjfrnz23kGattsFWbRA2OBq7bp/05JVoMb4QRA2TIbbvsyQ
- g0MMs9VldhdVfZcFqU2qKwQs8fBr8BD+OfPeiYndJV4GnfYhK692viMjv/+dgOvYcEgtlFaJ
- TLeiWvwUUxJ7ai45p+gCHXUYPGwrH4Dm2HAw61vUDkbT5pVOeGlFsvtOVEajnQX+MOV93l4=
-Message-ID: <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
-Date:   Fri, 23 Aug 2019 15:43:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2388169AbfHWOLf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 23 Aug 2019 10:11:35 -0400
+Received: from esa3.mentor.iphmx.com ([68.232.137.180]:15891 "EHLO
+        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730899AbfHWOLe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 10:11:34 -0400
+IronPort-SDR: dWeX+s2pINtohmAaRUTV9Xu5XH643cshmjtP5ZEMgoA/THit+CzMEI7YMyVlcMKY2+gpSx3yZi
+ o43MG8AboewMXht1lsnAr/xu+ZNVElyrLfiKZEhHEU2ZqOPSkgMKyyyObmmKV+F61ZuGKOxysj
+ KSBwGWOuxznvR95sdt9vBpgi7EBIjShUAn0xI2lYfxqEfCWXejZ+xwK0i33MzG8eKCuQatyADc
+ cgoEz1WNdsCiEXBdULvzWbYuOTjAU6RELaPurso6IOiJ/KlqqVEnnzScCrBHfaFd8UBKUVVspL
+ yLA=
+X-IronPort-AV: E=Sophos;i="5.64,421,1559548800"; 
+   d="scan'208";a="40711319"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa3.mentor.iphmx.com with ESMTP; 23 Aug 2019 06:11:34 -0800
+IronPort-SDR: wXHhGEnrXklgzww6xNsC8vnPTaUh+ob+4qXx+LqHRiU1mbmKS07zUQpsASBjFrDGtVXyXDpEVe
+ maM+T1WRAswYDgZQLd5zcnqfnlFSdVy3SsV/ifdGwl++RPfVazZa7ky+p+2L520trkmN3Bbo0e
+ B6hW22Y61V8DNUbJSETZtfZuS1JeEWn0PUrNbITCO0HfKPSYrXFyk3NqAKPtAGGrS2ssElgd6M
+ fcIMmTSWppLcgGyQMQ8GGxg+HPLpXhrxq9uIxFOozLy4l/fmoxc9uj3t+G1wbWw+TAIzDA4UON
+ W9A=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [Patch v5] usb: hcd: use managed device resources
+Thread-Topic: [Patch v5] usb: hcd: use managed device resources
+Thread-Index: AQHVWbuDnGbGmDS690Kl9IU7UhO1ug==
+Date:   Fri, 23 Aug 2019 14:11:28 +0000
+Message-ID: <1566569488679.31808@mentor.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-In-Reply-To: <1566567572.8347.54.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-W dniu 23.08.2019 o 15:39, Oliver Neukum pisze:
-> Am Freitag, den 23.08.2019, 15:31 +0200 schrieb Julian Sikorski:
->> it appears that lacie rugged usb3-fw is not compatible with UAS.
->> I have just connected my few years old Lacie Rugged USB3-FW to my new
->> desktop PC to see if the backups I have been creating on the laptop can
->> actually be restored.
-> 
-> Hi,
-> 
-> does that mean that we have a regression? How did you create those
-> backups?
-> 
-> 	Regards
-> 		Oliver
-> 
-Hi,
+Using managed device resources in usb_hcd_pci_probe() allows devm usage for
+resource subranges, such as the mmio resource for the platform device
+created to control host/device mode mux, which is a xhci extended
+capability, and sits inside the xhci mmio region.
 
-it is not a regression to the best of my understanding. The backups were
-created on another machine using the same uas blacklist quirk.
-I for some reason never reported this properly and have been using the
-workaround for years now. The issue only popped back up after I tried to
-connect the drive to a new PC.
+If managed device resources are not used then "parent" resource
+is released before subrange at driver removal as .remove callback is
+called before the devres list of resources for this device is walked
+and released.
 
-Best regards,
-Julian
+This has been observed with the xhci extended capability driver causing a
+use-after-free which is now fixed.
+
+An additional nice benefit is that error handling on driver initialisation
+is simplified much.
+
+Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
+Tested-by: Carsten Schmid <carsten_schmid@mentor.com>
+---
+Rationale:
+Use-after-free was reproduced on 4.14.102 and 4.14.129 kernel
+using unbind mechanism.
+echo 0000:00:15.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
+
+Upstream version of driver is identical in the affected code.
+Fix was tested successfully on 4.14.129.
+Provided patch applies and compiles on v5.2.8 stable.
+As this is also a bugfix, please consider it to go to stable trees too.
+---
+v2:
+   - more speaking name for private data element
+   - consider failure in driver init sequence
+   - fix minor issues found by checkpatch.pl
+v3:
+   - corrected typo: resorce -> resource
+   - added Reviewed by and Tested-by
+v4:
+   - completely rewritten to use devm resource allocation
+     in hcd-pci
+   - modified title to better reflect change content
+   - removed Reviewed-by
+     [old title: usb: xhci-pci: reorder removal to avoid use-after-free]
+v5:
+   - rewrite commit message to cover all aspects of the patch
+     [old title: usb: hcd: fix use-after-free on driver removal]
+
+Thanks to Hans and Mathias for their encouraging support.
+---
+ drivers/usb/core/hcd-pci.c | 30 ++++++++----------------------
+ 1 file changed, 8 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 03432467b05f..7537681355f6 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -216,17 +216,18 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 		/* EHCI, OHCI */
+ 		hcd->rsrc_start = pci_resource_start(dev, 0);
+ 		hcd->rsrc_len = pci_resource_len(dev, 0);
+-		if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len,
+-				driver->description)) {
++		if (!devm_request_mem_region(&dev->dev, hcd->rsrc_start,
++				hcd->rsrc_len, driver->description)) {
+ 			dev_dbg(&dev->dev, "controller already in use\n");
+ 			retval = -EBUSY;
+ 			goto put_hcd;
+ 		}
+-		hcd->regs = ioremap_nocache(hcd->rsrc_start, hcd->rsrc_len);
++		hcd->regs = devm_ioremap_nocache(&dev->dev, hcd->rsrc_start,
++				hcd->rsrc_len);
+ 		if (hcd->regs == NULL) {
+ 			dev_dbg(&dev->dev, "error mapping memory\n");
+ 			retval = -EFAULT;
+-			goto release_mem_region;
++			goto put_hcd;
+ 		}
+ 
+ 	} else {
+@@ -240,8 +241,8 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 
+ 			hcd->rsrc_start = pci_resource_start(dev, region);
+ 			hcd->rsrc_len = pci_resource_len(dev, region);
+-			if (request_region(hcd->rsrc_start, hcd->rsrc_len,
+-					driver->description))
++			if (devm_request_region(&dev->dev, hcd->rsrc_start,
++					hcd->rsrc_len, driver->description))
+ 				break;
+ 		}
+ 		if (region == PCI_ROM_RESOURCE) {
+@@ -275,20 +276,13 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ 	}
+ 
+ 	if (retval != 0)
+-		goto unmap_registers;
++		goto put_hcd;
+ 	device_wakeup_enable(hcd->self.controller);
+ 
+ 	if (pci_dev_run_wake(dev))
+ 		pm_runtime_put_noidle(&dev->dev);
+ 	return retval;
+ 
+-unmap_registers:
+-	if (driver->flags & HCD_MEMORY) {
+-		iounmap(hcd->regs);
+-release_mem_region:
+-		release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+-	} else
+-		release_region(hcd->rsrc_start, hcd->rsrc_len);
+ put_hcd:
+ 	usb_put_hcd(hcd);
+ disable_pci:
+@@ -347,14 +341,6 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
+ 		dev_set_drvdata(&dev->dev, NULL);
+ 		up_read(&companions_rwsem);
+ 	}
+-
+-	if (hcd->driver->flags & HCD_MEMORY) {
+-		iounmap(hcd->regs);
+-		release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
+-	} else {
+-		release_region(hcd->rsrc_start, hcd->rsrc_len);
+-	}
+-
+ 	usb_put_hcd(hcd);
+ 	pci_disable_device(dev);
+ }
+-- 
+2.17.1
