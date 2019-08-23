@@ -2,64 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A46F39B63D
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 20:34:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B84C9B7C9
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 22:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390215AbfHWSef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 14:34:35 -0400
-Received: from canardo.mork.no ([148.122.252.1]:41221 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730788AbfHWSef (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Aug 2019 14:34:35 -0400
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x7NIY98R010591
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 23 Aug 2019 20:34:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1566585251; bh=rhbGCmlboXmRguY9Y37vGEPWSnNoT7bk5MSyh7OrhWA=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=CXRcMehx+XnXe/Nzi0Ss84Q3Ouhy5OUMpObO5v5EtHxnzHHzPSnWspr7JGSBxbeoq
-         NGmQziZTCGpDQsNI5sUC5YhUztdPVnum/xkOP3e5EK6exw3D0lSUdP7fcz4bochtnJ
-         kSK9qD6Tc76twkYhKEU2lYOIii0Z38q0xnbhHKfg=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1i1EO0-0001F4-I0; Fri, 23 Aug 2019 20:34:08 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     <Charles.Hyde@dellteam.com>
-Cc:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <Mario.Limonciello@dell.com>,
-        <oliver@neukum.org>, <netdev@vger.kernel.org>,
-        <nic_swsd@realtek.com>
-Subject: Re: [RFC 3/4] Move ACPI functionality out of r8152 driver
-Organization: m
-References: <1566339738195.2913@Dellteam.com>
-Date:   Fri, 23 Aug 2019 20:34:08 +0200
-In-Reply-To: <1566339738195.2913@Dellteam.com> (Charles Hyde's message of
-        "Tue, 20 Aug 2019 22:22:18 +0000")
-Message-ID: <87mufz20kf.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S2389383AbfHWUmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 16:42:09 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39628 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2388903AbfHWUmJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 16:42:09 -0400
+Received: (qmail 5214 invoked by uid 2102); 23 Aug 2019 16:42:08 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 23 Aug 2019 16:42:08 -0400
+Date:   Fri, 23 Aug 2019 16:42:08 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
+        <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <9b06f6f469ea535d336945992242e32b6524cb2b.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1908231449390.1628-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.2 at canardo
-X-Virus-Status: Clean
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-<Charles.Hyde@dellteam.com> writes:
+On Fri, 23 Aug 2019, Andrea Vai wrote:
 
-> This change moves ACPI functionality out of the Realtek r8152 driver to
-> its own source and header file, making it available to other drivers as
-> needed now and into the future.  At the time this ACPI snippet was
-> introduced in 2016, only the Realtek driver made use of it in support of
-> Dell's enterprise IT policy efforts.  There comes now a need for this
-> same support in a different driver, also in support of Dell's enterprise
-> IT policy efforts.
+> Il giorno mar, 20/08/2019 alle 13.13 -0400, Alan Stern ha scritto:
+> > On Mon, 19 Aug 2019, Andrea Vai wrote:
+> > 
+> > > Hi Alan,
+> > >   I attach the two traces, collected as follows:
+> > > 
+> > > - start the trace;
+> > > - wait 10 seconds;
+> > > - plug the drive;
+> > > - wait 5 seconds;
+> > > - mount the drive;
+> > > - wait 5 seconds;
+> > > - copy a 500 byte file;
+> > > - wait 5 seconds;
+> > > - unmount the drive;
+> > > - wait 5 seconds;
+> > > - stop the trace.
+> > 
+> > Still no noticeable differences between the two traces.  They both 
+> > include a 1.2 second delay shortly after the writing starts, and
+> > the 
+> > initialization sequences are the same.
+> > 
+> > I really don't know where to look for this.  The only thing I can
+> > think
+> > of at this point is to repeat this test, but using a file large
+> > enough
+> > for the difference in writing speed to show up plainly.
+> > 
+> > By the way, it would be best to run the tests with the smallest
+> > possible number of other USB devices plugged in.  None at all, if
+> > you
+> > can arrange it.
+> 
+> Thanks, I went some steps further on this.
+> The following considerations all apply to the "bad" kernel.
+> 
+> Increasing the filesize lead me to find out that using a file sized
+> less than roughly 10MB the problem does not happen.
+> 
+> I found these results by making sets of 10 tries for each filesize,
+> using a filesize of 1kB, 10kB, 100kB, 1MB, 10MB, 100MB, 500MB (so, we
+> have 70 usbmon logs on these). If we define "fast" a copy that takes
+> (roughly(*)) no more time to complete than all the other tries in its
+> set, and "slow" elsewhere (=one or more tries in its set are
+> (sensibly(*)) faster), I noticed that in each set with a filesize of
+> 10MB or more the behavior can be very different: sometimes the copy is
+> still "fast", sometimes is "slow". The frequency of the "slow" copies
+> increases with the filesize. Also, among the "slow" copies in a set,
+> the time can be very different.
+> 
+> Also, I found that if the file is not present on the target location
+> (i.e. the USB pendrive), the problem does not happen (I have ten
+> usbmon logs here, taken in the worst scenario (500MB filesize)).
+> 
+> Tell me which log(s) would you like me to send you: I can sum up here
+> all the sets of tries, and the time their copies took to complete (in
+> seconds):
+> 
+> 1kB: 26, 27, 26, 26, 27, 26, 26, 27, 26, 27
+> 10kB: 27, 27, 26, 26, 27, 26, 27, 26, 27, 27
+> 100kB: 26, 26, 26, 27, 26, 26, 26, 27, 27, 27
+> 1MB: 26, 27, 27, 27, 27, 27, 27, 27, 27, 26
+> 10MB: 27, 31, 37, 27, 38, 27, 39, 27, 30, 28
+> 100MB: 32, 32, 144, 32, 145, 32, 123, 32, 153, 123
+> 500MB: 56, 1396, 747, 131, 795, 764, 292, 1021, 807, 516
+> 
+> Also, note that the first copy is always "fast", because each file was
+> initially not present on the pendrive. As said, I did one test of 10
+> tries by deleting the file on the pendrive before copying it again,
+> and the results are
+> 
+> 500MB: 56, 56, 57, 57, 56, 56, 60, 25***, 55, 56 (***Note the "fake"
+> 25s, doesn't matter because I forgot to plug the pendrive :-/ )
+> 
+> I have made a script to semi-automate all the tests I have done. I
+> attach the script here, so anyone interested could check it for any
+> mistake (remember I am not very skilled so I may have wrote buggy
+> code, done wrong assumptions, etc.). Please note that I decreased the
+> time between the trace start and the drive plugging from 10s to 5s
+> (simply to reduce the time needed to me to look at the countdown). Of
+> course I can do again the test(s) you need with a bigger amount of
+> $wait.
+> 
+> The script has been run with the command
+> 
+> # for k in {1..10}; do size=1000; ./test_usbmon $size && ping -a -c 5 8.8.8.8 ; done
+> (example for 1kB filesize)
+> 
+> or, in the set of "delete before copy",
+> 
+> # for k in {1..10}; do size=500000000; ./cancellaTestFile $size && ./test_usbmon $size && ping -a -c 5 8.8.8.8 ; done
+> 
+> The ping command is there just to have a sound alarm when finished.
+> 
+> I also attach the script to delete the file ("cancellaTestFile").
+> 
+> I took care to plug the pendrive exactly at the end of the countdown,
+> to keep the times in the logs more simple to detect and manage by you.
+> 
+> I have also logged all the terminal output log of the script.
+> 
+> Last note: I ran all the tests without any other USB device connected
+> but the pendrive (well, actually there is a card reader connected to
+> the internal USB connector, but on another bus. I didn't want to open
+> the case and disconnect it but of course I can do it if needed).
+> Thanks for pointing it out.
+> 
+> Thanks, and bye
+> Andrea
+> 
+> (*) as an example, on a set that shows the total elapsed time in
+> seconds being
+> 
+> 26, 27, 27, 27, 27, 27, 27, 27, 27, 26
+> 
+> I have assumed all of the copies to be "fast", while in the set
+> 
+> 32, 32, 144, 32, 145, 32, 123, 32, 153, 123
+> 
+> I have assumed 5 of the copies as "fast" (the ones that took 32
+> seconds) and the other "slow". Not going to deepen in some standard
+> deviation evaluation, etc., but if you'd like to I can provide some
+> more scientific detailed data :-)
 
-Yes, and we told you so.
+Wow, that sounds like a lot of work.
 
+Let's start with the 39-second run for the 10-MB file.  If you can put 
+the trace files on a server somewhere, available for downloading, that 
+would avoid sending a lot of uninteresting data to the mailing list.
 
-Bj=C3=B8rn
+Odd that the delays never occur when you're writing a new file.  (If
+nothing else, that gives you a way to work around the problem!)  It's
+hard to say what it means, though.  Maybe the flash drive doesn't like 
+overwriting used blocks.
+
+Alan Stern
+
