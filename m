@@ -2,91 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D01719AC80
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FBA19AD58
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392186AbfHWKHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 06:07:34 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:36591 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392180AbfHWKHe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:07:34 -0400
-Received: by mail-lf1-f67.google.com with SMTP id r5so1228960lfc.3
-        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2019 03:07:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qf0tKIGUzLMHo8897bxI7RBcbf3ra5As2xUShZTHVXk=;
-        b=jE9gw94w/pgz7UVZYcAdoir7gdHC599uaFqAZfv/f+xhZWcVIzW5ycibkKiuc64Fij
-         2v4MmF0EjLuSL4ozfNyabI2Cc/9hXbI0/l/SABfxMRUQavmZTxEU/1lU8V+4aZQ2q8Ui
-         EKZdNO+7tNhDCjhevzqHhf4C+hZUmRkl4WzOqEr4wvi++7J1ScnWHKKyI1Vl/wCB8N4X
-         UdG8vhkdJVDgmJ/eHPOJPZ0VvHYVn98u2Wjy2/iNGBFAR/AabPqBsR3aiOL3+g9VEOH/
-         1blIdDdH2RH0IUiC0ieXO+TdZFiJnlJFCrkbsHOZ1+tb+sGi/F54Zm4fSWtYHKthO+L2
-         hLYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qf0tKIGUzLMHo8897bxI7RBcbf3ra5As2xUShZTHVXk=;
-        b=KbvjvkulnsvRKc0k4oxEzsFCuplN5vnsdMShI8MEJxHZZoP2wJhmtl68B1f6yb8RfC
-         xlkM2/6vHIu7EJIrdgDLZplJr3jWv5NajnK1XbVxbL5uY0NOt9X9uoCMCycE3nrpkt4H
-         GT1Y4SyA3nnebdh9RQyvaEXShRirZna2R8JyWmh2lbJUXHWvW9uyfUk2WP/dkzYaowiN
-         WlkQKmiohKPjCbeYqVCfP49KMl9/gWH/hP6MhTgs+RD6Hl88TSC6iis8gdubVuzyQMuB
-         p0+5YGyj/LsTzmruadeq153smMG1zU3WbVsOWmQHM6C7Ci/ZsfZHNITTwG0471sn7qSv
-         5g2w==
-X-Gm-Message-State: APjAAAXoJJy6Y7iLDTmVogZTdoBVgKFGmmSMDXadpqbq9zAAr814o7Fn
-        rZ5gRffN5OCn/EU6FWXBpSejGepAnA03nlOCqpcPEQ==
-X-Google-Smtp-Source: APXvYqz/i+Y3ogiFU/vofGIhUoKotD90TSylBi/yYuyP+ATnMPS5RQPyrHi8LuwHLISNXwEhRblFyeyDZpGORCQSiqo=
-X-Received: by 2002:ac2:5c42:: with SMTP id s2mr2378472lfp.61.1566554852633;
- Fri, 23 Aug 2019 03:07:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <1566547041-20804-1-git-send-email-chunfeng.yun@mediatek.com> <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
-In-Reply-To: <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 23 Aug 2019 12:07:20 +0200
-Message-ID: <CACRpkdbr9PjFAvrq14DJmX1OSKYJxYFPaQZpVJaT_Q1_DUW=sw@mail.gmail.com>
-Subject: Re: [PATCH next v10 03/11] dt-bindings: usb: add binding for USB GPIO
- based connection detection driver
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S2391124AbfHWKeQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 06:34:16 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:35033 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2388983AbfHWKeQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:34:16 -0400
+X-IronPort-AV: E=Sophos;i="5.64,420,1559487600"; 
+   d="scan'208";a="24755310"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 23 Aug 2019 19:34:13 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 69E5E4224141;
+        Fri, 23 Aug 2019 19:34:13 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH] usb: host: ohci: fix a race condition between shutdown and irq
+Date:   Fri, 23 Aug 2019 19:32:37 +0900
+Message-Id: <1566556357-24897-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 9:58 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+This patch fixes an issue that the following error is
+possible to happen when ohci hardware causes an interruption
+and the system is shutting down at the same time.
 
-> It's used to support dual role switch via GPIO when use Type-B
-> receptacle, typically the USB ID pin is connected to an input
-> GPIO, and also used to enable/disable device when the USB Vbus
-> pin is connected to an input GPIO.
->
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v9~v10 no changes
+[   34.851754] usb 2-1: USB disconnect, device number 2
+[   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
+[   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
+[   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+[   35.187886] Workqueue: usb_hub_wq hub_event
+[   35.192063] Call trace:
+[   35.194509]  dump_backtrace+0x0/0x150
+[   35.198165]  show_stack+0x14/0x20
+[   35.201475]  dump_stack+0xa0/0xc4
+[   35.204785]  __report_bad_irq+0x34/0xe8
+[   35.208614]  note_interrupt+0x2cc/0x318
+[   35.212446]  handle_irq_event_percpu+0x5c/0x88
+[   35.216883]  handle_irq_event+0x48/0x78
+[   35.220712]  handle_fasteoi_irq+0xb4/0x188
+[   35.224802]  generic_handle_irq+0x24/0x38
+[   35.228804]  __handle_domain_irq+0x5c/0xb0
+[   35.232893]  gic_handle_irq+0x58/0xa8
+[   35.236548]  el1_irq+0xb8/0x180
+[   35.239681]  __do_softirq+0x94/0x23c
+[   35.243253]  irq_exit+0xd0/0xd8
+[   35.246387]  __handle_domain_irq+0x60/0xb0
+[   35.250475]  gic_handle_irq+0x58/0xa8
+[   35.254130]  el1_irq+0xb8/0x180
+[   35.257268]  kernfs_find_ns+0x5c/0x120
+[   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
+[   35.265361]  sysfs_unmerge_group+0x20/0x68
+[   35.269454]  dpm_sysfs_remove+0x2c/0x68
+[   35.273284]  device_del+0x80/0x370
+[   35.276683]  hid_destroy_device+0x28/0x60
+[   35.280686]  usbhid_disconnect+0x4c/0x80
+[   35.284602]  usb_unbind_interface+0x6c/0x268
+[   35.288867]  device_release_driver_internal+0xe4/0x1b0
+[   35.293998]  device_release_driver+0x14/0x20
+[   35.298261]  bus_remove_device+0x110/0x128
+[   35.302350]  device_del+0x148/0x370
+[   35.305832]  usb_disable_device+0x8c/0x1d0
+[   35.309921]  usb_disconnect+0xc8/0x2d0
+[   35.313663]  hub_event+0x6e0/0x1128
+[   35.317146]  process_one_work+0x1e0/0x320
+[   35.321148]  worker_thread+0x40/0x450
+[   35.324805]  kthread+0x124/0x128
+[   35.328027]  ret_from_fork+0x10/0x18
+[   35.331594] handlers:
+[   35.333862] [<0000000079300c1d>] usb_hcd_irq
+[   35.338126] [<0000000079300c1d>] usb_hcd_irq
+[   35.342389] Disabling IRQ #156
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+The ohci_shutdown() should hold the spin lock while disabling
+the interruption and changing the rh_state flag. Note that
+io_watchdog_func() also calls the ohci_shutdown() and it
+already held the spin lock, so that the patch makes a new
+function as _ohci_shutdown().
 
-Yours,
-Linus Walleij
+This patch is inspired by a Renesas R-Car Gen3 BSP patch
+from Tho Vu.
+
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ I think I should have added "Fixes:" tag on the patch, but
+ I have no idea how to find the suitable commit...
+
+ drivers/usb/host/ohci-hcd.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index b457fda..1fe3dee 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -419,8 +419,7 @@ static void ohci_usb_reset (struct ohci_hcd *ohci)
+  * other cases where the next software may expect clean state from the
+  * "firmware".  this is bus-neutral, unlike shutdown() methods.
+  */
+-static void
+-ohci_shutdown (struct usb_hcd *hcd)
++static void _ohci_shutdown(struct usb_hcd *hcd)
+ {
+ 	struct ohci_hcd *ohci;
+ 
+@@ -436,6 +435,16 @@ ohci_shutdown (struct usb_hcd *hcd)
+ 	ohci->rh_state = OHCI_RH_HALTED;
+ }
+ 
++static void ohci_shutdown(struct usb_hcd *hcd)
++{
++	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
++	unsigned long flags;
++
++	spin_lock_irqsave(&ohci->lock, flags);
++	_ohci_shutdown(hcd);
++	spin_unlock_irqrestore(&ohci->lock, flags);
++}
++
+ /*-------------------------------------------------------------------------*
+  * HC functions
+  *-------------------------------------------------------------------------*/
+@@ -760,7 +769,7 @@ static void io_watchdog_func(struct timer_list *t)
+  died:
+ 			usb_hc_died(ohci_to_hcd(ohci));
+ 			ohci_dump(ohci);
+-			ohci_shutdown(ohci_to_hcd(ohci));
++			_ohci_shutdown(ohci_to_hcd(ohci));
+ 			goto done;
+ 		} else {
+ 			/* No write back because the done queue was empty */
+-- 
+2.7.4
+
