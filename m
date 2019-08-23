@@ -2,54 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9669A3BF
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 01:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3CFD9A45B
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 02:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394406AbfHVXXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 19:23:23 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:50554 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394382AbfHVXXX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 19:23:23 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 6A0AD1539DF80;
-        Thu, 22 Aug 2019 16:23:22 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 16:23:22 -0700 (PDT)
-Message-Id: <20190822.162322.666892826002905972.davem@davemloft.net>
-To:     Markus.Elfring@web.de
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        gregkh@linuxfoundation.org, kstewart@linuxfoundation.org,
-        petkan@nucleusys.com, swinslow@gmail.com, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] net: usb: Delete unnecessary checks before the macro
- call =?iso-2022-jp?B?GyRCIUgbKEJkZXZfa2ZyZWVfc2tiGyRCIUkbKEI=?=
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <425214be-355b-92c0-bc74-1d0ea899290f@web.de>
-References: <425214be-355b-92c0-bc74-1d0ea899290f@web.de>
-X-Mailer: Mew version 6.8 on Emacs 26.1
+        id S1732121AbfHWAkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 20:40:22 -0400
+Received: from gate.crashing.org ([63.228.1.57]:59238 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732116AbfHWAkW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Aug 2019 20:40:22 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x7N0e6hA022853;
+        Thu, 22 Aug 2019 19:40:07 -0500
+Message-ID: <393dedc62684704db87d11f17650cb25de9649b8.camel@kernel.crashing.org>
+Subject: Re: f_mass_storage vs drivers/target
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date:   Fri, 23 Aug 2019 10:40:06 +1000
+In-Reply-To: <Pine.LNX.4.44L0.1908221315100.1311-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1908221315100.1311-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
 Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 22 Aug 2019 16:23:22 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Markus Elfring <Markus.Elfring@web.de>
-Date: Wed, 21 Aug 2019 22:24:16 +0200
+On Thu, 2019-08-22 at 13:30 -0400, Alan Stern wrote:
+> On Thu, 22 Aug 2019, Benjamin Herrenschmidt wrote:
+> 
+> > On Thu, 2019-08-22 at 14:58 +1000, Benjamin Herrenschmidt wrote:
+> > > 
+> > > Ah lovely ... the 338x fails in EP autoconf with f_tcm, digging...
+> > > 
+> > > While digging I found this gem:
+> > > 
+> > >     /* USB3380: use same address for usb and hardware endpoints */
+> > >     snprintf(name, sizeof(name), "ep%d%s", usb_endpoint_num(desc),
+> > >                     usb_endpoint_dir_in(desc) ? "in" : "out");
+> > >     ep = gadget_find_ep_by_name(_gadget, name);
+> > >     if (ep && usb_gadget_ep_match_desc(_gadget, ep, desc, ep_comp))
+> > >             return ep;
+> > > 
+> > > Any idea what's that supposed to achieve ?
+> 
+> It looks like in one mode, the endpoint number has to be the value 
+> predetermined by the hardware.  In the other mode, any hardware 
+> endpoint can be assigned any endpoint number.
 
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Wed, 21 Aug 2019 22:16:02 +0200
-> 
-> The dev_kfree_skb() function performs also input parameter validation.
-> Thus the test around the shown calls is not needed.
-> 
-> This issue was detected by using the Coccinelle software.
-> 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Sure but as I wrote, this is ep_match, which when called, always has
+usb_endpoint_num() set to 0... this function is supposed to chose the
+EP number afaik. So I don't think the above ever works, it just returns
+NULL. Or do we ever call this again with already predetermined EP nums,
+for example when doing multifunction ?
 
-Applied.
+> > > When ep_match is called, usb_endpoint_num() hasn't been set yet so
+> > > it's always 0 and always fails... or am I missing something ?
+> > 
+> > Two problems:
+> > 
+> >  - net2280.c doesn't set a max EP size, so autoconfig fails since
+> > f_tcm specifies one. What about this ?
+> > 
+> > --- a/drivers/usb/gadget/udc/core.c
+> > +++ b/drivers/usb/gadget/udc/core.c
+> > @@ -940,12 +940,14 @@ int usb_gadget_ep_match_desc(struct usb_gadget *gadget,
+> >         if (usb_endpoint_dir_out(desc) && !ep->caps.dir_out)
+> >                 return 0;
+> >  
+> > -       if (max > ep->maxpacket_limit)
+> > +       if (ep->maxpacket_limit && max > ep->maxpacket_limit)
+> >                 return 0;
+> > 
+> > (ie assume that ep->maxpacket_limit 0 means the UDC supports any
+> > legal size)
+> 
+> That looks reasonable.
+
+I'll send a patch.
+
+> >  - No UDC driver other than dummy sets max_streams, and f_tcm requires 4,
+> > so f_tcm will fail with *any* superspeed UDC driver as far as I can tell.
+> > 
+> > Was it ever tested with USB 3 ?
+> 
+> Note that USB 2 does not support streams at all.
+
+Yes, f_tcm only requires them for superspeed, but it does *require*
+them in that case.
+
+> > I'm not sure what the right fix here yet is as I yet have to learn about
+> > what those USB3 streams are :-) For now I've commented things out.
+> 
+> They are for multiplexing multiple data streams over a single USB 
+> endpoint.  As far as I know, the only use case for such a thing is USB 
+> Mass Storage.
+
+So f_tcm could operate in a degraded mode in the absence of streams
+easily, the problem is the mechanics of EP matching in epautoconf. It
+will just fail.
+
+I wonder since f_tcm is also the only user, whether we could change the
+matching logic to either:
+
+  - Don't try to match, return streams is available. This could be
+problematic if the UDC supports streams on some EPs and not others
+however.
+
+  - Do two passes: one pass trying to match the streams, and one patch
+without matching them if the first one fails.
+
+Then f_tcm could check whether it got EPs with streams and enable
+stream usage accordingly.
+
+Opinions ? Other option ?
+
+Cheers,
+Ben.
+
+
