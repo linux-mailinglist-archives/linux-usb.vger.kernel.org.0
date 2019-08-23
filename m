@@ -2,171 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D4C9A5F1
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 05:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8D59A5F2
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 05:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404138AbfHWDPj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 23:15:39 -0400
-Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:36382 "EHLO
-        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726283AbfHWDPj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Aug 2019 23:15:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1566530137; x=1598066137;
-  h=from:to:cc:subject:date:message-id:content-id:
-   content-transfer-encoding:mime-version;
-  bh=ob4QZi/l7tGfZK7wQ6VCKnGqOCBCS08GiafW4KIgBsw=;
-  b=ozIUl+NFWTuINeC/VDZx7CHjr7dgcECCDsyryV7tDdqbpFISnK/thrtv
-   5A5t+9u0HbeiLOC3Uy0mt+eOFcMKh1kybTBS14LNCR7Fpxs2uHEiewkhh
-   YIQwZ1xALaVAziwEy3lYV4/3Jugw5juRJgf+VQKuoj7x4qYinTHfm3XoU
-   M=;
-X-IronPort-AV: E=Sophos;i="5.64,419,1559520000"; 
-   d="scan'208";a="417099204"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-c300ac87.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 23 Aug 2019 03:15:36 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2b-c300ac87.us-west-2.amazon.com (Postfix) with ESMTPS id 1E737A2B57;
-        Fri, 23 Aug 2019 03:15:36 +0000 (UTC)
-Received: from EX13D21UWB002.ant.amazon.com (10.43.161.177) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 23 Aug 2019 03:15:35 +0000
-Received: from EX13D21UWB003.ant.amazon.com (10.43.161.212) by
- EX13D21UWB002.ant.amazon.com (10.43.161.177) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 23 Aug 2019 03:15:35 +0000
-Received: from EX13D21UWB003.ant.amazon.com ([10.43.161.212]) by
- EX13D21UWB003.ant.amazon.com ([10.43.161.212]) with mapi id 15.00.1367.000;
- Fri, 23 Aug 2019 03:15:35 +0000
-From:   "Herrenschmidt, Benjamin" <benh@amazon.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-CC:     "guido@kiener-muenchen.de" <guido@kiener-muenchen.de>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+        id S2404144AbfHWDPx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Aug 2019 23:15:53 -0400
+Received: from gate.crashing.org ([63.228.1.57]:56344 "EHLO gate.crashing.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726283AbfHWDPx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Aug 2019 23:15:53 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x7N3FfEZ028509;
+        Thu, 22 Aug 2019 22:15:42 -0500
+Message-ID: <bc390967a9ac59e658ae79ba74a23a6ca898351b.camel@kernel.crashing.org>
 Subject: [PATCH 1/2] usb: gadget: net2280: Move all "ll" registers in one
  structure
-Thread-Topic: [PATCH 1/2] usb: gadget: net2280: Move all "ll" registers in one
- structure
-Thread-Index: AQHVWWEHKoEDUkp5fk6VnP2k3vWtQw==
-Date:   Fri, 23 Aug 2019 03:15:35 +0000
-Message-ID: <85fca9aaeca07bc651be95d1a0ad83eaa4138b7e.camel@amazon.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.161.243]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <DCEF9989A1175B4A9B1F2612D05D0C0D@amazon.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
+From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Guido Kiener <guido@kiener-muenchen.de>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Date:   Fri, 23 Aug 2019 13:15:41 +1000
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VGhlIHNwbGl0IGludG8gbXVsdGlwbGUgc3RydWN0dXJlcyBvZiB0aGUgImxsIiByZWdpc3RlciBi
-YW5rIGlzDQppbXByYWN0aWNhbC4gSXQgbWFrZXMgaXQgaGFyZCB0byBhZGQgbGxfbGZwc190aW1l
-cnNfMiB3aGljaCBpcw0KYXQgb2Zmc2V0IDB4Nzk0LCB3aGljaCBpcyBvdXRzaWRlIG9mIHRoZSBl
-eGlzdGluZyAibGZwcyIgc3RydWN0dXJlDQphbmQgd291bGQgcmVxdWlyZSB1cyB0byBhZGQgeWV0
-IGFub3RoZXIgb25lLg0KDQpJbnN0ZWFkLCBtb3ZlIGFsbCB0aGUgImxsIiByZWdpc3RlcnMgaW50
-byBhIHNpbmdsZSB1c2IzMzh4X2xsX3JlZ3MNCnN0cnVjdHVyZSwgYW5kIGFkZCBsbF9sZnBzX3Rp
-bWVyc18yIHdoaWxlIGF0IGl0LiBJdCB3aWxsIGJlIHVzZWQNCmluIGEgc3Vic2VxdWVudCBwYXRj
-aC4NCg0KU2lnbmVkLW9mZi1ieTogQmVuamFtaW4gSGVycmVuc2NobWlkdCA8YmVuaEBrZXJuZWwu
-Y3Jhc2hpbmcub3JnPg0KLS0tDQogZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQyMjgwLmMgfCAy
-OCArKysrKysrKysrLS0tLS0tLS0tLS0tLS0tDQogZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQy
-MjgwLmggfCAgMyAtLS0NCiBpbmNsdWRlL2xpbnV4L3VzYi91c2IzMzh4LmggICAgICB8IDM1ICsr
-KysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tDQogMyBmaWxlcyBjaGFuZ2VkLCAzNiBpbnNl
-cnRpb25zKCspLCAzMCBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dh
-ZGdldC91ZGMvbmV0MjI4MC5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9uZXQyMjgwLmMNCmlu
-ZGV4IGI2YmJlMmU0NDhiYS4uZTAxOTExNDZiYTIyIDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2Iv
-Z2FkZ2V0L3VkYy9uZXQyMjgwLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvbmV0MjI4
-MC5jDQpAQCAtMjI0NCwzMCArMjI0NCwzMCBAQCBzdGF0aWMgdm9pZCB1c2JfcmVpbml0XzMzOHgo
-c3RydWN0IG5ldDIyODAgKmRldikNCiAJfQ0KIA0KIAkvKiBIYXJkd2FyZSBEZWZlY3QgYW5kIFdv
-cmthcm91bmQgKi8NCi0JdmFsID0gcmVhZGwoJmRldi0+bGxfbGZwc19yZWdzLT5sbF9sZnBzXzUp
-Ow0KKwl2YWwgPSByZWFkbCgmZGV2LT5sbHJlZ3MtPmxsX2xmcHNfNSk7DQogCXZhbCAmPSB+KDB4
-ZiA8PCBUSU1FUl9MRlBTXzZVUyk7DQogCXZhbCB8PSAweDUgPDwgVElNRVJfTEZQU182VVM7DQot
-CXdyaXRlbCh2YWwsICZkZXYtPmxsX2xmcHNfcmVncy0+bGxfbGZwc181KTsNCisJd3JpdGVsKHZh
-bCwgJmRldi0+bGxyZWdzLT5sbF9sZnBzXzUpOw0KIA0KLQl2YWwgPSByZWFkbCgmZGV2LT5sbF9s
-ZnBzX3JlZ3MtPmxsX2xmcHNfNik7DQorCXZhbCA9IHJlYWRsKCZkZXYtPmxscmVncy0+bGxfbGZw
-c182KTsNCiAJdmFsICY9IH4oMHhmZmZmIDw8IFRJTUVSX0xGUFNfODBVUyk7DQogCXZhbCB8PSAw
-eDAxMDAgPDwgVElNRVJfTEZQU184MFVTOw0KLQl3cml0ZWwodmFsLCAmZGV2LT5sbF9sZnBzX3Jl
-Z3MtPmxsX2xmcHNfNik7DQorCXdyaXRlbCh2YWwsICZkZXYtPmxscmVncy0+bGxfbGZwc182KTsN
-CiANCiAJLyoNCiAJICogQUFfQUIgRXJyYXRhLiBJc3N1ZSA0LiBXb3JrYXJvdW5kIGZvciBTdXBl
-clNwZWVkIFVTQg0KIAkgKiBIb3QgUmVzZXQgRXhpdCBIYW5kc2hha2UgbWF5IEZhaWwgaW4gU3Bl
-Y2lmaWMgQ2FzZSB1c2luZw0KIAkgKiBEZWZhdWx0IFJlZ2lzdGVyIFNldHRpbmdzLiBXb3JrYXJv
-dW5kIGZvciBFbnVtZXJhdGlvbiB0ZXN0Lg0KIAkgKi8NCi0JdmFsID0gcmVhZGwoJmRldi0+bGxf
-dHNuX3JlZ3MtPmxsX3Rzbl9jb3VudGVyc18yKTsNCisJdmFsID0gcmVhZGwoJmRldi0+bGxyZWdz
-LT5sbF90c25fY291bnRlcnNfMik7DQogCXZhbCAmPSB+KDB4MWYgPDwgSE9UX1RYX05PUkVTRVRf
-VFMyKTsNCiAJdmFsIHw9IDB4MTAgPDwgSE9UX1RYX05PUkVTRVRfVFMyOw0KLQl3cml0ZWwodmFs
-LCAmZGV2LT5sbF90c25fcmVncy0+bGxfdHNuX2NvdW50ZXJzXzIpOw0KKwl3cml0ZWwodmFsLCAm
-ZGV2LT5sbHJlZ3MtPmxsX3Rzbl9jb3VudGVyc18yKTsNCiANCi0JdmFsID0gcmVhZGwoJmRldi0+
-bGxfdHNuX3JlZ3MtPmxsX3Rzbl9jb3VudGVyc18zKTsNCisJdmFsID0gcmVhZGwoJmRldi0+bGxy
-ZWdzLT5sbF90c25fY291bnRlcnNfMyk7DQogCXZhbCAmPSB+KDB4MWYgPDwgSE9UX1JYX1JFU0VU
-X1RTMik7DQogCXZhbCB8PSAweDMgPDwgSE9UX1JYX1JFU0VUX1RTMjsNCi0Jd3JpdGVsKHZhbCwg
-JmRldi0+bGxfdHNuX3JlZ3MtPmxsX3Rzbl9jb3VudGVyc18zKTsNCisJd3JpdGVsKHZhbCwgJmRl
-di0+bGxyZWdzLT5sbF90c25fY291bnRlcnNfMyk7DQogDQogCS8qDQogCSAqIFNldCBSZWNvdmVy
-eSBJZGxlIHRvIFJlY292ZXIgYml0Og0KQEAgLTIyNzYsMTAgKzIyNzYsMTAgQEAgc3RhdGljIHZv
-aWQgdXNiX3JlaW5pdF8zMzh4KHN0cnVjdCBuZXQyMjgwICpkZXYpDQogCSAqIC0gSXQgaXMgc2Fm
-ZSB0byBzZXQgZm9yIGFsbCBjb25uZWN0aW9uIHNwZWVkczsgYWxsIGNoaXAgcmV2aXNpb25zLg0K
-IAkgKiAtIFItTS1XIHRvIGxlYXZlIG90aGVyIGJpdHMgdW5kaXN0dXJiZWQuDQogCSAqIC0gUmVm
-ZXJlbmNlIFBMWCBUVC03MzcyDQotCSAqLw0KLQl2YWwgPSByZWFkbCgmZGV2LT5sbF9jaGlja2Vu
-X3JlZy0+bGxfdHNuX2NoaWNrZW5fYml0KTsNCisJKi8NCisJdmFsID0gcmVhZGwoJmRldi0+bGxy
-ZWdzLT5sbF90c25fY2hpY2tlbl9iaXQpOw0KIAl2YWwgfD0gQklUKFJFQ09WRVJZX0lETEVfVE9f
-UkVDT1ZFUl9GTVcpOw0KLQl3cml0ZWwodmFsLCAmZGV2LT5sbF9jaGlja2VuX3JlZy0+bGxfdHNu
-X2NoaWNrZW5fYml0KTsNCisJd3JpdGVsKHZhbCwgJmRldi0+bGxyZWdzLT5sbF90c25fY2hpY2tl
-bl9iaXQpOw0KIA0KIAlJTklUX0xJU1RfSEVBRCgmZGV2LT5nYWRnZXQuZXAwLT5lcF9saXN0KTsN
-CiANCkBAIC0zNjY5LDEyICszNjY5LDYgQEAgc3RhdGljIGludCBuZXQyMjgwX3Byb2JlKHN0cnVj
-dCBwY2lfZGV2ICpwZGV2LCBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCAqaWQpDQogCQkJCQkJ
-CShiYXNlICsgMHgwMGI0KTsNCiAJCWRldi0+bGxyZWdzID0gKHN0cnVjdCB1c2IzMzh4X2xsX3Jl
-Z3MgX19pb21lbSAqKQ0KIAkJCQkJCQkoYmFzZSArIDB4MDcwMCk7DQotCQlkZXYtPmxsX2xmcHNf
-cmVncyA9IChzdHJ1Y3QgdXNiMzM4eF9sbF9sZnBzX3JlZ3MgX19pb21lbSAqKQ0KLQkJCQkJCQko
-YmFzZSArIDB4MDc0OCk7DQotCQlkZXYtPmxsX3Rzbl9yZWdzID0gKHN0cnVjdCB1c2IzMzh4X2xs
-X3Rzbl9yZWdzIF9faW9tZW0gKikNCi0JCQkJCQkJKGJhc2UgKyAweDA3N2MpOw0KLQkJZGV2LT5s
-bF9jaGlja2VuX3JlZyA9IChzdHJ1Y3QgdXNiMzM4eF9sbF9jaGlfcmVncyBfX2lvbWVtICopDQot
-CQkJCQkJCShiYXNlICsgMHgwNzljKTsNCiAJCWRldi0+cGxyZWdzID0gKHN0cnVjdCB1c2IzMzh4
-X3BsX3JlZ3MgX19pb21lbSAqKQ0KIAkJCQkJCQkoYmFzZSArIDB4MDgwMCk7DQogCQl1c2JzdGF0
-ID0gcmVhZGwoJmRldi0+dXNiLT51c2JzdGF0KTsNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9n
-YWRnZXQvdWRjL25ldDIyODAuaCBiL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvbmV0MjI4MC5oDQpp
-bmRleCBiNjVhNzk3NTQ0ZDcuLjg1ZDNjYTE2OThiYSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNi
-L2dhZGdldC91ZGMvbmV0MjI4MC5oDQorKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL25ldDIy
-ODAuaA0KQEAgLTE3OCw5ICsxNzgsNiBAQCBzdHJ1Y3QgbmV0MjI4MCB7DQogCXN0cnVjdCBuZXQy
-MjgwX2RlcF9yZWdzCQlfX2lvbWVtICpkZXA7DQogCXN0cnVjdCBuZXQyMjgwX2VwX3JlZ3MJCV9f
-aW9tZW0gKmVwcmVnczsNCiAJc3RydWN0IHVzYjMzOHhfbGxfcmVncwkJX19pb21lbSAqbGxyZWdz
-Ow0KLQlzdHJ1Y3QgdXNiMzM4eF9sbF9sZnBzX3JlZ3MJX19pb21lbSAqbGxfbGZwc19yZWdzOw0K
-LQlzdHJ1Y3QgdXNiMzM4eF9sbF90c25fcmVncwlfX2lvbWVtICpsbF90c25fcmVnczsNCi0Jc3Ry
-dWN0IHVzYjMzOHhfbGxfY2hpX3JlZ3MJX19pb21lbSAqbGxfY2hpY2tlbl9yZWc7DQogCXN0cnVj
-dCB1c2IzMzh4X3BsX3JlZ3MJCV9faW9tZW0gKnBscmVnczsNCiANCiAJc3RydWN0IGRtYV9wb29s
-CQkJKnJlcXVlc3RzOw0KZGlmZiAtLWdpdCBhL2luY2x1ZGUvbGludXgvdXNiL3VzYjMzOHguaCBi
-L2luY2x1ZGUvbGludXgvdXNiL3VzYjMzOHguaA0KaW5kZXggNzE4OWUzMzg3YmY5Li4yMDAyMGMx
-MzM2ZDUgMTAwNjQ0DQotLS0gYS9pbmNsdWRlL2xpbnV4L3VzYi91c2IzMzh4LmgNCisrKyBiL2lu
-Y2x1ZGUvbGludXgvdXNiL3VzYjMzOHguaA0KQEAgLTExMyw3ICsxMTMsMTAgQEAgc3RydWN0IHVz
-YjMzOHhfbGxfcmVncyB7DQogCXUzMiAgIGxsX2x0c3NtX2N0cmwxOw0KIAl1MzIgICBsbF9sdHNz
-bV9jdHJsMjsNCiAJdTMyICAgbGxfbHRzc21fY3RybDM7DQotCXUzMiAgIHVudXNlZFsyXTsNCisJ
-dTMyICAgdW51c2VkMTsNCisNCisJLyogMHg3MTAgKi8NCisJdTMyICAgdW51c2VkMjsNCiAJdTMy
-ICAgbGxfZ2VuZXJhbF9jdHJsMDsNCiAJdTMyICAgbGxfZ2VuZXJhbF9jdHJsMTsNCiAjZGVmaW5l
-ICAgICBQTV9VM19BVVRPX0VYSVQgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-MjkNCkBAIC0xMzYsMjkgKzEzOSw0MSBAQCBzdHJ1Y3QgdXNiMzM4eF9sbF9yZWdzIHsNCiAJdTMy
-ICAgbGxfZ2VuZXJhbF9jdHJsMjsNCiAjZGVmaW5lICAgICBTRUxFQ1RfSU5WRVJUX0xBTkVfUE9M
-QVJJVFkgICAgICAgICAgICAgICAgICAgICAgICAgNw0KICNkZWZpbmUgICAgIEZPUkNFX0lOVkVS
-VF9MQU5FX1BPTEFSSVRZICAgICAgICAgICAgICAgICAgICAgICAgICA2DQorDQorCS8qIDB4NzIw
-ICovDQogCXUzMiAgIGxsX2dlbmVyYWxfY3RybDM7DQogCXUzMiAgIGxsX2dlbmVyYWxfY3RybDQ7
-DQogCXUzMiAgIGxsX2Vycm9yX2dlbjsNCi19IF9fcGFja2VkOw0KKwl1MzIgICB1bnVzZWQzOw0K
-Kw0KKwkvKiAweDczMCAqLw0KKwl1MzIgICB1bnVzZWQ0WzRdOw0KIA0KLXN0cnVjdCB1c2IzMzh4
-X2xsX2xmcHNfcmVncyB7DQotCS8qIG9mZnNldCAweDc0OCAqLw0KKwkvKiAweDc0MCAqLw0KKwl1
-MzIgICB1bnVzZWQ1WzJdOw0KIAl1MzIgICBsbF9sZnBzXzU7DQogI2RlZmluZSAgICAgVElNRVJf
-TEZQU182VVMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDE2DQogCXUzMiAg
-IGxsX2xmcHNfNjsNCiAjZGVmaW5lICAgICBUSU1FUl9MRlBTXzgwVVMgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgMA0KLX0gX19wYWNrZWQ7DQogDQotc3RydWN0IHVzYjMzOHhf
-bGxfdHNuX3JlZ3Mgew0KLQkvKiBvZmZzZXQgMHg3N0MgKi8NCisJLyogMHg3NTAgKi8NCisJdTMy
-ICAgdW51c2VkNls4XTsNCisNCisJLyogMHg3NzAgKi8NCisJdTMyICAgdW51c2VkN1szXTsNCiAJ
-dTMyICAgbGxfdHNuX2NvdW50ZXJzXzI7DQogI2RlZmluZSAgICAgSE9UX1RYX05PUkVTRVRfVFMy
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDI0DQorDQorCS8qIDB4NzgwICovDQog
-CXUzMiAgIGxsX3Rzbl9jb3VudGVyc18zOw0KICNkZWZpbmUgICAgIEhPVF9SWF9SRVNFVF9UUzIg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAwDQotfSBfX3BhY2tlZDsNCisJdTMy
-ICAgdW51c2VkOFszXTsNCiANCi1zdHJ1Y3QgdXNiMzM4eF9sbF9jaGlfcmVncyB7DQotCS8qIG9m
-ZnNldCAweDc5QyAqLw0KKwkvKiAweDc5MCAqLw0KKwl1MzIgICB1bnVzZWQ5Ow0KKwl1MzIgICBs
-bF9sZnBzX3RpbWVyc18yOw0KKyNkZWZpbmUgICAgIExGUFNfVElNRVJTXzJfV09SS0FST1VORF9W
-QUxVRQkJCTB4MDg0ZA0KKwl1MzIgICB1bnVzZWQxMDsNCiAJdTMyICAgbGxfdHNuX2NoaWNrZW5f
-Yml0Ow0KICNkZWZpbmUgICAgIFJFQ09WRVJZX0lETEVfVE9fUkVDT1ZFUl9GTVcgICAgICAgICAg
-ICAgICAgICAgICAgICAzDQogfSBfX3BhY2tlZDsNCg0K
+The split into multiple structures of the "ll" register bank is
+impractical. It makes it hard to add ll_lfps_timers_2 which is
+at offset 0x794, which is outside of the existing "lfps" structure
+and would require us to add yet another one.
+
+Instead, move all the "ll" registers into a single usb338x_ll_regs
+structure, and add ll_lfps_timers_2 while at it. It will be used
+in a subsequent patch.
+
+Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+---
+ drivers/usb/gadget/udc/net2280.c | 28 ++++++++++---------------
+ drivers/usb/gadget/udc/net2280.h |  3 ---
+ include/linux/usb/usb338x.h      | 35 +++++++++++++++++++++++---------
+ 3 files changed, 36 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
+index b6bbe2e448ba..e0191146ba22 100644
+--- a/drivers/usb/gadget/udc/net2280.c
++++ b/drivers/usb/gadget/udc/net2280.c
+@@ -2244,30 +2244,30 @@ static void usb_reinit_338x(struct net2280 *dev)
+ 	}
+ 
+ 	/* Hardware Defect and Workaround */
+-	val = readl(&dev->ll_lfps_regs->ll_lfps_5);
++	val = readl(&dev->llregs->ll_lfps_5);
+ 	val &= ~(0xf << TIMER_LFPS_6US);
+ 	val |= 0x5 << TIMER_LFPS_6US;
+-	writel(val, &dev->ll_lfps_regs->ll_lfps_5);
++	writel(val, &dev->llregs->ll_lfps_5);
+ 
+-	val = readl(&dev->ll_lfps_regs->ll_lfps_6);
++	val = readl(&dev->llregs->ll_lfps_6);
+ 	val &= ~(0xffff << TIMER_LFPS_80US);
+ 	val |= 0x0100 << TIMER_LFPS_80US;
+-	writel(val, &dev->ll_lfps_regs->ll_lfps_6);
++	writel(val, &dev->llregs->ll_lfps_6);
+ 
+ 	/*
+ 	 * AA_AB Errata. Issue 4. Workaround for SuperSpeed USB
+ 	 * Hot Reset Exit Handshake may Fail in Specific Case using
+ 	 * Default Register Settings. Workaround for Enumeration test.
+ 	 */
+-	val = readl(&dev->ll_tsn_regs->ll_tsn_counters_2);
++	val = readl(&dev->llregs->ll_tsn_counters_2);
+ 	val &= ~(0x1f << HOT_TX_NORESET_TS2);
+ 	val |= 0x10 << HOT_TX_NORESET_TS2;
+-	writel(val, &dev->ll_tsn_regs->ll_tsn_counters_2);
++	writel(val, &dev->llregs->ll_tsn_counters_2);
+ 
+-	val = readl(&dev->ll_tsn_regs->ll_tsn_counters_3);
++	val = readl(&dev->llregs->ll_tsn_counters_3);
+ 	val &= ~(0x1f << HOT_RX_RESET_TS2);
+ 	val |= 0x3 << HOT_RX_RESET_TS2;
+-	writel(val, &dev->ll_tsn_regs->ll_tsn_counters_3);
++	writel(val, &dev->llregs->ll_tsn_counters_3);
+ 
+ 	/*
+ 	 * Set Recovery Idle to Recover bit:
+@@ -2276,10 +2276,10 @@ static void usb_reinit_338x(struct net2280 *dev)
+ 	 * - It is safe to set for all connection speeds; all chip revisions.
+ 	 * - R-M-W to leave other bits undisturbed.
+ 	 * - Reference PLX TT-7372
+-	 */
+-	val = readl(&dev->ll_chicken_reg->ll_tsn_chicken_bit);
++	*/
++	val = readl(&dev->llregs->ll_tsn_chicken_bit);
+ 	val |= BIT(RECOVERY_IDLE_TO_RECOVER_FMW);
+-	writel(val, &dev->ll_chicken_reg->ll_tsn_chicken_bit);
++	writel(val, &dev->llregs->ll_tsn_chicken_bit);
+ 
+ 	INIT_LIST_HEAD(&dev->gadget.ep0->ep_list);
+ 
+@@ -3669,12 +3669,6 @@ static int net2280_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 							(base + 0x00b4);
+ 		dev->llregs = (struct usb338x_ll_regs __iomem *)
+ 							(base + 0x0700);
+-		dev->ll_lfps_regs = (struct usb338x_ll_lfps_regs __iomem *)
+-							(base + 0x0748);
+-		dev->ll_tsn_regs = (struct usb338x_ll_tsn_regs __iomem *)
+-							(base + 0x077c);
+-		dev->ll_chicken_reg = (struct usb338x_ll_chi_regs __iomem *)
+-							(base + 0x079c);
+ 		dev->plregs = (struct usb338x_pl_regs __iomem *)
+ 							(base + 0x0800);
+ 		usbstat = readl(&dev->usb->usbstat);
+diff --git a/drivers/usb/gadget/udc/net2280.h b/drivers/usb/gadget/udc/net2280.h
+index b65a797544d7..85d3ca1698ba 100644
+--- a/drivers/usb/gadget/udc/net2280.h
++++ b/drivers/usb/gadget/udc/net2280.h
+@@ -178,9 +178,6 @@ struct net2280 {
+ 	struct net2280_dep_regs		__iomem *dep;
+ 	struct net2280_ep_regs		__iomem *epregs;
+ 	struct usb338x_ll_regs		__iomem *llregs;
+-	struct usb338x_ll_lfps_regs	__iomem *ll_lfps_regs;
+-	struct usb338x_ll_tsn_regs	__iomem *ll_tsn_regs;
+-	struct usb338x_ll_chi_regs	__iomem *ll_chicken_reg;
+ 	struct usb338x_pl_regs		__iomem *plregs;
+ 
+ 	struct dma_pool			*requests;
+diff --git a/include/linux/usb/usb338x.h b/include/linux/usb/usb338x.h
+index 7189e3387bf9..20020c1336d5 100644
+--- a/include/linux/usb/usb338x.h
++++ b/include/linux/usb/usb338x.h
+@@ -113,7 +113,10 @@ struct usb338x_ll_regs {
+ 	u32   ll_ltssm_ctrl1;
+ 	u32   ll_ltssm_ctrl2;
+ 	u32   ll_ltssm_ctrl3;
+-	u32   unused[2];
++	u32   unused1;
++
++	/* 0x710 */
++	u32   unused2;
+ 	u32   ll_general_ctrl0;
+ 	u32   ll_general_ctrl1;
+ #define     PM_U3_AUTO_EXIT                                     29
+@@ -136,29 +139,41 @@ struct usb338x_ll_regs {
+ 	u32   ll_general_ctrl2;
+ #define     SELECT_INVERT_LANE_POLARITY                         7
+ #define     FORCE_INVERT_LANE_POLARITY                          6
++
++	/* 0x720 */
+ 	u32   ll_general_ctrl3;
+ 	u32   ll_general_ctrl4;
+ 	u32   ll_error_gen;
+-} __packed;
++	u32   unused3;
++
++	/* 0x730 */
++	u32   unused4[4];
+ 
+-struct usb338x_ll_lfps_regs {
+-	/* offset 0x748 */
++	/* 0x740 */
++	u32   unused5[2];
+ 	u32   ll_lfps_5;
+ #define     TIMER_LFPS_6US                                      16
+ 	u32   ll_lfps_6;
+ #define     TIMER_LFPS_80US                                     0
+-} __packed;
+ 
+-struct usb338x_ll_tsn_regs {
+-	/* offset 0x77C */
++	/* 0x750 */
++	u32   unused6[8];
++
++	/* 0x770 */
++	u32   unused7[3];
+ 	u32   ll_tsn_counters_2;
+ #define     HOT_TX_NORESET_TS2                                  24
++
++	/* 0x780 */
+ 	u32   ll_tsn_counters_3;
+ #define     HOT_RX_RESET_TS2                                    0
+-} __packed;
++	u32   unused8[3];
+ 
+-struct usb338x_ll_chi_regs {
+-	/* offset 0x79C */
++	/* 0x790 */
++	u32   unused9;
++	u32   ll_lfps_timers_2;
++#define     LFPS_TIMERS_2_WORKAROUND_VALUE			0x084d
++	u32   unused10;
+ 	u32   ll_tsn_chicken_bit;
+ #define     RECOVERY_IDLE_TO_RECOVER_FMW                        3
+ } __packed;
+
+
