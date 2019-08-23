@@ -2,201 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA4959A667
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 05:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B139A7BF
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 08:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390122AbfHWDwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Aug 2019 23:52:37 -0400
-Received: from mail-eopbgr150079.outbound.protection.outlook.com ([40.107.15.79]:58852
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726283AbfHWDwh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Aug 2019 23:52:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TXwZm3GRXUtt3tvqRCGM8s0nllUxQoiZ1UmFSNUrEdbp7UwJA2pSmqrwseikhlSqpncabnc3p/PeSrKinrs/KrwIsO2Wyf2gXLyvUqXr7Gs0bc5kTfjsI4GgE+hJKQPI4iuusEftGEYW3cYS/gzOUvwSy/TW9DXuNB2wbjasLFKxFukR/AEwuhkWouqxg3Glw9oHgc5wNvGeaN1vp5xzfEI7W3nFuoApoI6Hnc9F1yrh39+u53cp2MWoCQ+OgIj7ZW7VEbL4xrP7FT9JOaWuwAFWaM6tMLmhLd2VZ+V0pRJYTGrFwZqSSfh7lP3C10U+gBkkw5e4p3P7Q+DuV3Eomg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IzobgcCyo/TsfsuYjX5nFAUm7UvMwmFQTla4maX2zwA=;
- b=QcrLC+T11lmiJIreujMVEnqALcSZ698YhV1iwW89ntJ//FESJa0Sr+mzu0NRJ4c+GdIznQRbS6DD3Yth2bpVPEjaOrNsLcur8hnW5ceotup8fluDUynfJgFrPLseaBxZZrVbgZf9UoJgl8Prijr9fJiXsnCh0lft21HS/h8jq3HYODd+su/Ad7QYnsPX8CtyJNdGTdvlCwRCNHeb6ZW7HHiI0nHumkvk3X7ByMb+1dQcFlItRHghNDf6nLmkG+upi30Kjgy7ls70gujGGzHmU2HYrtJwTxV3MHLucOPy0QyDfXKzbFg3WCYE6vw8VBii6sWmjnnCDkaNkxDNLwc+lQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IzobgcCyo/TsfsuYjX5nFAUm7UvMwmFQTla4maX2zwA=;
- b=htyG21mYxP1qpsvtft6E1H5zfbNeXnGgKiBzRoWW4Cfo0+o9Y00j5PNuzW8A/WOz7d0Pu+rNrbxx6HheOAmgitWwJ0da2tYtX7Q24jywAyeRf9nwwzjVWndgksbpZGIBHYtWYUSz6YQ01ahoU8EqYqYdubmhXdsUtpsMxQp3WLY=
-Received: from AM0PR04MB6817.eurprd04.prod.outlook.com (52.132.212.85) by
- AM0PR04MB5874.eurprd04.prod.outlook.com (20.178.202.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2199.19; Fri, 23 Aug 2019 03:52:33 +0000
-Received: from AM0PR04MB6817.eurprd04.prod.outlook.com
- ([fe80::4d21:d39f:b1da:811]) by AM0PR04MB6817.eurprd04.prod.outlook.com
- ([fe80::4d21:d39f:b1da:811%3]) with mapi id 15.20.2178.020; Fri, 23 Aug 2019
- 03:52:33 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Peter Chen <peter.chen@nxp.com>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>, Ran Wang <ran.wang_1@nxp.com>
-Subject: RE: [PATCH 1/1] usb: xhci: avoid VBus glitch during controller reset
- operation
-Thread-Topic: [PATCH 1/1] usb: xhci: avoid VBus glitch during controller reset
- operation
-Thread-Index: AQHVV88qu74WcWDk3UKcEVqZOYC8KacHBDgAgADoJACAAAz3QIAAHWaAgAACWdA=
-Date:   Fri, 23 Aug 2019 03:52:33 +0000
-Message-ID: <AM0PR04MB681721253333DFD7393082D7F1A40@AM0PR04MB6817.eurprd04.prod.outlook.com>
-References: <20190821031602.1030-1-peter.chen@nxp.com>
- <ce4fc3ec-2290-2902-1cf9-95add5b428b9@linux.intel.com>
- <20190823005918.mlcvlbzdai74t6xf@b29397-desktop>
- <DB8PR04MB6826525334C938A6838A896EF1A40@DB8PR04MB6826.eurprd04.prod.outlook.com>
- <20190823033055.ilv5tufoxyei53kf@b29397-desktop>
-In-Reply-To: <20190823033055.ilv5tufoxyei53kf@b29397-desktop>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.197]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 895d0b2f-0767-4b12-17ef-08d7277d5420
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM0PR04MB5874;
-x-ms-traffictypediagnostic: AM0PR04MB5874:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <AM0PR04MB58749D2E8687263119A5F825F1A40@AM0PR04MB5874.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
-x-forefront-prvs: 0138CD935C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(396003)(39860400002)(346002)(136003)(366004)(43544003)(52314003)(199004)(189003)(186003)(478600001)(53936002)(52536014)(76176011)(99286004)(71200400001)(71190400001)(9686003)(55016002)(11346002)(25786009)(7696005)(305945005)(446003)(7736002)(6116002)(3846002)(6436002)(74316002)(8936002)(2906002)(66066001)(6862004)(229853002)(26005)(54906003)(5660300002)(86362001)(66446008)(64756008)(81166006)(81156014)(6636002)(53546011)(102836004)(6506007)(14444005)(256004)(476003)(486006)(14454004)(76116006)(66946007)(66476007)(66556008)(316002)(4326008)(8676002)(6246003)(33656002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB5874;H:AM0PR04MB6817.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: lZBJNbUAwS04Gr8JnZS05vUQOJmngKg5yV6f/8aDNdHfbD2eePFufqpy99HR2iCtcYWVzwVvGabgJ1X41HtsrG3EdKX7L4AL7EVx8RRc87/jDuSSNPG5PhAZ6iywS2YmVfoh2HqsEtSJzapDQaN5RFaj/wfxwAeVf+AbGn/KhyXfFINP2leFAQF4xZ6+oseZInwPS3tPBn1XpbznnhuVahaFsbVN2akhgKpOZS4WPaVupZsIRmwM8ecaJhfjgasfEg4XBwPf1+TpmF+x1l5VbHuAQ9IJO4ely9cCLHckoKT+ijwsb2J3QlbUrT3n2gUMpwUgaK6p/LMa38i8hv9anebqARDEEkqILQjrSKOIPGgSbe2V0CKPXGytIgoval+m/UIc+Q9Txci8Ahfm9r/eWJVV2UuWY82hbR5Z2waFc90=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S2391539AbfHWGkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 02:40:46 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:57384 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2388081AbfHWGkp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 02:40:45 -0400
+X-UUID: 8c55025301574cb49dfe863783261f02-20190823
+X-UUID: 8c55025301574cb49dfe863783261f02-20190823
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 497540237; Fri, 23 Aug 2019 14:40:26 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Fri, 23 Aug 2019 14:40:24 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 23 Aug 2019 14:40:23 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ian Campbell <ijc+devicetree@hellion.org.uk>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>
+Subject: [RESEND PATCH v2 1/2] dt-bindings: usb: mtk-xhci: add an optional xhci_ck clock
+Date:   Fri, 23 Aug 2019 14:40:24 +0800
+Message-ID: <1566542425-20082-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 895d0b2f-0767-4b12-17ef-08d7277d5420
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2019 03:52:33.0868
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iLPLpy9bUcqXsL26OGVlpimxzxKd1vkpkpdRHwlJC95PvGNSOkmwC2ILtudihJKX+LM8gpQasdy4JSfqhL/eFg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB5874
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 28C714632E7B96289CC589C52B901DE75F63E441DB7A96A8CF8353BDAADD6D702000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgUGV0ZXIsDQoNCk9uIEZyaWRheSwgQXVndXN0IDIzLCAyMDE5IDExOjM0LCBQZXRlciBDaGVu
-IHdyb3RlOg0KPiANCj4gT24gMTktMDgtMjMgMDE6NTk6MjQsIFJhbiBXYW5nIHdyb3RlOg0KPiA+
-IEhJIFBldGVyLCBNYXRoaWFzLA0KPiA+DQo+ID4gU29ycnkgZm9yIHRoZSBsYXRlIHJldmlldy4N
-Cj4gPg0KPiA+IE9uIEZyaWRheSwgQXVndXN0IDIzLCAyMDE5IDA5OjAyLCBQZXRlciBDaGVuIHdy
-b3RlOg0KPiA+ID4NCj4gPiA+IE9uIDE5LTA4LTIyIDE0OjA4OjI2LCBNYXRoaWFzIE55bWFuIHdy
-b3RlOg0KPiA+ID4gPiBPbiAyMS44LjIwMTkgNi4xOCwgUGV0ZXIgQ2hlbiB3cm90ZToNCj4gPiA+
-ID4gPiBBY2NvcmRpbmcgdG8geEhDSSAxLjEgQ0g0LjE5LjQgUG9ydCBQb3dlcjoNCj4gPiA+ID4g
-PiAJV2hpbGUgQ2hpcCBIYXJkd2FyZSBSZXNldCBvciBIQ1JTVCBpcyBhc3NlcnRlZCwNCj4gPiA+
-ID4gPiAgICAgICAgIAl0aGUgdmFsdWUgb2YgUFAgaXMgdW5kZWZpbmVkLiBJZiB0aGUgeEhDIHN1
-cHBvcnRzDQo+ID4gPiA+ID4gICAgICAgICAJcG93ZXIgc3dpdGNoZXMgKFBQQyA9IOKAmDHigJkp
-IHRoZW4gVkJ1cyBtYXkgYmUgZGVhc3NlcnRlZA0KPiA+ID4gPiA+ICAgICAgICAgCWR1cmluZyB0
-aGlzIHRpbWUuIFBQIChhbmQgVkJ1cykgc2hhbGwgYmUgZW5hYmxlZCBpbW1lZGlhdGVseQ0KPiA+
-ID4gPiA+ICAgICAgICAgCXVwb24gZXhpdGluZyB0aGUgcmVzZXQgY29uZGl0aW9uLg0KPiA+ID4g
-PiA+DQo+ID4gPiA+ID4gVGhlIFZCdXMgZ2xpdGNoIG1heSBjYXVzZSBzb21lIFVTQiBkZXZpY2Vz
-IHdvcmsgYWJub3JtYWwsIHdlDQo+ID4gPiA+ID4gb2JzZXJ2ZSBpdCBhdCBOWFAgTFMxMDEyQUZX
-UlkvTFMxMDQzQVJEQi9MWDIxNjBBUURTL0xTMTA4OEFSREINCj4gcGxhdGZvcm1zLg0KPiA+ID4g
-VG8NCj4gPiA+ID4gPiBhdm9pZCB0aGlzIFZidXMgZ2xpdGNoLCB3ZSBjb3VsZCBzZXQgUFAgYXMg
-MCBiZWZvcmUgSENSU1QsIGFuZA0KPiA+ID4gPiA+IHRoZSBQUCB3aWxsIGJhY2sgdG8gMSBhZnRl
-ciBIQ1JTVCBhY2NvcmRpbmcgdG8gc3BlYy4NCj4gPiA+ID4NCj4gPiA+ID4gSXMgdGhpcyBnbGl0
-Y2ggY2F1c2luZyBpc3N1ZXMgYWxyZWFkeSBhdCB0aGUgZmlyc3QgeEhDIHJlc2V0IHdoZW4NCj4g
-PiA+ID4gd2UgYXJlIGxvYWRpbmcgdGhlIHhoY2kgZHJpdmVyLCAgb3Igb25seSBsYXRlciByZXNl
-dHMsIGxpa2UgeEhDIHJlc2V0IGF0DQo+IHJlc3VtZT8NCj4gPiA+DQo+ID4gPiBUaGUgZmlyc3Qg
-dGltZSwgUmFuIHdvdWxkIHlvdSBwbGVhc2UgY29uZmlybT8NCj4gPg0KPiA+IE15IHVuZGVyc3Rh
-bmQgaXMgdGhpcyB3aWxsIGhhcHBlbmVkIHdoZW5ldmVyIFBQIGlzIHNldCB0byAwLCBzdWNoIGFz
-IHhIQ0kgcmVzZXQuDQo+ID4gU28gSSB0aGluayBpdCBtaWdodCBhbHNvIGJlIG9ic2VydmVkIGR1
-cmluZyByZXN1bWUgaWYgeEhDIGRvIHJlc2V0Lg0KPiANCj4gWWVzLCBWYnVzIGdsaXRjaCBzaG91
-bGQgZXhpc3RzIHdoZW5ldmVyIHdlIGRvIGNvbnRyb2xsZXIgcmVzZXQsIEkgdGhvdWdodCB5b3UN
-Cj4gb25seSBtZWV0IHRoaXMgaXNzdWUgZHVyaW5nIGJvb3RzIHVwLg0KPiANCj4gPg0KPiA+IEhv
-d2V2ZXIsIGFjY29yZGluZyB0byBteSBwcmV2aW91cyB0ZXN0aW5nLCBpdCBtaWdodCBiZSB0b28g
-bGF0ZSB0byBkbw0KPiA+IHRoaXMgcG9ydCBwb3dlciBvZmYgaW4geGhjaV9yZXNldCgpLCBhY3R1
-YWxseSB0aGUgVkJVUyB3aWxsIGFzc2VydA0KPiA+IG9uY2UgRFdDMyBkcml2ZXIgc2V0IElQIHRv
-IGhvc3QgbW9kZSAoYmVmb3JlIGRvaW5nIHhIQyByZXNldCkuIFNvIHRoZQ0KPiA+IGdsaXRjaCBz
-dGlsbCBjYW4gYmUgb2JzZXJ2ZWQgb24gdGhlIHNjb3BlOyBJIGhhdmUgbW9yZSBpc3N1ZQ0KPiA+
-IGRlc2NyaXB0aW9uIGluIGFub3RoZXIgcGF0Y2ggZGlzY3Vzc2lvbiBhYm91dCB0aGlzLCBwbGVh
-c2Ugc2VlDQo+ID4NCj4gPiBsb3JlLmtlcm5lbC5vcmcvcGF0Y2h3b3JrL3BhdGNoLzEwMzI0MjUv
-DQo+ID4gUXVvdGVkIGZyb20gaXQ6DQo+ID4gQWN0dWFsbHkgSSBoYXZlIGRvbmUgZXhwZXJpbWVu
-dCBsaWtlIHdoYXQgeW91IHN1Z2dlc3RlZCAoaW4NCj4gPiB4aGNpLXBsYXQuYyksIGJ1dCB0aGUg
-dGltaW5nIHNlZW1zIHRvbyBsYXRlLS1tYWtpbmcgVkJVUyB3YXZlZm9ybSBsb29rIGxpa2UgYQ0K
-PiBzcXVhcmUgd2F2ZSBhcyBiZWxvdzoNCj4gPg0KPiA+ICAgICAgICAgICAgICAgSGVyZSBEV0Mz
-IGVuYWJsZSBob3N0IG1vZGUsIFZCVVMgb24NCj4gPiAgICAgICAgICAgICAgIHwNCj4gPiArNVYg
-ICAgICAgICAgLy0tLS0tLS0tLVwgNDBtcyAgLy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS4u
-Li4NCj4gPiAwViAgX19fX19fX18vICAgOTBtcyAgIFxfX19fX18vDQo+ID4gICAgICAgICAgICAg
-ICAgICAgICAgICB8ICAgICAgfA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgfCAgICAgIEhl
-cmUgZG8geGhjaSByZXNldCwgVkJVUyBiYWNrIHRvICs1ViBhZ2Fpbg0KPiA+ICAgICAgICAgICAg
-ICAgICAgICAgICAgSGVyZSBzZXQgYWxsIFBPUlRTQ1tQUF0gdG8gMCBpbg0KPiA+IHhoY2lfZ2Vu
-X3NldHVwKCkNCj4gPg0KPiA+IFNvIEkgYW0gYWZyYWlkIHRoZSBzb2x1dGlvbiBtaWdodCBoYXZl
-IHRvIGJlIGFkZGVkIGluIERXQzMgY29yZSBkcml2ZXINCj4gPiB3aGVyZSBqdXN0IGFmdGVyIGhv
-c3QgbW9kZSBlbmFibGluZyBjb2RlIGlmIHdhbnQgZml4IHRoaXMgOigNCj4gPg0KPiANCj4gUGVy
-IHNwZWMgNC4xOS40IFBvcnQgUG93ZXI6DQo+IA0KPiBXaGV0aGVyIGFuIHhIQyBpbXBsZW1lbnRh
-dGlvbiBzdXBwb3J0cyBwb3J0IHBvd2VyIHN3aXRjaGVzIG9yIG5vdCwgaXQgc2hhbGwNCj4gYXV0
-b21hdGljYWxseSBlbmFibGUgVkJ1cyBvbiBhbGwgUm9vdCBIdWIgcG9ydHMgYWZ0ZXIgYSBDaGlw
-IEhhcmR3YXJlIFJlc2V0IG9yDQo+IEhDUlNULg0KPiANCj4gUmFuJ3Mgb2JzZXJ2YXRpb24gY29u
-ZmlybWVkIGl0LCBQUCBpcyBhc3NlcnRlZCBvbmNlIHhIQ0kgaXMgZW5hYmxlZC4NCj4gRnJvbSB0
-aGUgY29kZSwgdGhlIEhDUlNUIHdpbGwgYmUgYXQgYm9vdHMgdXAgYW5kIHN5c3RlbSByZXN1bWUu
-DQo+IFNvLCBpdCBzZWVtcyB3ZSBjYW4ndCBrZWVwIFBQIGFsd2F5cyBhc3NlcnRlZC4gRm9yIHhI
-Q0ksIHRvIGF2b2lkIFZidXMgZ2xpdGNoDQo+IHRvdGFsbHksIHdlIG1heSBoYXZlIHRvIGNvbnRy
-b2wgVmJ1cyB3aXRob3V0IFBQIChlZywgY29uZmlndXJlIFBQIHBpbiBhcyBHUElPKS4NCg0KWWVz
-LCBhbm90aGVyIG9wdGlvbiBpcyB0byBkZXNpZ24gYSBiZXR0ZXIgVkJVUyBkcml2aW5nIGNpcmN1
-aXQgb24gSFcgc2lkZSB0byBmaWx0ZXIgdGhpcyBnbGl0Y2ggb3V0Lg0KSSBoYXZlIGZvdW5kIHNv
-bWUgZWFybGllciB2ZXJzaW9uIG9mIExTMTA0M0FSREIgYm9hcmQgZGVzaWduIGlzIHBlcmZlY3Qg
-b24gZG9pbmcgdGhpcy4NCg0KQW55d2F5LCBmb3IgYm9vdCwgbXkgc3VnZ2VzdGlvbiBpcyB0byBk
-byBpdCBpbiBEV0MzIGRyaXZlciBvbmNlIGFmdGVyIGVuYWJsaW5nIGhvc3QgbW9kZS4NCkJ1dCB0
-aGF0IHNvbHV0aW9uIGlzIHVnbHksIEkgaGF2ZSB0byBhZG1pdC4gDQpBbmQgZm9yIHJlc3VtZSwg
-ZnJhbmtseSBJIGRpZG7igJl0IG5vdGljZSB0aGlzIGJlZm9yZSAodGhhbmtzIGZvciByZW1pbmQp
-LCB3b3VsZCBkbyBmdXJ0aGVyIHN1cnZleQ0KaWYgY2FuIGZvdW5kIGEgc2ltaWxhciBzb2x1dGlv
-bi4NCg0KUmVnYXJkcywNClJhbg0KPiA+ID4gPg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gUmVwb3J0
-ZWQtYnk6IFJhbiBXYW5nIDxyYW4ud2FuZ18xQG54cC5jb20+DQo+ID4gPiA+ID4gU2lnbmVkLW9m
-Zi1ieTogUGV0ZXIgQ2hlbiA8cGV0ZXIuY2hlbkBueHAuY29tPg0KPiA+ID4gPiA+IC0tLQ0KPiA+
-ID4gPiA+ICAgZHJpdmVycy91c2IvaG9zdC94aGNpLmMgfCAxNSArKysrKysrKysrKysrKy0NCj4g
-PiA+ID4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNCBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0p
-DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNp
-LmMgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2kuYw0KPiA+ID4gPiA+IGluZGV4DQo+ID4gPiA+ID4g
-NmIzNGE1NzNjM2Q5Li5mNWE3YjVkNjMwMzEgMTAwNjQ0DQo+ID4gPiA+ID4gLS0tIGEvZHJpdmVy
-cy91c2IvaG9zdC94aGNpLmMNCj4gPiA+ID4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ku
-Yw0KPiA+ID4gPiA+IEBAIC0xNjcsNyArMTY3LDggQEAgaW50IHhoY2lfcmVzZXQoc3RydWN0IHho
-Y2lfaGNkICp4aGNpKQ0KPiA+ID4gPiA+ICAgew0KPiA+ID4gPiA+ICAgCXUzMiBjb21tYW5kOw0K
-PiA+ID4gPiA+ICAgCXUzMiBzdGF0ZTsNCj4gPiA+ID4gPiAtCWludCByZXQ7DQo+ID4gPiA+ID4g
-KwlpbnQgcmV0LCBpOw0KPiA+ID4gPiA+ICsJdTMyIHBvcnRzYzsNCj4gPiA+ID4gPiAgIAlzdGF0
-ZSA9IHJlYWRsKCZ4aGNpLT5vcF9yZWdzLT5zdGF0dXMpOyBAQCAtMTgxLDYgKzE4MiwxOCBAQA0K
-PiA+ID4gPiA+IGludCB4aGNpX3Jlc2V0KHN0cnVjdCB4aGNpX2hjZCAqeGhjaSkNCj4gPiA+ID4g
-PiAgIAkJcmV0dXJuIDA7DQo+ID4gPiA+ID4gICAJfQ0KPiA+ID4gPiA+ICsJLyoNCj4gPiA+ID4g
-PiArCSAqIEtlZXAgUE9SVFNDLlBQIGFzIDAgYmVmb3JlIEhDUlNUIHRvIGVsaW1pbmF0ZQ0KPiA+
-ID4gPiA+ICsJICogVmJ1cyBnbGl0Y2gsIHNlZSBDSCA0LjE5LjQuDQo+ID4gPiA+ID4gKwkgKi8N
-Cj4gPiA+ID4gPiArCWZvciAoaSA9IDA7IGkgPCBIQ1NfTUFYX1BPUlRTKHhoY2ktPmhjc19wYXJh
-bXMxKTsgaSsrKSB7DQo+ID4gPiA+ID4gKwkJX19sZTMyIF9faW9tZW0gKnBvcnRfYWRkciA9ICZ4
-aGNpLT5vcF9yZWdzLQ0KPiA+ID4gPnBvcnRfc3RhdHVzX2Jhc2UgKw0KPiA+ID4gPiA+ICsJCQkJ
-TlVNX1BPUlRfUkVHUyAqIGk7DQo+ID4gPiA+ID4gKwkJcG9ydHNjID0gcmVhZGwocG9ydF9hZGRy
-KTsNCj4gPiA+ID4gPiArCQlwb3J0c2MgJj0gflBPUlRfUE9XRVI7DQo+ID4gPiA+ID4gKwkJd3Jp
-dGVsKHBvcnRzYywgcG9ydF9hZGRyKTsNCj4gPiA+ID4NCj4gPiA+ID4gTm90IGFsbCBiaXRzIHJl
-YWQgZnJvbSBQT1JUU0Mgc2hvdWxkIGJlIHdyaXR0ZW4gYmFjaywgeW91IG1pZ2h0DQo+ID4gPiA+
-IG5lZWQgcG9ydHNjID0geGhjaV9wb3J0X3N0YXRlX3RvX25ldXRyYWwocG9ydHNjKSBoZXJlLg0K
-PiA+ID4NCj4gPiA+IFdpbGwgY2hhbmdlLg0KPiA+ID4NCj4gPiA+ID4NCj4gPiA+ID4gTm9ybWFs
-bHkgSSdkIHJlY29tbWVuZCB1c2luZyB0aGUgeGhjaV9zZXRfcG9ydF9wb3dlcigpIGhlbHBlcg0K
-PiA+ID4gPiBpbnN0ZWFkLCBidXQgaWYgdGhpcyBpcyBpcyBuZWVkZWQgYXQgZHJpdmVyIGxvYWQg
-dGltZSB0aGVuIHBvcnQNCj4gPiA+ID4gYXJyYXlzIG1heSBub3QgYmUgc2V0IHVwDQo+ID4gPiB5
-ZXQuDQo+ID4gPiA+IHhoY2lfc2V0X3BvcnRfcG93ZXIoKSB3b3VsZCB0YWtlIGNhcmUgb2YgcG9z
-c2libGUgQUNQSSBtZXRob2QNCj4gPiA+ID4gY2FsbHMsIGFuZCBhZGQNCj4gPiA+IHNvbWUgZGVi
-dWdnaW5nLg0KPiA+ID4gPg0KPiA+ID4NCj4gPiA+IEl0IGlzIG5lZWRlZCBhdCBsb2FkIHRpbWUs
-IHNvIEkgZGlkIG5vdCB1c2UgcG9ydCBhcnJheS4NCj4gPiA+DQo+ID4gPiA+IE5vdCBzdXJlIGlm
-IHRoaXMgd2lsbCBpbXBhY3Qgc29tZSBvdGhlciBwbGF0Zm9ybXMsIG1heWJlIGl0IHdvdWxkDQo+
-ID4gPiA+IGJlIGJldHRlciB0byBtb3ZlIHRoaXMgdG8gYSBzZXBhcmF0ZSBmdW5jdGlvbiwgYW5k
-IGNhbGwgaXQgYmVmb3JlDQo+ID4gPiA+IHhoY2lfcmVzZXQoKSBpZiBhDQo+ID4gPiBxdWlyayBp
-cyBzZXQuDQo+ID4gPiA+DQo+ID4gPg0KPiA+ID4gSXQgZm9sbG93cyBzcGVjLCBub3QgYXQgcXVp
-cmsuIFdlIHRhbGtlZCB3aXRoIFN5bm9wc2lzIGVuZ2luZWVyDQo+ID4gPiAoY2FzZTogODAwMTIz
-NTQ3OSksIHRoZXkgY29uZmlybWVkIHRoaXMgYmVoYXZpb3VyIGZvbGxvd3Mgc3BlYy4NCj4gPiA+
-IEJlc2lkZXMsIEkgdHJpZWQgYXQgYm90aCBkd2MzIGFuZCBjYWRlbmNlMyB4SENJIHBsYXRmb3Jt
-cywgdGhlDQo+ID4gPiBQT1JUX1BPV0VSIHdpbGwgYmUgc2V0IGFnYWluIGFmdGVyIGNvbnRyb2xs
-ZXIgc2V0Lg0KPiA+ID4NCj4gPiA+IFdoYXQncyBwb3RlbnRpYWwgaXNzdWUgeW91IGNvbnNpZGVy
-Pw0KPiA+ID4NCj4gPiA+IFRoYW5rcywNCj4gPiA+IFBldGVyDQo=
+Add a new optional clock xhci_ck
+
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2 changes:
+  1. add the new clock at the end, suggested by Rob
+---
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+index 266c2d917a28..f3e4acecabe8 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+@@ -30,7 +30,8 @@ Required properties:
+ 	the following ones are optional:
+ 	"ref_ck": reference clock used by low power mode etc,
+ 	"mcu_ck": mcu_bus clock for register access,
+-	"dma_ck": dma_bus clock for data transfer by DMA
++	"dma_ck": dma_bus clock for data transfer by DMA,
++	"xhci_ck": controller clock
+ 
+  - phys : see usb-hcd.txt in the current directory
+ 
+@@ -100,7 +101,7 @@ Required properties:
+  - clocks : a list of phandle + clock-specifier pairs, one for each
+ 	entry in clock-names
+  - clock-names : must contain "sys_ck", and the following ones are optional:
+-	"ref_ck", "mcu_ck" and "dma_ck"
++	"ref_ck", "mcu_ck" and "dma_ck", "xhci_ck"
+ 
+ Optional properties:
+  - vbus-supply : reference to the VBUS regulator;
+-- 
+2.23.0
+
