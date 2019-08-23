@@ -2,101 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9CF9B359
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 17:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A46F39B63D
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 20:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405523AbfHWPdF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 11:33:05 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39306 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2405326AbfHWPdF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 11:33:05 -0400
-Received: (qmail 4343 invoked by uid 2102); 23 Aug 2019 11:33:04 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Aug 2019 11:33:04 -0400
-Date:   Fri, 23 Aug 2019 11:33:04 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH] usb: host: ohci: fix a race condition between shutdown
- and irq
-In-Reply-To: <1566556357-24897-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Message-ID: <Pine.LNX.4.44L0.1908231124410.1628-100000@iolanthe.rowland.org>
+        id S2390215AbfHWSef (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 14:34:35 -0400
+Received: from canardo.mork.no ([148.122.252.1]:41221 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730788AbfHWSef (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Aug 2019 14:34:35 -0400
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x7NIY98R010591
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 23 Aug 2019 20:34:09 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1566585251; bh=rhbGCmlboXmRguY9Y37vGEPWSnNoT7bk5MSyh7OrhWA=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=CXRcMehx+XnXe/Nzi0Ss84Q3Ouhy5OUMpObO5v5EtHxnzHHzPSnWspr7JGSBxbeoq
+         NGmQziZTCGpDQsNI5sUC5YhUztdPVnum/xkOP3e5EK6exw3D0lSUdP7fcz4bochtnJ
+         kSK9qD6Tc76twkYhKEU2lYOIii0Z38q0xnbhHKfg=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1i1EO0-0001F4-I0; Fri, 23 Aug 2019 20:34:08 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     <Charles.Hyde@dellteam.com>
+Cc:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <gregkh@linuxfoundation.org>, <Mario.Limonciello@dell.com>,
+        <oliver@neukum.org>, <netdev@vger.kernel.org>,
+        <nic_swsd@realtek.com>
+Subject: Re: [RFC 3/4] Move ACPI functionality out of r8152 driver
+Organization: m
+References: <1566339738195.2913@Dellteam.com>
+Date:   Fri, 23 Aug 2019 20:34:08 +0200
+In-Reply-To: <1566339738195.2913@Dellteam.com> (Charles Hyde's message of
+        "Tue, 20 Aug 2019 22:22:18 +0000")
+Message-ID: <87mufz20kf.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 23 Aug 2019, Yoshihiro Shimoda wrote:
+<Charles.Hyde@dellteam.com> writes:
 
-> This patch fixes an issue that the following error is
-> possible to happen when ohci hardware causes an interruption
-> and the system is shutting down at the same time.
-> 
-> [   34.851754] usb 2-1: USB disconnect, device number 2
-> [   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
-> [   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
-> [   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
-> [   35.187886] Workqueue: usb_hub_wq hub_event
-> [   35.192063] Call trace:
-> [   35.194509]  dump_backtrace+0x0/0x150
-> [   35.198165]  show_stack+0x14/0x20
-> [   35.201475]  dump_stack+0xa0/0xc4
-> [   35.204785]  __report_bad_irq+0x34/0xe8
-> [   35.208614]  note_interrupt+0x2cc/0x318
-> [   35.212446]  handle_irq_event_percpu+0x5c/0x88
-> [   35.216883]  handle_irq_event+0x48/0x78
-> [   35.220712]  handle_fasteoi_irq+0xb4/0x188
-> [   35.224802]  generic_handle_irq+0x24/0x38
-> [   35.228804]  __handle_domain_irq+0x5c/0xb0
-> [   35.232893]  gic_handle_irq+0x58/0xa8
-> [   35.236548]  el1_irq+0xb8/0x180
-> [   35.239681]  __do_softirq+0x94/0x23c
-> [   35.243253]  irq_exit+0xd0/0xd8
-> [   35.246387]  __handle_domain_irq+0x60/0xb0
-> [   35.250475]  gic_handle_irq+0x58/0xa8
-> [   35.254130]  el1_irq+0xb8/0x180
-> [   35.257268]  kernfs_find_ns+0x5c/0x120
-> [   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
-> [   35.265361]  sysfs_unmerge_group+0x20/0x68
-> [   35.269454]  dpm_sysfs_remove+0x2c/0x68
-> [   35.273284]  device_del+0x80/0x370
-> [   35.276683]  hid_destroy_device+0x28/0x60
-> [   35.280686]  usbhid_disconnect+0x4c/0x80
-> [   35.284602]  usb_unbind_interface+0x6c/0x268
-> [   35.288867]  device_release_driver_internal+0xe4/0x1b0
-> [   35.293998]  device_release_driver+0x14/0x20
-> [   35.298261]  bus_remove_device+0x110/0x128
-> [   35.302350]  device_del+0x148/0x370
-> [   35.305832]  usb_disable_device+0x8c/0x1d0
-> [   35.309921]  usb_disconnect+0xc8/0x2d0
-> [   35.313663]  hub_event+0x6e0/0x1128
-> [   35.317146]  process_one_work+0x1e0/0x320
-> [   35.321148]  worker_thread+0x40/0x450
-> [   35.324805]  kthread+0x124/0x128
-> [   35.328027]  ret_from_fork+0x10/0x18
-> [   35.331594] handlers:
-> [   35.333862] [<0000000079300c1d>] usb_hcd_irq
-> [   35.338126] [<0000000079300c1d>] usb_hcd_irq
-> [   35.342389] Disabling IRQ #156
-> 
-> The ohci_shutdown() should hold the spin lock while disabling
-> the interruption and changing the rh_state flag. Note that
-> io_watchdog_func() also calls the ohci_shutdown() and it
-> already held the spin lock, so that the patch makes a new
-> function as _ohci_shutdown().
+> This change moves ACPI functionality out of the Realtek r8152 driver to
+> its own source and header file, making it available to other drivers as
+> needed now and into the future.  At the time this ACPI snippet was
+> introduced in 2016, only the Realtek driver made use of it in support of
+> Dell's enterprise IT policy efforts.  There comes now a need for this
+> same support in a different driver, also in support of Dell's enterprise
+> IT policy efforts.
 
-I don't understand this description.  It sounds like the OHCI
-controller generates an interrupt request, and then ohci_shutdown()  
-disables the interrupt request before the handler can run.  When the
-handler does run, it sees that no interrupts are enabled and so it
-returns IRQ_NOTMINE, leading to the error shown above.
+Yes, and we told you so.
 
-How will holding the spinlock fix this problem?
 
-Alan Stern
-
+Bj=C3=B8rn
