@@ -2,57 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 883FE9AA4A
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 10:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA109AABD
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 10:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392605AbfHWI1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 04:27:01 -0400
-Received: from mga05.intel.com ([192.55.52.43]:53883 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733069AbfHWI1B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Aug 2019 04:27:01 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Aug 2019 01:27:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,420,1559545200"; 
-   d="scan'208";a="203702966"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by fmsmga004.fm.intel.com with ESMTP; 23 Aug 2019 01:26:58 -0700
-Subject: Re: [RESEND PATCH v2 2/2] usb: xhci-mtk: add an optional xhci_ck
- clock
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ian Campbell <ijc+devicetree@hellion.org.uk>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org
-References: <1566542425-20082-1-git-send-email-chunfeng.yun@mediatek.com>
- <1566542425-20082-2-git-send-email-chunfeng.yun@mediatek.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <e1e4d220-9540-2001-13aa-89ff8ce829f5@linux.intel.com>
-Date:   Fri, 23 Aug 2019 11:28:50 +0300
+        id S2392931AbfHWIx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 04:53:26 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53572 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389120AbfHWIx0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 04:53:26 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x7N8rL2n039346;
+        Fri, 23 Aug 2019 03:53:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1566550401;
+        bh=AygYke9eev/ace09mklN8ehfRR+GaHjHMEoeOSlv2ko=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=RuDlomvHA+ozFBm2seWvqjWHsD4d5bUc8SLiA3BbFf31RdvtoNgulPq4c/Hy6faz8
+         gWSFWMsgTBvBYyRe+Qzd1l92xIRKzwbVpP2r7ViAAkjvDlrjhus7mpEUfE9HT8O8Ry
+         dfT0y1b+FY5K0YOhYcWyODGZ1n3qnHyy4JSuDC3s=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x7N8rLhh112033
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 23 Aug 2019 03:53:21 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 23
+ Aug 2019 03:53:21 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 23 Aug 2019 03:53:21 -0500
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x7N8rGdo010932;
+        Fri, 23 Aug 2019 03:53:16 -0500
+Subject: Re: [PATCH v10 5/6] usb:cdns3 Add Cadence USB3 DRD Driver
+To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <rogerq@ti.com>, <linux-kernel@vger.kernel.org>,
+        <jbergsagel@ti.com>, <nsekhar@ti.com>, <nm@ti.com>,
+        <sureshp@cadence.com>, <jpawar@cadence.com>, <kurahul@cadence.com>,
+        <aniljoy@cadence.com>
+References: <1563733939-21214-1-git-send-email-pawell@cadence.com>
+ <1563733939-21214-6-git-send-email-pawell@cadence.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+Message-ID: <c5067780-9dfe-2a3e-3498-22f3c1dadb87@ti.com>
+Date:   Fri, 23 Aug 2019 14:23:55 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1566542425-20082-2-git-send-email-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <1563733939-21214-6-git-send-email-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.8.2019 9.40, Chunfeng Yun wrote:
-> Some SoCs may have an optional clock xhci_ck (125M or 200M), it
-> usually uses the same PLL as sys_ck, so support it.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Hi,
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+On 22/07/19 12:02 AM, Pawel Laszczak wrote:
+> +
+> +/**
+> + * cdns3_req_ep0_get_status - Handling of GET_STATUS standard USB request
+> + * @priv_dev: extended gadget object
+> + * @ctrl_req: pointer to received setup packet
+> + *
+> + * Returns 0 if success, error code on error
+> + */
+> +static int cdns3_req_ep0_get_status(struct cdns3_device *priv_dev,
+> +				    struct usb_ctrlrequest *ctrl)
+> +{
+> +	__le16 *response_pkt;
+> +	u16 usb_status = 0;
+> +	u32 recip;
+> +	u32 reg;
+> +
+> +	recip = ctrl->bRequestType & USB_RECIP_MASK;
+> +
+> +	switch (recip) {
+> +	case USB_RECIP_DEVICE:
+> +		/* self powered */
+> +		if (priv_dev->is_selfpowered)
+> +			usb_status = BIT(USB_DEVICE_SELF_POWERED);
+> +
+> +		if (priv_dev->wake_up_flag)
+> +			usb_status |= BIT(USB_DEVICE_REMOTE_WAKEUP);
+> +
+> +		if (priv_dev->gadget.speed != USB_SPEED_SUPER)
+> +			break;
+> +
+> +		reg = readl(&priv_dev->regs->usb_sts);
+
+I see usb_sts is read, but never used in this function?
+
+> +
+> +		if (priv_dev->u1_allowed)
+> +			usb_status |= BIT(USB_DEV_STAT_U1_ENABLED);
+> +
+> +		if (priv_dev->u2_allowed)
+> +			usb_status |= BIT(USB_DEV_STAT_U2_ENABLED);
+> +
+> +		break;
+> +	case USB_RECIP_INTERFACE:
+> +		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+> +	case USB_RECIP_ENDPOINT:
+> +		/* check if endpoint is stalled */
+> +		cdns3_select_ep(priv_dev, ctrl->wIndex);
+> +		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)))
+> +			usb_status =  BIT(USB_ENDPOINT_HALT);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	response_pkt = (__le16 *)priv_dev->setup_buf;
+> +	*response_pkt = cpu_to_le16(usb_status);
+> +
+> +	cdns3_ep0_run_transfer(priv_dev, priv_dev->setup_dma,
+> +			       sizeof(*response_pkt), 1, 0);
+> +	return 0;
+> +}
+> +
+
+-- 
+Regards
+Vignesh
