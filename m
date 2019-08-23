@@ -2,143 +2,251 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FBA19AD58
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13129AD6F
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391124AbfHWKeQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 06:34:16 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:35033 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2388983AbfHWKeQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:34:16 -0400
-X-IronPort-AV: E=Sophos;i="5.64,420,1559487600"; 
-   d="scan'208";a="24755310"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 23 Aug 2019 19:34:13 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 69E5E4224141;
-        Fri, 23 Aug 2019 19:34:13 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] usb: host: ohci: fix a race condition between shutdown and irq
-Date:   Fri, 23 Aug 2019 19:32:37 +0900
-Message-Id: <1566556357-24897-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S2387601AbfHWKkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 06:40:09 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:40820 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730991AbfHWKkI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:40:08 -0400
+Received: by mail-wr1-f52.google.com with SMTP id c3so8171016wrd.7
+        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2019 03:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=38x9sYxmrUrxzTsoHeKR33Vu19XABcai3LfO1v6FfvA=;
+        b=vy3pLSR49Dj4/Aw9n2hN43RfUBEox+aJLvICuMkkppJFOcHtGo23MCUjQ0i4lWcDHM
+         pJdbsw95Jtuag72+tPh/GNyWx7kDdLz9KKepqvUdsjfBVtw7Wi/t1x3VmVHACTH7OHGA
+         VuMfu1/gmBWwxM5whgagPI1yjWwDT7AZ1tBrDnZQq6z0XVGkvYqEAi51ldg9KKbjMEwi
+         c7GPm9UFFRwRUGcuVqX+K+F5/+7I7lljw0d5FJEdzCvzfzBJruscy65QAjm0WqLxVXFB
+         nTgABtldtUy0he5rxz67fsnQtO4AAIIaBg6XZK4G8wSq8EH3GSM3XnRuJ9IozUXAf+1q
+         g2DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=38x9sYxmrUrxzTsoHeKR33Vu19XABcai3LfO1v6FfvA=;
+        b=JCaMjU2rrgAo/WwVnfNT6mruMIS9P8/AIauwfTbAxy0mZHdxnoW7EM1+rsayyw4nHC
+         xcxJFV8N/udbtCZLXkV0ZZFQrEZ1bzg5WU63Gea3OPA7Zw8GiHELimgOPBv5QHfRSbDB
+         xz5yR2hpgEbf5E3wybTG5BXS/T5sc612iRwzu0+9KogPf9bAgMyz97Az+428ONLjCQhw
+         8JEL/UHJ6exS4fhOgQoB9fAUcCQbyQJm5G+wIhMCqGFTHQjfWMhmIfBBVNbSBe8psmju
+         SwRvcN7AtHDCPgIFXwjeAjz6LkX/TV8wkJi7ZfDHqNJd9qP91L79zwmnWJCXfJWvBmGb
+         xcFg==
+X-Gm-Message-State: APjAAAWKMbn+CzPtcda9bQhwCaUr69f3KIKW3/8yceYbyU0/5ki54RY+
+        YFKuTugBDpFVbg7yC6lXfNMa3w==
+X-Google-Smtp-Source: APXvYqwfZZGHkmJ+BZ8lW0PXHjJWg0kLouehZ6p5xP8GIMeYkjLvusGlgoQONxWi2OM+MLe4Dxbwdg==
+X-Received: by 2002:a5d:4ec6:: with SMTP id s6mr4186745wrv.327.1566556805430;
+        Fri, 23 Aug 2019 03:40:05 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id x6sm2639577wmf.6.2019.08.23.03.40.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2019 03:40:04 -0700 (PDT)
+Message-ID: <9b06f6f469ea535d336945992242e32b6524cb2b.camel@unipv.it>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-usb@vger.kernel.org,
+        linux-scsi@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Fri, 23 Aug 2019 12:39:51 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1908201307540.1573-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1908201307540.1573-100000@iolanthe.rowland.org>
+Content-Type: multipart/mixed; boundary="=-/gSDmaPIaOWv7ywMbimM"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes an issue that the following error is
-possible to happen when ohci hardware causes an interruption
-and the system is shutting down at the same time.
 
-[   34.851754] usb 2-1: USB disconnect, device number 2
-[   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
-[   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
-[   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
-[   35.187886] Workqueue: usb_hub_wq hub_event
-[   35.192063] Call trace:
-[   35.194509]  dump_backtrace+0x0/0x150
-[   35.198165]  show_stack+0x14/0x20
-[   35.201475]  dump_stack+0xa0/0xc4
-[   35.204785]  __report_bad_irq+0x34/0xe8
-[   35.208614]  note_interrupt+0x2cc/0x318
-[   35.212446]  handle_irq_event_percpu+0x5c/0x88
-[   35.216883]  handle_irq_event+0x48/0x78
-[   35.220712]  handle_fasteoi_irq+0xb4/0x188
-[   35.224802]  generic_handle_irq+0x24/0x38
-[   35.228804]  __handle_domain_irq+0x5c/0xb0
-[   35.232893]  gic_handle_irq+0x58/0xa8
-[   35.236548]  el1_irq+0xb8/0x180
-[   35.239681]  __do_softirq+0x94/0x23c
-[   35.243253]  irq_exit+0xd0/0xd8
-[   35.246387]  __handle_domain_irq+0x60/0xb0
-[   35.250475]  gic_handle_irq+0x58/0xa8
-[   35.254130]  el1_irq+0xb8/0x180
-[   35.257268]  kernfs_find_ns+0x5c/0x120
-[   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
-[   35.265361]  sysfs_unmerge_group+0x20/0x68
-[   35.269454]  dpm_sysfs_remove+0x2c/0x68
-[   35.273284]  device_del+0x80/0x370
-[   35.276683]  hid_destroy_device+0x28/0x60
-[   35.280686]  usbhid_disconnect+0x4c/0x80
-[   35.284602]  usb_unbind_interface+0x6c/0x268
-[   35.288867]  device_release_driver_internal+0xe4/0x1b0
-[   35.293998]  device_release_driver+0x14/0x20
-[   35.298261]  bus_remove_device+0x110/0x128
-[   35.302350]  device_del+0x148/0x370
-[   35.305832]  usb_disable_device+0x8c/0x1d0
-[   35.309921]  usb_disconnect+0xc8/0x2d0
-[   35.313663]  hub_event+0x6e0/0x1128
-[   35.317146]  process_one_work+0x1e0/0x320
-[   35.321148]  worker_thread+0x40/0x450
-[   35.324805]  kthread+0x124/0x128
-[   35.328027]  ret_from_fork+0x10/0x18
-[   35.331594] handlers:
-[   35.333862] [<0000000079300c1d>] usb_hcd_irq
-[   35.338126] [<0000000079300c1d>] usb_hcd_irq
-[   35.342389] Disabling IRQ #156
+--=-/gSDmaPIaOWv7ywMbimM
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-The ohci_shutdown() should hold the spin lock while disabling
-the interruption and changing the rh_state flag. Note that
-io_watchdog_func() also calls the ohci_shutdown() and it
-already held the spin lock, so that the patch makes a new
-function as _ohci_shutdown().
+Il giorno mar, 20/08/2019 alle 13.13 -0400, Alan Stern ha scritto:
+> On Mon, 19 Aug 2019, Andrea Vai wrote:
+> 
+> > Hi Alan,
+> >   I attach the two traces, collected as follows:
+> > 
+> > - start the trace;
+> > - wait 10 seconds;
+> > - plug the drive;
+> > - wait 5 seconds;
+> > - mount the drive;
+> > - wait 5 seconds;
+> > - copy a 500 byte file;
+> > - wait 5 seconds;
+> > - unmount the drive;
+> > - wait 5 seconds;
+> > - stop the trace.
+> 
+> Still no noticeable differences between the two traces.  They both 
+> include a 1.2 second delay shortly after the writing starts, and
+> the 
+> initialization sequences are the same.
+> 
+> I really don't know where to look for this.  The only thing I can
+> think
+> of at this point is to repeat this test, but using a file large
+> enough
+> for the difference in writing speed to show up plainly.
+> 
+> By the way, it would be best to run the tests with the smallest
+> possible number of other USB devices plugged in.  None at all, if
+> you
+> can arrange it.
 
-This patch is inspired by a Renesas R-Car Gen3 BSP patch
-from Tho Vu.
+Thanks, I went some steps further on this.
+The following considerations all apply to the "bad" kernel.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- I think I should have added "Fixes:" tag on the patch, but
- I have no idea how to find the suitable commit...
+Increasing the filesize lead me to find out that using a file sized
+less than roughly 10MB the problem does not happen.
 
- drivers/usb/host/ohci-hcd.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+I found these results by making sets of 10 tries for each filesize,
+using a filesize of 1kB, 10kB, 100kB, 1MB, 10MB, 100MB, 500MB (so, we
+have 70 usbmon logs on these). If we define "fast" a copy that takes
+(roughly(*)) no more time to complete than all the other tries in its
+set, and "slow" elsewhere (=one or more tries in its set are
+(sensibly(*)) faster), I noticed that in each set with a filesize of
+10MB or more the behavior can be very different: sometimes the copy is
+still "fast", sometimes is "slow". The frequency of the "slow" copies
+increases with the filesize. Also, among the "slow" copies in a set,
+the time can be very different.
 
-diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
-index b457fda..1fe3dee 100644
---- a/drivers/usb/host/ohci-hcd.c
-+++ b/drivers/usb/host/ohci-hcd.c
-@@ -419,8 +419,7 @@ static void ohci_usb_reset (struct ohci_hcd *ohci)
-  * other cases where the next software may expect clean state from the
-  * "firmware".  this is bus-neutral, unlike shutdown() methods.
-  */
--static void
--ohci_shutdown (struct usb_hcd *hcd)
-+static void _ohci_shutdown(struct usb_hcd *hcd)
- {
- 	struct ohci_hcd *ohci;
- 
-@@ -436,6 +435,16 @@ ohci_shutdown (struct usb_hcd *hcd)
- 	ohci->rh_state = OHCI_RH_HALTED;
- }
- 
-+static void ohci_shutdown(struct usb_hcd *hcd)
-+{
-+	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&ohci->lock, flags);
-+	_ohci_shutdown(hcd);
-+	spin_unlock_irqrestore(&ohci->lock, flags);
-+}
-+
- /*-------------------------------------------------------------------------*
-  * HC functions
-  *-------------------------------------------------------------------------*/
-@@ -760,7 +769,7 @@ static void io_watchdog_func(struct timer_list *t)
-  died:
- 			usb_hc_died(ohci_to_hcd(ohci));
- 			ohci_dump(ohci);
--			ohci_shutdown(ohci_to_hcd(ohci));
-+			_ohci_shutdown(ohci_to_hcd(ohci));
- 			goto done;
- 		} else {
- 			/* No write back because the done queue was empty */
--- 
-2.7.4
+Also, I found that if the file is not present on the target location
+(i.e. the USB pendrive), the problem does not happen (I have ten
+usbmon logs here, taken in the worst scenario (500MB filesize)).
+
+Tell me which log(s) would you like me to send you: I can sum up here
+all the sets of tries, and the time their copies took to complete (in
+seconds):
+
+1kB: 26, 27, 26, 26, 27, 26, 26, 27, 26, 27
+10kB: 27, 27, 26, 26, 27, 26, 27, 26, 27, 27
+100kB: 26, 26, 26, 27, 26, 26, 26, 27, 27, 27
+1MB: 26, 27, 27, 27, 27, 27, 27, 27, 27, 26
+10MB: 27, 31, 37, 27, 38, 27, 39, 27, 30, 28
+100MB: 32, 32, 144, 32, 145, 32, 123, 32, 153, 123
+500MB: 56, 1396, 747, 131, 795, 764, 292, 1021, 807, 516
+
+Also, note that the first copy is always "fast", because each file was
+initially not present on the pendrive. As said, I did one test of 10
+tries by deleting the file on the pendrive before copying it again,
+and the results are
+
+500MB: 56, 56, 57, 57, 56, 56, 60, 25***, 55, 56 (***Note the "fake"
+25s, doesn't matter because I forgot to plug the pendrive :-/ )
+
+I have made a script to semi-automate all the tests I have done. I
+attach the script here, so anyone interested could check it for any
+mistake (remember I am not very skilled so I may have wrote buggy
+code, done wrong assumptions, etc.). Please note that I decreased the
+time between the trace start and the drive plugging from 10s to 5s
+(simply to reduce the time needed to me to look at the countdown). Of
+course I can do again the test(s) you need with a bigger amount of
+$wait.
+
+The script has been run with the command
+
+# for k in {1..10}; do size=1000; ./test_usbmon $size && ping -a -c 5 8.8.8.8 ; done
+(example for 1kB filesize)
+
+or, in the set of "delete before copy",
+
+# for k in {1..10}; do size=500000000; ./cancellaTestFile $size && ./test_usbmon $size && ping -a -c 5 8.8.8.8 ; done
+
+The ping command is there just to have a sound alarm when finished.
+
+I also attach the script to delete the file ("cancellaTestFile").
+
+I took care to plug the pendrive exactly at the end of the countdown,
+to keep the times in the logs more simple to detect and manage by you.
+
+I have also logged all the terminal output log of the script.
+
+Last note: I ran all the tests without any other USB device connected
+but the pendrive (well, actually there is a card reader connected to
+the internal USB connector, but on another bus. I didn't want to open
+the case and disconnect it but of course I can do it if needed).
+Thanks for pointing it out.
+
+Thanks, and bye
+Andrea
+
+(*) as an example, on a set that shows the total elapsed time in
+seconds being
+
+26, 27, 27, 27, 27, 27, 27, 27, 27, 26
+
+I have assumed all of the copies to be "fast", while in the set
+
+32, 32, 144, 32, 145, 32, 123, 32, 153, 123
+
+I have assumed 5 of the copies as "fast" (the ones that took 32
+seconds) and the other "slow". Not going to deepen in some standard
+deviation evaluation, etc., but if you'd like to I can provide some
+more scientific detailed data :-)
+
+
+--=-/gSDmaPIaOWv7ywMbimM
+Content-Type: application/x-shellscript; name="test_usbmon"
+Content-Disposition: attachment; filename="test_usbmon"
+Content-Transfer-Encoding: base64
+
+IyEvYmluL2Jhc2gKCiMgc3RhcnQgdGhlIHRyYWNlOwojIHdhaXQgNSBzZWNvbmRzOyAjTkIgRVJB
+IDEwIQojIHBsdWcgdGhlIGRyaXZlOwojIHdhaXQgNSBzZWNvbmRzOwojIG1vdW50IHRoZSBkcml2
+ZTsKIyB3YWl0IDUgc2Vjb25kczsKIyBjb3B5IGEgMTAwTUIgZmlsZTsKIyB3YWl0IDUgc2Vjb25k
+czsKIyB1bm1vdW50IHRoZSBkcml2ZTsKIyB3YWl0IDUgc2Vjb25kczsKIyBzdG9wIHRoZSB0cmFj
+ZS4KCgpkaW1lbnNpb25lPSQxICMgaW4gQllURVMhCndhaXQ9NSAjIFNlY29uZGkgZGEgYXR0ZW5k
+ZXJlIHBlciBpbnNlcmlyZSBsYSBwZW5kcml2ZSAjTkIgRVJBIDEwIQoKdGVzdGZpbGU9L05vQmFj
+a3VwL3Rlc3RmaWxlXyRkaW1lbnNpb25lCmVjaG8gLW4gIlVzaW5nIHRlc3RmaWxlICR0ZXN0Zmls
+ZS4uLiIKaWYgWyAhIC1lICR0ZXN0ZmlsZSBdCnRoZW4KICBlY2hvICIgZmlsZSBkb2Vzbid0IGV4
+aXN0ICh5ZXQpLCBjcmVhdGluZy4uLiIKICBkZCBpZj0vZGV2L3VyYW5kb20gb2Y9JHRlc3RmaWxl
+IGJzPSRkaW1lbnNpb25lIGNvdW50PTEgaWZsYWc9ZnVsbGJsb2NrIHN0YXR1cz1wcm9ncmVzcwpl
+bHNlCiAgZWNobyAiIChmaWxlIGlzIGFscmVhZHkgcHJlc2VudCkiCmZpCgplY2hvICJTVEFDQ0Eg
+VFVUVEkgR0xJIFVTQiEgQU5DSEUgTEEgUEVORFJJVkUhIgpyZWFkIC1wICJQcmVtaSBJTlZJTyBw
+ZXIgY29udGludWFyZSwgbyBjdHJsK0MgcGVyIGFubnVsbGFyZS4uLiIKCnRpbWVzdGFtcD0kKGRh
+dGUgKyIlWSVtJWRfJUglTSVTIikKZWNobyAiVGltZXN0YW1wOiAkdGltZXN0YW1wIgpTRUNPTkRT
+PTAKCmNhdCAvc3lzL2tlcm5lbC9kZWJ1Zy91c2IvdXNibW9uLzN1ID4gYmFkLm1vbi5vdXRfIiRk
+aW1lbnNpb25lIl8kdGltZXN0YW1wICYKZm9yICgoaT0wOyBpPD0kKCgkd2FpdC0xKSk7IGkrKykp
+CmRvCiAgZWNobyAiUGx1ZyB0aGUgZHJpdmUgaW4gJCgoJHdhaXQtJGkpKSBzZWNvbmRzLi4uIgog
+IHNsZWVwIDEKZG9uZQplY2hvICJQbHVnIHRoZSBkcml2ZSEiCnNsZWVwIDUKZWNobyAiUHJpbWEg
+ZGkgbW91bnQ6ICRTRUNPTkRTIgojIG1vdW50IFVVSUQ9IjA1MTQxMjM5LTRlYTUtNDk0ZC1hYTkx
+LWFjZDY3ZGI4OWNlNSIgL21udC9wZW5kcml2ZSAjIEVWRU4KbW91bnQgVVVJRD0iNmE5ZDNjMDUt
+Njc1OC00OWMwLWE0NmUtNmNlMjIxNDc4ZWIzIiAvbW50L3BlbmRyaXZlICMgT0RECmVjaG8gIkRv
+cG8gbW91bnQ6ICRTRUNPTkRTIgpzbGVlcCA1CmVjaG8gIlByaW1hIGRpIGNwOiAkU0VDT05EUyIK
+Y3AgJHRlc3RmaWxlIC9tbnQvcGVuZHJpdmUvCmVjaG8gIkRvcG8gY3A6ICRTRUNPTkRTIgpzbGVl
+cCA1CmVjaG8gIlByaW1hIGRpIHVubW91bnQ6ICRTRUNPTkRTIgp1bW91bnQgL21udC9wZW5kcml2
+ZQplY2hvICJEb3BvIHVubW91bnQ6ICRTRUNPTkRTIgpzbGVlcCA1CmVjaG8gIlByaW1hIGRpIHN0
+b3AgdHJhY2U6ICRTRUNPTkRTIgpraWxsYWxsIGNhdAplY2hvICJEb3BvIHN0b3AgdHJhY2U6ICRT
+RUNPTkRTIgplY2hvICIuLi5yZW1lbWJlciB0byB1bnBsdWcgdGhlIGRyaXZlLCBpZiB5b3Ugd2lz
+aCB0byBkbyBhbm90aGVyIHVzYm1vbiB0ZXN0LiIKIyBzcGQtc2F5ICJBbmRyZWEsIGhvIGZpbml0
+byEiCmV4aXQgMAo=
+
+
+--=-/gSDmaPIaOWv7ywMbimM
+Content-Type: application/x-shellscript; name="cancellaTestFile"
+Content-Disposition: attachment; filename="cancellaTestFile"
+Content-Transfer-Encoding: base64
+
+IyEvYmluL2Jhc2gKCmRpbWVuc2lvbmU9JDEgIyBpbiBCWVRFUyEKdGVzdGZpbGU9L21udC9wZW5k
+cml2ZS90ZXN0ZmlsZV8kZGltZW5zaW9uZQoKIyBtb3VudCBVVUlEPSIwNTE0MTIzOS00ZWE1LTQ5
+NGQtYWE5MS1hY2Q2N2RiODljZTUiIC9tbnQvcGVuZHJpdmUgIyBFVkVOCm1vdW50IFVVSUQ9IjZh
+OWQzYzA1LTY3NTgtNDljMC1hNDZlLTZjZTIyMTQ3OGViMyIgL21udC9wZW5kcml2ZSAjIE9ERAoK
+cm0gLXYgJHRlc3RmaWxlCgp1bW91bnQgL21udC9wZW5kcml2ZQoKZWNobyAiT0ssIHNtb250YXRv
+LiIKCmV4aXQgMAo=
+
+
+--=-/gSDmaPIaOWv7ywMbimM--
 
