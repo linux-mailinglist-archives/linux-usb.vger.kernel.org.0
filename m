@@ -2,168 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 827649AC6F
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01719AC80
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Aug 2019 12:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391907AbfHWKGi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 23 Aug 2019 06:06:38 -0400
-Received: from esa2.mentor.iphmx.com ([68.232.141.98]:40959 "EHLO
-        esa2.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391899AbfHWKGh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:06:37 -0400
-IronPort-SDR: MobJrKvaLs71+7AO5O3gKD6Y7LXqAEeT5VW3H6ggzg5qP4T/BHX/BR/jw4Q0UucIFfD+2EVlp5
- EH7sEHulXPaJNQ1x3EmBspZOHYv9ODTQg5jOgUDD2Z7rVKaiRAm1sDm0gik/7IZOeTfQaFVRoa
- T9pd9yDvT82iNmN3wv7/BX1X64u6WlyTxFuGllwDGhy1ML1GMQ5MJ70AWxaA0Xergf6juiYDdf
- l+CPI+M7Kec1mKbJZ+dNq38ZhWMiiZ0SUD9UhIw2R7ClLTerVB7n3IGNvDDXWfnMt+j34ImVJc
- P1A=
-X-IronPort-AV: E=Sophos;i="5.64,420,1559548800"; 
-   d="scan'208";a="40675118"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa2.mentor.iphmx.com with ESMTP; 23 Aug 2019 02:06:06 -0800
-IronPort-SDR: 8A0eKfb7HsYULvpEZPKg5oY79rr8+JrgwhthYp1r7SBHe/9+HDln7YZG+LnEgoHupPx3oOoKkz
- uaEnyLYy3o+AHPoHRRUBAHjM6RhSTPqAbU84VmL+Akd3ISMJ+8amY4FqZ6mBHUwMXz/v5aM684
- US9TqlfzbFCrrWZ7cYCBDyUXgncisX81ddJH0Onwb8ZI3TqFxELDHCSGMPbBg7rUM3n2IKLgb/
- 8Cd2qNHGVZuw3TeZJiKWjzT/mLujneqMRpKA2Xf9QzlG97d4O1muP0qPat6pQjFF8hXJmV+UMx
- xQ0=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: [Patch v4] usb: hcd: fix use-after-free on driver removal
-Thread-Topic: [Patch v4] usb: hcd: fix use-after-free on driver removal
-Thread-Index: AQHVWZfhcriOMYVBfUWq2zWHQehVwg==
-Date:   Fri, 23 Aug 2019 10:06:01 +0000
-Message-ID: <1566554761464.60146@mentor.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+        id S2392186AbfHWKHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 06:07:34 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36591 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392180AbfHWKHe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Aug 2019 06:07:34 -0400
+Received: by mail-lf1-f67.google.com with SMTP id r5so1228960lfc.3
+        for <linux-usb@vger.kernel.org>; Fri, 23 Aug 2019 03:07:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qf0tKIGUzLMHo8897bxI7RBcbf3ra5As2xUShZTHVXk=;
+        b=jE9gw94w/pgz7UVZYcAdoir7gdHC599uaFqAZfv/f+xhZWcVIzW5ycibkKiuc64Fij
+         2v4MmF0EjLuSL4ozfNyabI2Cc/9hXbI0/l/SABfxMRUQavmZTxEU/1lU8V+4aZQ2q8Ui
+         EKZdNO+7tNhDCjhevzqHhf4C+hZUmRkl4WzOqEr4wvi++7J1ScnWHKKyI1Vl/wCB8N4X
+         UdG8vhkdJVDgmJ/eHPOJPZ0VvHYVn98u2Wjy2/iNGBFAR/AabPqBsR3aiOL3+g9VEOH/
+         1blIdDdH2RH0IUiC0ieXO+TdZFiJnlJFCrkbsHOZ1+tb+sGi/F54Zm4fSWtYHKthO+L2
+         hLYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qf0tKIGUzLMHo8897bxI7RBcbf3ra5As2xUShZTHVXk=;
+        b=KbvjvkulnsvRKc0k4oxEzsFCuplN5vnsdMShI8MEJxHZZoP2wJhmtl68B1f6yb8RfC
+         xlkM2/6vHIu7EJIrdgDLZplJr3jWv5NajnK1XbVxbL5uY0NOt9X9uoCMCycE3nrpkt4H
+         GT1Y4SyA3nnebdh9RQyvaEXShRirZna2R8JyWmh2lbJUXHWvW9uyfUk2WP/dkzYaowiN
+         WlkQKmiohKPjCbeYqVCfP49KMl9/gWH/hP6MhTgs+RD6Hl88TSC6iis8gdubVuzyQMuB
+         p0+5YGyj/LsTzmruadeq153smMG1zU3WbVsOWmQHM6C7Ci/ZsfZHNITTwG0471sn7qSv
+         5g2w==
+X-Gm-Message-State: APjAAAXoJJy6Y7iLDTmVogZTdoBVgKFGmmSMDXadpqbq9zAAr814o7Fn
+        rZ5gRffN5OCn/EU6FWXBpSejGepAnA03nlOCqpcPEQ==
+X-Google-Smtp-Source: APXvYqz/i+Y3ogiFU/vofGIhUoKotD90TSylBi/yYuyP+ATnMPS5RQPyrHi8LuwHLISNXwEhRblFyeyDZpGORCQSiqo=
+X-Received: by 2002:ac2:5c42:: with SMTP id s2mr2378472lfp.61.1566554852633;
+ Fri, 23 Aug 2019 03:07:32 -0700 (PDT)
 MIME-Version: 1.0
+References: <1566547041-20804-1-git-send-email-chunfeng.yun@mediatek.com> <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 23 Aug 2019 12:07:20 +0200
+Message-ID: <CACRpkdbr9PjFAvrq14DJmX1OSKYJxYFPaQZpVJaT_Q1_DUW=sw@mail.gmail.com>
+Subject: Re: [PATCH next v10 03/11] dt-bindings: usb: add binding for USB GPIO
+ based connection detection driver
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On driver removal, the platform_device_unregister call
-attached through devm_add_action_or_reset was executed
-after usb_hcd_pci_remove.
-This lead to a use-after-free for the iomem resource of
-the xhci-ext-caps driver in the platform removal
-because the parent of the resource was freed earlier.
+On Fri, Aug 23, 2019 at 9:58 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 
-Fix this by using devm for hcd-pci created resources.
-This simplifies error handling on driver initialisation
-and fixes the removal sequence.
+> It's used to support dual role switch via GPIO when use Type-B
+> receptacle, typically the USB ID pin is connected to an input
+> GPIO, and also used to enable/disable device when the USB Vbus
+> pin is connected to an input GPIO.
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v9~v10 no changes
 
-Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
-Tested-by: Carsten Schmid <carsten_schmid@mentor.com>
----
-Rationale:
-Use-after-free was reproduced on 4.14.102 and 4.14.129 kernel
-using unbind mechanism.
-echo 0000:00:15.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Upstream version of driver is identical in the affected code.
-Fix was tested successfully on 4.14.129.
-Provided patch applies and compiles on v5.2.8 stable.
-As this is a bugfix, please consider it to go to stable trees too.
----
-v2:
-   - more speaking name for private data element
-   - consider failure in driver init sequence
-   - fix minor issues found by checkpatch.pl
-v3:
-   - corrected typo: resorce -> resource
-   - added Reviewed by and Tested-by
-v4:
-   - completely rewritten to use devm resource allocation
-     in hcd-pci
-   - modified title to better reflect change content
-   - removed Reviewed-by
-     [old title: usb: xhci-pci: reorder removal to avoid use-after-free]
----
- drivers/usb/core/hcd-pci.c | 30 ++++++++----------------------
- 1 file changed, 8 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
-index 03432467b05f..7537681355f6 100644
---- a/drivers/usb/core/hcd-pci.c
-+++ b/drivers/usb/core/hcd-pci.c
-@@ -216,17 +216,18 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 		/* EHCI, OHCI */
- 		hcd->rsrc_start = pci_resource_start(dev, 0);
- 		hcd->rsrc_len = pci_resource_len(dev, 0);
--		if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len,
--				driver->description)) {
-+		if (!devm_request_mem_region(&dev->dev, hcd->rsrc_start,
-+				hcd->rsrc_len, driver->description)) {
- 			dev_dbg(&dev->dev, "controller already in use\n");
- 			retval = -EBUSY;
- 			goto put_hcd;
- 		}
--		hcd->regs = ioremap_nocache(hcd->rsrc_start, hcd->rsrc_len);
-+		hcd->regs = devm_ioremap_nocache(&dev->dev, hcd->rsrc_start,
-+				hcd->rsrc_len);
- 		if (hcd->regs == NULL) {
- 			dev_dbg(&dev->dev, "error mapping memory\n");
- 			retval = -EFAULT;
--			goto release_mem_region;
-+			goto put_hcd;
- 		}
- 
- 	} else {
-@@ -240,8 +241,8 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 			hcd->rsrc_start = pci_resource_start(dev, region);
- 			hcd->rsrc_len = pci_resource_len(dev, region);
--			if (request_region(hcd->rsrc_start, hcd->rsrc_len,
--					driver->description))
-+			if (devm_request_region(&dev->dev, hcd->rsrc_start,
-+					hcd->rsrc_len, driver->description))
- 				break;
- 		}
- 		if (region == PCI_ROM_RESOURCE) {
-@@ -275,20 +276,13 @@ int usb_hcd_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 	}
- 
- 	if (retval != 0)
--		goto unmap_registers;
-+		goto put_hcd;
- 	device_wakeup_enable(hcd->self.controller);
- 
- 	if (pci_dev_run_wake(dev))
- 		pm_runtime_put_noidle(&dev->dev);
- 	return retval;
- 
--unmap_registers:
--	if (driver->flags & HCD_MEMORY) {
--		iounmap(hcd->regs);
--release_mem_region:
--		release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
--	} else
--		release_region(hcd->rsrc_start, hcd->rsrc_len);
- put_hcd:
- 	usb_put_hcd(hcd);
- disable_pci:
-@@ -347,14 +341,6 @@ void usb_hcd_pci_remove(struct pci_dev *dev)
- 		dev_set_drvdata(&dev->dev, NULL);
- 		up_read(&companions_rwsem);
- 	}
--
--	if (hcd->driver->flags & HCD_MEMORY) {
--		iounmap(hcd->regs);
--		release_mem_region(hcd->rsrc_start, hcd->rsrc_len);
--	} else {
--		release_region(hcd->rsrc_start, hcd->rsrc_len);
--	}
--
- 	usb_put_hcd(hcd);
- 	pci_disable_device(dev);
- }
--- 
-2.17.1
+Yours,
+Linus Walleij
