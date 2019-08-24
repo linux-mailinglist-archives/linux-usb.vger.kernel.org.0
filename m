@@ -2,115 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACA429BDF9
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 15:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5CA9BEC0
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 18:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727707AbfHXN0c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Aug 2019 09:26:32 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:12738 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727590AbfHXN0c (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Aug 2019 09:26:32 -0400
-Received: from pps.filterd (m0170389.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7O9I1UG024304;
-        Sat, 24 Aug 2019 09:26:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=vyenab3a8UQH7rT3KMO+iOomzSuZqcYP73PMmCmSPIE=;
- b=J/iMqm/N0WJdTi5TgBlmGq6ZdfHFNbHYMHYcJd72g8PoQYJgU3HOUlPxe3A8v5snxtSt
- 96trZn40na8DwsT2aP4Fm7yoGBPf+JfUEO8WnqpJezV5Jw5BsNdM5vN8rgHSMMVetO+j
- g15uj9G5oH6X5T786heYcDaywpVaKPikI7+qYqD/5O+/u3BYMa8YBPKQgBXHxWzSBVZt
- aXpehYtfcEgJxqYXTqON2eijl/FTQW7RkRLYjC390BdJXo4Bvr79TJJKmJf6TkbQOw4C
- ZGKVMUZ7dHiuVA3jIzBuYWJlU6Pr9IvIX1effbkoyoaNr3a1ddQ1W/vgdtFagTBuFJRT WA== 
-Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0a-00154904.pphosted.com with ESMTP id 2uk2fx8e5r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 24 Aug 2019 09:26:30 -0400
-Received: from pps.filterd (m0133268.ppops.net [127.0.0.1])
-        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7ODQR8a093409;
-        Sat, 24 Aug 2019 09:26:30 -0400
-Received: from ausxippc106.us.dell.com (AUSXIPPC106.us.dell.com [143.166.85.156])
-        by mx0a-00154901.pphosted.com with ESMTP id 2uk2d0j2jp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 24 Aug 2019 09:26:29 -0400
-X-LoopCount0: from 10.166.135.96
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="451775981"
-From:   <Mario.Limonciello@dell.com>
-To:     <bjorn@mork.no>, <Charles.Hyde@dellteam.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <oliver@neukum.org>,
-        <netdev@vger.kernel.org>, <nic_swsd@realtek.com>
-Subject: RE: [RFC 4/4] net: cdc_ncm: Add ACPI MAC address pass through
- functionality
-Thread-Topic: [RFC 4/4] net: cdc_ncm: Add ACPI MAC address pass through
- functionality
-Thread-Index: AQHVV6XcyyL7dINtZEiggXCPIGXHZ6cKIlGegAAtFPA=
-Date:   Sat, 24 Aug 2019 13:26:27 +0000
-Message-ID: <76ae76bf1fd44fb3bd42eb43907e3ce8@AUSX13MPC101.AMER.DELL.COM>
-References: <ec7435e0529243a99f6949ee9efbede5@AUSX13MPS303.AMER.DELL.COM>
- <877e722691.fsf@miraculix.mork.no>
-In-Reply-To: <877e722691.fsf@miraculix.mork.no>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [143.166.24.60]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:5.22.84,1.0.8
- definitions=2019-08-24_08:2019-08-23,2019-08-24 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- mlxlogscore=660 suspectscore=0 impostorscore=0 clxscore=1011 spamscore=0
- priorityscore=1501 phishscore=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1906280000 definitions=main-1908240149
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 malwarescore=0
- impostorscore=0 clxscore=1011 phishscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 mlxlogscore=755 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1906280000
- definitions=main-1908240102
+        id S1727628AbfHXQYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Aug 2019 12:24:09 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:46082 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbfHXQYJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Aug 2019 12:24:09 -0400
+Received: from mail-pf1-f200.google.com ([209.85.210.200])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1i1Yob-00058i-1x
+        for linux-usb@vger.kernel.org; Sat, 24 Aug 2019 16:22:57 +0000
+Received: by mail-pf1-f200.google.com with SMTP id 191so2641014pfz.8
+        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2019 09:22:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=5KUerDlSmB77Lo12oQ8r4Q4eH+L8kNrW2/kTpeARao4=;
+        b=Nf3PyPM3/3SCZicC1p4MN9OKzeeLTUaY1EEHddoyyZBUjNMajrLJXCtIeMdsQ0D/Z+
+         88ElMJ3W6LQs1oizLusLU4WQ0/rrT31HBnSyH2nwjjizNc+0xxBzw/mTIep+hAsK70zF
+         sr5WvXfmne5OuMjwhfWUV+jrOmhfJ+P1udxzt6uNjwfiZ+WyDKfp+MKZLO0suGxERniq
+         BcVDsusUVn1uQ5RBet7QId+1mswtrTwzD+c2NrdabRfpJY8jS6Jf9PH7Y7WjsRIWqkS1
+         FW+q3zi8IN+Zi69/wmc/kmNloLW3vUPFvquBfG6AS2jfXOGanLv2YjywgY+1HbDHsR8H
+         knng==
+X-Gm-Message-State: APjAAAVnVvGa4y8QRTjFXx/Eer9BYJH0QEZs/SMdACg6xQfnGAKT+AaE
+        qsOTIwejRIv9UgIyFaWrJFVxmnJ2OACGh+HJerDlWNsDWm8kWqy4jiRD3KjSZ6rWex2W3IEku/i
+        9eiq6fWZPsXzmcFDipnsVG1AJjTaC/bRM03ss+Q==
+X-Received: by 2002:a17:902:1024:: with SMTP id b33mr9858065pla.325.1566663775427;
+        Sat, 24 Aug 2019 09:22:55 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxmg8gFJdWJtcToHyLrlyWnul3s1B2nKRoi4wilC9bUOgNMwGIwzjgfqh45xtiOOXF1F2sfhg==
+X-Received: by 2002:a17:902:1024:: with SMTP id b33mr9858041pla.325.1566663775217;
+        Sat, 24 Aug 2019 09:22:55 -0700 (PDT)
+Received: from 2001-b011-380f-3c42-54b0-44c4-6d25-80e5.dynamic-ip6.hinet.net (2001-b011-380f-3c42-54b0-44c4-6d25-80e5.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:54b0:44c4:6d25:80e5])
+        by smtp.gmail.com with ESMTPSA id g19sm7073182pfh.27.2019.08.24.09.22.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 24 Aug 2019 09:22:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8;
+        delsp=yes;
+        format=flowed
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH] HID: quirks: Disable runtime suspend on Microsoft Corp.
+ Basic Optical Mouse v2.0
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <1566481032.8347.44.camel@suse.com>
+Date:   Sun, 25 Aug 2019 00:22:51 +0800
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+Message-Id: <E1CAAA78-D4F1-4EA4-8ED2-5B17839BB8D2@canonical.com>
+References: <20190822091744.3451-1-kai.heng.feng@canonical.com>
+ <1566467151.8347.23.camel@suse.com>
+ <AD8A4135-0275-45B3-BEB9-031737A2C756@canonical.com>
+ <1566470325.8347.35.camel@suse.com>
+ <D6E31CB0-BC2B-4B52-AF18-4BE990D3FDA5@canonical.com>
+ <1566481032.8347.44.camel@suse.com>
+To:     Oliver Neukum <oneukum@suse.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBCasO4cm4gTW9yayA8Ympvcm5A
-bW9yay5ubz4NCj4gU2VudDogU2F0dXJkYXksIEF1Z3VzdCAyNCwgMjAxOSA1OjQ0IEFNDQo+IFRv
-OiBIeWRlLCBDaGFybGVzIC0gRGVsbCBUZWFtDQo+IENjOiBsaW51eC11c2JAdmdlci5rZXJuZWwu
-b3JnOyBsaW51eC1hY3BpQHZnZXIua2VybmVsLm9yZzsNCj4gZ3JlZ2toQGxpbnV4Zm91bmRhdGlv
-bi5vcmc7IExpbW9uY2llbGxvLCBNYXJpbzsgb2xpdmVyQG5ldWt1bS5vcmc7DQo+IG5ldGRldkB2
-Z2VyLmtlcm5lbC5vcmc7IG5pY19zd3NkQHJlYWx0ZWsuY29tDQo+IFN1YmplY3Q6IFJlOiBbUkZD
-IDQvNF0gbmV0OiBjZGNfbmNtOiBBZGQgQUNQSSBNQUMgYWRkcmVzcyBwYXNzIHRocm91Z2gNCj4g
-ZnVuY3Rpb25hbGl0eQ0KPiANCj4gDQo+IFtFWFRFUk5BTCBFTUFJTF0NCj4gDQo+IDxDaGFybGVz
-Lkh5ZGVAZGVsbHRlYW0uY29tPiB3cml0ZXM6DQo+IA0KPiA+IEBAIC05MzAsMTEgKzkzMSwxOCBA
-QCBpbnQgY2RjX25jbV9iaW5kX2NvbW1vbihzdHJ1Y3QgdXNibmV0ICpkZXYsDQo+IHN0cnVjdCB1
-c2JfaW50ZXJmYWNlICppbnRmLCB1OCBkYXRhXw0KPiA+ICAJdXNiX3NldF9pbnRmZGF0YShjdHgt
-PmNvbnRyb2wsIGRldik7DQo+ID4NCj4gPiAgCWlmIChjdHgtPmV0aGVyX2Rlc2MpIHsNCj4gPiAr
-CQlzdHJ1Y3Qgc29ja2FkZHIgc2E7DQo+ID4gKw0KPiA+ICAJCXRlbXAgPSB1c2JuZXRfZ2V0X2V0
-aGVybmV0X2FkZHIoZGV2LCBjdHgtPmV0aGVyX2Rlc2MtDQo+ID5pTUFDQWRkcmVzcyk7DQo+ID4g
-IAkJaWYgKHRlbXApIHsNCj4gPiAgCQkJZGV2X2RiZygmaW50Zi0+ZGV2LCAiZmFpbGVkIHRvIGdl
-dCBtYWMgYWRkcmVzc1xuIik7DQo+ID4gIAkJCWdvdG8gZXJyb3IyOw0KPiA+ICAJCX0NCj4gPiAr
-CQlpZiAoZ2V0X2FjcGlfbWFjX3Bhc3N0aHJ1KCZpbnRmLT5kZXYsICZzYSkgPT0gMCkgew0KPiA+
-ICsJCQltZW1jcHkoZGV2LT5uZXQtPmRldl9hZGRyLCBzYS5zYV9kYXRhLCBFVEhfQUxFTik7DQo+
-ID4gKwkJCWlmICh1c2JuZXRfc2V0X2V0aGVybmV0X2FkZHIoZGV2KSA8IDApDQo+ID4gKwkJCQl1
-c2JuZXRfZ2V0X2V0aGVybmV0X2FkZHIoZGV2LCBjdHgtDQo+ID5ldGhlcl9kZXNjLT5pTUFDQWRk
-cmVzcyk7DQo+ID4gKwkJfQ0KPiA+ICAJCWRldl9pbmZvKCZpbnRmLT5kZXYsICJNQUMtQWRkcmVz
-czogJXBNXG4iLCBkZXYtPm5ldC0NCj4gPmRldl9hZGRyKTsNCj4gPiAgCX0NCj4gDQo+IFNvIHlv
-dSB3YW50IHRvIHJ1biBhIERlbGwgc3BlY2lmaWMgQUNQSSBtZXRob2QgZXZlcnkgdGltZSBhbnlv
-bmUgcGx1Z3Mgc29tZQ0KPiBOQ00gY2xhc3MgZGV2aWNlIGludG8gYSBob3N0IHN1cHBvcmluZyBB
-Q1BJPyAgVGhhdCdzIGdvaW5nIHRvIGFubm95IHRoZSBoZWxsIG91dA0KPiBvZiA5OS45OTk3JSBv
-ZiB0aGUgeDg2LCBpYTY0IGFuZCBhcm02NCB1c2VycyBvZiB0aGlzIGRyaXZlci4NCj4gDQo+IENh
-bGwgQUNQSSBvbmNlIHdoZW4gdGhlIGRyaXZlciBsb2FkcywgYW5kIG9ubHkgaWYgcnVubmluZyBv
-biBhbiBhY3R1YWwgRGVsbA0KPiBzeXN0ZW0gd2hlcmUgdGhpcyBtZXRob2QgaXMgc3VwcG9ydGVk
-LiAgVGhlcmUgbXVzdCBiZSBzb21lIEFDUEkgZGV2aWNlIElEIHlvdQ0KPiBjYW4gbWF0Y2ggb24g
-dG8ga25vdyBpZiB0aGlzIG1ldGhvZCBpcyBzdXBwb3J0ZWQgb3Igbm90Pw0KPiANCj4gDQo+IEJq
-w7hybg0KDQpJIGhhdmUgdG8gYWdyZWUgLSB0aGlzIGlzIG1pc3NpbmcgYW4gaWRlbnRpZnlpbmcg
-ZmFjdG9yIG9mIHRoZSBENjAwMC4gIEl0IHNob3VsZG4ndCBiZQ0KcnVubmluZyBvbiAianVzdCBh
-bnkiIGNkY19uY20gZGV2aWNlLg0KDQpUaGUgY29kZSB0aGF0IGlzIGluIGdldF9hY3BpX21hY19w
-YXNzdGhyb3VnaCBjaGVja3MgZm9yIGEgcHJvcGVybHkgYnVpbHQgQUNQSSBtZXRob2QNCnRob3Vn
-aC4NCg==
+at 21:37, Oliver Neukum <oneukum@suse.com> wrote:
+
+> Am Donnerstag, den 22.08.2019, 21:23 +0800 schrieb Kai-Heng Feng:
+>> at 18:38, Oliver Neukum <oneukum@suse.com> wrote:
+>>> Well, sort of. The USB spec merely states how to enter and exit
+>>> a suspended state and that device state must not be lost.
+>>> It does not tell you what a suspended device must be able to do.
+>>
+>> But shouldn’t remote wakeup signaling wakes the device up and let it exit
+>> suspend state?
+>
+> Yes. Have you tested using a button? If they indeed do not work, then
+> the device lies about supporting remote wakeup. That would warrant a
+> quirk, but for remote wakeup.
+
+Button click can wake the mouse up but not movement.
+
+>
+>> Or it’s okay to let the device be suspended when remote wakeup is needed
+>> but broken?
+>
+> Again, the HID spec does not specify what should trigger a remote
+> wakeup. Limiting this to mouse buttons but not movements is
+> inconvinient, but not buggy.
+
+Ok, I still find the behavior really surprising.
+
+>
+> This is indeed what Windows does. The device is suspended when the
+> screen saver switches on. That we do not do that is a deficiency
+> of X.
+> To use runtime PM regularly you need an .ini file
+
+Thanks for the explanation. I guess we can mimic the behavior in systemd or  
+upower.
+
+>
+>
+>>> In other words, if on your system it is on, you need to look
+>>> at udev, not the kernel.
+>>
+>> So if a device is broken when “power/control” is flipped by user, we  
+>> should
+>> deal it at userspace? That doesn’t sound right to me.
+>
+> If it is broken, as in crashing we could talk about it. If it merely
+> does not do what you want, then, yes, that is for user space to deal
+> with.
+
+Ok, I’ll take a look at userspace then.
+
+>
+>>> Well, no. Runtime PM is a trade off. You lose something if you use
+>>> it. If it worked just as well as full power, you would never use
+>>> full power, would you?
+>>
+>> I am not asking the suspended state to work as full power, but to  
+>> prevent a
+>> device enters suspend state because of broken remote wakeup.
+>
+> What then would be the difference between suspended and active? A small
+> delay in data transfer?
+
+Non-operational but with wakeup capability and vise versa.
+
+>
+>>> Whether the loss of functionality or performance is worth the energy
+>>> savings is a policy decision. Hence it belongs into udev.
+>>> Ideally the kernel would tell user space what will work in a
+>>> suspended state. Unfortunately HID does not provide support for that.
+>>
+>> I really don’t think “loss of functionally” belongs to policy decision.  
+>> But
+>> that’s just my opinion.
+>
+> That is just what we do if, for example, you choose between the configs
+> of a USB device or when you use authorization.
+>
+>> Maybe just calling usb_autopm_put_interface() in usbhid_close() to balance
+>> the refcount?
+>
+> No, the refcount is good. If remote wakeup is totally broken, you need
+> to introduce a quirk that will prevent the kernel from believing the
+> device when it claims to support it.
+
+Ok. I’ll see if it’s possible to mimic other OS under current Linux Desktop.
+
+Kai-Heng
+
+>
+> 	Regards
+> 		Oliver
+
+
