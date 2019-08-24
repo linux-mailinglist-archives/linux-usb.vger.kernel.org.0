@@ -2,164 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8109B9E1
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 02:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2B29BAEF
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 04:41:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbfHXAmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Aug 2019 20:42:38 -0400
-Received: from mail-eopbgr700123.outbound.protection.outlook.com ([40.107.70.123]:50272
-        "EHLO NAM04-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725283AbfHXAmi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Aug 2019 20:42:38 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EjR1sZslJ7Q3b8KPwCIzKxCeR13I/JGYdCRp5QlwqA5w0o7t+73eia88kZQeB5fL0YpmI0URzmCroj7Dyjq9Ejbfl6JZTxDxa84oxX7KI0MIOgplYjmV2AhaGBj1Nhuq27NBtUUO91B26y7Xz3X4/HQ4TQt/sM+o0tn+HTkn83ZOaslDaBLvcSVjw2fIPM3zeADYgHutCD8qRB8Y2N0AhKH76/3Mrsz7P2FaCDXu5D7ggIl/g2LUZlZ19bu2TUWlwALyRT9OIK592xiX11aNoXgbZah909JtcyRvNTL/5JYokUBouT+UtJdZzXoiWJAYPghqTrYkKqXa82nJkcyVEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BWqb6q6MaSOYZ4RAIX3+9+X4vEZTEnPPMBnHjQdvmrk=;
- b=mQ0p1PhfaqN7VfcihSu8GY7GUgCQKoLzBFclHYviYCoB/M90WMkLXFDmnVVoaQ+ZGmSJlxVDybQTqJAYGEj3RkmZPK+f7hwki3wUnPxrspr+nrHTmptukVQQi3xDaT7ILO2cUi9N95u2twmFv3KS2nTeh2Y0CB3JQuzrhM1aLas96x6HFqznl/676iG5srmqzVlyKatDHkL9TSxK4+Va6UUzmyZajILg/oyEHxsx7XqdOxFM1z65ZBY63+1P0StRH+0BwX9X6GGYLf0FwBSqWp0ECjHB0rCGLKY/j+syZHQ8uKoUkuj7/3zV9CAXTHe6txvqF2D498L1o5psEUc9/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 160.33.194.231) smtp.rcpttodomain=kernel.org smtp.mailfrom=sony.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=sony.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BWqb6q6MaSOYZ4RAIX3+9+X4vEZTEnPPMBnHjQdvmrk=;
- b=DwRNEKn9qWuLexTDrQn1MfPILPvO3UFCnFe7J08kadsn6T/3JA2OULM2draf/z2k5AckDgQ31TOLXNweI7Yx6Y4BN0nxmpPxcwrmTHLghpy1uHJKqgFvkBaRV00omtoKmgsqGJxrNhVkWDipxI3h5luwij8Ab2OOdePvF97IOhk=
-Received: from DM5PR13CA0050.namprd13.prod.outlook.com (2603:10b6:3:117::12)
- by DM5PR13MB1434.namprd13.prod.outlook.com (2603:10b6:3:122::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2178.15; Sat, 24 Aug
- 2019 00:41:55 +0000
-Received: from SN1NAM02FT053.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by DM5PR13CA0050.outlook.office365.com
- (2603:10b6:3:117::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2220.11 via Frontend
- Transport; Sat, 24 Aug 2019 00:41:55 +0000
-Authentication-Results: spf=pass (sender IP is 160.33.194.231)
- smtp.mailfrom=sony.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=sony.com;
-Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
- 160.33.194.231 as permitted sender) receiver=protection.outlook.com;
- client-ip=160.33.194.231; helo=usculsndmail04v.am.sony.com;
-Received: from usculsndmail04v.am.sony.com (160.33.194.231) by
- SN1NAM02FT053.mail.protection.outlook.com (10.152.72.102) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2199.13 via Frontend Transport; Sat, 24 Aug 2019 00:41:55 +0000
-Received: from usculsndmail12v.am.sony.com (usculsndmail12v.am.sony.com [146.215.230.103])
-        by usculsndmail04v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x7O0frvh014172;
-        Sat, 24 Aug 2019 00:41:54 GMT
-Received: from USCULXHUB08V.am.sony.com (usculxhub08v.am.sony.com [146.215.231.169])
-        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x7O0frF2005808;
-        Sat, 24 Aug 2019 00:41:53 GMT
-Received: from USCULXMSG13.am.sony.com ([146.215.231.78]) by
- USCULXHUB08V.am.sony.com ([146.215.231.169]) with mapi id 14.03.0439.000;
- Fri, 23 Aug 2019 20:41:52 -0400
-From:   <Roderick.Colenbrander@sony.com>
-To:     <jikos@kernel.org>, <stern@rowland.harvard.edu>
-CC:     <andreyknvl@google.com>, <gustavo@embeddedor.com>,
-        <hdanton@sina.com>, <syzkaller-bugs@googlegroups.com>,
-        <linux-input@vger.kernel.org>, <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] HID: USB: Fix general protection fault caused by
- Logitech driver
-Thread-Topic: [PATCH] HID: USB: Fix general protection fault caused by
- Logitech driver
-Thread-Index: AQHVWZVNSKI3nkEJ/k+tQRra1utmzKcJdZDM
-Date:   Sat, 24 Aug 2019 00:41:52 +0000
-Message-ID: <1DD62093774CEE42AFC16E785A108804ABFF456A@USCULXMSG13.am.sony.com>
-References: <Pine.LNX.4.44L0.1908221619370.1311-100000@iolanthe.rowland.org>,<nycvar.YFH.7.76.1908231128260.27147@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.1908231128260.27147@cbobk.fhfr.pm>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [146.215.228.6]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1725886AbfHXClR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Aug 2019 22:41:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51730 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725283AbfHXClR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Aug 2019 22:41:17 -0400
+Received: from localhost (65-114-90-19.dia.static.qwest.net [65.114.90.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E8CCC2173B;
+        Sat, 24 Aug 2019 02:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566614476;
+        bh=ltzB4QfE/niiworqpZoNfCtGUH51uNpOoALudu0WIHo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mTBLcVVI3jEgbiAA82t/jfPhUoT+d8M6/F5YLKTvniCQhmGiteybGq5iFIwVqWCTm
+         jyIENMLSXtBfq/W0OHEoplf47xlUUKCfXXwFj3TrF+q0UCxsSnGPC/c2aDXeF6cBwa
+         DFG5rtbpbcqm42kpMFgG8g8bDHvNm+atwiGGi7Ag=
+Date:   Fri, 23 Aug 2019 19:41:15 -0700
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Charles.Hyde@dellteam.com
+Cc:     linux-acpi@vger.kernel.org, Mario.Limonciello@dell.com,
+        oliver@neukum.org, nic_swsd@realtek.com, linux-usb@vger.kernel.org
+Subject: Re: [RFC 2/3] ACPI: move ACPI functionality out of r8152 driver
+Message-ID: <20190824024115.GA11208@kroah.com>
+References: <b84b32cb144f4ba8918ee2406e69275a@AUSX13MPS303.AMER.DELL.COM>
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.231;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(136003)(396003)(39860400002)(346002)(376002)(2980300002)(199004)(189003)(186003)(7696005)(6116002)(23726003)(33656002)(47776003)(66066001)(229853002)(478600001)(8936002)(2876002)(3846002)(55846006)(70586007)(2906002)(70206006)(46406003)(86362001)(336012)(11346002)(426003)(8746002)(7736002)(305945005)(2171002)(4326008)(956004)(316002)(110136005)(356004)(476003)(102836004)(446003)(37786003)(26005)(486006)(5660300002)(106002)(54906003)(97756001)(50466002)(6246003)(8676002)(246002)(76176011)(126002)(55016002)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR13MB1434;H:usculsndmail04v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail04.sonyusa.com,mail.sonyusa.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cac92904-6909-4bc6-ff27-08d7282bdd1a
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(4709080)(1401327)(2017052603328)(7193020);SRVR:DM5PR13MB1434;
-X-MS-TrafficTypeDiagnostic: DM5PR13MB1434:
-X-Microsoft-Antispam-PRVS: <DM5PR13MB1434C6E34D7290B637049D0898A70@DM5PR13MB1434.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 0139052FDB
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: Qj1aWUyU6SSi/0JKpwZ5rCkhz5ERaRk/EvKEZGGopMLe3SfbfGPqJFRjIH+mvWCX3St55Kr3qTsW89gh12OMrmntzoZsc/a98msYTnpWwf72V35jYYPprUKOZAewHCJhLtNXzaWfbrl6vshbXd+Ru4Z4wY/JAuD3GV74sRknqiz63Hec30XoQ1dZwNJhxXyTfkqwNmgFZE+gtjOTESbV+uvO9PxVC1h8gNCWdkbZ07BTtWOcRFSJelVbt3LpjkshHDW84IJQ3YfjJT6e1r35SttzpqrhDos1WZ/3/8wIKc+JC/V3mORs1hr+FQntNUSpRuEUqvf7XaTl7Rh2jFxjvOMa1BSpAl9q3NdNsnFpsUw16L+geZPqei/akFG4+oDv9am/jbIJNd3R/snE6W4N32PQc3n8/HCydNITG9/W3xs=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2019 00:41:55.0409
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cac92904-6909-4bc6-ff27-08d7282bdd1a
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.231];Helo=[usculsndmail04v.am.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR13MB1434
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b84b32cb144f4ba8918ee2406e69275a@AUSX13MPS303.AMER.DELL.COM>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 22 Aug 2019, Alan Stern wrote:=0A=
-=0A=
-> > > > > I've ran the fuzzer with your patches applied overnight and notic=
-ed=0A=
-> > > > > another fallout of similar bugs. I think they are caused by a sim=
-ilar=0A=
-> > > > > issue in the sony HID driver. There's no hid_hw_stop() call in th=
-e "if=0A=
-> > > > > (!(hdev->claimed & HID_CLAIMED_INPUT))" case in sony_probe(). Doe=
-s it=0A=
-> > > > > look like a bug to you?=0A=
-> > > >=0A=
-> > > > It looks like the relevant hid_hw_stop() call is the one at the end=
- of=0A=
-> > > > sony_configure_input().  But I can't tell if doing that way is vali=
-d or=0A=
-> > > > not -- in practice the code would end up calling hid_disconnect() w=
-hile=0A=
-> > > > hid_connect() was still running, which doesn't seem like a good ide=
-a.=0A=
-> > > >=0A=
-> > > > There's a comment about this near the end of sony_probe().  I suspe=
-ct=0A=
-> > > > it would be better to call hid_hw_stop() in the conditional code=0A=
-> > > > following that comment rather than in sony_configure_input().=0A=
-> > > >=0A=
-> > > > Either way, these are all things Jiri should know about or check up=
- on.=0A=
-> > > >=0A=
-> > > > Have you gotten any test results from syzbot exercising these pathw=
-ays?=0A=
-> > > > You ought to be able to tell which HID driver is involved by lookin=
-g=0A=
-> > > > through the console output.=0A=
-> > >=0A=
-> > > Yes, a typical crash is below, that's why I thought it's the sony=0A=
-> > > driver. Adding hid_hw_stop() in sony_probe() stops the issue from=0A=
-> > > happening, but I don't know whether it's the right fix.=0A=
-> >=0A=
-> > Probably you have to add hid_hw_stop() in sony_probe() and remove it=0A=
-> > from sony_configure_input().  But like I said above, Jiri should look=
-=0A=
-> > into this.=0A=
-=0A=
-> It almost certainly is, thanks.=0A=
-=0A=
-> Adding Roderick to CC ... Roderick, will you be able to test and submit=
-=0A=
-> a patch fixing that?=0A=
-> =0A=
-> --=0A=
-> Jiri Kosina=0A=
-> SUSE Labs=0A=
-=0A=
-Sure we will have a look and do some testing. Hopefully we can share a patc=
-h some time next week.=0A=
-=0A=
-Thanks,=0A=
-Roderick=
+On Fri, Aug 23, 2019 at 10:28:24PM +0000, Charles.Hyde@dellteam.com wrote:
+> --- /dev/null
+> +++ b/lib/acpi_mac_passthru.c
+> @@ -0,0 +1,61 @@
+> +/*
+> + *  Copyright (c) 2019 Dell Technology. All rights reserved.
+> + *
+> + * This program is free software; you can redistribute it and/or
+> + * modify it under the terms of the GNU General Public License
+> + * version 2 as published by the Free Software Foundation.
+> + *
+> + */
+
+You didn't run your patch through checkpatch.pl :(
+
+Anyway, drop the license boilerplate please and use a SPDX line, like
+checkpatch asks you to.
+
+> +
+> +#include <acpi/acpi_mac_passthru.h>
+> +#include <linux/etherdevice.h>
+> +
+> +int get_acpi_mac_passthru(struct device *dev, struct sockaddr *sa)
+> +{
+> +#ifdef CONFIG_ACPI
+> +	acpi_status status;
+> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
+> +	union acpi_object *obj;
+> +	int ret = -EINVAL;
+> +	unsigned char buf[6];
+> +
+> +	/* returns _AUXMAC_#AABBCCDDEEFF# */
+> +	status = acpi_evaluate_object(NULL, "\\_SB.AMAC", NULL, &buffer);
+> +	obj = (union acpi_object *)buffer.pointer;
+> +	if (!ACPI_SUCCESS(status))
+> +		return -ENODEV;
+> +	if (obj->type != ACPI_TYPE_BUFFER || obj->string.length != 0x17) {
+> +		dev_warn(dev,
+> +			 "Invalid buffer for pass-thru MAC addr: (%d, %d)\n",
+> +			 obj->type, obj->string.length);
+> +		goto amacout;
+> +	}
+> +	if (strncmp(obj->string.pointer, "_AUXMAC_#", 9) != 0 ||
+> +	    strncmp(obj->string.pointer + 0x15, "#", 1) != 0) {
+> +		dev_warn(dev,
+> +			 "Invalid header when reading pass-thru MAC addr\n");
+> +		goto amacout;
+> +	}
+> +	ret = hex2bin(buf, obj->string.pointer + 9, 6);
+> +	if (!(ret == 0 && is_valid_ether_addr(buf))) {
+> +		dev_warn(dev,
+> +			 "Invalid MAC for pass-thru MAC addr: %d, %pM\n",
+> +			 ret, buf);
+> +		ret = -EINVAL;
+> +		goto amacout;
+> +	}
+> +	memcpy(sa->sa_data, buf, 6);
+> +	dev_info(dev, "Pass-thru MAC addr %pM\n", sa->sa_data);
+> +
+> +amacout:
+> +	kfree(obj);
+> +	return ret;
+> +
+> +#else	/* !CONFIG_ACPI */
+> +	(void)dev;
+> +	(void)sa;
+> +
+> +	return -ENODEV;
+
+No #ifdef in .c files, especially for something as trivial as this.  The
+#ifdef needs to be in the .h file, and don't build this unless acpi is
+enabled.  And then, just move this to the acpi core, not in lib/
+
+thanks,
+
+greg k-h
