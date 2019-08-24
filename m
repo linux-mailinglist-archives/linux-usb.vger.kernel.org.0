@@ -2,127 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1439BC52
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 09:08:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7415D9BD05
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Aug 2019 12:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726075AbfHXHIe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Aug 2019 03:08:34 -0400
-Received: from mail-wr1-f41.google.com ([209.85.221.41]:41245 "EHLO
-        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725974AbfHXHIe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Aug 2019 03:08:34 -0400
-Received: by mail-wr1-f41.google.com with SMTP id j16so10500514wrr.8
-        for <linux-usb@vger.kernel.org>; Sat, 24 Aug 2019 00:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:openpgp:autocrypt:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jz6LyYZxV3hB+lLdiDTKSsWt5AFwnGFMBjH3adgbrdw=;
-        b=gUoGJXHpK3aVzmxwZvJ98B+IygPUQyVHxUe/RoafKjewqBeCmX2rrMior+u/+5P20F
-         WKVgDFH5O1r5t5/kvf34jnepTidJFvYSJILe9RMjhSyXbzXCE6FrBRyahk0hovqGQUls
-         CRtrBZX9UHhT7zHQICaOOmJCnwFGxbo5NBph05yTWtj5ZWUAtlUECo999Tddo4DnulM9
-         Q0aFThxPhAK5XVeLwUfMiFOb0rQpvDQ6IbIJY/GlNxxOLbaLviI0HuJaqp9qYVkhOA2g
-         zknGXKIqyiR0yRCZ2J18pNjZvzK5Rtsclj7n9cqj5Q6j8NAHkxaa9V6boOpepyhU0lFj
-         Pkeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:openpgp:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=jz6LyYZxV3hB+lLdiDTKSsWt5AFwnGFMBjH3adgbrdw=;
-        b=H3+hx0+F7bQ7ivik2ye3LGraTXQP3LbWpt1LVGanGqhNP/x1egBC990cQafXH1W/JR
-         nuwRPPHlaqvLlT6ndDejoBtj7gye7q/eZIGk9K1o/P1Zz4KdPwdoQYQtI51hEVyYnnlA
-         /HdLcfdqDrh6U9YhVDDeXmW6/E0MijZSLq2PWvDNLsQEEJ2Jb/Jf8L8KEpqKYgdocTTI
-         e4dwjDMJBUij5K8/MsOfG7h2VlABSWuA4VavjZe7rn0D26E2o415CbKV9FZu9QaLu4V+
-         9MgO7enRfaDx1I14+hdI8rnFeM+DnQvrzthARuthMVEB677losRPIlH2pz0QrnDD25UP
-         1akw==
-X-Gm-Message-State: APjAAAXDLGAiP4AOGISLAxASDGgenYn+hf+2da9iUUXcdt7Mxe8eLISw
-        5cHFeYIu56UV3/JMuRFhVbSBpW/e
-X-Google-Smtp-Source: APXvYqzksTqEZf1AueLX5JTwx7Bx3irPXA9rKDE18y3YFbKPg9EQd+MURJp6SbHCxFEFCWHwq1568Q==
-X-Received: by 2002:adf:afe2:: with SMTP id y34mr9194530wrd.250.1566630511789;
-        Sat, 24 Aug 2019 00:08:31 -0700 (PDT)
-Received: from ?IPv6:2a02:908:1964:6740:aee1:2beb:2fd0:abbc? ([2a02:908:1964:6740:aee1:2beb:2fd0:abbc])
-        by smtp.googlemail.com with ESMTPSA id c1sm4200577wmc.40.2019.08.24.00.08.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 24 Aug 2019 00:08:31 -0700 (PDT)
-Subject: Re: Lacie Rugged USB3-FW does not work with UAS
-To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
- <1566567572.8347.54.camel@suse.com>
- <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
- <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
- <1566595393.8347.56.camel@suse.com>
-From:   Julian Sikorski <belegdol@gmail.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=belegdol@gmail.com; prefer-encrypt=mutual; keydata=
- mQENBE40CmIBCACj+gI1pIMD0VGrZD4ugde8f3usLc0OE0OnPDXjqelxsC3B/x9BFoQrzfnP
- qJEtcB6F4V5MuEYutnteeuFsIkLHx6UIe9vr1Ze01XtN7Emsya/AKXaEcXYzUUjVmWn1NjJF
- ZlX0ML3mIQPERBDEY/aXAj7cVDGvkFVeKWIWE5KRqQWV2rYo0nizZTRYGB0z6KpMninG4hqF
- KvvpzhDS5ZnxijEYs0YAx0QllI4LjLTH3xLuYMnSbHzFRBh9zUsMttMnZdCudLZC6ZllkjtM
- ov/kIO35P5ygFJ9xlLyxMFkhXsARDWe3qwJCEHfJgtcblQD/LHuY200fTmrbwTK9Q4uNABEB
- AAG0JEp1bGlhbiBTaWtvcnNraSA8YmVsZWdkb2xAZ21haWwuY29tPokBOAQTAQIAIgUCTjQK
- YgIbAwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQLdUZIcIlWSuFYwf+J5lKOXWz+FJW
- Vn4b8Q237R/SOlZVwVfT9u/EjxGkploecihuzRadwXDMu030zdgo0m4lwEubOD5eMvzpBSYu
- Dc3fDPT/T5/O7avybt2w83hptPuwU4O0EmNrkgr6pHql1nxEvBpeB8KkJnexJww95Kl1YmBX
- c1kdRrAShNxiVQDpPnskGtnfK2eTqyuyhECApIVLxMIX5IsqGCpslRUR6e90iHd591iJgRT+
- Ji74QjkCQzJJVcKbX5T7HzbUd6mmkZjNbtog3g6WEPkI4Qdw+ZeDlSViN/SKPS2ptMMzxCOT
- neVuw3c6qM/VUo6AUTPSl+1c1rO2X7ZY5/Z9dCMP9rkBDQRONApiAQgAmurakWU/VVEKiPcM
- o5IsActeWERRTxgUXmliSp02YtBLYwOBQ6WUmJyhywOR8s3Wh93cHEPgEPI/n+cfytNxvpol
- liSXp3PZGJAmBSIq13d1lDYJBzDzNjUz6dj9YMV56zcsWbYF25grXbPY4acy/5RQXHWjQ4R9
- dtGCMd48dhMH6O0DvsiriRxJQrcXz0mgLSi79KVns4VgIuUuPCwPyF1zNUBs/srbgTuL+On0
- GjbK40GnJq/Zw2LhEGeicp0npoc4jshgVTtUXRQrGo04plJNpNg9Tl1UIbsHrjA1qz9yo8GR
- 4MLgXzcyfM6h+wz6qC8eI7jx4VEZxMhXtalvywARAQABiQEfBBgBAgAJBQJONApiAhsMAAoJ
- EC3VGSHCJVkrpl0IAJJd8qETlL0XzNZsguk8LwXi0c++iTTbotw/zn1f7CgGsZErm58KqNhR
- UltAZvK+lOclNPbZRsGzoEdg4TIvSymWVLN6jyblhcqH4G9mxmf6QOLvYR5I02UQiIbKvTvv
- mFA8bgr2vXPFc8rBmFXrwyC3DOjfrnz23kGattsFWbRA2OBq7bp/05JVoMb4QRA2TIbbvsyQ
- g0MMs9VldhdVfZcFqU2qKwQs8fBr8BD+OfPeiYndJV4GnfYhK692viMjv/+dgOvYcEgtlFaJ
- TLeiWvwUUxJ7ai45p+gCHXUYPGwrH4Dm2HAw61vUDkbT5pVOeGlFsvtOVEajnQX+MOV93l4=
-Message-ID: <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
-Date:   Sat, 24 Aug 2019 09:08:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727080AbfHXK0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Aug 2019 06:26:01 -0400
+Received: from canardo.mork.no ([148.122.252.1]:51893 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726966AbfHXK0B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Aug 2019 06:26:01 -0400
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x7OAPiQo013074
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 24 Aug 2019 12:25:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1566642346; bh=24IxeTH1e912w88ptP2Yb6xCPgtaB58BivyPEjXsA2I=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=VXkR1sN2UNmPfApo7ivNo7IHVqZ4rdMgFqyKl9k8j2b4HBHyy9sx6zDr/AywgD8C/
+         9gQsoW0/pAfwg46DoGpjei0WMMDEoxF5HunSEZcd60CUMHYvvr24LXWGD1S2q1MO+K
+         wVWe5+jawEUUdqH0uhZMyxP+nMqD4HTqlE1psXE0=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1i1TEu-0002B7-36; Sat, 24 Aug 2019 12:25:44 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     <Charles.Hyde@dellteam.com>
+Cc:     <linux-acpi@vger.kernel.org>, <Mario.Limonciello@dell.com>,
+        <oliver@neukum.org>, <nic_swsd@realtek.com>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [RFC 2/3] ACPI: move ACPI functionality out of r8152 driver
+Organization: m
+References: <b84b32cb144f4ba8918ee2406e69275a@AUSX13MPS303.AMER.DELL.COM>
+Date:   Sat, 24 Aug 2019 12:25:44 +0200
+In-Reply-To: <b84b32cb144f4ba8918ee2406e69275a@AUSX13MPS303.AMER.DELL.COM>
+        (Charles Hyde's message of "Fri, 23 Aug 2019 22:28:24 +0000")
+Message-ID: <87blwe272v.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <1566595393.8347.56.camel@suse.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-W dniu 23.08.2019 o 23:23, Oliver Neukum pisze:
-> Am Freitag, den 23.08.2019, 16:21 +0200 schrieb Julian Sikorski:
->>
->> I did some further digging regarding whether this is a regression: the
->> quirk file on the laptop is from 15 July 2014. The machine is from ca.
->> May 2011. Looking through my earlier posts to linux-usb it appears that
->> the addition of the quirk is related to this thread:
->>
->> https://marc.info/?l=linux-usb&m=140537519907935&w=2
->>
->> At the same time, back in 2011, I reported that the drive was working
->> after some fixes:
->>
->> https://marc.info/?l=linux-usb&m=132276407611433&w=2
-> 
-> Hi,
-> 
-> this is alarming. Was this physically the same drive? I am asking
-> because we have seen cases where two different devices were sold
-> under the same name.
-> 
-> 	Regards
-> 		Oliver
-> 
-Hi,
+<Charles.Hyde@dellteam.com> writes:
 
-I do indeed own two lacie rugged drives which do differ a bit. The older
-one (which was definitely working without the need for the quirk) is at
-work, I will bring it home and test it in a few days.
-Having said that, it appears that July 2014 is about when uas was rolled
-out to the public. So maybe the drive has worked using usb storage before.
+> This change moves ACPI functionality out of the Realtek r8152 driver to
+> its own source and header file, making it available to other drivers as
+> needed now and into the future.  At the time this ACPI snippet was
+> introduced in 2016, only the Realtek driver made use of it in support of
+> Dell's enterprise IT policy efforts.  There comes now a need for this
+> same support in a different driver, also in support of Dell's enterprise
+> IT policy efforts.
 
-Best regards,
-Julian
+Why not make a standalone driver out of this, making the MAC address
+(and other system specifc objects?) available to userspace? Then you
+can just distribute updated udev rules or systemd units or whatever for
+the next docking product.
+
+I don't think system specific policies should be put into device
+drivers.  Users will combine systems and devices in ways you don't
+foresee, and may have good reasons to want some non-default policy even
+for supported combinations.
+
+If you really want to have this policy in the driver(s), then please
+consider extending eth_platform_get_mac_address() with an x86/acpi
+method.  This will make the device driver code support fetching the mac
+address from device tree and Sparc idproms too.  Provided the netdev
+folks things this is OK, of course.  This needs to be discussed there,
+like get_maintainer.pl would have told you.
+
+Making sure we can modify the MAC address of USB ethernet devices is
+obviously a good thing regardless of how/where you fetch it.
+
+
+
+
+
+Bj=C3=B8rn
