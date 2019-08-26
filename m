@@ -2,85 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBE29C890
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 06:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9DBC9C8C1
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 07:42:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728052AbfHZEyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Aug 2019 00:54:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35060 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726606AbfHZEyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Aug 2019 00:54:02 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 650632070B;
-        Mon, 26 Aug 2019 04:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566795241;
-        bh=i+lQPAxEx7aM9E1qBjYJFL5Afb+6T2ja/tPbH3iwE4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S9KIOpNF3jFSJ/hQCM40RM+usrZKrU2ImKDe9zWj4BNvcW09CQYDnMR6Ti6KPtVYL
-         OY8dHDGUFYdmKL/kEezB3cNwvo1gdAyRyE0VAwlsL5OPSr5y7lHo9UF4jF2UyzPWzw
-         D3M2NXZQOo7fjCwDFTVOPdX+TVy/zdg9ZXTJ2o4s=
-Date:   Mon, 26 Aug 2019 06:53:59 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB: storage: ums-realtek: Enable auto-delink
- optionally
-Message-ID: <20190826045359.GD1678@kroah.com>
-References: <20190826044630.21949-1-kai.heng.feng@canonical.com>
- <20190826044630.21949-2-kai.heng.feng@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190826044630.21949-2-kai.heng.feng@canonical.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S1729210AbfHZFm2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Aug 2019 01:42:28 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:48154 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725806AbfHZFm2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 01:42:28 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_256_CBC_SHA1:32)
+        (Exim 4.76)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1i27lq-0004UF-4z; Mon, 26 Aug 2019 05:42:26 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH v2 1/2] USB: storage: ums-realtek: Update module parameter description for auto_delink_en
+Date:   Mon, 26 Aug 2019 13:42:15 +0800
+Message-Id: <20190826054216.31468-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 12:46:30PM +0800, Kai-Heng Feng wrote:
-> Auto-delink requires writing special registers to ums-realtek device.
-> Unconditionally enable auto-delink may break newer devices.
-> 
-> So only enable auto-delink by default for the original three IDs,
-> 0x0138, 0x0158 and 0x0159.
-> 
-> Realtek is working on a patch to properly support auto-delink for other
-> IDs.
-> 
-> BugLink: https://bugs.launchpad.net/bugs/1838886
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/usb/storage/realtek_cr.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-> index 4d86cfcc0b40..376f41d0cbc3 100644
-> --- a/drivers/usb/storage/realtek_cr.c
-> +++ b/drivers/usb/storage/realtek_cr.c
-> @@ -36,6 +36,10 @@ MODULE_DESCRIPTION("Driver for Realtek USB Card Reader");
->  MODULE_AUTHOR("wwang <wei_wang@realsil.com.cn>");
->  MODULE_LICENSE("GPL");
->  
-> +static int auto_delink_enable = -1;
-> +module_param(auto_delink_enable, int, S_IRUGO | S_IWUSR);
-> +MODULE_PARM_DESC(auto_delink_enable, "enable auto delink (-1=auto [default], 0=disable, 1=enable)");
-> +
->  static int auto_delink_mode = 1;
->  module_param(auto_delink_mode, int, S_IRUGO | S_IWUSR);
->  MODULE_PARM_DESC(auto_delink_mode, "auto delink mode (0=firmware, 1=software [default])");
-> @@ -996,12 +1000,22 @@ static int init_realtek_cr(struct us_data *us)
->  			goto INIT_FAIL;
->  	}
+The option named "auto_delink_en" is a bit misleading, as setting it to
+false doesn't really disable auto-delink but let auto-delink be firmware
+controlled.
 
-This patch doesn't apply as I can't take your first patch.  Can you redo
-it and resend?
+Update the description to reflect the real usage of this parameter.
 
-thanks,
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+v2:
+- Only update module parameter description.
 
-greg k-h
+ drivers/usb/storage/realtek_cr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index cc794e25a0b6..beaffac805af 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -38,7 +38,7 @@ MODULE_LICENSE("GPL");
+ 
+ static int auto_delink_en = 1;
+ module_param(auto_delink_en, int, S_IRUGO | S_IWUSR);
+-MODULE_PARM_DESC(auto_delink_en, "enable auto delink");
++MODULE_PARM_DESC(auto_delink_en, "auto delink mode (0=firmware, 1=software [default])");
+ 
+ #ifdef CONFIG_REALTEK_AUTOPM
+ static int ss_en = 1;
+-- 
+2.17.1
+
