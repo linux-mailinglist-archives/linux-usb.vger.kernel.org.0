@@ -2,92 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF189D40D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 18:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C029D49F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 19:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732158AbfHZQdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Aug 2019 12:33:22 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:41106 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727464AbfHZQdW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 12:33:22 -0400
-Received: (qmail 5153 invoked by uid 2102); 26 Aug 2019 12:33:21 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 26 Aug 2019 12:33:21 -0400
-Date:   Mon, 26 Aug 2019 12:33:21 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Johannes Thumshirn <jthumshirn@suse.de>,
-        Jens Axboe <axboe@kernel.dk>, <linux-usb@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-In-Reply-To: <ba1d4fe53258c7a710174723c99e002a4d9eecb0.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1908261219060.1662-100000@iolanthe.rowland.org>
+        id S1732608AbfHZRE4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Aug 2019 13:04:56 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34551 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732202AbfHZRE4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 13:04:56 -0400
+Received: by mail-pg1-f196.google.com with SMTP id n9so10986834pgc.1;
+        Mon, 26 Aug 2019 10:04:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=rV/QxiLUfmMPgKwGt5WE0he8vOLvp0R3y7oyfz3sl9k=;
+        b=iWVJcKiTJXGckIV/C6XHfB+VJvjeXB5tiWkVWU/goCNQkAKMDwUgLKSjU8iKtWnYYH
+         Yx2CrNttKkdr8yOQrtu/3NonWPm11zzHAueIAKk9t/RbAaPM//SY67IS531OqHI2nvdq
+         /c8hkEH64Cw0vYplLq1rzVdEV3gdwjQG9kn0EVs2X1zTBAPaTd/DL5reEFyNtSFjA2nI
+         gEaRlK5n4IGDJnynh+TuMKaz/E5qX1/fChu9hn3IaT9HcxE47wZIEHd4UyznO9lN4i+0
+         3vrK7D5H4oslSZ1uJP+DAHF2ftOOKPOcTuav/r6leBa5VbAMT59DqA85K9QZaYZEfO8p
+         bZvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=rV/QxiLUfmMPgKwGt5WE0he8vOLvp0R3y7oyfz3sl9k=;
+        b=ahxLy5RzYMGRXIbbhHiJCkG7fzvrZ++BUU2O0TpW0znUkzX80ZZ+FZJOu5NiJ6nk0s
+         8NpHF5XuIxEJ1OJghpx3N+P0rMAELJxmwv1vPO03cMsJm+GwnsaC5cyVckQ/5olNuksh
+         JzarJXx5lrYld6b8IKe241nM/EsVVboENEm16hY4UDMSP62qLamzYQIH2xXgrkVY3qpn
+         2mo6lSStzS699cZO0ysIGXpLzox8O1BgxsT9Y2BlhSmrwP9ni9zt4mcSi8ME7GaEcjQt
+         1KRlHEMXvWPyWqF6aIUKkMa/2iS1hFZnlCqY3mcoL9k4dA7MD910hj7YbC8m5QlUyzRo
+         fY9Q==
+X-Gm-Message-State: APjAAAVVvigKeUWrQcpNpiG6PvcSnIQHCKwSJWaYNdhWoL0b2mjEts8z
+        fsHeTa2R9Pww9mfhLoRb5gA=
+X-Google-Smtp-Source: APXvYqyGrnDlBIoQc7qmXhnO14jQvg2UvGIXB4WJzg/U4DEArH+8N6j3OwNAcaflwL3z+VwsrIF4tw==
+X-Received: by 2002:a17:90a:be06:: with SMTP id a6mr21081325pjs.92.1566839095647;
+        Mon, 26 Aug 2019 10:04:55 -0700 (PDT)
+Received: from localhost.localdomain ([221.155.202.134])
+        by smtp.gmail.com with ESMTPSA id k14sm9688345pfi.98.2019.08.26.10.04.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2019 10:04:55 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 02:04:50 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7] usbip: Implement SG support to vhci-hcd and stub
+ driver
+Message-ID: <20190826170450.GA2314@localhost.localdomain>
+References: <20190826150007.12187-1-suwan.kim027@gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190826150007.12187-1-suwan.kim027@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 26 Aug 2019, Andrea Vai wrote:
+On Tue, Aug 27, 2019 at 12:00:07AM +0900, Suwan Kim wrote:
+> There are bugs on vhci with usb 3.0 storage device. In USB, each SG
+> list entry buffer should be divisible by the bulk max packet size.
+> But with native SG support, this problem doesn't matter because the
+> SG buffer is treated as contiguous buffer. But without native SG
+> support, USB storage driver breaks SG list into several URBs and the
+> error occurs because of a buffer size of URB that cannot be divided
+> by the bulk max packet size. The error situation is as follows.
+> 
+> When USB Storage driver requests 31.5 KB data and has SG list which
+> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
+> reason. USB Storage driver splits this SG list into several URBs
+> because VHCI doesn't support SG and sends them separately. So the
+> first URB buffer size is 3584 bytes. When receiving data from device,
+> USB 3.0 device sends data packet of 1024 bytes size because the max
+> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
+> But the first URB buffer has only 3584 bytes buffer size. So host
+> controller terminates the transfer even though there is more data to
+> receive. So, vhci needs to support SG transfer to prevent this error.
+> 
+> In this patch, vhci supports SG regardless of whether the server's
+> host controller supports SG or not, because stub driver splits SG
+> list into several URBs if the server's host controller doesn't
+> support SG.
+> 
+> To support SG, vhci sets URB_DMA_MAP_SG flag in urb->transfer_flags
+> if URB has SG list and this flag will tell stub driver to use SG
+> list. After receiving urb from stub driver, vhci clear URB_DMA_MAP_SG
+> flag to avoid dma unmapping in HCD.
+ 
+I have a mistake not modifying this commit log according to the
+change of the code. I will resend v8.
 
-> ok, so you can grab them at
-> 
-> http://fisica.unipv.it/transfer/usbmon_logs.zip
-> 
-> (they will be automatically removed from there in a couple of weeks).
-> 
-> For each size there is a .txt file (which contains the terminal
-> output) and 10 bad.mon.out_.... trace files. The file suffix "NonCanc"
-> means there has not been file deletion before copy; while "Canc" means
-> the opposite.
-> 
-> Each trace file name is identified by a timestamp that is also
-> referenced inside the txt, so if you want to get i.e. the 39-sec trial
-> for the 10MB filesize you have to open the ...10MB....txt, search for
-> the 39 seconds total time string ("Dopo stop trace: 39"), look at the
-> beginning of that trial, a dozen rows before, take note of the
-> timestamp, and open the corresponding bad.mon.out file (of course, if
-> there are more trials with the same time, you have to identify it by
-> counting its position (7th in the example above)).
-> 
-> To make it more simple:
-> 
-> $ seconds=39; size=10MB; grep -B14 "Dopo stop trace: $seconds" log_10trials_"$size"_NonCanc.txt
-> 
-> should show you more straightly the part(s) you need.
-> 
-> > Odd that the delays never occur when you're writing a new file.  (If
-> > nothing else, that gives you a way to work around the problem!) 
-> 
-> Thank you, didn't realize that :-) I will try it.
-
-In fact, even the traces where the file doesn't exist beforehand show 
-some delays.  Just not as many delays as the traces where the file does 
-exist.  And again, each delay is in the middle of a write command, not 
-between commands.
-
-I suppose changes to the upper software layers could affect which
-blocks are assigned when a new file is written.  Perhaps one kernel
-re-uses the same old blocks that had been previously occupied and the
-other kernel allocates a completely new set of blocks.  That might
-change the drive's behavior.  The quick way to tell is to record two
-usbmon traces, one under the "good" kernel and one under the "bad"  
-kernel, where each test involves writing over a file that already
-exists (say, 50 MB) -- the same file for both tests.  The block numbers
-will appear in the traces.
-
-Also, I wonder if the changing the size of the data transfers would
-make any difference.  This is easy to try; just write "64" to
-/sys/block/sd?/queue/max_sectors_kb (where the ? is the appropriate
-drive letter) after the drive is plugged in but before the test starts.
-
-Alan Stern
-
+Regards
+Suwan Kim
