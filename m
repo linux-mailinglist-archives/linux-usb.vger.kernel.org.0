@@ -2,29 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B67689D377
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 17:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D30A59D38F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 17:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731018AbfHZPzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Aug 2019 11:55:43 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:41042 "HELO
+        id S1732343AbfHZP6P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Aug 2019 11:58:15 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:41064 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730228AbfHZPzn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 11:55:43 -0400
-Received: (qmail 4673 invoked by uid 2102); 26 Aug 2019 11:55:42 -0400
+        with SMTP id S1732337AbfHZP6P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 11:58:15 -0400
+Received: (qmail 4743 invoked by uid 2102); 26 Aug 2019 11:58:14 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 26 Aug 2019 11:55:42 -0400
-Date:   Mon, 26 Aug 2019 11:55:42 -0400 (EDT)
+  by localhost with SMTP; 26 Aug 2019 11:58:14 -0400
+Date:   Mon, 26 Aug 2019 11:58:14 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <usb-storage@lists.one-eyed-alien.net>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] USB: storage: ums-realtek: Make auto-delink
- support optionally
-In-Reply-To: <20190826054216.31468-2-kai.heng.feng@canonical.com>
-Message-ID: <Pine.LNX.4.44L0.1908261141110.1662-100000@iolanthe.rowland.org>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH] usb: host: ohci: fix a race condition between shutdown
+ and irq
+In-Reply-To: <TYAPR01MB45443AA0303F9DD1E08AFC2FD8A10@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.1908261157340.1662-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -32,78 +33,108 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 26 Aug 2019, Kai-Heng Feng wrote:
+On Mon, 26 Aug 2019, Yoshihiro Shimoda wrote:
 
-> Auto-delink requires writing special registers to ums-realtek device.
-> Unconditionally enable auto-delink may break newer devices.
+> Hi Alan,
 > 
-> So only enable auto-delink by default for the original three IDs,
-> 0x0138, 0x0158 and 0x0159.
+> > From: Alan Stern, Sent: Saturday, August 24, 2019 12:33 AM
+> > 
+> > On Fri, 23 Aug 2019, Yoshihiro Shimoda wrote:
+> > 
+> > > This patch fixes an issue that the following error is
+> > > possible to happen when ohci hardware causes an interruption
+> > > and the system is shutting down at the same time.
+> > >
+> > > [   34.851754] usb 2-1: USB disconnect, device number 2
+> > > [   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
+> > > [   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
+> > > [   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+> > > [   35.187886] Workqueue: usb_hub_wq hub_event
+> > > [   35.192063] Call trace:
+> > > [   35.194509]  dump_backtrace+0x0/0x150
+> > > [   35.198165]  show_stack+0x14/0x20
+> > > [   35.201475]  dump_stack+0xa0/0xc4
+> > > [   35.204785]  __report_bad_irq+0x34/0xe8
+> > > [   35.208614]  note_interrupt+0x2cc/0x318
+> > > [   35.212446]  handle_irq_event_percpu+0x5c/0x88
+> > > [   35.216883]  handle_irq_event+0x48/0x78
+> > > [   35.220712]  handle_fasteoi_irq+0xb4/0x188
+> > > [   35.224802]  generic_handle_irq+0x24/0x38
+> > > [   35.228804]  __handle_domain_irq+0x5c/0xb0
+> > > [   35.232893]  gic_handle_irq+0x58/0xa8
+> > > [   35.236548]  el1_irq+0xb8/0x180
+> > > [   35.239681]  __do_softirq+0x94/0x23c
+> > > [   35.243253]  irq_exit+0xd0/0xd8
+> > > [   35.246387]  __handle_domain_irq+0x60/0xb0
+> > > [   35.250475]  gic_handle_irq+0x58/0xa8
+> > > [   35.254130]  el1_irq+0xb8/0x180
+> > > [   35.257268]  kernfs_find_ns+0x5c/0x120
+> > > [   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
+> > > [   35.265361]  sysfs_unmerge_group+0x20/0x68
+> > > [   35.269454]  dpm_sysfs_remove+0x2c/0x68
+> > > [   35.273284]  device_del+0x80/0x370
+> > > [   35.276683]  hid_destroy_device+0x28/0x60
+> > > [   35.280686]  usbhid_disconnect+0x4c/0x80
+> > > [   35.284602]  usb_unbind_interface+0x6c/0x268
+> > > [   35.288867]  device_release_driver_internal+0xe4/0x1b0
+> > > [   35.293998]  device_release_driver+0x14/0x20
+> > > [   35.298261]  bus_remove_device+0x110/0x128
+> > > [   35.302350]  device_del+0x148/0x370
+> > > [   35.305832]  usb_disable_device+0x8c/0x1d0
+> > > [   35.309921]  usb_disconnect+0xc8/0x2d0
+> > > [   35.313663]  hub_event+0x6e0/0x1128
+> > > [   35.317146]  process_one_work+0x1e0/0x320
+> > > [   35.321148]  worker_thread+0x40/0x450
+> > > [   35.324805]  kthread+0x124/0x128
+> > > [   35.328027]  ret_from_fork+0x10/0x18
+> > > [   35.331594] handlers:
+> > > [   35.333862] [<0000000079300c1d>] usb_hcd_irq
+> > > [   35.338126] [<0000000079300c1d>] usb_hcd_irq
+> > > [   35.342389] Disabling IRQ #156
+> > >
+> > > The ohci_shutdown() should hold the spin lock while disabling
+> > > the interruption and changing the rh_state flag. Note that
+> > > io_watchdog_func() also calls the ohci_shutdown() and it
+> > > already held the spin lock, so that the patch makes a new
+> > > function as _ohci_shutdown().
+> > 
+> > I don't understand this description.  It sounds like the OHCI
+> > controller generates an interrupt request, and then ohci_shutdown()
+> > disables the interrupt request before the handler can run.  When the
+> > handler does run, it sees that no interrupts are enabled and so it
+> > returns IRQ_NOTMINE, leading to the error shown above.
+> > 
+> > How will holding the spinlock fix this problem?
 > 
-> Realtek is working on a patch to properly support auto-delink for other
-> IDs.
+> I'm sorry for lacking description. I should have described the following
+> descriptions instead of that. What do you think?
 > 
-> BugLink: https://bugs.launchpad.net/bugs/1838886
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v2:
-> - Use auto_delink_support instead of auto_delink_enable.
+> --
+> ohci_shutdown() disables all the interrupt and rh_state is set to
+> OHCI_RH_HALTED. In other hand, ohci_irq() is possible to enable
+> OHCI_INTR_SF and OHCI_INTR_MIE on ohci_irq(). Note that OHCI_INTR_SF
+> is possible to be set by start_ed_unlink() which is called:
+>  ohci_irq()
+>   -> process_done_list()
+>    -> takeback_td()
+>     -> start_ed_unlink()
 > 
-> drivers/usb/storage/realtek_cr.c | 24 +++++++++++++++++++-----
->  1 file changed, 19 insertions(+), 5 deletions(-)
+> So, ohci_irq() has the following condition, the issue happens by
+> &ohci->regs->intrenable = OHCI_INTR_MIE | OHCI_INTR_SF and
+> ohci->rh_state = OHCI_RH_HALTED:
 > 
-> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-> index beaffac805af..b304cca7c4fa 100644
-> --- a/drivers/usb/storage/realtek_cr.c
-> +++ b/drivers/usb/storage/realtek_cr.c
-> @@ -40,6 +40,10 @@ static int auto_delink_en = 1;
->  module_param(auto_delink_en, int, S_IRUGO | S_IWUSR);
->  MODULE_PARM_DESC(auto_delink_en, "auto delink mode (0=firmware, 1=software [default])");
->  
-> +static int auto_delink_support = -1;
-> +module_param(auto_delink_support, int, S_IRUGO | S_IWUSR);
-> +MODULE_PARM_DESC(auto_delink_support, "enable auto delink (-1=auto [default], 0=disable, 1=enable)");
-> +
->  #ifdef CONFIG_REALTEK_AUTOPM
->  static int ss_en = 1;
->  module_param(ss_en, int, S_IRUGO | S_IWUSR);
-> @@ -996,12 +1000,22 @@ static int init_realtek_cr(struct us_data *us)
->  			goto INIT_FAIL;
->  	}
->  
-> -	if (CHECK_FW_VER(chip, 0x5888) || CHECK_FW_VER(chip, 0x5889) ||
-> -	    CHECK_FW_VER(chip, 0x5901))
-> -		SET_AUTO_DELINK(chip);
-> -	if (STATUS_LEN(chip) == 16) {
-> -		if (SUPPORT_AUTO_DELINK(chip))
-> +	if (auto_delink_support == -1) {
-> +		if (CHECK_PID(chip, 0x0138) || CHECK_PID(chip, 0x0158) ||
-> +		    CHECK_PID(chip, 0x0159))
-> +			auto_delink_support = 1;
-> +		else
-> +			auto_delink_support = 0;
-> +	}
+> 	/* interrupt for some other device? */
+> 	if (ints == 0 || unlikely(ohci->rh_state == OHCI_RH_HALTED))
+> 		return IRQ_NOTMINE;
+> 
+> To fix the issue, ohci_shutdown() holds the spin lock while disabling
+> the interruption and changing the rh_state flag to prevent reenable
+> the OHCI_INTR_MIE unexpectedly. Note that io_watchdog_func() also calls
+> the ohci_shutdown() and it already held the spin lock, so that the patch
+> makes a new function as _ohci_shutdown().
 
-What will happen if somebody has two Realtek devices plugged in, where
-one of them has an old product ID and the other has a new one?  You
-shouldn't change the value of the module parameter like this.
-
-> +
-> +	if (auto_delink_support) {
-> +		if (CHECK_FW_VER(chip, 0x5888) || CHECK_FW_VER(chip, 0x5889) ||
-> +				CHECK_FW_VER(chip, 0x5901))
->  			SET_AUTO_DELINK(chip);
-> +		if (STATUS_LEN(chip) == 16) {
-> +			if (SUPPORT_AUTO_DELINK(chip))
-> +				SET_AUTO_DELINK(chip);
-> +		}
->  	}
->  #ifdef CONFIG_REALTEK_AUTOPM
->  	if (ss_en)
-
-Instead of adding a new module parameter, how about just changing the 
-driver's behavior?  If a chip doesn't have the right product ID, don't 
-enable auto_delink regardless of what the module parameter is set to.
+Okay, that's a lot better.  Please resubmit the patch with the new 
+description.
 
 Alan Stern
 
