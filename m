@@ -2,74 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6293C9CA01
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 09:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BC19CA4A
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Aug 2019 09:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729853AbfHZHUd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 26 Aug 2019 03:20:33 -0400
-Received: from esa1.mentor.iphmx.com ([68.232.129.153]:2102 "EHLO
-        esa1.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727963AbfHZHUd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 03:20:33 -0400
-IronPort-SDR: kp+a/J3iRS7LAH5/vt1m3RClaZVsrPBVoaiMHeAlgl8yDowF5AtEIB52rgX4ujutiMsCNDAoF9
- XrWWp2KzCIS1qTuW5qy+j6xyR3907aKyeAbEgy6xDJvSxPoPdaJ9DmyTETLbCBP5MQcEKYSS8G
- 631zov2RyWoYBCpjDWATazm5x5EL2TZkd8UKgkAZWr1f2eE8shHwL8ffZNEFSHbej/ESlQyakI
- 9Ywo4OVmBnOOSW4KPhsF6I6FoKFrjozlILRtCo8sRbX68UNW8mzfYPHiBbfTyIPSNS4IKGr3sQ
- fo4=
-X-IronPort-AV: E=Sophos;i="5.64,431,1559548800"; 
-   d="scan'208";a="42555463"
-Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
-  by esa1.mentor.iphmx.com with ESMTP; 25 Aug 2019 23:20:32 -0800
-IronPort-SDR: GAg1vJ5mBAbdtVBJuAFQvQXcZgqB6qp9xU0T9lX6dBrazCeKxNOQNjyDHS4i/WAewOgYBCTayU
- SU2+dO19J+NJ57IZbKSZdE0HVG7tnKcfcvt95lxTceF2T63A3ZNdCJuZcT/b2mF7gwdsF+l018
- 76Kh9+hryAAGVz3TOnILSualZNjRo/4fA5RUofImrn6w5HBww56640OmjCUHGO/tJsIOcGvFUO
- oZG36CWi6b9oQBRkuEhxcNsDn32ttw7M+cq+fD+CKOBKhMxVZ1vDZQj56xq4oVSWM7wLr7waOy
- 2ps=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
+        id S1729981AbfHZH1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Aug 2019 03:27:06 -0400
+Received: from mga07.intel.com ([134.134.136.100]:35634 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729962AbfHZH1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Aug 2019 03:27:05 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Aug 2019 00:27:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,431,1559545200"; 
+   d="scan'208";a="204471042"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
+  by fmsmga004.fm.intel.com with ESMTP; 26 Aug 2019 00:27:02 -0700
+Subject: Re: [Patch v5] usb: hcd: use managed device resources
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: AW: [Patch v5] usb: hcd: use managed device resources
-Thread-Topic: [Patch v5] usb: hcd: use managed device resources
-Thread-Index: AQHVWbuDnGbGmDS690Kl9IU7UhO1uqcLekmAgAGOS9Y=
-Date:   Mon, 26 Aug 2019 07:20:28 +0000
-Message-ID: <1566804028404.60821@mentor.com>
-References: <1566569488679.31808@mentor.com>,<20190825082949.GA4583@kroah.com>
-In-Reply-To: <20190825082949.GA4583@kroah.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 8BIT
+References: <1566569488679.31808@mentor.com> <20190825082949.GA4583@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <975465c3-6ced-56f6-9115-a19248b370be@linux.intel.com>
+Date:   Mon, 26 Aug 2019 10:28:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190825082949.GA4583@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 25.8.2019 11.29, Greg KH wrote:
+> On Fri, Aug 23, 2019 at 02:11:28PM +0000, Schmid, Carsten wrote:
+>> Using managed device resources in usb_hcd_pci_probe() allows devm usage for
+>> resource subranges, such as the mmio resource for the platform device
+>> created to control host/device mode mux, which is a xhci extended
+>> capability, and sits inside the xhci mmio region.
+>>
+>> If managed device resources are not used then "parent" resource
+>> is released before subrange at driver removal as .remove callback is
+>> called before the devres list of resources for this device is walked
+>> and released.
+>>
+>> This has been observed with the xhci extended capability driver causing a
+>> use-after-free which is now fixed.
+>>
+>> An additional nice benefit is that error handling on driver initialisation
+>> is simplified much.
+>>
+>> Signed-off-by: Carsten Schmid <carsten_schmid@mentor.com>
+>> Tested-by: Carsten Schmid <carsten_schmid@mentor.com>
+>> ---
+>> Rationale:
+>> Use-after-free was reproduced on 4.14.102 and 4.14.129 kernel
+>> using unbind mechanism.
+>> echo 0000:00:15.0 > /sys/bus/pci/drivers/xhci_hcd/unbind
+>>
 >> Upstream version of driver is identical in the affected code.
 >> Fix was tested successfully on 4.14.129.
 >> Provided patch applies and compiles on v5.2.8 stable.
 >> As this is also a bugfix, please consider it to go to stable trees too.
->
+> 
 > How far back should it go, just 4.14?  Was this caused by a specific
 > commit that you happened to notice?
->
-> thanks,
->
-> greg k-h
+> 
 
-Looks like the ext caps driver has been introduced in 4.17-rc1 and backported to 4.14.97.
-(at least my git history tells so).
-4.9 doesn't have it.
+To me it looks like the causing commit was added to 4.17:
+fa31b3c xhci: Add Intel extended cap / otg phy mux handling
 
-So, yes, 4.14 is the "oldest" candidate.
+Carsten, was the issue reproduced on upstream linux stable 4.14.129,
+or on some custom tree with backports?
 
-Thanks and best regards
-Carsten
-
+-Mathias
