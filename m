@@ -2,208 +2,380 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F13529ECAC
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 17:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3D79EF12
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 17:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728670AbfH0PaB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 11:30:01 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34608 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbfH0PaB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 11:30:01 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: eballetbo)
-        with ESMTPSA id E946328B0C7
-Subject: Re: Policy to keep USB ports powered in low-power states
-To:     Duncan Laurie <dlaurie@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nick Crews <ncrews@chromium.org>, linux-usb@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Daniel Kurtz <djkurtz@google.com>
-References: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
- <20190813060249.GD6670@kroah.com>
- <CAHX4x87DbJ4cKuwVO3OS=UzwtwSucFCV073W8bYHOPHW8NiA=A@mail.gmail.com>
- <20190814212012.GB22618@kroah.com>
- <CAHX4x84YM0PcoQw17FxMz=6=NPq2+HUUw2GWZarAKzZxr+ax=A@mail.gmail.com>
- <CADv6+07pYd-kg1i0TJXOPnEO6NUp6D5+BQBkqUO0MDAE+cquow@mail.gmail.com>
- <20190816091243.GB15703@kroah.com>
- <CADv6+047cZFRS9HG+OpsXw2+yZU4ROUf8v3eSh9p9GpJHy0mQw@mail.gmail.com>
-From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
-Message-ID: <3f1def95-e3d4-514b-af76-193cdc43990e@collabora.com>
-Date:   Tue, 27 Aug 2019 17:29:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729797AbfH0Phc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 11:37:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45858 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbfH0Pha (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Aug 2019 11:37:30 -0400
+Received: from linux-8ccs.fritz.box (unknown [92.117.134.103])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 04C4C20828;
+        Tue, 27 Aug 2019 15:37:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566920248;
+        bh=EVLmA6X4q3kOLjr2Olj2VbvDBZBfODkjU6EBVbbEqIY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ffw9NlrvdkKNxlnJcMdUOeNFtEAX8rVktWxtJ1w/nI69cL1ujixJHyZGlNU8Kwtsk
+         dMTGNRAK07vybtYjIA6VoDyyfMpgBgZKCaSP8q2GY43c5YixEH9Fq5i7C315W8rlLK
+         Jp60s9VfT2H9aX6E+cqI+zfjukN8pavP4+5/OhBk=
+Date:   Tue, 27 Aug 2019 17:37:18 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
+        hpa@zytor.com, joel@joelfernandes.org,
+        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
+        maco@android.com, maco@google.com, michal.lkml@markovi.net,
+        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
+        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
+        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
+        x86@kernel.org, yamada.masahiro@socionext.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Subject: Re: [PATCH v3 03/11] module: add support for symbol namespaces.
+Message-ID: <20190827153717.GA20822@linux-8ccs.fritz.box>
+References: <20190813121733.52480-1-maennich@google.com>
+ <20190821114955.12788-1-maennich@google.com>
+ <20190821114955.12788-4-maennich@google.com>
 MIME-Version: 1.0
-In-Reply-To: <CADv6+047cZFRS9HG+OpsXw2+yZU4ROUf8v3eSh9p9GpJHy0mQw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190821114955.12788-4-maennich@google.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
++++ Matthias Maennich [21/08/19 12:49 +0100]:
+>The EXPORT_SYMBOL_NS() and EXPORT_SYMBOL_NS_GPL() macros can be used to
+>export a symbol to a specific namespace.  There are no _GPL_FUTURE and
+>_UNUSED variants because these are currently unused, and I'm not sure
+>they are necessary.
+>
+>I didn't add EXPORT_SYMBOL_NS() for ASM exports; this patch sets the
+>namespace of ASM exports to NULL by default. In case of relative
+>references, it will be relocatable to NULL. If there's a need, this
+>should be pretty easy to add.
+>
+>A module that wants to use a symbol exported to a namespace must add a
+>MODULE_IMPORT_NS() statement to their module code; otherwise, modpost
+>will complain when building the module, and the kernel module loader
+>will emit an error and fail when loading the module.
+>
+>MODULE_IMPORT_NS() adds a modinfo tag 'import_ns' to the module. That
+>tag can be observed by the modinfo command, modpost and kernel/module.c
+>at the time of loading the module.
+>
+>The ELF symbols are renamed to include the namespace with an asm label;
+>for example, symbol 'usb_stor_suspend' in namespace USB_STORAGE becomes
+>'usb_stor_suspend.USB_STORAGE'.  This allows modpost to do namespace
+>checking, without having to go through all the effort of parsing ELF and
+>relocation records just to get to the struct kernel_symbols.
+>
+>On x86_64 I saw no difference in binary size (compression), but at
+>runtime this will require a word of memory per export to hold the
+>namespace. An alternative could be to store namespaced symbols in their
+>own section and use a separate 'struct namespaced_kernel_symbol' for
+>that section, at the cost of making the module loader more complex.
+>
+>Co-developed-by: Martijn Coenen <maco@android.com>
+>Signed-off-by: Martijn Coenen <maco@android.com>
+>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>Signed-off-by: Matthias Maennich <maennich@google.com>
+>---
+> include/asm-generic/export.h |  6 +--
+> include/linux/export.h       | 85 ++++++++++++++++++++++++++++++------
+> include/linux/module.h       |  2 +
+> kernel/module.c              | 43 ++++++++++++++++++
+> 4 files changed, 120 insertions(+), 16 deletions(-)
+>
+>diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+>index 63f54907317b..e2b5d0f569d3 100644
+>--- a/include/asm-generic/export.h
+>+++ b/include/asm-generic/export.h
+>@@ -17,11 +17,11 @@
+>
+> .macro __put, val, name
+> #ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+>-	.long	\val - ., \name - .
+>+	.long	\val - ., \name - ., 0 - .
+> #elif defined(CONFIG_64BIT)
+>-	.quad	\val, \name
+>+	.quad	\val, \name, 0
+> #else
+>-	.long	\val, \name
+>+	.long	\val, \name, 0
+> #endif
+> .endm
+>
+>diff --git a/include/linux/export.h b/include/linux/export.h
+>index 28a4d2150689..8e12e05444d1 100644
+>--- a/include/linux/export.h
+>+++ b/include/linux/export.h
+>@@ -20,6 +20,8 @@ extern struct module __this_module;
+>
+> #ifdef CONFIG_MODULES
+>
+>+#define NS_SEPARATOR "."
+>+
+> #if defined(__KERNEL__) && !defined(__GENKSYMS__)
+> #ifdef CONFIG_MODVERSIONS
+> /* Mark the CRC weak since genksyms apparently decides not to
+>@@ -49,6 +51,16 @@ extern struct module __this_module;
+>  * absolute relocations that require runtime processing on relocatable
+>  * kernels.
+>  */
+>+#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
+>+	__ADDRESSABLE(sym)						\
+>+	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+>+	    "	.balign	4					\n"	\
+>+	    "__ksymtab_" #sym NS_SEPARATOR #ns ":		\n"	\
+>+	    "	.long	" #sym "- .				\n"	\
+>+	    "	.long	__kstrtab_" #sym "- .			\n"	\
+>+	    "	.long	__kstrtab_ns_" #sym "- .		\n"	\
+>+	    "	.previous					\n")
+>+
+> #define __KSYMTAB_ENTRY(sym, sec)					\
+> 	__ADDRESSABLE(sym)						\
+> 	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+>@@ -56,32 +68,53 @@ extern struct module __this_module;
+> 	    "__ksymtab_" #sym ":				\n"	\
+> 	    "	.long	" #sym "- .				\n"	\
+> 	    "	.long	__kstrtab_" #sym "- .			\n"	\
+>+	    "	.long	0 - .					\n"	\
+> 	    "	.previous					\n")
+>
+> struct kernel_symbol {
+> 	int value_offset;
+> 	int name_offset;
+>+	int namespace_offset;
+> };
+> #else
+>+#define __KSYMTAB_ENTRY_NS(sym, sec, ns)				\
+>+	static const struct kernel_symbol __ksymtab_##sym##__##ns	\
+>+	asm("__ksymtab_" #sym NS_SEPARATOR #ns)				\
+>+	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+>+	__aligned(sizeof(void *))					\
+>+	= { (unsigned long)&sym, __kstrtab_##sym, __kstrtab_ns_##sym}
 
-On 16/8/19 19:02, Duncan Laurie wrote:
-> On Fri, Aug 16, 2019 at 2:12 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> On Thu, Aug 15, 2019 at 05:42:05PM -0600, Duncan Laurie wrote:
->>> On Wed, Aug 14, 2019 at 6:08 PM Nick Crews <ncrews@chromium.org> wrote:
->>>>
->>>> Adding Duncan Laurie who I think has some more intimate knowledge
->>>> of how this is implemented in HW. Duncan, could you correct or elaborate
->>>> on my answers below as you see fit? Also, sorry if I make some beginner
->>>> mistakes here, I'm just getting familiar with the USB subsystem, and thanks for
->>>> your patience.
->>>>
->>>> On Wed, Aug 14, 2019 at 3:20 PM Greg Kroah-Hartman
->>>> <gregkh@linuxfoundation.org> wrote:
->>>>>
->>>>> On Wed, Aug 14, 2019 at 02:12:07PM -0600, Nick Crews wrote:
->>>>>> Thanks for the fast response!
->>>>>>
->>>>>> On Tue, Aug 13, 2019 at 12:02 AM Greg Kroah-Hartman
->>>>>> <gregkh@linuxfoundation.org> wrote:
->>>>>>>
->>>>>>> On Mon, Aug 12, 2019 at 06:08:43PM -0600, Nick Crews wrote:
->>>>>>>> Hi Greg!
->>>>>>>
->>>>>>> Hi!
->>>>>>>
->>>>>>> First off, please fix your email client to not send html so that vger
->>>>>>> does not reject your messages :)
->>>>>>
->>>>>> Thanks, should be good now.
->>>>>>
->>>>>>>
->>>>>>>> I am working on a Chrome OS device that supports a policy called "USB Power
->>>>>>>> Share," which allows users to turn the laptop into a charge pack for their
->>>>>>>> phone. When the policy is enabled, power will be supplied to the USB ports
->>>>>>>> even when the system is in low power states such as S3 and S5. When
->>>>>>>> disabled, then no power will be supplied in S3 and S5. I wrote a driver
->>>>>>>> <https://lore.kernel.org/patchwork/patch/1062995/> for this already as part
->>>>>>>> of drivers/platform/chrome/, but Enric Balletbo i Serra, the maintainer,
->>>>>>>> had the reasonable suggestion of trying to move this into the USB subsystem.
->>>>>>>
->>>>>>> Correct suggestion.
->>>>>>>
->>>>>>>> Has anything like this been done before? Do you have any preliminary
->>>>>>>> thoughts on this before I start writing code? A few things that I haven't
->>>>>>>> figured out yet:
->>>>>>>> - How to make this feature only available on certain devices. Using device
->>>>>>>> tree? Kconfig? Making a separate driver just for this device that plugs
->>>>>>>> into the USB core?
->>>>>>>> - The feature is only supported on some USB ports, so we need a way of
->>>>>>>> filtering on a per-port basis.
->>>>>>>
->>>>>>> Look at the drivers/usb/typec/ code, I think that should do everything
->>>>>>> you need here as this is a typec standard functionality, right?
->>>>>>
->>>>>> Unfortunately this is for USB 2.0 ports, so it's not type-C.
->>>>>> Is the type-C code still worth looking at?
->>>>>
->>>>> If this is for USB 2, does it use the "non-standard" hub commands to
->>>>> turn on and off power?  If so, why not just use the usbreset userspace
->>>>> program for that?
->>>>
->>>> It does not use the standard hub commands. The USB ports are controlled
->>>> by an Embedded Controller (EC), so to control this policy we send a command
->>>> to the EC. Since the command to send to the EC is very specific, this would need
->>>> to go into a "hub driver" unique for these Wilco devices. We would make it so
->>>> that the normal hub registration is intercepted by something that sees this is a
->>>> Wilco device, and instead register the hub as a "wilco-hub", which has its own
->>>> special "power_share" sysfs attribute, but still is treated as a normal USB hub
->>>> otherwise?
->>>>
->>>
->>>
->>> I would say it is somewhat similar to the USB port power control which
->>> eventually calls into usb_acpi_set_power_state() but in this case it only
->>> affects the behavior when the system is NOT running.
->>
->> Ok, if this is when the system is not running, why does Linux need to be
->> involved at all?
->>
->> And if Linux is running, why not just follow the USB spec and not create
->> your own craziness?
->>
->>> This design has a standalone USB charge power controller on the board
->>> that passes through the USB2 D+/D- pins from one port and is able to do
->>> BC1.2 negotiation when the host controller is not powered, assuming
->>> the chip has been enabled by the Embedded Controller.
->>
->> So it does follow the spec?  Or does not?  I can't determine here.
->>
-> 
-> 
-> I didn't realize the part had a public datasheet:
-> https://www.dialog-semiconductor.com/sites/default/files/xslgc55544cr105_09292017.pdf
-> 
-> It is really only concerned with following the BC1.2 spec and not
-> interfering with the USB protocol part.
-> 
+Style nit: missing space after __kstrtab_ns_##sym.
 
-Without knowing the internal design, but having more infor now, looks to me that
-should be modelled more as a kind of power supply? Maybe something similar to
-UCS1002-2 device (drivers/power/supply/ucs1002_power.c) but behind the EC?
+>+
+> #define __KSYMTAB_ENTRY(sym, sec)					\
+> 	static const struct kernel_symbol __ksymtab_##sym		\
+>+	asm("__ksymtab_" #sym)						\
+> 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
+> 	__aligned(sizeof(void *))					\
+>-	= { (unsigned long)&sym, __kstrtab_##sym }
+>+	= { (unsigned long)&sym, __kstrtab_##sym, NULL }
+>
+> struct kernel_symbol {
+> 	unsigned long value;
+> 	const char *name;
+>+	const char *namespace;
+> };
+> #endif
+>
+>-/* For every exported symbol, place a struct in the __ksymtab section */
+>-#define ___EXPORT_SYMBOL(sym, sec)					\
+>+#define ___export_symbol_common(sym, sec)				\
+> 	extern typeof(sym) sym;						\
+> 	__CRC_SYMBOL(sym, sec)						\
+> 	static const char __kstrtab_##sym[]				\
+> 	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
+>-	= #sym;								\
+>+	= #sym								\
 
-Cheers,
- Enric
+Any particular reason for this change? Not that it's important, just
+noticing the inconsistent inclusion of the semicolon in some of the
+macros (e.g. __CRC_SYMBOL includes it but __export_symbol_common doesn't).
 
-> 
->> If the EC is in charge of all of this, why does Linux need to get
->> involved?
->>
-> 
-> Only because we are looking to expose a policy to control the behavior
-> of this chip at the OS level.
-> 
-> Most systems would put this in as an option in the BIOS but we do
-> not have setup menus on Chrome OS and we want to have the policy
-> controlled directly, preferably without resorting to an opaque interface
-> to a userspace utility.
-> 
-> To that end we have added a number of different EC controls and are
-> looking to fit them into the appropriate subsystems wherever possible.
-> As you can see they don't always fit naturally..
-> 
-> 
->>>>> And how are you turning a USB 2 port into a power source?  That feels
->>>>> really odd given the spec.  Is this part of the standard somewhere or
->>>>> just a firmware/hardware hack that you are adding to a device?
->>>>
->>>> The EC twiddles something in the port' HW so that the port turns into a
->>>> DCP (Dedicated Charging Port) and only supplies power, not data. So I
->>>> think yes, this is a bit of a hack that does not conform to the spec.
->>>>
->>>>>
->>>>> Is there some port information in the firmware that describes this
->>>>> functionality?  If so, can you expose it through sysfs to the port that
->>>>> way?
->>>>
->>>> [I'm not sure I'm answering your question, but] I believe that we could
->>>> make the BIOS firmware describe the USB ports' capabilities, and the
->>>> kernel's behavior would be gated upon what the firmware reports. I see
->>>> that struct usb_port already contains a "quirks" field, should we add a
->>>> POWER_SHARE quirk to include/linux/usb/quirks.h? I would guess that
->>>> should that should be reserved for quirks shared between many USB
->>>> devices/hubs?
->>>
->>> We could add a Device Property to the affected USB port in ACPI and
->>> describe it that way, similar to other properties like 'vcc-supply', 'clocks',
->>> 'vbus-detect', etc and hook it into the phy-generic driver.
->>>
->>> However I'm not clear on whether the phy driver binding works with XHCI
->>> when using ACPI, so this may not be an appropriate place either.
->>
->> Why would you have DT involved if you are using acpi?  :)
->>
-> 
-> This would come in via the _DSD method of passing parameters to
-> specific ACPI devices.
-> 
-> 
-> -duncan
-> 
+>+
+>+/* For every exported symbol, place a struct in the __ksymtab section */
+>+#define ___EXPORT_SYMBOL_NS(sym, sec, ns)				\
+>+	___export_symbol_common(sym, sec);			\
+>+	static const char __kstrtab_ns_##sym[]				\
+>+	__attribute__((section("__ksymtab_strings"), used, aligned(1)))	\
+>+	= #ns;								\
+>+	__KSYMTAB_ENTRY_NS(sym, sec, ns)
+>+
+>+#define ___EXPORT_SYMBOL(sym, sec)					\
+>+	___export_symbol_common(sym, sec);				\
+> 	__KSYMTAB_ENTRY(sym, sec)
+>
+> #if defined(__DISABLE_EXPORTS)
+>@@ -91,6 +124,7 @@ struct kernel_symbol {
+>  * be reused in other execution contexts such as the UEFI stub or the
+>  * decompressor.
+>  */
+>+#define __EXPORT_SYMBOL_NS(sym, sec, ns)
+> #define __EXPORT_SYMBOL(sym, sec)
+>
+> #elif defined(CONFIG_TRIM_UNUSED_KSYMS)
+>@@ -117,18 +151,26 @@ struct kernel_symbol {
+> #define __cond_export_sym_1(sym, sec) ___EXPORT_SYMBOL(sym, sec)
+> #define __cond_export_sym_0(sym, sec) /* nothing */
+>
+>+#define __EXPORT_SYMBOL_NS(sym, sec, ns)				\
+>+	__ksym_marker(sym);						\
+>+	__cond_export_ns_sym(sym, sec, ns, __is_defined(__KSYM_##sym))
+>+#define __cond_export_ns_sym(sym, sec, ns, conf)			\
+>+	___cond_export_ns_sym(sym, sec, ns, conf)
+>+#define ___cond_export_ns_sym(sym, sec, ns, enabled)			\
+>+	__cond_export_ns_sym_##enabled(sym, sec, ns)
+>+#define __cond_export_ns_sym_1(sym, sec, ns) ___EXPORT_SYMBOL_NS(sym, sec, ns)
+>+#define __cond_export_ns_sym_0(sym, sec, ns) /* nothing */
+>+
+> #else
+>+#define __EXPORT_SYMBOL_NS ___EXPORT_SYMBOL_NS
+> #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
+> #endif
+>
+>-#define EXPORT_SYMBOL(sym)					\
+>-	__EXPORT_SYMBOL(sym, "")
+>-
+>-#define EXPORT_SYMBOL_GPL(sym)					\
+>-	__EXPORT_SYMBOL(sym, "_gpl")
+>-
+>-#define EXPORT_SYMBOL_GPL_FUTURE(sym)				\
+>-	__EXPORT_SYMBOL(sym, "_gpl_future")
+>+#define EXPORT_SYMBOL(sym) __EXPORT_SYMBOL(sym, "")
+>+#define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
+>+#define EXPORT_SYMBOL_GPL_FUTURE(sym) __EXPORT_SYMBOL(sym, "_gpl_future")
+>+#define EXPORT_SYMBOL_NS(sym, ns) __EXPORT_SYMBOL_NS(sym, "", ns)
+>+#define EXPORT_SYMBOL_NS_GPL(sym, ns) __EXPORT_SYMBOL_NS(sym, "_gpl", ns)
+>
+> #ifdef CONFIG_UNUSED_SYMBOLS
+> #define EXPORT_UNUSED_SYMBOL(sym) __EXPORT_SYMBOL(sym, "_unused")
+>@@ -138,11 +180,28 @@ struct kernel_symbol {
+> #define EXPORT_UNUSED_SYMBOL_GPL(sym)
+> #endif
+>
+>-#endif	/* __GENKSYMS__ */
+>+#endif	/* __KERNEL__ && !__GENKSYMS__ */
+>+
+>+#if defined(__GENKSYMS__)
+>+/*
+>+ * When we're running genksyms, ignore the namespace and make the _NS
+>+ * variants look like the normal ones. There are two reasons for this:
+>+ * 1) In the normal definition of EXPORT_SYMBOL_NS, the 'ns' macro
+>+ *    argument is itself not expanded because it's always tokenized or
+>+ *    concatenated; but when running genksyms, a blank definition of the
+>+ *    macro does allow the argument to be expanded; if a namespace
+>+ *    happens to collide with a #define, this can cause issues.
+>+ * 2) There's no need to modify genksyms to deal with the _NS variants
+>+ */
+>+#define EXPORT_SYMBOL_NS(sym, ns) EXPORT_SYMBOL(sym)
+>+#define EXPORT_SYMBOL_NS_GPL(sym, ns) EXPORT_SYMBOL_GPL(sym)
+>+#endif
+>
+> #else /* !CONFIG_MODULES... */
+>
+> #define EXPORT_SYMBOL(sym)
+>+#define EXPORT_SYMBOL_NS(sym, ns)
+>+#define EXPORT_SYMBOL_NS_GPL(sym, ns)
+> #define EXPORT_SYMBOL_GPL(sym)
+> #define EXPORT_SYMBOL_GPL_FUTURE(sym)
+> #define EXPORT_UNUSED_SYMBOL(sym)
+>diff --git a/include/linux/module.h b/include/linux/module.h
+>index 1455812dd325..b3611e749f72 100644
+>--- a/include/linux/module.h
+>+++ b/include/linux/module.h
+>@@ -280,6 +280,8 @@ struct notifier_block;
+>
+> #ifdef CONFIG_MODULES
+>
+>+#define MODULE_IMPORT_NS(ns) MODULE_INFO(import_ns, #ns)
+>+
+> extern int modules_disabled; /* for sysctl */
+> /* Get/put a kernel symbol (calls must be symmetric) */
+> void *__symbol_get(const char *symbol);
+>diff --git a/kernel/module.c b/kernel/module.c
+>index a23067907169..57e8253f2251 100644
+>--- a/kernel/module.c
+>+++ b/kernel/module.c
+>@@ -544,6 +544,15 @@ static const char *kernel_symbol_name(const struct kernel_symbol *sym)
+> #endif
+> }
+>
+>+static const char *kernel_symbol_namespace(const struct kernel_symbol *sym)
+>+{
+>+#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
+>+	return offset_to_ptr(&sym->namespace_offset);
+>+#else
+>+	return sym->namespace;
+>+#endif
+>+}
+>+
+> static int cmp_name(const void *va, const void *vb)
+> {
+> 	const char *a;
+>@@ -1379,6 +1388,34 @@ static inline int same_magic(const char *amagic, const char *bmagic,
+> }
+> #endif /* CONFIG_MODVERSIONS */
+>
+>+static char *get_modinfo(const struct load_info *info, const char *tag);
+>+static char *get_next_modinfo(const struct load_info *info, const char *tag,
+>+			      char *prev);
+>+
+>+static int verify_namespace_is_imported(const struct load_info *info,
+>+					const struct kernel_symbol *sym,
+>+					struct module *mod)
+>+{
+>+	const char *namespace;
+>+	char *imported_namespace;
+>+
+>+	namespace = kernel_symbol_namespace(sym);
+>+	if (namespace) {
+>+		imported_namespace = get_modinfo(info, "import_ns");
+>+		while (imported_namespace) {
+>+			if (strcmp(namespace, imported_namespace) == 0)
+>+				return 0;
+>+			imported_namespace = get_next_modinfo(
+>+				info, "import_ns", imported_namespace);
+>+		}
+>+		pr_err("%s: module uses symbol (%s) from namespace %s, but does not import it.\n",
+>+		       mod->name, kernel_symbol_name(sym), namespace);
+>+		return -EINVAL;
+>+	}
+>+	return 0;
+>+}
+>+
+>+
+> /* Resolve a symbol for this module.  I.e. if we find one, record usage. */
+> static const struct kernel_symbol *resolve_symbol(struct module *mod,
+> 						  const struct load_info *info,
+>@@ -1413,6 +1450,12 @@ static const struct kernel_symbol *resolve_symbol(struct module *mod,
+> 		goto getname;
+> 	}
+>
+>+	err = verify_namespace_is_imported(info, sym, mod);
+>+	if (err) {
+>+		sym = ERR_PTR(err);
+>+		goto getname;
+>+	}
+
+I think we should verify the namespace before taking a reference to
+the owner module (just swap the verify_namespace_is_imported() and
+ref_module() calls here).
+
+Other than that, this patch looks good. Thanks!
+
+>+
+> getname:
+> 	/* We must make copy under the lock if we failed to get ref. */
+> 	strncpy(ownername, module_name(owner), MODULE_NAME_LEN);
+>-- 
+>2.23.0.rc1.153.gdeed80330f-goog
+>
