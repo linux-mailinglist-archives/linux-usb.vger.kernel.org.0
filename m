@@ -2,156 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5339F257
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 20:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964989F2C4
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 20:56:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbfH0Sb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 14:31:58 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:40450 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730038AbfH0Sb6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 14:31:58 -0400
-Received: by mail-ot1-f65.google.com with SMTP id c34so118403otb.7;
-        Tue, 27 Aug 2019 11:31:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nh5JlXKDScp/6jdVD0lYiet/VZlxy5TKafXl/GE7L28=;
-        b=Rzm0Z0Gjh+Sw50WibD5Vk8LcPjvRCsjDiaqN0mK5FO1zPE+cwsq9xQ9wV8d9M9Vr57
-         o11h6F6O6dt8KeEI1KUzTO4/43U823mDnk7AnLq7C8jop+t+meVeGZZl3wSVhbK0UO2X
-         zfgXyftqI/W1+ZiQ9g0QIb4y6BfNRJpTyjuHUgXe7dfgDayDbb2/iYgzbM7R+PzpzbIH
-         hlGT5L/jTK6FH6UK7O7In706yo7uvHNdhkootTjZXOcTtaicUZNcSq4BxXfNZKLAmUf7
-         2z8DG9Co92X72+xjknhshLddfn/C67o3fL+Wh87kc07a/ixwAH1vWyogOJdVbIgel298
-         3bRw==
-X-Gm-Message-State: APjAAAVB/oPdoReXi9XZdHIjAd8/TTpNzVBXKyjlDtz1fV9v7J9Q0+Oo
-        yQDK5yn+uZmOhTFdTJBoyA==
-X-Google-Smtp-Source: APXvYqwyILKBeRNQk+rBVcbEFALTsvo/l+G1oYafWQ6QxRePRSd/ebw3//wOjN0+4335ghUuXLcLYA==
-X-Received: by 2002:a9d:6b1a:: with SMTP id g26mr17166549otp.195.1566930716465;
-        Tue, 27 Aug 2019 11:31:56 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v24sm32104otj.78.2019.08.27.11.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 11:31:55 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 13:31:54 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Li Jun <jun.li@nxp.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Min Guo <min.guo@mediatek.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: Re: [PATCH next v10 03/11] dt-bindings: usb: add binding for USB
- GPIO based connection detection driver
-Message-ID: <20190827183154.GA10374@bogus>
-References: <1566547041-20804-1-git-send-email-chunfeng.yun@mediatek.com>
- <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
+        id S1730894AbfH0S4i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 14:56:38 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:40398 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730876AbfH0S4i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 14:56:38 -0400
+Received: (qmail 1525 invoked by uid 2102); 27 Aug 2019 14:56:36 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Aug 2019 14:56:36 -0400
+Date:   Tue, 27 Aug 2019 14:56:36 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     gregkh@linuxfoundation.org, <bauer.chen@realtek.com>,
+        <ricky_wu@realtek.com>, <linux-usb@vger.kernel.org>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] USB: storage: ums-realtek: Whitelist auto-delink
+ support
+In-Reply-To: <20190827173450.13572-2-kai.heng.feng@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.1908271454110.1545-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 03:57:13PM +0800, Chunfeng Yun wrote:
-> It's used to support dual role switch via GPIO when use Type-B
-> receptacle, typically the USB ID pin is connected to an input
-> GPIO, and also used to enable/disable device when the USB Vbus
-> pin is connected to an input GPIO.
+On Wed, 28 Aug 2019, Kai-Heng Feng wrote:
+
+> Auto-delink requires writing special registers to ums-realtek devices.
+> Unconditionally enable auto-delink may break newer devices.
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> So only enable auto-delink by default for the original three IDs,
+> 0x0138, 0x0158 and 0x0159.
+> 
+> Realtek is working on a patch to properly support auto-delink for other
+> IDs.
+> 
+> BugLink: https://bugs.launchpad.net/bugs/1838886
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > ---
-> v9~v10 no changes
+> v3:
+> - Whitelisting instead of adding new module parameter.
+> v2:
+> - Use auto_delink_support instead of auto_delink_enable.
 > 
-> v8 changes:
->  1. rename the title
->  2. change the compatible as "linux,usb-conn-gpio" instead of
->     "linux,typeb-conn-gpio"
+>  drivers/usb/storage/realtek_cr.c | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+> index beaffac805af..1d9ce9cbc831 100644
+> --- a/drivers/usb/storage/realtek_cr.c
+> +++ b/drivers/usb/storage/realtek_cr.c
+> @@ -996,12 +996,15 @@ static int init_realtek_cr(struct us_data *us)
+>  			goto INIT_FAIL;
+>  	}
+>  
+> -	if (CHECK_FW_VER(chip, 0x5888) || CHECK_FW_VER(chip, 0x5889) ||
+> -	    CHECK_FW_VER(chip, 0x5901))
+> -		SET_AUTO_DELINK(chip);
+> -	if (STATUS_LEN(chip) == 16) {
+> -		if (SUPPORT_AUTO_DELINK(chip))
+> +	if (CHECK_PID(chip, 0x0138) || CHECK_PID(chip, 0x0158) ||
+> +	    CHECK_PID(chip, 0x0159)) {
+> +		if (CHECK_FW_VER(chip, 0x5888) || CHECK_FW_VER(chip, 0x5889) ||
+> +				CHECK_FW_VER(chip, 0x5901))
+>  			SET_AUTO_DELINK(chip);
+> +		if (STATUS_LEN(chip) == 16) {
+> +			if (SUPPORT_AUTO_DELINK(chip))
+> +				SET_AUTO_DELINK(chip);
+> +		}
+>  	}
+>  #ifdef CONFIG_REALTEK_AUTOPM
+>  	if (ss_en)
 
-I don't think that is an improvement. How about 'gpio-usb-b-connector' 
-to be consistent.
+For both patches in this series:
 
-> 
-> v7 changes:
->  1. add description for device only mode
-> 
-> v6 changes:
->  1. remove status and port nodes in example
->  2. make vbus-supply as optional property
-> 
-> v5 changes:
->  1. treat type-B connector as child device of USB controller's, but not
->     as a separate virtual device, suggested by Rob
->  2. put connector's port node under connector node, suggested by Rob
-> 
-> v4 no changes
-> 
-> v3 changes:
->  1. treat type-B connector as a virtual device, but not child device of
->     USB controller's
-> 
-> v2 changes:
->   1. new patch to make binding clear suggested by Hans
-> ---
->  .../devicetree/bindings/usb/usb-conn-gpio.txt | 31 +++++++++++++++++++
->  1 file changed, 31 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
-> new file mode 100644
-> index 000000000000..d4d107fedc22
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
-> @@ -0,0 +1,31 @@
-> +USB GPIO Based Connection Detection
-> +
-> +This is typically used to switch dual role mode from the USB ID pin connected
-> +to an input GPIO, and also used to enable/disable device mode from the USB
-> +Vbus pin connected to an input GPIO.
-> +
-> +Required properties:
-> +- compatible : should include "linux,usb-conn-gpio" and "usb-b-connector".
-> +- id-gpios, vbus-gpios : input gpios, either one of them must be present,
-> +	and both can be present as well.
-> +	see connector/usb-connector.txt
-> +
-> +Optional properties:
-> +- vbus-supply : can be present if needed when supports dual role mode.
-> +	see connector/usb-connector.txt
-> +
-> +- Sub-nodes:
-> +	- port : can be present.
-> +		see graph.txt
-> +
-> +Example:
-> +
-> +&mtu3 {
-> +	connector {
-> +		compatible = "linux,usb-conn-gpio", "usb-b-connector";
-> +		label = "micro-USB";
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-'label' is for a human identifying a particular connector when there are 
-multiple (of the same type). So not a great example here.
+Shouldn't this patch go into the -stable kernels as well?
 
-> +		type = "micro";
-> +		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
-> +		vbus-supply = <&usb_p0_vbus>;
-> +	};
-> +};
-> -- 
-> 2.23.0
-> 
+Alan Stern
+
