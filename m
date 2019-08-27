@@ -2,85 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 537F39E543
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 12:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26539E610
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 12:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729726AbfH0KDw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 06:03:52 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:11411 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725805AbfH0KDw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 06:03:52 -0400
-X-IronPort-AV: E=Sophos;i="5.64,436,1559487600"; 
-   d="scan'208";a="25044207"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 27 Aug 2019 19:03:48 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 0D5D740083ED;
-        Tue, 27 Aug 2019 19:03:48 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, mathias.nyman@intel.com
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH 4/4] usb: host: xhci-rcar: avoid 60s wait by request_firmware() in system booting
-Date:   Tue, 27 Aug 2019 19:02:07 +0900
-Message-Id: <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1566900127-11148-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1566900127-11148-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1726059AbfH0Kta (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 06:49:30 -0400
+Received: from mx2.suse.de ([195.135.220.15]:55408 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725793AbfH0Kta (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Aug 2019 06:49:30 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 4640CACC4;
+        Tue, 27 Aug 2019 10:49:28 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USB: cdc-wdm: fix race between write and disconnect due to flag abuse
+Date:   Tue, 27 Aug 2019 12:34:36 +0200
+Message-Id: <20190827103436.21143-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y and CONFIG_USB_XHCI_RCAR=y,
-request_firmware() in xhci_rcar_download_firmware() waits for 60s to
-sysfs fallback for the firmware like below.
+In case of a disconnect an ongoing flush() has to be made fail.
+Nevertheless we cannot be sure that any pending URB has already
+finished, so although they will never succeed, they still must
+not be touched.
+The clean solution for this is to check for WDM_IN_USE
+and WDM_DISCONNECTED in flush(). There is no point in ever
+clearing WDM_IN_USE, as no further writes make sense.
 
-[    1.599701] xhci-hcd ee000000.usb: xHCI Host Controller
-[    1.604948] xhci-hcd ee000000.usb: new USB bus registered, assigned bus number 3
-[    1.612403] xhci-hcd ee000000.usb: Direct firmware load for r8a779x_usb3_v3.dlmem failed with error -2
-[    1.621726] xhci-hcd ee000000.usb: Falling back to sysfs fallback for: r8a779x_usb3_v3.dlmem
-[    1.707953] ata1: link resume succeeded after 1 retries
-[    1.819379] ata1: SATA link down (SStatus 0 SControl 300)
-[   62.436012] xhci-hcd ee000000.usb: can't setup: -11
-[   62.440901] xhci-hcd ee000000.usb: USB bus 3 deregistered
-[   62.446361] xhci-hcd: probe of ee000000.usb failed with error -11
+The issue is as old as the driver.
 
-To avoid this 60s wait, this patch adds to check the system_state
-condition and if the system is not running,
-xhci_rcar_download_firmware() calls request_firmware_direct()
-instead of request_firmware() as a workaround.
-
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Fixes: afba937e540c9 ("USB: CDC WDM driver")
+Reported-by: syzbot+d232cca6ec42c2edb3fc@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
 ---
- drivers/usb/host/xhci-rcar.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/usb/class/cdc-wdm.c | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-index 34761be..c90cf46 100644
---- a/drivers/usb/host/xhci-rcar.c
-+++ b/drivers/usb/host/xhci-rcar.c
-@@ -6,6 +6,7 @@
-  */
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 1656f5155ab8..f9f7c8a5e091 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -588,10 +588,20 @@ static int wdm_flush(struct file *file, fl_owner_t id)
+ {
+ 	struct wdm_device *desc = file->private_data;
  
- #include <linux/firmware.h>
-+#include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/of.h>
-@@ -146,7 +147,10 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
- 		firmware_name = priv->firmware_name;
+-	wait_event(desc->wait, !test_bit(WDM_IN_USE, &desc->flags));
++	wait_event(desc->wait,
++			/*
++			 * needs both flags. We cannot do with one
++			 * because resetting it would cause a race
++			 * with write() yet we need to signal
++			 * a disconnect
++			 */
++			!test_bit(WDM_IN_USE, &desc->flags) ||
++			test_bit(WDM_DISCONNECTING, &desc->flags));
  
- 	/* request R-Car USB3.0 firmware */
--	retval = request_firmware(&fw, firmware_name, dev);
-+	if (system_state < SYSTEM_RUNNING)
-+		retval = request_firmware_direct(&fw, firmware_name, dev);
-+	else
-+		retval = request_firmware(&fw, firmware_name, dev);
- 	if (retval)
- 		return retval;
+ 	/* cannot dereference desc->intf if WDM_DISCONNECTING */
+-	if (desc->werr < 0 && !test_bit(WDM_DISCONNECTING, &desc->flags))
++	if (test_bit(WDM_DISCONNECTING, &desc->flags))
++		return -ENODEV;
++	if (desc->werr < 0)
+ 		dev_err(&desc->intf->dev, "Error in flush path: %d\n",
+ 			desc->werr);
  
+@@ -975,8 +985,6 @@ static void wdm_disconnect(struct usb_interface *intf)
+ 	spin_lock_irqsave(&desc->iuspin, flags);
+ 	set_bit(WDM_DISCONNECTING, &desc->flags);
+ 	set_bit(WDM_READ, &desc->flags);
+-	/* to terminate pending flushes */
+-	clear_bit(WDM_IN_USE, &desc->flags);
+ 	spin_unlock_irqrestore(&desc->iuspin, flags);
+ 	wake_up_all(&desc->wait);
+ 	mutex_lock(&desc->rlock);
 -- 
-2.7.4
+2.16.4
 
