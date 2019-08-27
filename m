@@ -2,97 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4CE9E6F6
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 13:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AD89E6F8
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 13:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728970AbfH0Los (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 07:44:48 -0400
-Received: from mr01.mx01.tldhost.de ([62.108.36.247]:47901 "EHLO
-        mr01.mx01.tldhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726955AbfH0Los (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 07:44:48 -0400
-X-Greylist: delayed 1079 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Aug 2019 07:44:47 EDT
-Received: from mx01.tldhost.de (localhost [127.0.0.1])
-        by mx01.tldhost.de (Postfix) with ESMTP id DD15C12129C
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 13:21:08 +0200 (CEST)
-Received: by mx01.tldhost.de (Postfix, from userid 1001)
-        id D2BAB1212A9; Tue, 27 Aug 2019 13:21:08 +0200 (CEST)
-X-Spam-Status: No, score=0.0 required=7.0 tests=SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.2
-Received: from server12.tldhost.de (server12.tldhost.de [84.19.26.112])
-        by mx01.tldhost.de (Postfix) with ESMTPS id 38103120D05;
-        Tue, 27 Aug 2019 13:21:08 +0200 (CEST)
-Received: from fw-emea.rohde-schwarz.com (fw-emea.rohde-schwarz.com
- [80.246.32.33]) by webmail.kiener-muenchen.de (Horde Framework) with HTTP;
- Tue, 27 Aug 2019 11:21:08 +0000
-Date:   Tue, 27 Aug 2019 11:21:08 +0000
-Message-ID: <20190827112108.Horde.2zOgQvv3ycWPMlS-MBIY2Z_@webmail.kiener-muenchen.de>
-From:   guido@kiener-muenchen.de
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH 2/2] usb: gadget: net2280: Add workaround for AB chip
- Errata 11
-In-Reply-To: <28ccd8ca12c3310b86c0b84b73c1b607c1e00ebe.camel@kernel.crashing.org>
-Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
+        id S1726955AbfH0LpW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 07:45:22 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:37539 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726140AbfH0LpV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 07:45:21 -0400
+Received: by mail-wm1-f65.google.com with SMTP id d16so2681541wme.2
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 04:45:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:mime-version:message-id:in-reply-to
+         :references:user-agent:content-transfer-encoding;
+        bh=BBAQbvGI5m70IT7gwpTqMd9Zxn3yd9mTcRYoUs8xzbo=;
+        b=onXy4iVllrd8c4tpFtOk7zTSpflQfzAmBza47ZPpMBD67DZVWF+bgwvur2nW8uV81m
+         yl1frnPuQ2uV8k/J3BxTZO5onKpRKgKJpmx0VtxxjgZfh8RWg7Y3OS/iQRzllrVwtwUP
+         J/PvrSfiQcIoAecJsZR6bg4I53j4x0xXH7l6qjIiiLG9fjtelD6VQoFnIYntnQAMW1FK
+         oq2M0hEJgmdzWoYbjCZ7TAMvSPXceV6VvyXGqQhuap+F8030c4bCfS54LYchwHwABoEr
+         xiDmS2AG+b4Ohu3XSLGdKibKcWsogYlWMP93JkX592MYkrTQcX+IrEDXzDrgPkk9FvO2
+         ErEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:mime-version:message-id
+         :in-reply-to:references:user-agent:content-transfer-encoding;
+        bh=BBAQbvGI5m70IT7gwpTqMd9Zxn3yd9mTcRYoUs8xzbo=;
+        b=txJ2byiqvYWsyGV/fJnm/Cm+Laj844rhwhCTZ11F2wCeYCGA26i1H6Z88z7LZdEnp/
+         M4y9WzxRzFcui69iF71Jib/EmojBUCNf9nSutq6BLTlWoWboSbIcUu7pnI41F+uWV0eQ
+         cZVSPyMo8gfCnWjMKhaaWsD48ZoWK///P0BVp3JqFWzgB60hT+VdKur2yIB0lFt1FLOd
+         CRDzujEYxfJYnzEnFR0RLP6IxxoOAbgtx9cdxLef2EZIcZKQMOc1xSKnUVbtRCGuaEmn
+         sy6kDKn8zCgL6nJ55mAHALrNdMtswqo4e0pH+v99baJ45CZswf78uDEwJx+uTGrJx4a3
+         mcXw==
+X-Gm-Message-State: APjAAAX94RgzNDi7Kn/ZFLRmHygyqIXIkAl6fEtNnSVk4cen8Jbgbz7Q
+        8WNJN9nfqXsIbIQH6rCkTaI=
+X-Google-Smtp-Source: APXvYqySe4Ye5opeQvHzGYvU2Vu8TM7L6knp50soVvwu97HlfmYY8RXSTSpUCe49OrrLZ0z616MefA==
+X-Received: by 2002:a1c:9648:: with SMTP id y69mr26034632wmd.122.1566906319448;
+        Tue, 27 Aug 2019 04:45:19 -0700 (PDT)
+Received: from localhost ([92.59.185.54])
+        by smtp.gmail.com with ESMTPSA id t8sm37020305wra.73.2019.08.27.04.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 04:45:18 -0700 (PDT)
+From:   Vicente Bergas <vicencb@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Will Deacon <will.deacon@arm.com>,
+        MarcZyngier <marc.zyngier@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthias Brugger <mbrugger@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH] usb: dwc3: Add shutdown to =?iso-8859-1?Q?platform=5Fdriver?=
+Date:   Tue, 27 Aug 2019 13:45:16 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-X-PPP-Message-ID: <20190827112108.26136.69707@server12.tldhost.de>
-X-PPP-Vhost: kiener-muenchen.de
-X-POWERED-BY: TLDHost.de - AV:CLEAN SPAM:OK
+Message-ID: <8d48017a-64c5-4b25-8d85-113ffcf502c9@gmail.com>
+In-Reply-To: <20190817174140.6394-1-vicencb@gmail.com>
+References: <4d18d4f7-a00e-bd60-6361-51054eba3bca@arm.com>
+ <20190817174140.6394-1-vicencb@gmail.com>
+User-Agent: Trojita
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-Zitat von Benjamin Herrenschmidt <benh@kernel.crashing.org>:
-
-> The errata description is:
+On Saturday, August 17, 2019 7:41:40 PM CEST, Vicente Bergas wrote:
+> Otherwise the device keeps writing to memory after kexec and disturbs
+> the next kernel.
 >
-> Workaround for Default Duration of LFPS Handshake Signaling for
-> Device-Initiated U1 Exit is too short.
->
-> The default duration of the LFPS handshake generated by USB3380 for  
-> a device-initiated U1-exit may not be
-> long enough for certain SuperSpeed downstream ports (SuperSpeed  
-> hubs/hosts) to recognize. This could lead
-> to USB3380 entering the recovery state pre-maturely and ending up in  
-> the SS.Inactive state.
->
-> I have observed various enumeration failures, seemingly related to
-> lost transactions or SETUP status phases on modern hosts (typically
-> thunderbolt capable systems) without this workaround.
->
-> Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+> Signed-off-by: Vicente Bergas <vicencb@gmail.com>
 > ---
->  drivers/usb/gadget/udc/net2280.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+>  drivers/usb/dwc3/dwc3-of-simple.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/drivers/usb/gadget/udc/net2280.c  
-> b/drivers/usb/gadget/udc/net2280.c
-> index e0191146ba22..51efee21915f 100644
-> --- a/drivers/usb/gadget/udc/net2280.c
-> +++ b/drivers/usb/gadget/udc/net2280.c
-> @@ -2269,6 +2269,16 @@ static void usb_reinit_338x(struct net2280 *dev)
->  	val |= 0x3 << HOT_RX_RESET_TS2;
->  	writel(val, &dev->llregs->ll_tsn_counters_3);
+> Hi Felipe, Robin,
+> this version calls 'remove' from 'shutdown' instead of just asserting
+> a reset because it looks like a cleaner way to stop the device.
 >
-> +	/*
-> +	 * AB errata. Errata 11. Workaround for Default Duration of LFPS
-> +	 * Handshake Signaling for Device-Initiated U1 Exit is too short.
-> +	 * Without this, various enumeration failures observed with
-> +	 * modern superspeed hosts.
-> +	 */
-> +	val = readl(&dev->llregs->ll_lfps_timers_2);
-> +	writel((val & 0xffff0000) | LFPS_TIMERS_2_WORKAROUND_VALUE,
-> +	       &dev->llregs->ll_lfps_timers_2);
+> Calling remove from shutdown in core.c instead of dwc3-of-simple.c does not=
+
+> fix the issue either.
+>
+> It has been tested on the sapphire board, a RK3399 platform.
+>
+> Regards,
+>   Vicen=C3=A7.
+>
+> diff --git a/drivers/usb/dwc3/dwc3-of-simple.c=20
+> b/drivers/usb/dwc3/dwc3-of-simple.c
+> index bdac3e7d7b18..d5fd45c64901 100644
+> --- a/drivers/usb/dwc3/dwc3-of-simple.c
+> +++ b/drivers/usb/dwc3/dwc3-of-simple.c
+> @@ -133,6 +133,11 @@ static int dwc3_of_simple_remove(struct=20
+> platform_device *pdev)
+>  =09return 0;
+>  }
+> =20
+> +static void dwc3_of_simple_shutdown(struct platform_device *pdev)
+> +{
+> +=09dwc3_of_simple_remove(pdev);
+> +}
 > +
->  	/*
->  	 * Set Recovery Idle to Recover bit:
->  	 * - On SS connections, setting Recovery Idle to Recover Fmw improves
+>  static int __maybe_unused=20
+> dwc3_of_simple_runtime_suspend(struct device *dev)
+>  {
+>  =09struct dwc3_of_simple=09*simple =3D dev_get_drvdata(dev);
+> @@ -190,6 +195,7 @@ MODULE_DEVICE_TABLE(of, of_dwc3_simple_match);
+>  static struct platform_driver dwc3_of_simple_driver =3D {
+>  =09.probe=09=09=3D dwc3_of_simple_probe,
+>  =09.remove=09=09=3D dwc3_of_simple_remove,
+> +=09.shutdown=09=3D dwc3_of_simple_shutdown,
+>  =09.driver=09=09=3D {
+>  =09=09.name=09=3D "dwc3-of-simple",
+>  =09=09.of_match_table =3D of_dwc3_simple_match,
 
-I'm ok with your patch sequence.
+Hi,
+please, can you provide some feedback on this?
 
--Guido
+Regards,
+  Vicen=C3=A7.
 
