@@ -2,203 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD329EB5F
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13529ECAC
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 17:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727048AbfH0On5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 10:43:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56016 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725920AbfH0On5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Aug 2019 10:43:57 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA2B8206BF;
-        Tue, 27 Aug 2019 14:43:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566917036;
-        bh=YYcpRPJ9ObMCi1TUYaeck+9yIfym9MWqOaqRL4NI7/4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=cBiwjWnUXHcYFU3+QphcsfL72GFFmfOQGPRnuLrsHhJOcR6F78UmipUiaQI6iZm4D
-         qDQQmggQbuPN+9Oa5GSd4YSLI9mBcKtlNW/gxgg6DxdaRWnTbHQIYPJc3wu4OHjw+1
-         RgMxnG17Y2D37nVwjzKnXMFV7MqFcm11llSvwuts=
-Subject: Re: [PATCH v8] usbip: Implement SG support to vhci-hcd and stub
- driver
-To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20190826172348.23353-1-suwan.kim027@gmail.com>
- <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <9000ddaa-24f0-5c76-43a4-318f00ea31dc@kernel.org>
-Date:   Tue, 27 Aug 2019 08:43:55 -0600
+        id S1728670AbfH0PaB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 11:30:01 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:34608 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbfH0PaB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 11:30:01 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: eballetbo)
+        with ESMTPSA id E946328B0C7
+Subject: Re: Policy to keep USB ports powered in low-power states
+To:     Duncan Laurie <dlaurie@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nick Crews <ncrews@chromium.org>, linux-usb@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Daniel Kurtz <djkurtz@google.com>
+References: <CAHX4x86QCrkrnPEfrup8k96wyqg=QR_vgetYLqP1AEa02fx1vw@mail.gmail.com>
+ <20190813060249.GD6670@kroah.com>
+ <CAHX4x87DbJ4cKuwVO3OS=UzwtwSucFCV073W8bYHOPHW8NiA=A@mail.gmail.com>
+ <20190814212012.GB22618@kroah.com>
+ <CAHX4x84YM0PcoQw17FxMz=6=NPq2+HUUw2GWZarAKzZxr+ax=A@mail.gmail.com>
+ <CADv6+07pYd-kg1i0TJXOPnEO6NUp6D5+BQBkqUO0MDAE+cquow@mail.gmail.com>
+ <20190816091243.GB15703@kroah.com>
+ <CADv6+047cZFRS9HG+OpsXw2+yZU4ROUf8v3eSh9p9GpJHy0mQw@mail.gmail.com>
+From:   Enric Balletbo i Serra <enric.balletbo@collabora.com>
+Message-ID: <3f1def95-e3d4-514b-af76-193cdc43990e@collabora.com>
+Date:   Tue, 27 Aug 2019 17:29:56 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CADv6+047cZFRS9HG+OpsXw2+yZU4ROUf8v3eSh9p9GpJHy0mQw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/27/19 8:38 AM, shuah wrote:
-> On 8/26/19 11:23 AM, Suwan Kim wrote:
->> There are bugs on vhci with usb 3.0 storage device. In USB, each SG
->> list entry buffer should be divisible by the bulk max packet size.
->> But with native SG support, this problem doesn't matter because the
->> SG buffer is treated as contiguous buffer. But without native SG
->> support, USB storage driver breaks SG list into several URBs and the
->> error occurs because of a buffer size of URB that cannot be divided
->> by the bulk max packet size. The error situation is as follows.
+Hi,
+
+On 16/8/19 19:02, Duncan Laurie wrote:
+> On Fri, Aug 16, 2019 at 2:12 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
 >>
->> When USB Storage driver requests 31.5 KB data and has SG list which
->> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
->> reason. USB Storage driver splits this SG list into several URBs
->> because VHCI doesn't support SG and sends them separately. So the
->> first URB buffer size is 3584 bytes. When receiving data from device,
->> USB 3.0 device sends data packet of 1024 bytes size because the max
->> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
->> But the first URB buffer has only 3584 bytes buffer size. So host
->> controller terminates the transfer even though there is more data to
->> receive. So, vhci needs to support SG transfer to prevent this error.
+>> On Thu, Aug 15, 2019 at 05:42:05PM -0600, Duncan Laurie wrote:
+>>> On Wed, Aug 14, 2019 at 6:08 PM Nick Crews <ncrews@chromium.org> wrote:
+>>>>
+>>>> Adding Duncan Laurie who I think has some more intimate knowledge
+>>>> of how this is implemented in HW. Duncan, could you correct or elaborate
+>>>> on my answers below as you see fit? Also, sorry if I make some beginner
+>>>> mistakes here, I'm just getting familiar with the USB subsystem, and thanks for
+>>>> your patience.
+>>>>
+>>>> On Wed, Aug 14, 2019 at 3:20 PM Greg Kroah-Hartman
+>>>> <gregkh@linuxfoundation.org> wrote:
+>>>>>
+>>>>> On Wed, Aug 14, 2019 at 02:12:07PM -0600, Nick Crews wrote:
+>>>>>> Thanks for the fast response!
+>>>>>>
+>>>>>> On Tue, Aug 13, 2019 at 12:02 AM Greg Kroah-Hartman
+>>>>>> <gregkh@linuxfoundation.org> wrote:
+>>>>>>>
+>>>>>>> On Mon, Aug 12, 2019 at 06:08:43PM -0600, Nick Crews wrote:
+>>>>>>>> Hi Greg!
+>>>>>>>
+>>>>>>> Hi!
+>>>>>>>
+>>>>>>> First off, please fix your email client to not send html so that vger
+>>>>>>> does not reject your messages :)
+>>>>>>
+>>>>>> Thanks, should be good now.
+>>>>>>
+>>>>>>>
+>>>>>>>> I am working on a Chrome OS device that supports a policy called "USB Power
+>>>>>>>> Share," which allows users to turn the laptop into a charge pack for their
+>>>>>>>> phone. When the policy is enabled, power will be supplied to the USB ports
+>>>>>>>> even when the system is in low power states such as S3 and S5. When
+>>>>>>>> disabled, then no power will be supplied in S3 and S5. I wrote a driver
+>>>>>>>> <https://lore.kernel.org/patchwork/patch/1062995/> for this already as part
+>>>>>>>> of drivers/platform/chrome/, but Enric Balletbo i Serra, the maintainer,
+>>>>>>>> had the reasonable suggestion of trying to move this into the USB subsystem.
+>>>>>>>
+>>>>>>> Correct suggestion.
+>>>>>>>
+>>>>>>>> Has anything like this been done before? Do you have any preliminary
+>>>>>>>> thoughts on this before I start writing code? A few things that I haven't
+>>>>>>>> figured out yet:
+>>>>>>>> - How to make this feature only available on certain devices. Using device
+>>>>>>>> tree? Kconfig? Making a separate driver just for this device that plugs
+>>>>>>>> into the USB core?
+>>>>>>>> - The feature is only supported on some USB ports, so we need a way of
+>>>>>>>> filtering on a per-port basis.
+>>>>>>>
+>>>>>>> Look at the drivers/usb/typec/ code, I think that should do everything
+>>>>>>> you need here as this is a typec standard functionality, right?
+>>>>>>
+>>>>>> Unfortunately this is for USB 2.0 ports, so it's not type-C.
+>>>>>> Is the type-C code still worth looking at?
+>>>>>
+>>>>> If this is for USB 2, does it use the "non-standard" hub commands to
+>>>>> turn on and off power?  If so, why not just use the usbreset userspace
+>>>>> program for that?
+>>>>
+>>>> It does not use the standard hub commands. The USB ports are controlled
+>>>> by an Embedded Controller (EC), so to control this policy we send a command
+>>>> to the EC. Since the command to send to the EC is very specific, this would need
+>>>> to go into a "hub driver" unique for these Wilco devices. We would make it so
+>>>> that the normal hub registration is intercepted by something that sees this is a
+>>>> Wilco device, and instead register the hub as a "wilco-hub", which has its own
+>>>> special "power_share" sysfs attribute, but still is treated as a normal USB hub
+>>>> otherwise?
+>>>>
+>>>
+>>>
+>>> I would say it is somewhat similar to the USB port power control which
+>>> eventually calls into usb_acpi_set_power_state() but in this case it only
+>>> affects the behavior when the system is NOT running.
 >>
->> In this patch, vhci supports SG regardless of whether the server's
->> host controller supports SG or not, because stub driver splits SG
->> list into several URBs if the server's host controller doesn't
->> support SG.
+>> Ok, if this is when the system is not running, why does Linux need to be
+>> involved at all?
 >>
->> To support SG, vhci sets URB_DMA_MAP_SG flag in transfer_flags of
->> usbip header if URB has SG list and this flag will tell stub driver
->> to use SG list.
+>> And if Linux is running, why not just follow the USB spec and not create
+>> your own craziness?
 >>
->> vhci sends each SG list entry to stub driver. Then, stub driver sees
->> the total length of the buffer and allocates SG table and pages
->> according to the total buffer length calling sgl_alloc(). After stub
->> driver receives completed URB, it again sends each SG list entry to
->> vhci.
+>>> This design has a standalone USB charge power controller on the board
+>>> that passes through the USB2 D+/D- pins from one port and is able to do
+>>> BC1.2 negotiation when the host controller is not powered, assuming
+>>> the chip has been enabled by the Embedded Controller.
 >>
->> If the server's host controller doesn't support SG, stub driver
->> breaks a single SG request into several URBs and submits them to
->> the server's host controller. When all the split URBs are completed,
->> stub driver reassembles the URBs into a single return command and
->> sends it to vhci.
+>> So it does follow the spec?  Or does not?  I can't determine here.
 >>
->> Moreover, in the situation where vhci supports SG, but stub driver
->> does not, or vice versa, usbip works normally. Because there is no
->> protocol modification, there is no problem in communication between
->> server and client even if the one has a kernel without SG support.
->>
->> In the case of vhci supports SG and stub driver doesn't, because
->> vhci sends only the total length of the buffer to stub driver as
->> it did before the patch applied, stub driver only needs to allocate
->> the required length of buffers using only kmalloc() regardless of
->> whether vhci supports SG or not. But stub driver has to allocate
->> buffer with kmalloc() as much as the total length of SG buffer which
->> is quite huge when vhci sends SG request, so it has overhead in
->> buffer allocation in this situation.
->>
->> If stub driver needs to send data buffer to vhci because of IN pipe,
->> stub driver also sends only total length of buffer as metadata and
->> then sends real data as vhci does. Then vhci receive data from stub
->> driver and store it to the corresponding buffer of SG list entry.
->>
->> And for the case of stub driver supports SG and vhci doesn't, since
->> the USB storage driver checks that vhci doesn't support SG and sends
->> the request to stub driver by splitting the SG list into multiple
->> URBs, stub driver allocates a buffer for each URB with kmalloc() as
->> it did before this patch.
->>
->> * Test environment
->>
->> Test uses two difference machines and two different kernel version
->> to make mismatch situation between the client and the server where
->> vhci supports SG, but stub driver does not, or vice versa. All tests
->> are conducted in both full SG support that both vhci and stub support
->> SG and half SG support that is the mismatch situation. Test kernel
->> version is 5.3-rc6 with commit "usb: add a HCD_DMA flag instead of
->> guestimating DMA capabilities" to avoid unnecessary DMA mapping and
->> unmapping.
->>
->>   - Test kernel version
->>      - 5.3-rc6 with SG support
->>      - 5.1.20-200.fc29.x86_64 without SG support
->>
->> * SG support test
->>
->>   - Test devices
->>      - Super-speed storage device - SanDisk Ultra USB 3.0
->>      - High-speed storage device - SMI corporation USB 2.0 flash drive
->>
->>   - Test description
->>
->> Test read and write operation of mass storage device that uses the
->> BULK transfer. In test, the client reads and writes files whose size
->> is over 1G and it works normally.
->>
->> * Regression test
->>
->>   - Test devices
->>      - Super-speed device - Logitech Brio webcam
->>      - High-speed device  - Logitech C920 HD Pro webcam
->>      - Full-speed device  - Logitech bluetooth mouse
->>                           - Britz BR-Orion speaker
->>      - Low-speed device   - Logitech wired mouse
->>
->>   - Test description
->>
->> Moving and click test for mouse. To test the webcam, use gnome-cheese.
->> To test the speaker, play music and video on the client. All works
->> normally.
->>
->> * VUDC compatibility test
->>
->> VUDC also works well with this patch. Tests are done with two USB
->> gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
->>
->>          1. Serial gadget
->>          2. Mass storage gadget
->>
->>   - Serial gadget test
->>
->> Serial gadget on the host sends and receives data using cat command
->> on the /dev/ttyGS<N>. The client uses minicom to communicate with
->> the serial gadget.
->>
->>   - Mass storage gadget test
->>
->> After connecting the gadget with vhci, use "dd" to test read and
->> write operation on the client side.
->>
->> Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
->> Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
->>
->> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
->> ---
->> v7 - v8
->> - Modify the commit log which describes URB_DMA_MAP_SG flag setting.
->>
->> v6 - v7
->> - Move the flag set in setup_cmd_submit_pdu() of vhci_tx.c and
->>    manipulate usbip header flag instead of urb->transfer_flags.
->>
->> - Remove clearing URB_DMA_MAP_SG flag in vhci_rx.
 > 
-> setup_cmd_submit_pdu() is just for pdu and shouldn't be concerned
-> about the urb.
 > 
-> Please keep the URB_DMA_MAP_SG setting in urb->transfer_flags.
-> That mean you are restoring v6 code change with the commit log
-> updates from v8.
+> I didn't realize the part had a public datasheet:
+> https://www.dialog-semiconductor.com/sites/default/files/xslgc55544cr105_09292017.pdf
+> 
+> It is really only concerned with following the BC1.2 spec and not
+> interfering with the USB protocol part.
 > 
 
-I mean v6 with my comments on v6 addressed, moving setting the flag
-after kalloc() and other comments.
+Without knowing the internal design, but having more infor now, looks to me that
+should be modelled more as a kind of power supply? Maybe something similar to
+UCS1002-2 device (drivers/power/supply/ucs1002_power.c) but behind the EC?
 
-thanks,
--- Shuah
+Cheers,
+ Enric
 
+> 
+>> If the EC is in charge of all of this, why does Linux need to get
+>> involved?
+>>
+> 
+> Only because we are looking to expose a policy to control the behavior
+> of this chip at the OS level.
+> 
+> Most systems would put this in as an option in the BIOS but we do
+> not have setup menus on Chrome OS and we want to have the policy
+> controlled directly, preferably without resorting to an opaque interface
+> to a userspace utility.
+> 
+> To that end we have added a number of different EC controls and are
+> looking to fit them into the appropriate subsystems wherever possible.
+> As you can see they don't always fit naturally..
+> 
+> 
+>>>>> And how are you turning a USB 2 port into a power source?  That feels
+>>>>> really odd given the spec.  Is this part of the standard somewhere or
+>>>>> just a firmware/hardware hack that you are adding to a device?
+>>>>
+>>>> The EC twiddles something in the port' HW so that the port turns into a
+>>>> DCP (Dedicated Charging Port) and only supplies power, not data. So I
+>>>> think yes, this is a bit of a hack that does not conform to the spec.
+>>>>
+>>>>>
+>>>>> Is there some port information in the firmware that describes this
+>>>>> functionality?  If so, can you expose it through sysfs to the port that
+>>>>> way?
+>>>>
+>>>> [I'm not sure I'm answering your question, but] I believe that we could
+>>>> make the BIOS firmware describe the USB ports' capabilities, and the
+>>>> kernel's behavior would be gated upon what the firmware reports. I see
+>>>> that struct usb_port already contains a "quirks" field, should we add a
+>>>> POWER_SHARE quirk to include/linux/usb/quirks.h? I would guess that
+>>>> should that should be reserved for quirks shared between many USB
+>>>> devices/hubs?
+>>>
+>>> We could add a Device Property to the affected USB port in ACPI and
+>>> describe it that way, similar to other properties like 'vcc-supply', 'clocks',
+>>> 'vbus-detect', etc and hook it into the phy-generic driver.
+>>>
+>>> However I'm not clear on whether the phy driver binding works with XHCI
+>>> when using ACPI, so this may not be an appropriate place either.
+>>
+>> Why would you have DT involved if you are using acpi?  :)
+>>
+> 
+> This would come in via the _DSD method of passing parameters to
+> specific ACPI devices.
+> 
+> 
+> -duncan
+> 
