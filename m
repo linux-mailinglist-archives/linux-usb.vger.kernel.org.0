@@ -2,54 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F7C9DA29
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 01:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C439DB71
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 03:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727338AbfHZXwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Aug 2019 19:52:45 -0400
-Received: from host186.181-15-205.telecom.net.ar ([181.15.205.186]:52004 "EHLO
-        ulises.msaludjujuy.gov.ar" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726020AbfHZXwl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 19:52:41 -0400
-X-Greylist: delayed 347 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Aug 2019 19:52:37 EDT
-Received: by ulises.msaludjujuy.gov.ar (Postfix, from userid 5001)
-        id 4064B600C4; Mon, 26 Aug 2019 20:46:47 -0300 (-03)
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on ulises
-X-Spam-Level: 
-X-Spam-Status: No, score=-0.7 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
-        ALL_TRUSTED,BAYES_00,DEAR_SOMETHING,HK_SCAM_S7,LOTS_OF_MONEY autolearn=no
-        version=3.3.2
-Received: from www.msaludjujuy.gov.ar (localhost [127.0.0.1])
-        by ulises.msaludjujuy.gov.ar (Postfix) with ESMTP id 6616660E35;
-        Mon, 26 Aug 2019 19:18:16 -0300 (-03)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 26 Aug 2019 23:18:10 +0100
-From:   "Mr. Alfred Chow" <sunibrom@msaludjujuy.gov.ar>
-To:     undisclosed-recipients:;
-Subject: Business Proposal
-Reply-To: <cs7017640@gmail.com>
-Mail-Reply-To: <cs7017640@gmail.com>
-Message-ID: <8a1d4220812f714f2534b8b32954209e@msaludjujuy.gov.ar>
-X-Sender: sunibrom@msaludjujuy.gov.ar
-User-Agent: Roundcube Webmail/0.7.2
+        id S1728335AbfH0B6O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Aug 2019 21:58:14 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:37472 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727646AbfH0B6O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Aug 2019 21:58:14 -0400
+X-IronPort-AV: E=Sophos;i="5.64,435,1559487600"; 
+   d="scan'208";a="24775755"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 27 Aug 2019 10:58:11 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 622B44156587;
+        Tue, 27 Aug 2019 10:58:11 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH v2] usb: host: ohci: fix a race condition between shutdown and irq
+Date:   Tue, 27 Aug 2019 10:56:31 +0900
+Message-Id: <1566870991-4870-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This patch fixes an issue that the following error is
+possible to happen when ohci hardware causes an interruption
+and the system is shutting down at the same time.
 
+[   34.851754] usb 2-1: USB disconnect, device number 2
+[   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
+[   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
+[   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+[   35.187886] Workqueue: usb_hub_wq hub_event
+[   35.192063] Call trace:
+[   35.194509]  dump_backtrace+0x0/0x150
+[   35.198165]  show_stack+0x14/0x20
+[   35.201475]  dump_stack+0xa0/0xc4
+[   35.204785]  __report_bad_irq+0x34/0xe8
+[   35.208614]  note_interrupt+0x2cc/0x318
+[   35.212446]  handle_irq_event_percpu+0x5c/0x88
+[   35.216883]  handle_irq_event+0x48/0x78
+[   35.220712]  handle_fasteoi_irq+0xb4/0x188
+[   35.224802]  generic_handle_irq+0x24/0x38
+[   35.228804]  __handle_domain_irq+0x5c/0xb0
+[   35.232893]  gic_handle_irq+0x58/0xa8
+[   35.236548]  el1_irq+0xb8/0x180
+[   35.239681]  __do_softirq+0x94/0x23c
+[   35.243253]  irq_exit+0xd0/0xd8
+[   35.246387]  __handle_domain_irq+0x60/0xb0
+[   35.250475]  gic_handle_irq+0x58/0xa8
+[   35.254130]  el1_irq+0xb8/0x180
+[   35.257268]  kernfs_find_ns+0x5c/0x120
+[   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
+[   35.265361]  sysfs_unmerge_group+0x20/0x68
+[   35.269454]  dpm_sysfs_remove+0x2c/0x68
+[   35.273284]  device_del+0x80/0x370
+[   35.276683]  hid_destroy_device+0x28/0x60
+[   35.280686]  usbhid_disconnect+0x4c/0x80
+[   35.284602]  usb_unbind_interface+0x6c/0x268
+[   35.288867]  device_release_driver_internal+0xe4/0x1b0
+[   35.293998]  device_release_driver+0x14/0x20
+[   35.298261]  bus_remove_device+0x110/0x128
+[   35.302350]  device_del+0x148/0x370
+[   35.305832]  usb_disable_device+0x8c/0x1d0
+[   35.309921]  usb_disconnect+0xc8/0x2d0
+[   35.313663]  hub_event+0x6e0/0x1128
+[   35.317146]  process_one_work+0x1e0/0x320
+[   35.321148]  worker_thread+0x40/0x450
+[   35.324805]  kthread+0x124/0x128
+[   35.328027]  ret_from_fork+0x10/0x18
+[   35.331594] handlers:
+[   35.333862] [<0000000079300c1d>] usb_hcd_irq
+[   35.338126] [<0000000079300c1d>] usb_hcd_irq
+[   35.342389] Disabling IRQ #156
 
+ohci_shutdown() disables all the interrupt and rh_state is set to
+OHCI_RH_HALTED. In other hand, ohci_irq() is possible to enable
+OHCI_INTR_SF and OHCI_INTR_MIE on ohci_irq(). Note that OHCI_INTR_SF
+is possible to be set by start_ed_unlink() which is called:
+ ohci_irq()
+  -> process_done_list()
+   -> takeback_td()
+    -> start_ed_unlink()
+
+So, ohci_irq() has the following condition, the issue happens by
+&ohci->regs->intrenable = OHCI_INTR_MIE | OHCI_INTR_SF and
+ohci->rh_state = OHCI_RH_HALTED:
+
+	/* interrupt for some other device? */
+	if (ints == 0 || unlikely(ohci->rh_state == OHCI_RH_HALTED))
+		return IRQ_NOTMINE;
+
+To fix the issue, ohci_shutdown() holds the spin lock while disabling
+the interruption and changing the rh_state flag to prevent reenable
+the OHCI_INTR_MIE unexpectedly. Note that io_watchdog_func() also
+calls the ohci_shutdown() and it already held the spin lock, so that
+the patch makes a new function as _ohci_shutdown().
+
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+Changes from v1:
+ - Add more comments in the commit log.
+https://patchwork.kernel.org/patch/11111459/
+
+ drivers/usb/host/ohci-hcd.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-hcd.c b/drivers/usb/host/ohci-hcd.c
+index b457fda..1fe3dee 100644
+--- a/drivers/usb/host/ohci-hcd.c
++++ b/drivers/usb/host/ohci-hcd.c
+@@ -419,8 +419,7 @@ static void ohci_usb_reset (struct ohci_hcd *ohci)
+  * other cases where the next software may expect clean state from the
+  * "firmware".  this is bus-neutral, unlike shutdown() methods.
+  */
+-static void
+-ohci_shutdown (struct usb_hcd *hcd)
++static void _ohci_shutdown(struct usb_hcd *hcd)
+ {
+ 	struct ohci_hcd *ohci;
+ 
+@@ -436,6 +435,16 @@ ohci_shutdown (struct usb_hcd *hcd)
+ 	ohci->rh_state = OHCI_RH_HALTED;
+ }
+ 
++static void ohci_shutdown(struct usb_hcd *hcd)
++{
++	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
++	unsigned long flags;
++
++	spin_lock_irqsave(&ohci->lock, flags);
++	_ohci_shutdown(hcd);
++	spin_unlock_irqrestore(&ohci->lock, flags);
++}
++
+ /*-------------------------------------------------------------------------*
+  * HC functions
+  *-------------------------------------------------------------------------*/
+@@ -760,7 +769,7 @@ static void io_watchdog_func(struct timer_list *t)
+  died:
+ 			usb_hc_died(ohci_to_hcd(ohci));
+ 			ohci_dump(ohci);
+-			ohci_shutdown(ohci_to_hcd(ohci));
++			_ohci_shutdown(ohci_to_hcd(ohci));
+ 			goto done;
+ 		} else {
+ 			/* No write back because the done queue was empty */
 -- 
-Dear Sir/Madam,
+2.7.4
 
-I am Alfred Cheuk Yu Chow, the Director for Credit & Marketing Chong 
-Hing Bank, Hong Kong, I have a Business Proposal of USD$$38,980,369.00 
-(Thirty Eight Million, Nine Hundred and Eighty Thousand, Three Hundred 
-and Sixty Nine USD) for you to transact with me Contact me via my email 
-address if interested: cs7017640@gmail.com
-
-Yours Sincerely,
-Alfred Chow
