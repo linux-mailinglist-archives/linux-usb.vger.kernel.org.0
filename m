@@ -2,257 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FB49E9A6
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 15:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96FCB9EA47
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728810AbfH0Nj1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 09:39:27 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43954 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726170AbfH0Nj0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Aug 2019 09:39:26 -0400
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id EFAC0C04B940
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 13:39:25 +0000 (UTC)
-Received: by mail-ed1-f71.google.com with SMTP id d64so11712120edd.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 06:39:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=d1SaRknkLL/EJY0+pdXY5AHU1pBmVLN+9XZ8ZbqDYZQ=;
-        b=bjE8fGJVfxrJhICcx1FUff+wKLDqgXc1Hqn9X804ne+z1kUWDqC2iIjcvPOD7SQJzT
-         YD6HI+sf9WVZO2x/k+HHcIQzcRZzYssDoNUgZOlUGL7FIpkF9tWCg9aMEDg3W/tisIdG
-         V6mp4/aOZ6g6Xf9KB209ra+qYx0NZDXnANc/fnEuKtQ2/G4yMR6U6EZXtlpRERL2rOA/
-         Ozi8gF4efdr5rhrnBbH8KlB0MPXG9QKp+S/Mu7Afmwmat50jqrfCg0a7RZBjTw/pvWOs
-         Xagzb0gHyKVxZQ7eMyRV4fu3TKMLIjQaFZWMWL8dQXIXVsjzBHXPuSaKY/NvygSSVpCu
-         LmKA==
-X-Gm-Message-State: APjAAAVOcKpVItNy7r0goW/Eph/P7CiDgaND490tcIvsmzfehJ2lq/b9
-        CH0vlef+CeDiCoVlk0BwsUsyvRFwGRxg6Gur04FZnkxpZHtIKL0KW8/kIS3kF04hO/LKcRHXol9
-        O8IZ6H6o00QZh7+kz/l4n
-X-Received: by 2002:a05:6402:1641:: with SMTP id s1mr23597615edx.52.1566913164735;
-        Tue, 27 Aug 2019 06:39:24 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwjtpiiPfBImX2s4eUS6RfKG3gsx2XLyeB8HMBFOJEybWF6GhRn9XiAu3sZUOFC+rOb8pRtsA==
-X-Received: by 2002:a05:6402:1641:: with SMTP id s1mr23597600edx.52.1566913164555;
-        Tue, 27 Aug 2019 06:39:24 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id y25sm1945643edt.29.2019.08.27.06.39.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Aug 2019 06:39:23 -0700 (PDT)
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH 2/2] usb: roles: intel: Enable static DRD mode for role
- switch
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, Saranya Gopal <saranya.gopal@intel.com>,
-        Balaji Manoharan <m.balaji@intel.com>
-References: <20190826143230.59807-1-heikki.krogerus@linux.intel.com>
- <20190826143230.59807-3-heikki.krogerus@linux.intel.com>
-Message-ID: <2a0d10b9-b21d-5bd6-9115-5a686bfbb701@redhat.com>
-Date:   Tue, 27 Aug 2019 15:39:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729579AbfH0OBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 10:01:02 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39858 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729471AbfH0OBB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 10:01:01 -0400
+Received: (qmail 30830 invoked by uid 2102); 27 Aug 2019 10:01:00 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Aug 2019 10:01:00 -0400
+Date:   Tue, 27 Aug 2019 10:01:00 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: host: ohci: fix a race condition between shutdown
+ and irq
+In-Reply-To: <1566877910-6020-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Message-ID: <Pine.LNX.4.44L0.1908271000430.1545-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20190826143230.59807-3-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Tue, 27 Aug 2019, Yoshihiro Shimoda wrote:
 
-On 26-08-19 16:32, Heikki Krogerus wrote:
-> From: Saranya Gopal <saranya.gopal@intel.com>
+> This patch fixes an issue that the following error is
+> possible to happen when ohci hardware causes an interruption
+> and the system is shutting down at the same time.
 > 
-> Enable static DRD mode in Intel platforms which guarantees
-> successful role switch all the time. This fixes issues like
-> software role switch failure after cold boot and issue with
-> role switch when USB 3.0 cable is used. But, do not enable
-> static DRD mode for Cherrytrail devices which rely on firmware
-> for role switch.
+> [   34.851754] usb 2-1: USB disconnect, device number 2
+> [   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
+> [   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
+> [   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
+> [   35.187886] Workqueue: usb_hub_wq hub_event
+> [   35.192063] Call trace:
+> [   35.194509]  dump_backtrace+0x0/0x150
+> [   35.198165]  show_stack+0x14/0x20
+> [   35.201475]  dump_stack+0xa0/0xc4
+> [   35.204785]  __report_bad_irq+0x34/0xe8
+> [   35.208614]  note_interrupt+0x2cc/0x318
+> [   35.212446]  handle_irq_event_percpu+0x5c/0x88
+> [   35.216883]  handle_irq_event+0x48/0x78
+> [   35.220712]  handle_fasteoi_irq+0xb4/0x188
+> [   35.224802]  generic_handle_irq+0x24/0x38
+> [   35.228804]  __handle_domain_irq+0x5c/0xb0
+> [   35.232893]  gic_handle_irq+0x58/0xa8
+> [   35.236548]  el1_irq+0xb8/0x180
+> [   35.239681]  __do_softirq+0x94/0x23c
+> [   35.243253]  irq_exit+0xd0/0xd8
+> [   35.246387]  __handle_domain_irq+0x60/0xb0
+> [   35.250475]  gic_handle_irq+0x58/0xa8
+> [   35.254130]  el1_irq+0xb8/0x180
+> [   35.257268]  kernfs_find_ns+0x5c/0x120
+> [   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
+> [   35.265361]  sysfs_unmerge_group+0x20/0x68
+> [   35.269454]  dpm_sysfs_remove+0x2c/0x68
+> [   35.273284]  device_del+0x80/0x370
+> [   35.276683]  hid_destroy_device+0x28/0x60
+> [   35.280686]  usbhid_disconnect+0x4c/0x80
+> [   35.284602]  usb_unbind_interface+0x6c/0x268
+> [   35.288867]  device_release_driver_internal+0xe4/0x1b0
+> [   35.293998]  device_release_driver+0x14/0x20
+> [   35.298261]  bus_remove_device+0x110/0x128
+> [   35.302350]  device_del+0x148/0x370
+> [   35.305832]  usb_disable_device+0x8c/0x1d0
+> [   35.309921]  usb_disconnect+0xc8/0x2d0
+> [   35.313663]  hub_event+0x6e0/0x1128
+> [   35.317146]  process_one_work+0x1e0/0x320
+> [   35.321148]  worker_thread+0x40/0x450
+> [   35.324805]  kthread+0x124/0x128
+> [   35.328027]  ret_from_fork+0x10/0x18
+> [   35.331594] handlers:
+> [   35.333862] [<0000000079300c1d>] usb_hcd_irq
+> [   35.338126] [<0000000079300c1d>] usb_hcd_irq
+> [   35.342389] Disabling IRQ #156
 > 
-> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-> Signed-off-by: Balaji Manoharan <m.balaji@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
->   .../usb/roles/intel-xhci-usb-role-switch.c    | 26 ++++++++++++++++++-
->   1 file changed, 25 insertions(+), 1 deletion(-)
+> ohci_shutdown() disables all the interrupt and rh_state is set to
+> OHCI_RH_HALTED. In other hand, ohci_irq() is possible to enable
+> OHCI_INTR_SF and OHCI_INTR_MIE on ohci_irq(). Note that OHCI_INTR_SF
+> is possible to be set by start_ed_unlink() which is called:
+>  ohci_irq()
+>   -> process_done_list()
+>    -> takeback_td()
+>     -> start_ed_unlink()
 > 
-> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> index 7325a84dd1c8..9101ff94c8d2 100644
-> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> @@ -19,6 +19,7 @@
->   #include <linux/module.h>
->   #include <linux/platform_device.h>
->   #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->   #include <linux/usb/role.h>
->   
->   /* register definition */
-> @@ -26,6 +27,9 @@
->   #define SW_VBUS_VALID			BIT(24)
->   #define SW_IDPIN_EN			BIT(21)
->   #define SW_IDPIN			BIT(20)
-> +#define SW_SWITCH_EN_CFG0		BIT(16)
-
-Nitpick: Please drop the _CFG0 postfix, if anything this
-should be a prefix applied to *all* defines for the bits
-in this register
-
-> +#define SW_DRD_STATIC_HOST_CFG0		1
-> +#define SW_DRD_STATIC_DEV_CFG0		2
-
-So bits 0-1 together define the drd-mode. The datasheet
-calls the combination DRD_CONFIG, without a SW_ prefix,
-with the following values being defined:
-
-00: Dynamic role-switch
-01: Static Host mode
-10: Static device mode
-11: Reserved
-
-Notice this is an enum, so the use of bit-ops to clear the
-other state below is wrong. It happens to work, but this is
-not how a multi-bit setting should be modified.
-
-I suggest using the following defines instead:
-
-#define DRD_CONFIG_DYNAMIC		0
-#define DRD_CONFIG_STATIC_HOST		1
-#define DRD_CONFIG_STATIC_DEVICE	2
-#define DRD_CONFIG_MASK			3
-
->   #define DUAL_ROLE_CFG1			0x6c
->   #define HOST_MODE			BIT(29)
-> @@ -37,6 +41,7 @@
->   struct intel_xhci_usb_data {
->   	struct usb_role_switch *role_sw;
->   	void __iomem *base;
-> +	bool disable_sw_switch;
-
-I would prefer for this to be enable_sw_switch and the negation
-when reading the property.
-
->   };
->   
->   static const struct software_node intel_xhci_usb_node = {
-> @@ -63,23 +68,39 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
->   
->   	pm_runtime_get_sync(dev);
->   
-> -	/* Set idpin value as requested */
-> +	/*
-> +	 * Set idpin value as requested.
-> +	 * Since some devices rely on firmware setting DRD_CONFIG and
-> +	 * SW_SWITCH_EN_CFG0 bits to be zero for role switch,
-> +	 * do not set these bits for those devices.
-> +	 */
->   	val = readl(data->base + DUAL_ROLE_CFG0);
->   	switch (role) {
->   	case USB_ROLE_NONE:
->   		val |= SW_IDPIN;
->   		val &= ~SW_VBUS_VALID;
-> +		val &= ~(SW_DRD_STATIC_DEV_CFG0 | SW_DRD_STATIC_HOST_CFG0);
->   		break;
-
-Right, so this should be:
-
-		val &= ~DRD_CONFIG_MASK;
-
-Also ideally this should also have a if (!data->disable_sw_switch)
-for consistency.
-
->   	case USB_ROLE_HOST:
->   		val &= ~SW_IDPIN;
->   		val &= ~SW_VBUS_VALID;
-> +		if (!data->disable_sw_switch) {
-> +			val &= ~SW_DRD_STATIC_DEV_CFG0;
-
-So this clearing is wrong, it happens to work, but is not
-how modifying a "bit-set" / enum should be done, this should be:
-
-			val &= ~DRD_CONFIG_MASK;
-
-> +			val |= SW_DRD_STATIC_HOST_CFG0;
-> +		}
->   		break;
->   	case USB_ROLE_DEVICE:
->   		val |= SW_IDPIN;
->   		val |= SW_VBUS_VALID;
-> +		if (!data->disable_sw_switch) {
-> +			val &= ~SW_DRD_STATIC_HOST_CFG0;
-> +			val |= SW_DRD_STATIC_DEV_CFG0;
-> +		}
-
-Idem.
-
-
->   		break;
->   	}
->   	val |= SW_IDPIN_EN;
-> +	if (!data->disable_sw_switch)
-> +		val |= SW_SWITCH_EN_CFG0;
-
-So we now have a lot of "if (!data->disable_sw_switch)" checks,
-
-IMHO it would be better / cleaner to do this:
-
-	u32 glk, val, drd_config;
-
-	...
-
-  	val = readl(data->base + DUAL_ROLE_CFG0);
-  	switch (role) {
-  	case USB_ROLE_NONE:
-  		val |= SW_IDPIN;
-  		val &= ~SW_VBUS_VALID;
-		drd_config = DRD_CONFIG_DYNAMIC;
-  		break;
-  	case USB_ROLE_HOST:
-  		val &= ~SW_IDPIN;
-  		val &= ~SW_VBUS_VALID;
-		drd_config = DRD_CONFIG_STATIC_HOST;
-  		break;
-  	case USB_ROLE_DEVICE:
-  		val |= SW_IDPIN;
-  		val |= SW_VBUS_VALID;
-		drd_config = DRD_CONFIG_STATIC_DEVICE;
-  		break;
-  	}
-  	val |= SW_IDPIN_EN;
-
-	if (!data->disable_sw_switch) {
-		val &= ~DRD_CONFIG_MASK;
-		val |= SW_SWITCH_EN_CFG0 | drd_config;
-	}
-
-	...
-
-Regards,
-
-Hans
-
-
-
->   
->   	writel(val, data->base + DUAL_ROLE_CFG0);
->   
-> @@ -156,6 +177,9 @@ static int intel_xhci_usb_probe(struct platform_device *pdev)
->   	sw_desc.allow_userspace_control = true,
->   	sw_desc.fwnode = software_node_fwnode(&intel_xhci_usb_node);
->   
-> +	data->disable_sw_switch = device_property_read_bool(dev,
-> +						"sw_switch_disable");
-> +
->   	data->role_sw = usb_role_switch_register(dev, &sw_desc);
->   	if (IS_ERR(data->role_sw)) {
->   		fwnode_handle_put(sw_desc.fwnode);
+> So, ohci_irq() has the following condition, the issue happens by
+> &ohci->regs->intrenable = OHCI_INTR_MIE | OHCI_INTR_SF and
+> ohci->rh_state = OHCI_RH_HALTED:
 > 
+> 	/* interrupt for some other device? */
+> 	if (ints == 0 || unlikely(ohci->rh_state == OHCI_RH_HALTED))
+> 		return IRQ_NOTMINE;
+> 
+> To fix the issue, ohci_shutdown() holds the spin lock while disabling
+> the interruption and changing the rh_state flag to prevent reenable
+> the OHCI_INTR_MIE unexpectedly. Note that io_watchdog_func() also
+> calls the ohci_shutdown() and it already held the spin lock, so that
+> the patch makes a new function as _ohci_shutdown().
+> 
+> This patch is inspired by a Renesas R-Car Gen3 BSP patch
+> from Tho Vu.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
