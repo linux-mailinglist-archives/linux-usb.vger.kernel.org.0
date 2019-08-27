@@ -2,115 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96FCB9EA47
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35E19EB3A
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729579AbfH0OBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 10:01:02 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39858 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729471AbfH0OBB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 10:01:01 -0400
-Received: (qmail 30830 invoked by uid 2102); 27 Aug 2019 10:01:00 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Aug 2019 10:01:00 -0400
-Date:   Tue, 27 Aug 2019 10:01:00 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: host: ohci: fix a race condition between shutdown
- and irq
-In-Reply-To: <1566877910-6020-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Message-ID: <Pine.LNX.4.44L0.1908271000430.1545-100000@iolanthe.rowland.org>
+        id S1727048AbfH0Oiv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 10:38:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725920AbfH0Oiu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Aug 2019 10:38:50 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 190D0206E0;
+        Tue, 27 Aug 2019 14:38:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566916729;
+        bh=RX5/aRj9H2SKktSTf8FU4051RdwF0HeNoFpgZaG3paY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=qG9uFQy67Akm60dUwavk7TUHxbn/fYlzhOt0Q53wSdaEFAmTozjraqLq3ZJc5gnc3
+         3IyrTZT2rmIR5nGBgO66tnXITCLOvzDZ0rPt9YH1dFKWEWMGZhMzOzhNuBT+K4UNGV
+         LlGD+q7x6fmd8dXld//sgepI5VNnjOUH0Dy8ljaU=
+Subject: Re: [PATCH v8] usbip: Implement SG support to vhci-hcd and stub
+ driver
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190826172348.23353-1-suwan.kim027@gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
+Date:   Tue, 27 Aug 2019 08:38:48 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20190826172348.23353-1-suwan.kim027@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 27 Aug 2019, Yoshihiro Shimoda wrote:
+On 8/26/19 11:23 AM, Suwan Kim wrote:
+> There are bugs on vhci with usb 3.0 storage device. In USB, each SG
+> list entry buffer should be divisible by the bulk max packet size.
+> But with native SG support, this problem doesn't matter because the
+> SG buffer is treated as contiguous buffer. But without native SG
+> support, USB storage driver breaks SG list into several URBs and the
+> error occurs because of a buffer size of URB that cannot be divided
+> by the bulk max packet size. The error situation is as follows.
+> 
+> When USB Storage driver requests 31.5 KB data and has SG list which
+> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
+> reason. USB Storage driver splits this SG list into several URBs
+> because VHCI doesn't support SG and sends them separately. So the
+> first URB buffer size is 3584 bytes. When receiving data from device,
+> USB 3.0 device sends data packet of 1024 bytes size because the max
+> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
+> But the first URB buffer has only 3584 bytes buffer size. So host
+> controller terminates the transfer even though there is more data to
+> receive. So, vhci needs to support SG transfer to prevent this error.
+> 
+> In this patch, vhci supports SG regardless of whether the server's
+> host controller supports SG or not, because stub driver splits SG
+> list into several URBs if the server's host controller doesn't
+> support SG.
+> 
+> To support SG, vhci sets URB_DMA_MAP_SG flag in transfer_flags of
+> usbip header if URB has SG list and this flag will tell stub driver
+> to use SG list.
+> 
+> vhci sends each SG list entry to stub driver. Then, stub driver sees
+> the total length of the buffer and allocates SG table and pages
+> according to the total buffer length calling sgl_alloc(). After stub
+> driver receives completed URB, it again sends each SG list entry to
+> vhci.
+> 
+> If the server's host controller doesn't support SG, stub driver
+> breaks a single SG request into several URBs and submits them to
+> the server's host controller. When all the split URBs are completed,
+> stub driver reassembles the URBs into a single return command and
+> sends it to vhci.
+> 
+> Moreover, in the situation where vhci supports SG, but stub driver
+> does not, or vice versa, usbip works normally. Because there is no
+> protocol modification, there is no problem in communication between
+> server and client even if the one has a kernel without SG support.
+> 
+> In the case of vhci supports SG and stub driver doesn't, because
+> vhci sends only the total length of the buffer to stub driver as
+> it did before the patch applied, stub driver only needs to allocate
+> the required length of buffers using only kmalloc() regardless of
+> whether vhci supports SG or not. But stub driver has to allocate
+> buffer with kmalloc() as much as the total length of SG buffer which
+> is quite huge when vhci sends SG request, so it has overhead in
+> buffer allocation in this situation.
+> 
+> If stub driver needs to send data buffer to vhci because of IN pipe,
+> stub driver also sends only total length of buffer as metadata and
+> then sends real data as vhci does. Then vhci receive data from stub
+> driver and store it to the corresponding buffer of SG list entry.
+> 
+> And for the case of stub driver supports SG and vhci doesn't, since
+> the USB storage driver checks that vhci doesn't support SG and sends
+> the request to stub driver by splitting the SG list into multiple
+> URBs, stub driver allocates a buffer for each URB with kmalloc() as
+> it did before this patch.
+> 
+> * Test environment
+> 
+> Test uses two difference machines and two different kernel version
+> to make mismatch situation between the client and the server where
+> vhci supports SG, but stub driver does not, or vice versa. All tests
+> are conducted in both full SG support that both vhci and stub support
+> SG and half SG support that is the mismatch situation. Test kernel
+> version is 5.3-rc6 with commit "usb: add a HCD_DMA flag instead of
+> guestimating DMA capabilities" to avoid unnecessary DMA mapping and
+> unmapping.
+> 
+>   - Test kernel version
+>      - 5.3-rc6 with SG support
+>      - 5.1.20-200.fc29.x86_64 without SG support
+> 
+> * SG support test
+> 
+>   - Test devices
+>      - Super-speed storage device - SanDisk Ultra USB 3.0
+>      - High-speed storage device - SMI corporation USB 2.0 flash drive
+> 
+>   - Test description
+> 
+> Test read and write operation of mass storage device that uses the
+> BULK transfer. In test, the client reads and writes files whose size
+> is over 1G and it works normally.
+> 
+> * Regression test
+> 
+>   - Test devices
+>      - Super-speed device - Logitech Brio webcam
+>      - High-speed device  - Logitech C920 HD Pro webcam
+>      - Full-speed device  - Logitech bluetooth mouse
+>                           - Britz BR-Orion speaker
+>      - Low-speed device   - Logitech wired mouse
+> 
+>   - Test description
+> 
+> Moving and click test for mouse. To test the webcam, use gnome-cheese.
+> To test the speaker, play music and video on the client. All works
+> normally.
+> 
+> * VUDC compatibility test
+> 
+> VUDC also works well with this patch. Tests are done with two USB
+> gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
+> 
+>          1. Serial gadget
+>          2. Mass storage gadget
+> 
+>   - Serial gadget test
+> 
+> Serial gadget on the host sends and receives data using cat command
+> on the /dev/ttyGS<N>. The client uses minicom to communicate with
+> the serial gadget.
+> 
+>   - Mass storage gadget test
+> 
+> After connecting the gadget with vhci, use "dd" to test read and
+> write operation on the client side.
+> 
+> Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
+> Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
+> 
+> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> ---
+> v7 - v8
+> - Modify the commit log which describes URB_DMA_MAP_SG flag setting.
+> 
+> v6 - v7
+> - Move the flag set in setup_cmd_submit_pdu() of vhci_tx.c and
+>    manipulate usbip header flag instead of urb->transfer_flags.
+> 
+> - Remove clearing URB_DMA_MAP_SG flag in vhci_rx.
 
-> This patch fixes an issue that the following error is
-> possible to happen when ohci hardware causes an interruption
-> and the system is shutting down at the same time.
-> 
-> [   34.851754] usb 2-1: USB disconnect, device number 2
-> [   35.166658] irq 156: nobody cared (try booting with the "irqpoll" option)
-> [   35.173445] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted 5.3.0-rc5 #85
-> [   35.179964] Hardware name: Renesas Salvator-X 2nd version board based on r8a77965 (DT)
-> [   35.187886] Workqueue: usb_hub_wq hub_event
-> [   35.192063] Call trace:
-> [   35.194509]  dump_backtrace+0x0/0x150
-> [   35.198165]  show_stack+0x14/0x20
-> [   35.201475]  dump_stack+0xa0/0xc4
-> [   35.204785]  __report_bad_irq+0x34/0xe8
-> [   35.208614]  note_interrupt+0x2cc/0x318
-> [   35.212446]  handle_irq_event_percpu+0x5c/0x88
-> [   35.216883]  handle_irq_event+0x48/0x78
-> [   35.220712]  handle_fasteoi_irq+0xb4/0x188
-> [   35.224802]  generic_handle_irq+0x24/0x38
-> [   35.228804]  __handle_domain_irq+0x5c/0xb0
-> [   35.232893]  gic_handle_irq+0x58/0xa8
-> [   35.236548]  el1_irq+0xb8/0x180
-> [   35.239681]  __do_softirq+0x94/0x23c
-> [   35.243253]  irq_exit+0xd0/0xd8
-> [   35.246387]  __handle_domain_irq+0x60/0xb0
-> [   35.250475]  gic_handle_irq+0x58/0xa8
-> [   35.254130]  el1_irq+0xb8/0x180
-> [   35.257268]  kernfs_find_ns+0x5c/0x120
-> [   35.261010]  kernfs_find_and_get_ns+0x3c/0x60
-> [   35.265361]  sysfs_unmerge_group+0x20/0x68
-> [   35.269454]  dpm_sysfs_remove+0x2c/0x68
-> [   35.273284]  device_del+0x80/0x370
-> [   35.276683]  hid_destroy_device+0x28/0x60
-> [   35.280686]  usbhid_disconnect+0x4c/0x80
-> [   35.284602]  usb_unbind_interface+0x6c/0x268
-> [   35.288867]  device_release_driver_internal+0xe4/0x1b0
-> [   35.293998]  device_release_driver+0x14/0x20
-> [   35.298261]  bus_remove_device+0x110/0x128
-> [   35.302350]  device_del+0x148/0x370
-> [   35.305832]  usb_disable_device+0x8c/0x1d0
-> [   35.309921]  usb_disconnect+0xc8/0x2d0
-> [   35.313663]  hub_event+0x6e0/0x1128
-> [   35.317146]  process_one_work+0x1e0/0x320
-> [   35.321148]  worker_thread+0x40/0x450
-> [   35.324805]  kthread+0x124/0x128
-> [   35.328027]  ret_from_fork+0x10/0x18
-> [   35.331594] handlers:
-> [   35.333862] [<0000000079300c1d>] usb_hcd_irq
-> [   35.338126] [<0000000079300c1d>] usb_hcd_irq
-> [   35.342389] Disabling IRQ #156
-> 
-> ohci_shutdown() disables all the interrupt and rh_state is set to
-> OHCI_RH_HALTED. In other hand, ohci_irq() is possible to enable
-> OHCI_INTR_SF and OHCI_INTR_MIE on ohci_irq(). Note that OHCI_INTR_SF
-> is possible to be set by start_ed_unlink() which is called:
->  ohci_irq()
->   -> process_done_list()
->    -> takeback_td()
->     -> start_ed_unlink()
-> 
-> So, ohci_irq() has the following condition, the issue happens by
-> &ohci->regs->intrenable = OHCI_INTR_MIE | OHCI_INTR_SF and
-> ohci->rh_state = OHCI_RH_HALTED:
-> 
-> 	/* interrupt for some other device? */
-> 	if (ints == 0 || unlikely(ohci->rh_state == OHCI_RH_HALTED))
-> 		return IRQ_NOTMINE;
-> 
-> To fix the issue, ohci_shutdown() holds the spin lock while disabling
-> the interruption and changing the rh_state flag to prevent reenable
-> the OHCI_INTR_MIE unexpectedly. Note that io_watchdog_func() also
-> calls the ohci_shutdown() and it already held the spin lock, so that
-> the patch makes a new function as _ohci_shutdown().
-> 
-> This patch is inspired by a Renesas R-Car Gen3 BSP patch
-> from Tho Vu.
-> 
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+setup_cmd_submit_pdu() is just for pdu and shouldn't be concerned
+about the urb.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Please keep the URB_DMA_MAP_SG setting in urb->transfer_flags.
+That mean you are restoring v6 code change with the commit log
+updates from v8.
 
+This flag belongs with urb and not the cmd.submit. Having it in
+urb also helps when we debug and dump the urb from usbip_dump_urb()
+
+thanks,
+-- Shuah
