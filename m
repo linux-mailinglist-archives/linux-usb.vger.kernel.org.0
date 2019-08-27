@@ -2,168 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F29149E2E2
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 10:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D00D9E3D3
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 11:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729675AbfH0Ikw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 04:40:52 -0400
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:52060 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729671AbfH0Ikw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 04:40:52 -0400
-Received: by mail-wm1-f52.google.com with SMTP id k1so2159438wmi.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 01:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Sfr1A2Q5nePVt6BnZgP7jzycMTLI6jQm0IPnY1PgPlU=;
-        b=AWij5t2a+Wi+qN9OBjuth3hJJj8N5YXbUDabeCGg5kL8i1iGPSP9ORlyl2yeFfsCmZ
-         u2uEmn9+HRIqFHyIeY0J+tiwSokVuPC9nFIN3fWEipS8dWzGKrmY50ia9JB87vAXtzIV
-         eC3VBWKXo0BQa+exkijfqjb0zrlTvOkwC3Uwb7Sm5qA4Q8shXXRzDnSAS703F8W4Kgmh
-         e8Woz3pWIFX9V3XKMI/j+Fsj6R+SekAHiw0B7AE10Q7BMav/caqmQi65RU6izcXuieII
-         Vy3nzI1tL2ub5NFBU70fhp/hv2waUGSPQi2JSZsb1kXdcIhsYn8/fY9eOH79Ccvs1XnO
-         A6aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Sfr1A2Q5nePVt6BnZgP7jzycMTLI6jQm0IPnY1PgPlU=;
-        b=QwF2bJ2uPzECip5f97oQJoujl3e/JHjErcRJf2yXaQ4ErMpAJTEkg/8DRxgh+IwSbT
-         IDLrObK6wifneByXkEm/+5uTgKbspa31HOGSzpvmkaux4kZh1Fopkdi5fpfyN9GCPVou
-         5z6EH0VbWALm47fboExwrWqiQTc2PfTkzwvvmFM64gEwdE0sbjkZ1GONMjJ0WxJ4cmRY
-         08UcZqDT1IX/umJ8qACFt9bfCDnAGdSiV8lcX2Oh8HLDsfWB5mbkJTj6Sx8xjeI15oMo
-         dTqnKJqmCH/Bj15sWSveCEe7qwaHFJnjhDOJGNBFl0LbLMlfoWMGSDpXif6bopREFbHu
-         TmmA==
-X-Gm-Message-State: APjAAAUwMARqyT7kagsRIXBy/bhSTFsOnruy0XfDXBhSWfquTmIUr4gS
-        piq7obrYuTazCFawy1NKo2vWjgdjX9Wu16o3dM8=
-X-Google-Smtp-Source: APXvYqwkfhF6PeBnJud5aL8K6bYCS6UJxLUKhxZqExReULabMioXRTBsxipJjZhI9EFhh+LnHAxISLC6Is4sOgEcR+U=
-X-Received: by 2002:a1c:a985:: with SMTP id s127mr26261540wme.163.1566895249915;
- Tue, 27 Aug 2019 01:40:49 -0700 (PDT)
+        id S1729220AbfH0JTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 05:19:34 -0400
+Received: from sonic313-13.consmr.mail.bf2.yahoo.com ([74.6.133.123]:41459
+        "EHLO sonic313-13.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725805AbfH0JTe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 05:19:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1566897572; bh=yqDabFs/2ajL4+uqvl75CNrBfWTfbOsHh54Xr0A4zFM=; h=Date:From:Reply-To:Subject:From:Subject; b=C6dap/RfLrk/cntXBvLS87DmoED1nXnVf3cqkYtd9Er0e7UolW6OSB6u0Z15I5PwBxKBaS9xb9sam3yK2+Bgs/oR+GQFue+DPK8rtlKdQOGFNf0OA09Es6R4AXp9lWWbjgCxDsa6EPUPO1IHEkSZ4vWpzCPYFGu5HsBzB1VxKgRtMzWIrAG/71RMfBh3mKzmxNV5O9Cia/YUAwRSJVKhl4veGFQDGA9bCMdOzeqMrxbeb0UQQ5AWP5jfnHorwwbXSxKPWRKJXwvzVDt0av/kUTxQ5y5TC1LWOSC5naov0c1p5LGXlnl0CJLDjUBsP7YiGFlta4GINTCTLl2BfqLlUQ==
+X-YMail-OSG: UZ5CBhgVM1mpP5mMN_fOTiMOOJ7Fpk_MTTERi8A3TNSUIvs3BIzZ.FYrHzNkEvo
+ Kma77TnOyRTe_k874DG_XI4VKG8XQLqsSRhilbfjKpoFddq8FQnn7c7YKgb87guJ3NJ.lYtlW9R5
+ QGKyyWwckhofBYx5hW5tIXS9lct59aD5xXGiOLwg6P7ZsSEq63VldaIiINmxvIorZECmXcc02kha
+ Q9UGS_XhFqjY5_SASND8vuC0KQ1RIZRnVXQ2YJ8r2.yoPqI2.UOzJlFeFOmKJ2Vl.Je9XODO0VpV
+ 9kOP3qKHTTH7aqstFPrFIGq0d2n3W040DpnLQXo4iUmURht9hQHdjDzp0LTTC1TVKuIg4tFoE.2d
+ 6w5A6kRzDSfmSYCIkoREY.2zDabfYyxiwft9KX5HTR9U563HfS5DncWOwZ2bL4gSV2VhD5LMDYHi
+ x1I8MtrvM7ZCuKv1zkQPBI4TM5mI8RjBngNokN6ZaTKKJ_Pg9ER_6bHhYxvzjR8eplzJTeodrP3B
+ N1c9XrXKrAcSHrMNRoIpCjhE37qy4M1F4gYvdAQ8aOv3zByig.KgKQRS1fi.ocoMEa_NvFeBlzha
+ h5I2sChBmZM.B.0Q2pFhE8v30pNRhm62QFsyNiY3ozK7LxSxG1g3RrALiDIA5cYCT1NMjIJ9ibNx
+ WgluOo_5WEP2hv2oSVQWTaZ7eb.R1d2QS6Hv0d.ky7DAOc_ZwvvzawtiEY0ctJCmidCkStC92kKo
+ cS_C3frNjppEGejO1xg_DnqmsyFev6JDWUOTDO.HWcQU4jhmSTJHrenozbZMeAoWgBRv0fyXOZgx
+ 3VAZtRrOzGmZtSzwDtEq50MOawmZvW8T.VEDJKNZk3.kGgnve1oNkxeg0_zGGYPcNpfttQngtsvh
+ P8AQe_sSYR_AUX2rYG86LeW_DlYmtMQuarluE99W7IAcGpc9d2j6P_.IO_eClK3A67FG6hL0kFXc
+ yHH.PBYwfJe057hLNnNxtZ.giTZuGWhA2eDm72RnIRG9Xo.fDwjsW8gu_FJJbcbJ7k6EsVPuFdY8
+ 8gUsmcmJfTfzXWMT1V8Da4vVSGIEjNhPTc7.Kzf.0u6xbAoCaH9cUlH9lrWdwRapGIL66Wox4UN2
+ 5HNYK9xJmphro4HTlm8kldPPpQxlNhYKrUUUMxHx0ETH0wzN7aH.6l3KkLMb5Bt.h5YfCatzumCp
+ L3H8ar9oiMIxHewvg57p9.ZeptWhJO1qOkchww4.8w2fj2PH9WOML2QMIOdxGsPJG3g--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.bf2.yahoo.com with HTTP; Tue, 27 Aug 2019 09:19:32 +0000
+Date:   Tue, 27 Aug 2019 09:19:29 +0000 (UTC)
+From:   Elizabeth Edwards <mrselizabethedward1@gmail.com>
+Reply-To: ee3201366@gmail.com
+Message-ID: <2026022299.1863383.1566897569081@mail.yahoo.com>
+Subject: Dear Friend,
 MIME-Version: 1.0
-References: <20190702123006.11320-1-charlesyeh522@gmail.com> <20190716084907.GB10939@localhost>
-In-Reply-To: <20190716084907.GB10939@localhost>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Tue, 27 Aug 2019 16:40:39 +0800
-Message-ID: <CAAZvQQ5pJDmZ-F8E8AhGxNK6ohuq3ev8OnySE-+zQNThBcu3Ag@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B47=E6=9C=8816=E6=97=
-=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=884:49=E5=AF=AB=E9=81=93=EF=BC=9A
-> >  #define PL2303_FLOWCTRL_MASK         0xf0
-> > +#define PL2303_HXN_FLOWCTRL_MASK     0x1C
-> > +#define PL2303_HXN_FLOWCTRL          0x0A
->
-> I asked you to keep related defines together (and to move the mask where
-> the register define was, not the other way round). Please move these to
-> the other HXN defines below, and keep the register address defines
-> before the corresponding bit defines.
-
-Charles Ans:
-I am not 100% sure what you mean, please see if it is defined below
-
-#define PL2303_FLOWCTRL_MASK        0xf0
-
-#define PL2303_READ_TYPE_HX_STATUS    0x8080
-
-#define PL2303_HXN_CTRL_XON_XOFF    0x0C
-#define PL2303_HXN_CTRL_RTS_CTS        0x18
-#define PL2303_HXN_CTRL_NONE        0x1C
-#define PL2303_HXN_FLOWCTRL_MASK    0x1C
-#define PL2303_HXN_FLOWCTRL        0x0A
-
-#define PL2303_HXN_RESET_UP_DOWNSTREAM_DATA_PIPE    0x03
-#define PL2303_HXN_RESET_UP_DOWNSTREAM_DATA_PIPE_MASK    0x03
-#define PL2303_HXN_RESET_CONTROL    0x07
-
-> > +
-> > +#define PL2303_HXN_RESET_CONTROL_MASK        0x03
-> This makes no sense. The whole register is used for reset. If you want a
-> define that can be used for resetting both pipes then add two separate
-> defines for up and down respectively, and add a third define for
-> resetting both buffer as a bitwise OR of the two.
-
-Charles Ans:
-Yes,The whole register is used for reset.
-Bit 0 and bit 1 are used for up & downstream data pipe,
-Bit 2 for interface reset
-Bit 4 for chip reset.
-
-But I only reset bit 0 & bit 1.
 
 
-> Also move this one after the corresponding register address define
-> below.
->
-> > +#define PL2303_HXN_RESET_CONTROL     0x07
-> > +#define PL2303_HXN_CTRL_XON_XOFF     0x0C
-> > +#define PL2303_HXN_CTRL_RTS_CTS              0x18
-> > +#define PL2303_HXN_CTRL_NONE         0x1C
+Dear Friend,
 
-Charles Ans:
-I am not 100% sure what you mean, please see if it is defined below
+Please forgive me for stressing you with my predicaments as I know that thi=
+s letter may come to you as big surprise. Actually, as my pastor advised me=
+ to reject earthly reward and thanks by handing the project to someone I ha=
+ve never seen or met for a greater reward in heaven awaits for whoever can =
+give such a costly donation. I came across your E-mail from my personal sea=
+rch, and I decided to email you directly believing that you will be honest =
+to fulfill my final wish before or after my death.
 
-#define PL2303_FLOWCTRL_MASK        0xf0
+Meanwhile, I am Madam Elizabeth Edwards, 73 years, am from USA, still child=
+less. I am suffering from Adenocarcinoma Cancer of the lungs for the past 8=
+ years and from all indication my condition is really deteriorating as my d=
+octors have confirmed and courageously advised me that I may not live beyon=
+d 2 weeks from now for the reason that my tumor has reached a critical stag=
+e which has defiled all forms of medical treatment.
 
-#define PL2303_READ_TYPE_HX_STATUS    0x8080
+Since my days are numbered, I=E2=80=99ve decided willingly to fulfill my lo=
+ng-time vow to donate to the underprivileged the sum of Eighteen million fi=
+ve hundred thousand dollars ($18.5m) I deposited in a different account ove=
+r 8 years now because I have tried to handle this project by myself but I h=
+ave seen that my health could not allow me to do so anymore. My promise for=
+ the poor includes building of well-equipped charity foundation hospital an=
+d a technical school for their survival.
 
-#define PL2303_HXN_CTRL_XON_XOFF    0x0C
-#define PL2303_HXN_CTRL_RTS_CTS        0x18
-#define PL2303_HXN_CTRL_NONE        0x1C
-#define PL2303_HXN_FLOWCTRL_MASK    0x1C
-#define PL2303_HXN_FLOWCTRL        0x0A
+If you will be honest, kind and willing to assist me handle this charity pr=
+oject as I=E2=80=99ve mentioned here, I will like you to provide me your pe=
+rsonal data like. Contact me through this email address (elisabethe1981@mai=
+l.com) and also send me your private email address.
 
-#define PL2303_HXN_RESET_UP_DOWNSTREAM_DATA_PIPE    0x03
-#define PL2303_HXN_RESET_UP_DOWNSTREAM_DATA_PIPE_MASK    0x03
-#define PL2303_HXN_RESET_CONTROL    0x07
+(1) Your full name:
+(2) country:
+(3) phone number:
+(4) Age:
 
-> > +     } else if (spriv->type =3D=3D &pl2303_type_data[TYPE_HXN]) {
-> >               /* reset upstream data pipes */
->
-> This comment belongs in the last else block. Your new code shouldn't
-> need one.
-
-Charles Ans:
-OK, I will remove this comment.
-
-
->
-> > +             pl2303_update_reg(serial, PL2303_HXN_RESET_CONTROL,
-> > +                             PL2303_HXN_RESET_CONTROL_MASK, 0x03);
->
-> So two things; first, do you really need to read back the current value?
-> I would assume that it always reads back as 0 and that writing 0x03 in
-> this case would be sufficient to reset both buffers.
->
-
-Charles Ans:
- Yes, I want to read back the current value.
-because the whole register is used for reset.
-Bit 0 and bit 1 are used for up & downstream data pipe,
-Bit 2 for interface reset
-Bit 4 for chip reset.
-
-But I only reset bit 0 & bit 1.
-
-> Second, please use a define for 0x03; no magic constants, as we have
-> discussed before. You don't need a separate mask define if you're always
-> resetting both buffers together (just use the same value define twice).
-
-Charles Ans:
-OK, I will define for 0x03.
-
-#define PL2303_HXN_RESET_UP_DOWNSTREAM_DATA_PIPE    0x03
-
-
-Charles Yeh.
+Best Regards!
+Mrs. Elizabeth Edwards
