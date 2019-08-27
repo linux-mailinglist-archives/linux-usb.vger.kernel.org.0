@@ -2,171 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A669E726
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 13:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8024D9E7AB
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 14:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727910AbfH0LzI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 07:55:08 -0400
-Received: from mga17.intel.com ([192.55.52.151]:44534 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725850AbfH0LzH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Aug 2019 07:55:07 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Aug 2019 04:55:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,437,1559545200"; 
-   d="asc'?scan'208";a="380013415"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Aug 2019 04:55:04 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Ran Wang <ran.wang_1@nxp.com>, Yinbo Zhu <yinbo.zhu@nxp.com>,
+        id S1726527AbfH0MQZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 08:16:25 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:53556 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726170AbfH0MQZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 08:16:25 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 10so2845177wmp.3
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 05:16:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:mime-version:message-id:in-reply-to
+         :references:user-agent:content-transfer-encoding;
+        bh=pU0lXL5v2+TfEcbDBaFqBB4HEseMI0PfB9qV53kie2U=;
+        b=LmAsZv/mq0KHO3X+ry/5ysAZwONa3RGEyT694iXRSw0CGvdySAdY4GH5kkNPD7HS7k
+         TEYfa/jK6hCZrE3b6816WgGV6fuPkZzqD4nh17/BwjsStTctQffjujy4nfdsf/kfd44w
+         CMFX7ZVACIi29XdllRrXnRXQFlNhfUKyVvdN7qK1l5OH++LM2iAGRT0YTtgy+DFzRS4j
+         dIZJsoY61Sw79NBRi4bWj4EtuPH/98XzUq1c5i1KRFQiTAFBkYIkMx6IUj8xbZrRHPIo
+         IrsyIceEz4hrqHAq3MXspIN9Ct9/e19Vlh4yXtOrWvFlojh8+KdI0oWSGdbNykIVqCKW
+         00sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:mime-version:message-id
+         :in-reply-to:references:user-agent:content-transfer-encoding;
+        bh=pU0lXL5v2+TfEcbDBaFqBB4HEseMI0PfB9qV53kie2U=;
+        b=I5ImMu6e/k8edLSX82Tijt+v9SvPBcZ7WFgRHqeyvywxSwnZi5FMejdFaUHbT4rLKC
+         SkfZmTxwnXxaZZTrPQiYPMeYUjjfVKec6CHC1ox7MflE8z7DayVZgSNOsRbAVr+ILUIz
+         x5sTgUb0b6Nnt5sk6zncRhxPyoD0Ana5qHY2Jbxi922AX/8pezmtm/hWVVK1SUMlqiOn
+         lKyxON4VZM12IsHeAqrMYmY3G/CMyXzJO6fiC1kqmMnBHGz9WXzWn3a6TsJdKQiIVKaB
+         g8QJ1JZkRf6xpel3lJY201TURyGBvVN0xrrHNssyLgphPUjh1mljkJqAWbRzRrMP0+VJ
+         gDbA==
+X-Gm-Message-State: APjAAAU/bTUbjnAfZf3OlwUo+DWtcY1CVvelT14Tt+MktwW01JqN3x2K
+        N09ncPbOZCJ/2YCj0M6N9X5w9msvvYA=
+X-Google-Smtp-Source: APXvYqwqrwEIaF4GWhDndW+OvoIvxiahrwYyryDBG/0B/AEPySBTSKs1IX5f0yXf9wv+KitoR9I30A==
+X-Received: by 2002:a7b:c453:: with SMTP id l19mr27357429wmi.106.1566908183390;
+        Tue, 27 Aug 2019 05:16:23 -0700 (PDT)
+Received: from localhost ([92.59.185.54])
+        by smtp.gmail.com with ESMTPSA id o25sm1993846wmc.36.2019.08.27.05.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 05:16:22 -0700 (PDT)
+From:   Vicente Bergas <vicencb@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Will Deacon <will.deacon@arm.com>,
+        MarcZyngier <marc.zyngier@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Matthias Brugger <mbrugger@suse.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Xiaobo Xie <xiaobo.xie@nxp.com>, Jiafei Pan <jiafei.pan@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v1] usb: dwc3: remove the call trace of USBx_GFLADJ
-In-Reply-To: <DB8PR04MB682695EEB3E358BDB3E2D5D0F1A00@DB8PR04MB6826.eurprd04.prod.outlook.com>
-References: <20190729064607.8131-1-yinbo.zhu@nxp.com> <875zn8nt31.fsf@gmail.com> <VI1PR04MB41580DBF1A0C2DC143EE9CE3E9D30@VI1PR04MB4158.eurprd04.prod.outlook.com> <87h86nvtqo.fsf@gmail.com> <VI1PR04MB4158B49129BE9E3C00997555E9AC0@VI1PR04MB4158.eurprd04.prod.outlook.com> <87v9uzt1dr.fsf@gmail.com> <DB8PR04MB682695EEB3E358BDB3E2D5D0F1A00@DB8PR04MB6826.eurprd04.prod.outlook.com>
-Date:   Tue, 27 Aug 2019 14:55:00 +0300
-Message-ID: <87sgpmx1pn.fsf@gmail.com>
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH] usb: dwc3: Add shutdown to =?iso-8859-1?Q?platform=5Fdriver?=
+Date:   Tue, 27 Aug 2019 14:16:20 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Message-ID: <645526b8-bfed-4cc6-9500-1843c5fe0da9@gmail.com>
+In-Reply-To: <87v9uix1sv.fsf@gmail.com>
+References: <4d18d4f7-a00e-bd60-6361-51054eba3bca@arm.com>
+ <20190817174140.6394-1-vicencb@gmail.com>
+ <8d48017a-64c5-4b25-8d85-113ffcf502c9@gmail.com> <87v9uix1sv.fsf@gmail.com>
+User-Agent: Trojita
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-
-Hi,
-
-Ran Wang <ran.wang_1@nxp.com> writes:
->> Yinbo Zhu <yinbo.zhu@nxp.com> writes:
->> >> Yinbo Zhu <yinbo.zhu@nxp.com> writes:
->> >> >> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> >> >> > index
->> >> >> > 98bce85c29d0..a133d8490322 100644
->> >> >> > --- a/drivers/usb/dwc3/core.c
->> >> >> > +++ b/drivers/usb/dwc3/core.c
->> >> >> > @@ -300,8 +300,7 @@ static void
->> >> >> > dwc3_frame_length_adjustment(struct
->> >> >> > dwc3 *dwc)
->> >> >> >
->> >> >> >       reg =3D dwc3_readl(dwc->regs, DWC3_GFLADJ);
->> >> >> >       dft =3D reg & DWC3_GFLADJ_30MHZ_MASK;
->> >> >> > -     if (!dev_WARN_ONCE(dwc->dev, dft =3D=3D dwc->fladj,
->> >> >> > -         "request value same as default, ignoring\n")) {
->> >> >> > +     if (dft !=3D dwc->fladj) {
->> >> >>
->> >> >> if the value isn't different, why do you want to change it?
->> >> >>
->> >> >> --
->> >> >> Balbi
->> >> > Hi Balbi,
->> >> >
->> >> > I don't change any value. I was remove that call trace.
->> >>
->> >> Sure you do. The splat only shows when you request a FLADJ value
->> >> that's the same as the one already in the register. The reason you
->> >> see the splat is because your requested value is what's already in th=
-e HW.
->> >>
->> >> So, again, why are you adding this device tree property if the value
->> >> is already the correct one?
->> >>
->> >> > In addition that GFLADJ_30MHZ value intial value is 0, and it's
->> >> > value must be 0x20, if not, usb will not work.
->> >>
->> >> it's not zero, otherwise the splat wouldn't trigger. You're
->> >> requesting the value that's already in your register by default.
->> >>
->> >> --
->> >> Balbi
->> >
->> > Hi Balbi,
->> >
->> > According that rm doc that GFLADJ_30MHZ has a default value is 0x20,
->> > when GFLADJ_30MHZ_REG_SEL is 0, this 0x20 is a hard-coded value.
->> >
->> > But in fact, that default value is 0, please you note!
->> >
->> > Then according that xhci spec 5.2.4, that register the sixth bit if is
->> > 0, then that can support Frame Lenth Timing value.
->> >
->> > So set GFLADJ_30MHZ_REG_SEL to 1 for use FLADJ, then I find that it
->> > must use 0x20 usb will work well, even thoug xhci can permit
->> > GFLADJ_30MHZ use other value
->>=20
->> You only get the splat because you try to sent GFLADJ to 0x20 and it's A=
-LREADY
->> 0x20. This means that you don't need the property in DTS.
->>=20
->> > In addition about what you said is about dts patch, and that patch had
->> > merged by upstream, patch owner isn't me,
->>=20
->> Well, then remove the setting from DTS, since clearly it's not needed.
+On Tuesday, August 27, 2019 1:53:04 PM CEST, Felipe Balbi wrote:
+> Hi,
 >
-> Please considering below scenarios on the same board which needs GFLADJ p=
-roperty on kernel DTS:
+> Vicente Bergas <vicencb@gmail.com> writes:
+>> On Saturday, August 17, 2019 7:41:40 PM CEST, Vicente Bergas wrote:
+>>> Otherwise the device keeps writing to memory after kexec and disturbs
+>>> the next kernel.
+...
 >
-> 1. Board boot to U-Boot first, then load kernel. In this case, we need ke=
-rnel DTS
->     help to get GFLADJ setting right, everything is as expected.
+> why don't you just have shutdown use the same exact function as remove?
+> Frankly, though, I still don't fully understand what's going wrong
+> here. Why is the device still alive during kexec?
 >
-> 2. Board boot to U-Boot console, then execute 'usb start' under U-Boot co=
-nsole to init
->     DWC3 controller, then load kernel. In this case, actually GFLADJ is c=
-orrectly
->     configured already, and the GFLADJ config double-checking is fine (be=
-cause kernel
->     cannot know if U-Boot has initialized it or not), but warning looks n=
-ot necessary.
->
-> 3. Board boot to kernel, GFLADJ get set from DTS, then system suspend & r=
-esume. In this case
->     when resuming, GFLADJ setting has been restored correctly, so here we=
- might not need
->     send out the warning message (double-checking might be fine).
->
-> So, what's your suggestion to remove this looks non-necessary warning mes=
-sage?
+> cheers
 
-now this is well explained! So the value in the register is *NOT* 0x20
-by default, however, u-boot _can_ use dwc3 if we're flashing, then it'll
-result in the splat.
+Hi Felipe,
+the remove and shutdown functions have different prototypes, so
+shutdown is wrapping remove.
+Would it be preferable to cast remove as shutdown?
 
-Okay, this is a valid scenario that the kernel should consider. I agree
-that we should remove the WARN() from there.
+The issue with kexec is that the device is being used during the livetime
+of the first kernel. When the first kernel executes kexec it calls the
+shutdown function of drivers (instead of remove). Because of this the dwc3
+device keeps doing things like DMA.
+While the second kernel is taking over, it gets its memory corrupted with
+such DMA accesses from the device. When the second kernel reaches the point
+of taking over the dwc3 device, re-initializes it, but it is already too
+late. Still worse, if the second kernel did not have the dwc3 driver, it
+would get endless memory corruptions.
+All in all, devices that can do DMA need to stop doing it on shutdown.
 
-Thanks
+Regards,
+  Vicen=C3=A7.
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1lGhQACgkQzL64meEa
-mQZ3ghAAqsTDKjntUdQKZSxR0oUcnoQ52EY8S3wDuIxJnZUBOk4Z12V7RNH6IWkg
-1WmxlRS0aYpguZGp6XR4Vw6y0i2RuyZ6mq6MiXq4sF3I8pqhgrMFQEbxrVjyRvGH
-BWf0zlKNLH1XCqgX18ENKSWWGAzpR0/SXPtFhGdonnfiIZn+NfdId1jWjfxyOPIc
-/p/5VaWvlSazbAF37rJWGHrW6MwqltIApBdJXMdW7nwXsFWi9vnMvlBbnUzvcEr2
-BV+KCjWFuUvdG3bMU92mO/xUx0OOl7jhKSn7LcsBFL/5A0HayYZCB5LqOm9sWgJG
-MSir+vSmnZV1XKqQcLK64SchsaNaq1DvT9lUR2VPAh0GeGKxaU5iVvX60LC8vV7a
-ZwSb4OF5qYBNhYK6M1ezbxPD/xyWp0f6Vaqo1ryYcUNjC3KmV8i0YR4cgxE7ROUG
-NAIESWRvT+LBabddMsjPmeT6yub5xj1jugtC/oNsuybE41KRCRsqDTK9NzfSm89p
-mR+/JPNeqBCF2KpBHaySUWAXfCThlv/arNHQgzfFlZ/FMNMiF/kvTOh9Nv6RGARG
-n/qpkU91GbWBMg3Fp0iuZq1tRTFV7h9DYNtCKhaMTr8sNHut5SoulYF+O3DJun6m
-IK+wbyXFLzNNCFSq1n57pNAR1cd5HzR53afWiGMghtUmvvhJCbs=
-=X0Hb
------END PGP SIGNATURE-----
---=-=-=--
