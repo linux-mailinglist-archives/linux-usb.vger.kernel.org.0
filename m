@@ -2,96 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 207429DF06
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 09:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D479E2E0
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 10:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728797AbfH0HsX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 03:48:23 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45078 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728726AbfH0HsW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 03:48:22 -0400
-Received: by mail-oi1-f194.google.com with SMTP id v12so14227049oic.12;
-        Tue, 27 Aug 2019 00:48:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Q+LbTXEs9PDwLsW5XmuMwFaB6hwKHAJtFwpTGxDpO3I=;
-        b=Tn2dUSni7oYLo3pEl6fqA/SUWxVB1SsUAytiCRBrDz81r8xxRSgHfHkM19wIFZFCzY
-         R1+NnL1D6tMbc0pg6g6irh9bCGIqvEuiQmc2Vki2ywWVJejxVn5FoqNndHh3iJB8UcH2
-         r4myvG6nmTMi5LFhtiHcqz+G09GIviBiUxLDf5H+a2KlixozK27anU2T8d2P4G8MAve8
-         1405lDlrTlOVr+L4nbReY/E51zsxbhOTDbP6KI9UHYFbwMKEjb+wFWJ0t9xL28SE8Oer
-         s/xhTIWACsNn8wmrjPrM70COG1o2ewKwOYJ07Cz3KETOl1pLzW53eCgxCl8Gg9DcdeTh
-         jjtw==
-X-Gm-Message-State: APjAAAVfUl+hxeQLOQHtR0XrxfJwXpmdm+KdVI3z+8W9F3uFZWvHQ5Uk
-        HJ5LCIkyWBNU9h/LuV4HZN2dtHCWpM+wpvsrK5s=
-X-Google-Smtp-Source: APXvYqxaPjgZ655xBHFKruX61PjPaV+V5O0gw/iaUqA2YuETpt+PLdj43KoTeo42jqLv2QjTbfxKrFY/hcRRWKKYx5U=
-X-Received: by 2002:aca:4dd8:: with SMTP id a207mr14518973oib.115.1566892100701;
- Tue, 27 Aug 2019 00:48:20 -0700 (PDT)
+        id S1729669AbfH0IkE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 04:40:04 -0400
+Received: from mail-out.elkdata.ee ([185.7.252.64]:33803 "EHLO
+        mail-out.elkdata.ee" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729659AbfH0IkE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 04:40:04 -0400
+X-Greylist: delayed 321 seconds by postgrey-1.27 at vger.kernel.org; Tue, 27 Aug 2019 04:40:01 EDT
+Received: from mail-relay2.elkdata.ee (unknown [185.7.252.69])
+        by mail-out.elkdata.ee (Postfix) with ESMTP id 10C1A372B5E
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 11:34:39 +0300 (EEST)
+Received: from mail-relay2.elkdata.ee (unknown [185.7.252.69])
+        by mail-relay2.elkdata.ee (Postfix) with ESMTP id 0F50D8308D1
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 11:34:39 +0300 (EEST)
+X-Virus-Scanned: amavisd-new at elkdata.ee
+Received: from mail-relay2.elkdata.ee ([185.7.252.69])
+        by mail-relay2.elkdata.ee (mail-relay2.elkdata.ee [185.7.252.69]) (amavisd-new, port 10024)
+        with ESMTP id XQ0zWqYfMQ-5 for <linux-usb@vger.kernel.org>;
+        Tue, 27 Aug 2019 11:34:36 +0300 (EEST)
+Received: from mail.elkdata.ee (unknown [185.7.252.68])
+        by mail-relay2.elkdata.ee (Postfix) with ESMTP id 7245A83089B
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 11:34:36 +0300 (EEST)
+Received: from mail.meie.biz (21-182-190-90.sta.estpak.ee [90.190.182.21])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: leho@jaanalind.ee)
+        by mail.elkdata.ee (Postfix) with ESMTPSA id 54AAB60BF44
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 11:34:36 +0300 (EEST)
+Received: by mail.meie.biz (Postfix, from userid 500)
+        id 30C7AA831EA; Tue, 27 Aug 2019 11:34:36 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kraav.com; s=mail;
+        t=1566894876; bh=d61PiOFxTgD5q5f6YC05TEPzakKgZwZUPjGW30URG6Q=;
+        h=Date:From:To:Subject;
+        b=PwU6fUzUgYTfR6NeV8Sfg4F7obo+AZDV7MVmqL5B15n6BdyocajyjkiJj8GneKXXy
+         sa6YUO9Se2t3pSkWKX1q5YbTSm7SZEa8lybz/Z0FnvPITtuZDOARZshmLV+cQF/Y8y
+         wpLYpDTJVEi4PJYAdGpuTV7cG25sdR1Tw9XWv8nQ=
+Received: from papaya (papaya-vpn.meie.biz [192.168.48.157])
+        by mail.meie.biz (Postfix) with ESMTPA id 1E8E0A831E8
+        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 11:34:36 +0300 (EEST)
+Authentication-Results: mail.meie.biz; dmarc=fail (p=none dis=none) header.from=kraav.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kraav.com; s=mail;
+        t=1566894876; bh=d61PiOFxTgD5q5f6YC05TEPzakKgZwZUPjGW30URG6Q=;
+        h=Date:From:To:Subject;
+        b=PwU6fUzUgYTfR6NeV8Sfg4F7obo+AZDV7MVmqL5B15n6BdyocajyjkiJj8GneKXXy
+         sa6YUO9Se2t3pSkWKX1q5YbTSm7SZEa8lybz/Z0FnvPITtuZDOARZshmLV+cQF/Y8y
+         wpLYpDTJVEi4PJYAdGpuTV7cG25sdR1Tw9XWv8nQ=
+Received: (nullmailer pid 11209 invoked by uid 1000);
+        Tue, 27 Aug 2019 08:34:35 -0000
+Date:   Tue, 27 Aug 2019 11:34:35 +0300
+From:   Leho Kraav <leho@kraav.com>
+To:     linux-usb@vger.kernel.org
+Subject: 5.3.0-rc6: DELL Latitude 7400 2-in-1 (Whiskey Lake) unable to
+ `s2idle`, XHC causes wakeups
+Message-ID: <20190827083435.GD4124@papaya>
 MIME-Version: 1.0
-References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
- <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
- <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
-In-Reply-To: <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 27 Aug 2019 09:48:09 +0200
-Message-ID: <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com>
-Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Endless Linux Upstreaming Team <linux@endlessm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Bogosity: Unsure, tests=bogofilter, spamicity=0.500000, version=1.2.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 4:50 AM Daniel Drake <drake@endlessm.com> wrote:
->
-> On Mon, Aug 26, 2019 at 9:32 PM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
-> > On 26.8.2019 12.29, Rafael J. Wysocki wrote:
-> > > I wonder if you can reproduce this with the pm-s2idle-rework branch
-> > > from linux-pm.git merged in.
-> >
-> > Root cause looks similar to:
-> > https://bugzilla.kernel.org/show_bug.cgi?id=203885
-> >
-> > Mika wrote a fix for that:
-> > https://lore.kernel.org/linux-pci/20190821124519.71594-1-mika.westerberg@linux.intel.com/
->
-> Thanks for the suggestions. Mika's patch was already applied then
-> reverted, I applied it again but there's no change.
-> Also merging in pm-s2idle-rework doesn't make any difference.
->
-> Any other ideas? Or comments on my findings so far?
-> Given that I can't shift D0-D3-D0 reliably directly with setpci before
-> loading the driver, is that indicative of a fundamental problem with
-> the platform, or is my test invalid?
+Hi all
 
-That depends on what exactly happens when you try to do the D0-D3-D0
-with setpci.  If the device becomes unreachable (or worse) after that,
-it indicates a platform issue.  It should not do any harm at the
-least.
 
-However, in principle D0-D3-D0 at the PCI level alone may not be
-sufficient, because ACPI may need to be involved.
+[    0.000000] DMI: Dell Inc. Latitude 7400 2-in-1/0HCNR3, BIOS 1.4.0 06/10/2019
+[    0.225802] smpboot: CPU0: Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz (family: 0x6, model: 0x8e, stepping: 0xc)
 
-I think that PM-runtime should suspend XHCI controllers without
-anything on the bus under them, so I wonder what happens if
-".../power/control" is set to "on" and then to "auto" for that device,
-with the driver loaded.
+For some reason this machine out of the box can't suspend on latest Linux, because XHC wakeups.
 
-> Or in terms of other ways of testing the power transition outside of
-> the suspend path, if a PCI dev is runtime suspended with no driver
-> loaded, should Linux not be attempting to put it into D3?
+Only `echo XHC | sudo tee /proc/acpi/wakeup` helps.
 
-PCI devices without drivers cannot be runtime-suspended at all.
+No external USB devices are connected.
 
-Cheers,
-Rafael
+How do I diagnose which internal devices is causing the wakeup? Search
+engines are only displaying results for people bluntly disabling this
+wakeup source, but information on how to find out details is hard to come by.
+
+I did not need to disable anything on my previous DELL Latitude 7480, so curious.
+
+```
+aug   25 17:24:34 papaya kernel: PM: suspend entry (s2idle)
+aug   25 17:24:35 papaya kernel: Filesystems sync: 0.010 seconds
+aug   25 17:24:35 papaya kernel: Freezing user space processes ... (elapsed 0.192 seconds) done.
+aug   25 17:24:35 papaya kernel: OOM killer disabled.
+aug   25 17:24:35 papaya kernel: Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+aug   25 17:24:35 papaya kernel: printk: Suspending console(s) (use no_console_suspend to debug)
+aug   25 17:24:35 papaya kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x20 returns -16
+aug   25 17:24:35 papaya kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x1b0 returns -16
+aug   25 17:24:35 papaya kernel: PM: Device 0000:00:14.0 failed to suspend async: error -16
+aug   25 17:24:35 papaya kernel: PM: Some devices failed to suspend, or early wake event detected
+aug   25 17:24:35 papaya kernel: OOM killer enabled.
+aug   25 17:24:35 papaya wpa_supplicant[1104]: wlo1: Reject scan trigger since one is already pending
+aug   25 17:24:35 papaya wpa_supplicant[1104]: wlo1: Failed to initiate AP scan
+aug   25 17:24:35 papaya wpa_supplicant[1104]: wlo1: SME: Trying to authenticate with a4:2b:b0:f8:27:f5 (SSID='s62-xt-1' freq=2462 MHz)
+aug   25 17:24:35 papaya kernel: Restarting tasks ... done.
+aug   25 17:24:35 papaya kernel: wlo1: authenticate with a4:2b:b0:f8:27:f5
+aug   25 17:24:35 papaya kernel: nvme nvme0: 4/0/0 default/read/poll queues
+aug   25 17:24:35 papaya kernel: wlo1: send auth to a4:2b:b0:f8:27:f5 (try 1/3)
+aug   25 17:24:35 papaya wpa_supplicant[1104]: wlo1: CTRL-EVENT-REGDOM-CHANGE init=DRIVER type=WORLD
+aug   25 17:24:35 papaya kernel: wlo1: authenticated
+aug   25 17:24:35 papaya wpa_supplicant[1104]: wlo1: Trying to associate with a4:2b:b0:f8:27:f5 (SSID='s62-xt-1' freq=2462 MHz)
+aug   25 17:24:35 papaya kernel: wlo1: associate with a4:2b:b0:f8:27:f5 (try 1/3)
+aug   25 17:24:35 papaya kernel: wlo1: RX AssocResp from a4:2b:b0:f8:27:f5 (capab=0x431 status=0 aid=2)
+aug   25 17:24:35 papaya kernel: PM: suspend exit
+```
+
+Device 0000:00:14.0 is `00:14.0 USB controller: Intel Corporation Device 9ded (rev 30)`,
+no surprise there.
+
+-- 
+Leho Kraav, senior technology & digital marketing architect
