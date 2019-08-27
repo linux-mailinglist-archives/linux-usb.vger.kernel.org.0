@@ -2,316 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 562F09EB4B
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AD329EB5F
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Aug 2019 16:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729821AbfH0OlZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 10:41:25 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52074 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727089AbfH0OlY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 10:41:24 -0400
-Received: by mail-wm1-f68.google.com with SMTP id k1so3403267wmi.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 07:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7diyQC6Ra4+NFHhs8549xmFWYt9LcIpwPAa6izWd3FM=;
-        b=p0YzT8VudLkN6MHPw4ymN8ATLoAsztm3yREIaRQpxCpwqtDb5nFpksF3M/40Q7xfQg
-         hEsVta3ycn9tcp4mtficor5SFmJYSl1wERgLxBnHPQikWuindVAV8WoIzeUqeyrxKSRW
-         NOa+WRmrriK4//PnJSsD01rjOf9sdtiOgO4foF5kp7/abaoayBqT1/7eMsShz5J15o7t
-         sou2PxK6Ccuy5uGdNzcJKufOCUG8u3ddn40HxQ1iypxQXUFLlDKgqFhxlX8Bv1KQWZf1
-         7Cb0VzLqOcVNzcK066EWwKlS+cF3yhXFPqjrcD62vGWvOTzZ/y50vLv+1VHzkrLnnqZ6
-         Kn6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7diyQC6Ra4+NFHhs8549xmFWYt9LcIpwPAa6izWd3FM=;
-        b=VUCBEanQvY/XshltE5CzZLhBB3fw/pDuS/SkhEfH/CVlzzW2UWWpiD7puY+4D/QLd6
-         FbMob2fL/x+viRqJw7QMo1YzuX8Syl2ClO1mpeUETU+G000ECiWsrwPb2BzES6HRV33r
-         avaBNWX7py6qVvYzzxamWMKX/+anqt/GDAQnTGiLGkUgX6eBJmdUp2QEYH9uhlfvhPzG
-         xILt3x8SH0cwjvjURbWHzNNMBn5xVkBo8dguXqYkre6UZ47ZLYeDcz+sH+GzSZQ2zWLS
-         asPqIQGHv2Ic+x4ddWXhqBKE+XM841suc+tNMCSA+rucQsBTQGWTG97DXthsFi60B50F
-         /Fcg==
-X-Gm-Message-State: APjAAAUhA+Qacv9vWkYYuQc1d5fQ/YacR1HQX0PWeXkTFsIsPBAOYaQh
-        T3+9KiFTgwSnewrmS9spclH6Hg==
-X-Google-Smtp-Source: APXvYqxIK2wLu2K9HXTe7PqjJ7lnmkKiVGQi1TCLtXD8tzPRDHSUgPFIJMB2yNir/S8IWKhSkmANXw==
-X-Received: by 2002:a1c:c706:: with SMTP id x6mr29541988wmf.104.1566916881354;
-        Tue, 27 Aug 2019 07:41:21 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id o14sm26888491wrg.64.2019.08.27.07.41.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 07:41:20 -0700 (PDT)
-Date:   Tue, 27 Aug 2019 15:41:17 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com
-Subject: Re: [PATCH v3 04/11] modpost: add support for symbol namespaces
-Message-ID: <20190827144117.GB102829@google.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-5-maennich@google.com>
- <20190826162138.GA31739@linux-8ccs>
+        id S1727048AbfH0On5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 10:43:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56016 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725920AbfH0On5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Aug 2019 10:43:57 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CA2B8206BF;
+        Tue, 27 Aug 2019 14:43:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566917036;
+        bh=YYcpRPJ9ObMCi1TUYaeck+9yIfym9MWqOaqRL4NI7/4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=cBiwjWnUXHcYFU3+QphcsfL72GFFmfOQGPRnuLrsHhJOcR6F78UmipUiaQI6iZm4D
+         qDQQmggQbuPN+9Oa5GSd4YSLI9mBcKtlNW/gxgg6DxdaRWnTbHQIYPJc3wu4OHjw+1
+         RgMxnG17Y2D37nVwjzKnXMFV7MqFcm11llSvwuts=
+Subject: Re: [PATCH v8] usbip: Implement SG support to vhci-hcd and stub
+ driver
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190826172348.23353-1-suwan.kim027@gmail.com>
+ <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <9000ddaa-24f0-5c76-43a4-318f00ea31dc@kernel.org>
+Date:   Tue, 27 Aug 2019 08:43:55 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190826162138.GA31739@linux-8ccs>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 06:21:38PM +0200, Jessica Yu wrote:
->+++ Matthias Maennich [21/08/19 12:49 +0100]:
->>Add support for symbols that are exported into namespaces. For that,
->>extract any namespace suffix from the symbol name. In addition, emit a
->>warning whenever a module refers to an exported symbol without
->>explicitly importing the namespace that it is defined in. This patch
->>consistently adds the namespace suffix to symbol names exported into
->>Module.symvers.
+On 8/27/19 8:38 AM, shuah wrote:
+> On 8/26/19 11:23 AM, Suwan Kim wrote:
+>> There are bugs on vhci with usb 3.0 storage device. In USB, each SG
+>> list entry buffer should be divisible by the bulk max packet size.
+>> But with native SG support, this problem doesn't matter because the
+>> SG buffer is treated as contiguous buffer. But without native SG
+>> support, USB storage driver breaks SG list into several URBs and the
+>> error occurs because of a buffer size of URB that cannot be divided
+>> by the bulk max packet size. The error situation is as follows.
 >>
->>Example warning emitted by modpost in case of the above violation:
+>> When USB Storage driver requests 31.5 KB data and has SG list which
+>> has 3584 bytes buffer followed by 7 4096 bytes buffer for some
+>> reason. USB Storage driver splits this SG list into several URBs
+>> because VHCI doesn't support SG and sends them separately. So the
+>> first URB buffer size is 3584 bytes. When receiving data from device,
+>> USB 3.0 device sends data packet of 1024 bytes size because the max
+>> packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
+>> But the first URB buffer has only 3584 bytes buffer size. So host
+>> controller terminates the transfer even though there is more data to
+>> receive. So, vhci needs to support SG transfer to prevent this error.
 >>
->>WARNING: module ums-usbat uses symbol usb_stor_resume from namespace
->>USB_STORAGE, but does not import it.
+>> In this patch, vhci supports SG regardless of whether the server's
+>> host controller supports SG or not, because stub driver splits SG
+>> list into several URBs if the server's host controller doesn't
+>> support SG.
 >>
->>Co-developed-by: Martijn Coenen <maco@android.com>
->>Signed-off-by: Martijn Coenen <maco@android.com>
->>Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>Signed-off-by: Matthias Maennich <maennich@google.com>
->>---
->>scripts/mod/modpost.c | 91 +++++++++++++++++++++++++++++++++++++------
->>scripts/mod/modpost.h |  7 ++++
->>2 files changed, 87 insertions(+), 11 deletions(-)
+>> To support SG, vhci sets URB_DMA_MAP_SG flag in transfer_flags of
+>> usbip header if URB has SG list and this flag will tell stub driver
+>> to use SG list.
 >>
->>diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
->>index f277e116e0eb..538bb24ffee3 100644
->>--- a/scripts/mod/modpost.c
->>+++ b/scripts/mod/modpost.c
->>@@ -164,6 +164,7 @@ struct symbol {
->>	struct module *module;
->>	unsigned int crc;
->>	int crc_valid;
->>+	const char *namespace;
->>	unsigned int weak:1;
->>	unsigned int vmlinux:1;    /* 1 if symbol is defined in vmlinux */
->>	unsigned int kernel:1;     /* 1 if symbol is from kernel
->>@@ -233,6 +234,37 @@ static struct symbol *find_symbol(const char *name)
->>	return NULL;
->>}
+>> vhci sends each SG list entry to stub driver. Then, stub driver sees
+>> the total length of the buffer and allocates SG table and pages
+>> according to the total buffer length calling sgl_alloc(). After stub
+>> driver receives completed URB, it again sends each SG list entry to
+>> vhci.
 >>
->>+static bool contains_namespace(struct namespace_list *list,
->>+			       const char *namespace)
->>+{
->>+	struct namespace_list *ns_entry;
->>+
->>+	for (ns_entry = list; ns_entry != NULL; ns_entry = ns_entry->next)
->>+		if (strcmp(ns_entry->namespace, namespace) == 0)
->>+			return true;
->>+
->>+	return false;
->>+}
->>+
->>+static void add_namespace(struct namespace_list **list, const char *namespace)
->>+{
->>+	struct namespace_list *ns_entry;
->>+
->>+	if (!contains_namespace(*list, namespace)) {
->>+		ns_entry = NOFAIL(malloc(sizeof(struct namespace_list) +
->>+					 strlen(namespace) + 1));
->>+		strcpy(ns_entry->namespace, namespace);
->>+		ns_entry->next = *list;
->>+		*list = ns_entry;
->>+	}
->>+}
->>+
->>+static bool module_imports_namespace(struct module *module,
->>+				     const char *namespace)
->>+{
->>+	return contains_namespace(module->imported_namespaces, namespace);
->>+}
->>+
->>static const struct {
->>	const char *str;
->>	enum export export;
->>@@ -312,6 +344,22 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
->>		return export_unknown;
->>}
+>> If the server's host controller doesn't support SG, stub driver
+>> breaks a single SG request into several URBs and submits them to
+>> the server's host controller. When all the split URBs are completed,
+>> stub driver reassembles the URBs into a single return command and
+>> sends it to vhci.
 >>
->>+static const char *sym_extract_namespace(const char **symname)
->>+{
->>+	size_t n;
->>+	char *dupsymname;
->>+
->>+	n = strcspn(*symname, ".");
->>+	if (n < strlen(*symname) - 1) {
->>+		dupsymname = NOFAIL(strdup(*symname));
->>+		dupsymname[n] = '\0';
->>+		*symname = dupsymname;
->>+		return dupsymname + n + 1;
->>+	}
->>+
->>+	return NULL;
->>+}
->>+
->>/**
->> * Add an exported symbol - it may have already been added without a
->> * CRC, in this case just update the CRC
->>@@ -319,16 +367,18 @@ static enum export export_from_sec(struct elf_info *elf, unsigned int sec)
->>static struct symbol *sym_add_exported(const char *name, struct module *mod,
->>				       enum export export)
->>{
->>-	struct symbol *s = find_symbol(name);
->>+	const char *symbol_name = name;
->>+	const char *namespace = sym_extract_namespace(&symbol_name);
->>+	struct symbol *s = find_symbol(symbol_name);
+>> Moreover, in the situation where vhci supports SG, but stub driver
+>> does not, or vice versa, usbip works normally. Because there is no
+>> protocol modification, there is no problem in communication between
+>> server and client even if the one has a kernel without SG support.
 >>
->>	if (!s) {
->>-		s = new_symbol(name, mod, export);
->>+		s = new_symbol(symbol_name, mod, export);
->>+		s->namespace = namespace;
->>	} else {
->>		if (!s->preloaded) {
->>-			warn("%s: '%s' exported twice. Previous export "
->>-			     "was in %s%s\n", mod->name, name,
->>-			     s->module->name,
->>-			     is_vmlinux(s->module->name) ?"":".ko");
->>+			warn("%s: '%s' exported twice. Previous export was in %s%s\n",
->>+			     mod->name, symbol_name, s->module->name,
->>+			     is_vmlinux(s->module->name) ? "" : ".ko");
->>		} else {
->>			/* In case Module.symvers was out of date */
->>			s->module = mod;
->>@@ -1943,6 +1993,7 @@ static void read_symbols(const char *modname)
->>	const char *symname;
->>	char *version;
->>	char *license;
->>+	char *namespace;
->>	struct module *mod;
->>	struct elf_info info = { };
->>	Elf_Sym *sym;
->>@@ -1974,6 +2025,12 @@ static void read_symbols(const char *modname)
->>		license = get_next_modinfo(&info, "license", license);
->>	}
+>> In the case of vhci supports SG and stub driver doesn't, because
+>> vhci sends only the total length of the buffer to stub driver as
+>> it did before the patch applied, stub driver only needs to allocate
+>> the required length of buffers using only kmalloc() regardless of
+>> whether vhci supports SG or not. But stub driver has to allocate
+>> buffer with kmalloc() as much as the total length of SG buffer which
+>> is quite huge when vhci sends SG request, so it has overhead in
+>> buffer allocation in this situation.
 >>
->>+	namespace = get_modinfo(&info, "import_ns");
->>+	while (namespace) {
->>+		add_namespace(&mod->imported_namespaces, namespace);
->>+		namespace = get_next_modinfo(&info, "import_ns", namespace);
->>+	}
->>+
->>	for (sym = info.symtab_start; sym < info.symtab_stop; sym++) {
->>		symname = remove_dot(info.strtab + sym->st_name);
+>> If stub driver needs to send data buffer to vhci because of IN pipe,
+>> stub driver also sends only total length of buffer as metadata and
+>> then sends real data as vhci does. Then vhci receive data from stub
+>> driver and store it to the corresponding buffer of SG list entry.
 >>
->>@@ -2118,6 +2175,13 @@ static int check_exports(struct module *mod)
->>			basename++;
->>		else
->>			basename = mod->name;
->>+
->>+		if (exp->namespace &&
->>+		    !module_imports_namespace(mod, exp->namespace)) {
->>+			warn("module %s uses symbol %s from namespace %s, but does not import it.\n",
->>+			     basename, exp->name, exp->namespace);
->>+		}
->>+
->>		if (!mod->gpl_compatible)
->>			check_for_gpl_usage(exp->export, basename, exp->name);
->>		check_for_unused(exp->export, basename, exp->name);
->>@@ -2395,16 +2459,21 @@ static void write_dump(const char *fname)
->>{
->>	struct buffer buf = { };
->>	struct symbol *symbol;
->>+	const char *namespace;
->>	int n;
+>> And for the case of stub driver supports SG and vhci doesn't, since
+>> the USB storage driver checks that vhci doesn't support SG and sends
+>> the request to stub driver by splitting the SG list into multiple
+>> URBs, stub driver allocates a buffer for each URB with kmalloc() as
+>> it did before this patch.
 >>
->>	for (n = 0; n < SYMBOL_HASH_SIZE ; n++) {
->>		symbol = symbolhash[n];
->>		while (symbol) {
->>-			if (dump_sym(symbol))
->>-				buf_printf(&buf, "0x%08x\t%s\t%s\t%s\n",
->>-					symbol->crc, symbol->name,
->>-					symbol->module->name,
->>-					export_str(symbol->export));
->>+			if (dump_sym(symbol)) {
->>+				namespace = symbol->namespace;
->>+				buf_printf(&buf, "0x%08x\t%s%s%s\t%s\t%s\n",
->>+					   symbol->crc, symbol->name,
->>+					   namespace ? "." : "",
->>+					   namespace ? namespace : "",
->
->I think it might be cleaner to just have namespace be a separate
->field in Module.symvers, rather than appending a dot and the
->namespace at the end of a symbol name. Maybe something like
->
->   <crc> <symbol_name> <namespace> <module>
->
->For symbols without a namespace, we could just have "", with all
->fields delimited by tabs. This is just a stylistic suggestion, what do
->you think?
+>> * Test environment
+>>
+>> Test uses two difference machines and two different kernel version
+>> to make mismatch situation between the client and the server where
+>> vhci supports SG, but stub driver does not, or vice versa. All tests
+>> are conducted in both full SG support that both vhci and stub support
+>> SG and half SG support that is the mismatch situation. Test kernel
+>> version is 5.3-rc6 with commit "usb: add a HCD_DMA flag instead of
+>> guestimating DMA capabilities" to avoid unnecessary DMA mapping and
+>> unmapping.
+>>
+>>   - Test kernel version
+>>      - 5.3-rc6 with SG support
+>>      - 5.1.20-200.fc29.x86_64 without SG support
+>>
+>> * SG support test
+>>
+>>   - Test devices
+>>      - Super-speed storage device - SanDisk Ultra USB 3.0
+>>      - High-speed storage device - SMI corporation USB 2.0 flash drive
+>>
+>>   - Test description
+>>
+>> Test read and write operation of mass storage device that uses the
+>> BULK transfer. In test, the client reads and writes files whose size
+>> is over 1G and it works normally.
+>>
+>> * Regression test
+>>
+>>   - Test devices
+>>      - Super-speed device - Logitech Brio webcam
+>>      - High-speed device  - Logitech C920 HD Pro webcam
+>>      - Full-speed device  - Logitech bluetooth mouse
+>>                           - Britz BR-Orion speaker
+>>      - Low-speed device   - Logitech wired mouse
+>>
+>>   - Test description
+>>
+>> Moving and click test for mouse. To test the webcam, use gnome-cheese.
+>> To test the speaker, play music and video on the client. All works
+>> normally.
+>>
+>> * VUDC compatibility test
+>>
+>> VUDC also works well with this patch. Tests are done with two USB
+>> gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
+>>
+>>          1. Serial gadget
+>>          2. Mass storage gadget
+>>
+>>   - Serial gadget test
+>>
+>> Serial gadget on the host sends and receives data using cat command
+>> on the /dev/ttyGS<N>. The client uses minicom to communicate with
+>> the serial gadget.
+>>
+>>   - Mass storage gadget test
+>>
+>> After connecting the gadget with vhci, use "dd" to test read and
+>> write operation on the client side.
+>>
+>> Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
+>> Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
+>>
+>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+>> ---
+>> v7 - v8
+>> - Modify the commit log which describes URB_DMA_MAP_SG flag setting.
+>>
+>> v6 - v7
+>> - Move the flag set in setup_cmd_submit_pdu() of vhci_tx.c and
+>>    manipulate usbip header flag instead of urb->transfer_flags.
+>>
+>> - Remove clearing URB_DMA_MAP_SG flag in vhci_rx.
+> 
+> setup_cmd_submit_pdu() is just for pdu and shouldn't be concerned
+> about the urb.
+> 
+> Please keep the URB_DMA_MAP_SG setting in urb->transfer_flags.
+> That mean you are restoring v6 code change with the commit log
+> updates from v8.
+> 
 
-I thought of something like that initially, but did not do it to not
-break users of this file. But as I am anyway breaking users by changing
-the symbol name into symbol.NS, I might as well do it as you suggested.
-Since read_dump() also knew already how to extract the namespaces from
-symbol.NS, it had already worked without a change to the reading code
-of modpost. Are there any other consumers of Module.symvers that we
-should be aware of?
+I mean v6 with my comments on v6 addressed, moving setting the flag
+after kalloc() and other comments.
 
->Regardless of the chosen format, I think we need to document how
->namespaces are represented in Documentation/kbuild/modules.rst, where
->it describes the Module.symvers format.
+thanks,
+-- Shuah
 
-Agreed. I will update the documentation. It anyway needs an update.
-
-Cheers,
-Matthias
-
->>+					   symbol->module->name,
->>+					   export_str(symbol->export));
->>+			}
->>			symbol = symbol->next;
->>		}
->>	}
->>diff --git a/scripts/mod/modpost.h b/scripts/mod/modpost.h
->>index 8453d6ac2f77..9626bf3e7424 100644
->>--- a/scripts/mod/modpost.h
->>+++ b/scripts/mod/modpost.h
->>@@ -109,6 +109,11 @@ buf_printf(struct buffer *buf, const char *fmt, ...);
->>void
->>buf_write(struct buffer *buf, const char *s, int len);
->>
->>+struct namespace_list {
->>+	struct namespace_list *next;
->>+	char namespace[0];
->>+};
->>+
->>struct module {
->>	struct module *next;
->>	const char *name;
->>@@ -121,6 +126,8 @@ struct module {
->>	struct buffer dev_table_buf;
->>	char	     srcversion[25];
->>	int is_dot_o;
->>+	// Actual imported namespaces
->>+	struct namespace_list *imported_namespaces;
->>};
->>
->>struct elf_info {
->>-- 
->>2.23.0.rc1.153.gdeed80330f-goog
->>
