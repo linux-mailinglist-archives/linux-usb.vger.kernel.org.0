@@ -2,122 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21FE7A0034
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 12:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 605E6A004E
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 12:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbfH1KuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Aug 2019 06:50:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbfH1KuC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Aug 2019 06:50:02 -0400
-Received: from linux-8ccs (ip5f5adbee.dynamic.kabel-deutschland.de [95.90.219.238])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0AA242173E;
-        Wed, 28 Aug 2019 10:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566989401;
-        bh=He3MdEl4k4wvBwy2BRtUix0E0BXxfd11sG2nGJHSlno=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i40dmLIc4hNolwteO8/CrjM9Cpmu93uXZsAOD1MxRqDqkwMajOhi3Dh0Ac1J5QGbq
-         LszHHQ0TpbI6YImDsJdcJH+2MQ+nkwnpo8Rh7e8htHxd79vlrmg8Y4hcNYyhaKnSc2
-         TcnnzjJhpv8JAIXkqv1vRtuz4HQ/xogZe5mhW1hk=
-Date:   Wed, 28 Aug 2019 12:49:51 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Subject: Re: [PATCH v3 06/11] export: allow definition default namespaces in
- Makefiles or sources
-Message-ID: <20190828104951.GC25048@linux-8ccs>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-7-maennich@google.com>
+        id S1726300AbfH1K43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Aug 2019 06:56:29 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:15073 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726246AbfH1K43 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 06:56:29 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d665dde0000>; Wed, 28 Aug 2019 03:56:30 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 28 Aug 2019 03:56:28 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 28 Aug 2019 03:56:28 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 28 Aug
+ 2019 10:56:28 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 28 Aug 2019 10:56:28 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d665dda0001>; Wed, 28 Aug 2019 03:56:27 -0700
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>
+CC:     <linux-usb@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: [PATCH] usb: host: xhci-tegra: Set DMA mask correctly
+Date:   Wed, 28 Aug 2019 16:24:57 +0530
+Message-ID: <1566989697-13049-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190821114955.12788-7-maennich@google.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1566989790; bh=qZ4YA046RBeo9HvMuASkR90RUf4mhvLoCM1815X8nME=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=K45e2xXIhwDa856iTeuRFFOOLKYSUf2gkE+q3shnrr2sEiKEGzTVOjFRVixuClx9k
+         tJmCxrTrjzqvj6tiRRPOa4dU9Eoow1ggiWTfjQBLSlqUrLJU6Wk9eQzFuhImY49SqZ
+         fN1VH4AHlpeehP+UlqHlQ0qKIdtdZLoKMrGYXdgH+fY9ldeIPHhCA4RVN0ChP1y6Pn
+         ELvxBm666oaETPhnHMXvqN6ejZ6crgwM6U9Bg9OiuD2mXq8zuKhAHVKkTAG+roNrB4
+         W6sPJNDvqNU2g/4jHdpYr3nF1XBIaWEHkkhEXhAbKc6mENKcN3cOq2jYHfXkdK/8Vv
+         5K24yE2jJhxlg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+++ Matthias Maennich [21/08/19 12:49 +0100]:
->To avoid excessive usage of EXPORT_SYMBOL_NS(sym, MY_NAMESPACE), where
->MY_NAMESPACE will always be the namespace we are exporting to, allow
->exporting all definitions of EXPORT_SYMBOL() and friends by defining
->DEFAULT_SYMBOL_NAMESPACE.
->
->For example, to export all symbols defined in usb-common into the
->namespace USB_COMMON, add a line like this to drivers/usb/common/Makefile:
->
->  ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_COMMON
->
->That is equivalent to changing all EXPORT_SYMBOL(sym) definitions to
->EXPORT_SYMBOL_NS(sym, USB_COMMON). Subsequently all symbol namespaces
->functionality will apply.
->
->Another way of making use of this feature is to define the namespace
->within source or header files similar to how TRACE_SYSTEM defines are
->used:
->  #undef DEFAULT_SYMBOL_NAMESPACE
->  #define DEFAULT_SYMBOL_NAMESPACE USB_COMMON
->
->Please note that, as opposed to TRACE_SYSTEM, DEFAULT_SYMBOL_NAMESPACE
->has to be defined before including include/linux/export.h.
->
->If DEFAULT_SYMBOL_NAMESPACE is defined, a symbol can still be exported
->to another namespace by using EXPORT_SYMBOL_NS() and friends with
->explicitly specifying the namespace.
+The Falcon microcontroller that runs the XUSB firmware and which is
+responsible for exposing the XHCI interface can address only 40 bits of
+memory. Typically that's not a problem because Tegra devices don't have
+enough system memory to exceed those 40 bits.
 
-This changelog provides a good summary of how to use
-DEFAULT_SYMBOL_NAMESPACE, I wonder if we should explicitly document
-its proper usage somewhere? (along with EXPORT_SYMBOL_NS*)
-The EXPORT_SYMBOL API is briefly documented in
-Documentation/kernel-hacking/hacking.rst - it might be slightly dated,
-but perhaps it'd fit there best?
+However, if the ARM SMMU is enable on Tegra186 and later, the addresses
+passed to the XUSB controller can be anywhere in the 48-bit IOV address
+space of the ARM SMMU. Since the DMA/IOMMU API starts allocating from
+the top of the IOVA space, the Falcon microcontroller is not able to
+load the firmware successfully.
 
->Suggested-by: Arnd Bergmann <arnd@arndb.de>
->Reviewed-by: Martijn Coenen <maco@android.com>
->Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->Signed-off-by: Matthias Maennich <maennich@google.com>
->---
-> include/linux/export.h | 6 ++++++
-> 1 file changed, 6 insertions(+)
->
->diff --git a/include/linux/export.h b/include/linux/export.h
->index 8e12e05444d1..1fb243abdbc4 100644
->--- a/include/linux/export.h
->+++ b/include/linux/export.h
->@@ -166,6 +166,12 @@ struct kernel_symbol {
-> #define __EXPORT_SYMBOL ___EXPORT_SYMBOL
-> #endif
->
->+#ifdef DEFAULT_SYMBOL_NAMESPACE
->+#undef __EXPORT_SYMBOL
->+#define __EXPORT_SYMBOL(sym, sec)				\
->+	__EXPORT_SYMBOL_NS(sym, sec, DEFAULT_SYMBOL_NAMESPACE)
->+#endif
->+
-> #define EXPORT_SYMBOL(sym) __EXPORT_SYMBOL(sym, "")
-> #define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
-> #define EXPORT_SYMBOL_GPL_FUTURE(sym) __EXPORT_SYMBOL(sym, "_gpl_future")
->-- 
->2.23.0.rc1.153.gdeed80330f-goog
->
+Fix this by setting the DMA mask to 40 bits, which will force the DMA
+API to map the buffer for the firmware to an IOVA that is addressable by
+the Falcon.
+
+Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index dafc659..2ff7c91 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1194,6 +1194,16 @@ static int tegra_xusb_probe(struct platform_device *pdev)
+ 
+ 	tegra_xusb_config(tegra, regs);
+ 
++	/*
++	 * The XUSB Falcon microcontroller can only address 40 bits, so set
++	 * the DMA mask accordingly.
++	 */
++	err = dma_set_mask_and_coherent(tegra->dev, DMA_BIT_MASK(40));
++	if (err < 0) {
++		dev_err(&pdev->dev, "failed to set DMA mask: %d\n", err);
++		goto put_rpm;
++	}
++
+ 	err = tegra_xusb_load_firmware(tegra);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
+-- 
+2.7.4
+
