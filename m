@@ -2,113 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A13FA00E4
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 13:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA488A01D4
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 14:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726341AbfH1Lmq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Aug 2019 07:42:46 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:40753 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726300AbfH1Lmp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 07:42:45 -0400
-Received: by mail-ed1-f68.google.com with SMTP id h8so2642812edv.7;
-        Wed, 28 Aug 2019 04:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DHBfv5zjSEya+0Y/i6kKdeisc73VpG/vbKcbcAGWi3Q=;
-        b=Uv8oEDT3sDFgzoLnkO582psGXc3+5qq6bCYGdmUVGdSdIAUDsmmCrmbzOwwo0TxzRT
-         plcS5x5XUH0BT+dgcpj2kGi040BP2D3x1kgIzrBQwfvbOgm5vs9iLqNDztaPpEWXBkmr
-         SBbvFIz3p2m4UvFK4IsfVU4tIWiyHk+3SNDlwtjGUEfvNnlNlKDXQGAj4ZHFm8MeuxSi
-         6tIY+Gs6IqXzwIjG/3DhpxLmOR9Ptsa5O/FW6ObFGzXJwQwYGlQIaqjSWM6lp2+JLRgx
-         KNx63qglS1qpV/sybXXcqLwD8LZ+Ck+QNiR/i7g+adLMCj8dpsNmicKKedcF643WZt9A
-         L4wA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DHBfv5zjSEya+0Y/i6kKdeisc73VpG/vbKcbcAGWi3Q=;
-        b=hgJ4zRqDhSrIrs085cWu5pJvBL8YSH8qGqqoT95f5LCaSxo1XGa6Hb5vj2YggsVaRb
-         QzoR8e4KxQ8USHuO54X4t98vOt0GpBksttfZX2dh3K6c/0QiwOpj5wXtsjT0ZBJbV5O3
-         ug8Kbdll28/smYGSWw9+7AXvWrnOyk+g/YHXWEY2CLDh1NfN6o1cWQPxAxz/19nfTcbo
-         xiGn69iGKOb6qG0QM92i8ho4HR+Qz6Ufie8+v2PMIauDlzfaFl4eod6lLQXzrtwqPePN
-         sm/9rklEPKNpj4Cx0i3ExpzPyg4f+h9W+W+H/kPYjWV+u++wDqPtqJExFlgeQMmTgXwz
-         QyQg==
-X-Gm-Message-State: APjAAAUhZgJRTLbiAeDRrCguDBBk7apmDVK6WsjlC1Ad45oMuBapSjLq
-        76zA7/e0jVPuC56qZGkroR2Vehlb8W9IQjJoyA8=
-X-Google-Smtp-Source: APXvYqwiuWc/qla2uovuk7m1aKx3c6zg1cpqDRe3loN0F+Yt/wGHuSFur575MSgIYElejaU8KfmFTnKDjHrpXipRlYc=
-X-Received: by 2002:a17:906:5e50:: with SMTP id b16mr2770107eju.254.1566992564016;
- Wed, 28 Aug 2019 04:42:44 -0700 (PDT)
+        id S1726368AbfH1MeU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Aug 2019 08:34:20 -0400
+Received: from mr08.mx01.tldhost.de ([84.19.26.246]:35184 "EHLO
+        mr08.mx01.tldhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726300AbfH1MeU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 08:34:20 -0400
+X-Greylist: delayed 90787 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Aug 2019 08:34:20 EDT
+Received: from mx01.tldhost.de (localhost [127.0.0.1])
+        by mx01.tldhost.de (Postfix) with ESMTP id 9AC1E1212FB
+        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2019 14:34:18 +0200 (CEST)
+Received: by mx01.tldhost.de (Postfix, from userid 1001)
+        id 906441212FD; Wed, 28 Aug 2019 14:34:18 +0200 (CEST)
+X-Spam-Status: No, score=0.0 required=7.0 tests=SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.2
+Received: from server12.tldhost.de (server12.tldhost.de [84.19.26.112])
+        by mx01.tldhost.de (Postfix) with ESMTPS id 7E7DD12071A;
+        Wed, 28 Aug 2019 14:34:16 +0200 (CEST)
+Received: from fw-emea.rohde-schwarz.com (fw-emea.rohde-schwarz.com
+ [80.246.32.33]) by webmail.kiener-muenchen.de (Horde Framework) with HTTP;
+ Wed, 28 Aug 2019 12:34:17 +0000
+Date:   Wed, 28 Aug 2019 12:34:17 +0000
+Message-ID: <20190828123417.Horde.00t1xjtxlSxoLWLKyR_L7td@webmail.kiener-muenchen.de>
+From:   guido@kiener-muenchen.de
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 1/2] usb: gadget: net2280: Move all "ll" registers in
+ one structure
+References: <bc390967a9ac59e658ae79ba74a23a6ca898351b.camel@kernel.crashing.org>
+ <87ftllwqi7.fsf@gmail.com>
+ <d2f02109e718a6578d91467e6a4d522819be7a23.camel@kernel.crashing.org>
+ <87d0gpwo19.fsf@gmail.com>
+In-Reply-To: <87d0gpwo19.fsf@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-References: <20190723030206.2919-1-hslester96@gmail.com> <20190828032118.GA2966@b29397-desktop>
-In-Reply-To: <20190828032118.GA2966@b29397-desktop>
-From:   Chuhong Yuan <hslester96@gmail.com>
-Date:   Wed, 28 Aug 2019 19:42:32 +0800
-Message-ID: <CANhBUQ0PEOoVoVscO66spy0Jv4jf5wwtGKRUwa4vd=7b70kBwA@mail.gmail.com>
-Subject: Re: [PATCH] usb: chipidea: msm: Use device-managed registration API
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Disposition: inline
+X-PPP-Message-ID: <20190828123417.31263.19944@server12.tldhost.de>
+X-PPP-Vhost: kiener-muenchen.de
+X-POWERED-BY: TLDHost.de - AV:CLEAN SPAM:OK
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 11:24 AM Peter Chen <peter.chen@nxp.com> wrote:
+
+Zitat von Felipe Balbi <balbi@kernel.org>:
+
+> Hi,
 >
-> On 19-07-23 11:02:07, Chuhong Yuan wrote:
-> > Use devm_reset_controller_register to get rid
-> > of manual unregistration.
-> >
-> > Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
-> > ---
-> >  drivers/usb/chipidea/ci_hdrc_msm.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
-> > index bb4645a8ca46..067542e84aea 100644
-> > --- a/drivers/usb/chipidea/ci_hdrc_msm.c
-> > +++ b/drivers/usb/chipidea/ci_hdrc_msm.c
-> > @@ -216,7 +216,7 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
-> >       ci->rcdev.ops = &ci_hdrc_msm_reset_ops;
-> >       ci->rcdev.of_node = pdev->dev.of_node;
-> >       ci->rcdev.nr_resets = 2;
-> > -     ret = reset_controller_register(&ci->rcdev);
-> > +     ret = devm_reset_controller_register(&pdev->dev, &ci->rcdev);
-> >       if (ret)
-> >               return ret;
-> >
-> > @@ -272,7 +272,6 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
-> >  err_iface:
-> >       clk_disable_unprepare(ci->core_clk);
-> >  err_fs:
-> > -     reset_controller_unregister(&ci->rcdev);
+> Benjamin Herrenschmidt <benh@kernel.crashing.org> writes:
+>> On Wed, 2019-08-28 at 13:09 +0300, Felipe Balbi wrote:
+>>> Hi,
+>>>
+>>> Benjamin Herrenschmidt <benh@kernel.crashing.org> writes:
+>>>
+>>> > The split into multiple structures of the "ll" register bank is
+>>> > impractical. It makes it hard to add ll_lfps_timers_2 which is
+>>> > at offset 0x794, which is outside of the existing "lfps" structure
+>>> > and would require us to add yet another one.
+>>> >
+>>> > Instead, move all the "ll" registers into a single usb338x_ll_regs
+>>> > structure, and add ll_lfps_timers_2 while at it. It will be used
+>>> > in a subsequent patch.
+>>> >
+>>> > Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>>>
+>>> I tried applying your patches but it resulted in build break. Can you
+>>> collect all the dependencies and send a single series? I'm applying on
+>>> top of my testing/next branch.
+>>
+>> You mean the 2 net2280 patches ? Or something else ?
+>>
+>> What break did you get ? It's just one series of 2 patches.... I'll try
+>> rebasing them against your branch tomorrow.
 >
-> It is devm API, why the unregister needs to be called at
-> fail path?
+> allmodconfig broke with missing fields in whatever structure. I didn't
+> dig too much, sorry.
 >
 
-I am not very clear about your problem...
-After using devm_reset_controller_register(), I have removed
-reset_controller_unregister() calls
-in this patch.
+After applying [patch 1/2] & [patch 2/2] I could build on  
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/ branch  
+usb-next. Please note that [PATCH 1/2] was sent twice.
 
-> Peter
->
-> >       return ret;
-> >  }
-> >
-> > @@ -284,7 +283,6 @@ static int ci_hdrc_msm_remove(struct platform_device *pdev)
-> >       ci_hdrc_remove_device(ci->ci);
-> >       clk_disable_unprepare(ci->iface_clk);
-> >       clk_disable_unprepare(ci->core_clk);
-> > -     reset_controller_unregister(&ci->rcdev);
-> >
-> >       return 0;
-> >  }
-> > --
-> > 2.20.1
-> >
+-Guido
+
