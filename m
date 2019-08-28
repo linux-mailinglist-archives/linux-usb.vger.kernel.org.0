@@ -2,228 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8A19F870
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 04:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622729F8B3
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 05:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbfH1Cvt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 22:51:49 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33150 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbfH1Cvt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 22:51:49 -0400
-Received: by mail-pf1-f193.google.com with SMTP id g2so696030pfq.0;
-        Tue, 27 Aug 2019 19:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=AMK1B6KKKX0zrksq/ioLQbSIUix74Hs0qIN8nDHr/Ws=;
-        b=oUnjhk50+RskwhyPNCKomJsqr6wMLOPZCc9VxbudMghDogV2siKE9MX4/5zCCK0Gdx
-         Ttqqx9NpBM2WEEZPjTa9dBRTVzTs+TmUMr+SEKTzvN99z+oG438vBGwPCYLZ099J0aNb
-         KNHnRSVm6AOhL3ulYpI5DFjN1uZjHAsjrY3RPOde3e8ZvVn8eXfAR0fHCAI6RYfntnMC
-         5DOOudw5MJFVNGPILcbYAbUvpn14PkvS0JNn5FuqSjoNGbIW8HYmXIRIpc4zDimks9AR
-         QeVr+Ox5YAVdANu4bb6Aofn2A0Q7VuSQtdWfcRXk212TXgqTbJWDsTdH9Hpj1o3VJ7RP
-         4cww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=AMK1B6KKKX0zrksq/ioLQbSIUix74Hs0qIN8nDHr/Ws=;
-        b=QhV+Qxj+zcEHtXtuMn77D+zwazkhaZL1v8gEm25C2zhMiuDcrLHmfaRqPDrM576uvn
-         oPUdZZarwjyksZGeuJ0x4jdbqK/yvuCKamM4hwyXtbJkD6UZIkSlnKjDzzgIL/1OLg0e
-         Mc35LzNe+7FQMtp8LogWF9UBci+ky3aK/ZxOD4/skMml5fsqbAiaQHYGsXbFqI6Zhh7T
-         U/B8PiG2RqcCh79g1bkNnzpS4hE8emX535fLUHK2cmXNk4iXx2G39nfo2FjQijiwU9r9
-         Ma2kzpPy2EgeVFPscIyCb/qbbHKZBjAEm1RB45e+eqV9jFx4MejqLvbwWclGmLv/Rq7b
-         /NZA==
-X-Gm-Message-State: APjAAAXslWlCs+kYS9NYvEVj0trJOKkb/mancUtO3xMEz2Jk/M9FgBlW
-        c3sWKRox21yhWXUIzx+9y/M=
-X-Google-Smtp-Source: APXvYqyiCpjux30pOvXWBfNToNNdg2cho2PTwS5mbPglUqfGvaYmhxsn8CvfYaa3W/ZU1g9bI6DgcQ==
-X-Received: by 2002:a63:181:: with SMTP id 123mr1504851pgb.63.1566960707981;
-        Tue, 27 Aug 2019 19:51:47 -0700 (PDT)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id 24sm722308pfo.3.2019.08.27.19.51.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 19:51:47 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 11:51:42 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     valentina.manea.m@gmail.com, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] usbip: Implement SG support to vhci-hcd and stub
- driver
-Message-ID: <20190828025142.GA10615@localhost.localdomain>
-References: <20190826172348.23353-1-suwan.kim027@gmail.com>
- <d7bc3d7c-47a9-4b8c-ede2-2ed276fe2a77@kernel.org>
- <9000ddaa-24f0-5c76-43a4-318f00ea31dc@kernel.org>
+        id S1726250AbfH1DYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 23:24:04 -0400
+Received: from mail-eopbgr60069.outbound.protection.outlook.com ([40.107.6.69]:28226
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726178AbfH1DYE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Aug 2019 23:24:04 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nER46pRldVT35Eu9aM798dYmvkYR56kUxej1LQURmOKNLE3pSfRI2qS/K/xGE7T3GAPjiBaCGSceqNzM29jMvepqyZfs1BD4TQ7uv6OEKKljAuWObrvHYur1zmI7QnpyoEYWD+qBuYWwSU2XdZxo2rYqLkDpJJ4DABvY8a9orClh2veM8uhTgT8quIbrHC7KcOfs0cENliOkYYRQt388RX8JksSzfuaB5J4B8NtF/viCaqWigjG4jbRG81dFn68D6EcQn/t/CHGgIJcAOo5hdIsss2cVzIPyK10pmgFnuZ1gSE/VjD+THjpRdgKGOyKv8vqCy9u+0NATz4zUJZy3Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hem/93KMxl+2QcuwnNmBYBm0xDv/98eD4ErxefjGYfg=;
+ b=f8bxO1mbAnV6X4cgeBnlKK+F/3UY8zJO46DYctr5HrrLCNjSYhBJ5P0VDDOQ/qGQkSw6cUWsWZVaQlf7LmWRN90CY5nkMFZdT5ZIuEARFogcNIuI0fvkflKPgRy/38iHqeyegd9udnkenLJ3OU2T46aMgcoqlzw54hrrDm7IB3zjdihnEnv/ACf5nk5y+j6eVinA/eOnZNosKz1h4vL7H4KgSQgovRT23qG1z28ZMrufSS2Q9TJ6FmRwSzTlL5yaZZ4zdDCTol+WZcizKEmhJoJWoHgx8ilRSZlxQFPhJhupIplWWmV/alhE/YfE8zs0Mv2ZUSrSK3y/UgUb1hv3+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Hem/93KMxl+2QcuwnNmBYBm0xDv/98eD4ErxefjGYfg=;
+ b=L/m0O1IMCvfqn4apZus6h4Q5PeLx3/IksKlC/mMTzA1NZelRJ49Fpr40RKJUC6q4QOs1olhiiEy8nMrd540t+KwgWvKhSsofTlLKMv78Ru3+ElRLDs5oOxoYUlSQATEgGjXfKen+zrPqwj+LfJA1n/mm6wivEDzk5UN1kZsbGC8=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB5215.eurprd04.prod.outlook.com (20.177.51.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.16; Wed, 28 Aug 2019 03:24:00 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::e039:172d:fe77:320a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::e039:172d:fe77:320a%4]) with mapi id 15.20.2199.021; Wed, 28 Aug 2019
+ 03:24:00 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Chuhong Yuan <hslester96@gmail.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: chipidea: msm: Use device-managed registration API
+Thread-Topic: [PATCH] usb: chipidea: msm: Use device-managed registration API
+Thread-Index: AQHVQQMqCyiV6SBdkkOiu7Ig/zYETKcQHUkA
+Date:   Wed, 28 Aug 2019 03:24:00 +0000
+Message-ID: <20190828032118.GA2966@b29397-desktop>
+References: <20190723030206.2919-1-hslester96@gmail.com>
+In-Reply-To: <20190723030206.2919-1-hslester96@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 768941c9-8779-4dd5-19c6-08d72b672b93
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5215;
+x-ms-traffictypediagnostic: VI1PR04MB5215:
+x-microsoft-antispam-prvs: <VI1PR04MB5215B0F234FD62DCA98E07038BA30@VI1PR04MB5215.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3044;
+x-forefront-prvs: 014304E855
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(346002)(396003)(366004)(136003)(376002)(39860400002)(199004)(189003)(9686003)(5660300002)(99286004)(6512007)(76116006)(66946007)(33656002)(4326008)(91956017)(6486002)(229853002)(478600001)(86362001)(6246003)(3846002)(6116002)(7736002)(305945005)(53936002)(33716001)(1076003)(25786009)(66066001)(6436002)(64756008)(76176011)(6916009)(14454004)(102836004)(446003)(11346002)(53546011)(26005)(6506007)(81156014)(71190400001)(71200400001)(486006)(8936002)(186003)(54906003)(8676002)(1411001)(316002)(66446008)(2906002)(44832011)(476003)(256004)(66556008)(81166006)(66476007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5215;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 6pJpJgrMW5TVQE+yTHOaFMQqmtQzmI0laLLrgrXybv/03xhxTgswJDK13loNjHnrgvBWA0Dccv2GjedV3IWH1NbkuIaGSV3wvA1ss5NHTNLlsF7QXA0bvGyYpUtosdishrBxl5ppgOIwLUCc9Bm7dKXp1fRO2RZKZexITrbGtiunQpgVQO9rhO1LwHV0VVKHRxSeLNmkSikaqJXL2IwrTX14BXioUkSjZ/z5BTg3qRWS9tUZwRTFsaIQVGLqkGwXk9o152nSY4RzQotRldXpNfJDSS8e6W91ATWdpDw5EtxlpLOXMIwIKBjxcWutc+z8tITtn/tExG+jN5ps5I4oXVps3kkvUbJHR3Gk9JikLlgybrWxG9DKRr4vITL/TTD7Q4JQAqSv4LEdyfiL5ATk1IMXBhW+hMOJsPpKTV3pmOc=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <272B15344AB0F742B560731FEC28A3E0@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9000ddaa-24f0-5c76-43a4-318f00ea31dc@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 768941c9-8779-4dd5-19c6-08d72b672b93
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Aug 2019 03:24:00.7611
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EQuVKBv1n6/4SI43mQSde7nPj1wUsPNgsz4Ae8E2ZLIGTG5v8ywJ3nZloH6LG0u1depYAZOR72ckcyFZk5854w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5215
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 08:43:55AM -0600, shuah wrote:
-> On 8/27/19 8:38 AM, shuah wrote:
-> > On 8/26/19 11:23 AM, Suwan Kim wrote:
-> > > There are bugs on vhci with usb 3.0 storage device. In USB, each SG
-> > > list entry buffer should be divisible by the bulk max packet size.
-> > > But with native SG support, this problem doesn't matter because the
-> > > SG buffer is treated as contiguous buffer. But without native SG
-> > > support, USB storage driver breaks SG list into several URBs and the
-> > > error occurs because of a buffer size of URB that cannot be divided
-> > > by the bulk max packet size. The error situation is as follows.
-> > > 
-> > > When USB Storage driver requests 31.5 KB data and has SG list which
-> > > has 3584 bytes buffer followed by 7 4096 bytes buffer for some
-> > > reason. USB Storage driver splits this SG list into several URBs
-> > > because VHCI doesn't support SG and sends them separately. So the
-> > > first URB buffer size is 3584 bytes. When receiving data from device,
-> > > USB 3.0 device sends data packet of 1024 bytes size because the max
-> > > packet size of BULK pipe is 1024 bytes. So device sends 4096 bytes.
-> > > But the first URB buffer has only 3584 bytes buffer size. So host
-> > > controller terminates the transfer even though there is more data to
-> > > receive. So, vhci needs to support SG transfer to prevent this error.
-> > > 
-> > > In this patch, vhci supports SG regardless of whether the server's
-> > > host controller supports SG or not, because stub driver splits SG
-> > > list into several URBs if the server's host controller doesn't
-> > > support SG.
-> > > 
-> > > To support SG, vhci sets URB_DMA_MAP_SG flag in transfer_flags of
-> > > usbip header if URB has SG list and this flag will tell stub driver
-> > > to use SG list.
-> > > 
-> > > vhci sends each SG list entry to stub driver. Then, stub driver sees
-> > > the total length of the buffer and allocates SG table and pages
-> > > according to the total buffer length calling sgl_alloc(). After stub
-> > > driver receives completed URB, it again sends each SG list entry to
-> > > vhci.
-> > > 
-> > > If the server's host controller doesn't support SG, stub driver
-> > > breaks a single SG request into several URBs and submits them to
-> > > the server's host controller. When all the split URBs are completed,
-> > > stub driver reassembles the URBs into a single return command and
-> > > sends it to vhci.
-> > > 
-> > > Moreover, in the situation where vhci supports SG, but stub driver
-> > > does not, or vice versa, usbip works normally. Because there is no
-> > > protocol modification, there is no problem in communication between
-> > > server and client even if the one has a kernel without SG support.
-> > > 
-> > > In the case of vhci supports SG and stub driver doesn't, because
-> > > vhci sends only the total length of the buffer to stub driver as
-> > > it did before the patch applied, stub driver only needs to allocate
-> > > the required length of buffers using only kmalloc() regardless of
-> > > whether vhci supports SG or not. But stub driver has to allocate
-> > > buffer with kmalloc() as much as the total length of SG buffer which
-> > > is quite huge when vhci sends SG request, so it has overhead in
-> > > buffer allocation in this situation.
-> > > 
-> > > If stub driver needs to send data buffer to vhci because of IN pipe,
-> > > stub driver also sends only total length of buffer as metadata and
-> > > then sends real data as vhci does. Then vhci receive data from stub
-> > > driver and store it to the corresponding buffer of SG list entry.
-> > > 
-> > > And for the case of stub driver supports SG and vhci doesn't, since
-> > > the USB storage driver checks that vhci doesn't support SG and sends
-> > > the request to stub driver by splitting the SG list into multiple
-> > > URBs, stub driver allocates a buffer for each URB with kmalloc() as
-> > > it did before this patch.
-> > > 
-> > > * Test environment
-> > > 
-> > > Test uses two difference machines and two different kernel version
-> > > to make mismatch situation between the client and the server where
-> > > vhci supports SG, but stub driver does not, or vice versa. All tests
-> > > are conducted in both full SG support that both vhci and stub support
-> > > SG and half SG support that is the mismatch situation. Test kernel
-> > > version is 5.3-rc6 with commit "usb: add a HCD_DMA flag instead of
-> > > guestimating DMA capabilities" to avoid unnecessary DMA mapping and
-> > > unmapping.
-> > > 
-> > >   - Test kernel version
-> > >      - 5.3-rc6 with SG support
-> > >      - 5.1.20-200.fc29.x86_64 without SG support
-> > > 
-> > > * SG support test
-> > > 
-> > >   - Test devices
-> > >      - Super-speed storage device - SanDisk Ultra USB 3.0
-> > >      - High-speed storage device - SMI corporation USB 2.0 flash drive
-> > > 
-> > >   - Test description
-> > > 
-> > > Test read and write operation of mass storage device that uses the
-> > > BULK transfer. In test, the client reads and writes files whose size
-> > > is over 1G and it works normally.
-> > > 
-> > > * Regression test
-> > > 
-> > >   - Test devices
-> > >      - Super-speed device - Logitech Brio webcam
-> > >      - High-speed device  - Logitech C920 HD Pro webcam
-> > >      - Full-speed device  - Logitech bluetooth mouse
-> > >                           - Britz BR-Orion speaker
-> > >      - Low-speed device   - Logitech wired mouse
-> > > 
-> > >   - Test description
-> > > 
-> > > Moving and click test for mouse. To test the webcam, use gnome-cheese.
-> > > To test the speaker, play music and video on the client. All works
-> > > normally.
-> > > 
-> > > * VUDC compatibility test
-> > > 
-> > > VUDC also works well with this patch. Tests are done with two USB
-> > > gadget created by CONFIGFS USB gadget. Both use the BULK pipe.
-> > > 
-> > >          1. Serial gadget
-> > >          2. Mass storage gadget
-> > > 
-> > >   - Serial gadget test
-> > > 
-> > > Serial gadget on the host sends and receives data using cat command
-> > > on the /dev/ttyGS<N>. The client uses minicom to communicate with
-> > > the serial gadget.
-> > > 
-> > >   - Mass storage gadget test
-> > > 
-> > > After connecting the gadget with vhci, use "dd" to test read and
-> > > write operation on the client side.
-> > > 
-> > > Read  - dd if=/dev/sd<N> iflag=direct of=/dev/null bs=1G count=1
-> > > Write - dd if=<my file path> iflag=direct of=/dev/sd<N> bs=1G count=1
-> > > 
-> > > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > > ---
-> > > v7 - v8
-> > > - Modify the commit log which describes URB_DMA_MAP_SG flag setting.
-> > > 
-> > > v6 - v7
-> > > - Move the flag set in setup_cmd_submit_pdu() of vhci_tx.c and
-> > >    manipulate usbip header flag instead of urb->transfer_flags.
-> > > 
-> > > - Remove clearing URB_DMA_MAP_SG flag in vhci_rx.
-> > 
-> > setup_cmd_submit_pdu() is just for pdu and shouldn't be concerned
-> > about the urb.
-> > 
-> > Please keep the URB_DMA_MAP_SG setting in urb->transfer_flags.
-> > That mean you are restoring v6 code change with the commit log
-> > updates from v8.
-> > 
-> 
-> I mean v6 with my comments on v6 addressed, moving setting the flag
-> after kalloc() and other comments.
+On 19-07-23 11:02:07, Chuhong Yuan wrote:
+> Use devm_reset_controller_register to get rid
+> of manual unregistration.
+>=20
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+> ---
+>  drivers/usb/chipidea/ci_hdrc_msm.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci=
+_hdrc_msm.c
+> index bb4645a8ca46..067542e84aea 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_msm.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+> @@ -216,7 +216,7 @@ static int ci_hdrc_msm_probe(struct platform_device *=
+pdev)
+>  	ci->rcdev.ops =3D &ci_hdrc_msm_reset_ops;
+>  	ci->rcdev.of_node =3D pdev->dev.of_node;
+>  	ci->rcdev.nr_resets =3D 2;
+> -	ret =3D reset_controller_register(&ci->rcdev);
+> +	ret =3D devm_reset_controller_register(&pdev->dev, &ci->rcdev);
+>  	if (ret)
+>  		return ret;
+> =20
+> @@ -272,7 +272,6 @@ static int ci_hdrc_msm_probe(struct platform_device *=
+pdev)
+>  err_iface:
+>  	clk_disable_unprepare(ci->core_clk);
+>  err_fs:
+> -	reset_controller_unregister(&ci->rcdev);
 
-Ok. I completed test with your comment and 5.3-rc6 and will send v9.
+It is devm API, why the unregister needs to be called at
+fail path?
 
-Regards
-Suwan Kim
+Peter
+
+>  	return ret;
+>  }
+> =20
+> @@ -284,7 +283,6 @@ static int ci_hdrc_msm_remove(struct platform_device =
+*pdev)
+>  	ci_hdrc_remove_device(ci->ci);
+>  	clk_disable_unprepare(ci->iface_clk);
+>  	clk_disable_unprepare(ci->core_clk);
+> -	reset_controller_unregister(&ci->rcdev);
+> =20
+>  	return 0;
+>  }
+> --=20
+> 2.20.1
+> =
