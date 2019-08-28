@@ -2,83 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 739D89F71D
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 01:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48E29F7CE
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 03:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726092AbfH0X76 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Aug 2019 19:59:58 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:36687 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726065AbfH0X76 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 19:59:58 -0400
-Received: by mail-wm1-f68.google.com with SMTP id p13so623279wmh.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Aug 2019 16:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W77jTG8bpy693vui4bkkDm6EWrj+wqx5LPjIltQ2Bvg=;
-        b=Q5Z5XfDAESAdLfdGE6V4W96CLOS3dePdM2+vmZfW8cm+pb1ZUVhF1J6Rfypeiyc7sJ
-         s5q4L+VwYxCn49Ugw6k6/xI0JZcp1AAzgjL5uVV5znv9hy6LsWZSQvoALgfxDNRogtNq
-         xZIhQ0yjN9+8TUG96Xzlq4Z4PJNPRgoS8dd6g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W77jTG8bpy693vui4bkkDm6EWrj+wqx5LPjIltQ2Bvg=;
-        b=kQoPg6wD0K+o5WemSb849cG0Rinz6vWdb5FqFnIcZm3xcpH8K9ZXLpAqXzbni7ig6k
-         q8f8PDlFzlIXJYyEcrgCNyLwoG4yVHDhEyw4skScRuKgoi0/RXgO4Yy3wEpT4n9oRt4n
-         C7Lm1IwHQC3iHY2AxoVkwPkJ90wuiUY7hEIupOsqkSP7SK6w1y7zwSKSQJrTHKSYLRfo
-         Be5EEGz7Vmsl9vbseoDvEOW64zVz8ms1MG5F1LZx50wxY/0RBLlNF8zFaNSS4YsdZ7UO
-         vNrH0liaY1OUBds/lSuIYOuB9ObAeD7IWXDpZAW4b7R9nlcziWLK10QCMNih8Q3YknDo
-         5Tuw==
-X-Gm-Message-State: APjAAAVXH80WH5M3W1InIUMBukOxAqLDermD5RkmySOEZ4SCYY2p1+ws
-        7LEFHeBbfH+q2Kqu4CFZomx6ZQY5inMz7yPJH38IX7923NQ=
-X-Google-Smtp-Source: APXvYqxR32O+zrZRq6UlHyugg3oVxb6uNT8nx9VRWJKKwAsOCnBzaY+cuwdNtMkDLqIR1CU5+OLY5uUIyeUmEnPScAY=
-X-Received: by 2002:a7b:ca54:: with SMTP id m20mr1001230wml.102.1566950396022;
- Tue, 27 Aug 2019 16:59:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190827231409.253037-1-jwerner@chromium.org> <CAA6KcBAykS+VkhkcF42PhGyNu8KAEoaYPgA9-ru_HCxKrAEZzg@mail.gmail.com>
-In-Reply-To: <CAA6KcBAykS+VkhkcF42PhGyNu8KAEoaYPgA9-ru_HCxKrAEZzg@mail.gmail.com>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Tue, 27 Aug 2019 16:59:43 -0700
-Message-ID: <CAODwPW-+pPtiBh8Swn-cFs--2YaG6fMDyAzLXRucoweV50hDwA@mail.gmail.com>
-Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
-To:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
-        USB Mass Storage on Linux 
-        <usb-storage@lists.one-eyed-alien.net>
+        id S1726278AbfH1B2Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Aug 2019 21:28:25 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:5087 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726096AbfH1B2Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Aug 2019 21:28:25 -0400
+X-UUID: 96f7fddde3974cd790b42912ff8297f0-20190828
+X-UUID: 96f7fddde3974cd790b42912ff8297f0-20190828
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 237847491; Wed, 28 Aug 2019 09:28:26 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 28 Aug
+ 2019 09:28:24 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 28 Aug 2019 09:28:23 +0800
+Message-ID: <1566955695.7317.17.camel@mhfsdcap03>
+Subject: Re: [PATCH next v10 03/11] dt-bindings: usb: add binding for USB
+ GPIO based connection detection driver
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Matthias Brugger" <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        "Badhri Jagan Sridharan" <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Date:   Wed, 28 Aug 2019 09:28:15 +0800
+In-Reply-To: <20190827183154.GA10374@bogus>
+References: <1566547041-20804-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1566547041-20804-4-git-send-email-chunfeng.yun@mediatek.com>
+         <20190827183154.GA10374@bogus>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 259D35EFF30C0616C1A211BC45937CDECB94215148384FD745984477FEA65A402000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Why not do the mode switch from userspace?  I thought we were trying to move all the mode-switching stuff in that direction.....
+On Tue, 2019-08-27 at 13:31 -0500, Rob Herring wrote:
+> On Fri, Aug 23, 2019 at 03:57:13PM +0800, Chunfeng Yun wrote:
+> > It's used to support dual role switch via GPIO when use Type-B
+> > receptacle, typically the USB ID pin is connected to an input
+> > GPIO, and also used to enable/disable device when the USB Vbus
+> > pin is connected to an input GPIO.
+> > 
+> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > ---
+> > v9~v10 no changes
+> > 
+> > v8 changes:
+> >  1. rename the title
+> >  2. change the compatible as "linux,usb-conn-gpio" instead of
+> >     "linux,typeb-conn-gpio"
+> 
+> I don't think that is an improvement. How about 'gpio-usb-b-connector' 
+> to be consistent.
+Ok
 
-I need to tie in to the main USB mass storage driver in a way that I
-think would make it too complicated to move the mode switching part to
-userspace. See the part I'm adding to initializers.c... that one has
-to be in the kernel since it operates on the device after the mode
-switch when it is claimed by the normal USB storage driver. But the
-mode switch part has to communicate information to it to make sure it
-picks up the right device (just relying on the normal USB device
-matching isn't enough in this case, because all Android devices in AOA
-mode identify themselves with that well-known VID/PID... I don't know
-if there's any other kernel driver using this protocol today, but
-there may be at some point and then it becomes important to make sure
-you really grab the device you meant to grab). Some of that
-information (the 'route' field) isn't even directly available from
-userspace (I could use the device name string instead and that would
-roughly come out to the same thing, but seems less clean to me).
+> 
+> > 
+> > v7 changes:
+> >  1. add description for device only mode
+> > 
+> > v6 changes:
+> >  1. remove status and port nodes in example
+> >  2. make vbus-supply as optional property
+> > 
+> > v5 changes:
+> >  1. treat type-B connector as child device of USB controller's, but not
+> >     as a separate virtual device, suggested by Rob
+> >  2. put connector's port node under connector node, suggested by Rob
+> > 
+> > v4 no changes
+> > 
+> > v3 changes:
+> >  1. treat type-B connector as a virtual device, but not child device of
+> >     USB controller's
+> > 
+> > v2 changes:
+> >   1. new patch to make binding clear suggested by Hans
+> > ---
+> >  .../devicetree/bindings/usb/usb-conn-gpio.txt | 31 +++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
+> > 
+> > diff --git a/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt b/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
+> > new file mode 100644
+> > index 000000000000..d4d107fedc22
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
+> > @@ -0,0 +1,31 @@
+> > +USB GPIO Based Connection Detection
+> > +
+> > +This is typically used to switch dual role mode from the USB ID pin connected
+> > +to an input GPIO, and also used to enable/disable device mode from the USB
+> > +Vbus pin connected to an input GPIO.
+> > +
+> > +Required properties:
+> > +- compatible : should include "linux,usb-conn-gpio" and "usb-b-connector".
+> > +- id-gpios, vbus-gpios : input gpios, either one of them must be present,
+> > +	and both can be present as well.
+> > +	see connector/usb-connector.txt
+> > +
+> > +Optional properties:
+> > +- vbus-supply : can be present if needed when supports dual role mode.
+> > +	see connector/usb-connector.txt
+> > +
+> > +- Sub-nodes:
+> > +	- port : can be present.
+> > +		see graph.txt
+> > +
+> > +Example:
+> > +
+> > +&mtu3 {
+> > +	connector {
+> > +		compatible = "linux,usb-conn-gpio", "usb-b-connector";
+> > +		label = "micro-USB";
+> 
+> 'label' is for a human identifying a particular connector when there are 
+> multiple (of the same type). So not a great example here.
+Got it, will remove it
 
-So I could either do the mode switch in userspace and add a big custom
-sysfs interface to the usb-storage driver to allow userspace to
-configure all this, or I can add a small kernel shim driver like in
-this patch. Considering how little code the shim driver actually needs
-I expect it would come out to roughly the same amount of kernel code
-in both cases, and I feel like this version is much simpler to follow
-and fits cleaner in the existing "unusual device" driver
-infrastructure.
+Thanks a lot
+> 
+> > +		type = "micro";
+> > +		id-gpios = <&pio 12 GPIO_ACTIVE_HIGH>;
+> > +		vbus-supply = <&usb_p0_vbus>;
+> > +	};
+> > +};
+> > -- 
+> > 2.23.0
+> > 
+
+
