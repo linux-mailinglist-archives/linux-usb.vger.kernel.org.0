@@ -2,112 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4D4A0570
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 16:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BDA3A057F
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 17:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbfH1O6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Aug 2019 10:58:37 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:42980 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbfH1O6h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 10:58:37 -0400
-Received: by mail-lf1-f68.google.com with SMTP id u13so2425753lfm.9;
-        Wed, 28 Aug 2019 07:58:35 -0700 (PDT)
+        id S1726586AbfH1PCH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Aug 2019 11:02:07 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:37335 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726466AbfH1PCH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 11:02:07 -0400
+Received: by mail-io1-f70.google.com with SMTP id m7so3996354ioc.4
+        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2019 08:02:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8YmNYpAsozJM2W+xkUeMpjHRI0FhBBXfioemVsH1jkE=;
-        b=CkUnyDTf0PR8jDJmjzytcNQo/lK8kgBmdKVH48EVICyn73UNcYsShdWqmfdiFIZHTA
-         wLkRqsqLVGrrDwacCP2LjIPjc4ahe2qif2MMJRdOUV6EMv1PxflOWhrFr91d2rMyVBpE
-         L9NMaWsZ5zMZIkR3DkuzbxDP5hv543St7M5MvbdgNTk7BRROd3KN4Er6llHXja96DLpZ
-         mBU0RfQNohVkcemDZqk+Ua/k7p1CWiqLk0JI9SGhEg3GPawNTE0tgqczs3M4p/dMq05Y
-         6bg+qyx2X9I9QOGTTSLwvWTRl+sTeI/b29biNt9/M3WncLOZVosHWHydZsm0RbyNserE
-         GFlw==
-X-Gm-Message-State: APjAAAUf4kquvpesjgOuToyl/GIT233mPZV7uBZP2TGFFtnF2SUZ09HN
-        PyU5efcEm6tccJb+uHHsF558sKj0ca4=
-X-Google-Smtp-Source: APXvYqzpJU9WDE6PBAh2E+k7LHNv2Od8m+RkZewIUdP7zo/2L3bY1LPCle2Z8Fcl6zZEPnKWV0162w==
-X-Received: by 2002:ac2:4835:: with SMTP id 21mr2854924lft.121.1567004315207;
-        Wed, 28 Aug 2019 07:58:35 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id u14sm662869ljd.14.2019.08.28.07.58.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Aug 2019 07:58:34 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1i2zP5-0008E8-DI; Wed, 28 Aug 2019 16:58:31 +0200
-Date:   Wed, 28 Aug 2019 16:58:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V1 2/6] USB: serial: f81232: Force F81534A with RS232 mode
-Message-ID: <20190828145831.GI13017@localhost>
-References: <1559789656-15847-1-git-send-email-hpeter+linux_kernel@gmail.com>
- <1559789656-15847-3-git-send-email-hpeter+linux_kernel@gmail.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=eu539FS/Z7Btb3QzUArh3SmOtWSvireNfrFuvIPgtBE=;
+        b=hsNJ8ot4gw3Deg5JsA+TJ4MJxWJ/LnHn9BG34SGRRMFGDD3YhkhFzecXeLvXfRY23g
+         feou8O8jf2Se5x5AqcqsX/dIbS6KY8h814tk17zvS1DTFpHtNvda8Mx2hZHoU1dEjLKa
+         gNp6FKGVP0vH3G+PGff0dmqOs4sNm7hXcrjd9G/nUT53Vy6ZcNAcMPmZDmFWY0PqB5WX
+         n3xEPKk+/vGdPSEYaz7KI5VJLYNCuBAhaIjrwhfOVikP/Yyp++5kj8cs6CgPDHUxubWh
+         ecZj9cHS3ppq8MMr7UvcFafJyWlTrr7I4+UuqIVsDV6T6YIRlWaBulv9c4KmCnFb6vOt
+         h35A==
+X-Gm-Message-State: APjAAAWpMQPE8+qS1mIoaZVpzPMv5HU5o2BgdU/E3T/CYmCdQuHjGqjl
+        iXj7EvVVmrxhBDNf2Zepo/MMYh9kTt7QDSrlKEeK1dRn0Gcv
+X-Google-Smtp-Source: APXvYqzwE8A19rSH3hcqIFHzR8UX7yHb38ttALYpTM8PGsuecOx6RGW76+8BmerxLnoVe4V/c19tCJ74GeBDJUhqc0C1Bh31/URj
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1559789656-15847-3-git-send-email-hpeter+linux_kernel@gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5d:8c8b:: with SMTP id g11mr5136835ion.134.1567004526196;
+ Wed, 28 Aug 2019 08:02:06 -0700 (PDT)
+Date:   Wed, 28 Aug 2019 08:02:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000025435f05912eacc8@google.com>
+Subject: KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
+From:   syzbot <syzbot+4f11661279f916ba5627@syzkaller.appspotmail.com>
+To:     bigeasy@linutronix.de, chunfeng.yun@mediatek.com,
+        dtor@chromium.org, gregkh@linuxfoundation.org, jwilk@jwilk.net,
+        laurentiu.tudor@nxp.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rrangel@chromium.org,
+        stern@rowland.harvard.edu, suwan.kim027@gmail.com,
+        syzkaller-bugs@googlegroups.com, tweek@google.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 06, 2019 at 10:54:12AM +0800, Ji-Ze Hong (Peter Hong) wrote:
-> Force F81534A series UARTs with RS232 mode in port_probe().
+Hello,
 
-Please expand on why you need this here.
+syzbot found the following crash on:
 
-> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-> ---
->  drivers/usb/serial/f81232.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-> index 84efcc66aa56..75dfc0b9ef30 100644
-> --- a/drivers/usb/serial/f81232.c
-> +++ b/drivers/usb/serial/f81232.c
-> @@ -83,12 +83,22 @@ MODULE_DEVICE_TABLE(usb, id_table);
->  #define F81232_F81232_TYPE		1
->  #define F81232_F81534A_TYPE		2
->  
-> +/* Serial port self GPIO control, 2bytes [control&output data][input data] */
-> +#define F81534A_GPIO_REG		0x10e
-> +#define F81534A_GPIO_MODE2_DIR		BIT(6) /* 1: input, 0: output */
-> +#define F81534A_GPIO_MODE1_DIR		BIT(5)
-> +#define F81534A_GPIO_MODE0_DIR		BIT(4)
-> +#define F81534A_GPIO_MODE2_OUTPUT	BIT(2)
-> +#define F81534A_GPIO_MODE1_OUTPUT	BIT(1)
-> +#define F81534A_GPIO_MODE0_OUTPUT	BIT(0)
-> +
->  struct f81232_private {
->  	struct mutex lock;
->  	u8 modem_control;
->  	u8 modem_status;
->  	u8 shadow_lcr;
->  	u8 device_type;
-> +	u8 gpio_mode;
+HEAD commit:    a55aa89a Linux 5.3-rc6
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12899ca2600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2a6a2b9826fdadf9
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f11661279f916ba5627
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-Why store the mode? Are you going to use it later?
+Unfortunately, I don't have any reproducer for this crash yet.
 
->  	speed_t baud_base;
->  	struct work_struct lsr_work;
->  	struct work_struct interrupt_work;
-> @@ -871,6 +881,11 @@ static int f81232_port_probe(struct usb_serial_port *port)
->  	switch (priv->device_type) {
->  	case F81232_F81534A_TYPE:
->  		priv->process_read_urb = f81534a_process_read_urb;
-> +		priv->gpio_mode = F81534A_GPIO_MODE2_DIR;
-> +
-> +		/* tri-state with pull-high, default RS232 Mode */
-> +		status = f81232_set_register(port, F81534A_GPIO_REG,
-> +					priv->gpio_mode);
->  		break;
->  
->  	case F81232_F81232_TYPE:
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4f11661279f916ba5627@syzkaller.appspotmail.com
 
-Johan
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:359 [inline]
+BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x423/0x6b0  
+drivers/usb/core/hcd.c:774
+Write of size 2 at addr ffff8880a8e964c0 by task syz-executor.4/9841
+
+CPU: 1 PID: 9841 Comm: syz-executor.4 Not tainted 5.3.0-rc6 #146
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
+  print_address_description.cold+0xd4/0x306 mm/kasan/report.c:351
+  __kasan_report.cold+0x1b/0x36 mm/kasan/report.c:482
+  kasan_report+0x12/0x17 mm/kasan/common.c:618
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
+  memcpy+0x38/0x50 mm/kasan/common.c:123
+  memcpy include/linux/string.h:359 [inline]
+  usb_hcd_poll_rh_status+0x423/0x6b0 drivers/usb/core/hcd.c:774
+  rh_timer_func+0x19/0x20 drivers/usb/core/hcd.c:800
+  call_timer_fn+0x1ac/0x780 kernel/time/timer.c:1322
+  expire_timers kernel/time/timer.c:1366 [inline]
+  __run_timers kernel/time/timer.c:1685 [inline]
+  __run_timers kernel/time/timer.c:1653 [inline]
+  run_timer_softirq+0x697/0x17a0 kernel/time/timer.c:1698
+  __do_softirq+0x262/0x98c kernel/softirq.c:292
+  invoke_softirq kernel/softirq.c:373 [inline]
+  irq_exit+0x19b/0x1e0 kernel/softirq.c:413
+  exiting_irq arch/x86/include/asm/apic.h:537 [inline]
+  smp_apic_timer_interrupt+0x1a3/0x610 arch/x86/kernel/apic/apic.c:1133
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+  </IRQ>
+RIP: 0010:check_memory_region+0x1f/0x1a0 mm/kasan/generic.c:191
+Code: 00 66 2e 0f 1f 84 00 00 00 00 00 48 85 f6 0f 84 34 01 00 00 48 b8 ff  
+ff ff ff ff 7f ff ff 55 0f b6 d2 48 39 c7 48 89 e5 41 55 <41> 54 53 0f 86  
+07 01 00 00 4c 8d 5c 37 ff 49 89 f8 48 b8 00 00 00
+RSP: 0018:ffff88805ef17aa8 EFLAGS: 00000212 ORIG_RAX: ffffffffffffff13
+RAX: ffff7fffffffffff RBX: 0000000000000000 RCX: ffffffff873d1e85
+RDX: 0000000000000001 RSI: 0000000000000008 RDI: ffffffff897e2fc0
+RBP: ffff88805ef17ab0 R08: 1ffffffff12fc5f8 R09: fffffbfff12fc5f9
+R10: fffffbfff12fc5f8 R11: ffffffff897e2fc7 R12: fffffbfff134b5c6
+R13: ffff88805ef0e2c0 R14: ffffffff897e2fc0 R15: 0000000000000000
+  __kasan_check_write+0x14/0x20 mm/kasan/common.c:98
+  atomic64_cmpxchg include/asm-generic/atomic-instrumented.h:1463 [inline]
+  atomic_long_cmpxchg_acquire include/asm-generic/atomic-long.h:418 [inline]
+  __mutex_trylock_or_owner kernel/locking/mutex.c:111 [inline]
+  __mutex_trylock kernel/locking/mutex.c:126 [inline]
+  __mutex_lock_common kernel/locking/mutex.c:932 [inline]
+  __mutex_lock+0x425/0x13c0 kernel/locking/mutex.c:1077
+  mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1092
+  nf_sockopt_find.constprop.0+0x2d/0x290 net/netfilter/nf_sockopt.c:67
+  nf_sockopt net/netfilter/nf_sockopt.c:99 [inline]
+  nf_getsockopt+0x30/0xd0 net/netfilter/nf_sockopt.c:122
+  ip_getsockopt net/ipv4/ip_sockglue.c:1576 [inline]
+  ip_getsockopt+0x176/0x1d0 net/ipv4/ip_sockglue.c:1556
+  tcp_getsockopt net/ipv4/tcp.c:3665 [inline]
+  tcp_getsockopt+0x8f/0xe0 net/ipv4/tcp.c:3659
+  sock_common_getsockopt+0x94/0xd0 net/core/sock.c:3098
+  __sys_getsockopt+0x16d/0x310 net/socket.c:2129
+  __do_sys_getsockopt net/socket.c:2144 [inline]
+  __se_sys_getsockopt net/socket.c:2141 [inline]
+  __x64_sys_getsockopt+0xbe/0x150 net/socket.c:2141
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x45c38a
+Code: b8 34 01 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 dd 8c fb ff c3 66 2e 0f  
+1f 84 00 00 00 00 00 66 90 49 89 ca b8 37 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 ba 8c fb ff c3 66 0f 1f 84 00 00 00 00 00
+RSP: 002b:0000000000a6f618 EFLAGS: 00000202 ORIG_RAX: 0000000000000037
+RAX: ffffffffffffffda RBX: 0000000000a6f640 RCX: 000000000045c38a
+RDX: 0000000000000041 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 0000000000714e80 R08: 0000000000a6f63c R09: 0000000000004000
+R10: 0000000000a6f740 R11: 0000000000000202 R12: 0000000000000003
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000713380
+
+Allocated by task 29984:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:493 [inline]
+  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:466
+  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:507
+  __do_kmalloc mm/slab.c:3655 [inline]
+  __kmalloc+0x163/0x770 mm/slab.c:3664
+  kmalloc include/linux/slab.h:557 [inline]
+  proc_bulk+0x2f5/0x7f0 drivers/usb/core/devio.c:1168
+  usbdev_do_ioctl+0x525/0x2d10 drivers/usb/core/devio.c:2443
+  usbdev_ioctl+0x26/0x30 drivers/usb/core/devio.c:2600
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xdb6/0x13e0 fs/ioctl.c:696
+  ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+Freed by task 25754:
+  save_stack+0x23/0x90 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:455
+  kasan_slab_free+0xe/0x10 mm/kasan/common.c:463
+  __cache_free mm/slab.c:3425 [inline]
+  kfree+0x10a/0x2c0 mm/slab.c:3756
+  kvfree+0x61/0x70 mm/util.c:488
+  __vunmap+0x6c5/0x920 mm/vmalloc.c:2255
+  __vfree+0x41/0xd0 mm/vmalloc.c:2299
+  vfree+0x5f/0x90 mm/vmalloc.c:2329
+  copy_entries_to_user net/ipv4/netfilter/ip_tables.c:867 [inline]
+  get_entries net/ipv4/netfilter/ip_tables.c:1024 [inline]
+  do_ipt_get_ctl+0x71a/0x930 net/ipv4/netfilter/ip_tables.c:1700
+  nf_sockopt net/netfilter/nf_sockopt.c:104 [inline]
+  nf_getsockopt+0x7a/0xd0 net/netfilter/nf_sockopt.c:122
+  ip_getsockopt net/ipv4/ip_sockglue.c:1576 [inline]
+  ip_getsockopt+0x176/0x1d0 net/ipv4/ip_sockglue.c:1556
+  tcp_getsockopt net/ipv4/tcp.c:3665 [inline]
+  tcp_getsockopt+0x8f/0xe0 net/ipv4/tcp.c:3659
+  sock_common_getsockopt+0x94/0xd0 net/core/sock.c:3098
+  __sys_getsockopt+0x16d/0x310 net/socket.c:2129
+  __do_sys_getsockopt net/socket.c:2144 [inline]
+  __se_sys_getsockopt net/socket.c:2141 [inline]
+  __x64_sys_getsockopt+0xbe/0x150 net/socket.c:2141
+  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+The buggy address belongs to the object at ffff8880a8e964c0
+  which belongs to the cache kmalloc-32 of size 32
+The buggy address is located 0 bytes inside of
+  32-byte region [ffff8880a8e964c0, ffff8880a8e964e0)
+The buggy address belongs to the page:
+page:ffffea0002a3a580 refcount:1 mapcount:0 mapping:ffff8880aa4001c0  
+index:0xffff8880a8e96fc1
+flags: 0x1fffc0000000200(slab)
+raw: 01fffc0000000200 ffffea000269fe08 ffffea000161c988 ffff8880aa4001c0
+raw: ffff8880a8e96fc1 ffff8880a8e96000 000000010000003b 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8880a8e96380: 00 00 00 fc fc fc fc fc 00 00 00 fc fc fc fc fc
+  ffff8880a8e96400: 00 00 00 fc fc fc fc fc fb fb fb fb fc fc fc fc
+> ffff8880a8e96480: 00 00 fc fc fc fc fc fc 01 fc fc fc fc fc fc fc
+                                            ^
+  ffff8880a8e96500: 00 00 fc fc fc fc fc fc 00 00 fc fc fc fc fc fc
+  ffff8880a8e96580: fb fb fb fb fc fc fc fc 00 00 00 fc fc fc fc fc
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
