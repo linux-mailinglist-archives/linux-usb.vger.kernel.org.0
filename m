@@ -2,220 +2,504 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDA3A057F
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 17:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9260EA0588
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 17:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbfH1PCH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Aug 2019 11:02:07 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:37335 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726466AbfH1PCH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 11:02:07 -0400
-Received: by mail-io1-f70.google.com with SMTP id m7so3996354ioc.4
-        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2019 08:02:06 -0700 (PDT)
+        id S1726833AbfH1PC7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Aug 2019 11:02:59 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:33649 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726657AbfH1PC7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 11:02:59 -0400
+Received: by mail-lj1-f195.google.com with SMTP id z17so2941533ljz.0;
+        Wed, 28 Aug 2019 08:02:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=eu539FS/Z7Btb3QzUArh3SmOtWSvireNfrFuvIPgtBE=;
-        b=hsNJ8ot4gw3Deg5JsA+TJ4MJxWJ/LnHn9BG34SGRRMFGDD3YhkhFzecXeLvXfRY23g
-         feou8O8jf2Se5x5AqcqsX/dIbS6KY8h814tk17zvS1DTFpHtNvda8Mx2hZHoU1dEjLKa
-         gNp6FKGVP0vH3G+PGff0dmqOs4sNm7hXcrjd9G/nUT53Vy6ZcNAcMPmZDmFWY0PqB5WX
-         n3xEPKk+/vGdPSEYaz7KI5VJLYNCuBAhaIjrwhfOVikP/Yyp++5kj8cs6CgPDHUxubWh
-         ecZj9cHS3ppq8MMr7UvcFafJyWlTrr7I4+UuqIVsDV6T6YIRlWaBulv9c4KmCnFb6vOt
-         h35A==
-X-Gm-Message-State: APjAAAWpMQPE8+qS1mIoaZVpzPMv5HU5o2BgdU/E3T/CYmCdQuHjGqjl
-        iXj7EvVVmrxhBDNf2Zepo/MMYh9kTt7QDSrlKEeK1dRn0Gcv
-X-Google-Smtp-Source: APXvYqzwE8A19rSH3hcqIFHzR8UX7yHb38ttALYpTM8PGsuecOx6RGW76+8BmerxLnoVe4V/c19tCJ74GeBDJUhqc0C1Bh31/URj
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=YJoeWbyY/k+sFEmxVZnkNQ4kf88g80FsHdtBc8Qpy4E=;
+        b=lHnMQosAa1kRUR+muAevBstBHJ+0wsCS765zyd/086sWXWw53NsuZJDUt3H3AEBOgu
+         JgDavTZCuLKEpRNlRKZ4/wDqPgu++5gn26vzdEEaLEaZNfezFQdX30kD9jrsOaCJK1q8
+         iFbwkKN/BC9l95pznV+PRmT3xASxqYQ2c1WgAdwlHUAX/LJ73YlqS2O1TiAfQobaCCBC
+         F1Wm2p9wJZFBWHarbZjsV6dqn4gU6SS7l4DPene9JMM7QefU94f6HFvg3lLiZ3dvhep8
+         y6lHYnle3JyITweeUkNJypx3dJXmI/iXJjZ0/U9xqck/gWisUo/mQ3otIRs38D1FYXED
+         YztA==
+X-Gm-Message-State: APjAAAVuJu8Uu3/quSc9Z5s5k5NM9rRlANyLTeEky2NbcKUpiUZniHO+
+        XwMAG7JCfC64UV3fxDmKsN4=
+X-Google-Smtp-Source: APXvYqxddlBge+84mJBJN8JTaJ83D6hpSwxxyJul8eodfRBebD3+cwyg+sRrGEdUk045UWpnuV3OWw==
+X-Received: by 2002:a2e:2bc1:: with SMTP id r62mr2336031ljr.215.1567004576413;
+        Wed, 28 Aug 2019 08:02:56 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id n18sm1024632lfe.0.2019.08.28.08.02.55
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Aug 2019 08:02:55 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92)
+        (envelope-from <johan@kernel.org>)
+        id 1i2zTI-0008Fk-GQ; Wed, 28 Aug 2019 17:02:52 +0200
+Date:   Wed, 28 Aug 2019 17:02:52 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH V1 3/6] USB: serial: f81232: Add generator for F81534A
+Message-ID: <20190828150252.GJ13017@localhost>
+References: <1559789656-15847-1-git-send-email-hpeter+linux_kernel@gmail.com>
+ <1559789656-15847-4-git-send-email-hpeter+linux_kernel@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:8c8b:: with SMTP id g11mr5136835ion.134.1567004526196;
- Wed, 28 Aug 2019 08:02:06 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 08:02:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000025435f05912eacc8@google.com>
-Subject: KASAN: slab-out-of-bounds Write in usb_hcd_poll_rh_status
-From:   syzbot <syzbot+4f11661279f916ba5627@syzkaller.appspotmail.com>
-To:     bigeasy@linutronix.de, chunfeng.yun@mediatek.com,
-        dtor@chromium.org, gregkh@linuxfoundation.org, jwilk@jwilk.net,
-        laurentiu.tudor@nxp.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rrangel@chromium.org,
-        stern@rowland.harvard.edu, suwan.kim027@gmail.com,
-        syzkaller-bugs@googlegroups.com, tweek@google.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1559789656-15847-4-git-send-email-hpeter+linux_kernel@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Jun 06, 2019 at 10:54:13AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> The Fintek F81534A series is contains 1 HUB / 1 GPIO device / n UARTs,
+> but the UART is default disable and need enabled by GPIO device(2c42/16F8).
+> When F81534A plug to host, we can only see 1 HUB & 1 GPIO device, add
+> GPIO device USB interface to device_list and trigger generate worker,
+> f81534a_generate_worker to run f81534a_ctrl_generate_ports().
+> 
+> The operation in f81534a_ctrl_generate_ports() as following:
+> 	1: Write 0x8fff to F81534A_CMD_ENABLE_PORT register for enable all
+> 	   UART device.
+> 
+> 	2: Read port existence & current status from F81534A_CMD_PORT_STATUS
+> 	   register. the higher 16bit will indicate the UART existence. If the
+> 	   UART is existence, we'll check it GPIO mode as long as not default
+> 	   value (default is all input mode).
+> 
+> 	3: 1 GPIO device will check with max 15s and check next GPIO device when
+> 	   timeout. (F81534A_CTRL_RETRY * F81534A_CTRL_TIMER)
+> 
+> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
 
-syzbot found the following crash on:
+This is all looks crazy... Please better describe how the device works,
+and you want to implement support.
 
-HEAD commit:    a55aa89a Linux 5.3-rc6
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=12899ca2600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2a6a2b9826fdadf9
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f11661279f916ba5627
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> ---
+>  drivers/usb/serial/f81232.c | 356 +++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 355 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+> index 75dfc0b9ef30..e9470fb0d691 100644
+> --- a/drivers/usb/serial/f81232.c
+> +++ b/drivers/usb/serial/f81232.c
+> @@ -41,6 +41,12 @@ static const struct usb_device_id id_table[] = {
+>  };
+>  MODULE_DEVICE_TABLE(usb, id_table);
+>  
+> +static const struct usb_device_id f81534a_ctrl_id_table[] = {
+> +	{ USB_DEVICE(0x2c42, 0x16f8) },		/* Global control device */
+> +	{ }					/* Terminating entry */
+> +};
+> +MODULE_DEVICE_TABLE(usb, f81534a_ctrl_id_table);
 
-Unfortunately, I don't have any reproducer for this crash yet.
+You can only have one MODULE_DEVICE_TABLE()...
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+4f11661279f916ba5627@syzkaller.appspotmail.com
+> +
+>  /* Maximum baudrate for F81232 */
+>  #define F81232_MAX_BAUDRATE		1500000
+>  #define F81232_DEF_BAUDRATE		9600
+> @@ -49,6 +55,10 @@ MODULE_DEVICE_TABLE(usb, id_table);
+>  #define F81232_REGISTER_REQUEST		0xa0
+>  #define F81232_GET_REGISTER		0xc0
+>  #define F81232_SET_REGISTER		0x40
+> +#define F81534A_REGISTER_REQUEST	F81232_REGISTER_REQUEST
+> +#define F81534A_GET_REGISTER		F81232_GET_REGISTER
+> +#define F81534A_SET_REGISTER		F81232_SET_REGISTER
+> +#define F81534A_ACCESS_REG_RETRY	2
+>  
+>  #define SERIAL_BASE_ADDRESS		0x0120
+>  #define RECEIVE_BUFFER_REGISTER		(0x00 + SERIAL_BASE_ADDRESS)
+> @@ -83,6 +93,10 @@ MODULE_DEVICE_TABLE(usb, id_table);
+>  #define F81232_F81232_TYPE		1
+>  #define F81232_F81534A_TYPE		2
+>  
+> +#define F81534A_MAX_PORT		12
+> +#define F81534A_CTRL_TIMER		1000
+> +#define F81534A_CTRL_RETRY		15
+> +
+>  /* Serial port self GPIO control, 2bytes [control&output data][input data] */
+>  #define F81534A_GPIO_REG		0x10e
+>  #define F81534A_GPIO_MODE2_DIR		BIT(6) /* 1: input, 0: output */
+> @@ -92,6 +106,16 @@ MODULE_DEVICE_TABLE(usb, id_table);
+>  #define F81534A_GPIO_MODE1_OUTPUT	BIT(1)
+>  #define F81534A_GPIO_MODE0_OUTPUT	BIT(0)
+>  
+> +#define F81534A_CMD_ENABLE_PORT		0x116
+> +#define F81534A_CMD_PORT_STATUS		0x117
+> +
+> +/*
+> + * Control device global GPIO control,
+> + * 2bytes [control&output data][input data]
+> + */
+> +#define F81534A_CTRL_GPIO_REG		0x1601
+> +#define F81534A_CTRL_GPIO_MAX_PIN	3
+> +
+>  struct f81232_private {
+>  	struct mutex lock;
+>  	u8 modem_control;
+> @@ -106,10 +130,27 @@ struct f81232_private {
+>  	void (*process_read_urb)(struct urb *urb);
+>  };
+>  
+> +struct f81534a_ctrl_private {
+> +	struct usb_interface *intf;
+> +	struct mutex lock;
+> +	int device_idx;
+> +};
+> +
+> +struct f81534a_device {
+> +	struct list_head list;
+> +	struct usb_interface *intf;
+> +	int check_index;
+> +	int check_retry;
+> +};
+> +
+>  static u32 const baudrate_table[] = { 115200, 921600, 1152000, 1500000 };
+>  static u8 const clock_table[] = { F81232_CLK_1_846_MHZ, F81232_CLK_14_77_MHZ,
+>  				F81232_CLK_18_46_MHZ, F81232_CLK_24_MHZ };
+>  
+> +struct delayed_work f81534a_generate_worker;
+> +static DEFINE_MUTEX(device_mutex);
+> +static LIST_HEAD(device_list);
+> +
+>  static int calc_baud_divisor(speed_t baudrate, speed_t clockrate)
+>  {
+>  	if (!baudrate)
+> @@ -859,6 +900,281 @@ static void f81232_lsr_worker(struct work_struct *work)
+>  		dev_warn(&port->dev, "read LSR failed: %d\n", status);
+>  }
+>  
+> +static int f81534a_ctrl_get_register(struct usb_device *dev, u16 reg, u16 size,
+> +					void *val)
+> +{
+> +	int retry = F81534A_ACCESS_REG_RETRY;
+> +	int status;
+> +	u8 *tmp;
+> +
+> +	tmp = kmalloc(size, GFP_KERNEL);
+> +	if (!tmp)
+> +		return -ENOMEM;
+> +
+> +	while (retry--) {
+> +		status = usb_control_msg(dev,
+> +					usb_rcvctrlpipe(dev, 0),
+> +					F81534A_REGISTER_REQUEST,
+> +					F81534A_GET_REGISTER,
+> +					reg,
+> +					0,
+> +					tmp,
+> +					size,
+> +					USB_CTRL_GET_TIMEOUT);
+> +		if (status != size) {
+> +			status = usb_translate_errors(status);
+> +			if (status == -EIO)
+> +				continue;
+> +
+> +			status = -EIO;
+> +		} else {
+> +			status = 0;
+> +			memcpy(val, tmp, size);
+> +		}
+> +
+> +		break;
+> +	}
+> +
+> +	if (status) {
+> +		dev_err(&dev->dev, "get reg: %x, failed status: %d\n", reg,
+> +				status);
+> +	}
+> +
+> +	kfree(tmp);
+> +	return status;
+> +}
+> +
+> +static int f81534a_ctrl_set_register(struct usb_device *dev, u16 reg, u16 size,
+> +					void *val)
+> +{
+> +	int retry = F81534A_ACCESS_REG_RETRY;
+> +	int status;
+> +	u8 *tmp;
+> +
+> +	tmp = kmalloc(size, GFP_KERNEL);
+> +	if (!tmp)
+> +		return -ENOMEM;
+> +
+> +	memcpy(tmp, val, size);
+> +
+> +	while (retry--) {
+> +		status = usb_control_msg(dev,
+> +					usb_sndctrlpipe(dev, 0),
+> +					F81534A_REGISTER_REQUEST,
+> +					F81534A_SET_REGISTER,
+> +					reg,
+> +					0,
+> +					tmp,
+> +					size,
+> +					USB_CTRL_SET_TIMEOUT);
+> +		if (status != size) {
+> +			status = usb_translate_errors(status);
+> +			if (status == -EIO)
+> +				continue;
+> +
+> +			status = -EIO;
+> +		} else {
+> +			status = 0;
+> +		}
+> +
+> +		break;
+> +	}
+> +
+> +	if (status) {
+> +		dev_err(&dev->dev, "set ctrl reg: %x, failed status: %d\n", reg,
+> +				status);
+> +	}
+> +
+> +	kfree(tmp);
+> +	return status;
+> +}
+> +
+> +static int f81534a_ctrl_generate_ports(struct usb_interface *intf,
+> +					struct f81534a_device *device)
+> +{
+> +	struct usb_device *dev = interface_to_usbdev(intf);
+> +	uint32_t port_status;
+> +	u8 enable[2];
+> +	u8 tmp;
+> +	u8 mask;
+> +	int status;
+> +
+> +	/* enable all ports */
+> +	mask = F81534A_GPIO_MODE2_DIR | F81534A_GPIO_MODE1_DIR |
+> +			F81534A_GPIO_MODE0_DIR;
+> +	enable[0] = 0xff;
+> +	enable[1] = 0x8f;
+> +
+> +	status = f81534a_ctrl_set_register(dev, F81534A_CMD_ENABLE_PORT,
+> +			sizeof(enable), enable);
+> +	if (status) {
+> +		dev_warn(&dev->dev, "set CMD_ENABLE_PORT failed: %d\n", status);
+> +		return status;
+> +	}
+> +
+> +	/* get port state */
+> +	status = f81534a_ctrl_get_register(dev,
+> +			F81534A_CMD_PORT_STATUS, sizeof(port_status),
+> +			&port_status);
+> +	if (status) {
+> +		dev_warn(&dev->dev, "get CMD_PORT_STATUS failed: %d\n", status);
+> +		return status;
+> +	}
+> +
+> +	port_status >>= 16;
+> +
+> +	for (; device->check_index < F81534A_MAX_PORT; ++device->check_index) {
+> +		/* check port is exist, skip when not exist */
+> +		if (!(port_status & BIT(device->check_index)))
+> +			continue;
+> +
+> +		/*
+> +		 * All gpio for a port is default to input mode. It'll change
+> +		 * to RS232 mode after f81232_port_probe()/f81534a_port_init()
+> +		 * (2 output 0 & 1 input with pull high).
+> +		 */
+> +		status = f81534a_ctrl_get_register(dev,
+> +					F81534A_CTRL_GPIO_REG +
+> +					device->check_index, sizeof(tmp), &tmp);
+> +		if (status) {
+> +			dev_warn(&dev->dev, "get CTRL_GPIO_REG failed: %d\n",
+> +					status);
+> +			return status;
+> +		}
+> +
+> +		/* Check port had inited by f81232_port_probe() */
+> +		if ((tmp & mask) == mask)
+> +			break;
+> +	}
+> +
+> +	if (device->check_index < F81534A_MAX_PORT)
+> +		return -EAGAIN;
+> +
+> +	return 0;
+> +}
+> +
+> +static void f81534a_ctrl_generate_worker(struct work_struct *work)
+> +{
+> +	struct f81534a_device *device;
+> +	int status;
+> +
+> +	mutex_lock(&device_mutex);
+> +	list_for_each_entry(device, &device_list, list) {
+> +		if (device->check_index >= F81534A_MAX_PORT)
+> +			continue;
+> +
+> +		if (device->check_retry >= F81534A_CTRL_RETRY)
+> +			continue;
+> +
+> +		device->check_retry++;
+> +
+> +		status = f81534a_ctrl_generate_ports(device->intf, device);
+> +		if (status == -EAGAIN) {
+> +			dev_dbg(&device->intf->dev, "delayed generating: %d\n",
+> +					device->check_retry);
+> +
+> +			schedule_delayed_work(&f81534a_generate_worker,
+> +					msecs_to_jiffies(F81534A_CTRL_TIMER));
+> +			break;
+> +		} else if (!status) {
+> +			/* make this device generated */
+> +			device->check_index = F81534A_MAX_PORT;
+> +
+> +			dev_dbg(&device->intf->dev, "generated complete\n");
+> +		} else {
+> +			/* skip this device to generate */
+> +			device->check_index = F81534A_MAX_PORT;
+> +
+> +			dev_err(&device->intf->dev,
+> +					"error: %d, do next device generate\n",
+> +					status);
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&device_mutex);
+> +}
+> +
+> +static int f81534a_ctrl_probe(struct usb_interface *intf,
+> +				const struct usb_device_id *id)
+> +{
+> +	struct usb_device *dev = interface_to_usbdev(intf);
+> +	struct f81534a_ctrl_private *priv;
+> +	struct f81534a_device *device;
+> +
+> +	priv = devm_kzalloc(&intf->dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	device = devm_kzalloc(&intf->dev, sizeof(*device), GFP_KERNEL);
+> +	if (!device)
+> +		return -ENOMEM;
+> +
+> +	mutex_init(&priv->lock);
+> +	usb_set_intfdata(intf, priv);
+> +
+> +	INIT_LIST_HEAD(&device->list);
+> +	device->intf = intf;
+> +
+> +	mutex_lock(&device_mutex);
+> +	list_add_tail(&device->list, &device_list);
+> +	mutex_unlock(&device_mutex);
+> +
+> +	dev = usb_get_dev(dev);
+> +	schedule_delayed_work(&f81534a_generate_worker,
+> +				msecs_to_jiffies(F81534A_CTRL_TIMER));
+> +
+> +	return 0;
+> +}
+> +
+> +static void f81534a_ctrl_disconnect(struct usb_interface *intf)
+> +{
+> +	struct f81534a_ctrl_private *priv;
+> +	struct f81534a_device *device;
+> +	struct usb_device *dev;
+> +
+> +	mutex_lock(&device_mutex);
+> +
+> +	list_for_each_entry(device, &device_list, list) {
+> +		if (device->intf == intf) {
+> +			list_del(&device->list);
+> +
+> +			priv = usb_get_intfdata(intf);
+> +			dev = interface_to_usbdev(intf);
+> +			usb_put_dev(dev);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&device_mutex);
+> +}
+> +
+> +static int f81534a_ctrl_suspend(struct usb_interface *intf,
+> +					pm_message_t message)
+> +{
+> +	struct f81534a_device *device;
+> +
+> +	flush_delayed_work(&f81534a_generate_worker);
+> +
+> +	mutex_lock(&device_mutex);
+> +
+> +	list_for_each_entry(device, &device_list, list) {
+> +		device->check_index = 0;
+> +		device->check_retry = 0;
+> +	}
+> +
+> +	mutex_unlock(&device_mutex);
+> +
+> +	return 0;
+> +}
+> +
+> +static int f81534a_ctrl_resume(struct usb_interface *intf)
+> +{
+> +	schedule_delayed_work(&f81534a_generate_worker,
+> +				msecs_to_jiffies(F81534A_CTRL_TIMER));
+> +
+> +	return 0;
+> +}
+> +
+>  static int f81232_port_probe(struct usb_serial_port *port)
+>  {
+>  	struct f81232_private *priv;
+> @@ -976,7 +1292,45 @@ static struct usb_serial_driver * const serial_drivers[] = {
+>  	NULL,
+>  };
+>  
+> -module_usb_serial_driver(serial_drivers, id_table);
+> +static struct usb_driver f81534a_ctrl_driver = {
+> +	.name =		"f81534a_ctrl",
+> +	.id_table =	f81534a_ctrl_id_table,
+> +	.probe =	f81534a_ctrl_probe,
+> +	.disconnect =	f81534a_ctrl_disconnect,
+> +	.suspend =	f81534a_ctrl_suspend,
+> +	.resume =	f81534a_ctrl_resume,
+> +};
+> +
+> +static int __init f81232_init(void)
+> +{
+> +	int status;
+> +
+> +	INIT_DELAYED_WORK(&f81534a_generate_worker,
+> +			f81534a_ctrl_generate_worker);
+> +
+> +	status = usb_register_driver(&f81534a_ctrl_driver, THIS_MODULE,
+> +			KBUILD_MODNAME);
+> +	if (status)
+> +		return status;
+> +
+> +	status = usb_serial_register_drivers(serial_drivers, KBUILD_MODNAME,
+> +			id_table);
+> +	if (status) {
+> +		usb_deregister(&f81534a_ctrl_driver);
+> +		return status;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void __exit f81232_exit(void)
+> +{
+> +	usb_serial_deregister_drivers(serial_drivers);
+> +	usb_deregister(&f81534a_ctrl_driver);
+> +}
+> +
+> +module_init(f81232_init);
+> +module_exit(f81232_exit);
+>  
+>  MODULE_DESCRIPTION("Fintek F81232/532A/534A/535/536 USB to serial driver");
+>  MODULE_AUTHOR("Greg Kroah-Hartman <gregkh@linuxfoundation.org>");
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in memcpy include/linux/string.h:359 [inline]
-BUG: KASAN: slab-out-of-bounds in usb_hcd_poll_rh_status+0x423/0x6b0  
-drivers/usb/core/hcd.c:774
-Write of size 2 at addr ffff8880a8e964c0 by task syz-executor.4/9841
-
-CPU: 1 PID: 9841 Comm: syz-executor.4 Not tainted 5.3.0-rc6 #146
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  <IRQ>
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x172/0x1f0 lib/dump_stack.c:113
-  print_address_description.cold+0xd4/0x306 mm/kasan/report.c:351
-  __kasan_report.cold+0x1b/0x36 mm/kasan/report.c:482
-  kasan_report+0x12/0x17 mm/kasan/common.c:618
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x134/0x1a0 mm/kasan/generic.c:192
-  memcpy+0x38/0x50 mm/kasan/common.c:123
-  memcpy include/linux/string.h:359 [inline]
-  usb_hcd_poll_rh_status+0x423/0x6b0 drivers/usb/core/hcd.c:774
-  rh_timer_func+0x19/0x20 drivers/usb/core/hcd.c:800
-  call_timer_fn+0x1ac/0x780 kernel/time/timer.c:1322
-  expire_timers kernel/time/timer.c:1366 [inline]
-  __run_timers kernel/time/timer.c:1685 [inline]
-  __run_timers kernel/time/timer.c:1653 [inline]
-  run_timer_softirq+0x697/0x17a0 kernel/time/timer.c:1698
-  __do_softirq+0x262/0x98c kernel/softirq.c:292
-  invoke_softirq kernel/softirq.c:373 [inline]
-  irq_exit+0x19b/0x1e0 kernel/softirq.c:413
-  exiting_irq arch/x86/include/asm/apic.h:537 [inline]
-  smp_apic_timer_interrupt+0x1a3/0x610 arch/x86/kernel/apic/apic.c:1133
-  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
-  </IRQ>
-RIP: 0010:check_memory_region+0x1f/0x1a0 mm/kasan/generic.c:191
-Code: 00 66 2e 0f 1f 84 00 00 00 00 00 48 85 f6 0f 84 34 01 00 00 48 b8 ff  
-ff ff ff ff 7f ff ff 55 0f b6 d2 48 39 c7 48 89 e5 41 55 <41> 54 53 0f 86  
-07 01 00 00 4c 8d 5c 37 ff 49 89 f8 48 b8 00 00 00
-RSP: 0018:ffff88805ef17aa8 EFLAGS: 00000212 ORIG_RAX: ffffffffffffff13
-RAX: ffff7fffffffffff RBX: 0000000000000000 RCX: ffffffff873d1e85
-RDX: 0000000000000001 RSI: 0000000000000008 RDI: ffffffff897e2fc0
-RBP: ffff88805ef17ab0 R08: 1ffffffff12fc5f8 R09: fffffbfff12fc5f9
-R10: fffffbfff12fc5f8 R11: ffffffff897e2fc7 R12: fffffbfff134b5c6
-R13: ffff88805ef0e2c0 R14: ffffffff897e2fc0 R15: 0000000000000000
-  __kasan_check_write+0x14/0x20 mm/kasan/common.c:98
-  atomic64_cmpxchg include/asm-generic/atomic-instrumented.h:1463 [inline]
-  atomic_long_cmpxchg_acquire include/asm-generic/atomic-long.h:418 [inline]
-  __mutex_trylock_or_owner kernel/locking/mutex.c:111 [inline]
-  __mutex_trylock kernel/locking/mutex.c:126 [inline]
-  __mutex_lock_common kernel/locking/mutex.c:932 [inline]
-  __mutex_lock+0x425/0x13c0 kernel/locking/mutex.c:1077
-  mutex_lock_nested+0x16/0x20 kernel/locking/mutex.c:1092
-  nf_sockopt_find.constprop.0+0x2d/0x290 net/netfilter/nf_sockopt.c:67
-  nf_sockopt net/netfilter/nf_sockopt.c:99 [inline]
-  nf_getsockopt+0x30/0xd0 net/netfilter/nf_sockopt.c:122
-  ip_getsockopt net/ipv4/ip_sockglue.c:1576 [inline]
-  ip_getsockopt+0x176/0x1d0 net/ipv4/ip_sockglue.c:1556
-  tcp_getsockopt net/ipv4/tcp.c:3665 [inline]
-  tcp_getsockopt+0x8f/0xe0 net/ipv4/tcp.c:3659
-  sock_common_getsockopt+0x94/0xd0 net/core/sock.c:3098
-  __sys_getsockopt+0x16d/0x310 net/socket.c:2129
-  __do_sys_getsockopt net/socket.c:2144 [inline]
-  __se_sys_getsockopt net/socket.c:2141 [inline]
-  __x64_sys_getsockopt+0xbe/0x150 net/socket.c:2141
-  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45c38a
-Code: b8 34 01 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 dd 8c fb ff c3 66 2e 0f  
-1f 84 00 00 00 00 00 66 90 49 89 ca b8 37 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 ba 8c fb ff c3 66 0f 1f 84 00 00 00 00 00
-RSP: 002b:0000000000a6f618 EFLAGS: 00000202 ORIG_RAX: 0000000000000037
-RAX: ffffffffffffffda RBX: 0000000000a6f640 RCX: 000000000045c38a
-RDX: 0000000000000041 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 0000000000714e80 R08: 0000000000a6f63c R09: 0000000000004000
-R10: 0000000000a6f740 R11: 0000000000000202 R12: 0000000000000003
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000713380
-
-Allocated by task 29984:
-  save_stack+0x23/0x90 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:493 [inline]
-  __kasan_kmalloc.constprop.0+0xcf/0xe0 mm/kasan/common.c:466
-  kasan_kmalloc+0x9/0x10 mm/kasan/common.c:507
-  __do_kmalloc mm/slab.c:3655 [inline]
-  __kmalloc+0x163/0x770 mm/slab.c:3664
-  kmalloc include/linux/slab.h:557 [inline]
-  proc_bulk+0x2f5/0x7f0 drivers/usb/core/devio.c:1168
-  usbdev_do_ioctl+0x525/0x2d10 drivers/usb/core/devio.c:2443
-  usbdev_ioctl+0x26/0x30 drivers/usb/core/devio.c:2600
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xdb6/0x13e0 fs/ioctl.c:696
-  ksys_ioctl+0xab/0xd0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x73/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-Freed by task 25754:
-  save_stack+0x23/0x90 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_slab_free+0x102/0x150 mm/kasan/common.c:455
-  kasan_slab_free+0xe/0x10 mm/kasan/common.c:463
-  __cache_free mm/slab.c:3425 [inline]
-  kfree+0x10a/0x2c0 mm/slab.c:3756
-  kvfree+0x61/0x70 mm/util.c:488
-  __vunmap+0x6c5/0x920 mm/vmalloc.c:2255
-  __vfree+0x41/0xd0 mm/vmalloc.c:2299
-  vfree+0x5f/0x90 mm/vmalloc.c:2329
-  copy_entries_to_user net/ipv4/netfilter/ip_tables.c:867 [inline]
-  get_entries net/ipv4/netfilter/ip_tables.c:1024 [inline]
-  do_ipt_get_ctl+0x71a/0x930 net/ipv4/netfilter/ip_tables.c:1700
-  nf_sockopt net/netfilter/nf_sockopt.c:104 [inline]
-  nf_getsockopt+0x7a/0xd0 net/netfilter/nf_sockopt.c:122
-  ip_getsockopt net/ipv4/ip_sockglue.c:1576 [inline]
-  ip_getsockopt+0x176/0x1d0 net/ipv4/ip_sockglue.c:1556
-  tcp_getsockopt net/ipv4/tcp.c:3665 [inline]
-  tcp_getsockopt+0x8f/0xe0 net/ipv4/tcp.c:3659
-  sock_common_getsockopt+0x94/0xd0 net/core/sock.c:3098
-  __sys_getsockopt+0x16d/0x310 net/socket.c:2129
-  __do_sys_getsockopt net/socket.c:2144 [inline]
-  __se_sys_getsockopt net/socket.c:2141 [inline]
-  __x64_sys_getsockopt+0xbe/0x150 net/socket.c:2141
-  do_syscall_64+0xfd/0x6a0 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-The buggy address belongs to the object at ffff8880a8e964c0
-  which belongs to the cache kmalloc-32 of size 32
-The buggy address is located 0 bytes inside of
-  32-byte region [ffff8880a8e964c0, ffff8880a8e964e0)
-The buggy address belongs to the page:
-page:ffffea0002a3a580 refcount:1 mapcount:0 mapping:ffff8880aa4001c0  
-index:0xffff8880a8e96fc1
-flags: 0x1fffc0000000200(slab)
-raw: 01fffc0000000200 ffffea000269fe08 ffffea000161c988 ffff8880aa4001c0
-raw: ffff8880a8e96fc1 ffff8880a8e96000 000000010000003b 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8880a8e96380: 00 00 00 fc fc fc fc fc 00 00 00 fc fc fc fc fc
-  ffff8880a8e96400: 00 00 00 fc fc fc fc fc fb fb fb fb fc fc fc fc
-> ffff8880a8e96480: 00 00 fc fc fc fc fc fc 01 fc fc fc fc fc fc fc
-                                            ^
-  ffff8880a8e96500: 00 00 fc fc fc fc fc fc 00 00 fc fc fc fc fc fc
-  ffff8880a8e96580: fb fb fb fb fc fc fc fc 00 00 00 fc fc fc fc fc
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Johan
