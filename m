@@ -2,147 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1135A0052
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 12:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4278EA0066
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Aug 2019 13:02:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726310AbfH1K4e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Aug 2019 06:56:34 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:39357 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726341AbfH1K4e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Aug 2019 06:56:34 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t16so2025249wra.6
-        for <linux-usb@vger.kernel.org>; Wed, 28 Aug 2019 03:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Vx9t5xjLzwxSs68UQHUay9ecnGA4GXfJUCmBL33YCMk=;
-        b=NVdwLJqMFK27Egi+W5DT/3XO+B227WKx3M16ICzoXvtv3NVx+kYKIWtAq4ZidBcYR/
-         6IGwVIoAcsDgTwvd+pwztc4kqW7mf2sSDts/mC7aobOdzcsHuc/F1dpU/BpqoiE9ML/s
-         cDjmOLbsoCc6teLG/5wl/NGS2xAgrdjgeDYEI91IhxSHXf76R4GeGYbxSFH+75iaJUfe
-         wT8+75/RkSk5caZV3qv54/qXQy42Kzg3eZmIM2FCd4NoNwrSMF71P581+GSac3L9QeRC
-         S3Wx1vvGVwqa0gtVdM4obwVJsgIHz4ohf44ieueSHJ/wOuQxb45CsaAbBU1sGHgIo0nm
-         DTqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Vx9t5xjLzwxSs68UQHUay9ecnGA4GXfJUCmBL33YCMk=;
-        b=HWRsILmDqwflrAzJByV6fBBT9D3p1usic8RHxVergyrGd05+clqsByrPgFY6E03euP
-         fImcr6pnQ0c9pGQ7E+rnIYFo7jE+F/iqlSbj4j1cRXQeA2NLm87uAtKybouXr7B4Wnwt
-         y/yJzPBkYBlBDxKErkg7gw1Y65sK+syEB/b8dSe6d5QdPF/AZudAGpaYVDeWZryfVbCg
-         PUbM6CQssmlYQAO9wtg5P84Ups/iLU6elAeyo8vBfKEVNYPQhNMmL6yuJnbgvDqjCtsZ
-         34g0wekTygNwwI+hESZow3UZhHvcnPrrs9WYp6wbQW+sDhKfu1aqo6Oqxt2TrrpV8k8O
-         xt3g==
-X-Gm-Message-State: APjAAAVzp706V1Ds0QdhBOtEcZZqEQS8OYDYnm4dibs2/cmyoVFqQrJl
-        B2bKCnHLSFmzlLSpK+/jZxe23Q==
-X-Google-Smtp-Source: APXvYqzmp0a1H7Elm+SaoHNY31yTb5NC/BkvI3kruZqJ9jlO42a8aciCDXtLmxYxYGNQyoKWXYPq/A==
-X-Received: by 2002:adf:ce81:: with SMTP id r1mr3959629wrn.114.1566989791786;
-        Wed, 28 Aug 2019 03:56:31 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id f6sm4573707wrh.30.2019.08.28.03.56.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2019 03:56:31 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 11:56:27 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, geert@linux-m68k.org, gregkh@linuxfoundation.org,
-        hpa@zytor.com, joel@joelfernandes.org,
-        kstewart@linuxfoundation.org, linux-arch@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-modules@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, lucas.de.marchi@gmail.com,
-        maco@android.com, maco@google.com, michal.lkml@markovi.net,
-        mingo@redhat.com, oneukum@suse.com, pombredanne@nexb.com,
-        sam@ravnborg.org, sspatil@google.com, stern@rowland.harvard.edu,
-        tglx@linutronix.de, usb-storage@lists.one-eyed-alien.net,
-        x86@kernel.org, yamada.masahiro@socionext.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Subject: Re: [PATCH v3 06/11] export: allow definition default namespaces in
- Makefiles or sources
-Message-ID: <20190828105627.GA41539@google.com>
-References: <20190813121733.52480-1-maennich@google.com>
- <20190821114955.12788-1-maennich@google.com>
- <20190821114955.12788-7-maennich@google.com>
- <20190828104951.GC25048@linux-8ccs>
+        id S1726310AbfH1LCt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Aug 2019 07:02:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:51613 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726253AbfH1LCt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Aug 2019 07:02:49 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Aug 2019 04:02:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,440,1559545200"; 
+   d="asc'?scan'208";a="192556818"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by orsmga002.jf.intel.com with ESMTP; 28 Aug 2019 04:02:46 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linux-usb@vger.kernel.org
+Cc:     Guido Kiener <guido@kiener-muenchen.de>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH 1/2] usb: gadget: net2280: Move all "ll" registers in one structure
+In-Reply-To: <d2f02109e718a6578d91467e6a4d522819be7a23.camel@kernel.crashing.org>
+References: <bc390967a9ac59e658ae79ba74a23a6ca898351b.camel@kernel.crashing.org> <87ftllwqi7.fsf@gmail.com> <d2f02109e718a6578d91467e6a4d522819be7a23.camel@kernel.crashing.org>
+Date:   Wed, 28 Aug 2019 14:02:42 +0300
+Message-ID: <87d0gpwo19.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190828104951.GC25048@linux-8ccs>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 12:49:51PM +0200, Jessica Yu wrote:
->+++ Matthias Maennich [21/08/19 12:49 +0100]:
->>To avoid excessive usage of EXPORT_SYMBOL_NS(sym, MY_NAMESPACE), where
->>MY_NAMESPACE will always be the namespace we are exporting to, allow
->>exporting all definitions of EXPORT_SYMBOL() and friends by defining
->>DEFAULT_SYMBOL_NAMESPACE.
->>
->>For example, to export all symbols defined in usb-common into the
->>namespace USB_COMMON, add a line like this to drivers/usb/common/Makefile:
->>
->> ccflags-y += -DDEFAULT_SYMBOL_NAMESPACE=USB_COMMON
->>
->>That is equivalent to changing all EXPORT_SYMBOL(sym) definitions to
->>EXPORT_SYMBOL_NS(sym, USB_COMMON). Subsequently all symbol namespaces
->>functionality will apply.
->>
->>Another way of making use of this feature is to define the namespace
->>within source or header files similar to how TRACE_SYSTEM defines are
->>used:
->> #undef DEFAULT_SYMBOL_NAMESPACE
->> #define DEFAULT_SYMBOL_NAMESPACE USB_COMMON
->>
->>Please note that, as opposed to TRACE_SYSTEM, DEFAULT_SYMBOL_NAMESPACE
->>has to be defined before including include/linux/export.h.
->>
->>If DEFAULT_SYMBOL_NAMESPACE is defined, a symbol can still be exported
->>to another namespace by using EXPORT_SYMBOL_NS() and friends with
->>explicitly specifying the namespace.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Benjamin Herrenschmidt <benh@kernel.crashing.org> writes:
+> On Wed, 2019-08-28 at 13:09 +0300, Felipe Balbi wrote:
+>> Hi,
+>>=20
+>> Benjamin Herrenschmidt <benh@kernel.crashing.org> writes:
+>>=20
+>> > The split into multiple structures of the "ll" register bank is
+>> > impractical. It makes it hard to add ll_lfps_timers_2 which is
+>> > at offset 0x794, which is outside of the existing "lfps" structure
+>> > and would require us to add yet another one.
+>> >=20
+>> > Instead, move all the "ll" registers into a single usb338x_ll_regs
+>> > structure, and add ll_lfps_timers_2 while at it. It will be used
+>> > in a subsequent patch.
+>> >=20
+>> > Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+>>=20
+>> I tried applying your patches but it resulted in build break. Can you
+>> collect all the dependencies and send a single series? I'm applying on
+>> top of my testing/next branch.
 >
->This changelog provides a good summary of how to use
->DEFAULT_SYMBOL_NAMESPACE, I wonder if we should explicitly document
->its proper usage somewhere? (along with EXPORT_SYMBOL_NS*)
->The EXPORT_SYMBOL API is briefly documented in
->Documentation/kernel-hacking/hacking.rst - it might be slightly dated,
->but perhaps it'd fit there best?
+> You mean the 2 net2280 patches ? Or something else ?
+>
+> What break did you get ? It's just one series of 2 patches.... I'll try
+> rebasing them against your branch tomorrow.
 
-I will add documentation along with the commits. Not only for the
-macros, but in general to describe the feature.
+allmodconfig broke with missing fields in whatever structure. I didn't
+dig too much, sorry.
 
->>Suggested-by: Arnd Bergmann <arnd@arndb.de>
->>Reviewed-by: Martijn Coenen <maco@android.com>
->>Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>Signed-off-by: Matthias Maennich <maennich@google.com>
->>---
->>include/linux/export.h | 6 ++++++
->>1 file changed, 6 insertions(+)
->>
->>diff --git a/include/linux/export.h b/include/linux/export.h
->>index 8e12e05444d1..1fb243abdbc4 100644
->>--- a/include/linux/export.h
->>+++ b/include/linux/export.h
->>@@ -166,6 +166,12 @@ struct kernel_symbol {
->>#define __EXPORT_SYMBOL ___EXPORT_SYMBOL
->>#endif
->>
->>+#ifdef DEFAULT_SYMBOL_NAMESPACE
->>+#undef __EXPORT_SYMBOL
->>+#define __EXPORT_SYMBOL(sym, sec)				\
->>+	__EXPORT_SYMBOL_NS(sym, sec, DEFAULT_SYMBOL_NAMESPACE)
->>+#endif
->>+
->>#define EXPORT_SYMBOL(sym) __EXPORT_SYMBOL(sym, "")
->>#define EXPORT_SYMBOL_GPL(sym) __EXPORT_SYMBOL(sym, "_gpl")
->>#define EXPORT_SYMBOL_GPL_FUTURE(sym) __EXPORT_SYMBOL(sym, "_gpl_future")
->>-- 
->>2.23.0.rc1.153.gdeed80330f-goog
->>
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1mX1IACgkQzL64meEa
+mQYQqg//ZZr1rlkIhLlJZbxe32a6mFtyKtyaZaXWZrFCoAsuCJ++ii4gG+gI+fof
+TfRHInA3zH1rGwPn9Y+VUOqRPtU2pfVg76YfRgr2Wxgqk363eGBHhZ7xeWNjkbfP
+r2PrIC5W/prvmHJzx8upPl0pz6WPtCAHkVt5IjBthB6SBrO6WxPvAAO4tNYxLkSZ
+dBDC5LDnx/SJteCIZX7vYCNNbqsBAFaKgl13wsE3JuXal/ChETcx0XirKhn8GiWx
+IiDQgPsjF/Hw4XRTZl45ClRtALvzIlaH5rUiylrUaNd47bp/aPo3FAbgfGfd+yMk
+nDO0l9BBqhcSyWjtV5zSS1DTgCTFpQ3/cisk67YUiZ3ubff3XoASdnBiq9qeksKG
+IwmdS6mWSnAAHE1jlKoFq3ysE9dydNPNT1vhGqMqMT/U5apo+tRIo2rhfXJp0asW
+9QWpqfnsBZPGkopoU4IMU0suqU/n3K+9CY/zNitLhl0aMc3plb0xznZ+yyUFBBv7
+q0W5NzvfMcC2m9F3H2O2Lyag/ZArDzmNI301zh5Mjz6PD8zk86w6PYHEunAu2BhN
+eYzqShiJeMBaO9weCbY6+6DH6XKKIghNzZqcJsb8kj9oSTv4iTZJlQ+ZHKAEy1zK
+YGhzb3XIh9cG+mA1pfY+DjfnG51KzS4pTkvdOvtaYR/tWjlhI20=
+=f0SX
+-----END PGP SIGNATURE-----
+--=-=-=--
