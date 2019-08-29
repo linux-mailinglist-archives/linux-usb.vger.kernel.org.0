@@ -2,109 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 617BCA2318
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297D6A2346
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728214AbfH2SN2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 29 Aug 2019 14:13:28 -0400
-Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:44298 "EHLO
-        us-smtp-delivery-131.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726661AbfH2SNX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Aug 2019 14:13:23 -0400
-Received: from mailhub4.stratus.com (134.111.1.17 [134.111.1.17]) by
- relay.mimecast.com with ESMTP id us-mta-217-VWdq63w8Nbum4qPVrSS9QQ-1; Thu,
- 29 Aug 2019 14:12:16 -0400
-Received: from EXHQ1.corp.stratus.com (exhq1.corp.stratus.com [134.111.200.125])
-        by mailhub4.stratus.com (8.12.11/8.12.11) with ESMTP id x7TICGjv019840;
-        Thu, 29 Aug 2019 14:12:16 -0400
-Received: from linuxdev.lnx.eng.stratus.com (134.111.220.63) by
- EXHQ1.corp.stratus.com (134.111.200.125) with Microsoft SMTP Server (TLS) id
- 14.3.279.2; Thu, 29 Aug 2019 14:11:56 -0400
-From:   Bill Kuzeja <William.Kuzeja@stratus.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <torez@redhat.com>, Bill Kuzeja <William.Kuzeja@stratus.com>
-Subject: [PATCH RESEND] xhci: Prevent deadlock when xhci adapter breaks during init
-Date:   Thu, 29 Aug 2019 14:12:15 -0400
-Message-ID: <1567102335-5231-1-git-send-email-William.Kuzeja@stratus.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1727483AbfH2SOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 14:14:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56222 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728017AbfH2SOg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:14:36 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CF2D82339E;
+        Thu, 29 Aug 2019 18:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567102475;
+        bh=tHvS5YS1DOGqMguSYYPBSc/FLkd8zsZcv5hHnimAuus=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=K0hTxa0YiKfnDK10Xz0YXCZqS9jfqFZHU5Aigzc9R+2G1ngBQuXqpHLduQSuDfiJe
+         /P7qjvrmZ7BVQwwnhna2Sh5jDU9s4z58PK91V4loDzdNbZHKQ93WiVM4KImBnUn6Y7
+         ftbD6L1HkWj6Z2RR3diWipBCsWLbvLT2wtCsJH48=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wenwen Wang <wenwen@cs.uga.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 39/76] lan78xx: Fix memory leaks
+Date:   Thu, 29 Aug 2019 14:12:34 -0400
+Message-Id: <20190829181311.7562-39-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
+References: <20190829181311.7562-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-MC-Unique: VWdq63w8Nbum4qPVrSS9QQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: 8BIT
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The system can hit a deadlock if xhci adapter breaks while initializing. 
-The deadlock is between two threads: thread 1 is tearing down the 
-adapter and is stuck in usb_unlocked_disable_lpm waiting to lock the 
-hcd->handwidth_mutex. Thread 2 is holding this mutex (while still trying 
-to add a usb device), but is stuck in xhci_endpoint_reset waiting for a 
-stop or config command to complete. A reboot is required to resolve. 
+From: Wenwen Wang <wenwen@cs.uga.edu>
 
-It turns out when calling xhci_queue_stop_endpoint and 
-xhci_queue_configure_endpoint in xhci_endpoint_reset, the return code is
-not checked for errors. If the timing is right and the adapter dies just
-before either of these commands get issued, we hang indefinitely waiting 
-for a completion on a command that didn't get issued.
+[ Upstream commit b9cbf8a64865b50fd0f4a3915fa00ac7365cdf8f ]
 
-This wasn't a problem before the following fix because we didn't send 
-commands in xhci_endpoint_reset:
+In lan78xx_probe(), a new urb is allocated through usb_alloc_urb() and
+saved to 'dev->urb_intr'. However, in the following execution, if an error
+occurs, 'dev->urb_intr' is not deallocated, leading to memory leaks. To fix
+this issue, invoke usb_free_urb() to free the allocated urb before
+returning from the function.
 
-commit f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
-
-With the patch I am submitting, a duration test which breaks adapters 
-during initialization (and which deadlocks with the standard kernel) runs 
-without issue.
-
-Fixes: f5249461b504 ("xhci: Clear the host side toggle manually when endpoint is soft reset")
-Signed-off-by: Bill Kuzeja <william.kuzeja@stratus.com>
+Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/net/usb/lan78xx.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 248cd7a..835708d 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -3132,7 +3132,16 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 		xhci_free_command(xhci, cfg_cmd);
- 		goto cleanup;
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 3d92ea6fcc02b..f033fee225a11 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -3792,7 +3792,7 @@ static int lan78xx_probe(struct usb_interface *intf,
+ 	ret = register_netdev(netdev);
+ 	if (ret != 0) {
+ 		netif_err(dev, probe, netdev, "couldn't register the device\n");
+-		goto out3;
++		goto out4;
  	}
--	xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id, ep_index, 0);
-+
-+	if (xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id,
-+					ep_index, 0) < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, cfg_cmd);
-+		xhci_warn(xhci, "%s: stop_cmd xhci_queue_stop_endpoint "
-+				"returns error, exiting\n", __func__);
-+		goto cleanup;
-+	}
-+
- 	xhci_ring_cmd_db(xhci);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
  
-@@ -3146,8 +3155,15 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
- 					   ctrl_ctx, ep_flag, ep_flag);
- 	xhci_endpoint_copy(xhci, cfg_cmd->in_ctx, vdev->out_ctx, ep_index);
+ 	usb_set_intfdata(intf, dev);
+@@ -3807,12 +3807,14 @@ static int lan78xx_probe(struct usb_interface *intf,
  
--	xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
--				      udev->slot_id, false);
-+	if (xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
-+				      udev->slot_id, false) < 0) {
-+		spin_unlock_irqrestore(&xhci->lock, flags);
-+		xhci_free_command(xhci, cfg_cmd);
-+		xhci_warn(xhci, "%s: cfg_cmd xhci_queue_configure_endpoint "
-+				"returns error, exiting\n", __func__);
-+		goto cleanup;
-+	}
-+
- 	xhci_ring_cmd_db(xhci);
- 	spin_unlock_irqrestore(&xhci->lock, flags);
+ 	ret = lan78xx_phy_init(dev);
+ 	if (ret < 0)
+-		goto out4;
++		goto out5;
  
+ 	return 0;
+ 
+-out4:
++out5:
+ 	unregister_netdev(netdev);
++out4:
++	usb_free_urb(dev->urb_intr);
+ out3:
+ 	lan78xx_unbind(dev, intf);
+ out2:
 -- 
-1.8.3.1
+2.20.1
 
