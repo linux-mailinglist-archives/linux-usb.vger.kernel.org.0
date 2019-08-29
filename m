@@ -2,119 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCAFA17A6
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 13:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC20A17A7
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 13:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbfH2LDw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 07:03:52 -0400
-Received: from mga05.intel.com ([192.55.52.43]:58043 "EHLO mga05.intel.com"
+        id S1727072AbfH2LEI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 07:04:08 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41024 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726417AbfH2LDw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 07:03:52 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 04:03:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,442,1559545200"; 
-   d="scan'208";a="197783104"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 29 Aug 2019 04:03:51 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 29 Aug 2019 14:03:48 +0300
-Date:   Thu, 29 Aug 2019 14:03:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     hdegoede@redhat.com, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        Balaji Manoharan <m.balaji@intel.com>
-Subject: Re: [PATCH v4 1/2] xhci-ext-caps.c: Add property to disable Intel SW
+        id S1726417AbfH2LEH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Aug 2019 07:04:07 -0400
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D302481DF2
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2019 11:04:06 +0000 (UTC)
+Received: by mail-ed1-f70.google.com with SMTP id y15so1904577edu.19
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2019 04:04:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=v151/DDJVVo76OLaGkD3bAqGv2vYS9KJt1Lu3KVWxmM=;
+        b=aLVGS54rWvVkANzjroDBvYFCixhYGyWUTBE4G/oh+LwceQxllJ1aNnJQw5f93G4GmE
+         bw0Kz9WKxV4W8KzqrFZdnvMYAgPC3/AiBYIUUz8Mnva5kQnMSgEXfimsQith0Fpg7aGt
+         avplWQziOeETrDed+je9JFR2P293vIHWLnE8fWMWZXkVzz2lt8CBX4g7k0hwHpgqhHVd
+         qF4i9Gjw26AJGjXDH22MGAXftqMP28Hp42FLg4tFtN+TF8g1/2J+k8XozfPUpdinNRri
+         WHftxCui1DaeZzPTjF/eSSX7rA8t2WjdabqkztqOC++ZkkjVZmZKZnBPJxrICRyKzopk
+         SYOg==
+X-Gm-Message-State: APjAAAVSWkLiEX8iZqvdyuJfalWJNM750PTjmDG3X5oTOuuJN2EOfV8X
+        OlDNlTK1XJTs+qKgUJQG0pcfwbI422f3LW/T/jZpuAsfBDj94rIyKhkWfu26dH54RICOJkZ1n6b
+        AfFpJ0ZZ3nLKgxq9/6q9/
+X-Received: by 2002:a17:906:7f01:: with SMTP id d1mr7254605ejr.310.1567076645200;
+        Thu, 29 Aug 2019 04:04:05 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqxcHmnq3Wjl0Oc2DOjqRdyeCfJNeknz9mgaVnrOspgGSzfuy8L8/Bry75sfnpNaY6w+kAeoNA==
+X-Received: by 2002:a17:906:7f01:: with SMTP id d1mr7254579ejr.310.1567076644944;
+        Thu, 29 Aug 2019 04:04:04 -0700 (PDT)
+Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
+        by smtp.gmail.com with ESMTPSA id y25sm382938edt.29.2019.08.29.04.04.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2019 04:04:04 -0700 (PDT)
+Subject: Re: [PATCH v4 2/2] usb: roles: intel: Enable static DRD mode for role
  switch
-Message-ID: <20190829110348.GE5486@kuha.fi.intel.com>
+To:     Saranya Gopal <saranya.gopal@intel.com>,
+        heikki.krogerus@linux.intel.com
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, Balaji Manoharan <m.balaji@intel.com>,
+        =?UTF-8?Q?Rafa=c5=82_Psota?= <rafalzaq@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 References: <1567075327-24016-1-git-send-email-saranya.gopal@intel.com>
+ <1567075327-24016-2-git-send-email-saranya.gopal@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <94e5c5e9-2a73-58a3-fd1a-fbf0f5e07e23@redhat.com>
+Date:   Thu, 29 Aug 2019 13:04:03 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1567075327-24016-1-git-send-email-saranya.gopal@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <1567075327-24016-2-git-send-email-saranya.gopal@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 04:12:06PM +0530, Saranya Gopal wrote:
-> In platforms like Cherrytrail, 'SW switch enable' bit
-> should not be enabled for role switch. This patch
-> adds a property to Intel USB Role Switch platform driver
-> to denote that SW switch should be disabled in
-> Cherrytrail devices.
+Hi Saranya,
+
+On 29-08-19 12:42, Saranya Gopal wrote:
+> Enable static DRD mode in Intel platforms which guarantees
+> successful role switch all the time. This fixes issues like
+> software role switch failure after cold boot and issue with
+> role switch when USB 3.0 cable is used. But, do not enable
+> static DRD mode for Cherrytrail devices which rely on firmware
+> for role switch.
 > 
 > Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
 > Signed-off-by: Balaji Manoharan <m.balaji@intel.com>
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Unfortunately this patch conflicts with a patch to
+drivers/usb/roles/intel-xhci-usb-role-switch.c from Heikki
+which is already in -next, see:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=devprop
+
+And specifically this commit:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=devprop&id=d2a90ebb65536a6deeb9daf5aa8e0700e8cbb43a
+
+So you need to rebase on op of that branch and then the subsys
+maintainers need to figure out how to merge this, I guess
+the usb-next tree can merge Rafael's devprop branch for this?
+
+I've manually resolved the conflict locally and  given this new version
+a test-run on a Cherry Trail device and things still work as they should
+there, so with the conflict fixed this series is:
+
+Tested-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
 
 > ---
->  changes since v3: none
->  changes since v2: Added suggested-by tag
->  changes since v1: none
+>   changes since v3: Initialized drd_config variable to fix warning
+>   changes since v2: Revised SoB tags
+>   changes since v1: Added drd_config to avoid multiple if checks
+>                     Other minor changes suggested by Hans
+>                     
+>   drivers/usb/roles/intel-xhci-usb-role-switch.c | 27 ++++++++++++++++++++++++--
+>   1 file changed, 25 insertions(+), 2 deletions(-)
 > 
->  drivers/usb/host/xhci-ext-caps.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
-> index 399113f..f498160 100644
-> --- a/drivers/usb/host/xhci-ext-caps.c
-> +++ b/drivers/usb/host/xhci-ext-caps.c
-> @@ -6,11 +6,20 @@
->   */
->  
->  #include <linux/platform_device.h>
+> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> index 277de96..88d0416 100644
+> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
+> @@ -19,6 +19,7 @@
+>   #include <linux/module.h>
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
 > +#include <linux/property.h>
-> +#include <linux/pci.h>
->  #include "xhci.h"
->  
->  #define USB_SW_DRV_NAME		"intel_xhci_usb_sw"
->  #define USB_SW_RESOURCE_SIZE	0x400
->  
-> +#define PCI_DEVICE_ID_INTEL_CHERRYVIEW_XHCI	0x22b5
+>   #include <linux/usb/role.h>
+>   
+>   /* register definition */
+> @@ -26,6 +27,12 @@
+>   #define SW_VBUS_VALID			BIT(24)
+>   #define SW_IDPIN_EN			BIT(21)
+>   #define SW_IDPIN			BIT(20)
+> +#define SW_SWITCH_EN			BIT(16)
 > +
-> +static const struct property_entry role_switch_props[] = {
-> +	PROPERTY_ENTRY_BOOL("sw_switch_disable"),
-> +	{},
-> +};
-> +
->  static void xhci_intel_unregister_pdev(void *arg)
->  {
->  	platform_device_unregister(arg);
-> @@ -21,6 +30,7 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
->  	struct usb_hcd *hcd = xhci_to_hcd(xhci);
->  	struct device *dev = hcd->self.controller;
->  	struct platform_device *pdev;
-> +	struct pci_dev *pci = to_pci_dev(dev);
->  	struct resource	res = { 0, };
->  	int ret;
->  
-> @@ -43,6 +53,14 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
->  		return ret;
->  	}
->  
-> +	if (pci->device == PCI_DEVICE_ID_INTEL_CHERRYVIEW_XHCI) {
-> +		ret = platform_device_add_properties(pdev, role_switch_props);
-> +		if (ret) {
-> +			dev_err(dev, "failed to register device properties\n");
-> +			return ret;
-> +		}
+> +#define DRD_CONFIG_DYNAMIC		0
+> +#define DRD_CONFIG_STATIC_HOST		1
+> +#define DRD_CONFIG_STATIC_DEVICE	2
+> +#define DRD_CONFIG_MASK			3
+>   
+>   #define DUAL_ROLE_CFG1			0x6c
+>   #define HOST_MODE			BIT(29)
+> @@ -37,6 +44,7 @@
+>   struct intel_xhci_usb_data {
+>   	struct usb_role_switch *role_sw;
+>   	void __iomem *base;
+> +	bool enable_sw_switch;
+>   };
+>   
+>   static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+> @@ -45,6 +53,7 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+>   	unsigned long timeout;
+>   	acpi_status status;
+>   	u32 glk, val;
+> +	u32 drd_config = DRD_CONFIG_DYNAMIC;
+>   
+>   	/*
+>   	 * On many CHT devices ACPI event (_AEI) handlers read / modify /
+> @@ -59,24 +68,35 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+>   
+>   	pm_runtime_get_sync(dev);
+>   
+> -	/* Set idpin value as requested */
+> +	/*
+> +	 * Set idpin value as requested.
+> +	 * Since some devices rely on firmware setting DRD_CONFIG and
+> +	 * SW_SWITCH_EN bits to be zero for role switch,
+> +	 * do not set these bits for those devices.
+> +	 */
+>   	val = readl(data->base + DUAL_ROLE_CFG0);
+>   	switch (role) {
+>   	case USB_ROLE_NONE:
+>   		val |= SW_IDPIN;
+>   		val &= ~SW_VBUS_VALID;
+> +		drd_config = DRD_CONFIG_DYNAMIC;
+>   		break;
+>   	case USB_ROLE_HOST:
+>   		val &= ~SW_IDPIN;
+>   		val &= ~SW_VBUS_VALID;
+> +		drd_config = DRD_CONFIG_STATIC_HOST;
+>   		break;
+>   	case USB_ROLE_DEVICE:
+>   		val |= SW_IDPIN;
+>   		val |= SW_VBUS_VALID;
+> +		drd_config = DRD_CONFIG_STATIC_DEVICE;
+>   		break;
+>   	}
+>   	val |= SW_IDPIN_EN;
+> -
+> +	if (data->enable_sw_switch) {
+> +		val &= ~DRD_CONFIG_MASK;
+> +		val |= SW_SWITCH_EN | drd_config;
 > +	}
+>   	writel(val, data->base + DUAL_ROLE_CFG0);
+>   
+>   	acpi_release_global_lock(glk);
+> @@ -147,6 +167,9 @@ static int intel_xhci_usb_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, data);
+>   
+> +	data->enable_sw_switch = !device_property_read_bool(dev,
+> +						"sw_switch_disable");
 > +
->  	pdev->dev.parent = dev;
->  
->  	ret = platform_device_add(pdev);
-> -- 
-> 1.9.1
-
-thanks,
-
--- 
-heikki
+>   	data->role_sw = usb_role_switch_register(dev, &sw_desc);
+>   	if (IS_ERR(data->role_sw))
+>   		return PTR_ERR(data->role_sw);
+> 
