@@ -2,186 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F882A25A7
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E6CA2609
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729969AbfH2Sbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 14:31:35 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44914 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727959AbfH2Sbd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:31:33 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0879E875222;
-        Thu, 29 Aug 2019 18:31:33 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 16B8B600C1;
-        Thu, 29 Aug 2019 18:31:29 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
- Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
- Kingdom.
- Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 11/11] smack: Implement the watch_key and post_notification
- hooks [untested] [ver #6]
-From:   David Howells <dhowells@redhat.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     dhowells@redhat.com, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>, dhowells@redhat.com,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Thu, 29 Aug 2019 19:31:29 +0100
-Message-ID: <156710348929.10009.9818343561641033452.stgit@warthog.procyon.org.uk>
-In-Reply-To: <156710338860.10009.12524626894838499011.stgit@warthog.procyon.org.uk>
-References: <156710338860.10009.12524626894838499011.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/unknown-version
+        id S1728267AbfH2Sd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 14:33:56 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:45823 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728694AbfH2Sdv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Aug 2019 14:33:51 -0400
+Received: by mail-wr1-f41.google.com with SMTP id q12so4405088wrj.12
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2019 11:33:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:references:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=JnlWXDTbrqHM8aJAgZjpLz1LLb9hmD20EbvrUOM0KGI=;
+        b=XSrapY5Kx1bo12d4hYZAHZXRs0MbVq1hvDxiW7Nz5tHbj0+MfY9g3mXtAmC/kT+68h
+         RGiEw9yiqWxFDoBn0SECplfevSUXKJIlbWTrIM3jLuENwj6ouwm5EGKtJ3pt/woV6QRB
+         T3sYpqDkqhjlUiMR3sGxN9jlAPByHGXuT8PM+UJbsw6Ky+QZUKyqwyNPAd3pfMsyFDvF
+         EHxGKYCV1yQP+N4jadE9F91jGFr/DQadCM3j03VVtZ908k7A+GR1xEiF397qzuCZyzEc
+         /n6RbLljz5ZfFtfgmE0rdk4+H/Z+A09c2pPKEQIiPwrQWY0F3CUzFD1YUOnRlrTBNeWk
+         b9Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JnlWXDTbrqHM8aJAgZjpLz1LLb9hmD20EbvrUOM0KGI=;
+        b=rlyBe9tBsrB4Q189B7eXhbkj7hgFmwWJJiVuYtCwuKyRVbno8vPI62vyuGO1e40qzR
+         1fFdEkOHfoEh/SABexWSXWGkONFJIpYTJpxgUhW6lD8/YucgiWe+Fe36/Mm5+5NCiIdP
+         vt/Yxi5NdBnuEMdhN91gPi/AxzsTIBeU5M741SH8TTy9i+vXy2NYniJsJAqAa3JzWTzR
+         ha9Ca2k5UayDAwx5bO9KThZnE7ULZTOu+TJY83Xnnx0HUk2PlfZkO7D47NuD8bsMuEDU
+         QJDir5ezGJMJ2eCYVuuOeAhrJv+DhMIKAMwgS7K4UOWN95dmzy7j4TEj9mUaRpQuxugT
+         NFLw==
+X-Gm-Message-State: APjAAAWE6Wnd7o/iQfC8S4JnxpxV/UkRTANKaZLmib/KA21WwjvH+/yM
+        BL38oOtgHcLPJM3Wq+tVg0YG3Z9n
+X-Google-Smtp-Source: APXvYqzbT6ATUyH3hRlRo98ShjDh8kvaZDg0arsS4Jw6QJ08O//KxUTsJDIKFCaFEgRz4EJSpYNQxw==
+X-Received: by 2002:adf:ea08:: with SMTP id q8mr14036819wrm.188.1567103628166;
+        Thu, 29 Aug 2019 11:33:48 -0700 (PDT)
+Received: from ?IPv6:2a02:908:1964:6740:352a:955f:edef:b4dc? ([2a02:908:1964:6740:352a:955f:edef:b4dc])
+        by smtp.gmail.com with ESMTPSA id k6sm9462510wrg.0.2019.08.29.11.33.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2019 11:33:47 -0700 (PDT)
+Subject: Re: Lacie Rugged USB3-FW does not work with UAS
+From:   Julian Sikorski <belegdol@gmail.com>
+To:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
+References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
+ <1566567572.8347.54.camel@suse.com>
+ <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
+ <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
+ <1566595393.8347.56.camel@suse.com>
+ <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
+Message-ID: <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
+Date:   Thu, 29 Aug 2019 20:33:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.68]); Thu, 29 Aug 2019 18:31:33 +0000 (UTC)
+In-Reply-To: <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Implement the watch_key security hook in Smack to make sure that a key
-grants the caller Read permission in order to set a watch on a key.
+W dniu 24.08.2019 o 09:08, Julian Sikorski pisze:
+> W dniu 23.08.2019 o 23:23, Oliver Neukum pisze:
+>> Am Freitag, den 23.08.2019, 16:21 +0200 schrieb Julian Sikorski:
+>>>
+>>> I did some further digging regarding whether this is a regression: the
+>>> quirk file on the laptop is from 15 July 2014. The machine is from ca.
+>>> May 2011. Looking through my earlier posts to linux-usb it appears that
+>>> the addition of the quirk is related to this thread:
+>>>
+>>> https://marc.info/?l=linux-usb&m=140537519907935&w=2
+>>>
+>>> At the same time, back in 2011, I reported that the drive was working
+>>> after some fixes:
+>>>
+>>> https://marc.info/?l=linux-usb&m=132276407611433&w=2
+>>
+>> Hi,
+>>
+>> this is alarming. Was this physically the same drive? I am asking
+>> because we have seen cases where two different devices were sold
+>> under the same name.
+>>
+>> 	Regards
+>> 		Oliver
+>>
+> Hi,
+> 
+> I do indeed own two lacie rugged drives which do differ a bit. The older
+> one (which was definitely working without the need for the quirk) is at
+> work, I will bring it home and test it in a few days.
+> Having said that, it appears that July 2014 is about when uas was rolled
+> out to the public. So maybe the drive has worked using usb storage before.
+> 
+> Best regards,
+> Julian
+> 
+Hi,
 
-Also implement the post_notification security hook to make sure that the
-notification source is granted Write permission by the watch queue.
+I have finally managed to try the second, older drive. It turns out that 
+the USB IDs are different and that the older drive (059f:103e) does 
+indeed appear to work with UAS whereas the newer one (059f:1031) does not.
+I can now also confirm that I bought the newer drive in November 2013 
+which means that the initial attempts of getting a drive to work from 
+2011 must have been with the older (working) one. This makes a 
+regression less likely. My educated guess is that the newer drive was 
+working from November 2013 until July 2014 when linux 3.15 came out and 
+uas rollout broke the drive, after which I added the quirk and have been 
+using it since.
+Below is the dmesg output from connecting and disconnecting both drives, 
+older (working) first and newer (not working) second:
 
-For the moment, the watch_devices security hook is left unimplemented as
-it's not obvious what the object should be since the queue is global and
-didn't previously exist.
+[  103.728860] usb 1-4: new full-speed USB device number 6 using xhci_hcd
+[  103.933051] usb 1-4: device descriptor read/64, error -71
+[  104.214040] usb 1-4: device descriptor read/64, error -71
+[  104.494718] usb 1-4: new full-speed USB device number 7 using xhci_hcd
+[  105.888012] usb 2-4: new SuperSpeed Gen 1 USB device number 2 using 
+xhci_hcd
+[  105.910020] usb 2-4: New USB device found, idVendor=059f, 
+idProduct=103e, bcdDevice= 0.02
+[  105.910023] usb 2-4: New USB device strings: Mfr=2, Product=3, 
+SerialNumber=1
+[  105.910025] usb 2-4: Product: Rugged USB 3
+[  105.910027] usb 2-4: Manufacturer: LaCie
+[  105.910029] usb 2-4: SerialNumber: ce0238914a4c0000000
+[  105.960279] usb-storage 2-4:1.0: USB Mass Storage device detected
+[  105.960654] scsi host12: usb-storage 2-4:1.0
+[  105.960719] usbcore: registered new interface driver usb-storage
+[  105.962877] usbcore: registered new interface driver uas
+[  107.705420] scsi 12:0:0:0: Direct-Access     ST950032 5AS 
+  0002 PQ: 0 ANSI: 0
+[  107.706014] sd 12:0:0:0: [sdb] 976773168 512-byte logical blocks: 
+(500 GB/466 GiB)
+[  107.706101] sd 12:0:0:0: Attached scsi generic sg1 type 0
+[  107.706935] sd 12:0:0:0: [sdb] Write Protect is off
+[  107.706939] sd 12:0:0:0: [sdb] Mode Sense: 23 00 00 00
+[  107.707942] sd 12:0:0:0: [sdb] No Caching mode page found
+[  107.707945] sd 12:0:0:0: [sdb] Assuming drive cache: write through
+[  107.842540]  sdb: sdb1 sdb2
+[  107.845196] sd 12:0:0:0: [sdb] Attached SCSI disk
+[  347.637498] usb 2-4: USB disconnect, device number 2
+[  362.208749] usb 2-4: new SuperSpeed Gen 1 USB device number 3 using 
+xhci_hcd
+[  362.230833] usb 2-4: New USB device found, idVendor=059f, 
+idProduct=1061, bcdDevice= 0.01
+[  362.230837] usb 2-4: New USB device strings: Mfr=2, Product=3, 
+SerialNumber=1
+[  362.230839] usb 2-4: Product: Rugged USB3-FW
+[  362.230841] usb 2-4: Manufacturer: LaCie
+[  362.230842] usb 2-4: SerialNumber: 00000000157f928920fa
+[  362.270100] scsi host12: uas
+[  362.270720] scsi 12:0:0:0: Direct-Access     LaCie    Rugged FW USB3 
+  051E PQ: 0 ANSI: 6
+[  362.271472] sd 12:0:0:0: Attached scsi generic sg1 type 0
+[  362.280344] sd 12:0:0:0: [sdb] 1953525168 512-byte logical blocks: 
+(1.00 TB/932 GiB)
+[  362.280422] sd 12:0:0:0: [sdb] Write Protect is off
+[  362.280423] sd 12:0:0:0: [sdb] Mode Sense: 43 00 00 00
+[  362.280544] sd 12:0:0:0: [sdb] Write cache: enabled, read cache: 
+enabled, doesn't support DPO or FUA
+[  392.672691] sd 12:0:0:0: tag#29 uas_eh_abort_handler 0 uas-tag 1 
+inflight: IN
+[  392.672697] sd 12:0:0:0: tag#29 CDB: Report supported operation codes 
+a3 0c 01 12 00 00 00 00 02 00 00 00
+[  392.678304] scsi host12: uas_eh_device_reset_handler start
+[  392.800099] usb 2-4: reset SuperSpeed Gen 1 USB device number 3 using 
+xhci_hcd
+[  392.848154] scsi host12: uas_eh_device_reset_handler success
+[  422.875443] scsi host12: uas_eh_device_reset_handler start
+[  422.875650] sd 12:0:0:0: tag#16 uas_zap_pending 0 uas-tag 1 inflight:
+[  422.875654] sd 12:0:0:0: tag#16 CDB: Report supported operation codes 
+a3 0c 01 12 00 00 00 00 02 00 00 00
+[  422.997556] usb 2-4: reset SuperSpeed Gen 1 USB device number 3 using 
+xhci_hcd
+[  423.046525] scsi host12: uas_eh_device_reset_handler success
+[  431.853505] usb 2-4: USB disconnect, device number 3
+[  431.903459] sd 12:0:0:0: [sdb] Optimal transfer size 33553920 bytes
+[  432.064456] sd 12:0:0:0: [sdb] Read Capacity(16) failed: Result: 
+hostbyte=DID_ERROR driverbyte=DRIVER_OK
+[  432.064459] sd 12:0:0:0: [sdb] Sense not available.
+[  432.184595] sd 12:0:0:0: [sdb] Read Capacity(10) failed: Result: 
+hostbyte=DID_ERROR driverbyte=DRIVER_OK
+[  432.184599] sd 12:0:0:0: [sdb] Sense not available.
+[  432.232451] sd 12:0:0:0: [sdb] 0 512-byte logical blocks: (0 B/0 B)
+[  432.424484] sd 12:0:0:0: [sdb] Attached SCSI disk
 
-Signed-off-by: David Howells <dhowells@redhat.com>
----
-
- include/linux/lsm_audit.h  |    1 +
- security/smack/smack_lsm.c |   81 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 82 insertions(+)
-
-diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
-index 915330abf6e5..734d67889826 100644
---- a/include/linux/lsm_audit.h
-+++ b/include/linux/lsm_audit.h
-@@ -74,6 +74,7 @@ struct common_audit_data {
- #define LSM_AUDIT_DATA_FILE	12
- #define LSM_AUDIT_DATA_IBPKEY	13
- #define LSM_AUDIT_DATA_IBENDPORT 14
-+#define LSM_AUDIT_DATA_NOTIFICATION 15
- 	union 	{
- 		struct path path;
- 		struct dentry *dentry;
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 4c5e5a438f8b..ef3fb70649f0 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4320,8 +4320,82 @@ static int smack_key_getsecurity(struct key *key, char **_buffer)
- 	return length;
- }
- 
-+
-+#ifdef CONFIG_KEY_NOTIFICATIONS
-+/**
-+ * smack_watch_key - Smack access to watch a key for notifications.
-+ * @watch: The watch to be set
-+ * @key: The key to be watched
-+ *
-+ * Return 0 if the @watch->cred has permission to read from the key object and
-+ * an error otherwise.
-+ */
-+static int smack_watch_key(struct watch *watch, struct key *key)
-+{
-+	struct smk_audit_info ad;
-+	struct smack_known *tkp = smk_of_task(smack_cred(watch->cred));
-+	int rc;
-+
-+	if (key == NULL)
-+		return -EINVAL;
-+	/*
-+	 * If the key hasn't been initialized give it access so that
-+	 * it may do so.
-+	 */
-+	if (key->security == NULL)
-+		return 0;
-+	/*
-+	 * This should not occur
-+	 */
-+	if (tkp == NULL)
-+		return -EACCES;
-+
-+	if (smack_privileged_cred(CAP_MAC_OVERRIDE, watch->cred))
-+		return 0;
-+
-+#ifdef CONFIG_AUDIT
-+	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_KEY);
-+	ad.a.u.key_struct.key = key->serial;
-+	ad.a.u.key_struct.key_desc = key->description;
-+#endif
-+	rc = smk_access(tkp, key->security, MAY_READ, &ad);
-+	rc = smk_bu_note("key watch", tkp, key->security, MAY_READ, rc);
-+	return rc;
-+}
-+#endif /* CONFIG_KEY_NOTIFICATIONS */
- #endif /* CONFIG_KEYS */
- 
-+#ifdef CONFIG_WATCH_QUEUE
-+/**
-+ * smack_post_notification - Smack access to post a notification to a queue
-+ * @w_cred: The credentials of the watcher.
-+ * @cred: The credentials of the event source (may be NULL).
-+ * @n: The notification message to be posted.
-+ */
-+static int smack_post_notification(const struct cred *w_cred,
-+				   const struct cred *cred,
-+				   struct watch_notification *n)
-+{
-+	struct smk_audit_info ad;
-+	struct smack_known *subj, *obj;
-+	int rc;
-+
-+	/* Always let maintenance notifications through. */
-+	if (n->type == WATCH_TYPE_META)
-+		return 0;
-+
-+	if (!cred)
-+		return 0;
-+	subj = smk_of_task(smack_cred(cred));
-+	obj = smk_of_task(smack_cred(w_cred));
-+
-+	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_NOTIFICATION);
-+	rc = smk_access(subj, obj, MAY_WRITE, &ad);
-+	rc = smk_bu_note("notification", subj, obj, MAY_WRITE, rc);
-+	return rc;
-+}
-+#endif /* CONFIG_WATCH_QUEUE */
-+
- /*
-  * Smack Audit hooks
-  *
-@@ -4710,8 +4784,15 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(key_free, smack_key_free),
- 	LSM_HOOK_INIT(key_permission, smack_key_permission),
- 	LSM_HOOK_INIT(key_getsecurity, smack_key_getsecurity),
-+#ifdef CONFIG_KEY_NOTIFICATIONS
-+	LSM_HOOK_INIT(watch_key, smack_watch_key),
-+#endif
- #endif /* CONFIG_KEYS */
- 
-+#ifdef CONFIG_WATCH_QUEUE
-+	LSM_HOOK_INIT(post_notification, smack_post_notification),
-+#endif
-+
-  /* Audit hooks */
- #ifdef CONFIG_AUDIT
- 	LSM_HOOK_INIT(audit_rule_init, smack_audit_rule_init),
-
+Best regards,
+Julian
