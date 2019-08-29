@@ -2,52 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 074DFA1319
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 09:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0A4A1301
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 09:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727014AbfH2H6W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 03:58:22 -0400
-Received: from mail.aixigo.de ([5.145.142.10]:10848 "EHLO mail.aixigo.de"
+        id S1726330AbfH2HxN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 03:53:13 -0400
+Received: from mga03.intel.com ([134.134.136.65]:23535 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725807AbfH2H6V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 03:58:21 -0400
-X-Greylist: delayed 400 seconds by postgrey-1.27 at vger.kernel.org; Thu, 29 Aug 2019 03:58:21 EDT
-Received: from srvvm01.ac.aixigo.de (mail.ac.aixigo.de [172.19.96.11])
-        by gate5a.ac.aixigo.de (OpenSMTPD) with ESMTPS id 1773f9c3 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
-        Thu, 29 Aug 2019 09:51:40 +0200 (CEST)
-Received: from dpcl082.ac.aixigo.de (dpcl082.ac.aixigo.de [172.19.97.128])
-        by srvvm01.ac.aixigo.de (8.15.2/8.15.2/Debian-8) with ESMTP id x7T7peBT174490;
-        Thu, 29 Aug 2019 09:51:40 +0200
-Subject: Re: fsck on ext4: "WARN Wrong bounce buffer write length: 1024 != 0"
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
-References: <22367f07-3448-f771-0363-b5c6f500b77d@aixigo.com>
- <20190827163511.GM28066@mit.edu>
- <7b5b6185-fc81-8675-06d1-fc7dae3b47b0@linux.intel.com>
-From:   Harald Dunkel <harald.dunkel@aixigo.com>
-Message-ID: <2be81deb-60a2-39be-b1c6-51f57937e6c7@aixigo.com>
-Date:   Thu, 29 Aug 2019 09:51:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1725807AbfH2HxM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Aug 2019 03:53:12 -0400
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 00:53:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,442,1559545200"; 
+   d="scan'208";a="197746759"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 29 Aug 2019 00:53:07 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 29 Aug 2019 10:53:07 +0300
+Date:   Thu, 29 Aug 2019 10:53:07 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Saranya Gopal <saranya.gopal@intel.com>
+Cc:     hdegoede@redhat.com, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+        Balaji Manoharan <m.balaji@intel.com>
+Subject: Re: [PATCH v3 2/2] usb: roles: intel: Enable static DRD mode for
+ role switch
+Message-ID: <20190829075307.GD5486@kuha.fi.intel.com>
+References: <1567011332-22839-1-git-send-email-saranya.gopal@intel.com>
+ <1567011332-22839-2-git-send-email-saranya.gopal@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <7b5b6185-fc81-8675-06d1-fc7dae3b47b0@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.101.1 at srvvm01.ac.aixigo.de
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1567011332-22839-2-git-send-email-saranya.gopal@intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/28/19 9:57 AM, Mathias Nyman wrote:
-> 
-> I'll submit a proper patch
-> 
-> -Mathias
-> 
+Hi,
 
-Thanx very much
-Harri
+>  static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+> @@ -44,7 +52,7 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
+>  	struct intel_xhci_usb_data *data = dev_get_drvdata(dev);
+>  	unsigned long timeout;
+>  	acpi_status status;
+> -	u32 glk, val;
+> +	u32 glk, val, drd_config;
+
+I guess you need to fix that. While at it, please introduce it on its
+own line:
+
+        u32 drd_config = DRD_CONFIG_DYNAMIC;
+
+
+thanks,
+
+-- 
+heikki
