@@ -2,162 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DA7A17A8
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 13:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEB5A17D2
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 13:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727125AbfH2LEV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 07:04:21 -0400
-Received: from mga05.intel.com ([192.55.52.43]:58080 "EHLO mga05.intel.com"
+        id S1727415AbfH2LLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 07:11:09 -0400
+Received: from mga01.intel.com ([192.55.52.88]:29083 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726417AbfH2LEU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 07:04:20 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726982AbfH2LLJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Aug 2019 07:11:09 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 04:04:20 -0700
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 04:11:08 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,442,1559545200"; 
-   d="scan'208";a="197783168"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 29 Aug 2019 04:04:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 29 Aug 2019 14:04:16 +0300
-Date:   Thu, 29 Aug 2019 14:04:16 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Saranya Gopal <saranya.gopal@intel.com>
-Cc:     hdegoede@redhat.com, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        Balaji Manoharan <m.balaji@intel.com>
-Subject: Re: [PATCH v4 2/2] usb: roles: intel: Enable static DRD mode for
+   d="scan'208";a="205683656"
+Received: from fmsmsx107.amr.corp.intel.com ([10.18.124.205])
+  by fmsmga004.fm.intel.com with ESMTP; 29 Aug 2019 04:11:08 -0700
+Received: from fmsmsx121.amr.corp.intel.com (10.18.125.36) by
+ fmsmsx107.amr.corp.intel.com (10.18.124.205) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Thu, 29 Aug 2019 04:11:08 -0700
+Received: from bgsmsx102.gar.corp.intel.com (10.223.4.172) by
+ fmsmsx121.amr.corp.intel.com (10.18.125.36) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Thu, 29 Aug 2019 04:11:07 -0700
+Received: from bgsmsx104.gar.corp.intel.com ([169.254.5.178]) by
+ BGSMSX102.gar.corp.intel.com ([169.254.2.79]) with mapi id 14.03.0439.000;
+ Thu, 29 Aug 2019 16:41:04 +0530
+From:   "Gopal, Saranya" <saranya.gopal@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "Nyman, Mathias" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Balaji, M" <m.balaji@intel.com>, Rafal Psota <rafalzaq@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: RE: [PATCH v4 2/2] usb: roles: intel: Enable static DRD mode for
  role switch
-Message-ID: <20190829110416.GF5486@kuha.fi.intel.com>
+Thread-Topic: [PATCH v4 2/2] usb: roles: intel: Enable static DRD mode for
+ role switch
+Thread-Index: AQHVXlhjvxes0bFMQEWoeuAugS+K2acRmguAgABdw3A=
+Date:   Thu, 29 Aug 2019 11:11:04 +0000
+Message-ID: <C672AA6DAAC36042A98BAD0B0B25BDA94CCB5132@BGSMSX104.gar.corp.intel.com>
 References: <1567075327-24016-1-git-send-email-saranya.gopal@intel.com>
  <1567075327-24016-2-git-send-email-saranya.gopal@intel.com>
+ <94e5c5e9-2a73-58a3-fd1a-fbf0f5e07e23@redhat.com>
+In-Reply-To: <94e5c5e9-2a73-58a3-fd1a-fbf0f5e07e23@redhat.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiYmMzZmI1MDEtMWY2MC00MDY2LWI5YzQtYzQzNDdhNGIwZGM5IiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoibHVlSkxwRmJvV25WVlwvaGZjZmF3a0RkQ0RBU3FCVVpvcjhXdDIrTHpDd1J2cWJrbm5SSWZ1SXZvZ0Zmc2Z0XC8zIn0=
+x-originating-ip: [10.223.10.10]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1567075327-24016-2-git-send-email-saranya.gopal@intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 29, 2019 at 04:12:07PM +0530, Saranya Gopal wrote:
-> Enable static DRD mode in Intel platforms which guarantees
-> successful role switch all the time. This fixes issues like
-> software role switch failure after cold boot and issue with
-> role switch when USB 3.0 cable is used. But, do not enable
-> static DRD mode for Cherrytrail devices which rely on firmware
-> for role switch.
-> 
-> Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-> Signed-off-by: Balaji Manoharan <m.balaji@intel.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  changes since v3: Initialized drd_config variable to fix warning
->  changes since v2: Revised SoB tags
->  changes since v1: Added drd_config to avoid multiple if checks
->                    Other minor changes suggested by Hans
->                    
->  drivers/usb/roles/intel-xhci-usb-role-switch.c | 27 ++++++++++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/roles/intel-xhci-usb-role-switch.c b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> index 277de96..88d0416 100644
-> --- a/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> +++ b/drivers/usb/roles/intel-xhci-usb-role-switch.c
-> @@ -19,6 +19,7 @@
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/property.h>
->  #include <linux/usb/role.h>
->  
->  /* register definition */
-> @@ -26,6 +27,12 @@
->  #define SW_VBUS_VALID			BIT(24)
->  #define SW_IDPIN_EN			BIT(21)
->  #define SW_IDPIN			BIT(20)
-> +#define SW_SWITCH_EN			BIT(16)
-> +
-> +#define DRD_CONFIG_DYNAMIC		0
-> +#define DRD_CONFIG_STATIC_HOST		1
-> +#define DRD_CONFIG_STATIC_DEVICE	2
-> +#define DRD_CONFIG_MASK			3
->  
->  #define DUAL_ROLE_CFG1			0x6c
->  #define HOST_MODE			BIT(29)
-> @@ -37,6 +44,7 @@
->  struct intel_xhci_usb_data {
->  	struct usb_role_switch *role_sw;
->  	void __iomem *base;
-> +	bool enable_sw_switch;
->  };
->  
->  static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
-> @@ -45,6 +53,7 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
->  	unsigned long timeout;
->  	acpi_status status;
->  	u32 glk, val;
-> +	u32 drd_config = DRD_CONFIG_DYNAMIC;
->  
->  	/*
->  	 * On many CHT devices ACPI event (_AEI) handlers read / modify /
-> @@ -59,24 +68,35 @@ static int intel_xhci_usb_set_role(struct device *dev, enum usb_role role)
->  
->  	pm_runtime_get_sync(dev);
->  
-> -	/* Set idpin value as requested */
-> +	/*
-> +	 * Set idpin value as requested.
-> +	 * Since some devices rely on firmware setting DRD_CONFIG and
-> +	 * SW_SWITCH_EN bits to be zero for role switch,
-> +	 * do not set these bits for those devices.
-> +	 */
->  	val = readl(data->base + DUAL_ROLE_CFG0);
->  	switch (role) {
->  	case USB_ROLE_NONE:
->  		val |= SW_IDPIN;
->  		val &= ~SW_VBUS_VALID;
-> +		drd_config = DRD_CONFIG_DYNAMIC;
->  		break;
->  	case USB_ROLE_HOST:
->  		val &= ~SW_IDPIN;
->  		val &= ~SW_VBUS_VALID;
-> +		drd_config = DRD_CONFIG_STATIC_HOST;
->  		break;
->  	case USB_ROLE_DEVICE:
->  		val |= SW_IDPIN;
->  		val |= SW_VBUS_VALID;
-> +		drd_config = DRD_CONFIG_STATIC_DEVICE;
->  		break;
->  	}
->  	val |= SW_IDPIN_EN;
-> -
-> +	if (data->enable_sw_switch) {
-> +		val &= ~DRD_CONFIG_MASK;
-> +		val |= SW_SWITCH_EN | drd_config;
-> +	}
->  	writel(val, data->base + DUAL_ROLE_CFG0);
->  
->  	acpi_release_global_lock(glk);
-> @@ -147,6 +167,9 @@ static int intel_xhci_usb_probe(struct platform_device *pdev)
->  
->  	platform_set_drvdata(pdev, data);
->  
-> +	data->enable_sw_switch = !device_property_read_bool(dev,
-> +						"sw_switch_disable");
-> +
->  	data->role_sw = usb_role_switch_register(dev, &sw_desc);
->  	if (IS_ERR(data->role_sw))
->  		return PTR_ERR(data->role_sw);
-> -- 
-> 1.9.1
-
-thanks,
-
--- 
-heikki
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogbGludXgtdXNiLW93bmVy
+QHZnZXIua2VybmVsLm9yZyBbbWFpbHRvOmxpbnV4LXVzYi0NCj4gb3duZXJAdmdlci5rZXJuZWwu
+b3JnXSBPbiBCZWhhbGYgT2YgSGFucyBkZSBHb2VkZQ0KPiBTZW50OiBUaHVyc2RheSwgQXVndXN0
+IDI5LCAyMDE5IDQ6MzQgUE0NCj4gVG86IEdvcGFsLCBTYXJhbnlhIDxzYXJhbnlhLmdvcGFsQGlu
+dGVsLmNvbT47DQo+IGhlaWtraS5rcm9nZXJ1c0BsaW51eC5pbnRlbC5jb20NCj4gQ2M6IGdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnOyBOeW1hbiwgTWF0aGlhcw0KPiA8bWF0aGlhcy5ueW1hbkBp
+bnRlbC5jb20+OyBsaW51eC11c2JAdmdlci5rZXJuZWwub3JnOyBCYWxhamksIE0NCj4gPG0uYmFs
+YWppQGludGVsLmNvbT47IFJhZmHFgiBQc290YSA8cmFmYWx6YXFAZ21haWwuY29tPjsgUmFmYWVs
+IEouIFd5c29ja2kNCj4gPHJqd0Byand5c29ja2kubmV0Pg0KPiBTdWJqZWN0OiBSZTogW1BBVENI
+IHY0IDIvMl0gdXNiOiByb2xlczogaW50ZWw6IEVuYWJsZSBzdGF0aWMgRFJEIG1vZGUgZm9yIHJv
+bGUNCj4gc3dpdGNoDQo+IA0KPiBIaSBTYXJhbnlhLA0KPiANCj4gT24gMjktMDgtMTkgMTI6NDIs
+IFNhcmFueWEgR29wYWwgd3JvdGU6DQo+ID4gRW5hYmxlIHN0YXRpYyBEUkQgbW9kZSBpbiBJbnRl
+bCBwbGF0Zm9ybXMgd2hpY2ggZ3VhcmFudGVlcw0KPiA+IHN1Y2Nlc3NmdWwgcm9sZSBzd2l0Y2gg
+YWxsIHRoZSB0aW1lLiBUaGlzIGZpeGVzIGlzc3VlcyBsaWtlDQo+ID4gc29mdHdhcmUgcm9sZSBz
+d2l0Y2ggZmFpbHVyZSBhZnRlciBjb2xkIGJvb3QgYW5kIGlzc3VlIHdpdGgNCj4gPiByb2xlIHN3
+aXRjaCB3aGVuIFVTQiAzLjAgY2FibGUgaXMgdXNlZC4gQnV0LCBkbyBub3QgZW5hYmxlDQo+ID4g
+c3RhdGljIERSRCBtb2RlIGZvciBDaGVycnl0cmFpbCBkZXZpY2VzIHdoaWNoIHJlbHkgb24gZmly
+bXdhcmUNCj4gPiBmb3Igcm9sZSBzd2l0Y2guDQo+ID4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBTYXJh
+bnlhIEdvcGFsIDxzYXJhbnlhLmdvcGFsQGludGVsLmNvbT4NCj4gPiBTaWduZWQtb2ZmLWJ5OiBC
+YWxhamkgTWFub2hhcmFuIDxtLmJhbGFqaUBpbnRlbC5jb20+DQo+IA0KPiBVbmZvcnR1bmF0ZWx5
+IHRoaXMgcGF0Y2ggY29uZmxpY3RzIHdpdGggYSBwYXRjaCB0bw0KPiBkcml2ZXJzL3VzYi9yb2xl
+cy9pbnRlbC14aGNpLXVzYi1yb2xlLXN3aXRjaC5jIGZyb20gSGVpa2tpDQo+IHdoaWNoIGlzIGFs
+cmVhZHkgaW4gLW5leHQsIHNlZToNCj4gDQo+IGh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3Nj
+bS9saW51eC9rZXJuZWwvZ2l0L3JhZmFlbC9saW51eC0NCj4gcG0uZ2l0L2xvZy8/aD1kZXZwcm9w
+DQo+IA0KPiBBbmQgc3BlY2lmaWNhbGx5IHRoaXMgY29tbWl0Og0KPiANCj4gaHR0cHM6Ly9naXQu
+a2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvcmFmYWVsL2xpbnV4LQ0KPiBwbS5n
+aXQvY29tbWl0Lz9oPWRldnByb3AmaWQ9ZDJhOTBlYmI2NTUzNmE2ZGVlYjlkYWY1YWE4ZTA3MDBl
+OGNiYjQzDQo+IGENCj4gDQo+IFNvIHlvdSBuZWVkIHRvIHJlYmFzZSBvbiBvcCBvZiB0aGF0IGJy
+YW5jaCBhbmQgdGhlbiB0aGUgc3Vic3lzDQo+IG1haW50YWluZXJzIG5lZWQgdG8gZmlndXJlIG91
+dCBob3cgdG8gbWVyZ2UgdGhpcywgSSBndWVzcw0KPiB0aGUgdXNiLW5leHQgdHJlZSBjYW4gbWVy
+Z2UgUmFmYWVsJ3MgZGV2cHJvcCBicmFuY2ggZm9yIHRoaXM/DQo+DQpTdXJlLCBsZXQgbWUgcmVi
+YXNlIG9uIHRvcCBvZiB0aGF0IGJyYW5jaC4NClRoYW5rcywNClNhcmFueWENCiANCj4gSSd2ZSBt
+YW51YWxseSByZXNvbHZlZCB0aGUgY29uZmxpY3QgbG9jYWxseSBhbmQgIGdpdmVuIHRoaXMgbmV3
+IHZlcnNpb24NCj4gYSB0ZXN0LXJ1biBvbiBhIENoZXJyeSBUcmFpbCBkZXZpY2UgYW5kIHRoaW5n
+cyBzdGlsbCB3b3JrIGFzIHRoZXkgc2hvdWxkDQo+IHRoZXJlLCBzbyB3aXRoIHRoZSBjb25mbGlj
+dCBmaXhlZCB0aGlzIHNlcmllcyBpczoNCj4gDQo+IFRlc3RlZC1ieTogSGFucyBkZSBHb2VkZSA8
+aGRlZ29lZGVAcmVkaGF0LmNvbT4NCj4gUmV2aWV3ZWQtYnk6IEhhbnMgZGUgR29lZGUgPGhkZWdv
+ZWRlQHJlZGhhdC5jb20+DQo+IA0KPiBSZWdhcmRzLA0KPiANCj4gSGFucw0KPiANCj4gDQo+ID4g
+LS0tDQo+ID4gICBjaGFuZ2VzIHNpbmNlIHYzOiBJbml0aWFsaXplZCBkcmRfY29uZmlnIHZhcmlh
+YmxlIHRvIGZpeCB3YXJuaW5nDQo+ID4gICBjaGFuZ2VzIHNpbmNlIHYyOiBSZXZpc2VkIFNvQiB0
+YWdzDQo+ID4gICBjaGFuZ2VzIHNpbmNlIHYxOiBBZGRlZCBkcmRfY29uZmlnIHRvIGF2b2lkIG11
+bHRpcGxlIGlmIGNoZWNrcw0KPiA+ICAgICAgICAgICAgICAgICAgICAgT3RoZXIgbWlub3IgY2hh
+bmdlcyBzdWdnZXN0ZWQgYnkgSGFucw0KPiA+DQo+ID4gICBkcml2ZXJzL3VzYi9yb2xlcy9pbnRl
+bC14aGNpLXVzYi1yb2xlLXN3aXRjaC5jIHwgMjcNCj4gKysrKysrKysrKysrKysrKysrKysrKysr
+LS0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCAyNSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
+KQ0KPiA+DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3JvbGVzL2ludGVsLXhoY2ktdXNi
+LXJvbGUtc3dpdGNoLmMNCj4gYi9kcml2ZXJzL3VzYi9yb2xlcy9pbnRlbC14aGNpLXVzYi1yb2xl
+LXN3aXRjaC5jDQo+ID4gaW5kZXggMjc3ZGU5Ni4uODhkMDQxNiAxMDA2NDQNCj4gPiAtLS0gYS9k
+cml2ZXJzL3VzYi9yb2xlcy9pbnRlbC14aGNpLXVzYi1yb2xlLXN3aXRjaC5jDQo+ID4gKysrIGIv
+ZHJpdmVycy91c2Ivcm9sZXMvaW50ZWwteGhjaS11c2Itcm9sZS1zd2l0Y2guYw0KPiA+IEBAIC0x
+OSw2ICsxOSw3IEBADQo+ID4gICAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4gICAjaW5j
+bHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+DQo+ID4gICAjaW5jbHVkZSA8bGludXgvcG1f
+cnVudGltZS5oPg0KPiA+ICsjaW5jbHVkZSA8bGludXgvcHJvcGVydHkuaD4NCj4gPiAgICNpbmNs
+dWRlIDxsaW51eC91c2Ivcm9sZS5oPg0KPiA+DQo+ID4gICAvKiByZWdpc3RlciBkZWZpbml0aW9u
+ICovDQo+ID4gQEAgLTI2LDYgKzI3LDEyIEBADQo+ID4gICAjZGVmaW5lIFNXX1ZCVVNfVkFMSUQJ
+CQlCSVQoMjQpDQo+ID4gICAjZGVmaW5lIFNXX0lEUElOX0VOCQkJQklUKDIxKQ0KPiA+ICAgI2Rl
+ZmluZSBTV19JRFBJTgkJCUJJVCgyMCkNCj4gPiArI2RlZmluZSBTV19TV0lUQ0hfRU4JCQlCSVQo
+MTYpDQo+ID4gKw0KPiA+ICsjZGVmaW5lIERSRF9DT05GSUdfRFlOQU1JQwkJMA0KPiA+ICsjZGVm
+aW5lIERSRF9DT05GSUdfU1RBVElDX0hPU1QJCTENCj4gPiArI2RlZmluZSBEUkRfQ09ORklHX1NU
+QVRJQ19ERVZJQ0UJMg0KPiA+ICsjZGVmaW5lIERSRF9DT05GSUdfTUFTSwkJCTMNCj4gPg0KPiA+
+ICAgI2RlZmluZSBEVUFMX1JPTEVfQ0ZHMQkJCTB4NmMNCj4gPiAgICNkZWZpbmUgSE9TVF9NT0RF
+CQkJQklUKDI5KQ0KPiA+IEBAIC0zNyw2ICs0NCw3IEBADQo+ID4gICBzdHJ1Y3QgaW50ZWxfeGhj
+aV91c2JfZGF0YSB7DQo+ID4gICAJc3RydWN0IHVzYl9yb2xlX3N3aXRjaCAqcm9sZV9zdzsNCj4g
+PiAgIAl2b2lkIF9faW9tZW0gKmJhc2U7DQo+ID4gKwlib29sIGVuYWJsZV9zd19zd2l0Y2g7DQo+
+ID4gICB9Ow0KPiA+DQo+ID4gICBzdGF0aWMgaW50IGludGVsX3hoY2lfdXNiX3NldF9yb2xlKHN0
+cnVjdCBkZXZpY2UgKmRldiwgZW51bSB1c2Jfcm9sZSByb2xlKQ0KPiA+IEBAIC00NSw2ICs1Myw3
+IEBAIHN0YXRpYyBpbnQgaW50ZWxfeGhjaV91c2Jfc2V0X3JvbGUoc3RydWN0IGRldmljZSAqZGV2
+LA0KPiBlbnVtIHVzYl9yb2xlIHJvbGUpDQo+ID4gICAJdW5zaWduZWQgbG9uZyB0aW1lb3V0Ow0K
+PiA+ICAgCWFjcGlfc3RhdHVzIHN0YXR1czsNCj4gPiAgIAl1MzIgZ2xrLCB2YWw7DQo+ID4gKwl1
+MzIgZHJkX2NvbmZpZyA9IERSRF9DT05GSUdfRFlOQU1JQzsNCj4gPg0KPiA+ICAgCS8qDQo+ID4g
+ICAJICogT24gbWFueSBDSFQgZGV2aWNlcyBBQ1BJIGV2ZW50IChfQUVJKSBoYW5kbGVycyByZWFk
+IC8gbW9kaWZ5IC8NCj4gPiBAQCAtNTksMjQgKzY4LDM1IEBAIHN0YXRpYyBpbnQgaW50ZWxfeGhj
+aV91c2Jfc2V0X3JvbGUoc3RydWN0IGRldmljZSAqZGV2LA0KPiBlbnVtIHVzYl9yb2xlIHJvbGUp
+DQo+ID4NCj4gPiAgIAlwbV9ydW50aW1lX2dldF9zeW5jKGRldik7DQo+ID4NCj4gPiAtCS8qIFNl
+dCBpZHBpbiB2YWx1ZSBhcyByZXF1ZXN0ZWQgKi8NCj4gPiArCS8qDQo+ID4gKwkgKiBTZXQgaWRw
+aW4gdmFsdWUgYXMgcmVxdWVzdGVkLg0KPiA+ICsJICogU2luY2Ugc29tZSBkZXZpY2VzIHJlbHkg
+b24gZmlybXdhcmUgc2V0dGluZyBEUkRfQ09ORklHIGFuZA0KPiA+ICsJICogU1dfU1dJVENIX0VO
+IGJpdHMgdG8gYmUgemVybyBmb3Igcm9sZSBzd2l0Y2gsDQo+ID4gKwkgKiBkbyBub3Qgc2V0IHRo
+ZXNlIGJpdHMgZm9yIHRob3NlIGRldmljZXMuDQo+ID4gKwkgKi8NCj4gPiAgIAl2YWwgPSByZWFk
+bChkYXRhLT5iYXNlICsgRFVBTF9ST0xFX0NGRzApOw0KPiA+ICAgCXN3aXRjaCAocm9sZSkgew0K
+PiA+ICAgCWNhc2UgVVNCX1JPTEVfTk9ORToNCj4gPiAgIAkJdmFsIHw9IFNXX0lEUElOOw0KPiA+
+ICAgCQl2YWwgJj0gflNXX1ZCVVNfVkFMSUQ7DQo+ID4gKwkJZHJkX2NvbmZpZyA9IERSRF9DT05G
+SUdfRFlOQU1JQzsNCj4gPiAgIAkJYnJlYWs7DQo+ID4gICAJY2FzZSBVU0JfUk9MRV9IT1NUOg0K
+PiA+ICAgCQl2YWwgJj0gflNXX0lEUElOOw0KPiA+ICAgCQl2YWwgJj0gflNXX1ZCVVNfVkFMSUQ7
+DQo+ID4gKwkJZHJkX2NvbmZpZyA9IERSRF9DT05GSUdfU1RBVElDX0hPU1Q7DQo+ID4gICAJCWJy
+ZWFrOw0KPiA+ICAgCWNhc2UgVVNCX1JPTEVfREVWSUNFOg0KPiA+ICAgCQl2YWwgfD0gU1dfSURQ
+SU47DQo+ID4gICAJCXZhbCB8PSBTV19WQlVTX1ZBTElEOw0KPiA+ICsJCWRyZF9jb25maWcgPSBE
+UkRfQ09ORklHX1NUQVRJQ19ERVZJQ0U7DQo+ID4gICAJCWJyZWFrOw0KPiA+ICAgCX0NCj4gPiAg
+IAl2YWwgfD0gU1dfSURQSU5fRU47DQo+ID4gLQ0KPiA+ICsJaWYgKGRhdGEtPmVuYWJsZV9zd19z
+d2l0Y2gpIHsNCj4gPiArCQl2YWwgJj0gfkRSRF9DT05GSUdfTUFTSzsNCj4gPiArCQl2YWwgfD0g
+U1dfU1dJVENIX0VOIHwgZHJkX2NvbmZpZzsNCj4gPiArCX0NCj4gPiAgIAl3cml0ZWwodmFsLCBk
+YXRhLT5iYXNlICsgRFVBTF9ST0xFX0NGRzApOw0KPiA+DQo+ID4gICAJYWNwaV9yZWxlYXNlX2ds
+b2JhbF9sb2NrKGdsayk7DQo+ID4gQEAgLTE0Nyw2ICsxNjcsOSBAQCBzdGF0aWMgaW50IGludGVs
+X3hoY2lfdXNiX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UNCj4gKnBkZXYpDQo+ID4NCj4g
+PiAgIAlwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBkYXRhKTsNCj4gPg0KPiA+ICsJZGF0YS0+
+ZW5hYmxlX3N3X3N3aXRjaCA9ICFkZXZpY2VfcHJvcGVydHlfcmVhZF9ib29sKGRldiwNCj4gPiAr
+CQkJCQkJInN3X3N3aXRjaF9kaXNhYmxlIik7DQo+ID4gKw0KPiA+ICAgCWRhdGEtPnJvbGVfc3cg
+PSB1c2Jfcm9sZV9zd2l0Y2hfcmVnaXN0ZXIoZGV2LCAmc3dfZGVzYyk7DQo+ID4gICAJaWYgKElT
+X0VSUihkYXRhLT5yb2xlX3N3KSkNCj4gPiAgIAkJcmV0dXJuIFBUUl9FUlIoZGF0YS0+cm9sZV9z
+dyk7DQo+ID4NCg==
