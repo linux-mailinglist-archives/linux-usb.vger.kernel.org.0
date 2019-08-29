@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43891A23C6
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33778A24AF
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 20:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730379AbfH2SSP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 14:18:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60470 "EHLO mail.kernel.org"
+        id S1729391AbfH2SY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 14:24:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730364AbfH2SSO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:18:14 -0400
+        id S1729537AbfH2SQQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:16:16 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B675720828;
-        Thu, 29 Aug 2019 18:18:12 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECEAC23403;
+        Thu, 29 Aug 2019 18:16:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102693;
-        bh=rdPhH8z9NJp6n5Tx7phZxjwmGWsL0FRt3ZeaDJh3gcw=;
+        s=default; t=1567102575;
+        bh=SiranW8BmD8p0xcVsmm5TH1u4jivQdyNf4ld76TzPxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1Gj3orkDZMmaHm/1n86dnP8gZioUd5W/0blq3HV97IlN7GuFtckvKOrOjPW6t6r36
-         kKWpvdCkZDWRpqx5835pYoTOmagAjBDk/SZn/WJh9IrU+nTgkUsnaXvQ2OK8qKGyoT
-         Jc0k45iOecWz3MqRVElUCQ4v4A/iQYsLBTkkIU0E=
+        b=kID1kuwT//hUlSB1mkSlkFhoCdYGVSf68OlRnqHRlCLZScVehw+ay8H1/XeCBRrNi
+         xmRj6DzFjqvOFOhtQtgh3RcMRyn253IT75zW3rRrnBBHrj2DcUMvq+/oJrCtvak3JX
+         4EqSbQK7FvWZXTNjgpLLramWbedhl5OE/bmO3xHc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Wenwen Wang <wenwen@cs.uga.edu>,
         "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 09/15] net: kalmia: fix memory leaks
-Date:   Thu, 29 Aug 2019 14:17:56 -0400
-Message-Id: <20190829181802.9619-9-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 21/45] lan78xx: Fix memory leaks
+Date:   Thu, 29 Aug 2019 14:15:21 -0400
+Message-Id: <20190829181547.8280-21-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181802.9619-1-sashal@kernel.org>
-References: <20190829181802.9619-1-sashal@kernel.org>
+In-Reply-To: <20190829181547.8280-1-sashal@kernel.org>
+References: <20190829181547.8280-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -46,44 +46,51 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Wenwen Wang <wenwen@cs.uga.edu>
 
-[ Upstream commit f1472cb09f11ddb41d4be84f0650835cb65a9073 ]
+[ Upstream commit b9cbf8a64865b50fd0f4a3915fa00ac7365cdf8f ]
 
-In kalmia_init_and_get_ethernet_addr(), 'usb_buf' is allocated through
-kmalloc(). In the following execution, if the 'status' returned by
-kalmia_send_init_packet() is not 0, 'usb_buf' is not deallocated, leading
-to memory leaks. To fix this issue, add the 'out' label to free 'usb_buf'.
+In lan78xx_probe(), a new urb is allocated through usb_alloc_urb() and
+saved to 'dev->urb_intr'. However, in the following execution, if an error
+occurs, 'dev->urb_intr' is not deallocated, leading to memory leaks. To fix
+this issue, invoke usb_free_urb() to free the allocated urb before
+returning from the function.
 
 Signed-off-by: Wenwen Wang <wenwen@cs.uga.edu>
 Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/kalmia.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/usb/lan78xx.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/usb/kalmia.c b/drivers/net/usb/kalmia.c
-index 5662babf05832..d385b67258c79 100644
---- a/drivers/net/usb/kalmia.c
-+++ b/drivers/net/usb/kalmia.c
-@@ -117,16 +117,16 @@ kalmia_init_and_get_ethernet_addr(struct usbnet *dev, u8 *ethernet_addr)
- 	status = kalmia_send_init_packet(dev, usb_buf, sizeof(init_msg_1)
- 		/ sizeof(init_msg_1[0]), usb_buf, 24);
- 	if (status != 0)
--		return status;
-+		goto out;
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 8d140495da79d..e20266bd209e2 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -3799,7 +3799,7 @@ static int lan78xx_probe(struct usb_interface *intf,
+ 	ret = register_netdev(netdev);
+ 	if (ret != 0) {
+ 		netif_err(dev, probe, netdev, "couldn't register the device\n");
+-		goto out3;
++		goto out4;
+ 	}
  
- 	memcpy(usb_buf, init_msg_2, 12);
- 	status = kalmia_send_init_packet(dev, usb_buf, sizeof(init_msg_2)
- 		/ sizeof(init_msg_2[0]), usb_buf, 28);
- 	if (status != 0)
--		return status;
-+		goto out;
+ 	usb_set_intfdata(intf, dev);
+@@ -3814,12 +3814,14 @@ static int lan78xx_probe(struct usb_interface *intf,
  
- 	memcpy(ethernet_addr, usb_buf + 10, ETH_ALEN);
--
-+out:
- 	kfree(usb_buf);
- 	return status;
- }
+ 	ret = lan78xx_phy_init(dev);
+ 	if (ret < 0)
+-		goto out4;
++		goto out5;
+ 
+ 	return 0;
+ 
+-out4:
++out5:
+ 	unregister_netdev(netdev);
++out4:
++	usb_free_urb(dev->urb_intr);
+ out3:
+ 	lan78xx_unbind(dev, intf);
+ out2:
 -- 
 2.20.1
 
