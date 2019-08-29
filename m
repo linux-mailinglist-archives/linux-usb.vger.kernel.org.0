@@ -2,84 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC8A5A10DE
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 07:31:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA9CA1240
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Aug 2019 09:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727415AbfH2FbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 01:31:20 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56301 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725776AbfH2FbT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 01:31:19 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JrnK2FNpz9s5b;
-        Thu, 29 Aug 2019 15:31:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567056677;
-        bh=oIlRLyhh4VOnhrYht75HP9ne8cBfRj+H1ZHmre3phC4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PVWEtMoiYpRQCBEYImU73R8EgLboolgWeDq10zLt+uLqBCl63LFjZb5HgX8276IaW
-         ufGGeDzmidjP8LjQdffrA3OVYMVroFBBY9oTDsgHdcb2A7U9xvGeLg+gPXJz1duFvr
-         jkDzGID3Fh412Z6UO+CGihdSUnVeQ1gUMOLyo/pkewkkT1FAh1+8bBdA9Q2Xo2J7Y2
-         m0U2phENrvcGwO3XVo+CmKchAGTSwi6BnfwJi5ph6cwyyXO3tp7E1brJLVjqYJnieZ
-         dARkqkNdAzKF4bmcuXDUBj4FonlWHv4eGTwRrKUnON0/4tGkRLCpi5gWsQDtm/MEsc
-         1XNB9j2al+LwA==
-Date:   Thu, 29 Aug 2019 15:31:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: linux-next: build failure after merge of the keys tree
-Message-ID: <20190829153116.7ffc7470@canb.auug.org.au>
+        id S1727787AbfH2HDx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 03:03:53 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38732 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbfH2HDx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Aug 2019 03:03:53 -0400
+Received: by mail-wm1-f65.google.com with SMTP id o184so2574509wme.3
+        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2019 00:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=syJN1AElda7xhPvOw/vcy1dd6HyoWfY83SuIugcFyfE=;
+        b=ApuYI+m8YDXZXFm3JiiYl7767qTRfvwsIUrqU1BtJ2d3ovZVEMt+HLDjKOOIG8qu1y
+         H1FIhI5XqpMsPJWwcN+FJL3SMafk+HnnOisnkhs5CTX06OlcP+lctgbMQMQQYPjf1kx/
+         m70NRulYPkKyxLP8brmSIv3W7/6N6Npa5ffSDDSuHslYCMPxVrwrHpAj+hoRisd4261N
+         sB/bzFTQm+B4HQkAOUQUfWZFcJkFLStqshAbLDIVaNiR32aBlPSG0x9Rl2K87crpsTpj
+         bexhAjHtp/q0EQLl/PHc8wg2+Zpw+bIXy3QmloUGO50Kzh0ZWLkQ6PsZw8NWcPyTf/yE
+         3L+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=syJN1AElda7xhPvOw/vcy1dd6HyoWfY83SuIugcFyfE=;
+        b=l7J6hz1jwbAaBD85qwrIt3t/YQQaiRApfu9oF9G+6oOLvO13T9L60XbijyJnwnP0/m
+         shylT3Cib5H2TOC9bSbiih4Stfek7j4G287oyfZIyf1lspLPxw526HwZrKKSR7tggzFM
+         DcakLp8JOCG6ZWNp2aE3gOxk89TiRmzecwYaXIY5CMX40U3mAkl6bqn291S+7irStv/m
+         9CRm59Ux7ROq6yLVGcwYTN7Y7XAVpYFV7Ncl5uqwx7E41XfUNqvyFtpf63Ts6HtTA3uq
+         ypwoHR6AE+r9OTOE/9lPbnKc6s7wE4T1ee6kx23NyblT9V47jsWI5XVUAjF8FrYGa2xT
+         e/2w==
+X-Gm-Message-State: APjAAAXIdNzdx0sgR5p1PwMvpW5FBAWkpfnUNpRevi+9qPwquPBc+otJ
+        6A5fzyVmOUfVAwBWOCttn5lYhw==
+X-Google-Smtp-Source: APXvYqya0CiL9G1moyvmqQVNqGgkib/s77qe7jypGG/sh++aoSP0FKfRPFNRmI03bw4m+Sn596Ij4g==
+X-Received: by 2002:a7b:ce8f:: with SMTP id q15mr2906912wmj.154.1567062231241;
+        Thu, 29 Aug 2019 00:03:51 -0700 (PDT)
+Received: from [192.168.1.6] (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
+        by smtp.gmail.com with ESMTPSA id n14sm4299285wra.75.2019.08.29.00.03.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 29 Aug 2019 00:03:50 -0700 (PDT)
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
+ bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     robh@kernel.org, swboyd@chromium.org, andy.gross@linaro.org,
+        shawn.guo@linaro.org, gregkh@linuxfoundation.org,
+        mark.rutland@arm.com, kishon@ti.com, jackp@codeaurora.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org>
+ <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org>
+ <20190223165218.GB572@tuxbook-pro>
+From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+Message-ID: <6dc0957d-5806-7643-4454-966015865d38@linaro.org>
+Date:   Thu, 29 Aug 2019 09:03:48 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/V5YeR+sV2NR8/x92S3Bf/y3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20190223165218.GB572@tuxbook-pro>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---Sig_/V5YeR+sV2NR8/x92S3Bf/y3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/23/19 17:52, Bjorn Andersson wrote:
+> On Thu 07 Feb 03:17 PST 2019, Jorge Ramirez-Ortiz wrote:
+> 
+>> Binding description for Qualcomm's Synopsys 1.0.0 SuperSpeed phy
+>> controller embedded in QCS404.
+>>
+>> Based on Sriharsha Allenki's <sallenki@codeaurora.org> original
+>> definitions.
+>>
+>> Signed-off-by: Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>
+>> ---
+>>  .../bindings/phy/qcom,snps-usb-ssphy.txt      | 79 +++++++++++++++++++
+>>  1 file changed, 79 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,snps-usb-ssphy.txt
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/qcom,snps-usb-ssphy.txt b/Documentation/devicetree/bindings/phy/qcom,snps-usb-ssphy.txt
+>> new file mode 100644
+>> index 000000000000..354e6f9cef62
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/phy/qcom,snps-usb-ssphy.txt
+>> @@ -0,0 +1,79 @@
+>> +Qualcomm Synopsys 1.0.0 SS phy controller
+>> +===========================================
+>> +
+>> +Qualcomm 1.0.0 SS phy controller supports SuperSpeed USB connectivity on
+>> +some Qualcomm platforms.
+>> +
+>> +Required properties:
+>> +
+>> +- compatible:
+>> +    Value type: <string>
+>> +    Definition: Should contain "qcom,snps-usb-ssphy".
+> 
+> Per Rob's request make this:
+> 
+> Should contain "qcom,qcs404-snps-usb-ssphy" and "qcom,snps-usb-ssphy"
 
-Hi all,
+ok
 
-After merging the keys tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+> 
+> You can then leave the driver matching on qcom,snps-usb-ssphy for now
+> and if we ever find this to be incompatible with other platforms we can
+> make the driver match on the platform-specific compatible.
 
+ok
 
-Caused by commit
+> 
+>> +
+>> +- reg:
+>> +    Value type: <prop-encoded-array>
+>> +    Definition: USB PHY base address and length of the register map.
+>> +
+>> +- #phy-cells:
+>> +    Value type: <u32>
+>> +    Definition: Should be 0. See phy/phy-bindings.txt for details.
+>> +
+>> +- clocks:
+>> +    Value type: <prop-encoded-array>
+>> +    Definition: See clock-bindings.txt section "consumers". List of
+>> +		 three clock specifiers for reference, phy core and
+>> +		 pipe clocks.
+>> +
+>> +- clock-names:
+>> +    Value type: <string>
+>> +    Definition: Names of the clocks in 1-1 correspondence with the "clocks"
+>> +		 property. Must contain "ref", "phy" and "pipe".
+>> +
+>> +- vdd-supply:
+>> +    Value type: <phandle>
+>> +    Definition: phandle to the regulator VDD supply node.
+>> +
+>> +- vdda1p8-supply:
+>> +    Value type: <phandle>
+>> +    Definition: phandle to the regulator 1.8V supply node.
+>> +
+>> +Optional properties:
+>> +
+>> +- resets:
+>> +    Value type: <prop-encoded-array>
+>> +    Definition: See reset.txt section "consumers". Specifiers for COM and
+>> +		 PHY resets.
+>> +
+>> +- reset-names:
+>> +    Value type: <string>
+>> +    Definition: Names of the resets in 1-1 correspondence with the "resets"
+>> +		 property. Must contain "com" and "phy" if the property is
+>> +		 specified.
+>> +
+>> +Required child nodes:
+>> +
+>> +- usb connector node as defined in bindings/connector/usb-connector.txt
+>> +  containing the property vbus-supply.
+>> +
+>> +Example:
+>> +
+>> +usb3_phy: usb3-phy@78000 {
+>> +	compatible = "qcom,snps-usb-ssphy";
+>> +	reg = <0x78000 0x400>;
+>> +	#phy-cells = <0>;
+>> +	clocks = <&rpmcc RPM_SMD_LN_BB_CLK>,
+>> +		 <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
+>> +		 <&gcc GCC_USB3_PHY_PIPE_CLK>;
+>> +	clock-names = "ref", "phy", "pipe";
+>> +	resets = <&gcc GCC_USB3_PHY_BCR>,
+>> +		 <&gcc GCC_USB3PHY_PHY_BCR>;
+>> +	reset-names = "com", "phy";
+>> +	vdd-supply = <&vreg_l3_1p05>;
+>> +	vdda1p8-supply = <&vreg_l5_1p8>;
+>> +	usb3_c_connector: usb3-c-connector {
+> 
+> The USB-C connector is attached both to the HS and SS PHYs, so I think
+> you should represent this external to this node and use of_graph to
+> query it.
 
-  ef9cc255c953 ("usb: Add USB subsystem notifications")
+but AFAICS we wont be able to retrieve the vbux-supply from an external
+node (that interface does not exist).
 
-# CONFIG_USB_NOTIFICATIONS is not set
+rob, do you have a suggestion?
 
-I have used the keys tree from next-20190828 for today.
+> 
+> So the connector should look similar to example 2 in
+> connector/usb-connector.txt.
+> 
+> Regards,
+> Bjorn
+> 
+>> +		compatible = "usb-c-connector";
+>> +		label = "USB-C";
+>> +		type = "micro";
+>> +		vbus-supply = <&usb3_vbus_reg>;
+>> +	};
+>> +};
+>> -- 
+>> 2.20.1
+>>
+> 
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/V5YeR+sV2NR8/x92S3Bf/y3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1nYyQACgkQAVBC80lX
-0Gz4ZQf/XyUpDRlhsTMmyxhyfdA3UdK1jSikR9e/Plx+ODcR/oU/ZsEXXDc6X6qN
-SlOH7cRLs35YsIwgs+2BXrLxkcEtpJQQmFEr9SjiaW0aBNy8yNabtszzrtLZ1z7L
-L12nXZnRnl2tKt2FbbGIV6lUpE+j/TW4eWrdEw+vSiXblv/UNIBHAvOSVKFHElXT
-Dn1kYoRNWFc7jMokcZozCgI+6VqgBd94ez9s/4MB+kSE3EXFfCrnXjeTOTD3Bmr5
-OEBFPAy/oE0P9S8XTN1ksrl9ORGc0gJhBS6fuy9fsjSw5etE3Ms7n6pYfHsy+KIT
-zFcqdhLsuoorlziSEEIC+8WPyQ0d4Q==
-=kkoD
------END PGP SIGNATURE-----
-
---Sig_/V5YeR+sV2NR8/x92S3Bf/y3--
