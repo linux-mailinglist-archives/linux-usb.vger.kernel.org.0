@@ -2,128 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C93A2B74
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 02:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449C4A2C05
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 03:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfH3Ab0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 20:31:26 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:36243 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727059AbfH3AbZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Aug 2019 20:31:25 -0400
-Received: by mail-wr1-f68.google.com with SMTP id y19so5195605wrd.3
-        for <linux-usb@vger.kernel.org>; Thu, 29 Aug 2019 17:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nqVBtRpO+C34MJ3QBA0R3d2xfVyeSGDdtsHStA79oBo=;
-        b=FKUQnmmHNd64TY9Z4TWGpqhu8DKRLwMj+j4KVEJJ1LCul+OVFjmYDQd5u27EwJIEdE
-         mYuc8FcbpMTFlSqmCJXCmcFX957NNcq+f7vl8h5J6rxWdTdvAnc/43IyCKckfm+2CYxr
-         RGsykS0tU/ryhA9yLHu/21KqN9kpJCpNt7dVk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nqVBtRpO+C34MJ3QBA0R3d2xfVyeSGDdtsHStA79oBo=;
-        b=fgQThOw6KXbTUVdMhHsxUByPHD11zHqDVL+eWa9hntJY4uHmL1eAyiZ0lDlIia58eW
-         BIIwZVK7xXwUaaiP+Zi1p5b4WPd7QlQ/lxi/LxqcVqJv5NCzfewI1amF/cZIbHlq8olX
-         VxchHBQI15aMq2ukVlh55SvQJ4NHzRkpm+2+Go1CTtFc17EAoaaT0hHOsjHOoMr0NTjY
-         WvQ5+VqXfI3MmKQ/vkUWSaudR/QZPyh2F4jtDrAHiCpO+6BpYoljP0Q59ko/6U/b7N51
-         dDDpzvEvKmaoziqUqfvZCbL6n40YWFvNTUTIpHPAfPLTsc8xojB/tYj1zHw2a912RPAq
-         jGxg==
-X-Gm-Message-State: APjAAAWLvwRcQ+7jFYHRyoYn1OnizhOgyeM44Y5F7pwTD0YWyvbTn90Z
-        uU9kbbE0GeB+UTXcDiJMD36pUkqPpP7Me2ga4F1aOQ==
-X-Google-Smtp-Source: APXvYqytDer697ynDb+egbAEl3Iy3Dakztwz7cV3aFq9qfe44u+4m1DvFX64eZKh59r3he/QuM+JgoqviFJCcFLQ4rI=
-X-Received: by 2002:adf:facc:: with SMTP id a12mr14730139wrs.205.1567125083532;
- Thu, 29 Aug 2019 17:31:23 -0700 (PDT)
+        id S1727410AbfH3BAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Aug 2019 21:00:23 -0400
+Received: from dc2-smtprelay2.synopsys.com ([198.182.61.142]:38964 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726991AbfH3BAX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Aug 2019 21:00:23 -0400
+Received: from mailhost.synopsys.com (dc2-mailhost2.synopsys.com [10.12.135.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AB8C5C03C2;
+        Fri, 30 Aug 2019 01:00:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1567126822; bh=v+UvzZeB1e0YsYVXi4sl/Wp7VmXMNvPjweLxz/oTKLc=;
+        h=Date:From:Subject:To:CC:From;
+        b=Zpe9tYLzqSAD4x1BniolljyHkM77Aj44cLABd6uCVr9QaXfkmCk/CV9qCLiVh+ZoV
+         cXsGxgcXU/kj1rNLMRhcC0QoB1umA4KoOqmpE1tmQiFW4h5cCik5YNwxHZEPmZIlya
+         0LwDKWI+jHfBSJP1cDuce1xfISMfUEsAnxER7SEE3udtSIM7DxdJ+pbEYu279AJXVq
+         BD6gcGxC4LkAEt0UOVfKTSg1yuuwJ0XG20rs54v/OXXcp1Mdz4WKGWQHvCSdGTabHW
+         EGOPR7ofTLvObQPArt9+vuOOFukwnn+dtMWNu+Rh7KG3qr8Muyd5UjVbSERcx9YRkS
+         fphyJcE4YzA1Q==
+Received: from US01WXQAHTC1.internal.synopsys.com (us01wxqahtc1.internal.synopsys.com [10.12.238.230])
+        (using TLSv1.2 with cipher AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 95150A0091;
+        Fri, 30 Aug 2019 01:00:22 +0000 (UTC)
+Received: from US01WEHTC3.internal.synopsys.com (10.15.84.232) by
+ US01WXQAHTC1.internal.synopsys.com (10.12.238.230) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Thu, 29 Aug 2019 18:00:21 -0700
+Received: from te-lab16 (10.13.184.19) by US01WEHTC3.internal.synopsys.com
+ (10.15.84.231) with Microsoft SMTP Server (TLS) id 14.3.408.0; Thu, 29 Aug
+ 2019 18:00:16 -0700
+Received: by te-lab16 (sSMTP sendmail emulation); Thu, 29 Aug 2019 18:00:16
+ -0700
+Date:   Thu, 29 Aug 2019 18:00:16 -0700
+Message-ID: <6bbceb0a0468b5676fc4231169546ead91ce0c75.1567125618.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH v2] usb: dwc3: gadget: Workaround Mirosoft's BESL check
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
-References: <CAODwPW-+c6Ty_gqEFEaE0YhtutMR2tFnhEFOQre81uyM3mfMVA@mail.gmail.com>
- <Pine.LNX.4.44L0.1908291038050.1306-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1908291038050.1306-100000@iolanthe.rowland.org>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Thu, 29 Aug 2019 17:31:12 -0700
-Message-ID: <CAODwPW8gTZ_2WEc9n=WJ2PEmQk2anTQYfwQ-898+kOq6wsjnZw@mail.gmail.com>
-Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Dan Williams <dcbw@redhat.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        USB Storage list <usb-storage@lists.one-eyed-alien.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.13.184.19]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> USB drivers only bind to interfaces, are you saying that your device has
-> multiple interfaces on it?
+While testing our host system using Microsoft's usb stack against our
+gadget for various BESL values, we found an issue with their usb stack
+when the recommended baseline BESL value is 0 (125us) or when the deep
+BESL is 1 or less. The Windows host will issue a usb reset immediately
+after it receives the extended BOS descriptor and the enumeration will
+fail after a few attempts.
 
-Yes, I have a case where the device has two interfaces which both have
-interface class 0xff (although they do differ in subclass and
-protocol). I only want the usb-storage driver to bind to one of them
-(if it binds to the other it will eventually cause a timeout error
-that resets the whole device).
+To keep compatibility with Microsoft's host usb stack, let's workaround
+this issue by using the recommended baseline BESL of 1 (or 150us)
+and clamp the deep BESL value within 2 to 15.
 
-I tried doing a userspace mode switch and using
-/sys/bus/usb/drivers/usb-storage/new_id to bind the device now, which
-*almost* works, but I can't prevent it from binding to both
-interfaces. Unfortunately new_id can only take an interface class, not
-a subclass or protocol.
+This was tested against Windows 10 build 18956.
 
-> In fact, there already is a way to do this in the kernel: write to the
-> sysfs "bind" file.  The difficulty is that you can't force a driver to
-> bind to an interface if it doesn't believe it is compatible with the
-> interface.  And if the driver believes it is compatible, it will
-> automatically attempt to bind with all such interfaces regardless of
-> their path.
->
-> Perhaps what you need is a usb_device_id flag to indicate that the
-> entry should never be used for automatic matches -- only for matches
-> made by the user via the "bind" file.  Greg KH would probably be
-> willing to accept a new USB_DEVICE_ID_MATCH_NO_AUTO flag, which
-> could be included in your unusual_devs.h entries.
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
+changes in v2:
+- Add comment in code for the new change
 
-This is an interesting idea, but I don't quite see how it can work as
-you described? When I write to 'bind', the driver core calls
-driver_match_device(), which ends up calling usb_device_match()
-(right?), which is the same path that it would call for automatic
-matching. It still ends up in usb_match_one_id(), and if I check for
-the NO_AUTO flag there it would abort just as if it was an auto-match
-attempt. I see no way to pass the information that this is an
-explicit, user-requested "bind" rather than an automatic match across
-the bus->match() callback into the USB code. (I could change the
-signature of the match() callback, but that would require changing
-code for all device busses in Linux, which I assume is something we
-wouldn't want to do? I could also add a flag to struct device to
-communicate "this is currently trying to match for a user-initiated
-bind", but that seems hacky and not really the right place to put
-that.)
 
-I could instead add a new sysfs node 'force_bind' to the driver core,
-that would work like 'bind' except for skipping the
-driver_match_device() call entirely and forcing a probe(). Do you
-think that would be acceptable? Or is that too big of a hammer to make
-available for all drivers in Linux? Maybe if I do the same thing but
-only for usb drivers, or even only for the usb-storage driver
-specifically, would that be acceptable?
+ drivers/usb/dwc3/gadget.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-If none of this works, I could also extend the new_id interface to
-allow subclass/protocol matches instead. I don't like that as much
-because it doesn't allow me to control the devpath of the device I'm
-matching, but I think it would be enough for my use case (I can't make
-the usb-storage driver bind all AOA devices at all times, but at the
-times where I do want to use it for my one device, I don't expect any
-other AOA devices to be connected). The problem with this is that the
-order of arguments for new ID is already set in stone (vendor,
-product, interface class, refVendor, refProduct), and I don't think I
-can use the refVendor/refProduct for my case so I can't just append
-more numbers behind that. I could maybe instead change it so that it
-also accepts a key-value style line (like "idVendor=abcd
-idProduct=efgh bInterfaceSubClass=ff"), while still being
-backwards-compatible to the old format if you only give it numbers?
-What do you think?
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 7b58e0e1e438..3754bffb378c 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2083,9 +2083,19 @@ static void dwc3_gadget_config_params(struct usb_gadget *g,
+ 
+ 	/* Recommended BESL */
+ 	if (!dwc->dis_enblslpm_quirk) {
+-		params->besl_baseline = 0;
++		/*
++		 * If the recommended BESL baseline is 0 or if the BESL deep is
++		 * less than 2, Microsoft's Windows 10 host usb stack will issue
++		 * a usb reset immediately after it receives the extended BOS
++		 * descriptor and the enumeration will fail. To maintain
++		 * compatibility with the Windows' usb stack, let's set the
++		 * recommended BESL baseline to 1 and clamp the BESL deep to be
++		 * within 2 to 15.
++		 */
++		params->besl_baseline = 1;
+ 		if (dwc->is_utmi_l1_suspend)
+-			params->besl_deep = min_t(u8, dwc->hird_threshold, 15);
++			params->besl_deep =
++				clamp_t(u8, dwc->hird_threshold, 2, 15);
+ 	}
+ 
+ 	/* U1 Device exit Latency */
+-- 
+2.11.0
 
-Thanks for your advice!
