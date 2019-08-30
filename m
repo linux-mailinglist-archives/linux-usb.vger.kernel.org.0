@@ -2,106 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67933A3D21
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 19:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F98A3DB0
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 20:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727991AbfH3Rnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Aug 2019 13:43:37 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:40786 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727888AbfH3Rnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Aug 2019 13:43:37 -0400
-Received: (qmail 1647 invoked by uid 2102); 30 Aug 2019 13:43:36 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 30 Aug 2019 13:43:36 -0400
-Date:   Fri, 30 Aug 2019 13:43:36 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Julius Werner <jwerner@chromium.org>, Greg KH <greg@kroah.com>
-cc:     Dan Williams <dcbw@redhat.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        USB Storage list <usb-storage@lists.one-eyed-alien.net>
-Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
-In-Reply-To: <CAODwPW8gTZ_2WEc9n=WJ2PEmQk2anTQYfwQ-898+kOq6wsjnZw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1908301337150.1459-100000@iolanthe.rowland.org>
+        id S1727930AbfH3S2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Aug 2019 14:28:36 -0400
+Received: from mail-pf1-f177.google.com ([209.85.210.177]:38878 "EHLO
+        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727979AbfH3S2f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Aug 2019 14:28:35 -0400
+Received: by mail-pf1-f177.google.com with SMTP id o70so5146194pfg.5
+        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2019 11:28:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:cc:subject:to:from:user-agent:date;
+        bh=9GeCgw/KxFloNeY2cmQhUJuI6BYk8fDzNxr9XRd8OXk=;
+        b=ai/zCqyb/BzQPSLxNpUrZR7CwKxGWQ2I+RXtaeVKtdkNKoEKnMxFwrdfTlSjANybDL
+         FF+SNidSutGnxWc+1lYqacTgreiFWZg7A6uEls2EktdaioC8OiAd991XAHTvd/I/CTsq
+         I0D3cpqKf3EdMUshwYywp0JTUbS39u11rPAy4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
+         :user-agent:date;
+        bh=9GeCgw/KxFloNeY2cmQhUJuI6BYk8fDzNxr9XRd8OXk=;
+        b=mjgBl4GxXfeAGXsRiGqdnvTovnA+NwlusPpvsmBv6cVQ0/hbC9Caznxd3s5rQVwj9f
+         Lhv5bw6PDgahyInRidJWSR1hIqCYYGGa7MOsSAhsxV+upZst/Qw8ZdZJ93Ure4PSw2E/
+         n1H6OSchvveDV2lFF3zMRJdO6FLu2h2P/nYp3UG4c83xwN0SQGCZQuXBw9G4uIPRMFlp
+         y7pRnfVjls6+SSswuXl6TMS/GhMkn30sTpxbZ6tA1S55ZKGgjF3LImD1fPUycp76pMTT
+         OI3/mf1VHavU6imkeScyhA3QFrtoLtIQhbMp+IMM/8fO3WcN8fxhPhFU68mIphHduJT1
+         G9ZQ==
+X-Gm-Message-State: APjAAAVZuKbAnVORY+Qya7eaqUPGFMqkBbj/XJhYuciLSFYsWx3DNTDu
+        0llFEQsbt9V2IBcx8KIahO4eEg==
+X-Google-Smtp-Source: APXvYqzMiFGN83Njt2/JrFLYZUyyM9L9qiaHV6onYdWf1y1eG8n3W6IX2y++KngHRNf/PFHG04PAew==
+X-Received: by 2002:a63:460c:: with SMTP id t12mr13961916pga.69.1567189714926;
+        Fri, 30 Aug 2019 11:28:34 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id g14sm7411264pfb.150.2019.08.30.11.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 11:28:34 -0700 (PDT)
+Message-ID: <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190830164520.GK26807@tuxbook-pro>
+References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org> <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org> <20190223165218.GB572@tuxbook-pro> <6dc0957d-5806-7643-4454-966015865d38@linaro.org> <5d694878.1c69fb81.5f13b.ec4f@mx.google.com> <20190830164520.GK26807@tuxbook-pro>
+Cc:     Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>, robh@kernel.org,
+        andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        jackp@codeaurora.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        khasim.mohammed@linaro.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.8.1
+Date:   Fri, 30 Aug 2019 11:28:33 -0700
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 29 Aug 2019, Julius Werner wrote:
+Quoting Bjorn Andersson (2019-08-30 09:45:20)
+> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
+>=20
+> > Quoting Jorge Ramirez (2019-08-29 00:03:48)
+> > > On 2/23/19 17:52, Bjorn Andersson wrote:
+> > > > On Thu 07 Feb 03:17 PST 2019, Jorge Ramirez-Ortiz wrote:
+> > > >> +
+> > > >> +Required child nodes:
+> > > >> +
+> > > >> +- usb connector node as defined in bindings/connector/usb-connect=
+or.txt
+> > > >> +  containing the property vbus-supply.
+> > > >> +
+> > > >> +Example:
+> > > >> +
+> > > >> +usb3_phy: usb3-phy@78000 {
+> > > >> +    compatible =3D "qcom,snps-usb-ssphy";
+> > > >> +    reg =3D <0x78000 0x400>;
+> > > >> +    #phy-cells =3D <0>;
+> > > >> +    clocks =3D <&rpmcc RPM_SMD_LN_BB_CLK>,
+> > > >> +             <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
+> > > >> +             <&gcc GCC_USB3_PHY_PIPE_CLK>;
+> > > >> +    clock-names =3D "ref", "phy", "pipe";
+> > > >> +    resets =3D <&gcc GCC_USB3_PHY_BCR>,
+> > > >> +             <&gcc GCC_USB3PHY_PHY_BCR>;
+> > > >> +    reset-names =3D "com", "phy";
+> > > >> +    vdd-supply =3D <&vreg_l3_1p05>;
+> > > >> +    vdda1p8-supply =3D <&vreg_l5_1p8>;
+> > > >> +    usb3_c_connector: usb3-c-connector {
+> >=20
+> > Node name should be 'connector', not usb3-c-connector.
+> >=20
+>=20
+> It probably has to be usb-c-connector, because we have a
+> micro-usb-connector on the same board.
 
-> > In fact, there already is a way to do this in the kernel: write to the
-> > sysfs "bind" file.  The difficulty is that you can't force a driver to
-> > bind to an interface if it doesn't believe it is compatible with the
-> > interface.  And if the driver believes it is compatible, it will
-> > automatically attempt to bind with all such interfaces regardless of
-> > their path.
-> >
-> > Perhaps what you need is a usb_device_id flag to indicate that the
-> > entry should never be used for automatic matches -- only for matches
-> > made by the user via the "bind" file.  Greg KH would probably be
-> > willing to accept a new USB_DEVICE_ID_MATCH_NO_AUTO flag, which
-> > could be included in your unusual_devs.h entries.
-> 
-> This is an interesting idea, but I don't quite see how it can work as
-> you described? When I write to 'bind', the driver core calls
-> driver_match_device(), which ends up calling usb_device_match()
-> (right?), which is the same path that it would call for automatic
-> matching.
+Ok. Or connector@1 and connector@2? Our toplevel node container story is
+sort of sad because we have to play tricks with node names. But in the
+example, just connector I presume?=20
 
-Oh, too bad.  I had a vague memory that it did not call
-driver_match_device().
+>=20
+> > > >=20
+> > > > The USB-C connector is attached both to the HS and SS PHYs, so I th=
+ink
+> > > > you should represent this external to this node and use of_graph to
+> > > > query it.
+> > >=20
+> > > but AFAICS we wont be able to retrieve the vbux-supply from an extern=
+al
+> > > node (that interface does not exist).
+> > >=20
+> > > rob, do you have a suggestion?
+> >=20
+> > Shouldn't the vbus supply be in the phy? Or is this a situation where
+> > the phy itself doesn't have the vbus supply going to it because the PMIC
+> > gets in the way and handles the vbus for the connector by having the SoC
+> > communicate with the PMIC about when to turn the vbus on and off, etc?
+> >=20
+>=20
+> That's correct, the VBUS comes out of the PMIC and goes directly to the
+> connector.
+>=20
+> The additional complicating factor here is that the connector is wired
+> to a USB2 phy as well, so we need to wire up detection and vbus control
+> to both of them - but I think this will be fine, if we can only figure
+> out a sane way of getting hold of the vbus-supply.
+>=20
 
->  It still ends up in usb_match_one_id(), and if I check for
-> the NO_AUTO flag there it would abort just as if it was an auto-match
-> attempt. I see no way to pass the information that this is an
-> explicit, user-requested "bind" rather than an automatic match across
-> the bus->match() callback into the USB code. (I could change the
-> signature of the match() callback, but that would require changing
-> code for all device busses in Linux, which I assume is something we
-> wouldn't want to do? I could also add a flag to struct device to
-> communicate "this is currently trying to match for a user-initiated
-> bind", but that seems hacky and not really the right place to put
-> that.)
-> 
-> I could instead add a new sysfs node 'force_bind' to the driver core,
-> that would work like 'bind' except for skipping the
-> driver_match_device() call entirely and forcing a probe(). Do you
-> think that would be acceptable? Or is that too big of a hammer to make
-> available for all drivers in Linux? Maybe if I do the same thing but
-> only for usb drivers, or even only for the usb-storage driver
-> specifically, would that be acceptable?
-
-This is a question for Greg.  The problem is that there may be drivers
-which can't handle being probed for devices they don't match.
-
-Still, we ought to have a mechanism for doing manual but not automatic 
-matches.
-
-Greg, any thoughts?
-
-> If none of this works, I could also extend the new_id interface to
-> allow subclass/protocol matches instead. I don't like that as much
-> because it doesn't allow me to control the devpath of the device I'm
-> matching, but I think it would be enough for my use case (I can't make
-> the usb-storage driver bind all AOA devices at all times, but at the
-> times where I do want to use it for my one device, I don't expect any
-> other AOA devices to be connected). The problem with this is that the
-> order of arguments for new ID is already set in stone (vendor,
-> product, interface class, refVendor, refProduct), and I don't think I
-> can use the refVendor/refProduct for my case so I can't just append
-> more numbers behind that. I could maybe instead change it so that it
-> also accepts a key-value style line (like "idVendor=abcd
-> idProduct=efgh bInterfaceSubClass=ff"), while still being
-> backwards-compatible to the old format if you only give it numbers?
-> What do you think?
-
-I prefer the manual/automatic approach.  It allows the user to control 
-exactly which device will be probed, which could be important.
-
-Alan Stern
+Does it really matter to describe this situation though? Maybe it's
+simpler to throw the vbus supply into the phy and control it from the
+phy driver, even if it never really goes there. Or put it into the
+toplevel usb controller?
 
