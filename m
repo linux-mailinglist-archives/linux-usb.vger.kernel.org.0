@@ -2,139 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F98A3DB0
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 20:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EA6A3E7B
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 21:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727930AbfH3S2g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Aug 2019 14:28:36 -0400
-Received: from mail-pf1-f177.google.com ([209.85.210.177]:38878 "EHLO
-        mail-pf1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727979AbfH3S2f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Aug 2019 14:28:35 -0400
-Received: by mail-pf1-f177.google.com with SMTP id o70so5146194pfg.5
-        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2019 11:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:subject:to:from:user-agent:date;
-        bh=9GeCgw/KxFloNeY2cmQhUJuI6BYk8fDzNxr9XRd8OXk=;
-        b=ai/zCqyb/BzQPSLxNpUrZR7CwKxGWQ2I+RXtaeVKtdkNKoEKnMxFwrdfTlSjANybDL
-         FF+SNidSutGnxWc+1lYqacTgreiFWZg7A6uEls2EktdaioC8OiAd991XAHTvd/I/CTsq
-         I0D3cpqKf3EdMUshwYywp0JTUbS39u11rPAy4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
-         :user-agent:date;
-        bh=9GeCgw/KxFloNeY2cmQhUJuI6BYk8fDzNxr9XRd8OXk=;
-        b=mjgBl4GxXfeAGXsRiGqdnvTovnA+NwlusPpvsmBv6cVQ0/hbC9Caznxd3s5rQVwj9f
-         Lhv5bw6PDgahyInRidJWSR1hIqCYYGGa7MOsSAhsxV+upZst/Qw8ZdZJ93Ure4PSw2E/
-         n1H6OSchvveDV2lFF3zMRJdO6FLu2h2P/nYp3UG4c83xwN0SQGCZQuXBw9G4uIPRMFlp
-         y7pRnfVjls6+SSswuXl6TMS/GhMkn30sTpxbZ6tA1S55ZKGgjF3LImD1fPUycp76pMTT
-         OI3/mf1VHavU6imkeScyhA3QFrtoLtIQhbMp+IMM/8fO3WcN8fxhPhFU68mIphHduJT1
-         G9ZQ==
-X-Gm-Message-State: APjAAAVZuKbAnVORY+Qya7eaqUPGFMqkBbj/XJhYuciLSFYsWx3DNTDu
-        0llFEQsbt9V2IBcx8KIahO4eEg==
-X-Google-Smtp-Source: APXvYqzMiFGN83Njt2/JrFLYZUyyM9L9qiaHV6onYdWf1y1eG8n3W6IX2y++KngHRNf/PFHG04PAew==
-X-Received: by 2002:a63:460c:: with SMTP id t12mr13961916pga.69.1567189714926;
-        Fri, 30 Aug 2019 11:28:34 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id g14sm7411264pfb.150.2019.08.30.11.28.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 11:28:34 -0700 (PDT)
-Message-ID: <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        id S1728111AbfH3Tg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Aug 2019 15:36:26 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:53460 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727888AbfH3Tg0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Aug 2019 15:36:26 -0400
+Received: from pps.filterd (m0170396.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7UJYnZv011538;
+        Fri, 30 Aug 2019 15:36:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=smtpout1; bh=KiixhnD1Pq4dIXmN0767lQIU72s1aBJLx/6cjCEliac=;
+ b=YwGSkHchj4MXreruFMPgy91cE2yM4x6sTVUrmIR5J/EmWoKB1Sy03xEF959NIwZAtLGW
+ p1yevMrGAiDX/X+xT6GOJoimRt9BNym6lzeyKmyPqUhpia98WuKtsvTmPabN3G4/5e6E
+ lBBEVhflvklNN9uBDGsIvVDTloHijVLwQVMfTPGuy8FFkXw/9Q+Eu70QAVKG3m1P/l5n
+ EeK2J8Ml6Meo85Im8T7m/ZPfMyx3yS8uPT6OpXqgcxV0z/KwEmJf4EM1NoGoZh3VUa4n
+ H8u+XJx+BYzslBa3iI1S/yl9qujTNGKMGSTQRKMfsV4k4dSbgC5dOZfYjRD9abaOuIqd YQ== 
+Received: from mx0a-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
+        by mx0b-00154904.pphosted.com with ESMTP id 2uk2xjcybn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 30 Aug 2019 15:36:24 -0400
+Received: from pps.filterd (m0089484.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x7UJX8jg030741;
+        Fri, 30 Aug 2019 15:36:24 -0400
+Received: from ausxippc101.us.dell.com (ausxippc101.us.dell.com [143.166.85.207])
+        by mx0b-00154901.pphosted.com with ESMTP id 2up8vpcs84-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 30 Aug 2019 15:36:24 -0400
+X-LoopCount0: from 10.166.132.133
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,346,1549951200"; 
+   d="scan'208";a="1292046787"
+From:   <Charles.Hyde@dellteam.com>
+To:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>
+CC:     <linux-acpi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <nic_swsd@realtek.com>, <Mario.Limonciello@dell.com>
+Subject: [PATCH 0/3] Add get/set ethernet address functions and ACPI MAC
+ address pass through functionality to cdc_ncm driver
+Thread-Topic: [PATCH 0/3] Add get/set ethernet address functions and ACPI MAC
+ address pass through functionality to cdc_ncm driver
+Thread-Index: AQHVX2iIRQPrhZWsvkKRPPIO0hmaNA==
+Date:   Fri, 30 Aug 2019 19:36:22 +0000
+Message-ID: <1567193782174.28980@Dellteam.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.177.90.68]
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190830164520.GK26807@tuxbook-pro>
-References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org> <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org> <20190223165218.GB572@tuxbook-pro> <6dc0957d-5806-7643-4454-966015865d38@linaro.org> <5d694878.1c69fb81.5f13b.ec4f@mx.google.com> <20190830164520.GK26807@tuxbook-pro>
-Cc:     Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>, robh@kernel.org,
-        andy.gross@linaro.org, shawn.guo@linaro.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
-        jackp@codeaurora.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        khasim.mohammed@linaro.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY bindings
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Fri, 30 Aug 2019 11:28:33 -0700
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-08-30_07:2019-08-29,2019-08-30 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 phishscore=0
+ adultscore=0 bulkscore=0 clxscore=1015 mlxscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=511 priorityscore=1501 spamscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1908300184
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ adultscore=0 clxscore=1015 impostorscore=0 priorityscore=1501 spamscore=0
+ bulkscore=0 mlxlogscore=608 mlxscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1906280000
+ definitions=main-1908300184
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Bjorn Andersson (2019-08-30 09:45:20)
-> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
->=20
-> > Quoting Jorge Ramirez (2019-08-29 00:03:48)
-> > > On 2/23/19 17:52, Bjorn Andersson wrote:
-> > > > On Thu 07 Feb 03:17 PST 2019, Jorge Ramirez-Ortiz wrote:
-> > > >> +
-> > > >> +Required child nodes:
-> > > >> +
-> > > >> +- usb connector node as defined in bindings/connector/usb-connect=
-or.txt
-> > > >> +  containing the property vbus-supply.
-> > > >> +
-> > > >> +Example:
-> > > >> +
-> > > >> +usb3_phy: usb3-phy@78000 {
-> > > >> +    compatible =3D "qcom,snps-usb-ssphy";
-> > > >> +    reg =3D <0x78000 0x400>;
-> > > >> +    #phy-cells =3D <0>;
-> > > >> +    clocks =3D <&rpmcc RPM_SMD_LN_BB_CLK>,
-> > > >> +             <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
-> > > >> +             <&gcc GCC_USB3_PHY_PIPE_CLK>;
-> > > >> +    clock-names =3D "ref", "phy", "pipe";
-> > > >> +    resets =3D <&gcc GCC_USB3_PHY_BCR>,
-> > > >> +             <&gcc GCC_USB3PHY_PHY_BCR>;
-> > > >> +    reset-names =3D "com", "phy";
-> > > >> +    vdd-supply =3D <&vreg_l3_1p05>;
-> > > >> +    vdda1p8-supply =3D <&vreg_l5_1p8>;
-> > > >> +    usb3_c_connector: usb3-c-connector {
-> >=20
-> > Node name should be 'connector', not usb3-c-connector.
-> >=20
->=20
-> It probably has to be usb-c-connector, because we have a
-> micro-usb-connector on the same board.
-
-Ok. Or connector@1 and connector@2? Our toplevel node container story is
-sort of sad because we have to play tricks with node names. But in the
-example, just connector I presume?=20
-
->=20
-> > > >=20
-> > > > The USB-C connector is attached both to the HS and SS PHYs, so I th=
-ink
-> > > > you should represent this external to this node and use of_graph to
-> > > > query it.
-> > >=20
-> > > but AFAICS we wont be able to retrieve the vbux-supply from an extern=
-al
-> > > node (that interface does not exist).
-> > >=20
-> > > rob, do you have a suggestion?
-> >=20
-> > Shouldn't the vbus supply be in the phy? Or is this a situation where
-> > the phy itself doesn't have the vbus supply going to it because the PMIC
-> > gets in the way and handles the vbus for the connector by having the SoC
-> > communicate with the PMIC about when to turn the vbus on and off, etc?
-> >=20
->=20
-> That's correct, the VBUS comes out of the PMIC and goes directly to the
-> connector.
->=20
-> The additional complicating factor here is that the connector is wired
-> to a USB2 phy as well, so we need to wire up detection and vbus control
-> to both of them - but I think this will be fine, if we can only figure
-> out a sane way of getting hold of the vbus-supply.
->=20
-
-Does it really matter to describe this situation though? Maybe it's
-simpler to throw the vbus supply into the phy and control it from the
-phy driver, even if it never really goes there. Or put it into the
-toplevel usb controller?
-
+In recent testing of a Dell Universal Dock D6000, I found that MAC =0A=
+address pass through is not supported in the Linux drivers.  However, =0A=
+this same device is supported in Windows 10 (Pro) on my personal =0A=
+computer, in as much as I was able to tell Windows to assign a new MAC =0A=
+address of my choosing, and I saw through wireshark the new MAC address =0A=
+was pushed out to the device.  Afterward, Windows reported a new IP =0A=
+address and I was able to view web pages.=0A=
+=0A=
+This series of patches give support to cdc_ncm USB based Ethernet =0A=
+controllers for programming a MAC address to the device, and also to =0A=
+retrieve the device's MAC address.  This patch series further adds ACPI =0A=
+MAC address pass through support specifically for the cdc_ncm driver, and =
+=0A=
+generally for any other driver that may need or want it, in furtherance of =
+=0A=
+Dell's enterprise IT policy efforts.  It was this latter that I initially =
+=0A=
+found lacking when testing a D6000 with a Dell laptop, and then I found =0A=
+ifconfig was unable to set a MAC address into the device.  These patches =
+=0A=
+bring a similar level of functionality to cdc_ncm driver as is available =
+=0A=
+with the Realtek r8152 driver, and is available with Windows.=0A=
+=0A=
+The cdc_ncm driver limits the ACPI MAC address pass through support to =0A=
+only the Dell Universal Dock D6000, so no other cdc_ncm device will be=0A=
+impacted.=0A=
+=0A=
+Charles Hyde (3):=0A=
+  net: cdc_ncm: add get/set ethernet address functions=0A=
+  ACPI: move ACPI functionality out of r8152 driver=0A=
+  net: cdc_ncm: Add ACPI MAC address pass through functionality=0A=
+=0A=
+ drivers/acpi/Makefile            |   1 +=0A=
+ drivers/acpi/acpi_mac_passthru.c |  63 ++++++++++++++=0A=
+ drivers/net/usb/cdc_ncm.c        | 141 ++++++++++++++++++++++++++++++-=0A=
+ drivers/net/usb/r8152.c          |  44 +---------=0A=
+ include/acpi/acpi_mac_passthru.h |  29 +++++++=0A=
+ 5 files changed, 234 insertions(+), 44 deletions(-)=0A=
+ create mode 100644 drivers/acpi/acpi_mac_passthru.c=0A=
+ create mode 100644 include/acpi/acpi_mac_passthru.h=0A=
+=0A=
+-- =0A=
+2.20.1=0A=
