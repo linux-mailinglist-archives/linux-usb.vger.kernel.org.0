@@ -2,77 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32396A2DBF
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 05:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC1FA30AF
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Aug 2019 09:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728248AbfH3D4Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Aug 2019 23:56:25 -0400
-Received: from gate.crashing.org ([63.228.1.57]:35415 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728221AbfH3D4Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Aug 2019 23:56:24 -0400
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id x7U3uEYI027405;
-        Thu, 29 Aug 2019 22:56:15 -0500
-Message-ID: <c1a29e1639b4ac6d85f2aaf6de9778f976b6f246.camel@kernel.crashing.org>
-Subject: [PATCH v2 2/2] usb: gadget: net2280: Add workaround for AB chip
- Errata 11
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Guido Kiener <guido@kiener-muenchen.de>,
-        Alan Stern <stern@rowland.harvard.edu>
-Date:   Fri, 30 Aug 2019 13:56:14 +1000
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1728211AbfH3HRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Aug 2019 03:17:51 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44260 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726510AbfH3HRv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Aug 2019 03:17:51 -0400
+Received: by mail-wr1-f66.google.com with SMTP id b6so3061069wrv.11
+        for <linux-usb@vger.kernel.org>; Fri, 30 Aug 2019 00:17:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FpbAWeVajE7jbJxx72Z5QEPjasF1SzZQc9KND43zWKM=;
+        b=NPaPVEvAlEP1JwwBNRmZqQu1oXjgq7Ehu6IWBk/Gm3+47TQiElN7qNOrM8NdxNJUuY
+         8DW4Wrl4pGsO/FwXlQ28jwaPDg7vIjLNOf6/dDceSHDcw6t452DKc72rkFpL5vLXJw9z
+         bxHQsUHERyRczWxhfjNaoEdhqrFm0OuM17Ek+8MIkp8+MW8aItdbwahIw5ASVWUERoje
+         SwmdYGGcXSqH9DUAZTxDfsiQXxXy7TqNKuA2PQ0SCakmDuySWzcw8FZO4n6cncx/pLlD
+         C0nd8nKnnjLOle0TdsfC5KolLs4Sn9BaEX2McZqo6rx0UpNcxTGCy7z79ZyOK6OAyP7C
+         bcgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FpbAWeVajE7jbJxx72Z5QEPjasF1SzZQc9KND43zWKM=;
+        b=nz5mFghwAHXKlwjJhJlkWFVdjB2CUPBESoLvkZjPiHKD7jto+EHT/Iu777UF0KQkLF
+         Tsfpxnhy1/q7O4h4ReSU54yTQkaA5hisU85v+Insx1Eu1zzSjT+hoAe2VSrK/i2KHeZE
+         /GnPbKycGQR/WxucN+b+zHRksvfzj7jHd9xkStRo19cn9t8SYcsAr1lZp5joAxgokuzd
+         JLpQGF8Jq2Aq5M/3cpdRFhB5u8feRDSi5Kasl9EsJNBJBAnC+aI5L4u46xI2xDaXe/hD
+         kFn9qui4XGa+9myBIj9r5bmvR97TiB2T62CUzfsD5j2aFFxdkRU3msBzps/QmmUrc9zO
+         lcaA==
+X-Gm-Message-State: APjAAAXAhUh5DidbRWIXdUBFqdS2dfIljIzMNDiaMIENjwp+ytcw3OoA
+        Y0fstL5JXx1NHNzxXCwsNdevWg==
+X-Google-Smtp-Source: APXvYqytZc9V3iUoascFuNBlkNrDdlZGsMbx4k8y04BWHaakkVhzfSq61JeOcecviPSZKeU4s3zm4w==
+X-Received: by 2002:adf:aa85:: with SMTP id h5mr4534823wrc.329.1567149469792;
+        Fri, 30 Aug 2019 00:17:49 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:cb1d:af:5b00:6d6c:8493:1ab5:dad7])
+        by smtp.gmail.com with ESMTPSA id x6sm7637529wrt.63.2019.08.30.00.17.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 00:17:49 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        JC Kuo <jckuo@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: [PATCH 0/4] regulator: add and use a helper for setting supply names
+Date:   Fri, 30 Aug 2019 09:17:36 +0200
+Message-Id: <20190830071740.4267-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The errata description is:
+From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
 
-Workaround for Default Duration of LFPS Handshake Signaling for
-Device-Initiated U1 Exit is too short.
+There are ~80 users of regulator bulk APIs that set the supply names
+in a for loop before using the bulk helpers.
 
-The default duration of the LFPS handshake generated by USB3380 for a device-initiated U1-exit may not be
-long enough for certain SuperSpeed downstream ports (SuperSpeed hubs/hosts) to recognize. This could lead
-to USB3380 entering the recovery state pre-maturely and ending up in the SS.Inactive state.
+This series proposes to add a helper function for setting supply names
+and uses it in a couple tegra drivers. If accepted: a coccinelle script
+should be easy to develop that would address this in other drivers.
 
-I have observed various enumeration failures, seemingly related to
-lost transactions or SETUP status phases on modern hosts (typically
-thunderbolt capable systems) without this workaround.
+Bartosz Golaszewski (4):
+  regulator: provide regulator_bulk_set_supply_names()
+  ahci: tegra: use regulator_bulk_set_supply_names()
+  phy: tegra: use regulator_bulk_set_supply_names()
+  usb: host: xhci-tegra: use regulator_bulk_set_supply_names()
 
-Signed-off-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
----
+ drivers/ata/ahci_tegra.c           |  6 +++---
+ drivers/phy/tegra/xusb.c           |  6 +++---
+ drivers/regulator/helpers.c        | 21 +++++++++++++++++++++
+ drivers/usb/host/xhci-tegra.c      |  5 +++--
+ include/linux/regulator/consumer.h | 12 ++++++++++++
+ 5 files changed, 42 insertions(+), 8 deletions(-)
 
-  - v2. Rebased on top of Felipe's tree
-
- drivers/usb/gadget/udc/net2280.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/drivers/usb/gadget/udc/net2280.c b/drivers/usb/gadget/udc/net2280.c
-index e0191146ba22..51efee21915f 100644
---- a/drivers/usb/gadget/udc/net2280.c
-+++ b/drivers/usb/gadget/udc/net2280.c
-@@ -2269,6 +2269,16 @@ static void usb_reinit_338x(struct net2280 *dev)
- 	val |= 0x3 << HOT_RX_RESET_TS2;
- 	writel(val, &dev->llregs->ll_tsn_counters_3);
- 
-+	/*
-+	 * AB errata. Errata 11. Workaround for Default Duration of LFPS
-+	 * Handshake Signaling for Device-Initiated U1 Exit is too short.
-+	 * Without this, various enumeration failures observed with
-+	 * modern superspeed hosts.
-+	 */
-+	val = readl(&dev->llregs->ll_lfps_timers_2);
-+	writel((val & 0xffff0000) | LFPS_TIMERS_2_WORKAROUND_VALUE,
-+	       &dev->llregs->ll_lfps_timers_2);
-+
- 	/*
- 	 * Set Recovery Idle to Recover bit:
- 	 * - On SS connections, setting Recovery Idle to Recover Fmw improves
-
+-- 
+2.21.0
 
