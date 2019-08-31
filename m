@@ -2,85 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 742B6A40F9
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2019 01:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A67FAA4365
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2019 10:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbfH3XVL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Aug 2019 19:21:11 -0400
-Received: from muru.com ([72.249.23.125]:59296 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728122AbfH3XVL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Aug 2019 19:21:11 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id B8CF780D4;
-        Fri, 30 Aug 2019 23:21:39 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH 4/4] usb: musb: omap2430: Clean up enable and remove devctl tinkering
-Date:   Fri, 30 Aug 2019 16:20:58 -0700
-Message-Id: <20190830232058.53414-5-tony@atomide.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190830232058.53414-1-tony@atomide.com>
-References: <20190830232058.53414-1-tony@atomide.com>
+        id S1726453AbfHaInJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Aug 2019 04:43:09 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:50074 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726102AbfHaInJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Aug 2019 04:43:09 -0400
+Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 6A7FF25AD78;
+        Sat, 31 Aug 2019 18:43:07 +1000 (AEST)
+Received: by penelope.horms.nl (Postfix, from userid 7100)
+        id 46A02E218F0; Sat, 31 Aug 2019 10:43:05 +0200 (CEST)
+Date:   Sat, 31 Aug 2019 10:43:05 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH 4/4] usb: host: xhci-rcar: avoid 60s wait by
+ request_firmware() in system booting
+Message-ID: <20190831084304.wisliftdg5g26jbf@verge.net.au>
+References: <1566900127-11148-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+ <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+Organisation: Horms Solutions BV
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There should be no need to tinker with devctl in enable in the SoC glue
-code. We have musb_start() to take care of handling it already.
+On Tue, Aug 27, 2019 at 07:02:07PM +0900, Yoshihiro Shimoda wrote:
+> If CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y and CONFIG_USB_XHCI_RCAR=y,
+> request_firmware() in xhci_rcar_download_firmware() waits for 60s to
+> sysfs fallback for the firmware like below.
+> 
+> [    1.599701] xhci-hcd ee000000.usb: xHCI Host Controller
+> [    1.604948] xhci-hcd ee000000.usb: new USB bus registered, assigned bus number 3
+> [    1.612403] xhci-hcd ee000000.usb: Direct firmware load for r8a779x_usb3_v3.dlmem failed with error -2
+> [    1.621726] xhci-hcd ee000000.usb: Falling back to sysfs fallback for: r8a779x_usb3_v3.dlmem
+> [    1.707953] ata1: link resume succeeded after 1 retries
+> [    1.819379] ata1: SATA link down (SStatus 0 SControl 300)
+> [   62.436012] xhci-hcd ee000000.usb: can't setup: -11
+> [   62.440901] xhci-hcd ee000000.usb: USB bus 3 deregistered
+> [   62.446361] xhci-hcd: probe of ee000000.usb failed with error -11
+> 
+> To avoid this 60s wait, this patch adds to check the system_state
+> condition and if the system is not running,
+> xhci_rcar_download_firmware() calls request_firmware_direct()
+> instead of request_firmware() as a workaround.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/usb/musb/omap2430.c | 20 --------------------
- 1 file changed, 20 deletions(-)
+It seems to me that request_firmware() is working as expected.
+And that this patch introduces an alternate behaviour for xhci-rcar
+where it will fall back to the user-space helper in some cases but not
+others. This inconsistency isn't obviously correct to me. Perhaps
+xhci-rcar should always call request_firmware_direct() ?
 
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -275,33 +275,13 @@ static int omap2430_musb_init(struct musb *musb)
- 
- static void omap2430_musb_enable(struct musb *musb)
- {
--	u8		devctl;
--	unsigned long timeout = jiffies + msecs_to_jiffies(1000);
- 	struct device *dev = musb->controller;
- 	struct omap2430_glue *glue = dev_get_drvdata(dev->parent);
--	struct musb_hdrc_platform_data *pdata = dev_get_platdata(dev);
--	struct omap_musb_board_data *data = pdata->board_data;
--
- 
- 	switch (glue->status) {
- 
- 	case MUSB_ID_GROUND:
- 		omap_control_usb_set_mode(glue->control_otghs, USB_MODE_HOST);
--		if (data->interface_type != MUSB_INTERFACE_UTMI)
--			break;
--		devctl = musb_readb(musb->mregs, MUSB_DEVCTL);
--		/* start the session */
--		devctl |= MUSB_DEVCTL_SESSION;
--		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
--		while (musb_readb(musb->mregs, MUSB_DEVCTL) &
--				MUSB_DEVCTL_BDEVICE) {
--			cpu_relax();
--
--			if (time_after(jiffies, timeout)) {
--				dev_err(dev, "configured as A device timeout");
--				break;
--			}
--		}
- 		break;
- 
- 	case MUSB_VBUS_VALID:
--- 
-2.23.0
+> ---
+>  drivers/usb/host/xhci-rcar.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
+> index 34761be..c90cf46 100644
+> --- a/drivers/usb/host/xhci-rcar.c
+> +++ b/drivers/usb/host/xhci-rcar.c
+> @@ -6,6 +6,7 @@
+>   */
+>  
+>  #include <linux/firmware.h>
+> +#include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/of.h>
+> @@ -146,7 +147,10 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
+>  		firmware_name = priv->firmware_name;
+>  
+>  	/* request R-Car USB3.0 firmware */
+> -	retval = request_firmware(&fw, firmware_name, dev);
+> +	if (system_state < SYSTEM_RUNNING)
+> +		retval = request_firmware_direct(&fw, firmware_name, dev);
+> +	else
+> +		retval = request_firmware(&fw, firmware_name, dev);
+>  	if (retval)
+>  		return retval;
+>  
+> -- 
+> 2.7.4
+> 
