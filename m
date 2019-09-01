@@ -2,97 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A67FAA4365
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Aug 2019 10:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53426A4B69
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Sep 2019 21:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfHaInJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 31 Aug 2019 04:43:09 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:50074 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbfHaInJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 31 Aug 2019 04:43:09 -0400
-Received: from penelope.horms.nl (ip4dab7138.direct-adsl.nl [77.171.113.56])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 6A7FF25AD78;
-        Sat, 31 Aug 2019 18:43:07 +1000 (AEST)
-Received: by penelope.horms.nl (Postfix, from userid 7100)
-        id 46A02E218F0; Sat, 31 Aug 2019 10:43:05 +0200 (CEST)
-Date:   Sat, 31 Aug 2019 10:43:05 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 4/4] usb: host: xhci-rcar: avoid 60s wait by
- request_firmware() in system booting
-Message-ID: <20190831084304.wisliftdg5g26jbf@verge.net.au>
-References: <1566900127-11148-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1728638AbfIATj2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Sep 2019 15:39:28 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:44664 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725955AbfIATj2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Sep 2019 15:39:28 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id A29FC8153D; Sun,  1 Sep 2019 21:39:12 +0200 (CEST)
+Date:   Sun, 1 Sep 2019 21:39:25 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     Tony Lindgren <tony@atomide.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-omap@vger.kernel.org, sre@kernel.org, nekit1000@gmail.com,
+        mpartap@gmx.net, merlijn@wizzup.org
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Sebastian Reichel <sre@kernel.org>
+Subject: next-20190830 on Droid 4 was Re: [PATCH 0/4] musb host improvments
+ mostly for omap2430 glue
+Message-ID: <20190901193925.GA30586@amd>
+References: <20190830232058.53414-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="0OAP2g/MAC+5xKAE"
 Content-Disposition: inline
-In-Reply-To: <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190830232058.53414-1-tony@atomide.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 07:02:07PM +0900, Yoshihiro Shimoda wrote:
-> If CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y and CONFIG_USB_XHCI_RCAR=y,
-> request_firmware() in xhci_rcar_download_firmware() waits for 60s to
-> sysfs fallback for the firmware like below.
-> 
-> [    1.599701] xhci-hcd ee000000.usb: xHCI Host Controller
-> [    1.604948] xhci-hcd ee000000.usb: new USB bus registered, assigned bus number 3
-> [    1.612403] xhci-hcd ee000000.usb: Direct firmware load for r8a779x_usb3_v3.dlmem failed with error -2
-> [    1.621726] xhci-hcd ee000000.usb: Falling back to sysfs fallback for: r8a779x_usb3_v3.dlmem
-> [    1.707953] ata1: link resume succeeded after 1 retries
-> [    1.819379] ata1: SATA link down (SStatus 0 SControl 300)
-> [   62.436012] xhci-hcd ee000000.usb: can't setup: -11
-> [   62.440901] xhci-hcd ee000000.usb: USB bus 3 deregistered
-> [   62.446361] xhci-hcd: probe of ee000000.usb failed with error -11
-> 
-> To avoid this 60s wait, this patch adds to check the system_state
-> condition and if the system is not running,
-> xhci_rcar_download_firmware() calls request_firmware_direct()
-> instead of request_firmware() as a workaround.
-> 
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-It seems to me that request_firmware() is working as expected.
-And that this patch introduces an alternate behaviour for xhci-rcar
-where it will fall back to the user-space helper in some cases but not
-others. This inconsistency isn't obviously correct to me. Perhaps
-xhci-rcar should always call request_firmware_direct() ?
+--0OAP2g/MAC+5xKAE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/usb/host/xhci-rcar.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-rcar.c b/drivers/usb/host/xhci-rcar.c
-> index 34761be..c90cf46 100644
-> --- a/drivers/usb/host/xhci-rcar.c
-> +++ b/drivers/usb/host/xhci-rcar.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #include <linux/firmware.h>
-> +#include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/of.h>
-> @@ -146,7 +147,10 @@ static int xhci_rcar_download_firmware(struct usb_hcd *hcd)
->  		firmware_name = priv->firmware_name;
->  
->  	/* request R-Car USB3.0 firmware */
-> -	retval = request_firmware(&fw, firmware_name, dev);
-> +	if (system_state < SYSTEM_RUNNING)
-> +		retval = request_firmware_direct(&fw, firmware_name, dev);
-> +	else
-> +		retval = request_firmware(&fw, firmware_name, dev);
->  	if (retval)
->  		return retval;
->  
-> -- 
-> 2.7.4
-> 
+Hi!
+
+> So I ended up cleaning up omap2430 glue layer a bit for host mode with the
+> various reproducable errors I was seeing docking droid4 to a lapdock. The=
+re
+> are a few fixes, and then we end up removing all the devctl register tink=
+ering
+> for omap2430 glue layer.
+
+I thought I'd test this, so I took
+
+commit 6d028043b55e54f48fbdf62ea8ce11a4ad830cac
+    Add linux-next specific files for 20190830
+
+Series (and the other two patches you sent around it) applies ok, but
+the result does not boot.
+
+Hmm.
+
+I guess I'll need to resurrect the serial port cable.
+
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--0OAP2g/MAC+5xKAE
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl1sHm0ACgkQMOfwapXb+vIVbQCgsPODxEwwCon5ZeHC4gpSLfq1
+aB4An14jJZbgRELk7gz8FZPreGgMAzW+
+=paUb
+-----END PGP SIGNATURE-----
+
+--0OAP2g/MAC+5xKAE--
