@@ -2,102 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B745DA4C77
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 00:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F7AA4D25
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 03:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729106AbfIAW1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Sep 2019 18:27:05 -0400
-Received: from muru.com ([72.249.23.125]:59428 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728942AbfIAW1F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 1 Sep 2019 18:27:05 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id CFAFC80C0;
-        Sun,  1 Sep 2019 22:27:32 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH] usb: musb: omap2430: Idle musb on init
-Date:   Sun,  1 Sep 2019 15:27:00 -0700
-Message-Id: <20190901222700.36410-1-tony@atomide.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728982AbfIBBnm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Sep 2019 21:43:42 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:47086 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728836AbfIBBnm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Sep 2019 21:43:42 -0400
+Received: by mail-pg1-f195.google.com with SMTP id m3so6530131pgv.13;
+        Sun, 01 Sep 2019 18:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0aUX42n6MYpZAPtnUnOXwuIjIyDjbmoPgpeoVT5TRsM=;
+        b=p333U1AxmvdAk0pBEpP1oUYFNfDEyJJpbB3soBeqQfWNat0kerjEGi//Fxvue3hYPY
+         buUksIH2xTNak380SSpalrxwuhFOZctc6CbMczDD3ljiFUD+v1wiLN3YPxlUGyjXofx/
+         DgH3NeLssLiwOc8q84ubf+I/pTJe/QX5PVr018jrJPl190L345tqeuoOYlfaDMVVDPOP
+         ByqawH3vp+4hxdepsteaFFmKolB5ZbXXayS5yjR9yJ8gDZcCQ1NzE7YiGYDpzVfpd7pG
+         aBvs5YrmJBJmvjI1p4EejEd/cysBYfowozXx70wj9KLZFvtJTVJEBSXVH/gMDzcBxdRM
+         vL+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=0aUX42n6MYpZAPtnUnOXwuIjIyDjbmoPgpeoVT5TRsM=;
+        b=WCBLVvJvsnA8eMSr2Q06SO6F386ITooWZ9eWCQ3dLNSA2+o1lYQyTeef0Gp1+3XDZh
+         m4QSccZ/144MFtvvtxDkbrvUNgQbP/ucsPdPyhJRjUpXnR21So35e3OGyt4C/vKBka+7
+         sKHzblkQ1pPZzYeXfnA6PSQam/yhNTdkhyvzzVSDf0rHLFeoh68YWHXTkwzIo5POioLI
+         YIdDRGxi/zekk7fj7cFIRQp/EkxF6ndCcggFSNto7ajdDaT5klxAkt92y0azpwbo2Jgj
+         pLSzbhhHcXeB5FXmMc0k84asXhPsciwjnLKGExCpR+tqPM3Cju9BTU5gKbkqcFZiJwLG
+         db5g==
+X-Gm-Message-State: APjAAAUsTmdvILZ0QILRiVwqLC9NMnVeLm+A16QKVapwndX2yaJiiE45
+        8ThTgMK4oi2A4mtfdF44+CU=
+X-Google-Smtp-Source: APXvYqxRRnD9aoVuiRxCQfHDMdbSmWABTkgvfz+jWmckOoqf0XOlMx9k2pfgrfkq2Y368CgWLdanoA==
+X-Received: by 2002:a65:621a:: with SMTP id d26mr16676175pgv.153.1567388621595;
+        Sun, 01 Sep 2019 18:43:41 -0700 (PDT)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([89.31.126.54])
+        by smtp.gmail.com with ESMTPSA id n24sm12746268pjq.21.2019.09.01.18.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Sep 2019 18:43:40 -0700 (PDT)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH v2] usb: chipidea: msm: Use device-managed registration API
+Date:   Mon,  2 Sep 2019 09:43:23 +0800
+Message-Id: <20190902014323.27588-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We want to configure musb state in omap2430_musb_enable() instead of
-omap2430_musb_init(). Otherwise musb may not idle properly until
-USB cable has been connected at least once.
+Use devm_reset_controller_register to get rid
+of manual unregistration.
 
-And we already have omap_musb_set_mailbox() configure mode with
-omap_control_usb_set_mode() so we can remove those calls from
-omap2430_musb_enable().
-
-Cc: Jacopo Mondi <jacopo@jmondi.org>
-Cc: Marcel Partap <mpartap@gmx.net>
-Cc: Merlijn Wajer <merlijn@wizzup.org>
-Cc: Michael Scott <hashcode0f@gmail.com>
-Cc: NeKit <nekit1000@gmail.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Sebastian Reichel <sre@kernel.org>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 ---
- drivers/usb/musb/omap2430.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+Changes in v2:
+  - Remove not needed err_fs.
 
-diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
---- a/drivers/usb/musb/omap2430.c
-+++ b/drivers/usb/musb/omap2430.c
-@@ -211,7 +211,6 @@ static int omap2430_musb_init(struct musb *musb)
- 	u32 l;
- 	int status = 0;
- 	struct device *dev = musb->controller;
--	struct omap2430_glue *glue = dev_get_drvdata(dev->parent);
- 	struct musb_hdrc_platform_data *plat = dev_get_platdata(dev);
- 	struct omap_musb_board_data *data = plat->board_data;
+ drivers/usb/chipidea/ci_hdrc_msm.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/chipidea/ci_hdrc_msm.c b/drivers/usb/chipidea/ci_hdrc_msm.c
+index bb4645a8ca46..af648ba6544d 100644
+--- a/drivers/usb/chipidea/ci_hdrc_msm.c
++++ b/drivers/usb/chipidea/ci_hdrc_msm.c
+@@ -216,13 +216,13 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+ 	ci->rcdev.ops = &ci_hdrc_msm_reset_ops;
+ 	ci->rcdev.of_node = pdev->dev.of_node;
+ 	ci->rcdev.nr_resets = 2;
+-	ret = reset_controller_register(&ci->rcdev);
++	ret = devm_reset_controller_register(&pdev->dev, &ci->rcdev);
+ 	if (ret)
+ 		return ret;
  
-@@ -267,9 +266,6 @@ static int omap2430_musb_init(struct musb *musb)
- 			musb_readl(musb->mregs, OTG_INTERFSEL),
- 			musb_readl(musb->mregs, OTG_SIMENABLE));
+ 	ret = clk_prepare_enable(ci->fs_clk);
+ 	if (ret)
+-		goto err_fs;
++		return ret;
  
--	if (glue->status != MUSB_UNKNOWN)
--		omap_musb_set_mailbox(glue);
--
+ 	reset_control_assert(reset);
+ 	usleep_range(10000, 12000);
+@@ -232,7 +232,7 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+ 
+ 	ret = clk_prepare_enable(ci->core_clk);
+ 	if (ret)
+-		goto err_fs;
++		return ret;
+ 
+ 	ret = clk_prepare_enable(ci->iface_clk);
+ 	if (ret)
+@@ -271,8 +271,6 @@ static int ci_hdrc_msm_probe(struct platform_device *pdev)
+ 	clk_disable_unprepare(ci->iface_clk);
+ err_iface:
+ 	clk_disable_unprepare(ci->core_clk);
+-err_fs:
+-	reset_controller_unregister(&ci->rcdev);
+ 	return ret;
+ }
+ 
+@@ -284,7 +282,6 @@ static int ci_hdrc_msm_remove(struct platform_device *pdev)
+ 	ci_hdrc_remove_device(ci->ci);
+ 	clk_disable_unprepare(ci->iface_clk);
+ 	clk_disable_unprepare(ci->core_clk);
+-	reset_controller_unregister(&ci->rcdev);
+ 
  	return 0;
  }
- 
-@@ -278,19 +274,9 @@ static void omap2430_musb_enable(struct musb *musb)
- 	struct device *dev = musb->controller;
- 	struct omap2430_glue *glue = dev_get_drvdata(dev->parent);
- 
--	switch (glue->status) {
--
--	case MUSB_ID_GROUND:
--		omap_control_usb_set_mode(glue->control_otghs, USB_MODE_HOST);
--		break;
--
--	case MUSB_VBUS_VALID:
--		omap_control_usb_set_mode(glue->control_otghs, USB_MODE_DEVICE);
--		break;
--
--	default:
--		break;
--	}
-+	if (glue->status == MUSB_UNKNOWN)
-+		glue->status = MUSB_VBUS_OFF;
-+	omap_musb_set_mailbox(glue);
- }
- 
- static void omap2430_musb_disable(struct musb *musb)
 -- 
-2.23.0
+2.20.1
+
