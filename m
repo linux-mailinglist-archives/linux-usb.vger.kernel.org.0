@@ -2,157 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D270A4F24
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 08:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05352A4F2A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 08:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729515AbfIBGTk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Sep 2019 02:19:40 -0400
-Received: from ozlabs.org ([203.11.71.1]:47913 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726230AbfIBGTk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Sep 2019 02:19:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46MKgD2tbGz9sDB;
-        Mon,  2 Sep 2019 16:19:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567405176;
-        bh=t9O5MxvNoWVtNpfW2QZR8r8y4gZ6tmv7UWmwEAS7QLY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YVfSG3XrXw6C2O9FTtqr+Y4V/rn5+AERd9/ztoAVb84o8Qx+czjFmcbSu9ZcA1DiE
-         b6g1yUGyI6cNJ//sSANuWJvhJSo4WPIuJwfR2RuDLGblKvOqsfjSxnPL604CqzeWm9
-         sN8BDtMFKf7UzMcmmFeSL9iO96sswOCX7RXo4Y4a/7KEIDtMT1/TIOikFA6AlQDFfT
-         j2BIwDHrxi94ry9O7vGpsJGdxXFSOGYuVlGxGaNbmqxXjGBq0uTNkiwfpdywTzI8ID
-         iki/iwEPpGTtKso+0TNdPrWMvmw5QsbSMPRvIrZkAj2xTvK/F+IAIZf0JC2ApklDRu
-         wFnDDD4g3MOJQ==
-Date:   Mon, 2 Sep 2019 16:19:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the keys tree
-Message-ID: <20190902161935.78bf56f1@canb.auug.org.au>
-In-Reply-To: <20190829153116.7ffc7470@canb.auug.org.au>
-References: <20190829153116.7ffc7470@canb.auug.org.au>
+        id S1729577AbfIBGXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Sep 2019 02:23:09 -0400
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:36267 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729299AbfIBGXJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Sep 2019 02:23:09 -0400
+Received: by mail-wr1-f51.google.com with SMTP id y19so12683728wrd.3
+        for <linux-usb@vger.kernel.org>; Sun, 01 Sep 2019 23:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GXDQLzey5eVaH3nv6gKWbG5J2SJ2qpME5x9rf2oPD3I=;
+        b=kBwnMP+ONhB7ElGFyoORX2b0oURt0/dKqqr5+U+YBZKHjonzdLnbHm5hB/r+nB8nPM
+         mgKOtNkOPeBc7haAzOJ+KK6MVAL3VO6Og4lQlDxaLLC/3J0D/ZgVqG/YKchBpAmu+Ps6
+         8Jox4PJ5bKlMX8eb9KZpzVcGnZ3plNbKC98oVZffGGvfzQ6tWYcgIXljghLah31oLmKp
+         rcqSKRhMz4YOoUKyfr0ZkE8wuDZqdZNdsYsj9NXw2IvmpwTLa6GqZqAucdhvH6kqYMYZ
+         auNFCTZ3bCNq2oZEtUTlraGoIMz2ILzrYnLWduc3RUgKbIOkuHSDmZobeQzVMNpfd9eT
+         YjJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GXDQLzey5eVaH3nv6gKWbG5J2SJ2qpME5x9rf2oPD3I=;
+        b=A76PeUZxnHIFgszKNHDn6p5MEDYPXgpwb4Mod6atvUQMWbKVvy48ersQy1gcinGcck
+         TlDZ45aMVh4QaxZkHLGg+xLM/9Acub/R7bCZRpbnTcd2Rug0NkFaMCXzeJV/4I7DfJNN
+         ocu54/Qq/pFvVdO6EnmUo+/N1rMvkfB6PZqs7XAKFp2CEMsY242iIZGdbZOm97jdSruR
+         Z9wDRmA/qJRWhq4p8CFZywe5iWnxRpJ3aAbLx5K0xeLPDyTvzk9vKxu53Shn5TMZ4IGK
+         7XzYy/B/zay3E4osZbSlMrC2Ermw7NddcyBHRqnjLlYnlCIfjVrbm+qHvT7gcW0ZQG2X
+         A4iA==
+X-Gm-Message-State: APjAAAVt5wBuWh3jq9TuZj9R2m6UdJNCB/UdS5EjVnEJH36nYHWwvoav
+        l/05OcUX2zqOPQ24BCeHg6BWFw==
+X-Google-Smtp-Source: APXvYqwd5B1+mNZiCUdsAOpexzFqYG8beIuRWZhpUTVmnR2EtR8Ns3q0MBNTR/7EMMBAtVeoAOgVLQ==
+X-Received: by 2002:a5d:424a:: with SMTP id s10mr8643502wrr.55.1567405386975;
+        Sun, 01 Sep 2019 23:23:06 -0700 (PDT)
+Received: from [192.168.1.6] (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
+        by smtp.gmail.com with ESMTPSA id w13sm32060900wre.44.2019.09.01.23.23.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 01 Sep 2019 23:23:06 -0700 (PDT)
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
+ bindings
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     robh@kernel.org, andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        jackp@codeaurora.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        khasim.mohammed@linaro.org
+References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org>
+ <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org>
+ <20190223165218.GB572@tuxbook-pro>
+ <6dc0957d-5806-7643-4454-966015865d38@linaro.org>
+ <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
+ <20190830164520.GK26807@tuxbook-pro>
+ <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+Message-ID: <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
+Date:   Mon, 2 Sep 2019 08:23:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+8CAegbZXPlV2cLhTG7bR4i";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---Sig_/+8CAegbZXPlV2cLhTG7bR4i
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/30/19 20:28, Stephen Boyd wrote:
+> Quoting Bjorn Andersson (2019-08-30 09:45:20)
+>> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
+>>
+>>> Quoting Jorge Ramirez (2019-08-29 00:03:48)
+>>>> On 2/23/19 17:52, Bjorn Andersson wrote:
+>>>>> On Thu 07 Feb 03:17 PST 2019, Jorge Ramirez-Ortiz wrote:
+>>>>>> +
+>>>>>> +Required child nodes:
+>>>>>> +
+>>>>>> +- usb connector node as defined in bindings/connector/usb-connector.txt
+>>>>>> +  containing the property vbus-supply.
+>>>>>> +
+>>>>>> +Example:
+>>>>>> +
+>>>>>> +usb3_phy: usb3-phy@78000 {
+>>>>>> +    compatible = "qcom,snps-usb-ssphy";
+>>>>>> +    reg = <0x78000 0x400>;
+>>>>>> +    #phy-cells = <0>;
+>>>>>> +    clocks = <&rpmcc RPM_SMD_LN_BB_CLK>,
+>>>>>> +             <&gcc GCC_USB_HS_PHY_CFG_AHB_CLK>,
+>>>>>> +             <&gcc GCC_USB3_PHY_PIPE_CLK>;
+>>>>>> +    clock-names = "ref", "phy", "pipe";
+>>>>>> +    resets = <&gcc GCC_USB3_PHY_BCR>,
+>>>>>> +             <&gcc GCC_USB3PHY_PHY_BCR>;
+>>>>>> +    reset-names = "com", "phy";
+>>>>>> +    vdd-supply = <&vreg_l3_1p05>;
+>>>>>> +    vdda1p8-supply = <&vreg_l5_1p8>;
+>>>>>> +    usb3_c_connector: usb3-c-connector {
+>>>
+>>> Node name should be 'connector', not usb3-c-connector.
+>>>
+>>
+>> It probably has to be usb-c-connector, because we have a
+>> micro-usb-connector on the same board.
+> 
+> Ok. Or connector@1 and connector@2? Our toplevel node container story is
+> sort of sad because we have to play tricks with node names. But in the
+> example, just connector I presume? 
+> 
+>>
+>>>>>
+>>>>> The USB-C connector is attached both to the HS and SS PHYs, so I think
+>>>>> you should represent this external to this node and use of_graph to
+>>>>> query it.
+>>>>
+>>>> but AFAICS we wont be able to retrieve the vbux-supply from an external
+>>>> node (that interface does not exist).
+>>>>
+>>>> rob, do you have a suggestion?
+>>>
+>>> Shouldn't the vbus supply be in the phy? Or is this a situation where
+>>> the phy itself doesn't have the vbus supply going to it because the PMIC
+>>> gets in the way and handles the vbus for the connector by having the SoC
+>>> communicate with the PMIC about when to turn the vbus on and off, etc?
+>>>
+>>
+>> That's correct, the VBUS comes out of the PMIC and goes directly to the
+>> connector.
+>>
+>> The additional complicating factor here is that the connector is wired
+>> to a USB2 phy as well, so we need to wire up detection and vbus control
+>> to both of them - but I think this will be fine, if we can only figure
+>> out a sane way of getting hold of the vbus-supply.
+>>
+> 
+> Does it really matter to describe this situation though? Maybe it's
+> simpler to throw the vbus supply into the phy and control it from the
+> phy driver, even if it never really goes there. Or put it into the
+> toplevel usb controller?
+> 
+that would work for me - the connector definition seemed a better way to
+explain the connectivity but since we cant retrieve the supply from the
+external node is not of much functional use.
 
-Hi all,
-
-On Thu, 29 Aug 2019 15:31:16 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the keys tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
->=20
-> Caused by commit
->=20
->   ef9cc255c953 ("usb: Add USB subsystem notifications")
->=20
-> # CONFIG_USB_NOTIFICATIONS is not set
->=20
-> I have used the keys tree from next-20190828 for today.
-
-I only realised this morning that I forgot to include the error log
-(sorry):
-
-In file included from include/linux/usb/phy.h:15,
-                 from include/linux/usb/otg.h:14,
-                 from include/linux/usb/tegra_usb_phy.h:21,
-                 from arch/arm/mach-tegra/tegra.c:27:
-include/linux/usb.h:2026:34: error: parameter 2 ('subtype') has incomplete =
-type
- 2026 |       enum usb_notification_type subtype,
-      |       ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-include/linux/usb.h:2025:20: error: function declaration isn't a prototype =
-[-Werror=3Dstrict-prototypes]
- 2025 | static inline void post_usb_device_notification(const struct usb_de=
-vice *udev,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-include/linux/usb.h:2029:38: error: parameter 2 ('subtype') has incomplete =
-type
- 2029 |           enum usb_notification_type subtype,
-      |           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-include/linux/usb.h:2028:20: error: function declaration isn't a prototype =
-[-Werror=3Dstrict-prototypes]
- 2028 | static inline void post_usb_bus_notification(const struct usb_bus *=
-ubus,
-      |                    ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-(several more like this)
-
-Today I have included the following fix patch:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 2 Sep 2019 16:01:59 +1000
-Subject: [PATCH] usb: include watch_queue.h for needed enum
-
-The forward declararion doesn't seem to work (at laste for the
-!CONFIG_USB_NOTIFICATIONS case.
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/usb.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index a7d5fce46569..11438058f4fa 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -4,6 +4,7 @@
-=20
- #include <linux/mod_devicetable.h>
- #include <linux/usb/ch9.h>
-+#include <linux/watch_queue.h>
-=20
- #define USB_MAJOR			180
- #define USB_DEVICE_MAJOR		189
-@@ -26,7 +27,6 @@
- struct usb_device;
- struct usb_driver;
- struct wusb_dev;
--enum usb_notification_type;
-=20
- /*------------------------------------------------------------------------=
--*/
-=20
---=20
-2.23.0.rc1
-
-I then discovered that I needed to install libkeyutils-dev :-( but it
-built OK after that.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+8CAegbZXPlV2cLhTG7bR4i
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1stHcACgkQAVBC80lX
-0GxhZAgAk7/hqNI8xqsPxpzKfqTcWTeOcYGutHZicZDrYUjsmfXi6rguvL1gf6zF
-QooPTjCVh3U44YNMk7Xzu9ftIMYGByi/xdoaSV82mtw+NECpYysF7u3/dz3kK/yN
-V7YmxixJBwc2VmY4o9pXKLSlOHlki/+jC7QOVAJsho6SqiQlSGttDZCw49wsFrji
-BekgNKyKF4f8GrQb0xs2xibcxQVhFDrjcBE+NodSByvUCpIp3DWij4pxYS3XBDhg
-yYsKV36TYBigfsndTTIVUVU/SGDrU6nH39A6ff4NGCjEQOJSny1WenY1UL4J/VoG
-LNWAPn8coC6CKMzdjCdTI1jkdby9Xw==
-=JNcQ
------END PGP SIGNATURE-----
-
---Sig_/+8CAegbZXPlV2cLhTG7bR4i--
+but please let me know how to proceed. shall I add the supply back to
+the phy?
