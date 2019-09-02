@@ -2,74 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95707A5AF5
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 18:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F18DA5B24
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 18:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfIBQBW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Sep 2019 12:01:22 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:55102 "EHLO mx1.redhat.com"
+        id S1726192AbfIBQG4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Sep 2019 12:06:56 -0400
+Received: from muru.com ([72.249.23.125]:59460 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725815AbfIBQBW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Sep 2019 12:01:22 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id CBC20301E11C;
-        Mon,  2 Sep 2019 16:01:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 589CE600D1;
-        Mon,  2 Sep 2019 16:01:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20190902161935.78bf56f1@canb.auug.org.au>
-References: <20190902161935.78bf56f1@canb.auug.org.au> <20190829153116.7ffc7470@canb.auug.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     dhowells@redhat.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1726023AbfIBQG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Sep 2019 12:06:56 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 2A58C8022;
+        Mon,  2 Sep 2019 16:07:24 +0000 (UTC)
+Date:   Mon, 2 Sep 2019 09:06:51 -0700
+From:   Tony Lindgren <tony@atomide.com>
+To:     Pavel Machek <pavel@denx.de>
+Cc:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the keys tree
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH 0/4] musb host improvments mostly for omap2430 glue
+Message-ID: <20190902160651.GI52127@atomide.com>
+References: <20190830232058.53414-1-tony@atomide.com>
+ <20190902092344.GA31410@amd>
+ <20190902094408.GB31410@amd>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <16835.1567440079.1@warthog.procyon.org.uk>
-Date:   Mon, 02 Sep 2019 17:01:19 +0100
-Message-ID: <16836.1567440079@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Mon, 02 Sep 2019 16:01:21 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190902094408.GB31410@amd>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+* Pavel Machek <pavel@denx.de> [190902 09:44]:
+> On Mon 2019-09-02 11:23:44, Pavel Machek wrote:
+> Hmm. I guess CONFIG_USB_MUSB_DUAL_ROLE=y might be useful.
+> 
+> And now... if I unplug/replug the usb after the boot, USB hub and
+> mouse are recognized. Good!
+> 
+> Less than minute later:
+> 
+> mmusb-hdrc.0.auto: Babble
+> USB disconnect
 
-> The forward declararion doesn't seem to work (at laste for the
-> !CONFIG_USB_NOTIFICATIONS case.
+The babble is most likely caused by some kind of signaling issue.
 
-In the !CONFIG_USB_NOTIFICATIONS case, the argument is to a stub inline
-function.  Even though the argument isn't actually used, it can't be an
-undefined type - and, I'm guessing, an undefined size, meaning the compiler
-doesn't know how many registers/how much stack space it would occupy before
-getting to the error argument.
+> I unplug, replug usb (not at the phone, between hub and dongle, and
+> green LED indincating charging starts blinking rapidly.
+> 
+> cpcap-core spi0.0: EOT timed out.
+> 
+> I try plug/replug, and now green led is on.
+> 
+> I unplug replug at the phone, and get bunch more of messages:
+> 
+> musm _set_peripheral: already in peripheral mode: 99
+> musm _set_peripheral: already in peripheral mode: 81
+> musm _set_peripheral: already in peripheral mode: 81
+> 
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> musb_set_host: could not set host: 99
+> 
+> Unplug/replug at host, and again, hub+mouse is detected.
+> 
+> I unplug power connected to one of USB hub's ports... and find out
+> that phone was _not_ powering it.
+> 
+> Ok... so something somehow works.... sometimes :-).
 
-I have a fix for this in my tree that just makes it an unsigned int in the
-disabled case:
+My guess is you're missing a USB micro-B cable with ID pin
+grounded, with that things should just work automagically.
 
-static inline void post_usb_device_notification(const struct usb_device *udev,
-						unsigned int subtype, u32 error) {}
+So no need for hubs feeding back VBUS and no need to
+try to force host mode via sysfs unlike on n900.
 
-> +#include <linux/watch_queue.h>
+Regards,
 
-I was trying to avoid that if I could to avoid introducing the possibility of
-circular deps, but that might not be a problem in this case.
-
-> I then discovered that I needed to install libkeyutils-dev :-( but it
-> built OK after that.
-
-?  The kernel shouldn't require that to build.
-
-David
+Tony
