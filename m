@@ -2,93 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F18DA5B24
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 18:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E7BBA5B86
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 18:47:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbfIBQG4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Sep 2019 12:06:56 -0400
-Received: from muru.com ([72.249.23.125]:59460 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726023AbfIBQG4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Sep 2019 12:06:56 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 2A58C8022;
-        Mon,  2 Sep 2019 16:07:24 +0000 (UTC)
-Date:   Mon, 2 Sep 2019 09:06:51 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH 0/4] musb host improvments mostly for omap2430 glue
-Message-ID: <20190902160651.GI52127@atomide.com>
-References: <20190830232058.53414-1-tony@atomide.com>
- <20190902092344.GA31410@amd>
- <20190902094408.GB31410@amd>
+        id S1726415AbfIBQr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Sep 2019 12:47:28 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:40117 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726130AbfIBQr1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Sep 2019 12:47:27 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 6D69B5A5;
+        Mon,  2 Sep 2019 12:47:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 02 Sep 2019 12:47:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=X4LCCxeuQKKBpdGg9K31qhm4hIZ
+        cpVvtnQtc9U0Ccy0=; b=Tbc3Mj5CAQtxKSYc87aqaJHqwUU7vtREDCr5pCD0RCM
+        2RDUv5zFY0I09pRJWET565WJnVMVU5PUfqZfeIrnu7BouP/5Wc9mbN6BL6HnBJhA
+        rv8whm+YKyrGfimK6LR5tG6eu3v7uvWjqamfcEG2bSu22yrDCTBu2LJ+UJp/MsZr
+        NvAwj3lvU2Yl4f4jGO0fL/RJrMrhJz7zvNxrBpkViQofeRrE6p6pfWyHrdwL83YJ
+        62MWhgSl2J90zgzDUPzX/FqHWUPzBqKg/vbyWrlKFwFyeQd+aJNotSbW6kQ9xfh2
+        u5kphtaBoa/PRhNTfh5bGK8/moZ++1Q7kvwAWq4mtpg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=X4LCCx
+        euQKKBpdGg9K31qhm4hIZcpVvtnQtc9U0Ccy0=; b=yvEAQHsg41RyWHWY+Nult+
+        lYkP/S+SNZn0RwG9riT2fIuKgYFepQo4kLQ09WHIn4opVfELepUPrNjGon4hm4ZE
+        WBM2NPgw9/G7qJCF58UXOI7EXKxLY2TX0XEUn/V+Se/hxEMnXW88Y0vrkcn5LZYA
+        yKIxQAPpC4rFauAfNO3FHLyWpmYX1I+c3jKs+Yszp9JBxnQW7Pp5AgcZ2HwC3LIM
+        a1gci7xQIdhZt5MqLOaC76hVrBQa3nOyZBcml4zBL6w15PP0QvkRtV4agw+rvBC4
+        G/LkUb6gB2YSDeNfcCeHSuwR1ivE9KaRWkc0icrMf7lu3S/QmyqPiE/8ul3oqZYA
+        ==
+X-ME-Sender: <xms:nUdtXQeVNSFsLK57rw0DDtlPc4Gew2HfW_sPrNPZmW-LmflqeRACmw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudejtddguddtiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
+    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
+    ucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:nUdtXWezTV2Z-J53rDm_B27lt8QTpxTudVW-qZA3h5dUDU-h_T7o1w>
+    <xmx:nUdtXcjZ4v8gf2DXBVcUO13q0PA0ph8gCg0-aMNQr9gzR3zkh0__xw>
+    <xmx:nUdtXaRznwZfylVI749YbT13_vwoROezbPrPebmbf4KhE883uoWDBw>
+    <xmx:nkdtXYvq75Bi0D4ONwTDaUsTeatonNxosb6w0S5iQeQMqBZNJis4Pg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 8B2F3D6005F;
+        Mon,  2 Sep 2019 12:47:25 -0400 (EDT)
+Date:   Mon, 2 Sep 2019 18:47:24 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Dan Williams <dcbw@redhat.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        USB Storage list <usb-storage@lists.one-eyed-alien.net>
+Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
+Message-ID: <20190902164724.GA22619@kroah.com>
+References: <CAODwPW8gTZ_2WEc9n=WJ2PEmQk2anTQYfwQ-898+kOq6wsjnZw@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908301337150.1459-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190902094408.GB31410@amd>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <Pine.LNX.4.44L0.1908301337150.1459-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Pavel Machek <pavel@denx.de> [190902 09:44]:
-> On Mon 2019-09-02 11:23:44, Pavel Machek wrote:
-> Hmm. I guess CONFIG_USB_MUSB_DUAL_ROLE=y might be useful.
+On Fri, Aug 30, 2019 at 01:43:36PM -0400, Alan Stern wrote:
+> > I could instead add a new sysfs node 'force_bind' to the driver core,
+> > that would work like 'bind' except for skipping the
+> > driver_match_device() call entirely and forcing a probe(). Do you
+> > think that would be acceptable? Or is that too big of a hammer to make
+> > available for all drivers in Linux? Maybe if I do the same thing but
+> > only for usb drivers, or even only for the usb-storage driver
+> > specifically, would that be acceptable?
 > 
-> And now... if I unplug/replug the usb after the boot, USB hub and
-> mouse are recognized. Good!
+> This is a question for Greg.  The problem is that there may be drivers
+> which can't handle being probed for devices they don't match.
 > 
-> Less than minute later:
+> Still, we ought to have a mechanism for doing manual but not automatic 
+> matches.
 > 
-> mmusb-hdrc.0.auto: Babble
-> USB disconnect
+> Greg, any thoughts?
 
-The babble is most likely caused by some kind of signaling issue.
+This should work just fine today.  Add a new device id to the "new_id"
+file and then tell the driver to bind.  That's pretty much the same as a
+"force_bind", right?
 
-> I unplug, replug usb (not at the phone, between hub and dongle, and
-> green LED indincating charging starts blinking rapidly.
-> 
-> cpcap-core spi0.0: EOT timed out.
-> 
-> I try plug/replug, and now green led is on.
-> 
-> I unplug replug at the phone, and get bunch more of messages:
-> 
-> musm _set_peripheral: already in peripheral mode: 99
-> musm _set_peripheral: already in peripheral mode: 81
-> musm _set_peripheral: already in peripheral mode: 81
-> 
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> musb_set_host: could not set host: 99
-> 
-> Unplug/replug at host, and again, hub+mouse is detected.
-> 
-> I unplug power connected to one of USB hub's ports... and find out
-> that phone was _not_ powering it.
-> 
-> Ok... so something somehow works.... sometimes :-).
+thanks,
 
-My guess is you're missing a USB micro-B cable with ID pin
-grounded, with that things should just work automagically.
-
-So no need for hubs feeding back VBUS and no need to
-try to force host mode via sysfs unlike on n900.
-
-Regards,
-
-Tony
+greg k-h
