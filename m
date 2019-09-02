@@ -2,149 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AC5A541D
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 12:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 130AAA552B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 13:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730233AbfIBKfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Sep 2019 06:35:38 -0400
-Received: from mail-eopbgr1400114.outbound.protection.outlook.com ([40.107.140.114]:59760
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        id S1731051AbfIBLmS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Sep 2019 07:42:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:50072 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729806AbfIBKfh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Sep 2019 06:35:37 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EVeC6unlRTpLPYJS3JdtRHESPfNbfrbOHNhugdZ1EzoZvqR7aMZFIqHMBBv84nkehZJbztd6KRSNFNgc+dlWKQ2kdTqoH6XySo2gGVHWv6NohR7qruzlNeWWBAgF+2YAbd5emyNS9QY9kPLvGgx/VbeAHmeBR9IZkyvKDRvMxJWX6C+kwnTYjXGCFyi1H5/TEpR5RTdCGzpkbsUKxv4vTAc053gKkDMzq6pamZobdnT2/k6IMXYjXmjZrlbhCAyT7gzYYYyeuqADj8+XDUNT9UAY49KGIt0b58KkyTit4qOFO1wlef64rcvF2sUtxzioAGBDJ1aLiibgh3Fh3GD1vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fEhaFu698DxW6QSg2f5XVYWdPjwkDTWCTq40t4TOxFU=;
- b=G8A2MkMBl3MryNrW1QKjGFe8nLpZGf812jeoc8qpApH6FxTstW46o493ROhWIxlUchhe4fur9MQ9wVX+x9G/737AnJo7ogQ/LJuy7a/tfYR8qs+uhYEPOKjfTSaSJm7p2p9Ss+y8b99fbn65oca2XvWROf+koddRCNYsKYnlkZKzGL4z6SXkaSPLtVMkA6lT3LkpIVGk+LgTzVoFQUZjdoHH43bv7yspKo4GMArja1L2F3wPuXtxDmpuHtPeecHYW1nNaYaZ8cHVf47qBJQ6pToyXoeDI3ALhCzDljEVrpNUiDNwGslsICI66cZVqQphXkX69w254C/lZBjCoG+J0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fEhaFu698DxW6QSg2f5XVYWdPjwkDTWCTq40t4TOxFU=;
- b=aX1Ox6yzSr94GYIoWvOpXeGDWD+//V5bAKniqU45ZqVj7wrGvWf92w6ukM8seVjG2cqRyqMFuglAe++NkRfwI+z4SexhzyrscRkWHQhVHLLWNYV3t6B44OCbiliQ7i7x3nxvpihE1fy3SWkuY0FnUeu2sEwKwioV55JMFOnXQm4=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB4589.jpnprd01.prod.outlook.com (20.179.173.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.19; Mon, 2 Sep 2019 10:35:33 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6564:f61f:f179:facf]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::6564:f61f:f179:facf%5]) with mapi id 15.20.2220.022; Mon, 2 Sep 2019
- 10:35:33 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Simon Horman <horms@verge.net.au>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH 4/4] usb: host: xhci-rcar: avoid 60s wait by
- request_firmware() in system booting
-Thread-Topic: [PATCH 4/4] usb: host: xhci-rcar: avoid 60s wait by
- request_firmware() in system booting
-Thread-Index: AQHVXL65+6kkn9xTkUyWleEj4sJbHqcU9riAgANArOA=
-Date:   Mon, 2 Sep 2019 10:35:33 +0000
-Message-ID: <TYAPR01MB4544B88DD008C653007FF631D8BE0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <1566900127-11148-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <1566900127-11148-5-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <20190831084304.wisliftdg5g26jbf@verge.net.au>
-In-Reply-To: <20190831084304.wisliftdg5g26jbf@verge.net.au>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c1ab72df-78e1-4201-b432-08d72f914913
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB4589;
-x-ms-traffictypediagnostic: TYAPR01MB4589:
-x-microsoft-antispam-prvs: <TYAPR01MB45895B2E539936DA5F0526B2D8BE0@TYAPR01MB4589.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 01480965DA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(376002)(396003)(136003)(346002)(366004)(39860400002)(199004)(189003)(7696005)(6246003)(76176011)(6116002)(66066001)(71200400001)(71190400001)(3846002)(11346002)(476003)(446003)(486006)(256004)(14444005)(6916009)(99286004)(229853002)(55016002)(26005)(186003)(8936002)(6506007)(102836004)(53936002)(66946007)(76116006)(5660300002)(14454004)(66476007)(66556008)(64756008)(66446008)(54906003)(25786009)(9686003)(6436002)(7736002)(81156014)(33656002)(52536014)(316002)(81166006)(8676002)(2906002)(74316002)(305945005)(4326008)(478600001)(86362001);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4589;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: jeaRjs+TsuFQAfOAJcyGdXiglnb/CMTNAtSCq/SNk4i5zswU+pqc/0+MYwAJPAaR5O5XVR//fTKOQCdyLZebc5HkBia/fKdcNSiHruY92STN54m9GYj7ACt11QPEiUfZaTYP+KgMfAhTzx39T8z+TQBFIcvNvOOTlT4efHK7ycWMz14gcs1EGHTWDyQ11MsBZ45MHk5l4AH4IqGD4b5b2oUG1QeY+z3exF/50TWRM1nxiQpvJQzmhc++R+DboTZN9CXDNDdpNG1hH5e0tM2bY0DzgSrp9zGeYnQifVxs4FTqj25RjVUQqVo/ocwZGMvT1ZW0oWfkSLqHY8mLtFqEIKT8Bbs4ytCespoPBd8HC9PWxbUjFsd7jx0rBgsgheBS4dCr2mlQyxNR1dTb6azf38YH9ffsDc/lbltqKXCjrXg=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c1ab72df-78e1-4201-b432-08d72f914913
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2019 10:35:33.3689
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9WTRN7e+QGItORDq7ZPijIdwz2wsBvo4PjgYBUEzWoUS7vT4JETOr5znDPz37K8Hy/MgtxBTleTUk4z4wAyVThGKB9P6LkvSn3hLttDhu+dS0lLyrCRpLBZE8tj9luKv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4589
+        id S1730106AbfIBLmS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Sep 2019 07:42:18 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 21303AF8D;
+        Mon,  2 Sep 2019 11:42:17 +0000 (UTC)
+Message-ID: <1567424535.2469.11.camel@suse.com>
+Subject: Re: Lacie Rugged USB3-FW does not work with UAS
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Julian Sikorski <belegdol@gmail.com>, linux-usb@vger.kernel.org
+Date:   Mon, 02 Sep 2019 13:42:15 +0200
+In-Reply-To: <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
+References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
+         <1566567572.8347.54.camel@suse.com>
+         <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
+         <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
+         <1566595393.8347.56.camel@suse.com>
+         <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
+         <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
+Content-Type: multipart/mixed; boundary="=-LBj7SrdPX+QDFvsW0yiE"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Simon-san,
 
-Thank you for your comment!
+--=-LBj7SrdPX+QDFvsW0yiE
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-> From: Simon Horman, Sent: Saturday, August 31, 2019 5:43 PM
->=20
-> On Tue, Aug 27, 2019 at 07:02:07PM +0900, Yoshihiro Shimoda wrote:
-> > If CONFIG_FW_LOADER_USER_HELPER_FALLBACK=3Dy and CONFIG_USB_XHCI_RCAR=
-=3Dy,
-> > request_firmware() in xhci_rcar_download_firmware() waits for 60s to
-> > sysfs fallback for the firmware like below.
-> >
-> > [    1.599701] xhci-hcd ee000000.usb: xHCI Host Controller
-> > [    1.604948] xhci-hcd ee000000.usb: new USB bus registered, assigned =
-bus number 3
-> > [    1.612403] xhci-hcd ee000000.usb: Direct firmware load for r8a779x_=
-usb3_v3.dlmem failed with error -2
-> > [    1.621726] xhci-hcd ee000000.usb: Falling back to sysfs fallback fo=
-r: r8a779x_usb3_v3.dlmem
-> > [    1.707953] ata1: link resume succeeded after 1 retries
-> > [    1.819379] ata1: SATA link down (SStatus 0 SControl 300)
-> > [   62.436012] xhci-hcd ee000000.usb: can't setup: -11
-> > [   62.440901] xhci-hcd ee000000.usb: USB bus 3 deregistered
-> > [   62.446361] xhci-hcd: probe of ee000000.usb failed with error -11
-> >
-> > To avoid this 60s wait, this patch adds to check the system_state
-> > condition and if the system is not running,
-> > xhci_rcar_download_firmware() calls request_firmware_direct()
-> > instead of request_firmware() as a workaround.
-> >
-> > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->=20
-> It seems to me that request_firmware() is working as expected.
-> And that this patch introduces an alternate behaviour for xhci-rcar
-> where it will fall back to the user-space helper in some cases but not
-> others. This inconsistency isn't obviously correct to me. Perhaps
-> xhci-rcar should always call request_firmware_direct() ?
+Am Donnerstag, den 29.08.2019, 20:33 +0200 schrieb Julian Sikorski:
 
-If xhci-rcar always call request_firmware_direct() but end user
-uses the user-space helper on the driver, it's a regression because
-request_firmware_direct() always disables the user-space helper. So,
-I'd like to avoid using request_firmware_direct(). JFYI, I checked
-the git history and I found such a situation:
----
-commit c0cc00f250e19c717fc9cdbdb7f55aaa569c7498
-Author: Hauke Mehrtens <hauke@hauke-m.de>
-Date:   Thu Aug 24 23:06:41 2017 +0200
+Hi,
 
-    ath10k: activate user space firmware loading again
----
+this is a relief. If necessary we can blacklist the new device.
+Howevera, as that costs performance, I would appriciate if
+you take first try out an alternative approach.
 
-It seems we need more time to investigate how to fix (or avoid) this issue.
-So, I'll resend v2 patch series without this patch.
+> [  362.230833] usb 2-4: New USB device found, idVendor=059f, 
+> idProduct=1061, bcdDevice= 0.01
+> [  362.230837] usb 2-4: New USB device strings: Mfr=2, Product=3, 
+> SerialNumber=1
+> [  362.230839] usb 2-4: Product: Rugged USB3-FW
+> [  362.230841] usb 2-4: Manufacturer: LaCie
+> [  362.230842] usb 2-4: SerialNumber: 00000000157f928920fa
+> [  362.270100] scsi host12: uas
+> [  362.270720] scsi 12:0:0:0: Direct-Access     LaCie    Rugged FW USB3 
+>   051E PQ: 0 ANSI: 6
+> [  362.271472] sd 12:0:0:0: Attached scsi generic sg1 type 0
+> [  362.280344] sd 12:0:0:0: [sdb] 1953525168 512-byte logical blocks: 
+> (1.00 TB/932 GiB)
+> [  362.280422] sd 12:0:0:0: [sdb] Write Protect is off
+> [  362.280423] sd 12:0:0:0: [sdb] Mode Sense: 43 00 00 00
+> [  362.280544] sd 12:0:0:0: [sdb] Write cache: enabled, read cache: 
+> enabled, doesn't support DPO or FUA
 
-Best regards,
-Yoshihiro Shimoda
+This means that at least the earliest commandos did get through.
+
+> [  392.672691] sd 12:0:0:0: tag#29 uas_eh_abort_handler 0 uas-tag 1 
+> inflight: IN
+> [  392.672697] sd 12:0:0:0: tag#29 CDB: Report supported operation codes 
+> a3 0c 01 12 00 00 00 00 02 00 00 00
+> [  392.678304] scsi host12: uas_eh_device_reset_handler start
+> [  392.800099] usb 2-4: reset SuperSpeed Gen 1 USB device number 3 using 
+> xhci_hcd
+> [  392.848154] scsi host12: uas_eh_device_reset_handler success
+> [  422.875443] scsi host12: uas_eh_device_reset_handler start
+> [  422.875650] sd 12:0:0:0: tag#16 uas_zap_pending 0 uas-tag 1 inflight:
+> [  422.875654] sd 12:0:0:0: tag#16 CDB: Report supported operation codes 
+> a3 0c 01 12 00 00 00 00 02 00 00 00
+> [  422.997556] usb 2-4: reset SuperSpeed Gen 1 USB device number 3 using 
+> xhci_hcd
+> [  423.046525] scsi host12: uas_eh_device_reset_handler success
+> [  431.853505] usb 2-4: USB disconnect, device number 3
+> [  431.903459] sd 12:0:0:0: [sdb] Optimal transfer size 33553920 bytes
+> [  432.064456] sd 12:0:0:0: [sdb] Read Capacity(16) failed: Result: 
+> hostbyte=DID_ERROR driverbyte=DRIVER_OK
+
+Read Capacity(16) failed
+
+> [  432.064459] sd 12:0:0:0: [sdb] Sense not available.
+> [  432.184595] sd 12:0:0:0: [sdb] Read Capacity(10) failed: Result: 
+> hostbyte=DID_ERROR driverbyte=DRIVER_OK
+
+Read Capacity(10) failed
+
+There is a chance that this device can deal only with Read Capacity(10)
+and crashes on Read Capacity(16). One difference between Usb-storage
+and UAS is the order in which the 10 and 16 versions are tried.
+The attached patches introduce a quirk to reverse the order
+for this particular device under UAS. Could you try them?
+
+	Regards
+		Oliver
+
+--=-LBj7SrdPX+QDFvsW0yiE
+Content-Disposition: attachment; filename="0001-uas-honor-flag-to-avoid-CAPACITY16.patch"
+Content-Type: text/x-patch; name="0001-uas-honor-flag-to-avoid-CAPACITY16.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+RnJvbSA4ODMzNTU5NTFhMjNkM2M0YjNjMTRjYTA1NDA5NzI3MzlhZTZmZmIyIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBNb24sIDIgU2VwIDIwMTkgMTM6Mjg6MzkgKzAyMDAKU3ViamVjdDogW1BBVENIIDEvMl0gdWFz
+OiBob25vciBmbGFnIHRvIGF2b2lkIENBUEFDSVRZMTYKCkNvcHkgdGhlIHN1cHBvcnQgb3ZlciBm
+cm9tIHVzYi1zdG9yYWdlCgpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1
+c2UuY29tPgotLS0KIGRyaXZlcnMvdXNiL3N0b3JhZ2UvdWFzLmMgfCA0ICsrKysKIDEgZmlsZSBj
+aGFuZ2VkLCA0IGluc2VydGlvbnMoKykKCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9zdG9yYWdl
+L3Vhcy5jIGIvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMuYwppbmRleCA2OGIxY2IwZjg0ZTUuLmE4
+YmQ1ZmY1YTRiOSAxMDA2NDQKLS0tIGEvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMuYworKysgYi9k
+cml2ZXJzL3VzYi9zdG9yYWdlL3Vhcy5jCkBAIC04NTQsNiArODU0LDEwIEBAIHN0YXRpYyBpbnQg
+dWFzX3NsYXZlX2NvbmZpZ3VyZShzdHJ1Y3Qgc2NzaV9kZXZpY2UgKnNkZXYpCiAJCXNkZXYtPndj
+ZV9kZWZhdWx0X29uID0gMTsKIAl9CiAKKwkvKiBTb21lIGRldmljZXMgY2Fubm90IGhhbmRsZSBS
+RUFEX0NBUEFDSVRZXzE2ICovCisJaWYgKGRldmluZm8tPmZsYWdzICYgVVNfRkxfTk9fUkVBRF9D
+QVBBQ0lUWV8xNikKKwkJc2Rldi0+bm9fcmVhZF9jYXBhY2l0eV8xNiA9IDE7CisKIAkvKgogCSAq
+IFNvbWUgZGlza3MgcmV0dXJuIHRoZSB0b3RhbCBudW1iZXIgb2YgYmxvY2tzIGluIHJlc3BvbnNl
+CiAJICogdG8gUkVBRCBDQVBBQ0lUWSByYXRoZXIgdGhhbiB0aGUgaGlnaGVzdCBibG9jayBudW1i
+ZXIuCi0tIAoyLjE2LjQKCg==
+
+
+--=-LBj7SrdPX+QDFvsW0yiE
+Content-Disposition: attachment; filename="0002-uas-quirk-for-LaCie-Rugged-USB-3.patch"
+Content-Type: text/x-patch; name="0002-uas-quirk-for-LaCie-Rugged-USB-3.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+RnJvbSAxMTUzODlmZjY3OGNhZTdjYjYzNmFjN2U1MjBmMDZlNTE4MmNkMzUzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBNb24sIDIgU2VwIDIwMTkgMTM6MzA6MDAgKzAyMDAKU3ViamVjdDogW1BBVENIIDIvMl0gdWFz
+OiBxdWlyayBmb3IgTGFDaWUgUnVnZ2VkIFVTQiAzCgpOby4gQ0FQQUNJVFkxNiBmb3IgdGhlc2Ug
+ZGV2aWNlcy4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+
+Ci0tLQogZHJpdmVycy91c2Ivc3RvcmFnZS91bnVzdWFsX2RldnMuaCB8IDYgKysrKysrCiAxIGZp
+bGUgY2hhbmdlZCwgNiBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2Ivc3Rv
+cmFnZS91bnVzdWFsX2RldnMuaCBiL2RyaXZlcnMvdXNiL3N0b3JhZ2UvdW51c3VhbF9kZXZzLmgK
+aW5kZXggZWEwZDI3YTk0YWZlLi42NDNiYmE0MTI5MWUgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNi
+L3N0b3JhZ2UvdW51c3VhbF9kZXZzLmgKKysrIGIvZHJpdmVycy91c2Ivc3RvcmFnZS91bnVzdWFs
+X2RldnMuaApAQCAtODA2LDYgKzgwNiwxMiBAQCBVTlVTVUFMX0RFViggIDB4MDU5ZiwgMHgwNjUx
+LCAweDAwMDAsIDB4MDAwMCwKIAkJVVNCX1NDX0RFVklDRSwgVVNCX1BSX0RFVklDRSwgTlVMTCwK
+IAkJVVNfRkxfTk9fV1BfREVURUNUICksCiAKK1VOVVNVQUxfREVWKCAgMHgwNTlmLCAweDEwM2Us
+IDB4MDAwMiwgMHgwMDAyLAorCQkiTGFDaWUiLAorCQkiUnVnZ2VkIFVTQiAzIiwKKwkJVVNCX1ND
+X0RFVklDRSwgVVNCX1BSX0RFVklDRSwgTlVMTCwKKwkJVVNfRkxfTk9fUkVBRF9DQVBBQ0lUWV8x
+NiApLAorCiAvKgogICogU3VibWl0dGVkIGJ5IEpvZWwgQm91cnF1YXJkIDxudW1sb2NrQGZyZWVz
+dXJmLmNoPgogICogU29tZSB2ZXJzaW9ucyBvZiB0aGlzIGRldmljZSBuZWVkIHRoZSBTdWJDbGFz
+cyBhbmQgUHJvdG9jb2wgb3ZlcnJpZGVzCi0tIAoyLjE2LjQKCg==
+
+
+--=-LBj7SrdPX+QDFvsW0yiE--
 
