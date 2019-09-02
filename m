@@ -2,64 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BA2A57A5
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 15:26:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE557A57FA
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 15:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730375AbfIBN0N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 2 Sep 2019 09:26:13 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43450 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726441AbfIBN0M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Sep 2019 09:26:12 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 51D7B10A8136;
-        Mon,  2 Sep 2019 13:26:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5556360933;
-        Mon,  2 Sep 2019 13:26:06 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <563ae8b4-753a-179d-4f6d-94d2dd058f3b@schaufler-ca.com>
-References: <563ae8b4-753a-179d-4f6d-94d2dd058f3b@schaufler-ca.com> <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] Keyrings, Block and USB notifications [ver #7]
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <30969.1567430765.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Mon, 02 Sep 2019 14:26:05 +0100
-Message-ID: <30970.1567430765@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.64]); Mon, 02 Sep 2019 13:26:12 +0000 (UTC)
+        id S1731073AbfIBNi6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Sep 2019 09:38:58 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35408 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731044AbfIBNi5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Sep 2019 09:38:57 -0400
+Received: by mail-wr1-f68.google.com with SMTP id g7so14103041wrx.2;
+        Mon, 02 Sep 2019 06:38:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:subject:references
+         :in-reply-to:cc:cc:to;
+        bh=nPRUA5yZXmPWTokSGym1lKZ6GQZy5ySBbJLcfcoglsY=;
+        b=BFcpCg0LAn+Q+c79wtcXvehQXl8AqZ6jW9xkIm8so5A5qQRk/Bnf4IC9He2z4Mi8FU
+         LWbBApIFugWYM6jWqKmyV0F21F/NhsA+hdmdhJUJ8/lwHVsV3xm1WEBfqok4YB5Z+/vG
+         rdXJlBOUpvmsDU1j/LDIYsdu9qLYWTfpuiIcjOd4/YKDm3WdzYqnaGV9s3A1TGpMsTm5
+         bgnYwuddXFknk+q7+rW7y5Ty9bo6pCTbZ1x2NHNfuQpP43Iz2OlC9dSxXtWU9/Uhsq0i
+         6Vs3MyBSf4ceOiTaJICerNTXgmAZL5fNHr2iOhzV96qzsoJ40wMITKqI2n+6UuLb3OHU
+         Uqew==
+X-Gm-Message-State: APjAAAXLJtbf477yjOyk6n0sUdJjXo/hdGbR07IbIHDcPktiayTJZzS6
+        Eyj2AvaK6beJZi9bkU5nnA==
+X-Google-Smtp-Source: APXvYqyvbrMPmMiV5b3gWdHNFD445UozayaIuP3ud47MYHnGtI4Z0dvVWaAlPFhYplcTUpqc5ajKFA==
+X-Received: by 2002:adf:ff8e:: with SMTP id j14mr35307186wrr.141.1567431534372;
+        Mon, 02 Sep 2019 06:38:54 -0700 (PDT)
+Received: from localhost ([212.187.182.166])
+        by smtp.gmail.com with ESMTPSA id t203sm15258248wmf.42.2019.09.02.06.38.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2019 06:38:53 -0700 (PDT)
+Message-ID: <5d6d1b6d.1c69fb81.a78b7.2ccb@mx.google.com>
+Date:   Mon, 02 Sep 2019 14:38:53 +0100
+From:   Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH next v11 03/11] dt-bindings: usb: add binding for USB GPIO based connection detection driver
+References: <1567070558-29417-1-git-send-email-chunfeng.yun@mediatek.com> <1567070558-29417-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1567070558-29417-4-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Biju Das <biju.das@bp.renesas.com>
+CC:     Mark Rutland <mark.rutland@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Li Jun <jun.li@nxp.com>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Min Guo <min.guo@mediatek.com>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
-
-> > Tests for the key/keyring events can be found on the keyutils next branch:
-> >
-> > 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/log/?h=next
+On Thu, 29 Aug 2019 17:22:30 +0800, Chunfeng Yun wrote:
+> It's used to support dual role switch via GPIO when use Type-B
+> receptacle, typically the USB ID pin is connected to an input
+> GPIO, and also used to enable/disable device when the USB Vbus
+> pin is connected to an input GPIO.
 > 
-> I'm having trouble with the "make install" on Fedora. Is there an
-> unusual dependency?
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> v11 changes:
+>  1. add Reviewed-by Linus
+>  2. change compatible as "gpio-usb-b-connector", and remove label
+>     in example suggested by Rob
+> 
+> v9~v10 no changes
+> 
+> v8 changes:
+>  1. rename the title
+>  2. change the compatible as "linux,usb-conn-gpio" instead of
+>     "linux,typeb-conn-gpio"
+> 
+> v7 changes:
+>  1. add description for device only mode
+> 
+> v6 changes:
+>  1. remove status and port nodes in example
+>  2. make vbus-supply as optional property
+> 
+> v5 changes:
+>  1. treat type-B connector as child device of USB controller's, but not
+>     as a separate virtual device, suggested by Rob
+>  2. put connector's port node under connector node, suggested by Rob
+> 
+> v4 no changes
+> 
+> v3 changes:
+>  1. treat type-B connector as a virtual device, but not child device of
+>     USB controller's
+> 
+> v2 changes:
+>   1. new patch to make binding clear suggested by Hans
+> ---
+>  .../devicetree/bindings/usb/usb-conn-gpio.txt | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/usb-conn-gpio.txt
+> 
 
-I've pushed a couple of patches to my next branch.  Do "make install" and
-"make rpm" now work for you?
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-David
