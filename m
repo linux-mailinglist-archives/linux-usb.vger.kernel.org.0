@@ -2,184 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18475A4D5B
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 04:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 845BAA4DF4
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Sep 2019 05:55:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729212AbfIBC7W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Sep 2019 22:59:22 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38888 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729117AbfIBC7V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Sep 2019 22:59:21 -0400
-Received: by mail-pg1-f194.google.com with SMTP id d10so2089552pgo.5;
-        Sun, 01 Sep 2019 19:59:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KkuAItPCObG7Xv6hke9ccba/rUm0EoOSedBhG147eCQ=;
-        b=A0WtRbVQwOo4A/StLnWxwbVgFzDgcHdyOue7A/eluObTN0uWKZKCw8E/Kjf1KSzJxj
-         CdP3zdOntEmJoIIPPdawP/2KP5aCXXa4iQL+LnyCAGiXMQzoWZ3SNh4idMXT2z2l95bB
-         tCZTGTE1ru1ZE5dthdyu68gXitXr9faA99gxR68OtrPD/0wFlFgCsp+vEb2v2qXSUx3b
-         nNefzU31kglhRUYGlJTKnqhVoMxPdgzDd7kCyq9WgTsoIbTzWB7x0kmgvb1/I3iiVjaP
-         RzpSWtBy2XcAMT3Hzo/qaiWQW6h40VRR1H21tXb6yXBqaPaZ1A45gMW/tLR96cVrioWE
-         L+5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KkuAItPCObG7Xv6hke9ccba/rUm0EoOSedBhG147eCQ=;
-        b=RMgeXr8zuXmRQxQAn6Q0nYibVzTvayqI6EMxOpffg90MIQdL+nlTRnYCd9iaUZUbFf
-         IMhsCuIqRYbvIK8LHkNnnslBUjL40TEDOq/Lo6nb7n1r/EKCIZsgWgAfaG9kpeIGWlaN
-         d2Z4Pn3LgNc8jI3bzWYHU+yscy97Ej1jvqj+2KsDbRTuje9BWBom0M+L/hreS/HCMGez
-         kVbCq/7NpS725xt/fRxsVLakYGZ+KxBRVjBKbSisWbhf87Gke50g8aj6l5eKYDwthGxV
-         HtRsHZpd4MgJjKjwq/R2+W1Vk61QmNyXyffoXU9H67qNEIXnFPbHu9P5wgQ1HqJ60DUg
-         nTjA==
-X-Gm-Message-State: APjAAAVDFxXiBH5CTWUASbtIBClrowBMWH2SJtiLeDErfCBZay/L2Fz9
-        f2c2SqhQ7gYivJ0qO5gAxjU=
-X-Google-Smtp-Source: APXvYqz3epFgPOFLqTTRNtu1wL1R5RpY2qPkOF0SGjWVBAJzCb/qY4/xwd/QnyRm0tvxZ9+SS/DCDg==
-X-Received: by 2002:aa7:9ab6:: with SMTP id x22mr32406157pfi.80.1567393160357;
-        Sun, 01 Sep 2019 19:59:20 -0700 (PDT)
-Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id o67sm19538578pfb.39.2019.09.01.19.59.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 01 Sep 2019 19:59:19 -0700 (PDT)
-Subject: Re: [PATCH V1 3/6] USB: serial: f81232: Add generator for F81534A
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-References: <1559789656-15847-1-git-send-email-hpeter+linux_kernel@gmail.com>
- <1559789656-15847-4-git-send-email-hpeter+linux_kernel@gmail.com>
- <20190828150252.GJ13017@localhost>
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Message-ID: <b194f7e6-963d-df3b-5295-4323dae0846d@gmail.com>
-Date:   Mon, 2 Sep 2019 10:59:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729425AbfIBDy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Sep 2019 23:54:58 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:10807 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729089AbfIBDy6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Sep 2019 23:54:58 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d6c92910000>; Sun, 01 Sep 2019 20:54:57 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 01 Sep 2019 20:54:56 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Sun, 01 Sep 2019 20:54:56 -0700
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 2 Sep
+ 2019 03:54:56 +0000
+Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 2 Sep 2019 03:54:56 +0000
+Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.121]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d6c928f0001>; Sun, 01 Sep 2019 20:54:56 -0700
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH] xhci: tegra: mbox registers address in"soc" data
+Date:   Mon, 2 Sep 2019 11:54:45 +0800
+Message-ID: <20190902035445.32046-1-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-In-Reply-To: <20190828150252.GJ13017@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1567396497; bh=mlQz4dVcVde63JhrwDNVZvwBVImD48gjliha2oH6Drg=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=HZ28Rmccu+6qSaAHvpONP2cZQBEoknn4rY3uPf4KWxd51NamgcVaReKQxBgG8RnDv
+         TKjAISZ5s7f5Wqt4qr/tOczf1rxDfturMIksAJrIaYhlljy84tnNtdI5FwWb4AEFfD
+         QA3qBOXRr4eVKWjGDxQRMNM/3XnSXSDicLDVmrKRWRPyRKM1Ig4xfHyEBx2cTNEhVo
+         2i77prt/i+CIavIIP+5bvLuJJTZi7B/ACSpntRlZe0JZKdT2gVmYeQqY0PK07fZiK6
+         R/7RAfMbdqXo7xEz53o0IlEuqj+49jOMRFgzzVKFP/989lgbcopFd5WbdMig57geP2
+         LyPg2HRii+yCQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
+Tegra194 XUSB host controller has rearranged mailbox registers. This
+commit makes mailbox registers address a part of "soc" data so that
+xhci-tegra driver can be used for Tegra194.
 
-Johan Hovold 於 2019/8/28 下午 11:02 寫道:
-> On Thu, Jun 06, 2019 at 10:54:13AM +0800, Ji-Ze Hong (Peter Hong) wrote:
->> The Fintek F81534A series is contains 1 HUB / 1 GPIO device / n UARTs,
->> but the UART is default disable and need enabled by GPIO device(2c42/16F8).
->> When F81534A plug to host, we can only see 1 HUB & 1 GPIO device, add
->> GPIO device USB interface to device_list and trigger generate worker,
->> f81534a_generate_worker to run f81534a_ctrl_generate_ports().
->>
->> The operation in f81534a_ctrl_generate_ports() as following:
->> 	1: Write 0x8fff to F81534A_CMD_ENABLE_PORT register for enable all
->> 	   UART device.
->>
->> 	2: Read port existence & current status from F81534A_CMD_PORT_STATUS
->> 	   register. the higher 16bit will indicate the UART existence. If the
->> 	   UART is existence, we'll check it GPIO mode as long as not default
->> 	   value (default is all input mode).
->>
->> 	3: 1 GPIO device will check with max 15s and check next GPIO device when
->> 	   timeout. (F81534A_CTRL_RETRY * F81534A_CTRL_TIMER)
->>
->> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
-> 
-> This is all looks crazy... Please better describe how the device works,
-> and you want to implement support.
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
+---
+ drivers/usb/host/xhci-tegra.c | 51 ++++++++++++++++++++++++++---------
+ 1 file changed, 39 insertions(+), 12 deletions(-)
 
-I'll try to refactor more simply for first add into kernel.
-
->> ---
->>   drivers/usb/serial/f81232.c | 356 +++++++++++++++++++++++++++++++++++++++++++-
->>   1 file changed, 355 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
->> index 75dfc0b9ef30..e9470fb0d691 100644
->> --- a/drivers/usb/serial/f81232.c
->> +++ b/drivers/usb/serial/f81232.c
->> @@ -41,6 +41,12 @@ static const struct usb_device_id id_table[] = {
->>   };
->>   MODULE_DEVICE_TABLE(usb, id_table);
->>   
->> +static const struct usb_device_id f81534a_ctrl_id_table[] = {
->> +	{ USB_DEVICE(0x2c42, 0x16f8) },		/* Global control device */
->> +	{ }					/* Terminating entry */
->> +};
->> +MODULE_DEVICE_TABLE(usb, f81534a_ctrl_id_table);
-> 
-> You can only have one MODULE_DEVICE_TABLE()...
-
-I had a question about this. In this file, we'll need support 3 sets of
-id f81232(1)/f81534a(9)/f81534a_ctrl(1). So I will refactor the code
-about id section to the below due to the id table will use more than
-once:
-
-=======================================================================
-#define F81232_ID		\
-	{ USB_DEVICE(0x1934, 0x0706) }	/* 1 port UART device */
-
-#define F81534A_SERIES_ID	\
-	{ USB_DEVICE(0x2c42, 0x1602) },	/* In-Box 2 port UART device */	\
-	{ USB_DEVICE(0x2c42, 0x1604) },	/* In-Box 4 port UART device */	\
-	{ USB_DEVICE(0x2c42, 0x1605) },	/* In-Box 8 port UART device */	\
-	{ USB_DEVICE(0x2c42, 0x1606) },	/* In-Box 12 port UART device */ \
-	{ USB_DEVICE(0x2c42, 0x1608) },	/* Non-Flash type */ \
-	{ USB_DEVICE(0x2c42, 0x1632) },	/* 2 port UART device */ \
-	{ USB_DEVICE(0x2c42, 0x1634) },	/* 4 port UART device */ \
-	{ USB_DEVICE(0x2c42, 0x1635) },	/* 8 port UART device */ \
-	{ USB_DEVICE(0x2c42, 0x1636) }	/* 12 port UART device */
-
-#define F81534A_CTRL_ID		\
-	{ USB_DEVICE(0x2c42, 0x16f8) }	/* Global control device */
-
-static const struct usb_device_id id_table[] = {
-	F81232_ID,
-	{ }					/* Terminating entry */
-};
-
-static const struct usb_device_id f81534a_id_table[] = {
-	F81534A_SERIES_ID,
-	{ }					/* Terminating entry */
-};
-
-static const struct usb_device_id f81534a_ctrl_id_table[] = {
-	F81534A_CTRL_ID,
-	{ }					/* Terminating entry */
-};
-
-static const struct usb_device_id all_serial_id_table[] = {
-	F81232_ID,
-	F81534A_SERIES_ID,
-	{ }					/* Terminating entry */
-};
-MODULE_DEVICE_TABLE(usb, all_serial_id_table);
-=======================================================================
-
-but the checkpatch.pl give me the warning below:
-ERROR: Macros with complex values should be enclosed in parentheses
-#42: FILE: f81232.c:28:
-+#define F81534A_SERIES_ID      \
-+       { USB_DEVICE(0x2c42, 0x1602) }, /* In-Box 2 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1604) }, /* In-Box 4 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1605) }, /* In-Box 8 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1606) }, /* In-Box 12 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1608) }, /* Non-Flash type */ \
-+       { USB_DEVICE(0x2c42, 0x1632) }, /* 2 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1634) }, /* 4 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1635) }, /* 8 port UART device */ \
-+       { USB_DEVICE(0x2c42, 0x1636) }  /* 12 port UART device */
-
-Is any suggestion ?
-
-Thanks
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index dafc65911fc0..b92a03bbbd2c 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -146,6 +146,13 @@ struct tegra_xusb_phy_type {
+ 	unsigned int num;
+ };
+ 
++struct tega_xusb_mbox_regs {
++	u32 cmd;
++	u32 data_in;
++	u32 data_out;
++	u32 owner;
++};
++
+ struct tegra_xusb_soc {
+ 	const char *firmware;
+ 	const char * const *supply_names;
+@@ -160,6 +167,8 @@ struct tegra_xusb_soc {
+ 		} usb2, ulpi, hsic, usb3;
+ 	} ports;
+ 
++	struct tega_xusb_mbox_regs mbox;
++
+ 	bool scale_ss_clock;
+ 	bool has_ipfs;
+ };
+@@ -395,15 +404,15 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 	 * ACK/NAK messages.
+ 	 */
+ 	if (!(msg->cmd == MBOX_CMD_ACK || msg->cmd == MBOX_CMD_NAK)) {
+-		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++		value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 		if (value != MBOX_OWNER_NONE) {
+ 			dev_err(tegra->dev, "mailbox is busy\n");
+ 			return -EBUSY;
+ 		}
+ 
+-		fpci_writel(tegra, MBOX_OWNER_SW, XUSB_CFG_ARU_MBOX_OWNER);
++		fpci_writel(tegra, MBOX_OWNER_SW, tegra->soc->mbox.owner);
+ 
+-		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++		value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 		if (value != MBOX_OWNER_SW) {
+ 			dev_err(tegra->dev, "failed to acquire mailbox\n");
+ 			return -EBUSY;
+@@ -413,17 +422,17 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 	}
+ 
+ 	value = tegra_xusb_mbox_pack(msg);
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_DATA_IN);
++	fpci_writel(tegra, value, tegra->soc->mbox.data_in);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
++	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
+ 	value |= MBOX_INT_EN | MBOX_DEST_FALC;
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
++	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
+ 
+ 	if (wait_for_idle) {
+ 		unsigned long timeout = jiffies + msecs_to_jiffies(250);
+ 
+ 		while (time_before(jiffies, timeout)) {
+-			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++			value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 			if (value == MBOX_OWNER_NONE)
+ 				break;
+ 
+@@ -431,7 +440,7 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 		}
+ 
+ 		if (time_after(jiffies, timeout))
+-			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++			value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 
+ 		if (value != MBOX_OWNER_NONE)
+ 			return -ETIMEDOUT;
+@@ -598,16 +607,16 @@ static irqreturn_t tegra_xusb_mbox_thread(int irq, void *data)
+ 
+ 	mutex_lock(&tegra->lock);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_DATA_OUT);
++	value = fpci_readl(tegra, tegra->soc->mbox.data_out);
+ 	tegra_xusb_mbox_unpack(&msg, value);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
++	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
+ 	value &= ~MBOX_DEST_SMI;
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
++	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
+ 
+ 	/* clear mailbox owner if no ACK/NAK is required */
+ 	if (!tegra_xusb_mbox_cmd_requires_ack(msg.cmd))
+-		fpci_writel(tegra, MBOX_OWNER_NONE, XUSB_CFG_ARU_MBOX_OWNER);
++		fpci_writel(tegra, MBOX_OWNER_NONE, tegra->soc->mbox.owner);
+ 
+ 	tegra_xusb_mbox_handle(tegra, &msg);
+ 
+@@ -1365,6 +1374,12 @@ static const struct tegra_xusb_soc tegra124_soc = {
+ 	},
+ 	.scale_ss_clock = true,
+ 	.has_ipfs = true,
++	.mbox = {
++		.cmd = XUSB_CFG_ARU_MBOX_CMD,
++		.data_in = XUSB_CFG_ARU_MBOX_DATA_IN,
++		.data_out = XUSB_CFG_ARU_MBOX_DATA_OUT,
++		.owner = XUSB_CFG_ARU_MBOX_OWNER,
++	},
+ };
+ MODULE_FIRMWARE("nvidia/tegra124/xusb.bin");
+ 
+@@ -1397,6 +1412,12 @@ static const struct tegra_xusb_soc tegra210_soc = {
+ 	},
+ 	.scale_ss_clock = false,
+ 	.has_ipfs = true,
++	.mbox = {
++		.cmd = XUSB_CFG_ARU_MBOX_CMD,
++		.data_in = XUSB_CFG_ARU_MBOX_DATA_IN,
++		.data_out = XUSB_CFG_ARU_MBOX_DATA_OUT,
++		.owner = XUSB_CFG_ARU_MBOX_OWNER,
++	},
+ };
+ MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
+ 
+@@ -1422,6 +1443,12 @@ static const struct tegra_xusb_soc tegra186_soc = {
+ 	},
+ 	.scale_ss_clock = false,
+ 	.has_ipfs = false,
++	.mbox = {
++		.cmd = XUSB_CFG_ARU_MBOX_CMD,
++		.data_in = XUSB_CFG_ARU_MBOX_DATA_IN,
++		.data_out = XUSB_CFG_ARU_MBOX_DATA_OUT,
++		.owner = XUSB_CFG_ARU_MBOX_OWNER,
++	},
+ };
+ 
+ static const struct of_device_id tegra_xusb_of_match[] = {
 -- 
-With Best Regards,
-Peter Hong
+2.17.1
+
