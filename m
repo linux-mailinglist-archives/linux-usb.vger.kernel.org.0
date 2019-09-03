@@ -2,79 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C57E5A687E
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 14:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A85BA68D7
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 14:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728678AbfICMVx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 08:21:53 -0400
-Received: from mga03.intel.com ([134.134.136.65]:22708 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726631AbfICMVx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Sep 2019 08:21:53 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 05:21:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,463,1559545200"; 
-   d="scan'208";a="198760161"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 03 Sep 2019 05:21:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 03 Sep 2019 15:21:49 +0300
-Date:   Tue, 3 Sep 2019 15:21:49 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] usb: typec: tps6598x: Fix build error without
- CONFIG_REGMAP_I2C
-Message-ID: <20190903122149.GB23603@kuha.fi.intel.com>
-References: <20190903121026.22148-1-yuehaibing@huawei.com>
+        id S1729178AbfICMpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 08:45:31 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55323 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725782AbfICMpa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 08:45:30 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id BE72421F2E;
+        Tue,  3 Sep 2019 08:45:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 03 Sep 2019 08:45:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=MIZWO/r5WYB1ZmJJ7B8lddyJnVF
+        yg+qUjv42zSxUqt0=; b=YpxITNYJslSW1rZgpIoPl5+IM9y17nEwlw4O7z2QmG7
+        SFyWS6hscPNDH/RBVBpP6XAvURfgbip1bM/4DmR3slsgnPCeq/CSBndgNRbq+qcB
+        MFVztMkcLRCkvswpbB6WT1MNMnOSGRsV7WweL+jBHtiQtavnxOendn+JBWZ6h+PL
+        UuUecnKYOBA84l7Dmo2Wub1ssIulrupTd+xz7tkYySrVEhIPcaHe7lDkTiUglaO2
+        mUJJyPlNU7JcetuWjtyQzQdmXtJ34qQUcf1LRKORpeou2kxu38zKS11NySdEDNaY
+        vD9Mc/GlW+PPORuRS1pnlJ2QC2IlXuLOudnUTamQpsA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=MIZWO/
+        r5WYB1ZmJJ7B8lddyJnVFyg+qUjv42zSxUqt0=; b=PwfKBbhs0K48qaOLrvdzE5
+        pnSCoTF02Nc0tuXuMuJ6ECD9L09iHhA4JPiQPVLi8jqgbvgrmKk/vEf1AdrEzXNu
+        ot8Ni4Sxr4OpitfZYZmyRdNvSevN9oMTuCmbJj5RF60ZpAXReDS1yyrzmE+zL0kN
+        pwRo1I08so8k7txh1/6CtR6Xs+PEElDKwtKyiQjKIl0zQLivScXT+wfVeNbJ2C1+
+        Kije2LAwXPQAje3EbbCd/5DieXpKfIXUQSHfVriQ5zqFy1tpEBlu0xI07eVCGvBX
+        Cm86foaabB9v4kxUVqMkY/xRlltWPnU9AtAuyjIcYG2q9SW/zHDH6MnzN3Me7krA
+        ==
+X-ME-Sender: <xms:aWBuXaHJEL_wvL6RIxE8cXqRUzkXedDrT0uGhaRozG3QvRuZTL4FnA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudejfedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
+    vehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:aWBuXSZMSm--u0-7G9yA86f6dcfE7NJfGCPNQ4yE5XJffU2AjjtV4A>
+    <xmx:aWBuXcLYSZk_gHQe9K5RghidwiXL3sGmgDa-3MfDUksGYkerumEvZQ>
+    <xmx:aWBuXVyjZyzeTamMj24KaKLxWdMGDhEGMm_MC8kalXnuhv-Lhvv-VQ>
+    <xmx:aWBuXW62BIDK1Rwyvv7DuNM25f7N7yHc2oPD15nHM1sv37HTVSLr1Q>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id F2908D60068;
+        Tue,  3 Sep 2019 08:45:28 -0400 (EDT)
+Date:   Tue, 3 Sep 2019 14:45:27 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        USB Storage list <usb-storage@lists.one-eyed-alien.net>,
+        Dan Williams <dcbw@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
+Message-ID: <20190903124527.GB493@kroah.com>
+References: <CAODwPW8gTZ_2WEc9n=WJ2PEmQk2anTQYfwQ-898+kOq6wsjnZw@mail.gmail.com>
+ <Pine.LNX.4.44L0.1908301337150.1459-100000@iolanthe.rowland.org>
+ <20190902164724.GA22619@kroah.com>
+ <1567500374.2878.2.camel@suse.com>
+ <20190903091953.GA12325@kroah.com>
+ <1567505043.2878.4.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190903121026.22148-1-yuehaibing@huawei.com>
+In-Reply-To: <1567505043.2878.4.camel@suse.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 08:10:26PM +0800, YueHaibing wrote:
-> If CONFIG_REGMAP_I2C is not set, building fails:
+On Tue, Sep 03, 2019 at 12:04:03PM +0200, Oliver Neukum wrote:
+> Am Dienstag, den 03.09.2019, 11:19 +0200 schrieb Greg KH:
+> > On Tue, Sep 03, 2019 at 10:46:14AM +0200, Oliver Neukum wrote:
+> > > Am Montag, den 02.09.2019, 18:47 +0200 schrieb Greg KH:
+> > > > 
+> > > > This should work just fine today.  Add a new device id to the "new_id"
+> > > > file and then tell the driver to bind.  That's pretty much the same as a
+> > > > "force_bind", right?
+> > > 
+> > > That looks like a race condition by design to me.
+> > 
+> > How?
 > 
-> drivers/usb/typec/tps6598x.o: In function `tps6598x_probe':
-> tps6598x.c:(.text+0x5f0): undefined reference to `__devm_regmap_init_i2c'
-> 
-> Select REGMAP_I2C to fix this.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 0a4c005bd171 ("usb: typec: driver for TI TPS6598x USB Power Delivery controllers")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> You have one of these files and potentially multiple devices
+> to be bound. You need a locking scheme. As soon as the acts
+> of specifying and binding are distinct.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+What needs to be locked here?
 
-> ---
->  drivers/usb/typec/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index 89d9193..895e241 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -53,6 +53,7 @@ source "drivers/usb/typec/ucsi/Kconfig"
->  config TYPEC_TPS6598X
->  	tristate "TI TPS6598x USB Power Delivery controller driver"
->  	depends on I2C
-> +	select REGMAP_I2C
->  	help
->  	  Say Y or M here if your system has TI TPS65982 or TPS65983 USB Power
->  	  Delivery controller.
-> -- 
-> 2.7.4
-> 
+totally confused,
 
-thanks,
-
--- 
-heikki
+greg k-h
