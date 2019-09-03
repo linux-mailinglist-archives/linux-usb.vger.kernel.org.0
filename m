@@ -2,63 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCDEA7728
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 00:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4FEA7796
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 01:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727383AbfICWjN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 18:39:13 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:47028 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725882AbfICWjM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Sep 2019 18:39:12 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 225807F750;
-        Tue,  3 Sep 2019 22:39:12 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3BF44194B2;
-        Tue,  3 Sep 2019 22:39:09 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <23d61564-026e-b37a-8b16-ce68d5949f6c@schaufler-ca.com>
-References: <23d61564-026e-b37a-8b16-ce68d5949f6c@schaufler-ca.com> <87bf0363-af77-1e5a-961f-72730e39e3a6@schaufler-ca.com> <e36fa722-a300-2abf-ae9c-a0246fc66d0e@schaufler-ca.com> <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk> <156717352917.2204.17206219813087348132.stgit@warthog.procyon.org.uk> <4910.1567525310@warthog.procyon.org.uk> <11467.1567534014@warthog.procyon.org.uk>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/11] smack: Implement the watch_key and post_notification hooks [untested] [ver #7]
+        id S1726953AbfICXcG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 19:32:06 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42573 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727065AbfICXcF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 19:32:05 -0400
+Received: by mail-pf1-f194.google.com with SMTP id w22so3462955pfi.9
+        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2019 16:32:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=LfTKMbZe2QVHemXyI/fIb1Ivk454nudy7JvQKOTshZI=;
+        b=hhxlaIHTv3gXPMOEiEPTnhAjD9Y6bAgnhOJMrJaoKWITBLAEEXo3g+Dr2AbD2y2cNW
+         aVavGUpAgsD4jBtLtEdcSxEL4wLAtcHcQKJ+FN+dvjfpwYreNISdkKS6biYVAK6DtoAA
+         Zk0HK2Zi15ceZYkRx0KmoAQUwfHZ/KUWv1S/klYU/mGRS+G98nPqD3x9ggg1VsPL/TRD
+         tan1EttguFZmZzPYbMfKngbDKfMfRPDmpDkOw1ekyVuS2GOV7CzX1zIu+KtLeRFee8U3
+         p7MkywnwKuyKa3RQPnqFQoCteQJuhSKOBDHg/btqO/Wkmv67b/R11k8TlQP68drElMhr
+         MsEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=LfTKMbZe2QVHemXyI/fIb1Ivk454nudy7JvQKOTshZI=;
+        b=LZiLRrhNuIsDP5mp9oqibmMkco19BlQ/tYf3/Sw3H0S/XCAleaCzfqNkxodT/KRXIi
+         QzGKieXxVLpsB+k+qJDZHSXbMwsi5DLIkXR9RsFbaq8YELMbyfLyVhf5eOASKgaeSrYy
+         luIG/JNk3tvpzEQoM3RYYhDcB59eomK/3rqLHWXlZ1F5hY99QePifll6Q/xrZVLUXAW4
+         Obsl4fnsu/UUrgZx8OKokLFqcmOJumUxzIamEEK3J/JDpgJUGhff8KWzA/61vYaUFMa5
+         /DoDLYVju2weA+Opejyn6XV4Nb9fb69/SrEA/Cei/H9NwKnrc1hgrF1G7cTw4yNp+ZRg
+         LxLw==
+X-Gm-Message-State: APjAAAUD1UQqh8Bq72BD+lJDpDSEVhHpXZ0da1i34SSpYowJEazeByKh
+        Qs5K/EG3LB36dmrpGMijd930AQ==
+X-Google-Smtp-Source: APXvYqzOEVmuwaiwOAKa84Gb6UNz3WotsIqSI/TBfnStU4C0+10SnuM4+VTmlepgJynzri/fsmD3jg==
+X-Received: by 2002:a63:3fc9:: with SMTP id m192mr33069603pga.429.1567553524617;
+        Tue, 03 Sep 2019 16:32:04 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id a29sm29714392pfr.152.2019.09.03.16.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2019 16:32:03 -0700 (PDT)
+Date:   Tue, 3 Sep 2019 16:34:10 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Jack Pham <jackp@codeaurora.org>,
+        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>,
+        robh@kernel.org, andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
+ bindings
+Message-ID: <20190903233410.GQ26807@tuxbook-pro>
+References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org>
+ <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org>
+ <20190223165218.GB572@tuxbook-pro>
+ <6dc0957d-5806-7643-4454-966015865d38@linaro.org>
+ <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
+ <20190830164520.GK26807@tuxbook-pro>
+ <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+ <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
+ <20190903173924.GB9754@jackp-linux.qualcomm.com>
+ <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <14968.1567550348.1@warthog.procyon.org.uk>
-Date:   Tue, 03 Sep 2019 23:39:08 +0100
-Message-ID: <14969.1567550348@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.71]); Tue, 03 Sep 2019 22:39:12 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
 
-> I rebuilt with keys-next, updated the tests again, and now
-> the suite looks to be running trouble free.
+> Quoting Jack Pham (2019-09-03 10:39:24)
+> > On Mon, Sep 02, 2019 at 08:23:04AM +0200, Jorge Ramirez wrote:
+> > > On 8/30/19 20:28, Stephen Boyd wrote:
+> > > > Quoting Bjorn Andersson (2019-08-30 09:45:20)
+> > > >> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
+> > > >>
+> > > >>>>>
+> > > >>>>> The USB-C connector is attached both to the HS and SS PHYs, so I think
+> > > >>>>> you should represent this external to this node and use of_graph to
+> > > >>>>> query it.
+> > > >>>>
+> > > >>>> but AFAICS we wont be able to retrieve the vbux-supply from an external
+> > > >>>> node (that interface does not exist).
+> > > >>>>
+> > > >>>> rob, do you have a suggestion?
+> > > >>>
+> > > >>> Shouldn't the vbus supply be in the phy? Or is this a situation where
+> > > >>> the phy itself doesn't have the vbus supply going to it because the PMIC
+> > > >>> gets in the way and handles the vbus for the connector by having the SoC
+> > > >>> communicate with the PMIC about when to turn the vbus on and off, etc?
+> > > >>>
+> > > >>
+> > > >> That's correct, the VBUS comes out of the PMIC and goes directly to the
+> > > >> connector.
+> > > >>
+> > > >> The additional complicating factor here is that the connector is wired
+> > > >> to a USB2 phy as well, so we need to wire up detection and vbus control
+> > > >> to both of them - but I think this will be fine, if we can only figure
+> > > >> out a sane way of getting hold of the vbus-supply.
+> > > >>
+> > > > 
+> > > > Does it really matter to describe this situation though? Maybe it's
+> > > > simpler to throw the vbus supply into the phy and control it from the
+> > > > phy driver, even if it never really goes there. Or put it into the
+> > > > toplevel usb controller?
+> > > > 
+> > > that would work for me - the connector definition seemed a better way to
+> > > explain the connectivity but since we cant retrieve the supply from the
+> > > external node is not of much functional use.
+> > > 
+> > > but please let me know how to proceed. shall I add the supply back to
+> > > the phy?
+> 
+> So does the vbus actually go to the phy? I thought it never went there
+> and the power for the phy was different (and possibly lower in voltage).
+> 
 
-Glad to hear that, thanks.
+No, the PHYs use different - lower voltage - supplies to operate. VBUS
+is coming from a 5V supply straight to the connector and plug-detect
+logic (which is passive in this design).
 
-> I do see a message SKIP DUE TO DISABLED SELINUX which I take to mean that
-> there is an SELinux specific test.
+> > 
+> > Putting it in the toplevel usb node makes sense to me, since that's
+> > usually the driver that knows when it's switching into host mode and
+> > needs to turn on VBUS. The dwc3-qcom driver & bindings currently don't 
+> > do this but there's precedent in a couple of the other dwc3 "glues"--see
+> > Documentation/devicetree/bindings/usb/{amlogic\,dwc3,omap-usb}.txt
+> > 
+> > One exception is if the PMIC is also USB-PD capable and can do power
+> > role swap, in which case the VBUS control needs to be done by the TCPM,
+> > so that'd be a case where having vbus-supply in the connector node might
+> > make more sense.
+> > 
+> 
+> The other way is to implement the code to get the vbus supply out of a
+> connector. Then any driver can do the work if it knows it needs to and
+> we don't have to care that the vbus isn't going somewhere. I suppose
+> that would need an of_regulator_get() sort of API that can get the
+> regulator out of there? Or to make the connector into a struct device
+> that can get the regulator out per some generic connector driver and
+> then pass it through to the USB controller when it asks for it. Maybe
+> try to prototype that out?
+> 
 
-tests/bugzillas/bz1031154/runtest.sh
+The examples given in the DT bindings describes the connector as a child
+of a PMIC, with of_graph somehow tying it to the various inputs. But in
+these examples vbus is handled by implicitly inside the MFD, where
+extcon is informed about the plug event they toggle vbus as well.
 
-David
+In our case we have a extcon-usb-gpio to detect mode, which per Jorge's
+proposal will trickle down to the PHY and become a regulator calls on
+either some external regulator or more typically one of the chargers in
+the system.
+
+
+So if we come up with a struct device for the connector and some API for
+toggling the vbus we're going to have to fairly abstract entities
+representing pretty much the same thing - and in a design with a mux we
+would have a different setup.
+
+Regards,
+Bjorn
