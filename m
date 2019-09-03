@@ -2,145 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 778B8A7672
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 23:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C9CA76C1
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 00:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726394AbfICVpL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 17:45:11 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40912 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726273AbfICVpL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 17:45:11 -0400
-Received: by mail-pf1-f195.google.com with SMTP id w16so11738509pfn.7
-        for <linux-usb@vger.kernel.org>; Tue, 03 Sep 2019 14:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=message-id:mime-version:content-transfer-encoding:in-reply-to
-         :references:cc:subject:to:from:user-agent:date;
-        bh=DC974GZJGhexkCFBOM5qEmYf6z0HgA/VnDsSvsVF7D0=;
-        b=HiSF87MFMlybKjWPbamDnFr8jF4yrV8wWRl/q7vTLdCayEIsdov0M2UgoQlf3JX4H1
-         gBBiyAdAu8IAEwYR1bevmCl7HFTR9sajVfhMDgAXak5uU/WC9Pk+G7i996fVdJTigDwR
-         CK8z8PVAiAURMoDDeyttp6CxAFcufTD9LoaXE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:mime-version
-         :content-transfer-encoding:in-reply-to:references:cc:subject:to:from
-         :user-agent:date;
-        bh=DC974GZJGhexkCFBOM5qEmYf6z0HgA/VnDsSvsVF7D0=;
-        b=NGFiW9Qv8EfOU/WHs/xb2SJ/WXTFMiyyvZSv/83XW39U+miwh4b9U/+DpgKXJmhHAi
-         tQhrnz/X3OV3SjQnFOKqdaOUG0sQCZ1mp9e6bmeu6dFoQYuky9yZcERUraDbcinDO4aR
-         maPyMH2suAcQtXukthk03rUfICObzVWjtV7F3UPdMr/G+RoQn3f7tdFOj9++OGBPt1hI
-         RecBBMzUNQ0c7yqD3e5hhKd0KSayAibreaTUzodb6YLXLHA5sAVUHnjTUaVpSuQkdE6N
-         IvTGTsoVnrVGqz9EW8vnEzNR9SMD2ZYi9VR0/5t3UsRSBM2wLAT/t5LuSrsq90xiH6uj
-         7gKQ==
-X-Gm-Message-State: APjAAAUWs3vO4j5hF6LIeSf/kCV53zX4ciPtmTigIovD0DTzSPymZ9ne
-        HkeTYjsH3EBLhx5e3DjUQ6oHag==
-X-Google-Smtp-Source: APXvYqyyXLc2Kx3iRoFjN/Pmqbfyp7/k/scbD3QixYgco+j3rtBA2rDoAT/CxZaV2vtfjY0BzldgGg==
-X-Received: by 2002:a65:6454:: with SMTP id s20mr32157131pgv.15.1567547110418;
-        Tue, 03 Sep 2019 14:45:10 -0700 (PDT)
-Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id ck8sm498898pjb.25.2019.09.03.14.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2019 14:45:09 -0700 (PDT)
-Message-ID: <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
-Content-Type: text/plain; charset="utf-8"
+        id S1726451AbfICWQP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 18:16:15 -0400
+Received: from sonic307-16.consmr.mail.ne1.yahoo.com ([66.163.190.39]:46742
+        "EHLO sonic307-16.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726490AbfICWQO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 18:16:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1567548973; bh=fha3TjWoq7T+FaehvmjeV2B4PeIjuHcxcWYFtyVJWFE=; h=Subject:To:Cc:References:From:Date:In-Reply-To:From:Subject; b=Lx0my6aIH/Cg1sxMHPeI3XP/XUQJzSTqU0nXgkGK/gOh/yi/qmrs5AeEhcLlu3H8AxRNIM6Vk/F8QFy5oPWr0kOqE03bFr3QL9VMqGqX0boDFD8CliuOPA+HtuLL1FAQPUitGF0O1fbGQhaSZ/6ltXux9o8h/7Qri+k3Nu8DivxalB4zawKW/poiuCTshe7qn+7dEwcMZIZjq3oSiVMq/vz2CxLgtutuzaoEmVx9Vl+epO23HVOc7KRotP4Y2SxXBOcFPC4r4Vu7L2+C7ShoNM2kyLHjqGR7RQ9gLZIjWfx7X97p+vnqhbMG41v+Pj9DHR+ugmLzy94XeQoPXglLyQ==
+X-YMail-OSG: TdI9FxgVM1nYGzUJuT5BfwvBPLfFq_R1rUEfbVcG3oHD6iiI.B99ULNdd_Lx5fK
+ 80mFchTSt6.8HD1fr2iMnmOXCVBsKlYqy8laJz0i2lh3sGIATZYlYLKH1cdwittUZgSE7UMhvC74
+ ronJiEqp62ZRrkZ59n5S7_kCQ9DRkH.MsC3uM_iA55t_g3ioCOBItuuBhoZ0.kIQnn9oRW9YgyfM
+ hY_y3g7jjz6aMzernUXCzxWTrqNj6D1b3QUe5ZrGvS3mbNxiavXjXQ.0rM7Rh410t7GnXTm3ZOrT
+ EP_sOwe0hthexUVRBIHnRRj5GA5vnRIeUa_sFyLTmA0A77zzyS5KR04IE4k3368v1KqHSHFz0_6E
+ 7SfLuqWQntKKz6GoV_AyLp5osYnYr0zhdS1qXCM6BxJhXSCr_EPYVqYyUAxplSJBih5xmOkZU5Mn
+ hOlXNI9vFhPN7zx7LAceTeVarI31vBviSsq2_Q3uF9XljGvLV1.Khunm5HMpMDxDZ8dpkVCvU0Bv
+ 2S1NKamu4jIQoZUkXrZjam6Ynl0.Iqk9jHFGFY8EXR3a1HU5juqjJXa6mNJNebfjhlX5r4Ky.K_W
+ RNpIqYRO1q6uaejpt_edYfBz0aLW.DM1ONFB4FJGsnHWUqW.EMwCPLBbjvyukmK8_GJyKlwXYym4
+ hR6zCm2D9ZGafE4aZgg05xpSUg5vzDz.EK0Ypve5r89ebOwUx4lZ6snJrGChU4DoT2JD3fDHCCn2
+ BJPRO7hsNiIZqpv1cbCNoxSZG8gbw9YSG6qBpVAaYVF_ilKbY1Xp8FlRkKKfFmIVwP6e9n_FSWw1
+ 3l_xZXY15auhhzGcJ7vVYcPF0HzHrax7EHQuKmQ_6AP_pHfEMClbCxSwvgAOhXSQ93M3GG58O_WJ
+ _LgVZ44oms9gNcpqdbOa.Ujg5m4BLbQ3YZYBecYQe_2SK_ygeKjqIo1fVnJwwRU8ftoF4CMIakXW
+ wvsJYLi36mlpx7i5RqfF.DybSiLkMYpQLp0viEXvYNW8nS7.1sIt4gDk.pHSUkkIGcnqka1uP958
+ ui3c7G3CXILYUoC5kaqot9zIcZdjEbG6lQ83Jq8dbtqZkaafimWjw7A9jXgNAXrqaF4hqgpSm9EL
+ T2ctQko37V0lKVUb8yEzjdtHN.2ya9KoBIbI1XBzoFavR3OnaiXCrhghkoXXfCaQuAS8XA67jhpD
+ VUZLmtV3TqeYSHJB5uQhMRTQv7PmjLb5TVKuu7lSz5EzMuSFRbCV58EDBNTWNCRLlTeSb4WJA7iK
+ NNNB9lSOC.YRF7Lx3ryTqGM1dXJsC3i6e.64_mgIrM1iSirvmKd8qqbrBps2hjLyRwgZ9.LAWOW1
+ AODHGOWewFj4ADTWnfHg2_cxAHjwR_gCrtP17YQ--
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Tue, 3 Sep 2019 22:16:13 +0000
+Received: by smtp424.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 31589db2a53534d815576f1e840a33f6;
+          Tue, 03 Sep 2019 22:16:09 +0000 (UTC)
+Subject: Re: [PATCH 11/11] smack: Implement the watch_key and
+ post_notification hooks [untested] [ver #7]
+To:     David Howells <dhowells@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        casey@schaufler-ca.com
+References: <87bf0363-af77-1e5a-961f-72730e39e3a6@schaufler-ca.com>
+ <e36fa722-a300-2abf-ae9c-a0246fc66d0e@schaufler-ca.com>
+ <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
+ <156717352917.2204.17206219813087348132.stgit@warthog.procyon.org.uk>
+ <4910.1567525310@warthog.procyon.org.uk>
+ <11467.1567534014@warthog.procyon.org.uk>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=casey@schaufler-ca.com; keydata=
+ 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
+ abzjfg==
+Message-ID: <23d61564-026e-b37a-8b16-ce68d5949f6c@schaufler-ca.com>
+Date:   Tue, 3 Sep 2019 15:16:08 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190903173924.GB9754@jackp-linux.qualcomm.com>
-References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org> <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org> <20190223165218.GB572@tuxbook-pro> <6dc0957d-5806-7643-4454-966015865d38@linaro.org> <5d694878.1c69fb81.5f13b.ec4f@mx.google.com> <20190830164520.GK26807@tuxbook-pro> <5d696ad2.1c69fb81.977ea.39e5@mx.google.com> <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org> <20190903173924.GB9754@jackp-linux.qualcomm.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, robh@kernel.org,
-        andy.gross@linaro.org, shawn.guo@linaro.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY bindings
-To:     Jack Pham <jackp@codeaurora.org>,
-        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.8.1
-Date:   Tue, 03 Sep 2019 14:45:08 -0700
+In-Reply-To: <11467.1567534014@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Jack Pham (2019-09-03 10:39:24)
-> On Mon, Sep 02, 2019 at 08:23:04AM +0200, Jorge Ramirez wrote:
-> > On 8/30/19 20:28, Stephen Boyd wrote:
-> > > Quoting Bjorn Andersson (2019-08-30 09:45:20)
-> > >> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
-> > >>
-> > >>>>>
-> > >>>>> The USB-C connector is attached both to the HS and SS PHYs, so I =
-think
-> > >>>>> you should represent this external to this node and use of_graph =
-to
-> > >>>>> query it.
-> > >>>>
-> > >>>> but AFAICS we wont be able to retrieve the vbux-supply from an ext=
-ernal
-> > >>>> node (that interface does not exist).
-> > >>>>
-> > >>>> rob, do you have a suggestion?
-> > >>>
-> > >>> Shouldn't the vbus supply be in the phy? Or is this a situation whe=
-re
-> > >>> the phy itself doesn't have the vbus supply going to it because the=
- PMIC
-> > >>> gets in the way and handles the vbus for the connector by having th=
-e SoC
-> > >>> communicate with the PMIC about when to turn the vbus on and off, e=
-tc?
-> > >>>
-> > >>
-> > >> That's correct, the VBUS comes out of the PMIC and goes directly to =
-the
-> > >> connector.
-> > >>
-> > >> The additional complicating factor here is that the connector is wir=
-ed
-> > >> to a USB2 phy as well, so we need to wire up detection and vbus cont=
-rol
-> > >> to both of them - but I think this will be fine, if we can only figu=
-re
-> > >> out a sane way of getting hold of the vbus-supply.
-> > >>
-> > >=20
-> > > Does it really matter to describe this situation though? Maybe it's
-> > > simpler to throw the vbus supply into the phy and control it from the
-> > > phy driver, even if it never really goes there. Or put it into the
-> > > toplevel usb controller?
-> > >=20
-> > that would work for me - the connector definition seemed a better way to
-> > explain the connectivity but since we cant retrieve the supply from the
-> > external node is not of much functional use.
-> >=20
-> > but please let me know how to proceed. shall I add the supply back to
-> > the phy?
+On 9/3/2019 11:06 AM, David Howells wrote:
+> Casey Schaufler <casey@schaufler-ca.com> wrote:
+>
+>> Built from your tree.
+> What branch?  keys-next?
 
-So does the vbus actually go to the phy? I thought it never went there
-and the power for the phy was different (and possibly lower in voltage).
+I rebuilt with keys-next, updated the tests again, and now
+the suite looks to be running trouble free. I do see a message
+SKIP DUE TO DISABLED SELINUX which I take to mean that there
+is an SELinux specific test.
 
->=20
-> Putting it in the toplevel usb node makes sense to me, since that's
-> usually the driver that knows when it's switching into host mode and
-> needs to turn on VBUS. The dwc3-qcom driver & bindings currently don't=20
-> do this but there's precedent in a couple of the other dwc3 "glues"--see
-> Documentation/devicetree/bindings/usb/{amlogic\,dwc3,omap-usb}.txt
->=20
-> One exception is if the PMIC is also USB-PD capable and can do power
-> role swap, in which case the VBUS control needs to be done by the TCPM,
-> so that'd be a case where having vbus-supply in the connector node might
-> make more sense.
->=20
-
-The other way is to implement the code to get the vbus supply out of a
-connector. Then any driver can do the work if it knows it needs to and
-we don't have to care that the vbus isn't going somewhere. I suppose
-that would need an of_regulator_get() sort of API that can get the
-regulator out of there? Or to make the connector into a struct device
-that can get the regulator out per some generic connector driver and
-then pass it through to the USB controller when it asks for it. Maybe
-try to prototype that out?
-
+>
+>> keyctl move 483362336 1065401533 @s
+>> keyctl_move: Operation not supported
+> Odd.  That should be unconditional if you have CONFIG_KEYS and v5.3-rc1.  Can
+> you try:
+>
+> 	keyctl supports
+>
+> or just:
+>
+> 	keyctl add user a a @s
+>
+> which will give you an id, say 1234, then:
+>
+> 	keyctl move 1234 @s @u
+>
+> see if that works.
+>
+> David
