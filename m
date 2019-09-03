@@ -2,102 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 529FEA67D4
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 13:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FD7A680B
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 14:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728917AbfICLvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 07:51:36 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:34373 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbfICLvg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 07:51:36 -0400
-Received: by mail-pf1-f193.google.com with SMTP id b24so10665322pfp.1;
-        Tue, 03 Sep 2019 04:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=t2PxMG5OIm2u7yWMEpUqisBZ79ACocY8nzC9BY2ai8g=;
-        b=BzOKPbc4/MSMJfSK7LLEp7SNUCYYvBh4HDURdwaOsyyPnkmUTy/AKujgqW6L8uCJl6
-         XaL05v//eas0UdRSvSlKHyqwRFpRc/OqfKXo+pv6LGkymd+s1Q3HNWnKJfOg/3glY8pA
-         UUEmInY3y7aOIKQyPJKGU/KHvZRRANXNdyo1DVJX8D0D0PC4xTX0IRU/sdg2mPjLYCl2
-         jIgp072oXsEGLUyrYylNlT/GrfN3zP675thrTvlGYnNIaaJAvY4G9CdB4bMXBkzbQqzA
-         diGhS8KsD5HlryTqkAqj6N+3g9AW/tTi1c5Tn27Dwh2RyL5s1K+yw6JRQ1O6IkAT4M0I
-         AyuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition:user-agent;
-        bh=t2PxMG5OIm2u7yWMEpUqisBZ79ACocY8nzC9BY2ai8g=;
-        b=RznjvVOVUqxloO9dz3xRveY4yWKs9OWwMCDCnqgp+CrGXQqK8vugruwpP4+RHVudCl
-         B6vAUeZZaSSuTeb3GCaGAyNZHRBsMWdQ5s5+4f/tCPD3XOZAkZMowcjyEIdIWIWmryZj
-         8cxqNPyDoyxeGP8lD9lGltxMp5vcFWCcYRLqavDHi9kX9pRdwj0voefEAbSY279RScoF
-         cvrAk9YQS18LrqGkAD0opg7HIsKayMR8+fMefulAaOPSZ32x1w4WDBYWRf10+CqiaGv2
-         RNPcBROWPFDQKrGzUjKYwXoerFaufiUDwHitoKt3Wb0U2XymqCmOtvyYrhX8ZOiVrkTn
-         Kdew==
-X-Gm-Message-State: APjAAAXO/ii+qd4tdqpQz6KkxuqNrUrXg8vA+sTT+UDrbCyIpjdKgAOj
-        3oHzf4mxUNqonyHIyj3IxlI=
-X-Google-Smtp-Source: APXvYqzaQC+6kNqfUI/eVx4HPCBbmJTTOPyiSjSJY5k6LjVLpW9HArFoDoPFVW2rvicRDKjCvdCQRA==
-X-Received: by 2002:aa7:9303:: with SMTP id 3mr19787525pfj.29.1567511495522;
-        Tue, 03 Sep 2019 04:51:35 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r23sm7173244pjo.22.2019.09.03.04.51.34
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 04:51:34 -0700 (PDT)
-Date:   Tue, 3 Sep 2019 04:51:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/6] mfd: don't select DMA_DECLARE_COHERENT for the sm501
- and tc6393xb drivers
-Message-ID: <20190903115133.GA3543@roeck-us.net>
+        id S1728860AbfICMFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 08:05:11 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:50186 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726936AbfICMFL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 08:05:11 -0400
+Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id E4CCB86AD5A64D6FD21B;
+        Tue,  3 Sep 2019 20:05:08 +0800 (CST)
+Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
+ (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Tue, 3 Sep 2019
+ 20:04:59 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <pawell@cadence.com>,
+        <felipe.balbi@linux.intel.com>, <yuehaibing@huawei.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] usb: cdns3: remove set but not used variable 'priv_dev'
+Date:   Tue, 3 Sep 2019 20:04:45 +0800
+Message-ID: <20190903120445.22204-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain
+X-Originating-IP: [10.133.213.239]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 10:46:15AM +0200, Christoph Hellwig wrote:
-> Now that these drivers use the usb localmem pool there is no need to
-> select DMA_DECLARE_COHERENT.
-> 
-> Signed-off-by: Christoph Hellwig <hch@lst.de>
+Fixes gcc '-Wunused-but-set-variable' warning:
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+drivers/usb/cdns3/gadget.c: In function '__cdns3_gadget_init':
+drivers/usb/cdns3/gadget.c:2665:23: warning:
+ variable 'priv_dev' set but not used [-Wunused-but-set-variable]
+drivers/usb/cdns3/gadget.c: In function cdns3_start_all_request:
+drivers/usb/cdns3/gadget.c:357:24: warning:
+ variable priv_req set but not used [-Wunused-but-set-variable]
 
-for SM501.
+They are never used, so can be removed.
 
-> ---
->  drivers/mfd/Kconfig | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index f129f9678940..c8cbde59bbf6 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1105,7 +1105,6 @@ config MFD_SI476X_CORE
->  config MFD_SM501
->  	tristate "Silicon Motion SM501"
->  	depends on HAS_DMA
-> -	select DMA_DECLARE_COHERENT
->  	 ---help---
->  	  This is the core driver for the Silicon Motion SM501 multimedia
->  	  companion chip. This device is a multifunction device which may
-> @@ -1714,7 +1713,6 @@ config MFD_TC6393XB
->  	select GPIOLIB
->  	select MFD_CORE
->  	select MFD_TMIO
-> -	select DMA_DECLARE_COHERENT
->  	help
->  	  Support for Toshiba Mobile IO Controller TC6393XB
->  
-> -- 
-> 2.20.1
-> 
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ drivers/usb/cdns3/gadget.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 3094ad6..ddac638 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -354,13 +354,11 @@ enum usb_device_speed cdns3_get_speed(struct cdns3_device *priv_dev)
+ static int cdns3_start_all_request(struct cdns3_device *priv_dev,
+ 				   struct cdns3_endpoint *priv_ep)
+ {
+-	struct cdns3_request *priv_req;
+ 	struct usb_request *request;
+ 	int ret = 0;
+ 
+ 	while (!list_empty(&priv_ep->deferred_req_list)) {
+ 		request = cdns3_next_request(&priv_ep->deferred_req_list);
+-		priv_req = to_cdns3_request(request);
+ 
+ 		ret = cdns3_ep_run_transfer(priv_ep, request);
+ 		if (ret)
+@@ -2664,7 +2662,6 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
+ 
+ static int __cdns3_gadget_init(struct cdns3 *cdns)
+ {
+-	struct cdns3_device *priv_dev;
+ 	int ret = 0;
+ 
+ 	cdns3_drd_switch_gadget(cdns, 1);
+@@ -2674,8 +2671,6 @@ static int __cdns3_gadget_init(struct cdns3 *cdns)
+ 	if (ret)
+ 		return ret;
+ 
+-	priv_dev = cdns->gadget_dev;
+-
+ 	/*
+ 	 * Because interrupt line can be shared with other components in
+ 	 * driver it can't use IRQF_ONESHOT flag here.
+-- 
+2.7.4
+
+
