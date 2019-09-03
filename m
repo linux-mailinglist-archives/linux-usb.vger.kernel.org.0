@@ -2,102 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2B8A6A1B
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 15:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4661A6A38
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 15:43:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbfICNjh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 09:39:37 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:53799 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727667AbfICNjh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 09:39:37 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BAC84220A7;
-        Tue,  3 Sep 2019 09:39:35 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 03 Sep 2019 09:39:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=gt6jXD9kW6hjVEToMQvMVQFYZbf
-        ruSfRmUGV9CJbQus=; b=kaP5BkUevrHPOiTMJYYEUQuxrd8gVewPxJqPk19uF6U
-        3B48P0I3c+tCOlXPiyFTYATnBepjRAh49Sjj2jSh+96tLm0QuQzkQ9VcWJ1t1CCf
-        AWlP+Afb732PU894nB/+fVie+z8X51/DrAcnMCjCdQine5mUePrli/VeK93dpY6V
-        napVX02WkXRX+QtjdR3pqSDouqgYZYXDRcd7jAKT2ySXZaTzr4Yc/3oUOTgCqgaT
-        1oNpvf+AYwUg2Xz7vUE6SXj8ljTLjoDo0yRABftgALirbI3VLNGARai3JLEl2F4G
-        Hd6Vt9FIM5LQY5w4dm1Uf43F91DoRhQKxUKTGMxIewA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=gt6jXD
-        9kW6hjVEToMQvMVQFYZbfruSfRmUGV9CJbQus=; b=fEfUxuMfITZ+MX76xHhQuG
-        aNM/04PVtAPSzcRvd2Kls/5ZVh+vXXCGjdWvrEXhe7fJL2rMZ1qmRX6DDFHrUwyU
-        jNJ7sgGGqd0b2Ij2NgWmUCqwquOEMDZS0OrPgyt95exw9GYH+/ST++4xxtWdloQM
-        kWW9He4cb3pwv0exqVlUjeNczZlrx6/InldTxUp8azQlWpJh4ZtG2/lUEyfzNpCF
-        XaQnHSzcxnmpOKMxfIAxnWZbT8wcJKb3/9BOM8Y+bnye8DJXTR4N8QHyONdoYHUA
-        Kf2VikDYL5HLkH8+n1UGQ/4UM0CRS0Pv7uLwO6fmasSoPqgi/xfPtUSe6L2k0YEw
-        ==
-X-ME-Sender: <xms:F21uXTYCjL79J324_ECMEeezL_vMSO2ssCmZJlarXMpHgwZrlRCI7g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudejfedgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujggfsehttd
-    ertddtredvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
-    qeenucfkphepkeefrdekiedrkeelrddutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hgrhgvgheskhhrohgrhhdrtghomhenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:F21uXWpqhmrunVA_snQs8b565pA2fwfYAjX_-0d7rPnPrVwCUcKY0g>
-    <xmx:F21uXQ94OeZhT6PWFaCaKwAKm_D8mO6b55IZINLHvr2FNGwZP0D4AQ>
-    <xmx:F21uXd-hKGfrRhnWQ19OXfULW4NE0UP6eJClRVeGZuOeEffiUUkdDA>
-    <xmx:F21uXcnw3kKu346oFvy3sNmu-I5fKx7uerZFwgYLc3webRZ79QfwCg>
+        id S1729088AbfICNnH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 09:43:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40960 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728854AbfICNnH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 09:43:07 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2D3C880069;
-        Tue,  3 Sep 2019 09:39:35 -0400 (EDT)
-Date:   Tue, 3 Sep 2019 15:39:33 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Nathan Stratton Treadway <vgerlists@nathanst.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Adding "UAS" protocol line to usb.ids file?
-Message-ID: <20190903133933.GA9435@kroah.com>
-References: <20190817220145.GJ1403@nathanst.com>
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4183E2087E;
+        Tue,  3 Sep 2019 13:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567518186;
+        bh=BZuBxz5LjyjK3mxQ5wcwZ9xiDK4G1tNxcl6nHbFb1mM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jk16iEEfPJmtAHM0GX+d5PcvvnsvpmMlWndFqoWNmP7NYa4eTLLEL5GcsSa/khvHz
+         mJE4vH93jo8RelEWm8vyeMLlzXnaIrgxohhTaiYJFrf5/xGgnxuawpu1VpIROUI2iS
+         nfX3JnwGPgeytXXJ+fzX/emBppDOwM78HE8RbxRk=
+Date:   Tue, 3 Sep 2019 15:43:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Colin King <colin.king@canonical.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH][usb-next] usb: cdns3: fix missing assignment of ret
+ before error check on ret
+Message-ID: <20190903134304.GB9435@kroah.com>
+References: <20190902145035.18200-1-colin.king@canonical.com>
+ <BYAPR07MB4709DF377BFBD54FD6BF88B3DDBE0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <BYAPR07MB470927CBDF6CC2345DD350E6DDB90@BYAPR07MB4709.namprd07.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190817220145.GJ1403@nathanst.com>
+In-Reply-To: <BYAPR07MB470927CBDF6CC2345DD350E6DDB90@BYAPR07MB4709.namprd07.prod.outlook.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 17, 2019 at 06:01:45PM -0400, Nathan Stratton Treadway wrote:
-> I noticed that when I use "lsusb -v" on a UAS-enabled drive enclosure,
-> the bInterfaceProtocol line for #80/0x50 has a "protocol name" label but the
-> one for #98/0x62 does not:
+On Tue, Sep 03, 2019 at 03:29:50AM +0000, Pawel Laszczak wrote:
+> Hi Colin
 > 
+> >Hi Colin
+> >
+> >>
+> >>From: Colin Ian King <colin.king@canonical.com>
+> >>
+> >>Currently the check on a non-zero return code in ret is false because
+> >>ret has been initialized to zero.  I believe that ret should be assigned
+> >>to the return from the call to readl_poll_timeout_atomic before the
+> >>check on ret.  Since ret is being re-assinged the original initialization
+> >>of ret to zero can be removed.
+> >
+> >Thanks you for letting me know.
+> >Fortunately that's not a critical bug and has no impact for driver.
+> >I will correct it.
+> >
+> >Cheers
+> >Pawell
+> >
+> >>
+> >>Addresses-Coverity: ("'Constant' variable guards dead code")
+> >>Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> >>Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> >>---
+> >> drivers/usb/cdns3/gadget.c | 6 +++---
+> >> 1 file changed, 3 insertions(+), 3 deletions(-)
+> >>
+> >>diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> >>index 3094ad65ffc9..0eb3022838d6 100644
+> >>--- a/drivers/usb/cdns3/gadget.c
+> >>+++ b/drivers/usb/cdns3/gadget.c
+> >>@@ -2154,7 +2154,7 @@ int __cdns3_gadget_ep_clear_halt(struct cdns3_endpoint *priv_ep)
+> >> {
+> >> 	struct cdns3_device *priv_dev = priv_ep->cdns3_dev;
+> >> 	struct usb_request *request;
+> >>-	int ret = 0;
+> >>+	int ret;
+> >> 	int val;
+> >>
+> >> 	trace_cdns3_halt(priv_ep, 0, 0);
+> >>@@ -2162,8 +2162,8 @@ int __cdns3_gadget_ep_clear_halt(struct cdns3_endpoint *priv_ep)
+> >> 	writel(EP_CMD_CSTALL | EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
+> >>
+> >> 	/* wait for EPRST cleared */
+> >>-	readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
+> >>-				  !(val & EP_CMD_EPRST), 1, 100);
+> >>+	ret = readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
+> >>+					!(val & EP_CMD_EPRST), 1, 100);
+> >> 	if (ret)
+> >> 		return -EINVAL;
 > 
-> ========
-> # lsusb -v -s2:15 | grep Interface
->   bDeviceClass            0 (Defined at Interface level)
->     bNumInterfaces          1
->     Interface Descriptor:
->       bInterfaceNumber        0
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     80 Bulk-Only
->       iInterface              0
->     Interface Descriptor:
->       bInterfaceNumber        0
->       bInterfaceClass         8 Mass Storage
->       bInterfaceSubClass      6 SCSI
->       bInterfaceProtocol     98
->       iInterface              0
-> ========
-> 
-> 
-> 
-> So...I was wondering if there was any particular reason that protocol
-> 98 isn't included in the usb.ids file?
+> What about such condition:
+> 	if (unlikely(ret)) {
 
-No one got around to it?  Feel free to submit a patch to the web site
-that handles these to upate it.
+Only use likely/unlikely if you can actually measure the performance
+impact of not using it.  Otherwise drop it as the compiler and CPU will
+almost always get it correct for you (like in this case).
 
 thanks,
 
