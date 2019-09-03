@@ -2,116 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9D4A7275
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 20:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CEFA7310
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 21:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729653AbfICSS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 14:18:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43890 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727667AbfICSS4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Sep 2019 14:18:56 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E3CEC21897;
-        Tue,  3 Sep 2019 18:18:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567534735;
-        bh=UbR9zr74CHqTiq2rkGIGMBcWCy/78myqSwovEjuKNO4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M0MTmNKEQl06GbOF0O3rQOAQSly+IlMo88UaN9x60qebKZlcuSBwbd/kAJDSIP3ji
-         qGIZiyRAbhRxz6dzFClHz+ieP/Pwcei6RR28+lb5nHwChfFzQo177gs7OGZBU95vHd
-         sLmz+/hEfmiAnRf+KiVIliaWQiJGiOdR1usvaip0=
-Date:   Tue, 3 Sep 2019 20:18:53 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: rio500: Fix lockdep violation
-Message-ID: <20190903181853.GA3612@kroah.com>
-References: <20190815124821.GA25619@kroah.com>
- <Pine.LNX.4.44L0.1908151047100.1664-100000@iolanthe.rowland.org>
+        id S1726441AbfICTDq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 15:03:46 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:33564 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725977AbfICTDq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 15:03:46 -0400
+Received: (qmail 7198 invoked by uid 2102); 3 Sep 2019 15:03:45 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 3 Sep 2019 15:03:45 -0400
+Date:   Tue, 3 Sep 2019 15:03:45 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+35f4d916c623118d576e@syzkaller.appspotmail.com>
+cc:     Thinh.Nguyen@synopsys.com, <andreyknvl@google.com>,
+        <dianders@chromium.org>, <gregkh@linuxfoundation.org>,
+        <jflat@chromium.org>, <kai.heng.feng@canonical.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <malat@debian.org>, <mathias.nyman@linux.intel.com>,
+        <nsaenzjulienne@suse.de>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in usb_reset_and_verify_device
+In-Reply-To: <000000000000318cba0591a4f143@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909031501550.1859-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1908151047100.1664-100000@iolanthe.rowland.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 10:47:45AM -0400, Alan Stern wrote:
-> On Thu, 15 Aug 2019, Greg KH wrote:
-> 
-> > On Thu, Aug 08, 2019 at 02:23:00PM -0400, Alan Stern wrote:
-> > > On Thu, 8 Aug 2019, Greg KH wrote:
-> > > 
-> > > > On Thu, Aug 08, 2019 at 01:34:08PM -0400, Alan Stern wrote:
-> > > > > The syzbot fuzzer found a lockdep violation in the rio500 driver:
-> > > > > 
-> > > > > 	======================================================
-> > > > > 	WARNING: possible circular locking dependency detected
-> > > > > 	5.3.0-rc2+ #23 Not tainted
-> > > > > 	------------------------------------------------------
-> > > > > 	syz-executor.2/20386 is trying to acquire lock:
-> > > > > 	00000000772249c6 (rio500_mutex){+.+.}, at: open_rio+0x16/0xc0  
-> > > > > 	drivers/usb/misc/rio500.c:64
-> > > > > 
-> > > > > 	but task is already holding lock:
-> > > > > 	00000000d3e8f4b9 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-> > > > > 	drivers/usb/core/file.c:39
-> > > > > 
-> > > > > 	which lock already depends on the new lock.
-> > > > > 
-> > > > > The problem is that the driver's open_rio() routine is called while
-> > > > > the usbcore's minor_rwsem is locked for reading, and it acquires the
-> > > > > rio500_mutex; whereas conversely, probe_rio() and disconnect_rio()
-> > > > > first acquire the rio500_mutex and then call usb_register_dev() or
-> > > > > usb_deregister_dev(), which lock minor_rwsem for writing.
-> > > > > 
-> > > > > The correct ordering of acquisition should be: minor_rwsem first, then
-> > > > > rio500_mutex (since the locking in open_rio() cannot be changed).
-> > > > > Thus, the probe and disconnect routines should avoid holding
-> > > > > rio500_mutex while doing their registration and deregistration.
-> > > > > 
-> > > > > This patch adjusts the code in those two routines to do just that.  It
-> > > > > also relies on the fact that the probe and disconnect routines are
-> > > > > protected by the device mutex, so the initial test of rio->present
-> > > > > needs no extra locking.
-> > > > > 
-> > > > > Reported-by: syzbot+7bbcbe9c9ff0cd49592a@syzkaller.appspotmail.com
-> > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > > Fixes: d710734b0677 ("USB: rio500: simplify locking")
-> > > > > CC: Oliver Neukum <oneukum@suse.com>
-> > > > > CC: <stable@vger.kernel.org>
-> > > > > 
-> > > > > ---
-> > > > > 
-> > > > > This patch is different from the one I posted earlier.  I realized that 
-> > > > > we don't want to register the device's char file until after the 
-> > > > > buffers have been allocated.
-> > > > 
-> > > > Should I revert Oliver's patch?
-> > > 
-> > > Sorry, I should have explained more clearly: This goes on top of 
-> > > Oliver's patch.  In fact, Oliver's patch is the one listed in the 
-> > > Fixes: tag.
-> > > 
-> > > You do not need to apply Oliver's reversion.  Assuming he agrees that 
-> > > this patch is correct, of course.
-> > 
-> > Ok, I applied the revert, and that's in 5.3-rc4.  So of course this does
-> > not apply :)
-> > 
-> > Shoudl I revert the revert and then apply this?  I will if I can get an
-> > ack from Oliver...
-> 
-> Either that or else Oliver and I can squash the two patches into one.
+On Tue, 3 Sep 2019, syzbot wrote:
 
-I've now merged both, thanks.
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    eea39f24 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=174761b6600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=35f4d916c623118d576e
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1706275a600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+35f4d916c623118d576e@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in memcmp+0xa6/0xb0 lib/string.c:904
+> Read of size 1 at addr ffff8881d175bed6 by task kworker/0:3/2746
+> 
+> CPU: 0 PID: 2746 Comm: kworker/0:3 Not tainted 5.3.0-rc5+ #28
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:612
+>   memcmp+0xa6/0xb0 lib/string.c:904
+>   memcmp include/linux/string.h:400 [inline]
+>   descriptors_changed drivers/usb/core/hub.c:5579 [inline]
+>   usb_reset_and_verify_device+0x564/0x1300 drivers/usb/core/hub.c:5729
 
-greg k-h
+Diagnostic patch.
+
+#syz test: https://github.com/google/kasan.git eea39f24
+
+Index: usb-devel/drivers/usb/core/hub.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/hub.c
++++ usb-devel/drivers/usb/core/hub.c
+@@ -5721,6 +5721,13 @@ static int usb_reset_and_verify_device(s
+ 	if (ret < 0)
+ 		goto re_enumerate;
+ 
++	if (bos)
++		dev_info(&udev->dev, "Old BOS %p  Len 0x%x\n",
++			bos, le16_to_cpu(bos->desc->wTotalLength));
++	if (udev->bos)
++		dev_info(&udev->dev, "New BOS %p  Len 0x%x\n",
++			udev->bos, le16_to_cpu(udev->bos->desc->wTotalLength));
++
+ 	/* Device might have changed firmware (DFU or similar) */
+ 	if (descriptors_changed(udev, &descriptor, bos)) {
+ 		dev_info(&udev->dev, "device firmware changed\n");
+
