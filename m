@@ -2,60 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12509A6D2B
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 17:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6404DA6D85
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 18:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729056AbfICPnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 11:43:37 -0400
-Received: from dsl092-148-226.wdc2.dsl.speakeasy.net ([66.92.148.226]:50153
-        "EHLO nathanst.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728679AbfICPnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 11:43:37 -0400
-Received: from holmes.nathanst.com (nathanst@localhost [127.0.0.1])
-        by nathanst.com (8.13.4/8.13.4/Debian-3sarge3) with ESMTP id x83FhXo0032695
-        for <linux-usb@vger.kernel.org>; Tue, 3 Sep 2019 11:43:33 -0400
-Received: (from nathanst@localhost)
-        by holmes.nathanst.com (8.13.4/8.13.4/Submit) id x83FhX6p032693
-        for linux-usb@vger.kernel.org; Tue, 3 Sep 2019 11:43:33 -0400
-Date:   Tue, 3 Sep 2019 11:43:33 -0400
-From:   Nathan Stratton Treadway <vgerlists@nathanst.com>
-To:     linux-usb@vger.kernel.org
-Subject: Re: Adding "UAS" protocol line to usb.ids file?
-Message-ID: <20190903154333.GT4337@nathanst.com>
-References: <20190817220145.GJ1403@nathanst.com> <20190903133933.GA9435@kroah.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190903133933.GA9435@kroah.com>
-User-Agent: Mutt/1.5.9i
+        id S1730015AbfICQGo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 12:06:44 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35128 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728860AbfICQGn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:06:43 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id C1BC2309B688;
+        Tue,  3 Sep 2019 16:06:41 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 85FCF5DA5B;
+        Tue,  3 Sep 2019 16:06:38 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20190903085706.7700-1-hdanton@sina.com>
+References: <20190903085706.7700-1-hdanton@sina.com> <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/11] General notification queue with user mmap()'able ring buffer [ver #7]
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <7402.1567526797.1@warthog.procyon.org.uk>
+Date:   Tue, 03 Sep 2019 17:06:37 +0100
+Message-ID: <7403.1567526797@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Tue, 03 Sep 2019 16:06:42 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 15:39:33 +0200, Greg KH wrote:
-> On Sat, Aug 17, 2019 at 06:01:45PM -0400, Nathan Stratton Treadway wrote:
-> > I noticed that when I use "lsusb -v" on a UAS-enabled drive enclosure,
-> > the bInterfaceProtocol line for #80/0x50 has a "protocol name" label but the
-> > one for #98/0x62 does not:
-[...]
-> > So...I was wondering if there was any particular reason that protocol
-> > 98 isn't included in the usb.ids file?
+Hillf Danton <hdanton@sina.com> wrote:
+
+> > +	smp_store_release(&buf->meta.head, head);
 > 
-> No one got around to it?  Feel free to submit a patch to the web site
-> that handles these to upate it.
+> Add a line of comment for the paring smp_load_acquire().
+> I did not find it in 04/11.
 
-Thanks for your reply.  I did look there first, but because the
-"Bulk-Only" and "UAS" protocol names seem so similar but the UAS name
-hasn't been created for several years now, I started to wonder if there
-was a more complicated background story behind the situation.
+You won't find smp_load_acquire() - it's not in the kernel, though if you look
+in the sample, you'll find the corresponding barrier in userspace.  Note that
+there's a further implicit barrier you don't see.
 
-Anyway, for what it's worth there was a submission for the UAS protocal
-name on the USB ID website in 2013 and I submitted another one a couple
-weeks ago, but so far both are still showing up as grey (which seems to
-indicate that it's still pending approval by "an admin").
-  https://usb-ids.gowdy.us/read/UC/08/06/62
+I've added the comments:
 
-I'll see if I can track down contact information for the admin(s) there.
+	/* Barrier against userspace, ordering data read before tail read */
+	ring_tail = READ_ONCE(buf->meta.tail);
 
-						Nathan
+and:
+
+	/* Barrier against userspace, ordering head update after data write. */
+	smp_store_release(&buf->meta.head, head);
+
+David
