@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED798A6789
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 13:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529FEA67D4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 13:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729028AbfICLh4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 07:37:56 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46104 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729025AbfICLh4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 07:37:56 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q5so2747304pfg.13;
-        Tue, 03 Sep 2019 04:37:55 -0700 (PDT)
+        id S1728917AbfICLvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 07:51:36 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34373 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbfICLvg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 07:51:36 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b24so10665322pfp.1;
+        Tue, 03 Sep 2019 04:51:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NVdJdOAmZ0hGRuynRqiYY+kOL59PW+u7NGSvQi3VwYs=;
-        b=eHM8cp4ihsKGLyApe2LHYWhPFemeX8QNSzZr3hpo6gJWwTRjfG8ULLup/PcLmFz2L2
-         T5KUwoZmaXL4Eke2nJFQs20/Wo6eJCBJ51es1m6Ovq5iWbRJw7j6EKqX29dqD1y2uKp2
-         V89HpB+BNLwlyyearYVpGXdYM4qVUD0+i1h6+nez2rZ6dptyoQjf57FwzbOyRHHu9+yD
-         hLw4f20VFxI3+Mvvo7VZxmNYXRqi117G3RnyGiP4eu+ZFCTjzvy48+FSouCOooq7lPGb
-         jBNzSBE03TVmlhVf/4on95nCmSD5utEDQtksDhbYb+jVo/WtfG3c2vkyOrMryjycrpzV
-         AuFg==
+        h=sender:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=t2PxMG5OIm2u7yWMEpUqisBZ79ACocY8nzC9BY2ai8g=;
+        b=BzOKPbc4/MSMJfSK7LLEp7SNUCYYvBh4HDURdwaOsyyPnkmUTy/AKujgqW6L8uCJl6
+         XaL05v//eas0UdRSvSlKHyqwRFpRc/OqfKXo+pv6LGkymd+s1Q3HNWnKJfOg/3glY8pA
+         UUEmInY3y7aOIKQyPJKGU/KHvZRRANXNdyo1DVJX8D0D0PC4xTX0IRU/sdg2mPjLYCl2
+         jIgp072oXsEGLUyrYylNlT/GrfN3zP675thrTvlGYnNIaaJAvY4G9CdB4bMXBkzbQqzA
+         diGhS8KsD5HlryTqkAqj6N+3g9AW/tTi1c5Tn27Dwh2RyL5s1K+yw6JRQ1O6IkAT4M0I
+         AyuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NVdJdOAmZ0hGRuynRqiYY+kOL59PW+u7NGSvQi3VwYs=;
-        b=B5a2BT+Lad+Nr7L1GmbH7M9wLTsq2k4IXnn1WqUNt/aPXepGco8IOpYBmTUmWasdJE
-         lS8vEuC3GAOaoOuCMN4/AC2Fmgt/OQaLpqN42VBhZoOvFd9fTtAXf1nC+sLuWqvB6bmH
-         uXCCUFzGKQpUU355CUi2g2nY605bWuCpFzl5SJe3LnkxfJXjCgHs5kW3EkUwCnxyoq17
-         I2P69YzSBiCSeIichOOqK/4jtKFWW9aSutMjlfEgv7IneUcJ4AaWkYnD0C3UQnQUl13/
-         2M4RTSXA2mWVRtk+ReipOaolL5kfxI6MP1RJ3wxQgxLJDILD4KxgzcAYKUd7x855tZyZ
-         WgTQ==
-X-Gm-Message-State: APjAAAVbqH0yxPfGwGBuQsD2OqPndUewZaA/Z8jWCaGBtuTDcEK23NnP
-        UgLSGaFHfvZ1MtV/tUixZ+s=
-X-Google-Smtp-Source: APXvYqx+X9ArMamcoRQOqiJM66DXertYbZ4q3mJOy2DsEFr1QLydMsyCEfW6yDu0kFkJoqUw9PHWnA==
-X-Received: by 2002:a17:90a:9bc5:: with SMTP id b5mr4450619pjw.107.1567510675387;
-        Tue, 03 Sep 2019 04:37:55 -0700 (PDT)
+         :mime-version:content-disposition:user-agent;
+        bh=t2PxMG5OIm2u7yWMEpUqisBZ79ACocY8nzC9BY2ai8g=;
+        b=RznjvVOVUqxloO9dz3xRveY4yWKs9OWwMCDCnqgp+CrGXQqK8vugruwpP4+RHVudCl
+         B6vAUeZZaSSuTeb3GCaGAyNZHRBsMWdQ5s5+4f/tCPD3XOZAkZMowcjyEIdIWIWmryZj
+         8cxqNPyDoyxeGP8lD9lGltxMp5vcFWCcYRLqavDHi9kX9pRdwj0voefEAbSY279RScoF
+         cvrAk9YQS18LrqGkAD0opg7HIsKayMR8+fMefulAaOPSZ32x1w4WDBYWRf10+CqiaGv2
+         RNPcBROWPFDQKrGzUjKYwXoerFaufiUDwHitoKt3Wb0U2XymqCmOtvyYrhX8ZOiVrkTn
+         Kdew==
+X-Gm-Message-State: APjAAAXO/ii+qd4tdqpQz6KkxuqNrUrXg8vA+sTT+UDrbCyIpjdKgAOj
+        3oHzf4mxUNqonyHIyj3IxlI=
+X-Google-Smtp-Source: APXvYqzaQC+6kNqfUI/eVx4HPCBbmJTTOPyiSjSJY5k6LjVLpW9HArFoDoPFVW2rvicRDKjCvdCQRA==
+X-Received: by 2002:aa7:9303:: with SMTP id 3mr19787525pfj.29.1567511495522;
+        Tue, 03 Sep 2019 04:51:35 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k5sm12461188pfp.109.2019.09.03.04.37.53
+        by smtp.gmail.com with ESMTPSA id r23sm7173244pjo.22.2019.09.03.04.51.34
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 04:37:54 -0700 (PDT)
-Date:   Tue, 3 Sep 2019 04:37:53 -0700
+        Tue, 03 Sep 2019 04:51:34 -0700 (PDT)
+Date:   Tue, 3 Sep 2019 04:51:33 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Christoph Hellwig <hch@lst.de>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -52,53 +52,52 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
         linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] usb/ohci-sm501: remove the HCD_DMA flag
-Message-ID: <20190903113753.GA20198@roeck-us.net>
-References: <20190903084615.19161-1-hch@lst.de>
- <20190903084615.19161-2-hch@lst.de>
+Subject: Re: [PATCH 6/6] mfd: don't select DMA_DECLARE_COHERENT for the sm501
+ and tc6393xb drivers
+Message-ID: <20190903115133.GA3543@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190903084615.19161-2-hch@lst.de>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 10:46:10AM +0200, Christoph Hellwig wrote:
-> This driver doesn't support normal DMA, only direct access to its
-> local memory.  Remove the HCD_DMA flag to properly express that fact.
+On Tue, Sep 03, 2019 at 10:46:15AM +0200, Christoph Hellwig wrote:
+> Now that these drivers use the usb localmem pool there is no need to
+> select DMA_DECLARE_COHERENT.
 > 
-> Fixes: 1e4946c4412e ("usb: add a HCD_DMA flag instead of guestimating DMA capabilities")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Christoph Hellwig <hch@lst.de>
 
 Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-on top of next-20190903.
-
-Thanks!
-
-Guenter
+for SM501.
 
 > ---
->  drivers/usb/host/ohci-sm501.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/mfd/Kconfig | 2 --
+>  1 file changed, 2 deletions(-)
 > 
-> diff --git a/drivers/usb/host/ohci-sm501.c b/drivers/usb/host/ohci-sm501.c
-> index 0b2aea6e28d4..c158cda9e4b9 100644
-> --- a/drivers/usb/host/ohci-sm501.c
-> +++ b/drivers/usb/host/ohci-sm501.c
-> @@ -49,7 +49,7 @@ static const struct hc_driver ohci_sm501_hc_driver = {
->  	 * generic hardware linkage
->  	 */
->  	.irq =			ohci_irq,
-> -	.flags =		HCD_USB11 | HCD_DMA | HCD_MEMORY,
-> +	.flags =		HCD_USB11 | HCD_MEMORY,
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index f129f9678940..c8cbde59bbf6 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -1105,7 +1105,6 @@ config MFD_SI476X_CORE
+>  config MFD_SM501
+>  	tristate "Silicon Motion SM501"
+>  	depends on HAS_DMA
+> -	select DMA_DECLARE_COHERENT
+>  	 ---help---
+>  	  This is the core driver for the Silicon Motion SM501 multimedia
+>  	  companion chip. This device is a multifunction device which may
+> @@ -1714,7 +1713,6 @@ config MFD_TC6393XB
+>  	select GPIOLIB
+>  	select MFD_CORE
+>  	select MFD_TMIO
+> -	select DMA_DECLARE_COHERENT
+>  	help
+>  	  Support for Toshiba Mobile IO Controller TC6393XB
 >  
->  	/*
->  	 * basic lifecycle operations
 > -- 
 > 2.20.1
 > 
