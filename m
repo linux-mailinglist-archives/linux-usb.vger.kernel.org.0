@@ -2,85 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00052A6DB0
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 18:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4820A6EAC
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 18:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729954AbfICQMF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 12:12:05 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40626 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727667AbfICQME (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 12:12:04 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w10so9403666pgj.7;
-        Tue, 03 Sep 2019 09:12:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dAdXWGRp8/fowrCm9THOUSCdjWb7mJEYN/KL0laD3uQ=;
-        b=jEAAilDcPvvWxYMzUNyq//l5UEQBGUuBmUMPyBxdzYp6fxM1ioPQFZBYgdZ4sqHUR+
-         WslXxzCtPFbx1NMFXWrla4MahFqMCyDIbEYZ2E+rfY6xYIFHNsEurXdS/EIRi1tuDB56
-         BpWZUdx6tpv1YZZnUkNm5iKS5yjclvnc4uxOBYI4VJJ8nrqRp2zVbwdmjN0QnderQYs1
-         C+c9EfiRVVz/3XrPXrh40LxLwtC3mLELyQxZJGbzy7yYhVmULCZBRi2kDXR0iIb861rU
-         lpm4pHiwvvuVKY5S9k8qYCYTrRsHZDqogII32yUq7Qbdkv6zIgjZECMLxu3rHO6s3HBQ
-         zeMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dAdXWGRp8/fowrCm9THOUSCdjWb7mJEYN/KL0laD3uQ=;
-        b=qJifALLtpZfZ0m5l0Ly9/WR6g9CxPaJWsmtj/eZ8NLufeh4Ta4kQ6exdUWoMvqC0TP
-         5V2L32GaTO1DcnFKjcdS0zMlcF/l6u4nfv234kdn0sJrAHnxm7T6PAsg44TTJNxL1lum
-         AQAYRV+b8UMM7hR5emcsHZf5A8bCT+j/evlj06VT0cmiM44A0YBW9HtkyJcv4HOthplN
-         D2eWwzq1i2942eIMNnWkgFwFEHG3hegWWZjcQAeTn90ODxP4lOsFwx+odGNoIZk7a/rE
-         nKo4e5YVAWMqiAZzquWOmpEraRBfblI/ZYtzmQrk5ug3Um8yhlZ9OwYUJUi2kGo69MJz
-         FlbA==
-X-Gm-Message-State: APjAAAUeeoVM0mKteBNj8D7ahieczHeqUI+r0wwGsh7aZZGoNOrwfNwu
-        rvqENlrSIdYBagRrsMJQcbg=
-X-Google-Smtp-Source: APXvYqx2Pzmh4yf64AqdUiNh7C3xwl72iP7Cuip7LJd3dmSUngMqqGhc2zBoeukjefZ5p76EL2axYQ==
-X-Received: by 2002:aa7:8ac5:: with SMTP id b5mr39773944pfd.56.1567527123858;
-        Tue, 03 Sep 2019 09:12:03 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 127sm1658049pfw.6.2019.09.03.09.12.03
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 09:12:03 -0700 (PDT)
-Date:   Tue, 3 Sep 2019 09:12:02 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     David Howells <dhowells@redhat.com>
-Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
+        id S1730998AbfICQ16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 12:27:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49562 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730986AbfICQ15 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:27:57 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 98772238C5;
+        Tue,  3 Sep 2019 16:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567528076;
+        bh=Jx4h1OLqgtM+TERApXP4s/2ms0EySlgEHJea4wI2Qf4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DH7yIoGwDMBTdYv3qFeQSRvtY6GlzdhCxWqSgXJkLrP2DfIg7UOCxa4i1de3YteXg
+         WcuQj56idzDoSJ1zcLdkuf2TIW4dob1UErDoo/PyCrrNuwMyIHTUw3yGKPZvG0GEwB
+         zqIcSldOknaaGI+tu1ZWQxM2e9SDdpqwtqZPuQdo=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
-Message-ID: <20190903161202.GB22754@roeck-us.net>
-References: <20190903125129.GA18838@roeck-us.net>
- <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
- <156717350329.2204.7056537095039252263.stgit@warthog.procyon.org.uk>
- <7481.1567526867@warthog.procyon.org.uk>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 089/167] usb: typec: tcpm: Try PD-2.0 if sink does not respond to 3.0 source-caps
+Date:   Tue,  3 Sep 2019 12:24:01 -0400
+Message-Id: <20190903162519.7136-89-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
+References: <20190903162519.7136-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7481.1567526867@warthog.procyon.org.uk>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 05:07:47PM +0100, David Howells wrote:
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
-> > This added call to usbdev_remove() results in a crash when running
-> > the qemu "tosa" emulation. Removing the call fixes the problem.
-> 
-> Yeah - I'm going to drop the bus notification messages for now.
-> 
-It is not the bus notification itself causing problems. It is the
-call to usbdev_remove().
+From: Hans de Goede <hdegoede@redhat.com>
 
-Guenter
+[ Upstream commit 976daf9d1199932df80e7b04546d1a1bd4ed5ece ]
+
+PD 2.0 sinks are supposed to accept src-capabilities with a 3.0 header and
+simply ignore any src PDOs which the sink does not understand such as PPS
+but some 2.0 sinks instead ignore the entire PD_DATA_SOURCE_CAP message,
+causing contract negotiation to fail.
+
+This commit fixes such sinks not working by re-trying the contract
+negotiation with PD-2.0 source-caps messages if we don't have a contract
+after PD_N_HARD_RESET_COUNT hard-reset attempts.
+
+The problem fixed by this commit was noticed with a Type-C to VGA dongle.
+
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/typec/tcpm.c | 27 ++++++++++++++++++++++++++-
+ 1 file changed, 26 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/tcpm.c b/drivers/usb/typec/tcpm.c
+index 5f29ce8d6c3f9..e8524ad5a4c0a 100644
+--- a/drivers/usb/typec/tcpm.c
++++ b/drivers/usb/typec/tcpm.c
+@@ -37,6 +37,7 @@
+ 	S(SRC_ATTACHED),			\
+ 	S(SRC_STARTUP),				\
+ 	S(SRC_SEND_CAPABILITIES),		\
++	S(SRC_SEND_CAPABILITIES_TIMEOUT),	\
+ 	S(SRC_NEGOTIATE_CAPABILITIES),		\
+ 	S(SRC_TRANSITION_SUPPLY),		\
+ 	S(SRC_READY),				\
+@@ -2987,10 +2988,34 @@ static void run_state_machine(struct tcpm_port *port)
+ 			/* port->hard_reset_count = 0; */
+ 			port->caps_count = 0;
+ 			port->pd_capable = true;
+-			tcpm_set_state_cond(port, hard_reset_state(port),
++			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
+ 					    PD_T_SEND_SOURCE_CAP);
+ 		}
+ 		break;
++	case SRC_SEND_CAPABILITIES_TIMEOUT:
++		/*
++		 * Error recovery for a PD_DATA_SOURCE_CAP reply timeout.
++		 *
++		 * PD 2.0 sinks are supposed to accept src-capabilities with a
++		 * 3.0 header and simply ignore any src PDOs which the sink does
++		 * not understand such as PPS but some 2.0 sinks instead ignore
++		 * the entire PD_DATA_SOURCE_CAP message, causing contract
++		 * negotiation to fail.
++		 *
++		 * After PD_N_HARD_RESET_COUNT hard-reset attempts, we try
++		 * sending src-capabilities with a lower PD revision to
++		 * make these broken sinks work.
++		 */
++		if (port->hard_reset_count < PD_N_HARD_RESET_COUNT) {
++			tcpm_set_state(port, HARD_RESET_SEND, 0);
++		} else if (port->negotiated_rev > PD_REV20) {
++			port->negotiated_rev--;
++			port->hard_reset_count = 0;
++			tcpm_set_state(port, SRC_SEND_CAPABILITIES, 0);
++		} else {
++			tcpm_set_state(port, hard_reset_state(port), 0);
++		}
++		break;
+ 	case SRC_NEGOTIATE_CAPABILITIES:
+ 		ret = tcpm_pd_check_request(port);
+ 		if (ret < 0) {
+-- 
+2.20.1
+
