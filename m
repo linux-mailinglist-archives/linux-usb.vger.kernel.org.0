@@ -2,120 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4820A6EAC
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 18:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B4F7A6EE6
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 18:30:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730998AbfICQ16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 12:27:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49562 "EHLO mail.kernel.org"
+        id S1731361AbfICQ30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 12:29:26 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:34172 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730986AbfICQ15 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Sep 2019 12:27:57 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1730333AbfICQ30 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 12:29:26 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 98772238C5;
-        Tue,  3 Sep 2019 16:27:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567528076;
-        bh=Jx4h1OLqgtM+TERApXP4s/2ms0EySlgEHJea4wI2Qf4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DH7yIoGwDMBTdYv3qFeQSRvtY6GlzdhCxWqSgXJkLrP2DfIg7UOCxa4i1de3YteXg
-         WcuQj56idzDoSJ1zcLdkuf2TIW4dob1UErDoo/PyCrrNuwMyIHTUw3yGKPZvG0GEwB
-         zqIcSldOknaaGI+tu1ZWQxM2e9SDdpqwtqZPuQdo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        by mx1.redhat.com (Postfix) with ESMTPS id 563E187521B;
+        Tue,  3 Sep 2019 16:29:25 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 57C0A19C78;
+        Tue,  3 Sep 2019 16:29:22 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20190903161202.GB22754@roeck-us.net>
+References: <20190903161202.GB22754@roeck-us.net> <20190903125129.GA18838@roeck-us.net> <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk> <156717350329.2204.7056537095039252263.stgit@warthog.procyon.org.uk> <7481.1567526867@warthog.procyon.org.uk>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 089/167] usb: typec: tcpm: Try PD-2.0 if sink does not respond to 3.0 source-caps
-Date:   Tue,  3 Sep 2019 12:24:01 -0400
-Message-Id: <20190903162519.7136-89-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190903162519.7136-1-sashal@kernel.org>
-References: <20190903162519.7136-1-sashal@kernel.org>
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <29418.1567528161.1@warthog.procyon.org.uk>
+Date:   Tue, 03 Sep 2019 17:29:21 +0100
+Message-ID: <29419.1567528161@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.68]); Tue, 03 Sep 2019 16:29:25 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-[ Upstream commit 976daf9d1199932df80e7b04546d1a1bd4ed5ece ]
+> > > This added call to usbdev_remove() results in a crash when running
+> > > the qemu "tosa" emulation. Removing the call fixes the problem.
+> > 
+> > Yeah - I'm going to drop the bus notification messages for now.
+> > 
+> It is not the bus notification itself causing problems. It is the
+> call to usbdev_remove().
 
-PD 2.0 sinks are supposed to accept src-capabilities with a 3.0 header and
-simply ignore any src PDOs which the sink does not understand such as PPS
-but some 2.0 sinks instead ignore the entire PD_DATA_SOURCE_CAP message,
-causing contract negotiation to fail.
+Unfortunately, I don't know how to fix it and don't have much time to
+investigate it right now - and it's something that can be added back later.
 
-This commit fixes such sinks not working by re-trying the contract
-negotiation with PD-2.0 source-caps messages if we don't have a contract
-after PD_N_HARD_RESET_COUNT hard-reset attempts.
-
-The problem fixed by this commit was noticed with a Type-C to VGA dongle.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/typec/tcpm.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/tcpm.c b/drivers/usb/typec/tcpm.c
-index 5f29ce8d6c3f9..e8524ad5a4c0a 100644
---- a/drivers/usb/typec/tcpm.c
-+++ b/drivers/usb/typec/tcpm.c
-@@ -37,6 +37,7 @@
- 	S(SRC_ATTACHED),			\
- 	S(SRC_STARTUP),				\
- 	S(SRC_SEND_CAPABILITIES),		\
-+	S(SRC_SEND_CAPABILITIES_TIMEOUT),	\
- 	S(SRC_NEGOTIATE_CAPABILITIES),		\
- 	S(SRC_TRANSITION_SUPPLY),		\
- 	S(SRC_READY),				\
-@@ -2987,10 +2988,34 @@ static void run_state_machine(struct tcpm_port *port)
- 			/* port->hard_reset_count = 0; */
- 			port->caps_count = 0;
- 			port->pd_capable = true;
--			tcpm_set_state_cond(port, hard_reset_state(port),
-+			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
- 					    PD_T_SEND_SOURCE_CAP);
- 		}
- 		break;
-+	case SRC_SEND_CAPABILITIES_TIMEOUT:
-+		/*
-+		 * Error recovery for a PD_DATA_SOURCE_CAP reply timeout.
-+		 *
-+		 * PD 2.0 sinks are supposed to accept src-capabilities with a
-+		 * 3.0 header and simply ignore any src PDOs which the sink does
-+		 * not understand such as PPS but some 2.0 sinks instead ignore
-+		 * the entire PD_DATA_SOURCE_CAP message, causing contract
-+		 * negotiation to fail.
-+		 *
-+		 * After PD_N_HARD_RESET_COUNT hard-reset attempts, we try
-+		 * sending src-capabilities with a lower PD revision to
-+		 * make these broken sinks work.
-+		 */
-+		if (port->hard_reset_count < PD_N_HARD_RESET_COUNT) {
-+			tcpm_set_state(port, HARD_RESET_SEND, 0);
-+		} else if (port->negotiated_rev > PD_REV20) {
-+			port->negotiated_rev--;
-+			port->hard_reset_count = 0;
-+			tcpm_set_state(port, SRC_SEND_CAPABILITIES, 0);
-+		} else {
-+			tcpm_set_state(port, hard_reset_state(port), 0);
-+		}
-+		break;
- 	case SRC_NEGOTIATE_CAPABILITIES:
- 		ret = tcpm_pd_check_request(port);
- 		if (ret < 0) {
--- 
-2.20.1
-
+David
