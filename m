@@ -2,101 +2,271 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A85BA68D7
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 14:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D686FA68F1
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Sep 2019 14:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729178AbfICMpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 08:45:31 -0400
-Received: from out4-smtp.messagingengine.com ([66.111.4.28]:55323 "EHLO
-        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725782AbfICMpa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 08:45:30 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id BE72421F2E;
-        Tue,  3 Sep 2019 08:45:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Tue, 03 Sep 2019 08:45:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=MIZWO/r5WYB1ZmJJ7B8lddyJnVF
-        yg+qUjv42zSxUqt0=; b=YpxITNYJslSW1rZgpIoPl5+IM9y17nEwlw4O7z2QmG7
-        SFyWS6hscPNDH/RBVBpP6XAvURfgbip1bM/4DmR3slsgnPCeq/CSBndgNRbq+qcB
-        MFVztMkcLRCkvswpbB6WT1MNMnOSGRsV7WweL+jBHtiQtavnxOendn+JBWZ6h+PL
-        UuUecnKYOBA84l7Dmo2Wub1ssIulrupTd+xz7tkYySrVEhIPcaHe7lDkTiUglaO2
-        mUJJyPlNU7JcetuWjtyQzQdmXtJ34qQUcf1LRKORpeou2kxu38zKS11NySdEDNaY
-        vD9Mc/GlW+PPORuRS1pnlJ2QC2IlXuLOudnUTamQpsA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=MIZWO/
-        r5WYB1ZmJJ7B8lddyJnVFyg+qUjv42zSxUqt0=; b=PwfKBbhs0K48qaOLrvdzE5
-        pnSCoTF02Nc0tuXuMuJ6ECD9L09iHhA4JPiQPVLi8jqgbvgrmKk/vEf1AdrEzXNu
-        ot8Ni4Sxr4OpitfZYZmyRdNvSevN9oMTuCmbJj5RF60ZpAXReDS1yyrzmE+zL0kN
-        pwRo1I08so8k7txh1/6CtR6Xs+PEElDKwtKyiQjKIl0zQLivScXT+wfVeNbJ2C1+
-        Kije2LAwXPQAje3EbbCd/5DieXpKfIXUQSHfVriQ5zqFy1tpEBlu0xI07eVCGvBX
-        Cm86foaabB9v4kxUVqMkY/xRlltWPnU9AtAuyjIcYG2q9SW/zHDH6MnzN3Me7krA
-        ==
-X-ME-Sender: <xms:aWBuXaHJEL_wvL6RIxE8cXqRUzkXedDrT0uGhaRozG3QvRuZTL4FnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudejfedgvdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:aWBuXSZMSm--u0-7G9yA86f6dcfE7NJfGCPNQ4yE5XJffU2AjjtV4A>
-    <xmx:aWBuXcLYSZk_gHQe9K5RghidwiXL3sGmgDa-3MfDUksGYkerumEvZQ>
-    <xmx:aWBuXVyjZyzeTamMj24KaKLxWdMGDhEGMm_MC8kalXnuhv-Lhvv-VQ>
-    <xmx:aWBuXW62BIDK1Rwyvv7DuNM25f7N7yHc2oPD15nHM1sv37HTVSLr1Q>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F2908D60068;
-        Tue,  3 Sep 2019 08:45:28 -0400 (EDT)
-Date:   Tue, 3 Sep 2019 14:45:27 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        USB Storage list <usb-storage@lists.one-eyed-alien.net>,
-        Dan Williams <dcbw@redhat.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
-Message-ID: <20190903124527.GB493@kroah.com>
-References: <CAODwPW8gTZ_2WEc9n=WJ2PEmQk2anTQYfwQ-898+kOq6wsjnZw@mail.gmail.com>
- <Pine.LNX.4.44L0.1908301337150.1459-100000@iolanthe.rowland.org>
- <20190902164724.GA22619@kroah.com>
- <1567500374.2878.2.camel@suse.com>
- <20190903091953.GA12325@kroah.com>
- <1567505043.2878.4.camel@suse.com>
+        id S1729169AbfICMve (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 08:51:34 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35610 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726631AbfICMve (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 08:51:34 -0400
+Received: by mail-pl1-f195.google.com with SMTP id gn20so7847605plb.2;
+        Tue, 03 Sep 2019 05:51:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TNk9IGlPVK1NdSpsB9QxgWnU7LxyXG6TJSpdCnPvcps=;
+        b=PlkqjMBpGaEEopswRSqx1ppklTkOOKC5tczf/NyjD0+LP/6o1/tXcZMCaVC40Gh46Z
+         +0toRojAC547HzfHdAYcGCoc38jSHKMM3oAr2xSEFNn3ESjD15bTY7tbD6RAJNTG7cS3
+         wJEvoNYLXl0VIhWmtaOGLzRyU1Etw8o/LzwBKeP5SCjkqSHq2js6XN8lC4fFkco7Wz6P
+         0s6pP4N1Zj+uWoGRFxtK8AIyr1QkZYQG/g6iH1AYFrrIXNvYscILxZfrsyiYWcg1Ew9Y
+         65CxNuY46rJAiNeG/BwTZYYCZLThPItBDhusyGI4gQgawTn+ifwjAX+v8CB7EFHuqt97
+         xzFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TNk9IGlPVK1NdSpsB9QxgWnU7LxyXG6TJSpdCnPvcps=;
+        b=sc7a13a0rIMama0z/9bQKOJKc0wB2o6e3751E7GW+a97I+4rQ8VL74WmJVeaYfR317
+         HPp3ejzafVDuZ2YJc1bsCJPBb2ntxRTCeoaxvtKvQGJslG66QV7zS50WJLC5AwWukS0O
+         iNsALDk61rkh1kniesd/fTuJrYRWJjWVyw4tPlMoaucmmxMa21fx3InkArZbjOl5sZb8
+         mvpe+LO2pR7WPUrhSh8ELj5YihADcVpbLjBOAbDT0BfyUG74nAgw5dTTJNrusX5upy+8
+         vUbnTkpEzIHa38avKivkHPWvLvUUfBv3h6A4P+8P7MuB+E41F31/FcN9CHNqo2hOJGNu
+         QDBg==
+X-Gm-Message-State: APjAAAUYaojL+Dix+LBA9fNIfakVhluyupFQIJVzTugynZrr2seQlZaZ
+        d7rUw8MmDbn5rG4F7Q+MM0A=
+X-Google-Smtp-Source: APXvYqwKqxznM6zQU3HZTapz8CigzSVKi3gwBMTP0WSJy/KSSehiI9IBnjYNqmxFn6WeFDq4F2/zxA==
+X-Received: by 2002:a17:902:9689:: with SMTP id n9mr35703585plp.3.1567515092655;
+        Tue, 03 Sep 2019 05:51:32 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 71sm4293971pfw.147.2019.09.03.05.51.30
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Sep 2019 05:51:31 -0700 (PDT)
+Date:   Tue, 3 Sep 2019 05:51:29 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     David Howells <dhowells@redhat.com>
+Cc:     viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
+Message-ID: <20190903125129.GA18838@roeck-us.net>
+References: <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
+ <156717350329.2204.7056537095039252263.stgit@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1567505043.2878.4.camel@suse.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <156717350329.2204.7056537095039252263.stgit@warthog.procyon.org.uk>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 12:04:03PM +0200, Oliver Neukum wrote:
-> Am Dienstag, den 03.09.2019, 11:19 +0200 schrieb Greg KH:
-> > On Tue, Sep 03, 2019 at 10:46:14AM +0200, Oliver Neukum wrote:
-> > > Am Montag, den 02.09.2019, 18:47 +0200 schrieb Greg KH:
-> > > > 
-> > > > This should work just fine today.  Add a new device id to the "new_id"
-> > > > file and then tell the driver to bind.  That's pretty much the same as a
-> > > > "force_bind", right?
-> > > 
-> > > That looks like a race condition by design to me.
-> > 
-> > How?
+On Fri, Aug 30, 2019 at 02:58:23PM +0100, David Howells wrote:
+> Add a USB subsystem notification mechanism whereby notifications about
+> hardware events such as device connection, disconnection, reset and I/O
+> errors, can be reported to a monitoring process asynchronously.
 > 
-> You have one of these files and potentially multiple devices
-> to be bound. You need a locking scheme. As soon as the acts
-> of specifying and binding are distinct.
+> Firstly, an event queue needs to be created:
+> 
+> 	fd = open("/dev/event_queue", O_RDWR);
+> 	ioctl(fd, IOC_WATCH_QUEUE_SET_SIZE, page_size << n);
+> 
+> then a notification can be set up to report USB notifications via that
+> queue:
+> 
+> 	struct watch_notification_filter filter = {
+> 		.nr_filters = 1,
+> 		.filters = {
+> 			[0] = {
+> 				.type = WATCH_TYPE_USB_NOTIFY,
+> 				.subtype_filter[0] = UINT_MAX;
+> 			},
+> 		},
+> 	};
+> 	ioctl(fd, IOC_WATCH_QUEUE_SET_FILTER, &filter);
+> 	notify_devices(fd, 12);
+> 
+> After that, records will be placed into the queue when events occur on a
+> USB device or bus.  Records are of the following format:
+> 
+> 	struct usb_notification {
+> 		struct watch_notification watch;
+> 		__u32	error;
+> 		__u32	reserved;
+> 		__u8	name_len;
+> 		__u8	name[0];
+> 	} *n;
+> 
+> Where:
+> 
+> 	n->watch.type will be WATCH_TYPE_USB_NOTIFY
+> 
+> 	n->watch.subtype will be the type of notification, such as
+> 	NOTIFY_USB_DEVICE_ADD.
+> 
+> 	n->watch.info & WATCH_INFO_LENGTH will indicate the length of the
+> 	record.
+> 
+> 	n->watch.info & WATCH_INFO_ID will be the second argument to
+> 	device_notify(), shifted.
+> 
+> 	n->error and n->reserved are intended to convey information such as
+> 	error codes, but are currently not used
+> 
+> 	n->name_len and n->name convey the USB device name as an
+> 	unterminated string.  This may be truncated - it is currently
+> 	limited to a maximum 63 chars.
+> 
+> Note that it is permissible for event records to be of variable length -
+> or, at least, the length may be dependent on the subtype.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> cc: linux-usb@vger.kernel.org
+> ---
+> 
+>  Documentation/watch_queue.rst    |    9 ++++++
+>  drivers/usb/core/Kconfig         |    9 ++++++
+>  drivers/usb/core/devio.c         |   56 ++++++++++++++++++++++++++++++++++++++
+>  drivers/usb/core/hub.c           |    4 +++
+>  include/linux/usb.h              |   18 ++++++++++++
+>  include/uapi/linux/watch_queue.h |   30 ++++++++++++++++++++
+>  6 files changed, 125 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/watch_queue.rst b/Documentation/watch_queue.rst
+> index 5cc9c6924727..4087a8e670a8 100644
+> --- a/Documentation/watch_queue.rst
+> +++ b/Documentation/watch_queue.rst
+> @@ -11,6 +11,8 @@ receive notifications from the kernel.  This can be used in conjunction with::
+>  
+>      * Block layer event notifications
+>  
+> +    * USB subsystem event notifications
+> +
+>  
+>  The notifications buffers can be enabled by:
+>  
+> @@ -315,6 +317,13 @@ Any particular buffer can be fed from multiple sources.  Sources include:
+>      or temporary link loss.  Watches of this type are set on the global device
+>      watch list.
+>  
+> +  * WATCH_TYPE_USB_NOTIFY
+> +
+> +    Notifications of this type indicate USB subsystem events, such as
+> +    attachment, removal, reset and I/O errors.  Separate events are generated
+> +    for buses and devices.  Watchpoints of this type are set on the global
+> +    device watch list.
+> +
+>  
+>  Event Filtering
+>  ===============
+> diff --git a/drivers/usb/core/Kconfig b/drivers/usb/core/Kconfig
+> index ecaacc8ed311..57e7b649e48b 100644
+> --- a/drivers/usb/core/Kconfig
+> +++ b/drivers/usb/core/Kconfig
+> @@ -102,3 +102,12 @@ config USB_AUTOSUSPEND_DELAY
+>  	  The default value Linux has always had is 2 seconds.  Change
+>  	  this value if you want a different delay and cannot modify
+>  	  the command line or module parameter.
+> +
+> +config USB_NOTIFICATIONS
+> +	bool "Provide USB hardware event notifications"
+> +	depends on USB && DEVICE_NOTIFICATIONS
+> +	help
+> +	  This option provides support for getting hardware event notifications
+> +	  on USB devices and interfaces.  This makes use of the
+> +	  /dev/watch_queue misc device to handle the notification buffer.
+> +	  device_notify(2) is used to set/remove watches.
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index 9063ede411ae..b8572e4d6a1b 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -41,6 +41,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <asm/byteorder.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/watch_queue.h>
+>  
+>  #include "usb.h"
+>  
+> @@ -2660,13 +2661,68 @@ static void usbdev_remove(struct usb_device *udev)
+>  	}
+>  }
+>  
+> +#ifdef CONFIG_USB_NOTIFICATIONS
+> +static noinline void post_usb_notification(const char *devname,
+> +					   enum usb_notification_type subtype,
+> +					   u32 error)
+> +{
+> +	unsigned int gran = WATCH_LENGTH_GRANULARITY;
+> +	unsigned int name_len, n_len;
+> +	u64 id = 0; /* Might want to put a dev# here. */
+> +
+> +	struct {
+> +		struct usb_notification n;
+> +		char more_name[USB_NOTIFICATION_MAX_NAME_LEN -
+> +			       (sizeof(struct usb_notification) -
+> +				offsetof(struct usb_notification, name))];
+> +	} n;
+> +
+> +	name_len = strlen(devname);
+> +	name_len = min_t(size_t, name_len, USB_NOTIFICATION_MAX_NAME_LEN);
+> +	n_len = round_up(offsetof(struct usb_notification, name) + name_len,
+> +			 gran) / gran;
+> +
+> +	memset(&n, 0, sizeof(n));
+> +	memcpy(n.n.name, devname, n_len);
+> +
+> +	n.n.watch.type		= WATCH_TYPE_USB_NOTIFY;
+> +	n.n.watch.subtype	= subtype;
+> +	n.n.watch.info		= n_len;
+> +	n.n.error		= error;
+> +	n.n.name_len		= name_len;
+> +
+> +	post_device_notification(&n.n.watch, id);
+> +}
+> +
+> +void post_usb_device_notification(const struct usb_device *udev,
+> +				  enum usb_notification_type subtype, u32 error)
+> +{
+> +	post_usb_notification(dev_name(&udev->dev), subtype, error);
+> +}
+> +
+> +void post_usb_bus_notification(const struct usb_bus *ubus,
+> +			       enum usb_notification_type subtype, u32 error)
+> +{
+> +	post_usb_notification(ubus->bus_name, subtype, error);
+> +}
+> +#endif
+> +
+>  static int usbdev_notify(struct notifier_block *self,
+>  			       unsigned long action, void *dev)
+>  {
+>  	switch (action) {
+>  	case USB_DEVICE_ADD:
+> +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
+>  		break;
+>  	case USB_DEVICE_REMOVE:
+> +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
+> +		usbdev_remove(dev);
+> +		break;
+> +	case USB_BUS_ADD:
+> +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
+> +		break;
+> +	case USB_BUS_REMOVE:
+> +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
+>  		usbdev_remove(dev);
 
-What needs to be locked here?
+This added call to usbdev_remove() results in a crash when running
+the qemu "tosa" emulation. Removing the call fixes the problem.
 
-totally confused,
-
-greg k-h
+Guenter
