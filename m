@@ -2,92 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EA3A7D7D
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 10:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A46AA7D91
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 10:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727544AbfIDISN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 04:18:13 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:12476 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725774AbfIDISN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 04:18:13 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d6f73450000>; Wed, 04 Sep 2019 01:18:13 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 04 Sep 2019 01:18:12 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 04 Sep 2019 01:18:12 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Sep
- 2019 08:18:12 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 4 Sep 2019 08:18:12 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d6f73420000>; Wed, 04 Sep 2019 01:18:12 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <dmitry.torokhov@gmail.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [PATCH] USB: usbfs: check cpu address range before remap
-Date:   Wed, 4 Sep 2019 13:47:31 +0530
-Message-ID: <1567585051-1354-1-git-send-email-nkristam@nvidia.com>
+        id S1728108AbfIDIWX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 04:22:23 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:62336 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726045AbfIDIWW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 04:22:22 -0400
+X-IronPort-AV: E=Sophos;i="5.64,465,1559487600"; 
+   d="scan'208";a="25494206"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 04 Sep 2019 17:22:20 +0900
+Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 31CD841D31B0;
+        Wed,  4 Sep 2019 17:22:16 +0900 (JST)
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Biju Das <biju.das@bp.renesas.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, Simon Horman <horms@verge.net.au>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH RESEND v7 0/3] Add USB3.0 and TI HD3SS3220 driver support
+Date:   Wed,  4 Sep 2019 09:15:38 +0100
+Message-Id: <1567584941-13690-1-git-send-email-biju.das@bp.renesas.com>
 X-Mailer: git-send-email 2.7.4
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1567585093; bh=rLBDoKvihGl0MovYYfBvU0HKJlYfWcLeQewj7Y0wtHk=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=dvMJ0IyyvVeEh7H4G18ES1kXsBNgRYGZ55ae/oXrO+Q9FU+rIpTyItB+kztG2ZUcW
-         ki1Hwj+Q28phiA/5q4cjVRM+vDMVF5c6ZtF4uC+sCkf9Jzvkmq9WVupyX64kj3KZTM
-         U2t2tmeD0Ux0KA+/hlmnsNaIGlzoVdZ0kFb57GTkNt3vQCXJDq2mXHPnOrY2X6w1Vg
-         e4mUsfbZnARktmbkh5jhDqanFQLyOi0Zm0yhlB092fEM6tE64AYVsAwabBis/76ryA
-         WswQvZKnIEmOuyEy9ya38Xp3LfHwnnEIM8JS3mpnVbVz3njP/a601wGUnUmnVtuadu
-         M5QRfxufc3wuA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In usbfs mmap, usb_alloc_coherent is used to allocate memory.
-This Memory is then remapped to user space memory using remap_pfn_range.
-remap_pfn_range needs phy address of memory, for which virt_to_phy API
-is used. This API works only if memory is allocated using kmalloc. But
-usb_alloc_coherent can allocate memory in vmalloc range and this causes
-wrong remap of user memory.
+This series adds USB 3.0 support for the CAT874 platform, including a
+new driver for the TI HD3SS3220 USB Type-C DRP port controller.
 
-Check if address returned by usb_alloc_coherent failed in vmalloc range
-and if yes, use remap_vmalloc_range API, else use remap_pfn_range to remap
-address to user space.
+Patch4-7 on the v7 series been accepted and is in linux-rc tree.
+Resending patch 1-3 of v7 series, since the dependency patches [1], [2],[3],[4]
+is accpted for usb-next.
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- drivers/usb/core/devio.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+This patchset is based on usb-next tree.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index a945ad7..20999de 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -250,7 +250,12 @@ static int usbdev_mmap(struct file *file, struct vm_area_struct *vma)
- 	usbm->vma_use_count = 1;
- 	INIT_LIST_HEAD(&usbm->memlist);
- 
--	if (remap_pfn_range(vma, vma->vm_start,
-+	if (is_vmalloc_addr(usbm->mem)) {
-+		if (remap_vmalloc_range(vma, usbm->mem, 0) < 0) {
-+			dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
-+			return -EAGAIN;
-+		}
-+	} else if (remap_pfn_range(vma, vma->vm_start,
- 			virt_to_phys(usbm->mem) >> PAGE_SHIFT,
- 			size, vma->vm_page_prot) < 0) {
- 		dec_usb_memory_use_count(usbm, &usbm->vma_use_count);
+[1] commit 451d15a1731c7db9d4868 ("dt-binding: usb: add usb-role-switch property")
+[2] commit 977607653cdd06a2c4d1d ("usb: roles: Introduce stubs for the exiting functions in role.h")
+[3] commit 44493062abc38e5895e0c ("device connection: Add fwnode_connection_find_match()")
+[4] commit a31f01777bc54a0a9d576 ("usb: roles: Add fwnode_usb_role_switch_get() function")
+
+V7-->V7 RESEND
+  * No change
+    (https://patchwork.kernel.org/patch/10969911/)
+V6-->V7
+  * Rebased on the below patch series
+    (https://patchwork.kernel.org/project/linux-usb/list/?series=124223)
+  * Updted the hd3ss3220 binding documentation
+    -> Removed Rob's reviewed by tag, since there is a rework.
+    -> Incorporated Sergie and Shimoda-San's review comment.
+     (https://patchwork.kernel.org/patch/10944629/)
+  * Rebased hd3ss3220 driver based on the new API
+    --> Removed Heikki's review comment, since there is a rework
+    (https://patchwork.kernel.org/patch/10942499/)
+  * Incorporated shimoda-san's review comments for renesas usb3 binding
+    (https://patchwork.kernel.org/patch/10944631/)
+  * Incorporated shimoda-san's review comments for renesas usb3 driver
+    (https://patchwork.kernel.org/patch/10944643/)
+V5-->V6
+  * Updated bindings patch by using usb-role-switch property
+  * Used graph api's to get role switch supported by the usb-c-connector
+V4-->V5
+  * Incorporated Heikki's review comment.
+    (https://patchwork.kernel.org/patch/10902531/)
+  * Patch 1 is a dependency patch to make the compilation successful.
+    (https://patchwork.kernel.org/patch/10909971/)
+  * Patch 2 is also dependency patch to make the compilation successful.
+    Rebased on top of Patch1 and fixed Heikki's review comments
+    (https://patchwork.kernel.org/patch/10882555/)
+  * Incorporated Shimoda-San's review comment.
+    (https://patchwork.kernel.org/patch/10902535/)
+V3-->V4
+  * Incorporated Chunfeng Yun's review comment
+    (https://patchwork.kernel.org/project/linux-usb/list/?submitter=133171)
+  * Used fwnode API's to get roleswitch handle
+
+V2-->V3
+  * Used the new API to usb_role_switch by node to find the remote endpoint
+    (https://patchwork.kernel.org/patch/10882555/)
+  * Added renesas,usb-role-switch property
+  * Incorporated shimoda-san's review comment
+    (https://patchwork.kernel.org/patch/10852507/)
+
+V1-->V2
+  * Use USB role class instead of extcon to receive connect and disconnect
+    events and also for the dual role switch.
+  * Dropped patch 6
+  * Squashed patch 8 and patch 9
+  * https://patchwork.kernel.org/cover/10840641/
+
+
+Biju Das (3):
+  dt-bindings: usb: hd3ss3220 device tree binding document
+  usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller
+  dt-bindings: usb: renesas_usb3: Document usb role switch support
+
+ .../devicetree/bindings/usb/renesas,usb3-peri.txt  |  23 ++
+ .../devicetree/bindings/usb/ti,hd3ss3220.txt       |  38 +++
+ drivers/usb/typec/Kconfig                          |  10 +
+ drivers/usb/typec/Makefile                         |   1 +
+ drivers/usb/typec/hd3ss3220.c                      | 259 +++++++++++++++++++++
+ 5 files changed, 331 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,hd3ss3220.txt
+ create mode 100644 drivers/usb/typec/hd3ss3220.c
+
 -- 
 2.7.4
 
