@@ -2,95 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E81CA7FEF
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 12:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A2FA7FEC
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 12:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729286AbfIDKCT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 06:02:19 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:51238 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728259AbfIDKCS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 06:02:18 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x84A0UVH119080;
-        Wed, 4 Sep 2019 10:01:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=UM+SwFNr0NZqjE23wbuHlkhD3KZ5eqc7RvBW7cs6I4o=;
- b=CUm2SRHGblQACE6D2lFl/UJJlDCFFGPRG21XRHS5kFBWVPGcOyhUMICsKVoq/4Rqx0aw
- 9XRT8SUOKiy1i0/yBDdUdHgpQgRvng1QRQh0UlNELOPockzvGFNnNYdhpdHR0vaZpo3T
- 6ZrWhMpbrFbyswOH7tdWQri+zqdWgrrys0CPnAXi1pH1OQSdGx6UXPKs90meargUArp+
- yX9vzTHSXJoIpNbpPrQAKzEkm9yK4T30HmJc6jJkz7uH1zqIdSIRoG8YXbzcBTMrDf0X
- 2Nrg/hBPVLCeter25JDBKn59Vw2D1EmuNMLIMFhiBH23lG/TwWK2BY90eMbN3km+aJqx lw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2utb4f00tt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Sep 2019 10:01:11 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x849wDEV131414;
-        Wed, 4 Sep 2019 10:01:10 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2ut1hn7xja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Sep 2019 10:01:10 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x84A197q000449;
-        Wed, 4 Sep 2019 10:01:09 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Sep 2019 03:01:08 -0700
-Date:   Wed, 4 Sep 2019 13:01:02 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] usb: cdns3: Fix use after free in probe error handling
-Message-ID: <20190904100102.GB7007@mwanda>
+        id S1729563AbfIDKBh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 06:01:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38530 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbfIDKBh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 06:01:37 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C3E4E2339E;
+        Wed,  4 Sep 2019 10:01:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567591296;
+        bh=aggr3vv5VhvJRCHWx1jeMGaAXzhpEBiQa671AyYRvME=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gyvRfJ/VcYiXAX6c7c7OinedoRdn/Lvwaup/qk6Od+1BbfFf2hqfQYuc4eCK68AGH
+         4/vAIc6nsxZQO2lpKj019jrA0jv6rfPRhz0rBGflScd5lec5nLfU/mcU0Zbyr7T5Vd
+         XpvfcDnAxRf8KVwkE/7KRjwAXZgUq5QEFXajBfpQ=
+Date:   Wed, 4 Sep 2019 12:01:33 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jacky.Cao@sony.com
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stern@rowland.harvard.edu,
+        Kento.A.Kobayashi@sony.com
+Subject: Re: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
+Message-ID: <20190904100133.GB9615@kroah.com>
+References: <16EA1F625E922C43B00B9D82250220500871C862@APYOKXMS108.ap.sony.com>
+ <87sgpcmr7v.fsf@gmail.com>
+ <20190904075839.GA28042@kroah.com>
+ <16EA1F625E922C43B00B9D82250220500871C90C@APYOKXMS108.ap.sony.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9369 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909040099
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9369 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909040099
+In-Reply-To: <16EA1F625E922C43B00B9D82250220500871C90C@APYOKXMS108.ap.sony.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We can't use "wrap" after it has been freed.
+On Wed, Sep 04, 2019 at 08:52:12AM +0000, Jacky.Cao@sony.com wrote:
+> Hi, 
+> 
+> > I'm not ok with the whitespace damage making this patch impossible to apply :)
+> 
+> Sorry for the whitespace damage issue I didn't notice when I copied the content.
+> Just now I submitted v2 for this patch with whitespace damage issue fix.
+> Please help to confirm, thank you.
 
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/usb/cdns3/cdns3-pci-wrap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+You can always confirm your own submissions by looking on the mailing
+list itself, no need to ask anyone else to do that :)
 
-diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
-index c41ddb61b857..b0a29efe7d31 100644
---- a/drivers/usb/cdns3/cdns3-pci-wrap.c
-+++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
-@@ -159,8 +159,9 @@ static int cdns3_pci_probe(struct pci_dev *pdev,
- 		wrap->plat_dev = platform_device_register_full(&plat_info);
- 		if (IS_ERR(wrap->plat_dev)) {
- 			pci_disable_device(pdev);
-+			err = PTR_ERR(wrap->plat_dev);
- 			kfree(wrap);
--			return PTR_ERR(wrap->plat_dev);
-+			return err;
- 		}
- 	}
- 
--- 
-2.20.1
-
+greg k-h
