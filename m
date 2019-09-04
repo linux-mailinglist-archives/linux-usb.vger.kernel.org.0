@@ -2,256 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB418A781F
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 03:43:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EBC2A783B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 03:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727168AbfIDBnO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 21:43:14 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:18756 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726441AbfIDBnO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 21:43:14 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d6f16b30000>; Tue, 03 Sep 2019 18:43:15 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 03 Sep 2019 18:43:12 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 03 Sep 2019 18:43:12 -0700
-Received: from [10.19.108.121] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 4 Sep
- 2019 01:43:10 +0000
-Subject: Re: [PATCH] xhci: tegra: Parameterize mailbox register addresses
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>
-References: <20190902082127.17963-1-jckuo@nvidia.com>
- <20190903135822.GA10466@kroah.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <90794861-1fe7-b659-fd33-4fb0f2e7f929@nvidia.com>
-Date:   Wed, 4 Sep 2019 09:43:08 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727827AbfIDBxH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Sep 2019 21:53:07 -0400
+Received: from mail-eopbgr1410137.outbound.protection.outlook.com ([40.107.141.137]:16910
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726589AbfIDBxG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Sep 2019 21:53:06 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Zey7bZpPF3UheO98b+vAxYFGu6HtgjdzaHR5j7uL875orsSTxin/UvZWnX6e0SaQ2gGV6jTkkARPg0jZgsWU0qwwOtxWChxJ7Ot5JnZCkmhJYPbUmX+Fm9BRYdg0vV4nCNtsmwO2T5SLl2d9vF02b2Zn3OztRFx4HQf9d1OuyQaplj9kCIo87/UGV04H7XVigLTPU7GElT6sR5ZjI1ztFzgw1CwNMQBcYO0nz0ex/WsBylxb5ag6wZFKO717cTWfiN7E+kvg1FTWn1bG4cywD92okd1xjLi7KTN2bhbiVRYvqyu2WBoXPrVbrIMI4G0Lf+XzH60NtdrkbZl8IhkrFQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HuKBieB+g1++pW4pKO9wNGvSZ4A91H7c7FnFMzErAVY=;
+ b=FSKtHVQXYY7Mv07vAmTtHRcDV9EqCf7zCG8Th71NlIylN2Gb2S8UaJYTulNU6DRBzRdXxzXVuu3esIwQt9ogqWTe8xdfsE9IVYHpk3etNZFAuiY0SGBuSX2peC6sF+4DwTtwdwe+oTXWgkWuVDlC8l2Bxp5SdJBGNqM+HYSc/LGM86E5HOWZm9CreN8ccmNlL/6gCLWhl7K3CiHJbU+ZRam68CPX+SVbES/yTSU2wuCJrTEjLW1g6o0ySW2wGwltpDB9/1dQIZcwsavT23SlpBT90q4D3ns5dQZ8cr4UiziW6JQlW8DYiDlBZc08xiT4htLgIG7LYu5Vop4t1ZMs1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HuKBieB+g1++pW4pKO9wNGvSZ4A91H7c7FnFMzErAVY=;
+ b=kVugVezUdA0xmZSMfGoRRVUGubSklSBD73Ww9nmFceN7iWOoLJPsp1xgU78E3UDhbX2K4yFs2OO2sR9CbIWZBgmPAhEHCEr8GkJNlF56h12usGSuFKN7fs7g+XrQ72yKxNJXFrehhtBS6cwIaolE1mQMjuO/biXXaxvbnWvFp+M=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB4624.jpnprd01.prod.outlook.com (20.179.174.206) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.21; Wed, 4 Sep 2019 01:53:02 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::6564:f61f:f179:facf]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::6564:f61f:f179:facf%5]) with mapi id 15.20.2220.022; Wed, 4 Sep 2019
+ 01:53:02 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     David Howells <dhowells@redhat.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "raven@themaw.net" <raven@themaw.net>,
+        Christian Brauner <christian@brauner.io>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
+Thread-Topic: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
+Thread-Index: AQHVXzsMLREEIlZGOEClLfV6eehsdKcZpnywgAARagCAARAuwA==
+Date:   Wed, 4 Sep 2019 01:53:01 +0000
+Message-ID: <TYAPR01MB45441054C3956CCA7BBD80CBD8B80@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk>
+ <156717350329.2204.7056537095039252263.stgit@warthog.procyon.org.uk>
+ <TYAPR01MB4544829484474FC61E850F32D8B90@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+ <20190903093720.GD12325@kroah.com>
+In-Reply-To: <20190903093720.GD12325@kroah.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [150.249.235.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 5807f942-2c90-4679-2844-08d730da9ec9
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB4624;
+x-ms-traffictypediagnostic: TYAPR01MB4624:
+x-microsoft-antispam-prvs: <TYAPR01MB4624B79926458D8E0323E6ECD8B80@TYAPR01MB4624.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0150F3F97D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(979002)(4636009)(396003)(376002)(366004)(136003)(346002)(39860400002)(189003)(51914003)(199004)(66446008)(76116006)(6116002)(76176011)(81166006)(99286004)(6436002)(7416002)(8936002)(6246003)(64756008)(478600001)(54906003)(66476007)(66946007)(81156014)(9686003)(3846002)(66556008)(71190400001)(14444005)(71200400001)(4326008)(86362001)(53936002)(55016002)(256004)(229853002)(74316002)(476003)(14454004)(486006)(6506007)(5660300002)(102836004)(2906002)(6916009)(11346002)(52536014)(26005)(446003)(305945005)(186003)(7736002)(33656002)(316002)(7696005)(25786009)(8676002)(66066001)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB4624;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: uNmXCM2YWDvC1x/S4vmwiutzGkD8n4K4kmO3b4qBnRSwqvl1qYxNkBKRHhpRnzU+Ut3PKzJA8+unUbE4oqJT4d+QEf79M1W6C+gjk8CuviqilfCxbC+Q926b0sQIWPcdlzHcrgfjiLUu6RR61KNw1cF0i/RT76lapNzp4kmeDCCYs8koMLUmAkthY8X1lcKSR6JvvhOfHpkQX/iuYJ2T4pPtlMCyQF54Z/UEA9D3wRJj3wXnF/mcwSNkJmq24ULxdi6CBXmoO5adSIXEMYnxump7oKAE1GjKO8aGXcdSZXGYTT1Gq4HQRl1nei+fFWWMZJNPi4zEi+LfcxrV+kyUM2ywYCkcprmoIOwPY9r4n7P3AnLxfNctW/5ICbq5KR2LSat2pcyRqd3LcPGjS3qggzcaNOJ0cs43vl76bfrSeMM=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20190903135822.GA10466@kroah.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1567561395; bh=AolpN2XapqNWiHC++EK/EfhoocqnX+VHovMQXLSeQxg=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ESd4pjCGRpo1dnBUeqJ5Irvrs8KVS4uu8Qhhe4HJa9qB+ZScCzpPO8J4yeQN1ySK4
-         a4L359PnMIWv8A75AYHu0bOz0YAOW8OjE1ZtN6dT1PYYIlMO0At44QfmcsfNp8lQEy
-         QqKoiGDPjU1nhzFLFIeh21dNUTrkruOPx+OkcOT/gZW4h/r0NvYUyPCbzuhH0JGuyL
-         eB2mSuyrqNXAY0uFfqVAYFVvrtEmiRibxyp71aP2OF59a66wwmBHB/tzSVkL+Gf3Xq
-         KuIS2LjoIlsVy564ZERsCZTg97euHMOkW/nh67W/Hn4cKyBoVFJP87LLG4SUPnG3sd
-         2dhH40kRWbFqA==
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5807f942-2c90-4679-2844-08d730da9ec9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2019 01:53:02.0192
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QgwGWGDHxAjp04N98FrcyX+g/u6VGoCfySVFCbZXeJ/ur22VorZxVX6lvxrSletlflzscrkcvb0VeghSPE7YBc2FZZl6G81ig3b7CA1m79cuTxIuAdnmaLmWX0yLQcnb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4624
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/3/19 9:58 PM, Greg KH wrote:
-> On Mon, Sep 02, 2019 at 04:21:27PM +0800, JC Kuo wrote:
->> Tegra194 XUSB host controller has rearranged mailbox registers. This
->> commit makes mailbox registers address a part of "soc" data so that
->> xhci-tegra driver can be used for Tegra194.
->>
->> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->> ---
->>  drivers/usb/host/xhci-tegra.c | 58 +++++++++++++++++++++++++----------
->>  1 file changed, 42 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
->> index dafc65911fc0..247b08ca49ee 100644
->> --- a/drivers/usb/host/xhci-tegra.c
->> +++ b/drivers/usb/host/xhci-tegra.c
->> @@ -42,19 +42,18 @@
->>  #define XUSB_CFG_CSB_BASE_ADDR			0x800
->>  
->>  /* FPCI mailbox registers */
->> -#define XUSB_CFG_ARU_MBOX_CMD			0x0e4
->> +/* XUSB_CFG_ARU_MBOX_CMD */
->>  #define  MBOX_DEST_FALC				BIT(27)
->>  #define  MBOX_DEST_PME				BIT(28)
->>  #define  MBOX_DEST_SMI				BIT(29)
->>  #define  MBOX_DEST_XHCI				BIT(30)
->>  #define  MBOX_INT_EN				BIT(31)
->> -#define XUSB_CFG_ARU_MBOX_DATA_IN		0x0e8
->> +/* XUSB_CFG_ARU_MBOX_DATA_IN and XUSB_CFG_ARU_MBOX_DATA_OUT */
->>  #define  CMD_DATA_SHIFT				0
->>  #define  CMD_DATA_MASK				0xffffff
->>  #define  CMD_TYPE_SHIFT				24
->>  #define  CMD_TYPE_MASK				0xff
->> -#define XUSB_CFG_ARU_MBOX_DATA_OUT		0x0ec
->> -#define XUSB_CFG_ARU_MBOX_OWNER			0x0f0
->> +/* XUSB_CFG_ARU_MBOX_OWNER */
->>  #define  MBOX_OWNER_NONE			0
->>  #define  MBOX_OWNER_FW				1
->>  #define  MBOX_OWNER_SW				2
->> @@ -146,6 +145,13 @@ struct tegra_xusb_phy_type {
->>  	unsigned int num;
->>  };
->>  
->> +struct tega_xusb_mbox_regs {
->> +	unsigned int cmd;
->> +	unsigned int data_in;
->> +	unsigned int data_out;
->> +	unsigned int owner;
-> 
-> Shouldn't these all be u8 values?
-> 
-These data members represent register offset in Tegra XUSB FPCI area. Size of
-FPCI area is 0x1000, so it is possible for future Tegra XUSB to have mailbox
-registers allocated to somewhere > 0x100.
+Hi Greg,
 
->> +};
->> +
->>  struct tegra_xusb_soc {
->>  	const char *firmware;
->>  	const char * const *supply_names;
->> @@ -160,6 +166,8 @@ struct tegra_xusb_soc {
->>  		} usb2, ulpi, hsic, usb3;
->>  	} ports;
->>  
->> +	struct tega_xusb_mbox_regs mbox;
->> +
->>  	bool scale_ss_clock;
->>  	bool has_ipfs;
->>  };
->> @@ -395,15 +403,15 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
->>  	 * ACK/NAK messages.
->>  	 */
->>  	if (!(msg->cmd == MBOX_CMD_ACK || msg->cmd == MBOX_CMD_NAK)) {
->> -		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
->> +		value = fpci_readl(tegra, tegra->soc->mbox.owner);
->>  		if (value != MBOX_OWNER_NONE) {
->>  			dev_err(tegra->dev, "mailbox is busy\n");
->>  			return -EBUSY;
->>  		}
->>  
->> -		fpci_writel(tegra, MBOX_OWNER_SW, XUSB_CFG_ARU_MBOX_OWNER);
->> +		fpci_writel(tegra, MBOX_OWNER_SW, tegra->soc->mbox.owner);
->>  
->> -		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
->> +		value = fpci_readl(tegra, tegra->soc->mbox.owner);
->>  		if (value != MBOX_OWNER_SW) {
->>  			dev_err(tegra->dev, "failed to acquire mailbox\n");
->>  			return -EBUSY;
->> @@ -413,17 +421,17 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
->>  	}
->>  
->>  	value = tegra_xusb_mbox_pack(msg);
->> -	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_DATA_IN);
->> +	fpci_writel(tegra, value, tegra->soc->mbox.data_in);
->>  
->> -	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
->> +	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
->>  	value |= MBOX_INT_EN | MBOX_DEST_FALC;
->> -	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
->> +	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
->>  
->>  	if (wait_for_idle) {
->>  		unsigned long timeout = jiffies + msecs_to_jiffies(250);
->>  
->>  		while (time_before(jiffies, timeout)) {
->> -			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
->> +			value = fpci_readl(tegra, tegra->soc->mbox.owner);
->>  			if (value == MBOX_OWNER_NONE)
->>  				break;
->>  
->> @@ -431,7 +439,7 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
->>  		}
->>  
->>  		if (time_after(jiffies, timeout))
->> -			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
->> +			value = fpci_readl(tegra, tegra->soc->mbox.owner);
->>  
->>  		if (value != MBOX_OWNER_NONE)
->>  			return -ETIMEDOUT;
->> @@ -598,16 +606,16 @@ static irqreturn_t tegra_xusb_mbox_thread(int irq, void *data)
->>  
->>  	mutex_lock(&tegra->lock);
->>  
->> -	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_DATA_OUT);
->> +	value = fpci_readl(tegra, tegra->soc->mbox.data_out);
->>  	tegra_xusb_mbox_unpack(&msg, value);
->>  
->> -	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
->> +	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
->>  	value &= ~MBOX_DEST_SMI;
->> -	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
->> +	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
->>  
->>  	/* clear mailbox owner if no ACK/NAK is required */
->>  	if (!tegra_xusb_mbox_cmd_requires_ack(msg.cmd))
->> -		fpci_writel(tegra, MBOX_OWNER_NONE, XUSB_CFG_ARU_MBOX_OWNER);
->> +		fpci_writel(tegra, MBOX_OWNER_NONE, tegra->soc->mbox.owner);
->>  
->>  	tegra_xusb_mbox_handle(tegra, &msg);
->>  
->> @@ -1365,6 +1373,12 @@ static const struct tegra_xusb_soc tegra124_soc = {
->>  	},
->>  	.scale_ss_clock = true,
->>  	.has_ipfs = true,
->> +	.mbox = {
->> +		.cmd = 0xe4,
->> +		.data_in = 0xe8,
->> +		.data_out = 0xec,
->> +		.owner = 0xf0,
->> +	},
->>  };
->>  MODULE_FIRMWARE("nvidia/tegra124/xusb.bin");
->>  
->> @@ -1397,6 +1411,12 @@ static const struct tegra_xusb_soc tegra210_soc = {
->>  	},
->>  	.scale_ss_clock = false,
->>  	.has_ipfs = true,
->> +	.mbox = {
->> +		.cmd = 0xe4,
->> +		.data_in = 0xe8,
->> +		.data_out = 0xec,
->> +		.owner = 0xf0,
->> +	},
->>  };
->>  MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
->>  
->> @@ -1422,6 +1442,12 @@ static const struct tegra_xusb_soc tegra186_soc = {
->>  	},
->>  	.scale_ss_clock = false,
->>  	.has_ipfs = false,
->> +	.mbox = {
->> +		.cmd = 0xe4,
->> +		.data_in = 0xe8,
->> +		.data_out = 0xec,
->> +		.owner = 0xf0,
->> +	},
-> 
-> This did not change any existing functionality, is there a follow-on
-> patch somewhere that takes advantage of this change to enable different
-> hardware?  Otherwise this doesn't seem worth it.
-> 
-Yes, I will submit another patch to enable Tegra194 XHCI. It will make use of
-this patch to declare Tegra194 XUSB mailbox registers as:
+> From: Greg Kroah-Hartman, Sent: Tuesday, September 3, 2019 6:37 PM
+<snip>
+> > > +void post_usb_bus_notification(const struct usb_bus *ubus,
+> >
+> > This function's argument is struct usb_bus *, but ...
+> >
+> > > +			       enum usb_notification_type subtype, u32 error)
+> > > +{
+> > > +	post_usb_notification(ubus->bus_name, subtype, error);
+> > > +}
+> > > +#endif
+> > > +
+> > >  static int usbdev_notify(struct notifier_block *self,
+> > >  			       unsigned long action, void *dev)
+> > >  {
+> > >  	switch (action) {
+> > >  	case USB_DEVICE_ADD:
+> > > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
+> > >  		break;
+> > >  	case USB_DEVICE_REMOVE:
+> > > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
+> > > +		usbdev_remove(dev);
+> > > +		break;
+> > > +	case USB_BUS_ADD:
+> > > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
+> > > +		break;
+> > > +	case USB_BUS_REMOVE:
+> > > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
+> > >  		usbdev_remove(dev);
+> >
+> > this function calls usbdev_remove() with incorrect argument if the acti=
+on
+> > is USB_BUS_REMOVE. So, this seems to cause the following issue [1] on
+> > my environment (R-Car H3 / r8a7795 on next-20190902) [2]. However, I ha=
+ve
+> > no idea how to fix the issue, so I report this issue at the first step.
+>=20
+> As a few of us just discussed this on IRC, these bus notifiers should
+> probably be dropped as these are the incorrect structure type as you
+> found out.  Thanks for the report.
 
-	.mbox = {
-		.cmd = 0x68,
-		.data_in = 0x6c,
-		.data_out = 0x70,
-		.owner = 0x74,
-	},
+Thank you for the discussion. I got it.
 
-Thanks for review.
-JC
+Best regards,
+Yoshihiro Shimoda
 
-> thanks,
-> 
 > greg k-h
-> 
