@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E06A8B1A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C3CBA8B5D
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733083AbfIDQBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 12:01:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37372 "EHLO mail.kernel.org"
+        id S2387467AbfIDQCm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 12:02:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38760 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733108AbfIDQBs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:01:48 -0400
+        id S2387455AbfIDQCk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:02:40 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F5662087E;
-        Wed,  4 Sep 2019 16:01:46 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A2E0B2087E;
+        Wed,  4 Sep 2019 16:02:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612907;
-        bh=IvU46ufIgJ4CzMSuwftImTGxs1s1RzZcG7u/afqd5Yg=;
+        s=default; t=1567612959;
+        bh=h7bs5BaL3V7O2y9WW5ZRBJX0p8qiT4bHZLFJo4yFCI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XcxOPVtz6j7qkc9tdDQznr0ZbuPn52dRdVWCUYXS/rQGXmrMno625ItKntg9+rF80
-         +YpnUXP1LG22pPpK4yadEICWSx8U8fWHSHJE03aFv6VQ/YQzFYJ7hsCR5M3BQ7gt66
-         dzS7k2HflEWxJRighSQAfbyr1dUmJ1+NPrBThMiM=
+        b=P+2/Nbq2yYbSyK4xiC1K5Q1heuwET2SxU5qeRHN7q8bqeyso2afd2NU1dYcagQvTt
+         S0QcHMnKzCtfjd11l+azHl1017Q65/AROp/MsJWWeUaWUBzKYcAKdttEOeJBeiUzO2
+         4oXbDl1k1LylClygBrs9YXBWd0/rvu//Oa4Ol5+s=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Prashant Malani <pmalani@chromium.org>,
@@ -30,12 +30,12 @@ Cc:     Prashant Malani <pmalani@chromium.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 17/36] r8152: Set memory to all 0xFFs on failed reg reads
-Date:   Wed,  4 Sep 2019 12:01:03 -0400
-Message-Id: <20190904160122.4179-17-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 13/27] r8152: Set memory to all 0xFFs on failed reg reads
+Date:   Wed,  4 Sep 2019 12:02:06 -0400
+Message-Id: <20190904160220.4545-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190904160122.4179-1-sashal@kernel.org>
-References: <20190904160122.4179-1-sashal@kernel.org>
+In-Reply-To: <20190904160220.4545-1-sashal@kernel.org>
+References: <20190904160220.4545-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -73,10 +73,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 66beff4d76467..455eec3c46942 100644
+index 02e29562d254e..15dc70c118579 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -787,8 +787,11 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
+@@ -689,8 +689,11 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
  	ret = usb_control_msg(tp->udev, usb_rcvctrlpipe(tp->udev, 0),
  			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
  			      value, index, tmp, size, 500);
