@@ -2,164 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CB9A7B44
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 08:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9001AA7B93
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 08:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbfIDGMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 02:12:16 -0400
-Received: from mail-eopbgr1400091.outbound.protection.outlook.com ([40.107.140.91]:63936
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725877AbfIDGMQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 02:12:16 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E7JEePvT0bCMN0UPN66HpyF3bfChAOj21P50ZAqsOlXRZQ4Cjl2CisNRmSbp0FmLptv8mI2bWpKaFg2joztUbsX6qYtCQ2TblYon/5QFkuMXgj5KPFlyWik38Qx3QO0Hw2gKX+nBK/7l43+M9u9AZ96sM55LfYtrueTWByNUo3nOJl9jKU0wT7XzkssX23uTTcjMxd9CwTTHBB6/kvS9knFOQQP9ECVeBhR/IM7xL7bpRaFWV47lUitsm4OwCs9tMJAVc13BQhSJGtAQ68nG3f81036W4jluPDdVXqk7k5z6v7R5sgSAwKeIu5PvGaQIYJX2G8mCoD9oEQ/OYkKKtA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dqBcuB2anjHAvyM0ZuBmc46iE3H6qH0WPkvaIYFIk+4=;
- b=WBLqaESWpgQOddD2cHcWRhbJXYGq7dct2D31vWAao55a/HZtAgBn+otPCKKNI/IFDx2LjaERDLUqbEUua3oItCNvoHGGCSIxdbhDc/78Nn1TiBU/MWxnR1kzyBm+G8lhyo8TgptPLde6cuqJYpSNDYolMjiGN75JWHwhrsBhLwQq3yO+CkYUu2D00uYzaQbuBag4X4ncvbzFYGe0Tq/sPOLhp0fC08oYwmg7wk0eCiiVzJTB7D0A1EdfirUyAOea/iaRolVXtEHAWpDvuYSStRDx00TpjpfIHjy44tPcB2EyK8HXbER76wr/7aX0mj7VoX1Cc29j9Ux+IBFMCndPrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dqBcuB2anjHAvyM0ZuBmc46iE3H6qH0WPkvaIYFIk+4=;
- b=nGpkFlcOS8/Uz8s5K+dw0dek1AQDb3R4/lBxtvHSf9Bjf9NoZ6aZ3vj5tjfV8UqJuNGe0WeWTZ3fvW6OB5pLOoLc7wXdnRh3yzyOrbTQZ+NpvNQswYrYbtyTi+cttIUvX06kApw50plC/34q1yxtYyI6JoV36IE+83Kp4xf5g6U=
-Received: from OSAPR01MB4930.jpnprd01.prod.outlook.com (20.179.177.213) by
- OSAPR01MB4098.jpnprd01.prod.outlook.com (20.178.102.82) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.18; Wed, 4 Sep 2019 06:12:11 +0000
-Received: from OSAPR01MB4930.jpnprd01.prod.outlook.com
- ([fe80::c4ca:b67c:1d3f:c71a]) by OSAPR01MB4930.jpnprd01.prod.outlook.com
- ([fe80::c4ca:b67c:1d3f:c71a%7]) with mapi id 15.20.2220.022; Wed, 4 Sep 2019
- 06:12:11 +0000
-From:   "Kobayashi, Kento (Sony)" <Kento.A.Kobayashi@sony.com>
-To:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Cao, Jacky" <Jacky.Cao@sony.com>
+        id S1728781AbfIDGTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 02:19:54 -0400
+Received: from mga11.intel.com ([192.55.52.93]:38375 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725267AbfIDGTx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 02:19:53 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Sep 2019 23:19:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,465,1559545200"; 
+   d="asc'?scan'208";a="207356287"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga004.fm.intel.com with ESMTP; 03 Sep 2019 23:19:51 -0700
+From:   Felipe Balbi <balbi@kernel.org>
+To:     "Kobayashi\, Kento \(Sony\)" <Kento.A.Kobayashi@sony.com>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Cao\, Jacky" <Jacky.Cao@sony.com>
 Subject: RE: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
-Thread-Topic: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
-Thread-Index: AdUr4fO63YeCnMxgQdWlMpYcyadcJAOxqk0ACg+lZqA=
-Date:   Wed, 4 Sep 2019 06:12:11 +0000
-Message-ID: <OSAPR01MB49300F8CA0956F031CA4B1ECC9B80@OSAPR01MB4930.jpnprd01.prod.outlook.com>
-References: <16EA1F625E922C43B00B9D8225022050086ECF6A@APYOKXMS108.ap.sony.com>
- <16EA1F625E922C43B00B9D8225022050086F86B4@APYOKXMS108.ap.sony.com>
-In-Reply-To: <16EA1F625E922C43B00B9D8225022050086F86B4@APYOKXMS108.ap.sony.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Kento.A.Kobayashi@sony.com; 
-x-originating-ip: [2001:cf8:0:6c::202]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 71793a6d-eea6-4e51-8b4f-08d730fed323
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB4098;
-x-ms-traffictypediagnostic: OSAPR01MB4098:
-x-ld-processed: 66c65d8a-9158-4521-a2d8-664963db48e4,ExtAddr
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <OSAPR01MB4098142EA1CE2BCAAD7AD3A0C9B80@OSAPR01MB4098.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0150F3F97D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(376002)(136003)(346002)(366004)(396003)(199004)(189003)(8936002)(446003)(478600001)(11346002)(46003)(25786009)(8676002)(81156014)(81166006)(476003)(7736002)(4326008)(66446008)(66556008)(64756008)(9686003)(66946007)(54906003)(66476007)(316002)(14454004)(305945005)(5660300002)(110136005)(74316002)(229853002)(6436002)(486006)(55016002)(107886003)(99286004)(6246003)(186003)(53546011)(6506007)(102836004)(7696005)(2906002)(6116002)(33656002)(2501003)(53936002)(71190400001)(71200400001)(86362001)(76116006)(76176011)(14444005)(256004)(52536014);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB4098;H:OSAPR01MB4930.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: J5MvuROFOGNM/PdhDwdlunNw+KULeeuxo8erMC0t1GE9eqsiPp/TLj8fr6a5iyidNDu7U7KPLEhZTJ8ZuAZn/L8Kd3Diylfremvmdri/N7LawHs2dIQE2jttFD2rkWNuTN3rb4GL2n/pyrnZ/XdCMEzpzZ6Lza15ZV9PAYmg748UacsJMaLQtrk9xTA2jWPgsl7+X42vWGIA7Tr9WnYvqJHFhj6zXBYatHX224WneofaZZWdBnU3lBt3TLMI2N/dFcbSAIHNRnV8+eyt8IyuRZJNB2C61GNRtS45mrSy+/wLpUogio+a8ezdrDUdkrF0b33hCWEJYutwpjh+AVL15sG5wG+R2vE2Wil93pT+nG49scyNJsC6E1nsnWvQG2qeIzmbB8WhT0CGzSzDV6cBGhuTtMso9N8fvUV3lsX2Fg4=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <OSAPR01MB49300F8CA0956F031CA4B1ECC9B80@OSAPR01MB4930.jpnprd01.prod.outlook.com>
+References: <16EA1F625E922C43B00B9D8225022050086ECF6A@APYOKXMS108.ap.sony.com> <16EA1F625E922C43B00B9D8225022050086F86B4@APYOKXMS108.ap.sony.com> <OSAPR01MB49300F8CA0956F031CA4B1ECC9B80@OSAPR01MB4930.jpnprd01.prod.outlook.com>
+Date:   Wed, 04 Sep 2019 09:19:41 +0300
+Message-ID: <87v9u8mvlu.fsf@gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 71793a6d-eea6-4e51-8b4f-08d730fed323
-X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Sep 2019 06:12:11.4165
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hxPP7z0UVohPAJJ+HJ4Aq0Jey+vZpxA+AGYdvX4iY0J3Gl+L4O3ENvOP4uXRvx4UWG/eW3UaimINcpbn3l105WrSb7Za1TfVWtoTo1NuibA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB4098
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
 Hi,
 
-My company's member, Mr.Jacky, sent patch in June 26th.
-But we didn't receive comment about our patch.
-Could you confirm and tell us this patch is needed or not?
+"Kobayashi, Kento (Sony)" <Kento.A.Kobayashi@sony.com> writes:
 
-Regards,
-Kento Kobayashi
+> Hi,
+>
+> My company's member, Mr.Jacky, sent patch in June 26th.
+> But we didn't receive comment about our patch.
+> Could you confirm and tell us this patch is needed or not?
 
+I can't find the original patch in my inbox, could you resend it using
+git send-email?
 
+Patch seems necessary, indeed.
 
-From: Cao, Jacky <Jacky.Cao@sony.com>=20
-Sent: Monday, July 15, 2019 10:05 AM
-To: balbi@kernel.org; gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Kobayashi, Ken=
-to (Sony) <Kento.A.Kobayashi@sony.com>; Cao, Jacky <Jacky.Cao@sony.com>
-Subject: RE: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
+best regards
 
-Hi,=20
+=2D-=20
+balbi
 
-Since around half month past, let me confirm the status of this issue.
-If any comment about the fix patch, would you kind to share with us?=20
-Thank you.
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best Regards
-Jacky
+-----BEGIN PGP SIGNATURE-----
 
-From: Cao, Jacky=20
-Sent: Wednesday, June 26, 2019 1:48 PM
-To: mailto:balbi@kernel.org; mailto:gregkh@linuxfoundation.org; mailto:linu=
-x-usb@vger.kernel.org; mailto:linux-kernel@vger.kernel.org
-Cc: Kobayashi, Kento (Sony) <mailto:Kento.A.Kobayashi@sony.com>; Cao, Jacky=
- <mailto:Jacky.Cao@sony.com>
-Subject: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
-
-The power budget for SuperSpeed mode should be 900 mA
-according to USB3.0 specification, so set the power
-budget to 900 mA for dummy_start_ss which is only used
-for SuperSpeed mode.
-
-If the max power consumption of SuperSpeed device is
-larger than 500 mA, insufficient available bus power
-error happens in usb_choose_configuration function
-when the device connects to dummy hcd.
-
-Signed-off-by: Jacky Cao <mailto:Jacky.Cao@sony.com>
----
-drivers/usb/gadget/udc/dummy_hcd.c | 3 ++-
-1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/du=
-mmy_hcd.c
-index 8414fac..52f2cf5 100644
---- a/drivers/usb/gadget/udc/dummy_hcd.c
-+++ b/drivers/usb/gadget/udc/dummy_hcd.c
-@@ -48,6 +48,7 @@
-#define DRIVER_VERSION "02 May 2005"
-
-=A0#define POWER_BUDGET=A0 500=A0 /* in mA; use 8 for low-power port testin=
-g */
-+#define POWER_BUDGET_3_0=A0 900=A0 /* in mA */
-
-=A0static const char=A0 driver_name[] =3D "dummy_hcd";
-static const char=A0 driver_desc[] =3D "USB Host+Gadget Emulator";
-@@ -2432,7 +2433,7 @@ static int dummy_start_ss(struct dummy_hcd *dum_hcd)
-=A0=A0=A0=A0 dum_hcd->rh_state =3D DUMMY_RH_RUNNING;
-=A0=A0=A0=A0 dum_hcd->stream_en_ep =3D 0;
-=A0=A0=A0=A0 INIT_LIST_HEAD(&dum_hcd->urbp_list);
--=A0=A0=A0=A0 dummy_hcd_to_hcd(dum_hcd)->power_budget =3D POWER_BUDGET;
-+=A0=A0=A0=A0 dummy_hcd_to_hcd(dum_hcd)->power_budget =3D POWER_BUDGET_3_0;
-=A0=A0=A0=A0 dummy_hcd_to_hcd(dum_hcd)->state =3D HC_STATE_RUNNING;
-=A0=A0=A0=A0 dummy_hcd_to_hcd(dum_hcd)->uses_new_polling =3D 1;
-#ifdef CONFIG_USB_OTG
---=20
-2.7.4
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl1vV38ACgkQzL64meEa
+mQbnrRAAz0r8jcUBfL99Ca7PPl2wsF41zZW4+FepCIfSqfiPhDoMFuacv/JCc5ba
+jOUlfX9r65wY992hKAOR7htEEvAiR7eMJW0WyPSXB3LnL0QpHTbevBVZb1NT+1wk
+hkTLSVSV1vo24uBtxzw5HfmVXzUA995ZCRJONSUpuInEI8aeBSOz2bNNsXMAx8QU
+NMLL/kbrmbgPRKOpdzMH3jslpVYd+Ichmnufs/ERTepqGGefQOwRb7MYKvwVtZer
+3pvPmoh4mXEcV9fQuWbpRcelFQmWK1HMLnJ34hKvofcYDiWMcCDXmOzMpiq/62+B
+a5LKtXyU1rEvt2g+TZgH2MTAsQJDcsJRT3U5j53eClmsk9bjzOMr5BhzgH7J1BBV
+8zK3cvFUBZpUrpqcHjWugJZmSCiNsfascYLNM50L5esrOEi3jUMGblGHE1wkCh6a
+JPUX4qN6dMTi5KEjO8pWDHWl4KzM4Wlu59MozdtP45hszEtcoy5nnxoatRhqJlcS
+53Vl5ZJ+rBDin0IxX43866tm9AB3MSQriX+fGff86jfDpFDEml0iiPJ5LDKZsO2u
+Oua+czwSWuwZOTdS6n7ppCYBGFpLC5zxIxoJFH0xE7LfEVCFGJBfO845RGQq8E/X
+uaYTYadKUzIX7GVrP9/ya2bV1BHWH6Ve9Xpzmrb0d79W6ni62ls=
+=NyAQ
+-----END PGP SIGNATURE-----
+--=-=-=--
