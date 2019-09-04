@@ -2,104 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5DFA7842
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 03:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196ACA7AB1
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 07:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727348AbfIDByg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Sep 2019 21:54:36 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:31393 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726589AbfIDByg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Sep 2019 21:54:36 -0400
-X-UUID: b7c85c9247304d0b96b55c12cabe3981-20190904
-X-UUID: b7c85c9247304d0b96b55c12cabe3981-20190904
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1282712295; Wed, 04 Sep 2019 09:54:29 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N2.mediatek.inc
- (172.27.4.72) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 4 Sep
- 2019 09:54:27 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 4 Sep 2019 09:54:26 +0800
-Message-ID: <1567562067.7317.52.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 0/7]  add support USB for MT8183
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Wed, 4 Sep 2019 09:54:27 +0800
-In-Reply-To: <1567150854-30033-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1567150854-30033-1-git-send-email-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726012AbfIDFVF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 01:21:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36748 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725774AbfIDFVF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 01:21:05 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 672E72073F;
+        Wed,  4 Sep 2019 05:21:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567574463;
+        bh=HMRcyEk3huV8a0cdBx7wY83RryFHcPc53tfZ2CWT/fo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cy2tiBepn68Ss7ReaskqAnO4Wi6SzZxP7h2rV4+koLtrjb+bqIrExFfEUqPgIwOuo
+         8Uvru8enJ4kO+6SxyfDnAD4/przAA8jXwKblTg+YYFB9xy4O9RaAI/cvRCAwu6K/LP
+         nK45WqnTvhMUQLV6xN73NeMrSYxSdfFWnTfuXHrU=
+Date:   Wed, 4 Sep 2019 07:21:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci: tegra: Parameterize mailbox register addresses
+Message-ID: <20190904052101.GA17236@kroah.com>
+References: <20190902082127.17963-1-jckuo@nvidia.com>
+ <20190903135822.GA10466@kroah.com>
+ <90794861-1fe7-b659-fd33-4fb0f2e7f929@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: F991245A4BC6770D93164A2C1C559180A8AF081783FD3FC646A068AD51059FF02000:8
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <90794861-1fe7-b659-fd33-4fb0f2e7f929@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Wed, Sep 04, 2019 at 09:43:08AM +0800, JC Kuo wrote:
+> On 9/3/19 9:58 PM, Greg KH wrote:
+> > On Mon, Sep 02, 2019 at 04:21:27PM +0800, JC Kuo wrote:
+> >> Tegra194 XUSB host controller has rearranged mailbox registers. This
+> >> commit makes mailbox registers address a part of "soc" data so that
+> >> xhci-tegra driver can be used for Tegra194.
+> >>
+> >> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> >> ---
+> >>  drivers/usb/host/xhci-tegra.c | 58 +++++++++++++++++++++++++----------
+> >>  1 file changed, 42 insertions(+), 16 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+> >> index dafc65911fc0..247b08ca49ee 100644
+> >> --- a/drivers/usb/host/xhci-tegra.c
+> >> +++ b/drivers/usb/host/xhci-tegra.c
+> >> @@ -42,19 +42,18 @@
+> >>  #define XUSB_CFG_CSB_BASE_ADDR			0x800
+> >>  
+> >>  /* FPCI mailbox registers */
+> >> -#define XUSB_CFG_ARU_MBOX_CMD			0x0e4
+> >> +/* XUSB_CFG_ARU_MBOX_CMD */
+> >>  #define  MBOX_DEST_FALC				BIT(27)
+> >>  #define  MBOX_DEST_PME				BIT(28)
+> >>  #define  MBOX_DEST_SMI				BIT(29)
+> >>  #define  MBOX_DEST_XHCI				BIT(30)
+> >>  #define  MBOX_INT_EN				BIT(31)
+> >> -#define XUSB_CFG_ARU_MBOX_DATA_IN		0x0e8
+> >> +/* XUSB_CFG_ARU_MBOX_DATA_IN and XUSB_CFG_ARU_MBOX_DATA_OUT */
+> >>  #define  CMD_DATA_SHIFT				0
+> >>  #define  CMD_DATA_MASK				0xffffff
+> >>  #define  CMD_TYPE_SHIFT				24
+> >>  #define  CMD_TYPE_MASK				0xff
+> >> -#define XUSB_CFG_ARU_MBOX_DATA_OUT		0x0ec
+> >> -#define XUSB_CFG_ARU_MBOX_OWNER			0x0f0
+> >> +/* XUSB_CFG_ARU_MBOX_OWNER */
+> >>  #define  MBOX_OWNER_NONE			0
+> >>  #define  MBOX_OWNER_FW				1
+> >>  #define  MBOX_OWNER_SW				2
+> >> @@ -146,6 +145,13 @@ struct tegra_xusb_phy_type {
+> >>  	unsigned int num;
+> >>  };
+> >>  
+> >> +struct tega_xusb_mbox_regs {
+> >> +	unsigned int cmd;
+> >> +	unsigned int data_in;
+> >> +	unsigned int data_out;
+> >> +	unsigned int owner;
+> > 
+> > Shouldn't these all be u8 values?
+> > 
+> These data members represent register offset in Tegra XUSB FPCI area. Size of
+> FPCI area is 0x1000, so it is possible for future Tegra XUSB to have mailbox
+> registers allocated to somewhere > 0x100.
 
+Ok, then u16?
 
-  Please don't try to pick up this series, the dependent ones are still
-under public review, I'll fix build warning and send out new version
-after the dependent ones are applied
-  Sorry for inconvenience
+> > This did not change any existing functionality, is there a follow-on
+> > patch somewhere that takes advantage of this change to enable different
+> > hardware?  Otherwise this doesn't seem worth it.
+> > 
+> Yes, I will submit another patch to enable Tegra194 XHCI. It will make use of
+> this patch to declare Tegra194 XUSB mailbox registers as:
+> 
+> 	.mbox = {
+> 		.cmd = 0x68,
+> 		.data_in = 0x6c,
+> 		.data_out = 0x70,
+> 		.owner = 0x74,
+> 	},
 
-Thanks
+Can you send that out as patch 2/2 so that we see the need for this
+change?
 
-On Fri, 2019-08-30 at 15:40 +0800, Chunfeng Yun wrote:
-> This series support USB DRD controller and enable it's remote
-> wakeup functoin for MT8183, they depend on the following
-> series patches:
-> 
-> 1. this series add support MT6358 PMIC
->   [v5,01/10] mfd: mt6397: clean up code
->   https://patchwork.kernel.org/patch/11110487/
-> 
-> 2. this series add support pericfg syscon
->   [v2,1/2] dt-bindings: clock: mediatek: add pericfg for MT8183
->   https://patchwork.kernel.org/patch/11118183/
-> 
-> 3. add property mediatek,discth for tphy
->   [06/11] phy: phy-mtk-tphy: add a property for disconnect threshold
->   https://patchwork.kernel.org/patch/11110695/
-> 
-> v3 changes:
->   1. changes micros define
->   2. remove #reset-cell
->   3. update dependent series
-> 
-> v2 changes:
->   add patch [7/7]
-> 
-> Chunfeng Yun (7):
->   dt-bindings: usb: mtu3: support USB wakeup for MT8183
->   dt-bindings: usb: mtk-xhci: support USB wakeup for MT8183
->   usb: mtu3: support ip-sleep wakeup for MT8183
->   usb: mtk-xhci: support ip-sleep wakeup for MT8183
->   arm64: dts: mt8183: add usb and phy nodes
->   arm64: dts: mt8183: enable USB remote wakeup
->   arm64: dts: mt8183: tune disconnect threshold of u2phy
-> 
->  .../bindings/usb/mediatek,mtk-xhci.txt        |  1 +
->  .../devicetree/bindings/usb/mediatek,mtu3.txt |  1 +
->  arch/arm64/boot/dts/mediatek/mt8183-evb.dts   | 23 +++++++
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 63 +++++++++++++++++++
->  drivers/usb/host/xhci-mtk.c                   | 14 ++++-
->  drivers/usb/mtu3/mtu3_host.c                  | 14 ++++-
->  6 files changed, 114 insertions(+), 2 deletions(-)
-> 
+thanks,
 
-
+greg k-h
