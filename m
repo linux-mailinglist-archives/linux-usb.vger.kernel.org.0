@@ -2,103 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2828DA7FD6
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 11:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 538AAA7FE5
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 12:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729713AbfIDJyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 05:54:17 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:36550 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729045AbfIDJyQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 05:54:16 -0400
-Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x849s15r014209;
-        Wed, 4 Sep 2019 18:54:02 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x849s15r014209
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1567590842;
-        bh=JhR6cBZJXNkOmtdDQlpAlb7TvbwSunLjm1s429y9/Dc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tc1bbOw3q/fS5ESOlY4iWeAPsZZbollJrad1rcRIqARjafvBEG1L+szF2i0iuxMPB
-         mOBSwDvJaIEqaWWvI4fc6KCfVZmuntO3U2gMm3dqAkrSqBaw/bvizI0nuadnKyZvnO
-         5jc7G4eWKcJKuQ0II/T4Dt4hm1RTHUdzJjVYIMcMjswkke/fj42M15xAKAGss/rgeZ
-         rAYuC5BI98+uj8cX5/KKvSlspeH/HHZAi5RMDOr1tPaRHs1rnmqW1VvJU+o8tHBVuL
-         ZLWc80VaCc+CZHnbxjGOZ1QD+qhaOp/tHcj+4s9tZ2Aeq8luTur+sSSRLm4Af1XGmD
-         52vqUUmANWokw==
-X-Nifty-SrcIP: [209.85.217.44]
-Received: by mail-vs1-f44.google.com with SMTP id b11so7831266vsq.2;
-        Wed, 04 Sep 2019 02:54:02 -0700 (PDT)
-X-Gm-Message-State: APjAAAUznz7Try3leflUU5c/Vx/rXl8QBV4J9bSMyq+DyL3kdeyE8jvn
-        Tt2HyLBB+VNuIMseXHs25POLE86V2iMbfSy3zcI=
-X-Google-Smtp-Source: APXvYqy7454Jcx92pI3RMqpwk+6S0ib6S9rkr/phvwsE/qgfXtGRn0kQpTfE9reHZl23eQ23thoWq0SUB2mqidzWvw0=
-X-Received: by 2002:a67:fd97:: with SMTP id k23mr21110513vsq.179.1567590841199;
- Wed, 04 Sep 2019 02:54:01 -0700 (PDT)
+        id S1729045AbfIDKAX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 06:00:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37954 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726010AbfIDKAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 06:00:23 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0BDF22339E;
+        Wed,  4 Sep 2019 10:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567591222;
+        bh=5/PwM0o9LxuZZilmoCSNsDGRTChIxEaGEQJWKTq/Ovo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CttzYDrc/HgLAawFgOF7jarM0w81UzFv/BYjyhyDLd9zvBaCPRKGM54u+vcZriMko
+         Od3dVg8FVFMRVcmduv12ZFc0LRw91t1dGxJnrrSZwt2RozlEhADlAIdi2qXzI56PcT
+         49C0lSZeUNjLcr6khk8wn8Cf0FALXuknQHyPHohI=
+Date:   Wed, 4 Sep 2019 12:00:19 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Guenter Roeck <linux@roeck-us.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: usb dma_mask fixups
+Message-ID: <20190904100019.GA9615@kroah.com>
+References: <20190903084615.19161-1-hch@lst.de>
+ <20190903131648.GA19335@kroah.com>
+ <20190904085736.GH26880@dell>
 MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-9-maennich@google.com>
-In-Reply-To: <20190903150638.242049-9-maennich@google.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 4 Sep 2019 18:53:25 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
-Message-ID: <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
-Subject: Re: [PATCH v4 08/12] scripts: Coccinelle script for namespace dependencies.
-To:     Matthias Maennich <maennich@google.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        maco@android.com, sspatil@google.com,
-        Will Deacon <will@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        linux-usb <linux-usb@vger.kernel.org>,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190904085736.GH26880@dell>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 12:07 AM Matthias Maennich <maennich@google.com> wrote:
->
-> A script that uses the '<module>.ns_deps' files generated by modpost to
-> automatically add the required symbol namespace dependencies to each
-> module.
->
-> Usage:
-> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
->    DEFAULT_SYMBOL_NAMESPACE
-> 2) Run 'make' (or 'make modules') and get warnings about modules not
->    importing that namespace.
-> 3) Run 'make nsdeps' to automatically add required import statements
->    to said modules.
->
-> This makes it easer for subsystem maintainers to introduce and maintain
-> symbol namespaces into their codebase.
->
-> Co-developed-by: Martijn Coenen <maco@android.com>
-> Signed-off-by: Martijn Coenen <maco@android.com>
-> Acked-by: Julia Lawall <julia.lawall@lip6.fr>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Matthias Maennich <maennich@google.com>
+On Wed, Sep 04, 2019 at 09:57:36AM +0100, Lee Jones wrote:
+> On Tue, 03 Sep 2019, Greg Kroah-Hartman wrote:
+> 
+> > On Tue, Sep 03, 2019 at 10:46:09AM +0200, Christoph Hellwig wrote:
+> > > Hi all,
+> > > 
+> > > the first patch fixes the ohci-sm501 regression that Guenther reported
+> > > due to the platform device dma_mask changes.  The second one ports that
+> > > fix to another driver that works the same way.  The rest cleans up
+> > > various loose ends left over from the dma related usb changes in the
+> > > last two merge windows.
+> > 
+> > Thanks for these, all now queued up.
+> 
+> Did you queue the MFD patch too?
+> 
+> If so (and you can rebase ;) ), please feel free to add my:
+> 
+> Acked-by: Lee Jones <lee.jones@linaro.org>
+> 
+> If not, no sweat.
 
+I already applied it, and no, sorry, I can't rebase.  But thanks for the
+review!
 
-Without any correct dependency,
-this does not work.
-
-$ make clean; make nsdeps
-cat: modules.order: No such file or directory
-cat: ./modules.order: No such file or directory
-
-
-I do not see any point in the Makefile changes.
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+greg k-h
