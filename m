@@ -2,58 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1A2A7C80
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 09:16:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04A5A7CFC
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 09:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728717AbfIDHQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 03:16:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727787AbfIDHQo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 03:16:44 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9F4972339D;
-        Wed,  4 Sep 2019 07:16:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567581403;
-        bh=f8EZZerqx22BqB3RzsXbmB/o3MYtSOE4T3XPD3UXaF4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zOH9JjFruJCTTp6kIevTzvliq7OO6RNlAwGbxMUKh1HPeKn6iGeK7F5qysATWd/MA
-         1mb63cLoc7GFYiZaVbE4/QFb6uqSKTiUUfrZIN+fcJN00gJCbVebCy7ZfVliaTw2fX
-         C1F/6C8502bHkcoajUicecgDdGdYoCHK8gGfazwg=
-Date:   Wed, 4 Sep 2019 09:16:41 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, jeyu@kernel.org, joel@joelfernandes.org,
-        lucas.de.marchi@gmail.com, maco@android.com, sspatil@google.com,
-        will@kernel.org, yamada.masahiro@socionext.com,
-        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [PATCH v4 09/12] docs: Add documentation for Symbol Namespaces
-Message-ID: <20190904071641.GD18791@kroah.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-10-maennich@google.com>
+        id S1729122AbfIDHqu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 03:46:50 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38298 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727144AbfIDHqu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 03:46:50 -0400
+Received: by mail-wm1-f67.google.com with SMTP id o184so2368037wme.3;
+        Wed, 04 Sep 2019 00:46:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ALQJDHabIHIRVccnskz3EGkXYFFUSK5Bj/L/t8kK1RY=;
+        b=jmAXbqRh8aAZTEPJ4YqjRbQvcgIhoc67V9Y8KIpE+ugbtQtXtS/6ZPzecA5S0oKCbg
+         Q3n7D8gWrEtVYBvpL/fIGuDEADOI63DJfmWStYcp2+UWwK91rETmRHGh54Cr/yhymEOt
+         FWguz/ETf2zt0hveZ0glw3KtKkKCLStIlvszy8brliU4nKGDEQH8F8c7XRVxXkUDd+i0
+         f8mHaguh7+vncvEWmHg1iD2bqjm7VADXHNsUP00/vDpq2FIzBIKM5RUyjGTxkm0LVTVT
+         vXaz8Q/Qv0VSSQgPLzMXE/kehY/sVDq6WRyaaSd6EgES1LXW0n6zEJ7zK4IKQ+u/KHUF
+         HwaQ==
+X-Gm-Message-State: APjAAAXjopGUIs72oqzxFPvXA7SVbvZuNEdG56jTAb27GE+yTZ2vLMR0
+        U/U2rtYj8u6KyTqqgHzyXeyakqp48eHt9peQXBiAqhgW
+X-Google-Smtp-Source: APXvYqzrei7rUgXpBmUZ0+Wydv6tghQcHo02w8csqHAigBwWnK5qkd5y5qX2Pt0XShEryT9Xgb+Ny0I/xcdxP4uJk7g=
+X-Received: by 2002:a05:600c:2056:: with SMTP id p22mr2836990wmg.159.1567583208315;
+ Wed, 04 Sep 2019 00:46:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190903150638.242049-10-maennich@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <16EA1F625E922C43B00B9D82250220500871C7D7@APYOKXMS108.ap.sony.com>
+In-Reply-To: <16EA1F625E922C43B00B9D82250220500871C7D7@APYOKXMS108.ap.sony.com>
+From:   Felipe Balbi <balbi@kernel.org>
+Date:   Wed, 4 Sep 2019 10:46:37 +0300
+Message-ID: <CAH8TKc_XBksJHTue18O7jv7h0WjFSqQkJJ8Hc2aRNZaL3aRfVQ@mail.gmail.com>
+Subject: Re: [PATCH] USB: dummy-hcd: fix power budget for SuperSpeed mode
+To:     Jacky.Cao@sony.com
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        Kento.A.Kobayashi@sony.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 04:06:35PM +0100, Matthias Maennich wrote:
-> Describe using Symbol Namespaces from a perspective of a user. I.e.
-> module authors or subsystem maintainers.
-> 
-> Signed-off-by: Matthias Maennich <maennich@google.com>
+Hi,
 
-Nice, it's good to have stuff to point people at.
+On Wed, Sep 4, 2019 at 9:47 AM <Jacky.Cao@sony.com> wrote:
+>
+> The power budget for SuperSpeed mode should be 900 mA
+>
+> according to USB3.0 specification, so set the power
+>
+> budget to 900 mA for dummy_start_ss which is only used
+>
+> for SuperSpeed mode.
+>
+>
+>
+> If the max power consumption of SuperSpeed device is
+>
+> larger than 500 mA, insufficient available bus power
+>
+> error happens in usb_choose_configuration function
+>
+> when the device connects to dummy hcd.
+>
+>
+>
+> Signed-off-by: Jacky Cao <Jacky.Cao@sony.com>
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+You must send plain/text emails. I'm not receiving this via the
+mailing list. Please, fix your
+email client or use git send-email
+
+-- 
+balbi
