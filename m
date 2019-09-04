@@ -2,60 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00370A7C47
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 09:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1A2A7C80
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 09:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728921AbfIDHGU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 03:06:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59408 "EHLO mail.kernel.org"
+        id S1728717AbfIDHQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 03:16:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725840AbfIDHGU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 03:06:20 -0400
+        id S1727787AbfIDHQo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 03:16:44 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 925A522CED;
-        Wed,  4 Sep 2019 07:06:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9F4972339D;
+        Wed,  4 Sep 2019 07:16:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567580779;
-        bh=I9K0yVNmIk+nMrBPinuHZHyseMt4wDZjOkz5NPzTJv4=;
+        s=default; t=1567581403;
+        bh=f8EZZerqx22BqB3RzsXbmB/o3MYtSOE4T3XPD3UXaF4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bqbkUEYehaSrXbrA77i42/6XFJo9F+Dqfm/CQnrDDYaD2gGZzyzUnJfRcN6URz0Co
-         YGZQ1WWRXiph8QDsFxN1ZC5FV8yq3qxSm8w4oh4JDYDVdg5842W7zk2nXE+dk0+W2t
-         6kNAYre3X3PEGz3+sZHv1MRneJ5lokv0sRkJS3x4=
-Date:   Wed, 4 Sep 2019 09:06:16 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/7]  add support USB for MT8183
-Message-ID: <20190904070616.GC18791@kroah.com>
-References: <1567150854-30033-1-git-send-email-chunfeng.yun@mediatek.com>
- <1567562067.7317.52.camel@mhfsdcap03>
+        b=zOH9JjFruJCTTp6kIevTzvliq7OO6RNlAwGbxMUKh1HPeKn6iGeK7F5qysATWd/MA
+         1mb63cLoc7GFYiZaVbE4/QFb6uqSKTiUUfrZIN+fcJN00gJCbVebCy7ZfVliaTw2fX
+         C1F/6C8502bHkcoajUicecgDdGdYoCHK8gGfazwg=
+Date:   Wed, 4 Sep 2019 09:16:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, jeyu@kernel.org, joel@joelfernandes.org,
+        lucas.de.marchi@gmail.com, maco@android.com, sspatil@google.com,
+        will@kernel.org, yamada.masahiro@socionext.com,
+        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v4 09/12] docs: Add documentation for Symbol Namespaces
+Message-ID: <20190904071641.GD18791@kroah.com>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-10-maennich@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1567562067.7317.52.camel@mhfsdcap03>
+In-Reply-To: <20190903150638.242049-10-maennich@google.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 09:54:27AM +0800, Chunfeng Yun wrote:
-> Hi Greg,
+On Tue, Sep 03, 2019 at 04:06:35PM +0100, Matthias Maennich wrote:
+> Describe using Symbol Namespaces from a perspective of a user. I.e.
+> module authors or subsystem maintainers.
 > 
-> 
->   Please don't try to pick up this series, the dependent ones are still
-> under public review, I'll fix build warning and send out new version
-> after the dependent ones are applied
->   Sorry for inconvenience
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-No problem, now dropped from my review queue.
+Nice, it's good to have stuff to point people at.
 
-greg k-h
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
