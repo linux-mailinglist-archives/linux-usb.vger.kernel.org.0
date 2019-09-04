@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AFEA8A3E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95542A8A6A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:26:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732105AbfIDP6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 11:58:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32890 "EHLO mail.kernel.org"
+        id S1732342AbfIDP7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 11:59:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731540AbfIDP6p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 11:58:45 -0400
+        id S1732336AbfIDP7Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:59:16 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE14622CF7;
-        Wed,  4 Sep 2019 15:58:43 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A4F452087E;
+        Wed,  4 Sep 2019 15:59:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567612724;
-        bh=4KNWvu8UlFqosnanh2IlDJuiApyVITIiozQEuYanuy4=;
+        s=default; t=1567612755;
+        bh=2vjN1mTgWrVfPYXSq4C3quBd4Ijtnf7GY7w2gVNMFUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C8SPzWyXZ1/Y7Ou1vmW0O3gDQ51QQHDI1yo4/eJBAf6I0IWc8SCQs1u+RGALWoLbz
-         Ue5nRybrlX25w2J4CwyanAiZ/SIx4/DiJg7NzEfNmlbNuMZQnWV/Sx8UyRRS0I+BUm
-         KD9KhYquzYJq6RGdrE9X4pXJrfv3jTJo0J2YHumM=
+        b=tbbMZn9T9RHvcZUkqgbqABupcvdiMlGIS7BoDSsyj5BPLyWQgiB/zxO9ht5Kz4zuM
+         lhOH71qPmir3besBiebHf+/s9uIctd/z0fMvcIsmavVKatJ/QQA1XfL2lonnsZ+iRz
+         NiGnqk9YVazFNwaB2/n6CdmOm13Q9U9ZIYg5gqsA=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Prashant Malani <pmalani@chromium.org>,
-        Hayes Wang <hayeswang@realtek.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Nagarjuna Kristam <nkristam@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 43/94] r8152: Set memory to all 0xFFs on failed reg reads
-Date:   Wed,  4 Sep 2019 11:56:48 -0400
-Message-Id: <20190904155739.2816-43-sashal@kernel.org>
+        linux-tegra@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 64/94] usb: host: xhci-tegra: Set DMA mask correctly
+Date:   Wed,  4 Sep 2019 11:57:09 -0400
+Message-Id: <20190904155739.2816-64-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190904155739.2816-1-sashal@kernel.org>
 References: <20190904155739.2816-1-sashal@kernel.org>
@@ -45,50 +45,55 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Prashant Malani <pmalani@chromium.org>
+From: Nagarjuna Kristam <nkristam@nvidia.com>
 
-[ Upstream commit f53a7ad189594a112167efaf17ea8d0242b5ac00 ]
+[ Upstream commit 993cc8753453fccfe060a535bbe21fcf1001b626 ]
 
-get_registers() blindly copies the memory written to by the
-usb_control_msg() call even if the underlying urb failed.
+The Falcon microcontroller that runs the XUSB firmware and which is
+responsible for exposing the XHCI interface can address only 40 bits of
+memory. Typically that's not a problem because Tegra devices don't have
+enough system memory to exceed those 40 bits.
 
-This could lead to junk register values being read by the driver, since
-some indirect callers of get_registers() ignore the return values. One
-example is:
-  ocp_read_dword() ignores the return value of generic_ocp_read(), which
-  calls get_registers().
+However, if the ARM SMMU is enable on Tegra186 and later, the addresses
+passed to the XUSB controller can be anywhere in the 48-bit IOV address
+space of the ARM SMMU. Since the DMA/IOMMU API starts allocating from
+the top of the IOVA space, the Falcon microcontroller is not able to
+load the firmware successfully.
 
-So, emulate PCI "Master Abort" behavior by setting the buffer to all
-0xFFs when usb_control_msg() fails.
+Fix this by setting the DMA mask to 40 bits, which will force the DMA
+API to map the buffer for the firmware to an IOVA that is addressable by
+the Falcon.
 
-This patch is copied from the r8152 driver (v2.12.0) published by
-Realtek (www.realtek.com).
-
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
-Acked-by: Hayes Wang <hayeswang@realtek.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+Link: https://lore.kernel.org/r/1566989697-13049-1-git-send-email-nkristam@nvidia.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/r8152.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-tegra.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index e0dcb681cfe5a..7542afba019bb 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -787,8 +787,11 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
- 	ret = usb_control_msg(tp->udev, usb_rcvctrlpipe(tp->udev, 0),
- 			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
- 			      value, index, tmp, size, 500);
-+	if (ret < 0)
-+		memset(data, 0xff, size);
-+	else
-+		memcpy(data, tmp, size);
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 294158113d62c..77142f9bf26ae 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1217,6 +1217,16 @@ static int tegra_xusb_probe(struct platform_device *pdev)
  
--	memcpy(data, tmp, size);
- 	kfree(tmp);
+ 	tegra_xusb_config(tegra, regs);
  
- 	return ret;
++	/*
++	 * The XUSB Falcon microcontroller can only address 40 bits, so set
++	 * the DMA mask accordingly.
++	 */
++	err = dma_set_mask_and_coherent(tegra->dev, DMA_BIT_MASK(40));
++	if (err < 0) {
++		dev_err(&pdev->dev, "failed to set DMA mask: %d\n", err);
++		goto put_rpm;
++	}
++
+ 	err = tegra_xusb_load_firmware(tegra);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
 -- 
 2.20.1
 
