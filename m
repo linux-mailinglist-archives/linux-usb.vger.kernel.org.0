@@ -2,80 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 662D3A892B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615D2A896F
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731084AbfIDPED (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 11:04:03 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34338 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730604AbfIDPEC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 11:04:02 -0400
-Received: by mail-lf1-f68.google.com with SMTP id z21so16248682lfe.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2019 08:04:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=DcnAxhT50GR+ilGnjSHoQUvLCxVke3++MpUcW5c5jmI=;
-        b=nTnVVAh3rzSJH0S2dUAfgnyug7bLv8bNHGMSm/NE4fEQLoy+PEEQn27KPcHw2PyCP9
-         mlTZ3HnQSMAG3b+GtI0/2xj6ZvtAfPqasReJGkv3flCv4LWInDhX0LWITHJzMOPnipPf
-         kYsr5Cgsi7ReXEE1A5q2x2SfF1ICsKLt3JUWV5T7xkkKHfWTjT4LozOi8N6uXpKf/0ED
-         iAl4SnScb5O2O5y8SMpIVF8I5zNuT55YCwyyH2W7/hZo+QLVCs0uFrXplHfBG9zc+zjR
-         i1kyojbfw4+d+Tqet4ErTIxj1QFNq6bG4tiI53H1TesgF+fdndfGoL10fAdcTZHsCPaU
-         MSaA==
-X-Gm-Message-State: APjAAAVGd6RbyFUrS6tcPOVDPEe/Tav7GWA+M49SGH/ZpNdTJ1vHRJCH
-        7Q0IXl+5ybMSvZwr9Vu/Xvo=
-X-Google-Smtp-Source: APXvYqzC2wqJRCkZlJyanL5D8L9+3cKE/uVYS63F3r8wqySwV/m4cZuj+nCo97GOLEBTaAWaZMzt1g==
-X-Received: by 2002:a19:f11c:: with SMTP id p28mr13825468lfh.44.1567609440778;
-        Wed, 04 Sep 2019 08:04:00 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id q88sm949007lje.57.2019.09.04.08.03.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 08:04:00 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92)
-        (envelope-from <johan@kernel.org>)
-        id 1i5WpA-0006RJ-Oy; Wed, 04 Sep 2019 17:03:56 +0200
-Date:   Wed, 4 Sep 2019 17:03:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.4-rc1
-Message-ID: <20190904150356.GA24736@localhost>
+        id S1731129AbfIDPRw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 4 Sep 2019 11:17:52 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33346 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729635AbfIDPRw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 11:17:52 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 67C7710F23EC;
+        Wed,  4 Sep 2019 15:17:51 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EC6560C44;
+        Wed,  4 Sep 2019 15:17:46 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Pine.LNX.4.44L0.1909031316130.1859-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1909031316130.1859-100000@iolanthe.rowland.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     dhowells@redhat.com, Guenter Roeck <linux@roeck-us.net>,
+        viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1500.1567610266.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8BIT
+Date:   Wed, 04 Sep 2019 16:17:46 +0100
+Message-ID: <1501.1567610266@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 04 Sep 2019 15:17:52 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit d1abaeb3be7b5fa6d7a1fbbd2e14e3310005c4c1:
+Alan Stern <stern@rowland.harvard.edu> wrote:
 
-  Linux 5.3-rc5 (2019-08-18 14:31:08 -0700)
+> > > Unfortunately, I don't know how to fix it and don't have much time to
+> > > investigate it right now - and it's something that can be added back later.
+> > 
+> > The cause of your problem is quite simple:
+> > 
+> >  static int usbdev_notify(struct notifier_block *self,
+> >  			       unsigned long action, void *dev)
+> >  {
+> >  	switch (action) {
+> >  	case USB_DEVICE_ADD:
+> > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
+> >  		break;
+> >  	case USB_DEVICE_REMOVE:
+> > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
+> > +		usbdev_remove(dev);
+> > +		break;
+> > +	case USB_BUS_ADD:
+> > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
+> > +		break;
+> > +	case USB_BUS_REMOVE:
+> > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
+> >  		usbdev_remove(dev);
+> >  		break;
+> >  	}
+> > 
+> > The original code had usbdev_remove(dev) under the USB_DEVICE_REMOVE
+> > case.  The patch mistakenly moves it, putting it under the
+> ------------------------------^^^^^
+> 
+> Sorry, I should have said "duplicates" it.
 
-are available in the Git repository at:
+Ah, thanks.  I'd already removed the USB bus notifications, so I'll leave them
+out for now.
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.4-rc1
-
-for you to fetch changes up to 7a786b84790789eff5bad49e3f6c15f75b7bf691:
-
-  USB: serial: ftdi_sio: add support for FT232H CBUS gpios (2019-08-28 15:35:33 +0200)
-
-----------------------------------------------------------------
-USB-serial updates for 5.4-rc1
-
-Here are the USB-serial updates for 5.4-rc1, which this time is just a
-single commit adding support for the CBUS GPIOs on FT232H devices.
-
-This change has spent a week in linux-next with no reported issues.
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
-
-----------------------------------------------------------------
-Matthew Michilot (1):
-      USB: serial: ftdi_sio: add support for FT232H CBUS gpios
-
- drivers/usb/serial/ftdi_sio.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+David
