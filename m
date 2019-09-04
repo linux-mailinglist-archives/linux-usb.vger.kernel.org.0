@@ -2,79 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D9CA7EF6
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 11:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC219A7F3D
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 11:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729547AbfIDJMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 05:12:06 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:47990 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727144AbfIDJMG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 05:12:06 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 2296C4A38C189A8F0F9B;
-        Wed,  4 Sep 2019 17:12:04 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS408-HUB.china.huawei.com
- (10.3.19.208) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 17:11:53 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH -next] usb: host: xhci-tegra: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 17:10:04 +0800
-Message-ID: <20190904091004.3808-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1727351AbfIDJYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 05:24:24 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:59513 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725938AbfIDJYY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 05:24:24 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id EE1823C04C1;
+        Wed,  4 Sep 2019 11:24:20 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Cb1aw1883pt6; Wed,  4 Sep 2019 11:24:15 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 7B6233C005E;
+        Wed,  4 Sep 2019 11:24:15 +0200 (CEST)
+Received: from vmlxhi-070.adit-jv.com (10.72.93.148) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Wed, 4 Sep 2019
+ 11:24:14 +0200
+From:   Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+CC:     <linux-usb@vger.kernel.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
+Subject: [PATCH] usb: gadget: udc: renesas_usb3: add suspend event support
+Date:   Wed, 4 Sep 2019 11:24:07 +0200
+Message-ID: <1567589047-29816-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+X-Originating-IP: [10.72.93.148]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
+From: Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+In RCAR3 USB 3.0 Function, if host is detached an interrupt
+will be generated and Suspended state bit is set in interrupt status
+register. Interrupt handler will call driver->suspend(composite_suspend)
+if suspended state bit is set. composite_suspend will call
+ffs_func_suspend which will post FUNCTIONFS_SUSPEND and will be consumed
+by user space application via /dev/ep0.
+
+To be able to detect the host detach, USB_INT_1_B2_SPND to cover the
+Suspended bit of the B2_SPND_OUT[9] from the USB Status Register
+(USB_STA) register and perform appropriate action in the
+usb3_irq_epc_int_1 function.
+
+Without this commit, disconnection of the phone from R-Car-H3 ES2.0
+Salvator-X CN11 port is not recognized and reverse role switch does
+not happen. If phone is connected again it does not enumerate.
+
+With this commit, disconnection will be recognized and reverse role
+switch will happen. If phone is connected again it will enumerate
+properly and will become visible in the output of 'lsusb'.
+
+Signed-off-by: Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
 ---
- drivers/usb/host/xhci-tegra.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/usb/gadget/udc/renesas_usb3.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 2ff7c91..742960a 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -970,7 +970,7 @@ static int tegra_xusb_powerdomain_init(struct device *dev,
- static int tegra_xusb_probe(struct platform_device *pdev)
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index eaa3339b30a2..4ec703e302f5 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -767,6 +767,19 @@ static void usb3_irq_epc_int_1_resume(struct renesas_usb3 *usb3)
+ 	usb3_transition_to_default_state(usb3, false);
+ }
+ 
++static void usb3_irq_epc_int_1_suspend(struct renesas_usb3 *usb3)
++{
++	usb3_disable_irq_1(usb3, USB_INT_1_B2_SPND);
++
++	if (usb3->driver &&
++	    usb3->driver->suspend &&
++	    usb3->gadget.speed != USB_SPEED_UNKNOWN &&
++	    usb3->gadget.state != USB_STATE_NOTATTACHED) {
++		usb3->driver->suspend(&usb3->gadget);
++		usb_gadget_set_state(&usb3->gadget, USB_STATE_SUSPENDED);
++	}
++}
++
+ static void usb3_irq_epc_int_1_disable(struct renesas_usb3 *usb3)
  {
- 	struct tegra_xusb_mbox_msg msg;
--	struct resource *res, *regs;
-+	struct resource *regs;
- 	struct tegra_xusb *tegra;
- 	struct xhci_hcd *xhci;
- 	unsigned int i, j, k;
-@@ -992,14 +992,12 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 	if (IS_ERR(tegra->regs))
- 		return PTR_ERR(tegra->regs);
+ 	usb3_stop_usb3_connection(usb3);
+@@ -852,6 +865,9 @@ static void usb3_irq_epc_int_1(struct renesas_usb3 *usb3, u32 int_sta_1)
+ 	if (int_sta_1 & USB_INT_1_B2_RSUM)
+ 		usb3_irq_epc_int_1_resume(usb3);
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	tegra->fpci_base = devm_ioremap_resource(&pdev->dev, res);
-+	tegra->fpci_base = devm_platform_ioremap_resource(pdev, 1);
- 	if (IS_ERR(tegra->fpci_base))
- 		return PTR_ERR(tegra->fpci_base);
++	if (int_sta_1 & USB_INT_1_B2_SPND)
++		usb3_irq_epc_int_1_suspend(usb3);
++
+ 	if (int_sta_1 & USB_INT_1_SPEED)
+ 		usb3_irq_epc_int_1_speed(usb3);
  
- 	if (tegra->soc->has_ipfs) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, 2);
--		tegra->ipfs_base = devm_ioremap_resource(&pdev->dev, res);
-+		tegra->ipfs_base = devm_platform_ioremap_resource(pdev, 2);
- 		if (IS_ERR(tegra->ipfs_base))
- 			return PTR_ERR(tegra->ipfs_base);
- 	}
 -- 
 2.7.4
-
 
