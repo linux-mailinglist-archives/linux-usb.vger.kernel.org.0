@@ -2,89 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 615D2A896F
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A878FA8981
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731129AbfIDPRw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 4 Sep 2019 11:17:52 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:33346 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729635AbfIDPRw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 11:17:52 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 67C7710F23EC;
-        Wed,  4 Sep 2019 15:17:51 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2EC6560C44;
-        Wed,  4 Sep 2019 15:17:46 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <Pine.LNX.4.44L0.1909031316130.1859-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1909031316130.1859-100000@iolanthe.rowland.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     dhowells@redhat.com, Guenter Roeck <linux@roeck-us.net>,
-        viro@zeniv.linux.org.uk, Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
+        id S1731251AbfIDPXZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 11:23:25 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:47068 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1731212AbfIDPXZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 11:23:25 -0400
+Received: (qmail 4826 invoked by uid 2102); 4 Sep 2019 11:23:24 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Sep 2019 11:23:24 -0400
+Date:   Wed, 4 Sep 2019 11:23:24 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     syzbot <syzbot+35f4d916c623118d576e@syzkaller.appspotmail.com>,
+        <Thinh.Nguyen@synopsys.com>, <dianders@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 08/11] usb: Add USB subsystem notifications [ver #7]
+        <jflat@chromium.org>, Kai Heng Feng <kai.heng.feng@canonical.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, <malat@debian.org>,
+        <mathias.nyman@linux.intel.com>, <nsaenzjulienne@suse.de>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in usb_reset_and_verify_device
+In-Reply-To: <CAAeHK+xegKOayZw+kvw7ndA4v6Fy77rNM_VQnufZWXEHSjoqhg@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1909041120330.1722-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1500.1567610266.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Wed, 04 Sep 2019 16:17:46 +0100
-Message-ID: <1501.1567610266@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 04 Sep 2019 15:17:52 +0000 (UTC)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu> wrote:
+On Wed, 4 Sep 2019, Andrey Konovalov wrote:
 
-> > > Unfortunately, I don't know how to fix it and don't have much time to
-> > > investigate it right now - and it's something that can be added back later.
-> > 
-> > The cause of your problem is quite simple:
-> > 
-> >  static int usbdev_notify(struct notifier_block *self,
-> >  			       unsigned long action, void *dev)
-> >  {
-> >  	switch (action) {
-> >  	case USB_DEVICE_ADD:
-> > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_ADD, 0);
-> >  		break;
-> >  	case USB_DEVICE_REMOVE:
-> > +		post_usb_device_notification(dev, NOTIFY_USB_DEVICE_REMOVE, 0);
-> > +		usbdev_remove(dev);
-> > +		break;
-> > +	case USB_BUS_ADD:
-> > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_ADD, 0);
-> > +		break;
-> > +	case USB_BUS_REMOVE:
-> > +		post_usb_bus_notification(dev, NOTIFY_USB_BUS_REMOVE, 0);
-> >  		usbdev_remove(dev);
-> >  		break;
-> >  	}
-> > 
-> > The original code had usbdev_remove(dev) under the USB_DEVICE_REMOVE
-> > case.  The patch mistakenly moves it, putting it under the
-> ------------------------------^^^^^
+> On Wed, Sep 4, 2019 at 4:41 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Tue, 3 Sep 2019, syzbot wrote:
+> >
+> > > Hello,
+> > >
+> > > syzbot has tested the proposed patch but the reproducer still triggered
+> > > crash:
+> > > KASAN: slab-out-of-bounds Read in usb_reset_and_verify_device
+> > >
+> > > usb 6-1: Using ep0 maxpacket: 16
+> > > usb 6-1: BOS total length 54, descriptor 168
+> > > usb 6-1: Old BOS ffff8881cd814f60  Len 0xa8
+> > > usb 6-1: New BOS ffff8881cd257ae0  Len 0xa8
+> > > ==================================================================
+> > > BUG: KASAN: slab-out-of-bounds in memcmp+0xa6/0xb0 lib/string.c:904
+> > > Read of size 1 at addr ffff8881cd257c36 by task kworker/1:0/17
+> >
+> > Very sneaky!  A BOS descriptor whose wTotalLength field varies
+> > depending on how many bytes you read.
+> >
+> > This should fix it.  It's the same approach we use for the Config
+> > descriptor.
 > 
-> Sorry, I should have said "duplicates" it.
+> Nice, core USB bug :)
+> 
+> Can this potentially lead to something worse than a out-of-bounds memcmp?
 
-Ah, thanks.  I'd already removed the USB bus notifications, so I'll leave them
-out for now.
+I tend to doubt it.  It would require some code that does its own
+parsing of the BOS descriptors.  If there is any code like that in the
+kernel, I'm not aware of it.
 
-David
+Still, you never know...
+
+Alan Stern
+
