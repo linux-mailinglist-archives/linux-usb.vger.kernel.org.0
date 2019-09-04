@@ -2,71 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D01A7FC2
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 11:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2828DA7FD6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 11:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729496AbfIDJvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 05:51:00 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:37354 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725840AbfIDJvA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 05:51:00 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2F27C1FEC3B03BC2C546;
-        Wed,  4 Sep 2019 17:50:59 +0800 (CST)
-Received: from localhost (10.133.213.239) by DGGEMS411-HUB.china.huawei.com
- (10.3.19.211) with Microsoft SMTP Server id 14.3.439.0; Wed, 4 Sep 2019
- 17:50:51 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <yuehaibing@huawei.com>, <swboyd@chromium.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] usb: gadget: s3c-hsudc: use devm_platform_ioremap_resource() to simplify code
-Date:   Wed, 4 Sep 2019 17:50:22 +0800
-Message-ID: <20190904095022.24528-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S1729713AbfIDJyR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 05:54:17 -0400
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:36550 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729045AbfIDJyQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 05:54:16 -0400
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id x849s15r014209;
+        Wed, 4 Sep 2019 18:54:02 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x849s15r014209
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1567590842;
+        bh=JhR6cBZJXNkOmtdDQlpAlb7TvbwSunLjm1s429y9/Dc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tc1bbOw3q/fS5ESOlY4iWeAPsZZbollJrad1rcRIqARjafvBEG1L+szF2i0iuxMPB
+         mOBSwDvJaIEqaWWvI4fc6KCfVZmuntO3U2gMm3dqAkrSqBaw/bvizI0nuadnKyZvnO
+         5jc7G4eWKcJKuQ0II/T4Dt4hm1RTHUdzJjVYIMcMjswkke/fj42M15xAKAGss/rgeZ
+         rAYuC5BI98+uj8cX5/KKvSlspeH/HHZAi5RMDOr1tPaRHs1rnmqW1VvJU+o8tHBVuL
+         ZLWc80VaCc+CZHnbxjGOZ1QD+qhaOp/tHcj+4s9tZ2Aeq8luTur+sSSRLm4Af1XGmD
+         52vqUUmANWokw==
+X-Nifty-SrcIP: [209.85.217.44]
+Received: by mail-vs1-f44.google.com with SMTP id b11so7831266vsq.2;
+        Wed, 04 Sep 2019 02:54:02 -0700 (PDT)
+X-Gm-Message-State: APjAAAUznz7Try3leflUU5c/Vx/rXl8QBV4J9bSMyq+DyL3kdeyE8jvn
+        Tt2HyLBB+VNuIMseXHs25POLE86V2iMbfSy3zcI=
+X-Google-Smtp-Source: APXvYqy7454Jcx92pI3RMqpwk+6S0ib6S9rkr/phvwsE/qgfXtGRn0kQpTfE9reHZl23eQ23thoWq0SUB2mqidzWvw0=
+X-Received: by 2002:a67:fd97:: with SMTP id k23mr21110513vsq.179.1567590841199;
+ Wed, 04 Sep 2019 02:54:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.133.213.239]
-X-CFilter-Loop: Reflected
+References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-9-maennich@google.com>
+In-Reply-To: <20190903150638.242049-9-maennich@google.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Wed, 4 Sep 2019 18:53:25 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
+Message-ID: <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
+Subject: Re: [PATCH v4 08/12] scripts: Coccinelle script for namespace dependencies.
+To:     Matthias Maennich <maennich@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jessica Yu <jeyu@kernel.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        maco@android.com, sspatil@google.com,
+        Will Deacon <will@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-modules@vger.kernel.org,
+        linux-usb <linux-usb@vger.kernel.org>,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use devm_platform_ioremap_resource() to simplify the code a bit.
-This is detected by coccinelle.
+On Wed, Sep 4, 2019 at 12:07 AM Matthias Maennich <maennich@google.com> wrote:
+>
+> A script that uses the '<module>.ns_deps' files generated by modpost to
+> automatically add the required symbol namespace dependencies to each
+> module.
+>
+> Usage:
+> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
+>    DEFAULT_SYMBOL_NAMESPACE
+> 2) Run 'make' (or 'make modules') and get warnings about modules not
+>    importing that namespace.
+> 3) Run 'make nsdeps' to automatically add required import statements
+>    to said modules.
+>
+> This makes it easer for subsystem maintainers to introduce and maintain
+> symbol namespaces into their codebase.
+>
+> Co-developed-by: Martijn Coenen <maco@android.com>
+> Signed-off-by: Martijn Coenen <maco@android.com>
+> Acked-by: Julia Lawall <julia.lawall@lip6.fr>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Matthias Maennich <maennich@google.com>
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/usb/gadget/udc/s3c-hsudc.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
-index 858993c..21252fb 100644
---- a/drivers/usb/gadget/udc/s3c-hsudc.c
-+++ b/drivers/usb/gadget/udc/s3c-hsudc.c
-@@ -1263,7 +1263,6 @@ static const struct usb_gadget_ops s3c_hsudc_gadget_ops = {
- static int s3c_hsudc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
--	struct resource *res;
- 	struct s3c_hsudc *hsudc;
- 	struct s3c24xx_hsudc_platdata *pd = dev_get_platdata(&pdev->dev);
- 	int ret, i;
-@@ -1290,9 +1289,7 @@ static int s3c_hsudc_probe(struct platform_device *pdev)
- 		goto err_supplies;
- 	}
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--
--	hsudc->regs = devm_ioremap_resource(&pdev->dev, res);
-+	hsudc->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(hsudc->regs)) {
- 		ret = PTR_ERR(hsudc->regs);
- 		goto err_res;
+Without any correct dependency,
+this does not work.
+
+$ make clean; make nsdeps
+cat: modules.order: No such file or directory
+cat: ./modules.order: No such file or directory
+
+
+I do not see any point in the Makefile changes.
+
+
+
 -- 
-2.7.4
-
-
+Best Regards
+Masahiro Yamada
