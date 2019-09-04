@@ -2,80 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E57A8A3A
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89BEA8AD9
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732088AbfIDP6m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 11:58:42 -0400
-Received: from dsl092-148-226.wdc2.dsl.speakeasy.net ([66.92.148.226]:51204
-        "EHLO nathanst.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732073AbfIDP6m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 11:58:42 -0400
-Received: from holmes.nathanst.com (nathanst@localhost [127.0.0.1])
-        by nathanst.com (8.13.4/8.13.4/Debian-3sarge3) with ESMTP id x84FwVjg023043;
-        Wed, 4 Sep 2019 11:58:31 -0400
-Received: (from nathanst@localhost)
-        by holmes.nathanst.com (8.13.4/8.13.4/Submit) id x84FwVAA023041;
-        Wed, 4 Sep 2019 11:58:31 -0400
-Date:   Wed, 4 Sep 2019 11:58:31 -0400
-From:   Nathan Stratton Treadway <vgerlists@nathanst.com>
-To:     Julian Sikorski <belegdol@gmail.com>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org
-Subject: Re: Lacie Rugged USB3-FW does not work with UAS
-Message-ID: <20190904155831.GE4337@nathanst.com>
-References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com> <1566567572.8347.54.camel@suse.com> <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com> <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com> <1566595393.8347.56.camel@suse.com> <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com> <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com> <1567424535.2469.11.camel@suse.com> <2a06a5dd-3fc9-0aac-a7e2-67be35e2d6bb@gmail.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2a06a5dd-3fc9-0aac-a7e2-67be35e2d6bb@gmail.com>
-User-Agent: Mutt/1.5.9i
+        id S1732820AbfIDQAs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 12:00:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732164AbfIDQAq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:00:46 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C4B022CED;
+        Wed,  4 Sep 2019 16:00:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567612846;
+        bh=MObqDKyCwUFv4ZdRPDIg/JRo1tcGAB+2SCyl6lE37/s=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sUORdJQcgI3EpKZKLOywd/VIOAHDPwJwfrjk6CnKJV25ypXqseYI6bpm8SShgqphh
+         3dabOShoQDdf09RPEz0YgdoIKkPNVNNLxeoPMHHcq7CKyWKLoO/Ssg9PoS8/dTjGwj
+         fZlGjFajDq42C282LN4pt2MXeliU/9sv0MSK0P0E=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Prashant Malani <pmalani@chromium.org>,
+        Hayes Wang <hayeswang@realtek.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 29/52] r8152: Set memory to all 0xFFs on failed reg reads
+Date:   Wed,  4 Sep 2019 11:59:41 -0400
+Message-Id: <20190904160004.3671-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190904160004.3671-1-sashal@kernel.org>
+References: <20190904160004.3671-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 22:10:01 +0200, Julian Sikorski wrote:
-> thanks for the patch! It appears that we got the drives confused, the 
-> one needing quirks is 059f:1061. Unfortunately, even after hand-editing 
-> the patch to match (attached for confirmation), uas is still not 
-> working. The dmesg log is unchanged:
-> 
-> [   67.925435] usb 2-4: new SuperSpeed Gen 1 USB device number 2 using 
-> xhci_hcd
-> [   67.947738] usb 2-4: New USB device found, idVendor=059f, 
-> idProduct=1061, bcdDevice= 0.01
-> [   67.947739] usb 2-4: New USB device strings: Mfr=2, Product=3, 
-> SerialNumber=1
-> [   67.947740] usb 2-4: Product: Rugged USB3-FW
-> [   67.947741] usb 2-4: Manufacturer: LaCie
-> [   67.947742] usb 2-4: SerialNumber: 00000000157f928920fa
-> [   67.978140] usbcore: registered new interface driver usb-storage
-> [   68.007356] scsi host12: uas
-> [   68.007520] usbcore: registered new interface driver uas
-> [   68.007781] scsi 12:0:0:0: Direct-Access     LaCie    Rugged FW USB3 
->  051E PQ: 0 ANSI: 6
-[...] 
-> [  280.017821] usb 2-4: USB disconnect, device number 2
-> [  280.017869] scsi host12: uas_eh_device_reset_handler FAILED err -22
-> [  280.017876] sd 12:0:0:0: Device offlined - not ready after error recovery
-> [  280.043423] sd 12:0:0:0: [sdb] Optimal transfer size 33553920 bytes
-> [  280.204419] sd 12:0:0:0: [sdb] Read Capacity(16) failed: Result: 
-> hostbyte=DID_ERROR driverbyte=DRIVER_OK
-> [  280.204422] sd 12:0:0:0: [sdb] Sense not available.
-> [  280.324417] sd 12:0:0:0: [sdb] Read Capacity(10) failed: Result: 
-> hostbyte=DID_ERROR driverbyte=DRIVER_OK
-> [  280.324420] sd 12:0:0:0: [sdb] Sense not available.
+From: Prashant Malani <pmalani@chromium.org>
 
+[ Upstream commit f53a7ad189594a112167efaf17ea8d0242b5ac00 ]
 
-Oliver, does the presence of the "Read Capacity(16)" message here
-indicate that either the quirk was not applied to the device or that
-the patch didn't have the expected effect?
+get_registers() blindly copies the memory written to by the
+usb_control_msg() call even if the underlying urb failed.
 
-(Is there any way to check what quirks flags are actually in effect for
-a device attached to the UAS driver?  For the usb-storage driver there's
-both a "Quirks match for vid..." dmesg line and the Quirks: line in the 
-/proc/scsi/usb-storage/* file -- but neither of those seem to exist for
-the UAS driver....)
+This could lead to junk register values being read by the driver, since
+some indirect callers of get_registers() ignore the return values. One
+example is:
+  ocp_read_dword() ignores the return value of generic_ocp_read(), which
+  calls get_registers().
 
-							Nathan
+So, emulate PCI "Master Abort" behavior by setting the buffer to all
+0xFFs when usb_control_msg() fails.
+
+This patch is copied from the r8152 driver (v2.12.0) published by
+Realtek (www.realtek.com).
+
+Signed-off-by: Prashant Malani <pmalani@chromium.org>
+Acked-by: Hayes Wang <hayeswang@realtek.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/r8152.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index f1b5201cc3207..a065a6184f7e4 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -788,8 +788,11 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
+ 	ret = usb_control_msg(tp->udev, usb_rcvctrlpipe(tp->udev, 0),
+ 			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
+ 			      value, index, tmp, size, 500);
++	if (ret < 0)
++		memset(data, 0xff, size);
++	else
++		memcpy(data, tmp, size);
+ 
+-	memcpy(data, tmp, size);
+ 	kfree(tmp);
+ 
+ 	return ret;
+-- 
+2.20.1
 
