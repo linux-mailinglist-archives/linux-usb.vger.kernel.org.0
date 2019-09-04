@@ -2,195 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8877A962F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 00:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8792A9663
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 00:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731015AbfIDWRb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 18:17:31 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:59222 "EHLO mx1.redhat.com"
+        id S1730013AbfIDW1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 18:27:18 -0400
+Received: from mout.gmx.net ([212.227.17.21]:45181 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730435AbfIDWR3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 18:17:29 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9B8F43007C30;
-        Wed,  4 Sep 2019 22:17:28 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D534460C18;
-        Wed,  4 Sep 2019 22:17:24 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
- Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
- Kingdom.
- Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 11/11] smack: Implement the watch_key and post_notification
- hooks [ver #8]
-From:   David Howells <dhowells@redhat.com>
-To:     keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block@vger.kernel.org
-Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>, dhowells@redhat.com,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 04 Sep 2019 23:17:24 +0100
-Message-ID: <156763544404.18676.1316696252943973122.stgit@warthog.procyon.org.uk>
-In-Reply-To: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
-References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/unknown-version
+        id S1728008AbfIDW1S (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 18:27:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1567636034;
+        bh=vAryvW+pefoCrLy3Qh08VuWFZtfZw6PRqvzPl8aCHC4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Mm6oMITImjzu0LzZKsx6vx27J61lySZ3DfE7r3VVU529mgAwWBOVs1ho/cz9ramG5
+         e1m35mg0cNeNuGIFIrB1UqnW/mdgtIBMdrwelQe/xvtS4S7zAiZXKPXQZPdBWf0Otb
+         IPZ2kQdX2N9FQhKNifLuAgRv4uLR3BZcx3VgFcU4=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([212.51.155.56]) by mail.gmx.com
+ (mrgmx105 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M6UZl-1i3gsK47o1-006uql; Thu, 05 Sep 2019 00:27:14 +0200
+From:   beni.mahler@gmx.net
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, Beni Mahler <beni.mahler@gmx.net>
+Subject: [PATCH] USB: serial: FTDI: Add device IDs for Sienna and Echelon PL-20
+Date:   Thu,  5 Sep 2019 00:26:20 +0200
+Message-Id: <20190904222620.23618-1-beni.mahler@gmx.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Wed, 04 Sep 2019 22:17:28 +0000 (UTC)
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EXQ8ow8iW01FsesnbFoMjzIySEBZxlD9o4Z95lytkw44P05oio8
+ xPMzzfYB5i//zzgvVOzaHPzarwhGyfdNDA6ohApzcl2jUwmmhA6Fl5LJMKB+0RFW4/9WzD/
+ YJS3sNgC1Z3WFBT/LVVmtBPEokvoyC67mGR9W3o3+DxdjZ1l3nMUVGj/ndvteCSEnY0M7Qy
+ 2m+nDr0kuxA1HMDVhS4Qw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xjjoQCdZSCE=:fVviWa6YRjl3+hOgbdd2x9
+ 2Fnu5gMsFbDn6iNWcOkTDP5V1yRIxghUMwkbSf0E9joqAtX4QQwjCDwV3qmV6KlIc+K8rgcRi
+ sYLzr5ah3qMD0zslzLVueL3+TOug1ycFdPm22QoYTqvKWPpuwMIa/gdo4VWsQmCN8jZjlnOEd
+ 4tKw1C57rT/OKFrnjYacWQQwq3Xgyk+tgh5gUn60xvN4SqZlLyGsWeV1jjcrJtqsxeGiwgIfK
+ VM4/kamGQzl6Ykx78uIVpVH5rprB/Lw1Sq5ks6JlF6M+AS+MbRJslFF8eF7vMSJwRD88kxk8K
+ Qn9UPJB2iocxyib+vnCYlXeq2sKVuLLsComffRchfY7RiIGG83vWHYlkHaECkbCUqr0NjZIWu
+ wh7GC75jXTPTQh20FP14UPo/KdJfD17DiIZOswpLqOiTzcKLnSCuDcvlxFD6wr2HUEYFCZIZX
+ FvQ+zWqkcG1zNTxEfEEpSLtfWBZYq9gkQS8pFMj1wNIAKnOZFK3kRUIA2qP4+eQLE/w+nucQz
+ 9fXuWlSu+yD9Htbrn3dfUhL8bNsVGvG8jzy+yUW7n241O7vP77zgF/3OrhKLOyVttBpEwwe/1
+ CZFwQqbp585dhKeSgYWjkuO84hILaCiBg1VVuqCwVgme0RKdb0k/HwkaCJbWy+vwKdLQKYCm4
+ b2WIciOXAlHeLpu7cOeMBu1uzay72+VM4CX9v8XHqSTBsHIzaNLb55HzxhPuIksImSOXfrF2C
+ jmyv3ox+HQIfEg4uoN/u019a7jP92LRFMEshHs0SHcZpcBRtuLTj4MovnPIfTnfI1psU78pIy
+ nHAqaASLJtQ5Foz0kpX3sAUa6cx0sBXQWw8QwQmYWAa3+zfJ51YdTL2NJjSAIA1ugj6ELaIXE
+ tPRWPgZlpeiDZW//64JS4RKnscP/5cU+qFSoRjwOs5YRN9xbgnLkZnoXcnxLTDKIqOMyey6BF
+ TyubE5BMCWelYQq9Kbv7VhUZQ4h8HTWMNeDU5kSq36B26SU2kQTNbVpvS07M+qL28vgaeFA/S
+ S1uDjb3UyOergjdMXap7e9obSOPfDVsLVrV3kDLzrosb2l5UYoe1AjHQK6IavzxZvCiBHWroU
+ 9BOwOrPOt0+2kY+pfo/L3OaHg98eZKrs4DkP7geaxcjBaszp9uBYGw5vWMNqwNAD7XxUHo1jD
+ k/XJI6Wr0AJLaxs79mo5BMFJhsjccs0fRca8XssxXGhwOHngYR9sfTujgHpzvIwl17nJ+OvnY
+ k7/Z3iLk8LZPPJ0VH
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Implement the watch_key security hook in Smack to make sure that a key
-grants the caller Read permission in order to set a watch on a key.
+From: Beni Mahler <beni.mahler@gmx.net>
 
-Also implement the post_notification security hook to make sure that the
-notification source is granted Write permission by the watch queue.
+Both devices added here have a FTDI chip inside. The device from Echelon
+is called 'Network Interface' it is actually a LON network gateway.
 
-For the moment, the watch_devices security hook is left unimplemented as
-it's not obvious what the object should be since the queue is global and
-didn't previously exist.
+ ID 0403:8348 Future Technology Devices International, Ltd
+ https://www.eltako.com/fileadmin/downloads/de/datenblatt/Datenblatt_PL-SW=
+-PROF.pdf
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Acked-by: Casey Schaufler <casey@schaufler-ca.com>
----
+ ID 0920:7500 Network Interface
+ https://www.echelon.com/products/u20-usb-network-interface
 
- include/linux/lsm_audit.h  |    1 +
- security/smack/smack_lsm.c |   82 +++++++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 82 insertions(+), 1 deletion(-)
+Signed-off-by: Beni Mahler <beni.mahler@gmx.net>
+=2D--
+ drivers/usb/serial/ftdi_sio.c     | 3 +++
+ drivers/usb/serial/ftdi_sio_ids.h | 9 +++++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/include/linux/lsm_audit.h b/include/linux/lsm_audit.h
-index 915330abf6e5..734d67889826 100644
---- a/include/linux/lsm_audit.h
-+++ b/include/linux/lsm_audit.h
-@@ -74,6 +74,7 @@ struct common_audit_data {
- #define LSM_AUDIT_DATA_FILE	12
- #define LSM_AUDIT_DATA_IBPKEY	13
- #define LSM_AUDIT_DATA_IBENDPORT 14
-+#define LSM_AUDIT_DATA_NOTIFICATION 15
- 	union 	{
- 		struct path path;
- 		struct dentry *dentry;
-diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
-index 4c5e5a438f8b..1c2a908c6446 100644
---- a/security/smack/smack_lsm.c
-+++ b/security/smack/smack_lsm.c
-@@ -4274,7 +4274,7 @@ static int smack_key_permission(key_ref_t key_ref,
- 	if (tkp == NULL)
- 		return -EACCES;
- 
--	if (smack_privileged_cred(CAP_MAC_OVERRIDE, cred))
-+	if (smack_privileged(CAP_MAC_OVERRIDE))
- 		return 0;
- 
- #ifdef CONFIG_AUDIT
-@@ -4320,8 +4320,81 @@ static int smack_key_getsecurity(struct key *key, char **_buffer)
- 	return length;
- }
- 
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 4b3a049561f3..e25352932ba7 100644
+=2D-- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1030,6 +1030,9 @@ static const struct usb_device_id id_table_combined[=
+] =3D {
+ 	/* EZPrototypes devices */
+ 	{ USB_DEVICE(EZPROTOTYPES_VID, HJELMSLUND_USB485_ISO_PID) },
+ 	{ USB_DEVICE_INTERFACE_NUMBER(UNJO_VID, UNJO_ISODEBUG_V1_PID, 1) },
++	/* Sienna devices */
++	{ USB_DEVICE(FTDI_VID, FTDI_SIENNA_PID) },
++	{ USB_DEVICE(ECHELON_VID, ECHELON_U20_PID) },
+ 	{ }					/* Terminating entry */
+ };
+
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_s=
+io_ids.h
+index f12d806220b4..22d66217cb41 100644
+=2D-- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -39,6 +39,9 @@
+
+ #define FTDI_LUMEL_PD12_PID	0x6002
+
++/* Sienna Serial Interface by Secyourit GmbH */
++#define FTDI_SIENNA_PID		0x8348
 +
-+#ifdef CONFIG_KEY_NOTIFICATIONS
-+/**
-+ * smack_watch_key - Smack access to watch a key for notifications.
-+ * @key: The key to be watched
-+ *
-+ * Return 0 if the @watch->cred has permission to read from the key object and
-+ * an error otherwise.
+ /* Cyber Cortex AV by Fabulous Silicon (http://fabuloussilicon.com) */
+ #define CYBER_CORTEX_AV_PID	0x8698
+
+@@ -688,6 +691,12 @@
+ #define BANDB_TTL3USB9M_PID	0xAC50
+ #define BANDB_ZZ_PROG1_USB_PID	0xBA02
+
++/*
++ * Echelon USB Serial Interface
 + */
-+static int smack_watch_key(struct key *key)
-+{
-+	struct smk_audit_info ad;
-+	struct smack_known *tkp = smk_of_current();
-+	int rc;
-+
-+	if (key == NULL)
-+		return -EINVAL;
-+	/*
-+	 * If the key hasn't been initialized give it access so that
-+	 * it may do so.
-+	 */
-+	if (key->security == NULL)
-+		return 0;
-+	/*
-+	 * This should not occur
-+	 */
-+	if (tkp == NULL)
-+		return -EACCES;
-+
-+	if (smack_privileged_cred(CAP_MAC_OVERRIDE, current_cred()))
-+		return 0;
-+
-+#ifdef CONFIG_AUDIT
-+	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_KEY);
-+	ad.a.u.key_struct.key = key->serial;
-+	ad.a.u.key_struct.key_desc = key->description;
-+#endif
-+	rc = smk_access(tkp, key->security, MAY_READ, &ad);
-+	rc = smk_bu_note("key watch", tkp, key->security, MAY_READ, rc);
-+	return rc;
-+}
-+#endif /* CONFIG_KEY_NOTIFICATIONS */
- #endif /* CONFIG_KEYS */
- 
-+#ifdef CONFIG_WATCH_QUEUE
-+/**
-+ * smack_post_notification - Smack access to post a notification to a queue
-+ * @w_cred: The credentials of the watcher.
-+ * @cred: The credentials of the event source (may be NULL).
-+ * @n: The notification message to be posted.
-+ */
-+static int smack_post_notification(const struct cred *w_cred,
-+				   const struct cred *cred,
-+				   struct watch_notification *n)
-+{
-+	struct smk_audit_info ad;
-+	struct smack_known *subj, *obj;
-+	int rc;
-+
-+	/* Always let maintenance notifications through. */
-+	if (n->type == WATCH_TYPE_META)
-+		return 0;
-+
-+	if (!cred)
-+		return 0;
-+	subj = smk_of_task(smack_cred(cred));
-+	obj = smk_of_task(smack_cred(w_cred));
-+
-+	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_NOTIFICATION);
-+	rc = smk_access(subj, obj, MAY_WRITE, &ad);
-+	rc = smk_bu_note("notification", subj, obj, MAY_WRITE, rc);
-+	return rc;
-+}
-+#endif /* CONFIG_WATCH_QUEUE */
++#define ECHELON_VID		0x0920
++#define ECHELON_U20_PID		0x7500
 +
  /*
-  * Smack Audit hooks
-  *
-@@ -4710,8 +4783,15 @@ static struct security_hook_list smack_hooks[] __lsm_ro_after_init = {
- 	LSM_HOOK_INIT(key_free, smack_key_free),
- 	LSM_HOOK_INIT(key_permission, smack_key_permission),
- 	LSM_HOOK_INIT(key_getsecurity, smack_key_getsecurity),
-+#ifdef CONFIG_KEY_NOTIFICATIONS
-+	LSM_HOOK_INIT(watch_key, smack_watch_key),
-+#endif
- #endif /* CONFIG_KEYS */
- 
-+#ifdef CONFIG_WATCH_QUEUE
-+	LSM_HOOK_INIT(post_notification, smack_post_notification),
-+#endif
-+
-  /* Audit hooks */
- #ifdef CONFIG_AUDIT
- 	LSM_HOOK_INIT(audit_rule_init, smack_audit_rule_init),
+  * Intrepid Control Systems (http://www.intrepidcs.com/) ValueCAN and Neo=
+VI
+  */
+=2D-
+2.20.1
 
