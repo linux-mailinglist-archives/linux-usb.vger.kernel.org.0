@@ -2,106 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BF4A8CB4
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3228A8CDD
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 21:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732607AbfIDQQY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 12:16:24 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:36551 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732862AbfIDQQV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 12:16:21 -0400
-Received: by mail-lj1-f193.google.com with SMTP id l20so5762057ljj.3
-        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2019 09:16:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=one-eyed-alien.net; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3OkOI3j0Oo0CjA3trKCkMR2MwBR7d8kErbi/HKpfcyM=;
-        b=TUlK0rc196VsjDYABXU7yCCcQ4sTNOl47V6TQt/Z6Y4FZj6TevmCuFWT9dKCaAnTkd
-         ii+pt9kyT4tMSieTNWDBUkxJWxisf3YEfmljgf/j7puwe7joaJGEU4O2426wowD5IuNU
-         CQLeaZs18KcpY8ipXZwRFzvDYcdReO/oyNEP4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3OkOI3j0Oo0CjA3trKCkMR2MwBR7d8kErbi/HKpfcyM=;
-        b=KxLmz0qJBDXd5bTgZEK/fdX2zKMYKBHEmqZu8KOzGRJdN2R/wK5HiK6/9Lky3BqbKo
-         m5rAnLCxQLFyTLDIRGiNm417ekw4O44Y+nUqre6/M6cqenk4uBfeMnJ8Ug50xRf1Vt56
-         wl+6J48IDNbnHGICqJEWMxVDFvWH/bS2j0+mlvYTINtmVXaqhaEV07rFmi6zh+yDGSEW
-         HD2peIzN1QpCLiZ5kH2BZNKD/TtX9yf1tMoOy8Ngr0BVx0XEL3TGmyCg0oAN7PkiR0Ys
-         tfJdIM0hTQJram1fLE6qtHCCaPOKwTX+9f5mVgaBxXTzWXHbwz88Asq4FIE1oFaNcYy7
-         GeeQ==
-X-Gm-Message-State: APjAAAVqtEKe3tU4XspIVOKUHpDAgBex0Wzo/pPUf+BACM/dhSxMrvyl
-        ++J5VTmNCBQWC2AdGunfzty+K5+X8WVbuVfQYDGqLw==
-X-Google-Smtp-Source: APXvYqwjBs0W5/qIegdlz+i6Wn/+JSt4M3u1OfLNwPhUCj4In1akz/3V+ycUi8EU6qZzBMs2ICtcju1RZEnxtZQrP/k=
-X-Received: by 2002:a2e:9ad4:: with SMTP id p20mr24178237ljj.49.1567613778648;
- Wed, 04 Sep 2019 09:16:18 -0700 (PDT)
+        id S1732565AbfIDQSg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 12:18:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54092 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387546AbfIDQSf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 12:18:35 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D09921670;
+        Wed,  4 Sep 2019 16:18:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567613914;
+        bh=sC7d3G19my0wuRxGHnmv69/T4u7CkZZ7LnXonAOEEXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tQTTyOEWptIrKSMGw1x3kAdooYo19D5HbtO9PGefKmvKfrZXZSXRvTbzB8jZLCa6K
+         1acFKpv414PG+K9kew6H+6UMQ0dFhd4bXL+9E+T9A4+9J4vsbs5OPahQuUDJ3DcFJH
+         2PhhKCGM/JtbQgorcROOWnA1CEJuz/26fSWsMMK4=
+Date:   Wed, 4 Sep 2019 18:18:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial updates for 5.4-rc1
+Message-ID: <20190904161832.GB20662@kroah.com>
+References: <20190904150356.GA24736@localhost>
 MIME-Version: 1.0
-References: <20180716122125.175792-1-maco@android.com> <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-13-maennich@google.com> <20190903161045.GA22754@roeck-us.net>
- <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com> <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
-In-Reply-To: <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
-From:   Matthew Dharm <mdharm-usb@one-eyed-alien.net>
-Date:   Wed, 4 Sep 2019 09:16:07 -0700
-Message-ID: <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
-Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
- symbols in WATCHDOG_CORE namespace
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Matthias Maennich <maennich@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        maco@android.com, sspatil@google.com,
-        Will Deacon <will@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        linux-usb <linux-usb@vger.kernel.org>,
-        USB Mass Storage on Linux 
-        <usb-storage@lists.one-eyed-alien.net>,
-        linux-watchdog@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190904150356.GA24736@localhost>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Note that I don't object to the patch set in general. There may be symbols
-> which only need be exported in the context of a single subsystem or even
-> driver (if a driver consists of more than one module). For example, a mfd
-> driver may export symbols which should only be called by its client drivers.
-> In such a situation, it may well be beneficial to limit the use of exported
-> symbols.
+On Wed, Sep 04, 2019 at 05:03:56PM +0200, Johan Hovold wrote:
+> The following changes since commit d1abaeb3be7b5fa6d7a1fbbd2e14e3310005c4c1:
+> 
+>   Linux 5.3-rc5 (2019-08-18 14:31:08 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.4-rc1
 
-I can appreciate this benefit.
+Pulled and pushed out, thanks!
 
-> I am not sure what good that does in practice (if I understand correctly,
-> a driver only has to declare that it wants to use a restricted use symbol
-> if it wants to use it), but that is a different question.
-
-I think this question implies that you are coming from the perspective
-of "security" or wanting to restrict access to the underlying
-functions, rather than wanting to clean-up the way symbols are handled
-for manageability / maintainability purposes (which is the goal, as I
-understand it).
-
-HOWEVER, I have one question:  If these patches are included, and
-someone wants to introduce a bit of code which needs to use two
-symbols from different namespaces but with the same name, can that be
-done?  That is, if driver A has symbol 'foo' and driver B has symbol
-'foo' (both in their respective namespaces), and driver C wants to use
-A.foo and B.foo, can that be supported?
-
-Matt
-
-
--- 
-Matthew Dharm
-Former Maintainer, USB Mass Storage driver for Linux
+greg k-h
