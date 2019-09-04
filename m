@@ -2,59 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59040A821E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 14:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 405DCA8227
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Sep 2019 14:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729950AbfIDMJE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 08:09:04 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41892 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726010AbfIDMJD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Sep 2019 08:09:03 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 13C2185542;
-        Wed,  4 Sep 2019 12:09:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E9D2F5C219;
-        Wed,  4 Sep 2019 12:08:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <23d61564-026e-b37a-8b16-ce68d5949f6c@schaufler-ca.com>
-References: <23d61564-026e-b37a-8b16-ce68d5949f6c@schaufler-ca.com> <87bf0363-af77-1e5a-961f-72730e39e3a6@schaufler-ca.com> <e36fa722-a300-2abf-ae9c-a0246fc66d0e@schaufler-ca.com> <156717343223.2204.15875738850129174524.stgit@warthog.procyon.org.uk> <156717352917.2204.17206219813087348132.stgit@warthog.procyon.org.uk> <4910.1567525310@warthog.procyon.org.uk> <11467.1567534014@warthog.procyon.org.uk>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, viro@zeniv.linux.org.uk,
-        Stephen Smalley <sds@tycho.nsa.gov>,
+        id S1729563AbfIDMMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 08:12:48 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:39113 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728021AbfIDMMs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 08:12:48 -0400
+Received: by mail-pg1-f194.google.com with SMTP id u17so11150392pgi.6;
+        Wed, 04 Sep 2019 05:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PAQW62HDl0bciuqP6fN46/O4uLjRbfz/e823ZKZ4uxo=;
+        b=odUTXruYXwCFbaRqN+OB94gJRjA+2S5viypwCnnSxG6Y7hlUQLPxTDkDVYmX7W1rQU
+         uv215DqdfEM/8LweNRJ92mZ100vbSk36pwTRS8PoRbF3G4jNQnZFsZE8baMWWdEjJ/4W
+         VsnqF+3i4d+9nwck3wj1jdlm3MJTS0yC457YY0BtgCUwX/nHhEe82AoD2DbQbST0u5vC
+         tj688e5dfHqXvKvzUK74FIOASegsebMhqjECshw583+PaHJ0HGQnHRNZK6ZgVjxP5Mme
+         deZC0fJH1XpZsJb9sNsLJPy+2hgf38hsbLZZsKlhoUg3MtN7KrZ6iqKYKAu4Vxv2TWlH
+         DZ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PAQW62HDl0bciuqP6fN46/O4uLjRbfz/e823ZKZ4uxo=;
+        b=XazBVam9MKDfScbmxxiSZxUO7g3zNTIEFyIDb3LWrH3svlBtlytxkTayNSP2a8J5a8
+         c1tA6aBOPaNvKwYPzvUjBZj9R82HhMKtsqSIVncpN0448I3mrYsqX24wxv+T7fP3cpc/
+         VuuOu2T8H3IZ7ZhXEdGNcDM9Y9ewzhjb+o5BkMkC5ADKv3yIUubBuRN1lN2i2xtLfxcQ
+         wSDHN5LX8Xz2z4HdE62Ha7guvDqtSSbYfwj1zmT9mMvgFUTyMVb7onH3xFHOlUAGivRF
+         U0ioiNgFCvQjF+KIJPNJs4B0+dvwlSosUym8eFWLJx2u747nJNp46fpgV6nyroCubXWi
+         rGJA==
+X-Gm-Message-State: APjAAAXLP55EolJoJ/BAif1uSyVWobpwUKPk6OvcngvcWUF0VP152zrx
+        HP+xqDL3m9o6tp9M1v4DZYHfoC0I
+X-Google-Smtp-Source: APXvYqyhp7R0xzFwIzqeYLUau3rwyuE7rnJ98aLpivaxyyvptzZSQetH6q0c/XswiqVM7e++yuxtxA==
+X-Received: by 2002:a62:7a12:: with SMTP id v18mr2313087pfc.205.1567599166796;
+        Wed, 04 Sep 2019 05:12:46 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x5sm12419072pfi.165.2019.09.04.05.12.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 04 Sep 2019 05:12:45 -0700 (PDT)
+Subject: Re: [PATCH v4 12/12] RFC: watchdog: export core symbols in
+ WATCHDOG_CORE namespace
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Matthias Maennich <maennich@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/11] smack: Implement the watch_key and post_notification hooks [untested] [ver #7]
+        Jessica Yu <jeyu@kernel.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        maco@android.com, sspatil@google.com,
+        Will Deacon <will@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-modules@vger.kernel.org,
+        linux-usb <linux-usb@vger.kernel.org>,
+        usb-storage@lists.one-eyed-alien.net,
+        linux-watchdog@vger.kernel.org
+References: <20180716122125.175792-1-maco@android.com>
+ <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-13-maennich@google.com>
+ <20190903161045.GA22754@roeck-us.net>
+ <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
+Date:   Wed, 4 Sep 2019 05:12:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <31204.1567598939.1@warthog.procyon.org.uk>
-Date:   Wed, 04 Sep 2019 13:08:59 +0100
-Message-ID: <31205.1567598939@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Wed, 04 Sep 2019 12:09:03 +0000 (UTC)
+In-Reply-To: <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
+On 9/4/19 1:45 AM, Masahiro Yamada wrote:
+> On Wed, Sep 4, 2019 at 1:10 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On Tue, Sep 03, 2019 at 04:06:38PM +0100, Matthias Maennich wrote:
+>>> Modules using symbols from the WATCHDOG_CORE namespace are required to
+>>> explicitly import the namespace. This patch was generated with the
+>>> following steps and serves as a reference to use the symbol namespace
+>>> feature:
+>>>
+>>>   1) Use EXPORT_SYMBOL_NS* macros instead of EXPORT_SYMBOL* for symbols
+>>>      in watchdog_core.c
+>>>   2) make  (see warnings during modpost about missing imports)
+>>>   3) make nsdeps
+>>>
+>>> I used 'allmodconfig' for the above steps to ensure all occurrences are
+>>> patched.
+>>>
+>>> Defining DEFAULT_SYMBOL_NAMESPACE in the Makefile is not trivial in this
+>>> case as not only watchdog_core is defined in drivers/watchdog/Makefile.
+>>> Hence this patch uses the variant of using the EXPORT_SYMBOL_NS* macros
+>>> to export into a different namespace.
+>>>
+>>> An alternative to this patch would be a single definition line before
+>>> any use of EXPORT_SYMBOL*:
+>>>   #define DEFAULT_SYMBOL_NAMESPACE WATCHDOG_CORE
+>>>
+>>> This patch serves as a reference on how to use the symbol namespaces.
+>>>
+>>> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Signed-off-by: Matthias Maennich <maennich@google.com>
+>>
+>> As mentioned before, I am opposed to this set of changes. I don't see
+>> the point of restricting the use of exported symbols in WATCHDOG_CORE.
+>>
+>> Guenter
+> 
+> 
+> I agree.
+> 
+> I do not like this patch set either.
+> 
 
-> I rebuilt with keys-next, updated the tests again, and now
-> the suite looks to be running trouble free.
+Note that I don't object to the patch set in general. There may be symbols
+which only need be exported in the context of a single subsystem or even
+driver (if a driver consists of more than one module). For example, a mfd
+driver may export symbols which should only be called by its client drivers.
+In such a situation, it may well be beneficial to limit the use of exported
+symbols.
 
-Can I put you down as an Acked-by or something on this patch?
+I am not sure what good that does in practice (if I understand correctly,
+a driver only has to declare that it wants to use a restricted use symbol
+if it wants to use it), but that is a different question.
 
-Thanks,
-David
+Guenter
