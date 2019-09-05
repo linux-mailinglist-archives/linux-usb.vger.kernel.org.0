@@ -2,95 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C40D7A969F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 00:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7221CA983A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 04:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730032AbfIDWln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 18:41:43 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:35157 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfIDWln (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 18:41:43 -0400
-Received: by mail-pg1-f196.google.com with SMTP id n4so246469pgv.2
-        for <linux-usb@vger.kernel.org>; Wed, 04 Sep 2019 15:41:43 -0700 (PDT)
+        id S1730273AbfIECJs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 22:09:48 -0400
+Received: from mail-eopbgr1410093.outbound.protection.outlook.com ([40.107.141.93]:8368
+        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726240AbfIECJr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 22:09:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hsYL+MuM7Qw4P+YfsoJTy0tgGsv4aR52dzmbgkwFueFs6k0IMNU5XBVIJGbKS/adnBv7Ut2Q4cXlLc5FarA81ZSNHm7kVSXPaxFStiSpxalFLZniCQTvygp1laOi3wpr+GAjHbFqjvy3cVRGrDURWRh2O8ZW9lPgB7ga5VgJGxpPsVDMfUVCadEeuD3LMZiGiNh7Jw89Kqczsl1Xka2xh08tcuB+3joCBlpVF+9w8u9g5NKSqfJcd3gF9uMhdzGrljfwMYOumraEDtrbx6gP4pKCckGTii2k/JpxK6aydKm8k6oUrHdQamFLIq5xo6RE8ZMd4z7KWvpOlMxb3flXCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1jvKfLF2R+UpAfqE4o7aItd1RBKl3PXtgKTuVVNp9rc=;
+ b=BFdlSY+Af0lNpu7obxJV+crdIYGGh8uVC5jt8Go0fqe2hx5P6N6JI6oW9cNkedROqcmv4juKR7PgnAG3fa3ywXWIFA5/o2SjVDuGWwHCsdWY0WWMTVIdmidHWDHYTCAhqXl0QIaCHlEeOExOo1GBuam79p10nqzCTmh8hza/egteexEorStedcZLN9cuembByKS+/DkYx8BMJXdTpxcOy/WkUVuvq2H0ULxeiNk7gQ7OtNLD/0pgSxtXzNI3+Xpgg6aPAvUBryMxcEQM0ZtD6T7xcD84tsqyA+yPNtiPmiZttpd8YHsYUQCSIXmdLaZXnMp19i/euTQRWFzR3kP2iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=F7w7OYWEZp92dbWwWfKCD0/GMcWvLQYFBW0H+BsI0yY=;
-        b=S9HabiEoGTVsur2kzoliknHRgENKmGHHuORCxFux0MZLNCi4uI64q0L3AbjfI9oXiW
-         Ol+n98+2c8TLzKp0JmirprwgYfGCrcw71+13XO81KW5vfmAo4zLwCLJ0Iq9kB5zs4dra
-         MDGKCqgFMdOZxhKxxH8KgBs7K8pBLSFSmqva8inGOOfYMooL0Yn/w9p4vLS4/cVqVLdk
-         C1OY3tpJZWWHeXm975Z36vbSasINlDUdZ9yFqkIp8OzHx+SzTcZzJ1kx6iLQx6BWYIRG
-         IjBHE4ZP9eIRYpOAa/75/9sB7/kIiFGmUkMS6XZ7PWK4pDco+bVol5pYXYKqHHtghJ1S
-         Zo/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=F7w7OYWEZp92dbWwWfKCD0/GMcWvLQYFBW0H+BsI0yY=;
-        b=Igo/n5X/T+KQ0YW151usWaMxgTU6F/rVfkmrZ4mRaYQ/b2ZmZpD8AnBz5DPv9Cgdp0
-         +rLcNl0O09G+38aO8iYmZ7MK5vgqcf8ICbV65HpTd1u4btZU3zMA+AXZI8jh6crQqWAv
-         pKEgNMlhNNERdSM3V8yFSvO1yayvNl7/5ByHAUCLPIa6tylnquVdEA23Brr211uNyJA3
-         lquj1Ya+PNBvLnrMJGgyZHCs2XNUijzF7LfJMJ88XgLPsiNpi3fwuIl5EbGzndvMVBRD
-         MzKGeYDuYXJOw4ZrKp+FaG3/kQ2pMglPz73ErtvOQxlG0FN4AbSAK35Eqe6IxaX7SGvu
-         WhIA==
-X-Gm-Message-State: APjAAAWWSu8I3TqrwTjD5KnPd9d9loEoglN+wbDejv/cbWHlk7eSFh/5
-        2tIwhAz2+sPLQUTH1+RpssezgA==
-X-Google-Smtp-Source: APXvYqznDsIr2C14kjGSQV8JdcBv9qpoetbNHpdsCPFVRFAR3SY86n+TqDytSXZBKzEHxh8lgZfLrg==
-X-Received: by 2002:a17:90a:ac0a:: with SMTP id o10mr519853pjq.139.1567636902930;
-        Wed, 04 Sep 2019 15:41:42 -0700 (PDT)
-Received: from hermes.lan (204-195-22-127.wavecable.com. [204.195.22.127])
-        by smtp.gmail.com with ESMTPSA id t9sm148163pgj.89.2019.09.04.15.41.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2019 15:41:42 -0700 (PDT)
-Date:   Wed, 4 Sep 2019 15:41:40 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Hui Peng <benquike@gmail.com>
-Cc:     syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
-        alexios.zavras@intel.com, andreyknvl@google.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.payer@nebelwelt.net, netdev@vger.kernel.org,
-        rfontana@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Subject: Re: WARNING in hso_free_net_device
-Message-ID: <20190904154140.45dfb398@hermes.lan>
-In-Reply-To: <d6e4d2da-66c6-a8fe-2fea-a3435fa7cb54@gmail.com>
-References: <0000000000002a95df0591a4f114@google.com>
-        <d6e4d2da-66c6-a8fe-2fea-a3435fa7cb54@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1jvKfLF2R+UpAfqE4o7aItd1RBKl3PXtgKTuVVNp9rc=;
+ b=peXOxryPhTc5yKAV3G0jY8mdzurt8x18HTtsv4fBpiKoXKeld1zjixtrbrHA+0/lT7DpN5+FGcpvxzVIYoNwIfTkXe0CCs6zOmeT8OA8GCGo4vdjY8sEj1Dy273uSrcUheFvcdwisMAarwBlEheIv6xIXUI1V+4aQZ12JYSLxYc=
+Received: from OSAPR01MB4529.jpnprd01.prod.outlook.com (20.179.176.20) by
+ OSAPR01MB2547.jpnprd01.prod.outlook.com (52.134.246.207) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2220.18; Thu, 5 Sep 2019 02:09:43 +0000
+Received: from OSAPR01MB4529.jpnprd01.prod.outlook.com
+ ([fe80::80c8:d4a:d177:30f5]) by OSAPR01MB4529.jpnprd01.prod.outlook.com
+ ([fe80::80c8:d4a:d177:30f5%3]) with mapi id 15.20.2241.014; Thu, 5 Sep 2019
+ 02:09:43 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        "REE erosca@DE.ADIT-JV.COM" <erosca@DE.ADIT-JV.COM>,
+        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
+Subject: RE: [PATCH v2] usb: gadget: udc: renesas_usb3: add suspend event
+ support
+Thread-Topic: [PATCH v2] usb: gadget: udc: renesas_usb3: add suspend event
+ support
+Thread-Index: AQHVYy/I2t9BLcJRXk2KkAPfCRN4PaccVmqA
+Date:   Thu, 5 Sep 2019 02:09:42 +0000
+Message-ID: <OSAPR01MB4529159D4DA9764B0688D4A4D8BB0@OSAPR01MB4529.jpnprd01.prod.outlook.com>
+References: <TYAPR01MB454435E0431173D3C7F76D65D8B80@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+ <1567608481-771-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+In-Reply-To: <1567608481-771-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [150.249.235.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 36d34d33-6365-4236-5917-08d731a61dc6
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:OSAPR01MB2547;
+x-ms-traffictypediagnostic: OSAPR01MB2547:|OSAPR01MB2547:
+x-ms-exchange-purlcount: 1
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-microsoft-antispam-prvs: <OSAPR01MB2547FB23BD3CBCD7362BA8EAD8BB0@OSAPR01MB2547.jpnprd01.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-forefront-prvs: 015114592F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(376002)(39860400002)(396003)(366004)(199004)(189003)(8936002)(476003)(305945005)(15650500001)(74316002)(81156014)(81166006)(11346002)(446003)(486006)(102836004)(4326008)(7736002)(8676002)(186003)(26005)(14444005)(256004)(6506007)(76176011)(229853002)(52536014)(66066001)(6306002)(6436002)(55016002)(5660300002)(9686003)(478600001)(33656002)(53936002)(86362001)(14454004)(966005)(71200400001)(71190400001)(316002)(6246003)(110136005)(2906002)(3846002)(6116002)(107886003)(7696005)(99286004)(76116006)(66446008)(64756008)(66556008)(66476007)(25786009)(54906003)(66946007);DIR:OUT;SFP:1102;SCL:1;SRVR:OSAPR01MB2547;H:OSAPR01MB4529.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: RSHwIBE74LnohWti8SXPgmXPEXctbNKq36Om14Mloyap4ycVKKeoVNm5oCYbPvh5vUlRYiSw+EiU8dcV7HMx51E480k6L4l7C69idX8gHKOb7ZLMBzrV7lc5BBLTyu3QvrHF93FsbKBSB65p1cKopzkfUNwnsVV7H3fJkN1al+lTjFbfIxRqOo/NucIVMKutzeioNItago6+IKKOEjJraSIWqTvrzLF/RuKM6nBMLpiu/plj1iihX5JujSwt5+tSY0hVaTftZKFcUQpI7zr1k5mJcG26nhFDjDKG+JzspbwVia60P7UyIv1B1VC0nv2Nox6xCQ4MAJxlff7RTZpfRHas3f8Byjk7Ac8M/7UXTAmrXKV4oIbhr+GOR5qggqYZ7o7VPRKMZH7YXd/LEL9UPwnshFUoLM3UrvAthMZ+R3o=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36d34d33-6365-4236-5917-08d731a61dc6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 02:09:42.8235
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pxzwLg0n+XIv41NVriiElAmdNm8ONSjQopfUuvnmUBYOEEa4h/VI/PDRQPDYiwhXfLsFQAxRm0mG7be5ED7Lbn1c+gy0Z+eRRqaCR29ilYHJzaNrRn03zx7IfLwxA6tA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSAPR01MB2547
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Sep 2019 16:27:50 -0400
-Hui Peng <benquike@gmail.com> wrote:
+Hi Veeraiyan,
 
-> Hi, all:
->=20
-> I looked at the bug a little.
->=20
-> The issue is that in the error handling code, hso_free_net_device
-> unregisters
->=20
-> the net_device (hso_net->net)=C2=A0 by calling unregister_netdev. In the
-> error handling code path,
->=20
-> hso_net->net has not been registered yet.
->=20
-> I think there are two ways to solve the issue:
->=20
-> 1. fix it in drivers/net/usb/hso.c to avoiding unregistering the
-> net_device when it is still not registered
->=20
-> 2. fix it in unregister_netdev. We can add a field in net_device to
-> record whether it is registered, and make unregister_netdev return if
-> the net_device is not registered yet.
->=20
-> What do you guys think ?
+Thank you for the patch!
 
-#1
+> From: Veeraiyan Chidambaram, Sent: Wednesday, September 4, 2019 11:48 PM
+<snip>
+> --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> @@ -767,6 +767,20 @@ static void usb3_irq_epc_int_1_resume(struct renesas=
+_usb3 *usb3)
+>  	usb3_transition_to_default_state(usb3, false);
+>  }
+>=20
+> +static void usb3_irq_epc_int_1_suspend(struct renesas_usb3 *usb3)
+> +{
+> +	usb3_disable_irq_1(usb3, USB_INT_1_B2_SPND);
+> +
+> +	if (usb3->driver &&
+> +	    usb3->driver->suspend &&
+
+As I mentioned on v1 patch [1], I'd like to remove these conditions.
+After fixed it,
+
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+[1] https://patchwork.kernel.org/patch/11129797/#22862513
+
+Best regards,
+Yoshihiro Shimoda
+
+> +	    usb3->gadget.speed !=3D USB_SPEED_UNKNOWN &&
+> +	    usb3->gadget.state !=3D USB_STATE_NOTATTACHED) {
+> +		if (usb3->driver && usb3->driver->suspend)
+> +			usb3->driver->suspend(&usb3->gadget);
+> +		usb_gadget_set_state(&usb3->gadget, USB_STATE_SUSPENDED);
+> +	}
+> +}
+> +
+>  static void usb3_irq_epc_int_1_disable(struct renesas_usb3 *usb3)
+>  {
+>  	usb3_stop_usb3_connection(usb3);
+> @@ -852,6 +866,9 @@ static void usb3_irq_epc_int_1(struct renesas_usb3 *u=
+sb3, u32 int_sta_1)
+>  	if (int_sta_1 & USB_INT_1_B2_RSUM)
+>  		usb3_irq_epc_int_1_resume(usb3);
+>=20
+> +	if (int_sta_1 & USB_INT_1_B2_SPND)
+> +		usb3_irq_epc_int_1_suspend(usb3);
+> +
+>  	if (int_sta_1 & USB_INT_1_SPEED)
+>  		usb3_irq_epc_int_1_speed(usb3);
+>=20
+> --
+> 2.7.4
+
