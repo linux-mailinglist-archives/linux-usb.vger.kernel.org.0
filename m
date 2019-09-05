@@ -2,116 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 045C6AA651
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 16:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AA1AA87C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 18:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389913AbfIEOrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 10:47:03 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:39790 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725290AbfIEOrC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 10:47:02 -0400
-Received: by mail-wm1-f65.google.com with SMTP id q12so3405260wmj.4
-        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 07:47:00 -0700 (PDT)
+        id S2387682AbfIEQSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 12:18:07 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43297 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387631AbfIEQSG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 12:18:06 -0400
+Received: by mail-pf1-f194.google.com with SMTP id d15so2060724pfo.10
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 09:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zXRGEZPwLtQ5UinxPXKU5BfJwpOCdWN4x79WEBjhqjE=;
-        b=MBtV92rBa45246haRPT8qJPcyhwAnCzGKWvtch+yphLIQemMY/gh8rghP/zBtzfhZM
-         cpNvyMRnAG5QKZHMWcZ9nGFEPxpgrPHlGg7/XLUNNd4u6wM+0FQ2prtdPxZeCyRUYgG/
-         46UJM/NqDtwXc0nJ0q6SAb9xSMl58YKwCFKDbHGX/tVevKx8RK6diHCHAXeOi7MjI2lk
-         PvYvOQTx7+W8Qrmx13NqWuMQHWS6psl1gN95m/d/GLgjEpPk3HC1Stf1IKA/Ps6h4Sa/
-         B5GatoBEuuaROLE0BQKgN++QnG4MC66qo9gYpsjhhVJchmtowGwhpI1s78bjOcQhi51y
-         c6hw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=oxweDnammrNyIt2aaQLCe6r9vThCpXKTK19Q9yGm1E4=;
+        b=B+cZWsZuXFEQB01N9qcY/nKk7nFveM0bQSkHouQZ+2v8KRCDItQu12g91o55OqiDIl
+         SQnnn5r6vvZTn3KSmZR9+5rl9wxcTUw4H96aAEmGDnjJxx3uKAFfio+dNp5I+wQr3Vwe
+         gbXWR4hTOwsV+tXvAEB+6kyHio5Z54rthgV5q6RE89zhMs4lr/LJm01282eHycMXzU0z
+         U9a2VMJKcYvCVPouURNHnaM7gNG9pAlCnZKkh1Y0vrCEBkYcoJQ5dlKEJOS6mj8Rfcf/
+         3BOqGGxylR2E7voPViPNnWEY2QFJ0exUKtekqdkZckIcT8g6oOqpENw3lQbrUEfCQSqK
+         d4Uw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zXRGEZPwLtQ5UinxPXKU5BfJwpOCdWN4x79WEBjhqjE=;
-        b=ONieUGTON2Wk/L59foi1WUg0NUKXEdPtj/jnwIGMfUznAoGlJaxTvIkRsnM8fS8npD
-         sW56TVbQqwqyl7c1TFLv30SJ89TdIghkM+w4shg+ev2djoqMx+lH6nPPlTt5n9YPeobr
-         Z7OweAsBsQ7DDGSKzQa89DvvnKJ+7UuVifwI3BtDWhxTn8hNVVef7Q3nP7ebI40rFZQ+
-         e4R/vQhBMjYhuKAb6D/RvGWMLJwl7topaHgyXYRM6DV/qO1MTyqGAbm9QLRoPf4MbcDn
-         7zlgSqGnAbzrfzo5rBeWRFViJM6cAX9wLN4bAukPB1pFfckw4k+cxMx7q/rLTjyvKOXG
-         J2gg==
-X-Gm-Message-State: APjAAAUHpxsTqvtmP+UwUlzbCbxuKZCAPHtaiVS+9fs+KFtunvJGggFk
-        iPPRNEDDrr4FVHlL2oqbAxuEIA==
-X-Google-Smtp-Source: APXvYqxrOWP3uRwxr+KtT9+/rUjsTzf8G+3Pk75+GnyZlEo2O+xCfU34WKNLUgQbN77l6Mtdb/VdMA==
-X-Received: by 2002:a1c:ef13:: with SMTP id n19mr3424489wmh.48.1567694819611;
-        Thu, 05 Sep 2019 07:46:59 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id y3sm3568846wra.88.2019.09.05.07.46.58
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=oxweDnammrNyIt2aaQLCe6r9vThCpXKTK19Q9yGm1E4=;
+        b=Dqnfvv07Iy3LFzySgR4+nrsijOxRrv3ZfynQ7v4skymGfm3nj1PmZjDlNibkCbtwwz
+         oAm80/PUK/Esa85b9AgV7y5X9ILZNBvgUA4AMIAoQ7QswVmfFXNJGhqwuGlSsZPYxKQD
+         vRb2cAk5yJTufr6Hb3rBV/YzN+niXd18eHntEugBzn4w17yr+lw+9DaGx/wnR+3Jyk+k
+         9NVGPQPQ/Q/5S6zeLZbBYWyzqGT3P56IYMjmFbZ+3YKcsJVbfJwymtBnL1kKiN9yc+XK
+         B/gbD1FQyIbFNUTF4aGi9NvFWyUFcz2gFgtXc8K1q+bc6WoCSR5RUiijgfdnXW5K+ozu
+         o3rQ==
+X-Gm-Message-State: APjAAAXWWP6DTsSCbtJjhJORg3PyOzedO5blwHjPEKyWhf2nXpNWD4DH
+        tkjKwdNNyk/VyMonrutG4tnmEQ==
+X-Google-Smtp-Source: APXvYqztrUm14X1kqPalVQhtzDPhMyl9ZuipQZ2gB9IH4meo0O8XJPRIpaw1CUbOHUi6IeHE59j1dQ==
+X-Received: by 2002:a17:90a:303:: with SMTP id 3mr4750663pje.124.1567700285921;
+        Thu, 05 Sep 2019 09:18:05 -0700 (PDT)
+Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 07:46:58 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 15:46:55 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jessica Yu <jeyu@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        maco@android.com, sspatil@google.com,
-        Will Deacon <will@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        linux-usb <linux-usb@vger.kernel.org>,
-        usb-storage@lists.one-eyed-alien.net,
-        linux-watchdog@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>
-Subject: Re: [PATCH v4 08/12] scripts: Coccinelle script for namespace
- dependencies.
-Message-ID: <20190905144655.GB136369@google.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-9-maennich@google.com>
- <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAK7LNARgxoXAABNXhO-LzxAm8rh6NJqAm9-iMo2=t2c_6_KXtQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Thu, 05 Sep 2019 09:18:05 -0700 (PDT)
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     stable@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
+Subject: [BACKPORT 4.14.y 04/18] usb: dwc3: Allow disabling of metastability workaround
+Date:   Thu,  5 Sep 2019 10:17:45 -0600
+Message-Id: <20190905161759.28036-5-mathieu.poirier@linaro.org>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
+References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 06:53:25PM +0900, Masahiro Yamada wrote:
->On Wed, Sep 4, 2019 at 12:07 AM Matthias Maennich <maennich@google.com> wrote:
->>
->> A script that uses the '<module>.ns_deps' files generated by modpost to
->> automatically add the required symbol namespace dependencies to each
->> module.
->>
->> Usage:
->> 1) Move some symbols to a namespace with EXPORT_SYMBOL_NS() or define
->>    DEFAULT_SYMBOL_NAMESPACE
->> 2) Run 'make' (or 'make modules') and get warnings about modules not
->>    importing that namespace.
->> 3) Run 'make nsdeps' to automatically add required import statements
->>    to said modules.
->>
->> This makes it easer for subsystem maintainers to introduce and maintain
->> symbol namespaces into their codebase.
->>
->> Co-developed-by: Martijn Coenen <maco@android.com>
->> Signed-off-by: Martijn Coenen <maco@android.com>
->> Acked-by: Julia Lawall <julia.lawall@lip6.fr>
->> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Matthias Maennich <maennich@google.com>
->
->
->Without any correct dependency,
->this does not work.
+From: Roger Quadros <rogerq@ti.com>
 
-You are right, 'nsdeps' needs to depend on 'modules' to make that work.
-I will fix that in the next version.
+commit 42bf02ec6e420e541af9a47437d0bdf961ca2972 upstream
 
->$ make clean; make nsdeps
->cat: modules.order: No such file or directory
->cat: ./modules.order: No such file or directory
->
->
->I do not see any point in the Makefile changes.
+Some platforms (e.g. TI's DRA7 USB2 instance) have more trouble
+with the metastability workaround as it supports only
+a High-Speed PHY and the PHY can enter into an Erratic state [1]
+when the controller is set in SuperSpeed mode as part of
+the metastability workaround.
+
+This causes upto 2 seconds delay in enumeration on DRA7's USB2
+instance in gadget mode.
+
+If these platforms can be better off without the workaround,
+provide a device tree property to suggest that so the workaround
+is avoided.
+
+[1] Device mode enumeration trace showing PHY Erratic Error.
+     irq/90-dwc3-969   [000] d...    52.323145: dwc3_event: event (00000901): Erratic Error [U0]
+     irq/90-dwc3-969   [000] d...    52.560646: dwc3_event: event (00000901): Erratic Error [U0]
+     irq/90-dwc3-969   [000] d...    52.798144: dwc3_event: event (00000901): Erratic Error [U0]
+
+Signed-off-by: Roger Quadros <rogerq@ti.com>
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+---
+ Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+ drivers/usb/dwc3/core.c                        | 3 +++
+ drivers/usb/dwc3/core.h                        | 3 +++
+ drivers/usb/dwc3/gadget.c                      | 6 ++++--
+ 4 files changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 52fb41046b34..44e8bab159ad 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -47,6 +47,8 @@ Optional properties:
+ 			from P0 to P1/P2/P3 without delay.
+  - snps,dis-tx-ipgap-linecheck-quirk: when set, disable u2mac linestate check
+ 			during HS transmit.
++ - snps,dis_metastability_quirk: when set, disable metastability workaround.
++			CAUTION: use only if you are absolutely sure of it.
+  - snps,is-utmi-l1-suspend: true when DWC3 asserts output signal
+ 			utmi_l1_suspend_n, false when asserts utmi_sleep_n
+  - snps,hird-threshold: HIRD threshold
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 945330ea8d5c..9b093978bd24 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1115,6 +1115,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
+ 				 &dwc->fladj);
+ 
++	dwc->dis_metastability_quirk = device_property_read_bool(dev,
++				"snps,dis_metastability_quirk");
++
+ 	dwc->lpm_nyet_threshold = lpm_nyet_threshold;
+ 	dwc->tx_de_emphasis = tx_de_emphasis;
+ 
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index abd1142c9e4d..40bf0e0768d9 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -869,6 +869,7 @@ struct dwc3_scratchpad_array {
+  * 	1	- -3.5dB de-emphasis
+  * 	2	- No de-emphasis
+  * 	3	- Reserved
++ * @dis_metastability_quirk: set to disable metastability quirk.
+  * @imod_interval: set the interrupt moderation interval in 250ns
+  *                 increments or 0 to disable.
+  */
+@@ -1025,6 +1026,8 @@ struct dwc3 {
+ 	unsigned		tx_de_emphasis_quirk:1;
+ 	unsigned		tx_de_emphasis:2;
+ 
++	unsigned		dis_metastability_quirk:1;
++
+ 	u16			imod_interval;
+ };
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 1b99d44e52b9..5916340c4162 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2034,7 +2034,8 @@ static void dwc3_gadget_set_speed(struct usb_gadget *g,
+ 	 * STAR#9000525659: Clock Domain Crossing on DCTL in
+ 	 * USB 2.0 Mode
+ 	 */
+-	if (dwc->revision < DWC3_REVISION_220A) {
++	if (dwc->revision < DWC3_REVISION_220A &&
++	    !dwc->dis_metastability_quirk) {
+ 		reg |= DWC3_DCFG_SUPERSPEED;
+ 	} else {
+ 		switch (speed) {
+@@ -3265,7 +3266,8 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ 	 * is less than super speed because we don't have means, yet, to tell
+ 	 * composite.c that we are USB 2.0 + LPM ECN.
+ 	 */
+-	if (dwc->revision < DWC3_REVISION_220A)
++	if (dwc->revision < DWC3_REVISION_220A &&
++	    !dwc->dis_metastability_quirk)
+ 		dev_info(dwc->dev, "changing max_speed on rev %08x\n",
+ 				dwc->revision);
+ 
+-- 
+2.17.1
+
