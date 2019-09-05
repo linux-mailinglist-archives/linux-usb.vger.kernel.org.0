@@ -2,179 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A551CAA210
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 13:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3006AA24E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 14:01:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732961AbfIEL4b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 07:56:31 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:33701 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726115AbfIEL4a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 07:56:30 -0400
-Received: by mail-pg1-f194.google.com with SMTP id n190so1328442pgn.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 04:56:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hQjgBHGvmm6cLhWASKb+Bb7AwJCJUdb2bnFuCs7Jtms=;
-        b=K2qbfLgXLyDMYx3CT4itk56rqQZeUYICpAiwxY+bHziP0L0EtB4dRdLUgUM2QcBUfs
-         W7ppzriDhlwCscxbAou1vfl55NzgsdM/0MfsnTKUslHf2cpjRrtDYcWKvv+eEN5mB/j6
-         X71J+wI280prcddvuW9IFUeZsBbaG5I4ddkKgV/iEwWuXAx/Jid/VFlsrCi//5CfsCFu
-         aASElFfTRJI+hIXO1uASEtUJJ+xUuYUxWMeEKPGoGDGbni065nojqjwzRb11k7bjF9Ab
-         a2fsWOxEiemX0WN8auAnjYEtaAMBC4KNkA4Z9qS3fAPJCanYldj2VCni38+ux4H264oC
-         YGiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hQjgBHGvmm6cLhWASKb+Bb7AwJCJUdb2bnFuCs7Jtms=;
-        b=SnYZ13UK2UJYXcbbwrkPAN6eAv1/G0ZuNPZj+n/bT8E3PNKObaGYptT7KqbCVHdjEP
-         4usvAtbOn3b5/XXIPluwcfEWjavEg4LPmMFQycbBrmhyu4WAmivzh3J+qp7b1mLCEmaj
-         SaPBJSwX/7Bd9Udq9yYkf3008ukE2Qt8i/z9RGW1vTI13LPEhGQ0VP3w03kaaRpAISZM
-         vMTscxVKgGVM2a8+nQhrr5vVMt7EBFzLfoeyLxe7KtbaOk63tfplJVoaPygY8BTWwICc
-         gxws7OxIf/EzKTQ1nv72K+4FewQsNOziVkALoiQd6yO8gOHTZRbGQE7EsuCDbFTepy8V
-         SbcQ==
-X-Gm-Message-State: APjAAAXj0jTKl2HG+6epDn8u8AVOSjTMOomMJDFsQAbeQhwf57cHs70b
-        IYI/P3ZdYr6XbpcmVuMgskqqTvB7LvYHZpHM+mmiYw==
-X-Google-Smtp-Source: APXvYqzc8tR+1Eei1+UeBt7tujh4w17l1GmAOgfTaJEUhSU/o2sU9X3F/1/mpAjyhMhQh1pRjBZvA67ly+YggunTZ0g=
-X-Received: by 2002:a63:3006:: with SMTP id w6mr2822471pgw.440.1567684589317;
- Thu, 05 Sep 2019 04:56:29 -0700 (PDT)
+        id S1732280AbfIEMAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 08:00:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45602 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730767AbfIEMAu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 08:00:50 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A5DD121883;
+        Thu,  5 Sep 2019 12:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567684849;
+        bh=1xeBfYskUOKOC0SaWvO+Y+ILr+BecrmFnTQs8zVFl50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O7ZKkc1lP219Poi6xqKaQgcEbNWBZjpRM+hT8SY5Se9MidWdhWqCTwhjTpGjpN4nD
+         WCMVt5asF1oqgG8825623EO5kDyielgIOW8VGBywGk3lFfl9Jf8Kmivv59G3O4o9QU
+         cNKDVjNSLQ6OC6TBoVcwdmsHfBrC4iHpgxsw7pBA=
+Date:   Thu, 5 Sep 2019 14:00:46 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Jessica Yu <jeyu@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthew Dharm <mdharm-usb@one-eyed-alien.net>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Maennich <maennich@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        Martijn Coenen <maco@android.com>,
+        Sandeep Patil <sspatil@google.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-modules@vger.kernel.org,
+        linux-usb <linux-usb@vger.kernel.org>,
+        USB Mass Storage on Linux 
+        <usb-storage@lists.one-eyed-alien.net>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
+ symbols in WATCHDOG_CORE namespace
+Message-ID: <20190905120046.GA7952@kroah.com>
+References: <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-13-maennich@google.com>
+ <20190903161045.GA22754@roeck-us.net>
+ <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
+ <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
+ <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
+ <20190905104147.GA27788@linux-8ccs>
+ <CAK8P3a0rf0PhXK1RdF1mWTyGggBJeH0h0YOCxDvJFgxu8wmWKw@mail.gmail.com>
+ <20190905111617.GB27788@linux-8ccs>
+ <CAK7LNATBWCTJ-FXydob5FUYMymsqCxhenBynb2_NfJdSC2yGDQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <00000000000005ae9c058ee5245c@google.com>
-In-Reply-To: <00000000000005ae9c058ee5245c@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 5 Sep 2019 13:56:18 +0200
-Message-ID: <CAAeHK+zxTpfNE9cT4u-PCQv6pgX=z4MXsbBM9h3iFG6Bf0_qXQ@mail.gmail.com>
-Subject: Re: WARNING in mxl111sf_ctrl_msg
-To:     syzbot <syzbot+48eb85867b8a4c16adf0@syzkaller.appspotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Krufky <mkrufky@linuxtv.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNATBWCTJ-FXydob5FUYMymsqCxhenBynb2_NfJdSC2yGDQ@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 30, 2019 at 2:28 PM syzbot
-<syzbot+48eb85867b8a4c16adf0@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    7f7867ff usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11a7957c600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=792eb47789f57810
-> dashboard link: https://syzkaller.appspot.com/bug?extid=48eb85867b8a4c16adf0
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ac50f8600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1718c75c600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+48eb85867b8a4c16adf0@syzkaller.appspotmail.com
->
-> usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the
-> software demuxer
-> dvbdev: DVB: registering new adapter (Hauppauge 126xxx ATSC+)
-> usb 1-1: media controller created
-> dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
-> usb 1-1: selecting invalid altsetting 1
-> set interface failed
-> ------------[ cut here ]------------
-> DEBUG_LOCKS_WARN_ON(lock->magic != lock)
-> WARNING: CPU: 0 PID: 12 at kernel/locking/mutex.c:912 __mutex_lock_common
-> kernel/locking/mutex.c:912 [inline]
-> WARNING: CPU: 0 PID: 12 at kernel/locking/mutex.c:912
-> __mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc2+ #23
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   panic+0x2a3/0x6da kernel/panic.c:219
->   __warn.cold+0x20/0x4a kernel/panic.c:576
->   report_bug+0x262/0x2a0 lib/bug.c:186
->   fixup_bug arch/x86/kernel/traps.c:179 [inline]
->   fixup_bug arch/x86/kernel/traps.c:174 [inline]
->   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
->   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
->   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1026
-> RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:912 [inline]
-> RIP: 0010:__mutex_lock+0xd31/0x1360 kernel/locking/mutex.c:1077
-> Code: d2 0f 85 f6 05 00 00 44 8b 05 bb 99 0a 02 45 85 c0 0f 85 0a f4 ff ff
-> 48 c7 c6 00 87 a6 85 48 c7 c7 a0 84 a6 85 e8 f4 24 b8 fb <0f> 0b e9 f0 f3
-> ff ff 65 48 8b 1c 25 00 ef 01 00 be 08 00 00 00 48
-> RSP: 0018:ffff8881da206f40 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff812830fd RDI: ffffed103b440dda
-> RBP: ffff8881da2070b0 R08: ffff8881da1f1800 R09: fffffbfff0d5eb25
-> R10: fffffbfff0d5eb24 R11: ffffffff86af5923 R12: 0000000000000000
-> R13: dffffc0000000000 R14: ffff8881d2ee6ec8 R15: ffff8881d2ee6ec8
->   mxl111sf_ctrl_msg+0xb8/0x210 drivers/media/usb/dvb-usb-v2/mxl111sf.c:66
->   mxl111sf_write_reg+0x8b/0x120 drivers/media/usb/dvb-usb-v2/mxl111sf.c:123
->   mxl1x1sf_soft_reset+0x6b/0x190
-> drivers/media/usb/dvb-usb-v2/mxl111sf-phy.c:47
->   mxl111sf_lgdt3305_frontend_attach.constprop.0+0x23e/0x790
-> drivers/media/usb/dvb-usb-v2/mxl111sf.c:447
->   mxl111sf_frontend_attach_atsc_mh+0x13/0x70
-> drivers/media/usb/dvb-usb-v2/mxl111sf.c:984
->   dvb_usbv2_adapter_frontend_init
-> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:641 [inline]
->   dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:804
-> [inline]
->   dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:865 [inline]
->   dvb_usbv2_probe.cold+0x1e04/0x2567
-> drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:980
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x650 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:709
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:816
->   bus_for_each_drv+0x15c/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:882
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2114
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> Kernel Offset: disabled
-> Rebooting in 86400 seconds..
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+On Thu, Sep 05, 2019 at 08:25:32PM +0900, Masahiro Yamada wrote:
+> On Thu, Sep 5, 2019 at 8:16 PM Jessica Yu <jeyu@kernel.org> wrote:
+> >
+> > +++ Arnd Bergmann [05/09/19 12:52 +0200]:
+> > >On Thu, Sep 5, 2019 at 12:41 PM Jessica Yu <jeyu@kernel.org> wrote:
+> > >> +++ Matthew Dharm [04/09/19 09:16 -0700]:
+> > >> >On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> > >
+> > >> >HOWEVER, I have one question:  If these patches are included, and
+> > >> >someone wants to introduce a bit of code which needs to use two
+> > >> >symbols from different namespaces but with the same name, can that be
+> > >> >done?  That is, if driver A has symbol 'foo' and driver B has symbol
+> > >> >'foo' (both in their respective namespaces), and driver C wants to use
+> > >> >A.foo and B.foo, can that be supported?
+> > >>
+> > >> As of now, we currently don't support this - modpost will warn if a
+> > >> symbol is exported more than once (across modules + vmlinux), and the
+> > >> module loader currently assumes exported symbol names are unique.  Do
+> > >> you have a concrete use case? If there is a strong need for this, I
+> > >> don't think it'd be too hard to implement.
+> > >
+> > >I think what would prevent this from working in general is that having
+> > >two modules with the same exported symbol in different namespaces
+> > >won't link if you try to build both modules into the kernel itself.
+> > >
+> > >      Arnd
+> >
+> > Ah yeah, you are right. I only tried building an identically named
+> > exported symbol in a module and in the kernel, and there I got away
+> > with a modpost warning. But this breaks when building the module into
+> > the kernel, so I guess this is out of the question.
+> >
+> > Thanks,
+> >
+> > Jessica
+> >
+> 
+> 
+> The cover letter starts with
+> "As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel".
+> 
+> Whether or not we apply this patch set,
+> we will have to carefully maintain them
+> so that 31207 symbols are unique, anyway.
+> (And, we can do this with allmodconfig + modpost)
+> 
+> So, what is the point of the namespace,
+> where it does not loosen the scope of uniqueness?
 
-Looks like the same issue as:
-https://syzkaller.appspot.com/bug?id=d7240bc21ef4b00a01e5ac7a7e616bdb7da26104
+It does not "loosen" anything.  The problem is, we have 31207 exported
+symbols and no one has any idea how they are "clustered" :)
 
-#syz dup: INFO: trying to register non-static key in mxl111sf_ctrl_msg
+Ideally we would have separate namespaces where we could "keep" others
+from accessing symbols that are required to be global, but we do not
+want anyone else to use them.  But we have C, and we need to live with
+that.
+
+This is the "next best thing".  This provides a namespace and a marking
+by the user of that exported symbol that they really do know what they
+are doing.
+
+The USB storage exports are a concrete example of this in this patchset.
+Those symbols are to only be used by other USB storage drivers, and they
+are marked that way here.
+
+This also gives us the ability to start to actually understand what our
+different exported symbols are for.  Right now the USB core exports a
+ton of stuff, but who is expected to use what?  Right now any USB driver
+can use any of those functions and no one notices.  After this patchset
+is merged, I will start to "carve up" the USB exports into different
+"namespaces".  One example will be the functions only for use by USB
+host controller drivers.  Then if someone submits a new driver that says
+"use the USB host controller driver namespace", and that driver is _not_
+a USB host controller driver, it's a huge red flag that something really
+isn't correct here.
+
+Some other USB functions will probably get marked "USB core only" or
+some such thing, and then to use them you have to say you are importing
+from the "usb core only" which again, is a huge flag that you are doing
+something wrong.
+
+So on it's own, this patchset doesn't do much.  But it gives us the
+building blocks on which to start to make sense of those 31000+
+different exported symbols.
+
+As an aside, this is something that I know I and others have been
+wanting to see happen for 10+ years now, and I'm very happy to see it
+show up in a workable form as we have known this is a issue for a very
+long time.
+
+Hope this helps explain things better,
+
+greg k-h
