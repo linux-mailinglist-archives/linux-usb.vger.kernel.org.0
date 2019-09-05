@@ -2,83 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 130DBAA3CD
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 15:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91EAA58A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 16:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389694AbfIENDv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 09:03:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41202 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388180AbfIENDu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:03:50 -0400
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3A0DF21D7F;
-        Thu,  5 Sep 2019 13:03:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567688628;
-        bh=5A97SrUDUqyVKNx4DSBp3SVRp3CJEByfutDERGx+WWs=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=gEiMjB6HERBAz+GaBgIR5yO9T13FFCRmvjD84jb2uUtvX7vQrw1CCrmq+8gs+DPfv
-         l7l0umFeo2NdYzHiwfgIbhu5BfDHaZnkuloRVqbeoavkh5nUMJsaRjlwBqAPIbcEp9
-         Qr21N097KTIaylGDRz4ZB/0ZQxOUiNvC+jN6NFTU=
-Date:   Thu, 5 Sep 2019 15:03:33 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-cc:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        linux-input@vger.kernel.org,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] HID: hid-prodikeys: Fix general protection fault during
- probe
-In-Reply-To: <Pine.LNX.4.44L0.1909041149390.1722-100000@iolanthe.rowland.org>
-Message-ID: <nycvar.YFH.7.76.1909051503210.31470@cbobk.fhfr.pm>
-References: <Pine.LNX.4.44L0.1909041149390.1722-100000@iolanthe.rowland.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1730581AbfIEOOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 10:14:30 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:36670 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726048AbfIEOO3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 10:14:29 -0400
+Received: (qmail 2656 invoked by uid 2102); 5 Sep 2019 10:14:28 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Sep 2019 10:14:28 -0400
+Date:   Thu, 5 Sep 2019 10:14:28 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Jacky.Cao@sony.com
+cc:     balbi@kernel.org, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <Kento.A.Kobayashi@sony.com>
+Subject: Re: [PATCH v3] USB: dummy-hcd: fix power budget for SuperSpeed mode
+In-Reply-To: <16EA1F625E922C43B00B9D82250220500871CDE5@APYOKXMS108.ap.sony.com>
+Message-ID: <Pine.LNX.4.44L0.1909051014160.1631-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Sep 2019, Alan Stern wrote:
+On Thu, 5 Sep 2019 Jacky.Cao@sony.com wrote:
 
-> The syzbot fuzzer provoked a general protection fault in the
-> hid-prodikeys driver:
+> The power budget for SuperSpeed mode should be 900 mA
+> according to USB specification, so set the power budget
+> to 900mA for dummy_start_ss which is only used for
+> SuperSpeed mode.
 > 
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN
-> CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc5+ #28
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:pcmidi_submit_output_report drivers/hid/hid-prodikeys.c:300  [inline]
-> RIP: 0010:pcmidi_set_operational drivers/hid/hid-prodikeys.c:558 [inline]
-> RIP: 0010:pcmidi_snd_initialise drivers/hid/hid-prodikeys.c:686 [inline]
-> RIP: 0010:pk_probe+0xb51/0xfd0 drivers/hid/hid-prodikeys.c:836
-> Code: 0f 85 50 04 00 00 48 8b 04 24 4c 89 7d 10 48 8b 58 08 e8 b2 53 e4 fc  
-> 48 8b 54 24 20 48 b8 00 00 00 00 00 fc ff df 48 c1 ea 03 <80> 3c 02 00 0f  
-> 85 13 04 00 00 48 ba 00 00 00 00 00 fc ff df 49 8b
+> If the max power consumption of SuperSpeed device is
+> larger than 500 mA, insufficient available bus power
+> error happens in usb_choose_configuration function
+> when the device connects to dummy hcd.
 > 
-> The problem is caused by the fact that pcmidi_get_output_report() will
-> return an error if the HID device doesn't provide the right sort of
-> output report, but pcmidi_set_operational() doesn't bother to check
-> the return code and assumes the function call always succeeds.
+> Signed-off-by: Jacky Cao <Jacky.Cao@sony.com>
+> ---
+> Changes in v3:
+>   - Rename POWER_BUDGET_3_0 to POWER_BUDGET_3
+>   - Update commit message from USB3.0 specification to USB specification
 > 
-> This patch adds the missing check and aborts the probe operation if
-> necessary.
+> Changes in v2:
+>   - Fix whitespace damage
 > 
-> Reported-and-tested-by: syzbot+1088533649dafa1c9004@syzkaller.appspotmail.com
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> CC: <stable@vger.kernel.org>
+>  drivers/usb/gadget/udc/dummy_hcd.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+> index 8414fac..3d499d9 100644
+> --- a/drivers/usb/gadget/udc/dummy_hcd.c
+> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
+> @@ -48,6 +48,7 @@
+>  #define DRIVER_VERSION	"02 May 2005"
+>  
+>  #define POWER_BUDGET	500	/* in mA; use 8 for low-power port testing */
+> +#define POWER_BUDGET_3	900	/* in mA */
+>  
+>  static const char	driver_name[] = "dummy_hcd";
+>  static const char	driver_desc[] = "USB Host+Gadget Emulator";
+> @@ -2432,7 +2433,7 @@ static int dummy_start_ss(struct dummy_hcd *dum_hcd)
+>  	dum_hcd->rh_state = DUMMY_RH_RUNNING;
+>  	dum_hcd->stream_en_ep = 0;
+>  	INIT_LIST_HEAD(&dum_hcd->urbp_list);
+> -	dummy_hcd_to_hcd(dum_hcd)->power_budget = POWER_BUDGET;
+> +	dummy_hcd_to_hcd(dum_hcd)->power_budget = POWER_BUDGET_3;
+>  	dummy_hcd_to_hcd(dum_hcd)->state = HC_STATE_RUNNING;
+>  	dummy_hcd_to_hcd(dum_hcd)->uses_new_polling = 1;
+>  #ifdef CONFIG_USB_OTG
 
-Applied, thanks a lot Alan.
-
--- 
-Jiri Kosina
-SUSE Labs
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
