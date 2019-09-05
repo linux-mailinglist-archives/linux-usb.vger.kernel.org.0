@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62137AA857
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 18:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F55AA854
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 18:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388602AbfIEQSq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 12:18:46 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37747 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388616AbfIEQSU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 12:18:20 -0400
-Received: by mail-pf1-f195.google.com with SMTP id y9so2078904pfl.4
-        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 09:18:19 -0700 (PDT)
+        id S2389098AbfIEQSo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 12:18:44 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:44117 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388682AbfIEQSV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 12:18:21 -0400
+Received: by mail-pf1-f194.google.com with SMTP id q21so2054654pfn.11
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 09:18:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=k4RSHQziswwPF3IEl7odNlbX/Lq1Hx75YDWK/+CVFu0=;
-        b=jZZB1l94YWLd3tFIaGQ47yvMyJb9LlEazs2Ow8RBBjQ4l/r+vNhmddIWpMfHfHXs50
-         78rWPPNCOz1OQu1AmHck6xNxXoRE7CFw9P+2slSZQz2Ys6D042/onIrEufTy+6xGnf7G
-         /W7VbSFrbc056Zl/UdlRSDhj5hSjjoWsrULBTO1dp2b+2wVkNBYy15jzvUSO7Yol26Pq
-         +a0ju3yHvCNmc2ezasYLStXloGX/OXTLGO31IarwZm/OPn8nU0nkbRODmTltiIBUdlzi
-         njdrh0EUYg8SUhgdMLrNIUsilQw7WpjaCy9U6aj+BbrkPvrH3K1Yod5NAymx6bhyqYRw
-         48AQ==
+        bh=uGQDHiVh7Y3nm+Fh7RZmraqTkygsaWl9aTS4H8V2qOg=;
+        b=G2V7SSCDYkEQo7LiHhdd0FmXiDoCypwneNd0t71NKBiF5VjSYh7im1hJZ8psR9OmdS
+         vENjDDDDtQ6NwdMR/F+BtzcV44YofhYGBf5najafmfR9bR99jS1kCvdcrsHzlLCSSxeK
+         7GcxrvgtY7wXU8hlt8M2yDvumDEEvUFc4v5wE3taJ+LuREXiOMnvl/Lw2ns+rIOFePa8
+         KXF5jz1R9EzIfWODk0dy/N4ScNQsSc3JHGq4NtqlEeVnjTRTJemxCs9WCnFjW8eLTaw0
+         DZr6IXQltw83ioNUii9IPkrTtAIZFHKWIM+WRq0gtusHdP3ZkBTPW2WufSyZjWejUhJa
+         2Maw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=k4RSHQziswwPF3IEl7odNlbX/Lq1Hx75YDWK/+CVFu0=;
-        b=mmvo4eB1YcrMfbMYwZN8eQbHh53y9XVHtbI6RSKOcf/+m3Ig1/x29OsYRQN13ZrAYx
-         gZ6rynt5igAj8bbSOD04X7hBDYjBspVEx6ZM7Zumt7lBmrGsDIqgXnvnf+YkWu6f9PiW
-         AZu+QZYf08fkyBVVS22JvInCzl8Kz0K06EZMkvOX6KuV9VjVVKUUJogJ8WuOFeLgbMHo
-         iUH2+gqjAwfYTu8eQU4vE9E6Df/32igaooET+WEPHxZdkH3kQ7+Lu7gyJW8W204OK8Ef
-         UOWFGvb87kHw070p1y7i0hNLYQCnFLgibQeBp8E97u5i+scjXhHG2ZFC41p+K1tliU2O
-         smgQ==
-X-Gm-Message-State: APjAAAWyofbTICB41ycDmwLeCGJaUnta8aQQglCwjjwk2Kw+SKcbTUb/
-        Q9DAGiyrCnHV2YyeS62aGrN/Rg==
-X-Google-Smtp-Source: APXvYqylgGgnlf/Z0Orza9qJRrWxcszrwnK+vdVT7tg0cYX2LQXbbeSPDVM6mlYFYgUjBYVURutriw==
-X-Received: by 2002:a63:714a:: with SMTP id b10mr4066928pgn.25.1567700299222;
-        Thu, 05 Sep 2019 09:18:19 -0700 (PDT)
+        bh=uGQDHiVh7Y3nm+Fh7RZmraqTkygsaWl9aTS4H8V2qOg=;
+        b=adDb/uFoJ7hYt1C/eYQh0SmcHwoohZqNHltyQwG4YD966PXzYzT9NAZGCrBP30a2Co
+         4brz+oHZOpqw31V4A2eygxsZQyPlsbgNe4uVMiG3tSnC6cFwvCL0T2q8mmIo+Mo7+iMz
+         fTC4ahcfDk9Cwhohyc2Q9+0uSY3Q+vA7LNchKfVHD/95q83XOXLvZMnIO1f9qvrpsKlv
+         +cimN0Pk9ADRrHZl9RQSAoEGLvL4DwVlsxRbZVh868QnGIW5m9qIiK+jpoRH/8xw/WAU
+         ECgixunrHFRyiaPJJ2EpwDtwJ1lnSJmzdlG7UIpXfyFDhP7UetK4iWkCu17dVucaVGNV
+         BWeA==
+X-Gm-Message-State: APjAAAXpq21LKLG8m7CA0VUsoAU8B/762/VRMq4hy17BMlj6kQmb73vZ
+        yR+8DUL+qcub/v65IATazV1tvA==
+X-Google-Smtp-Source: APXvYqzyC7KQpz20rtOB8zivfhdGWRJPZQhVbOYyx1ZP0zkE+kwOQ1jHtksq4R981qryiPR2vzsmvw==
+X-Received: by 2002:a63:ff0c:: with SMTP id k12mr3771562pgi.186.1567700300722;
+        Thu, 05 Sep 2019 09:18:20 -0700 (PDT)
 Received: from xps15.cg.shawcable.net (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
-        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.18
+        by smtp.gmail.com with ESMTPSA id m129sm6324005pga.39.2019.09.05.09.18.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 09:18:18 -0700 (PDT)
+        Thu, 05 Sep 2019 09:18:19 -0700 (PDT)
 From:   Mathieu Poirier <mathieu.poirier@linaro.org>
 To:     stable@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
         linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: [BACKPORT 4.14.y 15/18] ASoC: davinci: Kill BUG_ON() usage
-Date:   Thu,  5 Sep 2019 10:17:56 -0600
-Message-Id: <20190905161759.28036-16-mathieu.poirier@linaro.org>
+Subject: [BACKPORT 4.14.y 16/18] ASoC: davinci-mcasp: Fix an error handling path in 'davinci_mcasp_probe()'
+Date:   Thu,  5 Sep 2019 10:17:57 -0600
+Message-Id: <20190905161759.28036-17-mathieu.poirier@linaro.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20190905161759.28036-1-mathieu.poirier@linaro.org>
 References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
@@ -60,35 +60,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Christophe Jaillet <christophe.jaillet@wanadoo.fr>
 
-commit befff4fbc27e19b14b343eb4a65d8f75d38b6230 upstream
+commit 1b8b68b05d1868404316d32e20782b00442aba90 upstream
 
-Don't use BUG_ON() for a non-critical sanity check on production
-systems.  This patch replaces with a softer WARN_ON() and an error
-path.
+All error handling paths in this function 'goto err' except this one.
 
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+If one of the 2 previous memory allocations fails, we should go through
+the existing error handling path. Otherwise there is an unbalanced
+pm_runtime_enable()/pm_runtime_disable().
+
+Fixes: dd55ff8346a9 ("ASoC: davinci-mcasp: Add set_tdm_slots() support")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 ---
- sound/soc/davinci/davinci-mcasp.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/soc/davinci/davinci-mcasp.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/sound/soc/davinci/davinci-mcasp.c b/sound/soc/davinci/davinci-mcasp.c
-index af6cd8b874f5..b4e6f4a04cb6 100644
+index b4e6f4a04cb6..07bac9ea65c4 100644
 --- a/sound/soc/davinci/davinci-mcasp.c
 +++ b/sound/soc/davinci/davinci-mcasp.c
-@@ -1748,7 +1748,8 @@ static int davinci_mcasp_get_dma_type(struct davinci_mcasp *mcasp)
- 				PTR_ERR(chan));
- 		return PTR_ERR(chan);
- 	}
--	BUG_ON(!chan->device || !chan->device->dev);
-+	if (WARN_ON(!chan->device || !chan->device->dev))
-+		return -EINVAL;
+@@ -2022,8 +2022,10 @@ static int davinci_mcasp_probe(struct platform_device *pdev)
+ 			     GFP_KERNEL);
  
- 	if (chan->device->dev->of_node)
- 		ret = of_property_read_string(chan->device->dev->of_node,
+ 	if (!mcasp->chconstr[SNDRV_PCM_STREAM_PLAYBACK].list ||
+-	    !mcasp->chconstr[SNDRV_PCM_STREAM_CAPTURE].list)
+-		return -ENOMEM;
++	    !mcasp->chconstr[SNDRV_PCM_STREAM_CAPTURE].list) {
++		ret = -ENOMEM;
++		goto err;
++	}
+ 
+ 	ret = davinci_mcasp_set_ch_constraints(mcasp);
+ 	if (ret)
 -- 
 2.17.1
 
