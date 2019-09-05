@@ -2,123 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CCEDAAE21
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 23:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97845AAE40
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 00:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732224AbfIEVzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 17:55:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44130 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731215AbfIEVzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Sep 2019 17:55:05 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 35812206DE;
-        Thu,  5 Sep 2019 21:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567720504;
-        bh=sxN+Qr/3fwNO0OFeIiUozIkTmD7RRmTjiEqGCmmePa4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TEZPMFUPMovUgr4tDaFH5yw3qPfuqa19akfrr16lxcsDdFmv5p4F7qmOA9yJasp8t
-         dO8oZVYMqZf5KEJz8EWtdSNXtWLgLXzWUWInZuiZ8YUcZ6YhoNQ52NM4o9gWNQ2FZ1
-         zlXMdPA8vTu3pg5wfc71Id4M3rJHUmi8RZPnztFs=
-Date:   Thu, 5 Sep 2019 23:55:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Charles.Hyde@dellteam.com
-Cc:     Mario.Limonciello@dell.com, oliver@neukum.org, rjw@rjwysocki.net,
-        lenb@kernel.org, chip.programmer@gmail.com, nic_swsd@realtek.com,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH 0/3] Add get/set ethernet address functions and ACPI MAC
- address pass through functionality to cdc_ncm driver
-Message-ID: <20190905215501.GA1219@kroah.com>
-References: <1567717313153.65736@Dellteam.com>
- <e41270463c46445d82415d86bebc9566@AUSX13MPC101.AMER.DELL.COM>
- <67e340c684a64e528b04276f715567cc@AUSX13MPS307.AMER.DELL.COM>
+        id S1732092AbfIEWPq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 18:15:46 -0400
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:46386 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731334AbfIEWPq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 18:15:46 -0400
+Received: by mail-lf1-f50.google.com with SMTP id t8so3294095lfc.13
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 15:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3+bS8S77AzTpTBzzxsdlLs0HnCbtRjNnmkiZK0MPy0c=;
+        b=LbASCsGx0k6udtd2AsgFeBhmCaCLrlsklx+62iSSE5Gkytkq0WN1acnDpFn5oCNEQS
+         KMkfsxyWBngO5Ing5S64rk5RN/Socr904CmKtCx01r5GqFjCKXQfIr7B9uXv9DslB2br
+         7qADnXCimEFjoVvgCL5m3EkgAFlL+VHV2J5FE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3+bS8S77AzTpTBzzxsdlLs0HnCbtRjNnmkiZK0MPy0c=;
+        b=KIPMqiR2yw7SLlBYclxAHDh/OC2gY50F6P2C/zPh3gWNB/TpimWC2uB1DNx7Z/EpF9
+         bgn+/d6F31iWzcDvN1BPSmO9cwuhYO4zgGXpyCSw+HdbGMbBbMjzVm3XPpzNZF5IpRSy
+         lpkrKDw3YLhlq5BCBDj2r/iUIYzzFX0LUK6LB+Gg70/u7/iQTQntrHBsSi4sEypNYexL
+         fFmpLWVQRjjM7CsMN9bxdr2zexZmrbysc/OLZSWJ4nbTifEXzQNDxOLsLY+hNMv+9250
+         WjTCqK2ssnrD35GDKNN4yPEIZCQU8dYfJIhLqgRt9vaZlLVSahp/vpD5F68d42Rpc32a
+         wrcw==
+X-Gm-Message-State: APjAAAWtFxj3FxwsPWhtiw9GdGeh5e8t5R6t8fkc1iknI7MH8I+BNz5C
+        Wf5LHszfnHgck1hPsXoY0pAuR++uoRs=
+X-Google-Smtp-Source: APXvYqzwjjvpmEx1yCvUnhQcChxADoZEzUyWYvlHLdWZFOe/UTIWjYPFj0kOP5ervzLDXpICk4ylXw==
+X-Received: by 2002:a19:7609:: with SMTP id c9mr3838819lff.91.1567721744181;
+        Thu, 05 Sep 2019 15:15:44 -0700 (PDT)
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com. [209.85.167.45])
+        by smtp.gmail.com with ESMTPSA id b7sm599457ljk.80.2019.09.05.15.15.43
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Sep 2019 15:15:43 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id y4so3310243lfe.11
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 15:15:43 -0700 (PDT)
+X-Received: by 2002:a19:f204:: with SMTP id q4mr3910741lfh.29.1567721338167;
+ Thu, 05 Sep 2019 15:08:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <67e340c684a64e528b04276f715567cc@AUSX13MPS307.AMER.DELL.COM>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
+ <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com>
+ <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
+ <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com>
+ <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com> <5396.1567719164@warthog.procyon.org.uk>
+In-Reply-To: <5396.1567719164@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 5 Sep 2019 15:08:42 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgbCXea1a9OTWgMMvcsCGGiNiPp+ty-edZrBWn63NCYdw@mail.gmail.com>
+Message-ID: <CAHk-=wgbCXea1a9OTWgMMvcsCGGiNiPp+ty-edZrBWn63NCYdw@mail.gmail.com>
+Subject: Re: Why add the general notification queue and its sources
+To:     David Howells <dhowells@redhat.com>
+Cc:     Ray Strode <rstrode@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Whitehouse <swhiteho@redhat.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Ray, Debarshi" <debarshi.ray@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 09:14:05PM +0000, Charles.Hyde@dellteam.com wrote:
-> > > -----Original Message-----
-> > > From: Hyde, Charles - Dell Team
-> > > Sent: Thursday, September 5, 2019 4:02 PM
-> > > To: Oliver Neukum; "Rafael J. Wysocki"; Len Brown
-> > > Cc: Limonciello, Mario; chip.programmer@gmail.com; Realtek linux nic
-> > > maintainers; linux-usb@vger.kernel.org; linux-acpi@vger.kernel.org
-> > > Subject: [PATCH 0/3] Add get/set ethernet address functions and ACPI
-> > > MAC address pass through functionality to cdc_ncm driver
-> > >
-> > > In recent testing of a Dell Universal Dock D6000, I found that MAC
-> > > address pass through is not supported in the Linux drivers.  However,
-> > > this same device is supported in Windows 10 (Pro) on my personal
-> > > computer, in as much as I was able to tell Windows to assign a new MAC
-> > > address of my choosing, and I saw through wireshark the new MAC
-> > > address was pushed out to the device.  Afterward, Windows reported a
-> > > new IP address and I was able to view web pages.
-> > >
-> > > This series of patches give support to cdc_ncm USB based Ethernet
-> > > controllers for programming a MAC address to the device, and also to
-> > > retrieve the device's MAC address.  This patch series further adds
-> > > ACPI MAC address pass through support specifically for the cdc_ncm
-> > > driver, and generally for any other driver that may need or want it,
-> > > in furtherance of Dell's enterprise IT policy efforts.  It was this
-> > > latter that I initially found lacking when testing a D6000 with a Dell
-> > > laptop, and then I found ifconfig was unable to set a MAC address into
-> > > the device.  These patches bring a similar level of functionality to
-> > > cdc_ncm driver as is available with the Realtek r8152 driver, and is available
-> > with Windows.
-> > >
-> > > The cdc_ncm driver limits the ACPI MAC address pass through support to
-> > > only the Dell Universal Dock D6000, so no other cdc_ncm device will be
-> > > impacted.
-> > >
-> > > Charles Hyde (3):
-> > >   net: cdc_ncm: add get/set ethernet address functions
-> > >   ACPI: move ACPI functionality out of r8152 driver
-> > >   net: cdc_ncm: Add ACPI MAC address pass through functionality
-> > >
-> > >  drivers/acpi/Makefile            |   1 +
-> > >  drivers/acpi/acpi_mac_passthru.c |  63 +++++++++++++
-> > >  drivers/net/usb/cdc_ncm.c        | 148 ++++++++++++++++++++++++++++---
-> > >  drivers/net/usb/r8152.c          |  44 +--------
-> > >  include/acpi/acpi_mac_passthru.h |  29 ++++++
-> > >  5 files changed, 234 insertions(+), 51 deletions(-)  create mode
-> > > 100644 drivers/acpi/acpi_mac_passthru.c  create mode 100644
-> > > include/acpi/acpi_mac_passthru.h
-> > >
-> > > --
-> > > 2.20.1
-> > 
-> > Typical practice is to make this new patch series prefixed with a v2. And to
-> > describe what has changed From v1 either in individual patches below the '--'
-> > or in the cover letter.
-> > 
-> > So can you please describe what changed from previous submission in case it's
-> > not obvious to reviewers?
-> > 
-> > For example:
-> > 
-> > [PATCH v2 0/3] Add get/set ethernet address functions and ACPI MAC address
-> > pass through functionality to cdc_ncm driver
-> > 
-> > Changes from v1 to v 2:
-> > * Changed foo to bar
-> 
-> 
-> Ah, my apologies.
-> 
-> What changed with today's patch series from what I proposed on Friday, August 30, is that I created a function named get_ethernet_addr() which replaces two instances where the same code snippet was located in the previous patch series.  I also created a post reset function to set the MAC address, if there exists an ACPI MAC address pass through (MAPT).  Oliver Neukum had requested a post reset function for this purpose.
+On Thu, Sep 5, 2019 at 2:32 PM David Howells <dhowells@redhat.com> wrote:
+>
+>  (1) /dev/watch_queue just implements locked-in-memory buffers.  It gets you
+>      no events by simply opening it.
 
-Please resend the series with that information in it, and also properly
-thread the emails so they are at least clustered together.
+Cool. In-memory buffers.
 
-thanks,
+But I know - we *have* one of those. There's already a system call for
+it, and has been forever. One that we then extended to allow people to
+change the buffer size, and do a lot of other things with.
 
-greg k-h
+It's called "pipe()". And you can give the writing side to other user
+space processes too, in case you are running an older kernel that
+didn't have some "event pipe support". It comes with resource
+management, because people already use those things.
+
+If you want to make a message protocol on top of it, it has cool
+atomicity guarantees for any message size less than PIPE_BUF, but to
+make things simple, maybe just say "fixed record sizes of 64 bytes" or
+something like that for events.
+
+Then you can use them from things like perl scripts, not just magical
+C programs.
+
+Why do we need a new kind of super-fancy high-speed thing for event reporting?
+
+If you have *so* many events that pipe handling is a performance
+issue, you have something seriously wrong going on.
+
+So no. I'm not interested in a magical memory-mapped pipe that is
+actually more limited than the real thing.
+
+                  Linus
