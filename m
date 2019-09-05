@@ -2,62 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF80A9EA0
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 11:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 012CFA9EFE
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 11:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732020AbfIEJmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 05:42:20 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:33288 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1731907AbfIEJmU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Sep 2019 05:42:20 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id E478FB9D8E469ECF2ECB;
-        Thu,  5 Sep 2019 17:42:17 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Thu, 5 Sep 2019 17:42:07 +0800
-From:   Wei Yongjun <weiyongjun1@huawei.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saranya Gopal <saranya.gopal@intel.com>
-CC:     Wei Yongjun <weiyongjun1@huawei.com>, <linux-usb@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-Subject: [PATCH -next] xhci-ext-caps.c: Add missing platform_device_put() on error in xhci_create_intel_xhci_sw_pdev()
-Date:   Thu, 5 Sep 2019 10:00:01 +0000
-Message-ID: <20190905100001.128349-1-weiyongjun1@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S2387663AbfIEJ5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 05:57:44 -0400
+Received: from mail.sysgo.com ([176.9.12.79]:49524 "EHLO mail.sysgo.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732586AbfIEJ5n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 05:57:43 -0400
+X-Greylist: delayed 335 seconds by postgrey-1.27 at vger.kernel.org; Thu, 05 Sep 2019 05:57:43 EDT
+From:   Roman Kapl <rka@sysgo.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>, Roman Kapl <rka@sysgo.com>
+Subject: [PATCH] usb: dwc3: reset the address and run_stop on init
+Date:   Thu,  5 Sep 2019 11:51:51 +0200
+Message-Id: <20190905095151.26590-1-rka@sysgo.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add the missing platform_device_put() before return from
-xhci_create_intel_xhci_sw_pdev() in the error handling case.
+The address should be set to zero during reset according to the
+documentation. Clearing RunStop ensures that the host disconnects from
+the device (it was not cleared by CSFTRST, at least on ls1043).
 
-Fixes: 6ed151f26484 ("xhci-ext-caps.c: Add property to disable Intel SW switch")
-Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+This allows the dwc3 to properly initialize even if the previous
+driver did not shutdown the device (e.g. when using virtualization).
+
+Signed-off-by: Roman Kapl <rka@sysgo.com>
 ---
- drivers/usb/host/xhci-ext-caps.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/dwc3/core.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-ext-caps.c b/drivers/usb/host/xhci-ext-caps.c
-index f498160df969..3351d07c431f 100644
---- a/drivers/usb/host/xhci-ext-caps.c
-+++ b/drivers/usb/host/xhci-ext-caps.c
-@@ -57,6 +57,7 @@ static int xhci_create_intel_xhci_sw_pdev(struct xhci_hcd *xhci, u32 cap_offset)
- 		ret = platform_device_add_properties(pdev, role_switch_props);
- 		if (ret) {
- 			dev_err(dev, "failed to register device properties\n");
-+			platform_device_put(pdev);
- 			return ret;
- 		}
- 	}
-
-
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index c9bb93a2c81e..c633f5e0621d 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -250,6 +250,7 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	reg |= DWC3_DCTL_CSFTRST;
++	reg &= ~DWC3_DCTL_RUN_STOP;
+ 	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
+ 
+ 	do {
+@@ -266,6 +267,10 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 	return -ETIMEDOUT;
+ 
+ done:
++	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
++	reg &= ~(DWC3_DCFG_DEVADDR_MASK);
++	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
++
+ 	/*
+ 	 * For DWC_usb31 controller, once DWC3_DCTL_CSFTRST bit is cleared,
+ 	 * we must wait at least 50ms before accessing the PHY domain
+-- 
+2.22.0
 
