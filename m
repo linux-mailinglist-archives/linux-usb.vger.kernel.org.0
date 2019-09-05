@@ -2,256 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B65EEA984D
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 04:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AB2A985B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 04:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730273AbfIECUc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Sep 2019 22:20:32 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:44928 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730571AbfIECUc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Sep 2019 22:20:32 -0400
-Received: by mail-io1-f67.google.com with SMTP id j4so1107803iog.11;
-        Wed, 04 Sep 2019 19:20:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language;
-        bh=+G46KvNlLn21VCpvk3pEp2Hl6SbV/sQ0K6A2KKrNWic=;
-        b=MqbppkmpjNeCkddBUPrJ/k/lBTska7xLBqjt13AofdQnaNny3T8CPnimKDysxCr6Qu
-         5nHhpvrxKtOl0Ah0DhOMX5GdcgmwtzG+5zdW2zEaxeD89rnzcykxQ4CvtHaK+fw6wFHV
-         rUx2YGjCujOQVbQAPGMiZauo/ZwcBADMJPKBatnQpT839mO1g4RztxRJy6uBl19Vme/c
-         3By/g3IjbIsEx40z4vISu7DcC1yorJ0nV6kD17lsrMaj66XNSCHGz7vLCmBaDWZnB1N6
-         V/RRL9PGV6y2AyU27TRFtYmQxLsfYrpiVKzVrCRUf5qontCOl6S2ozbY6niHFn5z7lfo
-         gUBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language;
-        bh=+G46KvNlLn21VCpvk3pEp2Hl6SbV/sQ0K6A2KKrNWic=;
-        b=Nozmd6fJlqvKM5u8d0ErvoNIITxSoAlqpaa3PRGqGFcnpnSps7vch/EFplHIs+ORi8
-         knRBiUno3qWSyBpbuGPvoUZFV/miK3aFTZkSwAbS+m8LedI/RSM2licoJ3y9v4X/lS5J
-         Qa5rT4TWopZLINrj/sD097s7YmcY/FEYbnd3FONYU5hSJ7bxFIDf4jIoeteU2mOgpsCF
-         XxVhUf3jxWH16OCl4XQcqG5RcuQIBqnBE6eH0jbCrGnJh1b2GbNX8uiEURI+3JzlAkYW
-         5KnMMsoxct5AZE6huoBpJedB7+UhqJcvFC5lQhrfA55weZbdTlcN6dkKjnN2d+XvM4Ln
-         U2gA==
-X-Gm-Message-State: APjAAAU7x0o5U15+AfesJvMoHaCGZXe957x2+LcjHcJ3lEEBaFsNfRPR
-        UgLbfiMNg6O0+IKskz2paoE=
-X-Google-Smtp-Source: APXvYqwlQ5dCHOgIjH33DcYephWfaZjfm1Ruj5Me87A/V7PtQhc6DU2gZSDwhuWVocAd2SlOB8QfPA==
-X-Received: by 2002:a5e:c311:: with SMTP id a17mr1385428iok.140.1567650030923;
-        Wed, 04 Sep 2019 19:20:30 -0700 (PDT)
-Received: from [192.168.254.31] ([172.78.24.232])
-        by smtp.gmail.com with ESMTPSA id p20sm1663489iod.43.2019.09.04.19.20.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Sep 2019 19:20:29 -0700 (PDT)
-Subject: Re: WARNING in hso_free_net_device
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
-        alexios.zavras@intel.com, andreyknvl@google.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.payer@nebelwelt.net, netdev@vger.kernel.org,
-        rfontana@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-References: <0000000000002a95df0591a4f114@google.com>
- <d6e4d2da-66c6-a8fe-2fea-a3435fa7cb54@gmail.com>
- <20190904154140.45dfb398@hermes.lan>
-From:   Hui Peng <benquike@gmail.com>
-Message-ID: <285edb24-01f9-3f9d-4946-b2f41ccd0774@gmail.com>
-Date:   Wed, 4 Sep 2019 22:20:23 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190904154140.45dfb398@hermes.lan>
-Content-Type: multipart/mixed;
- boundary="------------F0D63AB9033A22CB69F2E32D"
+        id S1728289AbfIECbT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Sep 2019 22:31:19 -0400
+Received: from mail-eopbgr60046.outbound.protection.outlook.com ([40.107.6.46]:52547
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727156AbfIECbS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Sep 2019 22:31:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QY7Y0YlAsbXzfQBguVer/0OAZ6SPCd8A2DqeiFlZ+/bAhmz3JF+WcnOhSn4Gfqyq43BkiCNF5vOWMkax1D8LXvQRUTs+LyWSEhNleJ21I1p1LNvTv13d5/uhQLNxm6CinDH5MVvhYEp3tJ8wDFRsMVBwIToSd0MozBzXK2XqflvYestUVvBKytU6zAghLd45SM7xnEKz2qotru+m2sel1k4u76clTtoCaqdzlfK5Xe3O0R+NM4obuBgDF+lAsmqjS2B9UHv18qRyvoK0ceLWF0z4as4nC5/oelqUU0NBqNZJmxRzlyYkh68Y7sJtEKmBgS9OK7V51sKU/XKpnoRFtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KjCMpgAQPo5fgTCO6+MH4gahefxjG0yFVrl3V5XsO8I=;
+ b=Cfi5MZafzvIIUXY7VOsNg+9dp2ZZ4zLLQlkFMakcDNoIbTEjFM/PgKklzsiPQyVKEZ7wqYgeSC/z1OKyrjbDbdqA0UOHfEiQdwN83Fws8ccgIP8u3NBdvEXyqoKrJRjKrl/kisJrNl0BirDrmWZzHe+4I5cYVXtzwyfK55+zbXp45bBR3TfXaek+jhXVNE8pH6gesnJ0EDHEwS1fLkKLimDH3N9boJlNnsih/pnp2IASnvUn4h6TNTBQEFfKfZyuxkSFj8vl9AjyjB0UtwxjQI90O5aYEyQoJpKDjScVGQjOEZQUOVClLR+z5EYZeUiRO+9C+42gQIr/RjtdgWMmwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KjCMpgAQPo5fgTCO6+MH4gahefxjG0yFVrl3V5XsO8I=;
+ b=GUGcJ4Rao1rzgiMJApN9+fDUyWf/AAfwpoJAmrcf/rB2t9AQRMenLM5aSxQE+cF4If56u3fnAQpAU80j6vbfvlndfYdCHyboLLWI3zXGtqnhAWfBj76lMaNTDSNjnaWzESHTSSW3UTMn9SY5R2315pytFLGOlTFHReFo8khtDQI=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB4782.eurprd04.prod.outlook.com (20.177.48.215) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.15; Thu, 5 Sep 2019 02:31:14 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::e039:172d:fe77:320a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::e039:172d:fe77:320a%4]) with mapi id 15.20.2220.022; Thu, 5 Sep 2019
+ 02:31:14 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [GIT PULL] usb: chipidea: changes for v5.4-rc1
+Thread-Topic: [GIT PULL] usb: chipidea: changes for v5.4-rc1
+Thread-Index: AQHVY5H87f5dCneKR0O5pEb5EchoUw==
+Date:   Thu, 5 Sep 2019 02:31:14 +0000
+Message-ID: <20190905023123.GA13573@b29397-desktop>
+Accept-Language: en-US
 Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9533e992-9ff4-417f-690d-08d731a91f8e
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB4782;
+x-ms-traffictypediagnostic: VI1PR04MB4782:
+x-microsoft-antispam-prvs: <VI1PR04MB4782282B731AB7CD0D2E23098BBB0@VI1PR04MB4782.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:397;
+x-forefront-prvs: 015114592F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(39860400002)(136003)(396003)(366004)(376002)(346002)(189003)(199004)(256004)(6436002)(99286004)(2501003)(71200400001)(71190400001)(316002)(33716001)(2351001)(33656002)(8936002)(478600001)(7736002)(305945005)(86362001)(14454004)(2906002)(8676002)(1730700003)(81166006)(476003)(3846002)(6116002)(6506007)(66476007)(6916009)(486006)(76116006)(1076003)(66066001)(91956017)(4326008)(186003)(5660300002)(66946007)(66446008)(44832011)(6512007)(9686003)(64756008)(53936002)(102836004)(26005)(66556008)(5640700003)(6486002)(81156014)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4782;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: x9hDyTqTostvVo3uJcojmbCe9NsK6dJjwM1p9Ng8s8YHHoc6FRkjSXCwEjoQITsiEfKo2YaQigtL4pOIlUYRscMBHq+htJsBks3s6w2M+m5OLYiY31cS4Ksl6tsN+zk6F6o8AewKIdP4bfLlR5fwovNFNYNTD9H/TcZXdaZYp4DfttTas7BBsG5lDwiJA3vzf0JksOwcbnUMVUYkwQ7mDLIjziQok84hRmv4ihTV1AGGHl5mh/Ezoepg2/UCjcNPtzOsrMepkH75fE1ErhKNH+3V1SFiFILf+vOtMQaruBQ+JvONBoKCOrtMHLE2gkTchh8BaexExONDuDSiEHSam/51RYxSMpkGVYavuXzzomiXBdx49yu0XyPthk5/Sl0CHlUD/U4IOqb/8vjBkXubME2tedoXFCBqK0H2CQFBhJc=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2D19273DB0A6A443A924F89A96721CAD@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9533e992-9ff4-417f-690d-08d731a91f8e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Sep 2019 02:31:14.3408
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: W8usANtPWIe1kH442oLHliSO+s7EbM0TmNfGiypHHBDMLoguKaiZMKXN4e7H74NtZPOGvpnyCpnUkkbx6bjWWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4782
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------F0D63AB9033A22CB69F2E32D
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit cdfee5623290bc893f595636b44fa28e8207c5b3=
+:
 
-Can you guys have=C2=A0 a look at the attached patch?
+  driver core: initialize a default DMA mask for platform device (2019-08-2=
+2 09:41:55 -0700)
 
-On 9/4/19 6:41 PM, Stephen Hemminger wrote:
-> On Wed, 4 Sep 2019 16:27:50 -0400
-> Hui Peng <benquike@gmail.com> wrote:
->
->> Hi, all:
->>
->> I looked at the bug a little.
->>
->> The issue is that in the error handling code, hso_free_net_device
->> unregisters
->>
->> the net_device (hso_net->net)=C2=A0 by calling unregister_netdev. In t=
-he
->> error handling code path,
->>
->> hso_net->net has not been registered yet.
->>
->> I think there are two ways to solve the issue:
->>
->> 1. fix it in drivers/net/usb/hso.c to avoiding unregistering the
->> net_device when it is still not registered
->>
->> 2. fix it in unregister_netdev. We can add a field in net_device to
->> record whether it is registered, and make unregister_netdev return if
->> the net_device is not registered yet.
->>
->> What do you guys think ?
-> #1
+are available in the Git repository at:
 
---------------F0D63AB9033A22CB69F2E32D
-Content-Type: text/x-patch;
- name="0001-Fix-a-wrong-unregistering-bug-in-hso_free_net_device.patch"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename*0="0001-Fix-a-wrong-unregistering-bug-in-hso_free_net_device.pa";
- filename*1="tch"
+  git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/us=
+b-ci-v5.4-rc1
 
-=46rom f3fdee8fc03aa2bc982f22da1d29bbf6bca72935 Mon Sep 17 00:00:00 2001
-From: Hui Peng <benquike@gmail.com>
-Date: Wed, 4 Sep 2019 21:38:35 -0400
-Subject: [PATCH] Fix a wrong unregistering bug in hso_free_net_device
+for you to fetch changes up to ecd55e367f3d706788632e176ec6b94e1a72a07c:
 
-As shown below, hso_create_net_device may call hso_free_net_device
-before the net_device is registered. hso_free_net_device will
-unregister the network device no matter it is registered or not,
-unregister_netdev is not able to handle unregistered net_device,
-resulting in the bug reported by the syzbot.
+  usb: chipidea: msm: Use device-managed registration API (2019-09-03 14:16=
+:40 +0800)
 
-```
-static struct hso_device *hso_create_net_device(struct usb_interface *int=
-erface,
-					       int port_spec)
-{
-	......
-	net =3D alloc_netdev(sizeof(struct hso_net), "hso%d", NET_NAME_UNKNOWN,
-      			    hso_net_init);
-	......
-	if (!hso_net->out_endp) {
-   	   	dev_err(&interface->dev, "Can't find BULK OUT endpoint\n");
-		goto exit;
-	}
+----------------------------------------------------------------
+Add role switch class support for chipidea
 
-	......
-	result =3D register_netdev(net);
-	......
-exit:
-	hso_free_net_device(hso_dev);
-	return NULL;
-}
+----------------------------------------------------------------
+Chuhong Yuan (1):
+      usb: chipidea: msm: Use device-managed registration API
 
-static void hso_free_net_device(struct hso_device *hso_dev)
-{
-	......
-	if (hso_net->net)
-		unregister_netdev(hso_net->net);
-	......
-}
+Li Jun (1):
+      usb: chipidea: add role switch class support
 
-```
+Peter Chen (2):
+      dt-binding: usb: ci-hdrc-usb2: add imx7ulp compatible
+      dt-binding: usb: usbmisc-imx: add imx7ulp compatible
 
-This patch adds a net_registered field in struct hso_net to record whethe=
-r
-the containing net_device is registered or not, and avoid unregistering i=
-t
-if it is not registered yet.
+ .../devicetree/bindings/usb/ci-hdrc-usb2.txt       |  1 +
+ .../devicetree/bindings/usb/usbmisc-imx.txt        |  1 +
+ drivers/usb/chipidea/Kconfig                       |  1 +
+ drivers/usb/chipidea/ci.h                          | 12 ++++
+ drivers/usb/chipidea/ci_hdrc_msm.c                 |  9 +--
+ drivers/usb/chipidea/core.c                        | 83 ++++++++++++++++++=
+++++
+ drivers/usb/chipidea/otg.c                         |  8 +--
+ 7 files changed, 105 insertions(+), 10 deletions(-)
 
-Reported-by: syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com
-Signed-off-by: Hui Peng <benquike@gmail.com>
----
- drivers/net/usb/hso.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index ce78714..5b3df33 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -128,6 +128,7 @@ struct hso_shared_int {
- struct hso_net {
- 	struct hso_device *parent;
- 	struct net_device *net;
-+	bool net_registered;
- 	struct rfkill *rfkill;
- 	char name[24];
-=20
-@@ -2362,7 +2363,7 @@ static void hso_free_net_device(struct hso_device *=
-hso_dev)
-=20
- 	remove_net_device(hso_net->parent);
-=20
--	if (hso_net->net)
-+	if (hso_net->net && hso_net->net_registered)
- 		unregister_netdev(hso_net->net);
-=20
- 	/* start freeing */
-@@ -2544,6 +2545,7 @@ static struct hso_device *hso_create_net_device(str=
-uct usb_interface *interface,
- 		dev_err(&interface->dev, "Failed to register device\n");
- 		goto exit;
- 	}
-+	hso_net->net_registered =3D true;
-=20
- 	hso_log_port(hso_dev);
-=20
 --=20
-2.7.4
 
-
---------------F0D63AB9033A22CB69F2E32D
-Content-Type: application/pgp-keys;
- name="pEpkey.asc"
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: attachment;
- filename="pEpkey.asc"
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-upzUiZLN0LKxjlsZTGx9e5m6J0BT
-=3DVJU3
------END PGP PUBLIC KEY BLOCK-----
-
---------------F0D63AB9033A22CB69F2E32D--
+Thanks,
+Peter Chen=
