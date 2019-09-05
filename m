@@ -2,215 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D06AAA72
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 19:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B14AAB15
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 20:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731840AbfIER6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 13:58:10 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:55552 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726837AbfIER6K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 13:58:10 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 0F534602EE; Thu,  5 Sep 2019 17:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1567706289;
-        bh=nFWYzMin0X86XFTxfBQkZ2g+xZj2gnwJ+osEMBqkGZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FsaSvgx2rDCQBAhofHKJipypjSWuP4UJBf/hWGAL2CkGE1E2aHGCCJYIBBAGlvmWK
-         ZIk6utDAsL3XS+/PqeJFAbZHF8XE4XEK6XwI7AF0MUSJrWLhDFPt0cV6sFsJYGrewE
-         iUrDBXfMUsfYlYeJN7/8iF7e5IJJlRAdqtDSlZnM=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        id S2391301AbfIESdU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 14:33:20 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:36970 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391296AbfIESdT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 14:33:19 -0400
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com [209.85.128.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 980E7602EE;
-        Thu,  5 Sep 2019 17:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1567706287;
-        bh=nFWYzMin0X86XFTxfBQkZ2g+xZj2gnwJ+osEMBqkGZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BNXk2vyH0V0FYTxlPkk4085980/XQYJ9ebz2q0rsVvyjfCZr95boNa6EXs2tlC+0p
-         KEqiC8BNx7d6iHpNnLzzwolJ1Q5KrNhBrFLCcU0p2tbA7TuQuLqRF9SgVKRdC5IaB9
-         V+CgS9Et8DWbBQpN4I40R6gO+5yHVhNqkOHSGkRw=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 980E7602EE
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Thu, 5 Sep 2019 10:58:02 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>, robh@kernel.org,
-        andy.gross@linaro.org, shawn.guo@linaro.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
- bindings
-Message-ID: <20190905175802.GA19599@jackp-linux.qualcomm.com>
-References: <20190223165218.GB572@tuxbook-pro>
- <6dc0957d-5806-7643-4454-966015865d38@linaro.org>
- <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
- <20190830164520.GK26807@tuxbook-pro>
- <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
- <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
- <20190903173924.GB9754@jackp-linux.qualcomm.com>
- <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
- <20190903233410.GQ26807@tuxbook-pro>
- <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org>
+        by mx1.redhat.com (Postfix) with ESMTPS id D19F47E427
+        for <linux-usb@vger.kernel.org>; Thu,  5 Sep 2019 18:33:18 +0000 (UTC)
+Received: by mail-wm1-f69.google.com with SMTP id 124so2103769wmz.1
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 11:33:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JkgFvZx1SpfRB54bm11+3DOumUuDokZW525XdQCPb+E=;
+        b=ov9AI9qKMuys3qcFusr8iLq5ar+sYmkntuC9K+VJLazcRyTn7nQQlJcOl1DhN/bdwT
+         X0k0bO/ERWtHdZAqHhnb9QvUPv+Yym0DzNR44C015LHmwK07HT/Lgvvh5NzbAA2ZuqK6
+         /3+R7JlxXzC+cGYUeKmNs1sB1TGfVzDyRB+oTQyT6XaD4JZSdGfqd3ijtfxuVHc7P7GO
+         FJs+SirHPcGFkYAUhym6zgQO0JDVcnvcwJBy3EF/194gFMmCaZTRJI/0GEAPBmupiVwB
+         niHa5h89cmTldBaAvX76HzRKpmES87AKHfR5DOG+L/am2YA1ZgSjcLc4y7gZkAzxpNCh
+         zMzw==
+X-Gm-Message-State: APjAAAW7qLQjqFujas5U5vtBBxnCBZADTVhqHiFVwAVRhyF4tgh7GIXI
+        WqUCe4ksU5c8GiKMGdilwKOqXbgX85m14kPnO+dm3Vtdwt+XL5lwcvfq38axuemvLNjTf/epZNa
+        IUMBWEmESS7CgCUzHeC0K3nQG6UogQaK9jROg
+X-Received: by 2002:a5d:568c:: with SMTP id f12mr3942173wrv.248.1567708397319;
+        Thu, 05 Sep 2019 11:33:17 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzmOECwYwtvafDfOc5sH/mM1xRRq5odIdcrX+xDOVM3wNnjyolmP+riNwHwlSKTnHua2vRyqquS9BP4i+1k7Ig=
+X-Received: by 2002:a5d:568c:: with SMTP id f12mr3942141wrv.248.1567708396973;
+ Thu, 05 Sep 2019 11:33:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
+ <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com>
+ <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
+In-Reply-To: <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
+From:   Ray Strode <rstrode@redhat.com>
+Date:   Thu, 5 Sep 2019 14:32:40 -0400
+Message-ID: <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com>
+Subject: Re: Why add the general notification queue and its sources
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Whitehouse <swhiteho@redhat.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Ray, Debarshi" <debarshi.ray@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jorge, Bjorn,
+Hi,
 
-On Thu, Sep 05, 2019 at 09:18:57AM +0200, Jorge Ramirez wrote:
-> On 9/4/19 01:34, Bjorn Andersson wrote:
-> > On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
-> > 
-> >> Quoting Jack Pham (2019-09-03 10:39:24)
-> >>> On Mon, Sep 02, 2019 at 08:23:04AM +0200, Jorge Ramirez wrote:
-> >>>> On 8/30/19 20:28, Stephen Boyd wrote:
-> >>>>> Quoting Bjorn Andersson (2019-08-30 09:45:20)
-> >>>>>> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
-> >>>>>>
-> >>>>>>>>>
-> >>>>>>>>> The USB-C connector is attached both to the HS and SS PHYs, so I think
-> >>>>>>>>> you should represent this external to this node and use of_graph to
-> >>>>>>>>> query it.
-> >>>>>>>>
-> >>>>>>>> but AFAICS we wont be able to retrieve the vbux-supply from an external
-> >>>>>>>> node (that interface does not exist).
-> >>>>>>>>
-> >>>>>>>> rob, do you have a suggestion?
-> >>>>>>>
-> >>>>>>> Shouldn't the vbus supply be in the phy? Or is this a situation where
-> >>>>>>> the phy itself doesn't have the vbus supply going to it because the PMIC
-> >>>>>>> gets in the way and handles the vbus for the connector by having the SoC
-> >>>>>>> communicate with the PMIC about when to turn the vbus on and off, etc?
-> >>>>>>>
-> >>>>>>
-> >>>>>> That's correct, the VBUS comes out of the PMIC and goes directly to the
-> >>>>>> connector.
-> >>>>>>
-> >>>>>> The additional complicating factor here is that the connector is wired
-> >>>>>> to a USB2 phy as well, so we need to wire up detection and vbus control
-> >>>>>> to both of them - but I think this will be fine, if we can only figure
-> >>>>>> out a sane way of getting hold of the vbus-supply.
-> >>>>>>
-> >>>>>
-> >>>>> Does it really matter to describe this situation though? Maybe it's
-> >>>>> simpler to throw the vbus supply into the phy and control it from the
-> >>>>> phy driver, even if it never really goes there. Or put it into the
-> >>>>> toplevel usb controller?
-> >>>>>
-> >>>> that would work for me - the connector definition seemed a better way to
-> >>>> explain the connectivity but since we cant retrieve the supply from the
-> >>>> external node is not of much functional use.
-> >>>>
-> >>>> but please let me know how to proceed. shall I add the supply back to
-> >>>> the phy?
-> >>
-> >> So does the vbus actually go to the phy? I thought it never went there
-> >> and the power for the phy was different (and possibly lower in voltage).
-> >>
-> > 
-> > No, the PHYs use different - lower voltage - supplies to operate. VBUS
-> > is coming from a 5V supply straight to the connector and plug-detect
-> > logic (which is passive in this design).
-> > 
-> >>>
-> >>> Putting it in the toplevel usb node makes sense to me, since that's
-> >>> usually the driver that knows when it's switching into host mode and
-> >>> needs to turn on VBUS. The dwc3-qcom driver & bindings currently don't 
-> >>> do this but there's precedent in a couple of the other dwc3 "glues"--see
-> >>> Documentation/devicetree/bindings/usb/{amlogic\,dwc3,omap-usb}.txt
-> >>>
-> >>> One exception is if the PMIC is also USB-PD capable and can do power
-> >>> role swap, in which case the VBUS control needs to be done by the TCPM,
-> >>> so that'd be a case where having vbus-supply in the connector node might
-> >>> make more sense.
-> >>>
-> >>
-> >> The other way is to implement the code to get the vbus supply out of a
-> >> connector. Then any driver can do the work if it knows it needs to and
-> >> we don't have to care that the vbus isn't going somewhere. I suppose
-> >> that would need an of_regulator_get() sort of API that can get the
-> >> regulator out of there? Or to make the connector into a struct device
-> >> that can get the regulator out per some generic connector driver and
-> >> then pass it through to the USB controller when it asks for it. Maybe
-> >> try to prototype that out?
-> >>
-> > 
-> > The examples given in the DT bindings describes the connector as a child
-> > of a PMIC, with of_graph somehow tying it to the various inputs. But in
-> > these examples vbus is handled by implicitly inside the MFD, where
-> > extcon is informed about the plug event they toggle vbus as well.
-> > 
-> > In our case we have a extcon-usb-gpio to detect mode, which per Jorge's
-> > proposal will trickle down to the PHY and become a regulator calls on
-> > either some external regulator or more typically one of the chargers in
-> > the system.
+On Thu, Sep 5, 2019 at 1:20 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> You've at least now answered part of the "Why", but you didn't
+> actually answer the whole "another developer" part.
+It's certainly something we've wanted in the GNOME world for a long time:
 
-Interesting you mention extcon-usb-gpio. I thought extcon at least from
-bindings perspective is passé now. Maybe this is what you need (just
-landed in usb-next):
+See for instance
 
-usb: common: add USB GPIO based connection detection driver
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=4602f3bff2669012c1147eecfe74c121765f5c56
+https://bugzilla.redhat.com/show_bug.cgi?id=991110
 
-dt-bindings: usb: add binding for USB GPIO based connection detection driver
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=f651c73e71f53f65e9846677d79d8e120452b59f
+and
 
-Fortunately this new driver might check the right boxes for you:
-- usb connector binding
-- ID detect GPIO
-- vbus-supply regulator
+https://bugzilla.gnome.org/show_bug.cgi?id=707402
 
-With that, I think you can also keep the connector subnode out of the
-SSPHY node well, and similarly get rid of the vbus toggle handling from
-the PHY driver.
+from all the way back 2013.  These are the alternatives I can think of:
 
-The big thing missing now is that this driver replaces extcon
-completely, so we'll need handling in dwc3/dwc3-qcom to retrieve the
-role switch state to know when host mode is entered. I saw this a while
-back but don't think it got picked up:
+- poll? status quo, but not great for obvious wakeup reasons
+- use a different credential cache collection type that does support
+change notification?
+some of the other types do support change notification, but have their
+own set of
+problems. But maybe we should just go back to DIR type credential
+cache collections
+and try to figure out the life cycle problems they pose, i don't
+know... or get more
+man power behind KCM...
+- manage change notification entirely from userspace.  assume credentials will
+always be put in place from krb5-libs entry points, and just skip
+notification if
+it happens out from under the libraries. maybe upstream kerberos guys would
+be onboard with this, I don't know. This seems less robust than having
+the kernel
+in the loop, though.
 
-https://patchwork.kernel.org/patch/10909981/
+> I really don't like how nobody else than you seems to even look at any
+> of the key handling patches. Because nobody else seems to care.
+I've got no insight here, so i'll just throw a dart...
 
-> > So if we come up with a struct device for the connector and some API for
-> > toggling the vbus we're going to have to fairly abstract entities
-> > representing pretty much the same thing - and in a design with a mux we
-> > would have a different setup.
-> 
-> I am a bit unclear - not sure if we have gone full circle on this
-> subject. what is then the direction to get this merged?
-> 
-> I did have look last week and the level of effort to support regulators
-> on external nodes is not neglectable meaning that I might not have the
-> time to deliver that feature (perhaps someone else wishes to take over?)
-> 
-> > 
-> > Regards,
-> > Bjorn
-> > 
-> 
+viro, is this something you have any interest in watching closer?
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> See what I'm saying? This whole "David Howells does his own features
+> that nobody else uses" needs to stop. You need to have a champion. I
+> just don't feel safe pulling these kinds of changes from you, because
+> I get the feeling that ABSOLUTELY NOBODY ELSE ever really looked at it
+> or really cared.
+I get the "one man is not enough for proper maintenance" argument, and
+maybe it's true.  I don't know.
+
+But I just want to point out, I have been asking dhowells for this change
+notification API for years, so it's not something he did on his own and for
+no particularly good reason. It solves a real problem and has a real-world
+use case.
+
+He kindly did it because I (and Robbie Harwood and others) asked him about
+it, off and on, and  he was able to fit it onto his priority list for us.
+From this thread, it sounds like he solved a problem for Greg too, killing a
+couple birds with one stone?
+
+--Ray
