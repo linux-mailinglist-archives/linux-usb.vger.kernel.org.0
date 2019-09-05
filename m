@@ -2,160 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3006AA24E
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 14:01:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44B5AA291
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 14:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732280AbfIEMAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 08:00:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45602 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730767AbfIEMAu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Sep 2019 08:00:50 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5DD121883;
-        Thu,  5 Sep 2019 12:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567684849;
-        bh=1xeBfYskUOKOC0SaWvO+Y+ILr+BecrmFnTQs8zVFl50=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O7ZKkc1lP219Poi6xqKaQgcEbNWBZjpRM+hT8SY5Se9MidWdhWqCTwhjTpGjpN4nD
-         WCMVt5asF1oqgG8825623EO5kDyielgIOW8VGBywGk3lFfl9Jf8Kmivv59G3O4o9QU
-         cNKDVjNSLQ6OC6TBoVcwdmsHfBrC4iHpgxsw7pBA=
-Date:   Thu, 5 Sep 2019 14:00:46 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Jessica Yu <jeyu@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthew Dharm <mdharm-usb@one-eyed-alien.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Matthias Maennich <maennich@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        Martijn Coenen <maco@android.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        linux-usb <linux-usb@vger.kernel.org>,
-        USB Mass Storage on Linux 
-        <usb-storage@lists.one-eyed-alien.net>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
- symbols in WATCHDOG_CORE namespace
-Message-ID: <20190905120046.GA7952@kroah.com>
-References: <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-13-maennich@google.com>
- <20190903161045.GA22754@roeck-us.net>
- <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
- <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
- <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
- <20190905104147.GA27788@linux-8ccs>
- <CAK8P3a0rf0PhXK1RdF1mWTyGggBJeH0h0YOCxDvJFgxu8wmWKw@mail.gmail.com>
- <20190905111617.GB27788@linux-8ccs>
- <CAK7LNATBWCTJ-FXydob5FUYMymsqCxhenBynb2_NfJdSC2yGDQ@mail.gmail.com>
+        id S2389188AbfIEMDz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 08:03:55 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:41227 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733117AbfIEMDy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 08:03:54 -0400
+Received: by mail-pg1-f193.google.com with SMTP id x15so1315286pgg.8
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 05:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Aai7vMHcDPZtNFz3aO3i4nNt8bejCBiPZk07jBpgR2w=;
+        b=WTcKN/e2WDwsfZRb1ZPCK72rhmmq1i4MgNfFiMwmgX5EGjjROA4kusvu55uNFp1LBO
+         /uxRGx4Kayu9ebfdeUxNnP6bYiADt13UMJIKX6L+ZZjCmoWp2e0nHouJX6HE3lRpTTTU
+         TIBSeFBYHps1uGMozAJdlXex02DUv14fDyEtrhShlEKELzWoONBOpQva3epcqzSXMyJX
+         /tx017mSIhp4ZvDpsNuXNjJqQ97lJZI1Ly+ljw3udSBplBSStERPMX9+8FpCY0IgiuWP
+         TZv1uzAo1OFPuUkMUY1EvY6x/d2ZUI1Ox+0kF1tL9GXD0w+EBB4bNXObcdZu15DpMDu+
+         Vf9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Aai7vMHcDPZtNFz3aO3i4nNt8bejCBiPZk07jBpgR2w=;
+        b=tvglwfJnayu9dP9YzoI80KfRjFTnaZIUe7aFgmw5WXZ1X+PjeaZXjrjPMGwuWt5Iuo
+         hsjQe/1CkDh9O7ZF1BpKc+jPpWdGJjDUOUJ2EJsJKofDgz4c+e6kQY49mbsRS7CI2Smv
+         Bw19O/icYPpMRvdTuMoNo6hLTTHG2OU5KWiC7yDUQi/4mEtxN4Mzmf/PIxdk3YmzbLUZ
+         3HVbqkEorcj1965j+PZmKutPVbmr7PA8CrjUguuN7ysSzto+6Kto5oqbWwJPfZHdbm4K
+         1JI4+gwNAkRjn3yZjK0KW7GycDI+L7UfvSs182YgqEkh7P9Rbjmew6mhAYgNt5HcdL4Q
+         +MjA==
+X-Gm-Message-State: APjAAAWMz3V4L2tDp/IIq6qmjBzmQVM3w4vJSbz9JstxdMw616mQGWfC
+        vjjlvkZeMUlvNm/gw5RSIdfdanmCNlHacKmTpx1myQ==
+X-Google-Smtp-Source: APXvYqyu8Win4to5U0SdZSHj6aVFd0Dn+v68b8PT7F4Jr4rllD6ZMBJGxv+/R/yW6QiPhDN64x5fnxAluKnbs/Aue7A=
+X-Received: by 2002:aa7:8bcc:: with SMTP id s12mr3295908pfd.93.1567685032809;
+ Thu, 05 Sep 2019 05:03:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK7LNATBWCTJ-FXydob5FUYMymsqCxhenBynb2_NfJdSC2yGDQ@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <000000000000490d4c058e8047e6@google.com>
+In-Reply-To: <000000000000490d4c058e8047e6@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 5 Sep 2019 14:03:41 +0200
+Message-ID: <CAAeHK+wq3M=75R=yjM0ECO4eoPjA1aOknHaE=nX48gidURD0wA@mail.gmail.com>
+Subject: Re: WARNING: ODEBUG bug in __free_pages_ok
+To:     syzbot <syzbot+6ff9bba63b987471b8be@syzkaller.appspotmail.com>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 08:25:32PM +0900, Masahiro Yamada wrote:
-> On Thu, Sep 5, 2019 at 8:16 PM Jessica Yu <jeyu@kernel.org> wrote:
-> >
-> > +++ Arnd Bergmann [05/09/19 12:52 +0200]:
-> > >On Thu, Sep 5, 2019 at 12:41 PM Jessica Yu <jeyu@kernel.org> wrote:
-> > >> +++ Matthew Dharm [04/09/19 09:16 -0700]:
-> > >> >On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > >
-> > >> >HOWEVER, I have one question:  If these patches are included, and
-> > >> >someone wants to introduce a bit of code which needs to use two
-> > >> >symbols from different namespaces but with the same name, can that be
-> > >> >done?  That is, if driver A has symbol 'foo' and driver B has symbol
-> > >> >'foo' (both in their respective namespaces), and driver C wants to use
-> > >> >A.foo and B.foo, can that be supported?
-> > >>
-> > >> As of now, we currently don't support this - modpost will warn if a
-> > >> symbol is exported more than once (across modules + vmlinux), and the
-> > >> module loader currently assumes exported symbol names are unique.  Do
-> > >> you have a concrete use case? If there is a strong need for this, I
-> > >> don't think it'd be too hard to implement.
-> > >
-> > >I think what would prevent this from working in general is that having
-> > >two modules with the same exported symbol in different namespaces
-> > >won't link if you try to build both modules into the kernel itself.
-> > >
-> > >      Arnd
-> >
-> > Ah yeah, you are right. I only tried building an identically named
-> > exported symbol in a module and in the kernel, and there I got away
-> > with a modpost warning. But this breaks when building the module into
-> > the kernel, so I guess this is out of the question.
-> >
-> > Thanks,
-> >
-> > Jessica
-> >
-> 
-> 
-> The cover letter starts with
-> "As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel".
-> 
-> Whether or not we apply this patch set,
-> we will have to carefully maintain them
-> so that 31207 symbols are unique, anyway.
-> (And, we can do this with allmodconfig + modpost)
-> 
-> So, what is the point of the namespace,
-> where it does not loosen the scope of uniqueness?
+On Thu, Jul 25, 2019 at 2:08 PM syzbot
+<syzbot+6ff9bba63b987471b8be@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    6a3599ce usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10d72ef0600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=700ca426ab83faae
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6ff9bba63b987471b8be
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=144edb68600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14cd0e64600000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+6ff9bba63b987471b8be@syzkaller.appspotmail.com
+>
+> usb 1-1: USB disconnect, device number 2
+> ------------[ cut here ]------------
+> ODEBUG: free active (active state 0) object type: timer_list hint:
+> hid_retry_timeout+0x0/0xd0 drivers/hid/usbhid/hid-core.c:716
+> WARNING: CPU: 1 PID: 21 at lib/debugobjects.c:325
+> debug_print_object+0x160/0x250 lib/debugobjects.c:325
+> Kernel panic - not syncing: panic_on_warn set ...
+> CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.2.0-rc6+ #15
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   panic+0x292/0x6c9 kernel/panic.c:219
+>   __warn.cold+0x20/0x4b kernel/panic.c:576
+>   report_bug+0x262/0x2a0 lib/bug.c:186
+>   fixup_bug arch/x86/kernel/traps.c:179 [inline]
+>   fixup_bug arch/x86/kernel/traps.c:174 [inline]
+>   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+>   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+>   invalid_op+0x14/0x20 arch/x86/entry/entry_64.S:986
+> RIP: 0010:debug_print_object+0x160/0x250 lib/debugobjects.c:325
+> Code: dd e0 16 ba 85 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 bf 00 00 00 48
+> 8b 14 dd e0 16 ba 85 48 c7 c7 c0 0c ba 85 e8 db c7 33 ff <0f> 0b 83 05 03
+> 6e 86 05 01 48 83 c4 20 5b 5d 41 5c 41 5d c3 48 89
+> RSP: 0018:ffff8881d9eff710 EFLAGS: 00010086
+> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8127ef3d RDI: ffffed103b3dfed4
+> RBP: 0000000000000001 R08: ffff8881d9e36000 R09: ffffed103b663ed7
+> R10: ffffed103b663ed6 R11: ffff8881db31f6b7 R12: ffffffff86b04760
+> R13: ffffffff812db3c0 R14: ffffffff88f4bae8 R15: ffff8881d0e1a8c8
+>   __debug_check_no_obj_freed lib/debugobjects.c:785 [inline]
+>   debug_check_no_obj_freed+0x2a3/0x42e lib/debugobjects.c:817
+>   free_pages_prepare mm/page_alloc.c:1140 [inline]
+>   __free_pages_ok+0x215/0x1bb0 mm/page_alloc.c:1366
+>   usbhid_disconnect+0x98/0xd0 drivers/hid/usbhid/hid-core.c:1414
+>   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+>   __device_release_driver drivers/base/dd.c:1081 [inline]
+>   device_release_driver_internal+0x404/0x4c0 drivers/base/dd.c:1112
+>   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+>   device_del+0x460/0xb80 drivers/base/core.c:2274
+>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>   usb_disconnect+0x284/0x830 drivers/usb/core/hub.c:2199
+>   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x13bd/0x3550 drivers/usb/core/hub.c:5441
+>   process_one_work+0x905/0x1570 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x30b/0x410 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+> ======================================================
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-It does not "loosen" anything.  The problem is, we have 31207 exported
-symbols and no one has any idea how they are "clustered" :)
-
-Ideally we would have separate namespaces where we could "keep" others
-from accessing symbols that are required to be global, but we do not
-want anyone else to use them.  But we have C, and we need to live with
-that.
-
-This is the "next best thing".  This provides a namespace and a marking
-by the user of that exported symbol that they really do know what they
-are doing.
-
-The USB storage exports are a concrete example of this in this patchset.
-Those symbols are to only be used by other USB storage drivers, and they
-are marked that way here.
-
-This also gives us the ability to start to actually understand what our
-different exported symbols are for.  Right now the USB core exports a
-ton of stuff, but who is expected to use what?  Right now any USB driver
-can use any of those functions and no one notices.  After this patchset
-is merged, I will start to "carve up" the USB exports into different
-"namespaces".  One example will be the functions only for use by USB
-host controller drivers.  Then if someone submits a new driver that says
-"use the USB host controller driver namespace", and that driver is _not_
-a USB host controller driver, it's a huge red flag that something really
-isn't correct here.
-
-Some other USB functions will probably get marked "USB core only" or
-some such thing, and then to use them you have to say you are importing
-from the "usb core only" which again, is a huge flag that you are doing
-something wrong.
-
-So on it's own, this patchset doesn't do much.  But it gives us the
-building blocks on which to start to make sense of those 31000+
-different exported symbols.
-
-As an aside, this is something that I know I and others have been
-wanting to see happen for 10+ years now, and I'm very happy to see it
-show up in a workable form as we have known this is a issue for a very
-long time.
-
-Hope this helps explain things better,
-
-greg k-h
+#syz dup: WARNING: ODEBUG bug in usbhid_disconnect (2)
