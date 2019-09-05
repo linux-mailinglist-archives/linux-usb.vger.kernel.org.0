@@ -2,146 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED0D0AA142
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 13:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 268B2AA152
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 13:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388380AbfIELZs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 07:25:48 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45095 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388371AbfIELZs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 07:25:48 -0400
-Received: by mail-wr1-f67.google.com with SMTP id l16so2281348wrv.12
-        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 04:25:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=eSSehVjGWa5LE0/gH3icTwBJRpC+AS+nnud+/72hXME=;
-        b=Mt+7+hRDjQpIIeJgMoGnabQHJimWM0kgJ2UdEMA4e/koR8gzYQ1321o30N4BZocB2u
-         /qPsUN06ep9Ol+mmRjACdrinITrJu1c9O4N3xnvY5dqYqZ+/ItmVEl2A/ZYZrOg5W0oX
-         d7PWqHT4dqRUH6829VDN0TFRWP1t1mvuuMzlSP+Tki8dp5s7y99j397jmCxbbgGWrbln
-         y/8uvI+kalF1Wrvu+ca8Do/eDHZ/0edCauMNiGxvt5we7BPMssy+foqfahPlM0xsLnrz
-         SkWQLtSRXNWpZA/0iWLZbGPpULHsaKv9wnWz3rTo1RkEttQopkNbw9P2GXMkDn5AWHGB
-         KxTg==
+        id S1732847AbfIEL1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 07:27:01 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:42818 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726120AbfIEL1B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 07:27:01 -0400
+Received: by mail-io1-f70.google.com with SMTP id x9so2817300ior.9
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 04:27:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eSSehVjGWa5LE0/gH3icTwBJRpC+AS+nnud+/72hXME=;
-        b=mx5rJQfc+Bto9EGbFfjriWM1QT47srExcnPkUk6MM8Zb5FIjIe8kJsIB5SzJSMX+Od
-         z8da2C998BEWCIZKAjyj6oG1sOGfLmNvSqqNFNDuaUEKN0GmBL9EHariEKtVaq+oT5BX
-         NSeTuZqzoDMvPXfv0jNWoJ7xEnuZ7QsfcwpPJGzZxWhDSGqpSCgnotWzsX9Rbj2BVZ0J
-         9gqF91e0Pm+hCgwPeIV+xd2T0LeoTWnIPpx0HqgIJXSJpW32Xu8/RIaV+ZZXaS7Lq5/G
-         /lBlGDIQgES513bAHYBZEaCZpTWqWFAHKag7+UnobLK5od4w5fIL+GC0RrwdYlH5nrl4
-         KTiA==
-X-Gm-Message-State: APjAAAUqKU5PdENHGfm+gOvWwaDv4hrkzYF9bWpXlFewDRoxcJZ1E8kE
-        xz0l3kZVkQERUBz8RhBOrnhPhQ==
-X-Google-Smtp-Source: APXvYqxetEUY8/CDjePqsdfkQZ4EdeUdz1CGPrEUDvyI1B7HWzOYDYHQy7uMF49ubR5yv2wYKsd3pQ==
-X-Received: by 2002:a5d:6211:: with SMTP id y17mr45427wru.35.1567682745012;
-        Thu, 05 Sep 2019 04:25:45 -0700 (PDT)
-Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
-        by smtp.gmail.com with ESMTPSA id f3sm2347171wmh.9.2019.09.05.04.25.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2019 04:25:44 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 12:25:41 +0100
-From:   Matthias Maennich <maennich@google.com>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        maco@android.com, sspatil@google.com,
-        Will Deacon <will@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        linux-usb <linux-usb@vger.kernel.org>,
-        USB Mass Storage on Linux 
-        <usb-storage@lists.one-eyed-alien.net>,
-        linux-watchdog@vger.kernel.org
-Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
- symbols in WATCHDOG_CORE namespace
-Message-ID: <20190905112541.GA227928@google.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190903150638.242049-1-maennich@google.com>
- <20190903150638.242049-13-maennich@google.com>
- <20190903161045.GA22754@roeck-us.net>
- <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
- <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
- <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
- <20190905104147.GA27788@linux-8ccs>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=7woNlVISujRJGF9f7Yv9hP0vcjuDeQlRJErmR/nep/s=;
+        b=hOO5Ep+Dg0HJpEyNXd4mDweqyHh1hDw4OFs37ZKyUMdoVUIr9xUfKNB2RoSaVs8qoY
+         QD98q1z0TVJXelZoj7qtpBpp1mXf1aFPje2kINLqL6yqbfgEp4Nx4TTgTJ2yf+kIqk4N
+         nuShw6gj3OpjdxVMygfy0eSjhMN0oZneaOM5Tmizz0FvoTA1wUrGaEnTceNhawkJp1Rn
+         SQRozg59b9ONl5C2q7h8NWeb7A/rTO/tm2W30Vmal83uBT+16lM7QKVlSf7OUdfGCwDD
+         pKoRGinx++yTnS72w7Q3ozFXr2b8QazUq7GYng2QXWH2Ms5pMcG7oQZNIzWtDHWrLjv5
+         AWgg==
+X-Gm-Message-State: APjAAAVILhJx6eu7eBZzKW/aLZlWeu8dHWen+R18jiizePvzk5W0qA8A
+        /rSn2mpZsX39qoqI+xS9P9yxtqZtjuhYv/f9er/a/RZq9jqx
+X-Google-Smtp-Source: APXvYqzrPWl90MY6xFLW6kE5r7FYbX5PnvVkgsNXXwiFcVSlOrXw4c1TUHRlr2M/2Ww7NwqWIs7UZ4UFqMX/6zQlqsJJFcJYxnZm
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190905104147.GA27788@linux-8ccs>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a02:9a12:: with SMTP id b18mr3575178jal.70.1567682820439;
+ Thu, 05 Sep 2019 04:27:00 -0700 (PDT)
+Date:   Thu, 05 Sep 2019 04:27:00 -0700
+In-Reply-To: <CAAeHK+xJrv1hCbO5qOGTBu=c8STo+-obatOGZ4cHkbuhqmEvrg@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a2044d0591cc99b2@google.com>
+Subject: Re: WARNING: ODEBUG bug in usbhid_disconnect (2)
+From:   syzbot <syzbot+14b53bfeb17f2b210eb7@syzkaller.appspotmail.com>
+To:     Roderick.Colenbrander@sony.com, andreyknvl@google.com,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 12:41:47PM +0200, Jessica Yu wrote:
->+++ Matthew Dharm [04/09/19 09:16 -0700]:
->>On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>>
->>>Note that I don't object to the patch set in general. There may be symbols
->>>which only need be exported in the context of a single subsystem or even
->>>driver (if a driver consists of more than one module). For example, a mfd
->>>driver may export symbols which should only be called by its client drivers.
->>>In such a situation, it may well be beneficial to limit the use of exported
->>>symbols.
->>
->>I can appreciate this benefit.
->>
->>>I am not sure what good that does in practice (if I understand correctly,
->>>a driver only has to declare that it wants to use a restricted use symbol
->>>if it wants to use it), but that is a different question.
->>
->>I think this question implies that you are coming from the perspective
->>of "security" or wanting to restrict access to the underlying
->>functions, rather than wanting to clean-up the way symbols are handled
->>for manageability / maintainability purposes (which is the goal, as I
->>understand it).
+Hello,
 
-The goal of this patch set is to introduce structure into the exported
-surface that goes beyond naming conventions like 'usb_*'. So, it is
-rather about maintainability then security. In particular, creating the
-visibility of which parts of the kernel use which other parts, might
-help to find cases where suboptimal choices were made. Maybe already
-during development/review.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-As Guenter correctly noted, a module is able to declare that it wants to
-use a namespace. One idea that came up earlier was to maybe restrict the
-namespaces that can actually be imported by modules. But I would see
-anything in that direction as beyond the scope of this series.
+Reported-and-tested-by:  
+syzbot+14b53bfeb17f2b210eb7@syzkaller.appspotmail.com
 
-A nice side effect of having to declare the usage is that it shows up in
-modinfo and module users can reason about how the module interacts with
-the rest of the kernel.
+Tested on:
 
+commit:         eea39f24 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d0c62209eedfd54e
+dashboard link: https://syzkaller.appspot.com/bug?extid=14b53bfeb17f2b210eb7
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12b6944e600000
 
->>HOWEVER, I have one question:  If these patches are included, and
->>someone wants to introduce a bit of code which needs to use two
->>symbols from different namespaces but with the same name, can that be
->>done?  That is, if driver A has symbol 'foo' and driver B has symbol
->>'foo' (both in their respective namespaces), and driver C wants to use
->>A.foo and B.foo, can that be supported?
->
->As of now, we currently don't support this - modpost will warn if a
->symbol is exported more than once (across modules + vmlinux), and the
->module loader currently assumes exported symbol names are unique.  Do
->you have a concrete use case? If there is a strong need for this, I
->don't think it'd be too hard to implement.
-
-The implementation does not change the fact that symbol names need to be
-unique. As Arnd just mentioned in the other thread: the linker will
-already fail if two builtin symbols use the same name. It is rather a
-tag attached to the symbol.
-
-Cheers,
-Matthias
+Note: testing is done by a robot and is best-effort only.
