@@ -2,108 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D56AAABBD
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 21:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8124CAACCC
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 22:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387597AbfIETHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 15:07:19 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:43391 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731206AbfIETHT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 15:07:19 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 330653C00C5;
-        Thu,  5 Sep 2019 21:07:15 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OTGX0Nk9r1cT; Thu,  5 Sep 2019 21:07:09 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S2388719AbfIEUKC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 16:10:02 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39844 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732468AbfIEUKC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 16:10:02 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 587473C005E;
-        Thu,  5 Sep 2019 21:07:09 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Thu, 5 Sep 2019
- 21:07:08 +0200
-Date:   Thu, 5 Sep 2019 21:07:05 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-CC:     Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        by mx1.redhat.com (Postfix) with ESMTPS id 5C742300BEAE;
+        Thu,  5 Sep 2019 20:10:01 +0000 (UTC)
+Received: from ovpn-124-235.rdu2.redhat.com (ovpn-124-235.rdu2.redhat.com [10.10.124.235])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26E605C1D4;
+        Thu,  5 Sep 2019 20:09:59 +0000 (UTC)
+Message-ID: <d19e8783e7fe47e51fbc12bf33c95fea16c93070.camel@redhat.com>
+Subject: Re: Why add the general notification queue and its sources
+From:   David Lehman <dlehman@redhat.com>
+To:     Ray Strode <rstrode@redhat.com>,
+        Steven Whitehouse <swhiteho@redhat.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Howells <dhowells@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: udc: renesas_usb3: add suspend event
- support
-Message-ID: <20190905190705.GA4062@vmlxhi-102.adit-jv.com>
-References: <1567675074-3331-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
- <TYAPR01MB45449D299241B52077101C85D8BB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ian Kent <ikent@redhat.com>
+Date:   Thu, 05 Sep 2019 16:09:58 -0400
+In-Reply-To: <CAKCoTu7ms4ckwDA_-onuJg+famnMzGZE9gGUcqqMz0kCAAECRg@mail.gmail.com>
+References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
+         <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com>
+         <17703.1567702907@warthog.procyon.org.uk>
+         <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
+         <11667f69-fbb5-28d2-3c31-7f865f2b93e5@redhat.com>
+         <CAKCoTu7ms4ckwDA_-onuJg+famnMzGZE9gGUcqqMz0kCAAECRg@mail.gmail.com>
+Organization: Red Hat, Inc.
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <TYAPR01MB45449D299241B52077101C85D8BB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Thu, 05 Sep 2019 20:10:01 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Shimoda-san,
-
-On Thu, Sep 05, 2019 at 11:07:02AM +0000, Yoshihiro Shimoda wrote:
-> Hi Veeraiyan,
+On Thu, 2019-09-05 at 14:51 -0400, Ray Strode wrote:
+> Hi,
 > 
-> > From: Veeraiyan Chidambaram, Sent: Thursday, September 5, 2019 6:18 PM
-> > 
-> > In R-Car Gen3 USB 3.0 Function, if host is detached an interrupt
-> > will be generated and Suspended state bit is set in interrupt status
-> > register. Interrupt handler will call driver->suspend(composite_suspend)
-> > if suspended state bit is set. composite_suspend will call
-> > ffs_func_suspend which will post FUNCTIONFS_SUSPEND and will be consumed
-> > by user space application via /dev/ep0.
-> > 
-> > To be able to detect the host detach, USB_INT_1_B2_SPND to cover the
-> > Suspended bit of the B2_SPND_OUT[9] from the USB Status Register
-> > (USB_STA) register and perform appropriate action in the
-> > usb3_irq_epc_int_1 function.
-> > 
-> > Without this commit, disconnection of the phone from R-Car H3 ES2.0
-> > Salvator-X CN11 port is not recognized and reverse role switch does
-> > not happen. If phone is connected again it does not enumerate.
-> > 
-> > With this commit, disconnection will be recognized and reverse role
-> > switch will happen by a user space application. If phone is connected
-> > again it will enumerate properly and will become visible in the
-> > output of 'lsusb'.
-> > 
-> > Signed-off-by: Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
+> On Thu, Sep 5, 2019 at 2:37 PM Steven Whitehouse <swhiteho@redhat.com
+> > wrote:
+> > The original reason for the mount notification mechanism was so
+> > that we
+> > are able to provide information to GUIs and similar filesystem and
+> > storage management tools, matching the state of the filesystem with
+> > the
+> > state of the underlying devices. This is part of a larger project
+> > entitled "Project Springfield" to try and provide better management
+> > tools for storage and filesystems. I've copied David Lehman in,
+> > since he
+> > can provide a wider view on this topic.
+> So one problem that I've heard discussed before is what happens in a
+> thinp
+> setup when the disk space is overallocated and gets used up. IIRC,
+> the
+> volumes just sort of eat themselves?
 > 
-> Thank you for the patch!
+> Getting proper notification of looming catastrophic failure to the
+> workstation user
+> before it's too late would be useful, indeed.
 > 
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> 
-> And, I tested this patch on my environment [1] and works correctly. So,
-> 
-> Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> I don't know if this new mechanism dhowells has development can help
+> with that,
 
-I guess there are strong similarities between this patch and [3].
-Would you like to pick [1-3], as they still apply cleanly to vanilla?
+My understanding is that there is already a dm devent that gets sent
+when the low water mark is crossed for a thin pool, but there is
+nothing in userspace that knows how to effectively get the user's
+attention at that time.
 
-[1] https://patchwork.kernel.org/patch/10581479/
-    ("[1/3] usb: renesas_usbhs: simplify usbhs_status_get_device_state()")
-[2] https://patchwork.kernel.org/patch/10581485/
-    ("[2/3] usb: renesas_usbhs: enable DVSE interrupt")
-[3] https://patchwork.kernel.org/patch/10581489/
-    ("usb: renesas_usbhs: add suspend event support in gadget mode")
+> and/or if solving that problem is part of the Project Springfield
+> initiative or not. Do you
+> know off hand?
 
-PS: Apologize for long silence in [3].
+We have been looking into building a userspace event notification
+service (for storage, initially) to aggregate and add context to low-
+level events such as these, providing a single source for all kinds of
+storage events with an excellent signal:noise ratio. Thin pool
+exhaustion is high on the list of problems we would want to address.
 
--- 
-Best Regards,
-Eugeniu.
+
+David
+
