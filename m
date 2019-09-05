@@ -2,117 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09107A9FA8
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 12:27:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3538EAA017
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 12:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732567AbfIEK1E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 06:27:04 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:39381 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732470AbfIEK1E (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 06:27:04 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id A97FB3C00C5;
-        Thu,  5 Sep 2019 12:27:01 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id weaR-lh-XcB0; Thu,  5 Sep 2019 12:26:55 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S2387946AbfIEKlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 06:41:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39376 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731215AbfIEKlz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 06:41:55 -0400
+Received: from linux-8ccs (nat.nue.novell.com [195.135.221.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id B604A3C005E;
-        Thu,  5 Sep 2019 12:26:55 +0200 (CEST)
-Received: from vmlxhi-070.adit-jv.com (10.72.93.148) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Thu, 5 Sep 2019
- 12:26:55 +0200
-Date:   Thu, 5 Sep 2019 12:26:16 +0200
-From:   veeraiyan chidambaram <external.veeraiyan.c@de.adit-jv.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 8503A206BB;
+        Thu,  5 Sep 2019 10:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567680113;
+        bh=f3g6+GkFfq7dsW3Hcfdj3HneqZPXcFMZ8t3cgR3qUcw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cxyT0NCRQWEW0CzJzXAKo/7ZeMnS91FwRcZR6V2djERXI2dpN9lo6kUNOwDCKqSN9
+         +cwK/irArqaUooaX6It16R2kiGAZeIOM5GO2r0wJjuyVPaiYm5PqRdPBDrAgecqkEB
+         o4pc6bNQO33ZjIl7KaHnCnv5U5WRXIE9dnMY9p/Q=
+Date:   Thu, 5 Sep 2019 12:41:47 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Matthew Dharm <mdharm-usb@one-eyed-alien.net>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Matthias Maennich <maennich@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        "REE erosca@DE.ADIT-JV.COM" <erosca@DE.ADIT-JV.COM>,
-        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
-Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: add suspend event
- support
-Message-ID: <20190905102616.GA3752@vmlxhi-070.adit-jv.com>
-References: <TYAPR01MB454435E0431173D3C7F76D65D8B80@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <1567608481-771-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
- <OSAPR01MB4529159D4DA9764B0688D4A4D8BB0@OSAPR01MB4529.jpnprd01.prod.outlook.com>
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Lucas De Marchi <lucas.de.marchi@gmail.com>,
+        maco@android.com, sspatil@google.com,
+        Will Deacon <will@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        linux-modules@vger.kernel.org,
+        linux-usb <linux-usb@vger.kernel.org>,
+        USB Mass Storage on Linux 
+        <usb-storage@lists.one-eyed-alien.net>,
+        linux-watchdog@vger.kernel.org
+Subject: Re: [usb-storage] Re: [PATCH v4 12/12] RFC: watchdog: export core
+ symbols in WATCHDOG_CORE namespace
+Message-ID: <20190905104147.GA27788@linux-8ccs>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190903150638.242049-1-maennich@google.com>
+ <20190903150638.242049-13-maennich@google.com>
+ <20190903161045.GA22754@roeck-us.net>
+ <CAK7LNARYqqCSCc0G4FL7_bj80iMoLLJrUJ7B3+huD25EUkrttA@mail.gmail.com>
+ <c6ac941c-06a4-e5dc-5cb9-fca7b40d7e9a@roeck-us.net>
+ <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <OSAPR01MB4529159D4DA9764B0688D4A4D8BB0@OSAPR01MB4529.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.93.148]
+In-Reply-To: <CAA6KcBBeP9xYbVws4=RMFNA4kyrodE-R3mifhbkee-Q+jFRcoQ@mail.gmail.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Shimoda-san,
++++ Matthew Dharm [04/09/19 09:16 -0700]:
+>On Wed, Sep 4, 2019 at 5:12 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Note that I don't object to the patch set in general. There may be symbols
+>> which only need be exported in the context of a single subsystem or even
+>> driver (if a driver consists of more than one module). For example, a mfd
+>> driver may export symbols which should only be called by its client drivers.
+>> In such a situation, it may well be beneficial to limit the use of exported
+>> symbols.
+>
+>I can appreciate this benefit.
+>
+>> I am not sure what good that does in practice (if I understand correctly,
+>> a driver only has to declare that it wants to use a restricted use symbol
+>> if it wants to use it), but that is a different question.
+>
+>I think this question implies that you are coming from the perspective
+>of "security" or wanting to restrict access to the underlying
+>functions, rather than wanting to clean-up the way symbols are handled
+>for manageability / maintainability purposes (which is the goal, as I
+>understand it).
+>
+>HOWEVER, I have one question:  If these patches are included, and
+>someone wants to introduce a bit of code which needs to use two
+>symbols from different namespaces but with the same name, can that be
+>done?  That is, if driver A has symbol 'foo' and driver B has symbol
+>'foo' (both in their respective namespaces), and driver C wants to use
+>A.foo and B.foo, can that be supported?
 
-Please ignore my previous V2 patch [1] and take V3 patch[2].
-sorry for the inconvenience.
-[1] https://patchwork.kernel.org/patch/11132433/
-[2] https://patchwork.kernel.org/patch/11132489/
-Best regards,
-Veeraiyan Chidambaram
+As of now, we currently don't support this - modpost will warn if a
+symbol is exported more than once (across modules + vmlinux), and the
+module loader currently assumes exported symbol names are unique.  Do
+you have a concrete use case? If there is a strong need for this, I
+don't think it'd be too hard to implement.
 
-On Thu, Sep 05, 2019 at 02:09:42AM +0000, Yoshihiro Shimoda wrote:
-> Hi Veeraiyan,
-> 
-> Thank you for the patch!
-> 
-> > From: Veeraiyan Chidambaram, Sent: Wednesday, September 4, 2019 11:48 PM
-> <snip>
-> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
-> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
-> > @@ -767,6 +767,20 @@ static void usb3_irq_epc_int_1_resume(struct renesas_usb3 *usb3)
-> >  	usb3_transition_to_default_state(usb3, false);
-> >  }
-> > 
-> > +static void usb3_irq_epc_int_1_suspend(struct renesas_usb3 *usb3)
-> > +{
-> > +	usb3_disable_irq_1(usb3, USB_INT_1_B2_SPND);
-> > +
-> > +	if (usb3->driver &&
-> > +	    usb3->driver->suspend &&
-> 
-> As I mentioned on v1 patch [1], I'd like to remove these conditions.
-> After fixed it,
-> 
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> 
-> [1] https://patchwork.kernel.org/patch/11129797/#22862513
-> 
-> Best regards,
-> Yoshihiro Shimoda
-> 
-> > +	    usb3->gadget.speed != USB_SPEED_UNKNOWN &&
-> > +	    usb3->gadget.state != USB_STATE_NOTATTACHED) {
-> > +		if (usb3->driver && usb3->driver->suspend)
-> > +			usb3->driver->suspend(&usb3->gadget);
-> > +		usb_gadget_set_state(&usb3->gadget, USB_STATE_SUSPENDED);
-> > +	}
-> > +}
-> > +
-> >  static void usb3_irq_epc_int_1_disable(struct renesas_usb3 *usb3)
-> >  {
-> >  	usb3_stop_usb3_connection(usb3);
-> > @@ -852,6 +866,9 @@ static void usb3_irq_epc_int_1(struct renesas_usb3 *usb3, u32 int_sta_1)
-> >  	if (int_sta_1 & USB_INT_1_B2_RSUM)
-> >  		usb3_irq_epc_int_1_resume(usb3);
-> > 
-> > +	if (int_sta_1 & USB_INT_1_B2_SPND)
-> > +		usb3_irq_epc_int_1_suspend(usb3);
-> > +
-> >  	if (int_sta_1 & USB_INT_1_SPEED)
-> >  		usb3_irq_epc_int_1_speed(usb3);
-> > 
-> > --
-> > 2.7.4
-> 
+Thanks,
+
+Jessica
+
