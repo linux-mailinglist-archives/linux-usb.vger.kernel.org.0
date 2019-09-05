@@ -2,91 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27967A9AAB
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 08:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AEF9A9B90
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 09:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731557AbfIEG1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 02:27:03 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:17907 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731461AbfIEG1D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 02:27:03 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d70aab70000>; Wed, 04 Sep 2019 23:27:03 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 04 Sep 2019 23:27:02 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 04 Sep 2019 23:27:02 -0700
-Received: from [10.19.108.121] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Sep
- 2019 06:27:00 +0000
-Subject: Re: [PATCH 1/8] clk: tegra: Add PLLE HW power sequencer control
-To:     Jon Hunter <jonathanh@nvidia.com>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <pdeschrijver@nvidia.com>,
-        <afrid@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>,
-        <skomatineni@nvidia.com>
-References: <20190614074652.21960-1-jckuo@nvidia.com>
- <20190614074652.21960-2-jckuo@nvidia.com>
- <1d215b49-73f7-8f5c-c8cb-81bf73553b19@nvidia.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <fb9517e8-e7db-613b-6922-b640c95f2a1a@nvidia.com>
-Date:   Thu, 5 Sep 2019 14:26:58 +0800
+        id S1731866AbfIEHTC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 03:19:02 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54407 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731862AbfIEHTB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 03:19:01 -0400
+Received: by mail-wm1-f65.google.com with SMTP id k2so1394014wmj.4
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 00:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RISrkcVh8Fqvuvvt7yP9o+S9VLGHZzFUmgTqhMvQtG4=;
+        b=w7Zmcb2XHj5Ual1LSZm+t0kJNSCVahdatsM8lQ8zM5/0XphUQGigOEZRdvZliz5F7j
+         dTOzp1F2X1FK+JJ8JkIDl6QVq2bfU7DCzXQszMmKfo7XBWdMk4nmgxs4gMRkxLdF5r2j
+         VbRnn9mzydneTR+bIb6Px14j6S4wj6+m1JsP8Vn655oOOERrxdJKjkeSzRLlSfrQlH/Y
+         OlHS0j8ol1x3MVPU8IRwkf3nBWfWajGfxubTqgnUgkK25Lcr0aim/Sgtox3Z4X29O1ii
+         RpppqP6TLKmH1q+INQmghSvW23w8gQQixjJ8ULuOFaTTQEWt7VCPeWNuquvj7ezWjCu7
+         RyQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RISrkcVh8Fqvuvvt7yP9o+S9VLGHZzFUmgTqhMvQtG4=;
+        b=Zzy9b9/xYzDzqf1jThL1w7vCY6qTj/R+VydmqCbIqwgr8RegDhsmbvUfelmgrR8SKs
+         jvLRT5VgHlpdcf094Nvst6sJd2SwBAZfamPbHaQ60zmzqhMQPO2zHa9ekko/WkyLd3sS
+         cFGj0tXQ7AkfiMjOAxrDbLLHCHCXMrNC50WGe1BrBNvrh8BmSBQ+Wbp6uLEZBnmQNmTb
+         +s6Hkcj1B97PXpLAcf5e1BRGG/ivyECoe3yJkh8W0YhsHEs4cYqhmHbA+jokUnZyEySQ
+         j4yGN8wsoBvDiO4KnIQ9JPx/Dykm2/j693shKkyZ41xMoDvNOnuEPaDZMqb/6NaiFL9s
+         QT0w==
+X-Gm-Message-State: APjAAAVRvpto0+pXv1+OCBknV5DvcfS4IbknWsZ9Nk7VB+Qsyl2W4K1O
+        iFwgsdlincHACmcinAJ0rSPBBA==
+X-Google-Smtp-Source: APXvYqwb3qPb+oOBBzHjG4sQtkXniSl2iyH54hj1GZDHlTP9lhKhJx6lcOSlYOQbGhBanmLEg10BaA==
+X-Received: by 2002:a7b:cf25:: with SMTP id m5mr1591920wmg.25.1567667939170;
+        Thu, 05 Sep 2019 00:18:59 -0700 (PDT)
+Received: from [192.168.1.6] (124.red-83-36-179.dynamicip.rima-tde.net. [83.36.179.124])
+        by smtp.gmail.com with ESMTPSA id b194sm1755057wmg.46.2019.09.05.00.18.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Sep 2019 00:18:58 -0700 (PDT)
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
+ bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     Jack Pham <jackp@codeaurora.org>, robh@kernel.org,
+        andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+References: <20190207111734.24171-1-jorge.ramirez-ortiz@linaro.org>
+ <20190207111734.24171-4-jorge.ramirez-ortiz@linaro.org>
+ <20190223165218.GB572@tuxbook-pro>
+ <6dc0957d-5806-7643-4454-966015865d38@linaro.org>
+ <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
+ <20190830164520.GK26807@tuxbook-pro>
+ <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+ <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
+ <20190903173924.GB9754@jackp-linux.qualcomm.com>
+ <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
+ <20190903233410.GQ26807@tuxbook-pro>
+From:   Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+Message-ID: <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org>
+Date:   Thu, 5 Sep 2019 09:18:57 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1d215b49-73f7-8f5c-c8cb-81bf73553b19@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20190903233410.GQ26807@tuxbook-pro>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1567664823; bh=x5cnuyRHQdEEcbA8md+H1Rut458iUH61JVC0i8TXuSs=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=SkVviJxOqC8LyRKrzg9GH+z6A45IIoy7FSH864kecC6jP3BDZrqRMAAts86V5uVYf
-         2rQ0oK9IzAH793aOJBWeTYQLGHpxJ/da491W+0/4cCrFl4tC/L9//N5xNyfBQG07Sj
-         M8lqw33lgQnpuqcRAkY1YH0Lq2kJDXOYMU9lULVQ/Xtk8X20KzzmtY2AxtW5an8sLe
-         +j16/wwjPUbHJKhapruyS+pyjlATU+DIJLwXXp/+Hot0G964D5oMXr8NSQk4TkaOj8
-         CACDG1KOF+eLYUP3YHLJZbsIdP+0+rSD6U3dkw7y+uQtsN4HkiJ6pXysrOMCaZrLxr
-         rpYqgqMRFZcGQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/4/19 8:16 PM, Jon Hunter wrote:
+On 9/4/19 01:34, Bjorn Andersson wrote:
+> On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
 > 
-> On 14/06/2019 08:46, JC Kuo wrote:
->> PLLE hardware power sequencer has to be enabled after PEX/SATA
->> UPHY PLL's sequencers are enabled.
+>> Quoting Jack Pham (2019-09-03 10:39:24)
+>>> On Mon, Sep 02, 2019 at 08:23:04AM +0200, Jorge Ramirez wrote:
+>>>> On 8/30/19 20:28, Stephen Boyd wrote:
+>>>>> Quoting Bjorn Andersson (2019-08-30 09:45:20)
+>>>>>> On Fri 30 Aug 09:01 PDT 2019, Stephen Boyd wrote:
+>>>>>>
+>>>>>>>>>
+>>>>>>>>> The USB-C connector is attached both to the HS and SS PHYs, so I think
+>>>>>>>>> you should represent this external to this node and use of_graph to
+>>>>>>>>> query it.
+>>>>>>>>
+>>>>>>>> but AFAICS we wont be able to retrieve the vbux-supply from an external
+>>>>>>>> node (that interface does not exist).
+>>>>>>>>
+>>>>>>>> rob, do you have a suggestion?
+>>>>>>>
+>>>>>>> Shouldn't the vbus supply be in the phy? Or is this a situation where
+>>>>>>> the phy itself doesn't have the vbus supply going to it because the PMIC
+>>>>>>> gets in the way and handles the vbus for the connector by having the SoC
+>>>>>>> communicate with the PMIC about when to turn the vbus on and off, etc?
+>>>>>>>
+>>>>>>
+>>>>>> That's correct, the VBUS comes out of the PMIC and goes directly to the
+>>>>>> connector.
+>>>>>>
+>>>>>> The additional complicating factor here is that the connector is wired
+>>>>>> to a USB2 phy as well, so we need to wire up detection and vbus control
+>>>>>> to both of them - but I think this will be fine, if we can only figure
+>>>>>> out a sane way of getting hold of the vbus-supply.
+>>>>>>
+>>>>>
+>>>>> Does it really matter to describe this situation though? Maybe it's
+>>>>> simpler to throw the vbus supply into the phy and control it from the
+>>>>> phy driver, even if it never really goes there. Or put it into the
+>>>>> toplevel usb controller?
+>>>>>
+>>>> that would work for me - the connector definition seemed a better way to
+>>>> explain the connectivity but since we cant retrieve the supply from the
+>>>> external node is not of much functional use.
+>>>>
+>>>> but please let me know how to proceed. shall I add the supply back to
+>>>> the phy?
 >>
->> tegra210_plle_hw_sequence_start() for XUSB PADCTL driver to enable
->> PLLE hardware sequencer at proper time.
+>> So does the vbus actually go to the phy? I thought it never went there
+>> and the power for the phy was different (and possibly lower in voltage).
 >>
->> tegra210_plle_hw_sequence_is_enabled() for XUSB PADCTL driver to
->> check whether PLLE hardware sequencer has been enabled or not.
 > 
-> I think that here to be clear about what is going on you should state
-> that you are "adding the function tegra210_plle_hw_sequence_start() ..."
-Thanks. I will amend the commit message accordingly.
+> No, the PHYs use different - lower voltage - supplies to operate. VBUS
+> is coming from a 5V supply straight to the connector and plug-detect
+> logic (which is passive in this design).
 > 
-> Are these functions dependent upon clk_plle_tegra210_enable() already
-> being called? I assume that there must be some dependency between the
-> above functions and the existing plle enable function. If there is a
-> dependency, how do you ensure the existing enable is already called?
-Yes, tegra210_plle_hw_sequence_start() has to be invoked after PLLE is
-enabled/locked. Caller is in charge of calling with correct sequence.
-I will add a check in tegra210_plle_hw_sequence_start() to ensure that
-PLLE HW sequencer will not be accidentally enabled when PLLE is not
-enabled/locked yet.
+>>>
+>>> Putting it in the toplevel usb node makes sense to me, since that's
+>>> usually the driver that knows when it's switching into host mode and
+>>> needs to turn on VBUS. The dwc3-qcom driver & bindings currently don't 
+>>> do this but there's precedent in a couple of the other dwc3 "glues"--see
+>>> Documentation/devicetree/bindings/usb/{amlogic\,dwc3,omap-usb}.txt
+>>>
+>>> One exception is if the PMIC is also USB-PD capable and can do power
+>>> role swap, in which case the VBUS control needs to be done by the TCPM,
+>>> so that'd be a case where having vbus-supply in the connector node might
+>>> make more sense.
+>>>
+>>
+>> The other way is to implement the code to get the vbus supply out of a
+>> connector. Then any driver can do the work if it knows it needs to and
+>> we don't have to care that the vbus isn't going somewhere. I suppose
+>> that would need an of_regulator_get() sort of API that can get the
+>> regulator out of there? Or to make the connector into a struct device
+>> that can get the regulator out per some generic connector driver and
+>> then pass it through to the USB controller when it asks for it. Maybe
+>> try to prototype that out?
+>>
+> 
+> The examples given in the DT bindings describes the connector as a child
+> of a PMIC, with of_graph somehow tying it to the various inputs. But in
+> these examples vbus is handled by implicitly inside the MFD, where
+> extcon is informed about the plug event they toggle vbus as well.
+> 
+> In our case we have a extcon-usb-gpio to detect mode, which per Jorge's
+> proposal will trickle down to the PHY and become a regulator calls on
+> either some external regulator or more typically one of the chargers in
+> the system.
+> 
+> 
+> So if we come up with a struct device for the connector and some API for
+> toggling the vbus we're going to have to fairly abstract entities
+> representing pretty much the same thing - and in a design with a mux we
+> would have a different setup.
 
-Thanks,
-JC
+I am a bit unclear - not sure if we have gone full circle on this
+subject. what is then the direction to get this merged?
+
+I did have look last week and the level of effort to support regulators
+on external nodes is not neglectable meaning that I might not have the
+time to deliver that feature (perhaps someone else wishes to take over?)
+
+> 
+> Regards,
+> Bjorn
+> 
+
