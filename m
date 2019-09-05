@@ -2,126 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08ACAAADD9
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 23:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCEDAAE21
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Sep 2019 23:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390678AbfIEVcu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 17:32:50 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:8816 "EHLO mx1.redhat.com"
+        id S1732224AbfIEVzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 17:55:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731418AbfIEVct (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Sep 2019 17:32:49 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1731215AbfIEVzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Sep 2019 17:55:05 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 37A8C18C4266;
-        Thu,  5 Sep 2019 21:32:49 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A7BBA60BE1;
-        Thu,  5 Sep 2019 21:32:45 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com>
-References: <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com> <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk> <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com> <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com> <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Ray Strode <rstrode@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Whitehouse <swhiteho@redhat.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Ray, Debarshi" <debarshi.ray@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>
-Subject: Re: Why add the general notification queue and its sources
+        by mail.kernel.org (Postfix) with ESMTPSA id 35812206DE;
+        Thu,  5 Sep 2019 21:55:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567720504;
+        bh=sxN+Qr/3fwNO0OFeIiUozIkTmD7RRmTjiEqGCmmePa4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TEZPMFUPMovUgr4tDaFH5yw3qPfuqa19akfrr16lxcsDdFmv5p4F7qmOA9yJasp8t
+         dO8oZVYMqZf5KEJz8EWtdSNXtWLgLXzWUWInZuiZ8YUcZ6YhoNQ52NM4o9gWNQ2FZ1
+         zlXMdPA8vTu3pg5wfc71Id4M3rJHUmi8RZPnztFs=
+Date:   Thu, 5 Sep 2019 23:55:01 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Charles.Hyde@dellteam.com
+Cc:     Mario.Limonciello@dell.com, oliver@neukum.org, rjw@rjwysocki.net,
+        lenb@kernel.org, chip.programmer@gmail.com, nic_swsd@realtek.com,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH 0/3] Add get/set ethernet address functions and ACPI MAC
+ address pass through functionality to cdc_ncm driver
+Message-ID: <20190905215501.GA1219@kroah.com>
+References: <1567717313153.65736@Dellteam.com>
+ <e41270463c46445d82415d86bebc9566@AUSX13MPC101.AMER.DELL.COM>
+ <67e340c684a64e528b04276f715567cc@AUSX13MPS307.AMER.DELL.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5395.1567719164.1@warthog.procyon.org.uk>
-Date:   Thu, 05 Sep 2019 22:32:44 +0100
-Message-ID: <5396.1567719164@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.62]); Thu, 05 Sep 2019 21:32:49 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <67e340c684a64e528b04276f715567cc@AUSX13MPS307.AMER.DELL.COM>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, Sep 05, 2019 at 09:14:05PM +0000, Charles.Hyde@dellteam.com wrote:
+> > > -----Original Message-----
+> > > From: Hyde, Charles - Dell Team
+> > > Sent: Thursday, September 5, 2019 4:02 PM
+> > > To: Oliver Neukum; "Rafael J. Wysocki"; Len Brown
+> > > Cc: Limonciello, Mario; chip.programmer@gmail.com; Realtek linux nic
+> > > maintainers; linux-usb@vger.kernel.org; linux-acpi@vger.kernel.org
+> > > Subject: [PATCH 0/3] Add get/set ethernet address functions and ACPI
+> > > MAC address pass through functionality to cdc_ncm driver
+> > >
+> > > In recent testing of a Dell Universal Dock D6000, I found that MAC
+> > > address pass through is not supported in the Linux drivers.  However,
+> > > this same device is supported in Windows 10 (Pro) on my personal
+> > > computer, in as much as I was able to tell Windows to assign a new MAC
+> > > address of my choosing, and I saw through wireshark the new MAC
+> > > address was pushed out to the device.  Afterward, Windows reported a
+> > > new IP address and I was able to view web pages.
+> > >
+> > > This series of patches give support to cdc_ncm USB based Ethernet
+> > > controllers for programming a MAC address to the device, and also to
+> > > retrieve the device's MAC address.  This patch series further adds
+> > > ACPI MAC address pass through support specifically for the cdc_ncm
+> > > driver, and generally for any other driver that may need or want it,
+> > > in furtherance of Dell's enterprise IT policy efforts.  It was this
+> > > latter that I initially found lacking when testing a D6000 with a Dell
+> > > laptop, and then I found ifconfig was unable to set a MAC address into
+> > > the device.  These patches bring a similar level of functionality to
+> > > cdc_ncm driver as is available with the Realtek r8152 driver, and is available
+> > with Windows.
+> > >
+> > > The cdc_ncm driver limits the ACPI MAC address pass through support to
+> > > only the Dell Universal Dock D6000, so no other cdc_ncm device will be
+> > > impacted.
+> > >
+> > > Charles Hyde (3):
+> > >   net: cdc_ncm: add get/set ethernet address functions
+> > >   ACPI: move ACPI functionality out of r8152 driver
+> > >   net: cdc_ncm: Add ACPI MAC address pass through functionality
+> > >
+> > >  drivers/acpi/Makefile            |   1 +
+> > >  drivers/acpi/acpi_mac_passthru.c |  63 +++++++++++++
+> > >  drivers/net/usb/cdc_ncm.c        | 148 ++++++++++++++++++++++++++++---
+> > >  drivers/net/usb/r8152.c          |  44 +--------
+> > >  include/acpi/acpi_mac_passthru.h |  29 ++++++
+> > >  5 files changed, 234 insertions(+), 51 deletions(-)  create mode
+> > > 100644 drivers/acpi/acpi_mac_passthru.c  create mode 100644
+> > > include/acpi/acpi_mac_passthru.h
+> > >
+> > > --
+> > > 2.20.1
+> > 
+> > Typical practice is to make this new patch series prefixed with a v2. And to
+> > describe what has changed From v1 either in individual patches below the '--'
+> > or in the cover letter.
+> > 
+> > So can you please describe what changed from previous submission in case it's
+> > not obvious to reviewers?
+> > 
+> > For example:
+> > 
+> > [PATCH v2 0/3] Add get/set ethernet address functions and ACPI MAC address
+> > pass through functionality to cdc_ncm driver
+> > 
+> > Changes from v1 to v 2:
+> > * Changed foo to bar
+> 
+> 
+> Ah, my apologies.
+> 
+> What changed with today's patch series from what I proposed on Friday, August 30, is that I created a function named get_ethernet_addr() which replaces two instances where the same code snippet was located in the previous patch series.  I also created a post reset function to set the MAC address, if there exists an ACPI MAC address pass through (MAPT).  Oliver Neukum had requested a post reset function for this purpose.
 
-> Also, what is the security model here? Open a special character
-> device, and you get access to random notifications from random
-> sources?
->
-> That makes no sense. Do they have the same security permissions?
+Please resend the series with that information in it, and also properly
+thread the emails so they are at least clustered together.
 
-Sigh.  It doesn't work like that.  I tried to describe this in the manpages I
-referred to in the cover note.  Obviously I didn't do a good enough job.  Let
-me try and explain the general workings and the security model here.
+thanks,
 
- (1) /dev/watch_queue just implements locked-in-memory buffers.  It gets you
-     no events by simply opening it.
-
-     Each time you open it you get your own private buffer.  Buffers are not
-     shares.  Creation of buffers is limited by ENFILE, EMFILE and
-     RLIMIT_MEMLOCK.
-
- (2) A buffer is implemented as a pollable ring buffer, with the head pointer
-     belonging to the kernel and the tail pointer belonging to userspace.
-     Userspace mmaps the buffer.
-
-     The kernel *only ever* reads the head and tail pointer from a buffer; it
-     never reads anything else.
-
-     When it wants to post a message to a buffer, the kernel reads the
-     pointers and then does one of three things:
-
-	(a) If the pointers were incoherent it drops the message.
-
-	(b) If the buffer was full the kernel writes a flag to indicate this
-	    and drops the message.
-
-	(c) Otherwise, the kernel writes a message and maybe padding at the
-     	    place(s) it expects and writes the head pointer.  If userspace was
-     	    busy trashing the place, that should not cause a problem for the
-     	    kernel.
-
-     The buffer pointers are expected to run to the end and wrap naturally;
-     they're only masked off at the point of actually accessing the buffer.
-
- (3) You connect event sources to your buffer, e.g.:
-
-	fd = open("/dev/watch_queue", ...);
-	keyctl_watch_key(KEY_SPEC_SESSION_KEYRING, fd, ...);
-
-     or:
-
-	watch_mount(AT_FDCWD, "/net", 0, fd, ...);
-
-     Security is checked at the point of connection to make sure you have
-     permission to access that source.  You have to have View permission on a
-     key/keyring for key events, for example, and you have to have execute
-     permission on a directory for mount events.
-
-     The LSM gets a look-in too: Smack checks you have read permission on a
-     key for example.
-
- (4) You can connect multiple sources of different types to your buffer and a
-     source can be connected to multiple buffers at a time.
-
- (5) Security is checked when an event is delivered to make sure the triggerer
-     of the event has permission to give you that event.  Smack requires that
-     the triggerer has write permission on the opener of the buffer for
-     example.
-
- (6) poll() signals POLLIN|POLLRDNORM if there is stuff in the buffer and
-     POLLERR if the pointers are incoherent.
-
-David
+greg k-h
