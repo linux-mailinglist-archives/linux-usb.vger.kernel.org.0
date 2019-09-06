@@ -2,74 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAC6AB92A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 15:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94E12AB933
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 15:25:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393289AbfIFNWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 09:22:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39576 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389315AbfIFNWj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 09:22:39 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 87B85206BB;
-        Fri,  6 Sep 2019 13:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567776159;
-        bh=F+5+j0hKHkPlII4mJBazwLBvW2FnavVO0cGYYhrJaCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gdhwqgHzrty8ug0LWYyHfJC2LuFizBFsAeBK3mDDpX09UZEPGQm3nGIcMLNub3hNY
-         oroBiG2qFlSBxjICeacuDwAmVt+uWN5fZZ3n+KBz3UsJFrvyN/lAcKZYqWu5M5r9cy
-         yzonJ6LwGUOnNy40Yv71iisbzwzEBVXBgjO7A1HQ=
-Date:   Fri, 6 Sep 2019 15:22:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jessica Yu <jeyu@kernel.org>
-Cc:     Matthias Maennich <maennich@google.com>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, joel@joelfernandes.org, lucas.de.marchi@gmail.com,
-        maco@android.com, sspatil@google.com, will@kernel.org,
-        yamada.masahiro@socionext.com, linux-kbuild@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v5 10/11] usb-storage: remove single-use define for
- debugging
-Message-ID: <20190906132236.GA4107@kroah.com>
-References: <20180716122125.175792-1-maco@android.com>
- <20190906103235.197072-1-maennich@google.com>
- <20190906103235.197072-11-maennich@google.com>
- <20190906125942.GA31531@linux-8ccs>
+        id S2390169AbfIFNZb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 09:25:31 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:35774 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbfIFNZb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 09:25:31 -0400
+Received: by mail-ot1-f67.google.com with SMTP id 100so5728074otn.2;
+        Fri, 06 Sep 2019 06:25:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:to:cc:references:in-reply-to:subject:date
+         :mime-version:content-transfer-encoding:importance;
+        bh=3plW1l6912WWdE/yvCMMT+DGRz02GchL5U8Ixz8OSJc=;
+        b=dH3mZeInNYg6vWgBgKZ7bMBS6VXeji19fIpgylTv+jzM/XGHkAAXpj6xnfDCpxReak
+         nBszE/KpU/0YW6hiRfCXG4f7EIv4NCnnO0beCbFIdFhWKwjjd+v+mdHobi8af41qeNyU
+         joH6B++dAiDN3UjyYT8fIw4BVVN5XavmeEm/4HjupykmSWNRMrGUhlzXqa9ccd0X40uA
+         IhidZTRW+nAsiL30Fc2U3tbL+vy4a9kVNYIxHYrzYCiD/smgOGizBFfc78Cd3ok6KI4N
+         FqNvpaG/H3peNb1gRwfUl8LsaPj3wFbEsU44Ptfl9+ug7iJgrzcr50iEUR3LKluv2jOk
+         0C2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:to:cc:references:in-reply-to
+         :subject:date:mime-version:content-transfer-encoding:importance;
+        bh=3plW1l6912WWdE/yvCMMT+DGRz02GchL5U8Ixz8OSJc=;
+        b=oG+rds/HQIgTjRK6s5ZXTD306W6lJPWwChHTTVUIPR/8uBAwkCtbYLyh/pCpHKa1rc
+         59mVaUf42/qG2r/eZeLf/ddjc+JikR3P53gY0zyXIpdFDXry25VRJkMycixo05qyprCK
+         KNOq4g4/t1ydcCScPqz9f4O9ck+4DbAiqn10mriflaKfuJvug+pkxVALjIx2f8DOFk1Z
+         u2lDb7H+4IBe79KB56KYRMpGNU94KXptuDD/Z1BKAWsQyyHu92nefChtK0P0rfvzn2DY
+         Jdz5mbVJnquid+gVH7IedDLHnqEcTLtryIhE4m4FjzwrNX/HndvSSp23x0liaA1FL3cL
+         hfgA==
+X-Gm-Message-State: APjAAAXSiiL+FQuU5KHU+xTJ9Q4vW3vCMC2EwOcOqJfLKheKUy23sByh
+        lipZ31nWDZ65aAk8KGLhRBI=
+X-Google-Smtp-Source: APXvYqyYVybcVpGualf4IbZ+OjnNF65FSuShTUyaI2lCW+yA7IyWU4DSBGMbSZyW51YCs4y2lSr+nw==
+X-Received: by 2002:a9d:618c:: with SMTP id g12mr6881158otk.136.1567776330863;
+        Fri, 06 Sep 2019 06:25:30 -0700 (PDT)
+Received: from chip ([2605:6000:f350:3e00:1997:696d:15b8:ee93])
+        by smtp.gmail.com with ESMTPSA id s9sm1875028oth.70.2019.09.06.06.25.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 06 Sep 2019 06:25:30 -0700 (PDT)
+Message-ID: <5A2ADDC81DB5421290EB97D1178C0BBE@chip>
+From:   <chip.programmer@gmail.com>
+To:     "Chunfeng Yun" <chunfeng.yun@mediatek.com>,
+        <Charles.Hyde@dellteam.com>
+Cc:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <Mario.Limonciello@dell.com>, <nic_swsd@realtek.com>,
+        <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>
+References: <1567717304186.90134@Dellteam.com> <1567736007.7317.71.camel@mhfsdcap03>
+In-Reply-To: <1567736007.7317.71.camel@mhfsdcap03>
+Subject: Re: [PATCH 3/3] net: cdc_ncm: Add ACPI MAC address pass through functionality
+Date:   Fri, 6 Sep 2019 08:25:23 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190906125942.GA31531@linux-8ccs>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain;
+        format=flowed;
+        charset="UTF-8";
+        reply-type=original
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+Importance: Normal
+X-Mailer: Microsoft Windows Live Mail 16.4.3528.331
+X-MimeOLE: Produced By Microsoft MimeOLE V16.4.3528.331
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 06, 2019 at 02:59:42PM +0200, Jessica Yu wrote:
-> +++ Matthias Maennich [06/09/19 11:32 +0100]:
-> > USB_STORAGE was defined as "usb-storage: " and used in a single location
-> > as argument to printk. In order to be able to use the name
-> > 'USB_STORAGE', drop the definition and use the string directly for the
-> > printk call.
-> > 
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Signed-off-by: Matthias Maennich <maennich@google.com>
-> 
-> Greg, didn't you pick this patch up for usb-next already (for the 5.4
-> merge window)? If that's the case, I could apply the series omitting
-> this patch (once there are no more comments or complaints).
+>> + if (strstr(dev->udev->product, "D6000")) {
+>> + sa.sa_family = dev->net->type;
+>> + if (get_acpi_mac_passthru(sa.sa_data)) {
+>> + if (!memcmp(dev->net->dev_addr, sa.sa_data,
+>> +     ETH_ALEN)) {
+>> + if (!cdc_ncm_set_ethernet_address(dev, &sa))
 
-Yes, I already have this in my tree, but there's no problem with you
-taking it in yours as I think it's needed for the one after this to
-build properly.
+> How about use one if-statement instead of these three if-statement?
 
-git will handle it properly when merging :)
+While using a single compound if statement is possible, my experience is 
+that using multiple if statements will make the code easier to debug and 
+maintain by others who come after me.  What is possible to do with code is 
+not necessarily what should be done.
 
-thanks!
-
-greg k-h
