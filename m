@@ -2,86 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC31AB215
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 07:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3AAAB395
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 10:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392368AbfIFFhi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 01:37:38 -0400
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:15232 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392346AbfIFFhh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 01:37:37 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d71f0a40000>; Thu, 05 Sep 2019 22:37:40 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 05 Sep 2019 22:37:37 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 05 Sep 2019 22:37:37 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Sep
- 2019 05:37:37 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Sep
- 2019 05:37:36 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 6 Sep 2019 05:37:36 +0000
-Received: from ubuntu.localdomain (Not Verified[10.19.108.201]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d71f09f0003>; Thu, 05 Sep 2019 22:37:36 -0700
-From:   Rick Tseng <rtseng@nvidia.com>
-To:     <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Rick Tseng <rtseng@nvidia.com>
-Subject: [PATCH v2] usb: host: xhci: wait CNR when doing xhci resume
-Date:   Fri, 6 Sep 2019 13:36:58 +0800
-Message-ID: <1567748218-6656-1-git-send-email-rtseng@nvidia.com>
-X-Mailer: git-send-email 2.1.4
-X-NVConfidentiality: public
+        id S1732090AbfIFIAS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 04:00:18 -0400
+Received: from canardo.mork.no ([148.122.252.1]:53743 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727816AbfIFIAS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Sep 2019 04:00:18 -0400
+Received: from miraculix.mork.no ([IPv6:2a02:2121:2c6:ea50:dc9c:cbff:fe10:7b5a])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x867xoWc028521
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 6 Sep 2019 09:59:51 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1567756793; bh=/2gqBF8vGK7i6EkJq1a5lQAMlIV0aHWhGCUe6Yfoiwk=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=CcvHpfUg0S1II3Sn0y45rVu0KkCxuh9lXl8GbXj2TP2bOgIRv7Sl6Nj+GdvdPrJyL
+         EWF7s+dzFRCvqab0FoQNqznbjp2X1H14PrC1z8igB3xmhIMRv+h3eAL3Oy3pTGGCcs
+         ux5Ujttbfgup0qWjQZiKs3MRojUFVmZuOG0pwrZs=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1i699l-0002uY-0i; Fri, 06 Sep 2019 09:59:45 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     <Charles.Hyde@dellteam.com>
+Cc:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <Mario.Limonciello@dell.com>, <chip.programmer@gmail.com>,
+        <nic_swsd@realtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH 3/3] net: cdc_ncm: Add ACPI MAC address pass through functionality
+Organization: m
+References: <1567717304186.90134@Dellteam.com>
+Date:   Fri, 06 Sep 2019 09:59:44 +0200
+In-Reply-To: <1567717304186.90134@Dellteam.com> (Charles Hyde's message of
+        "Thu, 5 Sep 2019 21:01:44 +0000")
+Message-ID: <874l1pua6n.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1567748260; bh=LLeg7x7J4LWqF38DzwzUQGltfIBa8E9zlDyCH0Bcgu4=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         X-NVConfidentiality:MIME-Version:Content-Type;
-        b=kIkUatHuj8XSztK1YHsBBp2WMBEofFoLgAYjZwJhbHTgT/x7lgtUnOpIxfb4+hLtM
-         wMG6KpQUTCpBns8XAS/Y+2b4WsWvnandcHB9kkI52CMdtUkvvs5a8hjM6mDEefdV6q
-         q3GtWuBbmCv1yR4fethzzRi4i+lzwjK8nPMT180V87wWCTQKhWRRMEpe+LD/Q2SlsD
-         5FYxWfY4dHDcgjBwRFUzyLKtxhj0kntd6UqEINTCYf95rv1lQssmgqG+D4IPY+SpuW
-         8K019c8/lGZ16h57P7258U+gKQiZWcctITDVq6mi+7vnHQaL3I0VN36sfNfhVuAab8
-         j4/4iAeq3Y9Pg==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-NVIDIA 3.1 xHCI card would lose power when moving power state into D3Cold.
-Thus we need to wait CNR bit to clear when xhci resmue as xhci init.
+<Charles.Hyde@dellteam.com> writes:
 
-Signed-off-by: Rick Tseng <rtseng@nvidia.com>
----
- drivers/usb/host/xhci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> +	if (strstr(dev->udev->product, "D6000")) {
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 03d1e55..6c7102c 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1108,6 +1108,15 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
- 		hibernated = true;
- 
- 	if (!hibernated) {
-+		/* Some xHC would lose power during suspend, so wait for
-+		 * controller ready from resume as xHC init.
-+		 */
-+		if (xhci_handshake(&xhci->op_regs->status,
-+				   STS_CNR, 0, 10 * 1000 * 1000)) {
-+			xhci_warn(xhci, "WARN: xHC timeout for CNR clear\n");
-+			spin_unlock_irq(&xhci->lock);
-+			return -ETIMEDOUT;
-+		}
- 		/* step 1: restore register */
- 		xhci_restore_registers(xhci);
- 		/* step 2: initialize command ring buffer */
--- 
-2.1.4
+Huh? Can you please test that on all USB devices ever made?
 
+
+Bj=C3=B8rn
