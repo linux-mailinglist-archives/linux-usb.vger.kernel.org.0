@@ -2,126 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3F3ABF48
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 20:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA44CABF55
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 20:25:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390962AbfIFSTr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 14:19:47 -0400
-Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:5890 "EHLO
-        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730881AbfIFSTr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 14:19:47 -0400
-Received: from pps.filterd (m0170396.ppops.net [127.0.0.1])
-        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86IA1Tq000810;
-        Fri, 6 Sep 2019 14:19:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=YB/kOC8ZWJlrYMhzEovQRsZUGkZZfBOjO9qedOnCFGA=;
- b=Abdy0jqmSGTPKvJlzjpEfT04aLjBZ3xIJ9k/d4zISCF9ZEBq1uaCo9pgcR3T2Uf8vGum
- wLZALxgCYCnLEt/Ca+L3NVNPA0aVBYVEf6LoCa/CA3UJPtnpA4y3Lqe4b9rd/1gw3xIC
- 4zYSCyEmAACGxTt2q99/65RRxG/4eW8MKoVV1r2J9SCC7rO4/0kGJlKSlhCjaqomcn6r
- xGtR4Isi/NrV/NEiB0xI3cTexFFKL8bdRhLCJMSz83GwMaVBGDx4+qLglm+5TpHAR2qn
- 6lMZCFryQOOl5zsWG50wWiZJWTswbsaVY6RWUKrMl0l5u6raI1tO+v1cTlF7midfPkmq 2w== 
-Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0b-00154904.pphosted.com with ESMTP id 2uqmr0v0j2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 06 Sep 2019 14:19:45 -0400
-Received: from pps.filterd (m0142693.ppops.net [127.0.0.1])
-        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86IDZVS042249;
-        Fri, 6 Sep 2019 14:19:44 -0400
-Received: from ausxipps301.us.dell.com (ausxipps301.us.dell.com [143.166.148.223])
-        by mx0a-00154901.pphosted.com with ESMTP id 2uu3x28mv7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 06 Sep 2019 14:19:44 -0400
-X-LoopCount0: from 10.166.132.127
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="393526737"
-From:   <Charles.Hyde@dellteam.com>
-To:     <stern@rowland.harvard.edu>
-CC:     <bjorn@mork.no>, <oliver@neukum.org>, <rjw@rjwysocki.net>,
-        <lenb@kernel.org>, <Mario.Limonciello@dell.com>,
-        <chip.programmer@gmail.com>, <nic_swsd@realtek.com>,
-        <linux-usb@vger.kernel.org>, <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
-Thread-Topic: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
-Thread-Index: AQHVZCzhVbpOtOy+DEKwLQ92ABp4yKceW3ikgACI4XCAAGUoAP//rQLA
-Date:   Fri, 6 Sep 2019 18:19:37 +0000
-Message-ID: <a9999ed336ba4f2a8cb93c57f0b3d2f4@AUSX13MPS307.AMER.DELL.COM>
-References: <43fa8b0a974d426faccf5e6d486af18a@AUSX13MPS307.AMER.DELL.COM>
- <Pine.LNX.4.44L0.1909061412350.1627-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909061412350.1627-100000@iolanthe.rowland.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Charles_Hyde@Dellteam.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-09-06T18:19:36.2181054Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
- aiplabel=External Public
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.143.18.86]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2392371AbfIFSZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 14:25:35 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35745 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387514AbfIFSZe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 14:25:34 -0400
+Received: by mail-pg1-f195.google.com with SMTP id n4so3944990pgv.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 11:25:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hi4I00yzrvjyDfq4Sb0LtZ///vr5wch4QIwVVeeu58U=;
+        b=tgPNLCytwqi6Eg7kgmztBs/cNpNh9cxkPtPcpl5lRVJoPELYoaUwQ8Mv9YiWOTwGw3
+         IzabFz5Bg5srMnqvFJ3uIt/IkEwDZktKRRfbIaTjZfIaVW6612RjMfe2d8YgKEELbgXS
+         ghlp9nGO078teOa1dpUSBFq0kz9UYTvqT9Bh5pEbnq4/HtDVEUELnm0enHbVVbYiUny2
+         5fXqfXoMKFX6naNJRRmm1V2w1xubXFvNZtIJQSH5TD4O9+L4nKJWyd4a2p5Pyg89EuaN
+         lPcLDOlfnHWx5N5AkcKJIRYPZzeSzZNnyOYT1eMGJkr6eRrDGLB7bqILDTeYo6aPqRiY
+         B2eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=hi4I00yzrvjyDfq4Sb0LtZ///vr5wch4QIwVVeeu58U=;
+        b=Hakd5cKhEiHIigArfMWCIspM/rpqh7qSnJOfnbzFFqpcrKiyWVTLBAkLMBfGgJglcu
+         /QyzOxPnyzqZkST8yX95DjCTtESvJzrZoYplcJDMxyHhAiz47dicDA1adDnUuXbBUWyJ
+         Q0bpu1uvsiBBo4WWGJhru4VE2BsSuK1HOoapLMsSsIy1IfXp6fnV23GBYMRO2HhgizqT
+         kgH7V2JtCCN9c6fKJV/CVK3oiUfkg6/EOHtcV0XffnkyhtwJOXvGrmGPlKJ42G1xVOdH
+         ASu3NrlxD2olmR+UXHjdAet/GGYpFUgjt4xS59DWSu8Zl5B7Cu9oz5V34g/oSHZZgp+X
+         LOjA==
+X-Gm-Message-State: APjAAAUGlAVwXJ4bQTT57RmmLUC1ykFPZKKOQRdwN2XkEEfKr3e4Y6Jx
+        aBae70vzQaIP9RnNcbqderbxHQ==
+X-Google-Smtp-Source: APXvYqyeiG+qz99HWZk7tAxTHFq2pCo/5SMXlzP6RqwmzOV6EmB6TEiXu9iDoH0GK5MAewVwnReY8A==
+X-Received: by 2002:a65:62cd:: with SMTP id m13mr9076178pgv.437.1567794333735;
+        Fri, 06 Sep 2019 11:25:33 -0700 (PDT)
+Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id j18sm7684471pfh.70.2019.09.06.11.25.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2019 11:25:33 -0700 (PDT)
+Date:   Fri, 6 Sep 2019 11:25:30 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Jack Pham <jackp@codeaurora.org>,
+        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>,
+        robh@kernel.org, andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
+ bindings
+Message-ID: <20190906182530.GD11938@tuxbook-pro>
+References: <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
+ <20190830164520.GK26807@tuxbook-pro>
+ <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
+ <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
+ <20190903173924.GB9754@jackp-linux.qualcomm.com>
+ <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
+ <20190903233410.GQ26807@tuxbook-pro>
+ <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org>
+ <20190905175802.GA19599@jackp-linux.qualcomm.com>
+ <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
- definitions=2019-09-06_07:2019-09-04,2019-09-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- impostorscore=0 bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 priorityscore=1501 clxscore=1015 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1906280000
- definitions=main-1909060193
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
- mlxlogscore=999 suspectscore=0 impostorscore=0 mlxscore=0 clxscore=1015
- phishscore=0 priorityscore=1501 bulkscore=0 spamscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1906280000
- definitions=main-1909060193
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > <snipped>
-> > > > +	ret =3D usbnet_read_cmd(dev, USB_CDC_GET_NET_ADDRESS,
-> > > > +			      USB_DIR_IN | USB_TYPE_CLASS
-> > > > +			      | USB_RECIP_INTERFACE, 0,
-> > > > +			      USB_REQ_SET_ADDRESS, buf, ETH_ALEN);
-> > >
-> > > Where did that USB_REQ_SET_ADDRESS come from? Did you just look up
-> > > an arbutrary macro that happened to match your device config?  How
-> > > do you expect this to work with a generic NCM device?  Or even your
-> > > own device, when the next firmware revision moves the function to a
-> different interface?
-> > <snipped>
-> >
-> > https://wiki.osdev.org/Universal_Serial_Bus#SET_ADDRESS
-> >
-> > https://www.usb.org/document-library/network-control-model-devices-spe
-> > cification-v10-and-errata-and-adopters-agreement
-> > Download and view the NCM specification v1.0 (Errata 1), dated November
-> 24, 2010.  See table 6.2 on page 30.  Also see sections 6.2.2 and 6.2.3 o=
-n page
-> 32.
-> >
-> > USB_REQ_SET_ADDRESS came from include/uapi/linux/usb/ch9.h.  This
-> matches the SET_ADDRESS definition from the osdev wiki page, so I used it
-> because the name and numeric values both matched.  It further matches wha=
-t
-> the Windows driver issues.
->=20
-> The names and values may match, but the meanings do not.
-> USB_REQ_SET_ADDRESS refers to a USB bus address, not a MAC address.
->=20
-> Alan Stern
+On Thu 05 Sep 22:26 PDT 2019, Stephen Boyd wrote:
 
+> Quoting Jack Pham (2019-09-05 10:58:02)
+> > Hi Jorge, Bjorn,
+> > 
+> > On Thu, Sep 05, 2019 at 09:18:57AM +0200, Jorge Ramirez wrote:
+> > > On 9/4/19 01:34, Bjorn Andersson wrote:
+> > > > On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
+> > > >> that would need an of_regulator_get() sort of API that can get the
+> > > >> regulator out of there? Or to make the connector into a struct device
+> > > >> that can get the regulator out per some generic connector driver and
+> > > >> then pass it through to the USB controller when it asks for it. Maybe
+> > > >> try to prototype that out?
+> > > >>
+> > > > 
+> > > > The examples given in the DT bindings describes the connector as a child
+> > > > of a PMIC, with of_graph somehow tying it to the various inputs. But in
+> > > > these examples vbus is handled by implicitly inside the MFD, where
+> > > > extcon is informed about the plug event they toggle vbus as well.
+> > > > 
+> > > > In our case we have a extcon-usb-gpio to detect mode, which per Jorge's
+> > > > proposal will trickle down to the PHY and become a regulator calls on
+> > > > either some external regulator or more typically one of the chargers in
+> > > > the system.
+> > 
+> > Interesting you mention extcon-usb-gpio. I thought extcon at least from
+> > bindings perspective is passé now. Maybe this is what you need (just
+> > landed in usb-next):
+> > 
+> > usb: common: add USB GPIO based connection detection driver
+> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=4602f3bff2669012c1147eecfe74c121765f5c56
+> > 
+> > dt-bindings: usb: add binding for USB GPIO based connection detection driver
+> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=f651c73e71f53f65e9846677d79d8e120452b59f
+> > 
+> > Fortunately this new driver might check the right boxes for you:
+> > - usb connector binding
+> > - ID detect GPIO
+> > - vbus-supply regulator
+> > 
+> > With that, I think you can also keep the connector subnode out of the
+> > SSPHY node well, and similarly get rid of the vbus toggle handling from
+> > the PHY driver.
+> > 
+> > The big thing missing now is that this driver replaces extcon
+> > completely, so we'll need handling in dwc3/dwc3-qcom to retrieve the
+> > role switch state to know when host mode is entered. I saw this a while
+> > back but don't think it got picked up:
+> > 
+> > https://patchwork.kernel.org/patch/10909981/
+> > 
+> 
+> Yes this looks like the approach that should be taken. One question
+> though, is this a micro-b connector or a type-c connector on the board?
+> I thought it was a type-c, so then this USB gpio based connection driver
+> isn't an exact fit?
+> 
 
-What better suggestion do folks have, instead of using USB_REQ_SET_ADDRESS?
+For this particular case it's a type c connector, but the port
+controller is operated completely passively (and there's no PD or DP
+involved), so the GPIO based approach seems like a good fit.
 
-Thank you,
-Charles
+Regards,
+Bjorn
