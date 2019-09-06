@@ -2,129 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 983E1AB1C0
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 06:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4DFAB209
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 07:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729806AbfIFElz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 00:41:55 -0400
-Received: from mail-eopbgr1400104.outbound.protection.outlook.com ([40.107.140.104]:45352
-        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727514AbfIFElz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 00:41:55 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BfOkvCNq9Z0BQdckQyQ5NtrYWBg6n2TV45WaMQBJIXKWwOiIfwZXMIQ3sNl3Vdowpxa7A9n8m8rv8MQvwiPufY97bkqy1/8hRUO+XnbTcfUyWkrXZUTmAKKRuiVOGkxXVzCjZKNjAfh5nG/wDtHEO1E2Sh3JM5TEKVgW+vrysYVfoGy1s3CB+ozKo5N+XidPprBHKRtJNN4P1Bu7P2+FfSDXg2TKDVWb0ej0uSFGkMonmzPEyBBASr/lXle09qJuuDGysDt5qHtwzclWdnuPePDMsIOlgiqqW4R3vJfF4ZpnblW12X+NVjBft/QD3jKY0HrxV6FOBJz2cz7saN1ZwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4GbtWtWRhtZXpAgNaUbWyuiyXTuxTkbyenjrj9i+8cw=;
- b=CZYhNoUBz5gbVXk+XZG3CWYhZSNOQNcB5S00vj+JQN1NPyq5HAyg9IiNNeTOwqVHzBj+MtXAcyLA3YKH0cnny8flESi9nCuj8uOen8OKbHDRMlDSa7vQDBcHIj1o//AzsQnv+WhqEk9Jw76McykFrTsrHzPnoTMTc12Ds8ogYh0+qCmIuNEx6SRfeZUVopzDP+2Wx//C2kr7CPK+BDOM8HEQjHeuwETXoFOHeIHh8EvEHKApKJ3ik7k3+33cczhC0OpygSL0eWgAWK+kQi8RbQTJXTPYgseNPAAk4HuaNLtKFVr846quOkeXyj706icPm7UvW9EIMfiO/KT3d/14Sw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S2392350AbfIFF0P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 01:26:15 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38945 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389949AbfIFF0P (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 01:26:15 -0400
+Received: by mail-pf1-f194.google.com with SMTP id s12so3565183pfe.6
+        for <linux-usb@vger.kernel.org>; Thu, 05 Sep 2019 22:26:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4GbtWtWRhtZXpAgNaUbWyuiyXTuxTkbyenjrj9i+8cw=;
- b=EGNB1jd27lv5ypdxtezet3n0D1pLaCP29gv90AyiCJrflQt/KXLTjNDsOMpPFEsdfXXGFxxlVerHH+mafDfwL2Sx0Odwou4voTscEXWS6NoEL5JCU0uTWFY9xhz1cvvqBVdV+zeL7JkjftJpjQESRUuzY6m5ex5m75266Blep/U=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB3360.jpnprd01.prod.outlook.com (20.178.139.82) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.18; Fri, 6 Sep 2019 04:41:50 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::7da1:bfc1:6c7f:8977]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::7da1:bfc1:6c7f:8977%7]) with mapi id 15.20.2241.018; Fri, 6 Sep 2019
- 04:41:50 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     "REE erosca@DE.ADIT-JV.COM" <erosca@DE.ADIT-JV.COM>
-CC:     Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>,
-        "REE erosca@DE.ADIT-JV.COM" <erosca@DE.ADIT-JV.COM>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: RE: [PATCH v3] usb: gadget: udc: renesas_usb3: add suspend event
- support
-Thread-Topic: [PATCH v3] usb: gadget: udc: renesas_usb3: add suspend event
- support
-Thread-Index: AQHVY8ruVM4kfXu4JEmvaon6vzm6uKcc6MMQgACJ3YCAAJ8xQA==
-Date:   Fri, 6 Sep 2019 04:41:50 +0000
-Message-ID: <TYAPR01MB4544B6F543B4678FAF95C2E7D8BA0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <1567675074-3331-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
- <TYAPR01MB45449D299241B52077101C85D8BB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <20190905190705.GA4062@vmlxhi-102.adit-jv.com>
-In-Reply-To: <20190905190705.GA4062@vmlxhi-102.adit-jv.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 375b8f69-133e-4502-a8db-08d7328488c4
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600166)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:TYAPR01MB3360;
-x-ms-traffictypediagnostic: TYAPR01MB3360:|TYAPR01MB3360:
-x-ms-exchange-purlcount: 3
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-microsoft-antispam-prvs: <TYAPR01MB3360BD0776BA1400CDB78491D8BA0@TYAPR01MB3360.jpnprd01.prod.outlook.com>
-x-ms-exchange-transport-forked: True
-x-ms-oob-tlc-oobclassifiers: OLM:843;
-x-forefront-prvs: 0152EBA40F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(39860400002)(346002)(136003)(366004)(376002)(199004)(189003)(3846002)(966005)(66556008)(64756008)(76116006)(66946007)(316002)(8936002)(66476007)(476003)(66446008)(86362001)(53936002)(478600001)(25786009)(55016002)(6306002)(5660300002)(6436002)(6116002)(15650500001)(52536014)(4326008)(99286004)(6246003)(54906003)(14454004)(71190400001)(446003)(6506007)(8676002)(7736002)(71200400001)(81156014)(26005)(256004)(14444005)(2906002)(74316002)(229853002)(102836004)(66066001)(11346002)(186003)(33656002)(486006)(305945005)(7696005)(81166006)(9686003)(76176011)(6916009);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3360;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: 1RRWNgB21VsZE6m2zbFP+6WFMJtwht2Rb0DAE14wqy/2/ayUPTtp3yPy9GsTbzuXHGjA2N0KltXFE7fRQSYAKpTYrqI+hb2GB5zKJT4vlxFlFc47tavfjAOxM55OzxfdBVum4jqgIidqyALrHi6fD46i1AXpk9yI5vTeWpTYj0FzqpVTApllH7RHox5Qh+A0KjGW3lG7CQ7gcrx/Ojyefy2ailHEHyCCoin+yYK3TU9grj03pkcTF2fSCSJSa6MQTzK1no3Z0tnOg8tnKXdXnZrxDXZ6zQXT+R3eO/gSTBsJ2t2ooPSexpYYiEBBsZK6T81hnIiNsCccjqwEdrTxgvncqGNqe53muRgThrAkW4dIrKImBZz67QMpiSyZhylu4xOsEKErmVpW63ssEr7vEPIYkQ26WMscluwx6/Kp/u0=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:to:from:cc:subject:user-agent:date;
+        bh=u7691phoxUxEdEhIJ0JOC7Ng9s9hyHBORKH2Von7rlk=;
+        b=Z+TBVNB0VSXglybGnbmX3Xg7oWyQb0Uh3ZQmxpzhBQJojSoaGcCNhwffxCs/S7qP7Z
+         X6MODDZ+h1RefxIKPN7IeBWDyWbLVcfMP6VSmijghP6yUKXYFwP6+dkTpAYxLGc2HY0f
+         LkN0m2IL7Zss46jGMqiX2iCWNvRVay7S2XySo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:to:from:cc:subject
+         :user-agent:date;
+        bh=u7691phoxUxEdEhIJ0JOC7Ng9s9hyHBORKH2Von7rlk=;
+        b=XQWtIgUy1+DwRxCW9nxnduPagQ4e+9dpIAZUTLZxXD1/SA0lOI0QIS7+8Pctpae+VP
+         C2ob32P4Kq0kHP8BqX3Id2pNAiZ6If4PLTfEVY+R7Gx0wi0QhnNIRzdmR/8ByUfp8wD9
+         kULImk040XGvZjXZGDTXINzsauJD4LpGMDfv602KsXaCvlgqCrNYqdshHQZezoTY1KPK
+         dJOen7PzSyCsope3vYA+Oe+HQnd5nF6elUhjj21dEyxIwz64vpGznhdOGwEiV4BgbZY+
+         sJXVdqbdclFnkyuoFLLQ7F1M9OZYSkQdnUpoTCHfN6zbD2AqMtQlWTazHulcbeNIaodI
+         TmMQ==
+X-Gm-Message-State: APjAAAU7W1JmebxXNdkSHd6ZtS9TNrpjZcYp/UGgd8qinI383z4RuVZJ
+        E3b6O80xSzhxiM9Y8l0io5LDQA==
+X-Google-Smtp-Source: APXvYqxxS2afeG8bx+7q56JsZOG8CWSYjGmdaA830tTQVpcIVkrfr7pzwoEZ4jywfiS5HQVZln95xw==
+X-Received: by 2002:a63:590f:: with SMTP id n15mr6506040pgb.190.1567747574583;
+        Thu, 05 Sep 2019 22:26:14 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id s186sm5936916pfb.126.2019.09.05.22.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2019 22:26:13 -0700 (PDT)
+Message-ID: <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 375b8f69-133e-4502-a8db-08d7328488c4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2019 04:41:50.6137
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UzCyHiprx0EgfoV4S8UVDi4Oqe/+9dkZ/opXlCc3r383iYK2N2VgXTm5D5obISaayEP3aIr5ixU6H0Ac5++rNffY4h2AcX6PnbyTFbkS+XuwAqy90+sMuBvu7rPtF+Is
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3360
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190905175802.GA19599@jackp-linux.qualcomm.com>
+References: <20190223165218.GB572@tuxbook-pro> <5d694878.1c69fb81.5f13b.ec4f@mx.google.com> <20190830164520.GK26807@tuxbook-pro> <5d696ad2.1c69fb81.977ea.39e5@mx.google.com> <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org> <20190903173924.GB9754@jackp-linux.qualcomm.com> <5d6edee5.1c69fb81.a3896.1d05@mx.google.com> <20190903233410.GQ26807@tuxbook-pro> <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org> <20190905175802.GA19599@jackp-linux.qualcomm.com>
+To:     Jack Pham <jackp@codeaurora.org>,
+        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, robh@kernel.org,
+        andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY bindings
+User-Agent: alot/0.8.1
+Date:   Thu, 05 Sep 2019 22:26:12 -0700
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Eugeniu-san,
-
-> From: Eugeniu Rosca, Sent: Friday, September 6, 2019 4:07 AM
-<snip>
+Quoting Jack Pham (2019-09-05 10:58:02)
+> Hi Jorge, Bjorn,
 >=20
-> I guess there are strong similarities between this patch and [3].
-> Would you like to pick [1-3], as they still apply cleanly to vanilla?
-
-Thank you for your comment! I completely forgot that you had submitted
-these [1-3] patches though, I'm thinking renesas_usbhs driver also should
-have this similar feature. I checked the [3] again and the commit log
-and the conditions should be fixed like this patch. Would you submit
-v2 patch series for renesas_usbhs driver? Or, May I submit it?
-Anything is OK to me.
-
-> [1] https://patchwork.kernel.org/patch/10581479/
->     ("[1/3] usb: renesas_usbhs: simplify usbhs_status_get_device_state()"=
-)
-> [2] https://patchwork.kernel.org/patch/10581485/
->     ("[2/3] usb: renesas_usbhs: enable DVSE interrupt")
-> [3] https://patchwork.kernel.org/patch/10581489/
->     ("usb: renesas_usbhs: add suspend event support in gadget mode")
+> On Thu, Sep 05, 2019 at 09:18:57AM +0200, Jorge Ramirez wrote:
+> > On 9/4/19 01:34, Bjorn Andersson wrote:
+> > > On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
+> > >> that would need an of_regulator_get() sort of API that can get the
+> > >> regulator out of there? Or to make the connector into a struct device
+> > >> that can get the regulator out per some generic connector driver and
+> > >> then pass it through to the USB controller when it asks for it. Maybe
+> > >> try to prototype that out?
+> > >>
+> > >=20
+> > > The examples given in the DT bindings describes the connector as a ch=
+ild
+> > > of a PMIC, with of_graph somehow tying it to the various inputs. But =
+in
+> > > these examples vbus is handled by implicitly inside the MFD, where
+> > > extcon is informed about the plug event they toggle vbus as well.
+> > >=20
+> > > In our case we have a extcon-usb-gpio to detect mode, which per Jorge=
+'s
+> > > proposal will trickle down to the PHY and become a regulator calls on
+> > > either some external regulator or more typically one of the chargers =
+in
+> > > the system.
 >=20
-> PS: Apologize for long silence in [3].
+> Interesting you mention extcon-usb-gpio. I thought extcon at least from
+> bindings perspective is pass=C3=83=C2=A9 now. Maybe this is what you need=
+ (just
+> landed in usb-next):
+>=20
+> usb: common: add USB GPIO based connection detection driver
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=
+=3Dusb-next&id=3D4602f3bff2669012c1147eecfe74c121765f5c56
+>=20
+> dt-bindings: usb: add binding for USB GPIO based connection detection dri=
+ver
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=
+=3Dusb-next&id=3Df651c73e71f53f65e9846677d79d8e120452b59f
+>=20
+> Fortunately this new driver might check the right boxes for you:
+> - usb connector binding
+> - ID detect GPIO
+> - vbus-supply regulator
+>=20
+> With that, I think you can also keep the connector subnode out of the
+> SSPHY node well, and similarly get rid of the vbus toggle handling from
+> the PHY driver.
+>=20
+> The big thing missing now is that this driver replaces extcon
+> completely, so we'll need handling in dwc3/dwc3-qcom to retrieve the
+> role switch state to know when host mode is entered. I saw this a while
+> back but don't think it got picked up:
+>=20
+> https://patchwork.kernel.org/patch/10909981/
+>=20
 
-No worries!
-
-Best regards,
-Yoshihiro Shimoda
+Yes this looks like the approach that should be taken. One question
+though, is this a micro-b connector or a type-c connector on the board?
+I thought it was a type-c, so then this USB gpio based connection driver
+isn't an exact fit?
 
