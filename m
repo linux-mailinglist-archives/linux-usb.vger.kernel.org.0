@@ -2,145 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA44CABF55
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 20:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DD2AC09E
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 21:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392371AbfIFSZf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 14:25:35 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35745 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387514AbfIFSZe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 14:25:34 -0400
-Received: by mail-pg1-f195.google.com with SMTP id n4so3944990pgv.2
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 11:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=hi4I00yzrvjyDfq4Sb0LtZ///vr5wch4QIwVVeeu58U=;
-        b=tgPNLCytwqi6Eg7kgmztBs/cNpNh9cxkPtPcpl5lRVJoPELYoaUwQ8Mv9YiWOTwGw3
-         IzabFz5Bg5srMnqvFJ3uIt/IkEwDZktKRRfbIaTjZfIaVW6612RjMfe2d8YgKEELbgXS
-         ghlp9nGO078teOa1dpUSBFq0kz9UYTvqT9Bh5pEbnq4/HtDVEUELnm0enHbVVbYiUny2
-         5fXqfXoMKFX6naNJRRmm1V2w1xubXFvNZtIJQSH5TD4O9+L4nKJWyd4a2p5Pyg89EuaN
-         lPcLDOlfnHWx5N5AkcKJIRYPZzeSzZNnyOYT1eMGJkr6eRrDGLB7bqILDTeYo6aPqRiY
-         B2eA==
+        id S2393355AbfIFTdS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 6 Sep 2019 15:33:18 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:3236 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730615AbfIFTdS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Sep 2019 15:33:18 -0400
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 704F12D6A3F
+        for <linux-usb@vger.kernel.org>; Fri,  6 Sep 2019 19:33:17 +0000 (UTC)
+Received: by mail-wr1-f72.google.com with SMTP id j10so2978088wrb.16
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 12:33:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=hi4I00yzrvjyDfq4Sb0LtZ///vr5wch4QIwVVeeu58U=;
-        b=Hakd5cKhEiHIigArfMWCIspM/rpqh7qSnJOfnbzFFqpcrKiyWVTLBAkLMBfGgJglcu
-         /QyzOxPnyzqZkST8yX95DjCTtESvJzrZoYplcJDMxyHhAiz47dicDA1adDnUuXbBUWyJ
-         Q0bpu1uvsiBBo4WWGJhru4VE2BsSuK1HOoapLMsSsIy1IfXp6fnV23GBYMRO2HhgizqT
-         kgH7V2JtCCN9c6fKJV/CVK3oiUfkg6/EOHtcV0XffnkyhtwJOXvGrmGPlKJ42G1xVOdH
-         ASu3NrlxD2olmR+UXHjdAet/GGYpFUgjt4xS59DWSu8Zl5B7Cu9oz5V34g/oSHZZgp+X
-         LOjA==
-X-Gm-Message-State: APjAAAUGlAVwXJ4bQTT57RmmLUC1ykFPZKKOQRdwN2XkEEfKr3e4Y6Jx
-        aBae70vzQaIP9RnNcbqderbxHQ==
-X-Google-Smtp-Source: APXvYqyeiG+qz99HWZk7tAxTHFq2pCo/5SMXlzP6RqwmzOV6EmB6TEiXu9iDoH0GK5MAewVwnReY8A==
-X-Received: by 2002:a65:62cd:: with SMTP id m13mr9076178pgv.437.1567794333735;
-        Fri, 06 Sep 2019 11:25:33 -0700 (PDT)
-Received: from tuxbook-pro (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id j18sm7684471pfh.70.2019.09.06.11.25.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2019 11:25:33 -0700 (PDT)
-Date:   Fri, 6 Sep 2019 11:25:30 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jack Pham <jackp@codeaurora.org>,
-        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>,
-        robh@kernel.org, andy.gross@linaro.org, shawn.guo@linaro.org,
-        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
-Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY
- bindings
-Message-ID: <20190906182530.GD11938@tuxbook-pro>
-References: <5d694878.1c69fb81.5f13b.ec4f@mx.google.com>
- <20190830164520.GK26807@tuxbook-pro>
- <5d696ad2.1c69fb81.977ea.39e5@mx.google.com>
- <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org>
- <20190903173924.GB9754@jackp-linux.qualcomm.com>
- <5d6edee5.1c69fb81.a3896.1d05@mx.google.com>
- <20190903233410.GQ26807@tuxbook-pro>
- <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org>
- <20190905175802.GA19599@jackp-linux.qualcomm.com>
- <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R/U7mUhygsddH+fGB+zy3E9CKa5h+Z8Nm54osdGuOgs=;
+        b=n3kD2F2Bp950JftWsKUFB4YdTeSS4bHygWe4KQ+oi0JROaCdw9fmPwUaltI8PkQT+U
+         YYCdDtXLAvVQt5Pcl8y6Sg8j/mDJNID6nADCx3iTIC67G7xmS1oMgkTsiMwVX08R8VBF
+         H7oHKmmxqQjX3e+sjtoJs434eCFz+99Q6ZjV61h7lkLoN5ZJa2wyRSOknBpjWeLFOqT0
+         EqmwERIP6AzZKDWk1akbGwe21VUfT0Y4tgVF09NqzCrSBrI5DiN76Xb4Nmnq4L1bD1RL
+         s7/AKWb76dhAA4WzlUbOXvJ0hQWyeLHjbRYlPQeG73TPA5nh/Clunvpk/PpuSEDNkoSe
+         547Q==
+X-Gm-Message-State: APjAAAVbfVptqpPYrp1IStF4iQ5pll+swdXcPgeW1kRYnXuzit0Zk1lc
+        Kt9U4aReQ4w8wWjXwdEcjEDyvtu5d3sQ4ar2hdRKX6ZZevS21D6KjX7I9ecKF++qa0djepquQ4a
+        bvFNy+QHA/1cJtj/DzckXFZ3tgtjZDa9NxWK+
+X-Received: by 2002:a1c:ca02:: with SMTP id a2mr9252541wmg.127.1567798396045;
+        Fri, 06 Sep 2019 12:33:16 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyTIyfiPV/yAsPvflKtcRM07P7nCUNe0sQoeZ2AMSNSLR0dzqdoxrOYrd5Bg/c1ZdH+IG1R0aOFq6s5vYlI0XA=
+X-Received: by 2002:a1c:ca02:: with SMTP id a2mr9252505wmg.127.1567798395711;
+ Fri, 06 Sep 2019 12:33:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
+ <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com>
+ <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
+ <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com> <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com>
+In-Reply-To: <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com>
+From:   Ray Strode <rstrode@redhat.com>
+Date:   Fri, 6 Sep 2019 15:32:37 -0400
+Message-ID: <CAKCoTu70E9cbVu=jVG4EiXnTNiG-znvri6Omh2t++1zRw+639Q@mail.gmail.com>
+Subject: Re: Why add the general notification queue and its sources
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Steven Whitehouse <swhiteho@redhat.com>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Ray, Debarshi" <debarshi.ray@gmail.com>,
+        Robbie Harwood <rharwood@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu 05 Sep 22:26 PDT 2019, Stephen Boyd wrote:
+Hi,
 
-> Quoting Jack Pham (2019-09-05 10:58:02)
-> > Hi Jorge, Bjorn,
-> > 
-> > On Thu, Sep 05, 2019 at 09:18:57AM +0200, Jorge Ramirez wrote:
-> > > On 9/4/19 01:34, Bjorn Andersson wrote:
-> > > > On Tue 03 Sep 14:45 PDT 2019, Stephen Boyd wrote:
-> > > >> that would need an of_regulator_get() sort of API that can get the
-> > > >> regulator out of there? Or to make the connector into a struct device
-> > > >> that can get the regulator out per some generic connector driver and
-> > > >> then pass it through to the USB controller when it asks for it. Maybe
-> > > >> try to prototype that out?
-> > > >>
-> > > > 
-> > > > The examples given in the DT bindings describes the connector as a child
-> > > > of a PMIC, with of_graph somehow tying it to the various inputs. But in
-> > > > these examples vbus is handled by implicitly inside the MFD, where
-> > > > extcon is informed about the plug event they toggle vbus as well.
-> > > > 
-> > > > In our case we have a extcon-usb-gpio to detect mode, which per Jorge's
-> > > > proposal will trickle down to the PHY and become a regulator calls on
-> > > > either some external regulator or more typically one of the chargers in
-> > > > the system.
-> > 
-> > Interesting you mention extcon-usb-gpio. I thought extcon at least from
-> > bindings perspective is passé now. Maybe this is what you need (just
-> > landed in usb-next):
-> > 
-> > usb: common: add USB GPIO based connection detection driver
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=4602f3bff2669012c1147eecfe74c121765f5c56
-> > 
-> > dt-bindings: usb: add binding for USB GPIO based connection detection driver
-> > https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=f651c73e71f53f65e9846677d79d8e120452b59f
-> > 
-> > Fortunately this new driver might check the right boxes for you:
-> > - usb connector binding
-> > - ID detect GPIO
-> > - vbus-supply regulator
-> > 
-> > With that, I think you can also keep the connector subnode out of the
-> > SSPHY node well, and similarly get rid of the vbus toggle handling from
-> > the PHY driver.
-> > 
-> > The big thing missing now is that this driver replaces extcon
-> > completely, so we'll need handling in dwc3/dwc3-qcom to retrieve the
-> > role switch state to know when host mode is entered. I saw this a while
-> > back but don't think it got picked up:
-> > 
-> > https://patchwork.kernel.org/patch/10909981/
-> > 
-> 
-> Yes this looks like the approach that should be taken. One question
-> though, is this a micro-b connector or a type-c connector on the board?
-> I thought it was a type-c, so then this USB gpio based connection driver
-> isn't an exact fit?
-> 
+On Thu, Sep 5, 2019 at 4:39 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> That is *way* too specific to make for any kind of generic
+> notification mechanism.
+Well from my standpoint, I just don't want to have to poll... I don't
+have a strong opinion
+about how it looks architecturally to reach that goal.
 
-For this particular case it's a type c connector, but the port
-controller is operated completely passively (and there's no PD or DP
-involved), so the GPIO based approach seems like a good fit.
+Ideally, at a higher level, I want the userspace api that gnome uses
+to be something
+like:
 
-Regards,
-Bjorn
+err = krb5_cc_watch (ctx, ccache, (krb5_cc_change_fct) on_cc_change ,
+&watch_fd);
+
+then a watch_fd would get handed back and caller could poll on it. if
+it woke up poll(),
+caller would do
+
+krb5_cc_watch_update (ctx, ccache, watch_fd)
+
+or so and it would trigger on_cc_change to get called (or something like that).
+
+If under the hood,  fd comes from opening /dev/watch_queue, and
+krb5_cc_watch_update reads from some mmap'ed buffer to decide whether
+or not to call on_cc_change, that's fine with me.
+
+If under the hood, fd comes from a pipe fd returned from some ioctl or syscall,
+and krb5_cc_watch_update reads messages directly from that fd to decide
+whether or not to call on_cc_change, that's fine with me. too.
+
+it could be an eventfd too, or whatever, too, just as long as its
+something I can add
+to poll() and don't have to intermittently poll ... :-)
+
+> Also, what is the security model here? Open a special character
+> device, and you get access to random notifications from random
+> sources?
+I guess dhowells answered this...
+
+> And why would you do a broken big-key thing in the kernel in the first
+> place? Why don't you just have a kernel key to indirectly encrypt
+> using a key and "additional user space data". The kernel should simply
+> not take care of insane 1MB keys.
+🤷 dunno.  I assume you're referencing the discussions from comment 0
+on that 2013 bug.  I wasn't involved in those discussions, I just chimed in
+after they happened trying to avoid having to add polling :-)
+
+I have no idea why a ticket would get that large. I assume it only is in weird
+edge cases.
+
+Anyway, gnome treats the tickets as opaque blobs.  it doesn't do anything
+with them other than tell the user when they need to get refreshed...
+
+all the actual key manipulation happens from krb5 libraries.
+
+of course, one advantage of having the tickets kernel side is nfs could
+in theory access them directly, rather than up calling back to userspace...
+
+--Ray
