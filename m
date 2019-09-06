@@ -2,89 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64FE7AB45C
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 10:50:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD067AB48C
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 11:03:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392711AbfIFIuT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 04:50:19 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:45834 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392632AbfIFIuS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 04:50:18 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id E467C3C00C5;
-        Fri,  6 Sep 2019 10:50:15 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id JYJmjfcXmBAG; Fri,  6 Sep 2019 10:50:10 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id A1BD93C005E;
-        Fri,  6 Sep 2019 10:50:09 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 6 Sep 2019
- 10:50:09 +0200
-Date:   Fri, 6 Sep 2019 10:50:06 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-CC:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
-        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: udc: renesas_usb3: add suspend event
- support
-Message-ID: <20190906085006.GA13214@vmlxhi-102.adit-jv.com>
-References: <1567675074-3331-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
- <TYAPR01MB45449D299241B52077101C85D8BB0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
- <20190905190705.GA4062@vmlxhi-102.adit-jv.com>
- <TYAPR01MB4544B6F543B4678FAF95C2E7D8BA0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+        id S2390941AbfIFJDV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 05:03:21 -0400
+Received: from canardo.mork.no ([148.122.252.1]:46045 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732629AbfIFJDV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Sep 2019 05:03:21 -0400
+Received: from miraculix.mork.no ([IPv6:2a02:2121:2c6:ea50:dc9c:cbff:fe10:7b5a])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8692whS016408
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 6 Sep 2019 11:02:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1567760580; bh=xZBEn2ft+wibAoI3k1K3RXJpJ2auCi0atCSt766wtBk=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=giIJe10iL+vlFe2vuBviurpKrXK/OMKbzM30mWx2duCTEhp5TDfM5iuNjrSH9hZz2
+         oanQGGMtoDFE3NDEUWhgl9j1GMR+xGo6/RWwqSqiPm/8671k+/LYggR4lqRJEd/JCU
+         JO8CTdr9MGryO08SjCdFQ4/d9Iomr5YvtxQ1x0ZI=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1i6A8q-00038G-UR; Fri, 06 Sep 2019 11:02:52 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     <Charles.Hyde@dellteam.com>
+Cc:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <Mario.Limonciello@dell.com>, <chip.programmer@gmail.com>,
+        <nic_swsd@realtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
+Organization: m
+References: <1567717318990.49322@Dellteam.com>
+Date:   Fri, 06 Sep 2019 11:02:52 +0200
+In-Reply-To: <1567717318990.49322@Dellteam.com> (Charles Hyde's message of
+        "Thu, 5 Sep 2019 21:01:59 +0000")
+Message-ID: <87zhjhssoz.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <TYAPR01MB4544B6F543B4678FAF95C2E7D8BA0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.2 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shimoda-san,
+<Charles.Hyde@dellteam.com> writes:
 
-On Fri, Sep 06, 2019 at 04:41:50AM +0000, Yoshihiro Shimoda wrote:
-> Hello Eugeniu-san,
-> 
-> > From: Eugeniu Rosca, Sent: Friday, September 6, 2019 4:07 AM
-> <snip>
-> > 
-> > I guess there are strong similarities between this patch and [3].
-> > Would you like to pick [1-3], as they still apply cleanly to vanilla?
-> 
-> Thank you for your comment! I completely forgot that you had submitted
-> these [1-3] patches though, I'm thinking renesas_usbhs driver also should
-> have this similar feature. I checked the [3] again and the commit log
-> and the conditions should be fixed like this patch. Would you submit
-> v2 patch series for renesas_usbhs driver? Or, May I submit it?
-> Anything is OK to me.
+> +static int cdc_ncm_get_ethernet_address(struct usbnet *dev,
+> +					struct cdc_ncm_ctx *ctx)
 
-Thank your for the prompt reply. It is very appreciated.
-We'll make sure to submit the v2 of [1-3], as per your request.
 
-> 
-> > [1] https://patchwork.kernel.org/patch/10581479/
-> >     ("[1/3] usb: renesas_usbhs: simplify usbhs_status_get_device_state()")
-> > [2] https://patchwork.kernel.org/patch/10581485/
-> >     ("[2/3] usb: renesas_usbhs: enable DVSE interrupt")
-> > [3] https://patchwork.kernel.org/patch/10581489/
-> >     ("usb: renesas_usbhs: add suspend event support in gadget mode")
+Is this function called anywhere?  Shouldn't it replace the
+usbnet_get_ethernet_addr() call in cdc_ncm_bind_common()?
 
--- 
-Best Regards,
-Eugeniu.
+But do note that cdc_ncm_bind_common() is shared with cdc_mbim and
+huawei_cdc_ncm, and that NCM specific code therefore must be
+conditional.
+
+That's why the usbnet_get_ethernet_addr() call is currently wrapped in
+'if (ctx->ether_desc) {}'.  You should definitely not try to do
+USB_CDC_GET_NET_ADDRESS or USB_CDC_SET_NET_ADDRESS on MBIM.  I don't
+know about the Huawei firmwares.  But I believe it's best to be careful
+and avoid these requests there too. Unless you have a number of
+different Huawei devices with assorted firmware revisions for testing.
+CDC NCM compliance is obviously not a requirement for their vendor
+specific dialect.
+
+> +{
+> +	int ret;
+> +	char *buf;
+> +
+> +	buf =3D kmalloc(ETH_ALEN, GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+
+usbnet_read_cmd() will kmalloc() yet another buffer, so this is
+completely pointless.  Just use the stack for the 6 byte buffer.
+
+Or let it write directly to dev->net->dev_addr, since you will fall back
+to usbnet_get_ethernet_addr() anyway if the request fails.
+
+> +	ret =3D usbnet_read_cmd(dev, USB_CDC_GET_NET_ADDRESS,
+> +			      USB_DIR_IN | USB_TYPE_CLASS
+> +			      | USB_RECIP_INTERFACE, 0,
+> +			      USB_REQ_SET_ADDRESS, buf, ETH_ALEN);
+
+Where did that USB_REQ_SET_ADDRESS come from? Did you just look up an
+arbutrary macro that happened to match your device config?  How do you
+expect this to work with a generic NCM device?  Or even your own device,
+when the next firmware revision moves the function to a different
+interface?
+
+It's nice to have USB_CDC_GET_NET_ADDRESS and USB_CDC_GET_NET_ADDRESS
+implemented, but there are a large number of NCM devices.  You should
+probably test the code with one or two other than your own.
+
+Note that few, if any, NCM devices are spec compliant.  You should
+expect at least one of them to do something really stupid when the see
+this optional and unexpected request.  I think it would be wise to avoid
+sending unsupported requests more than once to a device.
+
+> +	if (ret =3D=3D ETH_ALEN) {
+> +		memcpy(dev->net->dev_addr, buf, ETH_ALEN);
+> +		ret =3D 0;	/* success */
+> +	} else {
+> +		ret =3D usbnet_get_ethernet_addr(dev,
+> +					       ctx->ether_desc->iMACAddress);
+> +	}
+> +	kfree(buf);
+> +	return ret;
+
+If you passed dev->net->dev_addr above, then this could be simplified to
+
+        if (ret =3D=3D ETH_ALEN)
+            return 0;
+        return usbnet_get_ethernet_addr(dev,..);
+
+> +
+> +/* Provide method to push MAC address to the USB device's ethernet contr=
+oller.
+> + * If the device does not support CDC_SET_ADDRESS, there is no harm and =
+we
+> + * proceed as before.
+> + */
+> +static int cdc_ncm_set_ethernet_address(struct usbnet *dev,
+> +					struct sockaddr *addr)
+> +{
+> +	int ret;
+> +	char *buf;
+> +
+> +	buf =3D kmalloc(ETH_ALEN, GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	memcpy(buf, addr->sa_data, ETH_ALEN);
+> +	ret =3D usbnet_write_cmd(dev, USB_CDC_SET_NET_ADDRESS,
+> +			       USB_DIR_OUT | USB_TYPE_CLASS
+> +			       | USB_RECIP_INTERFACE, 0,
+> +			       USB_REQ_SET_ADDRESS, buf, ETH_ALEN);
+
+
+Same comments as above.
+
+
+
+Bj=C3=B8rn
