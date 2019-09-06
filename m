@@ -2,120 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6F6AB48E
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 11:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63980AB4CE
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 11:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392833AbfIFJET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 05:04:19 -0400
-Received: from mail-eopbgr790095.outbound.protection.outlook.com ([40.107.79.95]:12928
-        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732970AbfIFJES (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 05:04:18 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=f4iNd4aVKn0u+bVNchhMqFUWm8q3afM7/GqaP8jy4SWPS6VwEQhoRSGNVyggU/BANDGh7FJQmNJfS0w28P+4zkRw1R5JEJSZa+w6TBLDBMGxHeUTKTqwlTG2u1ddKfGRLk+rqMmKRoZwqi40bknwzKOaYSLFaofnd8dexzR/EuyrGOiZTn2dhozPYMyOLGPWQVVrxJTovjERgS9ZpfXp2JMHvhv5+W2c5S+uovOsbCWkcRlt8/nmXc6FHkS2axMCoz5Lx/yI2rKEMN9doqy2i308aXeWg3lGGl4zRWJwXZrqVeKguPe6FW6KU+JAQZ9lmGtEnZo/c8d8DGIOfiVyzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sdamTeRair1aglxz7uQ3c0QzGDJQS6W1bPl3Vb2yp00=;
- b=MVolaatN/I47AhkzT38PQ821NYEsYQdxLILIG1qsHCFLTShVrcNOALuTVA3THmn5hZo6t+UYBCQ5SaZftywoF0riV3l+b4xa0nfTgNYv6vE85OI6DG3w35MviHNeFkrnLoI0kdJrNSc+iK5Aoy5dF/AlG2FYYci5eIVYIlQMjxENWYmIK7+MbszDwGbE0bulhMa7z89BrdZYDeyhCGi8mNPFEXjOp3KqJcHtlmD4mG5ifLt0ezIkD3nan5/R/Qe4gm7IDJglQgqKfbKLny6Nrhy1XiQ6XcIlT0DZ44fniFyuXZT6U3g5Ni0yybcJUErLYrLsvCECUmX+2T0s9kPfMw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 117.103.190.106) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=sony.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=sony.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sdamTeRair1aglxz7uQ3c0QzGDJQS6W1bPl3Vb2yp00=;
- b=fG4ln40X6xKbYiBa4TQFoiBuHHHEt9BNGszpBC8hhsO01E9bJeC9xOqpp3Mmo7kbIbOHQHvZZBWrDkzN0u3wiQhuKFepxM6kRm7cXSArKGPcG2AHC4hYv9V4MjjdEAQSiCzUc4rWnA5kG+Af5GVs0yBh3WsLjm73PrGAsWLl8Ok=
-Received: from MWHPR13CA0047.namprd13.prod.outlook.com (2603:10b6:300:95::33)
- by DM5PR13MB1836.namprd13.prod.outlook.com (2603:10b6:3:12e::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2241.14; Fri, 6 Sep
- 2019 09:04:16 +0000
-Received: from BL2NAM02FT053.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e46::208) by MWHPR13CA0047.outlook.office365.com
- (2603:10b6:300:95::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2263.7 via Frontend
- Transport; Fri, 6 Sep 2019 09:04:16 +0000
-Authentication-Results: spf=pass (sender IP is 117.103.190.106)
- smtp.mailfrom=sony.com; vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=pass action=none header.from=sony.com;
-Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
- 117.103.190.106 as permitted sender) receiver=protection.outlook.com;
- client-ip=117.103.190.106; helo=ap.sony.com;
-Received: from ap.sony.com (117.103.190.106) by
- BL2NAM02FT053.mail.protection.outlook.com (10.152.76.225) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2241.14 via Frontend Transport; Fri, 6 Sep 2019 09:04:15 +0000
-Received: from APYOKXHT201.ap.sony.com (117.103.191.228) by
- APYOKXEG102.ap.sony.com (117.103.190.106) with Microsoft SMTP Server (TLS) id
- 14.3.468.0; Fri, 6 Sep 2019 09:04:07 +0000
-Received: from APYOKXMS108.ap.sony.com ([169.254.3.47]) by
- APYOKXHT201.ap.sony.com ([180.12.183.216]) with mapi id 14.03.0468.000; Fri,
- 6 Sep 2019 09:04:07 +0000
-From:   <Jacky.Cao@sony.com>
-To:     <gregkh@linuxfoundation.org>
-CC:     <balbi@kernel.org>, <stern@rowland.harvard.edu>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <Kento.A.Kobayashi@sony.com>, <Jacky.Cao@sony.com>
-Subject: RE: [PATCH v3] USB: dummy-hcd: fix power budget for SuperSpeed mode
-Thread-Topic: [PATCH v3] USB: dummy-hcd: fix power budget for SuperSpeed mode
-Thread-Index: AdVjnzygYGk1oEEuTFussd4DlSzUEgAjPt8AABiZ/yA=
-Date:   Fri, 6 Sep 2019 09:04:06 +0000
-Message-ID: <16EA1F625E922C43B00B9D82250220500871DA91@APYOKXMS108.ap.sony.com>
-References: <16EA1F625E922C43B00B9D82250220500871CDE5@APYOKXMS108.ap.sony.com>
- <20190905205516.GA25749@kroah.com>
-In-Reply-To: <20190905205516.GA25749@kroah.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [43.82.17.73]
-Content-Type: text/plain; charset="us-ascii"
+        id S1731659AbfIFJWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 05:22:05 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:51209 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728356AbfIFJWE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 05:22:04 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 5BDA320FBE;
+        Fri,  6 Sep 2019 05:22:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 06 Sep 2019 05:22:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=BPvuWYNA+G8sZz2Nil7DPB4BngH
+        FT5qJQJJYiYcW98o=; b=ADKzolOT8/sapcyd3E1FYIcGQVmuabSqmv0dt77iwxK
+        2rQ6z5HdXcZc7OzE0903ufw/Jjw8in8+0bzgf+TxtEPBhocACOi1qzD8sMwgGLcG
+        JrjuUYcF/u5mJYfOfmYS0i/F3ePPzVJrSjhcrfBeyBYECmeKhKpBuBOwmb7H7WAY
+        fwnPEZ5EAZ2KD3jvMYQG3kxpshFzNp9glCuXFYuLuEN4iVVsuphQzM7vZcxgyhVV
+        z+jIEc4OMmpvDvNXn0P++E//TZf9psQM+0WCcxhandQ/UEQsKG08KS9s4oDK+OZV
+        sbQuO6pqVuqent3EyBTnHni8iZWIZ/rJ3dxfbvreHuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=BPvuWY
+        NA+G8sZz2Nil7DPB4BngHFT5qJQJJYiYcW98o=; b=RFsvcXsHXMJPE5b48930fw
+        zNCtoPFNemKtkrmrIHT5zDEEH9jAP6cXVdGjUVMvNh/Tequ061xMG4hzN/c28ENv
+        iJs8ghXt0duxnfWoDPpwYiBIpUjDNz8LOogFc7CaM0G24byAkR4zLkxYeRICDW0/
+        +ndd73ZNiQmD9p1qAZZxrSByZ2BvvnoGjSZB8EAKvYo57ZL8GTGb7r8IKwsOpGFm
+        qimTX2cKJiSGrOQNcfShTkfR/VX5XDPuEGsLmq3Xv2rjUAPsfpZCFdlwwD4vBBkk
+        0JmTkVMDhfieqvxaMQYRzLH5RwaMABVH4wZZbzqhpS6LfLPV9O7pwXGxO1utcYDA
+        ==
+X-ME-Sender: <xms:OSVyXTgtcDt1ANI4fkLwm6x1BNuE1XeAW5SYv0LO_Ug_FnSbMWQxdA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddrudejledgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
+    vehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:OSVyXSzdTX9SvVlZQwsuxNbXN7Z0Lz5xYNkcOLTdEm3Rbsx7G69i0w>
+    <xmx:OSVyXf9OycgIWPOHtrD6uWi7IP7_kAYkB6myvjobU0ARVbsbePWY0A>
+    <xmx:OSVyXXxtwkwB-O2Pu1QzCS4rhgLdPVRhpHaZL8PVp_1lYeouRi7-6g>
+    <xmx:OyVyXfmqKXW5QtSaNYom57F26OE-BQO89kc7qJaPEoYm_NHipkFkyw>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9EC66D6005D;
+        Fri,  6 Sep 2019 05:22:01 -0400 (EDT)
+Date:   Fri, 6 Sep 2019 11:22:00 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Charles Hyde <chip.programmer@gmail.com>
+Cc:     Oliver Neukum <oliver@neukum.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Charles Hyde <charles.hyde@dellteam.com>,
+        Realtek linux nic maintainers <nic_swsd@realtek.com>,
+        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v3 3/3] net: cdc_ncm: Add ACPI MAC address pass through
+ functionality
+Message-ID: <20190906092200.GA31500@kroah.com>
+References: <20190906015115.12796-1-chip.programmer@gmail.com>
+ <20190906015115.12796-4-chip.programmer@gmail.com>
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:117.103.190.106;IPV:NLI;CTRY:JP;EFV:NLI;SFV:NSPM;SFS:(10019020)(39860400002)(376002)(346002)(396003)(136003)(2980300002)(189003)(199004)(5660300002)(8676002)(23726003)(6116002)(33656002)(106002)(4744005)(37786003)(3846002)(16586007)(316002)(2906002)(7636002)(6916009)(246002)(7736002)(305945005)(46406003)(70206006)(2876002)(76176011)(26005)(102836004)(54906003)(446003)(97756001)(8936002)(186003)(70586007)(476003)(478600001)(11346002)(486006)(126002)(2351001)(426003)(50466002)(4326008)(55016002)(7696005)(86362001)(356004)(107886003)(66066001)(229853002)(47776003)(55846006)(6246003)(336012);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR13MB1836;H:ap.sony.com;FPR:;SPF:Pass;LANG:en;PTR:APYOKXEG102.ap.sony.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3f6730e1-3ecb-4aec-cbbd-08d732a931a5
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(4709080)(1401327)(4618075)(2017052603328)(7193020);SRVR:DM5PR13MB1836;
-X-MS-TrafficTypeDiagnostic: DM5PR13MB1836:
-X-Microsoft-Antispam-PRVS: <DM5PR13MB1836C14C1756D3F09EAADAC587BA0@DM5PR13MB1836.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:276;
-X-Forefront-PRVS: 0152EBA40F
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: XO1xl1BScFYzTZPOX4Y0tGDK+Y5kpSW2jvktpEbj4UbkHb3klTphVYG7DDffgk1oIKrKVxCy1atlTZ3J32rtxwMPgWr58bnXjb98zbu9HVKtMUO3OQKa3xj43tH6Jh7gLiJI8O0dLWMW3zXp4CZ89E40XYmsSiAsccmpdWr5c07N5GbMWRciU3kZaJ0+MByesTcQe+sFcRVhJSVQJ2UuBIaIGcVQXmj48b+oLTOCwTfLl39ajiiBGNUonE2oFIk0+kBfnT3yMwSJlgXGCnwSRxNChrUPrqM3hcc58jz6/DSoUj3Ss5eNN0vCDU+OPxKUk72FDghMw/6GtnSEXb373Y6t9BdCqrJ3bRgQBlvj6x/YrE2Sggo0G/uG2N6Cunlz47iC1HppZfeasn47zJfUGyW1EsgjPxAki+ggbs24C8I=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2019 09:04:15.5221
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f6730e1-3ecb-4aec-cbbd-08d732a931a5
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[117.103.190.106];Helo=[ap.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR13MB1836
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190906015115.12796-4-chip.programmer@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, 
-
+On Thu, Sep 05, 2019 at 08:51:15PM -0500, Charles Hyde wrote:
+> This change adds support to cdc_ncm for ACPI MAC address pass through
+> functionality that also exists in the Realtek r8152 driver.  This is in
+> support of Dell's Universal Dock D6000, to give it the same feature
+> capability as is currently available in Windows and advertized on Dell's
+> product web site.
 > 
-> Does this "fix" a specific commit in the tree, and if so, what is the commit id of
-> that?  Also, should this go to the stable kernel(s)?
+> Today's v3 patch series includes a function named get_ethernet_addr()
+> which replaces two instances where the same code snippet was located in
+> teh previous patch series.  I also created a post reset function to set
+> the MAC address, if there exists an ACPI MAC address pass through (MAPT)
+> method.  Oliver Neukum had requested a post reset function for this
+> purpose.
 > 
-> thanks,
+> Signed-off-by: Charles Hyde <charles.hyde@dellteam.com>
+> Cc: Mario Limonciello <mario.limonciello@dell.com>
+> Cc: chip.programmer@gmail.com
+> Cc: Oliver Neukum <oliver@neukum.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-acpi@vger.kernel.org
+> ---
+>  drivers/net/usb/cdc_ncm.c | 74 +++++++++++++++++++++++++++++++++------
+>  1 file changed, 64 insertions(+), 10 deletions(-)
 > 
-> greg k-h
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 85093579612f..e0152d44f5af 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -52,6 +52,7 @@
+>  #include <linux/usb/usbnet.h>
+>  #include <linux/usb/cdc.h>
+>  #include <linux/usb/cdc_ncm.h>
+> +#include <acpi/acpi_mac_passthru.h>
+>  
+>  #if IS_ENABLED(CONFIG_USB_NET_CDC_MBIM)
+>  static bool prefer_mbim = true;
+> @@ -833,6 +834,45 @@ static const struct net_device_ops cdc_ncm_netdev_ops = {
+>  	.ndo_validate_addr   = eth_validate_addr,
+>  };
+>  
+> +static int get_ethernet_addr(struct usb_interface *intf)
+> +{
+> +	struct sockaddr sa;
+> +	struct usbnet *dev = usb_get_intfdata(intf);
+> +	struct cdc_ncm_ctx *ctx;
+> +	int ret = 0;
+> +
+> +	if (!dev)
+> +		return 0;
+> +
+> +	ctx = (struct cdc_ncm_ctx *)dev->data[0];
+> +	if (!ctx->ether_desc)
+> +		return 0;
+> +
+> +	ret = cdc_ncm_get_ethernet_address(dev, ctx);
+> +	if (ret) {
+> +		dev_dbg(&intf->dev, "failed to get mac address\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Check for a Dell Universal Dock D6000 before checking if ACPI
+> +	 * supports MAC address pass through.
+> +	 */
+> +	if (strstr(dev->udev->product, "D6000")) {
 
-No, this fix is not for specific commit since the POWER_BUDGET(500mA) is used for 
-SuperSpeed mode when dummy hcd added SuperSpeed support in commit(1cd8fd2887).
+As other people have pointed out, that's funny.
 
-And I think it should be imported to stable kernel(s) considering the "insufficient
-available bus power error" mentioned in commit message really happens. We reproduced
-this issue with linux-3.10, linux-4.9 which we use and confirmed it can be solved by
-this modification.
+No, this is explicitly what the USB vendor/product ids are for, don't
+try to make up something that will be guaranteed to not work
+correctly...
 
-Regards
-Jacky
+> +		sa.sa_family = dev->net->type;
+> +		if (get_acpi_mac_passthru(sa.sa_data)) {
+> +			if (!memcmp(dev->net->dev_addr, sa.sa_data,
+> +				    ETH_ALEN)) {
+> +				if (!cdc_ncm_set_ethernet_address(dev, &sa))
+> +					memcpy(dev->net->dev_addr, sa.sa_data,
+> +					       ETH_ALEN);
+> +			}
+> +		}
+> +	}
+> +	dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+
+If a driver is working properly, it should not spit out any kernel log
+messages.  Make this dev_dbg() if you need it for your own debugging
+logic.
+
+thanks,
+
+greg k-h
