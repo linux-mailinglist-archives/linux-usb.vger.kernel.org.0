@@ -2,111 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EED51AC187
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 22:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412B5AC18C
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 22:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731829AbfIFUkQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 16:40:16 -0400
-Received: from canardo.mork.no ([148.122.252.1]:52117 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730293AbfIFUkQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 16:40:16 -0400
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x86Kdid0024499
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 6 Sep 2019 22:39:45 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1567802386; bh=+LVxMZTDoXthUdCoqKn6C5OPG83oXn+cHvwFObYBYKM=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=MBehWhclsr1soqNz+TsPn3VjZ987WpdMBccUdzscdZpfscGa0Uv92s68kf53JGH3j
-         VbWAWdH4rOSbQiYl4FSpT3BBKv0Ojbi3ZplyI+ny0VbF3HxmHxBlekpE26exwm7044
-         r1ctHidD/WDuz+0vcX2ABO1jjRdx0iH8r/y+YVn8=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1i6L1E-0005h9-0b; Fri, 06 Sep 2019 22:39:44 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     <Charles.Hyde@dellteam.com>
-Cc:     <stern@rowland.harvard.edu>, <oliver@neukum.org>,
-        <rjw@rjwysocki.net>, <lenb@kernel.org>,
-        <Mario.Limonciello@dell.com>, <chip.programmer@gmail.com>,
-        <nic_swsd@realtek.com>, <linux-usb@vger.kernel.org>,
-        <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
-Organization: m
-References: <43fa8b0a974d426faccf5e6d486af18a@AUSX13MPS307.AMER.DELL.COM>
-        <Pine.LNX.4.44L0.1909061412350.1627-100000@iolanthe.rowland.org>
-        <a9999ed336ba4f2a8cb93c57f0b3d2f4@AUSX13MPS307.AMER.DELL.COM>
-        <87mufhqjdb.fsf@miraculix.mork.no>
-        <d8cdacc63ddd4da4a88d3712b2b53d32@AUSX13MPS307.AMER.DELL.COM>
-Date:   Fri, 06 Sep 2019 22:39:43 +0200
-In-Reply-To: <d8cdacc63ddd4da4a88d3712b2b53d32@AUSX13MPS307.AMER.DELL.COM>
-        (Charles Hyde's message of "Fri, 6 Sep 2019 20:20:13 +0000")
-Message-ID: <87ftl9qhv4.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S2388847AbfIFUk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 16:40:27 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37766 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731921AbfIFUk1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 16:40:27 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y5so2608223pfo.4
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 13:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:to:from:cc:subject:user-agent:date;
+        bh=swYhYhOrQirWfGuJUy4F9KFt5Sj0aaeo1T8GuTEGiz4=;
+        b=XNQZCDL1t7yoNNof+dtO6sm/fp+82jF9Dd+D/rQFYDJcBz/L2D1KGp8OUyEU0c8k6x
+         zUnkoplE8fEg02iv67iCnBKbzlwLAmDwz94XsxzsIa6ZQJY3xQWrtMdBLejK8GkIowW/
+         32OdRNGIdjSw6kW2kVX9y36xYaVXLtm9SM/yc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:to:from:cc:subject
+         :user-agent:date;
+        bh=swYhYhOrQirWfGuJUy4F9KFt5Sj0aaeo1T8GuTEGiz4=;
+        b=r7Uch3EJF42eeIy42lQfB5XVlEfDTvkROxX/tiFTzgQ7/mRVk00yrKTNYB2BjPaaT/
+         ZeixzNZvoSvDbJicuIyMiHqH5lL05sLw0J8mA3uhRoJ01/HznRyFtFcbpwF5LAW4kmsd
+         /XIRYPjDZoifYabVQEBliadQLCenVlngIe2D25EIbjHv6Kyrob+iUoUsb1IOte8tu67Y
+         HsdpTIS/Fsd9RrM/uPka217IYj01XPtZoYnCXTNqE+UQFSw56T889xiqKzD/eRTDQMRG
+         sRa3GizIX72ouEybzzMCu5Tw9mM7wHt0Ch/Fq97DJqKqkg41Q8f022xbKPReasfbyc7H
+         K8MQ==
+X-Gm-Message-State: APjAAAVSEpOuNO2gjxytMFVNADg5Jdw2sa/fv2N5e0dE5fuJ4kohUhcx
+        0NAM/RbzuxX1Zexzo6UIx3O4gg==
+X-Google-Smtp-Source: APXvYqw1lGijoxS5N/LyWFNhxa8KAKbm6+WK8DHVTDzRzO5NwdkiAeKIWg805Ebt+vzKg3H6r2nBUQ==
+X-Received: by 2002:a17:90a:b383:: with SMTP id e3mr11866956pjr.85.1567802426141;
+        Fri, 06 Sep 2019 13:40:26 -0700 (PDT)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id 2sm13930134pfa.43.2019.09.06.13.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2019 13:40:25 -0700 (PDT)
+Message-ID: <5d72c439.1c69fb81.484c6.fe28@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.2 at canardo
-X-Virus-Status: Clean
+In-Reply-To: <20190906182530.GD11938@tuxbook-pro>
+References: <5d694878.1c69fb81.5f13b.ec4f@mx.google.com> <5d696ad2.1c69fb81.977ea.39e5@mx.google.com> <f3584f38-dabc-7e7a-d1cb-84c80ed26215@linaro.org> <20190903173924.GB9754@jackp-linux.qualcomm.com> <5d6edee5.1c69fb81.a3896.1d05@mx.google.com> <20190903233410.GQ26807@tuxbook-pro> <c9481b7d-4805-25c6-f40f-9cbfc40afc93@linaro.org> <20190905175802.GA19599@jackp-linux.qualcomm.com> <5d71edf5.1c69fb81.1f307.fdd6@mx.google.com> <20190906182530.GD11938@tuxbook-pro>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     Jack Pham <jackp@codeaurora.org>,
+        Jorge Ramirez <jorge.ramirez-ortiz@linaro.org>,
+        robh@kernel.org, andy.gross@linaro.org, shawn.guo@linaro.org,
+        gregkh@linuxfoundation.org, mark.rutland@arm.com, kishon@ti.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, khasim.mohammed@linaro.org
+Subject: Re: [PATCH v4 3/4] dt-bindings: Add Qualcomm USB SuperSpeed PHY bindings
+User-Agent: alot/0.8.1
+Date:   Fri, 06 Sep 2019 13:40:24 -0700
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-<Charles.Hyde@dellteam.com> writes:
+Quoting Bjorn Andersson (2019-09-06 11:25:30)
+> On Thu 05 Sep 22:26 PDT 2019, Stephen Boyd wrote:
+>=20
+> >=20
+> > Yes this looks like the approach that should be taken. One question
+> > though, is this a micro-b connector or a type-c connector on the board?
+> > I thought it was a type-c, so then this USB gpio based connection driver
+> > isn't an exact fit?
+> >=20
+>=20
+> For this particular case it's a type c connector, but the port
+> controller is operated completely passively (and there's no PD or DP
+> involved), so the GPIO based approach seems like a good fit.
+>=20
 
->> > What better suggestion do folks have, instead of using
->> USB_REQ_SET_ADDRESS?
->>=20
->> The spec is clear: wIndex is supposed to be 'NCM Communications Interfac=
-e'.
->> That's how you address a specific NCM function (a USB device can have mo=
-re
->> than one...), and that's what you'll see in all the other interface spec=
-ific class
->> requests in this driver.  You don't have to look hard to find examples.
->>=20
->>=20
->> Bj=C3=B8rn
->
->
-> I have presented what works, with the v3 patch series.
+OK. Perhaps the binding needs an update then to have another compatible
+string indicating type-c connector that's not able to support PD or DP?
 
-Sure. It will work iff your NCM function has a control interface
-numbered 5.  Most NCM functions do not.
-
-> Mind you, the code I have provided sends the exact same USB message as
->  I traced with Wireshark on my Windows system.
-
-Snooping on communcation with one specific device is not a good way to
-figure out dynamic content. wIndex cannot be a constant.  It depends on
-the device configuration.
-
->If you can provide good working code that replicates what I have
->provided, I would be thrilled.
-
-There is working control request code a few lines up in the driver.  I
-didn't think it was too much to ask that you looked it up.  But I can
-copy an example here too:
-
-
-static int cdc_ncm_init(struct usbnet *dev)
-{
-	struct cdc_ncm_ctx *ctx =3D (struct cdc_ncm_ctx *)dev->data[0];
-	u8 iface_no =3D ctx->control->cur_altsetting->desc.bInterfaceNumber;
-	int err;
-
-	err =3D usbnet_read_cmd(dev, USB_CDC_GET_NTB_PARAMETERS,
-			      USB_TYPE_CLASS | USB_DIR_IN
-			      |USB_RECIP_INTERFACE,
-			      0, iface_no, &ctx->ncm_parm,
-			      sizeof(ctx->ncm_parm));
-,,
-
-You'll obviously have to replace USB_CDC_GET_NTB_PARAMETERS with
-USB_CDC_GET_NET_ADDRESS, &ctx->ncm_parm with buf, and
-sizeof(ctx->ncm_parm) with ETH_ALEN.
-
-
-Bj=C3=B8rn
