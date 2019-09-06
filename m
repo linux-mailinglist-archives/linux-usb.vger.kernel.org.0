@@ -2,130 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA604AB082
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 04:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3F4AB089
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 04:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387666AbfIFCF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Sep 2019 22:05:56 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41320 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729121AbfIFCF4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 22:05:56 -0400
-Received: by mail-io1-f65.google.com with SMTP id r26so9244135ioh.8;
-        Thu, 05 Sep 2019 19:05:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=fNjAO7w9eS/oFTIrN8hMdx8IAfL3ao3OhGwC/h4NODs=;
-        b=t8Bh4xj2REDoF1VC5A1yXzR++DYfGZ2hBOftZzOlHWjxGCJP3not1J15Q9nahr5wGS
-         GIYP1R3pfOUEsxJNJlJIgGEbHuwblu+RbJWWIdC/x3zeLvf6PfcJ848aS8zqBkEY7ipN
-         vitdSOSdFhgJ+zDY2bhyN0X1q9tgyIwj/vvFMG3O9VTzzj9Tt/6qEaaOCfi2S30ZOyXh
-         9knxO2u+VvMhjNgdcamqQW67xPRedv/uj62VB/ygLGFQ+ZN5i7Cee1yLbF1X8JirI0d2
-         3PjFnEel04uTrbagLUQ2hlmVit1hfe1M0mWzmsUNxQmta3kRX0JhzoCL2ZYrUy5aEYug
-         olZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=fNjAO7w9eS/oFTIrN8hMdx8IAfL3ao3OhGwC/h4NODs=;
-        b=NQ3KqUeAUkAo8MGt2Oy8pHGOdhFGBuLCqBY+7Db3kd95D64Ql9xkDCRCiB2bPZdv81
-         htYlNEdMlbdwWU2vZSzpgVSEaCOTeOakFmVLqRsg93iAaSDISstS4+YjGM8dKZjhqS8D
-         t07Q7fs8hQ6xXqorcnFhiFrbUnIYSSlGMmxAlvmUG9ZR4+9ypSOyPZLY2O1Ukk/aWGq5
-         aGBb6pbHDoIhYKZy3X5GULGeVUVtXlpvKTP6jwCUQ++fh6uFb2egE1lP6+esBzYmQvGZ
-         f4+SO9bu9Lfy3rmSCMEIXupGo49LHFqI4Qg34XAjl+3+1yALCcuJpjAi8yk/WyNLFtaT
-         Tt6A==
-X-Gm-Message-State: APjAAAVJKj36NMQ+ktehxGUF9u9aKZjZys/A3wpFgfyuNMZNX9Jy3cJ6
-        we/O8Amc3mcoe+ruEPNhNaQ=
-X-Google-Smtp-Source: APXvYqzrvldW3ojU/x20+y7cTaP88HXbmpOoRGCbe7AKvjRaefPQMetR6tFq1AYrY2esgO5umdzJJg==
-X-Received: by 2002:a02:cbad:: with SMTP id v13mr6827583jap.69.1567735555412;
-        Thu, 05 Sep 2019 19:05:55 -0700 (PDT)
-Received: from [10.186.170.145] ([128.210.107.81])
-        by smtp.gmail.com with ESMTPSA id k6sm2489169ioh.28.2019.09.05.19.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Sep 2019 19:05:54 -0700 (PDT)
-Subject: Re: WARNING in hso_free_net_device
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Stephen Hemminger <stephen@networkplumber.org>,
-        syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
-        alexios.zavras@intel.com, "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        netdev <netdev@vger.kernel.org>, rfontana@redhat.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Oliver Neukum <oneukum@suse.com>
-References: <0000000000002a95df0591a4f114@google.com>
- <d6e4d2da-66c6-a8fe-2fea-a3435fa7cb54@gmail.com>
- <20190904154140.45dfb398@hermes.lan>
- <285edb24-01f9-3f9d-4946-b2f41ccd0774@gmail.com>
- <CAAeHK+y3eQ7bXvo1tiAkwLCsFkbSU5B+6hsKbdEzkSXP2_Jyzg@mail.gmail.com>
-From:   Hui Peng <benquike@gmail.com>
-Message-ID: <02ef64cc-5053-e6da-fc59-9970f48064c5@gmail.com>
-Date:   Thu, 5 Sep 2019 22:05:54 -0400
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.0
+        id S1731599AbfIFCNf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Sep 2019 22:13:35 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:19805 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726600AbfIFCNf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Sep 2019 22:13:35 -0400
+X-UUID: 5f0f387dd44c4f47a7829ab7159041db-20190906
+X-UUID: 5f0f387dd44c4f47a7829ab7159041db-20190906
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 642873372; Fri, 06 Sep 2019 10:13:29 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N1.mediatek.inc
+ (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 6 Sep
+ 2019 10:13:25 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 6 Sep 2019 10:13:24 +0800
+Message-ID: <1567736007.7317.71.camel@mhfsdcap03>
+Subject: Re: [PATCH 3/3] net: cdc_ncm: Add ACPI MAC address pass through
+ functionality
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     <Charles.Hyde@dellteam.com>
+CC:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <Mario.Limonciello@dell.com>, <chip.programmer@gmail.com>,
+        <nic_swsd@realtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Date:   Fri, 6 Sep 2019 10:13:27 +0800
+In-Reply-To: <1567717304186.90134@Dellteam.com>
+References: <1567717304186.90134@Dellteam.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+y3eQ7bXvo1tiAkwLCsFkbSU5B+6hsKbdEzkSXP2_Jyzg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 34CE9271F974A5FFB90B8AA99CD636C6B43A790E619EA2EB9E91D6023E8C62562000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Thu, 2019-09-05 at 21:01 +0000, Charles.Hyde@dellteam.com wrote:
+> This change adds support to cdc_ncm for ACPI MAC address pass through
+> functionality that also exists in the Realtek r8152 driver.  This is in
+> support of Dell's Universal Dock D6000, to give it the same feature
+> capability as is currently available in Windows and advertized on Dell's
+> product web site.
+> 
+> Signed-off-by: Charles Hyde <charles.hyde@dellteam.com>
+> Cc: Mario Limonciello <mario.limonciello@dell.com>
+> Cc: chip.programmer@gmail.com
+> Cc: Oliver Neukum <oliver@neukum.org>
+> Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-acpi@vger.kernel.org
+> ---
+>  drivers/net/usb/cdc_ncm.c | 74 +++++++++++++++++++++++++++++++++------
+>  1 file changed, 64 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+> index 85093579612f..e0152d44f5af 100644
+> --- a/drivers/net/usb/cdc_ncm.c
+> +++ b/drivers/net/usb/cdc_ncm.c
+> @@ -52,6 +52,7 @@
+>  #include <linux/usb/usbnet.h>
+>  #include <linux/usb/cdc.h>
+>  #include <linux/usb/cdc_ncm.h>
+> +#include <acpi/acpi_mac_passthru.h>
+>  
+>  #if IS_ENABLED(CONFIG_USB_NET_CDC_MBIM)
+>  static bool prefer_mbim = true;
+> @@ -833,6 +834,45 @@ static const struct net_device_ops cdc_ncm_netdev_ops = {
+>  	.ndo_validate_addr   = eth_validate_addr,
+>  };
+>  
+> +static int get_ethernet_addr(struct usb_interface *intf)
+> +{
+> +	struct sockaddr sa;
+> +	struct usbnet *dev = usb_get_intfdata(intf);
+> +	struct cdc_ncm_ctx *ctx;
+> +	int ret = 0;
+> +
+> +	if (!dev)
+> +		return 0;
+> +
+> +	ctx = (struct cdc_ncm_ctx *)dev->data[0];
+> +	if (!ctx->ether_desc)
+> +		return 0;
+> +
+> +	ret = cdc_ncm_get_ethernet_address(dev, ctx);
+> +	if (ret) {
+> +		dev_dbg(&intf->dev, "failed to get mac address\n");
+> +		return ret;
+> +	}
+> +
+> +	/* Check for a Dell Universal Dock D6000 before checking if ACPI
+> +	 * supports MAC address pass through.
+> +	 */
+> +	if (strstr(dev->udev->product, "D6000")) {
+> +		sa.sa_family = dev->net->type;
+> +		if (get_acpi_mac_passthru(sa.sa_data)) {
+> +			if (!memcmp(dev->net->dev_addr, sa.sa_data,
+> +				    ETH_ALEN)) {
+> +				if (!cdc_ncm_set_ethernet_address(dev, &sa))
+How about use one if-statement instead of these three if-statement?
+
+> +					memcpy(dev->net->dev_addr, sa.sa_data,
+> +					       ETH_ALEN);
+> +			}
+> +		}
+> +	}
+> +	dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+> +
+> +	return 0;
+> +}
+> +
+>  int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_altsetting, int drvflags)
+>  {
+>  	struct cdc_ncm_ctx *ctx;
+> @@ -983,14 +1023,8 @@ int cdc_ncm_bind_common(struct usbnet *dev, struct usb_interface *intf, u8 data_
+>  	usb_set_intfdata(ctx->data, dev);
+>  	usb_set_intfdata(ctx->control, dev);
+>  
+> -	if (ctx->ether_desc) {
+> -		temp = usbnet_get_ethernet_addr(dev, ctx->ether_desc->iMACAddress);
+> -		if (temp) {
+> -			dev_dbg(&intf->dev, "failed to get mac address\n");
+> -			goto error2;
+> -		}
+> -		dev_info(&intf->dev, "MAC-Address: %pM\n", dev->net->dev_addr);
+> -	}
+> +	if (get_ethernet_addr(intf))
+> +		goto error2;
+>  
+>  	/* finish setting up the device specific data */
+>  	cdc_ncm_setup(dev);
+> @@ -1716,6 +1750,25 @@ static void cdc_ncm_status(struct usbnet *dev, struct urb *urb)
+>  	}
+>  }
+>  
+> +static int cdc_ncm_resume(struct usb_interface *intf)
+> +{
+> +	int ret;
+> +
+> +	ret = usbnet_resume(intf);
+> +	if (ret == 0)
+> +		get_ethernet_addr(intf);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cdc_ncm_post_reset(struct usb_interface *intf)
+> +{
+> +	/* reset the MAC address in case of policy change */
+> +	get_ethernet_addr(intf);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct driver_info cdc_ncm_info = {
+>  	.description = "CDC NCM",
+>  	.flags = FLAG_POINTTOPOINT | FLAG_NO_SETINT | FLAG_MULTI_PACKET
+> @@ -1848,8 +1901,9 @@ static struct usb_driver cdc_ncm_driver = {
+>  	.probe = usbnet_probe,
+>  	.disconnect = usbnet_disconnect,
+>  	.suspend = usbnet_suspend,
+> -	.resume = usbnet_resume,
+> -	.reset_resume =	usbnet_resume,
+> +	.resume = cdc_ncm_resume,
+> +	.reset_resume =	cdc_ncm_resume,
+> +	.post_reset = cdc_ncm_post_reset,
+>  	.supports_autosuspend = 1,
+>  	.disable_hub_initiated_lpm = 1,
+>  };
 
 
-On 9/5/2019 7:24 AM, Andrey Konovalov wrote:
-> On Thu, Sep 5, 2019 at 4:20 AM Hui Peng <benquike@gmail.com> wrote:
->>
->> Can you guys have  a look at the attached patch?
-> 
-> Let's try it:
-> 
-> #syz test: https://github.com/google/kasan.git eea39f24
-> 
-> FYI: there are two more reports coming from this driver, which might
-> (or might not) have the same root cause. One of them has a suggested
-> fix by Oliver.
-> 
-> https://syzkaller.appspot.com/bug?extid=67b2bd0e34f952d0321e
-> https://syzkaller.appspot.com/bug?extid=93f2f45b19519b289613
-> 
-
-I think they are different, though similar.
-This one is resulted from unregistering a network device.
-These 2 are resulted from unregistering a tty device.
-
->>
->> On 9/4/19 6:41 PM, Stephen Hemminger wrote:
->>> On Wed, 4 Sep 2019 16:27:50 -0400
->>> Hui Peng <benquike@gmail.com> wrote:
->>>
->>>> Hi, all:
->>>>
->>>> I looked at the bug a little.
->>>>
->>>> The issue is that in the error handling code, hso_free_net_device
->>>> unregisters
->>>>
->>>> the net_device (hso_net->net)  by calling unregister_netdev. In the
->>>> error handling code path,
->>>>
->>>> hso_net->net has not been registered yet.
->>>>
->>>> I think there are two ways to solve the issue:
->>>>
->>>> 1. fix it in drivers/net/usb/hso.c to avoiding unregistering the
->>>> net_device when it is still not registered
->>>>
->>>> 2. fix it in unregister_netdev. We can add a field in net_device to
->>>> record whether it is registered, and make unregister_netdev return if
->>>> the net_device is not registered yet.
->>>>
->>>> What do you guys think ?
->>> #1
