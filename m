@@ -2,68 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25212AB984
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 15:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF0EABC43
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 17:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393365AbfIFNnW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 09:43:22 -0400
-Received: from mga01.intel.com ([192.55.52.88]:40220 "EHLO mga01.intel.com"
+        id S2394786AbfIFPXl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 11:23:41 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:59868 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727970AbfIFNnW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 09:43:22 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Sep 2019 06:43:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,473,1559545200"; 
-   d="scan'208";a="199521750"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 06 Sep 2019 06:43:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 06 Sep 2019 16:43:18 +0300
-Date:   Fri, 6 Sep 2019 16:43:18 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajaykuee@gmail.com>
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: Re: [PATCH v4] usb: typec: ucsi: add support for separate DP altmode
- devices
-Message-ID: <20190906134318.GD30048@kuha.fi.intel.com>
-References: <20190904162714.5739-1-ajayg@nvidia.com>
+        id S1726019AbfIFPXk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Sep 2019 11:23:40 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3CEA13064FB0;
+        Fri,  6 Sep 2019 15:23:40 +0000 (UTC)
+Received: from ovpn-112-22.rdu2.redhat.com (ovpn-112-22.rdu2.redhat.com [10.10.112.22])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 406945C1D8;
+        Fri,  6 Sep 2019 15:23:36 +0000 (UTC)
+Message-ID: <717c9727a713aff7a3415bf0f4ea776de90c37bf.camel@redhat.com>
+Subject: Re: [PATCH 3/3] net: cdc_ncm: Add ACPI MAC address pass through
+ functionality
+From:   Dan Williams <dcbw@redhat.com>
+To:     =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Charles.Hyde@dellteam.com
+Cc:     oliver@neukum.org, rjw@rjwysocki.net, lenb@kernel.org,
+        Mario.Limonciello@dell.com, chip.programmer@gmail.com,
+        nic_swsd@realtek.com, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Date:   Fri, 06 Sep 2019 10:23:36 -0500
+In-Reply-To: <874l1pua6n.fsf@miraculix.mork.no>
+References: <1567717304186.90134@Dellteam.com>
+         <874l1pua6n.fsf@miraculix.mork.no>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190904162714.5739-1-ajayg@nvidia.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Fri, 06 Sep 2019 15:23:40 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 04, 2019 at 09:27:14AM -0700, Ajay Gupta wrote:
-> From: Ajay Gupta <ajayg@nvidia.com>
+On Fri, 2019-09-06 at 09:59 +0200, Bjørn Mork wrote:
+> <Charles.Hyde@dellteam.com> writes:
 > 
-> CCGx controller used on NVIDIA GPU card has two separate display
-> altmode for two DP pin assignments. UCSI specification doesn't
-> prohibits using separate display altmode.
+> > +	if (strstr(dev->udev->product, "D6000")) {
 > 
-> Current UCSI Type-C framework expects only one display altmode for
-> all DP pin assignment. This patch squashes two separate display
-> altmode into single altmode to support controllers with separate
-> display altmode. We first read all the alternate modes of connector
-> and then run through it to know if there are separate display
-> altmodes. If so, it prepares a new port altmode set after squashing
-> two or more separate altmodes into one.
+> Huh? Can you please test that on all USB devices ever made?
 
-This patch has still some stylistic issues (like the comments: please
-use the same style that was used previously in the driver), but
-besides those, I'm still not sure I understand why couldn't we isolate
-the solution to ucsi_ccg.c. I have to take a better look at this next
-week.
+Yeah. Can't VID/PID be used as the filter here instead?
 
-I'm sorry this takes so long.
+Dan
 
-Br,
-
--- 
-heikki
