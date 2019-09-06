@@ -2,462 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 269CAABE23
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 18:57:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EE6ABE20
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 18:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2395050AbfIFQ5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 12:57:39 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41230 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726012AbfIFQ5i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 12:57:38 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b13so4875944pfo.8
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 09:57:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=xCGioBDMF24yWNTIGYPpn+xmZRHxCmvWDaaVgxRmkyk=;
-        b=j7SToQ+M+9JJA6TnBlmlfpDCJU9rHpc5u8fePY5EmUtW8tF+u5hvrCWIQnzypPWPGt
-         Csog26iOPIN9bAVPB+SEKqHUBrfbqpRrzdqjckUjHj1WwXNYouF3dqMFz6wjBDH81gtB
-         7xId1m5KvYWLMgQBC06QjHoyO650wl52JWgpvDD/iFMYOmyyowL75Sef3cY27VOHhkpj
-         voP4R9TrfJ5gLuGRzH7O84IASnDROYHxbZ2TI+BzzMNFXbGTEfZginhxQImwXMzPrCjY
-         e4stXJ0cE6kRmOfuzuzP15Sv4zG0fCPHNkWleZpCxWHWgyQYVbO3DQw5Bnyepfh9zgD3
-         oqAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xCGioBDMF24yWNTIGYPpn+xmZRHxCmvWDaaVgxRmkyk=;
-        b=Ez1SVagATTtyjB2pq+CCFqChTlUl/CGAQMg7iiveu61PYwFCmSdy0bb4JE1NvDmS/6
-         8CqCV748rDSroZ43XfIJ13JFBSVBnSSrgbMdjO0+c1vCRpbjg1L+eTZGFWM30mllfafF
-         BfI4hLY5aRFJB+zrO8tREbyWLHF4JBkRu5HYjhBIg8dZMNFTWbST3HsedxlKSWhpumj+
-         zlbf5eIVDZf5k1M2hH8RUNgVio4KPPUdtRyJGGEYFGEKzH2XjJNq7itWO0XYPktPQDx6
-         ijsDNOzpu5tDZyzUDeStLdt3kx43IrcI8rWzyvezADGzpX7RTM6IQkdAoVngWpj1Tg5F
-         wCgg==
-X-Gm-Message-State: APjAAAWV8sA/6vLDWbsUOZ1aWvmxDuFUKuV+AZAleSCG35J2iPc171ke
-        gJ2M58tjAWOmJE5P4Cb65hU=
-X-Google-Smtp-Source: APXvYqyvG1Cak76EfISCAN82SBmTRX5C3PvujNTnwEhCdwpQJoDWzr6EJ72kWJoVW2i5NzccVtCmLg==
-X-Received: by 2002:a17:90a:3524:: with SMTP id q33mr10454019pjb.37.1567789057791;
-        Fri, 06 Sep 2019 09:57:37 -0700 (PDT)
-Received: from ajayg.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
-        by smtp.gmail.com with ESMTPSA id d10sm7077151pfh.8.2019.09.06.09.57.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 06 Sep 2019 09:57:37 -0700 (PDT)
-From:   Ajay Gupta <ajaykuee@gmail.com>
-X-Google-Original-From: Ajay Gupta <ajayg@nvidia.com>
-To:     heikki.krogerus@linux.intel.com
-Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
-Subject: [PATCH v5] usb: typec: ucsi: add support for separate DP altmode devices
-Date:   Fri,  6 Sep 2019 09:55:16 -0700
-Message-Id: <20190906165516.24006-1-ajayg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+        id S1732792AbfIFQ4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 12:56:54 -0400
+Received: from nat-hk.nvidia.com ([203.18.50.4]:44709 "EHLO nat-hk.nvidia.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727521AbfIFQ4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 6 Sep 2019 12:56:54 -0400
+Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d728fd00000>; Sat, 07 Sep 2019 00:56:48 +0800
+Received: from HKMAIL104.nvidia.com ([10.18.16.13])
+  by hkpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 06 Sep 2019 09:56:48 -0700
+X-PGP-Universal: processed;
+        by hkpgpgate101.nvidia.com on Fri, 06 Sep 2019 09:56:48 -0700
+Received: from HKMAIL101.nvidia.com (10.18.16.10) by HKMAIL104.nvidia.com
+ (10.18.16.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Sep
+ 2019 16:56:48 +0000
+Received: from NAM05-DM3-obe.outbound.protection.outlook.com (104.47.49.53) by
+ HKMAIL101.nvidia.com (10.18.16.10) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Fri, 6 Sep 2019 16:56:47 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OiAdZJuiniuMz/wCroKdIh3/toLqQKVf2uSu2/y89Ini+7eYvuTl0qBEdoKil5Rq8jfBArlaOf5deeMk6t1/v97JbPansIfk/CxzDyXxgwRPrgH+vOc4v2SdZmokguYjWMQLvfRJw+MDIkHPlzHlNkkr6EAWk5j0DTxwfcg1u9KESV8ujvHKhFxtXTxi3cZRNIZgOlJvzcMTJNIszjWPCLXihV7D8vFErVTjOj9cPJWfoKeoHTqNerEUoskXuSUo9QmQY+yZTamkybCn3dfkwpExPI9WS+fLYCITJ5Dgj2v+7NNJZDiI7rNmh6IYtZnYIrcssYIudR8+Mwb3EICA6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ydbcGjPYFR8Z1h2G6tPlA6o3hCEYTWv44vzCoVzlIWg=;
+ b=WolV37y0qsTxOMObR9oB2XLevw3W5D9xcZ+RnzMCEPX+/J2ECegPvnECQgryrp1zHzbSn6BT5Ox+Sd3s5Vs8m1jeKstkKoDr5d4dFTVjhqRTrygSmot2Nf/BYoRTUkIneIzWCjON0yERvG8zePVhsTm6yd2HF8qmD5NwwL8/nH+CtW2BLvF9iOTejFRCIaOxludZcfdQlO8VbjZLnam6bAWa55bTEWSCiY3nGTbewBn0ZqwpvSg9Q279y9iHUZGbjB7lJ9QBJJwtskutA7czNL/whVjmPvakxHNqrPN5jfRadD3ram5lKuJJDXh25JoXJkHEx++rU/tChqR62sUwmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from BN7PR12MB2723.namprd12.prod.outlook.com (20.176.177.94) by
+ BN7PR12MB2706.namprd12.prod.outlook.com (20.176.176.140) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2199.20; Fri, 6 Sep 2019 16:56:44 +0000
+Received: from BN7PR12MB2723.namprd12.prod.outlook.com
+ ([fe80::6459:8ad8:4765:6d88]) by BN7PR12MB2723.namprd12.prod.outlook.com
+ ([fe80::6459:8ad8:4765:6d88%4]) with mapi id 15.20.2220.022; Fri, 6 Sep 2019
+ 16:56:44 +0000
+From:   Ajay Gupta <ajayg@nvidia.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Ajay Gupta <ajaykuee@gmail.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v4] usb: typec: ucsi: add support for separate DP altmode
+ devices
+Thread-Topic: [PATCH v4] usb: typec: ucsi: add support for separate DP altmode
+ devices
+Thread-Index: AQHVYz4Do/O3J09RNUiBEp8YUwMlkKceq5gAgAAxT5A=
+Date:   Fri, 6 Sep 2019 16:56:44 +0000
+Message-ID: <BN7PR12MB27230ABB5F93E7ED007665EADCBA0@BN7PR12MB2723.namprd12.prod.outlook.com>
+References: <20190904162714.5739-1-ajayg@nvidia.com>
+ <20190906134318.GD30048@kuha.fi.intel.com>
+In-Reply-To: <20190906134318.GD30048@kuha.fi.intel.com>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-09-06T16:56:42.7617085Z;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=1fcf5c84-78a8-44ec-a47c-7d307db2d754;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ajayg@nvidia.com; 
+x-originating-ip: [216.228.112.22]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2f2f42d6-e4a8-4986-ce0b-08d732eb32d2
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN7PR12MB2706;
+x-ms-traffictypediagnostic: BN7PR12MB2706:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <BN7PR12MB2706DD75447478278BB7C79BDCBA0@BN7PR12MB2706.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0152EBA40F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(136003)(396003)(376002)(39860400002)(346002)(366004)(199004)(189003)(110136005)(86362001)(26005)(25786009)(446003)(66066001)(102836004)(5660300002)(6506007)(7696005)(486006)(476003)(76176011)(11346002)(4326008)(6436002)(7736002)(186003)(71200400001)(71190400001)(66946007)(66476007)(66556008)(64756008)(76116006)(66446008)(81166006)(55016002)(966005)(6246003)(6306002)(33656002)(9686003)(8676002)(478600001)(8936002)(81156014)(99286004)(229853002)(305945005)(74316002)(52536014)(53936002)(316002)(6116002)(2906002)(256004)(14454004)(3846002)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:BN7PR12MB2706;H:BN7PR12MB2723.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nvidia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: iT4Isc7kWbvWKfSyP8RVT4vtCnuuuxGfG5xzdwISxcbxjmNnGRNqZeKjxEDe8QHPA/kMJZaV57oBXya9YB0pzJCiTUmQPnkoq1M54MS99YPdSf2v5RDJ5UKksYlUhWtpsn5wE+Jy3mDWP4x0LNkRkVQnIaqRgYSCXQHg5LneQyYzjo/LzmNrT7JjDDix2CISWQrxjQ+LKpaqp1WbN+Q5LpCBfq6ZmqKvdAv0Cm7AneNQ5plO9Sxxc3YGm3gqENtBGNyPubRQLUGfwijdZwXQYzHgeKiWIdUXdhJgz0m47ocmqUFKpEFEbX5W94FXPGPdWmJt4e/k9IUhdTCLsd4wR859K7im5alBNDahZ3qITcwkCRroPBQlqaQB0TLlvPXNVGBoEzZNBFYB/tjFmP8rfMOsCdjFKDER2tnhPwKljgU=
+x-ms-exchange-transport-forked: True
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2f2f42d6-e4a8-4986-ce0b-08d732eb32d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2019 16:56:44.6031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2gcMd/m3h1O5WRGuYEepnKSLmEB9Lb48IOsH6mRlkPIm0L6VX+5LgHVae/6kTt2/IlK1mzM9BH6NCNRbjWlWfw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR12MB2706
+X-OriginatorOrg: Nvidia.com
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1567789008; bh=ydbcGjPYFR8Z1h2G6tPlA6o3hCEYTWv44vzCoVzlIWg=;
+        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
+         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
+         Thread-Index:Date:Message-ID:References:In-Reply-To:
+         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
+         authentication-results:x-originating-ip:x-ms-publictraffictype:
+         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
+         x-ms-traffictypediagnostic:x-ms-exchange-purlcount:
+         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
+         x-forefront-prvs:x-forefront-antispam-report:received-spf:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
+         x-ms-exchange-transport-forked:MIME-Version:
+         X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-CrossTenant-userprincipalname:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
+         Content-Language:Content-Type:Content-Transfer-Encoding;
+        b=G+qjRWgjtE5QjtIoUukXdPgUnKam9RAWsKh612MN1E507y0rfvw6EnJVJzl/OtlvO
+         Hj4kAWjMOGLsi80JPVdWrt3JzO1HYxw/KUlYxDI5yFVC1BqciUyHzjeg39Ba+idVwC
+         49vThW3j6XdOIDOT0tYHI6fmXus1ks6mxmhLYc4x762MkHj1jtlxLMHiImW+Ffoqyv
+         nwKJJbAvdgiEuypTUYBXgp182l7fyAdqfysysUGV6Nv78eAIb6NwWhWu8QQJogYf85
+         Vsf2mfo/vlW6KlmzUSDKdtmK19+w4UfF4k9HqcF1knOK+s7CqMjLm+KVj4hBNYenKi
+         szoMCfCBr6YkQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ajay Gupta <ajayg@nvidia.com>
+Hi Heikki,
 
-CCGx controller used on NVIDIA GPU card has two separate display
-altmode for two DP pin assignments. UCSI specification doesn't
-prohibits using separate display altmode.
+> > CCGx controller used on NVIDIA GPU card has two separate display
+> > altmode for two DP pin assignments. UCSI specification doesn't
+> > prohibits using separate display altmode.
+> >
+> > Current UCSI Type-C framework expects only one display altmode for all
+> > DP pin assignment. This patch squashes two separate display altmode
+> > into single altmode to support controllers with separate display
+> > altmode. We first read all the alternate modes of connector and then
+> > run through it to know if there are separate display altmodes. If so,
+> > it prepares a new port altmode set after squashing two or more
+> > separate altmodes into one.
+>=20
+> This patch has still some stylistic issues (like the comments: please use=
+ the
+> same style that was used previously in the driver),=20
+Ok, I will fix them in v5.
 
-Current UCSI Type-C framework expects only one display altmode for
-all DP pin assignment. This patch squashes two separate display
-altmode into single altmode to support controllers with separate
-display altmode. We first read all the alternate modes of connector
-and then run through it to know if there are separate display
-altmodes. If so, it prepares a new port altmode set after squashing
-two or more separate altmodes into one.
+> but besides those, I'm still not sure I understand why couldn't we isolat=
+e=20
+> the solution to ucsi_ccg.c.=20
+Please check my comments at [1] explaining why it can't be isolated to
+ucsi_ccg.c.
 
-Signed-off-by: Ajay Gupta <ajayg@nvidia.com>
----
-Original discussion on this issue is at [1]
+[1] https://marc.info/?l=3Dlinux-usb&m=3D156625373324903&w=3D2=20
 
-Change from v4->v5
-	- Fix comments style as per Heikki's review
-
-1. https://marc.info/?l=linux-usb&m=154905866830998&w=2
-
- drivers/usb/typec/ucsi/ucsi.c     |  68 +++++++++--
- drivers/usb/typec/ucsi/ucsi.h     |   8 ++
- drivers/usb/typec/ucsi/ucsi_ccg.c | 181 +++++++++++++++++++++++++++++-
- 3 files changed, 244 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index ba288b964dc8..2903fb96b893 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -346,12 +346,17 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
- 	int max_altmodes = UCSI_MAX_ALTMODES;
- 	struct typec_altmode_desc desc;
- 	struct ucsi_altmode alt[2];
-+	struct ucsi_altmode orig[UCSI_MAX_ALTMODES];
-+	struct ucsi_altmode updated[UCSI_MAX_ALTMODES];
-+	struct ucsi *ucsi = con->ucsi;
-+	bool multi_dp = false;
- 	struct ucsi_control ctrl;
- 	int num = 1;
- 	int ret;
- 	int len;
- 	int j;
- 	int i;
-+	int k = 0;
- 
- 	if (!(con->ucsi->cap.features & UCSI_CAP_ALT_MODE_DETAILS))
- 		return 0;
-@@ -362,35 +367,74 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
- 	if (recipient == UCSI_RECIPIENT_CON)
- 		max_altmodes = con->ucsi->cap.num_alt_modes;
- 
-+	memset(orig, 0, sizeof(orig));
-+	memset(updated, 0, sizeof(updated));
-+
-+	/* First get all the alternate modes */
- 	for (i = 0; i < max_altmodes;) {
- 		memset(alt, 0, sizeof(alt));
- 		UCSI_CMD_GET_ALTERNATE_MODES(ctrl, recipient, con->num, i, 1);
- 		len = ucsi_run_command(con->ucsi, &ctrl, alt, sizeof(alt));
--		if (len <= 0)
-+		/*
-+		 * We are collecting all altmodes first and then registering.
-+		 * Some type-C device will return zero length data beyond last
-+		 * alternate modes. We should not return if length is zero.
-+		 */
-+		if (len < 0)
- 			return len;
- 
-+		/* We got all altmodes, now break out and register them */
-+		if (!len)
-+			break;
-+
- 		/*
- 		 * This code is requesting one alt mode at a time, but some PPMs
- 		 * may still return two. If that happens both alt modes need be
--		 * registered and the offset for the next alt mode has to be
-+		 * saved and the offset for the next alt mode has to be
- 		 * incremented.
- 		 */
- 		num = len / sizeof(alt[0]);
- 		i += num;
- 
- 		for (j = 0; j < num; j++) {
--			if (!alt[j].svid)
--				return 0;
--
--			memset(&desc, 0, sizeof(desc));
--			desc.vdo = alt[j].mid;
--			desc.svid = alt[j].svid;
--			desc.roles = TYPEC_PORT_DRD;
-+			if (!alt[j].svid) {
-+				/* break out of outer loop and register */
-+				i = max_altmodes;
-+				break;
-+			}
-+
-+			orig[k].mid = alt[j].mid;
-+			orig[k].svid = alt[j].svid;
-+			k++;
-+		}
-+	}
- 
--			ret = ucsi_register_altmode(con, &desc, recipient);
--			if (ret)
--				return ret;
-+	/*
-+	 * Update the original altmode table as some ppms may report
-+	 * multiple DP altmodes.
-+	 */
-+	if (recipient == UCSI_RECIPIENT_CON && ucsi->ppm &&
-+	    ucsi->ppm->update_altmodes)
-+		multi_dp = ucsi->ppm->update_altmodes(ucsi->ppm, orig, updated);
-+
-+	/* now register altmodes */
-+	for (i = 0; i < max_altmodes; i++) {
-+		memset(&desc, 0, sizeof(desc));
-+		if (multi_dp && recipient == UCSI_RECIPIENT_CON) {
-+			desc.svid = updated[i].svid;
-+			desc.vdo = updated[i].mid;
-+		} else {
-+			desc.svid = orig[i].svid;
-+			desc.vdo = orig[i].mid;
- 		}
-+		desc.roles = TYPEC_PORT_DRD;
-+
-+		if (!desc.svid)
-+			return 0;
-+
-+		ret = ucsi_register_altmode(con, &desc, recipient);
-+		if (ret)
-+			return ret;
- 	}
- 
- 	return 0;
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index de87d0b8319d..fa6d896c5531 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -231,6 +231,11 @@ struct ucsi_control {
- #define UCSI_ERROR_DEAD_BATTERY			BIT(5)
- #define UCSI_ERROR_CONTRACT_NEGOTIATION_FAIL	BIT(6)
- 
-+#define UCSI_SET_NEW_CAM_ENTER(x)		(((x) >> 23) & 0x1)
-+#define UCSI_SET_NEW_CAM_GET_AM(x)		(((x) >> 24) & 0xff)
-+#define UCSI_SET_NEW_CAM_AM_MASK		(0xff << 24)
-+#define UCSI_SET_NEW_CAM_SET_AM(x)		(((x) & 0xff) << 24)
-+#define UCSI_CMD_CONNECTOR_MASK			(0x7)
- /* Data structure filled by PPM in response to GET_CAPABILITY command. */
- struct ucsi_capability {
- 	u32 attributes;
-@@ -363,11 +368,14 @@ struct ucsi_data {
-  * @data: memory location to the UCSI data structures
-  * @cmd: UCSI command execution routine
-  * @sync: Refresh UCSI mailbox (the data structures)
-+ * @update_altmodes: Squashes duplicate DP altmodes
-  */
- struct ucsi_ppm {
- 	struct ucsi_data *data;
- 	int (*cmd)(struct ucsi_ppm *, struct ucsi_control *);
- 	int (*sync)(struct ucsi_ppm *);
-+	bool (*update_altmodes)(struct ucsi_ppm *ppm, struct ucsi_altmode *orig,
-+				struct ucsi_altmode *updated);
- };
- 
- struct ucsi *ucsi_register_ppm(struct device *dev, struct ucsi_ppm *ppm);
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 907e20e1a71e..157ec3246d3c 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -16,6 +16,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/usb/typec_dp.h>
- 
- #include <asm/unaligned.h>
- #include "ucsi.h"
-@@ -173,6 +174,15 @@ struct ccg_resp {
- 	u8 length;
- };
- 
-+struct ucsi_ccg_altmode {
-+	u16 svid;
-+	u32 mid;
-+	u8 linked_idx;
-+	u8 active_idx;
-+#define UCSI_MULTI_DP_INDEX	(0xff)
-+	bool checked;
-+} __packed;
-+
- struct ucsi_ccg {
- 	struct device *dev;
- 	struct ucsi *ucsi;
-@@ -197,6 +207,10 @@ struct ucsi_ccg {
- 	u16 fw_build;
- 	bool run_isr; /* flag to call ISR routine during resume */
- 	struct work_struct pm_work;
-+
-+	bool has_multiple_dp;
-+	struct ucsi_ccg_altmode orig[UCSI_MAX_ALTMODES];
-+	struct ucsi_ccg_altmode updated[UCSI_MAX_ALTMODES];
- };
- 
- static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-@@ -389,9 +403,23 @@ static int ucsi_ccg_ack_interrupt(struct ucsi_ccg *uc)
- 	return ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
- }
- 
-+static void ucsi_ccg_update_get_current_cam_cmd(struct ucsi_ccg *uc,
-+						struct ucsi_data *data)
-+{
-+	u8 cam, new_cam;
-+
-+	if (data->cci.data_length == 0x1) {
-+		cam = data->message_in[0];
-+		new_cam = uc->orig[cam].linked_idx;
-+		data->message_in[0] = new_cam;
-+		uc->updated[new_cam].active_idx = cam;
-+	}
-+}
-+
- static int ucsi_ccg_sync(struct ucsi_ppm *ppm)
- {
- 	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
-+	struct ucsi_data *data;
- 	int status;
- 
- 	status = ucsi_ccg_recv_data(uc);
-@@ -399,12 +427,162 @@ static int ucsi_ccg_sync(struct ucsi_ppm *ppm)
- 		return status;
- 
- 	/* ack interrupt to allow next command to run */
--	return ucsi_ccg_ack_interrupt(uc);
-+	status = ucsi_ccg_ack_interrupt(uc);
-+	if (status < 0)
-+		return status;
-+
-+	data = ppm->data;
-+	if (data->ctrl.alt.cmd == UCSI_GET_CURRENT_CAM && uc->has_multiple_dp)
-+		ucsi_ccg_update_get_current_cam_cmd(uc, data);
-+
-+	return status;
-+}
-+
-+static bool ucsi_ccg_update_altmodes(struct ucsi_ppm *ppm,
-+				     struct ucsi_altmode *orig,
-+				     struct ucsi_altmode *updated)
-+{
-+	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
-+	struct ucsi_ccg_altmode *alt, *new_alt;
-+	int i, j, k = 0;
-+	bool found = false;
-+
-+	alt = uc->orig;
-+	new_alt = uc->updated;
-+	memset(uc->updated, 0, sizeof(uc->updated));
-+
-+	/*
-+	 * Copy original connector altmodes to new structure.
-+	 * We need this before second loop since second loop
-+	 * checks for duplicate altmodes.
-+	 */
-+	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-+		alt[i].svid = orig[i].svid;
-+		alt[i].mid = orig[i].mid;
-+		if (!alt[i].svid)
-+			break;
-+	}
-+
-+	for (i = 0; i < UCSI_MAX_ALTMODES; i++) {
-+		if (!alt[i].svid)
-+			break;
-+
-+		/* already checked and considered */
-+		if (alt[i].checked)
-+			continue;
-+
-+		if (!DP_CONF_GET_PIN_ASSIGN(alt[i].mid)) {
-+			/* Found Non DP altmode */
-+			new_alt[k].svid = alt[i].svid;
-+			new_alt[k].mid |= alt[i].mid;
-+			new_alt[k].linked_idx = i;
-+			alt[i].linked_idx = k;
-+			updated[k].svid = new_alt[k].svid;
-+			updated[k].mid = new_alt[k].mid;
-+			k++;
-+			continue;
-+		}
-+
-+		for (j = i + 1; j < UCSI_MAX_ALTMODES; j++) {
-+			if (alt[i].svid != alt[j].svid ||
-+			    !DP_CONF_GET_PIN_ASSIGN(alt[j].mid)) {
-+				continue;
-+			} else {
-+				/* Found duplicate DP mode */
-+				new_alt[k].svid = alt[i].svid;
-+				new_alt[k].mid |= alt[i].mid | alt[j].mid;
-+				new_alt[k].linked_idx = UCSI_MULTI_DP_INDEX;
-+				alt[i].linked_idx = k;
-+				alt[j].linked_idx = k;
-+				alt[j].checked = true;
-+				found = true;
-+			}
-+		}
-+		if (found) {
-+			uc->has_multiple_dp = true;
-+		} else {
-+			/* Didn't find any duplicate DP altmode */
-+			new_alt[k].svid = alt[i].svid;
-+			new_alt[k].mid |= alt[i].mid;
-+			new_alt[k].linked_idx = i;
-+			alt[i].linked_idx = k;
-+		}
-+		updated[k].svid = new_alt[k].svid;
-+		updated[k].mid = new_alt[k].mid;
-+		k++;
-+	}
-+	return found;
-+}
-+
-+static void ucsi_ccg_update_set_new_cam_cmd(struct ucsi_ccg *uc,
-+					    struct ucsi_connector *con,
-+					    struct ucsi_control *ctrl)
-+{
-+	struct ucsi_ccg_altmode *new_port, *port;
-+	struct typec_altmode *alt = NULL;
-+	u8 new_cam, cam, pin;
-+	bool enter_new_mode;
-+	int i, j, k = 0xff;
-+
-+	port = uc->orig;
-+	new_cam = UCSI_SET_NEW_CAM_GET_AM(ctrl->raw_cmd);
-+	new_port = &uc->updated[new_cam];
-+	cam = new_port->linked_idx;
-+	enter_new_mode = UCSI_SET_NEW_CAM_ENTER(ctrl->raw_cmd);
-+
-+	/*
-+	 * If CAM is UCSI_MULTI_DP_INDEX then this is DP altmode
-+	 * with multiple DP mode. Find out CAM for best pin assignement
-+	 * among all DP mode. Priorite pin E->D->C after making sure
-+	 * the partner supports that pin.
-+	 */
-+	if (cam == UCSI_MULTI_DP_INDEX) {
-+		if (enter_new_mode) {
-+			for (i = 0; con->partner_altmode[i]; i++) {
-+				alt = con->partner_altmode[i];
-+				if (alt->svid == new_port->svid)
-+					break;
-+			}
-+			/*
-+			 * alt will always be non NULL since this is
-+			 * UCSI_SET_NEW_CAM command and so there will be
-+			 * atleast one con->partner_altmode[i] with svid
-+			 * matching with new_port->svid.
-+			 */
-+			for (j = 0; port[j].svid; j++) {
-+				pin = DP_CONF_GET_PIN_ASSIGN(port[j].mid);
-+				if (alt && port[j].svid == alt->svid &&
-+				    (pin & DP_CONF_GET_PIN_ASSIGN(alt->vdo))) {
-+					/* prioritize pin E->D->C */
-+					if (k == 0xff || (k != 0xff && pin >
-+					    DP_CONF_GET_PIN_ASSIGN(port[k].mid))
-+					    ) {
-+						k = j;
-+					}
-+				}
-+			}
-+			cam = k;
-+			new_port->active_idx = cam;
-+		} else {
-+			cam = new_port->active_idx;
-+		}
-+	}
-+	ctrl->raw_cmd &= ~UCSI_SET_NEW_CAM_AM_MASK;
-+	ctrl->raw_cmd |= UCSI_SET_NEW_CAM_SET_AM(cam);
- }
- 
- static int ucsi_ccg_cmd(struct ucsi_ppm *ppm, struct ucsi_control *ctrl)
- {
- 	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
-+	struct ucsi_connector *con;
-+	int con_index;
-+
-+	if (ctrl->alt.cmd == UCSI_SET_NEW_CAM && uc->has_multiple_dp) {
-+		con_index = ctrl->cmd.data & UCSI_CMD_CONNECTOR_MASK;
-+		con = &uc->ucsi->connector[con_index - 1];
-+
-+		ucsi_ccg_update_set_new_cam_cmd(uc, con, ctrl);
-+	}
- 
- 	ppm->data->ctrl.raw_cmd = ctrl->raw_cmd;
- 	return ucsi_ccg_send_data(uc);
-@@ -1128,6 +1306,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 
- 	uc->ppm.cmd = ucsi_ccg_cmd;
- 	uc->ppm.sync = ucsi_ccg_sync;
-+	uc->ppm.update_altmodes = ucsi_ccg_update_altmodes;
- 	uc->dev = dev;
- 	uc->client = client;
- 	uc->run_isr = true;
--- 
-2.17.1
-
+Thanks
+> nvpublic
+> I have to take a better look at this next week.
+>=20
+> I'm sorry this takes so long.
+>=20
+> Br,
+>=20
+> --
+> heikki
