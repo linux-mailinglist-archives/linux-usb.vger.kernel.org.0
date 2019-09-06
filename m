@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F4FAB5F8
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 12:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602CAAB5F9
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 12:34:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391963AbfIFKcr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 06:32:47 -0400
-Received: from mail-vs1-f73.google.com ([209.85.217.73]:48654 "EHLO
-        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391954AbfIFKcq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 06:32:46 -0400
-Received: by mail-vs1-f73.google.com with SMTP id h11so653301vsj.15
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 03:32:45 -0700 (PDT)
+        id S2392003AbfIFKcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 06:32:51 -0400
+Received: from mail-vs1-f74.google.com ([209.85.217.74]:36835 "EHLO
+        mail-vs1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391990AbfIFKct (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 06:32:49 -0400
+Received: by mail-vs1-f74.google.com with SMTP id r129so658992vsr.3
+        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 03:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=XfkuPAzUg0cWTsSII8UxfvUGODgh66Dt0PdffmfP8ds=;
-        b=C6Jr4basPVZinLvyQuBY/r7Xehq/6fD8Z4AwI7Ou+U4iz1SeaCsIMGK5UzEFoCh3kL
-         7k+AJ2YSXHXGw7QNTRiJ8ltZGyCQPp9P8eS73HOTuEOJsoR6PNQDV8v2IxULBZN84cHA
-         TXZZKLn19IDXXLcvqMtJnYTMw7fID+m98MyQT7iIlal6isZEfCLfpoaZj/JP7G/aFrvH
-         lRXWpI55ga6IiMMdNLTpvlpvMqZeZvvh9Wx5t87nOEC/zjwrXBzP/G7pdhYaxZqpXc3p
-         qqZw126iKby/JWoA6BWfF8d/YLQxx1rrFDojmSnGcNrzbwONWZ8OoJksM4hdUYlQmUoZ
-         +bUQ==
+        bh=WpyyM8zjm4wtK5J690VZrM2s4HSiRGUxtkfpxo7zqKI=;
+        b=Skz33sHpPCZnoHy3AvVrg/LLqwQwyEGz36anNkWQoU5roRNbtVs5HkCrAJzloD84GS
+         FLXgT091RDmDDpkiFmgCVdrhxFh4kkwp/pxul1aUfuCd947ZNUFsfhjERMj7Cs7koVX0
+         qWq3tCWdb9YWHwMxMI2hoEuadpcMBD3K5HPm5XCXLz/+Tx0QBEhvO59ElSqBGHqhgWVP
+         vvw4IHRL1YGoIDpc+Ct+u2nvyGtLyZJGuviNOpHBItO2gMnzAZDevmP4oRFE7P46vTni
+         fUh41ilsp4v3ceWjwKRPEZzgn6/oYJOGhl2jFZWF/019eio/TcnBj+J3z2ztgxL66/Z+
+         5j0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=XfkuPAzUg0cWTsSII8UxfvUGODgh66Dt0PdffmfP8ds=;
-        b=do3Fdtpl0fvlEnrDdyks3pFS7h7WqhsgM3yMfPPO2oNHqml0yBEwquYGaGE0cG//E5
-         qN2q4A8o/ZruP3GvVHLr6FVBeAQtP6DU8HEbr5KJT3sfGVRJUnpKZjOWcnCO6Up1dQmQ
-         givI0MSsbg8OOqIDUXGCgFdQQVtRDfdok+/KtQiPxz0P33CKyXSudGDe2/qB1PPnlrC5
-         ax/vyxUM4HOqGcbbCxLRChLkT23mtso3Szl3hFakRNA9RH3EgpCWq3/6Xf0eEO3JrQzP
-         ST97PEJ9irpCWKvspSaDJgnDaEX33eUWDJxV/8SZ7OQ+bdy4jYDtS8EfAB1sV9Cc8Rgb
-         k6bQ==
-X-Gm-Message-State: APjAAAUO/tTlPb2q1GPxJy99Go7qYu2w9SbRpWLw2iNo6yULPlfHQJnO
-        hlZWkYE+KV/o1JMMMSCLcT6AhThT5cIegw==
-X-Google-Smtp-Source: APXvYqx66gHD+SeaL9xmE31R3KTiX9kgRcczCw8/S2SwjY37EWST9lA0u7geo0wJ4WJyTzo4D12jZ8sHy9W3hA==
-X-Received: by 2002:a1f:a3d8:: with SMTP id m207mr3707720vke.49.1567765964933;
- Fri, 06 Sep 2019 03:32:44 -0700 (PDT)
-Date:   Fri,  6 Sep 2019 11:32:25 +0100
+        bh=WpyyM8zjm4wtK5J690VZrM2s4HSiRGUxtkfpxo7zqKI=;
+        b=F2jUVETioOb96Y+d6tx3ZbYZl0pTD2UHiPQ3Napeeh1BXDPUNiQxU7TFpSLvjG0I7W
+         L+HzkPlBZGYYX33KxIN8ZPVU+qMEQiMOY6FZ/bu9diKQUjl8S7airPBqK76qWVBR1ZOo
+         FbcxLq1jzcTnHyOjD8R3SQ28eMtAmJ10CQ5IDUMgQb25DfS5IDmgMciiUrmgSq7AXJgS
+         wXFTNVgXv8RLGe01EaLPNQlux/cnTz1bdFrO+bgf6/Ies6HU/g5WqKxujKNVpBEHUhEc
+         fYIuGxL5yii91oHJ+VaoT0RVBBoMgLGRGxyJ2H+QGsBU3K226ZwtGmvrX37F7iNID/Vs
+         WZ8g==
+X-Gm-Message-State: APjAAAXO6apb+wz57RYyB8Mo6ruIolaXtDn0mwuzc1Tdq2ZYpqkxFt2X
+        x+3WidQia+Trsnrel8hWqe+MOPhrNS5pvg==
+X-Google-Smtp-Source: APXvYqwji9IO4P0sdnEEwGtqAmxa5gZ9mhcJuZTmoabFbDwxSe1f5uRwH8hIxTnlZWVDVEHc/tFE2bzrgk+OgQ==
+X-Received: by 2002:a67:1687:: with SMTP id 129mr4598055vsw.232.1567765968027;
+ Fri, 06 Sep 2019 03:32:48 -0700 (PDT)
+Date:   Fri,  6 Sep 2019 11:32:26 +0100
 In-Reply-To: <20190906103235.197072-1-maennich@google.com>
-Message-Id: <20190906103235.197072-2-maennich@google.com>
+Message-Id: <20190906103235.197072-3-maennich@google.com>
 Mime-Version: 1.0
 References: <20180716122125.175792-1-maco@android.com> <20190906103235.197072-1-maennich@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v5 01/11] module: support reading multiple values per modinfo tag
+Subject: [PATCH v5 02/11] export: explicitly align struct kernel_symbol
 From:   Matthias Maennich <maennich@google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     kernel-team@android.com, maennich@google.com, arnd@arndb.de,
@@ -62,62 +62,95 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Similar to modpost's get_next_modinfo(), introduce get_next_modinfo() in
-kernel/module.c to acquire any further values associated with the same
-modinfo tag name. That is useful for any tags that have multiple
-occurrences (such as 'alias'), but is in particular introduced here as
-part of the symbol namespaces patch series to read the (potentially)
-multiple namespaces a module is importing.
+This change allows growing struct kernel_symbol without wasting bytes to
+alignment. It also concretized the alignment of ksymtab entries if
+relative references are used for ksymtab entries.
 
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Reviewed-by: Martijn Coenen <maco@android.com>
+struct kernel_symbol was already implicitly being aligned to the word
+size, except on x86_64 and m68k, where it is aligned to 16 and 2 bytes,
+respectively.
+
+As far as I can tell there is no requirement for aligning struct
+kernel_symbol to 16 bytes on x86_64, but gcc aligns structs to their
+size, and the linker aligns the custom __ksymtab sections to the largest
+data type contained within, so setting KSYM_ALIGN to 16 was necessary to
+stay consistent with the code generated for non-ASM EXPORT_SYMBOL(). Now
+that non-ASM EXPORT_SYMBOL() explicitly aligns to word size (8),
+KSYM_ALIGN is no longer necessary.
+
+In case of relative references, the alignment has been changed
+accordingly to not waste space when adding new struct members.
+
+As for m68k, struct kernel_symbol is aligned to 2 bytes even though the
+structure itself is 8 bytes; using a 4-byte alignment shouldn't hurt.
+
+I manually verified the output of the __ksymtab sections didn't change
+on x86, x86_64, arm, arm64 and m68k. As expected, the section contents
+didn't change, and the ELF section alignment only changed on x86_64 and
+m68k. Feedback from other archs more than welcome.
+
+Co-developed-by: Martijn Coenen <maco@android.com>
+Signed-off-by: Martijn Coenen <maco@android.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Matthias Maennich <maennich@google.com>
 ---
- kernel/module.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ arch/m68k/include/asm/export.h | 1 -
+ include/asm-generic/export.h   | 8 +++-----
+ include/linux/export.h         | 3 ++-
+ 3 files changed, 5 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/module.c b/kernel/module.c
-index 9ee93421269c..3ee507c0a92f 100644
---- a/kernel/module.c
-+++ b/kernel/module.c
-@@ -2481,7 +2481,8 @@ static char *next_string(char *string, unsigned long *secsize)
- 	return string;
- }
+diff --git a/arch/m68k/include/asm/export.h b/arch/m68k/include/asm/export.h
+index 0af20f48bd07..b53008b67ce1 100644
+--- a/arch/m68k/include/asm/export.h
++++ b/arch/m68k/include/asm/export.h
+@@ -1,3 +1,2 @@
+-#define KSYM_ALIGN 2
+ #define KCRC_ALIGN 2
+ #include <asm-generic/export.h>
+diff --git a/include/asm-generic/export.h b/include/asm-generic/export.h
+index 294d6ae785d4..63f54907317b 100644
+--- a/include/asm-generic/export.h
++++ b/include/asm-generic/export.h
+@@ -4,15 +4,13 @@
+ #ifndef KSYM_FUNC
+ #define KSYM_FUNC(x) x
+ #endif
+-#ifdef CONFIG_64BIT
+-#ifndef KSYM_ALIGN
++#ifdef CONFIG_HAVE_ARCH_PREL32_RELOCATIONS
++#define KSYM_ALIGN 4
++#elif defined(CONFIG_64BIT)
+ #define KSYM_ALIGN 8
+-#endif
+ #else
+-#ifndef KSYM_ALIGN
+ #define KSYM_ALIGN 4
+ #endif
+-#endif
+ #ifndef KCRC_ALIGN
+ #define KCRC_ALIGN 4
+ #endif
+diff --git a/include/linux/export.h b/include/linux/export.h
+index fd8711ed9ac4..28a4d2150689 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -52,7 +52,7 @@ extern struct module __this_module;
+ #define __KSYMTAB_ENTRY(sym, sec)					\
+ 	__ADDRESSABLE(sym)						\
+ 	asm("	.section \"___ksymtab" sec "+" #sym "\", \"a\"	\n"	\
+-	    "	.balign	8					\n"	\
++	    "	.balign 4					\n"	\
+ 	    "__ksymtab_" #sym ":				\n"	\
+ 	    "	.long	" #sym "- .				\n"	\
+ 	    "	.long	__kstrtab_" #sym "- .			\n"	\
+@@ -66,6 +66,7 @@ struct kernel_symbol {
+ #define __KSYMTAB_ENTRY(sym, sec)					\
+ 	static const struct kernel_symbol __ksymtab_##sym		\
+ 	__attribute__((section("___ksymtab" sec "+" #sym), used))	\
++	__aligned(sizeof(void *))					\
+ 	= { (unsigned long)&sym, __kstrtab_##sym }
  
--static char *get_modinfo(struct load_info *info, const char *tag)
-+static char *get_next_modinfo(const struct load_info *info, const char *tag,
-+			      char *prev)
- {
- 	char *p;
- 	unsigned int taglen = strlen(tag);
-@@ -2492,13 +2493,25 @@ static char *get_modinfo(struct load_info *info, const char *tag)
- 	 * get_modinfo() calls made before rewrite_section_headers()
- 	 * must use sh_offset, as sh_addr isn't set!
- 	 */
--	for (p = (char *)info->hdr + infosec->sh_offset; p; p = next_string(p, &size)) {
-+	char *modinfo = (char *)info->hdr + infosec->sh_offset;
-+
-+	if (prev) {
-+		size -= prev - modinfo;
-+		modinfo = next_string(prev, &size);
-+	}
-+
-+	for (p = modinfo; p; p = next_string(p, &size)) {
- 		if (strncmp(p, tag, taglen) == 0 && p[taglen] == '=')
- 			return p + taglen + 1;
- 	}
- 	return NULL;
- }
- 
-+static char *get_modinfo(const struct load_info *info, const char *tag)
-+{
-+	return get_next_modinfo(info, tag, NULL);
-+}
-+
- static void setup_modinfo(struct module *mod, struct load_info *info)
- {
- 	struct module_attribute *attr;
+ struct kernel_symbol {
 -- 
 2.23.0.187.g17f5b7556c-goog
 
