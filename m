@@ -2,82 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE76AB56B
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 12:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D1EAB5CB
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 12:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390739AbfIFKJW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 06:09:22 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:49512 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387843AbfIFKJV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 6 Sep 2019 06:09:21 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 9B78C3084288;
-        Fri,  6 Sep 2019 10:09:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 126BB60A97;
-        Fri,  6 Sep 2019 10:09:17 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wjt2Eb+yEDOcQwCa0SrZ4cWu967OtQG8Vz21c=n5ZP1Nw@mail.gmail.com>
-References: <CAHk-=wjt2Eb+yEDOcQwCa0SrZ4cWu967OtQG8Vz21c=n5ZP1Nw@mail.gmail.com> <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk> <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com> <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com> <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com> <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com> <5396.1567719164@warthog.procyon.org.uk> <CAHk-=wgbCXea1a9OTWgMMvcsCGGiNiPp+ty-edZrBWn63NCYdw@mail.gmail.com> <14883.1567725508@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Ray Strode <rstrode@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Steven Whitehouse <swhiteho@redhat.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Ray, Debarshi" <debarshi.ray@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>
-Subject: Re: Why add the general notification queue and its sources
+        id S2391256AbfIFKab (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 06:30:31 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:18796 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389180AbfIFKab (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 06:30:31 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d7235470000>; Fri, 06 Sep 2019 03:30:31 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 06 Sep 2019 03:30:30 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 06 Sep 2019 03:30:30 -0700
+Received: from [10.24.193.88] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Sep
+ 2019 10:30:21 +0000
+Subject: Re: [Patch V8 7/8] usb: gadget: Add UDC driver for tegra XUSB device
+ mode controller
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1567585440-13751-1-git-send-email-nkristam@nvidia.com>
+ <1567585440-13751-8-git-send-email-nkristam@nvidia.com>
+ <1567593053.7317.64.camel@mhfsdcap03>
+ <36447248-1ddb-ff1d-a731-de6afb445a9d@nvidia.com>
+ <1567734192.7317.68.camel@mhfsdcap03>
+X-Nvconfidentiality: public
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+Message-ID: <7f24dbd0-e556-20c1-7aeb-5ddbdbe0349c@nvidia.com>
+Date:   Fri, 6 Sep 2019 16:01:53 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <27731.1567764557.1@warthog.procyon.org.uk>
-Date:   Fri, 06 Sep 2019 11:09:17 +0100
-Message-ID: <27732.1567764557@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Fri, 06 Sep 2019 10:09:21 +0000 (UTC)
+In-Reply-To: <1567734192.7317.68.camel@mhfsdcap03>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1567765831; bh=GDwZRdU/ebDm6QGvl1AQvTRJ+y6qnAjAmrni9fQPdbk=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=RAnuLOvDRvT807o+zmhO3KzFV4brOuwDo83FN/pGnxgMqFNUS7zi+TRtGt70xks1w
+         IgidSlmXvdDXw3ti8ktszIa+5BZe7baY3kAEERvowCas/sBR43DEh9NmptYLYx7jTg
+         1F1qE8qr4o6BZHV91AJ1cAlZT7RKAszgIp1RLp3n7qcPg/58jAQBqbsfpKeTxMgIrS
+         Hj4ttHhLpUkFEJH3wqpcNIKyP56rIn6B/kDGv6iqjKTIb8G4muUw13hX29pixpofYb
+         mSbruqdDb+FRHotj9gHDT3868DoG5nMGENI0NnNugy8exg4IBcqCgW6W2uZ7iFYb2I
+         gF0bP8fj0mGAQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-> But it's *literally* just finding the places that work with
-> pipe->curbuf/nrbufs and making them use atomic updates.
 
-No.  It really isn't.  That's two variables that describe the occupied section
-of the buffer.  Unless you have something like a 68020 with CAS2, or put them
-next to each other so you can use CMPXCHG8, you can't do that.
+On 06-09-2019 07:13, Chunfeng Yun wrote:
+> On Thu, 2019-09-05 at 09:57 +0530, Nagarjuna Kristam wrote:
+>>
+>> On 04-09-2019 16:00, Chunfeng Yun wrote:
+>>> On Wed, 2019-09-04 at 13:53 +0530, Nagarjuna Kristam wrote:
+>>>> This patch adds UDC driver for tegra XUSB 3.0 device mode controller.
+>>>> XUSB device mode controller supports SS, HS and FS modes
+>>>>
+>>>> Based on work by:
+>>>>   Mark Kuo <mkuo@nvidia.com>
+>>>>   Hui Fu <hfu@nvidia.com>
+>>>>   Andrew Bresticker <abrestic@chromium.org>
+>>>>
+>>>> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+>>>> Acked-by: Thierry Reding <treding@nvidia.com>
+>>>> ---
+>>>>  drivers/usb/gadget/udc/Kconfig      |   12 +
+>>>>  drivers/usb/gadget/udc/Makefile     |    1 +
+>>>>  drivers/usb/gadget/udc/tegra-xudc.c | 3791 +++++++++++++++++++++++++++++++++++
+>>>>  3 files changed, 3804 insertions(+)
+>>>>  create mode 100644 drivers/usb/gadget/udc/tegra-xudc.c
+>>>>
+>>>> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+>>>> index d354036..0fe7577 100644
+>>>> --- a/drivers/usb/gadget/udc/Kconfig
+>>>> +++ b/drivers/usb/gadget/udc/Kconfig
+>>>> @@ -441,6 +441,18 @@ config USB_GADGET_XILINX
+>>>>  	  dynamically linked module called "udc-xilinx" and force all
+>>>>  	  gadget drivers to also be dynamically linked.
+>>>>  
+>>>> +config USB_TEGRA_XUDC
+>>>> +	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
+>>>> +	depends on ARCH_TEGRA || COMPILE_TEST
+>>>> +	depends on PHY_TEGRA_XUSB
+>>>> +	select USB_CONN_GPIO
+>>> To me, needn't select this driver, without it, the driver still build
+>>> pass
+>>>
+>> Yes compilation passes with out this. Added select for getting USB_CONN_GPIO
+>> driver functionality.
+> We can enable it in defconfig, think about one day use type-c to do
+> dual-role switch, or other ways, will needn't select it then.
+> 
 
-They need converting to head/tail pointers first.
+Thanks for details, will get it enabled via defconfig instead.
 
-> They really would work with almost anything. You could even mix-and-match
-> "data generated by kernel" and "data done by 'write()' or 'splice()' by a
-> user process".
-
-Imagine that userspace writes a large message and takes the mutex.  At the
-same time something in softirq context decides *it* wants to write a message -
-it can't take the mutex and it can't wait, so the userspace write would have
-to cause the kernel message to be dropped.
-
-What I would have to do is make a write to a notification pipe go through
-post_notification() and limit the size to the maximum for a single message.
-
-Much easier to simply suppress writes and splices on pipes that have been set
-up to be notification queues - at least for now.
-
-David
+- Nagarjuna
+>>
+>>>> +	help
+>>>> +	 Enables NVIDIA Tegra USB 3.0 device mode controller driver.
+>>>> +
+>>>> +	 Say "y" to link the driver statically, or "m" to build a
+>>>> +	 dynamically linked module called "tegra_xudc" and force all
+>>>> +	 gadget drivers to also be dynamically linked.
+>>>> +
+>>>>  source "drivers/usb/gadget/udc/aspeed-vhub/Kconfig"
+>>>>  
+> 
+> 
