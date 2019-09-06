@@ -2,110 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 067BDABE9E
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 19:22:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B589ABF15
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Sep 2019 20:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387856AbfIFRWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Sep 2019 13:22:24 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:39097 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729928AbfIFRWY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 13:22:24 -0400
-Received: by mail-lj1-f195.google.com with SMTP id j16so6721061ljg.6
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 10:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HgnD7xuPPV7kJPJv1y/oxrmL+dxJJMuTrQ4Q4FChOdU=;
-        b=S6FXIRgesHQioG8oGxLk5Tjwzb4SPiDI6TQkN/1PfVNUkJMeUM47+DjxmFZZnsgnqF
-         aVUh5gjMjdVeG3Ez1LdJPa9NKOGaCIHQumkrSOBf3OS+YC+yfMLrM6/zSsHJRG8ghrAg
-         d5Mr3bY5beGZhlJwy9YNIxLVtQzi4ydOFbhE4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HgnD7xuPPV7kJPJv1y/oxrmL+dxJJMuTrQ4Q4FChOdU=;
-        b=BOt6Y7+0adgbbbsw5bvHjUSXlBjKWjRIua9yOQt/dDiYL/P92BGxOFuD1I0oohEUGT
-         3b8uXqJAKb4aGSvjxq29YX63GNwToSSYCKp4EckK4dpPIj9WWb2bvJfztK4HyjMiZjmx
-         0tre9JD6kuc2kHcrMn9oM7xkomDyLR5QWxhRiFuJzIPWDky0rj0jTQilQ/i67+tI5QAF
-         e3r991u68HnWTPpKCMfKbEeKEGD0ScuRtpGnWGjk8NjsXZY7eXo0RcjBQ0T7doOdD3Im
-         jc+sASUdmqyd6rbr2Wi5k6n47MXeBAis5aJmxHvEv3bYlrPN1QtvES9ECL7prT8Lsxqo
-         b8dQ==
-X-Gm-Message-State: APjAAAWpTPYnZz59D8NM0cUtqsVUeL3J5yc7bvQF7WDsqlYfU2xYsHbk
-        FaUFq8qYwLHnKQKin0dJunu7fVpPGbo=
-X-Google-Smtp-Source: APXvYqw7/kJ3Biod6I5S02ZuG+voBFcZSBLsON0+0CAnFuLW0U4Ui5v54UwYuAAD86Ir8vkbVSjV+g==
-X-Received: by 2002:a2e:a17a:: with SMTP id u26mr6399836ljl.137.1567790541667;
-        Fri, 06 Sep 2019 10:22:21 -0700 (PDT)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id t5sm1248460lfl.91.2019.09.06.10.22.21
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2019 10:22:21 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id a22so6749986ljd.0
-        for <linux-usb@vger.kernel.org>; Fri, 06 Sep 2019 10:22:21 -0700 (PDT)
-X-Received: by 2002:a2e:8507:: with SMTP id j7mr6626752lji.156.1567790104003;
- Fri, 06 Sep 2019 10:15:04 -0700 (PDT)
+        id S2391796AbfIFSAs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Sep 2019 14:00:48 -0400
+Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:3474 "EHLO
+        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2388322AbfIFSAs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Sep 2019 14:00:48 -0400
+Received: from pps.filterd (m0170398.ppops.net [127.0.0.1])
+        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86HtS29025575;
+        Fri, 6 Sep 2019 14:00:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dellteam.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=aXzYX18tT60aUWaQMnCsrQMCGlhXnd4brg96dCMlSck=;
+ b=WGy8FGBWMzlQCO+DpebesJpextW+M7kxq+crV63HSGYBNJfu/oEoPiHXWp4RydluHygN
+ zc46zAXkObJZIh4I2MvrufotJm6WVVpXalxBZPwEJsCUoXEJd7oSd8yZ93kd9y5m/U6l
+ oZ2TznDAyiCeFwb9n4gQa2kZXQAon90sVSwdJnkJI4MmDe80PUKHf4XjYoHFHbnMiGcf
+ 6sR0lIAVake/moRXiINYIlSB5LOhXalGoQr4AxzRftAvzT1Ntjk1KBMaVYzFGQflSMmv
+ 7BwXXUFNcqC6gVzazPO2i8TyxZplmDW3xtEhJVkni7H+aspTjwNIiiILJD9jomsV+jNt XQ== 
+Received: from mx0a-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
+        by mx0b-00154904.pphosted.com with ESMTP id 2uqm4b3afj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 06 Sep 2019 14:00:46 -0400
+Received: from pps.filterd (m0133268.ppops.net [127.0.0.1])
+        by mx0a-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x86HvcLV016637;
+        Fri, 6 Sep 2019 14:00:43 -0400
+Received: from ausxipps301.us.dell.com (ausxipps301.us.dell.com [143.166.148.223])
+        by mx0a-00154901.pphosted.com with ESMTP id 2ur5ym3f92-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Sep 2019 14:00:43 -0400
+X-LoopCount0: from 10.166.132.133
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="393519333"
+From:   <Charles.Hyde@dellteam.com>
+To:     <bjorn@mork.no>
+CC:     <oliver@neukum.org>, <rjw@rjwysocki.net>, <lenb@kernel.org>,
+        <Mario.Limonciello@dell.com>, <chip.programmer@gmail.com>,
+        <nic_swsd@realtek.com>, <linux-usb@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
+Thread-Topic: [PATCH 1/3] net: cdc_ncm: add get/set ethernet address functions
+Thread-Index: AQHVZCzhVbpOtOy+DEKwLQ92ABp4yKceW3ikgACI4XA=
+Date:   Fri, 6 Sep 2019 18:00:41 +0000
+Message-ID: <43fa8b0a974d426faccf5e6d486af18a@AUSX13MPS307.AMER.DELL.COM>
+References: <1567717318990.49322@Dellteam.com>
+ <87zhjhssoz.fsf@miraculix.mork.no>
+In-Reply-To: <87zhjhssoz.fsf@miraculix.mork.no>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Charles_Hyde@Dellteam.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-09-06T17:37:22.3647491Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
+ aiplabel=External Public
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.143.18.86]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <156763534546.18676.3530557439501101639.stgit@warthog.procyon.org.uk>
- <CAHk-=wh5ZNE9pBwrnr5MX3iqkUP4nspz17rtozrSxs5-OGygNw@mail.gmail.com>
- <17703.1567702907@warthog.procyon.org.uk> <CAHk-=wjQ5Fpv0D7rxX0W=obx9xoOAxJ_Cr+pGCYOAi2S9FiCNg@mail.gmail.com>
- <CAKCoTu7ms_Mr-q08d9XB3uascpzwBa5LF9JTT2aq8uUsoFE8aQ@mail.gmail.com>
- <CAHk-=wjcsxQ8QB_v=cwBQw4pkJg7pp-bBsdWyPivFO_OeF-y+g@mail.gmail.com>
- <5396.1567719164@warthog.procyon.org.uk> <CAHk-=wgbCXea1a9OTWgMMvcsCGGiNiPp+ty-edZrBWn63NCYdw@mail.gmail.com>
- <14883.1567725508@warthog.procyon.org.uk> <CAHk-=wjt2Eb+yEDOcQwCa0SrZ4cWu967OtQG8Vz21c=n5ZP1Nw@mail.gmail.com>
- <27732.1567764557@warthog.procyon.org.uk> <CAHk-=wiR1fpahgKuxSOQY6OfgjWD+MKz8UF6qUQ6V_y2TC_V6w@mail.gmail.com>
- <CAHk-=wioHmz69394xKRqFkhK8si86P_704KgcwjKxawLAYAiug@mail.gmail.com>
- <8e60555e-9247-e03f-e8b4-1d31f70f1221@redhat.com> <CAHk-=wg6=qhw0-F=2_8y=VdT+fj8k7G1+t2XNSkRYimXhampVg@mail.gmail.com>
-In-Reply-To: <CAHk-=wg6=qhw0-F=2_8y=VdT+fj8k7G1+t2XNSkRYimXhampVg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 6 Sep 2019 10:14:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjaSzdzYNuQXUSZNkT75Wmfw2v96tekgnV8nOwBQ3h0ig@mail.gmail.com>
-Message-ID: <CAHk-=wjaSzdzYNuQXUSZNkT75Wmfw2v96tekgnV8nOwBQ3h0ig@mail.gmail.com>
-Subject: Re: Why add the general notification queue and its sources
-To:     Steven Whitehouse <swhiteho@redhat.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Ray Strode <rstrode@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Ray, Debarshi" <debarshi.ray@gmail.com>,
-        Robbie Harwood <rharwood@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.70,1.0.8
+ definitions=2019-09-06_07:2019-09-04,2019-09-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ clxscore=1015 mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1906280000 definitions=main-1909060192
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 phishscore=0 mlxscore=0
+ adultscore=0 spamscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 priorityscore=1501 mlxlogscore=999 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1906280000
+ definitions=main-1909060192
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 6, 2019 at 10:07 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Hmm. Maybe somebody can come up with a good legacy signaling solution
-> (and "just use another pipe for error notification and OOB data" for
-> the first one may _work_, but that sounds pretty hacky and just not
-> very convenient).
-
-... actually, maybe the trivial solution for at least some prototyping
-cases is to make any user mode writers never drop messages. Don't use
-a non-blocking fd for the write direction.
-
-That's obviously *not* acceptable for a kernel writer, and it's not
-acceptable for an actual system daemon writer (that you could block by
-just not reading the notifications), but it's certainly acceptable for
-the "let's prototype having kernel support for /proc/mounts
-notifications using a local thread that just polls for it every few
-seconds".
-
-So at least for _some_ prototypes you can probably just ignore the
-overflow issue. It won't get you full test coverage, but it will get
-you a working legacy solution and a "look, if we have kernel support
-for this, we can do better".
-
-                 Linus
+PHNuaXBwZWQ+IA0KPiA+ICsJcmV0ID0gdXNibmV0X3JlYWRfY21kKGRldiwgVVNCX0NEQ19HRVRf
+TkVUX0FERFJFU1MsDQo+ID4gKwkJCSAgICAgIFVTQl9ESVJfSU4gfCBVU0JfVFlQRV9DTEFTUw0K
+PiA+ICsJCQkgICAgICB8IFVTQl9SRUNJUF9JTlRFUkZBQ0UsIDAsDQo+ID4gKwkJCSAgICAgIFVT
+Ql9SRVFfU0VUX0FERFJFU1MsIGJ1ZiwgRVRIX0FMRU4pOw0KPiANCj4gV2hlcmUgZGlkIHRoYXQg
+VVNCX1JFUV9TRVRfQUREUkVTUyBjb21lIGZyb20/IERpZCB5b3UganVzdCBsb29rIHVwIGFuDQo+
+IGFyYnV0cmFyeSBtYWNybyB0aGF0IGhhcHBlbmVkIHRvIG1hdGNoIHlvdXIgZGV2aWNlIGNvbmZp
+Zz8gIEhvdyBkbyB5b3UNCj4gZXhwZWN0IHRoaXMgdG8gd29yayB3aXRoIGEgZ2VuZXJpYyBOQ00g
+ZGV2aWNlPyAgT3IgZXZlbiB5b3VyIG93biBkZXZpY2UsDQo+IHdoZW4gdGhlIG5leHQgZmlybXdh
+cmUgcmV2aXNpb24gbW92ZXMgdGhlIGZ1bmN0aW9uIHRvIGEgZGlmZmVyZW50IGludGVyZmFjZT8N
+CjxzbmlwcGVkPg0KDQpodHRwczovL3dpa2kub3NkZXYub3JnL1VuaXZlcnNhbF9TZXJpYWxfQnVz
+I1NFVF9BRERSRVNTDQoNCmh0dHBzOi8vd3d3LnVzYi5vcmcvZG9jdW1lbnQtbGlicmFyeS9uZXR3
+b3JrLWNvbnRyb2wtbW9kZWwtZGV2aWNlcy1zcGVjaWZpY2F0aW9uLXYxMC1hbmQtZXJyYXRhLWFu
+ZC1hZG9wdGVycy1hZ3JlZW1lbnQNCkRvd25sb2FkIGFuZCB2aWV3IHRoZSBOQ00gc3BlY2lmaWNh
+dGlvbiB2MS4wIChFcnJhdGEgMSksIGRhdGVkIE5vdmVtYmVyIDI0LCAyMDEwLiAgU2VlIHRhYmxl
+IDYuMiBvbiBwYWdlIDMwLiAgQWxzbyBzZWUgc2VjdGlvbnMgNi4yLjIgYW5kIDYuMi4zIG9uIHBh
+Z2UgMzIuDQoNClVTQl9SRVFfU0VUX0FERFJFU1MgY2FtZSBmcm9tIGluY2x1ZGUvdWFwaS9saW51
+eC91c2IvY2g5LmguICBUaGlzIG1hdGNoZXMgdGhlIFNFVF9BRERSRVNTIGRlZmluaXRpb24gZnJv
+bSB0aGUgb3NkZXYgd2lraSBwYWdlLCBzbyBJIHVzZWQgaXQgYmVjYXVzZSB0aGUgbmFtZSBhbmQg
+bnVtZXJpYyB2YWx1ZXMgYm90aCBtYXRjaGVkLiAgSXQgZnVydGhlciBtYXRjaGVzIHdoYXQgdGhl
+IFdpbmRvd3MgZHJpdmVyIGlzc3Vlcy4NCg0KLS0gDQpDaGFybGVzDQo=
