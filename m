@@ -2,54 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C975AC8F7
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Sep 2019 21:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 586C7ACBAB
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Sep 2019 10:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404129AbfIGTKN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Sep 2019 15:10:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:48011 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732774AbfIGTKN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Sep 2019 15:10:13 -0400
-Received: (qmail 1746 invoked by uid 500); 7 Sep 2019 15:10:11 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 7 Sep 2019 15:10:11 -0400
-Date:   Sat, 7 Sep 2019 15:10:11 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Julius Werner <jwerner@chromium.org>
-cc:     Greg KH <greg@kroah.com>, Oliver Neukum <oneukum@suse.com>,
-        USB Storage list <usb-storage@lists.one-eyed-alien.net>,
-        Dan Williams <dcbw@redhat.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: storage: Add ums-cros-aoa driver
-In-Reply-To: <CAODwPW-FybmnZ97eTfShya_z1Oxrc91ofe6yC4vNN2ri51V5fw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1909071506500.1597-100000@netrider.rowland.org>
+        id S1727429AbfIHIvh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Sep 2019 04:51:37 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:37380 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727359AbfIHIvh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Sep 2019 04:51:37 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id 2057981F98; Sun,  8 Sep 2019 10:51:20 +0200 (CEST)
+Date:   Sun, 8 Sep 2019 10:51:33 +0200
+From:   Pavel Machek <pavel@denx.de>
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linus.walleij@linaro.org, bgolaszewski@baylibre.com,
+        linux-gpio@vger.kernel.org, sfr@canb.auug.org.au
+Subject: next-20190904: build failure in cp210x usb serial, gpio related?
+Message-ID: <20190908085133.GA7233@amd>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="pWyiEgJYm5f9v55/"
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 6 Sep 2019, Julius Werner wrote:
 
-> FWIW, I found a suitable workaround now to get my use case working
-> with existing kernels: I can do the mode switch from userspace, then
-> after the device reenumerates I can manually disable any interfaces I
-> don't like by writing 0 to their 'authorized' node, and then I write
-> the VID/PID to usb-storage/new_id.
+--pWyiEgJYm5f9v55/
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Okay, very good.
+Hi!
 
-> I still think it would be nice in general to be able to force a driver
-> to bind a specific device (rather than a VID/PID match), but it's not
-> a pressing need for me anymore.
+I'm getting this compiling the -next:
 
-You _can_ do this currently, by writing the name of the interface to 
-/sys/bus/usb/drivers/usb-storage/bind.  But as you know, this doesn't 
-work unless the VID & PID already match one of the driver's entries.
+  CC      drivers/net/wireless/intel/iwlwifi/mvm/mac80211.o
+  In file included from drivers/usb/serial/cp210x.c:23:
+  ./include/linux/gpio/driver.h:722:19: error: static declaration of
+  =E2=80=98gpiochip_lock_as_irq=E2=80=99 follows non-static declaration
+    722 | static inline int gpiochip_lock_as_irq(struct gpio_chip
+  *chip,
+        |                   ^~~~~~~~~~~~~~~~~~~~
+	./include/linux/gpio/driver.h:706:5: note: previous
+  declaration of =E2=80=98gpiochip_lock_as_irq=E2=80=99 was here
+    706 | int gpiochip_lock_as_irq(struct gpio_chip *chip, unsigned
+  int offset);
+        |     ^~~~~~~~~~~~~~~~~~~~
+	./include/linux/gpio/driver.h:729:20: error: static
+  declaration of =E2=80=98gpiochip_unlock_as_irq=E2=80=99 follows non-static
+  declaration
+    729 | static inline void gpiochip_unlock_as_irq(struct gpio_chip
+  *chip,
+        |                    ^~~~~~~~~~~~~~~~~~~~~~
+	./include/linux/gpio/driver.h:707:6: note: previous
+  declaration of =E2=80=98gpiochip_unlock_as_irq=E2=80=99 was here
+    707 | void gpiochip_unlock_as_irq(struct gpio_chip *chip, unsigned
+  int offset);
+        |      ^~~~~~~~~~~~~~~~~~~~~~
+	make[3]: *** [scripts/Makefile.build:265:
+  drivers/usb/serial/cp210x.o] Error 1
+  make[2]: *** [scripts/Makefile.build:509: drivers/usb/serial] Error
+  2
+  make[2]: *** Waiting for unfinished jobs....
+    CC      drivers/gpu/drm/ttm/ttm_page_alloc.o
+      AR      drivers/usb/storage/built-in.a
 
-Alan Stern
 
+Sounds like some fixes are needed in gpio headers?
+
+Best regards,
+									Pavel
+--=20
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
+g.html
+
+--pWyiEgJYm5f9v55/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iEYEARECAAYFAl10wRUACgkQMOfwapXb+vLlawCgqNaKqkY7OUYCIvmBJpOo5ED/
+fnYAoMN62O2sGHsH/wpY5Yak8O6eapEL
+=Kujg
+-----END PGP SIGNATURE-----
+
+--pWyiEgJYm5f9v55/--
