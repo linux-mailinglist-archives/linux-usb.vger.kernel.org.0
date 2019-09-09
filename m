@@ -2,230 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAFBAD410
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2019 09:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21994AD4F0
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2019 10:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726796AbfIIHnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Sep 2019 03:43:10 -0400
-Received: from mail-eopbgr20076.outbound.protection.outlook.com ([40.107.2.76]:7687
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726026AbfIIHnJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Sep 2019 03:43:09 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lVSXAaReQypYnhhq34qRoJLeM9KwzNb9UZUn/wruoCaL1BpbRncqL1nViS+eyRnTdYwpdY+uiU+uWjdlFvklBSsfeFZBtmHL20M/8Xv1ocf3Tvp/V6EPHEzxlY6ZHY07tq5oRcoTKBqgA0GhCcEy5GPafpBlRwSzr4A3Omj+gaYNbJhqPxmEipASMpbh8NaqHljCvPdM0447tKZUJWsDzpB0fVfWMmv5ins2KPDIauWJl5RkPV2gHRU8Uzh2MkX3uRd8MEbgQctmsy1dj1wpvowX/FdnWuwLLiUWKscR9Vpao+CLAXVy31IqzCyUknrkek/uIQzfTvTqg6qgIxxVeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hPVU6Iazy6VkigvwGVPA+rInwEd+zMG7RN0ronO9nlw=;
- b=fVU5bZDZy4wLhoSUqcn/mgDq8+7PAT4LcFLsdFZzK/Fm2trrB5zHFZkm5WvFhOI/ywFW2LFgrmWuGyNOVvVmmJ/pRDeGms46iWiqJ/GnEc3tGn315rnQLqGsgvtlXX+x5+aA0y9KorlhwsFyu6Dtloq/XCeWkC/sIseXIFCLhRiIVfDWdbq2mHa0cTfXkik0BSwxAMDwyxjxkWnmfEeQxnAIUFSdVHL6Z0D/NrlpZRS+VkjMCkdbxf/paNCtF6dirhYVUyGK1f/UhrTRP887D2RcWijTMX9hiH5kTjQHC7FnoCZOQTeg01b5CiN8Zpdi+FF3gvka261E6a0302ZbvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hPVU6Iazy6VkigvwGVPA+rInwEd+zMG7RN0ronO9nlw=;
- b=NoSiaJM1r4xxkeulpcUHm0nqwzMrTuusWmhzF6/XVGa6SJQhv7qy+S7mg0+W7FxwayIRSVz+3fNUQLi68M9L5B8dflhaGvKmtaB+AmjyWIjHKnqvbXlVielnJiRwTgZ237SJz2No94y3o30bGXw8Su/TvmA73QNL+WP7w+l9Z9M=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB3294.eurprd04.prod.outlook.com (10.170.231.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.20; Mon, 9 Sep 2019 07:43:03 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2241.018; Mon, 9 Sep 2019
- 07:43:03 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Jun Li <jun.li@nxp.com>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: chipidea: imx: enable vbus and id wakeup only for
- OTG events
-Thread-Topic: [PATCH v2] usb: chipidea: imx: enable vbus and id wakeup only
- for OTG events
-Thread-Index: AQHVZtsQK1VTBzu6b0m471SCOVDAJKci9t6A
-Date:   Mon, 9 Sep 2019 07:43:03 +0000
-Message-ID: <20190909074337.GA22414@b29397-desktop>
-References: <20190909064141.15643-1-jun.li@nxp.com>
-In-Reply-To: <20190909064141.15643-1-jun.li@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b0effd7e-5d40-4266-1997-08d734f958a4
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB3294;
-x-ms-traffictypediagnostic: VI1PR04MB3294:|VI1PR04MB3294:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB329432B5FFE4F6B3DB1A71F38BB70@VI1PR04MB3294.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-forefront-prvs: 01559F388D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(136003)(396003)(366004)(346002)(376002)(39860400002)(189003)(199004)(6506007)(6862004)(102836004)(7736002)(11346002)(486006)(86362001)(256004)(476003)(2906002)(54906003)(1076003)(14444005)(44832011)(8936002)(6636002)(33656002)(81166006)(8676002)(229853002)(6486002)(5660300002)(99286004)(76176011)(6512007)(66066001)(9686003)(3846002)(14454004)(6116002)(33716001)(26005)(25786009)(53546011)(478600001)(66946007)(66446008)(66556008)(186003)(64756008)(71200400001)(91956017)(76116006)(66476007)(53936002)(446003)(6436002)(316002)(6246003)(71190400001)(4326008)(81156014)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3294;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: p2SEGLpE9lAIyemou7JgY/p2785pPSFybY2iFJowxhmaCeISpTxo76A3EF5wZAeTXDp3cSjhuxtWjd0JMfTXA/dr61gCrPfi74PysVwyEUAn0iMxdYJp5cUZyuapKENHdy4XbtsmfmrbL/SksS5p5tZOln5Gi0IIdtVYpO8DgiU83hNixr9I686j+FRt5E/dRvPax4nRp5NgO+6FztF/5bGAD3xwTeUKV0ABFVJtIWiztQoQHiQHRcNfVCAGbAOLQxknHqDO9FuMdcSSqFAQt5gkTSxyCidpGvrJrKvgQetHHO6ZqRwvryqVqRqBd6JMg3KGrEJFNjXR8b3DYEmhYiX60sn48pyk0i7KeY/Q/6615wCqG1mLFAOM2D30T+kMcrHLnv7vsN7D3Y/Vxgr7goQ7c6XuSF5Aj/myuk92dS8=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <45E92A38E28A9D479BA2E307A3711C19@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727797AbfIIIfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Sep 2019 04:35:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38430 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726779AbfIIIfd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Sep 2019 04:35:33 -0400
+Received: from linux-8ccs (ip5f5ade63.dynamic.kabel-deutschland.de [95.90.222.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2587E218AC;
+        Mon,  9 Sep 2019 08:35:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568018132;
+        bh=TKImRVK5QfysGcK3+T8jXTqGg/4D94n2fS1rumyJj0k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TZcrEX8XikzlQDoHKc05y09WwC1EXW/eLqgiewIXoctMEF4T5kTG+SBZVvKmLSF4S
+         VceMDdm8DVu4k7r3KZcFC8odfFvXsgJyf0H+NA5s+jqm3ludZY4Ui/3lgYzsPbcv/q
+         zs77u5TDjehKhBneE5glLjJcM7UFKodd8kLRkcxQ=
+Date:   Mon, 9 Sep 2019 10:35:23 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Matthias Maennich <maennich@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        arnd@arndb.de, gregkh@linuxfoundation.org, joel@joelfernandes.org,
+        lucas.de.marchi@gmail.com, maco@android.com, sspatil@google.com,
+        will@kernel.org, yamada.masahiro@socionext.com,
+        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH v5 00/11] Symbol Namespaces
+Message-ID: <20190909083522.GA446@linux-8ccs>
+References: <20180716122125.175792-1-maco@android.com>
+ <20190906103235.197072-1-maennich@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0effd7e-5d40-4266-1997-08d734f958a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Sep 2019 07:43:03.3765
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: uTeXoA9OijwLoJyWZOk1R7VW6ffQ29RHbeYLEbTbt2InMXJJMVrqfLEG5XygMRils014ORERJ1rHOiL28bbIqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3294
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20190906103235.197072-1-maennich@google.com>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-09-09 14:41:41, jun.li@nxp.com wrote:
-> From: Li Jun <jun.li@nxp.com>
->=20
-> If ID or VBUS is from external block, don't enable its wakeup
-> because it isn't used at all.
->=20
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  drivers/usb/chipidea/ci_hdrc_imx.c |  8 ++++++++
->  drivers/usb/chipidea/ci_hdrc_imx.h |  2 ++
->  drivers/usb/chipidea/usbmisc_imx.c | 31 +++++++++++++++++++++++--------
->  3 files changed, 33 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci=
-_hdrc_imx.c
-> index e783604..b11d70f 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -433,6 +433,14 @@ static int ci_hdrc_imx_probe(struct platform_device =
-*pdev)
->  		goto err_clk;
->  	}
-> =20
-> +	if (!IS_ERR(pdata.id_extcon.edev) ||
-> +	    of_property_read_bool(np, "usb-role-switch"))
-> +		data->usbmisc_data->ext_id =3D 1;
-> +
-> +	if (!IS_ERR(pdata.vbus_extcon.edev) ||
-> +	    of_property_read_bool(np, "usb-role-switch"))
-> +		data->usbmisc_data->ext_vbus =3D 1;
-> +
->  	ret =3D imx_usbmisc_init_post(data->usbmisc_data);
->  	if (ret) {
->  		dev_err(dev, "usbmisc post failed, ret=3D%d\n", ret);
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci=
-_hdrc_imx.h
-> index c842e03..de2aac9 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.h
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.h
-> @@ -22,6 +22,8 @@ struct imx_usbmisc_data {
->  	unsigned int evdo:1; /* set external vbus divider option */
->  	unsigned int ulpi:1; /* connected to an ULPI phy */
->  	unsigned int hsic:1; /* HSIC controlller */
-> +	unsigned int ext_id:1; /* ID from exteranl event */
-> +	unsigned int ext_vbus:1; /* Vbus from exteranl event */
->  };
-> =20
->  int imx_usbmisc_init(struct imx_usbmisc_data *data);
-> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/us=
-bmisc_imx.c
-> index 078c1fd..e81e33c 100644
-> --- a/drivers/usb/chipidea/usbmisc_imx.c
-> +++ b/drivers/usb/chipidea/usbmisc_imx.c
-> @@ -100,6 +100,9 @@
->  #define MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID	MX7D_USB_VBUS_WAKEUP_SOURCE(2=
-)
->  #define MX7D_USB_VBUS_WAKEUP_SOURCE_SESS_END	MX7D_USB_VBUS_WAKEUP_SOURCE=
-(3)
-> =20
-> +#define MX6_USB_OTG_WAKEUP_BITS (MX6_BM_WAKEUP_ENABLE | MX6_BM_VBUS_WAKE=
-UP | \
-> +				 MX6_BM_ID_WAKEUP)
-> +
->  struct usbmisc_ops {
->  	/* It's called once when probe a usb device */
->  	int (*init)(struct imx_usbmisc_data *data);
-> @@ -330,14 +333,25 @@ static int usbmisc_imx53_init(struct imx_usbmisc_da=
-ta *data)
->  	return 0;
->  }
-> =20
-> +static u32 usbmisc_wakeup_setting(struct imx_usbmisc_data *data)
-> +{
-> +	u32 wakeup_setting =3D MX6_USB_OTG_WAKEUP_BITS;
-> +
-> +	if (data->ext_id)
-> +		wakeup_setting &=3D ~MX6_BM_ID_WAKEUP;
-> +
-> +	if (data->ext_vbus)
-> +		wakeup_setting &=3D ~MX6_BM_VBUS_WAKEUP;
-> +
-> +	return wakeup_setting;
-> +}
-> +
->  static int usbmisc_imx6q_set_wakeup
->  	(struct imx_usbmisc_data *data, bool enabled)
->  {
->  	struct imx_usbmisc *usbmisc =3D dev_get_drvdata(data->dev);
->  	unsigned long flags;
->  	u32 val;
-> -	u32 wakeup_setting =3D (MX6_BM_WAKEUP_ENABLE |
-> -		MX6_BM_VBUS_WAKEUP | MX6_BM_ID_WAKEUP);
->  	int ret =3D 0;
-> =20
->  	if (data->index > 3)
-> @@ -346,11 +360,12 @@ static int usbmisc_imx6q_set_wakeup
->  	spin_lock_irqsave(&usbmisc->lock, flags);
->  	val =3D readl(usbmisc->base + data->index * 4);
->  	if (enabled) {
-> -		val |=3D wakeup_setting;
-> +		val &=3D ~MX6_USB_OTG_WAKEUP_BITS;
-> +		val |=3D usbmisc_wakeup_setting(data);
->  	} else {
->  		if (val & MX6_BM_WAKEUP_INTR)
->  			pr_debug("wakeup int at ci_hdrc.%d\n", data->index);
-> -		val &=3D ~wakeup_setting;
-> +		val &=3D ~MX6_USB_OTG_WAKEUP_BITS;
->  	}
->  	writel(val, usbmisc->base + data->index * 4);
->  	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> @@ -547,17 +562,17 @@ static int usbmisc_imx7d_set_wakeup
->  	struct imx_usbmisc *usbmisc =3D dev_get_drvdata(data->dev);
->  	unsigned long flags;
->  	u32 val;
-> -	u32 wakeup_setting =3D (MX6_BM_WAKEUP_ENABLE |
-> -		MX6_BM_VBUS_WAKEUP | MX6_BM_ID_WAKEUP);
-> =20
->  	spin_lock_irqsave(&usbmisc->lock, flags);
->  	val =3D readl(usbmisc->base);
->  	if (enabled) {
-> -		writel(val | wakeup_setting, usbmisc->base);
-> +		val &=3D ~MX6_USB_OTG_WAKEUP_BITS;
-> +		val |=3D usbmisc_wakeup_setting(data);
-> +		writel(val, usbmisc->base);
->  	} else {
->  		if (val & MX6_BM_WAKEUP_INTR)
->  			dev_dbg(data->dev, "wakeup int\n");
-> -		writel(val & ~wakeup_setting, usbmisc->base);
-> +		writel(val & ~MX6_USB_OTG_WAKEUP_BITS, usbmisc->base);
->  	}
->  	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> =20
-> --=20
-> 2.7.4
->=20
++++ Matthias Maennich [06/09/19 11:32 +0100]:
+>As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel.
+>That is a growth of roughly 1000 symbols since 4.17 (30206 [2]). There
+>seems to be some consensus amongst kernel devs that the export surface
+>is too large, and hard to reason about.
+>
+>Generally, these symbols fall in one of these categories:
+>1) Symbols actually meant for drivers
+>2) Symbols that are only exported because functionality is split over
+>   multiple modules, yet they really shouldn't be used by modules outside
+>   of their own subsystem
+>3) Symbols really only meant for in-tree use
+>
+>When module developers try to upstream their code, it regularly turns
+>out that they are using exported symbols that they really shouldn't be
+>using. This problem is even bigger for drivers that are currently
+>out-of-tree, which may be using many symbols that they shouldn't be
+>using, and that break when those symbols are removed or modified.
+>
+>This patch allows subsystem maintainers to partition their exported
+>symbols into separate namespaces, and module authors to import such
+>namespaces only when needed.
+>
+>This allows subsystem maintainers to more easily limit availability of
+>these namespaced symbols to other parts of the kernel. It can also be
+>used to partition the set of exported symbols for documentation
+>purposes; for example, a set of symbols that is really only used for
+>debugging could be in a "SUBSYSTEM_DEBUG" namespace.
+>
+>I continued the work mainly done by Martijn Coenen.
+>
+>Changes in v2:
+>- Rather than adding and evaluating separate sections __knsimport_NS,
+>  use modinfo tags to declare the namespaces a module introduces.
+>  Adjust modpost and the module loader accordingly.
+>- Also add support for reading multiple modinfo values for the same tag
+>  to allow list-like access to modinfo tags.
+>- The macros in export.h have been cleaned up to avoid redundancy in the
+>  macro parameters (ns, nspost, nspost2).
+>- The introduction of relative references in the ksymtab entries caused
+>  a rework of the macros to accommodate that configuration as well.
+>- Alignment of kernel_symbol in the ksymtab needed to be fixed to allow
+>  growing the kernel_symbol struct.
+>- Modpost does now also append the namespace suffix to the symbol
+>  entries in Module.symvers.
+>- The configuration option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS allows
+>  relaxing the enforcement of properly declared namespace imports at
+>  module loading time.
+>- Symbols can be collectively exported into a namespace by defining
+>  DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile.
+>- The requirement for a very recent coccinelle spatch has been lifted by
+>  simplifying the script.
+>- nsdeps does now ensures MODULE_IMPORT_NS statements are sorted when
+>  patching the module source files.
+>- Some minor bugs have been addressed in nsdeps to allow it to work with
+>  modules that have more than one source file.
+>- The RFC for the usb-storage symbols has been simplified by using
+>  DEFAULT_SYMBOL_NAMESPACE=USB_STORAGE rather than explicitly exporting
+>  each and every symbol into that new namespace.
+>
+>Changes in v3:
+>- Reword the documentation for the
+>  MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS option for clarification.
+>- Fix printed required version of spatch in coccinelle script.
+>- Adopt kbuild changes for modpost: .mod files are no longer generated
+>  in .tmp_versions. Similarely, generate the .ns_deps files in the tree
+>  along with the .mod files. Also, nsdeps now uses modules.order as
+>  source for the list modules to consider.
+>- Add an RFC patch to introduce the namespace WATCHDOG_CORE for symbols
+>  exported in watchdog_core.c.
+>
+>Changes in v4:
+>- scripts/nsdeps:
+>  - exit on first error
+>  - support out-of-tree builds O=...
+>- scripts/export_report.pl: update for new Module.symvers format
+>- scripts/mod/modpost: make the namespace a separate field when
+>  exporting to Module.symvers (rather than symbol.NS)
+>- include/linux/export.h: fixed style nits
+>- kernel/module.c: ensure namespaces are imported before taking a
+>  reference to the owner module
+>- Documentation: document the Symbol Namespace feature and update
+>  references to Module.symvers and EXPORT_SYMBOL*
+>
+>Changes in v5:
+>- Makefile: let 'nsdeps' depend on 'modules' to allow
+>  `make clean; make nsdeps` to work
+>- scripts/nsdeps: drop 'exit on first error' again as it just makes more
+>  problems than it solves
+>- drop the watchdog RFC patch for now
+>
+>This patch series was developed against v5.3-rc7.
 
-This patch is ok for me, I will queue it from next -rc1.=20
+Great work Matthias!
 
---=20
+I think this patchset is shaping up nicely. As the merge window is
+coming up soon, I'd like to queue this up in modules-next by the end
+of today to allow for some testing and "soak" time in linux-next. If
+there are any more complaints, please speak up.
 
-Thanks,
-Peter Chen=
+Thanks!
+
+Jessica
