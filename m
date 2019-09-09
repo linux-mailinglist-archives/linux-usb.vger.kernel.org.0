@@ -2,151 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21994AD4F0
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2019 10:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83ED5AD5DD
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Sep 2019 11:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727797AbfIIIfd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Sep 2019 04:35:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38430 "EHLO mail.kernel.org"
+        id S1727444AbfIIJht (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Sep 2019 05:37:49 -0400
+Received: from mail.sysgo.com ([176.9.12.79]:49102 "EHLO mail.sysgo.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726779AbfIIIfd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Sep 2019 04:35:33 -0400
-Received: from linux-8ccs (ip5f5ade63.dynamic.kabel-deutschland.de [95.90.222.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2587E218AC;
-        Mon,  9 Sep 2019 08:35:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568018132;
-        bh=TKImRVK5QfysGcK3+T8jXTqGg/4D94n2fS1rumyJj0k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TZcrEX8XikzlQDoHKc05y09WwC1EXW/eLqgiewIXoctMEF4T5kTG+SBZVvKmLSF4S
-         VceMDdm8DVu4k7r3KZcFC8odfFvXsgJyf0H+NA5s+jqm3ludZY4Ui/3lgYzsPbcv/q
-         zs77u5TDjehKhBneE5glLjJcM7UFKodd8kLRkcxQ=
-Date:   Mon, 9 Sep 2019 10:35:23 +0200
-From:   Jessica Yu <jeyu@kernel.org>
-To:     Matthias Maennich <maennich@google.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
-        arnd@arndb.de, gregkh@linuxfoundation.org, joel@joelfernandes.org,
-        lucas.de.marchi@gmail.com, maco@android.com, sspatil@google.com,
-        will@kernel.org, yamada.masahiro@socionext.com,
-        linux-kbuild@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH v5 00/11] Symbol Namespaces
-Message-ID: <20190909083522.GA446@linux-8ccs>
-References: <20180716122125.175792-1-maco@android.com>
- <20190906103235.197072-1-maennich@google.com>
+        id S1728792AbfIIJht (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Sep 2019 05:37:49 -0400
+X-Greylist: delayed 300 seconds by postgrey-1.27 at vger.kernel.org; Mon, 09 Sep 2019 05:37:47 EDT
+Subject: Re: [PATCH] usb: dwc3: reset the address and run_stop on init
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Roman Kapl <rka@sysgo.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+References: <20190905095151.26590-1-rka@sysgo.com>
+ <14b0d784-e172-7c22-8804-a9e7035d970f@synopsys.com>
+From:   Roman Kapl <roman.kapl@sysgo.com>
+Message-ID: <5a6a8d61-1ccf-9731-0b80-da783636970f@sysgo.com>
+Date:   Mon, 9 Sep 2019 11:32:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20190906103235.197072-1-maennich@google.com>
-X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <14b0d784-e172-7c22-8804-a9e7035d970f@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-+++ Matthias Maennich [06/09/19 11:32 +0100]:
->As of Linux 5.3-rc7, there are 31207 [1] exported symbols in the kernel.
->That is a growth of roughly 1000 symbols since 4.17 (30206 [2]). There
->seems to be some consensus amongst kernel devs that the export surface
->is too large, and hard to reason about.
->
->Generally, these symbols fall in one of these categories:
->1) Symbols actually meant for drivers
->2) Symbols that are only exported because functionality is split over
->   multiple modules, yet they really shouldn't be used by modules outside
->   of their own subsystem
->3) Symbols really only meant for in-tree use
->
->When module developers try to upstream their code, it regularly turns
->out that they are using exported symbols that they really shouldn't be
->using. This problem is even bigger for drivers that are currently
->out-of-tree, which may be using many symbols that they shouldn't be
->using, and that break when those symbols are removed or modified.
->
->This patch allows subsystem maintainers to partition their exported
->symbols into separate namespaces, and module authors to import such
->namespaces only when needed.
->
->This allows subsystem maintainers to more easily limit availability of
->these namespaced symbols to other parts of the kernel. It can also be
->used to partition the set of exported symbols for documentation
->purposes; for example, a set of symbols that is really only used for
->debugging could be in a "SUBSYSTEM_DEBUG" namespace.
->
->I continued the work mainly done by Martijn Coenen.
->
->Changes in v2:
->- Rather than adding and evaluating separate sections __knsimport_NS,
->  use modinfo tags to declare the namespaces a module introduces.
->  Adjust modpost and the module loader accordingly.
->- Also add support for reading multiple modinfo values for the same tag
->  to allow list-like access to modinfo tags.
->- The macros in export.h have been cleaned up to avoid redundancy in the
->  macro parameters (ns, nspost, nspost2).
->- The introduction of relative references in the ksymtab entries caused
->  a rework of the macros to accommodate that configuration as well.
->- Alignment of kernel_symbol in the ksymtab needed to be fixed to allow
->  growing the kernel_symbol struct.
->- Modpost does now also append the namespace suffix to the symbol
->  entries in Module.symvers.
->- The configuration option MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS allows
->  relaxing the enforcement of properly declared namespace imports at
->  module loading time.
->- Symbols can be collectively exported into a namespace by defining
->  DEFAULT_SYMBOL_NAMESPACE in the corresponding Makefile.
->- The requirement for a very recent coccinelle spatch has been lifted by
->  simplifying the script.
->- nsdeps does now ensures MODULE_IMPORT_NS statements are sorted when
->  patching the module source files.
->- Some minor bugs have been addressed in nsdeps to allow it to work with
->  modules that have more than one source file.
->- The RFC for the usb-storage symbols has been simplified by using
->  DEFAULT_SYMBOL_NAMESPACE=USB_STORAGE rather than explicitly exporting
->  each and every symbol into that new namespace.
->
->Changes in v3:
->- Reword the documentation for the
->  MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS option for clarification.
->- Fix printed required version of spatch in coccinelle script.
->- Adopt kbuild changes for modpost: .mod files are no longer generated
->  in .tmp_versions. Similarely, generate the .ns_deps files in the tree
->  along with the .mod files. Also, nsdeps now uses modules.order as
->  source for the list modules to consider.
->- Add an RFC patch to introduce the namespace WATCHDOG_CORE for symbols
->  exported in watchdog_core.c.
->
->Changes in v4:
->- scripts/nsdeps:
->  - exit on first error
->  - support out-of-tree builds O=...
->- scripts/export_report.pl: update for new Module.symvers format
->- scripts/mod/modpost: make the namespace a separate field when
->  exporting to Module.symvers (rather than symbol.NS)
->- include/linux/export.h: fixed style nits
->- kernel/module.c: ensure namespaces are imported before taking a
->  reference to the owner module
->- Documentation: document the Symbol Namespace feature and update
->  references to Module.symvers and EXPORT_SYMBOL*
->
->Changes in v5:
->- Makefile: let 'nsdeps' depend on 'modules' to allow
->  `make clean; make nsdeps` to work
->- scripts/nsdeps: drop 'exit on first error' again as it just makes more
->  problems than it solves
->- drop the watchdog RFC patch for now
->
->This patch series was developed against v5.3-rc7.
+Hello,
 
-Great work Matthias!
+On 9/5/19 8:57 PM, Thinh Nguyen wrote:
+> Hi,
+> 
+> Roman Kapl wrote:
+>> The address should be set to zero during reset according to the
+>> documentation.
+> 
+> That is for usb reset and not core soft reset, and dwc3 already handles
+> that case.
 
-I think this patchset is shaping up nicely. As the merge window is
-coming up soon, I'd like to queue this up in modules-next by the end
-of today to allow for some testing and "soak" time in linux-next. If
-there are any more complaints, please speak up.
+I thought that core soft reset is part of the USB reset (it is done 
+during the init, right?).
 
-Thanks!
+> 
+>> Clearing RunStop ensures that the host disconnects from
+>> the device (it was not cleared by CSFTRST, at least on ls1043).
+>>
+>> This allows the dwc3 to properly initialize even if the previous
+>> driver did not shutdown the device (e.g. when using virtualization).
+> 
+> This sounds like a workaround to some issue that the function driver did
+> not handle.
 
-Jessica
+I am using the ACM function driver. However, as I said, the issue arises 
+only when the dwc3 driver is in a guest OS that is rebooted (even if the 
+reboot is initiated from within the guest OS, not a hard reset).
+
+Maybe this is out of scope for Linux, trying to 'clean up' after the 
+previous driver?
+
+Thank you, Roman Kapl
+
+> 
+>> Signed-off-by: Roman Kapl <rka@sysgo.com>
+>> ---
+>>    drivers/usb/dwc3/core.c | 5 +++++
+>>    1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index c9bb93a2c81e..c633f5e0621d 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -250,6 +250,7 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+>>    
+>>    	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+>>    	reg |= DWC3_DCTL_CSFTRST;
+>> +	reg &= ~DWC3_DCTL_RUN_STOP;
+>>    	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
+>>    
+>>    	do {
+>> @@ -266,6 +267,10 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+>>    	return -ETIMEDOUT;
+>>    
+>>    done:
+>> +	reg = dwc3_readl(dwc->regs, DWC3_DCFG);
+>> +	reg &= ~(DWC3_DCFG_DEVADDR_MASK);
+>> +	dwc3_writel(dwc->regs, DWC3_DCFG, reg);
+>> +
+>>    	/*
+>>    	 * For DWC_usb31 controller, once DWC3_DCTL_CSFTRST bit is cleared,
+>>    	 * we must wait at least 50ms before accessing the PHY domain
+> 
+> BR,
+> Thinh
+> 
