@@ -2,180 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0871AE22E
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2019 03:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B17FAE31D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2019 06:41:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403923AbfIJB6f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Sep 2019 21:58:35 -0400
-Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:35452 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726903AbfIJB6f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Sep 2019 21:58:35 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D51CEC0D80;
-        Tue, 10 Sep 2019 01:58:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1568080714; bh=eXAep5+eUkqEm1xwkG0TK1QBBzo3H0ry2NbsVCJXhCE=;
-        h=Date:In-Reply-To:References:From:Subject:To:CC:From;
-        b=bd9MXGbyT2ypvZokK+gO1M4M2cvd13/eHK5rvs3C4Rtl03KfTp0SI/Xcc7GdeMIfi
-         jGgOHToR+dU+yYBb1ok77s4AfSYF8fJamHYytiOC3FRJWkXfwyquJQbNbYVrj50MlW
-         iXxTBMShQ3L02AEjT5GhHGIa8E/eZms4I2nca1Plj7KxY6mCId69DzEaARbcHqZKgT
-         umOqWc3aON/+s56+/k0KjJdrX5D73InTb8tvNOPInv4tA76ex3tQ+0lhvKCMz8MQ7z
-         yni06lbuo7CKEZz/8A5adLDOLkxY4Or3W8AVMjRj+hdq9yRCiO5yJ1nJc0t9qU+hlz
-         uCRPfApdfDMYw==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id B6196A005A;
-        Tue, 10 Sep 2019 01:58:34 +0000 (UTC)
-Received: from US01WEHTC1.internal.synopsys.com (10.12.239.236) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Mon, 9 Sep 2019 18:58:34 -0700
-Received: from te-lab16 (10.13.184.19) by us01wehtc1.internal.synopsys.com
- (10.12.239.236) with Microsoft SMTP Server (TLS) id 14.3.408.0; Mon, 9 Sep
- 2019 18:58:32 -0700
-Received: by te-lab16 (sSMTP sendmail emulation); Mon, 09 Sep 2019 18:58:32
- -0700
-Date:   Mon, 9 Sep 2019 18:58:32 -0700
-Message-ID: <e5c791b5514a25c1a84f53ac5360d149b26b1cbc.1568080486.git.thinhn@synopsys.com>
-In-Reply-To: <47eb7d52f0e361d64547460b45e48fcc87f13ece.1568080486.git.thinhn@synopsys.com>
-References: <47eb7d52f0e361d64547460b45e48fcc87f13ece.1568080486.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 2/2] usb: dwc3: gadget: Properly set maxpacket limit
-To:     Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>
-CC:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+        id S1729294AbfIJEl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Sep 2019 00:41:58 -0400
+Received: from mail-eopbgr1400119.outbound.protection.outlook.com ([40.107.140.119]:58640
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729014AbfIJEl5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Sep 2019 00:41:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NLrK4dOgvaJmcbs9kNyatVOnJT02OFAt2DgO+rbjNqVEgY5M84KQEO/kxlCw6R9R5uBmM2vF0z2Xcd61PKx+M/uPKUl6E7qY77RpfMCCZlcoOsY/XKYKiPbwsYOTsilqSvMbvzqwlRbvoafk3pdGXWCfTJekJ9g/Xnj+EqkjvZK2NqS00NZ43COAJc2XN+VJgCPU894xEz2CbFdT7IUTkFbZCTMB+pWsbbl/66BuQEg5y0XnxGYJ+mkTsGbIJ9MTLLWcY9RBZRJIz2gpcS7SX9mtUg+JZtvMlYYd9J+nJc6f9KMSr5wxknr1H46NbtxzjR3M0I+zAYAjqqzcBSRKLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=STpK6pXBpCRuBUW4xFA/fAqBaX2mDrlyPm2okjFKRhc=;
+ b=CdqQuaOaBX0vrRQ9rgteyi+DpcRJ/eXHMgq9p6jakZDIK7hoiZuPMmyAsm7BE+OisJzib4AELRPlG2HVdZenO43f/xRO4VLBPM3BIcsG3C89LMX5YES5YyUtBwWB9drdMzCCWSPvlHbzfR0bI/rKIfECy96c0BAFGmNZ8wZm2MsA8JKFcPnjq7kJHPhD5mr4uMqbXcDKcWJ7eWFWldY+ZqWwKiA/ANdu0RrEc1WyAy8auW68usiWJ2/JZTDnbq2b8E5nV22PRRlHX6pZm5g1FKe3YkinXs+eCDI4fYrSJUhzrMPeMjnYWWVyEgJXXvQPO/6nKDOo0kS4DCawfh3YcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=STpK6pXBpCRuBUW4xFA/fAqBaX2mDrlyPm2okjFKRhc=;
+ b=YCjsceWvDrFrwyxl5aBW16lqKbcPLQyoW+kuVcskS1cQuLNoHJGbDJoUFReCR3S95VZxKkgwzRxYGpL7dJo9MDcOaNjWsDwiTAH3lLsgT5kUBBpBBK4xU+LRDMxZLLkUU6szLdqDlsXRLMxQ/B33vKbFmTx71TLnjMONB5hVKwA=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB2976.jpnprd01.prod.outlook.com (20.177.103.17) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2241.14; Tue, 10 Sep 2019 04:41:52 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::7da1:bfc1:6c7f:8977]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::7da1:bfc1:6c7f:8977%7]) with mapi id 15.20.2241.018; Tue, 10 Sep 2019
+ 04:41:52 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        "REE erosca@DE.ADIT-JV.COM" <erosca@DE.ADIT-JV.COM>,
+        Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
+Subject: RE: [PATCH v4 1/3] usb: renesas_usbhs: simplify
+ usbhs_status_get_device_state()
+Thread-Topic: [PATCH v4 1/3] usb: renesas_usbhs: simplify
+ usbhs_status_get_device_state()
+Thread-Index: AQHVZyW+BrJJGrBbx0eU4Bti60u24qckVOlw
+Date:   Tue, 10 Sep 2019 04:41:52 +0000
+Message-ID: <TYAPR01MB45441B261C2EA251DED6E606D8B60@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <1568043974-1236-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+In-Reply-To: <1568043974-1236-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [150.249.235.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6212a2a2-ad02-4ce9-008e-08d735a93380
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:TYAPR01MB2976;
+x-ms-traffictypediagnostic: TYAPR01MB2976:|TYAPR01MB2976:
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-microsoft-antispam-prvs: <TYAPR01MB2976BA3A52D6A23A90D43104D8B60@TYAPR01MB2976.jpnprd01.prod.outlook.com>
+x-ms-exchange-transport-forked: True
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-forefront-prvs: 01565FED4C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(376002)(39860400002)(366004)(396003)(346002)(189003)(199004)(110136005)(478600001)(54906003)(33656002)(8676002)(81156014)(99286004)(81166006)(8936002)(486006)(305945005)(7736002)(14444005)(256004)(476003)(446003)(11346002)(71190400001)(71200400001)(74316002)(26005)(66066001)(186003)(102836004)(14454004)(6116002)(316002)(3846002)(64756008)(76176011)(86362001)(53936002)(6246003)(9686003)(25786009)(55016002)(6506007)(107886003)(4326008)(2906002)(5660300002)(6436002)(229853002)(52536014)(76116006)(66446008)(7696005)(66946007)(66476007)(66556008);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB2976;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: WMgwVUI8NYZaVhfjHWquUnaFHExgJrDI/PAMdC1//+dUlsCvi4RHk21dsEBWmQDrkv1wsHYwNJ8EZ30XSanNCUiHHdg+vq5BjvjY8mmUTmHsR8oxqlPwW0qi4xeSN4I+Z8CikDVeGymwmoAhqy4XOQ7JMv4gL6h5eYNkuOp0UowoWO0eMCvDiMJB2hRCUIw81Kl/72D9V6EJfS5g/MuVud8VA2VdDSXikCPStIYgCt6TH6leuK3UtUUWGBKk0DJyctRwijkW83X2Q9qhLzYbL85X9GmQCAfN4ciq11cLeyKotoj81mgvZywDB2D6S1bbepM/xTD1eyYEreoHa3GsQdD56r1vyTuxtkJeuvWZ8ju57fs4GXV/CRwZ9uVEn0EVELE1Z34CCmWZ0ltXt2kqI+/icLnZyVNhxZcBCtskBEk=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.13.184.19]
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6212a2a2-ad02-4ce9-008e-08d735a93380
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Sep 2019 04:41:52.4927
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Yu0K8R/aKF/UvHoZTvxfm+eQBmrbn/kezH1i1KQHAoyn2PbCmWssoMr/atjm9gncFY4HCmcwA/S0Aqdw2inoE82xiFCEY4Rz4NNgVTTB7IUS6orBGgV8qA9tzicHh6ko
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2976
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the calculation of max packet size limit for IN endpoints is
-too restrictive. This prevents a matching of a capable hardware endpoint
-during configuration. Below is the minimum recommended HW configuration
-to support a particular endpoint setup from the databook:
+Hi Veeraiyan,
 
-For OUT endpoints, the databook recommended the minimum RxFIFO size to
-be at least 3x MaxPacketSize + 3x setup packets size (8 bytes each) +
-clock crossing margin (16 bytes).
+> From: Veeraiyan Chidambaram, Sent: Tuesday, September 10, 2019 12:46 AM
+<snip>
+>=20
+> Similar to usbhs_status_get_ctrl_stage(), *_get_device_state() is not
+> supposed to return any error code since its return value is the DVSQ
+> bitfield of the INTSTS0 register. According to SoC HW manual rev1.00,
+> every single value of DVSQ[2:0] is valid and none is an error:
+>=20
+> ----8<----
+> Device State
+> 000: Powered state
+> 001: Default state
+> 010: Address state
+> 011: Configuration state
+> 1xx: Suspended state
+> ----8<----
+>=20
+> Hence, simplify the function body. The motivation behind dropping the
+> switch/case construct is being able to implement reading the suspended
+> state. The latter (based on the above DVSQ[2:0] description) doesn't
+> have a unique value, but is rather a list of states (which makes
+> switch/case less suitable for reading/validating it):
+>=20
+> 100: (Suspended) Powered state
+> 101: (Suspended) Default state
+> 110: (Suspended) Address state
+> 111: (Suspended) Configuration state
+>=20
+> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> Signed-off-by: Veeraiyan Chidambaram <veeraiyan.chidambaram@in.bosch.com>
 
-For IN endpoints, the databook recommended the minimum TxFIFO size to be
-at least 3x MaxPacketSize for endpoints that support burst. If the
-endpoint doesn't support burst or when the device is operating in USB
-2.0 mode, a minimum TxFIFO size of 2x MaxPacketSize is recommended.
+Thank you for the patch!
 
-Base on these recommendations, we can calculate the MaxPacketSize limit
-of each endpoint. This patch revises the IN endpoint MaxPacketSize limit
-and also sets the MaxPacketSize limit for OUT endpoints.
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Reference: Databook 3.30a section 3.2.2 and 3.2.3
-
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/core.h   |  4 ++++
- drivers/usb/dwc3/gadget.c | 52 +++++++++++++++++++++++++++++++++++++----------
- 2 files changed, 45 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 6a6baadcb697..0f019db5e125 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -309,6 +309,10 @@
- #define DWC3_GTXFIFOSIZ_TXFDEP(n)	((n) & 0xffff)
- #define DWC3_GTXFIFOSIZ_TXFSTADDR(n)	((n) & 0xffff0000)
- 
-+/* Global RX Fifo Size Register */
-+#define DWC31_GRXFIFOSIZ_RXFDEP(n)	((n) & 0x7fff)	/* DWC_usb31 only */
-+#define DWC3_GRXFIFOSIZ_RXFDEP(n)	((n) & 0xffff)
-+
- /* Global Event Size Registers */
- #define DWC3_GEVNTSIZ_INTMASK		BIT(31)
- #define DWC3_GEVNTSIZ_SIZE(n)		((n) & 0xffff)
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 292e5e672868..cbda3bb4c1c0 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2205,7 +2205,6 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- {
- 	struct dwc3 *dwc = dep->dwc;
- 	int mdwidth;
--	int kbytes;
- 	int size;
- 
- 	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-@@ -2221,17 +2220,17 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- 	/* FIFO Depth is in MDWDITH bytes. Multiply */
- 	size *= mdwidth;
- 
--	kbytes = size / 1024;
--	if (kbytes == 0)
--		kbytes = 1;
--
- 	/*
--	 * FIFO sizes account an extra MDWIDTH * (kbytes + 1) bytes for
--	 * internal overhead. We don't really know how these are used,
--	 * but documentation say it exists.
-+	 * To meet performance requirement, a minimum TxFIFO size of 3x
-+	 * MaxPacketSize is recommended for endpoints that support burst and a
-+	 * minimum TxFIFO size of 2x MaxPacketSize for endpoints that don't
-+	 * support burst. Use those numbers and we can calculate the max packet
-+	 * limit as below.
- 	 */
--	size -= mdwidth * (kbytes + 1);
--	size /= kbytes;
-+	if (dwc->maximum_speed >= USB_SPEED_SUPER)
-+		size /= 3;
-+	else
-+		size /= 2;
- 
- 	usb_ep_set_maxpacket_limit(&dep->endpoint, size);
- 
-@@ -2249,8 +2248,39 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
- static int dwc3_gadget_init_out_endpoint(struct dwc3_ep *dep)
- {
- 	struct dwc3 *dwc = dep->dwc;
-+	int mdwidth;
-+	int size;
-+
-+	mdwidth = DWC3_MDWIDTH(dwc->hwparams.hwparams0);
-+
-+	/* MDWIDTH is represented in bits, convert to bytes */
-+	mdwidth /= 8;
- 
--	usb_ep_set_maxpacket_limit(&dep->endpoint, 1024);
-+	/* All OUT endpoints share a single RxFIFO space */
-+	size = dwc3_readl(dwc->regs, DWC3_GRXFIFOSIZ(0));
-+	if (dwc3_is_usb31(dwc))
-+		size = DWC31_GRXFIFOSIZ_RXFDEP(size);
-+	else
-+		size = DWC3_GRXFIFOSIZ_RXFDEP(size);
-+
-+	/* FIFO depth is in MDWDITH bytes */
-+	size *= mdwidth;
-+
-+	/*
-+	 * To meet performance requirement, a minimum recommended RxFIFO size
-+	 * is defined as follow:
-+	 * RxFIFO size >= (3 x MaxPacketSize) +
-+	 * (3 x 8 bytes setup packets size) + (16 bytes clock crossing margin)
-+	 *
-+	 * Then calculate the max packet limit as below.
-+	 */
-+	size -= (3 * 8) + 16;
-+	if (size < 0)
-+		size = 0;
-+	else
-+		size /= 3;
-+
-+	usb_ep_set_maxpacket_limit(&dep->endpoint, size);
- 	dep->endpoint.max_streams = 15;
- 	dep->endpoint.ops = &dwc3_gadget_ep_ops;
- 	list_add_tail(&dep->endpoint.ep_list,
--- 
-2.11.0
+Best regards,
+Yoshihiro Shimoda
 
