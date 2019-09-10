@@ -2,79 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDF82AE807
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2019 12:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB027AED21
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Sep 2019 16:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390539AbfIJKZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Sep 2019 06:25:39 -0400
-Received: from mail-lf1-f54.google.com ([209.85.167.54]:43194 "EHLO
-        mail-lf1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729700AbfIJKZi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Sep 2019 06:25:38 -0400
-Received: by mail-lf1-f54.google.com with SMTP id q27so12978284lfo.10
-        for <linux-usb@vger.kernel.org>; Tue, 10 Sep 2019 03:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=86PBgefI/y6X/Isd1n0htxpzll5TC6xu2rYWUoOg2+E=;
-        b=ExqvI2xn9CJJpk4iCHBRebb8Z9iziuTPjPohh4nkXLq31YjmvLjecF8HaVD1b03Zwp
-         BmLmeDpN/7+qkAbxeUzkffB2MRHqZfH+tOLHexeSWoxHaJNeMuv8HNdAPCnRcb1gZ/5a
-         f5eHP58LUGy/385RwTvXwD+XwN0OPXFjOn9ytYD85Uxsc7OrZFqdclb8T7ch5gygoH86
-         HaDeRzxgs4jW/Ig38MwZfRMFk3u/jWISZNWTwHDxy3wXACxguMRTIbjlki94IlZtP/0E
-         /1te8vF5EdgDwHXV17XE18Q1yzV6xbuCWx62fuAhxy9QTlELMJa2cbelEUrW1X6KWzdp
-         9DEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=86PBgefI/y6X/Isd1n0htxpzll5TC6xu2rYWUoOg2+E=;
-        b=kvPKzeMlrtYgHCCvyp4y9pg/MElKijODuJ4ezsy2WfiE7WM4XQ91wQqNnWuBaaQlkF
-         vCsF8nMgjKnJdBttYFQc52Gbbs1OaZRiy66ZwEcN58JTHdutHA/suVaRMeA72CEzn8BY
-         jruHM24EajTm5rdQi/AEdU3uXoc8ayLJnbmdmrL+RQI37WObKj2g5FodBahQCLXpkPeQ
-         iRf4Dgs0nzqE+U5y0+Qbe6zB9M0HBdUtyfqstXSkBW3nYzG+o4h3E62RD4KSPYv7vjxv
-         SUlKxbz+OXpngXGxijQ3m5A42A09kHmsHj7jROnszBc6zuUazA6XafOY7Rl3XggdglxK
-         gN+g==
-X-Gm-Message-State: APjAAAXpHZEHxqdV7XLf/6x3q6n/LD2TyHkWm7sK+bO3P99k03ypCTTT
-        waq7UFALr2AAX4EHXx5qYwUlnih+E+MsnlR3w91mjQ==
-X-Google-Smtp-Source: APXvYqxzAgxWmnCAlWjLbJSC2xDUVMd1qjJIhYHnDdxKGJ4zV+g693y3TgzFL0iinVPQnVMmNKjBkeRooOIaDrac4HQ=
-X-Received: by 2002:ac2:5c11:: with SMTP id r17mr20173197lfp.61.1568111136928;
- Tue, 10 Sep 2019 03:25:36 -0700 (PDT)
+        id S1730052AbfIJOfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Sep 2019 10:35:04 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:50139 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726535AbfIJOfD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Sep 2019 10:35:03 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 2D199258;
+        Tue, 10 Sep 2019 10:35:02 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Tue, 10 Sep 2019 10:35:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=Yn2LW5Cn6NDpHwAp8OL/VHEBLuD
+        Ea+FvY5tcN4UAkhY=; b=E1l0FDeU0uUFm7pcZuFCt4iz6yOAMuia+vNX5NgkfB9
+        OZ+OCRjCjmAheEZ/c0h/S46faHhQNilYVNSjtRKtEaHY/kG/ecQRjLJyA2moFe/m
+        QiGLzarjz3ucq0RiMxzat8L+2491N7JAvPBXH5i/on3KZHNI2lQwlnftpgcTIunw
+        A2NMpap8CEX7RSvWM0WTG7HhOKYDG79boZ3pcNrA9xmbAaShQHWxTV1aAAcZUyjx
+        xXnPucNsfVuZ2moPw5EHpIQCIY/t7qYRleuWKHPRmlKSbgnCLB/7ZJGL/c4QiN1X
+        SMJaboUtlK9Z54p+uBTgSHA0yDYE70+fSngiiws5SHA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=Yn2LW5
+        Cn6NDpHwAp8OL/VHEBLuDEa+FvY5tcN4UAkhY=; b=NNHX+V7aLEcSUnQcXHmGE3
+        nqfAJ1DZb+GMtyCwjtXktd01OmnSK0LMe3vSOTjBUaGAmSF46McHmEA3ASkbI6mz
+        /a7H9PN7qTW/0XsNw2iOX08ic59QTPZhc/VAXM3yORb5oQy1ZG0BW7a7s4EI5o4A
+        /YzepHaWkEb181HwyWTWK75/RkLk2p3ZQ4DqHJvdHCtGUCIF3dzUuYI803HJwnw8
+        jT18H5KQNk2bDKCwVxOKJO+PNKBMJcHn8B6sFBa90EWFzc5AoRr0afIFIuRBIZlH
+        sZLwttpozKF0w0dWRQ9TMqOwO6P5OOkSQC0WP40bhyaPhw7E+0td0sURk7cfXZKw
+        ==
+X-ME-Sender: <xms:lbR3XeLGvUx4O31kAw2oE1n5l3b6fsed1JR-zVy08lObam-UxyKvhQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrtddtgdehhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepvddufedrfedtrdekrdduud
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
+    lhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:lbR3XcGSgZBgfUJoxZBU4g8S3NN0RXfw57IHLBKmHhDJsEAasRbyAg>
+    <xmx:lbR3XcWakchC9nsJ8YlQPtYqK5DzoQcbNHxshQdTHqBMSbyym-Sh6Q>
+    <xmx:lbR3XSMePnZU-G5F6G3_gJC1yDjQfi6DXoXu20hx31ihEJ3K3AB3zA>
+    <xmx:lbR3XaV84X5qhBZCloMBm7H7idqNjs0OLhwR7hNP8BIkyQZHYjIeNg>
+Received: from localhost (110.8.30.213.rev.vodafone.pt [213.30.8.110])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DE087D6005A;
+        Tue, 10 Sep 2019 10:35:00 -0400 (EDT)
+Date:   Tue, 10 Sep 2019 15:34:59 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     stable@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-omap@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mtd@lists.infradead.org
+Subject: Re: [BACKPORT 4.14.y 03/18] drm/omap: panel-dsi-cm: fix driver
+Message-ID: <20190910143459.GC3362@kroah.com>
+References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
+ <20190905161759.28036-4-mathieu.poirier@linaro.org>
 MIME-Version: 1.0
-References: <20190908085133.GA7233@amd>
-In-Reply-To: <20190908085133.GA7233@amd>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 10 Sep 2019 11:25:25 +0100
-Message-ID: <CACRpkdYuaoc=0Ljn+xM8nqdo16-5tfS0=N5VeAnM6Lx0FME4Jg@mail.gmail.com>
-Subject: Re: next-20190904: build failure in cp210x usb serial, gpio related?
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190905161759.28036-4-mathieu.poirier@linaro.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Sep 8, 2019 at 9:51 AM Pavel Machek <pavel@denx.de> wrote:
+On Thu, Sep 05, 2019 at 10:17:44AM -0600, Mathieu Poirier wrote:
+> From: Tony Lindgren <tony@atomide.com>
+> 
+> commit e128310ddd379b0fdd21dc41d176c3b3505a0832 upstream
+> 
+> This adds support for get_timings() and check_timings()
+> to get the driver working and properly initializes the
+> timing information from DT.
+> 
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.co.uk>
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
+> Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+> ---
+>  .../gpu/drm/omapdrm/displays/panel-dsi-cm.c   | 56 +++++++++++++++++--
+>  1 file changed, 51 insertions(+), 5 deletions(-)
 
-> I'm getting this compiling the -next:
-(...)
->   ./include/linux/gpio/driver.h:722:19: error: static declaration of
->   =E2=80=98gpiochip_lock_as_irq=E2=80=99 follows non-static declaration
->     722 | static inline int gpiochip_lock_as_irq(struct gpio_chip
->   *chip,
+THis looks like a "new feature", right?  Why is this a stable patch?
 
-Yes this was fixed pretty much the same day the next release came
-out, and by now I got like 4 different patches solving the same problem,
-because no new next releases are coming out right now...
-bad timing with no next releases during the kernel summit, sorry!
+thanks,
 
-Yours,
-Linus Walleij
+greg k-h
