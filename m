@@ -2,99 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DEE8AF534
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 06:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F56AF5FE
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 08:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbfIKEzJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Sep 2019 00:55:09 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:41548 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726058AbfIKEzJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Sep 2019 00:55:09 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 75AE160A43; Wed, 11 Sep 2019 04:55:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1568177708;
-        bh=oMY5Tj+8xqlrsEI1mYLnZKn0gg+CRwrKPBMhq/IUAS4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KA4kqy72J+ImBJ5TDxBYXQ0/yrwgtp9eRcdDtmzWI2XI5It5Z/R8frN3fM5gC+tiJ
-         qI0VmQ7bvzQmDVInMaR1HbudenbPqJMXaUK+pvwVNyAylprNLjwa/T2DC3hSNRVhSI
-         HkXGPQ3m+VXSq4gORhfJuaNzlZmAhe4+2OfmMu/g=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from cchiluve-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: cchiluve@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2A1F8611DC;
-        Wed, 11 Sep 2019 04:55:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1568177706;
-        bh=oMY5Tj+8xqlrsEI1mYLnZKn0gg+CRwrKPBMhq/IUAS4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ABYatkaE+4ezK5n1VvbEF5PrRST9DqvqnG1HMBktxDmgxD7pxhKPpjgVphfCkPwia
-         3QYM2VYivVFOk9OXxJjKlWmHy6CXPL3B/dAJcgRWkrwkQp1/MX6MT1pJJvBqv/41sJ
-         2DMxeDHPR8oGZlyuzpTsH8DysHRoRRzbRLpbJN50=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2A1F8611DC
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cchiluve@codeaurora.org
-From:   Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-To:     balbi@kernel.org, agross@kernel.org, david.brown@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: [PATCH 3/3] arm64: dts: sdm845: Add interconnect properties for USB
-Date:   Wed, 11 Sep 2019 10:24:35 +0530
-Message-Id: <1568177675-18764-4-git-send-email-cchiluve@codeaurora.org>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1568177675-18764-1-git-send-email-cchiluve@codeaurora.org>
-References: <1568177675-18764-1-git-send-email-cchiluve@codeaurora.org>
+        id S1726390AbfIKGm1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Sep 2019 02:42:27 -0400
+Received: from esa4.microchip.iphmx.com ([68.232.154.123]:20595 "EHLO
+        esa4.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbfIKGm1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Sep 2019 02:42:27 -0400
+Received-SPF: Pass (esa4.microchip.iphmx.com: domain of
+  Nicolas.Ferre@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  envelope-from="Nicolas.Ferre@microchip.com";
+  x-sender="Nicolas.Ferre@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com a:mx1.microchip.iphmx.com
+  a:mx2.microchip.iphmx.com include:servers.mcsv.net
+  include:mktomail.com include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa4.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa4.microchip.iphmx.com;
+  envelope-from="Nicolas.Ferre@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa4.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Nicolas.Ferre@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: Kr0fy78TWTx/7uyhYaTb4pVf1lS3SI1D22i5ivt/iH+3LbcssZwAHRQ1u7De59PHiJBbl/kjNL
+ VIGEe8LL2gvSflr8MoTYVgfowqHMhgVbrEYKCBSjuDc4DVkHBTmWm8KMRwUW2fnNAe0Y77Z7pI
+ c76IsEWJaMBOVNPFV2jqBa3kGA7zQtliXGO/RtHvR/327vfGkkLd42wN8FGWSybnjThK36hmhy
+ YcJNRnvcybQXd+ZQZin0zAMxoNd1T1JXk4iMVm/G45JKbVa7gpZ3tmAPqEJYMYPc4obOOKu+8q
+ 6PM=
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="47503524"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Sep 2019 23:42:26 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Tue, 10 Sep 2019 23:42:25 -0700
+Received: from tenerife.corp.atmel.com (10.10.85.251) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Tue, 10 Sep 2019 23:42:24 -0700
+From:   Nicolas Ferre <nicolas.ferre@microchip.com>
+To:     <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
+CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <Boris.Krasnovskiy@lairdconnect.com>, <linux-usb@vger.kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Subject: [PATCH 0/3] USB: host: ohci-at91: tailor power consumption
+Date:   Wed, 11 Sep 2019 08:41:51 +0200
+Message-ID: <20190911064154.28633-1-nicolas.ferre@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Populate USB DT node with interconnect properties.
+Following a set of experiments we found areas of improvement for OHCI power
+consumption (and associated USB analog cells).
+This enhances the shutdown of residual power consumption in case of Linux
+suspend/resume and removal of the driver (when compiled as a module).
 
-Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
----
- arch/arm64/boot/dts/qcom/sdm845.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+Best regards,
+  Nicolas
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-index fcb9330..1c41922 100644
---- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-@@ -1837,6 +1837,12 @@
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 
-+			interconnects = <&rsc_hlos MASTER_USB3_0
-+						&rsc_hlos SLAVE_EBI1>,
-+					<&rsc_hlos MASTER_APPSS_PROC
-+						&rsc_hlos SLAVE_USB3_0>;
-+			interconnect-names = "usb-ddr", "apps-usb";
-+
- 			usb_1_dwc3: dwc3@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xcd00>;
-@@ -1881,6 +1887,12 @@
- 
- 			resets = <&gcc GCC_USB30_SEC_BCR>;
- 
-+			interconnects = <&rsc_hlos MASTER_USB3_1
-+						&rsc_hlos SLAVE_EBI1>,
-+					<&rsc_hlos MASTER_APPSS_PROC
-+						&rsc_hlos SLAVE_USB3_1>;
-+			interconnect-names = "usb-ddr", "apps-usb";
-+
- 			usb_2_dwc3: dwc3@a800000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a800000 0 0xcd00>;
+Boris Krasnovskiy (2):
+  USB: host: ohci-at91: completely shutdown the controller in
+    at91_stop_hc()
+  USB: host: ohci-at91: resume: balance the clock start call
+
+Nicolas Ferre (1):
+  USB: host: ohci-at91: suspend: delay needed before to stop clocks
+
+ drivers/usb/host/ohci-at91.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+2.17.1
 
