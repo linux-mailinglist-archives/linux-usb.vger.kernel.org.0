@@ -2,146 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B078BAF48F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 04:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA88AF4C2
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 05:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726555AbfIKC5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Sep 2019 22:57:10 -0400
-Received: from mail-eopbgr00059.outbound.protection.outlook.com ([40.107.0.59]:59349
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726510AbfIKC5K (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Sep 2019 22:57:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eCIakD3wxCqWLzClC71QbtI/DXBGSY3Kf3puFiJFAX2IchL5PlpajqbEyPQTSW0DDtdvZ9+zOzdMkbp1ANRuFkLXdQBAj4drd9huzHn48vHiRIoLqzD/MYAH/29YowkeIswpNCkbfvmd/LsDpFUnRQoP+7QIOz9Ww7KVEf1z/lq3+KpiVkywkPJkMBfNDlE18drSY8fxLorLYASqiSWytpyqs9PyXzwYqTEY/o+U9dvvV+RtSCgSk412rQUTMRh5t5tv2ijq+2BHlPaQvMPmYBTLSBECNqj66lbrzw3/lMkqBQgw5N2OO2QhRt80IXT8Dix6PJGO7LnWHHzpB90emQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sCvFfONdE1WTcKv7Fvt0HUW2zFnWGtoYjYvRtQkcavk=;
- b=JntKDE//qNS7VxhVI746sMTfKB5VbUi8kTcsJIkZirQjRS2AISJy7liJC91xxtuxyaOEaY/0qolt3D91RbiKQ3iHBXIhhotpi/Gv9Q31muKPdieX8JO70VyyfQH3csMODFkYSz6M41PmNBmZ7C1Sa7m6Fxp0RQ8lkJhMiClG6UggqaPLhN2AI36jg2AUwmORKFXbubmmJCx9ALH2ZNE42XYSDPvSQXboZxmMYevByfWf1cbgqzlJ4FNzBbv3tIjeAIHcOlXbUG+nkGAK7Xl4QWi53wIVTCsisgVuIPCtu2RxIj9qmYAUKEnghKTRfvvESPXxfwLdK2HGnH1inyLBBA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sCvFfONdE1WTcKv7Fvt0HUW2zFnWGtoYjYvRtQkcavk=;
- b=Ej68uJIt2cXG1fKG2DoPrUkSKJ7RZ5bMcHoOlrxoWlwzVEltA5CdKMnNx1FTFa9VVLYUi/IUPPwlIHk6tr37aVwS3Sw1sFZiEKmUP5HSKEE7uc9HcliyngQ2nR8bipQoaj5g6XPTa6EpMkbGm35A4uoT4laXYDVkCxtSacK/wb0=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB5711.eurprd04.prod.outlook.com (20.178.126.219) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.15; Wed, 11 Sep 2019 02:57:05 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2241.018; Wed, 11 Sep 2019
- 02:57:05 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Allen Blaylock <AllenB@epiloglaser.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+        id S1726561AbfIKDyY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Sep 2019 23:54:24 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:49442 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726341AbfIKDyY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Sep 2019 23:54:24 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 082B96085C; Wed, 11 Sep 2019 03:54:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568174063;
+        bh=lCfVEVyUpbiT7Rpsp/hjsOkf9hQsAf1v6risKYBkfgs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=KpgFvYxOfLJc2ZaQWbaPMxMa6616HDVjfWf4JR3A5iE+rK50ZcWvjVxGSU9hr24rG
+         hhzJ+vHUg2ZcybMr/0ITwKx1tRT1E7mpFtWLFzPXo9KtGnJ8m+QWPKip0tgMpGryBA
+         FKR/arFCBW+9H+PCkr05e5vzrGuMnjPzbVZIyQCk=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.206.24.216] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mgautam@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 31AA5604D4;
+        Wed, 11 Sep 2019 03:54:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568174062;
+        bh=lCfVEVyUpbiT7Rpsp/hjsOkf9hQsAf1v6risKYBkfgs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=LhT+nvN9qVEWJlzmFNxqtqVPdGqf6CgceWIJrKh+7a0DIN4sZIhGNcY6GWnISzNYS
+         PllvCz5eMulMhESZJpkViY+a8YLJvCM2577KJJDY4irDy8udeX2XW49KMf7TIVRfBe
+         Zcjlwhvu23wk6x7/HW+zbQKAyNooecsXTfrPFuqc=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 31AA5604D4
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mgautam@codeaurora.org
 Subject: Re: EHSET with hub and PCIe root hub
-Thread-Topic: EHSET with hub and PCIe root hub
-Thread-Index: AdVoIxLeoShF0bVgSnKKwHrYOWnWwgAKZ+wA
-Date:   Wed, 11 Sep 2019 02:57:05 +0000
-Message-ID: <20190911025750.GB22414@b29397-desktop>
+To:     Peter Chen <peter.chen@nxp.com>,
+        Allen Blaylock <AllenB@epiloglaser.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 References: <BYAPR20MB25012D076C3D44E07BA32C89CCB60@BYAPR20MB2501.namprd20.prod.outlook.com>
-In-Reply-To: <BYAPR20MB25012D076C3D44E07BA32C89CCB60@BYAPR20MB2501.namprd20.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b406acc7-5c43-4898-a051-08d73663ba5f
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR04MB5711;
-x-ms-traffictypediagnostic: VI1PR04MB5711:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <VI1PR04MB5711145F268B20B908FD5D5A8BB10@VI1PR04MB5711.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0157DEB61B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(396003)(366004)(39860400002)(376002)(136003)(346002)(189003)(199004)(11346002)(256004)(316002)(6246003)(6916009)(486006)(9686003)(2906002)(66476007)(76116006)(91956017)(6512007)(6486002)(66946007)(44832011)(8936002)(33716001)(99286004)(476003)(81166006)(81156014)(186003)(53936002)(25786009)(66446008)(4326008)(102836004)(53546011)(6506007)(86362001)(6436002)(8676002)(76176011)(26005)(7736002)(478600001)(305945005)(45080400002)(64756008)(6306002)(229853002)(66556008)(71200400001)(71190400001)(14444005)(33656002)(5660300002)(66066001)(6116002)(3846002)(14454004)(1076003)(966005)(446003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5711;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: XfFoeblFnI+wdNo9r+s5JFlacZrErvxZKR3jweQpVw6dtKStIYMZcd9j1N0kNiyH5bgmV/Hm5yszHaNnEDXOp4NOoHaZ9PHRurO8J9Tq19cJNyg9GSXYsVOHxx85Lz/c9Mo5xc62QDtX4+7tkG5NdLrc1w/Kug+qbn569c+JHNyq5wsr2lJuH7vhNNrj/zNee7jnkpIlN+X5dtzH9p6Hqub1IssjsqrykN7hsuuRtyk9QIRYSe5tvn2Blhs98TEtwbRNFCm2FGkqmiDtxwXqHG8AF8LV99XdGCjPB2Y66+KyoldsPAqKNzH95PYpt7dUfZWVGHXK6iFB1n3efgm95J3tpgBQEWpUakf/3SQjJczEd/kFdyMOcLkknkqAi937SpXe7wHDXQa2IpZIfww9NDyWplkeQEozCzb9hS7zyqM=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <17EE85C909960C4FA29C07CC62D0C624@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ <20190911025750.GB22414@b29397-desktop>
+From:   Manu Gautam <mgautam@codeaurora.org>
+Message-ID: <917f584b-11c8-9656-e9a3-df251350c427@codeaurora.org>
+Date:   Wed, 11 Sep 2019 09:24:18 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b406acc7-5c43-4898-a051-08d73663ba5f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2019 02:57:05.1146
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SFvTwN6Y5vPikezipIvljGIiEQyf2lcygiYKPyBMKFKIYcLXJmvlhgq8rXpO+XMRzrlYIsKQVdRpETnwn3g4Cw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5711
+In-Reply-To: <20190911025750.GB22414@b29397-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-09-10 22:01:58, Allen Blaylock wrote:
-> I am trying to validate the USB on an embedded platform based on the NXP =
-i.MX7.=20
-> So far I have only been able to validate root ports on the board but also=
- have a
-> PCIe xhci controller and a microchip USB3503 hub off of the HSIC port on =
-the=20
-> SoC which I would like to run the tests on.=20
->=20
-> I have reviewed the mailing list archives and found another discussion of=
- using
-> the EHSET driver to validate a driver and they reference the same issue I=
- am=20
-> seeing. When I plug in the device I see=20
-> usb_ehset_test: probe of <port path> failed with error -32
-> for either the PCIe root hub or the USB3503 HSIC hub.
->=20
-> Further down in the mailing list chain Peter Chen states=20
-> > Besides, do not connect HUB between your host board and emulation board=
-=20
-> > (for sending VID/PID).
-> but there is no additional information regarding this statement.
 
-EHSET is used to test embedded host electrical signal required by
-USB IF Compliance Test, not test the signal for USB HUB, since the
-EHSET module could only let embedded host controller enter test mode
-by writing TEST MODE registers follows EHCI or xHCI spec. Maybe the
-USB HUB could let its port enter test mode, but it needs to use other
-ways, maybe vendor specific commands.
+On 9/11/2019 8:27 AM, Peter Chen wrote:
+> On 19-09-10 22:01:58, Allen Blaylock wrote:
+>> I am trying to validate the USB on an embedded platform based on the NXP i.MX7. 
+>> So far I have only been able to validate root ports on the board but also have a
+>> PCIe xhci controller and a microchip USB3503 hub off of the HSIC port on the 
+>> SoC which I would like to run the tests on. 
+>>
+>> I have reviewed the mailing list archives and found another discussion of using
+>> the EHSET driver to validate a driver and they reference the same issue I am 
+>> seeing. When I plug in the device I see 
+>> usb_ehset_test: probe of <port path> failed with error -32
+>> for either the PCIe root hub or the USB3503 HSIC hub.
 
-For your PCIe xHCI controller, if it follows xHCI spec, it should work
-with EHSET, would you please debug it by code and see why return error?
 
-Peter
-> Looking around
-> it looks like the hubs have some mechanism for being tested[0] and the HS=
-ETT=20
-> application for Windows supports testing of hubs according to the=20
-> documentation.[1]
->=20
-> Is this something there exists a module for or are either of these cases
-> unexpected behavior for the EHSET kernel module?
->=20
-> Allen
->=20
-> [0] https://eur01.safelinks.protection.outlook.com/?url=3Dhttp%3A%2F%2Fww=
-w.testusb.com%2FHub_test.html&amp;data=3D02%7C01%7Cpeter.chen%40nxp.com%7C3=
-70e9acddb11494ec68008d7363a93fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%=
-7C637037497528612416&amp;sdata=3DdjXerGrLCkeITKRqg4KteuzNn5TMxeOhqif58DWJYU=
-E%3D&amp;reserved=3D0
-> [1] https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fu=
-sb.org%2Fsites%2Fdefault%2Ffiles%2FHSETT_Instruction_0_4_1.pdf&amp;data=3D0=
-2%7C01%7Cpeter.chen%40nxp.com%7C370e9acddb11494ec68008d7363a93fa%7C686ea1d3=
-bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637037497528612416&amp;sdata=3Dgem9tyxRA=
-WIppDFW%2Fpw08dPKqQQ9NMX%2BhH19V2SloiQ%3D&amp;reserved=3D0
->=20
+I remember seeing some HUBs which fail to enter compliance mode
+(STALL SetFeature request) if a device is connected to the port.
+You can check usbmon logs if SetFeature request was sent to HUB.
 
---=20
 
-Thanks,
-Peter Chen=
+>>
+>> Further down in the mailing list chain Peter Chen states 
+>>> Besides, do not connect HUB between your host board and emulation board 
+>>> (for sending VID/PID).
+>> but there is no additional information regarding this statement.
+> EHSET is used to test embedded host electrical signal required by
+> USB IF Compliance Test, not test the signal for USB HUB, since the
+> EHSET module could only let embedded host controller enter test mode
+> by writing TEST MODE registers follows EHCI or xHCI spec. Maybe the
+> USB HUB could let its port enter test mode, but it needs to use other
+> ways, maybe vendor specific commands.
+
+IMO ehset should work with external HUB as well since all it takes to
+put a HUB's port in compliance mode is sending a SetFeature request
+which I believe driver already does. If HUB is sending stall then you
+can try putting a different port in compliance which is not connected.
+
+>
+> For your PCIe xHCI controller, if it follows xHCI spec, it should work
+> with EHSET, would you please debug it by code and see why return error?
+>
+> Peter
+>> Looking around
+>> it looks like the hubs have some mechanism for being tested[0] and the HSETT 
+>> application for Windows supports testing of hubs according to the 
+>> documentation.[1]
+>>
+>> Is this something there exists a module for or are either of these cases
+>> unexpected behavior for the EHSET kernel module?
+>>
+>> Allen
+>>
+>> [0] https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.testusb.com%2FHub_test.html&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7C370e9acddb11494ec68008d7363a93fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637037497528612416&amp;sdata=djXerGrLCkeITKRqg4KteuzNn5TMxeOhqif58DWJYUE%3D&amp;reserved=0
+>> [1] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fusb.org%2Fsites%2Fdefault%2Ffiles%2FHSETT_Instruction_0_4_1.pdf&amp;data=02%7C01%7Cpeter.chen%40nxp.com%7C370e9acddb11494ec68008d7363a93fa%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C1%7C637037497528612416&amp;sdata=gem9tyxRAWIppDFW%2Fpw08dPKqQQ9NMX%2BhH19V2SloiQ%3D&amp;reserved=0
+>>
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
