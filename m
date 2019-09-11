@@ -2,95 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABB6B03A0
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 20:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39928B03D3
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Sep 2019 20:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730112AbfIKS1i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Sep 2019 14:27:38 -0400
-Received: from mx2.suse.de ([195.135.220.15]:60952 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729758AbfIKS1h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Sep 2019 14:27:37 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4C5E7AF23;
-        Wed, 11 Sep 2019 18:27:36 +0000 (UTC)
-Message-ID: <1568226447.11279.8.camel@suse.com>
-Subject: Re: ttyACM and BREAK chars ?
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Wed, 11 Sep 2019 20:27:27 +0200
-In-Reply-To: <24612ff3f7cd87642a3ab298950be31f8945fcc2.camel@infinera.com>
-References: <f7e55901a096024af2d77ae7838df3b658f2c28d.camel@infinera.com>
-         <1568211729.11279.6.camel@suse.com>
-         <24612ff3f7cd87642a3ab298950be31f8945fcc2.camel@infinera.com>
-Content-Type: multipart/mixed; boundary="=-nH//Ggiag1U73RN91wPd"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1730133AbfIKSo5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Sep 2019 14:44:57 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36269 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729994AbfIKSo4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Sep 2019 14:44:56 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y22so14282341pfr.3;
+        Wed, 11 Sep 2019 11:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=TqRe5lHOX4M4V547/WzO3Xh0zpwoYhwfsfhLh4/QmNw=;
+        b=cnMbF78zIN2X9zEOosJXsLy6lBLW8nW1rFohkwPEIwEa6uF/WOsmr2xAEaCVe9SAaN
+         i7+2cu7+E+HD86A9dgw7KnHv3DgSkf6MbdVO6kYHFHGtBoMfaXxiHoGeuuUYZoXnYMZY
+         Ekg3XH3c4rxVxhQhmfQv/GmEOMWlbMfF3zq/YKsRPvNNmuh+7DmnXbZDJakCr3JItly7
+         E/L6ZmHXOf49bDukg+osrL8HBIaUPKtSIS4xFCHloTkspkUpLF4eXYWTwugwaG0JCCW0
+         hiovc2vqED7iGDoHu2Ad6HClqB4Wpnka75/Wpcf8D3WPpKG4j8ii4SVkKr6u3WFJeoyc
+         0Vmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=TqRe5lHOX4M4V547/WzO3Xh0zpwoYhwfsfhLh4/QmNw=;
+        b=MnMGdjcDifEe/3XJJvLL22t94wfRVYEu9C9reGnG+P5OetVVt8TycdUPSikygzkZHe
+         4mclQpCsiWaxAutzBIixigRuwgLN2LA7YqlTcsIJAep1pVxsDJi5tiotLi0U8WEWGfFh
+         Xzo6QUCot01JP5SxL0EnXHuM71UIf/jDoczTAk4l81WFsDhS9CxXoBdK9ZAWttL/F3OU
+         uekx72wtdG7cbYG9BxQ5kN25jfDxzG7YWSxYzPy9HRXt6snvy6YoURWPS8BzqwZerqUR
+         Xa3aIPSe3GScootZhVvf1fjEh7FxSvlB+Cm52Q1F2RD5mzslZaVeh8G4ju9ofCcp4VIa
+         w7+w==
+X-Gm-Message-State: APjAAAU8MDrTFetIw22BKHOh8mx58wECuOUo7k7M0XpMMtPyUeYsJjTG
+        veSAl13H0i8tlgWjaM07RtI=
+X-Google-Smtp-Source: APXvYqywaaDO+l8UX/soexCNWT1d0rN20NelYgx+BVxfqR8t062U5VDK59Nz1VPcLeOY/YWISW81Sg==
+X-Received: by 2002:a62:cb:: with SMTP id 194mr46108963pfa.130.1568227496001;
+        Wed, 11 Sep 2019 11:44:56 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g26sm23692017pfi.103.2019.09.11.11.44.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Sep 2019 11:44:54 -0700 (PDT)
+Date:   Wed, 11 Sep 2019 11:44:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        devicetree@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 3/7] usb: mtu3: support ip-sleep wakeup for MT8183
+Message-ID: <20190911184453.GA2628@roeck-us.net>
+References: <1567150854-30033-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1567150854-30033-4-git-send-email-chunfeng.yun@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1567150854-30033-4-git-send-email-chunfeng.yun@mediatek.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-nH//Ggiag1U73RN91wPd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Mittwoch, den 11.09.2019, 14:34 +0000 schrieb Joakim Tjernlund:
-> On Wed, 2019-09-11 at 16:22 +0200, Oliver Neukum wrote:
-> > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
-> > 
-> > 
-> > Am Mittwoch, den 11.09.2019, 12:39 +0000 schrieb Joakim Tjernlund:
-> > > Every now and then my ttyACM0 hangs up or sends a BREAK char to my device.
-> > > I am trying to make ttyACM ignore incoming(over USB) and not emit
-> > > any BREAK automatically using termios (IGN_BRK) but that does not make a difference.
-> > > 
-> > > Is BREAK handling unimpl. in ttyACM ?
-> > 
-> > acm_send_break() implements it.
+On Fri, Aug 30, 2019 at 03:40:50PM +0800, Chunfeng Yun wrote:
+> Support USB wakeup by ip-sleep mode for MT8183, it's similar to
+> MT8173
 > 
-> Yes, I se that funktion but I don't see how one can ignore received BREAKs
-> If I set IGN_BRK on /dev/ttyACM0 I expect that every BREAK should just be ignored
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v3: changes micros define
+> 
+> v2: no changes
+> ---
+>  drivers/usb/mtu3/mtu3_host.c | 14 +++++++++++++-
+>  1 file changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
+> index c871b94f3e6f..4f8208885ebd 100644
+> --- a/drivers/usb/mtu3/mtu3_host.c
+> +++ b/drivers/usb/mtu3/mtu3_host.c
+> @@ -18,6 +18,12 @@
+>  #include "mtu3.h"
+>  #include "mtu3_dr.h"
+>  
+> +/* mt8183 etc */
+> +#define PERI_WK_CTRL0	0x20
+> +#define WC0_IS_C(x)	(((x) & 0xf) << 28)  /* cycle debounce */
+> +#define WC0_IS_P	BIT(12)	/* polarity */
+> +#define WC0_IS_EN	BIT(6)
+> +
 
-Handling breaks looks a bit broken on CDC-ACM.
-Could you test the attached patch?
+For 64-bit builds, this results in:
 
-	Regards
-		Oliver
+drivers/usb/mtu3/mtu3_host.c: In function ‘ssusb_wakeup_ip_sleep_set’:
+./include/linux/bits.h:6:19: warning:
+	conversion from ‘long unsigned int’ to ‘u32’ {aka ‘unsigned int’}
+	changes value from ‘18446744073441120320’ to ‘4026536000’ [-Woverflow]
 
---=-nH//Ggiag1U73RN91wPd
-Content-Disposition: attachment;
-	filename*0=0001-cdc-acm-fix-BREAK-rx-code-path-adding-necessary-call.pat;
-	filename*1=ch
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-cdc-acm-fix-BREAK-rx-code-path-adding-necessary-call.patch";
-	charset="UTF-8"
+since WC0_IS_C() is sign extended to 64 bit and then truncated.
 
-RnJvbSA3NGExNmEwZmRjMDU2NjU5YjA1NDNlYzM3N2I1MWZhMjMxYTQyM2MyIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBXZWQsIDExIFNlcCAyMDE5IDIwOjE3OjM4ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gY2RjLWFj
-bTogZml4IEJSRUFLIHJ4IGNvZGUgcGF0aCBhZGRpbmcgbmVjZXNzYXJ5IGNhbGxzCgpDb3VudGlu
-ZyBicmVhayBldmVudHMgaXMgbmljZSBidXQgd2Ugc2hvdWxkIGFjdHVhbGx5IHJlcG9ydCB0aGVt
-IHRvCnRoZSB0dHkgbGF5ZXIuCgpGaXhlczogNWE2YTYyYmRiOTI1NyAoImNkYy1hY206IGFkZCBU
-SU9DTUlXQUlUIikKU2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNv
-bT4KLS0tCiBkcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMgfCA0ICsrKy0KIDEgZmlsZSBjaGFu
-Z2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jbGFzcy9jZGMtYWNtLmMgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKaW5kZXgg
-NjJmNGZiOWIzNjJmLi44OWQ5N2Q5NzYzYjAgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
-L2NkYy1hY20uYworKysgYi9kcml2ZXJzL3VzYi9jbGFzcy9jZGMtYWNtLmMKQEAgLTMxMiw4ICsz
-MTIsMTAgQEAgc3RhdGljIHZvaWQgYWNtX3Byb2Nlc3Nfbm90aWZpY2F0aW9uKHN0cnVjdCBhY20g
-KmFjbSwgdW5zaWduZWQgY2hhciAqYnVmKQogCQkJYWNtLT5pb2NvdW50LmRzcisrOwogCQlpZiAo
-ZGlmZmVyZW5jZSAmIEFDTV9DVFJMX0RDRCkKIAkJCWFjbS0+aW9jb3VudC5kY2QrKzsKLQkJaWYg
-KG5ld2N0cmwgJiBBQ01fQ1RSTF9CUkspCisJCWlmIChuZXdjdHJsICYgQUNNX0NUUkxfQlJLKSB7
-CiAJCQlhY20tPmlvY291bnQuYnJrKys7CisJCQl0dHlfaW5zZXJ0X2ZsaXBfY2hhcigmYWNtLT5w
-b3J0LCAwLCBUVFlfQlJFQUspOworCQl9CiAJCWlmIChuZXdjdHJsICYgQUNNX0NUUkxfUkkpCiAJ
-CQlhY20tPmlvY291bnQucm5nKys7CiAJCWlmIChuZXdjdHJsICYgQUNNX0NUUkxfRlJBTUlORykK
-LS0gCjIuMTYuNAoK
+Observed with gcc 7.4.0 and 8.3.0.
 
+Guenter
 
---=-nH//Ggiag1U73RN91wPd--
-
+>  /* mt8173 etc */
+>  #define PERI_WK_CTRL1	0x4
+>  #define WC1_IS_C(x)	(((x) & 0xf) << 26)  /* cycle debounce */
+> @@ -30,7 +36,8 @@
+>  #define SSC_SPM_INT_EN		BIT(1)
+>  
+>  enum ssusb_uwk_vers {
+> -	SSUSB_UWK_V1 = 1,
+> +	SSUSB_UWK_V0 = 0,
+> +	SSUSB_UWK_V1,
+>  	SSUSB_UWK_V2,
+>  };
+>  
+> @@ -43,6 +50,11 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
+>  	u32 reg, msk, val;
+>  
+>  	switch (ssusb->uwk_vers) {
+> +	case SSUSB_UWK_V0:
+> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0;
+> +		msk = WC0_IS_EN | WC0_IS_C(0xf) | WC0_IS_P;
+> +		val = enable ? (WC0_IS_EN | WC0_IS_C(0x8)) : 0;
+> +		break;
+>  	case SSUSB_UWK_V1:
+>  		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1;
+>  		msk = WC1_IS_EN | WC1_IS_C(0xf) | WC1_IS_P;
