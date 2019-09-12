@@ -2,139 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45559B1309
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 18:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E62B156F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 22:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730749AbfILQta (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 12:49:30 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34872 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730509AbfILQta (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Sep 2019 12:49:30 -0400
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com [209.85.221.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5BABC2A09CE
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2019 16:49:29 +0000 (UTC)
-Received: by mail-wr1-f70.google.com with SMTP id a4so10919763wrg.8
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2019 09:49:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=p6UoFWsgsPkuQtSEESX9kkhleKRjVbh91vbkMxi8FIw=;
-        b=X3aD+NcGhK14kWz3LgCcpE5dTdHht3HzSOAHQJx7Z8ZHq7Tv7evwzp4jGAKBDNLRFS
-         zJ1Hx7x8aqCk6QF4isuQsrC9RDUFWADFw0YPnIKzSLLd+Ptio/8UVb8JY6w+2bGehg++
-         N22W8iPQLcoXtXnArJkIMSO2W+eo12iUPk0lw/0m4LWukqBrosi/y2DVPSW13O+W/bWF
-         2AQo+UnyQwvhGaQr7o6bAuZpwCqT17K8vB0Q8Kn/S6S2mw6O2Y28IGwYapYLBrG2pFo5
-         aCyMBibbt3UkO1tQc+Y9ahELUXstmhHk9bFWKS4MqcLCsy0mdRfSC22bBU5lQeXxGFxp
-         tOiQ==
-X-Gm-Message-State: APjAAAXAznObmGUUmt0GfWZMk5eZKaGDk83mjMsW1g4tguDI4XrosuaQ
-        +PRFHrnRlCUlXo9cHLmiDAuRsy1TabOlPMHcn1vGcggWWH4hI1FgcCpu6tm0+9KuUlKDV54MAkW
-        Bj8us8amfRPHu5o9sfR8a
-X-Received: by 2002:a5d:6811:: with SMTP id w17mr31804398wru.181.1568306967677;
-        Thu, 12 Sep 2019 09:49:27 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxrL3VP6sAEDt0Bo0M7LVEBolaalUXmcE8h3jDG603x7fhGBgsss6KO8uKCmP0qnEKPpoX5oQ==
-X-Received: by 2002:a5d:6811:: with SMTP id w17mr31804366wru.181.1568306967374;
-        Thu, 12 Sep 2019 09:49:27 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:3166:d768:e1a7:aab8? ([2001:b07:6468:f312:3166:d768:e1a7:aab8])
-        by smtp.gmail.com with ESMTPSA id h17sm807220wme.6.2019.09.12.09.49.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2019 09:49:26 -0700 (PDT)
-Subject: Re: KASAN: slab-out-of-bounds Read in handle_vmptrld
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org
-Cc:     bp@alien8.de, carlo@caione.org, catalin.marinas@arm.com,
-        devicetree@vger.kernel.org, hpa@zytor.com, jmattson@google.com,
-        joro@8bytes.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mingo@redhat.com, narmstrong@baylibre.com,
-        rkrcmar@redhat.com, robh+dt@kernel.org,
-        sean.j.christopherson@intel.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, wanpengli@tencent.com, will.deacon@arm.com,
-        x86@kernel.org,
-        syzbot <syzbot+46f1dd7dbbe2bfb98b10@syzkaller.appspotmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>
-References: <000000000000a9d4f705924cff7a@google.com>
- <87lfutei1j.fsf@vitty.brq.redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Openpgp: preference=signencrypt
-Message-ID: <5218e70e-8a80-7c5f-277b-01d9ab70692a@redhat.com>
-Date:   Thu, 12 Sep 2019 18:49:26 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <87lfutei1j.fsf@vitty.brq.redhat.com>
-Content-Type: text/plain; charset=utf-8
+        id S1727397AbfILUcz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 16:32:55 -0400
+Received: from mail-eopbgr770110.outbound.protection.outlook.com ([40.107.77.110]:55878
+        "EHLO NAM02-SN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725995AbfILUcy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Sep 2019 16:32:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rk8aLxcUbc5ohv7Y8jwie9YBjjm8EMDXPzb29GW+poE4zyniiWVBl3ad58iVHDjnNftYw3+UfzyLC6WPJLKYnsLFZmTlgd05ib4XOOKSFAG5QxEhHW47OKlUb3WtPLaF3r/YXdkKkzAA5+yExjA2Dg7BCIXoxn9u7Q4YDF89KCDYqmgqwUOHKdn6qI0M1FFVGvXBykIExkGt/oeRQVXnSR8w+vbQnH1Kz27OOPn3Chlftqxm8lHMsmnjq1UizZdicyk4JDmUASFOAFk7dmS3Z3j1p4E9IPXpA9QEgD1HjLaW0Vnr1y2YhSyVWmgbcb21VCUb8947EKnBgWvAJHIelg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oaKpT7rhMCo26MwHrfyPHFpPbvoYJ0heWukU+FsHwG8=;
+ b=gfDwFW2d5eAuUBvYI2nsb/j1GL/ryU02RoumzCf6+e6WaKeBRr/xWwXiC03RmNZNmHBTl5m9POVkazXVh/Z9NzvczapVljf2fUcow1FX7FHubDD7S1VwfxY5cFWfL47JOaAFIGdIehWgg67O6bCxhsXsnaHt1Un2MvbSKWqcpMOzjV5HUYT5nPMzENWtqEQ/fk7lIAr3hbXNVD0FIrBFZyADoJ8PJgAiQBFSdbSQmcgGhdOS/qKogEKW65Ae1k24uAuOuztZOkCzixvmSRxldJpT2tA0SPANI/rQhi9V308Q/joIM011nECTVxWPUASNr+1N9zTKGo4K1zpv/hvHCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=epiloglaser.com; dmarc=pass action=none
+ header.from=epiloglaser.com; dkim=pass header.d=epiloglaser.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epiloglaser.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oaKpT7rhMCo26MwHrfyPHFpPbvoYJ0heWukU+FsHwG8=;
+ b=o5YuW4nkMqELI6oJU943zkehUNgkKsdIj65cJSxJw+ldVYsZKibZAJZ7qLUF6uGINEfjeOJfnOtVVCMOSxu5ttsxyqsZ14RbQekLxBWyvFiv1XclbxCWDTr/XKfnLkKH8D0c8pBrntPrUHa8C8YvpPN4/d0EoEEUQVGDaMyfJQs=
+Received: from BYAPR20MB2501.namprd20.prod.outlook.com (20.179.158.74) by
+ BYAPR20MB2853.namprd20.prod.outlook.com (20.178.239.144) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2263.17; Thu, 12 Sep 2019 20:32:51 +0000
+Received: from BYAPR20MB2501.namprd20.prod.outlook.com
+ ([fe80::6550:204e:b15f:6a61]) by BYAPR20MB2501.namprd20.prod.outlook.com
+ ([fe80::6550:204e:b15f:6a61%5]) with mapi id 15.20.2241.022; Thu, 12 Sep 2019
+ 20:32:51 +0000
+From:   Allen Blaylock <AllenB@epiloglaser.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Manu Gautam <mgautam@codeaurora.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: EHSET with hub and PCIe root hub
+Thread-Topic: EHSET with hub and PCIe root hub
+Thread-Index: AdVoIxLeoShF0bVgSnKKwHrYOWnWwgAKZ+wAAAH42gAAIn25MAAlq/6AAABKNoAADCIvYA==
+Date:   Thu, 12 Sep 2019 20:32:41 +0000
+Deferred-Delivery: Thu, 12 Sep 2019 20:32:08 +0000
+Message-ID: <BYAPR20MB2501A4FBEDBBC6353B6EC585CCB00@BYAPR20MB2501.namprd20.prod.outlook.com>
+References: <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
+ <Pine.LNX.4.44L0.1909121023190.1440-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1909121023190.1440-100000@iolanthe.rowland.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=AllenB@epiloglaser.com; 
+x-originating-ip: [65.154.97.33]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 93be54c7-18f4-496c-7e1f-08d737c0623a
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR20MB2853;
+x-ms-traffictypediagnostic: BYAPR20MB2853:
+x-microsoft-antispam-prvs: <BYAPR20MB2853589D678B6E9039DD9C01CCB00@BYAPR20MB2853.namprd20.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 01583E185C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(376002)(39850400004)(396003)(366004)(189003)(199004)(6246003)(64756008)(66556008)(66476007)(66946007)(6506007)(76116006)(66446008)(476003)(26005)(6916009)(99286004)(52536014)(80792005)(66066001)(14444005)(7696005)(76176011)(256004)(54906003)(71200400001)(5024004)(6666004)(446003)(11346002)(316002)(71190400001)(5660300002)(86362001)(305945005)(486006)(74316002)(33656002)(102836004)(186003)(7736002)(8676002)(55016002)(2171002)(3846002)(6116002)(25786009)(81156014)(81166006)(6436002)(14454004)(229853002)(53936002)(2906002)(4326008)(8936002)(9686003)(478600001);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR20MB2853;H:BYAPR20MB2501.namprd20.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: epiloglaser.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 9RJpIRXGEiQy/p58iVNFISXsAtHaO/L2liXQEZ/iVaZu2mSV/ieTc5NsA1Yc3FEzri4czVv7ybdqiB7arupr8OZyATWS60tkTe/joyzLI1oBO85UsNKDZouHcNIr/Eb22tpyZeWzReDyTU5KloazQ6z/l7EQn3o5DDk/84yjJLe3BIK87bmbal17Y0x5/v1GlN84eZL9r+fQoQ0dhU48B/oT1BuVyr7coPNAwlx2YN7OCjtNK86R5vM4P+9OHZQCXrywnXXlwOXhXdYovgdA9aF9opCuGtGnlVpKK+bRWfZ71vRDUV410qYw7TPNx79zbuTQw5Am19CGIYwlnulcI8CSl6VRzjWJ63KarU/4RTLQC6gygPbj4mmHPrVpdgvbEeW5fxFpsWKLlyaDopDegRv97CpOLKzO+FjscMhX7tM=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: epiloglaser.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93be54c7-18f4-496c-7e1f-08d737c0623a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2019 20:32:51.4265
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d7e01375-2074-44c0-b145-645c57a61059
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uILpqJg5O85jOtWOnlCQ7hwAilE/g/484opEerGoJrKAzHE3ZYHNI3QWi+F5KUoeP5kYZ0/c0T8VHpdYzXM2NA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR20MB2853
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[tl;dr: there could be a /dev/usb bug only affecting KASAN
-configurations, jump to the end to skip the analysis and get to the bug
-details]
+>I should add that the USB 2.0 spec includes the following text (from secti=
+on 11.24.2.13):
+>
+>        Test mode of a downstream facing port can only be used in
+>        a well defined sequence of hub states. This sequence is
+>        defined as follows:
+>
+>        1)  All enabled downstream facing ports of the hub containing
+>            the port to be tested must be (selectively) suspended via
+>            the SetPortFeature(PORT_SUSPEND) request.  Each downstream
+>            facing port of the hub must be in the disabled,
+>            disconnected, or suspended state (see Figure 11-9).
+>
+>So you can see the hub probably failed the request because a non-suspended=
+ device was connected to port 3.  (And who knows what was attached to the o=
+ther ports -- the usbmon trace doesn't say.)
+>
+>Alan Stern
 
-On 12/09/19 15:54, Vitaly Kuznetsov wrote:
-> Hm, the bisection seems bogus but the stack points us to the following
-> piece of code:
-> 
->  4776)              if (kvm_vcpu_map(vcpu, gpa_to_gfn(vmptr), &map)) {
-> <skip>
->  4783)                      return nested_vmx_failValid(vcpu,
->  4784)                              VMXERR_VMPTRLD_INCORRECT_VMCS_REVISION_ID);
->  4785)              }
->  4786) 
->  4787)              new_vmcs12 = map.hva;
->  4788) 
-> *4789)              if (new_vmcs12->hdr.revision_id != VMCS12_REVISION ||
->  4790)                  (new_vmcs12->hdr.shadow_vmcs &&
->  4791)                   !nested_cpu_has_vmx_shadow_vmcs(vcpu))) {
-> 
-> the reported problem seems to be on VMCS12 region access but it's part
-> of guest memory and we successfuly managed to map it. We're definitely
-> within 1-page range. Maybe KASAN is just wrong here?
+This was very helpful.
 
-Here is the relevant part of the syzkaller repro:
+I was able to get the USB3503 to generate test packets by adding a SetPortF=
+eature(PORT_SUSPEND) request to suspend the port before setting the PORT_TE=
+ST feature. Is there a way to tell that a device is a hub but not a root hu=
+b so ports on root hub ports aren't suspended prior to calling SetPortFeatu=
+re(PORT_TEST)?
 
-syz_kvm_setup_cpu$x86(r1, 0xffffffffffffffff,
-&(0x7f0000000000/0x18000)=nil, 0x0, 0x133, 0x0, 0x0, 0xff7d)
-r3 = syz_open_dev$usb(&(0x7f0000000080)='/dev/bus/usb/00#/00#\x00',
-0x40000fffffd, 0x200800000000042)
-mmap$IORING_OFF_SQES(&(0x7f0000007000/0x2000)=nil, 0x2000, 0x4, 0x13,
-r3, 0x10000000)
-syz_kvm_setup_cpu$x86(0xffffffffffffffff, r2,
-&(0x7f0000000000/0x18000)=nil, 0x0, 0xfefd, 0x40, 0x0, 0xfffffffffffffdd4)
-ioctl$KVM_RUN(r2, 0xae80, 0x0)
+I tried to use hub_udev->maxchild to determine if something was a hub but t=
+his appears misguided since root hubs can have multiple children, nothing e=
+lse in the usb_device structure jumped out as being directly related to a h=
+ub.
 
-The mmap$IORING_OFF_SQES is just a normal mmap from a device, which
-replaces the previous mapping for guest memory and in particular
-0x7f0000007000 which is the VMCS (from the C reproducer: "#define
-ADDR_VAR_VMCS 0x7000").
-
-The previous mapping is freed with do_munmap and then repopulated in
-usbdev_mmap with remap_pfn_range.  In KVM this means that kvm_vcpu_map
-goes through hva_to_pfn_remapped, which correctly calls get_page via
-kvm_get_pfn.  (Note that although drivers/usb/core/devio.c's usbdev_mmap
-sets VM_IO *after* calling remap_pfn_range, remap_pfn_range itself
-helpfully sets it before calling remap_p4d_range.  And anyway KVM is
-looking at vma->vm_flags under mmap_sem, which is held during mmap).
-
-So, KVM should be doing the right thing.  Now, the error is:
-
-> Read of size 4 at addr ffff888091e10000 by task syz-executor758/10006
-> The buggy address belongs to the object at ffff888091e109c0 
-> The buggy address is located 2496 bytes to the left of
->  8192-byte region [ffff888091e109c0, ffff888091e129c0) 
-
-And given the use of remap_pfn_range in devusb_mmap, the simplest
-explanation could be that USB expects kmalloc-8k to return 8k-aligned
-values, but this is not true anymore with KASAN.  CCing Dmitry, Greg and
-linux-usb.
-
-Paolo
+--- a/drivers/usb/misc/ehset.c
++++ b/drivers/usb/misc/ehset.c
+@@ -62,6 +62,16 @@ static int ehset_probe(struct usb_interface *intf,
+                                        NULL, 0, 1000);
+                break;
+        case TEST_PACKET_PID:
++               if(hub_udev->maxchild)
++               {
++                       ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(h=
+ub_udev, 0),
++                                               USB_REQ_SET_FEATURE, USB_RT=
+_PORT,
++                                               USB_PORT_FEAT_SUSPEND, port=
+num,
++                                               NULL, 0, 1000);
++                       if (ret < 0)
++                               break;
++
++               }
+                ret =3D usb_control_msg(hub_udev, usb_sndctrlpipe(hub_udev,=
+ 0),
+                                        USB_REQ_SET_FEATURE, USB_RT_PORT,
+                                        USB_PORT_FEAT_TEST,
