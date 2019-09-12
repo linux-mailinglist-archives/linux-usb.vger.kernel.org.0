@@ -2,376 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75ECCB0F28
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 14:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C987B10FE
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 16:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731772AbfILMy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 08:54:26 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:33023 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731283AbfILMy0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Sep 2019 08:54:26 -0400
-Received: by mail-wr1-f68.google.com with SMTP id u16so28367270wrr.0
-        for <linux-usb@vger.kernel.org>; Thu, 12 Sep 2019 05:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:openpgp:autocrypt:message-id:date
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=J+Yj9nyrgo95/FhcjBiegG4ol1PycGVjpnMkbdoMg9Y=;
-        b=cEgrJ7KAXn0VgbIstyH/w0zqDdvcXNCIh8Qi3oyCJxvbhpux4nqyMz3MSVfFlNkptq
-         Qg6HNrorQoQ+64mMKfDvlkqACrLIBDblw1IO8wDqLZG9LObFkNj9Px0T7KXL7u1azpYn
-         tvZG9Qouo/FWYvSefXHTa8i8C/oM9EcnJPrk671MaMxZPC8D+Z4P8CJqO/O3rp+k2ANt
-         6QdlriJ2H1tvo6PizXYQT3qa9iCk+w1Oa+bpDmTHCmq5uVwCEkw9GjL5ciFV1kBjzfha
-         dFK0BGyF7ZEp1Gea3KUNGXBQIEmN5n3DOUsL4l7clzsuLZekxYVnDMYN6vy6hwo63N41
-         ji4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :message-id:date:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=J+Yj9nyrgo95/FhcjBiegG4ol1PycGVjpnMkbdoMg9Y=;
-        b=iy800v3G+nZQusb2q2LczECX4Jyzpax+TchWbDqSqSm+gw8kpenPHZ8L/ePS+T0jkd
-         q5RuC+lB0RUAu1iJLR7850Y+OjDZUZZ8hg6F4dvhve+nukl6P/6We4L2bIE81R6oJf16
-         s/hJTvMT4u2QfttdeFQXZ8YbMzhmksVeB9ffSAuxmSLtuUwm1CKY3pqO5AWCvbekT0GD
-         zpl61kDZZUY/A+daFlEYDnJtAYNoazgCbJWnYYBXO/roybRTCU75IeewJkHzNhm8kGiF
-         rW4fGYshCVkTjaUPQjtmXsdOYfTCPEb2/xxByOjrSDB/3d0JlS2U2/HtjS8yWZygubz5
-         Mb7g==
-X-Gm-Message-State: APjAAAU04fz/ToM4Ln77r5/xAr8/CQaDjXAnaopMAawvnesV0Hor/uTo
-        BkJSORTQqXolbkNeXX4L/9phpA==
-X-Google-Smtp-Source: APXvYqxncfqoAPnf4sIWROy5kXc5vo9x3/Yr6zEbbUOFGzTM4twlN/QAFIrdcUmH4ROq3e1e+JB3tg==
-X-Received: by 2002:adf:dd4d:: with SMTP id u13mr3160844wrm.112.1568292862211;
-        Thu, 12 Sep 2019 05:54:22 -0700 (PDT)
-Received: from [10.44.66.8] ([212.45.67.2])
-        by smtp.googlemail.com with ESMTPSA id y72sm9592815wmc.26.2019.09.12.05.54.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 12 Sep 2019 05:54:21 -0700 (PDT)
-Subject: Re: [PATCH 2/3] usb: dwc3: qcom: Add interconnect support in dwc3
- driver
-To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
-        balbi@kernel.org, agross@kernel.org
-Cc:     david.brown@linaro.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <1568177675-18764-1-git-send-email-cchiluve@codeaurora.org>
- <1568177675-18764-3-git-send-email-cchiluve@codeaurora.org>
-From:   Georgi Djakov <georgi.djakov@linaro.org>
-Openpgp: preference=signencrypt
-Autocrypt: addr=georgi.djakov@linaro.org; prefer-encrypt=mutual; keydata=
- mQINBFjTuRcBEACyAOVzghvyN19Sa/Nit4LPBWkICi5W20p6bwiZvdjhtuh50H5q4ktyxJtp
- 1+s8dMSa/j58hAWhrc2SNL3fttOCo+MM1bQWwe8uMBQJP4swgXf5ZUYkSssQlXxGKqBSbWLB
- uFHOOBTzaQBaNgsdXo+mQ1h8UCgM0zQOmbs2ort8aHnH2i65oLs5/Xgv/Qivde/FcFtvEFaL
- 0TZ7odM67u+M32VetH5nBVPESmnEDjRBPw/DOPhFBPXtal53ZFiiRr6Bm1qKVu3dOEYXHHDt
- nF13gB+vBZ6x5pjl02NUEucSHQiuCc2Aaavo6xnuBc3lnd4z/xk6GLBqFP3P/eJ56eJv4d0B
- 0LLgQ7c1T3fU4/5NDRRCnyk6HJ5+HSxD4KVuluj0jnXW4CKzFkKaTxOp7jE6ZD/9Sh74DM8v
- etN8uwDjtYsM07I3Szlh/I+iThxe/4zVtUQsvgXjwuoOOBWWc4m4KKg+W4zm8bSCqrd1DUgL
- f67WiEZgvN7tPXEzi84zT1PiUOM98dOnmREIamSpKOKFereIrKX2IcnZn8jyycE12zMkk+Sc
- ASMfXhfywB0tXRNmzsywdxQFcJ6jblPNxscnGMh2VlY2rezmqJdcK4G4Lprkc0jOHotV/6oJ
- mj9h95Ouvbq5TDHx+ERn8uytPygDBR67kNHs18LkvrEex/Z1cQARAQABtChHZW9yZ2kgRGph
- a292IDxnZW9yZ2kuZGpha292QGxpbmFyby5vcmc+iQI+BBMBAgAoBQJY07kXAhsDBQkHhM4A
- BgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRCyi/eZcnWWUuvsD/4miikUeAO6fU2Xy3fT
- l7RUCeb2Uuh1/nxYoE1vtXcow6SyAvIVTD32kHXucJJfYy2zFzptWpvD6Sa0Sc58qe4iLY4j
- M54ugOYK7XeRKkQHFqqR2T3g/toVG1BOLS2atooXEU+8OFbpLkBXbIdItqJ1M1SEw8YgKmmr
- JlLAaKMq3hMb5bDQx9erq7PqEKOB/Va0nNu17IL58q+Q5Om7S1x54Oj6LiG/9kNOxQTklOQZ
- t61oW1Ewjbl325fW0/Lk0QzmfLCrmGXXiedFEMRLCJbVImXVKdIt/Ubk6SAAUrA5dFVNBzm2
- L8r+HxJcfDeEpdOZJzuwRyFnH96u1Xz+7X2V26zMU6Wl2+lhvr2Tj7spxjppR+nuFiybQq7k
- MIwyEF0mb75RLhW33sdGStCZ/nBsXIGAUS7OBj+a5fm47vQKv6ekg60oRTHWysFSJm1mlRyq
- exhI6GwUo5GM/vE36rIPSJFRRgkt6nynoba/1c4VXxfhok2rkP0x3CApJ5RimbvITTnINY0o
- CU6f1ng1I0A1UTi2YcLjFq/gmCdOHExT4huywfu1DDf0p1xDyPA1FJaii/gJ32bBP3zK53hM
- dj5S7miqN7F6ZpvGSGXgahQzkGyYpBR5pda0m0k8drV2IQn+0W8Qwh4XZ6/YdfI81+xyFlXc
- CJjljqsMCJW6PdgEH7kCDQRY07kXARAAvupGd4Jdd8zRRiF+jMpv6ZGz8L55Di1fl1YRth6m
- lIxYTLwGf0/p0oDLIRldKswena3fbWh5bbTMkJmRiOQ/hffhPSNSyyh+WQeLY2kzl6geiHxD
- zbw37e2hd3rWAEfVFEXOLnmenaUeJFyhA3Wd8OLdRMuoV+RaLhNfeHctiEn1YGy2gLCq4VNb
- 4Wj5hEzABGO7+LZ14hdw3hJIEGKtQC65Jh/vTayGD+qdwedhINnIqslk9tCQ33a+jPrCjXLW
- X29rcgqigzsLHH7iVHWA9R5Aq7pCy5hSFsl4NBn1uV6UHlyOBUuiHBDVwTIAUnZ4S8EQiwgv
- WQxEkXEWLM850V+G6R593yZndTr3yydPgYv0xEDACd6GcNLR/x8mawmHKzNmnRJoOh6Rkfw2
- fSiVGesGo83+iYq0NZASrXHAjWgtZXO1YwjW9gCQ2jYu9RGuQM8zIPY1VDpQ6wJtjO/KaOLm
- NehSR2R6tgBJK7XD9it79LdbPKDKoFSqxaAvXwWgXBj0Oz+Y0BqfClnAbxx3kYlSwfPHDFYc
- R/ppSgnbR5j0Rjz/N6Lua3S42MDhQGoTlVkgAi1btbdV3qpFE6jglJsJUDlqnEnwf03EgjdJ
- 6KEh0z57lyVcy5F/EUKfTAMZweBnkPo+BF2LBYn3Qd+CS6haZAWaG7vzVJu4W/mPQzsAEQEA
- AYkCJQQYAQIADwUCWNO5FwIbDAUJB4TOAAAKCRCyi/eZcnWWUhlHD/0VE/2x6lKh2FGP+QHH
- UTKmiiwtMurYKJsSJlQx0T+j/1f+zYkY3MDX+gXa0d0xb4eFv8WNlEjkcpSPFr+pQ7CiAI33
- 99kAVMQEip/MwoTYvM9NXSMTpyRJ/asnLeqa0WU6l6Z9mQ41lLzPFBAJ21/ddT4xeBDv0dxM
- GqaH2C6bSnJkhSfSja9OxBe+F6LIAZgCFzlogbmSWmUdLBg+sh3K6aiBDAdZPUMvGHzHK3fj
- gHK4GqGCFK76bFrHQYgiBOrcR4GDklj4Gk9osIfdXIAkBvRGw8zg1zzUYwMYk+A6v40gBn00
- OOB13qJe9zyKpReWMAhg7BYPBKIm/qSr82aIQc4+FlDX2Ot6T/4tGUDr9MAHaBKFtVyIqXBO
- xOf0vQEokkUGRKWBE0uA3zFVRfLiT6NUjDQ0vdphTnsdA7h01MliZLQ2lLL2Mt5lsqU+6sup
- Tfql1omgEpjnFsPsyFebzcKGbdEr6vySGa3Cof+miX06hQXKe99a5+eHNhtZJcMAIO89wZmj
- 7ayYJIXFqjl/X0KBcCbiAl4vbdBw1bqFnO4zd1lMXKVoa29UHqby4MPbQhjWNVv9kqp8A39+
- E9xw890l1xdERkjVKX6IEJu2hf7X3MMl9tOjBK6MvdOUxvh1bNNmXh7OlBL1MpJYY/ydIm3B
- KEmKjLDvB0pePJkdTw==
-Message-ID: <fdb549f7-4d6b-88ae-2f97-3b9b9bd3de4e@linaro.org>
-Date:   Thu, 12 Sep 2019 15:54:19 +0300
+        id S1732553AbfILOUe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 10:20:34 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:48582 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1732455AbfILOUe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Sep 2019 10:20:34 -0400
+Received: (qmail 2710 invoked by uid 2102); 12 Sep 2019 10:20:33 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 12 Sep 2019 10:20:33 -0400
+Date:   Thu, 12 Sep 2019 10:20:33 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Allen Blaylock <AllenB@epiloglaser.com>
+cc:     Manu Gautam <mgautam@codeaurora.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: EHSET with hub and PCIe root hub
+In-Reply-To: <BYAPR20MB2501098ADC3493845D7D2E9DCCB10@BYAPR20MB2501.namprd20.prod.outlook.com>
+Message-ID: <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <1568177675-18764-3-git-send-email-cchiluve@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chandana,
+On Wed, 11 Sep 2019, Allen Blaylock wrote:
 
-Thank you for the patch!
-
-On 9/11/19 07:54, Chandana Kishori Chiluveru wrote:
-> Add interconnect support in dwc3-qcom driver to vote for bus
-> bandwidth.
+> So I do see the PORT_TEST SetFeature Request and Response when I use tcpdump to
+> make a capture using usbmon. Unfortunately I am not as familiar with the raw
+> usbmon output or some of the diagnostics output by usbmon so I may be missing 
+> something. Here is a capture from the sysfs usbmon file:
 > 
-> This requires for two different paths - from USB master to
-> DDR slave. The other is from APPS master to USB slave.
+> a52efe00 268933702 C Ii:002:01 0 1 = 08
+> a52efe00 268933736 S Ii:002:01 -115 1 <
+> a546b700 268934005 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b700 268934303 C Ci:002:00 0 4 = 01010100
+> a546b700 268934327 S Co:002:00 s 23 01 0010 0003 0000 0
+> a546b700 268934384 C Co:002:00 0 0
+> a546b700 268934438 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b700 268934520 C Ci:002:00 0 4 = 01010000
+> a546b700 268980085 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b700 268980332 C Ci:002:00 0 4 = 01010000
+> a546b700 269030091 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b700 269030333 C Ci:002:00 0 4 = 01010000
+> a546b700 269080082 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b700 269080335 C Ci:002:00 0 4 = 01010000
+> a546b280 269130094 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546b280 269130339 C Ci:002:00 0 4 = 01010000
+> a546b280 269130376 S Co:002:00 s 23 03 0004 0003 0000 0
+> a546b280 269130577 C Co:002:00 0 0
+> a546be00 269160091 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546be00 269160344 C Ci:002:00 0 4 = 03051000
+> a546be00 269160361 S Co:002:00 s 23 01 0014 0003 0000 0
+> a546be00 269160416 C Co:002:00 0 0
+> a546be00 269230118 S Ci:000:00 s 80 06 0100 0000 0040 64 <
+> a546be00 269230341 C Ci:000:00 0 18 = 12010002 00000040 0a1a0401 00010102 0301
+> a546be00 269230358 S Co:002:00 s 23 03 0004 0003 0000 0
+> a546be00 269230425 C Co:002:00 0 0
+> a546be00 269260104 S Ci:002:00 s a3 00 0000 0003 0004 4 <
+> a546be00 269260354 C Ci:002:00 0 4 = 03051000
+> a546be00 269260374 S Co:002:00 s 23 01 0014 0003 0000 0
+> a546be00 269260430 C Co:002:00 0 0
+> a546be00 269330097 S Co:000:00 s 00 05 0004 0000 0000 0
+> a546be00 269330372 C Co:000:00 0 0
+> a546b700 269380050 S Ci:004:00 s 80 06 0100 0000 0012 18 <
+> a546b700 269380327 C Ci:004:00 0 18 = 12010002 00000040 0a1a0401 00010102 0301
+> a546b700 269380360 S Ci:004:00 s 80 06 0200 0000 0009 9 <
+> a546b700 269380453 C Ci:004:00 0 9 = 09022e00 01010080 32
+> a546b700 269380468 S Ci:004:00 s 80 06 0200 0000 002e 46 <
+> a546b700 269380574 C Ci:004:00 0 46 = 09022e00 01010080 32090400 0004ff00 00000705 02020002 00070504 02000200
+> a546b700 269380608 S Ci:004:00 s 80 06 0300 0000 00ff 255 <
+> a546b700 269380701 C Ci:004:00 0 4 = 04030904
+> a546b700 269380717 S Ci:004:00 s 80 06 0302 0409 00ff 255 <
+> a546b700 269380824 C Ci:004:00 0 34 = 22035500 53004200 20004500 48004f00 53005400 20005400 45005300 54004500
+> a546b700 269380845 S Ci:004:00 s 80 06 0301 0409 00ff 255 <
+> a546b700 269380949 C Ci:004:00 0 34 = 22035500 53004200 20004500 48004f00 53005400 20005400 45005300 54004500
+> a546b700 269380968 S Ci:004:00 s 80 06 0303 0409 00ff 255 <
+> a546b700 269381074 C Ci:004:00 0 10 = 0a034900 4f005600 3300
+> a546b280 269381564 S Co:004:00 s 00 09 0001 0000 0000 0
+> a546b280 269381704 C Co:004:00 0 0
+> a560a000 269407637 S Co:002:00 s 23 03 0015 0403 0000 0
+> a560a000 269407869 C Co:002:00 -32 0
 > 
-> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 147 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 145 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 184df4d..4b8c2ae 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -14,6 +14,7 @@
->  #include <linux/extcon.h>
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
-> +#include <linux/interconnect.h>
->  #include <linux/phy/phy.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
-> @@ -38,6 +39,9 @@
->  #define PWR_EVNT_LPM_IN_L2_MASK			BIT(4)
->  #define PWR_EVNT_LPM_OUT_L2_MASK		BIT(5)
->  
-> +#define USB_DDR "usb-ddr"
-> +#define APPS_USB "apps-usb"
+> I was unable to make sense of it with the help of the usbmon.txt documentation
+> and will need some more time using wireshark and the output of tcpdump to get 
+> familiar with decoding the raw usbmon output.
 
-What is the benefit of adding these defines? Please remove them.
+Most of the usbmon output shows that a device was attached to port 3 of
+hub 2 and enumerated as usual over the course of about half a second.  
 
->  struct dwc3_qcom {
->  	struct device		*dev;
->  	void __iomem		*qscratch_base;
-> @@ -59,8 +63,13 @@ struct dwc3_qcom {
->  	enum usb_dr_mode	mode;
->  	bool			is_suspended;
->  	bool			pm_suspended;
-> +	struct icc_path *usb_ddr_icc_path;
-> +	struct icc_path *apps_usb_icc_path;
+The very last two lines show the computer sending the hub a
+Set-Port-Test request on port 3 for test mode 4, which is Test Packet.  
+The hub's response is a STALL, indicating that the hub doesn't
+understand or doesn't implement this request.
 
-Nit: Maybe try to make the indentation style consistent with the existing code?
+Alan Stern
 
->  };
->  
-> +static int usb_interconnect_enable(struct dwc3_qcom *qcom);
-> +static int usb_interconnect_disable(struct dwc3_qcom *qcom);
-> +
->  static inline void dwc3_qcom_setbits(void __iomem *base, u32 offset, u32 val)
->  {
->  	u32 reg;
-> @@ -222,7 +231,7 @@ static void dwc3_qcom_enable_interrupts(struct dwc3_qcom *qcom)
->  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  {
->  	u32 val;
-> -	int i;
-> +	int i, ret;
->  
->  	if (qcom->is_suspended)
->  		return 0;
-> @@ -234,6 +243,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  	for (i = qcom->num_clocks - 1; i >= 0; i--)
->  		clk_disable_unprepare(qcom->clks[i]);
->  
-> +	/* Remove bus voting */
-> +	ret = usb_interconnect_disable(qcom);
-> +	if (ret)
-> +		dev_err(qcom->dev, "bus bw voting failed %d\n", ret);
-> +
->  	qcom->is_suspended = true;
->  	dwc3_qcom_enable_interrupts(qcom);
->  
-> @@ -259,6 +273,11 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->  		}
->  	}
->  
-> +	/* Add bus voting */
-> +	ret = usb_interconnect_enable(qcom);
-> +	if (ret)
-> +		dev_err(qcom->dev, "bus bw voting failed %d\n", ret);
-> +
->  	/* Clear existing events from PHY related to L2 in/out */
->  	dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
->  			  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
-> @@ -409,6 +428,116 @@ static int dwc3_qcom_clk_init(struct dwc3_qcom *qcom, int count)
->  	return 0;
->  }
->  
-> +/* Interconnect path bandwidths in KBps */
-> +#define USB_MEMORY_AVG_HS_BW 240000
-> +#define USB_MEMORY_PEAK_HS_BW 700000
-> +#define USB_MEMORY_AVG_SS_BW  1000000
-> +#define USB_MEMORY_PEAK_SS_BW 2500000
-> +#define APPS_USB_AVG_BW 0
-> +#define APPS_USB_PEAK_BW 40000
-
-I would suggest to wrap the values with kBps_to_icc() or MBps_to_icc() macro.
-
-> +
-> +/**
-> + * usb_interconnect_init() - Request to get interconnect path handle
-> + * @qcom:			Pointer to the concerned usb core.
-> + *
-> + */
-> +static int usb_interconnect_init(struct dwc3_qcom *qcom)
-> +{
-> +	struct device *dev = qcom->dev;
-> +
-> +	qcom->usb_ddr_icc_path = of_icc_get(dev, USB_DDR);
-> +	if (IS_ERR(qcom->usb_ddr_icc_path)) {
-> +		dev_err(dev, "Error: (%ld) failed getting %s path\n",
-> +			PTR_ERR(qcom->usb_ddr_icc_path), USB_DDR);
-> +		return PTR_ERR(qcom->usb_ddr_icc_path);
-> +	}
-> +
-> +	qcom->apps_usb_icc_path = of_icc_get(dev, APPS_USB);
-> +	if (IS_ERR(qcom->apps_usb_icc_path)) {
-> +		dev_err(dev, "Error: (%ld) failed getting %s path\n",
-> +				PTR_ERR(qcom->apps_usb_icc_path), APPS_USB);
-> +		return PTR_ERR(qcom->usb_ddr_icc_path);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +/**
-> + * geni_interconnect_exit() - Request to release interconnect path handle
-> + * @qcom:			Pointer to the concerned usb core.
-> + *
-> + * This function is used to release interconnect path handle.
-> + */
-> +static void usb_interconnect_exit(struct dwc3_qcom *qcom)
-> +{
-> +	icc_put(qcom->usb_ddr_icc_path);
-> +	icc_put(qcom->apps_usb_icc_path);
-> +}
-> +
-> +/* Currently we only use bandwidth level, so just "enable" interconnects */
-> +static int usb_interconnect_enable(struct dwc3_qcom *qcom)
-> +{
-> +	struct dwc3 *dwc;
-> +	int ret;
-> +
-> +	dwc = platform_get_drvdata(qcom->dwc3);
-> +	if (!dwc) {
-> +		dev_err(qcom->dev, "Failed to get dwc3 device\n");
-> +		return -EPROBE_DEFER;
-> +	}
-> +
-> +	if (dwc->maximum_speed == USB_SPEED_SUPER) {
-> +		ret = icc_set_bw(qcom->usb_ddr_icc_path,
-> +			USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
-> +		if (ret)
-> +			return ret;
-> +	} else {
-> +		ret = icc_set_bw(qcom->usb_ddr_icc_path,
-> +			USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	ret = icc_set_bw(qcom->apps_usb_icc_path,
-> +		APPS_USB_AVG_BW, APPS_USB_PEAK_BW);
-> +	if (ret)
-> +		goto err_disable_mem_path;
-> +
-> +	return 0;
-> +
-> +err_disable_mem_path:
-> +	icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
-> +
-> +	return ret;
-> +}
-> +
-> +/* To disable an interconnect, we just its bandwidth to 0 */
-
-Missing the word "set"?
-
-> +static int usb_interconnect_disable(struct dwc3_qcom *qcom)
-> +{
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	int ret;
-> +
-> +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
-> +	if (ret)
-> +		goto err_reenable_memory_path;
-> +
-> +	return 0;       /* Success */
-
-Nit: This comment seems useless.
-
-> +
-> +	/* Re-enable things in the event of an error */
-> +err_reenable_memory_path:
-> +	if (dwc->maximum_speed == USB_SPEED_SUPER)
-> +		icc_set_bw(qcom->usb_ddr_icc_path,
-> +			USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
-> +	else
-> +		icc_set_bw(qcom->usb_ddr_icc_path,
-> +			USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
-> +
-> +	return ret;
-> +}
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
->  	struct device_node	*np = pdev->dev.of_node, *dwc3_np;
-> @@ -494,6 +623,17 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  		goto depopulate;
->  	}
->  
-> +	ret = usb_interconnect_init(qcom);
-> +	if (ret) {
-> +		dev_err(dev, "failed to get interconnect handle ret:%d\n", ret);
-> +		goto depopulate;
-> +	}
-> +	ret = usb_interconnect_enable(qcom);
-> +	if (ret) {
-> +		dev_err(qcom->dev, "bus bw voting failed %d\n", ret);
-> +		goto interconnect_exit;
-> +	}
-> +
->  	qcom->mode = usb_get_dr_mode(&qcom->dwc3->dev);
->  
->  	/* enable vbus override for device mode */
-> @@ -503,7 +643,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	/* register extcon to override sw_vbus on Vbus change later */
->  	ret = dwc3_qcom_register_extcon(qcom);
->  	if (ret)
-> -		goto depopulate;
-> +		goto interconnect_exit;
->  
->  	device_init_wakeup(&pdev->dev, 1);
->  	qcom->is_suspended = false;
-> @@ -513,6 +653,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  
->  	return 0;
->  
-> +interconnect_exit:
-> +	usb_interconnect_exit(qcom);
->  depopulate:
->  	of_platform_depopulate(&pdev->dev);
->  clk_disable:
-> @@ -540,6 +682,7 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
->  	}
->  	qcom->num_clocks = 0;
->  
-> +	usb_interconnect_exit(qcom);
->  	reset_control_assert(qcom->resets);
->  
->  	pm_runtime_allow(dev);
->
-The patch looks ok, but does not apply to neither mainline or linux-next.
-
-Thanks,
-Georgi
