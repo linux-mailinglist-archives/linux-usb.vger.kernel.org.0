@@ -2,103 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF278B1121
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 16:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B52B11AC
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 17:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732607AbfILO3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 10:29:55 -0400
-Received: from mail-eopbgr710135.outbound.protection.outlook.com ([40.107.71.135]:27136
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732598AbfILO3y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Sep 2019 10:29:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KKGc8j6VPqtAG0o/cKEgQ0DVzQjwpQN0eAesug9jGE+JNyEnylJ9bIjpRV/dZI+3msDbOQyBcj4pVE8akdIMwlRMu4wI9qwRnAbeloTr4xvDCYqnl2r/RoOXDfCoxQtq40XQEcT+Yejz2ACmE+c/uPA5nWLYC8tbAEjpgCmSOtkr9jRbJOTsnldq406Fkl+2Q+hfY+IdTgeZI8HoLHo+fOg88AEE3ciztfmeXoWMFoNT+ZM2Q9N9RxoAiLB6LKksJAyfgpn7EfAFW9GKIXQvC9hZcaih7IDd3fw7LrwKmScyKZrr4/zo5W4cFdtIMi8fcvDZ6napAdXqtCdAHArUCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aow6xUSZwGuoPvWxm9PtnFRF9x/1Sa+xZfC9Vyr7vPI=;
- b=a8WzqhDOcXOHlgZk1TFgXvQpGXurSnIPIllcJ/tQuIIexOBtWJaEGyWhK/Qv/V7E73Eqm7EMmAp1e8DPnVeeOF38uhQJmhqx84ru4i5Qr836KRCSiAZKdTLM7vWTayBfPaa4W17kNXBDAyvvixKy8f7Xk6C78SFulgVWINQmER3/4YXkG6W8WpabrkMhZTbk/bzasO/fOa4sg2nj1ThTo49qeq0mzcZwEyjNW0+9wbMlIMuMQTWPLe+0lYWYVwcjX8kwaiwJ4c5rdkeaM412t4sClMuWLlnhP0/pBl/afodsR4xM8k7+DS6y5Wb56giLAd6RDOh8G0ZVe0rU3hwAlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epiloglaser.com; dmarc=pass action=none
- header.from=epiloglaser.com; dkim=pass header.d=epiloglaser.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epiloglaser.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aow6xUSZwGuoPvWxm9PtnFRF9x/1Sa+xZfC9Vyr7vPI=;
- b=mh8AWz5kB6JXByB3oZhvzRXe77UTtrMGlJagdKFV8Rht9Ply3dPyd6JhUcbMIkUukt2rTtBfC3OAMYJcAs1ZMJiBw7rS67fs2sVm3yasqr6aBZjQ/LXPIPjjQAXz9Dpuce1JZdy4d/LdCxFB3r5JJqY6PynIk3sCHq1OHz1LDs0=
-Received: from BYAPR20MB2501.namprd20.prod.outlook.com (20.179.158.74) by
- BYAPR20MB2391.namprd20.prod.outlook.com (20.179.156.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2263.15; Thu, 12 Sep 2019 14:29:51 +0000
-Received: from BYAPR20MB2501.namprd20.prod.outlook.com
- ([fe80::6550:204e:b15f:6a61]) by BYAPR20MB2501.namprd20.prod.outlook.com
- ([fe80::6550:204e:b15f:6a61%5]) with mapi id 15.20.2241.022; Thu, 12 Sep 2019
- 14:29:51 +0000
-From:   Allen Blaylock <AllenB@epiloglaser.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Manu Gautam <mgautam@codeaurora.org>,
-        Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: EHSET with hub and PCIe root hub
-Thread-Topic: EHSET with hub and PCIe root hub
-Thread-Index: AdVoIxLeoShF0bVgSnKKwHrYOWnWwgAKZ+wAAAH42gAAIn25MAAlq/6AAAAnJtA=
-Date:   Thu, 12 Sep 2019 14:29:41 +0000
-Deferred-Delivery: Thu, 12 Sep 2019 14:29:15 +0000
-Message-ID: <BYAPR20MB250145E476D5A086285FB8B8CCB00@BYAPR20MB2501.namprd20.prod.outlook.com>
-References: <BYAPR20MB2501098ADC3493845D7D2E9DCCB10@BYAPR20MB2501.namprd20.prod.outlook.com>
- <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=AllenB@epiloglaser.com; 
-x-originating-ip: [65.154.97.33]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e6a40825-bcd9-4c89-7e06-08d7378dac26
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR20MB2391;
-x-ms-traffictypediagnostic: BYAPR20MB2391:
-x-microsoft-antispam-prvs: <BYAPR20MB23913FFE4786D566D62415D2CCB00@BYAPR20MB2391.namprd20.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01583E185C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(346002)(39850400004)(366004)(396003)(199004)(189003)(316002)(80792005)(33656002)(66476007)(25786009)(2906002)(6246003)(6506007)(478600001)(66946007)(26005)(55016002)(4326008)(66556008)(6916009)(9686003)(305945005)(64756008)(14444005)(53936002)(5024004)(102836004)(256004)(2171002)(11346002)(8676002)(52536014)(7736002)(99286004)(8936002)(5660300002)(81166006)(81156014)(54906003)(486006)(76176011)(446003)(7696005)(14454004)(66446008)(76116006)(86362001)(186003)(6666004)(71190400001)(71200400001)(4744005)(6116002)(6436002)(74316002)(66066001)(3846002)(476003)(229853002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR20MB2391;H:BYAPR20MB2501.namprd20.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: epiloglaser.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: cDDCUjbXQDQxQKxRLUet7upLC5K/YSgxx2AT3OwxiEthYAVyzVA6fgz6HVGe9ybdhRfvxvAepv8L1c6/XTESjz1HB8BdFhQIjC4sZzy0rOdGDJu4o2EycPOqxY5FRvr/n+HfKiIMzbA2Bs5vZpCsnXN2saotwPTJoZ3R+T+kiSz4hTa91AA+AbHpuyqtxE9nNkrpj2HBMDQLuBWt+BKVBR8YYmUNxlvjewtapoUE2HhyH8L7iMu4rnEmL/3CyrtLHHpSsht3EP5e1/1lTr7iXO4W/sChDwghpe31Ezd18TI52xHr4qbkTjvgG+N/7aIof66uxfrIOttecPdNONCAsoHgYIpv5OxxGPrqpHG63x2XAJOEiPaQBwE9O8OKir8Y0VQRUAnDnONkU/zablz2RyVzz4gMpqv/sANL4VyvGZA=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1732908AbfILPBF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 11:01:05 -0400
+Received: from mail.centricular.com ([50.116.37.142]:50756 "EHLO
+        mail.centricular.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732728AbfILPBE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Sep 2019 11:01:04 -0400
+X-Greylist: delayed 582 seconds by postgrey-1.27 at vger.kernel.org; Thu, 12 Sep 2019 11:01:04 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.centricular.com (Postfix) with ESMTP id 2CF4E58B9D;
+        Fri, 13 Sep 2019 00:51:22 +1000 (AEST)
+X-Virus-Scanned: Debian amavisd-new at centricular.com
+Authentication-Results: worm-farm.widgetgrove.com.au (amavisd-new);
+        dkim=neutral reason="invalid (public key: not available)"
+        header.d=centricular.com
+Received: from mail.centricular.com ([127.0.0.1])
+        by localhost (worm-farm.widgetgrove.com.au [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kf2y9-AUm6bz; Fri, 13 Sep 2019 00:51:21 +1000 (AEST)
+Received: from pimiento.home (180-150-69-32.b49645.syd.nbn.aussiebb.net [180.150.69.32])
+        by mail.centricular.com (Postfix) with ESMTPSA id 2A6D958B7A;
+        Fri, 13 Sep 2019 00:51:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=centricular.com;
+        s=201701; t=1568299881;
+        bh=0blo9GSKmoh1xANDh/GKuX1iNWqq2qOcdPcEvx0aDMQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VUxF9EkTQjkD7/7FMX1enkjyBhxmN0wVjsiwE5aGCYs5z+b9CyxH3kYzsVHSSByMM
+         UqLGcmeO1135CWLiEQRC1sDj6wfPRBIrtmqtJff+XtBpkZRngst2b4K5HdrxS+ip0G
+         Nj2TJi0YyJUnYB5ydKRZMrSMvhmo6PxVnLo7cuSb74IarkAAeVw5IyFoT+h5ch4iy1
+         96KKeEQpPiHN+FNYQ9kp0e2BuzE/Gp3QsM7Vfk2j1NL7PTzDCBQyl/UmZwq7Pw3g5k
+         SeNrKf/ufwgeuif9e03k7ftuG8nxMa4jNofnHyYuyM4l5kKciSCBTWXhFaI3U54yl3
+         CtJfzzjb5HfUw==
+From:   Jan Schmidt <jan@centricular.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Jan Schmidt <jan@centricular.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: [PATCH] xhci: Check all endpoints for LPM timeout
+Date:   Fri, 13 Sep 2019 00:49:21 +1000
+Message-Id: <20190912144921.368-1-jan@centricular.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: epiloglaser.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6a40825-bcd9-4c89-7e06-08d7378dac26
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2019 14:29:51.3325
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d7e01375-2074-44c0-b145-645c57a61059
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: s2zQBg+GJYEyWKyGojXbeSU0nGv3Diir7G0+AdPoWlxEZQqe24nX4+kCvUgQMqYM8CAwt0It8bAjnwMjyAetYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR20MB2391
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thank you Alan,
+If an endpoint is encountered that returns USB3_LPM_DEVICE_INITIATED, keep
+checking further endpoints, as there might be periodic endpoints later
+that return USB3_LPM_DISABLED due to shorter service intervals.
 
-I am still working through understanding the usbmon and this is a helpful h=
-int. I will contact the device manufacturer and see if there is some altern=
-ative method they recommend for testing.
+Without this, the code can set too high a maximum-exit-latency and
+prevent the use of multiple USB3 cameras that should be able to work.
 
->Most of the usbmon output shows that a device was attached to port 3 of hu=
-b 2 and enumerated as usual over the course of about half a second.
->
->The very last two lines show the computer sending the hub a Set-Port-Test =
-request on port 3 for test mode 4, which is Test Packet.
->The hub's response is a STALL, indicating that the hub doesn't understand =
-or doesn't implement this request.
->
->Alan Stern
->
+Signed-off-by: Jan Schmidt <jan@centricular.com>
+Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
+---
+ drivers/usb/host/xhci.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 03d1e552769b..1986b88661fc 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -4673,12 +4673,12 @@ static int xhci_update_timeout_for_endpoint(struct xhci_hcd *xhci,
+ 	alt_timeout = xhci_call_host_update_timeout_for_endpoint(xhci, udev,
+ 		desc, state, timeout);
+ 
+-	/* If we found we can't enable hub-initiated LPM, or
++	/* If we found we can't enable hub-initiated LPM, and
+ 	 * the U1 or U2 exit latency was too high to allow
+-	 * device-initiated LPM as well, just stop searching.
++	 * device-initiated LPM as well, then we will disable LPM
++	 * for this device, so stop searching any further.
+ 	 */
+-	if (alt_timeout == USB3_LPM_DISABLED ||
+-			alt_timeout == USB3_LPM_DEVICE_INITIATED) {
++	if (alt_timeout == USB3_LPM_DISABLED) {
+ 		*timeout = alt_timeout;
+ 		return -E2BIG;
+ 	}
+-- 
+2.21.0
+
