@@ -2,82 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D778EB09E2
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 10:08:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA9AB0A8D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 10:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726159AbfILIIR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 04:08:17 -0400
-Received: from mga12.intel.com ([192.55.52.136]:59169 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725765AbfILIIR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Sep 2019 04:08:17 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Sep 2019 01:08:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,495,1559545200"; 
-   d="scan'208";a="184732621"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga008.fm.intel.com with ESMTP; 12 Sep 2019 01:08:14 -0700
-Subject: Re: [PATCH v2] usb: host: xhci: wait CNR when doing xhci resume
-To:     Rick Tseng <rtseng@nvidia.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org
-References: <1567748218-6656-1-git-send-email-rtseng@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <2c771924-920f-c81a-b69b-806df8687838@linux.intel.com>
-Date:   Thu, 12 Sep 2019 11:10:06 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <1567748218-6656-1-git-send-email-rtseng@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        id S1730228AbfILIpU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 04:45:20 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48292 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726159AbfILIpU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Sep 2019 04:45:20 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id DC52BAF84;
+        Thu, 12 Sep 2019 08:45:18 +0000 (UTC)
+Message-ID: <1568277005.4008.6.camel@suse.com>
+Subject: Re: ttyACM and BREAK chars ?
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Thu, 12 Sep 2019 10:30:05 +0200
+In-Reply-To: <6e35e841122c1053ce0ec63383a883c7f58fca06.camel@infinera.com>
+References: <f7e55901a096024af2d77ae7838df3b658f2c28d.camel@infinera.com>
+         <1568211729.11279.6.camel@suse.com>
+         <24612ff3f7cd87642a3ab298950be31f8945fcc2.camel@infinera.com>
+         <1568226447.11279.8.camel@suse.com>
+         <6e35e841122c1053ce0ec63383a883c7f58fca06.camel@infinera.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6.9.2019 8.36, Rick Tseng wrote:
-> NVIDIA 3.1 xHCI card would lose power when moving power state into D3Cold.
-> Thus we need to wait CNR bit to clear when xhci resmue as xhci init.
+Am Donnerstag, den 12.09.2019, 07:09 +0000 schrieb Joakim Tjernlund:
+> On Wed, 2019-09-11 at 20:27 +0200, Oliver Neukum wrote:
+> > Am Mittwoch, den 11.09.2019, 14:34 +0000 schrieb Joakim Tjernlund:
+> > > On Wed, 2019-09-11 at 16:22 +0200, Oliver Neukum wrote:
+> > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
+> > > > 
+> > > > 
+> > > > Am Mittwoch, den 11.09.2019, 12:39 +0000 schrieb Joakim Tjernlund:
+> > > > > Every now and then my ttyACM0 hangs up or sends a BREAK char to my device.
+> > > > > I am trying to make ttyACM ignore incoming(over USB) and not emit
+> > > > > any BREAK automatically using termios (IGN_BRK) but that does not make a difference.
+> > > > > 
+> > > > > Is BREAK handling unimpl. in ttyACM ?
+> > > > 
+> > > > acm_send_break() implements it.
+> > > 
+> > > Yes, I se that funktion but I don't see how one can ignore received BREAKs
+> > > If I set IGN_BRK on /dev/ttyACM0 I expect that every BREAK should just be ignored
+> > 
+> > Handling breaks looks a bit broken on CDC-ACM.
+> > Could you test the attached patch?
+> > 
 > 
-> Signed-off-by: Rick Tseng <rtseng@nvidia.com>
-> ---
->   drivers/usb/host/xhci.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 03d1e55..6c7102c 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1108,6 +1108,15 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
->   		hibernated = true;
->   
->   	if (!hibernated) {
-> +		/* Some xHC would lose power during suspend, so wait for
-> +		 * controller ready from resume as xHC init.
-> +		 */
-> +		if (xhci_handshake(&xhci->op_regs->status,
-> +				   STS_CNR, 0, 10 * 1000 * 1000)) {
-> +			xhci_warn(xhci, "WARN: xHC timeout for CNR clear\n");
-> +			spin_unlock_irq(&xhci->lock);
-> +			return -ETIMEDOUT;
-> +		}
+> Sure, I can test it but from looking at the patch it seems like ACM already ignores
+> BREAKs(hardcoded) and with your patch you actually start reporting them.
 
-xhci_handshake() can return -ENODEV in case controller is not reachable (still in PCI D3).
-Would be better to just show and return what xhci_handshake() returns.
-I know there are places where the existing code doesn't do this, but it would be
-better to add it for new code
+Well, what is not reported cannot really be ignored.
+AFAICT  n_tty_receive_break() should solve the issue generically.
 
-ret = xhci_handshake(CNR bit clear)
-if (ret) {
-	xhci_warn(xhci, "Controller not ready at resume %d\n", ret);
-	unlock()
-	return ret
-}
+> My problem is sudden disconnects I cannot explain but I think they are connect to BREAKs
+> I have seen these errors in dmesg though, not sure if they help the diagnose:
+> [181780.167987] usb usb1-port6: disabled by hub (EMI?), re-enabling...
 
--Mathias
+The relevant fault happens likely just before that.
+
+> [181780.168208] cdc_acm 1-6.3:1.1: acm_ctrl_irq - usb_submit_urb failed: -19
+> [181780.167996] usb 1-6: USB disconnect, device number 30
+> [181780.176548] usb 1-6-port2: attempt power cycle
+> [181781.772847] usb 1-6.3: USB disconnect, device number 32
+> [181781.773134] cdc_acm 1-6.3:1.1: failed to set dtr/rts
+
+Either your cabling is indeed crap, or something crashes your device.
+
+	Regards
+		Oliver
 
