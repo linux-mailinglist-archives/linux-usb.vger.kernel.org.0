@@ -2,123 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 134D8B111E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 16:28:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF278B1121
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 16:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732595AbfILO2w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 10:28:52 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:48612 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732512AbfILO2w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Sep 2019 10:28:52 -0400
-Received: (qmail 2866 invoked by uid 2102); 12 Sep 2019 10:28:51 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 12 Sep 2019 10:28:51 -0400
-Date:   Thu, 12 Sep 2019 10:28:51 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Allen Blaylock <AllenB@epiloglaser.com>
-cc:     Manu Gautam <mgautam@codeaurora.org>,
+        id S1732607AbfILO3z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 10:29:55 -0400
+Received: from mail-eopbgr710135.outbound.protection.outlook.com ([40.107.71.135]:27136
+        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1732598AbfILO3y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Sep 2019 10:29:54 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KKGc8j6VPqtAG0o/cKEgQ0DVzQjwpQN0eAesug9jGE+JNyEnylJ9bIjpRV/dZI+3msDbOQyBcj4pVE8akdIMwlRMu4wI9qwRnAbeloTr4xvDCYqnl2r/RoOXDfCoxQtq40XQEcT+Yejz2ACmE+c/uPA5nWLYC8tbAEjpgCmSOtkr9jRbJOTsnldq406Fkl+2Q+hfY+IdTgeZI8HoLHo+fOg88AEE3ciztfmeXoWMFoNT+ZM2Q9N9RxoAiLB6LKksJAyfgpn7EfAFW9GKIXQvC9hZcaih7IDd3fw7LrwKmScyKZrr4/zo5W4cFdtIMi8fcvDZ6napAdXqtCdAHArUCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aow6xUSZwGuoPvWxm9PtnFRF9x/1Sa+xZfC9Vyr7vPI=;
+ b=a8WzqhDOcXOHlgZk1TFgXvQpGXurSnIPIllcJ/tQuIIexOBtWJaEGyWhK/Qv/V7E73Eqm7EMmAp1e8DPnVeeOF38uhQJmhqx84ru4i5Qr836KRCSiAZKdTLM7vWTayBfPaa4W17kNXBDAyvvixKy8f7Xk6C78SFulgVWINQmER3/4YXkG6W8WpabrkMhZTbk/bzasO/fOa4sg2nj1ThTo49qeq0mzcZwEyjNW0+9wbMlIMuMQTWPLe+0lYWYVwcjX8kwaiwJ4c5rdkeaM412t4sClMuWLlnhP0/pBl/afodsR4xM8k7+DS6y5Wb56giLAd6RDOh8G0ZVe0rU3hwAlw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=epiloglaser.com; dmarc=pass action=none
+ header.from=epiloglaser.com; dkim=pass header.d=epiloglaser.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epiloglaser.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aow6xUSZwGuoPvWxm9PtnFRF9x/1Sa+xZfC9Vyr7vPI=;
+ b=mh8AWz5kB6JXByB3oZhvzRXe77UTtrMGlJagdKFV8Rht9Ply3dPyd6JhUcbMIkUukt2rTtBfC3OAMYJcAs1ZMJiBw7rS67fs2sVm3yasqr6aBZjQ/LXPIPjjQAXz9Dpuce1JZdy4d/LdCxFB3r5JJqY6PynIk3sCHq1OHz1LDs0=
+Received: from BYAPR20MB2501.namprd20.prod.outlook.com (20.179.158.74) by
+ BYAPR20MB2391.namprd20.prod.outlook.com (20.179.156.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2263.15; Thu, 12 Sep 2019 14:29:51 +0000
+Received: from BYAPR20MB2501.namprd20.prod.outlook.com
+ ([fe80::6550:204e:b15f:6a61]) by BYAPR20MB2501.namprd20.prod.outlook.com
+ ([fe80::6550:204e:b15f:6a61%5]) with mapi id 15.20.2241.022; Thu, 12 Sep 2019
+ 14:29:51 +0000
+From:   Allen Blaylock <AllenB@epiloglaser.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Manu Gautam <mgautam@codeaurora.org>,
         Peter Chen <peter.chen@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Subject: RE: EHSET with hub and PCIe root hub
+Thread-Topic: EHSET with hub and PCIe root hub
+Thread-Index: AdVoIxLeoShF0bVgSnKKwHrYOWnWwgAKZ+wAAAH42gAAIn25MAAlq/6AAAAnJtA=
+Date:   Thu, 12 Sep 2019 14:29:41 +0000
+Deferred-Delivery: Thu, 12 Sep 2019 14:29:15 +0000
+Message-ID: <BYAPR20MB250145E476D5A086285FB8B8CCB00@BYAPR20MB2501.namprd20.prod.outlook.com>
+References: <BYAPR20MB2501098ADC3493845D7D2E9DCCB10@BYAPR20MB2501.namprd20.prod.outlook.com>
+ <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
 In-Reply-To: <Pine.LNX.4.44L0.1909121008160.1440-100000@iolanthe.rowland.org>
-Message-ID: <Pine.LNX.4.44L0.1909121023190.1440-100000@iolanthe.rowland.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=AllenB@epiloglaser.com; 
+x-originating-ip: [65.154.97.33]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e6a40825-bcd9-4c89-7e06-08d7378dac26
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR20MB2391;
+x-ms-traffictypediagnostic: BYAPR20MB2391:
+x-microsoft-antispam-prvs: <BYAPR20MB23913FFE4786D566D62415D2CCB00@BYAPR20MB2391.namprd20.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 01583E185C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(376002)(346002)(39850400004)(366004)(396003)(199004)(189003)(316002)(80792005)(33656002)(66476007)(25786009)(2906002)(6246003)(6506007)(478600001)(66946007)(26005)(55016002)(4326008)(66556008)(6916009)(9686003)(305945005)(64756008)(14444005)(53936002)(5024004)(102836004)(256004)(2171002)(11346002)(8676002)(52536014)(7736002)(99286004)(8936002)(5660300002)(81166006)(81156014)(54906003)(486006)(76176011)(446003)(7696005)(14454004)(66446008)(76116006)(86362001)(186003)(6666004)(71190400001)(71200400001)(4744005)(6116002)(6436002)(74316002)(66066001)(3846002)(476003)(229853002);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR20MB2391;H:BYAPR20MB2501.namprd20.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: epiloglaser.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: cDDCUjbXQDQxQKxRLUet7upLC5K/YSgxx2AT3OwxiEthYAVyzVA6fgz6HVGe9ybdhRfvxvAepv8L1c6/XTESjz1HB8BdFhQIjC4sZzy0rOdGDJu4o2EycPOqxY5FRvr/n+HfKiIMzbA2Bs5vZpCsnXN2saotwPTJoZ3R+T+kiSz4hTa91AA+AbHpuyqtxE9nNkrpj2HBMDQLuBWt+BKVBR8YYmUNxlvjewtapoUE2HhyH8L7iMu4rnEmL/3CyrtLHHpSsht3EP5e1/1lTr7iXO4W/sChDwghpe31Ezd18TI52xHr4qbkTjvgG+N/7aIof66uxfrIOttecPdNONCAsoHgYIpv5OxxGPrqpHG63x2XAJOEiPaQBwE9O8OKir8Y0VQRUAnDnONkU/zablz2RyVzz4gMpqv/sANL4VyvGZA=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-OriginatorOrg: epiloglaser.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e6a40825-bcd9-4c89-7e06-08d7378dac26
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Sep 2019 14:29:51.3325
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d7e01375-2074-44c0-b145-645c57a61059
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s2zQBg+GJYEyWKyGojXbeSU0nGv3Diir7G0+AdPoWlxEZQqe24nX4+kCvUgQMqYM8CAwt0It8bAjnwMjyAetYA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR20MB2391
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 12 Sep 2019, Alan Stern wrote:
+Thank you Alan,
 
-> On Wed, 11 Sep 2019, Allen Blaylock wrote:
-> 
-> > So I do see the PORT_TEST SetFeature Request and Response when I use tcpdump to
-> > make a capture using usbmon. Unfortunately I am not as familiar with the raw
-> > usbmon output or some of the diagnostics output by usbmon so I may be missing 
-> > something. Here is a capture from the sysfs usbmon file:
-> > 
-> > a52efe00 268933702 C Ii:002:01 0 1 = 08
-> > a52efe00 268933736 S Ii:002:01 -115 1 <
-> > a546b700 268934005 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b700 268934303 C Ci:002:00 0 4 = 01010100
-> > a546b700 268934327 S Co:002:00 s 23 01 0010 0003 0000 0
-> > a546b700 268934384 C Co:002:00 0 0
-> > a546b700 268934438 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b700 268934520 C Ci:002:00 0 4 = 01010000
-> > a546b700 268980085 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b700 268980332 C Ci:002:00 0 4 = 01010000
-> > a546b700 269030091 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b700 269030333 C Ci:002:00 0 4 = 01010000
-> > a546b700 269080082 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b700 269080335 C Ci:002:00 0 4 = 01010000
-> > a546b280 269130094 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546b280 269130339 C Ci:002:00 0 4 = 01010000
-> > a546b280 269130376 S Co:002:00 s 23 03 0004 0003 0000 0
-> > a546b280 269130577 C Co:002:00 0 0
-> > a546be00 269160091 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546be00 269160344 C Ci:002:00 0 4 = 03051000
-> > a546be00 269160361 S Co:002:00 s 23 01 0014 0003 0000 0
-> > a546be00 269160416 C Co:002:00 0 0
-> > a546be00 269230118 S Ci:000:00 s 80 06 0100 0000 0040 64 <
-> > a546be00 269230341 C Ci:000:00 0 18 = 12010002 00000040 0a1a0401 00010102 0301
-> > a546be00 269230358 S Co:002:00 s 23 03 0004 0003 0000 0
-> > a546be00 269230425 C Co:002:00 0 0
-> > a546be00 269260104 S Ci:002:00 s a3 00 0000 0003 0004 4 <
-> > a546be00 269260354 C Ci:002:00 0 4 = 03051000
-> > a546be00 269260374 S Co:002:00 s 23 01 0014 0003 0000 0
-> > a546be00 269260430 C Co:002:00 0 0
-> > a546be00 269330097 S Co:000:00 s 00 05 0004 0000 0000 0
-> > a546be00 269330372 C Co:000:00 0 0
-> > a546b700 269380050 S Ci:004:00 s 80 06 0100 0000 0012 18 <
-> > a546b700 269380327 C Ci:004:00 0 18 = 12010002 00000040 0a1a0401 00010102 0301
-> > a546b700 269380360 S Ci:004:00 s 80 06 0200 0000 0009 9 <
-> > a546b700 269380453 C Ci:004:00 0 9 = 09022e00 01010080 32
-> > a546b700 269380468 S Ci:004:00 s 80 06 0200 0000 002e 46 <
-> > a546b700 269380574 C Ci:004:00 0 46 = 09022e00 01010080 32090400 0004ff00 00000705 02020002 00070504 02000200
-> > a546b700 269380608 S Ci:004:00 s 80 06 0300 0000 00ff 255 <
-> > a546b700 269380701 C Ci:004:00 0 4 = 04030904
-> > a546b700 269380717 S Ci:004:00 s 80 06 0302 0409 00ff 255 <
-> > a546b700 269380824 C Ci:004:00 0 34 = 22035500 53004200 20004500 48004f00 53005400 20005400 45005300 54004500
-> > a546b700 269380845 S Ci:004:00 s 80 06 0301 0409 00ff 255 <
-> > a546b700 269380949 C Ci:004:00 0 34 = 22035500 53004200 20004500 48004f00 53005400 20005400 45005300 54004500
-> > a546b700 269380968 S Ci:004:00 s 80 06 0303 0409 00ff 255 <
-> > a546b700 269381074 C Ci:004:00 0 10 = 0a034900 4f005600 3300
-> > a546b280 269381564 S Co:004:00 s 00 09 0001 0000 0000 0
-> > a546b280 269381704 C Co:004:00 0 0
-> > a560a000 269407637 S Co:002:00 s 23 03 0015 0403 0000 0
-> > a560a000 269407869 C Co:002:00 -32 0
-> > 
-> > I was unable to make sense of it with the help of the usbmon.txt documentation
-> > and will need some more time using wireshark and the output of tcpdump to get 
-> > familiar with decoding the raw usbmon output.
-> 
-> Most of the usbmon output shows that a device was attached to port 3 of
-> hub 2 and enumerated as usual over the course of about half a second.  
-> 
-> The very last two lines show the computer sending the hub a
-> Set-Port-Test request on port 3 for test mode 4, which is Test Packet.  
-> The hub's response is a STALL, indicating that the hub doesn't
-> understand or doesn't implement this request.
+I am still working through understanding the usbmon and this is a helpful h=
+int. I will contact the device manufacturer and see if there is some altern=
+ative method they recommend for testing.
 
-I should add that the USB 2.0 spec includes the following text (from
-section 11.24.2.13):
-
-	Test mode of a downstream facing port can only be used in
-	a well defined sequence of hub states. This sequence is
-	defined as follows:
-
-	1)  All enabled downstream facing ports of the hub containing
-	    the port to be tested must be (selectively) suspended via 
-	    the SetPortFeature(PORT_SUSPEND) request.  Each downstream 
-	    facing port of the hub must be in the disabled, 
-	    disconnected, or suspended state (see Figure 11-9).
-
-So you can see the hub probably failed the request because a
-non-suspended device was connected to port 3.  (And who knows what was 
-attached to the other ports -- the usbmon trace doesn't say.)
-
-Alan Stern
-
+>Most of the usbmon output shows that a device was attached to port 3 of hu=
+b 2 and enumerated as usual over the course of about half a second.
+>
+>The very last two lines show the computer sending the hub a Set-Port-Test =
+request on port 3 for test mode 4, which is Test Packet.
+>The hub's response is a STALL, indicating that the hub doesn't understand =
+or doesn't implement this request.
+>
+>Alan Stern
+>
