@@ -2,83 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABA9AB0A8D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 10:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD82B0A85
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Sep 2019 10:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730228AbfILIpU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Sep 2019 04:45:20 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48292 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726159AbfILIpU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Sep 2019 04:45:20 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DC52BAF84;
-        Thu, 12 Sep 2019 08:45:18 +0000 (UTC)
-Message-ID: <1568277005.4008.6.camel@suse.com>
-Subject: Re: ttyACM and BREAK chars ?
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Joakim Tjernlund <Joakim.Tjernlund@infinera.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Thu, 12 Sep 2019 10:30:05 +0200
-In-Reply-To: <6e35e841122c1053ce0ec63383a883c7f58fca06.camel@infinera.com>
-References: <f7e55901a096024af2d77ae7838df3b658f2c28d.camel@infinera.com>
-         <1568211729.11279.6.camel@suse.com>
-         <24612ff3f7cd87642a3ab298950be31f8945fcc2.camel@infinera.com>
-         <1568226447.11279.8.camel@suse.com>
-         <6e35e841122c1053ce0ec63383a883c7f58fca06.camel@infinera.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1730333AbfILImS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Sep 2019 04:42:18 -0400
+Received: from canardo.mork.no ([148.122.252.1]:48937 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730049AbfILImR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Sep 2019 04:42:17 -0400
+Received: from miraculix.mork.no ([IPv6:2a02:2121:340:af89:304b:a5ff:fe41:6a88])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8C8gAef030205
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Thu, 12 Sep 2019 10:42:12 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1568277734; bh=0kzHipba7JDB2zZdsoc3Tx3P2A5WmFo1FDCKYtkan+E=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=Z5sW09IrHUoJUhNI4s/q7m842EFqVE0Mo3Sc/W8GgNqAYkopzj9gbKDn0+1AUkPr1
+         ednlmwfKA+OItkcFd3Sp5oApRxa/o0tIhb6oqaVetHc5zYg5QwCF7vLN816q3YRctD
+         mtkQekz0MNq+on4uWu2TWixdtDGYJ1tQ7uC5pXxU=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1i8Kg0-0001fJ-Ev; Thu, 12 Sep 2019 10:42:04 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     Oliver Neukum <oliver@neukum.org>, linux-usb@vger.kernel.org,
+        Lars Melin <larsm17@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH net,stable] cdc_ether: fix rndis support for Mediatek based smartphones
+Date:   Thu, 12 Sep 2019 10:42:00 +0200
+Message-Id: <20190912084200.6359-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 12.09.2019, 07:09 +0000 schrieb Joakim Tjernlund:
-> On Wed, 2019-09-11 at 20:27 +0200, Oliver Neukum wrote:
-> > Am Mittwoch, den 11.09.2019, 14:34 +0000 schrieb Joakim Tjernlund:
-> > > On Wed, 2019-09-11 at 16:22 +0200, Oliver Neukum wrote:
-> > > > CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender and know the content is safe.
-> > > > 
-> > > > 
-> > > > Am Mittwoch, den 11.09.2019, 12:39 +0000 schrieb Joakim Tjernlund:
-> > > > > Every now and then my ttyACM0 hangs up or sends a BREAK char to my device.
-> > > > > I am trying to make ttyACM ignore incoming(over USB) and not emit
-> > > > > any BREAK automatically using termios (IGN_BRK) but that does not make a difference.
-> > > > > 
-> > > > > Is BREAK handling unimpl. in ttyACM ?
-> > > > 
-> > > > acm_send_break() implements it.
-> > > 
-> > > Yes, I se that funktion but I don't see how one can ignore received BREAKs
-> > > If I set IGN_BRK on /dev/ttyACM0 I expect that every BREAK should just be ignored
-> > 
-> > Handling breaks looks a bit broken on CDC-ACM.
-> > Could you test the attached patch?
-> > 
-> 
-> Sure, I can test it but from looking at the patch it seems like ACM already ignores
-> BREAKs(hardcoded) and with your patch you actually start reporting them.
+A Mediatek based smartphone owner reports problems with USB
+tethering in Linux.  The verbose USB listing shows a rndis_host
+interface pair (e0/01/03 + 10/00/00), but the driver fails to
+bind with
 
-Well, what is not reported cannot really be ignored.
-AFAICT  n_tty_receive_break() should solve the issue generically.
+[  355.960428] usb 1-4: bad CDC descriptors
 
-> My problem is sudden disconnects I cannot explain but I think they are connect to BREAKs
-> I have seen these errors in dmesg though, not sure if they help the diagnose:
-> [181780.167987] usb usb1-port6: disabled by hub (EMI?), re-enabling...
+The problem is a failsafe test intended to filter out ACM serial
+functions using the same 02/02/ff class/subclass/protocol as RNDIS.
+The serial functions are recognized by their non-zero bmCapabilities.
 
-The relevant fault happens likely just before that.
+No RNDIS function with non-zero bmCapabilities were known at the time
+this failsafe was added. But it turns out that some Wireless class
+RNDIS functions are using the bmCapabilities field. These functions
+are uniquely identified as RNDIS by their class/subclass/protocol, so
+the failing test can safely be disabled.  The same applies to the two
+types of Misc class RNDIS functions.
 
-> [181780.168208] cdc_acm 1-6.3:1.1: acm_ctrl_irq - usb_submit_urb failed: -19
-> [181780.167996] usb 1-6: USB disconnect, device number 30
-> [181780.176548] usb 1-6-port2: attempt power cycle
-> [181781.772847] usb 1-6.3: USB disconnect, device number 32
-> [181781.773134] cdc_acm 1-6.3:1.1: failed to set dtr/rts
+Applying the failsafe to Communication class functions only retains
+the original functionality, and fixes the problem for the Mediatek based
+smartphone.
 
-Either your cabling is indeed crap, or something crashes your device.
+Tow examples of CDC functional descriptors with non-zero bmCapabilities
+from Wireless class RNDIS functions are:
 
-	Regards
-		Oliver
+0e8d:000a  Mediatek Crosscall Spider X5 3G Phone
+
+      CDC Header:
+        bcdCDC               1.10
+      CDC ACM:
+        bmCapabilities       0x0f
+          connection notifications
+          sends break
+          line coding and serial state
+          get/set/clear comm features
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+      CDC Call Management:
+        bmCapabilities       0x03
+          call management
+          use DataInterface
+        bDataInterface          1
+
+and
+
+19d2:1023  ZTE K4201-z
+
+      CDC Header:
+        bcdCDC               1.10
+      CDC ACM:
+        bmCapabilities       0x02
+          line coding and serial state
+      CDC Call Management:
+        bmCapabilities       0x03
+          call management
+          use DataInterface
+        bDataInterface          1
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1
+
+The Mediatek example is believed to apply to most smartphones with
+Mediatek firmware.  The ZTE example is most likely also part of a larger
+family of devices/firmwares.
+
+Suggested-by: Lars Melin <larsm17@gmail.com>
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+ drivers/net/usb/cdc_ether.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
+index 8458e88c18e9..32f53de5b1fe 100644
+--- a/drivers/net/usb/cdc_ether.c
++++ b/drivers/net/usb/cdc_ether.c
+@@ -206,7 +206,15 @@ int usbnet_generic_cdc_bind(struct usbnet *dev, struct usb_interface *intf)
+ 		goto bad_desc;
+ 	}
+ skip:
+-	if (rndis && header.usb_cdc_acm_descriptor &&
++	/* Communcation class functions with bmCapabilities are not
++	 * RNDIS.  But some Wireless class RNDIS functions use
++	 * bmCapabilities for their own purpose. The failsafe is
++	 * therefore applied only to Communication class RNDIS
++	 * functions.  The rndis test is redundant, but a cheap
++	 * optimization.
++	 */
++	if (rndis && is_rndis(&intf->cur_altsetting->desc) &&
++	    header.usb_cdc_acm_descriptor &&
+ 	    header.usb_cdc_acm_descriptor->bmCapabilities) {
+ 		dev_dbg(&intf->dev,
+ 			"ACM capabilities %02x, not really RNDIS?\n",
+-- 
+2.20.1
 
