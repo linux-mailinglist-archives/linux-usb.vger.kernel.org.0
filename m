@@ -2,130 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB214B17CB
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 06:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC54B1802
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 08:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfIMEqU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Sep 2019 00:46:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44036 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725817AbfIMEqU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Sep 2019 00:46:20 -0400
-Received: from localhost (unknown [84.241.200.49])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E110E20644;
-        Fri, 13 Sep 2019 04:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568349979;
-        bh=t3fz3+C+Rszs5v117iwBq01Z8XVjIxQhv9Gun6u8tMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nAxqE1jeHzcBqj7vt2s31JX2mZM36TzeeTNCnxyL124j8DT8qYynyf9uvPTX1WWBE
-         C75UMsP2UwpAl28q5wSIIUIlBB6QPBGHaqSDmsd2y2Zh6WjEoo/yKgvSstp7N1vntj
-         xDZK3JeX1rIm8lqy0gvUtH0FvxXLVy4WRzEMdS+c=
-Date:   Fri, 13 Sep 2019 05:46:14 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>, kvm@vger.kernel.org,
-        bp@alien8.de, carlo@caione.org, catalin.marinas@arm.com,
-        devicetree@vger.kernel.org, hpa@zytor.com, jmattson@google.com,
-        joro@8bytes.org, khilman@baylibre.com,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mark.rutland@arm.com, mingo@redhat.com, narmstrong@baylibre.com,
-        rkrcmar@redhat.com, robh+dt@kernel.org,
-        sean.j.christopherson@intel.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, wanpengli@tencent.com, will.deacon@arm.com,
-        x86@kernel.org,
-        syzbot <syzbot+46f1dd7dbbe2bfb98b10@syzkaller.appspotmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: KASAN: slab-out-of-bounds Read in handle_vmptrld
-Message-ID: <20190913044614.GA120223@kroah.com>
-References: <000000000000a9d4f705924cff7a@google.com>
- <87lfutei1j.fsf@vitty.brq.redhat.com>
- <5218e70e-8a80-7c5f-277b-01d9ab70692a@redhat.com>
+        id S1727510AbfIMGJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Sep 2019 02:09:02 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:19179 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbfIMGJC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Sep 2019 02:09:02 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d7b32810000>; Thu, 12 Sep 2019 23:09:05 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 12 Sep 2019 23:09:00 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 12 Sep 2019 23:09:00 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 13 Sep
+ 2019 06:08:59 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 13 Sep 2019 06:09:00 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d7b32790000>; Thu, 12 Sep 2019 23:08:59 -0700
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: [Patch V9 0/8] Tegra XUSB gadget driver support
+Date:   Fri, 13 Sep 2019 11:37:45 +0530
+Message-ID: <1568354873-24073-1-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5218e70e-8a80-7c5f-277b-01d9ab70692a@redhat.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1568354945; bh=E/sYGMtuskuPf9y3/P6zGX1TxO4x06wrgvlJLjQuT0k=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=qlC0By+5aMKK2P/hDBOm+0o1pWu7QDY7WnznDH8+xKyaIlejgVI+IHEnQya2Yejli
+         2iDOJkbPVceX59NQ9xnIeh96IRBUFtmdUNlMjkBWMijmlOfimWfx8DlX9EboRlQDQ/
+         PnKHkup4N7TS16oX6c9/QpCaCLxn4JnxPFGu5IHE3yMc7ay3f7e5ZbAu1hOd4bmHRm
+         UWD0z15bSoVitKiEy2fc0KZmZQra+XLH1ddqssjL8LqwFQfUPmj/r28IM0YUCyW9hZ
+         ne6TUmE0wtuEt4CfwBb9ycCjPQbRX94nvDNapkToU7bzxT3PgkUrDRGPlJ9eRmRoh/
+         S5oNirb9E/n8g==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 12, 2019 at 06:49:26PM +0200, Paolo Bonzini wrote:
-> [tl;dr: there could be a /dev/usb bug only affecting KASAN
-> configurations, jump to the end to skip the analysis and get to the bug
-> details]
-> 
-> On 12/09/19 15:54, Vitaly Kuznetsov wrote:
-> > Hm, the bisection seems bogus but the stack points us to the following
-> > piece of code:
-> > 
-> >  4776)              if (kvm_vcpu_map(vcpu, gpa_to_gfn(vmptr), &map)) {
-> > <skip>
-> >  4783)                      return nested_vmx_failValid(vcpu,
-> >  4784)                              VMXERR_VMPTRLD_INCORRECT_VMCS_REVISION_ID);
-> >  4785)              }
-> >  4786) 
-> >  4787)              new_vmcs12 = map.hva;
-> >  4788) 
-> > *4789)              if (new_vmcs12->hdr.revision_id != VMCS12_REVISION ||
-> >  4790)                  (new_vmcs12->hdr.shadow_vmcs &&
-> >  4791)                   !nested_cpu_has_vmx_shadow_vmcs(vcpu))) {
-> > 
-> > the reported problem seems to be on VMCS12 region access but it's part
-> > of guest memory and we successfuly managed to map it. We're definitely
-> > within 1-page range. Maybe KASAN is just wrong here?
-> 
-> Here is the relevant part of the syzkaller repro:
-> 
-> syz_kvm_setup_cpu$x86(r1, 0xffffffffffffffff,
-> &(0x7f0000000000/0x18000)=nil, 0x0, 0x133, 0x0, 0x0, 0xff7d)
-> r3 = syz_open_dev$usb(&(0x7f0000000080)='/dev/bus/usb/00#/00#\x00',
-> 0x40000fffffd, 0x200800000000042)
-> mmap$IORING_OFF_SQES(&(0x7f0000007000/0x2000)=nil, 0x2000, 0x4, 0x13,
-> r3, 0x10000000)
-> syz_kvm_setup_cpu$x86(0xffffffffffffffff, r2,
-> &(0x7f0000000000/0x18000)=nil, 0x0, 0xfefd, 0x40, 0x0, 0xfffffffffffffdd4)
-> ioctl$KVM_RUN(r2, 0xae80, 0x0)
-> 
-> The mmap$IORING_OFF_SQES is just a normal mmap from a device, which
-> replaces the previous mapping for guest memory and in particular
-> 0x7f0000007000 which is the VMCS (from the C reproducer: "#define
-> ADDR_VAR_VMCS 0x7000").
-> 
-> The previous mapping is freed with do_munmap and then repopulated in
-> usbdev_mmap with remap_pfn_range.  In KVM this means that kvm_vcpu_map
-> goes through hva_to_pfn_remapped, which correctly calls get_page via
-> kvm_get_pfn.  (Note that although drivers/usb/core/devio.c's usbdev_mmap
-> sets VM_IO *after* calling remap_pfn_range, remap_pfn_range itself
-> helpfully sets it before calling remap_p4d_range.  And anyway KVM is
-> looking at vma->vm_flags under mmap_sem, which is held during mmap).
-> 
-> So, KVM should be doing the right thing.  Now, the error is:
-> 
-> > Read of size 4 at addr ffff888091e10000 by task syz-executor758/10006
-> > The buggy address belongs to the object at ffff888091e109c0 
-> > The buggy address is located 2496 bytes to the left of
-> >  8192-byte region [ffff888091e109c0, ffff888091e129c0) 
-> 
-> And given the use of remap_pfn_range in devusb_mmap, the simplest
-> explanation could be that USB expects kmalloc-8k to return 8k-aligned
-> values, but this is not true anymore with KASAN.  CCing Dmitry, Greg and
-> linux-usb.
+Patches 1-3 are phy driver changes to add support for device
+mode.
+Patches 4-7 are changes related to XUSB device mode
+controller driver.
+Patch 8 is to enable drivers for XUDC support in defconfig
 
-USB drivers expect kmalloc to return DMA-able memory.  I don't know
-about specific alignment issues, that should only an issue for the host
-controller being used here, which you do not say in the above list.
+Test Steps(USB 2.0):
+- Enable "USB Gadget precomposed configurations" in defconfig
+- Build, flash and boot Jetson TX1
+- Connect Jetson TX1 and Ubuntu device using USB A to Micro B
+  cable
+- After boot on Jetson TX1 terminal usb0 network device should be
+  enumerated
+- Assign static ip to usb0 on Jetson TX1 and corresponding net
+  device on ubuntu
+- Run ping test and transfer test(used scp) to check data transfer
+  communication
 
-We have had some reports that usbdev_mmap() does not do the "correct
-thing" for all host controllers, but a lot of the DMA work that is in
-linux-next for 5.4-rc1 should have helped resolve those issues.  What
-tree are you seeing these bug reports happening from?
+SS mode is verified by enabling Type A port as peripheral
+---
+v9:
+* Patches 1,2,3,4,5 - No changes.
+* Patch 6 has update on compatible string as per suggestion from Chunfeng.
+* Patch 7 has comment fixes as suggested by Chunfeng.
+* Patch 8 has CONFIG_USB_GPIO enabled as module additionally.
+---
+v8:
+* Patches 1,2,3,4,5,8 - No changes.
+* Patch 6 has update on compatible string as per change done in [1].
+* Patch 7 has issue fix, where device mode didnot got enabled after resume
+  from suspend.
+---
+v7:
+* Patches 1,2,3,4,5,6,8 - No changes.
+* Patch 7 - Comments from Balbi and Chunfun adrresed.
+  Added COMPILE_TEST in Kconfig and updated dependencies.
+---
+v6:
+* Patches 1,2,3,7,8 - No changes.
+* Patch 4,5,6 - Comments from Rob addressed, updated usb connector driver
+  compatibility string.
+---
+v5:
+* Patches 1-3 - Commit subject updated as per inputs from Thierry.
+* Patch 4 - Added reg-names used on Tegra210 in the bindings doc
+* Enabled xudc driver as module instead of part of kernel in patch 8.
+* Patched 5-8 - No changes.
+---
+v4:
+* patch 1 - no changes.
+* corrected companion device search based on inputs from Thierry in patch 2.
+* removed unneeded dev variable and corrected value read in
+  tegra210_utmi_port_reset function in patch 3.
+* dt binding doc and dtb files are corrected for alignments.
+  Replaced extcon-usb-gpio with usb role switch.
+* Added support for USB role switch instead of extcon-usb-gpio and other minor
+  comments as suggested by Chunfeng.
+* Enabled xudc driver as module instead of part of kernel in patch 8.
+---
+V3:
+* Rebased patch 1 to top of tree.
+* Fixed bug in patch 2, where xudc interrupts dont get generated if USB host
+  mode fails to probe. Moved fake port detection logic to generic xusb.c. fake
+  usb port data is updated based on soc flag need_fake_usb3_port.
+* Added extra lines whereever necessary to make code more readable in patch 3
+  and 7.
+* dt binding doc is corrected for typos and extcon references. Also added
+  details for clocks and removed xusb_ references to clock and power-domain
+  names and accordingly patch 5 is updated.
+* removed avdd-pll-utmip-supply in patch 6, as its now part of padctl driver.
+* Patch 8 has no changes.
+---
+V2:
+* Patches 1-3 are new patches in this series, which splits unified features
+  patch to speprated features and removes need of port-fake entry in DT.
+* Patch 4 is re-arragend dt-bindings patch which incorporates previous
+  patch comments to sort DT entries alphabetically, addresses name changes
+  and PM domain details added.
+* Patch 5-6 are re-arranged DT patches with major changes - sort entries
+  alphabetically, and adds clock names.
+* Patch 7 is UDC driver tegra XUSB device mode controller with major
+  changes - remove un-used module params, lockinng for device_mode flag,
+  moving un-needed info logs to debug level, making changes feature flag
+  dependent rather than SOC based macros and other error handling in probe.
+* Patch 8 has no changes.
 
-thanks,
+Nagarjuna Kristam (8):
+  phy: tegra: xusb: Add XUSB dual mode support on Tegra210
+  phy: tegra: xusb: Add usb3 port fake support on Tegra210
+  phy: tegra: xusb: Add vbus override support on Tegra210
+  dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
+  arm64: tegra: Add xudc node for Tegra210
+  arm64: tegra: Enable xudc on Jetson TX1
+  usb: gadget: Add UDC driver for tegra XUSB device mode controller
+  arm64: defconfig: Enable tegra XUDC support
 
-greg k-h
+ .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  |  110 +
+ arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   31 +-
+ arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   19 +
+ arch/arm64/configs/defconfig                       |    2 +
+ drivers/phy/tegra/xusb-tegra210.c                  |  133 +-
+ drivers/phy/tegra/xusb.c                           |   87 +
+ drivers/phy/tegra/xusb.h                           |    4 +
+ drivers/usb/gadget/udc/Kconfig                     |   12 +
+ drivers/usb/gadget/udc/Makefile                    |    1 +
+ drivers/usb/gadget/udc/tegra-xudc.c                | 3787 ++++++++++++++++++++
+ include/linux/phy/tegra/xusb.h                     |    4 +-
+ 11 files changed, 4186 insertions(+), 4 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.txt
+ create mode 100644 drivers/usb/gadget/udc/tegra-xudc.c
+
+-- 
+2.7.4
+
