@@ -2,127 +2,1097 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3914B24D5
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 20:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675E2B264F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 21:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388162AbfIMSBi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Sep 2019 14:01:38 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:33298 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387936AbfIMSBh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Sep 2019 14:01:37 -0400
-Received: by mail-io1-f68.google.com with SMTP id m11so64504910ioo.0
-        for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2019 11:01:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rrqyBJXWUQ16PunrNF8zt8vFNM7dGzrn1uN2ZDTIc38=;
-        b=WYkiuNstUL4C1A6/IQCqTzer03XR1ChqSC4kgR1OcSkJQFGlbYACPK2h8EdfA/qqBd
-         GoGsmX94Xxf3i8gIrwfafayJsVgMePf/V6ebIWmVWX9cZ5GaZ7745S7FAUFZPgYnO0Ft
-         TDuX0vamwNxc3AUvtkUyfhcNm7b17L0B+o1LcV5fU+IZS8ZUiQMPJKcOeR+RFXx8sEog
-         Q0jKrDzrhTfTe/MIFcg05mmu0EY/afa7vNV1MOaXHmyHrMNDIhNfT3QRldyMdScWxegG
-         f7oGGpQvDt2+fD7qeLy2jTMmEnnsi0/BRfS3qvOhWT6FOZtwcVLiHn+18kU5pBdEkDvP
-         LY4g==
+        id S2388201AbfIMT4P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Sep 2019 15:56:15 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:54190 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729803AbfIMT4O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Sep 2019 15:56:14 -0400
+Received: by mail-io1-f70.google.com with SMTP id l21so39579449iob.20
+        for <linux-usb@vger.kernel.org>; Fri, 13 Sep 2019 12:56:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rrqyBJXWUQ16PunrNF8zt8vFNM7dGzrn1uN2ZDTIc38=;
-        b=gQrzy+MoWbn0+mL1TJSbP+giUD5nkMzNROz4PIUd6+gjCdv2RRDBym5RuMrcYGYh6M
-         xjveUjNjdNgwWi7jVRY0Vu/pdpmUwJ0s5wV8eCRIBVLZ4E1nJ9dUOBDQp3e4Nbv6kOZE
-         D2bJ8dBy3YxeQqw63AdkakytkRItS51/VHsDa+Le+ls0kqRTuwa1FvBQLbZ6Z0tczvXx
-         3buXK2yK1NJGwbgWKzPP+hd5pPBZDpPmmNQwwth1ZBlIbampVrwsvBM48t+EGBc8zC/0
-         KMlHWSshgdqwoO+U7t9aJDPWDTQ5RDQbVlBeZQHzc04Y35S+io2DvWT0fJKnbDjQ4kcV
-         Q4nA==
-X-Gm-Message-State: APjAAAXA9bOLzXw5ab/YUuUbyv7MdrnNQ6p9/CpTQDsJg1UZSYeEjfp1
-        BAImjhlUs3ESz89fbBvjMEOJAw1SHpWGi/VRdkOiMQ==
-X-Google-Smtp-Source: APXvYqwFJEEJhwuv81cn6FabGiVO1hPcxr4bxgTgHkH/tJbTRcpvohUfBiXg5ikABnrWbtWlawep4p0jt1X3QUb1Dfg=
-X-Received: by 2002:a6b:b291:: with SMTP id b139mr1195741iof.281.1568397697093;
- Fri, 13 Sep 2019 11:01:37 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=aP2r4l2nVPLcrUjMjn/ay3D8l3D1GDkhcRtbmUyf+FA=;
+        b=t7JULRrnzQk70lkki3JSLloZQJmjSeBhyUa3PaW7dybS0Qbe+ZmqTYHpMQmVLT9Ree
+         OwlbMHHvuxemKiXdaSZE7Rlu7rxDij2QYdoAMuhnSO33DE5OJXZKo7Yvrye3yDTA80VO
+         2kEHCiS4GxjUcYMUXfmTGN6PvzypWcL4v0oNRFTHqO/Ll9lO/bSG1uM51/+BFOMZZNz2
+         xXBnXSHk3BMyv8/lhSx7laQWPT3plGOAtFJCKEb0Mye4B6JVgYCOPGDJKDd+yHlajPJi
+         vnlZ5IEU5NPkgNUgOxjgVA6UaS0CmO0bT0an5b0AGB03bHRbWLle0/vrDd9pdqjPRmJU
+         T9Eg==
+X-Gm-Message-State: APjAAAW+h/L5zsIZj7bmpBmmWDFKylJ7X85U9trQTjE+yWAcuuM9338j
+        3J8n/pFAzyWnFgE4DauDRljFYRIjtkV673JWaTzCgsVjSw1d
+X-Google-Smtp-Source: APXvYqw/RhOTWC7EnZkSMuvzSHDxlojYNxMjAh1P7joUmc2DDsuPgs+Qjde2VcCwE2YkfYzDJVT5CHQq1iMmmHb2hNidTbVFRXhK
 MIME-Version: 1.0
-References: <20190729000631.GA24165@embeddedor> <201907290936.F5F486A6F@keescook>
- <CAOesGMh=H8MnZYH7xUFjF4rGWTt+cdkOGfDG4gr=Uaa1mU8A+A@mail.gmail.com>
-In-Reply-To: <CAOesGMh=H8MnZYH7xUFjF4rGWTt+cdkOGfDG4gr=Uaa1mU8A+A@mail.gmail.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Fri, 13 Sep 2019 19:01:25 +0100
-Message-ID: <CAOesGMinkG6gdQ-UZqtBooFrWXH_nB6uOovwZNcbqyJyHxd_Xg@mail.gmail.com>
-Subject: Re: [PATCH] usb: phy: ab8500-usb: Mark expected switch fall-throughs
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a6b:2c07:: with SMTP id s7mr1821188ios.254.1568404570868;
+ Fri, 13 Sep 2019 12:56:10 -0700 (PDT)
+Date:   Fri, 13 Sep 2019 12:56:10 -0700
+In-Reply-To: <000000000000542276058faf0117@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004fb020059274a5ff@google.com>
+Subject: Re: INFO: rcu detected stall in dummy_timer
+From:   syzbot <syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, balbi@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 7:00 PM Olof Johansson <olof@lixom.net> wrote:
->
-> On Mon, Jul 29, 2019 at 5:36 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Sun, Jul 28, 2019 at 07:06:31PM -0500, Gustavo A. R. Silva wrote:
-> > > Mark switch cases where we are expecting to fall through.
-> > >
-> > > This patch fixes the following warnings:
-> > >
-> > > drivers/usb/phy/phy-ab8500-usb.c: In function 'ab8500_usb_link_status_update':
-> > > drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDB;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:425:2: note: here
-> > >   case USB_LINK_NOT_CONFIGURED_8500:
-> > >   ^~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDC;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:441:2: note: here
-> > >   case USB_LINK_STD_HOST_NC_8500:
-> > >   ^~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDA;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:460:2: note: here
-> > >   case USB_LINK_HM_IDGND_8500:
-> > >   ^~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c: In function 'ab8505_usb_link_status_update':
-> > > drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDB;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:333:2: note: here
-> > >   case USB_LINK_NOT_CONFIGURED_8505:
-> > >   ^~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDC;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:353:2: note: here
-> > >   case USB_LINK_STD_HOST_NC_8505:
-> > >   ^~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
-> > >    event = UX500_MUSB_RIDA;
-> > >    ~~~~~~^~~~~~~~~~~~~~~~~
-> > > drivers/usb/phy/phy-ab8500-usb.c:371:2: note: here
-> > >   case USB_LINK_HM_IDGND_8505:
-> > >   ^~~~
-> > >
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
-> >
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> Acked-by: Olof Johansson <olof@lixom.net>
->
-> Felipe, Greg, this is still throwing warnings, several months later --
-> patch was never applied.
->
-> Mind picking it up as a fix to get a quieter build?
+syzbot has found a reproducer for the following crash on:
 
-Nevermind, I see they're gone from -next, so at least it's queued for
-next merge window. Sorry for the noise.
+HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1146550d600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+dashboard link: https://syzkaller.appspot.com/bug?extid=b24d736f18a1541ad550
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11203fa5600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162cd335600000
 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com
 
--Olof
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+rcu: INFO: rcu_sched self-detected stall on CPU
+rcu: 	1-....: (10495 ticks this GP) idle=b6e/1/0x4000000000000002  
+softirq=2369/2369 fqs=5236
+	(t=10500 jiffies g=1973 q=3366)
+NMI backtrace for cpu 1
+CPU: 1 PID: 16 Comm: ksoftirqd/1 Not tainted 5.3.0-rc7+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  nmi_cpu_backtrace.cold+0x55/0x96 lib/nmi_backtrace.c:101
+  nmi_trigger_cpumask_backtrace+0x1b0/0x1c7 lib/nmi_backtrace.c:62
+  trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
+  rcu_dump_cpu_stacks+0x169/0x1b3 kernel/rcu/tree_stall.h:254
+  print_cpu_stall kernel/rcu/tree_stall.h:455 [inline]
+  check_cpu_stall kernel/rcu/tree_stall.h:529 [inline]
+  rcu_pending kernel/rcu/tree.c:2736 [inline]
+  rcu_sched_clock_irq.cold+0x4a4/0x8d8 kernel/rcu/tree.c:2183
+  update_process_times+0x2a/0x70 kernel/time/timer.c:1639
+  tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:167
+  tick_sched_timer+0x42/0x130 kernel/time/tick-sched.c:1296
+  __run_hrtimer kernel/time/hrtimer.c:1389 [inline]
+  __hrtimer_run_queues+0x303/0xc50 kernel/time/hrtimer.c:1451
+  hrtimer_interrupt+0x2e8/0x730 kernel/time/hrtimer.c:1509
+  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1106 [inline]
+  smp_apic_timer_interrupt+0xf5/0x500 arch/x86/kernel/apic/apic.c:1131
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+  </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160  
+[inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x40/0x50  
+kernel/locking/spinlock.c:191
+Code: e8 95 a1 b7 fb 48 89 ef e8 3d 82 b8 fb f6 c7 02 75 11 53 9d e8 f1 34  
+d5 fb 65 ff 0d 82 1d 94 7a 5b 5d c3 e8 02 33 d5 fb 53 9d <eb> ed 0f 1f 40  
+00 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 fd 65 ff
+RSP: 0018:ffff8881da2479c8 EFLAGS: 00000206 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: 0000000000000206 RCX: 0000000000000002
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff8881da232044
+RBP: ffff8881d564c200 R08: ffff8881da231800 R09: fffffbfff11ad7a1
+R10: fffffbfff11ad7a0 R11: ffffffff88d6bd07 R12: 0000000000000080
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff8881d1c76f00
+  spin_unlock_irqrestore include/linux/spinlock.h:393 [inline]
+  dummy_timer+0x131b/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1979
+  call_timer_fn+0x179/0x650 kernel/time/timer.c:1322
+  expire_timers kernel/time/timer.c:1366 [inline]
+  __run_timers kernel/time/timer.c:1685 [inline]
+  __run_timers kernel/time/timer.c:1653 [inline]
+  run_timer_softirq+0x5cc/0x14b0 kernel/time/timer.c:1698
+  __do_softirq+0x221/0x912 kernel/softirq.c:292
+  run_ksoftirqd kernel/softirq.c:603 [inline]
+  run_ksoftirqd+0x1f/0x40 kernel/softirq.c:595
+  smpboot_thread_fn+0x3e8/0x850 kernel/smpboot.c:165
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 2-1:0.101: yurex_interrupt - unknown status received: -71
+yurex 3-1:0.101: yurex_inte
