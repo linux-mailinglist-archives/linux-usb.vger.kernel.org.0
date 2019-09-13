@@ -2,614 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9E5B1B15
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 11:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43118B1DE7
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Sep 2019 14:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728720AbfIMJsG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Sep 2019 05:48:06 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:54308 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728324AbfIMJsF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Sep 2019 05:48:05 -0400
-Received: by mail-wm1-f65.google.com with SMTP id p7so2004678wmp.4;
-        Fri, 13 Sep 2019 02:48:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=fTBPAV6f/cyfTsI7zVOV/Li/dv8JA0NqTOFj9qOMpJM=;
-        b=DnPGeR+tt8McbIy34QNeFQa5nLy7u6HEJdb/6c0SUBEMri7j0Jk4aUCdl6ruut8UuP
-         AngDFWddit/cXgohiHRSUoyS+bpi0E9MvHxOu6/gVTlQ7m1LxyHki6riYiOcjRf1zD1h
-         F7rI5ouIcq+iVjc3IV2rUNXKweqOVnU625Vq5zqtRXShfEEMBT7aDisZcrkTi1zLxP2D
-         vfNcvzqqIwd6a4/AJQwM3L353wVW2wgxXQ7Wiz6BzBmK3qBS2jxHnSgqlZH3YVkiixyP
-         /jdNWbev/bCjk+HouJMRUzawMjlBBP3eTDo566/ol01JUGTsblNovlvaqBt3WsYxKks3
-         wx5Q==
-X-Gm-Message-State: APjAAAUWCnjq/5gf2eqw85hpQm3AwX/WqdH5oBqRKEvKnTxGoGvKopYL
-        H8hwH5jkBIIjQKekqSV5EVA=
-X-Google-Smtp-Source: APXvYqxh2al91j69cBk6TGEDH3Pf1ABvQqUNJED3C4HFNHdl8yiC5QQBHTdsU7vPX0Kkw+er9aH2cQ==
-X-Received: by 2002:a1c:6a0f:: with SMTP id f15mr695635wmc.159.1568368080239;
-        Fri, 13 Sep 2019 02:48:00 -0700 (PDT)
-Received: from 1aq-andre ([77.107.218.170])
-        by smtp.gmail.com with ESMTPSA id x6sm2270057wmf.35.2019.09.13.02.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2019 02:47:59 -0700 (PDT)
-Message-ID: <8b32b04dd746ac2e9afc07d49e824465697182de.camel@andred.net>
-Subject: Re: [v5,2/4] usb: chipidea: imx: add HSIC support
-From:   =?ISO-8859-1?Q?Andr=E9?= Draszik <git@andred.net>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     dl-linux-imx <linux-imx@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "frieder.schrempf@exceet.de" <frieder.schrempf@exceet.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Date:   Fri, 13 Sep 2019 10:47:58 +0100
-In-Reply-To: <20181211020624.9433-3-peter.chen@nxp.com>
-References: <20181211020624.9433-3-peter.chen@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5-1.1 
+        id S1730061AbfIMM4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Sep 2019 08:56:21 -0400
+Received: from mga06.intel.com ([134.134.136.31]:15214 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726771AbfIMM4V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Sep 2019 08:56:21 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Sep 2019 05:56:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,501,1559545200"; 
+   d="scan'208";a="185091273"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Sep 2019 05:56:19 -0700
+Subject: Re: [PATCH] xhci: Check all endpoints for LPM timeout
+To:     Jan Schmidt <jan@centricular.com>, linux-usb@vger.kernel.org
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>
+References: <20190912144921.368-1-jan@centricular.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <896688f6-8486-3826-ee74-a225936f824d@linux.intel.com>
+Date:   Fri, 13 Sep 2019 15:58:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190912144921.368-1-jan@centricular.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
-
-On Tue, 2018-12-11 at 02:08 +0000, Peter Chen wrote:
-> To support imx HSIC, there are some special requirement:
-> - The HSIC pad is 1.2v, it may need to supply from external
-> - The data/strobe pin needs to be pulled down first, and after
->   host mode is initialized, the strobe pin needs to be pulled up
-> - During the USB suspend/resume, special setting is needed
-
-I have an imx7d based board that is using the USBH/HSIC port.
-
-This USB-port isn't working with this commit because the pinctrl
-is non-optional (as opposed to the NXP kernel 4.19.35 where
-the pinctrl is optional and it appears to work fine for us
-without).
-
-Now, I'd like to make it work with your patch here, but I
-am not sure the relevant pinmux setting is documented in
-the IMX7D applications processor reference manual
-IMX7DRM.pdf that I have.
-
-As far as I understand, I need to provide sth like the following:
-
-&usbh {
-        ...
-        pinctrl-names = "idle", "active";
-        pinctrl-0 = <&pinctrl_usbh_idle>;
-        pinctrl-1 = <&pinctrl_usbh_active>;
-        ...
-};
-
-pinctrl_usbh_idle: usbhgrp-idle {
-        fsl,pins = <
-                MX7D_PAD_USB_H_DATA__USB_H_DATA         0x........
-                MX7D_PAD_USB_H_STROBE__USB_H_STROBE     0x........
-        >;
-};
-
-pinctrl_usbh_active: usbhgrp-active {
-        fsl,pins = <
-                MX7D_PAD_USB_H_DATA__USB_H_DATA         0x........
-                MX7D_PAD_USB_H_STROBE__USB_H_STROBE     0x........
-         >;
-};
-
-
-Can you help or point me to the relevant documentation please for
-defining MX7D_PAD_USB_H_DATA__USB_H_DATA &
-MX7D_PAD_USB_H_STROBE__USB_H_STROBE and their register settings?
-
-Given USB_H_DATA and USB_H_STROBE don't appear to be board specific
-'No muxing' is mentioned in IMX7DRM), should any such configuration
-really go into imx7s.dtsi?
-
-Alternatively, given that this works without the extra pinctrl
-dance in the i.MX specific kernel, is it really needed on i.MX7,
-or can the driver be changed to make this optional here as well?
-What is the right approach?
-
-
-Cheers,
-Andre'
-
-
-
-
+On 12.9.2019 17.49, Jan Schmidt wrote:
+> If an endpoint is encountered that returns USB3_LPM_DEVICE_INITIATED, keep
+> checking further endpoints, as there might be periodic endpoints later
+> that return USB3_LPM_DISABLED due to shorter service intervals.
 > 
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> Without this, the code can set too high a maximum-exit-latency and
+> prevent the use of multiple USB3 cameras that should be able to work.
+> 
+> Signed-off-by: Jan Schmidt <jan@centricular.com>
+> Tested-by: Philipp Zabel <p.zabel@pengutronix.de>
 > ---
->  drivers/usb/chipidea/ci_hdrc_imx.c | 140 ++++++++++++++++++++++++++++++++-----
->  drivers/usb/chipidea/ci_hdrc_imx.h |   9 ++-
->  drivers/usb/chipidea/usbmisc_imx.c | 140 +++++++++++++++++++++++++++++++++++++
->  3 files changed, 270 insertions(+), 19 deletions(-)
+>   drivers/usb/host/xhci.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-> index 09b37c0d075d..56781c329db0 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> @@ -14,6 +14,7 @@
->  #include <linux/usb/chipidea.h>
->  #include <linux/usb/of.h>
->  #include <linux/clk.h>
-> +#include <linux/pinctrl/consumer.h>
->  
->  #include "ci.h"
->  #include "ci_hdrc_imx.h"
-> @@ -85,6 +86,9 @@ struct ci_hdrc_imx_data {
->  	bool supports_runtime_pm;
->  	bool override_phy_control;
->  	bool in_lpm;
-> +	struct pinctrl *pinctrl;
-> +	struct pinctrl_state *pinctrl_hsic_active;
-> +	struct regulator *hsic_pad_regulator;
->  	/* SoC before i.mx6 (except imx23/imx28) needs three clks */
->  	bool need_three_clks;
->  	struct clk *clk_ipg;
-> @@ -245,19 +249,49 @@ static void imx_disable_unprepare_clks(struct device *dev)
->  	}
->  }
->  
-> +static int ci_hdrc_imx_notify_event(struct ci_hdrc *ci, unsigned int event)
-> +{
-> +	struct device *dev = ci->dev->parent;
-> +	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
-> +	int ret = 0;
-> +
-> +	switch (event) {
-> +	case CI_HDRC_IMX_HSIC_ACTIVE_EVENT:
-> +		ret = pinctrl_select_state(data->pinctrl,
-> +				data->pinctrl_hsic_active);
-> +		if (ret)
-> +			dev_err(dev, "hsic_active select failed, err=%d\n",
-> +				ret);
-> +		break;
-> +	case CI_HDRC_IMX_HSIC_SUSPEND_EVENT:
-> +		ret = imx_usbmisc_hsic_set_connect(data->usbmisc_data);
-> +		if (ret)
-> +			dev_err(dev,
-> +				"hsic_set_connect failed, err=%d\n", ret);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->  static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  {
->  	struct ci_hdrc_imx_data *data;
->  	struct ci_hdrc_platform_data pdata = {
->  		.name		= dev_name(&pdev->dev),
->  		.capoffset	= DEF_CAPOFFSET,
-> +		.notify_event	= ci_hdrc_imx_notify_event,
->  	};
->  	int ret;
->  	const struct of_device_id *of_id;
->  	const struct ci_hdrc_imx_platform_flag *imx_platform_flag;
->  	struct device_node *np = pdev->dev.of_node;
-> +	struct device *dev = &pdev->dev;
-> +	struct pinctrl_state *pinctrl_hsic_idle;
->  
-> -	of_id = of_match_device(ci_hdrc_imx_dt_ids, &pdev->dev);
-> +	of_id = of_match_device(ci_hdrc_imx_dt_ids, dev);
->  	if (!of_id)
->  		return -ENODEV;
->  
-> @@ -268,19 +302,73 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	platform_set_drvdata(pdev, data);
-> -	data->usbmisc_data = usbmisc_get_init_data(&pdev->dev);
-> +	data->usbmisc_data = usbmisc_get_init_data(dev);
->  	if (IS_ERR(data->usbmisc_data))
->  		return PTR_ERR(data->usbmisc_data);
->  
-> -	ret = imx_get_clks(&pdev->dev);
-> +	if (of_usb_get_phy_mode(dev->of_node) == USBPHY_INTERFACE_MODE_HSIC) {
-> +		pdata.flags |= CI_HDRC_IMX_IS_HSIC;
-> +		data->usbmisc_data->hsic = 1;
-> +		data->pinctrl = devm_pinctrl_get(dev);
-> +		if (IS_ERR(data->pinctrl)) {
-> +			dev_err(dev, "pinctrl get failed, err=%ld\n",
-> +					PTR_ERR(data->pinctrl));
-> +			return PTR_ERR(data->pinctrl);
-> +		}
-> +
-> +		pinctrl_hsic_idle = pinctrl_lookup_state(data->pinctrl, "idle");
-> +		if (IS_ERR(pinctrl_hsic_idle)) {
-> +			dev_err(dev,
-> +				"pinctrl_hsic_idle lookup failed, err=%ld\n",
-> +					PTR_ERR(pinctrl_hsic_idle));
-> +			return PTR_ERR(pinctrl_hsic_idle);
-> +		}
-> +
-> +		ret = pinctrl_select_state(data->pinctrl, pinctrl_hsic_idle);
-> +		if (ret) {
-> +			dev_err(dev, "hsic_idle select failed, err=%d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		data->pinctrl_hsic_active = pinctrl_lookup_state(data->pinctrl,
-> +								"active");
-> +		if (IS_ERR(data->pinctrl_hsic_active)) {
-> +			dev_err(dev,
-> +				"pinctrl_hsic_active lookup failed, err=%ld\n",
-> +					PTR_ERR(data->pinctrl_hsic_active));
-> +			return PTR_ERR(data->pinctrl_hsic_active);
-> +		}
-> +
-> +		data->hsic_pad_regulator = devm_regulator_get(dev, "hsic");
-> +		if (PTR_ERR(data->hsic_pad_regulator) == -EPROBE_DEFER) {
-> +			return -EPROBE_DEFER;
-> +		} else if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
-> +			/* no pad regualator is needed */
-> +			data->hsic_pad_regulator = NULL;
-> +		} else if (IS_ERR(data->hsic_pad_regulator)) {
-> +			dev_err(dev, "Get HSIC pad regulator error: %ld\n",
-> +					PTR_ERR(data->hsic_pad_regulator));
-> +			return PTR_ERR(data->hsic_pad_regulator);
-> +		}
-> +
-> +		if (data->hsic_pad_regulator) {
-> +			ret = regulator_enable(data->hsic_pad_regulator);
-> +			if (ret) {
-> +				dev_err(dev,
-> +					"Failed to enable HSIC pad regulator\n");
-> +				return ret;
-> +			}
-> +		}
-> +	}
-> +	ret = imx_get_clks(dev);
->  	if (ret)
-> -		return ret;
-> +		goto disable_hsic_regulator;
->  
-> -	ret = imx_prepare_enable_clks(&pdev->dev);
-> +	ret = imx_prepare_enable_clks(dev);
->  	if (ret)
-> -		return ret;
-> +		goto disable_hsic_regulator;
->  
-> -	data->phy = devm_usb_get_phy_by_phandle(&pdev->dev, "fsl,usbphy", 0);
-> +	data->phy = devm_usb_get_phy_by_phandle(dev, "fsl,usbphy", 0);
->  	if (IS_ERR(data->phy)) {
->  		ret = PTR_ERR(data->phy);
->  		/* Return -EINVAL if no usbphy is available */
-> @@ -305,40 +393,43 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
->  
->  	ret = imx_usbmisc_init(data->usbmisc_data);
->  	if (ret) {
-> -		dev_err(&pdev->dev, "usbmisc init failed, ret=%d\n", ret);
-> +		dev_err(dev, "usbmisc init failed, ret=%d\n", ret);
->  		goto err_clk;
->  	}
->  
-> -	data->ci_pdev = ci_hdrc_add_device(&pdev->dev,
-> +	data->ci_pdev = ci_hdrc_add_device(dev,
->  				pdev->resource, pdev->num_resources,
->  				&pdata);
->  	if (IS_ERR(data->ci_pdev)) {
->  		ret = PTR_ERR(data->ci_pdev);
->  		if (ret != -EPROBE_DEFER)
-> -			dev_err(&pdev->dev,
-> -				"ci_hdrc_add_device failed, err=%d\n", ret);
-> +			dev_err(dev, "ci_hdrc_add_device failed, err=%d\n",
-> +					ret);
->  		goto err_clk;
->  	}
->  
->  	ret = imx_usbmisc_init_post(data->usbmisc_data);
->  	if (ret) {
-> -		dev_err(&pdev->dev, "usbmisc post failed, ret=%d\n", ret);
-> +		dev_err(dev, "usbmisc post failed, ret=%d\n", ret);
->  		goto disable_device;
->  	}
->  
->  	if (data->supports_runtime_pm) {
-> -		pm_runtime_set_active(&pdev->dev);
-> -		pm_runtime_enable(&pdev->dev);
-> +		pm_runtime_set_active(dev);
-> +		pm_runtime_enable(dev);
->  	}
->  
-> -	device_set_wakeup_capable(&pdev->dev, true);
-> +	device_set_wakeup_capable(dev, true);
->  
->  	return 0;
->  
->  disable_device:
->  	ci_hdrc_remove_device(data->ci_pdev);
->  err_clk:
-> -	imx_disable_unprepare_clks(&pdev->dev);
-> +	imx_disable_unprepare_clks(dev);
-> +disable_hsic_regulator:
-> +	if (data->hsic_pad_regulator)
-> +		ret = regulator_disable(data->hsic_pad_regulator);
->  	return ret;
->  }
->  
-> @@ -355,6 +446,8 @@ static int ci_hdrc_imx_remove(struct platform_device *pdev)
->  	if (data->override_phy_control)
->  		usb_phy_shutdown(data->phy);
->  	imx_disable_unprepare_clks(&pdev->dev);
-> +	if (data->hsic_pad_regulator)
-> +		regulator_disable(data->hsic_pad_regulator);
->  
->  	return 0;
->  }
-> @@ -367,9 +460,16 @@ static void ci_hdrc_imx_shutdown(struct platform_device *pdev)
->  static int __maybe_unused imx_controller_suspend(struct device *dev)
->  {
->  	struct ci_hdrc_imx_data *data = dev_get_drvdata(dev);
-> +	int ret = 0;
->  
->  	dev_dbg(dev, "at %s\n", __func__);
->  
-> +	ret = imx_usbmisc_hsic_set_clk(data->usbmisc_data, false);
-> +	if (ret) {
-> +		dev_err(dev, "usbmisc hsic_set_clk failed, ret=%d\n", ret);
-> +		return ret;
-> +	}
-> +
->  	imx_disable_unprepare_clks(dev);
->  	data->in_lpm = true;
->  
-> @@ -400,8 +500,16 @@ static int __maybe_unused imx_controller_resume(struct device *dev)
->  		goto clk_disable;
->  	}
->  
-> +	ret = imx_usbmisc_hsic_set_clk(data->usbmisc_data, true);
-> +	if (ret) {
-> +		dev_err(dev, "usbmisc hsic_set_clk failed, ret=%d\n", ret);
-> +		goto hsic_set_clk_fail;
-> +	}
-> +
->  	return 0;
->  
-> +hsic_set_clk_fail:
-> +	imx_usbmisc_set_wakeup(data->usbmisc_data, true);
->  clk_disable:
->  	imx_disable_unprepare_clks(dev);
->  	return ret;
-> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/ci_hdrc_imx.h
-> index 204275f47573..fcecab478934 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_imx.h
-> +++ b/drivers/usb/chipidea/ci_hdrc_imx.h
-> @@ -14,10 +14,13 @@ struct imx_usbmisc_data {
->  	unsigned int oc_polarity:1; /* over current polarity if oc enabled */
->  	unsigned int evdo:1; /* set external vbus divider option */
->  	unsigned int ulpi:1; /* connected to an ULPI phy */
-> +	unsigned int hsic:1; /* HSIC controlller */
->  };
->  
-> -int imx_usbmisc_init(struct imx_usbmisc_data *);
-> -int imx_usbmisc_init_post(struct imx_usbmisc_data *);
-> -int imx_usbmisc_set_wakeup(struct imx_usbmisc_data *, bool);
-> +int imx_usbmisc_init(struct imx_usbmisc_data *data);
-> +int imx_usbmisc_init_post(struct imx_usbmisc_data *data);
-> +int imx_usbmisc_set_wakeup(struct imx_usbmisc_data *data, bool enabled);
-> +int imx_usbmisc_hsic_set_connect(struct imx_usbmisc_data *data);
-> +int imx_usbmisc_hsic_set_clk(struct imx_usbmisc_data *data, bool on);
->  
->  #endif /* __DRIVER_USB_CHIPIDEA_CI_HDRC_IMX_H */
-> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-> index def80ff547e4..43a15a6e86f5 100644
-> --- a/drivers/usb/chipidea/usbmisc_imx.c
-> +++ b/drivers/usb/chipidea/usbmisc_imx.c
-> @@ -64,10 +64,22 @@
->  #define MX6_BM_OVER_CUR_DIS		BIT(7)
->  #define MX6_BM_OVER_CUR_POLARITY	BIT(8)
->  #define MX6_BM_WAKEUP_ENABLE		BIT(10)
-> +#define MX6_BM_UTMI_ON_CLOCK		BIT(13)
->  #define MX6_BM_ID_WAKEUP		BIT(16)
->  #define MX6_BM_VBUS_WAKEUP		BIT(17)
->  #define MX6SX_BM_DPDM_WAKEUP_EN		BIT(29)
->  #define MX6_BM_WAKEUP_INTR		BIT(31)
-> +
-> +#define MX6_USB_HSIC_CTRL_OFFSET	0x10
-> +/* Send resume signal without 480Mhz PHY clock */
-> +#define MX6SX_BM_HSIC_AUTO_RESUME	BIT(23)
-> +/* set before portsc.suspendM = 1 */
-> +#define MX6_BM_HSIC_DEV_CONN		BIT(21)
-> +/* HSIC enable */
-> +#define MX6_BM_HSIC_EN			BIT(12)
-> +/* Force HSIC module 480M clock on, even when in Host is in suspend mode */
-> +#define MX6_BM_HSIC_CLK_ON		BIT(11)
-> +
->  #define MX6_USB_OTG1_PHY_CTRL		0x18
->  /* For imx6dql, it is host-only controller, for later imx6, it is otg's */
->  #define MX6_USB_OTG2_PHY_CTRL		0x1c
-> @@ -94,6 +106,10 @@ struct usbmisc_ops {
->  	int (*post)(struct imx_usbmisc_data *data);
->  	/* It's called when we need to enable/disable usb wakeup */
->  	int (*set_wakeup)(struct imx_usbmisc_data *data, bool enabled);
-> +	/* It's called before setting portsc.suspendM */
-> +	int (*hsic_set_connect)(struct imx_usbmisc_data *data);
-> +	/* It's called during suspend/resume */
-> +	int (*hsic_set_clk)(struct imx_usbmisc_data *data, bool enabled);
->  };
->  
->  struct imx_usbmisc {
-> @@ -353,6 +369,18 @@ static int usbmisc_imx6q_init(struct imx_usbmisc_data *data)
->  	writel(reg | MX6_BM_NON_BURST_SETTING,
->  			usbmisc->base + data->index * 4);
->  
-> +	/* For HSIC controller */
-> +	if (data->hsic) {
-> +		reg = readl(usbmisc->base + data->index * 4);
-> +		writel(reg | MX6_BM_UTMI_ON_CLOCK,
-> +			usbmisc->base + data->index * 4);
-> +		reg = readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET
-> +			+ (data->index - 2) * 4);
-> +		reg |= MX6_BM_HSIC_EN | MX6_BM_HSIC_CLK_ON;
-> +		writel(reg, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET
-> +			+ (data->index - 2) * 4);
-> +	}
-> +
->  	spin_unlock_irqrestore(&usbmisc->lock, flags);
->  
->  	usbmisc_imx6q_set_wakeup(data, false);
-> @@ -360,6 +388,79 @@ static int usbmisc_imx6q_init(struct imx_usbmisc_data *data)
->  	return 0;
->  }
->  
-> +static int usbmisc_imx6_hsic_get_reg_offset(struct imx_usbmisc_data *data)
-> +{
-> +	int offset, ret = 0;
-> +
-> +	if (data->index == 2 || data->index == 3) {
-> +		offset = (data->index - 2) * 4;
-> +	} else if (data->index == 0) {
-> +		/*
-> +		 * For SoCs like i.MX7D and later, each USB controller has
-> +		 * its own non-core register region. For SoCs before i.MX7D,
-> +		 * the first two USB controllers are non-HSIC controllers.
-> +		 */
-> +		offset = 0;
-> +	} else {
-> +		dev_err(data->dev, "index is error for usbmisc\n");
-> +		ret = -EINVAL;
-> +	}
-> +
-> +	return ret ? ret : offset;
-> +}
-> +
-> +static int usbmisc_imx6_hsic_set_connect(struct imx_usbmisc_data *data)
-> +{
-> +	unsigned long flags;
-> +	u32 val;
-> +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-> +	int offset;
-> +
-> +	spin_lock_irqsave(&usbmisc->lock, flags);
-> +	offset = usbmisc_imx6_hsic_get_reg_offset(data);
-> +	if (offset < 0) {
-> +		spin_unlock_irqrestore(&usbmisc->lock, flags);
-> +		return offset;
-> +	}
-> +
-> +	val = readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> +	if (!(val & MX6_BM_HSIC_DEV_CONN))
-> +		writel(val | MX6_BM_HSIC_DEV_CONN,
-> +			usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> +
-> +	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +static int usbmisc_imx6_hsic_set_clk(struct imx_usbmisc_data *data, bool on)
-> +{
-> +	unsigned long flags;
-> +	u32 val;
-> +	struct imx_usbmisc *usbmisc = dev_get_drvdata(data->dev);
-> +	int offset;
-> +
-> +	spin_lock_irqsave(&usbmisc->lock, flags);
-> +	offset = usbmisc_imx6_hsic_get_reg_offset(data);
-> +	if (offset < 0) {
-> +		spin_unlock_irqrestore(&usbmisc->lock, flags);
-> +		return offset;
-> +	}
-> +
-> +	val = readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> +	val |= MX6_BM_HSIC_EN | MX6_BM_HSIC_CLK_ON;
-> +	if (on)
-> +		val |= MX6_BM_HSIC_CLK_ON;
-> +	else
-> +		val &= ~MX6_BM_HSIC_CLK_ON;
-> +
-> +	writel(val, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> +	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> +
-> +	return 0;
-> +}
-> +
-> +
->  static int usbmisc_imx6sx_init(struct imx_usbmisc_data *data)
->  {
->  	void __iomem *reg = NULL;
-> @@ -385,6 +486,13 @@ static int usbmisc_imx6sx_init(struct imx_usbmisc_data *data)
->  		spin_unlock_irqrestore(&usbmisc->lock, flags);
->  	}
->  
-> +	/* For HSIC controller */
-> +	if (data->hsic) {
-> +		val = readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-> +		val |= MX6SX_BM_HSIC_AUTO_RESUME;
-> +		writel(val, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-> +	}
-> +
->  	return 0;
->  }
->  
-> @@ -454,6 +562,7 @@ static int usbmisc_imx7d_init(struct imx_usbmisc_data *data)
->  	reg &= ~MX7D_USB_VBUS_WAKEUP_SOURCE_MASK;
->  	writel(reg | MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID,
->  		 usbmisc->base + MX7D_USBNC_USB_CTRL2);
-> +
->  	spin_unlock_irqrestore(&usbmisc->lock, flags);
->  
->  	usbmisc_imx7d_set_wakeup(data, false);
-> @@ -481,6 +590,8 @@ static const struct usbmisc_ops imx53_usbmisc_ops = {
->  static const struct usbmisc_ops imx6q_usbmisc_ops = {
->  	.set_wakeup = usbmisc_imx6q_set_wakeup,
->  	.init = usbmisc_imx6q_init,
-> +	.hsic_set_connect = usbmisc_imx6_hsic_set_connect,
-> +	.hsic_set_clk   = usbmisc_imx6_hsic_set_clk,
->  };
->  
->  static const struct usbmisc_ops vf610_usbmisc_ops = {
-> @@ -490,6 +601,8 @@ static const struct usbmisc_ops vf610_usbmisc_ops = {
->  static const struct usbmisc_ops imx6sx_usbmisc_ops = {
->  	.set_wakeup = usbmisc_imx6q_set_wakeup,
->  	.init = usbmisc_imx6sx_init,
-> +	.hsic_set_connect = usbmisc_imx6_hsic_set_connect,
-> +	.hsic_set_clk = usbmisc_imx6_hsic_set_clk,
->  };
->  
->  static const struct usbmisc_ops imx7d_usbmisc_ops = {
-> @@ -546,6 +659,33 @@ int imx_usbmisc_set_wakeup(struct imx_usbmisc_data *data, bool enabled)
->  }
->  EXPORT_SYMBOL_GPL(imx_usbmisc_set_wakeup);
->  
-> +int imx_usbmisc_hsic_set_connect(struct imx_usbmisc_data *data)
-> +{
-> +	struct imx_usbmisc *usbmisc;
-> +
-> +	if (!data)
-> +		return 0;
-> +
-> +	usbmisc = dev_get_drvdata(data->dev);
-> +	if (!usbmisc->ops->hsic_set_connect || !data->hsic)
-> +		return 0;
-> +	return usbmisc->ops->hsic_set_connect(data);
-> +}
-> +EXPORT_SYMBOL_GPL(imx_usbmisc_hsic_set_connect);
-> +
-> +int imx_usbmisc_hsic_set_clk(struct imx_usbmisc_data *data, bool on)
-> +{
-> +	struct imx_usbmisc *usbmisc;
-> +
-> +	if (!data)
-> +		return 0;
-> +
-> +	usbmisc = dev_get_drvdata(data->dev);
-> +	if (!usbmisc->ops->hsic_set_clk || !data->hsic)
-> +		return 0;
-> +	return usbmisc->ops->hsic_set_clk(data, on);
-> +}
-> +EXPORT_SYMBOL_GPL(imx_usbmisc_hsic_set_clk);
->  static const struct of_device_id usbmisc_imx_dt_ids[] = {
->  	{
->  		.compatible = "fsl,imx25-usbmisc",
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 03d1e552769b..1986b88661fc 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -4673,12 +4673,12 @@ static int xhci_update_timeout_for_endpoint(struct xhci_hcd *xhci,
+>   	alt_timeout = xhci_call_host_update_timeout_for_endpoint(xhci, udev,
+>   		desc, state, timeout);
+>   
+> -	/* If we found we can't enable hub-initiated LPM, or
+> +	/* If we found we can't enable hub-initiated LPM, and
+>   	 * the U1 or U2 exit latency was too high to allow
+> -	 * device-initiated LPM as well, just stop searching.
+> +	 * device-initiated LPM as well, then we will disable LPM
+> +	 * for this device, so stop searching any further.
+>   	 */
+> -	if (alt_timeout == USB3_LPM_DISABLED ||
+> -			alt_timeout == USB3_LPM_DEVICE_INITIATED) {
+> +	if (alt_timeout == USB3_LPM_DISABLED) {
+>   		*timeout = alt_timeout;
+>   		return -E2BIG;
+>   	}
+> 
 
+Thanks, nice catch. Adding to queue.
+
+While looking at this I see we have a similar issue if driver has
+"disable_hub_initiated_lpm" flag set.
+
+xhci_get_timeout_no_hub_lpm() might return USB3_LPM_DEVICE_INITIATED
+before we check if periodic endpoints would require disabling LPM
+completely.
+
+xhci_calculate_lpm_timeout()
+...
+     for (i = 0; i < config->desc.bNumInterfaces; i++) {
+         ...
+         if (intf->dev.driver) {
+             ...
+             if (driver && driver->disable_hub_initiated_lpm) {
+                 return xhci_get_timeout_no_hub_lpm(udev, state);
+
+I'll write a patch for that
+
+-Mathias
