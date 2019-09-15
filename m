@@ -2,75 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF467B306E
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Sep 2019 16:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DC1CB31EF
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Sep 2019 22:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729778AbfIOOFQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Sep 2019 10:05:16 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:58434 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726146AbfIOOFQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Sep 2019 10:05:16 -0400
-Received: from DGGEMS411-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id B66F8ED16131DCAC250C;
-        Sun, 15 Sep 2019 22:05:13 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS411-HUB.china.huawei.com (10.3.19.211) with Microsoft SMTP Server id
- 14.3.439.0; Sun, 15 Sep 2019 22:05:05 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <valentina.manea.m@gmail.com>, <shuah@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Mao Wenan <maowenan@huawei.com>
-Subject: [PATCH v2] usbip: vhci_hcd indicate failed message
-Date:   Sun, 15 Sep 2019 22:22:23 +0800
-Message-ID: <20190915142223.158404-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <5D7E3D1A.5070906@bfs.de>
-References: <5D7E3D1A.5070906@bfs.de>
+        id S1726445AbfIOUP7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Sep 2019 16:15:59 -0400
+Received: from muru.com ([72.249.23.125]:33024 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725270AbfIOUP7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 15 Sep 2019 16:15:59 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 5585380BB;
+        Sun, 15 Sep 2019 20:16:29 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH] phy: mapphone-mdm6600: Fix timeouts by adding wake-up handling
+Date:   Sun, 15 Sep 2019 13:15:52 -0700
+Message-Id: <20190915201552.10867-1-tony@atomide.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the return value of vhci_init_attr_group and
-sysfs_create_group is non-zero, which mean they failed
-to init attr_group and create sysfs group, so it would
-better add 'failed' message to indicate that.
-This patch also change pr_err to dev_err to trace which
-device is failed.
+We have an interrupt handler for the wake-up GPIO pin, but we're missing
+the code to wake-up the system. This can cause timeouts receiving data
+for the UART that shares the wake-up GPIO pin with the USB PHY.
 
-Fixes: 0775a9cbc694 ("usbip: vhci extension: modifications to vhci driver")
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
+All we need to do is just wake the system and kick the autosuspend
+timeout to fix the issue.
+
+Fixes: 5d1ebbda0318 ("phy: mapphone-mdm6600: Add USB PHY driver for MDM6600 on Droid 4")
+Cc: Marcel Partap <mpartap@gmx.net>
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Michael Scott <hashcode0f@gmail.com>
+Cc: NeKit <nekit1000@gmail.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Sebastian Reichel <sre@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- v2: change pr_err to dev_err.
- drivers/usb/usbip/vhci_hcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/phy/motorola/phy-mapphone-mdm6600.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 000ab7225717..bea28ec846ee 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1185,12 +1185,12 @@ static int vhci_start(struct usb_hcd *hcd)
- 	if (id == 0 && usb_hcd_is_primary_hcd(hcd)) {
- 		err = vhci_init_attr_group();
- 		if (err) {
--			pr_err("init attr group\n");
-+			dev_err(hcd_dev(hcd), "init attr group failed\n");
- 			return err;
- 		}
- 		err = sysfs_create_group(&hcd_dev(hcd)->kobj, &vhci_attr_group);
- 		if (err) {
--			pr_err("create sysfs files\n");
-+			dev_err(hcd_dev(hcd), "create sysfs files failed\n");
- 			vhci_finish_attr_group();
- 			return err;
- 		}
+diff --git a/drivers/phy/motorola/phy-mapphone-mdm6600.c b/drivers/phy/motorola/phy-mapphone-mdm6600.c
+--- a/drivers/phy/motorola/phy-mapphone-mdm6600.c
++++ b/drivers/phy/motorola/phy-mapphone-mdm6600.c
+@@ -243,10 +243,24 @@ static irqreturn_t phy_mdm6600_wakeirq_thread(int irq, void *data)
+ {
+ 	struct phy_mdm6600 *ddata = data;
+ 	struct gpio_desc *mode_gpio1;
++	int error, wakeup;
+ 
+ 	mode_gpio1 = ddata->mode_gpios->desc[PHY_MDM6600_MODE1];
+-	dev_dbg(ddata->dev, "OOB wake on mode_gpio1: %i\n",
+-		gpiod_get_value(mode_gpio1));
++	wakeup = gpiod_get_value(mode_gpio1);
++	if (!wakeup)
++		return IRQ_NONE;
++
++	dev_dbg(ddata->dev, "OOB wake on mode_gpio1: %i\n", wakeup);
++	error = pm_runtime_get_sync(ddata->dev);
++	if (error < 0) {
++		pm_runtime_put_noidle(ddata->dev);
++
++		return IRQ_NONE;
++	}
++
++	/* Just wake-up and kick the autosuspend timer */
++	pm_runtime_mark_last_busy(ddata->dev);
++	pm_runtime_put_autosuspend(ddata->dev);
+ 
+ 	return IRQ_HANDLED;
+ }
 -- 
-2.20.1
-
+2.23.0
