@@ -2,42 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C309B409D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 20:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B79B408F
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 20:49:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731393AbfIPStr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 14:49:47 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:56988 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730115AbfIPStK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 14:49:10 -0400
-Received: by mail-io1-f72.google.com with SMTP id n8so1067635ioh.23
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 11:49:10 -0700 (PDT)
+        id S2390604AbfIPStV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 14:49:21 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48842 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390542AbfIPStN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 14:49:13 -0400
+Received: by mail-io1-f71.google.com with SMTP id w16so1119587ioc.15
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 11:49:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2XxfILjNqvgOnvsx3ytCFDxVQdXM6VVuZeypAV3t46k=;
-        b=N8sh07EJOz8ZReYeH+ne7iQqlLFadhLFrL6nRdc0h6/x4ZYDtjRGyYqQBt1jgCVIIo
-         yGoCo23VVFG2dtNjjCqKfL9djE37m3PMqKBPsQzLXPqHOhhS2p6cVOiSH21iUETo3nru
-         Pqlr5laRwDU2g3LsAkw2d28U3n3/59SsW0kApPcv+HAm21cYNXWCR9oeM4nTlArfHgHs
-         +7sB8ieJAcOTHqEW6IFNxfVg4MNtTso3imJZJv1nNZpwFqqsne+pFpCbe5u1nB5hVKuJ
-         EGGNCwydrDmfZjw066AquYeFdQ/cjyo8PXO4xMNT2ZWkCY47ZJyfTbdkgh2UZ/baiivz
-         m0yQ==
-X-Gm-Message-State: APjAAAW6Q3fUkv18L1oBpCIghFODCdr+rCDu+MuEq5/RRw7LtnVS54nA
-        9gAutghfLSQRyjzhFtOW6au7N3oXUt4dk8ctmBexTXUGCrDx
-X-Google-Smtp-Source: APXvYqxAYehskRVQgzFrr0XdVWHwzuwgpJNhn+ZxrlmyrvG4FhfWqX1sw21wt+LSz1OiL8vSN93vNtKXCpzyTEAWVtLie46dgvGd
+        bh=xaMRN75Di4v9rM/RG8aN5eoYjRMSJ604xnc1tH0oFdk=;
+        b=kJAC8kq3Jt1Rai00wrmDRySYX8FW9dAwzl6ep225UKYiAnkCPuLiLmLJcFXXhaH++7
+         o1CQwFUoEHNnitbMZn/v/LwhsDIUeAWw+o2jy+OzA73aZ1RIqw0yaCBoEA/nb/VII7Wl
+         fNPxTRSdLLsmvpd+hnd84eXBD3C5BcfSbCQ+d8eM3x1MQgRdTPgWja02Pexpv/H4vXeA
+         NfwMb2u/4aXnYWwMivDA0Hz+n/JuCbSUGP/kg56+Y9yfK4OYZT0UBLW8tN5+iVC31fhZ
+         rNZVYZmxarwk43NaFCNdKSTAGxL0IgcfbSo3ONHloES+WmhnC/hnTpB2PkWmxES7dHHF
+         Iy0g==
+X-Gm-Message-State: APjAAAU8LZMTOnxKNuWIl59wihHQObDko66gx1GtdYrQcuXGjJ/oCcLr
+        XEH8JZVnU+cNyVMJu/rMIfgtxa5RpqZLr0uVUVXSyiB9z4Us
+X-Google-Smtp-Source: APXvYqws25JLmu4FFa81Iw0WzT9CKrFhzVavxtI/qWqfj4jHSPtYTH2FUjrnsa1MJ3CXiDtLGNNER5q27yqa5Ar3YTZPCatEcoCm
 MIME-Version: 1.0
-X-Received: by 2002:a02:c8cd:: with SMTP id q13mr477547jao.133.1568659749937;
- Mon, 16 Sep 2019 11:49:09 -0700 (PDT)
-Date:   Mon, 16 Sep 2019 11:49:09 -0700
+X-Received: by 2002:a6b:3ed4:: with SMTP id l203mr1386695ioa.275.1568659750654;
+ Mon, 16 Sep 2019 11:49:10 -0700 (PDT)
+Date:   Mon, 16 Sep 2019 11:49:10 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002b27c60592b00f38@google.com>
-Subject: WARNING in implement
-From:   syzbot <syzbot+38e7237add3712479d65@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
+Message-ID: <000000000000361fc90592b00fa4@google.com>
+Subject: KMSAN: uninit-value in ld_usb_read
+From:   syzbot <syzbot+2a4f0b034e05c34252d0@syzkaller.appspotmail.com>
+To:     bhelgaas@google.com, enric.balletbo@collabora.com,
+        glider@google.com, gregkh@linuxfoundation.org, kirr@nexedi.com,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lkundrak@v3.sk, logang@deltatee.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -49,62 +50,95 @@ Hello,
 
 syzbot found the following crash on:
 
-HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=170b213e600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=38e7237add3712479d65
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16830dc1600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f2d3fa600000
+HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1510d63a600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=2a4f0b034e05c34252d0
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13887b71600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14761d99600000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+38e7237add3712479d65@syzkaller.appspotmail.com
+Reported-by: syzbot+2a4f0b034e05c34252d0@syzkaller.appspotmail.com
 
-keytouch 0003:0926:3333.0001: implement() called with too large value 32769  
-(n: 1)! (kworker/0:1)
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 12 at drivers/hid/hid-core.c:1370  
-implement.cold+0x40/0x81 drivers/hid/hid-core.c:1370
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc7+ #0
+ldusb 4-1:0.28: Read buffer overflow, -414328874449497579 bytes dropped
+==================================================================
+BUG: KMSAN: uninit-value in _copy_to_user+0x1aa/0x1f0 lib/usercopy.c:29
+CPU: 0 PID: 12202 Comm: syz-executor155 Not tainted 5.3.0-rc7+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
-Workqueue: events hidinput_led_worker
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2a3/0x6da kernel/panic.c:219
-  __warn.cold+0x20/0x4a kernel/panic.c:576
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-RIP: 0010:implement.cold+0x40/0x81 drivers/hid/hid-core.c:1370
-Code: 00 ef 01 00 48 c7 c2 a0 ac 52 86 48 c7 c6 c0 8a 52 86 4c 8d 88 70 06  
-00 00 e8 3f 3b 1a fe 48 c7 c7 20 8b 52 86 e8 fc 4e d7 fc <0f> 0b 44 21 e5  
-e9 06 3a ff ff e8 64 ad ec fc 49 8d bd 28 19 00 00
-RSP: 0018:ffff8881da20fb88 EFLAGS: 00010082
-RAX: 0000000000000024 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81288ddd RDI: ffffed103b441f63
-RBP: 0000000000008001 R08: 0000000000000024 R09: ffffed103b643ee7
-R10: ffffed103b643ee6 R11: ffff8881db21f737 R12: 0000000000000001
-R13: ffff8881d28d8000 R14: 0000000000000001 R15: 0000000000000001
-  hid_output_field drivers/hid/hid-core.c:1543 [inline]
-  hid_output_report+0x2dc/0x4c0 drivers/hid/hid-core.c:1562
-  __usbhid_submit_report drivers/hid/usbhid/hid-core.c:593 [inline]
-  usbhid_submit_report+0x65c/0xde0 drivers/hid/usbhid/hid-core.c:638
-  usbhid_request+0x3c/0x70 drivers/hid/usbhid/hid-core.c:1252
-  hidinput_led_worker+0xbd/0x360 drivers/hid/hid-input.c:1495
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Shutting down cpus with NMI
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+  _copy_to_user+0x1aa/0x1f0 lib/usercopy.c:29
+  copy_to_user include/linux/uaccess.h:174 [inline]
+  ld_usb_read+0x58d/0xc40 drivers/usb/misc/ldusb.c:495
+  __vfs_read+0x1a9/0xc90 fs/read_write.c:425
+  vfs_read+0x359/0x6f0 fs/read_write.c:461
+  ksys_read+0x265/0x430 fs/read_write.c:587
+  __do_sys_read fs/read_write.c:597 [inline]
+  __se_sys_read+0x92/0xb0 fs/read_write.c:595
+  __x64_sys_read+0x4a/0x70 fs/read_write.c:595
+  do_syscall_64+0xbc/0xf0 arch/x86/entry/common.c:297
+  entry_SYSCALL_64_after_hwframe+0x63/0xe7
+RIP: 0033:0x441839
+Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffd47c58b68 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 0000000000441839
+RDX: 0000001788000335 RSI: 0000000020000140 RDI: 0000000000000004
+RBP: 0000000000017997 R08: 000000000000000f R09: 00000009004002c8
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402590
+R13: 0000000000402620 R14: 0000000000000000 R15: 0000000000000000
+
+Uninit was created at:
+  kmsan_save_stack_with_flags+0x37/0x70 mm/kmsan/kmsan.c:189
+  kmsan_internal_alloc_meta_for_pages+0x123/0x510 mm/kmsan/kmsan_hooks.c:114
+  kmsan_alloc_page+0x7a/0xf0 mm/kmsan/kmsan_hooks.c:244
+  __alloc_pages_nodemask+0x142d/0x5fa0 mm/page_alloc.c:4757
+  alloc_pages_current+0x68d/0x9a0 mm/mempolicy.c:2153
+  alloc_pages include/linux/gfp.h:511 [inline]
+  kmalloc_order mm/slab_common.c:1257 [inline]
+  kmalloc_order_trace+0x87/0x320 mm/slab_common.c:1269
+  kmalloc_large include/linux/slab.h:485 [inline]
+  __kmalloc+0x2e6/0x430 mm/slub.c:3823
+  kmalloc_array+0x86/0x110 include/linux/slab.h:676
+  ld_usb_probe+0x650/0x1650 drivers/usb/misc/ldusb.c:700
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+==================================================================
 
 
 ---
