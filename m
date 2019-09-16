@@ -2,89 +2,224 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAEDAB3E0D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 17:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A99B1B3E6A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 18:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729426AbfIPPrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 11:47:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39846 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728527AbfIPPrX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Sep 2019 11:47:23 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3C7442184D;
-        Mon, 16 Sep 2019 15:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568648842;
-        bh=MYm2zxY/xoEKbCW9H6wOf0Sfh5t3xNGKEsSQnRVcsH4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=cHVGaHv8YCgHi6cn3H1obmAuK37C+VZAuzPfpZqRh/R2HzsdTvXNvw6UQgOGQNcFc
-         RdSu+9uWR0SWTdHM3gJ2XzEH/Zqqtct1rT3EfNH9QKQG66p++TLOIa7oMsxa2Q2ART
-         VARaL6FPeFZYCokDO2JDHvCt/rrArX2AwOpDxw7w=
-Subject: Re: [PATCH v3] usbip: vhci_hcd indicate failed message
-To:     Mao Wenan <maowenan@huawei.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, shuah <shuah@kernel.org>
-References: <2743ad5b-9348-bd2b-4763-a2a199e6edad@kernel.org>
- <20190916150921.152977-1-maowenan@huawei.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <fb06edbf-e599-ada5-916d-405382cb6f6f@kernel.org>
-Date:   Mon, 16 Sep 2019 09:47:21 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2389601AbfIPQJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 12:09:09 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:55788 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732092AbfIPQJJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 12:09:09 -0400
+Received: by mail-io1-f70.google.com with SMTP id r13so225523ioj.22
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 09:09:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=J7phFRGQcXwjgVEn5hCkFcWK2exUv8WTVX5CjAs8+q4=;
+        b=AvGWuQyHSm2QaNuxCtcxTApq1/11Ve9l0YVHxrzkE3dVfiy06kaOADQGvZvLl1fQn9
+         1NWz5qMI0wlmaCx4YKRSarcgS7VJscD4Zuj+sj2dZ7oOKJdD+GlDLV/wbd08/xcpvW/w
+         4Fwj91nC7rF3pzntOTcATTsnK86mxMKNkDVRertWaEf1DhXhC3cMmb8pzP2d219lpgi/
+         mjv3g8J60huIGpDWdtBWUYV+eg62MgLGiBMPuKU3pD51hxQn4Qt1NyJpP9Tin9zvWzki
+         tk8xt9hjE7cqpeTAsRq8Xg2uPYI5ByG3H5/5gEjJJUKQhlDOOmE92aWNmnuoP2nLAwkN
+         8kxw==
+X-Gm-Message-State: APjAAAVKZ5fZnWIDEyHkTdVqsJcCKqbsXD+x43Kpvn5iw9i0Jrbc6lLD
+        dyelv0x3SEStE73O+gzRf993MtLzjb6/Lr8az5pzG0C12+t3
+X-Google-Smtp-Source: APXvYqyk/medgjyKbtSWCbPAyCRHWzAYdUuuMLOAfSdK9SVhB6rOCytepwIJ8nfc9KKYNicAy4MeRz+t+2VfQLOXzt4Z1+SvTqi9
 MIME-Version: 1.0
-In-Reply-To: <20190916150921.152977-1-maowenan@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a5e:8610:: with SMTP id z16mr626114ioj.65.1568650147759;
+ Mon, 16 Sep 2019 09:09:07 -0700 (PDT)
+Date:   Mon, 16 Sep 2019 09:09:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d58eb90592add24e@google.com>
+Subject: possible deadlock in usb_deregister_dev (2)
+From:   syzbot <syzbot+f9549f5ee8a5416f0b95@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/16/19 9:09 AM, Mao Wenan wrote:
-> If the return value of vhci_init_attr_group and
-> sysfs_create_group is non-zero, which mean they failed
-> to init attr_group and create sysfs group, so it would
-> better add 'failed' message to indicate that.
-> This patch also change pr_err to dev_err to trace which
-> device is failed.
-> 
-> Fixes: 0775a9cbc694 ("usbip: vhci extension: modifications to vhci driver")
-> Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> ---
->   v2: change pr_err to dev_err.
->   v3: add error code in failed messages.
->   drivers/usb/usbip/vhci_hcd.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index 000ab7225717..144507751eae 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -1185,12 +1185,12 @@ static int vhci_start(struct usb_hcd *hcd)
->   	if (id == 0 && usb_hcd_is_primary_hcd(hcd)) {
->   		err = vhci_init_attr_group();
->   		if (err) {
-> -			pr_err("init attr group\n");
-> +			dev_err(hcd_dev(hcd), "init attr group failed, err = %d\n", err);
->   			return err;
->   		}
->   		err = sysfs_create_group(&hcd_dev(hcd)->kobj, &vhci_attr_group);
->   		if (err) {
-> -			pr_err("create sysfs files\n");
-> +			dev_err(hcd_dev(hcd), "create sysfs files failed, err = %d\n", err);
->   			vhci_finish_attr_group();
->   			return err;
->   		}
-> 
+Hello,
 
-Looks good to me.
+syzbot found the following crash on:
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1742f159600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+dashboard link: https://syzkaller.appspot.com/bug?extid=f9549f5ee8a5416f0b95
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-thanks,
--- Shuah
+Unfortunately, I don't have any reproducer for this crash yet.
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f9549f5ee8a5416f0b95@syzkaller.appspotmail.com
+
+usb 5-1: USB disconnect, device number 27
+======================================================
+WARNING: possible circular locking dependency detected
+5.3.0-rc7+ #0 Not tainted
+------------------------------------------------------
+kworker/1:5/2876 is trying to acquire lock:
+000000006f0f0bc3 (minor_rwsem){++++}, at: usb_deregister_dev+0x95/0x230  
+drivers/usb/core/file.c:239
+
+but task is already holding lock:
+00000000175691a3 (open_disc_mutex){+.+.}, at: tower_disconnect+0x45/0x300  
+drivers/usb/misc/legousbtower.c:945
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (open_disc_mutex){+.+.}:
+        __mutex_lock_common kernel/locking/mutex.c:930 [inline]
+        __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
+        tower_open+0xce/0x9b0 drivers/usb/misc/legousbtower.c:335
+        usb_open+0x1df/0x270 drivers/usb/core/file.c:48
+        chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+        do_dentry_open+0x494/0x1120 fs/open.c:797
+        do_last fs/namei.c:3416 [inline]
+        path_openat+0x1430/0x3f50 fs/namei.c:3533
+        do_filp_open+0x1a1/0x280 fs/namei.c:3563
+        do_sys_open+0x3c0/0x580 fs/open.c:1089
+        do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+        entry_SYSCALL_64_after_hwframe+0x49/0xbe
+
+-> #0 (minor_rwsem){++++}:
+        check_prev_add kernel/locking/lockdep.c:2405 [inline]
+        check_prevs_add kernel/locking/lockdep.c:2507 [inline]
+        validate_chain kernel/locking/lockdep.c:2897 [inline]
+        __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
+        lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
+        down_write+0x92/0x150 kernel/locking/rwsem.c:1500
+        usb_deregister_dev+0x95/0x230 drivers/usb/core/file.c:239
+        tower_disconnect+0xa8/0x300 drivers/usb/misc/legousbtower.c:951
+        usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+        __device_release_driver drivers/base/dd.c:1134 [inline]
+        device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+        bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+        device_del+0x420/0xb10 drivers/base/core.c:2339
+        usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+        usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+        hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+        hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+        port_event drivers/usb/core/hub.c:5359 [inline]
+        hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+        process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+        worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+        kthread+0x318/0x420 kernel/kthread.c:255
+        ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+other info that might help us debug this:
+
+  Possible unsafe locking scenario:
+
+        CPU0                    CPU1
+        ----                    ----
+   lock(open_disc_mutex);
+                                lock(minor_rwsem);
+                                lock(open_disc_mutex);
+   lock(minor_rwsem);
+
+  *** DEADLOCK ***
+
+6 locks held by kworker/1:5/2876:
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at:  
+__write_once_size include/linux/compiler.h:226 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at:  
+arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at: atomic64_set  
+include/asm-generic/atomic-instrumented.h:855 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at:  
+atomic_long_set include/asm-generic/atomic-long.h:40 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at: set_work_data  
+kernel/workqueue.c:620 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at:  
+set_work_pool_and_clear_pending kernel/workqueue.c:647 [inline]
+  #0: 00000000ecb9dcf5 ((wq_completion)usb_hub_wq){+.+.}, at:  
+process_one_work+0x827/0x1530 kernel/workqueue.c:2240
+  #1: 0000000009747c0c ((work_completion)(&hub->events)){+.+.}, at:  
+process_one_work+0x85b/0x1530 kernel/workqueue.c:2244
+  #2: 000000004bd4f175 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1223 [inline]
+  #2: 000000004bd4f175 (&dev->mutex){....}, at: hub_event+0x17c/0x3640  
+drivers/usb/core/hub.c:5387
+  #3: 00000000668c8b60 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1223 [inline]
+  #3: 00000000668c8b60 (&dev->mutex){....}, at: usb_disconnect+0x91/0x8d0  
+drivers/usb/core/hub.c:2190
+  #4: 00000000787026a9 (&dev->mutex){....}, at:  
+device_release_driver_internal+0x23/0x500 drivers/base/dd.c:1162
+  #5: 00000000175691a3 (open_disc_mutex){+.+.}, at:  
+tower_disconnect+0x45/0x300 drivers/usb/misc/legousbtower.c:945
+
+stack backtrace:
+CPU: 1 PID: 2876 Comm: kworker/1:5 Not tainted 5.3.0-rc7+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  check_noncircular+0x345/0x3e0 kernel/locking/lockdep.c:1741
+  check_prev_add kernel/locking/lockdep.c:2405 [inline]
+  check_prevs_add kernel/locking/lockdep.c:2507 [inline]
+  validate_chain kernel/locking/lockdep.c:2897 [inline]
+  __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
+  down_write+0x92/0x150 kernel/locking/rwsem.c:1500
+  usb_deregister_dev+0x95/0x230 drivers/usb/core/file.c:239
+  tower_disconnect+0xa8/0x300 drivers/usb/misc/legousbtower.c:951
+  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1134 [inline]
+  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
+  device_del+0x420/0xb10 drivers/base/core.c:2339
+  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+legousbtower 5-1:0.219: LEGO USB Tower #-160 now disconnected
+usb 5-1: new high-speed USB device number 28 using dummy_hcd
+usb 5-1: device descriptor read/64, error 18
+usb 5-1: device descriptor read/64, error 18
+usb 5-1: new high-speed USB device number 29 using dummy_hcd
+usb 5-1: device descriptor read/64, error 18
+usb 5-1: device descriptor read/64, error 18
+usb usb5-port1: attempt power cycle
+usb 5-1: new high-speed USB device number 30 using dummy_hcd
+usb 4-1: new high-speed USB device number 9 using dummy_hcd
+usb 4-1: Using ep0 maxpacket: 16
+usb 4-1: config 0 interface 0 altsetting 0 endpoint 0x81 has an invalid  
+bInterval 0, changing to 7
+usb 4-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
+different from the interface descriptor's value: 9
+usb 4-1: New USB device found, idVendor=0d8c, idProduct=0022, bcdDevice=  
+0.00
+usb 4-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 4-1: config 0 descriptor??
+usbhid 4-1:0.0: can't add hid device: -71
+usbhid: probe of 4-1:0.0 failed with error -71
+usb 4-1: USB disconnect, device number 9
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
