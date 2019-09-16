@@ -2,135 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC250B347F
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 07:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911A3B353B
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 09:11:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728704AbfIPFqE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 01:46:04 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:2745 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727053AbfIPFqE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 01:46:04 -0400
-X-UUID: 1ab7ea77fe4148de9a65027ebe4a1bf6-20190916
-X-UUID: 1ab7ea77fe4148de9a65027ebe4a1bf6-20190916
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        id S1730601AbfIPHLW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 03:11:22 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:16688 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726082AbfIPHLW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 03:11:22 -0400
+X-UUID: f1b8921be39243db81135c57cd8880b7-20190916
+X-UUID: f1b8921be39243db81135c57cd8880b7-20190916
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 694545173; Mon, 16 Sep 2019 13:45:52 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 16 Sep
- 2019 13:45:48 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+        with ESMTP id 1352235378; Mon, 16 Sep 2019 15:11:14 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32DR.mediatek.inc
+ (172.27.6.104) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 16 Sep
+ 2019 15:11:07 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
  (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Sep 2019 13:45:47 +0800
-Message-ID: <1568612747.7317.72.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 3/7] usb: mtu3: support ip-sleep wakeup for MT8183
+ Transport; Mon, 16 Sep 2019 15:11:06 +0800
+Message-ID: <1568617865.7317.74.camel@mhfsdcap03>
+Subject: Re: [Patch V9 3/8] phy: tegra: xusb: Add vbus override support on
+ Tegra210
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <devicetree@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>
-Date:   Mon, 16 Sep 2019 13:45:47 +0800
-In-Reply-To: <20190911184453.GA2628@roeck-us.net>
-References: <1567150854-30033-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1567150854-30033-4-git-send-email-chunfeng.yun@mediatek.com>
-         <20190911184453.GA2628@roeck-us.net>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Date:   Mon, 16 Sep 2019 15:11:05 +0800
+In-Reply-To: <1568354873-24073-4-git-send-email-nkristam@nvidia.com>
+References: <1568354873-24073-1-git-send-email-nkristam@nvidia.com>
+         <1568354873-24073-4-git-send-email-nkristam@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-Product-Ver: SMEX-12.5.0.1684-8.5.1010-24914.004
-X-TM-AS-Result: No-8.235300-8.000000-10
-X-TMASE-MatchedRID: csPTYAMX1+HmLzc6AOD8DfHkpkyUphL9dfsypiTqGpue9toQ6h6LE2ng
-        VUDf4c8Y3UJTYve4D89VVkf0bJfBjyxppiUy9o4cA9lly13c/gElWygvtTclwFGLwJXlA4mIwBI
-        zUVtFoCLgRgaCjJFnr+xbYZUuzB/CsWFXqrN3c5D1WO1NzV/CYNi5W7Rf+s6QiiKPXbEds+4eMp
-        1P/J9F6H2dcFgFzv71OLoOGImc4B4M8jMXjBF+sIMbH85DUZXy3QfwsVk0UbtuRXh7bFKB7lAlx
-        8mk+INITqHBTq5IMRMciNlpck9RPvcGG72gNuthWClYJu9r4yY=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--8.235300-8.000000
-X-TMASE-Version: SMEX-12.5.0.1684-8.5.1010-24914.004
-X-TM-SNTS-SMTP: 3242FE149AFF8C962B76284F45FA462CBA199288A603FDB43D5C66F530F60A4F2000:8
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: DF578D0D8935BFB61BBE328B9FF34215B0B7C778C60519D9D891F49837686EC22000:8
 X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2019-09-11 at 11:44 -0700, Guenter Roeck wrote:
-> On Fri, Aug 30, 2019 at 03:40:50PM +0800, Chunfeng Yun wrote:
-> > Support USB wakeup by ip-sleep mode for MT8183, it's similar to
-> > MT8173
-> > 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v3: changes micros define
-> > 
-> > v2: no changes
-> > ---
-> >  drivers/usb/mtu3/mtu3_host.c | 14 +++++++++++++-
-> >  1 file changed, 13 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-> > index c871b94f3e6f..4f8208885ebd 100644
-> > --- a/drivers/usb/mtu3/mtu3_host.c
-> > +++ b/drivers/usb/mtu3/mtu3_host.c
-> > @@ -18,6 +18,12 @@
-> >  #include "mtu3.h"
-> >  #include "mtu3_dr.h"
-> >  
-> > +/* mt8183 etc */
-> > +#define PERI_WK_CTRL0	0x20
-> > +#define WC0_IS_C(x)	(((x) & 0xf) << 28)  /* cycle debounce */
-> > +#define WC0_IS_P	BIT(12)	/* polarity */
-> > +#define WC0_IS_EN	BIT(6)
-> > +
+On Fri, 2019-09-13 at 11:37 +0530, Nagarjuna Kristam wrote:
+> Tegra XUSB device control driver needs to control vbus override
+> during its operations, add API for the support.
 > 
-> For 64-bit builds, this results in:
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> ---
+>  drivers/phy/tegra/xusb-tegra210.c | 57 +++++++++++++++++++++++++++++++++++++++
+>  drivers/phy/tegra/xusb.c          | 22 +++++++++++++++
+>  drivers/phy/tegra/xusb.h          |  2 ++
+>  include/linux/phy/tegra/xusb.h    |  4 ++-
+>  4 files changed, 84 insertions(+), 1 deletion(-)
 > 
-> drivers/usb/mtu3/mtu3_host.c: In function ‘ssusb_wakeup_ip_sleep_set’:
-> ./include/linux/bits.h:6:19: warning:
-> 	conversion from ‘long unsigned int’ to ‘u32’ {aka ‘unsigned int’}
-> 	changes value from ‘18446744073441120320’ to ‘4026536000’ [-Woverflow]
-> 
-> since WC0_IS_C() is sign extended to 64 bit and then truncated.
-Got it, thanks a lot
+> diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
+> index 8c31f03..9e6f14b 100644
+> --- a/drivers/phy/tegra/xusb-tegra210.c
+> +++ b/drivers/phy/tegra/xusb-tegra210.c
+> @@ -65,6 +65,10 @@
+>  #define XUSB_PADCTL_USB3_PAD_MUX_PCIE_IDDQ_DISABLE(x) (1 << (1 + (x)))
+>  #define XUSB_PADCTL_USB3_PAD_MUX_SATA_IDDQ_DISABLE(x) (1 << (8 + (x)))
+>  
+> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(x) (0x080 + (x) * 0x40)
+> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP (1 << 18)
+> +#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN (1 << 22)
+> +
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(x) (0x084 + (x) * 0x40)
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT 7
+>  #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
+> @@ -227,6 +231,12 @@
+>  #define XUSB_PADCTL_UPHY_USB3_PADX_ECTL6(x) (0xa74 + (x) * 0x40)
+>  #define XUSB_PADCTL_UPHY_USB3_PAD_ECTL6_RX_EQ_CTRL_H_VAL 0xfcf01368
+>  
+> +#define XUSB_PADCTL_USB2_VBUS_ID 0xc60
+> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON (1 << 14)
+> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT 18
+> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK 0xf
+> +#define XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING 8
+> +
+>  struct tegra210_xusb_fuse_calibration {
+>  	u32 hs_curr_level[4];
+>  	u32 hs_term_range_adj;
+> @@ -2016,6 +2026,51 @@ static const struct tegra_xusb_port_ops tegra210_usb3_port_ops = {
+>  	.map = tegra210_usb3_port_map,
+>  };
+>  
+> +static int tegra210_xusb_padctl_vbus_override(struct tegra_xusb_padctl *padctl,
+> +					      bool status)
+> +{
+> +	u32 value;
+> +
+> +	dev_dbg(padctl->dev, "%s vbus override\n", status ? "set" : "clear");
+> +
+> +	value = padctl_readl(padctl, XUSB_PADCTL_USB2_VBUS_ID);
+> +
+> +	if (status) {
+> +		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
+> +		value &= ~(XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_MASK <<
+> +			   XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT);
+> +		value |= XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_FLOATING <<
+> +			 XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_SHIFT;
+> +	} else
+> +		value &= ~XUSB_PADCTL_USB2_VBUS_ID_OVERRIDE_VBUS_ON;
+Nit: use braces in else branch
 
-> 
-> Observed with gcc 7.4.0 and 8.3.0.
-> 
-> Guenter
-> 
-> >  /* mt8173 etc */
-> >  #define PERI_WK_CTRL1	0x4
-> >  #define WC1_IS_C(x)	(((x) & 0xf) << 26)  /* cycle debounce */
-> > @@ -30,7 +36,8 @@
-> >  #define SSC_SPM_INT_EN		BIT(1)
-> >  
-> >  enum ssusb_uwk_vers {
-> > -	SSUSB_UWK_V1 = 1,
-> > +	SSUSB_UWK_V0 = 0,
-> > +	SSUSB_UWK_V1,
-> >  	SSUSB_UWK_V2,
-> >  };
-> >  
-> > @@ -43,6 +50,11 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
-> >  	u32 reg, msk, val;
-> >  
-> >  	switch (ssusb->uwk_vers) {
-> > +	case SSUSB_UWK_V0:
-> > +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0;
-> > +		msk = WC0_IS_EN | WC0_IS_C(0xf) | WC0_IS_P;
-> > +		val = enable ? (WC0_IS_EN | WC0_IS_C(0x8)) : 0;
-> > +		break;
-> >  	case SSUSB_UWK_V1:
-> >  		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1;
-> >  		msk = WC1_IS_EN | WC1_IS_C(0xf) | WC1_IS_P;
+> +
+> +	padctl_writel(padctl, value, XUSB_PADCTL_USB2_VBUS_ID);
+> +
+> +	return 0;
+> +}
+> +
+> +static int tegra210_utmi_port_reset(struct phy *phy)
+> +{
+> +	struct tegra_xusb_padctl *padctl;
+> +	struct tegra_xusb_lane *lane;
+> +	u32 value;
+> +
+> +	lane = phy_get_drvdata(phy);
+> +	padctl = lane->pad->padctl;
+> +
+> +	value = padctl_readl(padctl,
+> +		     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL0(lane->index));
+> +
+> +	if ((value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIP) ||
+> +	    (value & XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL0_ZIN)) {
+> +		tegra210_xusb_padctl_vbus_override(padctl, false);
+> +		tegra210_xusb_padctl_vbus_override(padctl, true);
+> +		return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int
+>  tegra210_xusb_read_fuse_calibration(struct tegra210_xusb_fuse_calibration *fuse)
+>  {
+> @@ -2078,6 +2133,8 @@ static const struct tegra_xusb_padctl_ops tegra210_xusb_padctl_ops = {
+>  	.remove = tegra210_xusb_padctl_remove,
+>  	.usb3_set_lfps_detect = tegra210_usb3_set_lfps_detect,
+>  	.hsic_set_idle = tegra210_hsic_set_idle,
+> +	.vbus_override = tegra210_xusb_padctl_vbus_override,
+> +	.utmi_port_reset = tegra210_utmi_port_reset,
+>  };
+>  
+>  static const char * const tegra210_xusb_padctl_supply_names[] = {
+> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> index b4b217e..bf4b008 100644
+> --- a/drivers/phy/tegra/xusb.c
+> +++ b/drivers/phy/tegra/xusb.c
+> @@ -1121,6 +1121,28 @@ int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
+>  }
+>  EXPORT_SYMBOL_GPL(tegra_xusb_padctl_usb3_set_lfps_detect);
+>  
+> +int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
+> +							bool val)
+> +{
+> +	if (padctl->soc->ops->vbus_override)
+> +		return padctl->soc->ops->vbus_override(padctl, val);
+> +
+> +	return -ENOTSUPP;
+> +}
+> +EXPORT_SYMBOL_GPL(tegra_xusb_padctl_set_vbus_override);
+> +
+> +int tegra_phy_xusb_utmi_port_reset(struct phy *phy)
+> +{
+> +	struct tegra_xusb_lane *lane = phy_get_drvdata(phy);
+> +	struct tegra_xusb_padctl *padctl = lane->pad->padctl;
+> +
+> +	if (padctl->soc->ops->utmi_port_reset)
+> +		return padctl->soc->ops->utmi_port_reset(phy);
+> +
+> +	return -ENOTSUPP;
+> +}
+> +EXPORT_SYMBOL_GPL(tegra_phy_xusb_utmi_port_reset);
+> +
+>  MODULE_AUTHOR("Thierry Reding <treding@nvidia.com>");
+>  MODULE_DESCRIPTION("Tegra XUSB Pad Controller driver");
+>  MODULE_LICENSE("GPL v2");
+> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
+> index bd91832..da94fcc 100644
+> --- a/drivers/phy/tegra/xusb.h
+> +++ b/drivers/phy/tegra/xusb.h
+> @@ -373,6 +373,8 @@ struct tegra_xusb_padctl_ops {
+>  			     unsigned int index, bool idle);
+>  	int (*usb3_set_lfps_detect)(struct tegra_xusb_padctl *padctl,
+>  				    unsigned int index, bool enable);
+> +	int (*vbus_override)(struct tegra_xusb_padctl *padctl, bool set);
+> +	int (*utmi_port_reset)(struct phy *phy);
+>  };
+>  
+>  struct tegra_xusb_padctl_soc {
+> diff --git a/include/linux/phy/tegra/xusb.h b/include/linux/phy/tegra/xusb.h
+> index ee59562..1235865 100644
+> --- a/include/linux/phy/tegra/xusb.h
+> +++ b/include/linux/phy/tegra/xusb.h
+> @@ -18,5 +18,7 @@ int tegra_xusb_padctl_hsic_set_idle(struct tegra_xusb_padctl *padctl,
+>  				    unsigned int port, bool idle);
+>  int tegra_xusb_padctl_usb3_set_lfps_detect(struct tegra_xusb_padctl *padctl,
+>  					   unsigned int port, bool enable);
+> -
+> +int tegra_xusb_padctl_set_vbus_override(struct tegra_xusb_padctl *padctl,
+> +					bool val);
+> +int tegra_phy_xusb_utmi_port_reset(struct phy *phy);
+>  #endif /* PHY_TEGRA_XUSB_H */
 
 
