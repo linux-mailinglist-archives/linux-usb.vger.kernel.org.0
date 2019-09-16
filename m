@@ -2,43 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45DC6B408A
+	by mail.lfdr.de (Postfix) with ESMTP id 4E959B408B
 	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 20:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390550AbfIPStM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 14:49:12 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:52188 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390529AbfIPStM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 14:49:12 -0400
-Received: by mail-io1-f70.google.com with SMTP id a13so1083976ioh.18
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 11:49:10 -0700 (PDT)
+        id S2390552AbfIPStN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 14:49:13 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:50032 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390538AbfIPStN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 14:49:13 -0400
+Received: by mail-io1-f71.google.com with SMTP id j23so1108838iog.16
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 11:49:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=H5d07hqqMrbJbaBsCQ+sx6tpw1vZfzce0nP5jVQ63WA=;
-        b=I+T+dbQap9hz7CiF1QOt3itvo7+w5nyDvNZCYcQNGJ8EwmKEFxc6zd+dn70rjLokfk
-         64JhKEyYVfpAH2mJCAoTBM9Fp+DiPOby5vsIA9JarRNR4Op2metRIVkONE0vprW84kLE
-         v9rarnq8XoGW/iu5e51C6mxFa8dKEyZmdj52NFN6miBrwNd1UAgp0e9k7rWQDG5ldg2O
-         zwfcNfb44CAPF1VcYgEik22g75g96AacRZWVzIlisbYvU8tnp+QQPnisgK5liPLswq5R
-         Lhw1V2PGlK9o49BAWCQnvpQdcGzTNGs8n3reTdPZQ/VwN4LUFoYwvJ1mFSD5tNEExgP3
-         Yu2w==
-X-Gm-Message-State: APjAAAW+ZHG+/6VY45JA1mNPYQ3im5B1Y4ZLLiKw8mhdyBTIzAwiB39D
-        W08J9ctup/G/7w+NnUvyIt14Pqd1cAAESy2Ki5AmvQQXVjEU
-X-Google-Smtp-Source: APXvYqxOLb93mwFjaJWzMtzRNbjNwcfB6jwC1w1M8pzFNgb/RNkItBXt32uP4N9qiqX8dRF2unfka2I7Zjn7dp3sPcJfxZfeRrGW
+        bh=lsjoWdb29H1URgbvvIQ/akyCyj3dPalRUxcjRdE+WJI=;
+        b=kbuMyuDSUNrUkYXXaEfcLrZ/cJgMwo+b05MSyotxi8a9+Sh9uhycvua9zFaK9I+UKC
+         xfNoXaiZyxHsNblJsDr9g7rZxapc/eXkjXP81vXtdm6p2T5ABy8fcFmZCouqlTYGL8i3
+         jlwzGl1KPxfB00z39q4eCOio9DQG0yxhBCn+zJNKB/zPCyvbgjTnxDpDszeLRsT/CY1T
+         TIYB9HaiN0JaoSKLrEuYrOIv34LisaxMRENUp4Pxx9PAlv9qsJFoBL/7+Ql9BVyqRCOc
+         W5QqMhbgnaHcJoeku1r7+Fxjwqr/yDuFxIsNPusKON+dl+Js++cxvOY+8+9eULIdyonY
+         mRWA==
+X-Gm-Message-State: APjAAAWwrSC4tcdDgvRedOz0rAi1yaaa6SakruP8FxnlccsLB80FS+Y+
+        UxbohHNuR2pBQa1gTN9bLUm/ECWM1d86szF4N6Slq4Hdn4MA
+X-Google-Smtp-Source: APXvYqx1UYU5N0W/RNEBgs0Cch57LChMYV1Z8DTow0KuDWXjhamCR1KvF8xqIbScKKolvajXRI7SO66tQqU4w0hi/L0MTA5NnrpC
 MIME-Version: 1.0
-X-Received: by 2002:a02:a909:: with SMTP id n9mr1482796jam.57.1568659750337;
- Mon, 16 Sep 2019 11:49:10 -0700 (PDT)
-Date:   Mon, 16 Sep 2019 11:49:10 -0700
+X-Received: by 2002:a5d:91c8:: with SMTP id k8mr84730ior.232.1568659751875;
+ Mon, 16 Sep 2019 11:49:11 -0700 (PDT)
+Date:   Mon, 16 Sep 2019 11:49:11 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000031432d0592b00f44@google.com>
-Subject: KMSAN: uninit-value in usb_autopm_put_interface
-From:   syzbot <syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com>
-To:     glider@google.com, gregkh@linuxfoundation.org,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com, yuehaibing@huawei.com
+Message-ID: <00000000000048baec0592b00f00@google.com>
+Subject: WARNING: ODEBUG bug in usbhid_probe
+From:   syzbot <syzbot+d534bb48eb6d94062cfa@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -49,89 +49,85 @@ Hello,
 
 syzbot found the following crash on:
 
-HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=16a7dde1600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1a6e595adbd2458f1
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176303e1600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8f23e600000
+HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=14982e6e600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+dashboard link: https://syzkaller.appspot.com/bug?extid=d534bb48eb6d94062cfa
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+Unfortunately, I don't have any reproducer for this crash yet.
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com
+Reported-by: syzbot+d534bb48eb6d94062cfa@syzkaller.appspotmail.com
 
-==================================================================
-BUG: KMSAN: uninit-value in __write_once_size include/linux/compiler.h:235  
-[inline]
-BUG: KMSAN: uninit-value in pm_runtime_mark_last_busy  
-include/linux/pm_runtime.h:107 [inline]
-BUG: KMSAN: uninit-value in usb_mark_last_busy include/linux/usb.h:774  
-[inline]
-BUG: KMSAN: uninit-value in usb_autopm_put_interface+0xf2/0x120  
-drivers/usb/core/driver.c:1630
-CPU: 0 PID: 11318 Comm: syz-executor549 Not tainted 5.3.0-rc7+ #0
+usbhid 5-1:1.0: can't add hid device: -71
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object type: timer_list hint:  
+hid_retry_timeout+0x0/0xd0 drivers/hid/usbhid/hid-core.c:712
+WARNING: CPU: 0 PID: 12 at lib/debugobjects.c:481  
+debug_print_object+0x160/0x250 lib/debugobjects.c:481
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc7+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
-  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
-  __write_once_size include/linux/compiler.h:235 [inline]
-  pm_runtime_mark_last_busy include/linux/pm_runtime.h:107 [inline]
-  usb_mark_last_busy include/linux/usb.h:774 [inline]
-  usb_autopm_put_interface+0xf2/0x120 drivers/usb/core/driver.c:1630
-  usbhid_power+0x12a/0x170 drivers/hid/usbhid/hid-core.c:1238
-  hid_hw_power include/linux/hid.h:1038 [inline]
-  drop_ref drivers/hid/hidraw.c:338 [inline]
-  hidraw_release+0x4a9/0x6b0 drivers/hid/hidraw.c:356
-  __fput+0x4c9/0xba0 fs/file_table.c:280
-  ____fput+0x37/0x40 fs/file_table.c:313
-  task_work_run+0x22e/0x2a0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop arch/x86/entry/common.c:163 [inline]
-  prepare_exit_to_usermode+0x39d/0x4d0 arch/x86/entry/common.c:194
-  syscall_return_slowpath+0x90/0x610 arch/x86/entry/common.c:274
-  do_syscall_64+0xe2/0xf0 arch/x86/entry/common.c:300
-  entry_SYSCALL_64_after_hwframe+0x63/0xe7
-RIP: 0033:0x401b20
-Code: 01 f0 ff ff 0f 83 c0 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d ad 5b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 94 0b 00 00 c3 48 83 ec 08 e8 fa 00 00 00
-RSP: 002b:00007ffc46217cb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffea RBX: 0000000000000000 RCX: 0000000000401b20
-RDX: 0000000000000000 RSI: 000000000010503d RDI: 00007ffc46217cc0
-RBP: 6666666666666667 R08: 000000000000000f R09: 000000000000000b
-R10: 0000000000000075 R11: 0000000000000246 R12: 0000000000402b40
-R13: 0000000000402bd0 R14: 0000000000000000 R15: 0000000000000000
-
-Uninit was created at:
-  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:189 [inline]
-  kmsan_internal_poison_shadow+0x58/0xb0 mm/kmsan/kmsan.c:148
-  kmsan_slab_free+0x8d/0x100 mm/kmsan/kmsan_hooks.c:195
-  slab_free_freelist_hook mm/slub.c:1472 [inline]
-  slab_free mm/slub.c:3038 [inline]
-  kfree+0x4c1/0x2db0 mm/slub.c:3980
-  usb_release_interface+0x105/0x120 drivers/usb/core/message.c:1633
-  device_release+0xe2/0x380 drivers/base/core.c:1060
-  kobject_cleanup lib/kobject.c:693 [inline]
-  kobject_release lib/kobject.c:722 [inline]
-  kref_put include/linux/kref.h:65 [inline]
-  kobject_put+0x38d/0x480 lib/kobject.c:739
-  put_device+0x51/0x70 drivers/base/core.c:2264
-  usb_disable_device+0x69a/0x1150 drivers/usb/core/message.c:1248
-  usb_disconnect+0x51e/0xd60 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+RIP: 0010:debug_print_object+0x160/0x250 lib/debugobjects.c:481
+Code: dd 40 f6 da 85 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 bf 00 00 00 48  
+8b 14 dd 40 f6 da 85 48 c7 c7 80 eb da 85 e8 25 c5 31 ff <0f> 0b 83 05 0b  
+fc a7 05 01 48 83 c4 20 5b 5d 41 5c 41 5d c3 48 89
+RSP: 0018:ffff8881da20f178 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff81288ddd RDI: ffffed103b441e21
+RBP: 0000000000000001 R08: ffff8881da1f9800 R09: ffffed103b645d58
+R10: ffffed103b645d57 R11: ffff8881db22eabf R12: ffffffff86d0dd60
+R13: ffffffff812e7c20 R14: ffff8881cfebe8c8 R15: ffff8881d412fa80
+  __debug_check_no_obj_freed lib/debugobjects.c:963 [inline]
+  debug_check_no_obj_freed+0x2df/0x443 lib/debugobjects.c:994
+  free_pages_prepare mm/page_alloc.c:1174 [inline]
+  __free_pages_ok+0x222/0x1d70 mm/page_alloc.c:1420
+  usbhid_probe+0xcd1/0xfa0 drivers/hid/usbhid/hid-core.c:1395
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2165
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+  device_add+0xae6/0x16f0 drivers/base/core.c:2165
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
   port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x3fd0/0x72f0 drivers/usb/core/hub.c:5441
-  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-==================================================================
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
 ---
@@ -141,5 +137,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this bug report. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
