@@ -2,106 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF554B3DAE
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 17:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAEDAB3E0D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 17:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389151AbfIPP3x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 11:29:53 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39828 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727374AbfIPP3w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 11:29:52 -0400
-Received: by mail-pg1-f193.google.com with SMTP id u17so201831pgi.6
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 08:29:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+y4AkvsKSUe07hNkypQ1HfKQPXtAqApgQQ2c6pYsyvM=;
-        b=r4xQx2sZTsVMGJQTG+yP4K5+89JMjruqVFAgOZPhHjy/5EkjLo1a+GA6OjtG8UcSAO
-         fvBhCoNTRyRrS6Ofwjw+bvMrNKaGQkXc1Uuk9sFidnQFMWlNE0jPWFEhejNhE6IvaJDA
-         m8mYa79vRNAwdeqXH6tiYsmBklPEU+vPM4OCoAjyp7c701HPMbeM0QF1B66YfF2EoD9T
-         jI7RZ2FLOTYh61RKVmjkGCq1L0resvYIZdl0COVppwxBXUik4hh127syb1lEODBawtYR
-         qyXRY5d02OFbdtt7s3xfzuwme6NwGVVbYTa7Q3Z9JbUNYkHgmsdHlsyLIRnbvKyrewHR
-         kZig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+y4AkvsKSUe07hNkypQ1HfKQPXtAqApgQQ2c6pYsyvM=;
-        b=JJC18T2Ll+3r6Fm1x0L+0RhwMiZIoyKFK00wmpinzpSxOM/NGqaxkNkZVGKRC4UV8i
-         svo/j89slGoIdJJ/vngN92YAr+r2iW89z53WltBgU6sa13evmKshkLxwFKjMqf36WJk1
-         jngtQ2Rp1f+4NaDYx1G/0F+8hhnfHZWEGLNMroX/BYTpT9I/NiK56XSDV/8rkQjNC1Jr
-         qTS/0WAhg328WGBaiK/5VevssemwtQBNV7NCFzLDiycVMpHBAaBvvNjUKbipzf+vFPRa
-         AjDASybdXjJAo9Rp8fPu9cHpD6KKw/bd5X+eClHe5iuB3a/x7dHUIvJ5zi5hlC4+CRNu
-         55xw==
-X-Gm-Message-State: APjAAAVkJCwnwCAZ1gYD6wHnV1Hw4Av7ro2vUiEKvbdzKmrhIHq9KOW7
-        AMfc6jc3wDmqCE5IWozeCQAhnW9DYL59v5lNqRp6Zg==
-X-Google-Smtp-Source: APXvYqx/vQc7AckoJDceJnazN6xeds3moRiKMgeAsWhEzJVlkiGKHFbOefeJamw6iyqI1oA7OyuAW3Aoh1iFTqCs1mE=
-X-Received: by 2002:a17:90a:1990:: with SMTP id 16mr278460pji.47.1568647790078;
- Mon, 16 Sep 2019 08:29:50 -0700 (PDT)
+        id S1729426AbfIPPrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 11:47:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39846 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728527AbfIPPrX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Sep 2019 11:47:23 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3C7442184D;
+        Mon, 16 Sep 2019 15:47:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568648842;
+        bh=MYm2zxY/xoEKbCW9H6wOf0Sfh5t3xNGKEsSQnRVcsH4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=cHVGaHv8YCgHi6cn3H1obmAuK37C+VZAuzPfpZqRh/R2HzsdTvXNvw6UQgOGQNcFc
+         RdSu+9uWR0SWTdHM3gJ2XzEH/Zqqtct1rT3EfNH9QKQG66p++TLOIa7oMsxa2Q2ART
+         VARaL6FPeFZYCokDO2JDHvCt/rrArX2AwOpDxw7w=
+Subject: Re: [PATCH v3] usbip: vhci_hcd indicate failed message
+To:     Mao Wenan <maowenan@huawei.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, shuah <shuah@kernel.org>
+References: <2743ad5b-9348-bd2b-4763-a2a199e6edad@kernel.org>
+ <20190916150921.152977-1-maowenan@huawei.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <fb06edbf-e599-ada5-916d-405382cb6f6f@kernel.org>
+Date:   Mon, 16 Sep 2019 09:47:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <0000000000004fb020059274a5ff@google.com> <Pine.LNX.4.44L0.1909131629230.1466-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909131629230.1466-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 16 Sep 2019 17:29:39 +0200
-Message-ID: <CAAeHK+zrR3pB2R3yyyUdGM4Vrv77o47MHsgvbQ+LFHfiWBt1OQ@mail.gmail.com>
-Subject: Re: INFO: rcu detected stall in dummy_timer
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>, chunfeng.yun@mediatek.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190916150921.152977-1-maowenan@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 10:35 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, 13 Sep 2019, syzbot wrote:
->
-> > syzbot has found a reproducer for the following crash on:
-> >
-> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1146550d600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=b24d736f18a1541ad550
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11203fa5600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=162cd335600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com
-> >
-> > yurex 3-1:0.101: yurex_interrupt - unknown status received: -71
-> > yurex 5-1:0.101: yurex_interrupt - unknown status received: -71
-> > yurex 6-1:0.101: yurex_interrupt - unknown status received: -71
-> > rcu: INFO: rcu_sched self-detected stall on CPU
->
-> Andrey:
->
-> This problem may be a result of overloading dummy_timer.  The kernel
-> config you are using has CONFIG_HZ=100, but dummy-hcd needs
-> CONFIG_HZ=1000 (see the comment on line 1789).  That is, lower values
-> of HZ will occasionally lead to trouble, and this may be an example.
->
-> Can you change the config value for HZ and see if the bug still
-> reproduces?
+On 9/16/19 9:09 AM, Mao Wenan wrote:
+> If the return value of vhci_init_attr_group and
+> sysfs_create_group is non-zero, which mean they failed
+> to init attr_group and create sysfs group, so it would
+> better add 'failed' message to indicate that.
+> This patch also change pr_err to dev_err to trace which
+> device is failed.
+> 
+> Fixes: 0775a9cbc694 ("usbip: vhci extension: modifications to vhci driver")
+> Signed-off-by: Mao Wenan <maowenan@huawei.com>
+> ---
+>   v2: change pr_err to dev_err.
+>   v3: add error code in failed messages.
+>   drivers/usb/usbip/vhci_hcd.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 000ab7225717..144507751eae 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -1185,12 +1185,12 @@ static int vhci_start(struct usb_hcd *hcd)
+>   	if (id == 0 && usb_hcd_is_primary_hcd(hcd)) {
+>   		err = vhci_init_attr_group();
+>   		if (err) {
+> -			pr_err("init attr group\n");
+> +			dev_err(hcd_dev(hcd), "init attr group failed, err = %d\n", err);
+>   			return err;
+>   		}
+>   		err = sysfs_create_group(&hcd_dev(hcd)->kobj, &vhci_attr_group);
+>   		if (err) {
+> -			pr_err("create sysfs files\n");
+> +			dev_err(hcd_dev(hcd), "create sysfs files failed, err = %d\n", err);
+>   			vhci_finish_attr_group();
+>   			return err;
+>   		}
+> 
 
-Hi Alan,
+Looks good to me.
 
-I've tried running the reproducer with CONFIG_HZ=1000 and still got
-the same stall message. It's accompanied by countless "yurex
-6-1:0.101: yurex_interrupt - unknown status received: -71" messages,
-so I believe this is an issue in the yurex driver.
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Why does dumy_hcd require CONFIG_HZ=1000? The comment doesn't really
-explain the reason.
-
-Thanks!
+thanks,
+-- Shuah
