@@ -2,149 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCE9FB4275
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 22:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DD7B4282
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 22:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730576AbfIPUvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 16:51:43 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:52396 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726657AbfIPUvn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 16:51:43 -0400
-Received: (qmail 8224 invoked by uid 2102); 16 Sep 2019 16:51:42 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 16 Sep 2019 16:51:42 -0400
-Date:   Mon, 16 Sep 2019 16:51:42 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <kai.heng.feng@canonical.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mans@mansr.com>, <oneukum@suse.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: general protection fault in usb_set_interface
-In-Reply-To: <000000000000c2531f0592ab96fb@google.com>
-Message-ID: <Pine.LNX.4.44L0.1909161650440.1489-100000@iolanthe.rowland.org>
+        id S1728065AbfIPUxv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 16:53:51 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:39055 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726074AbfIPUxv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 16:53:51 -0400
+Received: by mail-io1-f66.google.com with SMTP id a1so2342337ioc.6
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 13:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HGutlHjL1hPcJfVETM7yg8zwMasPzYpZhM02tt4Go24=;
+        b=u0aWmW+DoQ6SEeBAEAw9YvDS7lFV3IV17Aj10/hlJhIcQIy03Jj3mutkOg4mbfP03G
+         iDQIT9awnoyaIfCpMueWzF/1wdrRcnHtuQVBU1+WauZKwVE/AIaQK5fvV8anSVQNSCg2
+         cWrDxUlxCASFPezCklO9OvutH5bvzWpgBpSOY5oY8Sn6BNFY8uRUuKWdiOELtzJWumZT
+         7wqBKejgtFTRlNk7/9sF7tvqdrldKxYT/gayaiJeL1mrPZ4/aOr8rlGR5bq7akAZ1y0X
+         wBK3RQYLGPniwuC6sL5MzLvTJBTD5E00h6f5YPFeuKFSjDFH2d4kPGch6bVxkRWXS2NR
+         r4Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HGutlHjL1hPcJfVETM7yg8zwMasPzYpZhM02tt4Go24=;
+        b=BdtysBIcgHiJz9PPcX8HDmaCojsaiXPHaJLH+5Ae2y+bVW2gOqDhS2mCLLIlMXviTV
+         meRTRmQjCKUBp9XxvuVM2cncR/dNTMSHcI/tPDsT+0jO/m9nirSySX1XdgvvgFlfjrtq
+         017xk+bseYLSAjbCWNLMfoK8KipSoFUVhuj8NOn0SzLPwz91fGFao2Jolk4+SavRKrpE
+         Cswx0TEzDehVR9mCETE3Wra2lKt+ZgOechRll1XzmXrHs0FSkQx9Z3cHAgd7F+Uw0t9F
+         iQy6LWijRaoZLVEqaOQwtPjDDt3MATx4sU3lGYE4Gh4/Bn3J4PMKxmIPnL6bQoUPT+/c
+         5v6Q==
+X-Gm-Message-State: APjAAAWMKWkmokj9vXGc2SG6IwSG4IRpg3rHp0Ci8UDBM8ktW13kqgBR
+        BMTZ6IxI0jxKXByJ3I+nreeqZa1mLxIO7Dl/n50=
+X-Google-Smtp-Source: APXvYqxRDdH5VNodPNmIZ4l+i7zGDQW70DiruM9n3uX0tT8li60VMp4jk2Cqou9JjchOzt8nO/KyKzBASmnEC2eN0nw=
+X-Received: by 2002:a02:1ac5:: with SMTP id 188mr406724jai.71.1568667230682;
+ Mon, 16 Sep 2019 13:53:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <CANMwUkjb7sCTQKjZG8Dxgta=WrNFc4eRLnCtdbxCx_MJd93oYA@mail.gmail.com>
+ <38c06b3b-d9b3-a175-9fb9-7d13f0501490@linux.intel.com> <CANMwUkj5kyxE21fDutTyPnW9vibpYwG_602YFO6tB=Mkr8905w@mail.gmail.com>
+In-Reply-To: <CANMwUkj5kyxE21fDutTyPnW9vibpYwG_602YFO6tB=Mkr8905w@mail.gmail.com>
+From:   =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>
+Date:   Mon, 16 Sep 2019 22:53:39 +0200
+Message-ID: <CANMwUkjWY0cNV9dJ1YWN+_9LBZb=Wcws7Vw52bR6CBMKyfTTJQ@mail.gmail.com>
+Subject: Re: No SuperSpeedPlus on ASM2142
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 16 Sep 2019, syzbot wrote:
+Le lun. 16 sept. 2019 =C3=A0 17:19, Lo=C3=AFc Yhuel <loic.yhuel@gmail.com> =
+a =C3=A9crit :
+>
+> > Most reliable way of checking the current actual port speed is reading =
+protocol speed id
+> > from the ports PORTSC register port-speed field.
+> > Use debugfs: (with your correct pci address and port number)
+> Currently I have "PortSpeed:4" which matches with the "Gen 1" trace.
+> If I even get a "Gen 2" trace again, I will check.
+>
+Even after several reboots into Linux, I was still getting "Gen 1" /
+"PortSpeed 4".
+So I tried booting into Windows, HWinfo64 showed "Gen 2", then
+rebooting into Linux.
+Then I got "Gen 2" / "PortSpeed: 5" on a 5.3 with the revert, or 5.0 kernel=
+.
+With the Fedora 5.2.14, it was "Gen 1" / "PortSpeed: 5".
+But performance was still the same as Gen 1.
+Reboot of poweroff didn't change anything.
 
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=158b66f1600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f57db9600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127b61a5600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com
-> 
-> usb 3-1: usbvision_write_reg: failed: error -2
-> usbvision_set_audio: can't write iopin register for audio switching
-> kasan: CONFIG_KASAN_INLINE enabled
-> kasan: GPF could be caused by NULL-ptr deref or user memory access
-> general protection fault: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 1955 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> RIP: 0010:usb_set_interface+0x34/0xa50 drivers/usb/core/message.c:1362
-> Code: fc 55 53 48 83 ec 40 89 54 24 18 89 74 24 10 e8 22 1c ef fd 49 8d 7c  
-> 24 48 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-> 85 fb 08 00 00 49 8b 44 24 48 49 8d 7c 24 18 48 89
-> RSP: 0018:ffff8881cb19fd50 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000009 RSI: ffffffff834ebe7e RDI: 0000000000000048
-> RBP: ffff8881cb8e4200 R08: ffffffff88d21878 R09: ffffed103971cb43
-> R10: ffff8881cb19fdc8 R11: ffff8881cb8e5a17 R12: 0000000000000000
-> R13: ffff8881cb8e5a10 R14: ffff8881cb8e4cc8 R15: ffff8881cb8e5178
-> FS:  00007f4f60b6d700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f4f6060c330 CR3: 00000001cc3a8000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   usbvision_radio_close+0x105/0x250  
-> drivers/media/usb/usbvision/usbvision-video.c:1114
->   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
->   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
->   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f4f6069b2b0
-> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-> RSP: 002b:00007ffde2d50ee8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f4f6069b2b0
-> RDX: 00007f4f60951df0 RSI: 0000000000000001 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 00007f4f60951df0 R09: 000000000000000a
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-> R13: 00007ffde2d51040 R14: 0000000000000000 R15: 0000000000000000
-> Modules linked in:
-> ---[ end trace 62bd2b7512ab49ee ]---
-> RIP: 0010:usb_set_interface+0x34/0xa50 drivers/usb/core/message.c:1362
-> Code: fc 55 53 48 83 ec 40 89 54 24 18 89 74 24 10 e8 22 1c ef fd 49 8d 7c  
-> 24 48 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f  
-> 85 fb 08 00 00 49 8b 44 24 48 49 8d 7c 24 18 48 89
-> RSP: 0018:ffff8881cb19fd50 EFLAGS: 00010206
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: 0000000000000009 RSI: ffffffff834ebe7e RDI: 0000000000000048
-> RBP: ffff8881cb8e4200 R08: ffffffff88d21878 R09: ffffed103971cb43
-> R10: ffff8881cb19fdc8 R11: ffff8881cb8e5a17 R12: 0000000000000000
-> R13: ffff8881cb8e5a10 R14: ffff8881cb8e4cc8 R15: ffff8881cb8e5178
-> FS:  00007f4f60b6d700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f4f6060c330 CR3: 00000001cc3a8000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> 
-> 
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+So I tried to play with the BIOS "Fast boot" option, even if it always
+lists the USB drives.
+I rebooted into Windows, HWInfo64 showed Gen 2, I did a performance test wh=
+ich
+returned 510MB/s.
+Then I rebooted into Linux, which then showed "Gen 1" / "PortSpeed: 4", but=
+ the
+performance was now good ! Even after several reboots, or toggling
+"Fast Boot" on/off,
+it didn't change : PortSpeed 4, but performance showing 10 Gbps was working=
+.
 
-Use-after-free bug.
+Then I tried powering off, unplugging AC and the USB cable, then
+booting without it.
+On plug, it was detected as "Gen 2", PortSpeed was 5, and performance was g=
+ood.
+After a reboot (so device plugged on boot), still the same.
+After a poweroff, still the same.
 
-Alan Stern
+So I really don't know how to make sense of this.
+Perhaps a register of the xhci controller had a bad value kept even
+after a poweroff
+due to the standby +5V, and was reset either by the BIOS or Windows at
+some point.
+But that doesn't explain why the PORTSC value was many time incoherent with=
+ the
+performance, in both ways.
 
-#syz test: https://github.com/google/kasan.git f0df5c1b
-
- drivers/media/usb/usbvision/usbvision-video.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
-+++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-@@ -1111,7 +1111,8 @@ static int usbvision_radio_close(struct
- 	mutex_lock(&usbvision->v4l2_lock);
- 	/* Set packet size to 0 */
- 	usbvision->iface_alt = 0;
--	usb_set_interface(usbvision->dev, usbvision->iface,
-+	if (usbvision->dev)
-+		usb_set_interface(usbvision->dev, usbvision->iface,
- 				    usbvision->iface_alt);
- 
- 	usbvision_audio_off(usbvision);
-
+Btw, I found another problem on resuming the system after a suspend :
+[  137.029272] pcieport 0000:00:01.1: PME: Spurious native interrupt!
+...
+[  137.129618] xhci_hcd 0000:08:00.0: WARN: xHC restore state timeout
+[  137.129624] xhci_hcd 0000:08:00.0: PCI post-resume error -110!
+[  137.129625] xhci_hcd 0000:08:00.0: HC died; cleaning up
+[  137.129633] PM: dpm_run_callback(): pci_pm_resume+0x0/0x90 returns -110
+[  137.129636] PM: Device 0000:08:00.0 failed to resume async: error -110
+Then a "echo 1 > remove, then "echo 1 > ../rescan" on sysfs got it back.
+This is a completely different issue, but at least, I can reproduce
+this one reliably.
