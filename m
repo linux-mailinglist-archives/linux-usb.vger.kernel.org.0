@@ -2,76 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24928B3CE7
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 16:52:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9703CB3D84
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 17:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387558AbfIPOwe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 10:52:34 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:2275 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726690AbfIPOwe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Sep 2019 10:52:34 -0400
-Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 0918AE8C31B2C551FB1F;
-        Mon, 16 Sep 2019 22:52:29 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS410-HUB.china.huawei.com (10.3.19.210) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 16 Sep 2019 22:52:20 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <valentina.manea.m@gmail.com>, <shuah@kernel.org>,
-        <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Mao Wenan <maowenan@huawei.com>
-Subject: [PATCH v3] usbip: vhci_hcd indicate failed message
-Date:   Mon, 16 Sep 2019 23:09:21 +0800
-Message-ID: <20190916150921.152977-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <2743ad5b-9348-bd2b-4763-a2a199e6edad@kernel.org>
-References: <2743ad5b-9348-bd2b-4763-a2a199e6edad@kernel.org>
+        id S1730697AbfIPPTn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 11:19:43 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:40306 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725847AbfIPPTn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 11:19:43 -0400
+Received: by mail-io1-f45.google.com with SMTP id h144so79475023iof.7
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 08:19:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=vDE6un5TdIDHWhyTO451c8k0sL9GKNam+arthvJoAr8=;
+        b=FpKQAdljT+aE7I8jAVF1bCU+yeXrN/kzsq3ZmsP1JdIw6taCBaqOuR0oOfysm8xu41
+         v+j3kW3l/dq0y3r8QMTCgmsY+8pSHUtrAikHRhLoPY1SPf37fz4uWMOQYQx9Pc99icrf
+         ml+RS4W+pkcAQCm5GJkEoVVSeeTw3z8IV2ZsgRJfTk2Lnhz+Vj4wuiBtrCrgT7q0Cte4
+         PKLQkG243w3iyH+AZ1+5/o9PoDvPoR9TIS2+YcKgqn9SilPwSkMhOAO5KSPzzlYDjE9T
+         u20DUcURb40t+Akkn/HODlsByOBHYaTN3aT+STrbTwc+J3PsyguqcwKG7OkrNyKuybKv
+         QTUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=vDE6un5TdIDHWhyTO451c8k0sL9GKNam+arthvJoAr8=;
+        b=aar5+XlhinlN0Vjp+Oqu3PgkXX7jRvV9Re88ZrRu8ZOzR265RSLubZZoqY1DUJA7xR
+         MmqEut4EJS4cC4IJFF+ZO/m0JhMv7OCSP3pz1D/1ko+WrHEPS4mVyOGvIF1cfzystyn6
+         /0I5yLBSdKdydg6qhd95RxkguunQapuc8yCR8gjNd0nKaC/QQEvUJXsdXwBPKRAJsLi0
+         U7nGfT92d500pjTnQf2UdFm3TnwBUc1beyImZxdG6z/anfj6tHaT1G/N0wvOX/i/iawV
+         7QQUlv5Oh10S0EvA9zcy9Vy7kbiyAPfNYdHTU/WkZA9ABtFde2vPHnLBm/Tx4kwt3ajF
+         bnQA==
+X-Gm-Message-State: APjAAAXr8twcaK3znvUpWTtG7vT1xh/Zjl1QYoRYo9Bfhze/w0Ko3cAt
+        nwTj80Kb8LkhWIop1chAP9Cjayv3KF9V/M0Lbwk=
+X-Google-Smtp-Source: APXvYqx0ThOcgKCx7Vci/w0CB1wNjnPQfwP/VrC//q47ZUKw295o+sbIuLUyFD+ohLiYYz78j386Aalo8E8+8Zly9B0=
+X-Received: by 2002:a5e:8a43:: with SMTP id o3mr456472iom.296.1568647182542;
+ Mon, 16 Sep 2019 08:19:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+References: <CANMwUkjb7sCTQKjZG8Dxgta=WrNFc4eRLnCtdbxCx_MJd93oYA@mail.gmail.com>
+ <38c06b3b-d9b3-a175-9fb9-7d13f0501490@linux.intel.com>
+In-Reply-To: <38c06b3b-d9b3-a175-9fb9-7d13f0501490@linux.intel.com>
+From:   =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>
+Date:   Mon, 16 Sep 2019 17:19:30 +0200
+Message-ID: <CANMwUkj5kyxE21fDutTyPnW9vibpYwG_602YFO6tB=Mkr8905w@mail.gmail.com>
+Subject: Re: No SuperSpeedPlus on ASM2142
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the return value of vhci_init_attr_group and
-sysfs_create_group is non-zero, which mean they failed
-to init attr_group and create sysfs group, so it would
-better add 'failed' message to indicate that.
-This patch also change pr_err to dev_err to trace which
-device is failed.
+Le lun. 16 sept. 2019 =C3=A0 14:57, Mathias Nyman
+<mathias.nyman@linux.intel.com> a =C3=A9crit :
+> So both places that indicate USB 3.1 support are not according to latest =
+spec,
+> SBRN (Serial Bus Release Number) is 30 instead of 31, and supported proto=
+col
+> capability minor revision is 0x1 instead of 0x10.
+Yes. I searched for firmwares, but I only saw a much older version
+available on Internet.
 
-Fixes: 0775a9cbc694 ("usbip: vhci extension: modifications to vhci driver")
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
----
- v2: change pr_err to dev_err.
- v3: add error code in failed messages.
- drivers/usb/usbip/vhci_hcd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Most reliable way of checking the current actual port speed is reading pr=
+otocol speed id
+> from the ports PORTSC register port-speed field.
+> Use debugfs: (with your correct pci address and port number)
+Currently I have "PortSpeed:4" which matches with the "Gen 1" trace.
+If I even get a "Gen 2" trace again, I will check.
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 000ab7225717..144507751eae 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1185,12 +1185,12 @@ static int vhci_start(struct usb_hcd *hcd)
- 	if (id == 0 && usb_hcd_is_primary_hcd(hcd)) {
- 		err = vhci_init_attr_group();
- 		if (err) {
--			pr_err("init attr group\n");
-+			dev_err(hcd_dev(hcd), "init attr group failed, err = %d\n", err);
- 			return err;
- 		}
- 		err = sysfs_create_group(&hcd_dev(hcd)->kobj, &vhci_attr_group);
- 		if (err) {
--			pr_err("create sysfs files\n");
-+			dev_err(hcd_dev(hcd), "create sysfs files failed, err = %d\n", err);
- 			vhci_finish_attr_group();
- 			return err;
- 		}
--- 
-2.20.1
+> Is the xHCI controller id PCI D0 state even when runtime suspeded?
+> Some ACPI tables end up preventing D3 for runtime suspend, keeping contro=
+ller in D0
+> and possibly preventing PME# wake signaling
+It seems you are right, lspci still shows D0 :
+Flags: PMEClk- DSI- D1- D2- AuxCurrent=3D55mA PME(D0+,D1-,D2-,D3hot-,D3cold=
+-)
+Status: D0 NoSoftRst+ PME-Enable+ DSel=3D0 DScale=3D0 PME-
 
+The other USB controllers (AMD 3.0 and 3.1) have
+"PME(D0+,D1-,D2-,D3hot+,D3cold+)",
+are in D3 state when runtime suspended, and wake up correctly.
+
+Looking at this, I realized the front panel USB3.0 connectors are on the AM=
+D 3.1
+controller, I wonder how they are limited to SuperSpeed (configured by
+the BIOS ?).
