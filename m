@@ -2,129 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85BA9B355E
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 09:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5101DB38F5
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 13:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730633AbfIPHNO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 03:13:14 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:65157 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729732AbfIPHNN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 03:13:13 -0400
-X-UUID: 1f818f2cd1ec455da55e4f37a1a78aee-20190916
-X-UUID: 1f818f2cd1ec455da55e4f37a1a78aee-20190916
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 372390825; Mon, 16 Sep 2019 15:13:01 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33DR.mediatek.inc
- (172.27.6.106) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 16 Sep
- 2019 15:12:59 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Sep 2019 15:12:59 +0800
-Message-ID: <1568617979.7317.76.camel@mhfsdcap03>
-Subject: Re: [Patch V9 6/8] arm64: tegra: Enable xudc on Jetson TX1
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Date:   Mon, 16 Sep 2019 15:12:59 +0800
-In-Reply-To: <1568354873-24073-7-git-send-email-nkristam@nvidia.com>
-References: <1568354873-24073-1-git-send-email-nkristam@nvidia.com>
-         <1568354873-24073-7-git-send-email-nkristam@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1726081AbfIPLEB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 07:04:01 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46199 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfIPLEA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 07:04:00 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a3so1770324pgm.13
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 04:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3iQ30jDPI9tgHQ/2F34EOHXtGRlocpS3nnuynT47dxE=;
+        b=N8Kp3LilmEnKiRu0sB+3Adup8kK/9RPkdCAOz3mj744UGXSfmdM9hX9TCF6S18Ta5x
+         FoRb1mox8Vkw6cFaX29zUnmWbjW5gpGFo1cAYYpposW6g0kYs1QfT84S1FT62SixN8XJ
+         CyI5fbv6mf92OVA/DkHm1ACRnQH5MVq2xUmm2od44Rn+bIS6I26hM+SSAxU8IWZq6tWL
+         FkmjhHFtMBBxGdm3kY+b+WJhHzOqcF2ko3xoTbavNZk60fRXbFkEXR6n5WKugBR0TWf1
+         6Wq9/pNVTFjO/n99oE31lvdIb9LXT3wRkuc9IC14P6KeqfKi8yZNfRFyvLCXtu4snn5u
+         8Hdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3iQ30jDPI9tgHQ/2F34EOHXtGRlocpS3nnuynT47dxE=;
+        b=mBkbgzNM5hd41LFbda7fITOYrQ/fl/U7yovIo7GpHyjHiSiehaqFbX+gyAqviVixvY
+         Y67YKqyPv+4S1vG+Hp6yaEAPKkW5wwLRR31bPwjjiCbggm3JiXec4L2m/YwQ2tWY1BbF
+         nx/3F32SIPmFoDcF/Dk7L6xRwwGXW3uFDB1pGXxf4Nf5GUWbDjKGtzHZJcFuR7uAsVYM
+         4lOeMoANDmTCg9h36BZFIsKVIv8OD667EWIpVgJvlQpuZg8l9mPh/c139ubVo2THvVB7
+         NDWVQ761+LgtNDXFK0AB5/2UFaQW8U+qtkJuetfNp5VcX+QPMG4OBmHB8wDpAr4UhKMO
+         VCzg==
+X-Gm-Message-State: APjAAAUDz0jyz81Qf3fv+bWslIS5opd/xgzcpWz8cldaR2wOcRR9M067
+        tv7no2HBCHDmvUqsNEvaDHg=
+X-Google-Smtp-Source: APXvYqxAuu6uyuNG5fCrzaoNdygH+p30tCiFMPl9KB7NPgWt+8XcWhnWKVY7WSjSaDjygUSHEsDycQ==
+X-Received: by 2002:a17:90a:e290:: with SMTP id d16mr2626716pjz.86.1568631839848;
+        Mon, 16 Sep 2019 04:03:59 -0700 (PDT)
+Received: from localhost.localdomain (180-150-79-77.b4964f.syd.nbn.aussiebb.net. [180.150.79.77])
+        by smtp.gmail.com with ESMTPSA id l62sm59620663pfl.167.2019.09.16.04.03.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Sep 2019 04:03:59 -0700 (PDT)
+From:   Rhys Kidd <rhyskidd@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-accelerators@lists.ozlabs.org,
+        Rhys Kidd <rhyskidd@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: [RFC PATCH 0/1] myriad-ma24xx-vsc: Helper fw driver for AI inference accelerator
+Date:   Mon, 16 Sep 2019 21:03:40 +1000
+Message-Id: <20190916110341.1310-1-rhyskidd@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-Product-Ver: SMEX-12.5.0.1684-8.5.1010-24914.004
-X-TM-AS-Result: No-6.260900-8.000000-10
-X-TMASE-MatchedRID: scwq2vQP8OHmLzc6AOD8DfHkpkyUphL9D+jls0cSwJNSMUnCl2ZytCiq
-        snPUKvF6nb6Z+uUpsD2j9EeGSOD5uMHmypFRLzeBfJy8LojR0khLXPA26IG0hN9RlPzeVuQQnVt
-        gvxMdrIPqUiXvyK0vLoAsU4eLkb8YsQmM31S41hxum3JC5AA1Oo1j+mrGi/PFCuSPuSVW5+7BWk
-        ElSj6UUV0SX0p6tZfVoFW8SPM0GkJNfs8n85Te8oMbH85DUZXylBlY5S+EP6fUZxEAlFPo846HM
-        5rqDwqty+X6UXAKBSEz7qcN3PQZ47SIFtlWoFdIV8SeOB1iUWenhwMcCUuGfA9pt9Vuvq9t50g1
-        BO70D8VyM5AenUwMMVrd8gRCyZfKBt93KmsktusUeH4FmTCnq7pmNLE8W69nMkY/2LNYoZQ10g7
-        fr0IQXQ==
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--6.260900-8.000000
-X-TMASE-Version: SMEX-12.5.0.1684-8.5.1010-24914.004
-X-TM-SNTS-SMTP: 22076F1786B60BA1606AA38DFE81EF11B6F61B78F46793633D2B0E77A51737742000:8
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-09-13 at 11:37 +0530, Nagarjuna Kristam wrote:
-> Enable XUSB device mode driver for USB0 slot on Jetson TX1.
-> 
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> Reviewed-by: JC Kuo <jckuo@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi | 31 +++++++++++++++++++++++++-
->  1 file changed, 30 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> index a7dc319..c1e106e 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi
-> @@ -1362,7 +1362,7 @@
->  				status = "okay";
->  
->  				lanes {
-> -					usb2-0 {
-> +					micro_b: usb2-0 {
->  						nvidia,function = "xusb";
->  						status = "okay";
->  					};
-> @@ -1483,6 +1483,21 @@
->  		vmmc-supply = <&vdd_3v3_sd>;
->  	};
->  
-> +	usb@700d0000 {
-> +		status = "okay";
-> +		phys = <&micro_b>;
-> +		phy-names = "usb2";
-> +		avddio-usb-supply = <&vdd_3v3_sys>;
-> +		hvdd-usb-supply = <&vdd_1v8>;
-> +		usb-role-switch;
-> +
-> +		port {
-> +			usb_role_switch: endpoint {
-> +				remote-endpoint = <&usb_b_conn_ep>;
-> +			};
-> +		};
-> +	};
-> +
->  	regulators {
->  		compatible = "simple-bus";
->  		#address-cells = <1>;
-> @@ -1641,4 +1656,18 @@
->  			linux,code = <KEY_VOLUMEUP>;
->  		};
->  	};
-> +
-> +	usb_type_b: connector {
-> +		compatible = "linux,usb-b-connector", "gpio-usb-b-connector";
-use standard compatible "usb-b-connector" instead of
-"linux,usb-b-connector"
+So this series is an effort to start a conversation in the community, with
+the intent to free the Intel(R) Myriad(TM) ma24xx stack, as found within:
 
-> +		label = "micro-USB";
-> +		type = "micro";
-> +		vbus-gpio = <&gpio TEGRA_GPIO(Z, 0) GPIO_ACTIVE_LOW>;
-> +
-> +		port {
-> +			usb_b_conn_ep: endpoint {
-> +				remote-endpoint = <&usb_role_switch>;
-> +			};
-> +		};
-> +	};
-> +
->  };
+  * USB Intel Neural Compute Stick   (ma2450)
+  * USB Intel Neural Compute Stick 2 (ma2485)
 
+What this patch series is:
+  * RFC for a helper driver that loads a (currently) non-redistributable
+    firmware binary blob for this hotswappable AI inference hardware.
+
+What this patch series is NOT:
+  * Kernel driver that provides clean API access to this AI accelerator.
+  * Any usermode support.
+
+Hardware:
+=======================================================================
+The Myriad ma24xx in the USB Intel Neural Compute Stick and Intel Neural
+Compute Stick 2 provides an API to accelerate AI inference calculations
+on the dedicated SHAVE VLIW vector co-processors, which are orchestrated
+by one or more LEON SPARC v8 real time cores.
+
+This VPU chip is positioned as a specialised low-power processor chip for
+computer vision inference applications. It contains a dedicated hardware
+accelerator for neural network deep-learning inferences.
+
+It was originally designed by Movidius Ltd, who announced they were to be
+acquired by Intel in September 2016.
+
+Boot process:
+=======================================================================
+The core chip is housed within a USB enclosure (there is a different
+variant embedded on a SoC over a local bus, but that's out of scope).
+
+When physically connected to a host system, the accelerator card first
+needs firmware to be loaded for the device to be useable. An uninitialised
+Myriad ma24xx presents with a distinctive USB ID. After firmware
+loading, the device detaches from the USB bus and reattaches with a new
+device ID. It can then be claimed by the usermode driver.
+
+Current software stack:
+=======================================================================
+
++ *
++ * The firmware is non-free and must be extracted by the user.
++ */
+
+Intel packages and distributes a downstream vendor Intel(R) Distribution of
+OpenVINO(TM) toolkit [0] (under a limited proprietary license) for these
+devices which, amongst other binary packages, contains the Deep Learning
+Deployment Toolkit [1] (Apache License Version 2.0).
+
+However, the non-redistributable firmware binary blob that must be loaded
+onto the Myriad ma24xx is not available under a suitable FOSS license.
+
+There have been periods of time during which support for non-x86 host
+platforms (e.g. Raspberry Pi ARMv8 64-bit) were missing or delayed in the
+Intel-distributed downstream vendor fork OpenVINO.
+
+Whilst Movidius was an independent company, a separate (also non-FOSS)
+"Myriad Development Kit" was made available for developers, although it is
+no longer actively supported nor new features developed for it.
+
+Let's try to open more of this stack to FOSS mainline, on any host!
+
+This patch series would provide mainline Linux kernel support to load
+the Myriad ma24xx firmware, were it to become freely licensed.
+
+As the linux-accelerators list is forming as somewhat of a home for Linux
+AI accelerators (training and inference) subsystem, I have copied that list
+as a heads-up to the larger effort to integrate this hardware into a fully
+open stack.
+
+May the RFC comments flood in!
+
+[0] https://software.intel.com/en-us/openvino-toolkit
+[1] https://github.com/opencv/dldt
+
+Note:
+Intel, the Intel logo, Movidius, Myriad, OpenVINO and the OpenVINO logo are
+trademarks of Intel Corporation or its subsidiaries in the U.S. and/or
+other countries.
+
+Rhys Kidd (1):
+  USB: myriad-ma24xx-vsc: Firmware loader driver for USB Myriad ma24xx
+
+ MAINTAINERS                          |   6 +
+ drivers/usb/misc/Kconfig             |   8 ++
+ drivers/usb/misc/Makefile            |   1 +
+ drivers/usb/misc/myriad-ma24xx-vsc.c | 171 +++++++++++++++++++++++++++
+ 4 files changed, 186 insertions(+)
+ create mode 100644 drivers/usb/misc/myriad-ma24xx-vsc.c
+
+-- 
+2.20.1
 
