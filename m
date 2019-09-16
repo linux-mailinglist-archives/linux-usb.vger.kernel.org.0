@@ -2,691 +2,381 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 520E9B336C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 04:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A040B3373
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 04:41:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728026AbfIPCbV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Sep 2019 22:31:21 -0400
-Received: from mail-eopbgr70089.outbound.protection.outlook.com ([40.107.7.89]:36686
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726316AbfIPCbV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Sep 2019 22:31:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VEOuwi4W0L2uYBbkQmC0kcCr+VDDij0NU4eUQPr2QJ4m0Mgz0u+NHh/kLSJQl/GVxTQh8Gi6ES9+dE2LHu+AGNKSOENw+rSIWQ+uj0/xWavX/5nxbv+Eaz3M+Lu/Xdcw+2UyKpCDY+VHDUwb28hlQfpCM8NA3TmAIos9OX3r0xRTC8WIm+XthJuo55Tkql1OHEzSJnC4R++jRGU2dLwSTxdpLlL/dSUslqPGRrxdl+a7CkJZ8YorTYua97QZmTn1GHpeLHiMfty2ZcSiX2/0Mr0BquuEtijHNo3kCoZzIobdyd6UgrzHigCs/XAnxHqKrE4JK7G/VAOgRZKVtmdbOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q8w1dyRgRiinuTDj+02m38WX7FJmrctimCptEyXQgaI=;
- b=J91zkWJz5McugqMPvQKkan2JNAPbjNpnje31rEY7spyozRpk2u/+DMfsq7uGY2NJRKzTtvQZq6poXV0A1x0Q0V75Vrc7h0sDEt9Q4OpBbwE7MNVBTC1d8fpFA0GmU7GgF6plkMd2CBU4mbJ/O/mGQkH5MnIhe3ULkEKkuSGC2LqYY+LMQKthxvjhKp1FJw30SzWDC0CJ8B1WYLfRkBPau9+L2N1+yuEkycoQwICGJ+9Y+v+Ok0E/D04hL9UeB0dLU+a3LVVBJsIPY1v3azA0JX9muhh62sp1Cro4rU/PfasEnuZ+mEfmU+tXC7xFP+f+sOJiUQ21MjaLfzfGQHhdMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q8w1dyRgRiinuTDj+02m38WX7FJmrctimCptEyXQgaI=;
- b=e0+176uuwTp6k9ohrElNjtbjCnzFlDyS3krUAfcC+CUt472eDm5PgQ6k1ZyZEa/7IOiBB8AW5bBECT3vWFGtA+8QxKrEAPiPt7QQLxvEsqbiWj4NeuGpgb/1MoAhd1I3FpvP1outEuqtUqOi3ZR4PAPJkGkP9rHzrqclODC3ADk=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB4336.eurprd04.prod.outlook.com (52.134.122.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2263.20; Mon, 16 Sep 2019 02:31:11 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2263.023; Mon, 16 Sep 2019
- 02:31:10 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     =?iso-8859-1?Q?Andr=E9_Draszik?= <git@andred.net>
-CC:     dl-linux-imx <linux-imx@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "frieder.schrempf@exceet.de" <frieder.schrempf@exceet.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [v5,2/4] usb: chipidea: imx: add HSIC support
-Thread-Topic: [v5,2/4] usb: chipidea: imx: add HSIC support
-Thread-Index: AQHVahhV3PVDXMo7hUKqyCkgYifa3KctmcKA
-Date:   Mon, 16 Sep 2019 02:31:10 +0000
-Message-ID: <20190916023113.GA21844@b29397-desktop>
-References: <20181211020624.9433-3-peter.chen@nxp.com>
- <8b32b04dd746ac2e9afc07d49e824465697182de.camel@andred.net>
-In-Reply-To: <8b32b04dd746ac2e9afc07d49e824465697182de.camel@andred.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b3e5b2b9-7df2-4f4a-7532-08d73a4df004
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB4336;
-x-ms-traffictypediagnostic: VI1PR04MB4336:|VI1PR04MB4336:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB43365F77286DE04164C52F0F8B8C0@VI1PR04MB4336.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0162ACCC24
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(396003)(366004)(376002)(346002)(136003)(39860400002)(189003)(199004)(64756008)(6916009)(86362001)(66946007)(66556008)(76116006)(91956017)(486006)(7736002)(66446008)(66476007)(305945005)(478600001)(25786009)(71200400001)(71190400001)(5660300002)(66066001)(102836004)(6506007)(53546011)(316002)(81166006)(1076003)(81156014)(8676002)(6116002)(30864003)(14444005)(44832011)(256004)(4326008)(4001150100001)(76176011)(6246003)(8936002)(3846002)(26005)(476003)(14454004)(53936002)(229853002)(6512007)(99286004)(9686003)(186003)(6486002)(53946003)(33716001)(11346002)(2906002)(33656002)(6436002)(54906003)(446003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4336;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: f2ear2Ml1ZbDpT0x8CoOkel6+KAOaQ3ClR+Xq+bzFbnBDDqE0MY4hyrFd+9mNRpOZyjw+b3zlliPh3wuatknMSAvmTR4O0ATFMI0XLBMbxnGi0/x2o4fKoZqUMdyAKF8csr8vm7Zy+TlJzBeAK0y4ot0BQkWJVs3yVXJL6iSLGjueYKW14CrXU9oPGwx/NbqkXeNDo1Vx+HfYdIHcueXtxg5jGmyE8zKkV1wPhtPf2XgfPrpvUUvKC3YDtdarQd5jbE/CBY75uhmL/qM8urs1lXuOEKK9IQUHPMS5d3uNwYHSio8N9zpEfoUKAjP6F2qN7SyMgz6F19j4I/PA8RomJdYRBhFlgfrsrCySN4etZKNodjHnnfNXIt7HWS1g1x8UILH+FeMqtV6J0KJcdVLMq1JBqMycWLbk8mnNe9NHps=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <4DA05E293058F34AA754B721D686F2AC@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726875AbfIPClU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Sep 2019 22:41:20 -0400
+Received: from mail-io1-f45.google.com ([209.85.166.45]:33590 "EHLO
+        mail-io1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbfIPClU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Sep 2019 22:41:20 -0400
+Received: by mail-io1-f45.google.com with SMTP id m11so75247968ioo.0
+        for <linux-usb@vger.kernel.org>; Sun, 15 Sep 2019 19:41:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=gIe1rOa/x+KoiZG7VpJqGpmro1lrLk1AtR3WLRXshdI=;
+        b=FkR2GVgVHK6mTgBKi7RbTBAKuL781RnXx2li1EpN6b0DYBhzvz3umeKDkcFBf+RNdu
+         fXbpKeQMPbn6LAcm32DW2xPoSXhZ+pMHj/xLvDCXz7GLAqdsQPdv5iG9UEqVajuebVYP
+         IPPgKN3B7nqMExQpqLmDqh8t7+yr4wHoXOLvYX5jHvT1ntPGru3oJAwD5NKjFPFAMvGl
+         8eB5/Wd6cOOWBSwrM0rQGN4RkDMuuJz/DaosTjkY4f8/5wA/UE8H67Q/N8z9aiMeACXC
+         tG+DZpHmBjNkk+CbGoCZ3hfoLr47TrshO0fdhJ2XM93Np/S6RZgnpB3RA7g5j6Z1WUg6
+         bBng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=gIe1rOa/x+KoiZG7VpJqGpmro1lrLk1AtR3WLRXshdI=;
+        b=KRMzrnjS/CcJBAduw3Ercz+/dFjFRn7xzyP343DNeGa8MrieHX6/PG1vH4twwoxdpG
+         nLZDIqK3rU/czxtIoBH5V4remVApszJ9RePnTtSsmSiZo/7iprap3cnBMITiQ2/IiQ9e
+         ymkT+JokitlKeDs3EQ92V5Gv57+VIR1XoeIqwnePqxGMJbRvLEMLbyyaVmDVEb40aWU9
+         0A7XCWVv2YepTyfw38IXVh7HJ03eOqAL+RuHYimHADJM/RnkRi5BoAFD06M6nU0RdDgs
+         GPpMbfB8zhlpFl1Ebk41oHfjMCv2ga0/HI7AJwm7mw1SjYz/RqZp5sC/vMiZjGus2rQz
+         1h4g==
+X-Gm-Message-State: APjAAAUxsMyA+9/fRBI+nMnYbRWBDtMD+0iRr8EAeJAOdT/lxo7yHpgF
+        zhVpJjmNcGfU1OlcfJ/Pj3fd8sugek/wLWrKMjoQFPuf
+X-Google-Smtp-Source: APXvYqw4+VxCfW6DxT11/LIQFPgqKvjgFSSiETr+GYnLTNH1aECnYtcInxaJO/P/PgZ1NOPv19hovrk7N/BJmORgLnY=
+X-Received: by 2002:a05:6638:1f5:: with SMTP id t21mr15224978jaq.119.1568601678730;
+ Sun, 15 Sep 2019 19:41:18 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b3e5b2b9-7df2-4f4a-7532-08d73a4df004
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2019 02:31:10.7982
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: WC2rcZQiHk/5chXZxBrSW4iIpg+Kfg3ZRbbyXXY5SYTIIF1Xz1wbyn2NmWnaXK0ZMgKuHi2pUYu4qOwIaL5Pyw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4336
+From:   =?UTF-8?Q?Lo=C3=AFc_Yhuel?= <loic.yhuel@gmail.com>
+Date:   Mon, 16 Sep 2019 04:41:07 +0200
+Message-ID: <CANMwUkjb7sCTQKjZG8Dxgta=WrNFc4eRLnCtdbxCx_MJd93oYA@mail.gmail.com>
+Subject: No SuperSpeedPlus on ASM2142
+To:     linux-usb@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000db45080592a28962"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-09-13 10:47:58, Andr=E9 Draszik wrote:
-> Hi Peter,
->=20
-> On Tue, 2018-12-11 at 02:08 +0000, Peter Chen wrote:
-> > To support imx HSIC, there are some special requirement:
-> > - The HSIC pad is 1.2v, it may need to supply from external
-> > - The data/strobe pin needs to be pulled down first, and after
-> >   host mode is initialized, the strobe pin needs to be pulled up
-> > - During the USB suspend/resume, special setting is needed
->=20
-> I have an imx7d based board that is using the USBH/HSIC port.
->=20
-> This USB-port isn't working with this commit because the pinctrl
-> is non-optional (as opposed to the NXP kernel 4.19.35 where
-> the pinctrl is optional and it appears to work fine for us
-> without).
->=20
-> Now, I'd like to make it work with your patch here, but I
-> am not sure the relevant pinmux setting is documented in
-> the IMX7D applications processor reference manual
-> IMX7DRM.pdf that I have.
+--000000000000db45080592a28962
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Andre,
+Hello,
 
-Thanks for reporting it. i.MX7D uses different HSIC controller
-compares with imx6, and there are dedicated HSIC pins which
-doesn't need configure pinmux. So the suitable solution is
-getting pinmux optional, a patch to improve it is welcome.
+I'm trying to get Gen 2 working on this controller.
+It drives 2 USB ports on the back panel of an ASUS Prime X399-A (latest BIOS).
+ASM2142 FW is 170308_70_02_00 (seen with ASM2142A_MPTool on Windows).
+On Windows 10 it uses the Microsoft xhci driver, and Gen 2 works.
 
-Peter
+On 5.3, I get :
+[    1.008270] xhci_hcd 0000:08:00.0: Host supports USB 3.0 SuperSpeed
+...
+[    1.333145] usb 4-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
 
->=20
-> As far as I understand, I need to provide sth like the following:
->=20
-> &usbh {
->         ...
->         pinctrl-names =3D "idle", "active";
->         pinctrl-0 =3D <&pinctrl_usbh_idle>;
->         pinctrl-1 =3D <&pinctrl_usbh_active>;
->         ...
-> };
->=20
-> pinctrl_usbh_idle: usbhgrp-idle {
->         fsl,pins =3D <
->                 MX7D_PAD_USB_H_DATA__USB_H_DATA         0x........
->                 MX7D_PAD_USB_H_STROBE__USB_H_STROBE     0x........
->         >;
-> };
->=20
-> pinctrl_usbh_active: usbhgrp-active {
->         fsl,pins =3D <
->                 MX7D_PAD_USB_H_DATA__USB_H_DATA         0x........
->                 MX7D_PAD_USB_H_STROBE__USB_H_STROBE     0x........
->          >;
-> };
->=20
->=20
-> Can you help or point me to the relevant documentation please for
-> defining MX7D_PAD_USB_H_DATA__USB_H_DATA &
-> MX7D_PAD_USB_H_STROBE__USB_H_STROBE and their register settings?
->=20
-> Given USB_H_DATA and USB_H_STROBE don't appear to be board specific
-> 'No muxing' is mentioned in IMX7DRM), should any such configuration
-> really go into imx7s.dtsi?
->=20
-> Alternatively, given that this works without the extra pinctrl
-> dance in the i.MX specific kernel, is it really needed on i.MX7,
-> or can the driver be changed to make this optional here as well?
-> What is the right approach?
->=20
->=20
-> Cheers,
-> Andre'
->=20
->=20
->=20
->=20
-> >=20
-> > Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> > ---
-> >  drivers/usb/chipidea/ci_hdrc_imx.c | 140 +++++++++++++++++++++++++++++=
-+++-----
-> >  drivers/usb/chipidea/ci_hdrc_imx.h |   9 ++-
-> >  drivers/usb/chipidea/usbmisc_imx.c | 140 +++++++++++++++++++++++++++++=
-++++++++
-> >  3 files changed, 270 insertions(+), 19 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/=
-ci_hdrc_imx.c
-> > index 09b37c0d075d..56781c329db0 100644
-> > --- a/drivers/usb/chipidea/ci_hdrc_imx.c
-> > +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/usb/chipidea.h>
-> >  #include <linux/usb/of.h>
-> >  #include <linux/clk.h>
-> > +#include <linux/pinctrl/consumer.h>
-> > =20
-> >  #include "ci.h"
-> >  #include "ci_hdrc_imx.h"
-> > @@ -85,6 +86,9 @@ struct ci_hdrc_imx_data {
-> >  	bool supports_runtime_pm;
-> >  	bool override_phy_control;
-> >  	bool in_lpm;
-> > +	struct pinctrl *pinctrl;
-> > +	struct pinctrl_state *pinctrl_hsic_active;
-> > +	struct regulator *hsic_pad_regulator;
-> >  	/* SoC before i.mx6 (except imx23/imx28) needs three clks */
-> >  	bool need_three_clks;
-> >  	struct clk *clk_ipg;
-> > @@ -245,19 +249,49 @@ static void imx_disable_unprepare_clks(struct dev=
-ice *dev)
-> >  	}
-> >  }
-> > =20
-> > +static int ci_hdrc_imx_notify_event(struct ci_hdrc *ci, unsigned int e=
-vent)
-> > +{
-> > +	struct device *dev =3D ci->dev->parent;
-> > +	struct ci_hdrc_imx_data *data =3D dev_get_drvdata(dev);
-> > +	int ret =3D 0;
-> > +
-> > +	switch (event) {
-> > +	case CI_HDRC_IMX_HSIC_ACTIVE_EVENT:
-> > +		ret =3D pinctrl_select_state(data->pinctrl,
-> > +				data->pinctrl_hsic_active);
-> > +		if (ret)
-> > +			dev_err(dev, "hsic_active select failed, err=3D%d\n",
-> > +				ret);
-> > +		break;
-> > +	case CI_HDRC_IMX_HSIC_SUSPEND_EVENT:
-> > +		ret =3D imx_usbmisc_hsic_set_connect(data->usbmisc_data);
-> > +		if (ret)
-> > +			dev_err(dev,
-> > +				"hsic_set_connect failed, err=3D%d\n", ret);
-> > +		break;
-> > +	default:
-> > +		break;
-> > +	}
-> > +
-> > +	return ret;
-> > +}
-> > +
-> >  static int ci_hdrc_imx_probe(struct platform_device *pdev)
-> >  {
-> >  	struct ci_hdrc_imx_data *data;
-> >  	struct ci_hdrc_platform_data pdata =3D {
-> >  		.name		=3D dev_name(&pdev->dev),
-> >  		.capoffset	=3D DEF_CAPOFFSET,
-> > +		.notify_event	=3D ci_hdrc_imx_notify_event,
-> >  	};
-> >  	int ret;
-> >  	const struct of_device_id *of_id;
-> >  	const struct ci_hdrc_imx_platform_flag *imx_platform_flag;
-> >  	struct device_node *np =3D pdev->dev.of_node;
-> > +	struct device *dev =3D &pdev->dev;
-> > +	struct pinctrl_state *pinctrl_hsic_idle;
-> > =20
-> > -	of_id =3D of_match_device(ci_hdrc_imx_dt_ids, &pdev->dev);
-> > +	of_id =3D of_match_device(ci_hdrc_imx_dt_ids, dev);
-> >  	if (!of_id)
-> >  		return -ENODEV;
-> > =20
-> > @@ -268,19 +302,73 @@ static int ci_hdrc_imx_probe(struct platform_devi=
-ce *pdev)
-> >  		return -ENOMEM;
-> > =20
-> >  	platform_set_drvdata(pdev, data);
-> > -	data->usbmisc_data =3D usbmisc_get_init_data(&pdev->dev);
-> > +	data->usbmisc_data =3D usbmisc_get_init_data(dev);
-> >  	if (IS_ERR(data->usbmisc_data))
-> >  		return PTR_ERR(data->usbmisc_data);
-> > =20
-> > -	ret =3D imx_get_clks(&pdev->dev);
-> > +	if (of_usb_get_phy_mode(dev->of_node) =3D=3D USBPHY_INTERFACE_MODE_HS=
-IC) {
-> > +		pdata.flags |=3D CI_HDRC_IMX_IS_HSIC;
-> > +		data->usbmisc_data->hsic =3D 1;
-> > +		data->pinctrl =3D devm_pinctrl_get(dev);
-> > +		if (IS_ERR(data->pinctrl)) {
-> > +			dev_err(dev, "pinctrl get failed, err=3D%ld\n",
-> > +					PTR_ERR(data->pinctrl));
-> > +			return PTR_ERR(data->pinctrl);
-> > +		}
-> > +
-> > +		pinctrl_hsic_idle =3D pinctrl_lookup_state(data->pinctrl, "idle");
-> > +		if (IS_ERR(pinctrl_hsic_idle)) {
-> > +			dev_err(dev,
-> > +				"pinctrl_hsic_idle lookup failed, err=3D%ld\n",
-> > +					PTR_ERR(pinctrl_hsic_idle));
-> > +			return PTR_ERR(pinctrl_hsic_idle);
-> > +		}
-> > +
-> > +		ret =3D pinctrl_select_state(data->pinctrl, pinctrl_hsic_idle);
-> > +		if (ret) {
-> > +			dev_err(dev, "hsic_idle select failed, err=3D%d\n", ret);
-> > +			return ret;
-> > +		}
-> > +
-> > +		data->pinctrl_hsic_active =3D pinctrl_lookup_state(data->pinctrl,
-> > +								"active");
-> > +		if (IS_ERR(data->pinctrl_hsic_active)) {
-> > +			dev_err(dev,
-> > +				"pinctrl_hsic_active lookup failed, err=3D%ld\n",
-> > +					PTR_ERR(data->pinctrl_hsic_active));
-> > +			return PTR_ERR(data->pinctrl_hsic_active);
-> > +		}
-> > +
-> > +		data->hsic_pad_regulator =3D devm_regulator_get(dev, "hsic");
-> > +		if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -EPROBE_DEFER) {
-> > +			return -EPROBE_DEFER;
-> > +		} else if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -ENODEV) {
-> > +			/* no pad regualator is needed */
-> > +			data->hsic_pad_regulator =3D NULL;
-> > +		} else if (IS_ERR(data->hsic_pad_regulator)) {
-> > +			dev_err(dev, "Get HSIC pad regulator error: %ld\n",
-> > +					PTR_ERR(data->hsic_pad_regulator));
-> > +			return PTR_ERR(data->hsic_pad_regulator);
-> > +		}
-> > +
-> > +		if (data->hsic_pad_regulator) {
-> > +			ret =3D regulator_enable(data->hsic_pad_regulator);
-> > +			if (ret) {
-> > +				dev_err(dev,
-> > +					"Failed to enable HSIC pad regulator\n");
-> > +				return ret;
-> > +			}
-> > +		}
-> > +	}
-> > +	ret =3D imx_get_clks(dev);
-> >  	if (ret)
-> > -		return ret;
-> > +		goto disable_hsic_regulator;
-> > =20
-> > -	ret =3D imx_prepare_enable_clks(&pdev->dev);
-> > +	ret =3D imx_prepare_enable_clks(dev);
-> >  	if (ret)
-> > -		return ret;
-> > +		goto disable_hsic_regulator;
-> > =20
-> > -	data->phy =3D devm_usb_get_phy_by_phandle(&pdev->dev, "fsl,usbphy", 0=
-);
-> > +	data->phy =3D devm_usb_get_phy_by_phandle(dev, "fsl,usbphy", 0);
-> >  	if (IS_ERR(data->phy)) {
-> >  		ret =3D PTR_ERR(data->phy);
-> >  		/* Return -EINVAL if no usbphy is available */
-> > @@ -305,40 +393,43 @@ static int ci_hdrc_imx_probe(struct platform_devi=
-ce *pdev)
-> > =20
-> >  	ret =3D imx_usbmisc_init(data->usbmisc_data);
-> >  	if (ret) {
-> > -		dev_err(&pdev->dev, "usbmisc init failed, ret=3D%d\n", ret);
-> > +		dev_err(dev, "usbmisc init failed, ret=3D%d\n", ret);
-> >  		goto err_clk;
-> >  	}
-> > =20
-> > -	data->ci_pdev =3D ci_hdrc_add_device(&pdev->dev,
-> > +	data->ci_pdev =3D ci_hdrc_add_device(dev,
-> >  				pdev->resource, pdev->num_resources,
-> >  				&pdata);
-> >  	if (IS_ERR(data->ci_pdev)) {
-> >  		ret =3D PTR_ERR(data->ci_pdev);
-> >  		if (ret !=3D -EPROBE_DEFER)
-> > -			dev_err(&pdev->dev,
-> > -				"ci_hdrc_add_device failed, err=3D%d\n", ret);
-> > +			dev_err(dev, "ci_hdrc_add_device failed, err=3D%d\n",
-> > +					ret);
-> >  		goto err_clk;
-> >  	}
-> > =20
-> >  	ret =3D imx_usbmisc_init_post(data->usbmisc_data);
-> >  	if (ret) {
-> > -		dev_err(&pdev->dev, "usbmisc post failed, ret=3D%d\n", ret);
-> > +		dev_err(dev, "usbmisc post failed, ret=3D%d\n", ret);
-> >  		goto disable_device;
-> >  	}
-> > =20
-> >  	if (data->supports_runtime_pm) {
-> > -		pm_runtime_set_active(&pdev->dev);
-> > -		pm_runtime_enable(&pdev->dev);
-> > +		pm_runtime_set_active(dev);
-> > +		pm_runtime_enable(dev);
-> >  	}
-> > =20
-> > -	device_set_wakeup_capable(&pdev->dev, true);
-> > +	device_set_wakeup_capable(dev, true);
-> > =20
-> >  	return 0;
-> > =20
-> >  disable_device:
-> >  	ci_hdrc_remove_device(data->ci_pdev);
-> >  err_clk:
-> > -	imx_disable_unprepare_clks(&pdev->dev);
-> > +	imx_disable_unprepare_clks(dev);
-> > +disable_hsic_regulator:
-> > +	if (data->hsic_pad_regulator)
-> > +		ret =3D regulator_disable(data->hsic_pad_regulator);
-> >  	return ret;
-> >  }
-> > =20
-> > @@ -355,6 +446,8 @@ static int ci_hdrc_imx_remove(struct platform_devic=
-e *pdev)
-> >  	if (data->override_phy_control)
-> >  		usb_phy_shutdown(data->phy);
-> >  	imx_disable_unprepare_clks(&pdev->dev);
-> > +	if (data->hsic_pad_regulator)
-> > +		regulator_disable(data->hsic_pad_regulator);
-> > =20
-> >  	return 0;
-> >  }
-> > @@ -367,9 +460,16 @@ static void ci_hdrc_imx_shutdown(struct platform_d=
-evice *pdev)
-> >  static int __maybe_unused imx_controller_suspend(struct device *dev)
-> >  {
-> >  	struct ci_hdrc_imx_data *data =3D dev_get_drvdata(dev);
-> > +	int ret =3D 0;
-> > =20
-> >  	dev_dbg(dev, "at %s\n", __func__);
-> > =20
-> > +	ret =3D imx_usbmisc_hsic_set_clk(data->usbmisc_data, false);
-> > +	if (ret) {
-> > +		dev_err(dev, "usbmisc hsic_set_clk failed, ret=3D%d\n", ret);
-> > +		return ret;
-> > +	}
-> > +
-> >  	imx_disable_unprepare_clks(dev);
-> >  	data->in_lpm =3D true;
-> > =20
-> > @@ -400,8 +500,16 @@ static int __maybe_unused imx_controller_resume(st=
-ruct device *dev)
-> >  		goto clk_disable;
-> >  	}
-> > =20
-> > +	ret =3D imx_usbmisc_hsic_set_clk(data->usbmisc_data, true);
-> > +	if (ret) {
-> > +		dev_err(dev, "usbmisc hsic_set_clk failed, ret=3D%d\n", ret);
-> > +		goto hsic_set_clk_fail;
-> > +	}
-> > +
-> >  	return 0;
-> > =20
-> > +hsic_set_clk_fail:
-> > +	imx_usbmisc_set_wakeup(data->usbmisc_data, true);
-> >  clk_disable:
-> >  	imx_disable_unprepare_clks(dev);
-> >  	return ret;
-> > diff --git a/drivers/usb/chipidea/ci_hdrc_imx.h b/drivers/usb/chipidea/=
-ci_hdrc_imx.h
-> > index 204275f47573..fcecab478934 100644
-> > --- a/drivers/usb/chipidea/ci_hdrc_imx.h
-> > +++ b/drivers/usb/chipidea/ci_hdrc_imx.h
-> > @@ -14,10 +14,13 @@ struct imx_usbmisc_data {
-> >  	unsigned int oc_polarity:1; /* over current polarity if oc enabled */
-> >  	unsigned int evdo:1; /* set external vbus divider option */
-> >  	unsigned int ulpi:1; /* connected to an ULPI phy */
-> > +	unsigned int hsic:1; /* HSIC controlller */
-> >  };
-> > =20
-> > -int imx_usbmisc_init(struct imx_usbmisc_data *);
-> > -int imx_usbmisc_init_post(struct imx_usbmisc_data *);
-> > -int imx_usbmisc_set_wakeup(struct imx_usbmisc_data *, bool);
-> > +int imx_usbmisc_init(struct imx_usbmisc_data *data);
-> > +int imx_usbmisc_init_post(struct imx_usbmisc_data *data);
-> > +int imx_usbmisc_set_wakeup(struct imx_usbmisc_data *data, bool enabled=
-);
-> > +int imx_usbmisc_hsic_set_connect(struct imx_usbmisc_data *data);
-> > +int imx_usbmisc_hsic_set_clk(struct imx_usbmisc_data *data, bool on);
-> > =20
-> >  #endif /* __DRIVER_USB_CHIPIDEA_CI_HDRC_IMX_H */
-> > diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/=
-usbmisc_imx.c
-> > index def80ff547e4..43a15a6e86f5 100644
-> > --- a/drivers/usb/chipidea/usbmisc_imx.c
-> > +++ b/drivers/usb/chipidea/usbmisc_imx.c
-> > @@ -64,10 +64,22 @@
-> >  #define MX6_BM_OVER_CUR_DIS		BIT(7)
-> >  #define MX6_BM_OVER_CUR_POLARITY	BIT(8)
-> >  #define MX6_BM_WAKEUP_ENABLE		BIT(10)
-> > +#define MX6_BM_UTMI_ON_CLOCK		BIT(13)
-> >  #define MX6_BM_ID_WAKEUP		BIT(16)
-> >  #define MX6_BM_VBUS_WAKEUP		BIT(17)
-> >  #define MX6SX_BM_DPDM_WAKEUP_EN		BIT(29)
-> >  #define MX6_BM_WAKEUP_INTR		BIT(31)
-> > +
-> > +#define MX6_USB_HSIC_CTRL_OFFSET	0x10
-> > +/* Send resume signal without 480Mhz PHY clock */
-> > +#define MX6SX_BM_HSIC_AUTO_RESUME	BIT(23)
-> > +/* set before portsc.suspendM =3D 1 */
-> > +#define MX6_BM_HSIC_DEV_CONN		BIT(21)
-> > +/* HSIC enable */
-> > +#define MX6_BM_HSIC_EN			BIT(12)
-> > +/* Force HSIC module 480M clock on, even when in Host is in suspend mo=
-de */
-> > +#define MX6_BM_HSIC_CLK_ON		BIT(11)
-> > +
-> >  #define MX6_USB_OTG1_PHY_CTRL		0x18
-> >  /* For imx6dql, it is host-only controller, for later imx6, it is otg'=
-s */
-> >  #define MX6_USB_OTG2_PHY_CTRL		0x1c
-> > @@ -94,6 +106,10 @@ struct usbmisc_ops {
-> >  	int (*post)(struct imx_usbmisc_data *data);
-> >  	/* It's called when we need to enable/disable usb wakeup */
-> >  	int (*set_wakeup)(struct imx_usbmisc_data *data, bool enabled);
-> > +	/* It's called before setting portsc.suspendM */
-> > +	int (*hsic_set_connect)(struct imx_usbmisc_data *data);
-> > +	/* It's called during suspend/resume */
-> > +	int (*hsic_set_clk)(struct imx_usbmisc_data *data, bool enabled);
-> >  };
-> > =20
-> >  struct imx_usbmisc {
-> > @@ -353,6 +369,18 @@ static int usbmisc_imx6q_init(struct imx_usbmisc_d=
-ata *data)
-> >  	writel(reg | MX6_BM_NON_BURST_SETTING,
-> >  			usbmisc->base + data->index * 4);
-> > =20
-> > +	/* For HSIC controller */
-> > +	if (data->hsic) {
-> > +		reg =3D readl(usbmisc->base + data->index * 4);
-> > +		writel(reg | MX6_BM_UTMI_ON_CLOCK,
-> > +			usbmisc->base + data->index * 4);
-> > +		reg =3D readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET
-> > +			+ (data->index - 2) * 4);
-> > +		reg |=3D MX6_BM_HSIC_EN | MX6_BM_HSIC_CLK_ON;
-> > +		writel(reg, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET
-> > +			+ (data->index - 2) * 4);
-> > +	}
-> > +
-> >  	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > =20
-> >  	usbmisc_imx6q_set_wakeup(data, false);
-> > @@ -360,6 +388,79 @@ static int usbmisc_imx6q_init(struct imx_usbmisc_d=
-ata *data)
-> >  	return 0;
-> >  }
-> > =20
-> > +static int usbmisc_imx6_hsic_get_reg_offset(struct imx_usbmisc_data *d=
-ata)
-> > +{
-> > +	int offset, ret =3D 0;
-> > +
-> > +	if (data->index =3D=3D 2 || data->index =3D=3D 3) {
-> > +		offset =3D (data->index - 2) * 4;
-> > +	} else if (data->index =3D=3D 0) {
-> > +		/*
-> > +		 * For SoCs like i.MX7D and later, each USB controller has
-> > +		 * its own non-core register region. For SoCs before i.MX7D,
-> > +		 * the first two USB controllers are non-HSIC controllers.
-> > +		 */
-> > +		offset =3D 0;
-> > +	} else {
-> > +		dev_err(data->dev, "index is error for usbmisc\n");
-> > +		ret =3D -EINVAL;
-> > +	}
-> > +
-> > +	return ret ? ret : offset;
-> > +}
-> > +
-> > +static int usbmisc_imx6_hsic_set_connect(struct imx_usbmisc_data *data=
-)
-> > +{
-> > +	unsigned long flags;
-> > +	u32 val;
-> > +	struct imx_usbmisc *usbmisc =3D dev_get_drvdata(data->dev);
-> > +	int offset;
-> > +
-> > +	spin_lock_irqsave(&usbmisc->lock, flags);
-> > +	offset =3D usbmisc_imx6_hsic_get_reg_offset(data);
-> > +	if (offset < 0) {
-> > +		spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > +		return offset;
-> > +	}
-> > +
-> > +	val =3D readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> > +	if (!(val & MX6_BM_HSIC_DEV_CONN))
-> > +		writel(val | MX6_BM_HSIC_DEV_CONN,
-> > +			usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> > +
-> > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int usbmisc_imx6_hsic_set_clk(struct imx_usbmisc_data *data, bo=
-ol on)
-> > +{
-> > +	unsigned long flags;
-> > +	u32 val;
-> > +	struct imx_usbmisc *usbmisc =3D dev_get_drvdata(data->dev);
-> > +	int offset;
-> > +
-> > +	spin_lock_irqsave(&usbmisc->lock, flags);
-> > +	offset =3D usbmisc_imx6_hsic_get_reg_offset(data);
-> > +	if (offset < 0) {
-> > +		spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > +		return offset;
-> > +	}
-> > +
-> > +	val =3D readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> > +	val |=3D MX6_BM_HSIC_EN | MX6_BM_HSIC_CLK_ON;
-> > +	if (on)
-> > +		val |=3D MX6_BM_HSIC_CLK_ON;
-> > +	else
-> > +		val &=3D ~MX6_BM_HSIC_CLK_ON;
-> > +
-> > +	writel(val, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET + offset);
-> > +	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +
-> >  static int usbmisc_imx6sx_init(struct imx_usbmisc_data *data)
-> >  {
-> >  	void __iomem *reg =3D NULL;
-> > @@ -385,6 +486,13 @@ static int usbmisc_imx6sx_init(struct imx_usbmisc_=
-data *data)
-> >  		spin_unlock_irqrestore(&usbmisc->lock, flags);
-> >  	}
-> > =20
-> > +	/* For HSIC controller */
-> > +	if (data->hsic) {
-> > +		val =3D readl(usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-> > +		val |=3D MX6SX_BM_HSIC_AUTO_RESUME;
-> > +		writel(val, usbmisc->base + MX6_USB_HSIC_CTRL_OFFSET);
-> > +	}
-> > +
-> >  	return 0;
-> >  }
-> > =20
-> > @@ -454,6 +562,7 @@ static int usbmisc_imx7d_init(struct imx_usbmisc_da=
-ta *data)
-> >  	reg &=3D ~MX7D_USB_VBUS_WAKEUP_SOURCE_MASK;
-> >  	writel(reg | MX7D_USB_VBUS_WAKEUP_SOURCE_BVALID,
-> >  		 usbmisc->base + MX7D_USBNC_USB_CTRL2);
-> > +
-> >  	spin_unlock_irqrestore(&usbmisc->lock, flags);
-> > =20
-> >  	usbmisc_imx7d_set_wakeup(data, false);
-> > @@ -481,6 +590,8 @@ static const struct usbmisc_ops imx53_usbmisc_ops =
-=3D {
-> >  static const struct usbmisc_ops imx6q_usbmisc_ops =3D {
-> >  	.set_wakeup =3D usbmisc_imx6q_set_wakeup,
-> >  	.init =3D usbmisc_imx6q_init,
-> > +	.hsic_set_connect =3D usbmisc_imx6_hsic_set_connect,
-> > +	.hsic_set_clk   =3D usbmisc_imx6_hsic_set_clk,
-> >  };
-> > =20
-> >  static const struct usbmisc_ops vf610_usbmisc_ops =3D {
-> > @@ -490,6 +601,8 @@ static const struct usbmisc_ops vf610_usbmisc_ops =
-=3D {
-> >  static const struct usbmisc_ops imx6sx_usbmisc_ops =3D {
-> >  	.set_wakeup =3D usbmisc_imx6q_set_wakeup,
-> >  	.init =3D usbmisc_imx6sx_init,
-> > +	.hsic_set_connect =3D usbmisc_imx6_hsic_set_connect,
-> > +	.hsic_set_clk =3D usbmisc_imx6_hsic_set_clk,
-> >  };
-> > =20
-> >  static const struct usbmisc_ops imx7d_usbmisc_ops =3D {
-> > @@ -546,6 +659,33 @@ int imx_usbmisc_set_wakeup(struct imx_usbmisc_data=
- *data, bool enabled)
-> >  }
-> >  EXPORT_SYMBOL_GPL(imx_usbmisc_set_wakeup);
-> > =20
-> > +int imx_usbmisc_hsic_set_connect(struct imx_usbmisc_data *data)
-> > +{
-> > +	struct imx_usbmisc *usbmisc;
-> > +
-> > +	if (!data)
-> > +		return 0;
-> > +
-> > +	usbmisc =3D dev_get_drvdata(data->dev);
-> > +	if (!usbmisc->ops->hsic_set_connect || !data->hsic)
-> > +		return 0;
-> > +	return usbmisc->ops->hsic_set_connect(data);
-> > +}
-> > +EXPORT_SYMBOL_GPL(imx_usbmisc_hsic_set_connect);
-> > +
-> > +int imx_usbmisc_hsic_set_clk(struct imx_usbmisc_data *data, bool on)
-> > +{
-> > +	struct imx_usbmisc *usbmisc;
-> > +
-> > +	if (!data)
-> > +		return 0;
-> > +
-> > +	usbmisc =3D dev_get_drvdata(data->dev);
-> > +	if (!usbmisc->ops->hsic_set_clk || !data->hsic)
-> > +		return 0;
-> > +	return usbmisc->ops->hsic_set_clk(data, on);
-> > +}
-> > +EXPORT_SYMBOL_GPL(imx_usbmisc_hsic_set_clk);
-> >  static const struct of_device_id usbmisc_imx_dt_ids[] =3D {
-> >  	{
-> >  		.compatible =3D "fsl,imx25-usbmisc",
->=20
+lsusb shows 10 Gbps support in "SuperSpeedPlus USB Device Capability" for
+both the root hub and the device.
 
---=20
+For the root hub, commit ddd57980 broke the detection, since
+xhci->usb3_rhub.min_rev is 0x1 instead of expected 0x10 (SBRN is 0x30).
+Reverting it changes to "Host supports USB 3.1 Enhanced SuperSpeed", and the
+speed of the root hub is 10000 in sysfs.
+However, I only got the device detected as "SuperSpeedPlus Gen 2 USB" once,
+and the performance didn't increase, so even if the "speed" in sysfs was 10000,
+I think it didn't work. After a reboot, it reverted to being detected as Gen 1.
 
-Thanks,
-Peter Chen=
+The device (JMS580 USB Gen 2 to SATA bridge, with an SSD) seems to have a
+performance issue on Gen 1 (doesn't depend on the controller or the OS), with
+about 280MB/s read (almost the same without UAS).
+But Gen 2 on Windows gives 510MB/s read, so even the only time Linux reported
+10 Gbps speed, if it was working "hdparm -t" should have improved.
+
+As a side note, the runtime power management doesn't seem to work either, but
+since it isn't the default configuration, unless this controller is
+used on laptops
+it probably doesn't matter.
+If the power/control of the PCIe device and its two root hubs are all set to
+"auto", it is suspended if there is no USB device, and doesn't wake up on plug.
+
+--000000000000db45080592a28962
+Content-Type: text/plain; charset="US-ASCII"; name="lsusb_5.3.txt"
+Content-Disposition: attachment; filename="lsusb_5.3.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k0lrpff02>
+X-Attachment-Id: f_k0lrpff02
+
+QnVzIDAwNCBEZXZpY2UgMDAyOiBJRCAwNTc4OjA1NzggSW50cmluc2l4IENvcnAuIEpNUzU4MA0K
+RGV2aWNlIERlc2NyaXB0b3I6DQogIGJMZW5ndGggICAgICAgICAgICAgICAgMTgNCiAgYkRlc2Ny
+aXB0b3JUeXBlICAgICAgICAgMQ0KICBiY2RVU0IgICAgICAgICAgICAgICAzLjEwDQogIGJEZXZp
+Y2VDbGFzcyAgICAgICAgICAgIDAgDQogIGJEZXZpY2VTdWJDbGFzcyAgICAgICAgIDAgDQogIGJE
+ZXZpY2VQcm90b2NvbCAgICAgICAgIDAgDQogIGJNYXhQYWNrZXRTaXplMCAgICAgICAgIDkNCiAg
+aWRWZW5kb3IgICAgICAgICAgIDB4MDU3OCBJbnRyaW5zaXggQ29ycC4NCiAgaWRQcm9kdWN0ICAg
+ICAgICAgIDB4MDU3OCANCiAgYmNkRGV2aWNlICAgICAgICAgICA0MS4wMQ0KICBpTWFudWZhY3R1
+cmVyICAgICAgICAgICAxIEpNaWNyb24NCiAgaVByb2R1Y3QgICAgICAgICAgICAgICAgMiBKTVM1
+ODANCiAgaVNlcmlhbCAgICAgICAgICAgICAgICAgMyAwMDAwMDAwMDExMTQwMzA1NDFDQg0KICBi
+TnVtQ29uZmlndXJhdGlvbnMgICAgICAxDQogIENvbmZpZ3VyYXRpb24gRGVzY3JpcHRvcjoNCiAg
+ICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAg
+Mg0KICAgIHdUb3RhbExlbmd0aCAgICAgICAweDAwNzkNCiAgICBiTnVtSW50ZXJmYWNlcyAgICAg
+ICAgICAxDQogICAgYkNvbmZpZ3VyYXRpb25WYWx1ZSAgICAgMQ0KICAgIGlDb25maWd1cmF0aW9u
+ICAgICAgICAgIDAgDQogICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHhjMA0KICAgICAgU2VsZiBQ
+b3dlcmVkDQogICAgTWF4UG93ZXIgICAgICAgICAgICAgICAgOG1BDQogICAgSW50ZXJmYWNlIERl
+c2NyaXB0b3I6DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3Jp
+cHRvclR5cGUgICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAwDQogICAg
+ICBiQWx0ZXJuYXRlU2V0dGluZyAgICAgICAwDQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAg
+ICAyDQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgICA4IE1hc3MgU3RvcmFnZQ0KICAgICAg
+YkludGVyZmFjZVN1YkNsYXNzICAgICAgNiBTQ1NJDQogICAgICBiSW50ZXJmYWNlUHJvdG9jb2wg
+ICAgIDgwIEJ1bGstT25seQ0KICAgICAgaUludGVyZmFjZSAgICAgICAgICAgICAgMCANCiAgICAg
+IEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcN
+CiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRy
+ZXNzICAgICAweDgxICBFUCAxIElODQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDIN
+CiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNo
+IFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAg
+ICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRl
+cw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAg
+ICAgICAgICAgICAgMTUNCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5n
+dGggICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0K
+ICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDAyICBFUCAyIE9VVA0KICAgICAgICBibUF0
+dHJpYnV0ZXMgICAgICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAg
+IEJ1bGsNCiAgICAgICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAg
+IFVzYWdlIFR5cGUgICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAg
+ICAweDA0MDAgIDF4IDEwMjQgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAg
+MA0KICAgICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgIDE1DQogICAgSW50ZXJmYWNlIERlc2Ny
+aXB0b3I6DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3JpcHRv
+clR5cGUgICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAwDQogICAgICBi
+QWx0ZXJuYXRlU2V0dGluZyAgICAgICAxDQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICA0
+DQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgICA4IE1hc3MgU3RvcmFnZQ0KICAgICAgYklu
+dGVyZmFjZVN1YkNsYXNzICAgICAgNiBTQ1NJDQogICAgICBiSW50ZXJmYWNlUHJvdG9jb2wgICAg
+IDk4IA0KICAgICAgaUludGVyZmFjZSAgICAgICAgICAgICAxMCBNU0MgVVNCIEF0dGFjaGVkIFND
+U0kNCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAg
+ICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5k
+cG9pbnRBZGRyZXNzICAgICAweDAxICBFUCAxIE9VVA0KICAgICAgICBibUF0dHJpYnV0ZXMgICAg
+ICAgICAgICAyDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEJ1bGsNCiAgICAg
+ICAgICBTeW5jaCBUeXBlICAgICAgICAgICAgICAgTm9uZQ0KICAgICAgICAgIFVzYWdlIFR5cGUg
+ICAgICAgICAgICAgICBEYXRhDQogICAgICAgIHdNYXhQYWNrZXRTaXplICAgICAweDA0MDAgIDF4
+IDEwMjQgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgMA0KICAgICAgICBi
+TWF4QnVyc3QgICAgICAgICAgICAgICAwDQogICAgICAgIENvbW1hbmQgcGlwZSAoMHgwMSkNCiAg
+ICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAg
+IDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRB
+ZGRyZXNzICAgICAweDgyICBFUCAyIElODQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAg
+IDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5
+bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAg
+ICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBi
+eXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJz
+dCAgICAgICAgICAgICAgIDANCiAgICAgICAgTWF4U3RyZWFtcyAgICAgICAgICAgICAzMg0KICAg
+ICAgICBTdGF0dXMgcGlwZSAoMHgwMikNCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAg
+ICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAg
+ICAgICAgNQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgzICBFUCAzIElODQogICAg
+ICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAgIDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAg
+ICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQog
+ICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAgICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tl
+dFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAg
+ICAgICAgICAwDQogICAgICAgIGJNYXhCdXJzdCAgICAgICAgICAgICAgMTQNCiAgICAgICAgTWF4
+U3RyZWFtcyAgICAgICAgICAgICAzMg0KICAgICAgICBEYXRhLWluIHBpcGUgKDB4MDMpDQogICAg
+ICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA3
+DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAgYkVuZHBvaW50QWRk
+cmVzcyAgICAgMHgwNCAgRVAgNCBPVVQNCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAg
+Mg0KICAgICAgICAgIFRyYW5zZmVyIFR5cGUgICAgICAgICAgICBCdWxrDQogICAgICAgICAgU3lu
+Y2ggVHlwZSAgICAgICAgICAgICAgIE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAg
+ICAgICAgRGF0YQ0KICAgICAgICB3TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5
+dGVzDQogICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAgICAgIDANCiAgICAgICAgYk1heEJ1cnN0
+ICAgICAgICAgICAgICAxNQ0KICAgICAgICBNYXhTdHJlYW1zICAgICAgICAgICAgIDMyDQogICAg
+ICAgIERhdGEtb3V0IHBpcGUgKDB4MDQpDQpCaW5hcnkgT2JqZWN0IFN0b3JlIERlc2NyaXB0b3I6
+DQogIGJMZW5ndGggICAgICAgICAgICAgICAgIDUNCiAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAx
+NQ0KICB3VG90YWxMZW5ndGggICAgICAgMHgwMDJhDQogIGJOdW1EZXZpY2VDYXBzICAgICAgICAg
+IDMNCiAgVVNCIDIuMCBFeHRlbnNpb24gRGV2aWNlIENhcGFiaWxpdHk6DQogICAgYkxlbmd0aCAg
+ICAgICAgICAgICAgICAgNw0KICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTYNCiAgICBiRGV2
+Q2FwYWJpbGl0eVR5cGUgICAgICAyDQogICAgYm1BdHRyaWJ1dGVzICAgMHgwMDAwMGYwZQ0KICAg
+ICAgQkVTTCBMaW5rIFBvd2VyIE1hbmFnZW1lbnQgKExQTSkgU3VwcG9ydGVkDQogICAgQkVTTCB2
+YWx1ZSAgICAgMzg0MCB1cyANCiAgU3VwZXJTcGVlZCBVU0IgRGV2aWNlIENhcGFiaWxpdHk6DQog
+ICAgYkxlbmd0aCAgICAgICAgICAgICAgICAxMA0KICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAg
+MTYNCiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAgICAzDQogICAgYm1BdHRyaWJ1dGVzICAgICAg
+ICAgMHgwMA0KICAgIHdTcGVlZHNTdXBwb3J0ZWQgICAweDAwMGUNCiAgICAgIERldmljZSBjYW4g
+b3BlcmF0ZSBhdCBGdWxsIFNwZWVkICgxMk1icHMpDQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUg
+YXQgSGlnaCBTcGVlZCAoNDgwTWJwcykNCiAgICAgIERldmljZSBjYW4gb3BlcmF0ZSBhdCBTdXBl
+clNwZWVkICg1R2JwcykNCiAgICBiRnVuY3Rpb25hbGl0eVN1cHBvcnQgICAxDQogICAgICBMb3dl
+c3QgZnVsbHktZnVuY3Rpb25hbCBkZXZpY2Ugc3BlZWQgaXMgRnVsbCBTcGVlZCAoMTJNYnBzKQ0K
+ICAgIGJVMURldkV4aXRMYXQgICAgICAgICAgMTAgbWljcm8gc2Vjb25kcw0KICAgIGJVMkRldkV4
+aXRMYXQgICAgICAgICAgMzIgbWljcm8gc2Vjb25kcw0KICBTdXBlclNwZWVkUGx1cyBVU0IgRGV2
+aWNlIENhcGFiaWxpdHk6DQogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAyMA0KICAgIGJEZXNj
+cmlwdG9yVHlwZSAgICAgICAgMTYNCiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAgIDEwDQogICAg
+Ym1BdHRyaWJ1dGVzICAgICAgICAgMHgwMDAwMDAwMQ0KICAgICAgU3VibGluayBTcGVlZCBBdHRy
+aWJ1dGUgY291bnQgMQ0KICAgICAgU3VibGluayBTcGVlZCBJRCBjb3VudCAwDQogICAgd0Z1bmN0
+aW9uYWxpdHlTdXBwb3J0ICAgMHgxMTAwDQogICAgYm1TdWJsaW5rU3BlZWRBdHRyWzBdICAgMHgw
+MDBhNDAzMA0KICAgICAgU3BlZWQgQXR0cmlidXRlIElEOiAwIDEwR2IvcyBTeW1tZXRyaWMgUlgg
+U3VwZXJTcGVlZFBsdXMNCiAgICBibVN1YmxpbmtTcGVlZEF0dHJbMV0gICAweDAwMGE0MGIwDQog
+ICAgICBTcGVlZCBBdHRyaWJ1dGUgSUQ6IDAgMTBHYi9zIFN5bW1ldHJpYyBUWCBTdXBlclNwZWVk
+UGx1cw0KRGV2aWNlIFN0YXR1czogICAgIDB4MDAwMQ0KICBTZWxmIFBvd2VyZWQNCg0KQnVzIDAw
+NCBEZXZpY2UgMDAxOiBJRCAxZDZiOjAwMDMgTGludXggRm91bmRhdGlvbiAzLjAgcm9vdCBodWIN
+CkRldmljZSBEZXNjcmlwdG9yOg0KICBiTGVuZ3RoICAgICAgICAgICAgICAgIDE4DQogIGJEZXNj
+cmlwdG9yVHlwZSAgICAgICAgIDENCiAgYmNkVVNCICAgICAgICAgICAgICAgMy4wMA0KICBiRGV2
+aWNlQ2xhc3MgICAgICAgICAgICA5IEh1Yg0KICBiRGV2aWNlU3ViQ2xhc3MgICAgICAgICAwIA0K
+ICBiRGV2aWNlUHJvdG9jb2wgICAgICAgICAzIA0KICBiTWF4UGFja2V0U2l6ZTAgICAgICAgICA5
+DQogIGlkVmVuZG9yICAgICAgICAgICAweDFkNmIgTGludXggRm91bmRhdGlvbg0KICBpZFByb2R1
+Y3QgICAgICAgICAgMHgwMDAzIDMuMCByb290IGh1Yg0KICBiY2REZXZpY2UgICAgICAgICAgICA1
+LjAzDQogIGlNYW51ZmFjdHVyZXIgICAgICAgICAgIDMgTGludXggNS4zLjAtcmM4KyB4aGNpLWhj
+ZA0KICBpUHJvZHVjdCAgICAgICAgICAgICAgICAyIHhIQ0kgSG9zdCBDb250cm9sbGVyDQogIGlT
+ZXJpYWwgICAgICAgICAgICAgICAgIDEgMDAwMDowODowMC4wDQogIGJOdW1Db25maWd1cmF0aW9u
+cyAgICAgIDENCiAgQ29uZmlndXJhdGlvbiBEZXNjcmlwdG9yOg0KICAgIGJMZW5ndGggICAgICAg
+ICAgICAgICAgIDkNCiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICAyDQogICAgd1RvdGFsTGVu
+Z3RoICAgICAgIDB4MDAxZg0KICAgIGJOdW1JbnRlcmZhY2VzICAgICAgICAgIDENCiAgICBiQ29u
+ZmlndXJhdGlvblZhbHVlICAgICAxDQogICAgaUNvbmZpZ3VyYXRpb24gICAgICAgICAgMCANCiAg
+ICBibUF0dHJpYnV0ZXMgICAgICAgICAweGUwDQogICAgICBTZWxmIFBvd2VyZWQNCiAgICAgIFJl
+bW90ZSBXYWtldXANCiAgICBNYXhQb3dlciAgICAgICAgICAgICAgICAwbUENCiAgICBJbnRlcmZh
+Y2UgRGVzY3JpcHRvcjoNCiAgICAgIGJMZW5ndGggICAgICAgICAgICAgICAgIDkNCiAgICAgIGJE
+ZXNjcmlwdG9yVHlwZSAgICAgICAgIDQNCiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgIDAN
+CiAgICAgIGJBbHRlcm5hdGVTZXR0aW5nICAgICAgIDANCiAgICAgIGJOdW1FbmRwb2ludHMgICAg
+ICAgICAgIDENCiAgICAgIGJJbnRlcmZhY2VDbGFzcyAgICAgICAgIDkgSHViDQogICAgICBiSW50
+ZXJmYWNlU3ViQ2xhc3MgICAgICAwIA0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICAgMCBG
+dWxsIHNwZWVkIChvciByb290KSBodWINCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAgICAgIDAg
+DQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAgICAgICAg
+ICAgICA3DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAgYkVuZHBv
+aW50QWRkcmVzcyAgICAgMHg4MSAgRVAgMSBJTg0KICAgICAgICBibUF0dHJpYnV0ZXMgICAgICAg
+ICAgICAzDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEludGVycnVwdA0KICAg
+ICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlw
+ZSAgICAgICAgICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDAwNCAg
+MXggNCBieXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgIDEyDQogICAgICAgIGJN
+YXhCdXJzdCAgICAgICAgICAgICAgIDANCkh1YiBEZXNjcmlwdG9yOg0KICBiTGVuZ3RoICAgICAg
+ICAgICAgICAxMg0KICBiRGVzY3JpcHRvclR5cGUgICAgICA0Mg0KICBuTmJyUG9ydHMgICAgICAg
+ICAgICAgMg0KICB3SHViQ2hhcmFjdGVyaXN0aWMgMHgwMDBhDQogICAgTm8gcG93ZXIgc3dpdGNo
+aW5nICh1c2IgMS4wKQ0KICAgIFBlci1wb3J0IG92ZXJjdXJyZW50IHByb3RlY3Rpb24NCiAgYlB3
+ck9uMlB3ckdvb2QgICAgICAgMTAgKiAyIG1pbGxpIHNlY29uZHMNCiAgYkh1YkNvbnRyQ3VycmVu
+dCAgICAgIDAgbWlsbGkgQW1wZXJlDQogIGJIdWJEZWNMYXQgICAgICAgICAgMC4wIG1pY3JvIHNl
+Y29uZHMNCiAgd0h1YkRlbGF5ICAgICAgICAgICAgIDAgbmFubyBzZWNvbmRzDQogIERldmljZVJl
+bW92YWJsZSAgICAweDAwDQogSHViIFBvcnQgU3RhdHVzOg0KICAgUG9ydCAxOiAwMDAwLjAyMDMg
+NUdicHMgcG93ZXIgVTAgZW5hYmxlIGNvbm5lY3QNCiAgIFBvcnQgMjogMDAwMC4wMmEwIDVHYnBz
+IHBvd2VyIFJ4LkRldGVjdA0KQmluYXJ5IE9iamVjdCBTdG9yZSBEZXNjcmlwdG9yOg0KICBiTGVu
+Z3RoICAgICAgICAgICAgICAgICA1DQogIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgMTUNCiAgd1Rv
+dGFsTGVuZ3RoICAgICAgIDB4MDAyYg0KICBiTnVtRGV2aWNlQ2FwcyAgICAgICAgICAyDQogIFN1
+cGVyU3BlZWQgVVNCIERldmljZSBDYXBhYmlsaXR5Og0KICAgIGJMZW5ndGggICAgICAgICAgICAg
+ICAgMTANCiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE2DQogICAgYkRldkNhcGFiaWxpdHlU
+eXBlICAgICAgMw0KICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4MDANCiAgICB3U3BlZWRzU3Vw
+cG9ydGVkICAgMHgwMDA4DQogICAgICBEZXZpY2UgY2FuIG9wZXJhdGUgYXQgU3VwZXJTcGVlZCAo
+NUdicHMpDQogICAgYkZ1bmN0aW9uYWxpdHlTdXBwb3J0ICAgMw0KICAgICAgTG93ZXN0IGZ1bGx5
+LWZ1bmN0aW9uYWwgZGV2aWNlIHNwZWVkIGlzIFN1cGVyU3BlZWQgKDVHYnBzKQ0KICAgIGJVMURl
+dkV4aXRMYXQgICAgICAgICAgIDAgbWljcm8gc2Vjb25kcw0KICAgIGJVMkRldkV4aXRMYXQgICAg
+ICAgICAgIDAgbWljcm8gc2Vjb25kcw0KICBTdXBlclNwZWVkUGx1cyBVU0IgRGV2aWNlIENhcGFi
+aWxpdHk6DQogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAyOA0KICAgIGJEZXNjcmlwdG9yVHlw
+ZSAgICAgICAgMTYNCiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAgIDEwDQogICAgYm1BdHRyaWJ1
+dGVzICAgICAgICAgMHgwMDAwMDAyMw0KICAgICAgU3VibGluayBTcGVlZCBBdHRyaWJ1dGUgY291
+bnQgMw0KICAgICAgU3VibGluayBTcGVlZCBJRCBjb3VudCAxDQogICAgd0Z1bmN0aW9uYWxpdHlT
+dXBwb3J0ICAgMHgwMDAxDQogICAgYm1TdWJsaW5rU3BlZWRBdHRyWzBdICAgMHgwMDA1MDAzNA0K
+ICAgICAgU3BlZWQgQXR0cmlidXRlIElEOiA0IDVHYi9zIFN5bW1ldHJpYyBSWCBTdXBlclNwZWVk
+DQogICAgYm1TdWJsaW5rU3BlZWRBdHRyWzFdICAgMHgwMDA1MDBiNA0KICAgICAgU3BlZWQgQXR0
+cmlidXRlIElEOiA0IDVHYi9zIFN5bW1ldHJpYyBUWCBTdXBlclNwZWVkDQogICAgYm1TdWJsaW5r
+U3BlZWRBdHRyWzJdICAgMHgwMDBhNDAzNQ0KICAgICAgU3BlZWQgQXR0cmlidXRlIElEOiA1IDEw
+R2IvcyBTeW1tZXRyaWMgUlggU3VwZXJTcGVlZFBsdXMNCiAgICBibVN1YmxpbmtTcGVlZEF0dHJb
+M10gICAweDAwMGE0MGI1DQogICAgICBTcGVlZCBBdHRyaWJ1dGUgSUQ6IDUgMTBHYi9zIFN5bW1l
+dHJpYyBUWCBTdXBlclNwZWVkUGx1cw0KRGV2aWNlIFN0YXR1czogICAgIDB4MDAwMQ0KICBTZWxm
+IFBvd2VyZWQNCg==
+--000000000000db45080592a28962
+Content-Type: text/plain; charset="US-ASCII"; name="lspci_5.3.txt"
+Content-Disposition: attachment; filename="lspci_5.3.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k0lrpfet1>
+X-Attachment-Id: f_k0lrpfet1
+
+MDg6MDAuMCBVU0IgY29udHJvbGxlcjogQVNNZWRpYSBUZWNobm9sb2d5IEluYy4gQVNNMjE0MiBV
+U0IgMy4xIEhvc3QgQ29udHJvbGxlciAocHJvZy1pZiAzMCBbWEhDSV0pCglTdWJzeXN0ZW06IEFT
+VVNUZUsgQ29tcHV0ZXIgSW5jLiBEZXZpY2UgODc1NgoJQ29udHJvbDogSS9PLSBNZW0rIEJ1c01h
+c3RlcisgU3BlY0N5Y2xlLSBNZW1XSU5WLSBWR0FTbm9vcC0gUGFyRXJyLSBTdGVwcGluZy0gU0VS
+Ui0gRmFzdEIyQi0gRGlzSU5UeCsKCVN0YXR1czogQ2FwKyA2Nk1Iei0gVURGLSBGYXN0QjJCLSBQ
+YXJFcnItIERFVlNFTD1mYXN0ID5UQWJvcnQtIDxUQWJvcnQtIDxNQWJvcnQtID5TRVJSLSA8UEVS
+Ui0gSU5UeC0KCUxhdGVuY3k6IDAsIENhY2hlIExpbmUgU2l6ZTogNjQgYnl0ZXMKCUludGVycnVw
+dDogcGluIEEgcm91dGVkIHRvIElSUSA1NAoJTlVNQSBub2RlOiAwCglSZWdpb24gMDogTWVtb3J5
+IGF0IGJhMzAwMDAwICg2NC1iaXQsIG5vbi1wcmVmZXRjaGFibGUpIFtzaXplPTMyS10KCUNhcGFi
+aWxpdGllczogWzUwXSBNU0k6IEVuYWJsZSsgQ291bnQ9MS84IE1hc2thYmxlLSA2NGJpdCsKCQlB
+ZGRyZXNzOiAwMDAwMDAwMGZlZTBkMDAwICBEYXRhOiA0MDIxCglDYXBhYmlsaXRpZXM6IFs3OF0g
+UG93ZXIgTWFuYWdlbWVudCB2ZXJzaW9uIDMKCQlGbGFnczogUE1FQ2xrLSBEU0ktIEQxLSBEMi0g
+QXV4Q3VycmVudD01NW1BIFBNRShEMCssRDEtLEQyLSxEM2hvdC0sRDNjb2xkLSkKCQlTdGF0dXM6
+IEQwIE5vU29mdFJzdCsgUE1FLUVuYWJsZS0gRFNlbD0wIERTY2FsZT0wIFBNRS0KCUNhcGFiaWxp
+dGllczogWzgwXSBFeHByZXNzICh2MikgTGVnYWN5IEVuZHBvaW50LCBNU0kgMDAKCQlEZXZDYXA6
+CU1heFBheWxvYWQgNTEyIGJ5dGVzLCBQaGFudEZ1bmMgMCwgTGF0ZW5jeSBMMHMgPDY0bnMsIEwx
+IDwydXMKCQkJRXh0VGFnKyBBdHRuQnRuLSBBdHRuSW5kLSBQd3JJbmQtIFJCRSsgRkxSZXNldC0K
+CQlEZXZDdGw6CUNvcnJFcnItIE5vbkZhdGFsRXJyLSBGYXRhbEVyci0gVW5zdXBSZXEtCgkJCVJs
+eGRPcmQrIEV4dFRhZysgUGhhbnRGdW5jLSBBdXhQd3ItIE5vU25vb3ArCgkJCU1heFBheWxvYWQg
+NTEyIGJ5dGVzLCBNYXhSZWFkUmVxIDUxMiBieXRlcwoJCURldlN0YToJQ29yckVyci0gTm9uRmF0
+YWxFcnItIEZhdGFsRXJyLSBVbnN1cFJlcS0gQXV4UHdyKyBUcmFuc1BlbmQtCgkJTG5rQ2FwOglQ
+b3J0ICMwLCBTcGVlZCA4R1QvcywgV2lkdGggeDIsIEFTUE0gTDBzIEwxLCBFeGl0IExhdGVuY3kg
+TDBzIDwydXMsIEwxIHVubGltaXRlZAoJCQlDbG9ja1BNLSBTdXJwcmlzZS0gTExBY3RSZXAtIEJ3
+Tm90LSBBU1BNT3B0Q29tcCsKCQlMbmtDdGw6CUFTUE0gRGlzYWJsZWQ7IFJDQiA2NCBieXRlcyBE
+aXNhYmxlZC0gQ29tbUNsaysKCQkJRXh0U3luY2gtIENsb2NrUE0tIEF1dFdpZERpcy0gQldJbnQt
+IEF1dEJXSW50LQoJCUxua1N0YToJU3BlZWQgNUdUL3MgKGRvd25ncmFkZWQpLCBXaWR0aCB4MiAo
+b2spCgkJCVRyRXJyLSBUcmFpbi0gU2xvdENsaysgRExBY3RpdmUtIEJXTWdtdC0gQUJXTWdtdC0K
+CQlEZXZDYXAyOiBDb21wbGV0aW9uIFRpbWVvdXQ6IE5vdCBTdXBwb3J0ZWQsIFRpbWVvdXREaXMt
+LCBMVFIrLCBPQkZGIE5vdCBTdXBwb3J0ZWQKCQkJIEF0b21pY09wc0NhcDogMzJiaXQtIDY0Yml0
+LSAxMjhiaXRDQVMtCgkJRGV2Q3RsMjogQ29tcGxldGlvbiBUaW1lb3V0OiA1MHVzIHRvIDUwbXMs
+IFRpbWVvdXREaXMtLCBMVFItLCBPQkZGIERpc2FibGVkCgkJCSBBdG9taWNPcHNDdGw6IFJlcUVu
+LQoJCUxua0N0bDI6IFRhcmdldCBMaW5rIFNwZWVkOiA1R1QvcywgRW50ZXJDb21wbGlhbmNlLSBT
+cGVlZERpcy0KCQkJIFRyYW5zbWl0IE1hcmdpbjogTm9ybWFsIE9wZXJhdGluZyBSYW5nZSwgRW50
+ZXJNb2RpZmllZENvbXBsaWFuY2UtIENvbXBsaWFuY2VTT1MtCgkJCSBDb21wbGlhbmNlIERlLWVt
+cGhhc2lzOiAtNmRCCgkJTG5rU3RhMjogQ3VycmVudCBEZS1lbXBoYXNpcyBMZXZlbDogLTZkQiwg
+RXF1YWxpemF0aW9uQ29tcGxldGUtLCBFcXVhbGl6YXRpb25QaGFzZTEtCgkJCSBFcXVhbGl6YXRp
+b25QaGFzZTItLCBFcXVhbGl6YXRpb25QaGFzZTMtLCBMaW5rRXF1YWxpemF0aW9uUmVxdWVzdC0K
+CUNhcGFiaWxpdGllczogWzEwMCB2MV0gQWR2YW5jZWQgRXJyb3IgUmVwb3J0aW5nCgkJVUVTdGE6
+CURMUC0gU0RFUy0gVExQLSBGQ1AtIENtcGx0VE8tIENtcGx0QWJydC0gVW54Q21wbHQtIFJ4T0Yt
+IE1hbGZUTFAtIEVDUkMtIFVuc3VwUmVxLSBBQ1NWaW9sLQoJCVVFTXNrOglETFAtIFNERVMtIFRM
+UC0gRkNQLSBDbXBsdFRPLSBDbXBsdEFicnQtIFVueENtcGx0LSBSeE9GLSBNYWxmVExQLSBFQ1JD
+LSBVbnN1cFJlcS0gQUNTVmlvbC0KCQlVRVN2cnQ6CURMUCsgU0RFUysgVExQLSBGQ1ArIENtcGx0
+VE8tIENtcGx0QWJydC0gVW54Q21wbHQtIFJ4T0YrIE1hbGZUTFArIEVDUkMtIFVuc3VwUmVxLSBB
+Q1NWaW9sLQoJCUNFU3RhOglSeEVyci0gQmFkVExQLSBCYWRETExQLSBSb2xsb3Zlci0gVGltZW91
+dC0gQWR2Tm9uRmF0YWxFcnItCgkJQ0VNc2s6CVJ4RXJyLSBCYWRUTFAtIEJhZERMTFAtIFJvbGxv
+dmVyLSBUaW1lb3V0LSBBZHZOb25GYXRhbEVyci0KCQlBRVJDYXA6CUZpcnN0IEVycm9yIFBvaW50
+ZXI6IDAwLCBFQ1JDR2VuQ2FwKyBFQ1JDR2VuRW4tIEVDUkNDaGtDYXAtIEVDUkNDaGtFbi0KCQkJ
+TXVsdEhkclJlY0NhcC0gTXVsdEhkclJlY0VuLSBUTFBQZnhQcmVzLSBIZHJMb2dDYXAtCgkJSGVh
+ZGVyTG9nOiAwMDAwMDAwMCAwMDAwMDAwMCAwMDAwMDAwMCAwMDAwMDAwMAoJQ2FwYWJpbGl0aWVz
+OiBbMjAwIHYxXSBTZWNvbmRhcnkgUENJIEV4cHJlc3MgPD8+CglDYXBhYmlsaXRpZXM6IFszMDAg
+djFdIExhdGVuY3kgVG9sZXJhbmNlIFJlcG9ydGluZwoJCU1heCBzbm9vcCBsYXRlbmN5OiAwbnMK
+CQlNYXggbm8gc25vb3AgbGF0ZW5jeTogMG5zCglLZXJuZWwgZHJpdmVyIGluIHVzZTogeGhjaV9o
+Y2QK
+--000000000000db45080592a28962
+Content-Type: text/plain; charset="US-ASCII"; name="dmesg_5.3.txt"
+Content-Disposition: attachment; filename="dmesg_5.3.txt"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k0lrpfeh0>
+X-Attachment-Id: f_k0lrpfeh0
+
+WyAgICAwLjE3NzYzMl0gcGNpIDAwMDA6MDg6MDAuMDogWzFiMjE6MjE0Ml0gdHlwZSAwMCBjbGFz
+cyAweDBjMDMzMApbICAgIDAuMTc3NjY3XSBwY2kgMDAwMDowODowMC4wOiByZWcgMHgxMDogW21l
+bSAweGJhMzAwMDAwLTB4YmEzMDdmZmYgNjRiaXRdClsgICAgMC4xNzc4NTNdIHBjaSAwMDAwOjA4
+OjAwLjA6IFBNRSMgc3VwcG9ydGVkIGZyb20gRDAKWyAgICAwLjE3Nzg5N10gcGNpIDAwMDA6MDg6
+MDAuMDogOC4wMDAgR2IvcyBhdmFpbGFibGUgUENJZSBiYW5kd2lkdGgsIGxpbWl0ZWQgYnkgNSBH
+VC9zIHgyIGxpbmsgYXQgMDAwMDowMjowOS4wIChjYXBhYmxlIG9mIDE1Ljc1MiBHYi9zIHdpdGgg
+OCBHVC9zIHgyIGxpbmspCi4uLgpbICAgIDAuOTUzMDYxXSB4aGNpX2hjZCAwMDAwOjA4OjAwLjA6
+IHhIQ0kgSG9zdCBDb250cm9sbGVyClsgICAgMC45NTMwODZdIHhoY2lfaGNkIDAwMDA6MDg6MDAu
+MDogbmV3IFVTQiBidXMgcmVnaXN0ZXJlZCwgYXNzaWduZWQgYnVzIG51bWJlciAzClsgICAgMS4w
+MDc5MTVdIHhoY2lfaGNkIDAwMDA6MDg6MDAuMDogaGNjIHBhcmFtcyAweDAyMDBlZjgxIGhjaSB2
+ZXJzaW9uIDB4MTEwIHF1aXJrcyAweDAwMDAwMDAwMDAwMDAwMTAKWyAgICAxLjAwODEwM10gdXNi
+IHVzYjM6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0xZDZiLCBpZFByb2R1Y3Q9MDAw
+MiwgYmNkRGV2aWNlPSA1LjAzClsgICAgMS4wMDgxMDRdIHVzYiB1c2IzOiBOZXcgVVNCIGRldmlj
+ZSBzdHJpbmdzOiBNZnI9MywgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MQpbICAgIDEuMDA4MTA1
+XSB1c2IgdXNiMzogUHJvZHVjdDogeEhDSSBIb3N0IENvbnRyb2xsZXIKWyAgICAxLjAwODEwNV0g
+dXNiIHVzYjM6IE1hbnVmYWN0dXJlcjogTGludXggNS4zLjAtcmM4KyB4aGNpLWhjZApbICAgIDEu
+MDA4MTA2XSB1c2IgdXNiMzogU2VyaWFsTnVtYmVyOiAwMDAwOjA4OjAwLjAKWyAgICAxLjAwODE1
+OV0gaHViIDMtMDoxLjA6IFVTQiBodWIgZm91bmQKWyAgICAxLjAwODE2NF0gaHViIDMtMDoxLjA6
+IDIgcG9ydHMgZGV0ZWN0ZWQKWyAgICAxLjAwODI0N10geGhjaV9oY2QgMDAwMDowODowMC4wOiB4
+SENJIEhvc3QgQ29udHJvbGxlcgpbICAgIDEuMDA4MjY5XSB4aGNpX2hjZCAwMDAwOjA4OjAwLjA6
+IG5ldyBVU0IgYnVzIHJlZ2lzdGVyZWQsIGFzc2lnbmVkIGJ1cyBudW1iZXIgNApbICAgIDEuMDA4
+MjcwXSB4aGNpX2hjZCAwMDAwOjA4OjAwLjA6IEhvc3Qgc3VwcG9ydHMgVVNCIDMuMCBTdXBlclNw
+ZWVkClsgICAgMS4wMDgyOTZdIHVzYiB1c2I0OiBXZSBkb24ndCBrbm93IHRoZSBhbGdvcml0aG1z
+IGZvciBMUE0gZm9yIHRoaXMgaG9zdCwgZGlzYWJsaW5nIExQTS4KWyAgICAxLjAwODMwNl0gdXNi
+IHVzYjQ6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0xZDZiLCBpZFByb2R1Y3Q9MDAw
+MywgYmNkRGV2aWNlPSA1LjAzClsgICAgMS4wMDgzMDddIHVzYiB1c2I0OiBOZXcgVVNCIGRldmlj
+ZSBzdHJpbmdzOiBNZnI9MywgUHJvZHVjdD0yLCBTZXJpYWxOdW1iZXI9MQpbICAgIDEuMDA4MzA4
+XSB1c2IgdXNiNDogUHJvZHVjdDogeEhDSSBIb3N0IENvbnRyb2xsZXIKWyAgICAxLjAwODMwOF0g
+dXNiIHVzYjQ6IE1hbnVmYWN0dXJlcjogTGludXggNS4zLjAtcmM4KyB4aGNpLWhjZApbICAgIDEu
+MDA4MzA5XSB1c2IgdXNiNDogU2VyaWFsTnVtYmVyOiAwMDAwOjA4OjAwLjAKWyAgICAxLjAwODM1
+M10gaHViIDQtMDoxLjA6IFVTQiBodWIgZm91bmQKWyAgICAxLjAwODM1OF0gaHViIDQtMDoxLjA6
+IDIgcG9ydHMgZGV0ZWN0ZWQKLi4uClsgICAgMS4zMzMxNDVdIHVzYiA0LTE6IG5ldyBTdXBlclNw
+ZWVkIEdlbiAxIFVTQiBkZXZpY2UgbnVtYmVyIDIgdXNpbmcgeGhjaV9oY2QKWyAgICAxLjM1MDYz
+OV0gdXNiIDQtMTogTmV3IFVTQiBkZXZpY2UgZm91bmQsIGlkVmVuZG9yPTA1NzgsIGlkUHJvZHVj
+dD0wNTc4LCBiY2REZXZpY2U9NDEuMDEKWyAgICAxLjM1MDY0MF0gdXNiIDQtMTogTmV3IFVTQiBk
+ZXZpY2Ugc3RyaW5nczogTWZyPTEsIFByb2R1Y3Q9MiwgU2VyaWFsTnVtYmVyPTMKWyAgICAxLjM1
+MDY0MV0gdXNiIDQtMTogUHJvZHVjdDogSk1TNTgwClsgICAgMS4zNTA2NDFdIHVzYiA0LTE6IE1h
+bnVmYWN0dXJlcjogSk1pY3JvbgpbICAgIDEuMzUwNjQyXSB1c2IgNC0xOiBTZXJpYWxOdW1iZXI6
+IDAwMDAwMDAwMTExNDAzMDU0MUNCCi4uLgpbICAgIDMuOTQ4OTQ3XSBzY3NpIGhvc3QxMDogdWFz
+ClsgICAgMy45NDkzMjBdIHNjc2kgMTA6MDowOjA6IERpcmVjdC1BY2Nlc3MgICAgIE00LUNUMTI4
+IE00U1NEMiAgICAgICAgICAgNDEwMSBQUTogMCBBTlNJOiA2ClsgICAgMy45NDk3MjJdIHNkIDEw
+OjA6MDowOiBBdHRhY2hlZCBzY3NpIGdlbmVyaWMgc2cxIHR5cGUgMApbICAgIDMuOTQ5ODc1XSB1
+c2Jjb3JlOiByZWdpc3RlcmVkIG5ldyBpbnRlcmZhY2UgZHJpdmVyIHVhcwpbICAgIDMuOTUwMTU3
+XSBzZCAxMDowOjA6MDogW3NkYl0gMjUwMDY5NjgwIDUxMi1ieXRlIGxvZ2ljYWwgYmxvY2tzOiAo
+MTI4IEdCLzExOSBHaUIpClsgICAgMy45NTAxNTldIHNkIDEwOjA6MDowOiBbc2RiXSA0MDk2LWJ5
+dGUgcGh5c2ljYWwgYmxvY2tzClsgICAgMy45NTAyNTBdIHNkIDEwOjA6MDowOiBbc2RiXSBXcml0
+ZSBQcm90ZWN0IGlzIG9mZgpbICAgIDMuOTUwMjUxXSBzZCAxMDowOjA6MDogW3NkYl0gTW9kZSBT
+ZW5zZTogNTMgMDAgMDAgMDgKWyAgICAzLjk1MDQyNl0gc2QgMTA6MDowOjA6IFtzZGJdIFdyaXRl
+IGNhY2hlOiBlbmFibGVkLCByZWFkIGNhY2hlOiBlbmFibGVkLCBkb2Vzbid0IHN1cHBvcnQgRFBP
+IG9yIEZVQQpbICAgIDMuOTUwOTM2XSBzZCAxMDowOjA6MDogW3NkYl0gT3B0aW1hbCB0cmFuc2Zl
+ciBzaXplIDMzNTUzOTIwIGJ5dGVzIG5vdCBhIG11bHRpcGxlIG9mIHBoeXNpY2FsIGJsb2NrIHNp
+emUgKDQwOTYgYnl0ZXMpClsgICAgMy45NTE5NDBdICBzZGI6IHNkYjEgc2RiMgpbICAgIDMuOTUz
+MDE4XSBzZCAxMDowOjA6MDogW3NkYl0gQXR0YWNoZWQgU0NTSSBkaXNrCg==
+--000000000000db45080592a28962--
