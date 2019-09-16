@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D93F2B3B61
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 15:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 808A1B3B5E
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Sep 2019 15:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387412AbfIPN3l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 09:29:41 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:54646 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733214AbfIPN3L (ORCPT
+        id S1733225AbfIPN3j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 09:29:39 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:54047 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733217AbfIPN3L (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 09:29:11 -0400
-Received: by mail-io1-f71.google.com with SMTP id a20so50560930iok.21
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 06:29:10 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id l21so50685011iob.20
+        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 06:29:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=b5laotBV7ygHpU70Ga/Xbaed4IgwjEvAckEgAO+A7E8=;
-        b=uJelMb6yrPraM9PPyYwvW0d/Bk62H/3PW6CMJWw+XPmDg3ZPtZsl+mD0bCC6VdDwyR
-         33+svyCsBStsuT9vBC5T/wxtY6pb8raKIwqLX/TZ62uf0R9m1azN4q8Lg4FxQsNb3pfA
-         3VwAGRCUaoarux28QSa6JhfHa0ywFEL5wNr6L3Kd/EPsyBSqNnm+Es4iTtoMD6qskp+0
-         E9hXPB2Ap0M/nhGM0Qv43FcFZNXsI3weYJn6uZih1tWjaGZICJoHORWzAvcvEo680fE7
-         ya1dB7RaNDtiIrIzWCiuysVtQSq84dfmU2aZrNwt7fnFJT7n6f33Tmku6RG+t39JzZra
-         EloQ==
-X-Gm-Message-State: APjAAAW7Ho/i7CC03yIjBiGmsZxPIOvgX4UwVjAlolTR1leGMasvF+PQ
-        0c4W5G7r0xusr5sSla7WypPjqgqOka0gGu5+5mTuWRhE3jvC
-X-Google-Smtp-Source: APXvYqzi3HjEwadA9ulwQBRY9iUGavcX/vVVGFLeZR/XwfithihO18DjX/LM54HCCZu8WQ65c8N5fPz3R86+MdTtRUQE9pSvYtAc
+        bh=SxErCaoipc4qR6AbkxYQ34p7V9bqMpiyVCAvn4RQDdM=;
+        b=TjgTOHT2QEbfbYe2/ImHy8hk7f2+sWIdW8X7fTuAPZU4bUzw72WChPfCnvnUoC/Uj5
+         RUfkqEshROOR5a6EW7immqTw6fqkIQSwo97Q5Gbz3ObmJIAAywULC2VYV7FSSwyVzDxJ
+         nG8vUZnznBy32XvguSSAmWB6etQIVbclJMOyJ9HI/5FxY8+zYfZScZ8swLh2HOZuDYms
+         O/FLhZ3xT9ezOv6lwnldisRcePWXI6QxGXdAtG7ETxaEz4a7+JEZgHdD8MYDW6tvSmbP
+         v7DSptA7O3bsK/D491dHoLq3C57AWbf6BtWQ/kDjz9IsohqNqMMoCbXqVK3Uqd197COH
+         OB3A==
+X-Gm-Message-State: APjAAAUoxVf2YLNW+DwOiXMwaBAvvZQwFDuum6rFTT0lkasHaBZHnciz
+        6yuL0swCjomVEM1psQtql2ujVxlBk5+FpmeogWSmOTAdCM5G
+X-Google-Smtp-Source: APXvYqx3+vh42Me/WY1PJ2O+8uJiq98zlHZ/LV6DA92+uX4JvNLPIbb6ya5UT+EU4TQxC85tYQMpfTWXTKIeE+a2FOLUl52IGiQV
 MIME-Version: 1.0
-X-Received: by 2002:a02:245:: with SMTP id 66mr10946896jau.30.1568640550276;
+X-Received: by 2002:a02:5585:: with SMTP id e127mr51965020jab.25.1568640550636;
  Mon, 16 Sep 2019 06:29:10 -0700 (PDT)
 Date:   Mon, 16 Sep 2019 06:29:10 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c7b6940592ab9606@google.com>
-Subject: divide error in cdc_ncm_update_rxtx_max
-From:   syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, davem@davemloft.net,
+Message-ID: <000000000000cd1def0592ab9697@google.com>
+Subject: KASAN: slab-out-of-bounds Write in ga_probe
+From:   syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, oliver@neukum.org,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
@@ -51,74 +51,53 @@ syzbot found the following crash on:
 
 HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=14cd1459600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=ce366e2b8296e25d84f5
+dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12b4dd85600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=179b7fc1600000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
+Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
 
-cdc_ncm 1-1:1.0: dwNtbInMaxSize=0 is too small. Using 2048
-cdc_ncm 1-1:1.0: setting rx_max = 2048
-cdc_ncm 1-1:1.0: setting tx_max = 16384
-divide error: 0000 [#1] SMP KASAN
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0-rc7+ #0
+usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
+different from the interface descriptor's value: 9
+usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=  
+0.00
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
+greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID  
+0e8f:0012] on usb-dummy_hcd.0-1/input0
+==================================================================
+BUG: KASAN: slab-out-of-bounds in set_bit  
+include/asm-generic/bitops-instrumented.h:28 [inline]
+BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97  
+[inline]
+BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0  
+drivers/hid/hid-gaff.c:146
+Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
+
+CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
 Workqueue: usb_hub_wq hub_event
-RIP: 0010:cdc_ncm_update_rxtx_max+0xc6e/0xef0 drivers/net/usb/cdc_ncm.c:419
-Code: e0 07 38 c2 0f 9e c1 84 d2 0f 95 c0 84 c1 0f 85 35 02 00 00 0f b7 5b  
-04 81 e3 ff 07 00 00 e8 29 47 f7 fd 31 d2 44 89 e0 31 ff <f7> f3 41 89 d5  
-89 d6 e8 86 48 f7 fd 45 85 ed 0f 85 17 f7 ff ff e8
-RSP: 0018:ffff8881da20f030 EFLAGS: 00010246
-RAX: 0000000000004000 RBX: 0000000000000000 RCX: 0000000000000001
-RDX: 0000000000000000 RSI: ffffffff83469377 RDI: 0000000000000000
-RBP: ffff8881c7ba0000 R08: ffff8881da1f9800 R09: ffffed103b645d58
-R10: ffffed103b645d57 R11: ffff8881db22eabf R12: 0000000000004000
-R13: 0000000000000000 R14: ffff8881d35f3dc0 R15: ffff8881d2a70f00
-FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1059879000 CR3: 00000001d49db000 CR4: 00000000001406f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
-  cdc_ncm_setup drivers/net/usb/cdc_ncm.c:667 [inline]
-  cdc_ncm_bind_common+0x1005/0x2570 drivers/net/usb/cdc_ncm.c:924
-  cdc_ncm_bind+0x7c/0x1c0 drivers/net/usb/cdc_ncm.c:1038
-  usbnet_probe+0xb43/0x23cf drivers/net/usb/usbnet.c:1722
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x6a/0x32c mm/kasan/report.c:351
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+  kasan_report+0xe/0x12 mm/kasan/common.c:618
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+  set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
+  gaff_init drivers/hid/hid-gaff.c:97 [inline]
+  ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
+  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
   really_probe+0x281/0x6d0 drivers/base/dd.c:548
   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-  device_add+0xae6/0x16f0 drivers/base/core.c:2165
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Modules linked in:
----[ end trace ab75cc10e099d8e9 ]---
-RIP:
+  __device_attach_driver+0x
 
 
 ---
