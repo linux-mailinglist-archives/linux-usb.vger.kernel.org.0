@@ -2,183 +2,246 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7801B479A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 08:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241DEB48B9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 10:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404297AbfIQGhw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 02:37:52 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37356 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387476AbfIQGht (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 02:37:49 -0400
-Received: by mail-qt1-f196.google.com with SMTP id d2so3040649qtr.4
-        for <linux-usb@vger.kernel.org>; Mon, 16 Sep 2019 23:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GwJ6ORRMmZdR3w7Rye5+C5HL4dpJCDvXajexzHeI2sY=;
-        b=sPtVhOvlERIo9Y1+3TdnfKs8CVITpPntQHqf+3NnmnP6jI3t+JwFKfo+AoDDx6vJF0
-         qWqeUYvJ2CD00vNArSKNZhl6q6DRRwUxJWkqFm2B5izKjB3pp1mhljQVOP2JEK7kDaow
-         HBpxPT0ugfhK2eoouiBlli3E1C0RBuoe/YBgO1wcFWnhY9J8Tft9LC7zfP5Zyr6ewh3T
-         Hivusay286ZRUCwTSqVYThzIgTNDsiB8D5b8AEwKgV+GBq15uLf9uVXUkNbLO71R8TZv
-         tmdGomVhAx768EOgxRXG0W6sYSyct2uJabKcr2KQyzjzwGOc3uciZ70XgB6Pc7YdpACJ
-         N2rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GwJ6ORRMmZdR3w7Rye5+C5HL4dpJCDvXajexzHeI2sY=;
-        b=Y5EFB13DjE2OdBhcAhhcoqxXCvPqOctQUgmwC5/KXDmwj4/UFkSRn5X1Ord6IajmUf
-         vXWwytVoixJND4REZbsoxhRRPesoxtW/+2LDHEnPjNDHwyKLWIhqw2brfcW0a1ol8SQe
-         ToSbbW8wVmF1Nj38QAhHn6FgmX8J6z+qVtZJkm3KCad8LOKN5nTYnh0DK4xWPwoRyiL6
-         Cg2zmRRNY+cOJdXReiLFCY3Z+vWx8mN2w1cPOvpEfnGw5sHErs1XvF6yi0ab5vXb5A8G
-         7Zp8ywkycJ2t7LPtPG69vVzzZy6ayQ9LiZD9GXanc2wWzkv3QN8p6N8REstltQ4a7w5e
-         o5Ow==
-X-Gm-Message-State: APjAAAWTteVL6TvdSs2QjxbGdKWjlZsyhNPM2TqKksmB6614Ltq72YVf
-        SrD+5NjUxRIbf/0F0soRkznKef3KIBGoVSBK1vASig==
-X-Google-Smtp-Source: APXvYqzExlFZOrZWpNxhVF+VH/+rdZTY4ifPUedaZr4+kbmUChVXA11PUlfH1IKpH2xzdY2bZolv50ROjD8QYfca728=
-X-Received: by 2002:ac8:108b:: with SMTP id a11mr2154851qtj.380.1568702266930;
- Mon, 16 Sep 2019 23:37:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <00000000000031432d0592b00f44@google.com> <Pine.LNX.4.44L0.1909161628090.1489-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909161628090.1489-100000@iolanthe.rowland.org>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 17 Sep 2019 08:37:34 +0200
-Message-ID: <CACT4Y+YzO9H3Ge9uEnMcK215DvTW-9fYrS7gYAOV62ssdyp42w@mail.gmail.com>
-Subject: Re: KMSAN: uninit-value in usb_autopm_put_interface
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com>,
-        Alexander Potapenko <glider@google.com>,
+        id S1731396AbfIQIDo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 04:03:44 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45842 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728049AbfIQIDo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Sep 2019 04:03:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 6F29CAF93;
+        Tue, 17 Sep 2019 08:03:41 +0000 (UTC)
+Message-ID: <1568707419.23075.2.camel@suse.com>
+Subject: Re: [RFC PATCH 1/1] USB: myriad-ma24xx-vsc: Firmware loader driver
+ for USB Myriad ma24xx
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Rhys Kidd <rhyskidd@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Johan Hovold <johan@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kai heng feng <kai.heng.feng@canonical.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yuehaibing@huawei.com
+        linux-accelerators@lists.ozlabs.org,
+        Alexander Shiyan <shc_work@mail.ru>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-usb@vger.kernel.org
+Date:   Tue, 17 Sep 2019 10:03:39 +0200
+In-Reply-To: <20190916110341.1310-2-rhyskidd@gmail.com>
+References: <20190916110341.1310-1-rhyskidd@gmail.com>
+         <20190916110341.1310-2-rhyskidd@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 10:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 16 Sep 2019, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
-> > git tree:       https://github.com/google/kmsan.git master
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16a7dde1600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1a6e595adbd2458f1
-> > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
-> > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176303e1600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8f23e600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com
-> >
-> > ==================================================================
-> > BUG: KMSAN: uninit-value in __write_once_size include/linux/compiler.h:235
-> > [inline]
-> > BUG: KMSAN: uninit-value in pm_runtime_mark_last_busy
-> > include/linux/pm_runtime.h:107 [inline]
-> > BUG: KMSAN: uninit-value in usb_mark_last_busy include/linux/usb.h:774
-> > [inline]
-> > BUG: KMSAN: uninit-value in usb_autopm_put_interface+0xf2/0x120
-> > drivers/usb/core/driver.c:1630
-> > CPU: 0 PID: 11318 Comm: syz-executor549 Not tainted 5.3.0-rc7+ #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-> >   kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
-> >   __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
-> >   __write_once_size include/linux/compiler.h:235 [inline]
-> >   pm_runtime_mark_last_busy include/linux/pm_runtime.h:107 [inline]
-> >   usb_mark_last_busy include/linux/usb.h:774 [inline]
-> >   usb_autopm_put_interface+0xf2/0x120 drivers/usb/core/driver.c:1630
-> >   usbhid_power+0x12a/0x170 drivers/hid/usbhid/hid-core.c:1238
-> >   hid_hw_power include/linux/hid.h:1038 [inline]
-> >   drop_ref drivers/hid/hidraw.c:338 [inline]
-> >   hidraw_release+0x4a9/0x6b0 drivers/hid/hidraw.c:356
-> >   __fput+0x4c9/0xba0 fs/file_table.c:280
-> >   ____fput+0x37/0x40 fs/file_table.c:313
-> >   task_work_run+0x22e/0x2a0 kernel/task_work.c:113
-> >   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-> >   exit_to_usermode_loop arch/x86/entry/common.c:163 [inline]
-> >   prepare_exit_to_usermode+0x39d/0x4d0 arch/x86/entry/common.c:194
-> >   syscall_return_slowpath+0x90/0x610 arch/x86/entry/common.c:274
-> >   do_syscall_64+0xe2/0xf0 arch/x86/entry/common.c:300
-> >   entry_SYSCALL_64_after_hwframe+0x63/0xe7
-> > RIP: 0033:0x401b20
-> > Code: 01 f0 ff ff 0f 83 c0 0b 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f
-> > 44 00 00 83 3d ad 5b 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff
-> > ff 0f 83 94 0b 00 00 c3 48 83 ec 08 e8 fa 00 00 00
-> > RSP: 002b:00007ffc46217cb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> > RAX: ffffffffffffffea RBX: 0000000000000000 RCX: 0000000000401b20
-> > RDX: 0000000000000000 RSI: 000000000010503d RDI: 00007ffc46217cc0
-> > RBP: 6666666666666667 R08: 000000000000000f R09: 000000000000000b
-> > R10: 0000000000000075 R11: 0000000000000246 R12: 0000000000402b40
-> > R13: 0000000000402bd0 R14: 0000000000000000 R15: 0000000000000000
-> >
-> > Uninit was created at:
-> >   kmsan_save_stack_with_flags mm/kmsan/kmsan.c:189 [inline]
-> >   kmsan_internal_poison_shadow+0x58/0xb0 mm/kmsan/kmsan.c:148
-> >   kmsan_slab_free+0x8d/0x100 mm/kmsan/kmsan_hooks.c:195
-> >   slab_free_freelist_hook mm/slub.c:1472 [inline]
-> >   slab_free mm/slub.c:3038 [inline]
-> >   kfree+0x4c1/0x2db0 mm/slub.c:3980
-> >   usb_release_interface+0x105/0x120 drivers/usb/core/message.c:1633
-> >   device_release+0xe2/0x380 drivers/base/core.c:1060
-> >   kobject_cleanup lib/kobject.c:693 [inline]
-> >   kobject_release lib/kobject.c:722 [inline]
-> >   kref_put include/linux/kref.h:65 [inline]
-> >   kobject_put+0x38d/0x480 lib/kobject.c:739
-> >   put_device+0x51/0x70 drivers/base/core.c:2264
-> >   usb_disable_device+0x69a/0x1150 drivers/usb/core/message.c:1248
-> >   usb_disconnect+0x51e/0xd60 drivers/usb/core/hub.c:2199
-> >   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
-> >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-> >   port_event drivers/usb/core/hub.c:5359 [inline]
-> >   hub_event+0x3fd0/0x72f0 drivers/usb/core/hub.c:5441
-> >   process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-> >   worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-> >   kthread+0x4b5/0x4f0 kernel/kthread.c:256
-> >   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-> > ==================================================================
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this bug, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> This is probably the same problem that was fixed in the Logitech driver
-> earlier.  The fix still appears to be in linux-next (commit
-> 5f9242775bb6).
->
-> Shouldn't syzbot wait until after the merge window before running tests
-> like this?
+Am Montag, den 16.09.2019, 21:03 +1000 schrieb Rhys Kidd:
+> The Myriad ma24xx in USB Intel Neural Compute Stick and Intel Neural
+> Compute Stick 2 provides an API to accelerate AI inference calculations
+> on the dedicated SHAVE VLIW vector co-processors, which are orchestrated
+> by one or more LEON SPARC v8 real time cores.
+> 
+> However, they need firmware to be loaded beforehand. An uninitialised
+> Myriad ma24xx presents with a distinctive USB ID. After firmware
+> loading, the device detaches from the USB bus and reattaches with a new
+> device ID. It can then be claimed by the usermode driver.
 
+Why are you using a kernel space driver for this?
 
-Merge window is a weak notion and may be not enough either (all trees
-do not necessary update at that point and syzbot does not necessary
-rebuild all of them successfully). syzbot uses another criteria: if
-you say a bug is fixed by commit X, it will wait until commit X
-reaches all of tested trees and will report the same crash signature
-again only after that. This procedure was specifically designed to not
-produce duplicate reports about the same bug.
-So either the bug wasn't really fixed, or this is another bug, or
-syzbot was given a wrong commit.
+> Signed-off-by: Rhys Kidd <rhyskidd@gmail.com>
+> ---
+>  MAINTAINERS                          |   6 +
+>  drivers/usb/misc/Kconfig             |   8 ++
+>  drivers/usb/misc/Makefile            |   1 +
+>  drivers/usb/misc/myriad-ma24xx-vsc.c | 171 +++++++++++++++++++++++++++
+>  4 files changed, 186 insertions(+)
+>  create mode 100644 drivers/usb/misc/myriad-ma24xx-vsc.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a50e97a63bc8..2c3ab39ac26a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16682,6 +16682,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git
+>  S:	Maintained
+>  F:	sound/usb/midi.*
+>  
+> +USB MYRIAD MA24XX FIRMWARE DRIVER
+> +M:	Rhys Kidd <rhyskidd@gmail.com>
+> +L:	linux-usb@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/usb/misc/myriad-ma24xx-vsc.c
+> +
+>  USB NETWORKING DRIVERS
+>  L:	linux-usb@vger.kernel.org
+>  S:	Odd Fixes
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index bdae62b2ffe0..5d600fb8ac50 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -275,3 +275,11 @@ config USB_CHAOSKEY
+>  
+>  	  To compile this driver as a module, choose M here: the
+>  	  module will be called chaoskey.
+> +
+> +config USB_MYRIAD_MA24XX_VSC
+> +	tristate "USB Intel Myriad MA24xx firmware loading support"
+> +	select FW_LOADER
+> +	help
+> +	  This driver loads firmware for Myriad ma24xx AI inference accelerators, as
+> +	  found in the USB Intel Neural Compute Stick (ma2450) and Intel Neural
+> +	  Compute Stick 2 (ma2485).
+> \ No newline at end of file
+> diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
+> index 109f54f5b9aa..e19d1348c5b6 100644
+> --- a/drivers/usb/misc/Makefile
+> +++ b/drivers/usb/misc/Makefile
+> @@ -17,6 +17,7 @@ obj-$(CONFIG_USB_ISIGHTFW)		+= isight_firmware.o
+>  obj-$(CONFIG_USB_LCD)			+= usblcd.o
+>  obj-$(CONFIG_USB_LD)			+= ldusb.o
+>  obj-$(CONFIG_USB_LEGOTOWER)		+= legousbtower.o
+> +obj-$(CONFIG_USB_MYRIAD_MA24XX_VSC)    += myriad-ma24xx-vsc.o
+>  obj-$(CONFIG_USB_RIO500)		+= rio500.o
+>  obj-$(CONFIG_USB_TEST)			+= usbtest.o
+>  obj-$(CONFIG_USB_EHSET_TEST_FIXTURE)    += ehset.o
+> diff --git a/drivers/usb/misc/myriad-ma24xx-vsc.c b/drivers/usb/misc/myriad-ma24xx-vsc.c
+> new file mode 100644
+> index 000000000000..f516c236a8f5
+> --- /dev/null
+> +++ b/drivers/usb/misc/myriad-ma24xx-vsc.c
+> @@ -0,0 +1,171 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Driver for loading USB Myriad ma24xx firmware
+> + *
+> + * Copyright (C) 2018 Rhys Kidd <rhyskidd@gmail.com>
+> + *
+> + * The Myriad ma24xx in USB Intel Neural Compute Stick and Intel Neural
+> + * Compute Stick 2 provides an API to accelerate AI inference calculations
+> + * on the dedicated SHAVE VLIW vector co-processors, which are orchestrated
+> + * by one or more LEON SPARC v8 real time cores.
+> + *
+> + * However, they need firmware to be loaded beforehand. An uninitialised
+> + * Myriad ma24xx presents with a distinctive USB ID. After firmware
+> + * loading, the device detaches from the USB bus and reattaches with a new
+> + * device ID. It can then be claimed by the usermode driver.
+> + *
+> + * The firmware is non-free and must be extracted by the user.
+> + */
+> +
+> +/* Standard include files */
+> +#include <linux/errno.h>
+> +#include <linux/firmware.h>
+> +#include <linux/module.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb.h>
+> +
+> +#define usb_dbg(usb_if, format, arg...) \
+> +	dev_dbg(&(usb_if)->dev, format, ## arg)
+> +
+> +#define usb_err(usb_if, format, arg...) \
+> +	dev_err(&(usb_if)->dev, format, ## arg)
+
+Why?
+
+> +/* Version Information */
+> +#define DRIVER_AUTHOR "Rhys Kidd <rhyskidd@gmail.com>"
+> +#define DRIVER_DESC   "Driver for loading USB Myriad ma24xx firmware"
+> +#define DRIVER_SHORT  "myriad_ma24xx_vsc"
+> +
+> +MODULE_AUTHOR(DRIVER_AUTHOR);
+> +MODULE_DESCRIPTION(DRIVER_DESC);
+> +MODULE_LICENSE("GPL");
+> +
+> +#define FW_DIR "myriad/"
+> +#define MA2450_FIRMWARE FW_DIR "mvncapi-2450.mvcmd"
+> +#define MA2480_FIRMWARE FW_DIR "mvncapi-2480.mvcmd"
+> +
+> +MODULE_FIRMWARE(MA2450_FIRMWARE);
+> +MODULE_FIRMWARE(MA2480_FIRMWARE);
+> +
+> +enum {
+> +	MA2450FW = 0,
+> +	MA2480FW
+> +};
+> +
+> +/* macros for struct usb_device_id */
+> +#define MYRIAD_CHIP_VERSION(x) \
+> +	((x)->driver_info & 0xf)
+> +
+> +#define MYRIAD_VID  0x03e7   /* Movidius Ltd, an Intel company */
+> +#define MA2450_PID  0x2150   /* ma2450 VSC loopback device, without fw */
+> +#define MA2485_PID  0x2485   /* ma2485 VSC loopback device, without fw */
+> +
+> +#define MYRIAD_BUF_LEN 512   /* max size of USB_SPEED_HIGH packet */
+> +#define WRITE_TIMEOUT  2000  /* milliseconds */
+> +
+> +static const struct usb_device_id id_table[] = {
+> +	{ USB_DEVICE(MYRIAD_VID, MA2450_PID), .driver_info = MA2450FW },
+> +	{ USB_DEVICE(MYRIAD_VID, MA2485_PID), .driver_info = MA2480FW },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(usb, id_table);
+> +
+> +static int myriad_ma24xx_vsc_probe(struct usb_interface *intf,
+> +				    const struct usb_device_id *id)
+> +{
+> +	struct usb_device *dev = interface_to_usbdev(intf);
+> +	struct usb_host_interface *altsetting = intf->cur_altsetting;
+> +	struct usb_endpoint_descriptor *epd;
+> +	int out_ep, res, size;
+> +	const struct firmware *firmware = NULL;
+> +	const u8 *ptr;
+> +	int offset, ret = 0;
+> +	char *buf;
+> +	char *fw_family_name;
+> +
+> +	usb_dbg(intf, "probe %s-%s", dev->product, dev->serial);
+> +
+> +	/* Find the first bulk OUT endpoint and its packet size */
+> +	res = usb_find_bulk_out_endpoint(altsetting, &epd);
+> +	if (res) {
+> +		usb_err(intf, "no OUT endpoint found");
+> +		return res;
+> +	}
+> +
+> +	out_ep = usb_endpoint_num(epd);
+> +	size = usb_endpoint_maxp(epd);
+> +
+> +	/* Validate endpoint and size */
+> +	if (size <= 0) {
+> +		usb_err(intf, "invalid size (%d)", size);
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (size > MYRIAD_BUF_LEN) {
+> +		usb_dbg(intf, "size reduced %d -> %d\n", size, MYRIAD_BUF_LEN);
+> +		size = MYRIAD_BUF_LEN;
+> +	}
+> +
+> +	buf = kmalloc(size, GFP_KERNEL);
+> +	if (!buf)
+> +		return -ENOMEM;
+> +
+> +	switch (MYRIAD_CHIP_VERSION(id)) {
+> +	case MA2450FW:
+> +		fw_family_name = MA2450_FIRMWARE;
+> +		break;
+> +	case MA2480FW:
+> +		fw_family_name = MA2480_FIRMWARE;
+> +		break;
+> +	default:
+> +		usb_err(intf, "unsupported myriad ma24xx firmware family\n");
+> +		return -ENODEV;
+
+Memory leak
+
+	Regards
+		Oliver
+
