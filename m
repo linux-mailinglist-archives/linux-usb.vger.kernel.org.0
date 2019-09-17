@@ -2,99 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E0DB50A4
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 16:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A98B2B50C0
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 16:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728540AbfIQOoy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 10:44:54 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:57397 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728109AbfIQOoy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 10:44:54 -0400
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iAEip-0005y6-7H; Tue, 17 Sep 2019 16:44:51 +0200
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1iAEio-0000WQ-IS; Tue, 17 Sep 2019 16:44:50 +0200
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     richard.leitner@skidata.com, robh+dt@kernel.org,
-        fancer.lancer@gmail.com
-Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        kernel@pengutronix.de
-Subject: [PATCH 4/4] usb: usb251xb: add pm_ops
-Date:   Tue, 17 Sep 2019 16:44:49 +0200
-Message-Id: <20190917144449.32739-5-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190917144449.32739-1-m.felsch@pengutronix.de>
-References: <20190917144449.32739-1-m.felsch@pengutronix.de>
+        id S1728666AbfIQOvs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 10:51:48 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38492 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728578AbfIQOvs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 10:51:48 -0400
+Received: (qmail 3667 invoked by uid 2102); 17 Sep 2019 10:51:47 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Sep 2019 10:51:47 -0400
+Date:   Tue, 17 Sep 2019 10:51:47 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Dmitry Vyukov <dvyukov@google.com>
+cc:     syzbot <syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kai heng feng <kai.heng.feng@canonical.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        <yuehaibing@huawei.com>
+Subject: Re: KMSAN: uninit-value in usb_autopm_put_interface
+In-Reply-To: <CACT4Y+YzO9H3Ge9uEnMcK215DvTW-9fYrS7gYAOV62ssdyp42w@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1909171040180.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently the driver don't support pm_ops. These ops are not necessary
-if the supply isn't switchable (always on). This assumptions seems to be
-wrong because no one needs a powered hub during suspend-to-ram/disk.
+On Tue, 17 Sep 2019, Dmitry Vyukov wrote:
 
-So adding simple_dev_pm_ops to be able to switch off the hub during
-suspend and to restore the config after a resume operation.
+> On Mon, Sep 16, 2019 at 10:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Mon, 16 Sep 2019, syzbot wrote:
+> >
+> > > Hello,
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
+> > > git tree:       https://github.com/google/kmsan.git master
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=16a7dde1600000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1a6e595adbd2458f1
+> > > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
+> > > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176303e1600000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8f23e600000
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
- drivers/usb/misc/usb251xb.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+> > This is probably the same problem that was fixed in the Logitech driver
+> > earlier.  The fix still appears to be in linux-next (commit
+> > 5f9242775bb6).
+> >
+> > Shouldn't syzbot wait until after the merge window before running tests
+> > like this?
+> 
+> 
+> Merge window is a weak notion and may be not enough either (all trees
+> do not necessary update at that point and syzbot does not necessary
+> rebuild all of them successfully). syzbot uses another criteria: if
+> you say a bug is fixed by commit X, it will wait until commit X
+> reaches all of tested trees and will report the same crash signature
+> again only after that. This procedure was specifically designed to not
+> produce duplicate reports about the same bug.
+> So either the bug wasn't really fixed, or this is another bug, or
+> syzbot was given a wrong commit.
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index bc031d33f433..5bba19937da1 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -701,6 +701,29 @@ static int usb251xb_i2c_probe(struct i2c_client *i2c,
- 	return usb251xb_probe(hub);
- }
- 
-+static int __maybe_unused usb251xb_suspend(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+
-+	return regulator_disable(hub->vdd);
-+}
-+
-+static int __maybe_unused usb251xb_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct usb251xb *hub = i2c_get_clientdata(client);
-+	int err;
-+
-+	err = regulator_enable(hub->vdd);
-+	if (err)
-+		return err;
-+
-+	return usb251xb_connect(hub);
-+}
-+
-+static SIMPLE_DEV_PM_OPS(usb251xb_pm_ops, usb251xb_suspend, usb251xb_resume);
-+
- static const struct i2c_device_id usb251xb_id[] = {
- 	{ "usb2512b", 0 },
- 	{ "usb2512bi", 0 },
-@@ -718,6 +741,7 @@ static struct i2c_driver usb251xb_i2c_driver = {
- 	.driver = {
- 		.name = DRIVER_NAME,
- 		.of_match_table = of_match_ptr(usb251xb_of_match),
-+		.pm = &usb251xb_pm_ops,
- 	},
- 	.probe    = usb251xb_i2c_probe,
- 	.id_table = usb251xb_id,
--- 
-2.20.1
+Hmmm.  Which are the "tested trees"?
+
+This bug (e1d1a6e595adbd2458f1) is marked as a duplicate of 
+3cbe5cd105d2ad56a1df.  The dashboard link says that bug was fixed by 
+commit "HID: logitech: Fix general protection fault caused by Logitech 
+driver" -- which is correct, as far as I know.
+
+That commit is present in linux-next, as mentioned above.  As of 10:44 
+EDT today, it is not present in Linus's tree, according to
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/hid/hid-lg.c
+
+(in fact, no commits affecting drivers/hid/hid-lg.c in that tree are 
+dated after 2019-07-10).
+
+Furthermore, according to
+
+https://github.com/google/kmsan/blob/master/drivers/hid/hid-lg.c?h=014077b5
+
+the source code actually used by syzbot for this test doesn't have that 
+commit either.  (BTW, is there any way to get a git log out of github?  
+It would be nice not to have to download the whole source file -- and 
+I'm not certain that this URL really does point to the version of the 
+file that syzbot used.)
+
+So what's really going on?
+
+Alan Stern
 
