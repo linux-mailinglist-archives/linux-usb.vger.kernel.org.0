@@ -2,117 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B4EBB5182
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BBE6B51C5
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729586AbfIQP26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 11:28:58 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:38722 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726546AbfIQP26 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 11:28:58 -0400
-Received: (qmail 4307 invoked by uid 2102); 17 Sep 2019 11:28:57 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Sep 2019 11:28:57 -0400
-Date:   Tue, 17 Sep 2019 11:28:57 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kai heng feng <kai.heng.feng@canonical.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        <yuehaibing@huawei.com>
-Subject: Re: KMSAN: uninit-value in usb_autopm_put_interface
-In-Reply-To: <CAAeHK+yMaX7LUUXbGj3RDDChdCDp+U_4ePt5PjDWWsrJUk04uw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1909171125330.1590-100000@iolanthe.rowland.org>
+        id S1729769AbfIQPq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 11:46:29 -0400
+Received: from canardo.mork.no ([148.122.252.1]:40655 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728003AbfIQPq3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Sep 2019 11:46:29 -0400
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8HFkLQV019542
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Tue, 17 Sep 2019 17:46:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1568735182; bh=01F0+hoCVuL91LPexeI+J5fAbsP/o62EI5xZw9DZwNA=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=dqx9U4lJuXVqWbWCKQEHhYcuwa4PNOEQN8whjxPCB6mDbVCL+uDM+6mdOa/D+Xkss
+         9EbJpT1xgDN9R8k9dwCPSjjnPTAh77gaeI4y4yJc91lQBrU0p5PAtwyycNBT3I5Kwe
+         Ew1VVgTsrxUO3AJFbcK9oJ1rzR505tiNLzZDEV70=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1iAFgL-0007xx-10; Tue, 17 Sep 2019 17:46:21 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, oliver@neukum.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: divide error in cdc_ncm_update_rxtx_max
+Organization: m
+References: <00000000000018e4250592c043c3@google.com>
+Date:   Tue, 17 Sep 2019 17:46:20 +0200
+In-Reply-To: <00000000000018e4250592c043c3@google.com> (syzbot's message of
+        "Tue, 17 Sep 2019 07:09:00 -0700")
+Message-ID: <87d0fzlycz.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Sep 2019, Andrey Konovalov wrote:
+syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com> writes:
 
-> On Tue, Sep 17, 2019 at 4:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Tue, 17 Sep 2019, Dmitry Vyukov wrote:
-> >
-> > > On Mon, Sep 16, 2019 at 10:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > >
-> > > > On Mon, 16 Sep 2019, syzbot wrote:
-> > > >
-> > > > > Hello,
-> > > > >
-> > > > > syzbot found the following crash on:
-> > > > >
-> > > > > HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
-> > > > > git tree:       https://github.com/google/kmsan.git master
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16a7dde1600000
-> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1a6e595adbd2458f1
-> > > > > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
-> > > > > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176303e1600000
-> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8f23e600000
-> >
-> > > > This is probably the same problem that was fixed in the Logitech driver
-> > > > earlier.  The fix still appears to be in linux-next (commit
-> > > > 5f9242775bb6).
-> > > >
-> > > > Shouldn't syzbot wait until after the merge window before running tests
-> > > > like this?
-> > >
-> > >
-> > > Merge window is a weak notion and may be not enough either (all trees
-> > > do not necessary update at that point and syzbot does not necessary
-> > > rebuild all of them successfully). syzbot uses another criteria: if
-> > > you say a bug is fixed by commit X, it will wait until commit X
-> > > reaches all of tested trees and will report the same crash signature
-> > > again only after that. This procedure was specifically designed to not
-> > > produce duplicate reports about the same bug.
-> > > So either the bug wasn't really fixed, or this is another bug, or
-> > > syzbot was given a wrong commit.
-> >
-> > Hmmm.  Which are the "tested trees"?
-> >
-> > This bug (e1d1a6e595adbd2458f1) is marked as a duplicate of
-> > 3cbe5cd105d2ad56a1df.  The dashboard link says that bug was fixed by
-> > commit "HID: logitech: Fix general protection fault caused by Logitech
-> > driver" -- which is correct, as far as I know.
-> >
-> > That commit is present in linux-next, as mentioned above.  As of 10:44
-> > EDT today, it is not present in Linus's tree, according to
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/hid/hid-lg.c
-> >
-> > (in fact, no commits affecting drivers/hid/hid-lg.c in that tree are
-> > dated after 2019-07-10).
-> >
-> > Furthermore, according to
-> >
-> > https://github.com/google/kmsan/blob/master/drivers/hid/hid-lg.c?h=014077b5
-> >
-> > the source code actually used by syzbot for this test doesn't have that
-> > commit either.  (BTW, is there any way to get a git log out of github?
-> > It would be nice not to have to download the whole source file -- and
-> > I'm not certain that this URL really does point to the version of the
-> > file that syzbot used.)
-> >
-> > So what's really going on?
-> 
-> Please see my response. This report is a different manifestation of
-> the same Logitech bug.
+> syzbot has tested the proposed patch but the reproducer still
+> triggered crash:
+> divide error in usbnet_update_max_qlen
+>
+> cdc_ncm 5-1:1.0: setting tx_max =3D 16384
+> divide error: 0000 [#1] SMP KASAN
+> CPU: 1 PID: 1737 Comm: kworker/1:2 Not tainted 5.3.0-rc7+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine,
+> BIOS Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:usbnet_update_max_qlen drivers/net/usb/usbnet.c:344 [inline]
+> RIP: 0010:usbnet_update_max_qlen+0x231/0x370 drivers/net/usb/usbnet.c:338
 
-Hmmm.  Does syzbot have any conception of which drivers are exercised 
-by a particular test script?  If it doesn't, there's no way to avoid 
-getting these duplicate reports.  Still, it is a little annoying for 
-the developers.
+Sure, but that's another error already fixed by Oliver..
 
-Alan Stern
+I guess this fix worked.  But I believe we should see if this is a more
+generic issue than just this single driver/bug.  I fear it is...
 
+
+
+Bj=C3=B8rn
