@@ -2,109 +2,248 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95ED1B55AA
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 20:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A93B565F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 21:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729662AbfIQSvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 14:51:18 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46973 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729654AbfIQSvS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 14:51:18 -0400
-Received: by mail-pl1-f193.google.com with SMTP id q24so1887161plr.13
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 11:51:17 -0700 (PDT)
+        id S1726353AbfIQTpE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 15:45:04 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:35708 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfIQTpE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 15:45:04 -0400
+Received: by mail-pg1-f193.google.com with SMTP id a24so2556299pgj.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 12:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=eUL3CofObSvtROvpchYQhoATJQhwSk2E5xxOcu56n6w=;
-        b=PgRbwawkQd6LmSRskqO7m760QviTkXlgObSFz6CAACWi/lOTqYkqayC36yfARrHAAp
-         uhFAx39ebPmvQCQYKTV9rW0ZULAmd4MV4UWA69kzWaKww1Kw72O3aaL3kagH7GjGpwsq
-         22kL0hVuaHH/4+d7E6hvz6Y/AlcF3tjd1d83I=
+        bh=Tgg2KV4/EfN+uMmiVDhI108boK8SBjqK7o3+PbMCrCI=;
+        b=Gax5dwcaedmEQcUPRLs3NtZVA81kF/AfrQ45bLDX1BwPZ21Ler+XLbfh4zFY9jr6k7
+         nSMFXqsSY3Eu/Ff9B3tIad+HkZbIxfIFxcrpCD2/1sAjrg/JK/JM0SnvVHv7a9yJTEwT
+         XeRLeOd0sl+4ky4EPSysETsBbBLoeTIRzGiuk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=eUL3CofObSvtROvpchYQhoATJQhwSk2E5xxOcu56n6w=;
-        b=oFnuLcS9Hz/4/eR3hL4uSdrkuGCg/q6Fwhdh813qqNOg5zW9FaWb2jNDdD7u7D6Orf
-         6E+kH+HYTBTP2Ve/Lx7w4uHl633fMshkkR0OJ2FSyzdsALJ5/rycPeowcA9xwVBgOp5i
-         HtYJtp6385+UWf+O3qoz4i6H1B3gT0RiBVqSiqylOY+vRglS4nA92y3vrTQX4xYrb96V
-         NLTn4ukcI4I52FBABkLHWVnox73tUEnRZcPoJcZMtIXaGsf6Si8fQb8gdWRW0X+1GNxE
-         Ilj0hfZwLVW9h4IqkCq9duAQQ5ICdfgB55hduTfuJlJMZ2hMVMHoTNNUZ5EyMVsJcPv5
-         52yA==
-X-Gm-Message-State: APjAAAVU8r9866TLwLBw/MajOmE6nwjCChTaAgp8r4RYb8SEriMsuOtT
-        mJ2Cn72WJN4yI8+BoWarA7QDaw==
-X-Google-Smtp-Source: APXvYqxP3wJP0JnkZvGN1bLYAMx//+LYQw9lbbuqTBfWIfZwqS+8S2S/rz8gWsFyMDZSkDm71eCYXw==
-X-Received: by 2002:a17:902:9889:: with SMTP id s9mr110407plp.140.1568746277416;
-        Tue, 17 Sep 2019 11:51:17 -0700 (PDT)
+        bh=Tgg2KV4/EfN+uMmiVDhI108boK8SBjqK7o3+PbMCrCI=;
+        b=lY9KtWb12cHT0CxMX1Uf/AyUfveFedEoRa4cq1gAkvOo+2Vt2iVtDfFcw88tGZpHv/
+         hM/p6fY2xcgi7jsJTlU0L1Iniz1NhyT10jwMuC0PCUVpz3UCWWf8n+ILxs4hyLFn9txG
+         OzxAL/IjD8+FrCVys89kKELeu6lkpFbB5HOwwURpkdrZ7RRKhO7dyvGkH2ul7XLZHQwd
+         TUcN+LIChU3FALPdsvuVh/evT2E0SCG2PABaORP7+BSyTyxunfzLgQsOn0TMlDREpNRq
+         XeyGCtEjw1JBAwA2uM1pp5rk42zzkgJOBS5IuY8xVx3seeEdjlNJB6k/7Oz3s8dEHsiV
+         rsDw==
+X-Gm-Message-State: APjAAAVzhbJjnfcG9MNAUge+W8kGUdA++CcAyEAQGKsnypLTNzNesy3j
+        ddkJYe2Yk893irtwZT6cFC/ZFA==
+X-Google-Smtp-Source: APXvYqwrZzEmLy6eO6PsNKzFBDcGp2OXEi0+GJ13UPfgamTyrLgYSPrOjFB9fJ4t+9h46xvAnPZClA==
+X-Received: by 2002:a65:5309:: with SMTP id m9mr510537pgq.266.1568749503244;
+        Tue, 17 Sep 2019 12:45:03 -0700 (PDT)
 Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
-        by smtp.gmail.com with ESMTPSA id bb15sm2849267pjb.2.2019.09.17.11.51.16
+        by smtp.gmail.com with ESMTPSA id 31sm3435103pgr.55.2019.09.17.12.45.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Sep 2019 11:51:16 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 11:51:15 -0700
+        Tue, 17 Sep 2019 12:45:01 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 12:44:59 -0700
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
 Cc:     balbi@kernel.org, agross@kernel.org, david.brown@linaro.org,
         linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH V3 1/3] dt-bindings: Introduce interconnect properties
- for Qualcomm DWC3 driver
-Message-ID: <20190917185115.GJ133864@google.com>
+Subject: Re: [PATCH V3 2/3] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+Message-ID: <20190917194459.GK133864@google.com>
 References: <1568718649-20124-1-git-send-email-cchiluve@codeaurora.org>
- <1568718649-20124-2-git-send-email-cchiluve@codeaurora.org>
+ <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1568718649-20124-2-git-send-email-cchiluve@codeaurora.org>
+In-Reply-To: <1568718649-20124-3-git-send-email-cchiluve@codeaurora.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 04:40:47PM +0530, Chandana Kishori Chiluveru wrote:
-> Add documentation for the interconnects and interconnect-names
-> properties for USB as detailed by bindings/interconnect/interconnect.txt.
+On Tue, Sep 17, 2019 at 04:40:48PM +0530, Chandana Kishori Chiluveru wrote:
+> Add interconnect support in dwc3-qcom driver to vote for bus
+> bandwidth.
+> 
+> This requires for two different paths - from USB master to
+> DDR slave. The other is from APPS master to USB slave.
 > 
 > Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
 > ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.txt | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/usb/dwc3/dwc3-qcom.c | 145 ++++++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 143 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.txt b/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-> index cb695aa..428565b 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-> @@ -33,6 +33,16 @@ Optional clocks:
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 184df4d..2a2f5af 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+>
+> ...
+>
+> +/**
+> + * dwc3_qcom_interconnect_init() - Get interconnect path handles
+
+nit: "Initialize the interconnect" or similar?
+
+> + * @qcom:			Pointer to the concerned usb core.
+> + *
+> + */
+> +static int dwc3_qcom_interconnect_init(struct dwc3_qcom *qcom)
+> +{
+> +	struct device *dev = qcom->dev;
+> +	int ret;
+> +
+> +	qcom->usb_ddr_icc_path = of_icc_get(dev, "usb-ddr");
+> +	if (IS_ERR(qcom->usb_ddr_icc_path)) {
+> +		dev_err(dev, "Error: (%ld) failed getting usb-ddr path\n",
+> +			PTR_ERR(qcom->usb_ddr_icc_path));
+> +		return PTR_ERR(qcom->usb_ddr_icc_path);
+> +	}
+> +
+> +	qcom->apps_usb_icc_path = of_icc_get(dev, "apps-usb");
+> +	if (IS_ERR(qcom->apps_usb_icc_path)) {
+> +		dev_err(dev, "Error: (%ld) failed getting apps-usb path\n",
+> +				PTR_ERR(qcom->apps_usb_icc_path));
+> +		return PTR_ERR(qcom->apps_usb_icc_path);
+> +	}
+> +
+> +	ret = dwc3_qcom_interconnect_enable(qcom);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable interconnect %d\n", ret);
+
+nit: 'interconnect: %d', otherwise the message could be read as
+'failed to enable interconnect number N'.
+
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * dwc3_qcom_interconnect_exit() - Release interconnect path handles
+> + * @qcom:			Pointer to the concerned usb core.
+> + *
+> + * This function is used to release interconnect path handle.
+> + */
+> +static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+> +{
+> +	icc_put(qcom->usb_ddr_icc_path);
+> +	icc_put(qcom->apps_usb_icc_path);
+> +}
+> +
+> +/* Currently we only use bandwidth level, so just "enable" interconnects */
+> +static int dwc3_qcom_interconnect_enable(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3 *dwc;
+> +	int ret;
+> +
+> +	dwc = platform_get_drvdata(qcom->dwc3);
+> +	if (!dwc) {
+> +		dev_err(qcom->dev, "Failed to get dwc3 device\n");
+> +		return -EPROBE_DEFER;
+> +	}
+
+I understand the need for the/some check (see
+https://patchwork.kernel.org/patch/11146903/#22885491 and my reply),
+but I'm not convinced it should be done here. The function can be
+called from other contexts than _probe(), so returning -EPROBE_DEFER
+seems wrong, although I understand that you want _probe() to return
+this value.
+
+I would suggest to do this (or another) check early in
+_probe(). Returning -EPROBE_DEFER from that context makes sense, and
+it should be the only time the check is actually needed.
+
+As commented on v2 I don't particularly like the idea of using a half
+initialized struct (dwc3), even more when what is initialized or not
+varies at runtime (since dwc3_probe() and qwc3_qcom_probe() appear to
+run in parallel). IIUC device_is_bound() returns true when a device is
+fully initialized (i.e. it's _probe() completed), I'd suggest to
+evaluate to use it instead of checking the drvdata. In this case the
+drvdata check should be ok, but in general these kind of races don't
+seem a good idea, maybe tomorrow someone wants to access another
+struct member, which isn't always initialized.
+
+Others: please correct me if using half-initialized structs is
+routine in kernel drivers or device_is_bound() is the wrong tool.
+
+> +
+> +	if (dwc->maximum_speed == USB_SPEED_SUPER) {
+> +		ret = icc_set_bw(qcom->usb_ddr_icc_path,
+> +			USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+> +		if (ret)
+> +			return ret;
+> +	} else {
+> +		ret = icc_set_bw(qcom->usb_ddr_icc_path,
+> +			USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	ret = icc_set_bw(qcom->apps_usb_icc_path,
+> +		APPS_USB_AVG_BW, APPS_USB_PEAK_BW);
+> +	if (ret)
+> +		goto err_disable_mem_path;
+> +
+> +	return 0;
+> +
+> +err_disable_mem_path:
+> +	icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> +
+> +	return ret;
+> +}
+> +
+> +/* To disable an interconnect, we just set its bandwidth to 0 */
+> +static int dwc3_qcom_interconnect_disable(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	int ret;
+> +
+> +	ret = icc_set_bw(qcom->usb_ddr_icc_path, 0, 0);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = icc_set_bw(qcom->apps_usb_icc_path, 0, 0);
+> +	if (ret)
+> +		goto err_reenable_memory_path;
+> +
+> +	return 0;
+> +
+> +	/* Re-enable things in the event of an error */
+> +err_reenable_memory_path:
+> +	if (dwc->maximum_speed == USB_SPEED_SUPER)
+> +		icc_set_bw(qcom->usb_ddr_icc_path,
+> +			USB_MEMORY_AVG_SS_BW, USB_MEMORY_PEAK_SS_BW);
+> +	else
+> +		icc_set_bw(qcom->usb_ddr_icc_path,
+> +			USB_MEMORY_AVG_HS_BW, USB_MEMORY_PEAK_HS_BW);
+
+This is essentially the same as in _interconnect_enable(). You could
+consider a helper function (inline?) for 'enabling' the memory path,
+which would make things more compact and also allow to get rid of the
+goto:
+
+if (ret)
+	qcom_dwc3_interconnect_enable_mempath(qcom);
+
+return ret;
+
+> +
+> +	return ret;
+> +}
+> +
+>  static irqreturn_t qcom_dwc3_resume_irq(int irq, void *data)
+>  {
+>  	struct dwc3_qcom *qcom = data;
+> @@ -494,6 +626,12 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+>  		goto depopulate;
+>  	}
 >  
->  Optional properties:
->  - resets:		Phandle to reset control that resets core and wrapper.
-> +- interconnects:	Pairs of phandles and interconnect provider specifiers
-> +			to denote the edge source and destination ports of
-> +			the interconnect path. Please refer to
-> +			Documentation/devicetree/bindings/interconnect/
-> +			for more details.
-> +- interconnect-names:	List of interconnect path name strings sorted in the same
-> +			order as the interconnects property. Consumers drivers will use
+> +	ret = dwc3_qcom_interconnect_init(qcom);
+> +	if (ret) {
+> +		dev_err(dev, "failed to init interconnect handles %d\n", ret);
 
-nit: Consumer
-
-no need to re-spin the series just for this.
-
-> +			interconnect-names to match interconnect paths with interconnect
-> +			specifiers. Please refer to Documentation/devicetree/bindings/
-> +			interconnect/ for more details.
->  - interrupts:		specifies interrupts from controller wrapper used
->  			to wakeup from low power/susepnd state.	Must contain
->  			one or more entry for interrupt-names property
-> @@ -74,6 +84,9 @@ Example device nodes:
->  			#size-cells = <1>;
->  			ranges;
->  
-> +			interconnects = <&qnoc MASTER_USB3_0 &qnoc SLAVE_EBI1>,
-> +					<&qnoc MASTER_APPSS_PROC &qnoc SLAVE_USB3_0>;
-> +			interconnect-names = "usb-ddr", "apps-usb";
->  			interrupts = <0 131 0>, <0 486 0>, <0 488 0>, <0 489 0>;
->  			interrupt-names = "hs_phy_irq", "ss_phy_irq",
->  				  "dm_hs_phy_irq", "dp_hs_phy_irq";
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+nit: remove 'handles' (and add ':' before the error code), it's an
+implementation detail, and now _icc_init() also calls _icc_enable(),
+hence it's not only the handles.
