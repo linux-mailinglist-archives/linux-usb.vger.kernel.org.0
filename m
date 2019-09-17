@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FBFB5545
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 20:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C465BB5558
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 20:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729167AbfIQSYw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 14:24:52 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39222 "HELO
+        id S1727212AbfIQSbb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 14:31:31 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39310 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729141AbfIQSYw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 14:24:52 -0400
-Received: (qmail 6810 invoked by uid 2102); 17 Sep 2019 14:24:51 -0400
+        with SMTP id S1726232AbfIQSbb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 14:31:31 -0400
+Received: (qmail 7234 invoked by uid 2102); 17 Sep 2019 14:31:30 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Sep 2019 14:24:51 -0400
-Date:   Tue, 17 Sep 2019 14:24:51 -0400 (EDT)
+  by localhost with SMTP; 17 Sep 2019 14:31:30 -0400
+Date:   Tue, 17 Sep 2019 14:31:30 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
-        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <kai.heng.feng@canonical.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mans@mansr.com>, <oneukum@suse.com>,
         <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
-In-Reply-To: <000000000000cd1def0592ab9697@google.com>
-Message-ID: <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
+Subject: Re: general protection fault in usb_set_interface
+In-Reply-To: <000000000000e08e490592c3b2c4@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909171428160.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -32,108 +32,126 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 16 Sep 2019, syzbot wrote:
+On Tue, 17 Sep 2019, syzbot wrote:
 
 > Hello,
 > 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
-> 
-> usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
-> different from the interface descriptor's value: 9
-> usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=  
-> 0.00
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
-> greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID  
-> 0e8f:0012] on usb-dummy_hcd.0-1/input0
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in set_bit  
-> include/asm-generic/bitops-instrumented.h:28 [inline]
-> BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97  
-> [inline]
-> BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0  
-> drivers/hid/hid-gaff.c:146
-> Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
-> 
-> CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:618
->   check_memory_region_inline mm/kasan/generic.c:185 [inline]
->   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
->   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
->   gaff_init drivers/hid/hid-gaff.c:97 [inline]
->   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
->   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x
-> 
-> 
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> syzbot tried to test the proposed patch but build/boot failed:
 
-The driver assumes that the device contains an input.
+Oops.  Typo.
 
-Alan Stern
+#syz test: https://github.com/google/kasan.git f0df5c1b
 
-https://github.com/google/kasan.git f0df5c1b
+ drivers/media/usb/usbvision/usbvision-video.c |   27 ++++++++++++++++++++++----
+ 1 file changed, 23 insertions(+), 4 deletions(-)
 
- drivers/hid/hid-gaff.c |   12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
-
-Index: usb-devel/drivers/hid/hid-gaff.c
+Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
 ===================================================================
---- usb-devel.orig/drivers/hid/hid-gaff.c
-+++ usb-devel/drivers/hid/hid-gaff.c
-@@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
- {
- 	struct gaff_device *gaff;
- 	struct hid_report *report;
--	struct hid_input *hidinput = list_entry(hid->inputs.next,
--						struct hid_input, list);
-+	struct hid_input *hidinput;
- 	struct list_head *report_list =
- 			&hid->report_enum[HID_OUTPUT_REPORT].report_list;
- 	struct list_head *report_ptr = report_list;
--	struct input_dev *dev = hidinput->input;
-+	struct input_dev *dev;
- 	int error;
+--- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
++++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+@@ -314,6 +314,10 @@ static int usbvision_v4l2_open(struct fi
+ 	if (mutex_lock_interruptible(&usbvision->v4l2_lock))
+ 		return -ERESTARTSYS;
  
-+	if (list_empty(&hid->inputs)) {
-+		hid_err(hid, "no inputs found\n");
-+		return -ENODEV;
++	if (usbvision->remove_pending) {
++		err_code = -ENODEV;
++		goto unlock;
 +	}
-+	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-+	dev = hidinput->input;
+ 	if (usbvision->user) {
+ 		err_code = -EBUSY;
+ 	} else {
+@@ -377,6 +381,7 @@ unlock:
+ static int usbvision_v4l2_close(struct file *file)
+ {
+ 	struct usb_usbvision *usbvision = video_drvdata(file);
++	int r;
+ 
+ 	PDEBUG(DBG_IO, "close");
+ 
+@@ -391,9 +396,10 @@ static int usbvision_v4l2_close(struct f
+ 	usbvision_scratch_free(usbvision);
+ 
+ 	usbvision->user--;
++	r = usbvision->remove_pending;
+ 	mutex_unlock(&usbvision->v4l2_lock);
+ 
+-	if (usbvision->remove_pending) {
++	if (r) {
+ 		printk(KERN_INFO "%s: Final disconnect\n", __func__);
+ 		usbvision_release(usbvision);
+ 		return 0;
+@@ -453,6 +459,9 @@ static int vidioc_querycap(struct file *
+ {
+ 	struct usb_usbvision *usbvision = video_drvdata(file);
+ 
++	if (!usbvision->dev)
++		return -ENODEV;
 +
- 	if (list_empty(report_list)) {
- 		hid_err(hid, "no output reports found\n");
- 		return -ENODEV;
+ 	strscpy(vc->driver, "USBVision", sizeof(vc->driver));
+ 	strscpy(vc->card,
+ 		usbvision_device_data[usbvision->dev_model].model_string,
+@@ -1073,6 +1082,11 @@ static int usbvision_radio_open(struct f
+ 
+ 	if (mutex_lock_interruptible(&usbvision->v4l2_lock))
+ 		return -ERESTARTSYS;
++
++	if (usbvision->remove_pending) {
++		err_code = -ENODEV;
++		goto out;
++	}
+ 	err_code = v4l2_fh_open(file);
+ 	if (err_code)
+ 		goto out;
+@@ -1105,21 +1119,24 @@ out:
+ static int usbvision_radio_close(struct file *file)
+ {
+ 	struct usb_usbvision *usbvision = video_drvdata(file);
++	int r;
+ 
+ 	PDEBUG(DBG_IO, "");
+ 
+ 	mutex_lock(&usbvision->v4l2_lock);
+ 	/* Set packet size to 0 */
+ 	usbvision->iface_alt = 0;
+-	usb_set_interface(usbvision->dev, usbvision->iface,
++	if (usbvision->dev)
++		usb_set_interface(usbvision->dev, usbvision->iface,
+ 				    usbvision->iface_alt);
+ 
+ 	usbvision_audio_off(usbvision);
+ 	usbvision->radio = 0;
+ 	usbvision->user--;
++	r = usbvision->remove_pending;
+ 	mutex_unlock(&usbvision->v4l2_lock);
+ 
+-	if (usbvision->remove_pending) {
++	if (r) {
+ 		printk(KERN_INFO "%s: Final disconnect\n", __func__);
+ 		v4l2_fh_release(file);
+ 		usbvision_release(usbvision);
+@@ -1551,6 +1568,7 @@ err_usb:
+ static void usbvision_disconnect(struct usb_interface *intf)
+ {
+ 	struct usb_usbvision *usbvision = to_usbvision(usb_get_intfdata(intf));
++	int u;
+ 
+ 	PDEBUG(DBG_PROBE, "");
+ 
+@@ -1567,13 +1585,14 @@ static void usbvision_disconnect(struct
+ 	v4l2_device_disconnect(&usbvision->v4l2_dev);
+ 	usbvision_i2c_unregister(usbvision);
+ 	usbvision->remove_pending = 1;	/* Now all ISO data will be ignored */
++	u = usbvision->user;
+ 
+ 	usb_put_dev(usbvision->dev);
+ 	usbvision->dev = NULL;	/* USB device is no more */
+ 
+ 	mutex_unlock(&usbvision->v4l2_lock);
+ 
+-	if (usbvision->user) {
++	if (u) {
+ 		printk(KERN_INFO "%s: In use, disconnect pending\n",
+ 		       __func__);
+ 		wake_up_interruptible(&usbvision->wait_frame);
+
 
