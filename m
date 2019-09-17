@@ -2,131 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42613B452D
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 03:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 676A2B462C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 05:54:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390703AbfIQBOh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Sep 2019 21:14:37 -0400
-Received: from mga09.intel.com ([134.134.136.24]:48559 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728842AbfIQBOh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Sep 2019 21:14:37 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Sep 2019 18:14:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,514,1559545200"; 
-   d="scan'208";a="198528953"
-Received: from jerryopenix.sh.intel.com (HELO jerryopenix) ([10.239.158.171])
-  by orsmga002.jf.intel.com with ESMTP; 16 Sep 2019 18:14:35 -0700
-Date:   Tue, 17 Sep 2019 09:13:15 +0800
-From:   "Liu, Changcheng" <changcheng.liu@intel.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: patch "usbip: tools: fix GCC8 warning for strncpy" added to
- usb-next
-Message-ID: <20190917011315.GA26753@jerryopenix>
-References: <156412454492134@kroah.com>
+        id S1729604AbfIQDy0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Sep 2019 23:54:26 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:33338 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728010AbfIQDy0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Sep 2019 23:54:26 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 249CB60850; Tue, 17 Sep 2019 03:54:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568692465;
+        bh=joRR7LYWU8P8rz60YCJxIY2KwbV/rIB9q9L/BVlXVTY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=boZYR3mHLqOWwC2LKDjyIVdts4vDiz/gr0kON5sZKdGVmeL2Qiv4/7uoje/mvW5sm
+         vPqYiw6CuAVbHUEzeauHEhMMNl26KfqQBUoehoP+5ee7KFNSSmm1jRcIOkva4JXMfd
+         xRhBnXIwTSFdQUpHePp4gZJyXjV3WLq2Dt1h9ZZU=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.206.24.216] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mgautam@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A3DA460850;
+        Tue, 17 Sep 2019 03:54:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568692464;
+        bh=joRR7LYWU8P8rz60YCJxIY2KwbV/rIB9q9L/BVlXVTY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Nem8DnySxJVDcZ69uI0DUGjwA6HQZoCFIk/77Ciez7xS5I1T5wPXxDX5tusHGEZRi
+         L5jUPZ3v3OkK0m6xhW1H1hpivUQbLDWOg+osFjhLmWt8EVbQxolIhMoQoIIeCoxceY
+         vGemHT/Cu2sXbW941Gn4KTziSoWc2+2wyK686Tco=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A3DA460850
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=mgautam@codeaurora.org
+Subject: Re: [PATCH V2 0/3] ADD interconnect support for USB
+To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>,
+        balbi@kernel.org, agross@kernel.org, david.brown@linaro.org
+Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <1568634061-14455-1-git-send-email-cchiluve@codeaurora.org>
+From:   Manu Gautam <mgautam@codeaurora.org>
+Message-ID: <97684757-0895-cc27-58ed-1b56db0f2756@codeaurora.org>
+Date:   Tue, 17 Sep 2019 09:24:19 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <156412454492134@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <1568634061-14455-1-git-send-email-cchiluve@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
-   Do we have plan to merge this patch into 5.3 Release?
-   I hit the build problem(warning turns to be error under -Werror) when
-   building 5.3 version.
 
-B.R.
-Changcheng
+On 9/16/2019 5:10 PM, Chandana Kishori Chiluveru wrote:
+> This path series aims to add interconnect support in
+> dwc3-qcom driver on SDM845 SoCs.
 
-On 09:02 Fri 26 Jul, gregkh@linuxfoundation.org wrote:
-> 
-> This is a note to let you know that I've just added the patch titled
-> 
->     usbip: tools: fix GCC8 warning for strncpy
-> 
-> to my usb git tree which can be found at
->     git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> in the usb-next branch.
-> 
-> The patch will show up in the next release of the linux-next tree
-> (usually sometime within the next 24 hours during the week.)
-> 
-> The patch will also be merged in the next major kernel release
-> during the merge window.
-> 
-> If you have any questions about this process, please let me know.
-> 
-> 
-> From 6389a62ff798e781567645c0b0ca3dd7b8a4289d Mon Sep 17 00:00:00 2001
-> From: "Liu, Changcheng" <changcheng.liu@intel.com>
-> Date: Thu, 25 Jul 2019 21:22:09 +0800
-> Subject: usbip: tools: fix GCC8 warning for strncpy
-> 
-> GCC8 started emitting warning about using strncpy with number of bytes
-> exactly equal destination size which could lead to non-zero terminated
-> string being copied. Use "SYSFS_PATH_MAX - 1" & "SYSFS_BUS_ID_SIZE - 1"
-> as number of bytes to ensure name is always zero-terminated.
-> 
-> Signed-off-by: Changcheng Liu <changcheng.liu@aliyun.com>
-> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-> Link: https://lore.kernel.org/r/20190725132209.GA27590@jerryopenix
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
->  tools/usb/usbip/libsrc/usbip_common.c        | 6 ++++--
->  tools/usb/usbip/libsrc/usbip_device_driver.c | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_common.c b/tools/usb/usbip/libsrc/usbip_common.c
-> index bb424638d75b..b8d7d480595a 100644
-> --- a/tools/usb/usbip/libsrc/usbip_common.c
-> +++ b/tools/usb/usbip/libsrc/usbip_common.c
-> @@ -226,8 +226,10 @@ int read_usb_device(struct udev_device *sdev, struct usbip_usb_device *udev)
->  	path = udev_device_get_syspath(sdev);
->  	name = udev_device_get_sysname(sdev);
->  
-> -	strncpy(udev->path,  path,  SYSFS_PATH_MAX);
-> -	strncpy(udev->busid, name, SYSFS_BUS_ID_SIZE);
-> +	strncpy(udev->path,  path,  SYSFS_PATH_MAX - 1);
-> +	udev->path[SYSFS_PATH_MAX - 1] = '\0';
-> +	strncpy(udev->busid, name, SYSFS_BUS_ID_SIZE - 1);
-> +	udev->busid[SYSFS_BUS_ID_SIZE - 1] = '\0';
->  
->  	sscanf(name, "%u-%u", &busnum, &devnum);
->  	udev->busnum = busnum;
-> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> index 5a3726eb44ab..051d7d3f443b 100644
-> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> @@ -91,7 +91,8 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
->  	copy_descr_attr16(dev, &descr, idProduct);
->  	copy_descr_attr16(dev, &descr, bcdDevice);
->  
-> -	strncpy(dev->path, path, SYSFS_PATH_MAX);
-> +	strncpy(dev->path, path, SYSFS_PATH_MAX - 1);
-> +	dev->path[SYSFS_PATH_MAX - 1] = '\0';
->  
->  	dev->speed = USB_SPEED_UNKNOWN;
->  	speed = udev_device_get_sysattr_value(sdev, "current_speed");
-> @@ -110,7 +111,8 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
->  	dev->busnum = 0;
->  
->  	name = udev_device_get_sysname(plat);
-> -	strncpy(dev->busid, name, SYSFS_BUS_ID_SIZE);
-> +	strncpy(dev->busid, name, SYSFS_BUS_ID_SIZE - 1);
-> +	dev->busid[SYSFS_BUS_ID_SIZE - 1] = '\0';
->  	return 0;
->  err:
->  	fclose(fd);
-> -- 
-> 2.22.0
-> 
-> 
+As Matthias commented on other patch, can you update the
+subject to mention that series is for dwc3-qcom only? And update
+same dt-bindings patch commit subject as well
+
+>
+> Changes since V1:
+>   > Comments by Georgi Djakov on "[PATCH 2/3]" addressed
+>   > [PATCH 1/3] and [PATCH 3/3] remains unchanged
+>
+> Chandana Kishori Chiluveru (3):
+>   dt-bindings: Introduce interconnect bindings for usb
+>   usb: dwc3: qcom: Add interconnect support in dwc3 driver
+>   arm64: dts: sdm845: Add interconnect properties for USB
+>
+>  .../devicetree/bindings/usb/qcom,dwc3.txt          |  13 ++
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi               |  12 ++
+>  drivers/usb/dwc3/dwc3-qcom.c                       | 145 ++++++++++++++++++++-
+>  3 files changed, 168 insertions(+), 2 deletions(-)
+>
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
