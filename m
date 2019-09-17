@@ -2,132 +2,321 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 573DDB5457
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 19:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7415AB54C7
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 19:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfIQRgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 13:36:02 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39114 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726278AbfIQRgC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 13:36:02 -0400
-Received: (qmail 6295 invoked by uid 2102); 17 Sep 2019 13:36:01 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Sep 2019 13:36:01 -0400
-Date:   Tue, 17 Sep 2019 13:36:01 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
-        <kai.heng.feng@canonical.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <mans@mansr.com>, <oneukum@suse.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: general protection fault in usb_set_interface
-In-Reply-To: <0000000000008ad92e0592c1e58f@google.com>
-Message-ID: <Pine.LNX.4.44L0.1909171323180.1590-100000@iolanthe.rowland.org>
+        id S1727685AbfIQR7A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 13:59:00 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:43570 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbfIQR7A (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 13:59:00 -0400
+Received: by mail-pl1-f193.google.com with SMTP id 4so1833736pld.10
+        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 10:58:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=0PcvX7ZTcQgsbgDEZrE+h18TKfKfoGtnmdkofDb9Kyk=;
+        b=GOFSb/baTTMhMqQZbzEp2eaT5zPoyd05eAxkep5YoVxUlSBoYwcuJ1VIRrcZWUADPx
+         Le7NjRB4BxAnJZg2b3bXdSUUQ0pBNBQVyEq4AT1DH91zHpW2Jwich/sb/SwoosfNi5ac
+         wu7rzljl5Fa8i9aYGYPkgIQcr6eMhyv1kfla4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0PcvX7ZTcQgsbgDEZrE+h18TKfKfoGtnmdkofDb9Kyk=;
+        b=SZ+dwaTOkeFeHaWoXOVqgI5O986Q0fZf/4GUGo20vUuRwgbcbpJx1mkCTB6bDKrAlo
+         5bZaZwKzxkhCCl21oOFt/N8hfP73I/91XQrCdcxt8Qgad0i/kLFlcbtdRqPSpcnA4QPf
+         fNwvhSCVIkpGRPLFi+UotrHFMxeh5Vms6w6gvJT2k2WHR4O/Dbd8fTJEW9iEy12sidZX
+         uNllOzljyXwMOXbIhh1CjwYshcnM5Ok+ci/iC4mPtWvurrzBJNR6qM3dqwjHV5vTqRYC
+         bV3o0Syu0J4GKdWgRQ1eTt2maShwM5IIYw+tXlAAg8/LgxjwBvDfjnNSk8S4jJUr1fG6
+         9ULQ==
+X-Gm-Message-State: APjAAAUoQCMFQy9rZTgnHKTdyKkpF12VX5+ZmAcyEpeR3N12FX9XTNtH
+        WBEMXfOpw93jrnd8uzvzJLOA5A==
+X-Google-Smtp-Source: APXvYqwJ22LdhJ9CnYNWuplY1l++rDxgq8ZDIv0hR66Ibqq1dxO2/XMgct50oaeWvbrR/9LIEyG2OA==
+X-Received: by 2002:a17:902:7c14:: with SMTP id x20mr4926547pll.289.1568743139264;
+        Tue, 17 Sep 2019 10:58:59 -0700 (PDT)
+Received: from localhost ([2620:15c:202:1:75a:3f6e:21d:9374])
+        by smtp.gmail.com with ESMTPSA id i22sm3534305pfa.70.2019.09.17.10.58.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Sep 2019 10:58:58 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 10:58:55 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     cchiluve@codeaurora.org
+Cc:     balbi@kernel.org, agross@kernel.org, david.brown@linaro.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH V2 2/3] usb: dwc3: qcom: Add interconnect support in dwc3
+ driver
+Message-ID: <20190917175855.GI133864@google.com>
+References: <1568634061-14455-1-git-send-email-cchiluve@codeaurora.org>
+ <1568634061-14455-3-git-send-email-cchiluve@codeaurora.org>
+ <20190916222446.GG133864@google.com>
+ <7762a32f08a297e47a45dc9840b62d02@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7762a32f08a297e47a45dc9840b62d02@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Sep 2019, syzbot wrote:
+Hi Chandana,
 
-> Hello,
+On Tue, Sep 17, 2019 at 04:39:20PM +0530, cchiluve@codeaurora.org wrote:
+> Hi Matthias,
 > 
-> syzbot has tested the proposed patch but the reproducer still triggered  
-> crash:
-> WARNING in sysfs_remove_group
+> Thanks for the review. I Will address below comments and post changes in new
+> version.
 > 
-> ------------[ cut here ]------------
-> sysfs group 'power' not found for kobject 'radio3'
-> WARNING: CPU: 1 PID: 2883 at fs/sysfs/group.c:278 sysfs_remove_group  
-> fs/sysfs/group.c:278 [inline]
-> WARNING: CPU: 1 PID: 2883 at fs/sysfs/group.c:278  
-> sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 1 PID: 2883 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   panic+0x2a3/0x6da kernel/panic.c:219
->   __warn.cold+0x20/0x4a kernel/panic.c:576
->   report_bug+0x262/0x2a0 lib/bug.c:186
->   fixup_bug arch/x86/kernel/traps.c:179 [inline]
->   fixup_bug arch/x86/kernel/traps.c:174 [inline]
->   do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
->   do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
->   invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-> RIP: 0010:sysfs_remove_group fs/sysfs/group.c:278 [inline]
-> RIP: 0010:sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
-> Code: 48 89 d9 49 8b 14 24 48 b8 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c  
-> 01 00 75 41 48 8b 33 48 c7 c7 e0 c8 d0 85 e8 a0 0e 8b ff <0f> 0b eb 95 e8  
-> e2 d1 db ff e9 d2 fe ff ff 48 89 df e8 d5 d1 db ff
-> RSP: 0018:ffff8881c6d17c50 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: ffffffff85f2d700 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff81288ddd RDI: ffffed1038da2f7c
-> RBP: 0000000000000000 R08: ffff8881d6243000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881cf014cd8
-> R13: ffffffff85f2dca0 R14: 0000000000000000 R15: ffff8881cf015178
->   dpm_sysfs_remove+0x97/0xb0 drivers/base/power/sysfs.c:735
->   device_del+0x12a/0xb10 drivers/base/core.c:2316
->   device_unregister+0x11/0x30 drivers/base/core.c:2371
->   video_unregister_device+0xa2/0xc0 drivers/media/v4l2-core/v4l2-dev.c:1051
->   usbvision_unregister_video+0x83/0x120  
-> drivers/media/usb/usbvision/usbvision-video.c:1243
->   usbvision_release+0x10d/0x1c0  
-> drivers/media/usb/usbvision/usbvision-video.c:1356
->   usbvision_radio_close.cold+0x2b/0x74  
-> drivers/media/usb/usbvision/usbvision-video.c:1129
->   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
->   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
->   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f4fde8992b0
-> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-> RSP: 002b:00007ffcce3d65f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f4fde8992b0
-> RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-> R13: 00007ffcce3d6750 R14: 0000000000000000 R15: 0000000000000000
-> Kernel Offset: disabled
-> Rebooting in 86400 seconds..
-> 
-> 
-> Tested on:
-> 
-> commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> console output: https://syzkaller.appspot.com/x/log.txt?x=178ba88d600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ce1b59600000
+> On 2019-09-17 03:54, Matthias Kaehlcke wrote:
+> > Hi Chandana,
+> > 
+> > On Mon, Sep 16, 2019 at 05:11:00PM +0530, Chandana Kishori Chiluveru
+> > wrote:
+> > > Add interconnect support in dwc3-qcom driver to vote for bus
+> > > bandwidth.
+> > > 
+> > > This requires for two different paths - from USB master to
+> > > DDR slave. The other is from APPS master to USB slave.
+> > > 
+> > > Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+> > > ---
+> > >  drivers/usb/dwc3/dwc3-qcom.c | 145
+> > > ++++++++++++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 143 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/dwc3-qcom.c
+> > > b/drivers/usb/dwc3/dwc3-qcom.c
+> > > index 184df4d..4f6c9736 100644
+> > > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > > @@ -14,6 +14,7 @@
+> > >  #include <linux/extcon.h>
+> > >  #include <linux/of_platform.h>
+> > >  #include <linux/platform_device.h>
+> > > +#include <linux/interconnect.h>
+> > 
+> > please use alphabetical order, i.e. this should be after
+> > 'linux/extcon.h'.
+> > 
+> > >  #include <linux/phy/phy.h>
+> > >  #include <linux/usb/of.h>
+> > >  #include <linux/reset.h>
+> > > @@ -59,8 +60,13 @@ struct dwc3_qcom {
+> > >  	enum usb_dr_mode	mode;
+> > >  	bool			is_suspended;
+> > >  	bool			pm_suspended;
+> > > +	struct icc_path		*usb_ddr_icc_path;
+> > > +	struct icc_path		*apps_usb_icc_path;
+> > >  };
+> > > 
+> > > +static int usb_interconnect_enable(struct dwc3_qcom *qcom);
+> > > +static int usb_interconnect_disable(struct dwc3_qcom *qcom);
+> > > +
+> > >  static inline void dwc3_qcom_setbits(void __iomem *base, u32
+> > > offset, u32 val)
+> > >  {
+> > >  	u32 reg;
+> > > @@ -222,7 +228,7 @@ static void dwc3_qcom_enable_interrupts(struct
+> > > dwc3_qcom *qcom)
+> > >  static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+> > >  {
+> > >  	u32 val;
+> > > -	int i;
+> > > +	int i, ret;
+> > > 
+> > >  	if (qcom->is_suspended)
+> > >  		return 0;
+> > > @@ -234,6 +240,11 @@ static int dwc3_qcom_suspend(struct dwc3_qcom
+> > > *qcom)
+> > >  	for (i = qcom->num_clocks - 1; i >= 0; i--)
+> > >  		clk_disable_unprepare(qcom->clks[i]);
+> > > 
+> > > +	/* Remove bus voting */
+> > 
+> > IMO the comment doesn't add much, especially since there is a log in
+> > case of failure.
+> > 
+> > > +	ret = usb_interconnect_disable(qcom);
+> > > +	if (ret)
+> > > +		dev_err(qcom->dev, "bus bw voting failed %d\n", ret);
+> > 
+> > This should probably be a warning, since the function continues with
+> > normal execution.
+> > 
+> > nit: the function is called usb_interconnect_disable(), but the
+> > message says "bus bw voting failed". The function name encapsulates
+> > what the function does, but the message talks about implementation
+> > details. To be consistent either the function should have something
+> > about 'voting' in it's name, or the message should be "failed to
+> > disable interconnect" or similar.
+> > 
+> > > +
+> > >  	qcom->is_suspended = true;
+> > >  	dwc3_qcom_enable_interrupts(qcom);
+> > > 
+> > > @@ -259,6 +270,11 @@ static int dwc3_qcom_resume(struct dwc3_qcom
+> > > *qcom)
+> > >  		}
+> > >  	}
+> > > 
+> > > +	/* Add bus voting */
+> > > +	ret = usb_interconnect_enable(qcom);
+> > > +	if (ret)
+> > > +		dev_err(qcom->dev, "bus bw voting failed %d\n", ret);
+> > > +
+> > 
+> > same comments as for suspend()
+> > 
+> > >  	/* Clear existing events from PHY related to L2 in/out */
+> > >  	dwc3_qcom_setbits(qcom->qscratch_base, PWR_EVNT_IRQ_STAT_REG,
+> > >  			  PWR_EVNT_LPM_IN_L2_MASK | PWR_EVNT_LPM_OUT_L2_MASK);
+> > > @@ -268,6 +284,117 @@ static int dwc3_qcom_resume(struct dwc3_qcom
+> > > *qcom)
+> > >  	return 0;
+> > >  }
+> > > 
+> > > +/* Interconnect path bandwidths in MBps */
+> > > +#define USB_MEMORY_AVG_HS_BW MBps_to_icc(240)
+> > > +#define USB_MEMORY_PEAK_HS_BW MBps_to_icc(700)
+> > > +#define USB_MEMORY_AVG_SS_BW  MBps_to_icc(1000)
+> > > +#define USB_MEMORY_PEAK_SS_BW MBps_to_icc(2500)
+> > > +#define APPS_USB_AVG_BW 0
+> > > +#define APPS_USB_PEAK_BW MBps_to_icc(40)
+> > > +
+> > > +/**
+> > > + * usb_interconnect_init() -
+> > 
+> > A function named 'usb_*' is typically associated to be a USB core
+> > function. I would suggest to use the 'dwc3_qcom_' prefix like all
+> > other functions in this file. Applicable to all new functions.
+> > 
+> > > Request to get interconnect path handle
+> > 
+> > nit: handles
+> > 
+> > Get rid of "Request to"?
+> > 
+> > > + * @qcom:			Pointer to the concerned usb core.
+> > > + *
+> > > + */
+> > > +static int usb_interconnect_init(struct dwc3_qcom *qcom)
+> > > +{
+> > > +	struct device *dev = qcom->dev;
+> > > +
+> > > +	qcom->usb_ddr_icc_path = of_icc_get(dev, "usb-ddr");
+> > > +	if (IS_ERR(qcom->usb_ddr_icc_path)) {
+> > > +		dev_err(dev, "Error: (%ld) failed getting %s path\n",
+> > > +			PTR_ERR(qcom->usb_ddr_icc_path), "usb-ddr");
+> > 
+> > Why not put 'usb-ddr' in the format string, instead of using '%s'?
+> > 
+> > > +		return PTR_ERR(qcom->usb_ddr_icc_path);
+> > > +	}
+> > > +
+> > > +	qcom->apps_usb_icc_path = of_icc_get(dev, "apps-usb");
+> > > +	if (IS_ERR(qcom->apps_usb_icc_path)) {
+> > > +		dev_err(dev, "Error: (%ld) failed getting %s path\n",
+> > > +				PTR_ERR(qcom->apps_usb_icc_path), "apps-usb");
+> > 
+> > same comment as above.
+> > 
+> >      	     	icc_put(qcom->usb_ddr_icc_path);
+> > 
+> > > +		return PTR_ERR(qcom->usb_ddr_icc_path);
+> > 
+> > should be 'qcom->apps_usb_icc_path'
+> > 
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +/**
+> > > + * geni_interconnect_exit() -
+> > 
+> > wrong prefix
+> > 
+> > > Request to release interconnect path handle
+> > 
+> > nit: handles
+> > 
+> > Get rid of "Request to"?
+> > 
+> > > + * @qcom:			Pointer to the concerned usb core.
+> > > + *
+> > > + * This function is used to release interconnect path handle.
+> > > + */
+> > > +static void usb_interconnect_exit(struct dwc3_qcom *qcom)
+> > > +{
+> > > +	icc_put(qcom->usb_ddr_icc_path);
+> > > +	icc_put(qcom->apps_usb_icc_path);
+> > > +}
+> > > +
+> > > +/* Currently we only use bandwidth level, so just "enable"
+> > > interconnects */
+> > > +static int usb_interconnect_enable(struct dwc3_qcom *qcom)
+> > > +{
+> > > +	struct dwc3 *dwc;
+> > > +	int ret;
+> > > +
+> > > +	dwc = platform_get_drvdata(qcom->dwc3);
+> > > +	if (!dwc) {
+> > > +		dev_err(qcom->dev, "Failed to get dwc3 device\n");
+> > > +		return -EPROBE_DEFER;
+> > > +	}
+> > 
+> > This should never happen, drvdata is set in _probe(). If it happens
+> > -EPROBE_DEFER doesn't seem to be an appropriate error code. I suggest
+> > to remove the condition entirely.
+> > 
+> In my testing i have seen a null pointer crash with "dwc->maximum_speed". To
+> prevent the crash i have added this logic.
+> Agree that drvdata is set in dwc3_probe(). Sometimes i can see that
+> dwc3_probe never getting completed before it can go and access
+> dwc->maximum_speed pointer here.
+> This is leading to null pointer access crash. if i defer the probe and try
+> again i can see that drvdata getting updated successfully in dwc3_probe.
 
-This is more than I can fix.  The whole way the v4l2 layer handles
-reference counting seems suspicious and I don't understand it.  (Does
-the code assume that the only reference holders are initial
-registration and open files?)
+I see, _probe() sets the drvdata of the dwc3_qcom pdev, however
+_enable() gets the drvdata from the dwc3 pdev.
 
-In this case it looks like the device may be unregistered twice.  It's
-hard to tell exactly what's going wrong without knowing more about how
-this is supposed to work.  It wouldn't hurt, for example, to use 
-dev_info() instead of printk(KERN_INFO) in places like 
-usbvision_disconnect().
+Apparently dwc3_probe() and dwc3_qcom_probe() can run in paralel:
 
-I'm going to step back and let the maintainers deal with the rest of
-this.
+dwc3_probe
+  // stuff
 
-Alan Stern
+  dwc3_get_properties
+    dwc->maximum_speed = usb_get_maximum_speed(dev);
 
+  platform_set_drvdata(pdev, dwc)
+
+  // more stuff
+
+
+dwc3_qcom_probe
+  dwc3_qcom_of_register_core
+    qcom->dwc3 = of_find_device_by_node()
+
+  usb_interconnect_enable
+    dwc = platform_get_drvdata(qcom->dwc3);
+
+
+When dwc3_qcom_of_register_core() is called the dwc3 device may not be
+fully initialized yet. Also after the drvdata is set initialization is
+still ongoing. You can't really rely on the dwc3 struct to be fully
+initialized, but at least the maximum_speed attribute should be set
+when the drvdata is not NULL.
+
+I wonder if it would be clearer to do the check in _probe() instead of
+_interconnect_enable(), the -EPROBE_DEFER return value is confusing,
+especially since the function can be called from a non-probe context.
+
+You could possibly use device_is_bound() to confirm that dwc3_probe()
+is completed, the function isn't widely used though. Checking that the
+device is fully initialized before using it seems like a good idea,
+however there might be reasons for not using device_is_bound() which I
+ignore. Maybe others can offer advice on this.
