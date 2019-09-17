@@ -2,133 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A834EB5175
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B4EBB5182
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729522AbfIQP2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 11:28:04 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:45116 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726305AbfIQP2D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 11:28:03 -0400
-Received: by mail-io1-f69.google.com with SMTP id o11so6215850iop.12
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 08:28:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Lzofq4xPIQXczbIqDkIH6JArDXWhDuAAg+Z/kAV0sq8=;
-        b=kCnl4Cy0DkaBHLE75aYxfknYZhRbkNzwZVlXR78KYid6KdjlRYFabenzkWip02Ahum
-         VIel19HbALlZGFoA8mwdxNN790UyAE2bNZVeE1NaOdyQY1hp30sEzZ5SZUELeJ8HfFTH
-         uzc3+YbiOHkBFcr10Ygz6eptBuFqO14p9qmu6VIf1hWUrenrAGqAItTkMnQWH6i2h04L
-         ozIejRMKpHWalVNe5ovKWZjdBBbtxHLNIqu4ifdpMh9roOSFyAnPW5Koz50NfKBhtHAW
-         bJw+IK1EWic6WbEyn1/CkcLn9V0mt98JkM9JSovcF3jjM3KSyL/51XN8zOZbAw1EVATG
-         OsmQ==
-X-Gm-Message-State: APjAAAV6CIQDEVYd7TEDKk9i6nc96HkIiaaBiSbBdhh84fKq4wc7n66P
-        IDIfxjsuNG1ZCN+3pBNRwuiA26ANqq1KvXpj6rLtyh40A4do
-X-Google-Smtp-Source: APXvYqyLTV8elUmeAG7div/A5qaTCYovaMk++Q3Zd5quAbkt6djbFw0SFfwznCg3hU9dmByT/aZyJZgd6WlTdihkVvQEL3N97D7P
+        id S1729586AbfIQP26 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 11:28:58 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38722 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726546AbfIQP26 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 11:28:58 -0400
+Received: (qmail 4307 invoked by uid 2102); 17 Sep 2019 11:28:57 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Sep 2019 11:28:57 -0400
+Date:   Tue, 17 Sep 2019 11:28:57 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e1d1a6e595adbd2458f1@syzkaller.appspotmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kai heng feng <kai.heng.feng@canonical.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        <yuehaibing@huawei.com>
+Subject: Re: KMSAN: uninit-value in usb_autopm_put_interface
+In-Reply-To: <CAAeHK+yMaX7LUUXbGj3RDDChdCDp+U_4ePt5PjDWWsrJUk04uw@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1909171125330.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9dd4:: with SMTP id 20mr4217338ioo.1.1568734081310;
- Tue, 17 Sep 2019 08:28:01 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 08:28:01 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1909171115310.1590-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a9f2870592c15dd3@google.com>
-Subject: Re: general protection fault in usb_set_interface
-From:   syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mans@mansr.com, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, 17 Sep 2019, Andrey Konovalov wrote:
 
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-possible deadlock in vidioc_querycap
+> On Tue, Sep 17, 2019 at 4:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Tue, 17 Sep 2019, Dmitry Vyukov wrote:
+> >
+> > > On Mon, Sep 16, 2019 at 10:31 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Mon, 16 Sep 2019, syzbot wrote:
+> > > >
+> > > > > Hello,
+> > > > >
+> > > > > syzbot found the following crash on:
+> > > > >
+> > > > > HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
+> > > > > git tree:       https://github.com/google/kmsan.git master
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16a7dde1600000
+> > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+> > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=e1d1a6e595adbd2458f1
+> > > > > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
+> > > > > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
+> > > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=176303e1600000
+> > > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10e8f23e600000
+> >
+> > > > This is probably the same problem that was fixed in the Logitech driver
+> > > > earlier.  The fix still appears to be in linux-next (commit
+> > > > 5f9242775bb6).
+> > > >
+> > > > Shouldn't syzbot wait until after the merge window before running tests
+> > > > like this?
+> > >
+> > >
+> > > Merge window is a weak notion and may be not enough either (all trees
+> > > do not necessary update at that point and syzbot does not necessary
+> > > rebuild all of them successfully). syzbot uses another criteria: if
+> > > you say a bug is fixed by commit X, it will wait until commit X
+> > > reaches all of tested trees and will report the same crash signature
+> > > again only after that. This procedure was specifically designed to not
+> > > produce duplicate reports about the same bug.
+> > > So either the bug wasn't really fixed, or this is another bug, or
+> > > syzbot was given a wrong commit.
+> >
+> > Hmmm.  Which are the "tested trees"?
+> >
+> > This bug (e1d1a6e595adbd2458f1) is marked as a duplicate of
+> > 3cbe5cd105d2ad56a1df.  The dashboard link says that bug was fixed by
+> > commit "HID: logitech: Fix general protection fault caused by Logitech
+> > driver" -- which is correct, as far as I know.
+> >
+> > That commit is present in linux-next, as mentioned above.  As of 10:44
+> > EDT today, it is not present in Linus's tree, according to
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/drivers/hid/hid-lg.c
+> >
+> > (in fact, no commits affecting drivers/hid/hid-lg.c in that tree are
+> > dated after 2019-07-10).
+> >
+> > Furthermore, according to
+> >
+> > https://github.com/google/kmsan/blob/master/drivers/hid/hid-lg.c?h=014077b5
+> >
+> > the source code actually used by syzbot for this test doesn't have that
+> > commit either.  (BTW, is there any way to get a git log out of github?
+> > It would be nice not to have to download the whole source file -- and
+> > I'm not certain that this URL really does point to the version of the
+> > file that syzbot used.)
+> >
+> > So what's really going on?
+> 
+> Please see my response. This report is a different manifestation of
+> the same Logitech bug.
 
-============================================
-WARNING: possible recursive locking detected
-5.3.0-rc7+ #0 Not tainted
---------------------------------------------
-v4l_id/3016 is trying to acquire lock:
-0000000069c3004e (&usbvision->v4l2_lock){+.+.}, at:  
-vidioc_querycap+0x62/0x3b0 drivers/media/usb/usbvision/usbvision-video.c:456
+Hmmm.  Does syzbot have any conception of which drivers are exercised 
+by a particular test script?  If it doesn't, there's no way to avoid 
+getting these duplicate reports.  Still, it is a little annoying for 
+the developers.
 
-but task is already holding lock:
-0000000069c3004e (&usbvision->v4l2_lock){+.+.}, at:  
-__video_do_ioctl+0x3ba/0xba0 drivers/media/v4l2-core/v4l2-ioctl.c:2846
-
-other info that might help us debug this:
-  Possible unsafe locking scenario:
-
-        CPU0
-        ----
-   lock(&usbvision->v4l2_lock);
-   lock(&usbvision->v4l2_lock);
-
-  *** DEADLOCK ***
-
-  May be due to missing lock nesting notation
-
-1 lock held by v4l_id/3016:
-  #0: 0000000069c3004e (&usbvision->v4l2_lock){+.+.}, at:  
-__video_do_ioctl+0x3ba/0xba0 drivers/media/v4l2-core/v4l2-ioctl.c:2846
-
-stack backtrace:
-CPU: 0 PID: 3016 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_deadlock_bug kernel/locking/lockdep.c:2301 [inline]
-  check_deadlock kernel/locking/lockdep.c:2342 [inline]
-  validate_chain kernel/locking/lockdep.c:2881 [inline]
-  __lock_acquire.cold+0x148/0x29b kernel/locking/lockdep.c:3880
-  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
-  __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-  __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-  vidioc_querycap+0x62/0x3b0  
-drivers/media/usb/usbvision/usbvision-video.c:456
-  v4l_querycap+0x121/0x340 drivers/media/v4l2-core/v4l2-ioctl.c:1058
-  __video_do_ioctl+0x969/0xba0 drivers/media/v4l2-core/v4l2-ioctl.c:2878
-  video_usercopy+0x446/0xf40 drivers/media/v4l2-core/v4l2-ioctl.c:3060
-  v4l2_ioctl+0x1a2/0x220 drivers/media/v4l2-core/v4l2-dev.c:360
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7f642b0b9347
-Code: 90 90 90 48 8b 05 f1 fa 2a 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff  
-ff c3 90 90 90 90 90 90 90 90 90 90 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 01 c3 48 8b 0d c1 fa 2a 00 31 d2 48 29 c2 64
-RSP: 002b:00007ffc2fc62b28 EFLAGS: 00000206 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f642b0b9347
-RDX: 00007ffc2fc62b30 RSI: 0000000080685600 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000206 R12: 0000000000400884
-R13: 00007ffc2fc62c80 R14: 0000000000000000 R15: 0000000000000000
-
-
-Tested on:
-
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=160d95c3600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=125290b1600000
+Alan Stern
 
