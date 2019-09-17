@@ -2,129 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D039B5266
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 18:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0FBB5351
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 18:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728477AbfIQQGD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 12:06:03 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:42247 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728395AbfIQQGD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 12:06:03 -0400
-Received: by mail-io1-f72.google.com with SMTP id x9so6435380ior.9
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 09:06:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=tMVKoMSo143WvFLpbKtqPunkRQ5QruXJpLrlAkHe/bU=;
-        b=bBxevwbBIi9H1JOYUWD2wYavecn98XR/dgp/bllKgJR5BJ2q5PpAIztNnZd5O75sX8
-         tx/dp+w4mMX0rOeTbFIWthy0Dw/iGgQKRJZFnDpmQrFzHClWxf4blfOWhhF+/3Ry2BLe
-         LznyAAFV0s/k+KIGyCsxHVSQLGgmnGhjhsfnAoPc0o4jOpyXjHFvKCWzrOXmPBi21yA/
-         fzZA8+garPK6MZMEZk6b39nVUQiBwRhRkyevn6Hn3vjZQDeMcOTfve9B4n/uVsH7mWSv
-         OmdPGZaM53YdkS3sew1HMReMx+w9KX7gvDwRiScFzSMR6qSMMEDVcqJdjSemB3EMjos7
-         YB3Q==
-X-Gm-Message-State: APjAAAUuUECgmlZ/eSbCzHRXDcTnDwcJd4vVrJJk9mhN1Bxm1VfiT9ok
-        SgFAAJJIin1LbD8THxDAX+DUcMqLms7M4Vlpj3DM6KBy0xPL
-X-Google-Smtp-Source: APXvYqw1D2p2pVGFPJwudQzoYsxbcbCyTnxThBiMA8Mg95bcXBIopp9fWUbHpO7XmmcFuVxtggFOKRUsSS+3YiN06KnxHh16VS4q
+        id S1727038AbfIQQrY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 12:47:24 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38888 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725847AbfIQQrY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 12:47:24 -0400
+Received: (qmail 5432 invoked by uid 2102); 17 Sep 2019 12:47:23 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Sep 2019 12:47:23 -0400
+Date:   Tue, 17 Sep 2019 12:47:23 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Greg KH <greg@kroah.com>
+cc:     Tomoki Sekiyama <tomoki.sekiyama@gmail.com>,
+        <andreyknvl@google.com>, <chunfeng.yun@mediatek.com>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH] USB: yurex: Don't retry on unexpected errors
+In-Reply-To: <0000000000001603470592b13bfc@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909171245410.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:3b94:: with SMTP id i142mr227690ioa.212.1568736360976;
- Tue, 17 Sep 2019 09:06:00 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 09:06:00 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1909171152520.1590-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008ad92e0592c1e58f@google.com>
-Subject: Re: general protection fault in usb_set_interface
-From:   syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mans@mansr.com, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+According to Greg KH, it has been generally agreed that when a USB
+driver encounters an unknown error (or one it can't handle directly),
+it should just give up instead of going into a potentially infinite
+retry loop.
 
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-WARNING in sysfs_remove_group
+The three codes -EPROTO, -EILSEQ, and -ETIME fall into this category.
+They can be caused by bus errors such as packet loss or corruption,
+attempting to communicate with a disconnected device, or by malicious
+firmware.  Nowadays the extent of packet loss or corruption is
+negligible, so it should be safe for a driver to give up whenever one
+of these errors occurs.
 
-------------[ cut here ]------------
-sysfs group 'power' not found for kobject 'radio3'
-WARNING: CPU: 1 PID: 2883 at fs/sysfs/group.c:278 sysfs_remove_group  
-fs/sysfs/group.c:278 [inline]
-WARNING: CPU: 1 PID: 2883 at fs/sysfs/group.c:278  
-sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 2883 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2a3/0x6da kernel/panic.c:219
-  __warn.cold+0x20/0x4a kernel/panic.c:576
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-RIP: 0010:sysfs_remove_group fs/sysfs/group.c:278 [inline]
-RIP: 0010:sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
-Code: 48 89 d9 49 8b 14 24 48 b8 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c  
-01 00 75 41 48 8b 33 48 c7 c7 e0 c8 d0 85 e8 a0 0e 8b ff <0f> 0b eb 95 e8  
-e2 d1 db ff e9 d2 fe ff ff 48 89 df e8 d5 d1 db ff
-RSP: 0018:ffff8881c6d17c50 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffffffff85f2d700 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff81288ddd RDI: ffffed1038da2f7c
-RBP: 0000000000000000 R08: ffff8881d6243000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: ffff8881cf014cd8
-R13: ffffffff85f2dca0 R14: 0000000000000000 R15: ffff8881cf015178
-  dpm_sysfs_remove+0x97/0xb0 drivers/base/power/sysfs.c:735
-  device_del+0x12a/0xb10 drivers/base/core.c:2316
-  device_unregister+0x11/0x30 drivers/base/core.c:2371
-  video_unregister_device+0xa2/0xc0 drivers/media/v4l2-core/v4l2-dev.c:1051
-  usbvision_unregister_video+0x83/0x120  
-drivers/media/usb/usbvision/usbvision-video.c:1243
-  usbvision_release+0x10d/0x1c0  
-drivers/media/usb/usbvision/usbvision-video.c:1356
-  usbvision_radio_close.cold+0x2b/0x74  
-drivers/media/usb/usbvision/usbvision-video.c:1129
-  v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
-  __fput+0x2d7/0x840 fs/file_table.c:280
-  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
-  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
-  prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
-  do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x7f4fde8992b0
-Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
-07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-RSP: 002b:00007ffcce3d65f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f4fde8992b0
-RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
-RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-R13: 00007ffcce3d6750 R14: 0000000000000000 R15: 0000000000000000
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+Although the yurex driver handles -EILSEQ errors in this way, it
+doesn't do the same for -EPROTO (as discovered by the syzbot fuzzer)
+or other unrecognized errors.  This patch adjusts the driver so that
+it doesn't log an error message for -EPROTO or -ETIME, and it doesn't
+retry after any errors.
+
+Reported-and-tested-by: syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: Tomoki Sekiyama <tomoki.sekiyama@gmail.com>
+CC: <stable@vger.kernel.org>
+
+---
 
 
-Tested on:
+[as1918]
 
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=178ba88d600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14ce1b59600000
+
+ drivers/usb/misc/yurex.c |    7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+Index: usb-devel/drivers/usb/misc/yurex.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/yurex.c
++++ usb-devel/drivers/usb/misc/yurex.c
+@@ -132,6 +132,7 @@ static void yurex_interrupt(struct urb *
+ 	switch (status) {
+ 	case 0: /*success*/
+ 		break;
++	/* The device is terminated or messed up, give up */
+ 	case -EOVERFLOW:
+ 		dev_err(&dev->interface->dev,
+ 			"%s - overflow with length %d, actual length is %d\n",
+@@ -140,12 +141,13 @@ static void yurex_interrupt(struct urb *
+ 	case -ENOENT:
+ 	case -ESHUTDOWN:
+ 	case -EILSEQ:
+-		/* The device is terminated, clean up */
++	case -EPROTO:
++	case -ETIME:
+ 		return;
+ 	default:
+ 		dev_err(&dev->interface->dev,
+ 			"%s - unknown status received: %d\n", __func__, status);
+-		goto exit;
++		return;
+ 	}
+ 
+ 	/* handle received message */
+@@ -177,7 +179,6 @@ static void yurex_interrupt(struct urb *
+ 		break;
+ 	}
+ 
+-exit:
+ 	retval = usb_submit_urb(dev->urb, GFP_ATOMIC);
+ 	if (retval) {
+ 		dev_err(&dev->interface->dev, "%s - usb_submit_urb failed: %d\n",
 
