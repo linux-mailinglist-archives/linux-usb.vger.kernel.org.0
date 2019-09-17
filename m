@@ -2,194 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD709B4CAF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 13:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7DFB4CBE
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 13:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726714AbfIQLTI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 07:19:08 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:56547 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726207AbfIQLTI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 07:19:08 -0400
-Received: by mail-io1-f69.google.com with SMTP id n8so5136628ioh.23
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 04:19:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ImZBuLTqSEGXljKxgyySfimbMAHeQ24x1lZOqK5BqZg=;
-        b=KNDpWN1G0oJxHHftOIGnwVmErr3yw+5OZaizhg0gipO+lfWx5JxaqfEqyH7SVZrCn+
-         9nfP1KeyM9tOi+Flc/d42t5hVP95SXK10jKGKMLEQTIV4MBgF2V+3p7UGxE6LCZTWEOy
-         gkjhkjCWKBLRKf4CD+WXdKXGEaOJAT4YQKtIW0gxcwb2oN908LUMwc4PXoXQXHrWL6SJ
-         H/9/aZOVGrFu2gI0wfQ2XOhhg8Ud+Uz5hcRGjk8fymOqXzUI3eCmZoubqevhZRxU9ySD
-         qoyW/5QgSWwCKA2oMO2hOwVh+HMB/vstpgFqx+um3m8CUt0UZhPYwr+2KTPKE5ADCV/D
-         eYTQ==
-X-Gm-Message-State: APjAAAXolLM7ufaxtXaGytidwBsxXgA/8lgU4HjMqYnO8fXg8hS1rZ6H
-        6UKtHQtUn2lDs2rQngQG+gz7AcaNFsNFEwnVlQaXHiVjpZ2I
-X-Google-Smtp-Source: APXvYqx+Hgx5u0l/NE/cjMdOUtMZw+vHj/Hty5p6SNnwuhmkFjhje/k05xn9Bspiy2nejxjNpcnVMNbSbJml2fEi5mBpUI19yDu8
-MIME-Version: 1.0
-X-Received: by 2002:a6b:fc15:: with SMTP id r21mr2694312ioh.25.1568719147452;
- Tue, 17 Sep 2019 04:19:07 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 04:19:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008953790592bde396@google.com>
-Subject: possible deadlock in open_rio (3)
-From:   syzbot <syzbot+19df89b6a1c1aa59be2b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        miquel@df.uba.ar, rio500-users@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        id S1726818AbfIQLW4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 07:22:56 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39092 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726230AbfIQLW4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Sep 2019 07:22:56 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 77CF8B0E6;
+        Tue, 17 Sep 2019 11:22:54 +0000 (UTC)
+Message-ID: <1568719373.23075.4.camel@suse.com>
+Subject: Re: divide error in usbnet_update_max_qlen
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+6102c120be558c885f04@syzkaller.appspotmail.com>,
+        davem@davemloft.net, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Date:   Tue, 17 Sep 2019 13:22:53 +0200
+In-Reply-To: <000000000000b83b550592ab965b@google.com>
+References: <000000000000b83b550592ab965b@google.com>
+Content-Type: multipart/mixed; boundary="=-Yd95Qj5bjthxkmik5dv9"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
 
-syzbot found the following crash on:
+--=-Yd95Qj5bjthxkmik5dv9
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=166a89be600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=19df89b6a1c1aa59be2b
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12558891600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=136f7409600000
+Am Montag, den 16.09.2019, 06:29 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=117659fa600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6102c120be558c885f04
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12107ba9600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=146014e6600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+6102c120be558c885f04@syzkaller.appspotmail.com
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+19df89b6a1c1aa59be2b@syzkaller.appspotmail.com
+#syz test: https://github.com/google/kasan.git f0df5c1b
+--=-Yd95Qj5bjthxkmik5dv9
+Content-Disposition: attachment; filename="0001-usbnet-sanity-checking-of-packet-sizes.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-usbnet-sanity-checking-of-packet-sizes.patch";
+	charset="UTF-8"
 
-======================================================
-WARNING: possible circular locking dependency detected
-5.3.0-rc7+ #0 Not tainted
-------------------------------------------------------
-syz-executor220/1722 is trying to acquire lock:
-00000000ff068a1b (rio500_mutex){+.+.}, at: open_rio+0x16/0xe0  
-drivers/usb/misc/rio500.c:65
-
-but task is already holding lock:
-00000000a02b2d74 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-drivers/usb/core/file.c:39
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (minor_rwsem){++++}:
-        down_write+0x92/0x150 kernel/locking/rwsem.c:1500
-        usb_register_dev drivers/usb/core/file.c:187 [inline]
-        usb_register_dev+0x131/0x670 drivers/usb/core/file.c:156
-        probe_rio.cold+0x53/0x237 drivers/usb/misc/rio500.c:474
-        usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-        really_probe+0x281/0x6d0 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-        bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:894
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2165
-        usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-        generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-        usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-        really_probe+0x281/0x6d0 drivers/base/dd.c:548
-        driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-        __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-        bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
-        __device_attach+0x217/0x360 drivers/base/dd.c:894
-        bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
-        device_add+0xae6/0x16f0 drivers/base/core.c:2165
-        usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-        hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-        hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-        port_event drivers/usb/core/hub.c:5359 [inline]
-        hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-        process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-        worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-        kthread+0x318/0x420 kernel/kthread.c:255
-        ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
--> #0 (rio500_mutex){+.+.}:
-        check_prev_add kernel/locking/lockdep.c:2405 [inline]
-        check_prevs_add kernel/locking/lockdep.c:2507 [inline]
-        validate_chain kernel/locking/lockdep.c:2897 [inline]
-        __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
-        lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
-        __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-        __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-        open_rio+0x16/0xe0 drivers/usb/misc/rio500.c:65
-        usb_open+0x1df/0x270 drivers/usb/core/file.c:48
-        chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-        do_dentry_open+0x494/0x1120 fs/open.c:797
-        do_last fs/namei.c:3416 [inline]
-        path_openat+0x1430/0x3f50 fs/namei.c:3533
-        do_filp_open+0x1a1/0x280 fs/namei.c:3563
-        do_sys_open+0x3c0/0x580 fs/open.c:1089
-        do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-        entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-other info that might help us debug this:
-
-  Possible unsafe locking scenario:
-
-        CPU0                    CPU1
-        ----                    ----
-   lock(minor_rwsem);
-                                lock(rio500_mutex);
-                                lock(minor_rwsem);
-   lock(rio500_mutex);
-
-  *** DEADLOCK ***
-
-1 lock held by syz-executor220/1722:
-  #0: 00000000a02b2d74 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
-drivers/usb/core/file.c:39
-
-stack backtrace:
-CPU: 1 PID: 1722 Comm: syz-executor220 Not tainted 5.3.0-rc7+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  check_noncircular+0x345/0x3e0 kernel/locking/lockdep.c:1741
-  check_prev_add kernel/locking/lockdep.c:2405 [inline]
-  check_prevs_add kernel/locking/lockdep.c:2507 [inline]
-  validate_chain kernel/locking/lockdep.c:2897 [inline]
-  __lock_acquire+0x1f7c/0x3b50 kernel/locking/lockdep.c:3880
-  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4412
-  __mutex_lock_common kernel/locking/mutex.c:930 [inline]
-  __mutex_lock+0x158/0x1360 kernel/locking/mutex.c:1077
-  open_rio+0x16/0xe0 drivers/usb/misc/rio500.c:65
-  usb_open+0x1df/0x270 drivers/usb/core/file.c:48
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-  do_dentry_open+0x494/0x1120 fs/open.c:797
-  do_last fs/namei.c:3416 [inline]
-  path_openat+0x1430/0x3f50 fs/namei.c:3533
-  do_filp_open+0x1a1/0x280 fs/namei.c:3563
-  do_sys_open+0x3c0/0x580 fs/open.c:1089
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x401880
-Code: 01 f0 ff ff 0f 83 80 0d 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
-44 00 00 83 3d 0d 05 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 54 0d 00 00 c3 48 83 ec 08 e8 ba 02 00 00
-RSP: 002b:00007ffcfca5b718 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007ffcfca5bbd0 RCX: 0000000000401880
-RDX: 0000000000000000 RSI: 0000000000000002 RDI: 00007ffcfca5b730
-RBP: 0000000000000000 R08: 0000000000000000 R09: 000000000000000f
-R10: 0000000000000064 R11: 0000000000000246 R12: 0000000000402a60
-R13: 0000000000402af0 R14: 0000000000000000 R15: 0000000000
+RnJvbSA1N2MyNDQzYjJhNzY3OGE2ZjdmNjQzN2Y3NDFmNDlmMDZhNTEwNGZiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDE3IFNlcCAyMDE5IDExOjUxOjU1ICswMjAwClN1YmplY3Q6IFtQQVRDSF0gdXNibmV0
+OiBzYW5pdHkgY2hlY2tpbmcgb2YgcGFja2V0IHNpemVzCgpNYWxpY2lvdXMgZGV2aWNlcyBjYW4g
+c2V0IHRoaXMgdG8gemVybyBhbmQgd2UgZGl2aWRlIGJ5IGl0LgpJbnRyb2R1Y2Ugc2FuaXR5IGNo
+ZWNraW5nLgoKU2lnbmVkLW9mZi1ieTogT2xpdmVyIE5ldWt1bSA8b25ldWt1bUBzdXNlLmNvbT4K
+LS0tCiBkcml2ZXJzL25ldC91c2IvdXNibmV0LmMgfCAzICsrKwogMSBmaWxlIGNoYW5nZWQsIDMg
+aW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL2RyaXZlcnMvbmV0L3VzYi91c2JuZXQuYyBiL2Ry
+aXZlcnMvbmV0L3VzYi91c2JuZXQuYwppbmRleCA1ODk1MmE3OWIwNWYuLmU0NDg0OTQ5OWI4OSAx
+MDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL3VzYm5ldC5jCisrKyBiL2RyaXZlcnMvbmV0L3Vz
+Yi91c2JuZXQuYwpAQCAtMzM5LDYgKzMzOSw4IEBAIHZvaWQgdXNibmV0X3VwZGF0ZV9tYXhfcWxl
+bihzdHJ1Y3QgdXNibmV0ICpkZXYpCiB7CiAJZW51bSB1c2JfZGV2aWNlX3NwZWVkIHNwZWVkID0g
+ZGV2LT51ZGV2LT5zcGVlZDsKIAorCWlmICghZGV2LT5yeF91cmJfc2l6ZSB8fCAhZGV2LT5oYXJk
+X210dSkKKwkJZ290byBpbnNhbml0eTsKIAlzd2l0Y2ggKHNwZWVkKSB7CiAJY2FzZSBVU0JfU1BF
+RURfSElHSDoKIAkJZGV2LT5yeF9xbGVuID0gTUFYX1FVRVVFX01FTU9SWSAvIGRldi0+cnhfdXJi
+X3NpemU7CkBAIC0zNTUsNiArMzU3LDcgQEAgdm9pZCB1c2JuZXRfdXBkYXRlX21heF9xbGVuKHN0
+cnVjdCB1c2JuZXQgKmRldikKIAkJZGV2LT50eF9xbGVuID0gNSAqIE1BWF9RVUVVRV9NRU1PUlkg
+LyBkZXYtPmhhcmRfbXR1OwogCQlicmVhazsKIAlkZWZhdWx0OgoraW5zYW5pdHk6CiAJCWRldi0+
+cnhfcWxlbiA9IGRldi0+dHhfcWxlbiA9IDQ7CiAJfQogfQotLSAKMi4xNi40Cgo=
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--=-Yd95Qj5bjthxkmik5dv9--
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
