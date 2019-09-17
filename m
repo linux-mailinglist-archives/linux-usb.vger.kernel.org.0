@@ -2,205 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A74B57B5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 23:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DD18B57BB
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 23:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbfIQVly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 17:41:54 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:3610 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727434AbfIQVly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 17:41:54 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d8153240000>; Tue, 17 Sep 2019 14:41:56 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 17 Sep 2019 14:41:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 17 Sep 2019 14:41:51 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Sep
- 2019 21:41:51 +0000
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.36.53) by
- HQMAIL111.nvidia.com (172.20.187.18) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Tue, 17 Sep 2019 21:41:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mkho0N9ZiSkxBUbOuQXtSbiXCZMmh3gvknbECs8QEMnL1biGJbOBcWgDUT93Ks0CzUnWrr8bZWDbkrz2cpKQk/P2wbND50/9bsH/MdDXVFWe7gubrKAW1SLfjHBCAIhG30WsFlmMkuCqPxSF0UAnwrfb2IiQ3Lui8WExi/nRf7AgzqVqzmJGNu+5jeEy8mjwontPjWPhNfAsHlaurM4WSpAbiF+CywHLjfQdqD4Aec8zZAIXYyRAZ+WOhY8chDHwH8o2xbX1kdmJ2m0HII4S84Bmm96mu64j8sNGAaDUyWH0E1OviBsKaZOXjuZdDGXWOeSmq63HvzrOokcZmrsG1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ytK7h7THdOGFQixp5xgeb+xpR7ukE7xEwU/ruAlUlQI=;
- b=ZtQph3waYGykzBgzqknM50dmBL6OwoCo2IkFj0J03dEplqA6B2Q13aWOvaaJ5OU6gITts6F8W48TS3dOqIEnCkWCLnHDk/rB2ep3R6heclNva1yIksgnu+esilc0LT+gyZLcTJJe/f6jjceWdkJn/6meVodwRPpNl8xLfk486BH8Tvqj2FqRtchMHAfP9QBVvmNPMgkXuwV4bXizKfXifSRsW/BC3HnxtBHiV3pbnYW5QBv9TAc7AB1ZCSTa5OX9YeSNJZs9G+3C15ySbSntmeKtx60gyC17u+gcs9TMhqIjUG/4WxaoZlzcdDhkR83TZCiNNZuqhNXX0iTdXacVUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.176.253.214) by
- BYAPR12MB2774.namprd12.prod.outlook.com (20.176.253.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.18; Tue, 17 Sep 2019 21:41:50 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca%3]) with mapi id 15.20.2263.023; Tue, 17 Sep 2019
- 21:41:50 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ajay Gupta <ajaykuee@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v5] usb: typec: ucsi: add support for separate DP altmode
- devices
-Thread-Topic: [PATCH v5] usb: typec: ucsi: add support for separate DP altmode
- devices
-Thread-Index: AQHVZNQ8AsCQcyBZj0i8dVukHObth6cpw8yAgAaw/tA=
-Date:   Tue, 17 Sep 2019 21:41:49 +0000
-Message-ID: <BYAPR12MB27272A58997E4D9BC030C9C3DC8F0@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190906165516.24006-1-ajayg@nvidia.com>
- <20190913152009.GA26700@kuha.fi.intel.com>
-In-Reply-To: <20190913152009.GA26700@kuha.fi.intel.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-09-17T21:41:48.6556714Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=b102ecc4-d3da-4498-925f-28ce88fed74e;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5ce7e852-dc80-459c-3a9e-08d73bb7d908
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BYAPR12MB2774;
-x-ms-traffictypediagnostic: BYAPR12MB2774:
-x-microsoft-antispam-prvs: <BYAPR12MB27746A64AE166C56B235FF03DC8F0@BYAPR12MB2774.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4941;
-x-forefront-prvs: 01630974C0
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(396003)(136003)(366004)(376002)(39860400002)(13464003)(199004)(189003)(64756008)(486006)(4326008)(66446008)(52536014)(86362001)(8936002)(229853002)(66556008)(33656002)(476003)(66066001)(316002)(66476007)(25786009)(110136005)(478600001)(8676002)(14454004)(6116002)(3846002)(81166006)(81156014)(76176011)(305945005)(7736002)(6436002)(6506007)(55016002)(6246003)(53546011)(9686003)(74316002)(66946007)(2906002)(76116006)(256004)(7696005)(26005)(71190400001)(99286004)(446003)(5660300002)(102836004)(71200400001)(11346002)(14444005)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2774;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: DRsxa3mH4gWCj6Uqeq70tK8T3V9bDIE1rONUPlRXTYnhCVui/fJSlSzmLUDiEFvUvrMIza/2K/8huEPNCgQ5WHjpRj0ncvzyRA5GIEOv9DzI7AUp4K1dQG2re1QNypQc6AyTZ0fSLW+vc7eqAyYnpl3FD0LEBiNCpoNwZhOpIvwBKJ+5Ktp7irGQP2jBT2/T46MCjhHRcu0YmzbP7cAlUP/dKWYXllfyCjGjhIEC7aklXZSC3zyWkm1LhVf/oL2utjdZyNEfWEW25uN9kYQ9jPu+vf7acQq4z9gt35jEVZWvQZxZntfkckC8gYcz84/jjk7p+FtfUrAWqWFmvGDDWOBKsV15kQ99MUj0+SSXCLdK2dE5e/XZch3VvNe06c6UhvJpnONyMKptJ3mKUurRmQUR/SvzfRfQSKhFiDC2XYc=
-x-ms-exchange-transport-forked: True
+        id S1726691AbfIQVoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 17:44:21 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:37695 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfIQVoV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 17:44:21 -0400
+Received: by mail-ot1-f68.google.com with SMTP id s28so4487520otd.4;
+        Tue, 17 Sep 2019 14:44:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gKcqtrlEn/n7PxU2KI9m0reyHk+S72VlPvTAhNccCIk=;
+        b=oqolPs6GBOPW6oOzxdjNn+DydqyQOnnFMvxhKuUxFpbnvHsKxmTEdhyrvRO58ThFzv
+         WBC4mWzhpnlbEcF9CLdjqxv/FKNt3GW7tx8lFk4gwHMqJPNt9xg5y1XY+C4EFxM+FIbt
+         BVCUQ8kcu1qkotgl0LahrVcHxxhjcTUdlOn/5COLgf5GKUpxE4wTCEaZMvDBES6eXXaJ
+         26ttxxELER/VavR7xgu0IYFXOiYKObcbLkw/km/HoAoQVtADtElUz8c1u3KB1nrGbHKw
+         A3c7Mtum517ibpFa4hfIjqT0tjpefeG64xBvjNmjMwumpX4OMZ1fbeagOYmjPWaA95Ka
+         9E7w==
+X-Gm-Message-State: APjAAAXLBxuCOQ2XTNV3p8GJFQJtkyLzzLkI8K2QSjUgjlTlcbZsBWAr
+        3M51HoOMUoVx7SH6HNoctKEfd6kAMDSCLApgAME=
+X-Google-Smtp-Source: APXvYqyCYK0dOI+H2F4Q0CNJNe1MfTsCf3c6o9QICE8GfKRLMyVhO8zBnfaDp14Mv/e2wZsL6j2D6C6FkDxHaG8rCBo=
+X-Received: by 2002:a9d:6a16:: with SMTP id g22mr789647otn.118.1568756659913;
+ Tue, 17 Sep 2019 14:44:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ce7e852-dc80-459c-3a9e-08d73bb7d908
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Sep 2019 21:41:50.0284
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Ho16RfR76qB98h0wne+AYAdVAGsEsHQvsAsSGQqtUFr830GMyB34xPZ+nMKYan/9fnJfc2AcdGtT++mvwHc+sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2774
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1568756516; bh=ytK7h7THdOGFQixp5xgeb+xpR7ukE7xEwU/ruAlUlQI=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         x-ms-exchange-transport-forked:MIME-Version:
-         X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=C8Knv1b5afHo1nlriWhuATd1fX2VkdyK9r5UztXAQttzJtYxWwFF3V7LoZVSxh7tp
-         j+QFN+zbt9i54hEuvuiebreGCrp49MToy4Psi0MPBIEjCqUpvwvxph7W7L3fRB2sDr
-         P1U9uVqaRnTzdR19HM7HarjZGfCd06fFnU2yMR9HL3oPq//ympQpoZF/6en1mnAEYI
-         7bYhNTm35t19ac+d5nI3IidoPVRdXC+Xovh3vumUubu8LAfNGG3qlMFkOJ+GFUcjiR
-         1W19Mb/V/M6idDs+1PJljYcgJi3eO6qb4uPOhI1UnNUfDtQcM6w5mfp22upTVa4OeI
-         ChF3jnZc3otog==
+References: <00000000000044408c0592b00ff5@google.com>
+In-Reply-To: <00000000000044408c0592b00ff5@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Sep 2019 23:44:08 +0200
+Message-ID: <CAJZ5v0j5-Jg8Wi_hEfM3DhzmY3sEwmrFjC2bTjyGgZ2afOKBEQ@mail.gmail.com>
+Subject: Re: KASAN: global-out-of-bounds Read in __pm_runtime_resume
+To:     syzbot <syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Len Brown <len.brown@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+On Mon, Sep 16, 2019 at 8:49 PM syzbot
+<syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10efb5fa600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=cd157359d82e8d98c17b
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com
+>
+> ==================================================================
+> BUG: KASAN: global-out-of-bounds in __pm_runtime_resume+0x162/0x180
+> drivers/base/power/runtime.c:1069
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Friday, September 13, 2019 8:20 AM
-> To: Ajay Gupta <ajaykuee@gmail.com>
-> Cc: linux-usb@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
-> Subject: Re: [PATCH v5] usb: typec: ucsi: add support for separate DP alt=
-mode
-> devices
->=20
-> Hi Ajay,
->=20
-> On Fri, Sep 06, 2019 at 09:55:16AM -0700, Ajay Gupta wrote:
-> > From: Ajay Gupta <ajayg@nvidia.com>
-> >
-> > CCGx controller used on NVIDIA GPU card has two separate display
-> > altmode for two DP pin assignments. UCSI specification doesn't
-> > prohibits using separate display altmode.
-> >
-> > Current UCSI Type-C framework expects only one display altmode for all
-> > DP pin assignment. This patch squashes two separate display altmode
-> > into single altmode to support controllers with separate display
-> > altmode. We first read all the alternate modes of connector and then
-> > run through it to know if there are separate display altmodes. If so,
-> > it prepares a new port altmode set after squashing two or more
-> > separate altmodes into one.
->=20
-> I'm going to go over this one more time during the merge window. I have a=
-n
-> idea how to improve this. Please bear with me. I have to make sure all op=
-tions
-> were considered.
->=20
-> I'm really sorry to block this for so long, but I'm just really really af=
-raid of
-> mixing special case solutions like this into otherwise generic code.
+This means that the caller of __pm_runtime_resume() did something odd.
 
-I can update the patch to make sure generic code flow remains as-is and spe=
-cial
-case is executed only for UCSI controllers which needs squashing of duplica=
-te
-DP altmodes.
-We can use the new function pointer update_altmode() added in "struct ucsi_=
-ppm" in v5
-of my patch for this purpose.
+> Read of size 1 at addr ffffffff863d87b1 by task syz-executor.2/13622
+>
+> CPU: 0 PID: 13622 Comm: syz-executor.2 Not tainted 5.3.0-rc7+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:618
+>   __pm_runtime_resume+0x162/0x180 drivers/base/power/runtime.c:1069
+>   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
+>   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1709
+>   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
 
-if (recipient =3D=3D UCSI_RECIPIENT_CON && ucsi->ppm && ucsi->ppm->update_a=
-ltmodes)
-	Get all the altmodes first, pass it to update_altmodes() for squashing if =
-needed,
-	and then register each altmodes.
-else
-	Use the current method where we get and register one altmode at a time.
+In this particular case usbhid_power() probably shouldn't have called
+pm_runtime_get_sync() or it shouldn't have been called itself or
+similar.
 
-Please let me know if this looks fine to you.
-
-Thanks
-> nvpublic
-> They always
-> make it difficult to modify the code later, and unfortunately we have the=
-m all
-> over the kernel. Look at the serial driver 8250_core/port/*.cas an exampl=
-e.
-> Ideally we should be able to "modularize" the whole alternate mode handli=
-ng
-> in the ucsi driver since there are now two different ways the PPMs can ha=
-ndle
-> them instead of simply mixing the support for the new method straight int=
-o
-> the existing structures.
->=20
-> thanks,
->=20
-> --
-> heikki
+>   hid_hw_power include/linux/hid.h:1038 [inline]
+>   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
+>   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+>   do_dentry_open+0x494/0x1120 fs/open.c:797
+>   do_last fs/namei.c:3416 [inline]
+>   path_openat+0x1430/0x3f50 fs/namei.c:3533
+>   do_filp_open+0x1a1/0x280 fs/namei.c:3563
+>   do_sys_open+0x3c0/0x580 fs/open.c:1089
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x4137d1
+> Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
+> 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
+> 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+> RSP: 002b:00007faea59927a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+> RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00000000004137d1
+> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007faea5992850
+> RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000293 R12: 00007faea59936d4
+> R13: 00000000004c8cbf R14: 00000000004dfc90 R15: 00000000ffffffff
+>
+> The buggy address belongs to the variable:
+>   __param_str_xfer_debug+0x91/0x4a0
+>
+> Memory state around the buggy address:
+>   ffffffff863d8680: fa fa fa fa 00 00 00 02 fa fa fa fa 00 00 00 00
+>   ffffffff863d8700: fa fa fa fa 00 00 00 02 fa fa fa fa 00 07 fa fa
+> > ffffffff863d8780: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 07 fa
+>                                       ^
+>   ffffffff863d8800: fa fa fa fa 00 00 00 00 00 00 fa fa fa fa fa fa
+>   ffffffff863d8880: 00 07 fa fa fa fa fa fa 00 00 06 fa fa fa fa fa
+> ==================================================================
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
