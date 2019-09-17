@@ -2,411 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02402B5523
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 20:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FBFB5545
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 20:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728926AbfIQSPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 14:15:02 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:54436 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726604AbfIQSPC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 14:15:02 -0400
-Received: by mail-io1-f72.google.com with SMTP id w8so3336072iod.21
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 11:15:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=TdUY63cYPwUAhiSERKmtQgs4emkR4SLu25teSuvZpbs=;
-        b=ajqw2s21idF5lqpp6o5FEu7yvoirhBdxKk/G1dvdny1TA+D/tUBzA2aYbUyP4prxmg
-         9xZKg8J6fbCH++Brhrxxy2OVcN/dUxsyrJoD12qWlifXT+ukmAvmfnnjpslPNKfZ6RIw
-         3KNB3tOuTUcJyMSdy8nvQKnJRd4sAXObyAE56xySHIIIBApVrnn0WThxyVLA6yr1bEVf
-         KJ17RmLJgcr/8zvhgFuLFapYUcR6349REgv3Qoc31mWiiJ7MC83YNHPHU8l9Tf1Ktf2J
-         3HEGDCZ7MXz4duYpRU8QoxvAtylzeYCd7TEy1IRDEJ6E10l1ws8Xb4ErrCkUcHaYyxts
-         ndIg==
-X-Gm-Message-State: APjAAAWRZJ8Ub14j9wLadwHtIyB2/SmLRh4LlVN6v3br1w1EotIl8Cqk
-        lDK+9HzpWwxZQITOGJM7Ts0G5QosFkBOQYGSUCrXJYld6Mfr
-X-Google-Smtp-Source: APXvYqzXxjiPXHnQKlM8/1HF/TBPAyTRl1ODWdYHoAAzlh0oP1tnA8+3BzBvwoeio3udP7pwTcAzsc/Hw4H0lu78QqTaKoMuFC+A
+        id S1729167AbfIQSYw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 14:24:52 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39222 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729141AbfIQSYw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 14:24:52 -0400
+Received: (qmail 6810 invoked by uid 2102); 17 Sep 2019 14:24:51 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Sep 2019 14:24:51 -0400
+Date:   Tue, 17 Sep 2019 14:24:51 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
+        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
+In-Reply-To: <000000000000cd1def0592ab9697@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8b50:: with SMTP id n77mr28646iod.195.1568744100888;
- Tue, 17 Sep 2019 11:15:00 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 11:15:00 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1909171405350.1590-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e08e490592c3b2c4@google.com>
-Subject: Re: general protection fault in usb_set_interface
-From:   syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mans@mansr.com, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, 16 Sep 2019, syzbot wrote:
 
-syzbot tried to test the proposed patch but build/boot failed:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
+> 
+> usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,  
+> different from the interface descriptor's value: 9
+> usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=  
+> 0.00
+> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 1-1: config 0 descriptor??
+> greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
+> greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID  
+> 0e8f:0012] on usb-dummy_hcd.0-1/input0
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in set_bit  
+> include/asm-generic/bitops-instrumented.h:28 [inline]
+> BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97  
+> [inline]
+> BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0  
+> drivers/hid/hid-gaff.c:146
+> Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
+> 
+> CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:618
+>   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+>   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+>   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
+>   gaff_init drivers/hid/hid-gaff.c:97 [inline]
+>   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
+>   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+>   __device_attach_driver+0x
+> 
+> 
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-  drivers/usb/typec/altmodes/built-in.a
-   CC      drivers/usb/misc/legousbtower.o
-   AR      drivers/usb/musb/built-in.a
-   CC      drivers/usb/host/sl811-hcd.o
-   CC      drivers/usb/usbip/vhci_sysfs.o
-   AR      drivers/usb/typec/mux/built-in.a
-   CC      drivers/usb/serial/generic.o
-   CC      drivers/usb/serial/bus.o
-   CC      drivers/usb/usbip/vhci_tx.o
-   CC      drivers/usb/serial/aircable.o
-   CC      drivers/usb/typec/tcpm/tcpm.o
-   CC      drivers/staging/rtl8712/usb_halinit.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/dm.o
-   AR      drivers/media/usb/zr364xx/built-in.a
-   CC      drivers/staging/uwb/driver.o
-   CC      drivers/staging/rtl8712/usb_ops.o
-   CC      drivers/staging/rtl8712/usb_ops_linux.o
-   CC      drivers/staging/rtl8712/rtl871x_io.o
-   CC      drivers/staging/rtl8712/rtl8712_io.o
-   CC      drivers/media/usb/uvc/uvc_debugfs.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/rf.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/fw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/phy.o
-   CC      drivers/media/usb/uvc/uvc_metadata.o
-   CC      drivers/usb/serial/ark3116.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/sw.o
-   CC      drivers/usb/serial/belkin_sa.o
-   CC      drivers/media/usb/uvc/uvc_entity.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/hw.o
-   CC      drivers/gpu/drm/i915/i915_oa_sklgt4.o
-   CC      drivers/gpu/drm/i915/i915_oa_bxt.o
-   CC      drivers/usb/misc/rio500.o
-   CC      drivers/usb/misc/usbtest.o
-   CC      drivers/staging/wlan-ng/prism2usb.o
-   CC      drivers/usb/misc/ehset.o
-   CC      drivers/usb/serial/ch341.o
-   CC      drivers/usb/storage/protocol.o
-   CC      drivers/usb/typec/ucsi/trace.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8192cu/built-in.a
-   CC      drivers/usb/usbip/vhci_rx.o
-   CC      drivers/usb/usbip/vhci_hcd.o
-   CC      drivers/usb/misc/trancevibrator.o
-   CC      drivers/usb/typec/ucsi/ucsi.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/fw.o
-   CC      drivers/staging/uwb/drp.o
-   CC      drivers/usb/host/sl811_cs.o
-   CC      drivers/staging/uwb/drp-avail.o
-   CC      drivers/usb/host/u132-hcd.o
-   CC      drivers/staging/rtl8712/rtl871x_ioctl_linux.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/table.o
-   AR      drivers/media/usb/uvc/built-in.a
-scripts/Makefile.build:497: recipe for target 'drivers/media/usb' failed
-make[2]: *** [drivers/media/usb] Error 2
-scripts/Makefile.build:497: recipe for target 'drivers/media' failed
-make[1]: *** [drivers/media] Error 2
-make[1]: *** Waiting for unfinished jobs....
-   CC      drivers/usb/misc/uss720.o
-   CC      drivers/usb/storage/transport.o
-   CC      drivers/usb/misc/usbsevseg.o
-   CC      drivers/usb/usbip/stub_dev.o
-   CC      drivers/usb/misc/usb251xb.o
-   CC      drivers/staging/uwb/drp-ie.o
-   CC      drivers/usb/serial/cp210x.o
-   CC      drivers/usb/serial/cyberjack.o
-   CC      drivers/usb/serial/cypress_m8.o
-   CC      drivers/gpu/drm/i915/i915_oa_kblgt2.o
-   CC      drivers/usb/host/bcma-hcd.o
-   CC      drivers/usb/host/r8a66597-hcd.o
-   CC      drivers/usb/misc/yurex.o
-   CC      drivers/usb/misc/usb3503.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/led.o
-   CC      drivers/staging/wlan-ng/p80211conv.o
-   CC      drivers/usb/host/ssb-hcd.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/phy.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/trx.o
-   CC      drivers/staging/uwb/est.o
-   CC      drivers/usb/misc/usb4604.o
-   CC      drivers/usb/misc/chaoskey.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/dm.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/fw.o
-   CC      drivers/staging/rtl8712/rtl871x_ioctl_rtl.o
-   CC      drivers/usb/usbip/stub_main.o
-   CC      drivers/usb/misc/lvstest.o
-   CC      drivers/usb/storage/usb.o
-   CC      drivers/usb/storage/initializers.o
-   CC      drivers/usb/storage/sierra_ms.o
-   CC      drivers/gpu/drm/drm_vblank.o
-   CC      drivers/gpu/drm/drm_syncobj.o
-   CC      drivers/usb/typec/ucsi/ucsi_acpi.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/hw.o
-   CC      drivers/usb/host/fotg210-hcd.o
-   CC      drivers/staging/uwb/ie.o
-   CC      drivers/gpu/drm/i915/i915_oa_kblgt3.o
-   CC      drivers/staging/wlan-ng/p80211req.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/pwrseq.o
-   CC      drivers/staging/wlan-ng/p80211wep.o
-   CC      drivers/staging/wlan-ng/p80211netdev.o
-   CC      drivers/usb/serial/usb_debug.o
-   CC      drivers/staging/rtl8712/rtl871x_ioctl_set.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/led.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/hw.o
-   CC      drivers/usb/usbip/stub_rx.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/led.o
-   CC      drivers/usb/usbip/stub_tx.o
-   CC      drivers/staging/uwb/ie-rcv.o
-   CC      drivers/usb/typec/class.o
-   CC      drivers/usb/serial/digi_acceleport.o
-   AR      drivers/usb/typec/ucsi/built-in.a
-   AR      drivers/usb/misc/built-in.a
-   CC      drivers/gpu/drm/i915/i915_oa_glk.o
-   CC      drivers/staging/uwb/lc-dev.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/phy.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/rf.o
-   CC      drivers/usb/usbip/vudc_dev.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8192ce/built-in.a
-   CC      drivers/usb/typec/tcpm/fusb302.o
-   CC      drivers/usb/storage/option_ms.o
-   CC      drivers/usb/storage/usual-tables.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/phy.o
-   CC      drivers/staging/rtl8712/rtl8712_led.o
-   CC      drivers/usb/typec/mux.o
-   CC      drivers/usb/typec/bus.o
-   CC      drivers/usb/typec/tcpm/tcpci.o
-   CC      drivers/gpu/drm/i915/i915_oa_cflgt2.o
-   CC      drivers/gpu/drm/i915/i915_oa_cflgt3.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/rf.o
-   CC      drivers/staging/uwb/lc-rc.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/rf.o
-   CC      drivers/usb/host/max3421-hcd.o
-   CC      drivers/usb/usbip/vudc_sysfs.o
-   CC      drivers/usb/serial/io_edgeport.o
-   CC      drivers/usb/serial/io_ti.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/sw.o
-   CC      drivers/usb/typec/tps6598x.o
-   CC      drivers/usb/storage/alauda.o
-   CC      drivers/usb/storage/cypress_atacb.o
-   CC      drivers/usb/storage/datafab.o
-   CC      drivers/gpu/drm/i915/i915_oa_cnl.o
-   CC      drivers/usb/usbip/vudc_tx.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/sw.o
-   CC      drivers/staging/rtl8712/rtl871x_mlme.o
-   CC      drivers/staging/rtl8712/ieee80211.o
-   CC      drivers/staging/uwb/neh.o
-   CC      drivers/usb/usbip/vudc_rx.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/table.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/sw.o
-   AR      drivers/usb/typec/tcpm/built-in.a
-   CC      drivers/gpu/drm/drm_lease.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/table.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/trx.o
-   AR      drivers/usb/typec/built-in.a
-   CC      drivers/staging/uwb/pal.o
-   CC      drivers/staging/uwb/radio.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192de/trx.o
-   CC      drivers/staging/uwb/reset.o
-   CC      drivers/usb/usbip/vudc_transfer.o
-   CC      drivers/gpu/drm/drm_writeback.o
-   CC      drivers/usb/usbip/vudc_main.o
-   AR      drivers/staging/wlan-ng/built-in.a
-   CC      drivers/gpu/drm/drm_client.o
-   CC      drivers/usb/storage/ene_ub6250.o
-   CC      drivers/staging/uwb/rsv.o
-   CC      drivers/usb/serial/empeg.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/dm.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/fw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/table.o
-   CC      drivers/usb/serial/f81232.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/dm.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/fw.o
-   CC      drivers/staging/uwb/scan.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8192se/trx.o
-   CC      drivers/staging/rtl8712/rtl871x_mp_ioctl.o
-   CC      drivers/staging/uwb/uwb-debug.o
-   CC      drivers/usb/storage/freecom.o
-   CC      drivers/gpu/drm/i915/i915_oa_icl.o
-   CC      drivers/usb/serial/f81534.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/hw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/base.o
-   CC      drivers/net/wireless/realtek/rtlwifi/cam.o
-   CC      drivers/gpu/drm/drm_client_modeset.o
-   CC      drivers/gpu/drm/drm_hdcp.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8192ee/built-in.a
-   CC      drivers/gpu/drm/drm_ioc32.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/dm.o
-   AR      drivers/usb/usbip/built-in.a
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/fw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/hw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723com/main.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/led.o
-   CC      drivers/gpu/drm/drm_atomic_uapi.o
-   CC      drivers/usb/serial/ftdi_sio.o
-   CC      drivers/staging/rtl8712/rtl871x_mp.o
-   CC      drivers/staging/wusbcore/host/whci/asl.o
-   CC      drivers/gpu/drm/drm_panel.o
-   CC      drivers/gpu/drm/drm_of.o
-   AR      drivers/usb/host/built-in.a
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723com/dm_common.o
-   CC      drivers/usb/serial/garmin_gps.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723com/fw_common.o
-   CC      drivers/staging/uwb/uwbd.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723com/phy_common.o
-   CC      drivers/usb/storage/isd200.o
-   CC      drivers/net/wireless/realtek/rtlwifi/core.o
-   AR      drivers/gpu/drm/i915/built-in.a
-   CC      drivers/usb/serial/ipaq.o
-   CC      drivers/staging/rtl8712/mlme_linux.o
-   CC      drivers/net/wireless/realtek/rtlwifi/debug.o
-   CC      drivers/net/wireless/realtek/rtlwifi/efuse.o
-   CC      drivers/staging/uwb/umc-bus.o
-   CC      drivers/staging/uwb/umc-dev.o
-   CC      drivers/staging/uwb/umc-drv.o
-   CC      drivers/staging/wusbcore/host/whci/debug.o
-   CC      drivers/staging/wusbcore/crypto.o
-   CC      drivers/gpu/drm/drm_agpsupport.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8192se/built-in.a
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_btc.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hal_bt_coexist.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/hw.o
-   CC      drivers/staging/rtl8712/recv_linux.o
-   CC      drivers/staging/wusbcore/devconnect.o
-   CC      drivers/staging/wusbcore/dev-sysfs.o
-   CC      drivers/staging/uwb/whci.o
-   CC      drivers/staging/wusbcore/mmc.o
-   CC      drivers/staging/wusbcore/pal.o
-   CC      drivers/staging/wusbcore/host/whci/hcd.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/led.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/phy.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/pwrseq.o
-   CC      drivers/staging/rtl8712/xmit_linux.o
-   CC      drivers/staging/rtl8712/usb_intf.o
-   CC      drivers/gpu/drm/drm_debugfs.o
-   CC      drivers/usb/storage/jumpshot.o
-   CC      drivers/staging/uwb/whc-rc.o
-   CC      drivers/gpu/drm/drm_debugfs_crc.o
-   CC      drivers/usb/storage/karma.o
-   CC      drivers/usb/serial/ipw.o
-   CC      drivers/usb/storage/onetouch.o
-   CC      drivers/usb/serial/ir-usb.o
-   CC      drivers/gpu/drm/drm_mipi_dsi.o
-   CC      drivers/net/wireless/realtek/rtlwifi/ps.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8192de/built-in.a
-   CC      drivers/staging/wusbcore/host/hwa-hc.o
-   CC      drivers/staging/uwb/hwa-rc.o
-   CC      drivers/staging/wusbcore/rh.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8723com/built-in.a
-   CC      drivers/staging/wusbcore/reservation.o
-   CC      drivers/staging/rtl8712/os_intfs.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/led.o
-   CC      drivers/staging/wusbcore/host/whci/hw.o
-   CC      drivers/usb/storage/realtek_cr.o
-   CC      drivers/staging/wusbcore/host/whci/init.o
-   CC      drivers/staging/wusbcore/host/whci/int.o
-   CC      drivers/staging/rtl8712/rtl871x_pwrctrl.o
-   CC      drivers/usb/storage/sddr09.o
-   CC      drivers/usb/serial/iuu_phoenix.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/sw.o
-   CC      drivers/staging/rtl8712/rtl8712_recv.o
-   CC      drivers/usb/storage/sddr55.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/rf.o
-   CC      drivers/gpu/drm/drm_panel_orientation_quirks.o
-   CC      drivers/usb/storage/shuttle_usbat.o
-   CC      drivers/staging/wusbcore/security.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/phy.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/pwrseq.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/rf.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/sw.o
-   CC      drivers/staging/wusbcore/wusbhc.o
-   CC      drivers/staging/rtl8712/rtl871x_recv.o
-   CC      drivers/staging/rtl8712/rtl871x_sta_mgt.o
-   CC      drivers/staging/rtl8712/rtl871x_xmit.o
-   CC      drivers/staging/rtl8712/rtl8712_xmit.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/table.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723be/trx.o
-   CC      drivers/usb/serial/keyspan.o
-   CC      drivers/usb/serial/keyspan_pda.o
-   AR      drivers/staging/uwb/built-in.a
-   AR      drivers/gpu/drm/built-in.a
-   CC      drivers/staging/wusbcore/wa-hc.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/phy.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/pwrseq.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/rf.o
-   CC      drivers/staging/wusbcore/host/whci/qset.o
-   CC      drivers/staging/wusbcore/host/whci/pzl.o
-   AR      drivers/gpu/built-in.a
-   CC      drivers/staging/wusbcore/host/whci/wusb.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/trx.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rc.o
-   CC      drivers/net/wireless/realtek/rtlwifi/regd.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/sw.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/table.o
-   CC      drivers/net/wireless/realtek/rtlwifi/stats.o
-   CC      drivers/net/wireless/realtek/rtlwifi/pci.o
-   CC      drivers/staging/wusbcore/wa-rpipe.o
-   CC      drivers/staging/wusbcore/wa-nep.o
-   AR      drivers/usb/storage/built-in.a
-   CC      drivers/net/wireless/realtek/rtlwifi/usb.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/table.o
-   CC      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/trx.o
-   CC      drivers/staging/wusbcore/wa-xfer.o
-   CC      drivers/staging/wusbcore/cbaf.o
-   CC      drivers/usb/serial/kobil_sct.o
-   CC      drivers/usb/serial/kl5kusb105.o
-   CC      drivers/usb/serial/metro-usb.o
-   CC      drivers/usb/serial/mct_u232.o
-   CC      drivers/usb/serial/mos7720.o
-   CC      drivers/usb/serial/mos7840.o
-   CC      drivers/usb/serial/mxuport.o
-   CC      drivers/usb/serial/navman.o
-   CC      drivers/usb/serial/omninet.o
-   CC      drivers/usb/serial/opticon.o
-   CC      drivers/usb/serial/option.o
-   CC      drivers/usb/serial/oti6858.o
-   CC      drivers/usb/serial/pl2303.o
-   CC      drivers/usb/serial/qcaux.o
-   CC      drivers/usb/serial/qcserial.o
-   CC      drivers/usb/serial/quatech2.o
-   CC      drivers/usb/serial/safe_serial.o
-   AR      drivers/staging/rtl8712/built-in.a
-   CC      drivers/usb/serial/sierra.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8723be/built-in.a
-   CC      drivers/usb/serial/usb-serial-simple.o
-   CC      drivers/usb/serial/spcp8x5.o
-   AR      drivers/staging/wusbcore/host/whci/built-in.a
-   AR      drivers/staging/wusbcore/host/built-in.a
-   CC      drivers/usb/serial/ssu100.o
-   CC      drivers/usb/serial/symbolserial.o
-   CC      drivers/usb/serial/usb_wwan.o
-   CC      drivers/usb/serial/ti_usb_3410_5052.o
-   CC      drivers/usb/serial/upd78f0730.o
-   CC      drivers/usb/serial/visor.o
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8723ae/built-in.a
-   CC      drivers/usb/serial/wishbone-serial.o
-   CC      drivers/usb/serial/xsens_mt.o
-   CC      drivers/usb/serial/whiteheat.o
-   AR      drivers/staging/wusbcore/built-in.a
-   AR      drivers/staging/built-in.a
-   AR      drivers/usb/serial/built-in.a
-   AR      drivers/usb/built-in.a
-   AR      drivers/net/wireless/realtek/rtlwifi/rtl8821ae/built-in.a
-   AR      drivers/net/wireless/realtek/rtlwifi/built-in.a
-   AR      drivers/net/wireless/realtek/built-in.a
-   AR      drivers/net/wireless/built-in.a
-   AR      drivers/net/built-in.a
-Makefile:1083: recipe for target 'drivers' failed
-make: *** [drivers] Error 2
+The driver assumes that the device contains an input.
 
+Alan Stern
 
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=176045b5600000
+https://github.com/google/kasan.git f0df5c1b
 
+ drivers/hid/hid-gaff.c |   12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
 
-Tested on:
-
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12f8611d600000
+Index: usb-devel/drivers/hid/hid-gaff.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-gaff.c
++++ usb-devel/drivers/hid/hid-gaff.c
+@@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
+ {
+ 	struct gaff_device *gaff;
+ 	struct hid_report *report;
+-	struct hid_input *hidinput = list_entry(hid->inputs.next,
+-						struct hid_input, list);
++	struct hid_input *hidinput;
+ 	struct list_head *report_list =
+ 			&hid->report_enum[HID_OUTPUT_REPORT].report_list;
+ 	struct list_head *report_ptr = report_list;
+-	struct input_dev *dev = hidinput->input;
++	struct input_dev *dev;
+ 	int error;
+ 
++	if (list_empty(&hid->inputs)) {
++		hid_err(hid, "no inputs found\n");
++		return -ENODEV;
++	}
++	hidinput = list_entry(hid->inputs.next, struct hid_input, list);
++	dev = hidinput->input;
++
+ 	if (list_empty(report_list)) {
+ 		hid_err(hid, "no output reports found\n");
+ 		return -ENODEV;
 
