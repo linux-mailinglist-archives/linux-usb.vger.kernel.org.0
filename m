@@ -2,59 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5C2B4DAF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 14:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B723B4DB1
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 14:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbfIQMUp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 08:20:45 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:43407 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727016AbfIQMUp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 08:20:45 -0400
-Received: by mail-pl1-f196.google.com with SMTP id 4so1442115pld.10
-        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 05:20:43 -0700 (PDT)
+        id S1727821AbfIQMVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 08:21:08 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35552 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727016AbfIQMVH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 08:21:07 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a24so1953968pgj.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Sep 2019 05:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mVDcRSz/ck1UBgj0REUeZyJEVnNGk+AGzLSzVdHEtGA=;
-        b=YWaD16KbTdtSSlvlTdYDCRlCwUqhIiT0akNG72gIbKkr5CqpJn+3X9S8jjm+yQIedn
-         7zWxdIorbq746OMPcxJa9Mtqs91U57hoJL9+3WQrLltK+aVEG37Lv2fgf47tacKIXKaP
-         oye9dP6KOp6hVszZL2Q98CG/jjky/vvnuuf/XBCVS5E+it0AXp4vCIsFnr41opBRqZko
-         j40OkIwf6WiK4e6spLQRX0unCfAPF7gJ2BYkvGn9Q29QhhNzA7c1trsWMPmtvH5VBS/j
-         DKTRvrCvgGZ2CitHpSErQDXeNwDi0CUWN1t/d2MAGy74HqtoLcWhwuNKWMRnDzHGKQ0D
-         V5LQ==
+        bh=228L4JG4mlhOwxu+drl+ZOfo7MIm1ndCSeLwMh3sYfI=;
+        b=en6VNYcRHCdOHapTQ+9jNzKsaVas71WgyDgFfUJ1OLH8PO4ineG3scFUuTXDKDdCS/
+         9Wu+RD6h7wKZk1cjDCYcuo4Lfs5wWDjI0/LkEPpceIUSG4xn0z0Pdc4WKbzgXVLH/Mgq
+         9V2kQ4FIDuJR/fx0/8IPAg2jcBnMEAE5VLz8O5fqGzkdfHpPV4bgF+0NkxApd/Lw/3RJ
+         SVUAzwOyzSKs6C9gZONeIMZthsHHYZKJJW/CAF0gc3Ii2NjyqWxnN3TJHHIe/bnGzq3t
+         8++JVIay508nR6BNW656z90ZvLSB1EdCaYqJ7tIcaQlc6ajF9Wv/JuELE6GRM6kteiYi
+         excA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mVDcRSz/ck1UBgj0REUeZyJEVnNGk+AGzLSzVdHEtGA=;
-        b=PyasVbzhKnMds81oYeTYySO6eCHlCasyH72gEW/77ys7u+wmJBfHDKj3mCEsqJdvY2
-         brx2SrNQ1AYp/GHWwI3oVeLAjrQqGJ9TlVRerrlVD3B24yEIEpG6dC/jwie1evqGIQN4
-         im+gqRb5z0K5f+jIi0EcGMW5tYtzv2ZGM5Zs9EaixLz9Av+8du8lVhecQELmLUQQoe0S
-         3m+JVYFr7DMrNj4AEa7v7RMgqYH0W6U/ExbZGFtC5hel0k9mlGqDnXp3c4jHRWfPdLZa
-         zUovNSF607lyWva3xoF07ZBXro4OCojsHeP7TYM9DwTHaXJRVBstlsyLHiWa+oIfMnqQ
-         zAYw==
-X-Gm-Message-State: APjAAAXDDfF1KUwy5wzdmngUegMLrAYxPZnTz9qS1kt7ikTPL4wrDd0P
-        aD39caSFOO/pz8d8L6mlROCucdWXA3HcnBHdWcYepHEGM+yWdg==
-X-Google-Smtp-Source: APXvYqz9O3VdJmpo+DNTlY7U1lMVMAoiZS7Oyf63AkUOZGFVGEs3GRj3B2sWIBNPFP7ZnvwjhGjmSREyBvCUN0xRaLo=
-X-Received: by 2002:a17:902:a50a:: with SMTP id s10mr3291891plq.336.1568722842486;
- Tue, 17 Sep 2019 05:20:42 -0700 (PDT)
+        bh=228L4JG4mlhOwxu+drl+ZOfo7MIm1ndCSeLwMh3sYfI=;
+        b=CRfzUtA8lAg4do21stwFHZOq5jjdfdlmxK9bHQ++agx4XAY6PHw7OE2NFybdepDevc
+         e9DWBtkgf4omf7oJc4uJdT8mwUPth9HS5Koyn6Z2Z/9UfRW62tt7gD7f50S1ArLYOZss
+         pmyioLG/vReoYHf3sbILwmjr3zuvekl2eLZeWSPgzcK6yze0Jyf1EJYNQPLWx4hxBhoX
+         cjpFu8HQQEah08qkPOm+ycgilwIPIK9u7MF3ED7xGJ72EozJjrfME4dtN3ghJkWhjrh6
+         ogXBoe7BtlUJ4/122f7oWVvQkVBntIygd/efsiwNKtn3mZMbnWR0JaNnihlnapVJE3EF
+         JklA==
+X-Gm-Message-State: APjAAAW205Wn85Sgt3hE2H+hovjikSjkyW6JixX+9atPbTigMM/14pNY
+        TOQ9wOQsQcE01pNZukXusY6QNQEgyrfaiQPNqo8Zxg==
+X-Google-Smtp-Source: APXvYqzTGv0OT1rs3XY1m38eEdn+XHH8NQjLSerkOQNt0K4z9AUspwWRa+GWlQA+fNaCy6ImBQ8CgHdl7H8SbOTlFU0=
+X-Received: by 2002:a63:5c26:: with SMTP id q38mr3024640pgb.130.1568722866400;
+ Tue, 17 Sep 2019 05:21:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000402f3a0592b00f13@google.com>
-In-Reply-To: <000000000000402f3a0592b00f13@google.com>
+References: <0000000000003a00b70592b00f85@google.com>
+In-Reply-To: <0000000000003a00b70592b00f85@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 17 Sep 2019 14:20:31 +0200
-Message-ID: <CAAeHK+wRazp98qvMgkbyKfK8tGvFFT9D67C4o-G9u2wCYpXZMQ@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in ld_usb_read (2)
-To:     syzbot <syzbot+4a52dbcef08fddbc887e@syzkaller.appspotmail.com>
-Cc:     alexandre.belloni@bootlin.com, Bjorn Helgaas <bhelgaas@google.com>,
-        enric.balletbo@collabora.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kirr@nexedi.com, LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, lkundrak@v3.sk,
-        logang@deltatee.com,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Date:   Tue, 17 Sep 2019 14:20:55 +0200
+Message-ID: <CAAeHK+xUbG1pvgjU2jRogtS8GjtdyZebgJQzrSHW80rjYsTx7A@mail.gmail.com>
+Subject: Re: BUG: bad usercopy in ld_usb_read (2)
+To:     syzbot <syzbot+4cd8c1b2445d0ffe05f6@syzkaller.appspotmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Qian Cai <cai@lca.pw>,
+        info@metux.net, isaacm@codeaurora.org,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        william.kucharski@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -62,7 +64,7 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Mon, Sep 16, 2019 at 8:49 PM syzbot
-<syzbot+4a52dbcef08fddbc887e@syzkaller.appspotmail.com> wrote:
+<syzbot+4cd8c1b2445d0ffe05f6@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -70,36 +72,47 @@ On Mon, Sep 16, 2019 at 8:49 PM syzbot
 >
 > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1462f9a5600000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1681c9c1600000
 > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4a52dbcef08fddbc887e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=4cd8c1b2445d0ffe05f6
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 >
 > Unfortunately, I don't have any reproducer for this crash yet.
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+4a52dbcef08fddbc887e@syzkaller.appspotmail.com
+> Reported-by: syzbot+4cd8c1b2445d0ffe05f6@syzkaller.appspotmail.com
 >
-> ldusb 3-1:0.98: Read buffer overflow, -2576376864 bytes dropped
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in _copy_to_user+0x124/0x150
-> lib/usercopy.c:27
-> Read of size 536879616 at addr ffff8881ab680008 by task syz-executor.2/12817
->
-> CPU: 0 PID: 12817 Comm: syz-executor.2 Not tainted 5.3.0-rc7+ #0
+> ldusb 5-1:0.98: Read buffer overflow, 4466454212372071848 bytes dropped
+> usercopy: Kernel memory exposure attempt detected from process stack
+> (offset 0, size 536871625)!
+> ------------[ cut here ]------------
+> kernel BUG at mm/usercopy.c:98!
+> invalid opcode: 0000 [#1] SMP KASAN
+> CPU: 1 PID: 17170 Comm: syz-executor.4 Not tainted 5.3.0-rc7+ #0
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
+> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:98
+> Code: e8 62 f0 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 c0
+> f7 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 c6 91 c1 ff <0f> 0b e8 36 f0
+> d6 ff e8 a1 90 fd ff 8b 54 24 04 49 89 d8 4c 89 e1
+> RSP: 0018:ffff8881d308fc40 EFLAGS: 00010282
+> RAX: 0000000000000060 RBX: ffffffff85cdf4e0 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff81288ddd RDI: ffffed103a611f7a
+> RBP: ffffffff85cdf6a0 R08: 0000000000000060 R09: fffffbfff11ad7a3
+> R10: fffffbfff11ad7a2 R11: ffffffff88d6bd17 R12: ffffffff85cdf8c0
+> R13: ffffffff85cdf4e0 R14: 00000000200002c9 R15: ffffffff85cdf4e0
+> FS:  00007fc613f93700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f983cbbf000 CR3: 00000001cc33e000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 > Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:618
->   check_memory_region_inline mm/kasan/generic.c:185 [inline]
->   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
->   _copy_to_user+0x124/0x150 lib/usercopy.c:27
->   copy_to_user include/linux/uaccess.h:152 [inline]
->   ld_usb_read+0x31a/0x780 drivers/usb/misc/ldusb.c:495
+>   __check_object_size mm/usercopy.c:276 [inline]
+>   __check_object_size.cold+0x91/0xbb mm/usercopy.c:250
+>   check_object_size include/linux/thread_info.h:119 [inline]
+>   check_copy_size include/linux/thread_info.h:150 [inline]
+>   copy_to_user include/linux/uaccess.h:151 [inline]
+>   ld_usb_read+0x304/0x780 drivers/usb/misc/ldusb.c:495
 >   __vfs_read+0x76/0x100 fs/read_write.c:425
 >   vfs_read+0x1ea/0x430 fs/read_write.c:461
 >   ksys_read+0x1e8/0x250 fs/read_write.c:587
@@ -109,29 +122,29 @@ On Mon, Sep 16, 2019 at 8:49 PM syzbot
 > Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
 > 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
 > ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007fad75925c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RSP: 002b:00007fc613f92c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
 > RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004598e9
-> RDX: 0000000020002200 RSI: 0000000020001200 RDI: 0000000000000004
-> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fad759266d4
+> RDX: 00000000200002c9 RSI: 0000000020000280 RDI: 0000000000000004
+> RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fc613f936d4
 > R13: 00000000004c6d1a R14: 00000000004dc0c0 R15: 00000000ffffffff
->
-> The buggy address belongs to the page:
-> page:ffffea0006ada000 refcount:1 mapcount:0 mapping:0000000000000000
-> index:0x0 compound_mapcount: 0
-> flags: 0x200000000010000(head)
-> raw: 0200000000010000 dead000000000100 dead000000000122 0000000000000000
-> raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881ab6a0300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->   ffff8881ab6a0380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > ffff8881ab6a0400: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
->                     ^
->   ffff8881ab6a0480: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
->   ffff8881ab6a0500: fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe fe
-> ==================================================================
+> Modules linked in:
+> ---[ end trace b440da0257bb7015 ]---
+> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:98
+> Code: e8 62 f0 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 c0
+> f7 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 c6 91 c1 ff <0f> 0b e8 36 f0
+> d6 ff e8 a1 90 fd ff 8b 54 24 04 49 89 d8 4c 89 e1
+> RSP: 0018:ffff8881d308fc40 EFLAGS: 00010282
+> RAX: 0000000000000060 RBX: ffffffff85cdf4e0 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff81288ddd RDI: ffffed103a611f7a
+> RBP: ffffffff85cdf6a0 R08: 0000000000000060 R09: fffffbfff11ad7a3
+> R10: fffffbfff11ad7a2 R11: ffffffff88d6bd17 R12: ffffffff85cdf8c0
+> R13: ffffffff85cdf4e0 R14: 00000000200002c9 R15: ffffffff85cdf4e0
+> FS:  00007fc613f93700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f983cbbf000 CR3: 00000001cc33e000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 >
 >
 > ---
