@@ -2,73 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BBE6B51C5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72545B51D9
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Sep 2019 17:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729769AbfIQPq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Sep 2019 11:46:29 -0400
-Received: from canardo.mork.no ([148.122.252.1]:40655 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728003AbfIQPq3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Sep 2019 11:46:29 -0400
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8HFkLQV019542
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 17 Sep 2019 17:46:21 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1568735182; bh=01F0+hoCVuL91LPexeI+J5fAbsP/o62EI5xZw9DZwNA=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=dqx9U4lJuXVqWbWCKQEHhYcuwa4PNOEQN8whjxPCB6mDbVCL+uDM+6mdOa/D+Xkss
-         9EbJpT1xgDN9R8k9dwCPSjjnPTAh77gaeI4y4yJc91lQBrU0p5PAtwyycNBT3I5Kwe
-         Ew1VVgTsrxUO3AJFbcK9oJ1rzR505tiNLzZDEV70=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1iAFgL-0007xx-10; Tue, 17 Sep 2019 17:46:21 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, oliver@neukum.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: divide error in cdc_ncm_update_rxtx_max
-Organization: m
-References: <00000000000018e4250592c043c3@google.com>
-Date:   Tue, 17 Sep 2019 17:46:20 +0200
-In-Reply-To: <00000000000018e4250592c043c3@google.com> (syzbot's message of
-        "Tue, 17 Sep 2019 07:09:00 -0700")
-Message-ID: <87d0fzlycz.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1729866AbfIQPyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Sep 2019 11:54:05 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38772 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729859AbfIQPyB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Sep 2019 11:54:01 -0400
+Received: (qmail 5167 invoked by uid 2102); 17 Sep 2019 11:53:59 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Sep 2019 11:53:59 -0400
+Date:   Tue, 17 Sep 2019 11:53:59 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <kai.heng.feng@canonical.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <mans@mansr.com>, <oneukum@suse.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: general protection fault in usb_set_interface
+In-Reply-To: <000000000000a9f2870592c15dd3@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909171152520.1590-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com> writes:
+On Tue, 17 Sep 2019, syzbot wrote:
 
-> syzbot has tested the proposed patch but the reproducer still
-> triggered crash:
-> divide error in usbnet_update_max_qlen
->
-> cdc_ncm 5-1:1.0: setting tx_max =3D 16384
-> divide error: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 1737 Comm: kworker/1:2 Not tainted 5.3.0-rc7+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine,
-> BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:usbnet_update_max_qlen drivers/net/usb/usbnet.c:344 [inline]
-> RIP: 0010:usbnet_update_max_qlen+0x231/0x370 drivers/net/usb/usbnet.c:338
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> possible deadlock in vidioc_querycap
+> 
+> ============================================
+> WARNING: possible recursive locking detected
+> 5.3.0-rc7+ #0 Not tainted
+> --------------------------------------------
+> v4l_id/3016 is trying to acquire lock:
+> 0000000069c3004e (&usbvision->v4l2_lock){+.+.}, at:  
+> vidioc_querycap+0x62/0x3b0 drivers/media/usb/usbvision/usbvision-video.c:456
+> 
+> but task is already holding lock:
+> 0000000069c3004e (&usbvision->v4l2_lock){+.+.}, at:  
+> __video_do_ioctl+0x3ba/0xba0 drivers/media/v4l2-core/v4l2-ioctl.c:2846
 
-Sure, but that's another error already fixed by Oliver..
+Heh.  That's what comes of trying to patch a driver when you aren't an 
+expert on it already.
 
-I guess this fix worked.  But I believe we should see if this is a more
-generic issue than just this single driver/bug.  I fear it is...
+Okay, the lock is already held at this point so we don't need to 
+acquire it.
 
+Alan Stern
 
+#syz test: https://github.com/google/kasan.git f0df5c1b
 
-Bj=C3=B8rn
+ drivers/media/usb/usbvision/usbvision-video.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
++++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+@@ -453,6 +453,9 @@ static int vidioc_querycap(struct file *
+ {
+ 	struct usb_usbvision *usbvision = video_drvdata(file);
+ 
++	if (!usbvision->dev)
++		return -ENODEV;
++
+ 	strscpy(vc->driver, "USBVision", sizeof(vc->driver));
+ 	strscpy(vc->card,
+ 		usbvision_device_data[usbvision->dev_model].model_string,
+@@ -1111,7 +1114,8 @@ static int usbvision_radio_close(struct
+ 	mutex_lock(&usbvision->v4l2_lock);
+ 	/* Set packet size to 0 */
+ 	usbvision->iface_alt = 0;
+-	usb_set_interface(usbvision->dev, usbvision->iface,
++	if (usbvision->dev)
++		usb_set_interface(usbvision->dev, usbvision->iface,
+ 				    usbvision->iface_alt);
+ 
+ 	usbvision_audio_off(usbvision);
+
