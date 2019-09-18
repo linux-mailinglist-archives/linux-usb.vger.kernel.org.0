@@ -2,77 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A96F2B62F5
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED48B632B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:26:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730837AbfIRMRt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 08:17:49 -0400
-Received: from canardo.mork.no ([148.122.252.1]:46379 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727193AbfIRMRt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Sep 2019 08:17:49 -0400
-Received: from miraculix.mork.no ([IPv6:2a02:2121:345:8091:90c6:3fae:14f0:3126])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8ICHjRe018136
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 18 Sep 2019 14:17:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1568809066; bh=6ReCdLpKToI7PCsGayRZb9MxdpELm+zou9tl9ZWV5QY=;
-        h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=HfPE3yew4RDxJsPjfUUTUZh8oipCKZeF2dZXdIvPriK/AucWka3J0vPdDTESnOHdk
-         NgFWNLFAhgtOcUhsqs7j0yVx4DLiMbRmZhWG92ZwuCUa1LkN4z1W+q9v4mORqoNCfv
-         x4JW50FkS29FhRIOu9G/Ikq4BU2qB3MjOROIZyRg=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@miraculix.mork.no>)
-        id 1iAYtw-0001f0-25; Wed, 18 Sep 2019 14:17:40 +0200
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH net,stable] usbnet: ignore endpoints with invalid wMaxPacketSize
-Date:   Wed, 18 Sep 2019 14:17:38 +0200
-Message-Id: <20190918121738.6343-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.20.1
+        id S1731100AbfIRM0D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:26:03 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:57215 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728539AbfIRM0C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 08:26:02 -0400
+Received: by mail-io1-f70.google.com with SMTP id n8so10758084ioh.23
+        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 05:26:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=yq57rTS7tT8k+xdJeb2CfUd2j81GNTcLfOruVvSsEeQ=;
+        b=DbscyCCHxWjLyEZfEq3RkOdkx7tRyBdHBTKlEk20FstU5WBve6gEXB+xHU6PPAw/wK
+         0xupMHEIDy2Vj0fmk+346lTAvrlwGQvvpkVENb9I4WFH3jSxU8n/rDpPIuR/Vbu/SX+K
+         eb008Qh0HJwtmnRgDrS+GkYlxKR407uvOH8LqaC1wBUmrDwwNiyseQCFA/EGjgv6fX2H
+         squTK0fx7GPTBrSO4Cnupj488JYESA1lgR+WhoFzgSrPkqGBP/xXDgIQxhOn/wWXPkV8
+         nC4P/1lbShKL34cVom6G6RTTSvEwEPXZAvipy2Lgcfi1jhrzQ5XzrSVRBbmvp0YAvgjB
+         W1Lg==
+X-Gm-Message-State: APjAAAVYL9CQJDm4LK6w6cZckOSwxZM3Bwlq8Shwfnj/JCNuoioGnsDS
+        tKQFTAAI00dLadzIEoTVTwFM4Fkh4Mt0V4cL5gfZ4eYoH76V
+X-Google-Smtp-Source: APXvYqx7fUN6ZZEHiu5creHYMFYei5Rfmu0F99U5no3hBFuFzr5yISH1tIhZ7tEhBcV9+P8+J/ecUAojRnyBPEli5iMDgNaYWH0l
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+X-Received: by 2002:a6b:c88e:: with SMTP id y136mr4267690iof.68.1568809560710;
+ Wed, 18 Sep 2019 05:26:00 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 05:26:00 -0700
+In-Reply-To: <20190918120147.4520-1-bjorn@mork.no>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000096290a0592d2f05a@google.com>
+Subject: Re: divide error in cdc_ncm_update_rxtx_max
+From:   syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com>
+To:     bjorn@mork.no, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        oliver@neukum.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Endpoints with zero wMaxPacketSize are not usable for transferring
-data. Ignore such endpoints when looking for valid in, out and
-status pipes, to make the drivers more robust against invalid and
-meaningless descriptors.
+Hello,
 
-The wMaxPacketSize of these endpoints are used for memory allocations
-and as divisors in many usbnet minidrivers. Avoiding zero is therefore
-critical.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
- drivers/net/usb/usbnet.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Reported-and-tested-by:  
+syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 58952a79b05f..dbea2136d901 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -100,6 +100,11 @@ int usbnet_get_endpoints(struct usbnet *dev, struct usb_interface *intf)
- 			int				intr = 0;
- 
- 			e = alt->endpoint + ep;
-+
-+			/* ignore endpoints which cannot transfer data */
-+			if (!usb_endpoint_maxp(&e->desc))
-+				continue;
-+
- 			switch (e->desc.bmAttributes) {
- 			case USB_ENDPOINT_XFER_INT:
- 				if (!usb_endpoint_dir_in(&e->desc))
--- 
-2.20.1
+Tested on:
 
+commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+dashboard link: https://syzkaller.appspot.com/bug?extid=ce366e2b8296e25d84f5
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=114971b5600000
+
+Note: testing is done by a robot and is best-effort only.
