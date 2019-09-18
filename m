@@ -2,49 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D902B5F03
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 10:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01E6B5F05
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 10:22:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfIRIVw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 04:21:52 -0400
-Received: from mail1.skidata.com ([91.230.2.99]:11724 "EHLO mail1.skidata.com"
+        id S1730129AbfIRIWD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 04:22:03 -0400
+Received: from mail2.skidata.com ([91.230.2.91]:2187 "EHLO mail2.skidata.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726131AbfIRIVw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Sep 2019 04:21:52 -0400
+        id S1726131AbfIRIWD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 04:22:03 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=skidata.com; i=@skidata.com; q=dns/txt; s=selector1;
-  t=1568794911; x=1600330911;
+  t=1568794922; x=1600330922;
   h=subject:to:cc:references:from:message-id:date:
    mime-version:in-reply-to:content-transfer-encoding;
-  bh=JYYKb4Og8/LgmZTeUewdUokg/KSASFzdq7s/jlHBVzo=;
-  b=Wcs6tEqYJ99w6nl8f5w0tIip/ShPdDjxCQ/6T84aJ2PDtligwqEa6c3F
-   j0uqCBBETSdoHuDqCHrqJyb4apPAJaYYdE7E0rntQHz0ifSsjxhKM+KWx
-   kEhj6AkWNK7hX8/ujg+Nfdc1rPeJcRun9SwoIQDnW79kP8zihZtjOq9pV
-   ggTIrV4B1DFks4G4/ltKx5MQRgQ83/DVt66b9Y10ug4L6ciDZs6hWwW0G
-   pRjWZBidgl68qEHQk6hAXPyFQFsdLqQNL51yRAmlElXwSCKIkqxgU8alG
-   RyTw6AWyLMS4fuzmWAXJJtch4aV++LtxIoeIrcDvy7yctIjkIwjwV8spe
-   Q==;
-IronPort-SDR: zzVPZwHkK+FnvOfx6lAfkfQFe094QYDi+yAHndt9+uXdUbHxqEv/NWle8QKdTnKvwU9+XiFtiJ
- WUmLQF8EkR2AWKvPQD13iG0DVi3Nz8T5e/7ve95+THDjGCr24/IP2SAj7njzg2uqNmhdHNaWmS
- mt4GaO2AID+3KD6fSN3oaTvmuiYCl13pkeEEwfXJha+SdTXTymEajLpurIyHeeyGGfIE3vxuEF
- Q1ueo1Q1/cyMHWP/3PQGBTtHMHZlOPoPaYKNjwcPAgptFw3RVgvkqs2LaTgaVVHw+spfyfW7bj
- RpM=
+  bh=ItTQ634pOZkTmlAo3FaDr7g0AAqS3F7gyf8qNzFJzX4=;
+  b=BI644oAeMLqX0pi7GXjxvdWDm0kGnR9if9UABVGW4CcO0NqsiYWoRai0
+   706yQwSSGH3PiX2xRjUMVzlOf3JHqNQzt4aZbpbQkbaiN0Xlj/XiAdwe/
+   jHRWoWDDamauwVQ0+CkbsAOMfmtx2eijQg927S0db++l2/wAvoOSpDgBN
+   Bf5C5qOW5284+SvovPYWP58DVBCuvBZ9pGBoOHH3c8ZSneulh8qgI3RdZ
+   nORkAJNA2CgfsOwckGHYWC6uHtdVeS3sbuD4fcMU/HP+iF3vYKBfesuNr
+   4rdRnraQhlUOl2tRq2qUbvEsmBRUrcXYimV07qkReUBMcMmRFXyXpgrxS
+   w==;
+IronPort-SDR: RcaiKXnQs/s3HpXWyWKyNAiKLCaBqgBLWX1ME4I4JP9f9Tj1EU3J5KNmhK98EHn/2lb8U+4zy8
+ 10YbvVpeKBWyKhzjm6ru+VSTP+ZSiwYPzuM29srmlGwagjkc9mSVE8hQeAdfL2DRm6OutIHvaq
+ eZ6yjkIWsMzOv0FCBd6yb4R96KmQG7SoT68NBaJqqkMt/KGP3NDQeyAhdYpTlqHHOMFuxBd2Bf
+ tQoJitEFLVLHzt8jdkIRVoMVHX2I/VFfiFc9YebvaPaNNEZaaYVH6yl38bm7kkX1AZubfsxQUE
+ 5tg=
 X-IronPort-AV: E=Sophos;i="5.64,520,1559512800"; 
-   d="scan'208";a="19688650"
-Subject: Re: [PATCH 2/4] usb: usb251xb: add vdd supply support
+   d="scan'208";a="2338235"
+Subject: Re: [PATCH 3/4] usb: usb251xb: simplify reset helper
 To:     Marco Felsch <m.felsch@pengutronix.de>, <robh+dt@kernel.org>,
         <fancer.lancer@gmail.com>
 CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <kernel@pengutronix.de>
 References: <20190917144449.32739-1-m.felsch@pengutronix.de>
- <20190917144449.32739-3-m.felsch@pengutronix.de>
+ <20190917144449.32739-4-m.felsch@pengutronix.de>
 From:   Richard Leitner <richard.leitner@skidata.com>
-Message-ID: <31006213-bd7e-b8f6-de23-24afc63ebf7c@skidata.com>
-Date:   Wed, 18 Sep 2019 10:14:42 +0200
+Message-ID: <61b35bdc-8eaa-e019-7754-316af9d360cb@skidata.com>
+Date:   Wed, 18 Sep 2019 10:14:53 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190917144449.32739-3-m.felsch@pengutronix.de>
+In-Reply-To: <20190917144449.32739-4-m.felsch@pengutronix.de>
 Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -57,9 +57,12 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On 17/09/2019 16:44, Marco Felsch wrote:
-> Currently we don't handle the supply. We need to add the supply support
-> to be able to switch the supply off e.g. during a suspend-to-ram
-> operation. So we can guarantee a correct (re-)initialization.
+> Currently the reset handler was always called to deassert the reset
+> line because assert the line was done during probe. Now if we want to
+> support pm by turn of the supply we need to call this routine twice and
+> the i2c_lock_bus is done twice too. To simplify that we can drop the
+> state and just do a reset in one go. So a future pm operation don't need
+> to lock the i2c bus twice.
 > 
 > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 
@@ -76,49 +79,55 @@ Tested-by: Richard Leitner <richard.leitner@skidata.com>
 regards;Richard.L
 
 > ---
->   drivers/usb/misc/usb251xb.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+>   drivers/usb/misc/usb251xb.c | 15 +++++++--------
+>   1 file changed, 7 insertions(+), 8 deletions(-)
 > 
 > diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index 6ca9111d150a..05819167604d 100644
+> index 05819167604d..bc031d33f433 100644
 > --- a/drivers/usb/misc/usb251xb.c
 > +++ b/drivers/usb/misc/usb251xb.c
-> @@ -17,6 +17,7 @@
->   #include <linux/module.h>
->   #include <linux/nls.h>
->   #include <linux/of_device.h>
-> +#include <linux/regulator/consumer.h>
->   #include <linux/slab.h>
+> @@ -263,20 +263,19 @@ static int usb251x_check_gpio_chip(struct usb251xb *hub)
+>   }
+>   #endif
 >   
->   /* Internal Register Set Addresses & Default Values acc. to DS00001692C */
-> @@ -116,6 +117,7 @@
->   struct usb251xb {
->   	struct device *dev;
->   	struct i2c_client *i2c;
-> +	struct regulator *vdd;
->   	u8 skip_config;
->   	struct gpio_desc *gpio_reset;
->   	u16 vendor_id;
-> @@ -420,6 +422,10 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
->   		return err;
->   	}
+> -static void usb251xb_reset(struct usb251xb *hub, int state)
+> +static void usb251xb_reset(struct usb251xb *hub)
+>   {
+>   	if (!hub->gpio_reset)
+>   		return;
 >   
-> +	hub->vdd = devm_regulator_get(dev, "vdd");
-> +	if (IS_ERR(hub->vdd))
-> +		return PTR_ERR(hub->vdd);
-> +
->   	if (of_property_read_u16_array(np, "vendor-id", &hub->vendor_id, 1))
->   		hub->vendor_id = USB251XB_DEF_VENDOR_ID;
+>   	i2c_lock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
 >   
-> @@ -665,6 +671,10 @@ static int usb251xb_probe(struct usb251xb *hub)
->   	if (err)
->   		return err;
+> -	gpiod_set_value_cansleep(hub->gpio_reset, state);
+> +	gpiod_set_value_cansleep(hub->gpio_reset, 1);
+> +	usleep_range(1, 10);	/* >=1us RESET_N asserted */
+> +	gpiod_set_value_cansleep(hub->gpio_reset, 0);
 >   
-> +	err = regulator_enable(hub->vdd);
-> +	if (err)
-> +		return err;
-> +
->   	err = usb251xb_connect(hub);
->   	if (err) {
->   		dev_err(dev, "Failed to connect hub (%d)\n", err);
+>   	/* wait for hub recovery/stabilization */
+> -	if (!state)
+> -		usleep_range(500, 750);	/* >=500us at power on */
+> -	else
+> -		usleep_range(1, 10);	/* >=1us at power down */
+> +	usleep_range(500, 750);	/* >=500us after RESET_N deasserted */
+>   
+>   	i2c_unlock_bus(hub->i2c->adapter, I2C_LOCK_SEGMENT);
+>   }
+> @@ -294,7 +293,7 @@ static int usb251xb_connect(struct usb251xb *hub)
+>   		i2c_wb[0] = 0x01;
+>   		i2c_wb[1] = USB251XB_STATUS_COMMAND_ATTACH;
+>   
+> -		usb251xb_reset(hub, 0);
+> +		usb251xb_reset(hub);
+>   
+>   		err = i2c_smbus_write_i2c_block_data(hub->i2c,
+>   				USB251XB_ADDR_STATUS_COMMAND, 2, i2c_wb);
+> @@ -344,7 +343,7 @@ static int usb251xb_connect(struct usb251xb *hub)
+>   	i2c_wb[USB251XB_ADDR_PORT_MAP_7]        = hub->port_map7;
+>   	i2c_wb[USB251XB_ADDR_STATUS_COMMAND] = USB251XB_STATUS_COMMAND_ATTACH;
+>   
+> -	usb251xb_reset(hub, 0);
+> +	usb251xb_reset(hub);
+>   
+>   	/* write registers */
+>   	for (i = 0; i < (USB251XB_I2C_REG_SZ / USB251XB_I2C_WRITE_SZ); i++) {
 > 
