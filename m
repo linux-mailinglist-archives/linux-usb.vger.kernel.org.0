@@ -2,66 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD76B62BF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96F2B62F5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730614AbfIRMHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 08:07:02 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:51659 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727095AbfIRMHC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 08:07:02 -0400
-Received: by mail-io1-f69.google.com with SMTP id a13so10687518ioh.18
-        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 05:07:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=FSF2twrGv8C9R/LR+gpcvgwHJvITBl5yE80ajwcfqc8=;
-        b=bSPVye6cgBJDxTX7tUeXoUqIu8MTO1DHjJ8/8U/rtArFmRrC6KxNCAISS0PMiYV0Ht
-         8aiP15PmvAbyn6nKaGEmPyOKoauMZl09HTeg0tzPE9tdpR0TjPw2rdSVfeIgPDYTZC/I
-         CtB4CksGi8Re4xbFAvQLV+Mh/8gkYISARxIyUQe670SIs9pMsgy8zfaBKJdtRjyKzpAh
-         wMl8CEGkKzK4BhYUpFf77r4K3Spks8mpBxW8vv3bqNwt68GCxV/Nshsd0OZQ+2FeJhvG
-         m8EPnRCCZdFJc/7EDYfaoIH1IXfQ8FQGXJiHH/vM0uhNS6Mbxg+d/U50IH/4TDjO7pY8
-         Btrg==
-X-Gm-Message-State: APjAAAUzDYCa9dtpAKy9uG0U1Uvcn4ZZayiUtlaXtRe7HIVZ3aLGdXkL
-        X3YOmZl82dIzLYEnNKGFp5A4Dv7ODIUwp17yA0odFJ8O2tDz
-X-Google-Smtp-Source: APXvYqzES4YyS8y/saMw3rpqBpSMCMeoqohImRV7AUnMLaeFyiNo0H/N/+OnqsOmNVhxdEBios6/bgoM8zTK3A3v+hOUj2vp5oOi
+        id S1730837AbfIRMRt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:17:49 -0400
+Received: from canardo.mork.no ([148.122.252.1]:46379 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727193AbfIRMRt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 08:17:49 -0400
+Received: from miraculix.mork.no ([IPv6:2a02:2121:345:8091:90c6:3fae:14f0:3126])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8ICHjRe018136
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 18 Sep 2019 14:17:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1568809066; bh=6ReCdLpKToI7PCsGayRZb9MxdpELm+zou9tl9ZWV5QY=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=HfPE3yew4RDxJsPjfUUTUZh8oipCKZeF2dZXdIvPriK/AucWka3J0vPdDTESnOHdk
+         NgFWNLFAhgtOcUhsqs7j0yVx4DLiMbRmZhWG92ZwuCUa1LkN4z1W+q9v4mORqoNCfv
+         x4JW50FkS29FhRIOu9G/Ikq4BU2qB3MjOROIZyRg=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1iAYtw-0001f0-25; Wed, 18 Sep 2019 14:17:40 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH net,stable] usbnet: ignore endpoints with invalid wMaxPacketSize
+Date:   Wed, 18 Sep 2019 14:17:38 +0200
+Message-Id: <20190918121738.6343-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9dd4:: with SMTP id 20mr4838250ioo.1.1568808420767;
- Wed, 18 Sep 2019 05:07:00 -0700 (PDT)
-Date:   Wed, 18 Sep 2019 05:07:00 -0700
-In-Reply-To: <CAAeHK+xJgJoR9rODcRH74knaRKmEq+DDVarNNwDMT_Vtg+gV2Q@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a400c60592d2ac8f@google.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
-From:   syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Endpoints with zero wMaxPacketSize are not usable for transferring
+data. Ignore such endpoints when looking for valid in, out and
+status pipes, to make the drivers more robust against invalid and
+meaningless descriptors.
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+The wMaxPacketSize of these endpoints are used for memory allocations
+and as divisors in many usbnet minidrivers. Avoiding zero is therefore
+critical.
 
-Reported-and-tested-by:  
-syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+ drivers/net/usb/usbnet.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Tested on:
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 58952a79b05f..dbea2136d901 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -100,6 +100,11 @@ int usbnet_get_endpoints(struct usbnet *dev, struct usb_interface *intf)
+ 			int				intr = 0;
+ 
+ 			e = alt->endpoint + ep;
++
++			/* ignore endpoints which cannot transfer data */
++			if (!usb_endpoint_maxp(&e->desc))
++				continue;
++
+ 			switch (e->desc.bmAttributes) {
+ 			case USB_ENDPOINT_XFER_INT:
+ 				if (!usb_endpoint_dir_in(&e->desc))
+-- 
+2.20.1
 
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=131651c9600000
-
-Note: testing is done by a robot and is best-effort only.
