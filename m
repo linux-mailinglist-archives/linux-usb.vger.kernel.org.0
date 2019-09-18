@@ -2,32 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 332A4B65AB
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 16:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17814B65E7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 16:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730217AbfIROQi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 10:16:38 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:53158 "HELO
+        id S1730653AbfIROXP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 10:23:15 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:53200 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726562AbfIROQi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 10:16:38 -0400
-Received: (qmail 2704 invoked by uid 2102); 18 Sep 2019 10:16:37 -0400
+        with SMTP id S1730153AbfIROXP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 10:23:15 -0400
+Received: (qmail 2743 invoked by uid 2102); 18 Sep 2019 10:23:14 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 18 Sep 2019 10:16:37 -0400
-Date:   Wed, 18 Sep 2019 10:16:37 -0400 (EDT)
+  by localhost with SMTP; 18 Sep 2019 10:23:14 -0400
+Date:   Wed, 18 Sep 2019 10:23:14 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     syzbot <syzbot+b24d736f18a1541ad550@syzkaller.appspotmail.com>,
-        Felipe Balbi <balbi@kernel.org>, <chunfeng.yun@mediatek.com>,
+To:     Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+cc:     linux-bluetooth@vger.kernel.org, <linux-usb@vger.kernel.org>,
+        <dianders@chromium.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Hui Peng <benquike@gmail.com>, <linux-pm@vger.kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Len Brown <len.brown@intel.com>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Dmitry Torokhov <dtor@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: INFO: rcu detected stall in dummy_timer
-In-Reply-To: <CAAeHK+yL9DX9oraq5dN8CSU6LzYN7PnRzppVbiG5b6QM5_ygEg@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1909181004440.1507-100000@iolanthe.rowland.org>
+        Mans Rullgard <mans@mansr.com>, Pavel Machek <pavel@ucw.cz>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: Re: [PATCH 0/2] Reset realtek bluetooth devices during user suspend
+In-Reply-To: <20190917212702.35747-1-abhishekpandit@chromium.org>
+Message-ID: <Pine.LNX.4.44L0.1909181017300.1507-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -35,50 +45,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 18 Sep 2019, Andrey Konovalov wrote:
+On Tue, 17 Sep 2019, Abhishek Pandit-Subedi wrote:
 
-> > > Why does dumy_hcd require CONFIG_HZ=1000? The comment doesn't really
-> > > explain the reason.
-> >
-> > Oh, that's simple enough.  USB events tend to happen at millisecond
-> > intervals.  The data on the USB bus is organized into frames (and
-> > microframes for high speed and SuperSpeed); a frame lasts one
-> > millisecond (and a microframe lasts 1/8 ms).  Many host controllers
-> > report important events when a frame boundary occurs (that's how
-> > dummy-hcd works).
-> >
-> > So for proper timing of the emulation, dummy-hcd requires timer
-> > interrupts with millisecond resolution.  I suppose the driver could be
-> > changed to use a high-res timer instead of a normal kernel timer, but
-> > for now that doesn't seem particularly important.
-> 
-> So what are the practical differences between using CONFIG_HZ=100 and
-> 1000 for dummy-hcd? Is is going to be slower or faster?
+> On a Realtek USB bluetooth device, I wanted a simple and consistent way
+> to put the device in reset during suspend (2 reasons: to save power and
+> disable BT as a wakeup source). Resetting it in the suspend callback
+> causes a detach and the resume callback is not called. Hence the changes
+> in this series to do the reset in suspend_noirq.
 
-The timing of the emulation will be more accurate with 1000.  Of
-course, for your purposes that doesn't matter.  Also, the driver will 
-probably end up using a higher fraction of the total CPU time.
+What about people who _want_ BT to be a wakeup source?
 
->  Or can it get
-> overloaded with data and cause stalls?
+Why does putting the device in reset save power?  That is, a suspended
+device is very strictly limited in the amount of current it's allowed
+to draw from the USB bus; why should it draw significantly less when it
+is reset?
 
-I really don't know the answer to that.  It seems probable that 100 is
-okay and is less likely to lead to overload and stalls than 1000.
+> I looked into using PERSIST and reset on resume but those seem mainly
+> for misbehaving devices that reset themselves.
 
->   Or something else? We're somewhat hesitant to change CONFIG_HZ as 
-> we don't know how it will affect other parts of the kernel (at some
-> point the USB fuzzer will become a part of the main syzbot instance
-> that doesn't only fuzz USB).
+They are, but that doesn't mean you can't use them for other things 
+too.
 
-Leaving it at 100 should be okay for now.  Especially since we have 
-decided to fix this particular problem in an independent way.
+> This patch series has been tested with Realtek BT hardware as well as
+> Intel BT (test procedure = disable as wake source, user suspend and
+> observe a detach + reattach on resume).
 
-In general, I don't know how dummy-hcd will behave when a driver gets 
-into a tight retry loop.  In theory, it might end up using so much CPU 
-time that you get an rcu stall like the one we saw, but I don't 
-understand exactly what happened in this case.  You'd think that with 
-no more than six (or however many threads syzbot used) callbacks per 
-jiffy, there would be plenty of time for normal threads to run.
+This series really seems like overkill for a single kind of device.
+
+Is there any way to turn off the device's BT radio during suspend (if
+wakeup is disabled) and then turn it back on during resume?  Wouldn't 
+that accomplish what you want just as well?
 
 Alan Stern
 
