@@ -2,82 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 996DBB62A5
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:02:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E114B62A6
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729059AbfIRMCE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 08:02:04 -0400
-Received: from canardo.mork.no ([148.122.252.1]:53945 "EHLO canardo.mork.no"
+        id S1729598AbfIRMCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:02:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34646 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbfIRMCD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Sep 2019 08:02:03 -0400
-Received: from miraculix.mork.no ([IPv6:2a02:2121:345:8091:f053:4dff:fe21:2003])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8IC1wUT005544
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 18 Sep 2019 14:01:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1568808119; bh=Uz0TZqm4Ho48Zs6Xrr3RgUGa9V3UICLeLfojVeuHbNE=;
-        h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=lL2ZQyXK7L4rEYe0KLi5BGmp+SPxd5rI8qwR6Vj1jgKLwSuaIGEuNRFUKe5cCzr0b
-         fOG4QW2qaX6q/MqcqPbl/twyCAuxcvPriZzmyKfNe99HgJEqHvKr8GmlUUQYbjfv7V
-         1zqdcYCqT42bKM13p3FlADYbMrCDXi1Se/rvuWs0=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@miraculix.mork.no>)
-        id 1iAYed-0001Bb-Vk; Wed, 18 Sep 2019 14:01:51 +0200
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
-Subject: [PATCH net,stable] cdc_ncm: fix divide-by-zero caused by invalid wMaxPacketSize
-Date:   Wed, 18 Sep 2019 14:01:46 +0200
-Message-Id: <20190918120147.4520-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.20.1
+        id S1726565AbfIRMCU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 08:02:20 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 169D02054F;
+        Wed, 18 Sep 2019 12:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568808137;
+        bh=EsPB8Ccpv5OSQDXtolYbZA9qi0MW30pF7WjJeC3rCKg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=06THZ3Rrt9DMIQfscNUnFTMZc9zIQO2teeo8V4Sk2wGqPJUeypCbWVd3Kve/BijGO
+         j5YW5BW5mXsiNgJ3s694mTQh27fFNXLBMSemTrbkwsuLmCtD6c0bvMUlpuxTkjDiK8
+         C/BFtM9Yw9eJ1Yg50o4iM3D69I6z/MCo3MWOjTe8=
+Date:   Wed, 18 Sep 2019 14:02:15 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yegor Yefremov <yegorslists@googlemail.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH] USB: serial: add port statistics
+Message-ID: <20190918120215.GA1901208@kroah.com>
+References: <20190918091415.23683-1-yegorslists@googlemail.com>
+ <20190918110814.GC1894362@kroah.com>
+ <CAGm1_kvb--Ckxxft=Nqx4GDoHhA_qU3+ZCoqF86dEua_V2VrtA@mail.gmail.com>
+ <20190918114511.GA1899089@kroah.com>
+ <CAGm1_kv9x234BSE1U0u=huwQDZdxmX-zURS6mB6ypbahmbAC_A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGm1_kv9x234BSE1U0u=huwQDZdxmX-zURS6mB6ypbahmbAC_A@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Endpoints with zero wMaxPacketSize are not usable for transferring
-data. Ignore such endpoints when looking for valid in, out and
-status pipes, to make the driver more robust against invalid and
-meaningless descriptors.
+On Wed, Sep 18, 2019 at 01:51:29PM +0200, Yegor Yefremov wrote:
+> On Wed, Sep 18, 2019 at 1:45 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Sep 18, 2019 at 01:22:42PM +0200, Yegor Yefremov wrote:
+> > > On Wed, Sep 18, 2019 at 1:08 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, Sep 18, 2019 at 11:14:15AM +0200, yegorslists@googlemail.com wrote:
+> > > > > From: Yegor Yefremov <yegorslists@googlemail.com>
+> > > > >
+> > > > > Add additional port statistics like received and transmitted bytes
+> > > > > the way /proc/tty/driver/serial does.
+> > > > >
+> > > > > As usbserial driver already provides USB related information and
+> > > > > this line is longer than 100 characters, this patch adds an
+> > > > > additional line with the same port number:
+> > > > >
+> > > > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...
+> > > > > 0: tx:112 rx:0
+> > > > >
+> > > > > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > > > > ---
+> > > > >  drivers/usb/serial/usb-serial.c | 22 ++++++++++++++++++++++
+> > > > >  1 file changed, 22 insertions(+)
+> > > >
+> > > > You can't change existing proc files without having the chance that
+> > > > userspace tools will break.
+> > > >
+> > > > Have you tried this and seen what dies a horrible death?
+> > >
+> > > This patch is more a proof of concept (forgot to add RFC keyword). I
+> > > find statistics provdes by the 8250 driver very useful for debugging
+> > > purposes. What would be the best way to implemnt this feature for
+> > > usbserial driver?
+> > >
+> > > a) extend current line:
+> > >
+> > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...tx:112 rx:0
+> > >
+> > > though this still can break parsing
+> > >
+> > > b) creating special entries for FTDI and other UARTs? Though it would
+> > > be greate to have all usbserial UART handled the same way in the same
+> > > file
+> >
+> > Why is any of this needed at all?  Also, be very aware of the security
+> > issues involved here, we had to disable access of these values by
+> > "normal" users for other tty devices, so please don't break that by
+> > offering it up here again.
+> >
+> > What is going to use this information?
+> 
+> This feature is not a "must have" one but it is convenient to see
+> transferred/received bytes and error flags from user space. If some
+> serial software is not working like expected and doesn't provide
+> enough debugging information one can quickly look at port statistics
+> from the console in order to check whether and how many bytes were
+> transferred or whether the were some communication errors.
 
-The wMaxPacketSize of the out pipe is used as divisor. So this change
-fixes a divide-by-zero bug.
+Again, it's a security issue, so be careful about this.  If you _REALLY_
+need it, make it a debugfs file, readble by root only.
 
-Reported-by: syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
-#syz test: https://github.com/google/kasan.git f0df5c1b
+Or a tracepoint, and then you can have a userspace read the data using
+ebpf :)
 
- drivers/net/usb/cdc_ncm.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 50c05d0f44cb..00cab3f43a4c 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -681,8 +681,12 @@ cdc_ncm_find_endpoints(struct usbnet *dev, struct usb_interface *intf)
- 	u8 ep;
- 
- 	for (ep = 0; ep < intf->cur_altsetting->desc.bNumEndpoints; ep++) {
--
- 		e = intf->cur_altsetting->endpoint + ep;
-+
-+		/* ignore endpoints which cannot transfer data */
-+		if (!usb_endpoint_maxp(&e->desc))
-+			continue;
-+
- 		switch (e->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) {
- 		case USB_ENDPOINT_XFER_INT:
- 			if (usb_endpoint_dir_in(&e->desc)) {
--- 
-2.20.1
-
+greg k-h
