@@ -2,202 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 620BDB6236
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 13:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B9DB6265
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 13:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730071AbfIRL03 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 07:26:29 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39265 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730065AbfIRL03 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 07:26:29 -0400
-Received: by mail-pf1-f194.google.com with SMTP id i1so4230670pfa.6
-        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 04:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GEKDbhzwNhpOBR6dELM5ZLkIekkSqfOIMrHIJk1k/V0=;
-        b=agcxYxEbPyxWq2pBrk006+27U5Xoh85acDeVMUH5z9Zi2Yv5CfEnPXpUFAYRMCeKXY
-         kb/TnliN0XwWkNMfvn54EUu0OVnJuqlPQpzsfLEnDEwnnpzrgJUe+yUBqUA5i10oYROg
-         vD4qAyXqC0EOCpXZfllRkyx6f/LAYJJl4mSF3yM2nBQJNF9dDD0/i+FYSMIWHc7+uAiz
-         0tJuoDxwPf5IWZ3sojDRmILrmqVY6mOOpq7JA1UiD31fR9gHccTokozsg3TehMZfQ5nN
-         dpzzMTHhZ8nJi5TruO/tQahI04h4PssBJrZuN4bTgGTpb8Vvjn78u3+N337VdsmXmQib
-         CWCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GEKDbhzwNhpOBR6dELM5ZLkIekkSqfOIMrHIJk1k/V0=;
-        b=tXzw8n9APaH4UJqMM9u49x47ga8wWvab1HWg2bR08AAoPKs7FjIXVQpAJp0oF1uR39
-         0+bPLclRbz+iuWV5a0e10FDzWI/pRhrx0DffaSNp0YXJiLELc2vPjsIApCgrnkJFhD0I
-         YdV8p94kulsd/FwzAlE831k+3eWCgV34sNTTTfGwJqaCauRVLH/3gUoOV788oclGE09d
-         aUCgN6v/K++BDxOAkwig4V+ucW761pGJikfqsbGsW5mkAWLxp2qPDbmAltsT5GzYfwiQ
-         wiJ8E27BdKDKlct5zlV0pfyGablH7u+vhtklLLH3+ew9y6aNUN1rhBwwVLgsaeHqJWX2
-         PS+g==
-X-Gm-Message-State: APjAAAUg5jd4UOwrQBzVLb+jOcVhH+FCL+/nWEKuN7kHre+tmYWNQNgE
-        fcvQ1W7vGnxSC8IH3ReHKf31st6R8qUkK/9bfTss8Q==
-X-Google-Smtp-Source: APXvYqwYAv+hSySRkpTsC5JgvSWSS21M81RsY0zta+P6vdFIbrT8Kb6VbysxQ7uG06t7MGvURGAjaippiHqiexnoL7I=
-X-Received: by 2002:a63:c442:: with SMTP id m2mr3520643pgg.286.1568805986413;
- Wed, 18 Sep 2019 04:26:26 -0700 (PDT)
+        id S1730276AbfIRLpP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 07:45:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50794 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730198AbfIRLpP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 07:45:15 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A9BF221907;
+        Wed, 18 Sep 2019 11:45:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568807114;
+        bh=xe30Vt/UgJxm8NUpWY9YkpcUtbsYVvcOqmZ/kFHLD5Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S1dR2sCRqnTfplkaRWVh26geOlvF+cmYq02MnBEVlhUo6OAci2DSeGbtcv1McF3/h
+         kqkE1mFGg3Y6FtgfkeL7p2qDMImERCBbfv0daq83e9rzAnSMUeYePRMM6i60fHsMeC
+         sT5DK+wDk+EZSFPVjQSUlGjaaX7KJ3I/YWxv4QWs=
+Date:   Wed, 18 Sep 2019 13:45:11 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yegor Yefremov <yegorslists@googlemail.com>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        Johan Hovold <johan@kernel.org>
+Subject: Re: [PATCH] USB: serial: add port statistics
+Message-ID: <20190918114511.GA1899089@kroah.com>
+References: <20190918091415.23683-1-yegorslists@googlemail.com>
+ <20190918110814.GC1894362@kroah.com>
+ <CAGm1_kvb--Ckxxft=Nqx4GDoHhA_qU3+ZCoqF86dEua_V2VrtA@mail.gmail.com>
 MIME-Version: 1.0
-References: <000000000000cd1def0592ab9697@google.com> <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 18 Sep 2019 13:26:15 +0200
-Message-ID: <CAAeHK+xJgJoR9rODcRH74knaRKmEq+DDVarNNwDMT_Vtg+gV2Q@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: multipart/mixed; boundary="0000000000008b82dd0592d21ba8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGm1_kvb--Ckxxft=Nqx4GDoHhA_qU3+ZCoqF86dEua_V2VrtA@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---0000000000008b82dd0592d21ba8
-Content-Type: text/plain; charset="UTF-8"
+On Wed, Sep 18, 2019 at 01:22:42PM +0200, Yegor Yefremov wrote:
+> On Wed, Sep 18, 2019 at 1:08 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Sep 18, 2019 at 11:14:15AM +0200, yegorslists@googlemail.com wrote:
+> > > From: Yegor Yefremov <yegorslists@googlemail.com>
+> > >
+> > > Add additional port statistics like received and transmitted bytes
+> > > the way /proc/tty/driver/serial does.
+> > >
+> > > As usbserial driver already provides USB related information and
+> > > this line is longer than 100 characters, this patch adds an
+> > > additional line with the same port number:
+> > >
+> > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...
+> > > 0: tx:112 rx:0
+> > >
+> > > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> > > ---
+> > >  drivers/usb/serial/usb-serial.c | 22 ++++++++++++++++++++++
+> > >  1 file changed, 22 insertions(+)
+> >
+> > You can't change existing proc files without having the chance that
+> > userspace tools will break.
+> >
+> > Have you tried this and seen what dies a horrible death?
+> 
+> This patch is more a proof of concept (forgot to add RFC keyword). I
+> find statistics provdes by the 8250 driver very useful for debugging
+> purposes. What would be the best way to implemnt this feature for
+> usbserial driver?
+> 
+> a) extend current line:
+> 
+> 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...tx:112 rx:0
+> 
+> though this still can break parsing
+> 
+> b) creating special entries for FTDI and other UARTs? Though it would
+> be greate to have all usbserial UART handled the same way in the same
+> file
 
-On Tue, Sep 17, 2019 at 8:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 16 Sep 2019, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
-> >
-> > usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,
-> > different from the interface descriptor's value: 9
-> > usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=
-> > 0.00
-> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > usb 1-1: config 0 descriptor??
-> > greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
-> > greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID
-> > 0e8f:0012] on usb-dummy_hcd.0-1/input0
-> > ==================================================================
-> > BUG: KASAN: slab-out-of-bounds in set_bit
-> > include/asm-generic/bitops-instrumented.h:28 [inline]
-> > BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97
-> > [inline]
-> > BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0
-> > drivers/hid/hid-gaff.c:146
-> > Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
-> >
-> > CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Workqueue: usb_hub_wq hub_event
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
-> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-> >   kasan_report+0xe/0x12 mm/kasan/common.c:618
-> >   check_memory_region_inline mm/kasan/generic.c:185 [inline]
-> >   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-> >   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
-> >   gaff_init drivers/hid/hid-gaff.c:97 [inline]
-> >   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
-> >   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
-> >   really_probe+0x281/0x6d0 drivers/base/dd.c:548
-> >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-> >   __device_attach_driver+0x
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this bug, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> The driver assumes that the device contains an input.
->
-> Alan Stern
->
-> https://github.com/google/kasan.git f0df5c1b
+Why is any of this needed at all?  Also, be very aware of the security
+issues involved here, we had to disable access of these values by
+"normal" users for other tty devices, so please don't break that by
+offering it up here again.
 
-You've forgotten "syz test" here :)
+What is going to use this information?
 
-#syz test: https://github.com/google/kasan.git f0df5c1b
+thanks,
 
->
->  drivers/hid/hid-gaff.c |   12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> Index: usb-devel/drivers/hid/hid-gaff.c
-> ===================================================================
-> --- usb-devel.orig/drivers/hid/hid-gaff.c
-> +++ usb-devel/drivers/hid/hid-gaff.c
-> @@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
->  {
->         struct gaff_device *gaff;
->         struct hid_report *report;
-> -       struct hid_input *hidinput = list_entry(hid->inputs.next,
-> -                                               struct hid_input, list);
-> +       struct hid_input *hidinput;
->         struct list_head *report_list =
->                         &hid->report_enum[HID_OUTPUT_REPORT].report_list;
->         struct list_head *report_ptr = report_list;
-> -       struct input_dev *dev = hidinput->input;
-> +       struct input_dev *dev;
->         int error;
->
-> +       if (list_empty(&hid->inputs)) {
-> +               hid_err(hid, "no inputs found\n");
-> +               return -ENODEV;
-> +       }
-> +       hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-> +       dev = hidinput->input;
-> +
->         if (list_empty(report_list)) {
->                 hid_err(hid, "no output reports found\n");
->                 return -ENODEV;
->
-
---0000000000008b82dd0592d21ba8
-Content-Type: text/x-patch; charset="US-ASCII"; name="hid-gaff.patch"
-Content-Disposition: attachment; filename="hid-gaff.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k0p6kf7m0>
-X-Attachment-Id: f_k0p6kf7m0
-
-SW5kZXg6IHVzYi1kZXZlbC9kcml2ZXJzL2hpZC9oaWQtZ2FmZi5jCj09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KLS0tIHVz
-Yi1kZXZlbC5vcmlnL2RyaXZlcnMvaGlkL2hpZC1nYWZmLmMKKysrIHVzYi1kZXZlbC9kcml2ZXJz
-L2hpZC9oaWQtZ2FmZi5jCkBAIC02NCwxNCArNjQsMjAgQEAgc3RhdGljIGludCBnYWZmX2luaXQo
-c3RydWN0IGhpZF9kZXZpY2UgKgogewogCXN0cnVjdCBnYWZmX2RldmljZSAqZ2FmZjsKIAlzdHJ1
-Y3QgaGlkX3JlcG9ydCAqcmVwb3J0OwotCXN0cnVjdCBoaWRfaW5wdXQgKmhpZGlucHV0ID0gbGlz
-dF9lbnRyeShoaWQtPmlucHV0cy5uZXh0LAotCQkJCQkJc3RydWN0IGhpZF9pbnB1dCwgbGlzdCk7
-CisJc3RydWN0IGhpZF9pbnB1dCAqaGlkaW5wdXQ7CiAJc3RydWN0IGxpc3RfaGVhZCAqcmVwb3J0
-X2xpc3QgPQogCQkJJmhpZC0+cmVwb3J0X2VudW1bSElEX09VVFBVVF9SRVBPUlRdLnJlcG9ydF9s
-aXN0OwogCXN0cnVjdCBsaXN0X2hlYWQgKnJlcG9ydF9wdHIgPSByZXBvcnRfbGlzdDsKLQlzdHJ1
-Y3QgaW5wdXRfZGV2ICpkZXYgPSBoaWRpbnB1dC0+aW5wdXQ7CisJc3RydWN0IGlucHV0X2RldiAq
-ZGV2OwogCWludCBlcnJvcjsKIAorCWlmIChsaXN0X2VtcHR5KCZoaWQtPmlucHV0cykpIHsKKwkJ
-aGlkX2VycihoaWQsICJubyBpbnB1dHMgZm91bmRcbiIpOworCQlyZXR1cm4gLUVOT0RFVjsKKwl9
-CisJaGlkaW5wdXQgPSBsaXN0X2VudHJ5KGhpZC0+aW5wdXRzLm5leHQsIHN0cnVjdCBoaWRfaW5w
-dXQsIGxpc3QpOworCWRldiA9IGhpZGlucHV0LT5pbnB1dDsKKwogCWlmIChsaXN0X2VtcHR5KHJl
-cG9ydF9saXN0KSkgewogCQloaWRfZXJyKGhpZCwgIm5vIG91dHB1dCByZXBvcnRzIGZvdW5kXG4i
-KTsKIAkJcmV0dXJuIC1FTk9ERVY7Cg==
---0000000000008b82dd0592d21ba8--
+greg k-h
