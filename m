@@ -2,64 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED48B632B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EABAB6380
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:44:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731100AbfIRM0D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 08:26:03 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:57215 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728539AbfIRM0C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 08:26:02 -0400
-Received: by mail-io1-f70.google.com with SMTP id n8so10758084ioh.23
-        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 05:26:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=yq57rTS7tT8k+xdJeb2CfUd2j81GNTcLfOruVvSsEeQ=;
-        b=DbscyCCHxWjLyEZfEq3RkOdkx7tRyBdHBTKlEk20FstU5WBve6gEXB+xHU6PPAw/wK
-         0xupMHEIDy2Vj0fmk+346lTAvrlwGQvvpkVENb9I4WFH3jSxU8n/rDpPIuR/Vbu/SX+K
-         eb008Qh0HJwtmnRgDrS+GkYlxKR407uvOH8LqaC1wBUmrDwwNiyseQCFA/EGjgv6fX2H
-         squTK0fx7GPTBrSO4Cnupj488JYESA1lgR+WhoFzgSrPkqGBP/xXDgIQxhOn/wWXPkV8
-         nC4P/1lbShKL34cVom6G6RTTSvEwEPXZAvipy2Lgcfi1jhrzQ5XzrSVRBbmvp0YAvgjB
-         W1Lg==
-X-Gm-Message-State: APjAAAVYL9CQJDm4LK6w6cZckOSwxZM3Bwlq8Shwfnj/JCNuoioGnsDS
-        tKQFTAAI00dLadzIEoTVTwFM4Fkh4Mt0V4cL5gfZ4eYoH76V
-X-Google-Smtp-Source: APXvYqx7fUN6ZZEHiu5creHYMFYei5Rfmu0F99U5no3hBFuFzr5yISH1tIhZ7tEhBcV9+P8+J/ecUAojRnyBPEli5iMDgNaYWH0l
+        id S1731285AbfIRMoK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:44:10 -0400
+Received: from mga07.intel.com ([134.134.136.100]:15846 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725902AbfIRMoK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 08:44:10 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Sep 2019 05:44:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,520,1559545200"; 
+   d="scan'208";a="186455979"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Sep 2019 05:44:07 -0700
+Subject: Re: [RFT PATCH] xhci: Prevent device initiated U1/U2 link pm if exit
+ latency is too long
+To:     Jan Schmidt <jan@centricular.com>
+Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org
+References: <7e3aca8f-3918-08be-f1fd-cb3299c2af16@centricular.com>
+ <1568732029-11186-1-git-send-email-mathias.nyman@linux.intel.com>
+ <8a372d28-a011-4060-ac12-2291fdc33a4d@centricular.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <1efe04f6-d2b5-78c9-38eb-5fe093a7e7b8@linux.intel.com>
+Date:   Wed, 18 Sep 2019 15:46:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c88e:: with SMTP id y136mr4267690iof.68.1568809560710;
- Wed, 18 Sep 2019 05:26:00 -0700 (PDT)
-Date:   Wed, 18 Sep 2019 05:26:00 -0700
-In-Reply-To: <20190918120147.4520-1-bjorn@mork.no>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000096290a0592d2f05a@google.com>
-Subject: Re: divide error in cdc_ncm_update_rxtx_max
-From:   syzbot <syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com>
-To:     bjorn@mork.no, linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        oliver@neukum.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <8a372d28-a011-4060-ac12-2291fdc33a4d@centricular.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 17.9.2019 18.56, Jan Schmidt wrote:
+> 
+> 
+> On 18/9/19 12:53 am, Mathias Nyman wrote:
+>> If host/hub initiated link pm is prevented by a driver flag we still must
+>> ensure that periodic endpoints have longer service intervals than link pm
+>> exit latency before allowing device initiated link pm.
+>>
+>> Fix this by continue walking and checking endpoint service interval if
+>> xhci_get_timeout_no_hub_lpm() returns anything else than USB3_LPM_DISABLED
+>>
+>> While at it fix the split line error message
+>>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> 
+> I tested by forcing the driver->disable_hub_initiated_lpm check and
+> confirm a) Other USB devices still work as I expect them to b) without
+> this patch, I'm back to only 1 working Oculus Rift Sensor. With it, I
+> can capture 3 simultaneously.
+> 
+> Tested-by: Jan Schmidt <jan@centricular.com>
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Great, thanks, I'll queue up that patch as well with your Tested-by tag
 
-Reported-and-tested-by:  
-syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=ce366e2b8296e25d84f5
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=114971b5600000
-
-Note: testing is done by a robot and is best-effort only.
+-Mathias
