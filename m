@@ -2,113 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E114B62A6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD76B62BF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbfIRMCU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 08:02:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbfIRMCU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Sep 2019 08:02:20 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 169D02054F;
-        Wed, 18 Sep 2019 12:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568808137;
-        bh=EsPB8Ccpv5OSQDXtolYbZA9qi0MW30pF7WjJeC3rCKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=06THZ3Rrt9DMIQfscNUnFTMZc9zIQO2teeo8V4Sk2wGqPJUeypCbWVd3Kve/BijGO
-         j5YW5BW5mXsiNgJ3s694mTQh27fFNXLBMSemTrbkwsuLmCtD6c0bvMUlpuxTkjDiK8
-         C/BFtM9Yw9eJ1Yg50o4iM3D69I6z/MCo3MWOjTe8=
-Date:   Wed, 18 Sep 2019 14:02:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yegor Yefremov <yegorslists@googlemail.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH] USB: serial: add port statistics
-Message-ID: <20190918120215.GA1901208@kroah.com>
-References: <20190918091415.23683-1-yegorslists@googlemail.com>
- <20190918110814.GC1894362@kroah.com>
- <CAGm1_kvb--Ckxxft=Nqx4GDoHhA_qU3+ZCoqF86dEua_V2VrtA@mail.gmail.com>
- <20190918114511.GA1899089@kroah.com>
- <CAGm1_kv9x234BSE1U0u=huwQDZdxmX-zURS6mB6ypbahmbAC_A@mail.gmail.com>
+        id S1730614AbfIRMHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:07:02 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:51659 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbfIRMHC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 08:07:02 -0400
+Received: by mail-io1-f69.google.com with SMTP id a13so10687518ioh.18
+        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 05:07:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=FSF2twrGv8C9R/LR+gpcvgwHJvITBl5yE80ajwcfqc8=;
+        b=bSPVye6cgBJDxTX7tUeXoUqIu8MTO1DHjJ8/8U/rtArFmRrC6KxNCAISS0PMiYV0Ht
+         8aiP15PmvAbyn6nKaGEmPyOKoauMZl09HTeg0tzPE9tdpR0TjPw2rdSVfeIgPDYTZC/I
+         CtB4CksGi8Re4xbFAvQLV+Mh/8gkYISARxIyUQe670SIs9pMsgy8zfaBKJdtRjyKzpAh
+         wMl8CEGkKzK4BhYUpFf77r4K3Spks8mpBxW8vv3bqNwt68GCxV/Nshsd0OZQ+2FeJhvG
+         m8EPnRCCZdFJc/7EDYfaoIH1IXfQ8FQGXJiHH/vM0uhNS6Mbxg+d/U50IH/4TDjO7pY8
+         Btrg==
+X-Gm-Message-State: APjAAAUzDYCa9dtpAKy9uG0U1Uvcn4ZZayiUtlaXtRe7HIVZ3aLGdXkL
+        X3YOmZl82dIzLYEnNKGFp5A4Dv7ODIUwp17yA0odFJ8O2tDz
+X-Google-Smtp-Source: APXvYqzES4YyS8y/saMw3rpqBpSMCMeoqohImRV7AUnMLaeFyiNo0H/N/+OnqsOmNVhxdEBios6/bgoM8zTK3A3v+hOUj2vp5oOi
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGm1_kv9x234BSE1U0u=huwQDZdxmX-zURS6mB6ypbahmbAC_A@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5d:9dd4:: with SMTP id 20mr4838250ioo.1.1568808420767;
+ Wed, 18 Sep 2019 05:07:00 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 05:07:00 -0700
+In-Reply-To: <CAAeHK+xJgJoR9rODcRH74knaRKmEq+DDVarNNwDMT_Vtg+gV2Q@mail.gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a400c60592d2ac8f@google.com>
+Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
+From:   syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 01:51:29PM +0200, Yegor Yefremov wrote:
-> On Wed, Sep 18, 2019 at 1:45 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Sep 18, 2019 at 01:22:42PM +0200, Yegor Yefremov wrote:
-> > > On Wed, Sep 18, 2019 at 1:08 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Wed, Sep 18, 2019 at 11:14:15AM +0200, yegorslists@googlemail.com wrote:
-> > > > > From: Yegor Yefremov <yegorslists@googlemail.com>
-> > > > >
-> > > > > Add additional port statistics like received and transmitted bytes
-> > > > > the way /proc/tty/driver/serial does.
-> > > > >
-> > > > > As usbserial driver already provides USB related information and
-> > > > > this line is longer than 100 characters, this patch adds an
-> > > > > additional line with the same port number:
-> > > > >
-> > > > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...
-> > > > > 0: tx:112 rx:0
-> > > > >
-> > > > > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > > > > ---
-> > > > >  drivers/usb/serial/usb-serial.c | 22 ++++++++++++++++++++++
-> > > > >  1 file changed, 22 insertions(+)
-> > > >
-> > > > You can't change existing proc files without having the chance that
-> > > > userspace tools will break.
-> > > >
-> > > > Have you tried this and seen what dies a horrible death?
-> > >
-> > > This patch is more a proof of concept (forgot to add RFC keyword). I
-> > > find statistics provdes by the 8250 driver very useful for debugging
-> > > purposes. What would be the best way to implemnt this feature for
-> > > usbserial driver?
-> > >
-> > > a) extend current line:
-> > >
-> > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...tx:112 rx:0
-> > >
-> > > though this still can break parsing
-> > >
-> > > b) creating special entries for FTDI and other UARTs? Though it would
-> > > be greate to have all usbserial UART handled the same way in the same
-> > > file
-> >
-> > Why is any of this needed at all?  Also, be very aware of the security
-> > issues involved here, we had to disable access of these values by
-> > "normal" users for other tty devices, so please don't break that by
-> > offering it up here again.
-> >
-> > What is going to use this information?
-> 
-> This feature is not a "must have" one but it is convenient to see
-> transferred/received bytes and error flags from user space. If some
-> serial software is not working like expected and doesn't provide
-> enough debugging information one can quickly look at port statistics
-> from the console in order to check whether and how many bytes were
-> transferred or whether the were some communication errors.
+Hello,
 
-Again, it's a security issue, so be careful about this.  If you _REALLY_
-need it, make it a debugfs file, readble by root only.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-Or a tracepoint, and then you can have a userspace read the data using
-ebpf :)
+Reported-and-tested-by:  
+syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
 
-thanks,
+Tested on:
 
-greg k-h
+commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=131651c9600000
+
+Note: testing is done by a robot and is best-effort only.
