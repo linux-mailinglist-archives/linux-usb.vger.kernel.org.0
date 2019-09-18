@@ -2,117 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DEDB627E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 13:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996DBB62A5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 14:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfIRLvr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 07:51:47 -0400
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:40996 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726616AbfIRLvr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 07:51:47 -0400
-Received: by mail-vs1-f65.google.com with SMTP id l2so4239673vsr.8
-        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 04:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FNV0yidpbDZLkT4EJ2cbRVz6TcTIQHgolGEicyJu7CM=;
-        b=d9UM4bP1teAd+ulUyJUZBQwOxod2wVfCGKk0zjhlkn5GZ4Qbiog9xLIsmK7eWMhFAG
-         3N4KDaY+kipT78Cl63oCdbxMtx7O+VYD/ZwwquIGJm6bPJdmR4He2C0hpKF413G/e0pZ
-         2OqLATUuHk1884YiY0LweFauCGgObfWr/jDXhMJExCq/gYjkUqRj+rMHwPuU4ETJHgK/
-         SUPbFa1Eg0vUP/fu8aMAM8mUnJ1kENhELztChlH+vSYUNipCLYgflwlUMS+eo/4ETfES
-         f8B/CA2CGGHYj72lbjPChGayuSKUh52y0tisPim0MDCP7gdISvtV9qZXS3JzI+/+ChQt
-         og9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FNV0yidpbDZLkT4EJ2cbRVz6TcTIQHgolGEicyJu7CM=;
-        b=VU23DqZaoGpFQ0ssS1vKPIcf5oOVe292gfWT4LirajQHD84At6zjSPDlYb0Zw5tla7
-         V8Dco+njA46/YKeIioFIz3hcLkbpFqugAhWoUys65sWhFQ9xG23HU64AAgh/VHqJeBbg
-         IHQoBxIHfAijNR8+pX0dpVbH7gML7h6t/ui1DuK8if+IHwqz403kQvyIRW1gyHJffyKz
-         8EBM6U5TSnjoE0zgfMBULiEgfXeQUrkO4UG5FixU4PHtNeBkc4K91UCuCSYWPA6AtIgc
-         eJQY0zjnleMqOIv1jYtyObjHPG6OwtMcZzhZK9AGBiZ0dURaLF/1Q9Tf2QBHwgjNyPzx
-         KEEQ==
-X-Gm-Message-State: APjAAAWP9Uf5QzgvbhGcQl5m1OaHOHsaYUKMKV+qqNhFeCtM0022jU1q
-        Dr/BhUWgIAeXGbBtmO01idAUvfHw1H1R6FYl8rYkkHnH
-X-Google-Smtp-Source: APXvYqwD8vhe7VB2A+m3n2akbImIlNWazGb8XqDarbC7+sj6kj+vZuDW4+P9sUSoQ5RBQeEZcwPGzF7XMzwLv43T1CQ=
-X-Received: by 2002:a67:e298:: with SMTP id g24mr1886886vsf.164.1568807506278;
- Wed, 18 Sep 2019 04:51:46 -0700 (PDT)
+        id S1729059AbfIRMCE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 08:02:04 -0400
+Received: from canardo.mork.no ([148.122.252.1]:53945 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726565AbfIRMCD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 08:02:03 -0400
+Received: from miraculix.mork.no ([IPv6:2a02:2121:345:8091:f053:4dff:fe21:2003])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x8IC1wUT005544
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 18 Sep 2019 14:01:59 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1568808119; bh=Uz0TZqm4Ho48Zs6Xrr3RgUGa9V3UICLeLfojVeuHbNE=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=lL2ZQyXK7L4rEYe0KLi5BGmp+SPxd5rI8qwR6Vj1jgKLwSuaIGEuNRFUKe5cCzr0b
+         fOG4QW2qaX6q/MqcqPbl/twyCAuxcvPriZzmyKfNe99HgJEqHvKr8GmlUUQYbjfv7V
+         1zqdcYCqT42bKM13p3FlADYbMrCDXi1Se/rvuWs0=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1iAYed-0001Bb-Vk; Wed, 18 Sep 2019 14:01:51 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oliver@neukum.org>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
+Subject: [PATCH net,stable] cdc_ncm: fix divide-by-zero caused by invalid wMaxPacketSize
+Date:   Wed, 18 Sep 2019 14:01:46 +0200
+Message-Id: <20190918120147.4520-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190918091415.23683-1-yegorslists@googlemail.com>
- <20190918110814.GC1894362@kroah.com> <CAGm1_kvb--Ckxxft=Nqx4GDoHhA_qU3+ZCoqF86dEua_V2VrtA@mail.gmail.com>
- <20190918114511.GA1899089@kroah.com>
-In-Reply-To: <20190918114511.GA1899089@kroah.com>
-From:   Yegor Yefremov <yegorslists@googlemail.com>
-Date:   Wed, 18 Sep 2019 13:51:29 +0200
-Message-ID: <CAGm1_kv9x234BSE1U0u=huwQDZdxmX-zURS6mB6ypbahmbAC_A@mail.gmail.com>
-Subject: Re: [PATCH] USB: serial: add port statistics
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 1:45 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Sep 18, 2019 at 01:22:42PM +0200, Yegor Yefremov wrote:
-> > On Wed, Sep 18, 2019 at 1:08 PM Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Wed, Sep 18, 2019 at 11:14:15AM +0200, yegorslists@googlemail.com wrote:
-> > > > From: Yegor Yefremov <yegorslists@googlemail.com>
-> > > >
-> > > > Add additional port statistics like received and transmitted bytes
-> > > > the way /proc/tty/driver/serial does.
-> > > >
-> > > > As usbserial driver already provides USB related information and
-> > > > this line is longer than 100 characters, this patch adds an
-> > > > additional line with the same port number:
-> > > >
-> > > > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...
-> > > > 0: tx:112 rx:0
-> > > >
-> > > > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> > > > ---
-> > > >  drivers/usb/serial/usb-serial.c | 22 ++++++++++++++++++++++
-> > > >  1 file changed, 22 insertions(+)
-> > >
-> > > You can't change existing proc files without having the chance that
-> > > userspace tools will break.
-> > >
-> > > Have you tried this and seen what dies a horrible death?
-> >
-> > This patch is more a proof of concept (forgot to add RFC keyword). I
-> > find statistics provdes by the 8250 driver very useful for debugging
-> > purposes. What would be the best way to implemnt this feature for
-> > usbserial driver?
-> >
-> > a) extend current line:
-> >
-> > 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...tx:112 rx:0
-> >
-> > though this still can break parsing
-> >
-> > b) creating special entries for FTDI and other UARTs? Though it would
-> > be greate to have all usbserial UART handled the same way in the same
-> > file
->
-> Why is any of this needed at all?  Also, be very aware of the security
-> issues involved here, we had to disable access of these values by
-> "normal" users for other tty devices, so please don't break that by
-> offering it up here again.
->
-> What is going to use this information?
+Endpoints with zero wMaxPacketSize are not usable for transferring
+data. Ignore such endpoints when looking for valid in, out and
+status pipes, to make the driver more robust against invalid and
+meaningless descriptors.
 
-This feature is not a "must have" one but it is convenient to see
-transferred/received bytes and error flags from user space. If some
-serial software is not working like expected and doesn't provide
-enough debugging information one can quickly look at port statistics
-from the console in order to check whether and how many bytes were
-transferred or whether the were some communication errors.
+The wMaxPacketSize of the out pipe is used as divisor. So this change
+fixes a divide-by-zero bug.
 
-Yegor
+Reported-by: syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+---
+#syz test: https://github.com/google/kasan.git f0df5c1b
+
+ drivers/net/usb/cdc_ncm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 50c05d0f44cb..00cab3f43a4c 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -681,8 +681,12 @@ cdc_ncm_find_endpoints(struct usbnet *dev, struct usb_interface *intf)
+ 	u8 ep;
+ 
+ 	for (ep = 0; ep < intf->cur_altsetting->desc.bNumEndpoints; ep++) {
+-
+ 		e = intf->cur_altsetting->endpoint + ep;
++
++		/* ignore endpoints which cannot transfer data */
++		if (!usb_endpoint_maxp(&e->desc))
++			continue;
++
+ 		switch (e->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) {
+ 		case USB_ENDPOINT_XFER_INT:
+ 			if (usb_endpoint_dir_in(&e->desc)) {
+-- 
+2.20.1
+
