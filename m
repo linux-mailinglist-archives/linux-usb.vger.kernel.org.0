@@ -2,161 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 822C3B6200
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 13:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34789B620C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Sep 2019 13:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729180AbfIRLEc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Sep 2019 07:04:32 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36217 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728433AbfIRLEb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Sep 2019 07:04:31 -0400
-Received: by mail-pg1-f196.google.com with SMTP id m29so3854473pgc.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Sep 2019 04:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oSDsY/hDm2eeYEnq9WTa9wXPHp0ZxF/gk9i7RQwPo3g=;
-        b=NiK+MLkaMkniiMcmS86T3kt+8oQbT16PG8Q90AyR+2mPy/omovQc1hSJ+vwDJgaBiX
-         oVav6do24xQQ5hQxLaZFtOazYcByGF3qYemyfsUtySy4V3Hmeq/agngv9HWfas62s6En
-         4MAIDY5jX7eYGuTyetX+jR6wbBtgRUup+ClfT0iaXl4ELRGaKIMtuffafuFJOkcXEAz9
-         XUuFWwJZEoXmzPEqKEiQ6wDSKkVUekPtFmQAJ0uV8H0wOG5u/R7fww907Aa5jl/Wd3hT
-         6ouQoA58hep+orkHOdq1dQ9QvrbUd7+fQFXlsXLoonVjLS8WycjAX24w73ey/1r6Mrxz
-         vupQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oSDsY/hDm2eeYEnq9WTa9wXPHp0ZxF/gk9i7RQwPo3g=;
-        b=Jog+Ditl1g65ehEOJfZk7IRXL0pKRGyQmjIFFJEg49ex32as8fGA7R9MvYHo/N22GL
-         z5xAQHfMyMLJlJj19kPd8IqAduyYae8TdE3kIu3tooJTqmxAOBdQTR9z8lg/vLL31koe
-         fvEx/E2h4C6+cnn+X1FqYAIcSB74bDygj6ITHChwx0BaWcLVW1PzMoJuJMx2jzIIibjR
-         BY4lMkdeRC3LyP5oJoU+kpKO+WRMbK17G0GCO8Ul91QBElztPseksfZnlG8FDuEeWvlu
-         foafqqbQG32bGzMllFaTcRedIF6tNTUeth4wseTz5tUhrbdzWW5fWWmfvbzpziX49jR5
-         1YPw==
-X-Gm-Message-State: APjAAAXdpPZ/7jdwyQghVFo4b9+b6/vi12Z7hNMwTPxege1d4ZHATyj7
-        fAWSHEO874+Sv4uPLK1TL3Tv0NdGE9KufdJEt3ULoA==
-X-Google-Smtp-Source: APXvYqxfkV9EERZ0pfDrC6A7v4+K7jWGyBCkUR+CMb+w5uGlu3/Gqyg3ntbKCMmM+RZc3cAsVQbfEjsBxL2fmasjsTA=
-X-Received: by 2002:aa7:8bcc:: with SMTP id s12mr3451353pfd.93.1568804670111;
- Wed, 18 Sep 2019 04:04:30 -0700 (PDT)
+        id S1728376AbfIRLIS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Sep 2019 07:08:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56866 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727921AbfIRLIS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Sep 2019 07:08:18 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 39A7F20644;
+        Wed, 18 Sep 2019 11:08:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568804897;
+        bh=mFX5KmGBL/xZJ+E41FOaDotw/IWIEka/IKaZBuYHk60=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PYtVL6NsN/czqqKCYbaXrx6jKUpI8mZOgeVL5dQHHLjFf3DkIzUNbGh152fItFBnh
+         BsUP4AudAgcagGrS5vXYXPjnegYuembqTNDTcrsWM3AIe/syfKYRvg5hbv56pENaiO
+         dzqLfP9jf4r7oQBZrx/rkqDpadcYLlSnwMXjm5GY=
+Date:   Wed, 18 Sep 2019 13:08:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     yegorslists@googlemail.com
+Cc:     linux-usb@vger.kernel.org, johan@kernel.org
+Subject: Re: [PATCH] USB: serial: add port statistics
+Message-ID: <20190918110814.GC1894362@kroah.com>
+References: <20190918091415.23683-1-yegorslists@googlemail.com>
 MIME-Version: 1.0
-References: <00000000000044408c0592b00ff5@google.com> <CAJZ5v0j5-Jg8Wi_hEfM3DhzmY3sEwmrFjC2bTjyGgZ2afOKBEQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j5-Jg8Wi_hEfM3DhzmY3sEwmrFjC2bTjyGgZ2afOKBEQ@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 18 Sep 2019 13:04:18 +0200
-Message-ID: <CAAeHK+xrFhG=Lirn_hPboH98EFCToyD0cWMJqRmAewgDLUo_6A@mail.gmail.com>
-Subject: Re: KASAN: global-out-of-bounds Read in __pm_runtime_resume
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     syzbot <syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190918091415.23683-1-yegorslists@googlemail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 11:44 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Sep 16, 2019 at 8:49 PM syzbot
-> <syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=10efb5fa600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=cd157359d82e8d98c17b
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+cd157359d82e8d98c17b@syzkaller.appspotmail.com
-> >
-> > ==================================================================
-> > BUG: KASAN: global-out-of-bounds in __pm_runtime_resume+0x162/0x180
-> > drivers/base/power/runtime.c:1069
->
-> This means that the caller of __pm_runtime_resume() did something odd.
->
-> > Read of size 1 at addr ffffffff863d87b1 by task syz-executor.2/13622
-> >
-> > CPU: 0 PID: 13622 Comm: syz-executor.2 Not tainted 5.3.0-rc7+ #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
-> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-> >   kasan_report+0xe/0x12 mm/kasan/common.c:618
-> >   __pm_runtime_resume+0x162/0x180 drivers/base/power/runtime.c:1069
-> >   pm_runtime_get_sync include/linux/pm_runtime.h:226 [inline]
-> >   usb_autopm_get_interface+0x1b/0x50 drivers/usb/core/driver.c:1709
-> >   usbhid_power+0x7c/0xe0 drivers/hid/usbhid/hid-core.c:1234
->
-> In this particular case usbhid_power() probably shouldn't have called
-> pm_runtime_get_sync() or it shouldn't have been called itself or
-> similar.
+On Wed, Sep 18, 2019 at 11:14:15AM +0200, yegorslists@googlemail.com wrote:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> Add additional port statistics like received and transmitted bytes
+> the way /proc/tty/driver/serial does.
+> 
+> As usbserial driver already provides USB related information and
+> this line is longer than 100 characters, this patch adds an
+> additional line with the same port number:
+> 
+> 0: module:ftdi_sio name:"FTDI USB Serial Device" vendor:0403 ...
+> 0: tx:112 rx:0
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+>  drivers/usb/serial/usb-serial.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 
-Hi Rafael,
+You can't change existing proc files without having the chance that
+userspace tools will break.
 
-This report is caused by a major memory corruption that can lead to
-all kinds of weird things. Let's wait for the fix to be in the
-mainline and then see if these bugs are still occurring.
+Have you tried this and seen what dies a horrible death?
 
-Thanks!
+thanks,
 
->
-> >   hid_hw_power include/linux/hid.h:1038 [inline]
-> >   hidraw_open+0x20d/0x740 drivers/hid/hidraw.c:282
-> >   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-> >   do_dentry_open+0x494/0x1120 fs/open.c:797
-> >   do_last fs/namei.c:3416 [inline]
-> >   path_openat+0x1430/0x3f50 fs/namei.c:3533
-> >   do_filp_open+0x1a1/0x280 fs/namei.c:3563
-> >   do_sys_open+0x3c0/0x580 fs/open.c:1089
-> >   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
-> >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > RIP: 0033:0x4137d1
-> > Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48
-> > 83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48
-> > 89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
-> > RSP: 002b:00007faea59927a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-> > RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 00000000004137d1
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007faea5992850
-> > RBP: 000000000075bf20 R08: 000000000000000f R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000293 R12: 00007faea59936d4
-> > R13: 00000000004c8cbf R14: 00000000004dfc90 R15: 00000000ffffffff
-> >
-> > The buggy address belongs to the variable:
-> >   __param_str_xfer_debug+0x91/0x4a0
-> >
-> > Memory state around the buggy address:
-> >   ffffffff863d8680: fa fa fa fa 00 00 00 02 fa fa fa fa 00 00 00 00
-> >   ffffffff863d8700: fa fa fa fa 00 00 00 02 fa fa fa fa 00 07 fa fa
-> > > ffffffff863d8780: fa fa fa fa 00 00 fa fa fa fa fa fa 00 00 07 fa
-> >                                       ^
-> >   ffffffff863d8800: fa fa fa fa 00 00 00 00 00 00 fa fa fa fa fa fa
-> >   ffffffff863d8880: 00 07 fa fa fa fa fa fa 00 00 06 fa fa fa fa fa
-> > ==================================================================
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+greg k-h
