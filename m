@@ -2,74 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF98B734E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 08:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F1FB741B
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 09:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388437AbfISGlD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 02:41:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36682 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725320AbfISGlC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Sep 2019 02:41:02 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5BB5920640;
-        Thu, 19 Sep 2019 06:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568875260;
-        bh=Izj8g1OpIOC/JHFk9OYZwz8tlGxgcOe5N7K85YJTnWc=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=0dsEbR1ECbmXqqFJC2vjwWxbFVT1QDg60DfZemLMEzItG1/pE+KBq7dF0Q7LMMeai
-         I0iaD82enmv4BsNp1Mik+XYId4jvo8GTsTsnfZKEX51NoDffq626W57kXrAGLdbh0A
-         jByH8IKUOCwWlNvMhEfeGbDZpGBLy2XBHc3ypyX8=
-Date:   Thu, 19 Sep 2019 08:40:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>
-Subject: Re: Reminder: 52 active syzbot reports in usb subsystem
-Message-ID: <20190919064058.GB2069956@kroah.com>
-References: <20190919052342.GC666@sol.localdomain>
+        id S2387631AbfISHdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 03:33:11 -0400
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:34372 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726142AbfISHdK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 03:33:10 -0400
+Received: by mail-wr1-f41.google.com with SMTP id a11so1952817wrx.1
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 00:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=s5uEbgPExVBChyzqNC67yVPJbV4//87tMpw3BUINnI8=;
+        b=oAPLCnUv3TXHX1wxIbCDLoMyrFFC5MDgbELmO04CVod7cJWw7jiunGONHRAkd/WcEF
+         Lh06r7C4CULiYjwM4FKL1LHmrD49WnKk8slvCAepPWnDtzbFqbvDQLrv5nuBoJSJpMEF
+         4/Z/VklVT8dYWFEqkGSY+Fo7Pui6iz6z0g1lXlVutzjNAl9hkM8xv+UqelSWd3Q9qjTC
+         QpjXjYgGiO3HFaJpVj4Um2nwn8fKzFHHZkVOrxXbaINj2tGJVt1EnzAY6wF8aiKI0QZc
+         WKH9VfGBSx4Wt7HYqf3WVabjQoRQoVF2nMdsBUX/ECnsCi4WgnmVgOTnTNh7yU6dG2ls
+         nVVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=s5uEbgPExVBChyzqNC67yVPJbV4//87tMpw3BUINnI8=;
+        b=SU8vvrdksSaRz907b4iHHUdRL9i1PW3eu7JMmSoakaw4iFjb55lzPWU1kMp52hyw9z
+         9XShxiKl2c15mjwgX6ZRcgdSPmzJLAqQ8qzO4V1hZlKB9SyGWKdWLEkXD90i5pamJDEW
+         07mmaMDIBD/9fqntRLoGHANAeSJUwTGN4vHQEh8mrqbE/6QbyOpH/ZTaO7xZypWt5I0S
+         Zj3Iz9ss+8kNwW6qWDQHWQEGeKFBeIK74mkXpkh3lupd3V+BPAWk2WxjbP/aerreru5o
+         ic8GjKlGdSqOkNAi5zE9TvR/pFiYwrHXdiGbRMxboqYy0DpRVpZKNh4IyySAmf5UpQ/K
+         TqVg==
+X-Gm-Message-State: APjAAAXjFhmfe0UQ+sAj2RU6MXhQYdI4oTjUQmcLwFyOBSB+N2QeO6J6
+        mOhtc/uC/NOGpMFMaaJ0crYSqA==
+X-Google-Smtp-Source: APXvYqxRq+llXOmONT/aJROch3Yq3MyYDtMvPry9advFESvYl1nKqvuj+bSxdS3D4R8NwBRmjQwBUA==
+X-Received: by 2002:a05:6000:12c9:: with SMTP id l9mr5868260wrx.163.1568878388315;
+        Thu, 19 Sep 2019 00:33:08 -0700 (PDT)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id 207sm8957158wme.17.2019.09.19.00.33.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 00:33:07 -0700 (PDT)
+Message-ID: <7db7c96626121e614320a87cc5ec4f48996211c5.camel@unipv.it>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Johannes Thumshirn <jthumshirn@suse.de>,
+        Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Date:   Thu, 19 Sep 2019 09:33:02 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1909181213141.1507-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1909181213141.1507-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190919052342.GC666@sol.localdomain>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 10:23:42PM -0700, Eric Biggers wrote:
-> [This email was generated by a script.  Let me know if you have any suggestions
-> to make it better, or if you want it re-generated with the latest status.]
+Il giorno mer, 18/09/2019 alle 12.30 -0400, Alan Stern ha scritto:
+> On Wed, 18 Sep 2019, Andrea Vai wrote:
+> [...]
+> > BAD:
+> >   Logs: log_10trials_50MB_BAD_NonCanc_64.txt,
+> > log_10trials_50MB_BAD_NonCanc_non64.txt
+> >   64: 34, 34, 35, 39, 37, 32, 42, 44, 43, 40
+> >   not64: 61, 71, 59, 71, 62, 75, 62, 70, 62, 68
+> > GOOD:
+> >   Logs: log_10trials_50MB_GOOD_NonCanc_64.txt,
+> > log_10trials_50MB_GOOD_NonCanc_non64.txt
+> >   64: 34, 32, 35, 34, 35, 33, 34, 33, 33, 33
+> >   not64: 32, 30, 32, 31, 31, 30, 32, 30, 32, 31
 > 
-> Of the syzbot reports that have (re-)occurred in the last 7 days, I've manually
-> marked 52 of them as possibly being bugs in the usb subsystem.  This category
-> mostly includes USB driver bugs, but it might include some core USB bugs too. 
-> I've listed these bug reports below.
-> 
-> If you believe a bug is no longer valid, please close it by sending a '#syz
-> fix', '#syz dup', or '#syz invalid' command in reply to the original thread, as
-> explained at https://goo.gl/tpsmEJ#status
-> 
-> If you believe I misattributed a bug to the usb subsystem, please let me know
-> and (if possible) forward it to the correct place.
-> 
-> Note: in total, I've actually assigned 90 open syzbot reports to this subsystem.
-> But to help focus people's efforts, I've only listed the 52 that have
-> (re-)occurred in the last week.  Let me know if you want the full list.
+> The improvement from using "64" with the bad kernel is quite
+> large.  
+> That alone would be a big help for you.
 
-Thanks for doing all of this.  There's a load of syzbot usb open bugs
-right now, hopefully the huge majority of them will "auto close" now
-that a lot of USB fixes are merged in Linus's tree.
+Well, not so much, actually, because the backup would take twice the
+time, that is quite annoying for me. But, apart from that, and from
+the efforts of Alan and other people following this issue (thanks), I
+would like to point out what I am not sure to have ever made clear
+about my support request: I have understood that my problem is quite
+specific, and don't want anyone to waste their time to help
+specifically *me* (I can buy another media, use the "64" tweak, or
+find any other workaround). But since we have identified the problem
+as kernel-related, I am worried for other users, maybe new to linux,
+that can have the same problem, and the evidence for them would be
+that linux is extremely slow to copy file over some USB media. So,
+among all the technical comments, I would like to make clear (if it's
+not already clear) that in my opinion it would be important to solve
+the problem without the need of user workarounds. Does it make sense?
+Are we moving towards that goal?
 
-Then we can sift through the rest to see what we have missed and wait
-for the next round of fuzzing that will happen, as the codepaths we have
-fixed up can now go deeper :)
+BTW, another question: Alan refers to the slow media as a "consumer-
+grade USB storage device". What could I do to identify and buy a "good
+media"? Are there any features to look for?
 
-thanks,
+Many thanks, and sorry if I ask anything obvious.
+Bye,
+Andrea
 
-greg k-h
