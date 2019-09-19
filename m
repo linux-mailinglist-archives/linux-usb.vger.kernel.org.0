@@ -2,206 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 657D1B7F34
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 18:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C305FB7FA3
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 19:06:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403904AbfISQcz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 12:32:55 -0400
-Received: from smtpout-fallback.aon.at ([195.3.96.120]:35484 "EHLO
-        smtpout-fallback.aon.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388812AbfISQcz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 12:32:55 -0400
-Received: (qmail 5107 invoked from network); 19 Sep 2019 16:32:50 -0000
-Received: from unknown (HELO smtpout.aon.at) ([172.18.1.200])
-          (envelope-sender <nospamforba@aon.at>)
-          by fallback44.highway.telekom.at (qmail-ldap-1.03) with SMTP
-          for <linux-usb@vger.kernel.org>; 19 Sep 2019 16:32:50 -0000
-X-A1Mail-Track-Id: 1568910770:5106:fallback44:172.18.1.200:1
-Received: (qmail 22857 invoked from network); 19 Sep 2019 16:32:47 -0000
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        WARSBL506.highway.telekom.at
-X-Spam-Level: 
-Received: from 100-64-46-110.rfc6598.a1.net (HELO [192.168.2.14]) ([100.64.46.110])
-          (envelope-sender <nospamforba@aon.at>)
-          by smarthub80.res.a1.net (qmail-ldap-1.03) with AES256-SHA encrypted SMTP; 19 Sep 2019 16:32:47 -0000
-X-A1Mail-Track-Id: 1568910767:22838:smarthub80:100.64.46.110:1
-Subject: Fwd: ASMEDIA ASM1351 Bridge - ATAPI support
-To:     linux-usb@vger.kernel.org, linux-scsi@vger.kernel.org
-From:   Bernhard <nospamforba@aon.at>
-X-Forwarded-Message-Id: 
-Message-ID: <58cd1fe4-5a88-2a83-8ac3-496d7898449f@aon.at>
-Date:   Thu, 19 Sep 2019 18:32:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2391487AbfISRGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 13:06:12 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37192 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391361AbfISRGM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 13:06:12 -0400
+Received: by mail-pg1-f194.google.com with SMTP id c17so2244639pgg.4
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 10:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vfr/ak8PqAW3a7/adXohYxQN4EYY6B1BFF1JySzS168=;
+        b=MJJjNVx5uL2HXYrQioINGIINJXrL+8NHmytYrd5C3UwHDWLgWE03FZMknALR7lCzHd
+         cVI4agqMVF5gouZA6bF+foFe75VuKkdq9/n5pWIwJT1aP6NFsI8QdhEMwDvCF7IqdoyD
+         f65lX8lTnv1HdiTXGLoPHQVB/Dt42gsdD4+Tuog368YFq3r3NQmZJOMlxaBDKaSqolBu
+         6UCN7IUxVCUcaxDr0IbU5L511/jB9zuv1IUt0jf1K+/0EfjXmG1wrM07Hdr9X0Mni97h
+         Rf1WpExTtW89vWzvCGrdPiHc8R+9DunVEifQMKWNqY//gf9w1fsUfuUmLmFKmaPXuVsY
+         N3+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vfr/ak8PqAW3a7/adXohYxQN4EYY6B1BFF1JySzS168=;
+        b=OENCePBTfabumFNWpWCpmgC4MUsAOPMmttXiPFZmmnZTe1pqEnmF7xtWQF2+Kb8cK0
+         96oHk5aBd30xGOvlSTvkDvOHElDxOgL6SMRuZcPWibbxaCp/lbn9El67IQdNX4Q0VpXo
+         LN5bDASzhIh2xEJPLf66+EHGGZWsbsgX7rgL02kdgFt4P+a1PPnZqveM5qG/2ubwwTVG
+         FHmjkbqtTnvXEtaZrDzlEssInNI52Sr/y4/KSC5WnybkZfpPc0Pe2eQUtU0+jwVqoD8G
+         9irMEZvXrFoFnoPADjeuqe6Gpey1Jq7KPRcGu3AgAFWNbSqMgmGniGd26muDo92i8nEk
+         59fg==
+X-Gm-Message-State: APjAAAWzyVr2hzeYE5MWmgt3RoofBEpXOlEFIg0/bO534zJ47lASN/+M
+        +/AQKVWduDIHgRPkNpJrKnUtcD0RGwvnRVUysr3h2Q==
+X-Google-Smtp-Source: APXvYqwF+yEDDmq8bzyXKUa8CBKAnT1PB+m3Gugv1nZP8AoxwOhoLKvil38EsnOPFTFQHI/1545FCjvI+5Emi0e+4U0=
+X-Received: by 2002:a63:d20f:: with SMTP id a15mr5142567pgg.130.1568912770407;
+ Thu, 19 Sep 2019 10:06:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: de-AT
-Content-Transfer-Encoding: 7bit
+References: <000000000000cd1def0592ab9697@google.com> <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 19 Sep 2019 19:05:59 +0200
+Message-ID: <CAAeHK+wh0bQKRXU_7fOC5XZKUUL1QW8DskCBJKQACwqZd=tZyw@mail.gmail.com>
+Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Sep 17, 2019 at 8:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, 16 Sep 2019, syzbot wrote:
+>
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
+> >
+> > usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,
+> > different from the interface descriptor's value: 9
+> > usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=
+> > 0.00
+> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > usb 1-1: config 0 descriptor??
+> > greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
+> > greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID
+> > 0e8f:0012] on usb-dummy_hcd.0-1/input0
+> > ==================================================================
+> > BUG: KASAN: slab-out-of-bounds in set_bit
+> > include/asm-generic/bitops-instrumented.h:28 [inline]
+> > BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97
+> > [inline]
+> > BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0
+> > drivers/hid/hid-gaff.c:146
+> > Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
+> >
+> > CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > Workqueue: usb_hub_wq hub_event
+> > Call Trace:
+> >   __dump_stack lib/dump_stack.c:77 [inline]
+> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
+> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+> >   kasan_report+0xe/0x12 mm/kasan/common.c:618
+> >   check_memory_region_inline mm/kasan/generic.c:185 [inline]
+> >   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+> >   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
+> >   gaff_init drivers/hid/hid-gaff.c:97 [inline]
+> >   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
+> >   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
+> >   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+> >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+> >   __device_attach_driver+0x
+> >
+> >
+> > ---
+> > This bug is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this bug report. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this bug, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+>
+> The driver assumes that the device contains an input.
 
-https://bugzilla.kernel.org/show_bug.cgi?id=204905
-kernel 5.2.14 , 4.19.73
+BTW, these two reports look fairly similar:
 
-ASMEDIA Bridge - ATAPI support
+https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
+https://syzkaller.appspot.com/bug?extid=1e86e2ccce227cca899b
 
-Dear kernel developers,
-
-I have bought a SATA to USB3 Adapter by Delock, which supports optical drives (ATAPI support) , ASMEDIA Bridge.
-Chipset: Asmedia ASM1351
-
-But it is not working with optical drives (hdd and ssd work) , see kernel messages. I also disabled uas for testing, but no success.
-
-Is it possible to add ATAPI support for this device?
-
-Thanks, Bernhard
-
-https://www.delock.de/produkte/G_62715/merkmale.html?setLanguage=en
-
-https://www.delock.de/produkte/G_62715/technische_details.html
-
-ASMT     2135
-idVendor=174c, idProduct=55aa
-
-[27003.336349] usb 4-1: new SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-[27003.383774] usb 4-1: New USB device found, idVendor=174c, idProduct=55aa, bcdDevice= 1.00
-[27003.383776] usb 4-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
-[27003.383778] usb 4-1: Product: ASM105x
-[27003.383779] usb 4-1: Manufacturer: ASMT
-[27003.383780] usb 4-1: SerialNumber: 123546400035
-[27003.447065] usb-storage 4-1:1.0: USB Mass Storage device detected
-[27003.447176] usb-storage 4-1:1.0: Quirks match for vid 174c pid 55aa: c00000
-[27003.447207] scsi host0: usb-storage 4-1:1.0
-[27003.447353] usbcore: registered new interface driver usb-storage
-[27003.451028] usbcore: registered new interface driver uas
-[27004.464296] scsi 0:0:0:0: Direct-Access     ASMT     2135             0    PQ: 0 ANSI: 6
-[27004.464554] scsi 0:0:0:0: Attached scsi generic sg0 type 0
-[27004.478120] sd 0:0:0:0: [sda] Attached SCSI removable disk
-[27137.900469] usb 4-1: USB disconnect, device number 2
-[27138.593741] usb 4-1: new SuperSpeed Gen 1 USB device number 3 using xhci_hcd
-[27138.631353] usb 4-1: New USB device found, idVendor=174c, idProduct=55aa, bcdDevice= 1.00
-[27138.631355] usb 4-1: New USB device strings: Mfr=2, Product=3, SerialNumber=1
-[27138.631356] usb 4-1: Product: ASM105x
-[27138.631357] usb 4-1: Manufacturer: ASMT
-[27138.631358] usb 4-1: SerialNumber: 123546400035
-[27138.638885] usb 4-1: UAS is blacklisted for this device, using usb-storage instead
-[27138.638886] usb-storage 4-1:1.0: USB Mass Storage device detected
-[27138.639048] usb-storage 4-1:1.0: Quirks match for vid 174c pid 55aa: c00000
-[27138.639093] scsi host0: usb-storage 4-1:1.0
-[27139.654238] scsi host0: scsi scan: INQUIRY result too short (5), using 36
-[27139.654242] scsi 0:0:0:0: Direct-Access                                    PQ: 0 ANSI: 0
-[27139.654505] sd 0:0:0:0: Attached scsi generic sg0 type 0
-[27173.844235] usb 4-1: Device not responding to setup address.
-[27178.013590] usb 4-1: Device not responding to setup address.
-[27178.229705] usb 4-1: device not accepting address 3, error -71
-[27182.503739] usb 4-1: Device not responding to setup address.
-[27186.673101] usb 4-1: Device not responding to setup address.
-[27186.899538] usb 4-1: device not accepting address 3, error -71
-     
-
-sudo lsusb -v -d 174c:55aa
-
-Bus 004 Device 002: ID 174c:55aa ASMedia Technology Inc. Name: ASM1051E SATA 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge, ASM1153E SATA 6Gb/s bridge
-Device Descriptor:
-     bLength                18
-     bDescriptorType         1
-     bcdUSB               3.10
-     bDeviceClass            0
-     bDeviceSubClass         0
-     bDeviceProtocol         0
-     bMaxPacketSize0         9
-     idVendor           0x174c ASMedia Technology Inc.
-     idProduct          0x55aa Name: ASM1051E SATA 6Gb/s bridge, ASM1053E SATA 6Gb/s bridge, ASM1153 SATA 3Gb/s bridge, ASM1153E SATA 6Gb/s bridge
-     bcdDevice            1.00
-     iManufacturer           2 ASMT
-     iProduct                3 ASM105x
-     iSerial                 1 123546400035
-     bNumConfigurations      1
-     Configuration Descriptor:
-       bLength                 9
-       bDescriptorType         2
-       wTotalLength       0x002c
-       bNumInterfaces          1
-       bConfigurationValue     1
-       iConfiguration          0
-       bmAttributes         0xc0
-         Self Powered
-       MaxPower                0mA
-       Interface Descriptor:
-         bLength                 9
-         bDescriptorType         4
-         bInterfaceNumber        0
-         bAlternateSetting       0
-         bNumEndpoints           2
-         bInterfaceClass         8 Mass Storage
-         bInterfaceSubClass      6 SCSI
-         bInterfaceProtocol     80 Bulk-Only
-         iInterface              0
-         Endpoint Descriptor:
-           bLength                 7
-           bDescriptorType         5
-           bEndpointAddress     0x81  EP 1 IN
-           bmAttributes            2
-             Transfer Type            Bulk
-             Synch Type               None
-             Usage Type               Data
-           wMaxPacketSize     0x0400  1x 1024 bytes
-           bInterval               0
-           bMaxBurst              15
-         Endpoint Descriptor:
-           bLength                 7
-           bDescriptorType         5
-           bEndpointAddress     0x02  EP 2 OUT
-           bmAttributes            2
-             Transfer Type            Bulk
-             Synch Type               None
-             Usage Type               Data
-           wMaxPacketSize     0x0400  1x 1024 bytes
-           bInterval               0
-           bMaxBurst              15
-Binary Object Store Descriptor:
-     bLength                 5
-     bDescriptorType        15
-     wTotalLength       0x002a
-     bNumDeviceCaps          3
-     USB 2.0 Extension Device Capability:
-       bLength                 7
-       bDescriptorType        16
-       bDevCapabilityType      2
-       bmAttributes   0x0000f41e
-         BESL Link Power Management (LPM) Supported
-       BESL value     1024 us
-       Deep BESL value    61440 us
-     SuperSpeed USB Device Capability:
-       bLength                10
-       bDescriptorType        16
-       bDevCapabilityType      3
-       bmAttributes         0x00
-       wSpeedsSupported   0x000e
-         Device can operate at Full Speed (12Mbps)
-         Device can operate at High Speed (480Mbps)
-         Device can operate at SuperSpeed (5Gbps)
-       bFunctionalitySupport   1
-         Lowest fully-functional device speed is Full Speed (12Mbps)
-       bU1DevExitLat          10 micro seconds
-       bU2DevExitLat        2047 micro seconds
-     SuperSpeedPlus USB Device Capability:
-       bLength                20
-       bDescriptorType        16
-       bDevCapabilityType     10
-       bmAttributes         0x00000001
-         Sublink Speed Attribute count 1
-         Sublink Speed ID count 0
-       wFunctionalitySupport   0x0000
-       bmSublinkSpeedAttr[0]   0x000a4030
-         Speed Attribute ID: 0 10Gb/s Symmetric RX SuperSpeedPlus
-       bmSublinkSpeedAttr[1]   0x000a40b0
-         Speed Attribute ID: 0 10Gb/s Symmetric TX SuperSpeedPlus
-can't get debug descriptor: Resource temporarily unavailable
-Device Status:     0x0001
-     Self Powered
-
-
+>
+> Alan Stern
+>
+> https://github.com/google/kasan.git f0df5c1b
+>
+>  drivers/hid/hid-gaff.c |   12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> Index: usb-devel/drivers/hid/hid-gaff.c
+> ===================================================================
+> --- usb-devel.orig/drivers/hid/hid-gaff.c
+> +++ usb-devel/drivers/hid/hid-gaff.c
+> @@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
+>  {
+>         struct gaff_device *gaff;
+>         struct hid_report *report;
+> -       struct hid_input *hidinput = list_entry(hid->inputs.next,
+> -                                               struct hid_input, list);
+> +       struct hid_input *hidinput;
+>         struct list_head *report_list =
+>                         &hid->report_enum[HID_OUTPUT_REPORT].report_list;
+>         struct list_head *report_ptr = report_list;
+> -       struct input_dev *dev = hidinput->input;
+> +       struct input_dev *dev;
+>         int error;
+>
+> +       if (list_empty(&hid->inputs)) {
+> +               hid_err(hid, "no inputs found\n");
+> +               return -ENODEV;
+> +       }
+> +       hidinput = list_entry(hid->inputs.next, struct hid_input, list);
+> +       dev = hidinput->input;
+> +
+>         if (list_empty(report_list)) {
+>                 hid_err(hid, "no output reports found\n");
+>                 return -ENODEV;
+>
