@@ -2,98 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D38B74FA
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24648B7509
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387857AbfISISm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 04:18:42 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42416 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731572AbfISISm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:18:42 -0400
-Received: by mail-lj1-f194.google.com with SMTP id y23so2622801lje.9
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 01:18:40 -0700 (PDT)
+        id S1731936AbfISIYE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 04:24:04 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:37163 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730886AbfISIYE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:24:04 -0400
+Received: by mail-lj1-f196.google.com with SMTP id l21so2670074lje.4;
+        Thu, 19 Sep 2019 01:24:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l086OEt/YmCp6+Ee4uju9cxpl1kQU9buLbBxRXPBhrY=;
-        b=PZbL0YU3p0UNy3Yid8fpnoGXd4l6sQ/api+YNoIosbZ0PV9JprAryZY7Q2XSTlveHk
-         fUWFbqyZ7Wp9t8BDOdMqUMOG4TYpigT6310W5P4ex8WS4GyygYxJe5VfDXk8tUaMFNTw
-         QHXSf8scgJuZZM7t9qoXlnsnTIOJhmiq4lMmBQNGGJ+uExY+7Xf/ZH39uHkaJ1mLd7lK
-         SUJiObn4veB2I3AmvyrLevbyjS83xj+t3perKRpfEf+bSKoVD8p7QXkIqfH74JG16H0p
-         wv9isi+Hjrd8nQWLgyHQhHzsX8a0Lv8MSuUyHFKfiUTOouoOIvkuMQmuKqMO0He6dq+L
-         t2gg==
-X-Gm-Message-State: APjAAAXUNoiCULIcThcmPyg7rSR/KxVOZtVGoMrmt4UcjXfC+VGviJEy
-        Q53SoWyXvvy3otzAOj8n+vU=
-X-Google-Smtp-Source: APXvYqyJBfSZH1pjJ+SiSIykFl6LL9gVt37ixkc3rfHGrP7gar6NEb4Qf+/Y/4OEoXquTQEWH5caAQ==
-X-Received: by 2002:a2e:810e:: with SMTP id d14mr4740962ljg.160.1568881119971;
-        Thu, 19 Sep 2019 01:18:39 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=iN+TLWF8p09S714aWtfN4Hu69Xi2AvWDJuLstvjUtUw=;
+        b=P6mB0lqYWn8TjqAuwSnIeTYKGdlcO+9j7aay16wdGpWK/6k/BOaUNHv3fzKTfd+rMZ
+         gvOzBjzn0KfkMGPFAS2kh1WSNntClB7KVJ6uGrBYeA99lIPIsoJZ/1XcGmEAGt5Nbe/E
+         pwpcafNP4yjU21pwXGxzgBNnuO34TovtEYDOGKY0gUzBb5n4VThElKL1dPFWbI2LbZzJ
+         cJ/Ud81BxFZzlcoRT2e95JlerPpYTxXBI7piCz3AYxOGexmyt2L/fxeazzOWhR6goO+y
+         TmOMaqBLI0z2lhaCBOaPsPTgALS4pOJo8JicrQmAjKcONbX2hI0Aj8uQKSGA1KdNqW2Q
+         s5zw==
+X-Gm-Message-State: APjAAAUP+p4KngBKHcG4I9241mQRac/dyqOdLvrRJMLjIJj+jehFD0Bz
+        La4bzKD9PINUHw3Xi3xJck2rGuwT
+X-Google-Smtp-Source: APXvYqy2XbfUzHTPO9pDYLdielNGRUvJLhSPJXh0+BSVs7kHFo4azrsSXfq0yC35UxvtjWk58iiK9w==
+X-Received: by 2002:a2e:5c09:: with SMTP id q9mr4836970ljb.4.1568881440489;
+        Thu, 19 Sep 2019 01:24:00 -0700 (PDT)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id q13sm1415116lfk.51.2019.09.19.01.18.36
+        by smtp.gmail.com with ESMTPSA id l23sm1472197lje.106.2019.09.19.01.23.59
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Sep 2019 01:18:37 -0700 (PDT)
+        Thu, 19 Sep 2019 01:23:59 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iAre8-0007vn-Ue; Thu, 19 Sep 2019 10:18:36 +0200
+        (envelope-from <johan@kernel.org>)
+        id 1iArjL-0007yl-BQ; Thu, 19 Sep 2019 10:23:59 +0200
+Date:   Thu, 19 Sep 2019 10:23:59 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4/4] USB: legousbtower: fix open after failed reset request
-Date:   Thu, 19 Sep 2019 10:18:15 +0200
-Message-Id: <20190919081815.30422-5-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190919081815.30422-1-johan@kernel.org>
-References: <20190919081815.30422-1-johan@kernel.org>
+To:     syzbot <syzbot+66935bec147fbf68d9f8@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        legousb-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, starblue@users.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: possible deadlock in tower_open
+Message-ID: <20190919082359.GA30545@localhost>
+References: <000000000000e669b80592ab96fc@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000e669b80592ab96fc@google.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver would return with a nonzero open count in case the reset
-control request failed. This would prevent any further attempts to open
-the char dev until the device was disconnected.
+On Mon, Sep 16, 2019 at 06:29:12AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13c8d14e600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=66935bec147fbf68d9f8
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> 
+> Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+66935bec147fbf68d9f8@syzkaller.appspotmail.com
+> 
+> ======================================================
+> WARNING: possible circular locking dependency detected
+> 5.3.0-rc7+ #0 Not tainted
+> ------------------------------------------------------
+> syz-executor.1/8155 is trying to acquire lock:
+> 0000000086c1bdfc (open_disc_mutex){+.+.}, at: tower_open+0xce/0x9b0  
+> drivers/usb/misc/legousbtower.c:335
+> 
+> but task is already holding lock:
+> 000000000f520f73 (minor_rwsem){++++}, at: usb_open+0x23/0x270  
+> drivers/usb/core/file.c:39
+> 
+> which lock already depends on the new lock.
 
-Fix this by incrementing the open count only on successful open.
+This looks like a duplicate of
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/misc/legousbtower.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+https://lkml.kernel.org/r/000000000000d58eb90592add24e@google.com
 
-diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index 4fa999882635..44d6a3381804 100644
---- a/drivers/usb/misc/legousbtower.c
-+++ b/drivers/usb/misc/legousbtower.c
-@@ -348,7 +348,6 @@ static int tower_open (struct inode *inode, struct file *file)
- 		retval = -EBUSY;
- 		goto unlock_exit;
- 	}
--	dev->open_count = 1;
- 
- 	/* reset the tower */
- 	result = usb_control_msg (dev->udev,
-@@ -388,13 +387,14 @@ static int tower_open (struct inode *inode, struct file *file)
- 		dev_err(&dev->udev->dev,
- 			"Couldn't submit interrupt_in_urb %d\n", retval);
- 		dev->interrupt_in_running = 0;
--		dev->open_count = 0;
- 		goto unlock_exit;
- 	}
- 
- 	/* save device in the file's private structure */
- 	file->private_data = dev;
- 
-+	dev->open_count = 1;
-+
- unlock_exit:
- 	mutex_unlock(&dev->lock);
- 
--- 
-2.23.0
+Not sure if this is the right way to report this (quoting needed?):
 
+#syz dup: possible deadlock in usb_deregister_dev (2)
+
+Johan
