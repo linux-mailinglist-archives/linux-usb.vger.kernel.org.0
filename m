@@ -2,213 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FE9B7627
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 11:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11396B76C5
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 11:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731638AbfISJV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 05:21:28 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:43588 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730677AbfISJV2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Sep 2019 05:21:28 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id F2CA83024558;
-        Thu, 19 Sep 2019 09:21:26 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-21.pek2.redhat.com [10.72.8.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 76C3B60872;
-        Thu, 19 Sep 2019 09:21:19 +0000 (UTC)
-Date:   Thu, 19 Sep 2019 17:21:15 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Vai <andrea.vai@unipv.it>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20190919092114.GB4541@ming.t460p>
-References: <Pine.LNX.4.44L0.1909181213141.1507-100000@iolanthe.rowland.org>
- <BYAPR04MB58160E6FEBD92D04ECA7D303E7890@BYAPR04MB5816.namprd04.prod.outlook.com>
- <20190919085555.GA4541@ming.t460p>
- <BYAPR04MB58163D3C66FEA00A754CF7C7E7890@BYAPR04MB5816.namprd04.prod.outlook.com>
+        id S2388971AbfISJyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 05:54:39 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:45401 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388649AbfISJyi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 05:54:38 -0400
+Received: by mail-io1-f66.google.com with SMTP id f12so6138106iog.12
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 02:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=06SZvgzdXOks25VF5C8zBO75e+mjEwq6bZ9qf1w1ELg=;
+        b=JgJ233lAqVJLTigOY3JZLRKHrUOjb+hvtDe4+C91jIwrBNH/89jAUdkom9P+dor3PJ
+         xHgCB+y7uF5g+wUM5UVCFYGDcOkA9GpR5zqQh7KPwPnefui7QwKfs+OW/GU+umVAbfAb
+         4EuXW4rHTtHj2FeCzBciZvVWPP+e0iywbkw5aN7vIzPYWyFaekh5MFDZ/u9NQ9RswYfH
+         MNRS0YGiIoCQiPaoiprHT9i4ngWxXNlQhzBuvoM8RLCqFKA+xGogOUvSM9XjXFQf4qO7
+         +06jzqLsuoLraHY/v8IdCGGpv9W56+i7m7rjIDmWvsrWN/9AmwKm6RWDYwqQipKRkA1a
+         RN8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=06SZvgzdXOks25VF5C8zBO75e+mjEwq6bZ9qf1w1ELg=;
+        b=p5VPGE2HCjOQYaCFOMMUYO+IFMmd9eH67IoboXH1hhY8KNY2mbKB/foki2AWviwsn0
+         Kvw07tZl/hDumGDu4Kg3TYP2kroj0OjYEuox6vH5olntqzWSrwvIgqw/KSglFIo3NHYC
+         nDKLfDB58Q0dknDtpZZ/gXYMusv+xsCxXLRmFZQEFTsBhHivVS5uZn0Pnl9HGpyg/6mf
+         A2ShHgxQDCduUXU6DfZR4+Kk3lp1maJcjdS6tO7TpyHE2b+XLPIHYckViLiwEMQwEOO9
+         RJsMvXt2cTKz/zihSPkuDak/5wIUmMlsYMqHWPqbUqxHseaO0Gp5DPcTtkDmcb1xtZyT
+         65nw==
+X-Gm-Message-State: APjAAAV7jKgessc7PMbH9ncD/XX2YqzHjkcJCVF+mtKtyYgIriQdcXJi
+        oZLxVMmjm9sd6Bj97jSYmvq0/hywvXaDuSCY/NQ=
+X-Google-Smtp-Source: APXvYqzCEqMX7n56omVAy2Mun9suCY4W5M+yOsSu2tFnnX6U/oJ9y7Zo7j2TQZhtL/36+OGgX3Ly1utUM7VoSnv433w=
+X-Received: by 2002:a6b:7a42:: with SMTP id k2mr4747898iop.303.1568886877907;
+ Thu, 19 Sep 2019 02:54:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR04MB58163D3C66FEA00A754CF7C7E7890@BYAPR04MB5816.namprd04.prod.outlook.com>
-User-Agent: Mutt/1.11.3 (2019-02-01)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Thu, 19 Sep 2019 09:21:27 +0000 (UTC)
+References: <20190916094305.GB21844@b29397-desktop> <0aae13f2-04cf-f45a-e6ee-4bf9e515faba@linux.intel.com>
+ <CAL411-oirjSLZzwoN8axqpfn-JQ8eEGMWD-w9p24Krap+dPs9g@mail.gmail.com> <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
+In-Reply-To: <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Thu, 19 Sep 2019 17:54:25 +0800
+Message-ID: <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
+Subject: Re: Event ring is full when do iozone test on UAS storage
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 09:09:33AM +0000, Damien Le Moal wrote:
-> On 2019/09/19 10:56, Ming Lei wrote:
-> > On Thu, Sep 19, 2019 at 08:26:32AM +0000, Damien Le Moal wrote:
-> >> On 2019/09/18 18:30, Alan Stern wrote:
-> >>> On Wed, 18 Sep 2019, Andrea Vai wrote:
+> On 17.9.2019 12.55, Peter Chen wrote:
 > >>>
-> >>>>> Also, I wonder if the changing the size of the data transfers would
-> >>>>> make any difference.  This is easy to try; just write "64" to
-> >>>>> /sys/block/sd?/queue/max_sectors_kb (where the ? is the appropriate
-> >>>>> drive letter) after the drive is plugged in but before the test
-> >>>>> starts.
-> >>>>
-> >>>> ok, so I duplicated the tests above for the "64" case (it was
-> >>>> initially set as "120", if it is relevant to know), leading to 40 tests named as
-> >>>>
-> >>>> bad.mon.out_50000000_64_TIMESTAMP
-> >>>> bad.mon.out_50000000_non64_TIMESTAMP
-> >>>> good.mon.out_50000000_64_TIMESTAMP
-> >>>> good.mon.out_50000000_non64_TIMESTAMP
-> >>>>
-> >>>> where "64" denotes the ones done with that value in max_sectors_kb,
-> >>>> and "not64" the ones without it (as far as I can tell, it has been
-> >>>> always "120").
-> >>>>
-> >>>> So, we have 40 traces total. Each set of 10 trials is identified by
-> >>>> a text file, which contains the output log of the test script (and the
-> >>>> timestamps), also available in the download zipfile.
-> >>>>
-> >>>> Just to summarize here the times, they are respectively (number
-> >>>> expressed  in seconds):
-> >>>>
-> >>>> BAD:
-> >>>>   Logs: log_10trials_50MB_BAD_NonCanc_64.txt,
-> >>>> log_10trials_50MB_BAD_NonCanc_non64.txt
-> >>>>   64: 34, 34, 35, 39, 37, 32, 42, 44, 43, 40
-> >>>>   not64: 61, 71, 59, 71, 62, 75, 62, 70, 62, 68
-> >>>> GOOD:
-> >>>>   Logs: log_10trials_50MB_GOOD_NonCanc_64.txt,
-> >>>> log_10trials_50MB_GOOD_NonCanc_non64.txt
-> >>>>   64: 34, 32, 35, 34, 35, 33, 34, 33, 33, 33
-> >>>>   not64: 32, 30, 32, 31, 31, 30, 32, 30, 32, 31
-> >>>
-> >>> The improvement from using "64" with the bad kernel is quite large.  
-> >>> That alone would be a big help for you.
-> >>>
-> >>> However, I did see what appears to be a very significant difference 
-> >>> between the bad and good kernel traces.  It has to do with the order in 
-> >>> which the blocks are accessed.
-> >>>
-> >>> Here is an extract from one of the bad traces.  I have erased all the 
-> >>> information except for the columns containing the block numbers to be 
-> >>> written:
-> >>>
-> >>> 00019628 00
-> >>> 00019667 00
-> >>> 00019628 80
-> >>> 00019667 80
-> >>> 00019629 00
-> >>> 00019668 00
-> >>> 00019629 80
-> >>> 00019668 80
-> >>>
-> >>> Here is the equivalent portion from one of the good traces:
-> >>>
-> >>> 00019628 00
-> >>> 00019628 80
-> >>> 00019629 00
-> >>> 00019629 80
-> >>> 0001962a 00
-> >>> 0001962a 80
-> >>> 0001962b 00
-> >>> 0001962b 80
-> >>>
-> >>> Notice that under the good kernel, the block numbers increase
-> >>> monotonically in a single sequence.  But under the bad kernel, the
-> >>> block numbers are not monotonic -- it looks like there are two separate
-> >>> threads each with its own strictly increasing sequence.
-> >>>
-> >>> This is exactly the sort of difference one might expect to see from
-> >>> the commit f664a3cc17b7 ("scsi: kill off the legacy IO path") you
-> >>> identified as the cause of the problem.  With multiqueue I/O, it's not 
-> >>> surprising to see multiple sequences of block numbers.
-> >>>
-> >>> Add it's not at all surprising that a consumer-grade USB storage device 
-> >>> might do a much worse job of handling non-sequential writes than 
-> >>> sequential ones.
-> >>>
-> >>> Which leads to a simple question for the SCSI or block-layer 
-> >>> maintainers:  Is there a sysfs setting Andrea can tweak which will 
-> >>> effectively restrict a particular disk device down to a single I/O
-> >>> queue, forcing sequential access?
+> >>> I met "event ring full error" like below, this error is met when
+> >>> I do iozone test on UAS storage at v4.19.35 kernel, but not meet
+> >>> this error at linux-next tree (08/24). The same host and test
+> >>> UAS storage device are used. This issue is due to xhci_handle_event
+> >>> does not return 0 long time, maybe the xHC speed is fast enough
+> >>> at that time. If I force the xhci_handle_event only run 100 times
+> >>> before update ERST dequene pointer, it will not occur this error.
+> >>> I did not  see any changes for xhci_handle_event at the latest code,
+> >>> so in theory, it should have this issue too. Do you think if we need
+> >>> to improve xhci_handle_event to avoid event ring?
 > >>
-> >> The scheduling inefficiency you are seeing may be coming from the fact that the
-> >> block layer does a direct issue of requests, bypassing the elevator, under some
-> >> conditions. One of these is sync requests on a multiqueue device. We hit this
-> >> problem on Zoned disks which can easily return an error for write requests
-> >> without the elevator throttling writes per zones (zone write locking). This
-> >> problem was discovered by Hans (on CC).
-> >>
-> >> I discussed this with Hannes yesterday and we think we have a fix, but we'll
-> >> need to do a lot of testing as all block devices are potentially impacted by the
-> >> change, including stacked drivers (DM). Performance regression is scary with any
-> >> change in that area (see blk_mq_make_request() and use of
-> >> blk_mq_try_issue_directly() vs blk_mq_sched_insert_request()).
-> > 
-> > Not sure this one is same with yours, for USB, mq-deadline is used at
-> > default, and direct issue won't be possible. Direct issue is only used
-> > in case of none or underlying queues of DM multipath.
-> 
-> For a multi-queue zoned disk, mq-deadline is also set, but we have observed
-> unaligned write IO errors for sync writes because of mq-deadline being bypassed
-> and as a result zones not being write-locked.
-> 
-> In blk_mq_make_request(), at the end, you have:
-> 
-> 	} else if ((q->nr_hw_queues > 1 && is_sync) || (!q->elevator &&
-> 			!data.hctx->dispatch_busy)) {
-> 		blk_mq_try_issue_directly(data.hctx, rq, &cookie);
-> 	} else {
-> 		blk_mq_sched_insert_request(rq, false, true, true);
-> 	}
-> 
-> Which I read as "for a sync req on a multi-queue device, direct issue",
-> regardless of the elevator being none or something else.
+> > The root cause is UAS protocol is very fast
+> > protocol, the
+> > other threads at non-CPU0 will add TRBs during we are handling event, so if
+> > hardware (xHC) has always consumed TD the non-CPU0s are adding,
+> > the ERST dequene pointer never get change to update, then this
+> > "event ring full" error will occur.
+> >
+> > The one reason why v4.19 has this issue is the max request length is larger
+> > than the latest kernel. At v4.19, it is 512KB, At the latest kernel,
+> > it is 256 KB.
+> > see /sys/block/sda/queue/max_sectors_kb.
+> > When I change max_sectors_kb as smaller value, the test will be more smooth.
+> > Besides, At v4.19, the UAS completion handler seems take more time
+> > compares to the latest kernel.
+> >
+> > I suggest adding threshold flag for event ring when it closes to full
+> > since we can't
+> > avoid USB3 use cases when the throughput is high, but the system is a
+> > little slow.
+> > Do you agree?
+>
+> I agree that it makes sense to force a ERDP write after handling some amount
+> of events, it can solve some event ring full issues, but not the fact that
+> we spend a lot of time in the interrupt handler.
 
-Yeah, looks elevator is bypassed in the above case, which seems a bug.
-USB storage has only single queue.
+Ok, I will proposal one patch to fix event ring full issue.
 
-> 
-> The correct test should probably be:
-> 
-> 	} else if (!q->elevator &&
-> 		   ((q->nr_hw_queues > 1 && is_sync) || 	
-> 		     !data.hctx->dispatch_busy))) {
-> 		blk_mq_try_issue_directly(data.hctx, rq, &cookie);
-> 	} else {
-> 		blk_mq_sched_insert_request(rq, false, true, true);
-> 	}
-> 
-> That is, never bypass the elevator if one is set. Thoughts ?
+>
+> Your logs show that you have TDs containing up to 128 TRBs.
+> When a TD like that finishes the driver will increase the sw dequeue pointer of the
+> transfer ring one by one until we reach the end of the TD.
+>
+> This means we call inc_deq() function 128 times in interrupt context, and each time
+> do a few comparisons. According to traces this takes ~120us. There might be some
+> tracing overhead but this could anyway be done in a saner way.
+>
+> I'll look into this
+>
 
-IMO, elevator shouldn't be bypassed any time, looks it is bypassed
-in the following branch too, but may not be reached for zone device.
+Since we use hard irq for xHCI, for high performance protocol, it may hard to
+reduce interrupt context time since we have lots of request handling,
+cache operation,
+and completion are interrupt context.
 
-blk_mq_make_request()
- ...
- } else if (plug && !blk_queue_nomerges(q)) {
-	...
-	if (same_queue_rq) {
-                        data.hctx = same_queue_rq->mq_hctx;
-                        trace_block_unplug(q, 1, true);
-                        blk_mq_try_issue_directly(data.hctx, same_queue_rq,
-                                        &cookie);
-                }
- }
+> Other things to consider in addition to writing ERDP and fixing the inc_dec() loop is
+> increasing event ring size (adding more than current 1 segment), and support giving
+> back URBs in tasklet by adding the HCD_BH flag to xhci hcd.
+>
 
+I tried to use 3 segments for event ring, still meet ring error.
+During the iozone
+test, the block layer produces data without stop, xHC will always be busy.
+Using bottom half giveback helps this issue,  ehci has already used bottom
+half giveback.
+
+So, Mathias, which solutions do you prefer:
+- One way to quit xhci_handle_event if there are enough events have handled
+- Change giveback as bottom half
 
 Thanks,
-Ming
+Peter
