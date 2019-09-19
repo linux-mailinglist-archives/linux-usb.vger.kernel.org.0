@@ -2,31 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC98B8151
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 21:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8689B82D7
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 22:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403963AbfISTTa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 15:19:30 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:48366 "HELO
+        id S1731385AbfISUnJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 16:43:09 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:48542 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2392320AbfISTT3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 15:19:29 -0400
-Received: (qmail 7399 invoked by uid 2102); 19 Sep 2019 15:19:28 -0400
+        with SMTP id S1731004AbfISUnJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 16:43:09 -0400
+Received: (qmail 8976 invoked by uid 2102); 19 Sep 2019 16:43:08 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 19 Sep 2019 15:19:28 -0400
-Date:   Thu, 19 Sep 2019 15:19:28 -0400 (EDT)
+  by localhost with SMTP; 19 Sep 2019 16:43:08 -0400
+Date:   Thu, 19 Sep 2019 16:43:08 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, <linux-input@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
-In-Reply-To: <CAAeHK+wh0bQKRXU_7fOC5XZKUUL1QW8DskCBJKQACwqZd=tZyw@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1909191515350.6904-100000@iolanthe.rowland.org>
+To:     syzbot <syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <miquel@df.uba.ar>, <rio500-users@lists.sourceforge.net>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: invalid-free in disconnect_rio (2)
+In-Reply-To: <0000000000004349550592ebfd2d@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909191639240.6904-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -34,124 +32,115 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 19 Sep 2019, Andrey Konovalov wrote:
+On Thu, 19 Sep 2019, syzbot wrote:
 
-> On Tue, Sep 17, 2019 at 8:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Mon, 16 Sep 2019, syzbot wrote:
-> >
-> > > Hello,
-> > >
-> > > syzbot found the following crash on:
-> > >
-> > > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
-> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
-> > >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
-> > >
-> > > usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,
-> > > different from the interface descriptor's value: 9
-> > > usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=
-> > > 0.00
-> > > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > > usb 1-1: config 0 descriptor??
-> > > greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
-> > > greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID
-> > > 0e8f:0012] on usb-dummy_hcd.0-1/input0
-> > > ==================================================================
-> > > BUG: KASAN: slab-out-of-bounds in set_bit
-> > > include/asm-generic/bitops-instrumented.h:28 [inline]
-> > > BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97
-> > > [inline]
-> > > BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0
-> > > drivers/hid/hid-gaff.c:146
-> > > Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
-> > >
-> > > CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > > Google 01/01/2011
-> > > Workqueue: usb_hub_wq hub_event
-> > > Call Trace:
-> > >   __dump_stack lib/dump_stack.c:77 [inline]
-> > >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> > >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
-> > >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-> > >   kasan_report+0xe/0x12 mm/kasan/common.c:618
-> > >   check_memory_region_inline mm/kasan/generic.c:185 [inline]
-> > >   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-> > >   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
-> > >   gaff_init drivers/hid/hid-gaff.c:97 [inline]
-> > >   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
-> > >   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
-> > >   really_probe+0x281/0x6d0 drivers/base/dd.c:548
-> > >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-> > >   __device_attach_driver+0x
-> > >
-> > >
-> > > ---
-> > > This bug is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > syzbot will keep track of this bug report. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > syzbot can test patches for this bug, for details see:
-> > > https://goo.gl/tpsmEJ#testing-patches
-> >
-> > The driver assumes that the device contains an input.
+> Hello,
 > 
-> BTW, these two reports look fairly similar:
+> syzbot found the following crash on:
 > 
-> https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
-> https://syzkaller.appspot.com/bug?extid=1e86e2ccce227cca899b
+> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17d6f31d600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=745b0dff8028f9488eba
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1009f769600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b1d4b1600000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com
+> 
+> usb 5-1: New USB device found, idVendor=0841, idProduct=0001,  
+> bcdDevice=c5.d0
+> usb 5-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> usb 5-1: config 0 descriptor??
+> rio500 5-1:0.133: Second USB Rio at address 2 refused
+> rio500: probe of 5-1:0.133 failed with error -16
+> usb 3-1: USB disconnect, device number 2
+> ==================================================================
+> BUG: KASAN: double-free or invalid-free in disconnect_rio+0x12b/0x1b0  
+> drivers/usb/misc/rio500.c:525
 
-Indeed they do.  I don't have time to patch them now; maybe next week.
-Unless you or someone else would like to do it first...  :-)  
+All right, that was a pretty dumb mistake on my part.  Checking for 
+whether a device has already been registered needs to be part of the 
+critical section.
 
-Essentially the same fix should work for each of these -- looks like
-they were written using copy-and-paste.  In fact, a quick grep through
-drivers/hid/*.c shows about 9 of them with the same suspect
-initialization code for hidinput.
+Alan Stern
 
-Alan Stern          
+#syz test: https://github.com/google/kasan.git e0bd8d79
 
+ drivers/usb/misc/rio500.c |   34 ++++++++++++++++++----------------
+ 1 file changed, 18 insertions(+), 16 deletions(-)
 
-> >  drivers/hid/hid-gaff.c |   12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > Index: usb-devel/drivers/hid/hid-gaff.c
-> > ===================================================================
-> > --- usb-devel.orig/drivers/hid/hid-gaff.c
-> > +++ usb-devel/drivers/hid/hid-gaff.c
-> > @@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
-> >  {
-> >         struct gaff_device *gaff;
-> >         struct hid_report *report;
-> > -       struct hid_input *hidinput = list_entry(hid->inputs.next,
-> > -                                               struct hid_input, list);
-> > +       struct hid_input *hidinput;
-> >         struct list_head *report_list =
-> >                         &hid->report_enum[HID_OUTPUT_REPORT].report_list;
-> >         struct list_head *report_ptr = report_list;
-> > -       struct input_dev *dev = hidinput->input;
-> > +       struct input_dev *dev;
-> >         int error;
-> >
-> > +       if (list_empty(&hid->inputs)) {
-> > +               hid_err(hid, "no inputs found\n");
-> > +               return -ENODEV;
-> > +       }
-> > +       hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-> > +       dev = hidinput->input;
-> > +
-> >         if (list_empty(report_list)) {
-> >                 hid_err(hid, "no output reports found\n");
-> >                 return -ENODEV;
+Index: usb-devel/drivers/usb/misc/rio500.c
+===================================================================
+--- usb-devel.orig/drivers/usb/misc/rio500.c
++++ usb-devel/drivers/usb/misc/rio500.c
+@@ -454,36 +454,35 @@ static int probe_rio(struct usb_interfac
+ {
+ 	struct usb_device *dev = interface_to_usbdev(intf);
+ 	struct rio_usb_data *rio = &rio_instance;
+-	int retval = -ENOMEM;
+-	char *ibuf, *obuf;
++	int retval;
+ 
++	mutex_lock(&rio500_mutex);
+ 	if (rio->present) {
+ 		dev_info(&intf->dev, "Second USB Rio at address %d refused\n", dev->devnum);
+-		return -EBUSY;
++		retval = -EBUSY;
++		goto err_present;
+ 	}
+ 	dev_info(&intf->dev, "USB Rio found at address %d\n", dev->devnum);
++	rio->present = 1;
+ 
+-	obuf = kmalloc(OBUF_SIZE, GFP_KERNEL);
+-	if (!obuf) {
++	retval = -ENOMEM;
++	rio->obuf = kmalloc(OBUF_SIZE, GFP_KERNEL);
++	if (!rio->obuf) {
+ 		dev_err(&dev->dev,
+ 			"probe_rio: Not enough memory for the output buffer\n");
+ 		goto err_obuf;
+ 	}
+-	dev_dbg(&intf->dev, "obuf address: %p\n", obuf);
++	dev_dbg(&intf->dev, "obuf address: %p\n", rio->obuf);
+ 
+-	ibuf = kmalloc(IBUF_SIZE, GFP_KERNEL);
+-	if (!ibuf) {
++	rio->ibuf = kmalloc(IBUF_SIZE, GFP_KERNEL);
++	if (!rio->ibuf) {
+ 		dev_err(&dev->dev,
+ 			"probe_rio: Not enough memory for the input buffer\n");
+ 		goto err_ibuf;
+ 	}
+-	dev_dbg(&intf->dev, "ibuf address: %p\n", ibuf);
++	dev_dbg(&intf->dev, "ibuf address: %p\n", rio->ibuf);
+ 
+-	mutex_lock(&rio500_mutex);
+ 	rio->rio_dev = dev;
+-	rio->ibuf = ibuf;
+-	rio->obuf = obuf;
+-	rio->present = 1;
+ 	mutex_unlock(&rio500_mutex);
+ 
+ 	retval = usb_register_dev(intf, &usb_rio_class);
+@@ -498,11 +497,14 @@ static int probe_rio(struct usb_interfac
+ 
+  err_register:
+ 	mutex_lock(&rio500_mutex);
+-	rio->present = 0;
+-	mutex_unlock(&rio500_mutex);
++	rio->rio_dev = NULL;
++	kfree(rio->ibuf);
+  err_ibuf:
+-	kfree(obuf);
++	kfree(rio->obuf);
+  err_obuf:
++	rio->present = 0;
++ err_present:
++	mutex_unlock(&rio500_mutex);
+ 	return retval;
+ }
+ 
 
