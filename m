@@ -2,49 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0878CB74F7
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF4FB74F6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387785AbfISISm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 04:18:42 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33917 "EHLO
+        id S2387523AbfISISk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 04:18:40 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37591 "EHLO
         mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731373AbfISISl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:18:41 -0400
-Received: by mail-lj1-f194.google.com with SMTP id j19so1157575lja.1
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 01:18:38 -0700 (PDT)
+        with ESMTP id S1728879AbfISISk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:18:40 -0400
+Received: by mail-lj1-f194.google.com with SMTP id l21so2654929lje.4;
+        Thu, 19 Sep 2019 01:18:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8MgI5S+05DIWI8umTRTDa8khd6auACJlX0yQxdc49Xs=;
-        b=BXT1OdsUu4biZSYmPqhE5aQEDy5VQId7GB8Iw8YHKy4hJlbf08m1MTUhydGALrgLEn
-         F+8dZFY88nnwXEbSEublx1+D9lHGB2ht8+86nekIAjszn83tGyev/A8xrrHAF2ltnCxt
-         mTu9unI/TIEn2wwfbUBw4rhTzcF7SefY6Y1Is8qehwJDTBXbMWDcpe0i6KFNl0W0Cvlj
-         xQE/TlqVc+iKKOLfxmOqh6mOGuEfbuMMn1b0D1Lywl6UZv3KWtSwnT24JQzxi02Xria7
-         Z/uAfT2uGOpeRbpkoOhWVK7aor/qIGpeQVtMp0pHnJb7Og1tKyyBwk7KatbG22d1HdCl
-         9RHw==
-X-Gm-Message-State: APjAAAUvSokt9xp4dfSU7V6IbKIU1OcNmlyklfiUI6U3MAHA1HRA0c9r
-        +39pxTWjDFiaAQ8gA5sNkKc=
-X-Google-Smtp-Source: APXvYqwzb13g1xUW6vu7xOwtJb5fnSE+N8uolZ7I90S6OU7uWQW1Kyxg41F+W5B/Cvgj41heLSl5RQ==
-X-Received: by 2002:a2e:9145:: with SMTP id q5mr4619449ljg.76.1568881117876;
-        Thu, 19 Sep 2019 01:18:37 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bdKMehp6wxnbpllEkvXzzRnRrggViXMGu8demEwoja0=;
+        b=s3+xIIjcJ/yKr06fleC5N7Xl+qZPqho+MNGLZplQJ4q3QDY9+VxipGz9JaSb4yEWNz
+         UMEEdswfSwU3luu/XSpyE9oP9rauOg3tcSHRcmBxM9Q+FtM6WT63nFnD9uzxiVXirj82
+         cRTwgRU4QKW2J86f7qD8CRz9OwK1Pe/BYJjoPVMFrWGMtu0C2X1gJmXCFck3nMywvVOv
+         RqvmlejKi3rDEAxQi9MM14Tiqm6j+DlgkmWwUnC7q/IXw4geR66GAWB4cjZ3R0/dNIWC
+         XJt79+gYf+qlCf8Vwq6cFeW2flFUEQ4uiGKAME/U6rwWibYpOgJuy7i7DqU1xse/Go+v
+         +Heg==
+X-Gm-Message-State: APjAAAWKv/Lx9zN8RatHISx5cKY+iIGja4VWR3Wwaj8aohLMfp2GM1/i
+        1V/z4jFvj/1LodAVaO3fCws=
+X-Google-Smtp-Source: APXvYqzmEAZneyg861HpgqHOF2chTtJL7HveCo6ZXfOB8sYWTcdkQdNk3BPX32Ow62y5lFpj1RAkbw==
+X-Received: by 2002:a05:651c:1102:: with SMTP id d2mr4043271ljo.74.1568881118454;
+        Thu, 19 Sep 2019 01:18:38 -0700 (PDT)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id u21sm1506401lje.92.2019.09.19.01.18.36
+        by smtp.gmail.com with ESMTPSA id h10sm1473716ljb.14.2019.09.19.01.18.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Thu, 19 Sep 2019 01:18:37 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
         (envelope-from <johan@xi.terra>)
-        id 1iAre8-0007vV-I5; Thu, 19 Sep 2019 10:18:36 +0200
+        id 1iAre8-0007vY-M7; Thu, 19 Sep 2019 10:18:36 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
         Oliver Neukum <oneukum@suse.com>,
-        Johan Hovold <johan@kernel.org>
-Subject: [PATCH 0/4] USB: legousbtower: misc fixes
-Date:   Thu, 19 Sep 2019 10:18:11 +0200
-Message-Id: <20190919081815.30422-1-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH 1/4] USB: legousbtower: fix slab info leak at probe
+Date:   Thu, 19 Sep 2019 10:18:12 +0200
+Message-Id: <20190919081815.30422-2-johan@kernel.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190919081815.30422-1-johan@kernel.org>
+References: <20190919081815.30422-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -52,25 +55,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This series fixes a few issues found in the legousbtower driver. The
-potential deadlock issue was reported by syzbot, and the rest was found
-through inspection.
+Make sure to check for short transfers when retrieving the version
+information at probe to avoid leaking uninitialised slab data when
+logging it.
 
-I have bunch of clean ups for this driver as well that I'll post once
-these are in Linus's tree.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/misc/legousbtower.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Johan
-
-
-Johan Hovold (4):
-  USB: legousbtower: fix slab info leak at probe
-  USB: legousbtower: fix deadlock on disconnect
-  USB: legousbtower: fix potential NULL-deref on disconnect
-  USB: legousbtower: fix open after failed reset request
-
- drivers/usb/misc/legousbtower.c | 55 ++++++++++++++-------------------
- 1 file changed, 23 insertions(+), 32 deletions(-)
-
+diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+index 006cf13b2199..1db07d4dc738 100644
+--- a/drivers/usb/misc/legousbtower.c
++++ b/drivers/usb/misc/legousbtower.c
+@@ -891,8 +891,10 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
+ 				  get_version_reply,
+ 				  sizeof(*get_version_reply),
+ 				  1000);
+-	if (result < 0) {
+-		dev_err(idev, "LEGO USB Tower get version control request failed\n");
++	if (result < sizeof(*get_version_reply)) {
++		if (result >= 0)
++			result = -EIO;
++		dev_err(idev, "get version request failed: %d\n", result);
+ 		retval = result;
+ 		goto error;
+ 	}
 -- 
 2.23.0
 
