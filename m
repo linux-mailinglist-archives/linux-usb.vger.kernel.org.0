@@ -2,49 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1010B74FC
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D38B74FA
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 10:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387911AbfISISn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 04:18:43 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37593 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387581AbfISISn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:18:43 -0400
-Received: by mail-lj1-f196.google.com with SMTP id l21so2654950lje.4;
-        Thu, 19 Sep 2019 01:18:39 -0700 (PDT)
+        id S2387857AbfISISm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 04:18:42 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:42416 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731572AbfISISm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 04:18:42 -0400
+Received: by mail-lj1-f194.google.com with SMTP id y23so2622801lje.9
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 01:18:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=gOw3dGTcmm1iVIPl96Li1eNYVJdVoD8Cu2D+Apy5uOg=;
-        b=Sp2qkjnMRrLkDlwRNIpk93U/EXHfN2UvnOilnFjVBfuVRCzqL8zV2M7Wi226v7bs/3
-         8kgu1duRykp9N7eUHI1A3YFuqxcOTXF8vEfDwPrJhN4NEv6LNST4kmjBqX5dXmn6UXfK
-         L9If+xOwYn+O3K4kS1p+iHe3y+AMbQ1k46atz10Pg05JGBFNoPsi46sNh93zWx0s1ydT
-         82PZEQq9YIFaVNUehOEarAwoDoGijwXS7p2krHhM7fka9OfSlKQ9thv4g/WXeUHQgYMb
-         WgS+vmQwlh7OF7cUizqS9uMTlP1YlV79t1+5Y/DQuhfHeads1wOEzl786SF7cu8jzqiV
-         eBCw==
-X-Gm-Message-State: APjAAAUvHT//llhZbMIOXwGa52/j5uWG7Ml8ALK/nXSong+0hzb4TMlv
-        RTXpt9mu4hmKwvR2az93KIA=
-X-Google-Smtp-Source: APXvYqyl9IBLYWk7cwMlWNYx+QovpnWMo+tlIMGgaAy3T26qh2BG6+Pq5zb4+dR2N/mcN8WzHvF8Gg==
-X-Received: by 2002:a2e:9586:: with SMTP id w6mr4409130ljh.47.1568881118946;
-        Thu, 19 Sep 2019 01:18:38 -0700 (PDT)
+        bh=l086OEt/YmCp6+Ee4uju9cxpl1kQU9buLbBxRXPBhrY=;
+        b=PZbL0YU3p0UNy3Yid8fpnoGXd4l6sQ/api+YNoIosbZ0PV9JprAryZY7Q2XSTlveHk
+         fUWFbqyZ7Wp9t8BDOdMqUMOG4TYpigT6310W5P4ex8WS4GyygYxJe5VfDXk8tUaMFNTw
+         QHXSf8scgJuZZM7t9qoXlnsnTIOJhmiq4lMmBQNGGJ+uExY+7Xf/ZH39uHkaJ1mLd7lK
+         SUJiObn4veB2I3AmvyrLevbyjS83xj+t3perKRpfEf+bSKoVD8p7QXkIqfH74JG16H0p
+         wv9isi+Hjrd8nQWLgyHQhHzsX8a0Lv8MSuUyHFKfiUTOouoOIvkuMQmuKqMO0He6dq+L
+         t2gg==
+X-Gm-Message-State: APjAAAXUNoiCULIcThcmPyg7rSR/KxVOZtVGoMrmt4UcjXfC+VGviJEy
+        Q53SoWyXvvy3otzAOj8n+vU=
+X-Google-Smtp-Source: APXvYqyJBfSZH1pjJ+SiSIykFl6LL9gVt37ixkc3rfHGrP7gar6NEb4Qf+/Y/4OEoXquTQEWH5caAQ==
+X-Received: by 2002:a2e:810e:: with SMTP id d14mr4740962ljg.160.1568881119971;
+        Thu, 19 Sep 2019 01:18:39 -0700 (PDT)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id r75sm1419504lff.7.2019.09.19.01.18.36
+        by smtp.gmail.com with ESMTPSA id q13sm1415116lfk.51.2019.09.19.01.18.36
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
         Thu, 19 Sep 2019 01:18:37 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
         (envelope-from <johan@xi.terra>)
-        id 1iAre8-0007vj-RR; Thu, 19 Sep 2019 10:18:36 +0200
+        id 1iAre8-0007vn-Ue; Thu, 19 Sep 2019 10:18:36 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
         Oliver Neukum <oneukum@suse.com>,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 3/4] USB: legousbtower: fix potential NULL-deref on disconnect
-Date:   Thu, 19 Sep 2019 10:18:14 +0200
-Message-Id: <20190919081815.30422-4-johan@kernel.org>
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 4/4] USB: legousbtower: fix open after failed reset request
+Date:   Thu, 19 Sep 2019 10:18:15 +0200
+Message-Id: <20190919081815.30422-5-johan@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190919081815.30422-1-johan@kernel.org>
 References: <20190919081815.30422-1-johan@kernel.org>
@@ -55,136 +54,46 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver is using its struct usb_device pointer as an inverted
-disconnected flag, but was setting it to NULL before making sure all
-completion handlers had run. This could lead to a NULL-pointer
-dereference in a number of dev_dbg and dev_err statements in the
-completion handlers which relies on said pointer.
+The driver would return with a nonzero open count in case the reset
+control request failed. This would prevent any further attempts to open
+the char dev until the device was disconnected.
 
-Fix this by unconditionally stopping all I/O and preventing
-resubmissions by poisoning the interrupt URBs at disconnect and using a
-dedicated disconnected flag.
+Fix this by incrementing the open count only on successful open.
 
-This also makes sure that all I/O has completed by the time the
-disconnect callback returns.
-
-Fixes: 9d974b2a06e3 ("USB: legousbtower.c: remove err() usage")
-Fixes: fef526cae700 ("USB: legousbtower: remove custom debug macro")
-Fixes: 4dae99638097 ("USB: legotower: remove custom debug macro and module parameter")
-Cc: stable <stable@vger.kernel.org>     # 3.5
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/misc/legousbtower.c | 26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+ drivers/usb/misc/legousbtower.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index 773e4188f336..4fa999882635 100644
+index 4fa999882635..44d6a3381804 100644
 --- a/drivers/usb/misc/legousbtower.c
 +++ b/drivers/usb/misc/legousbtower.c
-@@ -190,6 +190,7 @@ struct lego_usb_tower {
- 	unsigned char		minor;		/* the starting minor number for this device */
- 
- 	int			open_count;	/* number of times this port has been opened */
-+	unsigned long		disconnected:1;
- 
- 	char*			read_buffer;
- 	size_t			read_buffer_length; /* this much came in */
-@@ -289,8 +290,6 @@ static inline void lego_usb_tower_debug_data(struct device *dev,
-  */
- static inline void tower_delete (struct lego_usb_tower *dev)
- {
--	tower_abort_transfers (dev);
--
- 	/* free data structures */
- 	usb_free_urb(dev->interrupt_in_urb);
- 	usb_free_urb(dev->interrupt_out_urb);
-@@ -430,7 +429,8 @@ static int tower_release (struct inode *inode, struct file *file)
- 		retval = -ENODEV;
+@@ -348,7 +348,6 @@ static int tower_open (struct inode *inode, struct file *file)
+ 		retval = -EBUSY;
  		goto unlock_exit;
  	}
--	if (dev->udev == NULL) {
-+
-+	if (dev->disconnected) {
- 		/* the device was unplugged before the file was released */
+-	dev->open_count = 1;
  
- 		/* unlock here as tower_delete frees dev */
-@@ -466,10 +466,9 @@ static void tower_abort_transfers (struct lego_usb_tower *dev)
- 	if (dev->interrupt_in_running) {
+ 	/* reset the tower */
+ 	result = usb_control_msg (dev->udev,
+@@ -388,13 +387,14 @@ static int tower_open (struct inode *inode, struct file *file)
+ 		dev_err(&dev->udev->dev,
+ 			"Couldn't submit interrupt_in_urb %d\n", retval);
  		dev->interrupt_in_running = 0;
- 		mb();
--		if (dev->udev)
--			usb_kill_urb (dev->interrupt_in_urb);
-+		usb_kill_urb(dev->interrupt_in_urb);
- 	}
--	if (dev->interrupt_out_busy && dev->udev)
-+	if (dev->interrupt_out_busy)
- 		usb_kill_urb(dev->interrupt_out_urb);
- }
- 
-@@ -505,7 +504,7 @@ static __poll_t tower_poll (struct file *file, poll_table *wait)
- 
- 	dev = file->private_data;
- 
--	if (!dev->udev)
-+	if (dev->disconnected)
- 		return EPOLLERR | EPOLLHUP;
- 
- 	poll_wait(file, &dev->read_wait, wait);
-@@ -552,7 +551,7 @@ static ssize_t tower_read (struct file *file, char __user *buffer, size_t count,
- 	}
- 
- 	/* verify that the device wasn't unplugged */
--	if (dev->udev == NULL) {
-+	if (dev->disconnected) {
- 		retval = -ENODEV;
- 		pr_err("No device or device unplugged %d\n", retval);
+-		dev->open_count = 0;
  		goto unlock_exit;
-@@ -638,7 +637,7 @@ static ssize_t tower_write (struct file *file, const char __user *buffer, size_t
  	}
  
- 	/* verify that the device wasn't unplugged */
--	if (dev->udev == NULL) {
-+	if (dev->disconnected) {
- 		retval = -ENODEV;
- 		pr_err("No device or device unplugged %d\n", retval);
- 		goto unlock_exit;
-@@ -748,7 +747,7 @@ static void tower_interrupt_in_callback (struct urb *urb)
+ 	/* save device in the file's private structure */
+ 	file->private_data = dev;
  
- resubmit:
- 	/* resubmit if we're still running */
--	if (dev->interrupt_in_running && dev->udev) {
-+	if (dev->interrupt_in_running) {
- 		retval = usb_submit_urb (dev->interrupt_in_urb, GFP_ATOMIC);
- 		if (retval)
- 			dev_err(&dev->udev->dev,
-@@ -813,6 +812,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
- 
- 	dev->udev = udev;
- 	dev->open_count = 0;
-+	dev->disconnected = 0;
- 
- 	dev->read_buffer = NULL;
- 	dev->read_buffer_length = 0;
-@@ -938,6 +938,10 @@ static void tower_disconnect (struct usb_interface *interface)
- 	/* give back our minor and prevent further open() */
- 	usb_deregister_dev (interface, &tower_class);
- 
-+	/* stop I/O */
-+	usb_poison_urb(dev->interrupt_in_urb);
-+	usb_poison_urb(dev->interrupt_out_urb);
++	dev->open_count = 1;
 +
- 	mutex_lock(&dev->lock);
+ unlock_exit:
+ 	mutex_unlock(&dev->lock);
  
- 	/* if the device is not opened, then we clean up right now */
-@@ -945,7 +949,7 @@ static void tower_disconnect (struct usb_interface *interface)
- 		mutex_unlock(&dev->lock);
- 		tower_delete (dev);
- 	} else {
--		dev->udev = NULL;
-+		dev->disconnected = 1;
- 		/* wake up pollers */
- 		wake_up_interruptible_all(&dev->read_wait);
- 		wake_up_interruptible_all(&dev->write_wait);
 -- 
 2.23.0
 
