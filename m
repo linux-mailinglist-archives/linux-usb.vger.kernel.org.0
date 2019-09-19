@@ -2,66 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8223DB77CF
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 12:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E03DB7815
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 13:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389594AbfISKxE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 06:53:04 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:47531 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389586AbfISKxC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 06:53:02 -0400
-Received: by mail-io1-f69.google.com with SMTP id q1so4558315ios.14
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 03:53:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=jr/hT8uygPGiBuTwaFY7igDD72bmfCnEZQ3lM50QObE=;
-        b=C5bUgZbZqYnubejQ9j1j2XLyJtMG+7SA2tRHiLCPWwBwzRmXOq9sakwAx5i1cuTElq
-         8y/oX+R6D/Qwx/NkTyWxhrpU/SCW1cOixYqZg7f1OY1Eo83uwvXWkIxn+xO0109KTY1N
-         rMBPjiWtBa82yzlZxHhICqIFQaDXZKRd4CZK8y7bb7CdEqZBSgS4G+ngFZU/PbFax/ur
-         N2sPzhT3XXISQk7F510PEnABsehjFRHkhjbd7y6jrlk6rCtLaLlhQPBuOHFnGl0q0GdC
-         qLbgeIc3cTPUi0FzFnqNCFMLwV3DdHvnzyJBsJJEDJllqgZRo6NsThaWMpOCijxV7RYj
-         sOag==
-X-Gm-Message-State: APjAAAXiTh7mwbbYsW8gzPf2eojfk6xlsIlgov6kM4/EkrFoOgNa4pnk
-        BD1x43pf3+vKPgKm+25tt87b1x5LoRpp5iXXxqDwegu7Xqrx
-X-Google-Smtp-Source: APXvYqwBWekg4rlOfT8nn0tmPSwzloIFaVhEADkdzXirXXPPYKk38+p+DJLKH5A4eUO0l/GsUaCDAVmO12kKaHk5yiREht3CTXR5
+        id S2388526AbfISLAP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 07:00:15 -0400
+Received: from mga11.intel.com ([192.55.52.93]:21844 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387931AbfISLAP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Sep 2019 07:00:15 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Sep 2019 04:00:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,523,1559545200"; 
+   d="scan'208";a="202261892"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 19 Sep 2019 04:00:12 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 19 Sep 2019 14:00:11 +0300
+Date:   Thu, 19 Sep 2019 14:00:11 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] usb: typec: tcpm: collision avoidance
+Message-ID: <20190919110011.GB16243@kuha.fi.intel.com>
+References: <20190409130649.GD20058@kuha.fi.intel.com>
+ <9c9d17e3-bd99-c877-359c-a0a1b10a8d73@redhat.com>
+ <AM5PR1001MB099440C3AA6DA6BA2AB0F2AE802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <CAGZ6i=0rRgNH5bU-zcP58MNi+VSa+xeAQWL67egaZ-ui-ebmYA@mail.gmail.com>
+ <9f9a2de9-2cfb-385c-8e99-54b2587113ce@redhat.com>
+ <AM5PR1001MB09943830CFED9CB321CC883D802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <76a3c6df-63c0-78e7-c1ca-c83a30e95d38@redhat.com>
+ <009662c6-2897-e2dd-03a7-992fc0a78599@redhat.com>
+ <AM5PR1001MB099452876C75E45FD774BA77802B0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:e618:: with SMTP id g24mr10724603ioh.277.1568890380520;
- Thu, 19 Sep 2019 03:53:00 -0700 (PDT)
-Date:   Thu, 19 Sep 2019 03:53:00 -0700
-In-Reply-To: <20190919103504.GC30545@localhost>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d290e00592e5c17d@google.com>
-Subject: Re: KASAN: use-after-free Read in adu_disconnect
-From:   syzbot <syzbot+0243cb250a51eeefb8cc@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, dmg@turingmachine.org,
-        gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, Sep 19, 2019 at 06:48:32PM +0800, Kyle Tso wrote:
+> Ping! Anyone still reviewing this patch?
+> I have another change related to AMS.
+> I will group them as a set and re-send it.
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Please rebase resend the patch. It does not apply any more.
 
-Reported-and-tested-by:  
-syzbot+0243cb250a51eeefb8cc@syzkaller.appspotmail.com
+thanks,
 
-Tested on:
-
-commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-dashboard link: https://syzkaller.appspot.com/bug?extid=0243cb250a51eeefb8cc
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1440268d600000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+heikki
