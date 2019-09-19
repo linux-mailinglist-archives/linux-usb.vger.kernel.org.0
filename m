@@ -2,187 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6208B7A8B
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:32:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCE5B7B57
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:57:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390048AbfISNbw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 09:31:52 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37679 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389492AbfISNbw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 09:31:52 -0400
-Received: by mail-pf1-f195.google.com with SMTP id y5so2371524pfo.4;
-        Thu, 19 Sep 2019 06:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Yh9xjWmC15LcRyyY8rJ60DM1QAslviok4sh9u5t35BY=;
-        b=idVsOT6hSjTJOutVXIi7cTnrT2Va0yjY0ngf+59FSwgbSsMpdtUnsobGaI16bYsZpP
-         Nyj/9wJLoBq6NANXDoiMW/08AB2iADjxMTquYFgixeJIK3RfSt4UE6Cg/xrDoM/s+liV
-         oVQcLamYvey+XvNKUTwo/FRHz5/gzV6ssPpgkaX76BaMvniLXlHOWsejy5CommFe4nl+
-         al0pq8RYP+Anq197wrPBrIpkmfYXtKHvOhs/nankpmhsSgMWAb4ivjs6sYZvTOk/AMgG
-         gWojOcNrZCQMJhJNq8ZStoDOSE+dADmMThvZUJ2Le8nXpPOZcID65hALa4XhEJz1ZhZt
-         fwdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Yh9xjWmC15LcRyyY8rJ60DM1QAslviok4sh9u5t35BY=;
-        b=ShsP/n2Xtsltsw+h5wFt3Ha2yQ15IPFOyKLV91num2+xLHsel7dLibJjKqWFvP6z/V
-         CpEtPAEQoC42DTWUhtCQxJ9rzyi341drWnO327wu1QpkGO4o+mZp0d0wJDegcSTlnOdq
-         JHuO9sxjjNhRmHrm4H9XlYTxo6lyMaL13uZUYEQoOJgUl2Ba6E11i9i2ctqip2ZSQmlA
-         GlHhrsn9lqoqmtEA03hZwmAKEGi5NlM69Iq6DBNdw/Snxu9AYTCTLEPud0lIDC8MgNTi
-         LaHEv7c9sAcu735/TjC83tjIgUPT65o9BAuAjF71mL4WdQWINIGYOtqLrwdg0ABN5bAt
-         X/ag==
-X-Gm-Message-State: APjAAAVxU3/sjEqR0eXKilruQuCqWqH0uGbtx6VGhzkGcOmlC5kk7HKP
-        0NNAlZi8VhD0xfgUXNc1VjgQP4lH
-X-Google-Smtp-Source: APXvYqwfeIa6XLqv0I/gOqglay1G8ZnB9i4AF1+fjZxGxePEU2ZH7Aid1OS5yayuUuOfbhoLTVqJ2g==
-X-Received: by 2002:a63:c11:: with SMTP id b17mr6136716pgl.24.1568899909567;
-        Thu, 19 Sep 2019 06:31:49 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id n9sm4839333pjq.30.2019.09.19.06.31.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Sep 2019 06:31:48 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: typec: tcpm: collision avoidance
-To:     Kyle Tso <kyletso@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20190322121745.159768-1-kyletso@google.com>
- <20190404141345.GF21319@kuha.fi.intel.com>
- <08a6d422-e8f7-303e-7bf1-952344f2c182@roeck-us.net>
- <CAGZ6i=2zKLhS4By8Xanc863G+jSxPYg8SLU-UHkY94r5MiEYag@mail.gmail.com>
- <20190409130230.GC20058@kuha.fi.intel.com>
- <20190409130649.GD20058@kuha.fi.intel.com>
- <9c9d17e3-bd99-c877-359c-a0a1b10a8d73@redhat.com>
- <AM5PR1001MB099440C3AA6DA6BA2AB0F2AE802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
- <CAGZ6i=0rRgNH5bU-zcP58MNi+VSa+xeAQWL67egaZ-ui-ebmYA@mail.gmail.com>
- <9f9a2de9-2cfb-385c-8e99-54b2587113ce@redhat.com>
- <AM5PR1001MB09943830CFED9CB321CC883D802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
- <76a3c6df-63c0-78e7-c1ca-c83a30e95d38@redhat.com>
- <009662c6-2897-e2dd-03a7-992fc0a78599@redhat.com>
- <AM5PR1001MB099452876C75E45FD774BA77802B0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
- <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <91295210-7eb7-7272-d6cc-e983e8bd3fdf@roeck-us.net>
-Date:   Thu, 19 Sep 2019 06:31:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1732241AbfISN5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 09:57:38 -0400
+Received: from mout.web.de ([212.227.15.4]:51675 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727642AbfISN5i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Sep 2019 09:57:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1568901419;
+        bh=2itNaQy+sSJmv7IRFrgbQVOCGiABDW1aTMQwerda4Ho=;
+        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
+        b=j3Ukc1hyBl+sj7qOjIoMpGLxE32dB++axrHRW614ZXkE7SayBfou536TFyFKb00SQ
+         36C5ofQJhq7jhSTojs6+mBhwJJCC3gHnpgf7qgI86L4u2OtXaG/i562jFyewNO/9t/
+         EyJ3rEIJ2xzIo+EtrowIinY0X6qyw+It/VqYrJJI=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([93.132.191.36]) by smtp.web.de (mrweb001
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 0McFgl-1iStie0G07-00Jalj; Thu, 19
+ Sep 2019 15:56:59 +0200
+To:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>
+From:   Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] usb: gadget: udc: lpc32xx: Use
+ devm_platform_ioremap_resource() in lpc32xx_udc_probe()
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Himanshu Jha <himanshujha199640@gmail.com>
+Message-ID: <6671a08a-fb20-f15e-5dbd-8b6b710e0ef9@web.de>
+Date:   Thu, 19 Sep 2019 15:56:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-In-Reply-To: <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:EwaVOO2O/6UCooJydUvagzMuaCL7LXccGb10TPm0rB8mt6OXn3Z
+ oHiuBc/IH4SluhKLR8NN0B7YR18T3/zG2bw2QWQ58+3WaxtWpJ2GCvUvPCazbAjxvLwNsde
+ Ss8zTpmitBV9ARsXa3p4/U8K1gDbkYlCC0qxYL7s4Ih69a/ThQ3/7qxQMeQ8r7ZJg5Uzf/S
+ tTUKTB+vMoHSmLZqVlBZQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:t4gytpA5OsI=:XDaN0S3/D9dLDXnd560fpe
+ gwmPoNGF07dsIq1UEj+eDDoHV65kRfLGx2lemSwpADFpvoTEbxFVqaDyucBUYMULwbXbAdACV
+ tGpTzluQ7y6esAObxfTP9rJGxxv/Byi2Eu8DrNfzrWFnqhtJbLk/kGE4PF2M9k7nkSNfeCVCO
+ Zn47dLVi+/cBY6sUBs5i4e4h7qb6tZPMCQdmry97x5Y5Raaypb57LMYU/2op7uSWlnO3Bs7Dk
+ W7bmfzuutAYcFGed+mTBQvY8F+ZszVULlIaiPDl343WCyKRuUkyW4dcodRydHGGo/RjDcGlfs
+ GaUSkJ+E4RLkkgM5HfWy5+gBzOrUMphRMUe6s/DvVEM1I+cvn5XSXDw2JJyWBxeEmyJKic17I
+ Q4v8RTXkhsV4sUZT7SauKp25uTLs/4yvmCfHR05hIrDf7kA6Y/jhXH8uHTRX5DCNQSEdNoM+Z
+ KsLFvjcQWezCInDm3Sb4vJwiFeo6OOHNP6OKg4WoGEpVyXjta4cWfH0EHZ6/8kSxOno2ofKr/
+ XkgMaQhLJXuagh4SQ3VGnCP7OKTtiu9/tNapzpnfc4GoyUVQHjja8NVo13878oXPMTyKr2VCi
+ xE7NQGFNQsYnQOL8BCjzauWaUm48bcCjK3fWPm8q2Ot64SU7D2O/MIlQSIWCRBPYKtLQlhHAa
+ 9+Tvs9oIEeKm9Ww9+8RNchQnG6XILtBvdYBZjFB6g3l0SiD9Eeko2xKkaEF2V5b6T0zZ+bdnJ
+ tk6puhjWOwJRSe8urnPq8Z+arvbpqCbji7v8kpQ3gwijwrwJqqiWdxKyi+bM6ddSY1S7wU9ab
+ rpUYfbrNNM0ydCa9f4dX2/a/iBzOdRv2ir6zFY5kVKnqcZk7wKgzrvrvjFagqAS/bs3smHpO0
+ utSHQZNbmOYk/ZAo+UB299y2ROvvQLwMr88x2ZsUUyJ/Xx1XmwLmgo9MmA8bM9g03USxA9P3h
+ b9UnlCOuHyKGoRuUDS68U6Ds3fRWrpdZq+0nlwB4HJ8eF7m8V2UfX52sZc0sxVTfvL5k9/Lg9
+ WvmPAVkdYAaSCv9ikwcseGnHg5ikqOcLqY6iEHJ6UQ+XtBVwhcmyErcolrKtxPGxE7da+UKTw
+ 0w6i9vf51sYqA2G5uwV+Em1jZrMn4rlDrRIZWgoP97ZLA0uJ7HleKozrbNKyMT6sq/PDtLNTZ
+ Nek/k7KZxWdJqvzvJNqdlDrKBeSL+yldAM5kzNVEjLFsMaGwYCl27cq94Hj3QLcOPxrrCeEGn
+ x88lAbzqOFb79Dxo6h4k0LyftDy/o8TLvl0PVslMLbeSN9Bv74cOWlonQd1M=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 9/19/19 3:48 AM, Kyle Tso wrote:
-> Ping! Anyone still reviewing this patch?
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Thu, 19 Sep 2019 15:47:24 +0200
 
-Which patch ? Hans' series was long since pushed.
+Simplify this function implementation by using a known wrapper function.
 
-Guenter
+This issue was detected by using the Coccinelle software.
 
-> I have another change related to AMS.
-> I will group them as a set and re-send it.
-> 
-> Regards,
-> Kyle Tso
-> 
-> 
-> On Mon, Apr 15, 2019 at 6:03 PM Adam Thomson
-> <Adam.Thomson.Opensource@diasemi.com> wrote:
->>
->> On 13 April 2019 21:39, Hans de Goede wrote:
->>
->>> On 10-04-19 18:38, Hans de Goede wrote:
->>>> On 10-04-19 18:14, Adam Thomson wrote:
->>>>> On 10 April 2019 16:45, Hans de Goede wrote:
->>>
->>> <snip>
->>>
->>>>>> Starting toggling from tcpm_set_cc() just feels wrong; and currently
->>>>>> power role swapping is broken with the fusb302, which IIRC used to
->>>>>> work. I suspect this is related.
->>>>>>
->>>>>> I plan to write a patch tomorrow to functionally take tcpm_set_cc()
->>>>>> back to the way it was before. This should fix your case and I hope
->>>>>> this also fixes power-role swapping.
->>>>>>
->>>>>> This will re-introduce Adam Thomson's problem, but I have a feeling
->>>>>> that that actually needs a fix in the tcpm.c code rather then at the fusb302
->>> level.
->>>>>
->>>>> To be clear here, the names TOGGLING_MODE_SNK and
->>> TOGGLING_MODE_SRC
->>>>> are a misnomer from the HW spec for fusb302. The device isn't
->>>>> toggling anything as far as I'm aware, so I don't necessarily agree with your
->>> point.
->>>>
->>>> If I understand the datasheet correctly:
->>>>
->>>> "The FUSB302 has the capability to do autonomous DRP toggle. In
->>>> autonomous toggle the FUSB302 internally controls the PDWN1, PDWN2,
->>>> PU_EN1 and PU_EN2, MEAS_CC1 and MEAS_CC2 and implements a fixed DRP
->>>> toggle between presenting as a SRC and presenting as a SNK.
->>>> Alternately, it can present as a SRC or SNK only and poll CC1 and CC2
->>>> continuously."
->>>>
->>>> It is still attaching Rp resp Rd to CC1 or CC2 one at a time to detect
->>>> polarity, so it is still toggling, it just is not doing dual-role
->>>> toggling. This is also expected behavior for a sink, a sink may not
->>>> present Rd on both CC pins at the same time, otherwise the source
->>>> cannot detect the polarity and the source also cannot detect if Vconn
->>>> is necessary.
->>>>
->>>>> It's a mechanism to
->>>>> have the HW report when the CC line changes on connection. Without
->>>>> that we have no reporting from the HW for the fixed role scenarios.
->>>>
->>>> Not just connection, also polarity detection. Notice that the tcpm
->>>> framework / the driver also has a start_drp_toggling() method. I think
->>>> we may also need a start_srp_toggling function just like it and call
->>>> that from the SNK_UNATTACHED and SRC_UNATTACHED states for single-role
->>>> ports. I agree that we need to start toggling when in those states,
->>>> but tcpm_set_cc gets called in a lot of other places where AFAIK we
->>>> should NOT restart toggling and your patch causes us to restart
->>>> toggling in those cases.
->>>
->>> Ok, so as I suspected, commit ea3b4d5523bc ("usb: typec: fusb302:
->>> Resolve fixed power role contract setup") is what caused the power-role
->>> swapping breakage I've been seeing.
->>
->> Apologies for the breakage. Annoyed I didn't catch that when submitting that
->> patch. Thanks for looking to resolve this and will review your updates shortly.
->>
->>> So I've prepared a 3 patch series:
->>>
->>> 1) Add a new start_srp_connection_detect function which, when implemented
->>> by the tcpc_dev, gets called instead of start_drp_toggling for single role ports
->>> (SRPs)
->>>
->>> 2) Implement 1. for fusb302 to fix the SRP issue Adam was seeing, without
->>> depending on set_cc starting "toggling"
->>> or something like it for the fix
->>>
->>> 3) Revert commit ea3b4d5523bc, restoring power-role swap functionality.
->>>
->>> This should also fix the issue Kyle Tso was seeing when trying to change from one
->>> Rp setting to another.
->>>
->>> I'll send out the series right after this email.
->>>
->>> Regards,
->>>
->>> Hans
->>
-> 
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc=
+/lpc32xx_udc.c
+index b3e073fb88c6..0ed3fd8c6610 100644
+=2D-- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -3000,7 +3000,6 @@ static int lpc32xx_udc_probe(struct platform_device =
+*pdev)
+ 	struct device *dev =3D &pdev->dev;
+ 	struct lpc32xx_udc *udc;
+ 	int retval, i;
+-	struct resource *res;
+ 	dma_addr_t dma_handle;
+ 	struct device_node *isp1301_node;
+
+@@ -3048,9 +3047,6 @@ static int lpc32xx_udc_probe(struct platform_device =
+*pdev)
+ 	 *  IORESOURCE_IRQ, USB device interrupt number
+ 	 *  IORESOURCE_IRQ, USB transceiver interrupt number
+ 	 */
+-	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -ENXIO;
+
+ 	spin_lock_init(&udc->lock);
+
+@@ -3061,7 +3057,7 @@ static int lpc32xx_udc_probe(struct platform_device =
+*pdev)
+ 			return udc->udp_irq[i];
+ 	}
+
+-	udc->udp_baseaddr =3D devm_ioremap_resource(dev, res);
++	udc->udp_baseaddr =3D devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(udc->udp_baseaddr)) {
+ 		dev_err(udc->dev, "IO map failure\n");
+ 		return PTR_ERR(udc->udp_baseaddr);
+=2D-
+2.23.0
 
