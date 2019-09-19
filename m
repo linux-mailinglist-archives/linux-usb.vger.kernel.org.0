@@ -2,110 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AC6B7A2D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6208B7A8B
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732271AbfISNJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 09:09:13 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39850 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730838AbfISNJN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 09:09:13 -0400
-Received: by mail-pg1-f195.google.com with SMTP id u17so1893547pgi.6
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 06:09:12 -0700 (PDT)
+        id S2390048AbfISNbw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 09:31:52 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37679 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389492AbfISNbw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 09:31:52 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y5so2371524pfo.4;
+        Thu, 19 Sep 2019 06:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b7eB2Zj0HMh+W1nUIU3X2oj3xDi67z7zqFrF3NQgu6w=;
-        b=Gh1PJb4k9dC4So0WrZHGTSEMtfNWz5B6hV9FfAhQayjN0gLcUsyUQm7U4dAX7PtgFT
-         aGSZT0ghnsD/5OmmtSGnd88iM7mzyiwug9j2/7yXfaeV1/7innuJpEpvvBWB4ngmqjQA
-         g2iWLxc3fscHGG+zXZ/VvAUlQ2iHtpT2WKCBQmuCks1UHkFfHyOOicvxjtBNJpAnpwXX
-         SEVCOYy9z/5KcFTw84Tk01h0fKbv66Y97XEs3RpJa6x1QimcGrFefUeWd2ENdNaN4+G0
-         AogBoa29Ofd2Et4opfLNeHj2w6XO5PK29CD0aupFPA/yo4SWSYWqNLi+cprrspErsk3t
-         Z6Mw==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Yh9xjWmC15LcRyyY8rJ60DM1QAslviok4sh9u5t35BY=;
+        b=idVsOT6hSjTJOutVXIi7cTnrT2Va0yjY0ngf+59FSwgbSsMpdtUnsobGaI16bYsZpP
+         Nyj/9wJLoBq6NANXDoiMW/08AB2iADjxMTquYFgixeJIK3RfSt4UE6Cg/xrDoM/s+liV
+         oVQcLamYvey+XvNKUTwo/FRHz5/gzV6ssPpgkaX76BaMvniLXlHOWsejy5CommFe4nl+
+         al0pq8RYP+Anq197wrPBrIpkmfYXtKHvOhs/nankpmhsSgMWAb4ivjs6sYZvTOk/AMgG
+         gWojOcNrZCQMJhJNq8ZStoDOSE+dADmMThvZUJ2Le8nXpPOZcID65hALa4XhEJz1ZhZt
+         fwdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b7eB2Zj0HMh+W1nUIU3X2oj3xDi67z7zqFrF3NQgu6w=;
-        b=FmngrgnHf/DFFVcKyvj4eBKDgV1AHj3xMTRdwKf9mqJUyf99KM2soeSOLboaxAox4A
-         pcn2f2H6yCqaffij25CDfpUZs7AFmGz5K676Lm5VKn6IghTl3Qsk0vOYJE5/i5T7PzbB
-         SCntHZ+JFiPQnxWNX1spNFthQUrLzr0eWphErToqon57OS/6j4Ld9AKOymLNbyB0HOSj
-         5N9EpjTgfrRKRZX1p6Apmm1Qg6I1638NltQGMDL1m2+c5wksLR93dDnPQ8uVyf+COqjP
-         bzvn4CSNbFvnH8QL41oeJzlD+6vLYvzfcbox85SKzud4B61Sw6S6Chm+wwvRHHVe1Xzv
-         SABQ==
-X-Gm-Message-State: APjAAAV3DMS8rNe92ph9/3d4fRIYLd45DqhAuulBNJdyed3OGoRbYKRs
-        BIb9ewJAeC5OBRZWE8lHmGOiw5KfG+1VjOBZAEwPGA==
-X-Google-Smtp-Source: APXvYqy9CZ28RW2zKXiUC9d6EbgNnSdWP2+JzbdmSoIMlTI53bhmKqSgfp9RMosERJQCBAbFi870wx+/J0sJND9jXEA=
-X-Received: by 2002:a63:3006:: with SMTP id w6mr9148267pgw.440.1568898551847;
- Thu, 19 Sep 2019 06:09:11 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Yh9xjWmC15LcRyyY8rJ60DM1QAslviok4sh9u5t35BY=;
+        b=ShsP/n2Xtsltsw+h5wFt3Ha2yQ15IPFOyKLV91num2+xLHsel7dLibJjKqWFvP6z/V
+         CpEtPAEQoC42DTWUhtCQxJ9rzyi341drWnO327wu1QpkGO4o+mZp0d0wJDegcSTlnOdq
+         JHuO9sxjjNhRmHrm4H9XlYTxo6lyMaL13uZUYEQoOJgUl2Ba6E11i9i2ctqip2ZSQmlA
+         GlHhrsn9lqoqmtEA03hZwmAKEGi5NlM69Iq6DBNdw/Snxu9AYTCTLEPud0lIDC8MgNTi
+         LaHEv7c9sAcu735/TjC83tjIgUPT65o9BAuAjF71mL4WdQWINIGYOtqLrwdg0ABN5bAt
+         X/ag==
+X-Gm-Message-State: APjAAAVxU3/sjEqR0eXKilruQuCqWqH0uGbtx6VGhzkGcOmlC5kk7HKP
+        0NNAlZi8VhD0xfgUXNc1VjgQP4lH
+X-Google-Smtp-Source: APXvYqwfeIa6XLqv0I/gOqglay1G8ZnB9i4AF1+fjZxGxePEU2ZH7Aid1OS5yayuUuOfbhoLTVqJ2g==
+X-Received: by 2002:a63:c11:: with SMTP id b17mr6136716pgl.24.1568899909567;
+        Thu, 19 Sep 2019 06:31:49 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n9sm4839333pjq.30.2019.09.19.06.31.48
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 19 Sep 2019 06:31:48 -0700 (PDT)
+Subject: Re: [PATCH v2] usb: typec: tcpm: collision avoidance
+To:     Kyle Tso <kyletso@google.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20190322121745.159768-1-kyletso@google.com>
+ <20190404141345.GF21319@kuha.fi.intel.com>
+ <08a6d422-e8f7-303e-7bf1-952344f2c182@roeck-us.net>
+ <CAGZ6i=2zKLhS4By8Xanc863G+jSxPYg8SLU-UHkY94r5MiEYag@mail.gmail.com>
+ <20190409130230.GC20058@kuha.fi.intel.com>
+ <20190409130649.GD20058@kuha.fi.intel.com>
+ <9c9d17e3-bd99-c877-359c-a0a1b10a8d73@redhat.com>
+ <AM5PR1001MB099440C3AA6DA6BA2AB0F2AE802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <CAGZ6i=0rRgNH5bU-zcP58MNi+VSa+xeAQWL67egaZ-ui-ebmYA@mail.gmail.com>
+ <9f9a2de9-2cfb-385c-8e99-54b2587113ce@redhat.com>
+ <AM5PR1001MB09943830CFED9CB321CC883D802E0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <76a3c6df-63c0-78e7-c1ca-c83a30e95d38@redhat.com>
+ <009662c6-2897-e2dd-03a7-992fc0a78599@redhat.com>
+ <AM5PR1001MB099452876C75E45FD774BA77802B0@AM5PR1001MB0994.EURPRD10.PROD.OUTLOOK.COM>
+ <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <91295210-7eb7-7272-d6cc-e983e8bd3fdf@roeck-us.net>
+Date:   Thu, 19 Sep 2019 06:31:47 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <000000000000e669b80592ab96fc@google.com> <20190919082359.GA30545@localhost>
-In-Reply-To: <20190919082359.GA30545@localhost>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 19 Sep 2019 15:09:00 +0200
-Message-ID: <CAAeHK+zspPwm9vRHz3JNNzD5W+B-d4o7-br65Jcn1KCDJtBzZQ@mail.gmail.com>
-Subject: Re: possible deadlock in tower_open
-To:     Johan Hovold <johan@kernel.org>
-Cc:     syzbot <syzbot+66935bec147fbf68d9f8@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        legousb-devel@lists.sourceforge.net,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        starblue@users.sourceforge.net,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAGZ6i=10-DVWRseYXjRGVyRtnTijT9Mg_TBTkv=3qWiMfv28cw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 10:24 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Mon, Sep 16, 2019 at 06:29:12AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=13c8d14e600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=66935bec147fbf68d9f8
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > Unfortunately, I don't have any reproducer for this crash yet.
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+66935bec147fbf68d9f8@syzkaller.appspotmail.com
-> >
-> > ======================================================
-> > WARNING: possible circular locking dependency detected
-> > 5.3.0-rc7+ #0 Not tainted
-> > ------------------------------------------------------
-> > syz-executor.1/8155 is trying to acquire lock:
-> > 0000000086c1bdfc (open_disc_mutex){+.+.}, at: tower_open+0xce/0x9b0
-> > drivers/usb/misc/legousbtower.c:335
-> >
-> > but task is already holding lock:
-> > 000000000f520f73 (minor_rwsem){++++}, at: usb_open+0x23/0x270
-> > drivers/usb/core/file.c:39
-> >
-> > which lock already depends on the new lock.
->
-> This looks like a duplicate of
->
-> https://lkml.kernel.org/r/000000000000d58eb90592add24e@google.com
->
-> Not sure if this is the right way to report this (quoting needed?):
->
-> #syz dup: possible deadlock in usb_deregister_dev (2)
+On 9/19/19 3:48 AM, Kyle Tso wrote:
+> Ping! Anyone still reviewing this patch?
 
-Hi Johan,
+Which patch ? Hans' series was long since pushed.
 
-You did it right, now the status is changed to "closed as dup":
+Guenter
 
-https://syzkaller.appspot.com/bug?extid=66935bec147fbf68d9f8
+> I have another change related to AMS.
+> I will group them as a set and re-send it.
+> 
+> Regards,
+> Kyle Tso
+> 
+> 
+> On Mon, Apr 15, 2019 at 6:03 PM Adam Thomson
+> <Adam.Thomson.Opensource@diasemi.com> wrote:
+>>
+>> On 13 April 2019 21:39, Hans de Goede wrote:
+>>
+>>> On 10-04-19 18:38, Hans de Goede wrote:
+>>>> On 10-04-19 18:14, Adam Thomson wrote:
+>>>>> On 10 April 2019 16:45, Hans de Goede wrote:
+>>>
+>>> <snip>
+>>>
+>>>>>> Starting toggling from tcpm_set_cc() just feels wrong; and currently
+>>>>>> power role swapping is broken with the fusb302, which IIRC used to
+>>>>>> work. I suspect this is related.
+>>>>>>
+>>>>>> I plan to write a patch tomorrow to functionally take tcpm_set_cc()
+>>>>>> back to the way it was before. This should fix your case and I hope
+>>>>>> this also fixes power-role swapping.
+>>>>>>
+>>>>>> This will re-introduce Adam Thomson's problem, but I have a feeling
+>>>>>> that that actually needs a fix in the tcpm.c code rather then at the fusb302
+>>> level.
+>>>>>
+>>>>> To be clear here, the names TOGGLING_MODE_SNK and
+>>> TOGGLING_MODE_SRC
+>>>>> are a misnomer from the HW spec for fusb302. The device isn't
+>>>>> toggling anything as far as I'm aware, so I don't necessarily agree with your
+>>> point.
+>>>>
+>>>> If I understand the datasheet correctly:
+>>>>
+>>>> "The FUSB302 has the capability to do autonomous DRP toggle. In
+>>>> autonomous toggle the FUSB302 internally controls the PDWN1, PDWN2,
+>>>> PU_EN1 and PU_EN2, MEAS_CC1 and MEAS_CC2 and implements a fixed DRP
+>>>> toggle between presenting as a SRC and presenting as a SNK.
+>>>> Alternately, it can present as a SRC or SNK only and poll CC1 and CC2
+>>>> continuously."
+>>>>
+>>>> It is still attaching Rp resp Rd to CC1 or CC2 one at a time to detect
+>>>> polarity, so it is still toggling, it just is not doing dual-role
+>>>> toggling. This is also expected behavior for a sink, a sink may not
+>>>> present Rd on both CC pins at the same time, otherwise the source
+>>>> cannot detect the polarity and the source also cannot detect if Vconn
+>>>> is necessary.
+>>>>
+>>>>> It's a mechanism to
+>>>>> have the HW report when the CC line changes on connection. Without
+>>>>> that we have no reporting from the HW for the fixed role scenarios.
+>>>>
+>>>> Not just connection, also polarity detection. Notice that the tcpm
+>>>> framework / the driver also has a start_drp_toggling() method. I think
+>>>> we may also need a start_srp_toggling function just like it and call
+>>>> that from the SNK_UNATTACHED and SRC_UNATTACHED states for single-role
+>>>> ports. I agree that we need to start toggling when in those states,
+>>>> but tcpm_set_cc gets called in a lot of other places where AFAIK we
+>>>> should NOT restart toggling and your patch causes us to restart
+>>>> toggling in those cases.
+>>>
+>>> Ok, so as I suspected, commit ea3b4d5523bc ("usb: typec: fusb302:
+>>> Resolve fixed power role contract setup") is what caused the power-role
+>>> swapping breakage I've been seeing.
+>>
+>> Apologies for the breakage. Annoyed I didn't catch that when submitting that
+>> patch. Thanks for looking to resolve this and will review your updates shortly.
+>>
+>>> So I've prepared a 3 patch series:
+>>>
+>>> 1) Add a new start_srp_connection_detect function which, when implemented
+>>> by the tcpc_dev, gets called instead of start_drp_toggling for single role ports
+>>> (SRPs)
+>>>
+>>> 2) Implement 1. for fusb302 to fix the SRP issue Adam was seeing, without
+>>> depending on set_cc starting "toggling"
+>>> or something like it for the fix
+>>>
+>>> 3) Revert commit ea3b4d5523bc, restoring power-role swap functionality.
+>>>
+>>> This should also fix the issue Kyle Tso was seeing when trying to change from one
+>>> Rp setting to another.
+>>>
+>>> I'll send out the series right after this email.
+>>>
+>>> Regards,
+>>>
+>>> Hans
+>>
+> 
 
-Thanks!
