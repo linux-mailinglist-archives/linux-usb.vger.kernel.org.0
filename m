@@ -2,57 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D58B2B80B9
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 20:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39A58B80CF
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 20:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391425AbfISSV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 14:21:27 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39998 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391383AbfISSV1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 14:21:27 -0400
-Received: by mail-pg1-f193.google.com with SMTP id w10so2342645pgj.7
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 11:21:26 -0700 (PDT)
+        id S2392007AbfISS1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 14:27:21 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:37447 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391552AbfISS1U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 14:27:20 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y5so2857877pfo.4
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 11:27:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vrJRTyRyjbtyxOUOU72/IRaRESZZ7RWR2sxVa56E+kE=;
-        b=XixCEN7COc4bu0j+gxoL0ADFPutUsrj9tqDuZ7Ojr7u2NdFt1sOUDWp/rOSgxWlXMy
-         S+bzIiwWsVpOr6ufZRgRvBhP5MVe8Ltg7qJo26K5Ytxcb+Nj+VN8AkRUSgU90WD1j+zd
-         eAHuc6K00Rw9sl/g9vfhceZrJH/FeR2Jw6ZVATErlHWftHrx9LZ/Nl46IehNw93PPRXN
-         56PEPXmKcHMn7DAa+iF5vztVgg1sBwz/p2dHAjnV7wCVAdwAuEkbbe5cI9fZ53gt95ws
-         QBsaXwflWpQvbWNHbuOFjpJW40gtl3sWU47bXkxUky+u73AtTxc1Jjg6ZhSdtR8H48S9
-         Emqw==
+        bh=8e0dNVlCm2ER/Mcg4fyncBrKia3gYtZ/jIkj1l9+2Rs=;
+        b=rN/VcTqKzplV5ES/dI9JI5dfkCnOWnpXYMukyzdrUCIOlXvnWX3egQxoIQwjn0cCeP
+         cSdI8REvVHDFRV0lpUGMPRjpXXCGNMMQQDiYw0pkeRnQtpeXRFy7YNX4B6ILJLbfufj+
+         5elbIhhiCicxjv8BvMT+y0FP448bnDNxmX4eqt7iC4lBraOP3lnWQZwosU3bNqLDlsUg
+         6DpktL/8At4/sDUThYio4uwR1PpGUSuw5CuX+Upng8NkVlObABdi05h+IRBrxdPna4NX
+         x+gUWZ219e6DKNHaQtgbeGi5m1yndhvzUDhng19gBrwTF1KIAMNOp/FH8CDkcMqiuAMo
+         lliQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vrJRTyRyjbtyxOUOU72/IRaRESZZ7RWR2sxVa56E+kE=;
-        b=rexxbUzGiS27THeZTFJHqJVrg93pps9614P0fxYUh6/b76gSaNOtmRcgBpHtuuBMdG
-         g/YjM++vOllt/38Am00VFX/Q+aAs/EM1PNiTFmIejwo4egf34FEKt8x402HdzfkuxXE0
-         jdCNkoECutDO8RILJmPJ6l/06FQ+5oT5LMIONd4GzQszAWdE2Kn6HzZJrPMdGGfD9VrA
-         bH6wj7qTTaLmsc63ev0fMKE4ASoDLIIfKPeSMD1vmjJ1rMIMHnDKc7/lyvGy3dOnJgNU
-         dFStWAe6TnwYI+N5EgQ3H5wCl8SsIsVfDWa7EuytPon/DxM9tdd5koi2LKhexFrNFlIQ
-         VBag==
-X-Gm-Message-State: APjAAAVgGBnGBYM72dLKedUa8WUh5oeu8UIf6Krq2O9Pvh2IoLYR4Grv
-        Gn2MnIBBlYBO1JYDN6vwsx83Gl4Dg51MUafrY5VZjg==
-X-Google-Smtp-Source: APXvYqyEWPvyz3/heZOq+Pc/sO8gKl+2Qt1uyyenuQ1uFxb333j9qEqFIAjFVo71NZ/FIW11+K76tL9i+uaDawLngiU=
-X-Received: by 2002:a17:90a:1990:: with SMTP id 16mr5142011pji.47.1568917285723;
- Thu, 19 Sep 2019 11:21:25 -0700 (PDT)
+        bh=8e0dNVlCm2ER/Mcg4fyncBrKia3gYtZ/jIkj1l9+2Rs=;
+        b=U8syGIAr27HSXBe0fa7YpLrtVhBR7Ia/nIf3UCfwOJnqIwWvdgyB8nUQjq1dOhDPX/
+         xJKR5mBufLU5ZD/QAEqICaTBY1+gbCVRcTkXUAv7qzWiczFvXf52cAf9WECaO4Nxu+hk
+         sKNjqjCekrOfX9kJQeVJkEqkkt4Mg0lr+Lf0rNoju6Yk/uLEKD9OXHoyaaB2mnhf7fXA
+         uS2SuYGjvTp8xurSe4JjXDF6xrZ8zU1wpUK7FXqEkiTcDLzxG/V03wZ0Kz4oUHZkWVnE
+         ypVHtS7BPnxPzxQL7b5ZF5d4qOUZMy1LHZhRNq5axGCxi0Y9cr71lxXBJUwV/CYHoTpO
+         rAbg==
+X-Gm-Message-State: APjAAAXrLpkK2DSLgKXS1lCCwCuZQ3FOxos7GcryqgG7/Bw7JVVslXQT
+        rmViN4JBUMxDZIxlR+rCa58ZXTeD6uFPrFfJYZ437g==
+X-Google-Smtp-Source: APXvYqxmWFbpCVB/hbfgs0V+Q1y2eYh/bWgOoPraHLQq+V8uvuspLSKloB9a8nak1mM0yhFfb3ZS/ukRL8ZpQ/DwkGs=
+X-Received: by 2002:a17:90a:1990:: with SMTP id 16mr5168213pji.47.1568917639460;
+ Thu, 19 Sep 2019 11:27:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <0000000000004349550592ebfd2d@google.com>
-In-Reply-To: <0000000000004349550592ebfd2d@google.com>
+References: <0000000000003e64aa0592ebfde1@google.com>
+In-Reply-To: <0000000000003e64aa0592ebfde1@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 19 Sep 2019 20:21:14 +0200
-Message-ID: <CAAeHK+w4HSkQooNa59X41Un2pMVFzf4P0-NV8MuboVBUViUkXw@mail.gmail.com>
-Subject: Re: KASAN: invalid-free in disconnect_rio (2)
-To:     syzbot <syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Thu, 19 Sep 2019 20:27:08 +0200
+Message-ID: <CAAeHK+yyZKfD5tZGiZaJAJwW9tuv+Q+XEowaU3+3EEVYuzEfaw@mail.gmail.com>
+Subject: Re: KMSAN: kernel-usb-infoleak in hid_submit_ctrl
+To:     syzbot <syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Cesar Miquel <miquel@df.uba.ar>,
-        rio500-users@lists.sourceforge.net,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
@@ -61,145 +63,155 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Thu, Sep 19, 2019 at 8:19 PM syzbot
-<syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com> wrote:
+<syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
 > syzbot found the following crash on:
 >
-> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17d6f31d600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=745b0dff8028f9488eba
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1009f769600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b1d4b1600000
+> HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=123e42a5600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7c2bb71996f95a82524c
+> compiler:       clang version 9.0.0 (/home/glider/llvm/clang
+> 80fee25776c2fb61e74c1ecb1a523375c2500b69)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b0411a600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12d1ee01600000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com
+> Reported-by: syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com
 >
-> usb 5-1: New USB device found, idVendor=0841, idProduct=0001,
-> bcdDevice=c5.d0
-> usb 5-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 5-1: config 0 descriptor??
-> rio500 5-1:0.133: Second USB Rio at address 2 refused
-> rio500: probe of 5-1:0.133 failed with error -16
-> usb 3-1: USB disconnect, device number 2
+> microsoft 0003:045E:07DA.0002: unknown main item tag 0x0
+> microsoft 0003:045E:07DA.0002: unknown main item tag 0x0
 > ==================================================================
-> BUG: KASAN: double-free or invalid-free in disconnect_rio+0x12b/0x1b0
-> drivers/usb/misc/rio500.c:525
->
-> CPU: 0 PID: 102 Comm: kworker/0:2 Not tainted 5.3.0+ #0
+> BUG: KMSAN: kernel-usb-infoleak in usb_submit_urb+0x7ef/0x1f50
+> drivers/usb/core/urb.c:405
+> CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.3.0-rc7+ #0
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
 > Workqueue: usb_hub_wq hub_event
 > Call Trace:
 >   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   kasan_report_invalid_free+0x61/0xa0 mm/kasan/report.c:444
->   __kasan_slab_free+0x162/0x180 mm/kasan/common.c:434
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1474 [inline]
->   slab_free mm/slub.c:3016 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3957
->   disconnect_rio+0x12b/0x1b0 drivers/usb/misc/rio500.c:525
->   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
->   __device_release_driver drivers/base/dd.c:1134 [inline]
->   device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
->   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:532
->   device_del+0x420/0xb10 drivers/base/core.c:2375
->   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
->   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Allocated by task 17:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_kmalloc mm/kasan/common.c:493 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
->   kmalloc include/linux/slab.h:552 [inline]
->   probe_rio+0x135/0x248 drivers/usb/misc/rio500.c:474
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0xae6/0x16f0 drivers/base/core.c:2201
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0xae6/0x16f0 drivers/base/core.c:2201
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+>   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+>   kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+>   kmsan_internal_check_memory+0x7be/0x8d0 mm/kmsan/kmsan.c:553
+>   kmsan_handle_urb+0x28/0x40 mm/kmsan/kmsan_hooks.c:621
+>   usb_submit_urb+0x7ef/0x1f50 drivers/usb/core/urb.c:405
+>   hid_submit_ctrl+0xb5f/0x1160 drivers/hid/usbhid/hid-core.c:416
+>   usbhid_restart_ctrl_queue+0x355/0x510 drivers/hid/usbhid/hid-core.c:258
+>   __usbhid_submit_report drivers/hid/usbhid/hid-core.c:601 [inline]
+>   usbhid_submit_report+0x924/0x1200 drivers/hid/usbhid/hid-core.c:638
+>   usbhid_request+0xc6/0xe0 drivers/hid/usbhid/hid-core.c:1253
+>   hid_hw_request include/linux/hid.h:1053 [inline]
+>   __hidinput_change_resolution_multipliers+0x132/0x6a0
+> drivers/hid/hid-input.c:1566
+>   hidinput_change_resolution_multipliers drivers/hid/hid-input.c:1604
+> [inline]
+>   hidinput_connect+0x2b9a/0x4220 drivers/hid/hid-input.c:1914
+>   hid_connect+0x582/0x15c0 drivers/hid/hid-core.c:1877
+>   hid_hw_start+0x141/0x230 drivers/hid/hid-core.c:1981
+>   ms_probe+0x39b/0x8f0 drivers/hid/hid-microsoft.c:388
+>   hid_device_probe+0x490/0x820 drivers/hid/hid-core.c:2209
+>   really_probe+0xd08/0x1dc0 drivers/base/dd.c:548
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   hid_add_device+0x132b/0x1470 drivers/hid/hid-core.c:2365
+>   usbhid_probe+0x152b/0x1880 drivers/hid/usbhid/hid-core.c:1386
+>   usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+>   really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+>   generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+>   really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
 >   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
 >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
 >   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>   hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+>   process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+>   process_scheduled_works kernel/workqueue.c:2331 [inline]
+>   worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+>   kthread+0x4b5/0x4f0 kernel/kthread.c:256
+>   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 >
-> Freed by task 83:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1474 [inline]
->   slab_free mm/slub.c:3016 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3957
->   disconnect_rio+0x12b/0x1b0 drivers/usb/misc/rio500.c:525
->   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
->   __device_release_driver drivers/base/dd.c:1134 [inline]
->   device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
->   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:532
->   device_del+0x420/0xb10 drivers/base/core.c:2375
->   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
->   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+> Uninit was created at:
+>   kmsan_save_stack_with_flags mm/kmsan/kmsan.c:189 [inline]
+>   kmsan_internal_poison_shadow+0x58/0xb0 mm/kmsan/kmsan.c:148
+>   kmsan_slab_alloc+0xaa/0x120 mm/kmsan/kmsan_hooks.c:175
+>   slab_alloc_node mm/slub.c:2790 [inline]
+>   slab_alloc mm/slub.c:2799 [inline]
+>   __kmalloc+0x28e/0x430 mm/slub.c:3830
+>   kmalloc include/linux/slab.h:557 [inline]
+>   hcd_buffer_alloc+0x391/0x510 drivers/usb/core/buffer.c:132
+>   usb_alloc_coherent+0x11a/0x190 drivers/usb/core/usb.c:910
+>   hid_alloc_buffers drivers/hid/usbhid/hid-core.c:851 [inline]
+>   usbhid_start+0xf60/0x3970 drivers/hid/usbhid/hid-core.c:1075
+>   hid_hw_start+0x9a/0x230 drivers/hid/hid-core.c:1976
+>   ms_probe+0x39b/0x8f0 drivers/hid/hid-microsoft.c:388
+>   hid_device_probe+0x490/0x820 drivers/hid/hid-core.c:2209
+>   really_probe+0xd08/0x1dc0 drivers/base/dd.c:548
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   hid_add_device+0x132b/0x1470 drivers/hid/hid-core.c:2365
+>   usbhid_probe+0x152b/0x1880 drivers/hid/usbhid/hid-core.c:1386
+>   usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+>   really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+>   generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+>   really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+>   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+>   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+>   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+>   __device_attach+0x489/0x750 drivers/base/dd.c:882
+>   device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+>   bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+>   device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+>   usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
+>   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
 >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
 >   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>   hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+>   process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+>   process_scheduled_works kernel/workqueue.c:2331 [inline]
+>   worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+>   kthread+0x4b5/0x4f0 kernel/kthread.c:256
+>   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 >
-> The buggy address belongs to the object at ffff8881d5498000
->   which belongs to the cache kmalloc-4k of size 4096
-> The buggy address is located 0 bytes inside of
->   4096-byte region [ffff8881d5498000, ffff8881d5499000)
-> The buggy address belongs to the page:
-> page:ffffea0007552600 refcount:1 mapcount:0 mapping:ffff8881da00c280
-> index:0x0 compound_mapcount: 0
-> flags: 0x200000000010200(slab|head)
-> raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c280
-> raw: 0000000000000000 0000000000070007 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881d5497f00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->   ffff8881d5497f80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> > ffff8881d5498000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                     ^
->   ffff8881d5498080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881d5498100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> Bytes 0-4095 of 4096 are uninitialized
+> Memory access of size 4096 starts at ffff888108f43000
 > ==================================================================
 >
 >
@@ -213,5 +225,25 @@ On Thu, Sep 19, 2019 at 8:19 PM syzbot
 > syzbot can test patches for this bug, for details see:
 > https://goo.gl/tpsmEJ#testing-patches
 
-The "USB: rio500: Fix lockdep violation" patch is in the usb-fuzzer's
-tree, so this must be a different bug.
+Looks like the bug is that the HID subsystem doesn't account for the
+fact that HID report size might be 0, which causes an underflow when
+calculating buffer size in bytes as ((report->size - 1) >> 3) + 1. In
+this particular case a report of size 0 leads to hid_submit_ctrl()
+submitting an IN request with wLength == 0 (and transfer_buffer_length
+= 4096), which is interpreted as an OUT request by the USB core layer,
+and leads to a leak of 4096 bytes from transfer_buffer.
+
+This particular code path that leads to a info leak was introduced by
+commit 2dc702c9 "HID: input: use the Resolution Multiplier for
+high-resolution scrolling" in December 2018, so it's quite new. I've
+failed to leak any non-zero data from an Ubuntu laptop with 5.0 kernel
+that I have, probably because the leaked memory is allocated from USB
+HCD DMA pools and some kind of spraying is required here. I've also
+failed to find other ways to trigger a leak.
+
+Other manifestations the same issue:
+
+WARNING in __alloc_pages_nodemask:
+https://syzkaller.appspot.com/bug?extid=e38fe539fedfc127987e
+KASAN: slab-out-of-bounds Write in hid_report_raw_event:
+https://syzkaller.appspot.com/bug?extid=54323a55a37ec53f8045
