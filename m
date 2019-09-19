@@ -2,169 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCE5B7B57
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7501B7B65
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 15:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732241AbfISN5i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 09:57:38 -0400
-Received: from mout.web.de ([212.227.15.4]:51675 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727642AbfISN5i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Sep 2019 09:57:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1568901419;
-        bh=2itNaQy+sSJmv7IRFrgbQVOCGiABDW1aTMQwerda4Ho=;
-        h=X-UI-Sender-Class:To:From:Subject:Cc:Date;
-        b=j3Ukc1hyBl+sj7qOjIoMpGLxE32dB++axrHRW614ZXkE7SayBfou536TFyFKb00SQ
-         36C5ofQJhq7jhSTojs6+mBhwJJCC3gHnpgf7qgI86L4u2OtXaG/i562jFyewNO/9t/
-         EyJ3rEIJ2xzIo+EtrowIinY0X6qyw+It/VqYrJJI=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([93.132.191.36]) by smtp.web.de (mrweb001
- [213.165.67.108]) with ESMTPSA (Nemesis) id 0McFgl-1iStie0G07-00Jalj; Thu, 19
- Sep 2019 15:56:59 +0200
-To:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wei Yongjun <weiyongjun1@huawei.com>
-From:   Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] usb: gadget: udc: lpc32xx: Use
- devm_platform_ioremap_resource() in lpc32xx_udc_probe()
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Himanshu Jha <himanshujha199640@gmail.com>
-Message-ID: <6671a08a-fb20-f15e-5dbd-8b6b710e0ef9@web.de>
-Date:   Thu, 19 Sep 2019 15:56:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        id S1732112AbfISN7n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 09:59:43 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42046 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729256AbfISN7m (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 09:59:42 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q12so2393340pff.9
+        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 06:59:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=izEuKfEWrn2v1J+pGhcTRekoQB77cO7+WKf1KyrMJmQ=;
+        b=IlbyEZ9lIf0VAHfwXbWam2G9J1jSz3UuZ/YLPs8AKR5J+3qlTXwg67DuAkubiIx86y
+         w56GV+pJcfIXbtLOpqSeHTuXIVtHmXthQQ1UYCr/uZPNW9HuDGInJD2h1may4o/BcZMi
+         I8VVM4XaVZhwsxdA1yKbiV1xZH7JNi1g/iia4v2QYyN/18z0SbfQ8/TNIZTNN43o5QHI
+         Od5nH7eFywkn0R5W916TKIdeyoQ8kAcNtNBsT4Rj9AyLAeFt5kAeC5ORYl6UjJ3PMhDV
+         1QkYMOB4Od871ttSocawVtlmGgJ8zHR3Xe19UbZOnFSx7xzhdW2gOOQq0iARFGhB2JOP
+         wZew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=izEuKfEWrn2v1J+pGhcTRekoQB77cO7+WKf1KyrMJmQ=;
+        b=c/45/sI403I8Rm6oKEbPBWi42slgsF5s04V3Y4OlgsIhaA25lWmX/RaKBW5vqXLtdi
+         gyG1P2BYiydISi8b2nDBMeWV57Ra9A4dWbvdPu1ddWKwWJDztrmDzVmJGYEHwfJpxiJ4
+         J/9n4MOozdhU7byFXHHU6aGh0grhap4WlnV1l6lIpYcli5uuCaTdRjYtQNiIWwvgA1Cc
+         Z6sLKb0EdmHWwY3gaH2tL/EegFgbitadfuOsYUZlmaVf8tPFbpGQt9jUOqtCX0J3yJZ1
+         98KLrqFxsjWnNY2u7L6h4ZWaDRAT844f2P7YZiGAO9hCgt2wDTWKwPV+WMet0mqnYYAq
+         rr1A==
+X-Gm-Message-State: APjAAAU3UIXJQYKNbhnivZwe7oxICAP+odWSHfHbNIvvjaD+hl3/6GC+
+        q1Ij0LFkKTZ4GnIXKI+kErQ=
+X-Google-Smtp-Source: APXvYqyBTFjIDXWPcTndLhrKqQ5QcLMkTbdGzCvm0XaNYYGgfGg7Fg069tVsU4Q+cLezZhT3ddR9Jg==
+X-Received: by 2002:a62:2d3:: with SMTP id 202mr10883065pfc.141.1568901580448;
+        Thu, 19 Sep 2019 06:59:40 -0700 (PDT)
+Received: from localhost.localdomain ([221.155.202.134])
+        by smtp.gmail.com with ESMTPSA id h8sm10599062pfo.64.2019.09.19.06.59.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 06:59:39 -0700 (PDT)
+Date:   Thu, 19 Sep 2019 22:59:35 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     Peter Chen <hzpeterchen@gmail.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Suwan Kim <suwan.kim027@gmail.com>
+Subject: Re: Event ring is full when do iozone test on UAS storage
+Message-ID: <20190919135935.GA3133@localhost.localdomain>
+References: <20190916094305.GB21844@b29397-desktop>
+ <0aae13f2-04cf-f45a-e6ee-4bf9e515faba@linux.intel.com>
+ <CAL411-oirjSLZzwoN8axqpfn-JQ8eEGMWD-w9p24Krap+dPs9g@mail.gmail.com>
+ <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
+ <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:EwaVOO2O/6UCooJydUvagzMuaCL7LXccGb10TPm0rB8mt6OXn3Z
- oHiuBc/IH4SluhKLR8NN0B7YR18T3/zG2bw2QWQ58+3WaxtWpJ2GCvUvPCazbAjxvLwNsde
- Ss8zTpmitBV9ARsXa3p4/U8K1gDbkYlCC0qxYL7s4Ih69a/ThQ3/7qxQMeQ8r7ZJg5Uzf/S
- tTUKTB+vMoHSmLZqVlBZQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:t4gytpA5OsI=:XDaN0S3/D9dLDXnd560fpe
- gwmPoNGF07dsIq1UEj+eDDoHV65kRfLGx2lemSwpADFpvoTEbxFVqaDyucBUYMULwbXbAdACV
- tGpTzluQ7y6esAObxfTP9rJGxxv/Byi2Eu8DrNfzrWFnqhtJbLk/kGE4PF2M9k7nkSNfeCVCO
- Zn47dLVi+/cBY6sUBs5i4e4h7qb6tZPMCQdmry97x5Y5Raaypb57LMYU/2op7uSWlnO3Bs7Dk
- W7bmfzuutAYcFGed+mTBQvY8F+ZszVULlIaiPDl343WCyKRuUkyW4dcodRydHGGo/RjDcGlfs
- GaUSkJ+E4RLkkgM5HfWy5+gBzOrUMphRMUe6s/DvVEM1I+cvn5XSXDw2JJyWBxeEmyJKic17I
- Q4v8RTXkhsV4sUZT7SauKp25uTLs/4yvmCfHR05hIrDf7kA6Y/jhXH8uHTRX5DCNQSEdNoM+Z
- KsLFvjcQWezCInDm3Sb4vJwiFeo6OOHNP6OKg4WoGEpVyXjta4cWfH0EHZ6/8kSxOno2ofKr/
- XkgMaQhLJXuagh4SQ3VGnCP7OKTtiu9/tNapzpnfc4GoyUVQHjja8NVo13878oXPMTyKr2VCi
- xE7NQGFNQsYnQOL8BCjzauWaUm48bcCjK3fWPm8q2Ot64SU7D2O/MIlQSIWCRBPYKtLQlhHAa
- 9+Tvs9oIEeKm9Ww9+8RNchQnG6XILtBvdYBZjFB6g3l0SiD9Eeko2xKkaEF2V5b6T0zZ+bdnJ
- tk6puhjWOwJRSe8urnPq8Z+arvbpqCbji7v8kpQ3gwijwrwJqqiWdxKyi+bM6ddSY1S7wU9ab
- rpUYfbrNNM0ydCa9f4dX2/a/iBzOdRv2ir6zFY5kVKnqcZk7wKgzrvrvjFagqAS/bs3smHpO0
- utSHQZNbmOYk/ZAo+UB299y2ROvvQLwMr88x2ZsUUyJ/Xx1XmwLmgo9MmA8bM9g03USxA9P3h
- b9UnlCOuHyKGoRuUDS68U6Ds3fRWrpdZq+0nlwB4HJ8eF7m8V2UfX52sZc0sxVTfvL5k9/Lg9
- WvmPAVkdYAaSCv9ikwcseGnHg5ikqOcLqY6iEHJ6UQ+XtBVwhcmyErcolrKtxPGxE7da+UKTw
- 0w6i9vf51sYqA2G5uwV+Em1jZrMn4rlDrRIZWgoP97ZLA0uJ7HleKozrbNKyMT6sq/PDtLNTZ
- Nek/k7KZxWdJqvzvJNqdlDrKBeSL+yldAM5kzNVEjLFsMaGwYCl27cq94Hj3QLcOPxrrCeEGn
- x88lAbzqOFb79Dxo6h4k0LyftDy/o8TLvl0PVslMLbeSN9Bv74cOWlonQd1M=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Thu, 19 Sep 2019 15:47:24 +0200
+On Thu, Sep 19, 2019 at 05:54:25PM +0800, Peter Chen wrote:
+> > On 17.9.2019 12.55, Peter Chen wrote:
+> > >>>
+> > >>> I met "event ring full error" like below, this error is met when
+> > >>> I do iozone test on UAS storage at v4.19.35 kernel, but not meet
+> > >>> this error at linux-next tree (08/24). The same host and test
+> > >>> UAS storage device are used. This issue is due to xhci_handle_event
+> > >>> does not return 0 long time, maybe the xHC speed is fast enough
+> > >>> at that time. If I force the xhci_handle_event only run 100 times
+> > >>> before update ERST dequene pointer, it will not occur this error.
+> > >>> I did not  see any changes for xhci_handle_event at the latest code,
+> > >>> so in theory, it should have this issue too. Do you think if we need
+> > >>> to improve xhci_handle_event to avoid event ring?
+> > >>
+> > > The root cause is UAS protocol is very fast
+> > > protocol, the
+> > > other threads at non-CPU0 will add TRBs during we are handling event, so if
+> > > hardware (xHC) has always consumed TD the non-CPU0s are adding,
+> > > the ERST dequene pointer never get change to update, then this
+> > > "event ring full" error will occur.
+> > >
+> > > The one reason why v4.19 has this issue is the max request length is larger
+> > > than the latest kernel. At v4.19, it is 512KB, At the latest kernel,
+> > > it is 256 KB.
+> > > see /sys/block/sda/queue/max_sectors_kb.
+> > > When I change max_sectors_kb as smaller value, the test will be more smooth.
+> > > Besides, At v4.19, the UAS completion handler seems take more time
+> > > compares to the latest kernel.
+> > >
+> > > I suggest adding threshold flag for event ring when it closes to full
+> > > since we can't
+> > > avoid USB3 use cases when the throughput is high, but the system is a
+> > > little slow.
+> > > Do you agree?
+> >
+> > I agree that it makes sense to force a ERDP write after handling some amount
+> > of events, it can solve some event ring full issues, but not the fact that
+> > we spend a lot of time in the interrupt handler.
+> 
+> Ok, I will proposal one patch to fix event ring full issue.
+> 
+> >
+> > Your logs show that you have TDs containing up to 128 TRBs.
+> > When a TD like that finishes the driver will increase the sw dequeue pointer of the
+> > transfer ring one by one until we reach the end of the TD.
+> >
+> > This means we call inc_deq() function 128 times in interrupt context, and each time
+> > do a few comparisons. According to traces this takes ~120us. There might be some
+> > tracing overhead but this could anyway be done in a saner way.
+> >
+> > I'll look into this
+> >
+> 
+> Since we use hard irq for xHCI, for high performance protocol, it may hard to
+> reduce interrupt context time since we have lots of request handling,
+> cache operation,
+> and completion are interrupt context.
+> 
+> > Other things to consider in addition to writing ERDP and fixing the inc_dec() loop is
+> > increasing event ring size (adding more than current 1 segment), and support giving
+> > back URBs in tasklet by adding the HCD_BH flag to xhci hcd.
+> >
+> 
+> So, Mathias, which solutions do you prefer:
+> - One way to quit xhci_handle_event if there are enough events have handled
+> - Change giveback as bottom half
 
-Simplify this function implementation by using a known wrapper function.
+Hi Peter and Mathias,
 
-This issue was detected by using the Coccinelle software.
+Please consider the patch that deals with the bottom half of
+xhci.
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- drivers/usb/gadget/udc/lpc32xx_udc.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+	https://patchwork.kernel.org/patch/10880073/
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc=
-/lpc32xx_udc.c
-index b3e073fb88c6..0ed3fd8c6610 100644
-=2D-- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -3000,7 +3000,6 @@ static int lpc32xx_udc_probe(struct platform_device =
-*pdev)
- 	struct device *dev =3D &pdev->dev;
- 	struct lpc32xx_udc *udc;
- 	int retval, i;
--	struct resource *res;
- 	dma_addr_t dma_handle;
- 	struct device_node *isp1301_node;
+I think it is better to use tasklet as bottom half in xhci because
+HCD layer supports tasklet bottom half and other host controller
+dirvers use this feature to defer URB processing.
 
-@@ -3048,9 +3047,6 @@ static int lpc32xx_udc_probe(struct platform_device =
-*pdev)
- 	 *  IORESOURCE_IRQ, USB device interrupt number
- 	 *  IORESOURCE_IRQ, USB transceiver interrupt number
- 	 */
--	res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENXIO;
+Moreover, some devices (1Gbit USB ethernet controller) can show
+improved performance with tasklet bottom half in xhci.
 
- 	spin_lock_init(&udc->lock);
-
-@@ -3061,7 +3057,7 @@ static int lpc32xx_udc_probe(struct platform_device =
-*pdev)
- 			return udc->udp_irq[i];
- 	}
-
--	udc->udp_baseaddr =3D devm_ioremap_resource(dev, res);
-+	udc->udp_baseaddr =3D devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(udc->udp_baseaddr)) {
- 		dev_err(udc->dev, "IO map failure\n");
- 		return PTR_ERR(udc->udp_baseaddr);
-=2D-
-2.23.0
-
+Regards
+Suwan Kim
