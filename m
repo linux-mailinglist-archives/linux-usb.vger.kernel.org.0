@@ -2,174 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C305FB7FA3
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 19:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A30B800B
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Sep 2019 19:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391487AbfISRGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Sep 2019 13:06:12 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37192 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391361AbfISRGM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Sep 2019 13:06:12 -0400
-Received: by mail-pg1-f194.google.com with SMTP id c17so2244639pgg.4
-        for <linux-usb@vger.kernel.org>; Thu, 19 Sep 2019 10:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vfr/ak8PqAW3a7/adXohYxQN4EYY6B1BFF1JySzS168=;
-        b=MJJjNVx5uL2HXYrQioINGIINJXrL+8NHmytYrd5C3UwHDWLgWE03FZMknALR7lCzHd
-         cVI4agqMVF5gouZA6bF+foFe75VuKkdq9/n5pWIwJT1aP6NFsI8QdhEMwDvCF7IqdoyD
-         f65lX8lTnv1HdiTXGLoPHQVB/Dt42gsdD4+Tuog368YFq3r3NQmZJOMlxaBDKaSqolBu
-         6UCN7IUxVCUcaxDr0IbU5L511/jB9zuv1IUt0jf1K+/0EfjXmG1wrM07Hdr9X0Mni97h
-         Rf1WpExTtW89vWzvCGrdPiHc8R+9DunVEifQMKWNqY//gf9w1fsUfuUmLmFKmaPXuVsY
-         N3+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vfr/ak8PqAW3a7/adXohYxQN4EYY6B1BFF1JySzS168=;
-        b=OENCePBTfabumFNWpWCpmgC4MUsAOPMmttXiPFZmmnZTe1pqEnmF7xtWQF2+Kb8cK0
-         96oHk5aBd30xGOvlSTvkDvOHElDxOgL6SMRuZcPWibbxaCp/lbn9El67IQdNX4Q0VpXo
-         LN5bDASzhIh2xEJPLf66+EHGGZWsbsgX7rgL02kdgFt4P+a1PPnZqveM5qG/2ubwwTVG
-         FHmjkbqtTnvXEtaZrDzlEssInNI52Sr/y4/KSC5WnybkZfpPc0Pe2eQUtU0+jwVqoD8G
-         9irMEZvXrFoFnoPADjeuqe6Gpey1Jq7KPRcGu3AgAFWNbSqMgmGniGd26muDo92i8nEk
-         59fg==
-X-Gm-Message-State: APjAAAWzyVr2hzeYE5MWmgt3RoofBEpXOlEFIg0/bO534zJ47lASN/+M
-        +/AQKVWduDIHgRPkNpJrKnUtcD0RGwvnRVUysr3h2Q==
-X-Google-Smtp-Source: APXvYqwF+yEDDmq8bzyXKUa8CBKAnT1PB+m3Gugv1nZP8AoxwOhoLKvil38EsnOPFTFQHI/1545FCjvI+5Emi0e+4U0=
-X-Received: by 2002:a63:d20f:: with SMTP id a15mr5142567pgg.130.1568912770407;
- Thu, 19 Sep 2019 10:06:10 -0700 (PDT)
+        id S2391964AbfISRcv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Sep 2019 13:32:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55048 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391902AbfISRcv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Sep 2019 13:32:51 -0400
+Received: from sol.localdomain (c-24-5-143-220.hsd1.ca.comcast.net [24.5.143.220])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id DD13421929;
+        Thu, 19 Sep 2019 17:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568914371;
+        bh=A06GCZfmlBz66bhtsk20Q7z2/Ew4Y6LpOy4PTPOmff4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nEvF7MV0iuhN1uGbEgNsKDSwSru2bh9hmetARKd2CItYkYNjDvu+FOiTA5IbnxInq
+         rFfKGHCGkpAZjxpK2Hgtlbie6zY08glZyJsni2LjCOg8cjZhzpocQ4EH62u2WDSXc1
+         RRCYIj3CwayS5s10UNVfXTRIZbSLWsrqI2i0hHho=
+Date:   Thu, 19 Sep 2019 10:32:49 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: Reminder: 52 active syzbot reports in usb subsystem
+Message-ID: <20190919173249.GD667@sol.localdomain>
+Mail-Followup-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>
+References: <20190919052342.GC666@sol.localdomain>
+ <20190919064058.GB2069956@kroah.com>
 MIME-Version: 1.0
-References: <000000000000cd1def0592ab9697@google.com> <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909171423360.1590-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 19 Sep 2019 19:05:59 +0200
-Message-ID: <CAAeHK+wh0bQKRXU_7fOC5XZKUUL1QW8DskCBJKQACwqZd=tZyw@mail.gmail.com>
-Subject: Re: KASAN: slab-out-of-bounds Write in ga_probe
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190919064058.GB2069956@kroah.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 8:24 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Mon, 16 Sep 2019, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=14045831600000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=403741a091bf41d4ae79
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c1e62d600000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166a3a95600000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+403741a091bf41d4ae79@syzkaller.appspotmail.com
-> >
-> > usb 1-1: config 0 interface 0 altsetting 0 has 1 endpoint descriptor,
-> > different from the interface descriptor's value: 9
-> > usb 1-1: New USB device found, idVendor=0e8f, idProduct=0012, bcdDevice=
-> > 0.00
-> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> > usb 1-1: config 0 descriptor??
-> > greenasia 0003:0E8F:0012.0001: unknown main item tag 0x0
-> > greenasia 0003:0E8F:0012.0001: hidraw0: USB HID v0.00 Device [HID
-> > 0e8f:0012] on usb-dummy_hcd.0-1/input0
-> > ==================================================================
-> > BUG: KASAN: slab-out-of-bounds in set_bit
-> > include/asm-generic/bitops-instrumented.h:28 [inline]
-> > BUG: KASAN: slab-out-of-bounds in gaff_init drivers/hid/hid-gaff.c:97
-> > [inline]
-> > BUG: KASAN: slab-out-of-bounds in ga_probe+0x1fd/0x6f0
-> > drivers/hid/hid-gaff.c:146
-> > Write of size 8 at addr ffff8881d9acafc0 by task kworker/1:1/78
-> >
-> > CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.3.0-rc7+ #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> > Google 01/01/2011
-> > Workqueue: usb_hub_wq hub_event
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:77 [inline]
-> >   dump_stack+0xca/0x13e lib/dump_stack.c:113
-> >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
-> >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
-> >   kasan_report+0xe/0x12 mm/kasan/common.c:618
-> >   check_memory_region_inline mm/kasan/generic.c:185 [inline]
-> >   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-> >   set_bit include/asm-generic/bitops-instrumented.h:28 [inline]
-> >   gaff_init drivers/hid/hid-gaff.c:97 [inline]
-> >   ga_probe+0x1fd/0x6f0 drivers/hid/hid-gaff.c:146
-> >   hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
-> >   really_probe+0x281/0x6d0 drivers/base/dd.c:548
-> >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-> >   __device_attach_driver+0x
-> >
-> >
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> >
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > syzbot can test patches for this bug, for details see:
-> > https://goo.gl/tpsmEJ#testing-patches
->
-> The driver assumes that the device contains an input.
+On Thu, Sep 19, 2019 at 08:40:58AM +0200, Greg Kroah-Hartman wrote:
+> On Wed, Sep 18, 2019 at 10:23:42PM -0700, Eric Biggers wrote:
+> > [This email was generated by a script.  Let me know if you have any suggestions
+> > to make it better, or if you want it re-generated with the latest status.]
+> > 
+> > Of the syzbot reports that have (re-)occurred in the last 7 days, I've manually
+> > marked 52 of them as possibly being bugs in the usb subsystem.  This category
+> > mostly includes USB driver bugs, but it might include some core USB bugs too. 
+> > I've listed these bug reports below.
+> > 
+> > If you believe a bug is no longer valid, please close it by sending a '#syz
+> > fix', '#syz dup', or '#syz invalid' command in reply to the original thread, as
+> > explained at https://goo.gl/tpsmEJ#status
+> > 
+> > If you believe I misattributed a bug to the usb subsystem, please let me know
+> > and (if possible) forward it to the correct place.
+> > 
+> > Note: in total, I've actually assigned 90 open syzbot reports to this subsystem.
+> > But to help focus people's efforts, I've only listed the 52 that have
+> > (re-)occurred in the last week.  Let me know if you want the full list.
+> 
+> Thanks for doing all of this.  There's a load of syzbot usb open bugs
+> right now, hopefully the huge majority of them will "auto close" now
+> that a lot of USB fixes are merged in Linus's tree.
+> 
+> Then we can sift through the rest to see what we have missed and wait
+> for the next round of fuzzing that will happen, as the codepaths we have
+> fixed up can now go deeper :)
+> 
+> thanks,
+> 
 
-BTW, these two reports look fairly similar:
+AFAICS, only 2 syzbot bugs were fixed in the USB pull request for 5.4, and they
+were already closed by syzbot before I sent this reminder, as it seems to close
+bugs within a matter of hours.  So probably almost all of these bugs are still
+valid.  I'd be glad to resend a refreshed list in a week or two, but if you're
+expecting the number of open bugs (or even "active" bugs) to go down much by
+itself, you may be disappointed :-(
 
-https://syzkaller.appspot.com/bug?extid=94e2b9e9c7d1dd332345
-https://syzkaller.appspot.com/bug?extid=1e86e2ccce227cca899b
-
->
-> Alan Stern
->
-> https://github.com/google/kasan.git f0df5c1b
->
->  drivers/hid/hid-gaff.c |   12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> Index: usb-devel/drivers/hid/hid-gaff.c
-> ===================================================================
-> --- usb-devel.orig/drivers/hid/hid-gaff.c
-> +++ usb-devel/drivers/hid/hid-gaff.c
-> @@ -64,14 +64,20 @@ static int gaff_init(struct hid_device *
->  {
->         struct gaff_device *gaff;
->         struct hid_report *report;
-> -       struct hid_input *hidinput = list_entry(hid->inputs.next,
-> -                                               struct hid_input, list);
-> +       struct hid_input *hidinput;
->         struct list_head *report_list =
->                         &hid->report_enum[HID_OUTPUT_REPORT].report_list;
->         struct list_head *report_ptr = report_list;
-> -       struct input_dev *dev = hidinput->input;
-> +       struct input_dev *dev;
->         int error;
->
-> +       if (list_empty(&hid->inputs)) {
-> +               hid_err(hid, "no inputs found\n");
-> +               return -ENODEV;
-> +       }
-> +       hidinput = list_entry(hid->inputs.next, struct hid_input, list);
-> +       dev = hidinput->input;
-> +
->         if (list_empty(report_list)) {
->                 hid_err(hid, "no output reports found\n");
->                 return -ENODEV;
->
+- Eric
