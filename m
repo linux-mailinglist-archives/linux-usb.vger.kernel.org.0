@@ -2,120 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2F4B90B4
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 15:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6A2FB90FF
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 15:49:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727632AbfITNeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 09:34:05 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:50756 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbfITNeF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 09:34:05 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 5so2526236wmg.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 06:34:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=udvjNdAaSSgWGOmksIc53vxNg6HSUZsxek6jeMJ9Yps=;
-        b=JVaF1LDAISZPIF0ISG10MR77NR3Km2Y/l2OfEjqrIT83qw7lXItVe6hrN4v0tQEFsP
-         S7LVUWsK5lcSHyq7i0lWhTrSWvx1fmbCAe+gTNogWiDyqCirpj/LY4DD/wCvviykFQys
-         k6Vsw1RWvUO1+55XiCGeEDpfrfjoDMjBipxR/O7NzPRiJOsSr4WbVm53wwqfrhMrIugv
-         pOQ1kk7LVK3gxewSQK0zeXTxA4Ef6ZggtGNn+k3wmEvH6qSc7hugGpvNC2w2B/CoEKpr
-         Z2IB6eE0PhjcXMSjEyeotuPDyQT7uPDjI2PY7jvGE3sKBB2GXiEhd5nsLrtoJdRWoyMJ
-         r5NQ==
+        id S2387411AbfITNtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Sep 2019 09:49:08 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:34915 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387404AbfITNtI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 09:49:08 -0400
+Received: by mail-io1-f69.google.com with SMTP id r5so10754569iop.2
+        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 06:49:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=udvjNdAaSSgWGOmksIc53vxNg6HSUZsxek6jeMJ9Yps=;
-        b=quoV8yPh+oKU2VRuJBqsEP3xAEJxupOVb6lW9yQejcxaZTYSbZBd/VNhkzV7RSae9B
-         QLr6B6UVsw0vofV8Gz7+M98HnRtDFJuRq8uq81XGetT9kuR3ROSXBdo21u6EoEswGo4U
-         hy2IXz8nQ8Fre37tWxMw/1OMLTMRYd023poGxsOJSW335BADTWarob9gD2yLVOd5jAek
-         sjq28sOQcIFRYjFEyxS0pxWx3kIFEqV3VkpfZIiREDTMKk8O/U6wUh4bMIKKzlNuFQJl
-         oztAiMotNK0TPQJG/QLF6KIUKszcN+gxjeR93/hvBT4Z/aD3lWiIf8GhfTBINNeTAZo7
-         FEsw==
-X-Gm-Message-State: APjAAAUregdme+2/QpswvSX2DtfUgECBpO5An3XPldDbtxfpH+ayP/SI
-        HR0iRSFKmmr5Eu4CZz0KOUfKz3o7dT4=
-X-Google-Smtp-Source: APXvYqw0H/Z8QBHOdK9sRXubT41cAUATTv7lBB6XYkf1xsORzfHASGfiBUl4sJWfhTPxZ/TaxPMG9Q==
-X-Received: by 2002:a05:600c:d4:: with SMTP id u20mr3754114wmm.66.1568986441314;
-        Fri, 20 Sep 2019 06:34:01 -0700 (PDT)
-Received: from dhe-pc (p54941CA4.dip0.t-ipconnect.de. [84.148.28.164])
-        by smtp.gmail.com with ESMTPSA id q22sm1582311wmj.31.2019.09.20.06.34.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2019 06:34:00 -0700 (PDT)
-From:   David Heinzelmann <heinzelmann.david@gmail.com>
-X-Google-Original-From: David Heinzelmann <dhe@dhe-pc>
-Date:   Fri, 20 Sep 2019 17:33:57 +0200
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Check for changed device descriptors when a
- connection-change occurs before validating the connection.
-Message-ID: <20190920153357.GB5913@dhe-pc>
-References: <20190920103628.5432-1-heinzelmann.david@gmail.com>
- <20190920085556.GB521576@kroah.com>
- <20190920131726.GA5913@dhe-pc>
- <20190920121538.GA549982@kroah.com>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=PaouBw0Xbrhu4/nEFLLZtRhOLdajDYekVia1In7uP5g=;
+        b=EonjUSGPeTZs7tQ+bUAWbjdhsm9i7/p/HfVwkrEmGiRChS+FVmqRy9iAhXzw1QQXSe
+         A1X8DHgpYMKydQTmuAcQw0MH+05VvXv0rJ2DZBtnuPaN4d5BfIrVRRJw04DJLkAE4/52
+         ofnK7V1K8thHmzdg4LdgPT8g5AVcT60qgZWlNrBX12j3/X7ufoObBhL0+2SHSrHoEx8R
+         hkByevhqabBRRxUc7FfrR7KvTobUBWxc+s4+Z0JDHw0WMPBAdd80dRfDSoY843fPaTyK
+         +V7sah9gdbwgz/pzQDyqyXxQD1XfRfKREM30OPULZAkZfhPgDquF2ppV56uB5bsu1X/p
+         H4/w==
+X-Gm-Message-State: APjAAAWzpSSqT4nQ1gkzjz1C+rMgbo5SP7Is/NS/EKg2kkZDCeIpsfOR
+        EEBaoSZZg7LfdKA8rrsy21irw9R1bJ9mfCukhpGIKvhfKce7
+X-Google-Smtp-Source: APXvYqwy9baIWuDtd2Dpg5/2sGsIhjFWlsUqx2obaXg0jlSE5TUwkmZuyMRS1HIKUM/tQVK9LwLdYp61J1eT2lKFgZOR56iOPWGb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190920121538.GA549982@kroah.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5e:cb49:: with SMTP id h9mr14222240iok.307.1568987346106;
+ Fri, 20 Sep 2019 06:49:06 -0700 (PDT)
+Date:   Fri, 20 Sep 2019 06:49:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006c06df0592fc55ea@google.com>
+Subject: KASAN: slab-out-of-bounds Write in hiddev_ioctl_usage
+From:   syzbot <syzbot+34ee1b45d88571c2fa8b@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 02:15:38PM +0200, Greg KH wrote:
-> On Fri, Sep 20, 2019 at 03:17:26PM +0200, David Heinzelmann wrote:
-> > Hi,
-> > 
-> > sorry for the wrong patch format.
-> 
-> No problem, that's normal.  But please do not top-post on linux mailing
-> lists.
-> 
-> > I am trying to detect a change. At the moment I think the change could be ignored if a
-> > port connection-change occurs and the port status has again the 'PORT_CONNECTION' bit set. 
-> > 
-> > I have a fx3 device which does a re-enumeration after a firmware download. This is working
-> > as expected and I am seeing a 'remove event' and a 'add event' monitoring via udevadm. But
-> > if I connect multiple devices at the same time via an usb hub I am sometimes not receiving
-> > a 'remove event' and 'add event' for a single device.
-> 
-> Sounds like a broken hub :)
-> 
+Hello,
 
-I tried different hubs but I forgot to mention that it is also possible to trigger the issue
-without a hub if I reboot the devices via software at the same time. 
+syzbot found the following crash on:
 
-> > I think the problem could be that when a device disconnects and the port connection-change
-> > occurs and before the 'PORT_CONNECTION' bit is checked the device could already be
-> > reconnected and the 'PORT_CONNECTION' bit is set. Therefore I think it is not correct to
-> > resuscitate the exisiting device.
-> 
-> Does your patch actually fix the issue?  When a fx3 device downloads
-> firmware and re-enumerates, it should come back as a totally different
-> device, which will fail this check, right?  So I don't see how this
-> fixes the issues with your devices.
-> 
+HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cb8255600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
+dashboard link: https://syzkaller.appspot.com/bug?extid=34ee1b45d88571c2fa8b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1151ee8d600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10ce5909600000
 
-With the patch I do not have the issue anymore. After re-enumerate the device comes back with the same
-VID/PID but with a different device descriptor. Therefore the check will fail and hub_port_connect is
-called which initiates a device disconnect and connect. Without this 'reconnect' lsusb still shows me 
-the old device descriptor and I am not able to communicate with the device. 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+34ee1b45d88571c2fa8b@syzkaller.appspotmail.com
 
-> Unless all of the devices reset themselves at the same time and the hub
-> doesn't like that and can't notice that it happened?
-> 
-> If you use a different hub, does that work properly?
-> 
+==================================================================
+BUG: KASAN: slab-out-of-bounds in hiddev_ioctl_usage.isra.0+0x1251/0x13b0  
+drivers/hid/usbhid/hiddev.c:541
+Write of size 4 at addr ffff8881d59384b4 by task syz-executor819/1731
 
-There is no difference if an other hub is used. It also happens without a hub when the devices are
-rebooted via software. My thoughts on this is that when the device re-enumerates and the device
-descriptor has changed a device disconnect and connect should be initiated instead of doing nothing?
+CPU: 1 PID: 1731 Comm: syz-executor819 Not tainted 5.3.0+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description+0x6a/0x32c mm/kasan/report.c:351
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+  kasan_report+0xe/0x12 mm/kasan/common.c:618
+  hiddev_ioctl_usage.isra.0+0x1251/0x13b0 drivers/hid/usbhid/hiddev.c:541
+  hiddev_ioctl+0x7a1/0x1550 drivers/hid/usbhid/hiddev.c:807
+  vfs_ioctl fs/ioctl.c:46 [inline]
+  file_ioctl fs/ioctl.c:509 [inline]
+  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
+  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
+  __do_sys_ioctl fs/ioctl.c:720 [inline]
+  __se_sys_ioctl fs/ioctl.c:718 [inline]
+  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x444809
+Code: e8 bc af 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 1b d8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007ffd4d98f5b8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000444809
+RDX: 00000000200008c0 RSI: 000000004018480c RDI: 0000000000000004
+RBP: 00000000006cf018 R08: 18c1180b508ac6d9 R09: 00000000004002e0
+R10: 000000000000000f R11: 0000000000000246 R12: 00000000004024b0
+R13: 0000000000402540 R14: 0000000000000000 R15: 0000000000000000
 
-If I understand it correctly the resuscitation is used for handling port enable-changes occured by EMI.
-But when the device is doing a re-enumeration there should be no resuscitation.
+Allocated by task 83:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:493 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
+  kmalloc include/linux/slab.h:557 [inline]
+  kzalloc include/linux/slab.h:748 [inline]
+  hid_register_field drivers/hid/hid-core.c:102 [inline]
+  hid_add_field+0x444/0x11c0 drivers/hid/hid-core.c:277
+  hid_parser_main+0x6ab/0xbf0 drivers/hid/hid-core.c:579
+  hid_open_report+0x372/0x620 drivers/hid/hid-core.c:1202
+  hid_parse include/linux/hid.h:1017 [inline]
+  cmhid_probe+0xdd/0x160 drivers/hid/hid-cmedia.c:117
+  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2209
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  hid_add_device+0x33c/0x990 drivers/hid/hid-core.c:2365
+  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-David
+Freed by task 1:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
+  slab_free_hook mm/slub.c:1423 [inline]
+  slab_free_freelist_hook mm/slub.c:1474 [inline]
+  slab_free mm/slub.c:3016 [inline]
+  kfree+0xe4/0x2f0 mm/slub.c:3957
+  do_new_mount fs/namespace.c:2798 [inline]
+  do_mount+0x69f/0x1af0 fs/namespace.c:3114
+  ksys_mount+0xd7/0x150 fs/namespace.c:3323
+  do_mount_root+0x32/0x1ce init/do_mounts.c:389
+  mount_block_root+0x317/0x5d3 init/do_mounts.c:418
+  mount_root+0x1cd/0x213 init/do_mounts.c:563
+  prepare_namespace+0x1ff/0x23b init/do_mounts.c:622
+  kernel_init_freeable+0x57e/0x596 init/main.c:1211
+  kernel_init+0xd/0x1bf init/main.c:1110
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+The buggy address belongs to the object at ffff8881d59383c0
+  which belongs to the cache kmalloc-256 of size 256
+The buggy address is located 244 bytes inside of
+  256-byte region [ffff8881d59383c0, ffff8881d59384c0)
+The buggy address belongs to the page:
+page:ffffea0007564e00 refcount:1 mapcount:0 mapping:ffff8881da002780  
+index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 ffffea0007607e40 0000000b0000000b ffff8881da002780
+raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881d5938380: fc fc fc fc fc fc fc fc 00 00 00 00 00 00 00 00
+  ffff8881d5938400: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ffff8881d5938480: 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc fc
+                                      ^
+  ffff8881d5938500: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ffff8881d5938580: 00 00 00 00 00 00 00 00 00 00 00 00 00 fc fc fc
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
