@@ -2,80 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AB6B8F8E
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 14:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE65B9005
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 14:53:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408901AbfITMPu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 08:15:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408877AbfITMPu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Sep 2019 08:15:50 -0400
-Received: from localhost (unknown [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726646AbfITMxh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Sep 2019 08:53:37 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:51638 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbfITMxh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 08:53:37 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id 76335611DC; Fri, 20 Sep 2019 12:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568984016;
+        bh=6VLpHyiGOFZJyxCD0JkVlmylj7GYadsObC8yfDEfLp4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kklqKz6oqHrbj6NueMibwIk0+N2lkSOi/8kdd7WLS/mo7a5caFnBk2xKvUC8BS89i
+         C/EZlmSiiXxbp1RuhhMWV5fcyy6vAwYQQo5f5LehzHIFojYJMwIskSQd2Ootiurkc/
+         YC2RTtWvXYJbsWWb2ZCYAizfCQPjO71DH/sh9+sU=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from cchiluve-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C70A720644;
-        Fri, 20 Sep 2019 12:15:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568981748;
-        bh=mSRgUDHwabMKE5oazBqmDfwMgj7cJoCDIOm9iZGDvJk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AFwV4v0HFmNhxQGTis+SiaOzIMq77On1nQGoByNEkzdep6F2tBD7qZloT6oglb3fU
-         gyju8ZA5qHQLIXz893yLgH7tYSX0MRIMm8/si5Dq+CT1cup8Rm1fejnXfCIXfH5pyK
-         59AR6gGBWfKOsfAfOzXxrAi5qIbm38kF62enzPBc=
-Date:   Fri, 20 Sep 2019 14:15:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Heinzelmann <heinzelmann.david@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Check for changed device descriptors when a
- connection-change occurs before validating the connection.
-Message-ID: <20190920121538.GA549982@kroah.com>
-References: <20190920103628.5432-1-heinzelmann.david@gmail.com>
- <20190920085556.GB521576@kroah.com>
- <20190920131726.GA5913@dhe-pc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190920131726.GA5913@dhe-pc>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        (Authenticated sender: cchiluve@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0334D611DC;
+        Fri, 20 Sep 2019 12:53:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1568984016;
+        bh=6VLpHyiGOFZJyxCD0JkVlmylj7GYadsObC8yfDEfLp4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=kklqKz6oqHrbj6NueMibwIk0+N2lkSOi/8kdd7WLS/mo7a5caFnBk2xKvUC8BS89i
+         C/EZlmSiiXxbp1RuhhMWV5fcyy6vAwYQQo5f5LehzHIFojYJMwIskSQd2Ootiurkc/
+         YC2RTtWvXYJbsWWb2ZCYAizfCQPjO71DH/sh9+sU=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0334D611DC
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cchiluve@codeaurora.org
+From:   cchiluve <cchiluve@codeaurora.org>
+To:     balbi@kernel.org, agross@kernel.org, david.brown@linaro.org
+Cc:     linux-usb@vger.kernel.org, cchiluve <cchiluve@codeaurora.org>
+Subject: [PATCH V4 0/3] ADD interconnect support for Qualcomm DWC3 driver 
+Date:   Fri, 20 Sep 2019 18:23:14 +0530
+Message-Id: <1568983997-20004-1-git-send-email-cchiluve@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 03:17:26PM +0200, David Heinzelmann wrote:
-> Hi,
-> 
-> sorry for the wrong patch format.
+This path series aims to add interconnect support in
+dwc3-qcom driver on SDM845 SoCs.
 
-No problem, that's normal.  But please do not top-post on linux mailing
-lists.
+Changes from v3 -> v4
+  > Fixed review comments from Matthias
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
 
-> I am trying to detect a change. At the moment I think the change could be ignored if a
-> port connection-change occurs and the port status has again the 'PORT_CONNECTION' bit set. 
-> 
-> I have a fx3 device which does a re-enumeration after a firmware download. This is working
-> as expected and I am seeing a 'remove event' and a 'add event' monitoring via udevadm. But
-> if I connect multiple devices at the same time via an usb hub I am sometimes not receiving
-> a 'remove event' and 'add event' for a single device.
+Changes from v2 -> v3
+  > Fixed review comments from Matthias and Manu
+  > changed the functions prefix from usb_* to dwc3_qcom_*
 
-Sounds like a broken hub :)
+Changes since V1:
+  > Comments by Georgi Djakov on "[PATCH 2/3]" addressed
+  > [PATCH 1/3] and [PATCH 3/3] remains unchanged
 
-> I think the problem could be that when a device disconnects and the port connection-change
-> occurs and before the 'PORT_CONNECTION' bit is checked the device could already be
-> reconnected and the 'PORT_CONNECTION' bit is set. Therefore I think it is not correct to
-> resuscitate the exisiting device.
+Chandana Kishori Chiluveru (3):
+  dt-bindings: Introduce interconnect properties for Qualcomm DWC3
+    driver
+  usb: dwc3: qcom: Add interconnect support in dwc3 driver
+  arm64: dts: sdm845: Add interconnect properties for USB
 
-Does your patch actually fix the issue?  When a fx3 device downloads
-firmware and re-enumerates, it should come back as a totally different
-device, which will fail this check, right?  So I don't see how this
-fixes the issues with your devices.
+ .../devicetree/bindings/usb/qcom,dwc3.txt          |  13 ++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi               |  12 ++
+ drivers/usb/dwc3/dwc3-qcom.c                       | 145 ++++++++++++++++++++-
+ 3 files changed, 168 insertions(+), 2 deletions(-)
 
-Unless all of the devices reset themselves at the same time and the hub
-doesn't like that and can't notice that it happened?
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-If you use a different hub, does that work properly?
-
-thanks,
-
-greg k-h
