@@ -2,139 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25D6FB9417
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 17:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D990B9424
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 17:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404107AbfITPfU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 11:35:20 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:39806 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404101AbfITPfT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 11:35:19 -0400
-Received: by mail-pg1-f195.google.com with SMTP id u17so4033388pgi.6
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 08:35:18 -0700 (PDT)
+        id S2404162AbfITPie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Sep 2019 11:38:34 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:36376 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404128AbfITPid (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 11:38:33 -0400
+Received: by mail-pl1-f194.google.com with SMTP id f19so3363711plr.3
+        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 08:38:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KYYXiwhTHKlZGhQO6s6tMNDr7MAM6pAY3179upZ2BOo=;
-        b=KQxbGU1RiQfdCGtKvn71cIg4ycczc7KD03DnHRQPsmd0aj4xtiTgPgQ3XLWbRkzIJZ
-         3IFxpiksNZFe0pLUs2bLwa2Yp6XiZwQLRWkWiAqPZkPxFmbiZyW8rBBqF7pIoteEKKnc
-         v0ftsjNKmByaOBXLbVZFGjtR2tj20C1XjoZtTp+FAISrP7/d5qbVco1nFORsL31xZlVp
-         4RWA2Adml/s8kQAQH2uvUT78+aSCbiLGTU9DzywOlJOL3W4lQER2KDw5/4h6AnuMl8te
-         gkSiaVPvfGpmmm81sjxn82iPYqapDk/IYCvG4gt3tXfLhAOpr4cFozZdeN7uWMfwVCm0
-         axaQ==
+        bh=kBIlDtbyXtXdQi8ZAyUelcu4kBMJkgAjJmDWZAjgLk4=;
+        b=RQtCpboUZIP/B2mgGM/u8J8btcMzbZdokkMu5M0FgrxLwLI/Hl5Sp3JQAaymhrLMfR
+         VY3/AZMd0GCXFoSsLo689R3+NYbD8ev+havmS2CAd3xnKmIjIs2qVg/83dNBhR2Uxsjp
+         RzpfWbcbCMji+r5+UAVG7guyzCx9UuQym1RJPPPVSCLoWKzo5sGr329Xo8HoxhLathRd
+         sO4qI6pkd/elinx3TOZEc0feYEXDpqKYGhdrM5B6x5K5jDOw6dcUbSgFz3h4I8sPM9FR
+         hwQCbR2MLc3D+nm3b5wT4NgZtcBCZVzmtOA6E7hPJpE+QLxkEMUi5MqHim6W8s91Y4M8
+         NO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KYYXiwhTHKlZGhQO6s6tMNDr7MAM6pAY3179upZ2BOo=;
-        b=ZfZ+9A3YR99pQy5dDl3vwvtpXT4HV5quF+xL1+8rSusDz5TCI9FmuLPj4nlsWuBpr7
-         RxWBF9syVA0HT8k/5IzP21c/3Kw7k1rCsvYYjxYDm34wNarDjXnrsqP9jB5+kRA0jAO7
-         oHMJgQpxZKD1ZnCZX7mVEo/g+Z+tSBd8T+DI2wrYj9Zqk7+DHZ3dUaXnXauRJCjeZx40
-         8dzwtQpYw1KGWOEJDqy1Z7d94d8rEV08bbfLEO/ffOSCoJ1LmfVXYp33YhMV2lZ54FkR
-         +mha2pP1UkLV3yamC7sZXlsrQUVEuxMHM8khRp6TmEZaTECFFYxQ0PorGSI2h8zbeJTW
-         Kj5Q==
-X-Gm-Message-State: APjAAAU/+0hZJQxLW8EocvrxL9GbQvkPVwCMdXbF8GDjdmS2w7LNnNkv
-        KHMa6pehA1I+wLQdLO22T8MizfqihHTuNmwJ/8y5Jg==
-X-Google-Smtp-Source: APXvYqwzX7kgRz9E1iQ5UZ2ovmhU2m5NM1Ek8i3gbJBhffTeiMOGOkJ/6wyD4uj9P6rGzmly6IdbeRXXq4frR5RXOuk=
-X-Received: by 2002:a63:d20f:: with SMTP id a15mr10870010pgg.130.1568993717722;
- Fri, 20 Sep 2019 08:35:17 -0700 (PDT)
+        bh=kBIlDtbyXtXdQi8ZAyUelcu4kBMJkgAjJmDWZAjgLk4=;
+        b=jSUpX318Yjxh6x4OfrPTZND4AkJtuwx2L2SJkAm/LlvafjWd/v+9Xi+3KPlTHNK2CT
+         AhlTpbXKYUbquVPBCgLCBmIa5vZUxxCzFqke3sEsIOBa3KdBUbULimvhEs1qCJmxwHe8
+         1jiacV+Kpfxwy+p9z7DTRAlX0n9+bgT+X8Z2ANkW+qrb1SyN+ZgmM2ymACdXOT0Ftezp
+         wEmr+VqXp105F8zIolBEDaaDXoQW0vFeyZ5OJPkx1f4AmkQScDQ2iL0/S53n8bXnY/ev
+         v6661dA+JaYILp+G79JTTYqTCvTsnuJi0yRPJYv0gpaPGJFIjspoKsNn8iKHyP8QpzTY
+         TtxQ==
+X-Gm-Message-State: APjAAAWzy4UerP9A9LCNJ+J5G+qL29bdHFluKnORt9GKDxU2LjpnIRka
+        EnKnbrzKJJQI6IDyPEeA8wcwT9/6iP65fMo9Qek8ODTx/At/mQ==
+X-Google-Smtp-Source: APXvYqyRSgLWkIgyh1JIdj88i7yfMdK1qrM3w6aY1SH8YTZYOr55SseAJ5C0fFUY5kpCW5ZMZuByrZEWxGFeZ5MruF0=
+X-Received: by 2002:a17:902:a50a:: with SMTP id s10mr17230604plq.336.1568993911164;
+ Fri, 20 Sep 2019 08:38:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000f111a20592ab9671@google.com>
-In-Reply-To: <000000000000f111a20592ab9671@google.com>
+References: <000000000000a039300590796dc4@google.com>
+In-Reply-To: <000000000000a039300590796dc4@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 20 Sep 2019 17:35:06 +0200
-Message-ID: <CAAeHK+znT=Bdy58Vgj+gBR7eNOhhSAPcSu0KXugsmJQBZ3JuLg@mail.gmail.com>
-Subject: Re: KASAN: invalid-free in usbvision_release
-To:     syzbot <syzbot+0350a2346edac2799574@syzkaller.appspotmail.com>
-Cc:     allison@lohutok.net, Hans Verkuil <hverkuil@xs4all.nl>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+Date:   Fri, 20 Sep 2019 17:38:19 +0200
+Message-ID: <CAAeHK+z1+_AH1U2490GzegVxWA2LWSJKtB=GDA23TDuRLgepzA@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in iowarrior_callback
+To:     syzbot <syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 16, 2019 at 3:29 PM syzbot
-<syzbot+0350a2346edac2799574@syzkaller.appspotmail.com> wrote:
+On Mon, Aug 19, 2019 at 4:48 PM syzbot
+<syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
 > syzbot found the following crash on:
 >
-> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11caf595600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=0350a2346edac2799574
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11605772600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
+> dashboard link: https://syzkaller.appspot.com/bug?extid=1c7a8a0c02f8b83f3a67
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 >
 > Unfortunately, I don't have any reproducer for this crash yet.
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+0350a2346edac2799574@syzkaller.appspotmail.com
+> Reported-by: syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com
 >
-> usb 6-1: usbvision_write_reg: failed: error -2
-> usbvision_set_audio: can't write iopin register for audio switching
-> usb 6-1: usbvision_write_reg: failed: error -19
-> usbvision_audio_off: can't write reg
-> usbvision_radio_close: Final disconnect
 > ==================================================================
-> BUG: KASAN: double-free or invalid-free in usbvision_release+0x13b/0x1c0
-> drivers/media/usb/usbvision/usbvision-video.c:1353
+> BUG: KASAN: use-after-free in iowarrior_callback.cold+0x4f/0x51
+> drivers/usb/misc/iowarrior.c:208
+> Read of size 8 at addr ffff8881d56b5208 by task udevd/4692
 >
-> CPU: 1 PID: 7362 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
+> CPU: 1 PID: 4692 Comm: udevd Not tainted 5.3.0-rc4+ #26
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
 > Call Trace:
+>   <IRQ>
 >   __dump_stack lib/dump_stack.c:77 [inline]
 >   dump_stack+0xca/0x13e lib/dump_stack.c:113
 >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   kasan_report_invalid_free+0x61/0xa0 mm/kasan/report.c:444
->   __kasan_slab_free+0x162/0x180 mm/kasan/common.c:434
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1474 [inline]
->   slab_free mm/slub.c:3016 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3957
->   usbvision_release+0x13b/0x1c0
-> drivers/media/usb/usbvision/usbvision-video.c:1353
->   usbvision_radio_close.cold+0x6f/0x74
-> drivers/media/usb/usbvision/usbvision-video.c:1125
->   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
->   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
->   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:612
+>   iowarrior_callback.cold+0x4f/0x51 drivers/usb/misc/iowarrior.c:208
+>   __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1657
+>   usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1722
+>   dummy_timer+0x120f/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1965
+>   call_timer_fn+0x179/0x650 kernel/time/timer.c:1322
+>   expire_timers kernel/time/timer.c:1366 [inline]
+>   __run_timers kernel/time/timer.c:1685 [inline]
+>   __run_timers kernel/time/timer.c:1653 [inline]
+>   run_timer_softirq+0x5cc/0x14b0 kernel/time/timer.c:1698
+>   __do_softirq+0x221/0x912 kernel/softirq.c:292
+>   invoke_softirq kernel/softirq.c:373 [inline]
+>   irq_exit+0x178/0x1a0 kernel/softirq.c:413
+>   exiting_irq arch/x86/include/asm/apic.h:537 [inline]
+>   smp_apic_timer_interrupt+0x12f/0x500 arch/x86/kernel/apic/apic.c:1095
+>   apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+>   </IRQ>
+> RIP: 0010:__sanitizer_cov_trace_const_cmp1+0x0/0x20 kernel/kcov.c:247
+> Code: 66 2e 0f 1f 84 00 00 00 00 00 48 8b 0c 24 48 89 f2 48 89 fe bf 06 00
+> 00 00 e9 2c ff ff ff 66 90 66 2e 0f 1f 84 00 00 00 00 00 <48> 8b 0c 24 40
+> 0f b6 d6 40 0f b6 f7 bf 01 00 00 00 e9 0a ff ff ff
+> RSP: 0018:ffff8881c9397b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+> RAX: 00000000c9397c01 RBX: ffff8881c9397c00 RCX: ffffffff816a906f
+> RDX: 0000000000000000 RSI: 00000000c9397c01 RDI: 0000000000000000
+> RBP: 00000000c9397c01 R08: ffff8881b05fc800 R09: ffffed103b0df2a5
+> R10: ffffed103b0df2a4 R11: ffff8881d86f9523 R12: ffff8881c9397c08
+> R13: ffff8881c9397c38 R14: ffff8881d86f94a0 R15: ffff8881c9397c40
+>   unlazy_walk+0x116/0x550 fs/namei.c:675
+>   complete_walk+0xc6/0x240 fs/namei.c:788
+>   path_parentat.isra.0+0x8c/0x160 fs/namei.c:2366
+>   filename_parentat.isra.0+0x19c/0x410 fs/namei.c:2386
+>   do_renameat2+0x193/0xbb0 fs/namei.c:4545
+>   __do_sys_rename fs/namei.c:4673 [inline]
+>   __se_sys_rename fs/namei.c:4671 [inline]
+>   __x64_sys_rename+0x5d/0x80 fs/namei.c:4671
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
 >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f0c157b92b0
-> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0
-> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-> RSP: 002b:00007fff5c949928 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f0c157b92b0
-> RDX: 00007f0c15a6fdf0 RSI: 0000000000000001 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 00007f0c15a6fdf0 R09: 000000000000000a
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-> R13: 00007fff5c949a80 R14: 0000000000000000 R15: 0000000000000000
+> RIP: 0033:0x7fb52199e527
+> Code: 32 00 64 83 38 15 74 07 b8 ff ff ff ff 5b c3 48 89 df e8 1c c1 07 00
+> 85 c0 75 ed 31 c0 eb d3 90 90 90 90 b8 52 00 00 00 0f 05 <48> 3d 01 f0 ff
+> ff 73 01 c3 48 8b 0d e1 f8 32 00 31 d2 48 29 c2 64
+> RSP: 002b:00007ffe94095c28 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb52199e527
+> RDX: 00007fb521ccfe98 RSI: 00007ffe94095c60 RDI: 00007ffe94096060
+> RBP: 000000000127daa0 R08: 00007fb5223117a0 R09: 0000000001278560
+> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000127aec0
+> R13: 000000000126a250 R14: 00007ffe94095c60 R15: 0000000000000001
 >
-> Allocated by task 1995:
+> Allocated by task 12:
 >   save_stack+0x1b/0x80 mm/kasan/common.c:69
 >   set_track mm/kasan/common.c:77 [inline]
->   __kasan_kmalloc mm/kasan/common.c:493 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
->   kmalloc_array include/linux/slab.h:676 [inline]
->   usbvision_probe.cold+0xaae/0x1e57
-> drivers/media/usb/usbvision/usbvision-video.c:1484
+>   __kasan_kmalloc mm/kasan/common.c:487 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
+>   kmalloc include/linux/slab.h:552 [inline]
+>   kzalloc include/linux/slab.h:748 [inline]
+>   iowarrior_probe+0x7a/0x10b2 drivers/usb/misc/iowarrior.c:753
 >   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
 >   really_probe+0x281/0x6d0 drivers/base/dd.c:548
 >   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
@@ -163,53 +178,63 @@ On Mon, Sep 16, 2019 at 3:29 PM syzbot
 >   kthread+0x318/0x420 kernel/kthread.c:255
 >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 >
-> Freed by task 1995:
+> Freed by task 12:
 >   save_stack+0x1b/0x80 mm/kasan/common.c:69
 >   set_track mm/kasan/common.c:77 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
+>   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
 >   slab_free_hook mm/slub.c:1423 [inline]
 >   slab_free_freelist_hook mm/slub.c:1474 [inline]
 >   slab_free mm/slub.c:3016 [inline]
 >   kfree+0xe4/0x2f0 mm/slub.c:3957
->   usbvision_release+0x13b/0x1c0
-> drivers/media/usb/usbvision/usbvision-video.c:1353
->   usbvision_disconnect+0x16c/0x1d0
-> drivers/media/usb/usbvision/usbvision-video.c:1582
->   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
->   __device_release_driver drivers/base/dd.c:1134 [inline]
->   device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
->   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
->   device_del+0x420/0xb10 drivers/base/core.c:2339
->   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
->   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+>   iowarrior_delete drivers/usb/misc/iowarrior.c:246 [inline]
+>   iowarrior_probe+0xbb4/0x10b2 drivers/usb/misc/iowarrior.c:852
+>   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2165
+>   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2165
+>   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+>   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
 >   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
 >   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+>   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
 >   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
 >   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
 >   kthread+0x318/0x420 kernel/kthread.c:255
 >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 >
-> The buggy address belongs to the object at ffff8881d41ad420
->   which belongs to the cache kmalloc-32 of size 32
-> The buggy address is located 0 bytes inside of
->   32-byte region [ffff8881d41ad420, ffff8881d41ad440)
+> The buggy address belongs to the object at ffff8881d56b5180
+>   which belongs to the cache kmalloc-512 of size 512
+> The buggy address is located 136 bytes inside of
+>   512-byte region [ffff8881d56b5180, ffff8881d56b5380)
 > The buggy address belongs to the page:
-> page:ffffea0007506b40 refcount:1 mapcount:0 mapping:ffff8881da003400
-> index:0x0
-> flags: 0x200000000000200(slab)
-> raw: 0200000000000200 ffffea0007662c40 0000000f0000000f ffff8881da003400
-> raw: 0000000000000000 0000000080550055 00000001ffffffff 0000000000000000
+> page:ffffea000755ad00 refcount:1 mapcount:0 mapping:ffff8881da002500
+> index:0x0 compound_mapcount: 0
+> flags: 0x200000000010200(slab|head)
+> raw: 0200000000010200 ffffea000757ad00 0000000300000003 ffff8881da002500
+> raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
 > page dumped because: kasan: bad access detected
 >
 > Memory state around the buggy address:
->   ffff8881d41ad300: fb fb fb fb fc fc fb fb fb fb fc fc fb fb fb fb
->   ffff8881d41ad380: fc fc fb fb fb fb fc fc fb fb fb fb fc fc fb fb
-> > ffff8881d41ad400: fb fb fc fc fb fb fb fb fc fc fb fb fb fb fc fc
->                                 ^
->   ffff8881d41ad480: fb fb fb fb fc fc fb fb fb fb fc fc fb fb fb fb
->   ffff8881d41ad500: fc fc 00 00 00 00 fc fc fb fb fb fb fc fc fb fb
+>   ffff8881d56b5100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>   ffff8881d56b5180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > ffff8881d56b5200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                        ^
+>   ffff8881d56b5280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d56b5300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 > ==================================================================
 >
 >
@@ -220,14 +245,9 @@ On Mon, Sep 16, 2019 at 3:29 PM syzbot
 >
 > syzbot will keep track of this bug report. See:
 > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000f111a20592ab9671%40google.com.
 
-Most probably the same bug as:
+Most probably the same issue as:
 
-https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
+https://syzkaller.appspot.com/bug?id=c59a8f0485cd6634443cdf23cdbf3ea264dd888d
 
-#syz dup: general protection fault in usb_set_interface
+#syz dup: KASAN: use-after-free Read in iowarrior_disconnect
