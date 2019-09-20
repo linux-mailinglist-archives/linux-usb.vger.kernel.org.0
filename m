@@ -2,92 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 704E1B8C36
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 10:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F03B8C70
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 10:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437680AbfITICk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 04:02:40 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:27012 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390941AbfITICk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 04:02:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1568966559;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=omv7+mbGxPVf+0lSkKX4kVmao62GbbYXILt4i5WxIAo=;
-        b=cPpu0jmGxZ7lWifVnLxUatezDsGss6+EFGFXoA7lsSaZSsgGjKQZfHqER1u5BjU8crAd/5
-        pk/dJ6TVdhersB1HtWk3QhGTLoRevK/DSsmnFqVVI5U7bkUTPOcLMK3YcstJyF8Uum1r+S
-        4jcNn6Xm+h1ui+6I+5fD+1GH9T4hjng=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-213-x-byZX-SOsm8EPmUV3NFEg-1; Fri, 20 Sep 2019 04:02:38 -0400
-Received: by mail-ed1-f70.google.com with SMTP id y25so3676032edv.20
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 01:02:37 -0700 (PDT)
+        id S2393203AbfITIP4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Sep 2019 04:15:56 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:40399 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388411AbfITIPz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 04:15:55 -0400
+Received: by mail-lf1-f65.google.com with SMTP id d17so4390540lfa.7;
+        Fri, 20 Sep 2019 01:15:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Y/OJqZHSGkyT8kFjd1lJtlh+ntUpVdhTuyPyBbh3g+w=;
-        b=M/vmmeC+PfzFzidnyYnaJS1P7y44Psbvb4ZG669UhMNuUZdbSTygdOsO2azIbsFQgn
-         8DikduTxNQr2Mo2z9LdgY6axcK/K7fKa3hNWMo6Laf6wU673qRQ21JFVz8PuTMb3jdn7
-         fQJuAkAxIiXLim3VNwMPLurGJ6rFXH59Wq26+nm0qMMpeVf7n1OyPUjr6fn0scun9nUj
-         zHU+5LhVD8BTqC2n9sO5ligXiZH3KsiLUO7N7U7HBnsoHIk3+7tqjD1WIl8lsTNRTASY
-         odMW7MHQ/yHb/YKUoySlXCgUL+IYam1fN2mm7qNZueU8HYNKJrT/SxHMKys5zq5ttTqa
-         R5gQ==
-X-Gm-Message-State: APjAAAW2TXct5XxpYByRll+3Sc3O7knMXZASkIK33dgNVjU/Dw9W9Nvx
-        ehrmqfeGdYyI98uYYUDF5i+8gra7Uw+i/sCq1U8xF/BUCzetwecjqSJPOG3onWe+eQTTJC30Xyq
-        bNuDpBCRhVgUIxx5zOdWk
-X-Received: by 2002:aa7:d718:: with SMTP id t24mr19310599edq.300.1568966556930;
-        Fri, 20 Sep 2019 01:02:36 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwWaaT9DrifLzV+dSh9GB8CGVoZ5eA0zf6DFmKbqgk48C0ZCbjACBj2Aw5MgUhmUfCQoK1VHg==
-X-Received: by 2002:aa7:d718:: with SMTP id t24mr19310576edq.300.1568966556699;
-        Fri, 20 Sep 2019 01:02:36 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id a50sm192418eda.25.2019.09.20.01.02.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Sep 2019 01:02:35 -0700 (PDT)
-Subject: Re: [PATCH v3 0/2] tcpm: AMS and Collision Avoidance
-To:     Kyle Tso <kyletso@google.com>, linux@roeck-us.net,
-        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, Adam.Thomson.Opensource@diasemi.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190920032437.242187-1-kyletso@google.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <cb225c94-da97-1b47-48b6-3802dc3eb93b@redhat.com>
-Date:   Fri, 20 Sep 2019 10:02:34 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LrfyjdPdxewWc/E+N/Begl6k2uWPZL/n9FnhRH8LaEQ=;
+        b=L4xKTRo5CywFFEod/xneTJPJ4AJi4ZDibX5jF0KeEjr56KB+U7ZAp70O522X9PFrNW
+         f70ZH8Dv+SelbCodozOLcwsop7/cq0jqE7GNlXzJqmAGJdWIxQ5XZzjqCIbGMCvtzy90
+         GlQvBZZKXyL9mS0igp65hIRtwFkoCInp5MtCZUjAOVOChoy5N5L6KvwnzeS+0LzAc0G4
+         7dkK5agy8qfDxV8cVglm361V/ctAR615+mZvzI2aPDbkVeKOgUrqeGUQy09rsFV2ev3j
+         dyI96SgDN7PDBYEArm7kACIPBFQ7BD9hrd76DZ0wbZwZflu1cIv+XZRvnWFzi4ppgSCS
+         gaZQ==
+X-Gm-Message-State: APjAAAV58Ms5XAHYIKTmrSNptSoHGBD46Q1OUraXqqDXjx8A4YASXqcn
+        o92y2+OxHhD3jyAP+c1qMu8=
+X-Google-Smtp-Source: APXvYqxYAQOhQ7mSab3tLmDNSXrRiwwfk4BebreALvJsxW+ZAIMQ4zlYbDIvNdHFxwmpK8a8xBW3zA==
+X-Received: by 2002:ac2:50c5:: with SMTP id h5mr7947101lfm.105.1568967351210;
+        Fri, 20 Sep 2019 01:15:51 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id b19sm266554lji.41.2019.09.20.01.15.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 20 Sep 2019 01:15:50 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iBE50-00017w-FP; Fri, 20 Sep 2019 10:15:50 +0200
+Date:   Fri, 20 Sep 2019 10:15:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH V1 3/6] USB: serial: f81232: Add generator for F81534A
+Message-ID: <20190920081550.GK30545@localhost>
+References: <1559789656-15847-1-git-send-email-hpeter+linux_kernel@gmail.com>
+ <1559789656-15847-4-git-send-email-hpeter+linux_kernel@gmail.com>
+ <20190828150252.GJ13017@localhost>
+ <b194f7e6-963d-df3b-5295-4323dae0846d@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190920032437.242187-1-kyletso@google.com>
-Content-Language: en-US
-X-MC-Unique: x-byZX-SOsm8EPmUV3NFEg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b194f7e6-963d-df3b-5295-4323dae0846d@gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Kyle,
+On Mon, Sep 02, 2019 at 10:59:17AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> Hi Johan,
+> 
+> Johan Hovold 於 2019/8/28 下午 11:02 寫道:
+> > On Thu, Jun 06, 2019 at 10:54:13AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> >> The Fintek F81534A series is contains 1 HUB / 1 GPIO device / n UARTs,
+> >> but the UART is default disable and need enabled by GPIO device(2c42/16F8).
+> >> When F81534A plug to host, we can only see 1 HUB & 1 GPIO device, add
+> >> GPIO device USB interface to device_list and trigger generate worker,
+> >> f81534a_generate_worker to run f81534a_ctrl_generate_ports().
+> >>
+> >> The operation in f81534a_ctrl_generate_ports() as following:
+> >> 	1: Write 0x8fff to F81534A_CMD_ENABLE_PORT register for enable all
+> >> 	   UART device.
+> >>
+> >> 	2: Read port existence & current status from F81534A_CMD_PORT_STATUS
+> >> 	   register. the higher 16bit will indicate the UART existence. If the
+> >> 	   UART is existence, we'll check it GPIO mode as long as not default
+> >> 	   value (default is all input mode).
+> >>
+> >> 	3: 1 GPIO device will check with max 15s and check next GPIO device when
+> >> 	   timeout. (F81534A_CTRL_RETRY * F81534A_CTRL_TIMER)
+> >>
+> >> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+> > 
+> > This is all looks crazy... Please better describe how the device works,
+> > and you want to implement support.
+> 
+> I'll try to refactor more simply for first add into kernel.
+> 
+> >> ---
+> >>   drivers/usb/serial/f81232.c | 356 +++++++++++++++++++++++++++++++++++++++++++-
+> >>   1 file changed, 355 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+> >> index 75dfc0b9ef30..e9470fb0d691 100644
+> >> --- a/drivers/usb/serial/f81232.c
+> >> +++ b/drivers/usb/serial/f81232.c
+> >> @@ -41,6 +41,12 @@ static const struct usb_device_id id_table[] = {
+> >>   };
+> >>   MODULE_DEVICE_TABLE(usb, id_table);
+> >>   
+> >> +static const struct usb_device_id f81534a_ctrl_id_table[] = {
+> >> +	{ USB_DEVICE(0x2c42, 0x16f8) },		/* Global control device */
+> >> +	{ }					/* Terminating entry */
+> >> +};
+> >> +MODULE_DEVICE_TABLE(usb, f81534a_ctrl_id_table);
+> > 
+> > You can only have one MODULE_DEVICE_TABLE()...
+> 
+> I had a question about this. In this file, we'll need support 3 sets of
+> id f81232(1)/f81534a(9)/f81534a_ctrl(1). So I will refactor the code
+> about id section to the below due to the id table will use more than
+> once:
+> 
+> =======================================================================
+> #define F81232_ID		\
+> 	{ USB_DEVICE(0x1934, 0x0706) }	/* 1 port UART device */
+> 
+> #define F81534A_SERIES_ID	\
+> 	{ USB_DEVICE(0x2c42, 0x1602) },	/* In-Box 2 port UART device */	\
+> 	{ USB_DEVICE(0x2c42, 0x1604) },	/* In-Box 4 port UART device */	\
+> 	{ USB_DEVICE(0x2c42, 0x1605) },	/* In-Box 8 port UART device */	\
+> 	{ USB_DEVICE(0x2c42, 0x1606) },	/* In-Box 12 port UART device */ \
+> 	{ USB_DEVICE(0x2c42, 0x1608) },	/* Non-Flash type */ \
+> 	{ USB_DEVICE(0x2c42, 0x1632) },	/* 2 port UART device */ \
+> 	{ USB_DEVICE(0x2c42, 0x1634) },	/* 4 port UART device */ \
+> 	{ USB_DEVICE(0x2c42, 0x1635) },	/* 8 port UART device */ \
+> 	{ USB_DEVICE(0x2c42, 0x1636) }	/* 12 port UART device */
+> 
+> #define F81534A_CTRL_ID		\
+> 	{ USB_DEVICE(0x2c42, 0x16f8) }	/* Global control device */
+> 
+> static const struct usb_device_id id_table[] = {
+> 	F81232_ID,
+> 	{ }					/* Terminating entry */
+> };
+> 
+> static const struct usb_device_id f81534a_id_table[] = {
+> 	F81534A_SERIES_ID,
+> 	{ }					/* Terminating entry */
+> };
+> 
+> static const struct usb_device_id f81534a_ctrl_id_table[] = {
+> 	F81534A_CTRL_ID,
+> 	{ }					/* Terminating entry */
+> };
+> 
+> static const struct usb_device_id all_serial_id_table[] = {
+> 	F81232_ID,
+> 	F81534A_SERIES_ID,
+> 	{ }					/* Terminating entry */
+> };
+> MODULE_DEVICE_TABLE(usb, all_serial_id_table);
+> =======================================================================
+> 
+> but the checkpatch.pl give me the warning below:
+> ERROR: Macros with complex values should be enclosed in parentheses
+> #42: FILE: f81232.c:28:
+> +#define F81534A_SERIES_ID      \
+> +       { USB_DEVICE(0x2c42, 0x1602) }, /* In-Box 2 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1604) }, /* In-Box 4 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1605) }, /* In-Box 8 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1606) }, /* In-Box 12 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1608) }, /* Non-Flash type */ \
+> +       { USB_DEVICE(0x2c42, 0x1632) }, /* 2 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1634) }, /* 4 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1635) }, /* 8 port UART device */ \
+> +       { USB_DEVICE(0x2c42, 0x1636) }  /* 12 port UART device */
+> 
+> Is any suggestion ?
 
-On 20-09-2019 05:24, Kyle Tso wrote:
-> *** BLURB HERE ***
->=20
-> Kyle Tso (2):
->    usb: typec: tcpm: AMS and Collision Avoidance
->    usb: typec: tcpm: AMS for PD2.0
+Just ignore checkpatch.pl, that's often the right answer. We already
+have something similar to the above in usb-serial-simple.c.
 
-May I ask how and on which hardware you have tested this?
+Unless you can come up with some better way to deal with this.
 
-And specifically if you have tested this in combination with pwr-role swapp=
-ing?
-
-Regards,
-
-Hans
-
+Johan
