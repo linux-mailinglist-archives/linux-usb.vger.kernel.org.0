@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D990B9424
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 17:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55FFB9429
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Sep 2019 17:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404162AbfITPie (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 11:38:34 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:36376 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404128AbfITPid (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 11:38:33 -0400
-Received: by mail-pl1-f194.google.com with SMTP id f19so3363711plr.3
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 08:38:32 -0700 (PDT)
+        id S2390541AbfITPjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Sep 2019 11:39:07 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35377 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404128AbfITPjG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 11:39:06 -0400
+Received: by mail-pg1-f196.google.com with SMTP id a24so4052768pgj.2
+        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 08:39:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=kBIlDtbyXtXdQi8ZAyUelcu4kBMJkgAjJmDWZAjgLk4=;
-        b=RQtCpboUZIP/B2mgGM/u8J8btcMzbZdokkMu5M0FgrxLwLI/Hl5Sp3JQAaymhrLMfR
-         VY3/AZMd0GCXFoSsLo689R3+NYbD8ev+havmS2CAd3xnKmIjIs2qVg/83dNBhR2Uxsjp
-         RzpfWbcbCMji+r5+UAVG7guyzCx9UuQym1RJPPPVSCLoWKzo5sGr329Xo8HoxhLathRd
-         sO4qI6pkd/elinx3TOZEc0feYEXDpqKYGhdrM5B6x5K5jDOw6dcUbSgFz3h4I8sPM9FR
-         hwQCbR2MLc3D+nm3b5wT4NgZtcBCZVzmtOA6E7hPJpE+QLxkEMUi5MqHim6W8s91Y4M8
-         NO7g==
+        bh=3ckZvdNlDBLlx9wzHNecVlvgh5WHBDJv874i2JAKZgc=;
+        b=ZsAy7oL1yRE+AFDFcJbaYoFAUM0uaHUnOA/VvMgXhD4wGYWvQ8eTGUDgsKnJKuU617
+         62AEtfR+qirh3VuS2McR5L/fGK7IVbbsU6rwsVKdEuHdsaYRYG+/Jb6w0V7KFtHdBOBI
+         zLelVL+XVkWCEYFVQxgnDLDYlE0EQggczGnxPCY46xCxh2RJsWVJRrVVGblPaapltOYt
+         jqaqyXESAA7Ca8Yq+uX4hNRk3obJ92v4j/NFScOJPKjOcqA1VqfTRZqRWyrsU6Ik12kA
+         0GDQOwmYI5bE6SePmsUOJjEeMl6iRoSBq3anCZpp5TJNnDe79VB5KnFeT2ildXdwiAWB
+         5aBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=kBIlDtbyXtXdQi8ZAyUelcu4kBMJkgAjJmDWZAjgLk4=;
-        b=jSUpX318Yjxh6x4OfrPTZND4AkJtuwx2L2SJkAm/LlvafjWd/v+9Xi+3KPlTHNK2CT
-         AhlTpbXKYUbquVPBCgLCBmIa5vZUxxCzFqke3sEsIOBa3KdBUbULimvhEs1qCJmxwHe8
-         1jiacV+Kpfxwy+p9z7DTRAlX0n9+bgT+X8Z2ANkW+qrb1SyN+ZgmM2ymACdXOT0Ftezp
-         wEmr+VqXp105F8zIolBEDaaDXoQW0vFeyZ5OJPkx1f4AmkQScDQ2iL0/S53n8bXnY/ev
-         v6661dA+JaYILp+G79JTTYqTCvTsnuJi0yRPJYv0gpaPGJFIjspoKsNn8iKHyP8QpzTY
-         TtxQ==
-X-Gm-Message-State: APjAAAWzy4UerP9A9LCNJ+J5G+qL29bdHFluKnORt9GKDxU2LjpnIRka
-        EnKnbrzKJJQI6IDyPEeA8wcwT9/6iP65fMo9Qek8ODTx/At/mQ==
-X-Google-Smtp-Source: APXvYqyRSgLWkIgyh1JIdj88i7yfMdK1qrM3w6aY1SH8YTZYOr55SseAJ5C0fFUY5kpCW5ZMZuByrZEWxGFeZ5MruF0=
-X-Received: by 2002:a17:902:a50a:: with SMTP id s10mr17230604plq.336.1568993911164;
- Fri, 20 Sep 2019 08:38:31 -0700 (PDT)
+        bh=3ckZvdNlDBLlx9wzHNecVlvgh5WHBDJv874i2JAKZgc=;
+        b=JLsDDqb81T1O+YU9wPntx7Abs4YCmP/OJRTj1op/h4vqGTkY9hhQs8iJ6Sx4e8y3yt
+         LZY1eGIHY7o/MfGhINsK4LGjGKws6MGd4852G0ZRfXbvzw8r1At4cafhGU3kKS6sdm4a
+         0hfhaIapzjRBxKlgiReyeCtPreqeH4xE0VJgrEcAE7sLeMYgfCzTqam+mkAF4gpkfHcU
+         6JYedCsQnatvD0GKMZwgcJDIO28LjJvem4LSJ7M/vF7kOKsZ82KeYBUEtRTRL3fVfXGl
+         4kbJNQaegqx9gOWYVxKDAhIi/FGiOvdKyQ3JuL07yZ2Ix2R8fKTkBuWXwlnLbnqJUb9s
+         aG5g==
+X-Gm-Message-State: APjAAAXcx8dd6cNrfHonLf9l5NaBf1sx3TyMJTqeens1yk7UXRTBIAhx
+        +VR3EHMd3zXeCLOkNDexUZOR4x3zUi8+dQbOd7syPQ==
+X-Google-Smtp-Source: APXvYqxhxUtI1bBuQU8/xepUI7dffLtSBarKtP7rOdNSJlmsNMhtiIBOPgAMnUkb0f/ajCBtO0+x4mdK3k6miltcY4c=
+X-Received: by 2002:a63:d1a:: with SMTP id c26mr11999270pgl.286.1568993944330;
+ Fri, 20 Sep 2019 08:39:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000a039300590796dc4@google.com>
-In-Reply-To: <000000000000a039300590796dc4@google.com>
+References: <00000000000093a9110590796dc4@google.com>
+In-Reply-To: <00000000000093a9110590796dc4@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 20 Sep 2019 17:38:19 +0200
-Message-ID: <CAAeHK+z1+_AH1U2490GzegVxWA2LWSJKtB=GDA23TDuRLgepzA@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in iowarrior_callback
-To:     syzbot <syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com>
+Date:   Fri, 20 Sep 2019 17:38:53 +0200
+Message-ID: <CAAeHK+w7vaciRU=1nZpaVFS845NWZrCQjiAgebureCGbEUixrA@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in iowarrior_release
+To:     syzbot <syzbot+fa4fa544487e9d02b211@syzkaller.appspotmail.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         Kees Cook <keescook@chromium.org>,
@@ -62,7 +62,7 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Mon, Aug 19, 2019 at 4:48 PM syzbot
-<syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com> wrote:
+<syzbot+fa4fa544487e9d02b211@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -70,79 +70,55 @@ On Mon, Aug 19, 2019 at 4:48 PM syzbot
 >
 > HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11605772600000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14ff4372600000
 > kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
-> dashboard link: https://syzkaller.appspot.com/bug?extid=1c7a8a0c02f8b83f3a67
+> dashboard link: https://syzkaller.appspot.com/bug?extid=fa4fa544487e9d02b211
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c83b36600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15cbba22600000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+1c7a8a0c02f8b83f3a67@syzkaller.appspotmail.com
+> Reported-by: syzbot+fa4fa544487e9d02b211@syzkaller.appspotmail.com
 >
 > ==================================================================
-> BUG: KASAN: use-after-free in iowarrior_callback.cold+0x4f/0x51
-> drivers/usb/misc/iowarrior.c:208
-> Read of size 8 at addr ffff8881d56b5208 by task udevd/4692
+> BUG: KASAN: use-after-free in __mutex_lock_common
+> kernel/locking/mutex.c:912 [inline]
+> BUG: KASAN: use-after-free in __mutex_lock+0xf23/0x1360
+> kernel/locking/mutex.c:1077
+> Read of size 8 at addr ffff8881d4a716d8 by task syz-executor812/2337
 >
-> CPU: 1 PID: 4692 Comm: udevd Not tainted 5.3.0-rc4+ #26
+> CPU: 0 PID: 2337 Comm: syz-executor812 Not tainted 5.3.0-rc4+ #26
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
 > Call Trace:
->   <IRQ>
 >   __dump_stack lib/dump_stack.c:77 [inline]
 >   dump_stack+0xca/0x13e lib/dump_stack.c:113
 >   print_address_description+0x6a/0x32c mm/kasan/report.c:351
 >   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
 >   kasan_report+0xe/0x12 mm/kasan/common.c:612
->   iowarrior_callback.cold+0x4f/0x51 drivers/usb/misc/iowarrior.c:208
->   __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1657
->   usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1722
->   dummy_timer+0x120f/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1965
->   call_timer_fn+0x179/0x650 kernel/time/timer.c:1322
->   expire_timers kernel/time/timer.c:1366 [inline]
->   __run_timers kernel/time/timer.c:1685 [inline]
->   __run_timers kernel/time/timer.c:1653 [inline]
->   run_timer_softirq+0x5cc/0x14b0 kernel/time/timer.c:1698
->   __do_softirq+0x221/0x912 kernel/softirq.c:292
->   invoke_softirq kernel/softirq.c:373 [inline]
->   irq_exit+0x178/0x1a0 kernel/softirq.c:413
->   exiting_irq arch/x86/include/asm/apic.h:537 [inline]
->   smp_apic_timer_interrupt+0x12f/0x500 arch/x86/kernel/apic/apic.c:1095
->   apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
->   </IRQ>
-> RIP: 0010:__sanitizer_cov_trace_const_cmp1+0x0/0x20 kernel/kcov.c:247
-> Code: 66 2e 0f 1f 84 00 00 00 00 00 48 8b 0c 24 48 89 f2 48 89 fe bf 06 00
-> 00 00 e9 2c ff ff ff 66 90 66 2e 0f 1f 84 00 00 00 00 00 <48> 8b 0c 24 40
-> 0f b6 d6 40 0f b6 f7 bf 01 00 00 00 e9 0a ff ff ff
-> RSP: 0018:ffff8881c9397b20 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-> RAX: 00000000c9397c01 RBX: ffff8881c9397c00 RCX: ffffffff816a906f
-> RDX: 0000000000000000 RSI: 00000000c9397c01 RDI: 0000000000000000
-> RBP: 00000000c9397c01 R08: ffff8881b05fc800 R09: ffffed103b0df2a5
-> R10: ffffed103b0df2a4 R11: ffff8881d86f9523 R12: ffff8881c9397c08
-> R13: ffff8881c9397c38 R14: ffff8881d86f94a0 R15: ffff8881c9397c40
->   unlazy_walk+0x116/0x550 fs/namei.c:675
->   complete_walk+0xc6/0x240 fs/namei.c:788
->   path_parentat.isra.0+0x8c/0x160 fs/namei.c:2366
->   filename_parentat.isra.0+0x19c/0x410 fs/namei.c:2386
->   do_renameat2+0x193/0xbb0 fs/namei.c:4545
->   __do_sys_rename fs/namei.c:4673 [inline]
->   __se_sys_rename fs/namei.c:4671 [inline]
->   __x64_sys_rename+0x5d/0x80 fs/namei.c:4671
+>   __mutex_lock_common kernel/locking/mutex.c:912 [inline]
+>   __mutex_lock+0xf23/0x1360 kernel/locking/mutex.c:1077
+>   iowarrior_release+0x4c/0x280 drivers/usb/misc/iowarrior.c:650
+>   __fput+0x2d7/0x840 fs/file_table.c:280
+>   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+>   exit_task_work include/linux/task_work.h:22 [inline]
+>   do_exit+0x8ef/0x2c00 kernel/exit.c:879
+>   do_group_exit+0x125/0x340 kernel/exit.c:983
+>   __do_sys_exit_group kernel/exit.c:994 [inline]
+>   __se_sys_exit_group kernel/exit.c:992 [inline]
+>   __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:992
 >   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
 >   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7fb52199e527
-> Code: 32 00 64 83 38 15 74 07 b8 ff ff ff ff 5b c3 48 89 df e8 1c c1 07 00
-> 85 c0 75 ed 31 c0 eb d3 90 90 90 90 b8 52 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 01 c3 48 8b 0d e1 f8 32 00 31 d2 48 29 c2 64
-> RSP: 002b:00007ffe94095c28 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fb52199e527
-> RDX: 00007fb521ccfe98 RSI: 00007ffe94095c60 RDI: 00007ffe94096060
-> RBP: 000000000127daa0 R08: 00007fb5223117a0 R09: 0000000001278560
-> R10: 0000000000000000 R11: 0000000000000246 R12: 000000000127aec0
-> R13: 000000000126a250 R14: 00007ffe94095c60 R15: 0000000000000001
+> RIP: 0033:0x4445f8
+> Code: Bad RIP value.
+> RSP: 002b:00007ffdf26d4508 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004445f8
+> RDX: 0000000000000000 RSI: 000000000000003c RDI: 0000000000000000
+> RBP: 00000000004c4450 R08: 00000000000000e7 R09: ffffffffffffffd4
+> R10: 0000000000027c8d R11: 0000000000000246 R12: 0000000000000001
+> R13: 00000000006d6180 R14: 0000000000000000 R15: 0000000000000000
 >
-> Allocated by task 12:
+> Allocated by task 1742:
 >   save_stack+0x1b/0x80 mm/kasan/common.c:69
 >   set_track mm/kasan/common.c:77 [inline]
 >   __kasan_kmalloc mm/kasan/common.c:487 [inline]
@@ -178,7 +154,7 @@ On Mon, Aug 19, 2019 at 4:48 PM syzbot
 >   kthread+0x318/0x420 kernel/kthread.c:255
 >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 >
-> Freed by task 12:
+> Freed by task 1742:
 >   save_stack+0x1b/0x80 mm/kasan/common.c:69
 >   set_track mm/kasan/common.c:77 [inline]
 >   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
@@ -216,25 +192,25 @@ On Mon, Aug 19, 2019 at 4:48 PM syzbot
 >   kthread+0x318/0x420 kernel/kthread.c:255
 >   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 >
-> The buggy address belongs to the object at ffff8881d56b5180
+> The buggy address belongs to the object at ffff8881d4a71680
 >   which belongs to the cache kmalloc-512 of size 512
-> The buggy address is located 136 bytes inside of
->   512-byte region [ffff8881d56b5180, ffff8881d56b5380)
+> The buggy address is located 88 bytes inside of
+>   512-byte region [ffff8881d4a71680, ffff8881d4a71880)
 > The buggy address belongs to the page:
-> page:ffffea000755ad00 refcount:1 mapcount:0 mapping:ffff8881da002500
-> index:0x0 compound_mapcount: 0
+> page:ffffea0007529c00 refcount:1 mapcount:0 mapping:ffff8881da002500
+> index:0xffff8881d4a70c80 compound_mapcount: 0
 > flags: 0x200000000010200(slab|head)
-> raw: 0200000000010200 ffffea000757ad00 0000000300000003 ffff8881da002500
-> raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+> raw: 0200000000010200 ffffea0007529500 0000000300000003 ffff8881da002500
+> raw: ffff8881d4a70c80 00000000800c000a 00000001ffffffff 0000000000000000
 > page dumped because: kasan: bad access detected
 >
 > Memory state around the buggy address:
->   ffff8881d56b5100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->   ffff8881d56b5180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ffff8881d56b5200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                        ^
->   ffff8881d56b5280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881d56b5300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4a71580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4a71600: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> > ffff8881d4a71680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                                      ^
+>   ffff8881d4a71700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881d4a71780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 > ==================================================================
 >
 >
@@ -245,6 +221,8 @@ On Mon, Aug 19, 2019 at 4:48 PM syzbot
 >
 > syzbot will keep track of this bug report. See:
 > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
 Most probably the same issue as:
 
