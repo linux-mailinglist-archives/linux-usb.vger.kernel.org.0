@@ -2,81 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5EEB9BF4
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2019 04:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97D4B9C57
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Sep 2019 06:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437571AbfIUCDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Sep 2019 22:03:11 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:33767 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437471AbfIUCDK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Sep 2019 22:03:10 -0400
-Received: by mail-qk1-f196.google.com with SMTP id x134so9315919qkb.0
-        for <linux-usb@vger.kernel.org>; Fri, 20 Sep 2019 19:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=netronome-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :organization:mime-version:content-transfer-encoding;
-        bh=TKQNktweFiniNKPZ1K4hQ+hmbYW6Qjq/UnNJEIp/c0E=;
-        b=dhJ4ltjboaskS3BNZfUNp9te0pSoKYgpwSXOIMM3W4rDycbfQKBzm8pzlNgZlBvehX
-         lni1mXwspTYH795xgmQ5HvKr9lhLyN9oS49AEObVifxTZ587UKCjhWWG47q+uH6SEEYS
-         b5tCCntQv8CY1A0jL0QrOZcySTBKsT00TXvzStvL+flGRePQt7Ti7MXCR93bubBPGMiv
-         OzKh6Efg4lEdzWwVwpSMLg4CBII4vW1l7u7DQE8tVjf2EfNF003NJac1Eo8a+uJ8NZEb
-         r96AVRfWZW3l8SRLj0XnxYHv7gtHaoicMNNeWgE+XTw0DLutvpYDGaAw+Foy4Deu4e54
-         GFpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:organization:mime-version:content-transfer-encoding;
-        bh=TKQNktweFiniNKPZ1K4hQ+hmbYW6Qjq/UnNJEIp/c0E=;
-        b=c/EO7WPWmcNSs5vn3nVQikCLZqnJmYDIcsTTEIemLADPhr6AEoQuJEJk14As0SzIbj
-         x+pXaw4cvSbhuw5Ph74G0tVtADAxzz9/LIFQZ5DO+BWpu90pM/uLzVItm/f9+/TJzsJQ
-         ZFX+DkT675N+GT/iU0auLMShykL6yPZlwj2avihQRJlx+7WvXUr05pzLvju5VHBMH6ma
-         SNcW+76vMYQ2Ojm13Oa9+SpdGKZ2vMArnPWkki1lDvcHYOQtgP25Ow61iZZ0dGE2nfwp
-         Swqb8t+I37qnSD0H2zht0rHcv2Hdk72szvw/PVl0PyfHkFZX7CAiu+Bo9ZJ5Cc93Lvaw
-         VlbA==
-X-Gm-Message-State: APjAAAWOHJAHhmF+82sUIsxxCBjM47s+ZIA+4wBGc0QGUdfWvn6IK+IC
-        1MwYO/U65qlv5VxAkivdZPx3YBhKbYo=
-X-Google-Smtp-Source: APXvYqz/BxYdzZQVqL23CXs4R732G54NUtBs6GuwsHdbUcFT2KQ9DxUNZvh9MhT7Ju64TbdteyAULg==
-X-Received: by 2002:a05:620a:7ca:: with SMTP id 10mr6945646qkb.410.1569031388353;
-        Fri, 20 Sep 2019 19:03:08 -0700 (PDT)
-Received: from cakuba.netronome.com ([66.60.152.14])
-        by smtp.gmail.com with ESMTPSA id g8sm1896906qta.67.2019.09.20.19.03.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2019 19:03:08 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 19:03:03 -0700
-From:   Jakub Kicinski <jakub.kicinski@netronome.com>
-To:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        Oliver Neukum <oliver@neukum.org>
-Subject: Re: [PATCH net,stable] usbnet: ignore endpoints with invalid
- wMaxPacketSize
-Message-ID: <20190920190303.149da58a@cakuba.netronome.com>
-In-Reply-To: <20190918121738.6343-1-bjorn@mork.no>
-References: <20190918121738.6343-1-bjorn@mork.no>
-Organization: Netronome Systems, Ltd.
+        id S1725855AbfIUEpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Sep 2019 00:45:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48156 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725821AbfIUEpN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 21 Sep 2019 00:45:13 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6141D20C01;
+        Sat, 21 Sep 2019 04:45:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569041112;
+        bh=77X77KHeBAcUIWUblgox8NKnr//eHksiPvmH6Q/PpuA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LfxyUsY5qwFjXQujUGU2rLISA+wocs9KxABFTQnySjD7pf36tDcJBdHHNdXy/g6ZN
+         ZNZebe0WcnFBQh5MHZQtc2U0YBEfgATh5tFdgZzrSbiJfkf956paGcl56j2hfDQ9D/
+         XyjEx2tVxsMVass9C3pQY26gc4wj0HVHj3cPBROs=
+Date:   Sat, 21 Sep 2019 06:45:10 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     JH <jupiter.hce@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Failed to connect to 4G modem
+Message-ID: <20190921044510.GA990793@kroah.com>
+References: <CAA=hcWRF00syz8jB1+qdy1pFA7Wk_B=1Z_DT5vYuQrzFKhtZbw@mail.gmail.com>
+ <20190917120258.GB489142@kroah.com>
+ <CAA=hcWTD2zYD0gVTu6sDuRqUcTOnn42Gm0s1tOGvBQdQ40Q7LA@mail.gmail.com>
+ <20190918054744.GA1830105@kroah.com>
+ <CAA=hcWR__j20ZQY9H8zzTryEatSfe+yXLYQXSaXMvgy3pwdJKg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA=hcWR__j20ZQY9H8zzTryEatSfe+yXLYQXSaXMvgy3pwdJKg@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 18 Sep 2019 14:17:38 +0200, Bj=C3=B8rn Mork wrote:
-> Endpoints with zero wMaxPacketSize are not usable for transferring
-> data. Ignore such endpoints when looking for valid in, out and
-> status pipes, to make the drivers more robust against invalid and
-> meaningless descriptors.
->=20
-> The wMaxPacketSize of these endpoints are used for memory allocations
-> and as divisors in many usbnet minidrivers. Avoiding zero is therefore
-> critical.
->=20
-> Signed-off-by: Bj=C3=B8rn Mork <bjorn@mork.no>
+On Sat, Sep 21, 2019 at 08:10:30AM +1000, JH wrote:
+> Hi Greg,
+> 
+> On 9/18/19, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > Otherwise, just use 5.3 now and then 5.4 when it comes out in a few
+> > months.
+> 
+> My apology for an off topic question. I discussed with my colleague to
+> use 5.3, if we cannot wait for 5.4 LTS release, we will do a remote
+> 5.4 upgrade from 5.3 on air for the product. One of my colleague
+> warning me that kernel 5.3 and 5.4 LTS will not be a minor upgrade, it
+> will be major upgrade which will have massive libraries changes. I
+> don't agree with it, but I could not find kernel document to state
+> either 5.3 and 5.4 LTS is a major or minor change. What is your
+> insight view? Appreciate if you could point me a reference to prove my
+> colleague is wrong.
 
-Fixes tag would be useful. I'm not sure how far into stable we should
-backport this.
+You should never have to update any userspace code or library if the
+kernel is updated as we guarantee backwards compatibility.  If we did
+break something, please let us know and we will work very hard to fix
+it.
 
-Is this something that occurs on real devices or protection from
-malicious ones?
+This is a guarantee we made back in 2007 or so, and have been sticking
+to it since.
+
+There is no "major" upgrade issue here, the kernel does a new release
+every 3 months and changes the number, showing it is "newer" than the
+previous one.
+
+Hope this helps,
+
+greg k-h
