@@ -2,137 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05588BA185
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Sep 2019 10:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B129BABE4
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 00:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfIVIfb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Sep 2019 04:35:31 -0400
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:52806 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728019AbfIVIfb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 04:35:31 -0400
-Received: by mail-wm1-f53.google.com with SMTP id x2so6553123wmj.2
-        for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2019 01:35:30 -0700 (PDT)
+        id S1728519AbfIVWRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Sep 2019 18:17:35 -0400
+Received: from mail-io1-f51.google.com ([209.85.166.51]:39550 "EHLO
+        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727485AbfIVWRe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 18:17:34 -0400
+Received: by mail-io1-f51.google.com with SMTP id a1so28919628ioc.6
+        for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2019 15:17:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=AgbnPBRhCSXoNOUvqp0Hr2/jLPxDty0mDTI87UvhhWc=;
-        b=Bf6REYvadphjvbWm0/lC6uiytZvHcamYBFD2UgCp8zkuTVBPLh5k06Ksckm4PxlRen
-         SIAkp2hLq8hOEXNESR8RObeWc61ca3wbxvw/Cmo++9uB8umVdTIyP65FUyP1s4Jb2HFZ
-         MWIT3RqJTCa5wI35OzAenw3QI59Cn6yOmCaM4S28ECE8BJuZYhJSizYaeDSOh9RVd3cJ
-         i2VfGVTq9D+9IoqSOZM7GvEejp2xqnoFRThs/NrIrbvxhyeykvLdO5tXusGTjPbm6LEh
-         y1GHowkUQ/EVbw5ySeN9mLoQ1t6dXiPvrshud6GUAoE5VXlR3USOKGl5sTy9h3Ep/eZD
-         S5sQ==
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc;
+        bh=dqobuf/BrOxXasMTwIqqq7pm/XDIEuujQtxgD/0IH0Y=;
+        b=mDdKYe/K6r01mq7wWY7gpR/AdV/FAvCCoi/st/yOqa0vAAJ3+dGgdr6H9E3evIwqUD
+         +4OLPi2tNmePOzPY+kpKnR+/WCv0euqbp8HnvnksX0TSn9X//ojOllbYWEzurdvbgIOe
+         +kJ7nA6Bznu7idRywo0PNJXnHcrdJVq8Papb9Dmjf4gSzX/RzQVYtPECxyd+6U2aVmAI
+         nzLjFfQ+ZlDHzrtbDhnSSGZIqwj57hbyjhOcdvHkWo6RrFpvTed0LjCTDd0Jl2ono75s
+         2CpBb4UJZKyW9lstbMfypcqxIkJzxgX4vMhO1UzV4FeBpUpNsLXBkmrEGDrkPvnNGhSt
+         mvyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=AgbnPBRhCSXoNOUvqp0Hr2/jLPxDty0mDTI87UvhhWc=;
-        b=HhgWSJkxFf4Zv3A8IoE6wrMPeDCX4tICNDDDoXsHVh31LvDRgPzCLz4CKMCfaGWAiR
-         6Ib/pHWRCj966HkVZvapAViBvKgOB/fU0+QGW/Hd/YzOf0ZqZ6pGN94ocB3gnIA9l+hI
-         SJqbd5LKKFLwj4fosoKxBnlUz2HlKmBjHD74de15JNNRjMppgq1uXxkr832hH1R7p3W8
-         tWlb1PhScc9357CFTOeVHrkU2WflpWHG28p9vAbWm6LOaUN95ByTaq4jzhJSOUMRGPbx
-         vLdTrinTpmZutbu+wY2l6RonMLeXT+1j/yG6Pv8uMDj3nxoZ0Rh96NlJfRiYgYAbuHMT
-         OpLw==
-X-Gm-Message-State: APjAAAVvE4NIIxiuTT+vqECdv5igpNesdH9OH9T9Mi0kvikkipPeEvAQ
-        qIzkUXqU8d504NaEFdPzF/lLGJ8cuDJEmeLl7/4KkN4N
-X-Google-Smtp-Source: APXvYqyVHQvZp+wvaO6yMRb4fBlckCIOlFu5l5YuQ8LojfoXTkH05hUFmppQOiBHwfVqwv8EAbz1xYUyXYUxR8ZrxMc=
-X-Received: by 2002:a1c:a5c3:: with SMTP id o186mr10247486wme.51.1569141329050;
- Sun, 22 Sep 2019 01:35:29 -0700 (PDT)
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc;
+        bh=dqobuf/BrOxXasMTwIqqq7pm/XDIEuujQtxgD/0IH0Y=;
+        b=Gjq54IPibENHz2OPsCFd/T2vtIxPLmHa7fML/M3DphnWEtModB8PF5gZj64d/Mc9XF
+         OIi1ezF9o6z9iZWyTcLpoQZ9ZaKhMoAXFhKyYNe240pQ//fZlj/flNzbs10DmR73EpnX
+         Cnl5bSU3is4w5pqhqBv4o/MdRRuuVD7D2t7wbKL2ofx5G22lQV4oHkalFTZIRuRRmo1G
+         f+aYqh8c7xRgiTWYWdXK9zvjv5E0UL0q/uZh15bV1qzSTv1GbUo7g+yNjeVbF3dpU00j
+         LH9WoA1qIxqZJ5MCV2cKwWPm+0LDd901lCacsbgNr1DB6Hw9nxwiYeZhAc61YL5eACUZ
+         FUYg==
+X-Gm-Message-State: APjAAAV9V7VFG71SKcCDX2mMKSScorVcCjedA1j+ltu0COGOO5eS1sKF
+        b9TE5WL20ZM5iF89pxVjcL82UgJPeoSjutrn4nYI8FYk
+X-Google-Smtp-Source: APXvYqzf8lsZl42VwKFAzwFMLnvhOG3agalEKDiLFNKAjQPS+KF7wQgF9cKhQ5bNDL3zOWRD3mkHVE5FsEHahfFvI2g=
+X-Received: by 2002:a6b:4902:: with SMTP id u2mr7974033iob.301.1569190653997;
+ Sun, 22 Sep 2019 15:17:33 -0700 (PDT)
 MIME-Version: 1.0
-From:   alex zheng <tc0721@gmail.com>
-Date:   Sun, 22 Sep 2019 16:34:52 +0800
-Message-ID: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
-Subject: BUG report: usb: dwc3: Link TRB triggered an intterupt without IOC
- being setted
-To:     linux-usb@vger.kernel.org
+Received: by 2002:ac0:9c85:0:0:0:0:0 with HTTP; Sun, 22 Sep 2019 15:17:33
+ -0700 (PDT)
+In-Reply-To: <20190921044510.GA990793@kroah.com>
+References: <CAA=hcWRF00syz8jB1+qdy1pFA7Wk_B=1Z_DT5vYuQrzFKhtZbw@mail.gmail.com>
+ <20190917120258.GB489142@kroah.com> <CAA=hcWTD2zYD0gVTu6sDuRqUcTOnn42Gm0s1tOGvBQdQ40Q7LA@mail.gmail.com>
+ <20190918054744.GA1830105@kroah.com> <CAA=hcWR__j20ZQY9H8zzTryEatSfe+yXLYQXSaXMvgy3pwdJKg@mail.gmail.com>
+ <20190921044510.GA990793@kroah.com>
+From:   JH <jupiter.hce@gmail.com>
+Date:   Mon, 23 Sep 2019 08:17:33 +1000
+Message-ID: <CAA=hcWTwi+PRepcT9xS2G0YjtV7e6+YWwxTrKLSv_=7T61ty8Q@mail.gmail.com>
+Subject: Re: Failed to connect to 4G modem
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+Hi Greg,
 
-I am a user of dwc3 USB host controller, I found there are some
-confused behavior of trb event on this controller.
-When I run a raw USB data transfer(run bulk in&out transfer with
-libusb) and iperf3(over rndis) at the same time,
-there are some strange interrupts occurs and make the driver report
-error(ERROR DMA transfer).
-And:
-1. this problem only hapened in USB SS mode
-2. this problem seems not hapen when I run same test case with other
-xhci controller(such as asmedia/intel pcie xhci controller) on PC.
-3. the kernel version is 4.9.130
+On 9/21/19, Greg KH <gregkh@linuxfoundation.org> wrote:
+> You should never have to update any userspace code or library if the
+> kernel is updated as we guarantee backwards compatibility.  If we did
+> break something, please let us know and we will work very hard to fix
+> it.
+>
+> This is a guarantee we made back in 2007 or so, and have been sticking
+> to it since.
+>
+> There is no "major" upgrade issue here, the kernel does a new release
+> every 3 months and changes the number, showing it is "newer" than the
+> previous one.
+>
+> Hope this helps,
 
-I think this may be a hw bug of DWC3 USB controller, could anyone
-please give me some help to debug this problem=EF=BC=9F
+That demystified the kernel version many people misinterpreted, so I
+can tell my colleagues we are ensured there would be no libraries
+changes upgrading 5.3 to 5.4 LTS.
 
-The detail log see as below:
-[  131.074102] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto: xHCI
-handle event, 8000
-27630 [  131.074109] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-process trans event : ep_index =3D 11, event_dma =3D 1eb13e90
-27631 [  131.074117] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-inc_deq, start trb dma =3D 1eb13e90, dequeue_p =3D e482ce90, trb_free num
-=3D 1871, ring type =3D 2
-27632 [  131.074123] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-inc_deq 111, start trb dma =3D 1eb13ea0, dequeue_p =3D e482cea0, trb_free
-num =3D 1872, ring type =3D 2
-27633 [  131.074130] c0 3 (ksoftirqd/0) xhci-hcd xh[  133.057617] c0 3
-(ksoftirqd/0) xhci-hcd xhci-hcd.0.auto: ERROR Transfer event TRB DMA
-ptr not part of current TD ep_index 16 comp_code 1
-27634 [  133.059312] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb0fff0 trb-start 000000001eb10000
-trb-end 000000001eb10000 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27635 [  133.066215] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
-27636 [  133.067908] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb10000 trb-start 000000001eb10230
-trb-end 000000001eb10230 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27637 [  133.070572] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
-27638 [  133.072260] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb10010 trb-start 000000001eb10230
-trb-end 000000001eb10230 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27639 [  133.075052] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
-27640 [  133.076739] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb10020 trb-start 000000001eb10230
-trb-end 000000001eb10230 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27641 [  133.079472] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
-27642 [  133.081159] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb10030 trb-start 000000001eb10230
-trb-end 000000001eb10230 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27643 [  133.083896] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
-27644 [  133.085584] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-Looking for event-dma 000000001eb10040 trb-start 000000001eb10230
-trb-end 000000001eb10230 seg-start 000000001eb10000 seg-end
-000000001eb10ff0
-27645 [  133.088328] c0 3 (ksoftirqd/0) xhci-hcd xhci-hcd.0.auto:
-ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16
-comp_code 1
+Thank you so much.
 
-1. According these logs above the link trb whose address is 0x1eb0fff0
-occurs a transfer event, but this DMA address is not in the trb ring,
-then the driver report an error(and followed a few error logs witch
-invalid DMA address).
-2. I dump the data of the address(0x1eb0fff0) and find the IOC bit is
-not set, see as below:
-# dump_reg.sh 0x1eb0fff0 4
-0x1eb0fff0:0x1EB10000 0x00000000 0x00000000 0x00001800
+Kind regards,
+
+- jupiter
+
+> greg k-h
+>
