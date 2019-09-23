@@ -2,102 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BD9BB4F8
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DF3BB544
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404887AbfIWNIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 09:08:05 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43153 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394032AbfIWNIE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 09:08:04 -0400
-Received: by mail-lj1-f196.google.com with SMTP id n14so8583484ljj.10
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 06:08:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=GoIAIXzFV824pjQ30902obp3iYyQkh8cxwDip0pl4DY=;
-        b=bdhWboZrxyGH/n1yqX7qr4uYXW7dGqJjayFl7OHmW7jBVXv5XakXwjorPW+YI296UQ
-         GLUjhZlTujIinOzYY5ZMGBR2dmfDTnRGCa4QfE+lINfnF+X+FqztQkPM+qxlWqj44BFP
-         ir2ydM1x4DXr7sNZOuvHFfup7uhImbuS5AiUMoRQqdeAf8SLFtrSP7vHRunRr5nPATiO
-         ci+H4l+qsgs8Vjxgg2vAWfWUjYAu9SR7czBs2JgzE4qW5n87/5g6UTzmeZpBpgr+Dw8D
-         iy/os0mJxBblKpkf3iueJpn0wpkT3TmqEiESJj1JNuzRwoXeYpsaEyDuMuooBaNcrC40
-         falA==
-X-Gm-Message-State: APjAAAX90RI08mPGhW/06aGnkV21OUq5fyJRoC1dFBBNldgYla2/x/4k
-        yDVX9BfY512gVSgd8LQNXtU=
-X-Google-Smtp-Source: APXvYqwCux2PTE2Q3HvgtoXcAdWfnbFVQYm7xrCJTPWuIZpWrRunxVra1XDWyql1kl46TfQ/Kk8mTg==
-X-Received: by 2002:a2e:7c17:: with SMTP id x23mr16759043ljc.210.1569244082720;
-        Mon, 23 Sep 2019 06:08:02 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id z26sm2287762lji.79.2019.09.23.06.08.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Sep 2019 06:08:01 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iCO4S-0001Gp-DT; Mon, 23 Sep 2019 15:08:04 +0200
-Date:   Mon, 23 Sep 2019 15:08:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-Message-ID: <20190923130804.GC30545@localhost>
-References: <20190702123006.11320-1-charlesyeh522@gmail.com>
- <20190716084907.GB10939@localhost>
- <CAAZvQQ5pJDmZ-F8E8AhGxNK6ohuq3ev8OnySE-+zQNThBcu3Ag@mail.gmail.com>
- <20190920075602.GI30545@localhost>
- <CAAZvQQ6613eO6G0Gm-Sv3yWqTG_rRrynF=xVSLgz2uakXU2=ZQ@mail.gmail.com>
- <20190923102440.GA30545@localhost>
- <CAAZvQQ6MPrsfTcsnyD4DbKDVJf1WyLoxqW7q07k2RO1Cs5yd5Q@mail.gmail.com>
+        id S2407780AbfIWNbE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 09:31:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:41647 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404581AbfIWNbE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 09:31:04 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 06:31:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,540,1559545200"; 
+   d="scan'208";a="203127799"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Sep 2019 06:31:02 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ajay Gupta <ajayg@nvidia.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
+Date:   Mon, 23 Sep 2019 16:31:01 +0300
+Message-Id: <20190923133101.30774-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAZvQQ6MPrsfTcsnyD4DbKDVJf1WyLoxqW7q07k2RO1Cs5yd5Q@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 06:35:19PM +0800, Charles Yeh wrote:
-> Johan Hovold <johan@kernel.org> 於 2019年9月23日 週一 下午6:24寫道：
-> > That looks much better. But please move the reset defines above the
-> > flow control ones to keep the registers sorted by address (0x7 < 0xa).
-> 
-> Thank you for your reply
-> 
-> Charles Ans:
-> The new define is follows
-> 
-> #define PL2303_READ_TYPE_HX_STATUS    0x8080
-> 
-> #define PL2303_HXN_RESET_REG    0x07
-> #define PL2303_HXN_RESET_UPSTREAM_PIPE    0x02
-> #define PL2303_HXN_RESET_DOWNSTREAM_PIPE    0x01
-> 
-> #define PL2303_HXN_FLOWCTRL_REG        0x0A
-> #define PL2303_HXN_FLOWCTRL_MASK    0x1C
-> #define PL2303_HXN_FLOWCTRL_NONE        0x1C
-> #define PL2303_HXN_FLOWCTRL_RTS_CTS        0x18
-> #define PL2303_HXN_FLOWCTRL_XON_XOFF    0x0C
-> 
-> 
-> > Also looks good, thanks. Just move the reset define block as mentioned
-> > above.
-> 
-> Thank you for your reply
-> 
-> 
-> Please confirm the above new define
-> If there is no problem.. I will write a new Patch file.
+There is no need to try to prevent the extra ucsi_notify()
+that runtime resuming the device will cause.
 
-Yes, the above looks good.
+This fixes potential deadlock. Both ccg_read() and
+ccg_write() are called with the mutex already taken at least
+from ccg_send_command(). In ccg_read() and ccg_write, the
+mutex is only acquired so that run_isr flag can be set.
 
-Johan
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+Hi Ajay,
+
+Before going forward with this I would like to get confirmation from
+you that it is OK, and that I'm not missing anything. I did not see
+any real purpose for that run_isr flag. The only thing that I can see
+it preventing is an extra ucsi_notify() call caused by the waking of
+the controller, but that should not be a problem. Is there any other
+reason why the flag is there?
+
+If the driver works fine without the flag, then let's just drop it.
+The deadlock will need to be fixed in any case.
+
+thanks,
+
+---
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 40 ++-----------------------------
+ 1 file changed, 2 insertions(+), 38 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 907e20e1a71e..167cb6367198 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -195,7 +195,6 @@ struct ucsi_ccg {
+ 
+ 	/* fw build with vendor information */
+ 	u16 fw_build;
+-	bool run_isr; /* flag to call ISR routine during resume */
+ 	struct work_struct pm_work;
+ };
+ 
+@@ -224,18 +223,6 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+ 	if (quirks && quirks->max_read_len)
+ 		max_read_len = quirks->max_read_len;
+ 
+-	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
+-	    uc->fw_version <= CCG_OLD_FW_VERSION) {
+-		mutex_lock(&uc->lock);
+-		/*
+-		 * Do not schedule pm_work to run ISR in
+-		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
+-		 * since we are already in ISR path.
+-		 */
+-		uc->run_isr = false;
+-		mutex_unlock(&uc->lock);
+-	}
+-
+ 	pm_runtime_get_sync(uc->dev);
+ 	while (rem_len > 0) {
+ 		msgs[1].buf = &data[len - rem_len];
+@@ -278,18 +265,6 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+ 	msgs[0].len = len + sizeof(rab);
+ 	msgs[0].buf = buf;
+ 
+-	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
+-	    uc->fw_version <= CCG_OLD_FW_VERSION) {
+-		mutex_lock(&uc->lock);
+-		/*
+-		 * Do not schedule pm_work to run ISR in
+-		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
+-		 * since we are already in ISR path.
+-		 */
+-		uc->run_isr = false;
+-		mutex_unlock(&uc->lock);
+-	}
+-
+ 	pm_runtime_get_sync(uc->dev);
+ 	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
+ 	if (status < 0) {
+@@ -1130,7 +1105,6 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+ 	uc->ppm.sync = ucsi_ccg_sync;
+ 	uc->dev = dev;
+ 	uc->client = client;
+-	uc->run_isr = true;
+ 	mutex_init(&uc->lock);
+ 	INIT_WORK(&uc->work, ccg_update_firmware);
+ 	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
+@@ -1229,7 +1203,6 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
+ {
+ 	struct i2c_client *client = to_i2c_client(dev);
+ 	struct ucsi_ccg *uc = i2c_get_clientdata(client);
+-	bool schedule = true;
+ 
+ 	/*
+ 	 * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
+@@ -1237,17 +1210,8 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
+ 	 * Schedule a work to call ISR as a workaround.
+ 	 */
+ 	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
+-	    uc->fw_version <= CCG_OLD_FW_VERSION) {
+-		mutex_lock(&uc->lock);
+-		if (!uc->run_isr) {
+-			uc->run_isr = true;
+-			schedule = false;
+-		}
+-		mutex_unlock(&uc->lock);
+-
+-		if (schedule)
+-			schedule_work(&uc->pm_work);
+-	}
++	    uc->fw_version <= CCG_OLD_FW_VERSION)
++		schedule_work(&uc->pm_work);
+ 
+ 	return 0;
+ }
+-- 
+2.23.0
+
