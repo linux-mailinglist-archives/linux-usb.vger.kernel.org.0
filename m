@@ -2,113 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 659A4BB23A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 12:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64335BB24B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 12:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2501857AbfIWK2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 06:28:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39275 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729967AbfIWK2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 06:28:30 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iCLZy-00059W-Qj; Mon, 23 Sep 2019 12:28:26 +0200
-Received: from ukl by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iCLZx-00051h-UF; Mon, 23 Sep 2019 12:28:25 +0200
-Date:   Mon, 23 Sep 2019 12:28:25 +0200
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Peter Chen <peter.chen@nxp.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        Marco Felsch <m.felsch@pengutronix.de>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>
-Subject: Re: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
-Message-ID: <20190923102825.zemkconnvdibke5h@pengutronix.de>
-References: <20190625100412.11815-1-u.kleine-koenig@pengutronix.de>
- <VI1PR04MB5327E09DB0DFEB7E868DB59D8BE20@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20190626055409.jjiwptyths6p6jty@pengutronix.de>
- <VI1PR04MB53270E979BA9817D47A7AFC88BFD0@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <20190724130939.43t66umrasbe4wwf@pengutronix.de>
+        id S1729502AbfIWKfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 06:35:32 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40010 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727056AbfIWKfc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 06:35:32 -0400
+Received: by mail-lj1-f196.google.com with SMTP id 7so13149882ljw.7
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 03:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JLlhZFbMLuyCODkUeAK0T83tRwRmhr/Leuf93GfIESQ=;
+        b=Od/RCLwLPzBHLt701RXY3ICUYO88Y7vMga8Na0O+Q1/ecEY0v2LwmSncCeLhP7yJYA
+         hpEXaJ6I+yKgCFL+EUY6lGwYjxYwZKeawAzuBgw0F3BW30I7E8haNN9O4OGq8hKBrFPi
+         facDSa0CGRw6OCGULfkznIsNAmbk3NnkQD3Dboc9ImDIsZQ2PUM40DoIZqLhtGtclVIK
+         nnecnuQk4w1c4L2a6RNIhQg70ggAciYhjUImEqAbrlIbl7Bm+Pgyg+CG5Jtz/f/R2Yq1
+         SpmWTEyQcGXMVCg9KYsW3VfKZe7mW7gMNdjwA5c7zaRJuwUBBaHzDbmU/IJ1NbNriSN/
+         I3vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JLlhZFbMLuyCODkUeAK0T83tRwRmhr/Leuf93GfIESQ=;
+        b=QNLntH1yvmfWjyIIVCiHEgptS1Qfv6UqeamiyqkNpSIlDtNiH9jTpPJVUn5dvDPwcf
+         26Nqu4KljKZNIB3bpRcvvu+eDzT/p8DVh4hCmW6rbzaV36GopCUIAeYboQFuQ5cdqN+M
+         /QgRtkRmPKRqC0XVGSTPknlifjUmZ4MP6gPAG139xwYwUrsgqc8g7A5b6uezv0/XuNyG
+         7S8k9Krxkjh8/O18eLs5o7tWlhE9xIsXir+QrTd8dnTkT5FXlr0VkHfbEhsuzFLTnJLe
+         TpIRTIvCf11t4bYXbRcNMw4NfCXZx7gaHpamGjHa8+35LbFQzURVPOYAznf0vCiMgKTF
+         OS7w==
+X-Gm-Message-State: APjAAAVf7+3+NYqAf4fqKVs/SltwpDeR6lHb45M+yQVwAf9zfQJU4BJl
+        aTm5pWcD3HcY6GoYyNcNp0YKs4VBsRSuIkFxwD3V1LQhWYM=
+X-Google-Smtp-Source: APXvYqxmNqmvyT7iuTCh7vN7tZtONJIn5tuomJSqn6mlULFBl+VCczb4qVxGENPRQ11hIvET20A+VSDZ62lzTxTwgn4=
+X-Received: by 2002:a2e:9898:: with SMTP id b24mr16229921ljj.157.1569234930028;
+ Mon, 23 Sep 2019 03:35:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190724130939.43t66umrasbe4wwf@pengutronix.de>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20190702123006.11320-1-charlesyeh522@gmail.com>
+ <20190716084907.GB10939@localhost> <CAAZvQQ5pJDmZ-F8E8AhGxNK6ohuq3ev8OnySE-+zQNThBcu3Ag@mail.gmail.com>
+ <20190920075602.GI30545@localhost> <CAAZvQQ6613eO6G0Gm-Sv3yWqTG_rRrynF=xVSLgz2uakXU2=ZQ@mail.gmail.com>
+ <20190923102440.GA30545@localhost>
+In-Reply-To: <20190923102440.GA30545@localhost>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Mon, 23 Sep 2019 18:35:19 +0800
+Message-ID: <CAAZvQQ6MPrsfTcsnyD4DbKDVJf1WyLoxqW7q07k2RO1Cs5yd5Q@mail.gmail.com>
+Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 03:09:39PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Jun 27, 2019 at 03:15:10AM +0000, Peter Chen wrote:
-> >  
-> > > On 19-06-26 02:40, Peter Chen wrote:
-> > > >
-> > > > > Subject: [PATCH] ARM: imx25: provide a fixed regulator for usb phys
-> > > > >
-> > > > > The usb phys are internal to the SoC and so it their 5V supply. With
-> > > > > this regulator added explicitly the following (harmless) boot messages go away:
-> > > > >
-> > > > > 	usb_phy_generic usbphy:usb-phy@0: usbphy:usb-phy@0 supply vcc not found, using dummy regulator
-> > > > > 	usb_phy_generic usbphy:usb-phy@1: usbphy:usb-phy@1 supply vcc not found, using dummy regulator
-> > > > >
-> > > >
-> > > > To eliminate the warning message, I suggest doing below changes, as
-> > > > vcc supply is not mandatory.
-> > > >
-> > > > diff --git a/drivers/usb/phy/phy-generic.c
-> > > > b/drivers/usb/phy/phy-generic.c index a53b89be5324..01a5ff1a0515
-> > > > 100644
-> > > > --- a/drivers/usb/phy/phy-generic.c
-> > > > +++ b/drivers/usb/phy/phy-generic.c
-> > > > @@ -275,7 +275,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop,
-> > > >                 }
-> > > >         }
-> > > >
-> > > > -       nop->vcc = devm_regulator_get(dev, "vcc");
-> > > > +       nop->vcc = devm_regulator_get_optional(dev, "vcc");
-> > > 
-> > > Is the regulator optional? IMHO this shouldn't be the fix. I think the right fix is Uwe's
-> > > approach.
-> > > 
-> > 
-> > Add Felipe.
-> > 
-> > Some USB PHY's power are from the core system's power (eg, DDR), and some are
-> > fixed at the board and no switch for it. So, it is transparent for software at some cases.
-> 
-> It's not clear to me how to proceed. There are two opposing opinions and
-> I don't know enough about USB on mx25 to judge myself.
-> 
-> Felipe?
+Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B49=E6=9C=8823=E6=97=
+=A5 =E9=80=B1=E4=B8=80 =E4=B8=8B=E5=8D=886:24=E5=AF=AB=E9=81=93=EF=BC=9A
+> That looks much better. But please move the reset defines above the
+> flow control ones to keep the registers sorted by address (0x7 < 0xa).
 
-This thread is still open in my inbox. Felipe, how can I lure you into
-giving your opinion?
+Thank you for your reply
 
-My original suggestion can be seen at
-https://lore.kernel.org/linux-usb/20190625100412.11815-1-u.kleine-koenig@pengutronix.de/,
-Peter's alternative is still in the quotes above. Which is the
-right/better one?
+Charles Ans:
+The new define is follows
 
-Best regards and thanks,
-Uwe
+#define PL2303_READ_TYPE_HX_STATUS    0x8080
 
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
+#define PL2303_HXN_RESET_REG    0x07
+#define PL2303_HXN_RESET_UPSTREAM_PIPE    0x02
+#define PL2303_HXN_RESET_DOWNSTREAM_PIPE    0x01
+
+#define PL2303_HXN_FLOWCTRL_REG        0x0A
+#define PL2303_HXN_FLOWCTRL_MASK    0x1C
+#define PL2303_HXN_FLOWCTRL_NONE        0x1C
+#define PL2303_HXN_FLOWCTRL_RTS_CTS        0x18
+#define PL2303_HXN_FLOWCTRL_XON_XOFF    0x0C
+
+
+> Also looks good, thanks. Just move the reset define block as mentioned
+> above.
+
+Thank you for your reply
+
+
+Please confirm the above new define
+If there is no problem.. I will write a new Patch file.
+
+Charles.
