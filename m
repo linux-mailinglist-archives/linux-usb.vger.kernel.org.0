@@ -2,370 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A821DBB872
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E430BB8C9
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728699AbfIWPuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 11:50:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43664 "EHLO mail.kernel.org"
+        id S1732772AbfIWP7y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 11:59:54 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:58746 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728182AbfIWPuF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Sep 2019 11:50:05 -0400
-Received: from localhost.localdomain (unknown [194.230.155.145])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728464AbfIWP7y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 11:59:54 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 38AB4205F4;
-        Mon, 23 Sep 2019 15:50:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569253804;
-        bh=FFzbPPyzstoUTQIh5AyphTjoKpbu5dT+XJPhAdHJBEY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WBIhvdLMxJGUloK7m32dwhWXk2Pzythdg85Y3TSxn4AHNwXEWcHxcw+rY7vVpAs+Q
-         4dhoLEiE6ZtMnGhsyFxIqOBxx6+90XwCjhNUtY1//+iHfp7u1ky5Fhe0MJZ5gEjI9k
-         6r7Wug9n5vYaVA7XEoPXnv+IcQKMLQJqAU7x4fjc=
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
-        Jiri Kosina <trivial@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH trivial] usb: Fix Kconfig indentation
-Date:   Mon, 23 Sep 2019 17:49:56 +0200
-Message-Id: <20190923154956.6868-1-krzk@kernel.org>
-X-Mailer: git-send-email 2.17.1
+        by mx2.mailbox.org (Postfix) with ESMTPS id 871DCA125F;
+        Mon, 23 Sep 2019 17:59:52 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id yw4diq2wE7e7; Mon, 23 Sep 2019 17:59:49 +0200 (CEST)
+Received: from jgoerzen by hephaestus.lan.complete.org with local (Exim 4.92)
+        (envelope-from <jgoerzen@hephaestus.lan.complete.org>)
+        id 1iCQkd-00076T-7T; Mon, 23 Sep 2019 10:59:47 -0500
+References: <87woe37prw.fsf@complete.org> <87tv967nog.fsf@complete.org> <20190923102012.GZ30545@localhost>
+From:   John Goerzen <jgoerzen@complete.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Linux Keyspan USB serial driver ignoring XOFF
+In-reply-to: <20190923102012.GZ30545@localhost>
+Date:   Mon, 23 Sep 2019 10:59:47 -0500
+Message-ID: <87v9tjc8b0.fsf@complete.org>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adjust indentation from spaces to tab (+optional two spaces) as in
-coding style with command like:
-    $ sed -e 's/^        /\t/' -i */Kconfig
+On Mon, Sep 23 2019, Johan Hovold wrote:
 
-Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
----
- drivers/usb/dwc3/Kconfig           |  4 +-
- drivers/usb/gadget/legacy/Kconfig  | 20 ++++-----
- drivers/usb/gadget/udc/Kconfig     |  2 +-
- drivers/usb/host/Kconfig           | 68 +++++++++++++++---------------
- drivers/usb/misc/Kconfig           |  8 ++--
- drivers/usb/misc/sisusbvga/Kconfig |  2 +-
- drivers/usb/serial/Kconfig         | 44 +++++++++----------
- 7 files changed, 74 insertions(+), 74 deletions(-)
+> That's correct, the driver does not support software flow control even
+> if the hardware seems to have some support for assisted XON/XOFF.
+>
+> Would you mind testing the below patch which may be enough to turn
+> sw-flow control always on. If that works, I can probably find time to
+> cook up a proper patch to make this configurable later this week.
 
-diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-index 89abc6078703..cc431376fcd0 100644
---- a/drivers/usb/dwc3/Kconfig
-+++ b/drivers/usb/dwc3/Kconfig
-@@ -103,7 +103,7 @@ config USB_DWC3_MESON_G12A
-        default USB_DWC3
-        select USB_ROLE_SWITCH
-        help
--         Support USB2/3 functionality in Amlogic G12A platforms.
-+	 Support USB2/3 functionality in Amlogic G12A platforms.
- 	 Say 'Y' or 'M' if you have one such device.
- 
- config USB_DWC3_OF_SIMPLE
-@@ -111,7 +111,7 @@ config USB_DWC3_OF_SIMPLE
-        depends on OF && COMMON_CLK
-        default USB_DWC3
-        help
--         Support USB2/3 functionality in simple SoC integrations.
-+	 Support USB2/3 functionality in simple SoC integrations.
- 	 Currently supports Xilinx and Qualcomm DWC USB3 IP.
- 	 Say 'Y' or 'M' if you have one such device.
- 
-diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
-index 69ff7f8c86f5..38eaa9417b38 100644
---- a/drivers/usb/gadget/legacy/Kconfig
-+++ b/drivers/usb/gadget/legacy/Kconfig
-@@ -154,16 +154,16 @@ config USB_ETH_EEM
- 	select USB_LIBCOMPOSITE
- 	select USB_F_EEM
-        help
--         CDC EEM is a newer USB standard that is somewhat simpler than CDC ECM
--         and therefore can be supported by more hardware.  Technically ECM and
--         EEM are designed for different applications.  The ECM model extends
--         the network interface to the target (e.g. a USB cable modem), and the
--         EEM model is for mobile devices to communicate with hosts using
--         ethernet over USB.  For Linux gadgets, however, the interface with
--         the host is the same (a usbX device), so the differences are minimal.
--
--         If you say "y" here, the Ethernet gadget driver will use the EEM
--         protocol rather than ECM.  If unsure, say "n".
-+	 CDC EEM is a newer USB standard that is somewhat simpler than CDC ECM
-+	 and therefore can be supported by more hardware.  Technically ECM and
-+	 EEM are designed for different applications.  The ECM model extends
-+	 the network interface to the target (e.g. a USB cable modem), and the
-+	 EEM model is for mobile devices to communicate with hosts using
-+	 ethernet over USB.  For Linux gadgets, however, the interface with
-+	 the host is the same (a usbX device), so the differences are minimal.
-+
-+	 If you say "y" here, the Ethernet gadget driver will use the EEM
-+	 protocol rather than ECM.  If unsure, say "n".
- 
- config USB_G_NCM
- 	tristate "Network Control Model (NCM) support"
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index d7e611645533..485c92ef888a 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -123,7 +123,7 @@ config USB_GR_UDC
-        tristate "Aeroflex Gaisler GRUSBDC USB Peripheral Controller Driver"
-        depends on HAS_DMA
-        help
--          Select this to support Aeroflex Gaisler GRUSBDC cores from the GRLIB
-+	  Select this to support Aeroflex Gaisler GRUSBDC cores from the GRLIB
- 	  VHDL IP core library.
- 
- config USB_OMAP
-diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
-index 79b2e79dddd0..d6164ede63d3 100644
---- a/drivers/usb/host/Kconfig
-+++ b/drivers/usb/host/Kconfig
-@@ -220,12 +220,12 @@ config USB_EHCI_HCD_ORION
- 	  Marvell PXA/MMP USB controller" for those.
- 
- config USB_EHCI_HCD_SPEAR
--        tristate "Support for ST SPEAr on-chip EHCI USB controller"
--        depends on USB_EHCI_HCD && PLAT_SPEAR
--        default y
--        ---help---
--          Enables support for the on-chip EHCI controller on
--          ST SPEAr chips.
-+	tristate "Support for ST SPEAr on-chip EHCI USB controller"
-+	depends on USB_EHCI_HCD && PLAT_SPEAR
-+	default y
-+	---help---
-+	  Enables support for the on-chip EHCI controller on
-+	  ST SPEAr chips.
- 
- config USB_EHCI_HCD_STI
- 	tristate "Support for ST STiHxxx on-chip EHCI USB controller"
-@@ -237,12 +237,12 @@ config USB_EHCI_HCD_STI
- 	  STMicroelectronics consumer electronics SoC's.
- 
- config USB_EHCI_HCD_AT91
--        tristate  "Support for Atmel on-chip EHCI USB controller"
--        depends on USB_EHCI_HCD && ARCH_AT91
--        default y
--        ---help---
--          Enables support for the on-chip EHCI controller on
--          Atmel chips.
-+	tristate  "Support for Atmel on-chip EHCI USB controller"
-+	depends on USB_EHCI_HCD && ARCH_AT91
-+	default y
-+	---help---
-+	  Enables support for the on-chip EHCI controller on
-+	  Atmel chips.
- 
- config USB_EHCI_TEGRA
-        tristate "NVIDIA Tegra HCD support"
-@@ -250,8 +250,8 @@ config USB_EHCI_TEGRA
-        select USB_EHCI_ROOT_HUB_TT
-        select USB_TEGRA_PHY
-        help
--         This driver enables support for the internal USB Host Controllers
--         found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
-+	 This driver enables support for the internal USB Host Controllers
-+	 found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
- 
- config USB_EHCI_HCD_PPC_OF
- 	bool "EHCI support for PPC USB controller on OF platform bus"
-@@ -409,12 +409,12 @@ config USB_OHCI_HCD_OMAP1
- 	  Enables support for the OHCI controller on OMAP1/2 chips.
- 
- config USB_OHCI_HCD_SPEAR
--        tristate "Support for ST SPEAr on-chip OHCI USB controller"
--        depends on USB_OHCI_HCD && PLAT_SPEAR
--        default y
--        ---help---
--          Enables support for the on-chip OHCI controller on
--          ST SPEAr chips.
-+	tristate "Support for ST SPEAr on-chip OHCI USB controller"
-+	depends on USB_OHCI_HCD && PLAT_SPEAR
-+	default y
-+	---help---
-+	  Enables support for the on-chip OHCI controller on
-+	  ST SPEAr chips.
- 
- config USB_OHCI_HCD_STI
- 	tristate "Support for ST STiHxxx on-chip OHCI USB controller"
-@@ -426,12 +426,12 @@ config USB_OHCI_HCD_STI
- 	  STMicroelectronics consumer electronics SoC's.
- 
- config USB_OHCI_HCD_S3C2410
--        tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
--        depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX)
--        default y
--        ---help---
--          Enables support for the on-chip OHCI controller on
--          S3C24xx/S3C64xx chips.
-+	tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
-+	depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX)
-+	default y
-+	---help---
-+	  Enables support for the on-chip OHCI controller on
-+	  S3C24xx/S3C64xx chips.
- 
- config USB_OHCI_HCD_LPC32XX
- 	tristate "Support for LPC on-chip OHCI USB controller"
-@@ -440,8 +440,8 @@ config USB_OHCI_HCD_LPC32XX
- 	depends on USB_ISP1301
- 	default y
- 	---help---
--          Enables support for the on-chip OHCI controller on
--          NXP chips.
-+	  Enables support for the on-chip OHCI controller on
-+	  NXP chips.
- 
- config USB_OHCI_HCD_PXA27X
- 	tristate "Support for PXA27X/PXA3XX on-chip OHCI USB controller"
-@@ -456,8 +456,8 @@ config USB_OHCI_HCD_AT91
- 	depends on USB_OHCI_HCD && ARCH_AT91 && OF
- 	default y
- 	---help---
--          Enables support for the on-chip OHCI controller on
--          Atmel chips.
-+	  Enables support for the on-chip OHCI controller on
-+	  Atmel chips.
- 
- config USB_OHCI_HCD_OMAP3
- 	tristate "OHCI support for OMAP3 and later chips"
-@@ -716,11 +716,11 @@ config USB_IMX21_HCD
-        tristate "i.MX21 HCD support"
-        depends on ARM && ARCH_MXC
-        help
--         This driver enables support for the on-chip USB host in the
--         i.MX21 processor.
-+	 This driver enables support for the on-chip USB host in the
-+	 i.MX21 processor.
- 
--         To compile this driver as a module, choose M here: the
--         module will be called "imx21-hcd".
-+	 To compile this driver as a module, choose M here: the
-+	 module will be called "imx21-hcd".
- 
- config USB_HCD_BCMA
- 	tristate "BCMA usb host driver"
-diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-index bdae62b2ffe0..664d27bb6086 100644
---- a/drivers/usb/misc/Kconfig
-+++ b/drivers/usb/misc/Kconfig
-@@ -191,8 +191,8 @@ config USB_TEST
- 	  including sample test device firmware and "how to use it".
- 
- config USB_EHSET_TEST_FIXTURE
--        tristate "USB EHSET Test Fixture driver"
--        help
-+	tristate "USB EHSET Test Fixture driver"
-+	help
- 	  Say Y here if you want to support the special test fixture device
- 	  used for the USB-IF Embedded Host High-Speed Electrical Test procedure.
- 
-@@ -247,13 +247,13 @@ config USB_HSIC_USB3503
-        depends on I2C
-        select REGMAP_I2C
-        help
--         This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
-+	 This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
- 
- config USB_HSIC_USB4604
-        tristate "USB4604 HSIC to USB20 Driver"
-        depends on I2C
-        help
--         This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
-+	 This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
- 
- config USB_LINK_LAYER_TEST
- 	tristate "USB Link Layer Test driver"
-diff --git a/drivers/usb/misc/sisusbvga/Kconfig b/drivers/usb/misc/sisusbvga/Kconfig
-index 9b632ab24f03..c16121276a21 100644
---- a/drivers/usb/misc/sisusbvga/Kconfig
-+++ b/drivers/usb/misc/sisusbvga/Kconfig
-@@ -4,7 +4,7 @@ config USB_SISUSBVGA
- 	tristate "USB 2.0 SVGA dongle support (Net2280/SiS315)"
- 	depends on (USB_MUSB_HDRC || USB_EHCI_HCD)
- 	select FONT_SUPPORT if USB_SISUSBVGA_CON
--        ---help---
-+	---help---
- 	  Say Y here if you intend to attach a USB2VGA dongle based on a
- 	  Net2280 and a SiS315 chip.
- 
-diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
-index 67279c6bce33..0a8c16a8cda2 100644
---- a/drivers/usb/serial/Kconfig
-+++ b/drivers/usb/serial/Kconfig
-@@ -271,17 +271,17 @@ config USB_SERIAL_F8153X
- config USB_SERIAL_GARMIN
-        tristate "USB Garmin GPS driver"
-        help
--         Say Y here if you want to connect to your Garmin GPS.
--         Should work with most Garmin GPS devices which have a native USB port.
-+	 Say Y here if you want to connect to your Garmin GPS.
-+	 Should work with most Garmin GPS devices which have a native USB port.
- 
--         See <http://sourceforge.net/projects/garmin-gps> for the latest
--         version of the driver.
-+	 See <http://sourceforge.net/projects/garmin-gps> for the latest
-+	 version of the driver.
- 
--         To compile this driver as a module, choose M here: the
--         module will be called garmin_gps.
-+	 To compile this driver as a module, choose M here: the
-+	 module will be called garmin_gps.
- 
- config USB_SERIAL_IPW
--        tristate "USB IPWireless (3G UMTS TDD) Driver"
-+	tristate "USB IPWireless (3G UMTS TDD) Driver"
- 	select USB_SERIAL_WWAN
- 	help
- 	  Say Y here if you want to use a IPWireless USB modem such as
-@@ -341,20 +341,20 @@ config USB_SERIAL_KLSI
- 	  module will be called kl5kusb105.
- 
- config USB_SERIAL_KOBIL_SCT
--        tristate "USB KOBIL chipcard reader"
--        ---help---
--          Say Y here if you want to use one of the following KOBIL USB chipcard
--          readers:
--
--            - USB TWIN
--            - KAAN Standard Plus
--            - KAAN SIM
--            - SecOVID Reader Plus
--            - B1 Professional
--            - KAAN Professional
--
--          Note that you need a current CT-API.
--          To compile this driver as a module, choose M here: the
-+	tristate "USB KOBIL chipcard reader"
-+	---help---
-+	  Say Y here if you want to use one of the following KOBIL USB chipcard
-+	  readers:
-+
-+	    - USB TWIN
-+	    - KAAN Standard Plus
-+	    - KAAN SIM
-+	    - SecOVID Reader Plus
-+	    - B1 Professional
-+	    - KAAN Professional
-+
-+	  Note that you need a current CT-API.
-+	  To compile this driver as a module, choose M here: the
- 	  module will be called kobil_sct.
- 
- config USB_SERIAL_MCT_U232
-@@ -458,7 +458,7 @@ config USB_SERIAL_OTI6858
- 	tristate "USB Ours Technology Inc. OTi-6858 USB To RS232 Bridge Controller"
- 	help
- 	  Say Y here if you want to use the OTi-6858 single port USB to serial
--          converter device.
-+	  converter device.
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called oti6858.
--- 
-2.17.1
+Hi Johan,
 
+I gave it a try, but unfortunately that patch made no difference to the
+behavior I was seeing.   I'm happy to do whatever debugging may be
+helpful.
+
+Thanks!
+
+- John
