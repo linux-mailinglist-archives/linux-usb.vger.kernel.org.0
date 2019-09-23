@@ -2,157 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B29BB1B1
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 11:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A261BB1B6
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 11:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405498AbfIWJwN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 05:52:13 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:50760 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387666AbfIWJwN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 05:52:13 -0400
-Received: by mail-wm1-f50.google.com with SMTP id 5so9139987wmg.0
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 02:52:10 -0700 (PDT)
+        id S2405922AbfIWJxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 05:53:49 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:33809 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387666AbfIWJxt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 05:53:49 -0400
+Received: by mail-wm1-f65.google.com with SMTP id y135so14602543wmc.1
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 02:53:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=jv5fnJZZvydpbob1OfdIDe6q9g6yflDvkmSBMxBte8c=;
-        b=C/geEYfKP63S0SdihaZhxvhHoAx/3Jn1o4bbEoSEkca6lSEq/BCs7XlMZCo+85vw9+
-         YlaTWTGenegh1lhaH14A3RnVYO+J/0tbNeMGdO/WfhbtN+lkwEYNtaKn0tTozb2kNXQC
-         XcTfb3AY50/fFBLalD4hJEr9MBtqhwmG/TUyJRqGCOe6+5HnUuBEt8VOECWHDaqE2xkJ
-         PDqD9YQzytqbcJ7qs4kI8WAxqbKX3mqEvewENjOmqZOQihPJvLOgiVAxUbV/G0Eo/0W7
-         ONel4iOB5Wefjeke8VBc5ou186fnaCc/m07t6FAYt0Mlx5iSY03Imltep79CZriuTbb8
-         31qw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=pVr+aJNObFR/+g9/kL+nTeqe+BdoqBXFID2WBcZzap4=;
+        b=EMvb4GJSg+GzxGq7mZ/HXn6h2roiZyUPE3E762bZJEAf38XMGJ4rS2Oj829IjPp4Ct
+         OIi/PUvc89wXVVL9VCHIWwezM+CSd9QQY/a8HcPhIz/HlmSX9JB5Ry87MXSRR5eq9qyl
+         SLQbl8/3pC2x4tCOyB9hjxM34QZQvDXsSCbyMWm9cUONN61k3uii192OgNnsdv0FNdgl
+         sPqtNToT3Y8awrpcU1I21XcD+Qrzx7P5trGY6xSwD+xtnzg1ij5Ag3lAH/fTzzhmEnqi
+         s388441rqqpv5sHI9JjrhsbAmUL8KvYk30XUdguMsePG6RyDsf3T4tY62gddSFtb1ZNY
+         PEjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=jv5fnJZZvydpbob1OfdIDe6q9g6yflDvkmSBMxBte8c=;
-        b=bbvNaVOOGqmDeTifHA15y1Vh63ZXpO0PSVxtKdIkvldWSrljvOXfAgYxvO0iVVLYPS
-         RcUkHeySDTKDWkzwbbryXFzew2hkUrNq7TEn6NHT2hMuSgnC8kYAlVZqZQhhYQXreFHH
-         dEFuZ+EqeWYdCRD18GZAU38Rygv7j11HSwAGMh9HcZxIawvtA+5xXnYu6O0MXZiYBDWy
-         Mw9YaTh1asOqbTcoI/EABzKzkwhVSjwHbPSByKvROZjOqGiTMWMXg4GMZG4g7Xj/3yBM
-         6jhcHbsQ+BOdey+21Gvv0mlN8mD3IhlUDjEF+R/WgzKOTlOz/d9BYggdFxCe8dFNAaba
-         zbmg==
-X-Gm-Message-State: APjAAAU5QyrpJbmCsP53oCtbELaym3CQc5LWoOwdG0c2iUmk9tquvoA5
-        /sP1zLkd9Q/5G57jOTJj2E0=
-X-Google-Smtp-Source: APXvYqwQJPolFYVfvVbC+WttXRsvyoaXuSdslLz+LFZswg5ZqkF6GiSjgOb1FVW4vq4MCj+txcNCUg==
-X-Received: by 2002:a7b:ce0a:: with SMTP id m10mr13846227wmc.167.1569232329993;
-        Mon, 23 Sep 2019 02:52:09 -0700 (PDT)
-Received: from danielepa-ThinkCentre-M93p.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id t13sm18611779wra.70.2019.09.23.02.52.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Sep 2019 02:52:09 -0700 (PDT)
-From:   Daniele Palmas <dnlplm@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=pVr+aJNObFR/+g9/kL+nTeqe+BdoqBXFID2WBcZzap4=;
+        b=p1Bqk4aqXweV+TeLE4/q9OytB73qZH0CMeMR9l9WQytH3GSlq4nUvXK2y4RuDk8Ssd
+         SyyfyECwaZZXrNPPiwln/NevrDTFXthvBfzp8X9IiuLSKqi31462g579Y2YESWlW3okb
+         xTtjRfyW0Eu8F2fq03PBhRwiTV+aGALjc1esYXZXS0FEJD0KomMWCy4xe3MEVMmsOcSr
+         wCk6xqJemz2QIsNyj/afmul0jDMV9pv0VJCXAUdplaA318eqwsgyb2enbUMKYKXGwAM6
+         l/dCyx9O1qz0ySGS2EdJYYhz2q4uuP/YySzMWNZ9g2NBfhU4xGcVWQbwtBa5OfxQmMu6
+         /5Lg==
+X-Gm-Message-State: APjAAAWzhWpoYvuLaDvB53/CEiCbGsgg2H+Ye6kE5TRKdDRL5+mjjQ6I
+        YJv2hU1D8hGASrm5iuJ0uL3x2bmNJSRpH2tOhKc=
+X-Google-Smtp-Source: APXvYqz7wfe6tUGzsNOkrrBmI7M8GbOjKhzmAIrs5p3R6nZVYwzZH+euYocU3IG5hdjH9dhjPuZR2I+AEqtMVkSg9KI=
+X-Received: by 2002:a05:600c:254f:: with SMTP id e15mr12892052wma.163.1569232425739;
+ Mon, 23 Sep 2019 02:53:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190702123006.11320-1-charlesyeh522@gmail.com>
+ <20190716084907.GB10939@localhost> <CAAZvQQ5pJDmZ-F8E8AhGxNK6ohuq3ev8OnySE-+zQNThBcu3Ag@mail.gmail.com>
+ <20190920075602.GI30545@localhost>
+In-Reply-To: <20190920075602.GI30545@localhost>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Mon, 23 Sep 2019 17:53:34 +0800
+Message-ID: <CAAZvQQ6613eO6G0Gm-Sv3yWqTG_rRrynF=xVSLgz2uakXU2=ZQ@mail.gmail.com>
+Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
 To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] usb: serial: option: add Telit FN980 compositions
-Date:   Mon, 23 Sep 2019 11:51:42 +0200
-Message-Id: <20190923095142.10047-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the following Telit FN980 compositions:
+Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B49=E6=9C=8820=E6=97=
+=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=883:56=E5=AF=AB=E9=81=93=EF=BC=9A
+> Yes, that's better, but you're mixing register addresses, bit values and
+> masks above. Perhaps things would be more clear if you but a _REG suffix
+> on the register defines and order things as follows:
+>
+>         #define PL2303_HXN_<name1>_REG                  0xX1
+>         #define PL2303_HXN_<name1>_<field>_MASK         0xY1
+>         #define PL2303_HXN_<name1>_<field>_<value>      0xZ1
+>
+>         #define PL2303_HXN_<name2>_REG                  0xX2
+>         #define PL2303_HXN_<name2>_<field>_MASK         0xY2
+>         #define PL2303_HXN_<name2>_<field>_<value>      0xZ2
+>
+> The idea is simply to keep related defines together and not mix
+> register address, masks and value defines.
+>
+> Keep registers sorted by address, and bit masks and values by bit order
+> (e.g. MSB first).
 
-0x1050: tty, adb, rmnet, tty, tty, tty, tty
-0x1051: tty, adb, mbim, tty, tty, tty, tty
-0x1052: rndis, tty, adb, tty, tty, tty, tty
-0x1053: tty, adb, ecm, tty, tty, tty, tty
----
-Hi Johan,
+Thank you for your reply
 
-following the output of usb-devices for the compositions
+Charles Ans:
+The new define is follows
 
-T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 10 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1050 Rev=04.14
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN980m
-S:  SerialNumber=270b8241
-C:  #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+#define PL2303_READ_TYPE_HX_STATUS    0x8080
 
-T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 11 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1051 Rev=04.14
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN980m
-S:  SerialNumber=270b8241
-C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+#define PL2303_HXN_FLOWCTRL_REG        0x0A
+#define PL2303_HXN_FLOWCTRL_MASK    0x1C
+#define PL2303_HXN_FLOWCTRL_NONE        0x1C
+#define PL2303_HXN_FLOWCTRL_RTS_CTS        0x18
+#define PL2303_HXN_FLOWCTRL_XON_XOFF    0x0C
 
-T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#=  9 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1052 Rev=04.14
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN980m
-S:  SerialNumber=270b8241
-C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+#define PL2303_HXN_RESET_REG    0x07
+#define PL2303_HXN_RESET_UPSTREAM_PIPE    0x02
+#define PL2303_HXN_RESET_DOWNSTREAM_PIPE    0x01
 
-T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 12 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=1bc7 ProdID=1053 Rev=04.14
-S:  Manufacturer=Telit Wireless Solutions
-S:  Product=FN980m
-S:  SerialNumber=270b8241
-C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
-I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 
-Thanks,
-Daniele
----
- drivers/usb/serial/option.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> Yes, but that doesn't imply that you need to read back the old value.
+>
+> I'm assuming it would either always read back as 0, or you would read
+> back the previous value written, which means you could end up resetting
+> something you did not intend.
+>
+> Either way, you should not read back the current value when resetting
+> the data pipes.
+>
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 38e920ac7f82..10ac3610d922 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1154,6 +1154,14 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE922_USBCFG5, 0xff),
- 	  .driver_info = RSVD(0) | RSVD(1) | NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1050, 0xff),	/* Telit FN980 (rmnet) */
-+	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1051, 0xff),	/* Telit FN980 (MBIM) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1052, 0xff),	/* Telit FN980 (RNDIS) */
-+	  .driver_info = NCTRL(2) | RSVD(3) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1053, 0xff),	/* Telit FN980 (ECM) */
-+	  .driver_info = NCTRL(0) | RSVD(1) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
--- 
-2.17.1
+Thank you for your reply
 
+Charles Ans:
+The new code is follows
+
+    pl2303_vendor_write(serial,
+                PL2303_HXN_RESET_REG,
+                PL2303_HXN_RESET_UPSTREAM_PIPE |
+PL2303_HXN_RESET_DOWNSTREAM_PIPE);
+
+
+Please confirm the above new define & code..
+If there is no problem.. I will write a new Patch file.
+
+Charles.
