@@ -2,215 +2,370 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCEBCBB7A0
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A821DBB872
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfIWPM0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 11:12:26 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:35334 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726413AbfIWPM0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 11:12:26 -0400
-Received: by mail-pg1-f193.google.com with SMTP id a24so8190941pgj.2
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 08:12:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+e6VKyi4RDxzO+rMfy4D/+EuNanataS4taqwSVna9oM=;
-        b=szKAfDtwzpOu4MZzLe0ZS4E5nlYUrmKWuqmfRRece3j9lH1xpomjbFMSeTm7Xuaq+c
-         N05YLh4za/0+mnyWOjpM0CQxPIfktO5s3X987svSdq7nLxlp2617ZoCJDt++CZLnbswM
-         rWLLbODhLuJlYoktGAhG6lgaavTOGHR/AOKHAWOQqK8wEmmIVdlLxSfF7YW7jdaxFcWl
-         4odWWj9MeB1XmW6JjXQXyZNE4U4vaKioGvjF4q4xaupCgNFBJHjcmZOYlg3vhQWPBlcG
-         2xnsPTb+P/bF3MjIsbE8nioHprPNIVmUDbtsh48UVJ9SJI4OpxnyK3dWCF8HVBWYMa38
-         MvMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+e6VKyi4RDxzO+rMfy4D/+EuNanataS4taqwSVna9oM=;
-        b=eG7IYae4JtCp/YSo02UMBel4H/8Mk4Mx6OOS1OitTWF/GTLIrG4uniLF1F8zdTFE6e
-         KVLwCQ/PconFRQhzbN7WpuNxPv4GMtrjyIb3G4n3S7/gjigsfArCZ9RuvYmfRouIv9ix
-         GbP9wzFqK3NOvbw2I9emk6BIxEXbby9RtrDgX8y4YGXNqNPd7G7Yx5ICjdoOSYknGp7w
-         orzM9b4ZcmWyyfoBdwisZyGPKrBnu9j0xL36JWkDTc+Ll3HR925uGdcypHsp9m2pgjNo
-         JdWxcWGrXTgn+nIcSpJh2rOsk6xR49BBJkF4GazqCdyojRMh+/3JWSTSdHqjWOsO0+Hx
-         30Ng==
-X-Gm-Message-State: APjAAAWmfSwowQjOUHLTgaxK1P5LRunV/AfTq93m3MvOvaulQSi3FiTY
-        xJaYNAc/0IAP7hPQfqQgVn20EzQKccAGnMLu9x8x8g==
-X-Google-Smtp-Source: APXvYqzQu3zf7MwD5dSwHodhAcyLgVZAG0O7QPJ49rUXrKnnT4WLwPcTm7oGBXASJ4CDZCVhP2HnLUytdNiWsdA8EXo=
-X-Received: by 2002:aa7:8bcc:: with SMTP id s12mr34228pfd.93.1569251544634;
- Mon, 23 Sep 2019 08:12:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <00000000000058cce90593394589@google.com>
-In-Reply-To: <00000000000058cce90593394589@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 23 Sep 2019 17:12:13 +0200
-Message-ID: <CAAeHK+ywLa2CLMnxNxck2VStxj-xrxo4QLjJFmamJ7G25Tu+CA@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in v4l2_release (2)
-To:     syzbot <syzbot+ac438d7ad8171b0ecbbe@syzkaller.appspotmail.com>
-Cc:     boris.brezillon@collabora.com, ezequiel@collabora.com,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
-        USB list <linux-usb@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        niklas.soderlund+renesas@ragnatech.se, s.nawrocki@samsung.com,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728699AbfIWPuG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 11:50:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43664 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728182AbfIWPuF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 11:50:05 -0400
+Received: from localhost.localdomain (unknown [194.230.155.145])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 38AB4205F4;
+        Mon, 23 Sep 2019 15:50:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569253804;
+        bh=FFzbPPyzstoUTQIh5AyphTjoKpbu5dT+XJPhAdHJBEY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=WBIhvdLMxJGUloK7m32dwhWXk2Pzythdg85Y3TSxn4AHNwXEWcHxcw+rY7vVpAs+Q
+         4dhoLEiE6ZtMnGhsyFxIqOBxx6+90XwCjhNUtY1//+iHfp7u1ky5Fhe0MJZ5gEjI9k
+         6r7Wug9n5vYaVA7XEoPXnv+IcQKMLQJqAU7x4fjc=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH trivial] usb: Fix Kconfig indentation
+Date:   Mon, 23 Sep 2019 17:49:56 +0200
+Message-Id: <20190923154956.6868-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 4:31 PM syzbot
-<syzbot+ac438d7ad8171b0ecbbe@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14d4b6a1600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ac438d7ad8171b0ecbbe
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+ac438d7ad8171b0ecbbe@syzkaller.appspotmail.com
->
-> usb 4-1: usbvision_write_reg: failed: error -19
-> usbvision_audio_off: can't write reg
-> usbvision_radio_close: Final disconnect
-> ==================================================================
-> BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390
-> drivers/media/v4l2-core/v4l2-dev.c:459
-> Read of size 4 at addr ffff8881c5c55228 by task v4l_id/16726
->
-> CPU: 0 PID: 16726 Comm: v4l_id Not tainted 5.3.0+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:618
->   v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
->   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
->   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:300
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x7f26b3e742b0
-> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0
-> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff
-> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
-> RSP: 002b:00007fff0e393978 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
-> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f26b3e742b0
-> RDX: 00007f26b412adf0 RSI: 0000000000000001 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 00007f26b412adf0 R09: 000000000000000a
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
-> R13: 00007fff0e393ad0 R14: 0000000000000000 R15: 0000000000000000
->
-> Allocated by task 2757:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_kmalloc mm/kasan/common.c:493 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
->   kmalloc include/linux/slab.h:552 [inline]
->   kzalloc include/linux/slab.h:748 [inline]
->   usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1298 [inline]
->   usbvision_probe.cold+0x5c5/0x1f1f
-> drivers/media/usb/usbvision/usbvision-video.c:1452
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0xae6/0x16f0 drivers/base/core.c:2201
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
->   device_add+0xae6/0x16f0 drivers/base/core.c:2201
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Freed by task 16726:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1474 [inline]
->   slab_free mm/slub.c:3016 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3957
->   usbvision_release+0x181/0x1c0
-> drivers/media/usb/usbvision/usbvision-video.c:1347
->   usbvision_radio_close.cold+0x6f/0x74
-> drivers/media/usb/usbvision/usbvision-video.c:1113
->   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
->   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
->   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
->   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
->   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:300
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
-> The buggy address belongs to the object at ffff8881c5c54200
->   which belongs to the cache kmalloc-8k of size 8192
-> The buggy address is located 4136 bytes inside of
->   8192-byte region [ffff8881c5c54200, ffff8881c5c56200)
-> The buggy address belongs to the page:
-> page:ffffea0007171400 refcount:1 mapcount:0 mapping:ffff8881da00c500
-> index:0x0 compound_mapcount: 0
-> flags: 0x200000000010200(slab|head)
-> raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da00c500
-> raw: 0000000000000000 0000000080030003 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881c5c55100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881c5c55180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> > ffff8881c5c55200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                                    ^
->   ffff8881c5c55280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881c5c55300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Adjust indentation from spaces to tab (+optional two spaces) as in
+coding style with command like:
+    $ sed -e 's/^        /\t/' -i */Kconfig
 
-Most probably the same bug as:
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/usb/dwc3/Kconfig           |  4 +-
+ drivers/usb/gadget/legacy/Kconfig  | 20 ++++-----
+ drivers/usb/gadget/udc/Kconfig     |  2 +-
+ drivers/usb/host/Kconfig           | 68 +++++++++++++++---------------
+ drivers/usb/misc/Kconfig           |  8 ++--
+ drivers/usb/misc/sisusbvga/Kconfig |  2 +-
+ drivers/usb/serial/Kconfig         | 44 +++++++++----------
+ 7 files changed, 74 insertions(+), 74 deletions(-)
 
-https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 89abc6078703..cc431376fcd0 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -103,7 +103,7 @@ config USB_DWC3_MESON_G12A
+        default USB_DWC3
+        select USB_ROLE_SWITCH
+        help
+-         Support USB2/3 functionality in Amlogic G12A platforms.
++	 Support USB2/3 functionality in Amlogic G12A platforms.
+ 	 Say 'Y' or 'M' if you have one such device.
+ 
+ config USB_DWC3_OF_SIMPLE
+@@ -111,7 +111,7 @@ config USB_DWC3_OF_SIMPLE
+        depends on OF && COMMON_CLK
+        default USB_DWC3
+        help
+-         Support USB2/3 functionality in simple SoC integrations.
++	 Support USB2/3 functionality in simple SoC integrations.
+ 	 Currently supports Xilinx and Qualcomm DWC USB3 IP.
+ 	 Say 'Y' or 'M' if you have one such device.
+ 
+diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
+index 69ff7f8c86f5..38eaa9417b38 100644
+--- a/drivers/usb/gadget/legacy/Kconfig
++++ b/drivers/usb/gadget/legacy/Kconfig
+@@ -154,16 +154,16 @@ config USB_ETH_EEM
+ 	select USB_LIBCOMPOSITE
+ 	select USB_F_EEM
+        help
+-         CDC EEM is a newer USB standard that is somewhat simpler than CDC ECM
+-         and therefore can be supported by more hardware.  Technically ECM and
+-         EEM are designed for different applications.  The ECM model extends
+-         the network interface to the target (e.g. a USB cable modem), and the
+-         EEM model is for mobile devices to communicate with hosts using
+-         ethernet over USB.  For Linux gadgets, however, the interface with
+-         the host is the same (a usbX device), so the differences are minimal.
+-
+-         If you say "y" here, the Ethernet gadget driver will use the EEM
+-         protocol rather than ECM.  If unsure, say "n".
++	 CDC EEM is a newer USB standard that is somewhat simpler than CDC ECM
++	 and therefore can be supported by more hardware.  Technically ECM and
++	 EEM are designed for different applications.  The ECM model extends
++	 the network interface to the target (e.g. a USB cable modem), and the
++	 EEM model is for mobile devices to communicate with hosts using
++	 ethernet over USB.  For Linux gadgets, however, the interface with
++	 the host is the same (a usbX device), so the differences are minimal.
++
++	 If you say "y" here, the Ethernet gadget driver will use the EEM
++	 protocol rather than ECM.  If unsure, say "n".
+ 
+ config USB_G_NCM
+ 	tristate "Network Control Model (NCM) support"
+diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+index d7e611645533..485c92ef888a 100644
+--- a/drivers/usb/gadget/udc/Kconfig
++++ b/drivers/usb/gadget/udc/Kconfig
+@@ -123,7 +123,7 @@ config USB_GR_UDC
+        tristate "Aeroflex Gaisler GRUSBDC USB Peripheral Controller Driver"
+        depends on HAS_DMA
+        help
+-          Select this to support Aeroflex Gaisler GRUSBDC cores from the GRLIB
++	  Select this to support Aeroflex Gaisler GRUSBDC cores from the GRLIB
+ 	  VHDL IP core library.
+ 
+ config USB_OMAP
+diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+index 79b2e79dddd0..d6164ede63d3 100644
+--- a/drivers/usb/host/Kconfig
++++ b/drivers/usb/host/Kconfig
+@@ -220,12 +220,12 @@ config USB_EHCI_HCD_ORION
+ 	  Marvell PXA/MMP USB controller" for those.
+ 
+ config USB_EHCI_HCD_SPEAR
+-        tristate "Support for ST SPEAr on-chip EHCI USB controller"
+-        depends on USB_EHCI_HCD && PLAT_SPEAR
+-        default y
+-        ---help---
+-          Enables support for the on-chip EHCI controller on
+-          ST SPEAr chips.
++	tristate "Support for ST SPEAr on-chip EHCI USB controller"
++	depends on USB_EHCI_HCD && PLAT_SPEAR
++	default y
++	---help---
++	  Enables support for the on-chip EHCI controller on
++	  ST SPEAr chips.
+ 
+ config USB_EHCI_HCD_STI
+ 	tristate "Support for ST STiHxxx on-chip EHCI USB controller"
+@@ -237,12 +237,12 @@ config USB_EHCI_HCD_STI
+ 	  STMicroelectronics consumer electronics SoC's.
+ 
+ config USB_EHCI_HCD_AT91
+-        tristate  "Support for Atmel on-chip EHCI USB controller"
+-        depends on USB_EHCI_HCD && ARCH_AT91
+-        default y
+-        ---help---
+-          Enables support for the on-chip EHCI controller on
+-          Atmel chips.
++	tristate  "Support for Atmel on-chip EHCI USB controller"
++	depends on USB_EHCI_HCD && ARCH_AT91
++	default y
++	---help---
++	  Enables support for the on-chip EHCI controller on
++	  Atmel chips.
+ 
+ config USB_EHCI_TEGRA
+        tristate "NVIDIA Tegra HCD support"
+@@ -250,8 +250,8 @@ config USB_EHCI_TEGRA
+        select USB_EHCI_ROOT_HUB_TT
+        select USB_TEGRA_PHY
+        help
+-         This driver enables support for the internal USB Host Controllers
+-         found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
++	 This driver enables support for the internal USB Host Controllers
++	 found in NVIDIA Tegra SoCs. The controllers are EHCI compliant.
+ 
+ config USB_EHCI_HCD_PPC_OF
+ 	bool "EHCI support for PPC USB controller on OF platform bus"
+@@ -409,12 +409,12 @@ config USB_OHCI_HCD_OMAP1
+ 	  Enables support for the OHCI controller on OMAP1/2 chips.
+ 
+ config USB_OHCI_HCD_SPEAR
+-        tristate "Support for ST SPEAr on-chip OHCI USB controller"
+-        depends on USB_OHCI_HCD && PLAT_SPEAR
+-        default y
+-        ---help---
+-          Enables support for the on-chip OHCI controller on
+-          ST SPEAr chips.
++	tristate "Support for ST SPEAr on-chip OHCI USB controller"
++	depends on USB_OHCI_HCD && PLAT_SPEAR
++	default y
++	---help---
++	  Enables support for the on-chip OHCI controller on
++	  ST SPEAr chips.
+ 
+ config USB_OHCI_HCD_STI
+ 	tristate "Support for ST STiHxxx on-chip OHCI USB controller"
+@@ -426,12 +426,12 @@ config USB_OHCI_HCD_STI
+ 	  STMicroelectronics consumer electronics SoC's.
+ 
+ config USB_OHCI_HCD_S3C2410
+-        tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
+-        depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX)
+-        default y
+-        ---help---
+-          Enables support for the on-chip OHCI controller on
+-          S3C24xx/S3C64xx chips.
++	tristate "OHCI support for Samsung S3C24xx/S3C64xx SoC series"
++	depends on USB_OHCI_HCD && (ARCH_S3C24XX || ARCH_S3C64XX)
++	default y
++	---help---
++	  Enables support for the on-chip OHCI controller on
++	  S3C24xx/S3C64xx chips.
+ 
+ config USB_OHCI_HCD_LPC32XX
+ 	tristate "Support for LPC on-chip OHCI USB controller"
+@@ -440,8 +440,8 @@ config USB_OHCI_HCD_LPC32XX
+ 	depends on USB_ISP1301
+ 	default y
+ 	---help---
+-          Enables support for the on-chip OHCI controller on
+-          NXP chips.
++	  Enables support for the on-chip OHCI controller on
++	  NXP chips.
+ 
+ config USB_OHCI_HCD_PXA27X
+ 	tristate "Support for PXA27X/PXA3XX on-chip OHCI USB controller"
+@@ -456,8 +456,8 @@ config USB_OHCI_HCD_AT91
+ 	depends on USB_OHCI_HCD && ARCH_AT91 && OF
+ 	default y
+ 	---help---
+-          Enables support for the on-chip OHCI controller on
+-          Atmel chips.
++	  Enables support for the on-chip OHCI controller on
++	  Atmel chips.
+ 
+ config USB_OHCI_HCD_OMAP3
+ 	tristate "OHCI support for OMAP3 and later chips"
+@@ -716,11 +716,11 @@ config USB_IMX21_HCD
+        tristate "i.MX21 HCD support"
+        depends on ARM && ARCH_MXC
+        help
+-         This driver enables support for the on-chip USB host in the
+-         i.MX21 processor.
++	 This driver enables support for the on-chip USB host in the
++	 i.MX21 processor.
+ 
+-         To compile this driver as a module, choose M here: the
+-         module will be called "imx21-hcd".
++	 To compile this driver as a module, choose M here: the
++	 module will be called "imx21-hcd".
+ 
+ config USB_HCD_BCMA
+ 	tristate "BCMA usb host driver"
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index bdae62b2ffe0..664d27bb6086 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -191,8 +191,8 @@ config USB_TEST
+ 	  including sample test device firmware and "how to use it".
+ 
+ config USB_EHSET_TEST_FIXTURE
+-        tristate "USB EHSET Test Fixture driver"
+-        help
++	tristate "USB EHSET Test Fixture driver"
++	help
+ 	  Say Y here if you want to support the special test fixture device
+ 	  used for the USB-IF Embedded Host High-Speed Electrical Test procedure.
+ 
+@@ -247,13 +247,13 @@ config USB_HSIC_USB3503
+        depends on I2C
+        select REGMAP_I2C
+        help
+-         This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
++	 This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
+ 
+ config USB_HSIC_USB4604
+        tristate "USB4604 HSIC to USB20 Driver"
+        depends on I2C
+        help
+-         This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
++	 This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
+ 
+ config USB_LINK_LAYER_TEST
+ 	tristate "USB Link Layer Test driver"
+diff --git a/drivers/usb/misc/sisusbvga/Kconfig b/drivers/usb/misc/sisusbvga/Kconfig
+index 9b632ab24f03..c16121276a21 100644
+--- a/drivers/usb/misc/sisusbvga/Kconfig
++++ b/drivers/usb/misc/sisusbvga/Kconfig
+@@ -4,7 +4,7 @@ config USB_SISUSBVGA
+ 	tristate "USB 2.0 SVGA dongle support (Net2280/SiS315)"
+ 	depends on (USB_MUSB_HDRC || USB_EHCI_HCD)
+ 	select FONT_SUPPORT if USB_SISUSBVGA_CON
+-        ---help---
++	---help---
+ 	  Say Y here if you intend to attach a USB2VGA dongle based on a
+ 	  Net2280 and a SiS315 chip.
+ 
+diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
+index 67279c6bce33..0a8c16a8cda2 100644
+--- a/drivers/usb/serial/Kconfig
++++ b/drivers/usb/serial/Kconfig
+@@ -271,17 +271,17 @@ config USB_SERIAL_F8153X
+ config USB_SERIAL_GARMIN
+        tristate "USB Garmin GPS driver"
+        help
+-         Say Y here if you want to connect to your Garmin GPS.
+-         Should work with most Garmin GPS devices which have a native USB port.
++	 Say Y here if you want to connect to your Garmin GPS.
++	 Should work with most Garmin GPS devices which have a native USB port.
+ 
+-         See <http://sourceforge.net/projects/garmin-gps> for the latest
+-         version of the driver.
++	 See <http://sourceforge.net/projects/garmin-gps> for the latest
++	 version of the driver.
+ 
+-         To compile this driver as a module, choose M here: the
+-         module will be called garmin_gps.
++	 To compile this driver as a module, choose M here: the
++	 module will be called garmin_gps.
+ 
+ config USB_SERIAL_IPW
+-        tristate "USB IPWireless (3G UMTS TDD) Driver"
++	tristate "USB IPWireless (3G UMTS TDD) Driver"
+ 	select USB_SERIAL_WWAN
+ 	help
+ 	  Say Y here if you want to use a IPWireless USB modem such as
+@@ -341,20 +341,20 @@ config USB_SERIAL_KLSI
+ 	  module will be called kl5kusb105.
+ 
+ config USB_SERIAL_KOBIL_SCT
+-        tristate "USB KOBIL chipcard reader"
+-        ---help---
+-          Say Y here if you want to use one of the following KOBIL USB chipcard
+-          readers:
+-
+-            - USB TWIN
+-            - KAAN Standard Plus
+-            - KAAN SIM
+-            - SecOVID Reader Plus
+-            - B1 Professional
+-            - KAAN Professional
+-
+-          Note that you need a current CT-API.
+-          To compile this driver as a module, choose M here: the
++	tristate "USB KOBIL chipcard reader"
++	---help---
++	  Say Y here if you want to use one of the following KOBIL USB chipcard
++	  readers:
++
++	    - USB TWIN
++	    - KAAN Standard Plus
++	    - KAAN SIM
++	    - SecOVID Reader Plus
++	    - B1 Professional
++	    - KAAN Professional
++
++	  Note that you need a current CT-API.
++	  To compile this driver as a module, choose M here: the
+ 	  module will be called kobil_sct.
+ 
+ config USB_SERIAL_MCT_U232
+@@ -458,7 +458,7 @@ config USB_SERIAL_OTI6858
+ 	tristate "USB Ours Technology Inc. OTi-6858 USB To RS232 Bridge Controller"
+ 	help
+ 	  Say Y here if you want to use the OTi-6858 single port USB to serial
+-          converter device.
++	  converter device.
+ 
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called oti6858.
+-- 
+2.17.1
 
-#syz dup: general protection fault in usb_set_interface
