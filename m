@@ -2,30 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B88BB763
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 16:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4FF8BB76B
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728424AbfIWO6w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 10:58:52 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:43977 "HELO
+        id S1731625AbfIWPBQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 11:01:16 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47905 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727193AbfIWO6v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 10:58:51 -0400
-Received: (qmail 27342 invoked by uid 500); 23 Sep 2019 10:58:50 -0400
+        with SMTP id S1726699AbfIWPBQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 11:01:16 -0400
+Received: (qmail 27837 invoked by uid 500); 23 Sep 2019 11:01:15 -0400
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Sep 2019 10:58:50 -0400
-Date:   Mon, 23 Sep 2019 10:58:50 -0400 (EDT)
+  by localhost with SMTP; 23 Sep 2019 11:01:15 -0400
+Date:   Mon, 23 Sep 2019 11:01:15 -0400 (EDT)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@netrider.rowland.org
-To:     Greg KH <gregkh@linuxfoundation.org>
-cc:     Austin Kim <austindh.kim@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <mathias.nyman@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <nsaenzjulienne@suse.de>, <jflat@chromium.org>, <malat@debian.org>,
-        <dianders@chromium.org>
-Subject: Re: [PATCH] usb: hub: Minor refactoring in usb_hub_init()
-In-Reply-To: <20190923071145.GB2746429@kroah.com>
-Message-ID: <Pine.LNX.4.44L0.1909231053500.24712-100000@netrider.rowland.org>
+To:     Ran Wang <ran.wang_1@nxp.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: hub add filter for device with specific VID&PID
+In-Reply-To: <20190923105102.37413-1-ran.wang_1@nxp.com>
+Message-ID: <Pine.LNX.4.44L0.1909231059260.24712-100000@netrider.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -33,78 +35,45 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 23 Sep 2019, Greg KH wrote:
+On Mon, 23 Sep 2019, Ran Wang wrote:
 
-> On Mon, Sep 23, 2019 at 03:19:21PM +0900, Austin Kim wrote:
-> > Normally when creation of workqueue fails, exception handling takes place
-> > after the call to alloc_workqueue() is made.
-> > 
-> > But looking into usb_hub_init() function, 'return 0' statement is executed,
-> > when alloc_workqueue() returns valid workqueue pointer.
-> >        if (hub_wq)
-> >                return 0;
-> > 
-> > This might make other Linux driver developers get confused 
-> > because they could deduce that this is exceptional handling routine.
-> > 
-> > So perform minor refactoring by adding NULL pointer dereference check
-> > routine right after the call to alloc_workqueue() is made.
-> > 
-> > Signed-off-by: Austin Kim <austindh.kim@gmail.com>
-> > ---
-> >  drivers/usb/core/hub.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > index e8ebacc..0ddbfe6 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -5530,9 +5530,12 @@ int usb_hub_init(void)
-> >  	 * over to the companion full-speed controller.
-> >  	 */
-> >  	hub_wq = alloc_workqueue("usb_hub_wq", WQ_FREEZABLE, 0);
-> > -	if (hub_wq)
-> > -		return 0;
-> > +	if (unlikely(!hub_wq))
+> USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT "Unsupported
+> Device" Message require to stop enumerating device with VID=0x1a0a PID=0x0201
+> and pop message to declare this device is not supported.
 > 
-> Only ever use likely/unlikely if you can measure the difference without
-> it.  Otherwise the compiler and cpu will almost always do this better
-> than you.
+> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> ---
+>  drivers/usb/core/hub.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> So please remove this.
-> 
-> > +		goto err_workqueue;
-> > +
-> > +	return 0;
-> >  
-> > +err_workqueue:
-> >  	/* Fall through if kernel_thread failed */
-> 
-> This comment is now incorrect.
-> 
-> But really, there is nothing wrong with the original code here.  It
-> works properly, and while it is not identical to normal code "style"
-> here, there's nothing wrong with it that I can see.
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index bbcfa63..3cda0da 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -4982,6 +4982,18 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  		if (status < 0)
+>  			goto loop;
+>  
+> +		 /* USB 2.0 Embedded Host PET Automated Test (CH6)
+> +		 * 6.7.23 A-UUT "Unsupported Device" Message
+> +		 * require to filter out below device when enumeration
+> +		 */
+> +		if ((udev->descriptor.idVendor == 0x1a0a)
+> +		 && (udev->descriptor.idProduct == 0x0201)) {
+> +			dev_err(&udev->dev, "This device is not supported: idVendor=0x%x idProduct=0x%x\n",
+> +				udev->descriptor.idVendor,
+> +				udev->descriptor.idProduct);
 
-Indeed.  In fact, I suspect that this change would make the code less 
-understandable, because the reader would wonder why anybody would go to 
-the trouble of jumping over a return statement.  After all, this:
+There's no need to write out the Vendor and Product IDs.  They already 
+appear in the "New device" message.
 
-	if (!test)
-		jump error;
-	return 0;
- error:
+> +			goto done;
+> +		}
+> +
+>  		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+>  			msleep(2000);
 
-just looks like a strange and inefficient way of writing:
-
-	if (test)
-		return 0;
-
-Anyone reading it would wonder what the original author was thinking.
-
-If you really want to fix up this subroutine, you could change the two 
-"return -1" statements.  They should return an appropriate error code, 
-not just -1.
+Shouldn't this be implemented as a device quirk?
 
 Alan Stern
 
