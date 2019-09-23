@@ -2,90 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B129BABE4
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 00:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA42BAC68
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 03:38:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728519AbfIVWRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Sep 2019 18:17:35 -0400
-Received: from mail-io1-f51.google.com ([209.85.166.51]:39550 "EHLO
-        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727485AbfIVWRe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 18:17:34 -0400
-Received: by mail-io1-f51.google.com with SMTP id a1so28919628ioc.6
-        for <linux-usb@vger.kernel.org>; Sun, 22 Sep 2019 15:17:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
-         :cc;
-        bh=dqobuf/BrOxXasMTwIqqq7pm/XDIEuujQtxgD/0IH0Y=;
-        b=mDdKYe/K6r01mq7wWY7gpR/AdV/FAvCCoi/st/yOqa0vAAJ3+dGgdr6H9E3evIwqUD
-         +4OLPi2tNmePOzPY+kpKnR+/WCv0euqbp8HnvnksX0TSn9X//ojOllbYWEzurdvbgIOe
-         +kJ7nA6Bznu7idRywo0PNJXnHcrdJVq8Papb9Dmjf4gSzX/RzQVYtPECxyd+6U2aVmAI
-         nzLjFfQ+ZlDHzrtbDhnSSGZIqwj57hbyjhOcdvHkWo6RrFpvTed0LjCTDd0Jl2ono75s
-         2CpBb4UJZKyW9lstbMfypcqxIkJzxgX4vMhO1UzV4FeBpUpNsLXBkmrEGDrkPvnNGhSt
-         mvyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
-         :message-id:subject:to:cc;
-        bh=dqobuf/BrOxXasMTwIqqq7pm/XDIEuujQtxgD/0IH0Y=;
-        b=Gjq54IPibENHz2OPsCFd/T2vtIxPLmHa7fML/M3DphnWEtModB8PF5gZj64d/Mc9XF
-         OIi1ezF9o6z9iZWyTcLpoQZ9ZaKhMoAXFhKyYNe240pQ//fZlj/flNzbs10DmR73EpnX
-         Cnl5bSU3is4w5pqhqBv4o/MdRRuuVD7D2t7wbKL2ofx5G22lQV4oHkalFTZIRuRRmo1G
-         f+aYqh8c7xRgiTWYWdXK9zvjv5E0UL0q/uZh15bV1qzSTv1GbUo7g+yNjeVbF3dpU00j
-         LH9WoA1qIxqZJ5MCV2cKwWPm+0LDd901lCacsbgNr1DB6Hw9nxwiYeZhAc61YL5eACUZ
-         FUYg==
-X-Gm-Message-State: APjAAAV9V7VFG71SKcCDX2mMKSScorVcCjedA1j+ltu0COGOO5eS1sKF
-        b9TE5WL20ZM5iF89pxVjcL82UgJPeoSjutrn4nYI8FYk
-X-Google-Smtp-Source: APXvYqzf8lsZl42VwKFAzwFMLnvhOG3agalEKDiLFNKAjQPS+KF7wQgF9cKhQ5bNDL3zOWRD3mkHVE5FsEHahfFvI2g=
-X-Received: by 2002:a6b:4902:: with SMTP id u2mr7974033iob.301.1569190653997;
- Sun, 22 Sep 2019 15:17:33 -0700 (PDT)
+        id S2391374AbfIWBip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Sep 2019 21:38:45 -0400
+Received: from a8-21.smtp-out.amazonses.com ([54.240.8.21]:41456 "EHLO
+        a8-21.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387843AbfIWBip (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 21:38:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zp2ap7btoiiow65hultmctjebh3tse7g; d=aaront.org; t=1569202724;
+        h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type;
+        bh=Pxg5u6FuwjgB1YzTt5T/maEQQOagOxuJSeL6574+nUc=;
+        b=mcKj5WlfQqMpBpqbGOO7hoJgopo4P0EXimwQYYgiYgqMoowgUL+3nw5fM8OnU7ZG
+        9wBwJ7BdS8Nsw4K+b2qHnWRtPjCsJRvDuBIG8jXDYh0sdf2V9mCx7LZXmEWGK+jke8J
+        9dTtCDtC1QhV5CXH9ouoOLocPtGOIbLh7zPRkI4M=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1569202724;
+        h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type:Feedback-ID;
+        bh=Pxg5u6FuwjgB1YzTt5T/maEQQOagOxuJSeL6574+nUc=;
+        b=G9t7Do3h+tusz4PVoaAmuUVJE9FOcqsSCcWPoCUMmbi2u5e871pW27aU1PsPxUc4
+        3/1s74h7pcAU+J4XgMJghyLLmnqYMvhuLFN7ZY0r6CxnGPo6nWfF2TcEqIkCPGjBFLC
+        XRFnwyvAzUS/hbpLsAx1TBsCYRHKVdZcHRGD2qUE=
+X-Gm-Message-State: APjAAAV8tFNY0C/xuLbCmYerMne9Ju8IQ8aULgLged8+vgPsC+N39yfT
+        tFuTfr5+R8v07zg98lgTN0CwCnd4nQOrklFpGo0=
+X-Google-Smtp-Source: APXvYqxNLAPqW/41jG0jFSuO1+G9n5Ir9ZsxIvThMQWNZQ2r0gjlK3otnV+g50AXNlcP9USmn+khW/dsy3Y/SqLDVGc=
+X-Received: by 2002:a0d:c3c3:: with SMTP id f186mr21323762ywd.470.1569202723363;
+ Sun, 22 Sep 2019 18:38:43 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:ac0:9c85:0:0:0:0:0 with HTTP; Sun, 22 Sep 2019 15:17:33
- -0700 (PDT)
-In-Reply-To: <20190921044510.GA990793@kroah.com>
-References: <CAA=hcWRF00syz8jB1+qdy1pFA7Wk_B=1Z_DT5vYuQrzFKhtZbw@mail.gmail.com>
- <20190917120258.GB489142@kroah.com> <CAA=hcWTD2zYD0gVTu6sDuRqUcTOnn42Gm0s1tOGvBQdQ40Q7LA@mail.gmail.com>
- <20190918054744.GA1830105@kroah.com> <CAA=hcWR__j20ZQY9H8zzTryEatSfe+yXLYQXSaXMvgy3pwdJKg@mail.gmail.com>
- <20190921044510.GA990793@kroah.com>
-From:   JH <jupiter.hce@gmail.com>
-Date:   Mon, 23 Sep 2019 08:17:33 +1000
-Message-ID: <CAA=hcWTwi+PRepcT9xS2G0YjtV7e6+YWwxTrKLSv_=7T61ty8Q@mail.gmail.com>
-Subject: Re: Failed to connect to 4G modem
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
+From:   Aaron Thompson <dev@aaront.org>
+Date:   Mon, 23 Sep 2019 01:38:44 +0000
+X-Gmail-Original-Message-ID: <CABeuQhszD1x2G-L9Wk_ri16UsaF7zx0mN=S8_P+BA3i6Y3-Z7w@mail.gmail.com>
+Message-ID: <0100016d5bc55d05-d2c923f3-a4bb-4ba7-8adc-031b7d933b52-000000@email.amazonses.com>
+Subject: Moschip 7703 USB to serial free to a good home
+To:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+X-SES-Outgoing: 2019.09.23-54.240.8.21
+Feedback-ID: 1.us-east-1.8/56jQl+KfkRukJqWjlnf+MtEL0x/NchId1fC0q616g=:AmazonSES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hi all,
 
-On 9/21/19, Greg KH <gregkh@linuxfoundation.org> wrote:
-> You should never have to update any userspace code or library if the
-> kernel is updated as we guarantee backwards compatibility.  If we did
-> break something, please let us know and we will work very hard to fix
-> it.
->
-> This is a guarantee we made back in 2007 or so, and have been sticking
-> to it since.
->
-> There is no "major" upgrade issue here, the kernel does a new release
-> every 3 months and changes the number, showing it is "newer" than the
-> previous one.
->
-> Hope this helps,
+I have a Moschip 7703 USB to single serial port adapter that I'm not
+using primarily because it doesn't have an in-tree driver, so I'd be
+happy to send it to anyone who would like to add support for it. It
+looks like it should be easy to add to the existing mos7720 driver.
+Anyone interested?
 
-That demystified the kernel version many people misinterpreted, so I
-can tell my colleagues we are ensured there would be no libraries
-changes upgrading 5.3 to 5.4 LTS.
-
-Thank you so much.
-
-Kind regards,
-
-- jupiter
-
-> greg k-h
->
+Thanks,
+-- Aaron
