@@ -2,122 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7EBBB5A5
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E932BB5EB
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:58:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730898AbfIWNpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 09:45:03 -0400
-Received: from mga11.intel.com ([192.55.52.93]:32567 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725854AbfIWNpC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Sep 2019 09:45:02 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 06:45:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,540,1559545200"; 
-   d="scan'208";a="188145235"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga008.fm.intel.com with ESMTP; 23 Sep 2019 06:45:01 -0700
-Subject: Re: Event ring is full when do iozone test on UAS storage
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     Suwan Kim <suwan.kim027@gmail.com>,
-        Peter Chen <hzpeterchen@gmail.com>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20190916094305.GB21844@b29397-desktop>
- <0aae13f2-04cf-f45a-e6ee-4bf9e515faba@linux.intel.com>
- <CAL411-oirjSLZzwoN8axqpfn-JQ8eEGMWD-w9p24Krap+dPs9g@mail.gmail.com>
- <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
- <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
- <20190919135935.GA3133@localhost.localdomain>
- <e9090913-3ef8-5211-8f70-550df5dbe7ec@linux.intel.com>
-Message-ID: <ba5ab485-cd06-6480-fffb-5b9c6a99d7f1@linux.intel.com>
-Date:   Mon, 23 Sep 2019 16:46:56 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2408331AbfIWN6p convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 23 Sep 2019 09:58:45 -0400
+Received: from us-smtp-delivery-131.mimecast.com ([63.128.21.131]:51799 "EHLO
+        us-smtp-delivery-131.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2406362AbfIWN6p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 09:58:45 -0400
+Received: from mailhub5.stratus.com (134.111.1.18 [134.111.1.18]) by
+ relay.mimecast.com with ESMTP id us-mta-72-V2PPOjCePjOdd4e-xM_m3w-1; Mon,
+ 23 Sep 2019 09:58:40 -0400
+Received: from EXHQ1.corp.stratus.com (exhq1.corp.stratus.com [134.111.200.125])
+        by mailhub5.stratus.com (8.12.11/8.12.11) with ESMTP id x8NDwdnB029381;
+        Mon, 23 Sep 2019 09:58:40 -0400
+Received: from linuxdev.lnx.eng.stratus.com (134.111.220.63) by
+ EXHQ1.corp.stratus.com (134.111.200.125) with Microsoft SMTP Server (TLS) id
+ 14.3.279.2; Mon, 23 Sep 2019 09:58:34 -0400
+From:   Bill Kuzeja <William.Kuzeja@stratus.com>
+To:     <linux-usb@vger.kernel.org>, <mathias.nyman@intel.com>,
+        <torez@redhat.com>, <William.Kuzeja@stratus.com>
+Subject: [PATCH v2] xhci: Prevent deadlock when xhci adapter breaks during init
+Date:   Mon, 23 Sep 2019 09:58:39 -0400
+Message-ID: <1569247119-32708-1-git-send-email-William.Kuzeja@stratus.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-In-Reply-To: <e9090913-3ef8-5211-8f70-550df5dbe7ec@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-MC-Unique: V2PPOjCePjOdd4e-xM_m3w-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23.9.2019 14.19, Mathias Nyman wrote:
-> On 19.9.2019 16.59, Suwan Kim wrote:
->> On Thu, Sep 19, 2019 at 05:54:25PM +0800, Peter Chen wrote:
->>>> On 17.9.2019 12.55, Peter Chen wrote:
->>>>>>>
->>>>>>> I met "event ring full error" like below, this error is met when
->>>>>>> I do iozone test on UAS storage at v4.19.35 kernel, but not meet
->>>>>>> this error at linux-next tree (08/24). The same host and test
->>>>>>> UAS storage device are used. This issue is due to xhci_handle_event
->>>>>>> does not return 0 long time, maybe the xHC speed is fast enough
->>>>>>> at that time. If I force the xhci_handle_event only run 100 times
->>>>>>> before update ERST dequene pointer, it will not occur this error.
->>>>>>> I did not  see any changes for xhci_handle_event at the latest code,
->>>>>>> so in theory, it should have this issue too. Do you think if we need
->>>>>>> to improve xhci_handle_event to avoid event ring?
->>>>>>
->>>>> The root cause is UAS protocol is very fast
->>>>> protocol, the
->>>>> other threads at non-CPU0 will add TRBs during we are handling event, so if
->>>>> hardware (xHC) has always consumed TD the non-CPU0s are adding,
->>>>> the ERST dequene pointer never get change to update, then this
->>>>> "event ring full" error will occur.
->>>>>
->>>>> The one reason why v4.19 has this issue is the max request length is larger
->>>>> than the latest kernel. At v4.19, it is 512KB, At the latest kernel,
->>>>> it is 256 KB.
->>>>> see /sys/block/sda/queue/max_sectors_kb.
->>>>> When I change max_sectors_kb as smaller value, the test will be more smooth.
->>>>> Besides, At v4.19, the UAS completion handler seems take more time
->>>>> compares to the latest kernel.
->>>>>
->>>>> I suggest adding threshold flag for event ring when it closes to full
->>>>> since we can't
->>>>> avoid USB3 use cases when the throughput is high, but the system is a
->>>>> little slow.
->>>>> Do you agree?
->>>>
->>>> I agree that it makes sense to force a ERDP write after handling some amount
->>>> of events, it can solve some event ring full issues, but not the fact that
->>>> we spend a lot of time in the interrupt handler.
->>>
->>> Ok, I will proposal one patch to fix event ring full issue.
-> 
-> Great
-> 
->>>
->>>>
->>>> Your logs show that you have TDs containing up to 128 TRBs.
->>>> When a TD like that finishes the driver will increase the sw dequeue pointer of the
->>>> transfer ring one by one until we reach the end of the TD.
->>>>
->>>> This means we call inc_deq() function 128 times in interrupt context, and each time
->>>> do a few comparisons. According to traces this takes ~120us. There might be some
->>>> tracing overhead but this could anyway be done in a saner way.
->>>>
->>>> I'll look into this
->>>>
->>>
->>> Since we use hard irq for xHCI, for high performance protocol, it may hard to
->>> reduce interrupt context time since we have lots of request handling,
->>> cache operation,
->>> and completion are interrupt context.
-> 
-> I'm working on one improvement at the moment, it would be great if you could test
-> it out once i get it done.
+The system can hit a deadlock if an xhci adapter breaks while initializing.
+The deadlock is between two threads: thread 1 is tearing down the
+adapter and is stuck in usb_unlocked_disable_lpm waiting to lock the
+hcd->handwidth_mutex. Thread 2 is holding this mutex (while still trying
+to add a usb device), but is stuck in xhci_endpoint_reset waiting for a
+stop or config command to complete. A reboot is required to resolve.
 
-Got something  done on top of 5.3.
-It's in my tree in the irqoff_optimization branch
+It turns out when calling xhci_queue_stop_endpoint and
+xhci_queue_configure_endpoint in xhci_endpoint_reset, the return code is
+not checked for errors. If the timing is right and the adapter dies just
+before either of these commands get issued, we hang indefinitely waiting
+for a completion on a command that didn't get issued.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git  irqoff_optimization
+This wasn't a problem before the following fix because we didn't send
+commands in xhci_endpoint_reset:
 
-Does it help at all in your case?
+commit f5249461b504 ("xhci: Clear the host side toggle manually when
+    endpoint is soft reset")
 
--Mathias
+With the patch I am submitting, a duration test which breaks adapters
+during initialization (and which deadlocks with the standard kernel) runs
+without issue.
+
+Fixes: f5249461b504 ("xhci: Clear the host side toggle manually when
+    endpoint is soft reset")
+
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Torez Smith <torez@redhat.com>
+
+Signed-off-by: Bill Kuzeja <william.kuzeja@stratus.com>
+Signed-off-by: Torez Smith <torez@redhat.com>
+---
+ drivers/usb/host/xhci.c | 23 +++++++++++++++++++++--
+ 1 file changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 5008659..ed44ec2 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -3083,6 +3083,7 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+ 	unsigned int ep_index;
+ 	unsigned long flags;
+ 	u32 ep_flag;
++	int err;
+ 
+ 	xhci = hcd_to_xhci(hcd);
+ 	if (!host_ep->hcpriv)
+@@ -3142,7 +3143,17 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+ 		xhci_free_command(xhci, cfg_cmd);
+ 		goto cleanup;
+ 	}
+-	xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id, ep_index, 0);
++
++	err = xhci_queue_stop_endpoint(xhci, stop_cmd, udev->slot_id,
++					ep_index, 0);
++	if (err < 0) {
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		xhci_free_command(xhci, cfg_cmd);
++		xhci_dbg(xhci, "%s: Failed to queue stop ep command, %d ",
++				__func__, err);
++		goto cleanup;
++	}
++
+ 	xhci_ring_cmd_db(xhci);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+ 
+@@ -3156,8 +3167,16 @@ static void xhci_endpoint_reset(struct usb_hcd *hcd,
+ 					   ctrl_ctx, ep_flag, ep_flag);
+ 	xhci_endpoint_copy(xhci, cfg_cmd->in_ctx, vdev->out_ctx, ep_index);
+ 
+-	xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
++	err = xhci_queue_configure_endpoint(xhci, cfg_cmd, cfg_cmd->in_ctx->dma,
+ 				      udev->slot_id, false);
++	if (err < 0) {
++		spin_unlock_irqrestore(&xhci->lock, flags);
++		xhci_free_command(xhci, cfg_cmd);
++		xhci_dbg(xhci, "%s: Failed to queue config ep command, %d ",
++				__func__, err);
++		goto cleanup;
++	}
++
+ 	xhci_ring_cmd_db(xhci);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+ 
+-- 
+1.8.3.1
+
