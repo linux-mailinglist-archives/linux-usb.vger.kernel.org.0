@@ -2,78 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4FF8BB76B
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA13BB773
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 17:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731625AbfIWPBQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 11:01:16 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:47905 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726699AbfIWPBQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 11:01:16 -0400
-Received: (qmail 27837 invoked by uid 500); 23 Sep 2019 11:01:15 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Sep 2019 11:01:15 -0400
-Date:   Mon, 23 Sep 2019 11:01:15 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Ran Wang <ran.wang_1@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: hub add filter for device with specific VID&PID
-In-Reply-To: <20190923105102.37413-1-ran.wang_1@nxp.com>
-Message-ID: <Pine.LNX.4.44L0.1909231059260.24712-100000@netrider.rowland.org>
+        id S1726211AbfIWPEZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 11:04:25 -0400
+Received: from mga04.intel.com ([192.55.52.120]:20059 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726075AbfIWPEY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 11:04:24 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 08:04:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,540,1559545200"; 
+   d="scan'208";a="188165919"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Sep 2019 08:04:23 -0700
+Subject: Re: [PATCH v3] usb: host: xhci: wait CNR when doing xhci resume
+To:     Rick Tseng <rtseng@nvidia.com>, mathias.nyman@intel.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org
+References: <1568799691-3853-1-git-send-email-rtseng@nvidia.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <72e14518-3349-f256-2c6b-13b08f2ebad3@linux.intel.com>
+Date:   Mon, 23 Sep 2019 18:06:19 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <1568799691-3853-1-git-send-email-rtseng@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 23 Sep 2019, Ran Wang wrote:
-
-> USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT "Unsupported
-> Device" Message require to stop enumerating device with VID=0x1a0a PID=0x0201
-> and pop message to declare this device is not supported.
+On 18.9.2019 12.41, Rick Tseng wrote:
+> NVIDIA 3.1 xHCI card would lose power when moving power state into D3Cold.
+> Thus we need to wait CNR bit to clear when xhci resmue as xhci init.
 > 
-> Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
-> ---
->  drivers/usb/core/hub.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index bbcfa63..3cda0da 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -4982,6 +4982,18 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
->  		if (status < 0)
->  			goto loop;
->  
-> +		 /* USB 2.0 Embedded Host PET Automated Test (CH6)
-> +		 * 6.7.23 A-UUT "Unsupported Device" Message
-> +		 * require to filter out below device when enumeration
-> +		 */
-> +		if ((udev->descriptor.idVendor == 0x1a0a)
-> +		 && (udev->descriptor.idProduct == 0x0201)) {
-> +			dev_err(&udev->dev, "This device is not supported: idVendor=0x%x idProduct=0x%x\n",
-> +				udev->descriptor.idVendor,
-> +				udev->descriptor.idProduct);
+> Signed-off-by: Rick Tseng <rtseng@nvidia.com>
 
-There's no need to write out the Vendor and Product IDs.  They already 
-appear in the "New device" message.
+Thanks, added to queue.
+Did minor changes to commit message and comment
 
-> +			goto done;
-> +		}
-> +
->  		if (udev->quirks & USB_QUIRK_DELAY_INIT)
->  			msleep(2000);
-
-Shouldn't this be implemented as a device quirk?
-
-Alan Stern
+-Mathias
 
