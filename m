@@ -2,90 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4566BAF6D
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 10:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D48AEBB113
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 11:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406936AbfIWI1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 04:27:07 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:15145 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405857AbfIWI1G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 04:27:06 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d8881db0000>; Mon, 23 Sep 2019 01:27:07 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 23 Sep 2019 01:27:05 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 23 Sep 2019 01:27:05 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 23 Sep
- 2019 08:27:05 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 23 Sep 2019 08:27:05 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.65.118]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d8881d50001>; Mon, 23 Sep 2019 01:27:04 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V10 8/8] arm64: defconfig: Enable tegra XUDC support
-Date:   Mon, 23 Sep 2019 13:55:52 +0530
-Message-ID: <1569227152-3030-9-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
-References: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
+        id S1730108AbfIWJK7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 05:10:59 -0400
+Received: from mail-qt1-f174.google.com ([209.85.160.174]:38354 "EHLO
+        mail-qt1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730082AbfIWJK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 05:10:58 -0400
+Received: by mail-qt1-f174.google.com with SMTP id j31so16251555qta.5
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 02:10:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=8YwhPsnZ4Dn4ddZeDtc7eIWRTCkb8CcIGryzNRbAYJU=;
+        b=iwamg/taDRFNHLqRvcPceN0j55hqanRb4+T40n7P4TVJCAKLN5Vs8aH+/m9CeKIIqY
+         jVdE8nV2qkbzGeEpl8WbxPYUMof6rnbdb0tY4Iz9s/UPrMgssgsp1hsua0Yp+k/oIPIM
+         DHnBGqgU8hx7/0OdHgNDpma0ob+NEogXC6HkXSOLOcp+CMIpDVv3+QZYo/nrId+cIBgv
+         Tquc4OrMzzLGcMMlRcIxlrhpen6s2NOQAhJhzo7/VkAYSJH3Sf0AoQZ4+acGK8OLWhOg
+         dzvqRcXlqQhwnbfoisAEOtzF2rkQMjAfl/H+PKV+JO6xHheOw3p8VnNxe0Ycfio73MwV
+         RQLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=8YwhPsnZ4Dn4ddZeDtc7eIWRTCkb8CcIGryzNRbAYJU=;
+        b=B0ruVke2HyUj8LgjU2bIs3pSnrpqOS7sD+UomPfWcCo7WQldfNISDSO/noTcDJSkOE
+         j9bRmlaYIXuDXeZyViJPfxciNfBsoM/TCX1pesHVRLqp778d+RCo3R3+ivs2Nbd+7709
+         l84ZxYAhrgmX768cJtVAQIF/cSY4eaE/mzpz9PcBDAF9Q5ZPiFEnatlaoCdhIQ+7xVOV
+         b+6qGyny/wO2Tuk8VC/+P6BUgGpoonYtKJxJdslcDDKcC2HVvRchd8bZv/auE8gRAc0G
+         6BJ/ALQndH5Vlxj1CH5WEt7UPIQJvnAp5Mb2WqO03B7dH41G9Shp/UMoAM+YihTB69pO
+         SCrw==
+X-Gm-Message-State: APjAAAV+58gfba2fVqlLLGzGW+JljfS2LWtI3ukecME5sk+vzQe53kF1
+        /3tTqlfLCMIoO0+5TzOL6LipFrl0BYnCZLuZNu01gA==
+X-Google-Smtp-Source: APXvYqwwelQvxYlEvCFDYGCRhcrNpjdDh2rM+8vm9Y3sLkmLoGtt/jt3oitHQMAExy/xFM5G+pc5BvBlwreE6bC90vI=
+X-Received: by 2002:a0c:d0d0:: with SMTP id b16mr22856243qvh.191.1569229857649;
+ Mon, 23 Sep 2019 02:10:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1569227227; bh=NxpFZsYFnw+1U5EUfGv9prCuRFH/J4vh0J0DFvFH6Fw=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=BezUH2F9Lz34OIr2rz3u7nE0InKmD2kB1ARWwLZh+J0SEa8yUuJdejvl4WzPRivoG
-         N2EgpMuDu6E8uHKzreHqLh9BWlapsM8lJqBLF4O4ND4Tp9KdwFyRKTiQGAcJqiSv/+
-         zV9QfemudsdxBMUPlVI/u2fgVepzTLHCC7SytpNjwj8Yw6sSoXq6ZoNLQnZoU78ZNt
-         flhzOssABTEYcZapXiNfakR7Rpm3UxKdcAxCzGo8XoxREgbd+Pid1QC+w96mCbuI75
-         Xn45UhwZnDa21XLROZakyVsemNIZFjfGzMWWIaZw25nxe/5oLBy5b/X9AoH7n3Beco
-         Y3HXPj0102H/Q==
+References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
+ <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
+ <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
+ <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com>
+ <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com> <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Mon, 23 Sep 2019 17:10:46 +0800
+Message-ID: <CAD8Lp47qSte0C6sUFBkXVAHa755R5PnNUSvjRYD=JehYJ2R0pQ@mail.gmail.com>
+Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Endless Linux Upstreaming Team <linux@endlessm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable Nvidia XUSB device mode controller driver and USB GPIO Based
-Connection Detection Driver as module.
+On Wed, Aug 28, 2019 at 4:43 PM Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+> > I'll report it to the vendor,
+>
+> Yes, please.  At least try to get the information on what the exact
+> platform expectations with respect to the OS are.  Quite evidently,
+> they aren't just "do the usual thing".
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+AMD's response was:
+ > It=E2=80=99s modern stanby system, we don=E2=80=99t have any resource to=
+ debug
+Linux issue on it.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 8e05c39..bf027fe 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -581,6 +581,7 @@ CONFIG_SND_SIMPLE_CARD=m
- CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_I2C_HID=m
- CONFIG_USB=y
-+CONFIG_USB_CONN_GPIO=m
- CONFIG_USB_OTG=y
- CONFIG_USB_XHCI_HCD=y
- CONFIG_USB_XHCI_TEGRA=y
-@@ -606,6 +607,7 @@ CONFIG_USB_ULPI=y
- CONFIG_USB_GADGET=y
- CONFIG_USB_RENESAS_USBHS_UDC=m
- CONFIG_USB_RENESAS_USB3=m
-+CONFIG_USB_TEGRA_XUDC=m
- CONFIG_TYPEC=m
- CONFIG_TYPEC_HD3SS3220=m
- CONFIG_MMC=y
--- 
-2.7.4
+I imagine there are people in AMD that do care, but we don't have the
+right contacts here, not sure if you happen to have anyone you could
+forward this thread to just in case.
 
+Anyway, I looked again and found some more interesting points and a
+likely workaround, if you can help me nail down the details.
+
+I checked again the experiment of runtime-suspending and resuming the
+USB controller. As before, the problematic step is waking up. In
+pci_raw_set_power_state() the pmcsr is first read as value 103, then
+written as 0, then it msleeps for 10ms (in pci_dev_d3_sleep()), then
+reads back value 3.
+
+What I hadn't spotted before is that even though it failed to change
+the power state bits, bit 8 did get successfully unset, indicating
+that the device is not completely dead.
+
+I then increased the msleep delay to 20ms and now it resumes fine &
+USB devices work.
+
+Unfortunately it's not quite as simple as quirking d3_delay though,
+because the problem still happens upon resume from s2idle. In that
+case, pci_dev_d3_sleep() is not called at all.
+
+    if (state =3D=3D PCI_D3hot || dev->current_state =3D=3D PCI_D3hot)
+        pci_dev_d3_sleep(dev);
+
+In the runtime resume case, dev->current_state =3D=3D PCI_D3hot here (even
+though pci_set_power_state had been called to put it into D3cold), so
+the msleep happens.
+But in the system sleep (s2idle) case, dev->current_state =3D=3D
+PCI_D3cold here, so no sleep happens.
+That is strangely inconsistent - is it a bug?
+
+I also noticed that there is a 100ms d3cold_delay, but that seems to
+happen before pcmsr is accessed at all, and doesn't have take any
+effect here. However, I did also notice that there is no d3cold_delay
+done during wakeup from s2idle, it only happens on wakeup from runtime
+suspend. The code does seem to be written that way (runtime_d3cold
+flag) but I wonder if that is correct. From the standpoint of the ACPI
+PM specs, is there a difference between runtime suspend and s2idle
+suspend? Since there is no firmware-based system suspend happening I
+wonder if the d3cold_delay should apply in both cases.
+
+I compared behaviour to another system with Amd Ryzen5 3500U. It's not
+quite the same SoC but the XHCI controllers have the same PCI IDs. On
+that platform, I was able to reproduce the failure to runtime resume,
+but then it succeeds with a d3_delay of 20ms. On system
+suspend/resume, this other platform uses S3, and the XHCI controller
+is already in D0 upon resume (looks like the firmware turns on the USB
+controllers for us, so Linux avoids any difficulties there).
+
+That seems to agree that quirking these XHCI controllers (based on PCI
+ID) to have a d3_delay of 20ms seems sane, but first we need to nail
+down why that delay is not applied at all during resume from s2idle.
+
+Daniel
