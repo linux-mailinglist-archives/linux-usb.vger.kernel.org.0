@@ -2,152 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DF3BB544
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7EBBB5A5
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 15:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407780AbfIWNbE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 09:31:04 -0400
-Received: from mga12.intel.com ([192.55.52.136]:41647 "EHLO mga12.intel.com"
+        id S1730898AbfIWNpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 09:45:03 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32567 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404581AbfIWNbE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Sep 2019 09:31:04 -0400
+        id S1725854AbfIWNpC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 09:45:02 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 06:31:03 -0700
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Sep 2019 06:45:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,540,1559545200"; 
-   d="scan'208";a="203127799"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 23 Sep 2019 06:31:02 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-Date:   Mon, 23 Sep 2019 16:31:01 +0300
-Message-Id: <20190923133101.30774-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
+   d="scan'208";a="188145235"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga008.fm.intel.com with ESMTP; 23 Sep 2019 06:45:01 -0700
+Subject: Re: Event ring is full when do iozone test on UAS storage
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Suwan Kim <suwan.kim027@gmail.com>,
+        Peter Chen <hzpeterchen@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <20190916094305.GB21844@b29397-desktop>
+ <0aae13f2-04cf-f45a-e6ee-4bf9e515faba@linux.intel.com>
+ <CAL411-oirjSLZzwoN8axqpfn-JQ8eEGMWD-w9p24Krap+dPs9g@mail.gmail.com>
+ <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
+ <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
+ <20190919135935.GA3133@localhost.localdomain>
+ <e9090913-3ef8-5211-8f70-550df5dbe7ec@linux.intel.com>
+Message-ID: <ba5ab485-cd06-6480-fffb-5b9c6a99d7f1@linux.intel.com>
+Date:   Mon, 23 Sep 2019 16:46:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <e9090913-3ef8-5211-8f70-550df5dbe7ec@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to try to prevent the extra ucsi_notify()
-that runtime resuming the device will cause.
+On 23.9.2019 14.19, Mathias Nyman wrote:
+> On 19.9.2019 16.59, Suwan Kim wrote:
+>> On Thu, Sep 19, 2019 at 05:54:25PM +0800, Peter Chen wrote:
+>>>> On 17.9.2019 12.55, Peter Chen wrote:
+>>>>>>>
+>>>>>>> I met "event ring full error" like below, this error is met when
+>>>>>>> I do iozone test on UAS storage at v4.19.35 kernel, but not meet
+>>>>>>> this error at linux-next tree (08/24). The same host and test
+>>>>>>> UAS storage device are used. This issue is due to xhci_handle_event
+>>>>>>> does not return 0 long time, maybe the xHC speed is fast enough
+>>>>>>> at that time. If I force the xhci_handle_event only run 100 times
+>>>>>>> before update ERST dequene pointer, it will not occur this error.
+>>>>>>> I did not  see any changes for xhci_handle_event at the latest code,
+>>>>>>> so in theory, it should have this issue too. Do you think if we need
+>>>>>>> to improve xhci_handle_event to avoid event ring?
+>>>>>>
+>>>>> The root cause is UAS protocol is very fast
+>>>>> protocol, the
+>>>>> other threads at non-CPU0 will add TRBs during we are handling event, so if
+>>>>> hardware (xHC) has always consumed TD the non-CPU0s are adding,
+>>>>> the ERST dequene pointer never get change to update, then this
+>>>>> "event ring full" error will occur.
+>>>>>
+>>>>> The one reason why v4.19 has this issue is the max request length is larger
+>>>>> than the latest kernel. At v4.19, it is 512KB, At the latest kernel,
+>>>>> it is 256 KB.
+>>>>> see /sys/block/sda/queue/max_sectors_kb.
+>>>>> When I change max_sectors_kb as smaller value, the test will be more smooth.
+>>>>> Besides, At v4.19, the UAS completion handler seems take more time
+>>>>> compares to the latest kernel.
+>>>>>
+>>>>> I suggest adding threshold flag for event ring when it closes to full
+>>>>> since we can't
+>>>>> avoid USB3 use cases when the throughput is high, but the system is a
+>>>>> little slow.
+>>>>> Do you agree?
+>>>>
+>>>> I agree that it makes sense to force a ERDP write after handling some amount
+>>>> of events, it can solve some event ring full issues, but not the fact that
+>>>> we spend a lot of time in the interrupt handler.
+>>>
+>>> Ok, I will proposal one patch to fix event ring full issue.
+> 
+> Great
+> 
+>>>
+>>>>
+>>>> Your logs show that you have TDs containing up to 128 TRBs.
+>>>> When a TD like that finishes the driver will increase the sw dequeue pointer of the
+>>>> transfer ring one by one until we reach the end of the TD.
+>>>>
+>>>> This means we call inc_deq() function 128 times in interrupt context, and each time
+>>>> do a few comparisons. According to traces this takes ~120us. There might be some
+>>>> tracing overhead but this could anyway be done in a saner way.
+>>>>
+>>>> I'll look into this
+>>>>
+>>>
+>>> Since we use hard irq for xHCI, for high performance protocol, it may hard to
+>>> reduce interrupt context time since we have lots of request handling,
+>>> cache operation,
+>>> and completion are interrupt context.
+> 
+> I'm working on one improvement at the moment, it would be great if you could test
+> it out once i get it done.
 
-This fixes potential deadlock. Both ccg_read() and
-ccg_write() are called with the mutex already taken at least
-from ccg_send_command(). In ccg_read() and ccg_write, the
-mutex is only acquired so that run_isr flag can be set.
+Got something  done on top of 5.3.
+It's in my tree in the irqoff_optimization branch
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
-Hi Ajay,
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git  irqoff_optimization
 
-Before going forward with this I would like to get confirmation from
-you that it is OK, and that I'm not missing anything. I did not see
-any real purpose for that run_isr flag. The only thing that I can see
-it preventing is an extra ucsi_notify() call caused by the waking of
-the controller, but that should not be a problem. Is there any other
-reason why the flag is there?
+Does it help at all in your case?
 
-If the driver works fine without the flag, then let's just drop it.
-The deadlock will need to be fixed in any case.
-
-thanks,
-
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 40 ++-----------------------------
- 1 file changed, 2 insertions(+), 38 deletions(-)
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 907e20e1a71e..167cb6367198 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -195,7 +195,6 @@ struct ucsi_ccg {
- 
- 	/* fw build with vendor information */
- 	u16 fw_build;
--	bool run_isr; /* flag to call ISR routine during resume */
- 	struct work_struct pm_work;
- };
- 
-@@ -224,18 +223,6 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	if (quirks && quirks->max_read_len)
- 		max_read_len = quirks->max_read_len;
- 
--	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		/*
--		 * Do not schedule pm_work to run ISR in
--		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
--		 * since we are already in ISR path.
--		 */
--		uc->run_isr = false;
--		mutex_unlock(&uc->lock);
--	}
--
- 	pm_runtime_get_sync(uc->dev);
- 	while (rem_len > 0) {
- 		msgs[1].buf = &data[len - rem_len];
-@@ -278,18 +265,6 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	msgs[0].len = len + sizeof(rab);
- 	msgs[0].buf = buf;
- 
--	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		/*
--		 * Do not schedule pm_work to run ISR in
--		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
--		 * since we are already in ISR path.
--		 */
--		uc->run_isr = false;
--		mutex_unlock(&uc->lock);
--	}
--
- 	pm_runtime_get_sync(uc->dev);
- 	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 	if (status < 0) {
-@@ -1130,7 +1105,6 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 	uc->ppm.sync = ucsi_ccg_sync;
- 	uc->dev = dev;
- 	uc->client = client;
--	uc->run_isr = true;
- 	mutex_init(&uc->lock);
- 	INIT_WORK(&uc->work, ccg_update_firmware);
- 	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
-@@ -1229,7 +1203,6 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct ucsi_ccg *uc = i2c_get_clientdata(client);
--	bool schedule = true;
- 
- 	/*
- 	 * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-@@ -1237,17 +1210,8 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
- 	 * Schedule a work to call ISR as a workaround.
- 	 */
- 	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		if (!uc->run_isr) {
--			uc->run_isr = true;
--			schedule = false;
--		}
--		mutex_unlock(&uc->lock);
--
--		if (schedule)
--			schedule_work(&uc->pm_work);
--	}
-+	    uc->fw_version <= CCG_OLD_FW_VERSION)
-+		schedule_work(&uc->pm_work);
- 
- 	return 0;
- }
--- 
-2.23.0
-
+-Mathias
