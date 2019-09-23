@@ -2,42 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C08BB6C4
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 16:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F569BB6C6
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 16:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439927AbfIWObO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 10:31:14 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:39104 "EHLO
+        id S2439909AbfIWObK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 10:31:10 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:41261 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439912AbfIWObL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 10:31:11 -0400
-Received: by mail-io1-f69.google.com with SMTP id f9so10385299ioh.6
+        with ESMTP id S2439850AbfIWObJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 10:31:09 -0400
+Received: by mail-io1-f69.google.com with SMTP id q18so1403879ios.8
         for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 07:31:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=Vkdmbe+GWD0cjkCzxWqyKt4qjm4iES/NEwWg2SLjoyw=;
-        b=fyuUMmV7TD58TSWpKqZWa11PYeFP749+jlnLUML9Uo4BvZN5l2j/aDayDqtC9jkxMl
-         c+TaRVDZ9M0F+y94XeWAFZXeCcz9jvkgD11Kr2mIM8+4Oib5Uus1tnu6dfMB8sViDWsm
-         UblvZsjlzOCm/k9Q2SLcVivKc7fwIo4sBOXvoMPN2VHeIlRnqgwb+tBB75yYEKdNyTy2
-         dzJJzjzwfxH0j9Ly5yEnKJ95laOerjwkJSXOdU9pEIgTiqBVCOdq/MFKFyJGrSWA/aYq
-         zozRuWOzbPXuU/ljTxaZCz1rwBnZgCCue+Fmm9VtWcZZ9Xruha6oJwNhm7AvQxv/Wbhn
-         IFAA==
-X-Gm-Message-State: APjAAAXjn558gRYf4LgxP5aUf8dTRDx1G+ViCnhRRNXhiYBWOIYmhJzI
-        7Fsi9vcjZFhmkEE/4Gfq5n+oHCfmy7pOf/OnP4dpyWdFjKkX
-X-Google-Smtp-Source: APXvYqxbBjBdOi612p+MjGiFKhsNUPUhUlDpOcVXJ4R/tT08mrl4PmVKhaa2bxbJQmjzfUK5xdjsvSjsXHe3v09EjvDSqGciDvwY
+        bh=IjRWi0jZFV58CzEU6Vz96oJ3ckiiGtQva6OmGGp82do=;
+        b=WrKAiteRfS/b5gQwge3b4/B5p/ab0yNGfus2fyj6D5kLjJbDjvtKihdqm7QRD19AUV
+         WCHkL6bWl1dixS/wZZgitP1ihoOK9tAvqPOBFa17a8VwO1TiXWeu4YxtDuzbgoir5b55
+         vycUHhlUSfrP6Mm0OW6Z4U9CEdoMW3PZGAuuPRTVOVzlyfaM4WwSJGlwr5ygVxD4YhCt
+         2x90ls+BQv406XisFmdygRZyVj1y8mq60khux+sMQ1n2pLjqhNVoJG9DbVFgyHVUcVrZ
+         UGND2jXCmTX3NjrzjJlmpbgTc7o7vqhGPPKzKMdMrDrgoBbbmhnz2IpKffbwLzFQG/6l
+         EmtA==
+X-Gm-Message-State: APjAAAURMu2bUWdtE44HwjbeM5LJus/If9wOu/CGhBubTQskApF2l/lr
+        WNHjwMryaa8PPqZMa1SxglJw+Fvn4ZAlBkfv517AZH1RLVFJ
+X-Google-Smtp-Source: APXvYqyN5oPKaKaKyB9gLvZTbrJM10JGjoZQ7SBJTkcl1Lp0zhZp1sKCMx4gbu74vwXRFFbxm4WmIBHgzuizw49MC+Cr7hIkXc8s
 MIME-Version: 1.0
-X-Received: by 2002:a6b:d307:: with SMTP id s7mr3818884iob.39.1569249068674;
- Mon, 23 Sep 2019 07:31:08 -0700 (PDT)
-Date:   Mon, 23 Sep 2019 07:31:08 -0700
+X-Received: by 2002:a02:5ec4:: with SMTP id h187mr36416109jab.101.1569249069062;
+ Mon, 23 Sep 2019 07:31:09 -0700 (PDT)
+Date:   Mon, 23 Sep 2019 07:31:09 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004d79d20593394516@google.com>
-Subject: KASAN: use-after-free Read in em28xx_init_extension
-From:   syzbot <syzbot+e8fe6fd37e640743df98@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000005365ff0593394532@google.com>
+Subject: KASAN: use-after-free Read in xpad_play_effect
+From:   syzbot <syzbot+bea56e0be9fb9106bcf3@syzkaller.appspotmail.com>
+To:     aicommander@gmail.com, andreyknvl@google.com,
+        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        ramzeto@gmail.com, rfontana@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        tom@steelseries.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -50,129 +53,120 @@ syzbot found the following crash on:
 
 HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=114d95ad600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14aeeab1600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
-dashboard link: https://syzkaller.appspot.com/bug?extid=e8fe6fd37e640743df98
+dashboard link: https://syzkaller.appspot.com/bug?extid=bea56e0be9fb9106bcf3
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1692f991600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=145d05b1600000
+
+Unfortunately, I don't have any reproducer for this crash yet.
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+e8fe6fd37e640743df98@syzkaller.appspotmail.com
+Reported-by: syzbot+bea56e0be9fb9106bcf3@syzkaller.appspotmail.com
 
-em28xx 1-1:0.240: Audio interface 240 found (Vendor Class)
-em28xx 1-1:0.240: unknown em28xx chip ID (0)
-em28xx 1-1:0.240: Config register raw data: 0xfffffffb
-em28xx 1-1:0.240: AC97 chip type couldn't be determined
-em28xx 1-1:0.240: No AC97 audio processor
 ==================================================================
-BUG: KASAN: use-after-free in __list_add_valid+0xd8/0xf0 lib/list_debug.c:26
-Read of size 8 at addr ffff8881d31d0240 by task kworker/1:1/21
+BUG: KASAN: use-after-free in __lock_acquire+0x3377/0x3eb0  
+kernel/locking/lockdep.c:3828
+Read of size 8 at addr ffff8881ceebdc10 by task syz-executor.4/7298
 
-CPU: 1 PID: 21 Comm: kworker/1:1 Not tainted 5.3.0+ #0
+CPU: 0 PID: 7298 Comm: syz-executor.4 Not tainted 5.3.0+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
   dump_stack+0xca/0x13e lib/dump_stack.c:113
   print_address_description+0x6a/0x32c mm/kasan/report.c:351
   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
   kasan_report+0xe/0x12 mm/kasan/common.c:618
-  __list_add_valid+0xd8/0xf0 lib/list_debug.c:26
-  __list_add include/linux/list.h:60 [inline]
-  list_add_tail include/linux/list.h:93 [inline]
-  em28xx_init_extension+0x44/0x1f0  
-drivers/media/usb/em28xx/em28xx-core.c:1125
-  em28xx_init_dev.isra.0+0xa7b/0x15d8  
-drivers/media/usb/em28xx/em28xx-cards.c:3520
-  em28xx_usb_probe.cold+0xcac/0x2516  
-drivers/media/usb/em28xx/em28xx-cards.c:3869
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2201
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2201
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+  __lock_acquire+0x3377/0x3eb0 kernel/locking/lockdep.c:3828
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4487
+  __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+  _raw_spin_lock_irqsave+0x32/0x50 kernel/locking/spinlock.c:159
+  xpad_play_effect+0xfe/0xc50 drivers/input/joystick/xpad.c:1225
+  ml_play_effects+0x817/0x1270 drivers/input/ff-memless.c:398
+  ml_ff_playback+0x285/0x3d0 drivers/input/ff-memless.c:460
+  input_ff_event+0x13a/0x2e0 drivers/input/ff-core.c:286
+  input_handle_event+0x64e/0x1330 drivers/input/input.c:374
+  input_inject_event+0x30a/0x323 drivers/input/input.c:462
+  evdev_write+0x2c9/0x410 drivers/input/evdev.c:561
+  __vfs_write+0x76/0x100 fs/read_write.c:494
+  vfs_write+0x262/0x5c0 fs/read_write.c:558
+  ksys_write+0x1e8/0x250 fs/read_write.c:611
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x459a09
+Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
+48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007f53d068cc78 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459a09
+RDX: 0000000000000364 RSI: 00000000200000c0 RDI: 0000000000000005
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f53d068d6d4
+R13: 00000000004c9bfc R14: 00000000004e1480 R15: 00000000ffffffff
 
-Allocated by task 238:
+Allocated by task 6364:
   save_stack+0x1b/0x80 mm/kasan/common.c:69
   set_track mm/kasan/common.c:77 [inline]
   __kasan_kmalloc mm/kasan/common.c:493 [inline]
   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
   slab_post_alloc_hook mm/slab.h:520 [inline]
   slab_alloc_node mm/slub.c:2770 [inline]
-  slab_alloc mm/slub.c:2778 [inline]
-  kmem_cache_alloc+0xd6/0x2d0 mm/slub.c:2783
-  shmem_alloc_inode+0x18/0x40 mm/shmem.c:3630
-  alloc_inode+0x61/0x1e0 fs/inode.c:227
-  new_inode_pseudo+0x14/0xe0 fs/inode.c:916
-  new_inode+0x1b/0x40 fs/inode.c:945
-  shmem_get_inode+0x84/0x7e0 mm/shmem.c:2228
-  shmem_mknod+0x5a/0x1f0 mm/shmem.c:2864
-  lookup_open+0x119a/0x18d0 fs/namei.c:3224
-  do_last fs/namei.c:3314 [inline]
-  path_openat+0x1045/0x3f50 fs/namei.c:3525
-  do_filp_open+0x1a1/0x280 fs/namei.c:3555
-  do_sys_open+0x3c0/0x580 fs/open.c:1089
+  __kmalloc_node_track_caller+0xfc/0x3d0 mm/slub.c:4365
+  __kmalloc_reserve.isra.0+0x39/0xe0 net/core/skbuff.c:141
+  __alloc_skb+0xef/0x5a0 net/core/skbuff.c:209
+  alloc_skb include/linux/skbuff.h:1049 [inline]
+  netlink_alloc_large_skb net/netlink/af_netlink.c:1174 [inline]
+  netlink_sendmsg+0x8cd/0xcc0 net/netlink/af_netlink.c:1892
+  sock_sendmsg_nosec net/socket.c:637 [inline]
+  sock_sendmsg+0xcf/0x120 net/socket.c:657
+  ___sys_sendmsg+0x803/0x920 net/socket.c:2311
+  __sys_sendmsg+0xec/0x1b0 net/socket.c:2356
   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
   entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-Freed by task 0:
+Freed by task 6364:
   save_stack+0x1b/0x80 mm/kasan/common.c:69
   set_track mm/kasan/common.c:77 [inline]
   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
   slab_free_hook mm/slub.c:1423 [inline]
   slab_free_freelist_hook mm/slub.c:1474 [inline]
   slab_free mm/slub.c:3016 [inline]
-  kmem_cache_free+0xb9/0x380 mm/slub.c:3032
-  i_callback+0x3f/0x70 fs/inode.c:216
-  __rcu_reclaim kernel/rcu/rcu.h:222 [inline]
-  rcu_do_batch kernel/rcu/tree.c:2157 [inline]
-  rcu_core+0x630/0x1ca0 kernel/rcu/tree.c:2377
-  __do_softirq+0x221/0x912 kernel/softirq.c:292
+  kfree+0xe4/0x2f0 mm/slub.c:3957
+  skb_free_head+0x8b/0xa0 net/core/skbuff.c:591
+  skb_release_data+0x41f/0x7c0 net/core/skbuff.c:611
+  skb_release_all+0x46/0x60 net/core/skbuff.c:665
+  __kfree_skb net/core/skbuff.c:679 [inline]
+  consume_skb net/core/skbuff.c:838 [inline]
+  consume_skb+0xd9/0x320 net/core/skbuff.c:832
+  netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
+  netlink_unicast+0x4d7/0x690 net/netlink/af_netlink.c:1328
+  netlink_sendmsg+0x802/0xcc0 net/netlink/af_netlink.c:1917
+  sock_sendmsg_nosec net/socket.c:637 [inline]
+  sock_sendmsg+0xcf/0x120 net/socket.c:657
+  ___sys_sendmsg+0x803/0x920 net/socket.c:2311
+  __sys_sendmsg+0xec/0x1b0 net/socket.c:2356
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-The buggy address belongs to the object at ffff8881d31d0000
-  which belongs to the cache shmem_inode_cache of size 1184
-The buggy address is located 576 bytes inside of
-  1184-byte region [ffff8881d31d0000, ffff8881d31d04a0)
+The buggy address belongs to the object at ffff8881ceebdb00
+  which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 272 bytes inside of
+  1024-byte region [ffff8881ceebdb00, ffff8881ceebdf00)
 The buggy address belongs to the page:
-page:ffffea00074c7400 refcount:1 mapcount:0 mapping:ffff8881da115180  
+page:ffffea00073baf00 refcount:1 mapcount:0 mapping:ffff8881da002280  
 index:0x0 compound_mapcount: 0
 flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da115180
-raw: 0000000000000000 00000000800c000c 00000001ffffffff 0000000000000000
+raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da002280
+raw: 0000000000000000 00000000000e000e 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 
 Memory state around the buggy address:
-  ffff8881d31d0100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d31d0180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881d31d0200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                            ^
-  ffff8881d31d0280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d31d0300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881ceebdb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881ceebdb80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ffff8881ceebdc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                          ^
+  ffff8881ceebdc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881ceebdd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
 
@@ -183,5 +177,3 @@ syzbot engineers can be reached at syzkaller@googlegroups.com.
 
 syzbot will keep track of this bug report. See:
 https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
