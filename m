@@ -2,142 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A86BB21F
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 12:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EFC8BB22F
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 12:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439427AbfIWKUN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 06:20:13 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:43701 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439425AbfIWKUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 06:20:13 -0400
-Received: by mail-lf1-f65.google.com with SMTP id u3so9629005lfl.10
-        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 03:20:12 -0700 (PDT)
+        id S1728744AbfIWKXo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 06:23:44 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:35230 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728040AbfIWKXo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Sep 2019 06:23:44 -0400
+Received: by mail-wr1-f65.google.com with SMTP id v8so13311283wrt.2
+        for <linux-usb@vger.kernel.org>; Mon, 23 Sep 2019 03:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=oT/6d6LyFvtFqQTx4wJ6Tk0Y/dbk5rpXqbyqMul5pOU=;
+        b=UKk5PkGqV3qCUeUkvj1PM4WSf7AuOcNVjgwy59tFTU4O2pYBWuDUN9zZ1KAsnbjf6c
+         kciOGAibydNkdLIWyYAM9psq9Ml/SvzmZe2z6pvM3WaiHw4BdSV+f28hSHzl+ER5JPU/
+         RIRrYvO8hr7TN0eRVr1nzsaamd7jCISqWbj7tCcHaY/WVAQNYpaum/6vY3Dlohi0KGgi
+         LlujZRvcgwRdKCe2tT4yM+kyfnf5mWtYQB4pP110PU2u23YsooVlpGXJpt2butGyPpDB
+         otxmVt5W4tQolAMndWwma7OLKqGA2v4laq4pkBZbnszUA75JPJMbYIb+6FjIcSxj5xj6
+         ECNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=qsnfskqFdLvWR5iSkj+Fuy/EyG0nsiXFmZ404THFWGo=;
-        b=oC0heKdVK9JDvu5SHA/gYCuQNIuhutXt0c2IIPolujdgGCC/NoWNafoYkc/A+JE3kx
-         iuLVPj0VAJ5IIAPlYOC0YJyKRRDO6PIwFFdbL0U+/Hz+sqMBuXiWQNzdIOyWq5sPjJYB
-         ipDkmBGsQGk6ldC3WAXzLbdjTac3RN3OWsiicqD9/uHdEv9fXKwQaTm7n2us1P9n+UUI
-         9gyz/1HZJ+Dt/4sQG+3vaPT7/XV12lEoRqpj+5WJzrJ7bRmZfyfnhk3ba+OaKgkFW9KF
-         NFZ8isSDrkrm7rBbjeIwMkqIqYFD+wzyxwSRS3aYjzmNYHln4RYNFf1l8zrhE3V+FoEj
-         UVCw==
-X-Gm-Message-State: APjAAAUZzM1tMJHTYy/KJkowuW6MIwVnvZql0KHK+a6rPfBh42rGZBDL
-        FvhUAF3FHLjD+lvhha0YEVL2fK7G
-X-Google-Smtp-Source: APXvYqwcmCkaxYKOw4xNgK5exhxlBegDvuONFbBE4KYlpupgUe34waliYE6rsOK8hKbE+pb4Gq4MAQ==
-X-Received: by 2002:a19:5516:: with SMTP id n22mr17524994lfe.49.1569234011391;
-        Mon, 23 Sep 2019 03:20:11 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id q24sm2190629ljj.6.2019.09.23.03.20.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 23 Sep 2019 03:20:10 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iCLS0-0007D1-Qg; Mon, 23 Sep 2019 12:20:13 +0200
-Date:   Mon, 23 Sep 2019 12:20:12 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     John Goerzen <jgoerzen@complete.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Linux Keyspan USB serial driver ignoring XOFF
-Message-ID: <20190923102012.GZ30545@localhost>
-References: <87woe37prw.fsf@complete.org>
- <87tv967nog.fsf@complete.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tv967nog.fsf@complete.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=oT/6d6LyFvtFqQTx4wJ6Tk0Y/dbk5rpXqbyqMul5pOU=;
+        b=DWFpTk1Q0lLZ0Ad0nzhRhL+xErkat3XZWfHfR37Z7M0nNZs77GCjYI9R662xX928mg
+         nl7tFn+5rjbWXyulhBZ/uZDBGW0iUbJz2FT4IyQz2HXwS9vrfTzywAs5h17UiKvxBr95
+         4Dt1kSXwPDm0MmXR9eptC40ULDE7+W2/I31bgwBccz5/xWmltBx4LfLdLbIo6wKJt7f4
+         59GRzvcvAMmdkIb9rYNTjHLGJ4weoCXiflpZDaV/8Cy13lmcUEmukXArEFEkBpvbzLne
+         D109fa8ETFqKRLA7ZbFNGRTrvZEz/It4NVO+14ElTmNb8GMDPoPdqosKTfEF+aLq4ckl
+         tddQ==
+X-Gm-Message-State: APjAAAVknxgEstIMB2dT1UFeMJWaZvZWbcu8ssLek0kPGRBIdsDslvH+
+        +D6mFegKHkh02BGJYHx/nPC24s0i
+X-Google-Smtp-Source: APXvYqzh0qCiw6NfaBNKJwSb4gJ1H0Jg7yaoWdTiS8jjANco07znEszQP1qMd+RLg8NhU3KbgnBuzw==
+X-Received: by 2002:a5d:4241:: with SMTP id s1mr20798998wrr.101.1569234220856;
+        Mon, 23 Sep 2019 03:23:40 -0700 (PDT)
+Received: from danielepa-ThinkCentre-M93p.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
+        by smtp.gmail.com with ESMTPSA id l13sm8805534wmj.25.2019.09.23.03.23.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Sep 2019 03:23:40 -0700 (PDT)
+From:   Daniele Palmas <dnlplm@gmail.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH v2 1/1] usb: serial: option: add Telit FN980 compositions
+Date:   Mon, 23 Sep 2019 12:23:28 +0200
+Message-Id: <20190923102328.10627-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 02:49:51PM -0500, John Goerzen wrote:
-> Hello,
-> 
-> I have narrowed down the issue I'm about to describe to keyspan.c; a
-> Digi Edgeport/1 with identical configuration works fine.
-> 
-> I am configuring a Raspberry Pi running 4.19.66 (though keyspan.c hasn't
-> changed since 2017) to talk to a real-live vt420.  Configuring agetty
-> with systemd worked easy enough, but I found that XON/XOFF wasn't
-> working.  stty -a shows ixon and ixoff as appropriate, but sending
-> Ctrl-S (tested from multiple ways of sending) had no effect on output in
-> bash, or scrolling output.  (Emacs, though, recognized it as the start
-> of a search, so I knew it was getting down the line.)
-> 
-> 
-> After a great deal of head-scratching on this, I went to look at the
-> kernel source and found that keyspan.c does not appear to be honoring
-> XOFF.  I also have a Digi Edgeport/1 on hand (which uses io_ti.c), and
-> when I swapped to that, everything worked fine - Ctrl-S caused the
-> expected pause.
-> 
-> As far as I can tell, keyspan.c simply never implemented handling of
-> XOFF, but you guys are the experts there.
+This patch adds the following Telit FN980 compositions:
 
-That's correct, the driver does not support software flow control even
-if the hardware seems to have some support for assisted XON/XOFF.
+0x1050: tty, adb, rmnet, tty, tty, tty, tty
+0x1051: tty, adb, mbim, tty, tty, tty, tty
+0x1052: rndis, tty, adb, tty, tty, tty, tty
+0x1053: tty, adb, ecm, tty, tty, tty, tty
 
-Would you mind testing the below patch which may be enough to turn
-sw-flow control always on. If that works, I can probably find time to
-cook up a proper patch to make this configurable later this week.
-
-Johan
-
-
-From 55b46d78fe63f182923e4674659fa18f4624d6b8 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Mon, 23 Sep 2019 12:14:56 +0200
-Subject: [PATCH] USB: serial: keyspan: enable XON flow control
-
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
 ---
- drivers/usb/serial/keyspan.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Sorry, forgot to add Signed-off-by tag...
 
-diff --git a/drivers/usb/serial/keyspan.c b/drivers/usb/serial/keyspan.c
-index d34779fe4a8d..934430cbdfc4 100644
---- a/drivers/usb/serial/keyspan.c
-+++ b/drivers/usb/serial/keyspan.c
-@@ -2118,7 +2118,7 @@ static int keyspan_usa26_send_setup(struct usb_serial *serial,
- 	msg.setLcr = 0xff;
- 
- 	msg.ctsFlowControl = (p_priv->flow_control == flow_cts);
--	msg.xonFlowControl = 0;
-+	msg.xonFlowControl = 1;
- 	msg.setFlowControl = 0xff;
- 	msg.forwardingLength = 16;
- 	msg.xonChar = 17;
-@@ -2234,7 +2234,7 @@ static int keyspan_usa28_send_setup(struct usb_serial *serial,
- 	msg.parity = 0;		/* XXX for now */
- 
- 	msg.ctsFlowControl = (p_priv->flow_control == flow_cts);
--	msg.xonFlowControl = 0;
-+	msg.xonFlowControl = 1;
- 
- 	/* Do handshaking outputs, DTR is inverted relative to RTS */
- 	msg.rts = p_priv->rts_state;
-@@ -2388,7 +2388,7 @@ static int keyspan_usa49_send_setup(struct usb_serial *serial,
- 	msg.setLcr = 0xff;
- 
- 	msg.ctsFlowControl = (p_priv->flow_control == flow_cts);
--	msg.xonFlowControl = 0;
-+	msg.xonFlowControl = 1;
- 	msg.setFlowControl = 0xff;
- 
- 	msg.forwardingLength = 16;
-@@ -2690,7 +2690,7 @@ static int keyspan_usa67_send_setup(struct usb_serial *serial,
- 	msg.setLcr = 0xff;
- 
- 	msg.ctsFlowControl = (p_priv->flow_control == flow_cts);
--	msg.xonFlowControl = 0;
-+	msg.xonFlowControl = 1;
- 	msg.setFlowControl = 0xff;
- 	msg.forwardingLength = 16;
- 	msg.xonChar = 17;
+v2: added Signed-off-by tag
+
+Following the output of usb-devices for the compositions
+
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 10 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1050 Rev=04.14
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN980m
+S:  SerialNumber=270b8241
+C:  #Ifs= 7 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 11 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1051 Rev=04.14
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN980m
+S:  SerialNumber=270b8241
+C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#=  9 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1052 Rev=04.14
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN980m
+S:  SerialNumber=270b8241
+C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+T:  Bus=03 Lev=01 Prnt=01 Port=06 Cnt=02 Dev#= 12 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=1053 Rev=04.14
+S:  Manufacturer=Telit Wireless Solutions
+S:  Product=FN980m
+S:  SerialNumber=270b8241
+C:  #Ifs= 8 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+I:  If#= 2 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
+I:  If#= 3 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
+I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#= 7 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+
+---
+ drivers/usb/serial/option.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 38e920ac7f82..10ac3610d922 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -1154,6 +1154,14 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) | RSVD(3) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, TELIT_PRODUCT_LE922_USBCFG5, 0xff),
+ 	  .driver_info = RSVD(0) | RSVD(1) | NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1050, 0xff),	/* Telit FN980 (rmnet) */
++	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1051, 0xff),	/* Telit FN980 (MBIM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1052, 0xff),	/* Telit FN980 (RNDIS) */
++	  .driver_info = NCTRL(2) | RSVD(3) },
++	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1053, 0xff),	/* Telit FN980 (ECM) */
++	  .driver_info = NCTRL(0) | RSVD(1) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910),
+ 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(3) },
+ 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_ME910_DUAL_MODEM),
 -- 
-2.23.0
+2.17.1
 
