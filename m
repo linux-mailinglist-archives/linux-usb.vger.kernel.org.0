@@ -2,56 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CA42BAC68
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 03:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E3DBAC85
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 04:25:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391374AbfIWBip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Sep 2019 21:38:45 -0400
-Received: from a8-21.smtp-out.amazonses.com ([54.240.8.21]:41456 "EHLO
-        a8-21.smtp-out.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387843AbfIWBip (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 21:38:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zp2ap7btoiiow65hultmctjebh3tse7g; d=aaront.org; t=1569202724;
-        h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type;
-        bh=Pxg5u6FuwjgB1YzTt5T/maEQQOagOxuJSeL6574+nUc=;
-        b=mcKj5WlfQqMpBpqbGOO7hoJgopo4P0EXimwQYYgiYgqMoowgUL+3nw5fM8OnU7ZG
-        9wBwJ7BdS8Nsw4K+b2qHnWRtPjCsJRvDuBIG8jXDYh0sdf2V9mCx7LZXmEWGK+jke8J
-        9dTtCDtC1QhV5CXH9ouoOLocPtGOIbLh7zPRkI4M=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=6gbrjpgwjskckoa6a5zn6fwqkn67xbtw; d=amazonses.com; t=1569202724;
-        h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type:Feedback-ID;
-        bh=Pxg5u6FuwjgB1YzTt5T/maEQQOagOxuJSeL6574+nUc=;
-        b=G9t7Do3h+tusz4PVoaAmuUVJE9FOcqsSCcWPoCUMmbi2u5e871pW27aU1PsPxUc4
-        3/1s74h7pcAU+J4XgMJghyLLmnqYMvhuLFN7ZY0r6CxnGPo6nWfF2TcEqIkCPGjBFLC
-        XRFnwyvAzUS/hbpLsAx1TBsCYRHKVdZcHRGD2qUE=
-X-Gm-Message-State: APjAAAV8tFNY0C/xuLbCmYerMne9Ju8IQ8aULgLged8+vgPsC+N39yfT
-        tFuTfr5+R8v07zg98lgTN0CwCnd4nQOrklFpGo0=
-X-Google-Smtp-Source: APXvYqxNLAPqW/41jG0jFSuO1+G9n5Ir9ZsxIvThMQWNZQ2r0gjlK3otnV+g50AXNlcP9USmn+khW/dsy3Y/SqLDVGc=
-X-Received: by 2002:a0d:c3c3:: with SMTP id f186mr21323762ywd.470.1569202723363;
- Sun, 22 Sep 2019 18:38:43 -0700 (PDT)
-MIME-Version: 1.0
-From:   Aaron Thompson <dev@aaront.org>
-Date:   Mon, 23 Sep 2019 01:38:44 +0000
-X-Gmail-Original-Message-ID: <CABeuQhszD1x2G-L9Wk_ri16UsaF7zx0mN=S8_P+BA3i6Y3-Z7w@mail.gmail.com>
-Message-ID: <0100016d5bc55d05-d2c923f3-a4bb-4ba7-8adc-031b7d933b52-000000@email.amazonses.com>
-Subject: Moschip 7703 USB to serial free to a good home
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-SES-Outgoing: 2019.09.23-54.240.8.21
-Feedback-ID: 1.us-east-1.8/56jQl+KfkRukJqWjlnf+MtEL0x/NchId1fC0q616g=:AmazonSES
+        id S2391455AbfIWCY4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Sep 2019 22:24:56 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37468 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389942AbfIWCYz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Sep 2019 22:24:55 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y5so8184910pfo.4;
+        Sun, 22 Sep 2019 19:24:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=jl6nStrj8n1KdRcUctb22FcHDz6z46Ab7ioA1mr+peM=;
+        b=J6ZVsVKjKAbYuB7+uWgC6QXykq5twUFH/96mbBz2Ovd8H9w+TKnUMRsh2s5IgUGkwX
+         EWPCtkvs9wipVFIsLyztIFilOBtVVC4DYIzPzpEbnYiff+1fHVnv3VABUSPcgg2JWndM
+         Gf3d5923BCtoj2BBf8pjyg4BaTZkrXgV4YTbNsdegxaMq4kOBOJniwlUfP1LzCoVyMJU
+         JDpKkTKvOO7Dh+zEAR90aF77p/77H+n9lYbWS5T7SCTmNyySk4+0tK0PyGjkAbJh8MdF
+         ZSDHzghDqDJVgD0KFFBZX6pPWGoSfqioUUfGKDvzAgC2YJKG/xZPtogl/Gq6kJfZW/lk
+         tlpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=jl6nStrj8n1KdRcUctb22FcHDz6z46Ab7ioA1mr+peM=;
+        b=dMj+VDeruRb1BJSxbF+qoTrwxe1gs3QUhdbkGbrjy59xTjZzS1WVgkOYqSzYY7YxxO
+         DJoQEOVy5/6Oyb99IedXQCV+hGDarcq78AKVzbH5c9H7RelmO4TJmMaK81C1yJHH05gH
+         dgKsNJcn3T75OLnkDcwmJYDRYgaoJMfcisBAzYIVkxDhy6jzajeS3QvbFCQr+HF/ef3n
+         Cns5ZFoKXWR1E54DrWLkdsaFyLIrNj6EG4NyOtaDYN/yAiHxCsS0SMz43DG+gHlsvpJF
+         3JXh5c6AMResVz7c1eiSGr6OME1ix57iW5GTRFMq9pAHn3ia1KikaamrAjur4lyw0aTo
+         Ayew==
+X-Gm-Message-State: APjAAAVUCXotZWTWODhXACFfC/yGL4UnOctwEkpfZbOI9TsLlpZdZAcl
+        8qeKdMGGJQGPrQlY+WVi7MOTmJCJ
+X-Google-Smtp-Source: APXvYqxaHBRrQtOH8qvqEa4S0igLP5Ed+A34G12nHMCnZ8ZKxEiwAdp33qBGsDin1ezJ9/ZoxJKoGg==
+X-Received: by 2002:a17:90a:fb85:: with SMTP id cp5mr18596193pjb.42.1569205494746;
+        Sun, 22 Sep 2019 19:24:54 -0700 (PDT)
+Received: from localhost (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id h70sm10204523pgc.48.2019.09.22.19.24.53
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 22 Sep 2019 19:24:54 -0700 (PDT)
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+X-Google-Original-From: "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: [PATCH V2 0/7] Add Fintek F81534A series usb-to-serial driver
+Date:   Mon, 23 Sep 2019 10:24:42 +0800
+Message-Id: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi all,
+The Fintek F81532A/534A/535/536 is USB-to-2/4/8/12 serial ports device
+and the serial port is default disabled when plugin computer.
 
-I have a Moschip 7703 USB to single serial port adapter that I'm not
-using primarily because it doesn't have an in-tree driver, so I'd be
-happy to send it to anyone who would like to add support for it. It
-looks like it should be easy to add to the existing mos7720 driver.
-Anyone interested?
+The part number is a bit same with F81532/534, but F81534A series UART
+core is enhanced from F81232, not F81532/534.  
 
-Thanks,
--- Aaron
+The IC is contains devices as following:
+	1. HUB (all devices is connected with this hub)
+	2. GPIO/Control device. (enable serial port and control all GPIOs)
+	3. serial port 1 to x (2/4/8/12)
+
+It's most same with F81232, the UART device is difference as follow:
+	1. TX/RX bulk size is 128/512bytes
+	2. RX bulk layout change:
+		F81232: [LSR(1Byte)+DATA(1Byte)][LSR(1Byte)+DATA(1Byte)]...
+		F81534A:[LEN][Data.....][LSR]
+
+We'll try to do some code refacting before add F81534A series.
+
+Ji-Ze Hong (Peter Hong) (7):
+  USB: serial: f81232: Extract LSR handler
+  USB: serial: f81232: Add tx_empty function
+  USB: serial: f81232: Use devm_kzalloc
+  USB: serial: f81232: Add F81534A support
+  USB: serial: f81232: Set F81534A serial port with RS232 mode
+  USB: serial: f81232: Add generator for F81534A
+  USB: serial: f81232: Add gpiolib to GPIO device
+
+ drivers/usb/serial/f81232.c | 604 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 570 insertions(+), 34 deletions(-)
+
+-- 
+2.17.1
+
