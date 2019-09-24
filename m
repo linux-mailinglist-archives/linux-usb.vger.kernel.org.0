@@ -2,131 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A2FBC995
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 15:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF7DBCA03
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 16:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbfIXN6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Sep 2019 09:58:10 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56732 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbfIXN6J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Sep 2019 09:58:09 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8ODs196032693;
-        Tue, 24 Sep 2019 13:58:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=oANeCNLB06fjqCk0Vxb5BOas5qKPF69XI4u9j5h9af8=;
- b=a65YCizw5X2fX+RWPPWBzH2WaPMqKpAnEuLDHuT7LvCzLieX163PpHVYtBtd2c9jZDKX
- 6aQm4xhMcuVVI9aee2le/Bxj6f5UeNqBi6mZJAoi7dXiUyztyBdXkqJ/6YueoO264TJR
- vciu387KDRxydbFGen7KkJRq+GV8AaS39wF68byN2voC+ZgWV3299ECXiHwM9/rlsIvL
- WNUPFZgoLjikAlMOqiFsZu3t5bJ/Ahuu8lPhbhjoztlJZA9zP9g9d6VHaKuYsy0u/fie
- OEwmyI4SRoqQcRovqkFx3mbkWIx9y9ihrs4azKLT/7hqFMpABgEBVJr1+ZlW//O14wcH 6w== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2v5btpx99n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Sep 2019 13:58:06 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8ODsH4j052756;
-        Tue, 24 Sep 2019 13:56:05 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2v6yvkh08m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 24 Sep 2019 13:56:05 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8ODu4Cw015384;
-        Tue, 24 Sep 2019 13:56:05 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 24 Sep 2019 06:56:04 -0700
-Date:   Tue, 24 Sep 2019 16:55:58 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [bug report] usb: cdns3: Add Cadence USB3 DRD Driver
-Message-ID: <20190924135558.GA18359@mwanda>
+        id S2436912AbfIXOTJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Sep 2019 10:19:09 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:40421 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394680AbfIXOTI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Sep 2019 10:19:08 -0400
+Received: by mail-io1-f71.google.com with SMTP id r20so3327093ioh.7
+        for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2019 07:19:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4WCI/8Wqn0NEN6qtZrVOjHXS2Epttr/1ag+Os3By8oI=;
+        b=RmhtFdM11sZ+i4SQ6+pJvH7ZVqVCWwcDwm8pHsJ6mO/pQkF3Su/1wtuPSwoRA3+y3B
+         Pk02npnfNuPpDwULYJKqNHQp/F77YxaIN090lJ/3k/HL7RRBuI3U2v+RLm0PbHFcsvVv
+         1ox9L90mTSJmeeTh0VGOkaaGIo+LkY9Q9iKQ09Ox3ojhu4DUCuaZ2Ad1PJFt1bYf1vPl
+         yDU78Vc/dcUZhMa3LF0cawLkCauEaH3AWQKu6XI1BreiH9JcCD8zuE5no+3u2eVqWvJo
+         iOM2NWrWY6PU+9+HGj/1Lt6wY0lKybhQmnJd/S13Kdort1Z8xbcjxuoAwXw4dg0uQYhh
+         Htvg==
+X-Gm-Message-State: APjAAAVkDl1/Ca79qKCx9vGvsotVQ2l9YxNGwS7jEeQkIplh2m9GSbQD
+        YfEofwT17NYyaBvfVbKLvffrXjgF+TCKglDN+pHe7Lu/gDCN
+X-Google-Smtp-Source: APXvYqxZErJq8RgrHmQGUjIaf/b6OTC2jg8vElKXW7W12Jkd0R6WuMAunvOfzS3k8XX0fSys/sEII5d+/0roGa/NSaD4EqAB0iqo
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=450
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1909240137
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=525 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1909240137
+X-Received: by 2002:a6b:5003:: with SMTP id e3mr3797485iob.208.1569334748047;
+ Tue, 24 Sep 2019 07:19:08 -0700 (PDT)
+Date:   Tue, 24 Sep 2019 07:19:08 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000030f35305934d3804@google.com>
+Subject: general protection fault in open_rio
+From:   syzbot <syzbot+dbd38fbb686a9681143a@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Pawel Laszczak,
+Hello,
 
-The patch 7733f6c32e36: "usb: cdns3: Add Cadence USB3 DRD Driver"
-from Aug 26, 2019, leads to the following static checker warning:
+syzbot found the following crash on:
 
-	drivers/usb/cdns3/ep0.c:335 cdns3_ep0_feature_handle_device()
-	error: scheduling with locks held: 'spin_lock:lock'
+HEAD commit:    d9e63adc usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1602b303600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f4fa60e981ee8e6a
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbd38fbb686a9681143a
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-drivers/usb/cdns3/ep0.c
-   309  
-   310                  priv_dev->u2_allowed = !!set;
-   311                  break;
-   312          case USB_DEVICE_LTM_ENABLE:
-   313                  ret = -EINVAL;
-   314                  break;
-   315          case USB_DEVICE_TEST_MODE:
-   316                  if (state != USB_STATE_CONFIGURED || speed > USB_SPEED_HIGH)
-   317                          return -EINVAL;
-   318  
-   319                  tmode = le16_to_cpu(ctrl->wIndex);
-   320  
-   321                  if (!set || (tmode & 0xff) != 0)
-   322                          return -EINVAL;
-   323  
-   324                  switch (tmode >> 8) {
-   325                  case TEST_J:
-   326                  case TEST_K:
-   327                  case TEST_SE0_NAK:
-   328                  case TEST_PACKET:
-   329                          cdns3_ep0_complete_setup(priv_dev, 0, 1);
-   330                          /**
-   331                           *  Little delay to give the controller some time
-   332                           * for sending status stage.
-   333                           * This time should be less then 3ms.
-   334                           */
-   335                          usleep_range(1000, 2000);
-                                ^^^^^^^^^^^^^^^^^^^^^^^^
-This is called with locks held and IRQs disabled in
-cdns3_device_thread_irq_handler().  The call tree is:
+Unfortunately, I don't have any reproducer for this crash yet.
 
-cdns3_device_thread_irq_handler()
-  cdns3_check_ep0_interrupt_proceed()
-    cdns3_ep0_setup_phase()
-      cdns3_ep0_standard_request()
-        cdns3_req_ep0_handle_feature()
-          cdns3_ep0_feature_handle_device()
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+dbd38fbb686a9681143a@syzkaller.appspotmail.com
 
-You would need to have certain debug config options enabled to see the
-might_sleep() warnings and probably USB_DEVICE_TEST_MODE isn't used
-very often.
+usb 4-1: Rio opened.
+kasan: CONFIG_KASAN_INLINE enabled
+kasan: GPF could be caused by NULL-ptr deref or user memory access
+general protection fault: 0000 [#1] SMP KASAN
+CPU: 1 PID: 6898 Comm: syz-executor.1 Not tainted 5.3.0+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+RIP: 0010:dev_name include/linux/device.h:1342 [inline]
+RIP: 0010:__dev_printk+0x3a/0x203 drivers/base/core.c:3335
+Code: 89 f5 53 e8 0f 01 d0 fe 48 85 ed 0f 84 bc 01 00 00 e8 01 01 d0 fe 48  
+8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74  
+05 e8 32 e7 f6 fe 4c 8b 7d 50 4d 85 ff 75 27 e8 d4
+RSP: 0018:ffff8881cf697830 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffffed1039ed2f0d RCX: ffffc900012d0000
+RDX: 000000000000001e RSI: ffffffff826e3b9f RDI: 00000000000000f0
+RBP: 00000000000000a0 R08: ffff8881cf37c800 R09: fffffbfff0e98bf9
+R10: ffff8881cf697960 R11: ffffffff874c5fc7 R12: ffffffff85f2e160
+R13: ffff8881cf697888 R14: ffff8881ca024528 R15: ffff8881ca024528
+FS:  00007f175b8c8700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30627000 CR3: 00000001cbb1f000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+  _dev_info+0xd7/0x109 drivers/base/core.c:3381
+  open_rio drivers/usb/misc/rio500.c:75 [inline]
+  open_rio+0xaa/0xc0 drivers/usb/misc/rio500.c:59
+  usb_open+0x1df/0x270 drivers/usb/core/file.c:48
+  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+  do_dentry_open+0x494/0x1120 fs/open.c:797
+  do_last fs/namei.c:3408 [inline]
+  path_openat+0x1430/0x3f50 fs/namei.c:3525
+  do_filp_open+0x1a1/0x280 fs/namei.c:3555
+  do_sys_open+0x3c0/0x580 fs/open.c:1089
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x4138f1
+Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 04 19 00 00 c3 48  
+83 ec 08 e8 0a fa ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48  
+89 c2 e8 53 fa ff ff 48 89 d0 48 83 c4 08 48 3d 01
+RSP: 002b:00007f175b8c77a0 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00000000004138f1
+RDX: 0000000000000000 RSI: 0000000000000002 RDI: 00007f175b8c77d0
+RBP: 000000000075bf20 R08: 0000000000000000 R09: 000000000000000f
+R10: 0000000000000064 R11: 0000000000000293 R12: 00007f175b8c86d4
+R13: 00000000004c8d40 R14: 00000000004dfe48 R15: 00000000ffffffff
+Modules linked in:
+---[ end trace 2b1b73a1ede24824 ]---
+RIP: 0010:dev_name include/linux/device.h:1342 [inline]
+RIP: 0010:__dev_printk+0x3a/0x203 drivers/base/core.c:3335
+Code: 89 f5 53 e8 0f 01 d0 fe 48 85 ed 0f 84 bc 01 00 00 e8 01 01 d0 fe 48  
+8d 7d 50 b8 ff ff 37 00 48 89 fa 48 c1 e0 2a 48 c1 ea 03 <80> 3c 02 00 74  
+05 e8 32 e7 f6 fe 4c 8b 7d 50 4d 85 ff 75 27 e8 d4
+RSP: 0018:ffff8881cf697830 EFLAGS: 00010206
+RAX: dffffc0000000000 RBX: ffffed1039ed2f0d RCX: ffffc900012d0000
+RDX: 000000000000001e RSI: ffffffff826e3b9f RDI: 00000000000000f0
+RBP: 00000000000000a0 R08: ffff8881cf37c800 R09: fffffbfff0e98bf9
+R10: ffff8881cf697960 R11: ffffffff874c5fc7 R12: ffffffff85f2e160
+R13: ffff8881cf697888 R14: ffff8881ca024528 R15: ffff8881ca024528
+FS:  00007f175b8c8700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30627000 CR3: 00000001cbb1f000 CR4: 00000000001406e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
-   336                          cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
-   337                                                 USB_CMD_STMODE |
-   338                                                 USB_STS_TMODE_SEL(tmode - 1));
-   339                          break;
-   340                  default:
-   341                          ret = -EINVAL;
-   342                  }
-   343                  break;
-   344          default:
-   345                  ret = -EINVAL;
-   346          }
 
-regards,
-dan carpenter
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
