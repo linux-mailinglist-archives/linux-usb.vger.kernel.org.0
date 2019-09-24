@@ -2,360 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F07F4BBB11
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Sep 2019 20:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DC7BC0B0
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 05:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440381AbfIWSQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 14:16:11 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:1140 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2394280AbfIWSQL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Sep 2019 14:16:11 -0400
-Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d890be30000>; Tue, 24 Sep 2019 02:16:04 +0800
-Received: from HKMAIL103.nvidia.com ([10.18.16.12])
-  by hkpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 23 Sep 2019 11:16:03 -0700
-X-PGP-Universal: processed;
-        by hkpgpgate102.nvidia.com on Mon, 23 Sep 2019 11:16:03 -0700
-Received: from HKMAIL103.nvidia.com (10.18.16.12) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 23 Sep
- 2019 18:16:02 +0000
-Received: from NAM04-BN3-obe.outbound.protection.outlook.com (104.47.46.58) by
- HKMAIL103.nvidia.com (10.18.16.12) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Mon, 23 Sep 2019 18:16:02 +0000
+        id S2394805AbfIXDX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 23:23:58 -0400
+Received: from mail-eopbgr30040.outbound.protection.outlook.com ([40.107.3.40]:37030
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2394621AbfIXDX6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 23:23:58 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aVQDjhuIDhsETOMJD3Orz4fMz/99ps6s82WQoBWYrTjJf4YnxatO8i3x+2aR2ed1DrZEnwCs5dRQqvVQpkrJHDZSVSduHdME/MO8oS6aZmemXCc5lGIZY/X0NWCmbaJxxI+WF9DxbnVAxBDS4ElTlnGBY5V9+CZUhMlcLm2UZkyBzQLIwlGqqQsbymlRIs0M9yDmM6vXFNKrsYBcJZH1JUG+hf/UahUgOAYNzKdD8YLukTiXzf4C5NTrTwNkBL8k1yeH5AvlaDJ7paaqnq1r/van8NvH3Hh4QqJIqxefb4jIXY4VE4l58fseR2mElEqTdZp+GK+LDEFOnyPSXkD2Hw==
+ b=BaOK/pfn5WMateuB4W8ADTT7otX+J2FREiphYNhiJRPGc/QYgWUEFJhdXIJxWZTD1CrYPbn7x7JV4H3Mb3X6WO8vBgJYgYAN5BWCq/E5evf/phRacBGv2wlz8AJgDWdwTabFPbP/ZTUGUDuA5G/cbFaXT9+wNB/RZ7F0sBCG8EfP9HgoWvDKpr0GZBf1YUA2oQRq09X6TrMNUHQyfopacfAO9skNtakEU7vsX4IOp6SEE82g8WcgRTA3TzbpbQP248hMHYk0qhuvP0RE+rTUeEjCyROW3NRJm8ffuBjByJWuth7u4i7DwJkASu5f2KajayE0l9gb7e7eXLlsBMA/hg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wTeQEfZYXMifmwzBjZ4NOvtKgarxPUckokDNLdw9zWM=;
- b=e3TSgJMNAn9Xp6j9geSXdKIaGHJZfJ/fnPgO5JiafOyLiJeSlwRvo5YFinVZ7YY6tPUUQVxp+eaxOgUJP5ghy7ud8EEqpfqGn/qI9X5CSSinZF0aFYu4pbo4Cqz+TAtXITmm6Zb8JJcke9AOybKzlNhS9NeW6SltVu/E7DrILa3t5orS0yt8h7tpFLUQgST25revjSZ4OhHecErKEsZ8HAT8PP4z/wowV3A1FpUQKLtjUweve6KIfuCZGIlJYRH8bdRH577AfOPCVoc5bcbMy4JnCCQ9rHzH70dQtHqCRIyjiY6poFjgqWlgq9/lniJfqSrsgu+avDELDTgxx1xxgQ==
+ bh=PDOkap794uzwx9brTUvVXJ6oeO0I1t42s4rN4C2Nuzg=;
+ b=ZUbxG/OBbSSZHiKXBiJhPNtGDTaPlaRb5JaqoqfqODQJljY0oEGMs7iM3ofjnhnJ59afehFVo1sNmjN+b/77KAbETk+unywULzQwL4uLaOkD539F0zwYoHyGc50ay6c+c+Sq60kvF4An2i2MRejuykfGqfTdSeqlszSXgkpqR2j2pZwDIGqGOLH6OITo1se+oE+4+x/ipinRGwsAQdzfLC5mn+k+g5lyCAVSAt0ac44h31u8/LdT7inb4wZ2Ha2ktteyXIMhQw73+eCmrei4/nuY5KgBuGUIKytIXw188PaO/aqQYEzL2qjOwQcAUrcv4MD9bRaccyldI9OxLDxmJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.176.253.214) by
- BYAPR12MB3207.namprd12.prod.outlook.com (20.179.92.202) with Microsoft SMTP
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PDOkap794uzwx9brTUvVXJ6oeO0I1t42s4rN4C2Nuzg=;
+ b=gmGKxRcslq3+bdbB98HxGtSMBW85EJI/86vuK99ai/MKlpUUiUzH7VnrjLSfcCfTvepkrDPt9EP0rWLlu1TG35WcbCU+viP14N/CimsXDR0Pjw3jMWGT0B60OVtGeqntLwXbhX+mvePtehVvGZc+D0ntSi5QU0+c6MNhD4dtOcU=
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.240.82) by
+ DB8PR04MB7097.eurprd04.prod.outlook.com (52.135.62.75) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.18; Mon, 23 Sep 2019 18:15:59 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca%3]) with mapi id 15.20.2284.023; Mon, 23 Sep 2019
- 18:15:59 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-Thread-Topic: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-Thread-Index: AQHVchMpp6KrvihpkE21mkAsxfA8y6c5jGtw
-Date:   Mon, 23 Sep 2019 18:15:59 +0000
-Message-ID: <BYAPR12MB27276DD002AB589162CC7709DC850@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190923133101.30774-1-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20190923133101.30774-1-heikki.krogerus@linux.intel.com>
+ 15.20.2284.20; Tue, 24 Sep 2019 03:23:52 +0000
+Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::906f:1414:8cb:f7ee]) by DB8PR04MB6826.eurprd04.prod.outlook.com
+ ([fe80::906f:1414:8cb:f7ee%2]) with mapi id 15.20.2284.023; Tue, 24 Sep 2019
+ 03:23:52 +0000
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mathias Payer <mathias.payer@nebelwelt.net>,
+        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
+        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: hub add filter for device with specific VID&PID
+Thread-Topic: [PATCH] usb: hub add filter for device with specific VID&PID
+Thread-Index: AQHVcfycJPrHn/IcK0qf/xic1GWPZ6c5GiAAgAEI5+A=
+Date:   Tue, 24 Sep 2019 03:23:52 +0000
+Message-ID: <DB8PR04MB682649CA98B0704FAF037A40F1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
+References: <20190923105102.37413-1-ran.wang_1@nxp.com>
+ <20190923110712.GA2796979@kroah.com>
+In-Reply-To: <20190923110712.GA2796979@kroah.com>
 Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-09-23T18:15:58.1715818Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=86f026c0-19d3-491d-b2cb-b3b6396ff728;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
+ smtp.mailfrom=ran.wang_1@nxp.com; 
+x-originating-ip: [119.31.174.73]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 776c053f-3cdc-4a53-119c-08d74052161d
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:BYAPR12MB3207;
-x-ms-traffictypediagnostic: BYAPR12MB3207:
-x-microsoft-antispam-prvs: <BYAPR12MB3207778BA28EA6BB4CF8BBCBDC850@BYAPR12MB3207.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0169092318
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(376002)(396003)(346002)(136003)(13464003)(199004)(189003)(74316002)(256004)(76176011)(53546011)(6506007)(305945005)(102836004)(7736002)(7696005)(6916009)(4326008)(229853002)(476003)(9686003)(81166006)(81156014)(55016002)(25786009)(446003)(316002)(11346002)(66476007)(64756008)(86362001)(66946007)(66446008)(76116006)(66556008)(6436002)(6246003)(8936002)(486006)(14444005)(8676002)(186003)(478600001)(3846002)(6116002)(26005)(33656002)(14454004)(66066001)(99286004)(5660300002)(2906002)(52536014)(71190400001)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3207;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
+x-ms-office365-filtering-correlation-id: 9bff4d26-f463-4111-e937-08d7409e9fe9
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB8PR04MB7097;
+x-ms-traffictypediagnostic: DB8PR04MB7097:
+x-microsoft-antispam-prvs: <DB8PR04MB70975DE133DEC5F843544D3FF1840@DB8PR04MB7097.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-forefront-prvs: 0170DAF08C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(199004)(189003)(71200400001)(6436002)(52536014)(55016002)(316002)(86362001)(478600001)(26005)(14454004)(229853002)(66476007)(74316002)(66946007)(66066001)(64756008)(66446008)(71190400001)(3846002)(76116006)(7736002)(305945005)(6116002)(14444005)(256004)(5024004)(53546011)(486006)(66556008)(9686003)(186003)(76176011)(11346002)(33656002)(99286004)(2906002)(6506007)(4326008)(8676002)(7696005)(102836004)(6916009)(54906003)(6246003)(81166006)(81156014)(25786009)(446003)(476003)(5660300002)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB7097;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: hPrSWjcwBFfmLAS/8EG/zcHSV8D2m5CBe000u44leI59m/hTu6TALUPlPdPjyZfPoacSmh7rW+CwpY5/pPTKv6g4Tbjw3GAcym4JG2l/HzSqovw+cUQWhnh4O7i2A+05PonfI+YrmoGANCOgrqzgmPDyhGUydFGsT0Xd7iR1Z8MvZDzLIDtlx8JNkvmgt/tee+gwEisAdZ4Q4XX98XDFG/45tiB4kSF98t7rYifZth0Sx3kpRAbtP9OBA6yGMaS/jV6CaCkTu7zxw7HtijpIb01+p4OcaGW10IKbS+YEjiCGuQfg5GYaVW1OVrwRPvafTk7ZCF7+t5Akb+eW7FBtptRlgAQMdP9UgW6s4iqWw/bw4JUFs8WxaImac5gAFOcTg1A3PZF9sdmpyf3cxxj1ZX3xDMvAsh5WNbpOlPCmq6Y=
+x-microsoft-antispam-message-info: J9/tWFYXbPYjRGVYw51Zs9Ociec4VIZnZW55tKLkKBs114gOF+PQXyihQXrYHOmYTOgK3heR/ccS+JAJEA8bHTxiiRlJ4+6VFVIf7SExkS5aBPNOWa+RUptxH5QmfK+kt8rptPMrT4tXNtBrjJ3dszkBTjawmu+TN8GwMWRwZzJ5D0c7fsiGff64Xq9N4SmF72pdOhN3AcqQYz8hNlpRkLTOayjOf+c0Thj5NJkvc2rRJu1dIo7Q5a17GxIHf9/vKRERBo7xgpcTLmsYqux98+rov2UkzT3qen4wUqlk9tMpgoJLvmCrRh5jQxaWer/Mtt1Z2ZOq8TpvfRHThb3P6EOFU4GJg3fyn0xBfwNdG9n/QH5nDDkiA23VUUj5WMKZO0V1VTeXlL88umzj2o+W85MsZ75Zc3VSW6V+s/wNr78=
 x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-7"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 776c053f-3cdc-4a53-119c-08d74052161d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2019 18:15:59.6355
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9bff4d26-f463-4111-e937-08d7409e9fe9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 03:23:52.6790
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: H+qvkcQBi4gu6rADDfovHWhgVQiS2zr2y1rmQ1X92ITr/JRYVBuSHlHvdeg5VTYLy8alGKSMWU5VDnFLArBO+A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3207
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1569262564; bh=wTeQEfZYXMifmwzBjZ4NOvtKgarxPUckokDNLdw9zWM=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-microsoft-antispam:
-         x-ms-traffictypediagnostic:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam-message-info:
-         x-ms-exchange-transport-forked:MIME-Version:
-         X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=gtlUV0JX+3/Od1Usm2k1ZVerjD4enmpJsnwUdvT+Si4n656NWtLIXr8469Lll1NU8
-         mKhPiPiuSZO33Fk18tDBmapNCPOpy9Ysfqmkh84eB1xL3xaJ0V8jbXx9AKvXjW/0U4
-         cHsogcSs4svZYJ0Gn6IsooTzuEgcO/yKHuANLD+1hGIzSBFdbmceF7X3uGGIN8VYd1
-         Gm3p6+n8ORD09x0bHeWsJP4YnlaoRWUjArYbXE2glwEMl4cWwtPfSRBZmnyV36SD/S
-         1aFja6uwFOe9Y1kpTxlUQz2A0a4+kRB7KmssqRqTlhilkqIUVPMMYeU7CTTWi2DC0B
-         qkyE7oeuicwXA==
+X-MS-Exchange-CrossTenant-userprincipalname: 1BXMyfEy37DFBqBUcXSbWp4OJ+j7nOZiNM7ki/NVNoZ41Q7tT0xlSyrDJl3P7vMGKMqLbJNFkKEZAPR50oycQA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7097
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Hi Greg,
 
-> -----Original Message-----
-> From: linux-usb-owner@vger.kernel.org <linux-usb-owner@vger.kernel.org>
-> On Behalf Of Heikki Krogerus
-> Sent: Monday, September 23, 2019 6:31 AM
-> To: Ajay Gupta <ajayg@nvidia.com>
-> Cc: linux-usb@vger.kernel.org
-> Subject: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
+On Monday, September 23, 2019 19:07, Greg Kroah-Hartman wrote:
 >=20
-> There is no need to try to prevent the extra ucsi_notify() that runtime
-> resuming the device will cause.
+> On Mon, Sep 23, 2019 at 06:51:02PM +0800, Ran Wang wrote:
+> > USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT
+> > "Unsupported Device" Message require to stop enumerating device with
+> > VID=3D0x1a0a PID=3D0x0201 and pop message to declare this device is not
+> supported.
 >=20
-> This fixes potential deadlock. Both ccg_read() and
-> ccg_write() are called with the mutex already taken at least from
-> ccg_send_command(). In ccg_read() and ccg_write, the mutex is only acquir=
-ed
-> so that run_isr flag can be set.
->=20
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-> Hi Ajay,
->=20
-> Before going forward with this I would like to get confirmation from you =
-that it
-> is OK, and that I'm not missing anything.=20
-Thanks for this. I mixed up firmware flashing and IO path by using same loc=
-k.
+> Why is this a requirement?
 
->I did not see any real purpose for that run_isr flag.=20
-> The only thing that I can see it preventing is an extra ucsi_notify()
-> call caused by the waking of the controller, but that should not be a pro=
-blem.
-> Is there any other reason why the flag is there?
-ucsi_ccg_runtime_resume() will get called after pm_runtime_get_sync(uc->dev=
-);
-in ccg_read() and ccg_write(). If we allow extra ucsi_notify() then ccg_rea=
-d() and
-ccg_write() will get called again from ucsi_notfiy() through ucsi_sync(). T=
-his will
-keep on happening in a loop and the controller will remain in D0 always and=
+This comes from <USB On-The-Go and Embedded Host Automated Compliance Plan
+for the On-The-Go& Embedded Host Supplement Revision2.0>
+
+Below is related description I quote from it:
+6.7.23 A-UUT "Unsupported Device" Message
+Purpose: This test verifies that an A-UUT produces a device non-supported e=
+rror message
+	when a device it doesn't recognize, and does not support HNP, connects to =
+it.
+Applies to: All Targeted Hosts
+Description: Get VBUS turned on, and connect to the A-UUT. Get enumerated a=
+nd respond
+	as an unknown device not supporting HNP. Check that a suitable error messa=
+ge is generated.
+Pass Criteria: Message "Unsupported Device"or similar is displayed on UUT
+
+6.7.23.1 Test Procedure
+1. Start with cable still attached, PET applying 10=ECF capacitance and 10k=
+=D9 pull-down
+    resistance between VBUS and ground, data lines not pulled up.
+2. Get VBUS turned on, using the method described in Section6.7.1.
+3. Wait for almost TB_SVLD_BCON max (1s - 0.1s =3D 0.9s) from VBUS reaching=
+ VOTG_SESS_VLD max.
+4. Connect PET using D+ pull-up.
+5. Allow A-UUT to enumerate PET, responding with a VID / PID combination no=
+t on the TPL
+    of the UUT and also with the OTG descriptor stating that it does not su=
+pport HNP.
+6. Start 30s timer when Device Descriptor is read.
+7. Display Message "Click OK if 'Unsupported Device' indication displayed o=
+n UUT".
+8. If operator clicks OK before 30s timer expires, then UUT passes test.
+9. If 30selapses first, then UUT fails test.
+10. PET disconnects by removing any termination on the data lines, but leav=
+es a capacitance of
+    10=ECF and a pull-down resistance of 10k=D9 connected across VBUS.
+11. Wait 2s to allow disconnection to be detected.
+End of Test.
+
+> And why those specific vid/pid values?  What do they refer to?
+
+For step 5, we got the VID / PID number from USB IF certified lab(Allion.in=
+c at Taiwang). Looks like
+this is a reserved ID pair and will not be allocated to any vendor for thei=
+r products. So it's hence used for this
+case test (like saying: you should be able to pop a not-support message for=
+ this reserved VID&PID).
 =20
-runtime pm will never be done.
-
->=20
-> If the driver works fine without the flag, then let's just drop it.
-> The deadlock will need to be fixed in any case.
-
-We need to protect read/write of run_isr flag from ccg_read()/ccg_write() a=
-nd
-ucsi_ccg_runtime_resume() since they can get called from interrupt and runt=
-ime
-pm threads.
-
-I propose to add new "uc->pm_lock" for this purpose and not use "uc->lock".
-Please see the change below for this. I tested both FW flashing and runtime=
- PM
-and they both work with new pm_lock.
-
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucs=
-i_ccg.c
-index ed727b2..a79a475 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -206,6 +206,7 @@ struct ucsi_ccg {
-        /* fw build with vendor information */
-        u16 fw_build;
-        bool run_isr; /* flag to call ISR routine during resume */
-+       struct mutex pm_lock; /* to sync between io and system pm thread */
-        struct work_struct pm_work;
-
-        bool has_multiple_dp;
-@@ -240,14 +241,14 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 =
-*data, u32 len)
-
-        if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-            uc->fw_version <=3D CCG_OLD_FW_VERSION) {
--               mutex_lock(&uc->lock);
-+               mutex_lock(&uc->pm_lock);
-                /*
-                 * Do not schedule pm_work to run ISR in
-                 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-                 * since we are already in ISR path.
-                 */
-                uc->run_isr =3D false;
--               mutex_unlock(&uc->lock);
-+               mutex_unlock(&uc->pm_lock);
-        }
-
-        pm_runtime_get_sync(uc->dev);
-@@ -294,14 +295,14 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8=
- *data, u32 len)
-
-        if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-            uc->fw_version <=3D CCG_OLD_FW_VERSION) {
--               mutex_lock(&uc->lock);
-+               mutex_lock(&uc->pm_lock);
-                /*
-                 * Do not schedule pm_work to run ISR in
-                 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-                 * since we are already in ISR path.
-                 */
-                uc->run_isr =3D false;
--               mutex_unlock(&uc->lock);
-+               mutex_unlock(&uc->pm_lock);
-        }
-
-        pm_runtime_get_sync(uc->dev);
-@@ -1323,6 +1324,7 @@ static int ucsi_ccg_probe(struct i2c_client *client,
-        uc->client =3D client;
-        uc->run_isr =3D true;
-        mutex_init(&uc->lock);
-+       mutex_init(&uc->pm_lock);
-        INIT_WORK(&uc->work, ccg_update_firmware);
-        INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
-@@ -1434,12 +1436,12 @@ static int ucsi_ccg_runtime_resume(struct device *d=
-ev)
-         */
-        if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-            uc->fw_version <=3D CCG_OLD_FW_VERSION) {
--               mutex_lock(&uc->lock);
-+               mutex_lock(&uc->pm_lock);
-                if (!uc->run_isr) {
-                        uc->run_isr =3D true;
-                        schedule =3D false;
-                }
--               mutex_unlock(&uc->lock);
-+               mutex_unlock(&uc->pm_lock);
-
-                if (schedule)
-                        schedule_work(&uc->pm_work);
-
-
-Thanks
-> nvpublic
-> thanks,
->=20
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 40 ++-----------------------------
->  1 file changed, 2 insertions(+), 38 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index 907e20e1a71e..167cb6367198 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -195,7 +195,6 @@ struct ucsi_ccg {
->=20
->  	/* fw build with vendor information */
->  	u16 fw_build;
-> -	bool run_isr; /* flag to call ISR routine during resume */
->  	struct work_struct pm_work;
->  };
->=20
-> @@ -224,18 +223,6 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8
-> *data, u32 len)
->  	if (quirks && quirks->max_read_len)
->  		max_read_len =3D quirks->max_read_len;
->=20
-> -	if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-> -	    uc->fw_version <=3D CCG_OLD_FW_VERSION) {
-> -		mutex_lock(&uc->lock);
-> -		/*
-> -		 * Do not schedule pm_work to run ISR in
-> -		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-> -		 * since we are already in ISR path.
-> -		 */
-> -		uc->run_isr =3D false;
-> -		mutex_unlock(&uc->lock);
-> -	}
-> -
->  	pm_runtime_get_sync(uc->dev);
->  	while (rem_len > 0) {
->  		msgs[1].buf =3D &data[len - rem_len];
-> @@ -278,18 +265,6 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u=
-8
-> *data, u32 len)
->  	msgs[0].len =3D len + sizeof(rab);
->  	msgs[0].buf =3D buf;
->=20
-> -	if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-> -	    uc->fw_version <=3D CCG_OLD_FW_VERSION) {
-> -		mutex_lock(&uc->lock);
-> -		/*
-> -		 * Do not schedule pm_work to run ISR in
-> -		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
-> -		 * since we are already in ISR path.
-> -		 */
-> -		uc->run_isr =3D false;
-> -		mutex_unlock(&uc->lock);
-> -	}
-> -
->  	pm_runtime_get_sync(uc->dev);
->  	status =3D i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
->  	if (status < 0) {
-> @@ -1130,7 +1105,6 @@ static int ucsi_ccg_probe(struct i2c_client *client=
+> >
+> > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+> > ---
+> >  drivers/usb/core/hub.c | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c index
+> > bbcfa63..3cda0da 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -4982,6 +4982,18 @@ static void hub_port_connect(struct usb_hub *hub=
 ,
->  	uc->ppm.sync =3D ucsi_ccg_sync;
->  	uc->dev =3D dev;
->  	uc->client =3D client;
-> -	uc->run_isr =3D true;
->  	mutex_init(&uc->lock);
->  	INIT_WORK(&uc->work, ccg_update_firmware);
->  	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work); @@ -1229,7
-> +1203,6 @@ static int ucsi_ccg_runtime_resume(struct device *dev)  {
->  	struct i2c_client *client =3D to_i2c_client(dev);
->  	struct ucsi_ccg *uc =3D i2c_get_clientdata(client);
-> -	bool schedule =3D true;
+> int port1, u16 portstatus,
+> >  		if (status < 0)
+> >  			goto loop;
+> >
+> > +		 /* USB 2.0 Embedded Host PET Automated Test (CH6)
+> > +		 * 6.7.23 A-UUT "Unsupported Device" Message
+> > +		 * require to filter out below device when enumeration
+> > +		 */
 >=20
->  	/*
->  	 * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-> @@ -1237,17 +1210,8 @@ static int ucsi_ccg_runtime_resume(struct device
-> *dev)
->  	 * Schedule a work to call ISR as a workaround.
->  	 */
->  	if (uc->fw_build =3D=3D CCG_FW_BUILD_NVIDIA &&
-> -	    uc->fw_version <=3D CCG_OLD_FW_VERSION) {
-> -		mutex_lock(&uc->lock);
-> -		if (!uc->run_isr) {
-> -			uc->run_isr =3D true;
-> -			schedule =3D false;
-> -		}
-> -		mutex_unlock(&uc->lock);
-> -
-> -		if (schedule)
-> -			schedule_work(&uc->pm_work);
-> -	}
-> +	    uc->fw_version <=3D CCG_OLD_FW_VERSION)
-> +		schedule_work(&uc->pm_work);
->=20
->  	return 0;
->  }
-> --
-> 2.23.0
+> Nit, can you align your comment lines, to match the other multi-line comm=
+ents
+> in this file?  Otherwise it starts to look bad over time.
 
+Yes, will update.
+
+>=20
+>=20
+> > +		if ((udev->descriptor.idVendor =3D=3D 0x1a0a)
+> > +		 && (udev->descriptor.idProduct =3D=3D 0x0201)) {
+>=20
+> Are you sure you don't have to convert this value into cpu endian before
+> checking it?
+
+Thanks for pointing out, how about this:
+	if ((le16_to_cpu(udev->descriptor.idVendor) =3D=3D 0x1a0a)
+	 && (le16_to_cpu(udev->descriptor.idProduct) =3D=3D 0x0201)) {
+
+Regards,
+Ran
