@@ -2,55 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DC7BC0B0
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 05:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C6ABC0C2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 05:33:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394805AbfIXDX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Sep 2019 23:23:58 -0400
-Received: from mail-eopbgr30040.outbound.protection.outlook.com ([40.107.3.40]:37030
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        id S2436451AbfIXDdV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Sep 2019 23:33:21 -0400
+Received: from mail-eopbgr140052.outbound.protection.outlook.com ([40.107.14.52]:2817
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2394621AbfIXDX6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Sep 2019 23:23:58 -0400
+        id S1729308AbfIXDdV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Sep 2019 23:33:21 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BaOK/pfn5WMateuB4W8ADTT7otX+J2FREiphYNhiJRPGc/QYgWUEFJhdXIJxWZTD1CrYPbn7x7JV4H3Mb3X6WO8vBgJYgYAN5BWCq/E5evf/phRacBGv2wlz8AJgDWdwTabFPbP/ZTUGUDuA5G/cbFaXT9+wNB/RZ7F0sBCG8EfP9HgoWvDKpr0GZBf1YUA2oQRq09X6TrMNUHQyfopacfAO9skNtakEU7vsX4IOp6SEE82g8WcgRTA3TzbpbQP248hMHYk0qhuvP0RE+rTUeEjCyROW3NRJm8ffuBjByJWuth7u4i7DwJkASu5f2KajayE0l9gb7e7eXLlsBMA/hg==
+ b=RN6wSONGqOZK+YzSRSIjCt+6J6UFQx920NzRdoiKNtrRzmLYT+1PK0d2r+wxT8cdAYIouBUZ2tPUBQ3gVtAZfNSTbfPzITEDgP1tklFgHq4MV9MEN85rN3WmxAHADI+7SODGK4lI2yo88xr/q9dVrqrdzs5d0rp5ogTt1quJ/8EYCwCJq/jU2U1uoVoJEGh9dQesj+4bZcr+uNhwomL2+ipWV+oYzradORQEaEw1AC4nMpNaPpxaF1bz5XTGFD00M5KH7Sl96w3hpV4D30FC/Al8LlIef8BLBGlKAtHBi3CeG+cTzrf8t4+VlC2tvE3Fw1A7o8Gn8PPib2XM8nCftA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PDOkap794uzwx9brTUvVXJ6oeO0I1t42s4rN4C2Nuzg=;
- b=ZUbxG/OBbSSZHiKXBiJhPNtGDTaPlaRb5JaqoqfqODQJljY0oEGMs7iM3ofjnhnJ59afehFVo1sNmjN+b/77KAbETk+unywULzQwL4uLaOkD539F0zwYoHyGc50ay6c+c+Sq60kvF4An2i2MRejuykfGqfTdSeqlszSXgkpqR2j2pZwDIGqGOLH6OITo1se+oE+4+x/ipinRGwsAQdzfLC5mn+k+g5lyCAVSAt0ac44h31u8/LdT7inb4wZ2Ha2ktteyXIMhQw73+eCmrei4/nuY5KgBuGUIKytIXw188PaO/aqQYEzL2qjOwQcAUrcv4MD9bRaccyldI9OxLDxmJQ==
+ bh=EDxfBsK+MlvOSFJD9kB7m/i2bWuMSHm8dIfbmAgijA4=;
+ b=DREC2MIPL0Ue1jbu1MFZwuV4fahmiSAQHn3m/wIz8hizR/irG1MWxkcKbSN8Sy4KcXV/02UgZRRvZFCUJx/JRjk7QxyqhkIUdzRv74aPLZRBGWMUpQxM0rGQFHVfeM/xfTm6k8HaLCA5JDsJDPptZ6xqWaT8AoQu7djggxCh/B7psQa6IIuiBPHF1r/wAbz90Ls9BjwkpJpuJPtQ+600sXfyW215qg2v6Q8bpI/EAQIXhvOoyXN3Ar+2qVFykwe8I7yUpKENP7uRx1H2r/Fmjz3M1mXvbQefGF6W+u/Gb4JR0z3de+mMm52aVpw/QKwACcEnFFN7U4KpRWNXUapoTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PDOkap794uzwx9brTUvVXJ6oeO0I1t42s4rN4C2Nuzg=;
- b=gmGKxRcslq3+bdbB98HxGtSMBW85EJI/86vuK99ai/MKlpUUiUzH7VnrjLSfcCfTvepkrDPt9EP0rWLlu1TG35WcbCU+viP14N/CimsXDR0Pjw3jMWGT0B60OVtGeqntLwXbhX+mvePtehVvGZc+D0ntSi5QU0+c6MNhD4dtOcU=
+ bh=EDxfBsK+MlvOSFJD9kB7m/i2bWuMSHm8dIfbmAgijA4=;
+ b=lKFosT6ymow8//TSHSAWfpOYZ5TpyK1SqGB9+jj3CryJS1FPxaDScllFnBYNzQ+wPxXos8OA4gzgLwiQ+KN2I/eEBF12wmGXtnO5nsN7+fuSBJYP2W3CuZKxnBVLPduAPjHQsrwEpmPH5VAkSaDmKCWSJ/CUG+kQ9dgiQA+ZOSo=
 Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.240.82) by
- DB8PR04MB7097.eurprd04.prod.outlook.com (52.135.62.75) with Microsoft SMTP
+ DB8PR04MB5897.eurprd04.prod.outlook.com (20.179.11.26) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.20; Tue, 24 Sep 2019 03:23:52 +0000
+ 15.20.2284.18; Tue, 24 Sep 2019 03:32:37 +0000
 Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
  ([fe80::906f:1414:8cb:f7ee]) by DB8PR04MB6826.eurprd04.prod.outlook.com
  ([fe80::906f:1414:8cb:f7ee%2]) with mapi id 15.20.2284.023; Tue, 24 Sep 2019
- 03:23:52 +0000
+ 03:32:37 +0000
 From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
         Mathias Payer <mathias.payer@nebelwelt.net>,
         Dennis Wassenberg <dennis.wassenberg@secunet.com>,
         "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
 Subject: RE: [PATCH] usb: hub add filter for device with specific VID&PID
 Thread-Topic: [PATCH] usb: hub add filter for device with specific VID&PID
-Thread-Index: AQHVcfycJPrHn/IcK0qf/xic1GWPZ6c5GiAAgAEI5+A=
-Date:   Tue, 24 Sep 2019 03:23:52 +0000
-Message-ID: <DB8PR04MB682649CA98B0704FAF037A40F1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
+Thread-Index: AQHVcfycJPrHn/IcK0qf/xic1GWPZ6c5W4SAgADPjkA=
+Date:   Tue, 24 Sep 2019 03:32:37 +0000
+Message-ID: <DB8PR04MB6826516958DA6083192250CFF1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
 References: <20190923105102.37413-1-ran.wang_1@nxp.com>
- <20190923110712.GA2796979@kroah.com>
-In-Reply-To: <20190923110712.GA2796979@kroah.com>
+ <Pine.LNX.4.44L0.1909231059260.24712-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1909231059260.24712-100000@netrider.rowland.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -59,96 +59,46 @@ authentication-results: spf=none (sender IP is )
  smtp.mailfrom=ran.wang_1@nxp.com; 
 x-originating-ip: [119.31.174.73]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9bff4d26-f463-4111-e937-08d7409e9fe9
+x-ms-office365-filtering-correlation-id: e3b1e3a7-c3cc-429b-9239-08d7409fd8cf
 x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB8PR04MB7097;
-x-ms-traffictypediagnostic: DB8PR04MB7097:
-x-microsoft-antispam-prvs: <DB8PR04MB70975DE133DEC5F843544D3FF1840@DB8PR04MB7097.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:5797;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DB8PR04MB5897;
+x-ms-traffictypediagnostic: DB8PR04MB5897:
+x-microsoft-antispam-prvs: <DB8PR04MB5897A5582EC5999EA29F88F7F1840@DB8PR04MB5897.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
 x-forefront-prvs: 0170DAF08C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(39860400002)(396003)(366004)(376002)(199004)(189003)(71200400001)(6436002)(52536014)(55016002)(316002)(86362001)(478600001)(26005)(14454004)(229853002)(66476007)(74316002)(66946007)(66066001)(64756008)(66446008)(71190400001)(3846002)(76116006)(7736002)(305945005)(6116002)(14444005)(256004)(5024004)(53546011)(486006)(66556008)(9686003)(186003)(76176011)(11346002)(33656002)(99286004)(2906002)(6506007)(4326008)(8676002)(7696005)(102836004)(6916009)(54906003)(6246003)(81166006)(81156014)(25786009)(446003)(476003)(5660300002)(8936002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB7097;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(346002)(376002)(396003)(39860400002)(136003)(199004)(189003)(476003)(6246003)(7736002)(6116002)(9686003)(55016002)(6506007)(71200400001)(5660300002)(86362001)(2906002)(14444005)(256004)(6916009)(53546011)(6436002)(3846002)(102836004)(305945005)(74316002)(33656002)(66446008)(64756008)(66946007)(446003)(11346002)(71190400001)(81166006)(186003)(7696005)(8676002)(4326008)(54906003)(229853002)(81156014)(52536014)(66476007)(316002)(486006)(76116006)(478600001)(8936002)(66556008)(66066001)(14454004)(76176011)(99286004)(2171002)(25786009)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB5897;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: J9/tWFYXbPYjRGVYw51Zs9Ociec4VIZnZW55tKLkKBs114gOF+PQXyihQXrYHOmYTOgK3heR/ccS+JAJEA8bHTxiiRlJ4+6VFVIf7SExkS5aBPNOWa+RUptxH5QmfK+kt8rptPMrT4tXNtBrjJ3dszkBTjawmu+TN8GwMWRwZzJ5D0c7fsiGff64Xq9N4SmF72pdOhN3AcqQYz8hNlpRkLTOayjOf+c0Thj5NJkvc2rRJu1dIo7Q5a17GxIHf9/vKRERBo7xgpcTLmsYqux98+rov2UkzT3qen4wUqlk9tMpgoJLvmCrRh5jQxaWer/Mtt1Z2ZOq8TpvfRHThb3P6EOFU4GJg3fyn0xBfwNdG9n/QH5nDDkiA23VUUj5WMKZO0V1VTeXlL88umzj2o+W85MsZ75Zc3VSW6V+s/wNr78=
+x-microsoft-antispam-message-info: thy7CaXDRUI0cpGw09e5XN/y6hZ5pssGMuCD+x/V0SDid6srS+jaHtPA8BRuSbuVeJrFRRSaA37nSJeubdOqGNI9j0ftGfCgxLhuQxZ9mkXEIoOYROsaLfn9F37XijtzSirJD1dejPNkHQ7F1GzelFadgn3Lw9eAM99qN+YRRXXCcwbXmgrduL1ro/YO5MGpffrjSC1PMkIFKTO76mTG8JqR14fYD7jphlF10tFOo20BW7i3YFyPrs2ZeDmr11wjO3jc2qUN2aVTeaz66OQmbg5XuCzKXeY60UZHsnEQosSaWbiorgBqUKSjTPln8gI0FVR95G/NhS/fpNk2I3G+K/pNAlw/MT80egf7UaEREbkQLj3EBm5lmHk7YLYx0rpRG4tfWlTpWFaUmbWrxFJ/WGWcuapeoLv/33tE3dqrvT0=
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-7"
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bff4d26-f463-4111-e937-08d7409e9fe9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 03:23:52.6790
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3b1e3a7-c3cc-429b-9239-08d7409fd8cf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 03:32:37.6623
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1BXMyfEy37DFBqBUcXSbWp4OJ+j7nOZiNM7ki/NVNoZ41Q7tT0xlSyrDJl3P7vMGKMqLbJNFkKEZAPR50oycQA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7097
+X-MS-Exchange-CrossTenant-userprincipalname: 2D5CbC74VG5nmaNiaVGlu60scwG17T9vxwjIcQ3lTyCZ4BzlFZSueiLET5A3fy+GumsLHOuyajpr6Ka1uTNguw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB5897
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hi Alan,
 
-On Monday, September 23, 2019 19:07, Greg Kroah-Hartman wrote:
+On Monday, September 23, 2019 23:01, Alan Stern wrote:
 >=20
-> On Mon, Sep 23, 2019 at 06:51:02PM +0800, Ran Wang wrote:
+> On Mon, 23 Sep 2019, Ran Wang wrote:
+>=20
 > > USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT
 > > "Unsupported Device" Message require to stop enumerating device with
 > > VID=3D0x1a0a PID=3D0x0201 and pop message to declare this device is not
 > supported.
->=20
-> Why is this a requirement?
-
-This comes from <USB On-The-Go and Embedded Host Automated Compliance Plan
-for the On-The-Go& Embedded Host Supplement Revision2.0>
-
-Below is related description I quote from it:
-6.7.23 A-UUT "Unsupported Device" Message
-Purpose: This test verifies that an A-UUT produces a device non-supported e=
-rror message
-	when a device it doesn't recognize, and does not support HNP, connects to =
-it.
-Applies to: All Targeted Hosts
-Description: Get VBUS turned on, and connect to the A-UUT. Get enumerated a=
-nd respond
-	as an unknown device not supporting HNP. Check that a suitable error messa=
-ge is generated.
-Pass Criteria: Message "Unsupported Device"or similar is displayed on UUT
-
-6.7.23.1 Test Procedure
-1. Start with cable still attached, PET applying 10=ECF capacitance and 10k=
-=D9 pull-down
-    resistance between VBUS and ground, data lines not pulled up.
-2. Get VBUS turned on, using the method described in Section6.7.1.
-3. Wait for almost TB_SVLD_BCON max (1s - 0.1s =3D 0.9s) from VBUS reaching=
- VOTG_SESS_VLD max.
-4. Connect PET using D+ pull-up.
-5. Allow A-UUT to enumerate PET, responding with a VID / PID combination no=
-t on the TPL
-    of the UUT and also with the OTG descriptor stating that it does not su=
-pport HNP.
-6. Start 30s timer when Device Descriptor is read.
-7. Display Message "Click OK if 'Unsupported Device' indication displayed o=
-n UUT".
-8. If operator clicks OK before 30s timer expires, then UUT passes test.
-9. If 30selapses first, then UUT fails test.
-10. PET disconnects by removing any termination on the data lines, but leav=
-es a capacitance of
-    10=ECF and a pull-down resistance of 10k=D9 connected across VBUS.
-11. Wait 2s to allow disconnection to be detected.
-End of Test.
-
-> And why those specific vid/pid values?  What do they refer to?
-
-For step 5, we got the VID / PID number from USB IF certified lab(Allion.in=
-c at Taiwang). Looks like
-this is a reserved ID pair and will not be allocated to any vendor for thei=
-r products. So it's hence used for this
-case test (like saying: you should be able to pop a not-support message for=
- this reserved VID&PID).
-=20
 > >
 > > Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
 > > ---
@@ -169,24 +119,45 @@ case test (like saying: you should be able to pop a not-support message for=
 > > +		 * 6.7.23 A-UUT "Unsupported Device" Message
 > > +		 * require to filter out below device when enumeration
 > > +		 */
->=20
-> Nit, can you align your comment lines, to match the other multi-line comm=
-ents
-> in this file?  Otherwise it starts to look bad over time.
-
-Yes, will update.
-
->=20
->=20
 > > +		if ((udev->descriptor.idVendor =3D=3D 0x1a0a)
 > > +		 && (udev->descriptor.idProduct =3D=3D 0x0201)) {
+> > +			dev_err(&udev->dev, "This device is not supported:
+> idVendor=3D0x%x idProduct=3D0x%x\n",
+> > +				udev->descriptor.idVendor,
+> > +				udev->descriptor.idProduct);
 >=20
-> Are you sure you don't have to convert this value into cpu endian before
-> checking it?
+> There's no need to write out the Vendor and Product IDs.  They already ap=
+pear
+> in the "New device" message.
 
-Thanks for pointing out, how about this:
-	if ((le16_to_cpu(udev->descriptor.idVendor) =3D=3D 0x1a0a)
-	 && (le16_to_cpu(udev->descriptor.idProduct) =3D=3D 0x0201)) {
+OK
 
-Regards,
+> > +			goto done;
+> > +		}
+> > +
+> >  		if (udev->quirks & USB_QUIRK_DELAY_INIT)
+> >  			msleep(2000);
+>=20
+> Shouldn't this be implemented as a device quirk?
+
+Yes, I was also looking for the way in quirk but not quite sure currently.
+So we can stop initializing a device (with specific VID&PID) in quirk, righ=
+t?
+
+Actually in drivers/usb/core/hub.c function usb_enumerate_device(), it will
+call is_targeted(udev) which has below implementation:
+
+54         /* OTG PET device is always targeted (see OTG 2.0 ECN 6.4.2) */ =
+        =20
+55         if ((le16_to_cpu(dev->descriptor.idVendor) =3D=3D 0x1a0a &&     =
+             =20
+56              le16_to_cpu(dev->descriptor.idProduct) =3D=3D 0x0200))     =
+            =20
+57                 return 1;   =20
+
+The ID is very close to what I need to response. So, do I need to add code =
+here?
+
+Thanks.
 Ran
+
