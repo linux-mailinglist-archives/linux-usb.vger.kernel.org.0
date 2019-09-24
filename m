@@ -2,208 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E31BC433
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 10:43:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42807BC564
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 12:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440682AbfIXIng (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Sep 2019 04:43:36 -0400
-Received: from mail-eopbgr140082.outbound.protection.outlook.com ([40.107.14.82]:19416
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2439091AbfIXInf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Sep 2019 04:43:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DSk+x/j4v+RtG+OtRiV0oTCiuC5ufAv9uW1TDFolBzFH9b9jb2XpB0aJuAg5283BgqTzcWLdrxPU9514+bDl+z1LeVpIIay3W3Gn3UK5RhMHVzAa0+ICz10OKP7kTCl4hCwxYFLiPBinnJUu7+Wgtha5pKatuN1Iq5tig2dV62DsjFeaEZC+sMpKxzjyQztP9XiBq4WqqQN4T3odGaH2GCvmDKgEgBYir+I8QuKj+trZl31gzgT26UK6hWDS9gAC0heg/+iEVIQf1DKjmPAQthTIz9HB6Qy9qO4Gp/2mEJ557EBR00sBiadhncufXHooEuJHuQ1msHEEjTXkK1MBLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mvmZTceK/W8A2KblKtBYQ/hO+ZHv8F6wAdJzYXmWJWc=;
- b=FolomvpSu9TkvTn49UsVDmoc9bvjnQ3ycYYnRBh5+4pxGWeChHBP3DDvEcFaS4pJ8gllC6nE3lvxDqSS9yJYC/ZiYRvAX0MPY+aCj24kIYfuWaR1VCfesr+eHHOrq98tneFbFpZT7FRC5O19phBz2i6TDUzn9KlPSSLiSmbSkvJED1nK6s4HTkG2Go5vYq7C4zIOH/goX1ygl3ASAW8eKEmDCKkyxPjDnjgbNgzhUrHxe6FVkvy9iWMCCMGmwN66i7N4QrborTVu2GLoUBfmv5XDNWLjMwDITj7WuyOUoWIldogOUDX7S5zAorG0yhFcUzrVOLx8NbJNuC2BuVqOEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mvmZTceK/W8A2KblKtBYQ/hO+ZHv8F6wAdJzYXmWJWc=;
- b=PvC6RxSv5YewyY5CrDcBHM3ob86RJWKUeGMa9kEj1QGMggZg8cn6rbMpphLcRGQHVYDFdiAX87YbInooVPXFDv/l2+BisrGGmJFviTtaW62WyrEVlTkfszFbqZ2Rm5jwLfCdSoMqIg8JnYNhaN6fHqjyTkKdMcWb6Y2T3zY9jEo=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB5181.eurprd04.prod.outlook.com (20.177.51.154) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.20; Tue, 24 Sep 2019 08:43:32 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2284.023; Tue, 24 Sep 2019
- 08:43:32 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     Suwan Kim <suwan.kim027@gmail.com>,
-        Peter Chen <hzpeterchen@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Event ring is full when do iozone test on UAS storage
-Thread-Topic: Event ring is full when do iozone test on UAS storage
-Thread-Index: AQHVbHL4/6e/psj0i0CkLQoN5DU95acuUDcAgAFS6wCAAeGCgIABQuaAgABEf4CABhx8gIAAKU8AgAE+IoA=
-Date:   Tue, 24 Sep 2019 08:43:31 +0000
-Message-ID: <20190924084535.GA9490@b29397-desktop>
-References: <20190916094305.GB21844@b29397-desktop>
- <0aae13f2-04cf-f45a-e6ee-4bf9e515faba@linux.intel.com>
- <CAL411-oirjSLZzwoN8axqpfn-JQ8eEGMWD-w9p24Krap+dPs9g@mail.gmail.com>
- <92a09240-6489-b405-7916-26a77f2e0b06@linux.intel.com>
- <CAL411-p5TPHtBTe2cVtPsX07LhjeHw19qLjxz_XOXigEfG7_DQ@mail.gmail.com>
- <20190919135935.GA3133@localhost.localdomain>
- <e9090913-3ef8-5211-8f70-550df5dbe7ec@linux.intel.com>
- <ba5ab485-cd06-6480-fffb-5b9c6a99d7f1@linux.intel.com>
-In-Reply-To: <ba5ab485-cd06-6480-fffb-5b9c6a99d7f1@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7545a3f1-4c6b-413e-4670-08d740cb47a1
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB5181;
-x-ms-traffictypediagnostic: VI1PR04MB5181:
-x-microsoft-antispam-prvs: <VI1PR04MB5181A453F87FBF285F854C638B840@VI1PR04MB5181.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0170DAF08C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(979002)(4636009)(7916004)(366004)(136003)(396003)(39860400002)(376002)(346002)(199004)(189003)(1076003)(6486002)(3846002)(8936002)(81166006)(81156014)(64756008)(66476007)(66556008)(44832011)(54906003)(2906002)(486006)(66446008)(66946007)(14454004)(11346002)(446003)(86362001)(256004)(14444005)(8676002)(91956017)(76116006)(476003)(66066001)(33656002)(6506007)(305945005)(25786009)(76176011)(71190400001)(9686003)(71200400001)(229853002)(6512007)(6436002)(478600001)(4326008)(33716001)(6246003)(561944003)(53546011)(5660300002)(316002)(186003)(26005)(99286004)(7736002)(6116002)(6916009)(102836004)(969003)(989001)(999001)(1009001)(1019001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5181;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: O5dvQvJQYQSKL+doMkliXF8BnX541P4akHD7phd0Yt8x+owTJk/e80ET2gxBehZEznN2KcRb1hq4+GMjayZLdS11JqhJah1S9FTwWpJo3buslIWcP+CVFYsjvD8NnOHfzvTPARhamO/j3INXDih5QPj6CL4wqpwLA5LAUNVIrgd+db803gjk0YTY+94MiCQeXMTOmZ6YmbQS6tFopOSBO+5D/lmC1yZrCeUdM7LArJ3uFIRHtdHwjzdNnVqF3V6mDwix2uA3PsE+qgy4Kpwi4edNMHUlwIvYJi1L9/+yEdzv/kFbBY/ZY0ox+jtgUgjVg21oi44IOUrmhy/non+GvzJdxZpL1IfMYg9do6u5pKexXEvNPsGr8V1FYgnhlW0v19PL3Jgm770L2IhRnLrJ157CEj1bgCybYEpU4Wn/2XE=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <6D0BEAB8E9FD914D823F958C59DE7A6F@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727833AbfIXKI7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Sep 2019 06:08:59 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:44203 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725884AbfIXKI6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Sep 2019 06:08:58 -0400
+Received: by mail-ed1-f65.google.com with SMTP id r16so1233755edq.11
+        for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2019 03:08:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=ekToZBRsT9SKgAx2bojK6rdRNSU4mqm6jYloSyEr5ow=;
+        b=U3V1Ck/K+gJ7KUmjC29j3itiIdTAeS04Yr/gCjB2LO5fwl/pT4qTr6gD+op7iJ+nNr
+         vdfdt6c9BReex2umUUR74I2CuvgySd/WlATr2oF6WXzZgXrWrSDd+LD3ph/PZHSVpt58
+         02U2oLF2IilOwa30eKExCByK6H+qqXh4bCb5kjnB+4RGd6issLxbA6ZPTWijBcBNG/ZA
+         1GAPeqBGnS0TyTzNtpmCqiMmIok3d/CWllpMwguCNnlim/QW8tpyBymZRCgkjvm+ybiY
+         tSLwmAGs1PuRj7AtrhB3pd4scPh4AQW1UxsbkP/pOjOTitctQ6QOLw6Z6nQuFnTZtlms
+         YDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=ekToZBRsT9SKgAx2bojK6rdRNSU4mqm6jYloSyEr5ow=;
+        b=E33uD5PqvfFUBEJTvZZtbj88/KheMRoTePfwTEPtijaeA0SdSGSMSGEese60yx1WTl
+         hwjVy+SOe99MpT16WlzJ6hXfYbDSqD5fpwnx4RpdfNtZF8vPF3pwbmwWikQj2AsEyWnU
+         AJ6XBvV4yMxdyMHKsFo9c+ovs3RhPMdg1eaboKRW1qmd1qWEhpNla8BGTOWEyvFxv/BI
+         WUsy9YQWDl5ccLNtVet6uyOkHpgeKKUxWe4Cem2awhceyJWAwcZxNVy1ZfFIBSIPmffs
+         fEYFFB1xSI1t9L2xp/dF+9/6gfWQr3GYw6cH2vPsMURlqbtNXjEzvd5Go82Uhh0vpMu1
+         Nkkw==
+X-Gm-Message-State: APjAAAVsi0du/hn347t8n8tSXh5NWujgtxS8hxI7mo6T5TzS6++Jp1Et
+        Xna192vYAr1ceoPGrPI51VRMHoZ3Q3MqPi7o0Uw=
+X-Google-Smtp-Source: APXvYqyhAjE+jKJp5wHAaoleT5spsnZwFnrKVc8VQ3biDJ1XZGL42/bk4xEJDCS3Kb3toMxAaOFbETtnv+2384ZdTlc=
+X-Received: by 2002:a17:906:b298:: with SMTP id q24mr1670840ejz.168.1569319735899;
+ Tue, 24 Sep 2019 03:08:55 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7545a3f1-4c6b-413e-4670-08d740cb47a1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 08:43:31.9235
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: N0M5q+Bih0U+Yo7+Of+iq0k1t2SQyL705gCKYV4aOZV98art+PMM3d7k106/dRfIF1nlEQHRCuyh2xvI1qwhKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5181
+From:   Igor Opaniuk <igor.opaniuk@gmail.com>
+Date:   Tue, 24 Sep 2019 13:08:45 +0300
+Message-ID: <CAByghJYLLdtYiQGNCxJ4HEjm5Y1v0LQ1pc+dmHemoNWxx2h6jg@mail.gmail.com>
+Subject: [chipidea] continuous USB resets on NXP i.MX 6ULL device
+To:     Fabio Estevam <festevam@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>, stefan.wahren@i2se.com
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-09-23 16:46:56, Mathias Nyman wrote:
-> On 23.9.2019 14.19, Mathias Nyman wrote:
-> > On 19.9.2019 16.59, Suwan Kim wrote:
-> > > On Thu, Sep 19, 2019 at 05:54:25PM +0800, Peter Chen wrote:
-> > > > > On 17.9.2019 12.55, Peter Chen wrote:
-> > > > > > > >=20
-> > > > > > > > I met "event ring full error" like below, this error is met=
- when
-> > > > > > > > I do iozone test on UAS storage at v4.19.35 kernel, but not=
- meet
-> > > > > > > > this error at linux-next tree (08/24). The same host and te=
-st
-> > > > > > > > UAS storage device are used. This issue is due to xhci_hand=
-le_event
-> > > > > > > > does not return 0 long time, maybe the xHC speed is fast en=
-ough
-> > > > > > > > at that time. If I force the xhci_handle_event only run 100=
- times
-> > > > > > > > before update ERST dequene pointer, it will not occur this =
-error.
-> > > > > > > > I did not=A0 see any changes for xhci_handle_event at the l=
-atest code,
-> > > > > > > > so in theory, it should have this issue too. Do you think i=
-f we need
-> > > > > > > > to improve xhci_handle_event to avoid event ring?
-> > > > > > >=20
-> > > > > > The root cause is UAS protocol is very fast
-> > > > > > protocol, the
-> > > > > > other threads at non-CPU0 will add TRBs during we are handling =
-event, so if
-> > > > > > hardware (xHC) has always consumed TD the non-CPU0s are adding,
-> > > > > > the ERST dequene pointer never get change to update, then this
-> > > > > > "event ring full" error will occur.
-> > > > > >=20
-> > > > > > The one reason why v4.19 has this issue is the max request leng=
-th is larger
-> > > > > > than the latest kernel. At v4.19, it is 512KB, At the latest ke=
-rnel,
-> > > > > > it is 256 KB.
-> > > > > > see /sys/block/sda/queue/max_sectors_kb.
-> > > > > > When I change max_sectors_kb as smaller value, the test will be=
- more smooth.
-> > > > > > Besides, At v4.19, the UAS completion handler seems take more t=
-ime
-> > > > > > compares to the latest kernel.
-> > > > > >=20
-> > > > > > I suggest adding threshold flag for event ring when it closes t=
-o full
-> > > > > > since we can't
-> > > > > > avoid USB3 use cases when the throughput is high, but the syste=
-m is a
-> > > > > > little slow.
-> > > > > > Do you agree?
-> > > > >=20
-> > > > > I agree that it makes sense to force a ERDP write after handling =
-some amount
-> > > > > of events, it can solve some event ring full issues, but not the =
-fact that
-> > > > > we spend a lot of time in the interrupt handler.
-> > > >=20
-> > > > Ok, I will proposal one patch to fix event ring full issue.
-> >=20
-> > Great
-> >=20
-> > > >=20
-> > > > >=20
-> > > > > Your logs show that you have TDs containing up to 128 TRBs.
-> > > > > When a TD like that finishes the driver will increase the sw dequ=
-eue pointer of the
-> > > > > transfer ring one by one until we reach the end of the TD.
-> > > > >=20
-> > > > > This means we call inc_deq() function 128 times in interrupt cont=
-ext, and each time
-> > > > > do a few comparisons. According to traces this takes ~120us. Ther=
-e might be some
-> > > > > tracing overhead but this could anyway be done in a saner way.
-> > > > >=20
-> > > > > I'll look into this
-> > > > >=20
-> > > >=20
-> > > > Since we use hard irq for xHCI, for high performance protocol, it m=
-ay hard to
-> > > > reduce interrupt context time since we have lots of request handlin=
-g,
-> > > > cache operation,
-> > > > and completion are interrupt context.
-> >=20
-> > I'm working on one improvement at the moment, it would be great if you =
-could test
-> > it out once i get it done.
->=20
-> Got something  done on top of 5.3.
-> It's in my tree in the irqoff_optimization branch
->=20
-> git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git  irqoff_opt=
-imization
->=20
-> Does it help at all in your case?
->=20
+Hi Fabio, Peter, Stefan,
 
-I tested your patch, I am afraid it doesn't help on my case. At my case,
-the time is consumed at DMA unmap operation and UAS completion, but not
-xHCI internal code.
+I've incidentally discovered your last year discussion in ML [1] (I
+hope it rings
+the bell) regarding the issue I'm still observing on the same device with
+the mainline kernel.
 
-I have run UAS iozone and iperf tests, it doesn't show error on top of
-below three patches.
+The difference between i.MX 6ULL EVK and this particular device,
+is that usbotg2 is used only in host mode with the usb hub integrated on
+the carrier board [2] [3].
 
-usb: host: xhci: update event ring dequeue pointer on purpose
-usb: host: xhci: Support running urb giveback in tasklet context
-xhci: remove extra loop in interrupt context
+root@colibri-imx6:~# lsusb -s 1:1 --tree
+/:  Bus 01.Port 1: Dev 1, Class=3Droot_hub, Driver=3Dci_hdrc/1p, 480M
+    |__ Port 1: Dev 2, If 0, Class=3DHub, Driver=3Dhub/4p, 480M
+
+However I can't reproduce the same behavior with i.MX 6ULL EVK
+with connected usb hub to usbotg2. Also this behavior can't be reproduced
+with NXP downstream kernel (Linux version 4.9.144) on my device.
+
+After digging in a bit I found out that this happens only when
+autosuspend is enabled for the usb controller:
+echo auto > /sys/bus/usb/devices/1-1/power/control
+
+It tries to go to suspend mode, but everytime fails and resumes:
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+suspended
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+resuming
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+suspended
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+suspended
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+suspended
+root@colibri-imx6:~# cat /sys/bus/usb/devices/1-1/power/runtime_status
+resuming
+
+I'm observing ~2 seconds wakeup interrupts handled in ci_irq() in core.c an=
+d
+subsequent invocation of imx_controller_resume().
+
+Meantime usboh3 remains enabled all the time
+(though imx_disable_unprepare_clks() should disable it):
+root@colibri-imx6:~# cat /sys/kernel/debug/clk/clk_summary | grep usb
+    usbphy2_gate                      1        1        0           0
+        0     0  50000
+    usbphy1_gate                      1        1        0           0
+        0     0  50000
+          pll7_usb_host               1        1        0   480000000
+        0     0  50000
+             usbphy2                  1        1        0   480000000
+        0     0  50000
+          pll3_usb_otg                2        3        0   480000000
+        0     0  50000
+             usbphy1                  0        0        0   480000000
+        0     0  50000
+                         usboh3       1        1        0    66000000
+        0     0  50000
+
+While I'm trying to localize the root cause, maybe you can give some hints
+where to look into?
+
+Thanks for helping me!
+
+[1] https://marc.info/?l=3Dlinux-usb&m=3D151844741732751
+[2] https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/imx6ull=
+-colibri.dtsi#L191
+[3] https://github.com/torvalds/linux/blob/master/arch/arm/boot/dts/imx6ull=
+-colibri-eval-v3.dtsi#L143
 
 --=20
+Best regards - Freundliche Gr=C3=BCsse - Meilleures salutations
 
-Thanks,
-Peter Chen=
+Igor Opaniuk
+
+mailto: igor.opaniuk@gmail.com
+skype: igor.opanyuk
++380 (93) 836 40 67
+http://ua.linkedin.com/in/iopaniuk
