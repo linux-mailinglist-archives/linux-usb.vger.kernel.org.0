@@ -2,238 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16522BC413
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 10:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38E5BC429
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 10:36:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436668AbfIXIYv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Sep 2019 04:24:51 -0400
-Received: from mga18.intel.com ([134.134.136.126]:13069 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404719AbfIXIYv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Sep 2019 04:24:51 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Sep 2019 01:24:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,543,1559545200"; 
-   d="scan'208,223";a="203330806"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 24 Sep 2019 01:24:47 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 24 Sep 2019 11:24:46 +0300
-Date:   Tue, 24 Sep 2019 11:24:46 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-Message-ID: <20190924082446.GE16243@kuha.fi.intel.com>
-References: <20190923133101.30774-1-heikki.krogerus@linux.intel.com>
- <BYAPR12MB27276DD002AB589162CC7709DC850@BYAPR12MB2727.namprd12.prod.outlook.com>
+        id S2440628AbfIXIgZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Sep 2019 04:36:25 -0400
+Received: from mail-eopbgr140045.outbound.protection.outlook.com ([40.107.14.45]:35606
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2439052AbfIXIgY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Sep 2019 04:36:24 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PSqu6p8EgNmMrPZldzn+QTdNvIRWTgjifL+as+TqITmVVZNLKy7eJbYu5DiuYIql5XCMuw34cb5lV05DleJrnHgX5iQpihZ1Jz5UzqRE8m3Nshc6kpNP0+wy55hLUNi8sprLC6zQ4NrUpkN0Eev4Mu+CAVz0y7mjaS3VULEHuvt2Z6XYZiuPGsCkfUyXlIYIv8Auc2VoxXtOEzYCpgfDzBX6NxZvww2lGKrObh4FFcuKyQLntO9ErnvpBCDkspBUhYIbDZtyQMxpfpzzz2ugNPdcB+WIyxzF6lNQgOUmSUUpuY4nP7bXO8P2XwX6bRojCPYiFITF4W2djpLxszm7Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+riSyZhNx/KQJu4ryDVcMh3iI5DlFY13LY/4cxTed8o=;
+ b=nMjdzgcuNR2WJlE03X9flmDJz28YfAboKjqrqJMQKp5x5SWytHwoA+EkMgA00+qAkgSXqSFaq1nKuJ2oNVcOOdyK6Gr9+6GgaObqE75RKHqIpGNicB5HJ5Tz4kzg8wPTkF6JH2HNnyfpWzF/vTJVzgO7QoK3A7bi/Tho+eStrb3GQoWz7dIzm0Pw3UwQ1TYAhyXvYPFnEjn9GIaLonLcBnpUnOJjcP7qQWbC+BWBDtzNT5w5LInAAE6xj7QxOzbPj6JuCEKB49OTlqBGxWsbE5l3+JTL4o4EV+MEJ+ARdOKu/ksQIn0RwT+6spshAuF9EtPhBm1CuJrq2cDafjFaIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+riSyZhNx/KQJu4ryDVcMh3iI5DlFY13LY/4cxTed8o=;
+ b=AsCg/gF/XPWUgNc+dJ7bhTZeQLkIAwzUKUeIkSEixL5UrZ/GitmyomrXN0azrUjJDco2fLfq+kwBf5kIczKQW2vZSCLXUOcMcv71T+tG0Kw092Jtcm0+aX5iRUgZgO0ET1aQMMUl9fjNl2sq3YC7b7IuNbXUarV1t1FcBwyFV0I=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB4733.eurprd04.prod.outlook.com (20.177.48.202) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.25; Tue, 24 Sep 2019 08:35:38 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2284.023; Tue, 24 Sep 2019
+ 08:35:38 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/1] usb: host: xhci: update event ring dequeue pointer on
+ purpose
+Thread-Topic: [PATCH 1/1] usb: host: xhci: update event ring dequeue pointer
+ on purpose
+Thread-Index: AQHVcrMKaurOoYA1KEG+PiAfH5L+xQ==
+Date:   Tue, 24 Sep 2019 08:35:38 +0000
+Message-ID: <20190924083727.22260-1-peter.chen@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: HK0PR03CA0039.apcprd03.prod.outlook.com
+ (2603:1096:203:2f::27) To VI1PR04MB5327.eurprd04.prod.outlook.com
+ (2603:10a6:803:60::16)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a9bd3224-6631-4993-1adc-08d740ca2d4b
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB4733;
+x-ms-traffictypediagnostic: VI1PR04MB4733:|VI1PR04MB4733:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB4733806704D34E87DDA3853A8B840@VI1PR04MB4733.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2089;
+x-forefront-prvs: 0170DAF08C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(39860400002)(136003)(396003)(189003)(199004)(71200400001)(81156014)(8676002)(81166006)(2351001)(2501003)(71190400001)(186003)(66946007)(3846002)(26005)(64756008)(102836004)(386003)(476003)(478600001)(6506007)(36756003)(14454004)(66476007)(7736002)(2616005)(66446008)(4326008)(99286004)(66556008)(6116002)(44832011)(15650500001)(1076003)(52116002)(25786009)(305945005)(2906002)(486006)(256004)(14444005)(6486002)(316002)(6916009)(8936002)(66066001)(86362001)(6436002)(6512007)(5640700003)(5660300002)(50226002)(54906003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4733;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: uNonkEmvBsS7G9K5IArBYGbVP3U6vqtR901qcAid+igvuX5kbQLdFu7VE6Ih6XYm6FEfeAQYpfj7u7d1sSaCEVOjYvD4B0R9MRpD0m7+AneSn9/yk08n0PqdtrdK6FDyF5PKbH88nNqoCauizovuWF3mE3frOfBHAY/QJAKEDZUEb7DcYd2evfFCgM4XTo3CNpGqybuVIpmKZSzIsKfKTW+vd+fkCnUCLfG08wFO400HoJ6ep3RM2Tn77ML4+hnoYtlhUuA7YLgD425crrSyg7AcjHoDKXIb/ipfyWPpE4SyS/obOGf5hlpc91u1tISLevD+NKQrGOx46jKY/Xot/W09xvJF6itOUf5YbOW2x/jh8qhcYogFXhP26i4iVQkEZTMtN+NzSlhpbw2LzOrKM8TPNKfQyOlPkg4BYHI5VD4=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="bg08WKrSYDhXBjb5"
-Content-Disposition: inline
-In-Reply-To: <BYAPR12MB27276DD002AB589162CC7709DC850@BYAPR12MB2727.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9bd3224-6631-4993-1adc-08d740ca2d4b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Sep 2019 08:35:38.5851
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5eKMN4xPQnrWlbZlAi7oI70UEVUp3K8TWi/+h4QUaI0qX8AJeO5jtyhNNEFZKT0h7Bygu8B2Yk0kWqVOqzgX+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4733
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On some situations, the software handles TRB events slower
+than adding TRBs, then xhci_handle_event can't return zero
+long time, the xHC will consider the event ring is full,
+and trigger "Event Ring Full" error, but in fact, the software
+has already finished lots of events, just no chance to
+update ERDP (event ring dequeue pointer).
 
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In this commit, we force update ERDP if half of TRBS_PER_SEGMENT
+events have handled to avoid "Event Ring Full" error.
 
-Hi Ajay,
-
-On Mon, Sep 23, 2019 at 06:15:59PM +0000, Ajay Gupta wrote:
-> Hi Heikki,
-> 
-> > -----Original Message-----
-> > From: linux-usb-owner@vger.kernel.org <linux-usb-owner@vger.kernel.org>
-> > On Behalf Of Heikki Krogerus
-> > Sent: Monday, September 23, 2019 6:31 AM
-> > To: Ajay Gupta <ajayg@nvidia.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Subject: [RFC PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-> > 
-> > There is no need to try to prevent the extra ucsi_notify() that runtime
-> > resuming the device will cause.
-> > 
-> > This fixes potential deadlock. Both ccg_read() and
-> > ccg_write() are called with the mutex already taken at least from
-> > ccg_send_command(). In ccg_read() and ccg_write, the mutex is only acquired
-> > so that run_isr flag can be set.
-> > 
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> > Hi Ajay,
-> > 
-> > Before going forward with this I would like to get confirmation from you that it
-> > is OK, and that I'm not missing anything. 
-> Thanks for this. I mixed up firmware flashing and IO path by using same lock.
-> 
-> >I did not see any real purpose for that run_isr flag. 
-> > The only thing that I can see it preventing is an extra ucsi_notify()
-> > call caused by the waking of the controller, but that should not be a problem.
-> > Is there any other reason why the flag is there?
-> ucsi_ccg_runtime_resume() will get called after pm_runtime_get_sync(uc->dev);
-> in ccg_read() and ccg_write(). If we allow extra ucsi_notify() then ccg_read() and
-> ccg_write() will get called again from ucsi_notfiy() through ucsi_sync(). This will
-> keep on happening in a loop and the controller will remain in D0 always and 
-> runtime pm will never be done.
-
-OK, so the problem is actually that we are allowing the controller to
-suspend while we are still in the middle of waiting for completion to
-a command, right? That should not be allowed to happen.
-
-Instead of hiding the symptom from the problem with that flag, the
-driver needs to initially define autosuspend delay that is as long as
-UCSI_TIMEOUT_MS (or longer). That should be enough to fix the problem,
-though it still leaves a small change of hitting it in some corner
-cases. After I'm done with the I/O rewrite, we can guarantee that the
-controller stays in D0 for as long as it takes to process the whole
-command.
-
-But as the initial fix, let's just use the autosuspend delay.
-
-Can you test the attached patch?
-
-thanks,
-
--- 
-heikki
-
---bg08WKrSYDhXBjb5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-typec-ucsi-ccg-Remove-run_isr-flag.patch"
-
-From aced6041a9ff34cd1c10f60bbe8eaf0b55df60af Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Mon, 23 Sep 2019 15:04:10 +0300
-Subject: [PATCH] usb: typec: ucsi: ccg: Remove run_isr flag
-
-The "run_isr" flag is used for preventing the driver from
-calling the interrupt service routine in its runtime resume
-callback when the driver is expecting completion to a
-command, but what that basically does is that it hides the
-real problem. The real problem is that the controller is
-allowed to suspend in the middle of command execution.
-
-As a more appropriate fix for the problem, using autosuspend
-delay time that matches UCSI_TIMOUT_MS. That prevents the
-controller from suspending while still in the middle of
-executing a command.
-
-This fixes potential deadlock. Both ccg_read() and
-ccg_write() are called with the mutex already taken at least
-from ccg_send_command(). In ccg_read() and ccg_write, the
-mutex is only acquired so that run_isr flag can be set.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 42 +++----------------------------
- 1 file changed, 4 insertions(+), 38 deletions(-)
+ drivers/usb/host/xhci-ring.c | 53 ++++++++++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 907e20e1a71e..d772fce51905 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -195,7 +195,6 @@ struct ucsi_ccg {
- 
- 	/* fw build with vendor information */
- 	u16 fw_build;
--	bool run_isr; /* flag to call ISR routine during resume */
- 	struct work_struct pm_work;
- };
- 
-@@ -224,18 +223,6 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	if (quirks && quirks->max_read_len)
- 		max_read_len = quirks->max_read_len;
- 
--	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		/*
--		 * Do not schedule pm_work to run ISR in
--		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
--		 * since we are already in ISR path.
--		 */
--		uc->run_isr = false;
--		mutex_unlock(&uc->lock);
--	}
--
- 	pm_runtime_get_sync(uc->dev);
- 	while (rem_len > 0) {
- 		msgs[1].buf = &data[len - rem_len];
-@@ -278,18 +265,6 @@ static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
- 	msgs[0].len = len + sizeof(rab);
- 	msgs[0].buf = buf;
- 
--	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		/*
--		 * Do not schedule pm_work to run ISR in
--		 * ucsi_ccg_runtime_resume() after pm_runtime_get_sync()
--		 * since we are already in ISR path.
--		 */
--		uc->run_isr = false;
--		mutex_unlock(&uc->lock);
--	}
--
- 	pm_runtime_get_sync(uc->dev);
- 	status = i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
- 	if (status < 0) {
-@@ -1130,7 +1105,6 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 	uc->ppm.sync = ucsi_ccg_sync;
- 	uc->dev = dev;
- 	uc->client = client;
--	uc->run_isr = true;
- 	mutex_init(&uc->lock);
- 	INIT_WORK(&uc->work, ccg_update_firmware);
- 	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
-@@ -1188,6 +1162,8 @@ static int ucsi_ccg_probe(struct i2c_client *client,
- 
- 	pm_runtime_set_active(uc->dev);
- 	pm_runtime_enable(uc->dev);
-+	pm_runtime_use_autosuspend(uc->dev);
-+	pm_runtime_set_autosuspend_delay(uc->dev, 5000);
- 	pm_runtime_idle(uc->dev);
- 
- 	return 0;
-@@ -1229,7 +1205,6 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
- {
- 	struct i2c_client *client = to_i2c_client(dev);
- 	struct ucsi_ccg *uc = i2c_get_clientdata(client);
--	bool schedule = true;
- 
- 	/*
- 	 * Firmware version 3.1.10 or earlier, built for NVIDIA has known issue
-@@ -1237,17 +1212,8 @@ static int ucsi_ccg_runtime_resume(struct device *dev)
- 	 * Schedule a work to call ISR as a workaround.
- 	 */
- 	if (uc->fw_build == CCG_FW_BUILD_NVIDIA &&
--	    uc->fw_version <= CCG_OLD_FW_VERSION) {
--		mutex_lock(&uc->lock);
--		if (!uc->run_isr) {
--			uc->run_isr = true;
--			schedule = false;
--		}
--		mutex_unlock(&uc->lock);
--
--		if (schedule)
--			schedule_work(&uc->pm_work);
--	}
-+	    uc->fw_version <= CCG_OLD_FW_VERSION)
-+		schedule_work(&uc->pm_work);
- 
- 	return 0;
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e220bcbee173..92b6b07cf33d 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2737,6 +2737,35 @@ static int xhci_handle_event(struct xhci_hcd *xhci)
+ 	return 1;
  }
--- 
-2.23.0
+=20
++/*
++ * Update Event Ring Dequeue Pointer:
++ * - When all events have finished
++ * - To avoid "Event Ring Full Error" condition
++ */
++static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
++		union xhci_trb *event_ring_deq)
++{
++	u64 temp_64;
++	dma_addr_t deq;
++
++	temp_64 =3D xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
++	/* If necessary, update the HW's version of the event ring deq ptr. */
++	if (event_ring_deq !=3D xhci->event_ring->dequeue) {
++		deq =3D xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
++				xhci->event_ring->dequeue);
++		if (deq =3D=3D 0)
++			xhci_warn(xhci, "WARN something wrong with SW event "
++					"ring dequeue ptr.\n");
++		/* Update HC event ring dequeue pointer */
++		temp_64 &=3D ERST_PTR_MASK;
++		temp_64 |=3D ((u64) deq & (u64) ~ERST_PTR_MASK);
++	}
++
++	/* Clear the event handler busy flag (RW1C) */
++	temp_64 |=3D ERST_EHB;
++	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
++}
++
+ /*
+  * xHCI spec says we can get an interrupt, and if the HC has an error cond=
+ition,
+  * we might get bad data out of the event ring.  Section 4.10.2.7 has a li=
+st of
+@@ -2748,9 +2777,9 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	union xhci_trb *event_ring_deq;
+ 	irqreturn_t ret =3D IRQ_NONE;
+ 	unsigned long flags;
+-	dma_addr_t deq;
+ 	u64 temp_64;
+ 	u32 status;
++	int event_loop =3D 0;
+=20
+ 	spin_lock_irqsave(&xhci->lock, flags);
+ 	/* Check if the xHC generated the interrupt, or the irq is shared */
+@@ -2804,24 +2833,14 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	/* FIXME this should be a delayed service routine
+ 	 * that clears the EHB.
+ 	 */
+-	while (xhci_handle_event(xhci) > 0) {}
+-
+-	temp_64 =3D xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
+-	/* If necessary, update the HW's version of the event ring deq ptr. */
+-	if (event_ring_deq !=3D xhci->event_ring->dequeue) {
+-		deq =3D xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
+-				xhci->event_ring->dequeue);
+-		if (deq =3D=3D 0)
+-			xhci_warn(xhci, "WARN something wrong with SW event "
+-					"ring dequeue ptr.\n");
+-		/* Update HC event ring dequeue pointer */
+-		temp_64 &=3D ERST_PTR_MASK;
+-		temp_64 |=3D ((u64) deq & (u64) ~ERST_PTR_MASK);
++	while (xhci_handle_event(xhci) > 0) {
++		if (event_loop++ < TRBS_PER_SEGMENT / 2)
++			continue;
++		xhci_update_erst_dequeue(xhci, event_ring_deq);
++		event_loop =3D 0;
+ 	}
+=20
+-	/* Clear the event handler busy flag (RW1C); event ring is empty. */
+-	temp_64 |=3D ERST_EHB;
+-	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
++	xhci_update_erst_dequeue(xhci, event_ring_deq);
+ 	ret =3D IRQ_HANDLED;
+=20
+ out:
+--=20
+2.17.1
 
-
---bg08WKrSYDhXBjb5--
