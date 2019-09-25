@@ -2,332 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58151BD0FB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Sep 2019 19:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D894CBD5C8
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 02:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439554AbfIXRwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Sep 2019 13:52:49 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:40485 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbfIXRws (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Sep 2019 13:52:48 -0400
-Received: by mail-io1-f68.google.com with SMTP id h144so6589883iof.7;
-        Tue, 24 Sep 2019 10:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=i7nOdUPQO8n52YcV67l4CYsUQMUzMn8oGMVoe1snO9A=;
-        b=KDsJx0z1LDZXVlzQqXRrdwBlzM09gGR/sb1O1xx0IBuRbKHHe5jHQgVafZu5mO7o/a
-         EMP5O+b5/zIGrE6jOB9HABkMWPsIzH2eY5i/TSXPnwFQVkaUmUlTCKG41j3IxWXoQqaI
-         21ipDPaF2Gn8VudpwuI7M4ocIcbMZ4ylo/zwg99zZbEo2ciDuq1oRfl539G8TNPoUmIv
-         6A3m5wKxFgOl9M6ihgmG8xwGKJnInS8A0/2CIuv3DGfrbhKa7BJ9lMnwYkHTc508Jt8Z
-         Gtbm0d/l5TPJkjEUOJReowOLVxpJTkSQyk3HMAW1PrmkFMKZr2+SFOHIVq//d7WpT5a1
-         wygw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=i7nOdUPQO8n52YcV67l4CYsUQMUzMn8oGMVoe1snO9A=;
-        b=Bd7sPCLcJaQFVvGHZw5b5/0JbrJ6NRFIL1nckIDDb30ypLsr3YvXx8/iLkgQNFn9uZ
-         T2JzVTXyAQB4P3G8ykXd6qQIe630LJqdTQtWPMWOWuT/KAScKjLmpOq1jf53WbTxiNci
-         f7TDbm2Oq/8rQ3x7hLlgTu4/CGO2t9CCKJ5djHefdzmBS4CFSn/hAGsbyecL4asMPXme
-         9KbrJI8KxgHicyRkpyuUeoquwol8KmhbH+uMr/vM648/Pu1JQ1gpJIuzgI8Ko8fwgq4d
-         6JeQzvWI85CQSsPomkQTiRjY+2k1BHlRoU6DqY1//LenfYdiUcKZFQODJaOgZ1ikXn23
-         vCDw==
-X-Gm-Message-State: APjAAAWyp8tH8mFs96Sl105zeerLJTnBbvA8rO9FFv0XH0Ci0mUZhKAj
-        zn7X2fiYcZqmDQvLk+ak6r3sJUjiToNuMlGEe7A=
-X-Google-Smtp-Source: APXvYqzavLuw+fYyO/Ee/mlQ+iY4CvacUIYc3xWeyHRCeNGC5+bZUljuFpVga925HYErcNTBU0srAK1dAYx0mT418mM=
-X-Received: by 2002:a6b:cd81:: with SMTP id d123mr4933848iog.78.1569347566383;
- Tue, 24 Sep 2019 10:52:46 -0700 (PDT)
+        id S2390890AbfIYAou (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Sep 2019 20:44:50 -0400
+Received: from mail-eopbgr70075.outbound.protection.outlook.com ([40.107.7.75]:37404
+        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2390119AbfIYAou (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Sep 2019 20:44:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aCI4cdgsqdlZvHfwVZRNkDbOsX3msH5It1kzLlaPERFqxyA7jKvT0+gPDw7uw2MtWuTz3UsR5LYH9C5s19HJpVu0lyufb+UOvowmXepeh8zw+cZrNhoK6YaAQ+OZm3pwHUMIUaBhOgj+4MrrUmDU2rKxWQmmk2aIrqAvy4tMQIVnuqsthPIrbLNAqIyfKNjMIcwfYsyokpUvfTIfW16yKSoVcyTOEX1CNWmt533j+ZWsNITkv7gV0rs7vdvPr9V2S5F4/onB34Gq33CyM6Mt47IqRvBvYvyM7pas++GuW6EdwP/vasWtAWG7ZVB37JkCcyXLkG5AGKOdOR9R5tD7xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9XWDL/jx3TeJI7CQxpxC21e68YzcANEJSz2ykLd8HUo=;
+ b=er6oNKCCFW4S9q72BvWveuYHRAV+yjTpObcza2GbFp8NpCyh1QdTqydQ/p4BZ3WVX6u2fmwPZSjyGxh3yii8W/+pHWUdqg9nplhLgitulrESLV2nyzbFJ7wG0TwSbt9q8fb7HXlrbd88PZAi85IaFgBYooiNKOMc+vO5Ty386VNWMdhRJ5RIC98hQ45TF6IXM8Sh1bqWnrqEfW07qBpL1tJnyuyB3KjcPF5WOUNBmMKf1EnUokbCCW2495saXaFY6PJgX+nqDDwxvP0tMuGad1HHj+hICVsLcY8ofh2goA/U9EKSTGmd9Yo6rKLj46MPecdkKk2Hi1P8L8b+eCt5LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9XWDL/jx3TeJI7CQxpxC21e68YzcANEJSz2ykLd8HUo=;
+ b=JY8t90UpDOGALIuiQVZ/VEvOJFHpL6GsTGo1x87yYU1Hwni1vC6OFJTR5yTngnn+rIKseADvgC4TPeczGBS09MVOJIwLK1Jkb7oFSkRQGu2ShNaJ8QXMJrd1G+r8145mHau/l9NefGEwDit44bRyoJ4nvw7rzCLhQoyKe+Ohzow=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB6959.eurprd04.prod.outlook.com (52.133.246.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.20; Wed, 25 Sep 2019 00:44:40 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::744a:c78e:b8:633a]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::744a:c78e:b8:633a%7]) with mapi id 15.20.2284.023; Wed, 25 Sep 2019
+ 00:44:40 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Igor Opaniuk <igor.opaniuk@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>
+CC:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [chipidea] continuous USB resets on NXP i.MX 6ULL device
+Thread-Topic: [chipidea] continuous USB resets on NXP i.MX 6ULL device
+Thread-Index: AQHVcsAUbF6BuVbVZkO/pxJX+iUUrac7js3A
+Date:   Wed, 25 Sep 2019 00:44:39 +0000
+Message-ID: <VI1PR04MB53276A58AE76E5EADD822E498B870@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <CAByghJYLLdtYiQGNCxJ4HEjm5Y1v0LQ1pc+dmHemoNWxx2h6jg@mail.gmail.com>
+In-Reply-To: <CAByghJYLLdtYiQGNCxJ4HEjm5Y1v0LQ1pc+dmHemoNWxx2h6jg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b18f8254-1d24-4a8f-851f-08d741518c7a
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB6959;
+x-ms-traffictypediagnostic: VI1PR04MB6959:|VI1PR04MB6959:
+x-ms-exchange-purlcount: 3
+x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+x-microsoft-antispam-prvs: <VI1PR04MB6959F046894D07CBB29967388B870@VI1PR04MB6959.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01713B2841
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(136003)(376002)(396003)(366004)(189003)(199004)(476003)(33656002)(25786009)(52536014)(6306002)(9686003)(7696005)(66476007)(229853002)(99286004)(2501003)(66446008)(81156014)(6506007)(5660300002)(66574012)(81166006)(186003)(64756008)(6436002)(86362001)(4326008)(76116006)(66556008)(6246003)(8676002)(66066001)(26005)(446003)(102836004)(14444005)(11346002)(44832011)(74316002)(486006)(305945005)(7736002)(478600001)(55016002)(256004)(2906002)(8936002)(54906003)(66946007)(110136005)(3846002)(6116002)(45080400002)(76176011)(14454004)(316002)(71200400001)(966005)(71190400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6959;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: EH6s+CCjJQyaa3e6yRqytcM+6fVweP9TShhEgdrJ4p8ZSCjcVSEf4e3V7HfVpwaD0tvrjcgQxc8X1Z4vQ5fSuU2BNRY1t2qtSyqGQ9rMMt1DRpuXDtj1RHfKy2GdVhvk6Tzn6CiFhkk2oc7WiQ21Kr5WXJ60PqZLW/SU/5x2BL+04IPIERr5SyxSORDnK1cR9Oa33HCjYhVNzQm5823ajJF63E0Cn4a5oAO54hUP5I3J26xzMKzyLyJAlwuHCs80YFMy11V8Q3aoNN1ybGt6FbmAmoQKx7iaMpcLNdSGWab0psRrNkGpQy43yffe+/B1eATbnzSVqK5gk+yXbfzBBzeB9iXBqR9HgZoxQGSlAoz2bNcVJqWAFdGYjaHKXbhjJS2zhuabn1ns70jIrQr4/7C8bEO9RhrXO+BgOddkYP4jYLdr29JGVVqahEDFf0uTC+z7qhaa80F4qd+Eb6wmIg==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <1548057848-15136-1-git-send-email-rppt@linux.ibm.com>
-In-Reply-To: <1548057848-15136-1-git-send-email-rppt@linux.ibm.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Tue, 24 Sep 2019 12:52:35 -0500
-Message-ID: <CAHCN7x+Jv7yGPoB0Gm=TJ30ObLJduw2XomHkd++KqFEURYQcGg@mail.gmail.com>
-Subject: Re: [PATCH v2 00/21] Refine memblock API
-To:     Mike Rapoport <rppt@linux.ibm.com>
-Cc:     linux-mm@kvack.org, Rich Felker <dalias@libc.org>,
-        linux-ia64@vger.kernel.org,
-        devicetree <devicetree@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>, x86@kernel.org,
-        linux-mips@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Guo Ren <guoren@kernel.org>, sparclinux@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>, linux-s390@vger.kernel.org,
-        linux-c6x-dev@linux-c6x.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Richard Weinberger <richard@nod.at>, linux-sh@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        kasan-dev@googlegroups.com,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mark Salter <msalter@redhat.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Matt Turner <mattst88@gmail.com>,
-        linux-snps-arc@lists.infradead.org,
-        uclinux-h8-devel@lists.sourceforge.jp,
-        Petr Mladek <pmladek@suse.com>, linux-xtensa@linux-xtensa.org,
-        linux-alpha@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-m68k@lists.linux-m68k.org, Rob Herring <robh+dt@kernel.org>,
-        Greentime Hu <green.hu@gmail.com>,
-        xen-devel@lists.xenproject.org, Stafford Horne <shorne@gmail.com>,
-        Guan Xuetao <gxt@pku.edu.cn>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        openrisc@lists.librecores.org, etnaviv@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b18f8254-1d24-4a8f-851f-08d741518c7a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Sep 2019 00:44:39.9721
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JdQS7J9qHtkckZgts6FO+1DxVQkn/gcafaKtfXVR7tEbDtHgNc+hFcOt1IIN45YGYHEGubiSK0WJFa8fE9885g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6959
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jan 21, 2019 at 2:05 AM Mike Rapoport <rppt@linux.ibm.com> wrote:
->
-> Hi,
->
-> Current memblock API is quite extensive and, which is more annoying,
-> duplicated. Except the low-level functions that allow searching for a free
-> memory region and marking it as reserved, memblock provides three (well,
-> two and a half) sets of functions to allocate memory. There are several
-> overlapping functions that return a physical address and there are
-> functions that return virtual address. Those that return the virtual
-> address may also clear the allocated memory. And, on top of all that, some
-> allocators panic and some return NULL in case of error.
->
-> This set tries to reduce the mess, and trim down the amount of memblock
-> allocation methods.
->
-> Patches 1-10 consolidate the functions that return physical address of
-> the allocated memory
->
-> Patches 11-13 are some trivial cleanups
->
-> Patches 14-19 add checks for the return value of memblock_alloc*() and
-> panics in case of errors. The patches 14-18 include some minor refactoring
-> to have better readability of the resulting code and patch 19 is a
-> mechanical addition of
->
->         if (!ptr)
->                 panic();
->
-> after memblock_alloc*() calls.
->
-> And, finally, patches 20 and 21 remove panic() calls memblock and _nopanic
-> variants from memblock.
->
-> v2 changes:
-> * replace some more %lu with %zu
-> * remove panics where they are not needed in s390 and in printk
-> * collect Acked-by and Reviewed-by.
->
->
-> Christophe Leroy (1):
->   powerpc: use memblock functions returning virtual address
->
-> Mike Rapoport (20):
->   openrisc: prefer memblock APIs returning virtual address
->   memblock: replace memblock_alloc_base(ANYWHERE) with memblock_phys_alloc
->   memblock: drop memblock_alloc_base_nid()
->   memblock: emphasize that memblock_alloc_range() returns a physical address
->   memblock: memblock_phys_alloc_try_nid(): don't panic
->   memblock: memblock_phys_alloc(): don't panic
->   memblock: drop __memblock_alloc_base()
->   memblock: drop memblock_alloc_base()
->   memblock: refactor internal allocation functions
->   memblock: make memblock_find_in_range_node() and choose_memblock_flags() static
->   arch: use memblock_alloc() instead of memblock_alloc_from(size, align, 0)
->   arch: don't memset(0) memory returned by memblock_alloc()
->   ia64: add checks for the return value of memblock_alloc*()
->   sparc: add checks for the return value of memblock_alloc*()
->   mm/percpu: add checks for the return value of memblock_alloc*()
->   init/main: add checks for the return value of memblock_alloc*()
->   swiotlb: add checks for the return value of memblock_alloc*()
->   treewide: add checks for the return value of memblock_alloc*()
->   memblock: memblock_alloc_try_nid: don't panic
->   memblock: drop memblock_alloc_*_nopanic() variants
->
-I know it's rather late, but this patch broke the Etnaviv 3D graphics
-in my i.MX6Q.
-
-When I try to use the 3D, it returns some errors and the dmesg log
-shows some memory allocation errors too:
-[    3.682347] etnaviv etnaviv: bound 130000.gpu (ops gpu_ops)
-[    3.688669] etnaviv etnaviv: bound 134000.gpu (ops gpu_ops)
-[    3.695099] etnaviv etnaviv: bound 2204000.gpu (ops gpu_ops)
-[    3.700800] etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
-[    3.723013] etnaviv-gpu 130000.gpu: command buffer outside valid
-memory window
-[    3.731308] etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
-[    3.752437] etnaviv-gpu 134000.gpu: command buffer outside valid
-memory window
-[    3.760583] etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
-[    3.766766] etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
-[    3.776131] [drm] Initialized etnaviv 1.2.0 20151214 for etnaviv on minor 0
-
-# glmark2-es2-drm
-Error creating gpu
-Error: eglCreateWindowSurface failed with error: 0x3009
-Error: eglCreateWindowSurface failed with error: 0x3009
-Error: CanvasGeneric: Invalid EGL state
-Error: main: Could not initialize canvas
-
-
-Before this patch:
-
-[    3.691995] etnaviv etnaviv: bound 130000.gpu (ops gpu_ops)
-[    3.698356] etnaviv etnaviv: bound 134000.gpu (ops gpu_ops)
-[    3.704792] etnaviv etnaviv: bound 2204000.gpu (ops gpu_ops)
-[    3.710488] etnaviv-gpu 130000.gpu: model: GC2000, revision: 5108
-[    3.733649] etnaviv-gpu 134000.gpu: model: GC320, revision: 5007
-[    3.756115] etnaviv-gpu 2204000.gpu: model: GC355, revision: 1215
-[    3.762250] etnaviv-gpu 2204000.gpu: Ignoring GPU with VG and FE2.0
-[    3.771432] [drm] Initialized etnaviv 1.2.0 20151214 for etnaviv on minor 0
-
-and the 3D gemos work without this.
-
-I don't know enough about the i.MX6 nor the 3D accelerator to know how
-to fix it.
-I am hoping someone in the know might have some suggestions.
-
->  arch/alpha/kernel/core_cia.c              |   5 +-
->  arch/alpha/kernel/core_marvel.c           |   6 +
->  arch/alpha/kernel/pci-noop.c              |  13 +-
->  arch/alpha/kernel/pci.c                   |  11 +-
->  arch/alpha/kernel/pci_iommu.c             |  16 +-
->  arch/alpha/kernel/setup.c                 |   2 +-
->  arch/arc/kernel/unwind.c                  |   3 +-
->  arch/arc/mm/highmem.c                     |   4 +
->  arch/arm/kernel/setup.c                   |   6 +
->  arch/arm/mm/init.c                        |   6 +-
->  arch/arm/mm/mmu.c                         |  14 +-
->  arch/arm64/kernel/setup.c                 |   8 +-
->  arch/arm64/mm/kasan_init.c                |  10 ++
->  arch/arm64/mm/mmu.c                       |   2 +
->  arch/arm64/mm/numa.c                      |   4 +
->  arch/c6x/mm/dma-coherent.c                |   4 +
->  arch/c6x/mm/init.c                        |   4 +-
->  arch/csky/mm/highmem.c                    |   5 +
->  arch/h8300/mm/init.c                      |   4 +-
->  arch/ia64/kernel/mca.c                    |  25 +--
->  arch/ia64/mm/contig.c                     |   8 +-
->  arch/ia64/mm/discontig.c                  |   4 +
->  arch/ia64/mm/init.c                       |  38 ++++-
->  arch/ia64/mm/tlb.c                        |   6 +
->  arch/ia64/sn/kernel/io_common.c           |   3 +
->  arch/ia64/sn/kernel/setup.c               |  12 +-
->  arch/m68k/atari/stram.c                   |   4 +
->  arch/m68k/mm/init.c                       |   3 +
->  arch/m68k/mm/mcfmmu.c                     |   7 +-
->  arch/m68k/mm/motorola.c                   |   9 ++
->  arch/m68k/mm/sun3mmu.c                    |   6 +
->  arch/m68k/sun3/sun3dvma.c                 |   3 +
->  arch/microblaze/mm/init.c                 |  10 +-
->  arch/mips/cavium-octeon/dma-octeon.c      |   3 +
->  arch/mips/kernel/setup.c                  |   3 +
->  arch/mips/kernel/traps.c                  |   5 +-
->  arch/mips/mm/init.c                       |   5 +
->  arch/nds32/mm/init.c                      |  12 ++
->  arch/openrisc/mm/init.c                   |   5 +-
->  arch/openrisc/mm/ioremap.c                |   8 +-
->  arch/powerpc/kernel/dt_cpu_ftrs.c         |   8 +-
->  arch/powerpc/kernel/irq.c                 |   5 -
->  arch/powerpc/kernel/paca.c                |   6 +-
->  arch/powerpc/kernel/pci_32.c              |   3 +
->  arch/powerpc/kernel/prom.c                |   5 +-
->  arch/powerpc/kernel/rtas.c                |   6 +-
->  arch/powerpc/kernel/setup-common.c        |   3 +
->  arch/powerpc/kernel/setup_32.c            |  26 ++--
->  arch/powerpc/kernel/setup_64.c            |   4 +
->  arch/powerpc/lib/alloc.c                  |   3 +
->  arch/powerpc/mm/hash_utils_64.c           |  11 +-
->  arch/powerpc/mm/mmu_context_nohash.c      |   9 ++
->  arch/powerpc/mm/numa.c                    |   4 +
->  arch/powerpc/mm/pgtable-book3e.c          |  12 +-
->  arch/powerpc/mm/pgtable-book3s64.c        |   3 +
->  arch/powerpc/mm/pgtable-radix.c           |   9 +-
->  arch/powerpc/mm/ppc_mmu_32.c              |   3 +
->  arch/powerpc/platforms/pasemi/iommu.c     |   3 +
->  arch/powerpc/platforms/powermac/nvram.c   |   3 +
->  arch/powerpc/platforms/powernv/opal.c     |   3 +
->  arch/powerpc/platforms/powernv/pci-ioda.c |   8 +
->  arch/powerpc/platforms/ps3/setup.c        |   3 +
->  arch/powerpc/sysdev/dart_iommu.c          |   3 +
->  arch/powerpc/sysdev/msi_bitmap.c          |   3 +
->  arch/s390/kernel/crash_dump.c             |   3 +
->  arch/s390/kernel/setup.c                  |  16 ++
->  arch/s390/kernel/smp.c                    |   9 +-
->  arch/s390/kernel/topology.c               |   6 +
->  arch/s390/numa/mode_emu.c                 |   3 +
->  arch/s390/numa/numa.c                     |   6 +-
->  arch/sh/boards/mach-ap325rxa/setup.c      |   5 +-
->  arch/sh/boards/mach-ecovec24/setup.c      |  10 +-
->  arch/sh/boards/mach-kfr2r09/setup.c       |   5 +-
->  arch/sh/boards/mach-migor/setup.c         |   5 +-
->  arch/sh/boards/mach-se/7724/setup.c       |  10 +-
->  arch/sh/kernel/machine_kexec.c            |   3 +-
->  arch/sh/mm/init.c                         |   8 +-
->  arch/sh/mm/numa.c                         |   4 +
->  arch/sparc/kernel/prom_32.c               |   6 +-
->  arch/sparc/kernel/setup_64.c              |   6 +
->  arch/sparc/kernel/smp_64.c                |  12 ++
->  arch/sparc/mm/init_32.c                   |   2 +-
->  arch/sparc/mm/init_64.c                   |  11 ++
->  arch/sparc/mm/srmmu.c                     |  18 ++-
->  arch/um/drivers/net_kern.c                |   3 +
->  arch/um/drivers/vector_kern.c             |   3 +
->  arch/um/kernel/initrd.c                   |   2 +
->  arch/um/kernel/mem.c                      |  16 ++
->  arch/unicore32/kernel/setup.c             |   4 +
->  arch/unicore32/mm/mmu.c                   |  15 +-
->  arch/x86/kernel/acpi/boot.c               |   3 +
->  arch/x86/kernel/apic/io_apic.c            |   5 +
->  arch/x86/kernel/e820.c                    |   5 +-
->  arch/x86/kernel/setup_percpu.c            |  10 +-
->  arch/x86/mm/kasan_init_64.c               |  14 +-
->  arch/x86/mm/numa.c                        |  12 +-
->  arch/x86/platform/olpc/olpc_dt.c          |   3 +
->  arch/x86/xen/p2m.c                        |  11 +-
->  arch/xtensa/mm/kasan_init.c               |  10 +-
->  arch/xtensa/mm/mmu.c                      |   3 +
->  drivers/clk/ti/clk.c                      |   3 +
->  drivers/firmware/memmap.c                 |   2 +-
->  drivers/macintosh/smu.c                   |   5 +-
->  drivers/of/fdt.c                          |   8 +-
->  drivers/of/of_reserved_mem.c              |   7 +-
->  drivers/of/unittest.c                     |   8 +-
->  drivers/usb/early/xhci-dbc.c              |   2 +-
->  drivers/xen/swiotlb-xen.c                 |   7 +-
->  include/linux/memblock.h                  |  59 +------
->  init/main.c                               |  26 +++-
->  kernel/dma/swiotlb.c                      |  21 ++-
->  kernel/power/snapshot.c                   |   3 +
->  kernel/printk/printk.c                    |   9 +-
->  lib/cpumask.c                             |   3 +
->  mm/cma.c                                  |  10 +-
->  mm/kasan/init.c                           |  10 +-
->  mm/memblock.c                             | 249 ++++++++++--------------------
->  mm/page_alloc.c                           |  10 +-
->  mm/page_ext.c                             |   2 +-
->  mm/percpu.c                               |  84 +++++++---
->  mm/sparse.c                               |  25 ++-
->  121 files changed, 860 insertions(+), 412 deletions(-)
->
-> --
-> 2.7.4
->
->
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+IA0KPiANCj4gSGkgRmFiaW8sIFBldGVyLCBTdGVmYW4sDQo+IA0KPiBJJ3ZlIGluY2lkZW50YWxs
+eSBkaXNjb3ZlcmVkIHlvdXIgbGFzdCB5ZWFyIGRpc2N1c3Npb24gaW4gTUwgWzFdIChJIGhvcGUg
+aXQgcmluZ3MgdGhlDQo+IGJlbGwpIHJlZ2FyZGluZyB0aGUgaXNzdWUgSSdtIHN0aWxsIG9ic2Vy
+dmluZyBvbiB0aGUgc2FtZSBkZXZpY2Ugd2l0aCB0aGUgbWFpbmxpbmUNCj4ga2VybmVsLg0KPiAN
+Cj4gVGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBpLk1YIDZVTEwgRVZLIGFuZCB0aGlzIHBhcnRpY3Vs
+YXIgZGV2aWNlLCBpcyB0aGF0IHVzYm90ZzIgaXMNCj4gdXNlZCBvbmx5IGluIGhvc3QgbW9kZSB3
+aXRoIHRoZSB1c2IgaHViIGludGVncmF0ZWQgb24gdGhlIGNhcnJpZXIgYm9hcmQgWzJdIFszXS4N
+Cj4gDQo+IHJvb3RAY29saWJyaS1pbXg2On4jIGxzdXNiIC1zIDE6MSAtLXRyZWUNCj4gLzogIEJ1
+cyAwMS5Qb3J0IDE6IERldiAxLCBDbGFzcz1yb290X2h1YiwgRHJpdmVyPWNpX2hkcmMvMXAsIDQ4
+ME0NCj4gICAgIHxfXyBQb3J0IDE6IERldiAyLCBJZiAwLCBDbGFzcz1IdWIsIERyaXZlcj1odWIv
+NHAsIDQ4ME0NCj4gDQo+IEhvd2V2ZXIgSSBjYW4ndCByZXByb2R1Y2UgdGhlIHNhbWUgYmVoYXZp
+b3Igd2l0aCBpLk1YIDZVTEwgRVZLIHdpdGggY29ubmVjdGVkDQo+IHVzYiBodWIgdG8gdXNib3Rn
+Mi4gQWxzbyB0aGlzIGJlaGF2aW9yIGNhbid0IGJlIHJlcHJvZHVjZWQgd2l0aCBOWFAgZG93bnN0
+cmVhbQ0KPiBrZXJuZWwgKExpbnV4IHZlcnNpb24gNC45LjE0NCkgb24gbXkgZGV2aWNlLg0KPiAN
+Cj4gQWZ0ZXIgZGlnZ2luZyBpbiBhIGJpdCBJIGZvdW5kIG91dCB0aGF0IHRoaXMgaGFwcGVucyBv
+bmx5IHdoZW4gYXV0b3N1c3BlbmQgaXMNCj4gZW5hYmxlZCBmb3IgdGhlIHVzYiBjb250cm9sbGVy
+Og0KPiBlY2hvIGF1dG8gPiAvc3lzL2J1cy91c2IvZGV2aWNlcy8xLTEvcG93ZXIvY29udHJvbA0K
+PiANCj4gSXQgdHJpZXMgdG8gZ28gdG8gc3VzcGVuZCBtb2RlLCBidXQgZXZlcnl0aW1lIGZhaWxz
+IGFuZCByZXN1bWVzOg0KPiByb290QGNvbGlicmktaW14Njp+IyBjYXQgL3N5cy9idXMvdXNiL2Rl
+dmljZXMvMS0xL3Bvd2VyL3J1bnRpbWVfc3RhdHVzDQo+IHN1c3BlbmRlZA0KPiByb290QGNvbGli
+cmktaW14Njp+IyBjYXQgL3N5cy9idXMvdXNiL2RldmljZXMvMS0xL3Bvd2VyL3J1bnRpbWVfc3Rh
+dHVzDQo+IHJlc3VtaW5nDQo+IHJvb3RAY29saWJyaS1pbXg2On4jIGNhdCAvc3lzL2J1cy91c2Iv
+ZGV2aWNlcy8xLTEvcG93ZXIvcnVudGltZV9zdGF0dXMNCj4gc3VzcGVuZGVkDQo+IHJvb3RAY29s
+aWJyaS1pbXg2On4jIGNhdCAvc3lzL2J1cy91c2IvZGV2aWNlcy8xLTEvcG93ZXIvcnVudGltZV9z
+dGF0dXMNCj4gc3VzcGVuZGVkDQo+IHJvb3RAY29saWJyaS1pbXg2On4jIGNhdCAvc3lzL2J1cy91
+c2IvZGV2aWNlcy8xLTEvcG93ZXIvcnVudGltZV9zdGF0dXMNCj4gc3VzcGVuZGVkDQo+IHJvb3RA
+Y29saWJyaS1pbXg2On4jIGNhdCAvc3lzL2J1cy91c2IvZGV2aWNlcy8xLTEvcG93ZXIvcnVudGlt
+ZV9zdGF0dXMNCj4gcmVzdW1pbmcNCj4gDQo+IEknbSBvYnNlcnZpbmcgfjIgc2Vjb25kcyB3YWtl
+dXAgaW50ZXJydXB0cyBoYW5kbGVkIGluIGNpX2lycSgpIGluIGNvcmUuYyBhbmQNCj4gc3Vic2Vx
+dWVudCBpbnZvY2F0aW9uIG9mIGlteF9jb250cm9sbGVyX3Jlc3VtZSgpLg0KPiANCj4gTWVhbnRp
+bWUgdXNib2gzIHJlbWFpbnMgZW5hYmxlZCBhbGwgdGhlIHRpbWUgKHRob3VnaA0KPiBpbXhfZGlz
+YWJsZV91bnByZXBhcmVfY2xrcygpIHNob3VsZCBkaXNhYmxlIGl0KToNCj4gcm9vdEBjb2xpYnJp
+LWlteDY6fiMgY2F0IC9zeXMva2VybmVsL2RlYnVnL2Nsay9jbGtfc3VtbWFyeSB8IGdyZXAgdXNi
+DQo+ICAgICB1c2JwaHkyX2dhdGUgICAgICAgICAgICAgICAgICAgICAgMSAgICAgICAgMSAgICAg
+ICAgMCAgICAgICAgICAgMA0KPiAgICAgICAgIDAgICAgIDAgIDUwMDAwDQo+ICAgICB1c2JwaHkx
+X2dhdGUgICAgICAgICAgICAgICAgICAgICAgMSAgICAgICAgMSAgICAgICAgMCAgICAgICAgICAg
+MA0KPiAgICAgICAgIDAgICAgIDAgIDUwMDAwDQo+ICAgICAgICAgICBwbGw3X3VzYl9ob3N0ICAg
+ICAgICAgICAgICAgMSAgICAgICAgMSAgICAgICAgMCAgIDQ4MDAwMDAwMA0KPiAgICAgICAgIDAg
+ICAgIDAgIDUwMDAwDQo+ICAgICAgICAgICAgICB1c2JwaHkyICAgICAgICAgICAgICAgICAgMSAg
+ICAgICAgMSAgICAgICAgMCAgIDQ4MDAwMDAwMA0KPiAgICAgICAgIDAgICAgIDAgIDUwMDAwDQo+
+ICAgICAgICAgICBwbGwzX3VzYl9vdGcgICAgICAgICAgICAgICAgMiAgICAgICAgMyAgICAgICAg
+MCAgIDQ4MDAwMDAwMA0KPiAgICAgICAgIDAgICAgIDAgIDUwMDAwDQo+ICAgICAgICAgICAgICB1
+c2JwaHkxICAgICAgICAgICAgICAgICAgMCAgICAgICAgMCAgICAgICAgMCAgIDQ4MDAwMDAwMA0K
+PiAgICAgICAgIDAgICAgIDAgIDUwMDAwDQo+ICAgICAgICAgICAgICAgICAgICAgICAgICB1c2Jv
+aDMgICAgICAgMSAgICAgICAgMSAgICAgICAgMCAgICA2NjAwMDAwMA0KPiAgICAgICAgIDAgICAg
+IDAgIDUwMDAwDQo+IA0KPiBXaGlsZSBJJ20gdHJ5aW5nIHRvIGxvY2FsaXplIHRoZSByb290IGNh
+dXNlLCBtYXliZSB5b3UgY2FuIGdpdmUgc29tZSBoaW50cyB3aGVyZSB0bw0KPiBsb29rIGludG8/
+DQo+IA0KDQpXb3VsZCB5b3UgcGxlYXNlIGxvb2sgYmVsb3cgdHdvIGRvd25zdHJlYW0gcGF0Y2hl
+cyBzZWUgaWYgaXQgaGVscHM/DQoNCmNvbW1pdCBlOGU5NTY1OGZlNzVmMzg3M2UwNmQ1YWQ3MmE2
+YmYwYmFkNDBmMDY4DQpBdXRob3I6IExpIEp1biA8anVuLmxpQG54cC5jb20+DQpEYXRlOiAgIE1v
+biBPY3QgMTYgMjM6MTM6MTkgMjAxNyArMDgwMA0KDQogICAgTUxLLTE2NTc2IHVzYjogcGh5OiBt
+eHM6IHNldCBob2xkX3Jpbmdfb2ZmIGZvciBVU0IyIFBMTCBwb3dlciB1cA0KICAgIA0KICAgIFVT
+QjIgUExMIHVzZSByaW5nIFZDTywgd2hlbiB0aGUgUExMIHBvd2VyIHVwLCB0aGUgcmluZyBWQ0/i
+gJlzIHN1cHBseSBhbHNvDQogICAgcmFtcCB1cC4gVGhlcmUgaXMgYSBwb3NzaWJpbGl0eSB0aGF0
+IHRoZSByaW5nIFZDTyBzdGFydCBvc2NpbGxhdGlvbiBhdA0KICAgIG11bHRpIG5vZGVzIGluIHRo
+aXMgcGhhc2UsIGVzcGVjaWFsbHkgZm9yIFZDTyB3aGljaCBoYXMgbWFueSBzdGFnZXMsIHRoZW4N
+CiAgICB0aGUgbXVsdGl3YXZlIHdpbGwga2VwdCB1bnRpbCBQTEwgcG93ZXIgZG93bi4gSG9sZF9y
+aW5nX29mZihiaXQxMSkgY2FuDQogICAgZm9yY2UgdGhlIFZDTyBpbiBvbmUgZGV0ZXJtaW5lZCBz
+dGF0ZSB3aGVuIFZDTyBzdXBwbHkgc3RhcnQgcmFtcCB1cCwgdG8NCiAgICBhdm9pZCB0aGlzIG11
+bHRpd2F2ZSBpc3N1ZS4gUGVyIElDIGRlc2lnbidzIHN1Z2dlc3Rpb24gaXQncyBiZXR0ZXIgdGhp
+cw0KICAgIGJpdCBjYW4gYmUgb2ZmIGZyb20gMjV1cyBhZnRlciBwbGwgcG93ZXIgdXAgdG8gMjV1
+cyBiZWZvcmUgVVNCIFRYL1JYLg0KICAgIA0KDQpjb21taXQgYWE0NjgwZDg0NGEzNDBhNWI2YjYw
+NDg0ZjZlMDRjYjliYTYxM2M2NQ0KQXV0aG9yOiBQZXRlciBDaGVuIDxwZXRlci5jaGVuQG54cC5j
+b20+DQpEYXRlOiAgIFdlZCBTZXAgNyAxMjoxNjo1OSAyMDE2ICswODAwDQoNCiAgICBNTEstMTMx
+MjUgdXNiOiBwaHk6IHBoeS1teHMtdXNiOiBlbmFibGUgd2VhayAxcDEgcmVndWxhdG9yIGZvciBp
+bXg2dWwgZHVyaW5nIHN1c3BlbmQNCiAgICANCiAgICBGb3IgaW14NnVsIFBIWSwgd2hlbiB0aGUg
+c3lzdGVtIGVudGVycyBzdXNwZW5kLCBpdHMgMXAxIGlzIG9mZiBieSBkZWZhdWx0LA0KICAgIHRo
+YXQgbWF5IGNhdXNlIHRoZSBQSFkgZ2V0IGluYWNjdXJhdGUgVVNCIERQL0RNIHZhbHVlLiBJZiB0
+aGUgVVNCIHdha2V1cA0KICAgIGlzIGVuYWJsZWQgYXQgdGhpcyB0aW1lLCB0aGUgdW5leHBlY3Rl
+ZCB3YWtldXAgbWF5IG9jY3VyIHdoZW4gdGhlIHN5c3RlbQ0KICAgIGVudGVycyBzdXNwZW5kLg0K
+ICAgIA0KICAgIEluIHRoaXMgcGF0Y2gsIHdoZW4gdGhlIHZidXMgaXMgdGhlcmUsIHdlIGVuYWJs
+ZSB3ZWFrIDFwMSBkdXJpbmcgdGhlIFBIWQ0KICAgIHN1c3BlbmQgQVBJLCBpbiB0aGF0IGNhc2Us
+IHRoZSBVU0IgRFAvRE0gd2lsbCBiZSBhY2N1cmF0ZSBmb3IgVVNCIFBIWSwNCiAgICB0aGVuIHVu
+ZXhwZWN0ZWQgdXNiIHdha2V1cCB3aWxsIG5vdCBiZSBvY2N1cnJlZCwgZXNwZWNpYWxseSBmb3Ig
+dGhlIFVTQg0KICAgIGNoYXJnZXIgaXMgY29ubmVjdGVkIHNjZW5hcmlvLiBUaGUgdXNlciBuZWVk
+cyB0byBlbmFibGUgUEhZIHdha2V1cCBmb3INCiAgICBVU0Igd2FrZXVwIGZ1bmN0aW9uIHVzaW5n
+IGJlbG93IHNldHRpbmcuDQoNClBldGVyDQoNCj4gVGhhbmtzIGZvciBoZWxwaW5nIG1lIQ0KPiAN
+Cj4gWzFdDQo+IGh0dHBzOi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20v
+P3VybD1odHRwcyUzQSUyRiUyRm1hcmMuaW5mbyUyDQo+IEYlM0ZsJTNEbGludXgtDQo+IHVzYiUy
+Nm0lM0QxNTE4NDQ3NDE3MzI3NTEmYW1wO2RhdGE9MDIlN0MwMSU3Q3BldGVyLmNoZW4lNDBueHAu
+Y28NCj4gbSU3Q2I2MTc0MmQ0ZmY0NjQ2YzJjYjk0MDhkNzQwZDczNWZlJTdDNjg2ZWExZDNiYzJi
+NGM2ZmE5MmNkOTljNWMzMA0KPiAxNjM1JTdDMCU3QzAlN0M2MzcwNDkxNjUzNzY4NTk3ODgmYW1w
+O3NkYXRhPWVaZE9WQ3V5VnlBNTAyRGd3b04NCj4gMTZRbVU1V0RrbnJxQ0s1eG1FYklvdkFFJTNE
+JmFtcDtyZXNlcnZlZD0wDQo+IFsyXQ0KPiBodHRwczovL2V1cjAxLnNhZmVsaW5rcy5wcm90ZWN0
+aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMlM0ElMkYlMkZnaXRodWIuY29tJQ0KPiAyRnRvcnZh
+bGRzJTJGbGludXglMkZibG9iJTJGbWFzdGVyJTJGYXJjaCUyRmFybSUyRmJvb3QlMkZkdHMlMkZp
+bXg2DQo+IHVsbC0NCj4gY29saWJyaS5kdHNpJTIzTDE5MSZhbXA7ZGF0YT0wMiU3QzAxJTdDcGV0
+ZXIuY2hlbiU0MG54cC5jb20lN0NiNjE3NDJkDQo+IDRmZjQ2NDZjMmNiOTQwOGQ3NDBkNzM1ZmUl
+N0M2ODZlYTFkM2JjMmI0YzZmYTkyY2Q5OWM1YzMwMTYzNSU3QzAlN0MNCj4gMCU3QzYzNzA0OTE2
+NTM3Njg1OTc4OCZhbXA7c2RhdGE9NyUyRlZQMTV2MVhHZVF6d2VJdSUyRmFHaEpFdDFvdg0KPiBU
+bjR6bCUyRjNwZ2hLQmNHbHclM0QmYW1wO3Jlc2VydmVkPTANCj4gWzNdDQo+IGh0dHBzOi8vZXVy
+MDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20vP3VybD1odHRwcyUzQSUyRiUyRmdp
+dGh1Yi5jb20lDQo+IDJGdG9ydmFsZHMlMkZsaW51eCUyRmJsb2IlMkZtYXN0ZXIlMkZhcmNoJTJG
+YXJtJTJGYm9vdCUyRmR0cyUyRmlteDYNCj4gdWxsLWNvbGlicmktZXZhbC0NCj4gdjMuZHRzaSUy
+M0wxNDMmYW1wO2RhdGE9MDIlN0MwMSU3Q3BldGVyLmNoZW4lNDBueHAuY29tJTdDYjYxNzQyZDRm
+ZjQNCj4gNjQ2YzJjYjk0MDhkNzQwZDczNWZlJTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMz
+MDE2MzUlN0MwJTdDMCU3DQo+IEM2MzcwNDkxNjUzNzY4NTk3ODgmYW1wO3NkYXRhPU00M0JYckpl
+ZEtnc3pPSmtaOVc0aDVicVFvOVdCYXhlN0MNCj4gTDR0QUQyT3VrJTNEJmFtcDtyZXNlcnZlZD0w
+DQo+IA0KPiAtLQ0KPiBCZXN0IHJlZ2FyZHMgLSBGcmV1bmRsaWNoZSBHcsO8c3NlIC0gTWVpbGxl
+dXJlcyBzYWx1dGF0aW9ucw0KPiANCj4gSWdvciBPcGFuaXVrDQo+IA0KPiBtYWlsdG86IGlnb3Iu
+b3Bhbml1a0BnbWFpbC5jb20NCj4gc2t5cGU6IGlnb3Iub3Bhbnl1aw0KPiArMzgwICg5MykgODM2
+IDQwIDY3DQo+IGh0dHBzOi8vZXVyMDEuc2FmZWxpbmtzLnByb3RlY3Rpb24ub3V0bG9vay5jb20v
+P3VybD1odHRwJTNBJTJGJTJGdWEubGlua2VkaW4uY28NCj4gbSUyRmluJTJGaW9wYW5pdWsmYW1w
+O2RhdGE9MDIlN0MwMSU3Q3BldGVyLmNoZW4lNDBueHAuY29tJTdDYjYxNzQyDQo+IGQ0ZmY0NjQ2
+YzJjYjk0MDhkNzQwZDczNWZlJTdDNjg2ZWExZDNiYzJiNGM2ZmE5MmNkOTljNWMzMDE2MzUlN0Mw
+JTcNCj4gQzAlN0M2MzcwNDkxNjUzNzY4NTk3ODgmYW1wO3NkYXRhPXF6Z1daYWVyYUlVamlMRzI0
+czl4JTJCVVFFblJySjINCj4gVGlSS0QlMkY2bmRuYTRXcyUzRCZhbXA7cmVzZXJ2ZWQ9MA0K
