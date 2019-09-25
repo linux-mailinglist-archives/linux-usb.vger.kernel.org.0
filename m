@@ -2,73 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E09FBDBDE
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 12:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF638BDC99
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 13:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730702AbfIYKKk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 06:10:40 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:46714 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfIYKKj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 06:10:39 -0400
-Received: by mail-qt1-f194.google.com with SMTP id u22so5818987qtq.13;
-        Wed, 25 Sep 2019 03:10:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QJAwGk6DiGPuEl9vVf9Y57sR48ZzWXO2zIkN7FNDT54=;
-        b=uxKTN8lk1tw7q4BKtlWni5omGg5CksepRgdbb0Y8/fPCjGUk12xHmAkvag8jD+m6y+
-         wDujUC/f4KA/DYatOKT3q1/vM70kArBh26AejVLzBbXQZmDKT7YAGMnNUhXVQGa0MgF6
-         cAJ9vQMyTeAknsaJBXQwc2MaEKFBwu1yhyUT18UUXXz1hU095tWaXFVAvNGs2J3rw4m+
-         +fnIqQhm09JOsVEZ/5bg0qH03P6ecDeaqB5YVWIFui2NHbzs5qH7JHADqvPfAKZMPX+S
-         +7D1hzSITmfNaGWYJtEjG3GGAGLuGks11h7OXREuj3SMzdnKIlEPsaqiA11B9SGTbVEc
-         5JSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QJAwGk6DiGPuEl9vVf9Y57sR48ZzWXO2zIkN7FNDT54=;
-        b=ITQAybLJkB2WEvfwpPquzlwuk+DszXOb43kRmt56rvlZTeagcmUuup1B4JgJ+FfkgW
-         4ec8OzLRQUXuutLTsICDtk4sow7TmQ3DN+CjpeKSqBqMh1AaKwWGabauesb/0479Kufm
-         W/M8YlEnvo1ISR+9My/PY5DQBVhoqy4pI5jvE9Gts/QPAkjlC8SuDxvL1RdKE4puTNGL
-         R9gkX3nRjFMBhhLg3tFC+i+RCfBi2Y8AGi0/PtqXFV3iAL3snozofn6wfMc75R4RoJuk
-         lZFhjK3cQJeY7f/8wDCKewq0/S5uW/GLZ69NyKoVHpWdyc9wzbSKEXcq7PA5cAgq0bL/
-         wdTA==
-X-Gm-Message-State: APjAAAVjacjcvJrd1r5qhXeUvcr4nnuGPg8F91+J5nytAuyThz30KJVi
-        L2U5CNAIOAlTAqLr3gvhpE+7L3G+EdLDP/wFfMg=
-X-Google-Smtp-Source: APXvYqznDQSK+aaA6ZkdljBwkl0tTHX+rs+6dthLZ6KWbbv0oRm88ROn7k3x3V7tl2fIP8pOnHLy68ONiUomuQImPIo=
-X-Received: by 2002:a0c:9846:: with SMTP id e6mr6669660qvd.114.1569406238740;
- Wed, 25 Sep 2019 03:10:38 -0700 (PDT)
+        id S2390478AbfIYLCu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 07:02:50 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:39084 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728040AbfIYLCu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 07:02:50 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8PAsKrC087155;
+        Wed, 25 Sep 2019 11:02:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=k2ILhHGus9NiOIfWnAl5oqk/Fo6x9w5ynxOn5hufDGA=;
+ b=BE7llfCLlaWcANG1958urMQT4ONSqQxepfThJWGtwSCutAlSYnEZD6aikwSPk6zEPM+M
+ tT9eiU724rtBrkRku/GO1qOUO6wwljBb/aJ+D+uuXlvKeRECxufnXwqIBnJQ8Fc7ZnJk
+ XxsMZmRYR6jOy4Yz6Faymyk3LClp/uMb3IM7K4RcvZdZuewnPaDNrMfJCk333RZGlV2a
+ fHDAZPmBVXGDvYz6vJOSK2nM7lxZESryZfgJL2v8yjEpSGFs6v2vg2qoGpx1RmCDfU/3
+ f7483T7uQFoYT75CGHoporwopV92R9KWbr3F1jcPDXShznVRjaxCJqja9rm8lrnu/SfK 2g== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2v5b9tuvup-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Sep 2019 11:02:28 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8PAx23X047448;
+        Wed, 25 Sep 2019 11:02:28 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2v82q99ye5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 25 Sep 2019 11:02:28 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8PB2QmX009457;
+        Wed, 25 Sep 2019 11:02:26 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 25 Sep 2019 04:02:26 -0700
+Date:   Wed, 25 Sep 2019 14:02:19 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: [PATCH] usb: typec: tcpm: Fix a signedness bug in tcpm_fw_get_caps()
+Message-ID: <20190925110219.GN3264@mwanda>
 MIME-Version: 1.0
-References: <20190923071145.GB2746429@kroah.com> <Pine.LNX.4.44L0.1909231053500.24712-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909231053500.24712-100000@netrider.rowland.org>
-From:   Austin Kim <austindh.kim@gmail.com>
-Date:   Wed, 25 Sep 2019 19:10:33 +0900
-Message-ID: <CADLLry4ZW_jEfgcuAFUkRHZp8=hR9MgwQzKEB9nvJ=H9edwvow@mail.gmail.com>
-Subject: Re: [PATCH] usb: hub: Minor refactoring in usb_hub_init()
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
-        Thinh.Nguyen@synopsys.com, nsaenzjulienne@suse.de,
-        jflat@chromium.org, malat@debian.org,
-        Douglas Anderson <dianders@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9390 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1909250112
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9390 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1909250112
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> If you really want to fix up this subroutine, you could change the two
-> "return -1" statements.  They should return an appropriate error code,
-> not just -1.
->
-> Alan Stern
->
+The "port->typec_caps.data" and "port->typec_caps.type" variables are
+enums and in this context GCC will treat them as an unsigned int so they
+can never be less than zero.
 
-Thanks for valuable feedback over the patch.
-If I generate new patch later, let me make sure to contain an
-appropriate error code.
+Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Thanks,
-Austin Kim
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 96562744101c..d3b63e000ae2 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4410,7 +4410,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+ 	if (ret == 0) {
+ 		port->typec_caps.data = typec_find_port_data_role(cap_str);
+-		if (port->typec_caps.data < 0)
++		if ((int)port->typec_caps.data < 0)
+ 			return -EINVAL;
+ 	}
+ 
+@@ -4419,7 +4419,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 		return ret;
+ 
+ 	port->typec_caps.type = typec_find_port_power_role(cap_str);
+-	if (port->typec_caps.type < 0)
++	if ((int)port->typec_caps.type < 0)
+ 		return -EINVAL;
+ 	port->port_type = port->typec_caps.type;
+ 
+-- 
+2.20.1
+
