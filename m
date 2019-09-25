@@ -2,87 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75110BE077
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 16:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE95BE167
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 17:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438092AbfIYOqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 10:46:16 -0400
-Received: from mga12.intel.com ([192.55.52.136]:54761 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437125AbfIYOqQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Sep 2019 10:46:16 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 07:46:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,548,1559545200"; 
-   d="scan'208";a="191359855"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga003.jf.intel.com with ESMTP; 25 Sep 2019 07:46:14 -0700
-Subject: Re: BUG report: usb: dwc3: Link TRB triggered an intterupt without
- IOC being setted
-To:     alex zheng <tc0721@gmail.com>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        linux-usb@vger.kernel.org, xiaowei.zheng@dji.com
-References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
- <87a7avh8uu.fsf@gmail.com>
- <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com>
- <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com>
- <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com>
-Date:   Wed, 25 Sep 2019 17:48:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728711AbfIYPev (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 11:34:51 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:41082 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728463AbfIYPeu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 11:34:50 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t10so2605969plr.8
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2019 08:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wRpIL/tAhQ7tmZdnSOSRTMvtx0laE3jI6sYZoK3gWPE=;
+        b=JcNqYn4owFfGUXPFvzxQEUrFBHX+IEgzs8GRWys0yeJgQf6MJWCZEx46JGE0jk8bZk
+         6TfwxC8Tr6fx40/rioCBHUcsrVCnm5TT31x14SFyXyf6Yoch2+ts9pIUW3VwG8GFGETX
+         V2j7wmhNbSj0RRKUUtUOlQxO3xCNFQ0f4MGwe2ehQMw2NAtIN0E3GoGc2RoTuyTYlt6V
+         da5hTXsK+A1M3B6oPBNSNg3qRb5ymXCx63+ZEBpMfBAUwWw179pEWQwNdUOYvTH+e0L0
+         /ZZWPH/SDJINxrf7pT76Rrk3pfjVMlHtXbzistGM28bilBJMUo2s61THKVGVFgQN2lF1
+         Uiiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wRpIL/tAhQ7tmZdnSOSRTMvtx0laE3jI6sYZoK3gWPE=;
+        b=U3QcfXeXUX/EqTSi6zYMx+fvyHeyqLdpq48q/m6R4Q6IdUMhDs2arzQpfLE6HzTfkg
+         Wu9CaUTolEangIV1dG3eQZNdquGD8Z8iOEKa/gOIsFlUJy1pCg/j9lW44E0nMmd5/vnq
+         /ZqC9rb27Em4+jRWspvGWUyEjRY1kiU8Dseo5ULf+vsSe2aWjrH+JxGROu7pCiaB8P3L
+         whcv2ziGNuYAhhMTtO0vADNXPWCZZ9maMD6VA85Xu4cmrTTXoQX+fTjsc3ucI6AEOtLG
+         dLMOlWKQNOr3KkAiOBfP5iD8buM+eHJ8ghWj3/7H7pAwKsg9orPeZtjpxIZ5LzU7hE/z
+         5oWw==
+X-Gm-Message-State: APjAAAU6+0AEGhowIsk/+WEnKEH/1R38vcHLThd/h2dT0Ums6B9pawpA
+        rleR+wcOi3Lwb9Dh7rLF5RBi13nhqYN8hDjx4zl0WA==
+X-Google-Smtp-Source: APXvYqwb03jBv/q/OjCK6fv3NNJVzeeKBqjTw64ZXCSy9q0xHocdgul2oblxnMzitronqqBue11KbqD2D1BGoDqPtnk=
+X-Received: by 2002:a17:902:9a95:: with SMTP id w21mr1687049plp.336.1569425689662;
+ Wed, 25 Sep 2019 08:34:49 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <000000000000c2ee6a059360376e@google.com> <Pine.LNX.4.44L0.1909251006040.14432-100000@netrider.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1909251006040.14432-100000@netrider.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 25 Sep 2019 17:34:38 +0200
+Message-ID: <CAAeHK+zSYnRgUb_S9MwEp0rp5nk0YzpoVcYZOn_WooCW68EOmw@mail.gmail.com>
+Subject: Re: WARNING in pvr2_i2c_core_done
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.9.2019 17.45, alex zheng wrote:
-> Hi Mathias,
-> 
-> I try to ignore the DMA errors, then the transfer continues but it
-> complete with data lost, it seems like these ERROR Transfer event
-> should be right and must not be ignore.
-> 
-> test app show:
-> "did not get enough data, received size:14410176/15000000"
-> 
-> kernel log show: (you can see more detail info in the attached log files)
+On Wed, Sep 25, 2019 at 4:10 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, 25 Sep 2019, syzbot wrote:
+>
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    d9e63adc usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=16b5fcd5600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=f4fa60e981ee8e6a
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=e74a998ca8f1df9cc332
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ec07b1600000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ff0871600000
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
+> >
+> > pvrusb2: Device being rendered inoperable
+> > cx25840 0-0044: Unable to detect h/w, assuming cx23887
+> > cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
+> > pvrusb2: Attached sub-driver cx25840
+> > pvrusb2: ***WARNING*** pvrusb2 device hardware appears to be jammed and I
+> > can't clear it.
+> > pvrusb2: You might need to power cycle the pvrusb2 device in order to
+> > recover.
+> > ------------[ cut here ]------------
+> > sysfs group 'power' not found for kobject 'i2c-0'
+> > WARNING: CPU: 0 PID: 102 at fs/sysfs/group.c:278 sysfs_remove_group
+> > fs/sysfs/group.c:278 [inline]
+> > WARNING: CPU: 0 PID: 102 at fs/sysfs/group.c:278
+> > sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+>
+> I have seen a lot of error messages like this one (i.e., "group 'power'
+> not found for kobject"), in runs that involved fuzzing a completely
+> different USB driver.  Initial testing failed to find a cause.
+>
+> This leads me to wonder whether the problem might lie somewhere else
+> entirely.  A bug in some core kernel code?  Memory corruption?
 
-Logs show your transfer ring has four segments, but hardware fails to
-jump from the last segment back to first)
+AFAICS so far this has only been triggered from the usbvision driver
+[1] and from the pvrusb2 driver (this report).
 
-Last TRB (LINK TRB) of each segment points to the next segment,
-last segments link trb points back to first segment.
+I wanted to loop in sysfs maintainers, but it seems that Greg and
+Rafael are already cc'ed on this.
 
-In your case:
-0x1d117000 -> 0x1eb09000 -> 0x1eb0a000 -> 0x1dbda000 -> (back to 0x1d117000)
-
-For some reason your hardware doesn't treat the last TRB at the last segment
-as a LINK TRB, instead it just issues a transfer event for it, and continues to
-the next address instead of jumping back to first segment:
-
-Transfer event for last TRB at last segment: 0x1dbda000 (TRB: 0x1dbdaff0):
-This is a link TRB and should not generate transfer event:
-
-xhci-hcd.0.auto: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16 comp_code 1
-xhci-hcd xhci-hcd.0.auto: Looking for event-dma 000000001dbdaff0 trb-start 000000001d117000 trb-end 000000001d117000 seg-start 000000001d117000 seg-end 000000001d10
-xhci-hcd xhci-hcd.0.auto: Ignoring error
-
-Next transfer event should be for TRB at fisrt segment (0x1d117000)
-but event shows its trying to handle a event from TRB at 000000001dbdb000, which isn't even part of the ring.
-
-xhci-hcd xhci-hcd.0.auto: process trans event : ep_index = 16, event_dma = 1dbdb000
-xhci-hcd xhci-hcd.0.auto: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 16 comp_code 1
-xhci-hcd xhci-hcd.0.auto: Looking for event-dma 000000001dbdb000 trb-start 000000001d117000 trb-end 000000001d117000 seg-start 000000001d117000 seg-end 000000001d10
-xhci-hcd xhci-hcd.0.auto: Ignoring error
-
--Mathias
+[1] https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
