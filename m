@@ -2,115 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFFFBE30F
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 19:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F03EBE3B6
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 19:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408179AbfIYRIH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 13:08:07 -0400
-Received: from mx009.vodafonemail.xion.oxcs.net ([153.92.174.39]:60396 "EHLO
-        mx009.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2407544AbfIYRIH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 13:08:07 -0400
-Received: from vsmx002.vodafonemail.xion.oxcs.net (unknown [192.168.75.192])
-        by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTP id 5D2D2605B16;
-        Wed, 25 Sep 2019 17:08:04 +0000 (UTC)
-Received: from lazy.lzy (unknown [87.157.113.162])
-        by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTPA id B4A926066CF;
-        Wed, 25 Sep 2019 17:07:47 +0000 (UTC)
-Received: from lazy.lzy (localhost [127.0.0.1])
-        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x8PH7gAS005723
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 25 Sep 2019 19:07:42 +0200
-Received: (from red@localhost)
-        by lazy.lzy (8.15.2/8.15.2/Submit) id x8PH7fiP005722;
-        Wed, 25 Sep 2019 19:07:41 +0200
-Date:   Wed, 25 Sep 2019 19:07:41 +0200
-From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-To:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
-Message-ID: <20190925170741.GA5235@lazy.lzy>
-References: <20190817095422.GA4200@lazy.lzy>
- <Pine.LNX.4.44L0.1908191009490.1506-100000@iolanthe.rowland.org>
- <20190820072326.GD28968@lst.de>
- <20190820163722.GA2991@lazy.lzy>
- <20190826173833.GA4166@lazy.lzy>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190826173833.GA4166@lazy.lzy>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-VADE-STATUS: LEGIT
+        id S1727142AbfIYRrx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 13:47:53 -0400
+Received: from [125.116.199.129] ([125.116.199.129]:50420 "HELO unknown.com"
+        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with SMTP
+        id S1727028AbfIYRrx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Sep 2019 13:47:53 -0400
+X-Greylist: delayed 901 seconds by postgrey-1.27 at vger.kernel.org; Wed, 25 Sep 2019 13:47:52 EDT
+Received: from yiyongsuliao.com ([127.0.0.1])
+        (envelope-sender <540717872054530@safewaychina.com>)
+        by 127.0.0.1 with ESMTP
+        for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2019 01:17:46 +0800
+X-WM-Sender: 540717872054530@safewaychina.com
+X-Priority: 5
+X-Mailer: hdfQeUeb 08
+From:   "=?utf-8?Q?cuxgkkzgsu?=" <540717872054530@safewaychina.com>
+To:     "=?utf-8?Q?linux-usb?=" <linux-usb@vger.kernel.org>
+Subject: =?utf-8?Q?Pheckee23?=
+Message-ID: <e5d93c6d6719663b7fe81c9b005aa84f@safewaychina.com>
+Date:   Thu, 26 Sep 2019 01:17:41 +0800
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 07:38:33PM +0200, Piergiorgio Sartor wrote:
-> On Tue, Aug 20, 2019 at 06:37:22PM +0200, Piergiorgio Sartor wrote:
-> > On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
-> > > On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
-> > > > Let's bring this to the attention of some more people.
-> > > > 
-> > > > It looks like the bug that was supposed to be fixed by commit
-> > > > d74ffae8b8dd ("usb-storage: Add a limitation for
-> > > > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
-> > > > the bug still occurs.
-> > > 
-> > > Piergiorgio,
-> > > 
-> > > can you dump the content of max_hw_sectors_kb file for your USB storage
-> > > device and send that to this thread?
-> > 
-> > Hi all,
-> > 
-> > for both kernels, 5.1.20 (working) and 5.2.8 (not working),
-> > the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
-> > for USB storage devices (2.0 and 3.0).
-> > 
-> > This is for the PC showing the issue.
-> > 
-> > In an other PC, which does not show the issus at the moment,
-> > the values are 120, for USB2.0, and 256, for USB3.0.
-> 
-> Hi again,
-> 
-> any news on this?
-> 
-> Is there anything I can do to help?
-> 
-> Should I report this somewhere else too?
-> 
-> Currently this is quite a huge problem for me,
-> since the only working external storage is an
-> old 1394 HDD...
+带开发瓢   +Ⅴ :ⓀⓕⓅ⒎⒎⒍⒏
 
-Hi all,
-
-I'm now on kernel 5.2.16, from Fedora, and still I
-see the same issue.
-
-I guess it is not a chipset quirk, since there
-are two involved here.
-For the USB 2.0 I've (with "lspci"):
-
-USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
-
-For USB 3.0 I've:
-
-USB controller: ASMedia Technology Inc. ASM1042 SuperSpeed USB Host Controller (prog-if 30 [XHCI])
-
-Any idea on how to proceed?
-
-Thanks a lot.
-
-bye,
-
--- 
-
-piergiorgio
