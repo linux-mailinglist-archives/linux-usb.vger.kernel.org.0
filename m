@@ -2,156 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84571BDAF7
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 11:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71FCBDB1E
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 11:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731601AbfIYJ3Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 05:29:25 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35249 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727635AbfIYJ3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 05:29:24 -0400
-Received: by mail-lj1-f195.google.com with SMTP id m7so4904784lji.2;
-        Wed, 25 Sep 2019 02:29:23 -0700 (PDT)
+        id S1729696AbfIYJgt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 05:36:49 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35015 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729084AbfIYJgg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 05:36:36 -0400
+Received: by mail-wr1-f66.google.com with SMTP id v8so5856969wrt.2
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2019 02:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=MDwrTcg5h4KcHB5xxN6dz4uOQkvWcL/S1XF0CIlHhpM=;
+        b=OXJKEHz0in5Sx2njd2GITCEj3znYqW7E3tkNAp0NwNDtoLWLSuuUllm8QTJjOGqV7M
+         +8dyx7E6/xhFFVyV0zhwdqCvCjTS6ji/dmxq7Q43BTcqhLhV816ZTb3LLM3l/fVmhkXg
+         aVtwu28j90g9nxE2VGgbXgI/Te7HDl5BIvs1Ul5ELe5Yy4s5HBHnrxME0/EnLmT3eaX4
+         3HGX4LG6MuNqocmGOEUtRQkJcf0hWeKPzGkmnzPcu+H5Z13xqbopzO2KDL/3MlTKCO5S
+         1wZ4tID6DYA+BYIdrlIjBw5Wjd/TKmr+H8ZFHShgiCJ74sDnUd9WueNdni7EQw40HaTG
+         PLIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Dd8Bj+SsAYNVwg79OrKDBOgClQX6Coby2DC7H5g+GYE=;
-        b=UiP/ID2ZahT5uajSj3GoWeoAu6hfIZrUyFJN8IQr0cJwzX1l+9X5CYz7chewQipwfI
-         hHVSMnOvRJmvvPbOIR5A9EP4Cixxj47bw5CT/omrOtRc2CQImHb/VYWSEBLHGsLODD1H
-         UxKL9NXzJsZN6VOvF42HFgxAq2GbTyVuWok+7Ml6Lzw1j807Wr9BInSbqzf6OrgW532l
-         pKl4Zl7Ucrun9UmCkhV3jgWKT2s+aux7OS3gwK3xWGpwE6N60n+MB4oQGp23MHH4Q0Wl
-         pah1krtgtQcqFxWONElP3GvF0VX+XZI1+zBn8CQWdLEwo0ubZJOTnYuWqhc6wOr5/Eni
-         x2yg==
-X-Gm-Message-State: APjAAAXRESkCj6lyY1vQPQoTH6IPu12iLpVu76amWxutJhCdJJHI6ir9
-        s+SF3Q3aNxek89nurWOei/Q=
-X-Google-Smtp-Source: APXvYqyiIMY4Vxtvl6Umln32hktQBkXEMinsP7PdVS4Fs+Ubv+S1yRPlBOeR/rElGGfRj6Nfegsf5g==
-X-Received: by 2002:a05:651c:21b:: with SMTP id y27mr5256626ljn.219.1569403762537;
-        Wed, 25 Sep 2019 02:29:22 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id t24sm1085858ljc.23.2019.09.25.02.29.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 25 Sep 2019 02:29:21 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iD3c0-0002Fe-1f; Wed, 25 Sep 2019 11:29:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 2/2] USB: adutux: fix NULL-derefs on disconnect
-Date:   Wed, 25 Sep 2019 11:29:13 +0200
-Message-Id: <20190925092913.8608-2-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190925092913.8608-1-johan@kernel.org>
-References: <20190925092913.8608-1-johan@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=MDwrTcg5h4KcHB5xxN6dz4uOQkvWcL/S1XF0CIlHhpM=;
+        b=uY39E5qnwSckB1efhxJHlR/K06PilOFqyTIvyyKZkBN64HtNFgMFoW1Z8rYQsX9Saq
+         WWUiXOwOJc+3IvT6TjPLkmW/fs3HhG/c0D8sUzJod97FB2tQS5ONRl8Uc4taSoUcA2F4
+         ixmMl7m13SN9AL6xuE3pIY+8uz2dLZLRmSRo56+JIkw4NXgzEilBup7/SGMak3l58wIq
+         TQNLgCwFzV0Yv3V/nHgTEhQlcbzDmKPa1HIZ95upK/7FLZ+7V5CfsB5K9ZcgiePanBts
+         dFNYEvONc1bYgOWmj0p6ZtLysrVGuW/RCHmNCmF/09BSSJ6dYb2JzKGM7v/amt/vGLRx
+         2gCw==
+X-Gm-Message-State: APjAAAXz9cxBNz6jAQoIBK5i3ph+EW20LjnH/w4GNroU6fsMP78M1kbL
+        zC0CDKNxB5koQbBmU9B6QBqO68KkUeKbITuiw+u8z+0uEV0=
+X-Google-Smtp-Source: APXvYqzU6vdK8N039kg7FntZluOcy0pxp/cx7y5JPrAGdvqHaZ/O/jy6ij/ertbkPVGf9/EniNpD0sC9Ej0EqTxmH6E=
+X-Received: by 2002:adf:9dd1:: with SMTP id q17mr8363247wre.176.1569404194503;
+ Wed, 25 Sep 2019 02:36:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190702123006.11320-1-charlesyeh522@gmail.com>
+ <20190716084907.GB10939@localhost> <CAAZvQQ5pJDmZ-F8E8AhGxNK6ohuq3ev8OnySE-+zQNThBcu3Ag@mail.gmail.com>
+ <20190920075602.GI30545@localhost> <CAAZvQQ6613eO6G0Gm-Sv3yWqTG_rRrynF=xVSLgz2uakXU2=ZQ@mail.gmail.com>
+ <20190923102440.GA30545@localhost> <CAAZvQQ6MPrsfTcsnyD4DbKDVJf1WyLoxqW7q07k2RO1Cs5yd5Q@mail.gmail.com>
+ <20190923130804.GC30545@localhost> <CAAZvQQ51rCF6PqZWU22fkwfgUimsnyCMtC0mb3YRSikm0z=W7A@mail.gmail.com>
+ <20190925080654.GC14159@localhost>
+In-Reply-To: <20190925080654.GC14159@localhost>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Wed, 25 Sep 2019 17:36:23 +0800
+Message-ID: <CAAZvQQ5gJr_pTgA+XGyMfcf8Fakvg4zO3hcOcwufr7HOPn4DPQ@mail.gmail.com>
+Subject: Re: [PATCH] [PATCH v7] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver was using its struct usb_device pointer as an inverted
-disconnected flag, but was setting it to NULL before making sure all
-completion handlers had run. This could lead to a NULL-pointer
-dereference in a number of dev_dbg statements in the completion handlers
-which relies on said pointer.
+Johan Hovold <johan@kernel.org> =E6=96=BC 2019=E5=B9=B49=E6=9C=8825=E6=97=
+=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=884:06=E5=AF=AB=E9=81=93=EF=BC=9A
+> Meanwhile you can double check that you've considered all
+> review-feedback you've gotten so far.
+>
+> I don't think you ever replied to my last comment about the reset
+> register and why I thought using plain write (not read, mask, write) was
+> the right thing to do.
+>
+> Does the register always read back as 0, or does it read back as the
+> last value written?
 
-The pointer was also dereferenced unconditionally in a dev_dbg statement
-release() something which would lead to a NULL-deref whenever a device
-was disconnected before the final character-device close if debugging
-was enabled.
+Charles Ans:
+I just asked my colleague, who is RD of design PL2303 hardware,
+His answer is to read 0 forever.
 
-Fix this by unconditionally stopping all I/O and preventing
-resubmissions by poisoning the interrupt URBs at disconnect and using a
-dedicated disconnected flag.
+Does the register always read back as 0, or does it read back as the
+last value written?
+Ans: Yes, the register"#define PL2303_HXN_RESET_REG 0x07" always
+read back as 0.
 
-This also makes sure that all I/O has completed by the time the
-disconnect callback returns.
+I hope the above content has an answer to your question:
+If there are other questions, please try to raise it.. thanks
 
-Fixes: 1ef37c6047fe ("USB: adutux: remove custom debug macro and module parameter")
-Fixes: 66d4bc30d128 ("USB: adutux: remove custom debug macro")
-Cc: stable <stable@vger.kernel.org>     # 3.12
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/misc/adutux.c | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/misc/adutux.c b/drivers/usb/misc/adutux.c
-index bcc138990e2f..f9efec719359 100644
---- a/drivers/usb/misc/adutux.c
-+++ b/drivers/usb/misc/adutux.c
-@@ -75,6 +75,7 @@ struct adu_device {
- 	char			serial_number[8];
- 
- 	int			open_count; /* number of times this port has been opened */
-+	unsigned long		disconnected:1;
- 
- 	char		*read_buffer_primary;
- 	int			read_buffer_length;
-@@ -116,7 +117,7 @@ static void adu_abort_transfers(struct adu_device *dev)
- {
- 	unsigned long flags;
- 
--	if (dev->udev == NULL)
-+	if (dev->disconnected)
- 		return;
- 
- 	/* shutdown transfer */
-@@ -243,7 +244,7 @@ static int adu_open(struct inode *inode, struct file *file)
- 	}
- 
- 	dev = usb_get_intfdata(interface);
--	if (!dev || !dev->udev) {
-+	if (!dev) {
- 		retval = -ENODEV;
- 		goto exit_no_device;
- 	}
-@@ -326,7 +327,7 @@ static int adu_release(struct inode *inode, struct file *file)
- 	}
- 
- 	adu_release_internal(dev);
--	if (dev->udev == NULL) {
-+	if (dev->disconnected) {
- 		/* the device was unplugged before the file was released */
- 		if (!dev->open_count)	/* ... and we're the last user */
- 			adu_delete(dev);
-@@ -354,7 +355,7 @@ static ssize_t adu_read(struct file *file, __user char *buffer, size_t count,
- 		return -ERESTARTSYS;
- 
- 	/* verify that the device wasn't unplugged */
--	if (dev->udev == NULL) {
-+	if (dev->disconnected) {
- 		retval = -ENODEV;
- 		pr_err("No device or device unplugged %d\n", retval);
- 		goto exit;
-@@ -518,7 +519,7 @@ static ssize_t adu_write(struct file *file, const __user char *buffer,
- 		goto exit_nolock;
- 
- 	/* verify that the device wasn't unplugged */
--	if (dev->udev == NULL) {
-+	if (dev->disconnected) {
- 		retval = -ENODEV;
- 		pr_err("No device or device unplugged %d\n", retval);
- 		goto exit;
-@@ -764,11 +765,14 @@ static void adu_disconnect(struct usb_interface *interface)
- 
- 	usb_deregister_dev(interface, &adu_class);
- 
-+	usb_poison_urb(dev->interrupt_in_urb);
-+	usb_poison_urb(dev->interrupt_out_urb);
-+
- 	mutex_lock(&adutux_mutex);
- 	usb_set_intfdata(interface, NULL);
- 
- 	mutex_lock(&dev->mtx);	/* not interruptible */
--	dev->udev = NULL;	/* poison */
-+	dev->disconnected = 1;
- 	mutex_unlock(&dev->mtx);
- 
- 	/* if the device is not opened, then we clean up right now */
--- 
-2.23.0
-
+Charles.
