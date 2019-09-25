@@ -2,77 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A399BE269
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 18:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFFFBE30F
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 19:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732723AbfIYQXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 12:23:03 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:21590 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726553AbfIYQXD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 12:23:03 -0400
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-135-R6_mvMpcPuCbkdHMFLI7Pw-1; Wed, 25 Sep 2019 17:22:59 +0100
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Wed, 25 Sep 2019 17:22:59 +0100
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Wed, 25 Sep 2019 17:22:59 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mathias Nyman' <mathias.nyman@linux.intel.com>,
-        alex zheng <tc0721@gmail.com>
-CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "xiaowei.zheng@dji.com" <xiaowei.zheng@dji.com>
-Subject: RE: BUG report: usb: dwc3: Link TRB triggered an intterupt without
- IOC being setted
-Thread-Topic: BUG report: usb: dwc3: Link TRB triggered an intterupt without
- IOC being setted
-Thread-Index: AQHVc6/+eVm0qdujokOQz2eC8PiOvqc8korQ
-Date:   Wed, 25 Sep 2019 16:22:59 +0000
-Message-ID: <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
-References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
- <87a7avh8uu.fsf@gmail.com>
- <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com>
- <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com>
- <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
- <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com>
-In-Reply-To: <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S2408179AbfIYRIH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 13:08:07 -0400
+Received: from mx009.vodafonemail.xion.oxcs.net ([153.92.174.39]:60396 "EHLO
+        mx009.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2407544AbfIYRIH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 13:08:07 -0400
+Received: from vsmx002.vodafonemail.xion.oxcs.net (unknown [192.168.75.192])
+        by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTP id 5D2D2605B16;
+        Wed, 25 Sep 2019 17:08:04 +0000 (UTC)
+Received: from lazy.lzy (unknown [87.157.113.162])
+        by mta-6-out.mta.xion.oxcs.net (Postfix) with ESMTPA id B4A926066CF;
+        Wed, 25 Sep 2019 17:07:47 +0000 (UTC)
+Received: from lazy.lzy (localhost [127.0.0.1])
+        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x8PH7gAS005723
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 25 Sep 2019 19:07:42 +0200
+Received: (from red@localhost)
+        by lazy.lzy (8.15.2/8.15.2/Submit) id x8PH7fiP005722;
+        Wed, 25 Sep 2019 19:07:41 +0200
+Date:   Wed, 25 Sep 2019 19:07:41 +0200
+From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
+To:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
+Message-ID: <20190925170741.GA5235@lazy.lzy>
+References: <20190817095422.GA4200@lazy.lzy>
+ <Pine.LNX.4.44L0.1908191009490.1506-100000@iolanthe.rowland.org>
+ <20190820072326.GD28968@lst.de>
+ <20190820163722.GA2991@lazy.lzy>
+ <20190826173833.GA4166@lazy.lzy>
 MIME-Version: 1.0
-X-MC-Unique: R6_mvMpcPuCbkdHMFLI7Pw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190826173833.GA4166@lazy.lzy>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-VADE-STATUS: LEGIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogTWF0aGlhcyBOeW1hbg0KPiBTZW50OiAyNSBTZXB0ZW1iZXIgMjAxOSAxNTo0OA0KPiAN
-Cj4gT24gMjQuOS4yMDE5IDE3LjQ1LCBhbGV4IHpoZW5nIHdyb3RlOg0KPiA+IEhpIE1hdGhpYXMs
-DQouLi4NCj4gTG9ncyBzaG93IHlvdXIgdHJhbnNmZXIgcmluZyBoYXMgZm91ciBzZWdtZW50cywg
-YnV0IGhhcmR3YXJlIGZhaWxzIHRvDQo+IGp1bXAgZnJvbSB0aGUgbGFzdCBzZWdtZW50IGJhY2sg
-dG8gZmlyc3QpDQo+IA0KPiBMYXN0IFRSQiAoTElOSyBUUkIpIG9mIGVhY2ggc2VnbWVudCBwb2lu
-dHMgdG8gdGhlIG5leHQgc2VnbWVudCwNCj4gbGFzdCBzZWdtZW50cyBsaW5rIHRyYiBwb2ludHMg
-YmFjayB0byBmaXJzdCBzZWdtZW50Lg0KPiANCj4gSW4geW91ciBjYXNlOg0KPiAweDFkMTE3MDAw
-IC0+IDB4MWViMDkwMDAgLT4gMHgxZWIwYTAwMCAtPiAweDFkYmRhMDAwIC0+IChiYWNrIHRvIDB4
-MWQxMTcwMDApDQo+IA0KPiBGb3Igc29tZSByZWFzb24geW91ciBoYXJkd2FyZSBkb2Vzbid0IHRy
-ZWF0IHRoZSBsYXN0IFRSQiBhdCB0aGUgbGFzdCBzZWdtZW50DQo+IGFzIGEgTElOSyBUUkIsIGlu
-c3RlYWQgaXQganVzdCBpc3N1ZXMgYSB0cmFuc2ZlciBldmVudCBmb3IgaXQsIGFuZCBjb250aW51
-ZXMgdG8NCj4gdGhlIG5leHQgYWRkcmVzcyBpbnN0ZWFkIG9mIGp1bXBpbmcgYmFjayB0byBmaXJz
-dCBzZWdtZW50Og0KDQpUaGF0IGNvdWxkIGJlIGEgY2FjaGUgY29oZXJlbmN5IChvciBmbHVzaGlu
-ZyAoZXRjKSkgaXNzdWUuDQoNCj4+IFRoaXMgaXMgb3VyIHNlbGYtZGVzaWduIHBsYXRmb3JtIChB
-Uk0gdjcgY3B1IGNvcmUgIHdpdGggc3lub3BzeXMgRFdDIFVTQjMuMCBjb250cm9sbGVyKS4NCk9y
-IG1heWJlIHlvdXIgaGFyZHdhcmUgaXMganVzdCBnZXR0aW5nIHNvbWUgb2YgdGhlIG1lbW9yeSBh
-Y2Nlc3NlcyB3cm9uZz8NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lk
-ZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0K
-UmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Mon, Aug 26, 2019 at 07:38:33PM +0200, Piergiorgio Sartor wrote:
+> On Tue, Aug 20, 2019 at 06:37:22PM +0200, Piergiorgio Sartor wrote:
+> > On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
+> > > On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
+> > > > Let's bring this to the attention of some more people.
+> > > > 
+> > > > It looks like the bug that was supposed to be fixed by commit
+> > > > d74ffae8b8dd ("usb-storage: Add a limitation for
+> > > > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
+> > > > the bug still occurs.
+> > > 
+> > > Piergiorgio,
+> > > 
+> > > can you dump the content of max_hw_sectors_kb file for your USB storage
+> > > device and send that to this thread?
+> > 
+> > Hi all,
+> > 
+> > for both kernels, 5.1.20 (working) and 5.2.8 (not working),
+> > the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
+> > for USB storage devices (2.0 and 3.0).
+> > 
+> > This is for the PC showing the issue.
+> > 
+> > In an other PC, which does not show the issus at the moment,
+> > the values are 120, for USB2.0, and 256, for USB3.0.
+> 
+> Hi again,
+> 
+> any news on this?
+> 
+> Is there anything I can do to help?
+> 
+> Should I report this somewhere else too?
+> 
+> Currently this is quite a huge problem for me,
+> since the only working external storage is an
+> old 1394 HDD...
 
+Hi all,
+
+I'm now on kernel 5.2.16, from Fedora, and still I
+see the same issue.
+
+I guess it is not a chipset quirk, since there
+are two involved here.
+For the USB 2.0 I've (with "lspci"):
+
+USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
+
+For USB 3.0 I've:
+
+USB controller: ASMedia Technology Inc. ASM1042 SuperSpeed USB Host Controller (prog-if 30 [XHCI])
+
+Any idea on how to proceed?
+
+Thanks a lot.
+
+bye,
+
+-- 
+
+piergiorgio
