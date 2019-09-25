@@ -2,157 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D45BD7CB
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 07:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F42BBD8DF
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Sep 2019 09:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2411760AbfIYFgj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 01:36:39 -0400
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:39890 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404277AbfIYFgj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 01:36:39 -0400
-Received: by mail-qk1-f172.google.com with SMTP id 4so4241093qki.6
-        for <linux-usb@vger.kernel.org>; Tue, 24 Sep 2019 22:36:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=n4OkSaLpNdi0uLSUNENiAT5o+G4P+NMR/tdptF66Z3I=;
-        b=iyRFlBzIrYvGOOWlhqn+rRjFHWu51+wz+sFp2keLvkfA0dK+gopgYcrOdsln3IhuQ5
-         8nzIWwdWs+TJPFwKG3GcFtlkEm+VFC3pjouCpuh5Y7AxL8LWrtxWiuUFCfDzXoTQsAu2
-         aIzdol6kPQ2BeOJehaa89K1/y4awNETENu/sq6nwhr17MUzaMGJ4M/hXNFLhug98AqQ5
-         RelGTWy2nJ4L7H4wXVThA2cfYqlBAwKK0aItnAcRHCyNMrsejG/ZPAtBriIO61FkE9z3
-         dwqlKiSTP+N/pOi4jSe4O8rHlg4LZBhNU2L4uG4I3/ukUbrL4FQiu9O082CaP0oDgyUp
-         qgiA==
+        id S2405311AbfIYHQM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Sep 2019 03:16:12 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:46790 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405047AbfIYHQM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 03:16:12 -0400
+Received: by mail-lf1-f66.google.com with SMTP id t8so3346113lfc.13;
+        Wed, 25 Sep 2019 00:16:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=n4OkSaLpNdi0uLSUNENiAT5o+G4P+NMR/tdptF66Z3I=;
-        b=BYI2znogiyWajYFcb4S8ekVvCYMPI2cwQjcpgN06o4sOz3+aUAsACrK8NAqUrcjK2+
-         Fh1RJIh1jH96SV+ndWNRx+Lc/bIvAaoNifARYPNnPbD0TpY99jwU6Vv7W5HoXHNRnfw1
-         UjSv/ARqTyZp8VNzNQCkqxswJKYDXkUX1sJ9sMv2xNbK1s5idjk2AOlHPHG0OkymU0X1
-         fn1GHmOnksuGZzn+MRsc7gOnOlRzePqXBGCkhOV+QXRx6D+m7XnJrQlcU85bFGZpI2s7
-         RUlr9hb6XeM0TAP1B1QhxXPnBl9j5/TIsGUX188v9D2F22jeKsf66RkGSKYAhkmZc4kM
-         9qDA==
-X-Gm-Message-State: APjAAAVW/g40KmehDwyCfvY/1M7P8+tU0ebB+6+zxaQvO7TxHU6cqOg2
-        sZyRawSGmRpApD1nj5UIcEJ7XkRl+LhORgUYQaKHyg==
-X-Google-Smtp-Source: APXvYqxaFV8T/oCBkaikYDBW2cR0TU7jGiBrlEWX4Aqh8n7slYKD1Ubm6p+Bq8NxOtSYcKrxsZn5aRN73s43tyULGPY=
-X-Received: by 2002:a37:a7c5:: with SMTP id q188mr1749753qke.445.1569389796371;
- Tue, 24 Sep 2019 22:36:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=v3IxuuxS4/IRcbugvvfMOWxS50zKTmcgONQh2kY5N1s=;
+        b=QllyeOiuDQFUSf2fEbOerzoGI1UD4cKo3zCoQXphCjwGoL2cDreCUnX94D1upbk62Y
+         YsizzI46hTMF6G/beYJYaHSVvmvwvjkS3jro2aGTrHYHOgCwVLwgYN1AZGWsnhNZfMCo
+         LW4IHOymvf8oMkW7XRlC1KAQGBlcb9BFe4ymiXOfifXmJLBIJ2w1t1J5Xvn4OYyezcST
+         h6Kvcko3Lq7o4rEOZ5GozS9x6rKlhJ0kIWpk8BSd9dI3Ur7ugiZPQf/S3lEBd4mSUVd7
+         noFZqi50dIaW048zIQl7g6xWm2rRF67nCVSMTo7ebnFa1Cm57edhoz5YVGxyQKa7Kf5t
+         TqYA==
+X-Gm-Message-State: APjAAAWNNPuHRGekhPA8wtCrl8ZqcfrD1yfvCnrrDS1XDmkynBz3mYmh
+        NuXfsoz07bttDLtanV/SQUM=
+X-Google-Smtp-Source: APXvYqxK9KlRnUB5BCuCdHzDSyVWaKW57vgtVOZwe0WEPa0Hk1fxHthoUKNNsO1eBuospP4ZWxVEsw==
+X-Received: by 2002:a05:6512:304:: with SMTP id t4mr4739714lfp.15.1569395769975;
+        Wed, 25 Sep 2019 00:16:09 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id b67sm1046757ljf.5.2019.09.25.00.16.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 Sep 2019 00:16:09 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iD1X4-0003kO-7z; Wed, 25 Sep 2019 09:16:14 +0200
+Date:   Wed, 25 Sep 2019 09:16:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Peter Chen <hzpeterchen@gmail.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+58e201002fe1e775e1ae@syzkaller.appspotmail.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Ramses =?iso-8859-1?Q?Ram=EDrez?= <ramzeto@gmail.com>,
+        Richard Fontana <rfontana@redhat.com>,
+        Cameron Gutman <aicommander@gmail.com>,
+        Tom Panfil <tom@steelseries.com>, linux-input@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: use-after-free Read in usb_anchor_resume_wakeups
+Message-ID: <20190925071614.GA14159@localhost>
+References: <000000000000e9312b058d3eadb8@google.com>
+ <CAAeHK+yPewmT9J0mAYL0P2Wz55asVFD0DbQnwkBS7zdRTkyN2A@mail.gmail.com>
+ <CAL411-o09wBhiPtRixFo4=6pB1rAmUsTKc2sBQmn4MjQcPBy2A@mail.gmail.com>
 MIME-Version: 1.0
-References: <CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com>
- <CAJZ5v0g4T_0VD_oYMF_BF1VM-d1bg-BD8h8=STDrhVBgouPOPg@mail.gmail.com>
- <01cf6be6-9175-87ca-f3ad-78c06b666893@linux.intel.com> <CAD8Lp4658-c=7KabiJ=xuNRCqPwF4BJauMHqh_8WSBfCFHWSSg@mail.gmail.com>
- <CAJZ5v0gouaztf7tcKXBr90gjrVjOvqH70regD=o2r_d+9Bwvqg@mail.gmail.com>
- <CAD8Lp47oNJb5N5i4oUQfN5b=xCtUc1Lt852pnXxhNq0vyWj=yg@mail.gmail.com>
- <CAJZ5v0j=x4HHOsJ6fCX-xOr29-4BMRzjR5H5UaoWW9v-Ci8ODQ@mail.gmail.com> <CAD8Lp47qSte0C6sUFBkXVAHa755R5PnNUSvjRYD=JehYJ2R0pQ@mail.gmail.com>
-In-Reply-To: <CAD8Lp47qSte0C6sUFBkXVAHa755R5PnNUSvjRYD=JehYJ2R0pQ@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Wed, 25 Sep 2019 13:36:25 +0800
-Message-ID: <CAD8Lp4574C4QCA3mBb9iC_3hBj7pZ3kJi-fkg7dONQPjWcF8bQ@mail.gmail.com>
-Subject: Re: Ryzen7 3700U xhci fails on resume from sleep
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Endless Linux Upstreaming Team <linux@endlessm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL411-o09wBhiPtRixFo4=6pB1rAmUsTKc2sBQmn4MjQcPBy2A@mail.gmail.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 5:10 PM Daniel Drake <drake@endlessm.com> wrote:
-> Unfortunately it's not quite as simple as quirking d3_delay though,
-> because the problem still happens upon resume from s2idle. In that
-> case, pci_dev_d3_sleep() is not called at all.
->
->     if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
->         pci_dev_d3_sleep(dev);
->
-> In the runtime resume case, dev->current_state == PCI_D3hot here (even
-> though pci_set_power_state had been called to put it into D3cold), so
-> the msleep happens.
-> But in the system sleep (s2idle) case, dev->current_state ==
-> PCI_D3cold here, so no sleep happens.
-> That is strangely inconsistent - is it a bug?
+On Mon, Sep 23, 2019 at 05:41:54PM +0800, Peter Chen wrote:
+> > On Tue, Jul 9, 2019 at 2:27 PM syzbot
+> > <syzbot+58e201002fe1e775e1ae@syzkaller.appspotmail.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > syzbot found the following crash on:
+> > >
+> > > HEAD commit:    7829a896 usb-fuzzer: main usb gadget fuzzer driver
+> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=118d136da00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f6d4561982f71f63
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=58e201002fe1e775e1ae
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > >
+> > > Unfortunately, I don't have any reproducer for this crash yet.
+> > >
+> > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > Reported-by: syzbot+58e201002fe1e775e1ae@syzkaller.appspotmail.com
+> > >
+> > > dummy_hcd dummy_hcd.5: no ep configured for urb 00000000c6093b7b
+> > > xpad 6-1:0.169: xpad_irq_out - usb_submit_urb failed with result -19
+> > > ==================================================================
+> > > BUG: KASAN: use-after-free in debug_spin_lock_before
+> > > kernel/locking/spinlock_debug.c:83 [inline]
+> > > BUG: KASAN: use-after-free in do_raw_spin_lock+0x24d/0x280
+> > > kernel/locking/spinlock_debug.c:112
+> > > Read of size 4 at addr ffff8881d0e584dc by task kworker/1:4/2786
+> > >
+> 
+> It should due to URB is freed at xpad_disconnect, but xpad_irq_out
+> still tries to access
+> freed URB.
+> 
+> Peter
+> 
+> #syz test: https://github.com/google/kasan.git 7829a896
+> 
+> diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+> index 6b40a1c68f9f..32b7a199b580 100644
+> --- a/drivers/input/joystick/xpad.c
+> +++ b/drivers/input/joystick/xpad.c
+> @@ -1850,6 +1850,7 @@ static void xpad_disconnect(struct usb_interface *intf)
+> 
+>         xpad_deinit_input(xpad);
+> 
+> +       usb_kill_urb(xpad->irq_out);
 
-In more detail:
+I'm not sure this is the right fix. The interrupt-urb should have been
+stopped by xpad_stop_output() just above. Perhaps the type test in that
+function is broken, or we may have a race where another thread is
+submitting the URB after we tried to stop it which we fail to handle.
 
-During runtime suspend:
+Didn't check that closely, though.
 
-pci_set_power_state() is called with state=D3cold
- - This calls pci_raw_set_power_state() with state=D3hot
- -- After transitioning to D3hot, dev->current_state is updated to
-D3hot based on pmcsr readback
-
-acpi_device_set_power() is called with state=D3cold
- - acpi_power_transition() is called with state=D3cold, updates
-adev->power.state to D3cold
- - adev->power.state is updated (again) to D0
-
-pci_update_current_state() is called
- - platform_pci_get_power_state() returns D3cold
- - dev->current_state is updated to D3cold
-
-Observations: everything seems to be in order
-
-
-During runtime resume:
-
-pci_update_current_state() is called
- - platform_pci_get_power_state() returns D3cold
- - dev->current_state is updated to D3cold
-
-pci_set_power_state() is called with state=D0
- - Calls pci_platform_power_transition
- -- Calls acpi_pci_set_power_state -> acpi_device_set_power with state=D0 :
- --- acpi_power_transition() updates adev->power.state to D0
- --- adev->power.state is updated (again) to D0
- -- Calls pci_update_current_state
- --- platform_pci_get_power_state() returns D0 (so this is ignored)
- --- dev->current_state is updated to D3 via pmcsr read
- - D3cold delay happens (good)
- - Calls pci_raw_set_power_state() with state=D0
- -- current_state is D3 so the D3 delay happens (good) (I quirked this
-delay to 20ms)
- -- device is transitioned to D0 and dev->current_state is updated to
-D0 from pmcsr read
-
-Observations: everything seems to be in order, USB is working after resume
-
-
-During s2idle suspend:
-
-Exactly the same as runtime suspend above. Device transitions into
-D3cold and dev->current_state ends up as D3cold. Everything seems to
-be in order.
-
-
-During s2idle resume:
-
-acpi_device_set_power() is called with state=D0
- - acpi_power_transition() is called with state=D0, updates
-adev->power.state to D0
- - adev->power.state is updated (again) to D0
-
-pci_raw_set_power_state() is calld with state=D0
- -- dev->current_state is D3cold so no D3 delay happens ***
- -- device fails to transitioned to D0, pmcsr read indicates it's still in D3.
-
-Observations: that's a pretty clear difference between the s2idle
-resume and runtime resume paths.
-The s2idle resume path is arrived at via pci_pm_default_resume_early()
---> pci_power_up().
-
-
-Should the s2idle resume path be modified to call into
-pci_update_current_state() to change the current_state to D3hot based
-on pmcsr (like the runtime resume path does)?
-Or should pci_raw_set_power_state() be modified to also apply the
-d3_delay when transitioning from D3cold to D0?
-
-Thanks
-Daniel
+Johan
