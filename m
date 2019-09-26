@@ -2,103 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C80BEB18
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 06:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC0CBEBB2
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 07:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726520AbfIZEGu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 00:06:50 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35179 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726438AbfIZEGu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 00:06:50 -0400
-Received: by mail-wr1-f67.google.com with SMTP id v8so982978wrt.2
-        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2019 21:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6O3te8B9v8EP6DXpJUILeaiDwfu4hKzbhFKk3O+2hIc=;
-        b=v3tngBRzkkXSqdYaxFo8J7luIFDI39Ap3QuDsvssko/+ZHYvZuvrad7LKYrqWn91h+
-         7PGLiYa+aajdMpuogbeUQG3uwqfjFeU0Uy2i/HscJCvA0DDmSPgZXvUedBp+XsButXN1
-         popFqiRWQbu3GOuijlgg9In8sebmnJQlTBTfHZc73ic4kkFFJd73rxDM2TWM4a+ZWa0t
-         pJ4BEH7j4LlPSfEru9bRZGRXRme/NKEG1OTinK8bg0lq9vfj3ejSGkacxvmU7QpQfYnr
-         rEo4EewiFnPDtCfjV1o5V6SmGG4k7zRPL932ypV1FIv3YZpiFhK/hV1f9FuZtEDIC0fp
-         0j7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6O3te8B9v8EP6DXpJUILeaiDwfu4hKzbhFKk3O+2hIc=;
-        b=i+n/XJTm8b/dCnKWZSAaeE41Vp4CU4QMPks3hZDva44wDfMIDnxCQzjp+/OwSA1Qi7
-         ZW6Psk9TfJN2I/q9PVt9pbat+ulL0saPlKq3chsgtJv7IsRvCah2WJoJ56gqkE7HmrvQ
-         CF2WtgNjwFg5+ndH7Ge96DYni5bh0hDJOTHRDJ2/qDbMESi66hqu3b6daoKW1NCfVTRJ
-         tgQN6A8aZfSmEfwQRsA5K6MjaqkaOYQMbZYEVtGTwM7FvD/J+ic776DJcKlE3O5EQSwg
-         wZlkayRreS9T5i12Hg3MfP0OeqgpFPHON6tL8ZBW763N1MMVSk3ys5w+oZtp3JIRlOAm
-         HHKw==
-X-Gm-Message-State: APjAAAXBqXk5DQozbNsluRcMYChyvZOWiVimolafvK2etic0iLL+8F/s
-        DTtlZgHAZcr5B5QUvt62PtG4lvu+oXprN3VUNH+IBA==
-X-Google-Smtp-Source: APXvYqxi/aX/Sa4He/GsphASBb2GpvqD6GZsxYhQ8cRbVT/ddgFXaL5HlvJdKn0pRwCVZ5q5FZsT6iLR5jdo5KkMGYs=
-X-Received: by 2002:adf:d08b:: with SMTP id y11mr1171535wrh.50.1569470807953;
- Wed, 25 Sep 2019 21:06:47 -0700 (PDT)
+        id S2392323AbfIZFp7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 01:45:59 -0400
+Received: from mga11.intel.com ([192.55.52.93]:52499 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725870AbfIZFp6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Sep 2019 01:45:58 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Sep 2019 22:45:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,550,1559545200"; 
+   d="asc'?scan'208";a="189009469"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga008.fm.intel.com with ESMTP; 25 Sep 2019 22:45:56 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Mathias Nyman' <mathias.nyman@linux.intel.com>,
+        alex zheng <tc0721@gmail.com>
+Cc:     "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "xiaowei.zheng\@dji.com" <xiaowei.zheng@dji.com>
+Subject: RE: BUG report: usb: dwc3: Link TRB triggered an intterupt without IOC being setted
+In-Reply-To: <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
+References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com> <87a7avh8uu.fsf@gmail.com> <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com> <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com> <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com> <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com> <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
+Date:   Thu, 26 Sep 2019 08:45:52 +0300
+Message-ID: <87d0fny5in.fsf@gmail.com>
 MIME-Version: 1.0
-References: <20190925234224.95216-1-john.stultz@linaro.org>
- <20190925234224.95216-5-john.stultz@linaro.org> <1569461658.32135.12.camel@mhfsdcap03>
-In-Reply-To: <1569461658.32135.12.camel@mhfsdcap03>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 25 Sep 2019 21:06:34 -0700
-Message-ID: <CALAqxLX=csTtnqr2Hc9v_R8ex8zPj_P1JvSyjZXUKEqSaF=gPA@mail.gmail.com>
-Subject: Re: [PATCH 4/5] dt-bindings: usb: dwc3: of-simple: add compatible for HiSi
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 6:34 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> On Wed, 2019-09-25 at 23:42 +0000, John Stultz wrote:
-> > +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
-> > @@ -0,0 +1,52 @@
-> > +HiSi SuperSpeed DWC3 USB SoC controller
-> > +
-> > +Required properties:
-> > +- compatible:                should contain "hisilicon,hi3660-dwc3" for HiSi SoC
-> > +- clocks:            A list of phandle + clock-specifier pairs for the
-> > +                     clocks listed in clock-names
-> > +- clock-names:               Should contain the following:
-> > +  "clk_usb3phy_ref"  Phy reference clk
-> It's not good idea to apply phy's clock in dwc3's node
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Hey! Thanks for taking a look at this!
 
-So first, my apologies, I'm not the driver author and I don't have any
-real specs on the hardware other then what's in the source tree I'm
-working on.  Not the ideal person to be documenting the binding, but I
-realized we still needed some binding documentation (although a few
-other dwc-of-simple compat entries are undocumented), so this is my
-rough stab at it. :/
+Hi,
 
-Given the name clk_usb3phy_ref I'm assuming its a phy reference clock,
-but I honestly don't know if I'm getting that wrong.  It all seems to
-be leveraging the fact that the dwc-of-simple driver batch enables and
-disables all the clocks w/o really looking at the names.
+David Laight <David.Laight@ACULAB.COM> writes:
+> From: Mathias Nyman
+>> Sent: 25 September 2019 15:48
+>>=20
+>> On 24.9.2019 17.45, alex zheng wrote:
+>> > Hi Mathias,
+> ...
+>> Logs show your transfer ring has four segments, but hardware fails to
+>> jump from the last segment back to first)
+>>=20
+>> Last TRB (LINK TRB) of each segment points to the next segment,
+>> last segments link trb points back to first segment.
+>>=20
+>> In your case:
+>> 0x1d117000 -> 0x1eb09000 -> 0x1eb0a000 -> 0x1dbda000 -> (back to 0x1d117=
+000)
+>>=20
+>> For some reason your hardware doesn't treat the last TRB at the last seg=
+ment
+>> as a LINK TRB, instead it just issues a transfer event for it, and conti=
+nues to
+>> the next address instead of jumping back to first segment:
+>
+> That could be a cache coherency (or flushing (etc)) issue.
 
-Do you have a recommendation for what would be best here? I suspect
-it's necessary to enable/disable the clk in a similar path(though I'm
-unfortunately traveling this week so I can't validate that). Do I try
-to move the clk_usb3phy_ref clock enable/disable handling to somewhere
-else?
+XHCI has a HW-configurable maximum number of segments in a ring. AFAICT,
+xhci driver doesn't take that into consideration today. Perhaps the HW
+in question doesn't like more than 3 segments.
 
-thanks
--john
+Mathias, what was the register to check this? Do you remember?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl2MUJAACgkQzL64meEa
+mQbp7RAA29UhryY8ZvesqrBPLKC0YqDrnqshqI4lAIWNaGoceXtglXKBI0sP7a7R
+PR1otqYYRPQ08HZdcssrb+0/JUqN1254diTxGWiWKfRDh0XUCVO9ltobxL+nAK5H
+52kgCHUIFb/+wnpYcBb8PZgvucXiHYyokVzdQTkw9h3hwlURM12zhnu2KhJyLjHM
+V08LJcyKU8jJM9yFOhygVNTBLHKeBITKHXgCSCxUwKUIg6cdmFv8IQvdn+ypIbBC
+2hkbt3IjWPy4RI5+YS+JpB2HlnLb9TWjKM1xXtma6deBRApD2in7o1As7APGbq+Z
+NZjlhAUgc7cGc7N0xjofaxaaYHPxnjc3cmE/2PIcntfazAe90Z2sRMK6S+SJ0E4j
+iUYnqAQg4x9dlm7Np9U+L0Vd9C1TAvrPS4Q+X19grvD6Lb2BGjh0CDH7UbYkefhH
+yLhExhk2Ir2C1kN/cdw6HC7uKj2MSpm42/x61/Gx1i2NWp0Hv7T4jfKrCr2x/hBZ
+MLDAxHIyKFfcVbuNPBH8pyG22VqSAeLHgDDIsu4RwPKUugiVWsZjTFf5eS0fzeAs
+iiacktq1G6nbiJn6yHd2mu0skQ0EZJze65+AOAO+L7iRdsc0kKl6zbk7UHmo8gKP
+YQ5qeXahUTYGHXVYG8UbCHMOie5hVX7zkaarWLwYqARbCSQ/51s=
+=o8PF
+-----END PGP SIGNATURE-----
+--=-=-=--
