@@ -2,135 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E345BEA34
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 03:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C80BEB18
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 06:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391178AbfIZBea (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Sep 2019 21:34:30 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:45848 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2388759AbfIZBe3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Sep 2019 21:34:29 -0400
-X-UUID: 02390ec3819943f59fad01eaed510d65-20190926
-X-UUID: 02390ec3819943f59fad01eaed510d65-20190926
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1057313941; Thu, 26 Sep 2019 09:34:20 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N2.mediatek.inc
- (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Thu, 26 Sep
- 2019 09:34:19 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Thu, 26 Sep 2019 09:34:17 +0800
-Message-ID: <1569461658.32135.12.camel@mhfsdcap03>
-Subject: Re: [PATCH 4/5] dt-bindings: usb: dwc3: of-simple: add compatible
- for HiSi
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     John Stultz <john.stultz@linaro.org>
-CC:     lkml <linux-kernel@vger.kernel.org>,
+        id S1726520AbfIZEGu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 00:06:50 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:35179 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726438AbfIZEGu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 00:06:50 -0400
+Received: by mail-wr1-f67.google.com with SMTP id v8so982978wrt.2
+        for <linux-usb@vger.kernel.org>; Wed, 25 Sep 2019 21:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6O3te8B9v8EP6DXpJUILeaiDwfu4hKzbhFKk3O+2hIc=;
+        b=v3tngBRzkkXSqdYaxFo8J7luIFDI39Ap3QuDsvssko/+ZHYvZuvrad7LKYrqWn91h+
+         7PGLiYa+aajdMpuogbeUQG3uwqfjFeU0Uy2i/HscJCvA0DDmSPgZXvUedBp+XsButXN1
+         popFqiRWQbu3GOuijlgg9In8sebmnJQlTBTfHZc73ic4kkFFJd73rxDM2TWM4a+ZWa0t
+         pJ4BEH7j4LlPSfEru9bRZGRXRme/NKEG1OTinK8bg0lq9vfj3ejSGkacxvmU7QpQfYnr
+         rEo4EewiFnPDtCfjV1o5V6SmGG4k7zRPL932ypV1FIv3YZpiFhK/hV1f9FuZtEDIC0fp
+         0j7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6O3te8B9v8EP6DXpJUILeaiDwfu4hKzbhFKk3O+2hIc=;
+        b=i+n/XJTm8b/dCnKWZSAaeE41Vp4CU4QMPks3hZDva44wDfMIDnxCQzjp+/OwSA1Qi7
+         ZW6Psk9TfJN2I/q9PVt9pbat+ulL0saPlKq3chsgtJv7IsRvCah2WJoJ56gqkE7HmrvQ
+         CF2WtgNjwFg5+ndH7Ge96DYni5bh0hDJOTHRDJ2/qDbMESi66hqu3b6daoKW1NCfVTRJ
+         tgQN6A8aZfSmEfwQRsA5K6MjaqkaOYQMbZYEVtGTwM7FvD/J+ic776DJcKlE3O5EQSwg
+         wZlkayRreS9T5i12Hg3MfP0OeqgpFPHON6tL8ZBW763N1MMVSk3ys5w+oZtp3JIRlOAm
+         HHKw==
+X-Gm-Message-State: APjAAAXBqXk5DQozbNsluRcMYChyvZOWiVimolafvK2etic0iLL+8F/s
+        DTtlZgHAZcr5B5QUvt62PtG4lvu+oXprN3VUNH+IBA==
+X-Google-Smtp-Source: APXvYqxi/aX/Sa4He/GsphASBb2GpvqD6GZsxYhQ8cRbVT/ddgFXaL5HlvJdKn0pRwCVZ5q5FZsT6iLR5jdo5KkMGYs=
+X-Received: by 2002:adf:d08b:: with SMTP id y11mr1171535wrh.50.1569470807953;
+ Wed, 25 Sep 2019 21:06:47 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190925234224.95216-1-john.stultz@linaro.org>
+ <20190925234224.95216-5-john.stultz@linaro.org> <1569461658.32135.12.camel@mhfsdcap03>
+In-Reply-To: <1569461658.32135.12.camel@mhfsdcap03>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 25 Sep 2019 21:06:34 -0700
+Message-ID: <CALAqxLX=csTtnqr2Hc9v_R8ex8zPj_P1JvSyjZXUKEqSaF=gPA@mail.gmail.com>
+Subject: Re: [PATCH 4/5] dt-bindings: usb: dwc3: of-simple: add compatible for HiSi
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>,
-        "Andy Shevchenko" <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Yu Chen <chenyu56@huawei.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
-Date:   Thu, 26 Sep 2019 09:34:18 +0800
-In-Reply-To: <20190925234224.95216-5-john.stultz@linaro.org>
-References: <20190925234224.95216-1-john.stultz@linaro.org>
-         <20190925234224.95216-5-john.stultz@linaro.org>
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: F93ADA76283739A391119E64EF2F43EF159D1815EA94474BA56A6CF3A64D18CB2000:8
-X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2019-09-25 at 23:42 +0000, John Stultz wrote:
-> Add necessary compatible flag for HiSi's DWC3 so
-> dwc3-of-simple will probe.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->  .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/hisi,dwc3.txt b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
-> new file mode 100644
-> index 000000000000..dc31b8a3c006
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
-> @@ -0,0 +1,52 @@
-> +HiSi SuperSpeed DWC3 USB SoC controller
-> +
-> +Required properties:
-> +- compatible:		should contain "hisilicon,hi3660-dwc3" for HiSi SoC
-> +- clocks:		A list of phandle + clock-specifier pairs for the
-> +			clocks listed in clock-names
-> +- clock-names:		Should contain the following:
-> +  "clk_usb3phy_ref"	Phy reference clk
-It's not good idea to apply phy's clock in dwc3's node
+On Wed, Sep 25, 2019 at 6:34 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> On Wed, 2019-09-25 at 23:42 +0000, John Stultz wrote:
+> > +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> > @@ -0,0 +1,52 @@
+> > +HiSi SuperSpeed DWC3 USB SoC controller
+> > +
+> > +Required properties:
+> > +- compatible:                should contain "hisilicon,hi3660-dwc3" for HiSi SoC
+> > +- clocks:            A list of phandle + clock-specifier pairs for the
+> > +                     clocks listed in clock-names
+> > +- clock-names:               Should contain the following:
+> > +  "clk_usb3phy_ref"  Phy reference clk
+> It's not good idea to apply phy's clock in dwc3's node
 
-> +  "aclk_usb3otg"	USB3 OTG aclk
-> +
-> +- assigned-clocks:	Should be:
-> +				HI3660_ACLK_GATE_USB3OTG
-> +- assigned-clock-rates: Should be:
-> +				229Mhz (229000000) for HI3660_ACLK_GATE_USB3OTG
-> +
-> +Optional properties:
-> +- resets:		Phandle to reset control that resets core and wrapper.
-> +
-> +Required child node:
-> +A child node must exist to represent the core DWC3 IP block. The name of
-> +the node is not important. The content of the node is defined in dwc3.txt.
-> +
-> +Example device nodes:
-> +
-> +	usb3: hisi_dwc3 {
-> +		compatible = "hisilicon,hi3660-dwc3";
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +
-> +		clocks = <&crg_ctrl HI3660_CLK_ABB_USB>,
-> +			 <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
-> +		clock-names = "clk_usb3phy_ref", "aclk_usb3otg";
-> +
-> +		assigned-clocks = <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
-> +		assigned-clock-rates = <229 000 000>;
-> +		resets = <&crg_rst 0x90 8>,
-> +			 <&crg_rst 0x90 7>,
-> +			 <&crg_rst 0x90 6>,
-> +			 <&crg_rst 0x90 5>;
-> +
-> +		dwc3: dwc3@ff100000 {
-> +			compatible = "snps,dwc3";
-> +			reg = <0x0 0xff100000 0x0 0x100000>;
-> +			interrupts = <0 159 4>, <0 161 4>;
-> +			phys = <&usb_phy>;
-> +			phy-names = "usb3-phy";
-> +			dr_mode = "otg";
-> +
-> +			...
-> +		};
-> +	};
+Hey! Thanks for taking a look at this!
 
+So first, my apologies, I'm not the driver author and I don't have any
+real specs on the hardware other then what's in the source tree I'm
+working on.  Not the ideal person to be documenting the binding, but I
+realized we still needed some binding documentation (although a few
+other dwc-of-simple compat entries are undocumented), so this is my
+rough stab at it. :/
 
+Given the name clk_usb3phy_ref I'm assuming its a phy reference clock,
+but I honestly don't know if I'm getting that wrong.  It all seems to
+be leveraging the fact that the dwc-of-simple driver batch enables and
+disables all the clocks w/o really looking at the names.
+
+Do you have a recommendation for what would be best here? I suspect
+it's necessary to enable/disable the clk in a similar path(though I'm
+unfortunately traveling this week so I can't validate that). Do I try
+to move the clk_usb3phy_ref clock enable/disable handling to somewhere
+else?
+
+thanks
+-john
