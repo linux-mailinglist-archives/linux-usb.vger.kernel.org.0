@@ -2,76 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DF6FBEE29
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 11:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089D5BEE46
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 11:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730203AbfIZJMx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 05:12:53 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45952 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729167AbfIZJMw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 05:12:52 -0400
-Received: by mail-lf1-f65.google.com with SMTP id r134so1105675lff.12
-        for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2019 02:12:50 -0700 (PDT)
+        id S1730348AbfIZJRr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 05:17:47 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:43175 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730335AbfIZJRq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 05:17:46 -0400
+Received: by mail-lj1-f196.google.com with SMTP id n14so1358482ljj.10
+        for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2019 02:17:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W6g3+KXN9nBLb0Uwpf/8bB5Xk3DTcHgFK/ix1KLsES8=;
-        b=r2hvidtQn0wnv7s+FTNtQeh2KDL41v8gfyW/iTlFd9rSBwWM3zg5EkUtOJHqDD/qej
-         7saLPJsOck0uO3bwiPHLA6HhBud3GxVjXWxSO9FSgPOen1FS4SO1p2AZo29+2dMAwOEt
-         luvBKXw+YW4yF8UPgdpGQ2aEpORZxPT32kYjI/N8YLAbecl6yXMHWFz5XbuRhNJcMAKf
-         Dh8z7fr/R9D3fiyU+gKsxmWX0pPgMp60KOtIVLLYISHHs26z3q4O6ltLbqYJQIKfzuMl
-         ZLS++Y9ijLgkngrvIxoY8yfWpHxWiYskdGWa7ynYnZKi0R7umsjAb9THHnA0bAj54bku
-         yBmQ==
-X-Gm-Message-State: APjAAAXJ2iHGQCa+hLHpjVDlga7DdZK9fwBa9h7mpP3KisWmJ21PL2RS
-        s0fNNB3JQOkS7MrLNPx3Qrj+L4gh
-X-Google-Smtp-Source: APXvYqy9V8KtRhhgRRKU/Oehvs/pafWUqHDY8nkdogzkUfJSd1HTDXqZ8trhUhP5FjM8KJPMk13U8A==
-X-Received: by 2002:ac2:4ad9:: with SMTP id m25mr1515269lfp.89.1569489168648;
-        Thu, 26 Sep 2019 02:12:48 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=0u6rrDRUIsJUjxZzWMSPecOLQLJ1MnJXdNIrR7lLXrQ=;
+        b=f9K0vEzjO5SNk4LXtTrwI3wbY6O3IRCqocM7KSEo4wcITCJe46dQbDoscE60lEoQ0a
+         lVffirN4ODimAtYxOsMfP/Nx/Petq+OeSnaPePK5N3Gw6mwI8QznCRzCVA4L22fAG/py
+         laMC51hM9H0792psoTDeZyMhquCFk6MPDHEN14vUz265G+xqdNElo+Ki6/imryeHLGqF
+         uoe+GmtzsDIAOSeiJ2eaBE49ltg9/WbQ0Gt4SKIUhLgkD09s9UG8ltsYICai4xK+9AL9
+         rhTX8SX0ZSbly5GmjDIQSwQwk/62g7sHZaKWA+cpQAzt6LZfVye+6fF8K00fbylFK1p0
+         qX1Q==
+X-Gm-Message-State: APjAAAVxFvVCgZ9w76oHgm02ymKSeurOG4G4WhyJhv8Bn1aBpJ3ZuXBi
+        oIhrUmD8CsraJxrmCnxCE4CdNaV9
+X-Google-Smtp-Source: APXvYqwIArtIS2M82ResGuQ2BAmpiA207SHW4kfZEGqZvseuS9QNkoxWOdFvHjPx79jvzHNEswsewQ==
+X-Received: by 2002:a2e:1246:: with SMTP id t67mr1875615lje.174.1569489464989;
+        Thu, 26 Sep 2019 02:17:44 -0700 (PDT)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id i6sm401519lfc.37.2019.09.26.02.12.44
+        by smtp.gmail.com with ESMTPSA id 4sm376750ljv.87.2019.09.26.02.17.44
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Sep 2019 02:12:45 -0700 (PDT)
+        Thu, 26 Sep 2019 02:17:44 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iDPpS-0006R7-Gv; Thu, 26 Sep 2019 11:12:50 +0200
+        (envelope-from <johan@kernel.org>)
+        id 1iDPuI-0006XX-Ba; Thu, 26 Sep 2019 11:17:50 +0200
+Date:   Thu, 26 Sep 2019 11:17:50 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 4/4] USB: usblcd: use pr_err()
-Date:   Thu, 26 Sep 2019 11:12:28 +0200
-Message-Id: <20190926091228.24634-10-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190926091228.24634-1-johan@kernel.org>
+Subject: Re: [PATCH 0/4] USB: usblcd: disconnect fix and locking clean ups
+Message-ID: <20190926091750.GJ14159@localhost>
 References: <20190926091228.24634-1-johan@kernel.org>
+ <20190926091228.24634-6-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190926091228.24634-6-johan@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace the one remaining printk with pr_err().
+On Thu, Sep 26, 2019 at 11:12:24AM +0200, Johan Hovold wrote:
+> This series fixes a failure to stop I/O on disconnect() in the usblcd
+> driver. Turns out there was a lot of legacy cruft in this driver which
+> could simply be removed.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/misc/usblcd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My apologies for the double post.
 
-diff --git a/drivers/usb/misc/usblcd.c b/drivers/usb/misc/usblcd.c
-index 732eb1f81368..61e9e987fe4a 100644
---- a/drivers/usb/misc/usblcd.c
-+++ b/drivers/usb/misc/usblcd.c
-@@ -84,7 +84,7 @@ static int lcd_open(struct inode *inode, struct file *file)
- 
- 	interface = usb_find_interface(&lcd_driver, subminor);
- 	if (!interface) {
--		printk(KERN_ERR "USBLCD: %s - error, can't find device for minor %d\n",
-+		pr_err("USBLCD: %s - error, can't find device for minor %d\n",
- 		       __func__, subminor);
- 		return -ENODEV;
- 	}
--- 
-2.23.0
-
+Johan
