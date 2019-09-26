@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0CD8BEF44
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 12:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE63BEF45
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 12:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726271AbfIZKHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 06:07:35 -0400
+        id S1726289AbfIZKHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 06:07:36 -0400
 Received: from mga14.intel.com ([192.55.52.115]:2189 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725951AbfIZKHe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Sep 2019 06:07:34 -0400
+        id S1725951AbfIZKHg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Sep 2019 06:07:36 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Sep 2019 03:07:33 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 26 Sep 2019 03:07:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,551,1559545200"; 
-   d="scan'208";a="203825687"
+   d="scan'208";a="203825689"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 26 Sep 2019 03:07:33 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 26 Sep 2019 03:07:34 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Ajay Gupta <ajayg@nvidia.com>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 04/14] usb: typec: tcpm: Start using struct typec_operations
-Date:   Thu, 26 Sep 2019 13:07:22 +0300
-Message-Id: <20190926100727.71117-5-heikki.krogerus@linux.intel.com>
+Subject: [PATCH 05/14] usb: typec: tps6598x: Start using struct typec_operations
+Date:   Thu, 26 Sep 2019 13:07:23 +0300
+Message-Id: <20190926100727.71117-6-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20190926100727.71117-1-heikki.krogerus@linux.intel.com>
 References: <20190926100727.71117-1-heikki.krogerus@linux.intel.com>
@@ -38,132 +38,132 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Supplying the operation callbacks as part of a struct
 typec_operations instead of as part of struct
-typec_capability during port registration.
+typec_capability during port registration. After this there
+is not need to keep the capabilities stored anywhere in the
+driver.
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 47 ++++++++++++++++-------------------
- 1 file changed, 21 insertions(+), 26 deletions(-)
+ drivers/usb/typec/tps6598x.c | 49 +++++++++++++++++++-----------------
+ 1 file changed, 26 insertions(+), 23 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 96562744101c..0fde7e042d5f 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -390,12 +390,6 @@ static enum tcpm_state tcpm_default_state(struct tcpm_port *port)
- 	return SRC_UNATTACHED;
- }
+diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
+index a38d1409f15b..0698addd1185 100644
+--- a/drivers/usb/typec/tps6598x.c
++++ b/drivers/usb/typec/tps6598x.c
+@@ -94,7 +94,6 @@ struct tps6598x {
+ 	struct typec_port *port;
+ 	struct typec_partner *partner;
+ 	struct usb_pd_identity partner_identity;
+-	struct typec_capability typec_cap;
+ };
  
--static inline
--struct tcpm_port *typec_cap_to_tcpm(const struct typec_capability *cap)
--{
--	return container_of(cap, struct tcpm_port, typec_caps);
--}
--
- static bool tcpm_port_is_disconnected(struct tcpm_port *port)
- {
- 	return (!port->attached && port->cc1 == TYPEC_CC_OPEN &&
-@@ -3970,10 +3964,9 @@ void tcpm_pd_hard_reset(struct tcpm_port *port)
- }
- EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
- 
--static int tcpm_dr_set(const struct typec_capability *cap,
--		       enum typec_data_role data)
-+static int tcpm_dr_set(struct typec_port *p, enum typec_data_role data)
- {
--	struct tcpm_port *port = typec_cap_to_tcpm(cap);
-+	struct tcpm_port *port = typec_get_drvdata(p);
- 	int ret;
- 
- 	mutex_lock(&port->swap_lock);
-@@ -4038,10 +4031,9 @@ static int tcpm_dr_set(const struct typec_capability *cap,
- 	return ret;
- }
- 
--static int tcpm_pr_set(const struct typec_capability *cap,
--		       enum typec_role role)
-+static int tcpm_pr_set(struct typec_port *p, enum typec_role role)
- {
--	struct tcpm_port *port = typec_cap_to_tcpm(cap);
-+	struct tcpm_port *port = typec_get_drvdata(p);
- 	int ret;
- 
- 	mutex_lock(&port->swap_lock);
-@@ -4082,10 +4074,9 @@ static int tcpm_pr_set(const struct typec_capability *cap,
- 	return ret;
- }
- 
--static int tcpm_vconn_set(const struct typec_capability *cap,
--			  enum typec_role role)
-+static int tcpm_vconn_set(struct typec_port *p, bool source)
- {
--	struct tcpm_port *port = typec_cap_to_tcpm(cap);
-+	struct tcpm_port *port = typec_get_drvdata(p);
- 	int ret;
- 
- 	mutex_lock(&port->swap_lock);
-@@ -4096,7 +4087,7 @@ static int tcpm_vconn_set(const struct typec_capability *cap,
- 		goto port_unlock;
- 	}
- 
--	if (role == port->vconn_role) {
-+	if (source == port->vconn_role) {
- 		ret = 0;
- 		goto port_unlock;
- 	}
-@@ -4122,9 +4113,9 @@ static int tcpm_vconn_set(const struct typec_capability *cap,
- 	return ret;
- }
- 
--static int tcpm_try_role(const struct typec_capability *cap, int role)
-+static int tcpm_try_role(struct typec_port *p, int role)
- {
--	struct tcpm_port *port = typec_cap_to_tcpm(cap);
-+	struct tcpm_port *port = typec_get_drvdata(p);
- 	struct tcpc_dev	*tcpc = port->tcpc;
- 	int ret = 0;
- 
-@@ -4331,10 +4322,9 @@ static void tcpm_init(struct tcpm_port *port)
- 	tcpm_set_state(port, PORT_RESET, 0);
- }
- 
--static int tcpm_port_type_set(const struct typec_capability *cap,
--			      enum typec_port_type type)
-+static int tcpm_port_type_set(struct typec_port *p, enum typec_port_type type)
- {
--	struct tcpm_port *port = typec_cap_to_tcpm(cap);
-+	struct tcpm_port *port = typec_get_drvdata(p);
- 
- 	mutex_lock(&port->lock);
- 	if (type == port->port_type)
-@@ -4359,6 +4349,14 @@ static int tcpm_port_type_set(const struct typec_capability *cap,
+ /*
+@@ -307,11 +306,10 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
  	return 0;
  }
  
-+static const struct typec_operations tcpm_ops = {
-+	.try_role = tcpm_try_role,
-+	.dr_set = tcpm_dr_set,
-+	.pr_set = tcpm_pr_set,
-+	.vconn_set = tcpm_vconn_set,
-+	.port_type_set = tcpm_port_type_set
+-static int
+-tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
++static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
+ {
+-	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
+ 	const char *cmd = (role == TYPEC_DEVICE) ? "SWUF" : "SWDF";
++	struct tps6598x *tps = typec_get_drvdata(port);
+ 	u32 status;
+ 	int ret;
+ 
+@@ -338,11 +336,10 @@ tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
+ 	return ret;
+ }
+ 
+-static int
+-tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
++static int tps6598x_pr_set(struct typec_port *port, enum typec_role role)
+ {
+-	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
+ 	const char *cmd = (role == TYPEC_SINK) ? "SWSk" : "SWSr";
++	struct tps6598x *tps = typec_get_drvdata(port);
+ 	u32 status;
+ 	int ret;
+ 
+@@ -369,6 +366,11 @@ tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
+ 	return ret;
+ }
+ 
++static const struct typec_operations tps6598x_ops = {
++	.dr_set = tps6598x_dr_set,
++	.pr_set = tps6598x_pr_set,
 +};
 +
- void tcpm_tcpc_reset(struct tcpm_port *port)
+ static irqreturn_t tps6598x_interrupt(int irq, void *data)
  {
- 	mutex_lock(&port->lock);
-@@ -4770,11 +4768,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
- 	port->typec_caps.fwnode = tcpc->fwnode;
- 	port->typec_caps.revision = 0x0120;	/* Type-C spec release 1.2 */
- 	port->typec_caps.pd_revision = 0x0300;	/* USB-PD spec release 3.0 */
--	port->typec_caps.dr_set = tcpm_dr_set;
--	port->typec_caps.pr_set = tcpm_pr_set;
--	port->typec_caps.vconn_set = tcpm_vconn_set;
--	port->typec_caps.try_role = tcpm_try_role;
--	port->typec_caps.port_type_set = tcpm_port_type_set;
-+	port->typec_caps.driver_data = port;
-+	port->typec_caps.ops = &tcpm_ops;
+ 	struct tps6598x *tps = data;
+@@ -448,6 +450,7 @@ static const struct regmap_config tps6598x_regmap_config = {
  
- 	port->partner_desc.identity = &port->partner_ident;
- 	port->port_type = port->typec_caps.type;
+ static int tps6598x_probe(struct i2c_client *client)
+ {
++	struct typec_capability typec_cap = { };
+ 	struct tps6598x *tps;
+ 	u32 status;
+ 	u32 conf;
+@@ -492,40 +495,40 @@ static int tps6598x_probe(struct i2c_client *client)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	tps->typec_cap.revision = USB_TYPEC_REV_1_2;
+-	tps->typec_cap.pd_revision = 0x200;
+-	tps->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+-	tps->typec_cap.pr_set = tps6598x_pr_set;
+-	tps->typec_cap.dr_set = tps6598x_dr_set;
++	typec_cap.revision = USB_TYPEC_REV_1_2;
++	typec_cap.pd_revision = 0x200;
++	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
++	typec_cap.driver_data = tps;
++	typec_cap.ops = &tps6598x_ops;
+ 
+ 	switch (TPS_SYSCONF_PORTINFO(conf)) {
+ 	case TPS_PORTINFO_SINK_ACCESSORY:
+ 	case TPS_PORTINFO_SINK:
+-		tps->typec_cap.type = TYPEC_PORT_SNK;
+-		tps->typec_cap.data = TYPEC_PORT_UFP;
++		typec_cap.type = TYPEC_PORT_SNK;
++		typec_cap.data = TYPEC_PORT_UFP;
+ 		break;
+ 	case TPS_PORTINFO_DRP_UFP_DRD:
+ 	case TPS_PORTINFO_DRP_DFP_DRD:
+-		tps->typec_cap.type = TYPEC_PORT_DRP;
+-		tps->typec_cap.data = TYPEC_PORT_DRD;
++		typec_cap.type = TYPEC_PORT_DRP;
++		typec_cap.data = TYPEC_PORT_DRD;
+ 		break;
+ 	case TPS_PORTINFO_DRP_UFP:
+-		tps->typec_cap.type = TYPEC_PORT_DRP;
+-		tps->typec_cap.data = TYPEC_PORT_UFP;
++		typec_cap.type = TYPEC_PORT_DRP;
++		typec_cap.data = TYPEC_PORT_UFP;
+ 		break;
+ 	case TPS_PORTINFO_DRP_DFP:
+-		tps->typec_cap.type = TYPEC_PORT_DRP;
+-		tps->typec_cap.data = TYPEC_PORT_DFP;
++		typec_cap.type = TYPEC_PORT_DRP;
++		typec_cap.data = TYPEC_PORT_DFP;
+ 		break;
+ 	case TPS_PORTINFO_SOURCE:
+-		tps->typec_cap.type = TYPEC_PORT_SRC;
+-		tps->typec_cap.data = TYPEC_PORT_DFP;
++		typec_cap.type = TYPEC_PORT_SRC;
++		typec_cap.data = TYPEC_PORT_DFP;
+ 		break;
+ 	default:
+ 		return -ENODEV;
+ 	}
+ 
+-	tps->port = typec_register_port(&client->dev, &tps->typec_cap);
++	tps->port = typec_register_port(&client->dev, &typec_cap);
+ 	if (IS_ERR(tps->port))
+ 		return PTR_ERR(tps->port);
+ 
 -- 
 2.23.0
 
