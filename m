@@ -2,108 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5171ABFB3C
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 00:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8EE3BFC15
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 01:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbfIZWIu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 18:08:50 -0400
-Received: from esa3.hgst.iphmx.com ([216.71.153.141]:22768 "EHLO
-        esa3.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfIZWIu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 18:08:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1569535730; x=1601071730;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Hgy6DAPZl0jWum/D86Hr5Fth9vxPUwrThvnxsFiiasc=;
-  b=Gv4RwGk2SHc8W1yMbMk46SSozKpO8eYiSZ9MSHy8wDsDMUhik0LA7jJ1
-   8bZY8AT8NWKQj7ilPZE4SCa+66Ug89Jxge9Sd34C0Td/mDCaY+15sn6vk
-   +la6buQb2COL2Z0tReTA7H3z3xEln1lqAL2uOSaYnjSoPkM+zH6+/q1aY
-   mzoVKxBQoWCeHUV3nCQOfsJJ26IQBISQdMJhLAT4OYJwvN/bd/vExeDC/
-   4Lx9BJHsKMyeQbpSdgE98WzhLyJQAHlMG56t4ZcrrsCpqGrjEZgrg5xMv
-   +wD7+dDNktbIWx1uhx2by/OI4FDveLKyh8bqWXnQcr8bykNP9yQ3hRtfi
-   w==;
-IronPort-SDR: dZkOm3eoQWFJ/9gTuwRCHp4o5Dv8I6ATHsk9rkGX4PtOkuSlL2lCaBtv/e4CpSkZXwEPZDUUM3
- /jrZb8fwni4pKjJID48BgTtnazfTOuWuddf92/it0yAAYyIozV6W78IbK9wE3hSM4OQRe7S/On
- HVeuIQTxOhPa6fWKnzBI63FLl1ZAxG7jWRlg0E4R7JdU8dU9GOg4L5jUUaf+5gUY5KERa3T7IZ
- xGtm0haYwyGmsFrW6DC+E7VD7P1f31vfn2LeQdcdCahzsVdd2vjLKUyAHkRPZRO9vXWSjFd4XN
- Od0=
-X-IronPort-AV: E=Sophos;i="5.64,553,1559491200"; 
-   d="scan'208";a="123681607"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 27 Sep 2019 06:08:49 +0800
-IronPort-SDR: pmijeaBlyYfn0ErJ/LU8MQX69Qqm1+TIlo1PfZsqkHmRJAlQ2nuGewRDLHwLxq+L7pb4qj7SXf
- 5YjeDKr6mrcm6quX/ViG0zHbbeZ5WyHeTxgNFTrr4gEkx9WYFba62dADbkYxldPVJvG1v+jNoc
- B4LvPRxfdwnjMQwGD0Edj6N82Y4hyebpBXCPduem2WBZFaoq7St29lFpQSdOs87seFiNE2oSyB
- 7OuQ5x+VdCs8x57fYsOSvNAmjL3O7KG2E9Uh5kJzEgHYwtLWi3Q+ymAJA9TGgUm+F/bvaT7kRU
- 85o5blztRiCFMT9qldkvUnY1
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2019 15:05:09 -0700
-IronPort-SDR: 9zpNuZr0vL+FQiZahPvvSOPlN/37C3hgKudFHglsD3aYQMXbBOTAvOgQZtxQYOVkVyoGd4V+vU
- b8ppPc7GBwbaTEHjhxMZGC3GB0kPBYiIaZM2GiSMOZLYhuyq1IWQ8WUQuvryFTAgOrO59St5Kz
- df6w8FlhBblJxXY6vHra7k08n8U14WXc5r9d4SUmtiqSAdcs6stpMMtMd2eYTwolGRWWKaSL9l
- 8gNAtVAHexT2wvTsuRXmFfwrp4zeerBFR3Et7DDRm2EZMGmdQrmC/R7l/U1uY0jLPhQKG3wkD4
- qwg=
-WDCIronportException: Internal
-Received: from washi.fujisawa.hgst.com ([10.149.53.254])
-  by uls-op-cesaip01.wdc.com with ESMTP; 26 Sep 2019 15:08:48 -0700
-From:   Damien Le Moal <damien.lemoal@wdc.com>
-To:     linux-scsi@vger.kernel.org,
+        id S1729047AbfIZX5S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 19:57:18 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:45663 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728441AbfIZX5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 19:57:17 -0400
+Received: (qmail 26841 invoked by uid 500); 26 Sep 2019 19:57:16 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Sep 2019 19:57:16 -0400
+Date:   Thu, 26 Sep 2019 19:57:16 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+cc:     linux-scsi@vger.kernel.org,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-Subject: [PATCH 2/2] usb: Clear scsi command resid when residue is 0
-Date:   Fri, 27 Sep 2019 07:08:44 +0900
-Message-Id: <20190926220844.26631-3-damien.lemoal@wdc.com>
-X-Mailer: git-send-email 2.21.0
+        <linux-usb@vger.kernel.org>,
+        <usb-storage@lists.one-eyed-alien.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH 0/2] Fix SCSI & USB Storage CHECK CONDITION handling
 In-Reply-To: <20190926220844.26631-1-damien.lemoal@wdc.com>
-References: <20190926220844.26631-1-damien.lemoal@wdc.com>
+Message-ID: <Pine.LNX.4.44L0.1909261943230.24988-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A scsi command terminated with CHECK CONDITION is hijacked to execute
-request sense with the original command information preserved and
-restored respectively with scsi_eh_prep_cmnd() and
-scsi_eh_restore_cmnd() in usb_stor_invoke_transport(). This means that
-if the original command is retried, the command resid may not be 0,
-indicating the residual at the time of the previous failed execution. If
-the command is retried and fully succeed, the residual of 0 should thus
-be set, always, to avoid reporting to the upper layer an incorrect
-non-zero residual.
+On Fri, 27 Sep 2019, Damien Le Moal wrote:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
----
- drivers/usb/storage/transport.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+> If a non-passthrough command is terminated with a CHECK CONDITION, the
+> scsi error recovery code reuses the failed command scsi_cmnd structure
+> to process error recovery request sense. To preserve information
+> regarding the failed command, the functions scsi_eh_prep_cmnd() and
+> scsi_eh_restore_cmnd() respectively save and restore the original
+> command information. However, the resid field of the failed command
+> request structure is not preserved and reused for the request sense
+> handling, leading to the original command having an incorrect resid
+> when:
+> A) The command is not retried and terminated with an error
+> B) The command completes after retry and the underlying LLD does not set
+>    resid for a fully completed command (resid=0)
+> 
+> The first patch of this series addresses case (A) above by adding resid
+> as part of the command information saved using struct scsi_eh_save.
 
-diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
-index 96cb0409dd89..c69fcbe467ef 100644
---- a/drivers/usb/storage/transport.c
-+++ b/drivers/usb/storage/transport.c
-@@ -1287,6 +1287,15 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
- 			scsi_set_resid(srb, max(scsi_get_resid(srb),
- 			                                       (int) residue));
- 		}
-+	} else if (!residue) {
-+		/*
-+		 * The command may have been retried after a CHECK CONDITION
-+		 * failure and autosense execution, which can result in resid
-+		 * to indicate the residual at the time of the failure instead
-+		 * of 0. Clear the resid here to indicate that the command
-+		 * fully completed.
-+		 */
-+		scsi_set_resid(srb, 0);
- 	}
- 
- 	/* based on the status code, we report good or bad */
--- 
-2.21.0
+Good catch.
+
+> Case B can be observed with a WD My Book USB disks when a read or write
+> command is sent to the disk while the disk is in deep sleep mode
+> (spun down) due to a long period of inactivity (~30min).
+> In such case, the following command sequence happen:
+> 1) The read or write command is terminated after a few seconds with
+>    CHECK CONDITION and an asc/ascq of 04/01 (LOGICAL UNIT IS IN PROCESS
+>    OF BECOMING READY)
+> 2) In response to this failure, the USB mass storage driver triggers
+>    autosense processing, reusing the command descriptor to issue a
+>    request sense command with a 96B sense buffer size. The reply
+>    to this command gives a NOT READY / LOGICAL UNIT IS IN PROCESS
+>    OF BECOMING READY sense of 18B, resulting in a resid of 78B.
+> 3) The original command is retried and failed again, with step 2
+>    repeated, until the drive spins up and becomes ready.
+> 4) When the original command completes after the drive has become ready,
+>    the request sense command resid of 78B is seen by the scsi disk
+>    driver sd_done() function and wrongly generates a warning about the
+>    unaligned value reported.
+
+But with the 1/1 patch in place, 4 won't happen any more, right?  
+sd_done() will see the resid from the successful read or write.
+
+> This problem is fixed in patch 2 by always setting a command resid to 0
+> when there is no residual in usb_stor_Bulk_transport(). Note that
+> usb_stor_CB_transport() does not need changes since usb_stor_bulk_srb()
+> always sets the resid for a completed command, regardless of the
+> residual value.
+
+Exactly the same reasoning shows that usb_stor_Bulk_transport() also
+does not need changes, doesn't it?  Which means that patch 2/2 is 
+unnecessary.
+
+Alan Stern
+
+PS: The correct term is "residue", not "residual".  I know that the 
+code sometimes uses the wrong word.
 
