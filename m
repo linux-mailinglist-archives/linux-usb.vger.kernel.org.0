@@ -2,152 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7555BFAC2
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 22:51:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4432BFACF
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 23:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728880AbfIZUvQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 16:51:16 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:40792 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728855AbfIZUvP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 16:51:15 -0400
-Received: by mail-qk1-f196.google.com with SMTP id y144so200886qkb.7
-        for <linux-usb@vger.kernel.org>; Thu, 26 Sep 2019 13:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UFXRrFau2iJzsurfLrZlI44R9YQ5W58lJvvcXaxbZxI=;
-        b=KfUP2SE/YczAT4JhpCDujik7WoLJGyfqT3XGtzKI3SNB9DXBFNzL5mRonozZ1n2YQP
-         LJr2eSJSaF5hXp3ti/nJwV7A5FTVzR7PfNvyyF6wpTOQaAg3HkdZCJJSZraM5Ec8+pzT
-         whmvG1e7OsMifGARMfI3T70qIMuG5fdAVlS+o=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UFXRrFau2iJzsurfLrZlI44R9YQ5W58lJvvcXaxbZxI=;
-        b=DbvrHpkZ2RvtIh9ueHjwxMtNSGMSlfo8ACIUkzWRnlX8fqYUZO2ekOiw8jrXf5mKpD
-         bmsUE6ZM3O584lRwDG3DlZ+RgyhRnD0rJxRSPF8TVrFzRbR3NY4560acSHkrGmudnlMg
-         gw5D6mFedImDSPHIbNZnNl/Ad1CokyPuteceWi327gBZixqDOJtqcF48sEuwRWpPMcm9
-         3mkSvscjU8d23TFMAGpuw01iEHT+aesOZ+auiUrVPsrJCiRwJzWeJNse6ZgZDva3o/Nh
-         IWfgalG8mg5sWljR9lkKXmZ/YYT3MkgCBZ5zhgd1DANYzoLltiSPIBBA5m5fVLMB+hG8
-         kPXQ==
-X-Gm-Message-State: APjAAAXTa6WMbQA1plnooyB2ySW/gSR7p7cTJ8D2YhJphyg/zg5xUJbT
-        1UW6dIFIY1Oc3TY+Cf0BXrUlNNfGrFjc/HtOS/43qA==
-X-Google-Smtp-Source: APXvYqyOH46/TFqgHUrRLcD+R2H/hvTOilF7SBW1cOWfI7cZ6m4E2KFuCxu8bdmVWQs6LfcrJZg983Bh2DYShcIK4bE=
-X-Received: by 2002:a37:498f:: with SMTP id w137mr855825qka.419.1569531073398;
- Thu, 26 Sep 2019 13:51:13 -0700 (PDT)
+        id S1728816AbfIZVDb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 17:03:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:50017 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727816AbfIZVDb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 17:03:31 -0400
+Received: (qmail 13986 invoked by uid 500); 26 Sep 2019 17:03:30 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Sep 2019 17:03:30 -0400
+Date:   Thu, 26 Sep 2019 17:03:30 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+cc:     linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: general protection fault in usb_set_interface
+In-Reply-To: <000000000000cc588d05937a1659@google.com>
+Message-ID: <Pine.LNX.4.44L0.1909261637510.29542-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <CANFp7mX=THOVk-4TgSSscgtm598txqesDZYKE2sFtEVNHjN+-g@mail.gmail.com>
- <Pine.LNX.4.44L0.1909181442330.1507-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909181442330.1507-100000@iolanthe.rowland.org>
-From:   Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date:   Thu, 26 Sep 2019 13:51:02 -0700
-Message-ID: <CANFp7mWj8V=Hyo7b0xisYVde2dC9Ju0Rc+ituftnjcqXMuD5GA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Reset realtek bluetooth devices during user suspend
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-bluetooth@vger.kernel.org, linux-usb@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Hui Peng <benquike@gmail.com>, linux-pm@vger.kernel.org,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Wolfram Sang <wsa@the-dreams.de>, linux-kernel@vger.kernel.org,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Len Brown <len.brown@intel.com>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        Dmitry Torokhov <dtor@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mans Rullgard <mans@mansr.com>, Pavel Machek <pavel@ucw.cz>,
-        YueHaibing <yuehaibing@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 11:51 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Wed, 18 Sep 2019, Abhishek Pandit-Subedi wrote:
->
-> > Sorry, last reply went out with HTML. Re-sending in plain text.
-> >
-> > On Wed, Sep 18, 2019 at 7:23 AM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Tue, 17 Sep 2019, Abhishek Pandit-Subedi wrote:
-> > >
-> > > > On a Realtek USB bluetooth device, I wanted a simple and consistent way
-> > > > to put the device in reset during suspend (2 reasons: to save power and
-> > > > disable BT as a wakeup source). Resetting it in the suspend callback
-> > > > causes a detach and the resume callback is not called. Hence the changes
-> > > > in this series to do the reset in suspend_noirq.
-> > >
-> > > What about people who _want_ BT to be a wakeup source?
-> >
-> > When BT is enabled as a wakeup source, there is no reset.
-> >
-> > > Why does putting the device in reset save power?  That is, a suspended
-> > > device is very strictly limited in the amount of current it's allowed
-> > > to draw from the USB bus; why should it draw significantly less when it
-> > > is reset?
-> >
-> > I don't know that it's significantly less (only that it's OFF). My
-> > greater motivation is to make sure the bluetooth chip isn't
-> > accumulating events while the host is turned off. Sorry, I should have
-> > made that more clear in the cover letter.
-> >
-> > When the host is off, it continues to accumulate events for the host
-> > to process (packets from connected devices, LE advertisements, etc).
-> > At some point, the firmware buffers fill up and no more events can be
-> > stored. When the host is resumed later on, the firmware is in a bad
-> > state and doesn't respond. I had originally just reset in ->resume but
-> > then connected wireless devices wouldn't disconnect from the BT either
-> > and I had trouble getting them to reconnect.
-> >
-> > >
-> > > > I looked into using PERSIST and reset on resume but those seem mainly
-> > > > for misbehaving devices that reset themselves.
-> > >
-> > > They are, but that doesn't mean you can't use them for other things
-> > > too.
-> > >
-> > > > This patch series has been tested with Realtek BT hardware as well as
-> > > > Intel BT (test procedure = disable as wake source, user suspend and
-> > > > observe a detach + reattach on resume).
-> > >
-> > > This series really seems like overkill for a single kind of device.
-> > >
-> > > Is there any way to turn off the device's BT radio during suspend (if
-> > > wakeup is disabled) and then turn it back on during resume?  Wouldn't
-> > > that accomplish what you want just as well?
-> >
-> > Probably (but I couldn't find a way to do that).
->
-> There's no way to turn off the device's BT radio?  Then what happens
-> when the user turns off Bluetooth from the wireless control panel?
+Hans, Mauro, and other V4L2 maintainers:
 
-It looks like bluez invokes hci_dev_do_close. This gracefully clears
-any packets in flight, clears any pending actions and disables the
-device as a wakeup source (which for Realtek allows it to enter global
-suspend). This is approximately what I was trying to achieve.
+The patch tested here (URL listed at the bottom of the syzbot message
+below) fixes a couple of bugs in the usbvision driver:
 
-> >  I want to prevent
-> > bluetooth from waking up the host and to reliably be in a good state
-> > when the host resumes. The reset logic I implemented causes the hci
-> > device to disappear and reappear, which userspace seems to handle
-> > gracefully.
->
-> Have you tried out the persist/reset-on-resume approach?
->
-> Alan Stern
->
+	There are several races between the open, close, and disconnect
+	routines (and also vidioc_querycap).
 
-I think I'll abandon this patch series. The general sentiment seems to
-be "don't do this" and it looks like closing the hci device is better
-in my case.
+	The driver unregisters its video and radio devices from sysfs
+	in the usbvision_release() routine, not in 
+	usbvision_disconnect().  (This causes problems when userspace 
+	keeps the device open, because by the time the release routine 
+	runs, the relevant sysfs directories have already been 
+	removed -- drivers in general need to unregister things in 
+	their disconnect handlers.)
 
-Thanks for the feedback and pointing me this way.
+However, as report below shows, fixing those bugs has revealed an
+apparent problem involving reference counting in the V4L2 core.  I
+don't understand much about this subsystem, so maybe you can explain
+what's going wrong.
 
-Abhishek
+The usbvision driver deallocates its private data structure when a
+disconnect has occurred and the radio/video device files are closed.  
+But in this bug report, the v4l2_release() routine tries to access the
+embedded v4l2_device (via video_put) after the structure has been
+freed.
+
+Clearly something is wrong, and I can't tell how this is all intended 
+to work.  Is the deallocation supposed to occur at a later time?
+
+Any ideas or suggestions?
+
+Alan Stern
+
+
+On Thu, 26 Sep 2019, syzbot wrote:
+
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> KASAN: use-after-free Read in v4l2_release
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in v4l2_release+0x2f1/0x390  
+> drivers/media/v4l2-core/v4l2-dev.c:459
+> Read of size 4 at addr ffff8881c6e31028 by task v4l_id/2884
+> 
+> CPU: 1 PID: 2884 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xca/0x13e lib/dump_stack.c:113
+>   print_address_description+0x6a/0x32c mm/kasan/report.c:351
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
+>   kasan_report+0xe/0x12 mm/kasan/common.c:618
+>   v4l2_release+0x2f1/0x390 drivers/media/v4l2-core/v4l2-dev.c:459
+>   __fput+0x2d7/0x840 fs/file_table.c:280
+>   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+>   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
+>   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
+>   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
+>   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x7fc6c77342b0
+> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
+> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
+> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+> RSP: 002b:00007ffcea3a5dc8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007fc6c77342b0
+> RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+> R13: 00007ffcea3a5f20 R14: 0000000000000000 R15: 0000000000000000
+> 
+> Allocated by task 2841:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:69
+>   set_track mm/kasan/common.c:77 [inline]
+>   __kasan_kmalloc mm/kasan/common.c:493 [inline]
+>   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:466
+>   kmalloc include/linux/slab.h:552 [inline]
+>   kzalloc include/linux/slab.h:748 [inline]
+>   usbvision_alloc drivers/media/usb/usbvision/usbvision-video.c:1327 [inline]
+>   usbvision_probe.cold+0x586/0x1e56  
+> drivers/media/usb/usbvision/usbvision-video.c:1477
+>   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2165
+>   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+>   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+>   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+>   really_probe+0x281/0x6d0 drivers/base/dd.c:548
+>   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
+>   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+>   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
+>   __device_attach+0x217/0x360 drivers/base/dd.c:894
+>   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
+>   device_add+0xae6/0x16f0 drivers/base/core.c:2165
+>   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+>   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+>   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+>   port_event drivers/usb/core/hub.c:5359 [inline]
+>   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+>   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+>   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+>   kthread+0x318/0x420 kernel/kthread.c:255
+>   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> 
+> Freed by task 2884:
+>   save_stack+0x1b/0x80 mm/kasan/common.c:69
+>   set_track mm/kasan/common.c:77 [inline]
+>   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:455
+>   slab_free_hook mm/slub.c:1423 [inline]
+>   slab_free_freelist_hook mm/slub.c:1474 [inline]
+>   slab_free mm/slub.c:3016 [inline]
+>   kfree+0xe4/0x2f0 mm/slub.c:3957
+>   usbvision_release+0xcf/0x110  
+> drivers/media/usb/usbvision/usbvision-video.c:1372
+>   usbvision_radio_close.cold+0x2b/0x74  
+> drivers/media/usb/usbvision/usbvision-video.c:1142
+>   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+>   __fput+0x2d7/0x840 fs/file_table.c:280
+>   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+>   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
+>   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
+>   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
+>   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> 
+> The buggy address belongs to the object at ffff8881c6e30000
+>   which belongs to the cache kmalloc-8k of size 8192
+> The buggy address is located 4136 bytes inside of
+>   8192-byte region [ffff8881c6e30000, ffff8881c6e32000)
+> The buggy address belongs to the page:
+> page:ffffea00071b8c00 refcount:1 mapcount:0 mapping:ffff8881da00c500  
+> index:0x0 compound_mapcount: 0
+> flags: 0x200000000010200(slab|head)
+> raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c500
+> raw: 0000000000000000 0000000080030003 00000001ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
+> 
+> Memory state around the buggy address:
+>   ffff8881c6e30f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881c6e30f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> > ffff8881c6e31000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>                                    ^
+>   ffff8881c6e31080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>   ffff8881c6e31100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+> ==================================================================
+> 
+> 
+> Tested on:
+> 
+> commit:         f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1475a74d600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=148d45d3600000
+
