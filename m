@@ -2,71 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB23ABF347
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 14:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B49A5BF363
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Sep 2019 14:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726289AbfIZMp4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 08:45:56 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56334 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726209AbfIZMp4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 08:45:56 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iDT9d-0002xK-Eq; Thu, 26 Sep 2019 12:45:53 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        YueHaibing <yuehaibing@huawei.com>, linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: ftdi-elan: move a couple of statements to next line
-Date:   Thu, 26 Sep 2019 13:45:53 +0100
-Message-Id: <20190926124553.15177-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.20.1
+        id S1726248AbfIZMxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Sep 2019 08:53:16 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42689 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbfIZMxQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Sep 2019 08:53:16 -0400
+Received: by mail-pl1-f194.google.com with SMTP id e5so1034911pls.9;
+        Thu, 26 Sep 2019 05:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TZOZE+f2hac3gdmfNW1xLrjqhpR8KNKRDn13kJ7v7JE=;
+        b=UPLq14wS1rKlTb/sbQmaLf+w1Mm+f9YUBoRADz9PLBcs8c95uE4SkQ+nV3zdtyA28K
+         1Pg3B4tF2ezpCEfp2WK5vm54tktvdNi/RkW0fGtpxE4DFahUZgGd0NaCbgP2UkVQTtsD
+         g9SKAFz/0gP/XAUJWTNbnoN0jSz1jJ5TdmWJxJC0tH33r7rc8PRWwDtow4+lEH1BxZ/g
+         /+K1an4xAWI+rM567nakdbBt00YiHK7a7HCmGWEbmctRJY68QryAnwdJmuKC9aHRMyK+
+         +3n5CTSkjryWoM6JE6rTRc7NwyRis/6TzZlnroxfLK9f+j4Q7o7CU7l2QU2kGpfxyHmp
+         rdaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TZOZE+f2hac3gdmfNW1xLrjqhpR8KNKRDn13kJ7v7JE=;
+        b=SPg1B+7azjoROqVZu7t2Kjww2cCv5Rdr8NuiTQWcyHLMM/etKR2E7rz8VsJ+ok81fm
+         ZABghKqfH5STuyfEUkfZ17K6j1rhFQgbTMpB4R2Kmjq2sUTID7ohniGHGil1upB7bFIs
+         J7EFYlCxbij9wh/ePCtBOifpWqbf2zEFboV36sAQkT79WkEZ8eC3Wb/lfG8byRn0tfHz
+         5Lsu2v5okyGiicrsJ2q2jyEI7bcb4ceLvaj1jTg1mrKVq4oFy8KP60SPAmr8VIRqGdaM
+         fHrBztc97dISgTCy1HL6o8xwkoIFWVQFdLgsoK3uWqs9ku1Dqjujp0llHKv7LHs0AzI6
+         2JyQ==
+X-Gm-Message-State: APjAAAUGvh6+bmWQ/bfXP3pGFAOa4zRh8TW+MVmem1eVv7UXOgyviCKb
+        2pOdzuOptQDOwiUYDSmzr/g=
+X-Google-Smtp-Source: APXvYqwBuxHuJpQ7R68t4YE8dpJpMHAmfzrPXx4/EaIC4upBpwuXzYcnfmLXprAIpiVJtH+KCRl36g==
+X-Received: by 2002:a17:902:b20a:: with SMTP id t10mr3704897plr.277.1569502393574;
+        Thu, 26 Sep 2019 05:53:13 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k184sm4325854pge.57.2019.09.26.05.53.11
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 26 Sep 2019 05:53:12 -0700 (PDT)
+Date:   Thu, 26 Sep 2019 05:53:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: Fix a signedness bug in
+ tcpm_fw_get_caps()
+Message-ID: <20190926125310.GA9967@roeck-us.net>
+References: <20190925110219.GN3264@mwanda>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190925110219.GN3264@mwanda>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Wed, Sep 25, 2019 at 02:02:19PM +0300, Dan Carpenter wrote:
+> The "port->typec_caps.data" and "port->typec_caps.type" variables are
+> enums and in this context GCC will treat them as an unsigned int so they
+> can never be less than zero.
+> 
+> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 96562744101c..d3b63e000ae2 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4410,7 +4410,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+>  	if (ret == 0) {
+>  		port->typec_caps.data = typec_find_port_data_role(cap_str);
+> -		if (port->typec_caps.data < 0)
+> +		if ((int)port->typec_caps.data < 0)
+>  			return -EINVAL;
 
-There are a couple of statements that follow the end brace
-of while loops that should be moved to the next line to clean
-up the coding style. Cleans up style warnings from smatch.
+Doesn't that also cause a warning about overwriting error return codes ?
+I would prefer something like
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/usb/misc/ftdi-elan.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+		ret = typec_find_port_data_role(cap_str);
+		if (ret < 0)
+			return ret;
+		port->typec_caps.data = ret;
 
-diff --git a/drivers/usb/misc/ftdi-elan.c b/drivers/usb/misc/ftdi-elan.c
-index cdee3af33ad7..8a3d9c0c8d8b 100644
---- a/drivers/usb/misc/ftdi-elan.c
-+++ b/drivers/usb/misc/ftdi-elan.c
-@@ -333,7 +333,8 @@ static void ftdi_elan_abandon_completions(struct usb_ftdi *ftdi)
- 		*respond->result = -ESHUTDOWN;
- 		*respond->value = 0;
- 		complete(&respond->wait_completion);
--	} mutex_unlock(&ftdi->u132_lock);
-+	}
-+	mutex_unlock(&ftdi->u132_lock);
- }
- 
- static void ftdi_elan_abandon_targets(struct usb_ftdi *ftdi)
-@@ -763,7 +764,8 @@ static int ftdi_elan_total_command_size(struct usb_ftdi *ftdi, int command_size)
- 		struct u132_command *command = &ftdi->command[COMMAND_MASK &
- 							      i++];
- 		total_size += 5 + command->follows;
--	} return total_size;
-+	}
-+	return total_size;
- }
- 
- static int ftdi_elan_command_engine(struct usb_ftdi *ftdi)
--- 
-2.20.1
+Guenter
 
+>  	}
+>  
+> @@ -4419,7 +4419,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>  		return ret;
+>  
+>  	port->typec_caps.type = typec_find_port_power_role(cap_str);
+> -	if (port->typec_caps.type < 0)
+> +	if ((int)port->typec_caps.type < 0)
+>  		return -EINVAL;
+>  	port->port_type = port->typec_caps.type;
+>  
+> -- 
+> 2.20.1
+> 
