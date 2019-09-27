@@ -2,78 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE517C0AA5
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 19:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232BFC0BC1
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 20:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbfI0R4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 13:56:21 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56368 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726385AbfI0R4U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 13:56:20 -0400
-Received: (qmail 5450 invoked by uid 2102); 27 Sep 2019 13:56:19 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Sep 2019 13:56:19 -0400
-Date:   Fri, 27 Sep 2019 13:56:19 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Bastien Nocera <hadess@hadess.net>
-cc:     linux-usb@vger.kernel.org, <benjamin.tissoires@redhat.com>
+        id S1725980AbfI0StQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 14:49:16 -0400
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:44363 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbfI0StP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 14:49:15 -0400
+X-Originating-IP: 83.155.44.161
+Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
+        (Authenticated sender: hadess@hadess.net)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 74984E0005;
+        Fri, 27 Sep 2019 18:49:13 +0000 (UTC)
+Message-ID: <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
 Subject: Re: Driver for something that's neither a device nor an interface
  driver?
-In-Reply-To: <5e53febe013938d7b878de46a5ef9f18587bd4db.camel@hadess.net>
-Message-ID: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, benjamin.tissoires@redhat.com
+Date:   Fri, 27 Sep 2019 20:49:12 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 27 Sep 2019, Bastien Nocera wrote:
+On Fri, 2019-09-27 at 13:56 -0400, Alan Stern wrote:
+> 
+<snip>
+> Is there any reason this needs to be done in a kernel driver?
 
-> Hey,
-> 
-> I'm trying to write a "power supply" class driver for Apple MFi
-> devices, and struggling a little with the USB drivers.
-> 
-> To ask many Apple devices to draw more power, we need to make a call to
-> the device using a vendor command. It doesn't go to an interface, but
-> to the device itself.
-> 
-> The call done in the kernel would look something like:
-> usb_control_msg(mfi->udev, usb_sndctrlpipe(mfi->udev, 0), 
->                 0x40, /* Vendor-defined USB get enabled capabilities request. */
->                 USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
->                 current_ma, /* wValue, current offset */
->                 current_ma, /* wIndex, current offset */
->                 NULL, 0, USB_CTRL_GET_TIMEOUT);
-> 
-> But I can't figure out what type of driver I'd need to just be able to
-> export that power_supply interface.
-> 
-> Trying to use a "struct usb_device_driver" didn't work as probe
-> functions were never called, and a "struct usb_driver" gets unbound
-> after user-space and the ipheth drivers comes around.
-> 
-> This is my "struct usb_driver" attempt:
-> https://github.com/hadess/apple-mfi-fastcharge
-> 
-> Any ideas what type of driver, or what trick I should be using here?
+To offer a unified interface all the devices with similar needs.
 
-Is there any reason this needs to be done in a kernel driver?  Can it 
-be handled from userspace instead?
+>   Can it 
+> be handled from userspace instead?
 
-You said this was for a "power supply" class driver.  It's not clear 
-what that means -- the devices you want to communicate with are 
-iphones, ipads, etc., not power supplies.
+It could, at a great infrastructure cost, trying to get buy-in from
+various distributions, at the very least.
 
-Under what circumstances would these messages need to get sent?  What 
-piece of code is responsible for them?
+> You said this was for a "power supply" class driver.  It's not clear 
+> what that means -- the devices you want to communicate with are 
+> iphones, ipads, etc., not power supplies.
 
-If necessary, you can modify the core/generic.c driver.  However that 
-might not be the right approach, considering that this is meant only 
-for devices manufactured by Apple.
+There's tons of "device" scope "power_supply" devices in the kernel,
+which don't power the Linux machine they're running on. Grep for
+"POWER_SUPPLY_SCOPE_DEVICE" in the kernel, most wireless mice and
+keyboards implement this already.
 
-Alan Stern
+> Under what circumstances would these messages need to get sent?  
+
+User-space would control it by changing the device's
+POWER_SUPPLY_PROP_CHARGE_TYPE to "Fast", if available.
+
+eg.
+# echo "Fast" > /sys/devices/pci0000:00/0000:00:14.0/usb3/3-
+1/power_supply/apple_mfi_fastcharge/charge_type
+
+> What 
+> piece of code is responsible for them?
+
+In user-space? Hasn't been decided yet, but I can imagine a policy
+daemon that cares about what devices charge from which other device,
+and how fast. For example, a laptop in "low power mode" wouldn't want
+to fast charge a phone, if the only reason the phone was plugged in was
+to fetch some data off of it, for example.
+
+> If necessary, you can modify the core/generic.c driver.  However
+> that 
+> might not be the right approach, considering that this is meant only 
+> for devices manufactured by Apple.
+
+It's also used by at least one Blackberry device, and I can imagine
+other vendors having similar "APIs" to work-around USB 1.x charging
+current limits.
+
+I take it that by saying "modify core/generic.c" driver you mean that
+it's not possible to inherit from it, right?
 
