@@ -2,100 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13922C00F8
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 10:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5933C0129
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 10:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfI0IS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 04:18:58 -0400
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:44633 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbfI0IS6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 04:18:58 -0400
-Received: by mail-vk1-f196.google.com with SMTP id j21so1029161vki.11;
-        Fri, 27 Sep 2019 01:18:56 -0700 (PDT)
+        id S1725890AbfI0I30 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 04:29:26 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:38247 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725842AbfI0I3Z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 04:29:25 -0400
+Received: by mail-io1-f65.google.com with SMTP id u8so14175926iom.5
+        for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2019 01:29:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=LkJDn6ibgbN4/9pWs1W9eHajworB/c/+Fplmk0dMkcw=;
-        b=UBrBjlMTyQ648bspIoJgaMbZH9JbM7BC1g+A4L+FO4nF5LpE7KAR+jOFPpG5L55U2g
-         j646BasiKzBZ00NpzmIVhcVWZF8tjYFfo7KF/6NM0cQDawxL3ZbNEBbmAgSZsGdbkzG7
-         4ths5ZVPKJvaozzZrTeY85K6/ISSGBA/hgnQv1pqwaMwJASOeu7bnL3pQ8/DSpqQI2bk
-         hH6GTn5cwSzNpjmlEW3mn3P7PjlqrsqEAT8g+qGAMinvTUGcjASpvLHW/v2Ie9jYJjZa
-         rN78JyqVKcl6S0V4W8JrGAskH6YWh1T2UxJb36PcGfzBkUHypgDannKBTmR8Iu5jUnck
-         yGlw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=EDvQQGa2QjwV3TqYPc7JV+uiOfef2lIAs7Rasba1hSE=;
+        b=b1AZJoVEiV3uzOhujF671uaPrHz0+4T/Tg32cWFlC1YA8TGRtc2/W+sBjPF4+cn6au
+         KsCcEkhuRnhJEMX+ypi53r34utba5UHRFxXLpsjS+LJEA5mZzPIpvvzvsUl3sS14sypQ
+         bdZIUPvCpsbOT3DJNcqkdxTYw2nKy5DAIWyu8UStPgkj7cgTEqgr2cNfyCyJ0dkbhWNA
+         y6561iN2QIE7ZSy8AgtDNljCYLA70mCQsHjVZutMf9jrmTCqvokPYhOOBxqHd/PR4YBT
+         IqOkIxpDgQbstcozaluXOwfyPsuteS5PSqHV0yBrUouKauHQWSH9WDh6gG3cKSHiQn1A
+         skuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=LkJDn6ibgbN4/9pWs1W9eHajworB/c/+Fplmk0dMkcw=;
-        b=bUxP+Ix5Jl562ZiZSgIpI5qk02uvh2i/o9F9Bn8wCoHCzMb6dmaqLfVE1h7NJsPyYe
-         sKKYsGP7jUQ80CwG0Vd/JUVSEkzjJ55KSIsvdDvu/844AlnnbObbo17FHefIPLk9VZ/z
-         J82H01hDkXUh9bP/pWB77rlzqqQLEZQ8Ixqy3HV5fhrCKoxG3RYruSsQlKvnZbW2QooK
-         RxjEXrvR+ChTTVp/2lypaZuS2j5aGGzw3Y2byVj3EkaE4/8QzbZoCnthTku1yh7CXJzw
-         OGf6xO/qWQ20FvtRCk/Yp2bKn6f+LcwuEvpCTeL8U+HbtFYLG6e0ONSLZ2LlS0Ed8IYU
-         sUXA==
-X-Gm-Message-State: APjAAAUAYxy+TQxuy020qBTmFB/KhuW7xIoiyuQLJh3nH3xoHWGsXg9a
-        RsIHDHdebCNuEVQwOZDRPTNsx/40gwgrYh/TTJqAHz+MWbw=
-X-Google-Smtp-Source: APXvYqyNhZeXXSjGF3QhP6DSX+R7WJSLFPVJqg+aGBiHxxmVzGYIzj1eEvkUAHgfPFClZJXktAzdex5eSZieBJa4030=
-X-Received: by 2002:a1f:a4c5:: with SMTP id n188mr3958522vke.11.1569572335654;
- Fri, 27 Sep 2019 01:18:55 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=EDvQQGa2QjwV3TqYPc7JV+uiOfef2lIAs7Rasba1hSE=;
+        b=YH2H95rjaFh0RQ5erw6B6OGPyGVdKMWjB+WMpYNGb9H2mbzvv6Ocq4fvP9pzd8yzy9
+         rDMRzjtdhkCQsBI0IQh9/E+NIXfWMd+CwPK2RrrDbyJ6tYPqPnOfBXkR/xmw2cYOxK2Z
+         SnU8M6XKchGCltsNFNWI/NsdcPxXGBYTQAwU+hw73b0P9V4vRK8j7iSt4VdYcQ9X5sPv
+         nrBYvjNgDK7fktA9gW3Och0Rj06WpWJB2Nx76mR/+vcHDFeK7KF/3bbwIgmoqmHBQQGH
+         ly7/PTSmN7jBUu4bxD59vNB9QM1fEJVu7RkAdOIVbPYh8iAPr34CsSq2y6HtUGtH/bmL
+         /2rQ==
+X-Gm-Message-State: APjAAAXq+PW6G17DW/YJXP1RHshvtVGgJB41e2czNl1ilwNqKwbyGyjl
+        PzSESddTuO9MgTadfTGKdQz5e+mqW+I7G3cM1bE=
+X-Google-Smtp-Source: APXvYqyAGTAhpXTHqZVYBpWnp6ZsEJ28qnJ9TOdYSuWQ7h4oSGbbAW/bVfeEdhyviLiep4uvVjmNJSwSIHFqeQH2Cvw=
+X-Received: by 2002:a92:b743:: with SMTP id c3mr3545450ilm.237.1569572965041;
+ Fri, 27 Sep 2019 01:29:25 -0700 (PDT)
 MIME-Version: 1.0
-From:   Yegor Yefremov <yegorslists@googlemail.com>
-Date:   Fri, 27 Sep 2019 10:18:41 +0200
-Message-ID: <CAGm1_kuK6aA1ew9ZY-fVDUE+o71u1QaSg0kfX2jWUWE9Me8Tjg@mail.gmail.com>
-Subject: musb: cppi41: broken high speed FTDI functionality when connected to
- musb directly
-To:     linux-omap@vger.kernel.org
-Cc:     Tony Lindgren <tony@atomide.com>, vkoul@kernel.org,
-        Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>
+References: <1569484721-4424-1-git-send-email-pawell@cadence.com>
+In-Reply-To: <1569484721-4424-1-git-send-email-pawell@cadence.com>
+From:   Peter Chen <hzpeterchen@gmail.com>
+Date:   Fri, 27 Sep 2019 16:29:13 +0800
+Message-ID: <CAL411-rXBNVEr67QTx0Jaj3bo5pbK__2wCihz+8T6Q7dumgZaA@mail.gmail.com>
+Subject: Re: [PATCH v3 -next] usb: cdns3: Fix sheduling with locks held.
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        felipe.balbi@linux.intel.com, dan.carpenter@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I was porting my system from 3.18/4.2 to 5.3. During this process I
-noticed that FT4232 that is attached directly to musb is not working
-correctly when opened for the first time: tx is working but nothing
-can be received. On the second opening everything is working fine.
-When the same chip is connected via a USB hub - everything is working
-from the very beginning.
+On Thu, Sep 26, 2019 at 6:26 PM Pawel Laszczak <pawell@cadence.com> wrote:
+>
+> Patch fix issue in cdns3_ep0_feature_handle_device function.
+>
+> The function usleep_range can't be used there because this function is
+> called with locks held and IRQs disabled in
+> cdns3_device_thread_irq_handler().
+>
+> To resolve this issue patch replaces usleep_range with mdelay.
+>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> ---
+> v2: added Reported-by and Fixes tags
+> v3: added version of the patch
+> ---
+>  drivers/usb/cdns3/ep0.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
+> index 44f652e8b5a2..0445da0a5a0c 100644
+> --- a/drivers/usb/cdns3/ep0.c
+> +++ b/drivers/usb/cdns3/ep0.c
+> @@ -332,7 +332,7 @@ static int cdns3_ep0_feature_handle_device(struct cdns3_device *priv_dev,
+>                          * for sending status stage.
+>                          * This time should be less then 3ms.
+>                          */
+> -                       usleep_range(1000, 2000);
+> +                       mdelay(1);
+>                         cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
+>                                                USB_CMD_STMODE |
+>                                                USB_STS_TMODE_SEL(tmode - 1));
+> --
+> 2.17.1
+>
 
-I could reproduce this issue using BeagleBone Black with omap2plus_defconfig.
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-# lsusb -t
-+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=musb-hdrc/1p, 480M
-    |__ Port 1: Dev 2, If 0, Class=, Driver=ftdi_sio, 480M
-    |__ Port 1: Dev 2, If 1, Class=, Driver=ftdi_sio, 480M
-    |__ Port 1: Dev 2, If 2, Class=, Driver=ftdi_sio, 480M
-    |__ Port 1: Dev 2, If 3, Class=, Driver=ftdi_sio, 480M
-
-git bisect revealed the following:
-
-fdea2d09b997ba4c86e7a707a5fac87c305f2131 is the first bad commit
-commit fdea2d09b997ba4c86e7a707a5fac87c305f2131
-Author: Tony Lindgren <tony@atomide.com>
-Date:   Wed Aug 31 07:19:59 2016 -0700
-
-    dmaengine: cppi41: Add basic PM runtime support
-
-    Let's keep the device enabled between cppi41_dma_issue_pending()
-    and dmaengine_desc_get_callback_invoke() and rely on the PM runtime
-    autoidle timeout elsewhere.
-
-    As the PM runtime is for whole device, not for each channel,
-    we need to queue pending transfers if the device is PM runtime
-    suspended. Then we start the pending transfers in PM runtime
-    resume.
-
-    Signed-off-by: Tony Lindgren <tony@atomide.com>
-    Signed-off-by: Vinod Koul <vinod.koul@intel.com>
-
-:040000 040000 8cf92c09083541dfdee01cc2973e73ef520f4fb1
-a03c1a7ba8e723f7b503733c46edaa4141483265 M      drivers
-
-Any idea?
-
-Thanks.
-
-Best regards,
-Yegor
+Peter
