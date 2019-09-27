@@ -2,96 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B97A8C0A08
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 19:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74D2EC0A2E
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 19:19:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728098AbfI0RIK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 13:08:10 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56184 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727289AbfI0RIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 13:08:10 -0400
-Received: (qmail 4736 invoked by uid 2102); 27 Sep 2019 13:08:09 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Sep 2019 13:08:09 -0400
-Date:   Fri, 27 Sep 2019 13:08:09 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Ran Wang <ran.wang_1@nxp.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: hub add filter for device with specific VID&PID
-In-Reply-To: <DB8PR04MB682649CA98B0704FAF037A40F1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
-Message-ID: <Pine.LNX.4.44L0.1909271305030.4732-100000@iolanthe.rowland.org>
+        id S1727243AbfI0RTJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 13:19:09 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:50348 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726251AbfI0RTJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 13:19:09 -0400
+Received: by mail-io1-f69.google.com with SMTP id f5so13692756iob.17
+        for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2019 10:19:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=zxeLCqjDaKeujGz+PQqWI0G/tePghEgmDsXcOaH+Ukc=;
+        b=LDHmrTs+xgLmnxxLEXawtksbbLWNP9FDVb7KE8ibCDbCO916umk9JxRhxvSxeShBM2
+         U9g/OPR3VpuJYx19QYSoJYt/g8HfL5dM9qxr9JrY6S4Vz2Y2Ks53pFPsX/KDqe+MkmaF
+         GgCydVdAMkSbmFr1BiM8S8gCxVr68IJiJEkmmurjJs67iakj1+/CGDOUwPUJ88X2yr8P
+         qNqZqNMXw0DHJ7dldprRZ20ck4kbm7Pk7HkR6RF0cAM46u+mI2bbjE8Myk+/6um/cean
+         m28TgtLE1rcPSX6tdb8VW9FU/ZbKXdCV+RHcoEeErYz8veJRZot1KBOaiMkSVKBtrjaZ
+         yZNA==
+X-Gm-Message-State: APjAAAV+/igL3ErfhAhQQnwiwkpNZEXKvx6rrdpHzdm9Cje5/Mnj5C1T
+        kVfwq364R27p/6V8o1UmcCTmzeKLEKzjoGoobl39iHzLPuZl
+X-Google-Smtp-Source: APXvYqwWP8m5BBxC3dkBytp7j3WEAgQXsJw0NxI7m/wMePsgOlACjIQ4wlL1I0diJHh8s/38cY9F+r9wvNuPW1fF8EQ7UvkV55rC
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+X-Received: by 2002:a5d:9956:: with SMTP id v22mr20080ios.27.1569604748454;
+ Fri, 27 Sep 2019 10:19:08 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 10:19:08 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007831a205938c15a0@google.com>
+Subject: WARNING in hso_probe
+From:   syzbot <syzbot+f00009d1881ba5ac45f8@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 24 Sep 2019, Ran Wang wrote:
+Hello,
 
-> Hi Greg,
-> 
-> On Monday, September 23, 2019 19:07, Greg Kroah-Hartman wrote:
-> > 
-> > On Mon, Sep 23, 2019 at 06:51:02PM +0800, Ran Wang wrote:
-> > > USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT
-> > > "Unsupported Device" Message require to stop enumerating device with
-> > > VID=0x1a0a PID=0x0201 and pop message to declare this device is not
-> > supported.
-> > 
-> > Why is this a requirement?
-> 
-> This comes from <USB On-The-Go and Embedded Host Automated Compliance Plan
-> for the On-The-Go& Embedded Host Supplement Revision2.0>
+syzbot found the following crash on:
 
-How much do we care about our support for USB OTG?  Isn't it dying off?
+HEAD commit:    2994c077 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=145faaf3600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=69ddefac6929256a
+dashboard link: https://syzkaller.appspot.com/bug?extid=f00009d1881ba5ac45f8
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=149c5aa9600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1318fa39600000
 
-> Below is related description I quote from it:
-> 6.7.23 A-UUT "Unsupported Device" Message
-> Purpose: This test verifies that an A-UUT produces a device non-supported error message
-> 	when a device it doesn't recognize, and does not support HNP, connects to it.
-> Applies to: All Targeted Hosts
-> Description: Get VBUS turned on, and connect to the A-UUT. Get enumerated and respond
-> 	as an unknown device not supporting HNP. Check that a suitable error message is generated.
-> Pass Criteria: Message "Unsupported Device"or similar is displayed on UUT
-> 
-> 6.7.23.1 Test Procedure
-> 1. Start with cable still attached, PET applying 10ìF capacitance and 10kÙ pull-down
->     resistance between VBUS and ground, data lines not pulled up.
-> 2. Get VBUS turned on, using the method described in Section6.7.1.
-> 3. Wait for almost TB_SVLD_BCON max (1s - 0.1s = 0.9s) from VBUS reaching VOTG_SESS_VLD max.
-> 4. Connect PET using D+ pull-up.
-> 5. Allow A-UUT to enumerate PET, responding with a VID / PID combination not on the TPL
->     of the UUT and also with the OTG descriptor stating that it does not support HNP.
-> 6. Start 30s timer when Device Descriptor is read.
-> 7. Display Message "Click OK if 'Unsupported Device' indication displayed on UUT".
-> 8. If operator clicks OK before 30s timer expires, then UUT passes test.
-> 9. If 30selapses first, then UUT fails test.
-> 10. PET disconnects by removing any termination on the data lines, but leaves a capacitance of
->     10ìF and a pull-down resistance of 10kÙ connected across VBUS.
-> 11. Wait 2s to allow disconnection to be detected.
-> End of Test.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f00009d1881ba5ac45f8@syzkaller.appspotmail.com
 
-In fact, the system should respond the same way to any unrecognized 
-device that doesn't support HNP, right?  There's nothing special about 
-these VID/PID values.
+sysfs group 'power' not found for kobject 'ttyHS0'
+WARNING: CPU: 0 PID: 12 at fs/sysfs/group.c:278 sysfs_remove_group  
+fs/sysfs/group.c:278 [inline]
+WARNING: CPU: 0 PID: 12 at fs/sysfs/group.c:278  
+sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+RIP: 0010:sysfs_remove_group fs/sysfs/group.c:278 [inline]
+RIP: 0010:sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+Code: 48 89 d9 49 8b 14 24 48 b8 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c  
+01 00 75 41 48 8b 33 48 c7 c7 20 de d0 85 e8 20 29 8a ff <0f> 0b eb 95 e8  
+12 b3 db ff e9 d2 fe ff ff 48 89 df e8 05 b3 db ff
+RSP: 0018:ffff8881da20f150 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffffffff85f34640 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8128d3fd RDI: ffffed103b441e1c
+RBP: 0000000000000000 R08: ffff8881da1f9800 R09: fffffbfff11f45ae
+R10: fffffbfff11f45ad R11: ffffffff88fa2d6f R12: ffff8881d909b300
+R13: ffffffff85f34be0 R14: ffff8881d9099980 R15: ffff8881d909eef0
+  dpm_sysfs_remove+0x97/0xb0 drivers/base/power/sysfs.c:741
+  device_del+0x12a/0xb10 drivers/base/core.c:2352
+  device_unregister drivers/base/core.c:2407 [inline]
+  device_destroy+0x96/0xe0 drivers/base/core.c:2986
+  tty_unregister_device+0x7e/0x1a0 drivers/tty/tty_io.c:3185
+  hso_serial_tty_unregister drivers/net/usb/hso.c:2231 [inline]
+  hso_create_bulk_serial_device drivers/net/usb/hso.c:2668 [inline]
+  hso_probe.cold+0xc8/0x121 drivers/net/usb/hso.c:2934
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-> > And why those specific vid/pid values?  What do they refer to?
-> 
-> For step 5, we got the VID / PID number from USB IF certified lab(Allion.inc at Taiwang). Looks like
-> this is a reserved ID pair and will not be allocated to any vendor for their products. So it's hence used for this
-> case test (like saying: you should be able to pop a not-support message for this reserved VID&PID).
 
-Don't we do this already?
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Alan Stern
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
