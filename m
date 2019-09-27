@@ -2,146 +2,307 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A29B6C0CD8
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC26C0CE3
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728289AbfI0UtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 16:49:08 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:49338 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728252AbfI0UtH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:49:07 -0400
-Received: by mail-io1-f70.google.com with SMTP id e14so14844555iot.16
-        for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2019 13:49:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=8QPGYslH7xbixxtcmS2ekXL3LroU9FXTwTMy0L8QLKo=;
-        b=Ct+Zvt2H57/E6dVbezMWnxEVCGcPDrJzQzl6zTkJQ8y+TZJpQ0QZ/DHShunw/6SjgM
-         w77kAAhtZPPzO3890LFu3BFsqmnnxHKcR+G8mCtmatItB3arDI2uCPD+LNCDJtr0sppc
-         m4Z9vcCh0duvw6qn+AaMR9M4+iEAe4ZZEcVg5JZ6euhpij0U2c3UqSQ6BDYTvzcyxva4
-         tM0lnuLLQX3p3UtUQ99pFtd4b24sX5Pg91CqugamDHXNqRbSGeSr+pJzUtSJNyGSr2Cx
-         854tE7BS04Ms1cl2gLY6Hqz6HOx2GQtCs+QDjJRgOsM4U7iMXsHn2w2k0Ebh5SZrLIJI
-         OVPw==
-X-Gm-Message-State: APjAAAXQFyLNP42lepYYiSEDh3ViBc6JQu2+h2x/K/KazPjznxdBkjFl
-        66/qgfR22Gn5xZJjArHpG3vMk4tcF1FJmOhPYRo4RvauiRwy
-X-Google-Smtp-Source: APXvYqwaj1Tn71oNrrMA7u7UKwUOjnjcOeFlg5oqYNxT2GYRAB9HTR6oX0okRBTbf6yw17g3dkNq5N2nSfUaXOBMfvhpSNz/QVfa
+        id S1727685AbfI0UvH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 16:51:07 -0400
+Received: from esa6.hgst.iphmx.com ([216.71.154.45]:49278 "EHLO
+        esa6.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725815AbfI0UvH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:51:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1569617466; x=1601153466;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=pExdyhFlndem/pd1bZKqXdifUApGQhkkN158G7RW0xg=;
+  b=DYFDnMH5vUFr9Uy4kW9v5yzzHK7uJDBQFQ+lHeeHOQ/ZziIJLplk10Sm
+   tD79paKefmMGNMdqL4VAn74dpX6aipkefV4EcwW12BFP0IJeYf0qqV/qp
+   Q0mdZiR88rzqKHvONjkpivKEUEiXHODledPkx/OZtYxlQKx3pzGgzdySe
+   SAx3uaDb8dpq5d/BNS0abRUeSscxY1fleIDjdXSmqc9vLg8XgRMRFNziI
+   b+c2ARj4XCBM348SaFpNp1h8MJLKZjCn6kIqekP2sOb3UYzqWGpgvE0yj
+   BYMQQ+8cMh1nYZpWmkRbt5Vx4jSwS4WSFyRx36ZUR0mIQ+o174yIW7rm3
+   w==;
+IronPort-SDR: l+iHwfLhIXsPijH1G/8bXRE8V5AhFBDDQEubkh7+mhlSImHoYMXkIL4uK+1ecNvNI8klaihI8F
+ iMsws4mFmYR5y8J238z+UfOXg5T1zVPKKvqnu4/ezbFMoXUhP2oEdXiVcdHh7FtBqPRuqfUIBP
+ 7Q/kXZr53aXAiFc8Zm01yCiwR6ndHI+mbWl+TDiAh34Jm80OakAORljb29+/MYLHiNbkWcwQ5M
+ 3RtaSxerf5lC2SH4qq6tzKhOMvQLHR2rEFc8z2jxhYUpfl7aT8ByMB8Tq0KN3KZnAnoC5SFX1k
+ OE4=
+X-IronPort-AV: E=Sophos;i="5.64,556,1559491200"; 
+   d="scan'208";a="120886480"
+Received: from mail-bn3nam04lp2058.outbound.protection.outlook.com (HELO NAM04-BN3-obe.outbound.protection.outlook.com) ([104.47.46.58])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Sep 2019 04:51:05 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SpQKGOfTiEgVQnp4t4mIi9uuShH3abIJSWZgDsq8iQ/TtmKUwteTfemoRQuK6Kaix1kGe72VbtspfEV5wJDgJCUWDq4CBUH9nnnYQrO7HKSb/iDF6fcqiQS6sfL5ia/Wi1n0TB/H3OzeGb2BlFh8r4yT3jxiyRDdvAkkpci3rUdND6GbQCTd64rE5EPE3oYDTTwiUgwIgAheAq0BYmHoZZJ/BMICIQwf2va73ux3dPejo6R4Cnzt1W8jupbNOHI1dDd8jjp0x9HJ1enT1gsg72Et61+DfuyHRVa20LAR/ZRP+sYmIt6HBRBtDVb7nZ71orj0aycdH52UsLbAVnxRUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/ve3kzHe/f7jUHNhaWe68G6Ebai/Iy0xBB1BfOgYhUs=;
+ b=kTHbDy3GNzZEcnyKXcpuxF/XnIxt7BD6BPxVP5yYi3n8ALyeZfcXeqmAfVJgsrK9fLFzmCHzGeAxUF13FqwIdc/Fu/6oSHCsgOiU9ANf+xgoVrwHKATIY9xgGbNXfbGKOl4v8ws7/hu/NKNmQ1CdNoJtEfJ/ljYhoZO+zgO54PfX+/nht12M6w3M1iHc8PajgCkeLGtQyEVj7/wLVIczRgeocR5ilnuesycnxYbdeSCR0Tec0bMWWwYm6ILUoRzDpnM1n50sArF3K1k/JudnxbNGixPQML22HcEiDMsAKyND2C6zVyGdecCDm1Uqdzgx4delpoNWgNeDTYc3QMWWjg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/ve3kzHe/f7jUHNhaWe68G6Ebai/Iy0xBB1BfOgYhUs=;
+ b=eIQ5T8ZssL17YmXAG6Iap/riVT1oBu/f7YQuJkSetUZ02ikoa/Evr6+/FfAcz0cQkUAdaIhZEEM+iYsFbFIxe4MPco4FsvTaOeBgPLDpe+xhE+j/m1sSM4GAgvJwoUWyJl/VBbXYxyrqq/SVZ+mq4lpk1oPrG57OrYQQvUooSBA=
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.59.16) by
+ BYAPR04MB4696.namprd04.prod.outlook.com (52.135.239.84) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.16; Fri, 27 Sep 2019 20:51:02 +0000
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::9821:67e1:9799:b117]) by BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::9821:67e1:9799:b117%3]) with mapi id 15.20.2284.028; Fri, 27 Sep 2019
+ 20:51:02 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH 0/2] Fix SCSI & USB Storage CHECK CONDITION handling
+Thread-Topic: [PATCH 0/2] Fix SCSI & USB Storage CHECK CONDITION handling
+Thread-Index: AQHVdLb8KJ6R44yKq0u9gZ6abLEPEQ==
+Date:   Fri, 27 Sep 2019 20:51:02 +0000
+Message-ID: <BYAPR04MB581640C4D180F4699EA64838E7810@BYAPR04MB5816.namprd04.prod.outlook.com>
+References: <Pine.LNX.4.44L0.1909271218200.2054-100000@iolanthe.rowland.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Damien.LeMoal@wdc.com; 
+x-originating-ip: [199.255.44.250]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f4f4b7f7-9a2c-4966-7923-08d7438c6867
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: BYAPR04MB4696:
+x-microsoft-antispam-prvs: <BYAPR04MB46964A7E563F9F15E39EE824E7810@BYAPR04MB4696.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 0173C6D4D5
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(39860400002)(366004)(376002)(346002)(396003)(136003)(189003)(199004)(6116002)(3846002)(476003)(33656002)(14454004)(14444005)(5660300002)(76116006)(256004)(66476007)(64756008)(66556008)(66446008)(478600001)(66946007)(305945005)(74316002)(102836004)(8676002)(7696005)(7736002)(76176011)(99286004)(6506007)(81166006)(81156014)(53546011)(6436002)(2171002)(55016002)(26005)(9686003)(6246003)(8936002)(486006)(66066001)(2906002)(229853002)(316002)(86362001)(446003)(71200400001)(71190400001)(52536014)(4326008)(6916009)(25786009)(54906003)(186003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB4696;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /cj5dWPnS9X3kPPaYQGMUStuanXF6RKNYJ85ukwdhhfu53pCq0o0jLmrlLMmt3T1Moh4lrE6IeRfxDeHyjcNNYWeHV2aucQpoxTDt0sbVx0fdkQq/s//pfd6+Hk0qqoLwsBe3f3N94FHtFPzEeTi/ksIkACo8bAhgfl4RFM2qXHfLYj1bVBP/MjYJMtBTwCwrATauJqnet5XoUSogNOWB18kPVjVK1OQBelT62/6t09v/dLjPXW1fOmY/SANgboYcIbdK0Vz/PmPvhT465EZHfyS2vO6IiJnOhbwmRMSh2fzJ1dOYQROUdU4t5iWvNcZciXJmCZ+WstZnuksGXKuRzMAhYp7VFeSr2FkS0oWNl+0MnI5TaNWSo/OLmNbSuKReQzT1vDiCy4vyrNKqdlApjTx39VEpFgIyypEzM/gB8M=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a92:db0c:: with SMTP id b12mr6713082iln.27.1569617346753;
- Fri, 27 Sep 2019 13:49:06 -0700 (PDT)
-Date:   Fri, 27 Sep 2019 13:49:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000063015a05938f04f0@google.com>
-Subject: WARNING in em28xx_init_extension
-From:   syzbot <syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f4f4b7f7-9a2c-4966-7923-08d7438c6867
+X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2019 20:51:02.0779
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IEFTyCKIpl+2m9XE0EpZ310ogT6sGU4g2KNnOxccGA2weed/YQoPnK79h4B1PcABXrp/BDm+76vNrukwF3VMJw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB4696
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    2994c077 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=171c4be3600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=69ddefac6929256a
-dashboard link: https://syzkaller.appspot.com/bug?extid=76929be61691e7b3904b
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137d73bd600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f0c8cb600000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com
-
-em28xx 1-1:0.221: Audio interface 221 found (Vendor Class)
-em28xx 1-1:0.221: unknown em28xx chip ID (0)
-em28xx 1-1:0.221: Config register raw data: 0xfffffffb
-em28xx 1-1:0.221: AC97 chip type couldn't be determined
-em28xx 1-1:0.221: No AC97 audio processor
-------------[ cut here ]------------
-list_add corruption. prev->next should be next (ffffffff87779de0), but was  
-ffffffff8352fdcc. (prev=ffff8881d2ecc240).
-WARNING: CPU: 1 PID: 83 at lib/list_debug.c:26 __list_add_valid+0x99/0xf0  
-lib/list_debug.c:26
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.3.0+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2a3/0x6da kernel/panic.c:219
-  __warn.cold+0x20/0x4a kernel/panic.c:576
-  report_bug+0x262/0x2a0 lib/bug.c:186
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-RIP: 0010:__list_add_valid+0x99/0xf0 lib/list_debug.c:26
-Code: 48 c7 c7 60 06 db 85 e8 2a 7a 30 ff 0f 0b 48 83 c4 08 31 c0 5d 41 5c  
-c3 48 89 f1 48 c7 c7 20 07 db 85 4c 89 e6 e8 0c 7a 30 ff <0f> 0b 31 c0 eb  
-c5 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 07 db 85
-RSP: 0018:ffff8881d93cf120 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff8881d2810120 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8128d3fd RDI: ffffed103b279e16
-RBP: ffff8881d2810240 R08: ffff8881d92a3000 R09: fffffbfff11f45af
-R10: fffffbfff11f45ae R11: ffffffff88fa2d77 R12: ffffffff87779de0
-R13: ffff8881d2810000 R14: ffff8881d281012c R15: ffff8881d2c84400
-  __list_add include/linux/list.h:60 [inline]
-  list_add_tail include/linux/list.h:93 [inline]
-  em28xx_init_extension+0x44/0x1f0  
-drivers/media/usb/em28xx/em28xx-core.c:1125
-  em28xx_init_dev.isra.0+0xa7b/0x15d8  
-drivers/media/usb/em28xx/em28xx-cards.c:3520
-  em28xx_usb_probe.cold+0xcac/0x2516  
-drivers/media/usb/em28xx/em28xx-cards.c:3869
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2201
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2201
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+On 2019/09/27 9:34, Alan Stern wrote:=0A=
+> On Fri, 27 Sep 2019, Damien Le Moal wrote:=0A=
+> =0A=
+>> On 2019/09/26 16:57, Alan Stern wrote:=0A=
+>>> On Fri, 27 Sep 2019, Damien Le Moal wrote:=0A=
+>>>=0A=
+>>>> If a non-passthrough command is terminated with a CHECK CONDITION, the=
+=0A=
+>>>> scsi error recovery code reuses the failed command scsi_cmnd structure=
+=0A=
+>>>> to process error recovery request sense. To preserve information=0A=
+>>>> regarding the failed command, the functions scsi_eh_prep_cmnd() and=0A=
+>>>> scsi_eh_restore_cmnd() respectively save and restore the original=0A=
+>>>> command information. However, the resid field of the failed command=0A=
+>>>> request structure is not preserved and reused for the request sense=0A=
+>>>> handling, leading to the original command having an incorrect resid=0A=
+>>>> when:=0A=
+>>>> A) The command is not retried and terminated with an error=0A=
+>>>> B) The command completes after retry and the underlying LLD does not s=
+et=0A=
+>>>>    resid for a fully completed command (resid=3D0)=0A=
+>>>>=0A=
+>>>> The first patch of this series addresses case (A) above by adding resi=
+d=0A=
+>>>> as part of the command information saved using struct scsi_eh_save.=0A=
+>>>=0A=
+>>> Good catch.=0A=
+>>>=0A=
+>>>> Case B can be observed with a WD My Book USB disks when a read or writ=
+e=0A=
+>>>> command is sent to the disk while the disk is in deep sleep mode=0A=
+>>>> (spun down) due to a long period of inactivity (~30min).=0A=
+>>>> In such case, the following command sequence happen:=0A=
+>>>> 1) The read or write command is terminated after a few seconds with=0A=
+>>>>    CHECK CONDITION and an asc/ascq of 04/01 (LOGICAL UNIT IS IN PROCES=
+S=0A=
+>>>>    OF BECOMING READY)=0A=
+>>>> 2) In response to this failure, the USB mass storage driver triggers=
+=0A=
+>>>>    autosense processing, reusing the command descriptor to issue a=0A=
+>>>>    request sense command with a 96B sense buffer size. The reply=0A=
+>>>>    to this command gives a NOT READY / LOGICAL UNIT IS IN PROCESS=0A=
+>>>>    OF BECOMING READY sense of 18B, resulting in a resid of 78B.=0A=
+>>>> 3) The original command is retried and failed again, with step 2=0A=
+>>>>    repeated, until the drive spins up and becomes ready.=0A=
+>>>> 4) When the original command completes after the drive has become read=
+y,=0A=
+>>>>    the request sense command resid of 78B is seen by the scsi disk=0A=
+>>>>    driver sd_done() function and wrongly generates a warning about the=
+=0A=
+>>>>    unaligned value reported.=0A=
+>>>=0A=
+>>> But with the 1/1 patch in place, 4 won't happen any more, right?  =0A=
+>>> sd_done() will see the resid from the successful read or write.=0A=
+>>=0A=
+>> No it will not because the USB driver does not set the residue when the =
+value=0A=
+>> returned for the command is 0, that is, when the command succeeds after =
+the disk=0A=
+>> spins up. E.g., in my test, I used a 4096B read at LBA 0. With patch 1 o=
+nly, I=0A=
+>> see a residue of 4096 since the command is entirely failed with CHECK CO=
+NDITION=0A=
+>> until the drive spins up and becomes ready, at which point the resid bec=
+omes 0=0A=
+>> but is not set with scsi_set_resid(). Without patch 1 nor 2, I see a res=
+idue of=0A=
+>> 78B which is the residue from the request sense executed between retries=
+ of the=0A=
+>> read command.=0A=
+> =0A=
+> I don't doubt your results.  But you need to do a better job of =0A=
+> explaining how the existing code leads to those results.=0A=
+> =0A=
+> For example, you said the driver does not set the command's residue =0A=
+> when the command succeeds.  But in fact, one of the first things =0A=
+> usb_stor_invoke_transport() does -- before it begins transmitting the =0A=
+> command -- is=0A=
+> =0A=
+> 	scsi_set_resid(srb, 0);=0A=
+> =0A=
+> So if the command is successful, even if the transport layer routine =0A=
+> doesn't set the residue explicitly, the value should still be 0.=0A=
+=0A=
+Yes, you are right. I missed that one. Patch 2 is not needed at all.=0A=
+=0A=
+> So if you see the residue not getting set properly, you should explain =
+=0A=
+> exactly how that happens.=0A=
+=0A=
+I got confused in my analysis because I missed that the actual timing of=0A=
+sd_done() execution is after every command retry+request sense pair, that i=
+s,=0A=
+what usb_stor_invoke_transport() does. Without patch 1, the resid is wrong =
+on=0A=
+completion of the initial command because of the request sense, nothing to =
+do=0A=
+with resid not being initialized.=0A=
+W=0A=
+ith patch 1, sd_done() sees a resid equal to the entire command size in cas=
+e of=0A=
+failure, and 0 (as set by usb_stor_invoke_transport()) in case of success.=
+=0A=
+=0A=
+So as you suggested, only patch 1 is necessary. I will resend it with the=
+=0A=
+additional resid initialization for autosense for security, since that coul=
+d be=0A=
+a problem for a sense request that has no residue (the request sense is iss=
+ued=0A=
+directly using us->transport(), not using usb_stor_invoke_transport()).=0A=
+=0A=
+>> Patch 2 is needed to make sure that the residue is set to 0 when the com=
+mand=0A=
+>> fully completes. If there is no failure/request sense/retry dance, resid=
+ is=0A=
+>> already 0 (initialized value) so there is no problem. The problem shows =
+up only=0A=
+>> for CHECK CONDITION + retry patterns. Tests confirm this. Only patch 1 d=
+oes not=0A=
+>> solve the problem.=0A=
+> =0A=
+> But the residue gets reset to 0 every time before the command is=0A=
+> retried, doesn't it?=0A=
+=0A=
+Yes it is. Checked.=0A=
+=0A=
+> Unless for your device, the driver doesn't run =0A=
+> usb_stor_invoke_transport().  The only way that can happen is if you =0A=
+> use one of the modular subdrivers -- in which case the bug lies in that =
+=0A=
+> subdriver and should be fixed there, not in transport.c.=0A=
+=0A=
+The device is using usb_storage (Bulk transport, scsi transparent protocol)=
+. But=0A=
+the problem is higher up in the stack anyway.=0A=
+=0A=
+>>>> This problem is fixed in patch 2 by always setting a command resid to =
+0=0A=
+>>>> when there is no residual in usb_stor_Bulk_transport(). Note that=0A=
+>>>> usb_stor_CB_transport() does not need changes since usb_stor_bulk_srb(=
+)=0A=
+>>>> always sets the resid for a completed command, regardless of the=0A=
+>>>> residual value.=0A=
+>>>=0A=
+>>> Exactly the same reasoning shows that usb_stor_Bulk_transport() also=0A=
+>>> does not need changes, doesn't it?  Which means that patch 2/2 is =0A=
+>>> unnecessary.=0A=
+>>=0A=
+>> In usb_stor_Bulk_transport(), since scsi_set_resid() is only called unde=
+r the=0A=
+>>=0A=
+>> if (residue && !(us->fflags & US_FL_IGNORE_RESIDUE))=0A=
+>>=0A=
+>> condition, resid is not set if it is 0.=0A=
+> =0A=
+> But usb_stor_Bulk_transport() calls usb_stor_bulk_srb(), which does set=
+=0A=
+> the residue, as you realize:=0A=
+=0A=
+Yes, absolutely. Checked !=0A=
+=0A=
+>> Whereas in usb_stor_CB_transport(), through the call to usb_stor_bulk_sr=
+b(),=0A=
+>> resid is always set, unconditionally, with:=0A=
+>>=0A=
+>> scsi_set_resid(srb, scsi_bufflen(srb) - partial);=0A=
+>>=0A=
+>> where partial is the command length for a fully completed command (the v=
+ariable=0A=
+>> name is misleading), leading to resid being set to 0 as needed for succe=
+ssful=0A=
+>> commands.=0A=
+>>=0A=
+>> Please let me know if I missed something. I can reproduce the problem 10=
+0% of=0A=
+>> the time, even though it is painful due to the 30min wait between tests =
+to wait=0A=
+>> for the drive going to sleep (if I force a sleep power state, the proble=
+m does=0A=
+>> not happen due to power control the drive USB bridge FW, I am guessing, =
+which=0A=
+>> will wake up the disk before the command is sent).=0A=
+> =0A=
+> Please investigate a little more closely into what's going wrong and=0A=
+> present more details so that others can understand it too.=0A=
+=0A=
+I did and realized it was my mistake. USB is not to blame. Only handling of=
+=0A=
+resid in save/restore of struct scsi_eh_save.=0A=
+=0A=
+Thanks for your comments !=0A=
+=0A=
+Best regards.=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
