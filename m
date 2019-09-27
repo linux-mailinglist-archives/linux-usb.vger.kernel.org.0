@@ -2,105 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE3DC0C91
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29B6C0CD8
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:49:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfI0UVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 16:21:39 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:56444 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726033AbfI0UVj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:21:39 -0400
-Received: (qmail 6725 invoked by uid 2102); 27 Sep 2019 16:21:38 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 27 Sep 2019 16:21:38 -0400
-Date:   Fri, 27 Sep 2019 16:21:38 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Bastien Nocera <hadess@hadess.net>
-cc:     linux-usb@vger.kernel.org, <benjamin.tissoires@redhat.com>
-Subject: Re: Driver for something that's neither a device nor an interface
- driver?
-In-Reply-To: <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
-Message-ID: <Pine.LNX.4.44L0.1909271611440.4732-100000@iolanthe.rowland.org>
+        id S1728289AbfI0UtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 16:49:08 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:49338 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728252AbfI0UtH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:49:07 -0400
+Received: by mail-io1-f70.google.com with SMTP id e14so14844555iot.16
+        for <linux-usb@vger.kernel.org>; Fri, 27 Sep 2019 13:49:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=8QPGYslH7xbixxtcmS2ekXL3LroU9FXTwTMy0L8QLKo=;
+        b=Ct+Zvt2H57/E6dVbezMWnxEVCGcPDrJzQzl6zTkJQ8y+TZJpQ0QZ/DHShunw/6SjgM
+         w77kAAhtZPPzO3890LFu3BFsqmnnxHKcR+G8mCtmatItB3arDI2uCPD+LNCDJtr0sppc
+         m4Z9vcCh0duvw6qn+AaMR9M4+iEAe4ZZEcVg5JZ6euhpij0U2c3UqSQ6BDYTvzcyxva4
+         tM0lnuLLQX3p3UtUQ99pFtd4b24sX5Pg91CqugamDHXNqRbSGeSr+pJzUtSJNyGSr2Cx
+         854tE7BS04Ms1cl2gLY6Hqz6HOx2GQtCs+QDjJRgOsM4U7iMXsHn2w2k0Ebh5SZrLIJI
+         OVPw==
+X-Gm-Message-State: APjAAAXQFyLNP42lepYYiSEDh3ViBc6JQu2+h2x/K/KazPjznxdBkjFl
+        66/qgfR22Gn5xZJjArHpG3vMk4tcF1FJmOhPYRo4RvauiRwy
+X-Google-Smtp-Source: APXvYqwaj1Tn71oNrrMA7u7UKwUOjnjcOeFlg5oqYNxT2GYRAB9HTR6oX0okRBTbf6yw17g3dkNq5N2nSfUaXOBMfvhpSNz/QVfa
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:db0c:: with SMTP id b12mr6713082iln.27.1569617346753;
+ Fri, 27 Sep 2019 13:49:06 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 13:49:06 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000063015a05938f04f0@google.com>
+Subject: WARNING in em28xx_init_extension
+From:   syzbot <syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 27 Sep 2019, Bastien Nocera wrote:
+Hello,
 
-> On Fri, 2019-09-27 at 13:56 -0400, Alan Stern wrote:
-> > 
-> <snip>
-> > Is there any reason this needs to be done in a kernel driver?
-> 
-> To offer a unified interface all the devices with similar needs.
-> 
-> >   Can it 
-> > be handled from userspace instead?
-> 
-> It could, at a great infrastructure cost, trying to get buy-in from
-> various distributions, at the very least.
+syzbot found the following crash on:
 
-As Greg said, we generally prefer it if people do things that way
-(assuming it's possible).  As for buy-in from distributions, other
-programs such as usb_modeswitch have been widely accepted.  There's no
-reason to think yours wouldn't be just as popular.
+HEAD commit:    2994c077 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=171c4be3600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=69ddefac6929256a
+dashboard link: https://syzkaller.appspot.com/bug?extid=76929be61691e7b3904b
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=137d73bd600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14f0c8cb600000
 
-> > You said this was for a "power supply" class driver.  It's not clear 
-> > what that means -- the devices you want to communicate with are 
-> > iphones, ipads, etc., not power supplies.
-> 
-> There's tons of "device" scope "power_supply" devices in the kernel,
-> which don't power the Linux machine they're running on. Grep for
-> "POWER_SUPPLY_SCOPE_DEVICE" in the kernel, most wireless mice and
-> keyboards implement this already.
-> 
-> > Under what circumstances would these messages need to get sent?  
-> 
-> User-space would control it by changing the device's
-> POWER_SUPPLY_PROP_CHARGE_TYPE to "Fast", if available.
-> 
-> eg.
-> # echo "Fast" > /sys/devices/pci0000:00/0000:00:14.0/usb3/3-
-> 1/power_supply/apple_mfi_fastcharge/charge_type
-> 
-> > What 
-> > piece of code is responsible for them?
-> 
-> In user-space? Hasn't been decided yet, but I can imagine a policy
-> daemon that cares about what devices charge from which other device,
-> and how fast. For example, a laptop in "low power mode" wouldn't want
-> to fast charge a phone, if the only reason the phone was plugged in was
-> to fetch some data off of it, for example.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+76929be61691e7b3904b@syzkaller.appspotmail.com
 
-I actually meant in the kernel.  But you'll probably say that's what 
-we're trying to settle in this discussion.
+em28xx 1-1:0.221: Audio interface 221 found (Vendor Class)
+em28xx 1-1:0.221: unknown em28xx chip ID (0)
+em28xx 1-1:0.221: Config register raw data: 0xfffffffb
+em28xx 1-1:0.221: AC97 chip type couldn't be determined
+em28xx 1-1:0.221: No AC97 audio processor
+------------[ cut here ]------------
+list_add corruption. prev->next should be next (ffffffff87779de0), but was  
+ffffffff8352fdcc. (prev=ffff8881d2ecc240).
+WARNING: CPU: 1 PID: 83 at lib/list_debug.c:26 __list_add_valid+0x99/0xf0  
+lib/list_debug.c:26
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.3.0+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2a3/0x6da kernel/panic.c:219
+  __warn.cold+0x20/0x4a kernel/panic.c:576
+  report_bug+0x262/0x2a0 lib/bug.c:186
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+RIP: 0010:__list_add_valid+0x99/0xf0 lib/list_debug.c:26
+Code: 48 c7 c7 60 06 db 85 e8 2a 7a 30 ff 0f 0b 48 83 c4 08 31 c0 5d 41 5c  
+c3 48 89 f1 48 c7 c7 20 07 db 85 4c 89 e6 e8 0c 7a 30 ff <0f> 0b 31 c0 eb  
+c5 48 89 f2 4c 89 e1 48 89 ee 48 c7 c7 a0 07 db 85
+RSP: 0018:ffff8881d93cf120 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff8881d2810120 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8128d3fd RDI: ffffed103b279e16
+RBP: ffff8881d2810240 R08: ffff8881d92a3000 R09: fffffbfff11f45af
+R10: fffffbfff11f45ae R11: ffffffff88fa2d77 R12: ffffffff87779de0
+R13: ffff8881d2810000 R14: ffff8881d281012c R15: ffff8881d2c84400
+  __list_add include/linux/list.h:60 [inline]
+  list_add_tail include/linux/list.h:93 [inline]
+  em28xx_init_extension+0x44/0x1f0  
+drivers/media/usb/em28xx/em28xx-core.c:1125
+  em28xx_init_dev.isra.0+0xa7b/0x15d8  
+drivers/media/usb/em28xx/em28xx-cards.c:3520
+  em28xx_usb_probe.cold+0xcac/0x2516  
+drivers/media/usb/em28xx/em28xx-cards.c:3869
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-> > If necessary, you can modify the core/generic.c driver.  However
-> > that 
-> > might not be the right approach, considering that this is meant only 
-> > for devices manufactured by Apple.
-> 
-> It's also used by at least one Blackberry device, and I can imagine
-> other vendors having similar "APIs" to work-around USB 1.x charging
-> current limits.
-> 
-> I take it that by saying "modify core/generic.c" driver you mean that
-> it's not possible to inherit from it, right?
 
-The two don't have to be mutually exclusive.  That is, no, it was never
-intended for other drivers to inherit from generic.c (although it was
-originally intended that other drivers might _replace_ it in some
-situations -- that hasn't worked out in practice).  But in theory you
-could modify generic.c in a way that would make inheritance possible.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Or you could allow generic.c to attach "subdrivers" based on matching a
-device's VID/PID, and one such subdriver could be your power-supply
-manager.
-
-Alan Stern
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
