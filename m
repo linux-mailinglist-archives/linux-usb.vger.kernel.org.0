@@ -2,106 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F96C0C71
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE3DC0C91
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 22:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbfI0UMS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 16:12:18 -0400
-Received: from relay10.mail.gandi.net ([217.70.178.230]:60055 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728236AbfI0UMS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:12:18 -0400
-Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
-        (Authenticated sender: hadess@hadess.net)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id BE35A24000B;
-        Fri, 27 Sep 2019 20:12:15 +0000 (UTC)
-Message-ID: <48bcb34194695566b9c59f6e814706f8d65be962.camel@hadess.net>
+        id S1726698AbfI0UVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 16:21:39 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:56444 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726033AbfI0UVj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 16:21:39 -0400
+Received: (qmail 6725 invoked by uid 2102); 27 Sep 2019 16:21:38 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 27 Sep 2019 16:21:38 -0400
+Date:   Fri, 27 Sep 2019 16:21:38 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org, <benjamin.tissoires@redhat.com>
 Subject: Re: Driver for something that's neither a device nor an interface
  driver?
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        benjamin.tissoires@redhat.com
-Date:   Fri, 27 Sep 2019 22:12:14 +0200
-In-Reply-To: <20190927192554.GB1805907@kroah.com>
-References: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
-         <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
-         <20190927192554.GB1805907@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+In-Reply-To: <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1909271611440.4732-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-09-27 at 21:25 +0200, Greg KH wrote:
-> On Fri, Sep 27, 2019 at 08:49:12PM +0200, Bastien Nocera wrote:
-> > On Fri, 2019-09-27 at 13:56 -0400, Alan Stern wrote:
-> > <snip>
-> > > Is there any reason this needs to be done in a kernel driver?
+On Fri, 27 Sep 2019, Bastien Nocera wrote:
+
+> On Fri, 2019-09-27 at 13:56 -0400, Alan Stern wrote:
 > > 
-> > To offer a unified interface all the devices with similar needs.
+> <snip>
+> > Is there any reason this needs to be done in a kernel driver?
 > 
-> What "other devices with similar needs?"
-
-I would expect Android phones to be able to offer up a different
-charging method depending on policy, and wanting to be able to switch
-charging methods.
-
-> > >   Can it 
-> > > be handled from userspace instead?
-> > 
-> > It could, at a great infrastructure cost, trying to get buy-in from
-> > various distributions, at the very least.
+> To offer a unified interface all the devices with similar needs.
 > 
-> For USB devices that _can_ be handled in userspace, we ask that they
-> be
-> done in userspace and not with a kernel driver.  Something that only
-> does usb control messages with no other in-kernel api interfaces is
-> ripe
-> for a tiny userspace program using libusb.  Not for an in-kernel
-> driver.
-
-I don't quite understand why that would be when the kernel already
-offers the API to be able to control it.
-
-> > > You said this was for a "power supply" class driver.  It's not
-> > > clear 
-> > > what that means -- the devices you want to communicate with are 
-> > > iphones, ipads, etc., not power supplies.
-> > 
-> > There's tons of "device" scope "power_supply" devices in the
-> > kernel,
-> > which don't power the Linux machine they're running on. Grep for
-> > "POWER_SUPPLY_SCOPE_DEVICE" in the kernel, most wireless mice and
-> > keyboards implement this already.
+> >   Can it 
+> > be handled from userspace instead?
 > 
-> Yes, but those are real devices that the "Host" uses for power or
-> something else.  wireless mice and keyboards already have kernel
-> drivers
-> so that's fine as well (but probably could be done from userspace
-> too.)
+> It could, at a great infrastructure cost, trying to get buy-in from
+> various distributions, at the very least.
 
-It probably couldn't when the pipes to get key presses and the battery
-info are the same.
+As Greg said, we generally prefer it if people do things that way
+(assuming it's possible).  As for buy-in from distributions, other
+programs such as usb_modeswitch have been widely accepted.  There's no
+reason to think yours wouldn't be just as popular.
 
-> > > Under what circumstances would these messages need to get sent?  
-> > 
-> > User-space would control it by changing the device's
-> > POWER_SUPPLY_PROP_CHARGE_TYPE to "Fast", if available.
-> > 
-> > eg.
-> > # echo "Fast" > /sys/devices/pci0000:00/0000:00:14.0/usb3/3-
-> > 1/power_supply/apple_mfi_fastcharge/charge_type
+> > You said this was for a "power supply" class driver.  It's not clear 
+> > what that means -- the devices you want to communicate with are 
+> > iphones, ipads, etc., not power supplies.
 > 
-> power_supply class is for the power supply that is charging the cpu
-> you
-> type that on.  Not for the cpu of an attached device, right?
+> There's tons of "device" scope "power_supply" devices in the kernel,
+> which don't power the Linux machine they're running on. Grep for
+> "POWER_SUPPLY_SCOPE_DEVICE" in the kernel, most wireless mice and
+> keyboards implement this already.
+> 
+> > Under what circumstances would these messages need to get sent?  
+> 
+> User-space would control it by changing the device's
+> POWER_SUPPLY_PROP_CHARGE_TYPE to "Fast", if available.
+> 
+> eg.
+> # echo "Fast" > /sys/devices/pci0000:00/0000:00:14.0/usb3/3-
+> 1/power_supply/apple_mfi_fastcharge/charge_type
+> 
+> > What 
+> > piece of code is responsible for them?
+> 
+> In user-space? Hasn't been decided yet, but I can imagine a policy
+> daemon that cares about what devices charge from which other device,
+> and how fast. For example, a laptop in "low power mode" wouldn't want
+> to fast charge a phone, if the only reason the phone was plugged in was
+> to fetch some data off of it, for example.
 
-Again, power_supply class has a scope attached to it, so having the
-driver in the kernel would actually make it easier, with user-space not
-having to care whether the device uses an "Apple" method or something
-else.
+I actually meant in the kernel.  But you'll probably say that's what 
+we're trying to settle in this discussion.
+
+> > If necessary, you can modify the core/generic.c driver.  However
+> > that 
+> > might not be the right approach, considering that this is meant only 
+> > for devices manufactured by Apple.
+> 
+> It's also used by at least one Blackberry device, and I can imagine
+> other vendors having similar "APIs" to work-around USB 1.x charging
+> current limits.
+> 
+> I take it that by saying "modify core/generic.c" driver you mean that
+> it's not possible to inherit from it, right?
+
+The two don't have to be mutually exclusive.  That is, no, it was never
+intended for other drivers to inherit from generic.c (although it was
+originally intended that other drivers might _replace_ it in some
+situations -- that hasn't worked out in practice).  But in theory you
+could modify generic.c in a way that would make inheritance possible.
+
+Or you could allow generic.c to attach "subdrivers" based on matching a
+device's VID/PID, and one such subdriver could be your power-supply
+manager.
+
+Alan Stern
 
