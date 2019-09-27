@@ -2,87 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 232BFC0BC1
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 20:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EBFC0BD0
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 20:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725980AbfI0StQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 14:49:16 -0400
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:44363 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725815AbfI0StP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 27 Sep 2019 14:49:15 -0400
-X-Originating-IP: 83.155.44.161
-Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
-        (Authenticated sender: hadess@hadess.net)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 74984E0005;
-        Fri, 27 Sep 2019 18:49:13 +0000 (UTC)
-Message-ID: <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
+        id S1725990AbfI0S6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 14:58:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57362 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725790AbfI0S6A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Sep 2019 14:58:00 -0400
+Received: from localhost (unknown [62.119.166.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E9CAA207FF;
+        Fri, 27 Sep 2019 18:57:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569610679;
+        bh=wRkSwHWzFRh05/aqmtzFZ7pZY/ylsORvzBi6h7/MRpk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=foLvGXcbpLhCmZmbojIBKDNSZ0lYKOmDorNroBhFx4ijh8VuNcl5xri5mg7KfFF++
+         bzVc+yUb67SMqZpw2AGxagUzbTywKZPKeAiBqcBy8taNEf4Vw31r64Ff35MHdlIp3i
+         zc6M0rZ9NbD6Encyfni1kSgaV1StJ4MkgKltN2sw=
+Date:   Fri, 27 Sep 2019 20:57:55 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     linux-usb@vger.kernel.org, benjamin.tissoires@redhat.com
 Subject: Re: Driver for something that's neither a device nor an interface
  driver?
-From:   Bastien Nocera <hadess@hadess.net>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, benjamin.tissoires@redhat.com
-Date:   Fri, 27 Sep 2019 20:49:12 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+Message-ID: <20190927185755.GA1808068@kroah.com>
+References: <5e53febe013938d7b878de46a5ef9f18587bd4db.camel@hadess.net>
+ <20190927173809.GB1801491@kroah.com>
+ <e9842d24e72a4995047eede8e47e11db662879d7.camel@hadess.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e9842d24e72a4995047eede8e47e11db662879d7.camel@hadess.net>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 2019-09-27 at 13:56 -0400, Alan Stern wrote:
+On Fri, Sep 27, 2019 at 07:44:08PM +0200, Bastien Nocera wrote:
+> On Fri, 2019-09-27 at 19:38 +0200, Greg KH wrote:
+> > What does the usb descriptors for the device look like?  Is it only
+> > the
+> > "default" control endpoint and no interfaces?  What does the output
+> > of
+> > 'usbdevices' show for the device?
 > 
-<snip>
-> Is there any reason this needs to be done in a kernel driver?
+> The device in question can be an iPhone, an iPod Classic/Nano, or an
+> iPad, amongst others, and they usually have useful interfaces, such as
+> mass storage for the older ones, or ethernet, PTP, etc.
 
-To offer a unified interface all the devices with similar needs.
+Ah.  Then why do you have to do this from a kernel driver?  Why can't
+you do this from userspace?
 
->   Can it 
-> be handled from userspace instead?
+> > Normally you just bind to the "default" interface for the device, and
+> > all is good, there should be a few other drivers in the tree that do
+> > this, but I can't think of one off the top of my head at the moment.
+> 
+> All the interfaces (in the different configurations) are used for
+> something in the case of the iPhone 6S I'm trying to use.
+> 
+> I've attached the output of "lsusb -v" for the device below.
 
-It could, at a great infrastructure cost, trying to get buy-in from
-various distributions, at the very least.
+What about interface "9", the "Apple USB Multiplexor"?  What driver
+binds to that thing?  It's a vendor-specific protocol, so there
+shouldn't be any class driver assigned to it, unlike most of the other
+interfaces.
 
-> You said this was for a "power supply" class driver.  It's not clear 
-> what that means -- the devices you want to communicate with are 
-> iphones, ipads, etc., not power supplies.
+thanks,
 
-There's tons of "device" scope "power_supply" devices in the kernel,
-which don't power the Linux machine they're running on. Grep for
-"POWER_SUPPLY_SCOPE_DEVICE" in the kernel, most wireless mice and
-keyboards implement this already.
-
-> Under what circumstances would these messages need to get sent?  
-
-User-space would control it by changing the device's
-POWER_SUPPLY_PROP_CHARGE_TYPE to "Fast", if available.
-
-eg.
-# echo "Fast" > /sys/devices/pci0000:00/0000:00:14.0/usb3/3-
-1/power_supply/apple_mfi_fastcharge/charge_type
-
-> What 
-> piece of code is responsible for them?
-
-In user-space? Hasn't been decided yet, but I can imagine a policy
-daemon that cares about what devices charge from which other device,
-and how fast. For example, a laptop in "low power mode" wouldn't want
-to fast charge a phone, if the only reason the phone was plugged in was
-to fetch some data off of it, for example.
-
-> If necessary, you can modify the core/generic.c driver.  However
-> that 
-> might not be the right approach, considering that this is meant only 
-> for devices manufactured by Apple.
-
-It's also used by at least one Blackberry device, and I can imagine
-other vendors having similar "APIs" to work-around USB 1.x charging
-current limits.
-
-I take it that by saying "modify core/generic.c" driver you mean that
-it's not possible to inherit from it, right?
-
+greg k-h
