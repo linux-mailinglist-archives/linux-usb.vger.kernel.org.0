@@ -2,135 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EE6BFC87
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 02:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8262CBFE76
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Sep 2019 07:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfI0Ay6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Sep 2019 20:54:58 -0400
-Received: from smtp.infotech.no ([82.134.31.41]:53491 "EHLO smtp.infotech.no"
+        id S1726652AbfI0FLA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 01:11:00 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56362 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725955AbfI0Ay5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Sep 2019 20:54:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by smtp.infotech.no (Postfix) with ESMTP id 9CA0B204164;
-        Fri, 27 Sep 2019 02:54:54 +0200 (CEST)
-X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
-Received: from smtp.infotech.no ([127.0.0.1])
-        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7me66Fx3w7TQ; Fri, 27 Sep 2019 02:54:46 +0200 (CEST)
-Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
-        by smtp.infotech.no (Postfix) with ESMTPA id B3E2020414D;
-        Fri, 27 Sep 2019 02:54:45 +0200 (CEST)
-Reply-To: dgilbert@interlog.com
-Subject: Re: [PATCH 0/2] Fix SCSI & USB Storage CHECK CONDITION handling
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Damien Le Moal <damien.lemoal@wdc.com>
-Cc:     linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Justin Piszcz <jpiszcz@lucidpixels.com>
-References: <Pine.LNX.4.44L0.1909261943230.24988-100000@netrider.rowland.org>
-From:   Douglas Gilbert <dgilbert@interlog.com>
-Message-ID: <631aa72f-4eee-bb5d-a81c-62df3a5a09e8@interlog.com>
-Date:   Thu, 26 Sep 2019 20:54:41 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1725268AbfI0FK7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Sep 2019 01:10:59 -0400
+Received: from localhost (unknown [62.119.166.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 848E22054F;
+        Fri, 27 Sep 2019 05:10:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569561058;
+        bh=ls1GkAP3q7Y1jxVP/fVgN6Pw3D11AGVy4cV2gOlLBQ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JKy4AbNzhC5BVtzJ4z9lhF7ZcnaQJytp/ZFP4CwT7wy3imcfsYP0ANB1H5XBntsgT
+         5Vh6j6eBzUQ5I3deD1XcTpgOhIHVaQ3XA+f4go0NAyQnjgoS8+PeXiNc+HrMtxDP9S
+         uq8xHaOIbwWfcID7oI/P+mi/EWu5nE2FWot4Xav4=
+Date:   Fri, 27 Sep 2019 07:10:42 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        syzbot <syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: WARNING in pvr2_i2c_core_done
+Message-ID: <20190927051042.GA1767219@kroah.com>
+References: <CAAeHK+zSYnRgUb_S9MwEp0rp5nk0YzpoVcYZOn_WooCW68EOmw@mail.gmail.com>
+ <Pine.LNX.4.44L0.1909261741540.16697-100000@netrider.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1909261943230.24988-100000@netrider.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-CA
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1909261741540.16697-100000@netrider.rowland.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2019-09-26 7:57 p.m., Alan Stern wrote:
-> On Fri, 27 Sep 2019, Damien Le Moal wrote:
+On Thu, Sep 26, 2019 at 05:44:31PM -0400, Alan Stern wrote:
+> On Wed, 25 Sep 2019, Andrey Konovalov wrote:
 > 
->> If a non-passthrough command is terminated with a CHECK CONDITION, the
->> scsi error recovery code reuses the failed command scsi_cmnd structure
->> to process error recovery request sense. To preserve information
->> regarding the failed command, the functions scsi_eh_prep_cmnd() and
->> scsi_eh_restore_cmnd() respectively save and restore the original
->> command information. However, the resid field of the failed command
->> request structure is not preserved and reused for the request sense
->> handling, leading to the original command having an incorrect resid
->> when:
->> A) The command is not retried and terminated with an error
->> B) The command completes after retry and the underlying LLD does not set
->>     resid for a fully completed command (resid=0)
->>
->> The first patch of this series addresses case (A) above by adding resid
->> as part of the command information saved using struct scsi_eh_save.
+> > On Wed, Sep 25, 2019 at 4:10 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Wed, 25 Sep 2019, syzbot wrote:
+> > >
+> > > > Hello,
+> > > >
+> > > > syzbot found the following crash on:
+> > > >
+> > > > HEAD commit:    d9e63adc usb-fuzzer: main usb gadget fuzzer driver
+> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=16b5fcd5600000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f4fa60e981ee8e6a
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=e74a998ca8f1df9cc332
+> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ec07b1600000
+> > > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13ff0871600000
+> > > >
+> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > > > Reported-by: syzbot+e74a998ca8f1df9cc332@syzkaller.appspotmail.com
+> > > >
+> > > > pvrusb2: Device being rendered inoperable
+> > > > cx25840 0-0044: Unable to detect h/w, assuming cx23887
+> > > > cx25840 0-0044: cx23887 A/V decoder found @ 0x88 (pvrusb2_a)
+> > > > pvrusb2: Attached sub-driver cx25840
+> > > > pvrusb2: ***WARNING*** pvrusb2 device hardware appears to be jammed and I
+> > > > can't clear it.
+> > > > pvrusb2: You might need to power cycle the pvrusb2 device in order to
+> > > > recover.
+> > > > ------------[ cut here ]------------
+> > > > sysfs group 'power' not found for kobject 'i2c-0'
+> > > > WARNING: CPU: 0 PID: 102 at fs/sysfs/group.c:278 sysfs_remove_group
+> > > > fs/sysfs/group.c:278 [inline]
+> > > > WARNING: CPU: 0 PID: 102 at fs/sysfs/group.c:278
+> > > > sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+> > >
+> > > I have seen a lot of error messages like this one (i.e., "group 'power'
+> > > not found for kobject"), in runs that involved fuzzing a completely
+> > > different USB driver.  Initial testing failed to find a cause.
+> > >
+> > > This leads me to wonder whether the problem might lie somewhere else
+> > > entirely.  A bug in some core kernel code?  Memory corruption?
+> > 
+> > AFAICS so far this has only been triggered from the usbvision driver
+> > [1] and from the pvrusb2 driver (this report).
+> > 
+> > I wanted to loop in sysfs maintainers, but it seems that Greg and
+> > Rafael are already cc'ed on this.
+> > 
+> > [1] https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
 > 
-> Good catch.
-> 
->> Case B can be observed with a WD My Book USB disks when a read or write
->> command is sent to the disk while the disk is in deep sleep mode
->> (spun down) due to a long period of inactivity (~30min).
->> In such case, the following command sequence happen:
->> 1) The read or write command is terminated after a few seconds with
->>     CHECK CONDITION and an asc/ascq of 04/01 (LOGICAL UNIT IS IN PROCESS
->>     OF BECOMING READY)
->> 2) In response to this failure, the USB mass storage driver triggers
->>     autosense processing, reusing the command descriptor to issue a
->>     request sense command with a 96B sense buffer size. The reply
->>     to this command gives a NOT READY / LOGICAL UNIT IS IN PROCESS
->>     OF BECOMING READY sense of 18B, resulting in a resid of 78B.
->> 3) The original command is retried and failed again, with step 2
->>     repeated, until the drive spins up and becomes ready.
->> 4) When the original command completes after the drive has become ready,
->>     the request sense command resid of 78B is seen by the scsi disk
->>     driver sd_done() function and wrongly generates a warning about the
->>     unaligned value reported.
-> 
-> But with the 1/1 patch in place, 4 won't happen any more, right?
-> sd_done() will see the resid from the successful read or write.
-> 
->> This problem is fixed in patch 2 by always setting a command resid to 0
->> when there is no residual in usb_stor_Bulk_transport(). Note that
->> usb_stor_CB_transport() does not need changes since usb_stor_bulk_srb()
->> always sets the resid for a completed command, regardless of the
->> residual value.
-> 
-> Exactly the same reasoning shows that usb_stor_Bulk_transport() also
-> does not need changes, doesn't it?  Which means that patch 2/2 is
-> unnecessary.
-> 
-> Alan Stern
-> 
-> PS: The correct term is "residue", not "residual".  I know that the
-> code sometimes uses the wrong word.
+> It turns out the reason for this error is simple: The driver 
+> unregisters its subdevices in the release handler instead of in the 
+> disconnect handler.  There probably is documentation about this 
+> somewhere, but I don't know exactly where -- maybe Greg remembers.
 
-Digging into my T10 document archive I found this cam3r03.pdf :
+Nope, I don't remember.  It should happen in the disconnect handler, odd
+of it to be in release, but maybe that's the "easiest" way for v4l to
+handle this?
 
-   − cam_resid;
-     The data residual length member contains the difference in twos
-     complement form of the number of data bytes transferred by the
-     HA for the SCSI command compared with the number of bytes
-     requested by the CCB cam_dxfer_len member. This is calculated
-     by the total number of bytes requested to be transferred by the
-     CCB minus the actual number of bytes transferred by the HA.
+thanks,
 
-CAM is a now withdrawn T10 standard from the 1990s that was influential
-at the time. FreeBSD's SCSI subsystem is (still) based on CAM.
-
-For a more recent standard/draft there is fcp5r00.pdf that uses the
-term "residual value" when defining its fcp_resid.
-
-The only reference to the term "residue" that I found is in CAM: an
-optional message: IGNORE WIDE RESIDUE .
-
-So I would leave the naming up to the patch author. It is pretty
-clear what is being referred to in either case.
-
-Doug Gilbert
-
-
-P.S. I prefer "residual" because it is more flexible being both
-an adjective and a noun.
-[Ref: https://www.lexico.com/en/definition/residual]
-
-
+greg k-h
