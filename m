@@ -2,89 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12686C10E9
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2019 14:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2612C113C
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2019 17:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725932AbfI1M5n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Sep 2019 08:57:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48546 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725876AbfI1M5n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Sep 2019 08:57:43 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D885C20815;
-        Sat, 28 Sep 2019 12:57:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569675461;
-        bh=cpv/Yd4nsoQr4RG5XMgvshPVtBcRxJucBbVVmKCa8b4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aPatCDRwOb03U7ozPse+1wdRcK4WJNtkJ0w3ZPpIP3n/M7JfLVqF38tQv+Ef8xIPW
-         NJkzWrTCBgjZeLdZ25PikxLs2U/gwySrJdLNUle5QfCPZ05K8Mx1i7Pdic8Kve7C1o
-         rc8gPYts4rqeiTz9gLWvvExPeIz8tFd5gMahdrAM=
-Date:   Sat, 28 Sep 2019 14:57:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        benjamin.tissoires@redhat.com
-Subject: Re: Driver for something that's neither a device nor an interface
- driver?
-Message-ID: <20190928125738.GA1848662@kroah.com>
-References: <Pine.LNX.4.44L0.1909271351260.4732-100000@iolanthe.rowland.org>
- <7f25b01ceb1a3aa6bd213599474ceffc34a0054b.camel@hadess.net>
- <20190927192554.GB1805907@kroah.com>
- <48bcb34194695566b9c59f6e814706f8d65be962.camel@hadess.net>
- <20190928073935.GB1836895@kroah.com>
- <c47cfdbe937b209eb84af7de3aea7faf3faa5ca8.camel@hadess.net>
- <20190928121809.GB1845030@kroah.com>
- <7d5cea0ea49ef76a248f0c307418698cedf827dc.camel@hadess.net>
+        id S1726940AbfI1Puk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 28 Sep 2019 11:50:40 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:36669 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbfI1Puk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 28 Sep 2019 11:50:40 -0400
+Received: by mail-io1-f65.google.com with SMTP id b136so25723112iof.3
+        for <linux-usb@vger.kernel.org>; Sat, 28 Sep 2019 08:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=VmP4t6Nkr9v/B1z1zla8wNSvSBHiglNNEGF3yF1dQs4=;
+        b=IV7kmXdR3IT+IsDVmXHviFFmbEK9ecspRxvhpljt3jpgLDbJLcCSRyWGnCm0Gri1a+
+         D33eVBYC5iZUwxsm/hn+IFkCqC10td6sit+izjlxsNiInsDT+3xxE/D8zt5HX43gIryR
+         vOSwIDwQTOPTybUgEA7aM8P0zYXSvzTm/K3gBYR8WZYGttjiiFzs6B2Zr20ed4qucFk0
+         ryUDqjibRCPiBlX7lP0IaVtoEgp5Fi6tWNfzncFTIj/A8aPoXndNI+Sym2pdxtKzQpI7
+         TEPTPNISGDOPwkwanCnNpSy57UHw8mP0NBWTafLOkQK3ZRvsJo864sgfq9td+NAMzXva
+         NnSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=VmP4t6Nkr9v/B1z1zla8wNSvSBHiglNNEGF3yF1dQs4=;
+        b=bSjljgRKt0YzkKWWyr4HhfJL+mJFArb3rO4W6nt+3ZjIIugOM53iwvXylquZb2kQNw
+         s1zTZ3wafdyiWQOj2uRE08Yv/Pi0ChZN0/RjeiYiiqd9RowOeli47PyNs34xvoZD/cg8
+         k4BwJSmTyFVse7RPLYP0zHRlrcRmqtQxaXEIdPxxQI5aoNe6V/peBEOKHE4qIhWdz4ir
+         yQ11Ra5J2OX3FyULL11iTeqfmVcngv9F6xzpqXIEiSsPWjDziYhmd4UgVL9EH5J1Qe2M
+         Y8D1GxiznQRMC9Z4gCQPWqg50HIjNHBBaHBjmZSJ7tKdSY9N9knD8B/M/3SdfWvAZnFd
+         EgRA==
+X-Gm-Message-State: APjAAAV5I4+Vq7UcQVjxPYc1WS72p/tIrAw6ycuX0NEsjOh8M8H2cYnd
+        Pj+WSurARsWGckjqk3P76nERZDyPiHyhzdBFAJt87g==
+X-Google-Smtp-Source: APXvYqwkwNhya2ioOlIjprJXFwvJZIL3qnBjbsnapm17HKmI4c3S4jkMVe/jxRpA147CkVxnEEDR8lA5DqqEB0Lkn1A=
+X-Received: by 2002:a6b:210:: with SMTP id 16mr14135435ioc.104.1569685839639;
+ Sat, 28 Sep 2019 08:50:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7d5cea0ea49ef76a248f0c307418698cedf827dc.camel@hadess.net>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Received: by 2002:a02:620f:0:0:0:0:0 with HTTP; Sat, 28 Sep 2019 08:50:39
+ -0700 (PDT)
+Reply-To: edithbrown0257@gmail.com
+From:   Edith Brown <karenleo832@gmail.com>
+Date:   Sat, 28 Sep 2019 16:50:39 +0100
+Message-ID: <CAO0VLitH1eFm+T53UdmY5MH5e9zub3P8KAViKL_cvoGG=LhNvA@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 28, 2019 at 02:37:21PM +0200, Bastien Nocera wrote:
-> On Sat, 2019-09-28 at 14:18 +0200, Greg KH wrote:
-> > Again, the power_supply api is for power going the other way in the
-> > system.  That's not an "existing clearly defined API in kernel
-> > space".
-> 
-> No it isn't, not since 2011.
-> 
-> commit 25a0bc2dfc2ea732f40af2dae52426ead66ae76e
-> Author: Jeremy Fitzhardinge <jeremy@goop.org>
-> Date:   Wed Dec 7 11:24:20 2011 -0800
-> 
->     power_supply: add SCOPE attribute to power supplies
->     
->     This adds a "scope" attribute to a power_supply, which indicates how
->     much of the system it powers.  It appears in sysfs as "scope" or in
->     the uevent file as POWER_SUPPLY_SCOPE=.  There are presently three
->     possible values:
->             Unknown - unknown power topology
->             System - the power supply powers the whole system
->             Device - it powers a specific device, or tree of devices
->     
->     A power supply which doesn't have a "scope" attribute should be assumed to
->     have "System" scope.
->     
->     In general, usermode should assume that loss of all System-scoped power
->     supplies will power off the whole system, but any single one is sufficient
->     to power the system.
->     
->     Signed-off-by: Jeremy Fitzhardinge <jeremy@goop.org>
->     Cc: Richard Hughes <richard@hughsie.com>
-> 
-
-Ah, ok, my fault, then ok, let's see how your kernel driver ties into
-this then.
-
-thanks,
-
-greg k-h
+-- 
+Hello dear
+how are you?
+my name is Edith Brown
+i am a U.S military woman
+is my pleasure meeting you here
+best regards
