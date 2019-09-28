@@ -2,33 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 774B5C0F5B
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2019 04:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96ACC0F60
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Sep 2019 04:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbfI1Cg6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 27 Sep 2019 22:36:58 -0400
-Received: from mail.nic.cz ([217.31.204.67]:59632 "EHLO mail.nic.cz"
+        id S1726408AbfI1Cl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 27 Sep 2019 22:41:58 -0400
+Received: from mail.nic.cz ([217.31.204.67]:59700 "EHLO mail.nic.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbfI1Cg6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 27 Sep 2019 22:36:58 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Sep 2019 22:36:57 EDT
+        id S1725306AbfI1Cl5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 27 Sep 2019 22:41:57 -0400
 Received: from localhost (unknown [172.20.6.135])
-        by mail.nic.cz (Postfix) with ESMTPSA id 6B2C5140E6C;
-        Sat, 28 Sep 2019 04:29:50 +0200 (CEST)
+        by mail.nic.cz (Postfix) with ESMTPSA id D3E42140E6B;
+        Sat, 28 Sep 2019 04:32:09 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nic.cz; s=default;
-        t=1569637790; bh=oPsVH4Q8uPW/JICE5X/Kykl30D0ud1nhXptnC2f5l1M=;
+        t=1569637930; bh=PHJxNmUdFjLClF3fYBn9Bw3ogSKlLPbL0/s/38ERX9k=;
         h=Date:From:To;
-        b=HAcVemmhYvF5c7PLAn3IRwAhwVZckjQHryW1OAFIzedguEZiLOndwEcb1ega4NFaH
-         oHLbt3VXSVLTVQWvccV0DQ7tMtLjiSWsRx+jwSISvE/3DKEUz0zXzuKaC0Ju7s5vxu
-         A8YaGXT6rOmkFPNpDhbjCQaA/gvReWKz8IAxcYQk=
-Date:   Sat, 28 Sep 2019 04:29:50 +0200
+        b=BfhpkU2jwiK+yF9D047vrQpvCsu5DS214wxxOUaVrb6nf7Wg1p0tk4G2fa3ZpUUZC
+         h5E3yJMyO/NEadhZBt0SdI0oQUctVJElVlh3Le14zk6cAx3oGFafQ7vkHxJZvLbau5
+         OU9NyuErobSoDWNVTIsdCZKvzeziq7CfTaqWVuu4=
+Date:   Sat, 28 Sep 2019 04:32:09 +0200
 From:   Marek Behun <marek.behun@nic.cz>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>
 Cc:     linux-usb@vger.kernel.org,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: regression from commit "usb: host: xhci-plat: Prevent an abnormally
- restrictive PHY init skipping"
-Message-ID: <20190928042950.3ae07173@nic.cz>
+Subject: Re: regression from commit "usb: host: xhci-plat: Prevent an
+ abnormally restrictive PHY init skipping"
+Message-ID: <20190928043209.62cfc2ef@nic.cz>
+In-Reply-To: <20190928042950.3ae07173@nic.cz>
+References: <20190928042950.3ae07173@nic.cz>
 X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -43,24 +44,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Miquel,
+On Sat, 28 Sep 2019 04:29:50 +0200
+Marek Behun <marek.behun@nic.cz> wrote:
 
-I am encountering a regression caused by your commit eb6c2eb6c7fb
-"usb: host: xhci-plat: Prevent an abnormally restrictive PHY init
-skipping" [1]
+> Hi Miquel,
+> 
+> I am encountering a regression caused by your commit eb6c2eb6c7fb
+> "usb: host: xhci-plat: Prevent an abnormally restrictive PHY init
+> skipping" [1]
 
-In the Turris Mox device tree, we use both a comphy and a usb-phy, see
-[2]. I am not sure how to solve this now. You write in your commit
-message that "While there is not users of both PHY types at the same
-time, drop this limitation from the xhci-plat.c driver."
+I forgot to explain how the regression presents itself
 
-Should I get this patch reverted or try to solve it another way?
+  rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
 
-Thank you.
+The kernel than hangs.
 
 Marek
-
-[1]
-https://lore.kernel.org/linux-usb/20190731121150.2253-1-miquel.raynal@bootlin.com/
-[2]
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts#n258
