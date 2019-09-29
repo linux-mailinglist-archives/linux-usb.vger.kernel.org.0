@@ -2,118 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DEBC12E1
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2019 04:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E69FC1388
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2019 08:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728853AbfI2C51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 28 Sep 2019 22:57:27 -0400
-Received: from mail-eopbgr140089.outbound.protection.outlook.com ([40.107.14.89]:42914
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        id S1726018AbfI2GHo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Sep 2019 02:07:44 -0400
+Received: from mail-eopbgr00079.outbound.protection.outlook.com ([40.107.0.79]:18926
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728699AbfI2C51 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 28 Sep 2019 22:57:27 -0400
+        id S1725958AbfI2GHo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 29 Sep 2019 02:07:44 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NE/ssykPIOOieL8lOwO+fZVS9Lw4J1jys85U9lLkQ6m9Fgi7Z0oSoOBk6N/KH2jMfeM4p+cNTAsjtO9SsUy37g/uXTTbLeGGb61CkKQ6aiG9mpFTaoE4RSFfQ+tGCyrWd24iwhhhL592MQ7ySJ/4hFg6sabgILGbmIrDHHICAdjXlNjopirNwsvMucK/o/U6oCmFZ4duaQUkIXfy1IPS2e17Z0qygqSyp+3Wb9se9hP87ALHnBuJRX+4jg8RhDavCKpUBE2yFklEAiQCAaDm1RNiJh0oF7yewjk3cfl5VKwALM5/W0WCV+CaPCLDtLYqnLsMs4iv0BpO0YG6padEfQ==
+ b=NJbtDsAVl1XGQE8zoh/D3r/PAdR5O/gCTyCqLKfGHO7T7WkoklZEi0P6NrCZtKcdDA09f5fMC/1gTpeXqi0Tk5u53QzRNVkEYpzegRhO1fwJTcq9W18lxrt/6/Nblz+Lasi5Iwyck11GiJZzBJq2TvMysr3XRACFF4DHeyTclUubi1TDYO332CiTtQeLG7Mb1wfJfvpFPLa+QvuTDycwJtNgH0vNOkRR46BWkVdM1XnHw/gVxITHBoaaDiYSarVBjN4eI6/3P250060eZapJ5/K6ZAZFMnEILevhYzGOEDNZIA+RHOuHWUNC/Z6U000oywCU7wPNHEHzzzfQRO1juQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q7Cr/n4EZzxryUiJBwEqa8KZivcjhF4Yb8S7vhHNSNk=;
- b=Xb+v+bPVe/18UynoDg0ORMxtLleAwDEPtUNH47Hr0/Y85pWkIRRW6gMselM4HU01385jAtgcWiZI0HLp+5WYTKUq1Ez9QgmwsRr6c76ASqAImwlhOkfVe1OTpFWCBPmjt7pb0D0INfZVxDIuQ4sIZnAt33DWRCgbDk12GT6cGfptL1KCicDhaoSlsHSdatdVV322QgGvTndvA+mD27KWuJ+soHjjnfMuMOLMFtbk+q9jwqffIvMwNsgeG5Lm2caO88M4F8MCEWB4AfQrKpHkRSVrPtQGQnAMcq0hPQKKDtkNqv7DGd0EGInUZ272wBqbEqdfwnsVsCJPv8oYot4k+A==
+ bh=ncIBHeih+29wxwUg0Nb1V0yK4GH6nupNPhsEbEFuzvk=;
+ b=lhlqx1drVzV3trM22br7llQp4eOO6tqL01Cci3MuRBKWTSp6PDrKXy+v39AImFSLINq//GWwHhJU+wpRlqIbmzK6yauFjDiApgg+dU1599skxEL/B4O6Ev8jG+FS2PoLbxLsiy3vfUNlYrDxxQKu5MpAcDWUJg0pl7BldtOV6G/HlnaB7q+VpOTe6siK4KGp46IS3dY9J+DxYIzIcF4h+C4KiC+AhAtbGJo5u5lEutlnvIIxXBqFJQYsnLoNk1Ozcf3/kWpD/Bl8EHi/O4mDBQ3fP0DD2upZXdoga5ApF4H01JchZFAgRWUuH5fQlCMZiCBZqcWK/0AAVp5jQoNpVg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Q7Cr/n4EZzxryUiJBwEqa8KZivcjhF4Yb8S7vhHNSNk=;
- b=XpOCtPICRWj250KqiA7e2ewqbGTJtU37MJ3yLq3n1u+k0uljEmGlDR9prTBPpPkQLBGcsg/banZKvt807b6QKN6PnuY64MEYlGqOiHQyZSgCQaKcLbd+fQwV6BBKNIexlt0NSPQ+HjsmqGiY8eUMaDEEHqDn8kRXkXMnD8Z4I18=
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com (52.133.240.82) by
- DB8PR04MB7132.eurprd04.prod.outlook.com (52.135.63.80) with Microsoft SMTP
+ bh=ncIBHeih+29wxwUg0Nb1V0yK4GH6nupNPhsEbEFuzvk=;
+ b=rEEgZv05dIzyi0RoxDY4U3+jCICj1lCUVEQULssGwu+i8QERXaq/4gmpuDxsEmMtP+753x/lKFbi3bxplfG51+r+UDTuQU4HSsJ1CNbZPWI52xBOffhlFEesDZJJK5DOxv8sv+5ysM9mHYvGy/A7/mzmvt7ld9YV7ZsnXkguaxI=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB6096.eurprd04.prod.outlook.com (20.179.25.150) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.15; Sun, 29 Sep 2019 02:57:23 +0000
-Received: from DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::3d0b:c71f:fa1a:e856]) by DB8PR04MB6826.eurprd04.prod.outlook.com
- ([fe80::3d0b:c71f:fa1a:e856%2]) with mapi id 15.20.2305.017; Sun, 29 Sep 2019
- 02:57:23 +0000
-From:   Ran Wang <ran.wang_1@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] usb: hub add filter for device with specific VID&PID
-Thread-Topic: [PATCH] usb: hub add filter for device with specific VID&PID
-Thread-Index: AQHVcfycJPrHn/IcK0qf/xic1GWPZ6c5GiAAgAEI5+CABaVFgIACLFEQgAAINyA=
-Date:   Sun, 29 Sep 2019 02:57:23 +0000
-Message-ID: <DB8PR04MB682675054E3A5306F447E6FDF1830@DB8PR04MB6826.eurprd04.prod.outlook.com>
-References: <DB8PR04MB682649CA98B0704FAF037A40F1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
- <Pine.LNX.4.44L0.1909271305030.4732-100000@iolanthe.rowland.org>
- <DB8PR04MB6826763082AF84812426CC53F1830@DB8PR04MB6826.eurprd04.prod.outlook.com>
-In-Reply-To: <DB8PR04MB6826763082AF84812426CC53F1830@DB8PR04MB6826.eurprd04.prod.outlook.com>
+ 15.20.2284.20; Sun, 29 Sep 2019 06:07:39 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::1da:26dc:6373:4ab0]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::1da:26dc:6373:4ab0%3]) with mapi id 15.20.2305.017; Sun, 29 Sep 2019
+ 06:07:39 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v2 1/1] usb: host: xhci: update event ring dequeue pointer on
+ purpose
+Thread-Topic: [PATCH v2 1/1] usb: host: xhci: update event ring dequeue
+ pointer on purpose
+Thread-Index: AQHVdowy3KvqKrVg+E+m3SFwaVQ3lw==
+Date:   Sun, 29 Sep 2019 06:07:39 +0000
+Message-ID: <20190929060556.24182-1-peter.chen@nxp.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: SG2PR04CA0130.apcprd04.prod.outlook.com
+ (2603:1096:3:16::14) To VI1PR04MB5327.eurprd04.prod.outlook.com
+ (2603:10a6:803:60::16)
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ran.wang_1@nxp.com; 
-x-originating-ip: [92.121.36.198]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 50cb416f-8165-4d48-7708-08d74488c0c2
+x-ms-office365-filtering-correlation-id: b5120e49-4d73-4e66-6d92-08d744a354e4
 x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: DB8PR04MB7132:
-x-microsoft-antispam-prvs: <DB8PR04MB713208485020EF838FB43CFDF1830@DB8PR04MB7132.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR04MB6096;
+x-ms-traffictypediagnostic: VI1PR04MB6096:|VI1PR04MB6096:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB6096812268A330E7AE18E5DA8B830@VI1PR04MB6096.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2150;
 x-forefront-prvs: 017589626D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(396003)(136003)(39860400002)(366004)(376002)(189003)(199004)(8936002)(25786009)(6436002)(14454004)(74316002)(478600001)(66556008)(53546011)(99286004)(446003)(33656002)(6506007)(76116006)(305945005)(66476007)(66946007)(64756008)(66066001)(7696005)(229853002)(66446008)(54906003)(4326008)(9686003)(11346002)(186003)(256004)(6916009)(102836004)(55016002)(6246003)(2171002)(76176011)(52536014)(5660300002)(71200400001)(71190400001)(81156014)(81166006)(316002)(6116002)(3846002)(8676002)(86362001)(2906002)(26005)(476003)(486006)(7736002)(2940100002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB7132;H:DB8PR04MB6826.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39860400002)(376002)(366004)(346002)(136003)(199004)(189003)(25786009)(15650500001)(4326008)(6916009)(305945005)(81156014)(7736002)(5660300002)(6512007)(44832011)(71200400001)(71190400001)(50226002)(2351001)(386003)(26005)(54906003)(6436002)(2501003)(2906002)(66066001)(6506007)(86362001)(5640700003)(316002)(66446008)(6486002)(66476007)(99286004)(66556008)(256004)(478600001)(486006)(2616005)(52116002)(3846002)(64756008)(6116002)(102836004)(8936002)(66946007)(8676002)(186003)(81166006)(14454004)(14444005)(1076003)(476003)(36756003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6096;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: zhTQlV1PYr3iPQPN28yuW/8xnwY5tpNtzn9s7o0SSKDmPFQzjN9g1DFJDQCJO/j+N+/eUCXcPFl7xcrOVnzeMNEY/MWsef3cYoBR3MC3ng4mY4prGcJJHN57i5rIl8IvBnPMYqQGghlnYwBI6i7FEleXcAR2yca8eDEJAgID36Kmk51WO7OuDy9oD2AaK/YsXFHaHjFJnlLko2WN//exKkySEbfThc1PWr718ah6TTczmft0inGccyv6ltQCcIB7eFLnUaP/z5aezpJS0SO52jk4vmOUe0SFFSvjSR1xM4wFAoZHvOCDu7Au3VWjZsVa9wxZjf1oduF9JtdLERYvGeZGme6ojTW51ZnvUCRZbHCP2/CVqmbiw+FsOQhKTHcnYpU4URP6ZJJ49yUd8CPAVsS07k3rGltQRRdPAxLJjlk=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-microsoft-antispam-message-info: Yu6prTyM2K53S3oR70cUUZ0ocL0TAclcKHLFC3uAMRzJmhbmWXnCyRd7vCQ5IcVF9aKeKAkA0XijCSkQitBQzC9TWm4Clfqp90bR4iuCjetXkePNdqLVPx8vXuKg1pMrh1tQIWpG26GM6EZTnI+1TVtczHRx0bKqDPu1EkBxhytW/GgB4UEpIKpPb/tmICMpu9tKOvq94ib1brXmbOWlFU6SBVPZLRPfhElIxzelFypOs1uqagLQ1FVJvtzbWD7ZaubdKxGfww814DJGr5cc0YPGXHmFiO78ctx+FqcsxtNRJIzXk1AuWbScUKfG1K2ti2T/IKkNJqsttg9hi72q/oBysS2aYjhX+VILGBu3coBlZ0c73VeVnowbbdZBhTwS0qprPWzwz9oJDaJ9d+5rwJH/B9MVX0hyvVrtPLa3oNs=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50cb416f-8165-4d48-7708-08d74488c0c2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2019 02:57:23.4814
+X-MS-Exchange-CrossTenant-Network-Message-Id: b5120e49-4d73-4e66-6d92-08d744a354e4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Sep 2019 06:07:39.3537
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rJxuOczFpVCfzIjW0SOMS3FYo3UkO46bES5/9sQ6F90/XVt45JEldy1QYwJXrMuKxu0Xz9QbE8Ej78Engb1GKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7132
+X-MS-Exchange-CrossTenant-userprincipalname: 2/cPQdmzbUj7eAXeBuwHRKkLHrDZVzpCTrnHfMp0KsnpiMCs8wQioG/SIrUDgMRzoxsl+KxCzt5P03BFY62LNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6096
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgQWxhbiwNCg0KT24gU3VuZGF5LCBTZXB0ZW1iZXIgMjksIDIwMTkgMTA6MzUsIHdyb3RlOg0K
-PiANCj4gSGkgQWxhbiwNCj4gDQo+IE9uIFNhdHVyZGF5LCBTZXB0ZW1iZXIgMjgsIDIwMTkgMDE6
-MDgsIEFsYW4gU3Rlcm4gd3JvdGU6DQo8c25pcD4NCj4gPg0KPiA+IEluIGZhY3QsIHRoZSBzeXN0
-ZW0gc2hvdWxkIHJlc3BvbmQgdGhlIHNhbWUgd2F5IHRvIGFueSB1bnJlY29nbml6ZWQNCj4gPiBk
-ZXZpY2UgdGhhdCBkb2Vzbid0IHN1cHBvcnQgSE5QLCByaWdodD8gIFRoZXJlJ3Mgbm90aGluZyBz
-cGVjaWFsIGFib3V0DQo+ID4gdGhlc2UgVklEL1BJRCB2YWx1ZXMuDQo+IA0KPiBZZXMsIGJ1dCBJ
-IHNhdyB0aGVyZSBhcmUgYWxyZWFkeSBzb21lIGltcGxlbWVudGF0aW9uIGluIHVwc3RyZWFtIGtl
-cm5lbCBmb3IgdGhpcw0KPiBwdXJwb3NlLCBqdXN0IFBJRCBkaWZmZXJlbnQ6IGRyaXZlcnMvdXNi
-L2NvcmUvb3RnX3doaXRlbGlzdC5oIGZ1bmN0aW9uDQo+IGlzX3RhcmdldGVkKCkNCj4gDQo+ID4g
-PiA+IEFuZCB3aHkgdGhvc2Ugc3BlY2lmaWMgdmlkL3BpZCB2YWx1ZXM/ICBXaGF0IGRvIHRoZXkg
-cmVmZXIgdG8/DQo+ID4gPg0KPiA+ID4gRm9yIHN0ZXAgNSwgd2UgZ290IHRoZSBWSUQgLyBQSUQg
-bnVtYmVyIGZyb20gVVNCIElGIGNlcnRpZmllZA0KPiA+ID4gbGFiKEFsbGlvbi5pbmMgYXQgVGFp
-d2FuZykuIExvb2tzIGxpa2UgdGhpcyBpcyBhIHJlc2VydmVkIElEIHBhaXINCj4gPiA+IGFuZCB3
-aWxsIG5vdCBiZSBhbGxvY2F0ZWQgdG8gYW55IHZlbmRvciBmb3IgdGhlaXIgcHJvZHVjdHMuIFNv
-IGl0J3MNCj4gPiA+IGhlbmNlIHVzZWQgZm9yDQo+ID4gdGhpcyBjYXNlIHRlc3QgKGxpa2Ugc2F5
-aW5nOiB5b3Ugc2hvdWxkIGJlIGFibGUgdG8gcG9wIGEgbm90LXN1cHBvcnQNCj4gPiBtZXNzYWdl
-IGZvciB0aGlzIHJlc2VydmVkIFZJRCZQSUQpLg0KPiA+DQo+ID4gRG9uJ3Qgd2UgZG8gdGhpcyBh
-bHJlYWR5Pw0KPiANCj4gWWVzLCBidXQgaW4gZnVuY3Rpb24gaXNfc3RhcmdldGVkKCksIEkgZm91
-bmQgaXQncyBhIGxpdHRsZSBiZSBkaWZmZXJlbnQ6DQo+IEN1cnJlbnQgdXBzdHJlYW06ICAgICAg
-ICAgICAgICAgICAgICAgVklEID0gMHgxYTBhLCBQSUQgPSAweDAyMDANCj4gSW5mbyBmcm9tIFVT
-Qi1JRiBjZXJ0aWZpZWQgbGFiOiBWSUQgPSAweDFhMGEsIFBJRCA9IDB4MDIwMQ0KPiANCg0KU29y
-cnkgdGhhdCBJIG1pcy11bmRlcnN0b29kIHRoZSBsb2dpYyBvZiBpc19zdGFyZ2V0ZWQoKSBhbmQg
-aXQncyBjYWxsZXIuDQoNClNvIHRoZSBwcm9wZXIgd2F5IHRvIHJlc29sdmUgbXkgcHJvYmxlbSBp
-czoNCjEuIFNlbGVjdCBDT05GSUdfVVNCX09URyBpbiAuY29uZmlnDQoyLiBBZGQgcHJvcGVydHkg
-J3RwbC1zdXBwb3J0JyB0byBkZXZpY2UgdHJlZQ0KMy4gQ3VzdG9taXplIHdoaXRlbGlzdF90YWJs
-ZVtdIGFjY29yZGluZyB0byBteSBUYXJnZXQtUGVyaXBoZXJhbC1MaXN0DQpyZXF1aXJlbWVudC4N
-Cg0KQW0gSSByaWdodD8gOikNCg0KUmVnYXJkcywNClJhbg0K
+On some situations, the software handles TRB events slower
+than adding TRBs, then xhci_handle_event can't return zero
+long time, the xHC will consider the event ring is full,
+and trigger "Event Ring Full" error, but in fact, the software
+has already finished lots of events, just no chance to
+update ERDP (event ring dequeue pointer).
+
+In this commit, we force update ERDP if half of TRBS_PER_SEGMENT
+events have handled to avoid "Event Ring Full" error.
+
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v2:
+- If current ERDP value is the same with intended written one,
+  give up this written.
+
+ drivers/usb/host/xhci-ring.c | 62 ++++++++++++++++++++++++++----------
+ 1 file changed, 45 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e220bcbee173..2c0a15c3b3a7 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2737,6 +2737,44 @@ static int xhci_handle_event(struct xhci_hcd *xhci)
+ 	return 1;
+ }
+=20
++/*
++ * Update Event Ring Dequeue Pointer:
++ * - When all events have finished
++ * - To avoid "Event Ring Full Error" condition
++ */
++static void xhci_update_erst_dequeue(struct xhci_hcd *xhci,
++		union xhci_trb *event_ring_deq)
++{
++	u64 temp_64;
++	dma_addr_t deq;
++
++	temp_64 =3D xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
++	/* If necessary, update the HW's version of the event ring deq ptr. */
++	if (event_ring_deq !=3D xhci->event_ring->dequeue) {
++		deq =3D xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
++				xhci->event_ring->dequeue);
++		if (deq =3D=3D 0)
++			xhci_warn(xhci, "WARN something wrong with SW event "
++					"ring dequeue ptr.\n");
++
++		/*
++		 * Per 4.9.4, Software writes to the ERDP register shall
++		 * always advance the Event Ring Dequeue Pointer value.
++		 */
++		if ((temp_64 & (u64) ~ERST_PTR_MASK) =3D=3D
++				((u64) deq & (u64) ~ERST_PTR_MASK))
++			return;
++
++		/* Update HC event ring dequeue pointer */
++		temp_64 &=3D ERST_PTR_MASK;
++		temp_64 |=3D ((u64) deq & (u64) ~ERST_PTR_MASK);
++	}
++
++	/* Clear the event handler busy flag (RW1C) */
++	temp_64 |=3D ERST_EHB;
++	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
++}
++
+ /*
+  * xHCI spec says we can get an interrupt, and if the HC has an error cond=
+ition,
+  * we might get bad data out of the event ring.  Section 4.10.2.7 has a li=
+st of
+@@ -2748,9 +2786,9 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	union xhci_trb *event_ring_deq;
+ 	irqreturn_t ret =3D IRQ_NONE;
+ 	unsigned long flags;
+-	dma_addr_t deq;
+ 	u64 temp_64;
+ 	u32 status;
++	int event_loop =3D 0;
+=20
+ 	spin_lock_irqsave(&xhci->lock, flags);
+ 	/* Check if the xHC generated the interrupt, or the irq is shared */
+@@ -2804,24 +2842,14 @@ irqreturn_t xhci_irq(struct usb_hcd *hcd)
+ 	/* FIXME this should be a delayed service routine
+ 	 * that clears the EHB.
+ 	 */
+-	while (xhci_handle_event(xhci) > 0) {}
+-
+-	temp_64 =3D xhci_read_64(xhci, &xhci->ir_set->erst_dequeue);
+-	/* If necessary, update the HW's version of the event ring deq ptr. */
+-	if (event_ring_deq !=3D xhci->event_ring->dequeue) {
+-		deq =3D xhci_trb_virt_to_dma(xhci->event_ring->deq_seg,
+-				xhci->event_ring->dequeue);
+-		if (deq =3D=3D 0)
+-			xhci_warn(xhci, "WARN something wrong with SW event "
+-					"ring dequeue ptr.\n");
+-		/* Update HC event ring dequeue pointer */
+-		temp_64 &=3D ERST_PTR_MASK;
+-		temp_64 |=3D ((u64) deq & (u64) ~ERST_PTR_MASK);
++	while (xhci_handle_event(xhci) > 0) {
++		if (event_loop++ < TRBS_PER_SEGMENT / 2)
++			continue;
++		xhci_update_erst_dequeue(xhci, event_ring_deq);
++		event_loop =3D 0;
+ 	}
+=20
+-	/* Clear the event handler busy flag (RW1C); event ring is empty. */
+-	temp_64 |=3D ERST_EHB;
+-	xhci_write_64(xhci, temp_64, &xhci->ir_set->erst_dequeue);
++	xhci_update_erst_dequeue(xhci, event_ring_deq);
+ 	ret =3D IRQ_HANDLED;
+=20
+ out:
+--=20
+2.17.1
+
