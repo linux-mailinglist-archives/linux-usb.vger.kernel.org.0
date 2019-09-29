@@ -2,159 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 462C7C13AB
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2019 08:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E954FC196E
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Sep 2019 22:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726149AbfI2GgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 29 Sep 2019 02:36:24 -0400
-Received: from mail-io1-f52.google.com ([209.85.166.52]:42514 "EHLO
-        mail-io1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbfI2GgX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Sep 2019 02:36:23 -0400
-Received: by mail-io1-f52.google.com with SMTP id n197so28948232iod.9;
-        Sat, 28 Sep 2019 23:36:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=iDVkqOh00Gu1t88eatQYlGFJCHixlykrMMQFxTtFYFg=;
-        b=hzCgYFPKvBEobLhYvXZR5S1mo8QeleXmppOkCtehseCbc1OlH7MJ03a2NG7gZMQiN/
-         k+0oHQ8qtK/S/G3k1a/S5cbVjbc8ygpOBurC4y6GP60ZIHBxTavZes1LRG6HPj5PVv/b
-         RscP/OyvKVsgerpFXMhWsAxDS+TOOJuWssBoV19c64Yi9XyD0zkNCBRQVSC5D0+maYnc
-         f8U7XSWQBbwGp6OVgHw7KuDiEtDkTu9wFVQiHilO0dYQcs+w/8hFDXRawiBGbJWMNg27
-         oWdmAIu2VSzA8IfCkb9jWbWHV/G6ND3PIvVpCDwhe8kH2cmsHtWxi6UmFvNZVHdZm/HA
-         vf3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=iDVkqOh00Gu1t88eatQYlGFJCHixlykrMMQFxTtFYFg=;
-        b=UA9NjPhtBap6zIMZwIHxAEnI8aAbYye/GF5A0Ed7UN+nSuWiepNc69im58e6Hmmxb4
-         zlDVYekh0CG+Psx3LkhShT6psUegSGt1G03JqEvBoBAM/R8k0rPG/Voj46yviza1PInG
-         f+mggPr5VXTzDJUR9oLZGZO9q0SAd9qPGEr5MTbYcZdjGRww9WX13UZ/kFreRJ2ZCXvG
-         AwUTlqlqt4zweb83irBEh39mhRy/9tsKDENoDMLr15/fOgrXhLHml28ogEQ29JCf8zji
-         0s7kO3a1etMA5foCxxKl9brpmKjpgwpecJdemStZ/P57CVg5sDoPtV4D/Mx0zjyFMD7u
-         cZVg==
-X-Gm-Message-State: APjAAAWMbLPw0snwSq5aygVfzrd3x0qFUgWVC06Ikv3qE6QqNxnoZ4C7
-        W8dYh5zmlxQ6hNfulN7yMFgpIJHbmS4b9cngmv8=
-X-Google-Smtp-Source: APXvYqy7MnzpDoWCaQwB4PVeuO6/SdKp4zr9nmvtloH/bmgSv21Yw0NytNjVHSKVzZiGItMZTkbjQ/kKAKDwzoaYdW0=
-X-Received: by 2002:a5d:91d1:: with SMTP id k17mr8907186ior.237.1569738982780;
- Sat, 28 Sep 2019 23:36:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <DB8PR04MB682649CA98B0704FAF037A40F1840@DB8PR04MB6826.eurprd04.prod.outlook.com>
- <Pine.LNX.4.44L0.1909271305030.4732-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1909271305030.4732-100000@iolanthe.rowland.org>
-From:   Peter Chen <hzpeterchen@gmail.com>
-Date:   Sun, 29 Sep 2019 14:36:10 +0800
-Message-ID: <CAL411-o-dRJ+fQTxXhVBzwdd0L6B26B_75+DKxUaLziwLkuCtg@mail.gmail.com>
-Subject: Re: [PATCH] usb: hub add filter for device with specific VID&PID
+        id S1729057AbfI2UNw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 29 Sep 2019 16:13:52 -0400
+Received: from vsmx009.vodafonemail.xion.oxcs.net ([153.92.174.87]:30998 "EHLO
+        vsmx009.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726827AbfI2UNv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 29 Sep 2019 16:13:51 -0400
+Received: from vsmx001.vodafonemail.xion.oxcs.net (unknown [192.168.75.191])
+        by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id 3F170159BD66;
+        Sun, 29 Sep 2019 20:13:49 +0000 (UTC)
+Received: from lazy.lzy (unknown [87.157.113.162])
+        by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 8342415A2577;
+        Sun, 29 Sep 2019 20:13:34 +0000 (UTC)
+Received: from lazy.lzy (localhost [127.0.0.1])
+        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x8TKDWvk003119
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sun, 29 Sep 2019 22:13:32 +0200
+Received: (from red@localhost)
+        by lazy.lzy (8.15.2/8.15.2/Submit) id x8TKDWCL003118;
+        Sun, 29 Sep 2019 22:13:32 +0200
+Date:   Sun, 29 Sep 2019 22:13:32 +0200
+From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Ran Wang <ran.wang_1@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Payer <mathias.payer@nebelwelt.net>,
-        Dennis Wassenberg <dennis.wassenberg@secunet.com>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
+Message-ID: <20190929201332.GA3099@lazy.lzy>
+References: <20190925170741.GA5235@lazy.lzy>
+ <Pine.LNX.4.44L0.1909251429370.4444-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1909251429370.4444-100000@netrider.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-VADE-STATUS: LEGIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Sep 28, 2019 at 1:11 AM Alan Stern <stern@rowland.harvard.edu> wrot=
-e:
->
-> On Tue, 24 Sep 2019, Ran Wang wrote:
->
-> > Hi Greg,
-> >
-> > On Monday, September 23, 2019 19:07, Greg Kroah-Hartman wrote:
-> > >
-> > > On Mon, Sep 23, 2019 at 06:51:02PM +0800, Ran Wang wrote:
-> > > > USB 2.0 Embedded Host PET Automated Test (CH6) 6.7.23 A-UUT
-> > > > "Unsupported Device" Message require to stop enumerating device wit=
-h
-> > > > VID=3D0x1a0a PID=3D0x0201 and pop message to declare this device is=
- not
-> > > supported.
-> > >
-> > > Why is this a requirement?
-> >
-> > This comes from <USB On-The-Go and Embedded Host Automated Compliance P=
-lan
-> > for the On-The-Go& Embedded Host Supplement Revision2.0>
->
-> How much do we care about our support for USB OTG?  Isn't it dying off?
->
+On Wed, Sep 25, 2019 at 02:31:58PM -0400, Alan Stern wrote:
+> On Wed, 25 Sep 2019, Piergiorgio Sartor wrote:
+> 
+> > On Mon, Aug 26, 2019 at 07:38:33PM +0200, Piergiorgio Sartor wrote:
+> > > On Tue, Aug 20, 2019 at 06:37:22PM +0200, Piergiorgio Sartor wrote:
+> > > > On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
+> > > > > On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
+> > > > > > Let's bring this to the attention of some more people.
+> > > > > > 
+> > > > > > It looks like the bug that was supposed to be fixed by commit
+> > > > > > d74ffae8b8dd ("usb-storage: Add a limitation for
+> > > > > > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
+> > > > > > the bug still occurs.
+> > > > > 
+> > > > > Piergiorgio,
+> > > > > 
+> > > > > can you dump the content of max_hw_sectors_kb file for your USB storage
+> > > > > device and send that to this thread?
+> > > > 
+> > > > Hi all,
+> > > > 
+> > > > for both kernels, 5.1.20 (working) and 5.2.8 (not working),
+> > > > the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
+> > > > for USB storage devices (2.0 and 3.0).
+> > > > 
+> > > > This is for the PC showing the issue.
+> > > > 
+> > > > In an other PC, which does not show the issus at the moment,
+> > > > the values are 120, for USB2.0, and 256, for USB3.0.
+> > > 
+> > > Hi again,
+> > > 
+> > > any news on this?
+> > > 
+> > > Is there anything I can do to help?
+> > > 
+> > > Should I report this somewhere else too?
+> > > 
+> > > Currently this is quite a huge problem for me,
+> > > since the only working external storage is an
+> > > old 1394 HDD...
+> > 
+> > Hi all,
+> > 
+> > I'm now on kernel 5.2.16, from Fedora, and still I
+> > see the same issue.
+> > 
+> > I guess it is not a chipset quirk, since there
+> > are two involved here.
+> > For the USB 2.0 I've (with "lspci"):
+> > 
+> > USB controller: Advanced Micro Devices, Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller (prog-if 20 [EHCI])
+> > 
+> > For USB 3.0 I've:
+> > 
+> > USB controller: ASMedia Technology Inc. ASM1042 SuperSpeed USB Host Controller (prog-if 30 [XHCI])
+> > 
+> > Any idea on how to proceed?
+> > 
+> > Thanks a lot.
+> 
+> One thing you can try is git bisect from 5.1.20 (or maybe just 5.1.0)  
+> to 5.2.8.  If you can identify a particular commit which caused the
+> problem to start, that would help.
 
-Hi Alan,
+OK, I tried a bisect (2 days compilations...).
+Assuming I've done everything correctly (how to
+test this? How to remove the guilty patch?), this
+was the result:
 
-The OTG Compliance is really dead, but for non-PC host product, if we
-would like to
-pass USB certification, it needs to pass EH compliance test. Before
-going to Lab,
-the vendor will fill Compliance Checklist, it could declare HNP, SRP
-and ADP are not
-supported, then the PET test will bypass related test items.
+09324d32d2a0843e66652a087da6f77924358e62 is the first bad commit
+commit 09324d32d2a0843e66652a087da6f77924358e62
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Tue May 21 09:01:41 2019 +0200
 
-Peter
+    block: force an unlimited segment size on queues with a virt boundary
 
-> > Below is related description I quote from it:
-> > 6.7.23 A-UUT "Unsupported Device" Message
-> > Purpose: This test verifies that an A-UUT produces a device non-support=
-ed error message
-> >       when a device it doesn't recognize, and does not support HNP, con=
-nects to it.
-> > Applies to: All Targeted Hosts
-> > Description: Get VBUS turned on, and connect to the A-UUT. Get enumerat=
-ed and respond
-> >       as an unknown device not supporting HNP. Check that a suitable er=
-ror message is generated.
-> > Pass Criteria: Message "Unsupported Device"or similar is displayed on U=
-UT
-> >
-> > 6.7.23.1 Test Procedure
-> > 1. Start with cable still attached, PET applying 10=C3=ACF capacitance =
-and 10k=C3=99 pull-down
-> >     resistance between VBUS and ground, data lines not pulled up.
-> > 2. Get VBUS turned on, using the method described in Section6.7.1.
-> > 3. Wait for almost TB_SVLD_BCON max (1s - 0.1s =3D 0.9s) from VBUS reac=
-hing VOTG_SESS_VLD max.
-> > 4. Connect PET using D+ pull-up.
-> > 5. Allow A-UUT to enumerate PET, responding with a VID / PID combinatio=
-n not on the TPL
-> >     of the UUT and also with the OTG descriptor stating that it does no=
-t support HNP.
-> > 6. Start 30s timer when Device Descriptor is read.
-> > 7. Display Message "Click OK if 'Unsupported Device' indication display=
-ed on UUT".
-> > 8. If operator clicks OK before 30s timer expires, then UUT passes test=
-.
-> > 9. If 30selapses first, then UUT fails test.
-> > 10. PET disconnects by removing any termination on the data lines, but =
-leaves a capacitance of
-> >     10=C3=ACF and a pull-down resistance of 10k=C3=99 connected across =
-VBUS.
-> > 11. Wait 2s to allow disconnection to be detected.
-> > End of Test.
->
-> In fact, the system should respond the same way to any unrecognized
-> device that doesn't support HNP, right?  There's nothing special about
-> these VID/PID values.
->
-> > > And why those specific vid/pid values?  What do they refer to?
-> >
-> > For step 5, we got the VID / PID number from USB IF certified lab(Allio=
-n.inc at Taiwang). Looks like
-> > this is a reserved ID pair and will not be allocated to any vendor for =
-their products. So it's hence used for this
-> > case test (like saying: you should be able to pop a not-support message=
- for this reserved VID&PID).
->
-> Don't we do this already?
->
-> Alan Stern
->
+    We currently fail to update the front/back segment size in the bio when
+    deciding to allow an otherwise gappy segement to a device with a
+    virt boundary.  The reason why this did not cause problems is that
+    devices with a virt boundary fundamentally don't use segments as we
+    know it and thus don't care.  Make that assumption formal by forcing
+    an unlimited segement size in this case.
+
+    Fixes: f6970f83ef79 ("block: don't check if adjacent bvecs in one bio can be mergeable")
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
+    Reviewed-by: Ming Lei <ming.lei@redhat.com>
+    Reviewed-by: Hannes Reinecke <hare@suse.com>
+    Signed-off-by: Jens Axboe <axboe@kernel.dk>
+
+:040000 040000 57ba04a02f948022c0f6ba24bfa36f3b565b2440 8c925f71ce75042529c001bf244b30565d19ebf3 M      block
+
+What to do now?
+
+Thanks,
+
+bye,
+
+-- 
+
+piergiorgio
