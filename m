@@ -2,144 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB18CC29BE
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 00:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F9DC29B9
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 00:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729245AbfI3Wjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 18:39:35 -0400
-Received: from a27-51.smtp-out.us-west-2.amazonses.com ([54.240.27.51]:43960
-        "EHLO a27-51.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731123AbfI3Wje (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 18:39:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=ude52klaz7ukvnrchdbsicqdl2lnui6h; d=aaront.org; t=1569870369;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding;
-        bh=5wKw4aJWQB6UjLX7Fgfa/tSdWBuvi7EYyl6seWKxYV4=;
-        b=jPTuvmF94nV74kR5ORRY4xezAedQ0p8vrCSJX8qqZszBMvFGOPKDBB/mZELW+f4q
-        Xz6DqbAIwGOLTNuHtzzGD50myZm4Sl6A/igV4csaUGiDevv+NOcxc2PIg8G/d+wcejg
-        zhYpxPYi30lKdNEXInldqpu0VWwh9ePbh4RaTvfw=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1569870369;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:Content-Type:Content-Transfer-Encoding:Feedback-ID;
-        bh=5wKw4aJWQB6UjLX7Fgfa/tSdWBuvi7EYyl6seWKxYV4=;
-        b=dP7XPrnMr85zvwkvAVBWMuq0gCIOow4irz20dxFi68sG0vERLdp8zXPk3ih4f/g2
-        d8ohZbPoPPCd4St6ayoAjMyY72u5PHbc3TjgU32eCXZWyBNe0nL+JswIsR4d+kuVum6
-        VjevA5ea18FFCljkJOLdXU+/o+j0E5SGOZmqOAgw=
-X-Gm-Message-State: APjAAAXBm7/ZOwgLrD8Ab3Z2nKqaoRz/PB6Js3fONm8EIPG8YvSaSXxP
-        emWK/uorIkwilyyIMGzvd0EokaQntaNGkpMP3zs=
-X-Google-Smtp-Source: APXvYqztlmsfPuBgRs2T8VvmwSOx7HBolyCHeaxA6byK1qakB1rnu54zIFc+bnmemCrw3/VkCtWeES9WgBnSh68sv7A=
-X-Received: by 2002:a81:5082:: with SMTP id e124mr13475210ywb.39.1569870367655;
- Mon, 30 Sep 2019 12:06:07 -0700 (PDT)
+        id S1730178AbfI3WjT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 18:39:19 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:44574 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729406AbfI3WjQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 18:39:16 -0400
+Received: by mail-io1-f72.google.com with SMTP id k13so24981365ioc.11
+        for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2019 15:39:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jaFCCY9SApT65fw+A8gRWIZhb3sNt6GoxN/vYzgT0g8=;
+        b=PAMrMUHpL4j63HnBNdnFIrtgFUUbAMRv8XuPrzyzkdA6SOHGDiy6/LkKqMizPJbfIR
+         4uenayRyC12LXywYfgx2QB6pn0wj0oqJ9iu2CugGoRQR5m6fyftj62hEMuX6niYUA4z/
+         X/D9WqtuXNpCSPiEZcIZY6m3DjmlE0X3foQbglg4msR0eGUJmLmLdRpuBbDVyfUM5n3X
+         3GQP7dvsItMXBr/ccXtepHdEnZZjI60Ny7PM0TzrsPw/nZFn96VP/ZfCT80/+gOFFyrj
+         fevcMU+QfQ0j1MzNw4eOqRq7oMju5WVI2cQw1GzwK/7cN5Wcodvb2eYj57Zjg4TSkPCs
+         YioA==
+X-Gm-Message-State: APjAAAVudbD6XHUvBXKa1Yy7oh+sEVS1qE/PRdej+5EyXdZ7y8IjIFMt
+        DGqmgSam1XL32RC/x6KGKQxD4PhvdEm9Hbf9tuMrA9zmrjia
+X-Google-Smtp-Source: APXvYqyuf1UIFb3O8/pIRhIbL8RCDZ6MpHi6vZGy2aplkvcDjKjqU4KYIcNFWabGhm4SaYFHtDoCLy0P3JlnMNgjxIOxX2MYCJVB
 MIME-Version: 1.0
-References: <0100016d5bc55d05-d2c923f3-a4bb-4ba7-8adc-031b7d933b52-000000@email.amazonses.com>
- <871rw6ch9p.fsf@miraculix.mork.no>
-In-Reply-To: <871rw6ch9p.fsf@miraculix.mork.no>
-From:   Aaron Thompson <dev@aaront.org>
-Date:   Mon, 30 Sep 2019 19:06:09 +0000
-X-Gmail-Original-Message-ID: <CABeuQhss-jvs1=s5k7_ZfhkDg+V6xTtp2VqxuDKEpNE+azZWYg@mail.gmail.com>
-Message-ID: <0101016d8390d0cb-652b297d-5a47-46ee-8447-72e8f13a30f4-000000@us-west-2.amazonses.com>
-Subject: Re: Moschip 7703 USB to serial free to a good home
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-SES-Outgoing: 2019.09.30-54.240.27.51
-Feedback-ID: 1.us-west-2.OwdjDcIoZWY+bZWuVZYzryiuW455iyNkDEZFeL97Dng=:AmazonSES
+X-Received: by 2002:a5e:8f01:: with SMTP id c1mr14332039iok.148.1569883155650;
+ Mon, 30 Sep 2019 15:39:15 -0700 (PDT)
+Date:   Mon, 30 Sep 2019 15:39:15 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d4e4900593cce75d@google.com>
+Subject: KASAN: use-after-free Read in mcba_usb_disconnect
+From:   syzbot <syzbot+e29b17e5042bbc56fae9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 11:58 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
->
-> Aaron Thompson <dev@aaront.org> writes:
->
-> > I have a Moschip 7703 USB to single serial port adapter that I'm not
-> > using primarily because it doesn't have an in-tree driver, so I'd be
-> > happy to send it to anyone who would like to add support for it. It
-> > looks like it should be easy to add to the existing mos7720 driver.
-> > Anyone interested?
->
-> Sorry, not interested.  But did you try the obvious fix, even mentioned
-> here under "Moschip MCS7720, MCS7715 driver"?:
-> https://www.kernel.org/doc/Documentation/usb/usb-serial.txt
->
-> Just add the VID/PID to the device table and see what happens.  Just
-> post any error messages or other stuff here, along with the patch you
-> are testing, and you will get help interpreting it.
->
-> Note that you'll probably have to do a minor change in the
-> mos77xx_calc_num_ports() too, since it hardcodes 2 ports. But if you're
-> lucky then that's it.
->
->
-> Bj=C3=B8rn
+Hello,
 
-I have tinkered with it and unfortunately it's not that simple. The
-patch below seems to make it work up to 115200 baud in my very minimal
-testing. I have no confidence that it's correct though because I don't
-have any information about the device. I only have the old
-Moschip-authored 7703 driver to refer to and it's quite a bit
-different than the current 7720 driver.
+syzbot found the following crash on:
 
-Thanks,
-Aaron
+HEAD commit:    2994c077 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=173b5acd600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=69ddefac6929256a
+dashboard link: https://syzkaller.appspot.com/bug?extid=e29b17e5042bbc56fae9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10ec8e19600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=107ad813600000
 
-diff --git a/drivers/usb/serial/mos7720.c b/drivers/usb/serial/mos7720.c
-index 18110225..3cef30a 100644
---- a/drivers/usb/serial/mos7720.c
-+++ b/drivers/usb/serial/mos7720.c
-@@ -65,10 +65,12 @@ struct moschip_port {
- #define USB_VENDOR_ID_MOSCHIP 0x9710
- #define MOSCHIP_DEVICE_ID_7720 0x7720
- #define MOSCHIP_DEVICE_ID_7715 0x7715
-+#define MOSCHIP_DEVICE_ID_7703 0x7703
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+e29b17e5042bbc56fae9@syzkaller.appspotmail.com
 
- static const struct usb_device_id id_table[] =3D {
-  { USB_DEVICE(USB_VENDOR_ID_MOSCHIP, MOSCHIP_DEVICE_ID_7720) },
-  { USB_DEVICE(USB_VENDOR_ID_MOSCHIP, MOSCHIP_DEVICE_ID_7715) },
-+ { USB_DEVICE(USB_VENDOR_ID_MOSCHIP, MOSCHIP_DEVICE_ID_7703) },
-  { } /* terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, id_table);
-@@ -183,7 +185,7 @@ static inline __u16 get_reg_value(enum mos_regs reg,
-  return 0x0100;
+mcba_usb 1-1:0.180 can1: Failed to send cmd (169)
+mcba_usb 1-1:0.180: Microchip CAN BUS Analyzer connected
+usb 1-1: USB disconnect, device number 2
+mcba_usb 1-1:0.95 can0: device disconnected
+==================================================================
+BUG: KASAN: use-after-free in __lock_acquire+0x3377/0x3eb0  
+kernel/locking/lockdep.c:3828
+Read of size 8 at addr ffff8881d2e98f48 by task kworker/0:1/12
 
-  else       /* serial port reg */
-- return (serial_portnum + 2) << 8;
-+ return (serial_portnum + 3) << 8;
- }
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.3.0+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+  kasan_report+0xe/0x12 mm/kasan/common.c:634
+  __lock_acquire+0x3377/0x3eb0 kernel/locking/lockdep.c:3828
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4487
+  __raw_spin_lock_irq include/linux/spinlock_api_smp.h:128 [inline]
+  _raw_spin_lock_irq+0x2d/0x40 kernel/locking/spinlock.c:167
+  spin_lock_irq include/linux/spinlock.h:363 [inline]
+  usb_kill_anchored_urbs+0x1e/0x110 drivers/usb/core/urb.c:787
+  mcba_urb_unlink drivers/net/can/usb/mcba_usb.c:711 [inline]
+  mcba_usb_disconnect+0xd6/0xe4 drivers/net/can/usb/mcba_usb.c:881
+  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1134 [inline]
+  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:532
+  device_del+0x420/0xb10 drivers/base/core.c:2375
+  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
+  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
- /*
-@@ -988,6 +990,8 @@ static int mos77xx_calc_num_ports(struct usb_serial *se=
-rial,
-  swap(epds->bulk_out[0], epds->bulk_out[1]);
+The buggy address belongs to the page:
+page:ffffea00074ba600 refcount:0 mapcount:-128 mapping:0000000000000000  
+index:0x0
+flags: 0x200000000000000()
+raw: 0200000000000000 ffffea0007479208 ffff88821fffac18 0000000000000000
+raw: 0000000000000000 0000000000000003 00000000ffffff7f 0000000000000000
+page dumped because: kasan: bad access detected
 
-  return 1;
-+        } else if (product =3D=3D MOSCHIP_DEVICE_ID_7703) {
-+                return 1;
-  }
+Memory state around the buggy address:
+  ffff8881d2e98e00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+  ffff8881d2e98e80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> ffff8881d2e98f00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                               ^
+  ffff8881d2e98f80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+  ffff8881d2e99000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
 
-  return 2;
-@@ -1052,7 +1056,7 @@ static int mos7720_open(struct tty_struct *tty,
-struct usb_serial_port *port)
 
-  dev_dbg(&port->dev, "SS::%p LSR:%x\n", mos7720_port, data);
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-- write_mos_reg(serial, dummy, MOS7720_SP1_REG, 0x02);
-+ write_mos_reg(serial, dummy, MOS7720_SP1_REG, 0x08);
-  write_mos_reg(serial, dummy, MOS7720_SP2_REG, 0x02);
-
-  write_mos_reg(serial, port_number, MOS7720_IER, 0x00);
-@@ -1939,8 +1943,8 @@ static struct usb_serial_driver
-moschip7720_2port_driver =3D {
-  },
-  .description =3D "Moschip 2 port adapter",
-  .id_table =3D id_table,
-- .num_bulk_in =3D 2,
-- .num_bulk_out =3D 2,
-+ .num_bulk_in =3D 1,
-+ .num_bulk_out =3D 1,
-  .num_interrupt_in =3D 1,
-  .calc_num_ports =3D mos77xx_calc_num_ports,
-  .open =3D mos7720_open,
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
