@@ -2,167 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3BE6C1E25
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 11:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C022DC1EE7
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 12:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730543AbfI3JhT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 05:37:19 -0400
-Received: from mail-eopbgr150048.outbound.protection.outlook.com ([40.107.15.48]:14304
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730424AbfI3JhT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Sep 2019 05:37:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D4/SO2340hnRM6t6B1V7X0Ie52jV+LWn84oP6dbVE/hCXYBgwotvy+fVrKFtQkXfKSMh+x6KAwIVuKF3pGOdG1uIj/8t6D8plF6sdLmOU66KLWmnOBoLKwmwDv3eKTs52L8rJsK1yBdb+j4l9KfgQTiBtpmdUUNJK0LNPhJYE0kakrP96Gx+48jgdsj3tW1ajopa2TDjKJEF4UCsZw+YTWMhYXt6ZhnUxHrIU4a2wi3YkpQjH2R2WJj6VXslGKZ0sAQ2us0gBqpdksmas3Dgr9XtbVc5qpbCWF6FzhhUzEcejoW+EiPvwlRhdXpWKNDy5mqrWxSrJKv28k+oJdS5wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=my9KOx8GWsSt1ZJItPWMzp+0aYeVC6f6izKgy/trGEM=;
- b=NVQ9NRWbx+7WVXVRRkSDwVE1nh6aKSueDwavaA5HeFgg82UIXnFCwtRQzUyfFt3jgQTfuOT919KcMI/esAgOfc3w6lAvZ4zPZ2ufiQkAV5lOOX+B4r+znZ3V6YOMPMrcgMVSPWYp/0U4IDVXcJGvx4TMOzFGSvcqOKR1ApRclXNlexfm1fY9Kj65ZwMpjekvMzVwFE7TxhUfVHt360eijj0UEFol57YKsEliV85nbnp5p7CbIPWOnmJe99nQhziuD3CeuxL4gUuCmL+U2JgOYY3xqes5PfM8gOBXpoYA7JKpJR8hejjSZ03MPYon6oJhEx9IbjIkX4h7ksARDlYW2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=my9KOx8GWsSt1ZJItPWMzp+0aYeVC6f6izKgy/trGEM=;
- b=KzC9vnwUlCXGVACQ0PeV16KsC8PHkdkpifDgmcRnyhblDm+da8TlUKq12i6noSkbocAjDM1RkHYFzjTyJAY7+9u7lX7Cotk6PxPpxMCWioC8duFXHcAojbdgOZzOXqnj5bJ3CU1gP7e9JbEtfSQnT9AJAxX5h8lTXrPvErXhnME=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
- VI1PR04MB2974.eurprd04.prod.outlook.com (10.170.228.28) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Mon, 30 Sep 2019 09:37:10 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::1da:26dc:6373:4ab0]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::1da:26dc:6373:4ab0%3]) with mapi id 15.20.2305.017; Mon, 30 Sep 2019
- 09:37:10 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: RE: [PATCH v2 1/1] usb: host: xhci: update event ring dequeue pointer
- on purpose
-Thread-Topic: [PATCH v2 1/1] usb: host: xhci: update event ring dequeue
- pointer on purpose
-Thread-Index: AQHVdowy3KvqKrVg+E+m3SFwaVQ3l6dD7cYAgAAKNiA=
-Date:   Mon, 30 Sep 2019 09:37:10 +0000
-Message-ID: <VI1PR04MB532798317E040488FBEC9FC28B820@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20190929060556.24182-1-peter.chen@nxp.com>
- <befbb09e-cb05-c0dc-42ab-ad8ddedb9b49@linux.intel.com>
-In-Reply-To: <befbb09e-cb05-c0dc-42ab-ad8ddedb9b49@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6e7a3375-ea64-403c-f260-08d74589c448
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: VI1PR04MB2974:|VI1PR04MB2974:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB29742DC29561DF160C0850078B820@VI1PR04MB2974.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3173;
-x-forefront-prvs: 01762B0D64
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(346002)(396003)(39860400002)(136003)(199004)(189003)(86362001)(25786009)(74316002)(9686003)(54906003)(5660300002)(55016002)(316002)(2906002)(64756008)(478600001)(99286004)(8936002)(7696005)(14454004)(26005)(76116006)(66946007)(66476007)(66556008)(7736002)(102836004)(66446008)(110136005)(305945005)(186003)(81166006)(44832011)(6436002)(446003)(6246003)(11346002)(33656002)(66066001)(76176011)(476003)(71190400001)(71200400001)(6506007)(229853002)(4326008)(81156014)(8676002)(15650500001)(14444005)(6116002)(256004)(3846002)(52536014)(486006)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB2974;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: J0nRq9F7Jz7wnXT9DdtpCrfseNK5o2Lt4vX7WIYZ7k8hM+jcAim2dV5vqOTLb0XPQo5hqAXQ/jfEfpkHcdxCSw2LOJp3A5cxShbr6RkK85u76G4TXUV7M+W5DhTKsfwWDOhjArMvoqMgNTwPQzh3CXMw5d9ML3RRIMIalE30LzCj1rt0tUnC0k6KY+Q4lRFMnjVz51ctbo49By6TVkxk2T0L0JMi1mzv/1nrESEMVNffv9iVRFglBzB6tAAgDnSWc/bDnTf+4+lRQE65t4mQ8pMkyYiIPGdFHcWCDLc/DR6yArufbclRLTu2br5yWvZjM1u9NPwUKGQNdiyCUofjcT/JcYMSgD8JOFFVyhVflx75NR3lSmihhi4ybsPLIItS7BCNjTQRNNEphiBb1TMIE4dJTvLu7x+zbBsd1iwj7ew=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1730638AbfI3KbE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 06:31:04 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33246 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729415AbfI3KbE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 06:31:04 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y127so6628129lfc.0
+        for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2019 03:31:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=4DDWbNReBvgFhUjNUz4LW3KuSmkSJ9Df4wPhwJSiTng=;
+        b=qg9OkLcoS04Il2cvv88Ge+j1gYhgKfjQSuTXHKftxGqJHNEWBBkzb8D2w4l6dwAGtk
+         QIu59LhAQO5esTzO6j/+CDuNZYgp4x/5vGXYt9eGQ57ZxVxNcx841X1DWEfVtaCkYL7i
+         iEynNkVIZ1ZDDEzIQBzc/NmkMyOjX2NdCePjSIGYzspppzoWvtPy6jqnHmrS+Wd3Bh1q
+         H5TsFNV67MfC4Hcz4fmDGaOXhttvOgYqsbJTFGSQS9gGb3q4msq80ZASefBuMgvAFIrm
+         3l2EzjbQJLxn6d3Qv3jB8sZzCLAdikgxqasQ17xuTP5Yii4Ko7e7XNI8FO7SZM+ZvUQo
+         zQkw==
+X-Gm-Message-State: APjAAAVHKyCuVjuOdB1VE9uP5/dbGD/ZyWHNJulQotyp0FT/aXfBkLRV
+        E65eKF8lt3XObpDmiHzkphk=
+X-Google-Smtp-Source: APXvYqwerg0bZ28VHlBPYA0b64av/3AI4A021TqAos7dWFAVCq4bPIMtVLQYNyZkUA4/0mfE5NWo6Q==
+X-Received: by 2002:a19:f707:: with SMTP id z7mr3489586lfe.142.1569839462725;
+        Mon, 30 Sep 2019 03:31:02 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id f6sm3116597lfl.78.2019.09.30.03.31.01
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Sep 2019 03:31:01 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iEsxP-0004AF-Ey; Mon, 30 Sep 2019 12:31:07 +0200
+Date:   Mon, 30 Sep 2019 12:31:07 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Jim Lin <jilin@nvidia.com>, linux-usb@vger.kernel.org
+Subject: NULL-deref in xhci_clear_tt_buffer_complete()
+Message-ID: <20190930103107.GC13531@localhost>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6e7a3375-ea64-403c-f260-08d74589c448
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2019 09:37:10.0996
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wKAVmOFoN61S5M5bYMndt3P5C+xZ6Mft9XjmHJQ111VDESV9JHXCFobHJ01wYs6Ah2UOvLZ9VKr39ldVr66QNQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB2974
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-IA0KPiBPbiAyOS45LjIwMTkgOS4wNywgUGV0ZXIgQ2hlbiB3cm90ZToNCj4gPiBPbiBzb21lIHNp
-dHVhdGlvbnMsIHRoZSBzb2Z0d2FyZSBoYW5kbGVzIFRSQiBldmVudHMgc2xvd2VyIHRoYW4gYWRk
-aW5nDQo+ID4gVFJCcywgdGhlbiB4aGNpX2hhbmRsZV9ldmVudCBjYW4ndCByZXR1cm4gemVybyBs
-b25nIHRpbWUsIHRoZSB4SEMgd2lsbA0KPiA+IGNvbnNpZGVyIHRoZSBldmVudCByaW5nIGlzIGZ1
-bGwsIGFuZCB0cmlnZ2VyICJFdmVudCBSaW5nIEZ1bGwiIGVycm9yLA0KPiA+IGJ1dCBpbiBmYWN0
-LCB0aGUgc29mdHdhcmUgaGFzIGFscmVhZHkgZmluaXNoZWQgbG90cyBvZiBldmVudHMsIGp1c3Qg
-bm8NCj4gPiBjaGFuY2UgdG8gdXBkYXRlIEVSRFAgKGV2ZW50IHJpbmcgZGVxdWV1ZSBwb2ludGVy
-KS4NCj4gPg0KPiA+IEluIHRoaXMgY29tbWl0LCB3ZSBmb3JjZSB1cGRhdGUgRVJEUCBpZiBoYWxm
-IG9mIFRSQlNfUEVSX1NFR01FTlQNCj4gPiBldmVudHMgaGF2ZSBoYW5kbGVkIHRvIGF2b2lkICJF
-dmVudCBSaW5nIEZ1bGwiIGVycm9yLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogUGV0ZXIgQ2hl
-biA8cGV0ZXIuY2hlbkBueHAuY29tPg0KPiA+IC0tLQ0KPiA+IENoYW5nZXMgZm9yIHYyOg0KPiA+
-IC0gSWYgY3VycmVudCBFUkRQIHZhbHVlIGlzIHRoZSBzYW1lIHdpdGggaW50ZW5kZWQgd3JpdHRl
-biBvbmUsDQo+ID4gICAgZ2l2ZSB1cCB0aGlzIHdyaXR0ZW4uDQo+ID4NCj4gPiAgIGRyaXZlcnMv
-dXNiL2hvc3QveGhjaS1yaW5nLmMgfCA2MiArKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0t
-LS0tLS0NCj4gPiAgIDEgZmlsZSBjaGFuZ2VkLCA0NSBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlv
-bnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcmluZy5j
-DQo+ID4gYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcmluZy5jIGluZGV4IGUyMjBiY2JlZTE3My4u
-MmMwYTE1YzNiM2E3IDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1yaW5n
-LmMNCj4gPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktcmluZy5jDQo+ID4gQEAgLTI3Mzcs
-NiArMjczNyw0NCBAQCBzdGF0aWMgaW50IHhoY2lfaGFuZGxlX2V2ZW50KHN0cnVjdCB4aGNpX2hj
-ZCAqeGhjaSkNCj4gPiAgIAlyZXR1cm4gMTsNCj4gPiAgIH0NCj4gPg0KPiA+ICsvKg0KPiA+ICsg
-KiBVcGRhdGUgRXZlbnQgUmluZyBEZXF1ZXVlIFBvaW50ZXI6DQo+ID4gKyAqIC0gV2hlbiBhbGwg
-ZXZlbnRzIGhhdmUgZmluaXNoZWQNCj4gPiArICogLSBUbyBhdm9pZCAiRXZlbnQgUmluZyBGdWxs
-IEVycm9yIiBjb25kaXRpb24gICovIHN0YXRpYyB2b2lkDQo+ID4gK3hoY2lfdXBkYXRlX2Vyc3Rf
-ZGVxdWV1ZShzdHJ1Y3QgeGhjaV9oY2QgKnhoY2ksDQo+ID4gKwkJdW5pb24geGhjaV90cmIgKmV2
-ZW50X3JpbmdfZGVxKQ0KPiA+ICt7DQo+ID4gKwl1NjQgdGVtcF82NDsNCj4gPiArCWRtYV9hZGRy
-X3QgZGVxOw0KPiA+ICsNCj4gPiArCXRlbXBfNjQgPSB4aGNpX3JlYWRfNjQoeGhjaSwgJnhoY2kt
-PmlyX3NldC0+ZXJzdF9kZXF1ZXVlKTsNCj4gPiArCS8qIElmIG5lY2Vzc2FyeSwgdXBkYXRlIHRo
-ZSBIVydzIHZlcnNpb24gb2YgdGhlIGV2ZW50IHJpbmcgZGVxIHB0ci4gKi8NCj4gPiArCWlmIChl
-dmVudF9yaW5nX2RlcSAhPSB4aGNpLT5ldmVudF9yaW5nLT5kZXF1ZXVlKSB7DQo+ID4gKwkJZGVx
-ID0geGhjaV90cmJfdmlydF90b19kbWEoeGhjaS0+ZXZlbnRfcmluZy0+ZGVxX3NlZywNCj4gPiAr
-CQkJCXhoY2ktPmV2ZW50X3JpbmctPmRlcXVldWUpOw0KPiA+ICsJCWlmIChkZXEgPT0gMCkNCj4g
-PiArCQkJeGhjaV93YXJuKHhoY2ksICJXQVJOIHNvbWV0aGluZyB3cm9uZyB3aXRoIFNXIGV2ZW50
-ICINCj4gPiArCQkJCQkicmluZyBkZXF1ZXVlIHB0ci5cbiIpOw0KPiA+ICsNCj4gPiArCQkvKg0K
-PiA+ICsJCSAqIFBlciA0LjkuNCwgU29mdHdhcmUgd3JpdGVzIHRvIHRoZSBFUkRQIHJlZ2lzdGVy
-IHNoYWxsDQo+ID4gKwkJICogYWx3YXlzIGFkdmFuY2UgdGhlIEV2ZW50IFJpbmcgRGVxdWV1ZSBQ
-b2ludGVyIHZhbHVlLg0KPiA+ICsJCSAqLw0KPiA+ICsJCWlmICgodGVtcF82NCAmICh1NjQpIH5F
-UlNUX1BUUl9NQVNLKSA9PQ0KPiA+ICsJCQkJKCh1NjQpIGRlcSAmICh1NjQpIH5FUlNUX1BUUl9N
-QVNLKSkNCj4gPiArCQkJcmV0dXJuOw0KPiA+ICsNCj4gPiArCQkvKiBVcGRhdGUgSEMgZXZlbnQg
-cmluZyBkZXF1ZXVlIHBvaW50ZXIgKi8NCj4gPiArCQl0ZW1wXzY0ICY9IEVSU1RfUFRSX01BU0s7
-DQo+ID4gKwkJdGVtcF82NCB8PSAoKHU2NCkgZGVxICYgKHU2NCkgfkVSU1RfUFRSX01BU0spOw0K
-PiA+ICsJfQ0KPiA+ICsNCj4gPiArCS8qIENsZWFyIHRoZSBldmVudCBoYW5kbGVyIGJ1c3kgZmxh
-ZyAoUlcxQykgKi8NCj4gPiArCXRlbXBfNjQgfD0gRVJTVF9FSEI7DQo+ID4gKwl4aGNpX3dyaXRl
-XzY0KHhoY2ksIHRlbXBfNjQsICZ4aGNpLT5pcl9zZXQtPmVyc3RfZGVxdWV1ZSk7IH0NCj4gPiAr
-DQo+ID4gICAvKg0KPiA+ICAgICogeEhDSSBzcGVjIHNheXMgd2UgY2FuIGdldCBhbiBpbnRlcnJ1
-cHQsIGFuZCBpZiB0aGUgSEMgaGFzIGFuIGVycm9yIGNvbmRpdGlvbiwNCj4gPiAgICAqIHdlIG1p
-Z2h0IGdldCBiYWQgZGF0YSBvdXQgb2YgdGhlIGV2ZW50IHJpbmcuICBTZWN0aW9uIDQuMTAuMi43
-DQo+ID4gaGFzIGEgbGlzdCBvZiBAQCAtMjc0OCw5ICsyNzg2LDkgQEAgaXJxcmV0dXJuX3QgeGhj
-aV9pcnEoc3RydWN0IHVzYl9oY2QgKmhjZCkNCj4gPiAgIAl1bmlvbiB4aGNpX3RyYiAqZXZlbnRf
-cmluZ19kZXE7DQo+ID4gICAJaXJxcmV0dXJuX3QgcmV0ID0gSVJRX05PTkU7DQo+ID4gICAJdW5z
-aWduZWQgbG9uZyBmbGFnczsNCj4gPiAtCWRtYV9hZGRyX3QgZGVxOw0KPiA+ICAgCXU2NCB0ZW1w
-XzY0Ow0KPiA+ICAgCXUzMiBzdGF0dXM7DQo+ID4gKwlpbnQgZXZlbnRfbG9vcCA9IDA7DQo+ID4N
-Cj4gPiAgIAlzcGluX2xvY2tfaXJxc2F2ZSgmeGhjaS0+bG9jaywgZmxhZ3MpOw0KPiA+ICAgCS8q
-IENoZWNrIGlmIHRoZSB4SEMgZ2VuZXJhdGVkIHRoZSBpbnRlcnJ1cHQsIG9yIHRoZSBpcnEgaXMg
-c2hhcmVkDQo+ID4gKi8gQEAgLTI4MDQsMjQgKzI4NDIsMTQgQEAgaXJxcmV0dXJuX3QgeGhjaV9p
-cnEoc3RydWN0IHVzYl9oY2QgKmhjZCkNCj4gPiAgIAkvKiBGSVhNRSB0aGlzIHNob3VsZCBiZSBh
-IGRlbGF5ZWQgc2VydmljZSByb3V0aW5lDQo+ID4gICAJICogdGhhdCBjbGVhcnMgdGhlIEVIQi4N
-Cj4gPiAgIAkgKi8NCj4gPiAtCXdoaWxlICh4aGNpX2hhbmRsZV9ldmVudCh4aGNpKSA+IDApIHt9
-DQo+ID4gLQ0KPiA+IC0JdGVtcF82NCA9IHhoY2lfcmVhZF82NCh4aGNpLCAmeGhjaS0+aXJfc2V0
-LT5lcnN0X2RlcXVldWUpOw0KPiA+IC0JLyogSWYgbmVjZXNzYXJ5LCB1cGRhdGUgdGhlIEhXJ3Mg
-dmVyc2lvbiBvZiB0aGUgZXZlbnQgcmluZyBkZXEgcHRyLiAqLw0KPiA+IC0JaWYgKGV2ZW50X3Jp
-bmdfZGVxICE9IHhoY2ktPmV2ZW50X3JpbmctPmRlcXVldWUpIHsNCj4gPiAtCQlkZXEgPSB4aGNp
-X3RyYl92aXJ0X3RvX2RtYSh4aGNpLT5ldmVudF9yaW5nLT5kZXFfc2VnLA0KPiA+IC0JCQkJeGhj
-aS0+ZXZlbnRfcmluZy0+ZGVxdWV1ZSk7DQo+ID4gLQkJaWYgKGRlcSA9PSAwKQ0KPiA+IC0JCQl4
-aGNpX3dhcm4oeGhjaSwgIldBUk4gc29tZXRoaW5nIHdyb25nIHdpdGggU1cgZXZlbnQgIg0KPiA+
-IC0JCQkJCSJyaW5nIGRlcXVldWUgcHRyLlxuIik7DQo+ID4gLQkJLyogVXBkYXRlIEhDIGV2ZW50
-IHJpbmcgZGVxdWV1ZSBwb2ludGVyICovDQo+ID4gLQkJdGVtcF82NCAmPSBFUlNUX1BUUl9NQVNL
-Ow0KPiA+IC0JCXRlbXBfNjQgfD0gKCh1NjQpIGRlcSAmICh1NjQpIH5FUlNUX1BUUl9NQVNLKTsN
-Cj4gPiArCXdoaWxlICh4aGNpX2hhbmRsZV9ldmVudCh4aGNpKSA+IDApIHsNCj4gPiArCQlpZiAo
-ZXZlbnRfbG9vcCsrIDwgVFJCU19QRVJfU0VHTUVOVCAvIDIpDQo+ID4gKwkJCWNvbnRpbnVlOw0K
-PiA+ICsJCXhoY2lfdXBkYXRlX2Vyc3RfZGVxdWV1ZSh4aGNpLCBldmVudF9yaW5nX2RlcSk7DQo+
-ID4gKwkJZXZlbnRfbG9vcCA9IDA7DQo+ID4gICAJfQ0KPiA+DQo+ID4gLQkvKiBDbGVhciB0aGUg
-ZXZlbnQgaGFuZGxlciBidXN5IGZsYWcgKFJXMUMpOyBldmVudCByaW5nIGlzIGVtcHR5LiAqLw0K
-PiA+IC0JdGVtcF82NCB8PSBFUlNUX0VIQjsNCj4gPiAtCXhoY2lfd3JpdGVfNjQoeGhjaSwgdGVt
-cF82NCwgJnhoY2ktPmlyX3NldC0+ZXJzdF9kZXF1ZXVlKTsNCj4gPiArCXhoY2lfdXBkYXRlX2Vy
-c3RfZGVxdWV1ZSh4aGNpLCBldmVudF9yaW5nX2RlcSk7DQo+ID4gICAJcmV0ID0gSVJRX0hBTkRM
-RUQ7DQo+ID4NCj4gPiAgIG91dDoNCj4gPg0KPiANCj4gVGhpcyBzaG91bGQgd29yaywgYWRkaW5n
-IHRvIHF1ZXVlDQogDQpUaGFua3MsIEkgaGF2ZSB0ZXN0ZWQgdGhlc2UgZGF5cywgbm8gaXNzdWUg
-aGFzIGZvdW5kIHNvIGZhci4NCg0KUGV0ZXINCg==
+Hi Mathias,
+
+I hit this NULL-deref in xhci_clear_tt_buffer_complete() with usb-next
+after an external HS hub with a connected FS device got into some weird
+state this morning:
+
+[   66.833702] usb 2-2.4: USB disconnect, device number 5
+[   66.834756] usblcd 2-2.4:1.0: USB LCD #144 now disconnected
+
+[   67.774259] usb 2-2.4: new full-speed USB device number 6 using xhci_hcd
+[   67.855160] usb 2-2.4: unable to read config index 0 descriptor/start: -32
+[   67.855306] usb 2-2.4: chopping to 0 config(s)
+[   67.855401] usb 2-2.4: can't read configurations, error -32
+[   67.856455] BUG: kernel NULL pointer dereference, address: 00000000000006d8
+[   67.856554] #PF: supervisor read access in kernel mode
+[   67.856635] #PF: error_code(0x0000) - not-present page
+[   67.856712] PGD 0 P4D 0 
+[   67.856760] Oops: 0000 [#1] SMP
+[   67.856815] CPU: 2 PID: 97 Comm: kworker/2:2 Not tainted 5.3.0-rc7 #4
+[   67.856904] Hardware name:  /D34010WYK, BIOS WYLPT10H.86A.0051.2019.0322.1320 03/22/2019
+[   67.857017] Workqueue: events hub_tt_work
+[   67.857089] RIP: 0010:xhci_clear_tt_buffer_complete+0x2b/0xb0
+[   67.857173] Code: 57 41 56 41 55 49 89 f5 41 54 55 53 48 89 fb e8 db 94 fd ff 85 c0 75 07 48 8b 9b 58 03 00 00 49 8b 45 28 4c 8d a3 90 03 00 00 <8b> a8 d8 06 00 00 41 f6 45 03 03 75 60 45 0f b6 75 02 41 83 e6 0f
+[   67.857404] RSP: 0018:ffffa6020029fde8 EFLAGS: 00010202
+[   67.857482] RAX: 0000000000000000 RBX: ffff94cd55358000 RCX: 00000000000001f3
+[   67.857577] RDX: 00000000000001f2 RSI: ffff94cd50db2850 RDI: ffff94cd55358000
+[   67.857672] RBP: ffff94cd55372000 R08: 0000000000000000 R09: 0000000000000000
+[   67.857767] R10: 0000000000000000 R11: 0000000000000000 R12: ffff94cd55358390
+[   67.857860] R13: ffff94cd50db2850 R14: dead000000000122 R15: dead000000000100
+[   67.857956] FS:  0000000000000000(0000) GS:ffff94cd57900000(0000) knlGS:0000000000000000
+[   67.858060] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   67.858141] CR2: 00000000000006d8 CR3: 0000000213baa001 CR4: 00000000001606e0
+[   67.858236] Call Trace:
+[   67.858287]  hub_tt_work+0x154/0x190
+[   67.858353]  process_one_work+0x2a0/0x600
+[   67.858425]  worker_thread+0x34/0x3d0
+[   67.858490]  ? process_one_work+0x600/0x600
+[   67.858558]  kthread+0x118/0x130
+[   67.858614]  ? kthread_create_on_node+0x60/0x60
+[   67.858688]  ret_from_fork+0x3a/0x50
+[   67.858753] Modules linked in: netconsole ftdi_sio x86_pkg_temp_thermal usbserial usblcd
+[   67.858865] CR2: 00000000000006d8
+[   67.858922] ---[ end trace 7fb6e59f68b07112 ]---
+
+Address 00000000000006d8 is udev->slot_id (line 5203) so apparently
+
+	udev = (struct usb_device *)ep->hcpriv;
+
+can be NULL here.
+
+While the hub/device was in this state, the bug appeared to be perfectly
+reproducable and prevented the machine from booting. Disconnecting and
+reconnecting the hub made the problem go away.
+
+Also adding Jim Lin who introduced this code in commit ef513be0a905
+("usb: xhci: Add Clear_TT_Buffer") in v5.2.
+
+Johan
