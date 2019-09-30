@@ -2,124 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 272E3C1BCA
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 08:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAE9C1BE2
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 09:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729271AbfI3Gzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 02:55:32 -0400
-Received: from mout.web.de ([217.72.192.78]:38605 "EHLO mout.web.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726121AbfI3Gzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 30 Sep 2019 02:55:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
-        s=dbaedf251592; t=1569826522;
-        bh=+3E/INNc/nZJwNdJLcPAZwGiWdqqBKAEARv1mFvBn1w=;
-        h=X-UI-Sender-Class:Cc:References:Subject:To:From:Date:In-Reply-To;
-        b=XBHLn+Q2bUoxfl6m7U8LwOAaoereWzFuqLX9CRAIWP61PQob0/EOO1eCU/sarsR5m
-         3q99D103nW0/VfOGeo6sNUQmbQ+Dl5d6wsb49q+WS65+NhJ8wY01hMH9ztMyddYo0W
-         xqdJGQIRjE1rbE9TQdxi3n5E5yN3n57zu4VOcDcA=
-X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
-Received: from [192.168.1.2] ([2.244.97.105]) by smtp.web.de (mrweb101
- [213.165.67.124]) with ESMTPSA (Nemesis) id 0LeLKb-1hmuMW3DRN-00qC1P; Mon, 30
- Sep 2019 08:55:21 +0200
-Cc:     Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
-        Stephen McCamant <smccaman@umn.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <20190930024147.25243-1-navid.emamdoost@gmail.com>
-Subject: Re: [PATCH] usb: dwc3: pci: prevent memory leak in dwc3_pci_probe
-To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
-        linux-usb@vger.kernel.org
-From:   Markus Elfring <Markus.Elfring@web.de>
-Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
- 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 FEE=
-Message-ID: <5f21ff8b-0cd2-5442-7d8b-f31b0f5dcdfe@web.de>
-Date:   Mon, 30 Sep 2019 08:55:20 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1729355AbfI3HAJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 03:00:09 -0400
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:37842 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726858AbfI3HAJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 03:00:09 -0400
+Received: by mail-vs1-f66.google.com with SMTP id p13so6041387vsr.4;
+        Mon, 30 Sep 2019 00:00:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WPCu9sOB25lXthDF79C2tI3pqVlApVfxowlbJ7D2bJg=;
+        b=fdABa5sb3wgC9qift36otR5o95WPE9hdVZ/CGRUd9rT5pM0CSYsv154TY19KyS4Ehy
+         TbQZIscpyTFWTy3Qrr3dLEjRWZQVTnhzGt3CR9QQhtfuGaMxTdXCW0VqKyddZlSEDs+I
+         y4LtwM1Eqpok0gOb29kA/omKAeBhPfJvzbXRFctvU9FGHcqwdYNexDm9ugMwONiwfHQN
+         O5hK2u0R/f1cW6BDSxwZF00jnzZiH1hqtxGgk4tFRmOC8iwvebfp469wBX/4BumNBMhW
+         K4jvKGvLB5ClCgSmK+mfSLTRYvaJxjFYFp8Dci7PrSD2fggsAywtQ4AP/yx9TwxpBTcO
+         aGxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WPCu9sOB25lXthDF79C2tI3pqVlApVfxowlbJ7D2bJg=;
+        b=q/B9S8CLu3dwpkTAKoPDqRMYynyJNkxKQQYt3pP9viKST8SEabz7DV3HPNeVymntE6
+         2Lvrxm9QutyOvGdhGY6m4RfAMWAD/ziBTDptjs+sI1bIzcQF7xW5KJEUwsAaPj28/ORm
+         ify54w2as1i+EGA5neSDqH05pkobDHeqSZcN32Idwp34s02Xr70fMHCXfknmVLx1UzXo
+         inDdGsmq+Y5GXQWvZ5K02+AKmFuzP4AS5CHQ4XSez6XpJMTgD3bq8JYtzx9zX7mH1RVB
+         3qD4nIJLw+veiqwf3RTn0TWoE40lykf3crNvRyDJqx2/B2m1XdCrVJeTlSliRCOZcQ5H
+         4jVQ==
+X-Gm-Message-State: APjAAAVulf+YKr/pTdXI5KFYyTW9H+SCrF0k3G0pd+xCjFW+KUXJ+JjV
+        OGZ2QamAoof7bXk/xxhyqEfv1Tw3fTsF8MQr1SQ=
+X-Google-Smtp-Source: APXvYqwlLkX6f9yRlFlinkuFmNZ1HqVjfgSj8PAsFaooE7maEiujWShYgybsI/sgKC1rHNGwVcoAR6KGjZToMb1vO9M=
+X-Received: by 2002:a67:6542:: with SMTP id z63mr9053529vsb.143.1569826808018;
+ Mon, 30 Sep 2019 00:00:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190930024147.25243-1-navid.emamdoost@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:P+OGt6N+0QX9QcBfG9fpEPvI1r1TbI5LAftzqB3RikkON4+3hkS
- iHxzeaEga9e8WcwDnSbg5UWeXww+sQqLdQFByYcAWXhRYpWAgj8cfawXTh6JeqpNuSlae6+
- dvIhInTTKHsPbDhctwBKRDUKZ8ADFVy7hrIdVJUhKbrLhTIi9s4gxeWo+M7gDRt2OQ0RdCL
- gN0RMTcPMBRZ7Su3WiWmA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:r0EUch90hOQ=:JnE1MHNSBzIR4Lal1H6hxy
- j3Nm8AmAByGr2mLdox8fHm6r1gdl2rsd6jgtsoM91cnaP4zPR+OQmlAolGFOGscENGcRAXum5
- 6xzhOIgd5oAD7LM10t6O1GHi6lQcPsRZwuN+4eFie12pb5JeFJIyAUL4YJ9RcXi8X80nPo4vj
- FyoWA34OVANMKXgGHb8l8htmoM5l4BWGVLfGqsRuYOru3CgAQd7EtTw+dlwI+cvpRyma1HuEe
- hY88+ICF7ZNN4qsO0EepJW+Sx0IXu4HdO3MgJR/8mDF//bcuVHMiXINwE9NNtEM7ehqcEDedl
- Vx6F75U3Axbh2hnGIWPetTwzN9OZPZ8AbbN1VEQqzTytWRPDdp7XoHij2JKNcwloTkp+lg8+J
- 9d8Q99LiwSrzA8mz6+AayFFE8LmwGDlCwFp+5pa5OmSJsQTu9V1aVJbA3yOmsEqJjwZjiuUrL
- VMapsvzeJ1IZoXbTk9KPExPOQryzcA66ek9WgF/ZCg+Y/XqiW8qKCMQKFcgCc0MTu3GEp8TCb
- 8yUReYbMbS1Ti4MLm0gff+0G/6PMFI0vllUCGvGFGopiKS0Oh6jvsddMaRmeDE1hd0VQWN3Oh
- 2uzYBEjA8ubYZOV2xTEkNWpyOZohUxRIATpBENJmgY4SWm0xoqBwfLjqvEgUcDXDMoEDtDgkT
- dp9cYeikHDB75C3qEz4FlCOnjT8jitaVBe9PCJnJOJZ5CK7dcL7UclKjwTtrpGCHZUqvGRXp+
- vW2AsqmJjCYewsOOHlF7mraBbQEgsz3zDwckkfm7WJpYotIjpRi/XtDYzD1M6qgIrKGgSo+c7
- yACKW+L/7XAgIamcpR7QVOPLDDq5nT6P/uvl3XeGcD8lwJx8bbuXu914s479fIzsOg/EArJUM
- PNj0NDd4AfVyevetHXQCQdaRJ+q57nrQY9Ks20TWtHqdQ5cbtvYBsleHOj/bmaxWKH46w3FNy
- Xu/tr0Px9pWb8IBnJbRUuUkucZOIwS3oKba0HOAzdPmZCsJczE7yQkQrdVHotoanaRMhb1Fwp
- 7Y1At0BouoY5V9qu0JlT+wquAn5omSisxwMwBmobVlmlLMKJmFBHVHtxvb8YlVHsgNcbtsE+z
- RpxHVQvQ72GRgSh2y0PAH0MqWe/moIIOXjJ9FKiJTLe0WclwCqWDeeN2fR1G7i7nK61BO7ELs
- 1sLu39xK7kDrTX/fpOCl+qCXDqNHC1QAbnrjUJ36k9e+yCtbB1wA9ZSJRca4DrdaWK/Sy+RQT
- mWulbDeR4pZPijGb2/JoB1zX5/cctRzLsoObhXmuEqgV0jm621OykmYmQKB4=
+References: <CAGm1_kuK6aA1ew9ZY-fVDUE+o71u1QaSg0kfX2jWUWE9Me8Tjg@mail.gmail.com>
+ <CAGm1_kuQTtyrdwXAV9NCHnvj3f5d7TixmqCPw=Cxd2A=jKSYmg@mail.gmail.com>
+ <20190927151935.GD5610@atomide.com> <20190927155738.GF5610@atomide.com> <CAGm1_kvvMc848f6f+kg5K2sQ3+NHA-Se7T_pcwQfrB=4GfZM4Q@mail.gmail.com>
+In-Reply-To: <CAGm1_kvvMc848f6f+kg5K2sQ3+NHA-Se7T_pcwQfrB=4GfZM4Q@mail.gmail.com>
+From:   Yegor Yefremov <yegorslists@googlemail.com>
+Date:   Mon, 30 Sep 2019 08:59:51 +0200
+Message-ID: <CAGm1_kvZpYH+NP8JfYJWE2v3E9v+yFs20L8MSKsAjfC_g+GmaQ@mail.gmail.com>
+Subject: Re: musb: cppi41: broken high speed FTDI functionality when connected
+ to musb directly
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     linux-omap@vger.kernel.org, vkoul@kernel.org,
+        Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
+        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        giulio.benetti@benettiengineering.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> =E2=80=A6 This commit replaces return with the goto.
+On Sat, Sep 28, 2019 at 6:09 PM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
+>
+> On Fri, Sep 27, 2019 at 5:57 PM Tony Lindgren <tony@atomide.com> wrote:
+> >
+> > * Tony Lindgren <tony@atomide.com> [190927 15:20]:
+> > > * Yegor Yefremov <yegorslists@googlemail.com> [190927 12:31]:
+> > > > On Fri, Sep 27, 2019 at 10:18 AM Yegor Yefremov
+> > > > <yegorslists@googlemail.com> wrote:
+> > > > >
+> > > > > I was porting my system from 3.18/4.2 to 5.3. During this process I
+> > > > > noticed that FT4232 that is attached directly to musb is not working
+> > > > > correctly when opened for the first time: tx is working but nothing
+> > > > > can be received. On the second opening everything is working fine.
+> > > > > When the same chip is connected via a USB hub - everything is working
+> > > > > from the very beginning.
+> > > > >
+> > > > > I could reproduce this issue using BeagleBone Black with omap2plus_defconfig.
+> > > > >
+> > > > > # lsusb -t
+> > > > > +/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=musb-hdrc/1p, 480M
+> > > > >     |__ Port 1: Dev 2, If 0, Class=, Driver=ftdi_sio, 480M
+> > > > >     |__ Port 1: Dev 2, If 1, Class=, Driver=ftdi_sio, 480M
+> > > > >     |__ Port 1: Dev 2, If 2, Class=, Driver=ftdi_sio, 480M
+> > > > >     |__ Port 1: Dev 2, If 3, Class=, Driver=ftdi_sio, 480M
+> > > > >
+> > > > > git bisect revealed the following:
+> > > > >
+> > > > > fdea2d09b997ba4c86e7a707a5fac87c305f2131 is the first bad commit
+> > > > > commit fdea2d09b997ba4c86e7a707a5fac87c305f2131
+> > > > > Author: Tony Lindgren <tony@atomide.com>
+> > > > > Date:   Wed Aug 31 07:19:59 2016 -0700
+> > > > >
+> > > > >     dmaengine: cppi41: Add basic PM runtime support
+> > > > >
+> > > > >     Let's keep the device enabled between cppi41_dma_issue_pending()
+> > > > >     and dmaengine_desc_get_callback_invoke() and rely on the PM runtime
+> > > > >     autoidle timeout elsewhere.
+> > > > >
+> > > > >     As the PM runtime is for whole device, not for each channel,
+> > > > >     we need to queue pending transfers if the device is PM runtime
+> > > > >     suspended. Then we start the pending transfers in PM runtime
+> > > > >     resume.
+> > > > >
+> > > > >     Signed-off-by: Tony Lindgren <tony@atomide.com>
+> > > > >     Signed-off-by: Vinod Koul <vinod.koul@intel.com>
+> > > > >
+> > > > > :040000 040000 8cf92c09083541dfdee01cc2973e73ef520f4fb1
+> > > > > a03c1a7ba8e723f7b503733c46edaa4141483265 M      drivers
+> > > > >
+> > > > > Any idea?
+> > > >
+> > > > The problems can be reproduced with other FTDI chips like FT232R.
+> > > >
+> > > > Invoking "minicom -D /dev/ttyUSB0" and typing some characters is
+> > > > enough to reproduce the issue (just in case, hw flow control should be
+> > > > disabled).
+> > > >
+> > > > cp210x based converter is working without an issue. So only FTDI chips
+> > > > are affected so far.
+> > >
+> > > Hmm OK. Maybe this could be an issue where the FTDI chip takes
+> > > longer to enumerate and cppi41 is already suspended by then?
+> > >
+> > > At least we had a similar issue with commit ae4a3e028bb8
+> > > ("dmaengine: cppi41: Fix runtime PM timeouts with USB mass
+> > > storage").
+> >
+> > Looks like I'm unable to reproduce this with bbb and FT232R
+> > USB UART.
+> >
+> > I tried v5.3 with omap2plus_defconfig, then boot, load musb
+> > and ftdi-sio modules, then connect ftdi directly to bbb,
+> > and then run "minicom -D /dev/ttyUSB0" on bbb and it works
+> > just fine for me.
+> >
+> > I tried also rebooting the device inbetween in case it only
+> > happens on the first connect after boot but still no luck
+> > reproducing.
+>
+> Strange. I've used a loopback to check whether the characters will be echoed.
+> FTDI cable was connected all the time so that I could check RX right after boot.
+> Both Buildroot and OpenWrt rootfs's showed this behaviour.
+>
+> > Maybe try adding some debug prints to cppi41_runtime_suspend()
+> > and cppi41_runtime_resume() to see if gets runtime suspended
+> > too early?
+>
+> Will do on Mo.
 
-How do you think about to omit the wording =E2=80=9CThis commit=E2=80=9D f=
-rom your change descriptions?
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?id=3D97f9a3c4eee55b0178b518ae71=
-14a6a53372913d#n151
+I've added the printks to both routines and the result is quite
+interesting. On the system with a directly attached FTDI both routines
+will be always invoked before (resume) and after (suspend) the
+test/minicom i.e. during the USB initialization.
+
+On the systems with a USB hub, these routines will be invoked only
+during the USB initialization and the last invocation is resume.
+During the test, there are no invocations.
 
 Regards,
-Markus
+Yegor
