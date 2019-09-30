@@ -2,382 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD873C1AFC
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 07:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272E3C1BCA
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 08:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbfI3F0i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 01:26:38 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40116 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726032AbfI3F0i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 01:26:38 -0400
-Received: by mail-wm1-f68.google.com with SMTP id b24so11145577wmj.5
-        for <linux-usb@vger.kernel.org>; Sun, 29 Sep 2019 22:26:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Pqe6XGV9iFsybS699I+3e/hU7YTC1RERKfS+mumwIAg=;
-        b=PgvxDJAzr8DwZbrXDS/4A1ZyhBycwROEeBHd93ZDTY+hXKZTdGQaHBd0I0qPS+oDLC
-         RfG94GELYnFIcP/EtU5aWQ4w+6rHZwtXA5DZ//gmLtMJIKjqoAiWUkAILh7y7pnNdjwg
-         BfvFpfeCJmEEm/WX80I65a8ER+x7PlMNxrxBSfni/O9eoaMsDmxoYOG7gyxL/59vIFVe
-         O3Nc4joLYDqn804ekm5volXlOr/H/rt7/QJRFhbLIDvEJRhUtJlDlpM9wWEL6rdPVjk7
-         8UzPYC6tCLnvHCbJQLk3lO9gHsDuDnbMQVneeivV5/pRRmSeJFjExs24spY0QPmxWVSk
-         PbRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Pqe6XGV9iFsybS699I+3e/hU7YTC1RERKfS+mumwIAg=;
-        b=BDacoxBtmrhzESaFnDEeFnoRQa2CpWYdbf5IVEdMjEk3E1AjjK31hW850HDOr71OSg
-         nSLeVYMJGDEPJbuWpdUAOzj4qThv9X+OFoUpJNYkcKfQp8xTI8bVGaHC+GMJ1yyOLGVx
-         y7cnb553nFjrq9bFl0gW4m5u0edW0H7JikV6HtX3hz0leimHysvHTXlkTjL3o0SvddIc
-         qNQ29XHjLMbsYcSkMSqREYGmLEXBODP5mUKZoTG5xiOOdQxJXiLzDvj8nCKsUiDGKjiX
-         0Mx62f/euJOYD/tDHiUbdOwk2UgrRsufQgrHANwDmzOAr7r7cEfHU+bq0+ry26Vav0FC
-         8Rmg==
-X-Gm-Message-State: APjAAAXze7uC++40xe8ku3rq/auevUlMZJQYYDBAJCXQDQ58lwGvEdVi
-        cxGTZiMOAeN4C1jHDBV6XYBfwpDgKEBFQg==
-X-Google-Smtp-Source: APXvYqwSZE8Vo96IRBbobiC2T92dOaymPBCvr1qZSY0/S/MV2rlqrdpbVg6nmplpLoqOVTYG0O3rvA==
-X-Received: by 2002:a7b:c156:: with SMTP id z22mr16469271wmi.142.1569821193027;
-        Sun, 29 Sep 2019 22:26:33 -0700 (PDT)
-Received: from dhe-pc (p54941CA4.dip0.t-ipconnect.de. [84.148.28.164])
-        by smtp.gmail.com with ESMTPSA id a71sm15473741wme.11.2019.09.29.22.26.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Sep 2019 22:26:31 -0700 (PDT)
-From:   David Heinzelmann <heinzelmann.david@gmail.com>
-X-Google-Original-From: David Heinzelmann <dhe@dhe-pc>
-Date:   Mon, 30 Sep 2019 09:26:24 +0200
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     David Heinzelmann <heinzelmann.david@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] Check for changed device descriptors when a
- connection-change occurs before validating the connection.
-Message-ID: <20190930072624.GA24182@dhe-pc>
-References: <20190924100119.GA7353@dhe-pc>
- <Pine.LNX.4.44L0.1909251010290.14432-100000@netrider.rowland.org>
+        id S1729271AbfI3Gzc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 02:55:32 -0400
+Received: from mout.web.de ([217.72.192.78]:38605 "EHLO mout.web.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726121AbfI3Gzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Sep 2019 02:55:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de;
+        s=dbaedf251592; t=1569826522;
+        bh=+3E/INNc/nZJwNdJLcPAZwGiWdqqBKAEARv1mFvBn1w=;
+        h=X-UI-Sender-Class:Cc:References:Subject:To:From:Date:In-Reply-To;
+        b=XBHLn+Q2bUoxfl6m7U8LwOAaoereWzFuqLX9CRAIWP61PQob0/EOO1eCU/sarsR5m
+         3q99D103nW0/VfOGeo6sNUQmbQ+Dl5d6wsb49q+WS65+NhJ8wY01hMH9ztMyddYo0W
+         xqdJGQIRjE1rbE9TQdxi3n5E5yN3n57zu4VOcDcA=
+X-UI-Sender-Class: c548c8c5-30a9-4db5-a2e7-cb6cb037b8f9
+Received: from [192.168.1.2] ([2.244.97.105]) by smtp.web.de (mrweb101
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 0LeLKb-1hmuMW3DRN-00qC1P; Mon, 30
+ Sep 2019 08:55:21 +0200
+Cc:     Navid Emamdoost <emamd001@umn.edu>, Kangjie Lu <kjlu@umn.edu>,
+        Stephen McCamant <smccaman@umn.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <20190930024147.25243-1-navid.emamdoost@gmail.com>
+Subject: Re: [PATCH] usb: dwc3: pci: prevent memory leak in dwc3_pci_probe
+To:     Navid Emamdoost <navid.emamdoost@gmail.com>,
+        linux-usb@vger.kernel.org
+From:   Markus Elfring <Markus.Elfring@web.de>
+Autocrypt: addr=Markus.Elfring@web.de; prefer-encrypt=mutual; keydata=
+ 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 FEE=
+Message-ID: <5f21ff8b-0cd2-5442-7d8b-f31b0f5dcdfe@web.de>
+Date:   Mon, 30 Sep 2019 08:55:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1909251010290.14432-100000@netrider.rowland.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20190930024147.25243-1-navid.emamdoost@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:P+OGt6N+0QX9QcBfG9fpEPvI1r1TbI5LAftzqB3RikkON4+3hkS
+ iHxzeaEga9e8WcwDnSbg5UWeXww+sQqLdQFByYcAWXhRYpWAgj8cfawXTh6JeqpNuSlae6+
+ dvIhInTTKHsPbDhctwBKRDUKZ8ADFVy7hrIdVJUhKbrLhTIi9s4gxeWo+M7gDRt2OQ0RdCL
+ gN0RMTcPMBRZ7Su3WiWmA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:r0EUch90hOQ=:JnE1MHNSBzIR4Lal1H6hxy
+ j3Nm8AmAByGr2mLdox8fHm6r1gdl2rsd6jgtsoM91cnaP4zPR+OQmlAolGFOGscENGcRAXum5
+ 6xzhOIgd5oAD7LM10t6O1GHi6lQcPsRZwuN+4eFie12pb5JeFJIyAUL4YJ9RcXi8X80nPo4vj
+ FyoWA34OVANMKXgGHb8l8htmoM5l4BWGVLfGqsRuYOru3CgAQd7EtTw+dlwI+cvpRyma1HuEe
+ hY88+ICF7ZNN4qsO0EepJW+Sx0IXu4HdO3MgJR/8mDF//bcuVHMiXINwE9NNtEM7ehqcEDedl
+ Vx6F75U3Axbh2hnGIWPetTwzN9OZPZ8AbbN1VEQqzTytWRPDdp7XoHij2JKNcwloTkp+lg8+J
+ 9d8Q99LiwSrzA8mz6+AayFFE8LmwGDlCwFp+5pa5OmSJsQTu9V1aVJbA3yOmsEqJjwZjiuUrL
+ VMapsvzeJ1IZoXbTk9KPExPOQryzcA66ek9WgF/ZCg+Y/XqiW8qKCMQKFcgCc0MTu3GEp8TCb
+ 8yUReYbMbS1Ti4MLm0gff+0G/6PMFI0vllUCGvGFGopiKS0Oh6jvsddMaRmeDE1hd0VQWN3Oh
+ 2uzYBEjA8ubYZOV2xTEkNWpyOZohUxRIATpBENJmgY4SWm0xoqBwfLjqvEgUcDXDMoEDtDgkT
+ dp9cYeikHDB75C3qEz4FlCOnjT8jitaVBe9PCJnJOJZ5CK7dcL7UclKjwTtrpGCHZUqvGRXp+
+ vW2AsqmJjCYewsOOHlF7mraBbQEgsz3zDwckkfm7WJpYotIjpRi/XtDYzD1M6qgIrKGgSo+c7
+ yACKW+L/7XAgIamcpR7QVOPLDDq5nT6P/uvl3XeGcD8lwJx8bbuXu914s479fIzsOg/EArJUM
+ PNj0NDd4AfVyevetHXQCQdaRJ+q57nrQY9Ks20TWtHqdQ5cbtvYBsleHOj/bmaxWKH46w3FNy
+ Xu/tr0Px9pWb8IBnJbRUuUkucZOIwS3oKba0HOAzdPmZCsJczE7yQkQrdVHotoanaRMhb1Fwp
+ 7Y1At0BouoY5V9qu0JlT+wquAn5omSisxwMwBmobVlmlLMKJmFBHVHtxvb8YlVHsgNcbtsE+z
+ RpxHVQvQ72GRgSh2y0PAH0MqWe/moIIOXjJ9FKiJTLe0WclwCqWDeeN2fR1G7i7nK61BO7ELs
+ 1sLu39xK7kDrTX/fpOCl+qCXDqNHC1QAbnrjUJ36k9e+yCtbB1wA9ZSJRca4DrdaWK/Sy+RQT
+ mWulbDeR4pZPijGb2/JoB1zX5/cctRzLsoObhXmuEqgV0jm621OykmYmQKB4=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 10:20:00AM -0400, Alan Stern wrote:
-> On Tue, 24 Sep 2019, David Heinzelmann wrote:
-> 
-> > > I really don't understand this.
-> > > 
-> > > Your patch involves the case where there was a connect-change event but 
-> > > the port is still enabled.  Now maybe I've forgotten about one of the 
-> > > pathways, but it seems like that combination should never occur.
-> > > 
-> > > Certainly it shouldn't occur in your case.  The device disconnects and 
-> > > then reconnects with a new set of descriptors.  The disconnect should 
-> > > cause the port to be disabled, and the port should remain disabled 
-> > > after the reconnect occurs.  So how can your new code run in the first 
-> > > place?
-> > > 
-> > > Alan Stern
-> > > 
-> > 
-> > Hi,
-> > 
-> > I have a log with two devices which are connected to a hub and the hub is plugged in. 
-> > 
-> > The device which is not working in this log:
-> > 
-> > Sep 24 08:32:21 kernel: usb 2-6-port1: status 0203 change 0011
-> > Sep 24 08:32:21 kernel: usb 2-6.1: new SuperSpeed Gen 1 USB device number 65 using xhci_hcd
-> 
-> Ah, SuperSpeed.  You're using a USB-3 device.  That does make a
-> difference.
-> 
-> > Sep 24 08:32:21 kernel: usb 2-6.1: udev 65, busnum 2, minor = 192
-> > Sep 24 08:32:21 kernel: usb 2-6.1: New USB device found, idVendor=1409, idProduct=3240, bcdDevice= 0.00
-> > Sep 24 08:32:21 kernel: usb 2-6.1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> > Sep 24 08:32:21 kernel: usb 2-6.1: Product: USB 3.0 Camera
-> > Sep 24 08:32:21 kernel: usb 2-6.1: Manufacturer: Camera Manufacturer
-> > 
-> > Now the firmware download happens and the device is re-enumerating and a disconnect/connect should occur.
-> > But the only change which is seen is the following output:
-> > 
-> > Sep 24 08:32:23 kernel: usb 2-6-port1: link state change
-> > Sep 24 08:32:23 kernel: usb 2-6-port1: status 0203, change 0041, 5.0 Gb/s
-> > 
-> > Now the resuscitation is happening but from my understanding this is not correct as in the reality there was a
-> > reconnect from the device. So I tried to initiate a device reconnect if the device descriptor changed.
-> > 
-> > It also seems to me that the enumeration from the second device (usb 2-6-port1) is blocking 
-> > the port change event and so the actual disconnect is missed.
-> 
-> Now it all makes sense.  Yes, I agree that your patch is the
-> appropriate thing to do -- except that it contains at least one logic
-> error: It doesn't handle the return code from
-> usb_get_device_descriptor() properly.
-> 
-> Also, I think you should expand the immediately preceding comment.  
-> Explain that it is indeed possible for the port to be enabled at this
-> point, because USB-3 connections are initialized automatically by the
-> host controller hardware when the connection is detected.
-> 
-> Alan Stern
-> 
+> =E2=80=A6 This commit replaces return with the goto.
 
-Hi,
+How do you think about to omit the wording =E2=80=9CThis commit=E2=80=9D f=
+rom your change descriptions?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?id=3D97f9a3c4eee55b0178b518ae71=
+14a6a53372913d#n151
 
-I adjusted the patch. Any comments? If it's okay, I will re-sent the patch 
-to the mailing list.
-
-Here is the second version:
-
-
-From dc78b8add72168215b8295e01ce3e2599b4998f7 Mon Sep 17 00:00:00 2001
-From: David Heinzelmann <heinzelmann.david@gmail.com>
-Date: Mon, 30 Sep 2019 07:11:31 +0200
-Subject: [PATCH v2] Check for changed device descriptors when a connection-change
- occurs before validating the connection.
-
-When a port connection-change occurs the hub driver tries to resuscitate an existing
-device. Activated from a firmware download a usb device can re-enumerate with new or
-changed device descriptors. Therefore it will be checked for changed device descriptors
-before the connection is resuscitated and the connection-change event is ignored.
-
-Signed-off-by: David Heinzelmann <heinzelmann.david@gmail.com>
----
- drivers/usb/core/hub.c | 196 +++++++++++++++++++++++------------------
- 1 file changed, 111 insertions(+), 85 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 236313f41f4a..45d8bdc9eaae 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4930,6 +4930,91 @@ hub_power_remaining(struct usb_hub *hub)
- 	return remaining;
- }
- 
-+
-+static int descriptors_changed(struct usb_device *udev,
-+		struct usb_device_descriptor *old_device_descriptor,
-+		struct usb_host_bos *old_bos)
-+{
-+	int		changed = 0;
-+	unsigned	index;
-+	unsigned	serial_len = 0;
-+	unsigned	len;
-+	unsigned	old_length;
-+	int		length;
-+	char		*buf;
-+
-+	if (memcmp(&udev->descriptor, old_device_descriptor,
-+			sizeof(*old_device_descriptor)) != 0)
-+		return 1;
-+
-+	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
-+		return 1;
-+	if (udev->bos) {
-+		len = le16_to_cpu(udev->bos->desc->wTotalLength);
-+		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
-+			return 1;
-+		if (memcmp(udev->bos->desc, old_bos->desc, len))
-+			return 1;
-+	}
-+
-+	/* Since the idVendor, idProduct, and bcdDevice values in the
-+	 * device descriptor haven't changed, we will assume the
-+	 * Manufacturer and Product strings haven't changed either.
-+	 * But the SerialNumber string could be different (e.g., a
-+	 * different flash card of the same brand).
-+	 */
-+	if (udev->serial)
-+		serial_len = strlen(udev->serial) + 1;
-+
-+	len = serial_len;
-+	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
-+		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
-+		len = max(len, old_length);
-+	}
-+
-+	buf = kmalloc(len, GFP_NOIO);
-+	if (!buf)
-+		/* assume the worst */
-+		return 1;
-+
-+	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
-+		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
-+		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
-+				old_length);
-+		if (length != old_length) {
-+			dev_dbg(&udev->dev, "config index %d, error %d\n",
-+					index, length);
-+			changed = 1;
-+			break;
-+		}
-+		if (memcmp(buf, udev->rawdescriptors[index], old_length)
-+				!= 0) {
-+			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
-+				index,
-+				((struct usb_config_descriptor *) buf)->
-+					bConfigurationValue);
-+			changed = 1;
-+			break;
-+		}
-+	}
-+
-+	if (!changed && serial_len) {
-+		length = usb_string(udev, udev->descriptor.iSerialNumber,
-+				buf, serial_len);
-+		if (length + 1 != serial_len) {
-+			dev_dbg(&udev->dev, "serial string error %d\n",
-+					length);
-+			changed = 1;
-+		} else if (memcmp(buf, udev->serial, length) != 0) {
-+			dev_dbg(&udev->dev, "serial string changed\n");
-+			changed = 1;
-+		}
-+	}
-+
-+	kfree(buf);
-+	return changed;
-+}
-+
- static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		u16 portchange)
- {
-@@ -5167,7 +5252,9 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
- {
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
-+	struct usb_device_descriptor descriptor;
- 	int status = -ENODEV;
-+	int retval;
- 
- 	dev_dbg(&port_dev->dev, "status %04x, change %04x, %s\n", portstatus,
- 			portchange, portspeed(hub, portstatus));
-@@ -5188,7 +5275,30 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
- 	if ((portstatus & USB_PORT_STAT_CONNECTION) && udev &&
- 			udev->state != USB_STATE_NOTATTACHED) {
- 		if (portstatus & USB_PORT_STAT_ENABLE) {
--			status = 0;		/* Nothing to do */
-+			/* USB-3 connections are initialized
-+			 * automatically by the host controller
-+			 * hardware. Therefore check for changed
-+			 * device descriptors before resuscitating
-+			 * the device.
-+			 */
-+			descriptor = udev->descriptor;
-+			retval = usb_get_device_descriptor(udev,
-+				sizeof(udev->descriptor));
-+			if (retval < 0) {
-+				dev_dbg (&udev->dev, "can't read device "
-+					"descriptor %d\n", retval);
-+			} else {
-+				if (descriptors_changed(udev, &descriptor,
-+					udev->bos)) {
-+						dev_dbg(&udev->dev, "device descriptor "
-+							"has changed\n");
-+
-+						/* for disconnect() calls */
-+						udev->descriptor = descriptor;
-+					} else {
-+						status = 0; /* Nothing to do */
-+			}
-+		}
- #ifdef CONFIG_PM
- 		} else if (udev->state == USB_STATE_SUSPENDED &&
- 				udev->persist_enabled) {
-@@ -5550,90 +5660,6 @@ void usb_hub_cleanup(void)
- 	usb_deregister(&hub_driver);
- } /* usb_hub_cleanup() */
- 
--static int descriptors_changed(struct usb_device *udev,
--		struct usb_device_descriptor *old_device_descriptor,
--		struct usb_host_bos *old_bos)
--{
--	int		changed = 0;
--	unsigned	index;
--	unsigned	serial_len = 0;
--	unsigned	len;
--	unsigned	old_length;
--	int		length;
--	char		*buf;
--
--	if (memcmp(&udev->descriptor, old_device_descriptor,
--			sizeof(*old_device_descriptor)) != 0)
--		return 1;
--
--	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
--		return 1;
--	if (udev->bos) {
--		len = le16_to_cpu(udev->bos->desc->wTotalLength);
--		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
--			return 1;
--		if (memcmp(udev->bos->desc, old_bos->desc, len))
--			return 1;
--	}
--
--	/* Since the idVendor, idProduct, and bcdDevice values in the
--	 * device descriptor haven't changed, we will assume the
--	 * Manufacturer and Product strings haven't changed either.
--	 * But the SerialNumber string could be different (e.g., a
--	 * different flash card of the same brand).
--	 */
--	if (udev->serial)
--		serial_len = strlen(udev->serial) + 1;
--
--	len = serial_len;
--	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
--		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
--		len = max(len, old_length);
--	}
--
--	buf = kmalloc(len, GFP_NOIO);
--	if (!buf)
--		/* assume the worst */
--		return 1;
--
--	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
--		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
--		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
--				old_length);
--		if (length != old_length) {
--			dev_dbg(&udev->dev, "config index %d, error %d\n",
--					index, length);
--			changed = 1;
--			break;
--		}
--		if (memcmp(buf, udev->rawdescriptors[index], old_length)
--				!= 0) {
--			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
--				index,
--				((struct usb_config_descriptor *) buf)->
--					bConfigurationValue);
--			changed = 1;
--			break;
--		}
--	}
--
--	if (!changed && serial_len) {
--		length = usb_string(udev, udev->descriptor.iSerialNumber,
--				buf, serial_len);
--		if (length + 1 != serial_len) {
--			dev_dbg(&udev->dev, "serial string error %d\n",
--					length);
--			changed = 1;
--		} else if (memcmp(buf, udev->serial, length) != 0) {
--			dev_dbg(&udev->dev, "serial string changed\n");
--			changed = 1;
--		}
--	}
--
--	kfree(buf);
--	return changed;
--}
--
- /**
-  * usb_reset_and_verify_device - perform a USB port reset to reinitialize a device
-  * @udev: device to reset (not in SUSPENDED or NOTATTACHED state)
--- 
-2.20.1
+Regards,
+Markus
