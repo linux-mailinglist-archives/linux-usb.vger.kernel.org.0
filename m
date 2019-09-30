@@ -2,81 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 563FCC1FDE
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 13:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3930C1FE2
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 13:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729898AbfI3LRD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 30 Sep 2019 07:17:03 -0400
-Received: from zixvpm02.lrhcares.org ([71.181.118.111]:39385 "EHLO
-        zixvpm02.lrhcares.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729415AbfI3LRD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 07:17:03 -0400
-X-Greylist: delayed 1084 seconds by postgrey-1.27 at vger.kernel.org; Mon, 30 Sep 2019 07:17:02 EDT
-Received: from 127.0.0.1 (ZixVPM [127.0.0.1])
-        by Outbound.lrhcares.org (Proprietary) with SMTP id E42FB1D268D
-        for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2019 06:58:57 -0400 (EDT)
-Received: from mail2.lrhcares.org (smg-2_out.lh.org [192.168.10.9])
-        by zixvpm02.lrhcares.org (Proprietary) with ESMTP id 74B7F1D12F6;
-        Mon, 30 Sep 2019 06:58:56 -0400 (EDT)
-X-AuditID: c0a80a08-347ff700000009ea-74-5d91dff01c08
-Received: from lrhexhubcas2.lh.org (lrhexhubcas2.lh.org [172.17.100.22])
-        by  (Mail Gateway) with SMTP id FF.19.02538.0FFD19D5; Mon, 30 Sep 2019 06:58:56 -0400 (EDT)
-To:     undisclosed-recipients:;
-Received: from LRHEXMBX1.lh.org ([fe80::18b6:d4b7:efe1:d052]) by
- lrhexhubcas2.lh.org ([fe80::4087:8490:38b8:fe57%13]) with mapi id
- 14.03.0468.000; Mon, 30 Sep 2019 06:58:55 -0400
-From:   Juergen Spagolla <jspagolla@lrhcares.org>
-Subject: 
-Thread-Index: AdV3fXRGCZ124tjFSGycD5OYrzWJww==
-Date:   Mon, 30 Sep 2019 10:58:54 +0000
-Message-ID: <AC4FE10B2D01D34FAA83E522A6335941EC8DF33A@lrhexmbx1.lh.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.17.100.227]
-Content-Type: text/plain; charset="iso-8859-1"
-content-transfer-encoding: 8BIT
-MIME-Version: 1.0
-X-Brightmail-Tracker: H4sIAAAAAAAAA2VTbUxTZxjdez9rpdktE7nBLWmu02xzfG5Lnhlg+2N2TZaI08RpRthNewfN
-        yi1r0YwlLq1MswCOAgpSBJRgB1KQj4GAgKNjGBA2mEMQjVYsBCyGD0VhIOyWZgnJ3l8n5znn
-        vOfNm0eBB3bQIQq9lCqaJMHAUUrCqdZtDZ19kBMfsXRdDcszpwloGuokYcQbBPfcp0hYLHtB
-        Qn2pi4aH4/MEOKpWaFjL8iLotOXjkOuZw6Gu7iYJQ/0VGNRbq2m42paJwHLLicGivQGHMsdJ
-        HPKe3ybgufM0BenlNgwmy/5G0Fw8SsHiVVl8P72KArvzDoLcshYcHN3lFHQ9u0zAzPwqDj/0
-        PcZhuclKQNftGRwejnlpsDjiYdy9TENjbxEJ6SdaETRmsWCtWCRhcCCbBud0g9zJW0bAQm2j
-        3MmzE24UVlMw+bOdhn+aJxC09yyR0GY7i4MrowODnIvDGNxZGaRgbe0GDV3D/RgsFW2HnsxL
-        GKzVrGBwbjqXgIbuRgKmp9wY/Pakn4DBv+QbCouuoI91fP5CNc4/uFZJ8/cqu2l+dI3h8zx1
-        GN87O0DwpbVjNH/BOoHzNbMq3rPkJvn7PVUUPz61g8+ueUry5+ZLCf5ScRXNtz7pJuL2HLGg
-        aEGSjKlCqqjRiWZtDPfpZ7xmT7KgN2jiTPpjgjZNc8A3TRalVE6j18VwUZwmxSBo15kYTkhJ
-        ESUdF6vU/O9EyzK9pBElrVGnlxJjuL0H9oUCfPBhaCQXezBJ1Oilr4ymL19SSRk327CUAvLb
-        2b5eyoIcRAbapGCZ99mJnzpwHw5kHIhduWb04S3M62xx0SMyAyllvgmxkz+WkL4BxYSznoF8
-        5MOvMQq2o7ME8xvC2AnbnBykUBDMDtb2eLePVjGfsGN9Bev5iNnKvuh1rstxJpgd9ZRi/g4M
-        W972J+7HQezUo1XSjzn2/PlKwq8PY0fOnqH8eBfruOjF/flqtqfQQ9iQ2r4h1r7BYt9gsW+w
-        XEDEZRRgTk4MjQozJIUZTYn1SN6iXyuUimZ092S0CzEKxAWo3HhOfCApHDOnJbsQq8C5Larg
-        V2zxgSqdkPadaDImmI4aRLML7ZLfnYOHbNYa5Z2UUhPei4jgglXjJw7uD2QS5b/9WhRTRNN/
-        akyxKcSC0KH0cH6hybS9dab9ja4hW0F21rtPSzjdLPbF0vDbh3d+PqoOGm459LJ9pDJ72zfX
-        T9XQ+/6wuZO9kY3VJf37b8W1RCldq9HbBva+GjuUd8Xg5Kwh/N3fezI31741EH5Ura/9ZVwb
-        yyxYdid8FHCm6NkcefxNpd7SbT2eGT39fWvsDEeYk4TId3CTWfgX6oyYAFEEAAA=
-X-VPM-HOST: zixvpm02.lrhcares.org
-X-VPM-GROUP-ID: 7dd35b3d-e862-45f1-ae7e-0bbcd2d56d4b
-X-VPM-MSG-ID: f3a720c0-b200-40e1-a8fa-84f9258ff01d
-X-VPM-ENC-REGIME: Plaintext
-X-VPM-IS-HYBRID: 0
+        id S1730419AbfI3LTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 07:19:00 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:49178 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730345AbfI3LTA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 07:19:00 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id D9F246081C; Mon, 30 Sep 2019 11:18:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569842338;
+        bh=8tgWRtyRACRXTw50sZyFNSsCDyxHI2vAYx0mx9qPkqE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QVtMi+Rd0pbfMXU6AdHGPmiH4d8QRLcc/l7Ulc8OODdIvtsXCIK5vbbyHTl/EM9qG
+         ZN9WwsJ1Tf+bWAw/iWFmG0DOSXOTOUCcx95G+jmwxFs9QcugoReZ7SFonZ1Qp6BneQ
+         Gqqrqt1GKEzmOvpG32g7oam4vkWdWAkAWVpVwyUw=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from cchiluve-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: cchiluve@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id F2D6D607CA;
+        Mon, 30 Sep 2019 11:18:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569842338;
+        bh=8tgWRtyRACRXTw50sZyFNSsCDyxHI2vAYx0mx9qPkqE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QVtMi+Rd0pbfMXU6AdHGPmiH4d8QRLcc/l7Ulc8OODdIvtsXCIK5vbbyHTl/EM9qG
+         ZN9WwsJ1Tf+bWAw/iWFmG0DOSXOTOUCcx95G+jmwxFs9QcugoReZ7SFonZ1Qp6BneQ
+         Gqqrqt1GKEzmOvpG32g7oam4vkWdWAkAWVpVwyUw=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org F2D6D607CA
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cchiluve@codeaurora.org
+From:   Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org,
+        Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+Subject: [PATCH V2] usb: gadget: composite: Fix possible double free memory bug
+Date:   Mon, 30 Sep 2019 16:48:31 +0530
+Message-Id: <1569842311-10353-1-git-send-email-cchiluve@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Heeft u een persoonlijke lening, een zakelijke lening of projectfinanciering / investeringslening nodig.
-Wij bieden deze en nog veel meer financieringsdiensten tegen een vaste rentevoet van 3% per jaar.
-Neem voor meer informatie contact met ons op via e-mail: sigmafinancestg@gmail.com
-stuur e-mail alleen naar: sigmafinancestg@gmail.com
+composite_dev_cleanup call from the failure of configfs_composite_bind
+frees up the cdev->os_desc_req and cdev->req. If the previous calls of
+bind and unbind is successful these will carry stale values.
 
-Do you need a personal loan, a business loan or project financing/investment loan.
-We offer these and many more financing services at a fixed interest rate of 3% per year.
-For more information, kindly contact us via Email: sigmafinancestg@gmail.com
-send email only to :  sigmafinancestg@gmail.com
+Consider the below sequence of function calls:
+configfs_composite_bind()
+        composite_dev_prepare()
+                - Allocate cdev->req, cdev->req->buf
+        composite_os_desc_req_prepare()
+                - Allocate cdev->os_desc_req, cdev->os_desc_req->buf
+configfs_composite_unbind()
+        composite_dev_cleanup()
+                - free the cdev->os_desc_req->buf and cdev->req->buf
+Next composition switch
+configfs_composite_bind()
+        - If it fails goto err_comp_cleanup will call the
+	  composite_dev_cleanup() function
+        composite_dev_cleanup()
+	        - calls kfree up with the stale values of cdev->req->buf and
+		  cdev->os_desc_req from the previous configfs_composite_bind
+		  call. The free call on these stale values leads to double free.
 
-The information contained in this message may be confidential and protected from disclosure under applicable law.  These materials are intended only for the use of the intended recipient.  If you are not the intended recipient, you are hereby notified that any dissemination, distribution or copying of this communication is strictly prohibited.  If you have received this communication in error, please notify us immediately by replying to this message and then delete it from your computer.  All e-mail sent to this address will be received by the Littleton Regional Healthcare e-mail system and is subject to archiving and review by someone other than the intended recipient such as technical support and/or management personnel."
+Hence, Fix this issue by setting request and buffer pointer to NULL after
+kfree.
 
+Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+
+Changes in v2:
+	- Modified commit text.
+---
+ drivers/usb/gadget/composite.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index b8a1584..992f1e2 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2155,14 +2155,18 @@ void composite_dev_cleanup(struct usb_composite_dev *cdev)
+ 			usb_ep_dequeue(cdev->gadget->ep0, cdev->os_desc_req);
+ 
+ 		kfree(cdev->os_desc_req->buf);
++		cdev->os_desc_req->buf = NULL;
+ 		usb_ep_free_request(cdev->gadget->ep0, cdev->os_desc_req);
++		cdev->os_desc_req = NULL;
+ 	}
+ 	if (cdev->req) {
+ 		if (cdev->setup_pending)
+ 			usb_ep_dequeue(cdev->gadget->ep0, cdev->req);
+ 
+ 		kfree(cdev->req->buf);
++		cdev->req->buf = NULL;
+ 		usb_ep_free_request(cdev->gadget->ep0, cdev->req);
++		cdev->req = NULL;
+ 	}
+ 	cdev->next_string_id = 0;
+ 	device_remove_file(&cdev->gadget->dev, &dev_attr_suspended);
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
