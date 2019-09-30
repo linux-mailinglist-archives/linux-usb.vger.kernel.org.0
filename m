@@ -2,104 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1A2C234F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 16:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100F0C2388
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Sep 2019 16:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731767AbfI3ObH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 10:31:07 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:46553 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730378AbfI3ObG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 10:31:06 -0400
-Received: by mail-lj1-f194.google.com with SMTP id d1so9695388ljl.13
-        for <linux-usb@vger.kernel.org>; Mon, 30 Sep 2019 07:31:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zBL7epC00p9U9++zGccJDAwUuYYIfHYJAHuYq0NGhKI=;
-        b=Ke+Nx55iXZQfZSHRoqDLY786VnrQjJgoe/GD/uOlYu8+tDQ9EAUgLcqHGlUm6BTKpb
-         WX5654MwqqZ+4GZEY92XR6gll89SPNvhOQD60cXDcMBMQxuvCBnI/oi+9OcSMb9YhvVR
-         U2f3yCuw6i91i3dKrEsYVFk1FGdpYawZKGy0M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zBL7epC00p9U9++zGccJDAwUuYYIfHYJAHuYq0NGhKI=;
-        b=j6Dmi79wYpFo3GeYn/ABB+mVCON7e4V7bu8MdXwc82E4o1oGe29s4QGgsPBD6Kh6wL
-         oB93buhC1b9GTqNOuq1mwTpAP1KdhIqfqOHfjIEZ1YlDR+j9QtfDnJMBweEhAY71oh/p
-         CD9uSMzL7IGEVW56gQQu07xOaUCZAxyecY53SYFzv8DigzSCY2FUmlXP94SViRLkaQBa
-         kOSp8Kb0+ZcgEWle9uxeU8a+WDDjXWuElT3lC7/9qAlaLdBDDU8f9mHOEdfchI+2yRvh
-         XapFs0sQlpJT3+j4OktKQC0GdkT0QHscVpu8Fy8e5hvyjXhAP26YHhYD/91wormbPTiK
-         MCOQ==
-X-Gm-Message-State: APjAAAUGeIhZ1LLg/Ha6QkgUSQy/wSaGgVByqBHpdpMqr/C9cVg8PL/1
-        wyHr83xd1KKV94daF1WA/C+VEQ==
-X-Google-Smtp-Source: APXvYqyIcLy55HB3x/wsB1A7V+gCME1VE6tR84DBLqOOAZkx1QX/h9HdcAKeuQHRVXy8LcRSx7k+/A==
-X-Received: by 2002:a2e:8ec6:: with SMTP id e6mr12257813ljl.231.1569853864490;
-        Mon, 30 Sep 2019 07:31:04 -0700 (PDT)
-Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id q11sm3301932lje.52.2019.09.30.07.31.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 07:31:03 -0700 (PDT)
-Subject: Re: [PATCH v2] lib/string-choice: add yesno(), onoff(),
- enableddisabled(), plural() helpers
-To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <julia.lawall@lip6.fr>
-References: <20190930141842.15075-1-jani.nikula@intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
-Date:   Mon, 30 Sep 2019 16:31:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190930141842.15075-1-jani.nikula@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1731381AbfI3On1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 10:43:27 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48436 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730809AbfI3On1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 30 Sep 2019 10:43:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 9E6D4AE2A;
+        Mon, 30 Sep 2019 14:43:24 +0000 (UTC)
+Message-ID: <1569853679.2639.4.camel@suse.com>
+Subject: Re: WARNING in _chaoskey_fill/usb_submit_urb
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+f5349b421c6213d34ce2@syzkaller.appspotmail.com>,
+        gustavo@embeddedor.com, andreyknvl@google.com,
+        syzkaller-bugs@googlegroups.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Date:   Mon, 30 Sep 2019 16:27:59 +0200
+In-Reply-To: <000000000000488dd305933945d2@google.com>
+References: <000000000000488dd305933945d2@google.com>
+Content-Type: multipart/mixed; boundary="=-pDbKljJr9HUl0bviT/pC"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/09/2019 16.18, Jani Nikula wrote:
-> The kernel has plenty of ternary operators to choose between constant
-> strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
-> "s":
+
+--=-pDbKljJr9HUl0bviT/pC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+
+Am Montag, den 23.09.2019, 07:31 -0700 schrieb syzbot:
+> Hello,
 > 
+> syzbot found the following crash on:
 > 
-> ---
+> HEAD commit:    e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1452c6a1600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=f5349b421c6213d34ce2
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16342d45600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166769b1600000
 > 
-> v2: add string-choice.[ch] to not clutter kernel.h and to actually save
-> space on string constants.
-> 
-> +EXPORT_SYMBOL(enableddisabled);
-> +
-> +const char *plural(long v)
-> +{
-> +	return v == 1 ? "" : "s";
-> +}
-> +EXPORT_SYMBOL(plural);
-> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+f5349b421c6213d34ce2@syzkaller.appspotmail.com
+
+#syz test: https://github.com/google/kasan.git e0bd8d79
+
+--=-pDbKljJr9HUl0bviT/pC
+Content-Disposition: attachment; filename="0001-USB-chaoskey-fix-error-case-of-a-timeout.patch"
+Content-Transfer-Encoding: base64
+Content-Type: text/x-patch; name="0001-USB-chaoskey-fix-error-case-of-a-timeout.patch";
+	charset="UTF-8"
+
+RnJvbSBiODBiMzlhMjU2NWE4MGYxNmNlMDA3OTgyYmFiZTc1M2UyMjVlYTgzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBNb24sIDMwIFNlcCAyMDE5IDE1OjE5OjEzICswMjAwClN1YmplY3Q6IFtQQVRDSF0gVVNCOiBj
+aGFvc2tleTogZml4IGVycm9yIGNhc2Ugb2YgYSB0aW1lb3V0CgpJbiBjYXNlIG9mIGEgdGltZW91
+dCBjb21tdW5pY2F0aW9uIHdpdGggdGhlIGRldmljZSBuZWVkcyB0byBiZSBlbmRlZApmcm9tIHRo
+ZSBob3N0IHNpZGUsIGxlc3Qgd2Ugb3ZlcndyaXRlIGFuIGFjdGl2ZSBVUkIKClNpZ25lZC1vZmYt
+Ynk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5kZT4KLS0tCiBkcml2ZXJzL3VzYi9taXNj
+L2NoYW9za2V5LmMgfCAxNyArKysrKysrKysrKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDE0IGlu
+c2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbWlz
+Yy9jaGFvc2tleS5jIGIvZHJpdmVycy91c2IvbWlzYy9jaGFvc2tleS5jCmluZGV4IGNmNTgyOGNl
+OTI3YS4uM2NiN2UxYjdkNDU0IDEwMDY0NAotLS0gYS9kcml2ZXJzL3VzYi9taXNjL2NoYW9za2V5
+LmMKKysrIGIvZHJpdmVycy91c2IvbWlzYy9jaGFvc2tleS5jCkBAIC0zODMsMTMgKzM4MywxNyBA
+QCBzdGF0aWMgaW50IF9jaGFvc2tleV9maWxsKHN0cnVjdCBjaGFvc2tleSAqZGV2KQogCQkhZGV2
+LT5yZWFkaW5nLAogCQkoc3RhcnRlZCA/IE5BS19USU1FT1VUIDogQUxFQV9GSVJTVF9USU1FT1VU
+KSApOwogCi0JaWYgKHJlc3VsdCA8IDApCisJaWYgKHJlc3VsdCA8IDApIHsKKwkJdXNiX2tpbGxf
+dXJiKGRldi0+dXJiKTsKIAkJZ290byBvdXQ7CisJfQogCi0JaWYgKHJlc3VsdCA9PSAwKQorCWlm
+IChyZXN1bHQgPT0gMCkgewogCQlyZXN1bHQgPSAtRVRJTUVET1VUOwotCWVsc2UKKwkJdXNiX2tp
+bGxfdXJiKGRldi0+dXJiKTsKKwl9IGVsc2UgewogCQlyZXN1bHQgPSBkZXYtPnZhbGlkOworCX0K
+IG91dDoKIAkvKiBMZXQgdGhlIGRldmljZSBnbyBiYWNrIHRvIHNsZWVwIGV2ZW50dWFsbHkgKi8K
+IAl1c2JfYXV0b3BtX3B1dF9pbnRlcmZhY2UoZGV2LT5pbnRlcmZhY2UpOwpAQCAtNTI1LDcgKzUy
+OSwxNCBAQCBzdGF0aWMgaW50IGNoYW9za2V5X3N1c3BlbmQoc3RydWN0IHVzYl9pbnRlcmZhY2Ug
+KmludGVyZmFjZSwKIAogc3RhdGljIGludCBjaGFvc2tleV9yZXN1bWUoc3RydWN0IHVzYl9pbnRl
+cmZhY2UgKmludGVyZmFjZSkKIHsKKwlzdHJ1Y3QgY2hhb3NrZXkgKmRldjsKKwlzdHJ1Y3QgdXNi
+X2RldmljZSAqdWRldiA9IGludGVyZmFjZV90b191c2JkZXYoaW50ZXJmYWNlKTsKKwogCXVzYl9k
+YmcoaW50ZXJmYWNlLCAicmVzdW1lIik7CisJZGV2ID0gdXNiX2dldF9pbnRmZGF0YShpbnRlcmZh
+Y2UpOworCWlmIChsZTE2X3RvX2NwdSh1ZGV2LT5kZXNjcmlwdG9yLmlkVmVuZG9yKSA9PSBBTEVB
+X1ZFTkRPUl9JRCkKKwkJZGV2LT5yZWFkc19zdGFydGVkID0gZmFsc2U7CisKIAlyZXR1cm4gMDsK
+IH0KICNlbHNlCi0tIAoyLjE2LjQKCg==
 
 
-Say what? I'll bet you a beer that this is a net loss: You're adding
-hundreds of bytes of export symbol overhead, plus forcing gcc to emit
-actual calls at the call sites, with all the register saving/restoring
-that implies.
-
-Please just do this as static inlines. As I said, the linker is
-perfectly capable of merging string literals across translation units
-(but of course not between vmlinux and modules), so any built-in code
-that uses those helpers (or open-codes them, doesn't matter) will
-automatically share those literals.
-
-Rasmus
+--=-pDbKljJr9HUl0bviT/pC--
 
