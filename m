@@ -2,123 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E1FC392B
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 17:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39047C3A67
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 18:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389576AbfJAPe2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 11:34:28 -0400
-Received: from mga02.intel.com ([134.134.136.20]:62567 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727236AbfJAPe1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 11:34:27 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 08:32:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="205087932"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 08:32:55 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 18:32:54 +0300
-Date:   Tue, 1 Oct 2019 18:32:54 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Mario.Limonciello@dell.com, linux-usb@vger.kernel.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, rajmohan.mani@intel.com,
-        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
-        stern@rowland.harvard.edu, anthony.wong@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191001153254.GD2714@lahna.fi.intel.com>
-References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <20191001124748.GH2954373@kroah.com>
- <20191001130905.GO2714@lahna.fi.intel.com>
- <20191001145354.GA3366714@kroah.com>
- <924ce4d5862c4d859e238c0e706a3d5b@AUSX13MPC105.AMER.DELL.COM>
- <20191001152213.GB3450435@kroah.com>
+        id S1727720AbfJAQXQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 12:23:16 -0400
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:33464 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727339AbfJAQXQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 12:23:16 -0400
+Received: by mail-wm1-f53.google.com with SMTP id r17so2918722wme.0
+        for <linux-usb@vger.kernel.org>; Tue, 01 Oct 2019 09:23:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HfqrpqLs76Pt0f27qnd57A/KNk1+64U/XiwmLVi0Y4E=;
+        b=su+GUl7wuzyW8bDNCvxM9N9574jVgvGhMPz/1tQd//MeHb4hXr5+APu3AFWOn/vyHk
+         G1Y51RhoQTM8qKzydBTi5Y0klEm3naL7vv/gU7Owfb0vru7E2D6Lib4m5Gt9JBEksE/5
+         6ojhZsjyw1Xj8wjOKy37TgzjUwyR+R97CCFxX/V/Xmk/fZRqRDCr60p5ZlHNew5AoFQg
+         zM7C7l1pkgFOX+Nvk5woX9tqHCfIMLMSwMe+YuDEVKGcnSBcVhgCzx1L4eAjy4+9+w/m
+         5hfzGJrKXapxqYzbxkAdzMEAaJmHxQUfyZVVrKicTXUNzxjAtTcbVGoWXPSWBSJpyEme
+         5iKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HfqrpqLs76Pt0f27qnd57A/KNk1+64U/XiwmLVi0Y4E=;
+        b=c5gCH9Pdi5fHSjI+3uo32GJKiTnqHVWjdlIARvtSEMtnxwcNlQGO5FErEGLKyd1aiJ
+         bxTUCsUBKfhSc+FtRFA6CJisWquL899sCiGAeczih8KSCbY3RzytQpV2ZoKdWnAAx+9w
+         W8Z/aL9jYC2eZXMR41xOEFcxtV6KTYMbQadOIvosYbGWivzJjjpOf5Qx21bG8urHuJ9m
+         QtG9XD3FRj5Ihw6O4frytY8S06zzzYGTi4bV4hWMZCrADun6ZN8mv14b9pVBA2pRG9au
+         +QACL/8beOoNQdR3h7ra3ggFbwom2Ni4RTyXUH5CeFURUI5iN9rsv3HYRLCyQVS5sNyq
+         MDkA==
+X-Gm-Message-State: APjAAAWReBno7wi+DZB6rfVcyOM0JqXKHjUim5CpjqjPZ6OweqE2OQCE
+        l0szY/jJzyaKRpT2PviqXMaffvR46B5S7w==
+X-Google-Smtp-Source: APXvYqx8f68bxBLUvG1Y4n8bF7mxJ04+26codcJeMm9LGgTpuXROwNUM+ttDbyMGn7O5oygdv18Qfg==
+X-Received: by 2002:a1c:7c10:: with SMTP id x16mr4291450wmc.175.1569946994212;
+        Tue, 01 Oct 2019 09:23:14 -0700 (PDT)
+Received: from google.com ([2a00:79e0:d:210:e8f7:125b:61e9:733d])
+        by smtp.gmail.com with ESMTPSA id u10sm32471705wrg.55.2019.10.01.09.23.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Oct 2019 09:23:13 -0700 (PDT)
+Date:   Tue, 1 Oct 2019 17:23:10 +0100
+From:   Matthias Maennich <maennich@google.com>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jessica Yu <jeyu@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: depmod warning: unknown symbol usb_stor_sense_invalidCDB in
+ 5.4-rc1
+Message-ID: <20191001162310.GJ90796@google.com>
+References: <f78f3025-a50c-5111-b022-12fea1375795@i2se.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20191001152213.GB3450435@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <f78f3025-a50c-5111-b022-12fea1375795@i2se.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 05:22:13PM +0200, Greg KH wrote:
-> On Tue, Oct 01, 2019 at 02:59:06PM +0000, Mario.Limonciello@dell.com wrote:
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Sent: Tuesday, October 1, 2019 9:54 AM
-> > > To: Mika Westerberg
-> > > Cc: linux-usb@vger.kernel.org; Andreas Noever; Michael Jamet; Yehezkel Bernat;
-> > > Rajmohan Mani; Nicholas Johnson; Lukas Wunner; Alan Stern; Limonciello, Mario;
-> > > Anthony Wong; linux-kernel@vger.kernel.org
-> > > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-> > > 
-> > > 
-> > > [EXTERNAL EMAIL]
-> > > 
-> > > On Tue, Oct 01, 2019 at 04:09:05PM +0300, Mika Westerberg wrote:
-> > > > On Tue, Oct 01, 2019 at 02:47:48PM +0200, Greg Kroah-Hartman wrote:
-> > > > > > -	  Thunderbolt Controller driver. This driver is required if you
-> > > > > > -	  want to hotplug Thunderbolt devices on Apple hardware or on PCs
-> > > > > > -	  with Intel Falcon Ridge or newer.
-> > > > > > +	  USB4 (Thunderbolt) driver. USB4 is the public spec based on
-> > > > > > +	  Thunderbolt 3 protocol. This driver is required if you want to
-> > > > > > +	  hotplug Thunderbolt and USB4 compliant devices on Apple
-> > > > > > +	  hardware or on PCs with Intel Falcon Ridge or newer.
-> > > > >
-> > > > > Wait, did "old" thunderbolt just get re-branded as USB4?
-> > > >
-> > > > Not but the driver started supporting USB4 as well :)
-> > > >
-> > > > USB4 is pretty much public spec of Thunderbolt 3 but with some
-> > > > differences in register layouts (this is because Thunderbolt uses some
-> > > > vendor specific capabilities which are now moved to more "standard"
-> > > > places).
-> > > 
-> > > Ok, then we need to rename the Kconfig option as well, otherwise no one
-> > > will "know" that this changed, so they will not be prompted for it.
-> > > 
-> > > > > Because if I have an "old" laptop that needs Thunderbolt support, how am
-> > > > > I going to know it is now called USB4 instead?
-> > > >
-> > > > Well the Kconfig option tries to have both names there:
-> > > >
-> > > >   tristate "USB4 (Thunderbolt) support"
-> > > >
-> > > > and then
-> > > >
-> > > >   USB4 (Thunderbolt) driver. USB4 is the public spec based on
-> > > >   Thunderbolt 3 protocol. This driver is required if you want to hotplug
-> > > >   Thunderbolt and USB4 compliant devices on Apple hardware or on PCs
-> > > >   with Intel Falcon Ridge or newer.
-> > > >
-> > > > and the Kconfig option is still CONFIG_THUNDERBOLT. I know this is
-> > > > confusing but I don't have better ideas how we can advertise both. I
-> > > > borrowed this "format" from firewire.
-> > > 
-> > > CONFIG_USB4 instead?
-> > 
-> > How about CONFIG_USB4_PCIE?
-> > 
-> > I think that will help align that certain aspects of USB4 can be built optionally.
-> 
-> What aspects?  We don't have that here at all.
-> 
-> I guess the parts of USB4 that are not just this "hook up the PCIe
-> lane" that need to still be developed?
+On Mon, Sep 30, 2019 at 10:45:25PM +0200, Stefan Wahren wrote:
+>Hi,
+>
+>during make modules_install for arm/multi_v7_defconfig on current Linux
+>5.4-rc1, i'm getting the following warnings:
+>
+>depmod: WARNING:
+>/media/stefan/rootfs//lib/modules/5.4.0-rc1-00006-g4a80125-dirty/kernel/drivers/usb/storage/uas.ko
+>needs unknown symbol usb_stor_sense_invalidCDB
+>depmod: WARNING:
+>/media/stefan/rootfs//lib/modules/5.4.0-rc1-00006-g4a80125-dirty/kernel/drivers/usb/storage/uas.ko
+>needs unknown symbol usb_stor_adjust_quirks
+>
+>Reverting 32bca2df7da2 ("usb-storage: export symbols in USB_STORAGE
+>namespace") makes the problem go away.
+>
+>Would be if someone can take care of it.
 
-Actually PCIe tunneling is already there in the driver. USB4 has one bit
-that is needed to be set before PCIe tunneling can happen (we do that in
-patch 17/22) but other than that the existing PCIe tunneling code in the
-driver works as is.
+Hi Stefan!
+
+Thanks for reporting this. I will take care of it!
+
+Cheers,
+Matthias
