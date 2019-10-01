@@ -2,122 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E3DC35E8
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0456EC3606
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388616AbfJANiN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 09:38:13 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44879 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387990AbfJANiM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:38:12 -0400
-Received: by mail-wr1-f66.google.com with SMTP id z9so2442322wrl.11;
-        Tue, 01 Oct 2019 06:38:10 -0700 (PDT)
+        id S2388669AbfJANkq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 09:40:46 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34657 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726898AbfJANkq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:40:46 -0400
+Received: by mail-pg1-f194.google.com with SMTP id y35so9705367pgl.1;
+        Tue, 01 Oct 2019 06:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=96r3CtWiSvcK9gJDc0tqchiSXL0mJ/YvvBtbDmkfaE0=;
-        b=SgD1WPZopI9T61+uSgIvK+P8Moz6ilypDWR5uZTEcSuXxgh1OVfRxm8IC4KUHqMmSX
-         hBpGb1wgoBnVtZU64ZhZhr+uvsnzRW/oNhSmvQvPcJiVn4Y+sszZSZ8iK4h2QVTZ/vD/
-         Din5OSrcToGMog98cihi9+QPhYXtbZdwZeVtyftm5g8+p0FRTR7IyBmjvhwKnugSiA9P
-         qSj65oMPYlvd5CfFm/4+9WBwPAqze/wV4n7HpSB5Kf92Y7gNEEPi1977PQ0qwg1bstoG
-         e/NcisDmyad+4UgxYGb9cCU4WroV+kg9wmeo7HYz9pCGEqNW64R7AEoAusLmSMVlDEAh
-         uImg==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4vOYNi5T48xwb1n2hFAYpF7E0QLiPcqC0FCJyUAyNBQ=;
+        b=Xnt/LuGDQaAK+dLqW2ga47WZvlv2h7nLyYoxPC6nSSmFeMTOq9RG8hCFNc7GL5tl9e
+         HgzNat/g5WB6fyJKzllB+la34cFqzBeJ9bAEcCIeunGcLZ80RCNuTMh+5Ukt08Lk1waG
+         LPE37m/Zevzw6WVvXMZG00j8ICsosFSJuaie/psFekhW3u8oFUay0Wgq6IjgagvzUo6f
+         Oma6PdOoFvtHWdpdKHvhhMNrTBBqzaY1rcDAQgAkgYqtm7gl70TTWGVIDwcvGR/SuXAP
+         N/pzw+aw+FUEdQPUdRJMju6GajbSITrg+D+npSkgM2NRxRTUYqKH0Za/ZhWSsFvijutF
+         ntrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=96r3CtWiSvcK9gJDc0tqchiSXL0mJ/YvvBtbDmkfaE0=;
-        b=ig5y2A2iLA3S5LalM5yU4n1qZlbBUyBOyTrvGH8EyuLxwzOmQpzar/IhQi8wxY+Yjd
-         tysZ5gr6Nw1bPqEp/MgSkZJ51kX7mbOg415rNRrecXTiEhujaQNzaM1B+aCBoGIzk70k
-         XsAEgshAC0XFwX5/RnYfgTlXUjTC5BVQVyyMNmnVYJqJiYtZSGbthhjKbOYHGnwm1HmC
-         tB+jR6JKNcT38R9Kt3TA4NlaDTYqwV2V7coSgCINPLQIuGlnllMTHYSo3HbRY5hx+J/F
-         iqBT3WsjuTfz3PINuOuwN0FMlNeeeGhweuKZtdiGIjLVd5dRHQmEwnT8eYoLg/eWJP2e
-         qDHQ==
-X-Gm-Message-State: APjAAAW6ZjJFX5UJsKCkuourO5nC1tD970PJfwJaftsLi0oY3uOG5jIJ
-        SIaE0QH3mesLN+A1Y8UlGOdGhFuS
-X-Google-Smtp-Source: APXvYqx2MapoAoWxH36kAG/86QPnpHg5qum++6m/VlNMhipx4NA3i/ZbQOKuletj5kJHHrNYMRtLMg==
-X-Received: by 2002:a5d:52c5:: with SMTP id r5mr6086222wrv.160.1569937090036;
-        Tue, 01 Oct 2019 06:38:10 -0700 (PDT)
-Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
-        by smtp.gmail.com with ESMTPSA id f20sm2844042wmb.6.2019.10.01.06.38.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 06:38:08 -0700 (PDT)
-Date:   Tue, 1 Oct 2019 15:38:07 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4vOYNi5T48xwb1n2hFAYpF7E0QLiPcqC0FCJyUAyNBQ=;
+        b=DfzI9uxTA8u7ADk+BusUwsO0zdE6JwZRO79vD4CQDuBnpTjUUuI+KGxluHT7FGFWqF
+         e2PJfnGKQeogvMF641CL4Zv0x4yLSJa2qCjddtKKLAeWh1izLDerhYEwFt/6fPQsh1ci
+         H9Mf+e1/GIEUIoPbwMf+HA7bwGCu9zBxBTBAHnCrvqj+6Xh/dvSW7Sg/eWVwzp9VZgY+
+         pd0VHY7SBq6q5wGcNwNCqoa26zoErRMQsy/u2IE4DaS/TzmTtBwiWg29bpYu5L8eR5VV
+         BwlTzyCIB+/8dR2h6uq1Ec5/rIEZTIuBh6vqjYonCi0KHIOxc11pduq+RZD3Ac4mTOtR
+         0fdA==
+X-Gm-Message-State: APjAAAVKhG3T3lVa/bYayO4TftcOzT/60VoVz0HQH9SEI7YZBpYURPVN
+        jbeWJBJ3e9Xq0bNU76B33Tb4zQap
+X-Google-Smtp-Source: APXvYqwRvvLnhzb7LlS95wwloBZe3MSNY48zgJ00VCMN74VaASkeqSApwY50oEKW2WSGzYgAYhSTRA==
+X-Received: by 2002:a65:6709:: with SMTP id u9mr238225pgf.59.1569937245302;
+        Tue, 01 Oct 2019 06:40:45 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ev20sm2598898pjb.19.2019.10.01.06.40.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Oct 2019 06:40:44 -0700 (PDT)
+Subject: Re: [PATCH] usb: typec: tcpm: Fix a signedness bug in
+ tcpm_fw_get_caps()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH 0/3] tegra: use regulator_bulk_set_supply_names()
-Message-ID: <20191001133807.GB3563296@ulmo>
-References: <20191001132333.20146-1-brgl@bgdev.pl>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <20190925110219.GN3264@mwanda>
+ <20190926125310.GA9967@roeck-us.net> <20191001115442.GB22609@kadam>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <0d9ebb0e-d8b1-f963-9310-e4099dcf677a@roeck-us.net>
+Date:   Tue, 1 Oct 2019 06:40:43 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rJwd6BRFiFCcLxzm"
-Content-Disposition: inline
-In-Reply-To: <20191001132333.20146-1-brgl@bgdev.pl>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191001115442.GB22609@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 10/1/19 4:54 AM, Dan Carpenter wrote:
+> On Thu, Sep 26, 2019 at 05:53:10AM -0700, Guenter Roeck wrote:
+>> On Wed, Sep 25, 2019 at 02:02:19PM +0300, Dan Carpenter wrote:
+>>> The "port->typec_caps.data" and "port->typec_caps.type" variables are
+>>> enums and in this context GCC will treat them as an unsigned int so they
+>>> can never be less than zero.
+>>>
+>>> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+>>> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+>>> ---
+>>>   drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>>> index 96562744101c..d3b63e000ae2 100644
+>>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>>> @@ -4410,7 +4410,7 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>>>   	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+>>>   	if (ret == 0) {
+>>>   		port->typec_caps.data = typec_find_port_data_role(cap_str);
+>>> -		if (port->typec_caps.data < 0)
+>>> +		if ((int)port->typec_caps.data < 0)
+>>>   			return -EINVAL;
+>>
+>> Doesn't that also cause a warning about overwriting error return codes ?
+> 
+> I'm happy that you think there is a tool which generates warnings like
+> that but it's just people manually complaining.  :P
+> 
 
---rJwd6BRFiFCcLxzm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I am quite sure there is, or at least used to be - I have seen such warnings.
+Maybe it was removed.
 
-On Tue, Oct 01, 2019 at 03:23:30PM +0200, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
->=20
-> The regulator_bulk_set_supply_names() helper was merged upstream. Use it
-> in a couple tegra drivers.
->=20
-> Bartosz Golaszewski (3):
->   ahci: tegra: use regulator_bulk_set_supply_names()
->   phy: tegra: use regulator_bulk_set_supply_names()
->   usb: host: xhci-tegra: use regulator_bulk_set_supply_names()
->=20
->  drivers/ata/ahci_tegra.c      | 6 +++---
->  drivers/phy/tegra/xusb.c      | 6 +++---
->  drivers/usb/host/xhci-tegra.c | 5 +++--
->  3 files changed, 9 insertions(+), 8 deletions(-)
-
-I really don't see the point here. You've got a positive diffstat here,
-which means all that churn is without benefit.
-
-Is there some subsequent work based on this that will actually improve
-things?
-
-Thierry
-
---rJwd6BRFiFCcLxzm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2TVr8ACgkQ3SOs138+
-s6Gmxw//XyHpBaZ6nH9r5G6qR4tc5ltdQB1dqjsetQiQ3GP40BUwO9mtMUUgcfI/
-rdgUFAuLtiTH5m5XHYyCmBIWHi38bwTStJ4x0f7zg7IAfabhlRrTDPsaUSJuN+tt
-JL5RYKy9LjGIt8B3FusJWBgMMhAhmLf4vTTBqMRaK1vAd7XFqz0LAz+weUs11aZ8
-gauUBP2qZ6n+lL5ahAStY/0GC9gos1iNzgsvG6tZD3JyWQe6xwKvrroSq+s/iQUL
-V00s28QIe+zsQMl9f47mkJoAY5d55heIehG7oaYWPYsJS83yeHlW7YRi+CseyZwa
-o8ZSi3FqILEuO+yjH+h2nD8bpKltfhBwi4VUzn0sFAzz4btFkt1J0JYClKpF+Fwx
-msvSehNfgZt0JDJaQ6ACCBEVkcfCXe0pXX8BwLYW83V9gKWnklf97DKvFKmg4HMd
-/2JeVHouwG20VkQcjnYBTOpBv+08DKG0D19ZgviHnibUeTTu6mlpbCD2T6DzkLUE
-mGInzNLfgLfflCSeOusBazYQGy9DrGNhqGpnREXDY8NwZEUyA1EkHSl6BCOc6RaI
-VexLVXa11R0fNZRNJk2H2/MU9H/MWUUC+jRJQ+4X/ScGYtWjkJSe8LJ0KmgA2/5/
-gmqCqriJyFLot6c/z1kmNoSo2q2iedr7i4XKaUKrnf28LTQlRxk=
-=aSWM
------END PGP SIGNATURE-----
-
---rJwd6BRFiFCcLxzm--
+Guenter
