@@ -2,97 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD7E0C3588
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4A5CC3598
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388385AbfJANXx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 09:23:53 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37674 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388370AbfJANXu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:23:50 -0400
-Received: by mail-wr1-f68.google.com with SMTP id i1so15528518wro.4
-        for <linux-usb@vger.kernel.org>; Tue, 01 Oct 2019 06:23:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=enYbMbNI4tFIk7gfYa1OWesJ4PjjLcPO1FzeNFaXSzM=;
-        b=vTcmolbxld2vrR7GBYi0Xsk8M5+fVtDX3QP4tJzqLjwwbcqblsuf7qGLNAs9OwaRT4
-         fjS7a9OpIzlT/xfqgaDRyjf4V5Rit2/DWdoXokRzMW6dW4zsANFi49wKrnVssomj5g9R
-         nFysWpuZglqOsPWLlpJQvoJ243yFYclKXNMEw/ip1V2XbLgMUencpALJ5fcTinL2uWAe
-         ORXbD6zInbcK0k/JSvsshpClya/bFVAGR9cdsHcIvdaTPPcJkDw4gdHUfCYlnTzblJlj
-         3/yYxsTVd791qJ1nxdZ0+xCdNhd7LrRJVUi+mSxGEpJ7dNJIf4PtfzN/E/y4WRJo9q/I
-         ygDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=enYbMbNI4tFIk7gfYa1OWesJ4PjjLcPO1FzeNFaXSzM=;
-        b=unB7mk0Gyf7GOOJ+M62B4wETlR26+e4Cd2Acp5CE3aadeC6k6Xmb7Sybuqlv7z4Rbr
-         IccgvVLCCX7REWzKJbG1ZfliALnDBXPniIelkPbxXdSpofMJmpJ3z8lyGxxFFhhJ7DcX
-         KZxavwUlkm7RX467NXh7LpcgNUrbgdDubvPJAYFdO+AzMwa4DDruBhauSW75I0TPm7Ui
-         Gh3m5obeWmrdG7tdFmM+mYJTblg+1pmOdMJOL8EFwUHsUxGd3YG2mUMxfWOZ8oFbGJHw
-         cooF2sIeOxj4cig6BuxhfMUeMRc3NWJdfsSvCHHRvsuVX00613lZhnUgFaTC8jaOhmil
-         szSg==
-X-Gm-Message-State: APjAAAVQWX8kCYztGJGgb7DHEysC8E8CWouYddppxslk1BnjDVr9hpHr
-        skX+GaCkQd6m4RIq8sbGy9yTkw==
-X-Google-Smtp-Source: APXvYqzXbDDpewlYhp+7ocQHLaIU5HkjVp7oImNZRVgIZgzhGcBONIajVjr8GuK3dQUIsg/AA4n5Kw==
-X-Received: by 2002:adf:d08b:: with SMTP id y11mr18624076wrh.50.1569936227104;
-        Tue, 01 Oct 2019 06:23:47 -0700 (PDT)
-Received: from localhost.localdomain (amontpellier-652-1-281-69.w109-210.abo.wanadoo.fr. [109.210.96.69])
-        by smtp.gmail.com with ESMTPSA id o22sm41847990wra.96.2019.10.01.06.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2019 06:23:46 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: [PATCH 3/3] usb: host: xhci-tegra: use regulator_bulk_set_supply_names()
-Date:   Tue,  1 Oct 2019 15:23:33 +0200
-Message-Id: <20191001132333.20146-4-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191001132333.20146-1-brgl@bgdev.pl>
-References: <20191001132333.20146-1-brgl@bgdev.pl>
+        id S2388398AbfJAN1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 09:27:08 -0400
+Received: from mga12.intel.com ([192.55.52.136]:26474 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388261AbfJAN1H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 09:27:07 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 06:27:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
+   d="scan'208";a="205063337"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 06:27:03 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 16:27:03 +0300
+Date:   Tue, 1 Oct 2019 16:27:02 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mario.Limonciello@dell.com,
+        Anthony Wong <anthony.wong@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 08/22] thunderbolt: Add downstream PCIe port mappings
+ for Alpine and Titan Ridge
+Message-ID: <20191001132702.GQ2714@lahna.fi.intel.com>
+References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
+ <20191001113830.13028-9-mika.westerberg@linux.intel.com>
+ <20191001124054.GC2954373@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191001124054.GC2954373@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+On Tue, Oct 01, 2019 at 02:40:54PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 01, 2019 at 02:38:16PM +0300, Mika Westerberg wrote:
+> > In order to keep PCIe hierarchies consistent across hotplugs, add
+> > hard-coded PCIe downstream port to Thunderbolt port for Alpine Ridge and
+> > Titan Ridge as well.
+> 
+> Oh, that makes me nervous, how could a hard-coded pcie port ever get set
+> up incorrectly :)
+> 
+> How do we "know" that this is correct?  Is there any ACPI guarantees
+> that this "always will be so"?  If not, we all know someone will mess
+> this up...
 
-Use the new regulator helper instead of a for loop.
+For Alpine Ridge and Titan Ridge the PCIe ports are always the same.
 
-Signed-off-by: Bartosz Golaszewski <bgolaszewski@baylibre.com>
----
- drivers/usb/host/xhci-tegra.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Basically what this is about is that you have up to two Thunderbolt
+ports (type-C ports). When you plug in Thunderbolt device and PCIe gets
+tunneled, the PCIe hierarchy always is always extended from the same
+PCIe downstream port.
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index 2ff7c911fbd0..a3c4c9287f9e 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1128,8 +1128,9 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 		goto put_powerdomains;
- 	}
- 
--	for (i = 0; i < tegra->soc->num_supplies; i++)
--		tegra->supplies[i].supply = tegra->soc->supply_names[i];
-+	regulator_bulk_set_supply_names(tegra->supplies,
-+					tegra->soc->supply_names,
-+					tegra->soc->num_supplies);
- 
- 	err = devm_regulator_bulk_get(&pdev->dev, tegra->soc->num_supplies,
- 				      tegra->supplies);
--- 
-2.23.0
+If we don't do this then the PCIe device may be changing its address
+each plug/unplug. Also for older generations (that code is already in
+mainline) there are PCIe downstream ports that do not have enough
+resources for additional devices.
 
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> >  drivers/thunderbolt/tb.c |  4 +++-
+> >  drivers/thunderbolt/tb.h | 25 +++++++++++++++++++++++++
+> >  2 files changed, 28 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+> > index dbbe9afb9fb7..704455a4f763 100644
+> > --- a/drivers/thunderbolt/tb.c
+> > +++ b/drivers/thunderbolt/tb.c
+> > @@ -344,10 +344,12 @@ static struct tb_port *tb_find_pcie_down(struct tb_switch *sw,
+> >  		 * Hard-coded Thunderbolt port to PCIe down port mapping
+> >  		 * per controller.
+> >  		 */
+> > -		if (tb_switch_is_cr(sw))
+> > +		if (tb_switch_is_cr(sw) || tb_switch_is_ar(sw))
+> >  			index = !phy_port ? 6 : 7;
+> >  		else if (tb_switch_is_fr(sw))
+> >  			index = !phy_port ? 6 : 8;
+> > +		else if (tb_switch_is_tr(sw))
+> > +			index = !phy_port ? 8 : 9;
+> >  		else
+> >  			goto out;
+> >  
+> > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> > index e641dcebd50a..dbab06551eaa 100644
+> > --- a/drivers/thunderbolt/tb.h
+> > +++ b/drivers/thunderbolt/tb.h
+> > @@ -632,6 +632,31 @@ static inline bool tb_switch_is_fr(const struct tb_switch *sw)
+> >  	}
+> >  }
+> >  
+> > +static inline bool tb_switch_is_ar(const struct tb_switch *sw)
+> 
+> "ar"?  Can you spell it out?
+
+You mean call this tb_switch_is_alpine_ridge()? Sure,  I will then do
+the same for tb_switch_is_fr() and the existing ones.
+
+> 
+> > +{
+> > +	switch (sw->config.device_id) {
+> > +	case PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_2C_BRIDGE:
+> > +	case PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_LP_BRIDGE:
+> > +	case PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_BRIDGE:
+> > +	case PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_2C_BRIDGE:
+> > +		return true;
+> > +	default:
+> > +		return false;
+> > +	}
+> > +}
+> > +
+> > +static inline bool tb_switch_is_tr(const struct tb_switch *sw)
+> 
+> Same for "tr" please.
+
+Sure.
