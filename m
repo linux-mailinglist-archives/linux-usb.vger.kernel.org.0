@@ -2,204 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8AEC35D3
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DFDC35DB
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732921AbfJANgC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 09:36:02 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46655 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726853AbfJANgC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:36:02 -0400
-Received: by mail-pl1-f195.google.com with SMTP id q24so5479691plr.13
-        for <linux-usb@vger.kernel.org>; Tue, 01 Oct 2019 06:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=6RY2KcHBMdP5JmKRFPprGl+R49/zy/WuVzehXD6opUc=;
-        b=Y92MiDZn9PR8t/k/Z9R4AkQfoaHGUKxX9zsw7Jx+FK5b1J9AU6pMbyvn9SA0vd4+YI
-         Qq7VUfcLtp9new9hjT/d+NjlLA1oOx78XElCD/IC9rWamvr25FVudxrUJ5T6QFsJVecP
-         Iw5K2Fb82ajQroRRUA0cqHrcul9Sqnu+8ixjSEWMWcF3Vj+2NuEJPtQUg/QAzgspSmM5
-         bA2DpRwfz05IdnXSLXlECUTavF84PtR5kDkoYuF6woXWhCq1NkRxBh9CE2rZiNcUZqaV
-         iklujXw4Y4/UOm+vuF0Zgnlram/0EOe2PZVpFBrAH6yzgUye4W2mscuuai7+kaP3Cebb
-         hnrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=6RY2KcHBMdP5JmKRFPprGl+R49/zy/WuVzehXD6opUc=;
-        b=nHuqRJJuIKRjHwYHX+wgPs13s+jCdjELN7ECSus5z5Q75cps7Yi9Ordnwvg2VgZCUg
-         iNpNLDns5wy/+CukqTKWVaT2yFuvUuyEzTVS1BZKY8yDnkLPrNW1BAkDUl+1qT77g9Kv
-         g45II87JX2TTytbUWuLPDBa37ph66ISD1RGTO4UOdOBQMvbsyFdDz30NVi/1wihmYDM9
-         oCtWYlZvU0QDzc6kJ3utYybs77GZg2v+wbz3EusTuly9qCTJo0j2MHmpmL8nEsqT+4p4
-         pGEKrEFx1k2psNVae/6MLY0NA/+KtPMrSowEfcEddBQ7RMZ0NnapjhyiaKI8MTriby5U
-         3jPQ==
-X-Gm-Message-State: APjAAAWyEpeveoXFQIdHmN+QoEh+sgSAXobWOeN9s4N2QdeaG+inED1w
-        Y0rzk+I+EQKXiNdo7js+lmkcgfVY
-X-Google-Smtp-Source: APXvYqw7fpBXpJXpT7zQwwi1hVSTlftjHyvonq1hWxBsPUhgOdvNnJGy3je/sbFgDQ8UYnFpHfRvaQ==
-X-Received: by 2002:a17:902:6946:: with SMTP id k6mr25812778plt.26.1569936961289;
-        Tue, 01 Oct 2019 06:36:01 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k66sm4526629pjb.11.2019.10.01.06.36.00
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 06:36:00 -0700 (PDT)
-Subject: Re: [PATCH 5/7] usb: typec: tps6598x: Start using struct
- typec_operations
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-usb@vger.kernel.org
-References: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
- <20191001094858.68643-6-heikki.krogerus@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <8587aaaa-57be-809a-2cc3-cf98c8d42219@roeck-us.net>
-Date:   Tue, 1 Oct 2019 06:35:59 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20191001094858.68643-6-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S2388550AbfJANgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 09:36:55 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:36900 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726853AbfJANgz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:36:55 -0400
+Received: from pps.filterd (m0170389.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x91DJJSu010574;
+        Tue, 1 Oct 2019 09:36:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=smtpout1;
+ bh=sBQw2szhcF/O2fk7gdS40QsmnuIWV7+V8uGsBYxCNOc=;
+ b=l7oGVofod+uYjmbhaMqtOUDQOSbE9t1C1FBeNpaKHLrwOStdQ8W5Ws27345+Vu9oc3o8
+ BNief8WYc+KiWVB4xQ/nNM6O/fWtABpW+zowbOS7oijhcecfMFZ3x23oP9jORKMNRm5L
+ QKIT1dIDmivsH5SQ/LyVGUUhr5hiM4otv3NS28yzVH7bMPosUs8V9hlBu9oP9PAHYNDM
+ TZPty+4r/k0+D15y55T2uQSuhzIjT4d1343nZHlirCwlM8bUK4TdKLVwb0JV7SGbofvP
+ /gwE+iClKsB9EPQhannTxK/oM8pYhKF3tnqLaTBhZMkhXDTOQDKoHWbJZptPL5A9BLx+ 6g== 
+Received: from mx0a-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
+        by mx0a-00154904.pphosted.com with ESMTP id 2va3hcwekb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Oct 2019 09:36:53 -0400
+Received: from pps.filterd (m0089484.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x91DWnNU082779;
+        Tue, 1 Oct 2019 09:36:52 -0400
+Received: from ausxipps301.us.dell.com (ausxipps301.us.dell.com [143.166.148.223])
+        by mx0b-00154901.pphosted.com with ESMTP id 2vc0wmq9gm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Oct 2019 09:36:52 -0400
+X-LoopCount0: from 10.166.132.131
+X-PREM-Routing: D-Outbound
+X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
+   d="scan'208";a="403781742"
+From:   <Mario.Limonciello@dell.com>
+To:     <mika.westerberg@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <andreas.noever@gmail.com>,
+        <michael.jamet@intel.com>, <YehezkelShB@gmail.com>,
+        <rajmohan.mani@intel.com>,
+        <nicholas.johnson-opensource@outlook.com.au>, <lukas@wunner.de>,
+        <stern@rowland.harvard.edu>, <anthony.wong@canonical.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH 01/22] thunderbolt: Introduce tb_switch_is_icm()
+Thread-Topic: [RFC PATCH 01/22] thunderbolt: Introduce tb_switch_is_icm()
+Thread-Index: AQHVeEzM1s+3ejBj70m/VgDp/AQpCadGBYmAgAAKNgD//7mOMA==
+Date:   Tue, 1 Oct 2019 13:36:49 +0000
+Message-ID: <bc3be927d5fd41efa6e0828f78a41d7a@AUSX13MPC105.AMER.DELL.COM>
+References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
+ <20191001113830.13028-2-mika.westerberg@linux.intel.com>
+ <20191001121005.GA2951658@kroah.com>
+ <20191001124638.GL2714@lahna.fi.intel.com>
+In-Reply-To: <20191001124638.GL2714@lahna.fi.intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-10-01T13:36:48.4760965Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
+ aiplabel=External Public
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.143.18.86]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-01_07:2019-10-01,2019-10-01 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 impostorscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=810 bulkscore=0 mlxscore=0 priorityscore=1501 adultscore=0
+ clxscore=1011 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910010123
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 lowpriorityscore=0
+ spamscore=0 impostorscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ mlxlogscore=909 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1908290000
+ definitions=main-1909280083
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/1/19 2:48 AM, Heikki Krogerus wrote:
-> Supplying the operation callbacks as part of a struct
-> typec_operations instead of as part of struct
-> typec_capability during port registration. After this there
-> is not need to keep the capabilities stored anywhere in the
-> driver.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> -----Original Message-----
+> From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Sent: Tuesday, October 1, 2019 7:47 AM
+> To: Greg Kroah-Hartman
+> Cc: linux-usb@vger.kernel.org; Andreas Noever; Michael Jamet; Yehezkel Be=
+rnat;
+> Rajmohan Mani; Nicholas Johnson; Lukas Wunner; Alan Stern; Limonciello, M=
+ario;
+> Anthony Wong; linux-kernel@vger.kernel.org
+> Subject: Re: [RFC PATCH 01/22] thunderbolt: Introduce tb_switch_is_icm()
+>=20
+>=20
+> [EXTERNAL EMAIL]
+>=20
+> On Tue, Oct 01, 2019 at 02:10:05PM +0200, Greg Kroah-Hartman wrote:
+> > On Tue, Oct 01, 2019 at 02:38:09PM +0300, Mika Westerberg wrote:
+> > > We currently differentiate between SW CM and ICM by looking directly =
+at
+> >
+> > You should spell out what "SW CM" and "ICM" means please :)
+>=20
+> Indeed, sorry about that. I will spell them out in next version.
+>=20
+> SW CM is Software Connection manager, essentially
+> drivers/thunderbolt/tb.c.
 
-Nitpick or not:
+In some of the documentation I've seen non-internal connection manager refe=
+rred to
+as ECM, which I guess is an external connection manager?  To be consistent =
+with various
+documentations maybe that would be better than "SW CM".
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-
-> ---
->   drivers/usb/typec/tps6598x.c | 49 +++++++++++++++++++-----------------
->   1 file changed, 26 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-> index a38d1409f15b..0698addd1185 100644
-> --- a/drivers/usb/typec/tps6598x.c
-> +++ b/drivers/usb/typec/tps6598x.c
-> @@ -94,7 +94,6 @@ struct tps6598x {
->   	struct typec_port *port;
->   	struct typec_partner *partner;
->   	struct usb_pd_identity partner_identity;
-> -	struct typec_capability typec_cap;
->   };
->   
->   /*
-> @@ -307,11 +306,10 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
->   	return 0;
->   }
->   
-> -static int
-> -tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
-> +static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
->   {
-> -	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
->   	const char *cmd = (role == TYPEC_DEVICE) ? "SWUF" : "SWDF";
-> +	struct tps6598x *tps = typec_get_drvdata(port);
->   	u32 status;
->   	int ret;
->   
-> @@ -338,11 +336,10 @@ tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
->   	return ret;
->   }
->   
-> -static int
-> -tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
-> +static int tps6598x_pr_set(struct typec_port *port, enum typec_role role)
->   {
-> -	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
->   	const char *cmd = (role == TYPEC_SINK) ? "SWSk" : "SWSr";
-> +	struct tps6598x *tps = typec_get_drvdata(port);
->   	u32 status;
->   	int ret;
->   
-> @@ -369,6 +366,11 @@ tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
->   	return ret;
->   }
->   
-> +static const struct typec_operations tps6598x_ops = {
-> +	.dr_set = tps6598x_dr_set,
-> +	.pr_set = tps6598x_pr_set,
-> +};
-> +
->   static irqreturn_t tps6598x_interrupt(int irq, void *data)
->   {
->   	struct tps6598x *tps = data;
-> @@ -448,6 +450,7 @@ static const struct regmap_config tps6598x_regmap_config = {
->   
->   static int tps6598x_probe(struct i2c_client *client)
->   {
-> +	struct typec_capability typec_cap = { };
->   	struct tps6598x *tps;
->   	u32 status;
->   	u32 conf;
-> @@ -492,40 +495,40 @@ static int tps6598x_probe(struct i2c_client *client)
->   	if (ret < 0)
->   		return ret;
->   
-> -	tps->typec_cap.revision = USB_TYPEC_REV_1_2;
-> -	tps->typec_cap.pd_revision = 0x200;
-> -	tps->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-> -	tps->typec_cap.pr_set = tps6598x_pr_set;
-> -	tps->typec_cap.dr_set = tps6598x_dr_set;
-> +	typec_cap.revision = USB_TYPEC_REV_1_2;
-> +	typec_cap.pd_revision = 0x200;
-> +	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-> +	typec_cap.driver_data = tps;
-> +	typec_cap.ops = &tps6598x_ops;
->   
->   	switch (TPS_SYSCONF_PORTINFO(conf)) {
->   	case TPS_PORTINFO_SINK_ACCESSORY:
->   	case TPS_PORTINFO_SINK:
-> -		tps->typec_cap.type = TYPEC_PORT_SNK;
-> -		tps->typec_cap.data = TYPEC_PORT_UFP;
-> +		typec_cap.type = TYPEC_PORT_SNK;
-> +		typec_cap.data = TYPEC_PORT_UFP;
->   		break;
->   	case TPS_PORTINFO_DRP_UFP_DRD:
->   	case TPS_PORTINFO_DRP_DFP_DRD:
-> -		tps->typec_cap.type = TYPEC_PORT_DRP;
-> -		tps->typec_cap.data = TYPEC_PORT_DRD;
-> +		typec_cap.type = TYPEC_PORT_DRP;
-> +		typec_cap.data = TYPEC_PORT_DRD;
->   		break;
->   	case TPS_PORTINFO_DRP_UFP:
-> -		tps->typec_cap.type = TYPEC_PORT_DRP;
-> -		tps->typec_cap.data = TYPEC_PORT_UFP;
-> +		typec_cap.type = TYPEC_PORT_DRP;
-> +		typec_cap.data = TYPEC_PORT_UFP;
->   		break;
->   	case TPS_PORTINFO_DRP_DFP:
-> -		tps->typec_cap.type = TYPEC_PORT_DRP;
-> -		tps->typec_cap.data = TYPEC_PORT_DFP;
-> +		typec_cap.type = TYPEC_PORT_DRP;
-> +		typec_cap.data = TYPEC_PORT_DFP;
->   		break;
->   	case TPS_PORTINFO_SOURCE:
-> -		tps->typec_cap.type = TYPEC_PORT_SRC;
-> -		tps->typec_cap.data = TYPEC_PORT_DFP;
-> +		typec_cap.type = TYPEC_PORT_SRC;
-> +		typec_cap.data = TYPEC_PORT_DFP;
->   		break;
->   	default:
->   		return -ENODEV;
->   	}
->   
-> -	tps->port = typec_register_port(&client->dev, &tps->typec_cap);
-> +	tps->port = typec_register_port(&client->dev, &typec_cap);
->   	if (IS_ERR(tps->port))
->   		return PTR_ERR(tps->port);
->   
-> 
+>=20
+> ICM is the Firmware Connection manager, essentially what is done in
+> drivers/thunderbolt/icm.c. I think the I in ICM comes from Internal.
 
