@@ -2,117 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8250FC3611
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183FFC3619
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388331AbfJANms (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 09:42:48 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:37460 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726554AbfJANms (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 09:42:48 -0400
-Received: by mail-pg1-f194.google.com with SMTP id c17so9697935pgg.4;
-        Tue, 01 Oct 2019 06:42:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=z/nEIV3mGVbnMYj+TcOnxXxirSxVJhg4ol4Ju3KGU2o=;
-        b=fhQzAE+otiWupYULuurd4mNB4uqGTiDnbJsOjfS9Fdher1PdNV+8b3AJcPfONf7iNi
-         nFnPCzp86wUZ/IYJLcD++aa6ijrRmx1NGWt5gky1Uft2jmghgugrDd34XJG253aEo+o+
-         ra6mpqBWSTadRwmvTAiHdsvCoVqE/CpUBEgYaWpSZIXh6iMeQMNR1pzok81fVRkscVa1
-         T14L28ZZWBy3Fi5O3amnbHi3DoRbfCEfjNmTmPnEr73AFZ/5hrzSeSMPpnbXKs73iEJK
-         UCCk/rM3SZLS9PmNUjnxogebC+RQSiCRKtn1m8Vhg7N7kLIrVCzN2JuqFkZDwjG6do0K
-         5Row==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=z/nEIV3mGVbnMYj+TcOnxXxirSxVJhg4ol4Ju3KGU2o=;
-        b=k+akrAOOD8OGExoQTRTRmp5Ag6FWf6yNp4EryJye8WX02qm5RH+0T84VUbAMPckmWP
-         pzbdlEXGjiPBBDJ395RBh9RSaWTS9MP2QV9J0IWEnKRn27E4tTMmjuZO1IlduiwGui9k
-         60H51S0bUJRiT7YaZMHi7WLIMM9VZ8NNK6w9fUKtFAId/ikZKiLXvi1BdlPb4nBlAVz3
-         kAnebKcrpFPAk2/6IFaIOVicKPDtun7j40qGaXEFQhBa4d5YmPlb5XT8UZe7HQTD0qGi
-         1aQYBSqGiRSXdtJsXhfT76CZ3x4CmK9vUPk8RhjPpOHuJIiYxYJT7ZEJbD//7AdeYRBP
-         qcdQ==
-X-Gm-Message-State: APjAAAVDLQOwbH4cIZyHVRf9rOhLUJpUUjXfgkCtQcQUIT+5AiZmn056
-        AlkFnKHXhflcWO8ToINYKf1wCY3v
-X-Google-Smtp-Source: APXvYqw87tZE98E0owqFYpsHGYLQIQdmGPi3bMlRuSxtYCGpBYJosELqFY2XEMHWDvk19opnY3KQHg==
-X-Received: by 2002:a63:2b8e:: with SMTP id r136mr30480517pgr.191.1569937365804;
-        Tue, 01 Oct 2019 06:42:45 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b3sm16014524pfd.125.2019.10.01.06.42.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 06:42:45 -0700 (PDT)
-Subject: Re: [PATCH v2] usb: typec: tcpm: usb: typec: tcpm: Fix a signedness
- bug in tcpm_fw_get_caps()
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-References: <20191001120117.GA23528@mwanda>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f406dee6-fe4a-f8c8-179f-59a9bf1ae0e3@roeck-us.net>
-Date:   Tue, 1 Oct 2019 06:42:43 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2388450AbfJANmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 09:42:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:19704 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726554AbfJANmx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 09:42:53 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 06:42:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
+   d="scan'208";a="205064778"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 06:42:47 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 16:42:47 +0300
+Date:   Tue, 1 Oct 2019 16:42:47 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mario.Limonciello@dell.com,
+        Anthony Wong <anthony.wong@canonical.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/22] thunderbolt: Add support for USB4
+Message-ID: <20191001134247.GT2714@lahna.fi.intel.com>
+References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
+ <20191001124954.GI2954373@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20191001120117.GA23528@mwanda>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191001124954.GI2954373@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/1/19 5:01 AM, Dan Carpenter wrote:
-> The "port->typec_caps.data" and "port->typec_caps.type" variables are
-> enums and in this context GCC will treat them as an unsigned int so they
-> can never be less than zero.
+On Tue, Oct 01, 2019 at 02:49:54PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 01, 2019 at 02:38:08PM +0300, Mika Westerberg wrote:
+> > Hi all,
+> > 
+> > I'm sending this as RFC because the series is still missing important
+> > features such as power management so not ready for merging. However, I
+> > think it is good to get any early feedback from the community. We are
+> > working to add support for the missing features.
+> > 
+> > USB4 is the public specification of Thunderbolt 3 protocol and can be
+> > downloaded here:
+> > 
+> >   https://www.usb.org/sites/default/files/USB4%20Specification_1.zip
+> > 
+> > USB4 is about tunneling different protocols over a single cable (in the
+> > same way as Thunderbolt). The current USB4 spec supports PCIe, Display Port
+> > and USB 3.x, and also software based protocols such as networking between
+> > domains (hosts).
+> > 
+> > So far PCs have been using firmware based Connection Manager and Apple
+> > systems have been using software based one. A Connection Manager is the
+> > entity that handles creation of different tunnel types through the USB4
+> > (and Thunderbolt) fabric. With USB4 the plan is to have software based
+> > Connection Manager everywhere but some early systems will also support
+> > firmware to allow OS downgrade for example.
+> > 
+> > Current Linux Thunderbolt driver supports both "modes" and can detect which
+> > one to use dynamically.
+> > 
+> > This series first adds support for Thunderbolt 3 devices to the software
+> > connection manager and then extends that to support USB4 compliant hosts
+> > and devices (this applies to both firmware and software based connection
+> > managers). With this series the following features are supported also for
+> > USB4 compliant devices:
+> > 
+> >   - PCIe tunneling
+> >   - Display Port tunneling
+> >   - USB 3.x tunneling
+> >   - P2P networking (implemented in drivers/net/thunderbolt.c)
+> >   - Host and device NVM firmware upgrade
+> > 
+> > We also add two new sysfs attributes under each device that expose link
+> > speed and width to userspace. The rest of the userspace ABI stays the same.
+> > 
+> > I'm including Linux USB folks as well because USB4 is officially coming
+> > from USB-IF which puts us on same boat now.
+> > 
+> > While I changed the user visible Kconfig string to mention "USB4" (the
+> > Kconfig option is still CONFIG_THUNDERBOLT), I'm wondering whether we
+> > should move the whole Thunderbolt driver under drivers/usb/thunderbolt as
+> > well? 
 > 
-> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Looks "interesting", nice work!
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Thanks!
 
-> ---
-> v2: preserve the error code
-> 
->   drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++------
->   1 file changed, 8 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 96562744101c..5f61d9977a15 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4409,18 +4409,20 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->   	/* USB data support is optional */
->   	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
->   	if (ret == 0) {
-> -		port->typec_caps.data = typec_find_port_data_role(cap_str);
-> -		if (port->typec_caps.data < 0)
-> -			return -EINVAL;
-> +		ret = typec_find_port_data_role(cap_str);
-> +		if (ret < 0)
-> +			return ret;
-> +		port->typec_caps.data = ret;
->   	}
->   
->   	ret = fwnode_property_read_string(fwnode, "power-role", &cap_str);
->   	if (ret < 0)
->   		return ret;
->   
-> -	port->typec_caps.type = typec_find_port_power_role(cap_str);
-> -	if (port->typec_caps.type < 0)
-> -		return -EINVAL;
-> +	ret = typec_find_port_power_role(cap_str);
-> +	if (ret < 0)
-> +		return ret;
-> +	port->typec_caps.type = ret;
->   	port->port_type = port->typec_caps.type;
->   
->   	if (port->port_type == TYPEC_PORT_SNK)
-> 
+> I stopped at patch "Add initial support for USB4" as I don't think we
+> want to add USB4 code to a system that we know does not have it, right?
 
+You can connect a USB4 device to Thunderbolt 3 system. USB4 hubs
+specifically are required to support this by the spec. Of course then it
+is in Thunderbolt 3 alternate mode (not in USB4 native mode) but the
+USB4 register set is still there. So for example we still need to
+configure TMU (Time Management Unit) and access the DROM via router
+operations and so on.
+
+Do you mean we don't want that?
+
+> Everything up to then is just "normal" thunderbolt, and with the
+> exception of a few minor comments, all look fine to me.
+> 
+> I didn't actually read the USB4 patch just yet, as I figured we needed
+> to argue about that some more :)
+
+Heh, sure and thanks for the feedback so far :)
