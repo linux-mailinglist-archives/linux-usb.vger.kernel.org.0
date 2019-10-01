@@ -2,175 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57663C30F6
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 12:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52470C3116
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 12:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730245AbfJAKKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 06:10:37 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:15078 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729717AbfJAKKh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 06:10:37 -0400
-X-IronPort-AV: E=Sophos;i="5.64,570,1559487600"; 
-   d="scan'208";a="27788459"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 01 Oct 2019 19:10:34 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2DFE541F2F7A;
-        Tue,  1 Oct 2019 19:10:34 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     balbi@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, stable@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH 2/2] usb: renesas_usbhs: gadget: Fix usb_ep_set_{halt,wedge}() behavior
-Date:   Tue,  1 Oct 2019 19:10:33 +0900
-Message-Id: <1569924633-322-3-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1569924633-322-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-References: <1569924633-322-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+        id S1730286AbfJAKRo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 06:17:44 -0400
+Received: from mga03.intel.com ([134.134.136.65]:51739 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726109AbfJAKRo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 06:17:44 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 03:17:43 -0700
+X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
+   d="scan'208";a="366286885"
+Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 03:17:39 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>,
+        Vishal Kulkarni <vishal@chelsio.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [Intel-gfx] [PATCH v3] string-choice: add yesno(), onoff(), enableddisabled(), plural() helpers
+In-Reply-To: <20191001095911.GA2945944@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk> <20191001080739.18513-1-jani.nikula@intel.com> <20191001093849.GA2945163@kroah.com> <87blv0dcol.fsf@intel.com> <20191001095911.GA2945944@kroah.com>
+Date:   Tue, 01 Oct 2019 13:17:36 +0300
+Message-ID: <878sq4db27.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-According to usb_ep_set_halt()'s description,
-__usbhsg_ep_set_halt_wedge() should return -EAGAIN if the IN endpoint
-has any queue or data. Otherwise, this driver is possible to cause
-just STALL without sending a short packet data on g_mass_storage driver,
-and then a few resetting a device happens on a host side during
-a usb enumaration.
+On Tue, 01 Oct 2019, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> On Tue, Oct 01, 2019 at 12:42:34PM +0300, Jani Nikula wrote:
+>> On Tue, 01 Oct 2019, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+>> > On Tue, Oct 01, 2019 at 11:07:39AM +0300, Jani Nikula wrote:
+>> >> The kernel has plenty of ternary operators to choose between constant
+>> >> strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
+>> >> "s":
+>> >> 
+>> >> $ git grep '? "yes" : "no"' | wc -l
+>> >> 258
+>> >> $ git grep '? "on" : "off"' | wc -l
+>> >> 204
+>> >> $ git grep '? "enabled" : "disabled"' | wc -l
+>> >> 196
+>> >> $ git grep '? "" : "s"' | wc -l
+>> >> 25
+>> >> 
+>> >> Additionally, there are some occurences of the same in reverse order,
+>> >> split to multiple lines, or otherwise not caught by the simple grep.
+>> >> 
+>> >> Add helpers to return the constant strings. Remove existing equivalent
+>> >> and conflicting functions in i915, cxgb4, and USB core. Further
+>> >> conversion can be done incrementally.
+>> >> 
+>> >> While the main goal here is to abstract recurring patterns, and slightly
+>> >> clean up the code base by not open coding the ternary operators, there
+>> >> are also some space savings to be had via better string constant
+>> >> pooling.
+>> >> 
+>> >> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+>> >> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+>> >> Cc: intel-gfx@lists.freedesktop.org
+>> >> Cc: Vishal Kulkarni <vishal@chelsio.com>
+>> >> Cc: netdev@vger.kernel.org
+>> >> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> >> Cc: linux-usb@vger.kernel.org
+>> >> Cc: Andrew Morton <akpm@linux-foundation.org>
+>> >> Cc: linux-kernel@vger.kernel.org
+>> >> Cc: Julia Lawall <julia.lawall@lip6.fr>
+>> >> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+>> >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> # v1
+>> >
+>> > As this is a totally different version, please drop my reviewed-by as
+>> > that's really not true here :(
+>> 
+>> I did indicate it was for v1. Indeed v2 was different, but care to
+>> elaborate what's wrong with v3?
+>
+> No idea, but I haven't reviewed it yet, so to put my tag on there isn't
+> the nicest...
 
-Fixes: 2f98382dcdfe ("usb: renesas_usbhs: Add Renesas USBHS Gadget")
-Cc: <stable@vger.kernel.org> # v3.0+
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
----
- drivers/usb/renesas_usbhs/common.h     |  1 +
- drivers/usb/renesas_usbhs/fifo.c       |  2 +-
- drivers/usb/renesas_usbhs/fifo.h       |  1 +
- drivers/usb/renesas_usbhs/mod_gadget.c | 16 +++++++++++++++-
- drivers/usb/renesas_usbhs/pipe.c       | 15 +++++++++++++++
- drivers/usb/renesas_usbhs/pipe.h       |  1 +
- 6 files changed, 34 insertions(+), 2 deletions(-)
+Apologies, no harm intended.
 
-diff --git a/drivers/usb/renesas_usbhs/common.h b/drivers/usb/renesas_usbhs/common.h
-index d1a0a35..0824099 100644
---- a/drivers/usb/renesas_usbhs/common.h
-+++ b/drivers/usb/renesas_usbhs/common.h
-@@ -211,6 +211,7 @@ struct usbhs_priv;
- /* DCPCTR */
- #define BSTS		(1 << 15)	/* Buffer Status */
- #define SUREQ		(1 << 14)	/* Sending SETUP Token */
-+#define INBUFM		(1 << 14)	/* (PIPEnCTR) Transfer Buffer Monitor */
- #define CSSTS		(1 << 12)	/* CSSTS Status */
- #define	ACLRM		(1 << 9)	/* Buffer Auto-Clear Mode */
- #define SQCLR		(1 << 8)	/* Toggle Bit Clear */
-diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
-index 2a01ceb..86637cd 100644
---- a/drivers/usb/renesas_usbhs/fifo.c
-+++ b/drivers/usb/renesas_usbhs/fifo.c
-@@ -89,7 +89,7 @@ static void __usbhsf_pkt_del(struct usbhs_pkt *pkt)
- 	list_del_init(&pkt->node);
- }
- 
--static struct usbhs_pkt *__usbhsf_pkt_get(struct usbhs_pipe *pipe)
-+struct usbhs_pkt *__usbhsf_pkt_get(struct usbhs_pipe *pipe)
- {
- 	return list_first_entry_or_null(&pipe->list, struct usbhs_pkt, node);
- }
-diff --git a/drivers/usb/renesas_usbhs/fifo.h b/drivers/usb/renesas_usbhs/fifo.h
-index 88d1816..c3d3cc3 100644
---- a/drivers/usb/renesas_usbhs/fifo.h
-+++ b/drivers/usb/renesas_usbhs/fifo.h
-@@ -97,5 +97,6 @@ void usbhs_pkt_push(struct usbhs_pipe *pipe, struct usbhs_pkt *pkt,
- 		    void *buf, int len, int zero, int sequence);
- struct usbhs_pkt *usbhs_pkt_pop(struct usbhs_pipe *pipe, struct usbhs_pkt *pkt);
- void usbhs_pkt_start(struct usbhs_pipe *pipe);
-+struct usbhs_pkt *__usbhsf_pkt_get(struct usbhs_pipe *pipe);
- 
- #endif /* RENESAS_USB_FIFO_H */
-diff --git a/drivers/usb/renesas_usbhs/mod_gadget.c b/drivers/usb/renesas_usbhs/mod_gadget.c
-index 2c7523a..e5ef569 100644
---- a/drivers/usb/renesas_usbhs/mod_gadget.c
-+++ b/drivers/usb/renesas_usbhs/mod_gadget.c
-@@ -722,6 +722,7 @@ static int __usbhsg_ep_set_halt_wedge(struct usb_ep *ep, int halt, int wedge)
- 	struct usbhs_priv *priv = usbhsg_gpriv_to_priv(gpriv);
- 	struct device *dev = usbhsg_gpriv_to_dev(gpriv);
- 	unsigned long flags;
-+	int ret = 0;
- 
- 	dev_dbg(dev, "set halt %d (pipe %d)\n",
- 		halt, usbhs_pipe_number(pipe));
-@@ -729,6 +730,18 @@ static int __usbhsg_ep_set_halt_wedge(struct usb_ep *ep, int halt, int wedge)
- 	/********************  spin lock ********************/
- 	usbhs_lock(priv, flags);
- 
-+	/*
-+	 * According to usb_ep_set_halt()'s description, this function should
-+	 * return -EAGAIN if the IN endpoint has any queue or data. Note
-+	 * that the usbhs_pipe_is_dir_in() returns false if the pipe is an
-+	 * IN endpoint in the gadget mode.
-+	 */
-+	if (!usbhs_pipe_is_dir_in(pipe) && (__usbhsf_pkt_get(pipe) ||
-+	    usbhs_pipe_contains_transmittable_data(pipe))) {
-+		ret = -EAGAIN;
-+		goto out;
-+	}
-+
- 	if (halt)
- 		usbhs_pipe_stall(pipe);
- 	else
-@@ -739,10 +752,11 @@ static int __usbhsg_ep_set_halt_wedge(struct usb_ep *ep, int halt, int wedge)
- 	else
- 		usbhsg_status_clr(gpriv, USBHSG_STATUS_WEDGE);
- 
-+out:
- 	usbhs_unlock(priv, flags);
- 	/********************  spin unlock ******************/
- 
--	return 0;
-+	return ret;
- }
- 
- static int usbhsg_ep_set_halt(struct usb_ep *ep, int value)
-diff --git a/drivers/usb/renesas_usbhs/pipe.c b/drivers/usb/renesas_usbhs/pipe.c
-index c4922b9..9e5afdd 100644
---- a/drivers/usb/renesas_usbhs/pipe.c
-+++ b/drivers/usb/renesas_usbhs/pipe.c
-@@ -277,6 +277,21 @@ int usbhs_pipe_is_accessible(struct usbhs_pipe *pipe)
- 	return -EBUSY;
- }
- 
-+bool usbhs_pipe_contains_transmittable_data(struct usbhs_pipe *pipe)
-+{
-+	u16 val;
-+
-+	/* Do not support for DCP pipe */
-+	if (usbhs_pipe_is_dcp(pipe))
-+		return false;
-+
-+	val = usbhsp_pipectrl_get(pipe);
-+	if (val & INBUFM)
-+		return true;
-+
-+	return false;
-+}
-+
- /*
-  *		PID ctrl
-  */
-diff --git a/drivers/usb/renesas_usbhs/pipe.h b/drivers/usb/renesas_usbhs/pipe.h
-index 3080423..3b13052 100644
---- a/drivers/usb/renesas_usbhs/pipe.h
-+++ b/drivers/usb/renesas_usbhs/pipe.h
-@@ -83,6 +83,7 @@ void usbhs_pipe_clear(struct usbhs_pipe *pipe);
- void usbhs_pipe_clear_without_sequence(struct usbhs_pipe *pipe,
- 				       int needs_bfre, int bfre_enable);
- int usbhs_pipe_is_accessible(struct usbhs_pipe *pipe);
-+bool usbhs_pipe_contains_transmittable_data(struct usbhs_pipe *pipe);
- void usbhs_pipe_enable(struct usbhs_pipe *pipe);
- void usbhs_pipe_disable(struct usbhs_pipe *pipe);
- void usbhs_pipe_stall(struct usbhs_pipe *pipe);
+At times, I've seen the "# vN" notation used, I suppose both to indicate
+that the *ideas* presented in the earlier version warranted Reviewed-by
+from so-and-so, though this particular version still needs detailed
+review, and that the approval of the reviewer of the earlier version
+should be sought out before merging a subsequent version.
+
+BR,
+Jani.
+
+
 -- 
-2.7.4
-
+Jani Nikula, Intel Open Source Graphics Center
