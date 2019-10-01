@@ -2,66 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 854CAC2A41
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 01:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F94C2B63
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 02:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729874AbfI3XHQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 30 Sep 2019 19:07:16 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34535 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726789AbfI3XHP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 19:07:15 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m19so9922598otp.1;
-        Mon, 30 Sep 2019 16:07:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zDj+DK0QCFIN576pryZq/Y62yXQtYLQJm8d8iZrEbOs=;
-        b=HbJldpxWnsMDFgb6VP6Z0kZWFJt00UxqiNBSNqrumszmpxQBSxaGQt9FyhSdFzdJwL
-         j1bkr+RC5YTjA63FzQ5hyZNSRn45ODrlhUGNAXgNEdfpfI5+OMmTgQAfzfUst3ZbOZia
-         TrnW7zaqIMoDGltmW3vPAG+A5IbCc93/3nbAmlJHQnSNkbD+zqr+73utuByEFUUD4I22
-         zRGuwZJSTDHzGTsUUBGZcg5miMX9mphdP0z3p+AfzGh+31KG1DwCef3Wb4qDmBP9z4zz
-         B0jYmEwSIAg1/feRt94BJMDXaSM1hY7ACImRogDcVv3spu2kTMFAiPSTvwTP4c1zWDja
-         DJqw==
-X-Gm-Message-State: APjAAAVWAk1FDcvvPSe/610EToH2MkT3arh61eo11xkLwO82959b5UTc
-        dP6NHg9O/vfW2OiYphqhsA==
-X-Google-Smtp-Source: APXvYqyQJmQ4TDFGrSERGcpSMAOM1nVOQW8uwKCO9Rm+l0q+Hb6q01p0DIVO2XgqJFm32fxqYe8POA==
-X-Received: by 2002:a05:6830:10c5:: with SMTP id z5mr16004320oto.322.1569884835109;
-        Mon, 30 Sep 2019 16:07:15 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id j9sm4414823oij.15.2019.09.30.16.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2019 16:07:14 -0700 (PDT)
-Date:   Mon, 30 Sep 2019 18:07:14 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Marco Felsch <m.felsch@pengutronix.de>
-Cc:     richard.leitner@skidata.com, robh+dt@kernel.org,
-        fancer.lancer@gmail.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH 1/4] dt-bindings: usb: usb251xb: add documentation for
- voltage supply
-Message-ID: <20190930230714.GA29817@bogus>
-References: <20190917144449.32739-1-m.felsch@pengutronix.de>
- <20190917144449.32739-2-m.felsch@pengutronix.de>
+        id S1726691AbfJAAmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 30 Sep 2019 20:42:53 -0400
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:58866 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726106AbfJAAmw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 30 Sep 2019 20:42:52 -0400
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 8D90B27E62;
+        Mon, 30 Sep 2019 20:42:48 -0400 (EDT)
+Date:   Tue, 1 Oct 2019 10:42:48 +1000 (AEST)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH V2] scsi: save/restore command resid for error handling
+In-Reply-To: <20190927221602.27080-1-damien.lemoal@wdc.com>
+Message-ID: <alpine.LNX.2.21.1910011011410.13@nippy.intranet>
+References: <20190927221602.27080-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190917144449.32739-2-m.felsch@pengutronix.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Sep 2019 16:44:46 +0200, Marco Felsch wrote:
-> Add the optional voltage supply documentation. If not specified the
-> dummy-regulator is used.
-> 
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
-> ---
->  Documentation/devicetree/bindings/usb/usb251xb.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Sat, 28 Sep 2019, Damien Le Moal wrote:
 
-Acked-by: Rob Herring <robh@kernel.org>
+> When a non-passthrough command is terminated with CHECK CONDITION,
+> request sense is executed by hijacking the command descriptor. Since
+> scsi_eh_prep_cmnd() and scsi_eh_restore_cmnd() do not save/restore the
+> original command resid, the value returned on failure of the original
+> command is lost and replaced with the value set by the execution of the
+> request sense command. This value may in many instances be unaligned to
+> the device sector size, causing sd_done() to print a warning message
+> about the incorrect unaligned resid before the command is retried or
+> aborted.
+> 
+> Fix this problem by saving the original command resid in struct
+> scsi_eh_save using scsi_eh_prep_cmnd() and restoring it in
+> scsi_eh_restore_cmnd(). In addition, to make sure that the request sense
+> command is executed with a correctly initialized command structure, also
+> reset resid to 0 in scsi_eh_prep_cmnd() after saving the original
+> command resid value in struct scsi_eh_save.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+> ---
+> 
+> Changes from V1:
+> * Dropped patch 2
+> * Add resid reset in scsi_eh_prep_cmnd()
+> 
+>  drivers/scsi/scsi_error.c | 3 +++
+>  include/scsi/scsi_eh.h    | 1 +
+>  2 files changed, 4 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
+> index 1c470e31ae81..f53828bf7ad7 100644
+> --- a/drivers/scsi/scsi_error.c
+> +++ b/drivers/scsi/scsi_error.c
+> @@ -967,6 +967,7 @@ void scsi_eh_prep_cmnd(struct scsi_cmnd *scmd, struct scsi_eh_save *ses,
+>  	ses->data_direction = scmd->sc_data_direction;
+>  	ses->sdb = scmd->sdb;
+>  	ses->result = scmd->result;
+> +	ses->resid = scsi_get_resid(scmd);
+>  	ses->underflow = scmd->underflow;
+>  	ses->prot_op = scmd->prot_op;
+>  	ses->eh_eflags = scmd->eh_eflags;
+> @@ -977,6 +978,7 @@ void scsi_eh_prep_cmnd(struct scsi_cmnd *scmd, struct scsi_eh_save *ses,
+>  	memset(scmd->cmnd, 0, BLK_MAX_CDB);
+>  	memset(&scmd->sdb, 0, sizeof(scmd->sdb));
+>  	scmd->result = 0;
+> +	scsi_set_resid(scmd, 0);
+>  
+>  	if (sense_bytes) {
+>  		scmd->sdb.length = min_t(unsigned, SCSI_SENSE_BUFFERSIZE,
+> @@ -1029,6 +1031,7 @@ void scsi_eh_restore_cmnd(struct scsi_cmnd* scmd, struct scsi_eh_save *ses)
+>  	scmd->sc_data_direction = ses->data_direction;
+>  	scmd->sdb = ses->sdb;
+>  	scmd->result = ses->result;
+> +	scsi_set_resid(scmd, ses->resid);
+
+When saving and restoring state, perhaps it makes more sense to bypass the 
+higher level getter/setter API? Open-coded assignment statements are 
+already prevalent here, rather than calls to e.g. scsi_set_prot_op(), 
+set_msg_byte() etc. (There may be no code elsewhere that could tell the 
+difference, but we can't use "private" members to prove it, unlike C++.)
+
+>  	scmd->underflow = ses->underflow;
+>  	scmd->prot_op = ses->prot_op;
+>  	scmd->eh_eflags = ses->eh_eflags;
+> diff --git a/include/scsi/scsi_eh.h b/include/scsi/scsi_eh.h
+> index 3810b340551c..9caa9b262a32 100644
+> --- a/include/scsi/scsi_eh.h
+> +++ b/include/scsi/scsi_eh.h
+> @@ -32,6 +32,7 @@ extern int scsi_ioctl_reset(struct scsi_device *, int __user *);
+>  struct scsi_eh_save {
+>  	/* saved state */
+>  	int result;
+> +	unsigned int resid;
+
+There seems to be an inconsistency here. A signed int would be consistent 
+with the getter and setter helpers. Whereas, if you open-coded the 
+assignments instead, your unsigned int would make sense because 
+scsi_request.resid_len really is an unsigned int.
+
+-- 
+
+>  	int eh_eflags;
+>  	enum dma_data_direction data_direction;
+>  	unsigned underflow;
+> 
