@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49014C3534
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F02C3551
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 15:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbfJANJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 09:09:10 -0400
-Received: from mga14.intel.com ([192.55.52.115]:30595 "EHLO mga14.intel.com"
+        id S2388067AbfJANOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 09:14:50 -0400
+Received: from mga05.intel.com ([192.55.52.43]:22256 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725821AbfJANJK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 09:09:10 -0400
+        id S1726086AbfJANOu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 09:14:50 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 06:09:10 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 06:14:49 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="205061262"
+   d="scan'208";a="205061963"
 Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 06:09:06 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 16:09:05 +0300
-Date:   Tue, 1 Oct 2019 16:09:05 +0300
+  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 06:14:45 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 16:14:44 +0300
+Date:   Tue, 1 Oct 2019 16:14:44 +0300
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org,
@@ -36,15 +36,16 @@ Cc:     linux-usb@vger.kernel.org,
         Mario.Limonciello@dell.com,
         Anthony Wong <anthony.wong@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191001130905.GO2714@lahna.fi.intel.com>
+Subject: Re: [RFC PATCH 07/22] thunderbolt: Add default linking between ports
+ if not provided by DROM
+Message-ID: <20191001131444.GP2714@lahna.fi.intel.com>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <20191001124748.GH2954373@kroah.com>
+ <20191001113830.13028-8-mika.westerberg@linux.intel.com>
+ <20191001123911.GB2954373@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191001124748.GH2954373@kroah.com>
+In-Reply-To: <20191001123911.GB2954373@kroah.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
@@ -52,49 +53,26 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 02:47:48PM +0200, Greg Kroah-Hartman wrote:
-> > -	  Thunderbolt Controller driver. This driver is required if you
-> > -	  want to hotplug Thunderbolt devices on Apple hardware or on PCs
-> > -	  with Intel Falcon Ridge or newer.
-> > +	  USB4 (Thunderbolt) driver. USB4 is the public spec based on
-> > +	  Thunderbolt 3 protocol. This driver is required if you want to
-> > +	  hotplug Thunderbolt and USB4 compliant devices on Apple
-> > +	  hardware or on PCs with Intel Falcon Ridge or newer.
+On Tue, Oct 01, 2019 at 02:39:11PM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 01, 2019 at 02:38:15PM +0300, Mika Westerberg wrote:
+> > Some cases the DROM information is not correct or is simply missing.
 > 
-> Wait, did "old" thunderbolt just get re-branded as USB4?
+> What is "DROM"?
 
-Not but the driver started supporting USB4 as well :)
+It is "Device ROM". Essentially per-device information. I will spell it
+out in next version.
 
-USB4 is pretty much public spec of Thunderbolt 3 but with some
-differences in register layouts (this is because Thunderbolt uses some
-vendor specific capabilities which are now moved to more "standard"
-places). 
+> > This prevents establishing lane bonding even if it would be possible
+> > otherwise. To make this work better provide default linking between
+> > ports if DROM has not provided that information.
+> > 
+> > This works with legacy devices where ports 1 and 2, and 3 and 4 are
+> > linked together and also with USB4.
+> 
+> "linked together" as in "bonded"?  Or something else?  Names are getting
+> confusing here :(
 
-> Because if I have an "old" laptop that needs Thunderbolt support, how am
-> I going to know it is now called USB4 instead?
-
-Well the Kconfig option tries to have both names there:
-
-  tristate "USB4 (Thunderbolt) support"
-
-and then
-
-  USB4 (Thunderbolt) driver. USB4 is the public spec based on
-  Thunderbolt 3 protocol. This driver is required if you want to hotplug
-  Thunderbolt and USB4 compliant devices on Apple hardware or on PCs
-  with Intel Falcon Ridge or newer.
-
-and the Kconfig option is still CONFIG_THUNDERBOLT. I know this is
-confusing but I don't have better ideas how we can advertise both. I
-borrowed this "format" from firewire.
-
-> Shouldn't there just be a new USB4 option that only enables/builds the
-> USB4 stuff if selected?  Why would I want all of this additional code on
-> my old system if it's not going to do anything at all?
-
-USB4 devices are backward compatible with Thunderbolt 3 so you should be
-able to plug in USB4 device to your old Thunderbolt 3 laptop for
-example. It goes the other way as well. Some things are optional but for
-example USB4 hubs must support also Thunderbolt 3.
-
-Does that clarify?
+Here linked together means the both port in dual link so ports 1, 2 and
+ports 3 and 4. There are always two pairs of ports (lanes) that go out
+of physical connector. Here we just link them in software. I'll try to
+clarify this in the next version.
