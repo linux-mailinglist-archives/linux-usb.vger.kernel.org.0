@@ -2,108 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B847CC2D1B
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 08:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5CE1C2E60
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 09:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbfJAGJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 02:09:31 -0400
-Received: from mga06.intel.com ([134.134.136.31]:16527 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726672AbfJAGJb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 02:09:31 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 23:09:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
-   d="asc'?scan'208";a="197767956"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Sep 2019 23:09:28 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+        id S1728663AbfJAHrD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 03:47:03 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:49150 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725777AbfJAHrD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 03:47:03 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id AB6A161213; Tue,  1 Oct 2019 07:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569916021;
+        bh=H2m3cmQLDoOmCaNbnBGCED/0upYwNSXpptaqJvqa4lE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T+NSzIPAr84r32gkXqPISSZrx8P7RJI1kkSSApQhzFfpNa0YNduSxD7E5J5KaSMX8
+         0G1cvJ0/EAKDhsB9c4KYyF+Y+rGDPPMEMYhvOaPSOejc4Y+9CjoO98ml1hivExkz13
+         X1Z5hw77p0wYrUE7t6BkBzeoBXsHEi/eL3A8MRPw=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from cchiluve-linux.qualcomm.com (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: cchiluve@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B0C196115A;
+        Tue,  1 Oct 2019 07:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1569916021;
+        bh=H2m3cmQLDoOmCaNbnBGCED/0upYwNSXpptaqJvqa4lE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T+NSzIPAr84r32gkXqPISSZrx8P7RJI1kkSSApQhzFfpNa0YNduSxD7E5J5KaSMX8
+         0G1cvJ0/EAKDhsB9c4KYyF+Y+rGDPPMEMYhvOaPSOejc4Y+9CjoO98ml1hivExkz13
+         X1Z5hw77p0wYrUE7t6BkBzeoBXsHEi/eL3A8MRPw=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B0C196115A
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=cchiluve@codeaurora.org
+From:   Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+To:     balbi@kernel.org
 Cc:     linux-usb@vger.kernel.org,
         Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
-Subject: Re: [PATCH V2] usb: gadget: composite: Fix possible double free memory bug
-In-Reply-To: <1569842311-10353-1-git-send-email-cchiluve@codeaurora.org>
-References: <1569842311-10353-1-git-send-email-cchiluve@codeaurora.org>
-Date:   Tue, 01 Oct 2019 09:09:19 +0300
-Message-ID: <87d0fhvvxs.fsf@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Subject: [PATCH V3] usb: gadget: composite: Fix possible double free memory bug
+Date:   Tue,  1 Oct 2019 13:16:48 +0530
+Message-Id: <1569916008-3475-1-git-send-email-cchiluve@codeaurora.org>
+X-Mailer: git-send-email 1.9.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+composite_dev_cleanup call from the failure of configfs_composite_bind
+frees up the cdev->os_desc_req and cdev->req. If the previous calls of
+bind and unbind is successful these will carry stale values.
 
+Consider the below sequence of function calls:
+configfs_composite_bind()
+        composite_dev_prepare()
+                - Allocate cdev->req, cdev->req->buf
+        composite_os_desc_req_prepare()
+                - Allocate cdev->os_desc_req, cdev->os_desc_req->buf
+configfs_composite_unbind()
+        composite_dev_cleanup()
+                - free the cdev->os_desc_req->buf and cdev->req->buf
+Next composition switch
+configfs_composite_bind()
+        - If it fails goto err_comp_cleanup will call the
+	  composite_dev_cleanup() function
+        composite_dev_cleanup()
+	        - calls kfree up with the stale values of cdev->req->buf and
+		  cdev->os_desc_req from the previous configfs_composite_bind
+		  call. The free call on these stale values leads to double free.
 
-Hi,
+Hence, Fix this issue by setting request and buffer pointer to NULL after
+kfree.
 
-Chandana Kishori Chiluveru <cchiluve@codeaurora.org> writes:
-> composite_dev_cleanup call from the failure of configfs_composite_bind
-> frees up the cdev->os_desc_req and cdev->req. If the previous calls of
-> bind and unbind is successful these will carry stale values.
->
-> Consider the below sequence of function calls:
-> configfs_composite_bind()
->         composite_dev_prepare()
->                 - Allocate cdev->req, cdev->req->buf
->         composite_os_desc_req_prepare()
->                 - Allocate cdev->os_desc_req, cdev->os_desc_req->buf
-> configfs_composite_unbind()
->         composite_dev_cleanup()
->                 - free the cdev->os_desc_req->buf and cdev->req->buf
-> Next composition switch
-> configfs_composite_bind()
->         - If it fails goto err_comp_cleanup will call the
-> 	  composite_dev_cleanup() function
->         composite_dev_cleanup()
-> 	        - calls kfree up with the stale values of cdev->req->buf and
-> 		  cdev->os_desc_req from the previous configfs_composite_bind
-> 		  call. The free call on these stale values leads to double free.
->
-> Hence, Fix this issue by setting request and buffer pointer to NULL after
-> kfree.
->
-> Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
->
-> Changes in v2:
-> 	- Modified commit text.
+Signed-off-by: Chandana Kishori Chiluveru <cchiluve@codeaurora.org>
+---
 
-These two lines...
+Changes in v3:
+	-  As suggested by balbi, Removed changelog from commit text.
+Changes in v2:
+	- Modified commit text.
 
-> ---
+ drivers/usb/gadget/composite.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-... should be after this tearline :-)
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index b8a1584..992f1e2 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2155,14 +2155,18 @@ void composite_dev_cleanup(struct usb_composite_dev *cdev)
+ 			usb_ep_dequeue(cdev->gadget->ep0, cdev->os_desc_req);
+ 
+ 		kfree(cdev->os_desc_req->buf);
++		cdev->os_desc_req->buf = NULL;
+ 		usb_ep_free_request(cdev->gadget->ep0, cdev->os_desc_req);
++		cdev->os_desc_req = NULL;
+ 	}
+ 	if (cdev->req) {
+ 		if (cdev->setup_pending)
+ 			usb_ep_dequeue(cdev->gadget->ep0, cdev->req);
+ 
+ 		kfree(cdev->req->buf);
++		cdev->req->buf = NULL;
+ 		usb_ep_free_request(cdev->gadget->ep0, cdev->req);
++		cdev->req = NULL;
+ 	}
+ 	cdev->next_string_id = 0;
+ 	device_remove_file(&cdev->gadget->dev, &dev_attr_suspended);
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-We don't need that in the commit log
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl2S7ZEACgkQzL64meEa
-mQYtlQ//UvIJCNxQ7JGbg5IyQZdednaTN8e/y+J5ghBW84V2kee93gprTMCvz2E5
-UCZgRkXXxE5nkjHepyL1zz+N49JE3fAMO6pARUtgnQiaujgtK5AnZUaOn6rLuilB
-MEamNDWyJSvG1wRZqgseOB8oiC5z5Cwk/nrGJ15EBLAMO/ibZJ8V5kjDdOO4nr91
-1H83J1+8wWVGRSyV1wnyjEM/JvS3eET8SZLafcxx6ffrlSCv8Fn3ArqLC2+5KFvK
-RvgV6sfa3Tjqxg/kJGFWUaXKaTOAYrd6gdHzCs6ojEgpuMvy5zfESk6AWg7WqI3r
-4YLRaOEqxraQB0fLWjVQbyt473Ir8T/2vCe76pRDFu4PaZgGV47/+2N7BT4AL9ZE
-GSmMtOLgrsGAuQHiT2D3qt9DeM4y5xYQ227ffgnaDrj5mVzvl+lvia11WwfYO3/P
-Y+4v1TmnvxvtFsGOZXnUM7V06l6HntkqbV3ff7+xPrYSnx8CthabNSE3Dvj5FYfd
-AVZyB37xReIOdTJKpLcN7OpbixTtsBNWD4/jCLT/rH+TFNdDZbWmPl85nsAnEAR1
-/RYJCRBn0DEdRRm1pTEIFnWyPDeQPLwu4e9AdeX6Jtua2P7B8zw1/6zrg0mxCcap
-dfVg8KjE9H7gsgRdv0NHuVOK8dM2npWQ6MoqtnbdXq/rqaRM5Zo=
-=VuE+
------END PGP SIGNATURE-----
---=-=-=--
