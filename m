@@ -2,201 +2,355 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B07C3FF6
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 20:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FC4C408C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725928AbfJASgf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 14:36:35 -0400
-Received: from nat-hk.nvidia.com ([203.18.50.4]:53194 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725875AbfJASge (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 14:36:34 -0400
-Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.77]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d939cad0000>; Wed, 02 Oct 2019 02:36:29 +0800
-Received: from HKMAIL102.nvidia.com ([10.18.16.11])
-  by hkpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 01 Oct 2019 11:36:28 -0700
-X-PGP-Universal: processed;
-        by hkpgpgate101.nvidia.com on Tue, 01 Oct 2019 11:36:28 -0700
-Received: from HKMAIL104.nvidia.com (10.18.16.13) by HKMAIL102.nvidia.com
- (10.18.16.11) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 1 Oct
- 2019 18:36:28 +0000
-Received: from NAM05-DM3-obe.outbound.protection.outlook.com (104.47.49.59) by
- HKMAIL104.nvidia.com (10.18.16.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Tue, 1 Oct 2019 18:36:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZntZJVRV5Run0IVhqeNBwBr79jCeQH9aAwsvMIIq3eXu2zmNLrW91cr0/UbWfzAPRCUx/z/gcgYnI28jwOYCYokhxPcHwP8iKT6cyLog6GEmyNKD4XT4CCFrHm5OI00kdQcTrJHScXqpewq0emsMCkpSTFx3yjwgr4IwUTdtU3K1Y0TFPp0W8oEfBRSBpsWsw06uclg+MD3Q1yScHWT/KjHU6tqF2JWOou1ZVTC/UwQTSfi93n0JHoJCx/ogUMBEeGUiKyZdjgbOr1ZrOEeWZyUdhGAGDM+00rqAzp6qZimjf5WiHI5zjS7n2ZcDFo+pXdcxnqTIwXlG3wDJMTKEaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7eVnl57FKI3qHbWTkALBCKuosAxIQ3dT2jgpDOMQJz0=;
- b=M1YmIYkqClizOHYwJKK+I9Zo8zFVA2WidWldHfnrAk9ZupVxvsFcADhqbsIG8rFoLih9pbXabf9hEZRwCyvSzznkQaOClrSPbjqUW0rA/mM0xQe7kgeTPmFa4Sfm9E5tFFB1INjaHwoDQp4rLPThQUpIj33jgCpMWhOGpgMWEFUwWYOaaWziZBIvazM7SZMDpyZ3C35GYrN6onWcX1uRoPuNMB51plksDI8mXjrfj8jN/SFzDm51p8J/3U5tcsjGQLtbbkcctn6RM8+BKo5/yzwCaf8/O49DICDvwctG4hZRPryqplT6qMlrvxDLrh3dyAHNczVElS+Bf4xd/7zUfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.176.253.214) by
- BYAPR12MB3109.namprd12.prod.outlook.com (20.178.54.202) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.20; Tue, 1 Oct 2019 18:36:26 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::19f9:64ec:5139:dfca%3]) with mapi id 15.20.2305.022; Tue, 1 Oct 2019
- 18:36:25 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 00/14] usb: typec: UCSI driver overhaul
-Thread-Topic: [PATCH 00/14] usb: typec: UCSI driver overhaul
-Thread-Index: AQHVdFI7VovQttbK0kyVtx5zpzGGF6dGIWlA
-Date:   Tue, 1 Oct 2019 18:36:25 +0000
-Message-ID: <BYAPR12MB2727E1FE3CDFC5D6DD87CF73DC9D0@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20190926100727.71117-1-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20190926100727.71117-1-heikki.krogerus@linux.intel.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-10-01T18:36:24.5195047Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=af0348d5-5164-4ba3-b376-b38fb7412ad5;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 69708d2b-b9ff-4b07-aa1b-08d7469e443d
-x-ms-traffictypediagnostic: BYAPR12MB3109:
-x-microsoft-antispam-prvs: <BYAPR12MB31095E3AC5F2B70DE8F61EF2DC9D0@BYAPR12MB3109.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 0177904E6B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(136003)(396003)(366004)(376002)(346002)(13464003)(199004)(189003)(486006)(446003)(9686003)(8936002)(229853002)(102836004)(26005)(7736002)(55016002)(305945005)(186003)(6436002)(478600001)(71200400001)(71190400001)(99286004)(11346002)(476003)(6916009)(74316002)(256004)(14444005)(64756008)(66556008)(7696005)(86362001)(66446008)(4326008)(33656002)(2906002)(6116002)(5660300002)(52536014)(316002)(3846002)(76176011)(66946007)(66476007)(76116006)(81156014)(14454004)(66066001)(6246003)(6506007)(8676002)(53546011)(81166006)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3109;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: TuXPZBfxTiTDv8a49DzMvI7FQMXvSywz9goGAnL3gQ+2SmtV7+ulK9vb3vo/NiC4PX89WJGLTzse0RUn5PjsvvAMIS3wlZn85wFKw8iuEN75ch/+IcAx0luNbWRaRsZcLXinrwcG2+MyR9PQFjeFYaBB7H+XSGiuaJxntYiUpnokONM9yzFLcDdD7/58ZNaMGUFsxcmL0Xwjfqe9Vkba9rlWcfZljcJ3zQdkrUzNAPHXBuNq+FGKgJRbjPOqlDIqvqGUwcbb+7sPO07qhA0MW3dO7i4RcccewE2hH0dy0iehvVYFZp250Ho7otgQq+cr1YU9uB63z2iOd9fT+F6PLThd0dQaAsnPGlL7JyPKIcBdewXz1pgJWr8ox1K/A6eklYo1rK4jvtLSmzXjQkqSRQvwgXIKBd99BvBusfXzD3c=
-x-ms-exchange-transport-forked: True
+        id S1726687AbfJAS6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 14:58:46 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:36801 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726413AbfJAS6q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 14:58:46 -0400
+Received: by mail-wr1-f44.google.com with SMTP id y19so16814884wrd.3
+        for <linux-usb@vger.kernel.org>; Tue, 01 Oct 2019 11:58:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=JwaxlQNGcZAITN25s0L0uK8zyJ2KeNjAHv/bGu+ED1c=;
+        b=PA3LExfDMseIfosHWjzA3gvLHYsjtx6z/ftog3UNVRTLmIIOV4iWtWW9VYgGqUOneA
+         kAVXsVjKFkE6IT/vaubMDjKUukie8bwJbghTntyfJzbJEWW4e0Hc93InT5TT54BjqIjD
+         OQp9R6e3x0+TjiBg64YY0i6ZtYvWOurBs/BHOFX+qFL6CvCs3htpzmGjzRVhzMXWWhCp
+         9aZPjrS85F5eyBzpCcDjMKCsSctA7lgV83oshAwoxwOyvpdvsZDIn0nlfETsRYhjbW4N
+         N+HQOOIuJjSq8Nttc78WQiXNFHkxbbd/e2doO/tdm3aG0LEUKg9vqHVMSXO33+RYW4VE
+         6fNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:content-transfer-encoding;
+        bh=JwaxlQNGcZAITN25s0L0uK8zyJ2KeNjAHv/bGu+ED1c=;
+        b=mupiZbJKbnodNXF+fhJdJppqkYEjzSbGi9J15vMe65Q/y+EuPt/6ukbTa8BHraZoky
+         CxV5jpwdhp7XQ+6lpRw5/dfUe159MrM0F4UMzBKob+oUkg8GmCFcUwJfSKj4m1R9JE0G
+         r3WOK0L1iqJ1E8VbhMMXEjA8TuIHni2iSpdUmnmwwacNI2MJszGB5hD6NXRhwknDteQv
+         BtDsjWq79SZb1PYOowrwNhFRRsRqZoVAsuepNpDrBxemDQqWDlhwnY3HLpV9U87SzApW
+         ZWee3zAU0HOSL90ntCsvRhrJDoHYm58QvW0wKtRYN+82piMaKcdPAE7FEOMsXJo7K+M6
+         iH0w==
+X-Gm-Message-State: APjAAAU+BSEHZe1zj8SmpDpCwVnmUZKviCgwMF9Kug1o0x+69/oisOYn
+        0EzB4AobDd7rEUv3rSWXC+Z81ZoPZ2X1Tpz2WOTpqLUt9HpzE/Rx0/sAfqBGERBpuI9yPBTuRiF
+        a8DNmAIPiYMPZZSNZonAJ58F2Ut5AmA==
+X-Google-Smtp-Source: APXvYqww7V8qMX9e8z9iUHME+iJNUagPDZS+tf9XYPcFKmJtpj3Lmv9CQSreq/R+LRATJ6c/nSuMX60R47pCUMI4Clo=
+X-Received: by 2002:a5d:684a:: with SMTP id o10mr18654913wrw.23.1569956321550;
+ Tue, 01 Oct 2019 11:58:41 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69708d2b-b9ff-4b07-aa1b-08d7469e443d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Oct 2019 18:36:25.7634
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S4xOt6E0OcHtRxqiKcZw8/c2EiF6RvkjJeVZr3n71RLcEPyDh0rRpr4Fn0e2xjtI3mva1cImMdCVzxTZ6EaQ0g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3109
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
+References: <CAJ+vNU1UX-aaPVAnESgzyOx7chBFHPSDun0_4=Do4tjXZabhMg@mail.gmail.com>
+In-Reply-To: <CAJ+vNU1UX-aaPVAnESgzyOx7chBFHPSDun0_4=Do4tjXZabhMg@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 1 Oct 2019 11:58:26 -0700
+Message-ID: <CAJ+vNU1UdhbPSMZBOeW3XXBkALdNP8_Rk8T=bzeR9KpdqKC8VQ@mail.gmail.com>
+Subject: Re: PureThermal2 UVC video camera: Failed to submit URB 0 (-28)
+To:     linux-media <linux-media@vger.kernel.org>,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1569954989; bh=7eVnl57FKI3qHbWTkALBCKuosAxIQ3dT2jgpDOMQJz0=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=oVoTkGdPTMzKMrtZw84RAUipbBrI4RS54f1GvQoFc/J7QJshU3nTif8sqONna3gUv
-         OUXJn9ZlIyf3r0FSEPAeTdF35px/iQYWIKRSw7l8yqQaIXAUB/AestKAVhKXczUWg+
-         GWjUdl6kP5ZIuo0rWClEJt+im16WoRB10S7ZkaBPpG0HkF4+6QQ3RENFzELAbkWsV6
-         /53K79FLWUtdfCllrIhIjM155Tb/LI92VJMFr+O2CQFNjVvnlJICcvgw88+bHAL3Dq
-         9iWMUNrwRoHsPn925t4gXPRP43jkL/SSKtPKmu+/ZZiG89RxkUTCtsT2rA7nVL57de
-         J2t/GARxPJCXg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki
+On Thu, Sep 26, 2019 at 3:47 PM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> Greetings,
+>
+> I'm running into an issue with a USB UVC Full speed camera, the
+> PureThermal2 [1] on an IMX6 based ARM board.
+>
+> What I find is that I get two video devices registered (the first one
+> is the expected device, and I'm not clear what the 2nd one is). When I
+> try to capture a single frame I get 'Failed to submit URB 0 (-28)'
+> which historically has been due to a bandwidth issue. I encounter this
+> on the IMX6 EHCI host as well as the OTG host when no other devices
+> are connected (no hubs either). I've tested with both a 4.20 kernel
+> and a 5.3 kernel.
+>
+> If I plug this device into another board I have based on an OcteonTX
+> ARM64 cpu with a fairly modern 4.14 kernel and I find that a single
+> video device gets registered and I can capture just fine.
+>
+> Here are some details:
+> lsusb reports: 1e4e:0100 Cubeternet WebCam
+>
+> working system with 4.14 kernel hot-inserting the camera:
+> [  495.163276] usb 1-1.2: new full-speed USB device number 6 using xhci_h=
+cd
+> [  495.291685] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> (1e4e:0100)
+> [  495.300543] input: PureThermal (fw:v1.2.2): PureTh as
+> /devices/platform/soc@0/848000000000.pci/pci0000:00/0000:00:10.0/usb1/1-1=
+/1-1.2/1-1.2:1.0/input/input1
+> [  496.731214] usb 1-1.2: USB disconnect, device number 6
+> [  496.987294] usb 1-1.2: new full-speed USB device number 7 using xhci_h=
+cd
+> [  497.115683] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> (1e4e:0100)
+> [  497.124182] input: PureThermal (fw:v1.2.2): PureTh as
+> /devices/platform/soc@0/848000000000.pci/pci0000:00/0000:00:10.0/usb1/1-1=
+/1-1.2/1-1.2:1.0/input/input2
+> root@bionic-newport:~# for i in $(ls -1d
+> /sys/class/video4linux/video*); do echo $i:$(cat $i/name); done
+> /sys/class/video4linux/video0:PureThermal (fw:v1.2.2): PureTh
+> root@bionic-newport:~# v4l2-ctl --device=3D/dev/video0 --allDriver Info
+> (not using libv4l2):
+> Driver name   : uvcvideo
+> Card type     : PureThermal (fw:v1.2.2): PureTh
+> Bus info      : usb-0000:00:10.0-1.2
+> Driver version: 4.14.4
+> Capabilities  : 0x84200001
+> Video Capture
+> Streaming
+> Extended Pix Format
+> Device Capabilities
+> Device Caps   : 0x04200001
+> Video Capture
+> Streaming
+> Extended Pix Format
+> Priority: 2
+> Video input : 0 (Camera 1: ok)
+> Format Video Capture:
+> Width/Height      : 160/120
+> Pixel Format      : 'UYVY'
+> Field             : None
+> Bytes per Line    : 320
+> Size Image        : 38400
+> Colorspace        : sRGB
+> Transfer Function : Default (maps to sRGB)
+> YCbCr/HSV Encoding: Default (maps to ITU-R 601)
+> Quantization      : Default (maps to Limited Range)
+> Flags             :
+> Crop Capability Video Capture:
+> Bounds      : Left 0, Top 0, Width 160, Height 120
+> Default     : Left 0, Top 0, Width 160, Height 120
+> Pixel Aspect: 1/1
+> Selection: crop_default, Left 0, Top 0, Width 160, Height 120
+> Selection: crop_bounds, Left 0, Top 0, Width 160, Height 120
+> Streaming Parameters Video Capture:
+> Capabilities     : timeperframe
+> Frames per second: 9.000 (9/1)
+> Read buffers     : 0
+>                      brightness 0x00980900 (int)    : min=3D0 max=3D255
+> step=3D1 default=3D128 value=3D128
+>                        contrast 0x00980901 (int)    : min=3D0 max=3D255
+> step=3D1 default=3D128 value=3D128
+> root@bionic-newport:~# v4l2-ctl --device=3D/dev/video0 --stream-mmap
+> --stream-to=3Dx.raw --stream-count=3D1
+> <
+> root@bionic-newport:~# ls -l x.raw
+> -rw-r--r-- 1 root root 38400 Sep 26 22:25 x.raw
+>
+> non-working system with 5.3 kernel hot-inserting the device
+> [   54.252434] usb 2-1: new full-speed USB device number 2 using ci_hdrc
+> [   54.463017] usb 2-1: New USB device found, idVendor=3D1e4e,
+> idProduct=3D0100, bcdDevice=3D 2.00
+> [   54.463097] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, Ser=
+ialNumber=3D3
+> [   54.463114] usb 2-1: Product: PureThermal (fw:v1.2.2)
+> [   54.463130] usb 2-1: Manufacturer: GroupGets
+> [   54.463145] usb 2-1: SerialNumber: 801f001c-5102-3038-3835-39340000000=
+0
+> [   54.470265] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> (1e4e:0100)
+> [   54.480219] uvcvideo 2-1:1.0: Entity type for entity Extension 3
+> was not initialized!
+> [   54.480315] uvcvideo 2-1:1.0: Entity type for entity Processing 2
+> was not initialized!
+> [   54.480342] uvcvideo 2-1:1.0: Entity type for entity Extension 4
+> was not initialized!
+> [   54.480366] uvcvideo 2-1:1.0: Entity type for entity Extension 5
+> was not initialized!
+> [   54.480388] uvcvideo 2-1:1.0: Entity type for entity Extension 6
+> was not initialized!
+> [   54.480409] uvcvideo 2-1:1.0: Entity type for entity Extension 7
+> was not initialized!
+> [   54.480431] uvcvideo 2-1:1.0: Entity type for entity Extension 21
+> was not initialized!
+> [   54.480452] uvcvideo 2-1:1.0: Entity type for entity Extension 254
+> was not initialized!
+> [   54.480473] uvcvideo 2-1:1.0: Entity type for entity Camera 1 was
+> not initialized!
+> [   54.481802] input: PureThermal (fw:v1.2.2): PureTh as
+> /devices/soc0/soc/2100000.aips-bus/2184200.usb/ci_hdrc.1/usb2/2-1/2-1:1.0=
+/input/input1
+> [   55.733320] usb 2-1: USB disconnect, device number 2
+> [   56.252329] usb 2-1: new full-speed USB device number 3 using ci_hdrc
+> [   56.462977] usb 2-1: New USB device found, idVendor=3D1e4e,
+> idProduct=3D0100, bcdDevice=3D 2.00
+> [   56.462998] usb 2-1: New USB device strings: Mfr=3D1, Product=3D2, Ser=
+ialNumber=3D3
+> [   56.463015] usb 2-1: Product: PureThermal (fw:v1.2.2)
+> [   56.463030] usb 2-1: Manufacturer: GroupGets
+> [   56.463044] usb 2-1: SerialNumber: 801f001c-5102-3038-3835-39340000000=
+0
+> [   56.466135] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> (1e4e:0100)
+> [   56.473750] uvcvideo 2-1:1.0: Entity type for entity Extension 3
+> was not initialized!
+> [   56.473784] uvcvideo 2-1:1.0: Entity type for entity Processing 2
+> was not initialized!
+> [   56.473807] uvcvideo 2-1:1.0: Entity type for entity Extension 4
+> was not initialized!
+> [   56.473829] uvcvideo 2-1:1.0: Entity type for entity Extension 5
+> was not initialized!
+> [   56.473851] uvcvideo 2-1:1.0: Entity type for entity Extension 6
+> was not initialized!
+> [   56.473875] uvcvideo 2-1:1.0: Entity type for entity Extension 7
+> was not initialized!
+> [   56.473898] uvcvideo 2-1:1.0: Entity type for entity Extension 21
+> was not initialized!
+> [   56.473919] uvcvideo 2-1:1.0: Entity type for entity Extension 254
+> was not initialized!
+> [   56.473941] uvcvideo 2-1:1.0: Entity type for entity Camera 1 was
+> not initialized!
+> [   56.475097] input: PureThermal (fw:v1.2.2): PureTh as
+> /devices/soc0/soc/2100000.aips-bus/2184200.usb/ci_hdrc.1/usb2/2-1/2-1:1.0=
+/input/input2
+> root@bionic-armhf:~# for i in $(ls -1d /sys/class/video4linux/video*);
+> do echo $i:$(cat $i/name); done
+> /sys/class/video4linux/video0:ipu1_csi0 capture
+> /sys/class/video4linux/video1:ipu1_ic_prpenc capture
+> /sys/class/video4linux/video10:PureThermal (fw:v1.2.2): PureTh
+> /sys/class/video4linux/video2:ipu1_ic_prpvf capture
+> /sys/class/video4linux/video3:ipu1_csi1 capture
+> /sys/class/video4linux/video4:ipu2_csi0 capture
+> /sys/class/video4linux/video5:ipu2_ic_prpenc capture
+> /sys/class/video4linux/video6:ipu2_ic_prpvf capture
+> /sys/class/video4linux/video7:ipu2_csi1 capture
+> /sys/class/video4linux/video8:ipu_ic_pp csc/scaler
+> /sys/class/video4linux/video9:PureThermal (fw:v1.2.2): PureTh
+> ^^^^ why 2 video devices for this camera when the working system only had=
+ 1?
+> root@bionic-armhf:~# v4l2-ctl --device=3D/dev/video9 --all
+> Driver Info (not using libv4l2):
+> Driver name   : uvcvideo
+> Card type     : PureThermal (fw:v1.2.2): PureTh
+> Bus info      : usb-ci_hdrc.1-1
+> Driver version: 5.3.0
+> Capabilities  : 0x84A00001
+> Video Capture
+> Metadata Capture
+> Streaming
+> Extended Pix Format
+> Device Capabilities
+> Device Caps   : 0x04200001
+> Video Capture
+> Streaming
+> Extended Pix Format
+> Priority: 2
+> Video input : 0 (Camera 1: ok)
+> Format Video Capture:
+> Width/Height      : 160/120
+> Pixel Format      : 'UYVY'
+> Field             : None
+> Bytes per Line    : 320
+> Size Image        : 38400
+> Colorspace        : sRGB
+> Transfer Function : Default (maps to sRGB)
+> YCbCr/HSV Encoding: Default (maps to ITU-R 601)
+> Quantization      : Default (maps to Limited Range)
+> Flags             :
+> Crop Capability Video Capture:
+> Bounds      : Left 0, Top 0, Width 160, Height 120
+> Default     : Left 0, Top 0, Width 160, Height 120
+> Pixel Aspect: 1/1
+> Selection: crop_default, Left 0, Top 0, Width 160, Height 120
+> Selection: crop_bounds, Left 0, Top 0, Width 160, Height 120
+> Streaming Parameters Video Capture:
+> Capabilities     : timeperframe
+> Frames per second: 9.000 (9/1)
+> Read buffers     : 0
+>                      brightness 0x00980900 (int)    : min=3D0 max=3D255
+> step=3D1 default=3D128 value=3D128
+>                        contrast 0x00980901 (int)    : min=3D0 max=3D255
+> step=3D1 default=3D128 value=3D128
+> root@bionic-armhf:~# v4l2-ctl --device=3D/dev/video9 --stream-mmap
+> --stream-to=3Dx.raw --stream-count=3D1
+> [  134.601561] uvcvideo: Failed to submit URB 0 (-28).
+> VIDIOC_STREAMON: failed: No space left on device
+> ^^^ the issue
+> root@bionic-armhf:~# v4l2-ctl --device=3D/dev/video10 --all
+> Driver Info (not using libv4l2):
+> Driver name   : uvcvideo
+> Card type     : PureThermal (fw:v1.2.2): PureTh
+> Bus info      : usb-ci_hdrc.1-1
+> Driver version: 5.3.0
+> Capabilities  : 0x84A00001
+> Video Capture
+> Metadata Capture
+> Streaming
+> Extended Pix Format
+> Device Capabilities
+> Device Caps   : 0x04A00000
+> Metadata Capture
+> Streaming
+> Extended Pix Format
+> Priority: 2
+> root@bionic-armhf:~# v4l2-ctl --device=3D/dev/video10 --stream-mmap
+> --stream-to=3Dx.raw --stream-count=3D1
+> unsupported stream type
+> ^^^ no idea what this 2nd video device is
+>
+> I'm also not clear why the device enumerates then disconnects and
+> enumerates again when plugged in but this happens on the system it
+> works on as well and I've seen similar things with other devices.
+>
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Thursday, September 26, 2019 3:07 AM
-> To: Ajay Gupta <ajayg@nvidia.com>
-> Cc: linux-usb@vger.kernel.org
-> Subject: [PATCH 00/14] usb: typec: UCSI driver overhaul
->=20
-> Hi Ajay,
->=20
-> Here's the pretty much complete rewrite of the I/O handling that I was
-> talking about. The first seven patches are not actually related to
-> this stuff, but I'm including them here because the rest of the series
-> is made on top of them. I'm including also that fix patch I send you
-> earlier.
->=20
-> After this it should be easier to handle quirks. My idea how to handle
-> the multi-instance connector alt modes is that we "emulate" the PPM in
-> ucsi_ccg.c in order to handle them, so ucsi.c is not touched at all.
->=20
-> We can now get the connector alternate modes that the actual
-> controller supplies during probe - before registering the ucsi
-> interface=20
-How can ucsi_ccg.c get the connector alternate modes before
-registering ucsi interface? PPM reset, notification enable, etc.=20
-is done during ucsi registration. UCSI spec says:
-" The only commands the PPM is required to process in the=20
-"PPM Idle (Notifications Disabled)" state are=20
-SET_NOTIFICATION_ENABLE and PPM_RESE"
+I have found that if I enumerate the camera through a PCIe based XHCI
+host controller it still registers the 2 v4l2 devices but in this case
+I can capture fine. So it would appear that this has something to do
+with the IMX6 ci_hdrc controller. The -ENOSPC is getting returned from
+drivers/usb/host/ehci-sched.c:iso_stream_schedule()
 
-Also, it doesn't look correct if ucsi_ccg.c has to replicate most=20
-of the stuff done in ucsi_init() of ucsi.c.
+I feel perhaps this is something basic I don't understand regarding
+USB URB scheduling but I don't get why it occurs on the IMX6 ci_hdrc
+controller on not an XHCI controller.
 
-Thanks
-> nvpublic
-> - and squash all alt modes with the same SVID into one that
-> we supply to the ucsi.c when ever it sends GET_ALTERNATE_MODES
-> command. Also other alt mode commands like SET_NEW_CAM can have
-> special processing in ucsi_ccg.c and ucsi_ccg.c alone. There should
-> not be any problem with that anymore.
->=20
-> thanks,
->=20
-> Heikki Krogerus (14):
->   usb: typec: Copy everything from struct typec_capability during
->     registration
->   usb: typec: Introduce typec_get_drvdata()
->   usb: typec: Separate the operations vector
->   usb: typec: tcpm: Start using struct typec_operations
->   usb: typec: tps6598x: Start using struct typec_operations
->   usb: typec: ucsi: Start using struct typec_operations
->   usb: typec: Remove the callback members from struct typec_capability
->   usb: typec: ucsi: ccg: Remove run_isr flag
->   usb: typec: ucsi: Simplified interface registration and I/O API
->   usb: typec: ucsi: acpi: Move to the new API
->   usb: typec: ucsi: ccg: Move to the new API
->   usb: typec: ucsi: Remove the old API
->   usb: typec: ucsi: Remove struct ucsi_control
->   usb: typec: ucsi: Remove all bit-fields
->=20
->  drivers/usb/typec/class.c            | 125 +++---
->  drivers/usb/typec/tcpm/tcpm.c        |  47 +--
->  drivers/usb/typec/tps6598x.c         |  49 +--
->  drivers/usb/typec/ucsi/displayport.c |  26 +-
->  drivers/usb/typec/ucsi/trace.c       |  11 -
->  drivers/usb/typec/ucsi/trace.h       |  79 +---
->  drivers/usb/typec/ucsi/ucsi.c        | 592 ++++++++++++++-------------
->  drivers/usb/typec/ucsi/ucsi.h        | 410 +++++++------------
->  drivers/usb/typec/ucsi/ucsi_acpi.c   |  96 ++++-
->  drivers/usb/typec/ucsi/ucsi_ccg.c    | 214 ++++------
->  include/linux/usb/typec.h            |  38 +-
->  11 files changed, 785 insertions(+), 902 deletions(-)
->=20
-> --
-> 2.23.0
+Regards,
 
+Tim
+
+--=20
+
+
+CONFIDENTIALITY NOTICE: This email constitutes an electronic=20
+communication within the meaning of the Electronic Communications Privacy=
+=20
+Act, 18 U.S.C. 2510, and its disclosure is strictly limited to the named=20
+recipient(s) intended by the sender of this message. This email, and any=20
+attachments, may contain confidential and/or proprietary information. If=20
+you are not a named recipient, any copying, using, disclosing or=20
+distributing to others the information in this email and attachments is=20
+STRICTLY PROHIBITED. If you have received this email in error, please=20
+notify the sender immediately and permanently delete the email, any=20
+attachments, and all copies thereof from any drives or storage media and=20
+destroy any printouts or hard copies of the email and attachments.
+
+=C2=A0
+
+
+EXPORT COMPLIANCE NOTICE: This email and any attachments may contain=20
+technical data subject to U.S export restrictions under the International=
+=20
+Traffic in Arms Regulations (ITAR) or the Export Administration Regulations=
+=20
+(EAR). Export or transfer of this technical data and/or related information=
+=20
+to any foreign person(s) or entity(ies), either within the U.S. or outside=
+=20
+of the U.S., may require advance export authorization by the appropriate=20
+U.S. Government agency prior to export or transfer. In addition, technical=
+=20
+data may not be exported or transferred to certain countries or specified=
+=20
+designated nationals identified by U.S. embargo controls without prior=20
+export authorization. By accepting this email and any attachments, all=20
+recipients confirm that they understand and will comply with all applicable=
+=20
+ITAR, EAR and embargo compliance requirements.
