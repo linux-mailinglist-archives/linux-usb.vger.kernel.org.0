@@ -2,113 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13447C3816
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 16:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55385C385A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 16:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389013AbfJAOx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 10:53:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35820 "EHLO mail.kernel.org"
+        id S2389356AbfJAO64 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 10:58:56 -0400
+Received: from mga05.intel.com ([192.55.52.43]:32208 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727143AbfJAOx6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 10:53:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81C1220815;
-        Tue,  1 Oct 2019 14:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569941637;
-        bh=ZZ63NgRB4la/JntiVLUk4sSc2uMP4usvtqmHwu3XxTs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oiJasVlV/zy+HQBB3apaVUeS88GLzmWZf3sELqH6JOyNmq4K7MjVnegmzgtjg/VJA
-         S4oyDx7A4/DF7rZt9NET7tydhgIkY0UlbdfKqHHL8nkFrL8izKLBWf3MKvMtpgVqcX
-         yO2oZq61V2mJrj8OmQqiGAZE7tXg9fIaa8964USI=
-Date:   Tue, 1 Oct 2019 16:53:54 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mario.Limonciello@dell.com,
-        Anthony Wong <anthony.wong@canonical.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191001145354.GA3366714@kroah.com>
+        id S1727194AbfJAO6z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 10:58:55 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 07:58:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
+   d="scan'208";a="205077193"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 07:58:51 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 17:58:50 +0300
+Date:   Tue, 1 Oct 2019 17:58:50 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario.Limonciello@dell.com
+Cc:     linux-usb@vger.kernel.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        rajmohan.mani@intel.com,
+        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        anthony.wong@canonical.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 22/22] thunderbolt: Do not start firmware unless
+ asked by the user
+Message-ID: <20191001145850.GZ2714@lahna.fi.intel.com>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <20191001124748.GH2954373@kroah.com>
- <20191001130905.GO2714@lahna.fi.intel.com>
+ <20191001113830.13028-23-mika.westerberg@linux.intel.com>
+ <10cccc5a8d1a43fd9769ab6c4b53aeba@AUSX13MPC105.AMER.DELL.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191001130905.GO2714@lahna.fi.intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <10cccc5a8d1a43fd9769ab6c4b53aeba@AUSX13MPC105.AMER.DELL.COM>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 04:09:05PM +0300, Mika Westerberg wrote:
-> On Tue, Oct 01, 2019 at 02:47:48PM +0200, Greg Kroah-Hartman wrote:
-> > > -	  Thunderbolt Controller driver. This driver is required if you
-> > > -	  want to hotplug Thunderbolt devices on Apple hardware or on PCs
-> > > -	  with Intel Falcon Ridge or newer.
-> > > +	  USB4 (Thunderbolt) driver. USB4 is the public spec based on
-> > > +	  Thunderbolt 3 protocol. This driver is required if you want to
-> > > +	  hotplug Thunderbolt and USB4 compliant devices on Apple
-> > > +	  hardware or on PCs with Intel Falcon Ridge or newer.
+On Tue, Oct 01, 2019 at 02:43:15PM +0000, Mario.Limonciello@dell.com wrote:
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Tuesday, October 1, 2019 6:39 AM
+> > To: linux-usb@vger.kernel.org
+> > Cc: Andreas Noever; Michael Jamet; Mika Westerberg; Yehezkel Bernat; Rajmohan
+> > Mani; Nicholas Johnson; Lukas Wunner; Greg Kroah-Hartman; Alan Stern;
+> > Limonciello, Mario; Anthony Wong; linux-kernel@vger.kernel.org
+> > Subject: [RFC PATCH 22/22] thunderbolt: Do not start firmware unless asked by the
+> > user
 > > 
-> > Wait, did "old" thunderbolt just get re-branded as USB4?
+> > 
+> > [EXTERNAL EMAIL]
+> > 
+> > Since now we can do pretty much the same thing in the software
+> > connection manager than the firmware would do, there is no point
+> > starting it by default. Instead we can just continue using the software
+> > connection manager.
+> > 
+> > Make it possible for user to switch between the two by adding a module
+> > pararameter (start_icm) which is by default false. Having this ability
+> > to enable the firmware may be useful at least when debugging possible
+> > issues with the software connection manager implementation.
 > 
-> Not but the driver started supporting USB4 as well :)
-> 
-> USB4 is pretty much public spec of Thunderbolt 3 but with some
-> differences in register layouts (this is because Thunderbolt uses some
-> vendor specific capabilities which are now moved to more "standard"
-> places). 
+> If the host system firmware didn't start the ICM, does that mean SW connection
+> manager would just take over even on systems with discrete AR/TR controllers?
 
-Ok, then we need to rename the Kconfig option as well, otherwise no one
-will "know" that this changed, so they will not be prompted for it.
+Yes. This is pretty much the case with Apple systems now.
 
-> > Because if I have an "old" laptop that needs Thunderbolt support, how am
-> > I going to know it is now called USB4 instead?
+> > 
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > ---
+> >  drivers/thunderbolt/icm.c | 14 +++++++++++---
+> >  drivers/thunderbolt/tb.c  |  4 ----
+> >  2 files changed, 11 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+> > index 9c9c6ea2b790..c4a2de0f2a44 100644
+> > --- a/drivers/thunderbolt/icm.c
+> > +++ b/drivers/thunderbolt/icm.c
+> > @@ -11,6 +11,7 @@
+> > 
+> >  #include <linux/delay.h>
+> >  #include <linux/mutex.h>
+> > +#include <linux/moduleparam.h>
+> >  #include <linux/pci.h>
+> >  #include <linux/pm_runtime.h>
+> >  #include <linux/platform_data/x86/apple.h>
+> > @@ -43,6 +44,10 @@
+> >  #define ICM_APPROVE_TIMEOUT		10000	/* ms */
+> >  #define ICM_MAX_LINK			4
+> > 
+> > +static bool start_icm;
+> > +module_param(start_icm, bool, 0444);
+> > +MODULE_PARM_DESC(start_icm, "start ICM firmware if it is not running (default:
+> > false)");
+> > +
+> >  /**
+> >   * struct icm - Internal connection manager private data
+> >   * @request_lock: Makes sure only one message is send to ICM at time
+> > @@ -1353,13 +1358,16 @@ static bool icm_ar_is_supported(struct tb *tb)
+> >  {
+> >  	struct pci_dev *upstream_port;
+> >  	struct icm *icm = tb_priv(tb);
+> > +	u32 val;
+> > 
+> >  	/*
+> >  	 * Starting from Alpine Ridge we can use ICM on Apple machines
+> >  	 * as well. We just need to reset and re-enable it first.
 > 
-> Well the Kconfig option tries to have both names there:
-> 
->   tristate "USB4 (Thunderbolt) support"
-> 
-> and then
-> 
->   USB4 (Thunderbolt) driver. USB4 is the public spec based on
->   Thunderbolt 3 protocol. This driver is required if you want to hotplug
->   Thunderbolt and USB4 compliant devices on Apple hardware or on PCs
->   with Intel Falcon Ridge or newer.
-> 
-> and the Kconfig option is still CONFIG_THUNDERBOLT. I know this is
-> confusing but I don't have better ideas how we can advertise both. I
-> borrowed this "format" from firewire.
+> This comment doesn't really seem as relevant anymore.  The meaning of it
+> has nothing to do with Apple anymore.
 
-CONFIG_USB4 instead?
+Actually it is still relevant. For USB4 the intent is to have FW/SW CM
+switch in ACPI spec instead. But that is still under discussion.
 
-> > Shouldn't there just be a new USB4 option that only enables/builds the
-> > USB4 stuff if selected?  Why would I want all of this additional code on
-> > my old system if it's not going to do anything at all?
+> > +	 * However, only start it if explicitly asked by the user.
+> >  	 */
+> > -	if (!x86_apple_machine)
+> > -		return true;
+> > +	val = ioread32(tb->nhi->iobase + REG_FW_STS);
+> > +	if (!(val & REG_FW_STS_ICM_EN) && !start_icm)
+> > +		return false;
 > 
-> USB4 devices are backward compatible with Thunderbolt 3 so you should be
-> able to plug in USB4 device to your old Thunderbolt 3 laptop for
-> example. It goes the other way as well. Some things are optional but for
-> example USB4 hubs must support also Thunderbolt 3.
+> This code is already in icm_firmware_start.  Maybe split it to a small function
+> So you can just have the more readable
 > 
-> Does that clarify?
+> If (!icm_firmware_running(tb) && !start_icm))
 
-Yes, it does, looks like marketing just renamed an old functioning
-system into a "brand new one!" :)
-
-thanks,
-
-greg k-h
+Good point. I'll do that.
