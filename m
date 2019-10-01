@@ -2,63 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 672A7C30D7
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 12:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D156EC30F3
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 12:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729190AbfJAKCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 06:02:51 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:52323 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727361AbfJAKCu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 06:02:50 -0400
-Received: from webmail.gandi.net (webmail21.sd4.0x35.net [10.200.201.21])
-        (Authenticated sender: brun@services-courriers.online)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPA id 8816A1BF215;
-        Tue,  1 Oct 2019 10:02:42 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-Date:   Tue, 01 Oct 2019 11:02:42 +0100
-From:   HUREL Vincent <brun@services-courriers.online>
-To:     brun@services-courriers.online
-Subject: TRADING  ACCOUNT
-Organization: ABB FRANCE
-Reply-To: hurelvincent@newabb-fr.com
-Mail-Reply-To: hurelvincent@newabb-fr.com
-Message-ID: <f747869756b08fe7fa97b495a4f1bd4c@services-courriers.online>
-X-Sender: brun@services-courriers.online
-User-Agent: Roundcube Webmail/1.3.8
+        id S1730223AbfJAKKg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 06:10:36 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:61186 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726138AbfJAKKg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 06:10:36 -0400
+X-IronPort-AV: E=Sophos;i="5.64,570,1559487600"; 
+   d="scan'208";a="28007370"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 01 Oct 2019 19:10:34 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id D3A1541F2F61;
+        Tue,  1 Oct 2019 19:10:33 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, stable@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH 0/2] usb: renesas_usbhs: gadget: fix for g_mass_storage
+Date:   Tue,  1 Oct 2019 19:10:31 +0900
+Message-Id: <1569924633-322-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear sir ,
+This patch series is based on the latest Greg's usb.git / usb-linus
+branch.
 
-I am M HUREL Vincent , purchasing and sales manager of ABB FRANCE . Our 
-Company specialised in Supplying computer hardware and Electronic . We 
-want to extend our supplier list because of concurrency in prices on the 
-international market . We are seeking a supplier with whom we can to 
-have  partnered long-term in order to have competitive prices .we are 
-interested to buy the products you sell and want to place an order with 
-you in big quantities.
-Can you give us payment facilities ( 14 , 30 or 60 days payment terms ) 
-?
-Could you inform us of the steps to follow to open an account with you ?
+Yoshihiro Shimoda (2):
+  usb: renesas_usbhs: gadget: Do not discard queues in
+    usb_ep_set_{halt,wedge}()
+  usb: renesas_usbhs: gadget: Fix usb_ep_set_{halt,wedge}() behavior
 
-Waiting your feedback
+ drivers/usb/renesas_usbhs/common.h     |  1 +
+ drivers/usb/renesas_usbhs/fifo.c       |  2 +-
+ drivers/usb/renesas_usbhs/fifo.h       |  1 +
+ drivers/usb/renesas_usbhs/mod_gadget.c | 18 +++++++++++++++---
+ drivers/usb/renesas_usbhs/pipe.c       | 15 +++++++++++++++
+ drivers/usb/renesas_usbhs/pipe.h       |  1 +
+ 6 files changed, 34 insertions(+), 4 deletions(-)
 
-Cordially
+-- 
+2.7.4
 
-M HUREL Vincent
-
-ABB FRANCE
-5 BOULEVARD D OSNY
-95800 Cergy
-REG N° 335 146 312
-VAT N° FR 95 335146312
-TEL +33183777972
-TEL D : +33756981277
-FAX +33143381547
-https://new.abb.com
