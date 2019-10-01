@@ -2,58 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8169C40F6
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 21:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC29C41AD
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 22:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfJATVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 15:21:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48988 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726046AbfJATVb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 15:21:31 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8B8A22133F;
-        Tue,  1 Oct 2019 19:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569957691;
-        bh=RvPcjkqM5b2a6CVQHXIlLz6KOitP1BK/6MO4s0dLGZc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pg56kXFZDvZ2UFF8/Q9cdu6eaCwbhHHF0vmLonJpPSelP68EsueUz4iYSsHv+SD1B
-         4VGBw/C6FC6ysVLUxLEhfuDea8WRbZjfBv662puEHUg439Ev0NMW2kxuxBVKXu/7aC
-         /hjecLhVJty2Gk3wF9fglDAKXR/7JjYQxJJ33Jvo=
-Date:   Tue, 1 Oct 2019 21:21:28 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: PureThermal2 UVC video camera: Failed to submit URB 0 (-28)
-Message-ID: <20191001192128.GA3962873@kroah.com>
-References: <CAJ+vNU1UX-aaPVAnESgzyOx7chBFHPSDun0_4=Do4tjXZabhMg@mail.gmail.com>
- <CAJ+vNU1UdhbPSMZBOeW3XXBkALdNP8_Rk8T=bzeR9KpdqKC8VQ@mail.gmail.com>
+        id S1727010AbfJAUSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 16:18:55 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:49194 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725851AbfJAUSz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 16:18:55 -0400
+Received: (qmail 8138 invoked by uid 2102); 1 Oct 2019 16:18:54 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 1 Oct 2019 16:18:54 -0400
+Date:   Tue, 1 Oct 2019 16:18:54 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
+cc:     linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH 1/2] media: usbvision: Fix invalid accesses after device
+ disconnect
+Message-ID: <Pine.LNX.4.44L0.1910011611300.1991-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJ+vNU1UdhbPSMZBOeW3XXBkALdNP8_Rk8T=bzeR9KpdqKC8VQ@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 11:58:26AM -0700, Tim Harvey wrote:
-> CONFIDENTIALITY NOTICE: This email constitutes an electronic 
-> communication within the meaning of the Electronic Communications Privacy 
-> Act, 18 U.S.C. 2510, and its disclosure is strictly limited to the named 
-> recipient(s) intended by the sender of this message. This email, and any 
-> attachments, may contain confidential and/or proprietary information. If 
-> you are not a named recipient, any copying, using, disclosing or 
-> distributing to others the information in this email and attachments is 
-> STRICTLY PROHIBITED. If you have received this email in error, please 
-> notify the sender immediately and permanently delete the email, any 
-> attachments, and all copies thereof from any drives or storage media and 
-> destroy any printouts or hard copies of the email and attachments.
+The syzbot fuzzer found two invalid-access bugs in the usbvision
+driver.  These bugs occur when userspace keeps the device file open
+after the device has been disconnected and usbvision_disconnect() has
+set usbvision->dev to NULL:
 
-Now destroyed.  Footers like this are one way to not get a response on a
-public mailing list :(
+	When the device file is closed, usbvision_radio_close() tries
+	to issue a usb_set_interface() call, passing the NULL pointer
+	as its first argument.
+
+	If userspace performs a querycap ioctl call, vidioc_querycap()
+	calls usb_make_path() with the same NULL pointer.
+
+This patch fixes the problems by making the appropriate tests
+beforehand.  Note that vidioc_querycap() is protected by
+usbvision->v4l2_lock, acquired in a higher layer of the V4L2
+subsystem.
+
+Reported-and-tested-by: syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: <stable@vger.kernel.org>
+
+---
+
+[as1919]
+
+ drivers/media/usb/usbvision/usbvision-video.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
++++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+@@ -453,6 +453,9 @@ static int vidioc_querycap(struct file *
+ {
+ 	struct usb_usbvision *usbvision = video_drvdata(file);
+ 
++	if (!usbvision->dev)
++		return -ENODEV;
++
+ 	strscpy(vc->driver, "USBVision", sizeof(vc->driver));
+ 	strscpy(vc->card,
+ 		usbvision_device_data[usbvision->dev_model].model_string,
+@@ -1111,7 +1114,8 @@ static int usbvision_radio_close(struct
+ 	mutex_lock(&usbvision->v4l2_lock);
+ 	/* Set packet size to 0 */
+ 	usbvision->iface_alt = 0;
+-	usb_set_interface(usbvision->dev, usbvision->iface,
++	if (usbvision->dev)
++		usb_set_interface(usbvision->dev, usbvision->iface,
+ 				    usbvision->iface_alt);
+ 
+ 	usbvision_audio_off(usbvision);
+
