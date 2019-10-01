@@ -2,116 +2,254 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 306FCC2E89
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 10:03:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF30C2E9C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 10:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727511AbfJAIDf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 04:03:35 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42735 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726822AbfJAIDe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 04:03:34 -0400
-Received: by mail-lf1-f67.google.com with SMTP id c195so9110891lfg.9;
-        Tue, 01 Oct 2019 01:03:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=phwrmQv3WwVi3axl8RFNHHUxwBXKpIYVAs/RyvL7K3M=;
-        b=NoQHVMErN++xOeDNiRyW0wqEm9IxgWERvdCNJKoqS02tbrP6DHc7yyBvCYVBdOV3qI
-         27poackoPRMH3YiMuTSeti6fSGkm9wLKTfs+7qPoP9rj7oy6+7BvWjaNl5bNyg3YJWvM
-         1h72GJDZ5z5HL6vC2zuNb+rppkGmTjXSgPpxYSNObxICl8ukARcWl+neY2wTjZpX6+F1
-         ZKo/F+H4W7TO0Vk8K5cofGIs5D4+rzBtBCrvKzmzQmaaPvPWGrQydPe4pejAMmbUSNe7
-         HvO0lOlYNn1AEVmzEF7lM2PmIFD4EKKRRqUm7iNNae3KHxUrNnjdcpHBhody7R3sGTA/
-         abmA==
-X-Gm-Message-State: APjAAAXjIrvqhpMtqKkJowKKvqGEZZ3ZR4oaoet7dWW3AfV/rXBDOTNp
-        RIFVrIQgwTLqrnDbzQhO2oQ=
-X-Google-Smtp-Source: APXvYqws4d1Xmv/GKKc/rQTtlW/8USznaOLbdNbNQsOXKMeP9IJWN/zrTnD4rYlPmYv0Zp+X7W1GHg==
-X-Received: by 2002:a19:7605:: with SMTP id c5mr14912654lff.114.1569917012586;
-        Tue, 01 Oct 2019 01:03:32 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id s7sm3848568ljs.16.2019.10.01.01.03.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 01:03:31 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iFD8F-0008OW-Eh; Tue, 01 Oct 2019 10:03:39 +0200
-Date:   Tue, 1 Oct 2019 10:03:39 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Tony Lindgren <tony@atomide.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>,
-        linux-omap@vger.kernel.org, vkoul@kernel.org,
-        Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
-        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
-        giulio.benetti@benettiengineering.com,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: musb: cppi41: broken high speed FTDI functionality when
- connected to musb directly
-Message-ID: <20191001080339.GF13531@localhost>
-References: <CAGm1_kuK6aA1ew9ZY-fVDUE+o71u1QaSg0kfX2jWUWE9Me8Tjg@mail.gmail.com>
- <CAGm1_kuQTtyrdwXAV9NCHnvj3f5d7TixmqCPw=Cxd2A=jKSYmg@mail.gmail.com>
- <20190927151935.GD5610@atomide.com>
- <20190927155738.GF5610@atomide.com>
- <CAGm1_kvvMc848f6f+kg5K2sQ3+NHA-Se7T_pcwQfrB=4GfZM4Q@mail.gmail.com>
- <CAGm1_kvZpYH+NP8JfYJWE2v3E9v+yFs20L8MSKsAjfC_g+GmaQ@mail.gmail.com>
- <CAGm1_ktjndofS_N-qh7GVRuJFG1Jn87rf4D8Lt2XMj=+RrL2aw@mail.gmail.com>
- <20190930145711.GG5610@atomide.com>
- <20190930152330.GH5610@atomide.com>
- <20190930195411.6porqtm7tlokgel3@earth.universe>
+        id S1731695AbfJAIHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 04:07:49 -0400
+Received: from mga06.intel.com ([134.134.136.31]:18682 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726460AbfJAIHt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 04:07:49 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 01:07:48 -0700
+X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
+   d="scan'208";a="190517127"
+Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 01:07:44 -0700
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jani Nikula <jani.nikula@intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <julia.lawall@lip6.fr>
+Subject: [PATCH v3] string-choice: add yesno(), onoff(), enableddisabled(), plural() helpers
+Date:   Tue,  1 Oct 2019 11:07:39 +0300
+Message-Id: <20191001080739.18513-1-jani.nikula@intel.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
+References: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="VS++wcV0S1rZb1Fb"
-Content-Disposition: inline
-In-Reply-To: <20190930195411.6porqtm7tlokgel3@earth.universe>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The kernel has plenty of ternary operators to choose between constant
+strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
+"s":
 
---VS++wcV0S1rZb1Fb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+$ git grep '? "yes" : "no"' | wc -l
+258
+$ git grep '? "on" : "off"' | wc -l
+204
+$ git grep '? "enabled" : "disabled"' | wc -l
+196
+$ git grep '? "" : "s"' | wc -l
+25
 
-On Mon, Sep 30, 2019 at 09:54:11PM +0200, Sebastian Reichel wrote:
-> Hi,
->=20
-> On Mon, Sep 30, 2019 at 08:23:30AM -0700, Tony Lindgren wrote:
+Additionally, there are some occurences of the same in reverse order,
+split to multiple lines, or otherwise not caught by the simple grep.
 
-> > Actually playing with the cppi41 timeout might be more suitable here,
-> > they use the same module clock from what I remember though. So
-> > maybe increase the cppi41 autosuspend_timeout from 100 ms to 500 ms
-> > or higher:
-> >=20
-> > # echo 500 > /sys/bus/platform/drivers/cppi41-dma-engine/47400000.dma-c=
-ontroller/power/autosuspend_delay_ms
-> >=20
-> > If changing the autosuspend_timeout_ms value does not help, then
-> > try setting control to on there.
->=20
-> I did not check the details, but from the cover-letter this might be
-> woth looking into:
->=20
-> https://lore.kernel.org/lkml/20190930161205.18803-1-johan@kernel.org/
+Add helpers to return the constant strings. Remove existing equivalent
+and conflicting functions in i915, cxgb4, and USB core. Further
+conversion can be done incrementally.
 
-No, that one should be unrelated as it would only prevent later suspends af=
-ter
-a driver has been unbound (and rebound).
+While the main goal here is to abstract recurring patterns, and slightly
+clean up the code base by not open coding the ternary operators, there
+are also some space savings to be had via better string constant
+pooling.
 
-Johan
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: Vishal Kulkarni <vishal@chelsio.com>
+Cc: netdev@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: Julia Lawall <julia.lawall@lip6.fr>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> # v1
+Signed-off-by: Jani Nikula <jani.nikula@intel.com>
 
---VS++wcV0S1rZb1Fb
-Content-Type: application/pgp-signature; name="signature.asc"
+---
 
------BEGIN PGP SIGNATURE-----
+v2: add string-choice.[ch] to not clutter kernel.h and to actually save
+space on string constants.
 
-iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCXZMIWAAKCRALxc3C7H1l
-CGT5AQDIHV+XzTRbXywIry2DPN8FKYG1EWxrlad41pMXQnZaSgD+KXt/l3w0CN3Q
-3YmvyZsCjR/8IQk1PFHNAo5SKF0bmQM=
-=yh8c
------END PGP SIGNATURE-----
+v3: back to static inlines based on Rasmus' feedback
 
---VS++wcV0S1rZb1Fb--
+Example of further cleanup possibilities are at [1], to be done
+incrementally afterwards.
+
+[1] http://lore.kernel.org/r/20190903133731.2094-2-jani.nikula@intel.com
+---
+ drivers/gpu/drm/i915/i915_utils.h             | 16 +---------
+ .../ethernet/chelsio/cxgb4/cxgb4_debugfs.c    | 12 +------
+ drivers/usb/core/config.c                     |  6 +---
+ drivers/usb/core/generic.c                    |  6 +---
+ include/linux/string-choice.h                 | 31 +++++++++++++++++++
+ 5 files changed, 35 insertions(+), 36 deletions(-)
+ create mode 100644 include/linux/string-choice.h
+
+diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
+index 562f756da421..794f02a90efe 100644
+--- a/drivers/gpu/drm/i915/i915_utils.h
++++ b/drivers/gpu/drm/i915/i915_utils.h
+@@ -28,6 +28,7 @@
+ #include <linux/list.h>
+ #include <linux/overflow.h>
+ #include <linux/sched.h>
++#include <linux/string-choice.h>
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
+ 
+@@ -395,21 +396,6 @@ wait_remaining_ms_from_jiffies(unsigned long timestamp_jiffies, int to_wait_ms)
+ #define MBps(x) KBps(1000 * (x))
+ #define GBps(x) ((u64)1000 * MBps((x)))
+ 
+-static inline const char *yesno(bool v)
+-{
+-	return v ? "yes" : "no";
+-}
+-
+-static inline const char *onoff(bool v)
+-{
+-	return v ? "on" : "off";
+-}
+-
+-static inline const char *enableddisabled(bool v)
+-{
+-	return v ? "enabled" : "disabled";
+-}
+-
+ static inline void add_taint_for_CI(unsigned int taint)
+ {
+ 	/*
+diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
+index ae6a47dd7dc9..d9123dae1d00 100644
+--- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
++++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
+@@ -35,6 +35,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/debugfs.h>
+ #include <linux/string_helpers.h>
++#include <linux/string-choice.h>
+ #include <linux/sort.h>
+ #include <linux/ctype.h>
+ 
+@@ -2023,17 +2024,6 @@ static const struct file_operations rss_debugfs_fops = {
+ /* RSS Configuration.
+  */
+ 
+-/* Small utility function to return the strings "yes" or "no" if the supplied
+- * argument is non-zero.
+- */
+-static const char *yesno(int x)
+-{
+-	static const char *yes = "yes";
+-	static const char *no = "no";
+-
+-	return x ? yes : no;
+-}
+-
+ static int rss_config_show(struct seq_file *seq, void *v)
+ {
+ 	struct adapter *adapter = seq->private;
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index 151a74a54386..52cee9067eb4 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -10,6 +10,7 @@
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/device.h>
++#include <linux/string-choice.h>
+ #include <asm/byteorder.h>
+ #include "usb.h"
+ 
+@@ -19,11 +20,6 @@
+ #define USB_MAXCONFIG			8	/* Arbitrary limit */
+ 
+ 
+-static inline const char *plural(int n)
+-{
+-	return (n == 1 ? "" : "s");
+-}
+-
+ static int find_next_descriptor(unsigned char *buffer, int size,
+     int dt1, int dt2, int *num_skipped)
+ {
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 38f8b3e31762..a784a09794d6 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -21,14 +21,10 @@
+ 
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
++#include <linux/string-choice.h>
+ #include <uapi/linux/usb/audio.h>
+ #include "usb.h"
+ 
+-static inline const char *plural(int n)
+-{
+-	return (n == 1 ? "" : "s");
+-}
+-
+ static int is_rndis(struct usb_interface_descriptor *desc)
+ {
+ 	return desc->bInterfaceClass == USB_CLASS_COMM
+diff --git a/include/linux/string-choice.h b/include/linux/string-choice.h
+new file mode 100644
+index 000000000000..320b598bd8f0
+--- /dev/null
++++ b/include/linux/string-choice.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: MIT */
++/*
++ * Copyright © 2019 Intel Corporation
++ */
++
++#ifndef __STRING_CHOICE_H__
++#define __STRING_CHOICE_H__
++
++#include <linux/types.h>
++
++static inline const char *yesno(bool v)
++{
++	return v ? "yes" : "no";
++}
++
++static inline const char *onoff(bool v)
++{
++	return v ? "on" : "off";
++}
++
++static inline const char *enableddisabled(bool v)
++{
++	return v ? "enabled" : "disabled";
++}
++
++static inline const char *plural(long v)
++{
++	return v == 1 ? "" : "s";
++}
++
++#endif /* __STRING_CHOICE_H__ */
+-- 
+2.20.1
+
