@@ -2,69 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 019BCC38AB
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 17:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCA0C38C1
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 17:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389488AbfJAPNm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 11:13:42 -0400
-Received: from mga02.intel.com ([134.134.136.20]:60254 "EHLO mga02.intel.com"
+        id S1732232AbfJAPTi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 11:19:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51776 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389129AbfJAPNm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 11:13:42 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 08:13:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="205082435"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 01 Oct 2019 08:13:26 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Oct 2019 18:13:26 +0300
-Date:   Tue, 1 Oct 2019 18:13:26 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario.Limonciello@dell.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, rajmohan.mani@intel.com,
-        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
-        stern@rowland.harvard.edu, anthony.wong@canonical.com,
+        id S1731893AbfJAPTi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 11:19:38 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1B5202133F;
+        Tue,  1 Oct 2019 15:19:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569943177;
+        bh=oPP01wWGd043s57vaWHPnGdkRRNGRk9rhQTfDKdV+wA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VH+T0EKVMsL0HZuofffSGj9XBTKML9DobPL3lwz6J+rst9DASxXpKIblruJyzUSNw
+         cXq9McQ9z1QACt7YSYggYLcrrlhFpgwAnQadnpxIoLr7wEVGPXcji2r/CDGr04mXwR
+         1s+4P3i+AEJOPaxI00MGoLMrHR+jWhFzfECp3y/s=
+Date:   Tue, 1 Oct 2019 17:19:35 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mario.Limonciello@dell.com,
+        Anthony Wong <anthony.wong@canonical.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191001151326.GB2714@lahna.fi.intel.com>
+Message-ID: <20191001151935.GA3450435@kroah.com>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
  <20191001113830.13028-18-mika.westerberg@linux.intel.com>
  <20191001124748.GH2954373@kroah.com>
  <20191001130905.GO2714@lahna.fi.intel.com>
  <20191001145354.GA3366714@kroah.com>
- <924ce4d5862c4d859e238c0e706a3d5b@AUSX13MPC105.AMER.DELL.COM>
+ <20191001150734.GA2714@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <924ce4d5862c4d859e238c0e706a3d5b@AUSX13MPC105.AMER.DELL.COM>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191001150734.GA2714@lahna.fi.intel.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 01, 2019 at 02:59:06PM +0000, Mario.Limonciello@dell.com wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, October 1, 2019 9:54 AM
-> > To: Mika Westerberg
-> > Cc: linux-usb@vger.kernel.org; Andreas Noever; Michael Jamet; Yehezkel Bernat;
-> > Rajmohan Mani; Nicholas Johnson; Lukas Wunner; Alan Stern; Limonciello, Mario;
-> > Anthony Wong; linux-kernel@vger.kernel.org
-> > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-> > 
-> > 
-> > [EXTERNAL EMAIL]
-> > 
+On Tue, Oct 01, 2019 at 06:07:34PM +0300, Mika Westerberg wrote:
+> On Tue, Oct 01, 2019 at 04:53:54PM +0200, Greg Kroah-Hartman wrote:
 > > On Tue, Oct 01, 2019 at 04:09:05PM +0300, Mika Westerberg wrote:
 > > > On Tue, Oct 01, 2019 at 02:47:48PM +0200, Greg Kroah-Hartman wrote:
 > > > > > -	  Thunderbolt Controller driver. This driver is required if you
@@ -74,60 +66,54 @@ On Tue, Oct 01, 2019 at 02:59:06PM +0000, Mario.Limonciello@dell.com wrote:
 > > > > > +	  Thunderbolt 3 protocol. This driver is required if you want to
 > > > > > +	  hotplug Thunderbolt and USB4 compliant devices on Apple
 > > > > > +	  hardware or on PCs with Intel Falcon Ridge or newer.
-> > > >
+> > > > 
 > > > > Wait, did "old" thunderbolt just get re-branded as USB4?
-> > >
+> > > 
 > > > Not but the driver started supporting USB4 as well :)
-> > >
+> > > 
 > > > USB4 is pretty much public spec of Thunderbolt 3 but with some
 > > > differences in register layouts (this is because Thunderbolt uses some
 > > > vendor specific capabilities which are now moved to more "standard"
-> > > places).
+> > > places). 
 > > 
 > > Ok, then we need to rename the Kconfig option as well, otherwise no one
 > > will "know" that this changed, so they will not be prompted for it.
 > > 
 > > > > Because if I have an "old" laptop that needs Thunderbolt support, how am
 > > > > I going to know it is now called USB4 instead?
-> > >
+> > > 
 > > > Well the Kconfig option tries to have both names there:
-> > >
+> > > 
 > > >   tristate "USB4 (Thunderbolt) support"
-> > >
+> > > 
 > > > and then
-> > >
+> > > 
 > > >   USB4 (Thunderbolt) driver. USB4 is the public spec based on
 > > >   Thunderbolt 3 protocol. This driver is required if you want to hotplug
 > > >   Thunderbolt and USB4 compliant devices on Apple hardware or on PCs
 > > >   with Intel Falcon Ridge or newer.
-> > >
+> > > 
 > > > and the Kconfig option is still CONFIG_THUNDERBOLT. I know this is
 > > > confusing but I don't have better ideas how we can advertise both. I
 > > > borrowed this "format" from firewire.
 > > 
 > > CONFIG_USB4 instead?
 > 
-> How about CONFIG_USB4_PCIE?
-> 
-> I think that will help align that certain aspects of USB4 can be built optionally.
+> OK, but does that break existing .configs? I mean if you have already
+> CONFIG_THUNDERBOLT in your .config/defconfig does it now just get
+> dropped silently?
 
-But this is not about PCIe - it is just one type of a tunnel that is
-optional with USB4.
+Yup.  And then you get asked about CONFIG_USB4
 
-> > > > Shouldn't there just be a new USB4 option that only enables/builds the
-> > > > USB4 stuff if selected?  Why would I want all of this additional code on
-> > > > my old system if it's not going to do anything at all?
-> > >
-> > > USB4 devices are backward compatible with Thunderbolt 3 so you should be
-> > > able to plug in USB4 device to your old Thunderbolt 3 laptop for
-> > > example. It goes the other way as well. Some things are optional but for
-> > > example USB4 hubs must support also Thunderbolt 3.
-> > >
-> 
-> If PCIe tunnels are an optional feature in USB4, how can it be mandatory to support
-> Thunderbolt 3?
+> For example firewire has CONFIG_FIREWIRE even though the "standard" name
+> is IEEE 1394. I was thinking maybe we can do the same for
+> USB4/Thunderbolt?
 
-It is mandatory for USB4 hubs. For peripheral devices and hosts
-Thunderbolt 3 support is optional. So for example you could have USB4
-host that does not enter Thunderbolt 3 alternate mode at all so it only
-supports USB4 devices.
+It comes down to the what do you want to do for the next 20+ years,
+explain to people that "to get USB4 support, enable CONFIG_THUNDERBOLT"?
+
+:)
+
+thanks,
+
+greg k-h
