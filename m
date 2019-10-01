@@ -2,107 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 961B7C3C4D
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 18:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5527BC3C2C
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 18:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733219AbfJAQn5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 12:43:57 -0400
-Received: from muru.com ([72.249.23.125]:35046 "EHLO muru.com"
+        id S2390043AbfJAQoo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 12:44:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733177AbfJAQn4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:43:56 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 6BCCE811B;
-        Tue,  1 Oct 2019 16:44:27 +0000 (UTC)
-Date:   Tue, 1 Oct 2019 09:43:51 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Yegor Yefremov <yegorslists@googlemail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, linux-omap@vger.kernel.org,
-        vkoul@kernel.org, Bin Liu <b-liu@ti.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
-        giulio.benetti@benettiengineering.com,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: Re: musb: cppi41: broken high speed FTDI functionality when
- connected to musb directly
-Message-ID: <20191001164351.GJ5610@atomide.com>
-References: <20190927151935.GD5610@atomide.com>
- <20190927155738.GF5610@atomide.com>
- <CAGm1_kvvMc848f6f+kg5K2sQ3+NHA-Se7T_pcwQfrB=4GfZM4Q@mail.gmail.com>
- <CAGm1_kvZpYH+NP8JfYJWE2v3E9v+yFs20L8MSKsAjfC_g+GmaQ@mail.gmail.com>
- <CAGm1_ktjndofS_N-qh7GVRuJFG1Jn87rf4D8Lt2XMj=+RrL2aw@mail.gmail.com>
- <20190930145711.GG5610@atomide.com>
- <20190930152330.GH5610@atomide.com>
- <20190930195411.6porqtm7tlokgel3@earth.universe>
- <20191001080339.GF13531@localhost>
- <CAGm1_ksg2x9USqB+XGhkMQpA-zc77Ha1-j+foPJFR7R3XPZsNg@mail.gmail.com>
+        id S2390036AbfJAQom (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 12:44:42 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97BFE21906;
+        Tue,  1 Oct 2019 16:44:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569948281;
+        bh=58+D/0Nn5aEzAP8N0Mz6aHEHd5/96U8SlzotQWH0twA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CYHuWg5TZdZV5hZWg9KNyiaOIxx0RFyRjLBb5Ns9jT8hoL2SpjF4a8loGlyuh4GsS
+         6dQntCBv4Xq8MHybgr6FnC8P+YM+F+D4mFuW9zt63BvgFqtD7Q3MxnNGBXjSPuhSLf
+         YiI2A4xurdVNDEmMP7dla80oMihAHdZhHjtvMrVI=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 14/29] cdc_ncm: fix divide-by-zero caused by invalid wMaxPacketSize
+Date:   Tue,  1 Oct 2019 12:44:08 -0400
+Message-Id: <20191001164423.16406-14-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191001164423.16406-1-sashal@kernel.org>
+References: <20191001164423.16406-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGm1_ksg2x9USqB+XGhkMQpA-zc77Ha1-j+foPJFR7R3XPZsNg@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Yegor Yefremov <yegorslists@googlemail.com> [191001 09:20]:
-> On Tue, Oct 1, 2019 at 10:03 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Mon, Sep 30, 2019 at 09:54:11PM +0200, Sebastian Reichel wrote:
-> > > Hi,
-> > >
-> > > On Mon, Sep 30, 2019 at 08:23:30AM -0700, Tony Lindgren wrote:
-> >
-> > > > Actually playing with the cppi41 timeout might be more suitable here,
-> > > > they use the same module clock from what I remember though. So
-> > > > maybe increase the cppi41 autosuspend_timeout from 100 ms to 500 ms
-> > > > or higher:
-> > > >
-> > > > # echo 500 > /sys/bus/platform/drivers/cppi41-dma-engine/47400000.dma-controller/power/autosuspend_delay_ms
-> > > >
-> > > > If changing the autosuspend_timeout_ms value does not help, then
-> > > > try setting control to on there.
-> > >
-> > > I did not check the details, but from the cover-letter this might be
-> > > woth looking into:
-> > >
-> > > https://lore.kernel.org/lkml/20190930161205.18803-1-johan@kernel.org/
-> >
-> > No, that one should be unrelated as it would only prevent later suspends after
-> > a driver has been unbound (and rebound).
-> 
-> I've tried to increase the autosuspend_delay_ms and to set control to
-> "on" but nothing changes. Below you can see the output of my testing
-> script [1] (Py2 only). As one can see, the first cycle i.e. after the
-> port is open for the first time, fails. But the subsequent cycle is
-> successful. If you invoke the script again, everything repeats.
-> 
-> I've also made printk() in cppi41_run_queue() and it looks like this
-> routine will be called from cppi41_dma_issue_pending() only in the
-> beginning of the second test cycle.
+From: Bjørn Mork <bjorn@mork.no>
 
-So sounds like for you intially cppi41_dma_issue_pending() has
-!cdd->is_suspended and just adds the request to the queue. And
-then cppi41_run_queue() never gets called if this happens while
-we have cppi41_runtime_resume() is still running?
+[ Upstream commit 3fe4b3351301660653a2bc73f2226da0ebd2b95e ]
 
-Can you check that cppi41_dma_issue_pending() really gets
-called for the first request and it adds the request to the
-queue by adding a printk to cppi41_dma_issue_pending()?
+Endpoints with zero wMaxPacketSize are not usable for transferring
+data. Ignore such endpoints when looking for valid in, out and
+status pipes, to make the driver more robust against invalid and
+meaningless descriptors.
 
-> [1] http://ftp.visionsystems.de/temp/serialtest.py
+The wMaxPacketSize of the out pipe is used as divisor. So this change
+fixes a divide-by-zero bug.
 
-For me this script somehow fails to configure the ports with:
+Reported-by: syzbot+ce366e2b8296e25d84f5@syzkaller.appspotmail.com
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/cdc_ncm.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-$ python2 serialtest.py -c2 /dev/ttyUSB0 /dev/ttyUSB0
-Openning one of the serial ports failed
-Openning one of the serial ports failed
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index f5316ab68a0a8..ab28487e60484 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -681,8 +681,12 @@ cdc_ncm_find_endpoints(struct usbnet *dev, struct usb_interface *intf)
+ 	u8 ep;
+ 
+ 	for (ep = 0; ep < intf->cur_altsetting->desc.bNumEndpoints; ep++) {
+-
+ 		e = intf->cur_altsetting->endpoint + ep;
++
++		/* ignore endpoints which cannot transfer data */
++		if (!usb_endpoint_maxp(&e->desc))
++			continue;
++
+ 		switch (e->desc.bmAttributes & USB_ENDPOINT_XFERTYPE_MASK) {
+ 		case USB_ENDPOINT_XFER_INT:
+ 			if (usb_endpoint_dir_in(&e->desc)) {
+-- 
+2.20.1
 
-The permissions are set properly as I have minicom working..
-So still no luck reproducing.
-
-Regards,
-
-Tony
