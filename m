@@ -2,228 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9412C3094
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 11:49:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5082BC30C7
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 12:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729548AbfJAJtN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 05:49:13 -0400
-Received: from mga02.intel.com ([134.134.136.20]:29589 "EHLO mga02.intel.com"
+        id S1729393AbfJAJ7R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 05:59:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37010 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728711AbfJAJtM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 05:49:12 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 02:49:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
-   d="scan'208";a="205033846"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Oct 2019 02:49:10 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 7/7] usb: typec: Remove the callback members from struct typec_capability
-Date:   Tue,  1 Oct 2019 12:48:58 +0300
-Message-Id: <20191001094858.68643-8-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
-References: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
+        id S1725765AbfJAJ7R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Oct 2019 05:59:17 -0400
+Received: from localhost (unknown [89.205.130.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1BAED2190F;
+        Tue,  1 Oct 2019 09:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569923954;
+        bh=6BQj7mEtfMmysioXhhYw2T2ycMJfZtHk5KXS+5M9J/I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gsqEsnnhnu/YvGG69TnK4g5a2xTa+FgrBXr/RiK7xIdHcSVquGY5kk5UCPw0iPfki
+         6IRV7Bm90LEpF2HwXQ4tSoA/ymTVqyAIm66I8530Ysgg8KutObDwHg80mjPMs70gDR
+         DwW9tjRLUXtLNXrmKQhvnYg1xEvyDLnKrCMVglag=
+Date:   Tue, 1 Oct 2019 11:59:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        intel-gfx@lists.freedesktop.org,
+        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Julia Lawall <julia.lawall@lip6.fr>
+Subject: Re: [PATCH v3] string-choice: add yesno(), onoff(),
+ enableddisabled(), plural() helpers
+Message-ID: <20191001095911.GA2945944@kroah.com>
+References: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
+ <20191001080739.18513-1-jani.nikula@intel.com>
+ <20191001093849.GA2945163@kroah.com>
+ <87blv0dcol.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87blv0dcol.fsf@intel.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are no more users for them.
+On Tue, Oct 01, 2019 at 12:42:34PM +0300, Jani Nikula wrote:
+> On Tue, 01 Oct 2019, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> > On Tue, Oct 01, 2019 at 11:07:39AM +0300, Jani Nikula wrote:
+> >> The kernel has plenty of ternary operators to choose between constant
+> >> strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
+> >> "s":
+> >> 
+> >> $ git grep '? "yes" : "no"' | wc -l
+> >> 258
+> >> $ git grep '? "on" : "off"' | wc -l
+> >> 204
+> >> $ git grep '? "enabled" : "disabled"' | wc -l
+> >> 196
+> >> $ git grep '? "" : "s"' | wc -l
+> >> 25
+> >> 
+> >> Additionally, there are some occurences of the same in reverse order,
+> >> split to multiple lines, or otherwise not caught by the simple grep.
+> >> 
+> >> Add helpers to return the constant strings. Remove existing equivalent
+> >> and conflicting functions in i915, cxgb4, and USB core. Further
+> >> conversion can be done incrementally.
+> >> 
+> >> While the main goal here is to abstract recurring patterns, and slightly
+> >> clean up the code base by not open coding the ternary operators, there
+> >> are also some space savings to be had via better string constant
+> >> pooling.
+> >> 
+> >> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> >> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> >> Cc: intel-gfx@lists.freedesktop.org
+> >> Cc: Vishal Kulkarni <vishal@chelsio.com>
+> >> Cc: netdev@vger.kernel.org
+> >> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >> Cc: linux-usb@vger.kernel.org
+> >> Cc: Andrew Morton <akpm@linux-foundation.org>
+> >> Cc: linux-kernel@vger.kernel.org
+> >> Cc: Julia Lawall <julia.lawall@lip6.fr>
+> >> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> >> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> # v1
+> >
+> > As this is a totally different version, please drop my reviewed-by as
+> > that's really not true here :(
+> 
+> I did indicate it was for v1. Indeed v2 was different, but care to
+> elaborate what's wrong with v3?
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/class.c | 65 +++++++++++++--------------------------
- include/linux/usb/typec.h | 17 ----------
- 2 files changed, 22 insertions(+), 60 deletions(-)
+No idea, but I haven't reviewed it yet, so to put my tag on there isn't
+the nicest...
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 542be63795db..58e83fc54aa6 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -58,7 +58,6 @@ struct typec_port {
- 	struct typec_switch		*sw;
- 	struct typec_mux		*mux;
- 
--	const struct typec_capability	*cap;
- 	const struct typec_operations	*ops;
- };
- 
-@@ -970,19 +969,15 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
- 			return -EINVAL;
- 	}
- 
--	if (port->ops && port->ops->try_role) {
--		ret = port->ops->try_role(port, role);
--		if (ret)
--			return ret;
--	} else if (port->cap && port->cap->try_role) {
--		ret = port->cap->try_role(port->cap, role);
--		if (ret)
--			return ret;
--	} else {
-+	if (!port->ops || !port->ops->try_role) {
- 		dev_dbg(dev, "Setting preferred role not supported\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-+	ret = port->ops->try_role(port, role);
-+	if (ret)
-+		return ret;
-+
- 	port->prefer_role = role;
- 	return size;
- }
-@@ -1020,20 +1015,16 @@ static ssize_t data_role_store(struct device *dev,
- 		goto unlock_and_ret;
- 	}
- 
--	if (port->ops && port->ops->dr_set) {
--		ret = port->ops->dr_set(port, ret);
--		if (ret)
--			goto unlock_and_ret;
--	} else if (port->cap && port->cap->dr_set) {
--		ret = port->cap->dr_set(port->cap, ret);
--		if (ret)
--			goto unlock_and_ret;
--	} else {
-+	if (!port->ops || !port->ops->dr_set) {
- 		dev_dbg(dev, "data role swapping not supported\n");
- 		ret = -EOPNOTSUPP;
- 		goto unlock_and_ret;
- 	}
- 
-+	ret = port->ops->dr_set(port, ret);
-+	if (ret)
-+		goto unlock_and_ret;
-+
- 	ret = size;
- unlock_and_ret:
- 	mutex_unlock(&port->port_type_lock);
-@@ -1082,21 +1073,17 @@ static ssize_t power_role_store(struct device *dev,
- 		goto unlock_and_ret;
- 	}
- 
--	if (port->ops && port->ops->pr_set) {
--		ret = port->ops->pr_set(port, ret);
--		if (ret)
--			goto unlock_and_ret;
--	} else if (port->cap && port->cap->pr_set) {
--		ret = port->cap->pr_set(port->cap, ret);
--		if (ret)
--			goto unlock_and_ret;
--	} else {
-+	if (!port->ops || !port->ops->pr_set) {
- 		dev_dbg(dev, "power role swapping not supported\n");
- 		ret = -EOPNOTSUPP;
- 		goto unlock_and_ret;
- 	}
- 	ret = size;
- 
-+	ret = port->ops->pr_set(port, ret);
-+	if (ret)
-+		goto unlock_and_ret;
-+
- unlock_and_ret:
- 	mutex_unlock(&port->port_type_lock);
- 	return ret;
-@@ -1124,7 +1111,7 @@ port_type_store(struct device *dev, struct device_attribute *attr,
- 	enum typec_port_type type;
- 
- 	if ((!port->ops || !port->ops->port_type_set) ||
--	    !port->cap->port_type_set || port->fixed_role != TYPEC_PORT_DRP) {
-+	    port->fixed_role != TYPEC_PORT_DRP) {
- 		dev_dbg(dev, "changing port type not supported\n");
- 		return -EOPNOTSUPP;
- 	}
-@@ -1141,10 +1128,7 @@ port_type_store(struct device *dev, struct device_attribute *attr,
- 		goto unlock_and_ret;
- 	}
- 
--	if (port->ops && port->ops->port_type_set)
--		ret = port->ops->port_type_set(port, type);
--	else
--		ret = port->cap->port_type_set(port->cap, type);
-+	ret = port->ops->port_type_set(port, type);
- 	if (ret)
- 		goto unlock_and_ret;
- 
-@@ -1204,19 +1188,15 @@ static ssize_t vconn_source_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	if (port->ops && port->ops->vconn_set) {
--		ret = port->ops->vconn_set(port, source);
--		if (ret)
--			return ret;
--	} else if (port->cap && port->cap->vconn_set) {
--		ret = port->cap->vconn_set(port->cap, (enum typec_role)source);
--		if (ret)
--			return ret;
--	} else {
-+	if (!port->ops || !port->ops->vconn_set) {
- 		dev_dbg(dev, "VCONN swapping not supported\n");
- 		return -EOPNOTSUPP;
- 	}
- 
-+	ret = port->ops->vconn_set(port, source);
-+	if (ret)
-+		return ret;
-+
- 	return size;
- }
- 
-@@ -1619,7 +1599,6 @@ struct typec_port *typec_register_port(struct device *parent,
- 	mutex_init(&port->port_type_lock);
- 
- 	port->id = id;
--	port->cap = cap;
- 	port->ops = cap->ops;
- 	port->port_type = cap->type;
- 	port->fixed_role = cap->type;
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index 6c95a9ff43c6..e759668f8af9 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -197,11 +197,6 @@ struct typec_operations {
-  * @fwnode: Optional fwnode of the port
-  * @driver_data: Private pointer for driver specific info
-  * @ops: Port operations vector
-- * @try_role: Set data role preference for DRP port
-- * @dr_set: Set Data Role
-- * @pr_set: Set Power Role
-- * @vconn_set: Set VCONN Role
-- * @port_type_set: Set port type
-  *
-  * Static capabilities of a single USB Type-C port.
-  */
-@@ -219,18 +214,6 @@ struct typec_capability {
- 	void			*driver_data;
- 
- 	const struct typec_operations	*ops;
--
--	int		(*try_role)(const struct typec_capability *,
--				    int role);
--
--	int		(*dr_set)(const struct typec_capability *,
--				  enum typec_data_role);
--	int		(*pr_set)(const struct typec_capability *,
--				  enum typec_role);
--	int		(*vconn_set)(const struct typec_capability *,
--				     enum typec_role);
--	int		(*port_type_set)(const struct typec_capability *,
--					 enum typec_port_type);
- };
- 
- /* Specific to try_role(). Indicates the user want's to clear the preference. */
--- 
-2.23.0
-
+greg k-h
