@@ -2,254 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF30C2E9C
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 10:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170A4C2EC8
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 10:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731695AbfJAIHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 04:07:49 -0400
-Received: from mga06.intel.com ([134.134.136.31]:18682 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726460AbfJAIHt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Oct 2019 04:07:49 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 01:07:48 -0700
-X-IronPort-AV: E=Sophos;i="5.64,570,1559545200"; 
-   d="scan'208";a="190517127"
-Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 01:07:44 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jani Nikula <jani.nikula@intel.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
+        id S1732968AbfJAIXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 04:23:18 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:38664 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726672AbfJAIXR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Oct 2019 04:23:17 -0400
+Received: by mail-lj1-f195.google.com with SMTP id b20so12369110ljj.5;
+        Tue, 01 Oct 2019 01:23:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=39RhDSMZRJbAMEubpivc7sb2S4Q4zvVL3vDz0kDKunQ=;
+        b=apGeQcXrcJwa17iebDwOvQb1D2jFDABi+i3Y5e9mtrhu6R+cDl5hZidWE+hmdrUnj6
+         rC85MF3HgBo9uVwoXdwuZandJbtq6UfLt0U1jzPbr5Or7eDtBfGtoEPxwszZ+9831772
+         dFin7XkBaqyuES7uwR34j9cvvwR9sWeeH+qzGbUcJAAVqZhCY3Vc9HOguPGHiUxeNPT3
+         R9tPPEfKUYRee84EeqgrYEcE5SPfNZ5S572tpzBcXqC1YQis9nT4UpBIOnP/dIazrysF
+         IUR1YzG/X2BX+AteRzwng7nejqDQ4uxfk0bPiEk38EYNOjezfD6Kvsfh1cO+mJnDb0fQ
+         d+kg==
+X-Gm-Message-State: APjAAAVXA+i5xp/AWmzwaCjHxUjSgbLbD8IhUgx1JdgYHOF7/Rh85kjs
+        0+DEgiZDjRIeLE7ahy/JSNw=
+X-Google-Smtp-Source: APXvYqwodPNS5oQBgRnLFOd73QE2r4CIJZzLiTOY6/q38+5ENMLIBmOyPaOGzVyvR0NyQ54cKXksoQ==
+X-Received: by 2002:a2e:96d5:: with SMTP id d21mr14700661ljj.187.1569918195316;
+        Tue, 01 Oct 2019 01:23:15 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id h25sm4836377lfj.81.2019.10.01.01.23.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 01 Oct 2019 01:23:14 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iFDRK-00005F-1V; Tue, 01 Oct 2019 10:23:22 +0200
+Date:   Tue, 1 Oct 2019 10:23:22 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Cc:     Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <julia.lawall@lip6.fr>
-Subject: [PATCH v3] string-choice: add yesno(), onoff(), enableddisabled(), plural() helpers
-Date:   Tue,  1 Oct 2019 11:07:39 +0300
-Message-Id: <20191001080739.18513-1-jani.nikula@intel.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
-References: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
+        Pete Zaitcev <zaitcev@redhat.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] USB: fix runtime PM after driver unbind
+Message-ID: <20191001082322.GH13531@localhost>
+References: <20190930161205.18803-1-johan@kernel.org>
+ <20190930133603.0192f809@coco.lan>
 MIME-Version: 1.0
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190930133603.0192f809@coco.lan>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The kernel has plenty of ternary operators to choose between constant
-strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
-"s":
+On Mon, Sep 30, 2019 at 01:36:03PM -0300, Mauro Carvalho Chehab wrote:
+> Em Mon, 30 Sep 2019 18:12:01 +0200
+> Johan Hovold <johan@kernel.org> escreveu:
+> 
+> > A recent change in USB core broke runtime-PM after driver unbind in
+> > several drivers (when counting all USB serial drivers). Specifically,
+> > drivers which took care not modify the runtime-PM usage counter after
+> > their disconnect callback had returned, would now fail to be suspended
+> > when a driver is later bound.
+> > 
+> > I guess Greg could take all of these directly through his tree, unless
+> > the media maintainers disagree.
+> 
+> Patches look ok and I'm fine if they go via Greg's tree. So:
+> 
+> Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 
-$ git grep '? "yes" : "no"' | wc -l
-258
-$ git grep '? "on" : "off"' | wc -l
-204
-$ git grep '? "enabled" : "disabled"' | wc -l
-196
-$ git grep '? "" : "s"' | wc -l
-25
+Thanks for taking a look.
 
-Additionally, there are some occurences of the same in reverse order,
-split to multiple lines, or otherwise not caught by the simple grep.
+> Yet, on a quick look on media:
+> 
+> 	$ git grep -l usb_.*pm drivers/media/usb/
+> 	drivers/media/usb/cpia2/cpia2_usb.c
+> 	drivers/media/usb/dvb-usb-v2/az6007.c
+> 	drivers/media/usb/dvb-usb-v2/dvb_usb.h
+> 	drivers/media/usb/dvb-usb-v2/dvb_usb_core.c
+> 	drivers/media/usb/gspca/gspca.c
+> 	drivers/media/usb/gspca/gspca.h
+> 	drivers/media/usb/siano/smsusb.c
+> 	drivers/media/usb/stkwebcam/stk-webcam.c
+> 	drivers/media/usb/usbvision/usbvision-i2c.c
+> 	drivers/media/usb/uvc/uvc_driver.c
+> 	drivers/media/usb/uvc/uvc_v4l2.c
+> 	drivers/media/usb/zr364xx/zr364xx.c
+> 
+> There are other drivers beside stkwebcam with has some PM routines.
 
-Add helpers to return the constant strings. Remove existing equivalent
-and conflicting functions in i915, cxgb4, and USB core. Further
-conversion can be done incrementally.
+Yeah, but that may be for system-wide suspend.
 
-While the main goal here is to abstract recurring patterns, and slightly
-clean up the code base by not open coding the ternary operators, there
-are also some space savings to be had via better string constant
-pooling.
+> Ok, only two (stkwebcam and uvcvideo) uses usb_autopm_get_interface() and
+> usb_autopm_put_interface(), but I'm wondering if the others are doing the
+> right thing, as their implementation are probably older.
 
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: Vishal Kulkarni <vishal@chelsio.com>
-Cc: netdev@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: Julia Lawall <julia.lawall@lip6.fr>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org> # v1
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
+Right, only these two support runtime PM through USB core (autosuspend).
 
----
+In fact, I see now that stkwebcam fails to set the supports_autosuspend
+flag in its usb_driver struct, so runtime PM has never actually been
+enabled for this driver either. But I guess it doesn't hurt to fix
+missing puts if someones wants to try enabling it, if not only for
+documentation purposes and avoiding copy-paste proliferation.
 
-v2: add string-choice.[ch] to not clutter kernel.h and to actually save
-space on string constants.
+Lots of legacy...
 
-v3: back to static inlines based on Rasmus' feedback
-
-Example of further cleanup possibilities are at [1], to be done
-incrementally afterwards.
-
-[1] http://lore.kernel.org/r/20190903133731.2094-2-jani.nikula@intel.com
----
- drivers/gpu/drm/i915/i915_utils.h             | 16 +---------
- .../ethernet/chelsio/cxgb4/cxgb4_debugfs.c    | 12 +------
- drivers/usb/core/config.c                     |  6 +---
- drivers/usb/core/generic.c                    |  6 +---
- include/linux/string-choice.h                 | 31 +++++++++++++++++++
- 5 files changed, 35 insertions(+), 36 deletions(-)
- create mode 100644 include/linux/string-choice.h
-
-diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
-index 562f756da421..794f02a90efe 100644
---- a/drivers/gpu/drm/i915/i915_utils.h
-+++ b/drivers/gpu/drm/i915/i915_utils.h
-@@ -28,6 +28,7 @@
- #include <linux/list.h>
- #include <linux/overflow.h>
- #include <linux/sched.h>
-+#include <linux/string-choice.h>
- #include <linux/types.h>
- #include <linux/workqueue.h>
- 
-@@ -395,21 +396,6 @@ wait_remaining_ms_from_jiffies(unsigned long timestamp_jiffies, int to_wait_ms)
- #define MBps(x) KBps(1000 * (x))
- #define GBps(x) ((u64)1000 * MBps((x)))
- 
--static inline const char *yesno(bool v)
--{
--	return v ? "yes" : "no";
--}
--
--static inline const char *onoff(bool v)
--{
--	return v ? "on" : "off";
--}
--
--static inline const char *enableddisabled(bool v)
--{
--	return v ? "enabled" : "disabled";
--}
--
- static inline void add_taint_for_CI(unsigned int taint)
- {
- 	/*
-diff --git a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-index ae6a47dd7dc9..d9123dae1d00 100644
---- a/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-+++ b/drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
-@@ -35,6 +35,7 @@
- #include <linux/seq_file.h>
- #include <linux/debugfs.h>
- #include <linux/string_helpers.h>
-+#include <linux/string-choice.h>
- #include <linux/sort.h>
- #include <linux/ctype.h>
- 
-@@ -2023,17 +2024,6 @@ static const struct file_operations rss_debugfs_fops = {
- /* RSS Configuration.
-  */
- 
--/* Small utility function to return the strings "yes" or "no" if the supplied
-- * argument is non-zero.
-- */
--static const char *yesno(int x)
--{
--	static const char *yes = "yes";
--	static const char *no = "no";
--
--	return x ? yes : no;
--}
--
- static int rss_config_show(struct seq_file *seq, void *v)
- {
- 	struct adapter *adapter = seq->private;
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 151a74a54386..52cee9067eb4 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/device.h>
-+#include <linux/string-choice.h>
- #include <asm/byteorder.h>
- #include "usb.h"
- 
-@@ -19,11 +20,6 @@
- #define USB_MAXCONFIG			8	/* Arbitrary limit */
- 
- 
--static inline const char *plural(int n)
--{
--	return (n == 1 ? "" : "s");
--}
--
- static int find_next_descriptor(unsigned char *buffer, int size,
-     int dt1, int dt2, int *num_skipped)
- {
-diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
-index 38f8b3e31762..a784a09794d6 100644
---- a/drivers/usb/core/generic.c
-+++ b/drivers/usb/core/generic.c
-@@ -21,14 +21,10 @@
- 
- #include <linux/usb.h>
- #include <linux/usb/hcd.h>
-+#include <linux/string-choice.h>
- #include <uapi/linux/usb/audio.h>
- #include "usb.h"
- 
--static inline const char *plural(int n)
--{
--	return (n == 1 ? "" : "s");
--}
--
- static int is_rndis(struct usb_interface_descriptor *desc)
- {
- 	return desc->bInterfaceClass == USB_CLASS_COMM
-diff --git a/include/linux/string-choice.h b/include/linux/string-choice.h
-new file mode 100644
-index 000000000000..320b598bd8f0
---- /dev/null
-+++ b/include/linux/string-choice.h
-@@ -0,0 +1,31 @@
-+/* SPDX-License-Identifier: MIT */
-+/*
-+ * Copyright © 2019 Intel Corporation
-+ */
-+
-+#ifndef __STRING_CHOICE_H__
-+#define __STRING_CHOICE_H__
-+
-+#include <linux/types.h>
-+
-+static inline const char *yesno(bool v)
-+{
-+	return v ? "yes" : "no";
-+}
-+
-+static inline const char *onoff(bool v)
-+{
-+	return v ? "on" : "off";
-+}
-+
-+static inline const char *enableddisabled(bool v)
-+{
-+	return v ? "enabled" : "disabled";
-+}
-+
-+static inline const char *plural(long v)
-+{
-+	return v == 1 ? "" : "s";
-+}
-+
-+#endif /* __STRING_CHOICE_H__ */
--- 
-2.20.1
-
+Johan
