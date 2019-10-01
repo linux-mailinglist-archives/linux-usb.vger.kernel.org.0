@@ -2,26 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50077C32B1
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 13:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E60C329A
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Oct 2019 13:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733109AbfJALja (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Oct 2019 07:39:30 -0400
-Received: from mga17.intel.com ([192.55.52.151]:27910 "EHLO mga17.intel.com"
+        id S1732627AbfJALik (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Oct 2019 07:38:40 -0400
+Received: from mga07.intel.com ([134.134.136.100]:49106 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732600AbfJALik (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S1732572AbfJALik (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Tue, 1 Oct 2019 07:38:40 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 04:38:39 -0700
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Oct 2019 04:38:38 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,571,1559545200"; 
-   d="scan'208";a="181663255"
+   d="scan'208";a="197830157"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga007.jf.intel.com with ESMTP; 01 Oct 2019 04:38:35 -0700
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Oct 2019 04:38:35 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 34CC3419; Tue,  1 Oct 2019 14:38:31 +0300 (EEST)
+        id 626D656A; Tue,  1 Oct 2019 14:38:31 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Andreas Noever <andreas.noever@gmail.com>,
@@ -36,9 +36,9 @@ Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Mario.Limonciello@dell.com,
         Anthony Wong <anthony.wong@canonical.com>,
         linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 07/22] thunderbolt: Add default linking between ports if not provided by DROM
-Date:   Tue,  1 Oct 2019 14:38:15 +0300
-Message-Id: <20191001113830.13028-8-mika.westerberg@linux.intel.com>
+Subject: [RFC PATCH 12/22] thunderbolt: Add Display Port CM handshake for Titan Ridge devices
+Date:   Tue,  1 Oct 2019 14:38:20 +0300
+Message-Id: <20191001113830.13028-13-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
@@ -49,92 +49,99 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some cases the DROM information is not correct or is simply missing.
-This prevents establishing lane bonding even if it would be possible
-otherwise. To make this work better provide default linking between
-ports if DROM has not provided that information.
-
-This works with legacy devices where ports 1 and 2, and 3 and 4 are
-linked together and also with USB4.
+Titan Ridge devices and newer need an additional connection manager
+handshake in order to do proper Display Port tunneling so implement it
+here.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/eeprom.c | 11 -----------
- drivers/thunderbolt/switch.c | 32 ++++++++++++++++++++++++++++++++
- 2 files changed, 32 insertions(+), 11 deletions(-)
+ drivers/thunderbolt/tb_regs.h |  3 +++
+ drivers/thunderbolt/tunnel.c  | 44 +++++++++++++++++++++++++++++++++++
+ 2 files changed, 47 insertions(+)
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index ee5196479854..8dd7de0cc826 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -514,17 +514,6 @@ int tb_drom_read(struct tb_switch *sw)
- 		 * no entries). Hardcode the configuration here.
- 		 */
- 		tb_drom_read_uid_only(sw, &sw->uid);
--
--		sw->ports[1].link_nr = 0;
--		sw->ports[2].link_nr = 1;
--		sw->ports[1].dual_link_port = &sw->ports[2];
--		sw->ports[2].dual_link_port = &sw->ports[1];
--
--		sw->ports[3].link_nr = 0;
--		sw->ports[4].link_nr = 1;
--		sw->ports[3].dual_link_port = &sw->ports[4];
--		sw->ports[4].dual_link_port = &sw->ports[3];
--
- 		return 0;
- 	}
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 3a39490a954b..8d11b4a2d552 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -252,6 +252,9 @@ struct tb_regs_port_header {
+ #define ADP_DP_CS_3_HDPC			BIT(9)
+ #define DP_LOCAL_CAP				0x04
+ #define DP_REMOTE_CAP				0x05
++#define DP_STATUS_CTRL				0x06
++#define DP_STATUS_CTRL_CMHS			BIT(25)
++#define DP_STATUS_CTRL_UF			BIT(26)
  
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index 2b00ea7a979a..f7547287be68 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -1904,6 +1904,36 @@ static int tb_switch_add_dma_port(struct tb_switch *sw)
- 	return -ESHUTDOWN;
+ /* PCIe adapter registers */
+ #define ADP_PCIE_CS_0				0x00
+diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
+index 3353396e0806..369800110e5e 100644
+--- a/drivers/thunderbolt/tunnel.c
++++ b/drivers/thunderbolt/tunnel.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2019, Intel Corporation
+  */
+ 
++#include <linux/delay.h>
+ #include <linux/slab.h>
+ #include <linux/list.h>
+ 
+@@ -242,6 +243,41 @@ struct tb_tunnel *tb_tunnel_alloc_pci(struct tb *tb, struct tb_port *up,
+ 	return tunnel;
  }
  
-+static void tb_switch_default_link_ports(struct tb_switch *sw)
++static int tb_dp_cm_handshake(struct tb_port *in, struct tb_port *out)
 +{
-+	int i;
++	int timeout = 10;
++	u32 val;
++	int ret;
 +
-+	for (i = 1; i <= sw->config.max_port_number; i += 2) {
-+		struct tb_port *port = &sw->ports[i];
-+		struct tb_port *subordinate;
++	/* Both ends need to support this */
++	if (!tb_switch_is_tr(in->sw) || !tb_switch_is_tr(out->sw))
++		return 0;
 +
-+		if (!tb_port_is_null(port))
-+			continue;
++	ret = tb_port_read(out, &val, TB_CFG_PORT,
++			   out->cap_adap + DP_STATUS_CTRL, 1);
++	if (ret)
++		return ret;
 +
-+		/* Check for the subordinate port */
-+		if (i == sw->config.max_port_number ||
-+		    !tb_port_is_null(&sw->ports[i + 1]))
-+			continue;
++	val |= DP_STATUS_CTRL_UF | DP_STATUS_CTRL_CMHS;
 +
-+		/* Link them if not already done so (by DROM) */
-+		subordinate = &sw->ports[i + 1];
-+		if (!port->dual_link_port && !subordinate->dual_link_port) {
-+			port->link_nr = 0;
-+			port->dual_link_port = subordinate;
-+			subordinate->link_nr = 1;
-+			subordinate->dual_link_port = port;
++	ret = tb_port_write(out, &val, TB_CFG_PORT,
++			    out->cap_adap + DP_STATUS_CTRL, 1);
++	if (ret)
++		return ret;
 +
-+			tb_sw_dbg(sw, "linked ports %d <-> %d\n",
-+				  port->port, subordinate->port);
-+		}
-+	}
++	do {
++		ret = tb_port_read(out, &val, TB_CFG_PORT,
++				   out->cap_adap + DP_STATUS_CTRL, 1);
++		if (ret)
++			return ret;
++		if (!(val & DP_STATUS_CTRL_CMHS))
++			return 0;
++		usleep_range(10, 100);
++	} while (timeout--);
++
++	return -ETIMEDOUT;
 +}
 +
- static bool tb_switch_lane_bonding_possible(struct tb_switch *sw)
+ static int tb_dp_xchg_caps(struct tb_tunnel *tunnel)
  {
- 	const struct tb_port *up = tb_upstream_port(sw);
-@@ -2071,6 +2101,8 @@ int tb_switch_add(struct tb_switch *sw)
- 				return ret;
- 		}
+ 	struct tb_port *out = tunnel->dst_port;
+@@ -256,6 +292,14 @@ static int tb_dp_xchg_caps(struct tb_tunnel *tunnel)
+ 	if (in->sw->generation < 2 || out->sw->generation < 2)
+ 		return 0;
  
-+		tb_switch_default_link_ports(sw);
++	/*
++	 * Perform connection manager handshake between IN and OUT ports
++	 * before capabilities exchange can take place.
++	 */
++	ret = tb_dp_cm_handshake(in, out);
++	if (ret)
++		return ret;
 +
- 		ret = tb_switch_update_link_attributes(sw);
- 		if (ret)
- 			return ret;
+ 	/* Read both DP_LOCAL_CAP registers */
+ 	ret = tb_port_read(in, &in_dp_cap, TB_CFG_PORT,
+ 			   in->cap_adap + DP_LOCAL_CAP, 1);
 -- 
 2.23.0
 
