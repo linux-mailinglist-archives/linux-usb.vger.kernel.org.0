@@ -2,123 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F927C8CFD
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113B2C8D42
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726691AbfJBPhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 11:37:07 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:35504 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfJBPhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:37:07 -0400
-Received: by mail-lf1-f66.google.com with SMTP id w6so13094237lfl.2;
-        Wed, 02 Oct 2019 08:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ECk1ds4yK/usm2oIeYQjQGNy286MUJFaO7tGfpvFD48=;
-        b=CoQ1KrSaEemORYxjU84eBuww9g+jHyC1zvOrDjol+mHTXwQgcut1PrbZ70siVxxIws
-         fqLYMg3nXcClqhgn3q0o5oI11PE70rV4m3+B5ZSgNme6zhiCaGEAlfvGMXXtDqXXFfKZ
-         CK+6VadXiz4ZHpkEyCoR9ClJRs2Te7NYLIEpHHoN/bHRnscraSiHcu9ccIaBKPIApItj
-         iib+H5wCYqiFGcjGzPucHGd7s2WUtA9BPCLp0uiJGU/ImTV1FQdNMwCZGSVp/yUt0lLi
-         cAsjgkxcQ7MWA2PPgYP3KWAw/WVqI1Pr27b8YE6yHUgzTVRwAXLdRn6RmxsXqki83Rab
-         bBEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ECk1ds4yK/usm2oIeYQjQGNy286MUJFaO7tGfpvFD48=;
-        b=dc+3fg8dCIK9X4PpruizXPw7hAluHt7xTadHtasbplqviHo9b33eqsaOukPtp6tQSn
-         ctv/F17aRNQDgiJFoJjI9conNdKZ4rZvRxs8LVFd/lIeGWzwip/FJX8A3YnJIaKlR/A5
-         0KNlO08xWuth+qB5KiqGTbpxTv3xejZ5o4Is/kKRGcnptVVLKIz3c00C9xqF3+r1WCAf
-         ePExAPKs+2Pd0smsNUx8umDSE8PTdDF9cZBpDDr2d6JOFxOHp+QSlyzvfRTKImOtix5a
-         urjVJGoJZ6+Yf19UtDTmkbG7A7WZwwyF0wi30foG2xXfLROOf5Iphpt1PTX3BStOM+2s
-         7qDg==
-X-Gm-Message-State: APjAAAUzVkSG/ti0jWMu6P/9+HAzNiD2Yu1YdjUqvOno2Mhw8aWA42vk
-        NkOp0n+LtbBMEKp8scF0zwQe4Kurg+vA9F/qRvvEuBI/S8z1vg==
-X-Google-Smtp-Source: APXvYqw7Pzup4qrI0RpSRsrMyLy6h7TqPRZ0+qB46VbUUejl4bYnS47U5zMYnHld3F3fszOxtXLC8pUV9lu17A52XNM=
-X-Received: by 2002:a19:ec16:: with SMTP id b22mr2796735lfa.189.1570030625007;
- Wed, 02 Oct 2019 08:37:05 -0700 (PDT)
+        id S1728970AbfJBPrk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 11:47:40 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:38850 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727666AbfJBPrk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:47:40 -0400
+Received: (qmail 4241 invoked by uid 2102); 2 Oct 2019 11:47:39 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Oct 2019 11:47:39 -0400
+Date:   Wed, 2 Oct 2019 11:47:39 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     mathias.nyman@intel.com, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "usb: Avoid unnecessary LPM enabling and disabling
+ during suspend and resume"
+In-Reply-To: <20191002151512.28517-1-kai.heng.feng@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.1910021146260.1552-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com> <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
- <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
- <20191002083913.GG2714@lahna.fi.intel.com> <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
-In-Reply-To: <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Wed, 2 Oct 2019 18:36:48 +0300
-Message-ID: <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-To:     Mario Limonciello <Mario.Limonciello@dell.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        nicholas.johnson-opensource@outlook.com.au,
-        Lukas Wunner <lukas@wunner.de>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu,
-        Anthony Wong <anthony.wong@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 2, 2019 at 6:09 PM <Mario.Limonciello@dell.com> wrote:
->
-> > -----Original Message-----
-> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Sent: Wednesday, October 2, 2019 3:39 AM
-> > To: Limonciello, Mario
-> > Cc: linux-usb@vger.kernel.org; andreas.noever@gmail.com;
-> > michael.jamet@intel.com; YehezkelShB@gmail.com; rajmohan.mani@intel.com;
-> > nicholas.johnson-opensource@outlook.com.au; lukas@wunner.de;
-> > gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
-> > anthony.wong@canonical.com; linux-kernel@vger.kernel.org
-> > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-> >
-> >
-> > [EXTERNAL EMAIL]
-> >
-> > On Tue, Oct 01, 2019 at 06:14:23PM +0000, Mario.Limonciello@dell.com wrote:
-> > > One more thought; would you consider exporting to sysfs sw-
-> > >config.vendor_id?
-> > > Maybe an attribute that is switch_vendor?
-> > >
-> > > Userland fwupd also does validation on the NVM and will need to follow this.
-> > > The same check will go into fwupd to match the vendor and lack of
-> > nvm_non_active0
-> > > to mark the device as not updatable.  When the checks in the kernel get
-> > relaxed,
-> > > some NVM parsing will have to make it over to fwupd too to relax the check at
-> > that point.
-> >
-> > The original idea was that the kernel does the basic validation and
-> > userspace then does more complex checks. Currently you can compare the
-> > two NVM images (active one and the new) and find that information there.
-> > I think fwupd is doing just that already. Is that not enough?
->
-> I guess for fwupd we can do this without the extra attribute:
->
-> 1) If no NVM files or nvm_version: means unsupported vendor -show that messaging somewhere.
-> This means kernel doesn't know the vendor.
->
-> 2) If NVM file and nvm_version: means kernel knows it
-> *fwupd checks the vendor offset for intel.
-> -> intel: good, proceed
-> ->something else: fwupd needs to learn the format for the new vendor, show messaging
->
-> There is the unlikely case that kernel knows new vendor format and vendor NVM happened to have
-> same value as Intel vendor ID in same location of Intel NVM but another meaning.
-> Hopefully that doesn't happen :)
+On Wed, 2 Oct 2019, Kai-Heng Feng wrote:
 
-It's not even "same location - another meaning", the vendor ID comes from the
-DROM section, so it takes a few internal jumps inside the NVM to find the
-location. One of the "pointers" or section headers will be broken for sure.
+> This reverts commit d590c23111505635e1beb01006612971e5ede8aa.
+> 
+> Dell WD15 dock has a topology like this:
+> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+>     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+>             |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+> 
+> Their IDs:
+> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
+> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
+> 
+> Ethernet cannot be detected after plugging ethernet cable to the dock,
+> the hub and roothub get runtime resumed and runtime suspended
+> immediately:
+> ...
 
-And after this, we need to find the NVM in LVFS and it has to pass validation in
-a few other locations. The chances are so low that I'd think it isn't worth
-worrying about it.
+> After some trial and errors, the issue goes away if LPM on the SMSC hub
+> is disabled. Digging further, enabling and disabling LPM during runtime
+> resume and runtime suspend respectively can solve the issue.
+> 
+> So bring back the old LPM behavior, which the SMSC hub inside Dell WD15
+> depends on.
+> 
+> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+Maybe it would be better to have a VID/PID-specific quirk for this?
+
+Alan Stern
+
