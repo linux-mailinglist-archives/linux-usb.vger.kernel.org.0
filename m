@@ -2,161 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DA42AC8C8A
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F927C8CFD
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbfJBPPW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 11:15:22 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49978 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725893AbfJBPPV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:15:21 -0400
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iFgLW-00039D-7G; Wed, 02 Oct 2019 15:15:18 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH] Revert "usb: Avoid unnecessary LPM enabling and disabling during suspend and resume"
-Date:   Wed,  2 Oct 2019 23:15:12 +0800
-Message-Id: <20191002151512.28517-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        id S1726691AbfJBPhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 11:37:07 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:35504 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbfJBPhH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:37:07 -0400
+Received: by mail-lf1-f66.google.com with SMTP id w6so13094237lfl.2;
+        Wed, 02 Oct 2019 08:37:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ECk1ds4yK/usm2oIeYQjQGNy286MUJFaO7tGfpvFD48=;
+        b=CoQ1KrSaEemORYxjU84eBuww9g+jHyC1zvOrDjol+mHTXwQgcut1PrbZ70siVxxIws
+         fqLYMg3nXcClqhgn3q0o5oI11PE70rV4m3+B5ZSgNme6zhiCaGEAlfvGMXXtDqXXFfKZ
+         CK+6VadXiz4ZHpkEyCoR9ClJRs2Te7NYLIEpHHoN/bHRnscraSiHcu9ccIaBKPIApItj
+         iib+H5wCYqiFGcjGzPucHGd7s2WUtA9BPCLp0uiJGU/ImTV1FQdNMwCZGSVp/yUt0lLi
+         cAsjgkxcQ7MWA2PPgYP3KWAw/WVqI1Pr27b8YE6yHUgzTVRwAXLdRn6RmxsXqki83Rab
+         bBEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ECk1ds4yK/usm2oIeYQjQGNy286MUJFaO7tGfpvFD48=;
+        b=dc+3fg8dCIK9X4PpruizXPw7hAluHt7xTadHtasbplqviHo9b33eqsaOukPtp6tQSn
+         ctv/F17aRNQDgiJFoJjI9conNdKZ4rZvRxs8LVFd/lIeGWzwip/FJX8A3YnJIaKlR/A5
+         0KNlO08xWuth+qB5KiqGTbpxTv3xejZ5o4Is/kKRGcnptVVLKIz3c00C9xqF3+r1WCAf
+         ePExAPKs+2Pd0smsNUx8umDSE8PTdDF9cZBpDDr2d6JOFxOHp+QSlyzvfRTKImOtix5a
+         urjVJGoJZ6+Yf19UtDTmkbG7A7WZwwyF0wi30foG2xXfLROOf5Iphpt1PTX3BStOM+2s
+         7qDg==
+X-Gm-Message-State: APjAAAUzVkSG/ti0jWMu6P/9+HAzNiD2Yu1YdjUqvOno2Mhw8aWA42vk
+        NkOp0n+LtbBMEKp8scF0zwQe4Kurg+vA9F/qRvvEuBI/S8z1vg==
+X-Google-Smtp-Source: APXvYqw7Pzup4qrI0RpSRsrMyLy6h7TqPRZ0+qB46VbUUejl4bYnS47U5zMYnHld3F3fszOxtXLC8pUV9lu17A52XNM=
+X-Received: by 2002:a19:ec16:: with SMTP id b22mr2796735lfa.189.1570030625007;
+ Wed, 02 Oct 2019 08:37:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
+ <20191001113830.13028-18-mika.westerberg@linux.intel.com> <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
+ <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
+ <20191002083913.GG2714@lahna.fi.intel.com> <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
+In-Reply-To: <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
+From:   Yehezkel Bernat <yehezkelshb@gmail.com>
+Date:   Wed, 2 Oct 2019 18:36:48 +0300
+Message-ID: <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
+Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
+To:     Mario Limonciello <Mario.Limonciello@dell.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        nicholas.johnson-opensource@outlook.com.au,
+        Lukas Wunner <lukas@wunner.de>, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu,
+        Anthony Wong <anthony.wong@canonical.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit d590c23111505635e1beb01006612971e5ede8aa.
+On Wed, Oct 2, 2019 at 6:09 PM <Mario.Limonciello@dell.com> wrote:
+>
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Wednesday, October 2, 2019 3:39 AM
+> > To: Limonciello, Mario
+> > Cc: linux-usb@vger.kernel.org; andreas.noever@gmail.com;
+> > michael.jamet@intel.com; YehezkelShB@gmail.com; rajmohan.mani@intel.com;
+> > nicholas.johnson-opensource@outlook.com.au; lukas@wunner.de;
+> > gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
+> > anthony.wong@canonical.com; linux-kernel@vger.kernel.org
+> > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
+> >
+> >
+> > [EXTERNAL EMAIL]
+> >
+> > On Tue, Oct 01, 2019 at 06:14:23PM +0000, Mario.Limonciello@dell.com wrote:
+> > > One more thought; would you consider exporting to sysfs sw-
+> > >config.vendor_id?
+> > > Maybe an attribute that is switch_vendor?
+> > >
+> > > Userland fwupd also does validation on the NVM and will need to follow this.
+> > > The same check will go into fwupd to match the vendor and lack of
+> > nvm_non_active0
+> > > to mark the device as not updatable.  When the checks in the kernel get
+> > relaxed,
+> > > some NVM parsing will have to make it over to fwupd too to relax the check at
+> > that point.
+> >
+> > The original idea was that the kernel does the basic validation and
+> > userspace then does more complex checks. Currently you can compare the
+> > two NVM images (active one and the new) and find that information there.
+> > I think fwupd is doing just that already. Is that not enough?
+>
+> I guess for fwupd we can do this without the extra attribute:
+>
+> 1) If no NVM files or nvm_version: means unsupported vendor -show that messaging somewhere.
+> This means kernel doesn't know the vendor.
+>
+> 2) If NVM file and nvm_version: means kernel knows it
+> *fwupd checks the vendor offset for intel.
+> -> intel: good, proceed
+> ->something else: fwupd needs to learn the format for the new vendor, show messaging
+>
+> There is the unlikely case that kernel knows new vendor format and vendor NVM happened to have
+> same value as Intel vendor ID in same location of Intel NVM but another meaning.
+> Hopefully that doesn't happen :)
 
-Dell WD15 dock has a topology like this:
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
-            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+It's not even "same location - another meaning", the vendor ID comes from the
+DROM section, so it takes a few internal jumps inside the NVM to find the
+location. One of the "pointers" or section headers will be broken for sure.
 
-Their IDs:
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
-Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
-
-Ethernet cannot be detected after plugging ethernet cable to the dock,
-the hub and roothub get runtime resumed and runtime suspended
-immediately:
-...
-[  433.315169] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
-[  433.315204] usb usb4: usb auto-resume
-[  433.315226] hub 4-0:1.0: hub_resume
-[  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
-[  433.315264] usb usb4-port1: status 0343 change 0001
-[  433.315279] xhci_hcd 0000:3a:00.0: clear port1 connect change, portsc: 0x10002e2
-[  433.315293] xhci_hcd 0000:3a:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
-[  433.317012] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-[  433.422282] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
-
-At this point the SMSC hub (usb 4-1) goes into compliance mode
-(USB_SS_PORT_LS_COMP_MOD), and USB core tries to warm-reset it,
-
-[  433.422307] usb usb4-port1: do warm reset
-[  433.422311] usb 4-1: device reset not allowed in state 8
-[  433.422339] hub 4-0:1.0: state 7 ports 2 chg 0002 evt 0000
-[  433.422346] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
-[  433.422356] usb usb4-port1: do warm reset
-[  433.422358] usb 4-1: device reset not allowed in state 8
-[  433.422428] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 0 status  = 0xf0002e2
-[  433.422455] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 1 status  = 0xe0002a0
-[  433.422465] hub 4-0:1.0: hub_suspend
-[  433.422475] usb usb4: bus auto-suspend, wakeup 1
-[  433.426161] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-[  433.466209] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.510204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.554051] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.598235] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.642154] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.686204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.730205] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.774203] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.818207] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.862040] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-[  433.862053] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-[  433.862077] xhci_hcd 0000:3a:00.0: xhci_suspend: stopping port polling.
-[  433.862096] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
-[  433.862312] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_suspend: 0
-[  433.862445] xhci_hcd 0000:3a:00.0: PME# enabled
-[  433.902376] xhci_hcd 0000:3a:00.0: restoring config space at offset 0xc (was 0x0, writing 0x20)
-[  433.902395] xhci_hcd 0000:3a:00.0: restoring config space at offset 0x4 (was 0x100000, writing 0x100403)
-[  433.902490] xhci_hcd 0000:3a:00.0: PME# disabled
-[  433.902504] xhci_hcd 0000:3a:00.0: enabling bus mastering
-[  433.902547] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
-[  433.902649] pcieport 0000:00:1b.0: PME: Spurious native interrupt!
-[  433.902839] xhci_hcd 0000:3a:00.0: Port change event, 4-1, id 3, portsc: 0xb0202e2
-[  433.902842] xhci_hcd 0000:3a:00.0: resume root hub
-[  433.902845] xhci_hcd 0000:3a:00.0: handle_port_status: starting port polling.
-[  433.902877] xhci_hcd 0000:3a:00.0: xhci_resume: starting port polling.
-[  433.902889] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-[  433.902891] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
-[  433.902919] usb usb4: usb wakeup-resume
-[  433.902942] usb usb4: usb auto-resume
-[  433.902966] hub 4-0:1.0: hub_resume
-...
-
-However the warm-reset never success, the asserted PCI PME keeps the
-runtime-resume, warm-reset and runtime-suspend loop which never bring it back
-causing spurious interrupts floods.
-
-After some trial and errors, the issue goes away if LPM on the SMSC hub
-is disabled. Digging further, enabling and disabling LPM during runtime
-resume and runtime suspend respectively can solve the issue.
-
-So bring back the old LPM behavior, which the SMSC hub inside Dell WD15
-depends on.
-
-Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/usb/core/hub.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 236313f41f4a..22a96d279b14 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3269,6 +3269,12 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
- 		if (PMSG_IS_AUTO(msg))
- 			goto err_ltm;
- 	}
-+	if (usb_unlocked_disable_lpm(udev)) {
-+		dev_err(&udev->dev, "Failed to disable LPM before suspend\n.");
-+		status = -ENOMEM;
-+		if (PMSG_IS_AUTO(msg))
-+			goto err_lpm3;
-+	}
- 
- 	/* see 7.1.7.6 */
- 	if (hub_is_superspeed(hub->hdev))
-@@ -3295,7 +3301,9 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
- 	if (status) {
- 		dev_dbg(&port_dev->dev, "can't suspend, status %d\n", status);
- 
--		/* Try to enable USB3 LTM again */
-+		/* Try to enable USB3 LPM and LTM again */
-+		usb_unlocked_enable_lpm(udev);
-+ err_lpm3:
- 		usb_enable_ltm(udev);
-  err_ltm:
- 		/* Try to enable USB2 hardware LPM again */
-@@ -3584,8 +3592,9 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 		/* Try to enable USB2 hardware LPM */
- 		usb_enable_usb2_hardware_lpm(udev);
- 
--		/* Try to enable USB3 LTM */
-+		/* Try to enable USB3 LTM and LPM */
- 		usb_enable_ltm(udev);
-+		usb_unlocked_enable_lpm(udev);
- 	}
- 
- 	usb_unlock_port(port_dev);
--- 
-2.17.1
-
+And after this, we need to find the NVM in LVFS and it has to pass validation in
+a few other locations. The chances are so low that I'd think it isn't worth
+worrying about it.
