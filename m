@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3375FC8C46
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:04:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AE3C8C66
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 17:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727984AbfJBPEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 11:04:38 -0400
-Received: from mx0b-00154904.pphosted.com ([148.163.137.20]:35424 "EHLO
-        mx0b-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725766AbfJBPEh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:04:37 -0400
-Received: from pps.filterd (m0170394.ppops.net [127.0.0.1])
-        by mx0b-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x92ElNI7011345;
-        Wed, 2 Oct 2019 11:04:36 -0400
+        id S1728241AbfJBPJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 11:09:51 -0400
+Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:10708 "EHLO
+        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725766AbfJBPJv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 11:09:51 -0400
+Received: from pps.filterd (m0170391.ppops.net [127.0.0.1])
+        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x92F66Tl012263;
+        Wed, 2 Oct 2019 11:09:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=smtpout1;
- bh=Fne4wKYhGsShISfTecSpQhEctBbJgVgrRkq91FzVd5M=;
- b=OUQvDO4+eIjflLJTbjhxIGyelEz/AqhnS08zQkc07qEmrNq9q+MHiPjTVrXHMdvHNPXV
- ZkhVDKrQEytftQmDTA47U0RmvHUPXjazSql86E1EZUH98RsGHpdT2tAwPhxnRBbWv1aI
- dx5+mmUR6A+VMPRKhaQOXiUg4SVA1SokjBdAZhAIXmC9t1MxGbQ0jyjcq4Nnsmuo/+f3
- Kpjay24+Bbf6niW8oraaa4wg4PhfqW7TEy+qkYfNMasLqCpEY5mCnqZIvVfnVN3A9eSV
- Uh5m8Ae1XOiXoSkbArPHURkO6iDhseMBg/y6eDWqKXSiFiVShvBH7QxVZjUPSuheAvu6 Pw== 
-Received: from mx0b-00154901.pphosted.com (mx0a-00154901.pphosted.com [67.231.149.39])
-        by mx0b-00154904.pphosted.com with ESMTP id 2va238bk2h-1
+ bh=sOn88WoOOxEAiUXFVWykYOhOLqPInXGGzmg9K0K8ST8=;
+ b=aaLEiDcG1f5UlZk5jXoe4NyoxFez0DBA2MS1LYYZlO9rDhD5F5/r+6e12aXcbW8z17Rs
+ ySTfJEi4MOvu7rz+HTJXJnzWAd61+KNHE3PnIZiygv3YWVAfP/NF1H2t6b3fJZMS0nK1
+ MpkeIJd7lGHjhy4WEAuxefi9jjqdk/9RQX02bM78pTxN/uNGQEDUUv07PTiWY7WvUGtQ
+ PDG1omgZb5o96sSJmzEZMAUnmzRPd8jSPQxhrtWkBgwZurbzaaA3mmc2F6ZAAJWOx38P
+ 3WRpXU2gThzyIVsSSXPpXqa6Sg9zDB/I76vM9Qi2bx+IXugOSRR/eOjtyQrRIbPZuck/ FA== 
+Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
+        by mx0a-00154904.pphosted.com with ESMTP id 2va2nyugcv-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Oct 2019 11:04:36 -0400
-Received: from pps.filterd (m0090350.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x92F3RIK123751;
-        Wed, 2 Oct 2019 11:04:35 -0400
-Received: from ausxippc106.us.dell.com (AUSXIPPC106.us.dell.com [143.166.85.156])
-        by mx0b-00154901.pphosted.com with ESMTP id 2vca1war6j-1
+        Wed, 02 Oct 2019 11:09:49 -0400
+Received: from pps.filterd (m0089483.ppops.net [127.0.0.1])
+        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x92F3Jfg141215;
+        Wed, 2 Oct 2019 11:09:49 -0400
+Received: from ausxippc101.us.dell.com (ausxippc101.us.dell.com [143.166.85.207])
+        by mx0b-00154901.pphosted.com with ESMTP id 2vcp03n1h5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 02 Oct 2019 11:04:35 -0400
-X-LoopCount0: from 10.166.132.130
+        Wed, 02 Oct 2019 11:09:48 -0400
+X-LoopCount0: from 10.166.132.127
 X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="467769692"
+X-IronPort-AV: E=Sophos;i="5.60,346,1549951200"; 
+   d="scan'208";a="1305371468"
 From:   <Mario.Limonciello@dell.com>
 To:     <mika.westerberg@linux.intel.com>
 CC:     <linux-usb@vger.kernel.org>, <andreas.noever@gmail.com>,
@@ -48,14 +48,15 @@ CC:     <linux-usb@vger.kernel.org>, <andreas.noever@gmail.com>,
         <anthony.wong@canonical.com>, <linux-kernel@vger.kernel.org>
 Subject: RE: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
 Thread-Topic: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Thread-Index: AQHVeEzShOhklesInk+gx9St4A7986dGAqiggAFZDQCAABiIsA==
-Date:   Wed, 2 Oct 2019 15:04:33 +0000
-Message-ID: <46d927da41d9430196f9aed10ed33d91@AUSX13MPC105.AMER.DELL.COM>
+Thread-Index: AQHVeEzShOhklesInk+gx9St4A7986dGAqiggAATYiCAAUbqgIAAF+Aw
+Date:   Wed, 2 Oct 2019 15:09:46 +0000
+Message-ID: <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
  <20191001113830.13028-18-mika.westerberg@linux.intel.com>
  <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
- <20191002083446.GF2714@lahna.fi.intel.com>
-In-Reply-To: <20191002083446.GF2714@lahna.fi.intel.com>
+ <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
+ <20191002083913.GG2714@lahna.fi.intel.com>
+In-Reply-To: <20191002083913.GG2714@lahna.fi.intel.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -63,7 +64,7 @@ X-MS-TNEF-Correlator:
 msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
  MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
  MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-10-02T15:04:31.9392793Z;
+ MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-10-02T15:09:45.1313028Z;
  MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
  MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
  Information Protection;
@@ -76,16 +77,16 @@ Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
  definitions=2019-10-02_07:2019-10-01,2019-10-02 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- clxscore=1015 spamscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910020139
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
- phishscore=0 adultscore=0 malwarescore=0 clxscore=1015 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910020138
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ mlxscore=0 spamscore=0 phishscore=0 clxscore=1015 adultscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1908290000
+ definitions=main-1910020139
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 lowpriorityscore=0
+ mlxscore=0 phishscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ bulkscore=0 spamscore=0 malwarescore=0 clxscore=1015 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1908290000
+ definitions=main-1910020139
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -93,7 +94,7 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 > -----Original Message-----
 > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Sent: Wednesday, October 2, 2019 3:35 AM
+> Sent: Wednesday, October 2, 2019 3:39 AM
 > To: Limonciello, Mario
 > Cc: linux-usb@vger.kernel.org; andreas.noever@gmail.com;
 > michael.jamet@intel.com; YehezkelShB@gmail.com; rajmohan.mani@intel.com;
@@ -105,54 +106,41 @@ X-Mailing-List: linux-usb@vger.kernel.org
 >=20
 > [EXTERNAL EMAIL]
 >=20
-> On Tue, Oct 01, 2019 at 05:05:09PM +0000, Mario.Limonciello@dell.com wrot=
+> On Tue, Oct 01, 2019 at 06:14:23PM +0000, Mario.Limonciello@dell.com wrot=
 e:
-> > > @@ -322,9 +398,21 @@ static int tb_switch_nvm_add(struct tb_switch *s=
-w)
-> > >  	u32 val;
-> > >  	int ret;
-> > >
-> > > -	if (!sw->dma_port)
-> > > +	if (!nvm_readable(sw))
-> > >  		return 0;
-> > >
-> > > +	/*
-> > > +	 * The NVM format of non-Intel hardware is not known so
-> > > +	 * currently restrict NVM upgrade for Intel hardware. We may
-> > > +	 * relax this in the future when we learn other NVM formats.
-> > > +	 */
-> > > +	if (sw->config.vendor_id !=3D PCI_VENDOR_ID_INTEL) {
-> > > +		dev_info(&sw->dev,
-> > > +			 "NVM format of vendor %#x is not known, disabling
-> NVM
-> > > upgrade\n",
-> > > +			 sw->config.vendor_id);
-> > > +		return 0;
-> > > +	}
-> > > +
+> > One more thought; would you consider exporting to sysfs sw-
+> >config.vendor_id?
+> > Maybe an attribute that is switch_vendor?
 > >
-> > Don't you actually have an attribute you can use here for this exact pu=
-rpose
-> that you
-> > could  be setting rather than returning immediately?
-> > sw->no_nvm_upgrade
-> >
-> > Then potentially you can at least let users "dump out" the nvm on !Inte=
-l but
-> don't let
-> > it be written until ready to relax further.
+> > Userland fwupd also does validation on the NVM and will need to follow =
+this.
+> > The same check will go into fwupd to match the vendor and lack of
+> nvm_non_active0
+> > to mark the device as not updatable.  When the checks in the kernel get
+> relaxed,
+> > some NVM parsing will have to make it over to fwupd too to relax the ch=
+eck at
+> that point.
 >=20
-> Problem is that we currently read NVM version and size from a known
-> location in the NVM. If we don't know the format we can't do that so
-> that would mean we need to expose active NVM with some size and hide
-> nvm_version. I would rather have this support included in the kernel
-> driver and expose standard set of attributes but no strong feelings from
-> one way or another.
+> The original idea was that the kernel does the basic validation and
+> userspace then does more complex checks. Currently you can compare the
+> two NVM images (active one and the new) and find that information there.
+> I think fwupd is doing just that already. Is that not enough?
 
-I agree with you; this is a safer and smarter approach to wait until detail=
-s of format
-for other vendors is known and export attributes only when it is.  This wil=
-l also
-encourage other vendors to open up their format if the only way to access N=
-VM is
-to document the headers.
+I guess for fwupd we can do this without the extra attribute:
+
+1) If no NVM files or nvm_version: means unsupported vendor -show that mess=
+aging somewhere.
+This means kernel doesn't know the vendor.
+
+2) If NVM file and nvm_version: means kernel knows it
+*fwupd checks the vendor offset for intel.
+-> intel: good, proceed
+->something else: fwupd needs to learn the format for the new vendor, show =
+messaging
+
+There is the unlikely case that kernel knows new vendor format and vendor N=
+VM happened to have
+same value as Intel vendor ID in same location of Intel NVM but another mea=
+ning.
+Hopefully that doesn't happen :)
