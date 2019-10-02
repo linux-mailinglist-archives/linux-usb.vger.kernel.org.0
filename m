@@ -2,105 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C776C9300
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 22:45:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B865C93AC
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 23:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728410AbfJBUpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 16:45:31 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:41465 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728074AbfJBUpb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 16:45:31 -0400
-Received: by mail-wr1-f66.google.com with SMTP id q9so492082wrm.8
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 13:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jIRr3vuyuHhrBwVmAhx40vU7nfIocHRyk3SvX/TxJC4=;
-        b=lv4yJe494FP24e+BxkKzcTuskkg8FrNyh9qdqcSg1Dcv3YTx+dhl1QGHDCgV45qcWp
-         ZNxzSzgnJql+p8K7F/qHe7DvnikBq2EAL6deWohmcmE3Dj4an0zi7HZZWN4d4KleAWHa
-         5B2L54OLRlITlgizMY4oi/giR85rWAuBn8BtcqRdE4qAwtGHlX1AB2jG9lQKvYR/v9XG
-         0/eBFQYRZtUvWtTCaV/fcGYg9WsYWSWFigtWx8zQdWoOa/r8/okmQQrR6DCQdWZFteKt
-         h4B4l8//QXMkN4rcXtV8xBx2veLPPNQ+WOSeMF2/QnBw1rAxLy7BLvMtGMSWk6C1fJmU
-         Wbmg==
+        id S1727252AbfJBVuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 17:50:13 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:37361 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726462AbfJBVuN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 17:50:13 -0400
+Received: by mail-io1-f70.google.com with SMTP id u18so1392366ioc.4
+        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 14:50:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jIRr3vuyuHhrBwVmAhx40vU7nfIocHRyk3SvX/TxJC4=;
-        b=Gi4czWXBso32vGZ5oKC2uoXNkqicUHEMvvcXDqneyFL3ZapMpQtWsftw9cBiuMpleF
-         D3uOZht3Ej0GeRHIvwIWgIZszQLQ1W5qU9g1DCxw6NrPCoyi7CSdAShT5k8QWQe60nbC
-         o+44Ilj03ylSvG7X85WxHcRybQzhRV+JHpYdc4jUGj/lpKSKGY5bAsCDWLqjI1Iv/k6h
-         4OOfqnsJdwCjRt8sn6y/+nRqfCNT/B3ckYafK/RG46BNp8RM8f3ymTrfxFd5T2LvlPya
-         iidLbxnkak8ojRB8dg/8IoOuw7tO9ReietjRE6apgzWmQiPWrWqLeg1HbufxigeZygSp
-         MaWQ==
-X-Gm-Message-State: APjAAAWzlOa6tYKsHIfsYONGKJxuCGyq2H7iDzGxepGsl50pWlW0XJyq
-        dIVNPTEXpsMtLaQWojVhswf3Kc1yr6XQq89PZ2umzQ==
-X-Google-Smtp-Source: APXvYqy+TnevZ77P69zWyJBKS6NLgVRkGaL2594mjSL4rzRv021kXGI1tgDYK/GUZKWeJltREM0md2yRhQO0pJ/k90w=
-X-Received: by 2002:a5d:40cf:: with SMTP id b15mr3499059wrq.141.1570049128814;
- Wed, 02 Oct 2019 13:45:28 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=FVFfSQ1N4e8sms9/3nhKCOCc7RVTElQVbWRSDR4Lz+w=;
+        b=P7DKMmivBLfn6QNwqrfIkpnBbIR4g7iHEP/hIn9XpuleehS3U+stBIBkMUEhsuJ8Ro
+         ZoKqF3dqupUEJTeh2ge/9SvW28ribAOD3Bralf0CY0fF2LbZ08U6kVqDMDFrinDeGoUl
+         GLQaHgDFY9YMnHGR0NTEeteKnrWQabnhYTv6T+JUxuaNQCcm4/ymYGX9WB7Jz5xGVw0L
+         JrQhl7SST28jR4CkoAQD9H/lHq4ZeRy4g/VUtqMdieX2jg8UpQ+DUiG45cq7RPBL3VnP
+         NUo+VtEHpwv4OvHHEydM7Q7oZecXMyz4br43xy7eDB98r6pFIMiqQqRNvdzlXnuaFJhh
+         mRTQ==
+X-Gm-Message-State: APjAAAWtl8yZjs+tiIQX/IXuVpxNXheBZ0rxhGwiFAfHHGSHZMq0j7ri
+        VcoaN4q3NPtdVt3k1ZfGMw/lJbPAgEJG94HRODIjMVQ2O7ei
+X-Google-Smtp-Source: APXvYqy5U8vEk6m4PI9O3uAMPgUs+AjruWPqkT+uB7XC8rwgLIBqxdvCaMjkxb0GRLWGttlC7FJchJHWsKQgGspmxvME0KMoeaXE
 MIME-Version: 1.0
-References: <20190925234224.95216-1-john.stultz@linaro.org>
- <20190925234224.95216-5-john.stultz@linaro.org> <1569461658.32135.12.camel@mhfsdcap03>
- <CALAqxLX=csTtnqr2Hc9v_R8ex8zPj_P1JvSyjZXUKEqSaF=gPA@mail.gmail.com> <1569480152.32135.16.camel@mhfsdcap03>
-In-Reply-To: <1569480152.32135.16.camel@mhfsdcap03>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 2 Oct 2019 13:45:17 -0700
-Message-ID: <CALAqxLUo59DDn=XhofOTHHkpuQPPTxx_jiTTA_o8sedCsxEkiw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] dt-bindings: usb: dwc3: of-simple: add compatible for HiSi
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a92:c530:: with SMTP id m16mr6570416ili.44.1570053011937;
+ Wed, 02 Oct 2019 14:50:11 -0700 (PDT)
+Date:   Wed, 02 Oct 2019 14:50:11 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000e235d0593f474ba@google.com>
+Subject: KMSAN: uninit-value in mts_usb_probe
+From:   syzbot <syzbot+5630ca7c3b2be5c9da5e@syzkaller.appspotmail.com>
+To:     glider@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        oliver@neukum.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 25, 2019 at 11:42 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> On Wed, 2019-09-25 at 21:06 -0700, John Stultz wrote:
-> > On Wed, Sep 25, 2019 at 6:34 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> > > On Wed, 2019-09-25 at 23:42 +0000, John Stultz wrote:
-> > > > +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
-> > > > @@ -0,0 +1,52 @@
-> > > > +HiSi SuperSpeed DWC3 USB SoC controller
-> > > > +
-> > > > +Required properties:
-> > > > +- compatible:                should contain "hisilicon,hi3660-dwc3" for HiSi SoC
-> > > > +- clocks:            A list of phandle + clock-specifier pairs for the
-> > > > +                     clocks listed in clock-names
-> > > > +- clock-names:               Should contain the following:
-> > > > +  "clk_usb3phy_ref"  Phy reference clk
-> > > It's not good idea to apply phy's clock in dwc3's node
-...
-> > Given the name clk_usb3phy_ref I'm assuming its a phy reference clock,
-> > but I honestly don't know if I'm getting that wrong.  It all seems to
-> > be leveraging the fact that the dwc-of-simple driver batch enables and
-> > disables all the clocks w/o really looking at the names.
-> >
-...
-> If it's phy clock, we should enable/disable it in phy driver, maybe we'd
-> better ask for help from Yu Chen
+Hello,
 
-So I've been looking around the existing code and I'm not sure how we
-got to clk_usb3phy_ref here.
+syzbot found the following crash on:
 
-Really it is the HI3660_CLK_ABB_USB, who's name is "clk_abb_usb" and
-who's parent is "clk_gate_usb_tcxo_en"
+HEAD commit:    fe36eb20 kmsan: rework SLUB hooks
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=17605b6fa00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=40511ad0c5945201
+dashboard link: https://syzkaller.appspot.com/bug?extid=5630ca7c3b2be5c9da5e
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11305710600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1506787fa00000
 
-So I'm thinking just specifying clk_abb_usb is more accurate here?
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+5630ca7c3b2be5c9da5e@syzkaller.appspotmail.com
 
-Does that sound reasonable?
+usb 1-1: config 0 interface 235 altsetting 0 bulk endpoint 0x5 has invalid  
+maxpacket 0
+usb 1-1: New USB device found, idVendor=05da, idProduct=009a,  
+bcdDevice=46.6b
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+microtek usb (rev 0.4.3): can only deal with bulk endpoints; endpoint 15 is  
+not bulk.
+microtek usb (rev 0.4.3): can only deal with bulk endpoints; endpoint 10 is  
+not bulk.
+microtek usb (rev 0.4.3): will this work? Command EP is not usually 5
+==================================================================
+BUG: KMSAN: uninit-value in mts_usb_probe+0xd1d/0xfb0  
+drivers/usb/image/microtek.c:754
+CPU: 1 PID: 33 Comm: kworker/1:1 Not tainted 5.2.0-rc4+ #11
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+  mts_usb_probe+0xd1d/0xfb0 drivers/usb/image/microtek.c:754
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x5853/0x7320 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
-thanks
--john
+Uninit was stored to memory at:
+  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:187 [inline]
+  kmsan_internal_chain_origin+0xcc/0x150 mm/kmsan/kmsan.c:349
+  __msan_chain_origin+0x6b/0xe0 mm/kmsan/kmsan_instr.c:190
+  mts_usb_probe+0xcf7/0xfb0 drivers/usb/image/microtek.c:748
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1344/0x1d90 drivers/base/dd.c:513
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:670
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:777
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:843
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:890
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2111
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2534
+  hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
+  port_event drivers/usb/core/hub.c:5350 [inline]
+  hub_event+0x5853/0x7320 drivers/usb/core/hub.c:5432
+  process_one_work+0x1572/0x1f00 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+
+Local variable description: ----ep_in_set@mts_usb_probe
+Variable was created at:
+  mts_usb_probe+0x53/0xfb0 drivers/usb/image/microtek.c:666
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
