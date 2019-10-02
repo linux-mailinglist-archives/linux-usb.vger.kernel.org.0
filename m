@@ -2,103 +2,444 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 727CCC86D9
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 13:00:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC998C8747
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 13:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727335AbfJBLAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 07:00:41 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34380 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726777AbfJBLAl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 07:00:41 -0400
-Received: by mail-lj1-f193.google.com with SMTP id j19so16674786lja.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 04:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YqW4lirDp6dhPL53QREOEClblGXQffbz/DGv2dLJs4Q=;
-        b=ISl1taxiHeTMVMMOn0n8wcdg1xJCR1fcz2fZFt8tGPPObtsnfloz8d6yuwZ/9jaDBC
-         EpdDdSIVXj2fa5iKwOBPzK1izqeisJnL+CPOwUoqWwMd4nnpL+vDOFHoSeaHcSqS4GjT
-         iCUvnNTfZGkmnxxuPGn9m+87WKlq8hpi7/JB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YqW4lirDp6dhPL53QREOEClblGXQffbz/DGv2dLJs4Q=;
-        b=iGu9J9XCeTuQ72Hv1GBtfnWfwBq7I90ErUo7J0lNj4tzmRt1Q/SYomCz2YoNBoi5hA
-         YFG1ffr84uUVTN8twE3osFH3cp+KpAoXl57m3UIpPKg4y7ejhmjGYXxsjcir5UQfsdbj
-         eUjSCEbQMA6ONeiAdNFk/mox4ObfN54GlccOdU3o/T7I5pOzXON27Db4QEVtba6AarAb
-         DF0KAm2RWJajivl/glFLhongWo1xqAk27CpUst0wnaoz4l/2bn/WfnPTBKn8iI7NKCfq
-         NodlXVgUoia0W0hCQdMJI4Rcwsj2WNQw8bNoPoqPEH4nrTJ3nJbijnerUaZjmLcg+jHi
-         PFng==
-X-Gm-Message-State: APjAAAXH96PLn1IloTEwRZOPu/+FvkCw9NR9zxCT2GYhr6Jss0miWYG7
-        9lFRiZQg8E5D16XGAVY2+GoAmA==
-X-Google-Smtp-Source: APXvYqzu9K6EJ442RqSftT7bhnv6pnQOGABkdQlZVfOHCKr4mFhLt1GwBoceHpgFO7VessYbj9nmHg==
-X-Received: by 2002:a2e:86d5:: with SMTP id n21mr1977522ljj.1.1570014037566;
-        Wed, 02 Oct 2019 04:00:37 -0700 (PDT)
-Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id y22sm4544784lfb.75.2019.10.02.04.00.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 04:00:37 -0700 (PDT)
-Subject: Re: [PATCH v3] string-choice: add yesno(), onoff(),
- enableddisabled(), plural() helpers
-To:     Jani Nikula <jani.nikula@intel.com>, linux-kernel@vger.kernel.org
-Cc:     Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Julia Lawall <julia.lawall@lip6.fr>
-References: <8e697984-03b5-44f3-304e-42d303724eaa@rasmusvillemoes.dk>
- <20191001080739.18513-1-jani.nikula@intel.com> <87eezvbgp1.fsf@intel.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <dc08714c-c76f-10f1-a5e7-7972beeb4552@rasmusvillemoes.dk>
-Date:   Wed, 2 Oct 2019 13:00:30 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728193AbfJBL07 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 07:26:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42588 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725917AbfJBL07 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Oct 2019 07:26:59 -0400
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4DCD121783;
+        Wed,  2 Oct 2019 11:26:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570015617;
+        bh=1EAqeuZ2lEPENoN77/GnLmhvfVQmkvL0HXX/c8tgDPI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=POgOW9RZv81pgir+qurUsULY4O1E9R6pxlpibnmd3ereVndMljGZAmjmJs7IMR+BJ
+         KsiH8I7zfJh3CkS7mZ2Zg4IYP+hDl1GPwYzAscXrR020z2T/mMKD8kMQwDTe7msnBn
+         kUs+cfa60m6AAXEIhVBwbxkOC1empJ6RlJpVWEVo=
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Emmanuel Vadot <manu@bidouilliste.com>
+Subject: [PATCH 1/2] ARM: dts: sunxi: Revert phy-names removal for ECHI and OHCI
+Date:   Wed,  2 Oct 2019 13:26:50 +0200
+Message-Id: <20191002112651.100504-1-mripard@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <87eezvbgp1.fsf@intel.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02/10/2019 12.11, Jani Nikula wrote:
-> On Tue, 01 Oct 2019, Jani Nikula <jani.nikula@intel.com> wrote:
->> While the main goal here is to abstract recurring patterns, and slightly
->> clean up the code base by not open coding the ternary operators, there
->> are also some space savings to be had via better string constant
->> pooling.
-> 
-> Make that
-> 
-> """
-> While the main goal here is to abstract recurring patterns, and slightly
-> clean up the code base by not open coding the ternary operators, using
-> functions to access the strings also makes it easier to seek different
-> implementation options for potential space savings on string constants
-> in the future.
-> """
-> 
-> to be more explicit that this change does not directly translate to any
-> space savings.
-> 
-> Rasmus, okay with that?
+This reverts commits 3d109bdca981 ("ARM: dts: sunxi: Remove useless
+phy-names from EHCI and OHCI"), 0a3df8bb6dad ("ARM: dts: sunxi: h3/h5:
+Remove useless phy-names from EHCI and OHCI") and 3c7ab90aaa28 ("arm64:
+dts: allwinner: Remove useless phy-names from EHCI and OHCI").
 
-It's rather fluffy, but it doesn't make unfounded claims about space
-savings, so in that regard I'm fine with it.
+It turns out that while the USB bindings were not mentionning it, the PHY
+client bindings were mandating that phy-names is set when phys is. Let's
+add it back.
 
-[It's probably just my lack of imagination, but I still fail to see how
-one could ever achieve better than the linker creating just 1
-vmlinux-wide instance of "enabled", which I believe happens regardless
-of whether one uses these helpers or not.]
+Fixes: 3d109bdca981 ("ARM: dts: sunxi: Remove useless phy-names from EHCI and OHCI")
+Fixes: 0a3df8bb6dad ("ARM: dts: sunxi: h3/h5: Remove useless phy-names from EHCI and OHCI")
+Fixes: 3c7ab90aaa28 ("arm64: dts: allwinner: Remove useless phy-names from EHCI and OHCI")
+Reported-by: Emmanuel Vadot <manu@bidouilliste.com>
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+---
+ arch/arm/boot/dts/sun4i-a10.dtsi                      | 4 ++++
+ arch/arm/boot/dts/sun5i.dtsi                          | 2 ++
+ arch/arm/boot/dts/sun6i-a31.dtsi                      | 4 ++++
+ arch/arm/boot/dts/sun7i-a20.dtsi                      | 4 ++++
+ arch/arm/boot/dts/sun8i-a23-a33.dtsi                  | 2 ++
+ arch/arm/boot/dts/sun8i-a83t.dtsi                     | 3 +++
+ arch/arm/boot/dts/sun8i-r40.dtsi                      | 4 ++++
+ arch/arm/boot/dts/sun9i-a80.dtsi                      | 5 +++++
+ arch/arm/boot/dts/sunxi-h3-h5.dtsi                    | 6 ++++++
+ arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts | 2 ++
+ arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi         | 2 ++
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi          | 2 ++
+ 12 files changed, 40 insertions(+)
 
-Rasmus
+diff --git a/arch/arm/boot/dts/sun4i-a10.dtsi b/arch/arm/boot/dts/sun4i-a10.dtsi
+index ce823c44e98a..4c268b70b735 100644
+--- a/arch/arm/boot/dts/sun4i-a10.dtsi
++++ b/arch/arm/boot/dts/sun4i-a10.dtsi
+@@ -520,6 +520,7 @@
+ 			interrupts = <39>;
+ 			clocks = <&ccu CLK_AHB_EHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -529,6 +530,7 @@
+ 			interrupts = <64>;
+ 			clocks = <&ccu CLK_USB_OHCI0>, <&ccu CLK_AHB_OHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -608,6 +610,7 @@
+ 			interrupts = <40>;
+ 			clocks = <&ccu CLK_AHB_EHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -617,6 +620,7 @@
+ 			interrupts = <65>;
+ 			clocks = <&ccu CLK_USB_OHCI1>, <&ccu CLK_AHB_OHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun5i.dtsi b/arch/arm/boot/dts/sun5i.dtsi
+index cfb1efc8828c..6befa236ba99 100644
+--- a/arch/arm/boot/dts/sun5i.dtsi
++++ b/arch/arm/boot/dts/sun5i.dtsi
+@@ -391,6 +391,7 @@
+ 			interrupts = <39>;
+ 			clocks = <&ccu CLK_AHB_EHCI>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -400,6 +401,7 @@
+ 			interrupts = <40>;
+ 			clocks = <&ccu CLK_USB_OHCI>, <&ccu CLK_AHB_OHCI>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun6i-a31.dtsi b/arch/arm/boot/dts/sun6i-a31.dtsi
+index bbeb743633c6..ac7638078420 100644
+--- a/arch/arm/boot/dts/sun6i-a31.dtsi
++++ b/arch/arm/boot/dts/sun6i-a31.dtsi
+@@ -545,6 +545,7 @@
+ 			clocks = <&ccu CLK_AHB1_EHCI0>;
+ 			resets = <&ccu RST_AHB1_EHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -555,6 +556,7 @@
+ 			clocks = <&ccu CLK_AHB1_OHCI0>, <&ccu CLK_USB_OHCI0>;
+ 			resets = <&ccu RST_AHB1_OHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -565,6 +567,7 @@
+ 			clocks = <&ccu CLK_AHB1_EHCI1>;
+ 			resets = <&ccu RST_AHB1_EHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -575,6 +578,7 @@
+ 			clocks = <&ccu CLK_AHB1_OHCI1>, <&ccu CLK_USB_OHCI1>;
+ 			resets = <&ccu RST_AHB1_OHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun7i-a20.dtsi b/arch/arm/boot/dts/sun7i-a20.dtsi
+index 49380de754a9..874231be04e4 100644
+--- a/arch/arm/boot/dts/sun7i-a20.dtsi
++++ b/arch/arm/boot/dts/sun7i-a20.dtsi
+@@ -623,6 +623,7 @@
+ 			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_AHB_EHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -632,6 +633,7 @@
+ 			interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_USB_OHCI0>, <&ccu CLK_AHB_OHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -714,6 +716,7 @@
+ 			interrupts = <GIC_SPI 40 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_AHB_EHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -723,6 +726,7 @@
+ 			interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>;
+ 			clocks = <&ccu CLK_USB_OHCI1>, <&ccu CLK_AHB_OHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun8i-a23-a33.dtsi b/arch/arm/boot/dts/sun8i-a23-a33.dtsi
+index 52eed0ae3607..f292f96ab39b 100644
+--- a/arch/arm/boot/dts/sun8i-a23-a33.dtsi
++++ b/arch/arm/boot/dts/sun8i-a23-a33.dtsi
+@@ -307,6 +307,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI>;
+ 			resets = <&ccu RST_BUS_EHCI>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -317,6 +318,7 @@
+ 			clocks = <&ccu CLK_BUS_OHCI>, <&ccu CLK_USB_OHCI>;
+ 			resets = <&ccu RST_BUS_OHCI>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+index 523be6611c50..74bb053cf23c 100644
+--- a/arch/arm/boot/dts/sun8i-a83t.dtsi
++++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+@@ -632,6 +632,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI0>;
+ 			resets = <&ccu RST_BUS_EHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -643,6 +644,7 @@
+ 			clocks = <&ccu CLK_BUS_OHCI0>, <&ccu CLK_USB_OHCI0>;
+ 			resets = <&ccu RST_BUS_OHCI0>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -654,6 +656,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI1>;
+ 			resets = <&ccu RST_BUS_EHCI1>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun8i-r40.dtsi b/arch/arm/boot/dts/sun8i-r40.dtsi
+index bde068111b85..c9c2688db66d 100644
+--- a/arch/arm/boot/dts/sun8i-r40.dtsi
++++ b/arch/arm/boot/dts/sun8i-r40.dtsi
+@@ -273,6 +273,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI1>;
+ 			resets = <&ccu RST_BUS_EHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -284,6 +285,7 @@
+ 				 <&ccu CLK_USB_OHCI1>;
+ 			resets = <&ccu RST_BUS_OHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -294,6 +296,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI2>;
+ 			resets = <&ccu RST_BUS_EHCI2>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -305,6 +308,7 @@
+ 				 <&ccu CLK_USB_OHCI2>;
+ 			resets = <&ccu RST_BUS_OHCI2>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sun9i-a80.dtsi b/arch/arm/boot/dts/sun9i-a80.dtsi
+index 4fd879fb099c..1d9d12a90df9 100644
+--- a/arch/arm/boot/dts/sun9i-a80.dtsi
++++ b/arch/arm/boot/dts/sun9i-a80.dtsi
+@@ -346,6 +346,7 @@
+ 			clocks = <&usb_clocks CLK_BUS_HCI0>;
+ 			resets = <&usb_clocks RST_USB0_HCI>;
+ 			phys = <&usbphy1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -357,6 +358,7 @@
+ 				 <&usb_clocks CLK_USB_OHCI0>;
+ 			resets = <&usb_clocks RST_USB0_HCI>;
+ 			phys = <&usbphy1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -378,6 +380,7 @@
+ 			clocks = <&usb_clocks CLK_BUS_HCI1>;
+ 			resets = <&usb_clocks RST_USB1_HCI>;
+ 			phys = <&usbphy2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -407,6 +410,7 @@
+ 			clocks = <&usb_clocks CLK_BUS_HCI2>;
+ 			resets = <&usb_clocks RST_USB2_HCI>;
+ 			phys = <&usbphy3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -418,6 +422,7 @@
+ 				 <&usb_clocks CLK_USB_OHCI2>;
+ 			resets = <&usb_clocks RST_USB2_HCI>;
+ 			phys = <&usbphy3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm/boot/dts/sunxi-h3-h5.dtsi b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+index eba190b3f9de..107eeafad20a 100644
+--- a/arch/arm/boot/dts/sunxi-h3-h5.dtsi
++++ b/arch/arm/boot/dts/sunxi-h3-h5.dtsi
+@@ -304,6 +304,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI1>, <&ccu CLK_BUS_OHCI1>;
+ 			resets = <&ccu RST_BUS_EHCI1>, <&ccu RST_BUS_OHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -315,6 +316,7 @@
+ 				 <&ccu CLK_USB_OHCI1>;
+ 			resets = <&ccu RST_BUS_EHCI1>, <&ccu RST_BUS_OHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -325,6 +327,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI2>, <&ccu CLK_BUS_OHCI2>;
+ 			resets = <&ccu RST_BUS_EHCI2>, <&ccu RST_BUS_OHCI2>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -336,6 +339,7 @@
+ 				 <&ccu CLK_USB_OHCI2>;
+ 			resets = <&ccu RST_BUS_EHCI2>, <&ccu RST_BUS_OHCI2>;
+ 			phys = <&usbphy 2>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -346,6 +350,7 @@
+ 			clocks = <&ccu CLK_BUS_EHCI3>, <&ccu CLK_BUS_OHCI3>;
+ 			resets = <&ccu RST_BUS_EHCI3>, <&ccu RST_BUS_OHCI3>;
+ 			phys = <&usbphy 3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -357,6 +362,7 @@
+ 				 <&ccu CLK_USB_OHCI3>;
+ 			resets = <&ccu RST_BUS_EHCI3>, <&ccu RST_BUS_OHCI3>;
+ 			phys = <&usbphy 3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+index 2b6345db7dc0..78c82a665c84 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinebook.dts
+@@ -104,6 +104,7 @@
+ 
+ &ehci0 {
+ 	phys = <&usbphy 0>;
++	phy-names = "usb";
+ 	status = "okay";
+ };
+ 
+@@ -150,6 +151,7 @@
+ 
+ &ohci0 {
+ 	phys = <&usbphy 0>;
++	phy-names = "usb";
+ 	status = "okay";
+ };
+ 
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+index d0028934e11c..70f4cce6be43 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
+@@ -544,6 +544,7 @@
+ 			resets = <&ccu RST_BUS_OHCI1>,
+ 				 <&ccu RST_BUS_EHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -555,6 +556,7 @@
+ 				 <&ccu CLK_USB_OHCI1>;
+ 			resets = <&ccu RST_BUS_OHCI1>;
+ 			phys = <&usbphy 1>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+index 4020a1aafa3e..0d5ea19336a1 100644
+--- a/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
++++ b/arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi
+@@ -547,6 +547,7 @@
+ 			resets = <&ccu RST_BUS_OHCI3>,
+ 				 <&ccu RST_BUS_EHCI3>;
+ 			phys = <&usb2phy 3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+@@ -558,6 +559,7 @@
+ 				 <&ccu CLK_USB_OHCI3>;
+ 			resets = <&ccu RST_BUS_OHCI3>;
+ 			phys = <&usb2phy 3>;
++			phy-names = "usb";
+ 			status = "disabled";
+ 		};
+ 
+-- 
+2.23.0
 
