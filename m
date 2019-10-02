@@ -2,110 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E69BC49F0
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 10:49:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54714C4A3D
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 11:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727042AbfJBIt0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 04:49:26 -0400
-Received: from mga11.intel.com ([192.55.52.93]:57077 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725799AbfJBIt0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Oct 2019 04:49:26 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Oct 2019 01:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,573,1559545200"; 
-   d="scan'208";a="205281421"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 02 Oct 2019 01:49:21 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 02 Oct 2019 11:49:21 +0300
-Date:   Wed, 2 Oct 2019 11:49:21 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Mario.Limonciello@dell.com,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191002084921.GJ2714@lahna.fi.intel.com>
-References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <20191001124748.GH2954373@kroah.com>
- <20191001130905.GO2714@lahna.fi.intel.com>
- <20191001145354.GA3366714@kroah.com>
- <20191001150734.GA2714@lahna.fi.intel.com>
- <1569947262.2639.15.camel@suse.com>
- <20191002083034.GE2714@lahna.fi.intel.com>
- <20191002083954.GD1687317@kroah.com>
+        id S1726384AbfJBJJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 05:09:36 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:34174 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726043AbfJBJJg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 05:09:36 -0400
+Received: by mail-io1-f66.google.com with SMTP id q1so55244321ion.1
+        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 02:09:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hlThU/0+3HTSxVJIpbAfEl3+62sbcU01NeSU7eG4LqY=;
+        b=IV1QR0NXPUhoMOjxwHh18ibizuWPQ+4/OYrnffr2ZXKuvvWAf9gmljv0v7HkbZEiVt
+         zARhx2Xi6V3Nma7orMBFSNGs/EK8tnXF2zJKtrGR34m4X9Sia9oZtwTdZ9YW68LPKN7a
+         sxBQJcC+4R6XsKKVlRNkM/0/FBQ7Y/7hFIrNmvYAlvyHYVprDoSwhQ4lMamuwfcnCAU6
+         Fx1R6ch3q3XUxYYCKd5KWw5MceInpGHhV7byF+XrHXmBPIDopaGbx75hbB8VUd8ACpkp
+         lgy4b+MOUeirAgVbku/LVB97akEMZURhy8bCooqQyQNd8UKbUVBLCisXuU4kzgw7Z/r0
+         nIpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hlThU/0+3HTSxVJIpbAfEl3+62sbcU01NeSU7eG4LqY=;
+        b=EM95N5w/CuS2wnshq1GJNsQ330qmxfpwFrvy4U7K4Saf7m2kvMsNm/PPZbg+8TmmZe
+         9Sfm7AtiecmlUeM90uSYua0vK8ghCThw4yEZepkbPH3/T8w67iVVMoPjHfB7DzW0+d9T
+         NScsy+PSmVl9uGWRKL6SB3xjItOeB5w5MZ0oROVgBLXoNSroHoRvenWUZ+Uq183fhtf9
+         EHn/hBm2qlHJD+qnAkKjyjtPbPXNfeieB8R4L+RM6D0suVeO0L1tZoYGjyc+zXE123ea
+         LAkNqVOvY7nYSJxpd3ooQat5E7QMfPnEeQcCFzUbPxCLiQgVIlEL+g4WbONl7ULYArKv
+         MgyQ==
+X-Gm-Message-State: APjAAAW6mreok+1s3CdhOoJOWfDs/bM9WelbFr7xkLbTxwMpiyll6zb8
+        jEbuN7KfDu+0HLBAO99DsAYRLXoKAwisFq9li4sQAw==
+X-Google-Smtp-Source: APXvYqzIoyvaXbrjboO82pq9HbUiv4XbYQZhJ+E6TRlLc9GG+m0ukGOgfxcjEGQG58Y44wkqcLgO7h1hPaR44lh3y9I=
+X-Received: by 2002:a02:b156:: with SMTP id s22mr2834772jah.102.1570007375665;
+ Wed, 02 Oct 2019 02:09:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191002083954.GD1687317@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <20191001132333.20146-1-brgl@bgdev.pl> <20191001133807.GB3563296@ulmo>
+In-Reply-To: <20191001133807.GB3563296@ulmo>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 2 Oct 2019 11:09:24 +0200
+Message-ID: <CAMRc=Me5tC2pFc56oWrcdLqu3YULYWPFXLXLW6uciZ5OPO7_Ug@mail.gmail.com>
+Subject: Re: [PATCH 0/3] tegra: use regulator_bulk_set_supply_names()
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        JC Kuo <jckuo@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 10:39:54AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, Oct 02, 2019 at 11:30:34AM +0300, Mika Westerberg wrote:
-> > On Tue, Oct 01, 2019 at 06:27:42PM +0200, Oliver Neukum wrote:
-> > > Am Dienstag, den 01.10.2019, 18:07 +0300 schrieb Mika Westerberg:
-> > > 
-> > > Hi,
-> > > 
-> > > > OK, but does that break existing .configs? I mean if you have already
-> > > > CONFIG_THUNDERBOLT in your .config/defconfig does it now just get
-> > > > dropped silently?
-> > > 
-> > > People will have to look at this new stuff anyway.
-> > > 
-> > > > For example firewire has CONFIG_FIREWIRE even though the "standard" name
-> > > > is IEEE 1394. I was thinking maybe we can do the same for
-> > > > USB4/Thunderbolt
-> > > 
-> > > USB and Thunderbolt used to be distinct protocols. Whereas Firewire
-> > > was just a colloquial name for IEEE1394. Please be wordy here.
-> > > "Unified support for USB4 and Thunderbolt4"
-> > 
-> > OK.
-> > 
-> > I've been thinking this bit more and since Thunderbolt will stick around
-> > as well (it basically implements all the optional USB4 features and
-> > more) so would it make sense to have the Kconfig option be
-> > CONFIG_THUNDERBOLT_USB4 (or CONFIG_USB4_THUNDERBOLT)? That should cover
-> > both.
-> 
-> I would stick with CONFIG_USB4 but put both in the Kconfig text.  Again,
-> it will be easier to handle this over time.
+wt., 1 pa=C5=BA 2019 o 15:38 Thierry Reding <thierry.reding@gmail.com> napi=
+sa=C5=82(a):
+>
+> On Tue, Oct 01, 2019 at 03:23:30PM +0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> >
+> > The regulator_bulk_set_supply_names() helper was merged upstream. Use i=
+t
+> > in a couple tegra drivers.
+> >
+> > Bartosz Golaszewski (3):
+> >   ahci: tegra: use regulator_bulk_set_supply_names()
+> >   phy: tegra: use regulator_bulk_set_supply_names()
+> >   usb: host: xhci-tegra: use regulator_bulk_set_supply_names()
+> >
+> >  drivers/ata/ahci_tegra.c      | 6 +++---
+> >  drivers/phy/tegra/xusb.c      | 6 +++---
+> >  drivers/usb/host/xhci-tegra.c | 5 +++--
+> >  3 files changed, 9 insertions(+), 8 deletions(-)
+>
+> I really don't see the point here. You've got a positive diffstat here,
+> which means all that churn is without benefit.
+>
 
-OK, thanks Greg!
+A hand-coded for loop is replaced with a single function call. The
+actual generated code is smaller - I posted bloat-o-meter results last
+time. The only reason the number of lines of code doesn't really
+change is because the line is broken due to the function and argument
+names being too long.
 
-> > Comments?
-> > 
-> > Also does anyone have any thoughts about keeping the driver under
-> > drivers/thunderbolt vs. moving it under usb like
-> > drivers/usb/thunderbolt? I'm thinking if anyone not familiar with this
-> > tries to enable support for USB4 so the first place he/she probably
-> > looks is under "USB support" menuconfig entry.
-> 
-> You are not sharing/needing any of the drivers/usb/ code just yet,
-> right? 
+> Is there some subsequent work based on this that will actually improve
+> things?
 
-Yes, that's correct.
+I'd argue that replacing a common operation that's reimplemented
+explicitly by hand in many places with a helper function is already an
+improvement. Consolidation is almost always good.
 
-> I imagine that will happen "soon" and when it does, then sure,
-> moving stuff is fine with me.
+That being said, I like your idea about the regulator_get_from_names
+helper, but it will take more time as we have to cover optional
+multiple regulators as well. In other words: it's on my TODO list, but
+in the meantime there's no harm in using this since Mark decided to
+make it a part of the regulator API anyway.
 
-OK thanks!
+Bart
