@@ -2,110 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54714C4A3D
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 11:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE177C4AB4
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 11:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726384AbfJBJJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 05:09:36 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:34174 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbfJBJJg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 05:09:36 -0400
-Received: by mail-io1-f66.google.com with SMTP id q1so55244321ion.1
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 02:09:36 -0700 (PDT)
+        id S1726775AbfJBJj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 05:39:57 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38055 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725852AbfJBJj5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 05:39:57 -0400
+Received: by mail-wr1-f68.google.com with SMTP id w12so18831555wro.5;
+        Wed, 02 Oct 2019 02:39:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hlThU/0+3HTSxVJIpbAfEl3+62sbcU01NeSU7eG4LqY=;
-        b=IV1QR0NXPUhoMOjxwHh18ibizuWPQ+4/OYrnffr2ZXKuvvWAf9gmljv0v7HkbZEiVt
-         zARhx2Xi6V3Nma7orMBFSNGs/EK8tnXF2zJKtrGR34m4X9Sia9oZtwTdZ9YW68LPKN7a
-         sxBQJcC+4R6XsKKVlRNkM/0/FBQ7Y/7hFIrNmvYAlvyHYVprDoSwhQ4lMamuwfcnCAU6
-         Fx1R6ch3q3XUxYYCKd5KWw5MceInpGHhV7byF+XrHXmBPIDopaGbx75hbB8VUd8ACpkp
-         lgy4b+MOUeirAgVbku/LVB97akEMZURhy8bCooqQyQNd8UKbUVBLCisXuU4kzgw7Z/r0
-         nIpQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=hraA8b1qBqpZHnOd5yn8HO/MRf75psj1fsbKICu/qto=;
+        b=Br7f7aRjotBomYBHxyfEyC2YFTKCobpkcIoFcpCi2SAFZlV5qBcj9P3ISaou6q74xE
+         k8Vjo14JoUVn68Eryk1x/q0q/A9BJ7hjjBVcSDA96AMhRStBccIiQ+of6LzzD2FVEWqC
+         Pi1P5yJvLqIL2C7/cCCG3OQgbmSJ+2FBLaBP07Vlj57wyXF3dA/0hlefdh8n2kI6wubP
+         Zyqs8zvShH/9iAnu3ybvRZX/PrzAdxfBEH26Yz/jPPyNXKqNro++kRlrnirdEnR66F8n
+         GFDVAaVu2hvqOBfAPq5dfmISEh3vDW/yMyE88ulpQ/7w6/kaWbyn+X1Pb3Bp8JlWhYCP
+         adFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hlThU/0+3HTSxVJIpbAfEl3+62sbcU01NeSU7eG4LqY=;
-        b=EM95N5w/CuS2wnshq1GJNsQ330qmxfpwFrvy4U7K4Saf7m2kvMsNm/PPZbg+8TmmZe
-         9Sfm7AtiecmlUeM90uSYua0vK8ghCThw4yEZepkbPH3/T8w67iVVMoPjHfB7DzW0+d9T
-         NScsy+PSmVl9uGWRKL6SB3xjItOeB5w5MZ0oROVgBLXoNSroHoRvenWUZ+Uq183fhtf9
-         EHn/hBm2qlHJD+qnAkKjyjtPbPXNfeieB8R4L+RM6D0suVeO0L1tZoYGjyc+zXE123ea
-         LAkNqVOvY7nYSJxpd3ooQat5E7QMfPnEeQcCFzUbPxCLiQgVIlEL+g4WbONl7ULYArKv
-         MgyQ==
-X-Gm-Message-State: APjAAAW6mreok+1s3CdhOoJOWfDs/bM9WelbFr7xkLbTxwMpiyll6zb8
-        jEbuN7KfDu+0HLBAO99DsAYRLXoKAwisFq9li4sQAw==
-X-Google-Smtp-Source: APXvYqzIoyvaXbrjboO82pq9HbUiv4XbYQZhJ+E6TRlLc9GG+m0ukGOgfxcjEGQG58Y44wkqcLgO7h1hPaR44lh3y9I=
-X-Received: by 2002:a02:b156:: with SMTP id s22mr2834772jah.102.1570007375665;
- Wed, 02 Oct 2019 02:09:35 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=hraA8b1qBqpZHnOd5yn8HO/MRf75psj1fsbKICu/qto=;
+        b=N1etcA2NBmXqaMUzJOTlze1cEY1ZJyYAPhv9cxR1yr7ND6BKSzF7rMM9otYhTf3SMI
+         gg9sErfRytz0S5jhNIrMkJ5fhhFqxfqv8cr6lWMbpFZjkKMFCNA2lO6KRuj4JV4VyKWD
+         xnbGtiC8zj/OhAhMLatgwcMpb3HIuGk1sr8u3kNfF7Hjsuf/n40r71ur19s8eu6D9uC2
+         ffNozGeb2DR9KNMQMscQjmuUZf+mtmiHCDlL7HZbbOCq31FMb+WbPWlKSlb6ZJK3cG/H
+         hzOunb/mlIDUa+7pErtGIc/9vzs60x2LLIuObLNnYJgoS8uQm/GaVpDwX4WRRNufiQ3y
+         U2Cw==
+X-Gm-Message-State: APjAAAUv/Z615yp0kN9eUkG8Y7TXd/7vNbLjazLsE44TziYFHjArJuY3
+        Jo9yqOaK98a5Vg+mRsoGgP4=
+X-Google-Smtp-Source: APXvYqwd7WSUQ5zWRLHLMWJXNP195SFhVpd8PQfrm58rOVm4+4e22s1GVrVvmifGAQz02d2VbJhz7w==
+X-Received: by 2002:a5d:4f0b:: with SMTP id c11mr1915132wru.63.1570009194755;
+        Wed, 02 Oct 2019 02:39:54 -0700 (PDT)
+Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
+        by smtp.gmail.com with ESMTPSA id o19sm9574626wmh.27.2019.10.02.02.39.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2019 02:39:52 -0700 (PDT)
+Date:   Wed, 2 Oct 2019 11:39:51 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        nkristam@nvidia.com, skomatineni@nvidia.com
+Subject: Re: [PATCH 1/6] xhci: tegra: Parameterize mailbox register addresses
+Message-ID: <20191002093951.GB3716706@ulmo>
+References: <20191002080051.11142-1-jckuo@nvidia.com>
+ <20191002080051.11142-2-jckuo@nvidia.com>
 MIME-Version: 1.0
-References: <20191001132333.20146-1-brgl@bgdev.pl> <20191001133807.GB3563296@ulmo>
-In-Reply-To: <20191001133807.GB3563296@ulmo>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 2 Oct 2019 11:09:24 +0200
-Message-ID: <CAMRc=Me5tC2pFc56oWrcdLqu3YULYWPFXLXLW6uciZ5OPO7_Ug@mail.gmail.com>
-Subject: Re: [PATCH 0/3] tegra: use regulator_bulk_set_supply_names()
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-ide@vger.kernel.org, linux-tegra@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aM3YZ0Iwxop3KEKx"
+Content-Disposition: inline
+In-Reply-To: <20191002080051.11142-2-jckuo@nvidia.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-wt., 1 pa=C5=BA 2019 o 15:38 Thierry Reding <thierry.reding@gmail.com> napi=
-sa=C5=82(a):
->
-> On Tue, Oct 01, 2019 at 03:23:30PM +0200, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bgolaszewski@baylibre.com>
-> >
-> > The regulator_bulk_set_supply_names() helper was merged upstream. Use i=
-t
-> > in a couple tegra drivers.
-> >
-> > Bartosz Golaszewski (3):
-> >   ahci: tegra: use regulator_bulk_set_supply_names()
-> >   phy: tegra: use regulator_bulk_set_supply_names()
-> >   usb: host: xhci-tegra: use regulator_bulk_set_supply_names()
-> >
-> >  drivers/ata/ahci_tegra.c      | 6 +++---
-> >  drivers/phy/tegra/xusb.c      | 6 +++---
-> >  drivers/usb/host/xhci-tegra.c | 5 +++--
-> >  3 files changed, 9 insertions(+), 8 deletions(-)
->
-> I really don't see the point here. You've got a positive diffstat here,
-> which means all that churn is without benefit.
->
 
-A hand-coded for loop is replaced with a single function call. The
-actual generated code is smaller - I posted bloat-o-meter results last
-time. The only reason the number of lines of code doesn't really
-change is because the line is broken due to the function and argument
-names being too long.
+--aM3YZ0Iwxop3KEKx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Is there some subsequent work based on this that will actually improve
-> things?
+On Wed, Oct 02, 2019 at 04:00:46PM +0800, JC Kuo wrote:
+> Tegra194 XUSB host controller has rearranged mailbox registers. This
+> commit makes mailbox registers address a part of "soc" data so that
+> xhci-tegra driver can be used for Tegra194.
+>=20
+> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+> ---
+>  drivers/usb/host/xhci-tegra.c | 58 +++++++++++++++++++++++++----------
+>  1 file changed, 42 insertions(+), 16 deletions(-)
 
-I'd argue that replacing a common operation that's reimplemented
-explicitly by hand in many places with a helper function is already an
-improvement. Consolidation is almost always good.
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-That being said, I like your idea about the regulator_get_from_names
-helper, but it will take more time as we have to cover optional
-multiple regulators as well. In other words: it's on my TODO list, but
-in the meantime there's no harm in using this since Mark decided to
-make it a part of the regulator API anyway.
+--aM3YZ0Iwxop3KEKx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Bart
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2UcGcACgkQ3SOs138+
+s6HZXxAAj/2ccE7HkLhaxNMza6KLkAIu71w1a/63g7IUbRc7yLn7g4PwViahNPI0
+cyT0wfdMIZlquxbf+g7w7kqHXcMdylo34cNFKApdVTmMy6axKnom/jVJ7SUY4RXe
+N5YGVUXEGIhtlsuherZNx0MCgVh59KZSegokKL0sUbn5FaN7n+al0hYB0jJBEg2Y
+MuUJHhKbF+JKDL1G+TKGjhC7HQZP4GZubc0NWZAII+KwLmQAcPUK5UuPbFXyCK3S
+exxBrULnhWidd9g8A+FJNCcJgQAlPDfdo5XHIgEi1ZHJLoOqBVgUiwX6aZw4TIRM
+8J10QdlK0EYGM6e5Rj396FJgjREYY78n+oUNqx+L5GTVgDNYLjZ7xTmLTUxq8Gng
+vPeSxlruwzzbcnfI5YvWS5Spj7ydMEG5jfBaW9el1MCCuuIVuIXA2nbfZmVaPpvG
+6FYxav5UUVzrNiIwK0F5+0+RaB0U5/IlNSjlBFi1n0d5E4vLLrpwMGtu2cFsFzkq
+ZiGkchUm2V41JOuXmU+CFNGfOWKhzDBYNEnCJ+We5qNwYx+OG6/iP/nEEPCkIr5p
+jFMStpz0JBi6MDG5Vas7WexdPsk9N/1lOszGzkLAMYAJSTF014uylLyyK0+Y6NQe
+6FOuL//KfM5QGrdCFU5RnwM/Zz8YlS39wUahPYgkmd6w5j3wR9Y=
+=+5KZ
+-----END PGP SIGNATURE-----
+
+--aM3YZ0Iwxop3KEKx--
