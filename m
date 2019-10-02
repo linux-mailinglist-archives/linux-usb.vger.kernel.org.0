@@ -2,89 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 333E7C900D
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 19:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6199C904E
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 19:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727624AbfJBRjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 13:39:24 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:43322 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727357AbfJBRjY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 13:39:24 -0400
-Received: by mail-pg1-f193.google.com with SMTP id v27so12222195pgk.10
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 10:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=cFpXM64CfYsN6fqI2zVJX/hi/GzgkYdzD93O/deq/9o=;
-        b=Kh3xLmmxFykn7KjO4tQLTIcF8hVGYjTWAZs3UltCFf0B3zu2nEi13Z6MRL1xYhpDs7
-         HdgM0c/MileIqDM6iYUi9QPvOsLO6qOTLWZ5F/veOnoQujDiCL2P4M9mRBl46M9NGG0P
-         J+Llf6VzhwjdqbFM74RbyocpH4ztcm/x0fG3H+iIhNXtOdK08GajG2sGDFotIQ1vAARs
-         6t6UcpQ+U7h1raiCMuOQGRp4UmszsYcAL6XjZn6dIQ8j5AQR1tZAb70AWJfIaShXptZ/
-         etirohvslFx608Su9L1HAztHSxLrQOsveEgntrNWnTaECea/gmMMdZzRokIBO5339Fsu
-         PVEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=cFpXM64CfYsN6fqI2zVJX/hi/GzgkYdzD93O/deq/9o=;
-        b=DByIcjj1fQ/MfmVbxiMmxU96kfFWqZ0H2+nv7HlVXfei/6eM1bFA0OWKmisLSof3ew
-         3VgfkI5R/FrlJfH1OF9IPNvgLenUf8lcCtCFVkYs5jJDaXV/+vq9kLa4jUoFvT2JX8jB
-         Y/9qOX/WyUfqQlYl3HJj0U02f0t2TFdNR2PUSHWjkDQ5GaarjmPlaiH3HRI/s2uXWUTi
-         CNsXbeKJ8zgiiPNInwENoKqbVwK5q/r3HfFrdQhaEMm0QP2+FaMdsc7KugAatyxUsA8e
-         sHC3fWHMQ0aVAnuz/RnC4txP5v105rwE/dWBsTnYrbH+Gsgn/Z9crM3taOB0et37ezMZ
-         S5iQ==
-X-Gm-Message-State: APjAAAUr4cZI2VZWGAIdBRnglh+8wt88342MHs9Ag0xJmE6Is2eBTOHx
-        GJeA8M1PXJQyNbTOIzwwk1J/SB4ykEM=
-X-Google-Smtp-Source: APXvYqznts+CFJfaLyG+WUIPhiZursfww/zOZoR95RE+B+KbsJ9FH9RixZfhO5FN8Ud+HG6VbacRrg==
-X-Received: by 2002:a63:8f5e:: with SMTP id r30mr5089998pgn.161.1570037963477;
-        Wed, 02 Oct 2019 10:39:23 -0700 (PDT)
-Received: from localhost.localdomain ([103.241.225.67])
-        by smtp.gmail.com with ESMTPSA id c62sm72271pfa.92.2019.10.02.10.39.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 10:39:22 -0700 (PDT)
-From:   aliasgar.surti500@gmail.com
-To:     b-liu@ti.com, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Aliasgar Surti <aliasgar.surti500@gmail.com>
-Subject: [PATCH] drivers: musb: removed unused status variable
-Date:   Wed,  2 Oct 2019 23:09:13 +0530
-Message-Id: <20191002173913.12847-1-aliasgar.surti500@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728468AbfJBR6I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 13:58:08 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:39128 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726669AbfJBR6H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 13:58:07 -0400
+Received: (qmail 5129 invoked by uid 2102); 2 Oct 2019 13:58:06 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 2 Oct 2019 13:58:06 -0400
+Date:   Wed, 2 Oct 2019 13:58:06 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Tim Harvey <tharvey@gateworks.com>
+cc:     linux-media <linux-media@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: PureThermal2 UVC video camera: Failed to submit URB 0 (-28)
+In-Reply-To: <CAJ+vNU32WbBd8BuHmojDh4adEemT57qviM12AeeiC8yFVNUgmg@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1910021343290.1552-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Aliasgar Surti <aliasgar.surti500@gmail.com>
+On Wed, 2 Oct 2019, Tim Harvey wrote:
 
-Status variable is initialized and returned without updating it's value.
-Removed status variable and returned value directly.
+> On Tue, Oct 1, 2019 at 12:19 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Tue, 1 Oct 2019, Tim Harvey wrote:
+> >
+> > > On Thu, Sep 26, 2019 at 3:47 PM Tim Harvey <tharvey@gateworks.com> wrote:
+> > > >
+> > > > Greetings,
+> > > >
+> > > > I'm running into an issue with a USB UVC Full speed camera, the
+> > > > PureThermal2 [1] on an IMX6 based ARM board.
+> > > >
+> > > > What I find is that I get two video devices registered (the first one
+> > > > is the expected device, and I'm not clear what the 2nd one is). When I
+> > > > try to capture a single frame I get 'Failed to submit URB 0 (-28)'
+> > > > which historically has been due to a bandwidth issue. I encounter this
+> > > > on the IMX6 EHCI host as well as the OTG host when no other devices
+> > > > are connected (no hubs either). I've tested with both a 4.20 kernel
+> > > > and a 5.3 kernel.
+> > > >
+> > > > If I plug this device into another board I have based on an OcteonTX
+> > > > ARM64 cpu with a fairly modern 4.14 kernel and I find that a single
+> > > > video device gets registered and I can capture just fine.
+> > > >
+> > > > Here are some details:
+> > > > lsusb reports: 1e4e:0100 Cubeternet WebCam
+> > > >
+> > > > working system with 4.14 kernel hot-inserting the camera:
+> > > > [  495.163276] usb 1-1.2: new full-speed USB device number 6 using xhci_hcd
+> > > > [  495.291685] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> > > > (1e4e:0100)
+> > > > [  495.300543] input: PureThermal (fw:v1.2.2): PureTh as
+> > > > /devices/platform/soc@0/848000000000.pci/pci0000:00/0000:00:10.0/usb1/1-1/1-1.2/1-1.2:1.0/input/input1
+> > > > [  496.731214] usb 1-1.2: USB disconnect, device number 6
+> > > > [  496.987294] usb 1-1.2: new full-speed USB device number 7 using xhci_hcd
+> > > > [  497.115683] uvcvideo: Found UVC 1.00 device PureThermal (fw:v1.2.2)
+> > > > (1e4e:0100)
+> > > > [  497.124182] input: PureThermal (fw:v1.2.2): PureTh as
+> > > > /devices/platform/soc@0/848000000000.pci/pci0000:00/0000:00:10.0/usb1/1-1/1-1.2/1-1.2:1.0/input/input2
+> >
+> > ...
+> >
+> > > > I'm also not clear why the device enumerates then disconnects and
+> > > > enumerates again when plugged in but this happens on the system it
+> > > > works on as well and I've seen similar things with other devices.
+> >
+> > Perhaps some process opens the camera's device file, does something to
+> > cause the camera to disconnect and reconnect, but then doesn't close
+> > the file.
+> 
+> Alan,
+> 
+> I found that the '2 devices' is because of a kernel commit in 4.16
+> that adds support for UVC metadata: 088ead2 media: uvcvideo: Add a
+> metadata device node. I can comment out the call to
+> uvc_meta_register() and the 2nd device goes away but the first (and
+> only) v4l2 capture device still has the same issue.
 
-Signed-off-by: Aliasgar Surti <aliasgar.surti500@gmail.com>
----
- drivers/usb/musb/musb_gadget.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Okay, that explains that.
 
-diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-index ffe462a657b1..2cb31fc0cd60 100644
---- a/drivers/usb/musb/musb_gadget.c
-+++ b/drivers/usb/musb/musb_gadget.c
-@@ -1085,7 +1085,6 @@ static int musb_gadget_disable(struct usb_ep *ep)
- 	u8		epnum;
- 	struct musb_ep	*musb_ep;
- 	void __iomem	*epio;
--	int		status = 0;
- 
- 	musb_ep = to_musb_ep(ep);
- 	musb = musb_ep->musb;
-@@ -1118,7 +1117,7 @@ static int musb_gadget_disable(struct usb_ep *ep)
- 
- 	musb_dbg(musb, "%s", musb_ep->end_point.name);
- 
--	return status;
-+	return 0;
- }
- 
- /*
--- 
-2.17.1
+> > > I have found that if I enumerate the camera through a PCIe based XHCI
+> > > host controller it still registers the 2 v4l2 devices but in this case
+> > > I can capture fine. So it would appear that this has something to do
+> > > with the IMX6 ci_hdrc controller. The -ENOSPC is getting returned from
+> > > drivers/usb/host/ehci-sched.c:iso_stream_schedule()
+> > >
+> > > I feel perhaps this is something basic I don't understand regarding
+> > > USB URB scheduling but I don't get why it occurs on the IMX6 ci_hdrc
+> > > controller on not an XHCI controller.
+> >
+> > It's probably related to differences between the drivers.  What shows
+> > up in /sys/kernel/debug/usb/devices with the camera plugged in?
+> >
+> 
+> Here's some more debugging including /sys/kernel/debug/usb/devices:
+> ~# cat /sys/kernel/debug/usb/devices
+> 
+> T:  Bus=01 Lev=00 Prnt=00 Port=00 Cnt=00 Dev#=  1 Spd=480  MxCh= 1
+> B:  Alloc=  0/800 us ( 0%), #Int=  0, #Iso=  0
+> D:  Ver= 2.00 Cls=09(hub  ) Sub=00 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=1d6b ProdID=0002 Rev= 5.03
+> S:  Manufacturer=Linux 5.3.0-00157-g651f7f9-dirty ehci_hcd
+> S:  Product=EHCI Host Controller
+> S:  SerialNumber=ci_hdrc.0
+> C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=00 Driver=hub
+> E:  Ad=81(I) Atr=03(Int.) MxPS=   4 Ivl=256ms
+> 
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
+> D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=1e4e ProdID=0100 Rev= 2.00
+> S:  Manufacturer=GroupGets
+> S:  Product=PureThermal (fw:v1.2.2)
+> S:  SerialNumber=801f001c-5102-3038-3835-393400000000
+> C:* #Ifs= 2 Cfg#= 1 Atr=80 MxPwr=100mA
+> A:  FirstIf#= 0 IfCount= 2 Cls=0e(video) Sub=03 Prot=00
+> I:* If#= 0 Alt= 0 #EPs= 1 Cls=0e(video) Sub=01 Prot=00 Driver=uvcvideo
+> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+> I:* If#= 1 Alt= 0 #EPs= 0 Cls=0e(video) Sub=02 Prot=00 Driver=uvcvideo
+> I:  If#= 1 Alt= 1 #EPs= 1 Cls=0e(video) Sub=02 Prot=00 Driver=uvcvideo
+> E:  Ad=81(I) Atr=01(Isoc) MxPS= 962 Ivl=1ms
+
+So the camera is the only device on the bus (aside from the root hub).  
+And it asks for an 8-byte interrupt endpoint together with a 962-byte
+isochronous endpoint.
+
+That explains the problem.  ehci-hcd (the same code manages ChipIdea
+controllers) doesn't do a good job of handling high-bandwidth periodic
+requests for full-speed devices, particularly when isochronous and
+interrupt endpoints are both present.
+
+> So regardless of resolution/frame-size the device is requesting 962
+> byte USB frame bandwidth which should be just fine for USB full speed
+> in iso mode (max 1023). I'm not sure why the bandwidth reservation
+> fails.
+
+Yes, that amount of data is fine for full-speed USB.  But handling 
+full-speed devices attached to a high-speed controller isn't easy, and 
+ehci-hcd isn't able to make use of all the possible bandwidth.  In 
+fact, you'd be better off attaching the camera to a full-speed USB 1.1 
+controller, if one were available for your system.
+
+xHCI controllers, on the other hand, handle all the scheduling issues
+in hardware so the driver doesn't have to deal with them.  Evidently
+the ones you tried don't have any trouble in this situation.
+
+> Apparently the RaspberryPi 4 has this same issue:
+> https://github.com/raspberrypi/linux/issues/3136. The same thread
+> mentions that most USB full speed devices have fall-back endpoint
+> max-packet sizes that allow for reduced bandwidth reservations (but
+> this camera does not).
+> 
+> I get the same results regardless of CONFIG_USB_EHCI_TT_NEWSCHED enabled or not.
+
+And indeed, the same problem will occur whenever this device is 
+attached to an EHCI controller on a Linux-based system, unless somebody 
+goes to the trouble of improving the driver.  (It's tremendously 
+complicated -- the spec puts almost all the burden on the software 
+rather than the hardware/firmware -- and probably not worth the effort 
+of trying to do it correctly.  I wouldn't be surprised if adding proper 
+support for this would double the size of the driver.)
+
+Alan Stern
 
