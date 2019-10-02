@@ -2,104 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B614C49BA
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 10:40:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B9AC49EA
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Oct 2019 10:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfJBIj6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 04:39:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56264 "EHLO mail.kernel.org"
+        id S1726830AbfJBIsN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 04:48:13 -0400
+Received: from mga18.intel.com ([134.134.136.126]:3556 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726102AbfJBIj6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Oct 2019 04:39:58 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BDD26206C0;
-        Wed,  2 Oct 2019 08:39:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570005596;
-        bh=0ybPNFUhDC0HjkzvsQ82Z8pZaK/JIy0grwNqenttViw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G0j/bB7xwdaa+EdHv0AqfkqkGOFATKfd1CjySzwA6rrwip7BtEotRZGF1cMPvhY95
-         gJUyz3RsUUKCSLbaAnz9PnRpkJE0dJGauqWzc+H8CBgPgXLjiWFrj9tLmp4+kXCydF
-         E2zpU5txhPfuKY3gSHweITVHzB1iueo91vLNwE0Y=
-Date:   Wed, 2 Oct 2019 10:39:54 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Mario.Limonciello@dell.com,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191002083954.GD1687317@kroah.com>
+        id S1726010AbfJBIsN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Oct 2019 04:48:13 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Oct 2019 01:48:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,573,1559545200"; 
+   d="scan'208";a="205281082"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 02 Oct 2019 01:48:08 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 02 Oct 2019 11:48:08 +0300
+Date:   Wed, 2 Oct 2019 11:48:08 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario.Limonciello@dell.com
+Cc:     linux-usb@vger.kernel.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        rajmohan.mani@intel.com,
+        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        anthony.wong@canonical.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 22/22] thunderbolt: Do not start firmware unless
+ asked by the user
+Message-ID: <20191002084808.GI2714@lahna.fi.intel.com>
 References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <20191001124748.GH2954373@kroah.com>
- <20191001130905.GO2714@lahna.fi.intel.com>
- <20191001145354.GA3366714@kroah.com>
- <20191001150734.GA2714@lahna.fi.intel.com>
- <1569947262.2639.15.camel@suse.com>
- <20191002083034.GE2714@lahna.fi.intel.com>
+ <20191001113830.13028-23-mika.westerberg@linux.intel.com>
+ <10cccc5a8d1a43fd9769ab6c4b53aeba@AUSX13MPC105.AMER.DELL.COM>
+ <20191001145850.GZ2714@lahna.fi.intel.com>
+ <1cec43f38ccd42d9a4d9a9c86365a24a@AUSX13MPC105.AMER.DELL.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191002083034.GE2714@lahna.fi.intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <1cec43f38ccd42d9a4d9a9c86365a24a@AUSX13MPC105.AMER.DELL.COM>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 11:30:34AM +0300, Mika Westerberg wrote:
-> On Tue, Oct 01, 2019 at 06:27:42PM +0200, Oliver Neukum wrote:
-> > Am Dienstag, den 01.10.2019, 18:07 +0300 schrieb Mika Westerberg:
+On Tue, Oct 01, 2019 at 04:53:54PM +0000, Mario.Limonciello@dell.com wrote:
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Tuesday, October 1, 2019 9:59 AM
+> > To: Limonciello, Mario
+> > Cc: linux-usb@vger.kernel.org; andreas.noever@gmail.com;
+> > michael.jamet@intel.com; YehezkelShB@gmail.com; rajmohan.mani@intel.com;
+> > nicholas.johnson-opensource@outlook.com.au; lukas@wunner.de;
+> > gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
+> > anthony.wong@canonical.com; linux-kernel@vger.kernel.org
+> > Subject: Re: [RFC PATCH 22/22] thunderbolt: Do not start firmware unless asked by
+> > the user
 > > 
-> > Hi,
 > > 
-> > > OK, but does that break existing .configs? I mean if you have already
-> > > CONFIG_THUNDERBOLT in your .config/defconfig does it now just get
-> > > dropped silently?
+> > [EXTERNAL EMAIL]
 > > 
-> > People will have to look at this new stuff anyway.
+> > On Tue, Oct 01, 2019 at 02:43:15PM +0000, Mario.Limonciello@dell.com wrote:
+> > > > -----Original Message-----
+> > > > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > Sent: Tuesday, October 1, 2019 6:39 AM
+> > > > To: linux-usb@vger.kernel.org
+> > > > Cc: Andreas Noever; Michael Jamet; Mika Westerberg; Yehezkel Bernat;
+> > Rajmohan
+> > > > Mani; Nicholas Johnson; Lukas Wunner; Greg Kroah-Hartman; Alan Stern;
+> > > > Limonciello, Mario; Anthony Wong; linux-kernel@vger.kernel.org
+> > > > Subject: [RFC PATCH 22/22] thunderbolt: Do not start firmware unless asked by
+> > the
+> > > > user
+> > > >
+> > > >
+> > > > [EXTERNAL EMAIL]
+> > > >
+> > > > Since now we can do pretty much the same thing in the software
+> > > > connection manager than the firmware would do, there is no point
+> > > > starting it by default. Instead we can just continue using the software
+> > > > connection manager.
+> > > >
+> > > > Make it possible for user to switch between the two by adding a module
+> > > > pararameter (start_icm) which is by default false. Having this ability
+> > > > to enable the firmware may be useful at least when debugging possible
+> > > > issues with the software connection manager implementation.
+> > >
+> > > If the host system firmware didn't start the ICM, does that mean SW connection
+> > > manager would just take over even on systems with discrete AR/TR controllers?
 > > 
-> > > For example firewire has CONFIG_FIREWIRE even though the "standard" name
-> > > is IEEE 1394. I was thinking maybe we can do the same for
-> > > USB4/Thunderbolt
-> > 
-> > USB and Thunderbolt used to be distinct protocols. Whereas Firewire
-> > was just a colloquial name for IEEE1394. Please be wordy here.
-> > "Unified support for USB4 and Thunderbolt4"
+> > Yes. This is pretty much the case with Apple systems now.
 > 
-> OK.
+> Potentially if system firmware started ICM can we accomplish the same thing by
+> resetting AR/TR that normally use ICM and then SW CM would take over?
 > 
-> I've been thinking this bit more and since Thunderbolt will stick around
-> as well (it basically implements all the optional USB4 features and
-> more) so would it make sense to have the Kconfig option be
-> CONFIG_THUNDERBOLT_USB4 (or CONFIG_USB4_THUNDERBOLT)? That should cover
-> both.
+> Or is the ICM started up automatically when the controller is power cycled based
+> on something in the NVM?
 
-I would stick with CONFIG_USB4 but put both in the Kconfig text.  Again,
-it will be easier to handle this over time.
+It is something in the NVM :)
 
-> Comments?
+> I'm trying to find a way that I can usefully exercise some of this stuff on pre-USB4
+> controllers like AR/TR/ICL-TBT.
+
+Only way I can think of is to find yourself a Mac ;-)
+
+> > > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > > > ---
+> > > >  drivers/thunderbolt/icm.c | 14 +++++++++++---
+> > > >  drivers/thunderbolt/tb.c  |  4 ----
+> > > >  2 files changed, 11 insertions(+), 7 deletions(-)
+> > > >
+> > > > diff --git a/drivers/thunderbolt/icm.c b/drivers/thunderbolt/icm.c
+> > > > index 9c9c6ea2b790..c4a2de0f2a44 100644
+> > > > --- a/drivers/thunderbolt/icm.c
+> > > > +++ b/drivers/thunderbolt/icm.c
+> > > > @@ -11,6 +11,7 @@
+> > > >
+> > > >  #include <linux/delay.h>
+> > > >  #include <linux/mutex.h>
+> > > > +#include <linux/moduleparam.h>
+> > > >  #include <linux/pci.h>
+> > > >  #include <linux/pm_runtime.h>
+> > > >  #include <linux/platform_data/x86/apple.h>
+> > > > @@ -43,6 +44,10 @@
+> > > >  #define ICM_APPROVE_TIMEOUT		10000	/* ms */
+> > > >  #define ICM_MAX_LINK			4
+> > > >
+> > > > +static bool start_icm;
+> > > > +module_param(start_icm, bool, 0444);
+> > > > +MODULE_PARM_DESC(start_icm, "start ICM firmware if it is not running
+> > (default:
+> > > > false)");
+> > > > +
+> > > >  /**
+> > > >   * struct icm - Internal connection manager private data
+> > > >   * @request_lock: Makes sure only one message is send to ICM at time
+> > > > @@ -1353,13 +1358,16 @@ static bool icm_ar_is_supported(struct tb *tb)
+> > > >  {
+> > > >  	struct pci_dev *upstream_port;
+> > > >  	struct icm *icm = tb_priv(tb);
+> > > > +	u32 val;
+> > > >
+> > > >  	/*
+> > > >  	 * Starting from Alpine Ridge we can use ICM on Apple machines
+> > > >  	 * as well. We just need to reset and re-enable it first.
+> > >
+> > > This comment doesn't really seem as relevant anymore.  The meaning of it
+> > > has nothing to do with Apple anymore.
+> > 
+> > Actually it is still relevant. For USB4 the intent is to have FW/SW CM
+> > switch in ACPI spec instead. But that is still under discussion.
 > 
-> Also does anyone have any thoughts about keeping the driver under
-> drivers/thunderbolt vs. moving it under usb like
-> drivers/usb/thunderbolt? I'm thinking if anyone not familiar with this
-> tries to enable support for USB4 so the first place he/she probably
-> looks is under "USB support" menuconfig entry.
+> Like read a hint from an ACPI table that indicates which one driver should use?
 
-You are not sharing/needing any of the drivers/usb/ code just yet,
-right?  I imagine that will happen "soon" and when it does, then sure,
-moving stuff is fine with me.
+Yes.
 
-thanks,
+I think it will be extension to _OSC but as it is still under discussion
+so subject to change.
 
-greg k-h
+> The idea being early USB4 systems would test and ship with this bit set to
+> FW CM and later USB4 systems can have it set to SW CM?
+
+Correct.
+
+> I like that idea, but I think that you almost want the module parameter to indicate
+> which CM you want to "use" instead so you would override what was set in ACPI
+> either way, but default to auto.
+> 
+> cm=auto
+> TBT3 and less: follow NVM behavior
+> USB4: follow ACPI table, either use FW or SW CM.
+> 
+> cm=icm
+> Start up ICM, or error out if you can't.
+> 
+> cm=sw
+> Stop ICM if it's running, and initialize using kernel CM.
+>
+> That would certainly allow running this across some more configurations really easily then.
+
+The point with start_icm is to act as "chicken bit" in case SW CM (Linux
+driver) does not work properly. Nothing else. User can then switch back
+to FW CM on their Apple system and get more "working" system hopefully
+reporting this to us so we can try to figure out what's wrong with the
+driver :)
+
+I don't think it is good idea to have a module parameter to control
+anything else that is supposed to be set in the BIOS/boot firmware.
