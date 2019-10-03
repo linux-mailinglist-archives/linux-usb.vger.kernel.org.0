@@ -2,80 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F68C9AB2
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 11:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141B5C9AFA
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 11:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729235AbfJCJZX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 05:25:23 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:56890 "EHLO
+        id S1729207AbfJCJr2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 05:47:28 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:47625 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729133AbfJCJZX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 05:25:23 -0400
+        by vger.kernel.org with ESMTP id S1728966AbfJCJrW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 05:47:22 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1570094721;
+        s=mimecast20190719; t=1570096040;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wJTm8qjekjGG4PrnF39LqJE2BWesr9XqmlyPrS5rEd0=;
-        b=UevZiprx+FZWQpj7lN9Y9rXJLdIo3OD9qNkGJ7KlE0UCB8mN7Jj48AGjS5+sm+NcYM9cm+
-        ODWFy0FhPA3wlEk2ChQD3gn0r55VUgH7CopIqjRwn+byH6+qrmD4O97LT5eCjVG6r+EN7R
-        caYoHZQcQezsFeREjFFxVc++s0juDUY=
+        bh=Slr5vJy6mbyz1qs6FInoT5bsgy6V9VipGUl+FsYhiIY=;
+        b=Nv81P6T6FYn9cQ/lhjI9K31MxqrWVviIHBbPAUvw0twpKu5FGeiRqXXaFm3lUiVxRAcgtP
+        1/JELNkuaNlWL9AIsSPPihcBoWoB8bWfu7h3AG/VYV/cwX3S0DtIVe05dns0tzpJkK5v46
+        zfSkYiSlkbwfPl5rS2MIjftuvv4OI60=
 Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
  [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-254-S_mC1arhMRmu_l6RmC-p_Q-1; Thu, 03 Oct 2019 05:25:19 -0400
-Received: by mail-ed1-f72.google.com with SMTP id y66so1209884ede.16
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 02:25:19 -0700 (PDT)
+ us-mta-141-ZOx5b6eSM4yObOSCJEaVDA-1; Thu, 03 Oct 2019 05:47:18 -0400
+Received: by mail-ed1-f72.google.com with SMTP id c90so1247915edf.17
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 02:47:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=cspO/1Bz1DeOPFHQg8Glup0zEPBRBEmpHq6m1779G1Y=;
-        b=b/4AgOoDSBE5z9FRLhlMELk3ZLsC5KXXrfCNLw2lFYzILWLjg8aLpbLDB7VrWE8T01
-         zVEwtQ05FI9m8+e6FX5cYYJyiNaLWkQIcpLlSnYVPfONFmuBfYAZxu5bl62hEzODUPGA
-         lOtILGQ4h4/EEI58Wo7GYOpbrKogrRpPp3ukMk4pnkAiM83swfMbIRrslvK+rZBAeqVR
-         TFiJsoPmPKKYOG5TwrhqlN/ylPEs0pJ8pxZb5osomZn7NoYfVBg59yz4ae8KH+oaTg7I
-         HTZPlB8hKEzQ08bitJ8Yp0X9icaL80NIxOhArRjc5XCA2VX5OnXt5zkLvzsUptGJ9tqk
-         NnXA==
-X-Gm-Message-State: APjAAAUzsSXCNCzu05D/AEiyTQq+ja+U8YcnsToyR4CMI3dg+pgnIRD3
-        z89MPKUG6kpgFTGs3Asa8X+qCPTyJDXELmucjxVGiPYTOFISk0YxxRcvAXQTXkzahrF4YH1mSK2
-        LKFhFWHltiR5rLWbcx+qB
-X-Received: by 2002:a17:906:4a11:: with SMTP id w17mr6603196eju.21.1570094718204;
-        Thu, 03 Oct 2019 02:25:18 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyF0XjeBA/u82PuUYlN7Lwy0E1mH4R9bAy0WzuLvek8alGmoNwjlnGXS9ppktVor4dlw7Szcw==
-X-Received: by 2002:a17:906:4a11:: with SMTP id w17mr6603171eju.21.1570094717966;
-        Thu, 03 Oct 2019 02:25:17 -0700 (PDT)
+        bh=5u7AYILS1XoHJtXlAmd4z9JODYl7wd80zKyrfd1Qcsk=;
+        b=FRzh8cmPqIUcYHl9sT9XIu1m9Tmm4KmHmePPaqxyc0kjuVZVedkhZxtP4r+0TF8YSY
+         imb3tvpnCt64DHak/3lu0FIUZIe+MnwFi2A9qDIYLgZOdTthwqxrs+RzmJ7egH6vXCr7
+         vX0eKVvBW3gD5vmv+f9J5oqCHQAa7Ldpe5QT4fWnpVAcvi6nCwnwtLdju4Sf0Db0nJV1
+         FKxi8r1Uxi0oPXyQ1lSCigBxawsoGPQHjuWHprxnQf4fZktVLsrLFDPBQhS33Uhvd23F
+         chuydhQoSO2v1k2CoPoleBSU/W45eeEKH2SgfsqIPMPejs8APExrKi0eY0Ch2Yc42PA6
+         IgNg==
+X-Gm-Message-State: APjAAAVbv4qP5foCLQNX8lR+O5j+1rloiusWveEY+oUahWdDHb1ZLMf5
+        5vJpc2hM395ttTxn8YuMhwO/tSKySGPAAIujmxYXZ6ZMDFsoUH8HXhGZJPGnySd4VKQidE86jmz
+        LjShovdKgO55UwypV395S
+X-Received: by 2002:a17:906:d04f:: with SMTP id bo15mr7072172ejb.296.1570096037499;
+        Thu, 03 Oct 2019 02:47:17 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqw5TM/uO//Q6CLjKMwfsNTO7vdU4B0OhTH/gHaatMNw6g6IwUxAmkhGvfOv8PJ7Si/jqoeBmw==
+X-Received: by 2002:a17:906:d04f:: with SMTP id bo15mr7072161ejb.296.1570096037244;
+        Thu, 03 Oct 2019 02:47:17 -0700 (PDT)
 Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
-        by smtp.gmail.com with ESMTPSA id 36sm366170edz.92.2019.10.03.02.25.16
+        by smtp.gmail.com with ESMTPSA id 30sm371562edr.78.2019.10.03.02.47.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2019 02:25:17 -0700 (PDT)
-Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-3-john.stultz@linaro.org>
+        Thu, 03 Oct 2019 02:47:16 -0700 (PDT)
+Subject: Re: [PATCH v3 0/2] tcpm: AMS and Collision Avoidance
+To:     Kyle Tso <kyletso@google.com>, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     badhri@google.com, Adam.Thomson.Opensource@diasemi.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20190920032437.242187-1-kyletso@google.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
-Date:   Thu, 3 Oct 2019 11:25:16 +0200
+Message-ID: <bd03390e-35fb-2885-d026-b8df58f02283@redhat.com>
+Date:   Thu, 3 Oct 2019 11:47:15 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20191002231617.3670-3-john.stultz@linaro.org>
+In-Reply-To: <20190920032437.242187-1-kyletso@google.com>
 Content-Language: en-US
-X-MC-Unique: S_mC1arhMRmu_l6RmC-p_Q-1
+X-MC-Unique: ZOx5b6eSM4yObOSCJEaVDA-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -84,153 +73,92 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi John,
+Hi Kyle,
 
-On 03-10-2019 01:16, John Stultz wrote:
-> From: Yu Chen <chenyu56@huawei.com>
+On 20-09-2019 05:24, Kyle Tso wrote:
+> *** BLURB HERE ***
 >=20
-> This patch adds notifier for drivers want to be informed of the usb role
-> switch.
+> Kyle Tso (2):
+>    usb: typec: tcpm: AMS and Collision Avoidance
+>    usb: typec: tcpm: AMS for PD2.0
 
-I do not see any patches in this series actually using this new
-notifier.
+I've finally gotten a chance to test this on one of my own devices
+which uses the tcpm framework for its Type-c port.
 
-Maybe it is best to drop this patch until we actually have in-kernel
-users of this new API show up ?
+I am afraid that this series breaks DP altmode support,
+specifically, the dp_altmode_configure() function no longer
+seems to get called, leading to no pin-assignment being
+selected by default and DP thus not working.
+
+So sorry, but I have to NACK this series since it causes
+regressions.
+
+It might be easiest if you can get yourself some hardware
+which supports DP altmode and uses the fusb302 Type-C
+controller (which unlike your controller is actually
+supported by the mainline kernel).
+
+2 devices which have this are the original (version 1)
+of the GPD win and the GPD pocket. Since the version
+is not always clearly marked, make sure you get one which
+has a X7-Z8750 CPU, those are the version 1 models, you
+can still get these e.g. here:
+
+https://www.geekbuying.com/item/GPD-Pocket-7-Inch-Tablet-PC-Intel-Atom-X7-Z=
+8750-8GB-128GB-375711.html
+https://www.geekbuying.com/item/GPD-Win-Intel-Z8750-Windows-10-4GB-64GB-Gam=
+epad-Tablet-PC---Black-378018.html
+
+These 2 devices still need 2 minor patches to hookup the DP
+support, I have just finished these 2 patches up and I'm
+submitting them upstream today, I will Cc you on these.
+
+If you combine these with one of the many DP-charging pass-through
++ USB-3 out + HDMI out dongles, e.g.:
+https://www.aliexpress.com/item/32953320909.html
+
+And then after plugging in do:
+
+cat /sys/class/typec/port0-partner/port0-partner.0/displayport/pin_assignme=
+nt
+
+This should print:
+
+C [D]
+
+But when I add your patches into the mix it prints just:
+
+C D
+
+And these debug pr_err calls never happen:
+
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/a=
+ltmodes/displayport.c
+index 7845df030b72..d14f94078dd9 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -106,6 +106,7 @@ static int dp_altmode_configure(struct dp_altmode *dp, =
+u8 con)
+  =09=09break;
+  =09}
+
++=09pr_err("dp_altmode_configure pin_assign %08x conf %08x\n", pin_assign, =
+DP_CONF_GET_PIN_ASSIGN(dp->data.conf));
+  =09/* Determining the initial pin assignment. */
+  =09if (!DP_CONF_GET_PIN_ASSIGN(dp->data.conf)) {
+  =09=09/* Is USB together with DP preferred */
+@@ -115,6 +116,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, =
+u8 con)
+  =09=09else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK)
+  =09=09=09pin_assign &=3D DP_PIN_ASSIGN_DP_ONLY_MASK;
+
++=09=09pr_err("dp_altmode_configure masked pin_assign %08x\n", pin_assign);
++
+  =09=09if (!pin_assign)
+  =09=09=09return -EINVAL;
+
 
 Regards,
 
 Hans
-
-
->=20
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Jun Li <lijun.kernel@gmail.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->   drivers/usb/roles/class.c | 35 ++++++++++++++++++++++++++++++++++-
->   include/linux/usb/role.h  | 16 ++++++++++++++++
->   2 files changed, 50 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-> index 94b4e7db2b94..418e762d5d72 100644
-> --- a/drivers/usb/roles/class.c
-> +++ b/drivers/usb/roles/class.c
-> @@ -20,6 +20,7 @@ struct usb_role_switch {
->   =09struct device dev;
->   =09struct mutex lock; /* device lock*/
->   =09enum usb_role role;
-> +=09struct blocking_notifier_head nh;
->  =20
->   =09/* From descriptor */
->   =09struct device *usb2_port;
-> @@ -49,8 +50,10 @@ int usb_role_switch_set_role(struct usb_role_switch *s=
-w, enum usb_role role)
->   =09mutex_lock(&sw->lock);
->  =20
->   =09ret =3D sw->set(sw->dev.parent, role);
-> -=09if (!ret)
-> +=09if (!ret) {
->   =09=09sw->role =3D role;
-> +=09=09blocking_notifier_call_chain(&sw->nh, role, NULL);
-> +=09}
->  =20
->   =09mutex_unlock(&sw->lock);
->  =20
-> @@ -58,6 +61,35 @@ int usb_role_switch_set_role(struct usb_role_switch *s=
-w, enum usb_role role)
->   }
->   EXPORT_SYMBOL_GPL(usb_role_switch_set_role);
->  =20
-> +int usb_role_switch_register_notifier(struct usb_role_switch *sw,
-> +=09=09=09=09      struct notifier_block *nb)
-> +{
-> +=09int ret =3D blocking_notifier_chain_register(&sw->nh, nb);
-> +=09enum usb_role role;
-> +
-> +=09if (ret)
-> +=09=09return ret;
-> +
-> +=09/* Initialize the notifier that was just registered */
-> +=09mutex_lock(&sw->lock);
-> +=09if (sw->get)
-> +=09=09role =3D sw->get(sw->dev.parent);
-> +=09else
-> +=09=09role =3D sw->role;
-> +=09blocking_notifier_call_chain(&sw->nh, role, NULL);
-> +=09mutex_unlock(&sw->lock);
-> +
-> +=09return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(usb_role_switch_register_notifier);
-> +
-> +int usb_role_switch_unregister_notifier(struct usb_role_switch *sw,
-> +=09=09=09=09=09struct notifier_block *nb)
-> +{
-> +=09return blocking_notifier_chain_unregister(&sw->nh, nb);
-> +}
-> +EXPORT_SYMBOL_GPL(usb_role_switch_unregister_notifier);
-> +
->   /**
->    * usb_role_switch_get_role - Get the USB role for a switch
->    * @sw: USB role switch
-> @@ -296,6 +328,7 @@ usb_role_switch_register(struct device *parent,
->   =09=09return ERR_PTR(-ENOMEM);
->  =20
->   =09mutex_init(&sw->lock);
-> +=09BLOCKING_INIT_NOTIFIER_HEAD(&sw->nh);
->  =20
->   =09sw->allow_userspace_control =3D desc->allow_userspace_control;
->   =09sw->usb2_port =3D desc->usb2_port;
-> diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
-> index 2d77f97df72d..8dbf7940b7da 100644
-> --- a/include/linux/usb/role.h
-> +++ b/include/linux/usb/role.h
-> @@ -54,6 +54,10 @@ struct usb_role_switch *
->   usb_role_switch_register(struct device *parent,
->   =09=09=09 const struct usb_role_switch_desc *desc);
->   void usb_role_switch_unregister(struct usb_role_switch *sw);
-> +int usb_role_switch_register_notifier(struct usb_role_switch *sw,
-> +=09=09=09=09      struct notifier_block *nb);
-> +int usb_role_switch_unregister_notifier(struct usb_role_switch *sw,
-> +=09=09=09=09=09struct notifier_block *nb);
->   #else
->   static inline int usb_role_switch_set_role(struct usb_role_switch *sw,
->   =09=09enum usb_role role)
-> @@ -87,6 +91,18 @@ usb_role_switch_register(struct device *parent,
->   }
->  =20
->   static inline void usb_role_switch_unregister(struct usb_role_switch *s=
-w) { }
-> +
-> +static int usb_role_switch_register_notifier(struct usb_role_switch *sw,
-> +=09=09=09=09=09     struct notifier_block *nb)
-> +{
-> +=09return -ENODEV;
-> +}
-> +
-> +static int usb_role_switch_unregister_notifier(struct usb_role_switch *s=
-w,
-> +=09=09=09=09=09       struct notifier_block *nb)
-> +{
-> +=09return -ENODEV;
-> +}
->   #endif
->  =20
->   #endif /* __LINUX_USB_ROLE_H */
->=20
 
