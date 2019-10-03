@@ -2,139 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03B42CAEC9
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 21:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84ADCAF48
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 21:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731735AbfJCTE1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 15:04:27 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:45330 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1729781AbfJCTE1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 15:04:27 -0400
-Received: (qmail 18204 invoked by uid 2102); 3 Oct 2019 15:04:26 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Oct 2019 15:04:26 -0400
-Date:   Thu, 3 Oct 2019 15:04:26 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-cc:     gregkh@linuxfoundation.org, <mathias.nyman@intel.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: Add a new quirk to let buggy hub enable and
- disable LPM during suspend and resume
-In-Reply-To: <20191003172451.13943-1-kai.heng.feng@canonical.com>
-Message-ID: <Pine.LNX.4.44L0.1910031503050.1797-100000@iolanthe.rowland.org>
+        id S1731764AbfJCTcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 15:32:11 -0400
+Received: from mout.gmx.net ([212.227.17.22]:39939 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731401AbfJCTcL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Oct 2019 15:32:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1570131113;
+        bh=RsYW1tMQhVxSymVlEwGdBTZwMm3ZvLd9uaMyWMV0vz0=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=UNGyNJNeHfCx0k5lM+snCmDHFOZUU+nGO08Jh4E7eYCrsVXlTAI4bh3+NnbwWQsYQ
+         b/rxTff9qTHfmK2nI13TS78wm12BAN+kM8u7Wirb//wCPhUmBWomiSQeZXAPp9vvVe
+         i7Igv7cXyBHOy1ft6OHSJvs8k038RC8FVswqMbmM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([89.0.25.131]) by mail.gmx.com (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPGRp-1iUcVg0bmf-00Pf1D; Thu, 03
+ Oct 2019 21:31:53 +0200
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     devicetree@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: usb: Fix references to usb-hcd.yaml
+Date:   Thu,  3 Oct 2019 21:31:32 +0200
+Message-Id: <20191003193132.17758-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:M1Cfub0cD8k5EWKPSmYJTQTfT0r5TxH1kizM8MObV5ouKOLtROW
+ Y6Ve8LeMLt58u942N7DVrT7n9xh3Ro+vHN+He3rDjffEFt9acuMdP2CaSEXMNkf57Qn9TYS
+ 55iJdWnmjNPcLrCVWjQcV8Eh6ynBgXl+1OW+ZUZrq6re9aJVoe6EV36RHPoEoLO5WJPiRBb
+ JtOOuApOnXnCR12OfgPLA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:K139XvLUorM=:UC2svAclllxusezgtqx7aj
+ OQIMOkW9Yx52Cldj7c9AyhGNOkd4nddtd/qLQwHYhZ1CuDakZlc7LjgX1JD6CLdVuvlJRXInX
+ ZT1c5ncYj4HaPvZoLZCbgO9ZCwz1qcp0/NTkjulPw0dTqfAdeT8K9tIkmQuprYGFbnW9kMEFk
+ 1c4QV3D9sKYmVH2KqadNCJc1rw2ARIQRsk2e/CoiAjgwRLiyeYH04S0FlreAKn3icTc2qzV7k
+ oYF8ucnwIAdhc9o81jnE5zuxIP2VMy7655mtWfh7GqxtWJ2RNRR4ZViHPzAHjdz+2my76c1Yo
+ 9DTgPfvoWYIQJp6IJvzs9pn3FnwyKB0ibxEAZfUM7K+jsci2V/ckg+v9PRIz0MTaJMFNSdg1V
+ flkR6Okr8vZEEHqdWD2opuVm7Jo2f1qjvPTvDY1YdBy+y6rL+giFEkx+NulDPPPqMRFNF/c+x
+ S159BYfGpOxPSq/VcqzV1u91xNp4wJo/nMKHoyVF2IAyQ4O+/r3GPsABzFI15dqcw+YwCBTA1
+ ZLRDQK3K/s5SfyQAfS25cmIWwhBbjnv+7gOLmtDCRo7EgS2gMOeAClMVyX9ptz/rw5s7pwtle
+ 1MQlwv3qK3dqfPsDIe8Q8rtA3JwYbZQ6GsdJD6ZwQmkZ7FNTq//s6zDTwOdodKzpfQLRsVss5
+ FzoYqgBNMT3LHCXWVCr2CuRQD+L5Gxrlzxt6yda4vQPP0wL3i6VIENTNInShBXhudRoLODm8I
+ 4s339OIHrw6nVIKkDfOD0eYnVrgssn3li6j1b2k7JbUZKfW6tTn72g0oBKmUSR5LZs8xfeptL
+ SwLZF2JfnAcmtLKj5lAtXWpSsq7PtmxN74rLbCFgDTouLmIcW4c7fJImwiwWdjwC+0Sr+7TGw
+ Bh3DBLYk+c2JlwigKP3IfpAM03wAVG+ENRhDAVVkw5JV+wFnVJu+6pHNreC5ztaOah86qaEKv
+ fXIQ3wlllKZhflxBHbdiarQc/Bdj4Rumiz/mN1ElqMGJHjZrtWtEH1OZDnPSiG0glJQKtg1Hk
+ C9J6tgurj+KK1Dxtx110JV/c5ZZIoF9vsg7cKzEm7t4y2uA+CsN1rHsmL55L38z5UBLhw+OK5
+ hbGFSGshNBGXYNPpmFAiGRftBMcPVyvWr11mrpQRmUvECKnjMSlwusjr9HTDof2DAOULLLrtV
+ YGxUhG163JZkeAZ/OMJ5zk/EFA2AaWgLAzfAdrsTDly40glEiSu08S4tvb/AfypvBTh5p0q98
+ 9ynbT0qOnrogEiG4xqmKRv5G58ez0e+DSlvdzJ0qkCssv4Ht6EzLoJ6QYuRM=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 4 Oct 2019, Kai-Heng Feng wrote:
+usb-hcd.txt has been converted to YAML. Update references accordingly.
 
-> Dell WD15 dock has a topology like this:
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->             |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
-> 
-> Their IDs:
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
-> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
-> 
-> Ethernet cannot be detected after plugging ethernet cable to the dock,
-> the hub and roothub get runtime resumed and runtime suspended
-> immediately:
-> ...
-> [  433.315169] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
-> [  433.315204] usb usb4: usb auto-resume
-> [  433.315226] hub 4-0:1.0: hub_resume
-> [  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
-> [  433.315264] usb usb4-port1: status 0343 change 0001
-> [  433.315279] xhci_hcd 0000:3a:00.0: clear port1 connect change, portsc: 0x10002e2
-> [  433.315293] xhci_hcd 0000:3a:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
-> [  433.317012] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-> [  433.422282] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
-> 
-> At this point the SMSC hub (usb 4-1) enters into compliance mode
-> (USB_SS_PORT_LS_COMP_MOD), and USB core tries to warm-reset it,
-> 
-> [  433.422307] usb usb4-port1: do warm reset
-> [  433.422311] usb 4-1: device reset not allowed in state 8
-> [  433.422339] hub 4-0:1.0: state 7 ports 2 chg 0002 evt 0000
-> [  433.422346] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
-> [  433.422356] usb usb4-port1: do warm reset
-> [  433.422358] usb 4-1: device reset not allowed in state 8
-> [  433.422428] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 0 status  = 0xf0002e2
-> [  433.422455] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 1 status  = 0xe0002a0
-> [  433.422465] hub 4-0:1.0: hub_suspend
-> [  433.422475] usb usb4: bus auto-suspend, wakeup 1
-> [  433.426161] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-> [  433.466209] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.510204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.554051] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.598235] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.642154] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.686204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.730205] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.774203] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.818207] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.862040] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
-> [  433.862053] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-> [  433.862077] xhci_hcd 0000:3a:00.0: xhci_suspend: stopping port polling.
-> [  433.862096] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
-> [  433.862312] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_suspend: 0
-> [  433.862445] xhci_hcd 0000:3a:00.0: PME# enabled
-> [  433.902376] xhci_hcd 0000:3a:00.0: restoring config space at offset 0xc (was 0x0, writing 0x20)
-> [  433.902395] xhci_hcd 0000:3a:00.0: restoring config space at offset 0x4 (was 0x100000, writing 0x100403)
-> [  433.902490] xhci_hcd 0000:3a:00.0: PME# disabled
-> [  433.902504] xhci_hcd 0000:3a:00.0: enabling bus mastering
-> [  433.902547] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
-> [  433.902649] pcieport 0000:00:1b.0: PME: Spurious native interrupt!
-> [  433.902839] xhci_hcd 0000:3a:00.0: Port change event, 4-1, id 3, portsc: 0xb0202e2
-> [  433.902842] xhci_hcd 0000:3a:00.0: resume root hub
-> [  433.902845] xhci_hcd 0000:3a:00.0: handle_port_status: starting port polling.
-> [  433.902877] xhci_hcd 0000:3a:00.0: xhci_resume: starting port polling.
-> [  433.902889] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
-> [  433.902891] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
-> [  433.902919] usb usb4: usb wakeup-resume
-> [  433.902942] usb usb4: usb auto-resume
-> [  433.902966] hub 4-0:1.0: hub_resume
-> ...
-> 
-> However the warm-reset never success, the asserted PCI PME keeps the
-> runtime-resume, warm-reset and runtime-suspend loop which never bring it back
-> and causing spurious interrupts floods.
-> 
-> After some trial and errors, the issue goes away if LPM on the SMSC hub
-> is disabled. Digging further, enabling and disabling LPM during runtime
-> resume and runtime suspend respectively can solve the issue.
-> 
-> So bring back the old LPM behavior as a quirk and use it for the SMSC
-> hub to solve the issue.
-> 
-> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
-> v3:
-> - Add forgotten patch revision changelog.
-> 
-> v2:
-> - Explained by Alan, the hub should properly handle U3 -> U0 transition.
->   So use a quirk to target this buggy device only.
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  3 +++
->  drivers/usb/core/hub.c                          | 15 +++++++++++++++
->  drivers/usb/core/quirks.c                       |  6 ++++++
->  include/linux/usb/quirks.h                      |  3 +++
->  4 files changed, 27 insertions(+)
+Fixes: 14ec072a19ad ("dt-bindings: usb: Convert USB HCD generic binding to=
+ YAML")
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 4 ++--
+ Documentation/devicetree/bindings/usb/mediatek,mtu3.txt     | 4 ++--
+ Documentation/devicetree/bindings/usb/usb-uhci.txt          | 2 +-
+ Documentation/devicetree/bindings/usb/usb-xhci.txt          | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Mathias may want to try something different to fix this problem.  But
-if he doesn't, this patch is okay with me.
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b=
+/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+index f3e4acecabe8..42d8814f903a 100644
+=2D-- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
+@@ -33,7 +33,7 @@ Required properties:
+ 	"dma_ck": dma_bus clock for data transfer by DMA,
+ 	"xhci_ck": controller clock
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+- - phys : see usb-hcd.txt in the current directory
++ - phys : see usb-hcd.yaml in the current directory
 
-Alan Stern
+ Optional properties:
+  - wakeup-source : enable USB remote wakeup;
+@@ -53,7 +53,7 @@ Optional properties:
+ 	See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
+  - imod-interval-ns: default interrupt moderation interval is 5000ns
+
+-additionally the properties from usb-hcd.txt (in the current directory) a=
+re
++additionally the properties from usb-hcd.yaml (in the current directory) =
+are
+ supported.
+
+ Example:
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt b/Doc=
+umentation/devicetree/bindings/usb/mediatek,mtu3.txt
+index b9af7f5ee91d..e0ae6096f7ac 100644
+=2D-- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
+@@ -17,7 +17,7 @@ Required properties:
+  - clock-names : must contain "sys_ck" for clock of controller,
+ 	the following clocks are optional:
+ 	"ref_ck", "mcu_ck" and "dma_ck";
+- - phys : see usb-hcd.txt in the current directory
++ - phys : see usb-hcd.yaml in the current directory
+  - dr_mode : should be one of "host", "peripheral" or "otg",
+ 	refer to usb/generic.txt
+
+@@ -60,7 +60,7 @@ Optional properties:
+  - mediatek,u3p-dis-msk : mask to disable u3ports, bit0 for u3port0,
+ 	bit1 for u3port1, ... etc;
+
+-additionally the properties from usb-hcd.txt (in the current directory) a=
+re
++additionally the properties from usb-hcd.yaml (in the current directory) =
+are
+ supported.
+
+ Sub-nodes:
+diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.txt b/Document=
+ation/devicetree/bindings/usb/usb-uhci.txt
+index cc2e6f7d602e..d1702eb2c8bd 100644
+=2D-- a/Documentation/devicetree/bindings/usb/usb-uhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-uhci.txt
+@@ -6,7 +6,7 @@ Required properties:
+ - reg : Should contain 1 register ranges(address and length)
+ - interrupts : UHCI controller interrupt
+
+-additionally the properties from usb-hcd.txt (in the current directory) a=
+re
++additionally the properties from usb-hcd.yaml (in the current directory) =
+are
+ supported.
+
+ Example:
+diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Document=
+ation/devicetree/bindings/usb/usb-xhci.txt
+index 97400e8f8605..b49b819571f9 100644
+=2D-- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
++++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
+@@ -41,9 +41,9 @@ Optional properties:
+   - usb3-lpm-capable: determines if platform is USB3 LPM capable
+   - quirk-broken-port-ped: set if the controller has broken port disable =
+mechanism
+   - imod-interval-ns: default interrupt moderation interval is 5000ns
+-  - phys : see usb-hcd.txt in the current directory
++  - phys : see usb-hcd.yaml in the current directory
+
+-additionally the properties from usb-hcd.txt (in the current directory) a=
+re
++additionally the properties from usb-hcd.yaml (in the current directory) =
+are
+ supported.
+
+
+=2D-
+2.20.1
 
