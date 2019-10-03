@@ -2,169 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B84ADCAF48
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 21:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A659CAFAB
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 21:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731764AbfJCTcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 15:32:11 -0400
-Received: from mout.gmx.net ([212.227.17.22]:39939 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731401AbfJCTcL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Oct 2019 15:32:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1570131113;
-        bh=RsYW1tMQhVxSymVlEwGdBTZwMm3ZvLd9uaMyWMV0vz0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=UNGyNJNeHfCx0k5lM+snCmDHFOZUU+nGO08Jh4E7eYCrsVXlTAI4bh3+NnbwWQsYQ
-         b/rxTff9qTHfmK2nI13TS78wm12BAN+kM8u7Wirb//wCPhUmBWomiSQeZXAPp9vvVe
-         i7Igv7cXyBHOy1ft6OHSJvs8k038RC8FVswqMbmM=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from longitude ([89.0.25.131]) by mail.gmx.com (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MPGRp-1iUcVg0bmf-00Pf1D; Thu, 03
- Oct 2019 21:31:53 +0200
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     devicetree@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: usb: Fix references to usb-hcd.yaml
-Date:   Thu,  3 Oct 2019 21:31:32 +0200
-Message-Id: <20191003193132.17758-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.20.1
+        id S2388017AbfJCT7J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 15:59:09 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:41168 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730707AbfJCT7J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 15:59:09 -0400
+Received: by mail-io1-f71.google.com with SMTP id q18so7032859ios.8
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 12:59:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=7ds/2si/BzP0N7QbxssLjIqM/liqQB0WfI0eXD3isW0=;
+        b=lsb83qODQ+RhivnrHZCpNKrADHjm2K0GN7fxwlEu9gwRJ1of9XyAC1svOqz+EjIo5m
+         LPE9WeriXR0GWlTGLTy1ds6CgjjXFBuFvZ5BQRlg4EmnOTl9ekyrRtnKskJwyg+EhjVD
+         o72SBDclE4PhwNHlaHerVIt72BcxzNCRKBMQG/cFvbQu9u5xE5CWIxFaew0lllMF8UNb
+         wERot1I4Ju40k2yDl/0Gw3Rc35/hPCFN2uOGV+kRQxzjSCu7MpTFy2uF8kCl7Qw6V+OP
+         WW9wFKlpAUw2BBMpi+xv13WA6QQjz7RsfU1LWMMyxQhMugwXiEBbrYj+LHit8hVoz90B
+         kpbQ==
+X-Gm-Message-State: APjAAAWxa0IEMcr5t1PFHacSQ2R+X/rQWe3EzxzbtcvRinrHU3C8Jofr
+        uhQESYr2U3qMlDjafIltT4/xJIP0hY0Fuf0sb2Imf/SoQnoq
+X-Google-Smtp-Source: APXvYqxSvzHU1Nes06xd7cOaIg5JeK06DcdHiK31nkd5G2LFLWGdSa9stksNPlrz429TiM7KIggt8LtBxBBbsAKG1FSHzbIQFi77
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:M1Cfub0cD8k5EWKPSmYJTQTfT0r5TxH1kizM8MObV5ouKOLtROW
- Y6Ve8LeMLt58u942N7DVrT7n9xh3Ro+vHN+He3rDjffEFt9acuMdP2CaSEXMNkf57Qn9TYS
- 55iJdWnmjNPcLrCVWjQcV8Eh6ynBgXl+1OW+ZUZrq6re9aJVoe6EV36RHPoEoLO5WJPiRBb
- JtOOuApOnXnCR12OfgPLA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:K139XvLUorM=:UC2svAclllxusezgtqx7aj
- OQIMOkW9Yx52Cldj7c9AyhGNOkd4nddtd/qLQwHYhZ1CuDakZlc7LjgX1JD6CLdVuvlJRXInX
- ZT1c5ncYj4HaPvZoLZCbgO9ZCwz1qcp0/NTkjulPw0dTqfAdeT8K9tIkmQuprYGFbnW9kMEFk
- 1c4QV3D9sKYmVH2KqadNCJc1rw2ARIQRsk2e/CoiAjgwRLiyeYH04S0FlreAKn3icTc2qzV7k
- oYF8ucnwIAdhc9o81jnE5zuxIP2VMy7655mtWfh7GqxtWJ2RNRR4ZViHPzAHjdz+2my76c1Yo
- 9DTgPfvoWYIQJp6IJvzs9pn3FnwyKB0ibxEAZfUM7K+jsci2V/ckg+v9PRIz0MTaJMFNSdg1V
- flkR6Okr8vZEEHqdWD2opuVm7Jo2f1qjvPTvDY1YdBy+y6rL+giFEkx+NulDPPPqMRFNF/c+x
- S159BYfGpOxPSq/VcqzV1u91xNp4wJo/nMKHoyVF2IAyQ4O+/r3GPsABzFI15dqcw+YwCBTA1
- ZLRDQK3K/s5SfyQAfS25cmIWwhBbjnv+7gOLmtDCRo7EgS2gMOeAClMVyX9ptz/rw5s7pwtle
- 1MQlwv3qK3dqfPsDIe8Q8rtA3JwYbZQ6GsdJD6ZwQmkZ7FNTq//s6zDTwOdodKzpfQLRsVss5
- FzoYqgBNMT3LHCXWVCr2CuRQD+L5Gxrlzxt6yda4vQPP0wL3i6VIENTNInShBXhudRoLODm8I
- 4s339OIHrw6nVIKkDfOD0eYnVrgssn3li6j1b2k7JbUZKfW6tTn72g0oBKmUSR5LZs8xfeptL
- SwLZF2JfnAcmtLKj5lAtXWpSsq7PtmxN74rLbCFgDTouLmIcW4c7fJImwiwWdjwC+0Sr+7TGw
- Bh3DBLYk+c2JlwigKP3IfpAM03wAVG+ENRhDAVVkw5JV+wFnVJu+6pHNreC5ztaOah86qaEKv
- fXIQ3wlllKZhflxBHbdiarQc/Bdj4Rumiz/mN1ElqMGJHjZrtWtEH1OZDnPSiG0glJQKtg1Hk
- C9J6tgurj+KK1Dxtx110JV/c5ZZIoF9vsg7cKzEm7t4y2uA+CsN1rHsmL55L38z5UBLhw+OK5
- hbGFSGshNBGXYNPpmFAiGRftBMcPVyvWr11mrpQRmUvECKnjMSlwusjr9HTDof2DAOULLLrtV
- YGxUhG163JZkeAZ/OMJ5zk/EFA2AaWgLAzfAdrsTDly40glEiSu08S4tvb/AfypvBTh5p0q98
- 9ynbT0qOnrogEiG4xqmKRv5G58ez0e+DSlvdzJ0qkCssv4Ht6EzLoJ6QYuRM=
+X-Received: by 2002:a05:6e02:4ce:: with SMTP id f14mr11496186ils.278.1570132748264;
+ Thu, 03 Oct 2019 12:59:08 -0700 (PDT)
+Date:   Thu, 03 Oct 2019 12:59:08 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b5ec8b0594070456@google.com>
+Subject: KMSAN: uninit-value in iowarrior_disconnect
+From:   syzbot <syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com>
+To:     glider@google.com, gregkh@linuxfoundation.org,
+        gustavo@embeddedor.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        oneukum@suse.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb-hcd.txt has been converted to YAML. Update references accordingly.
+Hello,
 
-Fixes: 14ec072a19ad ("dt-bindings: usb: Convert USB HCD generic binding to=
- YAML")
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt | 4 ++--
- Documentation/devicetree/bindings/usb/mediatek,mtu3.txt     | 4 ++--
- Documentation/devicetree/bindings/usb/usb-uhci.txt          | 2 +-
- Documentation/devicetree/bindings/usb/usb-xhci.txt          | 4 ++--
- 4 files changed, 7 insertions(+), 7 deletions(-)
+syzbot found the following crash on:
 
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt b=
-/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-index f3e4acecabe8..42d8814f903a 100644
-=2D-- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.txt
-@@ -33,7 +33,7 @@ Required properties:
- 	"dma_ck": dma_bus clock for data transfer by DMA,
- 	"xhci_ck": controller clock
+HEAD commit:    014077b5 DO-NOT-SUBMIT: usb-fuzzer: main usb gadget fuzzer..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=108eae5e600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=0761012cebf7bdb38137
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15161d99600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13632e3a600000
 
-- - phys : see usb-hcd.txt in the current directory
-+ - phys : see usb-hcd.yaml in the current directory
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com
 
- Optional properties:
-  - wakeup-source : enable USB remote wakeup;
-@@ -53,7 +53,7 @@ Optional properties:
- 	See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-  - imod-interval-ns: default interrupt moderation interval is 5000ns
+==================================================================
+BUG: KMSAN: uninit-value in iowarrior_disconnect+0x27a/0x3e0  
+drivers/usb/misc/iowarrior.c:884
+CPU: 0 PID: 11102 Comm: kworker/0:5 Not tainted 5.3.0-rc7+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x162/0x2d0 mm/kmsan/kmsan_report.c:109
+  __msan_warning+0x75/0xe0 mm/kmsan/kmsan_instr.c:294
+  iowarrior_disconnect+0x27a/0x3e0 drivers/usb/misc/iowarrior.c:884
+  usb_unbind_interface+0x3a2/0xdd0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1120 [inline]
+  device_release_driver_internal+0x911/0xd20 drivers/base/dd.c:1151
+  device_release_driver+0x4b/0x60 drivers/base/dd.c:1174
+  bus_remove_device+0x4bf/0x670 drivers/base/bus.c:556
+  device_del+0xcd5/0x1d10 drivers/base/core.c:2339
+  usb_disable_device+0x567/0x1150 drivers/usb/core/message.c:1241
+  usb_disconnect+0x51e/0xd60 drivers/usb/core/hub.c:2199
+  hub_port_connect drivers/usb/core/hub.c:4949 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x3fd0/0x72f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
--additionally the properties from usb-hcd.txt (in the current directory) a=
-re
-+additionally the properties from usb-hcd.yaml (in the current directory) =
-are
- supported.
-
- Example:
-diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt b/Doc=
-umentation/devicetree/bindings/usb/mediatek,mtu3.txt
-index b9af7f5ee91d..e0ae6096f7ac 100644
-=2D-- a/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
-+++ b/Documentation/devicetree/bindings/usb/mediatek,mtu3.txt
-@@ -17,7 +17,7 @@ Required properties:
-  - clock-names : must contain "sys_ck" for clock of controller,
- 	the following clocks are optional:
- 	"ref_ck", "mcu_ck" and "dma_ck";
-- - phys : see usb-hcd.txt in the current directory
-+ - phys : see usb-hcd.yaml in the current directory
-  - dr_mode : should be one of "host", "peripheral" or "otg",
- 	refer to usb/generic.txt
-
-@@ -60,7 +60,7 @@ Optional properties:
-  - mediatek,u3p-dis-msk : mask to disable u3ports, bit0 for u3port0,
- 	bit1 for u3port1, ... etc;
-
--additionally the properties from usb-hcd.txt (in the current directory) a=
-re
-+additionally the properties from usb-hcd.yaml (in the current directory) =
-are
- supported.
-
- Sub-nodes:
-diff --git a/Documentation/devicetree/bindings/usb/usb-uhci.txt b/Document=
-ation/devicetree/bindings/usb/usb-uhci.txt
-index cc2e6f7d602e..d1702eb2c8bd 100644
-=2D-- a/Documentation/devicetree/bindings/usb/usb-uhci.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-uhci.txt
-@@ -6,7 +6,7 @@ Required properties:
- - reg : Should contain 1 register ranges(address and length)
- - interrupts : UHCI controller interrupt
-
--additionally the properties from usb-hcd.txt (in the current directory) a=
-re
-+additionally the properties from usb-hcd.yaml (in the current directory) =
-are
- supported.
-
- Example:
-diff --git a/Documentation/devicetree/bindings/usb/usb-xhci.txt b/Document=
-ation/devicetree/bindings/usb/usb-xhci.txt
-index 97400e8f8605..b49b819571f9 100644
-=2D-- a/Documentation/devicetree/bindings/usb/usb-xhci.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-xhci.txt
-@@ -41,9 +41,9 @@ Optional properties:
-   - usb3-lpm-capable: determines if platform is USB3 LPM capable
-   - quirk-broken-port-ped: set if the controller has broken port disable =
-mechanism
-   - imod-interval-ns: default interrupt moderation interval is 5000ns
--  - phys : see usb-hcd.txt in the current directory
-+  - phys : see usb-hcd.yaml in the current directory
-
--additionally the properties from usb-hcd.txt (in the current directory) a=
-re
-+additionally the properties from usb-hcd.yaml (in the current directory) =
-are
- supported.
+Uninit was created at:
+  kmsan_save_stack_with_flags mm/kmsan/kmsan.c:189 [inline]
+  kmsan_internal_poison_shadow+0x58/0xb0 mm/kmsan/kmsan.c:148
+  kmsan_slab_free+0x8d/0x100 mm/kmsan/kmsan_hooks.c:195
+  slab_free_freelist_hook mm/slub.c:1472 [inline]
+  slab_free mm/slub.c:3038 [inline]
+  kfree+0x4c1/0x2db0 mm/slub.c:3980
+  iowarrior_delete drivers/usb/misc/iowarrior.c:246 [inline]
+  iowarrior_release+0x334/0x3a0 drivers/usb/misc/iowarrior.c:670
+  __fput+0x4c9/0xba0 fs/file_table.c:280
+  ____fput+0x37/0x40 fs/file_table.c:313
+  task_work_run+0x22e/0x2a0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop arch/x86/entry/common.c:163 [inline]
+  prepare_exit_to_usermode+0x39d/0x4d0 arch/x86/entry/common.c:194
+  syscall_return_slowpath+0x90/0x610 arch/x86/entry/common.c:274
+  do_syscall_64+0xe2/0xf0 arch/x86/entry/common.c:300
+  entry_SYSCALL_64_after_hwframe+0x63/0xe7
+==================================================================
 
 
-=2D-
-2.20.1
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
