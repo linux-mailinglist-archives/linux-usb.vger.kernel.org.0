@@ -2,132 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9271C96FC
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 05:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4735C9704
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 05:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728140AbfJCDjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 23:39:08 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:53825 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbfJCDjH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 23:39:07 -0400
-Received: by mail-io1-f72.google.com with SMTP id w8so2908718iol.20
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 20:39:07 -0700 (PDT)
+        id S1727902AbfJCDpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 23:45:31 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39375 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727613AbfJCDpb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 23:45:31 -0400
+Received: by mail-pf1-f194.google.com with SMTP id v4so810131pff.6
+        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 20:45:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+2EKTzETZyhhguvmV3Okibj4WoYZhvMA8q52ITQpUvU=;
+        b=YbSJf7O3KRZlyNe7PHP1h/Q3t7R+2npDQ4Rm5dfZMB7CRANTkGt8R2nwPfGSR8gJBy
+         N4OAB7cAmA+IS2i2dsvxyeu8Xsfh8TjyhwoD4v2uiwVMgCnaWbGHpezPsdYhsC6WWSRl
+         nMRl1lUR5BatT2LVoDRg8seK9F/9/curUxaFPmwogOn7o+aOnSZSN3mod0xhF7WdmU27
+         OqJZRSIMT4YxXmm/S2jd/tvQP7CMe26ODI7o4jscnLTZD8Gq+etTLzK92nVDwwPy+U4x
+         vSw5bB29ij/RGKQmcTLkG6YyeB71dCJxGA7OmS7NAXKn+7yz0Pupi0cM1DtuQ1GVq8F1
+         MnIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=fNcmM8dDxJueHNsixPYAMzRv/o66qgp37A7jQpDFaDU=;
-        b=V0FRxdOLbBSoyCYkxe/AiR0mV3pLAIrnIrTt8p6KF9Klk6NXG7cW2+a3detAHhM+n7
-         RjCKrt8IXgv4LEie2Pc8xhIMYCz5mMg3HxhiUic0dRIc2diLx1bitdPfCeBV2METMjAE
-         BSB3xzGADTw4m8LjfcatIyCAg0zv4ZHjlQNdbpWOLssRfoR2DL6i6QmwRIuo/o6FPtZH
-         8mBPbiSjsCcJXct8arAUFcDNF2ogPTgcvVG44KCcI/dRk0YN/y9xS8wcezrI8QG5w/X1
-         qM4wlhGGQUSywLbsVglhHrjU3hir5TiKb4XSLqtboS3SL9H2heuTxW/UrrLETVHCXKO0
-         UTXg==
-X-Gm-Message-State: APjAAAV/hSRA/78AFgvLeXJWKFtVuhyJf4YowqGuNE6xODL1j5HjyP5j
-        yO3WLOt1l8YXQ7Qm1wyRabaKg0Si4jWT8kHwQjBd9AUH8j9D
-X-Google-Smtp-Source: APXvYqwFzhhBhYUtdnc9rPslh+XB3usOsuQcTSKUHt81F5Fwbea+PqEz88pROA3THyedDW94PkexFESBJJCjCpPBDRjU5iD/ggaV
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+2EKTzETZyhhguvmV3Okibj4WoYZhvMA8q52ITQpUvU=;
+        b=qbIi9U1/F0//QuUuecdxeSG64+j/CChVnI/VLQ+NVuq7bIcUEJ4A4c6nf9ZrSRCJ/Z
+         bzQx6Cyxt9y7f3HFZhzwBl0y093cigh9lXZhOLa2soYUJOZy8MdPvwzQ7RMikrDCes/Q
+         cvJpxwDevyWMWnGZHMiLorfsyeeP5yFr0l/PWNex/xR/NIE27RSrtIBjzNpNM0Mu8QO7
+         KQmOY+0lUmg2MFFobFbFFCf15erfnvWfj00Zw9MB5r4jiR5Kqlb7VvkuI3jQu5yZ9Y67
+         kEcYkgE4JsgXghaVIlcECIZZOIGSrMj5GbOLXkXaZZL5UnRHFnisRml9wdeXhfMKXYga
+         RTDg==
+X-Gm-Message-State: APjAAAV2DngltDDTvMkJeswO1kQzRTz4Kiq9sSH45SHhhzqa1dhuOhfb
+        irVQTdSrka2aS42veDMDOsmpQ2/W
+X-Google-Smtp-Source: APXvYqxKaUHyyQ967ldhE79dMFQ+yh1Qbc18sMbb/0vOGwn2cOFgEUdg6mcG11MYzDCTGr8Yn/W1fQ==
+X-Received: by 2002:a63:ba47:: with SMTP id l7mr7235595pgu.201.1570074330459;
+        Wed, 02 Oct 2019 20:45:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id u17sm782680pgf.8.2019.10.02.20.45.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 02 Oct 2019 20:45:29 -0700 (PDT)
+Subject: Re: [PATCH 1/7] usb: typec: Copy everything from struct
+ typec_capability during registration
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+References: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
+ <20191001094858.68643-2-heikki.krogerus@linux.intel.com>
+ <9173aabc-3e61-fc9b-e01e-0f1ce78429a2@roeck-us.net>
+ <20191002160652.GB19836@kuha.fi.intel.com>
+ <20191002163639.GA30400@roeck-us.net>
+ <20191002182933.GA19870@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <318179e6-fa1e-0b33-4a4f-40ecd6947f8a@roeck-us.net>
+Date:   Wed, 2 Oct 2019 20:45:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:cb10:: with SMTP id s16mr8001468ilo.79.1570073947045;
- Wed, 02 Oct 2019 20:39:07 -0700 (PDT)
-Date:   Wed, 02 Oct 2019 20:39:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e288f40593f953a9@google.com>
-Subject: KMSAN: uninit-value in sr9800_bind
-From:   syzbot <syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, oneukum@suse.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <20191002182933.GA19870@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 10/2/19 11:29 AM, Heikki Krogerus wrote:
+> On Wed, Oct 02, 2019 at 09:36:39AM -0700, Guenter Roeck wrote:
+>> port->cap->type used to be the role provided by the low level driver.
+>> That was static, and it was not possible to override it. It did not
+>> resemble the current port type, or a configured port type, it resembled
+>> port capabilities.
+>>
+>> Your code changes that, meaning even if the low level driver (effectively
+>> the hardware) states that it can not support DRP, it is now configurable
+>> anyway. That seems to me like a substantial change to the original meaning
+>> of this attribute.
+>>
+>> Effectiv ely there are now three values,
+>> - port->port_type	the current port tyle
+>> - port->fixed_type	the type selected by the user
+>> - port->cap->type	the type provided by low level code,
+>> 			now no longer available / used
+>>
+>> Even if the low level driver (hardware) says that it can not support
+>> TYPEC_PORT_DRP, that can be overwritten by the user. Maybe there is a
+>> good reason for that, but I don't see it, sorry.
+> 
+> No, that was not my intention. Clearly there is a bug in my code.
+> 
+>> Maybe it would make sense to introduce port->fixed_type in a separate patch.
+>> As part of that patch you could explain why port->cap->type, ie a reflection
+>> of the port capabilities, is no longer needed.
+> 
+> Or, I could make this really simple. I could just copy the content of
+> the cap as is to another struct typec_capability during port
+> registration. My goal is really just remove the need for the device
+> drivers keep the struct typec_capability instance if they don't need
+> it, and I don't need to remove the cap member to achieve that.
+> 
 
-syzbot found the following crash on:
+Maybe just use devm_kmemdup() ?
 
-HEAD commit:    124037e0 kmsan: drop inlines, rename do_kmsan_task_create()
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10f7e0cd600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=f1842130bbcfb335bac1
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142acef3600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11811bbd600000
+Guenter
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
-
-CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Error reading  
-RX_CTL register:ffffffb9
-CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Failed to enable  
-software MII access
-CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Failed to enable  
-hardware MII access
-=====================================================
-BUG: KMSAN: uninit-value in usbnet_probe+0x10ae/0x3960  
-drivers/net/usb/usbnet.c:1722
-CPU: 1 PID: 11159 Comm: kworker/1:4 Not tainted 5.3.0-rc7+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x13a/0x2b0 mm/kmsan/kmsan_report.c:108
-  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:250
-  sr_get_phyid drivers/net/usb/sr9800.c:380 [inline]
-  sr9800_bind+0xd39/0x1b10 drivers/net/usb/sr9800.c:800
-  usbnet_probe+0x10ae/0x3960 drivers/net/usb/usbnet.c:1722
-  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
-  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:882
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
-  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
-  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:882
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
-  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
-  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-
-Local variable description: ----res@sr_mdio_read
-Variable was created at:
-  sr_mdio_read+0x78/0x360 drivers/net/usb/sr9800.c:341
-  sr_get_phyid drivers/net/usb/sr9800.c:379 [inline]
-  sr9800_bind+0xce9/0x1b10 drivers/net/usb/sr9800.c:800
-=====================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Nevertheless, IMO this attribute file really needs to be deprecated.
+> On top of making things unnecessarily complicated for the userspace,
+> it's making it difficult to make changes to the rest of the class
+> code. We may not be able to get rid of the file, but there is nothing
+> preventing us from supplying a better solution as an option.
+> 
