@@ -2,58 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACBC4CB08E
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 22:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C78ACB130
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 23:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730376AbfJCU4e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 16:56:34 -0400
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:39428 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729440AbfJCU4d (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 16:56:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1570136192;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VC/LlBcR/5mNVDb/D015rZ9V1BXd6w3MDPPfMofQMc0=;
-        b=LEOD/T4wI7dybJE125JajOD0h/gBZDAJe0RPs5vn4jNPu6yCxm6DMIxEsptg8O1Rw8sSD4
-        w7eed8SNADTwVb2Z4/OwoUQuLfhXh7HE94CpMDnPg3u3VFctM01Djo79MjmdRJRd52w/xQ
-        FhvIjDxBVkhvy6YMKMlFU68wwITFAPk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-242--MWfBPm2P3ig30VunEuIsw-1; Thu, 03 Oct 2019 16:56:28 -0400
-Received: by mail-wm1-f72.google.com with SMTP id k9so1640481wmb.0
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 13:56:28 -0700 (PDT)
+        id S1733144AbfJCVdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 17:33:54 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55556 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730427AbfJCVdy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 17:33:54 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a6so3482654wma.5
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 14:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WqLu0wakUs3wLW/I7o/nZ1HroZMOcAjOwf4CjhO+KeY=;
+        b=SU3vbsQ6OHP3PG8vkkVhBcWke1RWVX76BBLoh371ZnNseL8IPXWuUGs8Aawlr7RpB1
+         OhrN3ieOxkzztglV/yzpowrX4psibNxJXJlYePix7tD7J1IqNmVEkFQHpaImI+SJw+fL
+         Qi+eFZDQbJZsRWvepgaLrxHz5iKcyph7k+468NLpj1+Xkc2829Qd76LtjKfibN9nNXLq
+         SNFXX3G5dtcqpf/41ELgEut0HkWdZfSqF65GOSbmfjS+BlIId4xiH8HRfQclYS1FE5ay
+         F0Vu/yPgPWokiZrw2+UdoNnU6d8v867EKDBCXwHsRUn0yTCFaPoNK5g1zBK6A1siE2rm
+         3y8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=A5kOIo5QkieVFmBFAtLwxKf3nxk646ajjZrARZPXdLI=;
-        b=UY5UVVjXnbfZBvWiXy9sg/y37Bt+lxDf0hC9rKkclHALuZInNbYszCP0a6YkEwEeF5
-         JBbYktp78Pa3Z+y05JF/+GIH8kv9Ooib7DbM3GumTIWU4Zi/tzXB6w9e9LyMEMTobIZ+
-         z4Vm2DHAV/yOZVowChdkX3Qp/pw4PcG9lWeEXmjax3QP3kEbhyj41Jn95pOGoVCiqxdf
-         R54/ymu5kqqOmh9zZmXOVsorFxkO76tKc7oaZgtXrfq8V2fx4HfZ1tM/7pq2yzK6GCH9
-         r5cYtxF7t4MJDATg+UtUYzN3sGQWnKL2V+tAKQmadhkXUdSzCeY/DhwFXB+JFXpgJEG7
-         EFjg==
-X-Gm-Message-State: APjAAAXp/fKvBHnbsiUFzOKqS3tDUGpUgiGG5KmoOmCKM2wqQvljqcT4
-        OtlwxDNvT3o6dU8Enla3sdwtokLLh7sgTOBLckXHOIo8yBloYx/x8b/DU8qY40INYh7Of6WaYMX
-        bqiwMPqgBzKUQuyKBKYnm
-X-Received: by 2002:a1c:1aca:: with SMTP id a193mr8470571wma.120.1570136186725;
-        Thu, 03 Oct 2019 13:56:26 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyTDfMkHtgwnWS6hHN107FbUrB3SZTNQ+JCS+Zycf70DOxLyHXyYisZjPmgWq6URjChzPNdOQ==
-X-Received: by 2002:a1c:1aca:: with SMTP id a193mr8470560wma.120.1570136186423;
-        Thu, 03 Oct 2019 13:56:26 -0700 (PDT)
-Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
-        by smtp.gmail.com with ESMTPSA id l9sm4075992wme.45.2019.10.03.13.56.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2019 13:56:25 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WqLu0wakUs3wLW/I7o/nZ1HroZMOcAjOwf4CjhO+KeY=;
+        b=W3G9l2q/WVo4UgOhnh/8wWqm92SkA4Bio72p/nk7PZfCjXvolgKd7GgxQ10uRRR76G
+         60wg49QEqYEqXsA3xMpVfW7EOEErf7x9N8LvNxQbMNoEjTAfOS0m/kfKk8IUUHJsxeQ5
+         J4RbihIWel7QTEXP+J7NgbO5e5gg/Bb9+fVbiwYHpW86/qCGt63KRy2zLFxEEea6Q89+
+         qkRVTNYm08PbA5D0yDLqkBxp00pPlmehpiu7/DrmoDaW510EiZc40TNc4vdtwVoKS9+i
+         aMBOEdYGiDwT08OrpPZGA5lcSKUCanZ5e7PP/zWQPQzII0l8VOnlHls5nxf8h7Ovwlga
+         qLMQ==
+X-Gm-Message-State: APjAAAWn4wSQI8q4Iru8JxjR0Hx3yMg3MxibblfCFIeH633XrZQvEkFU
+        9h7FENSAsfesh1Zq0bpIjBFvEkADDEpPCUuEqJp57Q==
+X-Google-Smtp-Source: APXvYqy0aDLcBSZThcU2euPdqUC7jbpYAO1vXBYibNhLeJuIpnrowDBFsgcoWmV4/OIiW/ottBpZY0dyuBAWgcYMMGw=
+X-Received: by 2002:a05:600c:48b:: with SMTP id d11mr3500415wme.153.1570138431210;
+ Thu, 03 Oct 2019 14:33:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
+ <20191003112618.GA2420393@kroah.com> <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
+ <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
+In-Reply-To: <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Thu, 3 Oct 2019 14:33:38 -0700
+Message-ID: <CALAqxLX3uSJKvRwzcQznaF4WK52BcM5Bh+PNXHmfDe1aTSUL8Q@mail.gmail.com>
 Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yu Chen <chenyu56@huawei.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -66,70 +65,50 @@ Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
         Linux USB List <linux-usb@vger.kernel.org>,
         "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
         <devicetree@vger.kernel.org>
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-3-john.stultz@linaro.org>
- <20191003112618.GA2420393@kroah.com>
- <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
-Date:   Thu, 3 Oct 2019 22:56:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
-Content-Language: en-US
-X-MC-Unique: -MWfBPm2P3ig30VunEuIsw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Thu, Oct 3, 2019 at 1:56 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 03-10-2019 22:45, John Stultz wrote:
+> > The HiKey960 has only one USB controller, but in order to support both
+> > USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
+> > connection is attached, it powers down and disconnects the hub. When
+> > the USB-C connection is detached, it powers the hub on and connects
+> > the controller to the hub.
+>
+> When you say one controller, do you mean 1 host and 1 gadget controller,
+> or is this one of these lovely devices where a gadget controller gets
+> abused as / confused with a proper host controller?
 
-On 03-10-2019 22:45, John Stultz wrote:
-> On Thu, Oct 3, 2019 at 4:26 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->>
->> On Wed, Oct 02, 2019 at 11:16:16PM +0000, John Stultz wrote:
->>> From: Yu Chen <chenyu56@huawei.com>
->>>
->>> This patch adds notifier for drivers want to be informed of the usb rol=
-e
->>> switch.
->>
->> Ick, I hate notifiers, they always come back to cause problems.
->>
->> What's just wrong with a "real" call to who ever needs to know this?
->> And who does need to know this anyway?  Like Hans said, if we don't have
->> a user for it, we should not add it.
->=20
-> So in this case, its used for interactions between the dwc3 driver and
-> the hikey960 integrated USB hub, which is controlled via gpio (which I
-> didn't submit here as I was trying to keep things short and
-> reviewable, but likely misjudged).
->=20
-> The HiKey960 has only one USB controller, but in order to support both
-> USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
-> connection is attached, it powers down and disconnects the hub. When
-> the USB-C connection is detached, it powers the hub on and connects
-> the controller to the hub.
+I'm not totally sure myself, but I believe it's the latter, as the
+host ports have to be disabled in order for the gadet/otg port to
+function.
 
-When you say one controller, do you mean 1 host and 1 gadget controller,
-or is this one of these lovely devices where a gadget controller gets
-abused as / confused with a proper host controller?
+There was a similar situation w/ the original HiKey board (dwc2
+controller) as well, though the switching was done fully in hardware
+and we only needed some minor tweaks to the driver to keep the state
+transitions straight.
 
-And since you are doing a usb-role-switch driver, I guess that the
-role-switch is integrated inside the SoC, so you only get one pair
-of USB datalines to the outside ?
+> And since you are doing a usb-role-switch driver, I guess that the
+> role-switch is integrated inside the SoC, so you only get one pair
+> of USB datalines to the outside ?
 
-This does seem rather special, it might help if you can provide a diagram
-with both the relevant bits inside the SoC as well as what lives outside
-the Soc. even if it is in ASCII art...
+I believe so, but again, I don't have a ton of knowledge about the SoC
+details, Chen Yu would probably be the right person to answer, but I
+don't know if he's doing upstreaming anymore.
 
-Regards,
+> This does seem rather special, it might help if you can provide a diagram
+> with both the relevant bits inside the SoC as well as what lives outside
+> the Soc. even if it is in ASCII art...
 
-Hans
+There is a schematic pdf here:
+https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
 
+The larger block diagram on page 3 might be helpful, but you can find
+more details on the usb hub bits on page 17 and 18.
+
+thanks
+-john
