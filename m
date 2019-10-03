@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 721F9CB080
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 22:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACBC4CB08E
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 22:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731473AbfJCUvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 16:51:45 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21273 "EHLO
+        id S1730376AbfJCU4e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 16:56:34 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:39428 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726119AbfJCUvo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 16:51:44 -0400
+        by vger.kernel.org with ESMTP id S1729440AbfJCU4d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 16:56:33 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1570135903;
+        s=mimecast20190719; t=1570136192;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vnjoTOFDyQSJChzhjYIQAV73Xgv8Ni7ZDZOSyZVwggE=;
-        b=WWLg/P0l/Sdx9yaoZ04O++bCaQoKzb71tWAgtSsfVPpxkwiCgrmZ1mblbWpbnYVsAE4v4G
-        1mrShOFKMN9uHoI2+I6S1iiPMWBYHm7z85vd4QqWE3Ya/BuvepIdrSFqjxyQ+OamOP9xj3
-        3hUciNquw+/wFytfvseXAVKtycR5TsI=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-364-7iunlINvOPqypnp1p_PH0A-1; Thu, 03 Oct 2019 16:51:41 -0400
-Received: by mail-wr1-f69.google.com with SMTP id w8so1667884wrm.3
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 13:51:41 -0700 (PDT)
+        bh=VC/LlBcR/5mNVDb/D015rZ9V1BXd6w3MDPPfMofQMc0=;
+        b=LEOD/T4wI7dybJE125JajOD0h/gBZDAJe0RPs5vn4jNPu6yCxm6DMIxEsptg8O1Rw8sSD4
+        w7eed8SNADTwVb2Z4/OwoUQuLfhXh7HE94CpMDnPg3u3VFctM01Djo79MjmdRJRd52w/xQ
+        FhvIjDxBVkhvy6YMKMlFU68wwITFAPk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-242--MWfBPm2P3ig30VunEuIsw-1; Thu, 03 Oct 2019 16:56:28 -0400
+Received: by mail-wm1-f72.google.com with SMTP id k9so1640481wmb.0
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 13:56:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=QdG6MOJurSUHQTcdmBqDPB7/rDTugK2vGncWCK5z81o=;
-        b=tkPs+HhWr2xQ6JszjORA/7K97tjJ+MZDJst9jZMel6KNNyWodkvSlSm72wcLOXMEhr
-         Y5VU3Q9KlcNfUEZU987goz0h2RqnFkcA68O/wSAbZkvTFgxOvxT6Id+MJsHfdG5i2xO1
-         5NQjRDHhelyq1Vi7bzXIC/GTOKQ6t2MlAqk8F5VTv+dtErVGwcFVOsKDE5h9U49j+QOY
-         0xzHjjwTfx5W3Dzjli3jkJHpc0P+DHJt842eH7HyJnZPsRS8YpfSSti0C1X4ChDdHMM9
-         7I7CyxUNIy9jYqfbEsY3hBzHaQ72RQe0hrXpDLEooV15f3z2i3D061juwOyzRbf20jYt
-         2tVw==
-X-Gm-Message-State: APjAAAXgKSo2xCpUlbsn5Gab6HdSUJgdnKtsre0cuYjQl4jxbhP4u3Fq
-        kkdzoBSozsnD9mW4iGxl9Lg+Cg3uDjsbLaTrHGsyJePi5Anpp3BWpBfGt0zNhcz7D66SjhkHFjS
-        QsqCp44wkr9lTxQz19q8T
-X-Received: by 2002:a5d:5708:: with SMTP id a8mr8343526wrv.240.1570135900520;
-        Thu, 03 Oct 2019 13:51:40 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxRoK2g19GQf2eAvJp7MRLHXk5+kqndlWHvUn9T3mCNKkdGU4maJmBDOT0p4s0oRgkz7ZChhg==
-X-Received: by 2002:a5d:5708:: with SMTP id a8mr8343517wrv.240.1570135900337;
-        Thu, 03 Oct 2019 13:51:40 -0700 (PDT)
+        bh=A5kOIo5QkieVFmBFAtLwxKf3nxk646ajjZrARZPXdLI=;
+        b=UY5UVVjXnbfZBvWiXy9sg/y37Bt+lxDf0hC9rKkclHALuZInNbYszCP0a6YkEwEeF5
+         JBbYktp78Pa3Z+y05JF/+GIH8kv9Ooib7DbM3GumTIWU4Zi/tzXB6w9e9LyMEMTobIZ+
+         z4Vm2DHAV/yOZVowChdkX3Qp/pw4PcG9lWeEXmjax3QP3kEbhyj41Jn95pOGoVCiqxdf
+         R54/ymu5kqqOmh9zZmXOVsorFxkO76tKc7oaZgtXrfq8V2fx4HfZ1tM/7pq2yzK6GCH9
+         r5cYtxF7t4MJDATg+UtUYzN3sGQWnKL2V+tAKQmadhkXUdSzCeY/DhwFXB+JFXpgJEG7
+         EFjg==
+X-Gm-Message-State: APjAAAXp/fKvBHnbsiUFzOKqS3tDUGpUgiGG5KmoOmCKM2wqQvljqcT4
+        OtlwxDNvT3o6dU8Enla3sdwtokLLh7sgTOBLckXHOIo8yBloYx/x8b/DU8qY40INYh7Of6WaYMX
+        bqiwMPqgBzKUQuyKBKYnm
+X-Received: by 2002:a1c:1aca:: with SMTP id a193mr8470571wma.120.1570136186725;
+        Thu, 03 Oct 2019 13:56:26 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyTDfMkHtgwnWS6hHN107FbUrB3SZTNQ+JCS+Zycf70DOxLyHXyYisZjPmgWq6URjChzPNdOQ==
+X-Received: by 2002:a1c:1aca:: with SMTP id a193mr8470560wma.120.1570136186423;
+        Thu, 03 Oct 2019 13:56:26 -0700 (PDT)
 Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
-        by smtp.gmail.com with ESMTPSA id b7sm2535993wrj.28.2019.10.03.13.51.39
+        by smtp.gmail.com with ESMTPSA id l9sm4075992wme.45.2019.10.03.13.56.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2019 13:51:39 -0700 (PDT)
+        Thu, 03 Oct 2019 13:56:25 -0700 (PDT)
 Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>
+To:     John Stultz <john.stultz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -68,17 +68,17 @@ Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
         <devicetree@vger.kernel.org>
 References: <20191002231617.3670-1-john.stultz@linaro.org>
  <20191002231617.3670-3-john.stultz@linaro.org>
- <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
- <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+ <20191003112618.GA2420393@kroah.com>
+ <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com>
-Date:   Thu, 3 Oct 2019 22:51:38 +0200
+Message-ID: <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
+Date:   Thu, 3 Oct 2019 22:56:24 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+In-Reply-To: <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
 Content-Language: en-US
-X-MC-Unique: 7iunlINvOPqypnp1p_PH0A-1
+X-MC-Unique: -MWfBPm2P3ig30VunEuIsw-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -89,52 +89,45 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On 03-10-2019 22:37, John Stultz wrote:
-> On Thu, Oct 3, 2019 at 2:25 AM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 03-10-2019 01:16, John Stultz wrote:
+On 03-10-2019 22:45, John Stultz wrote:
+> On Thu, Oct 3, 2019 at 4:26 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Wed, Oct 02, 2019 at 11:16:16PM +0000, John Stultz wrote:
 >>> From: Yu Chen <chenyu56@huawei.com>
 >>>
 >>> This patch adds notifier for drivers want to be informed of the usb rol=
 e
 >>> switch.
 >>
->> I do not see any patches in this series actually using this new
->> notifier.
+>> Ick, I hate notifiers, they always come back to cause problems.
 >>
->> Maybe it is best to drop this patch until we actually have in-kernel
->> users of this new API show up ?
+>> What's just wrong with a "real" call to who ever needs to know this?
+>> And who does need to know this anyway?  Like Hans said, if we don't have
+>> a user for it, we should not add it.
 >=20
-> Fair point. I'm sort of taking a larger patchset and trying to break
-> it up into more easily reviewable chunks, but I guess here I mis-cut.
+> So in this case, its used for interactions between the dwc3 driver and
+> the hikey960 integrated USB hub, which is controlled via gpio (which I
+> didn't submit here as I was trying to keep things short and
+> reviewable, but likely misjudged).
 >=20
-> The user is the hikey960 gpio hub driver here:
->    https://git.linaro.org/people/john.stultz/android-dev.git/commit/?id=
-=3Db06158a2d3eb00c914f12c76c93695e92d9af00f
+> The HiKey960 has only one USB controller, but in order to support both
+> USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
+> connection is attached, it powers down and disconnects the hub. When
+> the USB-C connection is detached, it powers the hub on and connects
+> the controller to the hub.
 
-Hmm, that seems to tie the TypeC data-role to the power-role, which
-is not going to work with role swapping.
+When you say one controller, do you mean 1 host and 1 gadget controller,
+or is this one of these lovely devices where a gadget controller gets
+abused as / confused with a proper host controller?
 
-What is controlling the usb-role-switch, and thus ultimately
-causing the notifier you are suggesting to get called ?
+And since you are doing a usb-role-switch driver, I guess that the
+role-switch is integrated inside the SoC, so you only get one pair
+of USB datalines to the outside ?
 
-Things like TYPEC_VBUS_POWER_OFF and TYPEC_VBUS_POWER_ON
-really beg to be modeled as a regulator and then the
-Type-C controller (using e.g. the drivers/usb/typec/tcpm/tcpm.c
-framework) can use that regulator to control things.
-in case of the tcpm.c framework it can then use that
-regulator to implement the set_vbus callback.
-
-You really do not want to tie this do the usb_switch, both
-because doing so ties the data and power-roles together
-which is not supposed to happen and because role-swapping
-requires careful timing of the VBUS on / off at different
-moments then the moments when you actually set the mux/switch
-for connecting the Dp/Dn lines to the host or gadget
-controller.
-
-The usb role switch abstraction is really only intended
-for the data-lines switch and should not be tied together
-with other stuff.
+This does seem rather special, it might help if you can provide a diagram
+with both the relevant bits inside the SoC as well as what lives outside
+the Soc. even if it is in ASCII art...
 
 Regards,
 
