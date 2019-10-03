@@ -2,130 +2,256 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5E3C970C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 05:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B027CC9811
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 08:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728666AbfJCDvg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 23:51:36 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:35355 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726002AbfJCDvg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 23:51:36 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y10so844314plp.2
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 20:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zcfr6gh+YYS9Ofe5zzxO00WWlSEbQSQbHSvUKydprX0=;
-        b=qcyLerwbn2yfOS02Xl8YbuxpAG8SsG1YHki1dPFC9wi9T0m52j3Gln5mRblhZGw1Ps
-         X5SC9PTEnKMLuESwQOZxQM2JRI7gteqfNWJc3i7dNEJJTtlBowHkHAVnsxwz6vjTta2W
-         efY0ZoZfhrTBR8E8lw4oJ2TRMLJNyP7bn2xZjxmssIGHCYbA722cFsD0rSzzaRJmWP45
-         P/Ak8GnYCAruaN4PLRAsyRWk6uS5BbxpdUVLYpKJSOsQ9i8aVue/rFG5Wi6S04cVGUvS
-         oDVebjsBSxojks5fdK/E/88886nxw2zcs8HPtIBrZzYA47c8MfRKIvTMU0IhMnuaaNxt
-         ouTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zcfr6gh+YYS9Ofe5zzxO00WWlSEbQSQbHSvUKydprX0=;
-        b=YxhiSGNVx7MmIOjTOz0/bW3sRTzurdGs5ZEu0y7iWWMc4KZADsZn58beqhQxzsnClp
-         KJFwodia3L6bBuH0ew7EWwW+ddAMH6UQl/fKucdJEf96vxxWUqrx4mUAYeB/y/gLhVfJ
-         VERjFU97o3Z9qWkNOSfqJifbsZQvcJNd/WxuVYFC/ohZaKQU1FsT/2DNmfy5sWW1spY8
-         YCRYEF3PR1QTGocPquuX9o+H6paee9m+iZQNZ0YRj2pw62x8dt84KejSIPXPGqgfmnId
-         BuZfKA7uuc30AA3APZDia37d+Hk+KU3Fbf9s4Snyp9xgVs8wvvyHi5K/gAMhpF3xSeYv
-         h/3Q==
-X-Gm-Message-State: APjAAAXk72kymSPL8VGHjGEceycupB3EfNnhAFuMF8C84zFQ+yLdTlaU
-        +mdlTkPqk2LKZUq4GECxQUqK/rGy
-X-Google-Smtp-Source: APXvYqxmgzjTxBNJMTgrlJsx96vTDyG63rqQ69syc0zIk5NzB4pO77swO0O74PpZjeTE/gdz6aEKRw==
-X-Received: by 2002:a17:902:6a82:: with SMTP id n2mr7396349plk.174.1570074693870;
-        Wed, 02 Oct 2019 20:51:33 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m22sm800169pgj.29.2019.10.02.20.51.32
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 20:51:32 -0700 (PDT)
-Subject: Re: [PATCH 1/7] usb: typec: Copy everything from struct
- typec_capability during registration
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
-References: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
- <20191001094858.68643-2-heikki.krogerus@linux.intel.com>
- <9173aabc-3e61-fc9b-e01e-0f1ce78429a2@roeck-us.net>
- <20191002160652.GB19836@kuha.fi.intel.com>
- <20191002191659.GA30108@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <58ec0c7e-10b5-2a73-0629-abb2bddba469@roeck-us.net>
-Date:   Wed, 2 Oct 2019 20:51:32 -0700
+        id S1728091AbfJCGAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 02:00:37 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:8702 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726539AbfJCGAh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 02:00:37 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d958e870000>; Wed, 02 Oct 2019 23:00:39 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 02 Oct 2019 23:00:36 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 02 Oct 2019 23:00:36 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Oct
+ 2019 06:00:35 +0000
+Received: from [10.19.108.102] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Oct 2019
+ 06:00:33 +0000
+Subject: Re: [PATCH 6/6] arm64: tegra: Enable XUSB host in P2972-0000 board
+To:     Thierry Reding <thierry.reding@gmail.com>
+CC:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
+        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>, <skomatineni@nvidia.com>
+References: <20191002080051.11142-1-jckuo@nvidia.com>
+ <20191002080051.11142-7-jckuo@nvidia.com> <20191002102611.GH3716706@ulmo>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <2b50ad58-e5da-2f93-0c18-f16843fe64ac@nvidia.com>
+Date:   Thu, 3 Oct 2019 14:00:32 +0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20191002191659.GA30108@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20191002102611.GH3716706@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1570082439; bh=IRvBK47uVjWmDsT165L0Pu++8XKZQ+qki1Prrbvm1Uw=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=ebvNQDzMhzJ73lFk+ey5emow7Ea+iV0Yd6g+785HNbmGSvDdJk1V5guN35ec5RjSJ
+         zB9IRYwqxV65I71gq1y1oXtcIo/VvJrBsC4PAYbmd6fN/uHbUQ7sjL8LmzP86PbA3J
+         Q/Kn098cIDblw5UKhP4wrIRsBVjhh3JHEgCLGmWeFOuKkB+gxu20bj/GdD91kJLuvG
+         aZTlyYQMZqBBTSgFDbD3iqjdiv7qusls6o35VVG3wSrQxxo+3OtB1n/ztGkVTCcOn+
+         nFlkPGWNAqrlh3PG1k1P68/Mv6eqH47X851PALmtSy6wAPMktTq8MKrkQRg1KNBzb0
+         8uLJAytOuocIw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/2/19 12:16 PM, Heikki Krogerus wrote:
-> On Wed, Oct 02, 2019 at 07:06:55PM +0300, Heikki Krogerus wrote:
->> This is a bit off topic, but that attribute file is really horrible.
->> Right now there is no way to know the actual capability of the
->> port in user space. If something changes a DRP port into sink or
->> source, there is no way to know after that that the port is actually
->> DRP capable.
-> 
-> That statement is not correct. I'm sorry. I don't know why did I put
-> it that way.
-> 
-> I wanted to say that now the userpsace is forced to keep track of a
-> specific sysfs file in order to be sure of the currently supported
-> role, That alone is wrong, but there is no way to guarantee that
-> one day we would not need to support another capability in a similar
-> fashion, and that would mean another sysfs file, and we just forced
-> the userspace to be modified. The capabilities of the port really need
-> to be static.
-> 
-
-I assume you refer to port_type. If I remember correctly, this is actually
-used by Android userspace code to specifically select if a port can be
-source, sink, or drp. I am not sure if it is a good idea to enforce
-port removal and re-registration in conjunction with this - the port
-can, after all, be connected to some storage device or to a monitor.
-I am not sure how we could "sell" to users the idea that if they change
-the port type, their screen will go dark for a few seconds.
-
-Am I missing something ?
-
-Thanks,
-Guenter
-
-> We can handle the capability changes like I propose below without
-> affecting the userspace.
-> 
->> So that ABI is "buggy", but even without the problem, I still really
->> think that allowing the capabilities to be changed like that in
->> general is completely wrong. I don't have a problem with changing the
->> capabilities, but IMO it should be handled at one level higher, at the
->> controller device level. If the capabilities of a port need to be
->> changed, the old port should be removed, and a new with the new
->> capabilities registered. That is the only way to handle it without
->> making things unnecessarily difficult for the user space.
+On 10/2/19 6:26 PM, Thierry Reding wrote:
+> On Wed, Oct 02, 2019 at 04:00:51PM +0800, JC Kuo wrote:
+>> This commit enables XUSB host and pad controller in Tegra194
+>> P2972-0000 board.
 >>
->> I'm pretty sure that that was my counter proposal already at the time
->> when the attribute file was introduced, but I don't remember why
->> wasn't it accepted at the time? My protest against adding that
->> attribute file was in any case ignored :-(. In any case, my plan was
->> to later propose a new sysfs group that we offer to the parent
->> controller devices instead assigning it to the port devices, and that
->> group is meant to allow port capability changes the way I explained
->> above. Unless of course you are against it?
+>> Signed-off-by: JC Kuo <jckuo@nvidia.com>
+>> ---
+>>  .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi | 31 +++++++++-
+>>  .../boot/dts/nvidia/tegra194-p2972-0000.dts   | 59 +++++++++++++++++++
+>>  2 files changed, 89 insertions(+), 1 deletion(-)
 >>
->> thanks,
->>
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+>> index 4c38426a6969..cb236edc6a0d 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
+>> @@ -229,7 +229,7 @@
+>>  						regulator-max-microvolt = <3300000>;
+>>  					};
+>>  
+>> -					ldo5 {
+>> +					vdd_usb_3v3: ldo5 {
+>>  						regulator-name = "VDD_USB_3V3";
+>>  						regulator-min-microvolt = <3300000>;
+>>  						regulator-max-microvolt = <3300000>;
+>> @@ -313,5 +313,34 @@
+>>  			regulator-boot-on;
+>>  			enable-active-low;
+>>  		};
+>> +
+>> +		vdd_5v_sata: regulator@4 {
+>> +			compatible = "regulator-fixed";
+>> +			reg = <4>;
+>> +
+>> +			regulator-name = "vdd-5v-sata";
+> 
+> Please keep capitalization of regulator names consistent. We use
+> all-caps and underscores for the others (which mirrors the names in the
+> schematics), so please stick with that for this one as well.
+> 
+Sure. I will fix this.
+> Also, I'm wondering if perhaps you can clarify something here. My
+> understanding is that SATA functionality is provided via a controller on
+> the PCI bus. Why is it that we route the 5 V SATA power to the USB port?
+> Oh wait... this is one of those eSATAp (hybrid) ports that can take
+> either eSATA or USB, right? Do we need any additional setup to switch
+> between eSATA and USB modes? Or is this all done in hardware? That is,
+> if I plug in an eSATA, does it automatically hotplug detect the device
+> as SATA and if I plug in a USB device, does it automatically detect it
+> as USB?
+> 
+Yes, this 5V supply is for the eSATAp port. eSATA cable will deliver the 5V to
+SATA device. No SATA/USB switch is required as USB SuperSpeed and PCIE-to-SATA
+controller each has its own UPHY lane. SATA TX/RX pairs also have dedicated pins
+at the eSATAp connector. External SATA drive can be hotplug and hardware will
+detect automatically.
+
+>> +			regulator-min-microvolt = <5000000>;
+>> +			regulator-max-microvolt = <5000000>;
+>> +			gpio = <&gpio TEGRA194_MAIN_GPIO(Z, 1) GPIO_ACTIVE_LOW>;
+> 
+> This will actually cause a warning on boot. For fixed regulators the
+> polarity of the enable GPIO is not specified in the GPIO specifier.
+> Instead you're supposed to use the boolean enable-active-high property
+> to specify if the enable GPIO is active-high. By default the enable GPIO
+> is considered to be active-low. The GPIO specifier needs to have the
+> GPIO_ACTIVE_HIGH flag set regardless for backwards-compatibilitiy
+> reasons.
+> 
+> Note that regulator@3 above your new entry does this wrongly, but
+> next-20191002 should have a fix for that.
+> 
+Thanks for the information. I will fix this in the next revision.
+>> +		};
+>> +	};
+>> +
+>> +	padctl@3520000 {
+> 
+> Don't forget to move this into /cbb as well to match the changes to
+> patch 5/6.
+> 
+Sure, will do.
+>> +		avdd-usb-supply = <&vdd_usb_3v3>;
+>> +		vclamp-usb-supply = <&vdd_1v8ao>;
+>> +		ports {
+> 
+> Blank line between the above two for better readability.
+> 
+Okay.
+>> +			usb2-1 {
+>> +				vbus-supply = <&vdd_5v0_sys>;
+>> +			};
+>> +			usb2-3 {
+> 
+> Same here and below.
+> 
+>> +				vbus-supply = <&vdd_5v_sata>;
+>> +			};
+>> +			usb3-0 {
+>> +				vbus-supply = <&vdd_5v0_sys>;
+>> +			};
+>> +			usb3-3 {
+>> +				vbus-supply = <&vdd_5v0_sys>;
+>> +			};
+>> +		};
+>>  	};
+>>  };
+>> diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
+>> index d47cd8c4dd24..410221927dfa 100644
+>> --- a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
+>> +++ b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
+>> @@ -222,4 +222,63 @@
+>>  			};
+>>  		};
+>>  	};
+>> +
+>> +	padctl@3520000 {
+> 
+> Same comment as above. Move this into /cbb.
+> 
+>> +		status = "okay";
+>> +
+>> +		pads {
+>> +			usb2 {
+>> +				lanes {
+>> +					usb2-1 {
+>> +						status = "okay";
+>> +					};
+>> +					usb2-2 {
+> 
+> And blank lines for readability here and below.
+> 
+>> +						status = "okay";
+>> +					};
+>> +					usb2-3 {
+>> +						status = "okay";
+>> +					};
+>> +				};
+>> +			};
+>> +			usb3 {
+>> +				lanes {
+>> +					usb3-0 {
+>> +						status = "okay";
+>> +					};
+>> +					usb3-3 {
+>> +						status = "okay";
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>> +
+>> +		ports {
+>> +			usb2-1 {
+>> +				mode = "host";
+>> +				status = "okay";
+>> +			};
+>> +			usb2-3 {
+>> +				mode = "host";
+>> +				status = "okay";
+>> +			};
+>> +			usb3-0 {
+>> +				nvidia,usb2-companion = <1>;
+>> +				status = "okay";
+>> +			};
+>> +			usb3-3 {
+>> +				nvidia,usb2-companion = <3>;
+>> +				nvidia,disable-gen2;
+>> +				status = "okay";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	tegra_xhci: xhci@3610000 {
+> 
+> Also needs to move into /cbb. Also, you can drop the tegra_xhci label
+> here since we never reference the controller from elsewhere.
+> 
+> Also make sure to update the name here to match the changes in 5/6.
+> 
+Got it. Thanks for the reminder.
+> Thierry
+> 
+>> +		status = "okay";
+>> +		phys =	<&{/padctl@3520000/pads/usb2/lanes/usb2-1}>,
+>> +			<&{/padctl@3520000/pads/usb2/lanes/usb2-3}>,
+>> +			<&{/padctl@3520000/pads/usb3/lanes/usb3-0}>,
+>> +			<&{/padctl@3520000/pads/usb3/lanes/usb3-3}>;
+>> +		phy-names = "usb2-1", "usb2-3", "usb3-0", "usb3-3";
+>> +	};
+>>  };
 >> -- 
->> heikki
-> 
-
+>> 2.17.1
+>>
