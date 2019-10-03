@@ -2,149 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE804C9BA6
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 12:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D13FC9C16
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 12:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727488AbfJCKFH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 06:05:07 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:39312 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727446AbfJCKFH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 06:05:07 -0400
-Received: by mail-qk1-f196.google.com with SMTP id 4so1732487qki.6
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 03:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XWiMJwqzT8oQE1dGfRwDaY6r1DsXYglQOBVzUqA8/w8=;
-        b=qMXgfIBEws2sS0qW6uaGhnWNDmBMgaDsfvPMwN8oxSu0kIAtRjDxUnvV5qE6IaQK/z
-         WS/Sq2y8+wYpblBZUA12mNHTZbfnUadl5aMsNSXkbWuOWJsqafeOwVM6PVOvD8vqbjNh
-         WHWqzYBzZ8cvoIG1e+pOuO+3EXEMoInOYdQrb366GC230SXMJBU5cx58zo8Z5fuMcdhr
-         MVTnJNWNFkOX+ePgVviLb0wZwPq49NyX+5JmBvwzYr9vpPIrsZ1bTSk9arBdYUWs+9g2
-         g9ynU96h3K7dh6M95/fjczcKjC1EUQKwhfELqSkIzNNz0xNl+kDyZ1cZjbJrLmXaieBI
-         Z0iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XWiMJwqzT8oQE1dGfRwDaY6r1DsXYglQOBVzUqA8/w8=;
-        b=Voql0731dP9GdX06PSXAL5ESMMOhjZwN6kwbekuF6fazQt0P5gF3IlRlM5NmMGYGp2
-         z5RSpvG0Id7e0HjsJfl2rBoDjSEqlWjhmKq1rh42BZpkY/UqhblbaleuvrEx5/19n38M
-         RAVsjHpc32iM2PbdSqynf2eARK3XPnIqxyfnRECrmM3q0mKCkJZpua16wEAfzh/mU7Ew
-         AiqgdujBnFVD9cCUvEtPZXzb0OAgBDsY4u2tVJinaYYaAmoHi2GdaHyTvm3djVqOBbQz
-         7JhiYo6nhEVXFxgcWz6ne2qfNcMthVOBQ6pw8abppcP3dDPR0dJjcIz3Xq+MfH0x9lpk
-         ZSMA==
-X-Gm-Message-State: APjAAAVomhnZ7zcnhB1GFnlXwsUl+H1beio//Ga6/e7nXhmVn1GPcggl
-        2wjeW370lB0Pc3/Su9uhETB90bBhV6fjsxbBq5pS1Q==
-X-Google-Smtp-Source: APXvYqzLN9WhEfYla8VI/XUEc/9tqZZw6y4Qk84UuA4On4Aoz/4gv8XTirE38rgkp0EobKHsJ0n3nOWwvfvN9tBxIUQ=
-X-Received: by 2002:a05:620a:7ca:: with SMTP id 10mr3512606qkb.410.1570097105389;
- Thu, 03 Oct 2019 03:05:05 -0700 (PDT)
+        id S1726978AbfJCKVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 06:21:32 -0400
+Received: from mga11.intel.com ([192.55.52.93]:44549 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725892AbfJCKVc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Oct 2019 06:21:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 03:21:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,251,1566889200"; 
+   d="scan'208";a="195171894"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga003.jf.intel.com with ESMTP; 03 Oct 2019 03:21:30 -0700
+Subject: Re: Regression: USB/xhci issues on some systems with newer kernel
+ versions
+To:     Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
+        linux-usb@vger.kernel.org
+References: <3edaf835-7cde-37d9-5a0a-5a9b21a02968@gmx.at>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <4dfc2bca-e333-4f05-e795-23cbe481d53e@linux.intel.com>
+Date:   Thu, 3 Oct 2019 13:23:29 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190920032437.242187-1-kyletso@google.com> <bd03390e-35fb-2885-d026-b8df58f02283@redhat.com>
-In-Reply-To: <bd03390e-35fb-2885-d026-b8df58f02283@redhat.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Thu, 3 Oct 2019 18:04:48 +0800
-Message-ID: <CAGZ6i=1mid0Cq2EtWTJHwRzPxXZJnLtTWwYL2QS0vZHNR9mJqQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] tcpm: AMS and Collision Avoidance
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <3edaf835-7cde-37d9-5a0a-5a9b21a02968@gmx.at>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans
+On 2.10.2019 15.28, Bernhard Gebetsberger wrote:
+> Hi,
+> 
+> There has been a regression in the xhci driver since kernel version 4.20, on some systems some usb devices won't work until the system gets rebooted.
+> The error message in dmesg is "WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state", although for some reason there are some usb devices that are affected by this issue but don't throw the error message(including the device I'm using, I got the error in previous kernel versions though).
+> It seems like this bug can also lead to system instability, one user reported in the bug tracker(https://bugzilla.kernel.org/show_bug.cgi?id=202541#c58) that he got a system freeze because of this when using kernel 5.3.1.
+> 
 
-Could you append the TCPM log?
+Ok, lets take a look at this.
+Some of the symptoms vary a bit in the report, so lets focus on ones that
+show: "WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state"
 
-On Thu, Oct 3, 2019 at 5:47 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Hi Kyle,
->
-> On 20-09-2019 05:24, Kyle Tso wrote:
-> > *** BLURB HERE ***
-> >
-> > Kyle Tso (2):
-> >    usb: typec: tcpm: AMS and Collision Avoidance
-> >    usb: typec: tcpm: AMS for PD2.0
->
-> I've finally gotten a chance to test this on one of my own devices
-> which uses the tcpm framework for its Type-c port.
->
-> I am afraid that this series breaks DP altmode support,
-> specifically, the dp_altmode_configure() function no longer
-> seems to get called, leading to no pin-assignment being
-> selected by default and DP thus not working.
->
-> So sorry, but I have to NACK this series since it causes
-> regressions.
->
-> It might be easiest if you can get yourself some hardware
-> which supports DP altmode and uses the fusb302 Type-C
-> controller (which unlike your controller is actually
-> supported by the mainline kernel).
->
-> 2 devices which have this are the original (version 1)
-> of the GPD win and the GPD pocket. Since the version
-> is not always clearly marked, make sure you get one which
-> has a X7-Z8750 CPU, those are the version 1 models, you
-> can still get these e.g. here:
->
-> https://www.geekbuying.com/item/GPD-Pocket-7-Inch-Tablet-PC-Intel-Atom-X7-Z8750-8GB-128GB-375711.html
-> https://www.geekbuying.com/item/GPD-Win-Intel-Z8750-Windows-10-4GB-64GB-Gamepad-Tablet-PC---Black-378018.html
->
-> These 2 devices still need 2 minor patches to hookup the DP
-> support, I have just finished these 2 patches up and I'm
-> submitting them upstream today, I will Cc you on these.
->
-> If you combine these with one of the many DP-charging pass-through
-> + USB-3 out + HDMI out dongles, e.g.:
-> https://www.aliexpress.com/item/32953320909.html
->
-> And then after plugging in do:
->
-> cat /sys/class/typec/port0-partner/port0-partner.0/displayport/pin_assignment
->
-> This should print:
->
-> C [D]
->
-> But when I add your patches into the mix it prints just:
->
-> C D
->
-> And these debug pr_err calls never happen:
->
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 7845df030b72..d14f94078dd9 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -106,6 +106,7 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
->                 break;
->         }
->
-> +       pr_err("dp_altmode_configure pin_assign %08x conf %08x\n", pin_assign, DP_CONF_GET_PIN_ASSIGN(dp->data.conf));
->         /* Determining the initial pin assignment. */
->         if (!DP_CONF_GET_PIN_ASSIGN(dp->data.conf)) {
->                 /* Is USB together with DP preferred */
-> @@ -115,6 +116,8 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
->                 else if (pin_assign & DP_PIN_ASSIGN_DP_ONLY_MASK)
->                         pin_assign &= DP_PIN_ASSIGN_DP_ONLY_MASK;
->
-> +               pr_err("dp_altmode_configure masked pin_assign %08x\n", pin_assign);
-> +
->                 if (!pin_assign)
->                         return -EINVAL;
->
->
-> Regards,
->
-> Hans
->
+> When looking at the responses in the bug tracker, it looks like it mostly affects Ryzen based systems with 300 series motherboards, although there are some other affected systems as well. It doesn't only affect wifi/bluetooth sticks, some users even got this issue when connecting their smartphone or their external hard drive to their PC.
+
+> 
+> I have uploaded the whole dmesg file and the tracing file to transfer.sh: https://transfer.sh/zYohl/dmesg and https://transfer.sh/KNbFL/xhci-trace
+
+Hmm, trying to download these just shows "Not Found"
+
+Could someone with a affected system enable tracing and dynamic debug on a
+recent kernel, take logs and traces of one failing instance where the message
+"WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state" is seen.
+
+mount -t debugfs none /sys/kernel/debug
+echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
+echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
+
+< Trigger the issue >
+
+Send output of dmesg
+Send content of /sys/kernel/debug/tracing/trace
+
+> 
+> The issues occur since commit f8f80be501aa2f10669585c3e328fad079d8cb3a "xhci: Use soft retry to recover faster from transaction errors". I think this commit should be reverted at least until a workaround has been found, especially since the next two kernel versions will be used by a lot of distributions(5.4 because it's a LTS kernel and 5.5 will probably be used in Ubuntu 20.04) so more users would be affected by this.
+> 
+
+There some time left before 5.4 is out, lets see if we can find the root cause first.
+
+-Mathias
+
