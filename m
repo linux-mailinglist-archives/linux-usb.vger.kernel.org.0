@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D62FCB03A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 22:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47CA3CB066
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 22:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733194AbfJCUhT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 16:37:19 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38277 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726669AbfJCUhS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 16:37:18 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 3so3446433wmi.3
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 13:37:17 -0700 (PDT)
+        id S1730342AbfJCUqN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 16:46:13 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33003 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726669AbfJCUqN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 16:46:13 -0400
+Received: by mail-wr1-f68.google.com with SMTP id b9so4301533wrs.0
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 13:46:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=63ds3t73ZrLj3HbV7qUiVgBUuKHqGbWcEjyWgIzskeE=;
-        b=ziI1PEzAwuBD/3nwpmQYYXYslTYque2zlEKkMbUyCSw6dlHNV7kB9VAwWgpRurXKN7
-         mcDYAmcUhP4bsEqTOLOp0AbA///bwWtKdAP/Z4MthfJQ7kRwHGtBp/lb5UwXguNCgPoQ
-         XmUHs1ODk2abTw3MeluecZg+IkWrkJz2mOg6Bqe57LEJevWeEp5tbIi/eMMHn8HSabf2
-         YW0j13DLGMF/JF9q0OleDgrOgI+RugOdwOC8B6IAI1lj+J99cQtrssH0cvuTSLNOtufV
-         TygGCxlOyWqws2dM4Ux9YWbSh8RVGOp0uKQ7MXo2dt9pqR5oK7lRKvzZmCkPE4o9i2d/
-         uo8Q==
+        bh=MLz52SXLm9tFNj7zfoyYuJlYYM4Yei855wkH/p9Zakw=;
+        b=OI7KpgqTLJVOEWIraY+nfkO4ojeYBzUUEKSTH0kqkcpDLaXbhCsQsSoVcPVwkDtmpU
+         nB2+/ZZmv9rvHsErgXDAlNcVkMb2ooESS+UmOT2X18o0r9PNmu5kvsDTBhmDOfQSIwol
+         edy2cmcHt0XTNRUWcLCceoxqi+myrjQnnUN2SGogHFCUspjHFN0/lxD1Y+FjmMzh2gEJ
+         UkY1C5gSxsqd7RzCIujmFF/eQhTif5fiFwq9YvpZczsEjBVsG+wRYp+yreQYR92ZkDNL
+         bE0zfHiOFBsyS1chtZiRP4Hg79Bm01RfQs+kKZ7zgd5ia4ISeCnu/sQUR1tJOHp0F2xn
+         gU9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=63ds3t73ZrLj3HbV7qUiVgBUuKHqGbWcEjyWgIzskeE=;
-        b=sipwPvas4g/rs29QYHLLj821y4nY/gLRrRZX1xvak9WVg8FYmxJJrwT8ZHZ/6HfbgF
-         EG1y6UQSzBTiK9df+FKYbwy4lCLLqj03e4eLOSH1MwmMWjBouIyanGdeWJWqfqb262h/
-         GwofQBGB+Lc1hpiNjHirh/EPTLTi/YLdVrlRuEEwknbNNDgDirIbMn4MBHZY7+oSlAAj
-         eZSesWuKmePdTmV0brf2znOZ/dBsXnuo0WV6trbSNspwzg2bj83dHkInzS+KigHizdjH
-         sEoL/SUO74+aBaffFwKf0gJCHJTGHpXwddAEynmE+71PtaddiYK0uLKlCIAiu+dK8Ntp
-         4chA==
-X-Gm-Message-State: APjAAAULXHSJORp2cv02L0+ZwpvwU9HQfnNtTpVyE8cH7ybY0SBw1s7P
-        pbRxmrvto6U+4zAIFI9MgcgIQZvyJGQKGbPYX7QHZg==
-X-Google-Smtp-Source: APXvYqzVrVcXrzwTGscDiiPv6l+aU2YRfAhMTVv5NfavOPgIBNOF2oVCTqQSyYHsCIQ6dv7jqQDIQMnq8Lmtfdlg0qI=
-X-Received: by 2002:a1c:9988:: with SMTP id b130mr8527379wme.164.1570135036923;
- Thu, 03 Oct 2019 13:37:16 -0700 (PDT)
+        bh=MLz52SXLm9tFNj7zfoyYuJlYYM4Yei855wkH/p9Zakw=;
+        b=TzxcyBmDpNBo9h1RpN8brrRKZQC0vPIvKIK9fyNSiETqrd4PMZ7q0spA4Zfz9UwlV4
+         Y97RfC2gf/5H0C1eHp6zNPkUMea936pv75DMaEYgDguGciRF0sWShKAe2FeYelmeofBp
+         vHRst3+Dx6lzmNhXU3KAvRZHkvsb+Duktng1lWIdIx3/k8pVktZ0IDKNAp4E6XHvvgnD
+         PbuPsxMTgDVhg9TdHsoAifI++tTXBwi3t6iSkR1xHdTAcDZ3XvUQgLbf3GoYwN7P67OR
+         SaaBj8v2hThozUbsrWf0ot9Z1/aPkJP0RlSbv26J+HICgLxsdiVS6Yr+Zrh8FYlRJalC
+         mneg==
+X-Gm-Message-State: APjAAAWLYvPJvq1hi3eyV0R4R9nAQ6RLDfUYGRL1nejJc3ObPtcZYjkI
+        IrI28FCpA1oZcTIH4B42J59tUrhJ0x8SY+GthEYO7j26
+X-Google-Smtp-Source: APXvYqyxKVh9z28GFY7FV59xDlRJaJrO7fjRrA9KhCUrEN79DqqukGpApLp9fiWohyYRkWNA856Kq3W60N6EgVMi+d0=
+X-Received: by 2002:a5d:638f:: with SMTP id p15mr8481403wru.169.1570135570974;
+ Thu, 03 Oct 2019 13:46:10 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
- <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
-In-Reply-To: <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
+ <20191003112618.GA2420393@kroah.com>
+In-Reply-To: <20191003112618.GA2420393@kroah.com>
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 3 Oct 2019 13:37:04 -0700
-Message-ID: <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+Date:   Thu, 3 Oct 2019 13:45:59 -0700
+Message-ID: <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
 Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     Hans de Goede <hdegoede@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Felipe Balbi <balbi@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
@@ -69,26 +69,36 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 3, 2019 at 2:25 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 03-10-2019 01:16, John Stultz wrote:
+On Thu, Oct 3, 2019 at 4:26 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Oct 02, 2019 at 11:16:16PM +0000, John Stultz wrote:
 > > From: Yu Chen <chenyu56@huawei.com>
 > >
 > > This patch adds notifier for drivers want to be informed of the usb role
 > > switch.
 >
-> I do not see any patches in this series actually using this new
-> notifier.
+> Ick, I hate notifiers, they always come back to cause problems.
 >
-> Maybe it is best to drop this patch until we actually have in-kernel
-> users of this new API show up ?
+> What's just wrong with a "real" call to who ever needs to know this?
+> And who does need to know this anyway?  Like Hans said, if we don't have
+> a user for it, we should not add it.
 
-Fair point. I'm sort of taking a larger patchset and trying to break
-it up into more easily reviewable chunks, but I guess here I mis-cut.
+So in this case, its used for interactions between the dwc3 driver and
+the hikey960 integrated USB hub, which is controlled via gpio (which I
+didn't submit here as I was trying to keep things short and
+reviewable, but likely misjudged).
 
-The user is the hikey960 gpio hub driver here:
-  https://git.linaro.org/people/john.stultz/android-dev.git/commit/?id=b06158a2d3eb00c914f12c76c93695e92d9af00f
+The HiKey960 has only one USB controller, but in order to support both
+USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
+connection is attached, it powers down and disconnects the hub. When
+the USB-C connection is detached, it powers the hub on and connects
+the controller to the hub.
 
-I'll resubmit again later with that patch included.
+This is pretty HiKey960 specific, so I think the notifier is useful to
+let the gpio hub logic tie into the role switching events.
+
+Suggestions for alternative approaches?
 
 thanks
 -john
