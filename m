@@ -2,98 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5665CA041
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 16:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5457CA045
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 16:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729048AbfJCOYq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 10:24:46 -0400
-Received: from mga09.intel.com ([134.134.136.24]:63563 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725957AbfJCOYq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Oct 2019 10:24:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 03 Oct 2019 07:24:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,252,1566889200"; 
-   d="scan'208";a="205630037"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 03 Oct 2019 07:24:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 03 Oct 2019 17:24:43 +0300
-Date:   Thu, 3 Oct 2019 17:24:43 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 00/14] usb: typec: UCSI driver overhaul
-Message-ID: <20191003142443.GC1048@kuha.fi.intel.com>
-References: <20190926100727.71117-1-heikki.krogerus@linux.intel.com>
- <BYAPR12MB2727E1FE3CDFC5D6DD87CF73DC9D0@BYAPR12MB2727.namprd12.prod.outlook.com>
+        id S1730025AbfJCO0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 10:26:20 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:44204 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725957AbfJCO0U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 10:26:20 -0400
+Received: (qmail 3509 invoked by uid 2102); 3 Oct 2019 10:26:19 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 3 Oct 2019 10:26:19 -0400
+Date:   Thu, 3 Oct 2019 10:26:19 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+cc:     mathias.nyman@intel.com, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] Revert "usb: Avoid unnecessary LPM enabling and disabling
+ during suspend and resume"
+In-Reply-To: <123BCB7F-5ABA-4DDD-9599-46D3240903F6@canonical.com>
+Message-ID: <Pine.LNX.4.44L0.1910031024410.1797-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR12MB2727E1FE3CDFC5D6DD87CF73DC9D0@BYAPR12MB2727.namprd12.prod.outlook.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ajay,
+On Thu, 3 Oct 2019, Kai-Heng Feng wrote:
 
-On Tue, Oct 01, 2019 at 06:36:25PM +0000, Ajay Gupta wrote:
-> Hi Heikki
+> > On Oct 2, 2019, at 23:47, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > 
+> > On Wed, 2 Oct 2019, Kai-Heng Feng wrote:
+> > 
+> >> This reverts commit d590c23111505635e1beb01006612971e5ede8aa.
+> >> 
+> >> Dell WD15 dock has a topology like this:
+> >> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+> >>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+> >>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+> >> 
+> >> Their IDs:
+> >> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> >> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
+> >> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
+> >> 
+> >> Ethernet cannot be detected after plugging ethernet cable to the dock,
+> >> the hub and roothub get runtime resumed and runtime suspended
+> >> immediately:
+> >> ...
+> > 
+> >> After some trial and errors, the issue goes away if LPM on the SMSC hub
+> >> is disabled. Digging further, enabling and disabling LPM during runtime
+> >> resume and runtime suspend respectively can solve the issue.
+> >> 
+> >> So bring back the old LPM behavior, which the SMSC hub inside Dell WD15
+> >> depends on.
+> >> 
+> >> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
+> >> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > 
+> > Maybe it would be better to have a VID/PID-specific quirk for this?
 > 
-> > -----Original Message-----
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Thursday, September 26, 2019 3:07 AM
-> > To: Ajay Gupta <ajayg@nvidia.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Subject: [PATCH 00/14] usb: typec: UCSI driver overhaul
-> > 
-> > Hi Ajay,
-> > 
-> > Here's the pretty much complete rewrite of the I/O handling that I was
-> > talking about. The first seven patches are not actually related to
-> > this stuff, but I'm including them here because the rest of the series
-> > is made on top of them. I'm including also that fix patch I send you
-> > earlier.
-> > 
-> > After this it should be easier to handle quirks. My idea how to handle
-> > the multi-instance connector alt modes is that we "emulate" the PPM in
-> > ucsi_ccg.c in order to handle them, so ucsi.c is not touched at all.
-> > 
-> > We can now get the connector alternate modes that the actual
-> > controller supplies during probe - before registering the ucsi
-> > interface 
-> How can ucsi_ccg.c get the connector alternate modes before
-> registering ucsi interface? PPM reset, notification enable, etc. 
-> is done during ucsi registration. UCSI spec says:
-> " The only commands the PPM is required to process in the 
-> "PPM Idle (Notifications Disabled)" state are 
-> SET_NOTIFICATION_ENABLE and PPM_RESE"
+> Re-reading the spec, I think we need some clarification:
+> "If the value is 3, then host software wants to selectively suspend the
+> device connected to this port. The hub shall transition the link to U3
+> from any of the other U states using allowed link state transitions.
+> If the port is not already in the U0 state, then it shall transition the
+> port to the U0 state and then initiate the transition to U3."
 > 
-> Also, it doesn't look correct if ucsi_ccg.c has to replicate most 
-> of the stuff done in ucsi_init() of ucsi.c.
+> The phrase "then it shall transition the port to the U0 state" what does "it" here refer to?
+> Is it the hub or the software?
+> If it's the former then it's indeed a buggy hub, but if it's the latter I think reverting the commit is the right thing to do.
 
-How about if we split ucsi_init() into a function that first simply
-constructs the struct ucsi and struct ucsi_connector instances without
-registering anything, and into separate functions that then register
-the ports, altmodes and what have you. I don't think that should be a
-huge problem. It will make ucsi.c even more like a library, which is
-probable a good thing. I can prepare patches for that too if you like?
+In my opinion, "it" here refers to the hub.  This is because of the 
+parallel construction with the preceding sentence ("... shall 
+transition the link/port"), which indicates that the subjects should be 
+the same.
 
-After that you should be able to get the struct ucsi instance that
-represents the "real" PPM without registering anything by calling
-a single function, most likely ucsi_init(). And after getting that you
-can construct the connector alternate modes that we actually register.
-Finally you register the final interface which does not use
-ucsi_ccg_ops, but instead something like ucsi_nvidia_ops.
+Alan Stern
 
-How would this sound to you?
-
-Br,
-
--- 
-heikki
