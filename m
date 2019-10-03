@@ -2,127 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD6DC96EE
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 05:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9271C96FC
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 05:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727160AbfJCDWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Oct 2019 23:22:39 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:32915 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbfJCDWj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 23:22:39 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so813370pfl.0
-        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 20:22:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=Qcbatkrbyyrp3eBE32fuNXC7/HcaftiTNzoulB+n+F0=;
-        b=vA9rJV6W6StGzq8ac3QtjivxEU9aoBXxLYIHjyDMcFzWXLUuKJR6aLVf8SrVkfbmGx
-         1alqxZaX/KTfcm2X/rJpq3MCA3BbDSQgyrtWgtMk2BvtyLbzuVkey5qqOIDMdbNb+5zL
-         0QSW2Umv2uJ12YiDOQ73F2ufn8fUJgbKxNCV7AvBHGVIH72OVQCoGMT8+p35apaUVLye
-         7obZ3IabS34qjjCLeP0XLoP2vUDuVIs2qejPcLp9tDZ/Jr4xk0b0lKfMylA73QHevBE8
-         OzpwUj3WJ248qonmDXzkU8aTrKDi5bxHfWdb2MQbg1BW/6Mv4yEtgtNmuVwbIgMZVY0w
-         YWbA==
+        id S1728140AbfJCDjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Oct 2019 23:39:08 -0400
+Received: from mail-io1-f72.google.com ([209.85.166.72]:53825 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725860AbfJCDjH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Oct 2019 23:39:07 -0400
+Received: by mail-io1-f72.google.com with SMTP id w8so2908718iol.20
+        for <linux-usb@vger.kernel.org>; Wed, 02 Oct 2019 20:39:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Qcbatkrbyyrp3eBE32fuNXC7/HcaftiTNzoulB+n+F0=;
-        b=QeezSMkc43uUCrKK1SXfeMGn7B5Jw59b0jjBOIFcN+gnhzO3OVQNm7Usm0lpvlDE1B
-         g656GT5F49uH24vt9Mz5Lh9Y+9btm+9E0Rr287mNLl7dArBK5K8QCN3hIFatJildW0JC
-         y3dY5TJ16S1t4Mtbuq/kAuR2OVG+SWZjN0MrNmWsj8WgChtMcKTFlaNy8sAD7ADwMrSd
-         3EWiWVE/Fxy5pcqFIwEsrG06isOFKJJlLcuohorZNkdjMxOYSq55+3AC2dZS+N8Upe5i
-         zGtyd+2qlrB8KxLKGRFgN780Whz+o2OYgPSYA5INYv4sHPWaO+FPfeVVUcgtJn3PHkGI
-         Pxmg==
-X-Gm-Message-State: APjAAAUrJT68NJbV18l1N02QMrsjWTwX3OlrG2WdF+0ZolXVMNCopgAe
-        98R4jd3EBFeDldyhJ3ypD8Nzcg==
-X-Google-Smtp-Source: APXvYqx2lOV0eh+Ow8KeLKSt9Zas93Pb/ThAgFgUhO+p+JCOUsHOJLJdQpDh8zxXHDvsj/W+AjVgAw==
-X-Received: by 2002:a63:5005:: with SMTP id e5mr7521362pgb.442.1570072957845;
-        Wed, 02 Oct 2019 20:22:37 -0700 (PDT)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id d76sm801914pga.80.2019.10.02.20.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2019 20:22:36 -0700 (PDT)
-From:   John Stultz <john.stultz@linaro.org>
-To:     lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [RFC][PATCH] dt-bindings: usb: rt1711h: Add connector bindings
-Date:   Thu,  3 Oct 2019 03:22:32 +0000
-Message-Id: <20191003032232.115832-1-john.stultz@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=fNcmM8dDxJueHNsixPYAMzRv/o66qgp37A7jQpDFaDU=;
+        b=V0FRxdOLbBSoyCYkxe/AiR0mV3pLAIrnIrTt8p6KF9Klk6NXG7cW2+a3detAHhM+n7
+         RjCKrt8IXgv4LEie2Pc8xhIMYCz5mMg3HxhiUic0dRIc2diLx1bitdPfCeBV2METMjAE
+         BSB3xzGADTw4m8LjfcatIyCAg0zv4ZHjlQNdbpWOLssRfoR2DL6i6QmwRIuo/o6FPtZH
+         8mBPbiSjsCcJXct8arAUFcDNF2ogPTgcvVG44KCcI/dRk0YN/y9xS8wcezrI8QG5w/X1
+         qM4wlhGGQUSywLbsVglhHrjU3hir5TiKb4XSLqtboS3SL9H2heuTxW/UrrLETVHCXKO0
+         UTXg==
+X-Gm-Message-State: APjAAAV/hSRA/78AFgvLeXJWKFtVuhyJf4YowqGuNE6xODL1j5HjyP5j
+        yO3WLOt1l8YXQ7Qm1wyRabaKg0Si4jWT8kHwQjBd9AUH8j9D
+X-Google-Smtp-Source: APXvYqwFzhhBhYUtdnc9rPslh+XB3usOsuQcTSKUHt81F5Fwbea+PqEz88pROA3THyedDW94PkexFESBJJCjCpPBDRjU5iD/ggaV
+MIME-Version: 1.0
+X-Received: by 2002:a92:cb10:: with SMTP id s16mr8001468ilo.79.1570073947045;
+ Wed, 02 Oct 2019 20:39:07 -0700 (PDT)
+Date:   Wed, 02 Oct 2019 20:39:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e288f40593f953a9@google.com>
+Subject: KMSAN: uninit-value in sr9800_bind
+From:   syzbot <syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add connector binding documentation for Richtek RT1711H Type-C
-chip driver
+Hello,
 
-It was noted by Rob Herring that the rt1711h binding docs
-doesn't include the connector binding.
+syzbot found the following crash on:
 
-Thus this patch adds such documentation following the details
-in Documentation/devicetree/bindings/usb/typec-tcpci.txt
+HEAD commit:    124037e0 kmsan: drop inlines, rename do_kmsan_task_create()
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=10f7e0cd600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1842130bbcfb335bac1
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=142acef3600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11811bbd600000
 
-CC: ShuFan Lee <shufan_lee@richtek.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: linux-usb@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Signed-off-by: John Stultz <john.stultz@linaro.org>
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
+
+CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Error reading  
+RX_CTL register:ffffffb9
+CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Failed to enable  
+software MII access
+CoreChips 2-1:0.159 (unnamed net_device) (uninitialized): Failed to enable  
+hardware MII access
+=====================================================
+BUG: KMSAN: uninit-value in usbnet_probe+0x10ae/0x3960  
+drivers/net/usb/usbnet.c:1722
+CPU: 1 PID: 11159 Comm: kworker/1:4 Not tainted 5.3.0-rc7+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x13a/0x2b0 mm/kmsan/kmsan_report.c:108
+  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:250
+  sr_get_phyid drivers/net/usb/sr9800.c:380 [inline]
+  sr9800_bind+0xd39/0x1b10 drivers/net/usb/sr9800.c:800
+  usbnet_probe+0x10ae/0x3960 drivers/net/usb/usbnet.c:1722
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
+  __device_attach+0x489/0x750 drivers/base/dd.c:882
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+
+Local variable description: ----res@sr_mdio_read
+Variable was created at:
+  sr_mdio_read+0x78/0x360 drivers/net/usb/sr9800.c:341
+  sr_get_phyid drivers/net/usb/sr9800.c:379 [inline]
+  sr9800_bind+0xce9/0x1b10 drivers/net/usb/sr9800.c:800
+=====================================================
+
+
 ---
- .../bindings/usb/richtek,rt1711h.txt          | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-index d4cf53c071d9..e3fc57e605ed 100644
---- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-+++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-@@ -6,10 +6,39 @@ Required properties:
-  - interrupts : <a b> where a is the interrupt number and b represents an
-    encoding of the sense and level information for the interrupt.
- 
-+Required sub-node:
-+- connector: The "usb-c-connector" attached to the tcpci chip, the bindings
-+  of connector node are specified in
-+  Documentation/devicetree/bindings/connector/usb-connector.txt
-+
- Example :
- rt1711h@4e {
- 	compatible = "richtek,rt1711h";
- 	reg = <0x4e>;
- 	interrupt-parent = <&gpio26>;
- 	interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+
-+	usb_con: connector {
-+		compatible = "usb-c-connector";
-+		label = "USB-C";
-+		data-role = "dual";
-+		power-role = "dual";
-+		try-power-role = "sink";
-+		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
-+		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
-+			     PDO_VAR(5000, 12000, 2000)>;
-+		op-sink-microwatt = <10000000>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@1 {
-+				reg = <1>;
-+				usb_con_ss: endpoint {
-+					remote-endpoint = <&usb3_data_ss>;
-+				};
-+			};
-+		};
-+	};
- };
--- 
-2.17.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
