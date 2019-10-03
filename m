@@ -2,256 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B027CC9811
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 08:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D9FC98D8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 09:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728091AbfJCGAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 02:00:37 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:8702 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726539AbfJCGAh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 02:00:37 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d958e870000>; Wed, 02 Oct 2019 23:00:39 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 02 Oct 2019 23:00:36 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 02 Oct 2019 23:00:36 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Oct
- 2019 06:00:35 +0000
-Received: from [10.19.108.102] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 3 Oct 2019
- 06:00:33 +0000
-Subject: Re: [PATCH 6/6] arm64: tegra: Enable XUSB host in P2972-0000 board
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <jonathanh@nvidia.com>,
-        <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>, <skomatineni@nvidia.com>
-References: <20191002080051.11142-1-jckuo@nvidia.com>
- <20191002080051.11142-7-jckuo@nvidia.com> <20191002102611.GH3716706@ulmo>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <2b50ad58-e5da-2f93-0c18-f16843fe64ac@nvidia.com>
-Date:   Thu, 3 Oct 2019 14:00:32 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727647AbfJCHKa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Oct 2019 03:10:30 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:38617 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725879AbfJCHKa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 03:10:30 -0400
+Received: by mail-lj1-f194.google.com with SMTP id b20so1442636ljj.5;
+        Thu, 03 Oct 2019 00:10:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=lk6voscM/OATPvzWTrWbUwYmf+fWIvoC2W/uo8QiGLY=;
+        b=eShvmU4cSWR8qWvhXkAcmM0DTZje81UNgrSj6p/6PS0untkes+f6/+535Gji5PJ9jO
+         95i8qYOxuG0tWVVZHzSulffm3fiLtYG+QKXaQaacpC/egoSlfyINSfz2jhbpIUiXw8Ib
+         +i9ycBrgV9npdE84ZixMC/IePDwzs4seh2XLjfmZDkpBBpHFq0814bPuOEh3OUPredyi
+         FlYbThP80oSZ7Uq7myLMjkPQ75xdIRqhQ85qNcBEFI7xKSyQEpJDwcT/hZWdlEGLH94B
+         NOjDCwJqwyAfsRRtCZ1+9VVmPq9UsL4XDQUdX8j6gXiy3xrXchktzNn1KedF7r3cqKoL
+         DzPg==
+X-Gm-Message-State: APjAAAXMUE1mhDjhTM/fcZEZQP/SuwYr0OruhF2ZttmtLl4bFHKeYAsq
+        nPwhg5yLZQ7Tjlaed8NxviY=
+X-Google-Smtp-Source: APXvYqxPIuDO+y/Zg0KXsLt/MOdKkAfmlZKqUfD8kAjpDTxSLxVZUWx8/lJjq7SyKAhsLe7IbjuYFQ==
+X-Received: by 2002:a2e:1648:: with SMTP id 8mr4745861ljw.194.1570086627736;
+        Thu, 03 Oct 2019 00:10:27 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id j17sm261618lfb.11.2019.10.03.00.10.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Oct 2019 00:10:26 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iFvFz-0004RG-2j; Thu, 03 Oct 2019 09:10:35 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        syzbot+5630ca7c3b2be5c9da5e@syzkaller.appspotmail.com
+Subject: [PATCH] USB: microtek: fix info-leak at probe
+Date:   Thu,  3 Oct 2019 09:09:31 +0200
+Message-Id: <20191003070931.17009-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <0000000000000e235d0593f474ba@google.com>
+References: <0000000000000e235d0593f474ba@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20191002102611.GH3716706@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1570082439; bh=IRvBK47uVjWmDsT165L0Pu++8XKZQ+qki1Prrbvm1Uw=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ebvNQDzMhzJ73lFk+ey5emow7Ea+iV0Yd6g+785HNbmGSvDdJk1V5guN35ec5RjSJ
-         zB9IRYwqxV65I71gq1y1oXtcIo/VvJrBsC4PAYbmd6fN/uHbUQ7sjL8LmzP86PbA3J
-         Q/Kn098cIDblw5UKhP4wrIRsBVjhh3JHEgCLGmWeFOuKkB+gxu20bj/GdD91kJLuvG
-         aZTlyYQMZqBBTSgFDbD3iqjdiv7qusls6o35VVG3wSrQxxo+3OtB1n/ztGkVTCcOn+
-         nFlkPGWNAqrlh3PG1k1P68/Mv6eqH47X851PALmtSy6wAPMktTq8MKrkQRg1KNBzb0
-         8uLJAytOuocIw==
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/2/19 6:26 PM, Thierry Reding wrote:
-> On Wed, Oct 02, 2019 at 04:00:51PM +0800, JC Kuo wrote:
->> This commit enables XUSB host and pad controller in Tegra194
->> P2972-0000 board.
->>
->> Signed-off-by: JC Kuo <jckuo@nvidia.com>
->> ---
->>  .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi | 31 +++++++++-
->>  .../boot/dts/nvidia/tegra194-p2972-0000.dts   | 59 +++++++++++++++++++
->>  2 files changed, 89 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
->> index 4c38426a6969..cb236edc6a0d 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
->> +++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
->> @@ -229,7 +229,7 @@
->>  						regulator-max-microvolt = <3300000>;
->>  					};
->>  
->> -					ldo5 {
->> +					vdd_usb_3v3: ldo5 {
->>  						regulator-name = "VDD_USB_3V3";
->>  						regulator-min-microvolt = <3300000>;
->>  						regulator-max-microvolt = <3300000>;
->> @@ -313,5 +313,34 @@
->>  			regulator-boot-on;
->>  			enable-active-low;
->>  		};
->> +
->> +		vdd_5v_sata: regulator@4 {
->> +			compatible = "regulator-fixed";
->> +			reg = <4>;
->> +
->> +			regulator-name = "vdd-5v-sata";
-> 
-> Please keep capitalization of regulator names consistent. We use
-> all-caps and underscores for the others (which mirrors the names in the
-> schematics), so please stick with that for this one as well.
-> 
-Sure. I will fix this.
-> Also, I'm wondering if perhaps you can clarify something here. My
-> understanding is that SATA functionality is provided via a controller on
-> the PCI bus. Why is it that we route the 5 V SATA power to the USB port?
-> Oh wait... this is one of those eSATAp (hybrid) ports that can take
-> either eSATA or USB, right? Do we need any additional setup to switch
-> between eSATA and USB modes? Or is this all done in hardware? That is,
-> if I plug in an eSATA, does it automatically hotplug detect the device
-> as SATA and if I plug in a USB device, does it automatically detect it
-> as USB?
-> 
-Yes, this 5V supply is for the eSATAp port. eSATA cable will deliver the 5V to
-SATA device. No SATA/USB switch is required as USB SuperSpeed and PCIE-to-SATA
-controller each has its own UPHY lane. SATA TX/RX pairs also have dedicated pins
-at the eSATAp connector. External SATA drive can be hotplug and hardware will
-detect automatically.
+Add missing bulk-in endpoint sanity check to prevent uninitialised stack
+data from being reported to the system log and used as endpoint
+addresses.
 
->> +			regulator-min-microvolt = <5000000>;
->> +			regulator-max-microvolt = <5000000>;
->> +			gpio = <&gpio TEGRA194_MAIN_GPIO(Z, 1) GPIO_ACTIVE_LOW>;
-> 
-> This will actually cause a warning on boot. For fixed regulators the
-> polarity of the enable GPIO is not specified in the GPIO specifier.
-> Instead you're supposed to use the boolean enable-active-high property
-> to specify if the enable GPIO is active-high. By default the enable GPIO
-> is considered to be active-low. The GPIO specifier needs to have the
-> GPIO_ACTIVE_HIGH flag set regardless for backwards-compatibilitiy
-> reasons.
-> 
-> Note that regulator@3 above your new entry does this wrongly, but
-> next-20191002 should have a fix for that.
-> 
-Thanks for the information. I will fix this in the next revision.
->> +		};
->> +	};
->> +
->> +	padctl@3520000 {
-> 
-> Don't forget to move this into /cbb as well to match the changes to
-> patch 5/6.
-> 
-Sure, will do.
->> +		avdd-usb-supply = <&vdd_usb_3v3>;
->> +		vclamp-usb-supply = <&vdd_1v8ao>;
->> +		ports {
-> 
-> Blank line between the above two for better readability.
-> 
-Okay.
->> +			usb2-1 {
->> +				vbus-supply = <&vdd_5v0_sys>;
->> +			};
->> +			usb2-3 {
-> 
-> Same here and below.
-> 
->> +				vbus-supply = <&vdd_5v_sata>;
->> +			};
->> +			usb3-0 {
->> +				vbus-supply = <&vdd_5v0_sys>;
->> +			};
->> +			usb3-3 {
->> +				vbus-supply = <&vdd_5v0_sys>;
->> +			};
->> +		};
->>  	};
->>  };
->> diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
->> index d47cd8c4dd24..410221927dfa 100644
->> --- a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
->> +++ b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
->> @@ -222,4 +222,63 @@
->>  			};
->>  		};
->>  	};
->> +
->> +	padctl@3520000 {
-> 
-> Same comment as above. Move this into /cbb.
-> 
->> +		status = "okay";
->> +
->> +		pads {
->> +			usb2 {
->> +				lanes {
->> +					usb2-1 {
->> +						status = "okay";
->> +					};
->> +					usb2-2 {
-> 
-> And blank lines for readability here and below.
-> 
->> +						status = "okay";
->> +					};
->> +					usb2-3 {
->> +						status = "okay";
->> +					};
->> +				};
->> +			};
->> +			usb3 {
->> +				lanes {
->> +					usb3-0 {
->> +						status = "okay";
->> +					};
->> +					usb3-3 {
->> +						status = "okay";
->> +					};
->> +				};
->> +			};
->> +		};
->> +
->> +		ports {
->> +			usb2-1 {
->> +				mode = "host";
->> +				status = "okay";
->> +			};
->> +			usb2-3 {
->> +				mode = "host";
->> +				status = "okay";
->> +			};
->> +			usb3-0 {
->> +				nvidia,usb2-companion = <1>;
->> +				status = "okay";
->> +			};
->> +			usb3-3 {
->> +				nvidia,usb2-companion = <3>;
->> +				nvidia,disable-gen2;
->> +				status = "okay";
->> +			};
->> +		};
->> +	};
->> +
->> +	tegra_xhci: xhci@3610000 {
-> 
-> Also needs to move into /cbb. Also, you can drop the tegra_xhci label
-> here since we never reference the controller from elsewhere.
-> 
-> Also make sure to update the name here to match the changes in 5/6.
-> 
-Got it. Thanks for the reminder.
-> Thierry
-> 
->> +		status = "okay";
->> +		phys =	<&{/padctl@3520000/pads/usb2/lanes/usb2-1}>,
->> +			<&{/padctl@3520000/pads/usb2/lanes/usb2-3}>,
->> +			<&{/padctl@3520000/pads/usb3/lanes/usb3-0}>,
->> +			<&{/padctl@3520000/pads/usb3/lanes/usb3-3}>;
->> +		phy-names = "usb2-1", "usb2-3", "usb3-0", "usb3-3";
->> +	};
->>  };
->> -- 
->> 2.17.1
->>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable <stable@vger.kernel.org>
+Reported-by: syzbot+5630ca7c3b2be5c9da5e@syzkaller.appspotmail.com
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/image/microtek.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/image/microtek.c b/drivers/usb/image/microtek.c
+index 0a57c2cc8e5a..7a6b122c833f 100644
+--- a/drivers/usb/image/microtek.c
++++ b/drivers/usb/image/microtek.c
+@@ -716,6 +716,10 @@ static int mts_usb_probe(struct usb_interface *intf,
+ 
+ 	}
+ 
++	if (ep_in_current != &ep_in_set[2]) {
++		MTS_WARNING("couldn't find two input bulk endpoints. Bailing out.\n");
++		return -ENODEV;
++	}
+ 
+ 	if ( ep_out == -1 ) {
+ 		MTS_WARNING( "couldn't find an output bulk endpoint. Bailing out.\n" );
+-- 
+2.23.0
+
