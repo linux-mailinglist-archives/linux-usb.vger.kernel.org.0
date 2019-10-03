@@ -2,170 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B89CA082
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 16:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F346CCA0C8
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Oct 2019 16:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730134AbfJCOlQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Oct 2019 10:41:16 -0400
-Received: from mx0a-00154904.pphosted.com ([148.163.133.20]:14348 "EHLO
-        mx0a-00154904.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729951AbfJCOlQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 10:41:16 -0400
-Received: from pps.filterd (m0170393.ppops.net [127.0.0.1])
-        by mx0a-00154904.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x93Ee6VL012477;
-        Thu, 3 Oct 2019 10:41:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dell.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=smtpout1;
- bh=V3BR9F8aqsjZnQsqhqhOQjBxvidnv8ceqAJIifPiUoE=;
- b=ERRPzXlLY4u0/LGIVNRbE+xSRivcyhxE4ZJUfh4j+3oQDryBP5KzRtm/h/vhM8mpzmpJ
- v2QNk/MbP6yzvcH0OW6DzRzK8Eb+bBcf5HeIC8akZYDK+OZ2WyUd2YiAQ+l/Uo0bZ1Zk
- U5qzsYf9lAkHUHxRvHy9eOZTUH/m5pzaZIIaVeZ2Vw+gwCdixQqWNpWsSO6BMpEYznGZ
- vYVHJ1i6cK0LdK4h5TWoMqa1DZ0VmU+ZtLBM5KUaEdiWKqMeHVlZSKRHR5k4MT0PPyeu
- anMuh/GHfTMe83uVRmkdUHuzBxIOJj1M71RMSefrSo4QuccPySApLw7sO+vxLTSzEF8V sg== 
-Received: from mx0b-00154901.pphosted.com (mx0b-00154901.pphosted.com [67.231.157.37])
-        by mx0a-00154904.pphosted.com with ESMTP id 2va2uk8r2m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Oct 2019 10:41:14 -0400
-Received: from pps.filterd (m0089483.ppops.net [127.0.0.1])
-        by mx0b-00154901.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x93EcWbj006028;
-        Thu, 3 Oct 2019 10:41:13 -0400
-Received: from ausxipps306.us.dell.com (AUSXIPPS306.us.dell.com [143.166.148.156])
-        by mx0b-00154901.pphosted.com with ESMTP id 2vdb1fw178-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 03 Oct 2019 10:41:13 -0400
-X-LoopCount0: from 10.166.132.131
-X-PREM-Routing: D-Outbound
-X-IronPort-AV: E=Sophos;i="5.60,349,1549951200"; 
-   d="scan'208";a="382884374"
-From:   <Mario.Limonciello@dell.com>
-To:     <mika.westerberg@linux.intel.com>
-CC:     <yehezkelshb@gmail.com>, <linux-usb@vger.kernel.org>,
-        <andreas.noever@gmail.com>, <michael.jamet@intel.com>,
-        <rajmohan.mani@intel.com>,
-        <nicholas.johnson-opensource@outlook.com.au>, <lukas@wunner.de>,
-        <gregkh@linuxfoundation.org>, <stern@rowland.harvard.edu>,
-        <anthony.wong@canonical.com>, <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Thread-Topic: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Thread-Index: AQHVeEzShOhklesInk+gx9St4A7986dGAqiggAATYiCAAUbqgIAAF+AwgABczAD//7D1UIABYeAAgAAaodA=
-Date:   Thu, 3 Oct 2019 14:41:11 +0000
-Message-ID: <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
-References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
- <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
- <20191002083913.GG2714@lahna.fi.intel.com>
- <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
- <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
- <bb84da73d1df468da1707a2af09eb2de@AUSX13MPC105.AMER.DELL.COM>
- <20191003080028.GK2819@lahna.fi.intel.com>
-In-Reply-To: <20191003080028.GK2819@lahna.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Enabled=True;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SiteId=945c199a-83a2-4e80-9f8c-5a91be5752dd;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Owner=Mario_Limonciello@Dell.com;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_SetDate=2019-10-03T14:41:10.3587326Z;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Name=External Public;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_17cb76b2-10b8-4fe1-93d4-2202842406cd_Extended_MSFT_Method=Manual;
- aiplabel=External Public
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.143.18.86]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-03_05:2019-10-03,2019-10-03 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 impostorscore=0
- mlxscore=0 spamscore=0 phishscore=0 priorityscore=1501 clxscore=1015
- malwarescore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910030137
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 bulkscore=0
- clxscore=1015 mlxlogscore=999 priorityscore=1501 lowpriorityscore=0
- spamscore=0 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910030137
+        id S1730166AbfJCO5k convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 3 Oct 2019 10:57:40 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:50272 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727587AbfJCO5k (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Oct 2019 10:57:40 -0400
+Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iG2Xy-00004r-Mf
+        for linux-usb@vger.kernel.org; Thu, 03 Oct 2019 14:57:38 +0000
+Received: by mail-pg1-f197.google.com with SMTP id x8so2131253pgq.14
+        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 07:57:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=W0SWomT5SY0yDSTtHUSDJc9LHcZaOyfwcQXgQs9p9z4=;
+        b=GvpksrGf+T5TksaDUL32F1yORd530BMANz+sPbMMMJ1umqCC6SvAnIm52v3nwjv9G3
+         ao4bL5UpUwBQOD1gZ6J7sBqfU95N+TfmwNs18rArnxRih8oZsWg9Vd5VyxsOy4JUSOQj
+         q6rMZxe+ZdPkUHkxEttDfvvCXOiHOZdF5QWLH+z5TaMSJFWjMUf+Rm+p+pfgVQhVTbWF
+         3HwLtW5YDeLR0s7oWDgWQkFHurUw4jg0B9Ypfhg99S45/IxeUp1Th0S709MguXfYN1yY
+         5oNonQYTxCJRdBLJOPHKMndfufz5Y78a/aodJXOePQYEXdXcvsKAuqW/Xv+YIgqqL464
+         AhfA==
+X-Gm-Message-State: APjAAAX+6V5qEoWNmbljmmbe+c9XhZUQKpnb1JBcBn5aHuhmuvVq+5mo
+        hXqniZGSXIjjIWB4ChNx5LSxqpExJPodICDETbnEwwI+e1uo/Xrk9unHGaHa6V2adIFGwnR7Sjr
+        yTuxcYEo9cMOGvkX2wfZ+7nlxoRD2v1oXteBzQw==
+X-Received: by 2002:a62:2b4d:: with SMTP id r74mr11513013pfr.30.1570114657200;
+        Thu, 03 Oct 2019 07:57:37 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqygWXjUMR1GW5JvI0IYOkgqCblsfxeBPVrb6mAoWUgub2AC/J9+rFS9punoE4zVZDk2PoplcA==
+X-Received: by 2002:a62:2b4d:: with SMTP id r74mr11512986pfr.30.1570114656861;
+        Thu, 03 Oct 2019 07:57:36 -0700 (PDT)
+Received: from 2001-b011-380f-3c42-0c4b-be14-8894-cacf.dynamic-ip6.hinet.net (2001-b011-380f-3c42-0c4b-be14-8894-cacf.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:c4b:be14:8894:cacf])
+        by smtp.gmail.com with ESMTPSA id p66sm3205097pfg.127.2019.10.03.07.57.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Oct 2019 07:57:36 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3594.4.18\))
+Subject: Re: [PATCH] Revert "usb: Avoid unnecessary LPM enabling and disabling
+ during suspend and resume"
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <Pine.LNX.4.44L0.1910031024410.1797-100000@iolanthe.rowland.org>
+Date:   Thu, 3 Oct 2019 22:57:33 +0800
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <E833DEE2-ADE1-436C-A342-427EA460F276@canonical.com>
+References: <Pine.LNX.4.44L0.1910031024410.1797-100000@iolanthe.rowland.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+X-Mailer: Apple Mail (2.3594.4.18)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> -----Original Message-----
-> From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Sent: Thursday, October 3, 2019 3:00 AM
-> To: Limonciello, Mario
-> Cc: yehezkelshb@gmail.com; linux-usb@vger.kernel.org;
-> andreas.noever@gmail.com; michael.jamet@intel.com;
-> rajmohan.mani@intel.com; nicholas.johnson-opensource@outlook.com.au;
-> lukas@wunner.de; gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
-> anthony.wong@canonical.com; linux-kernel@vger.kernel.org
-> Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
->=20
->=20
-> [EXTERNAL EMAIL]
->=20
-> On Wed, Oct 02, 2019 at 04:00:55PM +0000, Mario.Limonciello@dell.com wrot=
-e:
-> > > It's not even "same location - another meaning", the vendor ID comes =
-from
-> the
-> > > DROM section, so it takes a few internal jumps inside the NVM to find=
- the
-> > > location. One of the "pointers" or section headers will be broken for=
- sure.
-> > >
-> > > And after this, we need to find the NVM in LVFS and it has to pass va=
-lidation
-> in
-> > > a few other locations. The chances are so low that I'd think it isn't=
- worth
-> > > worrying about it.
-> >
-> > And now I remember why the back of my mind was having this thought of
-> wanting
-> > sysfs attribute in the first place.  The multiple jumps means that a lo=
-t more of
-> the
-> > NVM has to be dumped to get that data, which slows down fwupd startup
-> significantly.
->=20
-> IIRC currently fwupd does two reads of total 128 bytes from the active
-> NVM. Is that really slowing down fwupd startup significantly?
 
-Yeah, I timed it with fwupd.  Here's the averages:
 
-Without doing the reads to jump to this it's 0:00.06 seconds to probe a tre=
-e of
-Host controller and dock plugged in.
+> On Oct 3, 2019, at 22:26, Alan Stern <stern@rowland.harvard.edu> wrote:
+> 
+> On Thu, 3 Oct 2019, Kai-Heng Feng wrote:
+> 
+>>> On Oct 2, 2019, at 23:47, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>> 
+>>> On Wed, 2 Oct 2019, Kai-Heng Feng wrote:
+>>> 
+>>>> This reverts commit d590c23111505635e1beb01006612971e5ede8aa.
+>>>> 
+>>>> Dell WD15 dock has a topology like this:
+>>>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
+>>>>   |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+>>>>           |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+>>>> 
+>>>> Their IDs:
+>>>> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>>>> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
+>>>> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
+>>>> 
+>>>> Ethernet cannot be detected after plugging ethernet cable to the dock,
+>>>> the hub and roothub get runtime resumed and runtime suspended
+>>>> immediately:
+>>>> ...
+>>> 
+>>>> After some trial and errors, the issue goes away if LPM on the SMSC hub
+>>>> is disabled. Digging further, enabling and disabling LPM during runtime
+>>>> resume and runtime suspend respectively can solve the issue.
+>>>> 
+>>>> So bring back the old LPM behavior, which the SMSC hub inside Dell WD15
+>>>> depends on.
+>>>> 
+>>>> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
+>>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>>> 
+>>> Maybe it would be better to have a VID/PID-specific quirk for this?
+>> 
+>> Re-reading the spec, I think we need some clarification:
+>> "If the value is 3, then host software wants to selectively suspend the
+>> device connected to this port. The hub shall transition the link to U3
+>> from any of the other U states using allowed link state transitions.
+>> If the port is not already in the U0 state, then it shall transition the
+>> port to the U0 state and then initiate the transition to U3."
+>> 
+>> The phrase "then it shall transition the port to the U0 state" what does "it" here refer to?
+>> Is it the hub or the software?
+>> If it's the former then it's indeed a buggy hub, but if it's the latter I think reverting the commit is the right thing to do.
+> 
+> In my opinion, "it" here refers to the hub.  This is because of the 
+> parallel construction with the preceding sentence ("... shall 
+> transition the link/port"), which indicates that the subjects should be 
+> the same.
 
-With doing the reads and just host controller:
-0:04.40 seconds
+Hmm, okay, this is ambiguous to a non-native speaker like me.
+I'll use a quirk instead.
 
-With doing the reads and host controller and dock plugged in:
-0:10.73 seconds
+Kai-Heng
 
->=20
-> > However the kernel has this information handy already from thunderbolt =
-init
-> and can
-> > easily export an attribute which can then come from udev with no startu=
-p
-> penalty.
->=20
-> Indeed kernel has this information but I'm bit hesitant to add new
-> attributes if that same information is already available to the
-> userspace rather easily. IMHO we can always add this to the driver later
-> as we learn new NVM formats that require more parsing from fwupd side
-> slowing it down considerably.
+> 
+> Alan Stern
+> 
 
-I guess we can wait until new NVM formats come and cross the bridge at that=
- point.
-If we encounter a new NVM format that kernel recognizes but old fwupd doesn=
-'t it
-will reject it anyway (just the error won't be super clear why).
