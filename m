@@ -2,184 +2,199 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71B02CB5FA
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 10:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C38B2CB697
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 10:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388095AbfJDITz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 04:19:55 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:9856 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388028AbfJDITz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 04:19:55 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d9700aa0001>; Fri, 04 Oct 2019 01:19:54 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 04 Oct 2019 01:19:54 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 04 Oct 2019 01:19:54 -0700
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 4 Oct
- 2019 08:19:53 +0000
-Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 4 Oct 2019 08:19:53 +0000
-Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.105]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d9700a80000>; Fri, 04 Oct 2019 01:19:53 -0700
-From:   JC Kuo <jckuo@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>, <skomatineni@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>
-Subject: [PATCH v2 3/7] phy: tegra: xusb: Protect Tegra186 soc with config
-Date:   Fri, 4 Oct 2019 16:19:37 +0800
-Message-ID: <20191004081941.4831-4-jckuo@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191004081941.4831-1-jckuo@nvidia.com>
-References: <20191004081941.4831-1-jckuo@nvidia.com>
-X-NVConfidentiality: public
+        id S1728767AbfJDIpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 04:45:17 -0400
+Received: from mga02.intel.com ([134.134.136.20]:9621 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725730AbfJDIpR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Oct 2019 04:45:17 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 01:45:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,255,1566889200"; 
+   d="scan'208";a="205809177"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 04 Oct 2019 01:45:13 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 04 Oct 2019 11:45:12 +0300
+Date:   Fri, 4 Oct 2019 11:45:12 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/7] usb: typec: Separate the operations vector
+Message-ID: <20191004084512.GF1048@kuha.fi.intel.com>
+References: <20191001094858.68643-1-heikki.krogerus@linux.intel.com>
+ <20191001094858.68643-4-heikki.krogerus@linux.intel.com>
+ <6378359b-cf1b-eb8a-997d-8102ee6ee241@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1570177194; bh=wGTs2uohtGmflS5G7f3dZlFGPaIyK8edGiHQZwFsQJ0=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=HkdnYDrxvN17BZ2UyAWK1XXP7HJVYKADqs21SzJzsDp/sSlti6U/lQgsu/gdHPddy
-         g3UCkhumBvs7pI9Gk6E+PC/JAy5PJNQru/e3xnCix9Nk290WdVoYzCIOLUfZbLmbMP
-         gLIZNWa6Ao/APiHm4R13HkHV/oEB2N6DkOym38F+R216ckOOHbNE0jwYjOgnV3fHyD
-         siDk0bKU/0CjOz6zQ2iZLO/0rSMGkpjeVILlOZhESbBtnsjnXlFpvKmG7o6TgMMplN
-         aUOasgx7eYZ/uMPMKvELLkIVGsF1O2kxm/MTx18KCI6Xa+r7s2h3tiDdYPnYfQwekp
-         Dpi3LP+dMYmbw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6378359b-cf1b-eb8a-997d-8102ee6ee241@roeck-us.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As xusb-tegra186.c will be reused for Tegra194, it would be good to
-protect Tegra186 soc data with CONFIG_ARCH_TEGRA_186_SOC. This commit
-also reshuffles Tegra186 soc data single CONFIG_ARCH_TEGRA_186_SOC
-will be sufficient.
+On Tue, Oct 01, 2019 at 06:22:36AM -0700, Guenter Roeck wrote:
+> On 10/1/19 2:48 AM, Heikki Krogerus wrote:
+> > Introducing struct typec_operations which has the same
+> > callbacks as struct typec_capability. The old callbacks are
+> > kept for now, but after all users have been converted, they
+> > will be removed.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >   drivers/usb/typec/class.c | 90 +++++++++++++++++++++++++--------------
+> >   include/linux/usb/typec.h | 19 +++++++++
+> >   2 files changed, 76 insertions(+), 33 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index 9fab0be8f08c..542be63795db 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -59,6 +59,7 @@ struct typec_port {
+> >   	struct typec_mux		*mux;
+> >   	const struct typec_capability	*cap;
+> > +	const struct typec_operations	*ops;
+> >   };
+> >   #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+> > @@ -961,11 +962,6 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
+> >   		return -EOPNOTSUPP;
+> >   	}
+> > -	if (!port->cap->try_role) {
+> > -		dev_dbg(dev, "Setting preferred role not supported\n");
+> > -		return -EOPNOTSUPP;
+> > -	}
+> > -
+> >   	role = sysfs_match_string(typec_roles, buf);
+> >   	if (role < 0) {
+> >   		if (sysfs_streq(buf, "none"))
+> > @@ -974,9 +970,18 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
+> >   			return -EINVAL;
+> >   	}
+> > -	ret = port->cap->try_role(port->cap, role);
+> > -	if (ret)
+> > -		return ret;
+> > +	if (port->ops && port->ops->try_role) {
+> > +		ret = port->ops->try_role(port, role);
+> > +		if (ret)
+> > +			return ret;
+> > +	} else if (port->cap && port->cap->try_role) {
+> > +		ret = port->cap->try_role(port->cap, role);
+> > +		if (ret)
+> > +			return ret;
+> > +	} else {
+> > +		dev_dbg(dev, "Setting preferred role not supported\n");
+> > +		return -EOPNOTSUPP;
+> > +	}
+> 
+> This is a semantic change: Support is now checked _after_ the string is evaluated.
+> I understand the reason, but it should be noted in the patch description
+> (not sure if it is worth it, though - it seems to me it makes the code more
+> difficult to read).
+> 
+> >   	port->prefer_role = role;
+> >   	return size;
+> > @@ -1005,11 +1010,6 @@ static ssize_t data_role_store(struct device *dev,
+> >   	struct typec_port *port = to_typec_port(dev);
+> >   	int ret;
+> > -	if (!port->cap->dr_set) {
+> > -		dev_dbg(dev, "data role swapping not supported\n");
+> > -		return -EOPNOTSUPP;
+> > -	}
+> > -
+> >   	ret = sysfs_match_string(typec_data_roles, buf);
+> >   	if (ret < 0)
+> >   		return ret;
+> > @@ -1020,9 +1020,19 @@ static ssize_t data_role_store(struct device *dev,
+> >   		goto unlock_and_ret;
+> >   	}
+> > -	ret = port->cap->dr_set(port->cap, ret);
+> > -	if (ret)
+> > +	if (port->ops && port->ops->dr_set) {
+> > +		ret = port->ops->dr_set(port, ret);
+> > +		if (ret)
+> > +			goto unlock_and_ret;
+> > +	} else if (port->cap && port->cap->dr_set) {
+> > +		ret = port->cap->dr_set(port->cap, ret);
+> > +		if (ret)
+> > +			goto unlock_and_ret;
+> > +	} else {
+> > +		dev_dbg(dev, "data role swapping not supported\n");
+> > +		ret = -EOPNOTSUPP;
+> >   		goto unlock_and_ret;
+> 
+> This really makes me wonder if the semantic change makes sense. Support
+> is now evaluated _after_ the lock has been obtained. That seems like a
+> waste.
 
-Signed-off-by: JC Kuo <jckuo@nvidia.com>
----
-Changes in v2:
-- new patch to protect Tegra186 soc data with config
+OK, I'll re-think this.
 
- drivers/phy/tegra/xusb-tegra186.c | 70 ++++++++++++++++---------------
- 1 file changed, 36 insertions(+), 34 deletions(-)
+> > +	}
+> >   	ret = size;
+> >   unlock_and_ret:
+> > @@ -1055,11 +1065,6 @@ static ssize_t power_role_store(struct device *dev,
+> >   		return -EOPNOTSUPP;
+> >   	}
+> > -	if (!port->cap->pr_set) {
+> > -		dev_dbg(dev, "power role swapping not supported\n");
+> > -		return -EOPNOTSUPP;
+> > -	}
+> > -
+> >   	if (port->pwr_opmode != TYPEC_PWR_MODE_PD) {
+> >   		dev_dbg(dev, "partner unable to swap power role\n");
+> >   		return -EIO;
+> > @@ -1077,11 +1082,21 @@ static ssize_t power_role_store(struct device *dev,
+> >   		goto unlock_and_ret;
+> >   	}
+> > -	ret = port->cap->pr_set(port->cap, ret);
+> > -	if (ret)
+> > +	if (port->ops && port->ops->pr_set) {
+> > +		ret = port->ops->pr_set(port, ret);
+> > +		if (ret)
+> > +			goto unlock_and_ret;
+> > +	} else if (port->cap && port->cap->pr_set) {
+> > +		ret = port->cap->pr_set(port->cap, ret);
+> > +		if (ret)
+> > +			goto unlock_and_ret;
+> > +	} else {
+> > +		dev_dbg(dev, "power role swapping not supported\n");
+> > +		ret = -EOPNOTSUPP;
+> >   		goto unlock_and_ret;
+> > -
+> > +	}
+> >   	ret = size;
+> > +
+> >   unlock_and_ret:
+> >   	mutex_unlock(&port->port_type_lock);
+> >   	return ret;
+> > @@ -1108,7 +1123,8 @@ port_type_store(struct device *dev, struct device_attribute *attr,
+> >   	int ret;
+> >   	enum typec_port_type type;
+> > -	if (!port->cap->port_type_set || port->fixed_role != TYPEC_PORT_DRP) {
+> > +	if ((!port->ops || !port->ops->port_type_set) ||
+> > +	    !port->cap->port_type_set || port->fixed_role != TYPEC_PORT_DRP) {
+> 
+> The above now requires _all_ callbacks to exist, both ops and cap based ones.
+> Is that on purpose ? Maybe this should be as follows ?
+> 
+> 	if (((!port->ops || !port->ops->port_type_set) &&
+> 	     !port->cap->port_type_set) || port->fixed_role != TYPEC_PORT_DRP) {
+> 
+> or a bit better to read
+> 	if (port->fixed_role != TYPEC_PORT_DRP ||
+> 	    ((!port->ops || !port->ops->port_type_set) && !port->cap->port_type_set))
 
-diff --git a/drivers/phy/tegra/xusb-tegra186.c b/drivers/phy/tegra/xusb-tegra186.c
-index 6f3afaf9398f..3b60270f2009 100644
---- a/drivers/phy/tegra/xusb-tegra186.c
-+++ b/drivers/phy/tegra/xusb-tegra186.c
-@@ -503,19 +503,6 @@ static const char * const tegra186_usb2_functions[] = {
- 	"xusb",
- };
- 
--static const struct tegra_xusb_lane_soc tegra186_usb2_lanes[] = {
--	TEGRA186_LANE("usb2-0", 0,  0, 0, usb2),
--	TEGRA186_LANE("usb2-1", 0,  0, 0, usb2),
--	TEGRA186_LANE("usb2-2", 0,  0, 0, usb2),
--};
--
--static const struct tegra_xusb_pad_soc tegra186_usb2_pad = {
--	.name = "usb2",
--	.num_lanes = ARRAY_SIZE(tegra186_usb2_lanes),
--	.lanes = tegra186_usb2_lanes,
--	.ops = &tegra186_usb2_pad_ops,
--};
--
- static int tegra186_usb2_port_enable(struct tegra_xusb_port *port)
- {
- 	return 0;
-@@ -765,27 +752,6 @@ static const char * const tegra186_usb3_functions[] = {
- 	"xusb",
- };
- 
--static const struct tegra_xusb_lane_soc tegra186_usb3_lanes[] = {
--	TEGRA186_LANE("usb3-0", 0,  0, 0, usb3),
--	TEGRA186_LANE("usb3-1", 0,  0, 0, usb3),
--	TEGRA186_LANE("usb3-2", 0,  0, 0, usb3),
--};
--
--static const struct tegra_xusb_pad_soc tegra186_usb3_pad = {
--	.name = "usb3",
--	.num_lanes = ARRAY_SIZE(tegra186_usb3_lanes),
--	.lanes = tegra186_usb3_lanes,
--	.ops = &tegra186_usb3_pad_ops,
--};
--
--static const struct tegra_xusb_pad_soc * const tegra186_pads[] = {
--	&tegra186_usb2_pad,
--	&tegra186_usb3_pad,
--#if 0 /* TODO implement */
--	&tegra186_hsic_pad,
--#endif
--};
--
- static int
- tegra186_xusb_read_fuse_calibration(struct tegra186_xusb_padctl *padctl)
- {
-@@ -862,6 +828,7 @@ static const struct tegra_xusb_padctl_ops tegra186_xusb_padctl_ops = {
- 	.remove = tegra186_xusb_padctl_remove,
- };
- 
-+#if IS_ENABLED(CONFIG_ARCH_TEGRA_186_SOC)
- static const char * const tegra186_xusb_padctl_supply_names[] = {
- 	"avdd-pll-erefeut",
- 	"avdd-usb",
-@@ -869,6 +836,40 @@ static const char * const tegra186_xusb_padctl_supply_names[] = {
- 	"vddio-hsic",
- };
- 
-+static const struct tegra_xusb_lane_soc tegra186_usb2_lanes[] = {
-+	TEGRA186_LANE("usb2-0", 0,  0, 0, usb2),
-+	TEGRA186_LANE("usb2-1", 0,  0, 0, usb2),
-+	TEGRA186_LANE("usb2-2", 0,  0, 0, usb2),
-+};
-+
-+static const struct tegra_xusb_pad_soc tegra186_usb2_pad = {
-+	.name = "usb2",
-+	.num_lanes = ARRAY_SIZE(tegra186_usb2_lanes),
-+	.lanes = tegra186_usb2_lanes,
-+	.ops = &tegra186_usb2_pad_ops,
-+};
-+
-+static const struct tegra_xusb_lane_soc tegra186_usb3_lanes[] = {
-+	TEGRA186_LANE("usb3-0", 0,  0, 0, usb3),
-+	TEGRA186_LANE("usb3-1", 0,  0, 0, usb3),
-+	TEGRA186_LANE("usb3-2", 0,  0, 0, usb3),
-+};
-+
-+static const struct tegra_xusb_pad_soc tegra186_usb3_pad = {
-+	.name = "usb3",
-+	.num_lanes = ARRAY_SIZE(tegra186_usb3_lanes),
-+	.lanes = tegra186_usb3_lanes,
-+	.ops = &tegra186_usb3_pad_ops,
-+};
-+
-+static const struct tegra_xusb_pad_soc * const tegra186_pads[] = {
-+	&tegra186_usb2_pad,
-+	&tegra186_usb3_pad,
-+#if 0 /* TODO implement */
-+	&tegra186_hsic_pad,
-+#endif
-+};
-+
- const struct tegra_xusb_padctl_soc tegra186_xusb_padctl_soc = {
- 	.num_pads = ARRAY_SIZE(tegra186_pads),
- 	.pads = tegra186_pads,
-@@ -893,6 +894,7 @@ const struct tegra_xusb_padctl_soc tegra186_xusb_padctl_soc = {
- 	.num_supplies = ARRAY_SIZE(tegra186_xusb_padctl_supply_names),
- };
- EXPORT_SYMBOL_GPL(tegra186_xusb_padctl_soc);
-+#endif
- 
- MODULE_AUTHOR("JC Kuo <jckuo@nvidia.com>");
- MODULE_DESCRIPTION("NVIDIA Tegra186 XUSB Pad Controller driver");
+OK.
+
+
+thanks,
+
 -- 
-2.17.1
-
+heikki
