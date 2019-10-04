@@ -2,169 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8427DCC460
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 22:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862BFCC4FF
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 23:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729908AbfJDUpQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 16:45:16 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:39691 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725932AbfJDUpP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 16:45:15 -0400
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1iGURp-0004ek-Hv; Fri, 04 Oct 2019 22:45:09 +0200
-Received: from [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5] (unknown [IPv6:2a03:f580:87bc:d400:44c4:7f7f:9bfe:66b5])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits)
-         client-signature RSA-PSS (4096 bits))
-        (Client CN "mkl@blackshift.org", Issuer "StartCom Class 1 Client CA" (not verified))
-        (Authenticated sender: mkl@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 76E0B460453;
-        Fri,  4 Oct 2019 20:45:07 +0000 (UTC)
-Subject: Re: [PATCH 0/2] can: fix use-after-free on USB disconnect
-To:     Johan Hovold <johan@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20191001102914.4567-1-johan@kernel.org>
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mkl@pengutronix.de; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <ba71cc15-ac3f-66cd-fffe-214080867ea2@pengutronix.de>
-Date:   Fri, 4 Oct 2019 22:45:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729728AbfJDVni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 17:43:38 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:42279 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730367AbfJDVnh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 17:43:37 -0400
+Received: by mail-pf1-f194.google.com with SMTP id q12so4665797pff.9
+        for <linux-usb@vger.kernel.org>; Fri, 04 Oct 2019 14:43:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
+        b=MJ9Cw0wp0Mh+XkAZ37PArMbq3cXXTtMOK8MgPDNXCkP0yXajJDHPB5xaYgU0YftimM
+         IZ9Xr5C2yJosZi22FLfNZvyhDcgs9mFbobfjnE1WeFcBQ21xU74RMtcoRM+q4pMigeCm
+         sJyAZ9okOsrTu89hmigncAMqTy1HVXQqwb/PM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
+        b=fNgZ+eLqzpjR56MkzPzKcAffEOse0byBPaADmA6NmkRplRUZ37cyuxv5GZcy/UI3Yw
+         T+KWemcnV0O4zTkiGeID1a9PaySUJXVldCF6I5JTx6wlBIA4tYxCZKF79iqsQWbj+FD7
+         YyDFqxG+fd0I08oi9VIRQ+u5if3+eosEBRSSlpFHNW+vYNR1lsITIubGLJ3mJqeogJuY
+         AE4fRP68LLbEH1VuvbR+azLpfAHVeGseAI8B5/oa5MxoN3xPsQ+k8ziFUCXCADeIsAeq
+         czgHxu5Nkq13YMEygrfd6Ol84o9347YpKe3CutYwjzZOzNmEivUouG0a5c0K2p5ZXWQZ
+         9TKA==
+X-Gm-Message-State: APjAAAUsu+LrVMI4kqpe0rL4X29Qf+bkkiGpPb0J+CLA+tZjK5IqvWKW
+        k5Vq9lvFP4T/VmlpWKr+9dS+0w==
+X-Google-Smtp-Source: APXvYqy1SG4O+l1PxmR4D+2nW3K5VMykMwaSO5DOFDZyCRsqYuEK129X6z1/RcOxIP4TfZnnBe0BMw==
+X-Received: by 2002:a17:90a:e017:: with SMTP id u23mr4003152pjy.55.1570225416541;
+        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id a11sm10446799pfg.94.2019.10.04.14.43.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        alsa-devel@alsa-project.org, Andrew Lunn <andrew@lunn.ch>,
+        Arnd Bergmann <arnd@arndb.de>, Dan Murphy <dmurphy@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jason Cooper <jason@lakedaemon.net>,
+        Jean Delvare <jdelvare@suse.com>, Jiri Slaby <jslaby@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Pavel Machek <pavel@ucw.cz>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Riku Voipio <riku.voipio@iki.fi>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Takashi Iwai <tiwai@suse.com>
+Subject: [PATCH 00/10] Stop NULLifying match pointer in of_match_device()
+Date:   Fri,  4 Oct 2019 14:43:24 -0700
+Message-Id: <20191004214334.149976-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
 MIME-Version: 1.0
-In-Reply-To: <20191001102914.4567-1-johan@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha512;
- protocol="application/pgp-signature";
- boundary="BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy"
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy
-Content-Type: multipart/mixed; boundary="QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7";
- protected-headers="v1"
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Johan Hovold <johan@kernel.org>, Wolfgang Grandegger <wg@grandegger.com>
-Cc: "David S. Miller" <davem@davemloft.net>, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Message-ID: <ba71cc15-ac3f-66cd-fffe-214080867ea2@pengutronix.de>
-Subject: Re: [PATCH 0/2] can: fix use-after-free on USB disconnect
-References: <20191001102914.4567-1-johan@kernel.org>
-In-Reply-To: <20191001102914.4567-1-johan@kernel.org>
+of_match_device() uses of_match_ptr() to make the match table argument
+NULL via the pre-processor when CONFIG_OF=n. This makes life harder for
+compilers who think that match tables are never used and warn about
+unused variables when CONFIG_OF=n. This series changes various callers
+to use of_device_get_match_data() instead, which doesn't have this
+problem, and removes the of_match_ptr() usage from of_match_device() so
+that the compiler can stop complaining about unused variables. It will
+do dead code elimination instead and remove the match table if it isn't
+actually used.
 
---QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
-Content-Transfer-Encoding: quoted-printable
+Huge Cc list!
 
-On 10/1/19 12:29 PM, Johan Hovold wrote:
-> Syzbot reported a use-after-free on disconnect in mcba_usb and a quick
-> grep revealed a similar issue in usb_8dev.
->=20
-> Compile-tested only.
+Cc: Alessandro Zummo <a.zummo@towertech.it>
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc: Alexandre Torgue <alexandre.torgue@st.com>
+Cc: <alsa-devel@alsa-project.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Dan Murphy <dmurphy@ti.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Gregory Clement <gregory.clement@bootlin.com>
+Cc: Grygorii Strashko <grygorii.strashko@ti.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+Cc: Jacopo Mondi <jacopo@jmondi.org>
+Cc: Jaroslav Kysela <perex@perex.cz>
+Cc: Jason Cooper <jason@lakedaemon.net>
+Cc: Jean Delvare <jdelvare@suse.com>
+Cc: Jiri Slaby <jslaby@suse.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>
+Cc: <linux-hwmon@vger.kernel.org>
+Cc: <linux-leds@vger.kernel.org>
+Cc: <linux-media@vger.kernel.org>
+Cc: <linux-omap@vger.kernel.org>
+Cc: <linux-renesas-soc@vger.kernel.org>
+Cc: <linux-rtc@vger.kernel.org>
+Cc: <linux-serial@vger.kernel.org>
+Cc: <linux-spi@vger.kernel.org>
+Cc: <linux-usb@vger.kernel.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Richard Leitner <richard.leitner@skidata.com>
+Cc: Riku Voipio <riku.voipio@iki.fi>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.com>
 
-Applied to can.
+Stephen Boyd (10):
+  leds: pca953x: Use of_device_get_match_data()
+  media: renesas-ceu: Use of_device_get_match_data()
+  rtc: armada38x: Use of_device_get_match_data()
+  drivers: net: davinci_mdio: Use of_device_get_match_data()
+  serial: stm32: Use of_device_get_match_data()
+  usb: usb251xb: Use of_device_get_match_data()
+  ASoC: jz4740: Use of_device_get_match_data()
+  spi: gpio: Look for a device node instead of match
+  hwmon: (lm70) Avoid undefined reference to match table
+  of/device: Don't NULLify match table in of_match_device() with
+    CONFIG_OF=n
 
-tnx,
-Marc
+ drivers/hwmon/lm70.c                   |  2 +-
+ drivers/leds/leds-pca9532.c            | 14 +----
+ drivers/media/platform/renesas-ceu.c   |  2 +-
+ drivers/net/ethernet/ti/davinci_mdio.c | 12 ++---
+ drivers/rtc/rtc-armada38x.c            | 10 ++--
+ drivers/spi/spi-gpio.c                 |  5 +-
+ drivers/tty/serial/stm32-usart.c       | 71 ++++++++++++--------------
+ drivers/tty/serial/stm32-usart.h       |  2 +-
+ drivers/usb/misc/usb251xb.c            | 12 ++---
+ include/linux/of_device.h              |  4 +-
+ sound/soc/jz4740/jz4740-i2s.c          |  5 +-
+ 11 files changed, 55 insertions(+), 84 deletions(-)
 
---=20
-Pengutronix e.K.                  | Marc Kleine-Budde           |
-Industrial Linux Solutions        | Phone: +49-231-2826-924     |
-Vertretung West/Dortmund          | Fax:   +49-5121-206917-5555 |
-Amtsgericht Hildesheim, HRA 2686  | http://www.pengutronix.de   |
 
-
---QBkhT7RqXdjN9avIuHHtOSG3z3WkEt6c7--
-
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCgAdFiEEmvEkXzgOfc881GuFWsYho5HknSAFAl2Xr08ACgkQWsYho5Hk
-nSB91wf8Dgn4I3se1HZozX4bYj71NMqKqekWNgAbm7VKvxLHdRs9YME0522cfOI1
-zk0OxfDv9Dnh/4aF0btqP8ia7+QV513E0jecBEfaMAiouu7cT2xxorB5lUdKdRnN
-fxlNd/N2SSjXU8bx+5seF1+TmDgyoie6VK2A6mbn7cjSSecMcL/uLjY22dRJ/er/
-oG8/8y1rMc0SCW5QSgvaBVx1wpUwdHEIPJgoioxLabK4XkY3DzfF5enPbXvbrCi0
-g6KbiyAbOaAjvEzSxmTcXyYjvMNDGFOkGhMH1Qy0y1t4x3apqPeQ4l1hrGQ8otNb
-PAvJB97ehE90HD9Ptxu/UEF2vNvgqw==
-=GoKp
------END PGP SIGNATURE-----
-
---BcwU8lnONr1dgPI4dBqxJeJdOh9qg51hy--
+base-commit: 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c
+-- 
+Sent by a computer through tubes
