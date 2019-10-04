@@ -2,89 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D67CB458
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 08:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B7EBCB580
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 09:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388229AbfJDGMK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 02:12:10 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39723 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387618AbfJDGMJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 02:12:09 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y3so5242596ljj.6
-        for <linux-usb@vger.kernel.org>; Thu, 03 Oct 2019 23:12:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ovwOPn8gNTgoIzty2iqq+3ZNROjhRlZ+JjIiJWJcg8g=;
-        b=I2kjGZA5MTeO71mgaFkQMrrd0saVsE73SCQ75peH6+KASgjc91YMgVYGC3F8MykR3E
-         vIvKiKEA25rXFRtBWESsqnhUwmPd2tHDcU/HxczGNbxQ9WiIhClYbW3m1rIc8oDrLzAF
-         /GdpM3KaDcW90uFwATE074B9jhxxIHdFkZZVI0QYOKNnI4rJte3+qFg7FvO3RZ5zg527
-         tMeWpPUN0PZ1WZyKT/gj8LBvcuUbpxvQhS2J0JdhrEVq+lhIqNY+XQUM3uEdO5HPgkfD
-         T11wzu213vYFtcFWgGUfpFGzMdNfye10eXZSxsZZXSPKqE1M+l65IVFBgGU0C19EngOD
-         NYqA==
-X-Gm-Message-State: APjAAAXzxifhTSLwKZH7FUpF5BKFItTLNotpFIXd7NRbcqebMoFIkXSw
-        EhtewvGqJGtDwvcIrhBzoFKtNaP6
-X-Google-Smtp-Source: APXvYqwSCesWAU+c3i98hBWqn+PP1zJsGPHE2EXwcYj+/t3bQQxm0n+WNuW+Gl2BngJwlxDxWq+tDg==
-X-Received: by 2002:a2e:1614:: with SMTP id w20mr8394432ljd.159.1570169526316;
-        Thu, 03 Oct 2019 23:12:06 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id p22sm1051170ljp.69.2019.10.03.23.12.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Oct 2019 23:12:05 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iGGp4-0002ZI-7d; Fri, 04 Oct 2019 08:12:14 +0200
-Date:   Fri, 4 Oct 2019 08:12:14 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Reinhard Speyerer <rspmn@arcor.de>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add support for Cinterion CLS8
- devices
-Message-ID: <20191004061214.GB13531@localhost>
-References: <20191003165320.GA1626@arcor.de>
+        id S2387717AbfJDHyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 03:54:32 -0400
+Received: from mga03.intel.com ([134.134.136.65]:56043 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727409AbfJDHyc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Oct 2019 03:54:32 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 00:54:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,255,1566889200"; 
+   d="scan'208";a="205799275"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 04 Oct 2019 00:54:26 -0700
+Received: by lahna (sSMTP sendmail emulation); Fri, 04 Oct 2019 10:54:26 +0300
+Date:   Fri, 4 Oct 2019 10:54:26 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario.Limonciello@dell.com
+Cc:     yehezkelshb@gmail.com, linux-usb@vger.kernel.org,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        rajmohan.mani@intel.com,
+        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
+        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        anthony.wong@canonical.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
+Message-ID: <20191004075426.GA2819@lahna.fi.intel.com>
+References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
+ <20191001113830.13028-18-mika.westerberg@linux.intel.com>
+ <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
+ <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
+ <20191002083913.GG2714@lahna.fi.intel.com>
+ <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
+ <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
+ <bb84da73d1df468da1707a2af09eb2de@AUSX13MPC105.AMER.DELL.COM>
+ <20191003080028.GK2819@lahna.fi.intel.com>
+ <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191003165320.GA1626@arcor.de>
+In-Reply-To: <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 06:53:21PM +0200, Reinhard Speyerer wrote:
-> Add support for the serial ports of Cinterion CLS8 devices.
+On Thu, Oct 03, 2019 at 02:41:11PM +0000, Mario.Limonciello@dell.com wrote:
+> > -----Original Message-----
+> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Sent: Thursday, October 3, 2019 3:00 AM
+> > To: Limonciello, Mario
+> > Cc: yehezkelshb@gmail.com; linux-usb@vger.kernel.org;
+> > andreas.noever@gmail.com; michael.jamet@intel.com;
+> > rajmohan.mani@intel.com; nicholas.johnson-opensource@outlook.com.au;
+> > lukas@wunner.de; gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
+> > anthony.wong@canonical.com; linux-kernel@vger.kernel.org
+> > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
+> > 
+> > 
+> > [EXTERNAL EMAIL]
+> > 
+> > On Wed, Oct 02, 2019 at 04:00:55PM +0000, Mario.Limonciello@dell.com wrote:
+> > > > It's not even "same location - another meaning", the vendor ID comes from
+> > the
+> > > > DROM section, so it takes a few internal jumps inside the NVM to find the
+> > > > location. One of the "pointers" or section headers will be broken for sure.
+> > > >
+> > > > And after this, we need to find the NVM in LVFS and it has to pass validation
+> > in
+> > > > a few other locations. The chances are so low that I'd think it isn't worth
+> > > > worrying about it.
+> > >
+> > > And now I remember why the back of my mind was having this thought of
+> > wanting
+> > > sysfs attribute in the first place.  The multiple jumps means that a lot more of
+> > the
+> > > NVM has to be dumped to get that data, which slows down fwupd startup
+> > significantly.
+> > 
+> > IIRC currently fwupd does two reads of total 128 bytes from the active
+> > NVM. Is that really slowing down fwupd startup significantly?
 > 
-> T:  Bus=01 Lev=03 Prnt=05 Port=01 Cnt=02 Dev#= 25 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1e2d ProdID=00b0 Rev= 3.18
-> S:  Manufacturer=GEMALTO
-> S:  Product=USB Modem
-> C:* #Ifs= 5 Cfg#= 1 Atr=80 MxPwr=500mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> Yeah, I timed it with fwupd.  Here's the averages:
 > 
-> Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
+> Without doing the reads to jump to this it's 0:00.06 seconds to probe a tree of
+> Host controller and dock plugged in.
+> 
+> With doing the reads and just host controller:
+> 0:04.40 seconds
+>
+> With doing the reads and host controller and dock plugged in:
+> 0:10.73 seconds
 
-Applied, thanks.
+OK, it clearly takes time to read them. I wonder if this includes
+powering up the controller?
 
-Johan
+Also if you can get the hw_vendor_id and hw_product_id from the kernel
+does that mean you don't need to do the two reads or you still need
+those?
