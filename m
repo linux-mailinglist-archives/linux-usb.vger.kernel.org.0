@@ -2,78 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD86CBA06
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 14:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A27BCBA27
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 14:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729844AbfJDMLP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 08:11:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46612 "EHLO mail.kernel.org"
+        id S1729468AbfJDMRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 08:17:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49182 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727688AbfJDMLP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Oct 2019 08:11:15 -0400
+        id S1725826AbfJDMRz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Oct 2019 08:17:55 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 85E5F2070B;
-        Fri,  4 Oct 2019 12:11:14 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8C6962070B;
+        Fri,  4 Oct 2019 12:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570191075;
-        bh=uNOW1jkBNFsKdxqhCbzixLFWEpQSBX4Fn02eZ/OGkSY=;
+        s=default; t=1570191475;
+        bh=x1L2ZokeQOne/DqP/usAhgrzcCQTLBVzVANkVMBLdBU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xm8Re10knYSoiIw89hDLJD8X7ojjAv+NAWuu7GKQPNVA8GRi03aCvKgylltUiKIkZ
-         10Yy/ZNcUzn5FO1aGw8faSNB3Iob9ijugUolIPwn2BSii29N8p/WQ+azJoEDjCZ6ny
-         deLUz6EhMNsX585a5FgBeRYeGEQviSCB7JZQr2Yw=
-Date:   Fri, 4 Oct 2019 14:11:12 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     aliasgar.surti500@gmail.com
-Cc:     b-liu@ti.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] drivers: musb: removed unused status variable
-Message-ID: <20191004121112.GA382033@kroah.com>
-References: <20191002173913.12847-1-aliasgar.surti500@gmail.com>
+        b=T+8xF3iw9f6DsSsXYXsvqtfnO6A3JLaGPbHeq+6iVIV9vjxzrS2gP3UoMELtgutJg
+         G7xp/hXnHFS/2nDO472YaSJIjK703er6JAW3LtWnK1G2BINzQ8fYEBG/3nRIPWIva5
+         NGZ8Gc8IEyO8vnONSvoTEVHzwXdzTRJZxi2Mqqk8=
+Date:   Fri, 4 Oct 2019 14:17:52 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy@infradead.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, youling 257 <youling257@gmail.com>
+Subject: Re: Problem with "driver core: platform: Add an error message to
+ platform_get_irq*()" commit
+Message-ID: <20191004121752.GA409122@kroah.com>
+References: <01e3d855-c849-ad7f-a6f8-87c806bb488b@redhat.com>
+ <5d965926.1c69fb81.6d844.cdc4@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191002173913.12847-1-aliasgar.surti500@gmail.com>
+In-Reply-To: <5d965926.1c69fb81.6d844.cdc4@mx.google.com>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 11:09:13PM +0530, aliasgar.surti500@gmail.com wrote:
-> From: Aliasgar Surti <aliasgar.surti500@gmail.com>
+On Thu, Oct 03, 2019 at 01:25:09PM -0700, Stephen Boyd wrote:
+> Quoting Hans de Goede (2019-10-03 13:20:24)
+> > 
+> > The best solution I can come up with is adding a new
+> > platform_get_irq_byname_optional mirroring platform_get_irq_optional
+> > and using that in drivers such as the dwc3 driver.
+> > 
+> > Does anyone have a better suggestion?
+> > 
 > 
-> Status variable is initialized and returned without updating it's value.
-> Removed status variable and returned value directly.
-> 
-> Signed-off-by: Aliasgar Surti <aliasgar.surti500@gmail.com>
-> ---
->  drivers/usb/musb/musb_gadget.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-> index ffe462a657b1..2cb31fc0cd60 100644
-> --- a/drivers/usb/musb/musb_gadget.c
-> +++ b/drivers/usb/musb/musb_gadget.c
-> @@ -1085,7 +1085,6 @@ static int musb_gadget_disable(struct usb_ep *ep)
->  	u8		epnum;
->  	struct musb_ep	*musb_ep;
->  	void __iomem	*epio;
-> -	int		status = 0;
->  
->  	musb_ep = to_musb_ep(ep);
->  	musb = musb_ep->musb;
-> @@ -1118,7 +1117,7 @@ static int musb_gadget_disable(struct usb_ep *ep)
->  
->  	musb_dbg(musb, "%s", musb_ep->end_point.name);
->  
-> -	return status;
-> +	return 0;
->  }
->  
->  /*
-> -- 
-> 2.17.1
+> A byname_optional API sounds good to me.
 > 
 
-Someone else sent this same patch 2 hours before you did, sorry :(
+Sounds fine to me as well.
+
+greg k-h
