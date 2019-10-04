@@ -2,83 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 862BFCC4FF
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 23:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37570CC505
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 23:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729728AbfJDVni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 17:43:38 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:42279 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730367AbfJDVnh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 17:43:37 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q12so4665797pff.9
-        for <linux-usb@vger.kernel.org>; Fri, 04 Oct 2019 14:43:37 -0700 (PDT)
+        id S1731221AbfJDVnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 17:43:43 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43989 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731174AbfJDVnm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 17:43:42 -0400
+Received: by mail-pg1-f195.google.com with SMTP id v27so4459325pgk.10
+        for <linux-usb@vger.kernel.org>; Fri, 04 Oct 2019 14:43:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
-        b=MJ9Cw0wp0Mh+XkAZ37PArMbq3cXXTtMOK8MgPDNXCkP0yXajJDHPB5xaYgU0YftimM
-         IZ9Xr5C2yJosZi22FLfNZvyhDcgs9mFbobfjnE1WeFcBQ21xU74RMtcoRM+q4pMigeCm
-         sJyAZ9okOsrTu89hmigncAMqTy1HVXQqwb/PM=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kKHG7UTsDPcnCMtVxGV72BXVFFtNiiXVrgsu7N6vxI4=;
+        b=dUHt+jCIixU+I2Q5iiGOtz5ZLigFhCMop4kFDCvfXwqMApUQHan0clusE1HE9LZPTr
+         kTm1Sf08Dy/4mnp5fIxaCLIYm1CtgcsETkD0e/um/x2SznUJ3BMRFDDQ19Ps0nYJOPri
+         f6gEqnwUOTN2RyHZ8d+g5Am+X+uP4NhdPdb68=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=42znpoZzZjmG9yaRFQAzNvyi78UFWYqHsVeXsUAMBvM=;
-        b=fNgZ+eLqzpjR56MkzPzKcAffEOse0byBPaADmA6NmkRplRUZ37cyuxv5GZcy/UI3Yw
-         T+KWemcnV0O4zTkiGeID1a9PaySUJXVldCF6I5JTx6wlBIA4tYxCZKF79iqsQWbj+FD7
-         YyDFqxG+fd0I08oi9VIRQ+u5if3+eosEBRSSlpFHNW+vYNR1lsITIubGLJ3mJqeogJuY
-         AE4fRP68LLbEH1VuvbR+azLpfAHVeGseAI8B5/oa5MxoN3xPsQ+k8ziFUCXCADeIsAeq
-         czgHxu5Nkq13YMEygrfd6Ol84o9347YpKe3CutYwjzZOzNmEivUouG0a5c0K2p5ZXWQZ
-         9TKA==
-X-Gm-Message-State: APjAAAUsu+LrVMI4kqpe0rL4X29Qf+bkkiGpPb0J+CLA+tZjK5IqvWKW
-        k5Vq9lvFP4T/VmlpWKr+9dS+0w==
-X-Google-Smtp-Source: APXvYqy1SG4O+l1PxmR4D+2nW3K5VMykMwaSO5DOFDZyCRsqYuEK129X6z1/RcOxIP4TfZnnBe0BMw==
-X-Received: by 2002:a17:90a:e017:: with SMTP id u23mr4003152pjy.55.1570225416541;
-        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kKHG7UTsDPcnCMtVxGV72BXVFFtNiiXVrgsu7N6vxI4=;
+        b=qP5Hc+XxDm75/fCa+3XvLKouQSa2UuPkssVnCCKOPaCuXtGvtXCqxFe304tzhLpPz3
+         Dizl7vH41Kzv8lPu3nD0S5VB4ayuEkEzVgeV/bijkMgc/THWk7F500v5yaSiSwDzHmNa
+         Ch8mBxpEG3IVePGZMy48U18wabqBN0ymH26UoVLnQfJjjJ7762ZkbpC2hS6IpAFOypY8
+         umD5pB4/dd2CC1RVBbV23YaeRQcw/f1XYkt2+qa5Y2q6btdWtEYaTscReMXEr5TP880u
+         RNEuOPzeCuvSF+YD6PIo62mh3NHMgN5ZhVjNMEWyqtP2y72svxJ6gG0poMy++mTbVIS7
+         0tZQ==
+X-Gm-Message-State: APjAAAUHePLo5tEJpV5tG1tLMAGlkHDP+zJ2E7cNP7PozDqclLuRAL9+
+        nZfsyY+hhdfQO2dLD0M1Dji3Dg==
+X-Google-Smtp-Source: APXvYqxRakS5XLryNdBetTMDUVY49wiIkkoe+7l2+YKQd+NSkcecQAoD98r+dwCVJDzmBco1sQvNuA==
+X-Received: by 2002:a65:4686:: with SMTP id h6mr18021406pgr.212.1570225422072;
+        Fri, 04 Oct 2019 14:43:42 -0700 (PDT)
 Received: from smtp.gmail.com ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id a11sm10446799pfg.94.2019.10.04.14.43.35
+        by smtp.gmail.com with ESMTPSA id a11sm10446799pfg.94.2019.10.04.14.43.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2019 14:43:36 -0700 (PDT)
+        Fri, 04 Oct 2019 14:43:41 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        alsa-devel@alsa-project.org, Andrew Lunn <andrew@lunn.ch>,
-        Arnd Bergmann <arnd@arndb.de>, Dan Murphy <dmurphy@ti.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Frank Rowand <frowand.list@gmail.com>,
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Jean Delvare <jdelvare@suse.com>, Jiri Slaby <jslaby@suse.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-leds@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Pavel Machek <pavel@ucw.cz>,
         Richard Leitner <richard.leitner@skidata.com>,
-        Riku Voipio <riku.voipio@iki.fi>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH 00/10] Stop NULLifying match pointer in of_match_device()
-Date:   Fri,  4 Oct 2019 14:43:24 -0700
-Message-Id: <20191004214334.149976-1-swboyd@chromium.org>
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 06/10] usb: usb251xb: Use of_device_get_match_data()
+Date:   Fri,  4 Oct 2019 14:43:30 -0700
+Message-Id: <20191004214334.149976-7-swboyd@chromium.org>
 X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
+In-Reply-To: <20191004214334.149976-1-swboyd@chromium.org>
+References: <20191004214334.149976-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -86,86 +63,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-of_match_device() uses of_match_ptr() to make the match table argument
-NULL via the pre-processor when CONFIG_OF=n. This makes life harder for
-compilers who think that match tables are never used and warn about
-unused variables when CONFIG_OF=n. This series changes various callers
-to use of_device_get_match_data() instead, which doesn't have this
-problem, and removes the of_match_ptr() usage from of_match_device() so
-that the compiler can stop complaining about unused variables. It will
-do dead code elimination instead and remove the match table if it isn't
-actually used.
+Use the more modern API here instead of using of_match_device() and
+avoid casting away const from the returned pointer by pushing the const
+type through to the users. This nicely avoids referencing the match
+table when it is undefined with configurations where CONFIG_OF=n and
+avoids const issues.
 
-Huge Cc list!
-
-Cc: Alessandro Zummo <a.zummo@towertech.it>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Alexandre Torgue <alexandre.torgue@st.com>
-Cc: <alsa-devel@alsa-project.org>
-Cc: Andrew Lunn <andrew@lunn.ch>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Dan Murphy <dmurphy@ti.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Frank Rowand <frowand.list@gmail.com>
 Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Gregory Clement <gregory.clement@bootlin.com>
-Cc: Grygorii Strashko <grygorii.strashko@ti.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-Cc: Jacopo Mondi <jacopo@jmondi.org>
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Jason Cooper <jason@lakedaemon.net>
-Cc: Jean Delvare <jdelvare@suse.com>
-Cc: Jiri Slaby <jslaby@suse.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: <linux-hwmon@vger.kernel.org>
-Cc: <linux-leds@vger.kernel.org>
-Cc: <linux-media@vger.kernel.org>
-Cc: <linux-omap@vger.kernel.org>
-Cc: <linux-renesas-soc@vger.kernel.org>
-Cc: <linux-rtc@vger.kernel.org>
-Cc: <linux-serial@vger.kernel.org>
-Cc: <linux-spi@vger.kernel.org>
-Cc: <linux-usb@vger.kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>
-Cc: Paul Cercueil <paul@crapouillou.net>
-Cc: Pavel Machek <pavel@ucw.cz>
 Cc: Richard Leitner <richard.leitner@skidata.com>
-Cc: Riku Voipio <riku.voipio@iki.fi>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: <linux-usb@vger.kernel.org>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
 
-Stephen Boyd (10):
-  leds: pca953x: Use of_device_get_match_data()
-  media: renesas-ceu: Use of_device_get_match_data()
-  rtc: armada38x: Use of_device_get_match_data()
-  drivers: net: davinci_mdio: Use of_device_get_match_data()
-  serial: stm32: Use of_device_get_match_data()
-  usb: usb251xb: Use of_device_get_match_data()
-  ASoC: jz4740: Use of_device_get_match_data()
-  spi: gpio: Look for a device node instead of match
-  hwmon: (lm70) Avoid undefined reference to match table
-  of/device: Don't NULLify match table in of_match_device() with
-    CONFIG_OF=n
+Please ack or pick for immediate merge so the last patch can be merged.
 
- drivers/hwmon/lm70.c                   |  2 +-
- drivers/leds/leds-pca9532.c            | 14 +----
- drivers/media/platform/renesas-ceu.c   |  2 +-
- drivers/net/ethernet/ti/davinci_mdio.c | 12 ++---
- drivers/rtc/rtc-armada38x.c            | 10 ++--
- drivers/spi/spi-gpio.c                 |  5 +-
- drivers/tty/serial/stm32-usart.c       | 71 ++++++++++++--------------
- drivers/tty/serial/stm32-usart.h       |  2 +-
- drivers/usb/misc/usb251xb.c            | 12 ++---
- include/linux/of_device.h              |  4 +-
- sound/soc/jz4740/jz4740-i2s.c          |  5 +-
- 11 files changed, 55 insertions(+), 84 deletions(-)
+ drivers/usb/misc/usb251xb.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-
-base-commit: 54ecb8f7028c5eb3d740bb82b0f1d90f2df63c5c
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index 6ca9111d150a..84f218a6843c 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -392,7 +392,7 @@ static void usb251xb_get_ports_field(struct usb251xb *hub,
+ }
+ 
+ static int usb251xb_get_ofdata(struct usb251xb *hub,
+-			       struct usb251xb_data *data)
++			       const struct usb251xb_data *data)
+ {
+ 	struct device *dev = hub->dev;
+ 	struct device_node *np = dev->of_node;
+@@ -623,7 +623,7 @@ static const struct of_device_id usb251xb_of_match[] = {
+ MODULE_DEVICE_TABLE(of, usb251xb_of_match);
+ #else /* CONFIG_OF */
+ static int usb251xb_get_ofdata(struct usb251xb *hub,
+-			       struct usb251xb_data *data)
++			       const struct usb251xb_data *data)
+ {
+ 	return 0;
+ }
+@@ -633,13 +633,11 @@ static int usb251xb_probe(struct usb251xb *hub)
+ {
+ 	struct device *dev = hub->dev;
+ 	struct device_node *np = dev->of_node;
+-	const struct of_device_id *of_id = of_match_device(usb251xb_of_match,
+-							   dev);
++	const struct usb251xb_data *usb_data = of_device_get_match_data(dev);
+ 	int err;
+ 
+-	if (np && of_id) {
+-		err = usb251xb_get_ofdata(hub,
+-					  (struct usb251xb_data *)of_id->data);
++	if (np && usb_data) {
++		err = usb251xb_get_ofdata(hub, usb_data);
+ 		if (err) {
+ 			dev_err(dev, "failed to get ofdata: %d\n", err);
+ 			return err;
 -- 
 Sent by a computer through tubes
+
