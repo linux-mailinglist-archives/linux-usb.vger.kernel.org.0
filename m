@@ -2,81 +2,232 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7FF2CB5E7
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 10:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21320CB5FF
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 10:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388478AbfJDIT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 04:19:56 -0400
-Received: from mga17.intel.com ([192.55.52.151]:56639 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388246AbfJDIT4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Oct 2019 04:19:56 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 01:19:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,255,1566889200"; 
-   d="scan'208";a="205805350"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 04 Oct 2019 01:19:52 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 04 Oct 2019 11:19:51 +0300
-Date:   Fri, 4 Oct 2019 11:19:51 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Yehezkel Bernat <yehezkelshb@gmail.com>
-Cc:     Mario Limonciello <Mario.Limonciello@dell.com>,
-        linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        nicholas.johnson-opensource@outlook.com.au,
-        Lukas Wunner <lukas@wunner.de>, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu,
-        Anthony Wong <anthony.wong@canonical.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191004081951.GD2819@lahna.fi.intel.com>
-References: <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
- <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
- <20191002083913.GG2714@lahna.fi.intel.com>
- <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
- <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
- <bb84da73d1df468da1707a2af09eb2de@AUSX13MPC105.AMER.DELL.COM>
- <20191003080028.GK2819@lahna.fi.intel.com>
- <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
- <20191004075426.GA2819@lahna.fi.intel.com>
- <CA+CmpXsMkwZhCegGYPYQo2GwN6ROwDYbY3RVZTEeN+FfZ-PbMQ@mail.gmail.com>
+        id S2387889AbfJDITw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 04:19:52 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:15731 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726525AbfJDITw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 04:19:52 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d9700a90000>; Fri, 04 Oct 2019 01:19:53 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 04 Oct 2019 01:19:50 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 04 Oct 2019 01:19:50 -0700
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 4 Oct
+ 2019 08:19:50 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 4 Oct 2019 08:19:49 +0000
+Received: from jckuo-lt.nvidia.com (Not Verified[10.19.108.105]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5d9700a40000>; Fri, 04 Oct 2019 01:19:49 -0700
+From:   JC Kuo <jckuo@nvidia.com>
+To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
+        <jonathanh@nvidia.com>
+CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nkristam@nvidia.com>, <skomatineni@nvidia.com>,
+        JC Kuo <jckuo@nvidia.com>
+Subject: [PATCH v2 1/7] xhci: tegra: Parameterize mailbox register addresses
+Date:   Fri, 4 Oct 2019 16:19:35 +0800
+Message-ID: <20191004081941.4831-2-jckuo@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191004081941.4831-1-jckuo@nvidia.com>
+References: <20191004081941.4831-1-jckuo@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+CmpXsMkwZhCegGYPYQo2GwN6ROwDYbY3RVZTEeN+FfZ-PbMQ@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1570177193; bh=dcfwivKFxZr2p1gdB+07ooupRU7kOLANO6fEGThfSXc=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=WFBGXtRX7x9EUSrxXNQZ8w/3x/JD7udye6Ib2RnomakcjYaVjfU3UjpqEsamlW8+D
+         WztXsJzmczZ1gmVKMBQ/OhndNd95gy/gdnQlsadwI5c0LSoxD/gjIPDfeNJYTA2f94
+         faz9BIo1B4l3mBLS3MYAkeJ/JWNhN13+57TxojjP76PMzVqhSFfURVMWKrNkbWixYs
+         Gttt3FHvLm1V3IzzbZ8NMZaaTy1YBX7vB/a71ixY2fKurZzx8qxGJW8K4BRqEqtRUC
+         LCaTWqEdfuoRiMVytKb6yeA4bggqsSzJ0K1NQqsREq6DgYeuEi+lzdUrOD6pebpJb2
+         VDlygEtwmBLtw==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 04, 2019 at 11:07:34AM +0300, Yehezkel Bernat wrote:
-> > Also if you can get the hw_vendor_id and hw_product_id from the kernel
-> > does that mean you don't need to do the two reads or you still need
-> > those?
-> 
-> Are those the chip vendor or the OEM, in case they are different?
+Tegra194 XUSB host controller has rearranged mailbox registers. This
+commit makes mailbox registers address a part of "soc" data so that
+xhci-tegra driver can be used for Tegra194.
 
-Those are the actual USB4 hardware maker values, directly from
-ROUTER_CS_0 (p. 287 in the USB4 spec). This almost certainly differ from
-the OEM values from DROM we currently expose.
+Signed-off-by: JC Kuo <jckuo@nvidia.com>
 
-> Thinking about it again, I'd guess it shouldn't matter much, if the chip is from
-> Intel, the FW supports NVM upgrade, isn't it?
+---
+ drivers/usb/host/xhci-tegra.c | 58 +++++++++++++++++++++++++----------
+ 1 file changed, 42 insertions(+), 16 deletions(-)
 
-So the bottom line is that if the kernel thinks the router supports NVM
-upgrade it exposes the nvm_active/nvm_non_active files etc. I think
-fwupd uses this information to display user whether the device can be
-upgraded or not (for example ICL cannot as the NVM is part of BIOS).
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 2ff7c911fbd0..add6b8fb40e1 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -42,19 +42,18 @@
+ #define XUSB_CFG_CSB_BASE_ADDR			0x800
+ 
+ /* FPCI mailbox registers */
+-#define XUSB_CFG_ARU_MBOX_CMD			0x0e4
++/* XUSB_CFG_ARU_MBOX_CMD */
+ #define  MBOX_DEST_FALC				BIT(27)
+ #define  MBOX_DEST_PME				BIT(28)
+ #define  MBOX_DEST_SMI				BIT(29)
+ #define  MBOX_DEST_XHCI				BIT(30)
+ #define  MBOX_INT_EN				BIT(31)
+-#define XUSB_CFG_ARU_MBOX_DATA_IN		0x0e8
++/* XUSB_CFG_ARU_MBOX_DATA_IN and XUSB_CFG_ARU_MBOX_DATA_OUT */
+ #define  CMD_DATA_SHIFT				0
+ #define  CMD_DATA_MASK				0xffffff
+ #define  CMD_TYPE_SHIFT				24
+ #define  CMD_TYPE_MASK				0xff
+-#define XUSB_CFG_ARU_MBOX_DATA_OUT		0x0ec
+-#define XUSB_CFG_ARU_MBOX_OWNER			0x0f0
++/* XUSB_CFG_ARU_MBOX_OWNER */
+ #define  MBOX_OWNER_NONE			0
+ #define  MBOX_OWNER_FW				1
+ #define  MBOX_OWNER_SW				2
+@@ -146,6 +145,13 @@ struct tegra_xusb_phy_type {
+ 	unsigned int num;
+ };
+ 
++struct tega_xusb_mbox_regs {
++	u16 cmd;
++	u16 data_in;
++	u16 data_out;
++	u16 owner;
++};
++
+ struct tegra_xusb_soc {
+ 	const char *firmware;
+ 	const char * const *supply_names;
+@@ -160,6 +166,8 @@ struct tegra_xusb_soc {
+ 		} usb2, ulpi, hsic, usb3;
+ 	} ports;
+ 
++	struct tega_xusb_mbox_regs mbox;
++
+ 	bool scale_ss_clock;
+ 	bool has_ipfs;
+ };
+@@ -395,15 +403,15 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 	 * ACK/NAK messages.
+ 	 */
+ 	if (!(msg->cmd == MBOX_CMD_ACK || msg->cmd == MBOX_CMD_NAK)) {
+-		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++		value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 		if (value != MBOX_OWNER_NONE) {
+ 			dev_err(tegra->dev, "mailbox is busy\n");
+ 			return -EBUSY;
+ 		}
+ 
+-		fpci_writel(tegra, MBOX_OWNER_SW, XUSB_CFG_ARU_MBOX_OWNER);
++		fpci_writel(tegra, MBOX_OWNER_SW, tegra->soc->mbox.owner);
+ 
+-		value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++		value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 		if (value != MBOX_OWNER_SW) {
+ 			dev_err(tegra->dev, "failed to acquire mailbox\n");
+ 			return -EBUSY;
+@@ -413,17 +421,17 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 	}
+ 
+ 	value = tegra_xusb_mbox_pack(msg);
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_DATA_IN);
++	fpci_writel(tegra, value, tegra->soc->mbox.data_in);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
++	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
+ 	value |= MBOX_INT_EN | MBOX_DEST_FALC;
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
++	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
+ 
+ 	if (wait_for_idle) {
+ 		unsigned long timeout = jiffies + msecs_to_jiffies(250);
+ 
+ 		while (time_before(jiffies, timeout)) {
+-			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++			value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 			if (value == MBOX_OWNER_NONE)
+ 				break;
+ 
+@@ -431,7 +439,7 @@ static int tegra_xusb_mbox_send(struct tegra_xusb *tegra,
+ 		}
+ 
+ 		if (time_after(jiffies, timeout))
+-			value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_OWNER);
++			value = fpci_readl(tegra, tegra->soc->mbox.owner);
+ 
+ 		if (value != MBOX_OWNER_NONE)
+ 			return -ETIMEDOUT;
+@@ -598,16 +606,16 @@ static irqreturn_t tegra_xusb_mbox_thread(int irq, void *data)
+ 
+ 	mutex_lock(&tegra->lock);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_DATA_OUT);
++	value = fpci_readl(tegra, tegra->soc->mbox.data_out);
+ 	tegra_xusb_mbox_unpack(&msg, value);
+ 
+-	value = fpci_readl(tegra, XUSB_CFG_ARU_MBOX_CMD);
++	value = fpci_readl(tegra, tegra->soc->mbox.cmd);
+ 	value &= ~MBOX_DEST_SMI;
+-	fpci_writel(tegra, value, XUSB_CFG_ARU_MBOX_CMD);
++	fpci_writel(tegra, value, tegra->soc->mbox.cmd);
+ 
+ 	/* clear mailbox owner if no ACK/NAK is required */
+ 	if (!tegra_xusb_mbox_cmd_requires_ack(msg.cmd))
+-		fpci_writel(tegra, MBOX_OWNER_NONE, XUSB_CFG_ARU_MBOX_OWNER);
++		fpci_writel(tegra, MBOX_OWNER_NONE, tegra->soc->mbox.owner);
+ 
+ 	tegra_xusb_mbox_handle(tegra, &msg);
+ 
+@@ -1375,6 +1383,12 @@ static const struct tegra_xusb_soc tegra124_soc = {
+ 	},
+ 	.scale_ss_clock = true,
+ 	.has_ipfs = true,
++	.mbox = {
++		.cmd = 0xe4,
++		.data_in = 0xe8,
++		.data_out = 0xec,
++		.owner = 0xf0,
++	},
+ };
+ MODULE_FIRMWARE("nvidia/tegra124/xusb.bin");
+ 
+@@ -1407,6 +1421,12 @@ static const struct tegra_xusb_soc tegra210_soc = {
+ 	},
+ 	.scale_ss_clock = false,
+ 	.has_ipfs = true,
++	.mbox = {
++		.cmd = 0xe4,
++		.data_in = 0xe8,
++		.data_out = 0xec,
++		.owner = 0xf0,
++	},
+ };
+ MODULE_FIRMWARE("nvidia/tegra210/xusb.bin");
+ 
+@@ -1432,6 +1452,12 @@ static const struct tegra_xusb_soc tegra186_soc = {
+ 	},
+ 	.scale_ss_clock = false,
+ 	.has_ipfs = false,
++	.mbox = {
++		.cmd = 0xe4,
++		.data_in = 0xe8,
++		.data_out = 0xec,
++		.owner = 0xf0,
++	},
+ };
+ 
+ static const struct of_device_id tegra_xusb_of_match[] = {
+-- 
+2.17.1
 
-Exposing hw_vendor_id and hw_product_id may speed up fwupd because it
-does not need to go over the active NVM to figure out whether the new
-image is for the correct controller.
