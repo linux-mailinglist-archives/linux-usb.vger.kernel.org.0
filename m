@@ -2,108 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7EBCB580
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 09:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FC2CB59C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Oct 2019 10:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387717AbfJDHyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 03:54:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:56043 "EHLO mga03.intel.com"
+        id S1730745AbfJDIBF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Oct 2019 04:01:05 -0400
+Received: from mga09.intel.com ([134.134.136.24]:33959 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727409AbfJDHyc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Oct 2019 03:54:32 -0400
+        id S1725932AbfJDIBF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Oct 2019 04:01:05 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 00:54:30 -0700
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Oct 2019 01:01:04 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,255,1566889200"; 
-   d="scan'208";a="205799275"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
-  by fmsmga001.fm.intel.com with SMTP; 04 Oct 2019 00:54:26 -0700
-Received: by lahna (sSMTP sendmail emulation); Fri, 04 Oct 2019 10:54:26 +0300
-Date:   Fri, 4 Oct 2019 10:54:26 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario.Limonciello@dell.com
-Cc:     yehezkelshb@gmail.com, linux-usb@vger.kernel.org,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        rajmohan.mani@intel.com,
-        nicholas.johnson-opensource@outlook.com.au, lukas@wunner.de,
-        gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
-        anthony.wong@canonical.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-Message-ID: <20191004075426.GA2819@lahna.fi.intel.com>
-References: <20191001113830.13028-1-mika.westerberg@linux.intel.com>
- <20191001113830.13028-18-mika.westerberg@linux.intel.com>
- <184c95fc476146939b240557e54ee2c9@AUSX13MPC105.AMER.DELL.COM>
- <5357cb96013445d79f5c2016df8a194e@AUSX13MPC105.AMER.DELL.COM>
- <20191002083913.GG2714@lahna.fi.intel.com>
- <767f2f97059e4e9f861080672aaa18d3@AUSX13MPC105.AMER.DELL.COM>
- <CA+CmpXs4YsTA3QnD77SaXq3mRYX6oFwx+pm-3wEErwkF-02M+A@mail.gmail.com>
- <bb84da73d1df468da1707a2af09eb2de@AUSX13MPC105.AMER.DELL.COM>
- <20191003080028.GK2819@lahna.fi.intel.com>
- <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
+   d="scan'208";a="205801934"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 04 Oct 2019 01:00:59 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 04 Oct 2019 11:00:58 +0300
+Date:   Fri, 4 Oct 2019 11:00:58 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Yu Chen <chenyu56@huawei.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
+Message-ID: <20191004080058.GD1048@kuha.fi.intel.com>
+References: <20191002231617.3670-1-john.stultz@linaro.org>
+ <20191002231617.3670-3-john.stultz@linaro.org>
+ <20191003112618.GA2420393@kroah.com>
+ <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
+ <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <06a04bff94494da99c5359a7fb645d19@AUSX13MPC105.AMER.DELL.COM>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 02:41:11PM +0000, Mario.Limonciello@dell.com wrote:
-> > -----Original Message-----
-> > From: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Sent: Thursday, October 3, 2019 3:00 AM
-> > To: Limonciello, Mario
-> > Cc: yehezkelshb@gmail.com; linux-usb@vger.kernel.org;
-> > andreas.noever@gmail.com; michael.jamet@intel.com;
-> > rajmohan.mani@intel.com; nicholas.johnson-opensource@outlook.com.au;
-> > lukas@wunner.de; gregkh@linuxfoundation.org; stern@rowland.harvard.edu;
-> > anthony.wong@canonical.com; linux-kernel@vger.kernel.org
-> > Subject: Re: [RFC PATCH 17/22] thunderbolt: Add initial support for USB4
-> > 
-> > 
-> > [EXTERNAL EMAIL]
-> > 
-> > On Wed, Oct 02, 2019 at 04:00:55PM +0000, Mario.Limonciello@dell.com wrote:
-> > > > It's not even "same location - another meaning", the vendor ID comes from
-> > the
-> > > > DROM section, so it takes a few internal jumps inside the NVM to find the
-> > > > location. One of the "pointers" or section headers will be broken for sure.
-> > > >
-> > > > And after this, we need to find the NVM in LVFS and it has to pass validation
-> > in
-> > > > a few other locations. The chances are so low that I'd think it isn't worth
-> > > > worrying about it.
-> > >
-> > > And now I remember why the back of my mind was having this thought of
-> > wanting
-> > > sysfs attribute in the first place.  The multiple jumps means that a lot more of
-> > the
-> > > NVM has to be dumped to get that data, which slows down fwupd startup
-> > significantly.
-> > 
-> > IIRC currently fwupd does two reads of total 128 bytes from the active
-> > NVM. Is that really slowing down fwupd startup significantly?
+On Thu, Oct 03, 2019 at 10:56:24PM +0200, Hans de Goede wrote:
+> Hi,
 > 
-> Yeah, I timed it with fwupd.  Here's the averages:
+> On 03-10-2019 22:45, John Stultz wrote:
+> > On Thu, Oct 3, 2019 at 4:26 AM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > 
+> > > On Wed, Oct 02, 2019 at 11:16:16PM +0000, John Stultz wrote:
+> > > > From: Yu Chen <chenyu56@huawei.com>
+> > > > 
+> > > > This patch adds notifier for drivers want to be informed of the usb role
+> > > > switch.
+> > > 
+> > > Ick, I hate notifiers, they always come back to cause problems.
+> > > 
+> > > What's just wrong with a "real" call to who ever needs to know this?
+> > > And who does need to know this anyway?  Like Hans said, if we don't have
+> > > a user for it, we should not add it.
+> > 
+> > So in this case, its used for interactions between the dwc3 driver and
+> > the hikey960 integrated USB hub, which is controlled via gpio (which I
+> > didn't submit here as I was trying to keep things short and
+> > reviewable, but likely misjudged).
+> > 
+> > The HiKey960 has only one USB controller, but in order to support both
+> > USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
+> > connection is attached, it powers down and disconnects the hub. When
+> > the USB-C connection is detached, it powers the hub on and connects
+> > the controller to the hub.
 > 
-> Without doing the reads to jump to this it's 0:00.06 seconds to probe a tree of
-> Host controller and dock plugged in.
+> When you say one controller, do you mean 1 host and 1 gadget controller,
+> or is this one of these lovely devices where a gadget controller gets
+> abused as / confused with a proper host controller?
 > 
-> With doing the reads and just host controller:
-> 0:04.40 seconds
->
-> With doing the reads and host controller and dock plugged in:
-> 0:10.73 seconds
+> And since you are doing a usb-role-switch driver, I guess that the
+> role-switch is integrated inside the SoC, so you only get one pair
+> of USB datalines to the outside ?
 
-OK, it clearly takes time to read them. I wonder if this includes
-powering up the controller?
+Unless I'm mistaken, the dwc3 driver in this case is the
+usb-role-switch. The DWC3 IP includes both USB dost and device blocks,
+i.e. it's a dual role controller. Drivers like tcpm.c that negotiate
+the actual role need to tell the outcome of the negotiation to the
+dwc3 driver. So I think this part is OK.
 
-Also if you can get the hw_vendor_id and hw_product_id from the kernel
-does that mean you don't need to do the two reads or you still need
-those?
+The platform has also some kind of discrete switch for routing the
+signals to either Standard-A (the hub) or Type-C connector, so it does
+not represent the usb-role-switch. It should however affect the USB role,
+as if that switch routes the data signals to the Standard-A port (to
+the hub) instead of USB Type-C, the USB role needs to be fixed to host
+mode.
+
+I guess this series does not include the driver for that discrete
+switch/mux. I don't remember/know how that switch was planned to be
+handled.
+
+> This does seem rather special, it might help if you can provide a diagram
+> with both the relevant bits inside the SoC as well as what lives outside
+> the Soc. even if it is in ASCII art...
+
+thanks,
+
+-- 
+heikki
