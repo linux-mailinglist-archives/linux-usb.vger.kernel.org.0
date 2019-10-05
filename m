@@ -2,55 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FD85CC6E7
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Oct 2019 02:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43F7ACC879
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Oct 2019 08:53:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729291AbfJEA2A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Oct 2019 20:28:00 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:60396 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbfJEA2A (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Oct 2019 20:28:00 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id AFE1E14F2D926;
-        Fri,  4 Oct 2019 17:27:59 -0700 (PDT)
-Date:   Fri, 04 Oct 2019 17:27:59 -0700 (PDT)
-Message-Id: <20191004.172759.987507160837677462.davem@davemloft.net>
-To:     kai.heng.feng@canonical.com
-Cc:     hayeswang@realtek.com, mario.limonciello@dell.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] r8152: Set macpassthru in reset_resume callback
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191004125104.13202-1-kai.heng.feng@canonical.com>
-References: <20191004125104.13202-1-kai.heng.feng@canonical.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 04 Oct 2019 17:27:59 -0700 (PDT)
+        id S1726654AbfJEGxH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Oct 2019 02:53:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53488 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725927AbfJEGxH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Oct 2019 02:53:07 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 797AD2133F;
+        Sat,  5 Oct 2019 06:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570258387;
+        bh=xQ/9PkmdA4psfncbirvKStIGqZr1b9MHoU44bly1pZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OeXDFkmC0kke7PwKSM7PsKyJVyZOG3G9H7LFqnuv1x4VzJugUTr8tIWnQT5pWGHGo
+         W/jbBi3DYJqmW0LMFv+jZ5vVc080E3Gr82eRxFtGSvg5DHM4GKoPnDuRLbuya6Oq5O
+         8GajqyHgNLaKqjTxAddGrBgZOEBm9RdSvJPiYUhk=
+Date:   Sat, 5 Oct 2019 08:53:04 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 06/10] usb: usb251xb: Use of_device_get_match_data()
+Message-ID: <20191005065304.GB928719@kroah.com>
+References: <20191004214334.149976-1-swboyd@chromium.org>
+ <20191004214334.149976-7-swboyd@chromium.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191004214334.149976-7-swboyd@chromium.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date: Fri,  4 Oct 2019 20:51:04 +0800
+On Fri, Oct 04, 2019 at 02:43:30PM -0700, Stephen Boyd wrote:
+> Use the more modern API here instead of using of_match_device() and
+> avoid casting away const from the returned pointer by pushing the const
+> type through to the users. This nicely avoids referencing the match
+> table when it is undefined with configurations where CONFIG_OF=n and
+> avoids const issues.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Richard Leitner <richard.leitner@skidata.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: <linux-usb@vger.kernel.org>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> Please ack or pick for immediate merge so the last patch can be merged.
 
-> r8152 may fail to establish network connection after resume from system
-> suspend.
-> 
-> If the USB port connects to r8152 lost its power during system suspend,
-> the MAC address was written before is lost. The reason is that The MAC
-> address doesn't get written again in its reset_resume callback.
-> 
-> So let's set MAC address again in reset_resume callback. Also remove
-> unnecessary lock as no other locking attempt will happen during
-> reset_resume.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-
-Applied.
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
