@@ -2,159 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80567CD2BC
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2019 17:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A6CCD2FA
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2019 17:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726586AbfJFPWg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Oct 2019 11:22:36 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:57873 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725905AbfJFPWg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Oct 2019 11:22:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1570375354;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/kOnrpYd9eSud0Ixupa7J9ljvVudCP2XNDO8TzpsHNE=;
-        b=UgnJVUbIQYyPkZEIEPdBviR4ZMZVdZk8P+iJf4ehQqs0dK0TAIfXEzZyz0kCeIB9u8hd01
-        rXr+9yXrz/Tc+TTZrDJecvc3D7wTa+piLpqvacdJM8lHOJCAWe6hmzbLTNpQdN98ZoxFtU
-        EI0eWR0qJqM36hz5gV5H79UTH5Kq4LY=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-56-75qqDSQ0McOvfeUmnfGsfA-1; Sun, 06 Oct 2019 11:22:32 -0400
-Received: by mail-ed1-f69.google.com with SMTP id o92so7352393edb.9
-        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2019 08:22:32 -0700 (PDT)
+        id S1726529AbfJFPrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Oct 2019 11:47:43 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55716 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725905AbfJFPrm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Oct 2019 11:47:42 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a6so10044625wma.5;
+        Sun, 06 Oct 2019 08:47:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=eu8O/YhqU7zJEjRc7W99Fi77CUDu2zTF0Sf1rRqLcS8=;
-        b=SlgNOrRyM/xppVPNuA39QNZ96NMvgxq24gdgZnXBQvuaf9MEviEYEcJIWYpph69c5O
-         4RDHN9/qUJXjF6Xyf/l5hSuQYBetjiXOhH/5deBv6STkSlAHqCNyLXF5/scIGgZh6gXH
-         z2+J85trJlvB7oYRmSbw/ZOr+QnpSZV6uohhhHudeqV6sZAaCwyTlMAoqSg+h4FV1HYD
-         Y77GVCQbv1Ot9JZ0BT9thESU23jshnDXBQWINoK4QhiWal36mSG+j3hA5uPWBfFvrGWE
-         V/qhJZsvUYP4d1S1EXboK7JT2kdRCROqRWyjodnHLvtwCSOmPqHqQDwhqvBBmGrgLpZE
-         kplg==
-X-Gm-Message-State: APjAAAWfCUhKDIvHRu3Y19iL2tLat3LPUe7LM/CbJ6xEwuAJWdwZqI5R
-        hw8u1odyfudIeQuUsPnezJmNIpNSxJXvRYyWPybUenMMItBGf/5ennCTQxIlRxUnHnfCpXG/Cw2
-        YXSZOKrttjOMPr0VXU8mK
-X-Received: by 2002:a50:fb16:: with SMTP id d22mr25119908edq.30.1570375351658;
-        Sun, 06 Oct 2019 08:22:31 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxtY8LnU1MoovTCbhwbtJH9YruP7SXFbEh5OkwIhzOI6haHNozTxOEiKJdPxcrBFmzfbNEyQg==
-X-Received: by 2002:a50:fb16:: with SMTP id d22mr25119877edq.30.1570375351305;
-        Sun, 06 Oct 2019 08:22:31 -0700 (PDT)
-Received: from localhost.localdomain ([109.38.129.160])
-        by smtp.gmail.com with ESMTPSA id dv15sm1447787ejb.49.2019.10.06.08.22.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 06 Oct 2019 08:22:30 -0700 (PDT)
-Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Yu Chen <chenyu56@huawei.com>,
+        h=x-gm-message-state:date:from:to:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=SBpRb6qd+48zQK5uPLn0YvEluIoUY9o3FhFhGA6TXtY=;
+        b=Z37+ICp7Y2QDT49t+AdNnVTJVt76pPZFd6B69eHRoUoNZlsdtFkBCYnSdEyhWhNbuK
+         XyETKrUDNSnLU0N40QS4exLwpNzCn3/7e6RprNKgM+Qgr2l5BRucGBLAeRfUBtKOQMJ/
+         5E9krxQL8OOHlalnke9FA7tibZzAe6GFB/E4Tjd1T8SsglrBwPlPGPzr8Yl+7Mdbg35j
+         IFXYmMzgkgcDjGXuUelcoGSjezWAQjoj/QavICNDeyyyRPhrYYOc89Nr353qflFxSsn4
+         1BvgZwAEXST7N03PUH5ali/fZNJcdatPFLpTHv6qfPMQra3BvYtNieDoXbXlpO+z1NTI
+         sjXw==
+X-Gm-Message-State: APjAAAUxUmMz14TPUm0Zi7j50psy10b7VPGg5JHEvkXkDaeqENUPDqXP
+        tPZ/Wxzu3jmyhFXsDcYOxAA=
+X-Google-Smtp-Source: APXvYqwiD5w33vuIYv9624AWG0k3vsCYtE8uO59mkpTJi1G/TZQDv7OS1UJvxH3zuwZ0w6XxIwuUIQ==
+X-Received: by 2002:a1c:9988:: with SMTP id b130mr18139392wme.164.1570376858781;
+        Sun, 06 Oct 2019 08:47:38 -0700 (PDT)
+Received: from kozik-lap ([194.230.155.145])
+        by smtp.googlemail.com with ESMTPSA id o22sm31539882wra.96.2019.10.06.08.47.36
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 06 Oct 2019 08:47:38 -0700 (PDT)
+Date:   Sun, 6 Oct 2019 17:47:34 +0200
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-3-john.stultz@linaro.org>
- <20191003112618.GA2420393@kroah.com>
- <CALAqxLWm_u3KsXHn4a6PdBCOKM1vs5k0xS3G5jY+M-=HBqUJag@mail.gmail.com>
- <9cfccb6a-fba1-61a3-3eb6-3009c2f5e747@redhat.com>
- <CALAqxLX3uSJKvRwzcQznaF4WK52BcM5Bh+PNXHmfDe1aTSUL8Q@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <fa44a7ab-14bc-24ec-a19b-7bf15e100ce1@redhat.com>
-Date:   Sun, 6 Oct 2019 17:22:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, etnaviv@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-rpi-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 3/3] ARM: dts: exynos: Rename power domain nodes to
+ "power-domain" in Exynos4
+Message-ID: <20191006154734.GA29365@kozik-lap>
+References: <20191002160632.11140-1-krzk@kernel.org>
+ <20191002160632.11140-3-krzk@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLX3uSJKvRwzcQznaF4WK52BcM5Bh+PNXHmfDe1aTSUL8Q@mail.gmail.com>
-Content-Language: en-US
-X-MC-Unique: 75qqDSQ0McOvfeUmnfGsfA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191002160632.11140-3-krzk@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, Oct 02, 2019 at 06:06:32PM +0200, Krzysztof Kozlowski wrote:
+> The device node name should reflect generic class of a device so rename
+> power domain nodes to "power-domain".  No functional change.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+> ---
+>  arch/arm/boot/dts/exynos4.dtsi    | 14 +++++++-------
+>  arch/arm/boot/dts/exynos4210.dtsi |  2 +-
+>  arch/arm/boot/dts/exynos4412.dtsi |  2 +-
+>  3 files changed, 9 insertions(+), 9 deletions(-)
 
-On 10/3/19 11:33 PM, John Stultz wrote:
-> On Thu, Oct 3, 2019 at 1:56 PM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 03-10-2019 22:45, John Stultz wrote:
->>> The HiKey960 has only one USB controller, but in order to support both
->>> USB-C gadget/OTG and USB-A (host only) ports. When the USB-C
->>> connection is attached, it powers down and disconnects the hub. When
->>> the USB-C connection is detached, it powers the hub on and connects
->>> the controller to the hub.
->>
->> When you say one controller, do you mean 1 host and 1 gadget controller,
->> or is this one of these lovely devices where a gadget controller gets
->> abused as / confused with a proper host controller?
->=20
-> I'm not totally sure myself, but I believe it's the latter, as the
-> host ports have to be disabled in order for the gadet/otg port to
-> function.
->=20
-> There was a similar situation w/ the original HiKey board (dwc2
-> controller) as well, though the switching was done fully in hardware
-> and we only needed some minor tweaks to the driver to keep the state
-> transitions straight.
->=20
->> And since you are doing a usb-role-switch driver, I guess that the
->> role-switch is integrated inside the SoC, so you only get one pair
->> of USB datalines to the outside ?
->=20
-> I believe so, but again, I don't have a ton of knowledge about the SoC
-> details, Chen Yu would probably be the right person to answer, but I
-> don't know if he's doing upstreaming anymore.
->=20
->> This does seem rather special, it might help if you can provide a diagra=
-m
->> with both the relevant bits inside the SoC as well as what lives outside
->> the Soc. even if it is in ASCII art...
->=20
-> There is a schematic pdf here:
-> https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey=
-960/hardware-docs/HiKey960_Schematics.pdf
->=20
-> The larger block diagram on page 3 might be helpful, but you can find
-> more details on the usb hub bits on page 17 and 18.
+Applied.
 
-Ok, so I took a quick look at the schematic and it is really funky.
-
-The USB3 superspeed data pairs are only going to the USB-3 hub and
-only the USB-2 lines are muxed between the TypeC and the HUB, so
-in theory superspeed devices could keep working while the TypeC is
-in device mode, since their data lines will still be connected,
-but I guess the controller in the SoC is switched to device mode
-then so this does not work. Likewise Vbus is an all or
-nothing thing, either both the TypeC connector + the 2 Type-A
-reeptacles get Vusb or none of them get Vusb. Also it is seems to use
-the TypeC connector in host-mode together with the A receptacles.
-I must say this is a weird design...
-
-Anyways back the code to add a usb role switch notifier. I do
-not think that this is a good idea, this is making "core" changes
-to deal with a special case. If you are going to use a notfier for
-this then IMHO the notifier should be part of the hikey960 usb role
-swtich driver and not be in the usb-role-switch class code, since
-this is very much a device specific hack.
-
-Regards,
-
-Hans
-
+Best regards,
+Krzysztof
