@@ -2,84 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A6CCD2FA
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2019 17:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00090CD8F0
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Oct 2019 21:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbfJFPrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Oct 2019 11:47:43 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55716 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725905AbfJFPrm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Oct 2019 11:47:42 -0400
-Received: by mail-wm1-f65.google.com with SMTP id a6so10044625wma.5;
-        Sun, 06 Oct 2019 08:47:39 -0700 (PDT)
+        id S1726204AbfJFThb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Oct 2019 15:37:31 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39995 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725811AbfJFThb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Oct 2019 15:37:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1570390650;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=md1VGHpPCYWdmA8M50yw1vhe+847XkUmuOiHBgmLIBk=;
+        b=iZtgCC0nzoHEBX4exSHJelnsFYLruLqW/N+H2lxHPfvm5Df85SP6k28PcFHq6uCBe+nmFW
+        vldgjSudwtV1Ki+sglPIitfqyxBHLfnkUsAJE39PxGxxgquygglNpl6I+H4QXkNftPSYrj
+        EEs5HrQlqmhAtWKDCMY9x8oWm3j5vR8=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-232-tGR1TOVWOSOZ0MVY0dhzHw-1; Sun, 06 Oct 2019 15:37:28 -0400
+Received: by mail-ed1-f71.google.com with SMTP id p55so7620201edc.5
+        for <linux-usb@vger.kernel.org>; Sun, 06 Oct 2019 12:37:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SBpRb6qd+48zQK5uPLn0YvEluIoUY9o3FhFhGA6TXtY=;
-        b=Z37+ICp7Y2QDT49t+AdNnVTJVt76pPZFd6B69eHRoUoNZlsdtFkBCYnSdEyhWhNbuK
-         XyETKrUDNSnLU0N40QS4exLwpNzCn3/7e6RprNKgM+Qgr2l5BRucGBLAeRfUBtKOQMJ/
-         5E9krxQL8OOHlalnke9FA7tibZzAe6GFB/E4Tjd1T8SsglrBwPlPGPzr8Yl+7Mdbg35j
-         IFXYmMzgkgcDjGXuUelcoGSjezWAQjoj/QavICNDeyyyRPhrYYOc89Nr353qflFxSsn4
-         1BvgZwAEXST7N03PUH5ali/fZNJcdatPFLpTHv6qfPMQra3BvYtNieDoXbXlpO+z1NTI
-         sjXw==
-X-Gm-Message-State: APjAAAUxUmMz14TPUm0Zi7j50psy10b7VPGg5JHEvkXkDaeqENUPDqXP
-        tPZ/Wxzu3jmyhFXsDcYOxAA=
-X-Google-Smtp-Source: APXvYqwiD5w33vuIYv9624AWG0k3vsCYtE8uO59mkpTJi1G/TZQDv7OS1UJvxH3zuwZ0w6XxIwuUIQ==
-X-Received: by 2002:a1c:9988:: with SMTP id b130mr18139392wme.164.1570376858781;
-        Sun, 06 Oct 2019 08:47:38 -0700 (PDT)
-Received: from kozik-lap ([194.230.155.145])
-        by smtp.googlemail.com with ESMTPSA id o22sm31539882wra.96.2019.10.06.08.47.36
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 06 Oct 2019 08:47:38 -0700 (PDT)
-Date:   Sun, 6 Oct 2019 17:47:34 +0200
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 3/3] ARM: dts: exynos: Rename power domain nodes to
- "power-domain" in Exynos4
-Message-ID: <20191006154734.GA29365@kozik-lap>
-References: <20191002160632.11140-1-krzk@kernel.org>
- <20191002160632.11140-3-krzk@kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/EUNnnB4iJj41YotY6xxIusdJj0QHQ51a1QG+BiD0qA=;
+        b=SYdrb2LsXYNJBHaPQe/m1Od1HBYIGMlnTZLQQOqCDBBhrWJalT8mYQt8YxVeCe3kqY
+         8Vj8N03y610Q77MTHva9tC7VgQq/RDa/NA0wSMmQw+XsT78XI9avI2IjIIISvRDd0jXJ
+         ygExqypHl4NEXDN/wPu5Vp9EBgkRlJPpKar+l96W3zqng0g+7jxYPzKyr9o2cL/7yyp3
+         vyzBrxZ+/8fFAYWyaTzgyNLVxes0m0eGA1I7KEMAuTvN2OJEoznx5VVwHofWrpZXAtO9
+         ch/mx2m9UfBHkHYASsth2ANMTauBeTTAthHJymU0jnaQ4bCTHyzDps513QI+aK28e816
+         9Vdw==
+X-Gm-Message-State: APjAAAVGjjfJ1LMSieUJaM7I1HMRulFwDVYbiyz7lcrC2R0tYB0e2RXG
+        BxqNeLJtv1VzaJfdXUHO1uVass55dPfei5ziufzNYk5QV4BYIad3rC7VHc7a5WBDc4hud1hX2kr
+        8s4grq5NHDkRrujdqFhOQ
+X-Received: by 2002:a17:907:211c:: with SMTP id qn28mr21138439ejb.244.1570390647346;
+        Sun, 06 Oct 2019 12:37:27 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyLjzrJHf2a5ybPPnLlBS2yLENsojjJhdYCI/4qIvlYhNM/K0rhakPMnSidWnf3Mn9TuLRChw==
+X-Received: by 2002:a17:907:211c:: with SMTP id qn28mr21138428ejb.244.1570390647136;
+        Sun, 06 Oct 2019 12:37:27 -0700 (PDT)
+Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
+        by smtp.gmail.com with ESMTPSA id f6sm2848886edr.12.2019.10.06.12.37.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 06 Oct 2019 12:37:26 -0700 (PDT)
+Subject: Re: [PATCH 0/2] extcon: axp288: Move to swnodes
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20191001105138.73036-1-heikki.krogerus@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <b1691d61-313c-ad57-3ef4-2dc2dc8263a2@redhat.com>
+Date:   Sun, 6 Oct 2019 21:37:25 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191002160632.11140-3-krzk@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191001105138.73036-1-heikki.krogerus@linux.intel.com>
+Content-Language: en-US
+X-MC-Unique: tGR1TOVWOSOZ0MVY0dhzHw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 02, 2019 at 06:06:32PM +0200, Krzysztof Kozlowski wrote:
-> The device node name should reflect generic class of a device so rename
-> power domain nodes to "power-domain".  No functional change.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> ---
->  arch/arm/boot/dts/exynos4.dtsi    | 14 +++++++-------
->  arch/arm/boot/dts/exynos4210.dtsi |  2 +-
->  arch/arm/boot/dts/exynos4412.dtsi |  2 +-
->  3 files changed, 9 insertions(+), 9 deletions(-)
+Hi,
 
-Applied.
+On 01-10-2019 12:51, Heikki Krogerus wrote:
+> Hi Hans,
+>=20
+> That AXP288 extcon driver is the last that uses build-in connection
+> description. I'm replacing it with a code that finds the role mux
+> software node instead.
+>=20
+> I'm proposing also here a little helper
+> usb_role_switch_find_by_fwnode() that uses
+> class_find_device_by_fwnode() to find the role switches.
 
-Best regards,
-Krzysztof
+I'm building a kernel with these patches to test them now
+(on hw which uses the axp288 extcon code-paths with the role-sw)
+
+No test results yet, but I did notice this will building:
+
+   CC [M]  drivers/extcon/extcon-axp288.o
+drivers/extcon/extcon-axp288.c: In function =E2=80=98axp288_extcon_find_rol=
+e_sw=E2=80=99:
+drivers/extcon/extcon-axp288.c:333:9: warning: assignment discards =E2=80=
+=98const=E2=80=99 qualifier from pointer target type [-Wdiscarded-qualifier=
+s]
+   333 |  swnode =3D software_node_find_by_name(NULL, "intel-xhci-usb-sw");
+       |         ^
+
+Regards,
+
+Hans
+
