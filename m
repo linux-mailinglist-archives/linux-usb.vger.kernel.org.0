@@ -2,124 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D80CDD72
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 10:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0CACDD86
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 10:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727252AbfJGIkh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 04:40:37 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:53748 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726969AbfJGIkg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 04:40:36 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x978eJEp039869;
-        Mon, 7 Oct 2019 03:40:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570437619;
-        bh=iRVKW68mcO3r9tC2SUOrwePSzioiFn8z6va76+E22Cc=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=nK2ICAb4uGYUn7+BmSD7i/RZtBGDiegDzR3ikhSGZhOMeKkzHFWupRVWznhJRDP62
-         Ie/xIRgbihkco9/TYEbeBz4/H+1cHrl/kOcm9xQ7gLfMh409LOAuuWReCLjvywHkTj
-         IbzDg5aDYvXvtnEVP4fcFLapctZL/PcZO/ZLIZf8=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x978eJYl046528
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Oct 2019 03:40:19 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 03:40:19 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 7 Oct 2019 03:40:16 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x978eGEj024937;
-        Mon, 7 Oct 2019 03:40:16 -0500
-Subject: Re: [PATCH] usb:cdns3: Fix for CV CH9 running with g_zero driver.
-To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
-        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
-        <peter.chen@nxp.com>, <kurahul@cadence.com>
-References: <1570430355-26118-1-git-send-email-pawell@cadence.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <640b6cd2-5d10-2dbd-c74d-009747790633@ti.com>
-Date:   Mon, 7 Oct 2019 11:40:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727295AbfJGIoa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 04:44:30 -0400
+Received: from mga09.intel.com ([134.134.136.24]:16693 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727258AbfJGIoa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Oct 2019 04:44:30 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Oct 2019 01:44:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,267,1566889200"; 
+   d="scan'208";a="206366215"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 07 Oct 2019 01:44:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Oct 2019 11:44:26 +0300
+Date:   Mon, 7 Oct 2019 11:44:26 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] usb: typec: Separate the operations vector
+Message-ID: <20191007084426.GB14192@kuha.fi.intel.com>
+References: <20191004150817.45413-1-heikki.krogerus@linux.intel.com>
+ <20191004150817.45413-4-heikki.krogerus@linux.intel.com>
+ <9f45326d-8667-25e0-755a-37d1a76e5b83@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <1570430355-26118-1-git-send-email-pawell@cadence.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f45326d-8667-25e0-755a-37d1a76e5b83@roeck-us.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 07/10/2019 09:39, Pawel Laszczak wrote:
-> Patch fixes issue with Halt Endnpoint Test observed during using g_zero
-> driver as DUT. Bug occurred only on some testing board.
+On Sat, Oct 05, 2019 at 10:36:02AM -0700, Guenter Roeck wrote:
+> On 10/4/19 8:08 AM, Heikki Krogerus wrote:
+> > Introducing struct typec_operations which has the same
+> > callbacks as struct typec_capability. The old callbacks are
+> > kept for now, but after all users have been converted, they
+> > will be removed.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >   drivers/usb/typec/class.c | 39 +++++++++++++++++++++++++++++----------
+> >   include/linux/usb/typec.h | 20 ++++++++++++++++++++
+> >   2 files changed, 49 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index 89ffe370e426..f4972b7ee022 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -54,6 +54,7 @@ struct typec_port {
+> >   	const struct typec_capability	*orig_cap; /* to be removed */
+> >   	const struct typec_capability	*cap;
+> > +	const struct typec_operations   *ops;
+> >   };
+> >   #define to_typec_port(_dev_) container_of(_dev_, struct typec_port, dev)
+> > @@ -956,7 +957,7 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
+> >   		return -EOPNOTSUPP;
+> >   	}
+> > -	if (!port->cap->try_role) {
+> > +	if (!port->cap->try_role || (!port->ops && !port->ops->try_role)) {
 > 
-> Endpoint can defer transition to Halted state if endpoint has pending
-> requests.
-> Patch add additional condition that allows to return correct endpoint
-> status during Get Endpoint Status request even if the halting endpoint
-> is in progress.
+> Even though it is only temporary, this should be
+> 	if (!port->cap->try_role && (!port->ops || !port->ops->try_role)) {
 > 
-> Reported-by: Rahul Kumar <kurahul@cadence.com>
-> Signed-off-by: Rahul Kumar <kurahul@cadence.com>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> otherwise both cap->try_role and ops->try_role must exist. Also, there would
+> be a crash if port->cap->try_role and port->ops are both NULL. Same pretty
+> much everywhere below.
 
-Tested-by: Roger Quadros <rogerq@ti.com>
+Yes, this series is broken. I'll prepare v3.
 
+I'm going to add two more patches to this series where I'll drop a few
+more unused members from struct typec_capability.
 
-cheers,
--roger
-
-> ---
->   drivers/usb/cdns3/ep0.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c
-> index 44f652e8b5a2..10ae03430f34 100644
-> --- a/drivers/usb/cdns3/ep0.c
-> +++ b/drivers/usb/cdns3/ep0.c
-> @@ -234,9 +234,11 @@ static int cdns3_req_ep0_set_address(struct cdns3_device *priv_dev,
->   static int cdns3_req_ep0_get_status(struct cdns3_device *priv_dev,
->   				    struct usb_ctrlrequest *ctrl)
->   {
-> +	struct cdns3_endpoint *priv_ep;
->   	__le16 *response_pkt;
->   	u16 usb_status = 0;
->   	u32 recip;
-> +	u8 index;
->   
->   	recip = ctrl->bRequestType & USB_RECIP_MASK;
->   
-> @@ -262,9 +264,13 @@ static int cdns3_req_ep0_get_status(struct cdns3_device *priv_dev,
->   	case USB_RECIP_INTERFACE:
->   		return cdns3_ep0_delegate_req(priv_dev, ctrl);
->   	case USB_RECIP_ENDPOINT:
-> -		/* check if endpoint is stalled */
-> +		index = cdns3_ep_addr_to_index(ctrl->wIndex);
-> +		priv_ep = priv_dev->eps[index];
-> +
-> +		/* check if endpoint is stalled or stall is pending */
->   		cdns3_select_ep(priv_dev, ctrl->wIndex);
-> -		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)))
-> +		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)) ||
-> +		    (priv_ep->flags & EP_STALL_PENDING))
->   			usb_status =  BIT(USB_ENDPOINT_HALT);
->   		break;
->   	default:
-> 
+thanks,
 
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+heikki
