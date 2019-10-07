@@ -2,107 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F455CE354
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 15:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D58ACE3E2
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 15:38:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbfJGNWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 09:22:42 -0400
-Received: from ganesha.gnumonks.org ([213.95.27.120]:46611 "EHLO
-        ganesha.gnumonks.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727010AbfJGNWm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 09:22:42 -0400
-Received: from uucp by ganesha.gnumonks.org with local-bsmtp (Exim 4.89)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1iHSyG-0006ZO-JG; Mon, 07 Oct 2019 15:22:40 +0200
-Received: from laforge by nataraja.lan with local (Exim 4.92.2)
-        (envelope-from <laforge@gnumonks.org>)
-        id 1iHSua-0006mB-LR; Mon, 07 Oct 2019 15:18:52 +0200
-Date:   Mon, 7 Oct 2019 15:18:52 +0200
-From:   Harald Welte <laforge@gnumunks.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: CREAD ignored by almost all USB serial drivers
-Message-ID: <20191007131852.GN3821@nataraja>
-References: <20190928204955.GE4247@nataraja>
- <20191007110633.GB614644@kroah.com>
+        id S1727715AbfJGNis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 09:38:48 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:41662 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727685AbfJGNis (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 09:38:48 -0400
+Received: by mail-ed1-f67.google.com with SMTP id f20so12454277edv.8;
+        Mon, 07 Oct 2019 06:38:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BogXmgVnKqJ+AQ/JaMHMUj54c+Ae56aiHU6T/FwepGs=;
+        b=g52E3LKX6HzncFVPxZhtjKw6pzGAaTXm9pWBf1tyC/3EvHOGfeYSjJC/9vSg9xxmfa
+         r3uKIl8xFPHHEHiFDi6fcw7E0y07LBlcfMssl3B7vfFWz507YOGAIidkMreErohT20Ix
+         MUdABIzGLoCRcGgZkucj7jox/H/qzcDKcbDwzcy4pOfMlOosuf6LMx7acjxldQOiPSFL
+         bE+FvjHpt7Ln2cVW19G/Udu+7RyUjF1WdQZ6CF6/6XIdKd0CDwSippukcvLTaHdJcvaV
+         zeYRDN10gAPnSErN1fDAq4E88/n3O7YNSnJrJU+85Pw0eGbDz4tLhDCbZx40a/6L4oPU
+         vaiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BogXmgVnKqJ+AQ/JaMHMUj54c+Ae56aiHU6T/FwepGs=;
+        b=Hc0bcmT243ari4fxqwtgU20h+mdfFpp4+yNuK+bXDxtzJiEjkEq+cEnsYN8dr8ka2B
+         0xmlWVeYjXhWPAKHqKDShRbVxY3C18x4cyOgCIUV2viJoH8mEEzGp9biYFLwVwDDvbJ8
+         sBzbW1TQGmUk2RywBFmw/myLPeftnVASCDuxdV/WwhLAA/UzPmfqI+RJqMhs3IiWE1AM
+         7e6pIS9UF0avKRDLIgDQ7eajcwIzAWDZxZ2lRDg1lPh/eFVHdTq/ss32ujaRqjUN+obI
+         kiBWeoh8YwKeX9QmjHgoR/giZG+8gOIsyB/9EWvMukb9bybpZoHM/T+KRR0GVd0fRzVd
+         EyWg==
+X-Gm-Message-State: APjAAAVmRka6O9OnxNgl9OhnALy1JLbw9un/FOZrMuxkNG1IUKq21UvM
+        pYArKSZ2SNMtZgW/sNQC4YtbTqM+MZajdApci2g=
+X-Google-Smtp-Source: APXvYqwYkVkAMrD9bm9pPuHaU98To0XXlkK7s5HbAS2iqjb1se9dDWzI/lBmBgrEvZmI5h4RHnsiv+YVuiBgR4hMKbU=
+X-Received: by 2002:a17:907:211c:: with SMTP id qn28mr24238258ejb.244.1570455524911;
+ Mon, 07 Oct 2019 06:38:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191007110633.GB614644@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191007124607.20618-1-igor.opaniuk@gmail.com>
+ <20191007124607.20618-3-igor.opaniuk@gmail.com> <CAOMZO5B-XWxiu3iqc85UZT0c5WTHBx9on8x1Za_dS7Gj7h1K2w@mail.gmail.com>
+In-Reply-To: <CAOMZO5B-XWxiu3iqc85UZT0c5WTHBx9on8x1Za_dS7Gj7h1K2w@mail.gmail.com>
+From:   Igor Opaniuk <igor.opaniuk@gmail.com>
+Date:   Mon, 7 Oct 2019 16:38:33 +0300
+Message-ID: <CAByghJZBy2gU_98aM++YANDAvvY_Mtbow4fvzYp=Fd+mzJTTuQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 3/3] usb: phy: mxs: optimize disconnect line condition
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Igor Opaniuk <igor.opaniuk@toradex.com>,
+        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+HI Fabio,
 
-On Mon, Oct 07, 2019 at 01:06:33PM +0200, Greg KH wrote:
-> On Sat, Sep 28, 2019 at 10:49:55PM +0200, Harald Welte wrote:
-> > It seems that a lot of Linux kernel USB serial device drivers are
-> > ignoring the CREAD setting of termios.c_cflag.
+On Mon, Oct 7, 2019 at 3:51 PM Fabio Estevam <festevam@gmail.com> wrote:
 >
-> You just discovered something that has been broken since the first
-> usb-serial driver was written, all those years ago :)
+> Hi Igor,
+>
+> On Mon, Oct 7, 2019 at 9:47 AM Igor Opaniuk <igor.opaniuk@gmail.com> wrot=
+e:
+> >
+> > From: Igor Opaniuk <igor.opaniuk@toradex.com>
+> >
+> > We only have below cases to disconnect line when suspend:
+> > 1. Device mode without connection to any host/charger(no vbus).
+> > 2. Device mode connect to a charger, usb suspend when
+> > system is entering suspend.
+> >
+> > This patch can fix cases, when usb phy wrongly does disconnect
+> > line in case usb host enters suspend but vbus is off.
+> >
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+>
+> Who is the original author of this patch, is it you or Li Jun?
+>
+> If it is Li Jun, then his name should appear in the From field.
+right, it's Li Jun, will fix in v1.
 
-Amazing and frightening at the same time.  I would have expected
-somebody had built something like a hardware test fixture to test those
-drivers during all those decades.  Something like a "well-known" serial
-device as the tester, attaching to all the handshake etc. lines of the
-"device under test" and then running through many of the possible
-settings from HW to SW flow control, baud rate, parity, number of stop
-bits, break characters, etc.
+>
+> Also, it seems a Fixes tag is needed here.
+right, will do.
 
-I have no shortage of projects to work on, but if somebody else was
-interested to host a physical setup with many different [USB] serial
-ports and some CI around, I might be tempted to build the actual tester
-hardware and some test suite software for it.
+--=20
+Best regards - Freundliche Gr=C3=BCsse - Meilleures salutations
 
-> I did add support for this to the digi driver, as you saw, as the
-> hardware had support for it.  For everything else, they are all just
-> dumb uarts and do not expose that information to the host computer and I
-> think everyone just forgot about this option.
+Igor Opaniuk
 
-I am aware that many USB serial adapters are rather "dumb", hence my suggestion
-to add a related option to the core usb-serial, or even to the core tty/serial
-layer: If the driver doesn't process CREAD, simply discard the received bytes
-at this common/shared layer.
-
-> Given that you are the first to report it that I can think of, I don't
-> think very many people use half-duplex protocols with a shared Rx/Tx
-> (which is crazy anyway...)
-
-Every smart card interface [1] on this planet, including every SIM card in every
-mobile phone uses such a setup: asynchronous half-duplex communication with
-shared Rx/Tx.  Sure, not many people attach something like that to a USB-Serial
-adapter (as oppose to a USB-CCID reader), but I just wanted to clarify
-it's not as obscure as one may think.  You can actually buy
-ultra-low-cost SIM card readers built that way.
-
-Also, I would assume that RS-485 is still used in lots of technology,
-including e.g. DMX and industrial control systems.  Unless you go for a
-rather obscure 4-wire RS-485, then you have the same half-duplex
-operation on shared medium.  Please note that USB-RS485 adapters exist,
-using a variety of USB-serial chipsets.
-
-> > Please keep me in Cc of any responses, I'm not subscribed to linux-usb.
-> 
-> Is there a specific usb-serial driver that you are using that you want
-> to have this support added to?
-
-I'm typically using cp2102 or FTDI based devices, though of
-course in terms of "market footprint", PL2303 probably beats all of the
-others.  However, as indicated, maybe the "catch-all fall-back" in the
-core is an easy way to adhere termios rules about CREAD without having
-to hack up every driver individually?
-
-Thanks,
-	Harald
-
-[1] well, not every, but most smart cards follow ISO 7816-3, which is
-    what I'm talking about
--- 
-- Harald Welte <laforge@gnumunks.org>            http://laforge.gnumonks.org/
-============================================================================
-"Privacy in residential applications is a desirable marketing option."
-                                                  (ETSI EN 300 175-7 Ch. A6)
+mailto: igor.opaniuk@gmail.com
+skype: igor.opanyuk
++380 (93) 836 40 67
+http://ua.linkedin.com/in/iopaniuk
