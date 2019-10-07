@@ -2,117 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3543CE7DC
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 17:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2531ECE975
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 18:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729112AbfJGPjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 11:39:23 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:2577 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729083AbfJGPjX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 11:39:23 -0400
-X-IronPort-AV: E=Sophos;i="5.67,268,1566831600"; 
-   d="scan'208";a="28273756"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 08 Oct 2019 00:39:20 +0900
-Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 395474008AA2;
-        Tue,  8 Oct 2019 00:39:18 +0900 (JST)
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Biju Das <biju.das@bp.renesas.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] usb: typec: hd3ss3220: hd3ss3220_probe() warn: passing zero to 'PTR_ERR'
-Date:   Mon,  7 Oct 2019 16:38:49 +0100
-Message-Id: <1570462729-25722-1-git-send-email-biju.das@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S1728376AbfJGQl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 12:41:26 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39932 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727801AbfJGQl0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 12:41:26 -0400
+Received: by mail-lj1-f196.google.com with SMTP id y3so14424103ljj.6;
+        Mon, 07 Oct 2019 09:41:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jI/iLcOzPQTe2f97TrWx71MZt1CEPA+WREXnjknhy+c=;
+        b=eAHeAGQvB0yjKcC+675QO0viA5bq9QiSHfGf62JaiFxze/uqvjwwoETHfjC9kSZW9v
+         Rg4OpvFaytYRyl0oneg5MLure+OuT8WB6+elc6E/PVhGFQW0i9WsYQIRZCSWZiE7k2Kb
+         GQ8spupna243F1U/ExGKl2mDxHXJyjANSD5dDiu19T8XjlipjTZP4NOIgKI2sy5R3txR
+         wg2qruN6gpiDFlggTA3zM1lE/bkGFRsbklmpljT6lyn0ohFy0oHn8ZijbzI8zRUDqd1X
+         dGRyFCGvnc6hRXMNGg5GRZYul0UtGEgVILEskDuKVCOA9nvuyGiehzKU4+1sOMMtjeQ+
+         4eJQ==
+X-Gm-Message-State: APjAAAWK5KEtfuPYHkkpTtbhtlUhi5Sv5XnJHv10+v4VNLKPsHvAcQq7
+        00rfqfKHv+h9dgdPkkPAn2DgaqWK
+X-Google-Smtp-Source: APXvYqyNv2VKLAXOA9KNrpBz/Cds2AegDowgIvxaSpQnmeZebACb49uKRiLDPsG28obB29nUOBT/MQ==
+X-Received: by 2002:a2e:7e05:: with SMTP id z5mr19566975ljc.8.1570466483459;
+        Mon, 07 Oct 2019 09:41:23 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id g3sm3137094lja.61.2019.10.07.09.41.22
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 07 Oct 2019 09:41:22 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iHW4f-0001YL-4G; Mon, 07 Oct 2019 18:41:29 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrey Rusalin <arusalin@dev.rtsoft.ru>,
+        Lars Poeschel <poeschel@lemonage.de>,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] NFC: pn533: fix use-after-free and memleaks
+Date:   Mon,  7 Oct 2019 18:40:59 +0200
+Message-Id: <20191007164059.5927-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <000000000000f0d74d0594536e2c@google.com>
+References: <000000000000f0d74d0594536e2c@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch fixes the warning passing zero to 'PTR_ERR' by changing the
-check from 'IS_ERR_OR_NULL' to 'IS_ERR'. Also improved the error handling
-on probe function.
+The driver would fail to deregister and its class device and free
+related resources on late probe errors.
 
-Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
-Reported-by: kbuild test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+Reported-by: syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com
+Fixes: 32ecc75ded72 ("NFC: pn533: change order operations in dev registation")
+Cc: stable <stable@vger.kernel.org>	# 4.11
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/typec/hd3ss3220.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/nfc/pn533/usb.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 1900910..7e5f3f7 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -178,7 +178,7 @@ static int hd3ss3220_probe(struct i2c_client *client,
+diff --git a/drivers/nfc/pn533/usb.c b/drivers/nfc/pn533/usb.c
+index c5289eaf17ee..e897e4d768ef 100644
+--- a/drivers/nfc/pn533/usb.c
++++ b/drivers/nfc/pn533/usb.c
+@@ -547,18 +547,25 @@ static int pn533_usb_probe(struct usb_interface *interface,
  
- 	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
- 	fwnode_handle_put(connector);
--	if (IS_ERR_OR_NULL(hd3ss3220->role_sw))
-+	if (IS_ERR(hd3ss3220->role_sw))
- 		return PTR_ERR(hd3ss3220->role_sw);
- 
- 	hd3ss3220->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-@@ -188,20 +188,22 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 
- 	hd3ss3220->port = typec_register_port(&client->dev,
- 					      &hd3ss3220->typec_cap);
--	if (IS_ERR(hd3ss3220->port))
--		return PTR_ERR(hd3ss3220->port);
-+	if (IS_ERR(hd3ss3220->port)) {
-+		ret = PTR_ERR(hd3ss3220->port);
-+		goto err_put_role;
-+	}
- 
- 	hd3ss3220_set_role(hd3ss3220);
- 	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
- 	if (ret < 0)
+ 	rc = pn533_finalize_setup(priv);
+ 	if (rc)
 -		goto error;
-+		goto err_unreg_port;
++		goto err_deregister;
  
- 	if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
- 		ret = regmap_write(hd3ss3220->regmap,
- 				HD3SS3220_REG_CN_STAT_CTRL,
- 				data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
- 		if (ret < 0)
--			goto error;
-+			goto err_unreg_port;
- 	}
- 
- 	if (client->irq > 0) {
-@@ -210,18 +212,19 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 					"hd3ss3220", &client->dev);
- 		if (ret)
--			goto error;
-+			goto err_unreg_port;
- 	}
- 
- 	ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
- 	if (ret < 0)
--		goto error;
-+		goto err_unreg_port;
- 
- 	dev_info(&client->dev, "probed revision=0x%x\n", ret);
+ 	usb_set_intfdata(interface, phy);
  
  	return 0;
--error:
-+err_unreg_port:
- 	typec_unregister_port(hd3ss3220->port);
-+err_put_role:
- 	usb_role_switch_put(hd3ss3220->role_sw);
  
- 	return ret;
++err_deregister:
++	pn533_unregister_device(phy->priv);
+ error:
++	usb_kill_urb(phy->in_urb);
++	usb_kill_urb(phy->out_urb);
++	usb_kill_urb(phy->ack_urb);
++
+ 	usb_free_urb(phy->in_urb);
+ 	usb_free_urb(phy->out_urb);
+ 	usb_free_urb(phy->ack_urb);
+ 	usb_put_dev(phy->udev);
+ 	kfree(in_buf);
++	kfree(phy->ack_buffer);
+ 
+ 	return rc;
+ }
 -- 
-2.7.4
+2.23.0
 
