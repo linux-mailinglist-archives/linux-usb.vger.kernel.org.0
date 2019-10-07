@@ -2,115 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EBACEBCD
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 20:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3D7CEC0A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 20:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729405AbfJGS24 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 14:28:56 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:57876 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728031AbfJGS2z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 14:28:55 -0400
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iHXka-0003ZK-QF; Mon, 07 Oct 2019 18:28:53 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH 2/2] usb: core: Attempt power cycle when port is in eSS.Disabled state
-Date:   Tue,  8 Oct 2019 02:28:40 +0800
-Message-Id: <20191007182840.4867-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007182840.4867-1-kai.heng.feng@canonical.com>
-References: <20191007182840.4867-1-kai.heng.feng@canonical.com>
+        id S1728607AbfJGSif (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 14:38:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34282 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728081AbfJGSif (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Oct 2019 14:38:35 -0400
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 810AF21655;
+        Mon,  7 Oct 2019 18:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570473513;
+        bh=NAn+q6yf4CHs6Mu3N4wO/Uqn6OEuK70VfBhue/aQrmw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h6OBPyL/UW1tVbfEOBO4SpOwNmrWpZKcca/DqzkkWBlQW89u7QwvHRvL5eWfgt5b9
+         jk0hyfEQaCOvfSHuhYr+gsoSZdrtb8IDXXbMTudalWPQ7BHV89kvap97lRstRxPXO+
+         wCNY3dXkEBaNBT0LxAFO25hBZMbmMzNixvTlekuY=
+Received: by mail-qk1-f182.google.com with SMTP id f16so13598023qkl.9;
+        Mon, 07 Oct 2019 11:38:33 -0700 (PDT)
+X-Gm-Message-State: APjAAAWMktNLSAOM7GZb2N3v9iNLLYr3i98UObOKZ/LzUjsKOW8L99qk
+        aDWb6mDLhTilcpk3TpPjAyRTi1CzltF/xiw4xg==
+X-Google-Smtp-Source: APXvYqw1uMDNOBK4id6x2x90eI0DouFlvWMcqOx1OkyvNHbflg90LosKjYFToraQFwlrtde7/0IP7Djz+EDPbZVrG/U=
+X-Received: by 2002:a05:620a:549:: with SMTP id o9mr25361081qko.223.1570473512597;
+ Mon, 07 Oct 2019 11:38:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191007175553.66940-1-john.stultz@linaro.org> <20191007175553.66940-5-john.stultz@linaro.org>
+In-Reply-To: <20191007175553.66940-5-john.stultz@linaro.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Mon, 7 Oct 2019 13:38:20 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+Message-ID: <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 4/5] dt-bindings: usb: dwc3: of-simple: add
+ compatible for HiSi
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
-then connects to ASMedia xHCI's root hub:
+On Mon, Oct 7, 2019 at 12:56 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> Add necessary compatible flag for HiSi's DWC3 so
+> dwc3-of-simple will probe.
+>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Yu Chen <chenyu56@huawei.com>
+> Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: linux-usb@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+> v2: Tweaked clock names as clk_usb3phy_ref didn't seem right.
+> ---
+>  .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
+>  1 file changed, 52 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
 
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
-            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+Can you make this a schema.
 
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
-Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+> diff --git a/Documentation/devicetree/bindings/usb/hisi,dwc3.txt b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> new file mode 100644
+> index 000000000000..3a3e5c320f2a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> @@ -0,0 +1,52 @@
+> +HiSi SuperSpeed DWC3 USB SoC controller
+> +
+> +Required properties:
+> +- compatible:          should contain "hisilicon,hi3660-dwc3" for HiSi SoC
+> +- clocks:              A list of phandle + clock-specifier pairs for the
+> +                       clocks listed in clock-names
+> +- clock-names:         Should contain the following:
+> +  "clk_abb_usb"                USB reference clk
+> +  "aclk_usb3otg"       USB3 OTG aclk
+> +
+> +- assigned-clocks:     Should be:
+> +                               HI3660_ACLK_GATE_USB3OTG
+> +- assigned-clock-rates: Should be:
+> +                               229Mhz (229000000) for HI3660_ACLK_GATE_USB3OTG
+> +
+> +Optional properties:
+> +- resets:              Phandle to reset control that resets core and wrapper.
 
-The SMSC hub may disconnect after system resume from suspend. When this
-happens, the reset resume attempt fails, and the last resort to disable
-the port and see something comes up later, also fails.
+Looks like 4 resets though.
 
-When the issue occurs, the link state stays in eSS.Disabled state
-despite the warm reset attempts. The USB spec mentioned this can be
-caused by invalid VBus, and after some expiremets, it does show that the
-SMSC hub can be brought back after a power cycle.
+> +
+> +Required child node:
+> +A child node must exist to represent the core DWC3 IP block. The name of
+> +the node is not important. The content of the node is defined in dwc3.txt.
+> +
+> +Example device nodes:
+> +
+> +       usb3: hisi_dwc3 {
+> +               compatible = "hisilicon,hi3660-dwc3";
+> +               #address-cells = <2>;
+> +               #size-cells = <2>;
+> +               ranges;
+> +
+> +               clocks = <&crg_ctrl HI3660_CLK_ABB_USB>,
+> +                        <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+> +               clock-names = "clk_abb_usb", "aclk_usb3otg";
+> +
+> +               assigned-clocks = <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+> +               assigned-clock-rates = <229 000 000>;
+> +               resets = <&crg_rst 0x90 8>,
+> +                        <&crg_rst 0x90 7>,
+> +                        <&crg_rst 0x90 6>,
+> +                        <&crg_rst 0x90 5>;
+> +
+> +               dwc3: dwc3@ff100000 {
 
-So let's power cycle the port at the end of reset resume attempt, if
-it's in eSS.Disabled state.
+If it's only clocks and resets for the wrapper node, just make this
+all one node.
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/usb/core/hub.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+And 'usb3' for the node name.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 6655a6a1651b..5f50aca7cf67 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2739,20 +2739,33 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
- 		|| link_state == USB_SS_PORT_LS_COMP_MOD;
- }
- 
-+static bool hub_port_power_cycle_required(struct usb_hub *hub, int port1,
-+		u16 portstatus)
-+{
-+	u16 link_state;
-+
-+	if (!hub_is_superspeed(hub->hdev))
-+		return false;
-+
-+	link_state = portstatus & USB_PORT_STAT_LINK_STATE;
-+	return link_state == USB_SS_PORT_LS_SS_DISABLED;
-+}
-+
- static void hub_port_power_cycle(struct usb_hub *hub, int port1)
- {
-+	struct usb_port *port_dev = hub->ports[port1  - 1];
- 	int ret;
- 
- 	ret = usb_hub_set_port_power(hub, port1, false);
- 	if (ret) {
--		dev_info(&udev->dev, "failed to disable port power\n");
-+		dev_info(&port_dev->dev, "failed to disable port power\n");
- 		return;
- 	}
- 
- 	msleep(2 * hub_power_on_good_delay(hub));
- 	ret = usb_hub_set_port_power(hub, port1, true);
- 	if (ret) {
--		dev_info(&udev->dev, "failed to enable port power\n");
-+		dev_info(&port_dev->dev, "failed to enable port power\n");
- 		return;
- 	}
- 
-@@ -3600,6 +3613,10 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 	if (status < 0) {
- 		dev_dbg(&udev->dev, "can't resume, status %d\n", status);
- 		hub_port_logical_disconnect(hub, port1);
-+		if (hub_port_power_cycle_required(hub, port1, portstatus)) {
-+			dev_info(&udev->dev, "device in disabled state, attempt power cycle\n");
-+			hub_port_power_cycle(hub, port1);
-+		}
- 	} else  {
- 		/* Try to enable USB2 hardware LPM */
- 		usb_enable_usb2_hardware_lpm(udev);
--- 
-2.17.1
-
+> +                       compatible = "snps,dwc3";
+> +                       reg = <0x0 0xff100000 0x0 0x100000>;
+> +                       interrupts = <0 159 4>, <0 161 4>;
+> +                       phys = <&usb_phy>;
+> +                       phy-names = "usb3-phy";
+> +                       dr_mode = "otg";
+> +
+> +                       ...
+> +               };
+> +       };
+> --
+> 2.17.1
+>
