@@ -2,157 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8507ACE21F
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 14:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD87CE236
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 14:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728047AbfJGMrn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 08:47:43 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:42346 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728025AbfJGMrl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 08:47:41 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n14so15094963wrw.9;
-        Mon, 07 Oct 2019 05:47:40 -0700 (PDT)
+        id S1727635AbfJGMvw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 08:51:52 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39430 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727467AbfJGMvw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 08:51:52 -0400
+Received: by mail-lj1-f196.google.com with SMTP id y3so13513523ljj.6;
+        Mon, 07 Oct 2019 05:51:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=dE5Pbudcp01GEPyoenTGG4iUJBJux2YKczE2k0btNjU=;
-        b=Q2EIKM8DVJ7tDyl/BTGuEB31qH1AKFvkrYNn7nqDv77Leoyx0+82lXBEeKr++L5H9O
-         BrRGB7DvSg9xr7Zkruf+e6ALndQBwT9Huktp75hqfxfqvUsxsRxpUZUOWTaiLgZhil5u
-         TYpDIGXMBR5qkj9qfk8yxCIpmJ3LckZKklSAq2vicS+toGUwlhg09SUc1tNq9WMXVQlg
-         Pxj8cwD795QdSHN3lJlW4CUNOFB8FyUVc/TY0EWwFRfti5oEyvmyJmTDbLlYJYqTEFO/
-         v5nBdBVFd7I6MhWVPD7W6V0RBrSZPZ3gJ9CeZrh3sHFUcZmUSlFT+rOG7JpJHRQbeZzh
-         NKZA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q/stoexCazI9iuKLi8P8TUDyz6V2X8FtpeQI0qpKw/o=;
+        b=YpSrJL93JFq5m0zDCpcoJisSR/M6+Dtbd66ZPS0jlGnfOQLbedc0qAN9KDvsv4nBWH
+         PsaKYEvHVmUbtuPQBW1goArE0sfGTp3GnQE9mU9ogLtejBB65ln4iB7+p7kGUxN90hPD
+         niKyPC/99OQjEgts3idB1sIcd6G1HC7PIyPi4FlFpFFpoSbc5pdiywNlB2P5LF6rp+WN
+         LWoXrFqDn+HUtmyMPivBGRg4p8FiJ7WoPetvmzZvVO52gFAdiKTxuoKyB6GEqI+mWSME
+         IrphxicraJ03ahzIx/21w2VJhBIdd/VK6VbvO7ahsCdTyt2zs6vZW38Gng5cFS5JHsLe
+         DHFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=dE5Pbudcp01GEPyoenTGG4iUJBJux2YKczE2k0btNjU=;
-        b=WACUAwejTEfbv8AYqYHZWUeWae+jkXzEvxJzhmteaypkgEWY1auCjuzZiAYNRevg4p
-         eWnGrd54tFEVikk/kZNhmP9kpSsBmlIC2YIa5wcIhfsiAC8SNc3wOdDOgv5vREyyxk9h
-         G3DV7ZR0HzxQ1rHgHI5B3elHSgN/kjoiPx86mLJ+tNZwbbZ8Ik6NzT7A5tGnHKrLcNIH
-         MkzRQqWKlbapKbgMmpXGWchsU2JBl1zdllyo1dzhPicFkiuPQ50PxS6gRPEjHPJM68Zp
-         aiP85MQEoe78RcI7fDOgArPyko/VfAvoJpyOCzS/fBo3amdgOZRVL2xnVTFMMTyOmInQ
-         dLoA==
-X-Gm-Message-State: APjAAAVHBJdThL5X0GkvX871zkShmKlHnFh3BYqNLjDTpIfqeOdW3e3x
-        fzy/4gKm0ClK/TanW/spwImXU6wHxXE=
-X-Google-Smtp-Source: APXvYqxfcm+mguSSud/mija7CYkDcradVYcTrMnb8M+RUUOM79viuKI65prWYSiQClaVRyLyQozQTw==
-X-Received: by 2002:adf:fe8b:: with SMTP id l11mr17986939wrr.23.1570452459382;
-        Mon, 07 Oct 2019 05:47:39 -0700 (PDT)
-Received: from localhost ([194.105.145.90])
-        by smtp.gmail.com with ESMTPSA id c6sm15985051wrm.71.2019.10.07.05.47.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 07 Oct 2019 05:47:38 -0700 (PDT)
-From:   Igor Opaniuk <igor.opaniuk@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q/stoexCazI9iuKLi8P8TUDyz6V2X8FtpeQI0qpKw/o=;
+        b=aD7fXDJEERlW7WmXpMJWDZB133xgj6iN+14u4bdZwR1cIPpkHvRKtdUmfRukH+eHMD
+         4Kt6kq9m/T+sJehnV5Kz2WwK0XBi/jfUOde+r8IXwgA6xGZptR/zFg4PggbYcEHiI8zX
+         OQAUfhlQFTvkqoKCHq6wqrjBFlq2VdQP4/m88J1uGB2nU01XTYNphhC9kcFjRJWSBMfG
+         s+f+6QYxKl82vbY/cHHQLlHuH8rJ2/e4ycAJHlFG6p2iMmc2C1zVHde+JjmJup2jGxft
+         rmBdwPXWLPVHZ6A6Eyh6rkN1KPL9nnJHGbrSOZPAqz8xYtNbdlGnGnfHl/WjYkeVXwdF
+         9dnA==
+X-Gm-Message-State: APjAAAVB0zZspLV6vQzJf3J7DygSUgKBrOyAfCjKHusrFfDRb3pzjG3/
+        qxIuDZqEfeKCgqAmwFmt5YrvyKXKDEQoZK8LD64=
+X-Google-Smtp-Source: APXvYqzbIbzkdfmu0ZUuar7rTOgEP3mq4mYriuqCQEIx8rPeiuTn1IxwDyPOAxs6IhW57nHwifO8yPd/MQDSRrWaX3Y=
+X-Received: by 2002:a2e:6a0f:: with SMTP id f15mr7917754ljc.17.1570452708750;
+ Mon, 07 Oct 2019 05:51:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191007124607.20618-1-igor.opaniuk@gmail.com> <20191007124607.20618-3-igor.opaniuk@gmail.com>
+In-Reply-To: <20191007124607.20618-3-igor.opaniuk@gmail.com>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Mon, 7 Oct 2019 09:52:14 -0300
+Message-ID: <CAOMZO5B-XWxiu3iqc85UZT0c5WTHBx9on8x1Za_dS7Gj7h1K2w@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 3/3] usb: phy: mxs: optimize disconnect line condition
+To:     Igor Opaniuk <igor.opaniuk@gmail.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Philippe Schenker <philippe.schenker@toradex.com>,
         Stefan Agner <stefan.agner@toradex.com>,
         Max Krummenacher <max.krummenacher@toradex.com>,
         Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Igor Opaniuk <igor.opaniuk@toradex.com>,
-        Li Jun <jun.li@nxp.com>, Fabio Estevam <festevam@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v1 3/3] usb: phy: mxs: optimize disconnect line condition
-Date:   Mon,  7 Oct 2019 15:46:07 +0300
-Message-Id: <20191007124607.20618-3-igor.opaniuk@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007124607.20618-1-igor.opaniuk@gmail.com>
-References: <20191007124607.20618-1-igor.opaniuk@gmail.com>
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Igor Opaniuk <igor.opaniuk@toradex.com>
+Hi Igor,
 
-We only have below cases to disconnect line when suspend:
-1. Device mode without connection to any host/charger(no vbus).
-2. Device mode connect to a charger, usb suspend when
-system is entering suspend.
+On Mon, Oct 7, 2019 at 9:47 AM Igor Opaniuk <igor.opaniuk@gmail.com> wrote:
+>
+> From: Igor Opaniuk <igor.opaniuk@toradex.com>
+>
+> We only have below cases to disconnect line when suspend:
+> 1. Device mode without connection to any host/charger(no vbus).
+> 2. Device mode connect to a charger, usb suspend when
+> system is entering suspend.
+>
+> This patch can fix cases, when usb phy wrongly does disconnect
+> line in case usb host enters suspend but vbus is off.
+>
+> Signed-off-by: Li Jun <jun.li@nxp.com>
+> Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
 
-This patch can fix cases, when usb phy wrongly does disconnect
-line in case usb host enters suspend but vbus is off.
+Who is the original author of this patch, is it you or Li Jun?
 
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
----
+If it is Li Jun, then his name should appear in the From field.
 
- drivers/usb/phy/phy-mxs-usb.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 70b8c8248caf..d996666e09e6 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -204,6 +204,7 @@ struct mxs_phy {
- 	int port_id;
- 	u32 tx_reg_set;
- 	u32 tx_reg_mask;
-+	enum usb_current_mode mode;
- };
- 
- static inline bool is_imx6q_phy(struct mxs_phy *mxs_phy)
-@@ -386,17 +387,6 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
- 		usleep_range(500, 1000);
- }
- 
--static bool mxs_phy_is_otg_host(struct mxs_phy *mxs_phy)
--{
--	void __iomem *base = mxs_phy->phy.io_priv;
--	u32 phyctrl = readl(base + HW_USBPHY_CTRL);
--
--	if (IS_ENABLED(CONFIG_USB_OTG) &&
--			!(phyctrl & BM_USBPHY_CTRL_OTG_ID_VALUE))
--		return true;
--
--	return false;
--}
- 
- static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- {
-@@ -412,13 +402,26 @@ static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- 
- 	vbus_is_on = mxs_phy_get_vbus_status(mxs_phy);
- 
--	if (on && !vbus_is_on && !mxs_phy_is_otg_host(mxs_phy))
-+	if (on && ((!vbus_is_on && mxs_phy->mode != USB_MODE_HOST)))
- 		__mxs_phy_disconnect_line(mxs_phy, true);
- 	else
- 		__mxs_phy_disconnect_line(mxs_phy, false);
- 
- }
- 
-+/*
-+ * Set the usb current role for phy.
-+ */
-+static int mxs_phy_set_mode(struct usb_phy *phy,
-+		enum usb_current_mode mode)
-+{
-+	struct mxs_phy *mxs_phy = to_mxs_phy(phy);
-+
-+	mxs_phy->mode = mode;
-+
-+	return 0;
-+}
-+
- static int mxs_phy_init(struct usb_phy *phy)
- {
- 	int ret;
-@@ -796,6 +799,7 @@ static int mxs_phy_probe(struct platform_device *pdev)
- 	mxs_phy->phy.notify_disconnect	= mxs_phy_on_disconnect;
- 	mxs_phy->phy.type		= USB_PHY_TYPE_USB2;
- 	mxs_phy->phy.set_wakeup		= mxs_phy_set_wakeup;
-+	mxs_phy->phy.set_mode		= mxs_phy_set_mode;
- 	mxs_phy->phy.charger_detect	= mxs_phy_charger_detect;
- 
- 	mxs_phy->clk = clk;
--- 
-2.17.1
-
+Also, it seems a Fixes tag is needed here.
