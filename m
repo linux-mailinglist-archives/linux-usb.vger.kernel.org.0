@@ -2,103 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2531ECE975
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 18:41:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBA0CEB2E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 19:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728376AbfJGQl0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 12:41:26 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39932 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727801AbfJGQl0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 12:41:26 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y3so14424103ljj.6;
-        Mon, 07 Oct 2019 09:41:24 -0700 (PDT)
+        id S1729239AbfJGR4A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 13:56:00 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37766 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728079AbfJGRz7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 13:55:59 -0400
+Received: by mail-pg1-f196.google.com with SMTP id p1so6881629pgi.4
+        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 10:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=egboN5LspnsxlOmbUEUbW8zbZDOgKxSBdf9tJPyXXRs=;
+        b=h1As562vjET1VzrndYwZlyOz+8bP+Z6B7xHScJN8GN0dXK88R+2cHCxeADlO92XjUQ
+         bp+k3fsyOVMKU2H8C5DhtAir11Pp95AfQwX9dBU1Q00hP05/wNahVY35KhVta3r9FF9X
+         pEmUBcyVKz579Ru6T16W/hzUbOal04Ygcxw/JOPYxnD/YP7g1rbcHTkXsNIRNCbBO3jX
+         lll53Au/bZ9ilssKtkuGjChBP9xXL9Lz0ShEdID0ZabgSrB1y7mVM4oY1C0qAnGK2RIv
+         1dnwOO0g0TbkftARF6KvWBcBTVuvOFhXHqsZw6+8qfho08c1qfxOW3+ggttMw5KH1YGT
+         Mclg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jI/iLcOzPQTe2f97TrWx71MZt1CEPA+WREXnjknhy+c=;
-        b=eAHeAGQvB0yjKcC+675QO0viA5bq9QiSHfGf62JaiFxze/uqvjwwoETHfjC9kSZW9v
-         Rg4OpvFaytYRyl0oneg5MLure+OuT8WB6+elc6E/PVhGFQW0i9WsYQIRZCSWZiE7k2Kb
-         GQ8spupna243F1U/ExGKl2mDxHXJyjANSD5dDiu19T8XjlipjTZP4NOIgKI2sy5R3txR
-         wg2qruN6gpiDFlggTA3zM1lE/bkGFRsbklmpljT6lyn0ohFy0oHn8ZijbzI8zRUDqd1X
-         dGRyFCGvnc6hRXMNGg5GRZYul0UtGEgVILEskDuKVCOA9nvuyGiehzKU4+1sOMMtjeQ+
-         4eJQ==
-X-Gm-Message-State: APjAAAWK5KEtfuPYHkkpTtbhtlUhi5Sv5XnJHv10+v4VNLKPsHvAcQq7
-        00rfqfKHv+h9dgdPkkPAn2DgaqWK
-X-Google-Smtp-Source: APXvYqyNv2VKLAXOA9KNrpBz/Cds2AegDowgIvxaSpQnmeZebACb49uKRiLDPsG28obB29nUOBT/MQ==
-X-Received: by 2002:a2e:7e05:: with SMTP id z5mr19566975ljc.8.1570466483459;
-        Mon, 07 Oct 2019 09:41:23 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id g3sm3137094lja.61.2019.10.07.09.41.22
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Oct 2019 09:41:22 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iHW4f-0001YL-4G; Mon, 07 Oct 2019 18:41:29 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     netdev@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrey Rusalin <arusalin@dev.rtsoft.ru>,
-        Lars Poeschel <poeschel@lemonage.de>,
-        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH] NFC: pn533: fix use-after-free and memleaks
-Date:   Mon,  7 Oct 2019 18:40:59 +0200
-Message-Id: <20191007164059.5927-1-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <000000000000f0d74d0594536e2c@google.com>
-References: <000000000000f0d74d0594536e2c@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=egboN5LspnsxlOmbUEUbW8zbZDOgKxSBdf9tJPyXXRs=;
+        b=c5B3TRl4/fHK4fgDbgkjTODhT05TLXdBtgkS8OUKiAIYuhQXPsdILef3eDMRHlO8Ut
+         TY5qOa+QymMzlqqvb1d84pa1MrxenlK31joEdul8vyGt+aY3gEox1ouNBgzjKTQTwsYl
+         mTDxabMEypSyFB/acumTk4UHJ1YpUkmWBwAoqIHF5yGz+DtVCq+8ncFwq23ww/CJbCS/
+         RJ4rBiXTPFFW1tFsvjmGYX8gib5DAHqwoUYVznIfwBGrsAO8iV5i6EL/oi/n7jBh7zCN
+         h7GSHO3+WxitufWSYdy980uTdnjWTpOmbxA02vSfAVtYAY01J/wry9dnFGucSq5xYKok
+         d7bg==
+X-Gm-Message-State: APjAAAX8Op2vmuvHVaqGbESahQiqOpDKz9lgHKLyHge0fWwXwXbxrjGq
+        fPb/yJpNVtoopKE3v1IQOEHB/w==
+X-Google-Smtp-Source: APXvYqxlGxe94guiFCzVkK5f+pR1M2fVMTgZtKZPLcP1Jxldh/nvUB2WLt7G/TlrrY7TC5wnTetyzQ==
+X-Received: by 2002:a63:d250:: with SMTP id t16mr3884089pgi.278.1570470958745;
+        Mon, 07 Oct 2019 10:55:58 -0700 (PDT)
+Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
+        by smtp.gmail.com with ESMTPSA id k15sm3820096pgt.25.2019.10.07.10.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2019 10:55:57 -0700 (PDT)
+From:   John Stultz <john.stultz@linaro.org>
+To:     lkml <linux-kernel@vger.kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [RFC][PATCH v2 0/5] dwc3: Changes for HiKey960 support
+Date:   Mon,  7 Oct 2019 17:55:48 +0000
+Message-Id: <20191007175553.66940-1-john.stultz@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver would fail to deregister and its class device and free
-related resources on late probe errors.
+I've been carrying for awhile some patches that Yu Chen was
+previously pushing upstream to enable USB on the HiKey960 board
+and I wanted to try to nudge them forward as I'm not sure as to
+what his plans are.
 
-Reported-by: syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com
-Fixes: 32ecc75ded72 ("NFC: pn533: change order operations in dev registation")
-Cc: stable <stable@vger.kernel.org>	# 4.11
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/nfc/pn533/usb.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+This series is just the simpler parts of the patch set that I
+wanted to send out to see if we could make some progress on
+while I continue to work on the more complex bits.
 
-diff --git a/drivers/nfc/pn533/usb.c b/drivers/nfc/pn533/usb.c
-index c5289eaf17ee..e897e4d768ef 100644
---- a/drivers/nfc/pn533/usb.c
-+++ b/drivers/nfc/pn533/usb.c
-@@ -547,18 +547,25 @@ static int pn533_usb_probe(struct usb_interface *interface,
- 
- 	rc = pn533_finalize_setup(priv);
- 	if (rc)
--		goto error;
-+		goto err_deregister;
- 
- 	usb_set_intfdata(interface, phy);
- 
- 	return 0;
- 
-+err_deregister:
-+	pn533_unregister_device(phy->priv);
- error:
-+	usb_kill_urb(phy->in_urb);
-+	usb_kill_urb(phy->out_urb);
-+	usb_kill_urb(phy->ack_urb);
-+
- 	usb_free_urb(phy->in_urb);
- 	usb_free_urb(phy->out_urb);
- 	usb_free_urb(phy->ack_urb);
- 	usb_put_dev(phy->udev);
- 	kfree(in_buf);
-+	kfree(phy->ack_buffer);
- 
- 	return rc;
- }
+You can find the full set of changes to get USB working on the
+board here:
+  https://git.linaro.org/people/john.stultz/android-dev.git/log/?id=ef858be80f202b7bffb7d03c168ee72457a0ef3e
+
+This series is just the more trivial changes, along with some
+missing binding documentation that I've added.
+
+I'd greatly appreciate any review or feedback on this series!
+
+thanks
+-john
+
+New in v2:
+* Tweaked binding clock name as clk_usb3phy_ref didn't seem right.
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Yu Chen <chenyu56@huawei.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: linux-usb@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+
+John Stultz (2):
+  dt-bindings: usb: dwc3: Add a property to do a CGTL soft reset on mode
+    switching
+  dt-bindings: usb: dwc3: of-simple: add compatible for HiSi
+
+Yu Chen (3):
+  usb: dwc3: Execute GCTL Core Soft Reset while switch mdoe for
+    Hisilicon Kirin Soc
+  usb: dwc3: Increase timeout for CmdAct cleared by device controller
+  usb: dwc3: dwc3-of-simple: Add support for dwc3 of Hisilicon Soc
+    Platform
+
+ .../devicetree/bindings/usb/dwc3.txt          |  2 +
+ .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
+ drivers/usb/dwc3/core.c                       | 20 +++++++
+ drivers/usb/dwc3/core.h                       |  3 ++
+ drivers/usb/dwc3/dwc3-of-simple.c             |  4 +-
+ drivers/usb/dwc3/gadget.c                     |  2 +-
+ 6 files changed, 81 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+
 -- 
-2.23.0
+2.17.1
 
