@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA31CE788
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 17:31:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24FFCE78F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 17:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728825AbfJGPbZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 11:31:25 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38726 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbfJGPbY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 11:31:24 -0400
-Received: by mail-pg1-f195.google.com with SMTP id x10so8434413pgi.5
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 08:31:23 -0700 (PDT)
+        id S1728877AbfJGPbo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 11:31:44 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42022 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727931AbfJGPbo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 11:31:44 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q12so8873394pff.9
+        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 08:31:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=message-id:mime-version:content-transfer-encoding:in-reply-to
          :references:from:to:cc:subject:user-agent:date;
-        bh=sLa90r2E5qlyRjXK3gQlBRKqNd6GDxwpHpyhcXOfQ84=;
-        b=QbjIAco5PbtWgtLkhrQ4/gHl6xagLiNSKZe2tmKrNuHEWeSuY3bQ3eBYHYkc41MgoL
-         lE9Q4QKHjyNKwWLMkweolU9b3sx9Ydrk+blM0TNI7J39nNsjXmzwAVGp65LxInUJ4fwg
-         YbzCdwCJasI2YsCnGLpatsKK/QpODrHB1wmdo=
+        bh=JZ4ZLhpG0uBtRMl0o3Xeh7toOVYQ8X7X8agStl6yaPA=;
+        b=PWxzNCilhqxZx4BInRaEC85RoByjMuhy/v7d51XUHuyPoc2xgtUFa2Dq4rtT/tSg8K
+         o/mw7qx2clFS1oYj3pq6+B+546SBKXzyKa8K6+VRpc1eX8uFXe37ryhWGl9v8/Dfcfj3
+         HYvUYe7reb+I0oCOS67lxnxPmyia1T24TyWaE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:mime-version
          :content-transfer-encoding:in-reply-to:references:from:to:cc:subject
          :user-agent:date;
-        bh=sLa90r2E5qlyRjXK3gQlBRKqNd6GDxwpHpyhcXOfQ84=;
-        b=iFF+5i/s0tU1OtoKF1pqGb88CvDT58bAVLbjIRl6TmpSjAUXcJaEdictIVrSfI1rjL
-         Jniz6cbcPn9ww/wDcDymR7PS+id7BM05kGbLWrpHyze6pIASvp/Sl5m4Nc6j1YqFwleF
-         q9AGYP0Lhpb863/wEpBcUSqFjXtcphjUse6Vs/eRcuYlyDeP+AhrjDxqfX/i54KOIb4F
-         /2hsGw3KW1L6jaSZrLdC1mCOvq+t/AqjXOQomCZ/XYyUd+ZEkJf0V5aqQo8Wwj0H6IQK
-         cc0c+Pa9umcftfXyyLuOb7gEFtas5S6X1i10uLunxSAnzQHkq8TkFzQ21B9hXJs3gST1
-         sRGA==
-X-Gm-Message-State: APjAAAWZT+gDqIRidKxSXQUzUYIE6mhW1QkETWeuRTwkYnY7+5oE8txV
-        o99Xg/e1Rd0yGvyXF4PwwnD5wA==
-X-Google-Smtp-Source: APXvYqyIU0rNZmiZHnbdrXWq7p1j4lmE+m6tu39BGijoWH3TY0UhR+2MBJUz0zov8iXZjViNRKAozQ==
-X-Received: by 2002:aa7:8d8a:: with SMTP id i10mr33512099pfr.45.1570462283513;
-        Mon, 07 Oct 2019 08:31:23 -0700 (PDT)
+        bh=JZ4ZLhpG0uBtRMl0o3Xeh7toOVYQ8X7X8agStl6yaPA=;
+        b=kKSp088HAIRsWNYECqv3R8RYlu/9w79Hr+dZz2rogWKG3JWui+lGc1cUbyHlMc+Htu
+         FS0PoKAHj8LrROPiW3lZjNaXzUb5tnh5aPBEeAxhkTYjNS3E8ap6xYlYFKGN3EUxZMm+
+         rh5YCDz1Yt4uKPmJoYgVXHzL18fGVLy5uLjsntV6fSPom0n9v3E882s6yPzHZqXtUgN/
+         xUp8R8S1OjX1BymS6ffPExX0ISdyLRwDNXefiqoJIgMn9mWXl+/vC3yJexnQcWcA1rD3
+         ju1ib4wDa5DG/7CloGX8vzo6MooDDf+41P6k+RnsN2zaQ3u2GwiLgzjOuyTRq4+CFoSD
+         +ESw==
+X-Gm-Message-State: APjAAAXLdJYGp4w7gjgVkVnF+t7gAGMC8l1907+m70l1GIeto3z8yz9I
+        SoDwlsVoEgLlUbkSLG8TSBjX3A==
+X-Google-Smtp-Source: APXvYqwxYFF7RQHdC7kZifXplqwZ98J3wRnNwaPRlto+tGJlCXia8cgagHkZUM044+QuC2S+qil0Wg==
+X-Received: by 2002:a17:90a:a10f:: with SMTP id s15mr7702950pjp.49.1570462303498;
+        Mon, 07 Oct 2019 08:31:43 -0700 (PDT)
 Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
-        by smtp.gmail.com with ESMTPSA id 62sm16190658pfg.164.2019.10.07.08.31.22
+        by smtp.gmail.com with ESMTPSA id b14sm16028527pfi.95.2019.10.07.08.31.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 08:31:23 -0700 (PDT)
-Message-ID: <5d9b5a4b.1c69fb81.d0598.1f8c@mx.google.com>
+        Mon, 07 Oct 2019 08:31:43 -0700 (PDT)
+Message-ID: <5d9b5a5f.1c69fb81.842f8.329e@mx.google.com>
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191005210449.3926-3-hdegoede@redhat.com>
-References: <20191005210449.3926-1-hdegoede@redhat.com> <20191005210449.3926-3-hdegoede@redhat.com>
+In-Reply-To: <20191005210449.3926-4-hdegoede@redhat.com>
+References: <20191005210449.3926-1-hdegoede@redhat.com> <20191005210449.3926-4-hdegoede@redhat.com>
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
@@ -55,24 +55,19 @@ To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Hans de Goede <hdegoede@redhat.com>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: dwc3: Switch to platform_get_irq_byname_optional()
+Subject: Re: [PATCH 3/3] usb: dwc3: Remove dev_err() on platform_get_irq() failure
 User-Agent: alot/0.8.1
-Date:   Mon, 07 Oct 2019 08:31:22 -0700
+Date:   Mon, 07 Oct 2019 08:31:42 -0700
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Hans de Goede (2019-10-05 14:04:48)
-> The dwc3 code to get the "peripheral" / "host" / "otg" IRQ first tries
-> platform_get_irq_byname() and then falls back to the IRQ at index 0 if
-> the platform_get_irq_byname().
+Quoting Hans de Goede (2019-10-05 14:04:49)
+> Since commit 7723f4c5ecdb ("driver core: platform: Add an error message to
+> platform_get_irq*()"), platform_get_irq() will call dev_err() itself on
+> failure, so there is no need for the driver to also do this.
 >=20
-> In this case we do not want platform_get_irq_byname() to print an error
-> on failure, so switch to platform_get_irq_byname_optional() instead which
-> does not print an error.
->=20
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D205037
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
 
