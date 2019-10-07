@@ -2,82 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F034DCE15E
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 14:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0E55CE17E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 14:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbfJGMQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 08:16:29 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:43416 "EHLO
+        id S1727850AbfJGMUg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 08:20:36 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:43810 "EHLO
         lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727561AbfJGMQ3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 08:16:29 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97CGD2Z020799;
-        Mon, 7 Oct 2019 07:16:13 -0500
+        with ESMTP id S1727572AbfJGMUg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 08:20:36 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97CKTjO021578;
+        Mon, 7 Oct 2019 07:20:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570450573;
-        bh=JT6RnosxlMe8SvOy1VwR606ZNqg+8XpNbkC5dXgqkvo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ioAtB1uO2dWk6Kmff/0tXOG2aXczU4w1PLeI9HIbXuj1HxbO/xIMATdpAEIFQw9Bq
-         nrDUXzmgzqfVQiR3YiMcHIP1tW+aV4SO/6vAclKU7GscwLIFc20s5/RLVKzax7pFtY
-         CWU5Q3cIQjtVc4eBt8+WMH7+Qc/FeLmWm7U2xRRI=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97CGDi8070468
+        s=ti-com-17Q1; t=1570450829;
+        bh=7bKj1mNBNtUSIdmMJZZwZHQ0QlBSZkbso7CXV6MGnAw=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=sTONc3g1vwclMmaf/EZI7bG4LCnKgsOClg1cx9Dx/IVYFFlRts0gVTWbAD5Nr+0MR
+         Jc3iam1lLY67jLbb6EHTysAZjbYNHOaVEnjD/G6xQccwZWrAbt0xn1Iq9eUqwFlKU9
+         vk6cOVWB7GMCoHwi41WqGekVl7iZEt6BdZXFGrz0=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x97CKT6V059377
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 7 Oct 2019 07:16:13 -0500
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 7 Oct 2019 07:20:29 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 07:16:13 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ 2019 07:20:28 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 7 Oct 2019 07:16:11 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97CG6fM070909;
-        Mon, 7 Oct 2019 07:16:11 -0500
+ Frontend Transport; Mon, 7 Oct 2019 07:20:26 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97CKPUo077641;
+        Mon, 7 Oct 2019 07:20:26 -0500
+Subject: Re: [PATCH] usb: cdns3: Fix for incorrect DMA mask.
+To:     Pawel Laszczak <pawell@cadence.com>, <felipe.balbi@linux.intel.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
+        <nsekhar@ti.com>, <nm@ti.com>, <sureshp@cadence.com>,
+        <peter.chen@nxp.com>, <kurahul@cadence.com>
+References: <1570449803-15299-1-git-send-email-pawell@cadence.com>
 From:   Roger Quadros <rogerq@ti.com>
-To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <pawell@cadence.com>
-CC:     <peter.chen@nxp.com>, <nsekhar@ti.com>, <kurahul@cadence.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>
-Subject: [PATCH 2/2] usb: cdns3: gadget: Fix full-speed mode
-Date:   Mon, 7 Oct 2019 15:16:01 +0300
-Message-ID: <20191007121601.25996-3-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007121601.25996-1-rogerq@ti.com>
-References: <20191007121601.25996-1-rogerq@ti.com>
+Message-ID: <fc2b8ebb-f7f8-555e-ec36-bad2e531d194@ti.com>
+Date:   Mon, 7 Oct 2019 15:20:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <1570449803-15299-1-git-send-email-pawell@cadence.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We need to disable USB3 PHY for full-speed mode else
-gadget mode is broken.
 
-Signed-off-by: Roger Quadros <rogerq@ti.com>
-Signed-off-by: Sekhar Nori <nsekhar@ti.com>
----
- drivers/usb/cdns3/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-index 228cdc4ab886..157536753b8c 100644
---- a/drivers/usb/cdns3/gadget.c
-+++ b/drivers/usb/cdns3/gadget.c
-@@ -2571,6 +2571,7 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
- 	switch (max_speed) {
- 	case USB_SPEED_FULL:
- 		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
-+		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
- 		break;
- 	case USB_SPEED_HIGH:
- 		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+On 07/10/2019 15:03, Pawel Laszczak wrote:
+> This patch restores the correct DMA mask after switching back to device
+> mode.
+> The issue occurred because Device part of controller use 32 bits DMA and
+> Host side use 64 bits DMA. During loading XHCI driver the DMA mask
+> used by driver is overwritten by XHCI driver so it must be restored
+> to 32 bits.
+> 
+> Reported-by: Pawel Laszczak <pawell@cadence.com>
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+
+Tested-by: Roger Quadros <rogerq@ti.com>
+
+> ---
+>   drivers/usb/cdns3/gadget.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> index 157536753b8c..2ca280f4c054 100644
+> --- a/drivers/usb/cdns3/gadget.c
+> +++ b/drivers/usb/cdns3/gadget.c
+> @@ -2663,6 +2663,13 @@ static int __cdns3_gadget_init(struct cdns3 *cdns)
+>   {
+>   	int ret = 0;
+>   
+> +	/* Ensure 32-bit DMA Mask in case we switched back from Host mode */
+> +	ret = dma_set_mask_and_coherent(cdns->dev, DMA_BIT_MASK(32));
+> +	if (ret) {
+> +		dev_err(cdns->dev, "Failed to set dma mask: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+>   	cdns3_drd_switch_gadget(cdns, 1);
+>   	pm_runtime_get_sync(cdns->dev);
+>   
+> 
+
 -- 
+cheers,
+-roger
+
 Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
 Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
-
