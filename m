@@ -2,58 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B815ECE7B6
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 17:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3543CE7DC
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 17:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728753AbfJGPgW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 11:36:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727876AbfJGPgW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Oct 2019 11:36:22 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DD282206C2;
-        Mon,  7 Oct 2019 15:36:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570462581;
-        bh=E/ltM2kjdhSKlUTVtYaNcpPKHP81l4wIo/fVo8ykSjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FM0uCSWmh9mYzAe6waMA2WXlCa3dlIxKSPqmnyNWZER9zzc1Kt5nZWi6BX0MCywpR
-         JRCQHt6TOcJ0/GeU/qBuCWCI49wBcs+xF+OBhxHliAdQ4zwGkYLinjnCnMfWh9SyQM
-         ppgriF3qOCJcAQVuj54NUbaJthNa+8zCuvYwID78=
-Date:   Mon, 7 Oct 2019 17:36:18 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Chris Clayton <chris2553@googlemail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Linux SCSI Mailinglist <linux-scsi@vger.kernel.org>
-Subject: Re: depmod warning on 5.4-rc2
-Message-ID: <20191007153618.GB985210@kroah.com>
-References: <9047f80f-f6eb-a45d-2505-08e4ad3a92df@googlemail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9047f80f-f6eb-a45d-2505-08e4ad3a92df@googlemail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        id S1729112AbfJGPjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 11:39:23 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:2577 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729083AbfJGPjX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 11:39:23 -0400
+X-IronPort-AV: E=Sophos;i="5.67,268,1566831600"; 
+   d="scan'208";a="28273756"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 08 Oct 2019 00:39:20 +0900
+Received: from be1yocto.ree.adwin.renesas.com (unknown [172.29.43.62])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 395474008AA2;
+        Tue,  8 Oct 2019 00:39:18 +0900 (JST)
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Biju Das <biju.das@bp.renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH] usb: typec: hd3ss3220: hd3ss3220_probe() warn: passing zero to 'PTR_ERR'
+Date:   Mon,  7 Oct 2019 16:38:49 +0100
+Message-Id: <1570462729-25722-1-git-send-email-biju.das@bp.renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 07:07:38AM +0100, Chris Clayton wrote:
-> Just built and installed  -rc2 and get the following when depmod is run.
-> 
-> depmod: WARNING: /lib/modules/5.4.0-rc2/kernel/drivers/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
-> depmod: WARNING: /lib/modules/5.4.0-rc2/kernel/drivers/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
-> 
-> .config is attached.
-> 
-> Please cc me on any reply, I'm not subscribed to any of the lists
+This patch fixes the warning passing zero to 'PTR_ERR' by changing the
+check from 'IS_ERR_OR_NULL' to 'IS_ERR'. Also improved the error handling
+on probe function.
 
-This is a known issue in depmod right now, people are working on it if
-you look at the kbuild mailing list...
+Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Biju Das <biju.das@bp.renesas.com>
+---
+ drivers/usb/typec/hd3ss3220.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+index 1900910..7e5f3f7 100644
+--- a/drivers/usb/typec/hd3ss3220.c
++++ b/drivers/usb/typec/hd3ss3220.c
+@@ -178,7 +178,7 @@ static int hd3ss3220_probe(struct i2c_client *client,
+ 
+ 	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
+ 	fwnode_handle_put(connector);
+-	if (IS_ERR_OR_NULL(hd3ss3220->role_sw))
++	if (IS_ERR(hd3ss3220->role_sw))
+ 		return PTR_ERR(hd3ss3220->role_sw);
+ 
+ 	hd3ss3220->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+@@ -188,20 +188,22 @@ static int hd3ss3220_probe(struct i2c_client *client,
+ 
+ 	hd3ss3220->port = typec_register_port(&client->dev,
+ 					      &hd3ss3220->typec_cap);
+-	if (IS_ERR(hd3ss3220->port))
+-		return PTR_ERR(hd3ss3220->port);
++	if (IS_ERR(hd3ss3220->port)) {
++		ret = PTR_ERR(hd3ss3220->port);
++		goto err_put_role;
++	}
+ 
+ 	hd3ss3220_set_role(hd3ss3220);
+ 	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+ 	if (ret < 0)
+-		goto error;
++		goto err_unreg_port;
+ 
+ 	if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
+ 		ret = regmap_write(hd3ss3220->regmap,
+ 				HD3SS3220_REG_CN_STAT_CTRL,
+ 				data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+ 		if (ret < 0)
+-			goto error;
++			goto err_unreg_port;
+ 	}
+ 
+ 	if (client->irq > 0) {
+@@ -210,18 +212,19 @@ static int hd3ss3220_probe(struct i2c_client *client,
+ 					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+ 					"hd3ss3220", &client->dev);
+ 		if (ret)
+-			goto error;
++			goto err_unreg_port;
+ 	}
+ 
+ 	ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
+ 	if (ret < 0)
+-		goto error;
++		goto err_unreg_port;
+ 
+ 	dev_info(&client->dev, "probed revision=0x%x\n", ret);
+ 
+ 	return 0;
+-error:
++err_unreg_port:
+ 	typec_unregister_port(hd3ss3220->port);
++err_put_role:
+ 	usb_role_switch_put(hd3ss3220->role_sw);
+ 
+ 	return ret;
+-- 
+2.7.4
 
-greg k-h
