@@ -2,155 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8418CDDC5
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 10:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DF1CDF1E
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 12:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727324AbfJGIxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 04:53:53 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41984 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726969AbfJGIxx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 04:53:53 -0400
-Received: by mail-ot1-f65.google.com with SMTP id c10so10282687otd.9;
-        Mon, 07 Oct 2019 01:53:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CJwKV7c7t/InKjt3W1JAfd08/WuICvTQvlCpRokAAT4=;
-        b=JZsJbEAtMupq39HYi7Swlw74wlZB/YN+0NI8P5hHgWhnpFwsFYte+lK81acNG5IwcP
-         WbdXnFGca2T6Q3/0UAfm9V8n/f7SdBQB5Vs83JrgCcQspa+KL4XOFEzTOh4iUhq9g1HX
-         PIQbxBxRAd3MbA3atIkpAfydFj8wr4/17I1WMELd5mxBRDaz6MYth3BF4SyuPA/T+riZ
-         7kkmry5fYP7/aan03TMyJS3+2hbTLB+uzs2zKzI/1UBuTrXJ20pEYpzZ0bWnzrZdgUpO
-         8THbp/iTu0dJHrxfkcTzVH49hP5RzO1YwE8+o7lp/RftEVMbQuz44gLkyAWtdIk45l1M
-         LG5A==
-X-Gm-Message-State: APjAAAUsDzTC9EzJdq2M6w3qDVOv+k2BT4wuxOCQq+nBzfjMnCGdhy15
-        8akzIhCNv7f9qjCOlQfk/4Po0TskhAE48Fb0TL0=
-X-Google-Smtp-Source: APXvYqxd7Uuq1CmQMDkAVpN2R6vBlawdYZlMBeX0j4oXaYN2xzYqLJ3l+UKWnYWMoDRX3+SxZt8bj7LwTwzcq8QMQPg=
-X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr20698608oth.266.1570438432341;
- Mon, 07 Oct 2019 01:53:52 -0700 (PDT)
+        id S1727334AbfJGKWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 06:22:31 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:43652 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbfJGKWa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 06:22:30 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x97AJJ9K096797;
+        Mon, 7 Oct 2019 10:22:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=zRhaoJf1IYCzNl91rFA2hoUUNaBQLG5Ixrc7LjJhwME=;
+ b=feJvXfvosbX8esA8u/DZ3xgJn5smmQvtPdGF6J9Wq6CUhujq3gbdZrFn6Z4uW7hY+0s3
+ JT2FxKnQykaTm9M8wFLjyNKGVpj0xwkvmvcdTHAsSInhUlPbEWRO9bslaGBOmT6trEXC
+ b9GDnx+8sWwex5TaIvnWhAbOihKbhSWG/1vK3Bp5Y2jg2c3C5vyIF5HfqpdmxU9IX3QL
+ HkRCsWoWPTCq7IYA3/KGDeq0Mra4ejis7D77zo6OFT7MAkVfFS3SYgWwgT9Df8Ol1Jgh
+ UoQQ+zxAOAkTLLJ1EZL+OPRd4EL0uytdhhN5Jf/xhQCtFYYXhfNMW7MXxud6Ar229uxM 8Q== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2vejku5v4y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 07 Oct 2019 10:22:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x97AJ3IM004175;
+        Mon, 7 Oct 2019 10:22:24 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2vg203dydm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 07 Oct 2019 10:22:24 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x97AMLmW004990;
+        Mon, 7 Oct 2019 10:22:22 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 07 Oct 2019 03:22:21 -0700
+Date:   Mon, 7 Oct 2019 13:22:14 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     kbuild@01.org, Biju Das <biju.das@bp.renesas.com>
+Cc:     kbuild-all@01.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [usb:usb-next 32/38] drivers/usb/typec/hd3ss3220.c:182
+ hd3ss3220_probe() warn: passing zero to 'PTR_ERR'
+Message-ID: <20191007102214.GE21515@kadam>
 MIME-Version: 1.0
-References: <20191005210449.3926-1-hdegoede@redhat.com> <20191005210449.3926-2-hdegoede@redhat.com>
-In-Reply-To: <20191005210449.3926-2-hdegoede@redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 7 Oct 2019 10:53:40 +0200
-Message-ID: <CAJZ5v0jXoUG+iP+ydhTpnNKTaUJB7vWQhvFbZOK25eU4aGzPaA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] driver core: platform: Add platform_get_irq_byname_optional()
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Stephen Boyd <swboyd@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9402 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910070103
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9402 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1034
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910070103
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 5, 2019 at 11:04 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Some drivers (e.g dwc3) first try to get an IRQ byname and then fall
-> back to the one at index 0. In this case we do not want the error(s)
-> printed by platform_get_irq_byname(). This commit adds a new
-> platform_get_irq_byname_optional(), which does not print errors, for this.
->
-> While at it also improve the kdoc text for platform_get_irq_byname() a bit.
->
-> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=205037
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   dd3fd317e2beb899cbffcf364de049b9f9a02db5
+commit: 1c48c759ef4bb9031b3347277f04484e07e27d97 [32/38] usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller
 
-No issues found:
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+smatch warnings:
+drivers/usb/typec/hd3ss3220.c:182 hd3ss3220_probe() warn: passing zero to 'PTR_ERR'
 
-> ---
->  drivers/base/platform.c         | 46 ++++++++++++++++++++++++++++-----
->  include/linux/platform_device.h |  2 ++
->  2 files changed, 41 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-> index b6c6c7d97d5b..b230beb6ccb4 100644
-> --- a/drivers/base/platform.c
-> +++ b/drivers/base/platform.c
-> @@ -241,12 +241,8 @@ struct resource *platform_get_resource_byname(struct platform_device *dev,
->  }
->  EXPORT_SYMBOL_GPL(platform_get_resource_byname);
->
-> -/**
-> - * platform_get_irq_byname - get an IRQ for a device by name
-> - * @dev: platform device
-> - * @name: IRQ name
-> - */
-> -int platform_get_irq_byname(struct platform_device *dev, const char *name)
-> +static int __platform_get_irq_byname(struct platform_device *dev,
-> +                                    const char *name)
->  {
->         struct resource *r;
->
-> @@ -262,11 +258,47 @@ int platform_get_irq_byname(struct platform_device *dev, const char *name)
->         if (r)
->                 return r->start;
->
-> -       dev_err(&dev->dev, "IRQ %s not found\n", name);
->         return -ENXIO;
->  }
-> +
-> +/**
-> + * platform_get_irq_byname - get an IRQ for a device by name
-> + * @dev: platform device
-> + * @name: IRQ name
-> + *
-> + * Get an IRQ like platform_get_irq(), but then by name rather then by index.
-> + *
-> + * Return: IRQ number on success, negative error number on failure.
-> + */
-> +int platform_get_irq_byname(struct platform_device *dev, const char *name)
-> +{
-> +       int ret;
-> +
-> +       ret = __platform_get_irq_byname(dev, name);
-> +       if (ret < 0 && ret != -EPROBE_DEFER)
-> +               dev_err(&dev->dev, "IRQ %s not found\n", name);
-> +
-> +       return ret;
-> +}
->  EXPORT_SYMBOL_GPL(platform_get_irq_byname);
->
-> +/**
-> + * platform_get_irq_byname_optional - get an optional IRQ for a device by name
-> + * @dev: platform device
-> + * @name: IRQ name
-> + *
-> + * Get an optional IRQ by name like platform_get_irq_byname(). Except that it
-> + * does not print an error message if an IRQ can not be obtained.
-> + *
-> + * Return: IRQ number on success, negative error number on failure.
-> + */
-> +int platform_get_irq_byname_optional(struct platform_device *dev,
-> +                                    const char *name)
-> +{
-> +       return __platform_get_irq_byname(dev, name);
-> +}
-> +EXPORT_SYMBOL_GPL(platform_get_irq_byname_optional);
-> +
->  /**
->   * platform_add_devices - add a numbers of platform devices
->   * @devs: array of platform devices to add
-> diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> index 1b5cec067533..f2688404d1cd 100644
-> --- a/include/linux/platform_device.h
-> +++ b/include/linux/platform_device.h
-> @@ -64,6 +64,8 @@ extern struct resource *platform_get_resource_byname(struct platform_device *,
->                                                      unsigned int,
->                                                      const char *);
->  extern int platform_get_irq_byname(struct platform_device *, const char *);
-> +extern int platform_get_irq_byname_optional(struct platform_device *dev,
-> +                                           const char *name);
->  extern int platform_add_devices(struct platform_device **, int);
->
->  struct platform_device_info {
-> --
-> 2.23.0
->
+# https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=1c48c759ef4bb9031b3347277f04484e07e27d97
+git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
+git remote update usb
+git checkout 1c48c759ef4bb9031b3347277f04484e07e27d97
+vim +/PTR_ERR +182 drivers/usb/typec/hd3ss3220.c
+
+1c48c759ef4bb9 Biju Das 2019-09-04  152  
+1c48c759ef4bb9 Biju Das 2019-09-04  153  static int hd3ss3220_probe(struct i2c_client *client,
+1c48c759ef4bb9 Biju Das 2019-09-04  154  		const struct i2c_device_id *id)
+1c48c759ef4bb9 Biju Das 2019-09-04  155  {
+1c48c759ef4bb9 Biju Das 2019-09-04  156  	struct hd3ss3220 *hd3ss3220;
+1c48c759ef4bb9 Biju Das 2019-09-04  157  	struct fwnode_handle *connector;
+1c48c759ef4bb9 Biju Das 2019-09-04  158  	int ret;
+1c48c759ef4bb9 Biju Das 2019-09-04  159  	unsigned int data;
+1c48c759ef4bb9 Biju Das 2019-09-04  160  
+1c48c759ef4bb9 Biju Das 2019-09-04  161  	hd3ss3220 = devm_kzalloc(&client->dev, sizeof(struct hd3ss3220),
+1c48c759ef4bb9 Biju Das 2019-09-04  162  				 GFP_KERNEL);
+1c48c759ef4bb9 Biju Das 2019-09-04  163  	if (!hd3ss3220)
+1c48c759ef4bb9 Biju Das 2019-09-04  164  		return -ENOMEM;
+1c48c759ef4bb9 Biju Das 2019-09-04  165  
+1c48c759ef4bb9 Biju Das 2019-09-04  166  	i2c_set_clientdata(client, hd3ss3220);
+1c48c759ef4bb9 Biju Das 2019-09-04  167  
+1c48c759ef4bb9 Biju Das 2019-09-04  168  	hd3ss3220->dev = &client->dev;
+1c48c759ef4bb9 Biju Das 2019-09-04  169  	hd3ss3220->regmap = devm_regmap_init_i2c(client, &config);
+1c48c759ef4bb9 Biju Das 2019-09-04  170  	if (IS_ERR(hd3ss3220->regmap))
+1c48c759ef4bb9 Biju Das 2019-09-04  171  		return PTR_ERR(hd3ss3220->regmap);
+1c48c759ef4bb9 Biju Das 2019-09-04  172  
+1c48c759ef4bb9 Biju Das 2019-09-04  173  	hd3ss3220_set_source_pref(hd3ss3220,
+1c48c759ef4bb9 Biju Das 2019-09-04  174  				  HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_DEFAULT);
+1c48c759ef4bb9 Biju Das 2019-09-04  175  	connector = device_get_named_child_node(hd3ss3220->dev, "connector");
+1c48c759ef4bb9 Biju Das 2019-09-04  176  	if (IS_ERR(connector))
+1c48c759ef4bb9 Biju Das 2019-09-04  177  		return PTR_ERR(connector);
+1c48c759ef4bb9 Biju Das 2019-09-04  178  
+1c48c759ef4bb9 Biju Das 2019-09-04  179  	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
+1c48c759ef4bb9 Biju Das 2019-09-04  180  	fwnode_handle_put(connector);
+1c48c759ef4bb9 Biju Das 2019-09-04  181  	if (IS_ERR_OR_NULL(hd3ss3220->role_sw))
+1c48c759ef4bb9 Biju Das 2019-09-04 @182  		return PTR_ERR(hd3ss3220->role_sw);
+
+When fwnode_usb_role_switch_get() returns NULL then we return success
+here.  It seems like a bug.
+
+When function returns a mix of NULL and error pointers then NULL is a
+special case of success.  For example, a module tries to request a
+feature but that feature is deliberately turned off.  It's not an error
+so we can't return an error pointer, but at same time we can't return
+a valid pointer because the feature is disabled.
+
+For fwnode_usb_role_switch_get() it is a bit unclear to me what NULL
+means in that context, and there are no comments to explain it...  The
+fwnode_connection_find_match() is the same way where it mixes NULL and
+error pointers, doesn't have a comment, and it really seems like NULL is
+an error, not a special case of success like it's supposed to be.  I
+have added Heikki Krogerus to the CC list.
+
+1c48c759ef4bb9 Biju Das 2019-09-04  183  
+1c48c759ef4bb9 Biju Das 2019-09-04  184  	hd3ss3220->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+1c48c759ef4bb9 Biju Das 2019-09-04  185  	hd3ss3220->typec_cap.dr_set = hd3ss3220_dr_set;
+1c48c759ef4bb9 Biju Das 2019-09-04  186  	hd3ss3220->typec_cap.type = TYPEC_PORT_DRP;
+1c48c759ef4bb9 Biju Das 2019-09-04  187  	hd3ss3220->typec_cap.data = TYPEC_PORT_DRD;
+1c48c759ef4bb9 Biju Das 2019-09-04  188  
+1c48c759ef4bb9 Biju Das 2019-09-04  189  	hd3ss3220->port = typec_register_port(&client->dev,
+1c48c759ef4bb9 Biju Das 2019-09-04  190  					      &hd3ss3220->typec_cap);
+1c48c759ef4bb9 Biju Das 2019-09-04  191  	if (IS_ERR(hd3ss3220->port))
+1c48c759ef4bb9 Biju Das 2019-09-04  192  		return PTR_ERR(hd3ss3220->port);
+
+This error path should call usb_role_switch_put(hd3ss3220->role_sw) and
+probably a fwnode_handle_put() as well?
+
+I noticed this because I scrolled to the bottom of the fucntion and
+noticed that there was only one error label.  When you see a single
+error label like that, it's normally a red flag that the error handling
+is buggy.  Error labels should have descriptive names which say what
+they do.  I suggest something like:
+
+err_unreg_port:
+	typec_unregister_port(hd3ss3220->port);
+err_put_role:
+	usb_role_switch_put(hd3ss3220->role_sw);
+err_put_handle:
+	fwnode_handle_put(foo bar);
+
+	return ret;
+
+The rule behind this style of error handling is that you just have to
+keep track of the most recently allocated resource and at the bottom
+you free them in the reverse order from how you allocated them.  Here we
+had allocated ->role_sw but the typec_register_port() so we do goto
+free_role_sw;  Now people can guess what the goto does because the
+name is descriptive and since it matches the most recently allocated
+resource that means it's okay.
+
+1c48c759ef4bb9 Biju Das 2019-09-04  193  
+1c48c759ef4bb9 Biju Das 2019-09-04  194  	hd3ss3220_set_role(hd3ss3220);
+1c48c759ef4bb9 Biju Das 2019-09-04  195  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+1c48c759ef4bb9 Biju Das 2019-09-04  196  	if (ret < 0)
+1c48c759ef4bb9 Biju Das 2019-09-04  197  		goto error;
+1c48c759ef4bb9 Biju Das 2019-09-04  198  
+1c48c759ef4bb9 Biju Das 2019-09-04  199  	if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
+1c48c759ef4bb9 Biju Das 2019-09-04  200  		ret = regmap_write(hd3ss3220->regmap,
+1c48c759ef4bb9 Biju Das 2019-09-04  201  				HD3SS3220_REG_CN_STAT_CTRL,
+1c48c759ef4bb9 Biju Das 2019-09-04  202  				data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+1c48c759ef4bb9 Biju Das 2019-09-04  203  		if (ret < 0)
+1c48c759ef4bb9 Biju Das 2019-09-04  204  			goto error;
+1c48c759ef4bb9 Biju Das 2019-09-04  205  	}
+1c48c759ef4bb9 Biju Das 2019-09-04  206  
+1c48c759ef4bb9 Biju Das 2019-09-04  207  	if (client->irq > 0) {
+1c48c759ef4bb9 Biju Das 2019-09-04  208  		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
+1c48c759ef4bb9 Biju Das 2019-09-04  209  					hd3ss3220_irq_handler,
+1c48c759ef4bb9 Biju Das 2019-09-04  210  					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+1c48c759ef4bb9 Biju Das 2019-09-04  211  					"hd3ss3220", &client->dev);
+1c48c759ef4bb9 Biju Das 2019-09-04  212  		if (ret)
+1c48c759ef4bb9 Biju Das 2019-09-04  213  			goto error;
+1c48c759ef4bb9 Biju Das 2019-09-04  214  	}
+1c48c759ef4bb9 Biju Das 2019-09-04  215  
+1c48c759ef4bb9 Biju Das 2019-09-04  216  	ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
+1c48c759ef4bb9 Biju Das 2019-09-04  217  	if (ret < 0)
+1c48c759ef4bb9 Biju Das 2019-09-04  218  		goto error;
+1c48c759ef4bb9 Biju Das 2019-09-04  219  
+1c48c759ef4bb9 Biju Das 2019-09-04  220  	dev_info(&client->dev, "probed revision=0x%x\n", ret);
+1c48c759ef4bb9 Biju Das 2019-09-04  221  
+1c48c759ef4bb9 Biju Das 2019-09-04  222  	return 0;
+1c48c759ef4bb9 Biju Das 2019-09-04  223  error:
+1c48c759ef4bb9 Biju Das 2019-09-04  224  	typec_unregister_port(hd3ss3220->port);
+1c48c759ef4bb9 Biju Das 2019-09-04  225  	usb_role_switch_put(hd3ss3220->role_sw);
+1c48c759ef4bb9 Biju Das 2019-09-04  226  
+1c48c759ef4bb9 Biju Das 2019-09-04  227  	return ret;
+1c48c759ef4bb9 Biju Das 2019-09-04  228  }
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
