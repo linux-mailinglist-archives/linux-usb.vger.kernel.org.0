@@ -2,351 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 953C1CE0B8
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 13:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70429CE12A
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 14:04:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbfJGLl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 07:41:59 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:39570 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727411AbfJGLl6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 07:41:58 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x97BfrMT125478;
-        Mon, 7 Oct 2019 06:41:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1570448513;
-        bh=nH9TZ4hROoUMfZWTGhD+I02NEf8Kpjkulam8+3HbjLo=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=qPnX75pQZg4DcNeIpM6QbAMilecYZ9u4j41toHNjYVPzF+e9gPzUsNPWlCQk2OPyP
-         paIa54zQtr9Ck2fNBNlDV5VnjDTITEgihgQk/I1vwogq3pRf0GgAeAdV33o3Ii3I6M
-         SFOxFKjJz3znLOEglC+673dC5cLJUA79UL//lYFw=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97Bfr0U056657;
-        Mon, 7 Oct 2019 06:41:53 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 7 Oct
- 2019 06:41:51 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Mon, 7 Oct 2019 06:41:49 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x97BfjMM024908;
-        Mon, 7 Oct 2019 06:41:50 -0500
-From:   Roger Quadros <rogerq@ti.com>
+        id S1727984AbfJGMEC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 08:04:02 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:45528 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727490AbfJGMEB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 08:04:01 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x97C3o9O002479;
+        Mon, 7 Oct 2019 05:03:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=0uIp/AhWIWGVgvND+Fwu1dAZVZUhbMBbuX2ojfPD5qY=;
+ b=mCcAMhc/UnHwJyLFWXc2+Sg11D46O4MaqQRcFRnlUc4f7NeIc3hUeRZsNDtjjUWbfIbt
+ 8wnFn8ovY7fZlRW6iffUPpB34UdelipVsmK3XNQICA1I5IvmGsPkX3pcB+b9OrelWas1
+ sx62g1+bbkgPAA+pNQ+Wpm5oAu9jxx5inlikbdbsELC6LjkvZCBx+Z7vGKfg3R5XRAAb
+ Hy8yBz7Z9ojcJFzfjrUvWXiClveXCXe/ZIis77xy1wpe0QEzGkPn4SgHFHmk/XJaA8Yp
+ zZuhi6K2I0QCxo8QbxPzRtBPKi1XBZb8LeJPLsvexOxyKbi/2hvHM5ZTCnnF4yoxKXn7 Iw== 
+Received: from nam03-by2-obe.outbound.protection.outlook.com (mail-by2nam03lp2058.outbound.protection.outlook.com [104.47.42.58])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 2vepry680b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 07 Oct 2019 05:03:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GoZ9Jn0Hhw+u3bZlCmRbs3W3VDfGR9GEXLBkclMMmiKhhcdoJ0dOrEdqBHa+4niX/Bhw1VmUjq9FgnwPwyCMEJ2yXAT+503ti8gsvblFDN6ZYVv7+VgntOYml2m0p8oYdJ+rRBUK5SjpQ7KH28KRKXibCnwg+L7PX81cMV2VsWr6dJVRS8VN7BrFhEIjemdNeAOkXMR0oo5WMwHZKCy5DI8QHtq9a7HUorOozqMwcqDmazhl6ioGXYSPmXiG8C1HpwSnylkm44PdDUH9hh/Ji/8w8/xD4LiDb9F+nXnq48m3l8IuDAq99qtbvYZsRKKIvAIOXiX/FBFjqysYx21SDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0uIp/AhWIWGVgvND+Fwu1dAZVZUhbMBbuX2ojfPD5qY=;
+ b=FL8nznCUtY5f34R5WkR8AAbg4bfo2TGEEyv6nO7evu4W42+nXksZZEHXf73l8BA983Bxz1EGBGn0A3rR7rWJkKfpKhCgU4/SY0cPHNk1sc6IvAhModBpm4I4jq3Hku3PhyvfdQJIEarVaKl3oF0E/q/fJPepGcdqp/evUoNMrg2TYc1Ii3nlSmoTq2wIsLxj8PRtd9Hyup+IHIMaFfjkLxwwJ9CjOUoDgwF/TKgNFJI6ffuJhEFlCufphtmMYjVCdcOD9YD+a7C9XX1pOn+obZ/S8RafthVsXafLr0hsWJ5GY8s2lKlyae4w0WNHdsL6ai1p1nGoeitnm9DCSPzkRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 158.140.1.28) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=cadence.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0uIp/AhWIWGVgvND+Fwu1dAZVZUhbMBbuX2ojfPD5qY=;
+ b=wIQUFRQFtKWO85nngLKy3PuOEUaezo3ENxXDKqSyd2sbvJiMp/0HL24T6DPddP5gtHmADmLpE5x9JLPP/ldzZ5+LCxJRj57/7ciznbNWPp977Z7S1pdawxo4tDeUxtq/3aVCZE2G5CIYK+GmE7faPuEd4p6bg/y3idRg019Uk9Y=
+Received: from DM5PR07CA0044.namprd07.prod.outlook.com (2603:10b6:3:16::30) by
+ BN6PR07MB3203.namprd07.prod.outlook.com (2603:10b6:404:a6::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.24; Mon, 7 Oct 2019 12:03:48 +0000
+Received: from CO1NAM05FT034.eop-nam05.prod.protection.outlook.com
+ (2a01:111:f400:7e50::200) by DM5PR07CA0044.outlook.office365.com
+ (2603:10b6:3:16::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2327.24 via Frontend
+ Transport; Mon, 7 Oct 2019 12:03:48 +0000
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ cadence.com discourages use of 158.140.1.28 as permitted sender)
+Received: from sjmaillnx1.cadence.com (158.140.1.28) by
+ CO1NAM05FT034.mail.protection.outlook.com (10.152.96.146) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.8 via Frontend Transport; Mon, 7 Oct 2019 12:03:48 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id x97C3j1u012849
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Mon, 7 Oct 2019 05:03:47 -0700
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Mon, 7 Oct 2019 14:03:45 +0200
+Received: from lvlogina.cadence.com (10.165.176.102) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Mon, 7 Oct 2019 14:03:45 +0200
+Received: from lvlogina.cadence.com (localhost.localdomain [127.0.0.1])
+        by lvlogina.cadence.com (8.14.4/8.14.4) with ESMTP id x97C3i6w015716;
+        Mon, 7 Oct 2019 13:03:44 +0100
+Received: (from pawell@localhost)
+        by lvlogina.cadence.com (8.14.4/8.14.4/Submit) id x97C3hGa015702;
+        Mon, 7 Oct 2019 13:03:43 +0100
+From:   Pawel Laszczak <pawell@cadence.com>
 To:     <felipe.balbi@linux.intel.com>
-CC:     <gregkh@linuxfoundation.org>, <pawell@cadence.com>,
-        <nsekhar@ti.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Roger Quadros <rogerq@ti.com>
-Subject: [PATCH 2/2] usb: cdns3: Add TI specific wrapper driver
-Date:   Mon, 7 Oct 2019 14:41:42 +0300
-Message-ID: <20191007114142.5182-3-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191007114142.5182-1-rogerq@ti.com>
-References: <20191007114142.5182-1-rogerq@ti.com>
+CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <rogerq@ti.com>, <linux-kernel@vger.kernel.org>,
+        <jbergsagel@ti.com>, <nsekhar@ti.com>, <nm@ti.com>,
+        <sureshp@cadence.com>, <peter.chen@nxp.com>, <kurahul@cadence.com>,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH] usb: cdns3: Fix for incorrect DMA mask.
+Date:   Mon, 7 Oct 2019 13:03:23 +0100
+Message-ID: <1570449803-15299-1-git-send-email-pawell@cadence.com>
+X-Mailer: git-send-email 1.7.11.2
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-Forefront-Antispam-Report: CIP:158.140.1.28;IPV:CAL;SCL:-1;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(396003)(136003)(39850400004)(36092001)(199004)(189003)(4326008)(36756003)(26826003)(478600001)(5660300002)(87636003)(2351001)(2906002)(4720700003)(6666004)(356004)(48376002)(47776003)(107886003)(76130400001)(70206006)(305945005)(50226002)(50466002)(16586007)(186003)(26005)(86362001)(6916009)(246002)(7636002)(70586007)(336012)(126002)(486006)(8676002)(54906003)(42186006)(426003)(8936002)(2616005)(476003)(316002)(51416003);DIR:OUT;SFP:1101;SCL:1;SRVR:BN6PR07MB3203;H:sjmaillnx1.cadence.com;FPR:;SPF:SoftFail;LANG:en;PTR:corp.cadence.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: e5a37f07-b8cd-4abd-45af-08d74b1e694d
+X-MS-TrafficTypeDiagnostic: BN6PR07MB3203:
+X-Microsoft-Antispam-PRVS: <BN6PR07MB32030E083F9B51BFBA5AE0F2DD9B0@BN6PR07MB3203.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-Forefront-PRVS: 01834E39B7
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: odupIDn9czqeBRVasxrg8tktpsANJcuY+MwC06RyIhsLlucO0j2cCsGdUBP5x8BNe8BhAoWW9xSnxbFKtmo3ZfGpyuZOIdhVTemPl1P13sReRoNw4w4flLknO0gHVuCjcCEp4iEtjBBfOOe3w3sMjkhfZJV/WSw0mzrffxOQIUUitjDMS+v1vW7TMV0Ywy/CDkuO7yYcGQROPHWI06QebMRWsyG8x9kp0XJULgz1rU0tmrCFAoRFo7VqHUHCpLjiWxGMx35CfqFau/j6f+ZQCdBapLQ6ZMuaI93YwxHZJTT4AGxd9ay2ctKZZilC7I57tqalCD5/ge2O1SGMzuUB6633qwHOUdrTCp3s/TK9i7qDlUB9sM8UoRwAnb/bXgEZShMh4EGDhlB0J/PSLT3npwsQUoysXGoW7mQIFWGEdTE=
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2019 12:03:48.2947
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5a37f07-b8cd-4abd-45af-08d74b1e694d
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.28];Helo=[sjmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR07MB3203
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-07_02:2019-10-07,2019-10-07 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
+ adultscore=0 impostorscore=0 clxscore=1015 priorityscore=1501 mlxscore=0
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=918 phishscore=0 suspectscore=1
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910070120
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The J721e platform comes with 2 Cadence USB3 controller
-instances. This driver supports the TI specific wrapper
-on this platform.
+This patch restores the correct DMA mask after switching back to device
+mode.
+The issue occurred because Device part of controller use 32 bits DMA and
+Host side use 64 bits DMA. During loading XHCI driver the DMA mask
+used by driver is overwritten by XHCI driver so it must be restored
+to 32 bits.
 
+Reported-by: Pawel Laszczak <pawell@cadence.com>
 Signed-off-by: Roger Quadros <rogerq@ti.com>
-Signed-off-by: Sekhar Nori <nsekhar@ti.com>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
 ---
- drivers/usb/cdns3/Kconfig    |  10 ++
- drivers/usb/cdns3/Makefile   |   1 +
- drivers/usb/cdns3/cdns3-ti.c | 244 +++++++++++++++++++++++++++++++++++
- 3 files changed, 255 insertions(+)
- create mode 100644 drivers/usb/cdns3/cdns3-ti.c
+ drivers/usb/cdns3/gadget.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
-index d0331613a355..2a1e89d12ed9 100644
---- a/drivers/usb/cdns3/Kconfig
-+++ b/drivers/usb/cdns3/Kconfig
-@@ -43,4 +43,14 @@ config USB_CDNS3_PCI_WRAP
- 	  If you choose to build this driver as module it will
- 	  be dynamically linked and module will be called cdns3-pci.ko
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 157536753b8c..2ca280f4c054 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -2663,6 +2663,13 @@ static int __cdns3_gadget_init(struct cdns3 *cdns)
+ {
+ 	int ret = 0;
  
-+config USB_CDNS3_TI
-+	tristate "Cadence USB3 support on TI platforms"
-+	depends on ARCH_K3 || COMPILE_TEST
-+	default USB_CDNS3
-+	help
-+	  Say 'Y' or 'M' here if you are building for Texas Instruments
-+	  platforms that contain Cadence USB3 controller core.
++	/* Ensure 32-bit DMA Mask in case we switched back from Host mode */
++	ret = dma_set_mask_and_coherent(cdns->dev, DMA_BIT_MASK(32));
++	if (ret) {
++		dev_err(cdns->dev, "Failed to set dma mask: %d\n", ret);
++		return ret;
++	}
 +
-+	  e.g. J721e.
-+
- endif
-diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
-index a703547350bb..948e6b88d1a9 100644
---- a/drivers/usb/cdns3/Makefile
-+++ b/drivers/usb/cdns3/Makefile
-@@ -14,3 +14,4 @@ endif
- cdns3-$(CONFIG_USB_CDNS3_HOST)		+= host.o
+ 	cdns3_drd_switch_gadget(cdns, 1);
+ 	pm_runtime_get_sync(cdns->dev);
  
- obj-$(CONFIG_USB_CDNS3_PCI_WRAP)	+= cdns3-pci-wrap.o
-+obj-$(CONFIG_USB_CDNS3_TI)		+= cdns3-ti.o
-diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-new file mode 100644
-index 000000000000..7447f5fcbe64
---- /dev/null
-+++ b/drivers/usb/cdns3/cdns3-ti.c
-@@ -0,0 +1,244 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/**
-+ * cdns_ti-ti.c - TI specific Glue layer for Cadence USB Controller
-+ *
-+ * Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com
-+ */
-+
-+#include <linux/bits.h>
-+#include <linux/clk.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/interrupt.h>
-+#include <linux/platform_device.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/io.h>
-+#include <linux/of_platform.h>
-+#include <linux/pm_runtime.h>
-+
-+/* USB Wrapper register offsets */
-+#define USBSS_PID		0x0
-+#define	USBSS_W1		0x4
-+#define USBSS_STATIC_CONFIG	0x8
-+#define USBSS_PHY_TEST		0xc
-+#define	USBSS_DEBUG_CTRL	0x10
-+#define	USBSS_DEBUG_INFO	0x14
-+#define	USBSS_DEBUG_LINK_STATE	0x18
-+#define	USBSS_DEVICE_CTRL	0x1c
-+
-+/* Wrapper 1 register bits */
-+#define USBSS_W1_PWRUP_RST		BIT(0)
-+#define USBSS_W1_OVERCURRENT_SEL	BIT(8)
-+#define USBSS_W1_MODESTRAP_SEL		BIT(9)
-+#define USBSS_W1_OVERCURRENT		BIT(16)
-+#define USBSS_W1_MODESTRAP_MASK		GENMASK(18, 17)
-+#define USBSS_W1_MODESTRAP_SHIFT	17
-+#define USBSS_W1_USB2_ONLY		BIT(19)
-+
-+/* Static config register bits */
-+#define USBSS1_STATIC_PLL_REF_SEL_MASK	GENMASK(8, 5)
-+#define USBSS1_STATIC_PLL_REF_SEL_SHIFT	5
-+#define USBSS1_STATIC_LOOPBACK_MODE_MASK	GENMASK(4, 3)
-+#define USBSS1_STATIC_LOOPBACK_MODE_SHIFT	3
-+#define USBSS1_STATIC_VBUS_SEL_MASK	GENMASK(2, 1)
-+#define USBSS1_STATIC_VBUS_SEL_SHIFT	1
-+#define USBSS1_STATIC_LANE_REVERSE	BIT(0)
-+
-+/* Modestrap modes */
-+enum modestrap_mode { USBSS_MODESTRAP_MODE_NONE,
-+		      USBSS_MODESTRAP_MODE_HOST,
-+		      USBSS_MODESTRAP_MODE_PERIPHERAL};
-+
-+struct cdns_ti {
-+	struct device *dev;
-+	void __iomem *usbss;
-+	int usb2_only:1;
-+	int vbus_divider:1;
-+	struct clk *usb2_refclk;
-+	struct clk *lpm_clk;
-+};
-+
-+static const int cdns_ti_rate_table[] = {	/* in KHZ */
-+	9600,
-+	10000,
-+	12000,
-+	19200,
-+	20000,
-+	24000,
-+	25000,
-+	26000,
-+	38400,
-+	40000,
-+	58000,
-+	50000,
-+	52000,
-+};
-+
-+static inline u32 cdns_ti_readl(struct cdns_ti *data, u32 offset)
-+{
-+	return readl(data->usbss + offset);
-+}
-+
-+static inline void cdns_ti_writel(struct cdns_ti *data, u32 offset, u32 value)
-+{
-+	writel(value, data->usbss + offset);
-+}
-+
-+static int cdns_ti_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct device_node *node = pdev->dev.of_node;
-+	struct cdns_ti *data;
-+	struct resource	*res;
-+	int error;
-+	u32 reg;
-+	int modestrap_mode;
-+	int rate_code, i;
-+	unsigned long rate;
-+
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	data->dev = dev;
-+
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	data->usbss = devm_ioremap_resource(dev, res);
-+	if (IS_ERR(data->usbss))
-+		return PTR_ERR(data->usbss);
-+
-+	data->usb2_refclk = devm_clk_get(dev, "usb2_refclk");
-+	if (IS_ERR(data->usb2_refclk)) {
-+		dev_err(dev, "can't get usb2_refclk\n");
-+		return PTR_ERR(data->usb2_refclk);
-+	}
-+
-+	data->lpm_clk = devm_clk_get(dev, "lpm_clk");
-+	if (IS_ERR(data->lpm_clk)) {
-+		dev_err(dev, "can't get lpm_clk\n");
-+		return PTR_ERR(data->lpm_clk);
-+	}
-+
-+	rate = clk_get_rate(data->usb2_refclk);
-+	rate /= 1000;	/* To KHz */
-+	for (i = 0; i < ARRAY_SIZE(cdns_ti_rate_table); i++) {
-+		if (cdns_ti_rate_table[i] == rate)
-+			break;
-+	}
-+
-+	if (i == ARRAY_SIZE(cdns_ti_rate_table)) {
-+		dev_err(dev, "unsupported usb2_refclk rate: %lu KHz\n", rate);
-+		return -EINVAL;
-+	}
-+
-+	rate_code = i;
-+
-+	pm_runtime_enable(dev);
-+	error = pm_runtime_get_sync(dev);
-+	if (error < 0) {
-+		dev_err(dev, "pm_runtime_get_sync failed: %d\n", error);
-+		goto err_get;
-+	}
-+
-+	/* assert RESET */
-+	reg = cdns_ti_readl(data, USBSS_W1);
-+	reg &= ~USBSS_W1_PWRUP_RST;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+
-+	/* set static config */
-+	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-+	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
-+	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
-+
-+	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
-+	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
-+	if (data->vbus_divider)
-+		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
-+
-+	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
-+	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-+
-+	/* set USB2_ONLY mode if requested */
-+	reg = cdns_ti_readl(data, USBSS_W1);
-+	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
-+	if (data->usb2_only)
-+		reg |= USBSS_W1_USB2_ONLY;
-+
-+	/* set modestrap  */
-+	if (device_property_read_bool(dev, "ti,modestrap-host"))
-+		modestrap_mode = USBSS_MODESTRAP_MODE_HOST;
-+	else if (device_property_read_bool(dev, "ti,modestrap-peripheral"))
-+		modestrap_mode = USBSS_MODESTRAP_MODE_PERIPHERAL;
-+	else
-+		modestrap_mode = USBSS_MODESTRAP_MODE_NONE;
-+
-+	reg |= USBSS_W1_MODESTRAP_SEL;
-+	reg &= ~USBSS_W1_MODESTRAP_MASK;
-+	reg |= modestrap_mode << USBSS_W1_MODESTRAP_SHIFT;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+
-+	/* de-assert RESET */
-+	reg |= USBSS_W1_PWRUP_RST;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+
-+	error = of_platform_populate(node, NULL, NULL, dev);
-+	if (error) {
-+		dev_err(dev, "failed to create children: %d\n", error);
-+		goto err;
-+	}
-+
-+	return 0;
-+
-+err:
-+	pm_runtime_put_sync(data->dev);
-+err_get:
-+	pm_runtime_disable(data->dev);
-+
-+	return error;
-+}
-+
-+static int cdns_ti_remove_core(struct device *dev, void *c)
-+{
-+	struct platform_device *pdev = to_platform_device(dev);
-+
-+	platform_device_unregister(pdev);
-+
-+	return 0;
-+}
-+
-+static int cdns_ti_remove(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+
-+	device_for_each_child(dev, NULL, cdns_ti_remove_core);
-+	pm_runtime_put_sync(dev);
-+	pm_runtime_disable(dev);
-+
-+	platform_set_drvdata(pdev, NULL);
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id cdns_ti_of_match[] = {
-+	{ .compatible = "ti,j721e-usb", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, cdns_ti_of_match);
-+
-+static struct platform_driver cdns_ti_driver = {
-+	.probe		= cdns_ti_probe,
-+	.remove		= cdns_ti_remove,
-+	.driver		= {
-+		.name	= "cdns3-ti",
-+		.of_match_table	= cdns_ti_of_match,
-+	},
-+};
-+
-+module_platform_driver(cdns_ti_driver);
-+
-+MODULE_ALIAS("platform:cdns3-ti");
-+MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Cadence USB3 TI Glue Layer");
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+2.17.1
 
