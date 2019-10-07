@@ -2,141 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E2C1CEC26
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 20:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44484CEC6F
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 21:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728871AbfJGSvI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 7 Oct 2019 14:51:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:58302 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728081AbfJGSvI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 14:51:08 -0400
-Received: from mail-pg1-f199.google.com ([209.85.215.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iHY65-0004k3-Pi
-        for linux-usb@vger.kernel.org; Mon, 07 Oct 2019 18:51:05 +0000
-Received: by mail-pg1-f199.google.com with SMTP id 186so814814pgd.14
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 11:51:05 -0700 (PDT)
+        id S1728273AbfJGTHH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 15:07:07 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41710 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728079AbfJGTHH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 15:07:07 -0400
+Received: by mail-wr1-f68.google.com with SMTP id q9so16604637wrm.8
+        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 12:07:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=95juAPRibRsg5re+laxQpzz0D8Am/jXsPVvZ79cjhUQ=;
+        b=wW6rr+1hS+VmsRnIZrSE0LcWIGuTNm/CGXrzeSUP+yMjFX8ONLJUEFVbaavrpyiD0O
+         xmV6DbtmOrjCDLaongOaRi86y1lq1sgKTl8lmSNE9AvH3YoJEFegf2KVyjj54PuSMRyO
+         cK1uRRL4Ku7+uZkBiAGrilSsrGpN3EyXGxKm9Kt3GlXxPHT6bWYXAFyH8E4iEW03+SNm
+         iLesfPQ2lVCQOvVvx/r5qDetWCgZPzD7BWVwzztUl3WWaDk2YSY1K4TP56uzyURnKzZC
+         UW0QIjYwNVHs6lZW7XmyzGj7YN/Rj8sDaOR6LKGRE6cl85HsjchFtIfrRdMddy8Ucy+a
+         JE6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=xXnK7oD0S+17LMeZ9WTl+25MN7BhkE11C6CYbaSXA0I=;
-        b=qgoEt5PiyknAVlw8MxgyHe7Pb10H/Ok78/E8icgHMoP+DSI8Q5eEjpXyRaTlsunLSh
-         1msvzmQp7bbP3tqKbDCxC1gBY1xaM7zMIMAlN1jD0qTkpt/NsS8Iueo4lN89V2cCcpW4
-         3izJ9zVTOKKtPmKrUMDmrZxewZr7Bo8PSvovjQXIbtCGyNid8PuIrq9bjl6A6MsgzzqC
-         SkBFCwlAB6ahFfjRk3VVu/8403I54SaTtYvODs4TDOxpSR5xJBxLhZF3arLNPBxmiPTf
-         n1LTcSE59eiGiGpeRRLFMk5BNp/ZW+uyRBZhI16HfhSNfOjWgDU3Mf9YBWoZHFL33ZNK
-         V3gA==
-X-Gm-Message-State: APjAAAVBRoEG8dWMx6Rfxb7AI/pVUAuS5EfP+HhoId1LVnmuZ6qKryQe
-        RQiW/heVRwAjiI7fyHcz1KPnHfa1TEKQqei766Wfko7b5VBWNasCKzDpnJbK8e30eMImh3nlZPY
-        Vj3yPtUV3+HzA8o9PO7EIAUE1jl3PQ9OvJs6sqQ==
-X-Received: by 2002:a17:902:a40a:: with SMTP id p10mr30871114plq.149.1570474264467;
-        Mon, 07 Oct 2019 11:51:04 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxPH0vAH2jwBegkvLPOA4RhJ8Li+miRjRGaCiy/JurZoui+Ji1L1sd2xSap2ccHvWr+Kxs/YQ==
-X-Received: by 2002:a17:902:a40a:: with SMTP id p10mr30871095plq.149.1570474264188;
-        Mon, 07 Oct 2019 11:51:04 -0700 (PDT)
-Received: from 2001-b011-380f-3c42-ecd4-c98e-b194-f9c1.dynamic-ip6.hinet.net (2001-b011-380f-3c42-ecd4-c98e-b194-f9c1.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:ecd4:c98e:b194:f9c1])
-        by smtp.gmail.com with ESMTPSA id ce16sm223338pjb.29.2019.10.07.11.51.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 07 Oct 2019 11:51:03 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3594.4.19\))
-Subject: Re: [PATCH 7/8] xhci: Increase STS_SAVE timeout in xhci_suspend()
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20191006120750.5334F2087E@mail.kernel.org>
-Date:   Tue, 8 Oct 2019 02:51:02 +0800
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <993EAB64-6D52-469C-ADC2-2331DFBCA9BD@canonical.com>
-References: <1570190373-30684-8-git-send-email-mathias.nyman@linux.intel.com>
- <20191006120750.5334F2087E@mail.kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-X-Mailer: Apple Mail (2.3594.4.19)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=95juAPRibRsg5re+laxQpzz0D8Am/jXsPVvZ79cjhUQ=;
+        b=rCQXen7OGq/p+OPw25YiVGPu0ZFhtv8nEejwf2RvLtYTeBHTfzNXEqlYpImj5JnfXK
+         Biz1zZJa0MrnOsnX0CeqrUOfMU+FgozpTXKV/TabWKuCqzjHY67QSvxj5Rac3/USTqgT
+         F27bPU0LinbGd5BtvgdDggThd42FJ83NqKku+O5wHgqVxrVxPyzJrZyvNJLQnRctPJ5E
+         HwzQ2Cd+bPPjkBZhoyOjsapzlinIO1hc+tIjGz3zI2r6t/K6Lw7dHtTOlY1N9VYLAPmt
+         ZCPKqt+RrWGWf0InPGvfUfOvPm8/rez8dyJvhqgkb+w3vzdotu76baQ1PMEc1m7PsdWU
+         5qFg==
+X-Gm-Message-State: APjAAAX1YjLGu7GabUtJYhPE4BANCHK1m0CR6HgBGwzRpZCGNBWQRMI/
+        dHT3RCu99ALZ2BiknkRA0gPuE2cmcCC9qg8WLQ7WlQ==
+X-Google-Smtp-Source: APXvYqwtOgoWDzXe4XvcuBAiER1TlL5FYyZ+X3/oRcI/zh6Y8qgusWcdXgu+/X3MKRMM9vnwEhq0Gw2bS6tqef/R2ZM=
+X-Received: by 2002:adf:fc07:: with SMTP id i7mr8880378wrr.50.1570475224332;
+ Mon, 07 Oct 2019 12:07:04 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191007175553.66940-1-john.stultz@linaro.org>
+ <20191007175553.66940-5-john.stultz@linaro.org> <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+In-Reply-To: <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 7 Oct 2019 12:06:53 -0700
+Message-ID: <CALAqxLWB7Vd-H70LLLSW0Fv=_4-saQ9CE2k3-L_43E+F8mLj2w@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 4/5] dt-bindings: usb: dwc3: of-simple: add
+ compatible for HiSi
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sasha,
+On Mon, Oct 7, 2019 at 11:38 AM Rob Herring <robh+dt@kernel.org> wrote:
+>
+> On Mon, Oct 7, 2019 at 12:56 PM John Stultz <john.stultz@linaro.org> wrote:
+> >
+> > Add necessary compatible flag for HiSi's DWC3 so
+> > dwc3-of-simple will probe.
+> >
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Cc: Yu Chen <chenyu56@huawei.com>
+> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > ---
+> > v2: Tweaked clock names as clk_usb3phy_ref didn't seem right.
+> > ---
+> >  .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
+> >  1 file changed, 52 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+>
+> Can you make this a schema.
 
-> On Oct 6, 2019, at 20:07, Sasha Levin <sashal@kernel.org> wrote:
-> 
-> Hi,
-> 
-> [This is an automated email]
-> 
-> This commit has been processed because it contains a "Fixes:" tag,
-> fixing commit: f7fac17ca925 xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic().
-> 
-> The bot has tested the following trees: v5.3.2, v5.2.18, v4.19.76, v4.14.146, v4.9.194, v4.4.194.
-> 
-> v5.3.2: Build OK!
-> v5.2.18: Build OK!
-> v4.19.76: Build OK!
-> v4.14.146: Build OK!
-> v4.9.194: Failed to apply! Possible dependencies:
->    0b6c324c8b60 ("xhci: cleanup and refactor process_ctrl_td()")
->    0f1d832ed1fb ("usb: xhci: Add port test modes support for usb2.")
->    11644a765952 ("xhci: Add quirk to workaround the errata seen on Cavium Thunder-X2 Soc")
->    191edc5e2e51 ("xhci: Fix front USB ports on ASUS PRIME B350M-A")
->    1cc6d8617b91 ("usb: xhci: remove unnecessary second abort try")
->    2a72126de1bb ("xhci: Remove duplicate xhci urb giveback functions")
->    2d6d5769f82d ("xhci: fix non static symbol warning")
->    30a65b45bfb1 ("xhci: cleanup and refactor process_bulk_intr_td()")
->    446b31419cb1 ("xhci: refactor handle_tx_event() urb giveback")
->    4750bc78efdb ("usb: host: xhci support option to disable the xHCI USB2 HW LPM")
->    488dc164914f ("xhci: remove WARN_ON if dma mask is not set for platform devices")
->    4c39d4b949d3 ("usb: xhci: use bus->sysdev for DMA configuration")
->    505f581c48bc ("xhci: simplify if statement to make it more readable")
->    52ab86852f74 ("xhci: remove extra URB_SHORT_NOT_OK checks in xhci, core handles most cases")
->    6b7f40f71234 ("xhci: change xhci_set_link_state() to work with port structures")
->    76a35293b901 ("usb: host: xhci: simplify irq handler return")
->    9983a5fc39bf ("xhci: rename EP_HALT_PENDING to EP_STOP_CMD_PENDING")
->    9ef7fbbb4fdf ("xhci: Rename variables related to transfer descritpors")
->    a6ff6cbf1fab ("usb: xhci: Add helper function xhci_set_power_on().")
->    a7d57abcc8a5 ("xhci: workaround CSS timeout on AMD SNPS 3.0 xHC")
->    d3519b9d9606 ("xhci: Manually give back cancelled URB if we can't queue it for cancel")
->    d9f11ba9f107 ("xhci: Rework how we handle unresponsive or hoptlug removed hosts")
->    e740b019d7c6 ("xhci: xhci-hub: use new port structures to get port address instead of port array")
->    eaefcf246b56 ("xhci: change xhci_test_and_clear_bit() to use new port structure")
->    f97c08ae329b ("xhci: rename endpoint related trb variables")
->    f99265965b32 ("xhci: detect stop endpoint race using pending timer instead of counter.")
->    ffd4b4fc0b9a ("xhci: Add helper to get xhci roothub from hcd")
-> 
-> v4.4.194: Failed to apply! Possible dependencies:
->    11644a765952 ("xhci: Add quirk to workaround the errata seen on Cavium Thunder-X2 Soc")
->    191edc5e2e51 ("xhci: Fix front USB ports on ASUS PRIME B350M-A")
->    21939f003ad0 ("usb: host: xhci-plat: enable BROKEN_PED quirk if platform requested")
->    41135de1e7fd ("usb: xhci: add quirk flag for broken PED bits")
->    4750bc78efdb ("usb: host: xhci support option to disable the xHCI USB2 HW LPM")
->    488dc164914f ("xhci: remove WARN_ON if dma mask is not set for platform devices")
->    4c39d4b949d3 ("usb: xhci: use bus->sysdev for DMA configuration")
->    4efb2f694114 ("usb: host: xhci-plat: add struct xhci_plat_priv")
->    69307ccb9ad7 ("usb: xhci: bInterval quirk for TI TUSB73x0")
->    76f9502fe761 ("xhci: plat: adapt to unified device property interface")
->    9da5a1092b13 ("xhci: Bad Ethernet performance plugged in ASM1042A host")
->    a3aef3793071 ("xhci: get rid of platform data")
->    a7d57abcc8a5 ("xhci: workaround CSS timeout on AMD SNPS 3.0 xHC")
->    dec08194ffec ("xhci: Limit USB2 port wake support for AMD Promontory hosts")
->    def4e6f7b419 ("xhci: refactor and cleanup endpoint initialization.")
-> 
-> 
-> NOTE: The patch will not be queued to stable trees until it is upstream.
+Sorry, I'm not sure exactly what you're asking. I'm guessing from
+grepping around you want the bindings in yaml instead (I see a few
+examples)? Is there some pointer to documentation? The
+Documentation/devicetree/bindings/writing-bindings.txt file doesn't
+seem to say much on it.
 
-Where do I send backport for v4.4 and v4.9?
+> > diff --git a/Documentation/devicetree/bindings/usb/hisi,dwc3.txt b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> > new file mode 100644
+> > index 000000000000..3a3e5c320f2a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> > @@ -0,0 +1,52 @@
+> > +HiSi SuperSpeed DWC3 USB SoC controller
+> > +
+> > +Required properties:
+> > +- compatible:          should contain "hisilicon,hi3660-dwc3" for HiSi SoC
+> > +- clocks:              A list of phandle + clock-specifier pairs for the
+> > +                       clocks listed in clock-names
+> > +- clock-names:         Should contain the following:
+> > +  "clk_abb_usb"                USB reference clk
+> > +  "aclk_usb3otg"       USB3 OTG aclk
+> > +
+> > +- assigned-clocks:     Should be:
+> > +                               HI3660_ACLK_GATE_USB3OTG
+> > +- assigned-clock-rates: Should be:
+> > +                               229Mhz (229000000) for HI3660_ACLK_GATE_USB3OTG
+> > +
+> > +Optional properties:
+> > +- resets:              Phandle to reset control that resets core and wrapper.
+>
+> Looks like 4 resets though.
 
-Kai-Heng
+Good point. I'll fix that up.
 
-> 
-> How should we proceed with this patch?
-> 
-> -- 
-> Thanks,
-> Sasha
+> > +
+> > +Required child node:
+> > +A child node must exist to represent the core DWC3 IP block. The name of
+> > +the node is not important. The content of the node is defined in dwc3.txt.
+> > +
+> > +Example device nodes:
+> > +
+> > +       usb3: hisi_dwc3 {
+> > +               compatible = "hisilicon,hi3660-dwc3";
+> > +               #address-cells = <2>;
+> > +               #size-cells = <2>;
+> > +               ranges;
+> > +
+> > +               clocks = <&crg_ctrl HI3660_CLK_ABB_USB>,
+> > +                        <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+> > +               clock-names = "clk_abb_usb", "aclk_usb3otg";
+> > +
+> > +               assigned-clocks = <&crg_ctrl HI3660_ACLK_GATE_USB3OTG>;
+> > +               assigned-clock-rates = <229 000 000>;
+> > +               resets = <&crg_rst 0x90 8>,
+> > +                        <&crg_rst 0x90 7>,
+> > +                        <&crg_rst 0x90 6>,
+> > +                        <&crg_rst 0x90 5>;
+> > +
+> > +               dwc3: dwc3@ff100000 {
+>
+> If it's only clocks and resets for the wrapper node, just make this
+> all one node.
 
+Just to make sure I'm following, you're suggesting I put all the
+clocks/resets in the dwc3 node (renamed to usb for the node name) and
+not add the wrapper?
+
+I'll have to see if that's possible. The generic dwc3 binding wants 3
+clocks, but I only have two in the code I've worked with (similarly it
+seems to only want two resets, not 4) so I'll have to see if I can
+figure out how to adapt that.
+
+If that approach is preferred, do I also no longer need a separate
+binding document/schema?
+
+thanks
+-john
