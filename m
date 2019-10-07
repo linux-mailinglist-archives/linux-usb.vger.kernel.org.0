@@ -2,44 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A76E4CEC95
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 21:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECC9CECF0
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Oct 2019 21:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728718AbfJGTTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 15:19:07 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:36890 "EHLO
+        id S1729178AbfJGTjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 15:39:09 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:43655 "EHLO
         mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728506AbfJGTTH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 15:19:07 -0400
-Received: by mail-io1-f69.google.com with SMTP id u18so28434217ioc.4
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 12:19:06 -0700 (PDT)
+        with ESMTP id S1728330AbfJGTjJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 15:39:09 -0400
+Received: by mail-io1-f69.google.com with SMTP id i2so28451910ioo.10
+        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 12:39:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=kfIipKsUoU2wWE9hKOkjQ6E2PbPEy+2k66M2HMxGCeQ=;
-        b=j6G7MtEJs8ImWLC3KWFOcUE5plMqa7gG7EK09v9mnBEGEVYUA0Vk9TYuCmOyiqDoCK
-         1fdSCXT0Ix8c8lModqDn68Hc8GpICEAT/8VjLywIZW3NSYfzSpZvMjxyUUPmjHdFJmTa
-         a6s01XquuJ9/iUJ4gto0t0/ze5yl+q1C6qURtFAA+Xfn0Cc8gMfgGPW891Uuzc2HguVF
-         sSxYAcON0hokdO/nG3uvboHWtQWnj5M7Bokv/cI6FqQ1dSETgaUuiBV71i6XU/AQNMaS
-         UavLo07OOW8ZeBVS3AGxM/+Bv3tcXKOjtn9ze+bsbPAeZ95OjfwqNx+9oVUE+k3WuOcg
-         ozDw==
-X-Gm-Message-State: APjAAAWJBcufQCdPIFsE4NUZsA6crIUwQwSUYNELMaRdKqok+TctrxHk
-        sYiz73DgREQNZGWCKN5mFh2AWv/AcV0EQ3Za+GI/ka+tqSzp
-X-Google-Smtp-Source: APXvYqxmlQbrzZCsCgl3Aqez5p34MMznTpFGk54INHY3AxNOW/acF4gq6+pYak8SyVeux3NOkFMekxdJcgfbwGtHbQ6MFTOGVIwF
+        bh=kKDb/JioBJlC3ZSH7Ra1D6u0wPhnpnLccidK2R6RBOc=;
+        b=gsyNi0FuKlVNaX9LvMvNW4Ly+6Oc8scps25syfOpP4MQP6/njxWZl88k18YYx2owF1
+         in3X0GOQ/DunNKVMyBREyiPwmGCe2oqTnkjKY0iSMyTkToIpLvqHyN+8iwhgqArV+XDf
+         u7P6ZMY4hoTYdL0Jobzir2VG0xlDrLkcQ8sA0kDTM1mLnYfNGsTKloC1MdEVIdskoPWM
+         SURTalBgKhix+R/rlAz5VRYM7OKyLYBXY/6h7lZa5w/OI7oCtQ03i6+uJWIqHtkA+vEa
+         FxhaOM8OF+MzQyAAbAMBIB8vBv7mXwqIxB4Bj/zxxSfaEdRziKJQ3UW37kbFn3N8JQQU
+         IJZA==
+X-Gm-Message-State: APjAAAVoPebBC0XnNzWc9gfI1ItXeqZxZc8VfmAtaKJwngIPdUmC1FM0
+        pPyaX+PzziI8+k1j4b9Py5sQUFhYH2dfwwoba9wVY4Uu2i7H
+X-Google-Smtp-Source: APXvYqxldHRIjyw1O4EjayR7Y53v5Fqnw/B/xW7orK7MItW9khT42lcNa9DPDqCKODNcniseUWxW2QA80sICOI8pqFH/Y0jO79O1
 MIME-Version: 1.0
-X-Received: by 2002:a6b:f319:: with SMTP id m25mr20397110ioh.33.1570475946432;
- Mon, 07 Oct 2019 12:19:06 -0700 (PDT)
-Date:   Mon, 07 Oct 2019 12:19:06 -0700
+X-Received: by 2002:a92:5855:: with SMTP id m82mr31630600ilb.136.1570477147233;
+ Mon, 07 Oct 2019 12:39:07 -0700 (PDT)
+Date:   Mon, 07 Oct 2019 12:39:07 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea6699059456ecc8@google.com>
-Subject: KMSAN: uninit-value in asix_mdio_read
-From:   syzbot <syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, davem@davemloft.net, glider@google.com,
-        gregkh@linuxfoundation.org, kstewart@linuxfoundation.org,
+Message-ID: <0000000000007d25ff059457342d@google.com>
+Subject: KMSAN: uninit-value in alauda_check_media
+From:   syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>
+To:     glider@google.com, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, opensource@jilayne.com, swinslow@gmail.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        usb-storage@lists.one-eyed-alien.net
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -52,85 +51,63 @@ syzbot found the following crash on:
 
 HEAD commit:    1e76a3e5 kmsan: replace __GFP_NO_KMSAN_SHADOW with kmsan_i..
 git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=10327cc3600000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1204cc63600000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-dashboard link: https://syzkaller.appspot.com/bug?extid=a631ec9e717fb0423053
+dashboard link: https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
 compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e9a3db600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=167fcefb600000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123c860d600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=110631b7600000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
+Reported-by: syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
 
-asix 1-1:0.78 (unnamed net_device) (uninitialized): Failed to write reg  
-index 0x0000: -71
-asix 1-1:0.78 (unnamed net_device) (uninitialized): Failed to send software  
-reset: ffffffb9
-asix 1-1:0.78 (unnamed net_device) (uninitialized): Failed to write reg  
-index 0x0000: -71
-asix 1-1:0.78 (unnamed net_device) (uninitialized): Failed to enable  
-software MII access
-asix 1-1:0.78 (unnamed net_device) (uninitialized): Failed to read reg  
-index 0x0000: -71
 =====================================================
-BUG: KMSAN: uninit-value in asix_mdio_bus_read+0xbc/0xe0  
-drivers/net/usb/ax88172a.c:31
-CPU: 0 PID: 2919 Comm: kworker/0:2 Not tainted 5.3.0-rc7+ #0
+BUG: KMSAN: uninit-value in alauda_transport+0x462/0x57f0  
+drivers/usb/storage/alauda.c:1137
+CPU: 0 PID: 12279 Comm: usb-storage Not tainted 5.3.0-rc7+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
 Call Trace:
   __dump_stack lib/dump_stack.c:77 [inline]
   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
   kmsan_report+0x13a/0x2b0 mm/kmsan/kmsan_report.c:108
   __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:250
-  asix_mdio_read+0x3e9/0x8f0 drivers/net/usb/asix_common.c:461
-  asix_mdio_bus_read+0xbc/0xe0 drivers/net/usb/ax88172a.c:31
-  __mdiobus_read+0x106/0x3d0 drivers/net/phy/mdio_bus.c:563
-  mdiobus_read+0xbd/0x110 drivers/net/phy/mdio_bus.c:640
-  get_phy_id drivers/net/phy/phy_device.c:785 [inline]
-  get_phy_device+0x331/0x8a0 drivers/net/phy/phy_device.c:819
-  mdiobus_scan+0x91/0x760 drivers/net/phy/mdio_bus.c:527
-  __mdiobus_register+0x86d/0xca0 drivers/net/phy/mdio_bus.c:426
-  ax88172a_init_mdio drivers/net/usb/ax88172a.c:105 [inline]
-  ax88172a_bind+0xcc5/0xf80 drivers/net/usb/ax88172a.c:243
-  usbnet_probe+0x10ae/0x3960 drivers/net/usb/usbnet.c:1722
-  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
-  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:882
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
-  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
-  really_probe+0x1373/0x1dc0 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:709
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:816
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:454
-  __device_attach+0x489/0x750 drivers/base/dd.c:882
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:929
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:514
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2165
-  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
-  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
+  alauda_check_media+0x344/0x3310 drivers/usb/storage/alauda.c:460
+  alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1137
+  usb_stor_invoke_transport+0xf5/0x27e0 drivers/usb/storage/transport.c:606
+  usb_stor_transparent_scsi_command+0x5d/0x70  
+drivers/usb/storage/protocol.c:108
+  usb_stor_control_thread+0xca6/0x11a0 drivers/usb/storage/usb.c:380
   kthread+0x4b5/0x4f0 kernel/kthread.c:256
   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
-Local variable description: ----smsr@asix_mdio_read
+Local variable description: ----status@alauda_check_media
 Variable was created at:
-  asix_mdio_read+0xa0/0x8f0 include/linux/netdevice.h:2180
-  asix_mdio_bus_read+0xbc/0xe0 drivers/net/usb/ax88172a.c:31
+  alauda_check_media+0x8e/0x3310 drivers/usb/storage/alauda.c:454
+  alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1137
 =====================================================
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 12279 Comm: usb-storage Tainted: G    B             5.3.0-rc7+  
+#0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  panic+0x3c9/0xc1e kernel/panic.c:219
+  kmsan_report+0x2a2/0x2b0 mm/kmsan/kmsan_report.c:131
+  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:250
+  alauda_check_media+0x344/0x3310 drivers/usb/storage/alauda.c:460
+  alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1137
+  usb_stor_invoke_transport+0xf5/0x27e0 drivers/usb/storage/transport.c:606
+  usb_stor_transparent_scsi_command+0x5d/0x70  
+drivers/usb/storage/protocol.c:108
+  usb_stor_control_thread+0xca6/0x11a0 drivers/usb/storage/usb.c:380
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
 
 ---
