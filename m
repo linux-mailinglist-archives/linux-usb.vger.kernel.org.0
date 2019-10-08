@@ -2,74 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C170CFC07
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 16:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB6FCFD24
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 17:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726007AbfJHOKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 10:10:43 -0400
-Received: from mail-wm1-f41.google.com ([209.85.128.41]:51458 "EHLO
-        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725821AbfJHOKn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 10:10:43 -0400
-Received: by mail-wm1-f41.google.com with SMTP id 7so3338713wme.1
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 07:10:42 -0700 (PDT)
+        id S1726765AbfJHPGB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 11:06:01 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40505 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725953AbfJHPGB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 11:06:01 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x127so10922845pfb.7
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 08:06:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=egMXYOknQRi/HfO4C8rUYNk66iVEaK6CMMrTsjUWFPc=;
-        b=ud1L74m+oKyUBJhssssCAEn/123EPi6uHtxdlOF3lX4HXImW3Uh03FjRwDX3GaFYNO
-         78V/VtaI9gMkXpMW0TsQRmeVuOGOs29TQuF/pupm5g/VoyGb4n2oSPI3wC4vk8ng/0pu
-         NKUwRaQAOoZRcGRSO0gYZE1CpSFiBrZYatgkDTcU+CBERW3DnQhbvCq53yecFgB17jIA
-         qRzrESR2pgTBKusDnzBX8dmDiRlMeOqHE6lIVrv7C5B+d+zkk/co/TpF30WfNXFdeN+r
-         KuiZJHY62wkz6OtjrF0BJD3OgzEewEJxNmyONErplZ4v3WvziL2a+NasUfNj1ppzWPF2
-         6Zfg==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=tzsRg9pgEa9ifvg41ObkDkwx5TvwMyRk1wxFJpblvlg=;
+        b=G8uczl3RULQcRPZNuuCGSUomb/snylYiJ6arGsUloQ3Wa2+dSUqI/YENI2cilQPHq+
+         eA3+zmXi0bCaRtlqrEy+DS9RnTMUiUNxO7mtjIW0Oiv+ayXsEwyO1XyYkZs+MHOgW5wu
+         oo7eY39CvJcRKrVWmog/2bO2uGO+77/Ey6dQDwRu2cePnp97SenCamFTlNwEhPwdn30b
+         eKObB9wkms+pp9bQfr6USpdBqSs/idPOEUXkd5ziVWpP5BZomIUV9TSOmhWqXpWjNkHv
+         7mqwMZ5Q2KRhss4E0XnwCxFBcGdvFhuBOHQT+4vIwhLu6XPGYqhiiyZVyUyltufgpUw1
+         LQNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=egMXYOknQRi/HfO4C8rUYNk66iVEaK6CMMrTsjUWFPc=;
-        b=uNGeHw4dZnKnhcMLghYfa+JTo+zMbgcHr51HnUXW4nGkAUdVmUX2XR8KKCkly47Ft4
-         TBj1WFPYan2RRVJdbp2453w/Hemko2I0SKK1WSNb2ve5/QC2TbYhkcYxZ/IjHWXOJhbf
-         47Bze8RP/n4bTTVLVgRn0MVlPRiyBNQtbJ1MczsXve11ftZi8KLumd85/Lfeyq2Azu2G
-         +P7XlqQPsdp6F61iRBsp/2hhsXeeVSFrl+zfBzSiVk9TvLK7LHJBM3m3V1o1sqhalQXv
-         aziAsHFbtvEkj+OV0o53tyW4VaSpNHFHOfaxdjc2/kJttVc+SKcxcXId2mnzsVDPbwdy
-         Xk9g==
-X-Gm-Message-State: APjAAAVjW9eL4mTjMXINXbqAW+ajxhkWRObiz2gUeloalYR0FR/lSHyW
-        EYzi6M9IzYotbhkQua7NxHd9ewB6y/My2w==
-X-Google-Smtp-Source: APXvYqzkAA7irCvgq1s+76I2mkziGIe6pyrINP8e4Yoak1l5c5HrW0R1twC1jjsgfucyl4+IxJiyFw==
-X-Received: by 2002:a1c:ed0d:: with SMTP id l13mr4061022wmh.76.1570543840961;
-        Tue, 08 Oct 2019 07:10:40 -0700 (PDT)
-Received: from dhe-pc (p54941CA4.dip0.t-ipconnect.de. [84.148.28.164])
-        by smtp.gmail.com with ESMTPSA id t17sm39198658wrp.72.2019.10.08.07.10.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2019 07:10:39 -0700 (PDT)
-From:   David Heinzelmann <heinzelmann.david@gmail.com>
-X-Google-Original-From: David Heinzelmann <dhe@dhe-pc>
-Date:   Tue, 8 Oct 2019 18:10:22 +0200
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     David Heinzelmann <heinzelmann.david@gmail.com>,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4] usb: hub: Check device descriptor before resusciation
-Message-ID: <20191008161022.GA20011@dhe-pc>
-References: <20191007153538.GA985210@kroah.com>
- <20191008080901.17628-1-heinzelmann.david@gmail.com>
- <20191008125546.GA2846493@kroah.com>
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=tzsRg9pgEa9ifvg41ObkDkwx5TvwMyRk1wxFJpblvlg=;
+        b=jbGyPXCRrZBLKSXa5sBepKxFAYW0V/HNg+eR9JIz6vINXbsBdMqokcMkUhQbetDhyu
+         Fj/lHYdcGKcSAACut3jewxKrmB3R4mvCtoEXy3P5GrwOuEwPQTSL5JxlSs9NeUGWijdR
+         iT5jdiNA9m8hMI/EffDBB61fMwB7ftnuFYfD/LCqFpUPWMB7w294/NYlcSc8FANIZmz5
+         JEzF8aGQx1uNbQXAu4U6BFgoP1jZv7phy0qevsfenFhxCoaQ6uVDMtgXrxjLe8HOUjsc
+         rGHekacZDo+FshmchYngS4jydKVUvjRyIcCqMizWKfZJwu1oRG8j3X4VdCUYT0FeAGxN
+         1tVg==
+X-Gm-Message-State: APjAAAV9/5MKGdF+S9eHnYEuYgYEQL1dyUVKWG54yTWvFsaB+KHzWu7j
+        el6Y+dv3G5IZ2PAWSPUk5hJ1mA==
+X-Google-Smtp-Source: APXvYqxhixa3F/cEc785OVOZs0F2stbVxXL2Q91Zz8G3dA0FQLAg7s6F+eNuzgo0xQ6EBlfs3p8Uew==
+X-Received: by 2002:a65:48ca:: with SMTP id o10mr7551202pgs.116.1570547160188;
+        Tue, 08 Oct 2019 08:06:00 -0700 (PDT)
+Received: from localhost ([2601:602:9200:a1a5:8d4b:adae:e1eb:fe8e])
+        by smtp.gmail.com with ESMTPSA id u3sm17330522pfn.134.2019.10.08.08.05.59
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 08 Oct 2019 08:05:59 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Saurav Girepunje <saurav.girepunje@gmail.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     saurav.girepunje@hotmail.com
+Subject: Re: [PATCH] usb: dwc3: dwc3-meson-g12a.c: use devm_platform_ioremap_resource()
+In-Reply-To: <20191008102751.GA10401@saurav>
+References: <20191008102751.GA10401@saurav>
+Date:   Tue, 08 Oct 2019 08:05:58 -0700
+Message-ID: <7h7e5f5lbd.fsf@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191008125546.GA2846493@kroah.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 02:55:46PM +0200, Greg KH wrote:
-> What happened to Alan's ack?
-> 
+Saurav Girepunje <saurav.girepunje@gmail.com> writes:
 
-I'm not sure I'm allowed to add someone else's acked-by tag?  
-If so I will sent v5.
+> Use the new helper that wraps the calls to platform_get_resource()
+> and devm_ioremap_resource() together in dwc3_meson_g12a_probe().
+>
+> Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
 
-David
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+
+> ---
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index bca7e92a10e9..d73ccd9e1366 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -386,7 +386,6 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  	struct device		*dev = &pdev->dev;
+>  	struct device_node	*np = dev->of_node;
+>  	void __iomem *base;
+> -	struct resource *res;
+>  	enum phy_mode otg_id;
+>  	int ret, i, irq;
+>  
+> @@ -394,8 +393,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  	if (!priv)
+>  		return -ENOMEM;
+>  
+> -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -	base = devm_ioremap_resource(dev, res);
+> +	base = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(base))
+>  		return PTR_ERR(base);
+>  
+> -- 
+> 2.20.1
