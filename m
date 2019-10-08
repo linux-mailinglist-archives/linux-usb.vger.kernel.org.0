@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 397AFCF7E7
+	by mail.lfdr.de (Postfix) with ESMTP id ACB99CF7E8
 	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbfJHLNy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 07:13:54 -0400
+        id S1730372AbfJHLNz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 07:13:55 -0400
 Received: from mga02.intel.com ([134.134.136.20]:26010 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729790AbfJHLNy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 07:13:54 -0400
+        id S1729790AbfJHLNz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 07:13:55 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:13:53 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:13:55 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="206618904"
+   d="scan'208";a="206618905"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 04:13:52 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 04:13:54 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH v3 1/9] usb: typec: Copy everything from struct typec_capability during registration
-Date:   Tue,  8 Oct 2019 14:13:42 +0300
-Message-Id: <20191008111350.68581-2-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v3 2/9] usb: typec: Introduce typec_get_drvdata()
+Date:   Tue,  8 Oct 2019 14:13:43 +0300
+Message-Id: <20191008111350.68581-3-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
 References: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
@@ -36,93 +36,73 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Copying everything from struct typec_capability to struct
-typec_port during port registration. This will make sure
-that under no circumstances the driver can change the values
-in the struct typec_capability that the port uses.
+Leaving the private driver_data pointer of the port device
+to the port drivers.
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 ---
- drivers/usb/typec/class.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ drivers/usb/typec/class.c | 11 +++++++++++
+ include/linux/usb/typec.h |  4 ++++
+ 2 files changed, 15 insertions(+)
 
 diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 94a3eda62add..0bbf10c8ad58 100644
+index 0bbf10c8ad58..89ffe370e426 100644
 --- a/drivers/usb/typec/class.c
 +++ b/drivers/usb/typec/class.c
-@@ -52,6 +52,7 @@ struct typec_port {
- 	struct typec_switch		*sw;
- 	struct typec_mux		*mux;
+@@ -1488,6 +1488,16 @@ EXPORT_SYMBOL_GPL(typec_set_mode);
  
-+	const struct typec_capability	*orig_cap; /* to be removed */
- 	const struct typec_capability	*cap;
- };
+ /* --------------------------------------- */
  
-@@ -968,7 +969,7 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
- 			return -EINVAL;
- 	}
++/**
++ * typec_get_drvdata - Return private driver data pointer
++ * @port: USB Type-C port
++ */
++void *typec_get_drvdata(struct typec_port *port)
++{
++	return dev_get_drvdata(&port->dev);
++}
++EXPORT_SYMBOL_GPL(typec_get_drvdata);
++
+ /**
+  * typec_port_register_altmode - Register USB Type-C Port Alternate Mode
+  * @port: USB Type-C Port that supports the alternate mode
+@@ -1592,6 +1602,7 @@ struct typec_port *typec_register_port(struct device *parent,
+ 	port->dev.fwnode = cap->fwnode;
+ 	port->dev.type = &typec_port_dev_type;
+ 	dev_set_name(&port->dev, "port%d", id);
++	dev_set_drvdata(&port->dev, cap->driver_data);
  
--	ret = port->cap->try_role(port->cap, role);
-+	ret = port->cap->try_role(port->orig_cap, role);
- 	if (ret)
- 		return ret;
+ 	port->sw = typec_switch_get(&port->dev);
+ 	if (IS_ERR(port->sw)) {
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index 7df4ecabc78a..8b90cd77331c 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -179,6 +179,7 @@ struct typec_partner_desc {
+  * @sw: Cable plug orientation switch
+  * @mux: Multiplexer switch for Alternate/Accessory Modes
+  * @fwnode: Optional fwnode of the port
++ * @driver_data: Private pointer for driver specific info
+  * @try_role: Set data role preference for DRP port
+  * @dr_set: Set Data Role
+  * @pr_set: Set Power Role
+@@ -198,6 +199,7 @@ struct typec_capability {
+ 	struct typec_switch	*sw;
+ 	struct typec_mux	*mux;
+ 	struct fwnode_handle	*fwnode;
++	void			*driver_data;
  
-@@ -1014,7 +1015,7 @@ static ssize_t data_role_store(struct device *dev,
- 		goto unlock_and_ret;
- 	}
+ 	int		(*try_role)(const struct typec_capability *,
+ 				    int role);
+@@ -241,6 +243,8 @@ int typec_set_orientation(struct typec_port *port,
+ enum typec_orientation typec_get_orientation(struct typec_port *port);
+ int typec_set_mode(struct typec_port *port, int mode);
  
--	ret = port->cap->dr_set(port->cap, ret);
-+	ret = port->cap->dr_set(port->orig_cap, ret);
- 	if (ret)
- 		goto unlock_and_ret;
- 
-@@ -1071,7 +1072,7 @@ static ssize_t power_role_store(struct device *dev,
- 		goto unlock_and_ret;
- 	}
- 
--	ret = port->cap->pr_set(port->cap, ret);
-+	ret = port->cap->pr_set(port->orig_cap, ret);
- 	if (ret)
- 		goto unlock_and_ret;
- 
-@@ -1119,7 +1120,7 @@ port_type_store(struct device *dev, struct device_attribute *attr,
- 		goto unlock_and_ret;
- 	}
- 
--	ret = port->cap->port_type_set(port->cap, type);
-+	ret = port->cap->port_type_set(port->orig_cap, type);
- 	if (ret)
- 		goto unlock_and_ret;
- 
-@@ -1184,7 +1185,7 @@ static ssize_t vconn_source_store(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	ret = port->cap->vconn_set(port->cap, (enum typec_role)source);
-+	ret = port->cap->vconn_set(port->orig_cap, (enum typec_role)source);
- 	if (ret)
- 		return ret;
- 
-@@ -1278,6 +1279,7 @@ static void typec_release(struct device *dev)
- 	ida_destroy(&port->mode_ids);
- 	typec_switch_put(port->sw);
- 	typec_mux_put(port->mux);
-+	kfree(port->cap);
- 	kfree(port);
- }
- 
-@@ -1579,9 +1581,10 @@ struct typec_port *typec_register_port(struct device *parent,
- 	mutex_init(&port->port_type_lock);
- 
- 	port->id = id;
--	port->cap = cap;
-+	port->orig_cap = cap;
- 	port->port_type = cap->type;
- 	port->prefer_role = cap->prefer_role;
-+	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
- 
- 	device_initialize(&port->dev);
- 	port->dev.class = typec_class;
++void *typec_get_drvdata(struct typec_port *port);
++
+ int typec_find_port_power_role(const char *name);
+ int typec_find_power_role(const char *name);
+ int typec_find_port_data_role(const char *name);
 -- 
 2.23.0
 
