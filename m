@@ -2,158 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAF1D024E
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 22:44:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 252B3D02E7
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 23:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731033AbfJHUoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 16:44:32 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40230 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730523AbfJHUoc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 16:44:32 -0400
-Received: by mail-pg1-f195.google.com with SMTP id d26so10937369pgl.7
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 13:44:31 -0700 (PDT)
+        id S1729933AbfJHVgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 17:36:46 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46029 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728054AbfJHVgq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 17:36:46 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y72so143317pfb.12
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 14:36:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=nmmOKPTsvyGUoyuXu+nPXQyEy3RdTp7A7NRvn61bkoQ=;
-        b=HN1hyf6weVu+Vk5AAdemCyFfXZGwPnmH9GgT2QIMmjiGuOsXu8WrE9igUZtqJL9cEX
-         QnG8GJ61yx0gyJnC5/YFaNeXbR/Te4SX35/x9oCP32D2GTVi3iPiiYfG7XfK3emuM4Kr
-         hT45FGSGoE20/PJ/cptu232szfP3/zrs6kyveCqD9g+wKF8JcjB+KaSJp/PApgSUOJFG
-         Nnsj00TPDA08Axc9qxebhy2Q8+xoLtBrmVnmYh6hQSEIdIc/AkhZcZwfxw4eUxxUOjig
-         eQZJXmugjA38rGFmj15UniMtpyJ21NBWUlQAHSLEtTtP20vlx40W02tWOJ64BOvDAHVM
-         XSNw==
+        bh=UfO+rsp7LGs7g9+EqxndB2tvOXFeYPZj/g42I1KrvmM=;
+        b=Qo7KPUUWCYCMob2rXHzwMdKCirx6wuwmFakwcWDbM1+suZV7FZASpRqz2dXPZ3deoW
+         oElr0/goPJ2KgjI+wz1mZxOB/h57AzPdNBH8upquYdCEy/PqcGiuYJUN132I6vTQMk7k
+         9m9qBwFYQ+pK1BNfnOv3LXpTd2VZUEONnRk4zPfl0V8LKyrj2U3iihIEqT7O+55rlAEx
+         s2FYW3XmgAobEf5GIkUha82FEMNVeDMQmiqqOxcg0QqqyEs0kqHoJEmU1kIdgg0T79Ds
+         KGcMd/RTPItgYe4qoxGI50aXy43aRff+0ORMqo+zMU7eBsbKEa8C5DZ7Hn83A8/nJjOZ
+         rR4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=nmmOKPTsvyGUoyuXu+nPXQyEy3RdTp7A7NRvn61bkoQ=;
-        b=W3/wxxnhE1Gvbdx6cDHdTGGELephRxwHu/jggieyrCbRqrK4H5WUOo/iQXPH08wB0F
-         rT+fR8v7eipHkuEJxgFE/zc8rInI4BuksgkYCyQF1W8N5kmYZEZauTkxm8z90v5LLYvL
-         8q3VGKmwZUyptgvU56DCuwM2ZntjbzkSOIU6ZD08GkaXEP43UPKJRS6KtydRUOK7Nr3w
-         m34tzsGMxVR0wGyjbk6sZ3rWR1GIcyTFEG7nVz8/f+oRS3dZ0qDiN0L8B3OnirPLAZYR
-         aawds3keqdav1YJXv2ClandhcSs4TkozLX0XlFtHcV9V7iE7AE4LhKvoPy7VtyNSMFKb
-         ZwNQ==
-X-Gm-Message-State: APjAAAX++lZVw6p2wcv+XMSj6hFRCIqOY6VmUlXbCaKZJqepsK2ZvW+Y
-        Q8LxCqwX1jz9ryZXl6mzLINSVS6d
-X-Google-Smtp-Source: APXvYqzO3P8RC8wrkuYtqvTK2fFg7IJqgR3QgFFAP9obUeBUMcnXVg5M4Y7mYx9Fxu7UXG8U9hpZPw==
-X-Received: by 2002:a63:fa0a:: with SMTP id y10mr328002pgh.446.1570567470872;
-        Tue, 08 Oct 2019 13:44:30 -0700 (PDT)
+        bh=UfO+rsp7LGs7g9+EqxndB2tvOXFeYPZj/g42I1KrvmM=;
+        b=J+K3TPCF3x8AlSBqPiux9qhNU/ntGpElIRmBzovle2Z32S8mnANNZvbogr4gewnW9Y
+         pg3FxXvjoIWZs4tx5b0H9c50EG5gnNSUpWefvsyz9D7j5Vi9fAKLNXFVDqmT6anpw72x
+         LzoKKWRQoqWs7k/jGoWqWvrsyN3YTCmzKmMTMI7JjtktwxbMKvkalEiu2h+hHP7ctasG
+         dYqPvm2g3erJtOE6shkWqb8L4kKRH7pPPwCUGNfOJ2U3VQwOoMOT9on+R7w7+YhvKUVr
+         heHKqXn3wVunajMwlekHJ1jPDEllUlzb/ik8XJapeplM+wfYfQIyz9eFCEYGWGopXF6h
+         FCHg==
+X-Gm-Message-State: APjAAAUWNRbsebAjAK7NY21BZuJXLm58ay60MJPSxd42424hWtbuTXQc
+        BzmSsZGb/33YFPBOI4rclZQ=
+X-Google-Smtp-Source: APXvYqzm8X0nXqrOiQ4hgGiSwTNnSTYGGkO6E4lcPUY/DqKG2RKaUEdOJvOul6UnMpt78dFJBPZdAw==
+X-Received: by 2002:a63:541e:: with SMTP id i30mr588262pgb.130.1570570605506;
+        Tue, 08 Oct 2019 14:36:45 -0700 (PDT)
 Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b9sm23839pfo.105.2019.10.08.13.44.29
+        by smtp.gmail.com with ESMTPSA id g19sm134934pgm.63.2019.10.08.14.36.43
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 08 Oct 2019 13:44:29 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 13:44:28 -0700
+        Tue, 08 Oct 2019 14:36:44 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 14:36:43 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 1/9] usb: typec: Copy everything from struct
- typec_capability during registration
-Message-ID: <20191008204428.GA16138@roeck-us.net>
+Subject: Re: [PATCH v3 2/9] usb: typec: Introduce typec_get_drvdata()
+Message-ID: <20191008213643.GB16138@roeck-us.net>
 References: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
- <20191008111350.68581-2-heikki.krogerus@linux.intel.com>
+ <20191008111350.68581-3-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191008111350.68581-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20191008111350.68581-3-heikki.krogerus@linux.intel.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 02:13:42PM +0300, Heikki Krogerus wrote:
-> Copying everything from struct typec_capability to struct
-> typec_port during port registration. This will make sure
-> that under no circumstances the driver can change the values
-> in the struct typec_capability that the port uses.
+On Tue, Oct 08, 2019 at 02:13:43PM +0300, Heikki Krogerus wrote:
+> Leaving the private driver_data pointer of the port device
+> to the port drivers.
 > 
 > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/usb/typec/class.c | 15 +++++++++------
->  1 file changed, 9 insertions(+), 6 deletions(-)
+>  drivers/usb/typec/class.c | 11 +++++++++++
+>  include/linux/usb/typec.h |  4 ++++
+>  2 files changed, 15 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 94a3eda62add..0bbf10c8ad58 100644
+> index 0bbf10c8ad58..89ffe370e426 100644
 > --- a/drivers/usb/typec/class.c
 > +++ b/drivers/usb/typec/class.c
-> @@ -52,6 +52,7 @@ struct typec_port {
->  	struct typec_switch		*sw;
->  	struct typec_mux		*mux;
+> @@ -1488,6 +1488,16 @@ EXPORT_SYMBOL_GPL(typec_set_mode);
 >  
-> +	const struct typec_capability	*orig_cap; /* to be removed */
->  	const struct typec_capability	*cap;
->  };
+>  /* --------------------------------------- */
 >  
-> @@ -968,7 +969,7 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
->  			return -EINVAL;
->  	}
+> +/**
+> + * typec_get_drvdata - Return private driver data pointer
+> + * @port: USB Type-C port
+> + */
+> +void *typec_get_drvdata(struct typec_port *port)
+> +{
+> +	return dev_get_drvdata(&port->dev);
+> +}
+> +EXPORT_SYMBOL_GPL(typec_get_drvdata);
+> +
+>  /**
+>   * typec_port_register_altmode - Register USB Type-C Port Alternate Mode
+>   * @port: USB Type-C Port that supports the alternate mode
+> @@ -1592,6 +1602,7 @@ struct typec_port *typec_register_port(struct device *parent,
+>  	port->dev.fwnode = cap->fwnode;
+>  	port->dev.type = &typec_port_dev_type;
+>  	dev_set_name(&port->dev, "port%d", id);
+> +	dev_set_drvdata(&port->dev, cap->driver_data);
 >  
-> -	ret = port->cap->try_role(port->cap, role);
-> +	ret = port->cap->try_role(port->orig_cap, role);
->  	if (ret)
->  		return ret;
+>  	port->sw = typec_switch_get(&port->dev);
+>  	if (IS_ERR(port->sw)) {
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index 7df4ecabc78a..8b90cd77331c 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -179,6 +179,7 @@ struct typec_partner_desc {
+>   * @sw: Cable plug orientation switch
+>   * @mux: Multiplexer switch for Alternate/Accessory Modes
+>   * @fwnode: Optional fwnode of the port
+> + * @driver_data: Private pointer for driver specific info
+>   * @try_role: Set data role preference for DRP port
+>   * @dr_set: Set Data Role
+>   * @pr_set: Set Power Role
+> @@ -198,6 +199,7 @@ struct typec_capability {
+>  	struct typec_switch	*sw;
+>  	struct typec_mux	*mux;
+>  	struct fwnode_handle	*fwnode;
+> +	void			*driver_data;
 >  
-> @@ -1014,7 +1015,7 @@ static ssize_t data_role_store(struct device *dev,
->  		goto unlock_and_ret;
->  	}
+>  	int		(*try_role)(const struct typec_capability *,
+>  				    int role);
+> @@ -241,6 +243,8 @@ int typec_set_orientation(struct typec_port *port,
+>  enum typec_orientation typec_get_orientation(struct typec_port *port);
+>  int typec_set_mode(struct typec_port *port, int mode);
 >  
-> -	ret = port->cap->dr_set(port->cap, ret);
-> +	ret = port->cap->dr_set(port->orig_cap, ret);
->  	if (ret)
->  		goto unlock_and_ret;
->  
-> @@ -1071,7 +1072,7 @@ static ssize_t power_role_store(struct device *dev,
->  		goto unlock_and_ret;
->  	}
->  
-> -	ret = port->cap->pr_set(port->cap, ret);
-> +	ret = port->cap->pr_set(port->orig_cap, ret);
->  	if (ret)
->  		goto unlock_and_ret;
->  
-> @@ -1119,7 +1120,7 @@ port_type_store(struct device *dev, struct device_attribute *attr,
->  		goto unlock_and_ret;
->  	}
->  
-> -	ret = port->cap->port_type_set(port->cap, type);
-> +	ret = port->cap->port_type_set(port->orig_cap, type);
->  	if (ret)
->  		goto unlock_and_ret;
->  
-> @@ -1184,7 +1185,7 @@ static ssize_t vconn_source_store(struct device *dev,
->  	if (ret)
->  		return ret;
->  
-> -	ret = port->cap->vconn_set(port->cap, (enum typec_role)source);
-> +	ret = port->cap->vconn_set(port->orig_cap, (enum typec_role)source);
->  	if (ret)
->  		return ret;
->  
-> @@ -1278,6 +1279,7 @@ static void typec_release(struct device *dev)
->  	ida_destroy(&port->mode_ids);
->  	typec_switch_put(port->sw);
->  	typec_mux_put(port->mux);
-> +	kfree(port->cap);
->  	kfree(port);
->  }
->  
-> @@ -1579,9 +1581,10 @@ struct typec_port *typec_register_port(struct device *parent,
->  	mutex_init(&port->port_type_lock);
->  
->  	port->id = id;
-> -	port->cap = cap;
-> +	port->orig_cap = cap;
->  	port->port_type = cap->type;
->  	port->prefer_role = cap->prefer_role;
-> +	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
-
-I just realized ... unfortunately kmemdup() can return NULL.
-
->  
->  	device_initialize(&port->dev);
->  	port->dev.class = typec_class;
+> +void *typec_get_drvdata(struct typec_port *port);
+> +
+>  int typec_find_port_power_role(const char *name);
+>  int typec_find_power_role(const char *name);
+>  int typec_find_port_data_role(const char *name);
 > -- 
 > 2.23.0
 > 
