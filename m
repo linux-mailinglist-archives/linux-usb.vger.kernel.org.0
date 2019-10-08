@@ -2,141 +2,225 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3DACEFC3
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 01:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A330ECF0F4
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 04:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729697AbfJGXxt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Oct 2019 19:53:49 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:51800 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729659AbfJGXxt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Oct 2019 19:53:49 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 7so1187562wme.1
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 16:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Mn1LnJy3uGyTmsaBJVW9W+hDHZSF304DHp1ze76muE=;
-        b=s8zULUZPK3ba1eRXod3nvamrb1SLAHardF0wnLYeYvyyT2ya70yNsbW0dqybGnwP9X
-         pfqkzudINyre/xBswTYzGAdW9MaIBWM8RCEV9cIjfatj5sd5Ii0QPut9PuDIwtJa3GTZ
-         MsPKXm2lNvPAM1uMif9Z32ML0CCmnFguhE57DpuujFa9I2fnhtWxQV8zPHtMH7PDhATi
-         NZ1HRzBvinSl0mNOiaGEiB600xn09/BkWAtgLhHL4DkfvvlQnVu3LYP5Xc0KRjlK7k3b
-         goJ036XFGox5/tWNcFIqpjXC/8ooK5LUUM46uPFE+YizcAKD02jWqn54uYDJ5GpsD2PY
-         UyuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Mn1LnJy3uGyTmsaBJVW9W+hDHZSF304DHp1ze76muE=;
-        b=DLZRTfSkm7VkReEbd+jxfAZ4WM2RTV25so/0y1BmmiZJiJUBDpJrvzLvP4b6Ifv6Dn
-         1hGczlQYZcut0pn5bMT1gW2f3pyEZD50UxdgBzXBEa98no4CaKI7KukB9mlPC+y3558A
-         +/FuwT5tFDO/PUpENxt4pw9dlGPOZqk/JyN2drAxoGivcCXzBhTPAssUyAdZS8o2nczc
-         CGr4mySFhbDAMAlM3SarTfCY7biFaxOdhfc6S3eMuRYV5B389XazOdtJb6PE/3oSd4o8
-         xCVVISHfAlBzonQBsz9ScEF8U9RPuCQ0WFxiW0N7AHtckr2tOjbwOMCmT39oYX7RUt8J
-         ztbg==
-X-Gm-Message-State: APjAAAW/TfEObDWW68xohTX1y8HvXrthXKxJOIwm36kLp81wsOlxU7qu
-        Nri4s5393hJiQLOQ5oqBvdbHbLyKF3IAO+fi1RWFxw==
-X-Google-Smtp-Source: APXvYqwdQdgZ50oxZF3dBfM7fgP+RPsKHF1tMNWkPmyF7r2+2pMe/Fq/ec5ophJs3Yf4zVv+MKWipirzHyMjhETTDiQ=
-X-Received: by 2002:a7b:c8d9:: with SMTP id f25mr1340025wml.153.1570492426235;
- Mon, 07 Oct 2019 16:53:46 -0700 (PDT)
+        id S1729843AbfJHCzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Oct 2019 22:55:53 -0400
+Received: from mail-eopbgr00084.outbound.protection.outlook.com ([40.107.0.84]:49377
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729212AbfJHCzx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Oct 2019 22:55:53 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gbICT5ffG+gNqA5VT6zlhpaODD7X/6OFTT0JeVfvn9vejPcg72Kvsxiaq8pakXN+/jNNsq9N/K5MZkwyfhXZOUgzPxrdNN40tJYiAfL5vkNoZwbqu26ioDufZP96xIkk8PuU8zXhrQsfL1ByHvDaDf1JqHeSe1Xbfn8dQ9NJJqRs2eUVJGvSKMsg5yQ1yZiINYoCsckadneED8lvmU7nWuHzCvtVAard8TRAdtP4qKJxh89VxTogwIUZkTorIbfXoC3L0CAEdL9gAMirG6v9DMnaBAY21BhpMA7KXNJDHPxzgLkCfq7o+xksstCUangZhDiwPL2NCCc+LEnjMPtPTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oaIwYaRwKz2AoEcdv57ivNJwl+djus2HBFRZ+oWMSgc=;
+ b=kto+VmVmq+rxNcNrMVkv2pR2zmERwfGV+zBsyybD/BqdIY6Nxf8U5Q5kf/5/BYt9//gmxFuVEBAvBnsgUeaP+FQyry5L2Qu4Fgpsrd9RA1qS7JAcSmxO0BQVIHj4wlSYNLrOBOTWCqF1GzH5qo/NZOAAdc0qVDtU2vZdrhA4Vd30wPINyeETsxtaCCVleqicecPN8M2uvja4N6Fmt0mCIZ98TtQ0MyUFjgc547mgXG2sH5OtVq+ye8Kh5RLXoI8S+4FpaGjsf8lDgFP99B82aSU1J2wymXLoc3wCdAG8vcoxkz9+AVD6m+5+fqstgQGtq+GMdirodU6RbgyCsMWm+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oaIwYaRwKz2AoEcdv57ivNJwl+djus2HBFRZ+oWMSgc=;
+ b=jgl6xN7TcXDDEizw4NWEREFVE8Yg38I5+zLCVFGudct5TPx9QeMzCp5GjDu9WGfXcrAEgW0yVC/aqZopK9iGV+bl1zmzvAmktifXVsWaJnFURF+qn0gAROEtPTPy5D7W5iJ8XeN7LGBiwTZHsn0QoVATse3OugpEEMtl18oNZWk=
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com (20.179.235.146) by
+ VE1PR04MB6478.eurprd04.prod.outlook.com (10.255.118.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.23; Tue, 8 Oct 2019 02:55:48 +0000
+Received: from VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::1d8d:4301:3356:7525]) by VE1PR04MB6528.eurprd04.prod.outlook.com
+ ([fe80::1d8d:4301:3356:7525%6]) with mapi id 15.20.2327.026; Tue, 8 Oct 2019
+ 02:55:48 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [bug report] usb: chipidea: imx: enable vbus and id wakeup only
+ for OTG events
+Thread-Topic: [bug report] usb: chipidea: imx: enable vbus and id wakeup only
+ for OTG events
+Thread-Index: AQHVeRUIBr1WfBlv70y8YkM3aCI8Z6dQFDsg
+Date:   Tue, 8 Oct 2019 02:55:48 +0000
+Message-ID: <VE1PR04MB65282B69FD17EC1583C52672899A0@VE1PR04MB6528.eurprd04.prod.outlook.com>
+References: <20191002112954.GA1890@mwanda>
+In-Reply-To: <20191002112954.GA1890@mwanda>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=jun.li@nxp.com; 
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8faf33aa-8b9e-4f24-8c41-08d74b9b05c5
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: VE1PR04MB6478:|VE1PR04MB6478:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB6478C04301388F961E16333B899A0@VE1PR04MB6478.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3826;
+x-forefront-prvs: 01842C458A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(376002)(396003)(366004)(346002)(13464003)(189003)(199004)(51914003)(26005)(186003)(316002)(86362001)(6506007)(53546011)(44832011)(486006)(55016002)(7696005)(76176011)(9686003)(102836004)(54906003)(5660300002)(66946007)(74316002)(66446008)(64756008)(66556008)(66476007)(7736002)(76116006)(305945005)(52536014)(71200400001)(256004)(2906002)(6246003)(14444005)(66066001)(14454004)(81156014)(8936002)(6916009)(3846002)(8676002)(81166006)(4326008)(6116002)(71190400001)(6436002)(99286004)(229853002)(478600001)(476003)(446003)(11346002)(33656002)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VE1PR04MB6478;H:VE1PR04MB6528.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: I8jH6CCnDPMvi9bkeM09kk2wjHtoFzQ2JYtQOYp9KuLkQShcTzQz9r9JWPm8SMJUYV0i5nfD5GzYVv6HCjAxBDZgErEMYu6mDkqhtni3Eaef90awsWXZQp+Eulw28F6nTNFwrIt6Zma7P+oDaZ/uzW2vx6MDWCxr4tY2XKBWSkWwLM0NNsuuLi9eENohUWX6TzIXdYvoiyR1I5inL8eTFrJzisiPjHc/NBoJI5ahtXbUC7KWR/THcPyqhz0UOZsKwAwqbbJ9NyhwXHRPMn03G58517BG8gokyDwz+IcHfrYV6xkLuIDKcjinhNpNQNsMfUQhVhIAPJ12/u/TqGhXzz9RVS+s5RfoS4PSWG6zXe5AQUo76AO3milB+y6cNT1BH82ZOuO1nvtRLo+IJoLCdg89z3nXfNW0xI+fSWoKmrs=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20191007175553.66940-1-john.stultz@linaro.org>
- <20191007175553.66940-3-john.stultz@linaro.org> <20191007233904.GC9754@jackp-linux.qualcomm.com>
-In-Reply-To: <20191007233904.GC9754@jackp-linux.qualcomm.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 7 Oct 2019 16:53:33 -0700
-Message-ID: <CALAqxLWG0a_sRu08XL7q4MpD1ZfAEhVb3mKQ0FLAe8kjO2PV3A@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 2/5] usb: dwc3: Execute GCTL Core Soft Reset while
- switch mdoe for Hisilicon Kirin Soc
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Yu Chen <chenyu56@huawei.com>, Felipe Balbi <balbi@kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8faf33aa-8b9e-4f24-8c41-08d74b9b05c5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 02:55:48.3781
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qps4vCb5uU6+yrTy/PZNZzSeZux25wnLx2ph5L3F7lWH2VIUuBQUDIAmt+qnguoh
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6478
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 7, 2019 at 4:39 PM Jack Pham <jackp@codeaurora.org> wrote:
->
-> Hi John, Yu, Felipe,
->
-> On Mon, Oct 07, 2019 at 05:55:50PM +0000, John Stultz wrote:
-> > From: Yu Chen <chenyu56@huawei.com>
-> >
-> > A GCTL soft reset should be executed when switch mode for dwc3 core
-> > of Hisilicon Kirin Soc.
-> >
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > Cc: Yu Chen <chenyu56@huawei.com>
-> > Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > Cc: linux-usb@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> > ---
-> >  drivers/usb/dwc3/core.c | 20 ++++++++++++++++++++
-> >  drivers/usb/dwc3/core.h |  3 +++
-> >  2 files changed, 23 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index 999ce5e84d3c..440261432421 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -112,6 +112,19 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
-> >       dwc->current_dr_role = mode;
-> >  }
-> >
-> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
-> > +{
-> > +     u32 reg;
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg |= DWC3_GCTL_CORESOFTRESET;
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +
-> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
-> > +     reg &= ~DWC3_GCTL_CORESOFTRESET;
-> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
-> > +}
-> > +
-> >  static void __dwc3_set_mode(struct work_struct *work)
-> >  {
-> >       struct dwc3 *dwc = work_to_dwc(work);
-> > @@ -156,6 +169,10 @@ static void __dwc3_set_mode(struct work_struct *work)
-> >
-> >       dwc3_set_prtcap(dwc, dwc->desired_dr_role);
-> >
-> > +     /* Execute a GCTL Core Soft Reset when switch mode */
-> > +     if (dwc->gctl_reset_quirk)
-> > +             dwc3_gctl_core_soft_reset(dwc);
-> > +
->
-> In fact it is mentioned in the Synopsys databook to perform a GCTL
-> CoreSoftReset when changing the PrtCapDir between device & host modes.
-> So I think this should apply generally without a quirk. Further, it
-> states to do this *prior* to writing PrtCapDir, so should it go before
-> dwc3_set_prtcap() instead?
-
-Sounds good. I have no such access to the hardware docs, so I really
-appreciate your input here!
-
-I'll refactor it as you describe and remove the quirk flag.
-
-thanks
--john
+SGkgRGFuLA0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBEYW4gQ2FycGVu
+dGVyIDxkYW4uY2FycGVudGVyQG9yYWNsZS5jb20+DQo+IFNlbnQ6IDIwMTnE6jEw1MIyyNUgMTk6
+MzANCj4gVG86IEp1biBMaSA8anVuLmxpQG54cC5jb20+DQo+IENjOiBQZW5ndXRyb25peCBLZXJu
+ZWwgVGVhbSA8a2VybmVsQHBlbmd1dHJvbml4LmRlPjsgZGwtbGludXgtaW14DQo+IDxsaW51eC1p
+bXhAbnhwLmNvbT47IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogW2J1ZyBy
+ZXBvcnRdIHVzYjogY2hpcGlkZWE6IGlteDogZW5hYmxlIHZidXMgYW5kIGlkIHdha2V1cCBvbmx5
+IGZvciBPVEcgZXZlbnRzDQo+IA0KPiBIZWxsbyBMaSBKdW4sDQo+IA0KPiBUaGUgcGF0Y2ggMTVi
+ODBmN2MzYTdmOiAidXNiOiBjaGlwaWRlYTogaW14OiBlbmFibGUgdmJ1cyBhbmQgaWQgd2FrZXVw
+IG9ubHkgZm9yIE9URw0KPiBldmVudHMiIGZyb20gU2VwIDksIDIwMTksIGxlYWRzIHRvIHRoZSBm
+b2xsb3dpbmcgc3RhdGljIGNoZWNrZXIgd2FybmluZzoNCj4gDQo+IAlkcml2ZXJzL3VzYi9jaGlw
+aWRlYS9jaV9oZHJjX2lteC5jOjQzOCBjaV9oZHJjX2lteF9wcm9iZSgpDQo+IAl3YXJuOiAnZGF0
+YS0+dXNibWlzY19kYXRhJyBjYW4gYWxzbyBiZSBOVUxMDQoNClRoYW5rcyBmb3IgdGhlIHJlcG9y
+dGluZy4NCg0KPiANCj4gZHJpdmVycy91c2IvY2hpcGlkZWEvY2lfaGRyY19pbXguYw0KPiAgICAz
+MTcgICAgICAgICAgZGF0YSA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKmRhdGEp
+LCBHRlBfS0VSTkVMKTsNCj4gICAgMzE4ICAgICAgICAgIGlmICghZGF0YSkNCj4gICAgMzE5ICAg
+ICAgICAgICAgICAgICAgcmV0dXJuIC1FTk9NRU07DQo+ICAgIDMyMA0KPiAgICAzMjEgICAgICAg
+ICAgZGF0YS0+cGxhdF9kYXRhID0gaW14X3BsYXRmb3JtX2ZsYWc7DQo+ICAgIDMyMiAgICAgICAg
+ICBwZGF0YS5mbGFncyB8PSBpbXhfcGxhdGZvcm1fZmxhZy0+ZmxhZ3M7DQo+ICAgIDMyMyAgICAg
+ICAgICBwbGF0Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBkYXRhKTsNCj4gICAgMzI0ICAgICAgICAg
+IGRhdGEtPnVzYm1pc2NfZGF0YSA9IHVzYm1pc2NfZ2V0X2luaXRfZGF0YShkZXYpOw0KPiAgICAg
+ICAgICAgICAgICAgXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5e
+Xl4NCj4gVGhpcyBjYW4gcmV0dXJuIE5VTEwgb3IgZXJyb3IgcG9pbnRlci4NCj4gDQo+ICAgIDMy
+NSAgICAgICAgICBpZiAoSVNfRVJSKGRhdGEtPnVzYm1pc2NfZGF0YSkpDQo+ICAgIDMyNiAgICAg
+ICAgICAgICAgICAgIHJldHVybiBQVFJfRVJSKGRhdGEtPnVzYm1pc2NfZGF0YSk7DQo+ICAgIDMy
+Nw0KPiAgICAzMjggICAgICAgICAgaWYgKChvZl91c2JfZ2V0X3BoeV9tb2RlKGRldi0+b2Zfbm9k
+ZSkgPT0NCj4gVVNCUEhZX0lOVEVSRkFDRV9NT0RFX0hTSUMpDQo+ICAgIDMyOSAgICAgICAgICAg
+ICAgICAgICYmIGRhdGEtPnVzYm1pc2NfZGF0YSkgew0KPiAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICBeXl5eXl5eXl5eXl5eXl5eXl4gVGhpcyBjb2RlIGNoZWNrcyBmb3IgTlVMTC4NCj4gDQo+
+ICAgIDMzMCAgICAgICAgICAgICAgICAgIHBkYXRhLmZsYWdzIHw9IENJX0hEUkNfSU1YX0lTX0hT
+SUM7DQo+ICAgIDMzMSAgICAgICAgICAgICAgICAgIGRhdGEtPnVzYm1pc2NfZGF0YS0+aHNpYyA9
+IDE7DQo+ICAgIDMzMiAgICAgICAgICAgICAgICAgIGRhdGEtPnBpbmN0cmwgPSBkZXZtX3BpbmN0
+cmxfZ2V0KGRldik7DQo+ICAgIDMzMyAgICAgICAgICAgICAgICAgIGlmIChJU19FUlIoZGF0YS0+
+cGluY3RybCkpIHsNCj4gICAgMzM0ICAgICAgICAgICAgICAgICAgICAgICAgICBkZXZfZXJyKGRl
+diwgInBpbmN0cmwgZ2V0IGZhaWxlZCwgZXJyPSVsZFxuIiwNCj4gICAgMzM1ICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgUFRSX0VSUihkYXRhLT5waW5jdHJsKSk7DQo+
+ICAgIDMzNiAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIFBUUl9FUlIoZGF0YS0+cGlu
+Y3RybCk7DQo+ICAgIDMzNyAgICAgICAgICAgICAgICAgIH0NCj4gICAgMzM4DQo+ICAgIDMzOSAg
+ICAgICAgICAgICAgICAgIHBpbmN0cmxfaHNpY19pZGxlID0gcGluY3RybF9sb29rdXBfc3RhdGUo
+ZGF0YS0+cGluY3RybCwgImlkbGUiKTsNCj4gICAgMzQwICAgICAgICAgICAgICAgICAgaWYgKElT
+X0VSUihwaW5jdHJsX2hzaWNfaWRsZSkpIHsNCj4gICAgMzQxICAgICAgICAgICAgICAgICAgICAg
+ICAgICBkZXZfZXJyKGRldiwNCj4gICAgMzQyICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICJwaW5jdHJsX2hzaWNfaWRsZSBsb29rdXAgZmFpbGVkLCBlcnI9JWxkXG4iLA0KPiAgICAz
+NDMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBQVFJfRVJSKHBpbmN0
+cmxfaHNpY19pZGxlKSk7DQo+ICAgIDM0NCAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJu
+IFBUUl9FUlIocGluY3RybF9oc2ljX2lkbGUpOw0KPiAgICAzNDUgICAgICAgICAgICAgICAgICB9
+DQo+ICAgIDM0Ng0KPiAgICAzNDcgICAgICAgICAgICAgICAgICByZXQgPSBwaW5jdHJsX3NlbGVj
+dF9zdGF0ZShkYXRhLT5waW5jdHJsLCBwaW5jdHJsX2hzaWNfaWRsZSk7DQo+ICAgIDM0OCAgICAg
+ICAgICAgICAgICAgIGlmIChyZXQpIHsNCj4gICAgMzQ5ICAgICAgICAgICAgICAgICAgICAgICAg
+ICBkZXZfZXJyKGRldiwgImhzaWNfaWRsZSBzZWxlY3QgZmFpbGVkLCBlcnI9JWRcbiIsIHJldCk7
+DQo+ICAgIDM1MCAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHJldDsNCj4gICAgMzUx
+ICAgICAgICAgICAgICAgICAgfQ0KPiAgICAzNTINCj4gICAgMzUzICAgICAgICAgICAgICAgICAg
+ZGF0YS0+cGluY3RybF9oc2ljX2FjdGl2ZSA9IHBpbmN0cmxfbG9va3VwX3N0YXRlKGRhdGEtPnBp
+bmN0cmwsDQo+ICAgIDM1NCAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICJhY3RpdmUiKTsNCj4gICAgMzU1ICAgICAgICAgICAg
+ICAgICAgaWYgKElTX0VSUihkYXRhLT5waW5jdHJsX2hzaWNfYWN0aXZlKSkgew0KPiAgICAzNTYg
+ICAgICAgICAgICAgICAgICAgICAgICAgIGRldl9lcnIoZGV2LA0KPiAgICAzNTcgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgInBpbmN0cmxfaHNpY19hY3RpdmUgbG9va3VwIGZhaWxl
+ZCwgZXJyPSVsZFxuIiwNCj4gICAgMzU4DQo+IFBUUl9FUlIoZGF0YS0+cGluY3RybF9oc2ljX2Fj
+dGl2ZSkpOw0KPiAgICAzNTkgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiBQVFJfRVJS
+KGRhdGEtPnBpbmN0cmxfaHNpY19hY3RpdmUpOw0KPiAgICAzNjAgICAgICAgICAgICAgICAgICB9
+DQo+ICAgIDM2MQ0KPiAgICAzNjIgICAgICAgICAgICAgICAgICBkYXRhLT5oc2ljX3BhZF9yZWd1
+bGF0b3IgPSBkZXZtX3JlZ3VsYXRvcl9nZXQoZGV2LCAiaHNpYyIpOw0KPiAgICAzNjMgICAgICAg
+ICAgICAgICAgICBpZiAoUFRSX0VSUihkYXRhLT5oc2ljX3BhZF9yZWd1bGF0b3IpID09DQo+IC1F
+UFJPQkVfREVGRVIpIHsNCj4gICAgMzY0ICAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4g
+LUVQUk9CRV9ERUZFUjsNCj4gICAgMzY1ICAgICAgICAgICAgICAgICAgfSBlbHNlIGlmIChQVFJf
+RVJSKGRhdGEtPmhzaWNfcGFkX3JlZ3VsYXRvcikgPT0gLUVOT0RFVikNCj4gew0KPiAgICAzNjYg
+ICAgICAgICAgICAgICAgICAgICAgICAgIC8qIG5vIHBhZCByZWd1YWxhdG9yIGlzIG5lZWRlZCAq
+Lw0KPiAgICAzNjcgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEtPmhzaWNfcGFkX3JlZ3Vs
+YXRvciA9IE5VTEw7DQo+ICAgIDM2OCAgICAgICAgICAgICAgICAgIH0gZWxzZSBpZiAoSVNfRVJS
+KGRhdGEtPmhzaWNfcGFkX3JlZ3VsYXRvcikpIHsNCj4gICAgMzY5ICAgICAgICAgICAgICAgICAg
+ICAgICAgICBkZXZfZXJyKGRldiwgIkdldCBIU0lDIHBhZCByZWd1bGF0b3IgZXJyb3I6ICVsZFxu
+IiwNCj4gICAgMzcwDQo+IFBUUl9FUlIoZGF0YS0+aHNpY19wYWRfcmVndWxhdG9yKSk7DQo+ICAg
+IDM3MSAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIFBUUl9FUlIoZGF0YS0+aHNpY19w
+YWRfcmVndWxhdG9yKTsNCj4gICAgMzcyICAgICAgICAgICAgICAgICAgfQ0KPiAgICAzNzMNCj4g
+ICAgMzc0ICAgICAgICAgICAgICAgICAgaWYgKGRhdGEtPmhzaWNfcGFkX3JlZ3VsYXRvcikgew0K
+PiAgICAzNzUgICAgICAgICAgICAgICAgICAgICAgICAgIHJldCA9IHJlZ3VsYXRvcl9lbmFibGUo
+ZGF0YS0+aHNpY19wYWRfcmVndWxhdG9yKTsNCj4gICAgMzc2ICAgICAgICAgICAgICAgICAgICAg
+ICAgICBpZiAocmV0KSB7DQo+ICAgIDM3NyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBkZXZfZXJyKGRldiwNCj4gICAgMzc4ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIkZhaWxlZCB0byBlbmFibGUgSFNJQyBwYWQNCj4gcmVndWxhdG9yXG4iKTsNCj4g
+ICAgMzc5ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHJldHVybiByZXQ7DQo+ICAg
+IDM4MCAgICAgICAgICAgICAgICAgICAgICAgICAgfQ0KPiAgICAzODEgICAgICAgICAgICAgICAg
+ICB9DQo+ICAgIDM4MiAgICAgICAgICB9DQo+ICAgIDM4Mw0KPiAgICAzODQgICAgICAgICAgaWYg
+KHBkYXRhLmZsYWdzICYgQ0lfSERSQ19QTVFPUykNCj4gICAgMzg1ICAgICAgICAgICAgICAgICAg
+cG1fcW9zX2FkZF9yZXF1ZXN0KCZkYXRhLT5wbV9xb3NfcmVxLA0KPiAgICAzODYgICAgICAgICAg
+ICAgICAgICAgICAgICAgIFBNX1FPU19DUFVfRE1BX0xBVEVOQ1ksIDApOw0KPiAgICAzODcNCj4g
+ICAgMzg4ICAgICAgICAgIHJldCA9IGlteF9nZXRfY2xrcyhkZXYpOw0KPiAgICAzODkgICAgICAg
+ICAgaWYgKHJldCkNCj4gICAgMzkwICAgICAgICAgICAgICAgICAgZ290byBkaXNhYmxlX2hzaWNf
+cmVndWxhdG9yOw0KPiAgICAzOTENCj4gICAgMzkyICAgICAgICAgIHJldCA9IGlteF9wcmVwYXJl
+X2VuYWJsZV9jbGtzKGRldik7DQo+ICAgIDM5MyAgICAgICAgICBpZiAocmV0KQ0KPiAgICAzOTQg
+ICAgICAgICAgICAgICAgICBnb3RvIGRpc2FibGVfaHNpY19yZWd1bGF0b3I7DQo+ICAgIDM5NQ0K
+PiAgICAzOTYgICAgICAgICAgZGF0YS0+cGh5ID0gZGV2bV91c2JfZ2V0X3BoeV9ieV9waGFuZGxl
+KGRldiwgImZzbCx1c2JwaHkiLCAwKTsNCj4gICAgMzk3ICAgICAgICAgIGlmIChJU19FUlIoZGF0
+YS0+cGh5KSkgew0KPiAgICAzOTggICAgICAgICAgICAgICAgICByZXQgPSBQVFJfRVJSKGRhdGEt
+PnBoeSk7DQo+ICAgIDM5OSAgICAgICAgICAgICAgICAgIC8qIFJldHVybiAtRUlOVkFMIGlmIG5v
+IHVzYnBoeSBpcyBhdmFpbGFibGUgKi8NCj4gICAgNDAwICAgICAgICAgICAgICAgICAgaWYgKHJl
+dCA9PSAtRU5PREVWKQ0KPiAgICA0MDEgICAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEtPnBo
+eSA9IE5VTEw7DQo+ICAgIDQwMiAgICAgICAgICAgICAgICAgIGVsc2UNCj4gICAgNDAzICAgICAg
+ICAgICAgICAgICAgICAgICAgICBnb3RvIGVycl9jbGs7DQo+ICAgIDQwNCAgICAgICAgICB9DQo+
+ICAgIDQwNQ0KPiAgICA0MDYgICAgICAgICAgcGRhdGEudXNiX3BoeSA9IGRhdGEtPnBoeTsNCj4g
+ICAgNDA3DQo+ICAgIDQwOCAgICAgICAgICBpZiAoKG9mX2RldmljZV9pc19jb21wYXRpYmxlKG5w
+LCAiZnNsLGlteDUzLXVzYiIpIHx8DQo+ICAgIDQwOSAgICAgICAgICAgICAgIG9mX2RldmljZV9p
+c19jb21wYXRpYmxlKG5wLCAiZnNsLGlteDUxLXVzYiIpKSAmJiBwZGF0YS51c2JfcGh5DQo+ICYm
+DQo+ICAgIDQxMCAgICAgICAgICAgICAgb2ZfdXNiX2dldF9waHlfbW9kZShucCkgPT0NCj4gVVNC
+UEhZX0lOVEVSRkFDRV9NT0RFX1VMUEkpIHsNCj4gICAgNDExICAgICAgICAgICAgICAgICAgcGRh
+dGEuZmxhZ3MgfD0gQ0lfSERSQ19PVkVSUklERV9QSFlfQ09OVFJPTDsNCj4gICAgNDEyICAgICAg
+ICAgICAgICAgICAgZGF0YS0+b3ZlcnJpZGVfcGh5X2NvbnRyb2wgPSB0cnVlOw0KPiAgICA0MTMg
+ICAgICAgICAgICAgICAgICB1c2JfcGh5X2luaXQocGRhdGEudXNiX3BoeSk7DQo+ICAgIDQxNCAg
+ICAgICAgICB9DQo+ICAgIDQxNQ0KPiAgICA0MTYgICAgICAgICAgaWYgKHBkYXRhLmZsYWdzICYg
+Q0lfSERSQ19TVVBQT1JUU19SVU5USU1FX1BNKQ0KPiAgICA0MTcgICAgICAgICAgICAgICAgICBk
+YXRhLT5zdXBwb3J0c19ydW50aW1lX3BtID0gdHJ1ZTsNCj4gICAgNDE4DQo+ICAgIDQxOSAgICAg
+ICAgICByZXQgPSBpbXhfdXNibWlzY19pbml0KGRhdGEtPnVzYm1pc2NfZGF0YSk7DQo+ICAgIDQy
+MCAgICAgICAgICBpZiAocmV0KSB7DQo+ICAgIDQyMSAgICAgICAgICAgICAgICAgIGRldl9lcnIo
+ZGV2LCAidXNibWlzYyBpbml0IGZhaWxlZCwgcmV0PSVkXG4iLCByZXQpOw0KPiAgICA0MjIgICAg
+ICAgICAgICAgICAgICBnb3RvIGVycl9jbGs7DQo+ICAgIDQyMyAgICAgICAgICB9DQo+ICAgIDQy
+NA0KPiAgICA0MjUgICAgICAgICAgZGF0YS0+Y2lfcGRldiA9IGNpX2hkcmNfYWRkX2RldmljZShk
+ZXYsDQo+ICAgIDQyNiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwZGV2LT5yZXNv
+dXJjZSwgcGRldi0+bnVtX3Jlc291cmNlcywNCj4gICAgNDI3ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICZwZGF0YSk7DQo+ICAgIDQyOCAgICAgICAgICBpZiAoSVNfRVJSKGRhdGEt
+PmNpX3BkZXYpKSB7DQo+ICAgIDQyOSAgICAgICAgICAgICAgICAgIHJldCA9IFBUUl9FUlIoZGF0
+YS0+Y2lfcGRldik7DQo+ICAgIDQzMCAgICAgICAgICAgICAgICAgIGlmIChyZXQgIT0gLUVQUk9C
+RV9ERUZFUikNCj4gICAgNDMxICAgICAgICAgICAgICAgICAgICAgICAgICBkZXZfZXJyKGRldiwg
+ImNpX2hkcmNfYWRkX2RldmljZSBmYWlsZWQsIGVycj0lZFxuIiwNCj4gICAgNDMyICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0KTsNCj4gICAgNDMzICAgICAgICAg
+ICAgICAgICAgZ290byBlcnJfY2xrOw0KPiAgICA0MzQgICAgICAgICAgfQ0KPiAgICA0MzUNCj4g
+ICAgNDM2ICAgICAgICAgIGlmICghSVNfRVJSKHBkYXRhLmlkX2V4dGNvbi5lZGV2KSB8fA0KPiAg
+ICA0MzcgICAgICAgICAgICAgIG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgInVzYi1yb2xlLXN3
+aXRjaCIpKQ0KPiAgICA0MzggICAgICAgICAgICAgICAgICBkYXRhLT51c2JtaXNjX2RhdGEtPmV4
+dF9pZCA9IDE7DQo+ICAgICAgICAgICAgICAgICAgICAgICAgIF5eXl5eXl5eXl5eXl5eXl5eXl5e
+Xl5eXl5eXl5eXg0KPiANCj4gICAgNDM5DQo+ICAgIDQ0MCAgICAgICAgICBpZiAoIUlTX0VSUihw
+ZGF0YS52YnVzX2V4dGNvbi5lZGV2KSB8fA0KPiAgICA0NDEgICAgICAgICAgICAgIG9mX3Byb3Bl
+cnR5X3JlYWRfYm9vbChucCwgInVzYi1yb2xlLXN3aXRjaCIpKQ0KPiAgICA0NDIgICAgICAgICAg
+ICAgICAgICBkYXRhLT51c2JtaXNjX2RhdGEtPmV4dF92YnVzID0gMTsNCj4gICAgICAgICAgICAg
+ICAgICAgICAgICAgXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl5eXl4gVGhlc2Ugc2hvdWxk
+IHByb2JhYmx5DQo+IGNoZWNrIGZvciBOVUxMPyAgVGhpcyBkcml2ZXIgc2VlbXMgdG8gY2hlY2sg
+cHJldHR5IGNvbnNpc3RlbnRseS4NCg0KWWVzLCBJIHdpbGwgc3VibWl0IGEgcGF0Y2ggdG8gZml4
+IHRoaXMuDQoNCkxpIEp1bg0KPiANCj4gICAgNDQzDQo+ICAgIDQ0NCAgICAgICAgICByZXQgPSBp
+bXhfdXNibWlzY19pbml0X3Bvc3QoZGF0YS0+dXNibWlzY19kYXRhKTsNCj4gDQo+IHJlZ2FyZHMs
+DQo+IGRhbiBjYXJwZW50ZXINCg==
