@@ -2,76 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14424CF7F2
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A034CF828
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730375AbfJHLPq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 07:15:46 -0400
-Received: from mga02.intel.com ([134.134.136.20]:26134 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729790AbfJHLPq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 07:15:46 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:15:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="206619094"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2019 04:15:43 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Oct 2019 14:15:42 +0300
-Date:   Tue, 8 Oct 2019 14:15:42 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/2] extcon: axp288: Move to swnodes
-Message-ID: <20191008111542.GA12909@kuha.fi.intel.com>
-References: <20191001105138.73036-1-heikki.krogerus@linux.intel.com>
- <b1691d61-313c-ad57-3ef4-2dc2dc8263a2@redhat.com>
+        id S1730511AbfJHL3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 07:29:12 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45641 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730249AbfJHL3M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 07:29:12 -0400
+Received: by mail-wr1-f65.google.com with SMTP id r5so18902167wrm.12;
+        Tue, 08 Oct 2019 04:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=FYmSEb4UkFBwKb8YV3FOeq6yilH8AXXad/DLPAhG4DI=;
+        b=tEeiaX7Me1T5znQaAg+ubwUI0vyc8Zhm1RjV5QaasUhzCH7mpsLT9TdXrRLlndmrBy
+         9RHa82qNm8Z4BChHyMO4a1xGthdxMHsOyhGGzZ7pTvwqU+7Ym1YoivrurbPIQa6OgqII
+         KGwRa/dbvofp/UQ7IwH9WC+wq4VhIaGzl8ez39hfi1WDhYyms/dh8HbWcuccGmzK/cFx
+         fy7IcIVsurt7yk0XrmiR9v1WtfNAL7w58nKFHfsWUCPjmRPrgd0RD98wjUYEbwc+EBxf
+         GBGTyeaI2ExDYMGQ0tzbCGYyyLFe5sKirM45R6aBwUpFWLVALeunS9JMqEIaSaoAlwc8
+         tD3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=FYmSEb4UkFBwKb8YV3FOeq6yilH8AXXad/DLPAhG4DI=;
+        b=qoZ4sEne627nlcUxRg67VoqcM/8Mcz6gc1CSLwRGzh02lp8cTa1OSTiIE9pvN5WHDR
+         i5XaKt9fgt084I+Artw2FhKJjSgOX4qDp06JHOIKl/OivEjyk/7O6MHj+BfGi8NdyxJ8
+         xcmuRoOFPH1XUek4ZrXTJoLQUQ4OBkW4NAgqECMICR1WurWdP8aKHHmW7ZenrCfquiF+
+         yVQLpDYw42xO7d5g7aFWGto1FHYaG/rngOiLm7Ym+MGzHoBfPzI5jMauwaUx1On21bWQ
+         gcF+UY4yds8HbV50c+3kAp7SADZWev6idptVLq3OPYpeRCZNNxFEJVM9galCQAvJbghb
+         2glg==
+X-Gm-Message-State: APjAAAWw5Sao+5VGbgpOWleiw5kz6+OYYvN7T2p6NyKWz/+cJBnsJI0l
+        /f47kE1uibKMkDcbOdAKvmQ=
+X-Google-Smtp-Source: APXvYqwDi0ge0lsN7GXz3MGF8+juCAMiP5g/2tiWKI2mruB19jSzvAi1nOuWd7Kf7c7AMppkHec4Kw==
+X-Received: by 2002:adf:cc8a:: with SMTP id p10mr26060310wrj.321.1570534149735;
+        Tue, 08 Oct 2019 04:29:09 -0700 (PDT)
+Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
+        by smtp.gmail.com with ESMTPSA id y186sm6213868wmd.26.2019.10.08.04.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2019 04:29:08 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 13:29:07 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     JC Kuo <jckuo@nvidia.com>, jonathanh@nvidia.com,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        nkristam@nvidia.com, skomatineni@nvidia.com
+Subject: Re: [PATCH v3 0/7] add Tegra194 XUSB host and pad controller support
+Message-ID: <20191008112907.GC228118@ulmo>
+References: <20191004162906.4818-1-jckuo@nvidia.com>
+ <20191007110311.GA614644@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GPJrCs/72TxItFYR"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b1691d61-313c-ad57-3ef4-2dc2dc8263a2@redhat.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191007110311.GA614644@kroah.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Oct 06, 2019 at 09:37:25PM +0200, Hans de Goede wrote:
-> Hi,
-> 
-> On 01-10-2019 12:51, Heikki Krogerus wrote:
-> > Hi Hans,
-> > 
-> > That AXP288 extcon driver is the last that uses build-in connection
-> > description. I'm replacing it with a code that finds the role mux
-> > software node instead.
-> > 
-> > I'm proposing also here a little helper
-> > usb_role_switch_find_by_fwnode() that uses
-> > class_find_device_by_fwnode() to find the role switches.
-> 
-> I'm building a kernel with these patches to test them now
-> (on hw which uses the axp288 extcon code-paths with the role-sw)
-> 
-> No test results yet, but I did notice this will building:
-> 
->   CC [M]  drivers/extcon/extcon-axp288.o
-> drivers/extcon/extcon-axp288.c: In function ‘axp288_extcon_find_role_sw’:
-> drivers/extcon/extcon-axp288.c:333:9: warning: assignment discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
->   333 |  swnode = software_node_find_by_name(NULL, "intel-xhci-usb-sw");
->       |         ^
 
-Thanks Hans. I'll fix that.
+--GPJrCs/72TxItFYR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Br,
+On Mon, Oct 07, 2019 at 01:03:11PM +0200, Greg KH wrote:
+> On Sat, Oct 05, 2019 at 12:28:59AM +0800, JC Kuo wrote:
+> > Hi,
+> >=20
+> > This series introduces support for Tegra194 XUSB host and pad
+> > controller. Tegra194 XUSB host and pad controller are highly
+> > similar to the controllers found on Tegra186. Therefore, it's
+> > possible to resue xhci-tegra.c and xusb-tegra186.c for Tegra194.
+>=20
+> I've taken patches 1 and 2 through my USB tree.  If you want/need me to
+> take the others, please get acks from those maintainers on them so I can
+> do so.
 
--- 
-heikki
+I can pick up patches 6 and 7 into the Tegra tree. There are a few
+patches in there already that conflict with the DT changes in this
+series and those will be easier to resolve in the Tegra tree.
+
+JC, I noticed that you didn't Cc Kishon as the PHY subsystem maintainer.
+Please resend the series with Kishon added in the To: line to make sure
+he sees them and can apply or ack them.
+
+Given that Greg's already applied patches 1 and 2, maybe leave them out
+of the series.
+
+Thierry
+
+--GPJrCs/72TxItFYR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2ccwIACgkQ3SOs138+
+s6EHqhAAtp/qnbVEMpUPdQ4QZrf6zUalRDl5LzyC8TQdSl+FMfbcFe9thXOQNkKN
+w69TNE00wHz9llCeHLB7cXYKnXZkRjxjJg+0JRt5ULV6ijZH+vRG1ICs/FG5KPxZ
+RFODotu9nCMcbFmszhYTHP5TtvVObWylAhjQ8lBBWFRutILCsaYwY2qA5cd+JAAW
+itNCCKSIAhqksYpL0hmfFr28bUoMZ4fh51Lnie/RP0lHV6HHa1LPYXJQ10lx9x2u
+E+BanUgNYaNTpgnoZgQUsc0kjnrU8+watMHZGNAT2qOOtm71Xs1iOxkLR28z35Jm
+L8oTrS9DZAoob0ewxpWPH8dJMwrF8yxp+8Pp+C8NG0KpHpdiOM7woEq6VXEHaY+d
+6sfngywiY6YvY/dH18hH6Ds0tPWCaEwzDBdEenZAm2+H35cz4mFKBR/mxy2EkZJq
+cgRBJVLrKgG84Bnujfq8hNXkrGp3I3KCk+ENeq4tC+EpgDc3i1He7mS1G9ppSdxD
+lEMfnZqBD9Rj4zAQPoAVtkMdXGi93LL2YPIMZhEGbyl07ZejfsC+jomAXhmWpk+8
+r+3zZj10fXH7xGsdRAHIzra36DYVe8hsYJrMtyIr4yiDgebpDr5Ofvc0jdWq/eRU
+kxbyY8RANaFfs+vH7hIoB1ta6y0X+0SXeixsk+PuzqYfvDq6fV8=
+=mEdr
+-----END PGP SIGNATURE-----
+
+--GPJrCs/72TxItFYR--
