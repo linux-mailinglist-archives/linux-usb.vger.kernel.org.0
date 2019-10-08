@@ -2,91 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB0ED02FF
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 23:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7380D036D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 00:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731135AbfJHVkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 17:40:51 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:41013 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728054AbfJHVkv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 17:40:51 -0400
-Received: by mail-pg1-f194.google.com with SMTP id t3so5187272pga.8
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 14:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ZkCeKbP1ys4q3b3SvFig0ZxjSfmMEmE9jsl9r7a5bAE=;
-        b=AIH8PdjW+5/M6m8SJ+uxrrGqjlSBUDHJ/1FI/+/9zFjDoPTki/q9Knyb928P4zbS1V
-         RUNtxHdFDLYM30uPo6KVgt/HDfwHEDFa930wNLIx0J60saOQ5EgDqZyF4lxV/Bq/Zi07
-         UXcpseKL+sAqTEVQIwXL7JuKBZ6yyGb2I3pOS2GqZkHBgNVieqxIDmNT3NQQed+H1qFa
-         pI/o5TArQelRBfAxsJsu4BMtTUNWvCTf/2qzx07UnJdeMC64ouMxB8zYbMJp06MtQ5Uq
-         EZYOyrhqKoF5UQl1PxQHuF+ghKk2v9pZfKSc4IQyGshH1DsFOy1Z8+ack+6jD4xfLcOr
-         heCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZkCeKbP1ys4q3b3SvFig0ZxjSfmMEmE9jsl9r7a5bAE=;
-        b=Ulje+sUaFrWCxfY5DxMlgD/VfK8AlbME4BnqBP0Tpd5+NiC4WqQasOOhJFCHCDJUZ5
-         oV8Fpzz4RvofLV9pmlHrgRYPnrzSTSunaenowsmXkJtH8TYa592hyy6dxC9HafdyAPBA
-         jSdC2OJQRXcLNLom8l1YWMNI9EsQkr4mmvxgLNWm5NNjGZmuVJS2sjr/WevouVGcbhda
-         uoYO7ivCoM8EE/LAszsA2WLVOX0nBqcNN0+EVelRkrPmW6nBgPXdFTwvu4/fFTwVrTp2
-         KwBjpVtStLR2Bfw/zFISWqarTx9l45p5VpVptDdjbS0wvu6mSj0SGhsUW/JRhnhn9a9g
-         Lo5g==
-X-Gm-Message-State: APjAAAWBSI2OleK4wbjVFTv4aKezdgYd5UIlwM81dTS7OQsloeGC9RM0
-        4ncbaEK0TwdfRkog1zFyP0bGjbgQ
-X-Google-Smtp-Source: APXvYqwTS43x/RpGZL9O4MrDtlTWjBbplm+fTqjirIu160Rh5c3RBF/bYypKMzUv0nEfZ4Q7P3sWgQ==
-X-Received: by 2002:a17:90a:de14:: with SMTP id m20mr8405731pjv.10.1570570851078;
-        Tue, 08 Oct 2019 14:40:51 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g24sm86295pfi.81.2019.10.08.14.40.49
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 08 Oct 2019 14:40:50 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 14:40:49 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 9/9] usb: typec: Remove unused members from struct
- typec_capability
-Message-ID: <20191008214049.GF16138@roeck-us.net>
-References: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
- <20191008111350.68581-10-heikki.krogerus@linux.intel.com>
+        id S1725914AbfJHWcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 18:32:43 -0400
+Received: from valentin-vidic.from.hr ([94.229.67.141]:55737 "EHLO
+        valentin-vidic.from.hr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfJHWcm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 18:32:42 -0400
+X-Greylist: delayed 566 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Oct 2019 18:32:41 EDT
+X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
+Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
+        id 42C6925D; Wed,  9 Oct 2019 00:23:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+        d=valentin-vidic.from.hr; s=2017; t=1570573389;
+        bh=gCUfr9ijiKWav6o1R8261PlBXptRHXBtHMu8ZFIIfpk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=o51vqbaeFl/Epd2UP3431uHmkB3LyFRMsIDBxyj5/LXOGIymF0eb8IEWXc/Vihpr0
+         k5cO4FAOh1pCcK1b5Jm1oZfwRaPKJQW3uKl5I/0FO1/RQbWDSFmm2y+iL+gXpoFCPv
+         ECwAHqJv1SPvNl7ayGq7fVfiUClOOgETB2doDWZkcxt90DhHMC+n4TWidh/i2zD1uG
+         lfo0LsWUUsrMTn9PO8paQ344Z/4/sx1PM/Ebo73LdzhUm6jZJsWuCIuXY/QYI46GZt
+         +TdgZ9+fvZtSNcF4b4WpvqEcn7AI9o+yF/ph8LJADYzAfwhzvh1T2oBQ9gi6C84Q8R
+         viDMTzmFsDP1Q==
+From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Valentin Vidic <vvidic@valentin-vidic.from.hr>,
+        syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com
+Subject: [PATCH] usb: iowarrior: fix access to freed data structure
+Date:   Wed,  9 Oct 2019 00:23:07 +0200
+Message-Id: <20191008222307.18587-1-vvidic@valentin-vidic.from.hr>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191008111350.68581-10-heikki.krogerus@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 02:13:50PM +0300, Heikki Krogerus wrote:
-> The members for the muxes are not used, so dropping them.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+struct iowarrior gets freed prematurely in iowarrior_release while
+it is still being referenced from usb_interface, so let only
+iowarrior_disconnect call iowarrior_delete.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: KMSAN: uninit-value in iowarrior_disconnect
+Reported-by: syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+---
+ drivers/usb/misc/iowarrior.c | 35 +++++++++++++++--------------------
+ 1 file changed, 15 insertions(+), 20 deletions(-)
 
-> ---
->  include/linux/usb/typec.h | 2 --
->  1 file changed, 2 deletions(-)
-> 
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index 894798084319..0f52723a11bd 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -209,8 +209,6 @@ struct typec_capability {
->  	int			prefer_role;
->  	enum typec_accessory	accessory[TYPEC_MAX_ACCESSORY];
->  
-> -	struct typec_switch	*sw;
-> -	struct typec_mux	*mux;
->  	struct fwnode_handle	*fwnode;
->  	void			*driver_data;
->  
-> -- 
-> 2.23.0
-> 
+diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
+index f5bed9f29e56..0492ea76c4bf 100644
+--- a/drivers/usb/misc/iowarrior.c
++++ b/drivers/usb/misc/iowarrior.c
+@@ -638,7 +638,6 @@ static int iowarrior_open(struct inode *inode, struct file *file)
+ static int iowarrior_release(struct inode *inode, struct file *file)
+ {
+ 	struct iowarrior *dev;
+-	int retval = 0;
+ 
+ 	dev = file->private_data;
+ 	if (!dev)
+@@ -650,27 +649,23 @@ static int iowarrior_release(struct inode *inode, struct file *file)
+ 	mutex_lock(&dev->mutex);
+ 
+ 	if (dev->opened <= 0) {
+-		retval = -ENODEV;	/* close called more than once */
+ 		mutex_unlock(&dev->mutex);
+-	} else {
+-		dev->opened = 0;	/* we're closing now */
+-		retval = 0;
+-		if (dev->present) {
+-			/*
+-			   The device is still connected so we only shutdown
+-			   pending read-/write-ops.
+-			 */
+-			usb_kill_urb(dev->int_in_urb);
+-			wake_up_interruptible(&dev->read_wait);
+-			wake_up_interruptible(&dev->write_wait);
+-			mutex_unlock(&dev->mutex);
+-		} else {
+-			/* The device was unplugged, cleanup resources */
+-			mutex_unlock(&dev->mutex);
+-			iowarrior_delete(dev);
+-		}
++		return -ENODEV;	/* close called more than once */
+ 	}
+-	return retval;
++
++	dev->opened = 0;	/* we're closing now */
++	if (dev->present) {
++		/*
++		 * The device is still connected so we only shutdown
++		 * pending read/write ops.
++		 */
++		usb_kill_urb(dev->int_in_urb);
++		wake_up_interruptible(&dev->read_wait);
++		wake_up_interruptible(&dev->write_wait);
++	}
++
++	mutex_unlock(&dev->mutex);
++	return 0;
+ }
+ 
+ static __poll_t iowarrior_poll(struct file *file, poll_table * wait)
+-- 
+2.20.1
+
