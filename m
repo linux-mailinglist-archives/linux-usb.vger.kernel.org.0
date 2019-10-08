@@ -2,122 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D011CF9BB
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 14:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F16BCF9D5
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 14:32:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730882AbfJHM0K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 08:26:10 -0400
-Received: from mga02.intel.com ([134.134.136.20]:30802 "EHLO mga02.intel.com"
+        id S1730371AbfJHMcg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 08:32:36 -0400
+Received: from mga04.intel.com ([192.55.52.120]:25947 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730316AbfJHM0H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 08:26:07 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1730541AbfJHMcg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 08:32:36 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 05:26:07 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 05:32:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="206626813"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 05:26:05 -0700
+   d="scan'208";a="206627559"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 08 Oct 2019 05:32:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Oct 2019 15:32:31 +0300
+Date:   Tue, 8 Oct 2019 15:32:31 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
+To:     Biju Das <biju.das@bp.renesas.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 2/2] extcon: axp288: Remove the build-in connection description
-Date:   Tue,  8 Oct 2019 15:26:00 +0300
-Message-Id: <20191008122600.22340-3-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191008122600.22340-1-heikki.krogerus@linux.intel.com>
-References: <20191008122600.22340-1-heikki.krogerus@linux.intel.com>
+        linux-usb@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Simon Horman <horms@verge.net.au>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: hd3ss3220: hd3ss3220_probe() warn: passing
+ zero to 'PTR_ERR'
+Message-ID: <20191008123231.GB12909@kuha.fi.intel.com>
+References: <1570462729-25722-1-git-send-email-biju.das@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1570462729-25722-1-git-send-email-biju.das@bp.renesas.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Getting handle to the USB role switch by first finding its
-software fwnode.
+On Mon, Oct 07, 2019 at 04:38:49PM +0100, Biju Das wrote:
+> This patch fixes the warning passing zero to 'PTR_ERR' by changing the
+> check from 'IS_ERR_OR_NULL' to 'IS_ERR'. Also improved the error handling
+> on probe function.
+> 
+> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+> Reported-by: kbuild test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Biju Das <biju.das@bp.renesas.com>
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/extcon/extcon-axp288.c | 38 ++++++++++++++++++++--------------
- 1 file changed, 23 insertions(+), 15 deletions(-)
+OK by me. FWIW:
 
-diff --git a/drivers/extcon/extcon-axp288.c b/drivers/extcon/extcon-axp288.c
-index 415afaf479e7..a7f216191493 100644
---- a/drivers/extcon/extcon-axp288.c
-+++ b/drivers/extcon/extcon-axp288.c
-@@ -322,6 +322,25 @@ static void axp288_put_role_sw(void *data)
- 	usb_role_switch_put(info->role_sw);
- }
- 
-+static int axp288_extcon_find_role_sw(struct axp288_extcon_info *info)
-+{
-+	const struct software_node *swnode;
-+	struct fwnode_handle *fwnode;
-+
-+	if (!x86_match_cpu(cherry_trail_cpu_ids))
-+		return 0;
-+
-+	swnode = software_node_find_by_name(NULL, "intel-xhci-usb-sw");
-+	if (!swnode)
-+		return -EPROBE_DEFER;
-+
-+	fwnode = software_node_fwnode(swnode);
-+	info->role_sw = usb_role_switch_find_by_fwnode(fwnode);
-+	fwnode_handle_put(fwnode);
-+
-+	return info->role_sw ? 0 : -EPROBE_DEFER;
-+}
-+
- static int axp288_extcon_probe(struct platform_device *pdev)
- {
- 	struct axp288_extcon_info *info;
-@@ -343,9 +362,10 @@ static int axp288_extcon_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, info);
- 
--	info->role_sw = usb_role_switch_get(dev);
--	if (IS_ERR(info->role_sw))
--		return PTR_ERR(info->role_sw);
-+	ret = axp288_extcon_find_role_sw(info);
-+	if (ret)
-+		return ret;
-+
- 	if (info->role_sw) {
- 		ret = devm_add_action_or_reset(dev, axp288_put_role_sw, info);
- 		if (ret)
-@@ -440,26 +460,14 @@ static struct platform_driver axp288_extcon_driver = {
- 	},
- };
- 
--static struct device_connection axp288_extcon_role_sw_conn = {
--	.endpoint[0] = "axp288_extcon",
--	.endpoint[1] = "intel_xhci_usb_sw-role-switch",
--	.id = "usb-role-switch",
--};
--
- static int __init axp288_extcon_init(void)
- {
--	if (x86_match_cpu(cherry_trail_cpu_ids))
--		device_connection_add(&axp288_extcon_role_sw_conn);
--
- 	return platform_driver_register(&axp288_extcon_driver);
- }
- module_init(axp288_extcon_init);
- 
- static void __exit axp288_extcon_exit(void)
- {
--	if (x86_match_cpu(cherry_trail_cpu_ids))
--		device_connection_remove(&axp288_extcon_role_sw_conn);
--
- 	platform_driver_unregister(&axp288_extcon_driver);
- }
- module_exit(axp288_extcon_exit);
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 1900910..7e5f3f7 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -178,7 +178,7 @@ static int hd3ss3220_probe(struct i2c_client *client,
+>  
+>  	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
+>  	fwnode_handle_put(connector);
+> -	if (IS_ERR_OR_NULL(hd3ss3220->role_sw))
+> +	if (IS_ERR(hd3ss3220->role_sw))
+>  		return PTR_ERR(hd3ss3220->role_sw);
+>  
+>  	hd3ss3220->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> @@ -188,20 +188,22 @@ static int hd3ss3220_probe(struct i2c_client *client,
+>  
+>  	hd3ss3220->port = typec_register_port(&client->dev,
+>  					      &hd3ss3220->typec_cap);
+> -	if (IS_ERR(hd3ss3220->port))
+> -		return PTR_ERR(hd3ss3220->port);
+> +	if (IS_ERR(hd3ss3220->port)) {
+> +		ret = PTR_ERR(hd3ss3220->port);
+> +		goto err_put_role;
+> +	}
+>  
+>  	hd3ss3220_set_role(hd3ss3220);
+>  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+>  	if (ret < 0)
+> -		goto error;
+> +		goto err_unreg_port;
+>  
+>  	if (data & HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS) {
+>  		ret = regmap_write(hd3ss3220->regmap,
+>  				HD3SS3220_REG_CN_STAT_CTRL,
+>  				data | HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS);
+>  		if (ret < 0)
+> -			goto error;
+> +			goto err_unreg_port;
+>  	}
+>  
+>  	if (client->irq > 0) {
+> @@ -210,18 +212,19 @@ static int hd3ss3220_probe(struct i2c_client *client,
+>  					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+>  					"hd3ss3220", &client->dev);
+>  		if (ret)
+> -			goto error;
+> +			goto err_unreg_port;
+>  	}
+>  
+>  	ret = i2c_smbus_read_byte_data(client, HD3SS3220_REG_DEV_REV);
+>  	if (ret < 0)
+> -		goto error;
+> +		goto err_unreg_port;
+>  
+>  	dev_info(&client->dev, "probed revision=0x%x\n", ret);
+>  
+>  	return 0;
+> -error:
+> +err_unreg_port:
+>  	typec_unregister_port(hd3ss3220->port);
+> +err_put_role:
+>  	usb_role_switch_put(hd3ss3220->role_sw);
+>  
+>  	return ret;
+> -- 
+> 2.7.4
+
+thanks,
+
 -- 
-2.23.0
-
+heikki
