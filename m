@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5FB8CF7EB
+	by mail.lfdr.de (Postfix) with ESMTP id BEB5ECF7EC
 	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730471AbfJHLOB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 07:14:01 -0400
+        id S1730479AbfJHLOD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 07:14:03 -0400
 Received: from mga02.intel.com ([134.134.136.20]:26010 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729790AbfJHLOB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 07:14:01 -0400
+        id S1729790AbfJHLOD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 07:14:03 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:14:00 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:14:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="206618911"
+   d="scan'208";a="206618914"
 Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 04:13:58 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 04:14:01 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH v3 5/9] usb: typec: tps6598x: Start using struct typec_operations
-Date:   Tue,  8 Oct 2019 14:13:46 +0300
-Message-Id: <20191008111350.68581-6-heikki.krogerus@linux.intel.com>
+Subject: [PATCH v3 6/9] usb: typec: ucsi: Start using struct typec_operations
+Date:   Tue,  8 Oct 2019 14:13:47 +0300
+Message-Id: <20191008111350.68581-7-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
 References: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
@@ -38,133 +38,77 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Supplying the operation callbacks as part of a struct
 typec_operations instead of as part of struct
-typec_capability during port registration. After this there
-is not need to keep the capabilities stored anywhere in the
-driver.
+typec_capability during port registration.
 
 Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- drivers/usb/typec/tps6598x.c | 49 +++++++++++++++++++-----------------
- 1 file changed, 26 insertions(+), 23 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/usb/typec/tps6598x.c b/drivers/usb/typec/tps6598x.c
-index a38d1409f15b..0698addd1185 100644
---- a/drivers/usb/typec/tps6598x.c
-+++ b/drivers/usb/typec/tps6598x.c
-@@ -94,7 +94,6 @@ struct tps6598x {
- 	struct typec_port *port;
- 	struct typec_partner *partner;
- 	struct usb_pd_identity partner_identity;
--	struct typec_capability typec_cap;
- };
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index ba288b964dc8..edd722fb88b8 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -17,9 +17,6 @@
+ #include "ucsi.h"
+ #include "trace.h"
  
+-#define to_ucsi_connector(_cap_) container_of(_cap_, struct ucsi_connector, \
+-					      typec_cap)
+-
  /*
-@@ -307,11 +306,10 @@ static int tps6598x_exec_cmd(struct tps6598x *tps, const char *cmd,
- 	return 0;
- }
- 
--static int
--tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
-+static int tps6598x_dr_set(struct typec_port *port, enum typec_data_role role)
- {
--	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
- 	const char *cmd = (role == TYPEC_DEVICE) ? "SWUF" : "SWDF";
-+	struct tps6598x *tps = typec_get_drvdata(port);
- 	u32 status;
- 	int ret;
- 
-@@ -338,11 +336,10 @@ tps6598x_dr_set(const struct typec_capability *cap, enum typec_data_role role)
+  * UCSI_TIMEOUT_MS - PPM communication timeout
+  *
+@@ -713,10 +710,9 @@ static int ucsi_role_cmd(struct ucsi_connector *con, struct ucsi_control *ctrl)
  	return ret;
  }
  
 -static int
--tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
-+static int tps6598x_pr_set(struct typec_port *port, enum typec_role role)
+-ucsi_dr_swap(const struct typec_capability *cap, enum typec_data_role role)
++static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
  {
--	struct tps6598x *tps = container_of(cap, struct tps6598x, typec_cap);
- 	const char *cmd = (role == TYPEC_SINK) ? "SWSk" : "SWSr";
-+	struct tps6598x *tps = typec_get_drvdata(port);
- 	u32 status;
- 	int ret;
+-	struct ucsi_connector *con = to_ucsi_connector(cap);
++	struct ucsi_connector *con = typec_get_drvdata(port);
+ 	struct ucsi_control ctrl;
+ 	int ret = 0;
  
-@@ -369,6 +366,11 @@ tps6598x_pr_set(const struct typec_capability *cap, enum typec_role role)
+@@ -748,10 +744,9 @@ ucsi_dr_swap(const struct typec_capability *cap, enum typec_data_role role)
+ 	return ret < 0 ? ret : 0;
+ }
+ 
+-static int
+-ucsi_pr_swap(const struct typec_capability *cap, enum typec_role role)
++static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
+ {
+-	struct ucsi_connector *con = to_ucsi_connector(cap);
++	struct ucsi_connector *con = typec_get_drvdata(port);
+ 	struct ucsi_control ctrl;
+ 	int ret = 0;
+ 
+@@ -788,6 +783,11 @@ ucsi_pr_swap(const struct typec_capability *cap, enum typec_role role)
  	return ret;
  }
  
-+static const struct typec_operations tps6598x_ops = {
-+	.dr_set = tps6598x_dr_set,
-+	.pr_set = tps6598x_pr_set,
++static const struct typec_operations ucsi_ops = {
++	.dr_set = ucsi_dr_swap,
++	.pr_set = ucsi_pr_swap
 +};
 +
- static irqreturn_t tps6598x_interrupt(int irq, void *data)
+ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
  {
- 	struct tps6598x *tps = data;
-@@ -448,6 +450,7 @@ static const struct regmap_config tps6598x_regmap_config = {
+ 	struct fwnode_handle *fwnode;
+@@ -843,8 +843,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 		*accessory = TYPEC_ACCESSORY_DEBUG;
  
- static int tps6598x_probe(struct i2c_client *client)
- {
-+	struct typec_capability typec_cap = { };
- 	struct tps6598x *tps;
- 	u32 status;
- 	u32 conf;
-@@ -492,40 +495,40 @@ static int tps6598x_probe(struct i2c_client *client)
- 	if (ret < 0)
- 		return ret;
+ 	cap->fwnode = ucsi_find_fwnode(con);
+-	cap->dr_set = ucsi_dr_swap;
+-	cap->pr_set = ucsi_pr_swap;
++	cap->driver_data = con;
++	cap->ops = &ucsi_ops;
  
--	tps->typec_cap.revision = USB_TYPEC_REV_1_2;
--	tps->typec_cap.pd_revision = 0x200;
--	tps->typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
--	tps->typec_cap.pr_set = tps6598x_pr_set;
--	tps->typec_cap.dr_set = tps6598x_dr_set;
-+	typec_cap.revision = USB_TYPEC_REV_1_2;
-+	typec_cap.pd_revision = 0x200;
-+	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
-+	typec_cap.driver_data = tps;
-+	typec_cap.ops = &tps6598x_ops;
- 
- 	switch (TPS_SYSCONF_PORTINFO(conf)) {
- 	case TPS_PORTINFO_SINK_ACCESSORY:
- 	case TPS_PORTINFO_SINK:
--		tps->typec_cap.type = TYPEC_PORT_SNK;
--		tps->typec_cap.data = TYPEC_PORT_UFP;
-+		typec_cap.type = TYPEC_PORT_SNK;
-+		typec_cap.data = TYPEC_PORT_UFP;
- 		break;
- 	case TPS_PORTINFO_DRP_UFP_DRD:
- 	case TPS_PORTINFO_DRP_DFP_DRD:
--		tps->typec_cap.type = TYPEC_PORT_DRP;
--		tps->typec_cap.data = TYPEC_PORT_DRD;
-+		typec_cap.type = TYPEC_PORT_DRP;
-+		typec_cap.data = TYPEC_PORT_DRD;
- 		break;
- 	case TPS_PORTINFO_DRP_UFP:
--		tps->typec_cap.type = TYPEC_PORT_DRP;
--		tps->typec_cap.data = TYPEC_PORT_UFP;
-+		typec_cap.type = TYPEC_PORT_DRP;
-+		typec_cap.data = TYPEC_PORT_UFP;
- 		break;
- 	case TPS_PORTINFO_DRP_DFP:
--		tps->typec_cap.type = TYPEC_PORT_DRP;
--		tps->typec_cap.data = TYPEC_PORT_DFP;
-+		typec_cap.type = TYPEC_PORT_DRP;
-+		typec_cap.data = TYPEC_PORT_DFP;
- 		break;
- 	case TPS_PORTINFO_SOURCE:
--		tps->typec_cap.type = TYPEC_PORT_SRC;
--		tps->typec_cap.data = TYPEC_PORT_DFP;
-+		typec_cap.type = TYPEC_PORT_SRC;
-+		typec_cap.data = TYPEC_PORT_DFP;
- 		break;
- 	default:
- 		return -ENODEV;
- 	}
- 
--	tps->port = typec_register_port(&client->dev, &tps->typec_cap);
-+	tps->port = typec_register_port(&client->dev, &typec_cap);
- 	if (IS_ERR(tps->port))
- 		return PTR_ERR(tps->port);
- 
+ 	/* Register the connector */
+ 	con->port = typec_register_port(ucsi->dev, cap);
 -- 
 2.23.0
 
