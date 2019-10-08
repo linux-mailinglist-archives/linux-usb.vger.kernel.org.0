@@ -2,85 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F24DCF73D
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 12:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4EACF7E6
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730705AbfJHKjv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 06:39:51 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:52530 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730683AbfJHKjt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 06:39:49 -0400
-X-IronPort-AV: E=Sophos;i="5.67,270,1566831600"; 
-   d="scan'208";a="28359408"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 08 Oct 2019 19:39:47 +0900
-Received: from fabrizio-dev.ree.adwin.renesas.com (unknown [10.226.36.196])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id DAF43400941B;
-        Tue,  8 Oct 2019 19:39:43 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: [PATCH 10/10] arm64: dts: renesas: r8a774b1: Add INTC-EX device node
-Date:   Tue,  8 Oct 2019 11:38:52 +0100
-Message-Id: <1570531132-21856-11-git-send-email-fabrizio.castro@bp.renesas.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com>
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com>
+        id S1730118AbfJHLNx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 07:13:53 -0400
+Received: from mga02.intel.com ([134.134.136.20]:26010 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729790AbfJHLNx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 07:13:53 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 04:13:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
+   d="scan'208";a="206618901"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 04:13:50 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: [PATCH v3 0/9] usb: typec: Small API improvement
+Date:   Tue,  8 Oct 2019 14:13:41 +0300
+Message-Id: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add support for the Interrupt Controller for External Devices
-(INTC-EX) on RZ/G2N.
+Hi,
 
-Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
----
- arch/arm64/boot/dts/renesas/r8a774b1.dtsi | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+The broken conditions in the *_store() functions should now be fixed.
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-index f24bd34..80b8b2e 100644
---- a/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a774b1.dtsi
-@@ -390,6 +390,22 @@
- 			#thermal-sensor-cells = <1>;
- 		};
- 
-+		intc_ex: interrupt-controller@e61c0000 {
-+			compatible = "renesas,intc-ex-r8a774b1", "renesas,irqc";
-+			#interrupt-cells = <2>;
-+			interrupt-controller;
-+			reg = <0 0xe61c0000 0 0x200>;
-+			interrupts = <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH
-+				      GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH
-+				      GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH
-+				      GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH
-+				      GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH
-+				      GIC_SPI 161 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 407>;
-+			power-domains = <&sysc R8A774B1_PD_ALWAYS_ON>;
-+			resets = <&cpg 407>;
-+		};
-+
- 		tmu0: timer@e61e0000 {
- 			compatible = "renesas,tmu-r8a774b1", "renesas,tmu";
- 			reg = <0 0xe61e0000 0 0x30>;
+Cover letter from v2:
+
+In this version there should be no more semantic changes.
+
+The original cover letter:
+
+This series moves the callback members from struct typec_capabilities
+to a new struct typec_operations. That removes the need for the
+drivers to keep a copy of the struct typec_capabilites if they don't
+need it, and struct typec_operations can probable always be
+constified.
+
+The change is small, however I think the code ends up being a bit more
+cleaner looking this way. Let me know if it's OK.
+
+thanks,
+
+Heikki Krogerus (9):
+  usb: typec: Copy everything from struct typec_capability during
+    registration
+  usb: typec: Introduce typec_get_drvdata()
+  usb: typec: Separate the operations vector
+  usb: typec: tcpm: Start using struct typec_operations
+  usb: typec: tps6598x: Start using struct typec_operations
+  usb: typec: ucsi: Start using struct typec_operations
+  usb: typec: hd3ss3220: Start using struct typec_operations
+  usb: typec: Remove the callback members from struct typec_capability
+  usb: typec: Remove unused members from struct typec_capability
+
+ drivers/usb/typec/class.c     | 37 ++++++++++++++++++--------
+ drivers/usb/typec/hd3ss3220.c | 24 +++++++++--------
+ drivers/usb/typec/tcpm/tcpm.c | 45 ++++++++++++++------------------
+ drivers/usb/typec/tps6598x.c  | 49 +++++++++++++++++++----------------
+ drivers/usb/typec/ucsi/ucsi.c | 22 ++++++++--------
+ include/linux/usb/typec.h     | 41 ++++++++++++++++-------------
+ 6 files changed, 119 insertions(+), 99 deletions(-)
+
 -- 
-2.7.4
+2.23.0
 
