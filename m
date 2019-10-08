@@ -2,321 +2,264 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 364C9CF272
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 08:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752D0CF2C5
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 08:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729809AbfJHGJd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 02:09:33 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:41966 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728297AbfJHGJd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 02:09:33 -0400
-Received: by mail-wr1-f65.google.com with SMTP id q9so17832878wrm.8
-        for <linux-usb@vger.kernel.org>; Mon, 07 Oct 2019 23:09:31 -0700 (PDT)
+        id S1729926AbfJHGee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 02:34:34 -0400
+Received: from mail-eopbgr810070.outbound.protection.outlook.com ([40.107.81.70]:39648
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729740AbfJHGee (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 02:34:34 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VcNwQ3ByCJ/DOupyhTdLnsiHW/ADvdBmUFOUv31czCMtfflzpiRgbPcaWDMxxf33/br2n8afIihZU2XJgbfiueT17CRZToq29HGmWy6rg7SAtkQolFcMcQIeYbFiLt7rygJ8a0SePQtmUpiWBA1aXFy9gZOx5CVAp0yfVq5H4GFdpY0dJklo3PK4sEEXxDEiKlkm2KpcRUkm2s+qSNmgyFV6oF5oZNm5DNpjqZsszGMYXVFRNpKfcqtM4b1FGrUMW0TGXr/Cj5vOyOffG64J6tlbHSbq53jnvQF5jNDoZK8P3POP79lIro0h9rOW/5Pv8krkQVOF2GCeqiL9Brs6rA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cDsOKJ5OtZouaCOC9d2wsP3uOsrbxoTCaVIXdvAQCjQ=;
+ b=MdQAfa6bAViciUhkRLAJhmmH8bO+5B1gXIJ/OQHmAQFtgGer3FMt2eBejYnSpokBn+3VY0VdcBgKwsaTQ1DIlDWV0zmylsMV1CA2GIPn3vZeFy2J4oOgt03Qbjl/uL5sqPixcx0g1NWgDPyBRsA+E+cEDWijhMuWi3oKFmWODYDky8/ISxgM5omMBNnkhch3LRKhg/At2mBmFYla1tfwzsiXPf2fSaHUrVNAEKR4jl3DB7fxGA/tdSYaVFl+BdDCL44ghgu2Vo+bT+ptstptfke6004YV9UROgjvWc1eMeO9gpsLu0Jtr48a3IQjIC83xe+Pd9xpwZiFJuubLe+jkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.60.83) smtp.rcpttodomain=gmail.com smtp.mailfrom=xilinx.com;
+ dmarc=bestguesspass action=none header.from=xilinx.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cKAvbyg6nIph8rb1+uPilZlVSUi3nPRSzDY9b3NWOag=;
-        b=Jw1pMAkvBXs7hHBXmLvZL/AJlwTFDO5pHZ3N/RpaxNkBUJ/CTf/GDs60YzzOUReexk
-         yHkjuqBv5P8JAnOKy88+u7L7t6HKx8jvpXS57z1fl5j1prML/ZPj2t4h6qAcoZ4TF+sp
-         wTsLlrn6RsGbIsY37R7WXAb04Oiq4NvwTKnyxx3Pdpw/Mgpdhk+nT9YtBipktaQCZDaH
-         8a81nxJw4ElsgsJApUV5ViOShP5qLY7L270kVVcQptmNVuQo9nNzMVFpbb53+cTP81MF
-         m7on27ktTX0U1sPXXxs8iYYyCK8WjnZ00E9IyMh5vy1wXdAYjVrClMCHslb0skXoJoQd
-         izKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cKAvbyg6nIph8rb1+uPilZlVSUi3nPRSzDY9b3NWOag=;
-        b=TGC5/TWP6NBfyVAHNCC131QYfyoBwh0FrowodDMFt0ipzOrvm4QoctMgVrounGp6hO
-         Aw/+Hwsl3VdsFi6Y6wIxgTZ0k4oNPi3Zgpmek4kj8hH3ZOAvANGTs8K2Dy6IFDE5UHta
-         oofqM0aiU9J50V3eLv8KXnXRcfLC809y3/FrySyZ2RVN6Nym6Yw7/fi8KBkMnWu8Pwcf
-         Ah1s/USO6FlejLU+D7I9iEglWL4h0Plp0RBMMyVMhN+3DBnkVJPCQmdSze3VEVSuCSKQ
-         W+Y1TLgbB3vlggwCn6AavmQjr6gDAOe1FXQxHSvLSqefOdkx7rlkHQCLChzCBd0Se476
-         +Hxw==
-X-Gm-Message-State: APjAAAXtg0lkqrUcLVQ5hgzgUokQe+qSELvi4X2qwyLD0DO6xOFr/qdX
-        cn+d+mhogUvbwIvwxWZorkrUAorr/9xYmA==
-X-Google-Smtp-Source: APXvYqzPnwxA9huv4Hzqpy5BFnbGNCmkjXY+H1RSZ/DkREG+xetYlLe7/QpNbZ4kqpYdFPJ4yISevQ==
-X-Received: by 2002:a5d:5688:: with SMTP id f8mr27393792wrv.79.1570514970486;
-        Mon, 07 Oct 2019 23:09:30 -0700 (PDT)
-Received: from dhe-pc.product_development.local (p54941CA4.dip0.t-ipconnect.de. [84.148.28.164])
-        by smtp.googlemail.com with ESMTPSA id o18sm2934753wrw.90.2019.10.07.23.09.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 23:09:29 -0700 (PDT)
-From:   David Heinzelmann <heinzelmann.david@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        David Heinzelmann <heinzelmann.david@gmail.com>
-Subject: [PATCH v4] usb: hub: Check device descriptor before resusciation
-Date:   Tue,  8 Oct 2019 10:09:01 +0200
-Message-Id: <20191008080901.17628-1-heinzelmann.david@gmail.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191007153538.GA985210@kroah.com>
-References: <20191007153538.GA985210@kroah.com>
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cDsOKJ5OtZouaCOC9d2wsP3uOsrbxoTCaVIXdvAQCjQ=;
+ b=dN0be+FHMY+PXK3PndQN6Wn126wU2ina3gTJVHogOuqctq3q4oAXG/an2ekGX/dClOZzrbxXPL+eJR19YweTj7XalT28UnANXCLDgSbJrea6zBHrQHxPPMH906vpK4ZfOudKi1zCwOjMxc784Hc3ggq7jcUiKt6aH1ZESI5ACEg=
+Received: from MN2PR02CA0032.namprd02.prod.outlook.com (2603:10b6:208:fc::45)
+ by DM5PR02MB2683.namprd02.prod.outlook.com (2603:10b6:3:10e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2327.23; Tue, 8 Oct
+ 2019 06:34:29 +0000
+Received: from CY1NAM02FT046.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::205) by MN2PR02CA0032.outlook.office365.com
+ (2603:10b6:208:fc::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2327.25 via Frontend
+ Transport; Tue, 8 Oct 2019 06:34:29 +0000
+Authentication-Results: spf=pass (sender IP is 149.199.60.83)
+ smtp.mailfrom=xilinx.com; gmail.com; dkim=none (message not signed)
+ header.d=none;gmail.com; dmarc=bestguesspass action=none
+ header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.60.83 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.60.83; helo=xsj-pvapsmtpgw01;
+Received: from xsj-pvapsmtpgw01 (149.199.60.83) by
+ CY1NAM02FT046.mail.protection.outlook.com (10.152.74.232) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2327.21
+ via Frontend Transport; Tue, 8 Oct 2019 06:34:29 +0000
+Received: from unknown-38-66.xilinx.com ([149.199.38.66] helo=xsj-pvapsmtp01)
+        by xsj-pvapsmtpgw01 with esmtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1iHj4m-00063X-CR; Mon, 07 Oct 2019 23:34:28 -0700
+Received: from [127.0.0.1] (helo=localhost)
+        by xsj-pvapsmtp01 with smtp (Exim 4.63)
+        (envelope-from <michal.simek@xilinx.com>)
+        id 1iHj4h-0003tg-95; Mon, 07 Oct 2019 23:34:23 -0700
+Received: from xsj-pvapsmtp01 (smtp-fallback.xilinx.com [149.199.38.66] (may be forged))
+        by xsj-smtp-dlp1.xlnx.xilinx.com (8.13.8/8.13.1) with ESMTP id x986YJLd008545;
+        Mon, 7 Oct 2019 23:34:19 -0700
+Received: from [172.30.17.123]
+        by xsj-pvapsmtp01 with esmtp (Exim 4.63)
+        (envelope-from <michals@xilinx.com>)
+        id 1iHj4d-0003sf-BD; Mon, 07 Oct 2019 23:34:19 -0700
+Subject: Re: [PATCH] usb: gadget: udc: Fix assignment of 0/1 to bool variables
+To:     Saurav Girepunje <saurav.girepunje@gmail.com>, balbi@kernel.org,
+        gregkh@linuxfoundation.org, michal.simek@xilinx.com,
+        swboyd@chromium.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     saurav.girepunje@hotmail.com
+References: <20191007181527.GA6816@saurav>
+From:   Michal Simek <michal.simek@xilinx.com>
+Message-ID: <cfb871aa-332c-2256-d194-15f8b87de6f8@xilinx.com>
+Date:   Tue, 8 Oct 2019 08:34:16 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191007181527.GA6816@saurav>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-RCIS-Action: ALLOW
+X-TM-AS-Product-Ver: IMSS-7.1.0.1224-8.2.0.1013-23620.005
+X-TM-AS-User-Approved-Sender: Yes;Yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:149.199.60.83;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(39860400002)(136003)(346002)(189003)(199004)(44832011)(229853002)(2486003)(5660300002)(478600001)(230700001)(36386004)(31686004)(23676004)(36756003)(76176011)(486006)(11346002)(26005)(186003)(126002)(476003)(446003)(336012)(2616005)(305945005)(426003)(316002)(31696002)(81156014)(9786002)(81166006)(106002)(8936002)(4326008)(8676002)(65956001)(47776003)(2906002)(50466002)(58126008)(6666004)(6246003)(70586007)(70206006)(356004)(65806001)(42866002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR02MB2683;H:xsj-pvapsmtpgw01;FPR:;SPF:Pass;LANG:en;PTR:unknown-60-83.xilinx.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 94bbcbfc-1cc6-405c-2cc0-08d74bb99254
+X-MS-TrafficTypeDiagnostic: DM5PR02MB2683:
+X-Microsoft-Antispam-PRVS: <DM5PR02MB2683A393AFC9812EA569A513C69A0@DM5PR02MB2683.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Oob-TLC-OOBClassifiers: OLM:2399;
+X-Forefront-PRVS: 01842C458A
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B0/CgFe9S3ckoQ/KsQxUO7Pnv4FiVZK/09UOM7/eI4w+9HCUt+0KtOFGnV8jBfr1gebhIgLiu5MjNJV5+V4d7mTRJeaV3wj9ePMnHIBpDnPmgdr/75aur/oXunWQVfrk/j4lZUC8T/ODFi+IMnyFYmeCvGYRYdUzcH6U93CYpuUrYXsBQm1lQUU7Sz1XTj5XTMjVy2BOVzZ5BFhctaAM2dqEaVSeiKRjwz4A3lyS+30vvHLqJMAASZOe26jY7O0txmh7WPbQtwHNOVgycID1uNixexLqCO6mjMG2+YYlaXcVKlL5T0y8040MwTduBzVwfuyF2iQizyI+KyVEyMvbBcE7V3vW97MX7IycQThYDKuwkXihEqw8JDPX4YKvP/4B1PQuIzEEDUUJCz7VRMpEDzWFsR9PLbdGNL97EafJHbU=
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Oct 2019 06:34:29.0336
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94bbcbfc-1cc6-405c-2cc0-08d74bb99254
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.60.83];Helo=[xsj-pvapsmtpgw01]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR02MB2683
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If a device connected to an xHCI host controller disconnects from the USB bus
-and then reconnects, e.g. triggered by a firmware update, then the host
-controller automatically activates the connection and the port is enabled. The
-implementation of hub_port_connect_change() assumes that if the port is
-enabled then nothing has changed. There is no check if the USB descriptors
-have changed. As a result, the kernel's internal copy of the descriptors ends
-up being incorrect and the device doesn't work properly anymore.
+On 07. 10. 19 20:15, Saurav Girepunje wrote:
+> Use true/false assignment for below bool variables in udc-xilinx.c:
+> 
+> bool buffer0ready;
+> bool buffer1ready;
+> bool is_in;
+> bool is_iso;
+> 
+> Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+> ---
+>  drivers/usb/gadget/udc/udc-xilinx.c | 36 ++++++++++++++---------------
+>  1 file changed, 18 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+> index 29d8e5f8bb58..b077c5bfd9ae 100644
+> --- a/drivers/usb/gadget/udc/udc-xilinx.c
+> +++ b/drivers/usb/gadget/udc/udc-xilinx.c
+> @@ -392,7 +392,7 @@ static int xudc_dma_send(struct xusb_ep *ep, struct xusb_req *req,
+>  			      XUSB_EP_BUF0COUNT_OFFSET, length);
+>  		udc->write_fn(udc->addr, XUSB_DMA_CONTROL_OFFSET,
+>  			      XUSB_DMA_BRR_CTRL | (1 << ep->epnumber));
+> -		ep->buffer0ready = 1;
+> +		ep->buffer0ready = true;
+>  		ep->curbufnum = 1;
+>  	} else if (ep->curbufnum && !ep->buffer1ready) {
+>  		/* Get the Buffer address and copy the transmit data.*/
+> @@ -404,7 +404,7 @@ static int xudc_dma_send(struct xusb_ep *ep, struct xusb_req *req,
+>  		udc->write_fn(udc->addr, XUSB_DMA_CONTROL_OFFSET,
+>  			      XUSB_DMA_BRR_CTRL | (1 << (ep->epnumber +
+>  			      XUSB_STATUS_EP_BUFF2_SHIFT)));
+> -		ep->buffer1ready = 1;
+> +		ep->buffer1ready = true;
+>  		ep->curbufnum = 0;
+>  	} else {
+>  		/* None of ping pong buffers are ready currently .*/
+> @@ -442,7 +442,7 @@ static int xudc_dma_receive(struct xusb_ep *ep, struct xusb_req *req,
+>  		udc->write_fn(udc->addr, XUSB_DMA_CONTROL_OFFSET,
+>  			      XUSB_DMA_BRR_CTRL | XUSB_DMA_READ_FROM_DPRAM |
+>  			      (1 << ep->epnumber));
+> -		ep->buffer0ready = 1;
+> +		ep->buffer0ready = true;
+>  		ep->curbufnum = 1;
+>  	} else if (ep->curbufnum && !ep->buffer1ready) {
+>  		/* Get the Buffer address and copy the transmit data */
+> @@ -453,7 +453,7 @@ static int xudc_dma_receive(struct xusb_ep *ep, struct xusb_req *req,
+>  			      XUSB_DMA_BRR_CTRL | XUSB_DMA_READ_FROM_DPRAM |
+>  			      (1 << (ep->epnumber +
+>  			      XUSB_STATUS_EP_BUFF2_SHIFT)));
+> -		ep->buffer1ready = 1;
+> +		ep->buffer1ready = true;
+>  		ep->curbufnum = 0;
+>  	} else {
+>  		/* None of the ping-pong buffers are ready currently */
+> @@ -507,7 +507,7 @@ static int xudc_eptxrx(struct xusb_ep *ep, struct xusb_req *req,
+>  		 */
+>  		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
+>  			      1 << ep->epnumber);
+> -		ep->buffer0ready = 1;
+> +		ep->buffer0ready = true;
+>  		ep->curbufnum = 1;
+>  	} else if (ep->curbufnum && !ep->buffer1ready) {
+>  		/* Get the Buffer address and copy the transmit data.*/
+> @@ -525,7 +525,7 @@ static int xudc_eptxrx(struct xusb_ep *ep, struct xusb_req *req,
+>  		 */
+>  		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
+>  			      1 << (ep->epnumber + XUSB_STATUS_EP_BUFF2_SHIFT));
+> -		ep->buffer1ready = 1;
+> +		ep->buffer1ready = true;
+>  		ep->curbufnum = 0;
+>  	} else {
+>  		/* None of the ping-pong buffers are ready currently */
+> @@ -818,11 +818,11 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
+>  	case USB_ENDPOINT_XFER_CONTROL:
+>  		dev_dbg(udc->dev, "only one control endpoint\n");
+>  		/* NON- ISO */
+> -		ep->is_iso = 0;
+> +		ep->is_iso = false;
+>  		return -EINVAL;
+>  	case USB_ENDPOINT_XFER_INT:
+>  		/* NON- ISO */
+> -		ep->is_iso = 0;
+> +		ep->is_iso = false;
+>  		if (maxpacket > 64) {
+>  			dev_dbg(udc->dev, "bogus maxpacket %d\n", maxpacket);
+>  			return -EINVAL;
+> @@ -830,7 +830,7 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
+>  		break;
+>  	case USB_ENDPOINT_XFER_BULK:
+>  		/* NON- ISO */
+> -		ep->is_iso = 0;
+> +		ep->is_iso = false;
+>  		if (!(is_power_of_2(maxpacket) && maxpacket >= 8 &&
+>  				maxpacket <= 512)) {
+>  			dev_dbg(udc->dev, "bogus maxpacket %d\n", maxpacket);
+> @@ -839,12 +839,12 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
+>  		break;
+>  	case USB_ENDPOINT_XFER_ISOC:
+>  		/* ISO */
+> -		ep->is_iso = 1;
+> +		ep->is_iso = true;
+>  		break;
+>  	}
+>  
+> -	ep->buffer0ready = 0;
+> -	ep->buffer1ready = 0;
+> +	ep->buffer0ready = false;
+> +	ep->buffer1ready = false;
+>  	ep->curbufnum = 0;
+>  	ep->rambase = rambase[ep->epnumber];
+>  	xudc_epconfig(ep, udc);
+> @@ -868,11 +868,11 @@ static int __xudc_ep_enable(struct xusb_ep *ep,
+>  	if (ep->epnumber && !ep->is_in) {
+>  		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
+>  			      1 << ep->epnumber);
+> -		ep->buffer0ready = 1;
+> +		ep->buffer0ready = true;
+>  		udc->write_fn(udc->addr, XUSB_BUFFREADY_OFFSET,
+>  			     (1 << (ep->epnumber +
+>  			      XUSB_STATUS_EP_BUFF2_SHIFT)));
+> -		ep->buffer1ready = 1;
+> +		ep->buffer1ready = true;
+>  	}
+>  
+>  	return 0;
+> @@ -1331,8 +1331,8 @@ static void xudc_eps_init(struct xusb_udc *udc)
+>  		 * each endpoint is 0x10.
+>  		 */
+>  		ep->offset = XUSB_EP0_CONFIG_OFFSET + (ep_number * 0x10);
+> -		ep->is_in = 0;
+> -		ep->is_iso = 0;
+> +		ep->is_in = false;
+> +		ep->is_iso = false;
+>  		ep->maxpacket = 0;
+>  		xudc_epconfig(ep, udc);
+>  
+> @@ -1952,9 +1952,9 @@ static void xudc_nonctrl_ep_handler(struct xusb_udc *udc, u8 epnum,
+>  	ep = &udc->ep[epnum];
+>  	/* Process the End point interrupts.*/
+>  	if (intrstatus & (XUSB_STATUS_EP0_BUFF1_COMP_MASK << epnum))
+> -		ep->buffer0ready = 0;
+> +		ep->buffer0ready = false;
+>  	if (intrstatus & (XUSB_STATUS_EP0_BUFF2_COMP_MASK << epnum))
+> -		ep->buffer1ready = 0;
+> +		ep->buffer1ready = false;
+>  
+>  	if (list_empty(&ep->queue))
+>  		return;
+> 
 
-The solution to the problem is for hub_port_connect_change() always to
-check whether the device's descriptors have changed before resuscitating
-an enabled port.
+Acked-by: Michal Simek <michal.simek@xilinx.com>
 
-Signed-off-by: David Heinzelmann <heinzelmann.david@gmail.com>
----
-Changes in v4:
- - changed commit description
-Changes in v3:
- - changed commit message and description
- - fix code style
-Changes in v2:
- - fix logic error to handle return code from usb_get_device_descriptor()
-   properly
- - fix line endings
----
- drivers/usb/core/hub.c | 196 +++++++++++++++++++++++------------------
- 1 file changed, 111 insertions(+), 85 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 236313f41f4a..fdcfa85b5b12 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4930,6 +4930,91 @@ hub_power_remaining(struct usb_hub *hub)
- 	return remaining;
- }
- 
-+
-+static int descriptors_changed(struct usb_device *udev,
-+		struct usb_device_descriptor *old_device_descriptor,
-+		struct usb_host_bos *old_bos)
-+{
-+	int		changed = 0;
-+	unsigned	index;
-+	unsigned	serial_len = 0;
-+	unsigned	len;
-+	unsigned	old_length;
-+	int		length;
-+	char		*buf;
-+
-+	if (memcmp(&udev->descriptor, old_device_descriptor,
-+			sizeof(*old_device_descriptor)) != 0)
-+		return 1;
-+
-+	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
-+		return 1;
-+	if (udev->bos) {
-+		len = le16_to_cpu(udev->bos->desc->wTotalLength);
-+		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
-+			return 1;
-+		if (memcmp(udev->bos->desc, old_bos->desc, len))
-+			return 1;
-+	}
-+
-+	/* Since the idVendor, idProduct, and bcdDevice values in the
-+	 * device descriptor haven't changed, we will assume the
-+	 * Manufacturer and Product strings haven't changed either.
-+	 * But the SerialNumber string could be different (e.g., a
-+	 * different flash card of the same brand).
-+	 */
-+	if (udev->serial)
-+		serial_len = strlen(udev->serial) + 1;
-+
-+	len = serial_len;
-+	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
-+		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
-+		len = max(len, old_length);
-+	}
-+
-+	buf = kmalloc(len, GFP_NOIO);
-+	if (!buf)
-+		/* assume the worst */
-+		return 1;
-+
-+	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
-+		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
-+		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
-+				old_length);
-+		if (length != old_length) {
-+			dev_dbg(&udev->dev, "config index %d, error %d\n",
-+					index, length);
-+			changed = 1;
-+			break;
-+		}
-+		if (memcmp(buf, udev->rawdescriptors[index], old_length)
-+				!= 0) {
-+			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
-+				index,
-+				((struct usb_config_descriptor *) buf)->
-+					bConfigurationValue);
-+			changed = 1;
-+			break;
-+		}
-+	}
-+
-+	if (!changed && serial_len) {
-+		length = usb_string(udev, udev->descriptor.iSerialNumber,
-+				buf, serial_len);
-+		if (length + 1 != serial_len) {
-+			dev_dbg(&udev->dev, "serial string error %d\n",
-+					length);
-+			changed = 1;
-+		} else if (memcmp(buf, udev->serial, length) != 0) {
-+			dev_dbg(&udev->dev, "serial string changed\n");
-+			changed = 1;
-+		}
-+	}
-+
-+	kfree(buf);
-+	return changed;
-+}
-+
- static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
- 		u16 portchange)
- {
-@@ -5167,7 +5252,9 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
- {
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
-+	struct usb_device_descriptor descriptor;
- 	int status = -ENODEV;
-+	int retval;
- 
- 	dev_dbg(&port_dev->dev, "status %04x, change %04x, %s\n", portstatus,
- 			portchange, portspeed(hub, portstatus));
-@@ -5188,7 +5275,30 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
- 	if ((portstatus & USB_PORT_STAT_CONNECTION) && udev &&
- 			udev->state != USB_STATE_NOTATTACHED) {
- 		if (portstatus & USB_PORT_STAT_ENABLE) {
--			status = 0;		/* Nothing to do */
-+			/*
-+			 * USB-3 connections are initialized automatically by
-+			 * the hostcontroller hardware. Therefore check for
-+			 * changed device descriptors before resuscitating the
-+			 * device.
-+			 */
-+			descriptor = udev->descriptor;
-+			retval = usb_get_device_descriptor(udev,
-+					sizeof(udev->descriptor));
-+			if (retval < 0) {
-+				dev_dbg(&udev->dev,
-+						"can't read device descriptor %d\n",
-+						retval);
-+			} else {
-+				if (descriptors_changed(udev, &descriptor,
-+						udev->bos)) {
-+					dev_dbg(&udev->dev,
-+							"device descriptor has changed\n");
-+					/* for disconnect() calls */
-+					udev->descriptor = descriptor;
-+				} else {
-+					status = 0; /* Nothing to do */
-+				}
-+			}
- #ifdef CONFIG_PM
- 		} else if (udev->state == USB_STATE_SUSPENDED &&
- 				udev->persist_enabled) {
-@@ -5550,90 +5660,6 @@ void usb_hub_cleanup(void)
- 	usb_deregister(&hub_driver);
- } /* usb_hub_cleanup() */
- 
--static int descriptors_changed(struct usb_device *udev,
--		struct usb_device_descriptor *old_device_descriptor,
--		struct usb_host_bos *old_bos)
--{
--	int		changed = 0;
--	unsigned	index;
--	unsigned	serial_len = 0;
--	unsigned	len;
--	unsigned	old_length;
--	int		length;
--	char		*buf;
--
--	if (memcmp(&udev->descriptor, old_device_descriptor,
--			sizeof(*old_device_descriptor)) != 0)
--		return 1;
--
--	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
--		return 1;
--	if (udev->bos) {
--		len = le16_to_cpu(udev->bos->desc->wTotalLength);
--		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
--			return 1;
--		if (memcmp(udev->bos->desc, old_bos->desc, len))
--			return 1;
--	}
--
--	/* Since the idVendor, idProduct, and bcdDevice values in the
--	 * device descriptor haven't changed, we will assume the
--	 * Manufacturer and Product strings haven't changed either.
--	 * But the SerialNumber string could be different (e.g., a
--	 * different flash card of the same brand).
--	 */
--	if (udev->serial)
--		serial_len = strlen(udev->serial) + 1;
--
--	len = serial_len;
--	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
--		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
--		len = max(len, old_length);
--	}
--
--	buf = kmalloc(len, GFP_NOIO);
--	if (!buf)
--		/* assume the worst */
--		return 1;
--
--	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
--		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
--		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
--				old_length);
--		if (length != old_length) {
--			dev_dbg(&udev->dev, "config index %d, error %d\n",
--					index, length);
--			changed = 1;
--			break;
--		}
--		if (memcmp(buf, udev->rawdescriptors[index], old_length)
--				!= 0) {
--			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
--				index,
--				((struct usb_config_descriptor *) buf)->
--					bConfigurationValue);
--			changed = 1;
--			break;
--		}
--	}
--
--	if (!changed && serial_len) {
--		length = usb_string(udev, udev->descriptor.iSerialNumber,
--				buf, serial_len);
--		if (length + 1 != serial_len) {
--			dev_dbg(&udev->dev, "serial string error %d\n",
--					length);
--			changed = 1;
--		} else if (memcmp(buf, udev->serial, length) != 0) {
--			dev_dbg(&udev->dev, "serial string changed\n");
--			changed = 1;
--		}
--	}
--
--	kfree(buf);
--	return changed;
--}
--
- /**
-  * usb_reset_and_verify_device - perform a USB port reset to reinitialize a device
-  * @udev: device to reset (not in SUSPENDED or NOTATTACHED state)
--- 
-2.20.1
-
+Thanks,
+Michal
