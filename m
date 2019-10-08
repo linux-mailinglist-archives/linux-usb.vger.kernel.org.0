@@ -2,130 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A917D0198
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 21:55:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1B1D01E6
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 22:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730888AbfJHTzZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 15:55:25 -0400
-Received: from mail-ed1-f47.google.com ([209.85.208.47]:38383 "EHLO
-        mail-ed1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730914AbfJHTzZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 15:55:25 -0400
-Received: by mail-ed1-f47.google.com with SMTP id l21so16827997edr.5
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 12:55:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=aMQQgi7dIXVBnmVMSSMCLgb3oXTzeafbZdgWl2Y7dgh9d3yilS1+9yTnvWoS7+GzUk
-         LWbTYKnbDzuBJ3/U6U4a0Txwis4unkVKDohWYyBjnKYrTLghN7laSYeGp1/FcmznDyEO
-         GS9pgiMN+uT0qCjbihaa5wuvtHOM98vqOW8UVjJ7Cv+EprgLSNS8LJdhrjnJyNqQEN56
-         5sfOyU15h4kpoOXNgzNljIz5N8IZnpl4XHLYJYLCwvTOpHMRDfM3ywlgrk+4Qs+isMtv
-         bwWMXB9P8rpPXCaQx70qpw2S2sG0Q07XznOIe3PPQ9uFVdh7+iWMtRM+rtyrWFblwrYM
-         wXZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=d9t6Rq0RbZ7PXIZmIcLbP2JTBMFny2QBILsKgMXZe9M=;
-        b=gVTBQrAVDE1YC2yOhQkVpFWVgnr2KLY00aOtf4CVzVrkiH6v3VC6+s9enTajGhNBFA
-         5FjdPLuAa65NmjCDrjI34kbn7W+yOMj03n6oRNyTLJwnyIRccz1TbmLQQvBWtBGYdkVP
-         V8a4BEYF1c561Rsm4KMXpQTZKuCmylMkFoRtNhSPPG5iIEEra33hoOG3059LyFMp5/Ja
-         MH/enVxlZtKcNa9XJrVlRL2qGfuPMz1P0Ool7qIJTPeqGEfG3B54qz+i+Uq1OCOIOb3k
-         2xX2KJHQbyJNv9l9rMxSj5nCw70CoxQQUTg5hvqoly0q38moQurfOC+DW29W98rTRLdw
-         kdYQ==
-X-Gm-Message-State: APjAAAWvMwxyPEaNppwfRXWhCcM+TYPQAf2xfeng/0HISW/dmnoKaar8
-        mRJWAtV6/M304zZruyZjy+ET8116MWjG+ddvoBY=
-X-Google-Smtp-Source: APXvYqxaZfvXk0/G1PfPN40JEbEfue6b7v2Lk/SQWmnUxoxmnZyxXwpPNC4UPIh9mJw4kQ9atMHeHG1Orcb22TWXOSk=
-X-Received: by 2002:a50:c306:: with SMTP id a6mr36339639edb.108.1570564517490;
- Tue, 08 Oct 2019 12:55:17 -0700 (PDT)
+        id S1730165AbfJHUFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 16:05:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45130 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730070AbfJHUFc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 16:05:32 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A69CE206C0;
+        Tue,  8 Oct 2019 20:05:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570565130;
+        bh=WnWovhGuam+8iC1WkJ54DLr8k30VyWvOMA+nx0c3eXg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YUHSnWMehtC/wmq9pr4CbXv7iGaJ+lmcRKJ8mQwUmk1cHdoYU0A0/Yg02ybZTai2C
+         k+0Du0uwsvnAGQzbx55WbIF3KMTDzKQOTXAz9lMcsmofQ5BoEvpp/HGK2Juee8Whr3
+         NJOScg2RJhfCNEc6x0VSPXnZtTrjD2R35gFhd94E=
+Date:   Tue, 8 Oct 2019 22:05:27 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Matthias Maennich <maennich@google.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: Unknown symbol errors in usb storage driver
+Message-ID: <20191008200527.GB3129397@kroah.com>
+References: <e593864c-848f-0b6d-3408-f4c619f0cde5@gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a17:906:cc89:0:0:0:0 with HTTP; Tue, 8 Oct 2019 12:55:16
- -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   MONEY GRAM <currency1000000@gmail.com>
-Date:   Tue, 8 Oct 2019 20:55:16 +0100
-Message-ID: <CAPqfnSEO==O6BEtBbcMMZfh3qcY4Bz0qndhCqbcLqZx4DCs44A@mail.gmail.com>
-Subject: HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE M.T.C.N:78393135
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e593864c-848f-0b6d-3408-f4c619f0cde5@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-HERE IS YOUR MONEY GRAM PAYMENT HAS BEEN SENT TO YOU HERE IS THE
-M.T.C.N:78393135
+On Tue, Oct 08, 2019 at 09:53:16PM +0200, Heiner Kallweit wrote:
+> Since a while I see the following. I didn't bisect yet, maybe issue is caused by
+> 32bca2df7da2 ("usb-storage: export symbols in USB_STORAGE namespace")?
+> 
+>   DEPMOD  5.4.0-rc2-next-20191008+
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe1
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_reset_resume
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_pre_reset
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_host_template_init
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe2
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_disconnect
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_control_msg
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_post_reset
+> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_bulk_transfer_buf
+> 
 
-Attn: Beneficiary,
 
-This is to inform you that the America Embassy office was instructed
-to transfer your fund $980,000.00 U.S Dollars compensating all the
-SCAM VICTIMS and your email was found as one of the VICTIMS. by
-America security leading team and America representative officers so
-between today the 8th of October till 1ST Of December 2019 you will
-be receiving MONEY GRAM the sum of $6,000 dollars per day. However be informed
-that we have already sent the $6,000 dollars this morning to avoid
-cancellation of your payment, remain the total sum of $980,000.00.
+It's a depmod bug, see lkml for the discussion and potential fixes.
+People are working on it :)
 
-You have only six hours to call this office upon the receipt of this
-email the maximum amount you will be receiving per a day starting from
-today's $6,000 and the Money Transfer Control Number of today is
-below.
+thanks,
 
-NOTE; The sent $6,000 is on hold because of the instruction from IMF
-office, they asked us to place it on hold by requesting the (Clean
-Bill Record Certificate) which will cost you $25 in order to fulfill
-all the necessary obligation to avoid any hitches while sending you
-the payment through MONEY GRAM money transfer, the necessary
-obligation I mean here is to obtain the (Clean Bill Record
-Certificate)
-
-Below is the information of today track it in our
-
-websitehttps://moneygarm.com/asp/orderStatus.asp?country=global
-to see is available to pick up by the receiver, but if we didn't here
-from you soon we'll pickup it up from line for security reason to
-avoid hackers stealing the money online.
-
-Money Transfer Control Number M.T.C.N)::78393135
-SENDERS FIRST NAME: John
-SENDERS LAST NAME: Chun
-SENDERS COUNTRY...BENIN REPUBLIC
-TEXT QUESTION: A
-ANSWER: B
-AMOUNT: $6,000
-
-We need the below details from you, to enable us place the payment to
-your name and transfer the fund to you.
-
-(Full Receivers name)...................
-(You're Country)................................
-(Address)......................................
-(Phone NuMBER-...............................
-(You're Age)............................
-(OCCUPATION)..REAL ESTATE..................
-(A Copy of Your ID CARD).SEE ATTACHMENTS.............
-
-HOWEVER YOU HAVE TO PAY $25 FOR THE (Clean Bill Record Certificate)
-AND THAT IS ALL YOU HAVE TO DO ASAP.
-
-The payment will be sending to below information, such as:
-
-Receiver.............. ALAN UDE
-Country................Benin Republic
-Amount: ....................$25
-Question: .....................A
-Answer:................... B
-Sender...............Name:
-MTCN :..............
-
-According to the instruction and order we received from IMF the their
-requested $25 must be made directly to the above info's.
-
-Furthermore you are advised to call us as the instruction was passed
-that within 6hours without hearing from you, Count your payment
-canceled. Number to call is below listed manager director office of
-release order:
-DR.ALAN UDE
-Director MONEY GRAM-Benin
+greg k-h
