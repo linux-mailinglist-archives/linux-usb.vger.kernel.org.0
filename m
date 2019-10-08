@@ -2,96 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6416FD01E7
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 22:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FAF1D024E
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 22:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730070AbfJHUHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 16:07:02 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:54639 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729602AbfJHUHC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 16:07:02 -0400
-Received: by mail-wm1-f68.google.com with SMTP id p7so4494067wmp.4
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 13:07:01 -0700 (PDT)
+        id S1731033AbfJHUoc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 16:44:32 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:40230 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730523AbfJHUoc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 16:44:32 -0400
+Received: by mail-pg1-f195.google.com with SMTP id d26so10937369pgl.7
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 13:44:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+V/9F8xQhDPWl2iYJu5SyyDDe0yxxolR22lIQyOlq6s=;
-        b=JhqIYzo9c55TVg+jmIYOSZU2rVmX/xSH2cDOhs1CykWoqdr+Q3n5jgLktJDyCG3Qjg
-         hl7mKBpgPFcUfoak+b8Slbmdggm2yoA+FhRDos+eHrx8Zg3inR064UQQAvexZIhchGyv
-         ERv4LOwzK6zz81FDMJmD2kWTr3wIiuBLEMxBDusoAxaYcIONmbSixyH3j3E89N5OvLxI
-         V9e8PDLiGQOoS7bKUaK+p26Zm3vgd3CBA9LqVkHkEhkPOvOSoHJFtPH0t5g8MOLwJQwZ
-         uLcMvo9lo4H9pJcOi+xYz5v4RoDGdEIErd/ow3QtithY1RqH7amWgVelIiiBYXSh5scM
-         oQGQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=nmmOKPTsvyGUoyuXu+nPXQyEy3RdTp7A7NRvn61bkoQ=;
+        b=HN1hyf6weVu+Vk5AAdemCyFfXZGwPnmH9GgT2QIMmjiGuOsXu8WrE9igUZtqJL9cEX
+         QnG8GJ61yx0gyJnC5/YFaNeXbR/Te4SX35/x9oCP32D2GTVi3iPiiYfG7XfK3emuM4Kr
+         hT45FGSGoE20/PJ/cptu232szfP3/zrs6kyveCqD9g+wKF8JcjB+KaSJp/PApgSUOJFG
+         Nnsj00TPDA08Axc9qxebhy2Q8+xoLtBrmVnmYh6hQSEIdIc/AkhZcZwfxw4eUxxUOjig
+         eQZJXmugjA38rGFmj15UniMtpyJ21NBWUlQAHSLEtTtP20vlx40W02tWOJ64BOvDAHVM
+         XSNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+V/9F8xQhDPWl2iYJu5SyyDDe0yxxolR22lIQyOlq6s=;
-        b=Wg4FaFsUmVWyDxJN2eG861B+osztL8k6OpqEiWiCivkscNZa+wN6bCGm/AHx3+gnfX
-         VP9T3qZeomZ2q/xMb/eGO65UTapfxbqT9e7nkNl3m1vPJpMoCD1VVf9/wL7XXxLnZ5HO
-         GAAJXQt9Uy0q4jdnbkHR4vvnSjtjo7TBBMYt/i7H+OiT/KKY0ZedDRwUQTCFOoL7i9LA
-         c+ZVPjEKa6yrjq444ItmG6Mg6LpUI3pTp9UACVj0kWKvSW+eD/07aBAVxebH2OF7JMXr
-         hGGQ+60xfJ94Up1yDhaSBZwnTjW9WwjoyWPWQJ6b9D7xos5OFCvub702XZc2Q1T6eanZ
-         UkRA==
-X-Gm-Message-State: APjAAAVAFycCtCCPLXffIE+NAhjHB3AJIC7mfC9wtu6BLEUBX+lMggjU
-        wlXVFT7wbblwgRKRk0WqbI2PwbnA
-X-Google-Smtp-Source: APXvYqzyUPNUAojKYxjUZjRE1JNFHnIG+mCDYRY2V4WR5EX+a5e06fwN/uAuelH29mJZjWLVakODTg==
-X-Received: by 2002:a05:600c:cd:: with SMTP id u13mr4794210wmm.37.1570565220221;
-        Tue, 08 Oct 2019 13:07:00 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f26:6400:1dc6:b02d:53c2:ab45? (p200300EA8F2664001DC6B02D53C2AB45.dip0.t-ipconnect.de. [2003:ea:8f26:6400:1dc6:b02d:53c2:ab45])
-        by smtp.googlemail.com with ESMTPSA id h7sm20079044wrs.15.2019.10.08.13.06.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Oct 2019 13:06:59 -0700 (PDT)
-Subject: Re: Unknown symbol errors in usb storage driver
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Matthias Maennich <maennich@google.com>,
-        Jessica Yu <jeyu@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-References: <e593864c-848f-0b6d-3408-f4c619f0cde5@gmail.com>
- <20191008200527.GB3129397@kroah.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <2ccd4a5e-c5ed-ce14-2e89-89d039fd82e8@gmail.com>
-Date:   Tue, 8 Oct 2019 22:06:54 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=nmmOKPTsvyGUoyuXu+nPXQyEy3RdTp7A7NRvn61bkoQ=;
+        b=W3/wxxnhE1Gvbdx6cDHdTGGELephRxwHu/jggieyrCbRqrK4H5WUOo/iQXPH08wB0F
+         rT+fR8v7eipHkuEJxgFE/zc8rInI4BuksgkYCyQF1W8N5kmYZEZauTkxm8z90v5LLYvL
+         8q3VGKmwZUyptgvU56DCuwM2ZntjbzkSOIU6ZD08GkaXEP43UPKJRS6KtydRUOK7Nr3w
+         m34tzsGMxVR0wGyjbk6sZ3rWR1GIcyTFEG7nVz8/f+oRS3dZ0qDiN0L8B3OnirPLAZYR
+         aawds3keqdav1YJXv2ClandhcSs4TkozLX0XlFtHcV9V7iE7AE4LhKvoPy7VtyNSMFKb
+         ZwNQ==
+X-Gm-Message-State: APjAAAX++lZVw6p2wcv+XMSj6hFRCIqOY6VmUlXbCaKZJqepsK2ZvW+Y
+        Q8LxCqwX1jz9ryZXl6mzLINSVS6d
+X-Google-Smtp-Source: APXvYqzO3P8RC8wrkuYtqvTK2fFg7IJqgR3QgFFAP9obUeBUMcnXVg5M4Y7mYx9Fxu7UXG8U9hpZPw==
+X-Received: by 2002:a63:fa0a:: with SMTP id y10mr328002pgh.446.1570567470872;
+        Tue, 08 Oct 2019 13:44:30 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b9sm23839pfo.105.2019.10.08.13.44.29
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 08 Oct 2019 13:44:29 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 13:44:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 1/9] usb: typec: Copy everything from struct
+ typec_capability during registration
+Message-ID: <20191008204428.GA16138@roeck-us.net>
+References: <20191008111350.68581-1-heikki.krogerus@linux.intel.com>
+ <20191008111350.68581-2-heikki.krogerus@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20191008200527.GB3129397@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191008111350.68581-2-heikki.krogerus@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08.10.2019 22:05, Greg KH wrote:
-> On Tue, Oct 08, 2019 at 09:53:16PM +0200, Heiner Kallweit wrote:
->> Since a while I see the following. I didn't bisect yet, maybe issue is caused by
->> 32bca2df7da2 ("usb-storage: export symbols in USB_STORAGE namespace")?
->>
->>   DEPMOD  5.4.0-rc2-next-20191008+
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe1
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_reset_resume
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_pre_reset
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_host_template_init
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe2
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_disconnect
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_control_msg
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_post_reset
->> depmod: WARNING: /lib/modules/5.4.0-rc2-next-20191008+/kernel/drivers/usb/storage/ums-realtek.ko needs unknown symbol usb_stor_bulk_transfer_buf
->>
+On Tue, Oct 08, 2019 at 02:13:42PM +0300, Heikki Krogerus wrote:
+> Copying everything from struct typec_capability to struct
+> typec_port during port registration. This will make sure
+> that under no circumstances the driver can change the values
+> in the struct typec_capability that the port uses.
 > 
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>  drivers/usb/typec/class.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
 > 
-> It's a depmod bug, see lkml for the discussion and potential fixes.
-> People are working on it :)
-> 
-Good to know, thanks for the quick reply.
+> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> index 94a3eda62add..0bbf10c8ad58 100644
+> --- a/drivers/usb/typec/class.c
+> +++ b/drivers/usb/typec/class.c
+> @@ -52,6 +52,7 @@ struct typec_port {
+>  	struct typec_switch		*sw;
+>  	struct typec_mux		*mux;
+>  
+> +	const struct typec_capability	*orig_cap; /* to be removed */
+>  	const struct typec_capability	*cap;
+>  };
+>  
+> @@ -968,7 +969,7 @@ preferred_role_store(struct device *dev, struct device_attribute *attr,
+>  			return -EINVAL;
+>  	}
+>  
+> -	ret = port->cap->try_role(port->cap, role);
+> +	ret = port->cap->try_role(port->orig_cap, role);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1014,7 +1015,7 @@ static ssize_t data_role_store(struct device *dev,
+>  		goto unlock_and_ret;
+>  	}
+>  
+> -	ret = port->cap->dr_set(port->cap, ret);
+> +	ret = port->cap->dr_set(port->orig_cap, ret);
+>  	if (ret)
+>  		goto unlock_and_ret;
+>  
+> @@ -1071,7 +1072,7 @@ static ssize_t power_role_store(struct device *dev,
+>  		goto unlock_and_ret;
+>  	}
+>  
+> -	ret = port->cap->pr_set(port->cap, ret);
+> +	ret = port->cap->pr_set(port->orig_cap, ret);
+>  	if (ret)
+>  		goto unlock_and_ret;
+>  
+> @@ -1119,7 +1120,7 @@ port_type_store(struct device *dev, struct device_attribute *attr,
+>  		goto unlock_and_ret;
+>  	}
+>  
+> -	ret = port->cap->port_type_set(port->cap, type);
+> +	ret = port->cap->port_type_set(port->orig_cap, type);
+>  	if (ret)
+>  		goto unlock_and_ret;
+>  
+> @@ -1184,7 +1185,7 @@ static ssize_t vconn_source_store(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = port->cap->vconn_set(port->cap, (enum typec_role)source);
+> +	ret = port->cap->vconn_set(port->orig_cap, (enum typec_role)source);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1278,6 +1279,7 @@ static void typec_release(struct device *dev)
+>  	ida_destroy(&port->mode_ids);
+>  	typec_switch_put(port->sw);
+>  	typec_mux_put(port->mux);
+> +	kfree(port->cap);
+>  	kfree(port);
+>  }
+>  
+> @@ -1579,9 +1581,10 @@ struct typec_port *typec_register_port(struct device *parent,
+>  	mutex_init(&port->port_type_lock);
+>  
+>  	port->id = id;
+> -	port->cap = cap;
+> +	port->orig_cap = cap;
+>  	port->port_type = cap->type;
+>  	port->prefer_role = cap->prefer_role;
+> +	port->cap = kmemdup(cap, sizeof(*cap), GFP_KERNEL);
 
-> thanks,
+I just realized ... unfortunately kmemdup() can return NULL.
+
+>  
+>  	device_initialize(&port->dev);
+>  	port->dev.class = typec_class;
+> -- 
+> 2.23.0
 > 
-> greg k-h
-> 
-Heiner
