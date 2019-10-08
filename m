@@ -2,121 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDF6CF4BD
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 10:14:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F56CF535
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 10:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730309AbfJHIN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 04:13:59 -0400
-Received: from mga09.intel.com ([134.134.136.24]:50936 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730384AbfJHIN7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 04:13:59 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 01:13:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
-   d="scan'208";a="218208996"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Oct 2019 01:13:56 -0700
-Subject: Re: [PATCH 8/8] xhci: Fix NULL pointer dereference in
- xhci_clear_tt_buffer_complete()
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        "# v5 . 3" <stable@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-References: <1570190373-30684-1-git-send-email-mathias.nyman@linux.intel.com>
- <1570190373-30684-9-git-send-email-mathias.nyman@linux.intel.com>
- <20191007140245.GD13531@localhost>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <c0b1f81f-db1a-8f12-6880-a686cb9c35a7@linux.intel.com>
-Date:   Tue, 8 Oct 2019 11:15:58 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20191007140245.GD13531@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        id S1729865AbfJHIp0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 04:45:26 -0400
+Received: from mail-eopbgr80074.outbound.protection.outlook.com ([40.107.8.74]:13895
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729767AbfJHIp0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 04:45:26 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xe9t2g0SoiJeCwk4mxpQZoQFbWZVLVhhOKt0hsqfJb7KBVubxBeXU3x3/sTOGb01TRVxEdzSl7kpa1QzSRcdqe95c6/oXVtFLXm1+NQff2U/xg2egVW3bu9/Z7kQEEXVcevZMDlEPLCp3BZhkk9IlHeXVDsD1PQph4B1+ueKGg95en+0W3jVGLKiVh4FtbvnuXsxnEhxJW2OxkaK4fInZNGHLv/bSccMkknsERE7bIuRiOMTAKlQJRvgmcOCj2LW2A9b7f5gaVaXjqdWGStXwz7sjKu7tbkiyFA+wvS34P9tgOLDMnMa66IO9IJJDF5yK5ef5ti3V5XrCa02PWX6eg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8pbBEoyCEzYlaAXecwd1cMZnPKNei/aAFkMBKWEHLlQ=;
+ b=S6rzv8Zgv6Kc/8gLQGfs/cJBA2JMDmVS8Os2emuZdXB00E083G9gertUMtnCY3059HqcM/qqu4KxX1fWfJlnHxrKQtRf3s/Mkcx6YG9QB5LSQKJZto5o023PAmDhKlQpJ6s3wfRabFRJ6FLA3JePwPpLtzEh0lG/h2YlaPrUd8gUk2R0EyY7B0RT9PE+x/ew2SaHZpr/ojcKpWwcaswYKGt1Vqd2xDFOztir1xBGWxtquBr6xnw1uT9kDFGdkAE8DVDX9FD3ggW+4dIoNs3MywAE2VEAkkUO/2zkCZxwk+GA2OtQ3tByOorT8BSguv4RxqkkZDYuIaSKKB9SQhRxkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8pbBEoyCEzYlaAXecwd1cMZnPKNei/aAFkMBKWEHLlQ=;
+ b=aXpYfPjT4PUs1mGX+3vPjGqa+kYw6rUQPqdwwJpBX5UrE82sblTD8bSQQd53SwdZfWK/I8dYhMOEjNYisPQ9ClIqd6bPFm+doC0RuAE9SQL7did8dOuK+zTzqgFSXxKm8T6ffdKC9AgbB/ONHBdsMheRETxRcXoJUmHPXYGR/NA=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.52.16) by
+ VI1PR04MB7101.eurprd04.prod.outlook.com (10.186.159.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2327.24; Tue, 8 Oct 2019 08:44:43 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::1da:26dc:6373:4ab0]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::1da:26dc:6373:4ab0%3]) with mapi id 15.20.2327.026; Tue, 8 Oct 2019
+ 08:44:43 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jbergsagel@ti.com" <jbergsagel@ti.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
+        Suresh Punnoose <sureshp@cadence.com>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: RE: [PATCH] usb:cdns3: Fix for CV CH9 running with g_zero driver.
+Thread-Topic: [PATCH] usb:cdns3: Fix for CV CH9 running with g_zero driver.
+Thread-Index: AQHVfNoJ++ECtmBATUSOETiOVkdrz6dQUUWAgAARBwCAAAhcsA==
+Date:   Tue, 8 Oct 2019 08:44:42 +0000
+Message-ID: <VI1PR04MB53276319AB49C454A7A0318B8B9A0@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <1570430355-26118-1-git-send-email-pawell@cadence.com>
+ <20191008065619.GE5670@b29397-desktop>
+ <BN7PR07MB47056F9852550657E9651DD7DD9A0@BN7PR07MB4705.namprd07.prod.outlook.com>
+In-Reply-To: <BN7PR07MB47056F9852550657E9651DD7DD9A0@BN7PR07MB4705.namprd07.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 005f7745-b84b-4559-2f87-08d74bcbc3c6
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: VI1PR04MB7101:
+x-microsoft-antispam-prvs: <VI1PR04MB7101909E7D4B7E137A558DB28B9A0@VI1PR04MB7101.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
+x-forefront-prvs: 01842C458A
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(136003)(39860400002)(376002)(366004)(396003)(189003)(199004)(6246003)(76176011)(186003)(6506007)(102836004)(3846002)(7696005)(26005)(6116002)(33656002)(14454004)(9686003)(55016002)(8936002)(4326008)(478600001)(8676002)(486006)(81156014)(81166006)(2906002)(446003)(6436002)(99286004)(11346002)(476003)(54906003)(71190400001)(25786009)(316002)(66066001)(229853002)(86362001)(71200400001)(52536014)(6916009)(7416002)(76116006)(5660300002)(64756008)(256004)(66476007)(66556008)(44832011)(7736002)(14444005)(66446008)(305945005)(66946007)(74316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB7101;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /FBpq6TSOSuFsRmIXcKWwl1CiNrGa/yWS4X7VdRrco5E/siLfHns9cD0JrMQC+yxefFpB+8TY7wUJfQfO4sZImDfkFw6M+FWLQJ98sBK0uMBLhYXPVK6TdbK5+GsnSPEBho8ri9GIXivdD+Cg7MHpvmPRXrIpFLb0Yc2+12bV4833o/kouGHcWLu+pPiFvgzsunOX0PWyupX/UX2l+hBTobXn0ScbZ30CY3M25eS85tPu5tnKMRUi6OhhU71VENschgEp0/rcwAntnhcsHTevZy4sre3VmEcy7nk//No3ycODiRWotwqfjqpFh64/zFCDjW+FeuEJPnxF4X1KaBMYgIBF+A+bAVHTn6YK8DZ1hm/uoaXdGTpG7ma+cjXQBiie3xCnfvXtjxVaI7ZSToSduUFQb9dSC5BAqWW2Ks8/X0=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 005f7745-b84b-4559-2f87-08d74bcbc3c6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Oct 2019 08:44:43.0074
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mIGPELhPvseSBKSNyvnJMEmXkzYTs6yNHin5O9y27nqBSLUwgpJ8eHZRweevVSPVk1K+7oG5ZgDoDCf77bDYkQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7101
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7.10.2019 17.02, Johan Hovold wrote:
-> [ +CC: Alan ]
-> 
-> On Fri, Oct 04, 2019 at 02:59:33PM +0300, Mathias Nyman wrote:
->> udev stored in ep->hcpriv might be NULL if tt buffer is cleared
->> due to a halted control endpoint during device enumeration
->>
->> xhci_clear_tt_buffer_complete is called by hub_tt_work() once it's
->> scheduled,  and by then usb core might have freed and allocated a
->> new udev for the next enumeration attempt.
->>
->> Fixes: ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
->> Cc: <stable@vger.kernel.org> # v5.3
->> Reported-by: Johan Hovold <johan@kernel.org>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->>   drivers/usb/host/xhci.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->> index 00f3804f7aa7..517ec3206f6e 100644
->> --- a/drivers/usb/host/xhci.c
->> +++ b/drivers/usb/host/xhci.c
->> @@ -5238,8 +5238,16 @@ static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
->>   	unsigned int ep_index;
->>   	unsigned long flags;
->>   
->> +	/*
->> +	 * udev might be NULL if tt buffer is cleared during a failed device
->> +	 * enumeration due to a halted control endpoint. Usb core might
->> +	 * have allocated a new udev for the next enumeration attempt.
->> +	 */
->> +
->>   	xhci = hcd_to_xhci(hcd);
->>   	udev = (struct usb_device *)ep->hcpriv;
->> +	if (!udev)
->> +		return;
-> 
-> I didn't have time to look into this myself last week, or comment on the
-> patch before Greg picked it up, but this clearly isn't the right fix.
-> 
-> As your comment suggests, ep->hcpriv may indeed be NULL here if USB core
-> have allocated a new udev. But this only happens after USB has freed the
-> old usb_device and the new one happens to get the same address.
-> 
+=20
+> >> Endpoint can defer transition to Halted state if endpoint has pending
+> >> requests.
+> >
+> >The implementation of halt handling is a little complicated, you may
+> >consider return -EAGAIN for functional stall through usb_ep_set_halt
+> >from function driver if the requests are pending, it doesn't need to
+> >defer such kinds of functional stall.
+>=20
+> Yes, I remember your suggestion regarding using EAGAIN, but f_mass_storag=
+e
+> Driver simple check the status and try to stall endpoint again after 100 =
+ms.
+>=20
+> What if Command Verifier ask for endpoint status before this time, or if =
+the transfer
+> will not be finished on time ? Then the CV test may fail.
+>=20
+> So solution from this patch should be more certain.
+>=20
 
-You're right, that fix doesn't solve the actual issue, it avoids a few specific
-null pointer dereference cases, but leaves both root cause and several other
-use-after-free cases open.
+Your description is reasonable, since I have not met this issue, I would li=
+ke
+to know more about it:=20
+It occurs at CV9 or MSC test? For CV9 test, it may not try to stall non-ep0=
+.
+Which test case was failed?
 
-> Note that even the usb_host_endpoint itself (ep) has then been freed and
-> reallocated since it is member of struct usb_device, and it is the
-> use-after-free that needs fixing.
-> 
-> I've even been able to trigger another NULL-deref in this function
-> before a new udev has been allocated, due to the virt dev having been
-> freed by xhci_free_dev as part of usb_release_dev:
-> 
-> It seems the xhci clear-tt implementation was incomplete since it did
-> not take care to wait for any ongoing work before disabling the
-> endpoint. EHCI does this in ehci_endpoint_disable(), but xhci doesn't
-> even implement that callback.
-> 
+Peter
 
-So it seems, it might be possible to remove pending clear_tt work for
-most endpoints in the .drop_endpoint callbacks, but ep0 is different,
-it isn't dropped, we might need to implement the endpoint_disable()
-callback for this.
-
-> As this may be something you could end up hitting in other paths as
-> well, perhaps we should even consider reverting the offending commit
-> pending a more complete implementation?
-
-Possibly, if we can't find a working solution early enough in this release cycle
-
--Mathias
+> >
+> >Peter
+> >> Patch add additional condition that allows to return correct endpoint
+> >> status during Get Endpoint Status request even if the halting
+> >> endpoint is in progress.
+> >>
+> >> Reported-by: Rahul Kumar <kurahul@cadence.com>
+> >> Signed-off-by: Rahul Kumar <kurahul@cadence.com>
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> >> ---
+> >>  drivers/usb/cdns3/ep0.c | 10 ++++++++--
+> >>  1 file changed, 8 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/cdns3/ep0.c b/drivers/usb/cdns3/ep0.c index
+> >> 44f652e8b5a2..10ae03430f34 100644
+> >> --- a/drivers/usb/cdns3/ep0.c
+> >> +++ b/drivers/usb/cdns3/ep0.c
+> >> @@ -234,9 +234,11 @@ static int cdns3_req_ep0_set_address(struct
+> >> cdns3_device *priv_dev,  static int cdns3_req_ep0_get_status(struct
+> cdns3_device *priv_dev,
+> >>  				    struct usb_ctrlrequest *ctrl)  {
+> >> +	struct cdns3_endpoint *priv_ep;
+> >>  	__le16 *response_pkt;
+> >>  	u16 usb_status =3D 0;
+> >>  	u32 recip;
+> >> +	u8 index;
+> >>
+> >>  	recip =3D ctrl->bRequestType & USB_RECIP_MASK;
+> >>
+> >> @@ -262,9 +264,13 @@ static int cdns3_req_ep0_get_status(struct
+> cdns3_device *priv_dev,
+> >>  	case USB_RECIP_INTERFACE:
+> >>  		return cdns3_ep0_delegate_req(priv_dev, ctrl);
+> >>  	case USB_RECIP_ENDPOINT:
+> >> -		/* check if endpoint is stalled */
+> >> +		index =3D cdns3_ep_addr_to_index(ctrl->wIndex);
+> >> +		priv_ep =3D priv_dev->eps[index];
+> >> +
+> >> +		/* check if endpoint is stalled or stall is pending */
+> >>  		cdns3_select_ep(priv_dev, ctrl->wIndex);
+> >> -		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)))
+> >> +		if (EP_STS_STALL(readl(&priv_dev->regs->ep_sts)) ||
+> >> +		    (priv_ep->flags & EP_STALL_PENDING))
+> >>  			usb_status =3D  BIT(USB_ENDPOINT_HALT);
+> >>  		break;
+> >>  	default:
+> >> --
+> >> 2.17.1
+> >>
+> >
+> >--
+> >
+> >Thanks,
+> >Peter Chen
+>=20
+> Regards,
+> Pawel
