@@ -2,110 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 839E6CF58B
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 11:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24683CF63B
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 11:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730041AbfJHJCv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 05:02:51 -0400
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:37479 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727724AbfJHJCu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 05:02:50 -0400
-Received: by mail-lf1-f66.google.com with SMTP id w67so11360972lff.4
-        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 02:02:49 -0700 (PDT)
+        id S1730192AbfJHJkc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 05:40:32 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:37526 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728866AbfJHJkb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 05:40:31 -0400
+Received: by mail-ed1-f67.google.com with SMTP id r4so15041670edy.4;
+        Tue, 08 Oct 2019 02:40:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=6toEYcd/QGcUGM9UREyyXj/V8NYWbxfV95700fLW2gg=;
+        b=Y999RLk5KBrJ+pc6BtDE61uCoVg7RzzWgyDIMcJfrgCB44ugqjGGCSO6Ds2LhDMvwp
+         1wi8/Yn8mYPZLOB0BnPOTSc5WjRTXVY/le+DjypmWVDc3No45fOOkioW8UT2QOyp9vHk
+         A5tXloDC1TwyVExTgjJPHZ+7Ya5serZeo2rCYZcgD6caoi4y+WY7+UNb38oPse22mJN1
+         WEUgCYGvMZ9nRlqBiDeT8R99oPGLC+533UjGzVTX8n6j3QjIIQK+lWtLQ9wji1EvtEWi
+         KsEh/aslh5RWL8w71N1ladle+V/Wv3O592Q95eRB68XW7WXh3EKgRyVxLKqpfk0//t09
+         Kjgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6ADgCJdlGY+Zw3z+lbjx+EoicMOEEo+/ZLpLLPcoI9k=;
-        b=G9E0UkOxCB8IDCLiyQM1jhRO6rv4PrLd+IR+YFsjk+l6ntY9zev0WPpHua6ENA9D29
-         3HBKYAxdFa8vPAdhPBHW97avm3cQv2YvczdjN/8sxwT921NFVPAM5cRysy4Wfuq5zZsm
-         nGqg9CKcoub9azOK9hS/KoyqgQXrzpTX6xLq0rlLR87zKXuePmt/ML6g3cGUObBgTpf7
-         GsSqD/aZRdOqlCHjEbWlA6KLjVcMORdmeRs6abpqblJ1gmOf4GxtOJDKMkdk5jLm8QHi
-         IvK6i7kAwKWH0uFIsf3msIwudsLID511CB6w4uJ0ijBzjevU5TqUp7nEAmhinm4c03QJ
-         rZOA==
-X-Gm-Message-State: APjAAAVTP+f2B/axtAko6WQjqaeZ3wpsLI90SMtmf5mdaaeX03W/Vutv
-        YNDmgd5jADZHWKDJWnVqG+c=
-X-Google-Smtp-Source: APXvYqwDs48b7nNNQOxgkswUGUbkR86IhFAbVMNsAiBNNrq/wd0fshKnJsvK6oPTpFiuBoK9Q0S1NQ==
-X-Received: by 2002:a19:f512:: with SMTP id j18mr19896131lfb.169.1570525368736;
-        Tue, 08 Oct 2019 02:02:48 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id i6sm3405014lfc.37.2019.10.08.02.02.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Oct 2019 02:02:48 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iHlOO-0007uf-J2; Tue, 08 Oct 2019 11:02:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH] USB: core: drop OOM message
-Date:   Tue,  8 Oct 2019 11:02:40 +0200
-Message-Id: <20191008090240.30376-1-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=6toEYcd/QGcUGM9UREyyXj/V8NYWbxfV95700fLW2gg=;
+        b=jNfDeO+GK8EED+dp8WJh5dyqH2sTUkSs60J4IEmIg//VPOTDgrfQvTwnKUqW7DZpL0
+         22yP+uSS4V7JueSIC10zVf/BW1obSpPaVNBkKAx4MU1MWL2wLZgxRxuPrsqSXT2wvzHb
+         nxJFm1HouuINlMQhlZ7bA7/c0eaeKzLAklaXUS3MkMMQaAI+qdjVJRUlfBUShg+lDdcU
+         p2bwMbZxsQFalSTAr+oWdwLzoP91OrAu3q7DTGklE0mvwTJP9BEVJT7p4xH5URmCwQWj
+         bPTdysOa00ql/zEOe8UzVgPgZ//yCOqsOj6rMBwYu17KK+xjzZjV4B1K4CShEG1gt//O
+         yYWg==
+X-Gm-Message-State: APjAAAVq6kMm99eDuTf+sUIHglnNbV31FNPm1RPzQs4J6ieCsJvqkq7G
+        EobC1T4tau2cBvcCU9fe5Lnj9xRRmGOkitGtPFm5MkIR
+X-Google-Smtp-Source: APXvYqzdzhJMZJZKEfBMFgkKxjNZXhbj6umj6ISr9L6wITmNMut/uCRREVk8Dj/IkyLkavhB9TzOEFO9VQiz7ce84Q0=
+X-Received: by 2002:a05:6402:2054:: with SMTP id bc20mr34283549edb.55.1570527629145;
+ Tue, 08 Oct 2019 02:40:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191007124607.20618-1-igor.opaniuk@gmail.com>
+ <20191007124607.20618-2-igor.opaniuk@gmail.com> <20191008032326.GB5670@b29397-desktop>
+In-Reply-To: <20191008032326.GB5670@b29397-desktop>
+From:   Igor Opaniuk <igor.opaniuk@gmail.com>
+Date:   Tue, 8 Oct 2019 12:40:17 +0300
+Message-ID: <CAByghJYSPdjtiAp9UKy9SGGgmdvXxH+K+JAJdRU2vpCvXwouMA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 2/3] usb: chipidea: set mode for usb phy driver
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Igor Opaniuk <igor.opaniuk@toradex.com>,
+        Jun Li <jun.li@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop redundant OOM message on allocation failures which would already
-have been logged by the allocator. This also allows us to clean up the
-error paths somewhat.
+Hi Peter,
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/core/config.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+On Tue, Oct 8, 2019 at 6:23 AM Peter Chen <peter.chen@nxp.com> wrote:
+>
+> On 19-10-07 15:46:06, Igor Opaniuk wrote:
+> > From: Igor Opaniuk <igor.opaniuk@toradex.com>
+> >
+> > After enters one specific role, notify usb phy driver.
+> >
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+> > ---
+> >
+> >  drivers/usb/chipidea/ci.h | 21 ++++++++++++++++++---
+> >  1 file changed, 18 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+> > index 6911aef500e9..a11d23910b12 100644
+> > --- a/drivers/usb/chipidea/ci.h
+> > +++ b/drivers/usb/chipidea/ci.h
+> > @@ -275,9 +275,21 @@ static inline int ci_role_start(struct ci_hdrc *ci=
+, enum ci_role role)
+> >               return -ENXIO;
+> >
+> >       ret =3D ci->roles[role]->start(ci);
+> > -     if (!ret)
+> > -             ci->role =3D role;
+> > -     return ret;
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     ci->role =3D role;
+> > +
+> > +     if (ci->usb_phy) {
+> > +             if (role =3D=3D CI_ROLE_HOST)
+> > +                     usb_phy_set_mode(ci->usb_phy,
+> > +                                     USB_MODE_HOST);
+> > +             else
+> > +                     usb_phy_set_mode(ci->usb_phy,
+> > +                                     USB_MODE_DEVICE);
+> > +     }
+> > +
+> > +     return 0;
+> >  }
+> >
+> >  static inline void ci_role_stop(struct ci_hdrc *ci)
+> > @@ -290,6 +302,9 @@ static inline void ci_role_stop(struct ci_hdrc *ci)
+> >       ci->role =3D CI_ROLE_END;
+> >
+> >       ci->roles[role]->stop(ci);
+> > +
+> > +     if (ci->usb_phy)
+> > +             usb_phy_set_mode(ci->usb_phy, USB_MODE_NONE);
+> >  }
+> >
+> >  static inline enum usb_role ci_role_to_usb_role(struct ci_hdrc *ci)
+> > --
+>
+> Hi Igor,
+>
+> Thanks for doing that.
+>
+> We just find this series patch will break ARM32 multi_v7_defconfig
+> build. You may need to fix it at next revision, see below.
+>
+>   CC [M]  drivers/gpu/drm/nouveau/nvkm/subdev/fb/gm200.o
+> In file included from /home/b29397/work/projects/usb/drivers/phy/ti/phy-o=
+map-usb2.c:20:0:
+> /home/b29397/work/projects/usb/include/linux/phy/omap_control_phy.h:36:2:=
+ error: redeclaration of enumerator =E2=80=98USB_MODE_HOST=E2=80=99
+>   USB_MODE_HOST,
+>   ^~~~~~~~~~~~~
+> In file included from /home/b29397/work/projects/usb/include/linux/usb/ot=
+g.h:14:0,
+>                  from /home/b29397/work/projects/usb/include/linux/phy/om=
+ap_usb.h:13,
+>                  from /home/b29397/work/projects/usb/drivers/phy/ti/phy-o=
+map-usb2.c:14:
+> /home/b29397/work/projects/usb/include/linux/usb/phy.h:69:2: note: previo=
+us definition of =E2=80=98USB_MODE_HOST=E2=80=99 was here
+>   USB_MODE_HOST,
+>   ^~~~~~~~~~~~~
+> In file included from /home/b29397/work/projects/usb/drivers/phy/ti/phy-o=
+map-usb2.c:20:0:
+> /home/b29397/work/projects/usb/include/linux/phy/omap_control_phy.h:37:2:=
+ error: redeclaration of enumerator =E2=80=98USB_MODE_DEVICE=E2=80=99
+>   USB_MODE_DEVICE,
+>   ^~~~~~~~~~~~~~~
+> In file included from /home/b29397/work/projects/usb/include/linux/usb/ot=
+g.h:14:0,
+>                  from /home/b29397/work/projects/usb/include/linux/phy/om=
+ap_usb.h:13,
+>                  from /home/b29397/work/projects/usb/drivers/phy/ti/phy-o=
+map-usb2.c:14:
+> /home/b29397/work/projects/usb/include/linux/usb/phy.h:70:2: note: previo=
+us definition of =E2=80=98USB_MODE_DEVICE=E2=80=99 was here
+>   USB_MODE_DEVICE,
+>   ^~~~~~~~~~~~~~~
+> /home/b29397/work/projects/usb/scripts/Makefile.build:280: recipe for tar=
+get 'drivers/phy/ti/phy-omap-usb2.o' failed
+> make[4]: *** [drivers/phy/ti/phy-omap-usb2.o] Error 1
+> make[4]: *** Waiting for unfinished jobs....
+>   CC      drivers/pinctrl/qcom/pinctrl-ssbi-gpio.o
+>   CC      drivers/regulator/bcm590xx-regulator.o
+>   CC      drivers/pinctrl/qcom/pinctrl-spmi-mpp.o
+>   CC      drivers/pinctrl/qcom/pinctrl-ssbi-mpp.o
+>   CC      drivers/rpmsg/imx_rpmsg.o
+>   CC [M]  drivers/rpmsg/rpmsg_core.o
+>   CC      drivers/regulator/da9210-regulator.o
+>   CC      drivers/gpu/drm/drm_crtc_helper.o
+>   CC      drivers/pinctrl/samsung/pinctrl-exynos.o
+>   CC      drivers/gpu/drm/drm_dp_helper.o
+> /home/b29397/work/projects/usb/scripts/Makefile.build:497: recipe for tar=
+get 'drivers/phy/ti' failed
+> make[3]: *** [drivers/phy/ti] Error 2
+>
+> --
+>
+> Thanks,
+> Peter Chen
 
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 151a74a54386..ff9f50f7218f 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -800,10 +800,10 @@ int usb_get_configuration(struct usb_device *dev)
- {
- 	struct device *ddev = &dev->dev;
- 	int ncfg = dev->descriptor.bNumConfigurations;
--	int result = -ENOMEM;
- 	unsigned int cfgno, length;
- 	unsigned char *bigbuffer;
- 	struct usb_config_descriptor *desc;
-+	int result;
- 
- 	if (ncfg > USB_MAXCONFIG) {
- 		dev_warn(ddev, "too many configurations: %d, "
-@@ -819,16 +819,16 @@ int usb_get_configuration(struct usb_device *dev)
- 	length = ncfg * sizeof(struct usb_host_config);
- 	dev->config = kzalloc(length, GFP_KERNEL);
- 	if (!dev->config)
--		goto err2;
-+		return -ENOMEM;
- 
- 	length = ncfg * sizeof(char *);
- 	dev->rawdescriptors = kzalloc(length, GFP_KERNEL);
- 	if (!dev->rawdescriptors)
--		goto err2;
-+		return -ENOMEM;
- 
- 	desc = kmalloc(USB_DT_CONFIG_SIZE, GFP_KERNEL);
- 	if (!desc)
--		goto err2;
-+		return -ENOMEM;
- 
- 	for (cfgno = 0; cfgno < ncfg; cfgno++) {
- 		/* We grab just the first descriptor so we know how long
-@@ -890,9 +890,7 @@ int usb_get_configuration(struct usb_device *dev)
- err:
- 	kfree(desc);
- 	dev->descriptor.bNumConfigurations = cfgno;
--err2:
--	if (result == -ENOMEM)
--		dev_err(ddev, "out of memory\n");
-+
- 	return result;
- }
- 
--- 
-2.23.0
+Seems familiar to me, AFAIK we already fixed that in
+our downstream kernel, will add the fix for v1.
 
+Thanks!
+
+--
+Best regards - Freundliche Gr=C3=BCsse - Meilleures salutations
+
+Igor Opaniuk
+
+mailto: igor.opaniuk@gmail.com
+skype: igor.opanyuk
++380 (93) 836 40 67
+http://ua.linkedin.com/in/iopaniuk
