@@ -2,78 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0465FCF8BB
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 13:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7C1CF9B8
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Oct 2019 14:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730694AbfJHLmy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 07:42:54 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:42836 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730118AbfJHLmx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 07:42:53 -0400
-Received: by mail-oi1-f194.google.com with SMTP id i185so14447664oif.9;
-        Tue, 08 Oct 2019 04:42:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rWU50A1ftSfnXS5t6he0dr7vBuFC5vEUJUAdKOgY8bw=;
-        b=CN9t7YfAc0vWJIDXMZTaDRZQTh76TPp4qTdZD4q6reYI5nrtM2KkzO3bkJX9EGgdnN
-         gvHwRVL/CCevZiKCAzhu8V6gXArCwrJycQnANMX7JiVdMtgQrKMb3Mhc+38uxEImGhYz
-         iqiUFb8nIWlvmDI2bexaxD1nP4Q9pbhYeNNtpCzvFpBhO6yQd5LaXXbhb/C5teesnPaW
-         mLfIRCY9BThKjnbEkGOvqGGnaC2p7ZK5AbjyUpIu1FTNOUaM+r99yE8Bi4GoO9450Har
-         cpvTD8ev8bAO/AGpUHQSrJSv8oA7xZno95O3zT2H7bxjyoMa/hhbvX9V8N7oR6UnycVt
-         YoqQ==
-X-Gm-Message-State: APjAAAU7MAeL8yAD8LVEIOCzku3sG88fOI1ivYkE1QPFT23J8dUu7jHw
-        bR0+F71zeYWYbVnY0eMEitovInlB81HAtE/DjYU=
-X-Google-Smtp-Source: APXvYqyCiews/tKA57sXvPG5XvGEr37Qd8csRkV55q3J6cezMVTk15zb8MhXvmopRDNPJSrIQDtYqNfHP9ZJEaZ2Qus=
-X-Received: by 2002:aca:4bd2:: with SMTP id y201mr3663250oia.102.1570534973087;
- Tue, 08 Oct 2019 04:42:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570531132-21856-7-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570531132-21856-7-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 8 Oct 2019 13:42:41 +0200
-Message-ID: <CAMuHMdX5hkZ7kLRiA_NRrBziFsrZNgZX-cEiE+bAaubkMdX=1A@mail.gmail.com>
-Subject: Re: [PATCH 06/10] dt-bindings: usb: renesas_usb3: Document r8a774b1 support
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Simon Horman <horms@verge.net.au>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1730764AbfJHM0E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 08:26:04 -0400
+Received: from mga02.intel.com ([134.134.136.20]:30802 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730316AbfJHM0E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 08:26:04 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Oct 2019 05:26:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,270,1566889200"; 
+   d="scan'208";a="206626803"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Oct 2019 05:26:01 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 0/2]  extcon: axp288: Move to swnodes
+Date:   Tue,  8 Oct 2019 15:25:58 +0300
+Message-Id: <20191008122600.22340-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 12:39 PM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Document RZ/G2N (R8A774B1) SoC bindings.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+Hi Hans,
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Fixed the compiler warning in this version. No other changes.
 
-Gr{oetje,eeting}s,
+The original cover letter:
 
-                        Geert
+That AXP288 extcon driver is the last that uses build-in connection
+description. I'm replacing it with a code that finds the role mux
+software node instead.
+
+I'm proposing also here a little helper
+usb_role_switch_find_by_fwnode() that uses
+class_find_device_by_fwnode() to find the role switches.
+
+thanks,
+
+Heikki Krogerus (2):
+  usb: roles: Add usb_role_switch_find_by_fwnode()
+  extcon: axp288: Remove the build-in connection description
+
+ drivers/extcon/extcon-axp288.c | 38 ++++++++++++++++++++--------------
+ drivers/usb/roles/class.c      | 21 +++++++++++++++++++
+ include/linux/usb/role.h       |  3 +++
+ 3 files changed, 47 insertions(+), 15 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.23.0
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
