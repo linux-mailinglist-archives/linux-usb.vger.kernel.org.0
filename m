@@ -2,80 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7A7D10DA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CF8D115D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731397AbfJIOH3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 10:07:29 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:36576 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731291AbfJIOH3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:07:29 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 67so1827038oto.3;
-        Wed, 09 Oct 2019 07:07:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Xoqu4/6gzZJfqydmLWCZZExTM+Z/HHchEI/c3BMPIcY=;
-        b=T/mfS4YAhhPvuePxJ6MIJOcbml47SI6B5hvCOOLVEdt+DFDJO1PHQ0q047P//wVQKC
-         rXsR0Hextecd6M7RP0EiWHlv/E45lpCuAAdrOY5X8abxrZFyAqIUB+N1vXJr0+yMYqGm
-         0zSocij5OnAFpz5DCvTY6AGVSd/GJUEXn/O0l1Gt6KkJ0g9lCNXeKY2MikxaqNqV6CKR
-         UwGPEhbCpdvOsk53BNCDQ0455AV1fESSjyDh0uujWJOpTKESIBp6F8/LSf9UmtDLU/0U
-         dEW3FGbf6xA2B+2WJsxWejL5ZQy5rmHAVpbmcBk2KZ6P1xMPBCDms0ZHnG5Am839nJyw
-         z9Fw==
-X-Gm-Message-State: APjAAAWDOBNUSdM4ji4yctZcJ00mJ9AGKCDHn6k6X3r/4FFSkc4QCZLA
-        LqQFBCw7YVeqazeIcJ+EJFG3pClb8NU3LtIROvc=
-X-Google-Smtp-Source: APXvYqxG9nKgXLSoFI7/giibY8i89eFKiPK6JRXt8GaE/1srOdt2enUGLSmmEHLF6Cfzpg5dHk5/eRRLlvpTtbTZ5ZA=
-X-Received: by 2002:a05:6830:1b75:: with SMTP id d21mr3034304ote.145.1570630048241;
- Wed, 09 Oct 2019 07:07:28 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570531132-21856-8-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570531132-21856-8-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Oct 2019 16:07:17 +0200
-Message-ID: <CAMuHMdV8+Rsb53dsMEoRMk3Oj7yEqbhJ7CTNz-Z90ZZaBkZV8Q@mail.gmail.com>
-Subject: Re: [PATCH 07/10] arm64: dts: renesas: r8a774b1: Add USB2.0 phy and
- host (EHCI/OHCI) device nodes
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Simon Horman <horms@verge.net.au>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1731386AbfJIOen (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 10:34:43 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51004 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730490AbfJIOen (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:34:43 -0400
+Received: (qmail 2376 invoked by uid 2102); 9 Oct 2019 10:34:41 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Oct 2019 10:34:41 -0400
+Date:   Wed, 9 Oct 2019 10:34:41 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 2/5] USB: Make it possible to "subclass" usb_device_driver
+In-Reply-To: <20191009134342.6476-3-hadess@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 12:39 PM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Add USB2.0 phy and host (EHCI/OHCI) device nodes on RZ/G2N SoC dtsi.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+On Wed, 9 Oct 2019, Bastien Nocera wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.5.
+> The kernel currenly has only 2 usb_device_drivers, one generic one, one
+> that completely replaces the generic one to make USB devices usable over
+> a network.
 
-Gr{oetje,eeting}s,
+Presumably your first driver is in generic.c.  Where is the second one?
 
-                        Geert
+> Use the newly exported generic driver functions when a driver declares
+> to want them run, in addition to its own code. This makes it possible to
+> write drivers that extend the generic USB driver.
+> 
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+This has a few problems.  The biggest one is that the device core does 
+not guarantee any order of driver probing.  If generic.c is probed 
+first, the subclass driver will never get probed -- which is a pretty 
+fatal flaw.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> ---
+>  drivers/usb/core/driver.c | 36 ++++++++++++++++++++++++++++++------
+>  include/linux/usb.h       |  1 +
+>  2 files changed, 31 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index 2b27d232d7a7..863e380a272b 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -261,10 +261,17 @@ static int usb_probe_device(struct device *dev)
+>  	 */
+>  	if (!udriver->supports_autosuspend)
+>  		error = usb_autoresume_device(udev);
+> +	if (error)
+> +		return error;
+>  
+> -	if (!error)
+> -		error = udriver->probe(udev);
+> -	return error;
+> +	if (udriver->generic_init)
+> +		error = usb_generic_driver_probe(udev);
+> +	if (error)
+> +		return error;
+> +
+> +	if (udriver->probe)
+> +		return udriver->probe(udev);
+> +	return 0;
+>  }
+>  
+>  /* called from driver core with dev locked */
+> @@ -273,7 +280,10 @@ static int usb_unbind_device(struct device *dev)
+>  	struct usb_device *udev = to_usb_device(dev);
+>  	struct usb_device_driver *udriver = to_usb_device_driver(dev->driver);
+>  
+> -	udriver->disconnect(udev);
+> +	if (udriver->generic_init)
+> +		usb_generic_driver_disconnect(udev);
+> +	if (udriver->disconnect)
+> +		udriver->disconnect(udev);
+
+The order is wrong.  The disconnects should always be done in reverse 
+order of probing.  This is true whenever you have a destructor for a 
+subclass; the subclasses destructor runs before the superclass's 
+destructor.
+
+>  	if (!udriver->supports_autosuspend)
+>  		usb_autosuspend_device(udev);
+>  	return 0;
+> @@ -886,6 +896,14 @@ int usb_register_device_driver(struct usb_device_driver *new_udriver,
+>  	if (usb_disabled())
+>  		return -ENODEV;
+>  
+> +	if (new_udriver->probe == NULL &&
+> +	    !new_udriver->generic_init) {
+
+There's no point adding this extra test.  Even subclass drivers should 
+have a probe function.
+
+> +		printk(KERN_ERR "%s: error %d registering device "
+> +		       "	driver %s, no probe() function\n",
+
+Don't split character strings.  They are an exception to the 80-column 
+limit.
+
+> +		       usbcore_name, retval, new_udriver->name);
+> +		return -EINVAL;
+> +	}
+> +
+>  	new_udriver->drvwrap.for_devices = 1;
+>  	new_udriver->drvwrap.driver.name = new_udriver->name;
+>  	new_udriver->drvwrap.driver.bus = &usb_bus_type;
+> @@ -1149,7 +1167,10 @@ static int usb_suspend_device(struct usb_device *udev, pm_message_t msg)
+>  		udev->do_remote_wakeup = 0;
+>  		udriver = &usb_generic_driver;
+>  	}
+> -	status = udriver->suspend(udev, msg);
+> +	if (udriver->generic_init)
+> +		status = usb_generic_driver_suspend (udev, msg);
+> +	if (status == 0 && udriver->suspend)
+> +		status = udriver->suspend(udev, msg);
+
+Again, the order is wrong.  Suspend the subclass driver first.
+
+>   done:
+>  	dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
+> @@ -1181,7 +1202,10 @@ static int usb_resume_device(struct usb_device *udev, pm_message_t msg)
+>  		udev->reset_resume = 1;
+>  
+>  	udriver = to_usb_device_driver(udev->dev.driver);
+> -	status = udriver->resume(udev, msg);
+> +	if (udriver->generic_init)
+> +		status = usb_generic_driver_resume (udev, msg);
+> +	if (status == 0 && udriver->resume)
+> +		status = udriver->resume(udev, msg);
+>  
+>   done:
+>  	dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
+> diff --git a/include/linux/usb.h b/include/linux/usb.h
+> index e656e7b4b1e4..fb9ad3511e55 100644
+> --- a/include/linux/usb.h
+> +++ b/include/linux/usb.h
+> @@ -1242,6 +1242,7 @@ struct usb_device_driver {
+>  	const struct attribute_group **dev_groups;
+>  	struct usbdrv_wrap drvwrap;
+>  	unsigned int supports_autosuspend:1;
+> +	unsigned int generic_init:1;
+
+How about using a name that actually says something about the driver?  
+Such as generic_subclass?  Or subclass_of_generic?
+
+"init" has nothing to do with anything.
+
+>  };
+>  #define	to_usb_device_driver(d) container_of(d, struct usb_device_driver, \
+>  		drvwrap.driver)
+
+Alan Stern
+
