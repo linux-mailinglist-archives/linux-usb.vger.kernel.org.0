@@ -2,209 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C127AD05A3
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 04:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEA4D05C3
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 05:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730330AbfJICoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 22:44:07 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:9161 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730314AbfJICoG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 22:44:06 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d9d49760000>; Tue, 08 Oct 2019 19:44:06 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 08 Oct 2019 19:44:05 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 08 Oct 2019 19:44:05 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Oct
- 2019 02:44:05 +0000
-Received: from hqnvemgw01.nvidia.com (172.20.150.20) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 9 Oct 2019 02:44:05 +0000
-Received: from jckuo-lt.nvidia.com (Not Verified[10.19.101.249]) by hqnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5d9d49730009>; Tue, 08 Oct 2019 19:44:04 -0700
-From:   JC Kuo <jckuo@nvidia.com>
-To:     <gregkh@linuxfoundation.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>, <kishon@ti.com>
-CC:     <linux-tegra@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nkristam@nvidia.com>, JC Kuo <jckuo@nvidia.com>
-Subject: [PATCH v4 5/5] arm64: tegra: Enable XUSB host in P2972-0000 board
-Date:   Wed, 9 Oct 2019 10:43:43 +0800
-Message-ID: <20191009024343.30218-6-jckuo@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191009024343.30218-1-jckuo@nvidia.com>
-References: <20191009024343.30218-1-jckuo@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1570589046; bh=kTsf7sroztlFU/WoIr8VZwOOWFzOV3Kid4dRXTVjZ4I=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=MEZOOrXeOmV/9xhDlP5QVwsvFovjvVRPt00phORF9fdDU3zRK5uNZ4FUiUwOgmey7
-         xsoEGUS1ATgppySZMWVgpAhNQldx3/vCgnEOWmqsnlGjL2ODvkgT41w9gjPGxhTb+p
-         k8hxOHUJhIZ6sNOFTGTBb0PTE7++RnGMeDk5pgL81o+uTYx3eyqtlS5GpKwkNESixQ
-         tgAF5uktzI9/Amxa1uVt0pPj1cIlsUPOqSSSB59YJ+eyCQ89MQhoHU1mA7/nEM+dXL
-         lFaCbvqphyOwvyuEBiNd8afnxbgq+vBNFl0FK/7gRMv2Vd/J7qoZipkvtVWEe5IzYi
-         XJ5rnC9Ea8S7A==
+        id S1730271AbfJIDDP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 23:03:15 -0400
+Received: from inva021.nxp.com ([92.121.34.21]:58790 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726109AbfJIDDP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 8 Oct 2019 23:03:15 -0400
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E70BF200081;
+        Wed,  9 Oct 2019 05:03:13 +0200 (CEST)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id B8958200363;
+        Wed,  9 Oct 2019 05:03:10 +0200 (CEST)
+Received: from titan.ap.freescale.net (TITAN.ap.freescale.net [10.192.208.233])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 7A20B40299;
+        Wed,  9 Oct 2019 11:03:06 +0800 (SGT)
+From:   jun.li@nxp.com
+To:     peter.chen@nxp.com
+Cc:     gregkh@linuxfoundation.org, jun.li@nxp.com, linux-imx@nxp.com,
+        linux-usb@vger.kernel.org, dan.carpenter@oracle.com
+Subject: [PATCH] usb: chipidea: imx: check data->usbmisc_data against NULL before access
+Date:   Wed,  9 Oct 2019 10:52:28 +0800
+Message-Id: <20191009025228.16595-1-jun.li@nxp.com>
+X-Mailer: git-send-email 2.9.5
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This commit enables XUSB host and pad controller in Tegra194
-P2972-0000 board.
+From: Li Jun <jun.li@nxp.com>
 
-Signed-off-by: JC Kuo <jckuo@nvidia.com>
+As usbmisc_data is optional, so add the check before access its member,
+this fix below static checker warning:
+drivers/usb/chipidea/ci_hdrc_imx.c:438 ci_hdrc_imx_probe()
+warn: 'data->usbmisc_data' can also be NULL
+which is introduced by Patch 15b80f7c3a7f:
+"usb: chipidea: imx: enable vbus and id wakeup only for OTG events"
+
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Li Jun <jun.li@nxp.com>
 ---
-Changes in v4: none
-Changes in v3: none
-Changes in v2:
-- use capitalization of regulator names
-- fix gpio property of VDD_5V_SATA regulator
+ drivers/usb/chipidea/ci_hdrc_imx.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
- .../arm64/boot/dts/nvidia/tegra194-p2888.dtsi | 36 ++++++++++-
- .../boot/dts/nvidia/tegra194-p2972-0000.dts   | 62 +++++++++++++++++++
- 2 files changed, 97 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-index 4c38426a6969..e7d5e8a30f93 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi
-@@ -66,6 +66,29 @@
- 			vmmc-supply = <&vdd_emmc_3v3>;
- 		};
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index b11d70f..0498210 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -433,13 +433,15 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 		goto err_clk;
+ 	}
  
-+		padctl@3520000 {
-+			avdd-usb-supply = <&vdd_usb_3v3>;
-+			vclamp-usb-supply = <&vdd_1v8ao>;
+-	if (!IS_ERR(pdata.id_extcon.edev) ||
+-	    of_property_read_bool(np, "usb-role-switch"))
+-		data->usbmisc_data->ext_id = 1;
+-
+-	if (!IS_ERR(pdata.vbus_extcon.edev) ||
+-	    of_property_read_bool(np, "usb-role-switch"))
+-		data->usbmisc_data->ext_vbus = 1;
++	if (data->usbmisc_data) {
++		if (!IS_ERR(pdata.id_extcon.edev) ||
++		    of_property_read_bool(np, "usb-role-switch"))
++			data->usbmisc_data->ext_id = 1;
 +
-+			ports {
-+				usb2-1 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
-+
-+				usb2-3 {
-+					vbus-supply = <&vdd_5v_sata>;
-+				};
-+
-+				usb3-0 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
-+
-+				usb3-3 {
-+					vbus-supply = <&vdd_5v0_sys>;
-+				};
-+			};
-+		};
-+
- 		rtc@c2a0000 {
- 			status = "okay";
- 		};
-@@ -229,7 +252,7 @@
- 						regulator-max-microvolt = <3300000>;
- 					};
++		if (!IS_ERR(pdata.vbus_extcon.edev) ||
++		    of_property_read_bool(np, "usb-role-switch"))
++			data->usbmisc_data->ext_vbus = 1;
++	}
  
--					ldo5 {
-+					vdd_usb_3v3: ldo5 {
- 						regulator-name = "VDD_USB_3V3";
- 						regulator-min-microvolt = <3300000>;
- 						regulator-max-microvolt = <3300000>;
-@@ -313,5 +336,16 @@
- 			regulator-boot-on;
- 			enable-active-low;
- 		};
-+
-+		vdd_5v_sata: regulator@4 {
-+			compatible = "regulator-fixed";
-+			reg = <4>;
-+
-+			regulator-name = "VDD_5V_SATA";
-+			regulator-min-microvolt = <5000000>;
-+			regulator-max-microvolt = <5000000>;
-+			gpio = <&gpio TEGRA194_MAIN_GPIO(Z, 1) GPIO_ACTIVE_HIGH>;
-+			enable-active-high;
-+		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-index d47cd8c4dd24..b60eef64c487 100644
---- a/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra194-p2972-0000.dts
-@@ -62,6 +62,68 @@
- 							 GPIO_ACTIVE_LOW>;
- 			};
- 		};
-+		padctl@3520000 {
-+			status = "okay";
-+
-+			pads {
-+				usb2 {
-+					lanes {
-+						usb2-1 {
-+							status = "okay";
-+						};
-+
-+						usb2-3 {
-+							status = "okay";
-+						};
-+					};
-+				};
-+
-+				usb3 {
-+					lanes {
-+						usb3-0 {
-+							status = "okay";
-+						};
-+
-+						usb3-3 {
-+							status = "okay";
-+						};
-+					};
-+				};
-+			};
-+
-+			ports {
-+				usb2-1 {
-+					mode = "host";
-+					status = "okay";
-+				};
-+
-+				usb2-3 {
-+					mode = "host";
-+					status = "okay";
-+				};
-+
-+				usb3-0 {
-+					nvidia,usb2-companion = <1>;
-+					status = "okay";
-+				};
-+
-+				usb3-3 {
-+					nvidia,usb2-companion = <3>;
-+					nvidia,disable-gen2;
-+					status = "okay";
-+				};
-+			};
-+		};
-+
-+		usb@3610000 {
-+			status = "okay";
-+
-+			phys =	<&{/cbb/padctl@3520000/pads/usb2/lanes/usb2-1}>,
-+				<&{/cbb/padctl@3520000/pads/usb2/lanes/usb2-3}>,
-+				<&{/cbb/padctl@3520000/pads/usb3/lanes/usb3-0}>,
-+				<&{/cbb/padctl@3520000/pads/usb3/lanes/usb3-3}>;
-+			phy-names = "usb2-1", "usb2-3", "usb3-0", "usb3-3";
-+		};
- 	};
- 
- 	pcie@14100000 {
+ 	ret = imx_usbmisc_init_post(data->usbmisc_data);
+ 	if (ret) {
 -- 
-2.17.1
+2.7.4
 
