@@ -2,28 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F31D1072
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 15:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECBFD1074
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 15:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731133AbfJINnp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 09:43:45 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:37751 "EHLO
+        id S1731300AbfJINnr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 09:43:47 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:54835 "EHLO
         relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731037AbfJINnp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 09:43:45 -0400
+        with ESMTP id S1731072AbfJINnr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 09:43:47 -0400
 X-Originating-IP: 83.155.44.161
 Received: from localhost.localdomain (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
         (Authenticated sender: hadess@hadess.net)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 90DFF1BF20D;
-        Wed,  9 Oct 2019 13:43:43 +0000 (UTC)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 7F1021BF217;
+        Wed,  9 Oct 2019 13:43:44 +0000 (UTC)
 From:   Bastien Nocera <hadess@hadess.net>
 To:     linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: [PATCH 0/5] Add Apple MFi fastcharge USB device driver
-Date:   Wed,  9 Oct 2019 15:43:37 +0200
-Message-Id: <20191009134342.6476-1-hadess@hadess.net>
+Subject: [PATCH 1/5] USB: Export generic USB device driver functions
+Date:   Wed,  9 Oct 2019 15:43:38 +0200
+Message-Id: <20191009134342.6476-2-hadess@hadess.net>
 X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20191009134342.6476-1-hadess@hadess.net>
+References: <20191009134342.6476-1-hadess@hadess.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -31,30 +33,100 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As discussed in the thread "Driver for something that's neither a
-device nor an interface driver?", here's a patchset that makes it
-possible for device drivers to extend the generic device driver.
+This will make it possible to implement device drivers which extend the
+generic driver without needing to reimplement it.
 
-An example usage is provided in the shape of a driver that allows
-changing the charge type of an Apple MFi device to be fast.
+Signed-off-by: Bastien Nocera <hadess@hadess.net>
+---
+ drivers/usb/core/generic.c | 20 ++++++++++++--------
+ drivers/usb/core/usb.h     |  4 ++++
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
-Bastien Nocera (5):
-  USB: Export generic USB device driver functions
-  USB: Make it possible to "subclass" usb_device_driver
-  USB: Implement usb_device_match_id()
-  USB: Select better matching USB drivers when available
-  USB: Add driver to control USB fast charge for iOS devices
-
- drivers/usb/core/driver.c               |  66 +++-
- drivers/usb/core/generic.c              |  49 ++-
- drivers/usb/core/usb.h                  |   4 +
- drivers/usb/misc/Kconfig                |  10 +
- drivers/usb/misc/Makefile               |   1 +
- drivers/usb/misc/apple-mfi-fastcharge.c | 500 ++++++++++++++++++++++++
- include/linux/usb.h                     |   5 +
- 7 files changed, 619 insertions(+), 16 deletions(-)
- create mode 100644 drivers/usb/misc/apple-mfi-fastcharge.c
-
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index 38f8b3e31762..7454c74d43ee 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -195,7 +195,7 @@ int usb_choose_configuration(struct usb_device *udev)
+ }
+ EXPORT_SYMBOL_GPL(usb_choose_configuration);
+ 
+-static int generic_probe(struct usb_device *udev)
++int usb_generic_driver_probe(struct usb_device *udev)
+ {
+ 	int err, c;
+ 
+@@ -221,8 +221,9 @@ static int generic_probe(struct usb_device *udev)
+ 
+ 	return 0;
+ }
++EXPORT_SYMBOL_GPL(usb_generic_driver_probe);
+ 
+-static void generic_disconnect(struct usb_device *udev)
++void usb_generic_driver_disconnect(struct usb_device *udev)
+ {
+ 	usb_notify_remove_device(udev);
+ 
+@@ -231,10 +232,11 @@ static void generic_disconnect(struct usb_device *udev)
+ 	if (udev->actconfig)
+ 		usb_set_configuration(udev, -1);
+ }
++EXPORT_SYMBOL_GPL(usb_generic_driver_disconnect);
+ 
+ #ifdef	CONFIG_PM
+ 
+-static int generic_suspend(struct usb_device *udev, pm_message_t msg)
++int usb_generic_driver_suspend(struct usb_device *udev, pm_message_t msg)
+ {
+ 	int rc;
+ 
+@@ -261,8 +263,9 @@ static int generic_suspend(struct usb_device *udev, pm_message_t msg)
+ 		usbfs_notify_suspend(udev);
+ 	return rc;
+ }
++EXPORT_SYMBOL_GPL(usb_generic_driver_suspend);
+ 
+-static int generic_resume(struct usb_device *udev, pm_message_t msg)
++int usb_generic_driver_resume(struct usb_device *udev, pm_message_t msg)
+ {
+ 	int rc;
+ 
+@@ -280,16 +283,17 @@ static int generic_resume(struct usb_device *udev, pm_message_t msg)
+ 		usbfs_notify_resume(udev);
+ 	return rc;
+ }
++EXPORT_SYMBOL_GPL(usb_generic_driver_resume);
+ 
+ #endif	/* CONFIG_PM */
+ 
+ struct usb_device_driver usb_generic_driver = {
+ 	.name =	"usb",
+-	.probe = generic_probe,
+-	.disconnect = generic_disconnect,
++	.probe = usb_generic_driver_probe,
++	.disconnect = usb_generic_driver_disconnect,
+ #ifdef	CONFIG_PM
+-	.suspend = generic_suspend,
+-	.resume = generic_resume,
++	.suspend = usb_generic_driver_suspend,
++	.resume = usb_generic_driver_resume,
+ #endif
+ 	.supports_autosuspend = 1,
+ };
+diff --git a/drivers/usb/core/usb.h b/drivers/usb/core/usb.h
+index cf4783cf661a..7423c4c5700f 100644
+--- a/drivers/usb/core/usb.h
++++ b/drivers/usb/core/usb.h
+@@ -47,6 +47,10 @@ extern void usb_release_bos_descriptor(struct usb_device *dev);
+ extern char *usb_cache_string(struct usb_device *udev, int index);
+ extern int usb_set_configuration(struct usb_device *dev, int configuration);
+ extern int usb_choose_configuration(struct usb_device *udev);
++extern int usb_generic_driver_probe(struct usb_device *udev);
++extern void usb_generic_driver_disconnect(struct usb_device *udev);
++extern int usb_generic_driver_suspend(struct usb_device *udev, pm_message_t msg);
++extern int usb_generic_driver_resume(struct usb_device *udev, pm_message_t msg);
+ 
+ static inline unsigned usb_get_max_power(struct usb_device *udev,
+ 		struct usb_host_config *c)
 -- 
 2.21.0
 
