@@ -2,89 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB1C1D17B6
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 20:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88BAD17E3
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 20:57:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731426AbfJISpH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 14:45:07 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:51708 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728804AbfJISpH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 14:45:07 -0400
-Received: (qmail 6161 invoked by uid 2102); 9 Oct 2019 14:45:06 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 9 Oct 2019 14:45:06 -0400
-Date:   Wed, 9 Oct 2019 14:45:06 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Bastien Nocera <hadess@hadess.net>
-cc:     linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH 4/5] USB: Select better matching USB drivers when available
-In-Reply-To: <0661117fc2ff5f926443513c6685b72b8f371d14.camel@hadess.net>
-Message-ID: <Pine.LNX.4.44L0.1910091435300.1603-100000@iolanthe.rowland.org>
+        id S1730490AbfJIS5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 14:57:16 -0400
+Received: from mail-yw1-f51.google.com ([209.85.161.51]:35821 "EHLO
+        mail-yw1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729535AbfJIS5Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 14:57:16 -0400
+Received: by mail-yw1-f51.google.com with SMTP id r134so1214980ywg.2
+        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2019 11:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-transfer-encoding:content-language;
+        bh=4OZr2wWL+LlBh6IOfDlMjWQ1iaUqL+Svc4UGJ5r3Efc=;
+        b=j8l9+aR8nUi5K8d1Yci+OZfCPRmfmFMIJ4aIq/bi0ZaauI+ZwbvkJa6eflJqoRs1yr
+         Meil4IgRYQKhcuYnYO9XHYA/13tXStf35S9iDu/6SXV0rqN8d0YtJQ0qjcXuFW2wZThJ
+         vzWEF0XdhwKsbTcvdP9OdvaLWEF9nIKEqIHl3WwVEwaMbdHpQqbRfHoXgZXV2yUDGuJE
+         BBY6hs0gBufT7RPqeVNCfZ2KETTraQbhkpdXR25dr1my+z0vh6mumAXf/MeeVS1ls8DS
+         zAC4lH2hTuorl3LNzUZWkRcimKng0pOGH/Q+GOm03NgzIG228Ry71Mc2p48K2TtGl/99
+         f9uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=4OZr2wWL+LlBh6IOfDlMjWQ1iaUqL+Svc4UGJ5r3Efc=;
+        b=ZpZbV6q3IETuVOzO3LoxanTAKd7GI19ALLdsIPCWBvJEmt2OeqAIa/LUYSTMUM8b78
+         SfARpQpmUkD53wSqKWBBEjvJnH4MQ8CQssa18ncc95oLu0wxJvSBjiqRp59m3I1SVW0a
+         abo4yrKjvOuqam6DO/tUz2rVhfWC1A8Pj87KWABc/AyWlArM7g7uno3Tz9XZO/hfX1ZH
+         YLJgAQ6/LdYy2m2KiARqGRRfkV05XbvlqD33DIFVsuEQrp/hIFl/c6ewElNVqt4+SJY+
+         mXqdJe0cvYvxSrGvn1eojZFt8+n0vgsrHXQHDyFKo7b+SkCjq8zRKhtmsugL7sgmCFhV
+         LwYQ==
+X-Gm-Message-State: APjAAAXIoiekEzdILvapKMQ90qXNT6yRnfwplUj27U/y1Fc3y/7LQwUC
+        quxPd3HvVmKDN4Ez1FaGiHw2rOTe
+X-Google-Smtp-Source: APXvYqxUAYWkH1HGEvoQOdw6sNQwQ2iqXwQ2gdo2hDoQ5kdShvxKiSLNwTXYsYg4qZbCaW9gSbg1GQ==
+X-Received: by 2002:a0d:c144:: with SMTP id c65mr3815433ywd.218.1570647435427;
+        Wed, 09 Oct 2019 11:57:15 -0700 (PDT)
+Received: from [192.168.1.105] (ip68-4-180-157.oc.oc.cox.net. [68.4.180.157])
+        by smtp.gmail.com with ESMTPSA id g40sm740005ywk.14.2019.10.09.11.57.14
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 09 Oct 2019 11:57:15 -0700 (PDT)
+Subject: Re: Etron EJ168A controller
+To:     linux-usb@vger.kernel.org
+References: <91b55846-130e-a0b7-c516-5fa49ad60067@gmail.com>
+From:   Kenneth <x.xeroid@gmail.com>
+Message-ID: <38481a5a-4ea5-a166-917a-98dfa1accad8@gmail.com>
+Date:   Wed, 9 Oct 2019 11:57:14 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <91b55846-130e-a0b7-c516-5fa49ad60067@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 9 Oct 2019, Bastien Nocera wrote:
+Hi,
 
-> On Wed, 2019-10-09 at 13:28 -0400, Alan Stern wrote:
-> <snip>
-> > No, that's not quite it.
-> > 
-> > Here's what should happen when the subclass driver is being probed:
-> > First, call the generic_probe routine, and return immediately if that
-> > fails.  Then call the subclass driver's probe routine.  If that gets
-> > an
-> > error, fail the probe call but tell the device core that the device
-> > is
-> > now bound to the generic driver, not to the subclass driver.
-> 
-> So, something like that, on top of the existing patches? (I'm not sure
-> whether device_driver_attach is the correct call to use here).
-> 
-> -       if (udriver->probe)
-> -               return udriver->probe(udev);
-> -       return 0;
-> +       if (!udriver->probe)
-> +               return 0;
+I was informed that there were bug fixes for the Etron EJ168A controller in kernel 5.2 and 5.3
 
-This test is unnecessary; all drivers must have a probe routine.  
-Otherwise how would they know when they get bound to a device?
+While I can read most USB sticks, if I connect an android phone to this port, applications hang trying to access the phone.
 
-> +       error = udriver->probe(udev);
-> +       if (error == -ENODEV &&
-> +           udrv != &usb_generic_driver)
+MX Linux Form Topic = Android phone hangs with USB 3.0
 
-No need to test for usb_generic_driver; its probe routine always 
-returns 0.  But if you want to include the test anyway, at least don't 
-split the line -- it will all fit in under 80 columns.
-
-> +               return device_driver_attach(usb_generic_driver.drvwrap.driver, dev);
-> +       return error;
-
-I think that's right.  A little testing wouldn't hurt.
-
-> Anything else in this patch series? I was concerned about the naming
-> for "generic_init" in patch 2 ("subclass").
-
-Yes; see the suggestions in
-
-	https://marc.info/?l=linux-usb&m=157063168632242&w=2
-
-Also (I didn't notice this earlier), in patch 1/5 it's not necessary to 
-EXPORT the usb_generic_* routines.  They don't get used in the subclass 
-driver, only in usbcore.
-
-> If there's nothing, I'll test and respin the patchset with the above
-> changes tomorrow.
-
-Okay, good.
-
-Alan Stern
+Kenneth
 
