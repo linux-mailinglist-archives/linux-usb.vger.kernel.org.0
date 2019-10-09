@@ -2,78 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EC1D0552
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 03:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A368AD057A
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 04:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728200AbfJIBrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 21:47:42 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:39664 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726109AbfJIBrm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Oct 2019 21:47:42 -0400
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id A4AE99E700B83A829429;
-        Wed,  9 Oct 2019 09:47:39 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.439.0; Wed, 9 Oct 2019 09:47:32 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <biju.das@bp.renesas.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Mao Wenan <maowenan@huawei.com>,
-        "Hulk Robot" <hulkci@huawei.com>
-Subject: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
-Date:   Wed, 9 Oct 2019 09:47:07 +0800
-Message-ID: <20191009014707.38716-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S1729767AbfJICXS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 22:23:18 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:9155 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbfJICXS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 22:23:18 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d9d44990000>; Tue, 08 Oct 2019 19:23:21 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 08 Oct 2019 19:23:17 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 08 Oct 2019 19:23:17 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Oct
+ 2019 02:23:16 +0000
+Received: from [10.19.101.249] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 9 Oct 2019
+ 02:23:13 +0000
+Subject: Re: [PATCH v3 0/7] add Tegra194 XUSB host and pad controller support
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     <jonathanh@nvidia.com>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <nkristam@nvidia.com>,
+        <skomatineni@nvidia.com>
+References: <20191004162906.4818-1-jckuo@nvidia.com>
+ <20191007110311.GA614644@kroah.com> <20191008112907.GC228118@ulmo>
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <454e29a6-bf31-c75c-0f29-abd18a4ae071@nvidia.com>
+Date:   Wed, 9 Oct 2019 10:23:11 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+In-Reply-To: <20191008112907.GC228118@ulmo>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1570587801; bh=vnyW6vcYjvIgUWxen6TD2VOhh0h48/42kmnZQsDavJA=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
+         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
+         X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=ez12gg+le8K5PmWmR8YWC3VmIeWSmk35/9k5fY9ASesDIKMbncNvPGPoJEGRfdthe
+         1/H2cq2Mngi83sb65hai4L+ksuGs2YwIpJa4Pq4dfIA5cx9/Zw85jEPP+eXCZt/E/v
+         jAPV8AmzoBggSvN8Ub9LcHQ29KqawE9sv02x8gRR4MvgOl/1En7C/q/fk+v9tTby3/
+         8oFnp6Qh7Yqs9yLtExGoulqFTTqOaBuf7OP2rqPhOZjgE5ZbYVm1oLN9Tn07NuLM24
+         fwKF2yVodh4R4fDfeYZQpIAU825y7+UXL2bHyHl62k2mHWmOlzYEXO81EdZLPrf9Bs
+         /4bzHxzCp+8HA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If CONFIG_TYPEC_HD3SS3220=y, CONFIG_USB_ROLE_SWITCH=m, below errors
-can be found:
-drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_remove':
-hd3ss3220.c:(.text+0x64): undefined reference to `usb_role_switch_put'
-drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_dr_set':
-hd3ss3220.c:(.text+0x154): undefined reference to `usb_role_switch_set_role'
-drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_set_role':
-hd3ss3220.c:(.text+0x294): undefined reference to `usb_role_switch_set_role'
-hd3ss3220.c:(.text+0x2f4): undefined reference to `usb_role_switch_set_role'
-hd3ss3220.c:(.text+0x348): undefined reference to `usb_role_switch_set_role'
-hd3ss3220.c:(.text+0x390): undefined reference to `usb_role_switch_set_role'
-drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_probe':
-hd3ss3220.c:(.text+0x5e8): undefined reference to `fwnode_usb_role_switch_get'
-hd3ss3220.c:(.text+0x8a4): undefined reference to `usb_role_switch_put'
-make: *** [vmlinux] Error 1
-
-This patch add dependency USB_ROLE_SWITCH for TYPEC_HD3SS3220.
-
-Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
----
- drivers/usb/typec/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-index aceb2af..b4f2aac 100644
---- a/drivers/usb/typec/Kconfig
-+++ b/drivers/usb/typec/Kconfig
-@@ -53,6 +53,7 @@ source "drivers/usb/typec/ucsi/Kconfig"
- config TYPEC_HD3SS3220
- 	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
- 	depends on I2C
-+	depends on USB_ROLE_SWITCH
- 	help
- 	  Say Y or M here if your system has TI HD3SS3220 Type-C DRP Port
- 	  controller driver.
--- 
-2.7.4
-
+On 10/8/19 7:29 PM, Thierry Reding wrote:
+> On Mon, Oct 07, 2019 at 01:03:11PM +0200, Greg KH wrote:
+>> On Sat, Oct 05, 2019 at 12:28:59AM +0800, JC Kuo wrote:
+>>> Hi,
+>>>
+>>> This series introduces support for Tegra194 XUSB host and pad
+>>> controller. Tegra194 XUSB host and pad controller are highly
+>>> similar to the controllers found on Tegra186. Therefore, it's
+>>> possible to resue xhci-tegra.c and xusb-tegra186.c for Tegra194.
+>>
+>> I've taken patches 1 and 2 through my USB tree.  If you want/need me to
+>> take the others, please get acks from those maintainers on them so I can
+>> do so.
+> 
+> I can pick up patches 6 and 7 into the Tegra tree. There are a few
+> patches in there already that conflict with the DT changes in this
+> series and those will be easier to resolve in the Tegra tree.
+> 
+> JC, I noticed that you didn't Cc Kishon as the PHY subsystem maintainer.
+> Please resend the series with Kishon added in the To: line to make sure
+> he sees them and can apply or ack them.
+> 
+> Given that Greg's already applied patches 1 and 2, maybe leave them out
+> of the series.
+Thanks Thierry. I will send v4 accordingly.
+> 
+> Thierry
+> 
