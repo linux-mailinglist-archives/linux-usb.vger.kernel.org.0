@@ -2,80 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D48D1198
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9751ED119D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731471AbfJIOnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 10:43:08 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:42965 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731133AbfJIOnI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:43:08 -0400
-Received: by mail-ot1-f66.google.com with SMTP id c10so1917075otd.9;
-        Wed, 09 Oct 2019 07:43:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yOIw38zD/ngNIg+xiz6Rbo3Jdwlcuf3nU+5nbTT8sV0=;
-        b=borU7pg/yY7wtYipu5Oq8+zMUmREUzW0w29JTbrIek4Hb20hPKiSrGcPwa2V14Qjum
-         oYRAidRZF2a7AlQpm8GkoquqgKLL6pLHfIkZTNtD4vkE/39sO7NhxpYn+HfEXJnIDQ1A
-         BxYabMa+fSRpnlDJ3y8hnqgbSzDTevwCHXMocr3UvYD6oAirjpWOKSOEHEiqzv5ZvKSX
-         sJf3H6sEDaKaCDoDbB+uccM16trZUh+J4Fj9HGjmag+SiR2nLgHF0/55WSbFHfA4Nv13
-         wunZSKQKDeOF1wHK4NdKguHQsTZtWpdLPNyId2qACcXau1/bm1pmw1b9zPdZMQcQiykM
-         kodA==
-X-Gm-Message-State: APjAAAVUh4sM3Z6LqLbyts+7jmdrRqI2NPgVw8fRol0v80l0zg1YFonA
-        yzYlx+xoX2v61LM276ATbDsMqJUpYR03D0FhG2Y=
-X-Google-Smtp-Source: APXvYqxft/u7/XRb6nPeiCWFxPpaJowaExImgMdOt4nCer4aDN+X7hyxDQILaidnjOoe0WuTCqJnO3OSvFCZ8bO3zVk=
-X-Received: by 2002:a05:6830:1b75:: with SMTP id d21mr3231975ote.145.1570632187381;
- Wed, 09 Oct 2019 07:43:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570531132-21856-11-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570531132-21856-11-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Oct 2019 16:42:56 +0200
-Message-ID: <CAMuHMdVSqWMqTq3wS43jX5bi+RhjzfH8CEJpTz5JySUUxq_DfA@mail.gmail.com>
-Subject: Re: [PATCH 10/10] arm64: dts: renesas: r8a774b1: Add INTC-EX device node
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Simon Horman <horms@verge.net.au>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1731518AbfJIOnh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 10:43:37 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51058 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1730674AbfJIOnh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:43:37 -0400
+Received: (qmail 2872 invoked by uid 2102); 9 Oct 2019 10:43:36 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Oct 2019 10:43:36 -0400
+Date:   Wed, 9 Oct 2019 10:43:36 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 4/5] USB: Select better matching USB drivers when available
+In-Reply-To: <20191009134342.6476-5-hadess@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1910091041390.1603-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 12:39 PM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Add support for the Interrupt Controller for External Devices
-> (INTC-EX) on RZ/G2N.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+On Wed, 9 Oct 2019, Bastien Nocera wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.5.
+> Now that USB device drivers can reuse code from the generic USB device
+> driver, we need to make sure that they get selected rather than the
+> generic driver. Add an id_table and match vfunc to the usb_device_driver
+> struct, which will get used to select a better matching driver at
+> ->probe time.
+> 
+> This is a similar mechanism to that used in the HID drivers, with the
+> generic driver being selected unless there's a better matching one found
+> in the registered drivers (see hid_generic_match() in
+> drivers/hid/hid-generic.c).
+> 
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> ---
+>  drivers/usb/core/driver.c  | 15 +++++++++++++--
+>  drivers/usb/core/generic.c | 29 +++++++++++++++++++++++++++++
+>  include/linux/usb.h        |  2 ++
+>  3 files changed, 44 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index 50f92da8afcf..27ce63ed902d 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -819,13 +819,24 @@ static int usb_device_match(struct device *dev, struct device_driver *drv)
+>  {
+>  	/* devices and interfaces are handled separately */
+>  	if (is_usb_device(dev)) {
+> +		struct usb_device *udev;
+> +		struct usb_device_driver *udrv;
+>  
+>  		/* interface drivers never match devices */
+>  		if (!is_usb_device_driver(drv))
+>  			return 0;
+>  
+> -		/* TODO: Add real matching code */
+> -		return 1;
+> +		udev = to_usb_device(dev);
+> +		udrv = to_usb_device_driver(drv);
+> +
+> +		if (udrv->id_table &&
+> +		    usb_device_match_id(udev, udrv->id_table) != NULL) {
+> +			return 1;
+> +		}
+> +
+> +		if (udrv->match)
+> +			return udrv->match(udev);
+> +		return 0;
 
-Gr{oetje,eeting}s,
+What happens if the subclass driver's probe routine returns an error?  
+Don't you still want the device to be bound to the generic driver?
 
-                        Geert
+Alan Stern
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
