@@ -2,90 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE67D0991
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 10:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1BAFD09F4
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 10:33:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729592AbfJIIWj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 04:22:39 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64466 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725914AbfJIIWj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Oct 2019 04:22:39 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Oct 2019 01:22:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,273,1566889200"; 
-   d="scan'208";a="206829981"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 09 Oct 2019 01:22:35 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Oct 2019 11:22:35 +0300
-Date:   Wed, 9 Oct 2019 11:22:35 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mao Wenan <maowenan@huawei.com>
-Cc:     gregkh@linuxfoundation.org, biju.das@bp.renesas.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
-Message-ID: <20191009082235.GE12909@kuha.fi.intel.com>
-References: <20191009014707.38716-1-maowenan@huawei.com>
+        id S1729575AbfJIIdd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 04:33:33 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:37890 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726068AbfJIIdd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Oct 2019 04:33:33 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id E8759EA64E1B4E4E2FBD;
+        Wed,  9 Oct 2019 16:33:31 +0800 (CST)
+Received: from huawei.com (10.90.53.225) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Wed, 9 Oct 2019
+ 16:33:23 +0800
+From:   zhengbin <zhengbin13@huawei.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+CC:     <zhengbin13@huawei.com>
+Subject: [PATCH 0/2] usb: gadget: Remove set but not used variable 'opts'
+Date:   Wed, 9 Oct 2019 16:40:32 +0800
+Message-ID: <1570610434-68293-1-git-send-email-zhengbin13@huawei.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191009014707.38716-1-maowenan@huawei.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain
+X-Originating-IP: [10.90.53.225]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 09, 2019 at 09:47:07AM +0800, Mao Wenan wrote:
-> If CONFIG_TYPEC_HD3SS3220=y, CONFIG_USB_ROLE_SWITCH=m, below errors
-> can be found:
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_remove':
-> hd3ss3220.c:(.text+0x64): undefined reference to `usb_role_switch_put'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_dr_set':
-> hd3ss3220.c:(.text+0x154): undefined reference to `usb_role_switch_set_role'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_set_role':
-> hd3ss3220.c:(.text+0x294): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x2f4): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x348): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x390): undefined reference to `usb_role_switch_set_role'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_probe':
-> hd3ss3220.c:(.text+0x5e8): undefined reference to `fwnode_usb_role_switch_get'
-> hd3ss3220.c:(.text+0x8a4): undefined reference to `usb_role_switch_put'
-> make: *** [vmlinux] Error 1
-> 
-> This patch add dependency USB_ROLE_SWITCH for TYPEC_HD3SS3220.
-> 
-> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Mao Wenan <maowenan@huawei.com>
+zhengbin (2):
+  usb: gadget: Remove set but not used variable 'opts' in
+    acm_ms_do_config
+  usb: gadget: Remove set but not used variable 'opts' in msg_do_config
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+ drivers/usb/gadget/legacy/acm_ms.c       | 3 ---
+ drivers/usb/gadget/legacy/mass_storage.c | 3 ---
+ 2 files changed, 6 deletions(-)
 
-> ---
->  drivers/usb/typec/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index aceb2af..b4f2aac 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -53,6 +53,7 @@ source "drivers/usb/typec/ucsi/Kconfig"
->  config TYPEC_HD3SS3220
->  	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
->  	depends on I2C
-> +	depends on USB_ROLE_SWITCH
->  	help
->  	  Say Y or M here if your system has TI HD3SS3220 Type-C DRP Port
->  	  controller driver.
-> -- 
-> 2.7.4
+--
+2.7.4
 
-thanks,
-
--- 
-heikki
