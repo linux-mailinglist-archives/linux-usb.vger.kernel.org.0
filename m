@@ -2,99 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9A1D0A4E
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 10:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D17BFD0A83
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 11:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727035AbfJIIxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 04:53:17 -0400
-Received: from canardo.mork.no ([148.122.252.1]:55789 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725935AbfJIIxR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Oct 2019 04:53:17 -0400
-Received: from miraculix.mork.no ([IPv6:2a02:2121:2c8:bfe9:9043:eeff:fe9f:3336])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id x998rAv4011160
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 9 Oct 2019 10:53:11 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1570611191; bh=apcxaAqSeVr6+0ViCt7eeL9D7EbWWEBAuYHhQh/J0W4=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=W1UDe5LRu1CH+HfTj9XvAGs4S15VBOnkfbjTVWYKaJ9aV1xvIxd8/3WGrVrC2WowX
-         dOlHn4xGzoDQUp2bYEcjcRL1wQFwQ8OAwFnUEoV1Ltazbp0PcG+KmUwm/Af9EjQ5ZO
-         zQfx9khDOigUHJ3Sa8bPU1hF1qg/IyGgZudm0BrM=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1iI7iT-0003OW-GF; Wed, 09 Oct 2019 10:53:05 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Adam Bennett <abennett72@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Possible bug with cdc_ether, triggers NETDEV WATCHDOG
-Organization: m
-References: <3913c851-93f8-3d26-a578-f5a2c8b69aaa@gmail.com>
-Date:   Wed, 09 Oct 2019 10:53:05 +0200
-In-Reply-To: <3913c851-93f8-3d26-a578-f5a2c8b69aaa@gmail.com> (Adam Bennett's
-        message of "Mon, 7 Oct 2019 17:15:59 -0400")
-Message-ID: <878spuxpu6.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1729457AbfJIJFR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 05:05:17 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:42481 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725776AbfJIJFR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 05:05:17 -0400
+X-UUID: 81f012e1f9b44c2c851bb795067c102c-20191009
+X-UUID: 81f012e1f9b44c2c851bb795067c102c-20191009
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 556026422; Wed, 09 Oct 2019 17:05:06 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 9 Oct 2019 17:05:04 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 9 Oct 2019 17:05:03 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH 1/2] usb: mtu3: add a new function to do status stage
+Date:   Wed, 9 Oct 2019 17:04:59 +0800
+Message-ID: <1570611900-7112-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 78F6DC5777EFE46E7CDDFEAA2B0951DD3B205190962CA1F84679D165410B24462000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Adam Bennett <abennett72@gmail.com> writes:
+Exact a new static function to do status stage
 
-> I've been messing around with a Raspberry Pi Zero, in its ethernet
-> gadget mode.=C2=A0 This possible bug report is not against the Pi Zero
-> linux kernel, but rather the host computer's linux kernel.=C2=A0 I've been
-> able to reproduce the same host computer issue with my normal laptop,
-> and an embedded board (buildroot-based). Both run a newish version of
-> 4.19.
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/mtu3/mtu3_gadget_ep0.c | 23 ++++++++++++-----------
+ 1 file changed, 12 insertions(+), 11 deletions(-)
 
-The issue is reported on the host, but it's really a problem with the
-gadget.  You'll probably have the same issues with any host, including
-hosts running something other than Linux.  They just won't be as verbose
-about it.
+diff --git a/drivers/usb/mtu3/mtu3_gadget_ep0.c b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+index 4da216c99726..df3fd055792f 100644
+--- a/drivers/usb/mtu3/mtu3_gadget_ep0.c
++++ b/drivers/usb/mtu3/mtu3_gadget_ep0.c
+@@ -153,6 +153,15 @@ static void ep0_stall_set(struct mtu3_ep *mep0, bool set, u32 pktrdy)
+ 		set ? "SEND" : "CLEAR", decode_ep0_state(mtu));
+ }
+ 
++static void ep0_do_status_stage(struct mtu3 *mtu)
++{
++	void __iomem *mbase = mtu->mac_base;
++	u32 value;
++
++	value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
++	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY | EP0_DATAEND);
++}
++
+ static int ep0_queue(struct mtu3_ep *mep0, struct mtu3_request *mreq);
+ 
+ static void ep0_dummy_complete(struct usb_ep *ep, struct usb_request *req)
+@@ -297,8 +306,7 @@ static int handle_test_mode(struct mtu3 *mtu, struct usb_ctrlrequest *setup)
+ 		ep0_load_test_packet(mtu);
+ 
+ 	/* send status before entering test mode. */
+-	value = mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS;
+-	mtu3_writel(mbase, U3D_EP0CSR, value | EP0_SETUPPKTRDY | EP0_DATAEND);
++	ep0_do_status_stage(mtu);
+ 
+ 	/* wait for ACK status sent by host */
+ 	readl_poll_timeout_atomic(mbase + U3D_EP0CSR, value,
+@@ -632,7 +640,6 @@ __acquires(mtu->lock)
+ {
+ 	struct usb_ctrlrequest setup;
+ 	struct mtu3_request *mreq;
+-	void __iomem *mbase = mtu->mac_base;
+ 	int handled = 0;
+ 
+ 	ep0_read_setup(mtu, &setup);
+@@ -668,10 +675,7 @@ __acquires(mtu->lock)
+ 		mtu->delayed_status = true;
+ 	} else if (le16_to_cpu(setup.wLength) == 0) { /* no data stage */
+ 
+-		mtu3_writel(mbase, U3D_EP0CSR,
+-			(mtu3_readl(mbase, U3D_EP0CSR) & EP0_W1C_BITS)
+-			| EP0_SETUPPKTRDY | EP0_DATAEND);
+-
++		ep0_do_status_stage(mtu);
+ 		/* complete zlp request directly */
+ 		mreq = next_ep0_request(mtu);
+ 		if (mreq && !mreq->request.length)
+@@ -802,12 +806,9 @@ static int ep0_queue(struct mtu3_ep *mep, struct mtu3_request *mreq)
+ 	}
+ 
+ 	if (mtu->delayed_status) {
+-		u32 csr;
+ 
+ 		mtu->delayed_status = false;
+-		csr = mtu3_readl(mtu->mac_base, U3D_EP0CSR) & EP0_W1C_BITS;
+-		csr |= EP0_SETUPPKTRDY | EP0_DATAEND;
+-		mtu3_writel(mtu->mac_base, U3D_EP0CSR, csr);
++		ep0_do_status_stage(mtu);
+ 		/* needn't giveback the request for handling delay STATUS */
+ 		return 0;
+ 	}
+-- 
+2.23.0
 
-
-> The bug report is that most of the time I cannot ping through the
-> local link, and I get a kernel debug message:=C2=A0 sometimes I can ping
-> the Pi Zero with no kernel message, most of the time I can't ping and
-> the message comes up, and occasionally I get the message right when I
-> plug in the Pi Zero, before I issue the ping command.
->
-> Here is the dmesg on my normal laptop (I've included the plug-in
-> sequence also):
->
-> [11728.029900] usb 1-1: new high-speed USB device number 10 using xhci_hcd
-> [11728.434200] usb 1-1: device descriptor read/64, error -71
-
-First symptom of something wrong with the gadget...
-
-> [11728.669543] usb 1-1: New USB device found, idVendor=3D0525,
-> idProduct=3Da4a2, bcdDevice=3D 4.19
-> [11728.669548] usb 1-1: New USB device strings: Mfr=3D1, Product=3D2,
-> SerialNumber=3D0
-> [11728.669551] usb 1-1: Product: RNDIS/Ethernet Gadget
-> [11728.669554] usb 1-1: Manufacturer: Linux 4.19.75+ with 20980000.usb
-> [11728.674528] cdc_ether 1-1:1.0 usb0: register 'cdc_ether' at
-> usb-0000:00:14.0-1, CDC Ethernet Device, 22:93:3a:1e:ac:5c
-> [11730.725278] cdc_ether 1-1:1.0 enp0s20f0u1: renamed from usb0
-> [11768.174915] ------------[ cut here ]------------
-> [11768.174921] NETDEV WATCHDOG: enp0s20f0u1 (cdc_ether): transmit
-> queue 0 timed out
-
-
-This warning means that the gadget doesn't accept the packets we send
-it.  There isn't much the host can do about that, except dropping
-packets on the floor.  Which is why the warning is this loud.
-
-
-
-Bj=C3=B8rn
