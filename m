@@ -2,86 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F286D1603
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 19:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A0AD1632
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 19:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732388AbfJIR0o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 13:26:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49390 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732377AbfJIRYf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Oct 2019 13:24:35 -0400
-Received: from sasha-vm.mshome.net (unknown [167.220.2.234])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6DB9221920;
-        Wed,  9 Oct 2019 17:24:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570641874;
-        bh=uG3ifd4LdU/S4tdk5jXdV8M3Xx9rLvJA2I7pmFRBINY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SspeWhi0CajVZ39KNWCMCrWeKG04DChsiP8OY2cdRqJJyFE726GwTWNVU3WmC5oTw
-         BFoxcWzAqr6RioEo75NWzQKl+rTgYZtx5iZ7oUPgLy3DQsgX3O44MKzFaxhlYwWp2m
-         IxafM9od+qU/TfURaAw9eDjmVCn7nkAH0tGe5oSQ=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 19/21] r8152: Set macpassthru in reset_resume callback
-Date:   Wed,  9 Oct 2019 13:06:12 -0400
-Message-Id: <20191009170615.32750-19-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191009170615.32750-1-sashal@kernel.org>
-References: <20191009170615.32750-1-sashal@kernel.org>
+        id S1732512AbfJIR2M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 13:28:12 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51560 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1732250AbfJIR2L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 13:28:11 -0400
+Received: (qmail 5508 invoked by uid 2102); 9 Oct 2019 13:28:10 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Oct 2019 13:28:10 -0400
+Date:   Wed, 9 Oct 2019 13:28:10 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 4/5] USB: Select better matching USB drivers when available
+In-Reply-To: <7b3877fa575212e06b12136c4646e8a220f65cdb.camel@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1910091324300.1603-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On Wed, 9 Oct 2019, Bastien Nocera wrote:
 
-[ Upstream commit a54cdeeb04fc719e4c7f19d6e28dba7ea86cee5b ]
+> On Wed, 2019-10-09 at 10:43 -0400, Alan Stern wrote:
+> > On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> > 
+> > > Now that USB device drivers can reuse code from the generic USB
+> > device
+> > > driver, we need to make sure that they get selected rather than the
+> > > generic driver. Add an id_table and match vfunc to the
+> > usb_device_driver
+> > > struct, which will get used to select a better matching driver at
+> > > ->probe time.
+> > > 
+> > > This is a similar mechanism to that used in the HID drivers, with
+> > the
+> > > generic driver being selected unless there's a better matching one
+> > found
+> > > in the registered drivers (see hid_generic_match() in
+> > > drivers/hid/hid-generic.c).
+> > > 
+> > > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > > ---
+> > >  drivers/usb/core/driver.c  | 15 +++++++++++++--
+> > >  drivers/usb/core/generic.c | 29 +++++++++++++++++++++++++++++
+> > >  include/linux/usb.h        |  2 ++
+> > >  3 files changed, 44 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> > > index 50f92da8afcf..27ce63ed902d 100644
+> > > --- a/drivers/usb/core/driver.c
+> > > +++ b/drivers/usb/core/driver.c
+> > > @@ -819,13 +819,24 @@ static int usb_device_match(struct device
+> > *dev, struct device_driver *drv)
+> > >  {
+> > >       /* devices and interfaces are handled separately */
+> > >       if (is_usb_device(dev)) {
+> > > +             struct usb_device *udev;
+> > > +             struct usb_device_driver *udrv;
+> > >  
+> > >               /* interface drivers never match devices */
+> > >               if (!is_usb_device_driver(drv))
+> > >                       return 0;
+> > >  
+> > > -             /* TODO: Add real matching code */
+> > > -             return 1;
+> > > +             udev = to_usb_device(dev);
+> > > +             udrv = to_usb_device_driver(drv);
+> > > +
+> > > +             if (udrv->id_table &&
+> > > +                 usb_device_match_id(udev, udrv->id_table) !=
+> > NULL) {
+> > > +                     return 1;
+> > > +             }
+> > > +
+> > > +             if (udrv->match)
+> > > +                     return udrv->match(udev);
+> > > +             return 0;
+> > 
+> > What happens if the subclass driver's probe routine returns an
+> > error?  
+> > Don't you still want the device to be bound to the generic driver?
+> 
+> I don't know whether that's what you'd want to do. But if we did,
+> that'd only be for devices which have "generic_init" set.
+> 
+> We'd need to remember the result of the ->probe() call at the end of
+> usb_probe_device() (as modified in patch 2), and only call the generic
+> driver (not the specific device driver)'s functions in later usage.
+> 
+> Is that what you would expect?
 
-r8152 may fail to establish network connection after resume from system
-suspend.
+No, that's not quite it.
 
-If the USB port connects to r8152 lost its power during system suspend,
-the MAC address was written before is lost. The reason is that The MAC
-address doesn't get written again in its reset_resume callback.
+Here's what should happen when the subclass driver is being probed:
+First, call the generic_probe routine, and return immediately if that
+fails.  Then call the subclass driver's probe routine.  If that gets an
+error, fail the probe call but tell the device core that the device is
+now bound to the generic driver, not to the subclass driver.
 
-So let's set MAC address again in reset_resume callback. Also remove
-unnecessary lock as no other locking attempt will happen during
-reset_resume.
-
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/r8152.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 455eec3c46942..c0964281ab983 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -4465,10 +4465,9 @@ static int rtl8152_reset_resume(struct usb_interface *intf)
- 	struct r8152 *tp = usb_get_intfdata(intf);
- 
- 	clear_bit(SELECTIVE_SUSPEND, &tp->flags);
--	mutex_lock(&tp->control);
- 	tp->rtl_ops.init(tp);
- 	queue_delayed_work(system_long_wq, &tp->hw_phy_work, 0);
--	mutex_unlock(&tp->control);
-+	set_ethernet_addr(tp);
- 	return rtl8152_resume(intf);
- }
- 
--- 
-2.20.1
+Alan Stern
 
