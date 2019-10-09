@@ -2,112 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7380D036D
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 00:32:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D38CD048D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 02:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbfJHWcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Oct 2019 18:32:43 -0400
-Received: from valentin-vidic.from.hr ([94.229.67.141]:55737 "EHLO
-        valentin-vidic.from.hr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbfJHWcm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 18:32:42 -0400
-X-Greylist: delayed 566 seconds by postgrey-1.27 at vger.kernel.org; Tue, 08 Oct 2019 18:32:41 EDT
-X-Virus-Scanned: Debian amavisd-new at valentin-vidic.from.hr
-Received: by valentin-vidic.from.hr (Postfix, from userid 1000)
-        id 42C6925D; Wed,  9 Oct 2019 00:23:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=valentin-vidic.from.hr; s=2017; t=1570573389;
-        bh=gCUfr9ijiKWav6o1R8261PlBXptRHXBtHMu8ZFIIfpk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o51vqbaeFl/Epd2UP3431uHmkB3LyFRMsIDBxyj5/LXOGIymF0eb8IEWXc/Vihpr0
-         k5cO4FAOh1pCcK1b5Jm1oZfwRaPKJQW3uKl5I/0FO1/RQbWDSFmm2y+iL+gXpoFCPv
-         ECwAHqJv1SPvNl7ayGq7fVfiUClOOgETB2doDWZkcxt90DhHMC+n4TWidh/i2zD1uG
-         lfo0LsWUUsrMTn9PO8paQ344Z/4/sx1PM/Ebo73LdzhUm6jZJsWuCIuXY/QYI46GZt
-         +TdgZ9+fvZtSNcF4b4WpvqEcn7AI9o+yF/ph8LJADYzAfwhzvh1T2oBQ9gi6C84Q8R
-         viDMTzmFsDP1Q==
-From:   Valentin Vidic <vvidic@valentin-vidic.from.hr>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Valentin Vidic <vvidic@valentin-vidic.from.hr>,
-        syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com
-Subject: [PATCH] usb: iowarrior: fix access to freed data structure
-Date:   Wed,  9 Oct 2019 00:23:07 +0200
-Message-Id: <20191008222307.18587-1-vvidic@valentin-vidic.from.hr>
-X-Mailer: git-send-email 2.20.1
+        id S1729915AbfJIADy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Oct 2019 20:03:54 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:44238 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727051AbfJIADy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Oct 2019 20:03:54 -0400
+Received: by mail-qt1-f195.google.com with SMTP id u40so779811qth.11
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 17:03:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=WqGF5bRn2qBJEYFx3A8CTfvZkg26MRFOSHOBN5dL4Zs=;
+        b=Ze4YkFtBd5/DzMCSd2oh1KaJH6cGGY3c5lDfG6pSZ6jOxSQiT6uvs9O27SpmKr8rQr
+         PlkpW/HaFdKu4XO0WSsE8IPz7r3ukK7simUgA/7KRYbxWRsgu1LSa31uflzrX8M5g1Cy
+         ZPaDxwW2/6VuTDwJI4uasQVL5QX/GNIHGvJdT5O1EAkM0BpYxJ9u3LfFCsjmQaxgqIno
+         ccisTei/iVWOxqNU6DOQnfxb0dOPxUae5mXVTpsl1KwpH0z/XS6KAscYbJ6tHVnSYV6U
+         0CMSX821kQbAi7n8VRG2k5ArRMcP94PoEIbz0KF9Zo1Y6UbI1QkjYJUUmWaG6sZAUYCF
+         IlVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=WqGF5bRn2qBJEYFx3A8CTfvZkg26MRFOSHOBN5dL4Zs=;
+        b=j0LiccWWACpBrOkwG4CnFWOMFSHB3CrX/9TZaRO4dKSbRJWbpxpuj5fBO/Z/5hhZne
+         Cn2+U+bwyBwQVstIPVg8Ppm5hEsIG0ExywtFkQ3vX5FZQbDWKSOX9gQ91yar8+fwlj5C
+         lhzYFSqocxZ0AuVhgOufff7KrqXWb1E5YzdLna4K3nR8zpATXz3L3x3n0xgg8iUBIGRU
+         FCmi+YibCRDHFal8YOzVJqLY7GuUYGW0pW9YR+9Wf1ZZ8FEAzZSNQCk88Wa8Qoe+1Hu2
+         PK0045Lc9GVDPPeTjuJSqcafuOUuduE7nBSbSSPFsC+SvnT5PeSbf4ddCOWsQf6jD7Ld
+         DnVQ==
+X-Gm-Message-State: APjAAAVpkC5Z3eubMOj8REbWCYtL60FRkodr012ZDEVna3MoNvlb1Dq5
+        BNhBHxqm6Nm/l+Vg2/SFARNP2A==
+X-Google-Smtp-Source: APXvYqyIADhe7dvws8woSGcXlrTNvM3J0iaMNtO4UCC2BKh5+RZ9ipEJU27LBFUsyJIUN3nA3SIVjA==
+X-Received: by 2002:ac8:6952:: with SMTP id n18mr684128qtr.297.1570579431767;
+        Tue, 08 Oct 2019 17:03:51 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id u17sm153412qkj.71.2019.10.08.17.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2019 17:03:51 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 17:03:39 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrey Rusalin <arusalin@dev.rtsoft.ru>,
+        Lars Poeschel <poeschel@lemonage.de>,
+        linux-usb@vger.kernel.org,
+        syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH] NFC: pn533: fix use-after-free and memleaks
+Message-ID: <20191008170339.5b0843f2@cakuba.netronome.com>
+In-Reply-To: <20191007164059.5927-1-johan@kernel.org>
+References: <000000000000f0d74d0594536e2c@google.com>
+        <20191007164059.5927-1-johan@kernel.org>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-struct iowarrior gets freed prematurely in iowarrior_release while
-it is still being referenced from usb_interface, so let only
-iowarrior_disconnect call iowarrior_delete.
+On Mon,  7 Oct 2019 18:40:59 +0200, Johan Hovold wrote:
+> The driver would fail to deregister and its class device and free
+> related resources on late probe errors.
+> 
+> Reported-by: syzbot+cb035c75c03dbe34b796@syzkaller.appspotmail.com
+> Fixes: 32ecc75ded72 ("NFC: pn533: change order operations in dev registation")
+> Cc: stable <stable@vger.kernel.org>	# 4.11
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 
-Fixes: KMSAN: uninit-value in iowarrior_disconnect
-Reported-by: syzbot+0761012cebf7bdb38137@syzkaller.appspotmail.com
-Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
----
- drivers/usb/misc/iowarrior.c | 35 +++++++++++++++--------------------
- 1 file changed, 15 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/usb/misc/iowarrior.c b/drivers/usb/misc/iowarrior.c
-index f5bed9f29e56..0492ea76c4bf 100644
---- a/drivers/usb/misc/iowarrior.c
-+++ b/drivers/usb/misc/iowarrior.c
-@@ -638,7 +638,6 @@ static int iowarrior_open(struct inode *inode, struct file *file)
- static int iowarrior_release(struct inode *inode, struct file *file)
- {
- 	struct iowarrior *dev;
--	int retval = 0;
- 
- 	dev = file->private_data;
- 	if (!dev)
-@@ -650,27 +649,23 @@ static int iowarrior_release(struct inode *inode, struct file *file)
- 	mutex_lock(&dev->mutex);
- 
- 	if (dev->opened <= 0) {
--		retval = -ENODEV;	/* close called more than once */
- 		mutex_unlock(&dev->mutex);
--	} else {
--		dev->opened = 0;	/* we're closing now */
--		retval = 0;
--		if (dev->present) {
--			/*
--			   The device is still connected so we only shutdown
--			   pending read-/write-ops.
--			 */
--			usb_kill_urb(dev->int_in_urb);
--			wake_up_interruptible(&dev->read_wait);
--			wake_up_interruptible(&dev->write_wait);
--			mutex_unlock(&dev->mutex);
--		} else {
--			/* The device was unplugged, cleanup resources */
--			mutex_unlock(&dev->mutex);
--			iowarrior_delete(dev);
--		}
-+		return -ENODEV;	/* close called more than once */
- 	}
--	return retval;
-+
-+	dev->opened = 0;	/* we're closing now */
-+	if (dev->present) {
-+		/*
-+		 * The device is still connected so we only shutdown
-+		 * pending read/write ops.
-+		 */
-+		usb_kill_urb(dev->int_in_urb);
-+		wake_up_interruptible(&dev->read_wait);
-+		wake_up_interruptible(&dev->write_wait);
-+	}
-+
-+	mutex_unlock(&dev->mutex);
-+	return 0;
- }
- 
- static __poll_t iowarrior_poll(struct file *file, poll_table * wait)
--- 
-2.20.1
-
+Applied to net, thank you
