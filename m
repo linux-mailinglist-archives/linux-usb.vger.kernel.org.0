@@ -2,63 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C88BAD17E3
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 20:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E468D1AC8
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 23:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730490AbfJIS5Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 14:57:16 -0400
-Received: from mail-yw1-f51.google.com ([209.85.161.51]:35821 "EHLO
-        mail-yw1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729535AbfJIS5Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 14:57:16 -0400
-Received: by mail-yw1-f51.google.com with SMTP id r134so1214980ywg.2
-        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2019 11:57:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-transfer-encoding:content-language;
-        bh=4OZr2wWL+LlBh6IOfDlMjWQ1iaUqL+Svc4UGJ5r3Efc=;
-        b=j8l9+aR8nUi5K8d1Yci+OZfCPRmfmFMIJ4aIq/bi0ZaauI+ZwbvkJa6eflJqoRs1yr
-         Meil4IgRYQKhcuYnYO9XHYA/13tXStf35S9iDu/6SXV0rqN8d0YtJQ0qjcXuFW2wZThJ
-         vzWEF0XdhwKsbTcvdP9OdvaLWEF9nIKEqIHl3WwVEwaMbdHpQqbRfHoXgZXV2yUDGuJE
-         BBY6hs0gBufT7RPqeVNCfZ2KETTraQbhkpdXR25dr1my+z0vh6mumAXf/MeeVS1ls8DS
-         zAC4lH2hTuorl3LNzUZWkRcimKng0pOGH/Q+GOm03NgzIG228Ry71Mc2p48K2TtGl/99
-         f9uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=4OZr2wWL+LlBh6IOfDlMjWQ1iaUqL+Svc4UGJ5r3Efc=;
-        b=ZpZbV6q3IETuVOzO3LoxanTAKd7GI19ALLdsIPCWBvJEmt2OeqAIa/LUYSTMUM8b78
-         SfARpQpmUkD53wSqKWBBEjvJnH4MQ8CQssa18ncc95oLu0wxJvSBjiqRp59m3I1SVW0a
-         abo4yrKjvOuqam6DO/tUz2rVhfWC1A8Pj87KWABc/AyWlArM7g7uno3Tz9XZO/hfX1ZH
-         YLJgAQ6/LdYy2m2KiARqGRRfkV05XbvlqD33DIFVsuEQrp/hIFl/c6ewElNVqt4+SJY+
-         mXqdJe0cvYvxSrGvn1eojZFt8+n0vgsrHXQHDyFKo7b+SkCjq8zRKhtmsugL7sgmCFhV
-         LwYQ==
-X-Gm-Message-State: APjAAAXIoiekEzdILvapKMQ90qXNT6yRnfwplUj27U/y1Fc3y/7LQwUC
-        quxPd3HvVmKDN4Ez1FaGiHw2rOTe
-X-Google-Smtp-Source: APXvYqxUAYWkH1HGEvoQOdw6sNQwQ2iqXwQ2gdo2hDoQ5kdShvxKiSLNwTXYsYg4qZbCaW9gSbg1GQ==
-X-Received: by 2002:a0d:c144:: with SMTP id c65mr3815433ywd.218.1570647435427;
-        Wed, 09 Oct 2019 11:57:15 -0700 (PDT)
-Received: from [192.168.1.105] (ip68-4-180-157.oc.oc.cox.net. [68.4.180.157])
-        by smtp.gmail.com with ESMTPSA id g40sm740005ywk.14.2019.10.09.11.57.14
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Oct 2019 11:57:15 -0700 (PDT)
-Subject: Re: Etron EJ168A controller
-To:     linux-usb@vger.kernel.org
-References: <91b55846-130e-a0b7-c516-5fa49ad60067@gmail.com>
-From:   Kenneth <x.xeroid@gmail.com>
-Message-ID: <38481a5a-4ea5-a166-917a-98dfa1accad8@gmail.com>
-Date:   Wed, 9 Oct 2019 11:57:14 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1731589AbfJIVV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 17:21:57 -0400
+Received: from muru.com ([72.249.23.125]:36544 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731155AbfJIVV5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Oct 2019 17:21:57 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 103968140;
+        Wed,  9 Oct 2019 21:22:29 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Marcel Partap <mpartap@gmx.net>,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Michael Scott <hashcode0f@gmail.com>,
+        NeKit <nekit1000@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [PATCHv2 0/7] musb host improvments mostly for omap2430 glue
+Date:   Wed,  9 Oct 2019 14:21:37 -0700
+Message-Id: <20191009212145.28495-1-tony@atomide.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <91b55846-130e-a0b7-c516-5fa49ad60067@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -66,11 +37,31 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-I was informed that there were bug fixes for the Etron EJ168A controller in kernel 5.2 and 5.3
+Here's v2 set of musb clean-up mostly for the 2430 glue layer.
 
-While I can read most USB sticks, if I connect an android phone to this port, applications hang trying to access the phone.
+Regards,
 
-MX Linux Form Topic = Android phone hangs with USB 3.0
+Tony
 
-Kenneth
 
+Changes since v1:
+
+- Get rid of set_vbus stuff
+
+
+Tony Lindgren (7):
+  usb: musb: omap2430: Get rid of musb .set_vbus for omap2430 glue
+  usb: musb: omap2430: Wait on enable to avoid babble
+  usb: musb: omap2430: Handle multiple ID ground interrupts
+  usb: musb: Add musb_set_host and peripheral and use them for omap2430
+  usb: musb: omap2430: Clean up enable and remove devctl tinkering
+  usb: musb: omap2430: Idle musb on init
+  usb: musb: Get rid of omap2430_musb_set_vbus()
+
+ drivers/usb/musb/musb_core.c | 103 ++++++++++++++++++++++
+ drivers/usb/musb/musb_core.h |   3 +
+ drivers/usb/musb/omap2430.c  | 164 ++++++++++-------------------------
+ 3 files changed, 152 insertions(+), 118 deletions(-)
+
+-- 
+2.23.0
