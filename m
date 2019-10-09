@@ -2,121 +2,325 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B11D0659
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 06:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CD4D06BF
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 06:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730609AbfJIEJ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 00:09:58 -0400
-Received: from mail-eopbgr1410113.outbound.protection.outlook.com ([40.107.141.113]:38341
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725807AbfJIEJ4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Oct 2019 00:09:56 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lpk2lJufoqiDdTktcNrefJRmpVOZ15fTlEHStPavrG9IP/Z1jQ0cXCaX1L6RFyDT89rH5Rm5Vc4qGHWsTZYjwIJF7ZHfd5r9TboZv/eNx4QSICfTNZWkS7GaA89DEdccU4F8ES0DtBzmV+eDWmTImvTg5MYZZqovuKe4IqsU5EmhTLfR1JVKjrlTzHx07FXi7AJDLYyABbnTEJCRJ4u5PxfjQRzAR0ayi/gxEpYMFBahnjG5Ftz993lnqEhtDSTqbakCWjX3KuKjw572PtQVHib67JAEWppq2WP7pcIOn8G90+u2944ZeKRIah+PH2f1lMWLuw8kH2OyLjXbbhO24w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wz3l2fM2QgycuiEQZxs/la0C6Ob2qDLFq2P+Kwr1DTs=;
- b=ZWT7qHVvviQM5JKJL+hZp3qvcW+l9U3P1FPlZQfI+mUTdKH3cuG9dj17LbdE2rAV1nxaIKD8BMv8R0A9o5x+9/cZNOTbIqMmY4dlsq77ojpCkhf/tLg1YbtBotiYwIProeCNhevrbvY2hFNNTJ+WK0R1XeF+fT2SJR+fCotbrPu/d6coFWT4nqfCsf2JP2uIR1OLGxgxM+tTXXTMVMSBgfmQvR/D8yEVKhrNksxnoSky/7/E1U2fioIYfkYerwj1UY3Y0XHCD1WHW8wIT1tapp2ZI+pUgtmD6Q0Z3tUTk8o11nlRU3g/6tmnXu9FruZB8xxkqbsYE+sfblDeH1hG/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S1730339AbfJIEty (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 00:49:54 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:39040 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729040AbfJIEty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 00:49:54 -0400
+Received: by mail-wr1-f65.google.com with SMTP id r3so931135wrj.6
+        for <linux-usb@vger.kernel.org>; Tue, 08 Oct 2019 21:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wz3l2fM2QgycuiEQZxs/la0C6Ob2qDLFq2P+Kwr1DTs=;
- b=az7YaK0gn/ULVPm/RaxliMzug/3j9gf7Naz6jShzlLGKZBJhSnobCg9XAqYJqns4eg2Id0dG9H8BRkUB5dUZbX1WQqYab+aJ32bhPJxIFGeiiTNjN4c6/zDUjRqUFLuoaosvF0AacPH3mUPNYnAHAB1MbVN789/d8Sx7IJsM+P4=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB2237.jpnprd01.prod.outlook.com (52.133.179.20) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2327.24; Wed, 9 Oct 2019 04:09:53 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::548:32de:c810:1947]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::548:32de:c810:1947%4]) with mapi id 15.20.2327.026; Wed, 9 Oct 2019
- 04:09:53 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Simon Horman <horms@verge.net.au>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-CC:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Subject: RE: [PATCH 06/10] dt-bindings: usb: renesas_usb3: Document r8a774b1
- support
-Thread-Topic: [PATCH 06/10] dt-bindings: usb: renesas_usb3: Document r8a774b1
- support
-Thread-Index: AQHVfcTCct8OG+iTDEqU+YRjWkAxSqdRsvFQ
-Date:   Wed, 9 Oct 2019 04:09:53 +0000
-Message-ID: <TYAPR01MB45441AF12A4539B145539856D8950@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com>
- <1570531132-21856-7-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570531132-21856-7-git-send-email-fabrizio.castro@bp.renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7ef780c1-69f9-4ea7-8ca5-08d74c6e897f
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: TYAPR01MB2237:|TYAPR01MB2237:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <TYAPR01MB2237C3A03F3051C89F009753D8950@TYAPR01MB2237.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 018577E36E
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(346002)(136003)(376002)(396003)(366004)(39860400002)(189003)(199004)(76176011)(6506007)(7696005)(6436002)(102836004)(229853002)(6116002)(74316002)(110136005)(186003)(3846002)(26005)(52536014)(99286004)(81156014)(81166006)(55016002)(8676002)(446003)(11346002)(66066001)(486006)(476003)(71190400001)(9686003)(8936002)(66556008)(6246003)(2906002)(558084003)(7416002)(86362001)(54906003)(64756008)(305945005)(66446008)(33656002)(478600001)(14454004)(25786009)(4326008)(5660300002)(7736002)(256004)(66476007)(316002)(66946007)(76116006)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB2237;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1fn7ZRWyLsuO/aqA0K2jboJs1ly//3bFNd2CMA6st+O0+QHAFGKyy20bUJtFMO/CwLjhJFL3CdFGBs5IlNN83tUD01bageNHyzsl3ennAlW2BmMk+2fZw1BiVlGCh7TSjLK6B+ZPz+fy77g4Vkhh9QhHsHJcsAcK4X2kSw0S7tHttw4goN0ibzTd9Z5545cd8g4nSH6K/131Xaa1e0N1MPBIGcvJI8M1ba1U7zhH3iasb2NhxfU8HiyIC1oAA9tEdz/EJOXPyrp2IisgNc0YEHY2gOKfmDzquv06babw2dpHOxXN2DgcpoDD5QXk/7VTxZ2ky/toXzRRYZePSu2VxU1UAx4m4O8BCLv5K9H8uoC7H1Mw39d51TnP+NvqAryNF/zdwbJZN/IGOMoj5/LxmMHIGAz4HBEG0PKTl9MUVL4=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GB13OXScJEcqzjyQZ1NBr9EE56wlbKuTYrNv/Sb2q4g=;
+        b=XW+sIBEf8RkqXTZns/zP5cOmWzbiIdntngX5mnVjrG3HV2tT8iR5kOVpoH4YJKO8+o
+         Yqess0E/cTUBFTEP7Ls/KXvju8hOHPpczWGK3uKF0eRWbQwxHRCDmI4cR5tMLzuSc8nU
+         8JBNPS2hncTUV7K0g/hOFjUUn2DiRmsdUCiSCaAKv4EJ0yQEApS9GvwrU5PbIXH+pWih
+         AE9dFZMtCoXdPB+MotOvRW0ID0BnU9QFJHGeD1rrCsnI6mPiKwo+vluTYwK6Q7g+9uHd
+         buDi7XHeOf1tSqyEh0mw2gSI0PtYyUyQuvuwmA1tvxEJlwz3yBuw3YTRhbeWGBk/MKXd
+         w/Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GB13OXScJEcqzjyQZ1NBr9EE56wlbKuTYrNv/Sb2q4g=;
+        b=SofBRta1A1IvVqCFc7XXd3aMy7EXMmpt5VVCmBLotz+6I98Sn6phZ29q80Vck+ZHWV
+         pkSsq0+MXhr9iAyEgu+yuXWM3pZJWsV19VIT6+I2LetGrC11NiI3ZsilshafJLcmKRwJ
+         1YRC/0pN3QmivdM/Z6sbroGAtz0NuetCi+NNt7Mka8KbIeMUmviUc9fQlUeSGXkxTP+C
+         XDR00K1HD5pRdne0Ik4wQuAteTlRotAQTVsniW+3VzWWO0/PVWBP5Rr/SsuXOcMZn5A3
+         1wHrHhw++ZD/OuKfrwSzS7R/uw7DjBlQY5gwQwieGJdysdf9bJpoXctaPARF/XvOev5d
+         uiaA==
+X-Gm-Message-State: APjAAAUQf1SGVf1wjHNEOQh9mjpM9sJytz1zG6X7ssYpw4hLaEHQi22z
+        mcvPaCmQQrReLDwX0Ph65YE=
+X-Google-Smtp-Source: APXvYqy8ewh2aKEuN5s50ol+dT+zakYeJXt+WJVWTwaFZbcIHj7T2TBZODsrVNXSKFsw0OziZR7Bpg==
+X-Received: by 2002:adf:e646:: with SMTP id b6mr1037069wrn.373.1570596591135;
+        Tue, 08 Oct 2019 21:49:51 -0700 (PDT)
+Received: from dhe-pc.product_development.local (p54941CA4.dip0.t-ipconnect.de. [84.148.28.164])
+        by smtp.googlemail.com with ESMTPSA id y18sm2034599wro.36.2019.10.08.21.49.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Oct 2019 21:49:50 -0700 (PDT)
+From:   David Heinzelmann <heinzelmann.david@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org,
+        David Heinzelmann <heinzelmann.david@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v5] usb: hub: Check device descriptor before resusciation
+Date:   Wed,  9 Oct 2019 06:46:47 +0200
+Message-Id: <20191009044647.24536-1-heinzelmann.david@gmail.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191007153538.GA985210@kroah.com>
+References: <20191007153538.GA985210@kroah.com>
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ef780c1-69f9-4ea7-8ca5-08d74c6e897f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2019 04:09:53.1226
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: g0bzcilbmYA4STIXHQG3ib3UgJNSeyj8TJg+fYC0ZYw9zILg3bZtj7X7aZPYq93rg6dY/bVUwiwvlrjItycXrkWm+z3OMCYtYB/PNSy5RbkU3FhpFFUeEtGYK4/XESJG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2237
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Fabrizio-san,
+If a device connected to an xHCI host controller disconnects from the USB bus
+and then reconnects, e.g. triggered by a firmware update, then the host
+controller automatically activates the connection and the port is enabled. The
+implementation of hub_port_connect_change() assumes that if the port is
+enabled then nothing has changed. There is no check if the USB descriptors
+have changed. As a result, the kernel's internal copy of the descriptors ends
+up being incorrect and the device doesn't work properly anymore.
 
-> From: Fabrizio Castro, Sent: Tuesday, October 8, 2019 7:39 PM
->=20
-> Document RZ/G2N (R8A774B1) SoC bindings.
->=20
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+The solution to the problem is for hub_port_connect_change() always to
+check whether the device's descriptors have changed before resuscitating
+an enabled port.
 
-Thank you for the patch!
+Signed-off-by: David Heinzelmann <heinzelmann.david@gmail.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+---
+Changes in v5:
+ - added Acked-by
+Changes in v4:
+ - changed commit description
+Changes in v3:
+ - changed commit message and description
+ - fix code style
+Changes in v2:
+ - fix logic error to handle return code from usb_get_device_descriptor()
+   properly
+ - fix line endings
+---
+ drivers/usb/core/hub.c | 196 +++++++++++++++++++++++------------------
+ 1 file changed, 111 insertions(+), 85 deletions(-)
 
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-
-Best regards,
-Yoshihiro Shimoda
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 236313f41f4a..fdcfa85b5b12 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -4930,6 +4930,91 @@ hub_power_remaining(struct usb_hub *hub)
+ 	return remaining;
+ }
+ 
++
++static int descriptors_changed(struct usb_device *udev,
++		struct usb_device_descriptor *old_device_descriptor,
++		struct usb_host_bos *old_bos)
++{
++	int		changed = 0;
++	unsigned	index;
++	unsigned	serial_len = 0;
++	unsigned	len;
++	unsigned	old_length;
++	int		length;
++	char		*buf;
++
++	if (memcmp(&udev->descriptor, old_device_descriptor,
++			sizeof(*old_device_descriptor)) != 0)
++		return 1;
++
++	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
++		return 1;
++	if (udev->bos) {
++		len = le16_to_cpu(udev->bos->desc->wTotalLength);
++		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
++			return 1;
++		if (memcmp(udev->bos->desc, old_bos->desc, len))
++			return 1;
++	}
++
++	/* Since the idVendor, idProduct, and bcdDevice values in the
++	 * device descriptor haven't changed, we will assume the
++	 * Manufacturer and Product strings haven't changed either.
++	 * But the SerialNumber string could be different (e.g., a
++	 * different flash card of the same brand).
++	 */
++	if (udev->serial)
++		serial_len = strlen(udev->serial) + 1;
++
++	len = serial_len;
++	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
++		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
++		len = max(len, old_length);
++	}
++
++	buf = kmalloc(len, GFP_NOIO);
++	if (!buf)
++		/* assume the worst */
++		return 1;
++
++	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
++		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
++		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
++				old_length);
++		if (length != old_length) {
++			dev_dbg(&udev->dev, "config index %d, error %d\n",
++					index, length);
++			changed = 1;
++			break;
++		}
++		if (memcmp(buf, udev->rawdescriptors[index], old_length)
++				!= 0) {
++			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
++				index,
++				((struct usb_config_descriptor *) buf)->
++					bConfigurationValue);
++			changed = 1;
++			break;
++		}
++	}
++
++	if (!changed && serial_len) {
++		length = usb_string(udev, udev->descriptor.iSerialNumber,
++				buf, serial_len);
++		if (length + 1 != serial_len) {
++			dev_dbg(&udev->dev, "serial string error %d\n",
++					length);
++			changed = 1;
++		} else if (memcmp(buf, udev->serial, length) != 0) {
++			dev_dbg(&udev->dev, "serial string changed\n");
++			changed = 1;
++		}
++	}
++
++	kfree(buf);
++	return changed;
++}
++
+ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+ 		u16 portchange)
+ {
+@@ -5167,7 +5252,9 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
+ {
+ 	struct usb_port *port_dev = hub->ports[port1 - 1];
+ 	struct usb_device *udev = port_dev->child;
++	struct usb_device_descriptor descriptor;
+ 	int status = -ENODEV;
++	int retval;
+ 
+ 	dev_dbg(&port_dev->dev, "status %04x, change %04x, %s\n", portstatus,
+ 			portchange, portspeed(hub, portstatus));
+@@ -5188,7 +5275,30 @@ static void hub_port_connect_change(struct usb_hub *hub, int port1,
+ 	if ((portstatus & USB_PORT_STAT_CONNECTION) && udev &&
+ 			udev->state != USB_STATE_NOTATTACHED) {
+ 		if (portstatus & USB_PORT_STAT_ENABLE) {
+-			status = 0;		/* Nothing to do */
++			/*
++			 * USB-3 connections are initialized automatically by
++			 * the hostcontroller hardware. Therefore check for
++			 * changed device descriptors before resuscitating the
++			 * device.
++			 */
++			descriptor = udev->descriptor;
++			retval = usb_get_device_descriptor(udev,
++					sizeof(udev->descriptor));
++			if (retval < 0) {
++				dev_dbg(&udev->dev,
++						"can't read device descriptor %d\n",
++						retval);
++			} else {
++				if (descriptors_changed(udev, &descriptor,
++						udev->bos)) {
++					dev_dbg(&udev->dev,
++							"device descriptor has changed\n");
++					/* for disconnect() calls */
++					udev->descriptor = descriptor;
++				} else {
++					status = 0; /* Nothing to do */
++				}
++			}
+ #ifdef CONFIG_PM
+ 		} else if (udev->state == USB_STATE_SUSPENDED &&
+ 				udev->persist_enabled) {
+@@ -5550,90 +5660,6 @@ void usb_hub_cleanup(void)
+ 	usb_deregister(&hub_driver);
+ } /* usb_hub_cleanup() */
+ 
+-static int descriptors_changed(struct usb_device *udev,
+-		struct usb_device_descriptor *old_device_descriptor,
+-		struct usb_host_bos *old_bos)
+-{
+-	int		changed = 0;
+-	unsigned	index;
+-	unsigned	serial_len = 0;
+-	unsigned	len;
+-	unsigned	old_length;
+-	int		length;
+-	char		*buf;
+-
+-	if (memcmp(&udev->descriptor, old_device_descriptor,
+-			sizeof(*old_device_descriptor)) != 0)
+-		return 1;
+-
+-	if ((old_bos && !udev->bos) || (!old_bos && udev->bos))
+-		return 1;
+-	if (udev->bos) {
+-		len = le16_to_cpu(udev->bos->desc->wTotalLength);
+-		if (len != le16_to_cpu(old_bos->desc->wTotalLength))
+-			return 1;
+-		if (memcmp(udev->bos->desc, old_bos->desc, len))
+-			return 1;
+-	}
+-
+-	/* Since the idVendor, idProduct, and bcdDevice values in the
+-	 * device descriptor haven't changed, we will assume the
+-	 * Manufacturer and Product strings haven't changed either.
+-	 * But the SerialNumber string could be different (e.g., a
+-	 * different flash card of the same brand).
+-	 */
+-	if (udev->serial)
+-		serial_len = strlen(udev->serial) + 1;
+-
+-	len = serial_len;
+-	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
+-		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
+-		len = max(len, old_length);
+-	}
+-
+-	buf = kmalloc(len, GFP_NOIO);
+-	if (!buf)
+-		/* assume the worst */
+-		return 1;
+-
+-	for (index = 0; index < udev->descriptor.bNumConfigurations; index++) {
+-		old_length = le16_to_cpu(udev->config[index].desc.wTotalLength);
+-		length = usb_get_descriptor(udev, USB_DT_CONFIG, index, buf,
+-				old_length);
+-		if (length != old_length) {
+-			dev_dbg(&udev->dev, "config index %d, error %d\n",
+-					index, length);
+-			changed = 1;
+-			break;
+-		}
+-		if (memcmp(buf, udev->rawdescriptors[index], old_length)
+-				!= 0) {
+-			dev_dbg(&udev->dev, "config index %d changed (#%d)\n",
+-				index,
+-				((struct usb_config_descriptor *) buf)->
+-					bConfigurationValue);
+-			changed = 1;
+-			break;
+-		}
+-	}
+-
+-	if (!changed && serial_len) {
+-		length = usb_string(udev, udev->descriptor.iSerialNumber,
+-				buf, serial_len);
+-		if (length + 1 != serial_len) {
+-			dev_dbg(&udev->dev, "serial string error %d\n",
+-					length);
+-			changed = 1;
+-		} else if (memcmp(buf, udev->serial, length) != 0) {
+-			dev_dbg(&udev->dev, "serial string changed\n");
+-			changed = 1;
+-		}
+-	}
+-
+-	kfree(buf);
+-	return changed;
+-}
+-
+ /**
+  * usb_reset_and_verify_device - perform a USB port reset to reinitialize a device
+  * @udev: device to reset (not in SUSPENDED or NOTATTACHED state)
+-- 
+2.20.1
 
