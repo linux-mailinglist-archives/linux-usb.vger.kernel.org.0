@@ -2,80 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D506BD116B
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D73D1189
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 16:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731470AbfJIOjH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 10:39:07 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:34157 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729491AbfJIOjG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:39:06 -0400
-Received: by mail-ot1-f68.google.com with SMTP id m19so1939414otp.1;
-        Wed, 09 Oct 2019 07:39:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QQjFKWDZqjWTXiNcV4iPO7ss0OhEBXdi6eaFigDkSL8=;
-        b=s8Q0tbBUjItgU47j4vdz/Bflu+R9EVRao5+iv9n9SNojg5rOgxsOxxxvG5UpjKUQfP
-         UulexUwL7xh3bDav2cDoGxNb+aQXsUjhPs+GgL08Q4unvlbpIVpH/zPq1FhwOBlLbMEd
-         lt3WV0lJAODWVP3jGqzM3cg1kbi1QR2fPAGx9fM6J4hrSXk1iG40t1hfgRDcA7TECgb5
-         Uf35lV+ZFn3pH5t5W2RHABj/6bb+vWoLR6+UPgKaivFLCnIR59Opp+v3g6mKA1R+4QE5
-         xBfNRDyFIRsH1ATJ/NmcpuvlzYPU+PNOAX0+jAG6J81xiI4j3ccaJ05POfB5DEHAQXcI
-         Yh0g==
-X-Gm-Message-State: APjAAAWqA8oa0lEXLl9jE23dRhrKHdvh5ftf+SlXAKHZuBuzBlsbRbgV
-        bvBjW/8OcAzLLjFRLoQT6O0FQbaPYeNCeU+WNkY=
-X-Google-Smtp-Source: APXvYqzcZGhyFNk19zn0xftebfgdykxxeNAxrvj/mhGsyAHMUJvYnkJTNBVY8+tX4zWV+yLYeDJlRBGjP36kaKogSpg=
-X-Received: by 2002:a9d:7345:: with SMTP id l5mr3197408otk.39.1570631945630;
- Wed, 09 Oct 2019 07:39:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <1570531132-21856-1-git-send-email-fabrizio.castro@bp.renesas.com> <1570531132-21856-9-git-send-email-fabrizio.castro@bp.renesas.com>
-In-Reply-To: <1570531132-21856-9-git-send-email-fabrizio.castro@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 9 Oct 2019 16:38:54 +0200
-Message-ID: <CAMuHMdV5x4h-DJ04Mipf_nyvv6zytX9tJgdZ9wNv4w71=nDfLQ@mail.gmail.com>
-Subject: Re: [PATCH 08/10] arm64: dts: renesas: r8a774b1: Add USB-DMAC and
- HSUSB device nodes
-To:     Fabrizio Castro <fabrizio.castro@bp.renesas.com>
-Cc:     Simon Horman <horms@verge.net.au>, Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
+        id S1731578AbfJIOlh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 10:41:37 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:51046 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1731574AbfJIOlg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 10:41:36 -0400
+Received: (qmail 2864 invoked by uid 2102); 9 Oct 2019 10:41:35 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Oct 2019 10:41:35 -0400
+Date:   Wed, 9 Oct 2019 10:41:35 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>, dmaengine@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 2/5] USB: Make it possible to "subclass" usb_device_driver
+In-Reply-To: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
+Message-ID: <Pine.LNX.4.44L0.1910091040210.1603-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 12:39 PM Fabrizio Castro
-<fabrizio.castro@bp.renesas.com> wrote:
-> Add usb dmac and hsusb device nodes to the RZ/G2N SoC dtsi.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro@bp.renesas.com>
+On Wed, 9 Oct 2019, Alan Stern wrote:
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-devel for v5.5.
+> On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> 
+> > The kernel currenly has only 2 usb_device_drivers, one generic one, one
+> > that completely replaces the generic one to make USB devices usable over
+> > a network.
+> 
+> Presumably your first driver is in generic.c.  Where is the second one?
+> 
+> > Use the newly exported generic driver functions when a driver declares
+> > to want them run, in addition to its own code. This makes it possible to
+> > write drivers that extend the generic USB driver.
+> > 
+> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> 
+> This has a few problems.  The biggest one is that the device core does 
+> not guarantee any order of driver probing.  If generic.c is probed 
+> first, the subclass driver will never get probed -- which is a pretty 
+> fatal flaw.
 
-Gr{oetje,eeting}s,
+I wrote this before reading patch 4/5.  So the situation isn't so bad.
 
-                        Geert
+Alan Stern
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
