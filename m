@@ -2,60 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D18DFD1B19
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 23:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F70ED1CE5
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 01:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731150AbfJIVmW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 9 Oct 2019 17:42:22 -0400
-Received: from mx0b-0030aa01.pphosted.com ([208.86.201.44]:58434 "EHLO
-        mx0b-0030aa01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729865AbfJIVmW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 17:42:22 -0400
-X-Greylist: delayed 147798 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Oct 2019 17:42:21 EDT
-Received: from pps.filterd (m0146911.ppops.net [127.0.0.1])
-        by mx0b-0030aa01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x984Ycro025962;
-        Mon, 7 Oct 2019 21:38:56 -0700
-Received: from admin.localhost ([167.119.248.26])
-        by mx0b-0030aa01.pphosted.com with ESMTP id 2vetnkj0tj-24
-        (version=TLSv1 cipher=AES256-SHA bits=256 verify=NOT);
-        Mon, 07 Oct 2019 21:38:56 -0700
-Content-Type: text/plain; charset="iso-8859-1"
+        id S1731616AbfJIXjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 19:39:04 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39090 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730955AbfJIXjD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 19:39:03 -0400
+Received: by mail-ot1-f65.google.com with SMTP id s22so3264356otr.6;
+        Wed, 09 Oct 2019 16:39:01 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xfaJ6Ijz25Td45/swhL0HWSOcUtcHLc6emBFBS8WyOw=;
+        b=OEY6TANIdUuhE+RSC6Pbsxp3LQyjYHeMha53H6E33t5DbUx7+wFgwi3COa7rK7J5lq
+         I5UIVXy1HuNywPM3YFBTLJ2FfGEHlyXex3ac2Vs5bVS4/aXaBN9My6mdQSRogcOPJIIV
+         vohOSnGmS/xnoAb/aFp8WmzPKjAMSGy0QXMnkOP9KkWd8EPM0nbZoQsb2ck/Q59aQRIm
+         ch2uUBAUd3Zrq5lfWvXH4KEOy/cwwlErzi4AsJsWf96BPoF4O/aBZm1q05ahHlQsQWon
+         dFpIrOwDGb7kqVk1Y+Hm0/GwfiobtgJsco3tj8ICNG2pLEcHBVusq2YTgSFNXSdpZbjd
+         2pHQ==
+X-Gm-Message-State: APjAAAU0TX5zJY4YM8OS6uQlS50oz8BU8IMSqP0k2blqw1mMmNDFDSja
+        t5waIJ7RvcMMuGoPoy/KhapJ6mQ=
+X-Google-Smtp-Source: APXvYqzIQcdECP7sHtBSpJHI+jFCabS62ZfygcOXBQjYhZ9NsnTSnmOMd1i74eKBtoiTh3FE9+h9lA==
+X-Received: by 2002:a9d:620a:: with SMTP id g10mr5343743otj.318.1570664341395;
+        Wed, 09 Oct 2019 16:39:01 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id b5sm1149915oia.20.2019.10.09.16.39.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2019 16:39:00 -0700 (PDT)
+Date:   Wed, 9 Oct 2019 18:39:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     gregkh@linuxfoundation.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, kishon@ti.com, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, nkristam@nvidia.com
+Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
+Message-ID: <20191009233900.GA9109@bogus>
+References: <20191009024343.30218-1-jckuo@nvidia.com>
+ <20191009024343.30218-4-jckuo@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Hello
-To:     Recipient <mail@tfs.com>
-From:   "Triverton" <mail@tfs.com>
-Date:   Tue, 08 Oct 2019 12:38:24 +0800
-Reply-To: eleon_loanexpert@sanfranmail.com
-X-Antivirus: Avast (VPS 191007-4, 10/07/2019), Outbound message
-X-Antivirus-Status: Clean
-Message-ID: <2vetnkj0tj-24@m0146911.ppops.net>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-08_01:2019-10-07,2019-10-08 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_spam policy=outbound score=95 mlxscore=95 phishscore=0
- mlxlogscore=-129 impostorscore=0 bulkscore=0 priorityscore=1501
- adultscore=0 suspectscore=1 clxscore=1015 spamscore=95 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1910080046
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191009024343.30218-4-jckuo@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Good Morning!
+On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
+> Extend the bindings to cover the set of features found in Tegra194.
+> Note that, technically, there are four more supplies connected to the
+> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
+> , but the power sequencing requirements of Tegra194 require these to be
+> under the control of the PMIC.
+> 
+> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it is
+> possible for some platforms have long signal trace that could not
+> provide sufficient electrical environment for Gen 2 speed. To deal with
+> this, a new device node property "nvidia,disable-gen2" was added to
+> Tegra194 that be used to specifically disable Gen 2 speed for a
+> particular USB 3.0 port so that the port can be limited to Gen 1 speed
+> and avoid the instability.
 
- I strongly apologize for delving into your privacy. I am Elizabeth Leon, Loan Expert at Triverton Financial Service, Montreal, Canada. 
+I suspect this may be a common issue and we should have a common 
+property. Typically, this kind of property is in the controller though 
+and supports multiple speed limits. See PCI bindings for inspiration.
 
-We are offering all kind of loans at low interest rate. Respond for more details, and our website will be unveil to you for application.
-
-Best Regards,
-
-Mrs. Elizabeth Leon
-Loan Expert and Loan Processing Officer
-Triverton Financial Service
-
----
-This email has been checked for viruses by Avast antivirus software.
-https://www.avast.com/antivirus
-
+Rob
