@@ -2,141 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4AED1312
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 17:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7028CD131D
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Oct 2019 17:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731370AbfJIPi7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 11:38:59 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39471 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730256AbfJIPi6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 11:38:58 -0400
-Received: by mail-lj1-f196.google.com with SMTP id y3so2972650ljj.6;
-        Wed, 09 Oct 2019 08:38:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=HWGhrR9zQu1kilGXu57u8nXDF16dj6cYe7KVAB6aMHE=;
-        b=BlRdKv4v90THg+nkgbe0I7PiRPG5nFa35/cCKTTPuR8NT4eqYCEbcMHWhQ++QJzhDq
-         +AiDZ2rQZLi3Xp8RcaSZAicwJYADaAvAIfC2aaZjrcuxcAgh4oQaKNcqsX154yf64BDj
-         FX0cB6QuZ8c2JDFOhTeYcdWqohQkLw2qyraRTmaXSDkMVXvV2HsGkh1Z6TqPycnWiwz+
-         xO8n+t8VgyigUvDbUTO0iOqrjpjuvcHP0fTs8wbnGWS3/rzB7NlhQEJJGBRoZLls+ujm
-         DfQSRfseAIrOEoN7jE1pXbyDbiKAG6WzDCV9cUI+dC5jEtYrKduWJLTusRWsibQNsQ3Z
-         JB1A==
-X-Gm-Message-State: APjAAAVZ7Rj/3g3TUIlFBG5+r1QJTluY9HtOYUrh2wH0wsvzMPixB+T5
-        3g+GoucYnYLfy6KnCWMfl2c=
-X-Google-Smtp-Source: APXvYqzgDRhvqsI7XYqf5WepTJJQPmEGHKpTr7OeYL0U2W3l+9ztSYKra5VsB2hq888+pTB4gD8J/g==
-X-Received: by 2002:a2e:b17b:: with SMTP id a27mr2765429ljm.7.1570635535414;
-        Wed, 09 Oct 2019 08:38:55 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id 4sm557492ljv.87.2019.10.09.08.38.51
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 09 Oct 2019 08:38:53 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iIE3J-0002HB-Kq; Wed, 09 Oct 2019 17:39:01 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Keith Packard <keithp@keithp.com>,
-        Juergen Stuber <starblue@users.sourceforge.net>,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 5/5] USB: yurex: fix NULL-derefs on disconnect
-Date:   Wed,  9 Oct 2019 17:38:48 +0200
-Message-Id: <20191009153848.8664-6-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191009153848.8664-1-johan@kernel.org>
-References: <20191009153848.8664-1-johan@kernel.org>
+        id S1731192AbfJIPk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 11:40:28 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:49787 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729471AbfJIPk2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 11:40:28 -0400
+X-Originating-IP: 83.155.44.161
+Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
+        (Authenticated sender: hadess@hadess.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id ED3CE1BF20F;
+        Wed,  9 Oct 2019 15:40:25 +0000 (UTC)
+Message-ID: <2bbaeba7abb332aaf9fb521602f7199ba1e77273.camel@hadess.net>
+Subject: Re: [PATCH 3/5] USB: Implement usb_device_match_id()
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 09 Oct 2019 17:40:25 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1910091035260.1603-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1910091035260.1603-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver was using its struct usb_interface pointer as an inverted
-disconnected flag, but was setting it to NULL without making sure all
-code paths that used it were done with it.
+On Wed, 2019-10-09 at 10:36 -0400, Alan Stern wrote:
+> On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> 
+> > Match a usb_device with a table of IDs.
+> > 
+> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> > ---
+> >  drivers/usb/core/driver.c | 15 +++++++++++++++
+> >  include/linux/usb.h       |  2 ++
+> >  2 files changed, 17 insertions(+)
+> > 
+> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> > index 863e380a272b..50f92da8afcf 100644
+> > --- a/drivers/usb/core/driver.c
+> > +++ b/drivers/usb/core/driver.c
+> > @@ -800,6 +800,21 @@ const struct usb_device_id
+> *usb_match_id(struct usb_interface *interface,
+> >  }
+> >  EXPORT_SYMBOL_GPL(usb_match_id);
+> >  
+> > +const struct usb_device_id *usb_device_match_id(struct usb_device
+> *udev,
+> > +                             const struct usb_device_id *id)
+> > +{
+> > +     if (!id)
+> > +             return NULL;
+> > +
+> > +     for (; id->idVendor || id->idProduct ; id++) {
+> > +             if (usb_match_device(udev, id))
+> > +                     return id;
+> > +     }
+> 
+> This would be better if you allowed matching against just the
+> idVendor 
+> field rather than matching against both.  That would make it a lot 
+> simpler to match all Apple devices, for instance.
 
-Before commit ef61eb43ada6 ("USB: yurex: Fix protection fault after
-device removal") this included the interrupt-in completion handler, but
-there are further accesses in dev_err and dev_dbg statements in
-yurex_write() and the driver-data destructor (sic!).
+That should already be possible. The matching code is the same as for
+the USB interface drivers.
 
-Fix this by unconditionally stopping also the control URB at disconnect
-and by using a dedicated disconnected flag.
+Something like:
+static const struct usb_device_id apple_match[] = {
+    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR,
+      .idVendor = USB_VENDOR_APPLE
+    },
+    {}
+}
 
-Note that we need to take a reference to the struct usb_interface to
-avoid a use-after-free in the destructor whenever the device was
-disconnected while the character device was still open.
-
-Fixes: aadd6472d904 ("USB: yurex.c: remove dbg() usage")
-Fixes: 45714104b9e8 ("USB: yurex.c: remove err() usage")
-Cc: stable <stable@vger.kernel.org>     # 3.5: ef61eb43ada6
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/misc/yurex.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/misc/yurex.c b/drivers/usb/misc/yurex.c
-index 8d52d4336c29..be0505b8b5d4 100644
---- a/drivers/usb/misc/yurex.c
-+++ b/drivers/usb/misc/yurex.c
-@@ -60,6 +60,7 @@ struct usb_yurex {
- 
- 	struct kref		kref;
- 	struct mutex		io_mutex;
-+	unsigned long		disconnected:1;
- 	struct fasync_struct	*async_queue;
- 	wait_queue_head_t	waitq;
- 
-@@ -107,6 +108,7 @@ static void yurex_delete(struct kref *kref)
- 				dev->int_buffer, dev->urb->transfer_dma);
- 		usb_free_urb(dev->urb);
- 	}
-+	usb_put_intf(dev->interface);
- 	usb_put_dev(dev->udev);
- 	kfree(dev);
- }
-@@ -205,7 +207,7 @@ static int yurex_probe(struct usb_interface *interface, const struct usb_device_
- 	init_waitqueue_head(&dev->waitq);
- 
- 	dev->udev = usb_get_dev(interface_to_usbdev(interface));
--	dev->interface = interface;
-+	dev->interface = usb_get_intf(interface);
- 
- 	/* set up the endpoint information */
- 	iface_desc = interface->cur_altsetting;
-@@ -316,8 +318,9 @@ static void yurex_disconnect(struct usb_interface *interface)
- 
- 	/* prevent more I/O from starting */
- 	usb_poison_urb(dev->urb);
-+	usb_poison_urb(dev->cntl_urb);
- 	mutex_lock(&dev->io_mutex);
--	dev->interface = NULL;
-+	dev->disconnected = 1;
- 	mutex_unlock(&dev->io_mutex);
- 
- 	/* wakeup waiters */
-@@ -405,7 +408,7 @@ static ssize_t yurex_read(struct file *file, char __user *buffer, size_t count,
- 	dev = file->private_data;
- 
- 	mutex_lock(&dev->io_mutex);
--	if (!dev->interface) {		/* already disconnected */
-+	if (dev->disconnected) {		/* already disconnected */
- 		mutex_unlock(&dev->io_mutex);
- 		return -ENODEV;
- 	}
-@@ -440,7 +443,7 @@ static ssize_t yurex_write(struct file *file, const char __user *user_buffer,
- 		goto error;
- 
- 	mutex_lock(&dev->io_mutex);
--	if (!dev->interface) {		/* already disconnected */
-+	if (dev->disconnected) {		/* already disconnected */
- 		mutex_unlock(&dev->io_mutex);
- 		retval = -ENODEV;
- 		goto error;
--- 
-2.23.0
+And I couldn't use it in patch 5/5, as that's a range of product IDs,
+not all of them (which would be quite a lot more).
 
