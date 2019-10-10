@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0009DD224D
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 10:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E25DD22B3
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 10:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733116AbfJJIKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 04:10:16 -0400
-Received: from relay8-d.mail.gandi.net ([217.70.183.201]:33943 "EHLO
-        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732947AbfJJIKQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 04:10:16 -0400
+        id S1733188AbfJJI1B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 04:27:01 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:50139 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727389AbfJJI1B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 04:27:01 -0400
 X-Originating-IP: 83.155.44.161
 Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
         (Authenticated sender: hadess@hadess.net)
-        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 68C531BF209;
-        Thu, 10 Oct 2019 08:10:13 +0000 (UTC)
-Message-ID: <28db57b47c9f0e7a7a8ad1b6c4bac70cdf96b450.camel@hadess.net>
-Subject: Re: [PATCH 2/5] USB: Make it possible to "subclass"
- usb_device_driver
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id F24D7240002;
+        Thu, 10 Oct 2019 08:26:58 +0000 (UTC)
+Message-ID: <ae7c3e3abfce7cc6d69e8453c3964245db160143.camel@hadess.net>
+Subject: Re: [PATCH 4/5] USB: Select better matching USB drivers when
+ available
 From:   Bastien Nocera <hadess@hadess.net>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Thu, 10 Oct 2019 10:10:12 +0200
-In-Reply-To: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
-References: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
+Date:   Thu, 10 Oct 2019 10:26:58 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1910091435300.1603-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1910091435300.1603-100000@iolanthe.rowland.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
@@ -36,174 +36,20 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-More replies inline (which I always miss)
+On Wed, 2019-10-09 at 14:45 -0400, Alan Stern wrote:
+> 
+On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> 
+> <snip>
+> > +               return
+> device_driver_attach(usb_generic_driver.drvwrap.driver, dev);
+> > +       return error;
+> 
+> I think that's right.  A little testing wouldn't hurt.
 
-On Wed, 2019-10-09 at 10:34 -0400, Alan Stern wrote:
-> On Wed, 9 Oct 2019, Bastien Nocera wrote:
-> 
-> > The kernel currenly has only 2 usb_device_drivers, one generic one,
-> one
-> > that completely replaces the generic one to make USB devices usable
-> over
-> > a network.
-> 
-> Presumably your first driver is in generic.c.  Where is the second
-> one?
-> 
-> > Use the newly exported generic driver functions when a driver
-> declares
-> > to want them run, in addition to its own code. This makes it
-> possible to
-> > write drivers that extend the generic USB driver.
-> > 
-> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
-> 
-> This has a few problems.  The biggest one is that the device core
-> does 
-> not guarantee any order of driver probing.  If generic.c is probed 
-> first, the subclass driver will never get probed -- which is a
-> pretty 
-> fatal flaw.
-> 
-> > ---
-> >  drivers/usb/core/driver.c | 36 ++++++++++++++++++++++++++++++-----
-> -
-> >  include/linux/usb.h       |  1 +
-> >  2 files changed, 31 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-> > index 2b27d232d7a7..863e380a272b 100644
-> > --- a/drivers/usb/core/driver.c
-> > +++ b/drivers/usb/core/driver.c
-> > @@ -261,10 +261,17 @@ static int usb_probe_device(struct device
-> *dev)
-> >        */
-> >       if (!udriver->supports_autosuspend)
-> >               error = usb_autoresume_device(udev);
-> > +     if (error)
-> > +             return error;
-> >  
-> > -     if (!error)
-> > -             error = udriver->probe(udev);
-> > -     return error;
-> > +     if (udriver->generic_init)
-> > +             error = usb_generic_driver_probe(udev);
-> > +     if (error)
-> > +             return error;
-> > +
-> > +     if (udriver->probe)
-> > +             return udriver->probe(udev);
-> > +     return 0;
-> >  }
-> >  
-> >  /* called from driver core with dev locked */
-> > @@ -273,7 +280,10 @@ static int usb_unbind_device(struct device
-> *dev)
-> >       struct usb_device *udev = to_usb_device(dev);
-> >       struct usb_device_driver *udriver = to_usb_device_driver(dev-
-> >driver);
-> >  
-> > -     udriver->disconnect(udev);
-> > +     if (udriver->generic_init)
-> > +             usb_generic_driver_disconnect(udev);
-> > +     if (udriver->disconnect)
-> > +             udriver->disconnect(udev);
-> 
-> The order is wrong.  The disconnects should always be done in
-> reverse 
-> order of probing.  This is true whenever you have a destructor for a 
-> subclass; the subclasses destructor runs before the superclass's 
-> destructor.
+device_driver_attach() isn't available to this part of the code.
 
-Fixed. Fixed in the suspend function as well.
-
-> >       if (!udriver->supports_autosuspend)
-> >               usb_autosuspend_device(udev);
-> >       return 0;
-> > @@ -886,6 +896,14 @@ int usb_register_device_driver(struct
-> usb_device_driver *new_udriver,
-> >       if (usb_disabled())
-> >               return -ENODEV;
-> >  
-> > +     if (new_udriver->probe == NULL &&
-> > +         !new_udriver->generic_init) {
-> 
-> There's no point adding this extra test.  Even subclass drivers
-> should 
-> have a probe function.
-
-Removed.
-
-> > +             printk(KERN_ERR "%s: error %d registering device "
-> > +                    "        driver %s, no probe() function\n",
-> 
-> Don't split character strings.  They are an exception to the 80-
-> column 
-> limit.
-
-I was using the error message just below in the function as an example.
-A bad one apparently. This is gone in any case.
-
-> > +                    usbcore_name, retval, new_udriver->name);
-> > +             return -EINVAL;
-> > +     }
-> > +
-> >       new_udriver->drvwrap.for_devices = 1;
-> >       new_udriver->drvwrap.driver.name = new_udriver->name;
-> >       new_udriver->drvwrap.driver.bus = &usb_bus_type;
-> > @@ -1149,7 +1167,10 @@ static int usb_suspend_device(struct
-> usb_device *udev, pm_message_t msg)
-> >               udev->do_remote_wakeup = 0;
-> >               udriver = &usb_generic_driver;
-> >       }
-> > -     status = udriver->suspend(udev, msg);
-> > +     if (udriver->generic_init)
-> > +             status = usb_generic_driver_suspend (udev, msg);
-> > +     if (status == 0 && udriver->suspend)
-> > +             status = udriver->suspend(udev, msg);
-> 
-> Again, the order is wrong.  Suspend the subclass driver first.
-
-Done, as mentioned above.
-
-> >   done:
-> >       dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
-> > @@ -1181,7 +1202,10 @@ static int usb_resume_device(struct
-> usb_device *udev, pm_message_t msg)
-> >               udev->reset_resume = 1;
-> >  
-> >       udriver = to_usb_device_driver(udev->dev.driver);
-> > -     status = udriver->resume(udev, msg);
-> > +     if (udriver->generic_init)
-> > +             status = usb_generic_driver_resume (udev, msg);
-> > +     if (status == 0 && udriver->resume)
-> > +             status = udriver->resume(udev, msg);
-> >  
-> >   done:
-> >       dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
-> > diff --git a/include/linux/usb.h b/include/linux/usb.h
-> > index e656e7b4b1e4..fb9ad3511e55 100644
-> > --- a/include/linux/usb.h
-> > +++ b/include/linux/usb.h
-> > @@ -1242,6 +1242,7 @@ struct usb_device_driver {
-> >       const struct attribute_group **dev_groups;
-> >       struct usbdrv_wrap drvwrap;
-> >       unsigned int supports_autosuspend:1;
-> > +     unsigned int generic_init:1;
-> 
-> How about using a name that actually says something about the
-> driver?  
-> Such as generic_subclass?  Or subclass_of_generic?
-> 
-> "init" has nothing to do with anything.
-
-generic_subclass it will be. I've also documented it in the header.
-
-> >  };
-> >  #define      to_usb_device_driver(d) container_of(d, struct
-> usb_device_driver, \
-> >               drvwrap.driver)
-> 
-> Alan Stern
-> 
+I think the only way to do things here might be to set status bit for
+the usb_device and launch device_reprobe(). The second time around, we
+wouldn't match or probe the specific driver.
 
