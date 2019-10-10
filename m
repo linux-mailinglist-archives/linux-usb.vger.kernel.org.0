@@ -2,137 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1E8D1DDC
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 03:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A450D1EBC
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 05:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731959AbfJJBI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Oct 2019 21:08:29 -0400
-Received: from mx5.ucr.edu ([138.23.62.67]:61304 "EHLO mx5.ucr.edu"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731134AbfJJBI3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Oct 2019 21:08:29 -0400
-X-Greylist: delayed 426 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Oct 2019 21:08:28 EDT
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=ucr.edu; i=@ucr.edu; q=dns/txt; s=selector3;
-  t=1570669708; x=1602205708;
-  h=from:to:cc:subject:date:message-id;
-  bh=FbXEHMrqooWbgZHGXSG3NF7G7Mhn0laqydiduZiAtMk=;
-  b=FzuOuXrCy9NCb12PziTlJodb9X2rmKgvt686jfYofR+w62edRr4O1Q+A
-   czOhh8YvXxkD3sw3b1ThbQrm3wqNfP0mXj6XlAOo4TkJZxJLELbLjDAUm
-   /4XUAcskj2osfyJ/sIIiKyFDYcgasBqFAKK6QVTvP/VdsaeGtF0bDbLg9
-   RSRxGbA/4Wd/zLrrQTLz22x+QS1K9is8hJATrXTWpfmK3jxrhPloxCvCQ
-   xxRdu/aSILdfUEdvs/fe8hypnQzgfKQ1wrE5ZY64phmZvgtusEux5Zwue
-   aZTL8f79VFSNlr514kh0dUvn0yzwYTOLtj5Zjznr4l04nbEJn1pqg5cGQ
-   g==;
-IronPort-SDR: 2NfCT7+pjx7LNzzGL3rkd9WhAxxRwBPbbFzPABMXI/gQuE4VlvmEqv8jr7uBHDUREV10cZRgOq
- 9EMfn91GyxhOfBuDo9L5AdB4W4PiZ6xCDA1p+0441zeNaoJgthKhvQngOtaPY7Q5JHW0XvTJG9
- 6r3dAehFFsJV/wXhDXHRe7OTrS/jENErKcJXUn3jOMksiYK9ePBPIkSeEuIA4/qnBKJ21byFla
- hdWOaYGyZwNpNk3yEp2TiQn3GLmv1he0d2kL1i4QR+PwjRgT68HZbfDIuxZFT7FMWrm7KQS4+n
- trk=
-IronPort-PHdr: =?us-ascii?q?9a23=3AU2lbXx1Isl/K3BmosmDT+DRfVm0co7zxezQtwd?=
- =?us-ascii?q?8ZseIXKfad9pjvdHbS+e9qxAeQG9mCsLQa0aGK6ejJYi8p2d65qncMcZhBBV?=
- =?us-ascii?q?cuqP49uEgeOvODElDxN/XwbiY3T4xoXV5h+GynYwAOQJ6tL1LdrWev4jEMBx?=
- =?us-ascii?q?7xKRR6JvjvGo7Vks+7y/2+94fcbglVijexe7J/IAu5oQjeqMUdnJdvJLs2xh?=
- =?us-ascii?q?bVuHVDZv5YxXlvJVKdnhb84tm/8Zt++ClOuPwv6tBNX7zic6s3UbJXAjImM3?=
- =?us-ascii?q?so5MLwrhnMURGP5noHXWoIlBdDHhXI4wv7Xpf1tSv6q/Z91SyHNsD4Ubw4RT?=
- =?us-ascii?q?Kv5LpwRRT2lCkIKSI28GDPisxxkq1bpg6hpwdiyILQeY2ZKeZycr/Ycd4cQG?=
- =?us-ascii?q?pBX91RVzdAAoO6YIsEEvQPM/9FpInzplsBsx++ChSxD+/rxDJEmnr60Ks93O?=
- =?us-ascii?q?k9HwzKwBEsE8sSvHjJsd75MLoeXOCwwKTO0D7Nbe5Z2S3l5YbIbB4vvP+CU7?=
- =?us-ascii?q?F3f8fK1UUjCxnIgkmKpID5Iz+Y0PkGvWiB7+pnUOKik2woqwBwoziv28csjZ?=
- =?us-ascii?q?TCi4UVy1HF9SV22oc1KcGkREN1etOkDYdftzuAO4RoX8wiXnhltSAnwbMFoZ?=
- =?us-ascii?q?62ZDYGxIgjyhLFaPGKc5KE7gz+WOueOzt0mm5pdK6nixqv8EWtzvfwWte63V?=
- =?us-ascii?q?tKtCZJjNjBumoP2hHc7MWMV+Fz8V272TmV0gDe8uREIUcpmqXFM5Mh2bswlo?=
- =?us-ascii?q?YLsUTEAy/2hF36jK+IeUUg/eil8+Hnba/npp+YLoN0kgX+Prk3lsyxH+g0Lh?=
- =?us-ascii?q?QCU3KU+eS7073j8kn5T6tQgvIqlanZtYjWJcUdpqGnHw9Yypgv5wq7Aju809?=
- =?us-ascii?q?kVnWMLIExYdB+IlYTlJU3CLOzgAfe6mVuskTNrx/7cPr3mB5XANnjCkbbhfb?=
- =?us-ascii?q?ln6k5Q1BY/wN5E6pJJFr4BOuj/VVHsu9zFFhM5KRC7w/77CNVh0YMTQWaPAq?=
- =?us-ascii?q?6fMKPPvl6E//8vI/KXa4IOpjb9JOYq5+T0gX86h1AdZ6+p0oUTaHyiGfRmOU?=
- =?us-ascii?q?qZMjLCmNAERFYLrAojS6S+mU+CWD8LPy2aQqkmoDw3FdT1Xs/4WomxjenZj2?=
- =?us-ascii?q?+AFZpMazUDVw2B?=
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A2EmFADfgZ5dgMjWVdFmHgELHIVaTBC?=
- =?us-ascii?q?NJYVZUAEBAQaLKRhxhXqKMAEIAQEBDAEBLQIBAYRAglIjOBMCAwkBAQUBAQE?=
- =?us-ascii?q?BAQUEAQECEAEBCQ0JCCeFQoI6KYM1CxYVUoEVAQUBNSI5gkcBglIlBaRlgQM?=
- =?us-ascii?q?8jCUziGQBCQ2BSAkBCIEihzWEWYEQgQeBEYNQhA2DWYJKBIE5AQEBjXiHN5Z?=
- =?us-ascii?q?XAQYCghAUgXiTFSeEPIk/i0QBp2MCCgcGDyOBRoF7TSWBbAqBRFAQFIFbF45?=
- =?us-ascii?q?DITOBCI0/glQB?=
-X-IPAS-Result: =?us-ascii?q?A2EmFADfgZ5dgMjWVdFmHgELHIVaTBCNJYVZUAEBAQaLK?=
- =?us-ascii?q?RhxhXqKMAEIAQEBDAEBLQIBAYRAglIjOBMCAwkBAQUBAQEBAQUEAQECEAEBC?=
- =?us-ascii?q?Q0JCCeFQoI6KYM1CxYVUoEVAQUBNSI5gkcBglIlBaRlgQM8jCUziGQBCQ2BS?=
- =?us-ascii?q?AkBCIEihzWEWYEQgQeBEYNQhA2DWYJKBIE5AQEBjXiHN5ZXAQYCghAUgXiTF?=
- =?us-ascii?q?SeEPIk/i0QBp2MCCgcGDyOBRoF7TSWBbAqBRFAQFIFbF45DITOBCI0/glQB?=
-X-IronPort-AV: E=Sophos;i="5.67,278,1566889200"; 
-   d="scan'208";a="81814536"
-Received: from mail-pl1-f200.google.com ([209.85.214.200])
-  by smtpmx5.ucr.edu with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Oct 2019 18:01:21 -0700
-Received: by mail-pl1-f200.google.com with SMTP id s24so2734689plp.3
-        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2019 18:01:22 -0700 (PDT)
+        id S1732317AbfJJDB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Oct 2019 23:01:28 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36561 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726621AbfJJDB2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Oct 2019 23:01:28 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y22so2930411pfr.3
+        for <linux-usb@vger.kernel.org>; Wed, 09 Oct 2019 20:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=v6u1nm7ngSdTRUQiclEkIH6dgRDZsgNswCXmJQZSsgM=;
+        b=QAF/Os5xoueQ8rdoO6FNDTWRqktCXRM40BzdZNlRoF7TF82l202ByA5b3vOwt2Yaz8
+         dR12DG6ohybXtbC6IOCBXL86T0HvWO+Md4YgAEuI4RP8gitSPotMX33jFpkr3dDs0fC/
+         HUXIILxFzwvx8GGYHFLMCZM+qIrFU4FVLvA/BfSNHi3docXbFDr8MV6G5Q8gUzJUW50y
+         v+rawkfXqsIeAiGAKSF5TDK1oSQ3LZzlQE9s6cAr7DMMKCJATWrlIuC5CLtwSkdzr38R
+         dgQcH/pz2xdVL117h82Jb9DUjNbQEXd+8Kt/lB1wMvcbd/Ldwx8FP/mD+25xA0V6sfaK
+         92hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=MvM2jwgUKO6uz4LfxBqoaB6VDvyVvKuoyUYs0jsyz0k=;
-        b=C4Ip3IZRE/5/YhuJuzHZKO9CAxuFMMoXFcWBbDGG0oKic4Nq8zrtWqliKvzpVUDdCp
-         IvLWP3fxEVHYCApfCAfKwo4D2/Dz5NVrZ61qKSr0BU0briObr8EogB5ZvwtV3AteOAXP
-         HjONn6Gnfof3BMUw0QQW5uxTAoVlAm8p+JiVtigqqb1pLorIXkSwNFQ0TcL84+8Snknr
-         dko05IQykRLL2k/ncZU0nzRYyJOavt/AzepljAcOFhgCq/0S6E98jp7tXIUcgNFWkLo4
-         646bqSJGkNqJ7FZE1O712pBrkHqSqZksR+NOinK9/MyiH+kURDTWKUifXhKXcW4Eo5cs
-         ukPA==
-X-Gm-Message-State: APjAAAX01eqh9MGuaptZSLADhRNL8CxSIuK37QAkJq9my7mDvC/dtZsT
-        aI17JzpxbNzZSoelfM1R2ijqEzGTiUSaOXDeY+nOUpda9WYDiGaVbnbNt9a7TjZ5+NKVAub3tbv
-        oMfOaDEmuwXpDJTATvMZgGg==
-X-Received: by 2002:a17:902:2e:: with SMTP id 43mr6021045pla.270.1570669281481;
-        Wed, 09 Oct 2019 18:01:21 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqxOXnmntkThXGYy+i9dPCuMRJzaVdG4Osex5SflPK5bvsD16OY0wpQwitsRLeTtpk5YTdBCpQ==
-X-Received: by 2002:a17:902:2e:: with SMTP id 43mr6021006pla.270.1570669281167;
-        Wed, 09 Oct 2019 18:01:21 -0700 (PDT)
-Received: from Yizhuo.cs.ucr.edu (yizhuo.cs.ucr.edu. [169.235.26.74])
-        by smtp.googlemail.com with ESMTPSA id f65sm3388103pgc.90.2019.10.09.18.01.19
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=v6u1nm7ngSdTRUQiclEkIH6dgRDZsgNswCXmJQZSsgM=;
+        b=DjlqBw6mlUWKVsxGtVgIiDRA8I9Cr3PsNSyBp2eubXT9POFuCarLtoUJD/cfPHKqyu
+         Q6sDMeki1Lj0VxfV+6IxEo63o7Z21gb+p3JBu0O9etoYgBnBg1LEh7G9dLZp8JfOA38q
+         ocyl1O+fuj5VCHc4syfVmPaz0oStJ9GK0keUPHOh3UHL8Jymy7X6KjtmP9ClrtD+kAYi
+         H9MxsRzHWgjJPOg5nKAe6Zr1XDi+83D2APqXoGl5Ox5DNiPpj7AKgzyj5vbpB0PYeWI3
+         09lG71z9Ocm5TdElT8eUsldagAyapferiJM3TX9u4UA9G00wVB3d2qC+kUUEyoc61o/P
+         p2aw==
+X-Gm-Message-State: APjAAAUDJaU95Rolabpv4zUc7O7ufZfeCX3VfHMLBr//OnGsNZKKfqk3
+        OqEeWe2O7WuVeCcu+Pyb/Zraw+to/A0=
+X-Google-Smtp-Source: APXvYqztCepxhPI8wVLqUFSvMSUJ3Xg7tfFGNsf3EDq2abdkO61i+0q0CH1onsG3+oafcaYMDI+q9A==
+X-Received: by 2002:aa7:821a:: with SMTP id k26mr7682485pfi.184.1570676486256;
+        Wed, 09 Oct 2019 20:01:26 -0700 (PDT)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id v3sm3574007pfn.18.2019.10.09.20.01.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2019 18:01:20 -0700 (PDT)
-From:   Yizhuo <yzhai003@ucr.edu>
-Cc:     Yizhuo <yzhai003@ucr.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Jan-Marek Glogowski <glogow@fbihome.de>,
-        Mathieu Malaterre <malat@debian.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: core: Fix potental Null Pointer dereference
-Date:   Wed,  9 Oct 2019 18:02:02 -0700
-Message-Id: <20191010010205.25739-1-yzhai003@ucr.edu>
-X-Mailer: git-send-email 2.17.1
-To:     unlisted-recipients:; (no To-header on input)
+        Wed, 09 Oct 2019 20:01:26 -0700 (PDT)
+Date:   Wed, 9 Oct 2019 20:01:12 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     =?UTF-8?B?QmrDuHJu?= Mork <bjorn@mork.no>, netdev@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] net: usb: qmi_wwan: add Telit 0x1050 composition
+Message-ID: <20191009200112.78ba1ba7@cakuba.netronome.com>
+In-Reply-To: <20191009090718.12879-1-dnlplm@gmail.com>
+References: <20191009090718.12879-1-dnlplm@gmail.com>
+Organization: Netronome Systems, Ltd.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Inside function usb_device_is_owned(), usb_hub_to_struct_hub()
-could return NULL but there's no check before its dereference,
-which is potentially unsafe.
+On Wed,  9 Oct 2019 11:07:18 +0200, Daniele Palmas wrote:
+> This patch adds support for Telit FN980 0x1050 composition
+> 
+> 0x1050: tty, adb, rmnet, tty, tty, tty, tty
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
 
-Signed-off-by: Yizhuo <yzhai003@ucr.edu>
----
- drivers/usb/core/hub.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 236313f41f4a..8d628c8e0c1b 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1977,7 +1977,7 @@ bool usb_device_is_owned(struct usb_device *udev)
- 	if (udev->state == USB_STATE_NOTATTACHED || !udev->parent)
- 		return false;
- 	hub = usb_hub_to_struct_hub(udev->parent);
--	return !!hub->ports[udev->portnum - 1]->port_owner;
-+	return hub && !!hub->ports[udev->portnum - 1]->port_owner;
- }
- 
- static void recursively_mark_NOTATTACHED(struct usb_device *udev)
--- 
-2.17.1
-
+Applied, thanks!
