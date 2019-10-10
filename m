@@ -2,163 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D71D2BE2
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 15:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56536D2C44
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 16:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbfJJN5O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 09:57:14 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34693 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725959AbfJJN5N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 09:57:13 -0400
-Received: by mail-wr1-f66.google.com with SMTP id j11so8054712wrp.1;
-        Thu, 10 Oct 2019 06:57:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=kKpm7XM1AgpSN1jrhyWVldr2l3miF1XGBH1EW5loxxI=;
-        b=hkLd84++mfI8DFZArVwjpGXEap9gVCEvxtrIk2GCAec5fJlbZnrJ+fF/5b5qtRAxBN
-         7zu8N3Hq7k8saPoZ4+41pnq1iymTz58A9wVpJnOr3Y/VCaIBlvYrkiP6iod1wtgWphGj
-         8qisHK3qM0yiViWyXPI/tsulamhgLzVovb7CjWPxjkeRw1ySUyPAHqUSMVI3uszMbRGS
-         OjfZEfFPffXnbZUYgYGiyCgBj+1igbTyVHWVLqmj4JNND6Dv525BL0Y1CgB6+2Nm/wqX
-         0lND4FVUjZ1UfiTpwa/MrT+MUE5UsVx5qIAwSO4UzaG9jSlgAHCAgDF4VkkUn1frOTkM
-         GHtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=kKpm7XM1AgpSN1jrhyWVldr2l3miF1XGBH1EW5loxxI=;
-        b=RyM8G3/z93S+sFkizwS0DnOGo+3xj3WJmWMShYWNLtLFT2U/mnxnYOe/JJt/TrrGrW
-         ycV69jQrzmBbbFrZmcM6qeVmowNUw0Ckz3Vktg3yGJUueg9k8AZkB6hIjy4bwevObBI4
-         3ZHfVP3ld7DN1XTZYCprqWcpN80hZbiMPvJvf3eOCDkgXfDMRG+lsHm8/FuXvX/S+QtR
-         9YzoElfg6MZy+JsaaVt+S+NZoIZwmB0EjGsq0zGxLhCSi8vKcfPRaSWk/tA/CABHK3zn
-         WA/tTIGGDKTLRETqhmjvRFL+AFA2uePhlfeQPGkDMcac5itZt6nTKLU8+GL+qIs+/CY7
-         ykoA==
-X-Gm-Message-State: APjAAAXJyMR1YZnD4wopAMRzNOhAg86ejKeZAux3N5sfkvJyvY/4V5p0
-        quQZPBeUTJzzbpxQgWmoEGz8n6hQngQ=
-X-Google-Smtp-Source: APXvYqxnSQAklQr786Hn4Cib+9+4j5ERR7EwmEMJDisBGjMLS8ap04iHd53VBJcDXdLnQjFxNU2sTw==
-X-Received: by 2002:a5d:540e:: with SMTP id g14mr8988389wrv.177.1570715830595;
-        Thu, 10 Oct 2019 06:57:10 -0700 (PDT)
-Received: from localhost ([194.105.145.90])
-        by smtp.gmail.com with ESMTPSA id u4sm9088089wmg.41.2019.10.10.06.57.09
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 10 Oct 2019 06:57:10 -0700 (PDT)
-From:   Igor Opaniuk <igor.opaniuk@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Li Jun <jun.li@nxp.com>,
-        Igor Opaniuk <igor.opaniuk@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
+        id S1726088AbfJJOTR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 10:19:17 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:55262 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725901AbfJJOTQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 10:19:16 -0400
+Received: (qmail 2421 invoked by uid 2102); 10 Oct 2019 10:19:15 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Oct 2019 10:19:15 -0400
+Date:   Thu, 10 Oct 2019 10:19:15 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] usb: phy: mxs: optimize disconnect line condition
-Date:   Thu, 10 Oct 2019 16:56:56 +0300
-Message-Id: <20191010135656.3264-3-igor.opaniuk@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191010135656.3264-1-igor.opaniuk@gmail.com>
-References: <20191010135656.3264-1-igor.opaniuk@gmail.com>
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH 4/5] USB: Select better matching USB drivers when available
+In-Reply-To: <ae7c3e3abfce7cc6d69e8453c3964245db160143.camel@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1910101017260.1581-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+On Thu, 10 Oct 2019, Bastien Nocera wrote:
 
-We only have below cases to disconnect line when suspend:
-1. Device mode without connection to any host/charger(no vbus).
-2. Device mode connect to a charger, usb suspend when
-system is entering suspend.
+> On Wed, 2019-10-09 at 14:45 -0400, Alan Stern wrote:
+> > 
+> On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> > 
+> > <snip>
+> > > +               return
+> > device_driver_attach(usb_generic_driver.drvwrap.driver, dev);
+> > > +       return error;
+> > 
+> > I think that's right.  A little testing wouldn't hurt.
+> 
+> device_driver_attach() isn't available to this part of the code.
+> 
+> I think the only way to do things here might be to set status bit for
+> the usb_device and launch device_reprobe(). The second time around, we
+> wouldn't match or probe the specific driver.
 
-This patch can fix cases, when usb phy wrongly does disconnect
-line in case usb host enters suspend but vbus is off.
+That would mean probing generic_driver twice, right?  You probably
+should call its disconnect routine in between.
 
-Fixes: 7b09e67639("usb: phy: mxs: refine mxs_phy_disconnect_line")
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
----
+That sounds pretty awkward, but if there's no other way then go ahead 
+and do it.
 
-v2:
-- restored original commit author
-- fixed build for multi_v7
-
- drivers/usb/phy/phy-mxs-usb.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 70b8c8248caf..f58ea923c7eb 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -204,6 +204,7 @@ struct mxs_phy {
- 	int port_id;
- 	u32 tx_reg_set;
- 	u32 tx_reg_mask;
-+	enum usb_current_mode mode;
- };
- 
- static inline bool is_imx6q_phy(struct mxs_phy *mxs_phy)
-@@ -386,17 +387,6 @@ static void __mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool disconnect)
- 		usleep_range(500, 1000);
- }
- 
--static bool mxs_phy_is_otg_host(struct mxs_phy *mxs_phy)
--{
--	void __iomem *base = mxs_phy->phy.io_priv;
--	u32 phyctrl = readl(base + HW_USBPHY_CTRL);
--
--	if (IS_ENABLED(CONFIG_USB_OTG) &&
--			!(phyctrl & BM_USBPHY_CTRL_OTG_ID_VALUE))
--		return true;
--
--	return false;
--}
- 
- static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- {
-@@ -412,13 +402,26 @@ static void mxs_phy_disconnect_line(struct mxs_phy *mxs_phy, bool on)
- 
- 	vbus_is_on = mxs_phy_get_vbus_status(mxs_phy);
- 
--	if (on && !vbus_is_on && !mxs_phy_is_otg_host(mxs_phy))
-+	if (on && ((!vbus_is_on && mxs_phy->mode != USB_CURRENT_MODE_HOST)))
- 		__mxs_phy_disconnect_line(mxs_phy, true);
- 	else
- 		__mxs_phy_disconnect_line(mxs_phy, false);
- 
- }
- 
-+/*
-+ * Set the usb current role for phy.
-+ */
-+static int mxs_phy_set_mode(struct usb_phy *phy,
-+		enum usb_current_mode mode)
-+{
-+	struct mxs_phy *mxs_phy = to_mxs_phy(phy);
-+
-+	mxs_phy->mode = mode;
-+
-+	return 0;
-+}
-+
- static int mxs_phy_init(struct usb_phy *phy)
- {
- 	int ret;
-@@ -796,6 +799,7 @@ static int mxs_phy_probe(struct platform_device *pdev)
- 	mxs_phy->phy.notify_disconnect	= mxs_phy_on_disconnect;
- 	mxs_phy->phy.type		= USB_PHY_TYPE_USB2;
- 	mxs_phy->phy.set_wakeup		= mxs_phy_set_wakeup;
-+	mxs_phy->phy.set_mode		= mxs_phy_set_mode;
- 	mxs_phy->phy.charger_detect	= mxs_phy_charger_detect;
- 
- 	mxs_phy->clk = clk;
--- 
-2.17.1
+Ala Stern
 
