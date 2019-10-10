@@ -2,97 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64937D2A07
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 14:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637F1D2A31
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 14:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387687AbfJJMxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 08:53:12 -0400
-Received: from smtp1.lauterbach.com ([62.154.241.196]:54527 "EHLO
-        smtp1.lauterbach.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387512AbfJJMxM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 08:53:12 -0400
-Received: (qmail 1943 invoked by uid 484); 10 Oct 2019 12:53:09 -0000
-X-Qmail-Scanner-Diagnostics: from 10.2.10.40 by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
- (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
- Clear:RC:1(10.2.10.40):. 
- Processed in 0.3351 secs); 10 Oct 2019 12:53:09 -0000
-Received: from unknown (HELO ingpc3.intern.lauterbach.com) (Authenticated_SSL:irohloff@[10.2.10.40])
-          (envelope-sender <ingo.rohloff@lauterbach.com>)
-          by smtp1.lauterbach.com (qmail-ldap-1.03) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <gregkh@linuxfoundation.org>; 10 Oct 2019 12:53:08 -0000
-Date:   Thu, 10 Oct 2019 14:53:08 +0200
-From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org
-Subject: Re: [PATCH] USB: usbfs: Suppress emission of uevents for interfaces
- handled via usbfs
-Message-ID: <20191010130913.5af35519@ingpc3.intern.lauterbach.com>
-In-Reply-To: <20191010102411.GA541845@kroah.com>
-References: <20191009123829.07eacc7f@ingpc3.intern.lauterbach.com>
-        <20191010102411.GA541845@kroah.com>
-Organization: Lauterbach GmbH
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S2387959AbfJJM6u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 08:58:50 -0400
+Received: from mail-lj1-f181.google.com ([209.85.208.181]:46501 "EHLO
+        mail-lj1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733300AbfJJM6t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 08:58:49 -0400
+Received: by mail-lj1-f181.google.com with SMTP id d1so6055210ljl.13;
+        Thu, 10 Oct 2019 05:58:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=me5AjClr8sL9m3SIk4xO4Mj+ZHOX0W4gkjY5Nq58ddc=;
+        b=LW8bzndmmobUaDngBIOKCXmxB20WUDCeFCrPH/KfkQdqw6nmeCcx3e6Y7F69MkgGjN
+         ICLod+cHIRyekuT6WFCBTEDOgvszrpnuJD5odxHSWGdvU8Fnfj3nmZxqqnmJBEPzyL/8
+         uG8G6uwfJX/Ang/5NhNKDgZe45Gcs+uwm3oeJFY2r6QKFV8UvgTDrBbkf0UzgQ4j3Hi2
+         LY907UQlmyKzzwKmQkYogre1hIotmfboE6xB7ZjeCVvknoHJLsUFo6RLXgi6l1DinSxs
+         v5wQ8nYWcX3DhAoEOn3ag3Dox46jtPk+Nuw1ImihJUHb/ajJDfx7C4FWXEppd2/gjeDS
+         cvtg==
+X-Gm-Message-State: APjAAAWE4nipAUYFIkeFjo6rXLg62IlL6/brrHFGhrD9qpx1T3/7hTXN
+        9a95sm8JuHhcOD60FSDfyJM=
+X-Google-Smtp-Source: APXvYqyvHoOv9SO9XA+/5htTzTT9dH15Yg60CXh78J3Qwz38m+gvRFcvZR3MVY6EC0rHP0WLO0mkXg==
+X-Received: by 2002:a2e:584b:: with SMTP id x11mr6504493ljd.90.1570712327335;
+        Thu, 10 Oct 2019 05:58:47 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id 207sm1488894lfn.0.2019.10.10.05.58.46
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Oct 2019 05:58:46 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iIY1w-00072o-Ou; Thu, 10 Oct 2019 14:58:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Juergen Stuber <starblue@users.sourceforge.net>,
+        Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] USB: misc: more disconnect fixes
+Date:   Thu, 10 Oct 2019 14:58:33 +0200
+Message-Id: <20191010125835.27031-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Greg
+Turns out we have more gems in these old drivers.
 
-> > +	else {
-> > +		/* suppress uevents for devices handled by usbfs */
-> > +		dev_set_uevent_suppress(&intf->dev, 1);
-> >  		err = usb_driver_claim_interface(&usbfs_driver, intf, ps);
-> > +		if (err != 0)  
-> > +			dev_set_uevent_suppress(&intf->dev, 0);
+Johan
 
-> Did checkpatch let this go through?  Shouldn't that be:
-> 		if (err)
 
-I actually wanted it the way it is, but it really might not be the best option.
-Let me explain:
-The main goal was to suppress bind/unbind uevents produced by libusb
-or any other user space program which calls
-ioctl USBDEVFS_CLAIMINTERFACE/USBDEVFS_RELEASEINTERFACE .
+Johan Hovold (2):
+  USB: ldusb: fix memleak on disconnect
+  USB: legousbtower: fix memleak on disconnect
 
-Now I can suppress uevents produced by usb_driver_claim_interface
-with the code above.
-But I was not sure how to handle the call to usb_driver_release_interface 
-from devio.c/releaseintf()
+ drivers/usb/misc/ldusb.c        | 5 +----
+ drivers/usb/misc/legousbtower.c | 5 +----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
 
-The strategy I used was: 
-1) Set suppression of uevents when user space program tries to claim interface
-2) If claiming the interface works, then KEEP uevents suppressed,
-   otherwise undo suppression.
-   That's why its "if err !=0"; error happened => undo suppression.
-3) When interface is released make sure suppression is undone AFTER unbinding the driver.
+-- 
+2.23.0
 
-Thinking about your comment: It might be better + simpler to just use
-1) Suppress uevents when calling usb_driver_claim_interface. Undo suppression right after the call.
-2) Suppress uevents when calling usb_driver_release_interface. Undo suppression right after the call.
-
-The main semantic problem I do not know about: 
-Is it correct to modify uevent suppression of an USB interface device 
-even if it CANNOT be claimed by usbfs ?
-I grepped the source code for usage of dev_set_uevent_suppress, but it seems not to be 100%
-clear how that should be used (sometimes uevents are only suppressed temporarily to implement
-a delay, sometimes they are actually kept suppressed).
-
-I will prepare/send an alternative.
-
-with best regards
-  Ingo
-
-PS:
-> ...
-> No need for this in the changelog body :)
-
-I should have read the documentation about how to send correct E-Mails for patches more intensively.
-I just found out about "git send-email" and had not set it up (did now...). I am sorry.
-
-> And did you send this patch twice?
-
-Unfortunately yes: I was struggling how to format this correctly.
