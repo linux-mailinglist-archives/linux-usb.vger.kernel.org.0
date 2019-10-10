@@ -2,111 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC15D221C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 09:50:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0009DD224D
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 10:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733093AbfJJHuP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 03:50:15 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:47031 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726864AbfJJHuO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 03:50:14 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q5so3328991pfg.13
-        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2019 00:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BMwVxKJ5pjT6AAme6CzPathy+GO4sDWlKBre4oI24yA=;
-        b=RFG6HwCYSDramAhQi1uVRJXiRCVoJbWbPFfqpgOBrr+ONoYndjuqcaaKVXq5mGam8b
-         NZtTefp9ssgMDcOeS44tvnd/S01DBUC/puqu1Pc1WrhMLPuHRw/wlomndD3BsbpSaPGb
-         gHUbAX/+u3EKiwTIyQl/RS16LhLTepVBNK6XM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BMwVxKJ5pjT6AAme6CzPathy+GO4sDWlKBre4oI24yA=;
-        b=YNDqX3HFuAMXIQW4mtd+unyxCUFOScd+Pyok9TH+6jcqMSW/qTW793q9GEhnaVRIVb
-         DH/cFzyvcNmqraIE+oKzjpLhaNWNfEWex5QDp2l05FdV5bmojs0LQrhdam+ngvjFeGBr
-         X+qJRPB528X5BLd1CrIrrWnGF7a2/CUD4e27bw/eHITqPuWSjeZcJElSS993y/vUvwuS
-         9rgz2NyOlA9Qsx+6fzetecUEFh2RkKMxjYo11N9QdhLKQ8mANlqbR1kTT1kuCVVYmCJj
-         HMS785OoaPrhspV8M/SpdVzlFvqNFpmt94zrxFn75ak8HLS+IFfE0zlggLJAh4OKfp7P
-         SeEw==
-X-Gm-Message-State: APjAAAVqcK2UuYraYxKIAxSRDFg5t0XzY0KHgwfrsdRE6iKRuCv2Z63C
-        gmk7nSIN9LnH3tdz5Zz+F6ZNt+EsLQl46Q==
-X-Google-Smtp-Source: APXvYqyImi2kgnGChUg2KfgfL+4s6k7vSPd2oI6xHbrOyAm/ZcqmRMonHqTVcAChWDBQgIDHwV/S+w==
-X-Received: by 2002:a63:4e09:: with SMTP id c9mr9163082pgb.98.1570693812256;
-        Thu, 10 Oct 2019 00:50:12 -0700 (PDT)
-Received: from tfiga.tok.corp.google.com ([2401:fa00:8f:203:f5fe:2a5e:f953:c0ed])
-        by smtp.gmail.com with ESMTPSA id 22sm4812489pfj.139.2019.10.10.00.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 00:50:11 -0700 (PDT)
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        id S1733116AbfJJIKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 04:10:16 -0400
+Received: from relay8-d.mail.gandi.net ([217.70.183.201]:33943 "EHLO
+        relay8-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732947AbfJJIKQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 04:10:16 -0400
+X-Originating-IP: 83.155.44.161
+Received: from classic (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
+        (Authenticated sender: hadess@hadess.net)
+        by relay8-d.mail.gandi.net (Postfix) with ESMTPSA id 68C531BF209;
+        Thu, 10 Oct 2019 08:10:13 +0000 (UTC)
+Message-ID: <28db57b47c9f0e7a7a8ad1b6c4bac70cdf96b450.camel@hadess.net>
+Subject: Re: [PATCH 2/5] USB: Make it possible to "subclass"
+ usb_device_driver
+From:   Bastien Nocera <hadess@hadess.net>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support),
-        linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC
-        support), linux-kernel@vger.kernel.org (open list),
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Changqi Hu <Changqi.Hu@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Shik Chen <shik@chromium.org>, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH] usb: mtk-xhci: Set the XHCI_NO_64BIT_SUPPORT quirk
-Date:   Thu, 10 Oct 2019 16:50:04 +0900
-Message-Id: <20191010075004.192818-1-tfiga@chromium.org>
-X-Mailer: git-send-email 2.23.0.581.g78d2f28ef7-goog
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 10 Oct 2019 10:10:12 +0200
+In-Reply-To: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1910091025500.1603-100000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MediaTek XHCI host controller does not support 64-bit addressing despite
-the AC64 bit of HCCPARAMS1 register being set. The platform-specific
-glue sets the DMA mask to 32 bits on its own, but it has no effect,
-because xhci_gen_setup() overrides it according to hardware
-capabilities.
+More replies inline (which I always miss)
 
-Use the XHCI_NO_64BIT_SUPPORT quirk to tell the XHCI core to force
-32-bit DMA mask instead.
+On Wed, 2019-10-09 at 10:34 -0400, Alan Stern wrote:
+> On Wed, 9 Oct 2019, Bastien Nocera wrote:
+> 
+> > The kernel currenly has only 2 usb_device_drivers, one generic one,
+> one
+> > that completely replaces the generic one to make USB devices usable
+> over
+> > a network.
+> 
+> Presumably your first driver is in generic.c.  Where is the second
+> one?
+> 
+> > Use the newly exported generic driver functions when a driver
+> declares
+> > to want them run, in addition to its own code. This makes it
+> possible to
+> > write drivers that extend the generic USB driver.
+> > 
+> > Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> 
+> This has a few problems.  The biggest one is that the device core
+> does 
+> not guarantee any order of driver probing.  If generic.c is probed 
+> first, the subclass driver will never get probed -- which is a
+> pretty 
+> fatal flaw.
+> 
+> > ---
+> >  drivers/usb/core/driver.c | 36 ++++++++++++++++++++++++++++++-----
+> -
+> >  include/linux/usb.h       |  1 +
+> >  2 files changed, 31 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> > index 2b27d232d7a7..863e380a272b 100644
+> > --- a/drivers/usb/core/driver.c
+> > +++ b/drivers/usb/core/driver.c
+> > @@ -261,10 +261,17 @@ static int usb_probe_device(struct device
+> *dev)
+> >        */
+> >       if (!udriver->supports_autosuspend)
+> >               error = usb_autoresume_device(udev);
+> > +     if (error)
+> > +             return error;
+> >  
+> > -     if (!error)
+> > -             error = udriver->probe(udev);
+> > -     return error;
+> > +     if (udriver->generic_init)
+> > +             error = usb_generic_driver_probe(udev);
+> > +     if (error)
+> > +             return error;
+> > +
+> > +     if (udriver->probe)
+> > +             return udriver->probe(udev);
+> > +     return 0;
+> >  }
+> >  
+> >  /* called from driver core with dev locked */
+> > @@ -273,7 +280,10 @@ static int usb_unbind_device(struct device
+> *dev)
+> >       struct usb_device *udev = to_usb_device(dev);
+> >       struct usb_device_driver *udriver = to_usb_device_driver(dev-
+> >driver);
+> >  
+> > -     udriver->disconnect(udev);
+> > +     if (udriver->generic_init)
+> > +             usb_generic_driver_disconnect(udev);
+> > +     if (udriver->disconnect)
+> > +             udriver->disconnect(udev);
+> 
+> The order is wrong.  The disconnects should always be done in
+> reverse 
+> order of probing.  This is true whenever you have a destructor for a 
+> subclass; the subclasses destructor runs before the superclass's 
+> destructor.
 
-Signed-off-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/usb/host/xhci-mtk.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Fixed. Fixed in the suspend function as well.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index b18a6baef204a..4d101d52cc11b 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -395,6 +395,11 @@ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
- 	if (mtk->lpm_support)
- 		xhci->quirks |= XHCI_LPM_SUPPORT;
-+	/*
-+	 * MTK host controller does not support 64-bit addressing, despite
-+	 * having the AC64 bit of the HCCPARAMS1 register set.
-+	 */
-+	xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
- }
- 
- /* called during probe() after chip reset completes */
-@@ -488,11 +493,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 		goto disable_clk;
- 	}
- 
--	/* Initialize dma_mask and coherent_dma_mask to 32-bits */
--	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
--	if (ret)
--		goto disable_clk;
--
- 	hcd = usb_create_hcd(driver, dev, dev_name(dev));
- 	if (!hcd) {
- 		ret = -ENOMEM;
--- 
-2.23.0.581.g78d2f28ef7-goog
+> >       if (!udriver->supports_autosuspend)
+> >               usb_autosuspend_device(udev);
+> >       return 0;
+> > @@ -886,6 +896,14 @@ int usb_register_device_driver(struct
+> usb_device_driver *new_udriver,
+> >       if (usb_disabled())
+> >               return -ENODEV;
+> >  
+> > +     if (new_udriver->probe == NULL &&
+> > +         !new_udriver->generic_init) {
+> 
+> There's no point adding this extra test.  Even subclass drivers
+> should 
+> have a probe function.
+
+Removed.
+
+> > +             printk(KERN_ERR "%s: error %d registering device "
+> > +                    "        driver %s, no probe() function\n",
+> 
+> Don't split character strings.  They are an exception to the 80-
+> column 
+> limit.
+
+I was using the error message just below in the function as an example.
+A bad one apparently. This is gone in any case.
+
+> > +                    usbcore_name, retval, new_udriver->name);
+> > +             return -EINVAL;
+> > +     }
+> > +
+> >       new_udriver->drvwrap.for_devices = 1;
+> >       new_udriver->drvwrap.driver.name = new_udriver->name;
+> >       new_udriver->drvwrap.driver.bus = &usb_bus_type;
+> > @@ -1149,7 +1167,10 @@ static int usb_suspend_device(struct
+> usb_device *udev, pm_message_t msg)
+> >               udev->do_remote_wakeup = 0;
+> >               udriver = &usb_generic_driver;
+> >       }
+> > -     status = udriver->suspend(udev, msg);
+> > +     if (udriver->generic_init)
+> > +             status = usb_generic_driver_suspend (udev, msg);
+> > +     if (status == 0 && udriver->suspend)
+> > +             status = udriver->suspend(udev, msg);
+> 
+> Again, the order is wrong.  Suspend the subclass driver first.
+
+Done, as mentioned above.
+
+> >   done:
+> >       dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
+> > @@ -1181,7 +1202,10 @@ static int usb_resume_device(struct
+> usb_device *udev, pm_message_t msg)
+> >               udev->reset_resume = 1;
+> >  
+> >       udriver = to_usb_device_driver(udev->dev.driver);
+> > -     status = udriver->resume(udev, msg);
+> > +     if (udriver->generic_init)
+> > +             status = usb_generic_driver_resume (udev, msg);
+> > +     if (status == 0 && udriver->resume)
+> > +             status = udriver->resume(udev, msg);
+> >  
+> >   done:
+> >       dev_vdbg(&udev->dev, "%s: status %d\n", __func__, status);
+> > diff --git a/include/linux/usb.h b/include/linux/usb.h
+> > index e656e7b4b1e4..fb9ad3511e55 100644
+> > --- a/include/linux/usb.h
+> > +++ b/include/linux/usb.h
+> > @@ -1242,6 +1242,7 @@ struct usb_device_driver {
+> >       const struct attribute_group **dev_groups;
+> >       struct usbdrv_wrap drvwrap;
+> >       unsigned int supports_autosuspend:1;
+> > +     unsigned int generic_init:1;
+> 
+> How about using a name that actually says something about the
+> driver?  
+> Such as generic_subclass?  Or subclass_of_generic?
+> 
+> "init" has nothing to do with anything.
+
+generic_subclass it will be. I've also documented it in the header.
+
+> >  };
+> >  #define      to_usb_device_driver(d) container_of(d, struct
+> usb_device_driver, \
+> >               drvwrap.driver)
+> 
+> Alan Stern
+> 
 
