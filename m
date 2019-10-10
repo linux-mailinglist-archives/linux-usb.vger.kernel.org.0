@@ -2,90 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D06BD2DEA
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 17:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E8BD2ED4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 18:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbfJJPjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 11:39:35 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34082 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbfJJPjf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 11:39:35 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b128so4168974pfa.1
-        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2019 08:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JwdlgT8hDAqNnvsbqVOgYcsV//b7oTzDiaICevRMAZs=;
-        b=qp4Qkf6UajxvdDRvinUc90yAtXwFc46gs1Wuf8ED91eEP20YKAQnI3j4i2AK1O4tji
-         KEq1bwkYRgc3Frpn/qJWtCZpGfxqsrHZ/9ibYaSelAK1KYZu+J9MRuCf49oA++W21p9B
-         69j6tC/ALqhDfcTKsaAc8git9bEtQhTpm6SxgrW+W2mM8WCzd/2K/s6Ij6lhD8BdEq+K
-         rmMdn5q4fFF6euUh6T9QMKVRYFyZANB7fM+ljcuSa9qS/1f2p2d+yf6YvyGXOBNP8J8x
-         V8QOdLAP58XwqQ1mPn0K3P1r2jCnlHeO5O/LQbhFN+8XpQ5o2G+6ZBkQX1a0Z6Va3qx+
-         oroA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JwdlgT8hDAqNnvsbqVOgYcsV//b7oTzDiaICevRMAZs=;
-        b=jgglI/WRJZIo/TrMvZCl8oaBZmcXM9h1qh9eH1Iem/8bxSS7JC25g5pzy9Bhzowxj+
-         wIPWpb83kD9HgzPWuXwu9DCB0SILsvGFtXToUgMtvYO33HUyNZkBlef/AexaVayfJcNA
-         hj2/tvXAmxEfM6rKm5KkYAEFSfx9v4RrQmRo3coN4h2+AXDr5BzC50avOXA8ATGkOifE
-         Yo1YjAYAIIC9TYNqlRdkBVWad1P9qBX3CsIr14GFghARlxGsySces6Vt9FsgWt5/VY3I
-         vEOwDlBo5X2ObR9gTXf2fyi4+z2F0BDLkbkuNgHcbkmtvEXA965PYdjplMNHjn/QKZ6O
-         XBhA==
-X-Gm-Message-State: APjAAAXORCvpN9HOIR5jRWkM3BgbJCl0jXtLehYAyApp2CEu8J2HyQD2
-        D+EFnh546Lbo4t4mVEgJ8xDSAGTThfpG1cHd91tarQ==
-X-Google-Smtp-Source: APXvYqw+JkpVmRn96tTeYYk+vPQV8eH0uQ37XfYipDQdUqOxhO2+fBUA7TpKmtXOohbzHWV15NvBj4eLKg1WtPjIMxY=
-X-Received: by 2002:a65:4c03:: with SMTP id u3mr11798981pgq.440.1570721973285;
- Thu, 10 Oct 2019 08:39:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.1909191639240.6904-100000@iolanthe.rowland.org> <000000000000f8d8a10592eed95f@google.com>
-In-Reply-To: <000000000000f8d8a10592eed95f@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 10 Oct 2019 17:39:22 +0200
-Message-ID: <CAAeHK+zRkoOje-irNLB-_0Vtgr1_Af-rxPv+=_8P3pqNd+YHQw@mail.gmail.com>
-Subject: Re: KASAN: invalid-free in disconnect_rio (2)
-To:     syzbot <syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Cesar Miquel <miquel@df.uba.ar>,
-        rio500-users@lists.sourceforge.net,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726184AbfJJQsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 12:48:15 -0400
+Received: from smtp1.lauterbach.com ([62.154.241.196]:57409 "EHLO
+        smtp1.lauterbach.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726178AbfJJQsP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 12:48:15 -0400
+Received: (qmail 584 invoked by uid 484); 10 Oct 2019 16:48:13 -0000
+X-Qmail-Scanner-Diagnostics: from 10.2.10.44 by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
+ (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
+ Clear:RC:1(10.2.10.44):. 
+ Processed in 0.085959 secs); 10 Oct 2019 16:48:13 -0000
+Received: from unknown (HELO ingpc2.intern.lauterbach.com) (Authenticated_SSL:irohloff@[10.2.10.44])
+          (envelope-sender <ingo.rohloff@lauterbach.com>)
+          by smtp1.lauterbach.com (qmail-ldap-1.03) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <linux-usb@vger.kernel.org>; 10 Oct 2019 16:48:12 -0000
+From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org
+Cc:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Subject: [PATCH] usb: usbfs: Suppress problematic bind and unbind uevents.
+Date:   Thu, 10 Oct 2019 18:48:00 +0200
+Message-Id: <20191010164800.2444-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 11:44 PM syzbot
-<syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot has tested the proposed patch and the reproducer did not trigger
-> crash:
->
-> Reported-and-tested-by:
-> syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com
->
-> Tested on:
->
-> commit:         e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=745b0dff8028f9488eba
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> patch:          https://syzkaller.appspot.com/x/patch.diff?x=15b3efc3600000
->
-> Note: testing is done by a robot and is best-effort only.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000f8d8a10592eed95f%40google.com.
+commit 1455cf8dbfd0 ("driver core: emit uevents when device is bound
+to a driver") added bind and unbind uevents when a driver is bound or
+unbound to a physical device.
 
-#syz fix: USB: rio500: Remove Rio 500 kernel driver
+For USB devices which are handled via the generic usbfs layer (via
+libusb for example), this is problematic:
+Each time a user space program calls
+   ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
+and then later
+   ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
+The kernel will now produce a bind or unbind event, which does not
+really contain any useful information.
+
+This allows a user space program to run a DoS attack against programs
+which listen to uevents (in particular systemd/eudev/upowerd):
+A malicious user space program just has to call in a tight loop
+
+   ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
+   ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
+
+With this loop the malicious user space program floods the kernel and
+all programs listening to uevents with tons of bind and unbind
+events.
+
+This patch suppresses uevents for ioctls USBDEVFS_CLAIMINTERFACE and
+USBDEVFS_RELEASEINTERFACE.
+
+Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+---
+ drivers/usb/core/devio.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 3f899552f6e3..6ca40d135430 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -764,8 +764,15 @@ static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
+ 	intf = usb_ifnum_to_if(dev, ifnum);
+ 	if (!intf)
+ 		err = -ENOENT;
+-	else
++	else {
++		unsigned int old_suppress;
++
++		/* suppress uevents while claiming interface */
++		old_suppress = dev_get_uevent_suppress(&intf->dev);
++		dev_set_uevent_suppress(&intf->dev, 1);
+ 		err = usb_driver_claim_interface(&usbfs_driver, intf, ps);
++		dev_set_uevent_suppress(&intf->dev, old_suppress);
++	}
+ 	if (err == 0)
+ 		set_bit(ifnum, &ps->ifclaimed);
+ 	return err;
+@@ -785,7 +792,13 @@ static int releaseintf(struct usb_dev_state *ps, unsigned int ifnum)
+ 	if (!intf)
+ 		err = -ENOENT;
+ 	else if (test_and_clear_bit(ifnum, &ps->ifclaimed)) {
++		unsigned int old_suppress;
++
++		/* suppress uevents while releasing interface */
++		old_suppress = dev_get_uevent_suppress(&intf->dev);
++		dev_set_uevent_suppress(&intf->dev, 1);
+ 		usb_driver_release_interface(&usbfs_driver, intf);
++		dev_set_uevent_suppress(&intf->dev, old_suppress);
+ 		err = 0;
+ 	}
+ 	return err;
+-- 
+2.17.1
+
