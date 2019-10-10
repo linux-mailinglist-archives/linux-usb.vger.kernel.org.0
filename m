@@ -2,77 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CDFD2AD2
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 15:17:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F1CD2BDF
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 15:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388313AbfJJNRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 09:17:46 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35501 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388328AbfJJNRp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 09:17:45 -0400
-Received: by mail-ot1-f67.google.com with SMTP id z6so4834350otb.2
-        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2019 06:17:45 -0700 (PDT)
+        id S1726132AbfJJN5L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 09:57:11 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41165 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725959AbfJJN5K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 09:57:10 -0400
+Received: by mail-wr1-f65.google.com with SMTP id q9so8027192wrm.8;
+        Thu, 10 Oct 2019 06:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
-         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
-         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
-         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
-         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
-         YqYQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=BI+X9/23+Lvr8h9vJlp7cjBXaJiIevfv3xHjpHNIvrc=;
+        b=AWRKwkWrp/jPWpCQAuNyzR/eF5h9hIwxFlb5RXrN521n9DPGGRADph3yS+BfIGqF+Z
+         2P/9yq5kzVo0QKGSijDzI8HYBVVMQyiNQ8GlySyCqExxqQFMLdwMcwc3N7KRD7NcMpJH
+         tAHV20qsYM0IC+TyFSHB4L13ZjGhdwFxYPBg1GX0BQa7eVSOo+QQXD/zHDosRM1Bs/EY
+         QhannvF7eHGqrYp58PPhC+nREvnJ0oqjuoid3xS9+kGkgiJClwHBqlseaKYcR3mnqT+1
+         lpvsM2gjOKzdZyxVJJMgHZCnAjBiqp0Uf2eW7pOuc6WMvHp8VmK21T571LYOEtWD4/G3
+         VF9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=KPEiqop/+i+ya9Unwo9Hz7viMg4acvI7LBAXjpPltn+lTVL8Z+ap6k959X0l7OvVA/
-         nqMv5Y3WYHpIffPJxd8XWVW7pI1H8yd3ydkwfVWvDoPKDL77SKcQ1No969H3x7fHWS9g
-         i6X7qavevIZehK+upv5T6r5KIfcZEWfBnGE7IrwiZuPkroMM6jcKo+BD9WQH2OpnQVWE
-         lS24bmlO1Dz3JaHYIKclvITM6EN0wQmfASjui4k08l3NpRCV5F1SMW/vIud7yZZfs3cc
-         Mve0Ts73i7U9JZuT9ON3kkOdPQ7opSstRfey+vO1qgFOJgUBB+ENIUb1mAP572wWzsJR
-         hmbQ==
-X-Gm-Message-State: APjAAAURU2KAMICk3ffVZjt7x98d3tVCyXIubl9HtwH03iOJZ3M2JsI+
-        m2vTwhzCj0mvBXJQaQVzun6Mk/JlBBox9v3htWqF
-X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
-X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
- Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
- -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   Valentina Yurina <v_yurina@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:17:41 +0100
-Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=BI+X9/23+Lvr8h9vJlp7cjBXaJiIevfv3xHjpHNIvrc=;
+        b=JcJHeyUYQiEAKbUERbTJwdehB85jfFDdONbu2ZySyuh7gyNsX3Eam46oaGJtUY2me8
+         UT2aCzSII8hH8ON7rpkLYrnKr8E7goG9Osf21ZV/X6Nql5S2Mf3bD4q9kXHLq+Gah4f6
+         Uh5lH8Y0uF5lDJLAbvYntkpW1BMiYeppcJ33lz9KcR3TpDDea2MIohVuDfK84L2Ypw0E
+         LqIOCg6dnuL8Cr9VETszItZB5QhZY0zci7VYLt3Xp26ysmwEAdOY7QhoGQmvaIMnciDr
+         f1P7Zl+4KYp+bXX0Ylgq3i2RO0PHfF25Iq2ASMZ5isYOq5ukmPmXb99Bs+kjCOvzfJQp
+         EA+Q==
+X-Gm-Message-State: APjAAAUl1P+Py5paYXk2Xxgo1KWsmBJ8a9Z3xq786mTIj5kOiKYun+ap
+        IljLbr3CR8t2Wcu4lMFAUUx1CyewmEU=
+X-Google-Smtp-Source: APXvYqx9xZon+o/bW79wbx03uRwh314eTdqElwNEpnJLMdjcHDrL1qCZkldI2UDo81i5d1UPOHrRLw==
+X-Received: by 2002:a5d:6447:: with SMTP id d7mr8801561wrw.247.1570715827786;
+        Thu, 10 Oct 2019 06:57:07 -0700 (PDT)
+Received: from localhost ([194.105.145.90])
+        by smtp.gmail.com with ESMTPSA id q15sm9125827wrg.65.2019.10.10.06.57.06
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 10 Oct 2019 06:57:06 -0700 (PDT)
+From:   Igor Opaniuk <igor.opaniuk@gmail.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan.agner@toradex.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+        Li Jun <jun.li@nxp.com>,
+        Igor Opaniuk <igor.opaniuk@toradex.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] usb: phy: add usb mode for usb_phy
+Date:   Thu, 10 Oct 2019 16:56:54 +0300
+Message-Id: <20191010135656.3264-1-igor.opaniuk@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Li Jun <jun.li@nxp.com>
+
+USB phy driver may need to know the current working mode of
+the controller, and can provide different settings according to
+host mode or device mode.
+
+Signed-off-by: Li Jun <jun.li@nxp.com>
+Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
+---
+
+v2:
+- restored original commit author
+- fixed build for multi_v7
+
+ include/linux/usb/phy.h | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..d138703e3688 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -63,6 +63,13 @@ enum usb_otg_state {
+ 	OTG_STATE_A_VBUS_ERR,
+ };
+ 
++/* The usb role of phy to be working with */
++enum usb_current_mode {
++	USB_CURRENT_MODE_NONE,
++	USB_CURRENT_MODE_HOST,
++	USB_CURRENT_MODE_DEVICE,
++};
++
+ struct usb_phy;
+ struct usb_otg;
+ 
+@@ -155,6 +162,13 @@ struct usb_phy {
+ 	 * manually detect the charger type.
+ 	 */
+ 	enum usb_charger_type (*charger_detect)(struct usb_phy *x);
++
++	/*
++	 * Set current working mode of the USB controller
++	 * (device, host)
++	 */
++	int	(*set_mode)(struct usb_phy *x,
++			enum usb_current_mode mode);
+ };
+ 
+ /* for board-specific init logic */
+@@ -213,6 +227,15 @@ usb_phy_vbus_off(struct usb_phy *x)
+ 	return x->set_vbus(x, false);
+ }
+ 
++static inline int
++usb_phy_set_mode(struct usb_phy *x, enum usb_current_mode mode)
++{
++	if (!x || !x->set_mode)
++		return 0;
++
++	return x->set_mode(x, mode);
++}
++
+ /* for usb host and peripheral controller drivers */
+ #if IS_ENABLED(CONFIG_USB_PHY)
+ extern struct usb_phy *usb_get_phy(enum usb_phy_type type);
 -- 
-Hello,
+2.17.1
 
-We are private lenders based in UK.
-
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
-
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
-
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
-
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
