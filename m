@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D50D2DDF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 17:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D06BD2DEA
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 17:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbfJJPhH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 11:37:07 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46501 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726166AbfJJPhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 11:37:07 -0400
-Received: by mail-pl1-f193.google.com with SMTP id q24so2954867plr.13
-        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2019 08:37:07 -0700 (PDT)
+        id S1726083AbfJJPjf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 11:39:35 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:34082 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726007AbfJJPjf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 11:39:35 -0400
+Received: by mail-pf1-f196.google.com with SMTP id b128so4168974pfa.1
+        for <linux-usb@vger.kernel.org>; Thu, 10 Oct 2019 08:39:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=h2rFG8brthk+yAj45DH5mKNIDigDVTcT8mTC8jWGGo0=;
-        b=JOoBJWqSyjf6X8szeBRsDC6LkOh5ptq4UUCbbCWkPyb7EsSTEb3M6NXtkyyJ7TX9as
-         eP3KlHAf34IAV4FEq/lpIc/5Ep+JxDRdwJBer0BnpWVIpzeDOMzNIKDQdlz/Jo2+URl1
-         Wa9pOZHaNYb/mX5Kkxjo4T2vxRH6hSoQHL2kP1pg/HLJ3onEm25CKU6QsBO2GZfhJer1
-         oyrys/Re0wx1hofXKtgO39DWHccjHdmvKpMeqQZ+cmDm4U3KTviLdPsFXyhSk2sDCr+8
-         TSnm8V2ieaY4tjv9Xdef0frjl7K5oczyJLijEUpOcXn5eOBZnbIveAEwAajyxaMgqtgf
-         SJZw==
+        bh=JwdlgT8hDAqNnvsbqVOgYcsV//b7oTzDiaICevRMAZs=;
+        b=qp4Qkf6UajxvdDRvinUc90yAtXwFc46gs1Wuf8ED91eEP20YKAQnI3j4i2AK1O4tji
+         KEq1bwkYRgc3Frpn/qJWtCZpGfxqsrHZ/9ibYaSelAK1KYZu+J9MRuCf49oA++W21p9B
+         69j6tC/ALqhDfcTKsaAc8git9bEtQhTpm6SxgrW+W2mM8WCzd/2K/s6Ij6lhD8BdEq+K
+         rmMdn5q4fFF6euUh6T9QMKVRYFyZANB7fM+ljcuSa9qS/1f2p2d+yf6YvyGXOBNP8J8x
+         V8QOdLAP58XwqQ1mPn0K3P1r2jCnlHeO5O/LQbhFN+8XpQ5o2G+6ZBkQX1a0Z6Va3qx+
+         oroA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=h2rFG8brthk+yAj45DH5mKNIDigDVTcT8mTC8jWGGo0=;
-        b=Wh8EY6/Oe87NwGmY8ABlCmN8gqYj1rtDiUL7ryczXn5wtPIzlBJ4xWyq4oxfjCiShv
-         Vhp7U3VJbYLMI2dXRmmUgRS/UN0S5E/2QHdzZgUTIWYNM9zafs9LQiHPwqN3JfFXwvIF
-         ibfa77rN9DKZfmyd2ORLYIlV269ATVKe4SHRfPzxwDytAMXIdpqySrO3aRXEFDeTl11m
-         1WOZL17REQ6NqkeXR4/m/zSKPR95qGwNJmf4HWLNMAna098DvNrBpxzdvzfMf8HRWDBX
-         p3rLjZcOqyEUoj2f6z6wPKHm+FJSO8gHa6TxvhDO+OW6S+cqIgAZSuZQOQtkNoMgNIAk
-         GJ5w==
-X-Gm-Message-State: APjAAAUrTRYBbOy3M2z6VpjrEfAXfKrbCk5FH6LqKUtd20jtnqF1uf/b
-        GiH0KsoPsUeZ0Gl4YLCHG/NYF/CGcpHWkHKYyBxTC/hzIu4=
-X-Google-Smtp-Source: APXvYqzeI6lIk0oZVnkyUaIveVA3axZTTzjzdyNo7JQ7knndG80eRIVovNFBN8bSwTYsZVBJ0Ey/9v1Jkvcn6z2mQOI=
-X-Received: by 2002:a17:902:9696:: with SMTP id n22mr9390927plp.252.1570721826604;
- Thu, 10 Oct 2019 08:37:06 -0700 (PDT)
+        bh=JwdlgT8hDAqNnvsbqVOgYcsV//b7oTzDiaICevRMAZs=;
+        b=jgglI/WRJZIo/TrMvZCl8oaBZmcXM9h1qh9eH1Iem/8bxSS7JC25g5pzy9Bhzowxj+
+         wIPWpb83kD9HgzPWuXwu9DCB0SILsvGFtXToUgMtvYO33HUyNZkBlef/AexaVayfJcNA
+         hj2/tvXAmxEfM6rKm5KkYAEFSfx9v4RrQmRo3coN4h2+AXDr5BzC50avOXA8ATGkOifE
+         Yo1YjAYAIIC9TYNqlRdkBVWad1P9qBX3CsIr14GFghARlxGsySces6Vt9FsgWt5/VY3I
+         vEOwDlBo5X2ObR9gTXf2fyi4+z2F0BDLkbkuNgHcbkmtvEXA965PYdjplMNHjn/QKZ6O
+         XBhA==
+X-Gm-Message-State: APjAAAXORCvpN9HOIR5jRWkM3BgbJCl0jXtLehYAyApp2CEu8J2HyQD2
+        D+EFnh546Lbo4t4mVEgJ8xDSAGTThfpG1cHd91tarQ==
+X-Google-Smtp-Source: APXvYqw+JkpVmRn96tTeYYk+vPQV8eH0uQ37XfYipDQdUqOxhO2+fBUA7TpKmtXOohbzHWV15NvBj4eLKg1WtPjIMxY=
+X-Received: by 2002:a65:4c03:: with SMTP id u3mr11798981pgq.440.1570721973285;
+ Thu, 10 Oct 2019 08:39:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAeHK+wE8ngx2Pa9=vD6Fw6MCbHpxfX6ss97deQUsmGD_Bw_Bw@mail.gmail.com>
- <Pine.LNX.4.44L0.1909241031550.6144-100000@netrider.rowland.org> <20190924143804.GA623902@kroah.com>
-In-Reply-To: <20190924143804.GA623902@kroah.com>
+References: <Pine.LNX.4.44L0.1909191639240.6904-100000@iolanthe.rowland.org> <000000000000f8d8a10592eed95f@google.com>
+In-Reply-To: <000000000000f8d8a10592eed95f@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 10 Oct 2019 17:36:55 +0200
-Message-ID: <CAAeHK+yj91+aNcyrAhWr8UGjSQdWqs0ZMHe3wAaBSvf=mjaCyw@mail.gmail.com>
-Subject: Re: general protection fault in open_rio
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+dbd38fbb686a9681143a@syzkaller.appspotmail.com>,
+Date:   Thu, 10 Oct 2019 17:39:22 +0200
+Message-ID: <CAAeHK+zRkoOje-irNLB-_0Vtgr1_Af-rxPv+=_8P3pqNd+YHQw@mail.gmail.com>
+Subject: Re: KASAN: invalid-free in disconnect_rio (2)
+To:     syzbot <syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Cesar Miquel <miquel@df.uba.ar>,
+        rio500-users@lists.sourceforge.net,
+        Alan Stern <stern@rowland.harvard.edu>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
@@ -61,43 +61,31 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Sep 24, 2019 at 4:38 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Thu, Sep 19, 2019 at 11:44 PM syzbot
+<syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com> wrote:
 >
-> On Tue, Sep 24, 2019 at 10:33:12AM -0400, Alan Stern wrote:
-> > On Tue, 24 Sep 2019, Andrey Konovalov wrote:
-> >
-> > > On Tue, Sep 24, 2019 at 4:19 PM syzbot
-> > > <syzbot+dbd38fbb686a9681143a@syzkaller.appspotmail.com> wrote:
-> > > >
-> > > > Hello,
-> > > >
-> > > > syzbot found the following crash on:
-> > > >
-> > > > HEAD commit:    d9e63adc usb-fuzzer: main usb gadget fuzzer driver
-> > > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1602b303600000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=f4fa60e981ee8e6a
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=dbd38fbb686a9681143a
-> > > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this crash yet.
-> > > >
-> > > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > > > Reported-by: syzbot+dbd38fbb686a9681143a@syzkaller.appspotmail.com
-> >
-> > > Most probably the same bug:
-> > >
-> > > https://syzkaller.appspot.com/bug?extid=745b0dff8028f9488eba
-> > >
-> > > #syz dup: KASAN: invalid-free in disconnect_rio (2)
-> >
-> > Even more to the point, a patch was recently posted to the mailing list
-> > to remove the rio500 driver entirely:
-> >
-> >       https://marc.info/?l=linux-usb&m=156925553004947&w=2
+> Hello,
 >
-> I'll be queueing this up and just marking the driver BROKEN on older
-> kernels to solve all of these issues :)
+> syzbot has tested the proposed patch and the reproducer did not trigger
+> crash:
+>
+> Reported-and-tested-by:
+> syzbot+745b0dff8028f9488eba@syzkaller.appspotmail.com
+>
+> Tested on:
+>
+> commit:         e0bd8d79 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8847e5384a16f66a
+> dashboard link: https://syzkaller.appspot.com/bug?extid=745b0dff8028f9488eba
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> patch:          https://syzkaller.appspot.com/x/patch.diff?x=15b3efc3600000
+>
+> Note: testing is done by a robot and is best-effort only.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000f8d8a10592eed95f%40google.com.
 
 #syz fix: USB: rio500: Remove Rio 500 kernel driver
