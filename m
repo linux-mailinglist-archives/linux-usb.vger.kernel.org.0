@@ -2,76 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E337D296C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 14:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64937D2A07
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Oct 2019 14:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728305AbfJJMYa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Oct 2019 08:24:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727800AbfJJMYa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Oct 2019 08:24:30 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 00DA62064A;
-        Thu, 10 Oct 2019 12:24:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570710269;
-        bh=V6Im9tIruuo5nEvuNj2TYE6nnP2KSGGLoqkQxLOo1Rg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vE005q4Dy9h01CqRYK7q5jjWARTiVtFAM+i+HEH6av5S/ONj6l1u+XVHiQux6YEJI
-         KD8y237gGMVO/3gGWma4xJaVvbUHNAcl+7HvNTJkZLrkRPQJ8skXNSEvKnN3pB6b/8
-         lyn1k0I5QDuvKQ74B12TcsIjO51ZnBYyPD+EaADQ=
-Date:   Thu, 10 Oct 2019 14:24:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Keith Packard <keithp@keithp.com>,
-        Juergen Stuber <starblue@users.sourceforge.net>,
-        stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 5/5] USB: yurex: fix NULL-derefs on disconnect
-Message-ID: <20191010122426.GA702899@kroah.com>
-References: <20191009153848.8664-1-johan@kernel.org>
- <20191009153848.8664-6-johan@kernel.org>
- <20191010110532.GC27819@localhost>
+        id S2387687AbfJJMxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Oct 2019 08:53:12 -0400
+Received: from smtp1.lauterbach.com ([62.154.241.196]:54527 "EHLO
+        smtp1.lauterbach.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387512AbfJJMxM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Oct 2019 08:53:12 -0400
+Received: (qmail 1943 invoked by uid 484); 10 Oct 2019 12:53:09 -0000
+X-Qmail-Scanner-Diagnostics: from 10.2.10.40 by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
+ (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
+ Clear:RC:1(10.2.10.40):. 
+ Processed in 0.3351 secs); 10 Oct 2019 12:53:09 -0000
+Received: from unknown (HELO ingpc3.intern.lauterbach.com) (Authenticated_SSL:irohloff@[10.2.10.40])
+          (envelope-sender <ingo.rohloff@lauterbach.com>)
+          by smtp1.lauterbach.com (qmail-ldap-1.03) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <gregkh@linuxfoundation.org>; 10 Oct 2019 12:53:08 -0000
+Date:   Thu, 10 Oct 2019 14:53:08 +0200
+From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org
+Subject: Re: [PATCH] USB: usbfs: Suppress emission of uevents for interfaces
+ handled via usbfs
+Message-ID: <20191010130913.5af35519@ingpc3.intern.lauterbach.com>
+In-Reply-To: <20191010102411.GA541845@kroah.com>
+References: <20191009123829.07eacc7f@ingpc3.intern.lauterbach.com>
+        <20191010102411.GA541845@kroah.com>
+Organization: Lauterbach GmbH
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191010110532.GC27819@localhost>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 01:05:32PM +0200, Johan Hovold wrote:
-> On Wed, Oct 09, 2019 at 05:38:48PM +0200, Johan Hovold wrote:
-> > The driver was using its struct usb_interface pointer as an inverted
-> > disconnected flag, but was setting it to NULL without making sure all
-> > code paths that used it were done with it.
-> > 
-> > Before commit ef61eb43ada6 ("USB: yurex: Fix protection fault after
-> > device removal") this included the interrupt-in completion handler, but
-> > there are further accesses in dev_err and dev_dbg statements in
-> > yurex_write() and the driver-data destructor (sic!).
-> > 
-> > Fix this by unconditionally stopping also the control URB at disconnect
-> > and by using a dedicated disconnected flag.
-> > 
-> > Note that we need to take a reference to the struct usb_interface to
-> > avoid a use-after-free in the destructor whenever the device was
-> > disconnected while the character device was still open.
-> > 
-> > Fixes: aadd6472d904 ("USB: yurex.c: remove dbg() usage")
-> > Fixes: 45714104b9e8 ("USB: yurex.c: remove err() usage")
-> > Cc: stable <stable@vger.kernel.org>     # 3.5: ef61eb43ada6
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> 
-> Greg, I noticed that you picked up all patches in this series except
-> this last one.
-> 
-> Was that one purpose or by mistake?
+Hello Greg
 
-Mistake, thanks for catching that.  Now queued up.
+> > +	else {
+> > +		/* suppress uevents for devices handled by usbfs */
+> > +		dev_set_uevent_suppress(&intf->dev, 1);
+> >  		err = usb_driver_claim_interface(&usbfs_driver, intf, ps);
+> > +		if (err != 0)  
+> > +			dev_set_uevent_suppress(&intf->dev, 0);
 
-greg k-h
+> Did checkpatch let this go through?  Shouldn't that be:
+> 		if (err)
+
+I actually wanted it the way it is, but it really might not be the best option.
+Let me explain:
+The main goal was to suppress bind/unbind uevents produced by libusb
+or any other user space program which calls
+ioctl USBDEVFS_CLAIMINTERFACE/USBDEVFS_RELEASEINTERFACE .
+
+Now I can suppress uevents produced by usb_driver_claim_interface
+with the code above.
+But I was not sure how to handle the call to usb_driver_release_interface 
+from devio.c/releaseintf()
+
+The strategy I used was: 
+1) Set suppression of uevents when user space program tries to claim interface
+2) If claiming the interface works, then KEEP uevents suppressed,
+   otherwise undo suppression.
+   That's why its "if err !=0"; error happened => undo suppression.
+3) When interface is released make sure suppression is undone AFTER unbinding the driver.
+
+Thinking about your comment: It might be better + simpler to just use
+1) Suppress uevents when calling usb_driver_claim_interface. Undo suppression right after the call.
+2) Suppress uevents when calling usb_driver_release_interface. Undo suppression right after the call.
+
+The main semantic problem I do not know about: 
+Is it correct to modify uevent suppression of an USB interface device 
+even if it CANNOT be claimed by usbfs ?
+I grepped the source code for usage of dev_set_uevent_suppress, but it seems not to be 100%
+clear how that should be used (sometimes uevents are only suppressed temporarily to implement
+a delay, sometimes they are actually kept suppressed).
+
+I will prepare/send an alternative.
+
+with best regards
+  Ingo
+
+PS:
+> ...
+> No need for this in the changelog body :)
+
+I should have read the documentation about how to send correct E-Mails for patches more intensively.
+I just found out about "git send-email" and had not set it up (did now...). I am sorry.
+
+> And did you send this patch twice?
+
+Unfortunately yes: I was struggling how to format this correctly.
