@@ -2,109 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47053D449E
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 17:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29434D44C8
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 17:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728096AbfJKPmC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 11:42:02 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:41346 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727149AbfJKPmC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 11:42:02 -0400
-Received: by mail-io1-f69.google.com with SMTP id q18so15127309ios.8
-        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2019 08:42:01 -0700 (PDT)
+        id S1728142AbfJKPv1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 11:51:27 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:34045 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728086AbfJKPv0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 11:51:26 -0400
+Received: by mail-ot1-f65.google.com with SMTP id m19so8384187otp.1;
+        Fri, 11 Oct 2019 08:51:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=kFsPfbIuVLLP06mBsnv++deRNxJoBeYlYpS0DCBKJRY=;
-        b=hZeZvRpFrEW0XX0frAgc3PEzrKTDD+kk3y7iqQGDwK7/ZKb3zevlqw91MI+ULmZ/sC
-         haOP+8rP+wiNQcmxbuIQ0NEmImCcUZQXPqO91qEnDBa/I2OsFaTSDxXbX6Vj3e/Otlt+
-         lhqDON2SbWScPxXuuzIcZiJU/YkDLFdN/S08VvEaJa47MwL+JMa81FYMcz/GollJuySr
-         Ch11DrxvuJP/bgGZZmT2Mn7KEYz+cq5A8q8f+xgMm2G0vh2TrdYVgcg0AULQ6cL1qOqO
-         tTsjBQCoBxAZCA4XTYL7QGUEV7rzmVJXCkNJSz/FEsEDRv0Z/TjYdmvok7nHFFuHonTj
-         14Og==
-X-Gm-Message-State: APjAAAXZp2D0mOXTY21J3tf3Wdkrs5vvza5FIQYeGcAAThPcXVSQU6vY
-        zeZaU9XEGREG8n6xtvBGN4RTawpfez5gAR0xsJUle2I0/huS
-X-Google-Smtp-Source: APXvYqxXLVkmWggCu+Lv+8QrqPqjahv/fK5bYpGS0bKVyVgxGg2uLnvbq0VxIpHqkH2HZnuRzFPxtwoZNQtlC05V5hfbsFmrBVIb
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Y/QLZGzKlqPXEYz4XBHb6fc2z++j0NNAuKvWxwrnWJg=;
+        b=ec9NzZUpmc0uLkvW1tOSgjCPKMLt9xvqzSaW1wdr6BXn1pXtR5/MfGNBTCiIb/Awjq
+         F/4vQAqh3GMKlZGW7TGvI09CAj7uGcMwHuMUKREdqY88KZa2GTBgWc2NVsYOsVhsRl/W
+         UaD+F/y5Luf70XKJjZUz5Q5cAJyG5iK0ZOkL5U8aFbDpCLlaX0rZiLZny1h99JK2SbSu
+         xsOrXdl82GZL8v4JQIsFY4arKf0ElW+4c42JGtnc8eyjlW3jdTJtqk2Okn+EG/xe+YR4
+         Iqwr6HHancxMvJGCttYL2MdyZLqmVtcqc12DBljO7k0smR3zqFMyFlRpkvYQzhF4acRW
+         LVAw==
+X-Gm-Message-State: APjAAAUsW6M5ba/q6+yZ6jMQC7MZNKT1tNCtXAkOIUFIx7l3KWqL3g5e
+        ymM5DxACq0NwOPLPnbzIeA==
+X-Google-Smtp-Source: APXvYqzMiRb5PqzKa+7EMBkhL+RYTJ4w67wtnTkU2oNcHr3BX8SzjO7iCTP7LdvIaXqRtBxNK69+Rg==
+X-Received: by 2002:a9d:7844:: with SMTP id c4mr9137267otm.273.1570809085207;
+        Fri, 11 Oct 2019 08:51:25 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 17sm2625595oiz.3.2019.10.11.08.51.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2019 08:51:24 -0700 (PDT)
+Date:   Fri, 11 Oct 2019 10:51:23 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Subject: Re: [RFC][PATCH v2 4/5] dt-bindings: usb: dwc3: of-simple: add
+ compatible for HiSi
+Message-ID: <20191011155123.GA14272@bogus>
+References: <20191007175553.66940-1-john.stultz@linaro.org>
+ <20191007175553.66940-5-john.stultz@linaro.org>
+ <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+ <CALAqxLWB7Vd-H70LLLSW0Fv=_4-saQ9CE2k3-L_43E+F8mLj2w@mail.gmail.com>
+ <CAL_JsqJ9uUtqTDEkLi86-BCvW+wM6Pgz_K+JuTsuOqHfFOHStA@mail.gmail.com>
+ <CALAqxLVpPvHf2RpwjHh5v9cnQm9CLtj0HHaqVH=EFQJk-GhaPQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:9b04:: with SMTP id j4mr106545iok.45.1570808521184;
- Fri, 11 Oct 2019 08:42:01 -0700 (PDT)
-Date:   Fri, 11 Oct 2019 08:42:01 -0700
-In-Reply-To: <CAG_fn=WsN0d8VO6=4jtDP9rHqBMp0zBvJQ7qrvQhZkkaj6NNsg@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ea5bf90594a45b81@google.com>
-Subject: Re: KMSAN: uninit-value in alauda_check_media
-From:   syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>
-To:     glider@google.com, gregkh@linuxfoundation.org,
-        jaskaransingh7654321@gmail.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com,
-        usb-storage@lists.one-eyed-alien.net
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALAqxLVpPvHf2RpwjHh5v9cnQm9CLtj0HHaqVH=EFQJk-GhaPQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Oct 07, 2019 at 04:00:24PM -0700, John Stultz wrote:
+> On Mon, Oct 7, 2019 at 2:11 PM Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Mon, Oct 7, 2019 at 2:07 PM John Stultz <john.stultz@linaro.org> wrote:
+> > >
+> > > On Mon, Oct 7, 2019 at 11:38 AM Rob Herring <robh+dt@kernel.org> wrote:
+> > > >
+> > > > On Mon, Oct 7, 2019 at 12:56 PM John Stultz <john.stultz@linaro.org> wrote:
+> > > > >
+> > > > > Add necessary compatible flag for HiSi's DWC3 so
+> > > > > dwc3-of-simple will probe.
+> > > > >
+> > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > Cc: Felipe Balbi <balbi@kernel.org>
+> > > > > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > > > Cc: Yu Chen <chenyu56@huawei.com>
+> > > > > Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> > > > > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > Cc: linux-usb@vger.kernel.org
+> > > > > Cc: devicetree@vger.kernel.org
+> > > > > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > > > > ---
+> > > > > v2: Tweaked clock names as clk_usb3phy_ref didn't seem right.
+> > > > > ---
+> > > > >  .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
+> > > > >  1 file changed, 52 insertions(+)
+> > > > >  create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> > > >
+> > > > Can you make this a schema.
+> > >
+> > > Sorry, I'm not sure exactly what you're asking. I'm guessing from
+> > > grepping around you want the bindings in yaml instead (I see a few
+> > > examples)?
+> >
+> > Yes.
+> >
+> > > Is there some pointer to documentation? The
+> > > Documentation/devicetree/bindings/writing-bindings.txt file doesn't
+> > > seem to say much on it.
+> >
+> > You mean Documentation/devicetree/writing-schemas.rst? There's that
+> > and Documentation/devicetree/bindings/example-schema.yaml which has a
+> > bunch of annotations on what each part means.
+> 
+> Ah! Sorry for missing that. Thanks for the pointer, though I may get
+> away with dropping this one.
+> 
+> > > > If it's only clocks and resets for the wrapper node, just make this
+> > > > all one node.
+> > >
+> > > Just to make sure I'm following, you're suggesting I put all the
+> > > clocks/resets in the dwc3 node (renamed to usb for the node name) and
+> > > not add the wrapper?
+> >
+> > Yes.
+> >
+> > > I'll have to see if that's possible. The generic dwc3 binding wants 3
+> > > clocks, but I only have two in the code I've worked with (similarly it
+> > > seems to only want two resets, not 4) so I'll have to see if I can
+> > > figure out how to adapt that.
+> >
+> > Possible since commit fe8abf332b8f ("usb: dwc3: support clocks and
+> > resets for DWC3 core").
+> 
+> Ok. It *seems* like I can get it working with the existing binding
+> then. There's a little funkiness with the core expecting three clocks
+> while I only have two (currently I'm duplicating the "bus_early" clk
+> for "suspend". Is there a preferred way to do this sort of hack?), and
+> I'm a little worried that only the first reset is being used (instead
+> of the 4 specified), but it seems to work so far.
 
-syzbot has tested the proposed patch but the reproducer still triggered  
-crash:
-KMSAN: uninit-value in alauda_check_media
+I would assume that you simply don't know how the 'suspend' clock is 
+connected rather than you don't have one. But that's maybe not a 
+problem you can fix.
 
-=====================================================
-BUG: KMSAN: uninit-value in alauda_transport+0x462/0x57f0  
-drivers/usb/storage/alauda.c:1138
-CPU: 1 PID: 11015 Comm: usb-storage Not tainted 5.4.0-rc2+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x14c/0x2c0 mm/kmsan/kmsan_report.c:110
-  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:245
-  alauda_check_media+0x344/0x3310 drivers/usb/storage/alauda.c:461
-  alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1138
-  usb_stor_invoke_transport+0xf5/0x27e0 drivers/usb/storage/transport.c:606
-  usb_stor_transparent_scsi_command+0x5d/0x70  
-drivers/usb/storage/protocol.c:108
-  usb_stor_control_thread+0xca6/0x11a0 drivers/usb/storage/usb.c:380
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-
-Local variable description: ----status@alauda_check_media
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 11015 Comm: usb-storage Tainted: G    B             5.4.0-rc2+  
-#0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  panic+0x3c9/0xc1e kernel/panic.c:220
-  kmsan_report+0x2b4/0x2c0 mm/kmsan/kmsan_report.c:133
-  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:245
-  alauda_check_media+0x344/0x3310 drivers/usb/storage/alauda.c:461
-  alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1138
-  usb_stor_invoke_transport+0xf5/0x27e0 drivers/usb/storage/transport.c:606
-  usb_stor_transparent_scsi_command+0x5d/0x70  
-drivers/usb/storage/protocol.c:108
-  usb_stor_control_thread+0xca6/0x11a0 drivers/usb/storage/usb.c:380
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+I would make dwc3 use devm_clk_bulk_get_all and allow for less than 3 
+clocks. And do a similar change for resets.
 
 
-Tested on:
+> I still suspect the dwc3-of-simple.c method might be better since it
+> can handle arbitrary sets of clks and resets instead of the fixed 3 &
+> 1 in the dwc3.txt binding.
+> But if I can get away without having to add an extra binding here, I'd
+> be happier.
 
-commit:         c40e5c97 kmsan: drop some dead code in kmsan_shadow.c
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=153ba453600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=49548798e87d32d7
-dashboard link: https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
+Me too.
 
+Rob
