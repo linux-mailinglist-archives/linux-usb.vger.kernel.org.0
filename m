@@ -2,112 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F09BD388D
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 06:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B4BD38BD
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 07:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726255AbfJKElf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 00:41:35 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:57909 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726099AbfJKElf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 00:41:35 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D023621D26;
-        Fri, 11 Oct 2019 00:41:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 11 Oct 2019 00:41:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=5/+iOpELycZpC0MTwhVfynJi15W
-        sJNom1anWUYNAIKQ=; b=Q2x46KaLO9bvgEU4XcN4XBeFWhm6w5lD50wC5E7Yr9j
-        2SqKFUQWUFlavURDbtqP9yZI2HnRixtn0AXXpgF2P1gHdh+0UeTQyAgZhUEzdPZ9
-        t4nkH3WwaFV4TU0Fovuz3ty16eN52/9hFnYwkdj3Vf06bRC5IwKr3HbeY98ypxcm
-        WjSI7pVoJQNc3I+JOFwQMLZw47dXW9KWEifGc0l9l4VDbfMaN+H2qMzlGIhNno8H
-        3fWUd3aWaUJZzuUWTl2rX2hxp6Z59mwJZfHfNv9hXcmDNE1aSgnz1XgcyGwpcMxd
-        BEH5pZKHCzYPEA4Gjl2/Hy2N8Bx1sM4gXJr9HMJ4+Dg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=5/+iOp
-        ELycZpC0MTwhVfynJi15WsJNom1anWUYNAIKQ=; b=GMnMCqwfOCLU/RWSFkszEF
-        FHeebUYLHrqg6ZWyUE9qlarhvEJR83S/TrTbjXfoMsHFDpPNWqy0dvgTHgzq8YWf
-        YFfRlbEQ+TswA6WEscJVbnTQWm3rNFPdeuP7G2h6+06zA0EWOmhf4zQaXMyuRKIO
-        ehZkr2+APNmMk8DNcjcWu9UHrOj2eIlNzWUZS4IptlcBoZM61Z6R3X8MrbnMr4Iy
-        roE1+Z2dEQKV+7IfeX49CrN1IY5q13oZpsIL44QKavJ/3D0/5IlcQ+5boAmQC6QF
-        7ke4TwiW/cs7Z8O2gg2Rwene8rPPo+HQmC2tI69hfz55VfX8zTCC48DvIsPyoULQ
-        ==
-X-ME-Sender: <xms:_gegXXzPXbC2iu9w9l4sqKv-buRdNXNOiiChi52sxyl7Ald85hhCxQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrieeggdekiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
-    ejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhenucev
-    lhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:_gegXYkvmBJ7irozfPll8Nkh49la_iWE-xjUDIuapX3vom97g88IJw>
-    <xmx:_gegXYkiQ6y0qi-Zw6DIrkHHeZEZWMWxtOYDyszgzdkrX14wiN_YPg>
-    <xmx:_gegXSzpGN1861wNmNpLbPUdvWrzhmnuskxBk8IllUp9aJ5pDIWBKA>
-    <xmx:_gegXejO8ytZBTuIHlfs-hSPm1QKEvTROJhYCa2h4Z38kbYn5zK6QA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id EB77380059;
-        Fri, 11 Oct 2019 00:41:33 -0400 (EDT)
-Date:   Fri, 11 Oct 2019 06:41:32 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
-Cc:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org
-Subject: Re: [PATCH] usb: usbfs: Suppress problematic bind and unbind uevents.
-Message-ID: <20191011044132.GA946248@kroah.com>
-References: <20191010164800.2444-1-ingo.rohloff@lauterbach.com>
+        id S1726205AbfJKFm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 01:42:29 -0400
+Received: from mail-eopbgr60062.outbound.protection.outlook.com ([40.107.6.62]:35510
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726116AbfJKFm3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Oct 2019 01:42:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bL+2PNtBZXCRPDVe3qAmXnnaFzWTn0YHVzIBF+dIxqgLUEsndjspKtA0TMVCfFzb9SgIwHxgIlxrcGmibSP0fXr9Bwe4U2lSAegIWgdUU/utA9wW1Ieo3WubuiL+12y3Hc6fVNdA4jO4xkCXeCkyMp6PdsNzm/FHXlCCAjoVi3QFR6BqwEP5kSuc1HIQC7qe2fZARbIpIUPGDmSNtP0NH/qRIs46/WRPswrUxr4RkQUmh2BSfz0hy4ddsOiRulEPu7PAyuyM4xw5KHbb31oykTaJM5Khkw5NR3jW5TFMKxfGQn819M5C6Pkppw3akLOQ24oPd/ZQALH21qe4puhCzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5W3xgHYF1T8WBlQn92j0FEqMy0bsddlU/fcBqbBJpgo=;
+ b=eryHpW+79k+3iVSaKGndf6d92qgO3Vy3VxrqDqKrosHc5TLXyX0RVxSmjhyoupe4oNO4URX5Lx4+vETdthO7raIKoSj7HKfM9SRVutTocnXt1yN0SuFbftwNTdZILJgJDZCpzlJhVqqRhDNmq7f9sJF13mOuUiOsV6kfBzwljIUkLaB3JcqxGPXfXZJCCeUlhkjPcgP6S+oIkvzh0KLYa5gCOWR2bBM7x8DHkQiIMdOmmYXP8l4U8k6267euoM2WQLWHOMP8arf8+jd8q/mQNUnuOYv2InaXafHHfeZO3yYs9FFR/rt+HZGwJqlLN3fxX6vXi/cVhswaioRan+an5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5W3xgHYF1T8WBlQn92j0FEqMy0bsddlU/fcBqbBJpgo=;
+ b=YMfMKboIUBX+qKKA7KWE/JZG6caqscsZDoA5kHKpJVMUh2QGvqGCLsnb1FpdUB1J2eMi/Tu7ZtA/pzcZPoKHvyhAGBnJ6c2rP3xv+GevNv/sLY+E5VEgqdnlCVkA2Ebdpb6lZSnt51aZnQrXIynq7rhvKw9KIkG3wKRz9C73YII=
+Received: from AM0PR04MB5314.eurprd04.prod.outlook.com (20.177.41.157) by
+ AM0PR04MB4915.eurprd04.prod.outlook.com (20.176.215.212) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16; Fri, 11 Oct 2019 05:42:25 +0000
+Received: from AM0PR04MB5314.eurprd04.prod.outlook.com
+ ([fe80::99b0:3cb8:e409:1798]) by AM0PR04MB5314.eurprd04.prod.outlook.com
+ ([fe80::99b0:3cb8:e409:1798%6]) with mapi id 15.20.2347.021; Fri, 11 Oct 2019
+ 05:42:25 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     dl-linux-imx <linux-imx@nxp.com>,
+        "git@andred.net" <git@andred.net>, Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH 1/3] usb: chipidea: imx: change hsic power regulator as
+ optional
+Thread-Topic: [PATCH 1/3] usb: chipidea: imx: change hsic power regulator as
+ optional
+Thread-Index: AQHVf/apXptcQx3r70GtQVZl7qMxQw==
+Date:   Fri, 11 Oct 2019 05:42:25 +0000
+Message-ID: <20191011054129.20502-1-peter.chen@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: TY2PR01CA0024.jpnprd01.prod.outlook.com
+ (2603:1096:404:a::36) To AM0PR04MB5314.eurprd04.prod.outlook.com
+ (2603:10a6:208:cd::29)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e5388757-f3f8-4cd8-75ba-08d74e0dcb50
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: AM0PR04MB4915:|AM0PR04MB4915:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <AM0PR04MB4915CE881DAC4218B2B18C1A8B970@AM0PR04MB4915.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:390;
+x-forefront-prvs: 0187F3EA14
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(189003)(199004)(6436002)(2501003)(2351001)(2616005)(14444005)(256004)(6512007)(8936002)(5640700003)(50226002)(6916009)(486006)(8676002)(476003)(186003)(81166006)(81156014)(44832011)(1076003)(26005)(386003)(305945005)(54906003)(52116002)(66946007)(102836004)(316002)(5660300002)(86362001)(36756003)(71190400001)(64756008)(66556008)(66446008)(6506007)(6486002)(66476007)(3846002)(6116002)(25786009)(478600001)(14454004)(71200400001)(4326008)(7736002)(2906002)(4744005)(99286004)(66066001);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR04MB4915;H:AM0PR04MB5314.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 8WwBd+6gXqtkAElP8vvqd8uYanmwZ/RgsFxvyb/peRHLyrQqahERw949Ca//WNGSWVCIas/vxMjKEsOahZ/RlJr+A2JQsnIkVsYg+ToLiAh5jAQ0A7JG74KLFKvTXkIliBoMHiazs8bllA6hLAluAtMBchI70uWxZPZQZV5sNbybL1RPKSSEEgQqiWwRS8s9PXKfM/Ieulq1NKtHIJeasRc47ZHX60OXqpjxx148AGOwBDy/0NX3tjFL+ADlb4PZRXqHY4avoxJ96YhvhV9gW9NkAv6ZlzDbZQi/a9Ynz/leSfwDMfJX7paoFv5krSVdUgyKwWKCdrvbWX+3q37MIvhkKOwahnShTjlS1KWRhQKAEFmH58DpmUFjrF1fKDBgD3tKtgpk+aFiui/XMLqqN37b+FCidNAjST4KwvDwftk=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191010164800.2444-1-ingo.rohloff@lauterbach.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5388757-f3f8-4cd8-75ba-08d74e0dcb50
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2019 05:42:25.3611
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: lMfnhoq6ScM3d0QX895hwaUSPCeglQtf/4ncCutM7brPXAbziCTsGObq+muspl6md4alr3PO6vwDxLT+yNvXaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB4915
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 06:48:00PM +0200, Ingo Rohloff wrote:
-> commit 1455cf8dbfd0 ("driver core: emit uevents when device is bound
-> to a driver") added bind and unbind uevents when a driver is bound or
-> unbound to a physical device.
-> 
-> For USB devices which are handled via the generic usbfs layer (via
-> libusb for example), this is problematic:
-> Each time a user space program calls
->    ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
-> and then later
->    ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
-> The kernel will now produce a bind or unbind event, which does not
-> really contain any useful information.
-> 
-> This allows a user space program to run a DoS attack against programs
-> which listen to uevents (in particular systemd/eudev/upowerd):
-> A malicious user space program just has to call in a tight loop
-> 
->    ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
->    ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
-> 
-> With this loop the malicious user space program floods the kernel and
-> all programs listening to uevents with tons of bind and unbind
-> events.
-> 
-> This patch suppresses uevents for ioctls USBDEVFS_CLAIMINTERFACE and
-> USBDEVFS_RELEASEINTERFACE.
-> 
-> Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-> ---
->  drivers/usb/core/devio.c | 15 ++++++++++++++-
->  1 file changed, 14 insertions(+), 1 deletion(-)
+Not every platform needs this regulator.
 
-I am guessing this is a new version of a previously-submitted patch?  If
-so, you need to include a "version" number on it, and put what you
-changed below the --- line.  The kernel documentation should explain how
-to do this, if not, please let us know.
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+ drivers/usb/chipidea/ci_hdrc_imx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Please fix this up and resend.
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_h=
+drc_imx.c
+index 16700170bc34..25a38ed27aa8 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -359,7 +359,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pd=
+ev)
+ 			return PTR_ERR(data->pinctrl_hsic_active);
+ 		}
+=20
+-		data->hsic_pad_regulator =3D devm_regulator_get(dev, "hsic");
++		data->hsic_pad_regulator =3D
++				devm_regulator_get_optional(dev, "hsic");
+ 		if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -EPROBE_DEFER) {
+ 			return -EPROBE_DEFER;
+ 		} else if (PTR_ERR(data->hsic_pad_regulator) =3D=3D -ENODEV) {
+--=20
+2.17.1
 
-thanks,
-
-greg k-h
