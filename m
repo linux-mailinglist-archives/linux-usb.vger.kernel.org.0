@@ -2,144 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2594CD4292
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 16:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EE8D42B3
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 16:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728198AbfJKOSz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 10:18:55 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38742 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbfJKOSy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 10:18:54 -0400
-Received: by mail-pg1-f193.google.com with SMTP id x10so5886868pgi.5
-        for <linux-usb@vger.kernel.org>; Fri, 11 Oct 2019 07:18:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yoMVKHDANohlAdb5zxdvxg69/UYoMm/KT4X5akubYBQ=;
-        b=s2PJBxVJnHyxvp02+EPM0NjgLYSIErC3ATW/gLjj6sCJChtumFuP3RLAMLnlytff8F
-         MLdft2AlNFUwHPdwA/nblu1C65sucd+8MGLormcw+3s/xs0TxY/LZ1ODwE0QTAZZlznV
-         SCwnYQkAOxEPib8d0YZ9+7uCEVlvg8G1GQhX9vz5wfJ9f3MC56LSOKCtSjBIc2p5SGEC
-         XVxX+fvw+3flvwDDRjHZFivvW4bSH9NlNcsEB4KyUtSwSvkahr4ml5Hc2RxrwHWT8jt+
-         e6/WnEVklyDJresRyc6VHRoIN2gLOcNl8VOZma2j1L4i90wjSij5yUH9/9+8hAaXHuJM
-         VnJQ==
+        id S1728517AbfJKOXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 10:23:00 -0400
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:42162 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728068AbfJKOXA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 10:23:00 -0400
+Received: by mail-lf1-f66.google.com with SMTP id c195so7167491lfg.9;
+        Fri, 11 Oct 2019 07:22:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yoMVKHDANohlAdb5zxdvxg69/UYoMm/KT4X5akubYBQ=;
-        b=c+ionzzn9QH8gK7nWzWnV0MwUiZfVvnjMRfrphdzS/IH/+VSd06MKYJiYTBErSIWqN
-         8/2UHYHhJzW5cBzIEiDaq/xngUx0rpXtfAaviYbmGT9rBJBAPag+XK68iYenCYj1rhjT
-         3WD+bH53GUQBOjIYaxAh52tDCELmNL6n9wKI2uRzeV3bzile/MkSt1D261Q4S62KrgMv
-         ovb0465JAR5PFR/H/7Mtfzogg5vNqpPiSusnfDvJzqLVt0MqHW4OEcXDdFm9StX7GsLt
-         g3+OVCY0rfZEOIRKx4JAgDdY2OhSAxttqemtkFdgnUHqfiEj8KRx5xWP/d0YzV6xjyJm
-         M7IQ==
-X-Gm-Message-State: APjAAAV4H/Yw35rbLIERLs7+wZhkYZU9xMeUlCD3Toswi0UPXjP7kxmA
-        251X2rNBDcmpZIE5gvcaQLqjhJvpy2wmZdfw0+J3jw==
-X-Google-Smtp-Source: APXvYqz+pdf+0dBDvFeDuFmond5Ww8v6pIafG+BQPs2OXn5tOXrf1XKQ4eXbGsrVt2JBXKhjFEIBEufmQ1IHn4H+DIM=
-X-Received: by 2002:a65:4c03:: with SMTP id u3mr17200592pgq.440.1570803533488;
- Fri, 11 Oct 2019 07:18:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <b8b1e4fef9f3ece63909c38b3302621d76770caa.camel@gmail.com> <Pine.LNX.4.44L0.1910111003100.1529-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1910111003100.1529-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 11 Oct 2019 16:18:42 +0200
-Message-ID: <CAAeHK+zR=S1cyaYfehyUDrpMGMXvxgLEeS8V2ze2HkwYUp6bjg@mail.gmail.com>
-Subject: Re: KMSAN: uninit-value in alauda_check_media
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Jaskaran Singh <jaskaransingh7654321@gmail.com>,
-        syzbot <syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com>,
-        Alexander Potapenko <glider@google.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=S3rz5KInV3mTt7kGQSPB4VeyIaD00X/PVCmOmkNi/do=;
+        b=aJsMjcKM67+5XEzCAgA296YRiWfcACsdcOUfGGSeqNqk0Yp07aoOm6OfeLW3eyU5Oj
+         q5dUnhm0kr0DcEb1d13Fos5cCCh6M/Sx+CXHk+JdiBxIbhMnsxyhEbW7orQP6L0ws22S
+         IDmpzDkU+iD0RL2gxYlNf7eewFKmie9Dp0HyweDQIF6xZQO8SC/qwx66qhrZyiLgIg0g
+         JQI1B1eVfkY6q1IPNl54hKpopBnQV1KX18qxl1Ucxf02nyW2xRw6JWbwIsz3gMuRPSHl
+         v1rR5kZ2mr1ogNvfZAF/wBsITkwX94TvLR9B/xNiJnDEi7AAfXIG70dMh9dX0NyeIVdI
+         FDRQ==
+X-Gm-Message-State: APjAAAX9Id2DDLvixcnV8jRsRy0agH8i1THYgAKdu9MSYw8lSzFbXnot
+        SRoAoJ5D6Rz7SZYZYgoWSVM=
+X-Google-Smtp-Source: APXvYqwBmbjVZw6TIud7A1nZLdwVxJ08GywE7fv8kmVetKeg62ghaCBI8EiZtR+7ENdeMime3/iNPg==
+X-Received: by 2002:ac2:4c99:: with SMTP id d25mr9618630lfl.112.1570803778483;
+        Fri, 11 Oct 2019 07:22:58 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id i128sm1899754lji.49.2019.10.11.07.22.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 11 Oct 2019 07:22:57 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iIvoz-00014c-2P; Fri, 11 Oct 2019 16:23:09 +0200
+Date:   Fri, 11 Oct 2019 16:23:09 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Juergen Stuber <starblue@users.sourceforge.net>,
+        Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        usb-storage@lists.one-eyed-alien.net
-Content-Type: text/plain; charset="UTF-8"
+        legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, walter harms <wharms@bfs.de>
+Subject: Re: [PATCH v2] USB: legousbtower: fix a signedness bug in
+ tower_probe()
+Message-ID: <20191011142309.GK13531@localhost>
+References: <5DA088DE.5040902@bfs.de>
+ <20191011141115.GA4521@mwanda>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191011141115.GA4521@mwanda>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 4:08 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, 11 Oct 2019, Jaskaran Singh wrote:
->
-> > On Mon, 2019-10-07 at 12:39 -0700, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following crash on:
-> > >
-> > > HEAD commit:    1e76a3e5 kmsan: replace __GFP_NO_KMSAN_SHADOW with
-> > > kmsan_i..
-> > > git tree:       https://github.com/google/kmsan.git master
-> > > console output:
-> > > https://syzkaller.appspot.com/x/log.txt?x=1204cc63600000
-> > > kernel config:
-> > > https://syzkaller.appspot.com/x/.config?x=f03c659d0830ab8d
-> > > dashboard link:
-> > > https://syzkaller.appspot.com/bug?extid=e7d46eb426883fb97efd
-> > > compiler:       clang version 9.0.0 (/home/glider/llvm/clang
-> > > 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> > > syz repro:
-> > > https://syzkaller.appspot.com/x/repro.syz?x=123c860d600000
-> > > C reproducer:
-> > > https://syzkaller.appspot.com/x/repro.c?x=110631b7600000
-> > >
-> > > IMPORTANT: if you fix the bug, please add the following tag to the
-> > > commit:
-> > > Reported-by: syzbot+e7d46eb426883fb97efd@syzkaller.appspotmail.com
-> > >
-> > > =====================================================
-> > > BUG: KMSAN: uninit-value in alauda_transport+0x462/0x57f0
-> > > drivers/usb/storage/alauda.c:1137
-> > > CPU: 0 PID: 12279 Comm: usb-storage Not tainted 5.3.0-rc7+ #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine,
-> > > BIOS
-> > > Google 01/01/2011
-> > > Call Trace:
-> > >   __dump_stack lib/dump_stack.c:77 [inline]
-> > >   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-> > >   kmsan_report+0x13a/0x2b0 mm/kmsan/kmsan_report.c:108
-> > >   __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:250
-> > >   alauda_check_media+0x344/0x3310 drivers/usb/storage/alauda.c:460
-> > >   alauda_transport+0x462/0x57f0 drivers/usb/storage/alauda.c:1137
-> > >   usb_stor_invoke_transport+0xf5/0x27e0
-> > > drivers/usb/storage/transport.c:606
-> > >   usb_stor_transparent_scsi_command+0x5d/0x70
-> > > drivers/usb/storage/protocol.c:108
-> > >   usb_stor_control_thread+0xca6/0x11a0 drivers/usb/storage/usb.c:380
-> > >   kthread+0x4b5/0x4f0 kernel/kthread.c:256
-> > >   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
->
->
-> > #syz test: https://github.com/google/kmsan.git 1e76a3e5
-> >
-> > diff --git a/drivers/usb/storage/alauda.c
-> > b/drivers/usb/storage/alauda.c
-> > index ddab2cd3d2e7..bb309b9ad65b 100644
-> > --- a/drivers/usb/storage/alauda.c
-> > +++ b/drivers/usb/storage/alauda.c
-> > @@ -452,7 +452,7 @@ static int alauda_init_media(struct us_data *us)
-> >  static int alauda_check_media(struct us_data *us)
-> >  {
-> >       struct alauda_info *info = (struct alauda_info *) us->extra;
-> > -     unsigned char status[2];
-> > +     unsigned char *status = us->iobuf;
-> >       int rc;
-> >
-> >       rc = alauda_get_media_status(us, status);
+On Fri, Oct 11, 2019 at 05:11:15PM +0300, Dan Carpenter wrote:
+> The problem is that sizeof() is unsigned long so negative error codes
+> are type promoted to high positive values and the condition becomes
+> false.
+> 
+> Fixes: 1d427be4a39d ("USB: legousbtower: fix slab info leak at probe")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-[...]
+Acked-by: Johan Hovold <johan@kernel.org>
 
-> Now yes, it's true that defining status as an array on the stack is
-> also a bug, since USB transfer buffers are not allowed to be stack
-> variables.
-
-Hi Alan,
-
-I'm curious, what is the reason for disallowing that? Should we try to
-somehow detect such cases automatically?
-
-Thanks!
+> ---
+> v2: style improvement suggested by Walter Harms.
+> 
+>  drivers/usb/misc/legousbtower.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+> index 9d4c52a7ebe0..9bd240df8f4c 100644
+> --- a/drivers/usb/misc/legousbtower.c
+> +++ b/drivers/usb/misc/legousbtower.c
+> @@ -881,7 +881,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
+>  				  get_version_reply,
+>  				  sizeof(*get_version_reply),
+>  				  1000);
+> -	if (result < sizeof(*get_version_reply)) {
+> +	if (result != sizeof(*get_version_reply)) {
+>  		if (result >= 0)
+>  			result = -EIO;
+>  		dev_err(idev, "get version request failed: %d\n", result);
