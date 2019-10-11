@@ -2,100 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE55D4801
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 20:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F83D480D
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 21:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728883AbfJKSyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 14:54:10 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:46284 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728603AbfJKSyK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 14:54:10 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BInHq1057189;
-        Fri, 11 Oct 2019 18:53:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2019-08-05; bh=HHDwUBgH2SNzkov7VJYo/6PQPC/UBB5flZBfQpz4CNg=;
- b=TrbzywzVLp+TJt6hG8+BsLGELv98VwtL8N0nfwigpb+JtMOVJIjhszhfduNPUUd9USO5
- ad+2lqo9qJY9JKboh1+rs5twU2d7POeMdG1MXpNfu3BsjpJ0XDv50niWkOhbp2HiuwdN
- Si7Pu0j4WNyh0cniSmqnyTC/MS+RIs1f/+gmJOFbFk0EVZCddB2csRTjC9u/0Y4v2csu
- EZX9zNsCO+jEJyauOSjlML3plCx4msVoLv3gUNcr2tkpyvBFCJg6ONn306xoRJoQasRk
- CjH0XH0hA0cXe8k4k+pU40Af2/9B9b1KfMePHfVkwTsYw/CpTzIfeV5Q3/covzZUvJJF Rw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2vekts37ns-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Oct 2019 18:53:04 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BIlkRY071692;
-        Fri, 11 Oct 2019 18:51:03 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2vj9qvhv45-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 11 Oct 2019 18:51:03 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9BIp2FL030724;
-        Fri, 11 Oct 2019 18:51:02 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 11 Oct 2019 11:51:01 -0700
-Date:   Fri, 11 Oct 2019 21:50:55 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Biju Das <biju.das@bp.renesas.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH v2] usb: typec: fix an IS_ERR() vs NULL bug in
- hd3ss3220_probe()
-Message-ID: <20191011185055.GA20972@mwanda>
+        id S1728868AbfJKTAO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 15:00:14 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40009 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728603AbfJKTAO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 15:00:14 -0400
+Received: by mail-ot1-f67.google.com with SMTP id y39so8858492ota.7;
+        Fri, 11 Oct 2019 12:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XVzDAbcWZXdsDHTskHlN8zvp0OFOMZiiZvVTqyfK5oQ=;
+        b=REQ9n4XT5uYJfOAt1+orGDMyhg6WGHfDuJEeLvDDO4/MDCtIqfiE5UKnIbXTkSUIdo
+         wTDvve84sMTKhuPtVZIVJF6cPXzRQB36Wbcf4w90zEsN57NoO7CjmH1S7wcREdGz1BlV
+         GmCUGScx8p0Da3hcjC+Hempl1kr+Q6DjJ7TC2HOX20FMVHqe7zCjqpOI3HK6JXB/FTp1
+         pjEIdCJ8apXKars5B1BRIvZCqOT6bSvcov7k9JTtKuGS7wNzygFKR4ppaOo2BALgYYYC
+         aIZf3KZ6MJxQEvO1HUPxl+L7ZxYoy2BgduTWbr/oVb5PfEyUvGE8xnAqXAc79Wpp+PZ2
+         b0ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XVzDAbcWZXdsDHTskHlN8zvp0OFOMZiiZvVTqyfK5oQ=;
+        b=VSf96EROhCy6br2wmM1gMiP6Vx65xt5ycGEdeqteQUWHuAZ0DNb9K0xr9GKRPOuXd4
+         JUO48boIj/yjn5DmFYA9AqAp2qlQCRla8y/27inYubulrf0/zJch94Wra56Eyz1/dPii
+         F4uHV0t+a5k+yWR/E+UCxXWISlb4p3YHg0QM1Mu1/dd2FfaomRhMzktd+YYDam1QR5gG
+         VirgQJD88TVp+C+/sv8/GroTajc7Ht9+X1fIgC6Tvq74hCpaU32ncc+JiyLpXnBPvIYE
+         9oMFOBlX3I6lpcXo8oftweVHgkReemyTOqVKLXJg0blwA6591DuBTdJgI6XavsjTNvvv
+         rc5A==
+X-Gm-Message-State: APjAAAVOr2yGsnW9okK2b6VruuNMzp2h9jtdCGq4OZib136aw/jfFFXs
+        oFnX/t7mLQiJeNwVlx+eSL8=
+X-Google-Smtp-Source: APXvYqxS4oNRrteuzDW9YVSqdV0G2YAQXYVv2QQCjhlTgH68PPgJwN8VSyesKZWAz5+MV66mdeQ9iA==
+X-Received: by 2002:a9d:67d7:: with SMTP id c23mr14470404otn.0.1570820413034;
+        Fri, 11 Oct 2019 12:00:13 -0700 (PDT)
+Received: from localhost.localdomain ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id 67sm3037688otq.34.2019.10.11.12.00.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2019 12:00:12 -0700 (PDT)
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: [PATCH] USB: host: ohci-at91: Remove unused variable regs in at91_stop_hc
+Date:   Fri, 11 Oct 2019 11:59:50 -0700
+Message-Id: <20191011185950.1470-1-natechancellor@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191011135935.GB32191@kuha.fi.intel.com>
-X-Mailer: git-send-email haha only kidding
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9407 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910110158
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9407 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910110158
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The device_get_named_child_node() function doesn't return error
-pointers, it returns NULL on error.
+drivers/usb/host/ohci-at91.c:118:28: warning: unused variable 'regs'
+[-Wunused-variable]
+        struct ohci_regs __iomem *regs = hcd->regs;
+                                  ^
+1 warning generated.
 
-Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Fixes: 9c4567fa0a44 ("USB: host: ohci-at91: completely shutdown the controller in at91_stop_hc()")
+Signed-off-by: Nathan Chancellor <natechancellor@gmail.com>
 ---
-v2: remove -ENODEV instead of -EIO
+ drivers/usb/host/ohci-at91.c | 1 -
+ 1 file changed, 1 deletion(-)
 
- drivers/usb/typec/hd3ss3220.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-index 9715600aeb04..8afaf5768a17 100644
---- a/drivers/usb/typec/hd3ss3220.c
-+++ b/drivers/usb/typec/hd3ss3220.c
-@@ -172,8 +172,8 @@ static int hd3ss3220_probe(struct i2c_client *client,
- 	hd3ss3220_set_source_pref(hd3ss3220,
- 				  HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_DEFAULT);
- 	connector = device_get_named_child_node(hd3ss3220->dev, "connector");
--	if (IS_ERR(connector))
--		return PTR_ERR(connector);
-+	if (!connector)
-+		return -ENODEV;
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index 513e48397743..b635c6a1b1a9 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -115,7 +115,6 @@ static void at91_start_hc(struct platform_device *pdev)
+ static void at91_stop_hc(struct platform_device *pdev)
+ {
+ 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
+-	struct ohci_regs __iomem *regs = hcd->regs;
+ 	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
  
- 	hd3ss3220->role_sw = fwnode_usb_role_switch_get(connector);
- 	fwnode_handle_put(connector);
+ 	dev_dbg(&pdev->dev, "stop\n");
 -- 
-2.20.1
+2.23.0
 
