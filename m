@@ -2,101 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21DC4D4253
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 16:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1692BD4272
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 16:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728195AbfJKOIZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 10:08:25 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:33758 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728068AbfJKOIZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 10:08:25 -0400
-Received: by mail-lj1-f194.google.com with SMTP id a22so10006464ljd.0;
-        Fri, 11 Oct 2019 07:08:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kq69ey+m/z5tqfV/9IOKfxX5Rfcxt+ZNgiO1EUz+ow8=;
-        b=bE6JQ9FDGbX4JfXPKcJcm9LPO/a0MlHLlqZYmYDgcUaCRWqAnDVo7vNB91FMEZhoTd
-         A2pWp79rBtnJ8f4Tw/DaU3zUVUf0fXp6hZuyVBjWfhOH4q3guYZPrsPRvbuMN//9SDTj
-         BUeccl4PZy1HwlGJr26TuWPR2jn3eUXphjC5DQYodMxwUbTnK+38+Jvm5ff6ebqT4pRR
-         7zy91eaIVYgoOukq7v1Rg9I6aQfpwJRNj8qtTOmTEpgU7S5t93iLi6vEqFUwU5RcpLNP
-         zSFbT8o9szZsUTsyDACuu47N6rfglU1zji0921jPL+S0qnm44TgMHpbj3EWbs4imJAcc
-         ufhg==
-X-Gm-Message-State: APjAAAXnKw56sYnTJAYbBrpwxdjGDRIowVMhFTX2XKH41gC2s5zO43M4
-        PPLik/XtnnbLyvT8TJfpk54=
-X-Google-Smtp-Source: APXvYqze3lQWca18LwMM/zYo2hgKC1VfqkFxWyXmDo3h78mUHJsFxxdWHAperjG4kzVSi4kBh8belg==
-X-Received: by 2002:a2e:9707:: with SMTP id r7mr5946539lji.219.1570802900984;
-        Fri, 11 Oct 2019 07:08:20 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id n3sm2001976lfl.62.2019.10.11.07.08.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 11 Oct 2019 07:08:20 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iIvap-0000x9-Kb; Fri, 11 Oct 2019 16:08:31 +0200
-Date:   Fri, 11 Oct 2019 16:08:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     walter harms <wharms@bfs.de>,
-        Juergen Stuber <starblue@users.sourceforge.net>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728303AbfJKOLl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 10:11:41 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51366 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728232AbfJKOLl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 10:11:41 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BE8xCD015693;
+        Fri, 11 Oct 2019 14:11:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2019-08-05; bh=ACyrOF2vwTDg4lXATY//MKrzIHwBR5ivqwPu7uM74zI=;
+ b=Vo37vCSmss0L3fhPqAEPOaP3IlV+dkDU5OdNtvUH7T5/vcrGerF3XsWGHjVgwBryZPf1
+ /sAcFAPwJJOqQCct2NbVGLeu2TmwFkyi0mmvi7YXIR52rJ0GhcwPpONyWbAxnN8HQ8EZ
+ q53g0bM84p9pDrJK00guYuky+DsDa3EY94/xdNUwzcs03G+XRGBebCUBJTf8b11NBl+/
+ UKZw/6GDdWmxYojXg3G3qIdcuEThmwGaiPk/kMuTnh0N7gDFe2FAUTOny3j24TWhXFdL
+ WNyCSEy2A1EjEQARFPt7xXypw40Jh3e6Zb3lrNH1t6GAqgQHnvCUIeQ2W3pO94bqtgOS 6w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2vekts1r79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Oct 2019 14:11:24 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9BE9JSK060511;
+        Fri, 11 Oct 2019 14:11:24 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2vjryc8a4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 11 Oct 2019 14:11:24 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9BEBNQa024250;
+        Fri, 11 Oct 2019 14:11:23 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 11 Oct 2019 14:11:22 +0000
+Date:   Fri, 11 Oct 2019 17:11:15 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Juergen Stuber <starblue@users.sourceforge.net>,
+        Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] USB: legousbtower: fix a signedness bug in tower_probe()
-Message-ID: <20191011140831.GJ13531@localhost>
-References: <20191011133525.GB22905@mwanda>
- <5DA088DE.5040902@bfs.de>
- <20191011135855.GE4774@kadam>
+        kernel-janitors@vger.kernel.org, walter harms <wharms@bfs.de>
+Subject: [PATCH v2] USB: legousbtower: fix a signedness bug in tower_probe()
+Message-ID: <20191011141115.GA4521@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191011135855.GE4774@kadam>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <5DA088DE.5040902@bfs.de>
+X-Mailer: git-send-email haha only kidding
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9406 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910110133
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9406 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910110133
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 04:58:56PM +0300, Dan Carpenter wrote:
-> On Fri, Oct 11, 2019 at 03:51:26PM +0200, walter harms wrote:
-> > 
-> > 
-> > Am 11.10.2019 15:35, schrieb Dan Carpenter:
-> > > The problem is that sizeof() is unsigned long so negative error codes
-> > > are type promoted to high positive values and the condition becomes
-> > > false.
-> > > 
-> > > Fixes: 1d427be4a39d ("USB: legousbtower: fix slab info leak at probe")
-> > > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > > ---
-> > >  drivers/usb/misc/legousbtower.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-> > > index 9d4c52a7ebe0..835908fe1e65 100644
-> > > --- a/drivers/usb/misc/legousbtower.c
-> > > +++ b/drivers/usb/misc/legousbtower.c
-> > > @@ -881,7 +881,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
-> > >  				  get_version_reply,
-> > >  				  sizeof(*get_version_reply),
-> > >  				  1000);
-> > > -	if (result < sizeof(*get_version_reply)) {
-> > > +	if (result < 0 || result < sizeof(*get_version_reply)) {
-> > >  		if (result >= 0)
-> > >  			result = -EIO;
-> > >  		dev_err(idev, "get version request failed: %d\n", result);
-> > 
-> > i am not an USB expert but it seems that this is a complicated way
-> > to check for result != sizeof(*get_version_reply).
-> 
-> Yeah.  You're right.  That would look nicer.  I will resend.
+The problem is that sizeof() is unsigned long so negative error codes
+are type promoted to high positive values and the condition becomes
+false.
 
-Your version, or adding an explicit cast to int, may be preferred as
-they document that there's something to watch out for here.
+Fixes: 1d427be4a39d ("USB: legousbtower: fix slab info leak at probe")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+v2: style improvement suggested by Walter Harms.
 
-Either way you have my ack.
+ drivers/usb/misc/legousbtower.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Johan
+diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+index 9d4c52a7ebe0..9bd240df8f4c 100644
+--- a/drivers/usb/misc/legousbtower.c
++++ b/drivers/usb/misc/legousbtower.c
+@@ -881,7 +881,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
+ 				  get_version_reply,
+ 				  sizeof(*get_version_reply),
+ 				  1000);
+-	if (result < sizeof(*get_version_reply)) {
++	if (result != sizeof(*get_version_reply)) {
+ 		if (result >= 0)
+ 			result = -EIO;
+ 		dev_err(idev, "get version request failed: %d\n", result);
+-- 
+2.20.1
+
