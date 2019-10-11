@@ -2,111 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AA0D3F10
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 13:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A76D3FDC
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Oct 2019 14:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbfJKLzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Oct 2019 07:55:23 -0400
-Received: from smtp1.lauterbach.com ([62.154.241.196]:55761 "EHLO
-        smtp1.lauterbach.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727541AbfJKLzX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Oct 2019 07:55:23 -0400
-Received: (qmail 20354 invoked by uid 484); 11 Oct 2019 11:55:20 -0000
-X-Qmail-Scanner-Diagnostics: from 10.2.10.44 by smtp1.lauterbach.com (envelope-from <ingo.rohloff@lauterbach.com>, uid 484) with qmail-scanner-2.11 
- (mhr: 1.0. clamdscan: 0.99/21437. spamassassin: 3.4.0.  
- Clear:RC:1(10.2.10.44):. 
- Processed in 0.085656 secs); 11 Oct 2019 11:55:20 -0000
-Received: from unknown (HELO ingpc2.intern.lauterbach.com) (Authenticated_SSL:irohloff@[10.2.10.44])
-          (envelope-sender <ingo.rohloff@lauterbach.com>)
-          by smtp1.lauterbach.com (qmail-ldap-1.03) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <gregkh@linuxfoundation.org>; 11 Oct 2019 11:55:19 -0000
-From:   Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org,
-        Ingo Rohloff <ingo.rohloff@lauterbach.com>
-Subject: [PATCH v2] usb: usbfs: Suppress problematic bind and unbind uevents.
-Date:   Fri, 11 Oct 2019 13:55:18 +0200
-Message-Id: <20191011115518.2801-1-ingo.rohloff@lauterbach.com>
-X-Mailer: git-send-email 2.17.1
+        id S1728184AbfJKMpp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Oct 2019 08:45:45 -0400
+Received: from mga06.intel.com ([134.134.136.31]:62385 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728147AbfJKMpp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Oct 2019 08:45:45 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Oct 2019 05:45:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,284,1566889200"; 
+   d="scan'208";a="219380772"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 11 Oct 2019 05:45:43 -0700
+Subject: Re: [PATCH 8/8] xhci: Fix NULL pointer dereference in
+ xhci_clear_tt_buffer_complete()
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, USB <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+References: <1570190373-30684-1-git-send-email-mathias.nyman@linux.intel.com>
+ <1570190373-30684-9-git-send-email-mathias.nyman@linux.intel.com>
+ <20191007140245.GD13531@localhost>
+ <c0b1f81f-db1a-8f12-6880-a686cb9c35a7@linux.intel.com>
+Message-ID: <1c4b7107-f5e1-4a69-2a73-0e339c7e1072@linux.intel.com>
+Date:   Fri, 11 Oct 2019 15:47:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <c0b1f81f-db1a-8f12-6880-a686cb9c35a7@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-commit 1455cf8dbfd0 ("driver core: emit uevents when device is bound
-to a driver") added bind and unbind uevents when a driver is bound or
-unbound to a physical device.
+On 8.10.2019 11.15, Mathias Nyman wrote:
+> On 7.10.2019 17.02, Johan Hovold wrote:
+>>
+>> I didn't have time to look into this myself last week, or comment on the
+>> patch before Greg picked it up, but this clearly isn't the right fix.
+>>
+>> As your comment suggests, ep->hcpriv may indeed be NULL here if USB core
+>> have allocated a new udev. But this only happens after USB has freed the
+>> old usb_device and the new one happens to get the same address.
+>>
+> 
+> You're right, that fix doesn't solve the actual issue, it avoids a few specific
+> null pointer dereference cases, but leaves both root cause and several other
+> use-after-free cases open.
+> 
+>> Note that even the usb_host_endpoint itself (ep) has then been freed and
+>> reallocated since it is member of struct usb_device, and it is the
+>> use-after-free that needs fixing.
+>>
+>> I've even been able to trigger another NULL-deref in this function
+>> before a new udev has been allocated, due to the virt dev having been
+>> freed by xhci_free_dev as part of usb_release_dev:
+>>
+>> It seems the xhci clear-tt implementation was incomplete since it did
+>> not take care to wait for any ongoing work before disabling the
+>> endpoint. EHCI does this in ehci_endpoint_disable(), but xhci doesn't
+>> even implement that callback.
+>>
+> 
+> So it seems, it might be possible to remove pending clear_tt work for
+> most endpoints in the .drop_endpoint callbacks, but ep0 is different,
+> it isn't dropped, we might need to implement the endpoint_disable()
+> callback for this.
+> 
 
-For USB devices which are handled via the generic usbfs layer (via
-libusb for example), this is problematic:
-Each time a user space program calls
-   ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
-and then later
-   ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
-The kernel will now produce a bind or unbind event, which does not
-really contain any useful information.
+I was able to reproduce the use-after-free issue by faking a endpoint halt,
+and resetting the endpoint early in enumeration at Get device descriptor request.
 
-This allows a user space program to run a DoS attack against programs
-which listen to uevents (in particular systemd/eudev/upowerd):
-A malicious user space program just has to call in a tight loop
+To fix this I added the endpoint_disable() callback that will wait for
+clear_tt_work to finish before returning, similar to the ehci solution.
+It works in my case.
 
-   ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
-   ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
+the endpoint_disable() callback is called by usb core both before dropping
+xhci endpoints belonging to a interface, and separately for ep0 before udev is
+freed during enumeration retry.
 
-With this loop the malicious user space program floods the kernel and
-all programs listening to uevents with tons of bind and unbind
-events.
+Both the hack that triggers the issue (LS/FS behind HS bug won't ever enumerate with this)
+and the fix to prevent use after free can be found in  clear_tt_fix branch:
 
-This patch suppresses uevents for ioctls USBDEVFS_CLAIMINTERFACE and
-USBDEVFS_RELEASEINTERFACE.
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git clear_tt_fix
 
-Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
----
+I'll send the fix out to the list as well, any chance you could try that out?
 
-Notes:
-    v2:
-    Patch only single file (devio.c), try to only suppress uevents while
-    usb_driver_claim_interface/usb_driver_release_interface are called.
-    Try to restore old state of dev->kobj.uevent_suppress.
-
- drivers/usb/core/devio.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 3f899552f6e3..6ca40d135430 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -764,8 +764,15 @@ static int claimintf(struct usb_dev_state *ps, unsigned int ifnum)
- 	intf = usb_ifnum_to_if(dev, ifnum);
- 	if (!intf)
- 		err = -ENOENT;
--	else
-+	else {
-+		unsigned int old_suppress;
-+
-+		/* suppress uevents while claiming interface */
-+		old_suppress = dev_get_uevent_suppress(&intf->dev);
-+		dev_set_uevent_suppress(&intf->dev, 1);
- 		err = usb_driver_claim_interface(&usbfs_driver, intf, ps);
-+		dev_set_uevent_suppress(&intf->dev, old_suppress);
-+	}
- 	if (err == 0)
- 		set_bit(ifnum, &ps->ifclaimed);
- 	return err;
-@@ -785,7 +792,13 @@ static int releaseintf(struct usb_dev_state *ps, unsigned int ifnum)
- 	if (!intf)
- 		err = -ENOENT;
- 	else if (test_and_clear_bit(ifnum, &ps->ifclaimed)) {
-+		unsigned int old_suppress;
-+
-+		/* suppress uevents while releasing interface */
-+		old_suppress = dev_get_uevent_suppress(&intf->dev);
-+		dev_set_uevent_suppress(&intf->dev, 1);
- 		usb_driver_release_interface(&usbfs_driver, intf);
-+		dev_set_uevent_suppress(&intf->dev, old_suppress);
- 		err = 0;
- 	}
- 	return err;
--- 
-2.17.1
-
+-Mathias
