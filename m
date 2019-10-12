@@ -2,55 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07054D5225
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Oct 2019 21:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB7AD532F
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 00:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729610AbfJLTXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Oct 2019 15:23:52 -0400
-Received: from nms02.ip-net.mgrs.ru ([178.237.242.9]:56412 "EHLO
-        nms02.ip-net.mgrs.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728579AbfJLTXv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Oct 2019 15:23:51 -0400
-Received: from User (localhost.localdomain [127.0.0.1])
-        by nms02.ip-net.mgrs.ru (Postfix) with SMTP id C89BE4E11B8;
-        Sat, 12 Oct 2019 08:16:19 +0300 (MSK)
-Reply-To: <kepe19655@aol.com>
-From:   "Mr. Henk Boelens" <info@wholeearth.com>
-To:     henkboelens2016@contractor.net
-Subject: GOOD DAY?
-Date:   Fri, 11 Oct 2019 22:17:04 -0700
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="Windows-1251"
-Content-Transfer-Encoding: 7bit
-X-Priority: 3
-X-MSMail-Priority: Normal
-X-Mailer: Microsoft Outlook Express 6.00.2600.0000
-X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
-Message-Id: <20191012051620.C89BE4E11B8@nms02.ip-net.mgrs.ru>
+        id S1728564AbfJLWzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Oct 2019 18:55:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47488 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727149AbfJLWzG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 12 Oct 2019 18:55:06 -0400
+Subject: Re: [GIT PULL] USB fixes for 5.4-rc3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570920905;
+        bh=rNZPRkCkuOjFkyDRZWT924omIyghGSOicle0spV96d4=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=li2BBkhensSMFx9AwZdoSMN6PF2bXnw9Er0u88T1mlfFtKojriZo4EUWc2kWVaOdy
+         3N7dSA/E7HlvtCzaMMu+ynFIPuUU0bUaRvF8aSNoa0Gc8t2P+7FzQISk1HBGXYfG/0
+         aSbxystdfnb1jS6Ssa/ERTjrCxtOpyqRvZHDbAwc=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20191012161553.GA2191565@kroah.com>
+References: <20191012161553.GA2191565@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20191012161553.GA2191565@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc3
+X-PR-Tracked-Commit-Id: aafb00a977cf7d81821f7c9d12e04c558c22dc3c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6c90bbd0a4e133665128a941ffcb4f7ac5dcb3cf
+Message-Id: <157092090586.32460.6340268885427798293.pr-tracker-bot@kernel.org>
+Date:   Sat, 12 Oct 2019 22:55:05 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Western Associate Bank
-Bank Address:Tower Building 83 Hull Road
-Oxwich Brussels Belgium
+The pull request you sent on Sat, 12 Oct 2019 18:15:53 +0200:
 
-Dear Friend
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc3
 
-Please accept my apologies if this request does not meet your personal ethics as it is not intended to cause you any embarrassment in what ever form. I got your
-contact email address from the internet directory and decided to contact you for this transaction that is based on trust and your outstanding. I have an interesting business proposal for you that will be of immense benefit to both of us. Although this may be hard for you to believe because i know that there is absolutely going to be a great doubt and distrust in your heart in respect of this email as this might sound strange to you and coupled with the fact that, so many individuals have taken possession of the Internet to facilitate their nefarious deeds, thereby making it extremely difficult for genuine and legitimate persons to get attention and recognition. Please grant me the benefit of doubt and hear me out.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6c90bbd0a4e133665128a941ffcb4f7ac5dcb3cf
 
-My name is Henk Boelens . I work with Western Associate Bank here in Belgium as a branch bank manager. I discovered an abandoned sum of GBP 19,850,000.00 (Nineteen Million Eight Hundred And Fifty Thousand British Pounds) in an account that belongs to one of our foreign customers Late Dr. Erin Jacobson, an American citizen who unfortunately lost his life and his entire family in Montana plane crash on March 23, 2009, on their way to a group ski vacation. The choice of contacting you is aroused from the geographical nature of where you live, particularly due to the sensitivity of this transaction and the confidentiality herein. Now our bank has been waiting for any of the relatives to come up for the claim but nobody has done that. I personally tried to locate any member of his family but have been unsuccessful in locating the relatives for 7 years now, i have also checked the deposit documents and discovered that he did not declare any next of kin on the deposit.
+Thank you!
 
-Now the Management of our bank as instructed me to look for the next of kin or they will convert the funds into the Government Treasury Account as unclaimed funds and the funds will be wasted. Therefore, I cannot claim these funds without presenting a foreigner to stand as next of kin. This is reason why I contacted you to seek your consent to present you as an next of kin so that the funds will be release to you, then we share it 55% for me and 45% for you because am not a
-greedy person and is deal between me and you.
-
-I have employed the service of an Attorney who will secure all necessary legal documents that could be used to back up this claim. All the attorney need to do is to fill in your names to the documents and legalize it in the Court here to prove you as the legitimate next of kin to the late depositor Dr. Erin Jacobson then the bank will release the funds to you as the rightful beneficiary.
-
-This is a fair deal without any risk attached either on your part or on my part as long as we comply with the laws governing the claiming of funds in our establishment. All I require is your honest co-operation to enable us see this deal through, and with my position in the bank as a bank manager, I will do every thing possible to protect your interest and to make sure everything workout successfully.
-
-If you are interested in this deal, kindly send me your complete information, your full names and address, Your Private telephone and Fax numbers, and Cell phone so that the attorney will start processing the necessary paperwork that would facilitate the release of the funds to you.
-
-Mr. Henk Boelens
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
