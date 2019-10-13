@@ -2,154 +2,945 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B5DD5734
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 20:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86F87D576E
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 20:46:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728481AbfJMSLh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Oct 2019 14:11:37 -0400
-Received: from vsmx012.vodafonemail.xion.oxcs.net ([153.92.174.90]:21364 "EHLO
-        vsmx012.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727141AbfJMSLh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Oct 2019 14:11:37 -0400
-Received: from vsmx004.vodafonemail.xion.oxcs.net (unknown [192.168.75.198])
-        by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTP id 60551F34EB2;
-        Sun, 13 Oct 2019 18:11:33 +0000 (UTC)
-Received: from lazy.lzy (unknown [93.212.126.195])
-        by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTPA id A68DE19AD8B;
-        Sun, 13 Oct 2019 18:11:18 +0000 (UTC)
-Received: from lazy.lzy (localhost [127.0.0.1])
-        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x9DIBGb8003897
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sun, 13 Oct 2019 20:11:16 +0200
-Received: (from red@localhost)
-        by lazy.lzy (8.15.2/8.15.2/Submit) id x9DIBG8h003896;
-        Sun, 13 Oct 2019 20:11:16 +0200
-Date:   Sun, 13 Oct 2019 20:11:16 +0200
-From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-To:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
-Message-ID: <20191013181116.GA3858@lazy.lzy>
-References: <20190929201332.GA3099@lazy.lzy>
- <Pine.LNX.4.44L0.1909292056230.5908-100000@netrider.rowland.org>
- <20190930182501.GA4043@lazy.lzy>
+        id S1728946AbfJMSqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Oct 2019 14:46:06 -0400
+Received: from cable.insite.cz ([84.242.75.189]:44239 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728239AbfJMSqG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 13 Oct 2019 14:46:06 -0400
+X-Greylist: delayed 361 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Oct 2019 14:45:56 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 18253A1A40B06;
+        Sun, 13 Oct 2019 20:39:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1570991993; bh=XxZieD5wQvyXbq71cZBFThMIDyDtGcp/GBmkNsU0t4s=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=JW/Y8EVwJnjtpCZoLFEP1UL2gSypuJhohsI7VJAPQUl/8ACN6x1pxZSlfO4fDh3Yk
+         CC15PUiIeoOXRYgyEE38ymapzcrf69zoZoZglJJSFSA8UNqGOkpgHQK48xJt62/msH
+         i3qdPrLLItGymGxuUsATn3CQcXPyFomRDQitXjOE=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id YRJF6yoM2PiX; Sun, 13 Oct 2019 20:39:45 +0200 (CEST)
+Received: from [192.168.105.151] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 6F3F6A1A40B05;
+        Sun, 13 Oct 2019 20:39:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1570991985; bh=XxZieD5wQvyXbq71cZBFThMIDyDtGcp/GBmkNsU0t4s=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=GhTEqO/o6eU8jZPnFD36M4x6DBzzkl0uq+aDv5Bu8vw3pQ2Gt627G1CcczDeFEZpL
+         dDCVykXt3y2VDssmrcY1Iexd68At+jpDxaLf7siYwEFZzjaFeBvzXHnPnYbamBwwxz
+         /4glf0Xfr1tQo9BQNMK8K42qUUG99IlpVkAAFhAE=
+Subject: Re: Re: usb: dwc2: Re: Maximum packet size in dwc2 gadget HS mode <
+ 1024
+To:     linux-usb@vger.kernel.org,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+References: <3496ebef-c3b6-d884-8bd8-fed48e875b10@ivitera.com>
+ <52dc70dc-86e4-c47a-ae49-1f201b066b2e@ivitera.com>
+ <97fed6c8-e780-021f-4f93-64701a14bc3f@synopsys.com>
+ <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <deb8918a-14f5-ca3f-53d5-0d99d406fc3c@ivitera.com>
+Date:   Sun, 13 Oct 2019 20:39:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190930182501.GA4043@lazy.lzy>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-VADE-STATUS: LEGIT
+In-Reply-To: <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
+Content-Type: multipart/mixed;
+ boundary="------------A59DF5F79234655264FF5959"
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 30, 2019 at 08:25:01PM +0200, Piergiorgio Sartor wrote:
-> On Sun, Sep 29, 2019 at 09:01:48PM -0400, Alan Stern wrote:
-> > On Sun, 29 Sep 2019, Piergiorgio Sartor wrote:
-> > 
-> > > On Wed, Sep 25, 2019 at 02:31:58PM -0400, Alan Stern wrote:
-> > > > On Wed, 25 Sep 2019, Piergiorgio Sartor wrote:
-> > > > 
-> > > > > On Mon, Aug 26, 2019 at 07:38:33PM +0200, Piergiorgio Sartor wrote:
-> > > > > > On Tue, Aug 20, 2019 at 06:37:22PM +0200, Piergiorgio Sartor wrote:
-> > > > > > > On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
-> > > > > > > > On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
-> > > > > > > > > Let's bring this to the attention of some more people.
-> > > > > > > > > 
-> > > > > > > > > It looks like the bug that was supposed to be fixed by commit
-> > > > > > > > > d74ffae8b8dd ("usb-storage: Add a limitation for
-> > > > > > > > > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
-> > > > > > > > > the bug still occurs.
-> > > > > > > > 
-> > > > > > > > Piergiorgio,
-> > > > > > > > 
-> > > > > > > > can you dump the content of max_hw_sectors_kb file for your USB storage
-> > > > > > > > device and send that to this thread?
-> > > > > > > 
-> > > > > > > Hi all,
-> > > > > > > 
-> > > > > > > for both kernels, 5.1.20 (working) and 5.2.8 (not working),
-> > > > > > > the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
-> > > > > > > for USB storage devices (2.0 and 3.0).
-> > > > > > > 
-> > > > > > > This is for the PC showing the issue.
-> > > > > > > 
-> > > > > > > In an other PC, which does not show the issus at the moment,
-> > > > > > > the values are 120, for USB2.0, and 256, for USB3.0.
-> > 
-> > > > One thing you can try is git bisect from 5.1.20 (or maybe just 5.1.0)  
-> > > > to 5.2.8.  If you can identify a particular commit which caused the
-> > > > problem to start, that would help.
-> > > 
-> > > OK, I tried a bisect (2 days compilations...).
-> > > Assuming I've done everything correctly (how to
-> > > test this? How to remove the guilty patch?), this
-> > > was the result:
-> > > 
-> > > 09324d32d2a0843e66652a087da6f77924358e62 is the first bad commit
-> > > commit 09324d32d2a0843e66652a087da6f77924358e62
-> > > Author: Christoph Hellwig <hch@lst.de>
-> > > Date:   Tue May 21 09:01:41 2019 +0200
-> > > 
-> > >     block: force an unlimited segment size on queues with a virt boundary
-> > > 
-> > >     We currently fail to update the front/back segment size in the bio when
-> > >     deciding to allow an otherwise gappy segement to a device with a
-> > >     virt boundary.  The reason why this did not cause problems is that
-> > >     devices with a virt boundary fundamentally don't use segments as we
-> > >     know it and thus don't care.  Make that assumption formal by forcing
-> > >     an unlimited segement size in this case.
-> > > 
-> > >     Fixes: f6970f83ef79 ("block: don't check if adjacent bvecs in one bio can be mergeable")
-> > >     Signed-off-by: Christoph Hellwig <hch@lst.de>
-> > >     Reviewed-by: Ming Lei <ming.lei@redhat.com>
-> > >     Reviewed-by: Hannes Reinecke <hare@suse.com>
-> > >     Signed-off-by: Jens Axboe <axboe@kernel.dk>
-> > > 
-> > > :040000 040000 57ba04a02f948022c0f6ba24bfa36f3b565b2440 8c925f71ce75042529c001bf244b30565d19ebf3 M      block
-> > > 
-> > > What to do now?
-> > 
-> > Here's how to verify that the bisection got a correct result.  First, 
-> > do a git checkout of commit 09324d32d2a0, build the kernel, and make 
-> > sure that it exhibits the problem.
-> > 
-> > Next, have git write out the contents of that commit in the form of a
-> > patch (git show commit-id >patchfile), and revert it (git apply -R
-> > patchfile).  Build the kernel from that tree, and make sure that it
-> > does not exhibit the problem.  If it doesn't, you have definitely shown
-> > that this commit is the cause (or at least, is _one_ of the causes).
+This is a multi-part message in MIME format.
+--------------A59DF5F79234655264FF5959
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Transfer-Encoding: 7bit
+
+Hi Minas
+Dne 11. 10. 19 v 9:45 Minas Harutyunyan napsal(a):
+> Hi Pavel,
 > 
-> I tried as suggested, i.e. jumping to commit
-> 09324d32d2a0843e66652a087da6f77924358e62, testing,
-> removing the patch, testing.
-> The result was as expected.
-> I was able to reproduce the issue with the commit,
-> I was not able to reproduce it without.
-> It seems this patch / commit is causing the problem.
-> Directly or indirectly.
+>>
+> Could you please send regdump and debug log for failing case.
 > 
-> What are the next steps?
 
-Hi all,
+Thanks a lot for your reply.
 
-I tested kernel 5.3.5 (Fedora kernel-5.3.5-200.fc30.x86_64),
-with same problematic results.
+Attaching regdump-960bytes.txt for 32kHz/16b/15ch both playback and 
+capture,  bInterval=4 in 
+https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L287 
+=> 960 bytes packet size every 1ms. This mode does not work for EP OUT 
+(host playback -> gadget -> RPi capture)
 
-Again, what should be done now?
-Could you please revert the patch?
+Also attaching regdmp-896bytes.txt for 32kHz/16b/14ch which works OK, 
+bitperfect transmission.
 
-Or is there something else to check?
 
-Thanks,
+For debug - I enabled this:
 
-bye,
+file gadget.c +p;file u_audio.c +p; file f_uac2.h +p
 
--- 
+debug-960bytes.txt - not working:
+Every 8 packets:
 
-piergiorgio
+[ 2037.700760] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) 
+DxEPINT=0x00000002
+[ 2037.700765] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
+[ 2037.700773] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req 
+c55e9e44, -61 => 28ac9e7b
+[ 2037.700780] u_audio_iso_complete: iso_complete status(-61) 0/960
+
+
+
+
+debug-896bytes.txt - working OK:
+
+EPDisbld is not every 8 packets, sometimes I see:
+
+  2298.501983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) 
+DxEPINT=0x00000002
+[ 2298.501996] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req 
+6bae385d, -61 => 8ea32601
+[ 2298.502001] u_audio_iso_complete: iso_complete status(-61) 0/896
+[ 2298.502009] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, 
+noi=0, zero=0, snok=0
+
+Thank you for your help.
+
+Best regards,
+
+Pavel.
+
+--------------A59DF5F79234655264FF5959
+Content-Type: text/plain; charset=UTF-8;
+ name="debug-896bytes.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="debug-896bytes.txt"
+
+[ 2298.499997] u_audio_iso_complete: iso_complete status(-61) 0/896
+[ 2298.500004] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, noi=0, zero=0, snok=0
+[ 2298.500011] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
+[ 2298.500015] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
+[ 2298.500021] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
+[ 2298.500026] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b380 => 0x00000b34
+[ 2298.500030] dwc2 fe980000.usb: ep0 state:0
+[ 2298.500034] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
+[ 2298.500039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
+[ 2298.500198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.500203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.500449] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.500453] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.500698] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.500703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.500949] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.500953] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.500962] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
+[ 2298.500966] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2298.500973] dwc2 fe980000.usb: dwc2_hsotg_irq: 040880a8 00080000 (d0bc3c44) retry 8
+[ 2298.500978] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
+[ 2298.500983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
+[ 2298.500988] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
+[ 2298.500995] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req c4380602, -61 => 8ea32601
+[ 2298.501001] u_audio_iso_complete: iso_complete status(-61) 0/896
+[ 2298.501009] dwc2 fe980000.usb: ep1out: req c4380602: 896@44f9c05a, noi=0, zero=0, snok=0
+[ 2298.501016] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
+[ 2298.501020] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
+[ 2298.501026] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
+[ 2298.501031] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b000 => 0x00000b34
+[ 2298.501035] dwc2 fe980000.usb: ep0 state:0
+[ 2298.501039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
+[ 2298.501044] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
+[ 2298.501198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.501203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.501448] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.501452] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.501698] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.501703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.501948] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.501953] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.501961] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
+[ 2298.501965] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2298.501972] dwc2 fe980000.usb: dwc2_hsotg_irq: 040880a8 00080000 (d0bc3c44) retry 8
+[ 2298.501977] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
+[ 2298.501983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
+[ 2298.501996] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req 6bae385d, -61 => 8ea32601
+[ 2298.502001] u_audio_iso_complete: iso_complete status(-61) 0/896
+[ 2298.502009] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, noi=0, zero=0, snok=0
+[ 2298.502015] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
+[ 2298.502020] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
+[ 2298.502025] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
+[ 2298.502030] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b380 => 0x00000b34
+[ 2298.502034] dwc2 fe980000.usb: ep0 state:0
+[ 2298.502039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
+[ 2298.502043] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
+[ 2298.502198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.502203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.502449] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.502454] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.502699] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.502703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.502948] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.502952] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2298.502960] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
+[ 2298.502964] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2298.502993] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req c4380602, -61 => 8ea32601
+[ 2298.502999] u_audio_iso_complete: iso_complete status(-61) 0/896
+[ 2298.503006] dwc2 fe980000.usb: ep1out: req c4380602: 896@44f9c05a, noi=0, zero=0, snok=0
+[ 2298.503012] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
+[ 2298.503017] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
+[ 2298.503022] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
+[ 2298.503027] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b000 => 0x00000b34
+[ 2298.503031] dwc2 fe980000.usb: ep0 state:0
+[ 2298.503035] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
+[ 2298.503039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
+[ 2298.503198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
+[ 2298.503203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+
+
+--------------A59DF5F79234655264FF5959
+Content-Type: text/plain; charset=UTF-8;
+ name="debug-960bytes.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="debug-960bytes.txt"
+
+ 2037.699774] u_audio_iso_complete: iso_complete status(-61) 0/960
+[ 2037.699781] dwc2 fe980000.usb: ep1out: req 73ddf3c0: 960@2706e743, noi=0, zero=0, snok=0
+[ 2037.699789] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
+[ 2037.699796] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
+[ 2037.699801] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
+[ 2037.699806] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3800 => 0x00000b34
+[ 2037.699811] dwc2 fe980000.usb: ep0 state:0
+[ 2037.699817] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
+[ 2037.699821] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
+[ 2037.699968] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.699975] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.700217] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.700221] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.700470] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.700477] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.700718] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.700722] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.700734] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
+[ 2037.700738] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2037.700748] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
+[ 2037.700754] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
+[ 2037.700760] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
+[ 2037.700765] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
+[ 2037.700773] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req c55e9e44, -61 => 28ac9e7b
+[ 2037.700780] u_audio_iso_complete: iso_complete status(-61) 0/960
+[ 2037.700788] dwc2 fe980000.usb: ep1out: req c55e9e44: 960@04b142de, noi=0, zero=0, snok=0
+[ 2037.700794] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
+[ 2037.700801] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
+[ 2037.700807] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
+[ 2037.700812] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3bc0 => 0x00000b34
+[ 2037.700816] dwc2 fe980000.usb: ep0 state:0
+[ 2037.700821] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
+[ 2037.700827] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
+[ 2037.700970] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.700974] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.701218] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.701223] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.701469] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.701473] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.701718] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.701723] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.701734] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
+[ 2037.701738] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2037.701745] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
+[ 2037.701750] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
+[ 2037.701755] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
+[ 2037.701761] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
+[ 2037.701768] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req 73ddf3c0, -61 => 28ac9e7b
+[ 2037.701774] u_audio_iso_complete: iso_complete status(-61) 0/960
+[ 2037.701780] dwc2 fe980000.usb: ep1out: req 73ddf3c0: 960@2706e743, noi=0, zero=0, snok=0
+[ 2037.701788] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
+[ 2037.701792] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
+[ 2037.701798] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
+[ 2037.701803] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3800 => 0x00000b34
+[ 2037.701807] dwc2 fe980000.usb: ep0 state:0
+[ 2037.701813] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
+[ 2037.701817] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
+[ 2037.701968] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.701974] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.702218] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.702223] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.702468] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.702473] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.702719] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
+[ 2037.702725] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
+[ 2037.702733] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
+[ 2037.702737] dwc2 fe980000.usb: GOUTNakEff triggered
+[ 2037.702745] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
+[ 2037.702751] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
+[ 2037.702756] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
+[ 2037.702761] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
+[ 2037.702767] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req c55e9e44, -61 => 28ac9e7b
+[ 2037.702773] u_audio_iso_complete: iso_complete status(-61) 0/960
+[ 2037.702779] dwc2 fe980000.usb: ep1out: req c55e9e44: 960@04b142de, noi=0, zero=0, snok=0
+[ 2037.702786] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
+[ 2037.702791] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
+[ 2037.702796] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
+[ 2037.702801] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3bc0 => 0x00000b34
+
+
+--------------A59DF5F79234655264FF5959
+Content-Type: text/plain; charset=UTF-8;
+ name="regdump-896bytes.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="regdump-896bytes.txt"
+
+GOTGCTL = 0x000d0000
+GOTGINT = 0x00000000
+GAHBCFG = 0x00000031
+GUSBCFG = 0x00001400
+GRSTCTL = 0x80000180
+GINTSTS = 0x04008028
+GINTMSK = 0xd0bc3c44
+GRXSTSR = 0x6151a7d3
+GRXFSIZ = 0x00000100
+GNPTXFSIZ = 0x00200100
+GNPTXSTS = 0x00080020
+GI2CCTL = 0x00000000
+GPVNDCTL = 0x00000000
+GGPIO = 0x00000000
+GUID = 0x2708a000
+GSNPSID = 0x4f54280a
+GHWCFG1 = 0x00000000
+GHWCFG2 = 0x228ddd50
+GHWCFG3 = 0x0ff000e8
+GHWCFG4 = 0x1ff00020
+GLPMCFG = 0x75736230
+GPWRDN = 0x00000000
+GDFIFOCFG = 0x00000000
+ADPCTL = 0x00000000
+HPTXFSIZ = 0x01000c20
+DPTXFSIZN(1) = 0x02000120
+DPTXFSIZN(2) = 0x02000320
+DPTXFSIZN(3) = 0x02000520
+DPTXFSIZN(4) = 0x02000720
+DPTXFSIZN(5) = 0x02000920
+DPTXFSIZN(6) = 0x01000b20
+DPTXFSIZN(7) = 0x01000c20
+DPTXFSIZN(8) = 0x01000c20
+DPTXFSIZN(9) = 0x02000120
+DPTXFSIZN(10) = 0x02000320
+DPTXFSIZN(11) = 0x02000520
+DPTXFSIZN(12) = 0x02000720
+DPTXFSIZN(13) = 0x02000920
+DPTXFSIZN(14) = 0x01000b20
+DPTXFSIZN(15) = 0x01000c20
+DCFG = 0x04040120
+DCTL = 0x00000000
+DSTS = 0x0011ba00
+DIEPMSK = 0x0000200f
+DOEPMSK = 0x0000000f
+DAINT = 0x00000000
+DAINTMSK = 0x00030001
+DTKNQR1 = 0x00000000
+DTKNQR2 = 0x00000000
+DTKNQR3 = 0x0c100020
+DTKNQR4 = 0x00000000
+DVBUSDIS = 0x000017d7
+DVBUSPULSE = 0x000005b8
+DIEPCTL(0) = 0x00008000
+DIEPCTL(1) = 0x01860380
+DIEPCTL(2) = 0x00000400
+DIEPCTL(3) = 0x00000400
+DIEPCTL(4) = 0x00000400
+DIEPCTL(5) = 0x00000400
+DIEPCTL(6) = 0x00000400
+DIEPCTL(7) = 0x00000400
+DIEPCTL(8) = 0x00000400
+DIEPCTL(9) = 0x00000400
+DIEPCTL(10) = 0x00000400
+DIEPCTL(11) = 0x00000400
+DIEPCTL(12) = 0x00000400
+DIEPCTL(13) = 0x00000400
+DIEPCTL(14) = 0x00000400
+DIEPCTL(15) = 0x00000400
+DOEPCTL(0) = 0x80028000
+DOEPCTL(1) = 0x80048380
+DOEPCTL(2) = 0x00000400
+DOEPCTL(3) = 0x00000400
+DOEPCTL(4) = 0x00000400
+DOEPCTL(5) = 0x00000400
+DOEPCTL(6) = 0x00000400
+DOEPCTL(7) = 0x00000400
+DOEPCTL(8) = 0x00000400
+DOEPCTL(9) = 0x00000400
+DOEPCTL(10) = 0x00000400
+DOEPCTL(11) = 0x00000400
+DOEPCTL(12) = 0x00000400
+DOEPCTL(13) = 0x00000400
+DOEPCTL(14) = 0x00000400
+DOEPCTL(15) = 0x00000400
+DIEPINT(0) = 0x000000d0
+DIEPINT(1) = 0x00000000
+DIEPINT(2) = 0x00000080
+DIEPINT(3) = 0x00000080
+DIEPINT(4) = 0x00000080
+DIEPINT(5) = 0x00000080
+DIEPINT(6) = 0x00000080
+DIEPINT(7) = 0x00000080
+DIEPINT(8) = 0x00000080
+DIEPINT(9) = 0x00000080
+DIEPINT(10) = 0x00000080
+DIEPINT(11) = 0x00000080
+DIEPINT(12) = 0x00000080
+DIEPINT(13) = 0x00000080
+DIEPINT(14) = 0x00000080
+DIEPINT(15) = 0x00000080
+DOEPINT(0) = 0x00002000
+DOEPINT(1) = 0x00002000
+DOEPINT(2) = 0x00000000
+DOEPINT(3) = 0x00000000
+DOEPINT(4) = 0x00000000
+DOEPINT(5) = 0x00000000
+DOEPINT(6) = 0x00000000
+DOEPINT(7) = 0x00000000
+DOEPINT(8) = 0x00000000
+DOEPINT(9) = 0x00000000
+DOEPINT(10) = 0x00000000
+DOEPINT(11) = 0x00000000
+DOEPINT(12) = 0x00000000
+DOEPINT(13) = 0x00000000
+DOEPINT(14) = 0x00000000
+DOEPINT(15) = 0x00000000
+DIEPTSIZ(0) = 0x00000000
+DIEPTSIZ(1) = 0x00000000
+DIEPTSIZ(2) = 0x00000000
+DIEPTSIZ(3) = 0x00000000
+DIEPTSIZ(4) = 0x00000000
+DIEPTSIZ(5) = 0x00000000
+DIEPTSIZ(6) = 0x00000000
+DIEPTSIZ(7) = 0x00000000
+DIEPTSIZ(8) = 0x00000000
+DIEPTSIZ(9) = 0x00000000
+DIEPTSIZ(10) = 0x00000000
+DIEPTSIZ(11) = 0x00000000
+DIEPTSIZ(12) = 0x00000000
+DIEPTSIZ(13) = 0x00000000
+DIEPTSIZ(14) = 0x00000000
+DIEPTSIZ(15) = 0x00000000
+DOEPTSIZ(0) = 0x00080008
+DOEPTSIZ(1) = 0x00080380
+DOEPTSIZ(2) = 0x00000000
+DOEPTSIZ(3) = 0x00000000
+DOEPTSIZ(4) = 0x00000000
+DOEPTSIZ(5) = 0x00000000
+DOEPTSIZ(6) = 0x00000000
+DOEPTSIZ(7) = 0x00000000
+DOEPTSIZ(8) = 0x00000000
+DOEPTSIZ(9) = 0x00000000
+DOEPTSIZ(10) = 0x00000000
+DOEPTSIZ(11) = 0x00000000
+DOEPTSIZ(12) = 0x00000000
+DOEPTSIZ(13) = 0x00000000
+DOEPTSIZ(14) = 0x00000000
+DOEPTSIZ(15) = 0x00000000
+DIEPDMA(0) = 0xef2b2004
+DIEPDMA(1) = 0xd66e0f00
+DIEPDMA(2) = 0x1bda55e0
+DIEPDMA(3) = 0x6231e1a1
+DIEPDMA(4) = 0x58ab6e94
+DIEPDMA(5) = 0xfd702e1d
+DIEPDMA(6) = 0xdb415a94
+DIEPDMA(7) = 0x2ee9992c
+DIEPDMA(8) = 0x2d488611
+DIEPDMA(9) = 0x2d488611
+DIEPDMA(10) = 0x2d488611
+DIEPDMA(11) = 0x2d488611
+DIEPDMA(12) = 0x2d488611
+DIEPDMA(13) = 0x2d488611
+DIEPDMA(14) = 0x2d488611
+DIEPDMA(15) = 0x2d488611
+DOEPDMA(0) = 0xd7533240
+DOEPDMA(1) = 0xd4c6b380
+DOEPDMA(2) = 0xe66c5a8d
+DOEPDMA(3) = 0x0e264341
+DOEPDMA(4) = 0x6fee07bd
+DOEPDMA(5) = 0x72153c07
+DOEPDMA(6) = 0x6151a7d3
+DOEPDMA(7) = 0x2d488611
+DOEPDMA(8) = 0xa57ea57e
+DOEPDMA(9) = 0xa57ea57e
+DOEPDMA(10) = 0xa57ea57e
+DOEPDMA(11) = 0xa57ea57e
+DOEPDMA(12) = 0xa57ea57e
+DOEPDMA(13) = 0xa57ea57e
+DOEPDMA(14) = 0xa57ea57e
+DOEPDMA(15) = 0xa57ea57e
+DTXFSTS(0) = 0x00000020
+DTXFSTS(1) = 0x00000100
+DTXFSTS(2) = 0x00000020
+DTXFSTS(3) = 0x00000020
+DTXFSTS(4) = 0x00000020
+DTXFSTS(5) = 0x00000020
+DTXFSTS(6) = 0x00000020
+DTXFSTS(7) = 0x00000020
+DTXFSTS(8) = 0x00000020
+DTXFSTS(9) = 0x00000020
+DTXFSTS(10) = 0x00000020
+DTXFSTS(11) = 0x00000020
+DTXFSTS(12) = 0x00000020
+DTXFSTS(13) = 0x00000020
+DTXFSTS(14) = 0x00000020
+DTXFSTS(15) = 0x00000020
+PCGCTL = 0x00000000
+HCFG = 0x00040120
+HFIR = 0x000017d7
+HFNUM = 0x19740237
+HPTXSTS = 0x00080200
+HAINT = 0x00000000
+HAINTMSK = 0x00000001
+HFLBADDR = 0x00000000
+HPRT0 = 0x00000000
+HCCHAR(0) = 0x01860380
+HCCHAR(1) = 0x80048380
+HCCHAR(2) = 0x00000400
+HCCHAR(3) = 0x00000400
+HCCHAR(4) = 0x00000400
+HCCHAR(5) = 0x00000400
+HCCHAR(6) = 0x00000400
+HCCHAR(7) = 0x00000400
+HCCHAR(8) = 0x00000400
+HCCHAR(9) = 0x00000400
+HCCHAR(10) = 0x00000400
+HCCHAR(11) = 0x00000400
+HCCHAR(12) = 0x00000400
+HCCHAR(13) = 0x00000400
+HCCHAR(14) = 0x00000400
+HCCHAR(15) = 0x00000400
+HCSPLT(0) = 0x00000000
+HCSPLT(1) = 0x00000000
+HCSPLT(2) = 0x00000000
+HCSPLT(3) = 0x00000000
+HCSPLT(4) = 0x00000000
+HCSPLT(5) = 0x00000000
+HCSPLT(6) = 0x00000000
+HCSPLT(7) = 0x00000000
+HCSPLT(8) = 0x00000000
+HCSPLT(9) = 0x00000000
+HCSPLT(10) = 0x00000000
+HCSPLT(11) = 0x00000000
+HCSPLT(12) = 0x00000000
+HCSPLT(13) = 0x00000000
+HCSPLT(14) = 0x00000000
+HCSPLT(15) = 0x00000000
+HCINT(0) = 0x00000000
+HCINT(1) = 0x00002000
+HCINT(2) = 0x00000000
+HCINT(3) = 0x00000000
+HCINT(4) = 0x00000000
+HCINT(5) = 0x00000000
+HCINT(6) = 0x00000000
+HCINT(7) = 0x00000000
+HCINT(8) = 0x00000000
+HCINT(9) = 0x00000000
+HCINT(10) = 0x00000000
+HCINT(11) = 0x00000000
+HCINT(12) = 0x00000000
+HCINT(13) = 0x00000000
+HCINT(14) = 0x00000000
+HCINT(15) = 0x00000000
+HCINTMSK(0) = 0x0000000f
+HCINTMSK(1) = 0x00000000
+HCINTMSK(2) = 0x00000000
+HCINTMSK(3) = 0x00000000
+HCINTMSK(4) = 0x00000000
+HCINTMSK(5) = 0x00000000
+HCINTMSK(6) = 0x00000000
+HCINTMSK(7) = 0x00000000
+HCINTMSK(8) = 0x00000000
+HCINTMSK(9) = 0x00000000
+HCINTMSK(10) = 0x00000000
+HCINTMSK(11) = 0x00000000
+HCINTMSK(12) = 0x00000000
+HCINTMSK(13) = 0x00000000
+HCINTMSK(14) = 0x00000000
+HCINTMSK(15) = 0x00000000
+HCTSIZ(0) = 0x00000000
+HCTSIZ(1) = 0x00080380
+HCTSIZ(2) = 0x00000000
+HCTSIZ(3) = 0x00000000
+HCTSIZ(4) = 0x00000000
+HCTSIZ(5) = 0x00000000
+HCTSIZ(6) = 0x00000000
+HCTSIZ(7) = 0x00000000
+HCTSIZ(8) = 0x00000000
+HCTSIZ(9) = 0x00000000
+HCTSIZ(10) = 0x00000000
+HCTSIZ(11) = 0x00000000
+HCTSIZ(12) = 0x00000000
+HCTSIZ(13) = 0x00000000
+HCTSIZ(14) = 0x00000000
+HCTSIZ(15) = 0x00000000
+HCDMA(0) = 0xd7533240
+HCDMA(1) = 0xd4c6b380
+HCDMA(2) = 0xe66c5a8d
+HCDMA(3) = 0x0e264341
+HCDMA(4) = 0x6fee07bd
+HCDMA(5) = 0x72153c07
+HCDMA(6) = 0x6151a7d3
+HCDMA(7) = 0x2d488611
+HCDMA(8) = 0xa57ea57e
+HCDMA(9) = 0xa57ea57e
+HCDMA(10) = 0xa57ea57e
+HCDMA(11) = 0xa57ea57e
+HCDMA(12) = 0xa57ea57e
+HCDMA(13) = 0xa57ea57e
+HCDMA(14) = 0xa57ea57e
+HCDMA(15) = 0xa57ea57e
+HCDMAB(0) = 0xa57ea57e
+HCDMAB(1) = 0xd7533240
+HCDMAB(2) = 0xd4c6b380
+HCDMAB(3) = 0xe66c5a8d
+HCDMAB(4) = 0x0e264341
+HCDMAB(5) = 0x6fee07bd
+HCDMAB(6) = 0x72153c07
+HCDMAB(7) = 0x6151a7d3
+HCDMAB(8) = 0x2d488611
+HCDMAB(9) = 0xa57ea57e
+HCDMAB(10) = 0xa57ea57e
+HCDMAB(11) = 0xa57ea57e
+HCDMAB(12) = 0xa57ea57e
+HCDMAB(13) = 0xa57ea57e
+HCDMAB(14) = 0xa57ea57e
+HCDMAB(15) = 0xa57ea57e
+
+--------------A59DF5F79234655264FF5959
+Content-Type: text/plain; charset=UTF-8;
+ name="regdump-960bytes.txt"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="regdump-960bytes.txt"
+
+GOTGCTL = 0x000d0000
+GOTGINT = 0x00000000
+GAHBCFG = 0x00000031
+GUSBCFG = 0x00001400
+GRSTCTL = 0x80000180
+GINTSTS = 0x0400c02a
+GINTMSK = 0xd0bc3c44
+GRXSTSR = 0x6151a7d3
+GRXFSIZ = 0x00000100
+GNPTXFSIZ = 0x00200100
+GNPTXSTS = 0x00080020
+GI2CCTL = 0x00000000
+GPVNDCTL = 0x00000000
+GGPIO = 0x00000000
+GUID = 0x2708a000
+GSNPSID = 0x4f54280a
+GHWCFG1 = 0x00000000
+GHWCFG2 = 0x228ddd50
+GHWCFG3 = 0x0ff000e8
+GHWCFG4 = 0x1ff00020
+GLPMCFG = 0x75736230
+GPWRDN = 0x00000000
+GDFIFOCFG = 0x00000000
+ADPCTL = 0x00000000
+HPTXFSIZ = 0x01000c20
+DPTXFSIZN(1) = 0x02000120
+DPTXFSIZN(2) = 0x02000320
+DPTXFSIZN(3) = 0x02000520
+DPTXFSIZN(4) = 0x02000720
+DPTXFSIZN(5) = 0x02000920
+DPTXFSIZN(6) = 0x01000b20
+DPTXFSIZN(7) = 0x01000c20
+DPTXFSIZN(8) = 0x01000c20
+DPTXFSIZN(9) = 0x02000120
+DPTXFSIZN(10) = 0x02000320
+DPTXFSIZN(11) = 0x02000520
+DPTXFSIZN(12) = 0x02000720
+DPTXFSIZN(13) = 0x02000920
+DPTXFSIZN(14) = 0x01000b20
+DPTXFSIZN(15) = 0x01000c20
+DCFG = 0x04040110
+DCTL = 0x00000000
+DSTS = 0x003a5a00
+DIEPMSK = 0x0000200f
+DOEPMSK = 0x0000000f
+DAINT = 0x00000000
+DAINTMSK = 0x00010001
+DTKNQR1 = 0x00000000
+DTKNQR2 = 0x00000000
+DTKNQR3 = 0x0c100020
+DTKNQR4 = 0x00000000
+DVBUSDIS = 0x000017d7
+DVBUSPULSE = 0x000005b8
+DIEPCTL(0) = 0x00008000
+DIEPCTL(1) = 0x018603c0
+DIEPCTL(2) = 0x00000400
+DIEPCTL(3) = 0x00000400
+DIEPCTL(4) = 0x00000400
+DIEPCTL(5) = 0x00000400
+DIEPCTL(6) = 0x00000400
+DIEPCTL(7) = 0x00000400
+DIEPCTL(8) = 0x00000400
+DIEPCTL(9) = 0x00000400
+DIEPCTL(10) = 0x00000400
+DIEPCTL(11) = 0x00000400
+DIEPCTL(12) = 0x00000400
+DIEPCTL(13) = 0x00000400
+DIEPCTL(14) = 0x00000400
+DIEPCTL(15) = 0x00000400
+DOEPCTL(0) = 0x80028000
+DOEPCTL(1) = 0x000603c0
+DOEPCTL(2) = 0x00000400
+DOEPCTL(3) = 0x00000400
+DOEPCTL(4) = 0x00000400
+DOEPCTL(5) = 0x00000400
+DOEPCTL(6) = 0x00000400
+DOEPCTL(7) = 0x00000400
+DOEPCTL(8) = 0x00000400
+DOEPCTL(9) = 0x00000400
+DOEPCTL(10) = 0x00000400
+DOEPCTL(11) = 0x00000400
+DOEPCTL(12) = 0x00000400
+DOEPCTL(13) = 0x00000400
+DOEPCTL(14) = 0x00000400
+DOEPCTL(15) = 0x00000400
+DIEPINT(0) = 0x000000d0
+DIEPINT(1) = 0x00000000
+DIEPINT(2) = 0x00000080
+DIEPINT(3) = 0x00000080
+DIEPINT(4) = 0x00000080
+DIEPINT(5) = 0x00000080
+DIEPINT(6) = 0x00000080
+DIEPINT(7) = 0x00000080
+DIEPINT(8) = 0x00000080
+DIEPINT(9) = 0x00000080
+DIEPINT(10) = 0x00000080
+DIEPINT(11) = 0x00000080
+DIEPINT(12) = 0x00000080
+DIEPINT(13) = 0x00000080
+DIEPINT(14) = 0x00000080
+DIEPINT(15) = 0x00000080
+DOEPINT(0) = 0x00002000
+DOEPINT(1) = 0x00000000
+DOEPINT(2) = 0x00000000
+DOEPINT(3) = 0x00000000
+DOEPINT(4) = 0x00000000
+DOEPINT(5) = 0x00000000
+DOEPINT(6) = 0x00000000
+DOEPINT(7) = 0x00000000
+DOEPINT(8) = 0x00000000
+DOEPINT(9) = 0x00000000
+DOEPINT(10) = 0x00000000
+DOEPINT(11) = 0x00000000
+DOEPINT(12) = 0x00000000
+DOEPINT(13) = 0x00000000
+DOEPINT(14) = 0x00000000
+DOEPINT(15) = 0x00000000
+DIEPTSIZ(0) = 0x00000000
+DIEPTSIZ(1) = 0x00000000
+DIEPTSIZ(2) = 0x00000000
+DIEPTSIZ(3) = 0x00000000
+DIEPTSIZ(4) = 0x00000000
+DIEPTSIZ(5) = 0x00000000
+DIEPTSIZ(6) = 0x00000000
+DIEPTSIZ(7) = 0x00000000
+DIEPTSIZ(8) = 0x00000000
+DIEPTSIZ(9) = 0x00000000
+DIEPTSIZ(10) = 0x00000000
+DIEPTSIZ(11) = 0x00000000
+DIEPTSIZ(12) = 0x00000000
+DIEPTSIZ(13) = 0x00000000
+DIEPTSIZ(14) = 0x00000000
+DIEPTSIZ(15) = 0x00000000
+DOEPTSIZ(0) = 0x00080008
+DOEPTSIZ(1) = 0x000803c0
+DOEPTSIZ(2) = 0x00000000
+DOEPTSIZ(3) = 0x00000000
+DOEPTSIZ(4) = 0x00000000
+DOEPTSIZ(5) = 0x00000000
+DOEPTSIZ(6) = 0x00000000
+DOEPTSIZ(7) = 0x00000000
+DOEPTSIZ(8) = 0x00000000
+DOEPTSIZ(9) = 0x00000000
+DOEPTSIZ(10) = 0x00000000
+DOEPTSIZ(11) = 0x00000000
+DOEPTSIZ(12) = 0x00000000
+DOEPTSIZ(13) = 0x00000000
+DOEPTSIZ(14) = 0x00000000
+DOEPTSIZ(15) = 0x00000000
+DIEPDMA(0) = 0xd6e73004
+DIEPDMA(1) = 0xd66e0f00
+DIEPDMA(2) = 0x1bda55e0
+DIEPDMA(3) = 0x6231e1a1
+DIEPDMA(4) = 0x58ab6e94
+DIEPDMA(5) = 0xfd702e1d
+DIEPDMA(6) = 0xdb415a94
+DIEPDMA(7) = 0x2ee9992c
+DIEPDMA(8) = 0x2d488611
+DIEPDMA(9) = 0x2d488611
+DIEPDMA(10) = 0x2d488611
+DIEPDMA(11) = 0x2d488611
+DIEPDMA(12) = 0x2d488611
+DIEPDMA(13) = 0x2d488611
+DIEPDMA(14) = 0x2d488611
+DIEPDMA(15) = 0x2d488611
+DOEPDMA(0) = 0xd710f240
+DOEPDMA(1) = 0xd66e3800
+DOEPDMA(2) = 0xe66c5a8d
+DOEPDMA(3) = 0x0e264341
+DOEPDMA(4) = 0x6fee07bd
+DOEPDMA(5) = 0x72153c07
+DOEPDMA(6) = 0x6151a7d3
+DOEPDMA(7) = 0x2d488611
+DOEPDMA(8) = 0x00110500
+DOEPDMA(9) = 0x00110500
+DOEPDMA(10) = 0x00110500
+DOEPDMA(11) = 0x00110500
+DOEPDMA(12) = 0x00110500
+DOEPDMA(13) = 0x00110500
+DOEPDMA(14) = 0x00110500
+DOEPDMA(15) = 0x00110500
+DTXFSTS(0) = 0x00000020
+DTXFSTS(1) = 0x00000100
+DTXFSTS(2) = 0x00000020
+DTXFSTS(3) = 0x00000020
+DTXFSTS(4) = 0x00000020
+DTXFSTS(5) = 0x00000020
+DTXFSTS(6) = 0x00000020
+DTXFSTS(7) = 0x00000020
+DTXFSTS(8) = 0x00000020
+DTXFSTS(9) = 0x00000020
+DTXFSTS(10) = 0x00000020
+DTXFSTS(11) = 0x00000020
+DTXFSTS(12) = 0x00000020
+DTXFSTS(13) = 0x00000020
+DTXFSTS(14) = 0x00000020
+DTXFSTS(15) = 0x00000020
+PCGCTL = 0x00000000
+HCFG = 0x00040110
+HFIR = 0x000017d7
+HFNUM = 0x076a074b
+HPTXSTS = 0x00080200
+HAINT = 0x00000000
+HAINTMSK = 0x00000001
+HFLBADDR = 0x00000000
+HPRT0 = 0x00000000
+HCCHAR(0) = 0x018603c0
+HCCHAR(1) = 0x000603c0
+HCCHAR(2) = 0x00000400
+HCCHAR(3) = 0x00000400
+HCCHAR(4) = 0x00000400
+HCCHAR(5) = 0x00000400
+HCCHAR(6) = 0x00000400
+HCCHAR(7) = 0x00000400
+HCCHAR(8) = 0x00000400
+HCCHAR(9) = 0x00000400
+HCCHAR(10) = 0x00000400
+HCCHAR(11) = 0x00000400
+HCCHAR(12) = 0x00000400
+HCCHAR(13) = 0x00000400
+HCCHAR(14) = 0x00000400
+HCCHAR(15) = 0x00000400
+HCSPLT(0) = 0x00000000
+HCSPLT(1) = 0x00000000
+HCSPLT(2) = 0x00000000
+HCSPLT(3) = 0x00000000
+HCSPLT(4) = 0x00000000
+HCSPLT(5) = 0x00000000
+HCSPLT(6) = 0x00000000
+HCSPLT(7) = 0x00000000
+HCSPLT(8) = 0x00000000
+HCSPLT(9) = 0x00000000
+HCSPLT(10) = 0x00000000
+HCSPLT(11) = 0x00000000
+HCSPLT(12) = 0x00000000
+HCSPLT(13) = 0x00000000
+HCSPLT(14) = 0x00000000
+HCSPLT(15) = 0x00000000
+HCINT(0) = 0x00000000
+HCINT(1) = 0x00000000
+HCINT(2) = 0x00000000
+HCINT(3) = 0x00000000
+HCINT(4) = 0x00000000
+HCINT(5) = 0x00000000
+HCINT(6) = 0x00000000
+HCINT(7) = 0x00000000
+HCINT(8) = 0x00000000
+HCINT(9) = 0x00000000
+HCINT(10) = 0x00000000
+HCINT(11) = 0x00000000
+HCINT(12) = 0x00000000
+HCINT(13) = 0x00000000
+HCINT(14) = 0x00000000
+HCINT(15) = 0x00000000
+HCINTMSK(0) = 0x0000000f
+HCINTMSK(1) = 0x00000000
+HCINTMSK(2) = 0x00000000
+HCINTMSK(3) = 0x00000000
+HCINTMSK(4) = 0x00000000
+HCINTMSK(5) = 0x00000000
+HCINTMSK(6) = 0x00000000
+HCINTMSK(7) = 0x00000000
+HCINTMSK(8) = 0x00000000
+HCINTMSK(9) = 0x00000000
+HCINTMSK(10) = 0x00000000
+HCINTMSK(11) = 0x00000000
+HCINTMSK(12) = 0x00000000
+HCINTMSK(13) = 0x00000000
+HCINTMSK(14) = 0x00000000
+HCINTMSK(15) = 0x00000000
+HCTSIZ(0) = 0x00000000
+HCTSIZ(1) = 0x000803c0
+HCTSIZ(2) = 0x00000000
+HCTSIZ(3) = 0x00000000
+HCTSIZ(4) = 0x00000000
+HCTSIZ(5) = 0x00000000
+HCTSIZ(6) = 0x00000000
+HCTSIZ(7) = 0x00000000
+HCTSIZ(8) = 0x00000000
+HCTSIZ(9) = 0x00000000
+HCTSIZ(10) = 0x00000000
+HCTSIZ(11) = 0x00000000
+HCTSIZ(12) = 0x00000000
+HCTSIZ(13) = 0x00000000
+HCTSIZ(14) = 0x00000000
+HCTSIZ(15) = 0x00000000
+HCDMA(0) = 0xd710f240
+HCDMA(1) = 0xd66e3800
+HCDMA(2) = 0xe66c5a8d
+HCDMA(3) = 0x0e264341
+HCDMA(4) = 0x6fee07bd
+HCDMA(5) = 0x72153c07
+HCDMA(6) = 0x6151a7d3
+HCDMA(7) = 0x2d488611
+HCDMA(8) = 0x00110500
+HCDMA(9) = 0x00110500
+HCDMA(10) = 0x00110500
+HCDMA(11) = 0x00110500
+HCDMA(12) = 0x00110500
+HCDMA(13) = 0x00110500
+HCDMA(14) = 0x00110500
+HCDMA(15) = 0x00110500
+HCDMAB(0) = 0x00110500
+HCDMAB(1) = 0xd710f240
+HCDMAB(2) = 0xd66e3800
+HCDMAB(3) = 0xe66c5a8d
+HCDMAB(4) = 0x0e264341
+HCDMAB(5) = 0x6fee07bd
+HCDMAB(6) = 0x72153c07
+HCDMAB(7) = 0x6151a7d3
+HCDMAB(8) = 0x2d488611
+HCDMAB(9) = 0x00110500
+HCDMAB(10) = 0x00110500
+HCDMAB(11) = 0x00110500
+HCDMAB(12) = 0x00110500
+HCDMAB(13) = 0x00110500
+HCDMAB(14) = 0x00110500
+HCDMAB(15) = 0x00110500
+
+--------------A59DF5F79234655264FF5959--
