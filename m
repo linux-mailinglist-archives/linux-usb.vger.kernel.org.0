@@ -2,945 +2,408 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F87D576E
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 20:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47708D57C8
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 21:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728946AbfJMSqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Oct 2019 14:46:06 -0400
-Received: from cable.insite.cz ([84.242.75.189]:44239 "EHLO cable.insite.cz"
+        id S1729527AbfJMTaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Oct 2019 15:30:25 -0400
+Received: from mga03.intel.com ([134.134.136.65]:4203 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728239AbfJMSqG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 13 Oct 2019 14:46:06 -0400
-X-Greylist: delayed 361 seconds by postgrey-1.27 at vger.kernel.org; Sun, 13 Oct 2019 14:45:56 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 18253A1A40B06;
-        Sun, 13 Oct 2019 20:39:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1570991993; bh=XxZieD5wQvyXbq71cZBFThMIDyDtGcp/GBmkNsU0t4s=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=JW/Y8EVwJnjtpCZoLFEP1UL2gSypuJhohsI7VJAPQUl/8ACN6x1pxZSlfO4fDh3Yk
-         CC15PUiIeoOXRYgyEE38ymapzcrf69zoZoZglJJSFSA8UNqGOkpgHQK48xJt62/msH
-         i3qdPrLLItGymGxuUsATn3CQcXPyFomRDQitXjOE=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YRJF6yoM2PiX; Sun, 13 Oct 2019 20:39:45 +0200 (CEST)
-Received: from [192.168.105.151] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 6F3F6A1A40B05;
-        Sun, 13 Oct 2019 20:39:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1570991985; bh=XxZieD5wQvyXbq71cZBFThMIDyDtGcp/GBmkNsU0t4s=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=GhTEqO/o6eU8jZPnFD36M4x6DBzzkl0uq+aDv5Bu8vw3pQ2Gt627G1CcczDeFEZpL
-         dDCVykXt3y2VDssmrcY1Iexd68At+jpDxaLf7siYwEFZzjaFeBvzXHnPnYbamBwwxz
-         /4glf0Xfr1tQo9BQNMK8K42qUUG99IlpVkAAFhAE=
-Subject: Re: Re: usb: dwc2: Re: Maximum packet size in dwc2 gadget HS mode <
- 1024
-To:     linux-usb@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-References: <3496ebef-c3b6-d884-8bd8-fed48e875b10@ivitera.com>
- <52dc70dc-86e4-c47a-ae49-1f201b066b2e@ivitera.com>
- <97fed6c8-e780-021f-4f93-64701a14bc3f@synopsys.com>
- <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <deb8918a-14f5-ca3f-53d5-0d99d406fc3c@ivitera.com>
-Date:   Sun, 13 Oct 2019 20:39:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729374AbfJMTaZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 13 Oct 2019 15:30:25 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Oct 2019 12:30:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,293,1566889200"; 
+   d="gz'50?scan'50,208,50";a="199212867"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 13 Oct 2019 12:30:16 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iJjZH-000GYk-RT; Mon, 14 Oct 2019 03:30:15 +0800
+Date:   Mon, 14 Oct 2019 03:29:34 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     kbuild-all@lists.01.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Changbin Du <changbin.du@gmail.com>
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+Message-ID: <201910140347.fy4EKE69%lkp@intel.com>
+References: <20191013055359.23312-1-changbin.du@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
-Content-Type: multipart/mixed;
- boundary="------------A59DF5F79234655264FF5959"
-Content-Language: en-US
+Content-Type: multipart/mixed; boundary="lquivkdwamayvc2f"
+Content-Disposition: inline
+In-Reply-To: <20191013055359.23312-1-changbin.du@gmail.com>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------A59DF5F79234655264FF5959
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Hi Minas
-Dne 11. 10. 19 v 9:45 Minas Harutyunyan napsal(a):
-> Hi Pavel,
-> 
->>
-> Could you please send regdump and debug log for failing case.
-> 
+--lquivkdwamayvc2f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks a lot for your reply.
+Hi Changbin,
 
-Attaching regdump-960bytes.txt for 32kHz/16b/15ch both playback and 
-capture,  bInterval=4 in 
-https://github.com/torvalds/linux/blob/master/drivers/usb/gadget/function/f_uac2.c#L287 
-=> 960 bytes packet size every 1ms. This mode does not work for EP OUT 
-(host playback -> gadget -> RPi capture)
+Thank you for the patch! Perhaps something to improve:
 
-Also attaching regdmp-896bytes.txt for 32kHz/16b/14ch which works OK, 
-bitperfect transmission.
+[auto build test WARNING on linus/master]
+[cannot apply to v5.4-rc2 next-20191010]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
+url:    https://github.com/0day-ci/linux/commits/Changbin-Du/kernel-doc-rename-the-kernel-doc-directive-functions-to-specific/20191014-013215
+reproduce: make htmldocs
 
-For debug - I enabled this:
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
 
-file gadget.c +p;file u_audio.c +p; file f_uac2.h +p
+All warnings (new ones prefixed by >>):
 
-debug-960bytes.txt - not working:
-Every 8 packets:
+   Warning: The Sphinx 'sphinx_rtd_theme' HTML theme was not found. Make sure you have the theme installed to produce pretty HTML output. Falling back to the default theme.
+   WARNING: dot(1) not found, for better output quality install graphviz from http://www.graphviz.org
+   WARNING: convert(1) not found, for SVG to PDF conversion install ImageMagick (https://www.imagemagick.org)
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file include/linux/reservation.h
+   Error: Cannot open file include/linux/reservation.h
+>> include/linux/regulator/machine.h:196: warning: struct member 'max_uV_step' not described in 'regulation_constraints'
+>> include/linux/regulator/driver.h:223: warning: struct member 'resume' not described in 'regulator_ops'
+>> include/linux/i2c.h:337: warning: struct member 'init_irq' not described in 'i2c_client'
+   drivers/gpio/gpiolib-of.c:92: warning: Excess function parameter 'dev' description in 'of_gpio_need_valid_mask'
+>> include/linux/spi/spi.h:190: warning: struct member 'driver_override' not described in 'spi_device'
+   mm/util.c:1: warning: 'get_user_pages_fast' not found
+>> mm/slab.c:4215: warning: function parameter 'objp' not described in '__ksize'
+   drivers/usb/typec/bus.c:1: warning: 'typec_altmode_register_driver' not found
+   drivers/usb/typec/bus.c:1: warning: 'typec_altmode_unregister_driver' not found
+   drivers/usb/typec/class.c:1: warning: 'typec_altmode_unregister_notifier' not found
+   drivers/usb/typec/class.c:1: warning: 'typec_altmode_register_notifier' not found
+>> include/linux/w1.h:277: warning: struct member 'of_match_table' not described in 'w1_family'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:335: warning: Excess function parameter 'dev' description in 'amdgpu_gem_prime_export'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:336: warning: Excess function parameter 'dev' description in 'amdgpu_gem_prime_export'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c:142: warning: function parameter 'blockable' not described in 'amdgpu_mn_read_lock'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:347: warning: cannot understand function prototype: 'struct amdgpu_vm_pt_cursor '
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:348: warning: cannot understand function prototype: 'struct amdgpu_vm_pt_cursor '
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:494: warning: function parameter 'start' not described in 'amdgpu_vm_pt_first_dfs'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: function parameter 'adev' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: function parameter 'vm' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: function parameter 'start' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: function parameter 'cursor' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: function parameter 'entry' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:821: warning: function parameter 'level' not described in 'amdgpu_vm_bo_param'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'params' not described in 'amdgpu_vm_update_flags'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'bo' not described in 'amdgpu_vm_update_flags'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'level' not described in 'amdgpu_vm_update_flags'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'pe' not described in 'amdgpu_vm_update_flags'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'addr' not described in 'amdgpu_vm_update_flags'
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: function parameter 'count' not described in 'amdgpu_vm_update_flags'
 
-[ 2037.700760] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) 
-DxEPINT=0x00000002
-[ 2037.700765] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
-[ 2037.700773] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req 
-c55e9e44, -61 => 28ac9e7b
-[ 2037.700780] u_audio_iso_complete: iso_complete status(-61) 0/960
+vim +1207 drivers/gpu/drm/i915/i915_drv.h
 
+eec688e1420da5 Robert Bragg          2016-11-07  1069  
+16d98b31f80775 Robert Bragg          2016-12-07  1070  /**
+16d98b31f80775 Robert Bragg          2016-12-07  1071   * struct i915_perf_stream - state for a single open stream FD
+16d98b31f80775 Robert Bragg          2016-12-07  1072   */
+eec688e1420da5 Robert Bragg          2016-11-07  1073  struct i915_perf_stream {
+16d98b31f80775 Robert Bragg          2016-12-07  1074  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1075  	 * @dev_priv: i915 drm device
+16d98b31f80775 Robert Bragg          2016-12-07  1076  	 */
+eec688e1420da5 Robert Bragg          2016-11-07  1077  	struct drm_i915_private *dev_priv;
+eec688e1420da5 Robert Bragg          2016-11-07  1078  
+16d98b31f80775 Robert Bragg          2016-12-07  1079  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1080  	 * @link: Links the stream into ``&drm_i915_private->streams``
+16d98b31f80775 Robert Bragg          2016-12-07  1081  	 */
+eec688e1420da5 Robert Bragg          2016-11-07  1082  	struct list_head link;
+eec688e1420da5 Robert Bragg          2016-11-07  1083  
+6d2438c8233bd0 Chris Wilson          2019-01-15  1084  	/**
+6d2438c8233bd0 Chris Wilson          2019-01-15  1085  	 * @wakeref: As we keep the device awake while the perf stream is
+6d2438c8233bd0 Chris Wilson          2019-01-15  1086  	 * active, we track our runtime pm reference for later release.
+6d2438c8233bd0 Chris Wilson          2019-01-15  1087  	 */
+6619c0075f784d Chris Wilson          2019-01-14  1088  	intel_wakeref_t wakeref;
+6619c0075f784d Chris Wilson          2019-01-14  1089  
+16d98b31f80775 Robert Bragg          2016-12-07  1090  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1091  	 * @sample_flags: Flags representing the `DRM_I915_PERF_PROP_SAMPLE_*`
+16d98b31f80775 Robert Bragg          2016-12-07  1092  	 * properties given when opening a stream, representing the contents
+16d98b31f80775 Robert Bragg          2016-12-07  1093  	 * of a single sample as read() by userspace.
+16d98b31f80775 Robert Bragg          2016-12-07  1094  	 */
+eec688e1420da5 Robert Bragg          2016-11-07  1095  	u32 sample_flags;
+16d98b31f80775 Robert Bragg          2016-12-07  1096  
+16d98b31f80775 Robert Bragg          2016-12-07  1097  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1098  	 * @sample_size: Considering the configured contents of a sample
+16d98b31f80775 Robert Bragg          2016-12-07  1099  	 * combined with the required header size, this is the total size
+16d98b31f80775 Robert Bragg          2016-12-07  1100  	 * of a single sample record.
+16d98b31f80775 Robert Bragg          2016-12-07  1101  	 */
+d79651522e89c4 Robert Bragg          2016-11-07  1102  	int sample_size;
+eec688e1420da5 Robert Bragg          2016-11-07  1103  
+16d98b31f80775 Robert Bragg          2016-12-07  1104  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1105  	 * @ctx: %NULL if measuring system-wide across all contexts or a
+16d98b31f80775 Robert Bragg          2016-12-07  1106  	 * specific context that is being monitored.
+16d98b31f80775 Robert Bragg          2016-12-07  1107  	 */
+eec688e1420da5 Robert Bragg          2016-11-07  1108  	struct i915_gem_context *ctx;
+16d98b31f80775 Robert Bragg          2016-12-07  1109  
+16d98b31f80775 Robert Bragg          2016-12-07  1110  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1111  	 * @enabled: Whether the stream is currently enabled, considering
+16d98b31f80775 Robert Bragg          2016-12-07  1112  	 * whether the stream was opened in a disabled state and based
+16d98b31f80775 Robert Bragg          2016-12-07  1113  	 * on `I915_PERF_IOCTL_ENABLE` and `I915_PERF_IOCTL_DISABLE` calls.
+16d98b31f80775 Robert Bragg          2016-12-07  1114  	 */
+eec688e1420da5 Robert Bragg          2016-11-07  1115  	bool enabled;
+eec688e1420da5 Robert Bragg          2016-11-07  1116  
+16d98b31f80775 Robert Bragg          2016-12-07  1117  	/**
+16d98b31f80775 Robert Bragg          2016-12-07  1118  	 * @ops: The callbacks providing the implementation of this specific
+16d98b31f80775 Robert Bragg          2016-12-07  1119  	 * type of configured stream.
+16d98b31f80775 Robert Bragg          2016-12-07  1120  	 */
+d79651522e89c4 Robert Bragg          2016-11-07  1121  	const struct i915_perf_stream_ops *ops;
+701f8231a2fe17 Lionel Landwerlin     2017-08-03  1122  
+701f8231a2fe17 Lionel Landwerlin     2017-08-03  1123  	/**
+701f8231a2fe17 Lionel Landwerlin     2017-08-03  1124  	 * @oa_config: The OA configuration used by the stream.
+701f8231a2fe17 Lionel Landwerlin     2017-08-03  1125  	 */
+701f8231a2fe17 Lionel Landwerlin     2017-08-03  1126  	struct i915_oa_config *oa_config;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1127  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1128  	/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1129  	 * The OA context specific information.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1130  	 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1131  	struct intel_context *pinned_ctx;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1132  	u32 specific_ctx_id;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1133  	u32 specific_ctx_id_mask;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1134  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1135  	struct hrtimer poll_check_timer;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1136  	wait_queue_head_t poll_wq;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1137  	bool pollin;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1138  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1139  	bool periodic;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1140  	int period_exponent;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1141  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1142  	/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1143  	 * State of the OA buffer.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1144  	 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1145  	struct {
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1146  		struct i915_vma *vma;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1147  		u8 *vaddr;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1148  		u32 last_ctx_id;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1149  		int format;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1150  		int format_size;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1151  		int size_exponent;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1152  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1153  		/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1154  		 * Locks reads and writes to all head/tail state
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1155  		 *
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1156  		 * Consider: the head and tail pointer state needs to be read
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1157  		 * consistently from a hrtimer callback (atomic context) and
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1158  		 * read() fop (user context) with tail pointer updates happening
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1159  		 * in atomic context and head updates in user context and the
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1160  		 * (unlikely) possibility of read() errors needing to reset all
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1161  		 * head/tail state.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1162  		 *
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1163  		 * Note: Contention/performance aren't currently a significant
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1164  		 * concern here considering the relatively low frequency of
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1165  		 * hrtimer callbacks (5ms period) and that reads typically only
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1166  		 * happen in response to a hrtimer event and likely complete
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1167  		 * before the next callback.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1168  		 *
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1169  		 * Note: This lock is not held *while* reading and copying data
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1170  		 * to userspace so the value of head observed in htrimer
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1171  		 * callbacks won't represent any partial consumption of data.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1172  		 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1173  		spinlock_t ptr_lock;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1174  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1175  		/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1176  		 * One 'aging' tail pointer and one 'aged' tail pointer ready to
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1177  		 * used for reading.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1178  		 *
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1179  		 * Initial values of 0xffffffff are invalid and imply that an
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1180  		 * update is required (and should be ignored by an attempted
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1181  		 * read)
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1182  		 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1183  		struct {
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1184  			u32 offset;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1185  		} tails[2];
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1186  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1187  		/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1188  		 * Index for the aged tail ready to read() data up to.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1189  		 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1190  		unsigned int aged_tail_idx;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1191  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1192  		/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1193  		 * A monotonic timestamp for when the current aging tail pointer
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1194  		 * was read; used to determine when it is old enough to trust.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1195  		 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1196  		u64 aging_timestamp;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1197  
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1198  		/**
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06 @1199  		 * Although we can always read back the head pointer register,
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1200  		 * we prefer to avoid trusting the HW state, just to avoid any
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1201  		 * risk that some hardware condition could * somehow bump the
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1202  		 * head pointer unpredictably and cause us to forward the wrong
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1203  		 * OA buffer data to userspace.
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1204  		 */
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1205  		u32 head;
+a37f08a882b01a Umesh Nerlige Ramappa 2019-08-06  1206  	} oa_buffer;
+d79651522e89c4 Robert Bragg          2016-11-07 @1207  };
+d79651522e89c4 Robert Bragg          2016-11-07  1208  
 
+:::::: The code at line 1207 was first introduced by commit
+:::::: d79651522e89c4ffa8992b48dfe449f0c583f809 drm/i915: Enable i915 perf stream for Haswell OA unit
 
+:::::: TO: Robert Bragg <robert@sixbynine.org>
+:::::: CC: Daniel Vetter <daniel.vetter@ffwll.ch>
 
-debug-896bytes.txt - working OK:
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 
-EPDisbld is not every 8 packets, sometimes I see:
+--lquivkdwamayvc2f
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
 
-  2298.501983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) 
-DxEPINT=0x00000002
-[ 2298.501996] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req 
-6bae385d, -61 => 8ea32601
-[ 2298.502001] u_audio_iso_complete: iso_complete status(-61) 0/896
-[ 2298.502009] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, 
-noi=0, zero=0, snok=0
+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
 
-Thank you for your help.
-
-Best regards,
-
-Pavel.
-
---------------A59DF5F79234655264FF5959
-Content-Type: text/plain; charset=UTF-8;
- name="debug-896bytes.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="debug-896bytes.txt"
-
-[ 2298.499997] u_audio_iso_complete: iso_complete status(-61) 0/896
-[ 2298.500004] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, noi=0, zero=0, snok=0
-[ 2298.500011] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
-[ 2298.500015] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
-[ 2298.500021] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
-[ 2298.500026] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b380 => 0x00000b34
-[ 2298.500030] dwc2 fe980000.usb: ep0 state:0
-[ 2298.500034] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
-[ 2298.500039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
-[ 2298.500198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.500203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.500449] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.500453] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.500698] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.500703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.500949] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.500953] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.500962] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
-[ 2298.500966] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2298.500973] dwc2 fe980000.usb: dwc2_hsotg_irq: 040880a8 00080000 (d0bc3c44) retry 8
-[ 2298.500978] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
-[ 2298.500983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
-[ 2298.500988] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
-[ 2298.500995] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req c4380602, -61 => 8ea32601
-[ 2298.501001] u_audio_iso_complete: iso_complete status(-61) 0/896
-[ 2298.501009] dwc2 fe980000.usb: ep1out: req c4380602: 896@44f9c05a, noi=0, zero=0, snok=0
-[ 2298.501016] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
-[ 2298.501020] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
-[ 2298.501026] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
-[ 2298.501031] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b000 => 0x00000b34
-[ 2298.501035] dwc2 fe980000.usb: ep0 state:0
-[ 2298.501039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
-[ 2298.501044] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
-[ 2298.501198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.501203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.501448] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.501452] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.501698] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.501703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.501948] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.501953] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.501961] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
-[ 2298.501965] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2298.501972] dwc2 fe980000.usb: dwc2_hsotg_irq: 040880a8 00080000 (d0bc3c44) retry 8
-[ 2298.501977] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
-[ 2298.501983] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
-[ 2298.501996] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req 6bae385d, -61 => 8ea32601
-[ 2298.502001] u_audio_iso_complete: iso_complete status(-61) 0/896
-[ 2298.502009] dwc2 fe980000.usb: ep1out: req 6bae385d: 896@68e9d579, noi=0, zero=0, snok=0
-[ 2298.502015] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
-[ 2298.502020] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
-[ 2298.502025] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
-[ 2298.502030] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b380 => 0x00000b34
-[ 2298.502034] dwc2 fe980000.usb: ep0 state:0
-[ 2298.502039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
-[ 2298.502043] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
-[ 2298.502198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.502203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.502449] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.502454] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.502699] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.502703] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.502948] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.502952] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2298.502960] dwc2 fe980000.usb: dwc2_hsotg_irq: 040080a8 00000080 (d0bc3cc4) retry 8
-[ 2298.502964] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2298.502993] dwc2 fe980000.usb: complete: ep 76ae3eae ep1out, req c4380602, -61 => 8ea32601
-[ 2298.502999] u_audio_iso_complete: iso_complete status(-61) 0/896
-[ 2298.503006] dwc2 fe980000.usb: ep1out: req c4380602: 896@44f9c05a, noi=0, zero=0, snok=0
-[ 2298.503012] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x00068380, ep 1, dir out
-[ 2298.503017] dwc2 fe980000.usb: ureq->length:896 ureq->actual:0
-[ 2298.503022] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@896/896, 0x00080380 => 0x00000b30
-[ 2298.503027] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d4c6b000 => 0x00000b34
-[ 2298.503031] dwc2 fe980000.usb: ep0 state:0
-[ 2298.503035] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x84068380
-[ 2298.503039] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x80048380
-[ 2298.503198] dwc2 fe980000.usb: dwc2_hsotg_irq: 04208028 00200000 (d0bc3c44) retry 8
-[ 2298.503203] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-
-
---------------A59DF5F79234655264FF5959
-Content-Type: text/plain; charset=UTF-8;
- name="debug-960bytes.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="debug-960bytes.txt"
-
- 2037.699774] u_audio_iso_complete: iso_complete status(-61) 0/960
-[ 2037.699781] dwc2 fe980000.usb: ep1out: req 73ddf3c0: 960@2706e743, noi=0, zero=0, snok=0
-[ 2037.699789] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
-[ 2037.699796] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
-[ 2037.699801] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
-[ 2037.699806] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3800 => 0x00000b34
-[ 2037.699811] dwc2 fe980000.usb: ep0 state:0
-[ 2037.699817] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
-[ 2037.699821] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
-[ 2037.699968] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.699975] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.700217] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.700221] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.700470] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.700477] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.700718] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.700722] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.700734] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
-[ 2037.700738] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2037.700748] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
-[ 2037.700754] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
-[ 2037.700760] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
-[ 2037.700765] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
-[ 2037.700773] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req c55e9e44, -61 => 28ac9e7b
-[ 2037.700780] u_audio_iso_complete: iso_complete status(-61) 0/960
-[ 2037.700788] dwc2 fe980000.usb: ep1out: req c55e9e44: 960@04b142de, noi=0, zero=0, snok=0
-[ 2037.700794] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
-[ 2037.700801] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
-[ 2037.700807] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
-[ 2037.700812] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3bc0 => 0x00000b34
-[ 2037.700816] dwc2 fe980000.usb: ep0 state:0
-[ 2037.700821] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
-[ 2037.700827] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
-[ 2037.700970] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.700974] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.701218] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.701223] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.701469] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.701473] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.701718] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.701723] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.701734] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
-[ 2037.701738] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2037.701745] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
-[ 2037.701750] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
-[ 2037.701755] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
-[ 2037.701761] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
-[ 2037.701768] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req 73ddf3c0, -61 => 28ac9e7b
-[ 2037.701774] u_audio_iso_complete: iso_complete status(-61) 0/960
-[ 2037.701780] dwc2 fe980000.usb: ep1out: req 73ddf3c0: 960@2706e743, noi=0, zero=0, snok=0
-[ 2037.701788] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
-[ 2037.701792] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
-[ 2037.701798] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
-[ 2037.701803] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3800 => 0x00000b34
-[ 2037.701807] dwc2 fe980000.usb: ep0 state:0
-[ 2037.701813] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x840683c0
-[ 2037.701817] dwc2 fe980000.usb: dwc2_hsotg_start_req: DXEPCTL=0x800483c0
-[ 2037.701968] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.701974] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.702218] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.702223] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.702468] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.702473] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.702719] dwc2 fe980000.usb: dwc2_hsotg_irq: 0420c02a 00200000 (d0bc3c44) retry 8
-[ 2037.702725] dwc2 fe980000.usb: dwc2_gadget_handle_incomplete_isoc_out: GINTSTS_INCOMPL_SOOUT
-[ 2037.702733] dwc2 fe980000.usb: dwc2_hsotg_irq: 0400c0aa 00000080 (d0bc3cc4) retry 8
-[ 2037.702737] dwc2 fe980000.usb: GOUTNakEff triggered
-[ 2037.702745] dwc2 fe980000.usb: dwc2_hsotg_irq: 0408c0aa 00080000 (d0bc3c44) retry 8
-[ 2037.702751] dwc2 fe980000.usb: dwc2_hsotg_irq: daint=00020000
-[ 2037.702756] dwc2 fe980000.usb: dwc2_hsotg_epint: ep1(out) DxEPINT=0x00000002
-[ 2037.702761] dwc2 fe980000.usb: dwc2_gadget_handle_ep_disabled: EPDisbld
-[ 2037.702767] dwc2 fe980000.usb: complete: ep ba4d666f ep1out, req c55e9e44, -61 => 28ac9e7b
-[ 2037.702773] u_audio_iso_complete: iso_complete status(-61) 0/960
-[ 2037.702779] dwc2 fe980000.usb: ep1out: req c55e9e44: 960@04b142de, noi=0, zero=0, snok=0
-[ 2037.702786] dwc2 fe980000.usb: dwc2_hsotg_start_req: DxEPCTL=0x000683c0, ep 1, dir out
-[ 2037.702791] dwc2 fe980000.usb: ureq->length:960 ureq->actual:0
-[ 2037.702796] dwc2 fe980000.usb: dwc2_hsotg_start_req: 1@960/960, 0x000803c0 => 0x00000b30
-[ 2037.702801] dwc2 fe980000.usb: dwc2_hsotg_start_req: 0x00000000d66e3bc0 => 0x00000b34
-
-
---------------A59DF5F79234655264FF5959
-Content-Type: text/plain; charset=UTF-8;
- name="regdump-896bytes.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="regdump-896bytes.txt"
-
-GOTGCTL = 0x000d0000
-GOTGINT = 0x00000000
-GAHBCFG = 0x00000031
-GUSBCFG = 0x00001400
-GRSTCTL = 0x80000180
-GINTSTS = 0x04008028
-GINTMSK = 0xd0bc3c44
-GRXSTSR = 0x6151a7d3
-GRXFSIZ = 0x00000100
-GNPTXFSIZ = 0x00200100
-GNPTXSTS = 0x00080020
-GI2CCTL = 0x00000000
-GPVNDCTL = 0x00000000
-GGPIO = 0x00000000
-GUID = 0x2708a000
-GSNPSID = 0x4f54280a
-GHWCFG1 = 0x00000000
-GHWCFG2 = 0x228ddd50
-GHWCFG3 = 0x0ff000e8
-GHWCFG4 = 0x1ff00020
-GLPMCFG = 0x75736230
-GPWRDN = 0x00000000
-GDFIFOCFG = 0x00000000
-ADPCTL = 0x00000000
-HPTXFSIZ = 0x01000c20
-DPTXFSIZN(1) = 0x02000120
-DPTXFSIZN(2) = 0x02000320
-DPTXFSIZN(3) = 0x02000520
-DPTXFSIZN(4) = 0x02000720
-DPTXFSIZN(5) = 0x02000920
-DPTXFSIZN(6) = 0x01000b20
-DPTXFSIZN(7) = 0x01000c20
-DPTXFSIZN(8) = 0x01000c20
-DPTXFSIZN(9) = 0x02000120
-DPTXFSIZN(10) = 0x02000320
-DPTXFSIZN(11) = 0x02000520
-DPTXFSIZN(12) = 0x02000720
-DPTXFSIZN(13) = 0x02000920
-DPTXFSIZN(14) = 0x01000b20
-DPTXFSIZN(15) = 0x01000c20
-DCFG = 0x04040120
-DCTL = 0x00000000
-DSTS = 0x0011ba00
-DIEPMSK = 0x0000200f
-DOEPMSK = 0x0000000f
-DAINT = 0x00000000
-DAINTMSK = 0x00030001
-DTKNQR1 = 0x00000000
-DTKNQR2 = 0x00000000
-DTKNQR3 = 0x0c100020
-DTKNQR4 = 0x00000000
-DVBUSDIS = 0x000017d7
-DVBUSPULSE = 0x000005b8
-DIEPCTL(0) = 0x00008000
-DIEPCTL(1) = 0x01860380
-DIEPCTL(2) = 0x00000400
-DIEPCTL(3) = 0x00000400
-DIEPCTL(4) = 0x00000400
-DIEPCTL(5) = 0x00000400
-DIEPCTL(6) = 0x00000400
-DIEPCTL(7) = 0x00000400
-DIEPCTL(8) = 0x00000400
-DIEPCTL(9) = 0x00000400
-DIEPCTL(10) = 0x00000400
-DIEPCTL(11) = 0x00000400
-DIEPCTL(12) = 0x00000400
-DIEPCTL(13) = 0x00000400
-DIEPCTL(14) = 0x00000400
-DIEPCTL(15) = 0x00000400
-DOEPCTL(0) = 0x80028000
-DOEPCTL(1) = 0x80048380
-DOEPCTL(2) = 0x00000400
-DOEPCTL(3) = 0x00000400
-DOEPCTL(4) = 0x00000400
-DOEPCTL(5) = 0x00000400
-DOEPCTL(6) = 0x00000400
-DOEPCTL(7) = 0x00000400
-DOEPCTL(8) = 0x00000400
-DOEPCTL(9) = 0x00000400
-DOEPCTL(10) = 0x00000400
-DOEPCTL(11) = 0x00000400
-DOEPCTL(12) = 0x00000400
-DOEPCTL(13) = 0x00000400
-DOEPCTL(14) = 0x00000400
-DOEPCTL(15) = 0x00000400
-DIEPINT(0) = 0x000000d0
-DIEPINT(1) = 0x00000000
-DIEPINT(2) = 0x00000080
-DIEPINT(3) = 0x00000080
-DIEPINT(4) = 0x00000080
-DIEPINT(5) = 0x00000080
-DIEPINT(6) = 0x00000080
-DIEPINT(7) = 0x00000080
-DIEPINT(8) = 0x00000080
-DIEPINT(9) = 0x00000080
-DIEPINT(10) = 0x00000080
-DIEPINT(11) = 0x00000080
-DIEPINT(12) = 0x00000080
-DIEPINT(13) = 0x00000080
-DIEPINT(14) = 0x00000080
-DIEPINT(15) = 0x00000080
-DOEPINT(0) = 0x00002000
-DOEPINT(1) = 0x00002000
-DOEPINT(2) = 0x00000000
-DOEPINT(3) = 0x00000000
-DOEPINT(4) = 0x00000000
-DOEPINT(5) = 0x00000000
-DOEPINT(6) = 0x00000000
-DOEPINT(7) = 0x00000000
-DOEPINT(8) = 0x00000000
-DOEPINT(9) = 0x00000000
-DOEPINT(10) = 0x00000000
-DOEPINT(11) = 0x00000000
-DOEPINT(12) = 0x00000000
-DOEPINT(13) = 0x00000000
-DOEPINT(14) = 0x00000000
-DOEPINT(15) = 0x00000000
-DIEPTSIZ(0) = 0x00000000
-DIEPTSIZ(1) = 0x00000000
-DIEPTSIZ(2) = 0x00000000
-DIEPTSIZ(3) = 0x00000000
-DIEPTSIZ(4) = 0x00000000
-DIEPTSIZ(5) = 0x00000000
-DIEPTSIZ(6) = 0x00000000
-DIEPTSIZ(7) = 0x00000000
-DIEPTSIZ(8) = 0x00000000
-DIEPTSIZ(9) = 0x00000000
-DIEPTSIZ(10) = 0x00000000
-DIEPTSIZ(11) = 0x00000000
-DIEPTSIZ(12) = 0x00000000
-DIEPTSIZ(13) = 0x00000000
-DIEPTSIZ(14) = 0x00000000
-DIEPTSIZ(15) = 0x00000000
-DOEPTSIZ(0) = 0x00080008
-DOEPTSIZ(1) = 0x00080380
-DOEPTSIZ(2) = 0x00000000
-DOEPTSIZ(3) = 0x00000000
-DOEPTSIZ(4) = 0x00000000
-DOEPTSIZ(5) = 0x00000000
-DOEPTSIZ(6) = 0x00000000
-DOEPTSIZ(7) = 0x00000000
-DOEPTSIZ(8) = 0x00000000
-DOEPTSIZ(9) = 0x00000000
-DOEPTSIZ(10) = 0x00000000
-DOEPTSIZ(11) = 0x00000000
-DOEPTSIZ(12) = 0x00000000
-DOEPTSIZ(13) = 0x00000000
-DOEPTSIZ(14) = 0x00000000
-DOEPTSIZ(15) = 0x00000000
-DIEPDMA(0) = 0xef2b2004
-DIEPDMA(1) = 0xd66e0f00
-DIEPDMA(2) = 0x1bda55e0
-DIEPDMA(3) = 0x6231e1a1
-DIEPDMA(4) = 0x58ab6e94
-DIEPDMA(5) = 0xfd702e1d
-DIEPDMA(6) = 0xdb415a94
-DIEPDMA(7) = 0x2ee9992c
-DIEPDMA(8) = 0x2d488611
-DIEPDMA(9) = 0x2d488611
-DIEPDMA(10) = 0x2d488611
-DIEPDMA(11) = 0x2d488611
-DIEPDMA(12) = 0x2d488611
-DIEPDMA(13) = 0x2d488611
-DIEPDMA(14) = 0x2d488611
-DIEPDMA(15) = 0x2d488611
-DOEPDMA(0) = 0xd7533240
-DOEPDMA(1) = 0xd4c6b380
-DOEPDMA(2) = 0xe66c5a8d
-DOEPDMA(3) = 0x0e264341
-DOEPDMA(4) = 0x6fee07bd
-DOEPDMA(5) = 0x72153c07
-DOEPDMA(6) = 0x6151a7d3
-DOEPDMA(7) = 0x2d488611
-DOEPDMA(8) = 0xa57ea57e
-DOEPDMA(9) = 0xa57ea57e
-DOEPDMA(10) = 0xa57ea57e
-DOEPDMA(11) = 0xa57ea57e
-DOEPDMA(12) = 0xa57ea57e
-DOEPDMA(13) = 0xa57ea57e
-DOEPDMA(14) = 0xa57ea57e
-DOEPDMA(15) = 0xa57ea57e
-DTXFSTS(0) = 0x00000020
-DTXFSTS(1) = 0x00000100
-DTXFSTS(2) = 0x00000020
-DTXFSTS(3) = 0x00000020
-DTXFSTS(4) = 0x00000020
-DTXFSTS(5) = 0x00000020
-DTXFSTS(6) = 0x00000020
-DTXFSTS(7) = 0x00000020
-DTXFSTS(8) = 0x00000020
-DTXFSTS(9) = 0x00000020
-DTXFSTS(10) = 0x00000020
-DTXFSTS(11) = 0x00000020
-DTXFSTS(12) = 0x00000020
-DTXFSTS(13) = 0x00000020
-DTXFSTS(14) = 0x00000020
-DTXFSTS(15) = 0x00000020
-PCGCTL = 0x00000000
-HCFG = 0x00040120
-HFIR = 0x000017d7
-HFNUM = 0x19740237
-HPTXSTS = 0x00080200
-HAINT = 0x00000000
-HAINTMSK = 0x00000001
-HFLBADDR = 0x00000000
-HPRT0 = 0x00000000
-HCCHAR(0) = 0x01860380
-HCCHAR(1) = 0x80048380
-HCCHAR(2) = 0x00000400
-HCCHAR(3) = 0x00000400
-HCCHAR(4) = 0x00000400
-HCCHAR(5) = 0x00000400
-HCCHAR(6) = 0x00000400
-HCCHAR(7) = 0x00000400
-HCCHAR(8) = 0x00000400
-HCCHAR(9) = 0x00000400
-HCCHAR(10) = 0x00000400
-HCCHAR(11) = 0x00000400
-HCCHAR(12) = 0x00000400
-HCCHAR(13) = 0x00000400
-HCCHAR(14) = 0x00000400
-HCCHAR(15) = 0x00000400
-HCSPLT(0) = 0x00000000
-HCSPLT(1) = 0x00000000
-HCSPLT(2) = 0x00000000
-HCSPLT(3) = 0x00000000
-HCSPLT(4) = 0x00000000
-HCSPLT(5) = 0x00000000
-HCSPLT(6) = 0x00000000
-HCSPLT(7) = 0x00000000
-HCSPLT(8) = 0x00000000
-HCSPLT(9) = 0x00000000
-HCSPLT(10) = 0x00000000
-HCSPLT(11) = 0x00000000
-HCSPLT(12) = 0x00000000
-HCSPLT(13) = 0x00000000
-HCSPLT(14) = 0x00000000
-HCSPLT(15) = 0x00000000
-HCINT(0) = 0x00000000
-HCINT(1) = 0x00002000
-HCINT(2) = 0x00000000
-HCINT(3) = 0x00000000
-HCINT(4) = 0x00000000
-HCINT(5) = 0x00000000
-HCINT(6) = 0x00000000
-HCINT(7) = 0x00000000
-HCINT(8) = 0x00000000
-HCINT(9) = 0x00000000
-HCINT(10) = 0x00000000
-HCINT(11) = 0x00000000
-HCINT(12) = 0x00000000
-HCINT(13) = 0x00000000
-HCINT(14) = 0x00000000
-HCINT(15) = 0x00000000
-HCINTMSK(0) = 0x0000000f
-HCINTMSK(1) = 0x00000000
-HCINTMSK(2) = 0x00000000
-HCINTMSK(3) = 0x00000000
-HCINTMSK(4) = 0x00000000
-HCINTMSK(5) = 0x00000000
-HCINTMSK(6) = 0x00000000
-HCINTMSK(7) = 0x00000000
-HCINTMSK(8) = 0x00000000
-HCINTMSK(9) = 0x00000000
-HCINTMSK(10) = 0x00000000
-HCINTMSK(11) = 0x00000000
-HCINTMSK(12) = 0x00000000
-HCINTMSK(13) = 0x00000000
-HCINTMSK(14) = 0x00000000
-HCINTMSK(15) = 0x00000000
-HCTSIZ(0) = 0x00000000
-HCTSIZ(1) = 0x00080380
-HCTSIZ(2) = 0x00000000
-HCTSIZ(3) = 0x00000000
-HCTSIZ(4) = 0x00000000
-HCTSIZ(5) = 0x00000000
-HCTSIZ(6) = 0x00000000
-HCTSIZ(7) = 0x00000000
-HCTSIZ(8) = 0x00000000
-HCTSIZ(9) = 0x00000000
-HCTSIZ(10) = 0x00000000
-HCTSIZ(11) = 0x00000000
-HCTSIZ(12) = 0x00000000
-HCTSIZ(13) = 0x00000000
-HCTSIZ(14) = 0x00000000
-HCTSIZ(15) = 0x00000000
-HCDMA(0) = 0xd7533240
-HCDMA(1) = 0xd4c6b380
-HCDMA(2) = 0xe66c5a8d
-HCDMA(3) = 0x0e264341
-HCDMA(4) = 0x6fee07bd
-HCDMA(5) = 0x72153c07
-HCDMA(6) = 0x6151a7d3
-HCDMA(7) = 0x2d488611
-HCDMA(8) = 0xa57ea57e
-HCDMA(9) = 0xa57ea57e
-HCDMA(10) = 0xa57ea57e
-HCDMA(11) = 0xa57ea57e
-HCDMA(12) = 0xa57ea57e
-HCDMA(13) = 0xa57ea57e
-HCDMA(14) = 0xa57ea57e
-HCDMA(15) = 0xa57ea57e
-HCDMAB(0) = 0xa57ea57e
-HCDMAB(1) = 0xd7533240
-HCDMAB(2) = 0xd4c6b380
-HCDMAB(3) = 0xe66c5a8d
-HCDMAB(4) = 0x0e264341
-HCDMAB(5) = 0x6fee07bd
-HCDMAB(6) = 0x72153c07
-HCDMAB(7) = 0x6151a7d3
-HCDMAB(8) = 0x2d488611
-HCDMAB(9) = 0xa57ea57e
-HCDMAB(10) = 0xa57ea57e
-HCDMAB(11) = 0xa57ea57e
-HCDMAB(12) = 0xa57ea57e
-HCDMAB(13) = 0xa57ea57e
-HCDMAB(14) = 0xa57ea57e
-HCDMAB(15) = 0xa57ea57e
-
---------------A59DF5F79234655264FF5959
-Content-Type: text/plain; charset=UTF-8;
- name="regdump-960bytes.txt"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="regdump-960bytes.txt"
-
-GOTGCTL = 0x000d0000
-GOTGINT = 0x00000000
-GAHBCFG = 0x00000031
-GUSBCFG = 0x00001400
-GRSTCTL = 0x80000180
-GINTSTS = 0x0400c02a
-GINTMSK = 0xd0bc3c44
-GRXSTSR = 0x6151a7d3
-GRXFSIZ = 0x00000100
-GNPTXFSIZ = 0x00200100
-GNPTXSTS = 0x00080020
-GI2CCTL = 0x00000000
-GPVNDCTL = 0x00000000
-GGPIO = 0x00000000
-GUID = 0x2708a000
-GSNPSID = 0x4f54280a
-GHWCFG1 = 0x00000000
-GHWCFG2 = 0x228ddd50
-GHWCFG3 = 0x0ff000e8
-GHWCFG4 = 0x1ff00020
-GLPMCFG = 0x75736230
-GPWRDN = 0x00000000
-GDFIFOCFG = 0x00000000
-ADPCTL = 0x00000000
-HPTXFSIZ = 0x01000c20
-DPTXFSIZN(1) = 0x02000120
-DPTXFSIZN(2) = 0x02000320
-DPTXFSIZN(3) = 0x02000520
-DPTXFSIZN(4) = 0x02000720
-DPTXFSIZN(5) = 0x02000920
-DPTXFSIZN(6) = 0x01000b20
-DPTXFSIZN(7) = 0x01000c20
-DPTXFSIZN(8) = 0x01000c20
-DPTXFSIZN(9) = 0x02000120
-DPTXFSIZN(10) = 0x02000320
-DPTXFSIZN(11) = 0x02000520
-DPTXFSIZN(12) = 0x02000720
-DPTXFSIZN(13) = 0x02000920
-DPTXFSIZN(14) = 0x01000b20
-DPTXFSIZN(15) = 0x01000c20
-DCFG = 0x04040110
-DCTL = 0x00000000
-DSTS = 0x003a5a00
-DIEPMSK = 0x0000200f
-DOEPMSK = 0x0000000f
-DAINT = 0x00000000
-DAINTMSK = 0x00010001
-DTKNQR1 = 0x00000000
-DTKNQR2 = 0x00000000
-DTKNQR3 = 0x0c100020
-DTKNQR4 = 0x00000000
-DVBUSDIS = 0x000017d7
-DVBUSPULSE = 0x000005b8
-DIEPCTL(0) = 0x00008000
-DIEPCTL(1) = 0x018603c0
-DIEPCTL(2) = 0x00000400
-DIEPCTL(3) = 0x00000400
-DIEPCTL(4) = 0x00000400
-DIEPCTL(5) = 0x00000400
-DIEPCTL(6) = 0x00000400
-DIEPCTL(7) = 0x00000400
-DIEPCTL(8) = 0x00000400
-DIEPCTL(9) = 0x00000400
-DIEPCTL(10) = 0x00000400
-DIEPCTL(11) = 0x00000400
-DIEPCTL(12) = 0x00000400
-DIEPCTL(13) = 0x00000400
-DIEPCTL(14) = 0x00000400
-DIEPCTL(15) = 0x00000400
-DOEPCTL(0) = 0x80028000
-DOEPCTL(1) = 0x000603c0
-DOEPCTL(2) = 0x00000400
-DOEPCTL(3) = 0x00000400
-DOEPCTL(4) = 0x00000400
-DOEPCTL(5) = 0x00000400
-DOEPCTL(6) = 0x00000400
-DOEPCTL(7) = 0x00000400
-DOEPCTL(8) = 0x00000400
-DOEPCTL(9) = 0x00000400
-DOEPCTL(10) = 0x00000400
-DOEPCTL(11) = 0x00000400
-DOEPCTL(12) = 0x00000400
-DOEPCTL(13) = 0x00000400
-DOEPCTL(14) = 0x00000400
-DOEPCTL(15) = 0x00000400
-DIEPINT(0) = 0x000000d0
-DIEPINT(1) = 0x00000000
-DIEPINT(2) = 0x00000080
-DIEPINT(3) = 0x00000080
-DIEPINT(4) = 0x00000080
-DIEPINT(5) = 0x00000080
-DIEPINT(6) = 0x00000080
-DIEPINT(7) = 0x00000080
-DIEPINT(8) = 0x00000080
-DIEPINT(9) = 0x00000080
-DIEPINT(10) = 0x00000080
-DIEPINT(11) = 0x00000080
-DIEPINT(12) = 0x00000080
-DIEPINT(13) = 0x00000080
-DIEPINT(14) = 0x00000080
-DIEPINT(15) = 0x00000080
-DOEPINT(0) = 0x00002000
-DOEPINT(1) = 0x00000000
-DOEPINT(2) = 0x00000000
-DOEPINT(3) = 0x00000000
-DOEPINT(4) = 0x00000000
-DOEPINT(5) = 0x00000000
-DOEPINT(6) = 0x00000000
-DOEPINT(7) = 0x00000000
-DOEPINT(8) = 0x00000000
-DOEPINT(9) = 0x00000000
-DOEPINT(10) = 0x00000000
-DOEPINT(11) = 0x00000000
-DOEPINT(12) = 0x00000000
-DOEPINT(13) = 0x00000000
-DOEPINT(14) = 0x00000000
-DOEPINT(15) = 0x00000000
-DIEPTSIZ(0) = 0x00000000
-DIEPTSIZ(1) = 0x00000000
-DIEPTSIZ(2) = 0x00000000
-DIEPTSIZ(3) = 0x00000000
-DIEPTSIZ(4) = 0x00000000
-DIEPTSIZ(5) = 0x00000000
-DIEPTSIZ(6) = 0x00000000
-DIEPTSIZ(7) = 0x00000000
-DIEPTSIZ(8) = 0x00000000
-DIEPTSIZ(9) = 0x00000000
-DIEPTSIZ(10) = 0x00000000
-DIEPTSIZ(11) = 0x00000000
-DIEPTSIZ(12) = 0x00000000
-DIEPTSIZ(13) = 0x00000000
-DIEPTSIZ(14) = 0x00000000
-DIEPTSIZ(15) = 0x00000000
-DOEPTSIZ(0) = 0x00080008
-DOEPTSIZ(1) = 0x000803c0
-DOEPTSIZ(2) = 0x00000000
-DOEPTSIZ(3) = 0x00000000
-DOEPTSIZ(4) = 0x00000000
-DOEPTSIZ(5) = 0x00000000
-DOEPTSIZ(6) = 0x00000000
-DOEPTSIZ(7) = 0x00000000
-DOEPTSIZ(8) = 0x00000000
-DOEPTSIZ(9) = 0x00000000
-DOEPTSIZ(10) = 0x00000000
-DOEPTSIZ(11) = 0x00000000
-DOEPTSIZ(12) = 0x00000000
-DOEPTSIZ(13) = 0x00000000
-DOEPTSIZ(14) = 0x00000000
-DOEPTSIZ(15) = 0x00000000
-DIEPDMA(0) = 0xd6e73004
-DIEPDMA(1) = 0xd66e0f00
-DIEPDMA(2) = 0x1bda55e0
-DIEPDMA(3) = 0x6231e1a1
-DIEPDMA(4) = 0x58ab6e94
-DIEPDMA(5) = 0xfd702e1d
-DIEPDMA(6) = 0xdb415a94
-DIEPDMA(7) = 0x2ee9992c
-DIEPDMA(8) = 0x2d488611
-DIEPDMA(9) = 0x2d488611
-DIEPDMA(10) = 0x2d488611
-DIEPDMA(11) = 0x2d488611
-DIEPDMA(12) = 0x2d488611
-DIEPDMA(13) = 0x2d488611
-DIEPDMA(14) = 0x2d488611
-DIEPDMA(15) = 0x2d488611
-DOEPDMA(0) = 0xd710f240
-DOEPDMA(1) = 0xd66e3800
-DOEPDMA(2) = 0xe66c5a8d
-DOEPDMA(3) = 0x0e264341
-DOEPDMA(4) = 0x6fee07bd
-DOEPDMA(5) = 0x72153c07
-DOEPDMA(6) = 0x6151a7d3
-DOEPDMA(7) = 0x2d488611
-DOEPDMA(8) = 0x00110500
-DOEPDMA(9) = 0x00110500
-DOEPDMA(10) = 0x00110500
-DOEPDMA(11) = 0x00110500
-DOEPDMA(12) = 0x00110500
-DOEPDMA(13) = 0x00110500
-DOEPDMA(14) = 0x00110500
-DOEPDMA(15) = 0x00110500
-DTXFSTS(0) = 0x00000020
-DTXFSTS(1) = 0x00000100
-DTXFSTS(2) = 0x00000020
-DTXFSTS(3) = 0x00000020
-DTXFSTS(4) = 0x00000020
-DTXFSTS(5) = 0x00000020
-DTXFSTS(6) = 0x00000020
-DTXFSTS(7) = 0x00000020
-DTXFSTS(8) = 0x00000020
-DTXFSTS(9) = 0x00000020
-DTXFSTS(10) = 0x00000020
-DTXFSTS(11) = 0x00000020
-DTXFSTS(12) = 0x00000020
-DTXFSTS(13) = 0x00000020
-DTXFSTS(14) = 0x00000020
-DTXFSTS(15) = 0x00000020
-PCGCTL = 0x00000000
-HCFG = 0x00040110
-HFIR = 0x000017d7
-HFNUM = 0x076a074b
-HPTXSTS = 0x00080200
-HAINT = 0x00000000
-HAINTMSK = 0x00000001
-HFLBADDR = 0x00000000
-HPRT0 = 0x00000000
-HCCHAR(0) = 0x018603c0
-HCCHAR(1) = 0x000603c0
-HCCHAR(2) = 0x00000400
-HCCHAR(3) = 0x00000400
-HCCHAR(4) = 0x00000400
-HCCHAR(5) = 0x00000400
-HCCHAR(6) = 0x00000400
-HCCHAR(7) = 0x00000400
-HCCHAR(8) = 0x00000400
-HCCHAR(9) = 0x00000400
-HCCHAR(10) = 0x00000400
-HCCHAR(11) = 0x00000400
-HCCHAR(12) = 0x00000400
-HCCHAR(13) = 0x00000400
-HCCHAR(14) = 0x00000400
-HCCHAR(15) = 0x00000400
-HCSPLT(0) = 0x00000000
-HCSPLT(1) = 0x00000000
-HCSPLT(2) = 0x00000000
-HCSPLT(3) = 0x00000000
-HCSPLT(4) = 0x00000000
-HCSPLT(5) = 0x00000000
-HCSPLT(6) = 0x00000000
-HCSPLT(7) = 0x00000000
-HCSPLT(8) = 0x00000000
-HCSPLT(9) = 0x00000000
-HCSPLT(10) = 0x00000000
-HCSPLT(11) = 0x00000000
-HCSPLT(12) = 0x00000000
-HCSPLT(13) = 0x00000000
-HCSPLT(14) = 0x00000000
-HCSPLT(15) = 0x00000000
-HCINT(0) = 0x00000000
-HCINT(1) = 0x00000000
-HCINT(2) = 0x00000000
-HCINT(3) = 0x00000000
-HCINT(4) = 0x00000000
-HCINT(5) = 0x00000000
-HCINT(6) = 0x00000000
-HCINT(7) = 0x00000000
-HCINT(8) = 0x00000000
-HCINT(9) = 0x00000000
-HCINT(10) = 0x00000000
-HCINT(11) = 0x00000000
-HCINT(12) = 0x00000000
-HCINT(13) = 0x00000000
-HCINT(14) = 0x00000000
-HCINT(15) = 0x00000000
-HCINTMSK(0) = 0x0000000f
-HCINTMSK(1) = 0x00000000
-HCINTMSK(2) = 0x00000000
-HCINTMSK(3) = 0x00000000
-HCINTMSK(4) = 0x00000000
-HCINTMSK(5) = 0x00000000
-HCINTMSK(6) = 0x00000000
-HCINTMSK(7) = 0x00000000
-HCINTMSK(8) = 0x00000000
-HCINTMSK(9) = 0x00000000
-HCINTMSK(10) = 0x00000000
-HCINTMSK(11) = 0x00000000
-HCINTMSK(12) = 0x00000000
-HCINTMSK(13) = 0x00000000
-HCINTMSK(14) = 0x00000000
-HCINTMSK(15) = 0x00000000
-HCTSIZ(0) = 0x00000000
-HCTSIZ(1) = 0x000803c0
-HCTSIZ(2) = 0x00000000
-HCTSIZ(3) = 0x00000000
-HCTSIZ(4) = 0x00000000
-HCTSIZ(5) = 0x00000000
-HCTSIZ(6) = 0x00000000
-HCTSIZ(7) = 0x00000000
-HCTSIZ(8) = 0x00000000
-HCTSIZ(9) = 0x00000000
-HCTSIZ(10) = 0x00000000
-HCTSIZ(11) = 0x00000000
-HCTSIZ(12) = 0x00000000
-HCTSIZ(13) = 0x00000000
-HCTSIZ(14) = 0x00000000
-HCTSIZ(15) = 0x00000000
-HCDMA(0) = 0xd710f240
-HCDMA(1) = 0xd66e3800
-HCDMA(2) = 0xe66c5a8d
-HCDMA(3) = 0x0e264341
-HCDMA(4) = 0x6fee07bd
-HCDMA(5) = 0x72153c07
-HCDMA(6) = 0x6151a7d3
-HCDMA(7) = 0x2d488611
-HCDMA(8) = 0x00110500
-HCDMA(9) = 0x00110500
-HCDMA(10) = 0x00110500
-HCDMA(11) = 0x00110500
-HCDMA(12) = 0x00110500
-HCDMA(13) = 0x00110500
-HCDMA(14) = 0x00110500
-HCDMA(15) = 0x00110500
-HCDMAB(0) = 0x00110500
-HCDMAB(1) = 0xd710f240
-HCDMAB(2) = 0xd66e3800
-HCDMAB(3) = 0xe66c5a8d
-HCDMAB(4) = 0x0e264341
-HCDMAB(5) = 0x6fee07bd
-HCDMAB(6) = 0x72153c07
-HCDMAB(7) = 0x6151a7d3
-HCDMAB(8) = 0x2d488611
-HCDMAB(9) = 0x00110500
-HCDMAB(10) = 0x00110500
-HCDMAB(11) = 0x00110500
-HCDMAB(12) = 0x00110500
-HCDMAB(13) = 0x00110500
-HCDMAB(14) = 0x00110500
-HCDMAB(15) = 0x00110500
-
---------------A59DF5F79234655264FF5959--
+--lquivkdwamayvc2f--
