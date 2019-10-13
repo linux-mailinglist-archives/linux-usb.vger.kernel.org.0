@@ -2,84 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D34FD5681
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 16:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B5DD5734
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Oct 2019 20:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729265AbfJMOeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Oct 2019 10:34:25 -0400
-Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:44812 "EHLO
-        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729249AbfJMOeZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Oct 2019 10:34:25 -0400
-Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
-        id 4749280239; Sun, 13 Oct 2019 16:34:08 +0200 (CEST)
-Date:   Sun, 13 Oct 2019 16:34:02 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Marcel Partap <mpartap@gmx.net>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Michael Scott <hashcode0f@gmail.com>,
-        NeKit <nekit1000@gmail.com>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH 7/7] usb: musb: Get rid of omap2430_musb_set_vbus()
-Message-ID: <20191013143402.GB13278@amd>
-References: <20191009212145.28495-1-tony@atomide.com>
- <20191009212145.28495-8-tony@atomide.com>
+        id S1728481AbfJMSLh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Oct 2019 14:11:37 -0400
+Received: from vsmx012.vodafonemail.xion.oxcs.net ([153.92.174.90]:21364 "EHLO
+        vsmx012.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727141AbfJMSLh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Oct 2019 14:11:37 -0400
+Received: from vsmx004.vodafonemail.xion.oxcs.net (unknown [192.168.75.198])
+        by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTP id 60551F34EB2;
+        Sun, 13 Oct 2019 18:11:33 +0000 (UTC)
+Received: from lazy.lzy (unknown [93.212.126.195])
+        by mta-8-out.mta.xion.oxcs.net (Postfix) with ESMTPA id A68DE19AD8B;
+        Sun, 13 Oct 2019 18:11:18 +0000 (UTC)
+Received: from lazy.lzy (localhost [127.0.0.1])
+        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id x9DIBGb8003897
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sun, 13 Oct 2019 20:11:16 +0200
+Received: (from red@localhost)
+        by lazy.lzy (8.15.2/8.15.2/Submit) id x9DIBG8h003896;
+        Sun, 13 Oct 2019 20:11:16 +0200
+Date:   Sun, 13 Oct 2019 20:11:16 +0200
+From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
+To:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
+Message-ID: <20191013181116.GA3858@lazy.lzy>
+References: <20190929201332.GA3099@lazy.lzy>
+ <Pine.LNX.4.44L0.1909292056230.5908-100000@netrider.rowland.org>
+ <20190930182501.GA4043@lazy.lzy>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="JYK4vJDZwFMowpUq"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191009212145.28495-8-tony@atomide.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190930182501.GA4043@lazy.lzy>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-VADE-STATUS: LEGIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Sep 30, 2019 at 08:25:01PM +0200, Piergiorgio Sartor wrote:
+> On Sun, Sep 29, 2019 at 09:01:48PM -0400, Alan Stern wrote:
+> > On Sun, 29 Sep 2019, Piergiorgio Sartor wrote:
+> > 
+> > > On Wed, Sep 25, 2019 at 02:31:58PM -0400, Alan Stern wrote:
+> > > > On Wed, 25 Sep 2019, Piergiorgio Sartor wrote:
+> > > > 
+> > > > > On Mon, Aug 26, 2019 at 07:38:33PM +0200, Piergiorgio Sartor wrote:
+> > > > > > On Tue, Aug 20, 2019 at 06:37:22PM +0200, Piergiorgio Sartor wrote:
+> > > > > > > On Tue, Aug 20, 2019 at 09:23:26AM +0200, Christoph Hellwig wrote:
+> > > > > > > > On Mon, Aug 19, 2019 at 10:14:25AM -0400, Alan Stern wrote:
+> > > > > > > > > Let's bring this to the attention of some more people.
+> > > > > > > > > 
+> > > > > > > > > It looks like the bug that was supposed to be fixed by commit
+> > > > > > > > > d74ffae8b8dd ("usb-storage: Add a limitation for
+> > > > > > > > > blk_queue_max_hw_sectors()"), which is part of 5.2.5, but apparently
+> > > > > > > > > the bug still occurs.
+> > > > > > > > 
+> > > > > > > > Piergiorgio,
+> > > > > > > > 
+> > > > > > > > can you dump the content of max_hw_sectors_kb file for your USB storage
+> > > > > > > > device and send that to this thread?
+> > > > > > > 
+> > > > > > > Hi all,
+> > > > > > > 
+> > > > > > > for both kernels, 5.1.20 (working) and 5.2.8 (not working),
+> > > > > > > the content of /sys/dev/x:y/queue/max_hw_sectors_kb is 512
+> > > > > > > for USB storage devices (2.0 and 3.0).
+> > > > > > > 
+> > > > > > > This is for the PC showing the issue.
+> > > > > > > 
+> > > > > > > In an other PC, which does not show the issus at the moment,
+> > > > > > > the values are 120, for USB2.0, and 256, for USB3.0.
+> > 
+> > > > One thing you can try is git bisect from 5.1.20 (or maybe just 5.1.0)  
+> > > > to 5.2.8.  If you can identify a particular commit which caused the
+> > > > problem to start, that would help.
+> > > 
+> > > OK, I tried a bisect (2 days compilations...).
+> > > Assuming I've done everything correctly (how to
+> > > test this? How to remove the guilty patch?), this
+> > > was the result:
+> > > 
+> > > 09324d32d2a0843e66652a087da6f77924358e62 is the first bad commit
+> > > commit 09324d32d2a0843e66652a087da6f77924358e62
+> > > Author: Christoph Hellwig <hch@lst.de>
+> > > Date:   Tue May 21 09:01:41 2019 +0200
+> > > 
+> > >     block: force an unlimited segment size on queues with a virt boundary
+> > > 
+> > >     We currently fail to update the front/back segment size in the bio when
+> > >     deciding to allow an otherwise gappy segement to a device with a
+> > >     virt boundary.  The reason why this did not cause problems is that
+> > >     devices with a virt boundary fundamentally don't use segments as we
+> > >     know it and thus don't care.  Make that assumption formal by forcing
+> > >     an unlimited segement size in this case.
+> > > 
+> > >     Fixes: f6970f83ef79 ("block: don't check if adjacent bvecs in one bio can be mergeable")
+> > >     Signed-off-by: Christoph Hellwig <hch@lst.de>
+> > >     Reviewed-by: Ming Lei <ming.lei@redhat.com>
+> > >     Reviewed-by: Hannes Reinecke <hare@suse.com>
+> > >     Signed-off-by: Jens Axboe <axboe@kernel.dk>
+> > > 
+> > > :040000 040000 57ba04a02f948022c0f6ba24bfa36f3b565b2440 8c925f71ce75042529c001bf244b30565d19ebf3 M      block
+> > > 
+> > > What to do now?
+> > 
+> > Here's how to verify that the bisection got a correct result.  First, 
+> > do a git checkout of commit 09324d32d2a0, build the kernel, and make 
+> > sure that it exhibits the problem.
+> > 
+> > Next, have git write out the contents of that commit in the form of a
+> > patch (git show commit-id >patchfile), and revert it (git apply -R
+> > patchfile).  Build the kernel from that tree, and make sure that it
+> > does not exhibit the problem.  If it doesn't, you have definitely shown
+> > that this commit is the cause (or at least, is _one_ of the causes).
+> 
+> I tried as suggested, i.e. jumping to commit
+> 09324d32d2a0843e66652a087da6f77924358e62, testing,
+> removing the patch, testing.
+> The result was as expected.
+> I was able to reproduce the issue with the commit,
+> I was not able to reproduce it without.
+> It seems this patch / commit is causing the problem.
+> Directly or indirectly.
+> 
+> What are the next steps?
 
---JYK4vJDZwFMowpUq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi all,
 
-On Wed 2019-10-09 14:21:44, Tony Lindgren wrote:
-> Now that we've removed direct calls from interrupt handler to
-> omap2430_musb_set_vbus(), let's make things less confusing and
-> configure VBUS directly in omap_musb_set_mailbox().
->=20
-> We have omap_musb_set_mailbox() called from the PHYs, and that's
-> all we need.
->=20
-> Note that we can now also drop the check for MUSB_INTERFACE_UTMI,
-> we've been already calling otg_set_vbus(musb->xceiv->otg, 0)
-> unconditionally via omap2430_musb_set_vbus() and we should only
-> need to call it once.
->=20
-> And we want to disable VBUS unconditionally on disconnect even
-> without musb->gadget_driver, so let's drop that check too.
->=20
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
+I tested kernel 5.3.5 (Fedora kernel-5.3.5-200.fc30.x86_64),
+with same problematic results.
 
-4-7: Acked-by: Pavel Machek <pavel@ucw.cz>
+Again, what should be done now?
+Could you please revert the patch?
 
---=20
-(english) http://www.livejournal.com/~pavelmachek
-(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blo=
-g.html
+Or is there something else to check?
 
---JYK4vJDZwFMowpUq
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+bye,
 
-iEYEARECAAYFAl2jNdoACgkQMOfwapXb+vLjKgCfRKROp8H/HwWN7lmjsmtxSM3e
-+Q0An3AkCZWYfwE9C63orIWsFs2j9Mtl
-=DjNd
------END PGP SIGNATURE-----
+-- 
 
---JYK4vJDZwFMowpUq--
+piergiorgio
