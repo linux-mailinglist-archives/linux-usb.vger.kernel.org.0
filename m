@@ -2,126 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3944D6653
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 17:43:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D25D6AC9
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 22:27:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731588AbfJNPnZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Oct 2019 11:43:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56924 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731441AbfJNPnZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Oct 2019 11:43:25 -0400
-Received: from localhost (odyssey.drury.edu [64.22.249.253])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DCE0921848;
-        Mon, 14 Oct 2019 15:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571067804;
-        bh=ogA0vV9jKYkujrE+XcGevuyHNLI9AnE4kf2je8GMmOo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WQgZ8mYT63jkCOewpVr2XBTJgsYL8Un/tkLweTDniCh3HCsx3KaVEYOvxfOj3Wll5
-         APp05yihO1GEw4gLAfZIjFgx2Pe2IM/kHVizYZRuyFJvmml0On7oQDhHM8iY+oAklI
-         qgKsJrBiJ2iTTYaHi6EJVEgbaJ3OYcTRN/QlRvgM=
-Date:   Mon, 14 Oct 2019 10:43:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Message-ID: <20191014154322.GA190693@google.com>
+        id S1731910AbfJNU1e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Oct 2019 16:27:34 -0400
+Received: from gateway20.websitewelcome.com ([192.185.45.27]:34382 "EHLO
+        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729667AbfJNU1e (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Oct 2019 16:27:34 -0400
+X-Greylist: delayed 1944 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Oct 2019 16:27:32 EDT
+Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
+        by gateway20.websitewelcome.com (Postfix) with ESMTP id 5566C40109882
+        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2019 13:11:27 -0500 (CDT)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id K5roi81wlVUVYK5rois4Py; Mon, 14 Oct 2019 14:18:52 -0500
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
+        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Z6hy7j2bf2J0P83dPxoUJpQb5DqOP18QhotJKCAr1Fk=; b=T+ZcWALctqO2RNH+PdtNf3wdXf
+        xxQgqYhkamefp5TT7wBcrfhixu+fVcq+nWT3UGYiz9SXenkq8HXJdIbENEk7rb3aO6vbUhf3FQEUD
+        3lho4t1+FKXgfExwK3Sa8WOLN+lHYRy9JW0rusqrsypXCnDr85+YlMQrgLPSZGeQm7dglGByDvSwu
+        CNie5O6UWiNqGYUQdItd/UAgmCW+jxofPvvcoR4FrCDdxS7qdIQw3WMHzBJiSBxvppEe05VZXqGeI
+        hVkmz3Y0QhmmNNG7XVU9Tl5siVzjJQ65elzEAg+anzaXbUjns60laMlVoq9zvajdpAZF092P8/yWp
+        xk7s8JqQ==;
+Received: from [187.192.22.73] (port=54766 helo=embeddedor)
+        by gator4166.hostgator.com with esmtpa (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1iK5rm-000wQV-S6; Mon, 14 Oct 2019 14:18:51 -0500
+Date:   Mon, 14 Oct 2019 14:18:30 -0500
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Roland Stigge <stigge@antcom.de>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Subject: [PATCH] usb: udc: lpc32xx: fix bad bit shift operation
+Message-ID: <20191014191830.GA10721@embeddedor>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191014061355.29072-1-drake@endlessm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.22.73
+X-Source-L: No
+X-Exim-ID: 1iK5rm-000wQV-S6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: (embeddedor) [187.192.22.73]:54766
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 7
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[+cc Mika]
+It seems that the right variable to use in this case is *i*, instead of
+*n*, otherwise there is an undefined behavior when right shifiting by more
+than 31 bits when multiplying n by 8; notice that *n* can take values
+equal or greater than 4 (4, 8, 16, ...).
 
-On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
-> On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
-> the XHCI controller fails to resume from runtime suspend or s2idle,
-> and USB becomes unusable from that point.
-> 
-> xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-> xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-> xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
-> xhci_hcd 0000:03:00.4: PCI post-resume error -110!
-> xhci_hcd 0000:03:00.4: HC died; cleaning up
-> 
-> The D3-to-D0 transition is successful if the D3 delay is increased
-> to 20ms. Add an appropriate quirk for the affected hardware.
-> 
-> Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
-> Signed-off-by: Daniel Drake <drake@endlessm.com>
+Also, notice that under the current conditions (bl = 3), we are skiping
+the handling of bytes 3, 7, 31... So, fix this by updating this logic
+and limit *bl* up to 4 instead of up to 3.
 
-Can you tell if this is because the Ryzen7 XHCI controller is out of
-spec, or is the Linux PCI core missing some delay?  If the latter,
-fixing the core might fix other devices as well.
+This fix is based on function udc_stuff_fifo().
 
-Mika has this patch:
-https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
-for similar issues, but I think that patch fixes D3cold->D0
-transitions, and your patch appears to be concerned with D3hot->D0
-transitions.
+Addresses-Coverity-ID: 1454834 ("Bad bit shift operation")
+Fixes: 24a28e428351 ("USB: gadget driver for LPC32xx")
+Cc: stable@vger.kernel.org
+Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
+---
+ drivers/usb/gadget/udc/lpc32xx_udc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> ---
->  drivers/pci/quirks.c | 30 +++++++++++++++++++++++-------
->  1 file changed, 23 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index 320255e5e8f8..4570439a6a6c 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -1871,19 +1871,35 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x2609, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260a, quirk_intel_pcie_pm);
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260b, quirk_intel_pcie_pm);
->  
-> +static void quirk_d3_delay(struct pci_dev *dev, unsigned int delay)
-> +{
-> +	if (dev->d3_delay >= delay)
-> +		return;
-> +
-> +	dev->d3_delay = delay;
-> +	pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
-> +		 dev->d3_delay);
-> +}
-> +
->  static void quirk_radeon_pm(struct pci_dev *dev)
->  {
->  	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
-> -	    dev->subsystem_device == 0x00e2) {
-> -		if (dev->d3_delay < 20) {
-> -			dev->d3_delay = 20;
-> -			pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
-> -				 dev->d3_delay);
-> -		}
-> -	}
-> +	    dev->subsystem_device == 0x00e2)
-> +		quirk_d3_delay(dev, 20);
->  }
->  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
->  
-> +/*
-> + * Ryzen7 XHCI controllers fail upon resume from runtime suspend or s2idle
-> + * unless an extended D3 delay is used.
-> + */
-> +static void quirk_ryzen_xhci_d3(struct pci_dev *dev)
-> +{
-> +	quirk_d3_delay(dev, 20);
-> +}
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3);
-> +
->  #ifdef CONFIG_X86_IO_APIC
->  static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
->  {
-> -- 
-> 2.20.1
-> 
+diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
+index 2b1f3cc7819b..bf6c81e2f8cc 100644
+--- a/drivers/usb/gadget/udc/lpc32xx_udc.c
++++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
+@@ -1177,11 +1177,11 @@ static void udc_pop_fifo(struct lpc32xx_udc *udc, u8 *data, u32 bytes)
+ 			tmp = readl(USBD_RXDATA(udc->udp_baseaddr));
+ 
+ 			bl = bytes - n;
+-			if (bl > 3)
+-				bl = 3;
++			if (bl > 4)
++				bl = 4;
+ 
+ 			for (i = 0; i < bl; i++)
+-				data[n + i] = (u8) ((tmp >> (n * 8)) & 0xFF);
++				data[n + i] = (u8) ((tmp >> (i * 8)) & 0xFF);
+ 		}
+ 		break;
+ 
+-- 
+2.23.0
+
