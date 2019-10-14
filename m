@@ -2,254 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0202ED5FA8
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 12:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2162ED5FD9
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 12:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731258AbfJNKDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Oct 2019 06:03:04 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:41998 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730378AbfJNKDE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Oct 2019 06:03:04 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n14so18917679wrw.9;
-        Mon, 14 Oct 2019 03:03:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=Ngln3AC9QLkh5gLsYDzuns7ztDutAhXRFp1aOInf5Jc=;
-        b=U4miVBs5EV1+dtU0uxxHmfviusIPRGukon9NHCnlRGMyw8Tj8qbuekNpfalgePiFM8
-         LgGlnc1SkmylAifrQb4JDUMjwMzbIMWhz5NaRmcrqiaWJ3nTBaOYZyu1XlcLVfUruVxU
-         6vBAf+fTSyKlqT71aBuvfLxG3FvskNEZofQIvVb9T8iN+swLKL+ExWlByDaN3HtP2vx9
-         LKmFqB5/5w56z/sA0anQEE/CfPJEQmhQ0Gd82fYCCWYd7S6KRpUNzsghJZhpO/EmJdNS
-         CIG4kUxH9I8c3YvQqHujwmD3whp8woLObSwrJ/iDQlsf7/HAGguvKdFU8DLO0TZUtgqr
-         asAA==
+        id S1731379AbfJNKQE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Oct 2019 06:16:04 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:33295 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730860AbfJNKQE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Oct 2019 06:16:04 -0400
+Received: by mail-lf1-f68.google.com with SMTP id y127so11403063lfc.0;
+        Mon, 14 Oct 2019 03:16:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=Ngln3AC9QLkh5gLsYDzuns7ztDutAhXRFp1aOInf5Jc=;
-        b=fIYSRn3HVY1QR9B9a739BUPA+qsNYdZX0ZD0clVQEc1JAamtP638OJdOw+D3jBP0bq
-         P2xL1rxC0U199oxf99fZ1PUYyTNdPh6dsrXjAUCSkDj/UT7w2nGpMNMXGik5E9UtgfzY
-         7MPUr+yz1SnhmtYxiwSsFJljQAGzYHmCeqLy46WSU5cMCfBTj1hHHRxGRSEcr2ff3rgV
-         nm0W0fNu2XHh/J8Ta2+4I9S8bdEle3aTuV2jnHhbrg2pX+rJ4JfUN+4W1qsozEo4m4mB
-         ogOp4zoqX+RCMIuqWJR6EEINKZkrQT6QDZM1g+68Be7ePXFd9azjlDnB8P18ZeEHCevm
-         CqXA==
-X-Gm-Message-State: APjAAAVP2rTsx1eeYCO1e3OMCcNVlcWD2Z/D9ZsLFg/XNZjAWClDRGSX
-        CxZFL4Sji+Yl3LummulzxzM=
-X-Google-Smtp-Source: APXvYqwvBzjci18YXroHT3sen3HLefXdQ+pC5l/eE2rPeSrO/4FWoS+bguRI69Ie6dCXzsvO4roSSg==
-X-Received: by 2002:adf:82ad:: with SMTP id 42mr12109017wrc.209.1571047380209;
-        Mon, 14 Oct 2019 03:03:00 -0700 (PDT)
-Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
-        by smtp.gmail.com with ESMTPSA id m18sm27712327wrg.97.2019.10.14.03.02.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 03:02:58 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 12:02:57 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Nagarjuna Kristam <nkristam@nvidia.com>, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V10 0/8] Tegra XUSB gadget driver support
-Message-ID: <20191014100257.GB419598@ulmo>
-References: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
+        bh=ZPSVvZUElOUiKV/doqRMk+tVtdAW+rauLkS5pvoaQXI=;
+        b=goFrFjG9tMRKI0Gjb/MPzDJ1wLQl3UXKgqYSqjWPmi/RUApbM5zmaiqaFQa9xAv1Ct
+         JPklJoVd6/9Sp0De9Wmaz4syatvUtgjv6u+poHIIZxsnE+8bnfKhP46dr43Www8S6ja6
+         TzzgSKSieQ4rbrx4QpQG4vlweFCKSNOGQ3mC4GiZ9bJRZzkupGx0YV2AJo24uYiTYPF3
+         +nqgxlzDO3Q50by5kp1NZ75GCdb3+Ak7Hr+wcbRFPVzQurGnutXQr1tSGyrBSVqgaiUs
+         EdYuY1uPkxCE7e/4K9gPZNVXz4fAxih6PJXdL/rMQTk/Lni9T7VnhNa2z297GWechl8x
+         Iycg==
+X-Gm-Message-State: APjAAAVsWxnJ6qpllIsbecnhbonr1e3/ebVg9p1iTJhJGgNpp4NnB79+
+        7p/Y6cS54kpeH9KLQhRY7S54Z8kv
+X-Google-Smtp-Source: APXvYqzM297RG6C4nfD1J51CsLKSovhQ+DMSTtHhVbESTao8adajczTfciygNySkOr+cZAsoqPtFDA==
+X-Received: by 2002:ac2:4215:: with SMTP id y21mr16841858lfh.85.1571048161178;
+        Mon, 14 Oct 2019 03:16:01 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id e29sm4100446ljb.105.2019.10.14.03.16.00
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Oct 2019 03:16:00 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iJxOd-0005zk-86; Mon, 14 Oct 2019 12:16:11 +0200
+Date:   Mon, 14 Oct 2019 12:16:11 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        "# v5 . 3" <stable@vger.kernel.org>
+Subject: Re: [RFT PATCH] xhci: Fix use-after-free regression in xhci clear
+ hub TT implementation
+Message-ID: <20191014101611.GN13531@localhost>
+References: <1c4b7107-f5e1-4a69-2a73-0e339c7e1072@linux.intel.com>
+ <1570798722-31594-1-git-send-email-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="v9Ux+11Zm5mwPlX6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <1570798722-31594-1-git-send-email-mathias.nyman@linux.intel.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---v9Ux+11Zm5mwPlX6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Sep 23, 2019 at 01:55:44PM +0530, Nagarjuna Kristam wrote:
-> Patches 1-3 are phy driver changes to add support for device
-> mode.
-> Patches 4-7 are changes related to XUSB device mode
-> controller driver.
-> Patch 8 is to enable drivers for XUDC support in defconfig
->=20
-> Test Steps(USB 2.0):
-> - Enable "USB Gadget precomposed configurations" in defconfig
-> - Build, flash and boot Jetson TX1
-> - Connect Jetson TX1 and Ubuntu device using USB A to Micro B
->   cable
-> - After boot on Jetson TX1 terminal usb0 network device should be
->   enumerated
-> - Assign static ip to usb0 on Jetson TX1 and corresponding net
->   device on ubuntu
-> - Run ping test and transfer test(used scp) to check data transfer
->   communication
-
-Hi Felipe, Kishon, Greg,
-
-Patches 1-3 provide new API that is required by patch 7, so I think
-patches 1, 2, 3, 4 and 7 should probably all go through a single tree to
-avoid having to model the dependencies using stable branches.
-
-Kishon, patches 1-3 have gone through several rounds of review already,
-but do you have any remaining concerns on them? If not, it'd be great if
-you could ack them. Felipe and Greg could then pick them up along with
-patches 4 and 7 into the USB tree.
-
-Felipe, Greg, does that sound like a reasonable plan?
-
-I should also mention that while waiting for review, Nagarjuna has been
-able to extend support for the XUDC driver to Tegra186 but has so far
-been holding back on sending them out so as to not needlessly hold up
-progress on this series. However, given the interdependencies, I've come
-to think that it may be preferable to merge everything in one go instead
-of revisiting this in a couple of weeks.
-
-If you guys prefer, Nagarjuna could send out v11 of the series and
-integrate Tegra186 support.
-
-Thanks,
-Thierry
-
-
-> SS mode is verified by enabling Type A port as peripheral
+On Fri, Oct 11, 2019 at 03:58:42PM +0300, Mathias Nyman wrote:
+> commit ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer") schedules work
+> to clear TT buffer, but causes a use-after-free regression at the same time
+> 
+> Make sure hub_tt_work finishes before endpoint is disabled, otherwise
+> the work will dereference already freed endpoint and device related
+> pointers.
+> 
+> This was triggered when usb core failed to read the configuration
+> descriptor of a FS/LS device during enumeration.
+> xhci driver queued clear_tt_work while usb core freed and reallocated
+> a new device for the next enumeration attempt.
+> 
+> EHCI driver implents ehci_endpoint_disable() that makes sure
+> clear_tt_work has finished before it returns, but xhci lacks this support.
+> usb core will call hcd->driver->endpoint_disable() callback before
+> disabling endpoints, so we want this in xhci as well.
+> 
+> The added xhci_endpoint_disable() is based on ehci_endpoint_disable()
+> 
+> Fixes: ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer")
+> Cc: <stable@vger.kernel.org> # v5.3
+> Reported-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > ---
-> v10:
-> * Patches 1,2,4,5,7,8 - No changes.
-> * Patch 3 has braces added to one single line else condition.
-> * Patch 6 has update on compatible string as per suggestion from Chunfeng.
-> ---
-> v9:
-> * Patches 1,2,3,4,5 - No changes.
-> * Patch 6 has update on compatible string as per suggestion from Chunfeng.
-> * Patch 7 has comment fixes as suggested by Chunfeng.
-> * Patch 8 has CONFIG_USB_GPIO enabled as module additionally.
-> ---
-> v8:
-> * Patches 1,2,3,4,5,8 - No changes.
-> * Patch 6 has update on compatible string as per change done in [1].
-> * Patch 7 has issue fix, where device mode didnot got enabled after resume
->   from suspend.
-> ---
-> v7:
-> * Patches 1,2,3,4,5,6,8 - No changes.
-> * Patch 7 - Comments from Balbi and Chunfun adrresed.
->   Added COMPILE_TEST in Kconfig and updated dependencies.
-> ---
-> v6:
-> * Patches 1,2,3,7,8 - No changes.
-> * Patch 4,5,6 - Comments from Rob addressed, updated usb connector driver
->   compatibility string.
-> ---
-> v5:
-> * Patches 1-3 - Commit subject updated as per inputs from Thierry.
-> * Patch 4 - Added reg-names used on Tegra210 in the bindings doc
-> * Enabled xudc driver as module instead of part of kernel in patch 8.
-> * Patched 5-8 - No changes.
-> ---
-> v4:
-> * patch 1 - no changes.
-> * corrected companion device search based on inputs from Thierry in patch=
- 2.
-> * removed unneeded dev variable and corrected value read in
->   tegra210_utmi_port_reset function in patch 3.
-> * dt binding doc and dtb files are corrected for alignments.
->   Replaced extcon-usb-gpio with usb role switch.
-> * Added support for USB role switch instead of extcon-usb-gpio and other =
-minor
->   comments as suggested by Chunfeng.
-> * Enabled xudc driver as module instead of part of kernel in patch 8.
-> ---
-> V3:
-> * Rebased patch 1 to top of tree.
-> * Fixed bug in patch 2, where xudc interrupts dont get generated if USB h=
-ost
->   mode fails to probe. Moved fake port detection logic to generic xusb.c.=
- fake
->   usb port data is updated based on soc flag need_fake_usb3_port.
-> * Added extra lines whereever necessary to make code more readable in pat=
-ch 3
->   and 7.
-> * dt binding doc is corrected for typos and extcon references. Also added
->   details for clocks and removed xusb_ references to clock and power-doma=
-in
->   names and accordingly patch 5 is updated.
-> * removed avdd-pll-utmip-supply in patch 6, as its now part of padctl dri=
-ver.
-> * Patch 8 has no changes.
-> ---
-> V2:
-> * Patches 1-3 are new patches in this series, which splits unified featur=
-es
->   patch to speprated features and removes need of port-fake entry in DT.
-> * Patch 4 is re-arragend dt-bindings patch which incorporates previous
->   patch comments to sort DT entries alphabetically, addresses name changes
->   and PM domain details added.
-> * Patch 5-6 are re-arranged DT patches with major changes - sort entries
->   alphabetically, and adds clock names.
-> * Patch 7 is UDC driver tegra XUSB device mode controller with major
->   changes - remove un-used module params, lockinng for device_mode flag,
->   moving un-needed info logs to debug level, making changes feature flag
->   dependent rather than SOC based macros and other error handling in prob=
-e.
-> * Patch 8 has no changes.
->=20
-> Nagarjuna Kristam (8):
->   phy: tegra: xusb: Add XUSB dual mode support on Tegra210
->   phy: tegra: xusb: Add usb3 port fake support on Tegra210
->   phy: tegra: xusb: Add vbus override support on Tegra210
->   dt-bindings: usb: Add NVIDIA Tegra XUSB device mode controller binding
->   arm64: tegra: Add xudc node for Tegra210
->   arm64: tegra: Enable xudc on Jetson TX1
->   usb: gadget: Add UDC driver for tegra XUSB device mode controller
->   arm64: defconfig: Enable tegra XUDC support
->=20
->  .../devicetree/bindings/usb/nvidia,tegra-xudc.txt  |  110 +
->  arch/arm64/boot/dts/nvidia/tegra210-p2597.dtsi     |   31 +-
->  arch/arm64/boot/dts/nvidia/tegra210.dtsi           |   19 +
->  arch/arm64/configs/defconfig                       |    2 +
->  drivers/phy/tegra/xusb-tegra210.c                  |  134 +-
->  drivers/phy/tegra/xusb.c                           |   87 +
->  drivers/phy/tegra/xusb.h                           |    4 +
->  drivers/usb/gadget/udc/Kconfig                     |   11 +
->  drivers/usb/gadget/udc/Makefile                    |    1 +
->  drivers/usb/gadget/udc/tegra-xudc.c                | 3787 ++++++++++++++=
-++++++
->  include/linux/phy/tegra/xusb.h                     |    4 +-
->  11 files changed, 4186 insertions(+), 4 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xu=
-dc.txt
->  create mode 100644 drivers/usb/gadget/udc/tegra-xudc.c
->=20
-> --=20
-> 2.7.4
->=20
+>  drivers/usb/host/xhci.c | 43 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 43 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 5cfbf9a04494..6e817686d04f 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -3071,6 +3071,48 @@ void xhci_cleanup_stalled_ring(struct xhci_hcd *xhci, unsigned int ep_index,
+>  	}
+>  }
+>  
+> +static void xhci_endpoint_disable(struct usb_hcd *hcd,
+> +				  struct usb_host_endpoint *host_ep)
+> +{
+> +	struct xhci_hcd		*xhci;
+> +	struct xhci_virt_device	*vdev;
+> +	struct xhci_virt_ep	*ep;
+> +	struct usb_device	*udev;
+> +	unsigned long		flags;
+> +	unsigned int		ep_index;
+> +
+> +	xhci = hcd_to_xhci(hcd);
+> +rescan:
+> +	spin_lock_irqsave(&xhci->lock, flags);
+> +
+> +	udev = (struct usb_device *)host_ep->hcpriv;
+> +	if (!udev || !udev->slot_id)
+> +		goto done;
+> +
+> +	vdev = xhci->devs[udev->slot_id];
+> +	if (!vdev)
+> +		goto done;
+> +
+> +	ep_index = xhci_get_endpoint_index(&host_ep->desc);
+> +	ep = &vdev->eps[ep_index];
+> +	if (!ep)
+> +		goto done;
+> +
+> +	/* wait for hub_tt_work to finish clearing hub TT */
+> +	if (ep->ep_state & EP_CLEARING_TT) {
+> +		spin_unlock_irqrestore(&xhci->lock, flags);
+> +		schedule_timeout_uninterruptible(1);
+> +		goto rescan;
+> +	}
+> +
+> +	if (ep->ep_state)
+> +		xhci_dbg(xhci, "endpoint disable with ep_state 0x%x\n",
+> +			 ep->ep_state);
+> +done:
+> +	host_ep->hcpriv = NULL;
+> +	spin_unlock_irqrestore(&xhci->lock, flags);
+> +}
+> +
 
---v9Ux+11Zm5mwPlX6
-Content-Type: application/pgp-signature; name="signature.asc"
+I used essentially the same reproducer as you did for debugging this
+after I first hit it with an actually stalled control endpoint, and this
+patch works also with my fault-injection hack.
 
------BEGIN PGP SIGNATURE-----
+I've reviewed the code and it looks good to me except for one mostly
+theoretical issue. You need to check ep->hc_priv while holding the
+xhci->lock in xhci_clear_tt_buffer_complete() or you could end up having
+xhci_endpoint_disable() reschedule indefinitely while waiting for
+EP_CLEARING_TT to be cleared on a sufficiently weakly ordered
+system.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2kR88ACgkQ3SOs138+
-s6HcqBAAi6UX8jUkVwpS+m7EFLB8/o3WWuKoXwy4KUgj8b/RxjJJY1McNFuBE+b7
-1bZYWwORUA1v1fttqvXb6IbyMU5pyX9szaIlUw89B/p8hN0zXNdSsXi+d+Zq1mKo
-13zp6K4cel9FgTJZFWCRgP8ZfOplg6u3nNwP5JmPo/y8I9/iG4b5y01dsUpUJu5Q
-eniPgOflNqULclwdL0wcHRfVO2c3IyEE9U/qN+HDpxIY5/S1y9xDpwzjQikQSykN
-cOl/p2q00+EG/0onZcBGhuzGy9S8I9mHLGQhksmvcZDOIGMGotcwaur5xFGAv4IB
-7Ji548LYVfBT2P3vGkwnHJPm849jUHmoogEisHZZopqS3tQEUArIeTV//KQmKQdt
-XVyYcyq0nzw5KdF0Su+FCmDZUIaXJf1NVy+hsjhk9CyXbTWlEabUV6B5blafpqNF
-iAcBvToW8OndAMmLXkgkXpcct2QmgA9ic0JQbNtbxw5UQ7MwU5Tj30M+7f86q2K+
-z5LyNeIf+X2xsztv+FgeNNNQbtfp0NlpBxRPQ5qFaykgjOzzg1FvljxQpfQ29UCu
-4QvfBe2wIClKTwcO8o3wQ+JURKnt5YRXyzljYEkbPSu7MgnB86jsxHueGDm1j1AA
-kf6rTlSilLLaPMuSFh2vjb3GR/rDEsZEkYmBDhDSIh2dce/DHEg=
-=CTFt
------END PGP SIGNATURE-----
+Since cfbb8a84c2d2 ("xhci: Fix NULL pointer dereference in
+xhci_clear_tt_buffer_complete()") isn't needed anymore and is slightly
+misleading, I suggest amending the patch with the following:
 
---v9Ux+11Zm5mwPlX6--
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 9b1e15fe2c8e..6c17e3fe181a 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -5280,20 +5280,13 @@ static void xhci_clear_tt_buffer_complete(struct usb_hcd *hcd,
+        unsigned int ep_index;
+        unsigned long flags;
+ 
+-       /*
+-        * udev might be NULL if tt buffer is cleared during a failed device
+-        * enumeration due to a halted control endpoint. Usb core might
+-        * have allocated a new udev for the next enumeration attempt.
+-        */
+-
+        xhci = hcd_to_xhci(hcd);
++
++       spin_lock_irqsave(&xhci->lock, flags);
+        udev = (struct usb_device *)ep->hcpriv;
+-       if (!udev)
+-               return;
+        slot_id = udev->slot_id;
+        ep_index = xhci_get_endpoint_index(&ep->desc);
+ 
+-       spin_lock_irqsave(&xhci->lock, flags);
+        xhci->devs[slot_id]->eps[ep_index].ep_state &= ~EP_CLEARING_TT;
+        xhci_ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
+        spin_unlock_irqrestore(&xhci->lock, flags);
+
+Feel free to add my:
+
+Suggested-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Johan Hovold <johan@kernel.org>
+Tested-by: Johan Hovold <johan@kernel.org>
+
+Johan
