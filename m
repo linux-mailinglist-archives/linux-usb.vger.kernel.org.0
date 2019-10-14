@@ -2,71 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8BFD5E03
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 10:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F8ED5E15
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 11:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730622AbfJNI6s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Oct 2019 04:58:48 -0400
-Received: from mga06.intel.com ([134.134.136.31]:43474 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730354AbfJNI6s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Oct 2019 04:58:48 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Oct 2019 01:58:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,295,1566889200"; 
-   d="scan'208";a="207929957"
-Received: from vkuppusa-mobl2.ger.corp.intel.com (HELO localhost) ([10.249.39.77])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Oct 2019 01:58:41 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Changbin Du <changbin.du@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Changbin Du <changbin.du@gmail.com>
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions' to 'specific'
-In-Reply-To: <20191013055359.23312-1-changbin.du@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20191013055359.23312-1-changbin.du@gmail.com>
-Date:   Mon, 14 Oct 2019 11:59:37 +0300
-Message-ID: <875zkrd7nq.fsf@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1730588AbfJNJEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Oct 2019 05:04:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60774 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730423AbfJNJEf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Oct 2019 05:04:35 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 46D04B498;
+        Mon, 14 Oct 2019 09:04:34 +0000 (UTC)
+Message-ID: <1571043862.19529.9.camel@suse.com>
+Subject: Re: Possible bug with cdc_ether, triggers NETDEV WATCHDOG
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Adam Bennett <abennett72@gmail.com>,
+        =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Date:   Mon, 14 Oct 2019 11:04:22 +0200
+In-Reply-To: <339e0633-6dd3-5c0f-0b6d-598848bf1d37@gmail.com>
+References: <3913c851-93f8-3d26-a578-f5a2c8b69aaa@gmail.com>
+         <878spuxpu6.fsf@miraculix.mork.no>
+         <339e0633-6dd3-5c0f-0b6d-598848bf1d37@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 13 Oct 2019, Changbin Du <changbin.du@gmail.com> wrote:
-> The 'functions' directive is not only for functions, but also works for
-> structs/unions. So the name is misleading. This patch renames it to
-> 'specific', so now we have export/internal/specific directives to limit
-> the functions/types to be included in documentation. Meanwhile we improved
-> the warning message.
+Am Mittwoch, den 09.10.2019, 09:27 -0400 schrieb Adam Bennett:
+> On 10/9/19 4:53 AM, Bjørn Mork wrote:
 
-Agreed on "functions" being less than perfect. It directly exposes the
-idiosyncrasies of scripts/kernel-doc. I'm not sure "specific" is any
-better, though.
+> > This warning means that the gadget doesn't accept the packets we send
+> > it.  There isn't much the host can do about that, except dropping
+> > packets on the floor.  Which is why the warning is this loud.
+> > 
+> 
+> Would a firewall on either the linux host or the Pi Zero cause the same 
+> problem (and message)?
 
-Perhaps "symbols" would be more self-explanatory. Or, actually make
-"functions" only work on functions, and add a separate keyword for other
-stuff. *shrug*
+If a firewall discards a packet, it will not reach the transmit queue.
+Hence the answer to that question is negative. If other OSes get this
+device to work, we would need to know what they are doing differently.
+Can you get a trace from them and compare it to ours?
 
-Seems like the patch is way too big. I'd probably add "symbols" (or
-whatever) as a synonym for "functions" for starters, and convert
-documents piecemeal, and finally drop the old one.
+	Regards
+		Oliver
 
-The scripts/kernel-doc change should be a patch of its own.
-
-BR,
-Jani.
-
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
