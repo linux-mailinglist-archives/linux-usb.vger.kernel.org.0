@@ -2,126 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8210FD63A1
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 15:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74085D6396
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 15:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731783AbfJNNR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Oct 2019 09:17:58 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35966 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729858AbfJNNR5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Oct 2019 09:17:57 -0400
-Received: by mail-wm1-f68.google.com with SMTP id m18so16743931wmc.1;
-        Mon, 14 Oct 2019 06:17:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=BSVT6/rt9caDK62gYBDnDh5e/nv1bV+8wumCRGej6zY=;
-        b=aQ/G0g8I6kNE8fOdXRgLPoYpiISVXLPukBvLP5vPS8vSrLcmsHWiNNMQtV/3bhkTFl
-         jf6g+PvsSBsxkUNfmsoYQskfdcnAzOxC5l02hDDCRmYFVHRvHe6V9tXRXlFnr7+U8NVW
-         2KR7qk6ywYdpxdSSVF/CHRStr/94Kx0CbP8qdxWDyuGglwq6tl4RLRkIeAhqCSuTo+an
-         U/M/5D21bKkeZv9eBoNJqSK/H8CkP3TNw9SD2M+twxTyohpJJdId7DLQ1Zvy8IQB6Yng
-         cXClxAK6st/hvyfVY4SiA3hgdw60yF4iPilbjiUhkIqcw6WDCD5st5oC2qL/6ctOMF+0
-         JduA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=BSVT6/rt9caDK62gYBDnDh5e/nv1bV+8wumCRGej6zY=;
-        b=A1msMrrtntF1Z/66ApEQGmY8UN7W6hbxK2D8ZIwf2aCS/BRVIEhW3ATmu1n+7jRcIN
-         7anctX8z74th2gx8ca4VdEgZIzgoKeZtlkEAqcI19rybDGkAVjhA0StcGtt+Qr/I9Iie
-         5CTxKEnuvRBf8C0nuD/ISpmXB93Zja4kcT25ad6graqkEogoC07O02mA2cM1XkyVn93t
-         JqSrinJs68vASRk7tMC50KZqkq+JlkZZh9Q25qaSwfOBkDHBvGIbMv/QJaeQIoT3MxC/
-         AuOR4D1B1qYRgS/5RYZBnXj+O3uO5JofUmqVoJE59x+ANWkKTkwwr5AgXOyfAilGiE8j
-         TF6w==
-X-Gm-Message-State: APjAAAWBQczd5/6x1yloGSbJ0XSeep1eWy1nDBRIy/A5sEQuAIVrhEzV
-        6qOXcGY1+0wNSfKLu6KbPuE=
-X-Google-Smtp-Source: APXvYqwtnutp4lo0pHwlyN5XuihN3EaRu+UPIJGENSCr6Sqg5W1GxgswhnEWZN1nfVIEg3eltKAKgw==
-X-Received: by 2002:a05:600c:2212:: with SMTP id z18mr1827206wml.154.1571059074747;
-        Mon, 14 Oct 2019 06:17:54 -0700 (PDT)
-Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
-        by smtp.gmail.com with ESMTPSA id c21sm13316525wmb.46.2019.10.14.06.17.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 06:17:53 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 15:17:52 +0200
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     JC Kuo <jckuo@nvidia.com>, gregkh@linuxfoundation.org,
-        jonathanh@nvidia.com, kishon@ti.com, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, nkristam@nvidia.com
-Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-Message-ID: <20191014131752.GF422231@ulmo>
-References: <20191009024343.30218-1-jckuo@nvidia.com>
- <20191009024343.30218-4-jckuo@nvidia.com>
- <20191009233900.GA9109@bogus>
+        id S1730735AbfJNNQr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Oct 2019 09:16:47 -0400
+Received: from mga06.intel.com ([134.134.136.31]:57917 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729858AbfJNNQr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Oct 2019 09:16:47 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Oct 2019 06:16:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,295,1566889200"; 
+   d="scan'208";a="220100314"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Oct 2019 06:16:44 -0700
+Subject: Re: [RFT PATCH] xhci: Fix use-after-free regression in xhci clear hub
+ TT implementation
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, "# v5 . 3" <stable@vger.kernel.org>
+References: <1c4b7107-f5e1-4a69-2a73-0e339c7e1072@linux.intel.com>
+ <1570798722-31594-1-git-send-email-mathias.nyman@linux.intel.com>
+ <20191014101611.GN13531@localhost>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <7e88dd63-9cd6-1149-10a0-960e944ef31f@linux.intel.com>
+Date:   Mon, 14 Oct 2019 16:18:49 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l+goss899txtYvYf"
-Content-Disposition: inline
-In-Reply-To: <20191009233900.GA9109@bogus>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191014101611.GN13531@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 14.10.2019 13.16, Johan Hovold wrote:
+> On Fri, Oct 11, 2019 at 03:58:42PM +0300, Mathias Nyman wrote:
+>> commit ef513be0a905 ("usb: xhci: Add Clear_TT_Buffer") schedules work
+>> to clear TT buffer, but causes a use-after-free regression at the same time
+>>
+>> Make sure hub_tt_work finishes before endpoint is disabled, otherwise
+>> the work will dereference already freed endpoint and device related
+>> pointers.
+>>
+>> This was triggered when usb core failed to read the configuration
+>> descriptor of a FS/LS device during enumeration.
+>> xhci driver queued clear_tt_work while usb core freed and reallocated
+>> a new device for the next enumeration attempt.
+>>
+>> EHCI driver implents ehci_endpoint_disable() that makes sure
+>> clear_tt_work has finished before it returns, but xhci lacks this support.
+>> usb core will call hcd->driver->endpoint_disable() callback before
+>> disabling endpoints, so we want this in xhci as well.
+>>
+>> The added xhci_endpoint_disable() is based on ehci_endpoint_disable()
+>>
+> 
+> I used essentially the same reproducer as you did for debugging this
+> after I first hit it with an actually stalled control endpoint, and this
+> patch works also with my fault-injection hack.
+> 
+> I've reviewed the code and it looks good to me except for one mostly
+> theoretical issue. You need to check ep->hc_priv while holding the
+> xhci->lock in xhci_clear_tt_buffer_complete() or you could end up having
+> xhci_endpoint_disable() reschedule indefinitely while waiting for
+> EP_CLEARING_TT to be cleared on a sufficiently weakly ordered
+> system.
 
---l+goss899txtYvYf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Good point, I'll change that
 
-On Wed, Oct 09, 2019 at 06:39:00PM -0500, Rob Herring wrote:
-> On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
-> > Extend the bindings to cover the set of features found in Tegra194.
-> > Note that, technically, there are four more supplies connected to the
-> > XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
-> > , but the power sequencing requirements of Tegra194 require these to be
-> > under the control of the PMIC.
-> >=20
-> > Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it is
-> > possible for some platforms have long signal trace that could not
-> > provide sufficient electrical environment for Gen 2 speed. To deal with
-> > this, a new device node property "nvidia,disable-gen2" was added to
-> > Tegra194 that be used to specifically disable Gen 2 speed for a
-> > particular USB 3.0 port so that the port can be limited to Gen 1 speed
-> > and avoid the instability.
->=20
-> I suspect this may be a common issue and we should have a common=20
-> property. Typically, this kind of property is in the controller though=20
-> and supports multiple speed limits. See PCI bindings for inspiration.
+> 
+> Since cfbb8a84c2d2 ("xhci: Fix NULL pointer dereference in
+> xhci_clear_tt_buffer_complete()") isn't needed anymore and is slightly
+> misleading, I suggest amending the patch with the following:
+> 
 
-Given that support for gen 2 speeds is dependent on signal trace length,
-it doesn't really make sense to restrict the whole controller to a given
-speed if only the signal trace for a single port exceeds the limit for
-which gen 2 would work.
+I'll add those changes and your tags to the patch
 
-Also, the USB PHYs are in a different hardware block than the USB
-controller, so this really is a property of the PHY block, not the USB
-controller.
-
-Thierry
-
---l+goss899txtYvYf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2kdYAACgkQ3SOs138+
-s6HMkQ/6A3Fj9ZJJsdJnHLfvMDhmqc/ZtjXEf75kGFK8o5zyYn7mMEiIX7UJwn0v
-u17ZP3AEz0nPbMpQ6VFkAH/JijR1m4P2vtl4/sxEpqWUpllPgb7cmK2ZefL8Wa5/
-+tha3SoS//h5XjI/lwVfaxnzJyE7owSaumpZG5NzR5fk4UWcUOzmZXAQSedOKppX
-3Jh5+pMwNenrbzvqxt0w1Lv0L3KMRH8rZN/r4m2WXNKqc/Zsb+zGAyF9uXylNd33
-Q29CpQvAJZwuyPj1NGsSJqwo/rl65QiHmXqwJh8azlUL9LBpGurYtox1kytVbtrY
-zxBxtLPuCabG5EvEPlGv0yv0no4kMvnZu1qCG10veWGkOGq7XHGyG8jdyBJDhBgt
-Ahin5YDmVrfG1c5balwzNgE5ZMNOF074JgcL2MZN0ac5NKky2yFPSvdBxJvGLt90
-etu2wctrjXOUmUj4Lr8mOh3QTD/mVHecHRfCWpSaaasDlQPj9g3NvCxvut8RWHDH
-z9irlyyUI5ahytdR1bxhq3UsuDDT3W6rRrVuwjo3Rw37NYwaa4M7ppB4Zqv8rUkz
-BGM9UTk+K39ZBBYYcHxdAJ1x5EChqh2WzAC/nGiwVd2hbgqj1I2zpZMSALBTUtlg
-fno5aAC10Un6nevQlxAJ/yBxynSbGEhBWt1yVXKzdHSJhB6VKz0=
-=+5Sz
------END PGP SIGNATURE-----
-
---l+goss899txtYvYf--
+Thanks
+Mathias
