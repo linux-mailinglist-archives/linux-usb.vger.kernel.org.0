@@ -2,115 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D25D6AC9
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 22:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB33D6AE6
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Oct 2019 22:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731910AbfJNU1e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Oct 2019 16:27:34 -0400
-Received: from gateway20.websitewelcome.com ([192.185.45.27]:34382 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729667AbfJNU1e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Oct 2019 16:27:34 -0400
-X-Greylist: delayed 1944 seconds by postgrey-1.27 at vger.kernel.org; Mon, 14 Oct 2019 16:27:32 EDT
-Received: from cm11.websitewelcome.com (cm11.websitewelcome.com [100.42.49.5])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 5566C40109882
-        for <linux-usb@vger.kernel.org>; Mon, 14 Oct 2019 13:11:27 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id K5roi81wlVUVYK5rois4Py; Mon, 14 Oct 2019 14:18:52 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Type:MIME-Version:Message-ID:Subject:
-        Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Z6hy7j2bf2J0P83dPxoUJpQb5DqOP18QhotJKCAr1Fk=; b=T+ZcWALctqO2RNH+PdtNf3wdXf
-        xxQgqYhkamefp5TT7wBcrfhixu+fVcq+nWT3UGYiz9SXenkq8HXJdIbENEk7rb3aO6vbUhf3FQEUD
-        3lho4t1+FKXgfExwK3Sa8WOLN+lHYRy9JW0rusqrsypXCnDr85+YlMQrgLPSZGeQm7dglGByDvSwu
-        CNie5O6UWiNqGYUQdItd/UAgmCW+jxofPvvcoR4FrCDdxS7qdIQw3WMHzBJiSBxvppEe05VZXqGeI
-        hVkmz3Y0QhmmNNG7XVU9Tl5siVzjJQ65elzEAg+anzaXbUjns60laMlVoq9zvajdpAZF092P8/yWp
-        xk7s8JqQ==;
-Received: from [187.192.22.73] (port=54766 helo=embeddedor)
-        by gator4166.hostgator.com with esmtpa (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1iK5rm-000wQV-S6; Mon, 14 Oct 2019 14:18:51 -0500
-Date:   Mon, 14 Oct 2019 14:18:30 -0500
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Sylvain Lemieux <slemieux.tyco@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Roland Stigge <stigge@antcom.de>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: [PATCH] usb: udc: lpc32xx: fix bad bit shift operation
-Message-ID: <20191014191830.GA10721@embeddedor>
+        id S2387811AbfJNUtf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Oct 2019 16:49:35 -0400
+Received: from mail-eopbgr760111.outbound.protection.outlook.com ([40.107.76.111]:23521
+        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2387731AbfJNUtf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Oct 2019 16:49:35 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MybpUUiGZnWjEdAgd7fYbEXahV/V1rVAgT/guxeLGYP2cD8pwvfnOVy34dBtjwkEaN1OKM7SvRfnKC9R6VJXgzOpN5q5skKL3XeaR9rd6vIJAPvBr9yCMBYeHjxmvahQqspmW3u7gZxhB8DQy7Lx89MqH23qWskMnl2NicRqFcabDx9I0mQGMTPcRX1Ze7acZRmFRChLcUBwfJKER/LeXVqJunXJdRKlX4VrLargZgaRwv7JrTOtuUIxWGpG++1YTMzRdKbIQzu0kxUlGUiR1icHXMIqStK6jsEsIpbNTXWtcoDFmZ6fZWKF3NpbV4Z+LqPR1B8gdg8iBRpn0QpVxg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OArEe6nXYnBjam6+kgN/IG+mDckpqt8jB9TcKWjhL+8=;
+ b=M/yQ3n/Nxj9iSyV8vv+9D9f9AgwrskSXaqUnK0Z9OpzsTjdC6YLmonKBlyzdPuH8CqPYQBQW9MESoa5t8TfX7KZphcvCjcEbrvnogiGhkQUe4SPLfZWNiL8cc8ddE5GVctRY+b2513j8fNtGNH3vmYebu6HOgMfFfHfGlyputdj5kY5v7oBitnNjo5fcOAkrSGSOa4DP7XP+nqhSaxEZ9H5eOALP4U+XtHNDimCIX9L1KjOetT+jyJCPqCLyGRIyA0tRszYZccZzsf3Sp+FfGYxirrEOwDNEHqpw3FFge0nv6NAhw6ZuX/yFbPH1vbemSgE4Vwk6R092HYukW8o0Gw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 160.33.194.228) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=sony.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=sony.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
+ s=selector2-Sony-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OArEe6nXYnBjam6+kgN/IG+mDckpqt8jB9TcKWjhL+8=;
+ b=GW8ap/OtxWR7IboWJaCeN4ARVfmxmyY4CC3bxYgfZsVEI+/lz29dimTIgVXYOi+8wBLwn5egEbRa69BC5KS5XjTtJSaofKp/iRMl8n9HrssY0KACQ/AKYeMVlXBdiZCsBpZbM7+KPKFXBlKAXn3YYUbI9GDUDq0a48gogH+gj5c=
+Received: from MWHPR13CA0003.namprd13.prod.outlook.com (2603:10b6:300:16::13)
+ by BN6PR13MB1507.namprd13.prod.outlook.com (2603:10b6:404:10f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.15; Mon, 14 Oct
+ 2019 20:48:51 +0000
+Received: from CY1NAM02FT017.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::208) by MWHPR13CA0003.outlook.office365.com
+ (2603:10b6:300:16::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2367.6 via Frontend
+ Transport; Mon, 14 Oct 2019 20:48:51 +0000
+Authentication-Results: spf=pass (sender IP is 160.33.194.228)
+ smtp.mailfrom=sony.com; linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=pass action=none header.from=sony.com;
+Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
+ 160.33.194.228 as permitted sender) receiver=protection.outlook.com;
+ client-ip=160.33.194.228; helo=usculsndmail01v.am.sony.com;
+Received: from usculsndmail01v.am.sony.com (160.33.194.228) by
+ CY1NAM02FT017.mail.protection.outlook.com (10.152.75.181) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16 via Frontend Transport; Mon, 14 Oct 2019 20:48:51 +0000
+Received: from usculsndmail12v.am.sony.com (usculsndmail12v.am.sony.com [146.215.230.103])
+        by usculsndmail01v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9EKmn8J020884;
+        Mon, 14 Oct 2019 20:48:50 GMT
+Received: from USCULXHUB04V.am.sony.com (hubs.sonyusa.com [146.215.231.18])
+        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9EKmnIf008425;
+        Mon, 14 Oct 2019 20:48:49 GMT
+Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
+ USCULXHUB04V.am.sony.com ([146.215.231.18]) with mapi id 14.03.0439.000; Mon,
+ 14 Oct 2019 16:48:48 -0400
+From:   <Tim.Bird@sony.com>
+To:     <jani.nikula@linux.intel.com>, <changbin.du@gmail.com>,
+        <corbet@lwn.net>
+CC:     <linux-pci@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-crypto@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <intel-gfx@lists.freedesktop.org>, <changbin.du@gmail.com>
+Subject: RE: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+Thread-Topic: [PATCH] kernel-doc: rename the kernel-doc directive
+ 'functions' to 'specific'
+Thread-Index: AQHVgYrHjoG0ILu0Lk6IAGRKrE96jadaG2GAgACB3oA=
+Date:   Mon, 14 Oct 2019 20:48:48 +0000
+Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
+References: <20191013055359.23312-1-changbin.du@gmail.com>
+ <875zkrd7nq.fsf@intel.com>
+In-Reply-To: <875zkrd7nq.fsf@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [146.215.228.6]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 187.192.22.73
-X-Source-L: No
-X-Exim-ID: 1iK5rm-000wQV-S6
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (embeddedor) [187.192.22.73]:54766
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 7
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:160.33.194.228;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(376002)(396003)(136003)(39860400002)(346002)(199004)(189003)(13464003)(8676002)(37786003)(23726003)(102836004)(6246003)(97756001)(7696005)(76176011)(5660300002)(3846002)(55016002)(6116002)(86362001)(55846006)(486006)(2876002)(33656002)(476003)(126002)(46406003)(246002)(2906002)(336012)(54906003)(356004)(11346002)(186003)(26005)(14444005)(478600001)(426003)(50466002)(4326008)(47776003)(66066001)(446003)(70206006)(110136005)(7416002)(8746002)(70586007)(8936002)(106002)(305945005)(229853002)(316002)(2201001)(7736002)(2101003)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:BN6PR13MB1507;H:usculsndmail01v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail.sonyusa.com,mail01.sonyusa.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3e15f9ef-1f4b-49bd-255a-08d750e7eb79
+X-MS-TrafficTypeDiagnostic: BN6PR13MB1507:
+X-Microsoft-Antispam-PRVS: <BN6PR13MB1507003AF9F82B961C9751ABFD900@BN6PR13MB1507.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-Forefront-PRVS: 01901B3451
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ODSsHBKcgRD7wEsIwdsafZ04SyHtvm6qy2uPMrfx8nrVkiaJV82xR/OwG5okb99i7iEG7CUt+pn2KbJBPyp187ND0/kHxYb/7tP22z69BUTj6Wlx1EQoDSV+ElAIjXpN8C9DoU+jBgY6W7C27KRfwheVky55hswuncioRmZtMFK1kJEUyeM7Ng2QRXmSWjvzg5eD+pBeRIFTbw41R2yDlXxOkRNAOFdLDaUSiTsIqTqloaCmX36kXCqIpoFg0YZbKxmOMYBMBSA57f5ntoG9D4U+oJ5tHYpM7vs19N0ZrD/WMS6Dq2UYzCeQFl/EdGjVR1G99/WzNKsZfKa0Eg7uBmjCbjLFkVBs7/de3Fw5Ts373lbBgIV94u9kGMfIy4vxMe2QQWX45Oe9neLBGoV3iJYAf/TXPsVgSHA6TIoC3fA=
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2019 20:48:51.3386
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e15f9ef-1f4b-49bd-255a-08d750e7eb79
+X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.228];Helo=[usculsndmail01v.am.sony.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR13MB1507
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It seems that the right variable to use in this case is *i*, instead of
-*n*, otherwise there is an undefined behavior when right shifiting by more
-than 31 bits when multiplying n by 8; notice that *n* can take values
-equal or greater than 4 (4, 8, 16, ...).
 
-Also, notice that under the current conditions (bl = 3), we are skiping
-the handling of bytes 3, 7, 31... So, fix this by updating this logic
-and limit *bl* up to 4 instead of up to 3.
 
-This fix is based on function udc_stuff_fifo().
+> -----Original Message-----
+> From: Jani Nikula on October 13, 2019 11:00 PM
+> On Sun, 13 Oct 2019, Changbin Du <changbin.du@gmail.com> wrote:
+> > The 'functions' directive is not only for functions, but also works for
+> > structs/unions. So the name is misleading. This patch renames it to
+> > 'specific', so now we have export/internal/specific directives to limit
+> > the functions/types to be included in documentation. Meanwhile we
+> improved
+> > the warning message.
+>=20
+> Agreed on "functions" being less than perfect. It directly exposes the
+> idiosyncrasies of scripts/kernel-doc. I'm not sure "specific" is any
+> better, though.
 
-Addresses-Coverity-ID: 1454834 ("Bad bit shift operation")
-Fixes: 24a28e428351 ("USB: gadget driver for LPC32xx")
-Cc: stable@vger.kernel.org
-Signed-off-by: Gustavo A. R. Silva <gustavo@embeddedor.com>
----
- drivers/usb/gadget/udc/lpc32xx_udc.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I strongly agree with this.  'specific' IMHO, has no semantic value and
+I'd rather just leave the only-sometimes-wrong 'functions' than convert
+to something that obscures the meaning always.
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 2b1f3cc7819b..bf6c81e2f8cc 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -1177,11 +1177,11 @@ static void udc_pop_fifo(struct lpc32xx_udc *udc, u8 *data, u32 bytes)
- 			tmp = readl(USBD_RXDATA(udc->udp_baseaddr));
- 
- 			bl = bytes - n;
--			if (bl > 3)
--				bl = 3;
-+			if (bl > 4)
-+				bl = 4;
- 
- 			for (i = 0; i < bl; i++)
--				data[n + i] = (u8) ((tmp >> (n * 8)) & 0xFF);
-+				data[n + i] = (u8) ((tmp >> (i * 8)) & 0xFF);
- 		}
- 		break;
- 
--- 
-2.23.0
+>=20
+> Perhaps "symbols" would be more self-explanatory. Or, actually make
+> "functions" only work on functions, and add a separate keyword for other
+> stuff. *shrug*
+My preference would be to use 'symbols'.  I tried to come up with something
+but 'symbols' is better than anything I came up with.
 
+>=20
+> Seems like the patch is way too big. I'd probably add "symbols" (or
+> whatever) as a synonym for "functions" for starters, and convert
+> documents piecemeal, and finally drop the old one.
+>=20
+> The scripts/kernel-doc change should be a patch of its own.
+Agreed on these two points as well.
+
+Just adding my 2 cents.
+ -- Tim
