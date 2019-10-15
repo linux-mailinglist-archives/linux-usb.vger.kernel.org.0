@@ -2,266 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E296D70EB
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 10:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC56BD7236
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 11:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728756AbfJOIZt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 04:25:49 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:42868 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfJOIZs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 04:25:48 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9F8PThH074238;
-        Tue, 15 Oct 2019 03:25:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571127929;
-        bh=811Z+jePVaI7WCbmvOozaNOkvGJ9LwbS2ApKdtJxa2Q=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=BvbzvMduajncyRfkXtqenraA/fjfMNIw6lqsMrXxODmyuH0D+bNv5yGnVxaKitJPY
-         V9C+Q/bm/91I7lANWuxmCs2LpY4D4BUH1KWeTLiB4CSzmiCIkDG5uxNvr+HzbhyV/O
-         FE/EJD3qSdWk3X1nxMgXpSmNSF87Z5ek4DMbx8Ws=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9F8PTX3025533
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Oct 2019 03:25:29 -0500
-Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 15
- Oct 2019 03:25:21 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 15 Oct 2019 03:25:27 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9F8POaM030610;
-        Tue, 15 Oct 2019 03:25:24 -0500
-Subject: Re: [RFC][PATCH 3/3] usb: dwc3: Registering a role switch in the DRD
- code.
-To:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-CC:     Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-4-john.stultz@linaro.org>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <9e86bb7b-5dd2-760e-c324-fe1c1ee41868@ti.com>
-Date:   Tue, 15 Oct 2019 11:25:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728022AbfJOJ0D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 05:26:03 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52530 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725890AbfJOJ0D (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 05:26:03 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 489D9AC59;
+        Tue, 15 Oct 2019 09:25:59 +0000 (UTC)
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+To:     Tim.Bird@sony.com, jani.nikula@linux.intel.com,
+        changbin.du@gmail.com, corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+References: <20191013055359.23312-1-changbin.du@gmail.com>
+ <875zkrd7nq.fsf@intel.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+Autocrypt: addr=tzimmermann@suse.de; keydata=
+ mQENBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
+ XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
+ BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
+ hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
+ 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
+ AAG0J1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPokBVAQTAQgAPhYh
+ BHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJbOdLgAhsDBQkDwmcABQsJCAcCBhUKCQgLAgQWAgMB
+ Ah4BAheAAAoJEGgNwR1TC3ojR80H/jH+vYavwQ+TvO8ksXL9JQWc3IFSiGpuSVXLCdg62AmR
+ irxW+qCwNncNQyb9rd30gzdectSkPWL3KSqEResBe24IbA5/jSkPweJasgXtfhuyoeCJ6PXo
+ clQQGKIoFIAEv1s8l0ggPZswvCinegl1diyJXUXmdEJRTWYAtxn/atut1o6Giv6D2qmYbXN7
+ mneMC5MzlLaJKUtoH7U/IjVw1sx2qtxAZGKVm4RZxPnMCp9E1MAr5t4dP5gJCIiqsdrVqI6i
+ KupZstMxstPU//azmz7ZWWxT0JzgJqZSvPYx/SATeexTYBP47YFyri4jnsty2ErS91E6H8os
+ Bv6pnSn7eAq5AQ0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRH
+ UE9eosYbT6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgT
+ RjP+qbU63Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+R
+ dhgATnWWGKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zb
+ ehDda8lvhFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r
+ 12+lqdsAEQEAAYkBPAQYAQgAJhYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJbOdLgAhsMBQkD
+ wmcAAAoJEGgNwR1TC3ojpfcIAInwP5OlcEKokTnHCiDTz4Ony4GnHRP2fXATQZCKxmu4AJY2
+ h9ifw9Nf2TjCZ6AMvC3thAN0rFDj55N9l4s1CpaDo4J+0fkrHuyNacnT206CeJV1E7NYntxU
+ n+LSiRrOdywn6erjxRi9EYTVLCHcDhBEjKmFZfg4AM4GZMWX1lg0+eHbd5oL1as28WvvI/uI
+ aMyV8RbyXot1r/8QLlWldU3NrTF5p7TMU2y3ZH2mf5suSKHAMtbE4jKJ8ZHFOo3GhLgjVrBW
+ HE9JXO08xKkgD+w6v83+nomsEuf6C6LYrqY/tsZvyEX6zN8CtirPdPWu/VXNRYAl/lat7lSI
+ 3H26qrE=
+Message-ID: <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
+Date:   Tue, 15 Oct 2019 11:25:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20191002231617.3670-4-john.stultz@linaro.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="xhqojG6Suv0J68B6aAC9CpKobUD0Yg8Vm"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--xhqojG6Suv0J68B6aAC9CpKobUD0Yg8Vm
+Content-Type: multipart/mixed; boundary="e6U1SKLtu8YetFMprVb1L54zX2NmQYBjI";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Tim.Bird@sony.com, jani.nikula@linux.intel.com, changbin.du@gmail.com,
+ corbet@lwn.net
+Cc: linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+ linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ intel-gfx@lists.freedesktop.org
+Message-ID: <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+References: <20191013055359.23312-1-changbin.du@gmail.com>
+ <875zkrd7nq.fsf@intel.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
 
-On 03/10/2019 02:16, John Stultz wrote:
-> From: Yu Chen <chenyu56@huawei.com>
-> 
-> The Type-C drivers use USB role switch API to inform the
-> system about the negotiated data role, so registering a role
-> switch in the DRD code in order to support platforms with
-> USB Type-C connectors.
-> 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Jun Li <lijun.kernel@gmail.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
->   drivers/usb/dwc3/Kconfig |  1 +
->   drivers/usb/dwc3/core.h  |  6 ++++
->   drivers/usb/dwc3/drd.c   | 78 +++++++++++++++++++++++++++++++++++++++-
->   3 files changed, 84 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
-> index 89abc6078703..1104745c41a9 100644
-> --- a/drivers/usb/dwc3/Kconfig
-> +++ b/drivers/usb/dwc3/Kconfig
-> @@ -44,6 +44,7 @@ config USB_DWC3_DUAL_ROLE
->   	bool "Dual Role mode"
->   	depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
->   	depends on (EXTCON=y || EXTCON=USB_DWC3)
-> +	select USB_ROLE_SWITCH
->   	help
->   	  This is the default mode of working of DWC3 controller where
->   	  both host and gadget features are enabled.
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index b3cb6eec3f8f..83728157b3e9 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -25,6 +25,7 @@
->   #include <linux/usb/ch9.h>
->   #include <linux/usb/gadget.h>
->   #include <linux/usb/otg.h>
-> +#include <linux/usb/role.h>
->   #include <linux/ulpi/interface.h>
->   
->   #include <linux/phy/phy.h>
-> @@ -951,6 +952,9 @@ struct dwc3_scratchpad_array {
->    * @hsphy_mode: UTMI phy mode, one of following:
->    *		- USBPHY_INTERFACE_MODE_UTMI
->    *		- USBPHY_INTERFACE_MODE_UTMIW
-> + * role_sw: usb_role_switch handle
-> + * role_switch_default_mode: default operation mode of controller while
-> + *			usb role is USB_ROLE_NONE.
->    * @usb2_phy: pointer to USB2 PHY
->    * @usb3_phy: pointer to USB3 PHY
->    * @usb2_generic_phy: pointer to USB2 PHY
-> @@ -1085,6 +1089,8 @@ struct dwc3 {
->   	struct extcon_dev	*edev;
->   	struct notifier_block	edev_nb;
->   	enum usb_phy_interface	hsphy_mode;
-> +	struct usb_role_switch	*role_sw;
-> +	enum usb_dr_mode	role_switch_default_mode;
->   
->   	u32			fladj;
->   	u32			irq_gadget;
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index 726100d1ac0d..95b466a7faa0 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -479,6 +479,58 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
->   	return edev;
->   }
->   
-> +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role role)
-> +{
-> +	struct dwc3 *dwc = dev_get_drvdata(dev);
-> +	u32 mode;
-> +
-> +	switch (role) {
-> +	case USB_ROLE_HOST:
-> +		mode = DWC3_GCTL_PRTCAP_HOST;
-> +		break;
-> +	case USB_ROLE_DEVICE:
-> +		mode = DWC3_GCTL_PRTCAP_DEVICE;
-> +		break;
-> +	default:
-> +		if (dwc->role_switch_default_mode == USB_DR_MODE_HOST)
-> +			mode = DWC3_GCTL_PRTCAP_HOST;
-> +		else
-> +			mode = DWC3_GCTL_PRTCAP_DEVICE;
-> +		break;
-> +	}
-> +
-> +	dwc3_set_mode(dwc, mode);
-> +	return 0;
-> +}
-> +
-> +static enum usb_role dwc3_usb_role_switch_get(struct device *dev)
-> +{
-> +	struct dwc3 *dwc = dev_get_drvdata(dev);
-> +	unsigned long flags;
-> +	enum usb_role role;
-> +
-> +	spin_lock_irqsave(&dwc->lock, flags);
-> +	switch (dwc->current_dr_role) {
-> +	case DWC3_GCTL_PRTCAP_HOST:
-> +		role = USB_ROLE_HOST;
-> +		break;
-> +	case DWC3_GCTL_PRTCAP_DEVICE:
-> +		role = USB_ROLE_DEVICE;
-> +		break;
-> +	case DWC3_GCTL_PRTCAP_OTG:
-> +		role = dwc->current_otg_role;
-> +		break;
-> +	default:
-> +		if (dwc->role_switch_default_mode == USB_DR_MODE_HOST)
-> +			role = USB_ROLE_HOST;
-> +		else
-> +			role = USB_ROLE_DEVICE;
-> +		break;
-> +	}
-> +	spin_unlock_irqrestore(&dwc->lock, flags);
-> +	return role;
-> +}
-> +
->   int dwc3_drd_init(struct dwc3 *dwc)
->   {
->   	int ret, irq;
-> @@ -487,7 +539,28 @@ int dwc3_drd_init(struct dwc3 *dwc)
->   	if (IS_ERR(dwc->edev))
->   		return PTR_ERR(dwc->edev);
->   
-> -	if (dwc->edev) {
-> +	if (device_property_read_bool(dwc->dev, "usb-role-switch")) {
+--e6U1SKLtu8YetFMprVb1L54zX2NmQYBjI
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
 
-I think we should use role switch unconditionally and get rid of the
-debugfs role status/change mechanism.
+Hi
 
-> +		struct usb_role_switch_desc dwc3_role_switch = {0};
-> +		u32 mode;
-> +
-> +		if (device_property_read_bool(dwc->dev,
-> +					      "role-switch-default-host")) {
-> +			dwc->role_switch_default_mode = USB_DR_MODE_HOST;
-> +			mode = DWC3_GCTL_PRTCAP_HOST;
-> +		} else {
-> +			dwc->role_switch_default_mode = USB_DR_MODE_PERIPHERAL;
-> +			mode = DWC3_GCTL_PRTCAP_DEVICE;
-> +		}
-> +		dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
-> +		dwc3_role_switch.set = dwc3_usb_role_switch_set;
-> +		dwc3_role_switch.get = dwc3_usb_role_switch_get;
-> +		dwc->role_sw = usb_role_switch_register(dwc->dev,
-> +							&dwc3_role_switch);
-> +		if (IS_ERR(dwc->role_sw))
-> +			return PTR_ERR(dwc->role_sw);
-> +
-> +		dwc3_set_mode(dwc, mode);
-> +	} else if (dwc->edev) {
+Am 14.10.19 um 22:48 schrieb Tim.Bird@sony.com:
+>=20
+>=20
+>> -----Original Message-----
+>> From: Jani Nikula on October 13, 2019 11:00 PM
+>> On Sun, 13 Oct 2019, Changbin Du <changbin.du@gmail.com> wrote:
+>>> The 'functions' directive is not only for functions, but also works f=
+or
+>>> structs/unions. So the name is misleading. This patch renames it to
+>>> 'specific', so now we have export/internal/specific directives to lim=
+it
+>>> the functions/types to be included in documentation. Meanwhile we
+>> improved
+>>> the warning message.
+>>
+>> Agreed on "functions" being less than perfect. It directly exposes the=
 
-Role switch should exist regardless if dwc->edev is present or not.
+>> idiosyncrasies of scripts/kernel-doc. I'm not sure "specific" is any
+>> better, though.
+>=20
+> I strongly agree with this.  'specific' IMHO, has no semantic value and=
 
->   		dwc->edev_nb.notifier_call = dwc3_drd_notifier;
->   		ret = extcon_register_notifier(dwc->edev, EXTCON_USB_HOST,
->   					       &dwc->edev_nb);
-> @@ -534,6 +607,9 @@ void dwc3_drd_exit(struct dwc3 *dwc)
->   {
->   	unsigned long flags;
->   
-> +	if (dwc->role_sw)
-> +		usb_role_switch_unregister(dwc->role_sw);
-> +
->   	if (dwc->edev)
->   		extcon_unregister_notifier(dwc->edev, EXTCON_USB_HOST,
->   					   &dwc->edev_nb);
-> 
+> I'd rather just leave the only-sometimes-wrong 'functions' than convert=
 
--- 
-cheers,
--roger
+> to something that obscures the meaning always.
+>=20
+>>
+>> Perhaps "symbols" would be more self-explanatory. Or, actually make
+>> "functions" only work on functions, and add a separate keyword for oth=
+er
+>> stuff. *shrug*
+> My preference would be to use 'symbols'.  I tried to come up with somet=
+hing
+> but 'symbols' is better than anything I came up with.
 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
+imprecise as 'functions'.
+
+Best regards
+Thomas
+
+>>
+>> Seems like the patch is way too big. I'd probably add "symbols" (or
+>> whatever) as a synonym for "functions" for starters, and convert
+>> documents piecemeal, and finally drop the old one.
+>>
+>> The scripts/kernel-doc change should be a patch of its own.
+> Agreed on these two points as well.
+>=20
+> Just adding my 2 cents.
+>  -- Tim
+> _______________________________________________
+> dri-devel mailing list
+> dri-devel@lists.freedesktop.org
+> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+>=20
+
+--=20
+Thomas Zimmermann
+Graphics Driver Developer
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
+(HRB 36809, AG N=C3=BCrnberg)
+Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
+
+
+--e6U1SKLtu8YetFMprVb1L54zX2NmQYBjI--
+
+--xhqojG6Suv0J68B6aAC9CpKobUD0Yg8Vm
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEchf7rIzpz2NEoWjlaA3BHVMLeiMFAl2lkKUACgkQaA3BHVML
+eiPfCAf/W0bkytCWyMq99ercABUIKnlOK53TBUZ9NR3Teor0EJtwx1giKdxBOLbe
+qAjTTABU3EcEtmCxmmsKLUEyDrBEmK+/T4YDbASwYt9qSRZQ5rJXRY7RrTsiIfkF
+TWYe27RbVMt7Vn4UC1f1FsShMPxv6fIrpyNoXtB8cCE/aFSLpdPafv0zNxvHFBe+
+SnDdVv+dR767Yhm8etpDlgpFtAD03PTH4hN+ZD9dLD/qgJh7NQiI1zyirt2ns6kv
+2RhyIDmEVltSEhgVDCMg+LOZG41UNmIqpjgNEUF1ReeJeYX3MecovgE4mdzYA4TD
+7q4r9GeyLGeoqsEUu0A4mGRY+ZBZ8g==
+=b8IK
+-----END PGP SIGNATURE-----
+
+--xhqojG6Suv0J68B6aAC9CpKobUD0Yg8Vm--
