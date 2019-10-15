@@ -2,184 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D29D7A7A
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 17:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C9ED7C39
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 18:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387488AbfJOPvM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 11:51:12 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:49028 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726422AbfJOPvL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 11:51:11 -0400
-Received: by mail-io1-f70.google.com with SMTP id w16so32685398ioc.15
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 08:51:09 -0700 (PDT)
+        id S2388221AbfJOQpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 12:45:25 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:38538 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727643AbfJOQpZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 12:45:25 -0400
+Received: by mail-ot1-f67.google.com with SMTP id e11so17511119otl.5;
+        Tue, 15 Oct 2019 09:45:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=6iWAXjrX3NQKqn51T418k7zm7Dix07NoPgKf3FFwRF4=;
-        b=K4F6AZm4BYLq19LDvgv6SE0E+cyuBCgRAEgKhIzS1Jih+HihJ8uw04BYp/Ov2EQlqF
-         FlOrLllgnJY5MXmnLS3oyIWgU1+Ke6rZK48K/a0jnB1+KD4qlDUrlm4X8VjhVki0u4cv
-         pG9WCyH5dAuQjua3E38+KlkvJXihRi9Yo/96EW0hVhKTT1ugPToADxaEFVYw5ndJXNml
-         3zITGQ2Y8AZ5CNIMxZhM6f4AVzEib8zRkB9pfrgFvWvb40ul0829SwMx0ze2qe8f/onA
-         zQA4CMIX5ZausLGGr+3H/fgVxohl5u5LCRWpxgeS7pJ2J5j6xqKYpA3pC7DXn/bV2dyC
-         8eAg==
-X-Gm-Message-State: APjAAAWhyOpiHw9TT0zLVXuAAlt8gW8XhAcHQjVLr6cJCtDAwvgGVL9u
-        GQXqgHtFewjP60w+UQCK47kZFatCjnj0/ODHSJjTPiVCW5kZ
-X-Google-Smtp-Source: APXvYqz7bswPx83+mEXEvlO+1TwzqszisjmX1pdx0B4dXukN8vidYzwze85YI2qwDOVjpMGBvBslHouwjezkd3hcUh7j9l2HXn05
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=L5HOgkQMMJIihEae5ZZkONlPFc7mxHbtAiMOUbphoZo=;
+        b=lozZTxNh9+Us0oxQivH77G45cZ9qvm5VKPsmheR5LKUAWvUIW+uMQ6engak349+6K7
+         o7p69BPSStrxt8ru9b53S/K0kSmf3I6GdoCfQFQCOi20uT5UFqQ82KB8LJwRArja/YN4
+         lfZk2qqIqgjm4ijdi3udUbmDqiLcEdI7CvtPZV1uHp23OmKHpnlGcOfQiKQuL2hFQUY+
+         q7qpOWoV79xGcjxhKWPWzNuXcPqN+LZnCJGYDEKhgb8PoNF8RiV0lK02MHKez92C9LB8
+         DMiGRYhD3k9dlHHQmjE+w9DH1QpQD4RkpT/iEUaOQsBD7IChF3kMrjtWwDTQ0YaWILiX
+         isHw==
+X-Gm-Message-State: APjAAAVHWVj4ZBDR/PFwM/BHUdMf59oXcqU+iTdJAQ6i2wqT8eyFmCzO
+        yA9hJPqKrfU+ow1v7ZQHIsCaRCDmbDdFbuFowrKI2g==
+X-Google-Smtp-Source: APXvYqyCr+2dtAe4fWd6QTmS4rnjNno+NHjgK7brIt6EL/DeVt+mmOemmSBJxtvCQImIDFF/T0HX6+lr9I76HpMLaag=
+X-Received: by 2002:a05:6830:1544:: with SMTP id l4mr15309053otp.297.1571157924270;
+ Tue, 15 Oct 2019 09:45:24 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:da47:: with SMTP id p7mr6560956ilq.184.1571154669517;
- Tue, 15 Oct 2019 08:51:09 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 08:51:09 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f6ca4c0594f4f3d4@google.com>
-Subject: KASAN: use-after-free Read in usb_autopm_put_interface
-From:   syzbot <syzbot+cd24df4d075c319ebfc5@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        kai.heng.feng@canonical.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+References: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
+In-Reply-To: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 15 Oct 2019 18:45:13 +0200
+Message-ID: <CAMuHMdXkdNCyNQyWEPEzTYScwqTfv9z_RzFcJDy7VySeiZEmdw@mail.gmail.com>
+Subject: Re: [PATCH] usb: renesas_usbhs: fix __le16 warnings
+To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+Cc:     linux-kernel@lists.codethink.co.uk,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Simon Horman <horms+renesas@verge.net.au>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, Oct 15, 2019 at 5:50 PM Ben Dooks (Codethink)
+<ben.dooks@codethink.co.uk> wrote:
+> Fix the warnings generated by casting to/from __le16 without
+> using the correct functions.
+>
+> Fixes the following sparse warnings:
+>
+> drivers/usb/renesas_usbhs/common.c:165:25: warning: incorrect type in assignment (different base types)
+> drivers/usb/renesas_usbhs/common.c:165:25:    expected restricted __le16 [usertype] wValue
+> drivers/usb/renesas_usbhs/common.c:165:25:    got unsigned short
+> drivers/usb/renesas_usbhs/common.c:166:25: warning: incorrect type in assignment (different base types)
+> drivers/usb/renesas_usbhs/common.c:166:25:    expected restricted __le16 [usertype] wIndex
+> drivers/usb/renesas_usbhs/common.c:166:25:    got unsigned short
+> drivers/usb/renesas_usbhs/common.c:167:25: warning: incorrect type in assignment (different base types)
+> drivers/usb/renesas_usbhs/common.c:167:25:    expected restricted __le16 [usertype] wLength
+> drivers/usb/renesas_usbhs/common.c:167:25:    got unsigned short
+> drivers/usb/renesas_usbhs/common.c:173:39: warning: incorrect type in argument 3 (different base types)
+> drivers/usb/renesas_usbhs/common.c:173:39:    expected unsigned short [usertype] data
+> drivers/usb/renesas_usbhs/common.c:173:39:    got restricted __le16 [usertype] wValue
+> drivers/usb/renesas_usbhs/common.c:174:39: warning: incorrect type in argument 3 (different base types)
+> drivers/usb/renesas_usbhs/common.c:174:39:    expected unsigned short [usertype] data
+> drivers/usb/renesas_usbhs/common.c:174:39:    got restricted __le16 [usertype] wIndex
+> drivers/usb/renesas_usbhs/common.c:175:39: warning: incorrect type in argument 3 (different base types)
+> drivers/usb/renesas_usbhs/common.c:175:39:    expected unsigned short [usertype] data
+>
+> Note. I belive this to be correct, and should be a no-op on arm.
 
-syzbot found the following crash on:
+Yep, the affected platforms are little-endian.
 
-HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=174dc008e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-dashboard link: https://syzkaller.appspot.com/bug?extid=cd24df4d075c319ebfc5
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145d2e6f600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11ce4473600000
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+cd24df4d075c319ebfc5@syzkaller.appspotmail.com
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-==================================================================
-BUG: KASAN: use-after-free in usb_autopm_put_interface+0x70/0x90  
-drivers/usb/core/driver.c:1629
-Read of size 8 at addr ffff8881d8cdf070 by task syz-executor117/2705
+Gr{oetje,eeting}s,
 
-CPU: 1 PID: 2705 Comm: syz-executor117 Not tainted 5.4.0-rc3+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
-  kasan_report+0xe/0x20 mm/kasan/common.c:634
-  usb_autopm_put_interface+0x70/0x90 drivers/usb/core/driver.c:1629
-  usblp_release+0x121/0x1d0 drivers/usb/class/usblp.c:467
-  __fput+0x2d7/0x840 fs/file_table.c:280
-  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-  exit_task_work include/linux/task_work.h:22 [inline]
-  do_exit+0x8c4/0x2c00 kernel/exit.c:817
-  do_group_exit+0x125/0x340 kernel/exit.c:921
-  get_signal+0x466/0x23d0 kernel/signal.c:2734
-  do_signal+0x88/0x14e0 arch/x86/kernel/signal.c:815
-  exit_to_usermode_loop+0x1a2/0x200 arch/x86/entry/common.c:159
-  prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
-  do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:300
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x448569
-Code: Bad RIP value.
-RSP: 002b:00007fcc286a6db8 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-RAX: fffffffffffffe00 RBX: 00000000006ddc48 RCX: 0000000000448569
-RDX: 0000000000000000 RSI: 0000000000000080 RDI: 00000000006ddc48
-RBP: 00000000006ddc40 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000006ddc4c
-R13: 00007fff5babd83f R14: 00007fcc286a79c0 R15: 00000000006ddc4c
+                        Geert
 
-Allocated by task 102:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:510 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
-  kmalloc include/linux/slab.h:556 [inline]
-  kzalloc include/linux/slab.h:690 [inline]
-  usb_set_configuration+0x2c4/0x1670 drivers/usb/core/message.c:1846
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2201
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5183 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5323 [inline]
-  port_event drivers/usb/core/hub.c:5469 [inline]
-  hub_event+0x1dd0/0x37e0 drivers/usb/core/hub.c:5551
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Freed by task 102:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  kasan_set_free_info mm/kasan/common.c:332 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
-  slab_free_hook mm/slub.c:1424 [inline]
-  slab_free_freelist_hook mm/slub.c:1475 [inline]
-  slab_free mm/slub.c:3018 [inline]
-  kfree+0xe4/0x320 mm/slub.c:3967
-  device_release+0x71/0x200 drivers/base/core.c:1100
-  kobject_cleanup lib/kobject.c:693 [inline]
-  kobject_release lib/kobject.c:722 [inline]
-  kref_put include/linux/kref.h:65 [inline]
-  kobject_put+0x171/0x280 lib/kobject.c:739
-  put_device+0x1b/0x30 drivers/base/core.c:2300
-  usb_disable_device+0x2ce/0x690 drivers/usb/core/message.c:1244
-  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
-  hub_port_connect drivers/usb/core/hub.c:5034 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5323 [inline]
-  port_event drivers/usb/core/hub.c:5469 [inline]
-  hub_event+0x16ca/0x37e0 drivers/usb/core/hub.c:5551
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881d8cdf000
-  which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 112 bytes inside of
-  2048-byte region [ffff8881d8cdf000, ffff8881d8cdf800)
-The buggy address belongs to the page:
-page:ffffea0007633600 refcount:1 mapcount:0 mapping:ffff8881da00c000  
-index:0x0 compound_mapcount: 0
-flags: 0x200000000010200(slab|head)
-raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da00c000
-raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881d8cdef00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff8881d8cdef80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff8881d8cdf000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                              ^
-  ffff8881d8cdf080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881d8cdf100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
-
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
