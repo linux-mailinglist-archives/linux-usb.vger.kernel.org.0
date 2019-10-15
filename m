@@ -2,81 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA17D7736
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 15:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAF2D774C
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 15:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731670AbfJONOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 09:14:45 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46798 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729551AbfJONOp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 09:14:45 -0400
-Received: by mail-pl1-f196.google.com with SMTP id q24so9568064plr.13
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 06:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=xKhilnM4WXOXsTSTKbfwf8PB9C6k6WKitlQebcNsfcU=;
-        b=uaPjuoVep5Lk9G4tZU5a0aA5fgEVSsWGHZXIksSICpW/SKLECz77FLkvttMfttDg2F
-         3st93BJRQo4+7+NmJVwLs7yLjbjLZjXKiqwWLHnv8xkTlbGhS3ejZV7bXJthvVUnjftK
-         09pFjrjPZ9EMagl8wR6ZYVp9D8YipZCLROnpCtT4Lkoz1aB7BLPX81ulcdl7Uewj8Qg+
-         T9Nq1TWAp1lcuCpQBhR+ScRImWx6Oiyd6/X+/dUNDrLVtqXgAQ7r6eeInKVQEB0sj8pR
-         qHT7d2Es1FS7WerNVtamYORe3xA0r3p+k96WLCAxBrQMh6gAiic0BVGwrXImFCFm+FQT
-         jPww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=xKhilnM4WXOXsTSTKbfwf8PB9C6k6WKitlQebcNsfcU=;
-        b=fk7Rfk3ra583KfCgel+k5K+aNj7OJ1wNjKDpkTCOgVIhSyKR8oqHJTlkgQMvQ3/vt4
-         SWZyna8chwHQkTc5Xz/2n04szTHTBsfTHc4pOlosE74Vdpp76NgBEsTdoqnYTx2KGzqX
-         XgP4H0yLSe+6kFnRzv1j/cVQK+a3/wVvb4DbIhQc7z7+ECkS1DuvXdVEnvuJyM2oKQ3D
-         1zHsaksl07tXZmFjTBsbHPnvagH/Jw9F7/i2t9jCc1jEDrPtsea74agy0fHWu3w5unFz
-         5MQh4yHp/JxDVS/Wxp/2VQ/FWJ7VrBRZJAau55q6sGs9WzvpddJk52jTjmy/6EYbxRRC
-         rJKQ==
-X-Gm-Message-State: APjAAAULp0/A5nU/tDIoTK+qBXfZvPMxyv9BEOwys9v4k0YQowgiXJKr
-        BujPmOzk0AhyaMpp/tIvG9k=
-X-Google-Smtp-Source: APXvYqw/LK0jjZ9Z1xWkDNTvBf1+j8DqlGFWtCx4N1rizL5R1gOee+4VL88CoRGQsunf8nfGs/YrPA==
-X-Received: by 2002:a17:902:be07:: with SMTP id r7mr34959577pls.313.1571145284548;
-        Tue, 15 Oct 2019 06:14:44 -0700 (PDT)
-Received: from goorm.ap-northeast-2.compute.internal (ec2-15-164-218-113.ap-northeast-2.compute.amazonaws.com. [15.164.218.113])
-        by smtp.gmail.com with ESMTPSA id c1sm32318848pfb.135.2019.10.15.06.14.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 06:14:43 -0700 (PDT)
-From:   GwanYeong Kim <gy741.kim@gmail.com>
-To:     valentina.manea.m@gmail.com
-Cc:     shuah@kernel.org, gregkh@linuxfoundation.org, allison@lohutok.net,
-        opensource@jilayne.com, changcheng.liu@intel.com,
-        tglx@linutronix.de, linux-usb@vger.kernel.org,
-        GwanYeong Kim <gy741.kim@gmail.com>
-Subject: [PATCH] usbip: tools: Fix read_usb_vudc_device() error path handling
-Date:   Tue, 15 Oct 2019 13:14:37 +0000
-Message-Id: <20191015131437.525-1-gy741.kim@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1731802AbfJONSq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 09:18:46 -0400
+Received: from mga18.intel.com ([134.134.136.126]:16623 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729551AbfJONSp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 09:18:45 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 06:18:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
+   d="scan'208";a="208181089"
+Received: from mcretu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.56.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Oct 2019 06:18:38 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Matthew Wilcox <willy@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Tim.Bird@sony.com, changbin.du@gmail.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions' to 'specific'
+In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20191013055359.23312-1-changbin.du@gmail.com> <875zkrd7nq.fsf@intel.com> <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com> <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de> <20191015115439.GE32665@bombadil.infradead.org>
+Date:   Tue, 15 Oct 2019 16:19:36 +0300
+Message-ID: <8736fub0yf.fsf@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-cannot be less than 0 - fread() returns 0 on error.
+On Tue, 15 Oct 2019, Matthew Wilcox <willy@infradead.org> wrote:
+> On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
+>> > My preference would be to use 'symbols'.  I tried to come up with something
+>> > but 'symbols' is better than anything I came up with.
+>> 
+>> Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
+>> imprecise as 'functions'.
+>
+> I suggested 'identifier' because that's the term used in the C spec (6.2.1):
+>
+> : An identifier can denote an object; a function; a tag or a member
+> : of a structure, union, or enumeration; a typedef name; a label name;
+> : a macro name; or a macro parameter.
+>
+> We don't allow documenting all those things separately, but it does cover
+> all the things we do allow to be individually documented.
 
-Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
----
- tools/usb/usbip/libsrc/usbip_device_driver.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Agreed.
 
-diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-index 051d7d3f443b..49760b98aabc 100644
---- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-+++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-@@ -79,7 +79,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
- 	if (!fd)
- 		return -1;
- 	ret = fread((char *) &descr, sizeof(descr), 1, fd);
--	if (ret < 0)
-+	if (ret != sizeof(descr))
- 		goto err;
- 	fclose(fd);
- 
+BR,
+Jani.
+
+
 -- 
-2.17.1
-
+Jani Nikula, Intel Open Source Graphics Center
