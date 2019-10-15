@@ -2,63 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01160D7EF7
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 20:27:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC8FD7F92
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 21:05:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389116AbfJOS13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 14:27:29 -0400
-Received: from ms.lwn.net ([45.79.88.28]:36136 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726405AbfJOS12 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Oct 2019 14:27:28 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id AA813316;
-        Tue, 15 Oct 2019 18:27:27 +0000 (UTC)
-Date:   Tue, 15 Oct 2019 12:27:26 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
- to 'specific'
-Message-ID: <20191015122726.7e12f551@lwn.net>
-In-Reply-To: <20191013055359.23312-1-changbin.du@gmail.com>
-References: <20191013055359.23312-1-changbin.du@gmail.com>
-Organization: LWN.net
+        id S2389263AbfJOTFt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 15:05:49 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:41818 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729457AbfJOTFt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 15:05:49 -0400
+Received: (qmail 7250 invoked by uid 2102); 15 Oct 2019 15:05:48 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 15 Oct 2019 15:05:48 -0400
+Date:   Tue, 15 Oct 2019 15:05:48 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Bastien Nocera <hadess@hadess.net>
+cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: Re: [PATCH v2 3/6] USB: Implement usb_device_match_id()
+In-Reply-To: <20191015143132.8099-4-hadess@hadess.net>
+Message-ID: <Pine.LNX.4.44L0.1910151503290.1462-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 13 Oct 2019 13:53:59 +0800
-Changbin Du <changbin.du@gmail.com> wrote:
+On Tue, 15 Oct 2019, Bastien Nocera wrote:
 
-> The 'functions' directive is not only for functions, but also works for
-> structs/unions. So the name is misleading. This patch renames it to
-> 'specific', so now we have export/internal/specific directives to limit
-> the functions/types to be included in documentation. Meanwhile we improved
-> the warning message.
+> Match a usb_device with a table of IDs.
+> 
+> Signed-off-by: Bastien Nocera <hadess@hadess.net>
+> ---
+>  drivers/usb/core/driver.c | 15 +++++++++++++++
+>  include/linux/usb.h       |  2 ++
+>  2 files changed, 17 insertions(+)
+> 
+> diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+> index d3787d084937..cc3ca62111b4 100644
+> --- a/drivers/usb/core/driver.c
+> +++ b/drivers/usb/core/driver.c
+> @@ -800,6 +800,21 @@ const struct usb_device_id *usb_match_id(struct usb_interface *interface,
+>  }
+>  EXPORT_SYMBOL_GPL(usb_match_id);
+>  
+> +const struct usb_device_id *usb_device_match_id(struct usb_device *udev,
+> +				const struct usb_device_id *id)
+> +{
+> +	if (!id)
+> +		return NULL;
+> +
+> +	for (; id->idVendor || id->idProduct ; id++) {
+> +		if (usb_match_device(udev, id))
+> +			return id;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(usb_device_match_id);
 
-I agree with the others that "specific" doesn't really make things
-better.  "Interfaces" maybe; otherwise we could go for something like
-"filter" or "select".
+This function doesn't need to be EXPORT'ed.
 
-Paint mine green :)
+Aside from that, the whole series looks okay to me.  Feel free to 
+submit an updated version to Greg KH with my:
 
-Whatever we end up with, I think it should be added as a synonym for
-"functions".  Then the various selectors that are actually pulling out
-docs for functions could be changed at leisure - or not at all.  I'd
-rather not see a big patch changing everything at once.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Thanks,
+Alan Stern
 
-jon
