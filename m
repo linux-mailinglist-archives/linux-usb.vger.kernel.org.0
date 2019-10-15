@@ -2,69 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAF2D774C
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 15:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F9FD7847
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 16:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731802AbfJONSq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 09:18:46 -0400
-Received: from mga18.intel.com ([134.134.136.126]:16623 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729551AbfJONSp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Oct 2019 09:18:45 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 06:18:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
-   d="scan'208";a="208181089"
-Received: from mcretu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.56.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Oct 2019 06:18:38 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Tim.Bird@sony.com, changbin.du@gmail.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions' to 'specific'
-In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20191013055359.23312-1-changbin.du@gmail.com> <875zkrd7nq.fsf@intel.com> <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com> <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de> <20191015115439.GE32665@bombadil.infradead.org>
-Date:   Tue, 15 Oct 2019 16:19:36 +0300
-Message-ID: <8736fub0yf.fsf@intel.com>
+        id S1732571AbfJOOT4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 10:19:56 -0400
+Received: from imap1.codethink.co.uk ([176.9.8.82]:49897 "EHLO
+        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730697AbfJOOT4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 10:19:56 -0400
+Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
+        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
+        id 1iKNfv-0004bb-Dk; Tue, 15 Oct 2019 15:19:47 +0100
+Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.2)
+        (envelope-from <ben@rainbowdash.codethink.co.uk>)
+        id 1iKNfv-0004Bu-36; Tue, 15 Oct 2019 15:19:47 +0100
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+To:     linux-kernel@lists.codethink.co.uk
+Cc:     Ben Dooks <ben.dooks@codethink.co.uk>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Sylvain Lemieux <slemieux.tyco@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: ohci-nxp: fix use of integer as pointer
+Date:   Tue, 15 Oct 2019 15:19:45 +0100
+Message-Id: <20191015141945.16067-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Oct 2019, Matthew Wilcox <willy@infradead.org> wrote:
-> On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
->> > My preference would be to use 'symbols'.  I tried to come up with something
->> > but 'symbols' is better than anything I came up with.
->> 
->> Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
->> imprecise as 'functions'.
->
-> I suggested 'identifier' because that's the term used in the C spec (6.2.1):
->
-> : An identifier can denote an object; a function; a tag or a member
-> : of a structure, union, or enumeration; a typedef name; a label name;
-> : a macro name; or a macro parameter.
->
-> We don't allow documenting all those things separately, but it does cover
-> all the things we do allow to be individually documented.
+The hcd pointer in ohci_hcd_nxp_probe() is
+being initialised with a 0, so fix to NULL to
+avoid the following sparse warning:
 
-Agreed.
+drivers/usb/host/ohci-nxp.c:153:31: warning: Using plain integer as NULL pointer
 
-BR,
-Jani.
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+---
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/usb/host/ohci-nxp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/drivers/usb/host/ohci-nxp.c b/drivers/usb/host/ohci-nxp.c
+index c561881d0e79..85878e8ad331 100644
+--- a/drivers/usb/host/ohci-nxp.c
++++ b/drivers/usb/host/ohci-nxp.c
+@@ -150,7 +150,7 @@ static void ohci_nxp_stop_hc(void)
+ 
+ static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+ {
+-	struct usb_hcd *hcd = 0;
++	struct usb_hcd *hcd = NULL;
+ 	const struct hc_driver *driver = &ohci_nxp_hc_driver;
+ 	struct resource *res;
+ 	int ret = 0, irq;
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.23.0
+
