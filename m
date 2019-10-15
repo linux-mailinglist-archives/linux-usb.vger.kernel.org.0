@@ -2,150 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4A0D73AB
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 12:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 636DAD7541
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 13:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731166AbfJOKpY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 06:45:24 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:50534 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728213AbfJOKpC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 06:45:02 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9FAivOq054394;
-        Tue, 15 Oct 2019 05:44:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571136297;
-        bh=t3uQRzoxUoIAGaVOBNnQcWE3nM7U8z67BUNAerP3x40=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=VbZlQ1A85nKRrceBss4jgVv6kHJ8sjIAHvlGAfxl9pQEHW98s6PkAaAzqw8gKQk1x
-         5TOklRuW1c+hkx8uqrvVhAV86wX5pFUnYy8eTaeZrDo/yqBXiJT1aRw5oOE68dJsXQ
-         9KonuLGp2mIj3b1n0OiUaHvMcph1rvTjqCUt1nOw=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9FAivXj100908
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 15 Oct 2019 05:44:57 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 15
- Oct 2019 05:44:50 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 15 Oct 2019 05:44:50 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9FAitwg048098;
-        Tue, 15 Oct 2019 05:44:55 -0500
-Subject: Re: how to test g_webcam
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        <laurent.pinchart@ideasonboard.com>, <paul.elder@ideasonboard.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Bin Liu [EP]" <b-liu@ti.com>
-CC:     "Nori, Sekhar" <nsekhar@ti.com>
-References: <7c65d743-f6cd-846b-381a-07808c6f4c5a@ti.com>
- <8736fzv3c5.fsf@gmail.com> <a23554e6-4dd7-b252-eda3-4d986d4a80be@ti.com>
- <8736fvh58n.fsf@gmail.com> <922b2947-2d47-19c4-9116-73c5f281de15@ti.com>
- <871rvf8l09.fsf@gmail.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <75438b39-2233-8865-860a-661cf09bea4b@ti.com>
-Date:   Tue, 15 Oct 2019 13:44:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729014AbfJOLkc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 07:40:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32854 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726472AbfJOLkb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 07:40:31 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 09A4821A49;
+        Tue, 15 Oct 2019 11:40:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571139631;
+        bh=oGPUs6ScsKBWjiqXvGtsLhcAYD8CQlphpe25WiR9FGY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IuhXmlHj2PRLsBZj2269HsoFFYUJrFjAzqKrBXSsQ2lsXfxkAooLORx/ALjRhk/av
+         ERpKqQNIxKws3tEloX9E5mfprd62BzVlhogQ3aOrpQrb9cxxE3XPXOK00XeBGl973Y
+         lVbRtilHoNYYolWIarpI02u6whi0mzrqQRS4oax4=
+Received: by mail-qt1-f177.google.com with SMTP id m15so30074401qtq.2;
+        Tue, 15 Oct 2019 04:40:31 -0700 (PDT)
+X-Gm-Message-State: APjAAAWhL/rI0qhYBfHM8DEWfMzO3/NGgv2BBnIN9oadhCsnWZsUElaV
+        kUZYni865pnk1Tn40DT44LkSodXNUr2N3MsQyg==
+X-Google-Smtp-Source: APXvYqwOmCf+8YOVZvLtKg632W0xW7C6kdgWWv1JJ/jsejb6F+m2ruoP20gZce1ZKtzSOkNUWHdYVGoH9vEkkWJApFc=
+X-Received: by 2002:ac8:44d9:: with SMTP id b25mr39160131qto.300.1571139630214;
+ Tue, 15 Oct 2019 04:40:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <871rvf8l09.fsf@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20191007175553.66940-1-john.stultz@linaro.org>
+ <20191007175553.66940-5-john.stultz@linaro.org> <CAL_JsqJLY2n7hfneNptAGswVZtGm3vJbSR6W2wUG+ZTzMN8wZA@mail.gmail.com>
+ <CALAqxLWB7Vd-H70LLLSW0Fv=_4-saQ9CE2k3-L_43E+F8mLj2w@mail.gmail.com>
+ <CAL_JsqJ9uUtqTDEkLi86-BCvW+wM6Pgz_K+JuTsuOqHfFOHStA@mail.gmail.com>
+ <CALAqxLVpPvHf2RpwjHh5v9cnQm9CLtj0HHaqVH=EFQJk-GhaPQ@mail.gmail.com>
+ <20191011155123.GA14272@bogus> <CALAqxLUbh7_PkOwh9NrS_+sgLDZMHndbp44jVQkB=WqOhKUotA@mail.gmail.com>
+In-Reply-To: <CALAqxLUbh7_PkOwh9NrS_+sgLDZMHndbp44jVQkB=WqOhKUotA@mail.gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 15 Oct 2019 06:40:18 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLB_Pruk0n0jS0B-uB74R=pE7aOhoo5FU191Hg3wsd7XA@mail.gmail.com>
+Message-ID: <CAL_JsqLB_Pruk0n0jS0B-uB74R=pE7aOhoo5FU191Hg3wsd7XA@mail.gmail.com>
+Subject: Re: [RFC][PATCH v2 4/5] dt-bindings: usb: dwc3: of-simple: add
+ compatible for HiSi
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, Oct 14, 2019 at 10:57 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Fri, Oct 11, 2019 at 8:51 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Mon, Oct 07, 2019 at 04:00:24PM -0700, John Stultz wrote:
+> > > On Mon, Oct 7, 2019 at 2:11 PM Rob Herring <robh+dt@kernel.org> wrote:
+> > > >
+> > > > On Mon, Oct 7, 2019 at 2:07 PM John Stultz <john.stultz@linaro.org> wrote:
+> > > > >
+> > > > > On Mon, Oct 7, 2019 at 11:38 AM Rob Herring <robh+dt@kernel.org> wrote:
+> > > > > >
+> > > > > > On Mon, Oct 7, 2019 at 12:56 PM John Stultz <john.stultz@linaro.org> wrote:
+> > > > > > >
+> > > > > > > Add necessary compatible flag for HiSi's DWC3 so
+> > > > > > > dwc3-of-simple will probe.
+> > > > > > >
+> > > > > > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > > > > Cc: Felipe Balbi <balbi@kernel.org>
+> > > > > > > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > > > > > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > > > > > Cc: Mark Rutland <mark.rutland@arm.com>
+> > > > > > > Cc: Yu Chen <chenyu56@huawei.com>
+> > > > > > > Cc: Matthias Brugger <matthias.bgg@gmail.com>
+> > > > > > > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > > > > > > Cc: linux-usb@vger.kernel.org
+> > > > > > > Cc: devicetree@vger.kernel.org
+> > > > > > > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > > > > > > ---
+> > > > > > > v2: Tweaked clock names as clk_usb3phy_ref didn't seem right.
+> > > > > > > ---
+> > > > > > >  .../devicetree/bindings/usb/hisi,dwc3.txt     | 52 +++++++++++++++++++
+> > > > > > >  1 file changed, 52 insertions(+)
+> > > > > > >  create mode 100644 Documentation/devicetree/bindings/usb/hisi,dwc3.txt
+> > > > > >
+> > > > > > Can you make this a schema.
+> > > > >
+> > > > > Sorry, I'm not sure exactly what you're asking. I'm guessing from
+> > > > > grepping around you want the bindings in yaml instead (I see a few
+> > > > > examples)?
+> > > >
+> > > > Yes.
+> > > >
+> > > > > Is there some pointer to documentation? The
+> > > > > Documentation/devicetree/bindings/writing-bindings.txt file doesn't
+> > > > > seem to say much on it.
+> > > >
+> > > > You mean Documentation/devicetree/writing-schemas.rst? There's that
+> > > > and Documentation/devicetree/bindings/example-schema.yaml which has a
+> > > > bunch of annotations on what each part means.
+> > >
+> > > Ah! Sorry for missing that. Thanks for the pointer, though I may get
+> > > away with dropping this one.
+> > >
+> > > > > > If it's only clocks and resets for the wrapper node, just make this
+> > > > > > all one node.
+> > > > >
+> > > > > Just to make sure I'm following, you're suggesting I put all the
+> > > > > clocks/resets in the dwc3 node (renamed to usb for the node name) and
+> > > > > not add the wrapper?
+> > > >
+> > > > Yes.
+> > > >
+> > > > > I'll have to see if that's possible. The generic dwc3 binding wants 3
+> > > > > clocks, but I only have two in the code I've worked with (similarly it
+> > > > > seems to only want two resets, not 4) so I'll have to see if I can
+> > > > > figure out how to adapt that.
+> > > >
+> > > > Possible since commit fe8abf332b8f ("usb: dwc3: support clocks and
+> > > > resets for DWC3 core").
+> > >
+> > > Ok. It *seems* like I can get it working with the existing binding
+> > > then. There's a little funkiness with the core expecting three clocks
+> > > while I only have two (currently I'm duplicating the "bus_early" clk
+> > > for "suspend". Is there a preferred way to do this sort of hack?), and
+> > > I'm a little worried that only the first reset is being used (instead
+> > > of the 4 specified), but it seems to work so far.
+> >
+> > I would assume that you simply don't know how the 'suspend' clock is
+> > connected rather than you don't have one. But that's maybe not a
+> > problem you can fix.
+> >
+> > I would make dwc3 use devm_clk_bulk_get_all and allow for less than 3
+> > clocks. And do a similar change for resets.
+>
+> So got a chance to start implementing this and it seems like it will
+> work. That said, it feels like I'm duplicating logic already in the
+> dwc-of-simple.c implementation (which already handles arbitrary clks
+> and resets), particularly if I try to implement the device specific
+> need_reset quirk used by HiKey960 (and rk3399).
+>
+> Do you feel having that logic copied is worth avoiding the extra
+> bindings? Or is it too duplicative?
 
-On 14/10/2019 17:22, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Roger Quadros <rogerq@ti.com> writes:
->>> Hmm, Link Change is disabled by default upstream, unless you're running
->>> on anything older than 2.50a. I don't remember the version you're using,
->>> though :-p
->>
->> 2.02a
-> 
-> Thanks :-)
-> 
->>>>        irq/170-dwc3-270   [000] d...   173.408918: dwc3_event: event (00000101): Reset [U0]
->>>>        irq/170-dwc3-270   [000] d...   173.463787: dwc3_event: event (00000201): Connection Done [U0]
->>>>        irq/170-dwc3-270   [000] d...   173.463796: dwc3_gadget_ep_cmd: ep0out: cmd 'Set Endpoint Configuration' [401] params 80000200 00000500 00000000 --> status: Successful
->>>>        irq/170-dwc3-270   [000] d...   173.463799: dwc3_gadget_ep_enable: ep0out: mps 64/512 streams 0 burst 1 ring 0/0 flags E:swBp:>
->>>>        irq/170-dwc3-270   [000] d...   173.463803: dwc3_gadget_ep_cmd: ep0in: cmd 'Set Endpoint Configuration' [401] params 80000200 02000500 00000000 --> status: Successful
->>>>        irq/170-dwc3-270   [000] d...   173.463804: dwc3_gadget_ep_enable: ep0in: mps 64/512 streams 0 burst 1 ring 0/0 flags E:swbp:<
->>>
->>> hmm, High speed? Can we get traces for superspeed too?
->>
->> We can after I figure out the -ENODEV issue I reported above.
-> 
-> cool
-> 
->>>>          uvc-gadget-275   [001] d...   173.712586: dwc3_prepare_trb: ep0out: trb 4a151d32 buf 00000000ae85b000 size 8 ctrl 00000c23 (HLcs:SC:setup)
->>>>          uvc-gadget-275   [001] d...   173.712592: dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 ae85b000 00000000 --> status: Successful
->>>>        irq/170-dwc3-270   [000] d...   173.712688: dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
->>>>        irq/170-dwc3-270   [000] d...   173.712690: dwc3_ctrl_req: a1 81 00 02 00 00 01 00
->>>
->>> Another one...
->>
->> 0xa1 GetRequest directed to video data endpoint of a VideoStreaming interface,
->> 0x81 GET_CUR (Current setting attribute),
->> 0002 CT_AE_MODE_CONTROL (Auto-exposure control selector),
->> 0000 interface?,
->> length 0001,
-> 
-> Thanks for these :-)
-> 
->>>>          uvc-gadget-275   [001] d...   215.933842: dwc3_gadget_ep_cmd: ep1in: cmd 'End Transfer' [30c08] params 00000000 00000000 00000000 --> status: Successful
->>>>          uvc-gadget-275   [001] .n..   215.933980: dwc3_ep_dequeue: ep2in: req f1fb458c length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.940651: dwc3_ep_dequeue: ep2in: req 5be7fd9f length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.947297: dwc3_ep_dequeue: ep2in: req 996abf23 length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.953954: dwc3_ep_dequeue: ep2in: req d9961026 length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.960615: dwc3_free_request: ep2in: req f1fb458c length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.960617: dwc3_free_request: ep2in: req 5be7fd9f length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.960618: dwc3_free_request: ep2in: req 996abf23 length 0/1024 zsI ==> -11
->>>>          uvc-gadget-275   [001] .n..   215.960619: dwc3_free_request: ep2in: req d9961026 length 0/1024 zsI ==> -11
->>>
->>> So, first things first:
->>>
->>> Let's figure out what those class requests are and why are they *always*
->>> stalled. UVC class spec should answer that.
->>
->> I tried to decipher 2 class specific requests that we get.
->>
->>>
->>> Then we need to find out why it takes 1.5 seconds for uvc-gadget to
->>> queue more data.
->>>
->>
->> Not sure how to do that.
-> 
-> Look at the source for uvc-gadget. If I were to guess, I'd say
-> uvc-gadget prepares frames as a function of the requested bandwidth.
-> 
-> It probably goes to sleep periodically until it thinks there's more data
-> to send.
-> 
+We already have reset and clock setup in 2 places, so it's already
+kind of duplicated.
 
-I used the a different uvc-gadget application from this location [1] and it seems to
-work quite fine with builtin video pattern and jpg image but not with V4L2 capture source.
+Why not refactor into a helper that both can use?
 
-So something is broken in uvc-gadget at [2]
-
-[1] https://github.com/wlhe/uvc-gadget
-[2] http://git.ideasonboard.org/uvc-gadget.git
-
-cheers,
--roger
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Rob
