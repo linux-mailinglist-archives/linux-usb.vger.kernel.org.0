@@ -2,96 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FC1ED7E78
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 20:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A956D7EDD
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 20:25:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389083AbfJOSIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 14:08:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40134 "EHLO mail.kernel.org"
+        id S1729418AbfJOSZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 14:25:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43980 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725820AbfJOSIy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Oct 2019 14:08:54 -0400
+        id S1726144AbfJOSZZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 14:25:25 -0400
 Received: from localhost (unknown [38.98.37.135])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2210920659;
-        Tue, 15 Oct 2019 18:08:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1FD0D20854;
+        Tue, 15 Oct 2019 18:25:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571162933;
-        bh=72Jhf2gCfLKMsgroJ+dspsUWbLqIIaKdSi3E4kfQTHg=;
+        s=default; t=1571163922;
+        bh=w3JPtmPhxhHKUGlCZ+tjFLFIEORSsCJ50SVVIpYzLAU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NxpiRKvyPENu5nqLqiiuFfvP8HewQgS0FRdSFH07T5l3FMQbOQO44QHVHBgUFam0F
-         eXDUI/uT1ldmjFXmLTQEiewhqryQ4Ac5n4vAV3hlsaHuBZOZnyuDDJRKQN+Wqkhlgx
-         swd+tFNGfcfgwhilnMLjyfPZwq0ztzgXzUO+HuSs=
-Date:   Tue, 15 Oct 2019 19:58:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Nagarjuna Kristam <nkristam@nvidia.com>, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V10 0/8] Tegra XUSB gadget driver support
-Message-ID: <20191015175820.GC1072965@kroah.com>
-References: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
- <20191014100257.GB419598@ulmo>
+        b=Nw10qirKFE8Uc7jhiN45AqLWnEfRFgOO6JiEMOCwwGN4FUc8mm4ONJzFwlwYy76zM
+         AYf+31Io0H5F+jSNeqqYlF6W0TWw3Mq+24X/ps6dRbXJVYL+N+CS0iQg7KaUXgPHoj
+         78WQchFf/StCynBT9L2x5Oz/VVTxT7+I0/QeMA+4=
+Date:   Tue, 15 Oct 2019 20:23:36 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Cc:     linux-usb@vger.kernel.org, linux-hotplug@vger.kernel.org
+Subject: Re: [PATCH v2] usb: usbfs: Suppress problematic bind and unbind
+ uevents.
+Message-ID: <20191015182336.GA1136990@kroah.com>
+References: <20191011115518.2801-1-ingo.rohloff@lauterbach.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191014100257.GB419598@ulmo>
+In-Reply-To: <20191011115518.2801-1-ingo.rohloff@lauterbach.com>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 12:02:57PM +0200, Thierry Reding wrote:
-> On Mon, Sep 23, 2019 at 01:55:44PM +0530, Nagarjuna Kristam wrote:
-> > Patches 1-3 are phy driver changes to add support for device
-> > mode.
-> > Patches 4-7 are changes related to XUSB device mode
-> > controller driver.
-> > Patch 8 is to enable drivers for XUDC support in defconfig
-> > 
-> > Test Steps(USB 2.0):
-> > - Enable "USB Gadget precomposed configurations" in defconfig
-> > - Build, flash and boot Jetson TX1
-> > - Connect Jetson TX1 and Ubuntu device using USB A to Micro B
-> >   cable
-> > - After boot on Jetson TX1 terminal usb0 network device should be
-> >   enumerated
-> > - Assign static ip to usb0 on Jetson TX1 and corresponding net
-> >   device on ubuntu
-> > - Run ping test and transfer test(used scp) to check data transfer
-> >   communication
+On Fri, Oct 11, 2019 at 01:55:18PM +0200, Ingo Rohloff wrote:
+> commit 1455cf8dbfd0 ("driver core: emit uevents when device is bound
+> to a driver") added bind and unbind uevents when a driver is bound or
+> unbound to a physical device.
 > 
-> Hi Felipe, Kishon, Greg,
+> For USB devices which are handled via the generic usbfs layer (via
+> libusb for example), this is problematic:
+> Each time a user space program calls
+>    ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
+> and then later
+>    ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
+> The kernel will now produce a bind or unbind event, which does not
+> really contain any useful information.
 > 
-> Patches 1-3 provide new API that is required by patch 7, so I think
-> patches 1, 2, 3, 4 and 7 should probably all go through a single tree to
-> avoid having to model the dependencies using stable branches.
+> This allows a user space program to run a DoS attack against programs
+> which listen to uevents (in particular systemd/eudev/upowerd):
+> A malicious user space program just has to call in a tight loop
 > 
-> Kishon, patches 1-3 have gone through several rounds of review already,
-> but do you have any remaining concerns on them? If not, it'd be great if
-> you could ack them. Felipe and Greg could then pick them up along with
-> patches 4 and 7 into the USB tree.
+>    ioctl(usb_fd, USBDEVFS_CLAIMINTERFACE, &usb_intf_nr);
+>    ioctl(usb_fd, USBDEVFS_RELEASEINTERFACE, &usb_intf_nr);
 > 
-> Felipe, Greg, does that sound like a reasonable plan?
+> With this loop the malicious user space program floods the kernel and
+> all programs listening to uevents with tons of bind and unbind
+> events.
+> 
+> This patch suppresses uevents for ioctls USBDEVFS_CLAIMINTERFACE and
+> USBDEVFS_RELEASEINTERFACE.
+> 
+> Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+> ---
+> 
+> Notes:
+>     v2:
+>     Patch only single file (devio.c), try to only suppress uevents while
+>     usb_driver_claim_interface/usb_driver_release_interface are called.
+>     Try to restore old state of dev->kobj.uevent_suppress.
 
-Fine with me.
-
-> I should also mention that while waiting for review, Nagarjuna has been
-> able to extend support for the XUDC driver to Tegra186 but has so far
-> been holding back on sending them out so as to not needlessly hold up
-> progress on this series. However, given the interdependencies, I've come
-> to think that it may be preferable to merge everything in one go instead
-> of revisiting this in a couple of weeks.
-> 
-> If you guys prefer, Nagarjuna could send out v11 of the series and
-> integrate Tegra186 support.
-
-That's also fine.
+Thanks for cleaning this up.  It looks much nicer now.  I've queued it
+up in my tree, let's see how testing goes :)
 
 thanks,
 
