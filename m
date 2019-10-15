@@ -2,101 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 494DDD7E2D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 19:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC1ED7E78
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 20:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731548AbfJORzW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 13:55:22 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:40441 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726192AbfJORzW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 13:55:22 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 7so21195132ljw.7;
-        Tue, 15 Oct 2019 10:55:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rWzJ8n7OSIuZ45gRCoMAJHmCCjITG30iMIEnwpMd3gk=;
-        b=rsfHjKJNul8qvJFrZaTUY3A5XhV1bvpQX3KjrCcgU4aS5AXw7rFjarDCxexCU5ZpUU
-         ReQv1N8+Znv1pBsSjcZf0dIc+XPlXxjcnO9uENjSyG9H9XaoCsRmHDWj5dHT/v/DA1xZ
-         p5x+ZCwMxcQH5W73/kb+HmNF3TjllWMn86wCgAQu8FogJGzkeOukvGMDSG0xtM/NRrHz
-         iyz+bOAn5eBuWfxS01Z0aQfAI8l5KT09tGsKzcTl7sWKs+FPCSaOKPOZ5MY+pMYLRFFD
-         5zOiKhKMpgPrJ457YBu3NzsS5KX2UGASA7zYYUXYMffxKMvy9vcAQFhUDas7Upx6BKL6
-         fakg==
-X-Gm-Message-State: APjAAAWLUDluS5IgFsgy1RC2Lh2AS29ws8bJsEBjKANrLtwoHL54uq1X
-        7bH25uGHeV2PnfOVwxAyLpM=
-X-Google-Smtp-Source: APXvYqyQGk2et1WyKkWpkdV/Yy5lebwn2GnBYCuxpzhCEW10W7I+MFMFyhtXxB/szxWu/QVo50JHjg==
-X-Received: by 2002:a2e:85c1:: with SMTP id h1mr23284311ljj.169.1571162119912;
-        Tue, 15 Oct 2019 10:55:19 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id 207sm4637079lfj.25.2019.10.15.10.55.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 15 Oct 2019 10:55:18 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@xi.terra>)
-        id 1iKR2h-0004ox-8A; Tue, 15 Oct 2019 19:55:31 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pete Zaitcev <zaitcev@redhat.com>,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        syzbot+cd24df4d075c319ebfc5@syzkaller.appspotmail.com
-Subject: [PATCH] USB: usblp: fix use-after-free on disconnect
-Date:   Tue, 15 Oct 2019 19:55:22 +0200
-Message-Id: <20191015175522.18490-1-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <000000000000f6ca4c0594f4f3d4@google.com>
-References: <000000000000f6ca4c0594f4f3d4@google.com>
+        id S2389083AbfJOSIy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 14:08:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40134 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbfJOSIy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 14:08:54 -0400
+Received: from localhost (unknown [38.98.37.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2210920659;
+        Tue, 15 Oct 2019 18:08:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571162933;
+        bh=72Jhf2gCfLKMsgroJ+dspsUWbLqIIaKdSi3E4kfQTHg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NxpiRKvyPENu5nqLqiiuFfvP8HewQgS0FRdSFH07T5l3FMQbOQO44QHVHBgUFam0F
+         eXDUI/uT1ldmjFXmLTQEiewhqryQ4Ac5n4vAV3hlsaHuBZOZnyuDDJRKQN+Wqkhlgx
+         swd+tFNGfcfgwhilnMLjyfPZwq0ztzgXzUO+HuSs=
+Date:   Tue, 15 Oct 2019 19:58:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>, jonathanh@nvidia.com,
+        mark.rutland@arm.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [Patch V10 0/8] Tegra XUSB gadget driver support
+Message-ID: <20191015175820.GC1072965@kroah.com>
+References: <1569227152-3030-1-git-send-email-nkristam@nvidia.com>
+ <20191014100257.GB419598@ulmo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191014100257.GB419598@ulmo>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-A recent commit addressing a runtime PM use-count regression, introduced
-a use-after-free by not making sure we held a reference to the struct
-usb_interface for the lifetime of the driver data.
+On Mon, Oct 14, 2019 at 12:02:57PM +0200, Thierry Reding wrote:
+> On Mon, Sep 23, 2019 at 01:55:44PM +0530, Nagarjuna Kristam wrote:
+> > Patches 1-3 are phy driver changes to add support for device
+> > mode.
+> > Patches 4-7 are changes related to XUSB device mode
+> > controller driver.
+> > Patch 8 is to enable drivers for XUDC support in defconfig
+> > 
+> > Test Steps(USB 2.0):
+> > - Enable "USB Gadget precomposed configurations" in defconfig
+> > - Build, flash and boot Jetson TX1
+> > - Connect Jetson TX1 and Ubuntu device using USB A to Micro B
+> >   cable
+> > - After boot on Jetson TX1 terminal usb0 network device should be
+> >   enumerated
+> > - Assign static ip to usb0 on Jetson TX1 and corresponding net
+> >   device on ubuntu
+> > - Run ping test and transfer test(used scp) to check data transfer
+> >   communication
+> 
+> Hi Felipe, Kishon, Greg,
+> 
+> Patches 1-3 provide new API that is required by patch 7, so I think
+> patches 1, 2, 3, 4 and 7 should probably all go through a single tree to
+> avoid having to model the dependencies using stable branches.
+> 
+> Kishon, patches 1-3 have gone through several rounds of review already,
+> but do you have any remaining concerns on them? If not, it'd be great if
+> you could ack them. Felipe and Greg could then pick them up along with
+> patches 4 and 7 into the USB tree.
+> 
+> Felipe, Greg, does that sound like a reasonable plan?
 
-Fixes: 9a31535859bf ("USB: usblp: fix runtime PM after driver unbind")
-Cc: stable <stable@vger.kernel.org>
-Reported-by: syzbot+cd24df4d075c319ebfc5@syzkaller.appspotmail.com
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/class/usblp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Fine with me.
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index fb8bd60c83f4..0d8e3f3804a3 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -445,6 +445,7 @@ static void usblp_cleanup(struct usblp *usblp)
- 	kfree(usblp->readbuf);
- 	kfree(usblp->device_id_string);
- 	kfree(usblp->statusbuf);
-+	usb_put_intf(usblp->intf);
- 	kfree(usblp);
- }
- 
-@@ -1113,7 +1114,7 @@ static int usblp_probe(struct usb_interface *intf,
- 	init_waitqueue_head(&usblp->wwait);
- 	init_usb_anchor(&usblp->urbs);
- 	usblp->ifnum = intf->cur_altsetting->desc.bInterfaceNumber;
--	usblp->intf = intf;
-+	usblp->intf = usb_get_intf(intf);
- 
- 	/* Malloc device ID string buffer to the largest expected length,
- 	 * since we can re-query it on an ioctl and a dynamic string
-@@ -1198,6 +1199,7 @@ static int usblp_probe(struct usb_interface *intf,
- 	kfree(usblp->readbuf);
- 	kfree(usblp->statusbuf);
- 	kfree(usblp->device_id_string);
-+	usb_put_intf(usblp->intf);
- 	kfree(usblp);
- abort_ret:
- 	return retval;
--- 
-2.23.0
+> I should also mention that while waiting for review, Nagarjuna has been
+> able to extend support for the XUDC driver to Tegra186 but has so far
+> been holding back on sending them out so as to not needlessly hold up
+> progress on this series. However, given the interdependencies, I've come
+> to think that it may be preferable to merge everything in one go instead
+> of revisiting this in a couple of weeks.
+> 
+> If you guys prefer, Nagarjuna could send out v11 of the series and
+> integrate Tegra186 support.
 
+That's also fine.
+
+thanks,
+
+greg k-h
