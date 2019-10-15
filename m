@@ -2,72 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46226D7D8D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 19:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BD2D7E24
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 19:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388427AbfJORYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 13:24:03 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41346 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727387AbfJORYD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 13:24:03 -0400
-Received: by mail-ot1-f65.google.com with SMTP id g13so17625721otp.8;
-        Tue, 15 Oct 2019 10:24:02 -0700 (PDT)
+        id S1730156AbfJORwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 13:52:55 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:41078 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726192AbfJORwz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 13:52:55 -0400
+Received: by mail-ot1-f67.google.com with SMTP id g13so17708036otp.8;
+        Tue, 15 Oct 2019 10:52:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=AMnuJgHGU6R0IzytORO8cFlW8ykU5YUSocCPPL5eBC4=;
-        b=UEiJXYbXmrIOZRPiKZBaVt+kyPYDy/vH44IePvqy+WVoUHfMvdBLwewfDrU+AXGbHE
-         HZMSpz5R6JKF+dm7tDI+Ndb1dfJXp/pvyua/GsbHHvCIcW6lBm69Dx7xDI0JMzK3is/c
-         Ssza4d3tM6KkMgDHcsEMMquLa9Ohi1qDbvFeC0cLPqD0P4t0rlYAx9moGLkpO2IrK2yL
-         Xsnw36SjMUdcfZ0mbjJr7OdUQ+fQIQbbZ6Xz7uk2k+dpMhwHjB/th0vLgC0Sby8wvWCe
-         83dqm79YKPYEJY1k3EBM3tUG3wQjhd1Atow79jcDilPXXI9Il9mXlfVIe4oWFZIS0wrY
-         GSrQ==
-X-Gm-Message-State: APjAAAWK+pLUUAUEF8UGmGyhLy08rzhj5kn8AXMlWWsWzE97lpoQgw9N
-        XS48O1KcJ9uqhV6RUgpARA==
-X-Google-Smtp-Source: APXvYqxeAQyn2woHyJsNz/1A9Qqotnbqgu/lYixgaEz9AtYG4uiKdx1AbMY3H/CJDkTrB7+S/N/KHQ==
-X-Received: by 2002:a05:6830:22ce:: with SMTP id q14mr3987927otc.115.1571160242078;
-        Tue, 15 Oct 2019 10:24:02 -0700 (PDT)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id d194sm6658461oib.47.2019.10.15.10.24.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2019 10:24:01 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 12:24:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Alexandre Torgue <alexandre.torgue@st.com>
-Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@st.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] dt-bindings: usb: generic-ehci: Add "companion" entry
-Message-ID: <20191015172400.GA724@bogus>
-References: <20191007134410.10337-1-alexandre.torgue@st.com>
- <20191007134410.10337-4-alexandre.torgue@st.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0awkrNAPcXWo+Wm8QfkD5O17YbDc9wlliWJjxDTQPl4=;
+        b=A09rzlzGFg3ApjtfQolUx0XxOId8zdCTpVL2fhgTgcmL2qNYTJQ/QAPwTMzYOdBUGL
+         hEyn0wRe4hq7oOBqHLpQcDSZtrfPx+RlkUI1S2q4eGu2Z+UI3zKXcs/hT9IImrtprId7
+         Rp4GFSbYrFYi/obgIQJuuqA+TwHAQLsdG28Yl5lwKDRjY6VSmop9DGTiWrVCFOnJnz2D
+         p6om/04m9zyYrBpV2Y9BnwwCFUE4I1TXwmEED5T+jjItUEFgjFLW38cNPrrc3milLAdE
+         f6/cM+AbqwfoRr9557VnAtLKkj6wY9UXpQe0bhpF8OGsOfP83L18r4z5SWWrrfefrWq5
+         VgXw==
+X-Gm-Message-State: APjAAAUkOenZSVnnQJsYj/klZkQKtFwSn0Lk8ZhvEDW/eOfP5RkASYBZ
+        2BvYMylx+pzZDHLvGfSBGj3CvRbmqqeKS23p+qA=
+X-Google-Smtp-Source: APXvYqy+z2640pLWXA/n52YLsdwhV9kHXEIfBefEfzEG0gR7AIhD1qLPwhn/HydFH/9RJQz2Qf4j1X31ihVGYH3jcuA=
+X-Received: by 2002:a05:6830:1e69:: with SMTP id m9mr1431970otr.262.1571161972801;
+ Tue, 15 Oct 2019 10:52:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191007134410.10337-4-alexandre.torgue@st.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191014061355.29072-1-drake@endlessm.com> <20191014154322.GA190693@google.com>
+ <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
+In-Reply-To: <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 15 Oct 2019 19:52:41 +0200
+Message-ID: <CAJZ5v0jCh87azmBuhj1T_M+OV8tu7v7Y7WV_zaf56+fxhXU3KQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 7 Oct 2019 15:44:10 +0200, Alexandre Torgue wrote:
-> "companion" entry is present in "generic.txt" usb binding file. This commit
-> adds it also in generic-ehci yaml binding.
-> 
-> Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
-> 
+On Tue, Oct 15, 2019 at 7:31 AM Daniel Drake <drake@endlessm.com> wrote:
+>
+> On Mon, Oct 14, 2019 at 11:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > Can you tell if this is because the Ryzen7 XHCI controller is out of
+> > spec, or is the Linux PCI core missing some delay?  If the latter,
+> > fixing the core might fix other devices as well.
+> >
+> > Mika has this patch:
+> > https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
+> > for similar issues, but I think that patch fixes D3cold->D0
+> > transitions, and your patch appears to be concerned with D3hot->D0
+> > transitions.
+>
+> It's actually coming out of D3cold here, however what happens right
+> before this is that __pci_start_power_transition() calls
+> pci_platform_power_transition(D0) to leave D3cold state, then
+> pci_update_current_state() reads PMCSR and updates dev->current_state
+> to D3hot.
 
-Applied, thanks.
+Which pci_update_current_state() do you mean, exactly?
 
-Rob
+Note that pci_platform_power_transition() itself contains one, which
+triggers after a successful change of the ACPI power state of the
+device (which should be the case here).
+
+Then, there is one in pci_power_up(), but before that the device's
+PMCSR is read from and written to in pci_raw_set_power_state().
+
+It looks like the reads from it after the ACPI power state change are
+all successful, but the write isn't unless there is the delay between
+it and the former platform_pci_set_power_state().
+
+> The 20ms delay for these XHCI controllers is needed precisely at this
+> point - after writing PMCSR to move to D0, and before reading it back
+> to check the result.
+> I tried moving the delay immediately before writing PMCSR, but that
+> doesn't work. Based on that, it seems like it's just a little out of
+> spec.
+
+That I agree with and the platform firmware doesn't compensate for
+that (which it could do, arguably).
