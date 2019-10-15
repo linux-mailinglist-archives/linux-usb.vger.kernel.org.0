@@ -2,60 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FE8D837E
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 00:21:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8BDD83B6
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 00:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729939AbfJOWVG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 18:21:06 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35138 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726417AbfJOWVG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 18:21:06 -0400
-Received: by mail-lj1-f194.google.com with SMTP id m7so21894737lji.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 15:21:04 -0700 (PDT)
+        id S2389917AbfJOWcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 18:32:32 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33534 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732040AbfJOWcc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 18:32:32 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a22so21927103ljd.0
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 15:32:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=igJfeABa6M5mmcDSZ9XAWyfxDlpeT34TBKS5Vu4WYQ8=;
-        b=LIYdbK/WEFGMNdD+uIGw2BasCdPDikOSk/1C31c/6KJAoWeweWvBbkEnJF4PHN8TkH
-         BgZdUCf/ZYXj115hlOqd/koyMkdZG6Il9yGalmukOiV4kTIOYCVZSlLQpLqR2NWtyVYg
-         nGZ/n1OZmV0DBw+aQ4pzCSwYlzFEdDM+SUZEQ=
+        bh=fon9Xqueqx/Fq0wGHnHqEDUCXyflZLUwsevU6fmx6jE=;
+        b=SIEI+eyzsLvgKQSWy68fNU4waAO3JnvS6nzHr5/fZu5+F3lS+ninFSB5dUKCVryHZ+
+         kl8H8QJRcmYfRoBpcYQdlcvyFYmbnE5AhMRuYRji7sgqsBgEDlqfBvGU7GUQWJu2UMf7
+         6W/csLC8ZHTI+HN72RKiuRYhkxOOMexsvDhzA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=igJfeABa6M5mmcDSZ9XAWyfxDlpeT34TBKS5Vu4WYQ8=;
-        b=TV8s5k/Ttm85nlyfxi1t9SFlTvYfYMtpzx/SpAQUI1Rip0+wkl1Vhd1KNc64XIOog4
-         QXcK07/vBcNUiueQRTBOaJmDvj9emGm3Gk0kMVtkYHQ44aVAh4esnZpMcopTAiURj9WK
-         VQnQALpfrpLzfUTkGZCdj5c0y/I6byjOrt5gSivE/Cl4zHIo4Iu0rPSf8AUeip63kCgh
-         ExCYtNthQef1PdNQvpqa43UcIbgo5ClKUPM0NbLDr/kpTIFSXpE+rvy+LByeq/c4mjIs
-         HTwkA2C2pV7JpccB5XbVR67zqnDeAGlxniVunPZVEJCb4OF0HglV0mnduLCZtzpzRyiB
-         gX+w==
-X-Gm-Message-State: APjAAAW4IFi7Arsj7EkfAtgcp7NlzZTJx8zpWeTAvhJ424iBOB5STq6o
-        xhTp9eLTBQcT5E6y0mzjG9/O1zPWNs0=
-X-Google-Smtp-Source: APXvYqzcIPKMwlyoGrG857nGp95sht7GWuFTmXZdgqjyK5Iv60ek8n5KPOTyLPhXhZ77v/qnKiE/pQ==
-X-Received: by 2002:a05:651c:1ae:: with SMTP id c14mr22539422ljn.135.1571178064110;
-        Tue, 15 Oct 2019 15:21:04 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id q13sm5373611lfk.51.2019.10.15.15.21.03
+        bh=fon9Xqueqx/Fq0wGHnHqEDUCXyflZLUwsevU6fmx6jE=;
+        b=ia0/TtkkVulKJawwNvzt6yrSwRAkc75l4/jzZ2KWsx/1rp1BXV8LIHHVyloa8tUQAR
+         /zasPPrTHV+0SGj8bllgbxzxUzhE7ms9OLJX7plEW06ELZgmjhdUwLgqOSDfVX973NNl
+         6Z9AqpJ2TrK5Ki66N5vT/Vyiro6jH5FwwZUOm9cv99eNo06BfbvkG8CfCIEqu42PQ/KE
+         cJHQeUw9g6iNpGZvr3jbyoctgr9nxbevfZR9+u7pRW+ho8f3wCcHsLiXnljewtpyW/03
+         BcazANIHisLFCOxg0U9+aqJJTCV8Ap5tIGxkEvJFdhMY2jQAf2GlaUEWh4joYKwe+SBJ
+         xigw==
+X-Gm-Message-State: APjAAAV/LkymX2fUK5Xd0rLUj7ib6P/Dxq71M6aP9yJsHHTUDM1G5Fik
+        TTKoXhQnWvOqLRvs/q2TkV1Yi1AKVwk=
+X-Google-Smtp-Source: APXvYqxzLZAVf0b6kTeHw7GGwG8c7Dhe9s+rq5hpxgPlYJDGKEqldzCSn9PTJjO/+elV4OCPPEmoIw==
+X-Received: by 2002:a2e:86cd:: with SMTP id n13mr23670991ljj.239.1571178747957;
+        Tue, 15 Oct 2019 15:32:27 -0700 (PDT)
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com. [209.85.167.54])
+        by smtp.gmail.com with ESMTPSA id z2sm6189239ljz.72.2019.10.15.15.32.24
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Oct 2019 15:21:03 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id c195so15723008lfg.9
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 15:21:03 -0700 (PDT)
-X-Received: by 2002:ac2:43a8:: with SMTP id t8mr22573654lfl.134.1571178063150;
- Tue, 15 Oct 2019 15:21:03 -0700 (PDT)
+        Tue, 15 Oct 2019 15:32:25 -0700 (PDT)
+Received: by mail-lf1-f54.google.com with SMTP id t8so15699726lfc.13
+        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 15:32:24 -0700 (PDT)
+X-Received: by 2002:a19:5504:: with SMTP id n4mr4230778lfe.106.1571178744104;
+ Tue, 15 Oct 2019 15:32:24 -0700 (PDT)
 MIME-Version: 1.0
 References: <157117606853.15019.15459271147790470307.stgit@warthog.procyon.org.uk>
- <157117614109.15019.15677943675625422728.stgit@warthog.procyon.org.uk>
-In-Reply-To: <157117614109.15019.15677943675625422728.stgit@warthog.procyon.org.uk>
+In-Reply-To: <157117606853.15019.15459271147790470307.stgit@warthog.procyon.org.uk>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 15 Oct 2019 15:20:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wivjB8Va7K_eK_fx+Z1vpbJ82DW=eVfyP33ZDusaK44EA@mail.gmail.com>
-Message-ID: <CAHk-=wivjB8Va7K_eK_fx+Z1vpbJ82DW=eVfyP33ZDusaK44EA@mail.gmail.com>
-Subject: Re: [RFC PATCH 08/21] pipe: Check for ring full inside of the
- spinlock in pipe_write()
+Date:   Tue, 15 Oct 2019 15:32:08 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whfCy+WCZ5SXZGi4QEhxXm=EjZjj4R9+o4q-QR3saMyfg@mail.gmail.com>
+Message-ID: <CAHk-=whfCy+WCZ5SXZGi4QEhxXm=EjZjj4R9+o4q-QR3saMyfg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/21] pipe: Keyrings, Block and USB notifications
 To:     David Howells <dhowells@redhat.com>
 Cc:     Casey Schaufler <casey@schaufler-ca.com>,
         Stephen Smalley <sds@tycho.nsa.gov>,
@@ -74,13 +72,15 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 2:49 PM David Howells <dhowells@redhat.com> wrote:
->
-> +                       if (head - pipe->tail == buffers) {
+Aside from the two small comments, the pipe side looked reasonable,
+but I stopped looking when the patches moved on to the notificaiton
+part, and maybe I missed something in the earlier ones too.
 
-Can we just have helper inline functions for these things?
+Which does bring me to the meat of this email: can we please keep the
+pipe cleanups and prepwork (and benchmarking) as a separate patch
+series? I'd like that to be done separately from the notification
+code, since it's re-organization and cleanup - while the eventual goal
+is to be able to add messages to the pipe atomically, I think the
+series makes sense (and should make sense) on its own.
 
-You describe them in the commit message of 03/21 (good), but it would
-be even better if the code was just self-describing..
-
-           Linus
+          Linus
