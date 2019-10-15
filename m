@@ -2,140 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 806B9D79AA
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 17:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042F9D79C3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 17:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733310AbfJOPV7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 11:21:59 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:52000 "EHLO
-        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732659AbfJOPV7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 11:21:59 -0400
-Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
-        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1iKOe0-0006E0-Nb; Tue, 15 Oct 2019 16:21:52 +0100
-Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.2)
-        (envelope-from <ben@rainbowdash.codethink.co.uk>)
-        id 1iKOe0-0000UU-9v; Tue, 15 Oct 2019 16:21:52 +0100
-From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-To:     linux-kernel@lists.codethink.co.uk
-Cc:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: xhci: fix __le32/__le64 accessors in debugfs code
-Date:   Tue, 15 Oct 2019 16:21:50 +0100
-Message-Id: <20191015152150.1840-1-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.23.0
+        id S1733165AbfJOP0q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 11:26:46 -0400
+Received: from mga02.intel.com ([134.134.136.20]:32317 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726523AbfJOP0p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 11:26:45 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Oct 2019 08:26:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,300,1566889200"; 
+   d="scan'208";a="395569337"
+Received: from fmsmsx106.amr.corp.intel.com ([10.18.124.204])
+  by fmsmga005.fm.intel.com with ESMTP; 15 Oct 2019 08:26:45 -0700
+Received: from fmsmsx162.amr.corp.intel.com (10.18.125.71) by
+ FMSMSX106.amr.corp.intel.com (10.18.124.204) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 15 Oct 2019 08:26:44 -0700
+Received: from bgsmsx110.gar.corp.intel.com (10.223.4.212) by
+ fmsmsx162.amr.corp.intel.com (10.18.125.71) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Tue, 15 Oct 2019 08:26:44 -0700
+Received: from bgsmsx104.gar.corp.intel.com ([169.254.5.228]) by
+ BGSMSX110.gar.corp.intel.com ([169.254.11.93]) with mapi id 14.03.0439.000;
+ Tue, 15 Oct 2019 20:56:41 +0530
+From:   "Gopal, Saranya" <saranya.gopal@intel.com>
+To:     Roger Quadros <rogerq@ti.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Bin Liu [EP]" <b-liu@ti.com>
+CC:     "Nori, Sekhar" <nsekhar@ti.com>
+Subject: RE: how to test g_webcam
+Thread-Topic: how to test g_webcam
+Thread-Index: AQHVgDPmWH0hxtxRWkygI7jFq6u7oqdVDM4AgASlAwCAAAoTAIAADJYAgAAQigCAAVWJAIAAqdJA
+Date:   Tue, 15 Oct 2019 15:26:41 +0000
+Message-ID: <C672AA6DAAC36042A98BAD0B0B25BDA94CD14A54@BGSMSX104.gar.corp.intel.com>
+References: <7c65d743-f6cd-846b-381a-07808c6f4c5a@ti.com>
+ <8736fzv3c5.fsf@gmail.com> <a23554e6-4dd7-b252-eda3-4d986d4a80be@ti.com>
+ <8736fvh58n.fsf@gmail.com> <922b2947-2d47-19c4-9116-73c5f281de15@ti.com>
+ <871rvf8l09.fsf@gmail.com> <75438b39-2233-8865-860a-661cf09bea4b@ti.com>
+In-Reply-To: <75438b39-2233-8865-860a-661cf09bea4b@ti.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.2.0.6
+dlp-reaction: no-action
+x-ctpclassification: CTP_NT
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL0ludGVsMyIsImlkIjoiNmY5MTY0MjAtYzE2Ni00ZGIyLWIzNjctY2IzMjNmZWQzZTVhIiwicHJvcHMiOlt7Im4iOiJDVFBDbGFzc2lmaWNhdGlvbiIsInZhbHMiOlt7InZhbHVlIjoiQ1RQX05UIn1dfV19LCJTdWJqZWN0TGFiZWxzIjpbXSwiVE1DVmVyc2lvbiI6IjE3LjEwLjE4MDQuNDkiLCJUcnVzdGVkTGFiZWxIYXNoIjoibjNQUEVxdlwvOVBucFFkd2p1Qlp6U3FRRndHdlJ1Rm1qQlRhY2RVTlYrREFcLzZQZ3Z2S0ZvZTUzalE3dW5QdVZrIn0=
+x-originating-ip: [10.223.10.10]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It looks like some of the xhci debug code is passing
-u32 to functions directly from __le32/__le64 fields. Fix
-this by using le{32,64}_to_cpu() on these to fix the
-following sparse warnings;
-
-drivers/usb/host/xhci-debugfs.c:205:62: warning: incorrect type in argument 1 (different base types)
-drivers/usb/host/xhci-debugfs.c:205:62:    expected unsigned int [usertype] field0
-drivers/usb/host/xhci-debugfs.c:205:62:    got restricted __le32
-drivers/usb/host/xhci-debugfs.c:206:62: warning: incorrect type in argument 2 (different base types)
-drivers/usb/host/xhci-debugfs.c:206:62:    expected unsigned int [usertype] field1
-drivers/usb/host/xhci-debugfs.c:206:62:    got restricted __le32
-drivers/usb/host/xhci-debugfs.c:207:62: warning: incorrect type in argument 3 (different base types)
-drivers/usb/host/xhci-debugfs.c:207:62:    expected unsigned int [usertype] field2
-drivers/usb/host/xhci-debugfs.c:207:62:    got restricted __le32
-drivers/usb/host/xhci-debugfs.c:208:62: warning: incorrect type in argument 4 (different base types)
-drivers/usb/host/xhci-debugfs.c:208:62:    expected unsigned int [usertype] field3
-drivers/usb/host/xhci-debugfs.c:208:62:    got restricted __le32
-drivers/usb/host/xhci-debugfs.c:266:53: warning: incorrect type in argument 1 (different base types)
-drivers/usb/host/xhci-debugfs.c:266:53:    expected unsigned int [usertype] info
-drivers/usb/host/xhci-debugfs.c:266:53:    got restricted __le32 [usertype] dev_info
-drivers/usb/host/xhci-debugfs.c:267:53: warning: incorrect type in argument 2 (different base types)
-drivers/usb/host/xhci-debugfs.c:267:53:    expected unsigned int [usertype] info2
-drivers/usb/host/xhci-debugfs.c:267:53:    got restricted __le32 [usertype] dev_info2
-drivers/usb/host/xhci-debugfs.c:268:53: warning: incorrect type in argument 3 (different base types)
-drivers/usb/host/xhci-debugfs.c:268:53:    expected unsigned int [usertype] tt_info
-drivers/usb/host/xhci-debugfs.c:268:53:    got restricted __le32 [usertype] tt_info
-drivers/usb/host/xhci-debugfs.c:269:53: warning: incorrect type in argument 4 (different base types)
-drivers/usb/host/xhci-debugfs.c:269:53:    expected unsigned int [usertype] state
-drivers/usb/host/xhci-debugfs.c:269:53:    got restricted __le32 [usertype] dev_state
-drivers/usb/host/xhci-debugfs.c:289:57: warning: incorrect type in argument 1 (different base types)
-drivers/usb/host/xhci-debugfs.c:289:57:    expected unsigned int [usertype] info
-drivers/usb/host/xhci-debugfs.c:289:57:    got restricted __le32 [usertype] ep_info
-drivers/usb/host/xhci-debugfs.c:290:57: warning: incorrect type in argument 2 (different base types)
-drivers/usb/host/xhci-debugfs.c:290:57:    expected unsigned int [usertype] info2
-drivers/usb/host/xhci-debugfs.c:290:57:    got restricted __le32 [usertype] ep_info2
-drivers/usb/host/xhci-debugfs.c:291:57: warning: incorrect type in argument 3 (different base types)
-drivers/usb/host/xhci-debugfs.c:291:57:    expected unsigned long long [usertype] deq
-drivers/usb/host/xhci-debugfs.c:291:57:    got restricted __le64 [usertype] deq
-drivers/usb/host/xhci-debugfs.c:292:57: warning: incorrect type in argument 4 (different base types)
-drivers/usb/host/xhci-debugfs.c:292:57:    expected unsigned int [usertype] tx_info
-drivers/usb/host/xhci-debugfs.c:292:57:    got restricted __le32 [usertype] tx_info
-
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
----
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-.. (open list)
----
- drivers/usb/host/xhci-debugfs.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index 7ba6afc7ef23..76c3f29562d2 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -202,10 +202,10 @@ static void xhci_ring_dump_segment(struct seq_file *s,
- 		trb = &seg->trbs[i];
- 		dma = seg->dma + i * sizeof(*trb);
- 		seq_printf(s, "%pad: %s\n", &dma,
--			   xhci_decode_trb(trb->generic.field[0],
--					   trb->generic.field[1],
--					   trb->generic.field[2],
--					   trb->generic.field[3]));
-+			   xhci_decode_trb(le32_to_cpu(trb->generic.field[0]),
-+					   le32_to_cpu(trb->generic.field[1]),
-+					   le32_to_cpu(trb->generic.field[2]),
-+					   le32_to_cpu(trb->generic.field[3])));
- 	}
- }
- 
-@@ -263,10 +263,10 @@ static int xhci_slot_context_show(struct seq_file *s, void *unused)
- 	xhci = hcd_to_xhci(bus_to_hcd(dev->udev->bus));
- 	slot_ctx = xhci_get_slot_ctx(xhci, dev->out_ctx);
- 	seq_printf(s, "%pad: %s\n", &dev->out_ctx->dma,
--		   xhci_decode_slot_context(slot_ctx->dev_info,
--					    slot_ctx->dev_info2,
--					    slot_ctx->tt_info,
--					    slot_ctx->dev_state));
-+		   xhci_decode_slot_context(le32_to_cpu(slot_ctx->dev_info),
-+					    le32_to_cpu(slot_ctx->dev_info2),
-+					    le32_to_cpu(slot_ctx->tt_info),
-+					    le32_to_cpu(slot_ctx->dev_state)));
- 
- 	return 0;
- }
-@@ -286,10 +286,10 @@ static int xhci_endpoint_context_show(struct seq_file *s, void *unused)
- 		ep_ctx = xhci_get_ep_ctx(xhci, dev->out_ctx, dci);
- 		dma = dev->out_ctx->dma + dci * CTX_SIZE(xhci->hcc_params);
- 		seq_printf(s, "%pad: %s\n", &dma,
--			   xhci_decode_ep_context(ep_ctx->ep_info,
--						  ep_ctx->ep_info2,
--						  ep_ctx->deq,
--						  ep_ctx->tx_info));
-+			   xhci_decode_ep_context(le32_to_cpu(ep_ctx->ep_info),
-+						  le32_to_cpu(ep_ctx->ep_info2),
-+						  le64_to_cpu(ep_ctx->deq),
-+						  le32_to_cpu(ep_ctx->tx_info)));
- 	}
- 
- 	return 0;
--- 
-2.23.0
-
+SGkgUXVhZHJvcywNCg0KPiBJIHVzZWQgdGhlIGEgZGlmZmVyZW50IHV2Yy1nYWRnZXQgYXBwbGlj
+YXRpb24gZnJvbSB0aGlzIGxvY2F0aW9uIFsxXSBhbmQgaXQgc2VlbXMNCj4gdG8NCj4gd29yayBx
+dWl0ZSBmaW5lIHdpdGggYnVpbHRpbiB2aWRlbyBwYXR0ZXJuIGFuZCBqcGcgaW1hZ2UgYnV0IG5v
+dCB3aXRoIFY0TDINCj4gY2FwdHVyZSBzb3VyY2UuDQo+IA0KPiBTbyBzb21ldGhpbmcgaXMgYnJv
+a2VuIGluIHV2Yy1nYWRnZXQgYXQgWzJdDQo+IA0KPiBbMV0gaHR0cHM6Ly9naXRodWIuY29tL3ds
+aGUvdXZjLWdhZGdldA0KPiBbMl0gaHR0cDovL2dpdC5pZGVhc29uYm9hcmQub3JnL3V2Yy1nYWRn
+ZXQuZ2l0DQoNCkkgdGhpbmsgc3VwcG9ydCBmb3IgcGF0dGVybiBhbmQgSlBHIGltYWdlIHdhcyBp
+bnRlbnRpb25hbGx5IHJlbW92ZWQgZnJvbSB1dmMtZ2FkZ2V0IHdpdGggdGhpcyBjb21taXQ6DQpo
+dHRwOi8vZ2l0LmlkZWFzb25ib2FyZC5vcmcvdXZjLWdhZGdldC5naXQvY29tbWl0ZGlmZi8wMGI4
+OTIzMDU2OTRlYTc5NjcyOGMxZjk3ODMxYmMzYzU5YThlM2RhP2hwPTUzYjEzOWEyMjgxMGUwMGFh
+MGNlODcyODUzYjQ1MTA3YzRlZGVlOTgNClRoYW5rcywNClNhcmFueWENCj4gDQo+IGNoZWVycywN
+Cj4gLXJvZ2VyDQo+IC0tDQo+IFRleGFzIEluc3RydW1lbnRzIEZpbmxhbmQgT3ksIFBvcmtrYWxh
+bmthdHUgMjIsIDAwMTgwIEhlbHNpbmtpLg0KPiBZLXR1bm51cy9CdXNpbmVzcyBJRDogMDYxNTUy
+MS00LiBLb3RpcGFpa2thL0RvbWljaWxlOiBIZWxzaW5raQ0K
