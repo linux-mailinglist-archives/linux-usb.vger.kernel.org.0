@@ -2,94 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C9ED7C39
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 18:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 432A0D7D6A
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Oct 2019 19:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388221AbfJOQpZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 12:45:25 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:38538 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727643AbfJOQpZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 12:45:25 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e11so17511119otl.5;
-        Tue, 15 Oct 2019 09:45:24 -0700 (PDT)
+        id S1731319AbfJORVv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 13:21:51 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40141 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726525AbfJORVv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 13:21:51 -0400
+Received: by mail-oi1-f195.google.com with SMTP id k9so17524556oib.7;
+        Tue, 15 Oct 2019 10:21:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L5HOgkQMMJIihEae5ZZkONlPFc7mxHbtAiMOUbphoZo=;
-        b=lozZTxNh9+Us0oxQivH77G45cZ9qvm5VKPsmheR5LKUAWvUIW+uMQ6engak349+6K7
-         o7p69BPSStrxt8ru9b53S/K0kSmf3I6GdoCfQFQCOi20uT5UFqQ82KB8LJwRArja/YN4
-         lfZk2qqIqgjm4ijdi3udUbmDqiLcEdI7CvtPZV1uHp23OmKHpnlGcOfQiKQuL2hFQUY+
-         q7qpOWoV79xGcjxhKWPWzNuXcPqN+LZnCJGYDEKhgb8PoNF8RiV0lK02MHKez92C9LB8
-         DMiGRYhD3k9dlHHQmjE+w9DH1QpQD4RkpT/iEUaOQsBD7IChF3kMrjtWwDTQ0YaWILiX
-         isHw==
-X-Gm-Message-State: APjAAAVHWVj4ZBDR/PFwM/BHUdMf59oXcqU+iTdJAQ6i2wqT8eyFmCzO
-        yA9hJPqKrfU+ow1v7ZQHIsCaRCDmbDdFbuFowrKI2g==
-X-Google-Smtp-Source: APXvYqyCr+2dtAe4fWd6QTmS4rnjNno+NHjgK7brIt6EL/DeVt+mmOemmSBJxtvCQImIDFF/T0HX6+lr9I76HpMLaag=
-X-Received: by 2002:a05:6830:1544:: with SMTP id l4mr15309053otp.297.1571157924270;
- Tue, 15 Oct 2019 09:45:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 15 Oct 2019 18:45:13 +0200
-Message-ID: <CAMuHMdXkdNCyNQyWEPEzTYScwqTfv9z_RzFcJDy7VySeiZEmdw@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: fix __le16 warnings
-To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-Cc:     linux-kernel@lists.codethink.co.uk,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wMQYKbyhFA0J53uXBrOY3g9qc7SUK0PL+5SCKX00VUU=;
+        b=D878rz1Z4ez2g0ZBvon/wKCoB/esDCrO7mYh1Pmp07UXFfUxNDZEykjhGdMb7JI+9F
+         NRrtthiQGe40+6ZEwPcY+o7Svf4vrzRRF0Dm2IhX6gTRbWL71v7H9pQqF9edW7Ccf6QV
+         0QAnxan7QqmquGj35OuWLV8yBAaDxIHOqDgZVnM/Da40+AoSB3eyjfBfudQme5OMOQY2
+         qMyUuTXzflFXfxKaBV1krKb5t1yoo5vrYST7tkAk+WMC5BRW+nZoC0Azve6Y3waR/hdl
+         9yQ/P7AWVBZyq863rjFDgajd1tPGWRLXDyKvYsN/dA56uXKqoOoP0ARuRtOjsq+B2Qhw
+         9UKg==
+X-Gm-Message-State: APjAAAVhVat7Ol9EEAYE46QPphyesI2IWJ0poQYFAZ06MTmBNJ2GGE6E
+        NJn1/rTze4qkJfNcMp4ZRw==
+X-Google-Smtp-Source: APXvYqzqnTfEgidDenSlUfa7aOPOWYsLH7H0GHitbZ8rXyoGFRnAK2iUj2pxxTyIJqKthdjAV1LKQQ==
+X-Received: by 2002:aca:dec4:: with SMTP id v187mr30817920oig.46.1571160108888;
+        Tue, 15 Oct 2019 10:21:48 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id d95sm7245526otb.25.2019.10.15.10.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 10:21:47 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 12:21:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Simon Horman <horms+renesas@verge.net.au>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: arm: stm32: Add missing STM32 boards
+Message-ID: <20191015172147.GA29624@bogus>
+References: <20191007134410.10337-1-alexandre.torgue@st.com>
+ <20191007134410.10337-2-alexandre.torgue@st.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191007134410.10337-2-alexandre.torgue@st.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 5:50 PM Ben Dooks (Codethink)
-<ben.dooks@codethink.co.uk> wrote:
-> Fix the warnings generated by casting to/from __le16 without
-> using the correct functions.
->
-> Fixes the following sparse warnings:
->
-> drivers/usb/renesas_usbhs/common.c:165:25: warning: incorrect type in assignment (different base types)
-> drivers/usb/renesas_usbhs/common.c:165:25:    expected restricted __le16 [usertype] wValue
-> drivers/usb/renesas_usbhs/common.c:165:25:    got unsigned short
-> drivers/usb/renesas_usbhs/common.c:166:25: warning: incorrect type in assignment (different base types)
-> drivers/usb/renesas_usbhs/common.c:166:25:    expected restricted __le16 [usertype] wIndex
-> drivers/usb/renesas_usbhs/common.c:166:25:    got unsigned short
-> drivers/usb/renesas_usbhs/common.c:167:25: warning: incorrect type in assignment (different base types)
-> drivers/usb/renesas_usbhs/common.c:167:25:    expected restricted __le16 [usertype] wLength
-> drivers/usb/renesas_usbhs/common.c:167:25:    got unsigned short
-> drivers/usb/renesas_usbhs/common.c:173:39: warning: incorrect type in argument 3 (different base types)
-> drivers/usb/renesas_usbhs/common.c:173:39:    expected unsigned short [usertype] data
-> drivers/usb/renesas_usbhs/common.c:173:39:    got restricted __le16 [usertype] wValue
-> drivers/usb/renesas_usbhs/common.c:174:39: warning: incorrect type in argument 3 (different base types)
-> drivers/usb/renesas_usbhs/common.c:174:39:    expected unsigned short [usertype] data
-> drivers/usb/renesas_usbhs/common.c:174:39:    got restricted __le16 [usertype] wIndex
-> drivers/usb/renesas_usbhs/common.c:175:39: warning: incorrect type in argument 3 (different base types)
-> drivers/usb/renesas_usbhs/common.c:175:39:    expected unsigned short [usertype] data
->
-> Note. I belive this to be correct, and should be a no-op on arm.
+On Mon, 7 Oct 2019 15:44:08 +0200, Alexandre Torgue wrote:
+> This commit documents missing STM32 boards:
+> 
+> -STM32MCU: F429 disco/eval, F469-disco, F746 disco/eval, F769 disco,
+> H743 disco/eval.
+> 
+> -STM32MPU: MP157 dk1/dk2/ed1/ev1.
+> 
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
+> 
 
-Yep, the affected platforms are little-endian.
+Applied, thanks.
 
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Rob
