@@ -2,74 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E3DD844C
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 01:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2864AD849E
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 02:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389624AbfJOXOp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 19:14:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49878 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725970AbfJOXOp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Oct 2019 19:14:45 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7209820663;
-        Tue, 15 Oct 2019 23:14:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571181285;
-        bh=u/1Fs8cS6EGzipNVQGWJ8bROGkIumox9o4udTWVE61A=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=a9Sta15j5R1fY+UxtsRWDdIbRY26PchNOGgxhCajbLNmVwEcDVQ7uNTdsYOFYRsx4
-         WDInuGnCI3enq/G+phU4Ltr5lHJPzPID/ZksZt7B1lfBZY9w428ngAPIYhCVm6t6dT
-         p2LH0Kf8siCTiG8G26hKAvxAZIZidFQp9Leg/ASs=
-Subject: Re: [PATCH] usbip: tools: Fix read_usb_vudc_device() error path
- handling
-To:     GwanYeong Kim <gy741.kim@gmail.com>, valentina.manea.m@gmail.com
-Cc:     gregkh@linuxfoundation.org, allison@lohutok.net,
-        opensource@jilayne.com, changcheng.liu@intel.com,
-        tglx@linutronix.de, linux-usb@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20191015131437.525-1-gy741.kim@gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <bb2bef23-336a-2f28-8faa-00e4adbb76d9@kernel.org>
-Date:   Tue, 15 Oct 2019 17:14:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2387596AbfJPADk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 20:03:40 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35873 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728287AbfJPADk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 20:03:40 -0400
+Received: by mail-wm1-f67.google.com with SMTP id m18so798157wmc.1;
+        Tue, 15 Oct 2019 17:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=z+boKbPCJy6Y+QmEBbA2r6Sy5oF4Bkb5MuauoyykrQg=;
+        b=o9s23SP7JEIeCegNEId+494t1oUADoPW/AaYLQCM9nW0UZY9VnFOmgJAKyfhJV+vfU
+         SUM67QdQDD5jfkrS6zCFCJiY9HkKYL41XjA5rTppD9+Cn/Mf87TyIvcdt6TfoX8sLplC
+         SHxLR2sjCen3SsmBsodriYKupoRWPzbRNr//tuLfLVxJH0dkiv7cW6XWTVlL49G3gBcZ
+         TavTe8XoTdJDg3jnnbsW26uuFU4iPOE3ydfvc3pkAjt5zpmUMw2fBjHIwP8x1gnJzaeL
+         L+xycGn81efQM6XCUoVgqn5ACf4ZVgvewcW3NfYREkAnQ18+p0G5cPrcTSgUX/Uk82Ay
+         XvnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=z+boKbPCJy6Y+QmEBbA2r6Sy5oF4Bkb5MuauoyykrQg=;
+        b=Mb5VpJQ8wBE5KJyKwUGmeGdh2lyhIE05toSwx2ocPDBf4vCWWFA1h0AzlyUJ854gUJ
+         5QPMXkY1wn05sC1tNCtSjBeWLT9ZDw2w7SUaD4vZGoSbcokAntFPVVwOJdA/DJm9hgAN
+         tL8S8c+jwO8RNZQeNw0hji6Ufy1bTN9YPa8jzK4b6z5anCzaXQ2BQg5PqLJ2LhrQd/X0
+         sKvNpYLKbAQBMUMACuQM1e1lh9kghPaTNID5gXFQ0ro2tmifGYUdm9V8dkfudneo/78g
+         0FZvNP6axIMztXaQowCi281vrrDOK9fdGwcMmaJ/1LfAIoDHwK1EI9GCzboxykDDCbF7
+         ZrfQ==
+X-Gm-Message-State: APjAAAXIaWqjOWNiQNrl7scQes5ICv/6xHrx3xwgV5NnzK3yAD8egS+q
+        j1mKJo8GRjN3zcd8j7jUg1Y=
+X-Google-Smtp-Source: APXvYqyCj2CodWgBxqzJ6BnmheAkq7jFR2HRMpb748mzst4r2RhVtoYTg1jcyiHQDjd7jbTwZwftgw==
+X-Received: by 2002:a7b:cd87:: with SMTP id y7mr807381wmj.93.1571184216877;
+        Tue, 15 Oct 2019 17:03:36 -0700 (PDT)
+Received: from mail.google.com ([104.238.174.53])
+        by smtp.gmail.com with ESMTPSA id q19sm47346920wra.89.2019.10.15.17.03.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 17:03:35 -0700 (PDT)
+Date:   Wed, 16 Oct 2019 08:03:24 +0800
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Thomas Zimmermann <tzimmermann@suse.de>, Tim.Bird@sony.com,
+        jani.nikula@linux.intel.com, changbin.du@gmail.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
+ to 'specific'
+Message-ID: <20191016000322.7dnuwvxqtdbg7clq@mail.google.com>
+References: <20191013055359.23312-1-changbin.du@gmail.com>
+ <875zkrd7nq.fsf@intel.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
+ <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
+ <20191015115439.GE32665@bombadil.infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <20191015131437.525-1-gy741.kim@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
+User-Agent: NeoMutt/20180716
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/15/19 7:14 AM, GwanYeong Kim wrote:
-> cannot be less than 0 - fread() returns 0 on error.
+On Tue, Oct 15, 2019 at 04:54:39AM -0700, Matthew Wilcox wrote:
+> On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
+> > > My preference would be to use 'symbols'.  I tried to come up with something
+> > > but 'symbols' is better than anything I came up with.
+> > 
+> > Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
+> > imprecise as 'functions'.
 > 
-> Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
-> ---
->   tools/usb/usbip/libsrc/usbip_device_driver.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+> I suggested 'identifier' because that's the term used in the C spec (6.2.1):
 > 
-> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> index 051d7d3f443b..49760b98aabc 100644
-> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> @@ -79,7 +79,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
->   	if (!fd)
->   		return -1;
->   	ret = fread((char *) &descr, sizeof(descr), 1, fd);
-> -	if (ret < 0) > +	if (ret != sizeof(descr))
+> : An identifier can denote an object; a function; a tag or a member
+> : of a structure, union, or enumeration; a typedef name; a label name;
+> : a macro name; or a macro parameter.
+>
+I also prefer this one now. I was looking for something like this. My original
+idea is 'prototype', but that is only for function.
 
-Are you sure this check is correct? fread() returns the number
-of elements read, # elements = 1  in this case.
+> We don't allow documenting all those things separately, but it does cover
+> all the things we do allow to be individually documented.
 
-fread() returns 0 when size or # of elements is 0 and in other
-error cases it will return < # of elements. I would think you
-want to check ret != 1 here.
-
-thanks,
--- Shuah
+-- 
+Cheers,
+Changbin Du
