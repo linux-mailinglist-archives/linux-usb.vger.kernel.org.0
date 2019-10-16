@@ -2,189 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EA4D8C6C
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A00D8C7F
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730314AbfJPJWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 05:22:12 -0400
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:42274 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726480AbfJPJWM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:22:12 -0400
-Received: by mail-yw1-f66.google.com with SMTP id i207so8384463ywc.9;
-        Wed, 16 Oct 2019 02:22:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=fE2pjCnbjKZ4MlHeVN9jf9xQvMsEbh3Ui9qBwYYhdik=;
-        b=quQrLnOXJ+Il6WrvPYFqz55r1v/b/zkH2rjO3kPNUeLava+9ZFcyGLJAY5MXYJrDG1
-         gaOeuW9BiBU1vEhCnrzI8WIZbpQ0pUsTX1TugR8SOks/He43p/kFyM5y+mCbbGnL4tW/
-         ph2pMfzCvj5cwTWv8DHkjobW3HNbvNDqIqfXhFfAizjdab3xiZDxEkvCd/OjK+HI92DD
-         G+fA55tE/oHSzfX/qSVhBCmFqlCVgjz3gebmzQC5vrUO+BF3nP+V+44KiwMKKtMP5WeX
-         AjLb8aHGJ6/VxKnkeLq+xncuj6W8yt4Mcxp3Zoi3bNccYWlLzdZNW4cu1smcH5wRBlaY
-         w04w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=fE2pjCnbjKZ4MlHeVN9jf9xQvMsEbh3Ui9qBwYYhdik=;
-        b=t2eSy2u5CL+/PSHmjoYHg1tsIoRE0EPpf938YrsEoh5GfrTYGSBJWlZrRavg8HCNz6
-         xOO5XrNHyaBgDBkqaTAEUbALmVf23OsaX6VfgLek210oSerDmw6kz/LYHwTQqxZ7QN4u
-         q6BzAXNxpYrLW1uLVoK9iq3/QaZF7jK8SOsV/OeLqtoAbBIEUfWOK7YskTcxvjiPKVUN
-         IdyDNfSIMJWTdL+8WozPxYEDgadbKj7LQhgtsOKm0JiFxhzXHrFQAC8c0Z4ahjFqH1Ny
-         QGnFexr81V+fnOai5AgF7uynPOM7Iw/cDkEQcNCE0tKKSMUYRoql26ZB1D9ST8pbilRe
-         YycQ==
-X-Gm-Message-State: APjAAAWkC3uxzY2H56dd4X3E5aSNoPv11NVSA7u5TWz7immZApzdLRaN
-        LyKrtdjEz13GEhHx/A+IGIU+q5tZB6Ranb3Tquo=
-X-Google-Smtp-Source: APXvYqy8YrQ7Fy9N0tSf6UnOVs5Y+XEEVGl5A6TEHhdSMmEJSPXvfJQR9YwZUrgWvsNk3tI/X/ypSn6EmXOCxoq1o/U=
-X-Received: by 2002:a0d:fa01:: with SMTP id k1mr19961558ywf.326.1571217730743;
- Wed, 16 Oct 2019 02:22:10 -0700 (PDT)
+        id S2391967AbfJPJZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 05:25:27 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:46318 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732124AbfJPJZ1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:25:27 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9G9P0Cr049206;
+        Wed, 16 Oct 2019 04:25:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571217900;
+        bh=JCp9NDVOPJ/jkmiAXxjMw3QseopHXTfTuzXh/Aea6Dg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=jzJ6IUbHI5OFOT1UTFz8OC+sOk5BmdIaP77KTFW7SJanw9JG+nT3AsjgWqRKwarCX
+         jWyFcAJ848zUGztqS0df4NNJcfRh4QV/BQx9OS3DxMg0icIgDhE6mpYuG9LGAehuCT
+         ZxRQBOFz7rHJFJwTY9i/cB/HXSeIobcyN+AgRtAQ=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9G9P0mQ034719;
+        Wed, 16 Oct 2019 04:25:00 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 16
+ Oct 2019 04:24:53 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 16 Oct 2019 04:24:53 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9G9Ou6H015203;
+        Wed, 16 Oct 2019 04:24:56 -0500
+Subject: Re: [RFC][PATCH 3/3] usb: dwc3: Registering a role switch in the DRD
+ code.
+To:     John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20191002231617.3670-1-john.stultz@linaro.org>
+ <20191002231617.3670-4-john.stultz@linaro.org>
+ <9e86bb7b-5dd2-760e-c324-fe1c1ee41868@ti.com>
+ <CALAqxLUVd5Eo_9tuP9aQUpNT0gnewBv8Dpvsj8UT3MucmzCJVQ@mail.gmail.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <fc74130f-bc8e-5d44-2c4a-340934c7b1d3@ti.com>
+Date:   Wed, 16 Oct 2019 12:24:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-From:   zzoru <zzoru007@gmail.com>
-Date:   Wed, 16 Oct 2019 02:21:59 -0700
-Message-ID: <CALRZ7UuEBvMtL6Q3TOKjXdh9B4X5bcHUdbO7i20TmPShZHmKZg@mail.gmail.com>
-Subject: WARNING in __alloc_pages_nodemask
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     dokyungs@uci.edu, syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CALAqxLUVd5Eo_9tuP9aQUpNT0gnewBv8Dpvsj8UT3MucmzCJVQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We found the following crash on Linux 5.4-rc1 (Not patched in current
-HEAD commit 3b1f00aceb7a67bf079a5a64aa5c6baf78a8f442)
-with our customized syzkaller.
+On 15/10/2019 22:10, John Stultz wrote:
+> On Tue, Oct 15, 2019 at 1:25 AM Roger Quadros <rogerq@ti.com> wrote:
+>> On 03/10/2019 02:16, John Stultz wrote:
+>>> @@ -487,7 +539,28 @@ int dwc3_drd_init(struct dwc3 *dwc)
+>>>        if (IS_ERR(dwc->edev))
+>>>                return PTR_ERR(dwc->edev);
+>>>
+>>> -     if (dwc->edev) {
+>>> +     if (device_property_read_bool(dwc->dev, "usb-role-switch")) {
+>>
+>> I think we should use role switch unconditionally and get rid of the
+>> debugfs role status/change mechanism.
+>>
+>>> +             struct usb_role_switch_desc dwc3_role_switch = {0};
+>>> +             u32 mode;
+>>> +
+>>> +             if (device_property_read_bool(dwc->dev,
+>>> +                                           "role-switch-default-host")) {
+>>> +                     dwc->role_switch_default_mode = USB_DR_MODE_HOST;
+>>> +                     mode = DWC3_GCTL_PRTCAP_HOST;
+>>> +             } else {
+>>> +                     dwc->role_switch_default_mode = USB_DR_MODE_PERIPHERAL;
+>>> +                     mode = DWC3_GCTL_PRTCAP_DEVICE;
+>>> +             }
+>>> +             dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
+>>> +             dwc3_role_switch.set = dwc3_usb_role_switch_set;
+>>> +             dwc3_role_switch.get = dwc3_usb_role_switch_get;
+>>> +             dwc->role_sw = usb_role_switch_register(dwc->dev,
+>>> +                                                     &dwc3_role_switch);
+>>> +             if (IS_ERR(dwc->role_sw))
+>>> +                     return PTR_ERR(dwc->role_sw);
+>>> +
+>>> +             dwc3_set_mode(dwc, mode);
+>>> +     } else if (dwc->edev) {
+>>
+>> Role switch should exist regardless if dwc->edev is present or not.
+> 
+> Does that risk duplicative mode sets when things change (via the
+> dwc3_drd_notifier and dwc3_usb_role_switch_set calls?).
 
-WARNING: CPU: 0 PID: 12 at linux/mm/page_alloc.c:4727
-__alloc_pages_nodemask+0x333/0x760 linux/mm/page_alloc.c:4727
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.4.0-rc1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack linux/lib/dump_stack.c:77 [inline]
- dump_stack+0x7c/0xbb linux/lib/dump_stack.c:113
- panic+0x205/0x48e linux/kernel/panic.c:220
- __warn+0x19c/0x1c0 linux/kernel/panic.c:581
- report_bug+0x1a9/0x2b0 linux/lib/bug.c:195
- fixup_bug.part.11+0x32/0x80 linux/arch/x86/kernel/traps.c:179
- fixup_bug linux/arch/x86/include/asm/irqflags.h:54 [inline]
- do_error_trap+0xf5/0x160 linux/arch/x86/kernel/traps.c:272
- do_invalid_op+0x31/0x40 linux/arch/x86/kernel/traps.c:291
- invalid_op+0x23/0x30 linux/arch/x86/entry/entry_64.S:1028
-RIP: 0010:__alloc_pages_nodemask+0x333/0x760 linux/mm/page_alloc.c:4727
-Code: fe ff ff 65 48 8b 04 25 00 ef 01 00 48 05 68 10 00 00 41 bc 01
-00 00 00 48 89 44 24 40 e9 2a fe ff ff 81 e7 00 20 00 00 75 02 <0f> 0b
-45 31 e4 e9 6e ff ff ff 41 f7 c6 00 00 40 00 0f 84 2c ff ff
-RSP: 0018:ffff88801a1a6f60 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 1ffff11003434def RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000034 RDI: 0000000000000000
-RBP: ffffffffffffff5e R08: ffffed1002d261a2 R09: dffffc0000000000
-R10: 0000000000000001 R11: ffffed1002d261a1 R12: ffffffffffffff5e
-R13: 0000000000000dc0 R14: ffff888017140000 R15: 0000000000000034
- alloc_pages linux/include/linux/gfp.h:509 [inline]
- kmalloc_order+0x16/0x50 linux/mm/slab_common.c:1294
- kmalloc_order_trace+0x18/0x110 linux/mm/slab_common.c:1306
- kmalloc linux/include/linux/slab.h:557 [inline]
- kzalloc linux/include/linux/slab.h:686 [inline]
- init_realtek_cr+0x2ec/0x1440 linux/drivers/usb/storage/realtek_cr.c:990
- usb_stor_acquire_resources linux/drivers/usb/storage/usb.c:784 [inline]
- usb_stor_probe2+0x738/0xbb0 linux/drivers/usb/storage/usb.c:1047
- realtek_cr_probe+0x9b/0xe0 linux/drivers/usb/storage/realtek_cr.c:1048
- usb_probe_interface+0x2b9/0x870 linux/drivers/usb/core/driver.c:361
- really_probe+0x444/0x830 linux/drivers/base/dd.c:548
- driver_probe_device+0xe3/0x250 linux/drivers/base/dd.c:721
- __device_attach_driver+0x17a/0x1e0 linux/drivers/base/dd.c:828
- bus_for_each_drv+0x143/0x1e0 linux/drivers/base/bus.c:430
- __device_attach+0x1f1/0x310 linux/drivers/base/dd.c:894
- bus_probe_device+0x1d7/0x280 linux/drivers/base/bus.c:490
- device_add+0xb72/0x1660 linux/drivers/base/core.c:2201
- usb_set_configuration+0xaca/0x1840 linux/drivers/usb/core/message.c:2023
- generic_probe+0x63/0xd0 linux/drivers/usb/core/generic.c:210
- usb_probe_device+0x89/0xd0 linux/drivers/usb/core/driver.c:266
- really_probe+0x444/0x830 linux/drivers/base/dd.c:548
- driver_probe_device+0xe3/0x250 linux/drivers/base/dd.c:721
- __device_attach_driver+0x17a/0x1e0 linux/drivers/base/dd.c:828
- bus_for_each_drv+0x143/0x1e0 linux/drivers/base/bus.c:430
- __device_attach+0x1f1/0x310 linux/drivers/base/dd.c:894
- bus_probe_device+0x1d7/0x280 linux/drivers/base/bus.c:490
- device_add+0xb72/0x1660 linux/drivers/base/core.c:2201
- usb_new_device+0x784/0x10d0 linux/drivers/usb/core/hub.c:2536
- hub_port_connect linux/drivers/usb/core/hub.c:5098 [inline]
- hub_port_connect_change linux/drivers/usb/core/hub.c:5213 [inline]
- port_event linux/drivers/usb/core/hub.c:5359 [inline]
- hub_event+0x18ed/0x3610 linux/drivers/usb/core/hub.c:5441
- process_one_work+0x8b5/0x17c0 linux/kernel/workqueue.c:2269
- worker_thread+0x82/0xb80 linux/kernel/workqueue.c:2415
- kthread+0x325/0x3e0 linux/kernel/kthread.c:255
- ret_from_fork+0x24/0x30 linux/arch/x86/entry/entry_64.S:352
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-Kernel Offset: disabled
+Yes, we need to deal with it in the driver. e.g. in current case
+when debugfs overrides a role from "otg" to "host" or "device",
+we ignore the notifier.
 
-Following is my analysis of this bug. (Just add some comments in source code):
+Something similar could be done with role switch I think.
 
-realtek_cr.c:
-struct rts51x_chip {
-    u16 vendor_id;
-    u16 product_id;
-    char max_lun; // char -> signed 1byte
-    ...
-}
+Felipe, what do you think?
 
-static int init_realtek_cr(struct us_data *us)
-{
-    int size, i, retval;
-    ...
-    us->max_lun = chip->max_lun = rts51x_get_max_lun(us); // From USB
-device (-127~126) Malicious usb device can manipulate this value.
-
-    size = (chip->max_lun + 1) * sizeof(struct rts51x_status); // Can
-be negative integer or 0 (-1+1).
-
-    chip->status = kzalloc(size, GFP_KERNEL); //  kzalloc(0) ==
-ZERO_SIZE_PTR or kzalloc(negative integer) -> Warning
-
-    ...
-
-    for (i = 0; i <= (int)(chip->max_lun); i++) {
-        retval = rts51x_check_status(us, (u8) i);
-        ...
-    }
-}
-
-tatic int rts51x_check_status(struct us_data *us, u8 lun)
-{
-    struct rts51x_chip *chip = (struct rts51x_chip *)(us->extra);
-    int retval;
-    u8 buf[16];
-
-    retval = rts51x_read_status(us, lun, buf, 16, &(chip->status_len));
-    if (retval != STATUS_SUCCESS)
-        return -EIO;
-
-    usb_stor_dbg(us, "chip->status_len = %d\n", chip->status_len);
-
-    chip->status[lun].vid = ((u16) buf[0] << 8) | buf[1]; //
-ZERO_SIZE_PTR DEREFERENCE :(
-    chip->status[lun].pid = ((u16) buf[2] << 8) | buf[3];
-    chip->status[lun].cur_lun = buf[4];
-    chip->status[lun].card_type = buf[5];
-    chip->status[lun].total_lun = buf[6];
-    chip->status[lun].fw_ver = ((u16) buf[7] << 8) | buf[8];
-    chip->status[lun].phy_exist = buf[9];
-    chip->status[lun].multi_flag = buf[10];
-    chip->status[lun].multi_card = buf[11];
-    chip->status[lun].log_exist = buf[12];
-    if (chip->status_len == 16) {
-        chip->status[lun].detailed_type.detailed_type1 = buf[13];
-        chip->status[lun].function[0] = buf[14];
-        chip->status[lun].function[1] = buf[15];
-    }
-    return 0;
-}
-
-Need to change a declaration of max_lun. (u8)
+-- 
+cheers,
+-roger
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
