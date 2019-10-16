@@ -2,76 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20796D8511
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 02:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CDA8D851B
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 02:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388672AbfJPAs2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 20:48:28 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41042 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbfJPAs2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 20:48:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=pf6bbQYx9hUE+6rFYONnUuY9TK+2idQNGK21XGkY2xo=; b=qU7sjU5uXXip0NogETsugUAi3
-        jtRE/3LcBLi9RdoLLx/XlPfCCqP/SEyUzVoQs8WqvIypx8a18jDctjkK4Re6BQG2NHTAYVe2clHx9
-        Fc3+P2BkHiuODGY67O+nE61aVcc/8GpDa/jzNwRrmBaE2id/NXw+dKOwpSr6xQnMsQ4fuePOFe+js
-        JIH8ZaatXc+A7TE44A1jvUJ6kUvX7Z+zadosMUcWzpR9cy44tC5hgJou/w2EXK7tpk4l7WdxUdnN+
-        jZ8v5qs2XXayMAz4jgQI/jbaEXemK0icN8biguipxmOtXSmNRCQ8+4zKpkdeeh7JWzTQO0Suarzpb
-        TMB4py35Q==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iKXUD-0005ri-Tc; Wed, 16 Oct 2019 00:48:21 +0000
-Date:   Tue, 15 Oct 2019 17:48:21 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Changbin Du <changbin.du@gmail.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>, Tim.Bird@sony.com,
-        jani.nikula@linux.intel.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
- to 'specific'
-Message-ID: <20191016004821.GI32665@bombadil.infradead.org>
-References: <20191013055359.23312-1-changbin.du@gmail.com>
- <875zkrd7nq.fsf@intel.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
- <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
- <20191015115439.GE32665@bombadil.infradead.org>
- <20191016000322.7dnuwvxqtdbg7clq@mail.google.com>
+        id S2390398AbfJPAzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 20:55:11 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:52150 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726315AbfJPAzL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 20:55:11 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id D0656E38D07370F6AE70;
+        Wed, 16 Oct 2019 08:55:07 +0800 (CST)
+Received: from [127.0.0.1] (10.177.96.96) by DGGEMS412-HUB.china.huawei.com
+ (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Wed, 16 Oct 2019
+ 08:54:57 +0800
+Subject: Re: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
+To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <biju.das@bp.renesas.com>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+References: <20191009014707.38716-1-maowenan@huawei.com>
+From:   maowenan <maowenan@huawei.com>
+Message-ID: <ff1837bd-d6eb-a296-f7d9-f2988d5d2256@huawei.com>
+Date:   Wed, 16 Oct 2019 08:54:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016000322.7dnuwvxqtdbg7clq@mail.google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191009014707.38716-1-maowenan@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.96.96]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 08:03:24AM +0800, Changbin Du wrote:
-> On Tue, Oct 15, 2019 at 04:54:39AM -0700, Matthew Wilcox wrote:
-> > On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
-> > > > My preference would be to use 'symbols'.  I tried to come up with something
-> > > > but 'symbols' is better than anything I came up with.
-> > > 
-> > > Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
-> > > imprecise as 'functions'.
-> > 
-> > I suggested 'identifier' because that's the term used in the C spec (6.2.1):
-> > 
-> > : An identifier can denote an object; a function; a tag or a member
-> > : of a structure, union, or enumeration; a typedef name; a label name;
-> > : a macro name; or a macro parameter.
->
-> I also prefer this one now. I was looking for something like this. My original
-> idea is 'prototype', but that is only for function.
+kindly ping.
 
-We could also go with 'declaration' or 'definition'.  But I prefer
-'identifier'.
+On 2019/10/9 9:47, Mao Wenan wrote:
+> If CONFIG_TYPEC_HD3SS3220=y, CONFIG_USB_ROLE_SWITCH=m, below errors
+> can be found:
+> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_remove':
+> hd3ss3220.c:(.text+0x64): undefined reference to `usb_role_switch_put'
+> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_dr_set':
+> hd3ss3220.c:(.text+0x154): undefined reference to `usb_role_switch_set_role'
+> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_set_role':
+> hd3ss3220.c:(.text+0x294): undefined reference to `usb_role_switch_set_role'
+> hd3ss3220.c:(.text+0x2f4): undefined reference to `usb_role_switch_set_role'
+> hd3ss3220.c:(.text+0x348): undefined reference to `usb_role_switch_set_role'
+> hd3ss3220.c:(.text+0x390): undefined reference to `usb_role_switch_set_role'
+> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_probe':
+> hd3ss3220.c:(.text+0x5e8): undefined reference to `fwnode_usb_role_switch_get'
+> hd3ss3220.c:(.text+0x8a4): undefined reference to `usb_role_switch_put'
+> make: *** [vmlinux] Error 1
+> 
+> This patch add dependency USB_ROLE_SWITCH for TYPEC_HD3SS3220.
+> 
+> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Mao Wenan <maowenan@huawei.com>
+> ---
+>  drivers/usb/typec/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
+> index aceb2af..b4f2aac 100644
+> --- a/drivers/usb/typec/Kconfig
+> +++ b/drivers/usb/typec/Kconfig
+> @@ -53,6 +53,7 @@ source "drivers/usb/typec/ucsi/Kconfig"
+>  config TYPEC_HD3SS3220
+>  	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
+>  	depends on I2C
+> +	depends on USB_ROLE_SWITCH
+>  	help
+>  	  Say Y or M here if your system has TI HD3SS3220 Type-C DRP Port
+>  	  controller driver.
+> 
+
