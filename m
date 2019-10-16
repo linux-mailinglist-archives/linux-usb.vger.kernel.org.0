@@ -2,109 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A802D8885
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 08:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA96D88AF
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 08:39:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387750AbfJPGOb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 02:14:31 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:35047 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725797AbfJPGOb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 02:14:31 -0400
-Received: by mail-qt1-f196.google.com with SMTP id m15so34507115qtq.2
-        for <linux-usb@vger.kernel.org>; Tue, 15 Oct 2019 23:14:31 -0700 (PDT)
+        id S2388946AbfJPGjO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 02:39:14 -0400
+Received: from mail-eopbgr1400134.outbound.protection.outlook.com ([40.107.140.134]:50913
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388357AbfJPGjO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Oct 2019 02:39:14 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FkVaNNcTwrC2m/jt0I8TAzbrnQLROIqv1S0et2c41MlKyZ9fnioWXVU+XHiKazuwmFQTHn9Cjqjw4pHJLKQepwHZqNya8axdQVYgNmxUPl0DmAAUePktSz4l8OS7yTzf0Kpo3UVnJyWlRVRV72xy2WnnXymEODyhQoOrEQ2hiVvDgLUfMXYwBnfSd4lPIaCx6P5E24feWc/wpX95gVUNFk+r81m6jT5p8WT6FgXDEDyzT0pQlRBr0IIkworDA5qjN98oGoEF/1S3mYplSENihNuyD62K/NGzzK09BTvEwgC65vBdtpsfRkCizVgJoNXmOhVJUiIBd9mOBVDYZf11sQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/Me+yI609mYsg9WbQZMBF7dnvMkdAfv5UnReQTytYA=;
+ b=bd0Iqd1ig1PAlLEtiKDzqRKPSqzeoNH4Om70WnQs5i9msLuwXr5cmF55WhzRL1l88PgmpFTE6cbQr5Ez+mMQ4fw3lmJshyDDsZQziBmGFumb28ZC4c+2lPcNoT1TSV3oqYE1qQFYUa3j2sekznbhAB7DH2JHjIykZ7azADoZfLyElsSvl0a9JsREKiFALe2FvDkL5+WsT18xc2zdDcwhFtkXxcSDL4jw9ein8NpM5ewX9ovIwUG2pFajmh18DknnnshTNkLZeo9iaC6FKLrVvjGRE5A7O8nU2rS9hv2ks5J7rlmVyMbwWpTpG8GyLpUQoLq876aRs0gqkGIB32T7NA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GawCBMh9NqIamtg2SCquuU1mF2daZgV9LLd8P7nFDiA=;
-        b=CXoo/fxf0E8vVt7V01SYD4EOrQEbYvFRaZGjmwWsldsThEeLmd7ndBq5a1QN61duLS
-         H1qumH85+uXVEeEqNYNF+yytPOTjc2zTElfS+D1c78Dd1a6ba9MRl0Ee+w5xIrc8ZRSA
-         JvAwakO2alwHOK4cJRtxRBJfc08OuYNUfGCq+XbHx1on7nejEvC3xlzJxOyrLr3mIKOG
-         oczoyDadGf4jb0vNHn7pKDmhJ5Vw8dPlBAnycccgF/iNi+FcejU9CCUf/F8qxQ9oCedu
-         aaRInZcTYJrE3EZf0dMyQzN53JS2CapS1aFlF6BZeRdhoaMjOOdDm0jfwsZNBSzIEWaO
-         EJXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GawCBMh9NqIamtg2SCquuU1mF2daZgV9LLd8P7nFDiA=;
-        b=qFfiQWaJlK1r9TFvVaFQwWMpRYwQw/UFQCW6ISSJ3lh4OnB/RQuv9XmEpYPSH7MgBv
-         n2ym6bVbUtKOkg9lVvlOw01Xd4hsMhjYua8983XT2BsFLu6GBeNaBSL+DxCQCTcBNfbz
-         GXXNU+alfEmaFb9+UBxkXiWBuFZCKoeLPRt9rW5UFEMX6KPeV32BrcAhFnB6lX94RvQe
-         E7VZG+5n/AVDDWpnqucvgboRQAUqU8TwlX1iwAgapwybWYWPnsjNebodjFcmLSE9Ql0D
-         VtxaFId0JnxobHTl0Dm8Wi/wpr2g4QHE6gc6wwRHu66MKH9ycs1UohxVFXlo8y1CbQ5d
-         XGNQ==
-X-Gm-Message-State: APjAAAVf4LZ8IG1vEhYb3cZ5f+D5NO6jTVT+pdGcHLGTgs45mAqMH0yT
-        KTsLuWqIB4S2ezowhiSlyIqBNTxfi8QOtTGz7i0PCQ==
-X-Google-Smtp-Source: APXvYqwiV4mxddPn7dV0fiVkZcslq0XHJF+3rn4ldkXT/4VjJjQHGBpNHo6hrlxrom6jnAhtRDMsMkYuqTbw/k8u56M=
-X-Received: by 2002:ac8:3021:: with SMTP id f30mr42138162qte.80.1571206470472;
- Tue, 15 Oct 2019 23:14:30 -0700 (PDT)
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/Me+yI609mYsg9WbQZMBF7dnvMkdAfv5UnReQTytYA=;
+ b=MJyhjfoExSClzNDXOXnd0SyWtkLU+iQHLtTpl5WsYYWGy8Jk6X58tlKY92W/nVPwGTYUFrCXnzwlZXpnt6px5SYv7+Id8bhP3V2+maUMC7Jb1MehwQbQURX5g8pubj0BjqwzkRlih0pEeO85NCgnTjbvMZ8K59ZvDVzJMXFC+v8=
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
+ OSBPR01MB3447.jpnprd01.prod.outlook.com (20.178.98.150) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16; Wed, 16 Oct 2019 06:39:10 +0000
+Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::dc33:9b1f:4522:550e]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
+ ([fe80::dc33:9b1f:4522:550e%3]) with mapi id 15.20.2347.023; Wed, 16 Oct 2019
+ 06:39:10 +0000
+From:   Biju Das <biju.das@bp.renesas.com>
+To:     maowenan <maowenan@huawei.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: RE: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
+Thread-Topic: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
+Thread-Index: AQHVfkOKloVrfMGidkOyU5GyOdNjm6dcfByAgABfdUA=
+Date:   Wed, 16 Oct 2019 06:39:09 +0000
+Message-ID: <OSBPR01MB2103364C0A4E7150C10DC624B8920@OSBPR01MB2103.jpnprd01.prod.outlook.com>
+References: <20191009014707.38716-1-maowenan@huawei.com>
+ <ff1837bd-d6eb-a296-f7d9-f2988d5d2256@huawei.com>
+In-Reply-To: <ff1837bd-d6eb-a296-f7d9-f2988d5d2256@huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=biju.das@bp.renesas.com; 
+x-originating-ip: [193.141.220.21]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 601c99b7-7fc7-4f94-e7f8-08d752038d1c
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: OSBPR01MB3447:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <OSBPR01MB3447A7F919AF66294BBED2F6B8920@OSBPR01MB3447.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:288;
+x-forefront-prvs: 0192E812EC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(39860400002)(376002)(366004)(136003)(346002)(199004)(189003)(11346002)(81156014)(8676002)(486006)(256004)(186003)(476003)(26005)(8936002)(66066001)(2501003)(86362001)(44832011)(66556008)(229853002)(66476007)(6436002)(64756008)(76116006)(66946007)(66446008)(74316002)(7736002)(305945005)(2201001)(81166006)(446003)(99286004)(966005)(478600001)(33656002)(9686003)(4326008)(102836004)(7696005)(6246003)(55016002)(6306002)(76176011)(14454004)(6506007)(25786009)(71200400001)(71190400001)(110136005)(2906002)(316002)(3846002)(54906003)(6116002)(5660300002)(52536014)(53546011);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBPR01MB3447;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
+received-spf: None (protection.outlook.com: bp.renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 6mr0ZQBk4L590AHlWyg75kp6To0Nc9U2mxn/zuklH2rHmBIzLHPz7Gc40DYVD1z4W3D0f1DJyityu40K4T6XwpdhQRV1mQxj+l+Bv4aq93MznFHzecUfSFU/FvYtsOnkAJPf+GwSV+/Z+dn/93fMwlD4bGxDKjbSt5Y7ORn87czgmCCvLce0Kj/QCRRFNwL6ORHfrLjVwwC8++iGNxxO5OeIuHYa1eH9VwlM0EUMSPbXIWofRsX7hlgwXewji6jSQ452USwG1GR8WFhADbyndrxt+aOHtxGwwBq3ssvzxytOuKe49DiB+jtugChANoJLNTj+cZethEktDBywA7cqk9zrN4o0KJ1Cen4J2dUBSBSDJg1V70YOGLWlMppHsZwpq/cVDX5SZKdhYLWZYwmn9h2C98G83wbNGhyImITwi20lKWx5axwLVdjnpAHDcUcHpJhSGFfkjMH47NwOEXFzGw==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20191014061355.29072-1-drake@endlessm.com> <20191014154322.GA190693@google.com>
- <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com> <CAJZ5v0jCh87azmBuhj1T_M+OV8tu7v7Y7WV_zaf56+fxhXU3KQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jCh87azmBuhj1T_M+OV8tu7v7Y7WV_zaf56+fxhXU3KQ@mail.gmail.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Wed, 16 Oct 2019 14:14:19 +0800
-Message-ID: <CAD8Lp46BJvCo4c3c2XTrbPyF3k8p0QG24WbsWQ2Sc=7ikcyC8w@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 601c99b7-7fc7-4f94-e7f8-08d752038d1c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2019 06:39:09.8627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rwVw3/RzFvD1gm014ZEF3Eyj42YG4jzRpOtG+1HPv/PWNPsiIDMYvU2nVgFauHOi+kBOZhmvyXPZQCP8nihsEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB3447
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 1:52 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> On Tue, Oct 15, 2019 at 7:31 AM Daniel Drake <drake@endlessm.com> wrote:
-> > It's actually coming out of D3cold here, however what happens right
-> > before this is that __pci_start_power_transition() calls
-> > pci_platform_power_transition(D0) to leave D3cold state, then
-> > pci_update_current_state() reads PMCSR and updates dev->current_state
-> > to D3hot.
->
-> Which pci_update_current_state() do you mean, exactly?
->
-> Note that pci_platform_power_transition() itself contains one, which
-> triggers after a successful change of the ACPI power state of the
-> device (which should be the case here).
-
-That's the one I mean.
-
-pci_pm_default_resume_early
-- pci_power_up
--- __pci_start_power_transition
---- pci_platform_power_transition
----- pci_update_current_state(D0)
-
-At this point, PMCSR is read and dev->current_status is set to D3 accordingly.
-
-Then, continuing in pci_power_up(), pci_raw_set_power_state(D0) is
-called and the extra delay is needed there after writing PMCSR to
-transition to D0.
-I didn't go further along the call trace because at that point the
-problem has already been triggered.
-
-> That I agree with and the platform firmware doesn't compensate for
-> that (which it could do, arguably).
-
-I tried to get official AMD support on this but their response was
-that they don't have available resources to dedicate to Linux support.
-Without guidance from AMD I don't think there's any chance of a
-firmware change from the platform vendor.
-
-I think we just have to figure out how to work with it. It seems that
-Windows 10 delays longer or uses some other scheme. Another
-alternative that I just tried is retrying the PMCSR write & readback
-if it didn't complete the transition on the first try. That works
-fine, let me know if it's preferred to implement something along those
-lines as a more generic workaround.
-
-Daniel
+DQogVGhpcyBwYXRjaCBpcyBwcmVzZW50IGluIGJvdGggdXNiLW5leHQgYW5kIExpbnV4LW5leHQu
+DQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2dyZWdr
+aC91c2IuZ2l0L2NvbW1pdC8/aD11c2ItbmV4dCZpZD1kYTRiNWQxOGRkOTQ5YWJkZGE3YzhlYTc2
+Yzk0ODNiNWVkZDQ5NjE2DQoNCmh0dHBzOi8vZ2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9r
+ZXJuZWwvZ2l0L25leHQvbGludXgtbmV4dC5naXQvY29tbWl0Lz9oPW5leHQtMjAxOTEwMTYmaWQ9
+ZGE0YjVkMThkZDk0OWFiZGRhN2M4ZWE3NmM5NDgzYjVlZGQ0OTYxNg0KDQpDaGVlcnMsDQpCaWp1
+DQoNCg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIC1uZXh0XSB1c2I6IHR5cGVjOiBhZGQgZGVwZW5k
+ZW5jeSBmb3INCj4gVFlQRUNfSEQzU1MzMjIwDQo+IA0KPiBraW5kbHkgcGluZy4NCj4gDQo+IE9u
+IDIwMTkvMTAvOSA5OjQ3LCBNYW8gV2VuYW4gd3JvdGU6DQo+ID4gSWYgQ09ORklHX1RZUEVDX0hE
+M1NTMzIyMD15LCBDT05GSUdfVVNCX1JPTEVfU1dJVENIPW0sIGJlbG93DQo+IGVycm9ycw0KPiA+
+IGNhbiBiZSBmb3VuZDoNCj4gPiBkcml2ZXJzL3VzYi90eXBlYy9oZDNzczMyMjAubzogSW4gZnVu
+Y3Rpb24gYGhkM3NzMzIyMF9yZW1vdmUnOg0KPiA+IGhkM3NzMzIyMC5jOigudGV4dCsweDY0KTog
+dW5kZWZpbmVkIHJlZmVyZW5jZSB0byBgdXNiX3JvbGVfc3dpdGNoX3B1dCcNCj4gPiBkcml2ZXJz
+L3VzYi90eXBlYy9oZDNzczMyMjAubzogSW4gZnVuY3Rpb24gYGhkM3NzMzIyMF9kcl9zZXQnOg0K
+PiA+IGhkM3NzMzIyMC5jOigudGV4dCsweDE1NCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8NCj4g
+YHVzYl9yb2xlX3N3aXRjaF9zZXRfcm9sZScNCj4gPiBkcml2ZXJzL3VzYi90eXBlYy9oZDNzczMy
+MjAubzogSW4gZnVuY3Rpb24gYGhkM3NzMzIyMF9zZXRfcm9sZSc6DQo+ID4gaGQzc3MzMjIwLmM6
+KC50ZXh0KzB4Mjk0KTogdW5kZWZpbmVkIHJlZmVyZW5jZSB0bw0KPiBgdXNiX3JvbGVfc3dpdGNo
+X3NldF9yb2xlJw0KPiA+IGhkM3NzMzIyMC5jOigudGV4dCsweDJmNCk6IHVuZGVmaW5lZCByZWZl
+cmVuY2UgdG8NCj4gYHVzYl9yb2xlX3N3aXRjaF9zZXRfcm9sZScNCj4gPiBoZDNzczMyMjAuYzoo
+LnRleHQrMHgzNDgpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvDQo+IGB1c2Jfcm9sZV9zd2l0Y2hf
+c2V0X3JvbGUnDQo+ID4gaGQzc3MzMjIwLmM6KC50ZXh0KzB4MzkwKTogdW5kZWZpbmVkIHJlZmVy
+ZW5jZSB0bw0KPiBgdXNiX3JvbGVfc3dpdGNoX3NldF9yb2xlJw0KPiA+IGRyaXZlcnMvdXNiL3R5
+cGVjL2hkM3NzMzIyMC5vOiBJbiBmdW5jdGlvbiBgaGQzc3MzMjIwX3Byb2JlJzoNCj4gPiBoZDNz
+czMyMjAuYzooLnRleHQrMHg1ZTgpOiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvDQo+IGBmd25vZGVf
+dXNiX3JvbGVfc3dpdGNoX2dldCcNCj4gPiBoZDNzczMyMjAuYzooLnRleHQrMHg4YTQpOiB1bmRl
+ZmluZWQgcmVmZXJlbmNlIHRvIGB1c2Jfcm9sZV9zd2l0Y2hfcHV0Jw0KPiA+IG1ha2U6ICoqKiBb
+dm1saW51eF0gRXJyb3IgMQ0KPiA+DQo+ID4gVGhpcyBwYXRjaCBhZGQgZGVwZW5kZW5jeSBVU0Jf
+Uk9MRV9TV0lUQ0ggZm9yIFRZUEVDX0hEM1NTMzIyMC4NCj4gPg0KPiA+IEZpeGVzOiAxYzQ4Yzc1
+OWVmNGIgKCJ1c2I6IHR5cGVjOiBkcml2ZXIgZm9yIFRJIEhEM1NTMzIyMCBVU0IgVHlwZS1DDQo+
+ID4gRFJQIHBvcnQgY29udHJvbGxlciIpDQo+ID4gUmVwb3J0ZWQtYnk6IEh1bGsgUm9ib3QgPGh1
+bGtjaUBodWF3ZWkuY29tPg0KPiA+IFNpZ25lZC1vZmYtYnk6IE1hbyBXZW5hbiA8bWFvd2VuYW5A
+aHVhd2VpLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy91c2IvdHlwZWMvS2NvbmZpZyB8IDEg
+Kw0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykNCj4gPg0KPiA+IGRpZmYgLS1n
+aXQgYS9kcml2ZXJzL3VzYi90eXBlYy9LY29uZmlnIGIvZHJpdmVycy91c2IvdHlwZWMvS2NvbmZp
+Zw0KPiA+IGluZGV4IGFjZWIyYWYuLmI0ZjJhYWMgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91
+c2IvdHlwZWMvS2NvbmZpZw0KPiA+ICsrKyBiL2RyaXZlcnMvdXNiL3R5cGVjL0tjb25maWcNCj4g
+PiBAQCAtNTMsNiArNTMsNyBAQCBzb3VyY2UgImRyaXZlcnMvdXNiL3R5cGVjL3Vjc2kvS2NvbmZp
+ZyINCj4gPiAgY29uZmlnIFRZUEVDX0hEM1NTMzIyMA0KPiA+ICAJdHJpc3RhdGUgIlRJIEhEM1NT
+MzIyMCBUeXBlLUMgRFJQIFBvcnQgY29udHJvbGxlciBkcml2ZXIiDQo+ID4gIAlkZXBlbmRzIG9u
+IEkyQw0KPiA+ICsJZGVwZW5kcyBvbiBVU0JfUk9MRV9TV0lUQ0gNCj4gPiAgCWhlbHANCj4gPiAg
+CSAgU2F5IFkgb3IgTSBoZXJlIGlmIHlvdXIgc3lzdGVtIGhhcyBUSSBIRDNTUzMyMjAgVHlwZS1D
+IERSUCBQb3J0DQo+ID4gIAkgIGNvbnRyb2xsZXIgZHJpdmVyLg0KPiA+DQoNCg==
