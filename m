@@ -2,51 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7D4D871A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 06:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A1DD872A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 06:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728617AbfJPECv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 00:02:51 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:44332 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727597AbfJPECv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 00:02:51 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 54B29108A31AE;
-        Tue, 15 Oct 2019 21:02:50 -0700 (PDT)
-Date:   Tue, 15 Oct 2019 21:02:49 -0700 (PDT)
-Message-Id: <20191015.210249.78012402045984501.davem@davemloft.net>
-To:     vvidic@valentin-vidic.from.hr
-Cc:     hslester96@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: usb: sr9800: fix uninitialized local variable
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191015202020.29114-1-vvidic@valentin-vidic.from.hr>
-References: <20191015202020.29114-1-vvidic@valentin-vidic.from.hr>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 15 Oct 2019 21:02:50 -0700 (PDT)
+        id S2388615AbfJPEOw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 00:14:52 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:33614 "EHLO
+        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726155AbfJPEOw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 00:14:52 -0400
+X-IronPort-AV: E=Sophos;i="5.67,302,1566831600"; 
+   d="scan'208";a="29205641"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 16 Oct 2019 13:14:49 +0900
+Received: from localhost.localdomain (unknown [10.166.17.210])
+        by relmlir6.idc.renesas.com (Postfix) with ESMTP id DA08241B058E;
+        Wed, 16 Oct 2019 13:14:33 +0900 (JST)
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Subject: [PATCH] usb: renesas_usbhs: Fix warnings in usbhsg_recip_handler_std_set_device()
+Date:   Wed, 16 Oct 2019 13:14:33 +0900
+Message-Id: <1571199273-5312-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Valentin Vidic <vvidic@valentin-vidic.from.hr>
-Date: Tue, 15 Oct 2019 22:20:20 +0200
+This patch fixes the following sparse warnings by shifting 8-bits after
+le16_to_cpu().
 
-> Make sure res does not contain random value if the call to
-> sr_read_cmd fails for some reason.
-> 
-> Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
-> Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+drivers/usb/renesas_usbhs/mod_gadget.c:268:47: warning: restricted __le16 degrades to integer
+drivers/usb/renesas_usbhs/mod_gadget.c:268:47: warning: cast to restricted __le16
 
-Applied.
+Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+---
+ drivers/usb/renesas_usbhs/mod_gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But often in situation like this a failed read can more aptly be indicated by
-an all-1's value.
+diff --git a/drivers/usb/renesas_usbhs/mod_gadget.c b/drivers/usb/renesas_usbhs/mod_gadget.c
+index 0b1fa6d..22f882c 100644
+--- a/drivers/usb/renesas_usbhs/mod_gadget.c
++++ b/drivers/usb/renesas_usbhs/mod_gadget.c
+@@ -265,7 +265,7 @@ static int usbhsg_recip_handler_std_set_device(struct usbhs_priv *priv,
+ 	case USB_DEVICE_TEST_MODE:
+ 		usbhsg_recip_handler_std_control_done(priv, uep, ctrl);
+ 		udelay(100);
+-		usbhs_sys_set_test_mode(priv, le16_to_cpu(ctrl->wIndex >> 8));
++		usbhs_sys_set_test_mode(priv, le16_to_cpu(ctrl->wIndex) >> 8);
+ 		break;
+ 	default:
+ 		usbhsg_recip_handler_std_control_done(priv, uep, ctrl);
+-- 
+2.7.4
+
