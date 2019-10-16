@@ -2,74 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49AF7D9332
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 16:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F225D93C8
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 16:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405621AbfJPOAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 10:00:49 -0400
-Received: from sonic305-2.consmr.mail.bf2.yahoo.com ([74.6.133.41]:33632 "EHLO
-        sonic305-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2404448AbfJPOAt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 10:00:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1571234447; bh=2WyIOtQ/U7lkSnB0LWs94pR+1/L1irVJb5iZ8RpiM7k=; h=Date:From:Reply-To:Subject:From:Subject; b=cIt7zSEPiiPfnmuWVavJnWNR3kevJOe/iOwQ1tE49+y9gEXvgDDsLubu3kEswd5qZVTrwPWT4oYGOHGisDG8PSISEdZ6u4A+baTrBj4Mck6n4XYwuxBXXxbfLn3zvKbwGpsc4ULYk15/+GUztClQ2QAP9BYVGBJC/5dv8T/J8dJwcGvwuvBkUhYAUpWjvZP49r7fy1Z19n5ZkrFLxOMpRN7EPXruUxNUjok1iA0eFfFfJuzJud5YGAlXDpXJVT2BYm9HpQNUkbfVZ6waosFCdIZfcXlzkqa3xM46+6/YiR43uzqK9tDuDiVDZTvTLoAHxnofKY58fKae/kyFB4O4uQ==
-X-YMail-OSG: tK8q5f8VM1m2gOKdA.x4_vPkaoxB8nZUYXJSwg8wX.UFssKNQkFREtcWU2SgWI6
- ZMafkwghF86aIuYWyW.o9KZlZSVVHO71b3D0PrClrVaflgwVwiL4oYZb6VFhiWeC4pFme8.7xG_X
- JOtNgdRl7URaDMDyp2ZX0o8cctWbKUlWRlptOq9MAVKnH3EwoDX3PqJkYY13Dm8JBOiWo12sQVbm
- pBtMxE6frgJVGkVlPpRkK_OhdPlr_oO.ZIYpK.5pWeQ1jJRiZQtOP.C_NPInGfSNPwGUQZqjVKAa
- 0CxD.ceZJ.JsvGtGTPjoyjmwes865T1Z.NbETdlXmxuJXDClfxDDlC7LO2NqoDDbVT1.QJfePE0H
- h0WggmcM1lrLXxzf.E007iO3PtwkJYhl3pWFlBFz6QUzQdUAikveaKoqzE0lLhsROBqfUC8mThtW
- XzHdA6M3H6cifSHveBKhCeKouoJivAShiDbZbHEbQ2iGz0qwSlf1A5e4po9xPFM7bHYv5WiYb.yj
- jDqIr4518kdSinuFrGCzSdfE7rCoKRZ7198dkpl5b4QleoRwRhFFXX7f5CkI_DLikbiW1ycNFeMr
- IZiAFns8QlT5ESVRVC9.9AKWfS8hqlsaYA2LmwJt3gABeJacYUKRwM7eUIcMzXs9d7QofJlk5K_k
- ipMecPxLLYD_2YqB2fmdQnw3dgu4vvWciZKrgJ5Aa_JFCqBR3HzVXsseyQl.f6gsjShLhMUNPCDH
- flAWHawh2l_xqmlec_12SXqyIV6ldmfEtRXHwKM6mYsvvB9mRUZ6qFCHgzLD0Vl2am4DZjoaD1Bn
- XkthugOBCT1.xh5_OkeDIkf.3bidenTVs97WvH72QMquZuVOYd52BfN9j.8Vq1JNd3BY3eevrGva
- xD_B5NRSlXYhi33jMp8JAmhYsrOlg8jsBPq3xlyTttsoALEUGsqpGahzXe.AY5IR52Wr7xYeirXJ
- gsXo_npbAl54PEs7pA7l9b.LUyOZzA5pfiufsUuNabsbMELJT6MAbO25vt4sQomzmHceoajgP6h8
- u26UYbetfNQSOCZE8Gts.HdwcScAZnGWqSide7YRmMcXsGNrYZgQ1DmmmIGspVntTftDgv_WDToy
- T13tAhiX58K8EDf5oZ2nzZmZ4jrqPHVaIhBndlNqJrs82DXdDJOdqrkwAwainyflQEP2GBCw0p21
- orYunFA1JtBUlVebA4oM9dvS00UIFPZfmXukjzzOH3NxjaDQwYmwQFhrta8DwqMHkzmawZIB6Dn7
- pa6GgmtGrtdaOM2tnY6B03vgkH448wkpYXqx9VTiA60h7.0f9w40G
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Wed, 16 Oct 2019 14:00:47 +0000
-Date:   Wed, 16 Oct 2019 14:00:42 +0000 (UTC)
-From:   Ms Lisa Hugh <lisa.hugh222@gmail.com>
-Reply-To: ms.lisahugh000@gmail.com
-Message-ID: <1962352404.1554008.1571234442847@mail.yahoo.com>
-Subject: YOUR CO-OPERATION PLEASE.
+        id S2394033AbfJPO0a convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 16 Oct 2019 10:26:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40738 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387995AbfJPO0a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Oct 2019 10:26:30 -0400
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 830493086E27;
+        Wed, 16 Oct 2019 14:26:29 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-121-84.rdu2.redhat.com [10.10.121.84])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 35D195D9DC;
+        Wed, 16 Oct 2019 14:26:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=whiz1sHXu8SVZKEC2dup=r5JMrftPtEt6ff9Ea8dyH8yQ@mail.gmail.com>
+References: <CAHk-=whiz1sHXu8SVZKEC2dup=r5JMrftPtEt6ff9Ea8dyH8yQ@mail.gmail.com> <157117606853.15019.15459271147790470307.stgit@warthog.procyon.org.uk> <157117608708.15019.1998141309054662114.stgit@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Tim Chen <tim.c.chen@linux.intel.com>,
+        Kan Liang <kan.liang@intel.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH 02/21] Add a prelocked wake-up
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6899.1571235985.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: 8BIT
+Date:   Wed, 16 Oct 2019 15:26:25 +0100
+Message-ID: <6900.1571235985@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.44]); Wed, 16 Oct 2019 14:26:30 +0000 (UTC)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Btw, is there any point in __wake_up_sync_key() taking a nr_exclusive
+argument since it clears WF_SYNC if nr_exclusive != 1 and doesn't make sense
+to be >1 anyway.
 
-
-
-
-
-Dear Friend,
-
-I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
-
-Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is (US$4.5M DOLLARS).
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
-
-Note/ 50% for you why 50% for me after success of the transfer to your bank account.
-
-Below information is what i need from you so we can be reaching each other .
-
-1)Full name ...
-2)Private telephone number...
-3)Age...
-4)Nationality...
-5)Occupation ...
-
-
-Thanks.
-
-
-Ms Lisa Hugh
+David
+---
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 3eb7cae8206c..bb7676d396cd 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -201,9 +201,9 @@ void __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void
+ void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
+ void __wake_up_locked_key_bookmark(struct wait_queue_head *wq_head,
+ 		unsigned int mode, void *key, wait_queue_entry_t *bookmark);
+-void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
++void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
+ void __wake_up_locked(struct wait_queue_head *wq_head, unsigned int mode, int nr);
+-void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr);
++void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode);
+ 
+ #define wake_up(x)			__wake_up(x, TASK_NORMAL, 1, NULL)
+ #define wake_up_nr(x, nr)		__wake_up(x, TASK_NORMAL, nr, NULL)
+@@ -214,7 +214,7 @@ void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr);
+ #define wake_up_interruptible(x)	__wake_up(x, TASK_INTERRUPTIBLE, 1, NULL)
+ #define wake_up_interruptible_nr(x, nr)	__wake_up(x, TASK_INTERRUPTIBLE, nr, NULL)
+ #define wake_up_interruptible_all(x)	__wake_up(x, TASK_INTERRUPTIBLE, 0, NULL)
+-#define wake_up_interruptible_sync(x)	__wake_up_sync((x), TASK_INTERRUPTIBLE, 1)
++#define wake_up_interruptible_sync(x)	__wake_up_sync((x), TASK_INTERRUPTIBLE)
+ 
+ /*
+  * Wakeup macros to be used to report events to the targets.
+@@ -228,7 +228,7 @@ void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr);
+ #define wake_up_interruptible_poll(x, m)					\
+ 	__wake_up(x, TASK_INTERRUPTIBLE, 1, poll_to_key(m))
+ #define wake_up_interruptible_sync_poll(x, m)					\
+-	__wake_up_sync_key((x), TASK_INTERRUPTIBLE, 1, poll_to_key(m))
++	__wake_up_sync_key((x), TASK_INTERRUPTIBLE, poll_to_key(m))
+ 
+ #define ___wait_cond_timeout(condition)						\
+ ({										\
+diff --git a/kernel/exit.c b/kernel/exit.c
+index a46a50d67002..a1ff25ef050e 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -1435,7 +1435,7 @@ static int child_wait_callback(wait_queue_entry_t *wait, unsigned mode,
+ void __wake_up_parent(struct task_struct *p, struct task_struct *parent)
+ {
+ 	__wake_up_sync_key(&parent->signal->wait_chldexit,
+-				TASK_INTERRUPTIBLE, 1, p);
++			   TASK_INTERRUPTIBLE, p);
+ }
+ 
+ static long do_wait(struct wait_opts *wo)
+diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+index c1e566a114ca..b4b52361dab7 100644
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -169,7 +169,6 @@ EXPORT_SYMBOL_GPL(__wake_up_locked_key_bookmark);
+  * __wake_up_sync_key - wake up threads blocked on a waitqueue.
+  * @wq_head: the waitqueue
+  * @mode: which threads
+- * @nr_exclusive: how many wake-one or wake-many threads to wake up
+  * @key: opaque value to be passed to wakeup targets
+  *
+  * The sync wakeup differs that the waker knows that it will schedule
+@@ -183,26 +182,21 @@ EXPORT_SYMBOL_GPL(__wake_up_locked_key_bookmark);
+  * accessing the task state.
+  */
+ void __wake_up_sync_key(struct wait_queue_head *wq_head, unsigned int mode,
+-			int nr_exclusive, void *key)
++			void *key)
+ {
+-	int wake_flags = 1; /* XXX WF_SYNC */
+-
+ 	if (unlikely(!wq_head))
+ 		return;
+ 
+-	if (unlikely(nr_exclusive != 1))
+-		wake_flags = 0;
+-
+-	__wake_up_common_lock(wq_head, mode, nr_exclusive, wake_flags, key);
++	__wake_up_common_lock(wq_head, mode, 1, WF_SYNC, key);
+ }
+ EXPORT_SYMBOL_GPL(__wake_up_sync_key);
+ 
+ /*
+  * __wake_up_sync - see __wake_up_sync_key()
+  */
+-void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode, int nr_exclusive)
++void __wake_up_sync(struct wait_queue_head *wq_head, unsigned int mode)
+ {
+-	__wake_up_sync_key(wq_head, mode, nr_exclusive, NULL);
++	__wake_up_sync_key(wq_head, mode, NULL);
+ }
+ EXPORT_SYMBOL_GPL(__wake_up_sync);	/* For internal use only */
+ 
