@@ -2,114 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AE5D86EF
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 05:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7D4D871A
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 06:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727963AbfJPDrE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 23:47:04 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:33190 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbfJPDrE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Oct 2019 23:47:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=lEWx+UcLpjc4KWKcEW1+PWSmi50tgZmjOZfoB8gc4Z0=; b=bvUvLkCZ/lM3nfg8dRn4Rby90
-        6tm5t6HgvANdT8lfI4/c1AUt0cV9N9yzP+bTBJcDpfIA0f5eD8ikUUFb2L3ZujeofE9rFB+DcTrQ3
-        vfqXZPUGrMiebMroUw17r/Fcri6IrpiQr0SoD6YyGJ4Cs+GP8oC1AiJd6wrnJgOnvQcm63kRo76TR
-        AWR9Mrvib9X42zArYzWXiq9V8cm7BuqIynEuufKHGk1v2rmRF+D8xJDY7nSP9YNGaW1GCVIbZL/cF
-        W8zE3XxzNdTak5wGCc6vy8PablKcKpdWahoWyxuF/pdYNw42bju7QTEXf4cLjBNR7UHVkyAgnHaD2
-        wtWal3F6Q==;
-Received: from [2601:1c0:6280:3f0::9ef4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iKaHA-0004MI-Al; Wed, 16 Oct 2019 03:47:04 +0000
-Subject: Re: [PATCH] usb: typec: Add sysfs node to show cc orientation
-To:     pumahsu <pumahsu@google.com>, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, kyletso@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191016034314.231363-1-pumahsu@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <577ac2f6-f073-1bd0-0adb-33fa8243773c@infradead.org>
-Date:   Tue, 15 Oct 2019 20:47:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <20191016034314.231363-1-pumahsu@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S1728617AbfJPECv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 00:02:51 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:44332 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727597AbfJPECv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 00:02:51 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 54B29108A31AE;
+        Tue, 15 Oct 2019 21:02:50 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 21:02:49 -0700 (PDT)
+Message-Id: <20191015.210249.78012402045984501.davem@davemloft.net>
+To:     vvidic@valentin-vidic.from.hr
+Cc:     hslester96@gmail.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: usb: sr9800: fix uninitialized local variable
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20191015202020.29114-1-vvidic@valentin-vidic.from.hr>
+References: <20191015202020.29114-1-vvidic@valentin-vidic.from.hr>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 15 Oct 2019 21:02:50 -0700 (PDT)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/15/19 8:43 PM, pumahsu wrote:
-> Export the Type-C cc orientation so that user space can
-> get this information.
+From: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Date: Tue, 15 Oct 2019 22:20:20 +0200
+
+> Make sure res does not contain random value if the call to
+> sr_read_cmd fails for some reason.
 > 
-> Signed-off-by: pumahsu <pumahsu@google.com>
+> Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
+> Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
 
-Hi,
-what the * is cc orientation?
+Applied.
 
-> ---
->  Documentation/ABI/testing/sysfs-class-typec |  7 +++++++
->  drivers/usb/typec/class.c                   | 11 +++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> index d7647b258c3c..419f952c991d 100644
-> --- a/Documentation/ABI/testing/sysfs-class-typec
-> +++ b/Documentation/ABI/testing/sysfs-class-typec
-> @@ -108,6 +108,13 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->  Description:
->  		Revision number of the supported USB Type-C specification.
->  
-> +What:		/sys/class/typec/<port>/cc_orientation
-> +Date:		September 2019
-> +Contact:	Puma Hsu <pumahsu@google.com>
-> +Description:
-> +		Indicates which cc orientation is active now, or 0 when
-> +		nothing is connected.
-> +
->  
->  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->  
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 7d8805d9bf37..00edae63da8e 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1238,6 +1238,16 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(usb_power_delivery_revision);
->  
-> +static ssize_t cc_orientation_show(struct device *dev,
-> +						struct device_attribute *attr,
-> +						char *buf)
-> +{
-> +	struct typec_port *p = to_typec_port(dev);
-> +
-> +	return sprintf(buf, "%d\n", typec_get_orientation(p));
-> +}
-> +static DEVICE_ATTR_RO(cc_orientation);
-> +
->  static struct attribute *typec_attrs[] = {
->  	&dev_attr_data_role.attr,
->  	&dev_attr_power_operation_mode.attr,
-> @@ -1248,6 +1258,7 @@ static struct attribute *typec_attrs[] = {
->  	&dev_attr_usb_typec_revision.attr,
->  	&dev_attr_vconn_source.attr,
->  	&dev_attr_port_type.attr,
-> +	&dev_attr_cc_orientation.attr,
->  	NULL,
->  };
->  ATTRIBUTE_GROUPS(typec);
-> 
-
-
--- 
-~Randy
+But often in situation like this a failed read can more aptly be indicated by
+an all-1's value.
