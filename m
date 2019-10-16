@@ -2,348 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A56B0D8CB2
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C3CD8CED
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392037AbfJPJjo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 05:39:44 -0400
-Received: from relay7-d.mail.gandi.net ([217.70.183.200]:52147 "EHLO
-        relay7-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390240AbfJPJjo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:39:44 -0400
-X-Originating-IP: 83.155.44.161
-Received: from classic.redhat.com (mon69-7-83-155-44-161.fbx.proxad.net [83.155.44.161])
-        (Authenticated sender: hadess@hadess.net)
-        by relay7-d.mail.gandi.net (Postfix) with ESMTPSA id DF06620002;
-        Wed, 16 Oct 2019 09:39:40 +0000 (UTC)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Bastien Nocera <hadess@hadess.net>,
-        Alan Stern <stern@rowland.harvard.edu>
-Subject: [PATCH v3 6/6] USB: Add driver to control USB fast charge for iOS devices
-Date:   Wed, 16 Oct 2019 11:39:33 +0200
-Message-Id: <20191016093933.693-7-hadess@hadess.net>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191016093933.693-1-hadess@hadess.net>
-References: <20191016093933.693-1-hadess@hadess.net>
+        id S2388087AbfJPJvS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 05:51:18 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:53734 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729546AbfJPJvS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:51:18 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9G9pB1C025774;
+        Wed, 16 Oct 2019 04:51:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571219471;
+        bh=P0xrDOLVQ/vankA69ekSgNkW1nIAIUG0Uxb4YWDc/OA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=HeMkc98qTYxa1FlugAOz1mMMT13HSrf0hBGKgz5ZkDkIxYz7Os/2IAWQKauxxTMwd
+         UtNG5GuUyLAWf4J6+jfM5CPAkFGhLZlGMq7YQquY4MgfJjR5CI2UvT3xIhk4j3u2IY
+         lLW8cwlaceIfW9Er8nKaJ6mhyBW8vbWT16l7OlAI=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9G9pBn1027303
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 16 Oct 2019 04:51:11 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 16
+ Oct 2019 04:51:03 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 16 Oct 2019 04:51:09 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9G9p70c116258;
+        Wed, 16 Oct 2019 04:51:08 -0500
+Subject: Re: [PATCH 1/2] dt-bindings: usb: Add binding for the TI wrapper for
+ Cadence USB3 controller
+To:     Rob Herring <robh@kernel.org>
+CC:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <pawell@cadence.com>, <nsekhar@ti.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+References: <20191007114142.5182-1-rogerq@ti.com>
+ <20191007114142.5182-2-rogerq@ti.com> <20191015212931.GA8031@bogus>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <06c2ecb0-74ce-5b34-9b71-d734706739d7@ti.com>
+Date:   Wed, 16 Oct 2019 12:51:07 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191015212931.GA8031@bogus>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-iOS devices will not draw more than 500mA unless instructed to do so.
-Setting the charge type power supply property to "fast" tells the device
-to start drawing more power, using the same procedure that official
-"MFi" chargers would.
+Hi,
 
-Signed-off-by: Bastien Nocera <hadess@hadess.net>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
- MAINTAINERS                             |   6 +
- drivers/usb/misc/Kconfig                |  10 +
- drivers/usb/misc/Makefile               |   1 +
- drivers/usb/misc/apple-mfi-fastcharge.c | 237 ++++++++++++++++++++++++
- 4 files changed, 254 insertions(+)
- create mode 100644 drivers/usb/misc/apple-mfi-fastcharge.c
+On 16/10/2019 00:29, Rob Herring wrote:
+> On Mon, Oct 07, 2019 at 02:41:41PM +0300, Roger Quadros wrote:
+>> TI platforms have a wrapper module around the Cadence USB3
+>> controller. Add binding information for that.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
+>> ---
+>>   .../devicetree/bindings/usb/cdns-usb3-ti.txt  | 59 +++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/usb/cdns-usb3-ti.txt
+> 
+> Please convert to DT schema.
+> 
+>> diff --git a/Documentation/devicetree/bindings/usb/cdns-usb3-ti.txt b/Documentation/devicetree/bindings/usb/cdns-usb3-ti.txt
+>> new file mode 100644
+>> index 000000000000..12c7c903e6da
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/cdns-usb3-ti.txt
+>> @@ -0,0 +1,59 @@
+>> +Binding for the TI specific wrapper for the Cadence USBSS-DRD controller
+>> +
+>> +Required properties:
+>> +  - compatible: Should contain "ti,j721e-usb"
+>> +  - reg: Physical base address and size of the wrappers register area.
+>> +  - power-domains: Should contain a phandle to a PM domain provider node
+>> +                   and an args specifier containing the USB device id
+>> +                   value. This property is as per the binding documentation:
+>> +                   Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+>> +  - clocks: Clock phandles to usb2_refclk and lpm_clk
+>> +  - clock-names: Should contain "usb2_refclk" and "lpm_clk"
+> 
+> _clk is redundant. 'ref' amd 'lpm' is sufficient.
+> 
+>> +
+>> +Optional properties:
+>> + - ti,usb2-only: If present, it restricts the controller to USB2.0 mode of
+>> +		 operation. Must be present if USB3 PHY is not available
+>> +		 for USB.
+> 
+> Seems like this should be discoverable based on describing the phy
+> connections.
 
-diff --git MAINTAINERS MAINTAINERS
-index 94ce075907a0..9e8f9fc972f5 100644
---- MAINTAINERS
-+++ MAINTAINERS
-@@ -16728,6 +16728,12 @@ S:	Maintained
- F:	Documentation/usb/acm.rst
- F:	drivers/usb/class/cdc-acm.*
- 
-+USB APPLE MFI FASTCHARGE DRIVER
-+M:	Bastien Nocera <hadess@hadess.net>
-+L:	linux-usb@vger.kernel.org
-+S:	Maintained
-+F:	drivers/usb/misc/apple-mfi-fastcharge.c
-+
- USB AR5523 WIRELESS DRIVER
- M:	Pontus Fuchs <pontus.fuchs@gmail.com>
- L:	linux-wireless@vger.kernel.org
-diff --git drivers/usb/misc/Kconfig drivers/usb/misc/Kconfig
-index bdae62b2ffe0..f52a49478f1c 100644
---- drivers/usb/misc/Kconfig
-+++ drivers/usb/misc/Kconfig
-@@ -147,6 +147,16 @@ config USB_APPLEDISPLAY
- 	  Say Y here if you want to control the backlight of Apple Cinema
- 	  Displays over USB. This driver provides a sysfs interface.
- 
-+config APPLE_MFI_FASTCHARGE
-+	tristate "Fast charge control for iOS devices"
-+	select POWER_SUPPLY
-+	help
-+	  Say Y here if you want to control whether iOS devices will
-+	  fast charge from the USB interface, as implemented in "MFi"
-+	  chargers.
-+
-+	  It is safe to say M here.
-+
- source "drivers/usb/misc/sisusbvga/Kconfig"
- 
- config USB_LD
-diff --git drivers/usb/misc/Makefile drivers/usb/misc/Makefile
-index 109f54f5b9aa..b75106cf3948 100644
---- drivers/usb/misc/Makefile
-+++ drivers/usb/misc/Makefile
-@@ -11,6 +11,7 @@ obj-$(CONFIG_USB_EMI26)			+= emi26.o
- obj-$(CONFIG_USB_EMI62)			+= emi62.o
- obj-$(CONFIG_USB_EZUSB_FX2)		+= ezusb.o
- obj-$(CONFIG_USB_FTDI_ELAN)		+= ftdi-elan.o
-+obj-$(CONFIG_APPLE_MFI_FASTCHARGE)	+= apple-mfi-fastcharge.o
- obj-$(CONFIG_USB_IDMOUSE)		+= idmouse.o
- obj-$(CONFIG_USB_IOWARRIOR)		+= iowarrior.o
- obj-$(CONFIG_USB_ISIGHTFW)		+= isight_firmware.o
-diff --git drivers/usb/misc/apple-mfi-fastcharge.c drivers/usb/misc/apple-mfi-fastcharge.c
-new file mode 100644
-index 000000000000..f1c4461a9a3c
---- /dev/null
-+++ drivers/usb/misc/apple-mfi-fastcharge.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: GPL-2.0+
-+/*
-+ * Fast-charge control for Apple "MFi" devices
-+ *
-+ * Copyright (C) 2019 Bastien Nocera <hadess@hadess.net>
-+ */
-+
-+/* Standard include files */
-+#include <linux/module.h>
-+#include <linux/power_supply.h>
-+#include <linux/slab.h>
-+#include <linux/usb.h>
-+
-+MODULE_AUTHOR("Bastien Nocera <hadess@hadess.net>");
-+MODULE_DESCRIPTION("Fast-charge control for Apple \"MFi\" devices");
-+MODULE_LICENSE("GPL");
-+
-+#define TRICKLE_CURRENT_MA		0
-+#define FAST_CURRENT_MA			2500
-+
-+#define APPLE_VENDOR_ID			0x05ac	/* Apple */
-+
-+/* The product ID is defined as starting with 0x12nn, as per the
-+ * "Choosing an Apple Device USB Configuration" section in
-+ * release R9 (2012) of the "MFi Accessory Hardware Specification"
-+ *
-+ * To distinguish an Apple device, a USB host can check the device
-+ * descriptor of attached USB devices for the following fields:
-+ * ■ Vendor ID: 0x05AC
-+ * ■ Product ID: 0x12nn
-+ *
-+ * Those checks will be done in .match() and .probe().
-+ */
-+
-+static const struct usb_device_id mfi_fc_id_table[] = {
-+	{ .idVendor = APPLE_VENDOR_ID,
-+	  .match_flags = USB_DEVICE_ID_MATCH_VENDOR },
-+	{},
-+};
-+
-+MODULE_DEVICE_TABLE(usb, mfi_fc_id_table);
-+
-+/* Driver-local specific stuff */
-+struct mfi_device {
-+	struct usb_device *udev;
-+	struct power_supply *battery;
-+	int charge_type;
-+};
-+
-+static int apple_mfi_fc_set_charge_type(struct mfi_device *mfi,
-+					const union power_supply_propval *val)
-+{
-+	int current_ma;
-+	int retval;
-+	__u8 request_type;
-+
-+	if (mfi->charge_type == val->intval) {
-+		dev_dbg(&mfi->udev->dev, "charge type %d already set\n",
-+				mfi->charge_type);
-+		return 0;
-+	}
-+
-+	switch (val->intval) {
-+	case POWER_SUPPLY_CHARGE_TYPE_TRICKLE:
-+		current_ma = TRICKLE_CURRENT_MA;
-+		break;
-+	case POWER_SUPPLY_CHARGE_TYPE_FAST:
-+		current_ma = FAST_CURRENT_MA;
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	request_type = USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE;
-+	retval = usb_control_msg(mfi->udev, usb_sndctrlpipe(mfi->udev, 0),
-+				 0x40, /* Vendor‐defined power request */
-+				 request_type,
-+				 current_ma, /* wValue, current offset */
-+				 current_ma, /* wIndex, current offset */
-+				 NULL, 0, USB_CTRL_GET_TIMEOUT);
-+	if (retval) {
-+		dev_dbg(&mfi->udev->dev, "retval = %d\n", retval);
-+		return retval;
-+	}
-+
-+	mfi->charge_type = val->intval;
-+
-+	return 0;
-+}
-+
-+static int apple_mfi_fc_get_property(struct power_supply *psy,
-+		enum power_supply_property psp,
-+		union power_supply_propval *val)
-+{
-+	struct mfi_device *mfi = power_supply_get_drvdata(psy);
-+
-+	dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		val->intval = mfi->charge_type;
-+		break;
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		val->intval = POWER_SUPPLY_SCOPE_DEVICE;
-+		break;
-+	default:
-+		return -ENODATA;
-+	}
-+
-+	return 0;
-+}
-+
-+static int apple_mfi_fc_set_property(struct power_supply *psy,
-+		enum power_supply_property psp,
-+		const union power_supply_propval *val)
-+{
-+	struct mfi_device *mfi = power_supply_get_drvdata(psy);
-+	int ret;
-+
-+	dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
-+
-+	ret = pm_runtime_get_sync(&mfi->udev->dev);
-+	if (ret < 0)
-+		return ret;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		ret = apple_mfi_fc_set_charge_type(mfi, val);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	pm_runtime_mark_last_busy(&mfi->udev->dev);
-+	pm_runtime_put_autosuspend(&mfi->udev->dev);
-+
-+	return ret;
-+}
-+
-+static int apple_mfi_fc_property_is_writeable(struct power_supply *psy,
-+					      enum power_supply_property psp)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		return 1;
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static enum power_supply_property apple_mfi_fc_properties[] = {
-+	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_SCOPE
-+};
-+
-+static const struct power_supply_desc apple_mfi_fc_desc = {
-+	.name                   = "apple_mfi_fastcharge",
-+	.type                   = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties             = apple_mfi_fc_properties,
-+	.num_properties         = ARRAY_SIZE(apple_mfi_fc_properties),
-+	.get_property           = apple_mfi_fc_get_property,
-+	.set_property           = apple_mfi_fc_set_property,
-+	.property_is_writeable  = apple_mfi_fc_property_is_writeable
-+};
-+
-+static int mfi_fc_probe(struct usb_device *udev)
-+{
-+	struct power_supply_config battery_cfg = {};
-+	struct mfi_device *mfi = NULL;
-+	int err;
-+
-+	/* See comment above mfi_fc_id_table[] */
-+	if (udev->descriptor.idProduct < 0x1200 ||
-+	    udev->descriptor.idProduct > 0x12ff) {
-+		return -ENODEV;
-+	}
-+
-+	mfi = kzalloc(sizeof(struct mfi_device), GFP_KERNEL);
-+	if (!mfi) {
-+		err = -ENOMEM;
-+		goto error;
-+	}
-+
-+	battery_cfg.drv_data = mfi;
-+
-+	mfi->charge_type = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
-+	mfi->battery = power_supply_register(&udev->dev,
-+						&apple_mfi_fc_desc,
-+						&battery_cfg);
-+	if (IS_ERR(mfi->battery)) {
-+		dev_err(&udev->dev, "Can't register battery\n");
-+		err = PTR_ERR(mfi->battery);
-+		goto error;
-+	}
-+
-+	mfi->udev = usb_get_dev(udev);
-+	dev_set_drvdata(&udev->dev, mfi);
-+
-+	return 0;
-+
-+error:
-+	kfree(mfi);
-+	return err;
-+}
-+
-+static void mfi_fc_disconnect(struct usb_device *udev)
-+{
-+	struct mfi_device *mfi;
-+
-+	mfi = dev_get_drvdata(&udev->dev);
-+	if (mfi->battery)
-+		power_supply_unregister(mfi->battery);
-+	dev_set_drvdata(&udev->dev, NULL);
-+	usb_put_dev(mfi->udev);
-+	kfree(mfi);
-+}
-+
-+static struct usb_device_driver mfi_fc_driver = {
-+	.name =		"apple-mfi-fastcharge",
-+	.probe =	mfi_fc_probe,
-+	.disconnect =	mfi_fc_disconnect,
-+	.id_table =	mfi_fc_id_table,
-+	.generic_subclass = 1,
-+};
-+
-+static int __init mfi_fc_driver_init(void)
-+{
-+	return usb_register_device_driver(&mfi_fc_driver, THIS_MODULE);
-+}
-+
-+static void __exit mfi_fc_driver_exit(void)
-+{
-+	usb_deregister_device_driver(&mfi_fc_driver);
-+}
-+
-+module_init(mfi_fc_driver_init);
-+module_exit(mfi_fc_driver_exit);
+I don't think so. the PHY connections are in the child node.
+
+> 
+>> + - ti,modestrap-host: Set controller modestrap to HOST mode.
+>> + - ti,modestrap-peripheral: Set controller modestrap to PERIPHERAL mode.
+> 
+> What does modestrap mean? Fixed to the mode or that's the default? For
+> default, John Stultz sent a similar binding. Seems we need something
+> common.
+
+It means if the controller needs to be hard-wired (using a register bit)
+to be either host or peripheral.
+
+I think that this will not really be used so I'll get rid of it. It was mostly
+used for initial debug.
+
+The controller is dual-role and the role can be set to either host or peripheral
+using the operational registers.
+
+> 
+>> + - ti,vbus-divider: Should be present if USB VBUS line is connected to the
+>> +		 VBUS pin of the SoC via a 1/3 voltage divider.
+>> +
+>> +Sub-nodes:
+>> +The USB2 PHY and the Cadence USB3 controller should be the sub-nodes.
+>> +
+>> +Example:
+>> +
+>> +	ti_usb0: cdns_usb@4104000 {
+>> +		compatible = "ti,j721e-usb";
+>> +		reg = <0x00 0x4104000 0x00 0x100>;
+>> +		power-domains = <&k3_pds 288 TI_SCI_PD_EXCLUSIVE>;
+>> +		clocks = <&k3_clks 288 15>, <&k3_clks 288 3>;
+>> +		clock-names = "usb2_refclk", "lpm_clk";
+>> +		assigned-clocks = <&k3_clks 288 15>;	/* USB2_REFCLK */
+>> +		assigned-clock-parents = <&k3_clks 288 16>; /* HFOSC0 */
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		phy@4108000 {
+>> +			compatible = "ti,j721e-usb2-phy";
+>> +			reg = <0x00 0x4108000 0x00 0x400>;
+>> +		};
+> 
+> Why is this a child node? Use the phy binding.
+> 
+
+This is a USB2 PHY that physically sits within the ti_usb0 wrapper module that
+controls power and clock to it.
+
+There isn't a device driver required for it so should I just get rid of it?
+Or can it just live there? what can the compatible be?
+Or we can add it later if at all a driver is needed.
+
+>> +
+>> +		usb0: usb@6000000 {
+>> +			compatible = "cdns,usb3-1.0.1";
+> 
+> Not documented.
+
+should be
+	compatible = "cdns,usb3";
+> 
+>> +			reg = <0x00 0x6000000 0x00 0x10000>,
+>> +			      <0x00 0x6010000 0x00 0x10000>,
+>> +			      <0x00 0x6020000 0x00 0x10000>;
+>> +			reg-names = "otg", "xhci", "dev";
+>> +			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,	/* irq.0 */
+>> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,	/* irq.6 */
+>> +				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;	/* otgirq.0 */
+>> +			interrupt-names = "host",
+>> +					  "peripheral",
+>> +					  "otg";
+>> +			maximum-speed = "super-speed";
+>> +			dr_mode = "otg";
+>> +		};
+>> +	};
+
 -- 
-2.21.0
+cheers,
+-roger
 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
