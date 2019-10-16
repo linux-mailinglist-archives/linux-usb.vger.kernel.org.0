@@ -2,83 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDA8D851B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 02:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F749D85ED
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 04:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390398AbfJPAzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Oct 2019 20:55:11 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:52150 "EHLO huawei.com"
+        id S1732153AbfJPCd5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Oct 2019 22:33:57 -0400
+Received: from mail-eopbgr1400124.outbound.protection.outlook.com ([40.107.140.124]:15136
+        "EHLO JPN01-TY1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726315AbfJPAzL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Oct 2019 20:55:11 -0400
-Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id D0656E38D07370F6AE70;
-        Wed, 16 Oct 2019 08:55:07 +0800 (CST)
-Received: from [127.0.0.1] (10.177.96.96) by DGGEMS412-HUB.china.huawei.com
- (10.3.19.212) with Microsoft SMTP Server id 14.3.439.0; Wed, 16 Oct 2019
- 08:54:57 +0800
-Subject: Re: [PATCH -next] usb: typec: add dependency for TYPEC_HD3SS3220
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <biju.das@bp.renesas.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-References: <20191009014707.38716-1-maowenan@huawei.com>
-From:   maowenan <maowenan@huawei.com>
-Message-ID: <ff1837bd-d6eb-a296-f7d9-f2988d5d2256@huawei.com>
-Date:   Wed, 16 Oct 2019 08:54:53 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.0
+        id S1726534AbfJPCd5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Oct 2019 22:33:57 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oO1xb7HyXvrrkzixxOjR8JARmBSwufa6B8GIoxNEjyNO705Yd20k1ph7oRHi+uJGDWNIYpRV1uAKvNFi3Ofhjdg/6ru7qWvCmsK73XZskJc1Act884vrQ0/oRbM5DX+3zvL+BqNMkDAeA04Lcs2UFbjiPgJcVqu8XblgwjzNeEW/fw4iuKWMGGhlrM8zNQhB74O1vRS8Pb/2UVn9V0mLef5rVtdDxsWkk2MLMyr3huyXMwKob1wdwImRs/v5UWfUIXfa4Iq66KY9i2bf3T2IGjpBoGAhBZM8SUFgfBy3duc6qtBWLZYzriaJe86GhxO1zQG4uuECtp7E2XqSEChIvw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9/03ZeJdh9GusIEpK34xfWt4qWrz9b6FXLgQoiCVto=;
+ b=Lj47T7oa1j0x2zEDynizJ/o4fZu2mv1E6ldIwahEjSqmGMbVL6as0Z1BSOG4OyGia0mIHjgtmG9jLkd2FzKYF2hOSVLdQW6UqCGivPXw1EsZ0zlCRx7Tn0vBQMtRToTajHd+30XaWguFg6h1uj5ZthNkor+SQHSxUecbDB1CUF33eDMQ2IBZWCIr3RJd0+YyXsNS0hm88gynQpuKURNCgT7CJlE0CvZY2sXD0HPelg9jKODEcQEY9yIND+EV8wvgK/bTOgmQMCtQSSPWgYHLrMWGwWOqS0mLBMQ960APGtJhOjuypdNOqbq/OwUali0+y6+oKIloeB8yxWVyE6xVVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9/03ZeJdh9GusIEpK34xfWt4qWrz9b6FXLgQoiCVto=;
+ b=aq3EATsHjzHZ80d3Y4S+06xRXXYaaizABkhd/G/BkVPUxR3+EwZxfy4ysWAAg6eXE5WFInwbQm3fp51I4UfbhgLtFUx75YalYGmR9YbBETZ3W34KHEuhFrJdzhXsICHkpoBdkH4uW/WjcJtUtZKNVCUcbVipYvgSJDog980gAeY=
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
+ TYAPR01MB2767.jpnprd01.prod.outlook.com (20.177.102.209) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.21; Wed, 16 Oct 2019 02:33:53 +0000
+Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::548:32de:c810:1947]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
+ ([fe80::548:32de:c810:1947%4]) with mapi id 15.20.2347.023; Wed, 16 Oct 2019
+ 02:33:53 +0000
+From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        "linux-kernel@lists.codethink.co.uk" 
+        <linux-kernel@lists.codethink.co.uk>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] usb: renesas_usbhs: fix type of buf
+Thread-Topic: [PATCH] usb: renesas_usbhs: fix type of buf
+Thread-Index: AQHVg215oHe6LRh5mk6lGIz3ahK8IKdcjOdg
+Date:   Wed, 16 Oct 2019 02:33:52 +0000
+Message-ID: <TYAPR01MB45444200737D0CAB2DC7873FD8920@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+References: <20191015153017.10858-1-ben.dooks@codethink.co.uk>
+In-Reply-To: <20191015153017.10858-1-ben.dooks@codethink.co.uk>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
+x-originating-ip: [150.249.235.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0951df9d-162d-4a0a-2326-08d751e14915
+x-ms-office365-filtering-ht: Tenant
+x-ms-traffictypediagnostic: TYAPR01MB2767:
+x-microsoft-antispam-prvs: <TYAPR01MB2767FAF6A57EE928C57E8A06D8920@TYAPR01MB2767.jpnprd01.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:157;
+x-forefront-prvs: 0192E812EC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(39860400002)(346002)(376002)(396003)(366004)(199004)(189003)(66476007)(66446008)(66556008)(11346002)(6246003)(2906002)(305945005)(4326008)(74316002)(6116002)(3846002)(476003)(486006)(256004)(6436002)(229853002)(14444005)(7736002)(446003)(9686003)(55016002)(64756008)(66946007)(8676002)(81156014)(81166006)(8936002)(2501003)(316002)(478600001)(26005)(186003)(99286004)(14454004)(86362001)(25786009)(6506007)(66066001)(76116006)(102836004)(7696005)(52536014)(76176011)(54906003)(71190400001)(4744005)(33656002)(110136005)(71200400001)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB2767;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: renesas.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: e6Za6TDQH6IZoFam+y9g6qKd77sC/YfX85kuV6+wd0/EsW6SNBTAmrd4EXnkiwmNXM1uQ58awMFkTbBMBk8ldgGekf9CkaVJzu7DaSL2DC3lxiRNP3BcxfYtjQ+MP/My+8jgkSoBe7YIbmlmG+6Xq/X0TKcPSL62t2v12DpCGgz3e3hmUE5FwGQYLSP7j5n+IzuVrp3cxv4ETK9J+wvqpE90WcXiutEH1vQ3rsNLwqgfvS41+rvt+qxzNPEupQ3T07hYriK8f23MKRhkeH9Fhyu/cHWN7VETwsk1dy1XhGuCCd9FLZvyGe8RwX1X2VSqxRTIadaYZfNF3/BHnnrxxgZ7uXSlynmwIeaqxvsHh+0UmAaMO7zn/YAyWo4JshXWxhHsXUYzzje15/+g8LmABjZWpcSg85xt9hgoLkAtaC0=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <20191009014707.38716-1-maowenan@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.177.96.96]
-X-CFilter-Loop: Reflected
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0951df9d-162d-4a0a-2326-08d751e14915
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2019 02:33:52.9909
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ba/IjsqsBS/C1sOLpKa5gys7YKNoGEeYUjIINWVX09VYiUuDwE1cvDbXSJY3m2PuF/vezJhsTZwd4djruHlfDarxu6nmnrt0/9gNAB6eHJz8zr2MoD6Ne4JCiImnGnuH
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB2767
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-kindly ping.
+Hi Ben,
 
-On 2019/10/9 9:47, Mao Wenan wrote:
-> If CONFIG_TYPEC_HD3SS3220=y, CONFIG_USB_ROLE_SWITCH=m, below errors
-> can be found:
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_remove':
-> hd3ss3220.c:(.text+0x64): undefined reference to `usb_role_switch_put'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_dr_set':
-> hd3ss3220.c:(.text+0x154): undefined reference to `usb_role_switch_set_role'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_set_role':
-> hd3ss3220.c:(.text+0x294): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x2f4): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x348): undefined reference to `usb_role_switch_set_role'
-> hd3ss3220.c:(.text+0x390): undefined reference to `usb_role_switch_set_role'
-> drivers/usb/typec/hd3ss3220.o: In function `hd3ss3220_probe':
-> hd3ss3220.c:(.text+0x5e8): undefined reference to `fwnode_usb_role_switch_get'
-> hd3ss3220.c:(.text+0x8a4): undefined reference to `usb_role_switch_put'
-> make: *** [vmlinux] Error 1
-> 
-> This patch add dependency USB_ROLE_SWITCH for TYPEC_HD3SS3220.
-> 
-> Fixes: 1c48c759ef4b ("usb: typec: driver for TI HD3SS3220 USB Type-C DRP port controller")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> ---
->  drivers/usb/typec/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/Kconfig b/drivers/usb/typec/Kconfig
-> index aceb2af..b4f2aac 100644
-> --- a/drivers/usb/typec/Kconfig
-> +++ b/drivers/usb/typec/Kconfig
-> @@ -53,6 +53,7 @@ source "drivers/usb/typec/ucsi/Kconfig"
->  config TYPEC_HD3SS3220
->  	tristate "TI HD3SS3220 Type-C DRP Port controller driver"
->  	depends on I2C
-> +	depends on USB_ROLE_SWITCH
->  	help
->  	  Say Y or M here if your system has TI HD3SS3220 Type-C DRP Port
->  	  controller driver.
-> 
+> From: Ben Dooks (Codethink), Sent: Wednesday, October 16, 2019 12:30 AM
+>=20
+> Fix the type of buf in __usbhsg_recip_send_status to
+> be __le16 to avoid the following sparse warning:
+>=20
+> drivers/usb/renesas_usbhs/mod_gadget.c:335:14: warning: incorrect type in=
+ assignment (different base types)
+> drivers/usb/renesas_usbhs/mod_gadget.c:335:14:    expected unsigned short
+> drivers/usb/renesas_usbhs/mod_gadget.c:335:14:    got restricted __le16 [=
+usertype]
+>=20
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+
+Thank you for the patch!
+
+Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+
+I also found a parse warning in the usbhsg_recip_handler_std_set_device().
+So, I'll make a patch to fix the warning.
+
+Best regards,
+Yoshihiro Shimoda
 
