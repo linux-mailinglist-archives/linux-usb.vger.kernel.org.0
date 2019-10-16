@@ -2,197 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22072D8D0D
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2F55D8D1D
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 11:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392095AbfJPJzQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 05:55:16 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:33020 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728556AbfJPJzP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:55:15 -0400
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9G9sfBB080644;
-        Wed, 16 Oct 2019 04:54:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571219681;
-        bh=ilvmorCMdYLV72y3iRRl828Fp9lD2xDungHZT0n9FRU=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=hahLTPEGxEbDd5g7fTyGMLIpHg87uMKwqP4+TlO2o7Og00hHuXZSfrhRQ8fLCJFnE
-         uQ/gjBdIqAvGGdUsHS9OZZQWqhWv+P6c9FQ4cliyE8hOUyqQx8aPt+0pL+fUFV/Fjl
-         0E19L8NAJbj1G5dnD4nzw6qUkHWcs5tBFnp9Rt5M=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9G9sfxC105364
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 16 Oct 2019 04:54:41 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 16
- Oct 2019 04:54:34 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 16 Oct 2019 04:54:40 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9G9scFD113224;
-        Wed, 16 Oct 2019 04:54:39 -0500
-Subject: Re: [PATCH 1/2] usb: cdns3: fix cdns3_core_init_role()
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "peter.chen@nxp.com" <peter.chen@nxp.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20191007121601.25996-1-rogerq@ti.com>
- <20191007121601.25996-2-rogerq@ti.com>
- <BYAPR07MB470974496C7C59FDE615E5F3DD920@BYAPR07MB4709.namprd07.prod.outlook.com>
- <715c8f74-2790-6546-66ae-c0aea53946ed@ti.com>
- <BYAPR07MB470923F80C4B49D26291B268DD920@BYAPR07MB4709.namprd07.prod.outlook.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <3d2e7110-448f-d847-7668-bb20d7e03d22@ti.com>
-Date:   Wed, 16 Oct 2019 12:54:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2392167AbfJPJ7K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 05:59:10 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:37862 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388672AbfJPJ7K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 05:59:10 -0400
+Received: by mail-yw1-f68.google.com with SMTP id m7so8429264ywe.4;
+        Wed, 16 Oct 2019 02:59:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ZMhs3phMDot/5Pzq60tp9yVwrBzhHhVMNpUKqIJOnzg=;
+        b=OYDKGW9dppgYzeRz72NFHIjdpdt2MU8xumN8CXbYUH/65Eq7UKObjpEyaT6HEjIYeZ
+         rmbIWqHBIurALFfaI1cMfi0has2k1apqA1r++HjKJmBiBYXYmHnaf6HEpkytQ7ufhKeF
+         jOJUy8UJDhunhDLoj7HzaA1gOBcIxLQnXdPZoElUXeD94qJq+SOj1fir/sVtpU1GGFGd
+         MSNriw6AhBa+HF2wCLa4uJB2o39fnhV9VAmpHfVOBC9TeQ/Lha+5G58Lul3bavV2HI/h
+         Aivk6H1ejSTakqdp9uixrWh5rMvStxvDjVGOVvZLdCimo3Q8PqSeTVQ7ree87MM446Q5
+         GY1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ZMhs3phMDot/5Pzq60tp9yVwrBzhHhVMNpUKqIJOnzg=;
+        b=YjoXMe5xJR3HR1dZ3sIVsYOVPqLrYrtVcFYoFt3PIR1FilKHa79aJ/ekfnHr9ifMPy
+         yewBCqQHh/BXmrMw61zqbGWli76HV6X9TiI+FWTA9+y7aFEP+CDG5T9tAC85Suw7yln3
+         8AeilhdW759FQzrg0yGFb5DJW+ihSbFSZuakN1qIFj2WdhDYZFRq086HldzndqN9ORO9
+         zxQhaJ6IQdx85sgGoOl9VdrLKz+zAWbJQh8ScnYX6OQN18OKsAzx7Y8NrDTV6zUMnCmn
+         1W0mnL3az6O28/zTzrx9P/83EgLznSiF8Ilml0I/e+Gu/jAIk9QxuD1XtGOSx6gYBMRA
+         2kXg==
+X-Gm-Message-State: APjAAAWIJAERqQbsdaAxI4BzQPeQ6J+oatmp0iPOscp+jqD6hxOf/hSt
+        DaRAyQQs/r0QlKYPNQqDkElH96bCYcjmLCxT1aU=
+X-Google-Smtp-Source: APXvYqwPbS30QeZuU8xPCQxD9XzBvr8NHiiZsYAQpBQgdmxWcEX17Fph27siWiBloJBiXxGsrF7BA91+Pyd6NZRxY44=
+X-Received: by 2002:a0d:fa01:: with SMTP id k1mr20036137ywf.326.1571219948688;
+ Wed, 16 Oct 2019 02:59:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <BYAPR07MB470923F80C4B49D26291B268DD920@BYAPR07MB4709.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From:   zzoru <zzoru007@gmail.com>
+Date:   Wed, 16 Oct 2019 02:58:57 -0700
+Message-ID: <CALRZ7UuS10CvHvDxMyFyN_wZF_xvzrABT-E_NRt1jKKtXk6Rng@mail.gmail.com>
+Subject: WARNING: ODEBUG bug in del_timer
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     dokyungs@uci.edu, syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+We found the following crash on Linux 5.4-rc1 (Not patched in currnet
+HEAD commit 3b1f00aceb7a67bf079a5a64aa5c6baf78a8f442)
+with our customized syzkaller.
+
+ODEBUG: assert_init not available (active state 0) object type:
+timer_list hint: 0x0
+WARNING: CPU: 0 PID: 141 at linux/lib/debugobjects.c:484
+debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 141 Comm: kworker/0:3 Not tainted 5.4.0-rc1 #5
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ __dump_stack linux/lib/dump_stack.c:77 [inline]
+ dump_stack+0x7c/0xbb linux/lib/dump_stack.c:113
+ panic+0x205/0x48e linux/kernel/panic.c:220
+ __warn+0x19c/0x1c0 linux/kernel/panic.c:581
+ report_bug+0x1a9/0x2b0 linux/lib/bug.c:195
+ fixup_bug.part.11+0x32/0x80 linux/arch/x86/kernel/traps.c:179
+ fixup_bug linux/arch/x86/include/asm/irqflags.h:54 [inline]
+ do_error_trap+0xf5/0x160 linux/arch/x86/kernel/traps.c:272
+ do_invalid_op+0x31/0x40 linux/arch/x86/kernel/traps.c:291
+ invalid_op+0x23/0x30 linux/arch/x86/entry/entry_64.S:1028
+RIP: 0010:debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
+Code: 3c dd 80 05 9a 85 48 89 fa 48 c1 ea 03 80 3c 02 00 75 7f 48 8b
+14 dd 80 05 9a 85 4c 89 ee 48 c7 c7 00 fb 99 85 e8 d2 a7 43 ff <0f> 0b
+83 05 cd bd 70 05 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffff888017017668 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: ffffffff814153b0
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a41f730
+RBP: 0000000000000001 R08: ffffed1003483ee7 R09: ffffed1003483ee7
+R10: 0000000000000001 R11: ffffed1003483ee6 R12: ffffffff86908460
+R13: ffffffff859a01a0 R14: ffffffff812b6bc0 R15: ffff888017fb0420
+ debug_object_assert_init+0x290/0x430 linux/lib/debugobjects.c:866
+ debug_timer_assert_init linux/kernel/time/timer.c:729 [inline]
+ debug_assert_init linux/kernel/time/timer.c:774 [inline]
+ del_timer+0x67/0xf0 linux/kernel/time/timer.c:1196
+ realtek_cr_destructor+0x5a/0x90 linux/drivers/usb/storage/realtek_cr.c:937
+ usb_stor_release_resources linux/drivers/usb/storage/usb.c:817 [inline]
+ release_everything+0xc0/0x2c0 linux/drivers/usb/storage/usb.c:879
+ usb_unbind_interface+0x19f/0x810 linux/drivers/usb/core/driver.c:423
+ __device_release_driver linux/drivers/base/dd.c:1134 [inline]
+ device_release_driver_internal+0x429/0x4f0 linux/drivers/base/dd.c:1165
+ bus_remove_device+0x2d1/0x490 linux/drivers/base/bus.c:532
+ device_del+0x403/0xaa0 linux/drivers/base/core.c:2375
+ usb_disable_device+0x1d7/0x5f0 linux/drivers/usb/core/message.c:1237
+ usb_disconnect+0x25a/0x840 linux/drivers/usb/core/hub.c:2199
+ hub_port_connect linux/drivers/usb/core/hub.c:4949 [inline]
+ hub_port_connect_change linux/drivers/usb/core/hub.c:5213 [inline]
+ port_event linux/drivers/usb/core/hub.c:5359 [inline]
+ hub_event+0x11f5/0x3610 linux/drivers/usb/core/hub.c:5441
+ process_one_work+0x8b5/0x17c0 linux/kernel/workqueue.c:2269
+ worker_thread+0x82/0xb80 linux/kernel/workqueue.c:2415
+ kthread+0x325/0x3e0 linux/kernel/kthread.c:255
+ ret_from_fork+0x24/0x30 linux/arch/x86/entry/entry_64.S:352
+Dumping ftrace buffer:
+   (ftrace buffer empty)
+Kernel Offset: disabled
+
+Following is my analysis of this bug (Just add some comments in source code):
+https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L887-L891
+static int realtek_cr_autosuspend_setup(struct us_data *us)
+{
+    ...
+    if (retval != STATUS_SUCCESS) {
+        usb_stor_dbg(us, "Read status fail\n");
+        return -EIO; // Error!
+    }
+    ...
+    timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn,
+0); // rts51x_suspend_timer wasn't be initialized. When
+realtek_cr_autosuspend_setup just returns an error.
+}
 
 
-On 16/10/2019 12:38, Pawel Laszczak wrote:
->>
->>
->> Hi Pawel,
->>
->> On 16/10/2019 07:32, Pawel Laszczak wrote:
->>> Hi Roger
->>>
->>>>
->>>> At startup we should trigger the HW state machine
->>>> only if it is OTG mode. Otherwise we should just
->>>> start the respective role.
->>>>
->>>> Initialize idle role by default. If we don't do this then
->>>> cdns3_idle_role_stop() is not called when switching to
->>>> host/device role and so lane switch mechanism
->>>> doesn't work. This results to super-speed device not working
->>>> in one orientation if it was plugged before driver probe.
->>>>
->>>> Signed-off-by: Roger Quadros <rogerq@ti.com>
->>>> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
->>>> ---
->>>> drivers/usb/cdns3/core.c | 20 +++++++++++++++++++-
->>>> 1 file changed, 19 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
->>>> index 06f1e105be4e..1109dc5a4c39 100644
->>>> --- a/drivers/usb/cdns3/core.c
->>>> +++ b/drivers/usb/cdns3/core.c
->>>> @@ -160,10 +160,28 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
->>>> 	if (ret)
->>>> 		goto err;
->>>>
->>>> -	if (cdns->dr_mode != USB_DR_MODE_OTG) {
->>>> +	/* Initialize idle role to start with */
->>>> +	ret = cdns3_role_start(cdns, USB_ROLE_NONE);
->>>> +	if (ret)
->>>> +		goto err;
->>>> +
->>>> +	switch (cdns->dr_mode) {
->>>> +	case USB_DR_MODE_UNKNOWN:
->>>
->>> One note in this place. USB_DR_MODE_UNKNOWN is not possible in this place.
->>> If cdns->dr_mode will be USB_DR_MODE_UNKNOWN then driver returns -EINVAL
->>
->> At which place? I could not find.
-> 
-> In this patch we can't see this line:
-> https://elixir.bootlin.com/linux/v5.4-rc2/source/drivers/usb/cdns3/core.c#L159
-> There is called  cdns3_drd_update_mode(cdns);
-> 
-> int cdns3_drd_update_mode(struct cdns3 *cdns)
-> {
-> 	int ret = 0;
-> 
-> 	switch (cdns->dr_mode) {
-> 	case USB_DR_MODE_PERIPHERAL:
-> 		ret = cdns3_set_mode(cdns, USB_DR_MODE_PERIPHERAL);
-> 		break;
-> 	case USB_DR_MODE_HOST:
-> 		ret = cdns3_set_mode(cdns, USB_DR_MODE_HOST);
-> 		break;
-> 	case USB_DR_MODE_OTG:
-> 		ret = cdns3_init_otg_mode(cdns);
-> 		break;
-> 	default:
-> 		dev_err(cdns->dev, "Unsupported mode of operation %d\n",
-> 			cdns->dr_mode);
-> 		return -EINVAL;
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> After calling cdns3_drd_update_mode  we have 2 first lines from this patch
-> 	if (ret)
-> 		goto err;
+https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L1010-L1012
 
-I see now. I will update this patch to error out if dr_mode is USB_DR_MODE_UNKNOWN.
-Thanks.
+#ifdef CONFIG_REALTEK_AUTOPM
+if (ss_en)
+    realtek_cr_autosuspend_setup(us); // There isn't any check about
+return code.
+#endif
 
-cheers,
--roger
-
-> 
-> Pawel
->>
->>> some line before after returning form cdns3_drd_update_mode and in consequence
->>> it jump to err label.
->>>
->>> Maybe for better readability it this condition should be treated here also as error.
->>>
->>>> +	case USB_DR_MODE_OTG:
->>>> 		ret = cdns3_hw_role_switch(cdns);
->>>> 		if (ret)
->>>> 			goto err;
->>>> +		break;
->>>> +	case USB_DR_MODE_PERIPHERAL:
->>>> +		ret = cdns3_role_start(cdns, USB_ROLE_DEVICE);
->>>> +		if (ret)
->>>> +			goto err;
->>>> +		break;
->>>> +	case USB_DR_MODE_HOST:
->>>> +		ret = cdns3_role_start(cdns, USB_ROLE_HOST);
->>>> +		if (ret)
->>>> +			goto err;
->>>> +		break;
->>>> 	}
->>>>
->>>> 	return ret;
->>>
->>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
->>> Tested-by: Pawel Laszczak <pawell@cadence.com>
->>>
->>> --
->>> Regards,
->>> Pawel
->>>
->>
->> --
->> cheers,
->> -roger
->> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
->> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
-
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L936-L939
+static void realtek_cr_destructor(void *extra)
+{
+    ...
+    if (ss_en) {
+        del_timer(&chip->rts51x_suspend_timer); // Ouch! :(
+        chip->timer_expires = 0;
+    }
+    ...
+}
