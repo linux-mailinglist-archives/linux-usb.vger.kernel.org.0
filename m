@@ -2,140 +2,257 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE94D895F
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 09:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED7AD8A1E
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 09:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbfJPH1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 03:27:24 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:33119 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726965AbfJPH1X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 03:27:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571210842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cGBDAdb3YnijWBVYdlInolCMs5oOL00xTnXj5F/DK3A=;
-        b=ZrBo0HrTSGGsmF+hWsu/IZcaqdaLHNOevyMyTaxbNgmS7Rnj66NFlmC1quTb3tGIWwMys2
-        5pIXh15Sa+k5BiJiwrwWMhsCE2QqEY61T79r2PPhx3Yaj5CkoJ+MGz7LqozWv7lh/fx5UR
-        MKcUL3I+chO/cgQCIN0YAU/bO7K0fLQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-229-f9ryrPdQMYCtCzVW1eRaow-1; Wed, 16 Oct 2019 03:27:20 -0400
-Received: by mail-wm1-f69.google.com with SMTP id o8so782078wmc.2
-        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2019 00:27:20 -0700 (PDT)
+        id S2391272AbfJPHqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 03:46:16 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45139 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391264AbfJPHqQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 03:46:16 -0400
+Received: by mail-lf1-f68.google.com with SMTP id a19so3706702lfg.12
+        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2019 00:46:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=QvRi7PNoggQszDfre8D+FBzcsSh0CBoNlDWz8tev6yQ=;
+        b=RU4N7tUwuMfI1VibR44SQ9yks8vKVb5eF1y46S/6t3LFTW4cFYnE80Pk+GUbw9adiY
+         7pkUda9TFfJCZh0Qnm9cHSUhUFa+fL1/80R0Qg8cq0fEMSiE/3ZYOfVy582xWOfe7GAx
+         BtuoalHwtq4x9rd3dhU0C8u0WLYIKTsURlQ7Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=BhD8VGexW/5QagnP/Ued5Qhc8c7mr6fpk5pCNSfJYfc=;
-        b=OEK+Sa9XtHxmf4qRqM5XU6nrD835hal/z6yBQAWSy+CqhFVsXnB5wIHSpmyT7jD6BW
-         rp5+yAkp1yXWupYyQwVm1j4sXvSNg85POkrKsdZkiQdKb3SsY0CaaTXMmbdtTBNDmGfS
-         ARfyoUEr0a2zysiOXKHT/GaxnBV+MEvshfvpg2ftd/oLi3PnMC9wQYCggquuFDCQLnsb
-         9IPJMCrFjwyCZqvVQreuzdqO9J19PCPdhVVnTNsQPWi/NavL1rtXtRp8sSb38jjt90FZ
-         iizvrLXxwxh5ikgh4Va1ds6HpAqSySHNdqZPzCzpVapWaqbbV2jINBOAXY0W2XNXygiA
-         1Abg==
-X-Gm-Message-State: APjAAAUh7sjeLq+SFDaHKUBVsDwpuC83HEcQEh951LQWQfasFwIMLYrj
-        aNwzkxfAb7SpQQuHByOdOltcCGKObe7V/F/ad6TntLRiy7k9avaUNVdW2CBVOOT4h6fAscOcBr/
-        vRfvVPTrGR2V3a3440g0h
-X-Received: by 2002:a1c:9894:: with SMTP id a142mr2036210wme.70.1571210839575;
-        Wed, 16 Oct 2019 00:27:19 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyPkQFx5uOArg7hO/ofUb50CjW/EkVfR8jfBWPKRTJEKoyhGtFJhJoj6xq6jfvZZfKpiJrn1A==
-X-Received: by 2002:a1c:9894:: with SMTP id a142mr2036195wme.70.1571210839356;
-        Wed, 16 Oct 2019 00:27:19 -0700 (PDT)
-Received: from localhost.localdomain ([109.38.134.168])
-        by smtp.gmail.com with ESMTPSA id q192sm1902217wme.23.2019.10.16.00.27.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2019 00:27:18 -0700 (PDT)
-Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        bh=QvRi7PNoggQszDfre8D+FBzcsSh0CBoNlDWz8tev6yQ=;
+        b=Ai9oOkA907x+Hj+7BeiQR64Ly93PeMUF87KDdCJbWDaHp2pRxr8MCwUJizg7YcjCux
+         0T3vLntld9ASGNUUo3Lpd/h4kFPz/Gdiyu4q9vC4711aQ73d35rFWy72uueDNq/qLAbs
+         V+7CPIQpv7BO79PN3JQAcvbwGz0K907SyVsdB0KtX2WhLxG03uvfoXUb7hq1l5yWxS6/
+         fZVTz8QYRQju2MGurSSDl6c/YhZVBrN8pbPii0YICRFILHq7H81EVGQpQYfbeQlDoRqF
+         9W8cg54jzdNpMEE1oGMlEoXWwefXDfObGIt8D2mIBVdgoA4MURMHP8qx1VZ+mV/1dtXc
+         /Mbg==
+X-Gm-Message-State: APjAAAVN3Sv2AiC2PZ8VOR5KC+EpempBZvloJZaCzM7NI7EoipdnRAJE
+        ryFy4k5dKhFT0AfNVbSRUPyXVQ==
+X-Google-Smtp-Source: APXvYqyBmqGfoeKFBJH4OrBLDBFGebGhLmDfJwIYHLGKut9DDipI1Qyw/3UVrk5mWZI3oDJFyaWWGQ==
+X-Received: by 2002:a19:6759:: with SMTP id e25mr3829669lfj.80.1571211973028;
+        Wed, 16 Oct 2019 00:46:13 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id q26sm5650578lfd.53.2019.10.16.00.46.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 16 Oct 2019 00:46:12 -0700 (PDT)
+Subject: Re: [RFC PATCH 03/21] pipe: Use head and tail pointers for the ring,
+ not cursor and length
+To:     David Howells <dhowells@redhat.com>, torvalds@linux-foundation.org
+Cc:     Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-3-john.stultz@linaro.org>
- <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
- <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
- <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com>
- <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com>
-Date:   Wed, 16 Oct 2019 09:27:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <157117606853.15019.15459271147790470307.stgit@warthog.procyon.org.uk>
+ <157117609543.15019.17103851546424902507.stgit@warthog.procyon.org.uk>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <b8799179-d389-8005-4f6d-845febc3bb23@rasmusvillemoes.dk>
+Date:   Wed, 16 Oct 2019 09:46:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
+In-Reply-To: <157117609543.15019.17103851546424902507.stgit@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-MC-Unique: f9ryrPdQMYCtCzVW1eRaow-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On 15/10/2019 23.48, David Howells wrote:
+> Convert pipes to use head and tail pointers for the buffer ring rather than
+> pointer and length as the latter requires two atomic ops to update (or a
+> combined op) whereas the former only requires one.
+> 
+>  (1) The head pointer is the point at which production occurs and points to
+>      the slot in which the next buffer will be placed.  This is equivalent
+>      to pipe->curbuf + pipe->nrbufs.
+> 
+>      The head pointer belongs to the write-side.
+> 
+>  (2) The tail pointer is the point at which consumption occurs.  It points
+>      to the next slot to be consumed.  This is equivalent to pipe->curbuf.
+> 
+>      The tail pointer belongs to the read-side.
+> 
+>  (3) head and tail are allowed to run to UINT_MAX and wrap naturally.  They
+>      are only masked off when the array is being accessed, e.g.:
+> 
+> 	pipe->bufs[head & mask]
+> 
+>      This means that it is not necessary to have a dead slot in the ring as
+>      head == tail isn't ambiguous.
+> 
+>  (4) The ring is empty if "head == tail".
+> 
+>  (5) The occupancy of the ring is "head - tail".
+> 
+>  (6) The number of free slots in the ring is "(tail + pipe->ring_size) -
+>      head".
 
-On 10/15/19 7:39 AM, John Stultz wrote:
-> On Thu, Oct 3, 2019 at 1:51 PM Hans de Goede <hdegoede@redhat.com> wrote:
->> On 03-10-2019 22:37, John Stultz wrote:
->>> Fair point. I'm sort of taking a larger patchset and trying to break
->>> it up into more easily reviewable chunks, but I guess here I mis-cut.
->>>
->>> The user is the hikey960 gpio hub driver here:
->>>     https://git.linaro.org/people/john.stultz/android-dev.git/commit/?i=
-d=3Db06158a2d3eb00c914f12c76c93695e92d9af00f
->>
->> Hmm, that seems to tie the TypeC data-role to the power-role, which
->> is not going to work with role swapping.
->=20
-> Thanks again for the feedback here. Sorry for the slow response. Been
-> reworking some of the easier changes but am starting to look at how to
-> address your feedback here.
->=20
->> What is controlling the usb-role-switch, and thus ultimately
->> causing the notifier you are suggesting to get called ?
->=20
-> The tcpm_mux_set() call via tcpm_state_machine_work()
->=20
->> Things like TYPEC_VBUS_POWER_OFF and TYPEC_VBUS_POWER_ON
->> really beg to be modeled as a regulator and then the
->> Type-C controller (using e.g. the drivers/usb/typec/tcpm/tcpm.c
->> framework) can use that regulator to control things.
->> in case of the tcpm.c framework it can then use that
->> regulator to implement the set_vbus callback.
->=20
-> So I'm looking at the bindings and I'm not sure exactly how to tie a
-> regulator style driver into the tcpm for this?
-> Looking at the driver I just see this commented out bit:
->     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/drivers/usb/typec/tcpm/tcpm.c#n3075
->=20
-> Do you happen to have a pointer to something closer to what you are descr=
-ibing?
+Seems an odd way of writing pipe->ring_size - (head - tail) ; i.e.
+obviously #free slots is #size minus #occupancy.
 
-Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb302.=
-c
-you need to do something similar in your Type-C controller driver and
-export the GPIO as as a gpio-controlled regulator and tie the regulator to
-the connector.
+>  (7) The ring is full if "head >= (tail + pipe->ring_size)", which can also
+>      be written as "head - tail >= pipe->ring_size".
+>
 
-Regards,
+No it cannot, it _must_ be written in the latter form. Assuming
+sizeof(int)==1 for simplicity, consider ring_size = 16, tail = 240.
+Regardless whether head is 240, 241, ..., 255, 0, tail + ring_size wraps
+to 0, so the former expression states the ring is full in all cases.
 
-Hans
+Better spell out somewhere that while head and tail are free-running, at
+any point in time they satisfy the invariant head - tail <= pipe_size
+(and also 0 <= head - tail, but that's a tautology for unsigned
+ints...). Then it's a matter of taste if one wants to write "full" as
+head-tail == pipe_size or head-tail >= pipe_size.
 
+> Also split pipe->buffers into pipe->ring_size (which indicates the size of the
+> ring) and pipe->max_usage (which restricts the amount of ring that write() is
+> allowed to fill).  This allows for a pipe that is both writable by the kernel
+> notification facility and by userspace, allowing plenty of ring space for
+> notifications to be added whilst preventing userspace from being able to use
+> up too much buffer space.
+
+That seems like something that should be added in a separate patch -
+adding ->max_usage and switching appropriate users of ->ring_size over,
+so it's more clear where you're using one or the other.
+
+> @@ -1949,8 +1950,12 @@ static ssize_t fuse_dev_splice_write(struct pipe_inode_info *pipe,
+>  
+>  	pipe_lock(pipe);
+>  
+> -	bufs = kvmalloc_array(pipe->nrbufs, sizeof(struct pipe_buffer),
+> -			      GFP_KERNEL);
+> +	head = pipe->head;
+> +	tail = pipe->tail;
+> +	mask = pipe->ring_size - 1;
+> +	count = head - tail;
+> +
+> +	bufs = kvmalloc_array(count, sizeof(struct pipe_buffer), GFP_KERNEL);
+>  	if (!bufs) {
+>  		pipe_unlock(pipe);
+>  		return -ENOMEM;
+> @@ -1958,8 +1963,8 @@ static ssize_t fuse_dev_splice_write(struct pipe_inode_info *pipe,
+>  
+>  	nbuf = 0;
+>  	rem = 0;
+> -	for (idx = 0; idx < pipe->nrbufs && rem < len; idx++)
+> -		rem += pipe->bufs[(pipe->curbuf + idx) & (pipe->buffers - 1)].len;
+> +	for (idx = tail; idx < head && rem < len; idx++)
+> +		rem += pipe->bufs[idx & mask].len;
+>  
+>  	ret = -EINVAL;
+>  	if (rem < len)
+> @@ -1970,16 +1975,16 @@ static ssize_t fuse_dev_splice_write(struct pipe_inode_info *pipe,
+>  		struct pipe_buffer *ibuf;
+>  		struct pipe_buffer *obuf;
+>  
+> -		BUG_ON(nbuf >= pipe->buffers);
+> -		BUG_ON(!pipe->nrbufs);
+> -		ibuf = &pipe->bufs[pipe->curbuf];
+> +		BUG_ON(nbuf >= pipe->ring_size);
+> +		BUG_ON(tail == head);
+> +		ibuf = &pipe->bufs[tail];
+
+I don't see where tail gets masked between tail = pipe->tail; above and
+here, but I may be missing it. In any case, how about seeding head and
+tail with something like 1<<20 when creating the pipe so bugs like that
+are hit more quickly.
+
+> @@ -515,17 +525,19 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+>  static long pipe_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+>  {
+>  	struct pipe_inode_info *pipe = filp->private_data;
+> -	int count, buf, nrbufs;
+> +	int count, head, tail, mask;
+>  
+>  	switch (cmd) {
+>  		case FIONREAD:
+>  			__pipe_lock(pipe);
+>  			count = 0;
+> -			buf = pipe->curbuf;
+> -			nrbufs = pipe->nrbufs;
+> -			while (--nrbufs >= 0) {
+> -				count += pipe->bufs[buf].len;
+> -				buf = (buf+1) & (pipe->buffers - 1);
+> +			head = pipe->head;
+> +			tail = pipe->tail;
+> +			mask = pipe->ring_size - 1;
+> +
+> +			while (tail < head) {
+> +				count += pipe->bufs[tail & mask].len;
+> +				tail++;
+>  			}
+
+This is broken if head has wrapped but tail has not. It has to be "while
+(head - tail)" or perhaps just "while (tail != head)" or something along
+those lines.
+
+> @@ -1086,17 +1104,21 @@ static long pipe_set_size(struct pipe_inode_info *pipe, unsigned long arg)
+>  	}
+>  
+>  	/*
+> -	 * We can shrink the pipe, if arg >= pipe->nrbufs. Since we don't
+> -	 * expect a lot of shrink+grow operations, just free and allocate
+> -	 * again like we would do for growing. If the pipe currently
+> +	 * We can shrink the pipe, if arg is greater than the ring occupancy.
+> +	 * Since we don't expect a lot of shrink+grow operations, just free and
+> +	 * allocate again like we would do for growing.  If the pipe currently
+>  	 * contains more buffers than arg, then return busy.
+>  	 */
+> -	if (nr_pages < pipe->nrbufs) {
+> +	mask = pipe->ring_size - 1;
+> +	head = pipe->head & mask;
+> +	tail = pipe->tail & mask;
+> +	n = pipe->head - pipe->tail;
+
+I think it's confusing to "premask" head and tail here. Can you either
+drop that (pipe_set_size should hardly be a hot path?), or perhaps call
+them something else to avoid a future reader seeing an unmasked
+bufs[head] and thinking that's a bug?
+
+> @@ -1254,9 +1290,10 @@ static ssize_t pipe_get_pages(struct iov_iter *i,
+>  		   struct page **pages, size_t maxsize, unsigned maxpages,
+>  		   size_t *start)
+>  {
+> +	unsigned int p_tail;
+> +	unsigned int i_head;
+>  	unsigned npages;
+>  	size_t capacity;
+> -	int idx;
+>  
+>  	if (!maxsize)
+>  		return 0;
+> @@ -1264,12 +1301,15 @@ static ssize_t pipe_get_pages(struct iov_iter *i,
+>  	if (!sanity(i))
+>  		return -EFAULT;
+>  
+> -	data_start(i, &idx, start);
+> -	/* some of this one + all after this one */
+> -	npages = ((i->pipe->curbuf - idx - 1) & (i->pipe->buffers - 1)) + 1;
+> -	capacity = min(npages,maxpages) * PAGE_SIZE - *start;
+> +	data_start(i, &i_head, start);
+> +	p_tail = i->pipe->tail;
+> +	/* Amount of free space: some of this one + all after this one */
+> +	npages = (p_tail + i->pipe->ring_size) - i_head;
+
+Hm, it's not clear that this is equivalent to the old computation. Since
+it seems repeated in a few places, could it be factored to a little
+helper (before this patch) and the "some of this one + all after this
+one" comment perhaps expanded to explain what is going on?
+
+Rasmus
