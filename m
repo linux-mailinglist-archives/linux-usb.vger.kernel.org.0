@@ -2,89 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D21ED923E
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 15:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AF7D9332
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Oct 2019 16:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389985AbfJPNSe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 09:18:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38804 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388141AbfJPNSd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Oct 2019 09:18:33 -0400
-Received: from localhost (unknown [209.136.236.94])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 210212067B;
-        Wed, 16 Oct 2019 13:18:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571231913;
-        bh=YIWcTuUJHIOVXA+g0HyqMlGhT20VZ0OS5Ku5Zr3UxF0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=epj+51FF8efh+asCvRlahgykECVPArnsYRSGChgqgDE2xPFTR2WHASw1k3uGYm0uT
-         n2R+VQI7+jP9jU3g1mI5fkT4AjF0uuxPn9a80kRN9tJDOGJo7GSVUDnW5d9ZFP4JOs
-         gFMrx8qfXgO8rlsPvUeZtHhSj9ztua0QG+CUx/IA=
-Date:   Wed, 16 Oct 2019 06:18:32 -0700
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     GwanYeong Kim <gy741.kim@gmail.com>
-Cc:     shuah <shuah@kernel.org>, valentina.manea.m@gmail.com,
-        allison@lohutok.net, opensource@jilayne.com,
-        changcheng.liu@intel.com, tglx@linutronix.de,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usbip: tools: Fix read_usb_vudc_device() error path
- handling
-Message-ID: <20191016131832.GC56859@kroah.com>
-References: <20191015131437.525-1-gy741.kim@gmail.com>
- <bb2bef23-336a-2f28-8faa-00e4adbb76d9@kernel.org>
- <20191016133825.00006e29@gmail.com>
+        id S2405621AbfJPOAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 10:00:49 -0400
+Received: from sonic305-2.consmr.mail.bf2.yahoo.com ([74.6.133.41]:33632 "EHLO
+        sonic305-2.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2404448AbfJPOAt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 10:00:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1571234447; bh=2WyIOtQ/U7lkSnB0LWs94pR+1/L1irVJb5iZ8RpiM7k=; h=Date:From:Reply-To:Subject:From:Subject; b=cIt7zSEPiiPfnmuWVavJnWNR3kevJOe/iOwQ1tE49+y9gEXvgDDsLubu3kEswd5qZVTrwPWT4oYGOHGisDG8PSISEdZ6u4A+baTrBj4Mck6n4XYwuxBXXxbfLn3zvKbwGpsc4ULYk15/+GUztClQ2QAP9BYVGBJC/5dv8T/J8dJwcGvwuvBkUhYAUpWjvZP49r7fy1Z19n5ZkrFLxOMpRN7EPXruUxNUjok1iA0eFfFfJuzJud5YGAlXDpXJVT2BYm9HpQNUkbfVZ6waosFCdIZfcXlzkqa3xM46+6/YiR43uzqK9tDuDiVDZTvTLoAHxnofKY58fKae/kyFB4O4uQ==
+X-YMail-OSG: tK8q5f8VM1m2gOKdA.x4_vPkaoxB8nZUYXJSwg8wX.UFssKNQkFREtcWU2SgWI6
+ ZMafkwghF86aIuYWyW.o9KZlZSVVHO71b3D0PrClrVaflgwVwiL4oYZb6VFhiWeC4pFme8.7xG_X
+ JOtNgdRl7URaDMDyp2ZX0o8cctWbKUlWRlptOq9MAVKnH3EwoDX3PqJkYY13Dm8JBOiWo12sQVbm
+ pBtMxE6frgJVGkVlPpRkK_OhdPlr_oO.ZIYpK.5pWeQ1jJRiZQtOP.C_NPInGfSNPwGUQZqjVKAa
+ 0CxD.ceZJ.JsvGtGTPjoyjmwes865T1Z.NbETdlXmxuJXDClfxDDlC7LO2NqoDDbVT1.QJfePE0H
+ h0WggmcM1lrLXxzf.E007iO3PtwkJYhl3pWFlBFz6QUzQdUAikveaKoqzE0lLhsROBqfUC8mThtW
+ XzHdA6M3H6cifSHveBKhCeKouoJivAShiDbZbHEbQ2iGz0qwSlf1A5e4po9xPFM7bHYv5WiYb.yj
+ jDqIr4518kdSinuFrGCzSdfE7rCoKRZ7198dkpl5b4QleoRwRhFFXX7f5CkI_DLikbiW1ycNFeMr
+ IZiAFns8QlT5ESVRVC9.9AKWfS8hqlsaYA2LmwJt3gABeJacYUKRwM7eUIcMzXs9d7QofJlk5K_k
+ ipMecPxLLYD_2YqB2fmdQnw3dgu4vvWciZKrgJ5Aa_JFCqBR3HzVXsseyQl.f6gsjShLhMUNPCDH
+ flAWHawh2l_xqmlec_12SXqyIV6ldmfEtRXHwKM6mYsvvB9mRUZ6qFCHgzLD0Vl2am4DZjoaD1Bn
+ XkthugOBCT1.xh5_OkeDIkf.3bidenTVs97WvH72QMquZuVOYd52BfN9j.8Vq1JNd3BY3eevrGva
+ xD_B5NRSlXYhi33jMp8JAmhYsrOlg8jsBPq3xlyTttsoALEUGsqpGahzXe.AY5IR52Wr7xYeirXJ
+ gsXo_npbAl54PEs7pA7l9b.LUyOZzA5pfiufsUuNabsbMELJT6MAbO25vt4sQomzmHceoajgP6h8
+ u26UYbetfNQSOCZE8Gts.HdwcScAZnGWqSide7YRmMcXsGNrYZgQ1DmmmIGspVntTftDgv_WDToy
+ T13tAhiX58K8EDf5oZ2nzZmZ4jrqPHVaIhBndlNqJrs82DXdDJOdqrkwAwainyflQEP2GBCw0p21
+ orYunFA1JtBUlVebA4oM9dvS00UIFPZfmXukjzzOH3NxjaDQwYmwQFhrta8DwqMHkzmawZIB6Dn7
+ pa6GgmtGrtdaOM2tnY6B03vgkH448wkpYXqx9VTiA60h7.0f9w40G
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Wed, 16 Oct 2019 14:00:47 +0000
+Date:   Wed, 16 Oct 2019 14:00:42 +0000 (UTC)
+From:   Ms Lisa Hugh <lisa.hugh222@gmail.com>
+Reply-To: ms.lisahugh000@gmail.com
+Message-ID: <1962352404.1554008.1571234442847@mail.yahoo.com>
+Subject: YOUR CO-OPERATION PLEASE.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191016133825.00006e29@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 01:38:25PM +0900, GwanYeong Kim wrote:
-> On Tue, 15 Oct 2019 17:14:32 -0600
-> shuah <shuah@kernel.org> wrote:
-> 
-> > On 10/15/19 7:14 AM, GwanYeong Kim wrote:
-> > > cannot be less than 0 - fread() returns 0 on error.
-> > > 
-> > > Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
-> > > ---
-> > >   tools/usb/usbip/libsrc/usbip_device_driver.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> > > b/tools/usb/usbip/libsrc/usbip_device_driver.c index
-> > > 051d7d3f443b..49760b98aabc 100644 ---
-> > > a/tools/usb/usbip/libsrc/usbip_device_driver.c +++
-> > > b/tools/usb/usbip/libsrc/usbip_device_driver.c @@ -79,7 +79,7 @@
-> > > int read_usb_vudc_device(struct udev_device *sdev, struct
-> > > usbip_usb_device *dev) if (!fd) return -1;
-> > >   	ret = fread((char *) &descr, sizeof(descr), 1, fd);
-> > > -	if (ret < 0) > +	if (ret != sizeof(descr))
-> > 
-> > Are you sure this check is correct? fread() returns the number
-> > of elements read, # elements = 1  in this case.
-> 
-> Thank you for pointing this out.
-> Sorry for my mistake.
-> 
-> > fread() returns 0 when size or # of elements is 0 and in other
-> > error cases it will return < # of elements. I would think you
-> > want to check ret != 1 here.
-> 
-> You're right.
-> This should be changed to "ret != 1".
-> 
-> Should I send a new patch?
 
-If you want to have it applied, yes.
 
-thanks,
 
-greg k-h
+
+
+Dear Friend,
+
+I am Ms Lisa Hugh work with the department of Audit and accounting manager here in the Bank,
+
+Please i need your assistance for the transferring of thIs fund to your bank account for both of us benefit for life time investment and the amount is (US$4.5M DOLLARS).
+
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+
+Note/ 50% for you why 50% for me after success of the transfer to your bank account.
+
+Below information is what i need from you so we can be reaching each other .
+
+1)Full name ...
+2)Private telephone number...
+3)Age...
+4)Nationality...
+5)Occupation ...
+
+
+Thanks.
+
+
+Ms Lisa Hugh
