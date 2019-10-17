@@ -2,95 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B38C0DA3D5
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 04:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AC59DA477
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 06:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392042AbfJQCdm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 22:33:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50260 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390279AbfJQCdm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Oct 2019 22:33:42 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93B4F2053B;
-        Thu, 17 Oct 2019 02:33:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571279621;
-        bh=YMinDGi9yVQwHzGVSBtzIuzF7yrvPM+vMOAYEps32AQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=RFHOe7F+/oGuGWL8QW9vhAnolEh4AMRyJYLoSovylaiezr7+xx7Jw0Pnuizec6LuJ
-         igKyfvFX3jUSzJ9gfh7OsrlNragyjEPCEDOlrSY1LBdfWElCl+b14y+FDo9WBBtsmL
-         8BgoMim7UMz6H9DrSSQcBifIG9eBD9ht07weVupQ=
-Subject: Re: [PATCH v2] usbip: tools: Fix read_usb_vudc_device() error path
- handling
-To:     GwanYeong Kim <gy741.kim@gmail.com>, valentina.manea.m@gmail.com
-Cc:     gregkh@linuxfoundation.org, allison@lohutok.net,
-        opensource@jilayne.com, changcheng.liu@intel.com,
-        tglx@linutronix.de, linux-usb@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20191016131832.GC56859@kroah.com>
- <20191017022512.3809-1-gy741.kim@gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <e460e4fb-cefa-9dea-f0f6-7e92f3727034@kernel.org>
-Date:   Wed, 16 Oct 2019 20:33:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2407702AbfJQEAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 00:00:21 -0400
+Received: from mail-yb1-f195.google.com ([209.85.219.195]:36096 "EHLO
+        mail-yb1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725379AbfJQEAU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 00:00:20 -0400
+Received: by mail-yb1-f195.google.com with SMTP id t4so276992ybk.3
+        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2019 21:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=R7agJn2xhu/bfVAbFCngbuss5j4mtvnFbiuNdxVUHic=;
+        b=uMDdLUWiJA2yKy+OGjOmykqJj33fp+sY8NRzeKF65knMaZVdPsJWcjXpzj+tH7mAZN
+         8p07Wqcs28OXGahYnTgqWZSKUeVo+eod2yMftru17RMEjR19Jy6NWJPKgyoOFa1pgg8s
+         SwkRkX2PLPVcrNe5oK6Bm7657Zc6vGsO6TkmApgUxWUzGL+Rje+hlYvXnZ9H5M3WZvlp
+         4waQEf1JQdcmjs42vyN12NhVT9igU8sDAERWpl2QqH+MndrsyQy5Jw0Ls+fmnjzyW2t7
+         T8QOwHYIIHSWev3QHJnax5g4hCARmnZG0h6+kayPir9h+s3PzzoVZ8Z0b1Vo1EyIFuL9
+         HUTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=R7agJn2xhu/bfVAbFCngbuss5j4mtvnFbiuNdxVUHic=;
+        b=gjtUEr03wzLlVKClSVtb/+L0izDYt6k5PvkvOQ+lRk33b/WBy7oBjxnrr/Rv5AHiFQ
+         04ZPIJOBxpPwhndRKn5HEh/Pg4RNVBSfgYC/mrBo6yxQzZqQf5R6i43bGPH6s5ld/Qj0
+         4JKetEARXgzvjzOoCcwQ11k9Y0f7XP1SCc7qVlkDfA0Iu1S5eoeLS8rbhS7U6HMLkHDa
+         t/QK04RjMa1ALiI9ammPhQLR6GvIV611pA2njhJypxw1dNL9CZBTRr7pssnlGBEZ2w2e
+         o0VNTr/AgruHHZ9G4kRJmJUkpr0ssPtWdKrAUDLqVptg1j+TBkHD4JtKqns2uWlYfuWi
+         UerA==
+X-Gm-Message-State: APjAAAV3lSm6IUX8ShDsGYBBzkmXS7/TbIMIoCzP/7gkf0vweKIsc5Rj
+        cIkAA0sTiu+/nbeHCefFGi8GpwiQ7nx+oDRaSLY=
+X-Google-Smtp-Source: APXvYqwkz2PMs73k7TfDoKU/oUvqrfz0dY0jpp8B72pmhh7u+iciyMRx+tmMwJQwxeli7UTrzdJFmoBaBBaSHNlNL+M=
+X-Received: by 2002:a25:8292:: with SMTP id r18mr733101ybk.424.1571284820093;
+ Wed, 16 Oct 2019 21:00:20 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191017022512.3809-1-gy741.kim@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Reply-To: beatricejonson1@yandex.com
+Received: by 2002:a25:6141:0:0:0:0:0 with HTTP; Wed, 16 Oct 2019 21:00:19
+ -0700 (PDT)
+From:   Beatrice Johnson <beatricejonson1@gmail.com>
+Date:   Thu, 17 Oct 2019 06:00:19 +0200
+X-Google-Sender-Auth: YewXkc9XRgOFILhfOuByG6mLyZ0
+Message-ID: <CAO99B9_i2Mu7wR40FDqY-VssG2fE2JaT9+eaw5Q5NjJ6+ZMFVg@mail.gmail.com>
+Subject: I need Your Urgent assistance.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/16/19 8:25 PM, GwanYeong Kim wrote:
-> cannot be less than 0 - fread() returns 0 on error.
-> 
+I need Your Urgent assistance.
 
-This isn't really accurate right. fread() doesn't always
-return 0 in error. It could return < number of elements
-and set errno.
+My name is Beatrice Johnson. The only daughter of the late Mr. Madou
+Johnson. Here in Burkina Faso, i got your profile while searching for
+contact on internet; I am contacting you to help me receive some
+amount of money in your country. So that I can travel To America to
+continue my education over there,
 
-Please make changes to reflect that.
+Before my father died he deposited the Sum of ($4.5Million) in a bank
+here and he advised me before he died to look for a faithful and
+reliable foreigner, who can help receive the Funds outside country, So
+that I can travel to meet you in your country. For my share percentage
+of the total amount 4.5 Million, from your county I will travel to
+America to continue my education and business.
 
-> Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
-> ---
->   tools/usb/usbip/libsrc/usbip_device_driver.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> index 051d7d3f443b..959bb29d0477 100644
-> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
-> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
-> @@ -69,7 +69,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
->   	FILE *fd = NULL;
->   	struct udev_device *plat;
->   	const char *speed;
-> -	int ret = 0;
-> +	size_t ret = 0;
+I hope you are capable to receive the 4.5 Million in your country with
+trust.  I will like to travel to your country immediately the bank
+wire the funds into your account. You will take 30% of the total 4.5
+Million for your good and kind assistance to me. I will send to you
+the full details concerning the funds immediately I hear from you
+soon.
 
-You don't need to initialize this.
+My Regards,
 
->   
->   	plat = udev_device_get_parent(sdev);
->   	path = udev_device_get_syspath(plat);
-> @@ -79,7 +79,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
->   	if (!fd)
->   		return -1;
->   	ret = fread((char *) &descr, sizeof(descr), 1, fd);
-> -	if (ret < 0)
-> +	if (ret != 1)
-
-Why not print error message?
-
->   		goto err;
->   	fclose(fd);
->   
-> 
-
-thanks,
--- Shuah
+Beatrice Johnson.
