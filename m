@@ -2,157 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A79A8DB6D2
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 21:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14298DB765
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 21:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503346AbfJQTHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 15:07:08 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:47053 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393263AbfJQTHI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 15:07:08 -0400
-Received: by mail-pf1-f194.google.com with SMTP id q5so2221045pfg.13
-        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2019 12:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T8xAHlfkcXXy3tAV1rfOh1RH08qh99XamRpJlnNkuCs=;
-        b=WGOC2fW3eL810UxK2OyOTVUqrRlRaY0iNjVmxNOAEmof0riKtYccrkunE9/apbWrH1
-         EtkKYxJrIK7f/7C/KQKAIuRYZAAsWiRXHm6wagzHd/QlCWtjaa373xFQemLS1HE/cC6c
-         OGM1kH96dHWLpow6T/2IUPIUcXtP3LZ5uJ3UaUE521IegSRcqW2J7hH3x6kmiECXc1k9
-         0u7fVQ3wPFOFFYSx47ZxAFkm6uxEqLK4zqpdgf/TxcjvX6HQo7dI/F41UU5BDTx+mI0z
-         ejod0hKhi8zPWU5OOHD+NTSzc5dN77WKZtiR0gMvEOzhByD842QYtsBN3n8v88YF4ugn
-         BDKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T8xAHlfkcXXy3tAV1rfOh1RH08qh99XamRpJlnNkuCs=;
-        b=AY6dYY+hVDWjebwsIMd8KH29R+esDTFF4iPC+lx2iCRoW7UV5gsrfKNRk4GmYe8aCR
-         UV8NYos1yNH0cSCgbZAeLwFPL/e02RJILadfn7XvZXox/d55w1l/AJdZZJ37GRPeK3s/
-         OJMzmTm3baJgyjCN2G3HnuZNRWC+1sXBM6XQwmBPY1/q9rimj5YkExprI7gMFU4l5H9F
-         mR3Ll7sN7/8xpP3gvibSktXF68lT5oUckRs079sGcxz1p0uYm+vKIlqisj3FcyvoS8N5
-         Mm3HnQOttCvCXsqZAsLj8URIXHHnLvvmwdDKX0PaO4M1S8DPXc+v9TR3jyfJJKztb4+H
-         woFQ==
-X-Gm-Message-State: APjAAAUWFSKSBKBiUMKjYoSwX2ZLCbCAJqI9yBot//F5uCUhvg7rCv2E
-        P0+BM5NEyPYN4mo5i+97HPtto5yuvxOVi061Aa5bYP2AgeY=
-X-Google-Smtp-Source: APXvYqx48LhISGcOzRtwaIhszXsRUYe5Kli1JNiMo5SrzNfO5jHqIrJS0QlR3iXZlDy9TTxurGoX3WwkbHUfLynZEK0=
-X-Received: by 2002:a63:541e:: with SMTP id i30mr5796978pgb.130.1571339227516;
- Thu, 17 Oct 2019 12:07:07 -0700 (PDT)
+        id S2503473AbfJQTXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 15:23:35 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60651 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2503470AbfJQTXf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 15:23:35 -0400
+Received: (qmail 18603 invoked by uid 500); 17 Oct 2019 15:23:34 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 17 Oct 2019 15:23:34 -0400
+Date:   Thu, 17 Oct 2019 15:23:34 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
+cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        <linux-block@vger.kernel.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
+In-Reply-To: <20191017175306.GA3014@lazy.lzy>
+Message-ID: <Pine.LNX.4.44L0.1910171522200.18407-100000@netrider.rowland.org>
 MIME-Version: 1.0
-References: <cover.1571333592.git.andreyknvl@google.com> <1b30d1c9e7f86c25425c5ee53d7facede289608e.1571333592.git.andreyknvl@google.com>
- <20191017181943.GC1094415@kroah.com>
-In-Reply-To: <20191017181943.GC1094415@kroah.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 17 Oct 2019 21:06:56 +0200
-Message-ID: <CAAeHK+zEoEbtk62raCU_10V_K97VAeebfJfuCRaf5DskT5yVhw@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/3] usb, kcov: collect coverage from hub_event
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 8:19 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Oct 17, 2019 at 07:44:14PM +0200, Andrey Konovalov wrote:
-> > This patch adds kcov_remote_start/kcov_remote_stop annotations to the
-> > hub_event function, which is responsible for processing events on USB
-> > buses, in particular events that happen during USB device enumeration.
-> > Each USB bus gets a unique id, which can be used to attach a kcov device
-> > to a particular USB bus for coverage collection.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  drivers/usb/core/hub.c    | 4 ++++
-> >  include/linux/kcov.h      | 1 +
-> >  include/uapi/linux/kcov.h | 7 +++++++
-> >  3 files changed, 12 insertions(+)
-> >
-> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > index 236313f41f4a..03a40e41b099 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -5374,6 +5374,8 @@ static void hub_event(struct work_struct *work)
-> >       hub_dev = hub->intfdev;
-> >       intf = to_usb_interface(hub_dev);
-> >
-> > +     kcov_remote_start(kcov_remote_handle_usb(hdev->bus->busnum));
-> > +
-> >       dev_dbg(hub_dev, "state %d ports %d chg %04x evt %04x\n",
-> >                       hdev->state, hdev->maxchild,
-> >                       /* NOTE: expects max 15 ports... */
-> > @@ -5480,6 +5482,8 @@ static void hub_event(struct work_struct *work)
-> >       /* Balance the stuff in kick_hub_wq() and allow autosuspend */
-> >       usb_autopm_put_interface(intf);
-> >       kref_put(&hub->kref, hub_release);
-> > +
-> > +     kcov_remote_stop();
-> >  }
-> >
-> >  static const struct usb_device_id hub_id_table[] = {
-> > diff --git a/include/linux/kcov.h b/include/linux/kcov.h
-> > index 702672d98d35..38a47e0b67c2 100644
-> > --- a/include/linux/kcov.h
-> > +++ b/include/linux/kcov.h
-> > @@ -30,6 +30,7 @@ void kcov_task_exit(struct task_struct *t);
-> >  /*
-> >   * Reserved handle ranges:
-> >   * 0000000000000000 - 0000ffffffffffff : common handles
-> > + * 0001000000000000 - 0001ffffffffffff : USB subsystem handles
->
-> So how many bits are you going to have for any in-kernel tasks?  Aren't
-> you going to run out quickly?
+On Thu, 17 Oct 2019, Piergiorgio Sartor wrote:
 
-With these patches we only collect coverage from hub_event threads,
-and we need one ID per USB bus, the number of which is quite limited.
-But then we might want to collect coverage from other parts of the USB
-subsystem, so we might need more IDs. I don't expect the number of
-different subsystem from which we want to collect coverage to be
-large, so the idea here is to use 2 bytes of an ID to denote the
-subsystem, and the other 6 to denote different coverage collection
-sections within it.
+> > Here is one more thing you can try.  I have no idea whether it will 
+> > make any difference, but the Changelog entry for the patch you 
+> > identified suggests that it might help.
+> > 
+> > Alan Stern
+> > 
+> > 
+> > 
+> > Index: usb-devel/drivers/usb/storage/scsiglue.c
+> > ===================================================================
+> > --- usb-devel.orig/drivers/usb/storage/scsiglue.c
+> > +++ usb-devel/drivers/usb/storage/scsiglue.c
+> > @@ -68,7 +68,6 @@ static const char* host_info(struct Scsi
+> >  static int slave_alloc (struct scsi_device *sdev)
+> >  {
+> >  	struct us_data *us = host_to_us(sdev->host);
+> > -	int maxp;
+> >  
+> >  	/*
+> >  	 * Set the INQUIRY transfer length to 36.  We don't use any of
+> > @@ -78,15 +77,6 @@ static int slave_alloc (struct scsi_devi
+> >  	sdev->inquiry_len = 36;
+> >  
+> >  	/*
+> > -	 * USB has unusual scatter-gather requirements: the length of each
+> > -	 * scatterlist element except the last must be divisible by the
+> > -	 * Bulk maxpacket value.  Fortunately this value is always a
+> > -	 * power of 2.  Inform the block layer about this requirement.
+> > -	 */
+> > -	maxp = usb_maxpacket(us->pusb_dev, us->recv_bulk_pipe, 0);
+> > -	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
+> > -
+> > -	/*
+> >  	 * Some host controllers may have alignment requirements.
+> >  	 * We'll play it safe by requiring 512-byte alignment always.
+> >  	 */
+> 
+> Hi,
+> 
+> I tested the patch.
+> 
+> Assumming I did everything properly, add patch,
+> test, issue not showing up, remove patch, re-test,
+> issue present.
+> 
+> It seems this patch you provide solves the issue.
+> 
+> Thanks a lot for the support and the solution.
+> 
+> I guess now this patch will be integrated into
+> mainline sometimes.
+> Please let me know, in this thread or directly, in
+> which kernel it will be available.
 
-But overall, which encoding scheme to use here is a good question.
-Ideas are welcome.
+I'm busy for the next few days, but I will submit the patch next week.
 
-> >   */
-> >  void kcov_remote_start(u64 handle);
-> >  void kcov_remote_stop(void);
-> > diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
-> > index 46f78f716ca9..45c9ae59cebc 100644
-> > --- a/include/uapi/linux/kcov.h
-> > +++ b/include/uapi/linux/kcov.h
-> > @@ -43,4 +43,11 @@ enum {
-> >  #define KCOV_CMP_SIZE(n)        ((n) << 1)
-> >  #define KCOV_CMP_MASK           KCOV_CMP_SIZE(3)
-> >
-> > +#define KCOV_REMOTE_HANDLE_USB  0x0001000000000000ull
-> > +
-> > +static inline __u64 kcov_remote_handle_usb(unsigned int bus)
-> > +{
-> > +     return KCOV_REMOTE_HANDLE_USB + (__u64)bus;
-> > +}
->
-> Why is this function in a uapi .h file?  What userspace code would call
-> this?
+> Thanks again, it would be for me impossible to
+> solve without your support,
 
-A userspace process that wants to collect coverage from USB bus # N
-needs to pass kcov_remote_handle_usb(N) into KCOV_REMOTE_ENABLE ioctl.
+You're welcome.
+
+Alan Stern
+
