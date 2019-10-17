@@ -2,180 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4BFBDA5A8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 08:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C415DDA5D8
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 08:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406290AbfJQGdI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 17 Oct 2019 02:33:08 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:60612 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404882AbfJQGdH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 02:33:07 -0400
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iKzLN-0002hb-Ug
-        for linux-usb@vger.kernel.org; Thu, 17 Oct 2019 06:33:06 +0000
-Received: by mail-pf1-f200.google.com with SMTP id p2so941366pff.4
-        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2019 23:33:05 -0700 (PDT)
+        id S2407851AbfJQG5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 02:57:39 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:32902 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392691AbfJQG5j (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 02:57:39 -0400
+Received: by mail-oi1-f196.google.com with SMTP id a15so1272803oic.0;
+        Wed, 16 Oct 2019 23:57:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=tGYrofeMsi6WLwI3Dz7U750VAtFDzMl2rD6wl365C0A=;
-        b=SwS3/3uAGNFSDgJu0OvlJRlYAKerr48ANS/GIIK5aq2MyIgT2dWjNfhW6W30pm6zgW
-         E+qFwVEqeVBWMOIh3bXfuTprqVKD4NTkjew/EAF3aZwBqipoTJ9HyqyeQ1/YHhX7YREY
-         2+8jndHswXQdgb4FsvKdyejzAgOZg4HlNzxd6iM2tf0bYu1wdp6JdJBeb/MaI3w45+EK
-         +McIxmcKxXxas3K26/oyceMRgfmsiU+qo8TnanG2KutPrmQxDNP2C/yFftbIMYE7HXoW
-         IWWRf7/XCYoJ2TUir18XcOhsHBwp78KWlXIfv5B7uWKWJnoRYsbtwLqakFFRDypmflWp
-         kbOg==
-X-Gm-Message-State: APjAAAVe/2U/so6uwV2h1kGaSy55Uk8WpVtJ4n/TzCia0woDUh+kqyte
-        Uf92FptV+l/6s5aiFyhaYdpptz/BbCGu9SdnEyTzqpCoZ71QzmmL2G6xlAkqzsM2euLH+8vMK90
-        uqK4DM6uFo+MJXa339P+YtkFXjUsPS/uCywYVcQ==
-X-Received: by 2002:a17:902:bb92:: with SMTP id m18mr2192511pls.297.1571293984461;
-        Wed, 16 Oct 2019 23:33:04 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy8pPXJFTb7A7IxyfW6KqXT1cRak4W/djJ0ZN5Y4ypeLdO1IytJeV/F+rOeyHPn748rdoUmXg==
-X-Received: by 2002:a17:902:bb92:: with SMTP id m18mr2192479pls.297.1571293983993;
-        Wed, 16 Oct 2019 23:33:03 -0700 (PDT)
-Received: from 2001-b011-380f-3c42-c02c-3cd8-f108-bd7e.dynamic-ip6.hinet.net (2001-b011-380f-3c42-c02c-3cd8-f108-bd7e.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:c02c:3cd8:f108:bd7e])
-        by smtp.gmail.com with ESMTPSA id a8sm1114282pff.5.2019.10.16.23.33.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 16 Oct 2019 23:33:02 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3601\))
-Subject: Re: [PATCH v3] usb: Add a new quirk to let buggy hub enable and
- disable LPM during suspend and resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <Pine.LNX.4.44L0.1910031503050.1797-100000@iolanthe.rowland.org>
-Date:   Thu, 17 Oct 2019 14:33:00 +0800
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <A6EC775D-CE42-4F34-9B87-478482EF683A@canonical.com>
-References: <Pine.LNX.4.44L0.1910031503050.1797-100000@iolanthe.rowland.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3601)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DpbexsAaJKGXtyeEN5Jk64plg1Z6QAlcAhFxTzBWpB0=;
+        b=naRJZscLNaz8RRrCMCCL8mkDxUYxseHyq6ogcswZh+/E7vSWPvhag8UtsdrdDjgyPl
+         AHhMfUh59TRuMLHEYjYs88In29hgmczsHNNJNKtqy17Z/cV2ZpDpCed6hBKKyy3PJ4Xj
+         BKEjmwv5GOA+0dqI0w9xz2utwTi3iAjXk5mEHOKc4PRWiJPZBVmFeVsvPAvsWLcnGqnh
+         IOBv3ZC2wZTgwnk2Dl5lUgDpBX7gd/rUn+cQVkIF5rGQ3/Rqy7Cjc71suLnQfp/2zRQJ
+         K+cH/E5n5uFnib8ZKPaoh7Wffh5oTcoXxvy8tSLatLAF4jTcK5BSEX1oqyqVwM/7/VkR
+         rCNg==
+X-Gm-Message-State: APjAAAWMZCC2YHHwdt2UvQmhHAphG4QMikRUkzDvfRlb3JA3JToEocUg
+        r+4GansHalsXAEYoxfGnkIM5pbIghKzFeP08uPSHQ9gp
+X-Google-Smtp-Source: APXvYqxGTAoSZtd+rRjTloaWngnXATMJw7NKpZEz+zg6U/MMfMCAOds74hz/UbHuy8M4x5XoparCCZdaSLj4Qh7pGv4=
+X-Received: by 2002:a54:4e89:: with SMTP id c9mr1775447oiy.148.1571295458039;
+ Wed, 16 Oct 2019 23:57:38 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
+ <20191016122656.3jpmes4rnz47u5wc@verge.net.au> <TYAPR01MB45440369B72F2C994CF8C85FD86D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYAPR01MB45440369B72F2C994CF8C85FD86D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 17 Oct 2019 08:57:26 +0200
+Message-ID: <CAMuHMdWsRDyUh0MzYNX=mQuuPem1NxArFOqXGVAba3TWGEXxWg@mail.gmail.com>
+Subject: Re: [PATCH] usb: renesas_usbhs: fix __le16 warnings
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Simon Horman <horms@verge.net.au>
+Cc:     "linux-kernel@lists.codethink.co.uk" 
+        <linux-kernel@lists.codethink.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Shimoda-san, Simon,
 
+On Thu, Oct 17, 2019 at 4:18 AM Yoshihiro Shimoda
+<yoshihiro.shimoda.uh@renesas.com> wrote:
+> > From: Simon Horman, Sent: Wednesday, October 16, 2019 9:27 PM
+> <snip>
+> > > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+> > > index 4c3de777ef6c..a3c30b609433 100644
+> > > --- a/drivers/usb/renesas_usbhs/common.c
+> > > +++ b/drivers/usb/renesas_usbhs/common.c
+> > > @@ -162,17 +162,17 @@ void usbhs_usbreq_get_val(struct usbhs_priv *priv, struct usb_ctrlrequest *req)
+> > >     req->bRequest           = (val >> 8) & 0xFF;
+> > >     req->bRequestType       = (val >> 0) & 0xFF;
+> > >
+> > > -   req->wValue     = usbhs_read(priv, USBVAL);
+> > > -   req->wIndex     = usbhs_read(priv, USBINDX);
+> > > -   req->wLength    = usbhs_read(priv, USBLENG);
+> > > +   req->wValue     = cpu_to_le16(usbhs_read(priv, USBVAL));
+> > > +   req->wIndex     = cpu_to_le16(usbhs_read(priv, USBINDX));
+> > > +   req->wLength    = cpu_to_le16(usbhs_read(priv, USBLENG));
+> >
+> > usbhs_read is backed by readl which performs
+> > a le->cpu conversion. Rather than have a double conversion
+> > perhaps it would be nicer to introduce usbhs_read_le.
+> > Likewise for write.
+>
+> I'm afraid but, I could not understand these comments.
+> At the moment, the usbhs_{read,write}() call io{read,write}16(),
+> not {read,write}l().
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/renesas_usbhs/common.c?h=v5.4-rc3#n62
 
-> On Oct 4, 2019, at 03:04, Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> On Fri, 4 Oct 2019, Kai-Heng Feng wrote:
-> 
->> Dell WD15 dock has a topology like this:
->> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
->>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->> 
->> Their IDs:
->> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
->> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
->> 
->> Ethernet cannot be detected after plugging ethernet cable to the dock,
->> the hub and roothub get runtime resumed and runtime suspended
->> immediately:
->> ...
->> [  433.315169] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
->> [  433.315204] usb usb4: usb auto-resume
->> [  433.315226] hub 4-0:1.0: hub_resume
->> [  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
->> [  433.315264] usb usb4-port1: status 0343 change 0001
->> [  433.315279] xhci_hcd 0000:3a:00.0: clear port1 connect change, portsc: 0x10002e2
->> [  433.315293] xhci_hcd 0000:3a:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
->> [  433.317012] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->> [  433.422282] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
->> 
->> At this point the SMSC hub (usb 4-1) enters into compliance mode
->> (USB_SS_PORT_LS_COMP_MOD), and USB core tries to warm-reset it,
->> 
->> [  433.422307] usb usb4-port1: do warm reset
->> [  433.422311] usb 4-1: device reset not allowed in state 8
->> [  433.422339] hub 4-0:1.0: state 7 ports 2 chg 0002 evt 0000
->> [  433.422346] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
->> [  433.422356] usb usb4-port1: do warm reset
->> [  433.422358] usb 4-1: device reset not allowed in state 8
->> [  433.422428] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 0 status  = 0xf0002e2
->> [  433.422455] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 1 status  = 0xe0002a0
->> [  433.422465] hub 4-0:1.0: hub_suspend
->> [  433.422475] usb usb4: bus auto-suspend, wakeup 1
->> [  433.426161] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->> [  433.466209] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.510204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.554051] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.598235] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.642154] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.686204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.730205] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.774203] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.818207] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.862040] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->> [  433.862053] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->> [  433.862077] xhci_hcd 0000:3a:00.0: xhci_suspend: stopping port polling.
->> [  433.862096] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
->> [  433.862312] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_suspend: 0
->> [  433.862445] xhci_hcd 0000:3a:00.0: PME# enabled
->> [  433.902376] xhci_hcd 0000:3a:00.0: restoring config space at offset 0xc (was 0x0, writing 0x20)
->> [  433.902395] xhci_hcd 0000:3a:00.0: restoring config space at offset 0x4 (was 0x100000, writing 0x100403)
->> [  433.902490] xhci_hcd 0000:3a:00.0: PME# disabled
->> [  433.902504] xhci_hcd 0000:3a:00.0: enabling bus mastering
->> [  433.902547] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
->> [  433.902649] pcieport 0000:00:1b.0: PME: Spurious native interrupt!
->> [  433.902839] xhci_hcd 0000:3a:00.0: Port change event, 4-1, id 3, portsc: 0xb0202e2
->> [  433.902842] xhci_hcd 0000:3a:00.0: resume root hub
->> [  433.902845] xhci_hcd 0000:3a:00.0: handle_port_status: starting port polling.
->> [  433.902877] xhci_hcd 0000:3a:00.0: xhci_resume: starting port polling.
->> [  433.902889] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->> [  433.902891] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
->> [  433.902919] usb usb4: usb wakeup-resume
->> [  433.902942] usb usb4: usb auto-resume
->> [  433.902966] hub 4-0:1.0: hub_resume
->> ...
->> 
->> However the warm-reset never success, the asserted PCI PME keeps the
->> runtime-resume, warm-reset and runtime-suspend loop which never bring it back
->> and causing spurious interrupts floods.
->> 
->> After some trial and errors, the issue goes away if LPM on the SMSC hub
->> is disabled. Digging further, enabling and disabling LPM during runtime
->> resume and runtime suspend respectively can solve the issue.
->> 
->> So bring back the old LPM behavior as a quirk and use it for the SMSC
->> hub to solve the issue.
->> 
->> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->> v3:
->> - Add forgotten patch revision changelog.
->> 
->> v2:
->> - Explained by Alan, the hub should properly handle U3 -> U0 transition.
->>  So use a quirk to target this buggy device only.
->> 
->> Documentation/admin-guide/kernel-parameters.txt |  3 +++
->> drivers/usb/core/hub.c                          | 15 +++++++++++++++
->> drivers/usb/core/quirks.c                       |  6 ++++++
->> include/linux/usb/quirks.h                      |  3 +++
->> 4 files changed, 27 insertions(+)
-> 
-> Mathias may want to try something different to fix this problem.  But
-> if he doesn't, this patch is okay with me.
-> 
-> Acked-by: Alan Stern <stern@rowland.harvard.edu>
+ioread16() and readw() don't do byteswapping on ARM, as ARM is
+little-endian. Likewise, cpu_to_le16() is a no-op on ARM.
 
-If there's no objection, can we merge this patch?
+Double swapping would matter only on a big-endian platform, and could
+indeed be avoided by introducing usbhs_read_le*() functions that are
+just wrappers around __raw_read16() on big-endian.
+However, until the Renesas USBHS IP core ends up on a big-endian
+platform, it's not worth doing that, IMHO.
 
-Kai-Heng. 
+> > >  }
+> > >
+> > >  void usbhs_usbreq_set_val(struct usbhs_priv *priv, struct usb_ctrlrequest *req)
+> > >  {
+> > >     usbhs_write(priv, USBREQ,  (req->bRequest << 8) | req->bRequestType);
+> > > -   usbhs_write(priv, USBVAL,  req->wValue);
+> > > -   usbhs_write(priv, USBINDX, req->wIndex);
+> > > -   usbhs_write(priv, USBLENG, req->wLength);
+> > > +   usbhs_write(priv, USBVAL,  le16_to_cpu(req->wValue));
+> > > +   usbhs_write(priv, USBINDX, le16_to_cpu(req->wIndex));
+> > > +   usbhs_write(priv, USBLENG, le16_to_cpu(req->wLength));
+> > >
+> > >     usbhs_bset(priv, DCPCTR, SUREQ, SUREQ);
+> > >  }
 
-> 
-> Alan Stern
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
