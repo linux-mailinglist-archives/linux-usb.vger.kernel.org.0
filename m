@@ -2,147 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F618DA38D
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 04:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B90DA3AB
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 04:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437557AbfJQCSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Oct 2019 22:18:51 -0400
-Received: from mail-eopbgr1410111.outbound.protection.outlook.com ([40.107.141.111]:43403
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729268AbfJQCSv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Oct 2019 22:18:51 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VTvfHNFKZ6slUgRa/SgPDCP900u2bxZC7uSuA+utt+ORc4bjclKveRaB7KjrinVim0m+MV9rIf7r4KjRbgpbZfWLBgTA6leJ82/7LVaQ7sFpktzqUswTuzQ4GDIRbvRO64odKRlmzPgTOJckdr9QUpSAt8L2Kr/QI41Nv+MIflOTRnc93dU9OxMeBV9IlV2mtPUuVg9sfhozzubvqIG1OC3Zljk3zLWgzBYV5GMp8BqOcwKzVAafM5v06svKWT1k0GFjOmVRTVzbQIm9K4T/gqmYs6nXMP5/uaevK8MD4P2Hsra4Jsp2ENKqBQqklO2uT5gz43wVIePsSiTcLUPvTA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n7K8JUzNCsIlrCLSWrn6zcIqZ/rsDhaLTwEYuZsx+sc=;
- b=oLxXuYy1HO3ORPzMHBXAzfOk3/C+QNMv97eYcUvsa2ATcH+Q8hlOwcP3FRRJ8ij/UfvTBoYd7GxFCR4lPrxmmQoF5UkM6FEdK7CnPo+OMC9d9sN7TW3hV9aaKunmI/RZCUpcsvBRK1ZBut6ECIG9w7f0/vp2tu2CB+TKjBFbz9ALBOKxKeckvPuxLClWk3+RvAGNV2iKLMagNfOaTCr8AkRe5V4z4LY0pq7BRXgaoWLXg2QgEplx9M6yMpd5GT2yQEE10l1kFjDKqBIvfD1YRrohumNlj8543GnXL7Qjod2yrRuY1a3cqN7rWnlD7oaP22Wcwvvqz5c/XGuOepznzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S2404268AbfJQCZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Oct 2019 22:25:19 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41758 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbfJQCZT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Oct 2019 22:25:19 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t3so375080pga.8
+        for <linux-usb@vger.kernel.org>; Wed, 16 Oct 2019 19:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n7K8JUzNCsIlrCLSWrn6zcIqZ/rsDhaLTwEYuZsx+sc=;
- b=jc4afxqYno/wz8o64LlmGSTPgESyUymMCBjoMKOU4M/jebOYmVKkxwjYjV2WCUxiGsvAdkXNgije05JCo+NCdgwj++hDCxRsn3Dz+/lZnwqxtGdWUROkH4rp0lcqqAAu7/chjJyJsGNohSPdmNkO/WaCr3LPkIJzl8YNR8BIcJ4=
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com (20.179.175.203) by
- TYAPR01MB3664.jpnprd01.prod.outlook.com (20.178.137.81) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.18; Thu, 17 Oct 2019 02:18:47 +0000
-Received: from TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::548:32de:c810:1947]) by TYAPR01MB4544.jpnprd01.prod.outlook.com
- ([fe80::548:32de:c810:1947%4]) with mapi id 15.20.2347.023; Thu, 17 Oct 2019
- 02:18:47 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Simon Horman <horms@verge.net.au>
-CC:     "linux-kernel@lists.codethink.co.uk" 
-        <linux-kernel@lists.codethink.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-Subject: RE: [PATCH] usb: renesas_usbhs: fix __le16 warnings
-Thread-Topic: [PATCH] usb: renesas_usbhs: fix __le16 warnings
-Thread-Index: AQHVg3BX7WaejZzh5Uuo1PfP1tSBgKddMx4AgADnaMA=
-Date:   Thu, 17 Oct 2019 02:18:47 +0000
-Message-ID: <TYAPR01MB45440369B72F2C994CF8C85FD86D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-References: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
- <20191016122656.3jpmes4rnz47u5wc@verge.net.au>
-In-Reply-To: <20191016122656.3jpmes4rnz47u5wc@verge.net.au>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=yoshihiro.shimoda.uh@renesas.com; 
-x-originating-ip: [150.249.235.54]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d8dded65-8466-47ce-f294-08d752a8577d
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: TYAPR01MB3664:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <TYAPR01MB366448B5893101792AC4CA88D86D0@TYAPR01MB3664.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7219;
-x-forefront-prvs: 01930B2BA8
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(376002)(396003)(366004)(39860400002)(346002)(189003)(199004)(256004)(99286004)(6306002)(102836004)(4326008)(33656002)(76176011)(2906002)(6436002)(478600001)(9686003)(305945005)(66066001)(966005)(7736002)(229853002)(86362001)(7696005)(55016002)(25786009)(71190400001)(14454004)(74316002)(6246003)(476003)(52536014)(6506007)(486006)(71200400001)(11346002)(446003)(6916009)(6116002)(3846002)(66556008)(66946007)(316002)(66476007)(8676002)(8936002)(66446008)(64756008)(76116006)(81166006)(81156014)(186003)(54906003)(5660300002)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:TYAPR01MB3664;H:TYAPR01MB4544.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /QukEE4bZ1lNoCqT0ULIykjMQ5Ncusx1G8vYYWIhA2uPFjkkC2eK/NuIscagx5wJkZp/g6UCk6YRqwRL7kxl63IDtSGqo3G88k83hzcmj0C+c0XcQmsT42TUYIjpk8BSOfSEqbwDs9lYJB8I1g2eU+9lmiSNpfblqpXyN1YYWSKKjv6rdv8ZfJyqfCyc02dP8CSmjmVfULoN05k8mTI5xxedcWR7h+6ksOgx9JMVk7TTgXpmjkTv8OVq37eo2jDzicY4ltm8qKUweK9nztxM4K+MVRksdyzVkzpXtmXolCKyeQB6F60zPq5ZnYIOfkgfPIbFOUiJX7qhSOvBP5pXDVQLGQztG5lhfk9Q6heJ+nIlBA9++c8cTKl0rE2TqnVM8YYc/Njl1nzkk6DfJZ3xxlNGMeJXROvvJBxa7jcQ2Dl/J1ypo1v45OmyFc3qPQySnEQc/ElicXm4DvC9AaxNcQ==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8dded65-8466-47ce-f294-08d752a8577d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2019 02:18:47.0600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: umWYp1oHE2jyPWmndTpf82Eq4TlO3XjfPiTgRkcP1M+jNn3ijMsUJxv2a3mqHGXcHtQUixFMTdGRf+HzbhWWbNw+pVswzHc9SlOPngTfOrhDi71fndYetNop06+OmHBu
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB3664
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=HiTb1lGMW2hDjeX1w1W4dB5NOv9bAsByUoSi2ucDFlY=;
+        b=ix9tACCneSBCKeIVNoba8KcFLtiMSmMN5UAPagEhhHzVBxigG2t4ljoQortWb3UqTC
+         zbnyOLLlbshpWTbusWPen5jp0Rcv/sTUR/lWn5W+EHUqLZT3ToEV45+cxcbFF2qDVRpA
+         /cDIIfUnpVnmjQYqh9gcpOn/UIX3YWXI2LeOJKcvGzK+dilVMr7Ip30uPws1k1oBE/oO
+         slSY9yg9JxFNmdM3riB5SHsUzK4HRNkH6C7yx1byWApO01Piru1a95KJAobjgQCWqws+
+         ps/3qvrDRktTv9B+HsW1sNqmViiY3FvOtzxgz+F8wKKRz9HpHxHdVli85DGaFIS382FN
+         Q+2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=HiTb1lGMW2hDjeX1w1W4dB5NOv9bAsByUoSi2ucDFlY=;
+        b=qSoalYN5fCrBxpPwu2lj9R+zkbx0lbUH2+214VaaghyGAtbfrBtgh8eOMTSERclhjM
+         cBmltq1MLdiFLPqKLVRgD8ILGkMTBIMzSzXx1K0IMgfJ9ixIAGxzPXksILSUYQ/2dphw
+         noFKcPYaPtr0xjzLCCSUZu95uYUZDBejddMY1Xi66HFOwF0cpztObgFQvaeh4cUTdh/0
+         qTl1eN89Apm5a6u+PV1IsHCywy7qgtzFOTQwLC1PXxzzLHPU1hH80nvx/e2OzdFb80Bb
+         852uuhm1PYJ8spzs52nuvSFF4eBFlxQjO42bJUFGPwO+Y4vNr23Q4JQ/QF1FdA7hwYFf
+         fwsQ==
+X-Gm-Message-State: APjAAAW4PFZAHy+7PqFW0D1Hz5eUwcWizOGQnctgeoFNHBKg2RKCXZHV
+        tdmxLGQMgLPoB3ajRpcpKl8=
+X-Google-Smtp-Source: APXvYqzcPEZJa6fpVkMD6j9SWHln2Zp6Ayeu10YNeEsGw4iTMMzSMZEV8Ff720YGkU7KPu/UBiiXNw==
+X-Received: by 2002:a63:f904:: with SMTP id h4mr1449932pgi.80.1571279118501;
+        Wed, 16 Oct 2019 19:25:18 -0700 (PDT)
+Received: from goorm.ap-northeast-2.compute.internal (ec2-52-78-194-131.ap-northeast-2.compute.amazonaws.com. [52.78.194.131])
+        by smtp.gmail.com with ESMTPSA id k9sm449980pfk.72.2019.10.16.19.25.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2019 19:25:17 -0700 (PDT)
+From:   GwanYeong Kim <gy741.kim@gmail.com>
+To:     valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org, allison@lohutok.net,
+        opensource@jilayne.com, changcheng.liu@intel.com,
+        tglx@linutronix.de, linux-usb@vger.kernel.org,
+        GwanYeong Kim <gy741.kim@gmail.com>
+Subject: [PATCH v2] usbip: tools: Fix read_usb_vudc_device() error path handling
+Date:   Thu, 17 Oct 2019 02:25:12 +0000
+Message-Id: <20191017022512.3809-1-gy741.kim@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191016131832.GC56859@kroah.com>
+References: <20191016131832.GC56859@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Simon-san,
+cannot be less than 0 - fread() returns 0 on error.
 
-> From: Simon Horman, Sent: Wednesday, October 16, 2019 9:27 PM
-<snip>
-> > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_u=
-sbhs/common.c
-> > index 4c3de777ef6c..a3c30b609433 100644
-> > --- a/drivers/usb/renesas_usbhs/common.c
-> > +++ b/drivers/usb/renesas_usbhs/common.c
-> > @@ -162,17 +162,17 @@ void usbhs_usbreq_get_val(struct usbhs_priv *priv=
-, struct usb_ctrlrequest *req)
-> >  	req->bRequest		=3D (val >> 8) & 0xFF;
-> >  	req->bRequestType	=3D (val >> 0) & 0xFF;
-> >
-> > -	req->wValue	=3D usbhs_read(priv, USBVAL);
-> > -	req->wIndex	=3D usbhs_read(priv, USBINDX);
-> > -	req->wLength	=3D usbhs_read(priv, USBLENG);
-> > +	req->wValue	=3D cpu_to_le16(usbhs_read(priv, USBVAL));
-> > +	req->wIndex	=3D cpu_to_le16(usbhs_read(priv, USBINDX));
-> > +	req->wLength	=3D cpu_to_le16(usbhs_read(priv, USBLENG));
->=20
-> usbhs_read is backed by readl which performs
-> a le->cpu conversion. Rather than have a double conversion
-> perhaps it would be nicer to introduce usbhs_read_le.
-> Likewise for write.
+Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
+---
+ tools/usb/usbip/libsrc/usbip_device_driver.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-I'm afraid but, I could not understand these comments.
-At the moment, the usbhs_{read,write}() call io{read,write}16(),
-not {read,write}l().
+diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
+index 051d7d3f443b..959bb29d0477 100644
+--- a/tools/usb/usbip/libsrc/usbip_device_driver.c
++++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
+@@ -69,7 +69,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+ 	FILE *fd = NULL;
+ 	struct udev_device *plat;
+ 	const char *speed;
+-	int ret = 0;
++	size_t ret = 0;
+ 
+ 	plat = udev_device_get_parent(sdev);
+ 	path = udev_device_get_syspath(plat);
+@@ -79,7 +79,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+ 	if (!fd)
+ 		return -1;
+ 	ret = fread((char *) &descr, sizeof(descr), 1, fd);
+-	if (ret < 0)
++	if (ret != 1)
+ 		goto err;
+ 	fclose(fd);
+ 
+-- 
+2.17.1
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
-vers/usb/renesas_usbhs/common.c?h=3Dv5.4-rc3#n62
-
-Best regards,
-Yoshihiro Shimoda
-
->=20
-> >  }
-> >
-> >  void usbhs_usbreq_set_val(struct usbhs_priv *priv, struct usb_ctrlrequ=
-est *req)
-> >  {
-> >  	usbhs_write(priv, USBREQ,  (req->bRequest << 8) | req->bRequestType);
-> > -	usbhs_write(priv, USBVAL,  req->wValue);
-> > -	usbhs_write(priv, USBINDX, req->wIndex);
-> > -	usbhs_write(priv, USBLENG, req->wLength);
-> > +	usbhs_write(priv, USBVAL,  le16_to_cpu(req->wValue));
-> > +	usbhs_write(priv, USBINDX, le16_to_cpu(req->wIndex));
-> > +	usbhs_write(priv, USBLENG, le16_to_cpu(req->wLength));
-> >
-> >  	usbhs_bset(priv, DCPCTR, SUREQ, SUREQ);
-> >  }
-> > --
-> > 2.23.0
-> >
