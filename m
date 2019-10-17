@@ -2,141 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93441DB274
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 18:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF9FDB328
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 19:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408163AbfJQQel (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 12:34:41 -0400
-Received: from muru.com ([72.249.23.125]:37814 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730640AbfJQQel (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Oct 2019 12:34:41 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id C458C804F;
-        Thu, 17 Oct 2019 16:35:10 +0000 (UTC)
-Date:   Thu, 17 Oct 2019 09:34:33 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     min.guo@mediatek.com
-Cc:     Bin Liu <b-liu@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        id S2440617AbfJQRTm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 13:19:42 -0400
+Received: from imap1.codethink.co.uk ([176.9.8.82]:36910 "EHLO
+        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728639AbfJQRTm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 13:19:42 -0400
+Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
+        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
+        id 1iL9R4-0005Yp-RG; Thu, 17 Oct 2019 18:19:38 +0100
+Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.2)
+        (envelope-from <ben@rainbowdash.codethink.co.uk>)
+        id 1iL9R4-0002IK-Cr; Thu, 17 Oct 2019 18:19:38 +0100
+From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+To:     linux-kernel@lists.codethink.co.uk
+Cc:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, hdegoede@redhat.com,
-        Yonglong Wu <yonglong.wu@mediatek.com>
-Subject: Re: [PATCH v8 6/6] usb: musb: Add support for MediaTek musb
- controller
-Message-ID: <20191017163433.GN5610@atomide.com>
-References: <20191017094126.29045-1-min.guo@mediatek.com>
- <20191017094126.29045-7-min.guo@mediatek.com>
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: host: oxu210hp-hcd: fix __iomem annotations
+Date:   Thu, 17 Oct 2019 18:19:34 +0100
+Message-Id: <20191017171934.8771-1-ben.dooks@codethink.co.uk>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191017094126.29045-7-min.guo@mediatek.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+There are a number of places in the driver where it fails
+to maintain __iomem on pointers used to access registers
+so fixup the warnings by adding these in the appropriate
+places.
 
-Just few comments for future changes that might help below.
+Examples of the sparse warnings fixed:
 
-* min.guo@mediatek.com <min.guo@mediatek.com> [191017 09:42]:
-> --- /dev/null
-> +++ b/drivers/usb/musb/mediatek.c
-> +static int musb_usb_role_sx_set(struct device *dev, enum usb_role role)
-> +{
-> +	struct mtk_glue *glue = dev_get_drvdata(dev);
-> +	struct musb *musb = glue->musb;
-> +	u8 devctl = readb(musb->mregs + MUSB_DEVCTL);
-> +	enum usb_role new_role;
-> +
-> +	if (role == glue->role)
-> +		return 0;
-> +
-> +	switch (role) {
-> +	case USB_ROLE_HOST:
-> +		musb->xceiv->otg->state = OTG_STATE_A_WAIT_VRISE;
-> +		glue->phy_mode = PHY_MODE_USB_HOST;
-> +		new_role = USB_ROLE_HOST;
-> +		if (glue->role == USB_ROLE_NONE)
-> +			phy_power_on(glue->phy);
-> +
-> +		devctl |= MUSB_DEVCTL_SESSION;
-> +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
-> +		MUSB_HST_MODE(musb);
-> +		break;
-> +	case USB_ROLE_DEVICE:
-> +		musb->xceiv->otg->state = OTG_STATE_B_IDLE;
-> +		glue->phy_mode = PHY_MODE_USB_DEVICE;
-> +		new_role = USB_ROLE_DEVICE;
-> +		devctl &= ~MUSB_DEVCTL_SESSION;
-> +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
-> +		if (glue->role == USB_ROLE_NONE)
-> +			phy_power_on(glue->phy);
-> +
-> +		MUSB_DEV_MODE(musb);
-> +		break;
-> +	case USB_ROLE_NONE:
-> +		glue->phy_mode = PHY_MODE_USB_OTG;
-> +		new_role = USB_ROLE_NONE;
-> +		devctl &= ~MUSB_DEVCTL_SESSION;
-> +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
-> +		if (glue->role != USB_ROLE_NONE)
-> +			phy_power_off(glue->phy);
-> +
-> +		break;
-> +	default:
-> +		dev_err(glue->dev, "Invalid State\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	glue->role = new_role;
-> +	phy_set_mode(glue->phy, glue->phy_mode);
-> +
-> +	return 0;
-> +}
+drivers/usb/host/oxu210hp-hcd.c:686:9: warning: incorrect type in argument 2 (different address spaces)
+drivers/usb/host/oxu210hp-hcd.c:686:9:    expected void volatile [noderef] <asn:2> *addr
+drivers/usb/host/oxu210hp-hcd.c:686:9:    got void *
+drivers/usb/host/oxu210hp-hcd.c:686:9: warning: incorrect type in argument 2 (different address spaces)
+drivers/usb/host/oxu210hp-hcd.c:686:9:    expected void volatile [noderef] <asn:2> *addr
+drivers/usb/host/oxu210hp-hcd.c:686:9:    got void *
+drivers/usb/host/oxu210hp-hcd.c:686:9: warning: incorrect type in argument 2 (different address spaces)
+drivers/usb/host/oxu210hp-hcd.c:686:9:    expected void volatile [noderef] <asn:2> *addr
+drivers/usb/host/oxu210hp-hcd.c:686:9:    got void *
+drivers/usb/host/oxu210hp-hcd.c:681:16: warning: incorrect type in argument 1 (different address spaces)
+drivers/usb/host/oxu210hp-hcd.c:681:16:    expected void const volatile [noderef] <asn:2> *addr
+drivers/usb/host/oxu210hp-hcd.c:681:16:    got void *
 
-For the role change, I recently posted a patch "[PATCH 4/7] usb: musb:
-Add musb_set_host and peripheral and use them for omap2430". That
-should work for you looking at the code above, so later on you might
-want to change to use that. Probably best done as a follow-up patch
-to avoid adding extra dependencies to your series.
+Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+---
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+---
+ drivers/usb/host/oxu210hp-hcd.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-Please also note that musb core attempts to do things automagically
-on it's own. So trying to force mode in general does not work reliably.
-This is because VBUS may not yet have risen for example.
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index e67242e437ed..fe09b8626329 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -676,12 +676,12 @@ static int oxu_hub_control(struct usb_hcd *hcd,
+  */
+ 
+ /* Low level read/write registers functions */
+-static inline u32 oxu_readl(void *base, u32 reg)
++static inline u32 oxu_readl(void __iomem *base, u32 reg)
+ {
+ 	return readl(base + reg);
+ }
+ 
+-static inline void oxu_writel(void *base, u32 reg, u32 val)
++static inline void oxu_writel(void __iomem *base, u32 reg, u32 val)
+ {
+ 	writel(val, base + reg);
+ }
+@@ -4063,7 +4063,7 @@ static const struct hc_driver oxu_hc_driver = {
+  * Module stuff
+  */
+ 
+-static void oxu_configuration(struct platform_device *pdev, void *base)
++static void oxu_configuration(struct platform_device *pdev, void __iomem *base)
+ {
+ 	u32 tmp;
+ 
+@@ -4093,7 +4093,7 @@ static void oxu_configuration(struct platform_device *pdev, void *base)
+ 	oxu_writel(base, OXU_CHIPIRQEN_SET, OXU_USBSPHLPWUI | OXU_USBOTGLPWUI);
+ }
+ 
+-static int oxu_verify_id(struct platform_device *pdev, void *base)
++static int oxu_verify_id(struct platform_device *pdev, void __iomem *base)
+ {
+ 	u32 id;
+ 	static const char * const bo[] = {
+@@ -4121,7 +4121,7 @@ static int oxu_verify_id(struct platform_device *pdev, void *base)
+ static const struct hc_driver oxu_hc_driver;
+ static struct usb_hcd *oxu_create(struct platform_device *pdev,
+ 				unsigned long memstart, unsigned long memlen,
+-				void *base, int irq, int otg)
++				void __iomem *base, int irq, int otg)
+ {
+ 	struct device *dev = &pdev->dev;
+ 
+@@ -4158,7 +4158,7 @@ static struct usb_hcd *oxu_create(struct platform_device *pdev,
+ 
+ static int oxu_init(struct platform_device *pdev,
+ 				unsigned long memstart, unsigned long memlen,
+-				void *base, int irq)
++				void __iomem *base, int irq)
+ {
+ 	struct oxu_info *info = platform_get_drvdata(pdev);
+ 	struct usb_hcd *hcd;
+@@ -4207,7 +4207,7 @@ static int oxu_init(struct platform_device *pdev,
+ static int oxu_drv_probe(struct platform_device *pdev)
+ {
+ 	struct resource *res;
+-	void *base;
++	void __iomem *base;
+ 	unsigned long memstart, memlen;
+ 	int irq, ret;
+ 	struct oxu_info *info;
+-- 
+2.23.0
 
-The role change is best done based on the USB PHY as then usually
-musb has already switched to the right mode automatically :)
-
-> +static const struct musb_platform_ops mtk_musb_ops = {
-> +	.quirks = MUSB_DMA_INVENTRA,
-> +	.init = mtk_musb_init,
-> +	.get_toggle = mtk_musb_get_toggle,
-> +	.set_toggle = mtk_musb_set_toggle,
-> +	.exit = mtk_musb_exit,
-> +#ifdef CONFIG_USB_INVENTRA_DMA
-> +	.dma_init = musbhs_dma_controller_create_noirq,
-> +	.dma_exit = musbhs_dma_controller_destroy,
-> +#endif
-> +	.clearb = mtk_musb_clearb,
-> +	.clearw = mtk_musb_clearw,
-> +	.busctl_offset = mtk_musb_busctl_offset,
-> +	.set_mode = mtk_musb_set_mode,
-> +};
-
-So you may want to consider getting rid of .set_mode completely
-and rely on USB PHY calls instead.
-
-In some cases you need to use struct phy_companion for set_vbus
-depending how things are wired.
-
-Regards,
-
-Tony
