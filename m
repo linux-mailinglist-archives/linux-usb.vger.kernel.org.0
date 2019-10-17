@@ -2,120 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C6167DA6B7
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 09:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCCADA6D5
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 09:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438645AbfJQHs5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 03:48:57 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:2810 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390846AbfJQHs5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 03:48:57 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5da81ceb0000>; Thu, 17 Oct 2019 00:48:59 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 17 Oct 2019 00:48:56 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 17 Oct 2019 00:48:56 -0700
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 17 Oct
- 2019 07:48:56 +0000
-Received: from [10.19.108.113] (10.124.1.5) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 17 Oct
- 2019 07:48:54 +0000
-Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-To:     Rob Herring <robh@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        <linux-tegra@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-References: <20191009024343.30218-1-jckuo@nvidia.com>
- <20191009024343.30218-4-jckuo@nvidia.com> <20191009233900.GA9109@bogus>
- <20191014131752.GF422231@ulmo>
- <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <57692050-8284-a31f-71fd-7441823f3f2b@nvidia.com>
-Date:   Thu, 17 Oct 2019 15:48:52 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2408010AbfJQH6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 03:58:17 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:50140 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732594AbfJQH6Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 03:58:16 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9H7w560017305;
+        Thu, 17 Oct 2019 02:58:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571299085;
+        bh=PB8P3M92Qr+BuxLmFcudWc9V7nMyMBfC6vJnswIve6k=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=WAOLY0CqXUZDnoyC1csA83T49deZ5hd4eG12f+WZF94jFvUSVUOBs4xgUbk9l5sSq
+         T16gihJO88TT9GDyOaVobwU1KyT/4akLLQoFdyDm7JZRyM3dWa41xT/2M2DHsbVxAG
+         2+eM4Up+0t77bVga4ROmziYW9qTye9JxGpvjaY0c=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9H7w5Ke015520
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 17 Oct 2019 02:58:05 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 17
+ Oct 2019 02:57:57 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 17 Oct 2019 02:58:05 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9H7w2Gd102521;
+        Thu, 17 Oct 2019 02:58:03 -0500
+From:   Roger Quadros <rogerq@ti.com>
+To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
+        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
+Subject: [PATCH] usb: cdns3: Error out if USB_DR_MODE_UNKNOWN in cdns3_core_init_role()
+Date:   Thu, 17 Oct 2019 10:58:01 +0300
+Message-ID: <20191017075801.8734-1-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191016131808.GB56859@kroah.com>
+References: <20191016131808.GB56859@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571298539; bh=nIXBLya6bRUIuxRwlDLEPxSLP7joKF8reE7kSpNLl38=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=J0MP7wHYBCEfKBTs/ScBeIQ6GbtrNcqNyFlZAKn1s0n0c4EYsbdJuRD+0MGi4n//F
-         n9Osq2q7nMlc4FRJYZOTtgBCcnuipPXlXdLDPnwGzkuKogfOzKfb+y6so98Qxgkc0d
-         5BmEmxhdK/uCsV4LlzDWi/KvUFvkzNQwBXdoiQob/QyMc/mJJTv5zzpSVo9kqfFuRU
-         f8x0bsOkvM/8uBop1OCJwRSXu16r5aoN0bYR3YrIUeW0q6NkLdgNGkyd//MTZWXTWC
-         C/q4ANzzGy1cYWUQJT1j7OrmYEpOzgKcA6FC+axwM5svcij8jEIZJhNe3bnaZEimuj
-         qZ5PFweU7V7AQ==
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thierry, Hi Rob, Hi Kishon,
-Please let me know your thoughts of the below implementation.
+USB_DR_MODE_UNKNOWN should be treated as error as it is done in
+cdns3_drd_update_mode().
 
-1. Add a "bool disable_gen2" to "phy->attrs" structure.
-2. In _of_phy_get() of phy-core.c to add the follow to parse a generic property.
+Fixes: 02ffc26df96b ("usb: cdns3: fix cdns3_core_init_role()")
+Signed-off-by: Roger Quadros <rogerq@ti.com>
+---
+ drivers/usb/cdns3/core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-	phy->attrs.disable_gen2 = of_property_read_bool(args.np,
-							"usb-disable-gen2");
-3. In individual phy driver, to add SOC/PHY specific programming accordingly.
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 1109dc5a4c39..c2123ef8d8a3 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -166,7 +166,6 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+ 		goto err;
+ 
+ 	switch (cdns->dr_mode) {
+-	case USB_DR_MODE_UNKNOWN:
+ 	case USB_DR_MODE_OTG:
+ 		ret = cdns3_hw_role_switch(cdns);
+ 		if (ret)
+@@ -182,6 +181,9 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
+ 		if (ret)
+ 			goto err;
+ 		break;
++	default:
++		ret = -EINVAL;
++		goto err;
+ 	}
+ 
+ 	return ret;
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
-Thanks,
-JC
-
-On 10/14/19 9:40 PM, Rob Herring wrote:
-> On Mon, Oct 14, 2019 at 8:17 AM Thierry Reding <thierry.reding@gmail.com> wrote:
->>
->> On Wed, Oct 09, 2019 at 06:39:00PM -0500, Rob Herring wrote:
->>> On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
->>>> Extend the bindings to cover the set of features found in Tegra194.
->>>> Note that, technically, there are four more supplies connected to the
->>>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
->>>> , but the power sequencing requirements of Tegra194 require these to be
->>>> under the control of the PMIC.
->>>>
->>>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it is
->>>> possible for some platforms have long signal trace that could not
->>>> provide sufficient electrical environment for Gen 2 speed. To deal with
->>>> this, a new device node property "nvidia,disable-gen2" was added to
->>>> Tegra194 that be used to specifically disable Gen 2 speed for a
->>>> particular USB 3.0 port so that the port can be limited to Gen 1 speed
->>>> and avoid the instability.
->>>
->>> I suspect this may be a common issue and we should have a common
->>> property. Typically, this kind of property is in the controller though
->>> and supports multiple speed limits. See PCI bindings for inspiration.
->>
->> Given that support for gen 2 speeds is dependent on signal trace length,
->> it doesn't really make sense to restrict the whole controller to a given
->> speed if only the signal trace for a single port exceeds the limit for
->> which gen 2 would work.
->>
->> Also, the USB PHYs are in a different hardware block than the USB
->> controller, so this really is a property of the PHY block, not the USB
->> controller.
-> 
-> Okay, but still should be common for USB PHYs IMO.
-> 
-> Rob
-> 
