@@ -2,119 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C415DDA5D8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 08:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6167DA6B7
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 09:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407851AbfJQG5j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 02:57:39 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:32902 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392691AbfJQG5j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 02:57:39 -0400
-Received: by mail-oi1-f196.google.com with SMTP id a15so1272803oic.0;
-        Wed, 16 Oct 2019 23:57:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DpbexsAaJKGXtyeEN5Jk64plg1Z6QAlcAhFxTzBWpB0=;
-        b=naRJZscLNaz8RRrCMCCL8mkDxUYxseHyq6ogcswZh+/E7vSWPvhag8UtsdrdDjgyPl
-         AHhMfUh59TRuMLHEYjYs88In29hgmczsHNNJNKtqy17Z/cV2ZpDpCed6hBKKyy3PJ4Xj
-         BKEjmwv5GOA+0dqI0w9xz2utwTi3iAjXk5mEHOKc4PRWiJPZBVmFeVsvPAvsWLcnGqnh
-         IOBv3ZC2wZTgwnk2Dl5lUgDpBX7gd/rUn+cQVkIF5rGQ3/Rqy7Cjc71suLnQfp/2zRQJ
-         K+cH/E5n5uFnib8ZKPaoh7Wffh5oTcoXxvy8tSLatLAF4jTcK5BSEX1oqyqVwM/7/VkR
-         rCNg==
-X-Gm-Message-State: APjAAAWMZCC2YHHwdt2UvQmhHAphG4QMikRUkzDvfRlb3JA3JToEocUg
-        r+4GansHalsXAEYoxfGnkIM5pbIghKzFeP08uPSHQ9gp
-X-Google-Smtp-Source: APXvYqxGTAoSZtd+rRjTloaWngnXATMJw7NKpZEz+zg6U/MMfMCAOds74hz/UbHuy8M4x5XoparCCZdaSLj4Qh7pGv4=
-X-Received: by 2002:a54:4e89:: with SMTP id c9mr1775447oiy.148.1571295458039;
- Wed, 16 Oct 2019 23:57:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191015155044.11858-1-ben.dooks@codethink.co.uk>
- <20191016122656.3jpmes4rnz47u5wc@verge.net.au> <TYAPR01MB45440369B72F2C994CF8C85FD86D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-In-Reply-To: <TYAPR01MB45440369B72F2C994CF8C85FD86D0@TYAPR01MB4544.jpnprd01.prod.outlook.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 17 Oct 2019 08:57:26 +0200
-Message-ID: <CAMuHMdWsRDyUh0MzYNX=mQuuPem1NxArFOqXGVAba3TWGEXxWg@mail.gmail.com>
-Subject: Re: [PATCH] usb: renesas_usbhs: fix __le16 warnings
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Simon Horman <horms@verge.net.au>
-Cc:     "linux-kernel@lists.codethink.co.uk" 
-        <linux-kernel@lists.codethink.co.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S2438645AbfJQHs5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 03:48:57 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:2810 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390846AbfJQHs5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 03:48:57 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5da81ceb0000>; Thu, 17 Oct 2019 00:48:59 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Thu, 17 Oct 2019 00:48:56 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Thu, 17 Oct 2019 00:48:56 -0700
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 17 Oct
+ 2019 07:48:56 +0000
+Received: from [10.19.108.113] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 17 Oct
+ 2019 07:48:54 +0000
+Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
+To:     Rob Herring <robh@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        <linux-tegra@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-Content-Type: text/plain; charset="UTF-8"
+        <devicetree@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+References: <20191009024343.30218-1-jckuo@nvidia.com>
+ <20191009024343.30218-4-jckuo@nvidia.com> <20191009233900.GA9109@bogus>
+ <20191014131752.GF422231@ulmo>
+ <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <57692050-8284-a31f-71fd-7441823f3f2b@nvidia.com>
+Date:   Thu, 17 Oct 2019 15:48:52 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1571298539; bh=nIXBLya6bRUIuxRwlDLEPxSLP7joKF8reE7kSpNLl38=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=J0MP7wHYBCEfKBTs/ScBeIQ6GbtrNcqNyFlZAKn1s0n0c4EYsbdJuRD+0MGi4n//F
+         n9Osq2q7nMlc4FRJYZOTtgBCcnuipPXlXdLDPnwGzkuKogfOzKfb+y6so98Qxgkc0d
+         5BmEmxhdK/uCsV4LlzDWi/KvUFvkzNQwBXdoiQob/QyMc/mJJTv5zzpSVo9kqfFuRU
+         f8x0bsOkvM/8uBop1OCJwRSXu16r5aoN0bYR3YrIUeW0q6NkLdgNGkyd//MTZWXTWC
+         C/q4ANzzGy1cYWUQJT1j7OrmYEpOzgKcA6FC+axwM5svcij8jEIZJhNe3bnaZEimuj
+         qZ5PFweU7V7AQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Shimoda-san, Simon,
+Hi Thierry, Hi Rob, Hi Kishon,
+Please let me know your thoughts of the below implementation.
 
-On Thu, Oct 17, 2019 at 4:18 AM Yoshihiro Shimoda
-<yoshihiro.shimoda.uh@renesas.com> wrote:
-> > From: Simon Horman, Sent: Wednesday, October 16, 2019 9:27 PM
-> <snip>
-> > > diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> > > index 4c3de777ef6c..a3c30b609433 100644
-> > > --- a/drivers/usb/renesas_usbhs/common.c
-> > > +++ b/drivers/usb/renesas_usbhs/common.c
-> > > @@ -162,17 +162,17 @@ void usbhs_usbreq_get_val(struct usbhs_priv *priv, struct usb_ctrlrequest *req)
-> > >     req->bRequest           = (val >> 8) & 0xFF;
-> > >     req->bRequestType       = (val >> 0) & 0xFF;
-> > >
-> > > -   req->wValue     = usbhs_read(priv, USBVAL);
-> > > -   req->wIndex     = usbhs_read(priv, USBINDX);
-> > > -   req->wLength    = usbhs_read(priv, USBLENG);
-> > > +   req->wValue     = cpu_to_le16(usbhs_read(priv, USBVAL));
-> > > +   req->wIndex     = cpu_to_le16(usbhs_read(priv, USBINDX));
-> > > +   req->wLength    = cpu_to_le16(usbhs_read(priv, USBLENG));
-> >
-> > usbhs_read is backed by readl which performs
-> > a le->cpu conversion. Rather than have a double conversion
-> > perhaps it would be nicer to introduce usbhs_read_le.
-> > Likewise for write.
->
-> I'm afraid but, I could not understand these comments.
-> At the moment, the usbhs_{read,write}() call io{read,write}16(),
-> not {read,write}l().
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/renesas_usbhs/common.c?h=v5.4-rc3#n62
+1. Add a "bool disable_gen2" to "phy->attrs" structure.
+2. In _of_phy_get() of phy-core.c to add the follow to parse a generic property.
 
-ioread16() and readw() don't do byteswapping on ARM, as ARM is
-little-endian. Likewise, cpu_to_le16() is a no-op on ARM.
+	phy->attrs.disable_gen2 = of_property_read_bool(args.np,
+							"usb-disable-gen2");
+3. In individual phy driver, to add SOC/PHY specific programming accordingly.
 
-Double swapping would matter only on a big-endian platform, and could
-indeed be avoided by introducing usbhs_read_le*() functions that are
-just wrappers around __raw_read16() on big-endian.
-However, until the Renesas USBHS IP core ends up on a big-endian
-platform, it's not worth doing that, IMHO.
+Thanks,
+JC
 
-> > >  }
-> > >
-> > >  void usbhs_usbreq_set_val(struct usbhs_priv *priv, struct usb_ctrlrequest *req)
-> > >  {
-> > >     usbhs_write(priv, USBREQ,  (req->bRequest << 8) | req->bRequestType);
-> > > -   usbhs_write(priv, USBVAL,  req->wValue);
-> > > -   usbhs_write(priv, USBINDX, req->wIndex);
-> > > -   usbhs_write(priv, USBLENG, req->wLength);
-> > > +   usbhs_write(priv, USBVAL,  le16_to_cpu(req->wValue));
-> > > +   usbhs_write(priv, USBINDX, le16_to_cpu(req->wIndex));
-> > > +   usbhs_write(priv, USBLENG, le16_to_cpu(req->wLength));
-> > >
-> > >     usbhs_bset(priv, DCPCTR, SUREQ, SUREQ);
-> > >  }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 10/14/19 9:40 PM, Rob Herring wrote:
+> On Mon, Oct 14, 2019 at 8:17 AM Thierry Reding <thierry.reding@gmail.com> wrote:
+>>
+>> On Wed, Oct 09, 2019 at 06:39:00PM -0500, Rob Herring wrote:
+>>> On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
+>>>> Extend the bindings to cover the set of features found in Tegra194.
+>>>> Note that, technically, there are four more supplies connected to the
+>>>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
+>>>> , but the power sequencing requirements of Tegra194 require these to be
+>>>> under the control of the PMIC.
+>>>>
+>>>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it is
+>>>> possible for some platforms have long signal trace that could not
+>>>> provide sufficient electrical environment for Gen 2 speed. To deal with
+>>>> this, a new device node property "nvidia,disable-gen2" was added to
+>>>> Tegra194 that be used to specifically disable Gen 2 speed for a
+>>>> particular USB 3.0 port so that the port can be limited to Gen 1 speed
+>>>> and avoid the instability.
+>>>
+>>> I suspect this may be a common issue and we should have a common
+>>> property. Typically, this kind of property is in the controller though
+>>> and supports multiple speed limits. See PCI bindings for inspiration.
+>>
+>> Given that support for gen 2 speeds is dependent on signal trace length,
+>> it doesn't really make sense to restrict the whole controller to a given
+>> speed if only the signal trace for a single port exceeds the limit for
+>> which gen 2 would work.
+>>
+>> Also, the USB PHYs are in a different hardware block than the USB
+>> controller, so this really is a property of the PHY block, not the USB
+>> controller.
+> 
+> Okay, but still should be common for USB PHYs IMO.
+> 
+> Rob
+> 
