@@ -2,178 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4AADAA98
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 12:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A1BDAB0E
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 13:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409151AbfJQKxY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 17 Oct 2019 06:53:24 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44520 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391322AbfJQKxY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Oct 2019 06:53:24 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id DFFC78553F;
-        Thu, 17 Oct 2019 10:53:23 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-121-84.rdu2.redhat.com [10.10.121.84])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 70158600C4;
-        Thu, 17 Oct 2019 10:53:20 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <b8799179-d389-8005-4f6d-845febc3bb23@rasmusvillemoes.dk>
-References: <b8799179-d389-8005-4f6d-845febc3bb23@rasmusvillemoes.dk> <157117606853.15019.15459271147790470307.stgit@warthog.procyon.org.uk> <157117609543.15019.17103851546424902507.stgit@warthog.procyon.org.uk>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 03/21] pipe: Use head and tail pointers for the ring, not cursor and length
+        id S2439687AbfJQLTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 07:19:14 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46550 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439679AbfJQLTN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 07:19:13 -0400
+Received: by mail-pl1-f194.google.com with SMTP id q24so962718plr.13
+        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2019 04:19:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RpvJaWuaj5p2zl6AGhLO6pPdP5dG2XMc5QcqZdbusrA=;
+        b=F64H2U154pkhqclozn5m1COmSg6ol6+JJiinDjL1LrOeCLpjIbV0wQnJhUS4CueIRI
+         r8xgFOFBoNptMsktYxV/tN4bpFAxLzAxOn94uyp1C2friHJatGXeaA/yc+a9lL8s7jNM
+         VZg8fszdfmjl6Y4GCLTp30kr9DQNuQWTEeEJMXSY1lRk0L4uzSKBDcl827+Tbd6oExqC
+         464EtOOekl7Zn3uoYGMq2BjJ5WgPq1Xr6ONKJGzga4xKjb3bvkJ5ZhtPDsua5E0bUUpN
+         S8CSer6zuTrq1aWvCSooO3yN6g5GQRTsxzwd37xq4deT8lcVtWHMAZYr8xAg4bzJzij2
+         uSeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RpvJaWuaj5p2zl6AGhLO6pPdP5dG2XMc5QcqZdbusrA=;
+        b=hWDj4OdLkMdxLNLQc1za1DaBVlbwKPT1rqo+7BSsToQtFeHe1TnoZhCTv0tRAz8ckm
+         8Q0P/OtcnkpHfUCVKOS4WlFh22SXHMQaB/JPr8Wkiqgkz3Og0dr78kBh2errRJC9nXRM
+         uKANV3De/QZeN47Vw43UXbkLbimTMmvnTs4pGzEUweeLym0PYz6n6RITT7CEAXJPV0Vh
+         nV3pIxO7Qj4LGNAfNsEEGeznjLBRNtc5t/dGDa+vGPLr4uhfOxfFxroei7vAH9J9V7ej
+         7CvczCIK7n6waY+HE8Ju+MBfU04w//nLpgLG0d62APBMAiwtdN+yJo5AxecnIvn7e3my
+         vSLA==
+X-Gm-Message-State: APjAAAWRy6BQHuAUU8CjW5K/Z3ubiS6nGXiQ7EKDPQDN2J+dblNpaVZ6
+        WoUSROvSF/98IlN6GlANSkmLktXmDEC8ry2tcvlYTA==
+X-Google-Smtp-Source: APXvYqw06LcVrow5/Sx3dP8eikh/LxB1skUYyIr4JsFUvmR7b+l7zw+/Wbmh2bmKCiLkv8IdRKvnwr2sqXpLqrx4PjY=
+X-Received: by 2002:a17:902:9696:: with SMTP id n22mr3228007plp.252.1571311152434;
+ Thu, 17 Oct 2019 04:19:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <8693.1571309599.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: 8BIT
-Date:   Thu, 17 Oct 2019 11:53:19 +0100
-Message-ID: <8694.1571309599@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Thu, 17 Oct 2019 10:53:24 +0000 (UTC)
+References: <00000000000087ce3a0595115382@google.com>
+In-Reply-To: <00000000000087ce3a0595115382@google.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 17 Oct 2019 13:19:01 +0200
+Message-ID: <CAAeHK+xyVSgSfXrTtgzP7JRy7GtU+pDPwBUfd0hz1TEipWCntA@mail.gmail.com>
+Subject: Re: BUG: bad usercopy in ld_usb_read (3)
+To:     syzbot <syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, Qian Cai <cai@lca.pw>,
+        info@metux.net, isaacm@codeaurora.org,
+        Kees Cook <keescook@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+On Thu, Oct 17, 2019 at 3:42 AM syzbot
+<syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1756ff77600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=acee996f6938b9ded381
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com
+>
+> ldusb 5-1:0.28: Read buffer overflow, 177886378725897 bytes dropped
+> usercopy: Kernel memory exposure attempt detected from process stack
+> (offset 0, size 2147479552)!
+> ------------[ cut here ]------------
+> kernel BUG at mm/usercopy.c:99!
+> invalid opcode: 0000 [#1] SMP KASAN
+> CPU: 1 PID: 6543 Comm: syz-executor.5 Not tainted 5.4.0-rc3+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
+> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40
+> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51
+> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
+> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
+> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
+> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
+> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
+> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
+> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   __check_object_size mm/usercopy.c:282 [inline]
+>   __check_object_size.cold+0x91/0xbb mm/usercopy.c:256
+>   check_object_size include/linux/thread_info.h:119 [inline]
+>   check_copy_size include/linux/thread_info.h:150 [inline]
+>   copy_to_user include/linux/uaccess.h:151 [inline]
+>   ld_usb_read+0x31a/0x760 drivers/usb/misc/ldusb.c:492
+>   __vfs_read+0x76/0x100 fs/read_write.c:425
+>   vfs_read+0x1ea/0x430 fs/read_write.c:461
+>   ksys_read+0x1e8/0x250 fs/read_write.c:587
+>   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x459a59
+> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
+> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
+> RSP: 002b:00007fb330337c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459a59
+> RDX: 00000000ffffffad RSI: 0000000020003200 RDI: 0000000000000004
+> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb3303386d4
+> R13: 00000000004c7120 R14: 00000000004dcae8 R15: 00000000ffffffff
+> Modules linked in:
+> ---[ end trace 0fa22c64036b6ebe ]---
+> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
+> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40
+> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51
+> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
+> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
+> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
+> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
+> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
+> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
+> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-> >  (6) The number of free slots in the ring is "(tail + pipe->ring_size) -
-> >      head".
-> 
-> Seems an odd way of writing pipe->ring_size - (head - tail) ; i.e.
-> obviously #free slots is #size minus #occupancy.
+Most likely a duplicate of
+https://syzkaller.appspot.com/bug?extid=6fe95b826644f7f12b0b
 
-Perhaps so.  The way I was looking at it is the window into which things can
-be written is tail...tail+ring_size; the number of free slots is the distance
-from head to the end of the window.
-
-Anyway, I now have a helper that does it your way.
-
-> >  (7) The ring is full if "head >= (tail + pipe->ring_size)", which can also
-> >      be written as "head - tail >= pipe->ring_size".
-> >
-> 
-> No it cannot, it _must_ be written in the latter form.
-
-Ah, you're right.  I have a helper now for that too.
-
-> head-tail == pipe_size or head-tail >= pipe_size
-
-In general, I'd prefer ">=" just in case tail gets in front of head.
-
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
-
-> > Also split pipe->buffers into pipe->ring_size (which indicates the size of
-> > the ring) and pipe->max_usage (which restricts the amount of ring that
-> > write() is allowed to fill).  This allows for a pipe that is both writable
-> > by the kernel notification facility and by userspace, allowing plenty of
-> > ring space for notifications to be added whilst preventing userspace from
-> > being able to use up too much buffer space.
-> 
-> That seems like something that should be added in a separate patch -
-> adding ->max_usage and switching appropriate users of ->ring_size over,
-> so it's more clear where you're using one or the other.
-
-Okay.
-
-> > +		ibuf = &pipe->bufs[tail];
-> 
-> I don't see where tail gets masked between tail = pipe->tail;
-
-Yeah - I missed that one.
-
-> In any case, how about seeding head and tail with something like 1<<20 when
-> creating the pipe so bugs like that are hit more quickly.
-
-That's sounds like a good idea.
-
-> > +			while (tail < head) {
-> > +				count += pipe->bufs[tail & mask].len;
-> > +				tail++;
-> >  			}
-> 
-> This is broken if head has wrapped but tail has not. It has to be "while
-> (head - tail)" or perhaps just "while (tail != head)" or something along
-> those lines.
-
-Yeah...  It's just too easy to overlook this and use ordinary comparisons.
-I've switched to "while (tail != head)".
-
-> > +	mask = pipe->ring_size - 1;
-> > +	head = pipe->head & mask;
-> > +	tail = pipe->tail & mask;
-> > +	n = pipe->head - pipe->tail;
-> 
-> I think it's confusing to "premask" head and tail here. Can you either
-> drop that (pipe_set_size should hardly be a hot path?), or perhaps call
-> them something else to avoid a future reader seeing an unmasked
-> bufs[head] and thinking that's a bug?
-
-I've made it now do the masking right before doing the memcpy calls and used
-different variable names for it:
-
-	if (n > 0) {
-		unsigned int h = head & mask;
-		unsigned int t = tail & mask;
-		if (h > t) {
-			memcpy(bufs, &pipe->bufs + t,
-			       n * sizeof(struct pipe_buffer));
-		} else {
-			unsigned int tsize = pipe->ring_size - t;
-			if (h > 0)
-				memcpy(bufs + tsize, pipe->bufs,
-				       h * sizeof(struct pipe_buffer));
-			memcpy(bufs, pipe->bufs + t,
-			       tsize * sizeof(struct pipe_buffer));
-		}
-
-> > -	data_start(i, &idx, start);
-> > -	/* some of this one + all after this one */
-> > -	npages = ((i->pipe->curbuf - idx - 1) & (i->pipe->buffers - 1)) + 1;
-> > -	capacity = min(npages,maxpages) * PAGE_SIZE - *start;
-> > +	data_start(i, &i_head, start);
-> > +	p_tail = i->pipe->tail;
-> > +	/* Amount of free space: some of this one + all after this one */
-> > +	npages = (p_tail + i->pipe->ring_size) - i_head;
-> 
-> Hm, it's not clear that this is equivalent to the old computation. Since
-> it seems repeated in a few places, could it be factored to a little
-> helper (before this patch) and the "some of this one + all after this
-> one" comment perhaps expanded to explain what is going on?
-
-Yeah...  It's a bit weird, even before my changes.
-
-However, looking at it again, it seems data_start() does the appropriate
-calculations.  If there's space in the current head buffer, it returns the
-offset to that and the head of that buffer, otherwise it advances the head
-pointer and sets the offset to 0.
-
-So I think the comment may actually be retrospective - referring to the state
-that data_start() has given us, rather than talking about the next bit of
-code.
-
-I also wonder if pipe_get_pages_alloc() is broken.  It doesn't check to see
-whether the buffer is full at the point it calls data_start().  However,
-data_start() doesn't check either and, without this patch, will simply advance
-and mask off the ring index - which may wrap.
-
-The maths in the unpatched version is pretty icky and I'm not convinced it's
-correct.
-
-David
+#syz dup: KASAN: slab-out-of-bounds Read in ld_usb_read (3)
