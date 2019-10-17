@@ -2,160 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A1BDAB0E
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 13:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71049DAB63
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 13:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439687AbfJQLTO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 07:19:14 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46550 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2439679AbfJQLTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 07:19:13 -0400
-Received: by mail-pl1-f194.google.com with SMTP id q24so962718plr.13
-        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2019 04:19:13 -0700 (PDT)
+        id S2405997AbfJQLoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 07:44:16 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39633 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389551AbfJQLoQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 07:44:16 -0400
+Received: by mail-wm1-f66.google.com with SMTP id v17so2188438wml.4;
+        Thu, 17 Oct 2019 04:44:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=RpvJaWuaj5p2zl6AGhLO6pPdP5dG2XMc5QcqZdbusrA=;
-        b=F64H2U154pkhqclozn5m1COmSg6ol6+JJiinDjL1LrOeCLpjIbV0wQnJhUS4CueIRI
-         r8xgFOFBoNptMsktYxV/tN4bpFAxLzAxOn94uyp1C2friHJatGXeaA/yc+a9lL8s7jNM
-         VZg8fszdfmjl6Y4GCLTp30kr9DQNuQWTEeEJMXSY1lRk0L4uzSKBDcl827+Tbd6oExqC
-         464EtOOekl7Zn3uoYGMq2BjJ5WgPq1Xr6ONKJGzga4xKjb3bvkJ5ZhtPDsua5E0bUUpN
-         S8CSer6zuTrq1aWvCSooO3yN6g5GQRTsxzwd37xq4deT8lcVtWHMAZYr8xAg4bzJzij2
-         uSeA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tKphLTG5rDz1Oeqj0pmCIxFB6Sb2iosdUC35W2fCKWo=;
+        b=tlU+UtEPC3a3HlrxERUI/LSDEK7gP9cIzDyZBdVl93+xB75AcUNELT1YnrZnxDa2/Q
+         hQlNuOdI3Tl1+aQN2X1/LqOeZGUg9ROWejHRBelXLMvOtxkrs7J52XH3jXJpujzkWH5P
+         kEFuEa61Zjhf7c52/9OfPepbbGTv3c8iOdzhDakBZZfFhyzl42xvH8+8Eh70GqPhKuqX
+         g923U4cmqz5rBGfbrX+WgPaL4dOKHtW4JJdxUYhlp4lYMRIuxYaE2or3vQNwh6nBNyLG
+         IMVuC4CC3eDBQVqr8XQF6RNxg8Kekd825FvFF7aYRh7BmVluJCVhnWKLJgRDYcbUJs5Z
+         UEBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RpvJaWuaj5p2zl6AGhLO6pPdP5dG2XMc5QcqZdbusrA=;
-        b=hWDj4OdLkMdxLNLQc1za1DaBVlbwKPT1rqo+7BSsToQtFeHe1TnoZhCTv0tRAz8ckm
-         8Q0P/OtcnkpHfUCVKOS4WlFh22SXHMQaB/JPr8Wkiqgkz3Og0dr78kBh2errRJC9nXRM
-         uKANV3De/QZeN47Vw43UXbkLbimTMmvnTs4pGzEUweeLym0PYz6n6RITT7CEAXJPV0Vh
-         nV3pIxO7Qj4LGNAfNsEEGeznjLBRNtc5t/dGDa+vGPLr4uhfOxfFxroei7vAH9J9V7ej
-         7CvczCIK7n6waY+HE8Ju+MBfU04w//nLpgLG0d62APBMAiwtdN+yJo5AxecnIvn7e3my
-         vSLA==
-X-Gm-Message-State: APjAAAWRy6BQHuAUU8CjW5K/Z3ubiS6nGXiQ7EKDPQDN2J+dblNpaVZ6
-        WoUSROvSF/98IlN6GlANSkmLktXmDEC8ry2tcvlYTA==
-X-Google-Smtp-Source: APXvYqw06LcVrow5/Sx3dP8eikh/LxB1skUYyIr4JsFUvmR7b+l7zw+/Wbmh2bmKCiLkv8IdRKvnwr2sqXpLqrx4PjY=
-X-Received: by 2002:a17:902:9696:: with SMTP id n22mr3228007plp.252.1571311152434;
- Thu, 17 Oct 2019 04:19:12 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tKphLTG5rDz1Oeqj0pmCIxFB6Sb2iosdUC35W2fCKWo=;
+        b=tVOluZI0YxSlUtLRBRFHcgOcqKVfTW4nhmX3WeuIhd8nXNTVxOrbV+yLih1iFd8QU2
+         ZiAlGFzMkbgxAIAkkb9FiuPGPJ62h6+p63uCfusDDA1H4/ID2lfDqCzcq8A39DOrFJlN
+         le1hnZahJTin08q6wsHlbfHS9e4FL+sWitqLyIUqmDsS8SkNufCHO8DXkstqjaCT9LsG
+         ToA5jW6XvGWE6xsbrm/VBWIJ0860gWsDcMHDxpBy7QxPvOsBCChb4E+BiEJH9fWj3e/Y
+         +tL6ySdQl9B+yovvN/Ip3AOBnActeOR2elrZzL4xFol3pWDTYi94qKq7+JftBVrOesuo
+         xgXQ==
+X-Gm-Message-State: APjAAAXna8loHvNsrdWHQZ0g+/d+FJuST51Jrkew2/WExOqq7quU93M5
+        iGARi5AMYsuYp1zcNIuTMyE=
+X-Google-Smtp-Source: APXvYqzAHe7HqGQfPmIdiEERsGWfUFSwbxqOV/s4zGAk450HldnjoDMiHFlRjZivL6hhl5EDrsh+4w==
+X-Received: by 2002:a7b:ca4d:: with SMTP id m13mr2573792wml.95.1571312652581;
+        Thu, 17 Oct 2019 04:44:12 -0700 (PDT)
+Received: from localhost (p2E5BE2CE.dip0.t-ipconnect.de. [46.91.226.206])
+        by smtp.gmail.com with ESMTPSA id y3sm11980657wmg.2.2019.10.17.04.44.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 04:44:11 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 13:44:10 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     JC Kuo <jckuo@nvidia.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-tegra@vger.kernel.org,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Nagarjuna Kristam <nkristam@nvidia.com>
+Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
+Message-ID: <20191017114410.GD3122066@ulmo>
+References: <20191009024343.30218-1-jckuo@nvidia.com>
+ <20191009024343.30218-4-jckuo@nvidia.com>
+ <20191009233900.GA9109@bogus>
+ <20191014131752.GF422231@ulmo>
+ <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
+ <57692050-8284-a31f-71fd-7441823f3f2b@nvidia.com>
 MIME-Version: 1.0
-References: <00000000000087ce3a0595115382@google.com>
-In-Reply-To: <00000000000087ce3a0595115382@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Thu, 17 Oct 2019 13:19:01 +0200
-Message-ID: <CAAeHK+xyVSgSfXrTtgzP7JRy7GtU+pDPwBUfd0hz1TEipWCntA@mail.gmail.com>
-Subject: Re: BUG: bad usercopy in ld_usb_read (3)
-To:     syzbot <syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, Qian Cai <cai@lca.pw>,
-        info@metux.net, isaacm@codeaurora.org,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4zI0WCX1RcnW9Hbu"
+Content-Disposition: inline
+In-Reply-To: <57692050-8284-a31f-71fd-7441823f3f2b@nvidia.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 3:42 AM syzbot
-<syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1756ff77600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=acee996f6938b9ded381
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->
-> Unfortunately, I don't have any reproducer for this crash yet.
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com
->
-> ldusb 5-1:0.28: Read buffer overflow, 177886378725897 bytes dropped
-> usercopy: Kernel memory exposure attempt detected from process stack
-> (offset 0, size 2147479552)!
-> ------------[ cut here ]------------
-> kernel BUG at mm/usercopy.c:99!
-> invalid opcode: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 6543 Comm: syz-executor.5 Not tainted 5.4.0-rc3+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
-> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40
-> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51
-> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
-> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
-> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
-> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
-> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
-> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
-> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   __check_object_size mm/usercopy.c:282 [inline]
->   __check_object_size.cold+0x91/0xbb mm/usercopy.c:256
->   check_object_size include/linux/thread_info.h:119 [inline]
->   check_copy_size include/linux/thread_info.h:150 [inline]
->   copy_to_user include/linux/uaccess.h:151 [inline]
->   ld_usb_read+0x31a/0x760 drivers/usb/misc/ldusb.c:492
->   __vfs_read+0x76/0x100 fs/read_write.c:425
->   vfs_read+0x1ea/0x430 fs/read_write.c:461
->   ksys_read+0x1e8/0x250 fs/read_write.c:587
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x459a59
-> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007fb330337c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459a59
-> RDX: 00000000ffffffad RSI: 0000000020003200 RDI: 0000000000000004
-> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb3303386d4
-> R13: 00000000004c7120 R14: 00000000004dcae8 R15: 00000000ffffffff
-> Modules linked in:
-> ---[ end trace 0fa22c64036b6ebe ]---
-> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
-> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40
-> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51
-> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
-> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
-> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
-> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
-> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
-> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
-> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Most likely a duplicate of
-https://syzkaller.appspot.com/bug?extid=6fe95b826644f7f12b0b
+--4zI0WCX1RcnW9Hbu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-#syz dup: KASAN: slab-out-of-bounds Read in ld_usb_read (3)
+On Thu, Oct 17, 2019 at 03:48:52PM +0800, JC Kuo wrote:
+> Hi Thierry, Hi Rob, Hi Kishon,
+> Please let me know your thoughts of the below implementation.
+>=20
+> 1. Add a "bool disable_gen2" to "phy->attrs" structure.
+
+phy->attrs is pretty bus agnostic, so adding a USB-specific property
+doesn't sound like the right thing to do here.
+
+> 2. In _of_phy_get() of phy-core.c to add the follow to parse a generic pr=
+operty.
+>=20
+> 	phy->attrs.disable_gen2 =3D of_property_read_bool(args.np,
+> 							"usb-disable-gen2");
+> 3. In individual phy driver, to add SOC/PHY specific programming accordin=
+gly.
+
+Could this perhaps be done using the ->set_mode() callback? We don't
+currently implement that, but we could implement it and then perhaps use
+the submode parameter to distinguish between USB 3.1 Gen 1 and USB 3.1
+Gen 2. Perhaps a good mapping would look like this:
+
+	USB 3.1 Gen 1: mode =3D PHY_MODE_USB_HOST_SS, submode =3D 0x0300
+	USB 3.1 Gen 2: mode =3D PHY_MODE_USB_HOST_SS, submode =3D 0x0301
+
+The above basically reflects that USB 3.1 Gen 1 is really USB 3.0. This
+would also work with other speeds:
+
+	USB 2.0: mode =3D PHY_MODE_USB_HOST_HS, submode =3D 0x0200
+
+etc. I suppose to make this clearer we could add defines for the various
+submodes. It seems like submode may be intended to represent one of the
+interface modes defined by USBPHY_INTERFACE_MODE_*, but perhaps it can
+be repurposed for PHY_MODE_USB_HOST_SS?
+
+Thierry
+
+>=20
+> Thanks,
+> JC
+>=20
+> On 10/14/19 9:40 PM, Rob Herring wrote:
+> > On Mon, Oct 14, 2019 at 8:17 AM Thierry Reding <thierry.reding@gmail.co=
+m> wrote:
+> >>
+> >> On Wed, Oct 09, 2019 at 06:39:00PM -0500, Rob Herring wrote:
+> >>> On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
+> >>>> Extend the bindings to cover the set of features found in Tegra194.
+> >>>> Note that, technically, there are four more supplies connected to the
+> >>>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_P=
+LL)
+> >>>> , but the power sequencing requirements of Tegra194 require these to=
+ be
+> >>>> under the control of the PMIC.
+> >>>>
+> >>>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it=
+ is
+> >>>> possible for some platforms have long signal trace that could not
+> >>>> provide sufficient electrical environment for Gen 2 speed. To deal w=
+ith
+> >>>> this, a new device node property "nvidia,disable-gen2" was added to
+> >>>> Tegra194 that be used to specifically disable Gen 2 speed for a
+> >>>> particular USB 3.0 port so that the port can be limited to Gen 1 spe=
+ed
+> >>>> and avoid the instability.
+> >>>
+> >>> I suspect this may be a common issue and we should have a common
+> >>> property. Typically, this kind of property is in the controller though
+> >>> and supports multiple speed limits. See PCI bindings for inspiration.
+> >>
+> >> Given that support for gen 2 speeds is dependent on signal trace lengt=
+h,
+> >> it doesn't really make sense to restrict the whole controller to a giv=
+en
+> >> speed if only the signal trace for a single port exceeds the limit for
+> >> which gen 2 would work.
+> >>
+> >> Also, the USB PHYs are in a different hardware block than the USB
+> >> controller, so this really is a property of the PHY block, not the USB
+> >> controller.
+> >=20
+> > Okay, but still should be common for USB PHYs IMO.
+> >=20
+> > Rob
+> >=20
+
+--4zI0WCX1RcnW9Hbu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl2oVAkACgkQ3SOs138+
+s6H0XhAAkIXr/bF4284DsOZ2ZcXx5pNP+GIEKALOqU4zATVgYWQaKG8FACjwJ1vy
+TuKvlCN0w635625Cw+YzHot9ZsmaYdnr/m81QiLE74b94oClKSY3kftvdcmuOZMJ
+goQERkEraMNYL2vfhPhoUJkuEqG1k3Y2pgi/BvCuct5loRAaNCSLCtjG6H4KG5tN
++36lEdTRmbtFMfc36lGdaRHb5PFe/zEXcjoJePEF56RVW9zW1/sQqIMqULYxzjh4
+BAcYtJ2lJP+4/0mOJLZuqo40mVFf1p0gIPMhx0M67h9gkfNbkXb4li2+JCQ/sI9B
+dCF+jz3g9L3HfLtWK3AMk1Of5id5kSG3UU23+64UfmL4MWM3xYzn7D9U9bac4k7o
+Ua6XD7coC9Y8aRsQR+zSLkFC9/GmTQuOBlgPghQXUYHGN9dTymPIZHG7w1wPK8ik
+R4krezTCHLB2MjtGqoFl/A1zvHcDbqJxCbZDgq1Sk5t2ekqfy5nsu6VrxtzjgTLG
+p0Z7/cIyOVcj8qvb62OHS9A/zlfd2jobWRo/Hhla39cHAS4LaKWi+j9oTQ6l9z65
+GeilzgAVGJiJ62oaWRI8zbXmZzaxxAOavj4WolTcL6jrmj+sfLOlqv3wh/ziXTSI
+E3AVNXer0JurJCQXCBz1Iwc7TPqEp+LEMEQi9hFcWrd4S1s41to=
+=mhb4
+-----END PGP SIGNATURE-----
+
+--4zI0WCX1RcnW9Hbu--
