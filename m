@@ -2,43 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FEEDB9C2
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 00:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D92DBAA6
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 02:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441676AbfJQWbt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 18:31:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:51075 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732705AbfJQWbt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 18:31:49 -0400
-Received: (qmail 4223 invoked by uid 500); 17 Oct 2019 18:31:48 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 17 Oct 2019 18:31:48 -0400
-Date:   Thu, 17 Oct 2019 18:31:48 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     Benedikt Schemmer <ben@besd.de>
-cc:     linux-usb@vger.kernel.org
-Subject: Re: [USB EHCI DRIVER] [Regression] EHCI no longer working in 5.4
- series kernel
-In-Reply-To: <36985a59-18fd-88c9-0f1e-0b356ba041e8@besd.de>
-Message-ID: <Pine.LNX.4.44L0.1910171830550.4074-100000@netrider.rowland.org>
+        id S2503962AbfJRAU2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 20:20:28 -0400
+Received: from zaovasilisa.ru ([88.200.194.99]:49001 "EHLO usrv.lan"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2503926AbfJRAU1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Oct 2019 20:20:27 -0400
+X-Greylist: delayed 22562 seconds by postgrey-1.27 at vger.kernel.org; Thu, 17 Oct 2019 20:20:19 EDT
+Received: from 127.0.0.1 (localhost [127.0.0.1])
+        by usrv.lan (Postfix) with SMTP id E44FB186481;
+        Thu, 17 Oct 2019 17:04:03 +0400 (MSD)
+Received: from (HELO zlba) [49.155.13.191] by 127.0.0.1 id 08foBMeDLK33 for <linux-nvme@lists.infradead.org>; Thu, 17 Oct 2019 10:59:51 -0200
+Message-ID: <9$4n3z523f$d$rou@1wu6v8t.44r>
+From:   "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+Reply-To: "Mr Ekrem Bayraktar" <dave@dbsoundfactory.com>
+To:     linux-nvme@lists.infradead.org
+Subject: MOTHERLESS CHILDREN IN YOUR CITY !!
+Date:   Thu, 17 Oct 19 10:59:51 GMT
+X-Mailer: MIME-tools 5.503 (Entity 5.501)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: multipart/alternative;
+        boundary="EFA7_FB09FAD2"
+X-Priority: 3
+X-MSMail-Priority: Normal
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 17 Oct 2019, Benedikt Schemmer wrote:
 
-> Hi all,
-> 
-> I recently started compiling the 5.4. kernel starting with rc3 and noticed that both my keyboard and mouse aren't working
-> when connected to the motherboards USB ports (they work fine when connected to an xhci extension card) and they work fine
-> with the 5.3 series up to 5.3.6
+--EFA7_FB09FAD2
+Content-Type: text/plain;
+Content-Transfer-Encoding: quoted-printable
 
-Can you use git bisect to track the problem down to a particular commit?
+Dear Sir / Madam
 
-Alan Stern
+
+
+Since ever we left your country back to Canada , we have gotten Government=
+ approval and we have been busying planning for the less privilege Childre=
+n projects.
+
+We are planning to release first batch of the funds $2,990,000.00 within 1=
+4 days for building an estate for motherless children in your city.
+
+I want you to use my mother;s company name to register this charity projec=
+t in your country after receiving the project funds.
+
+It must be registered as { Bayraktar Group Homeless Children Ltd }.
+
+
+Can you handle and supervise this big project ?
+Can you manager all the workers as a senior supervisor ?
+We want to be sure you can handle it before we proceed with this project.
+
+
+Please call me if you want to hear from us + 1-917 580 4919.
+Please can you manage such project please Kindly reply for further details=
+.
+
+Your full names-----------
+
+
+
+Ekrem Bayraktar.
+Bayraktar Shipping Group
+
+--EFA7_FB09FAD2--
 
