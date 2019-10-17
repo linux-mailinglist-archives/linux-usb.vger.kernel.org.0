@@ -2,91 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCCADA6D5
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 09:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FFDDA738
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 10:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408010AbfJQH6R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 03:58:17 -0400
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:50140 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732594AbfJQH6Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 03:58:16 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9H7w560017305;
-        Thu, 17 Oct 2019 02:58:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571299085;
-        bh=PB8P3M92Qr+BuxLmFcudWc9V7nMyMBfC6vJnswIve6k=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=WAOLY0CqXUZDnoyC1csA83T49deZ5hd4eG12f+WZF94jFvUSVUOBs4xgUbk9l5sSq
-         T16gihJO88TT9GDyOaVobwU1KyT/4akLLQoFdyDm7JZRyM3dWa41xT/2M2DHsbVxAG
-         2+eM4Up+0t77bVga4ROmziYW9qTye9JxGpvjaY0c=
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9H7w5Ke015520
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 17 Oct 2019 02:58:05 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 17
- Oct 2019 02:57:57 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 17 Oct 2019 02:58:05 -0500
-Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9H7w2Gd102521;
-        Thu, 17 Oct 2019 02:58:03 -0500
-From:   Roger Quadros <rogerq@ti.com>
-To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
-        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
-Subject: [PATCH] usb: cdns3: Error out if USB_DR_MODE_UNKNOWN in cdns3_core_init_role()
-Date:   Thu, 17 Oct 2019 10:58:01 +0300
-Message-ID: <20191017075801.8734-1-rogerq@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191016131808.GB56859@kroah.com>
-References: <20191016131808.GB56859@kroah.com>
+        id S2408241AbfJQI0U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 04:26:20 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:30197 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2387581AbfJQI0U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 04:26:20 -0400
+X-UUID: ac8042f2d8c74c4bab2f984771d7d9bd-20191017
+X-UUID: ac8042f2d8c74c4bab2f984771d7d9bd-20191017
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <min.guo@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1164182793; Thu, 17 Oct 2019 16:26:08 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 17 Oct 2019 16:26:04 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 17 Oct 2019 16:26:03 +0800
+From:   <min.guo@mediatek.com>
+To:     Bin Liu <b-liu@ti.com>, Rob Herring <robh+dt@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
+        <hdegoede@redhat.com>, Min Guo <min.guo@mediatek.com>
+Subject: [PATCH RESEND v7 0/6] Add MediaTek MUSB Controller Driver
+Date:   Thu, 17 Oct 2019 16:25:48 +0800
+Message-ID: <20191017082554.27953-1-min.guo@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-TM-SNTS-SMTP: 5873172F392C39E2384854588EDDAB7493890FBB8452BFEB0DE11811A9F88D1E2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB_DR_MODE_UNKNOWN should be treated as error as it is done in
-cdns3_drd_update_mode().
+From: Min Guo <min.guo@mediatek.com>
 
-Fixes: 02ffc26df96b ("usb: cdns3: fix cdns3_core_init_role()")
-Signed-off-by: Roger Quadros <rogerq@ti.com>
----
- drivers/usb/cdns3/core.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+These patches introduce the MediaTek MUSB controller driver.
 
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 1109dc5a4c39..c2123ef8d8a3 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -166,7 +166,6 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
- 		goto err;
- 
- 	switch (cdns->dr_mode) {
--	case USB_DR_MODE_UNKNOWN:
- 	case USB_DR_MODE_OTG:
- 		ret = cdns3_hw_role_switch(cdns);
- 		if (ret)
-@@ -182,6 +181,9 @@ static int cdns3_core_init_role(struct cdns3 *cdns)
- 		if (ret)
- 			goto err;
- 		break;
-+	default:
-+		ret = -EINVAL;
-+		goto err;
- 	}
- 
- 	return ret;
+The driver can be configured as Dual-Role Device (DRD),
+Peripheral Only and Host Only modes. This has beed tested on
+MT2701 with a variety of devices in host mode and with the 
+f_mass gadget driver in peripheral mode, plugging otg cables
+in/out a lot of times in all possible imaginable plug orders.
+
+changes in v7:
+changes of dt-bindings and DTS:
+1. Change compatible string
+2. Change usb connector child node compatible as "gpio-usb-b-connector" 
+
+changes in v6:
+changes of dt-bindings:
+1. Modify usb connector child node
+changes of DTS:
+1. Modify usb connector child node
+changes of driver:
+1. Add of_platform_populate in probe to populate connector platform_devices
+   from device tree data
+2. Replace extcon with usb role switch mechanism to support dual-role mode,
+   depends on [1]
+3. Remove set vbus function
+
+    [1] [v6,09/10] usb: roles: add USB Type-B GPIO connector driver
+        https://patchwork.kernel.org/patch/10966361/
+
+changes in v5:
+changes of dt-bindings suggested by Rob:
+1. Modify compatible as 
+- compatible : should be one of:
+               "mediatek,mt-2701"
+               ...
+               followed by "mediatek,mtk-musb"
+2. Add usb connector child node
+changes of DTS:
+1. Add usb connector child node
+changes of driver suggested by Bin:
+1. Replace musb_readb() with musb_clearb() to clear dma pending interrupts
+2. Replace musb_readb() with musb_clearb() to clear common/tx/rx pending interrupts
+3. Make musb_clearb/w() return the value of musb_readb/w()
+
+changes in v4:
+changes of dt-bindings suggested by Sergei:
+1. String alignment
+changes of driver suggested by Tony and Bin:
+1. Add a new patch for set/get_toggle()
+2. Add a new patch for noirq type of dma
+3. Add a new patch musb_clearb/w()
+4. Abondon patch "usb: musb: Delete the const attribute of addr parameter in readb/w/l hooks"
+
+changes in v3:
+changes of driver suggested by Bin:
+1. Add a new patch for musb_readb/w/l() to remove const attribute 
+2. Use is_out as function parameter in set_toggle/get_toggle() hooks
+3. Remove 'u8/u16 data' parameter in clearb/w() hooks
+4. Remove musb_default_clearb/w()
+5. Replace musb_readb/w() with musb_clearb/w() to clear pending interrupts 
+6. Add comments to clearb/w() hooks
+7. Replace musb_save_toggle() with musb->io.get_toggle()
+8. Replace musb_set_toggle() with musb->io.set_toggle()
+
+changes in v2:
+changes of dt-bindings suggested by Rob and Bin:
+1. Modify DRC to DRD
+2. Drop the "<soc-model>-musb" in compatible
+3. Remove phy-names
+4. Add space after comma in clock-names
+dtsi:
+1. Remove phy-names
+changes of driver suggested by Bin:
+1. Add a new patch for musb_set_toggle
+2. Add summarize of MediaTek musb controller differences in the commit log
+3. Abondon patch "usb: musb: Move musbhsdma macro definition to musb_dma.h"
+4. Add "|| COMPILE_TEST" in Kconfig
+5. Add musb_clearb() and musb_clearw() hooks
+6. Add get_toggle() and set_toggle() hooks
+7. Replace musb_readl() with musb_readw() to read 16bit toggle register
+8. Move MediaTek's private toggle registers from musb_regs.h to mediatek.c
+9. Create musbhs_dma_controller_create_noirq()
+
+Min Guo (6):
+  dt-bindings: usb: musb: Add support for MediaTek musb controller
+  arm: dts: mt2701: Add usb2 device nodes
+  usb: musb: Add get/set toggle hooks
+  usb: musb: Add noirq type of dma create interface
+  usb: musb: Add musb_clearb/w() interface
+  usb: musb: Add support for MediaTek musb controller
+
+ .../devicetree/bindings/usb/mediatek,musb.txt      |  55 ++
+ arch/arm/boot/dts/mt2701-evb.dts                   |  21 +
+ arch/arm/boot/dts/mt2701.dtsi                      |  33 ++
+ drivers/usb/musb/Kconfig                           |   9 +-
+ drivers/usb/musb/Makefile                          |   1 +
+ drivers/usb/musb/mediatek.c                        | 582 +++++++++++++++++++++
+ drivers/usb/musb/musb_core.c                       |  74 ++-
+ drivers/usb/musb/musb_core.h                       |  13 +-
+ drivers/usb/musb/musb_dma.h                        |   9 +
+ drivers/usb/musb/musb_host.c                       |  46 +-
+ drivers/usb/musb/musb_io.h                         |  12 +-
+ drivers/usb/musb/musbhsdma.c                       |  56 +-
+ drivers/usb/musb/sunxi.c                           |   4 +-
+ drivers/usb/musb/tusb6010.c                        |   2 +-
+ 14 files changed, 845 insertions(+), 72 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
+ create mode 100644 drivers/usb/musb/mediatek.c
+
 -- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+1.9.1
 
