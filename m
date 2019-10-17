@@ -2,91 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 097FBDAF04
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 16:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9214DAF31
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Oct 2019 16:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437441AbfJQOCZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Oct 2019 10:02:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48700 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727542AbfJQOCZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Oct 2019 10:02:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D7B36B5C9;
-        Thu, 17 Oct 2019 14:02:22 +0000 (UTC)
-Message-ID: <1571320940.5264.11.camel@suse.com>
-Subject: Re: KMSAN: uninit-value in ax88172a_bind
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+a8d4acdad35e6bbca308@syzkaller.appspotmail.com>,
-        davem@davemloft.net, swinslow@gmail.com, glider@google.com,
-        syzkaller-bugs@googlegroups.com, opensource@jilayne.com,
-        tglx@linutronix.de, gregkh@linuxfoundation.org,
-        allison@lohutok.net, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Date:   Thu, 17 Oct 2019 16:02:20 +0200
-In-Reply-To: <00000000000064555d0594ebff2f@google.com>
-References: <00000000000064555d0594ebff2f@google.com>
-Content-Type: multipart/mixed; boundary="=-1FI935soZhHIsJol0ILN"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S2389807AbfJQOIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Oct 2019 10:08:43 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:44315 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727429AbfJQOIn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Oct 2019 10:08:43 -0400
+Received: by mail-ot1-f68.google.com with SMTP id 21so1965769otj.11;
+        Thu, 17 Oct 2019 07:08:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4LaxdzcWVgTMeshGXRDImrA5EwGUcbpIabxr8Z7hfxY=;
+        b=l3zD5PNY7CkOMQVysxowSv5P/mhHsPul41RD1O18r6sDVvokb7iSWrO1LIjqIId4y5
+         xFMsfb0ea4rHhkvWNcHTETtd4ehzmfj8V/Mu3lQ1EXd+5rcA03V2QMt4vtlWjxz0vSPk
+         i/p+5lyrkyzNfQEEk6P3M9irR+XggTYyzsOYdeYqT/X8NFVwSBr1cynRP2aZAve1qoLz
+         b8Oxxo54I3sxQtYnYyql7dVGpmw7X7aQn4i/7HLs8IIoawqi+rYvTiR0v3WACUuOo1+c
+         zbOdAbhyOgBgJmJ+Dpya6kmABw7hNHKW869gUnUM0SSXftLzGq49d2jGyUk247/hfT95
+         Zfjw==
+X-Gm-Message-State: APjAAAWojthhuwGAinu5ABLchTuoejvleUZYTGaLzXS6CgVETPrinRiP
+        Iovl5h6ai8i1qQF2K7GSBNSGJEA=
+X-Google-Smtp-Source: APXvYqzWR4t2orXzG34Y3uK5tLGUXivPJ3U/zljrWoSmEsG8YVlKGN5S+DXwZjmsakg5G35UsjPEqQ==
+X-Received: by 2002:a05:6830:1510:: with SMTP id k16mr3207388otp.197.1571321322294;
+        Thu, 17 Oct 2019 07:08:42 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 91sm639337otn.36.2019.10.17.07.08.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 07:08:41 -0700 (PDT)
+Date:   Thu, 17 Oct 2019 09:08:41 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     min.guo@mediatek.com
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, tony@atomide.com,
+        hdegoede@redhat.com, Min Guo <min.guo@mediatek.com>
+Subject: Re: [PATCH RESEND v7 1/6] dt-bindings: usb: musb: Add support for
+ MediaTek musb controller
+Message-ID: <20191017140841.GA20279@bogus>
+References: <20191017082554.27953-1-min.guo@mediatek.com>
+ <20191017082554.27953-2-min.guo@mediatek.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191017082554.27953-2-min.guo@mediatek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---=-1FI935soZhHIsJol0ILN
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-
-Am Montag, den 14.10.2019, 22:10 -0700 schrieb syzbot:
-> Hello,
+On Thu, 17 Oct 2019 16:25:49 +0800, <min.guo@mediatek.com> wrote:
+> From: Min Guo <min.guo@mediatek.com>
 > 
-> syzbot found the following crash on:
+> This adds support for MediaTek musb controller in
+> host, peripheral and otg mode.
 > 
-> HEAD commit:    fa169025 kmsan: get rid of unused static functions in kmsa..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1432a653600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=49548798e87d32d7
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a8d4acdad35e6bbca308
-> compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-> 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14743a6f600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=125bdbc7600000
+> Signed-off-by: Min Guo <min.guo@mediatek.com>
+> ---
+> changes in v7:
+> 1. Modify compatible as
+> - compatible : should be one of:
+>                "mediatek,mt2701-musb"
+>                ...
+>                followed by "mediatek,mtk-musb"
+> 2. Change usb connector child node compatible as "gpio-usb-b-connector" 
 > 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+a8d4acdad35e6bbca308@syzkaller.appspotmail.com
+> changes in v6:
+> 1. Modify usb connector child node
+> 
+> changes in v5:
+> suggested by Rob:
+> 1. Modify compatible as 
+> - compatible : should be one of:
+>                "mediatek,mt-2701"
+>                ...
+>                followed by "mediatek,mtk-musb"
+> 2. Add usb connector child node
+> 
+> changes in v4:
+> suggested by Sergei:
+> 1. String alignment
+> 
+> changes in v3:
+> 1. no changes
+> 
+> changes in v2:
+> suggested by Bin:
+> 1. Modify DRC to DRD
+> suggested by Rob:
+> 2. Drop the "<soc-model>-musb" in compatible
+> 3. Remove phy-names
+> 4. Add space after comma in clock-names
+> ---
+>  .../devicetree/bindings/usb/mediatek,musb.txt      | 55 ++++++++++++++++++++++
+>  1 file changed, 55 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
+> 
 
-#syz test: https://github.com/google/kmsan.git fa169025
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-
---=-1FI935soZhHIsJol0ILN
-Content-Disposition: attachment;
-	filename="0001-asix-fix-information-leak-on-short-answers.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch; name="0001-asix-fix-information-leak-on-short-answers.patch";
-	charset="UTF-8"
-
-RnJvbSBhNmZkN2EwNGEzMzBhOGJmYWQ4MzZiMjA4NDNlYTVmZTI2ZTBhZTM4IE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
-OiBUaHUsIDE3IE9jdCAyMDE5IDE1OjEyOjMzICswMjAwClN1YmplY3Q6IFtQQVRDSF0gYXNpeDog
-Zml4IGluZm9ybWF0aW9uIGxlYWsgb24gc2hvcnQgYW5zd2VycwoKSWYgYSBtYWxpY2lvdXMgZGV2
-aWNlIGdpdmVzIGEgc2hvcnQgTUFDIGl0IGNhbiBlbGljaXQgdXAgdG8KNSBieXRlcyBvZiBsZWFr
-ZWQgbWVtb3J5IG91dCBvZiB0aGUgZHJpdmVyLiBXZSBuZWVkIHRvIGNoZWNrIGZvcgpFVEhfQUxF
-Ti4KClNpZ25lZC1vZmYtYnk6IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+Ci0tLQog
-ZHJpdmVycy9uZXQvdXNiL2F4ODgxNzJhLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNl
-cnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2IvYXg4
-ODE3MmEuYyBiL2RyaXZlcnMvbmV0L3VzYi9heDg4MTcyYS5jCmluZGV4IDAxMWJkNGNiNTQ2ZS4u
-YWYzOTk0ZTA4NTNiIDEwMDY0NAotLS0gYS9kcml2ZXJzL25ldC91c2IvYXg4ODE3MmEuYworKysg
-Yi9kcml2ZXJzL25ldC91c2IvYXg4ODE3MmEuYwpAQCAtMTk2LDcgKzE5Niw3IEBAIHN0YXRpYyBp
-bnQgYXg4ODE3MmFfYmluZChzdHJ1Y3QgdXNibmV0ICpkZXYsIHN0cnVjdCB1c2JfaW50ZXJmYWNl
-ICppbnRmKQogCiAJLyogR2V0IHRoZSBNQUMgYWRkcmVzcyAqLwogCXJldCA9IGFzaXhfcmVhZF9j
-bWQoZGV2LCBBWF9DTURfUkVBRF9OT0RFX0lELCAwLCAwLCBFVEhfQUxFTiwgYnVmLCAwKTsKLQlp
-ZiAocmV0IDwgMCkgeworCWlmIChyZXQgPCBFVEhfQUxFTikgewogCQluZXRkZXZfZXJyKGRldi0+
-bmV0LCAiRmFpbGVkIHRvIHJlYWQgTUFDIGFkZHJlc3M6ICVkXG4iLCByZXQpOwogCQlnb3RvIGZy
-ZWU7CiAJfQotLSAKMi4xNi40Cgo=
-
-
---=-1FI935soZhHIsJol0ILN--
-
+If a tag was not added on purpose, please state why and what changed.
