@@ -2,89 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C41ECDCE7B
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:42:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A982ADCEC7
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730794AbfJRSl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 14:41:58 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:40686 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728350AbfJRSl6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 14:41:58 -0400
-Received: by mail-il1-f194.google.com with SMTP id o16so6447713ilq.7;
-        Fri, 18 Oct 2019 11:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tJXKGhc1AW/l0WKj0IcIOpG/c9m//aZTCOArzVW/AZw=;
-        b=s/JGYncSzqI2bGxfMPGTrEU6YMN+uue1Pn3GVsKkV6CewWE7VwswNVssbghypg2B5r
-         O4iy4KgD9IPaIpFP1Uuji4WcIqDJT35onsmfK/8ZfnRxgjJsluFIvQAdyj05RUO4yYWn
-         H7HjIFAhkdyk24buc2FvoJdcOydo3D7fY/UyXBLwK5FpIvTu7RbaQzEn9jIHuObUYlp2
-         oK487cyGVr2lFBqaJ2ttjFXOGKB7R4lDPOvMCsTCGzqExsRoh+Oo5Uh+Qmlt68zO8QeV
-         YbgbC6FAgo6rUOqcP+bIWbmOMvA5jnoaldwbwttz2cDmoOkgNNZ/3xmBk/6q7AYUJ5uy
-         PLNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tJXKGhc1AW/l0WKj0IcIOpG/c9m//aZTCOArzVW/AZw=;
-        b=NVlGuxJfvM/8PuMo3ediHtIIALkbs332SdT1EMjA37bc3Nuc7vdCM893mKCU7R61Ck
-         aP+bpgG7pmJxAqYRQMN1QiuIFK49KigTQLrLCmr+ZLHoGCCeAUb5CTKwa4C/T6gA81Hn
-         QRKCcKYuowBEFXx7dJmln/crAHAwQYV7Ciaru3iks7KeP9iOWFGf2ZAF9nm3bWMs/JCg
-         DZFqaAaPo12Gx8wwCDGIoXq5zlQqMNiqjM+guMQFlZY7KIAA4pnBgNYh0VA6BExns3hf
-         g0p3kvrRfZSyMSwdXqjb/KN/+XIcOb4Jnim8U5E8BdX8hB4kC8+IaOZh9BGy167yjFkP
-         1c0w==
-X-Gm-Message-State: APjAAAVReqOq3wtIE6nQ51lGMW9GDaMCjgDEg/WcKvTC5/LeBOvm4W8K
-        GRBSs7Uta27KZpIDA4otBtKNwqPj5g3p9cOnz9w=
-X-Google-Smtp-Source: APXvYqzVGnrRdxkCssJMUgVLUGTgfJ2Oe03f70oC9SJo+hLMFSxkpBPACOQ7WecE05oJWVeLVBFKMSyBLSuR6dgWN3A=
-X-Received: by 2002:a92:b682:: with SMTP id m2mr11544098ill.64.1571424117434;
- Fri, 18 Oct 2019 11:41:57 -0700 (PDT)
+        id S2439862AbfJRSzQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 14:55:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55574 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726421AbfJRSzQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Oct 2019 14:55:16 -0400
+Received: from localhost (unknown [38.98.37.137])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6F60220640;
+        Fri, 18 Oct 2019 18:55:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571424915;
+        bh=K/12HBOLREs70oPt0BZw/4JhTqL9elo+MXR7+xUsZpc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lSZOPZ5s+y6I0QKlrMUyTBW6wCcQf+ClsnwoUbqkZ0ShgPjqSHXIqLI1ZUmD9voHo
+         yVeGB/LPOjtZuCbmteO7cUk+fNre3cNoksos3d9qDvait1oTrFbG1ewzJq71c+lmx1
+         STz8i25nWbFnfehNscC5vHfMSPlSsNncz7Sd001g=
+Date:   Fri, 18 Oct 2019 11:54:58 -0700
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 2/2] USB: ldusb: fix ring-buffer locking
+Message-ID: <20191018185458.GA1191145@kroah.com>
+References: <20191018151955.25135-1-johan@kernel.org>
+ <20191018151955.25135-3-johan@kernel.org>
 MIME-Version: 1.0
-References: <20191015141945.16067-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20191015141945.16067-1-ben.dooks@codethink.co.uk>
-From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
-Date:   Fri, 18 Oct 2019 14:41:46 -0400
-Message-ID: <CA+rxa6q3M_o9E95-W5DrtNkzhuuVRBjS74U_TQKLCOde+nG0vw@mail.gmail.com>
-Subject: Re: [PATCH] usb: ohci-nxp: fix use of integer as pointer
-To:     Ben Dooks <ben.dooks@codethink.co.uk>
-Cc:     linux-kernel@lists.codethink.co.uk,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018151955.25135-3-johan@kernel.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 15, 2019 at 10:19 AM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
->
-> The hcd pointer in ohci_hcd_nxp_probe() is
-> being initialised with a 0, so fix to NULL to
-> avoid the following sparse warning:
->
-> drivers/usb/host/ohci-nxp.c:153:31: warning: Using plain integer as NULL pointer
->
-> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-> ---
-[...]
+On Fri, Oct 18, 2019 at 05:19:55PM +0200, Johan Hovold wrote:
+> The custom ring-buffer implementation was merged without any locking
+> whatsoever, but a spinlock was later added by commit 9d33efd9a791
+> ("USB: ldusb bugfix").
+> 
+> The lock did not cover the loads from the ring-buffer entry after
+> determining the buffer was non-empty, nor the update of the tail index
+> once the entry had been processed. The former could lead to stale data
+> being returned, while the latter could lead to memory corruption on
+> sufficiently weakly ordered architectures.
 
-> --- a/drivers/usb/host/ohci-nxp.c
-> +++ b/drivers/usb/host/ohci-nxp.c
-> @@ -150,7 +150,7 @@ static void ohci_nxp_stop_hc(void)
->
->  static int ohci_hcd_nxp_probe(struct platform_device *pdev)
->  {
-> -       struct usb_hcd *hcd = 0;
-> +       struct usb_hcd *hcd = NULL;
->         const struct hc_driver *driver = &ohci_nxp_hc_driver;
->         struct resource *res;
->         int ret = 0, irq;
-> --
-> 2.23.0
->
-Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
+Ugh.
+
+This almost looks sane, but what's the odds there is some other issue in
+here as well?  Would it make sense to just convert the code to use the
+"standard" ring buffer code instead?
+
+thanks,
+
+greg k-h
