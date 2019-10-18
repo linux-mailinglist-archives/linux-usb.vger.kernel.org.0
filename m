@@ -2,104 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCCDDCF4F
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 21:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4313EDCFA3
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 21:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439892AbfJRTc7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 15:32:59 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:37369 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394807AbfJRTc6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 15:32:58 -0400
-Received: from mail-qk1-f179.google.com ([209.85.222.179]) by
- mrelayeu.kundenserver.de (mreue012 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N5UoU-1hx1rB0p0k-016tR7; Fri, 18 Oct 2019 21:32:55 +0200
-Received: by mail-qk1-f179.google.com with SMTP id u184so6377750qkd.4;
-        Fri, 18 Oct 2019 12:32:54 -0700 (PDT)
-X-Gm-Message-State: APjAAAWOMUseeQAnmf5ePLjWA4QTqPmO0TGTh8vzYVIg+mSZ45wpLuT4
-        58u8s2senhYMMa3qH1GwOLEUY2VGgyDQeT6vYe0=
-X-Google-Smtp-Source: APXvYqzndIi4+lrEFsQAJTvDSAykrBEjXYWBlihPsFokm/QiIqztK3NntxmM4iVAVoSe7PNdrIRvDpgwbQhfLS5cKrs=
-X-Received: by 2002:a37:db0a:: with SMTP id e10mr10369877qki.3.1571427173049;
- Fri, 18 Oct 2019 12:32:53 -0700 (PDT)
+        id S2443382AbfJRTxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 15:53:48 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:40470 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2440122AbfJRTxs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 15:53:48 -0400
+Received: by mail-wr1-f68.google.com with SMTP id o28so7460558wro.7
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 12:53:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3KqAVxh/H5jpQl7YP1P5BVxZv7QnY/IKmQ+2C63eW48=;
+        b=v8KNTh7DuhG0MKiLe5luNuiu7KAhrLPVqMFgRJ8hCekbjvwQac9IPsRYKemoLeZFQZ
+         +S9QqFYXXod8F7qDSPi/bsIoMgfAgw+tyd+NeL0XD4g0aAmuoJxmzgWUViPtyTGT9FWE
+         g2hn3gMkXrHCJyIjGjweVtdFl6Osq6Y2mUQ2/4FJ26QTfh8Kjjyav938nUnxH1Nl2lNU
+         WxE3KJBNtmFyNnFSXoPF8zU6MvjoMdiVrkyJiPF5FsMT7VIzqZ/TP+R4hyfM0BXiFEsG
+         DpVpp5yvzcMPN9UO8Qx4H3EG3p2D1yzzOTGIhmuypLZNPA0B6DFBhoLEix4S1gLe+30G
+         3FLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3KqAVxh/H5jpQl7YP1P5BVxZv7QnY/IKmQ+2C63eW48=;
+        b=GsXZsgtGQ4zkA/aut3BLfU9OqzJ46BaITG/A8asoMCdU6qFTK6AuTcl3es9kuKztYJ
+         2+JLJuXRzM0j7Zlb9bdvRE/rXbzcVZvzCRHihY3Ob6b1jdeUVPNdW1SIbswjLqtvl339
+         8aLCRBSg1ekiUV87dKaVFYPwVwweym7JOx/2wvnABGtq1tgjWYpslwtdwX5KCqo10oyo
+         18tm8R4x9n+amItkTwslBasYMhD6yo0Pl+CcWerDlQfTRfRf58oj8A9QW2LS/M9+Cr/M
+         mCABni070bIeGmVB9Fv9W2Im4jR1+0+PNtW40pzK2UVSBracSZxNgPv8o4Yr/ZfjxjHB
+         TKOQ==
+X-Gm-Message-State: APjAAAXwkc5GvOrnGFUmDQN9hClY92I1hnPhHTXHCxiq+5DdI9zpw137
+        p6/kfOuuMbRljps//svGTmY2P1kB9dyo3b94QgMH8A==
+X-Google-Smtp-Source: APXvYqydNS4dpnOUsvw/+62vkI3l2jIVz/3Fo1Lh33Kgvus/mPxF4eL5MgL+Z0E6soAxCv6h1VMoN95TzjknYyidMMg=
+X-Received: by 2002:a05:6000:92:: with SMTP id m18mr6103036wrx.105.1571428425920;
+ Fri, 18 Oct 2019 12:53:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <87v9slg9k5.fsf@belgarion.home>
- <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
-In-Reply-To: <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 18 Oct 2019 21:32:36 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
-Message-ID: <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
-Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
-To:     Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
+ <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com> <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+ <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com> <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
+ <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com> <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
+ <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com> <CALAqxLWHbhst5KXAGCswKVp7ztzFHxdb6nskfze+Jk+xWo2Ssw@mail.gmail.com>
+ <7877d69b-b17c-d4a4-9806-3dca98fc9e26@redhat.com>
+In-Reply-To: <7877d69b-b17c-d4a4-9806-3dca98fc9e26@redhat.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 18 Oct 2019 12:53:33 -0700
+Message-ID: <CALAqxLWE-8YkYmrKoP6-+2xherwsGZ8-CeUyOFe9YPQj6EuSpg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:x6rjh/SYhkhVXFY7sn38XpS2jNl7mZ+ZSAgBlTmeuBIEAqo8moQ
- ZloY0yHOr0VObCTuKLP4a+2rBvJkW653ZyzZa/eWVN3/Ovj/BNRg9Ewp1Qf7rCBMO8Hhk1D
- iwosZq0hvegBArF9MtuUzikr1dATmDPGh2GE3ojjjAh3L/xbOPWehNtgUykguhtLo25ub3e
- Gh9uYlRVvIqPMYEpjyOxg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:xqW7pTXOCNI=:B+AiqXxm34TeJktaofJfOW
- XqUjplt4t0CUZ2O55g6B1bgZZacd+rT+JuPTFvuaVx1dQM1GrEbNii30aJz0qTY/9r2GHRVUi
- OvSlVnq3juFgtcY+5TmDRWP+EjFL1/t5QgjdUXDpsAc1iUjtxFwuDKrEFw+SMqJFj+Evb4M8L
- 7wbYHomgQQY+uoWcF9O5DLciqMHlDIzbauOi8Lb8bts8RuWV8MWXNKV6pySMZBfkvYKfVY6Id
- dRjDuhZDsgP5jWCbtzO12OqzKnxMnZUkvtuNqE907owCD6DW0lhUjJdXJhyg1DtnUR53aLxXm
- uyT/qud2H90oWDD31hBeJ6MHXUOHppefVXVH9rJMm26ZRkgxdiioxTD1OTJ3EFcBSYEbMiSdD
- m5KrdOruT25lSFB4y/FukEE5zBpl7S+BgJvHFF6Lpzaci4tD8YF/Hro/LlSi2jylbMPpLzp0o
- KFXy7N7zXVPStE+nf8LQ+jE3PgkeG0V+cB2bFyTkuUjr3n3f0q/2MDNhY0CG1kmgrpZlzzT3C
- nFqWmIbnG7sOILmVeWRjrQKFkoHeOzeRBURJlkJHZ3Gutmq6dZJlxibBGXhwRR/y/DLzj1lOO
- nJSr90gM3rzdbOXgkUqkX6zqSQRolgGoHmR78xCiWTiTij+CXnBDpAbXF7ph7vNR8G4br9z3F
- 7GSqCWBHVQSTXQR8mPCBUBGRHGWz00P0gLcFNQnu04PqT8bERSnbgL6kj6jQEO2gPIvxVswEo
- KaV2YTmOgsEA8o5SRMsZ1yI0YtaDQ+9tFZs7P8kssy4pBkyQoodTbi6OXh3O/ve4sCf1oXpS0
- hLIQTF7A215Fx0yevnxC4Wa+lLYgROb6ZPDKBCkqsk9/rn4KMZ6nxOo4JptuWrj4WMJY71M9w
- TgvMufS3940rCabHvzVQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 9:17 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> On Fri, Oct 18, 2019 at 9:04 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
-> > Arnd Bergmann <arnd@arndb.de> writes:
-> >
-> > > Hi PXA maintainers,
-> > >
-> > > I'm in the process of getting the old ARM platforms to all build
-> > > in a single kernel. The largest part of that work is changing all
-> > > the device drivers to no longer require mach/*.h header files.
-> > >
-> > > This series does it for arch/pxa/.
-> > >
-> > > As with the omap1 and s3c24xx series I sent before, I don't
-> > > expect this all to be correct in the first version, though
-> > > a lot of the patches are fairly simple and I did exhaustive
-> > > compile-time testing on them.
-> > >
-> > > Please test if you have the hardware, or review!
-> >
-> > Hi Arnd,
-> >
-> > Would you have a git tree I can pull from ?
-> > That would make my life easier than applying manually 46 patches...
+On Fri, Oct 18, 2019 at 12:30 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> Looking at drivers/usb/typec/tcpm/tcpci.c: tcpci_set_vconn I see that
+> there is a data struct with vendor specific callbacks and that the
+> drivers/usb/typec/tcpm/tcpci_rt1711h.c implements that.
 >
-> I've now pushed it to
->
-> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
-> pxa-multiplatform
+> So you may want something similar here. But things are tricky here,
+> because when nothing is connected you want to provide Vbus for
+> the USB-A ports, which means that if someone then connects a
+> USB-A to C cable to connect the board to a PC (switching the port
+> to device mode) there will be a time when both sides are supplying
+> 5V if I remember the schedule correctly.
 
-Sorry for the duplication, I had some problems with email configuration
-so my reply got rejected, let's see if it goes through this time.
+Ok. Thanks for the pointer, I'll take a look at that to see if I can
+get it to work.
 
-       Arnd
+> I think that the original hack might not be that bad, the whole hw
+> design seems so, erm, broken, that you probably cannot do proper
+> roleswapping anyways.  So just tying Vbus to host mode might be
+> fine, the question then becomes again how can some other piece
+> of code listen to the role-switch events...
+
+So, at least in the current approach (see the v3 series), I've
+basically set the hub driver as an role-switch intermediary, sitting
+between the calls from the tcpm to the dwc3 driver. It actually works
+better then the earlier notifier method (which had some issues with
+reliably establishing the initial state on boot).  Does that approach
+work for you?
+
+thanks
+-john
