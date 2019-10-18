@@ -2,174 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05932DC7E9
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 16:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C78BDC805
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 17:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408670AbfJRO5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 10:57:10 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:34908 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405740AbfJRO5K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 10:57:10 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 205so4062146pfw.2
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 07:57:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ydALGgVicVJOUZPcweINsb7CLfCW/DqcPbJk2q0d7jQ=;
-        b=dLQ8+hT2GMo9JgM7ixoD85oCG9PI4mGkadYIx7FIBdX5lcQcUpOVrQVTKSoq+2Onkl
-         eURqOCDhPTNgd7TVDGtHfigkpD9lc7ZXI8ku96C7Csmt4b96OX4LJhRxXA8+9yX/D71/
-         SGnC7yg1lKrgjp5PKhUsUPGbv2/P6yNiArdiXkgDPqOIjjHjSIzfFQ8cuhtQjaIygvfU
-         3Z8XEahQBS9oX1WTmv6P6dr7+RckSCrYA09FR5TZVQz34mfAZ9PYTbE0UxLuB8R4Dzpy
-         RV9L0BovylRJ9gO6S1jEL08ThVaou7Ea2yB0kmZZtgDXdNAMVq/GwGk4gUuH8A9j7OlX
-         Xx9g==
+        id S2634267AbfJRPDW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 11:03:22 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:45116 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2634203AbfJRPDW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 11:03:22 -0400
+Received: by mail-lj1-f195.google.com with SMTP id q64so6531590ljb.12;
+        Fri, 18 Oct 2019 08:03:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ydALGgVicVJOUZPcweINsb7CLfCW/DqcPbJk2q0d7jQ=;
-        b=Inx1vi72lG7GTbcGOyRT0ir51njAWANlx1VMcdXl9N0ugA92Njm6k+WbeXnsJS2Qi3
-         b75dNVREmpInz/DuU6lbVu3OpnhIK1wxHW0ReEzZH9DvsnIzMf0jQDRtdH3bqS9U4KEo
-         8oJEaFKVyvdHhQ60N48OyWKMpEBFM8YCuV8OhP8Xifrcb/VlSpA7NIG2ihv2byV7hyZs
-         AekEfPNBRLsKlEVt5C20cXdR9nZTVbdsE7tlutnJYuNeXVaT+ejYpW+pi8qTgxD8sHmB
-         r0bbgIzQRfo2cZG4d81TXf9op5DOFFwwVB+R5Hho1ti9ReWv3jJB+eTdMKnNUBnVQ1FF
-         jUEA==
-X-Gm-Message-State: APjAAAXjfmBuBEGMrMa0lWZnpYfWrmQCFOAMJd6gDl/omd4U6suufQ4e
-        c+Ohm+NYqpFS/0gpoliDG4GsQU3xywdXN2hP2nKsXQ==
-X-Google-Smtp-Source: APXvYqzwx+I8pwfhKz/uQhIOIu90U6M1tZmBKsNEfZhkL5V1L5T7cAO7x0M+nIC1xcH8K0AoEdWHNdAWCgqG5C9g0GM=
-X-Received: by 2002:a62:5503:: with SMTP id j3mr7162388pfb.93.1571410629424;
- Fri, 18 Oct 2019 07:57:09 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=XFN5CU9XZuSVc2bYbY/HDqoKRZEKGUyQPQg3On2l0sE=;
+        b=gBkToDaoKGRVwJreDGo607Fv70ru++/1xO32/vIMRQhKLqTYQ7kahpEbeCj8Di84as
+         63/7G6dKfn3FRVVa29BE6NwahNXhuruXe1k4tVqjjD/q9CiEw1n1XOPnTrUvjmZ6KVf3
+         6wWscf7tiT662US35hZfwOqHA5jyJk9V1tAKKO9aHwcU0dj8IQKm0Nqb84bP6yN5D50q
+         kZ6ZFFB+F/h4AD3/yVlo+FkeiOj3B4cJ2gLJNDwYdaa9Gk5n6t66BnBek24ZifmP0REZ
+         3LeUgbu3K9D12FrLLa9z+CcchT+KTVllIgjWM0YbQegN/ku3/xfDSvXqDbUQ7OD+0ZeT
+         2Ovg==
+X-Gm-Message-State: APjAAAUEpIBkH7Fz+o7IYvyxHBvYs8kCiHitk1bZzKfeqRjiOc8LIhXO
+        NNtzyq/0g/SSTykpOx/jWmg=
+X-Google-Smtp-Source: APXvYqwxdjJ+MtoBj9uhvCnlqOpwlR/Dxd78cC1h8ehsF5PmgDyA+G27aJtxy1wsDyFkxYXymLe/1g==
+X-Received: by 2002:a2e:481a:: with SMTP id v26mr4158614lja.41.1571410998012;
+        Fri, 18 Oct 2019 08:03:18 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id j7sm2690715lfc.16.2019.10.18.08.03.16
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 08:03:17 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iLTmq-0006YT-9P; Fri, 18 Oct 2019 17:03:29 +0200
+Date:   Fri, 18 Oct 2019 17:03:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        syzbot+6fe95b826644f7f12b0b@syzkaller.appspotmail.com
+Subject: Re: [PATCH 1/2] USB: ldusb: fix read info leaks
+Message-ID: <20191018150328.GC24768@localhost>
+References: <20191018141750.23756-1-johan@kernel.org>
+ <20191018141750.23756-2-johan@kernel.org>
 MIME-Version: 1.0
-References: <000000000000f036110595307db3@google.com>
-In-Reply-To: <000000000000f036110595307db3@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 18 Oct 2019 16:56:58 +0200
-Message-ID: <CAAeHK+wwSXRDp6sdnpp0MZ494igBkrSciYT0bT28FzWQ6dqnLA@mail.gmail.com>
-Subject: Re: KMSAN: uninit-value in ld_usb_read (2)
-To:     syzbot <syzbot+fd49690bb45caaacf578@syzkaller.appspotmail.com>
-Cc:     enric.balletbo@collabora.com,
-        Alexander Potapenko <glider@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, kirr@nexedi.com,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, lkundrak@v3.sk,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018141750.23756-2-johan@kernel.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 4:53 PM syzbot
-<syzbot+fd49690bb45caaacf578@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    c2453450 kmsan: kcov: prettify the code unpoisoning area->..
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12d6dc5f600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3684f3c73f43899a
-> dashboard link: https://syzkaller.appspot.com/bug?extid=fd49690bb45caaacf578
-> compiler:       clang version 9.0.0 (/home/glider/llvm/clang
-> 80fee25776c2fb61e74c1ecb1a523375c2500b69)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c63d7600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1180adab600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+fd49690bb45caaacf578@syzkaller.appspotmail.com
->
-> =====================================================
-> BUG: KMSAN: uninit-value in ld_usb_read+0x870/0xc50
-> drivers/usb/misc/ldusb.c:487
-> CPU: 1 PID: 12745 Comm: syz-executor511 Not tainted 5.4.0-rc3+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0x191/0x1f0 lib/dump_stack.c:113
->   kmsan_report+0x14a/0x2f0 mm/kmsan/kmsan_report.c:109
->   __msan_warning+0x73/0xf0 mm/kmsan/kmsan_instr.c:245
->   ld_usb_read+0x870/0xc50 drivers/usb/misc/ldusb.c:487
->   __vfs_read+0x1a9/0xc90 fs/read_write.c:425
->   vfs_read+0x359/0x6f0 fs/read_write.c:461
->   ksys_read+0x265/0x430 fs/read_write.c:587
->   __do_sys_read fs/read_write.c:597 [inline]
->   __se_sys_read+0x92/0xb0 fs/read_write.c:595
->   __x64_sys_read+0x4a/0x70 fs/read_write.c:595
->   do_syscall_64+0xb6/0x160 arch/x86/entry/common.c:291
->   entry_SYSCALL_64_after_hwframe+0x63/0xe7
-> RIP: 0033:0x4418a9
-> Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
-> ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007ffd63549848 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004418a9
-> RDX: 0000000000000002 RSI: 0000000020000040 RDI: 0000000000000004
-> RBP: 00000000006cc018 R08: 000000000000000f R09: 00000000004002c8
-> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402600
-> R13: 0000000000402690 R14: 0000000000000000 R15: 0000000000000000
->
-> Uninit was created at:
->   kmsan_save_stack_with_flags+0x3f/0x90 mm/kmsan/kmsan.c:150
->   kmsan_internal_alloc_meta_for_pages mm/kmsan/kmsan_shadow.c:364 [inline]
->   kmsan_alloc_page+0x153/0x370 mm/kmsan/kmsan_shadow.c:393
->   __alloc_pages_nodemask+0x149d/0x60c0 mm/page_alloc.c:4794
->   alloc_pages_current+0x68d/0x9a0 mm/mempolicy.c:2188
->   alloc_pages include/linux/gfp.h:511 [inline]
->   kmalloc_order mm/slab_common.c:1303 [inline]
->   kmalloc_order_trace+0x94/0x3f0 mm/slab_common.c:1319
->   kmalloc_large include/linux/slab.h:485 [inline]
->   __kmalloc+0x2e6/0x430 mm/slub.c:3825
->   kmalloc_array+0x86/0x110 include/linux/slab.h:618
->   ld_usb_probe+0x64f/0x1460 drivers/usb/misc/ldusb.c:697
->   usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
->   really_probe+0xd91/0x1f90 drivers/base/dd.c:552
->   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
->   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
->   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
->   __device_attach+0x489/0x750 drivers/base/dd.c:894
->   device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
->   bus_probe_device+0x131/0x390 drivers/base/bus.c:490
->   device_add+0x25b5/0x2df0 drivers/base/core.c:2201
->   usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
->   generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
->   usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
->   really_probe+0xd91/0x1f90 drivers/base/dd.c:552
->   driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
->   __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
->   bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
->   __device_attach+0x489/0x750 drivers/base/dd.c:894
->   device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
->   bus_probe_device+0x131/0x390 drivers/base/bus.c:490
->   device_add+0x25b5/0x2df0 drivers/base/core.c:2201
->   usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
->   process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
->   worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
->   kthread+0x4b5/0x4f0 kernel/kthread.c:256
->   ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-> =====================================================
->
->
+On Fri, Oct 18, 2019 at 04:17:49PM +0200, Johan Hovold wrote:
+> Fix broken read implementation, which could be used to trigger slab info
+> leaks.
+> 
+> The driver failed to check if the custom ring buffer was still empty
+> when waking up after having waited for more data. This would happen on
+> every interrupt-in completion, even if no data had been added to the
+> ring buffer (e.g. on disconnect events).
+> 
+> Due to missing sanity checks and uninitialised (kmalloced) ring-buffer
+> entries, this meant that huge slab info leaks could easily be triggered.
+> 
+> Note that the empty-buffer check after wakeup is enough to fix the info
+> leak on disconnect, but let's clear the buffer on allocation and add a
+> sanity check to read() to prevent further leaks.
+> 
+> Fixes: 2824bd250f0b ("[PATCH] USB: add ldusb driver")
+> Cc: stable <stable@vger.kernel.org>     # 2.6.13
+> Reported-by: syzbot+6fe95b826644f7f12b0b@syzkaller.appspotmail.com
+> Signed-off-by: Johan Hovold <johan@kernel.org>
 > ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000f036110595307db3%40google.com.
+>  drivers/usb/misc/ldusb.c | 18 +++++++++++-------
+>  1 file changed, 11 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/ldusb.c b/drivers/usb/misc/ldusb.c
+> index 147c90c2a4e5..94780e14e95d 100644
+> --- a/drivers/usb/misc/ldusb.c
+> +++ b/drivers/usb/misc/ldusb.c
+> @@ -464,7 +464,7 @@ static ssize_t ld_usb_read(struct file *file, char __user *buffer, size_t count,
+>  
+>  	/* wait for data */
+>  	spin_lock_irq(&dev->rbsl);
+> -	if (dev->ring_head == dev->ring_tail) {
+> +	while (dev->ring_head == dev->ring_tail) {
+>  		dev->interrupt_in_done = 0;
+>  		spin_unlock_irq(&dev->rbsl);
+>  		if (file->f_flags & O_NONBLOCK) {
+> @@ -474,12 +474,17 @@ static ssize_t ld_usb_read(struct file *file, char __user *buffer, size_t count,
+>  		retval = wait_event_interruptible(dev->read_wait, dev->interrupt_in_done);
+>  		if (retval < 0)
+>  			goto unlock_exit;
+> -	} else {
+> -		spin_unlock_irq(&dev->rbsl);
+> +
+> +		spin_lock_irq(&dev->rbsl);
+>  	}
+> +	spin_unlock_irq(&dev->rbsl);
+>  
+>  	/* actual_buffer contains actual_length + interrupt_in_buffer */
+>  	actual_buffer = (size_t *)(dev->ring_buffer + dev->ring_tail * (sizeof(size_t)+dev->interrupt_in_endpoint_size));
+> +	if (*actual_buffer > sizeof(size_t) + dev->interrupt_in_endpoint_size) {
 
-#syz dup: KASAN: slab-out-of-bounds Read in ld_usb_read (3)
+Bah, this should have been just
+
+	if (*actual_buffer > dev->interrupt_in_endpoint_size)
+
+will send a v2.
+	
+> +		retval = -EIO;
+> +		goto unlock_exit;
+> +	}
+>  	bytes_to_read = min(count, *actual_buffer);
+>  	if (bytes_to_read < *actual_buffer)
+>  		dev_warn(&dev->intf->dev, "Read buffer overflow, %zd bytes dropped\n",
+
+Johan
