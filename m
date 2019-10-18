@@ -2,160 +2,437 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 982FDDBF63
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 10:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38DEDBFE5
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 10:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2442161AbfJRIGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 04:06:25 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:40923 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2442159AbfJRIGZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 04:06:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571385983;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AueYkt1KhewDQYWLSoW/pmDep2RIg04euyPWY35AI9w=;
-        b=WMsD8L0M8WI+PA/WkCrX8nsg+X+INLOyX9JmfvwlsF4dZC1bHveFHGo2HpIPFcQQSJGSZe
-        VOq8GaPqfGlIAbSTmYHCUxYn4vAFZszi6LVknKLeigu8vxiiicM0Xj/+afaSR/q3GzYa0y
-        T0A0Gp+jt4xzPXL7aeJsfsu66RpQZlc=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-269-2uEYAMOYOPeopd6b0evJvg-1; Fri, 18 Oct 2019 04:06:22 -0400
-Received: by mail-wm1-f70.google.com with SMTP id l184so813429wmf.6
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 01:06:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VP1zhflDz8B0kkQ83/WshvBQYqQO+15WgGKLtiGwYF0=;
-        b=scs2/4NJPvnM3ygh3/PTxsffuYTIPFXMiApS03pAds87cNSXmhgJ1uiX6YvOz4dPdN
-         3brLvhrkb2iuzxOTCUS+7zLOFQswp9qTX3p73acmW6J3hRwFB+B396EfzloX8+9c4pw+
-         khlBxdgSK8i9NlsQ81oIynyxaqSE44FDtoqv4zZGKAruojWZn3oK2q+cthuRaWpELj+S
-         YUiFZi13bEfm3kkfO2RWzAXlzDi0OVJ2dh+1lP7aplYOQAwusToBHzae2D8LEQmWPAFL
-         Havbf3/6AwlDDnjJu3cFqSgDrmaCcIlCC3oON5JBqWhjPAYgSk4hZI8ZzUEB9Wv6cxsV
-         zAcQ==
-X-Gm-Message-State: APjAAAVH1GaSzXW9jtt9gGdyontlyiKdmrGZHCZI/J1R9xIyRUvLfKTx
-        eTBcTn6hdU/DJPv5YejdcJsmbZq6rcHALllf0+4maNF1M3lvAhP/Pg8eHHq/s1IU5eI4JRjC3ME
-        VngrQtC5C13N8Ta7Zr2m4
-X-Received: by 2002:a1c:55c4:: with SMTP id j187mr6447027wmb.155.1571385980980;
-        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyZVd1ccyO/Ym3el/1+WjQ1WmMCkhdIX12XtPQT7ZY+XQ7DuXpVt6/IuFyKiUT17eAeClDQkg==
-X-Received: by 2002:a1c:55c4:: with SMTP id j187mr6446987wmb.155.1571385980715;
-        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
-Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
-        by smtp.gmail.com with ESMTPSA id h7sm4729423wrt.17.2019.10.18.01.06.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
-Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20191002231617.3670-1-john.stultz@linaro.org>
- <20191002231617.3670-3-john.stultz@linaro.org>
- <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
- <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
- <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com>
- <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
- <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com>
- <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
-Date:   Fri, 18 Oct 2019 10:06:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
-Content-Language: en-US
-X-MC-Unique: 2uEYAMOYOPeopd6b0evJvg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+        id S2632813AbfJRI2n (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 04:28:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:49124 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2632790AbfJRI2n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Oct 2019 04:28:43 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 2E01EAD87;
+        Fri, 18 Oct 2019 08:28:39 +0000 (UTC)
+From:   Daniel Wagner <dwagner@suse.de>
+To:     UNGLinuxDriver@microchip.com
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Daniel Wagner <dwagner@suse.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Stefan Wahren <wahrenst@gmx.net>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH] net: usb: lan78xx: Use phy_mac_interrupt() for interrupt handling
+Date:   Fri, 18 Oct 2019 10:28:17 +0200
+Message-Id: <20191018082817.111480-1-dwagner@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+handle_simple_irq() expect interrupts to be disabled. The USB
+framework is using threaded interrupts, which implies that interrupts
+are re-enabled as soon as it has run.
+
+This reverts the changes from cc89c323a30e ("lan78xx: Use irq_domain
+for phy interrupt from USB Int. EP").
+
+[    4.886203] 000: irq 79 handler irq_default_primary_handler+0x0/0x8 enabled interrupts
+[    4.886243] 000: WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:152 __handle_irq_event_percpu+0x154/0x168
+[    4.896294] 000: Modules linked in:
+[    4.896301] 000: CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.3.6 #39
+[    4.896310] 000: Hardware name: Raspberry Pi 3 Model B+ (DT)
+[    4.896315] 000: pstate: 60000005 (nZCv daif -PAN -UAO)
+[    4.896321] 000: pc : __handle_irq_event_percpu+0x154/0x168
+[    4.896331] 000: lr : __handle_irq_event_percpu+0x154/0x168
+[    4.896339] 000: sp : ffff000010003cc0
+[    4.896346] 000: x29: ffff000010003cc0 x28: 0000000000000060
+[    4.896355] 000: x27: ffff000011021980 x26: ffff00001189c72b
+[    4.896364] 000: x25: ffff000011702bc0 x24: ffff800036d6e400
+[    4.896373] 000: x23: 000000000000004f x22: ffff000010003d64
+[    4.896381] 000: x21: 0000000000000000 x20: 0000000000000002
+[    4.896390] 000: x19: ffff8000371c8480 x18: 0000000000000060
+[    4.896398] 000: x17: 0000000000000000 x16: 00000000000000eb
+[    4.896406] 000: x15: ffff000011712d18 x14: 7265746e69206465
+[    4.896414] 000: x13: ffff000010003ba0 x12: ffff000011712df0
+[    4.896422] 000: x11: 0000000000000001 x10: ffff000011712e08
+[    4.896430] 000: x9 : 0000000000000001 x8 : 000000000003c920
+[    4.896437] 000: x7 : ffff0000118cc410 x6 : ffff0000118c7f00
+[    4.896445] 000: x5 : 000000000003c920 x4 : 0000000000004510
+[    4.896453] 000: x3 : ffff000011712dc8 x2 : 0000000000000000
+[    4.896461] 000: x1 : 73a3f67df94c1500 x0 : 0000000000000000
+[    4.896466] 000: Call trace:
+[    4.896471] 000:  __handle_irq_event_percpu+0x154/0x168
+[    4.896481] 000:  handle_irq_event_percpu+0x50/0xb0
+[    4.896489] 000:  handle_irq_event+0x40/0x98
+[    4.896497] 000:  handle_simple_irq+0xa4/0xf0
+[    4.896505] 000:  generic_handle_irq+0x24/0x38
+[    4.896513] 000:  intr_complete+0xb0/0xe0
+[    4.896525] 000:  __usb_hcd_giveback_urb+0x58/0xd8
+[    4.896533] 000:  usb_giveback_urb_bh+0xd0/0x170
+[    4.896539] 000:  tasklet_action_common.isra.0+0x9c/0x128
+[    4.896549] 000:  tasklet_hi_action+0x24/0x30
+[    4.896556] 000:  __do_softirq+0x120/0x23c
+[    4.896564] 000:  irq_exit+0xb8/0xd8
+[    4.896571] 000:  __handle_domain_irq+0x64/0xb8
+[    4.896579] 000:  bcm2836_arm_irqchip_handle_irq+0x60/0xc0
+[    4.896586] 000:  el1_irq+0xb8/0x140
+[    4.896592] 000:  arch_cpu_idle+0x10/0x18
+[    4.896601] 000:  do_idle+0x200/0x280
+[    4.896608] 000:  cpu_startup_entry+0x20/0x28
+[    4.896615] 000:  rest_init+0xb4/0xc0
+[    4.896623] 000:  arch_call_rest_init+0xc/0x14
+[    4.896632] 000:  start_kernel+0x454/0x480
+
+[dwagner: Updated Jisheng's initial patch]
+
+Fixes: cc89c323a30e ("lan78xx: Use irq_domain for phy interrupt from USB Int. EP")
+Cc: Woojung Huh <woojung.huh@microchip.com>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Andrew Lunn <andrew@lunn.ch>
+Cc: Stefan Wahren <wahrenst@gmx.net>
+Cc: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Daniel Wagner <dwagner@suse.de>
+---
 Hi,
 
-On 18-10-2019 07:55, John Stultz wrote:
-> On Wed, Oct 16, 2019 at 12:27 AM Hans de Goede <hdegoede@redhat.com> wrot=
-e:
->> On 10/15/19 7:39 AM, John Stultz wrote:
->>> On Thu, Oct 3, 2019 at 1:51 PM Hans de Goede <hdegoede@redhat.com> wrot=
-e:
->>>> On 03-10-2019 22:37, John Stultz wrote:
->>>>> Fair point. I'm sort of taking a larger patchset and trying to break
->>>>> it up into more easily reviewable chunks, but I guess here I mis-cut.
->>>>>
->>>>> The user is the hikey960 gpio hub driver here:
->>>>>      https://git.linaro.org/people/john.stultz/android-dev.git/commit=
-/?id=3Db06158a2d3eb00c914f12c76c93695e92d9af00f
->>>>
->>>> Hmm, that seems to tie the TypeC data-role to the power-role, which
->>>> is not going to work with role swapping.
->>>
->>> Thanks again for the feedback here. Sorry for the slow response. Been
->>> reworking some of the easier changes but am starting to look at how to
->>> address your feedback here.
->>>
->>>> What is controlling the usb-role-switch, and thus ultimately
->>>> causing the notifier you are suggesting to get called ?
->>>
->>> The tcpm_mux_set() call via tcpm_state_machine_work()
->>>
->>>> Things like TYPEC_VBUS_POWER_OFF and TYPEC_VBUS_POWER_ON
->>>> really beg to be modeled as a regulator and then the
->>>> Type-C controller (using e.g. the drivers/usb/typec/tcpm/tcpm.c
->>>> framework) can use that regulator to control things.
->>>> in case of the tcpm.c framework it can then use that
->>>> regulator to implement the set_vbus callback.
->>>
->>> So I'm looking at the bindings and I'm not sure exactly how to tie a
->>> regulator style driver into the tcpm for this?
->>> Looking at the driver I just see this commented out bit:
->>>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
-/tree/drivers/usb/typec/tcpm/tcpm.c#n3075
->>>
->>> Do you happen to have a pointer to something closer to what you are des=
-cribing?
->>
->> Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb3=
-02.c
->> you need to do something similar in your Type-C controller driver and
->> export the GPIO as as a gpio-controlled regulator and tie the regulator =
-to
->> the connector.
->=20
-> Thanks for the suggestion, I really appreciate it! One more question
-> though, since I'm using the tcpci_rt1711h driver, which re-uses the
-> somewhat sparse tcpci.c implementation, would you recommend trying to
-> add generic regulator support to the tcpci code or trying to extend
-> the implementation somehow allow the tcpci_rt1711h driver replace just
-> the set_vbus function?
+With Andrew's "net: usb: lan78xx: Connect PHY before registering MAC"
+and this patch I am able to boot and use the RPi3 with -rt.
 
-I have the feeling that this is more of a question for Heikki.
+There was already a lot of dicussion on this topic but no fixes so
+far. So I just suggest to revert the original commit since it is not
+clear to me what it fixes:
 
-My first instinct is: if you are using tcpci can't you put all
-the hacks you need for the usb connection shared between hub
-and type-c in your firmware ?
+https://www.spinics.net/lists/netdev/msg542290.html
+https://marc.info/?l=linux-netdev&m=154604180927252&w=2
+https://patchwork.kernel.org/patch/10888797/
 
-Regards,
+Without this revert RPi3 is not usable for -rt at this point.
 
-Hans
+Thanks,
+Daniel
+
+ drivers/net/usb/lan78xx.c | 208 +++-----------------------------------
+ 1 file changed, 16 insertions(+), 192 deletions(-)
+
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index 58f5a219fb65..f96c7ff3edd4 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -20,10 +20,6 @@
+ #include <linux/mdio.h>
+ #include <linux/phy.h>
+ #include <net/ip6_checksum.h>
+-#include <linux/interrupt.h>
+-#include <linux/irqdomain.h>
+-#include <linux/irq.h>
+-#include <linux/irqchip/chained_irq.h>
+ #include <linux/microchipphy.h>
+ #include <linux/phy_fixed.h>
+ #include <linux/of_mdio.h>
+@@ -87,38 +83,6 @@
+ /* statistic update interval (mSec) */
+ #define STAT_UPDATE_TIMER		(1 * 1000)
+ 
+-/* defines interrupts from interrupt EP */
+-#define MAX_INT_EP			(32)
+-#define INT_EP_INTEP			(31)
+-#define INT_EP_OTP_WR_DONE		(28)
+-#define INT_EP_EEE_TX_LPI_START		(26)
+-#define INT_EP_EEE_TX_LPI_STOP		(25)
+-#define INT_EP_EEE_RX_LPI		(24)
+-#define INT_EP_MAC_RESET_TIMEOUT	(23)
+-#define INT_EP_RDFO			(22)
+-#define INT_EP_TXE			(21)
+-#define INT_EP_USB_STATUS		(20)
+-#define INT_EP_TX_DIS			(19)
+-#define INT_EP_RX_DIS			(18)
+-#define INT_EP_PHY			(17)
+-#define INT_EP_DP			(16)
+-#define INT_EP_MAC_ERR			(15)
+-#define INT_EP_TDFU			(14)
+-#define INT_EP_TDFO			(13)
+-#define INT_EP_UTX			(12)
+-#define INT_EP_GPIO_11			(11)
+-#define INT_EP_GPIO_10			(10)
+-#define INT_EP_GPIO_9			(9)
+-#define INT_EP_GPIO_8			(8)
+-#define INT_EP_GPIO_7			(7)
+-#define INT_EP_GPIO_6			(6)
+-#define INT_EP_GPIO_5			(5)
+-#define INT_EP_GPIO_4			(4)
+-#define INT_EP_GPIO_3			(3)
+-#define INT_EP_GPIO_2			(2)
+-#define INT_EP_GPIO_1			(1)
+-#define INT_EP_GPIO_0			(0)
+-
+ static const char lan78xx_gstrings[][ETH_GSTRING_LEN] = {
+ 	"RX FCS Errors",
+ 	"RX Alignment Errors",
+@@ -350,15 +314,6 @@ struct statstage {
+ 	struct lan78xx_statstage64	curr_stat;
+ };
+ 
+-struct irq_domain_data {
+-	struct irq_domain	*irqdomain;
+-	unsigned int		phyirq;
+-	struct irq_chip		*irqchip;
+-	irq_flow_handler_t	irq_handler;
+-	u32			irqenable;
+-	struct mutex		irq_lock;		/* for irq bus access */
+-};
+-
+ struct lan78xx_net {
+ 	struct net_device	*net;
+ 	struct usb_device	*udev;
+@@ -415,8 +370,6 @@ struct lan78xx_net {
+ 
+ 	int			delta;
+ 	struct statstage	stats;
+-
+-	struct irq_domain_data	domain_data;
+ };
+ 
+ /* define external phy id */
+@@ -1251,6 +1204,7 @@ static void lan78xx_defer_kevent(struct lan78xx_net *dev, int work)
+ static void lan78xx_status(struct lan78xx_net *dev, struct urb *urb)
+ {
+ 	u32 intdata;
++	struct phy_device *phydev = dev->net->phydev;
+ 
+ 	if (urb->actual_length != 4) {
+ 		netdev_warn(dev->net,
+@@ -1264,8 +1218,7 @@ static void lan78xx_status(struct lan78xx_net *dev, struct urb *urb)
+ 		netif_dbg(dev, link, dev->net, "PHY INTR: 0x%08x\n", intdata);
+ 		lan78xx_defer_kevent(dev, EVENT_LINK_RESET);
+ 
+-		if (dev->domain_data.phyirq > 0)
+-			generic_handle_irq(dev->domain_data.phyirq);
++		phy_mac_interrupt(phydev);
+ 	} else
+ 		netdev_warn(dev->net,
+ 			    "unexpected interrupt: 0x%08x\n", intdata);
+@@ -1874,127 +1827,6 @@ static void lan78xx_link_status_change(struct net_device *net)
+ 	}
+ }
+ 
+-static int irq_map(struct irq_domain *d, unsigned int irq,
+-		   irq_hw_number_t hwirq)
+-{
+-	struct irq_domain_data *data = d->host_data;
+-
+-	irq_set_chip_data(irq, data);
+-	irq_set_chip_and_handler(irq, data->irqchip, data->irq_handler);
+-	irq_set_noprobe(irq);
+-
+-	return 0;
+-}
+-
+-static void irq_unmap(struct irq_domain *d, unsigned int irq)
+-{
+-	irq_set_chip_and_handler(irq, NULL, NULL);
+-	irq_set_chip_data(irq, NULL);
+-}
+-
+-static const struct irq_domain_ops chip_domain_ops = {
+-	.map	= irq_map,
+-	.unmap	= irq_unmap,
+-};
+-
+-static void lan78xx_irq_mask(struct irq_data *irqd)
+-{
+-	struct irq_domain_data *data = irq_data_get_irq_chip_data(irqd);
+-
+-	data->irqenable &= ~BIT(irqd_to_hwirq(irqd));
+-}
+-
+-static void lan78xx_irq_unmask(struct irq_data *irqd)
+-{
+-	struct irq_domain_data *data = irq_data_get_irq_chip_data(irqd);
+-
+-	data->irqenable |= BIT(irqd_to_hwirq(irqd));
+-}
+-
+-static void lan78xx_irq_bus_lock(struct irq_data *irqd)
+-{
+-	struct irq_domain_data *data = irq_data_get_irq_chip_data(irqd);
+-
+-	mutex_lock(&data->irq_lock);
+-}
+-
+-static void lan78xx_irq_bus_sync_unlock(struct irq_data *irqd)
+-{
+-	struct irq_domain_data *data = irq_data_get_irq_chip_data(irqd);
+-	struct lan78xx_net *dev =
+-			container_of(data, struct lan78xx_net, domain_data);
+-	u32 buf;
+-	int ret;
+-
+-	/* call register access here because irq_bus_lock & irq_bus_sync_unlock
+-	 * are only two callbacks executed in non-atomic contex.
+-	 */
+-	ret = lan78xx_read_reg(dev, INT_EP_CTL, &buf);
+-	if (buf != data->irqenable)
+-		ret = lan78xx_write_reg(dev, INT_EP_CTL, data->irqenable);
+-
+-	mutex_unlock(&data->irq_lock);
+-}
+-
+-static struct irq_chip lan78xx_irqchip = {
+-	.name			= "lan78xx-irqs",
+-	.irq_mask		= lan78xx_irq_mask,
+-	.irq_unmask		= lan78xx_irq_unmask,
+-	.irq_bus_lock		= lan78xx_irq_bus_lock,
+-	.irq_bus_sync_unlock	= lan78xx_irq_bus_sync_unlock,
+-};
+-
+-static int lan78xx_setup_irq_domain(struct lan78xx_net *dev)
+-{
+-	struct device_node *of_node;
+-	struct irq_domain *irqdomain;
+-	unsigned int irqmap = 0;
+-	u32 buf;
+-	int ret = 0;
+-
+-	of_node = dev->udev->dev.parent->of_node;
+-
+-	mutex_init(&dev->domain_data.irq_lock);
+-
+-	lan78xx_read_reg(dev, INT_EP_CTL, &buf);
+-	dev->domain_data.irqenable = buf;
+-
+-	dev->domain_data.irqchip = &lan78xx_irqchip;
+-	dev->domain_data.irq_handler = handle_simple_irq;
+-
+-	irqdomain = irq_domain_add_simple(of_node, MAX_INT_EP, 0,
+-					  &chip_domain_ops, &dev->domain_data);
+-	if (irqdomain) {
+-		/* create mapping for PHY interrupt */
+-		irqmap = irq_create_mapping(irqdomain, INT_EP_PHY);
+-		if (!irqmap) {
+-			irq_domain_remove(irqdomain);
+-
+-			irqdomain = NULL;
+-			ret = -EINVAL;
+-		}
+-	} else {
+-		ret = -EINVAL;
+-	}
+-
+-	dev->domain_data.irqdomain = irqdomain;
+-	dev->domain_data.phyirq = irqmap;
+-
+-	return ret;
+-}
+-
+-static void lan78xx_remove_irq_domain(struct lan78xx_net *dev)
+-{
+-	if (dev->domain_data.phyirq > 0) {
+-		irq_dispose_mapping(dev->domain_data.phyirq);
+-
+-		if (dev->domain_data.irqdomain)
+-			irq_domain_remove(dev->domain_data.irqdomain);
+-	}
+-	dev->domain_data.phyirq = 0;
+-	dev->domain_data.irqdomain = NULL;
+-}
+-
+ static int lan8835_fixup(struct phy_device *phydev)
+ {
+ 	int buf;
+@@ -2123,16 +1955,15 @@ static int lan78xx_phy_init(struct lan78xx_net *dev)
+ 		return -EIO;
+ 	}
+ 
+-	/* if phyirq is not set, use polling mode in phylib */
+-	if (dev->domain_data.phyirq > 0)
+-		phydev->irq = dev->domain_data.phyirq;
+-	else
+-		phydev->irq = 0;
+-	netdev_dbg(dev->net, "phydev->irq = %d\n", phydev->irq);
+-
+ 	/* set to AUTOMDIX */
+ 	phydev->mdix = ETH_TP_MDI_AUTO;
+ 
++	ret = phy_read(phydev, LAN88XX_INT_STS);
++	ret = phy_write(phydev, LAN88XX_INT_MASK,
++			LAN88XX_INT_MASK_MDINTPIN_EN_ |
++			LAN88XX_INT_MASK_LINK_CHANGE_);
++	phydev->irq = PHY_IGNORE_INTERRUPT;
++
+ 	ret = phy_connect_direct(dev->net, phydev,
+ 				 lan78xx_link_status_change,
+ 				 dev->interface);
+@@ -2570,6 +2401,11 @@ static int lan78xx_reset(struct lan78xx_net *dev)
+ 	}
+ 	ret = lan78xx_write_reg(dev, MAC_CR, buf);
+ 
++	/* enable PHY interrupts */
++	ret = lan78xx_read_reg(dev, INT_EP_CTL, &buf);
++	buf |= INT_ENP_PHY_INT;
++	ret = lan78xx_write_reg(dev, INT_EP_CTL, buf);
++
+ 	ret = lan78xx_read_reg(dev, MAC_TX, &buf);
+ 	buf |= MAC_TX_TXEN_;
+ 	ret = lan78xx_write_reg(dev, MAC_TX, buf);
+@@ -2977,13 +2813,6 @@ static int lan78xx_bind(struct lan78xx_net *dev, struct usb_interface *intf)
+ 
+ 	dev->net->hw_features = dev->net->features;
+ 
+-	ret = lan78xx_setup_irq_domain(dev);
+-	if (ret < 0) {
+-		netdev_warn(dev->net,
+-			    "lan78xx_setup_irq_domain() failed : %d", ret);
+-		goto out1;
+-	}
+-
+ 	dev->net->hard_header_len += TX_OVERHEAD;
+ 	dev->hard_mtu = dev->net->mtu + dev->net->hard_header_len;
+ 
+@@ -2991,13 +2820,13 @@ static int lan78xx_bind(struct lan78xx_net *dev, struct usb_interface *intf)
+ 	ret = lan78xx_reset(dev);
+ 	if (ret) {
+ 		netdev_warn(dev->net, "Registers INIT FAILED....");
+-		goto out2;
++		goto out;
+ 	}
+ 
+ 	ret = lan78xx_mdio_init(dev);
+ 	if (ret) {
+ 		netdev_warn(dev->net, "MDIO INIT FAILED.....");
+-		goto out2;
++		goto out;
+ 	}
+ 
+ 	dev->net->flags |= IFF_MULTICAST;
+@@ -3006,10 +2835,7 @@ static int lan78xx_bind(struct lan78xx_net *dev, struct usb_interface *intf)
+ 
+ 	return ret;
+ 
+-out2:
+-	lan78xx_remove_irq_domain(dev);
+-
+-out1:
++out:
+ 	netdev_warn(dev->net, "Bind routine FAILED");
+ 	cancel_work_sync(&pdata->set_multicast);
+ 	cancel_work_sync(&pdata->set_vlan);
+@@ -3021,8 +2847,6 @@ static void lan78xx_unbind(struct lan78xx_net *dev, struct usb_interface *intf)
+ {
+ 	struct lan78xx_priv *pdata = (struct lan78xx_priv *)(dev->data[0]);
+ 
+-	lan78xx_remove_irq_domain(dev);
+-
+ 	lan78xx_remove_mdio(dev);
+ 
+ 	if (pdata) {
+-- 
+2.21.0
 
