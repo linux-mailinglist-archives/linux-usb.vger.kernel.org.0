@@ -2,135 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEA3DCE19
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9DFDCE4E
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505854AbfJRSiD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 14:38:03 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33980 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730794AbfJRSiC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 14:38:02 -0400
-Received: by mail-pf1-f195.google.com with SMTP id b128so4416110pfa.1;
-        Fri, 18 Oct 2019 11:38:02 -0700 (PDT)
+        id S2505870AbfJRSjU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 14:39:20 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:53008 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2505856AbfJRSjU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 14:39:20 -0400
+Received: by mail-wm1-f68.google.com with SMTP id r19so7169808wmh.2
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 11:39:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=IFDsqOMwc2ojaPSLkT8+wMYUXewN1acLP2lqR1XP15Q=;
-        b=HDe9kDeKBahe9NjGm/ugr3PrO4D0Lw085ywSNSA095A6Y7b0bdnZjmqC82XIISIIdt
-         HL1478hYPAIvWzZLWe743K+0Z4UKFrxK0/hQ9QagRbJbspKW/xQebobzv2mUFy3hRLKH
-         //wSlMwz56Seed2I+e/Y5zi3HKTITkVYbYNZcR/r9Ty9L4OUJxGZQa8n7sooJF+d06MV
-         U8c1Xqzj80SWkW1+fMzKDsGOIVt27mRFx9PdNgqZxq/nnXPUUxC1LvIFwI/iWySD+Mw9
-         Y/fW+KH35SuT8tMvpzVKHsaJfOpxO5whSf8Fu101J4r54ddKqPMDRDSv0HSvbuy5Taxu
-         2ebg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=f4CnMsn4AbSRNn1EVCaabWmq8sv54L0ZTWdVo5HeLwA=;
+        b=f1TWdlYaruRtAyn1ngSsZ6uQn90ArDxO5LBV1SCnegvCTBjunLuFQdCC5GQcOic5kV
+         XFX4SOPayd3RrflTHaz9+t1hM4dPpdExngdo3PnFxk5kowUq+zvTsVLEbj2AUks6p20x
+         iQHFEDttYjw/iF8/w/yPlasZfFcKXzwcThXlvx8iXO6IZu/+6bD9Si5igH998rahS9kD
+         wCtSdgazQwuBZ7W127ThETW+39wbFdle7JTJlO+jOfYJ/a4KN4EGaVf7O2oRqubH7fEQ
+         XdqNT2/L8jTS95upwtA+kgQwGiJxlXO8kpGvnzsiPJcVm/lBKiwBaH9+SueZ4aw1uEBh
+         zaoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IFDsqOMwc2ojaPSLkT8+wMYUXewN1acLP2lqR1XP15Q=;
-        b=oQmEyaKbSDM+BjqtH9XH/ITkCs9nIAbpkizbSvzomnnq/0WoQtlqH+ZgB2NMm0sqyM
-         46jfYSYcmdghh+BLiwdnMur5fcuVVl6PZBR4Duj0vEJaxdUwajkJ1+I0kRfNwUEu7Nqu
-         LFIWf0HGvmwjhmAj3CGLg4COcqI1XNfQ+teg4tGyrVQ5OSd2bpo9lnC+9YemWrsnvNPx
-         V4n2+Rm8RJFkviWUpgc2SzFFKIydJdRW5pFB16+igXpEOgwFaeJBXkb1vLNJyq9PFu7f
-         8ZLX42oiOsFyC3ZhG7qLsIBE8Oxz6cqbcTajgQ7yjg8ZdDyJfe/tG97bNlPyNqi+R8le
-         8lig==
-X-Gm-Message-State: APjAAAVkC6MI9rbmGK5AsM/4nnVmhBP6ZwpDmT2NKV7C0BLUGKOr0CSe
-        STr4JWggU2B73+Bp2Iktk80=
-X-Google-Smtp-Source: APXvYqxI3fG8J2/DXNrMqbp5He+LcRaizowKU8zXJc/NBeHP6e+1CmGad85VCcLrdR+rSgjhba5HPg==
-X-Received: by 2002:a63:5762:: with SMTP id h34mr2723268pgm.235.1571423881363;
-        Fri, 18 Oct 2019 11:38:01 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id 69sm6908001pgh.47.2019.10.18.11.37.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 11:38:00 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 11:37:57 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-Message-ID: <20191018183757.GL35946@dtor-ws>
-References: <20191018154052.1276506-1-arnd@arndb.de>
- <20191018154201.1276638-5-arnd@arndb.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=f4CnMsn4AbSRNn1EVCaabWmq8sv54L0ZTWdVo5HeLwA=;
+        b=hHn/1zU0MqDTqtWnf6UrgyHc/zB0PPUIbz996QMAc9qc4BCpgW9MySZGvAKGes3gc2
+         RY29TD6Cq24qe9JdLEzkcEc7N0NKCbTq1njvrRz5MCvyJ+2rwWNByqnA8SyVoxlB3cA3
+         9qWio2t560ZES2pq6i7ET8jy5mjpkE/um8SGpRgJ+hr+sTmWutcASLb84/FUZvGPVTNV
+         rCxO3eZi4nbtEHvtM606gtMpsmI3SZQXjPT8f4AGJjHgM/3ZdSU3OEy0DbwvwH/ek+eh
+         jjahH27XR1O6ving37e66e8klc2AMPZ7HsHfMPlGIrtJeUMJt/qNnfyknn2nLRMej08G
+         7Ahg==
+X-Gm-Message-State: APjAAAW5A2SGn/M2FEB74PViHbOf6ibY03fhUdbtK2EyIv4v019mC5cQ
+        RSwO1VQ16cnNFcMaUCRG020VBIXNSOokBgwAR6fDYQ==
+X-Google-Smtp-Source: APXvYqwQBRN+0AP3sy+6+jMt6ece72V8onGhRTBZvT/3iOom/I8z+sXUkSfEcU0M5YrBcGzh2NdoipI884i3PRHW/D4=
+X-Received: by 2002:a1c:f201:: with SMTP id s1mr8322752wmc.59.1571423957896;
+ Fri, 18 Oct 2019 11:39:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
+ <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com> <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+ <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com> <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
+ <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com> <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
+ <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
+In-Reply-To: <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Fri, 18 Oct 2019 11:39:06 -0700
+Message-ID: <CALAqxLWHbhst5KXAGCswKVp7ztzFHxdb6nskfze+Jk+xWo2Ssw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 05:41:20PM +0200, Arnd Bergmann wrote:
-> The mach/hardware.h is included in lots of places, and it provides
-> three different things on pxa:
-> 
-> - the cpu_is_pxa* macros
-> - an indirect inclusion of mach/addr-map.h
-> - the __REG() and io_pv2() helper macros
-> 
-> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
-> headers, then change all the files that use mach/hardware.h to
-> include the exact set of those three headers that they actually
-> need, allowing for further more targeted cleanup.
-> 
-> linux/soc/pxa/cpu.h can remain permanently exported and is now in
-> a global location along with similar headers. pxa-regs.h and
-> addr-map.h are only used in a very small number of drivers now
-> and can be moved to arch/arm/mach-pxa/ directly when those drivers
-> are to pass the necessary data as resources.
-> 
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On Fri, Oct 18, 2019 at 1:06 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 18-10-2019 07:55, John Stultz wrote:
+> > On Wed, Oct 16, 2019 at 12:27 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> >> Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb302.c
+> >> you need to do something similar in your Type-C controller driver and
+> >> export the GPIO as as a gpio-controlled regulator and tie the regulator to
+> >> the connector.
+> >
+> > Thanks for the suggestion, I really appreciate it! One more question
+> > though, since I'm using the tcpci_rt1711h driver, which re-uses the
+> > somewhat sparse tcpci.c implementation, would you recommend trying to
+> > add generic regulator support to the tcpci code or trying to extend
+> > the implementation somehow allow the tcpci_rt1711h driver replace just
+> > the set_vbus function?
+>
+> I have the feeling that this is more of a question for Heikki.
+>
+> My first instinct is: if you are using tcpci can't you put all
+> the hacks you need for the usb connection shared between hub
+> and type-c in your firmware ?
 
-For input bits:
+I appreciate the suggestion, but I'm not aware of any USB firmware for
+the board, nor do I think I have any such source.  :(
 
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
--- 
-Dmitry
+thanks
+-john
