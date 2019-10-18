@@ -2,121 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE825DC181
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 11:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5C8DC391
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 13:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633115AbfJRJkY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 05:40:24 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:13378 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2442378AbfJRJjo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 05:39:44 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5da988620000>; Fri, 18 Oct 2019 02:39:46 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 18 Oct 2019 02:39:43 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 18 Oct 2019 02:39:43 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Oct
- 2019 09:39:42 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Fri, 18 Oct 2019 09:39:43 +0000
-Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.66.147]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5da9885c0000>; Fri, 18 Oct 2019 02:39:42 -0700
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
-CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>
-Subject: [Patch V11 09/11] arm64: tegra: Enable xudc on Jetson TX2
-Date:   Fri, 18 Oct 2019 15:08:14 +0530
-Message-ID: <1571391496-20834-10-git-send-email-nkristam@nvidia.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1571391496-20834-1-git-send-email-nkristam@nvidia.com>
-References: <1571391496-20834-1-git-send-email-nkristam@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571391586; bh=E76RFg4hKivDlAPkzUSnSS0t3ggcoA3D3Vws4hzLjjg=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=Tb9KsRI4F6GdJb673V/8fUaaFpvEk2LLTUTumsQHvCxGoF1EHHmbd/fQCcKW4/ywW
-         Gx4u8hReGcFkdxV1rUajMJO87TPKHK2nde48xTRJD950n1A85C1BMWwxkhS4G4TMT8
-         Ubwaps6+i9WYBVnCHwwtkpQ21K1diVXwEMrvtqoDz1YOpgU8WPyNaeplO3mxKY1/sV
-         tJBpxsOV6A5uC+Zii5J0lbqXQYueYnhPKPIkfn7VYKIJSup0b26S6SDXzUKeFqI7/b
-         jNwGCvfsgTzLUwV9i2sfx07R2V4ZtExkKn63/brJXAkHlRtm3JwA/ezrqi6MWygZ0X
-         Fao9l02MvRYLw==
+        id S2409877AbfJRLCO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 07:02:14 -0400
+Received: from inca-roads.misterjones.org ([213.251.177.50]:43379 "EHLO
+        inca-roads.misterjones.org" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2390315AbfJRLCO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 07:02:14 -0400
+Received: from [212.111.254.166] (helo=big-swifty.misterjones.org)
+        by cheepnis.misterjones.org with esmtpsa (TLSv1.2:AES256-GCM-SHA384:256)
+        (Exim 4.80)
+        (envelope-from <maz@kernel.org>)
+        id 1iLQ1L-0005Xu-ES; Fri, 18 Oct 2019 13:02:11 +0200
+Date:   Fri, 18 Oct 2019 12:02:10 +0100
+Message-ID: <86imomz58t.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Daniel Wagner <dwagner@suse.de>
+Cc:     UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>, Stefan Wahren <wahrenst@gmx.net>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] net: usb: lan78xx: Use phy_mac_interrupt() for interrupt handling
+In-Reply-To: <20191018082817.111480-1-dwagner@suse.de>
+References: <20191018082817.111480-1-dwagner@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 EasyPG/1.0.0 Emacs/26
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 212.111.254.166
+X-SA-Exim-Rcpt-To: dwagner@suse.de, UNGLinuxDriver@microchip.com, netdev@vger.kernel.org, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org, woojung.huh@microchip.com, andrew@lunn.ch, wahrenst@gmx.net, Jisheng.Zhang@synaptics.com, bigeasy@linutronix.de, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on cheepnis.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enable XUSB device mode driver for USB0 slot on Jetson TX2.
+On Fri, 18 Oct 2019 09:28:17 +0100,
+Daniel Wagner <dwagner@suse.de> wrote:
+> 
+> handle_simple_irq() expect interrupts to be disabled. The USB
+> framework is using threaded interrupts, which implies that interrupts
+> are re-enabled as soon as it has run.
+> 
+> This reverts the changes from cc89c323a30e ("lan78xx: Use irq_domain
+> for phy interrupt from USB Int. EP").
+> 
+> [    4.886203] 000: irq 79 handler irq_default_primary_handler+0x0/0x8 enabled interrupts
+> [    4.886243] 000: WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:152 __handle_irq_event_percpu+0x154/0x168
+> [    4.896294] 000: Modules linked in:
+> [    4.896301] 000: CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.3.6 #39
+> [    4.896310] 000: Hardware name: Raspberry Pi 3 Model B+ (DT)
+> [    4.896315] 000: pstate: 60000005 (nZCv daif -PAN -UAO)
+> [    4.896321] 000: pc : __handle_irq_event_percpu+0x154/0x168
+> [    4.896331] 000: lr : __handle_irq_event_percpu+0x154/0x168
+> [    4.896339] 000: sp : ffff000010003cc0
+> [    4.896346] 000: x29: ffff000010003cc0 x28: 0000000000000060
+> [    4.896355] 000: x27: ffff000011021980 x26: ffff00001189c72b
+> [    4.896364] 000: x25: ffff000011702bc0 x24: ffff800036d6e400
+> [    4.896373] 000: x23: 000000000000004f x22: ffff000010003d64
+> [    4.896381] 000: x21: 0000000000000000 x20: 0000000000000002
+> [    4.896390] 000: x19: ffff8000371c8480 x18: 0000000000000060
+> [    4.896398] 000: x17: 0000000000000000 x16: 00000000000000eb
+> [    4.896406] 000: x15: ffff000011712d18 x14: 7265746e69206465
+> [    4.896414] 000: x13: ffff000010003ba0 x12: ffff000011712df0
+> [    4.896422] 000: x11: 0000000000000001 x10: ffff000011712e08
+> [    4.896430] 000: x9 : 0000000000000001 x8 : 000000000003c920
+> [    4.896437] 000: x7 : ffff0000118cc410 x6 : ffff0000118c7f00
+> [    4.896445] 000: x5 : 000000000003c920 x4 : 0000000000004510
+> [    4.896453] 000: x3 : ffff000011712dc8 x2 : 0000000000000000
+> [    4.896461] 000: x1 : 73a3f67df94c1500 x0 : 0000000000000000
+> [    4.896466] 000: Call trace:
+> [    4.896471] 000:  __handle_irq_event_percpu+0x154/0x168
+> [    4.896481] 000:  handle_irq_event_percpu+0x50/0xb0
+> [    4.896489] 000:  handle_irq_event+0x40/0x98
+> [    4.896497] 000:  handle_simple_irq+0xa4/0xf0
+> [    4.896505] 000:  generic_handle_irq+0x24/0x38
+> [    4.896513] 000:  intr_complete+0xb0/0xe0
+> [    4.896525] 000:  __usb_hcd_giveback_urb+0x58/0xd8
+> [    4.896533] 000:  usb_giveback_urb_bh+0xd0/0x170
+> [    4.896539] 000:  tasklet_action_common.isra.0+0x9c/0x128
+> [    4.896549] 000:  tasklet_hi_action+0x24/0x30
+> [    4.896556] 000:  __do_softirq+0x120/0x23c
+> [    4.896564] 000:  irq_exit+0xb8/0xd8
+> [    4.896571] 000:  __handle_domain_irq+0x64/0xb8
+> [    4.896579] 000:  bcm2836_arm_irqchip_handle_irq+0x60/0xc0
+> [    4.896586] 000:  el1_irq+0xb8/0x140
+> [    4.896592] 000:  arch_cpu_idle+0x10/0x18
+> [    4.896601] 000:  do_idle+0x200/0x280
+> [    4.896608] 000:  cpu_startup_entry+0x20/0x28
+> [    4.896615] 000:  rest_init+0xb4/0xc0
+> [    4.896623] 000:  arch_call_rest_init+0xc/0x14
+> [    4.896632] 000:  start_kernel+0x454/0x480
+> 
+> [dwagner: Updated Jisheng's initial patch]
+> 
+> Fixes: cc89c323a30e ("lan78xx: Use irq_domain for phy interrupt from USB Int. EP")
+> Cc: Woojung Huh <woojung.huh@microchip.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+> Hi,
+> 
+> With Andrew's "net: usb: lan78xx: Connect PHY before registering MAC"
+> and this patch I am able to boot and use the RPi3 with -rt.
+> 
+> There was already a lot of dicussion on this topic but no fixes so
+> far. So I just suggest to revert the original commit since it is not
+> clear to me what it fixes:
+> 
+> https://www.spinics.net/lists/netdev/msg542290.html
+> https://marc.info/?l=linux-netdev&m=154604180927252&w=2
+> https://patchwork.kernel.org/patch/10888797/
+> 
+> Without this revert RPi3 is not usable for -rt at this point.
 
-Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
----
- arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts | 29 +++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts b/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-index 2e61957..b55de35 100644
---- a/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-+++ b/arch/arm64/boot/dts/nvidia/tegra186-p2771-0000.dts
-@@ -131,7 +131,7 @@
- 				status = "okay";
- 
- 				lanes {
--					usb2-0 {
-+					micro_b: usb2-0 {
- 						nvidia,function = "xusb";
- 						status = "okay";
- 					};
-@@ -201,6 +201,20 @@
- 		phy-names = "usb2-0", "usb2-1", "usb3-0";
- 	};
- 
-+	usb@3550000 {
-+		status = "okay";
-+
-+		phys = <&micro_b>;
-+		phy-names = "usb2";
-+		usb-role-switch;
-+
-+		port {
-+			usb_role_switch: endpoint {
-+				remote-endpoint = <&usb_b_conn_ep>;
-+			};
-+		};
-+	};
-+
- 	i2c@c250000 {
- 		/* carrier board ID EEPROM */
- 		eeprom@57 {
-@@ -367,4 +381,17 @@
- 			vin-supply = <&vdd_5v0_sys>;
- 		};
- 	};
-+
-+	usb_type_b: connector {
-+		compatible = "usb-b-connector", "gpio-usb-b-connector";
-+		label = "micro-USB";
-+		type = "micro";
-+		vbus-gpio = <&gpio TEGRA186_MAIN_GPIO(X, 7) GPIO_ACTIVE_LOW>;
-+
-+		port {
-+			usb_b_conn_ep: endpoint {
-+				remote-endpoint = <&usb_role_switch>;
-+			};
-+		};
-+	};
- };
+	M.
+
 -- 
-2.7.4
-
+Jazz is not dead, it just smells funny.
