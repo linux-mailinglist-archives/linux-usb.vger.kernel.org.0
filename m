@@ -2,148 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EB2DC7D2
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 16:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EA4DC7E0
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 16:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2634221AbfJROxL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 10:53:11 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:34122 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394114AbfJROxK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 10:53:10 -0400
-Received: by mail-io1-f71.google.com with SMTP id z10so8879799ioj.1
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 07:53:07 -0700 (PDT)
+        id S2634272AbfJRO4H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 10:56:07 -0400
+Received: from mail-wm1-f74.google.com ([209.85.128.74]:37636 "EHLO
+        mail-wm1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2634270AbfJRO4H (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 10:56:07 -0400
+Received: by mail-wm1-f74.google.com with SMTP id o8so2864914wmc.2
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 07:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=yc/eud15jtn/68GNn5D6RpG4esICx8d3KE84rtJsHck=;
+        b=DD4RNHCQEYgY4LPTbWF0bEzKJpj56iYSVfCGi1ZakRuOvBmPkCeTTXZ9q/SkW8cIUe
+         CgjVN+PqHKS9AmkhTwxFW0xc4rfeCokgJ4Axa1SSaAbPSMG5TYkGLp6JxMzbpWAnscvq
+         DAWdpivSmAHrr61L3t/2s+/cQfqljrgLtTQvgwBtmtzr4Zvl7hTBKYXKYNGap/wRDYI5
+         1wG137HJ/Wy+rWeYjSTTmbyypl7QLpFfZwKa3zgKRQyqmQsbqsN5/VXdl1+VLnCmcufz
+         KH3T510Qw/0dBnofaoT0FuGq2zAzuh9AyAQYRP9DjYDbIpBYBAEy/jrQsihtYxFikj8Y
+         PIhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=31JpFUUMI0833veX6/3Xc4Ad9JSME0v2pnvL2+iC+c4=;
-        b=C0H4ochQNjs0+tR+KbUiIChK83lRCvMhc7S0o/G71/GjD2n6nkYtZLV8nm5UId5n29
-         Ffi2aERrXCgNB9vzi+bukgfMQaiFsoFodXrRmsUif4OD8YliMYHa7okJgdRyxqxiILhH
-         7CCxhOTqhZwLCp7TZzOqSV60+Tqtr2ajDbBzI09no20RTW7LWr4IVnAhy+/tu7UrX6Wg
-         cz+31P47bPXyPjCgUaWqVGY3TdkP5F5Svf7tffm7kTvHuv1vSmLL0aFoBh7bDHiOVrE5
-         o/hzSJzAKhoQbFOgXk7xchlGMuzDYaHwy/7OEX36mBmmzwjYBOGqGqfhR8CSLwlrXxD2
-         7xSA==
-X-Gm-Message-State: APjAAAVXGmw//I/w1DoS8rbgdo7b5mxwEPzPeYRJnQyrSwQazROOnfuq
-        flghOfAOaAz1Iz23ZWbnDUVVmL7UiXFkEjQoGnijjirF2+Ak
-X-Google-Smtp-Source: APXvYqxGQTNch575ai9m61k+pTwl8d6bwf490DFw6FEpqQGZLepdk8vXWI8VRroFbzwisUElwi3WxNHFDB8UZZCXkXNLIOVslF6s
-MIME-Version: 1.0
-X-Received: by 2002:a92:88cf:: with SMTP id m76mr10823165ilh.40.1571410387414;
- Fri, 18 Oct 2019 07:53:07 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 07:53:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f036110595307db3@google.com>
-Subject: KMSAN: uninit-value in ld_usb_read (2)
-From:   syzbot <syzbot+fd49690bb45caaacf578@syzkaller.appspotmail.com>
-To:     enric.balletbo@collabora.com, glider@google.com,
-        gregkh@linuxfoundation.org, johan@kernel.org, kirr@nexedi.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        lkundrak@v3.sk, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=yc/eud15jtn/68GNn5D6RpG4esICx8d3KE84rtJsHck=;
+        b=WGg6IINuTK9nrjsHjIdkmppe7gFXA8Q6MhlR+2fkU6/XedbTrwhuhfvYL/8iaLkrON
+         gUfLTvYq2ksPoXfK8qsN9Yl0mV+Zl6TU0BxJdWr+yrnfdprl5XekcMr1+fSQN+yQQPx8
+         qciAjGWEy2w+v2oBFby2651+CXK/yrPTtrxUO2NXQ2Wku+88/BGsEigJ7ZSh+/gHljD9
+         czHy5rcYz3GbRIJ+wx1EN6Geepf0y3JD7H0MWf+S/INBdaq3m6lPAnsrowgrdWwJIuye
+         jg7gk+KrxWveV17PcDL3NRufcA9JwHmcN6Bdeq1B98QjVfskU3oxtwNNOmXPLuQU8p/C
+         Hcng==
+X-Gm-Message-State: APjAAAW+kEEzg5V6SKcX8VNZQUQ1eMAukVx2fURwz1O3kJOtnJkty8a3
+        MF7Jc1XzLUhxVhn/LMezeT0CUohMJsP99hVvizh3uhiOUKKdXEWQldPEzKUgbS4qJLxoUHEAASl
+        lsFrR7NuBM1+1338ghYVFJRKWbBm1zgVwqtiqqjxg3up2O4JqPljtmE1VBkAWSLxJ7uxYpSXM4E
+        nW
+X-Google-Smtp-Source: APXvYqxyyrELtJ6sDmBfP7yBYHlnJtgNogNsv+PAFdAKgnfpSGntk1T5IuEHltHnQI7E9E7kzLuIOUqT0dorLOup
+X-Received: by 2002:a5d:4ace:: with SMTP id y14mr2449479wrs.131.1571410564846;
+ Fri, 18 Oct 2019 07:56:04 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 16:55:56 +0200
+Message-Id: <7a9d6e35873d52ec0ab1e6b9827d9299a1f4fb0d.1571409250.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
+Subject: [PATCH 1/2] USB: dummy-hcd: increase max number of devices to 32
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    c2453450 kmsan: kcov: prettify the code unpoisoning area->..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d6dc5f600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3684f3c73f43899a
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd49690bb45caaacf578
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157c63d7600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1180adab600000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+fd49690bb45caaacf578@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in ld_usb_read+0x870/0xc50  
-drivers/usb/misc/ldusb.c:487
-CPU: 1 PID: 12745 Comm: syz-executor511 Not tainted 5.4.0-rc3+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x14a/0x2f0 mm/kmsan/kmsan_report.c:109
-  __msan_warning+0x73/0xf0 mm/kmsan/kmsan_instr.c:245
-  ld_usb_read+0x870/0xc50 drivers/usb/misc/ldusb.c:487
-  __vfs_read+0x1a9/0xc90 fs/read_write.c:425
-  vfs_read+0x359/0x6f0 fs/read_write.c:461
-  ksys_read+0x265/0x430 fs/read_write.c:587
-  __do_sys_read fs/read_write.c:597 [inline]
-  __se_sys_read+0x92/0xb0 fs/read_write.c:595
-  __x64_sys_read+0x4a/0x70 fs/read_write.c:595
-  do_syscall_64+0xb6/0x160 arch/x86/entry/common.c:291
-  entry_SYSCALL_64_after_hwframe+0x63/0xe7
-RIP: 0033:0x4418a9
-Code: e8 8c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb 08 fc ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffd63549848 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00000000004418a9
-RDX: 0000000000000002 RSI: 0000000020000040 RDI: 0000000000000004
-RBP: 00000000006cc018 R08: 000000000000000f R09: 00000000004002c8
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000402600
-R13: 0000000000402690 R14: 0000000000000000 R15: 0000000000000000
-
-Uninit was created at:
-  kmsan_save_stack_with_flags+0x3f/0x90 mm/kmsan/kmsan.c:150
-  kmsan_internal_alloc_meta_for_pages mm/kmsan/kmsan_shadow.c:364 [inline]
-  kmsan_alloc_page+0x153/0x370 mm/kmsan/kmsan_shadow.c:393
-  __alloc_pages_nodemask+0x149d/0x60c0 mm/page_alloc.c:4794
-  alloc_pages_current+0x68d/0x9a0 mm/mempolicy.c:2188
-  alloc_pages include/linux/gfp.h:511 [inline]
-  kmalloc_order mm/slab_common.c:1303 [inline]
-  kmalloc_order_trace+0x94/0x3f0 mm/slab_common.c:1319
-  kmalloc_large include/linux/slab.h:485 [inline]
-  __kmalloc+0x2e6/0x430 mm/slub.c:3825
-  kmalloc_array+0x86/0x110 include/linux/slab.h:618
-  ld_usb_probe+0x64f/0x1460 drivers/usb/misc/ldusb.c:697
-  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
-  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
-  __device_attach+0x489/0x750 drivers/base/dd.c:894
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2201
-  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
-  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
-  __device_attach+0x489/0x750 drivers/base/dd.c:894
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2201
-  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
-  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-  worker_thread+0x111b/0x2460 kernel/workqueue.c:2415
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-=====================================================
-
-
+This patch increases the maximum number of Dummy UDC/HCD devices to 32.
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/gadget/udc/dummy_hcd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index 3d499d93c083..a8f1e5707c14 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -2725,7 +2725,7 @@ static struct platform_driver dummy_hcd_driver = {
+ };
+ 
+ /*-------------------------------------------------------------------------*/
+-#define MAX_NUM_UDC	2
++#define MAX_NUM_UDC	32
+ static struct platform_device *the_udc_pdev[MAX_NUM_UDC];
+ static struct platform_device *the_hcd_pdev[MAX_NUM_UDC];
+ 
+-- 
+2.23.0.866.gb869b98d4c-goog
+
