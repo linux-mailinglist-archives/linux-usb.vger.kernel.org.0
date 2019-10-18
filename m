@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFDADD3EE
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2019 00:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F83CDD3E6
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2019 00:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731281AbfJRWGT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 18:06:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38282 "EHLO mail.kernel.org"
+        id S2404673AbfJRWVW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 18:21:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38306 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731258AbfJRWGT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:06:19 -0400
+        id S1729186AbfJRWGX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:06:23 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1481B222D4;
-        Fri, 18 Oct 2019 22:06:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id AC6FC222D2;
+        Fri, 18 Oct 2019 22:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436378;
-        bh=uhPeJNd+u49dcc0yqvWhoBEO7i98kn3a/Loq3BHxCWo=;
+        s=default; t=1571436382;
+        bh=w72zSyvqC/ZsLccUu1t1p4GzejqibTaKWFcIEuyG+0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C/14N7qqjKO36MlSTZgO8Br465pUasQT4ZsyL7a0yrZL7D6T8/90uBKtIld7cgwv/
-         9aZMnwr7mJbnWTxY14ZVhvTQNkkBGI68sa+dSVN5I4fSG5i2R+enptJQRCjAmuHlem
-         F92+wW8XJHl5Dzoqn32zm9xN8PkX74GgzMFcZnoY=
+        b=HqxA9Z8dohohd5+vYXtnkfgi7z7DEIP+U1n9Vqs0vJxYjKeGBiqSi/yg3Yh/ARGJd
+         ae1boHI9R40yxWJGZ/5khSUbmfhmpktDoQ2wp7W3e/Q4CmncRNmyg/aTfIUleDIlsx
+         8rWzcfgReLUi5bOqePygx6B2xDsPioCtwpkUtpOY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>,
+Cc:     Jan-Marek Glogowski <glogow@fbihome.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 032/100] usb: dwc3: gadget: clear DWC3_EP_TRANSFER_STARTED on cmd complete
-Date:   Fri, 18 Oct 2019 18:04:17 -0400
-Message-Id: <20191018220525.9042-32-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 035/100] usb: handle warm-reset port requests on hub resume
+Date:   Fri, 18 Oct 2019 18:04:20 -0400
+Message-Id: <20191018220525.9042-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191018220525.9042-1-sashal@kernel.org>
 References: <20191018220525.9042-1-sashal@kernel.org>
@@ -43,60 +44,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Felipe Balbi <felipe.balbi@linux.intel.com>
+From: Jan-Marek Glogowski <glogow@fbihome.de>
 
-[ Upstream commit acbfa6c26f21a18830ee064b588c92334305b6af ]
+[ Upstream commit 4fdc1790e6a9ef22399c6bc6e63b80f4609f3b7e ]
 
-We must wait until End Transfer completes in order to clear
-DWC3_EP_TRANSFER_STARTED, otherwise we may confuse the driver.
+On plug-in of my USB-C device, its USB_SS_PORT_LS_SS_INACTIVE
+link state bit is set. Greping all the kernel for this bit shows
+that the port status requests a warm-reset this way.
 
-This patch is in preparation to fix a rare race condition that happens
-upon Disconnect Interrupt.
+This just happens, if its the only device on the root hub, the hub
+therefore resumes and the HCDs status_urb isn't yet available.
+If a warm-reset request is detected, this sets the hubs event_bits,
+which will prevent any auto-suspend and allows the hubs workqueue
+to warm-reset the port later in port_event.
 
-Tested-by: Thinh Nguyen <thinhn@synopsys.com>
-Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+Signed-off-by: Jan-Marek Glogowski <glogow@fbihome.de>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 19 +++++--------------
- 1 file changed, 5 insertions(+), 14 deletions(-)
+ drivers/usb/core/hub.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 7b0957c530485..54de732550648 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -375,19 +375,9 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned cmd,
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 8018f813972e0..d5fbd36cf4624 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -107,6 +107,8 @@ EXPORT_SYMBOL_GPL(ehci_cf_port_reset_rwsem);
+ static void hub_release(struct kref *kref);
+ static int usb_reset_and_verify_device(struct usb_device *udev);
+ static int hub_port_disable(struct usb_hub *hub, int port1, int set_state);
++static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
++		u16 portstatus);
  
- 	trace_dwc3_gadget_ep_cmd(dep, cmd, params, cmd_status);
- 
--	if (ret == 0) {
--		switch (DWC3_DEPCMD_CMD(cmd)) {
--		case DWC3_DEPCMD_STARTTRANSFER:
--			dep->flags |= DWC3_EP_TRANSFER_STARTED;
--			dwc3_gadget_ep_get_transfer_index(dep);
--			break;
--		case DWC3_DEPCMD_ENDTRANSFER:
--			dep->flags &= ~DWC3_EP_TRANSFER_STARTED;
--			break;
--		default:
--			/* nothing */
--			break;
--		}
-+	if (ret == 0 && DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
-+		dep->flags |= DWC3_EP_TRANSFER_STARTED;
-+		dwc3_gadget_ep_get_transfer_index(dep);
- 	}
- 
- 	if (unlikely(susphy)) {
-@@ -2417,7 +2407,8 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 		cmd = DEPEVT_PARAMETER_CMD(event->parameters);
- 
- 		if (cmd == DWC3_DEPCMD_ENDTRANSFER) {
--			dep->flags &= ~DWC3_EP_END_TRANSFER_PENDING;
-+			dep->flags &= ~(DWC3_EP_END_TRANSFER_PENDING |
-+					DWC3_EP_TRANSFER_STARTED);
- 			dwc3_gadget_ep_cleanup_cancelled_requests(dep);
+ static inline char *portspeed(struct usb_hub *hub, int portstatus)
+ {
+@@ -1111,6 +1113,11 @@ static void hub_activate(struct usb_hub *hub, enum hub_activation_type type)
+ 						   USB_PORT_FEAT_ENABLE);
  		}
- 		break;
+ 
++		/* Make sure a warm-reset request is handled by port_event */
++		if (type == HUB_RESUME &&
++		    hub_port_warm_reset_required(hub, port1, portstatus))
++			set_bit(port1, hub->event_bits);
++
+ 		/*
+ 		 * Add debounce if USB3 link is in polling/link training state.
+ 		 * Link will automatically transition to Enabled state after
 -- 
 2.20.1
 
