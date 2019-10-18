@@ -2,113 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A52DC088
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 11:06:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A44DC09F
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 11:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389170AbfJRJGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 05:06:46 -0400
-Received: from imap1.codethink.co.uk ([176.9.8.82]:49956 "EHLO
-        imap1.codethink.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727741AbfJRJGp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 05:06:45 -0400
-Received: from [167.98.27.226] (helo=[10.35.5.173])
-        by imap1.codethink.co.uk with esmtpsa (Exim 4.84_2 #1 (Debian))
-        id 1iLODb-0004dn-DT; Fri, 18 Oct 2019 10:06:43 +0100
-Subject: Re: [PATCH] usb: cdns3: include host-export,h for cdns3_host_init
-To:     Pawel Laszczak <pawell@cadence.com>,
-        "linux-kernel@lists.codethink.co.uk" 
-        <linux-kernel@lists.codethink.co.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20191017124427.17055-1-ben.dooks@codethink.co.uk>
- <BYAPR07MB47099123D3A6BD193491FD34DD6C0@BYAPR07MB4709.namprd07.prod.outlook.com>
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-Organization: Codethink Limited.
-Message-ID: <fe82dabc-c446-e132-bbfe-d79a75feece2@codethink.co.uk>
-Date:   Fri, 18 Oct 2019 10:06:42 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2633051AbfJRJLH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 05:11:07 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:64173 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2390299AbfJRJLH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 05:11:07 -0400
+X-UUID: 0b296a3532bf45c79b434c6dda51c59b-20191018
+X-UUID: 0b296a3532bf45c79b434c6dda51c59b-20191018
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <min.guo@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 29892557; Fri, 18 Oct 2019 17:10:57 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 18 Oct
+ 2019 17:10:56 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Fri, 18 Oct 2019 17:10:55 +0800
+Message-ID: <1571389858.28949.13.camel@mhfsdcap03>
+Subject: Re: [PATCH v8 6/6] usb: musb: Add support for MediaTek musb
+ controller
+From:   Min Guo <min.guo@mediatek.com>
+To:     Tony Lindgren <tony@atomide.com>
+CC:     Bin Liu <b-liu@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <hdegoede@redhat.com>,
+        Yonglong Wu <yonglong.wu@mediatek.com>
+Date:   Fri, 18 Oct 2019 17:10:58 +0800
+In-Reply-To: <20191017163433.GN5610@atomide.com>
+References: <20191017094126.29045-1-min.guo@mediatek.com>
+         <20191017094126.29045-7-min.guo@mediatek.com>
+         <20191017163433.GN5610@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-In-Reply-To: <BYAPR07MB47099123D3A6BD193491FD34DD6C0@BYAPR07MB4709.namprd07.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 13098244CDB25E873947D08018311C68E73616178ECC778BC1294947B6B966362000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18/10/2019 04:45, Pawel Laszczak wrote:
-> Hi
+Hi,
+On Thu, 2019-10-17 at 09:34 -0700, Tony Lindgren wrote:
+> Hi,
 > 
->> The cdns3_host_init() function is declared in host-export.h
->> but host.c does not include it. Add the include to have
->> the declaration present (and remove the declaration of
->> cdns3_host_exit which is now static).
->>
->> Fixes the following sparse warning:
->>
->> drivers/usb/cdns3/host.c:58:5: warning: symbol 'cdns3_host_init' was not declared. Should it be static?
+> Just few comments for future changes that might help below.
 > 
-> It should not be static. It can be called from core.c file.
-> It will be static only if CONFIG_USB_CDNS3_HOST will not be defined and in
-> this case function will be declared in host-export.h  as static.
-
-I know, this isn't being made static, that's a warning.
-
-> For me It doesn't look like driver issue.
-
->>
->> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
->> ---
->> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Cc: Pawel Laszczak <pawell@cadence.com>
->> Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
->> Cc: "Ben Dooks
->> Cc: linux-usb@vger.kernel.org
->> ---
->> drivers/usb/cdns3/host-export.h | 1 -
->> drivers/usb/cdns3/host.c        | 1 +
->> 2 files changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/cdns3/host-export.h b/drivers/usb/cdns3/host-export.h
->> index b498a170b7e8..ae11810f8826 100644
->> --- a/drivers/usb/cdns3/host-export.h
->> +++ b/drivers/usb/cdns3/host-export.h
->> @@ -12,7 +12,6 @@
->> #ifdef CONFIG_USB_CDNS3_HOST
->>
->> int cdns3_host_init(struct cdns3 *cdns);
->> -void cdns3_host_exit(struct cdns3 *cdns);
+> * min.guo@mediatek.com <min.guo@mediatek.com> [191017 09:42]:
+> > --- /dev/null
+> > +++ b/drivers/usb/musb/mediatek.c
+> > +static int musb_usb_role_sx_set(struct device *dev, enum usb_role role)
+> > +{
+> > +	struct mtk_glue *glue = dev_get_drvdata(dev);
+> > +	struct musb *musb = glue->musb;
+> > +	u8 devctl = readb(musb->mregs + MUSB_DEVCTL);
+> > +	enum usb_role new_role;
+> > +
+> > +	if (role == glue->role)
+> > +		return 0;
+> > +
+> > +	switch (role) {
+> > +	case USB_ROLE_HOST:
+> > +		musb->xceiv->otg->state = OTG_STATE_A_WAIT_VRISE;
+> > +		glue->phy_mode = PHY_MODE_USB_HOST;
+> > +		new_role = USB_ROLE_HOST;
+> > +		if (glue->role == USB_ROLE_NONE)
+> > +			phy_power_on(glue->phy);
+> > +
+> > +		devctl |= MUSB_DEVCTL_SESSION;
+> > +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
+> > +		MUSB_HST_MODE(musb);
+> > +		break;
+> > +	case USB_ROLE_DEVICE:
+> > +		musb->xceiv->otg->state = OTG_STATE_B_IDLE;
+> > +		glue->phy_mode = PHY_MODE_USB_DEVICE;
+> > +		new_role = USB_ROLE_DEVICE;
+> > +		devctl &= ~MUSB_DEVCTL_SESSION;
+> > +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
+> > +		if (glue->role == USB_ROLE_NONE)
+> > +			phy_power_on(glue->phy);
+> > +
+> > +		MUSB_DEV_MODE(musb);
+> > +		break;
+> > +	case USB_ROLE_NONE:
+> > +		glue->phy_mode = PHY_MODE_USB_OTG;
+> > +		new_role = USB_ROLE_NONE;
+> > +		devctl &= ~MUSB_DEVCTL_SESSION;
+> > +		musb_writeb(musb->mregs, MUSB_DEVCTL, devctl);
+> > +		if (glue->role != USB_ROLE_NONE)
+> > +			phy_power_off(glue->phy);
+> > +
+> > +		break;
+> > +	default:
+> > +		dev_err(glue->dev, "Invalid State\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	glue->role = new_role;
+> > +	phy_set_mode(glue->phy, glue->phy_mode);
+> > +
+> > +	return 0;
+> > +}
 > 
-> We can't remove this function. It is invoked from core.c file.
-> If you remove it from host-export.h then it will not be visible there.
+> For the role change, I recently posted a patch "[PATCH 4/7] usb: musb:
+> Add musb_set_host and peripheral and use them for omap2430". That
+> should work for you looking at the code above, so later on you might
+> want to change to use that. Probably best done as a follow-up patch
+> to avoid adding extra dependencies to your series.
+OK, thanks. I will try this patch.
+
+> Please also note that musb core attempts to do things automagically
+> on it's own. So trying to force mode in general does not work reliably.
+> This is because VBUS may not yet have risen for example.
+VBUS control is through a GPIO on MediaTek musb controller. The host/device switching method is to use the driver of gpio-usb-b-connector, it sets the debounce of GPIO, the link of patch is as follows:
+	Usb: roles: add USB Type-B GPIO connector driver
+	Https://patchwork.kernel.org/patch/10966361/
+
+> The role change is best done based on the USB PHY as then usually
+> musb has already switched to the right mode automatically :)
+Considering the use of type-c connector later, the foce phy method is used.
+
+> > +static const struct musb_platform_ops mtk_musb_ops = {
+> > +	.quirks = MUSB_DMA_INVENTRA,
+> > +	.init = mtk_musb_init,
+> > +	.get_toggle = mtk_musb_get_toggle,
+> > +	.set_toggle = mtk_musb_set_toggle,
+> > +	.exit = mtk_musb_exit,
+> > +#ifdef CONFIG_USB_INVENTRA_DMA
+> > +	.dma_init = musbhs_dma_controller_create_noirq,
+> > +	.dma_exit = musbhs_dma_controller_destroy,
+> > +#endif
+> > +	.clearb = mtk_musb_clearb,
+> > +	.clearw = mtk_musb_clearw,
+> > +	.busctl_offset = mtk_musb_busctl_offset,
+> > +	.set_mode = mtk_musb_set_mode,
+> > +};
 > 
->>
->> #else
->>
->> diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
->> index 2733a8f71fcd..ad788bf3fe4f 100644
->> --- a/drivers/usb/cdns3/host.c
->> +++ b/drivers/usb/cdns3/host.c
->> @@ -12,6 +12,7 @@
->> #include <linux/platform_device.h>
->> #include "core.h"
->> #include "drd.h"
->> +#include "host-export.h"
+> So you may want to consider getting rid of .set_mode completely
+> and rely on USB PHY calls instead.
 > 
-> Why host must include this file. This function is implemented
-> In host.c and is used only in  core.c file .
+> In some cases you need to use struct phy_companion for set_vbus
+> depending how things are wired.
+> 
+> Regards,
+> 
+> Tony
 
-The implementation should also have the declaration to ensure
-that the implemented function matches the declared prototype in
-the header
 
-
-
--- 
-Ben Dooks				http://www.codethink.co.uk/
-Senior Engineer				Codethink - Providing Genius
-
-https://www.codethink.co.uk/privacy.html
