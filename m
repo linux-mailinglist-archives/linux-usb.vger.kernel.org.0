@@ -2,127 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C78BDC805
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 17:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5351FDC832
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 17:13:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2634267AbfJRPDW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 11:03:22 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:45116 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2634203AbfJRPDW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 11:03:22 -0400
-Received: by mail-lj1-f195.google.com with SMTP id q64so6531590ljb.12;
-        Fri, 18 Oct 2019 08:03:18 -0700 (PDT)
+        id S2407936AbfJRPNd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 11:13:33 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52367 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393855AbfJRPNd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 11:13:33 -0400
+Received: by mail-wm1-f68.google.com with SMTP id r19so6581087wmh.2
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 08:13:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=XFN5CU9XZuSVc2bYbY/HDqoKRZEKGUyQPQg3On2l0sE=;
-        b=gBkToDaoKGRVwJreDGo607Fv70ru++/1xO32/vIMRQhKLqTYQ7kahpEbeCj8Di84as
-         63/7G6dKfn3FRVVa29BE6NwahNXhuruXe1k4tVqjjD/q9CiEw1n1XOPnTrUvjmZ6KVf3
-         6wWscf7tiT662US35hZfwOqHA5jyJk9V1tAKKO9aHwcU0dj8IQKm0Nqb84bP6yN5D50q
-         kZ6ZFFB+F/h4AD3/yVlo+FkeiOj3B4cJ2gLJNDwYdaa9Gk5n6t66BnBek24ZifmP0REZ
-         3LeUgbu3K9D12FrLLa9z+CcchT+KTVllIgjWM0YbQegN/ku3/xfDSvXqDbUQ7OD+0ZeT
-         2Ovg==
-X-Gm-Message-State: APjAAAUEpIBkH7Fz+o7IYvyxHBvYs8kCiHitk1bZzKfeqRjiOc8LIhXO
-        NNtzyq/0g/SSTykpOx/jWmg=
-X-Google-Smtp-Source: APXvYqwxdjJ+MtoBj9uhvCnlqOpwlR/Dxd78cC1h8ehsF5PmgDyA+G27aJtxy1wsDyFkxYXymLe/1g==
-X-Received: by 2002:a2e:481a:: with SMTP id v26mr4158614lja.41.1571410998012;
-        Fri, 18 Oct 2019 08:03:18 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id j7sm2690715lfc.16.2019.10.18.08.03.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 18 Oct 2019 08:03:17 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iLTmq-0006YT-9P; Fri, 18 Oct 2019 17:03:29 +0200
-Date:   Fri, 18 Oct 2019 17:03:28 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Oliver Neukum <oneukum@suse.com>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        syzbot+6fe95b826644f7f12b0b@syzkaller.appspotmail.com
-Subject: Re: [PATCH 1/2] USB: ldusb: fix read info leaks
-Message-ID: <20191018150328.GC24768@localhost>
-References: <20191018141750.23756-1-johan@kernel.org>
- <20191018141750.23756-2-johan@kernel.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=AHVlwZpI1Il/Mqw6Whn6SsJXtUVGoCQg7RQm3GpCU6s=;
+        b=BRD9OW0vAiNtbAMQho9TNo/oLkFN3Ti52s5V5g//wIE5xZuwDIfQSXpD1t7cVNca0+
+         wGhJmGjaHla/gGSFoxo+NO1BIFkk9Xaz+eiAwMxwNTGZjz1OlKIKNe521OYUJQUhuDZ2
+         4fdeZIjrdQkeQlvD2XwAPeiqRCWgmULRXGYSt/kLshUC6IkZsVO5FOYfS5lByA/zde3Q
+         C/CptlLn+4frIu/tCGJ+HKmN6pXpNgSeYRtELe4t27bLsmy8imh8kAPPjZS1NP9cXzGD
+         ZJrbZC0IJIEYcEFlG3pNQ+XrrrqxXdPSRWF1Uc+VFbburBiotqi83MadBR8wWEG9VsQn
+         LGcg==
+X-Gm-Message-State: APjAAAXc8HJx0inAfEXlPsakjiv2+Ovx7e5z1q05UM5K4f60jA1Lvj9T
+        c360J9+J95i3Edrf6xe7gvXKyOwy
+X-Google-Smtp-Source: APXvYqwcvkqhcUWuo3M+OuMNXaKmtLhTIrzgi8qm/6r6qECWEfupQpPInIoo0jqmPpSTlAJAU8KP/w==
+X-Received: by 2002:a7b:c848:: with SMTP id c8mr7832065wml.83.1571411611467;
+        Fri, 18 Oct 2019 08:13:31 -0700 (PDT)
+Received: from tfsielt31850 ([77.107.218.170])
+        by smtp.gmail.com with ESMTPSA id h17sm6380334wme.6.2019.10.18.08.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2019 08:13:30 -0700 (PDT)
+Message-ID: <c90a79b56ac3d13b79db4f4b3206be71232df147.camel@andred.net>
+Subject: Re: [PATCH 1/3] usb: chipidea: imx: change hsic power regulator as
+ optional
+From:   =?ISO-8859-1?Q?Andr=E9?= Draszik <git@andred.net>
+To:     Peter Chen <peter.chen@nxp.com>
+Cc:     dl-linux-imx <linux-imx@nxp.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Date:   Fri, 18 Oct 2019 16:13:30 +0100
+In-Reply-To: <20191011054129.20502-1-peter.chen@nxp.com>
+References: <20191011054129.20502-1-peter.chen@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018141750.23756-2-johan@kernel.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 04:17:49PM +0200, Johan Hovold wrote:
-> Fix broken read implementation, which could be used to trigger slab info
-> leaks.
+Peter,
+
+Thank you for this series, I was out so I will test it early next week
+and report.
+
+
+Cheers,
+Andre'
+
+
+On Fri, 2019-10-11 at 05:42 +0000, Peter Chen wrote:
+> Not every platform needs this regulator.
 > 
-> The driver failed to check if the custom ring buffer was still empty
-> when waking up after having waited for more data. This would happen on
-> every interrupt-in completion, even if no data had been added to the
-> ring buffer (e.g. on disconnect events).
-> 
-> Due to missing sanity checks and uninitialised (kmalloced) ring-buffer
-> entries, this meant that huge slab info leaks could easily be triggered.
-> 
-> Note that the empty-buffer check after wakeup is enough to fix the info
-> leak on disconnect, but let's clear the buffer on allocation and add a
-> sanity check to read() to prevent further leaks.
-> 
-> Fixes: 2824bd250f0b ("[PATCH] USB: add ldusb driver")
-> Cc: stable <stable@vger.kernel.org>     # 2.6.13
-> Reported-by: syzbot+6fe95b826644f7f12b0b@syzkaller.appspotmail.com
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Peter Chen <peter.chen@nxp.com>
 > ---
->  drivers/usb/misc/ldusb.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/misc/ldusb.c b/drivers/usb/misc/ldusb.c
-> index 147c90c2a4e5..94780e14e95d 100644
-> --- a/drivers/usb/misc/ldusb.c
-> +++ b/drivers/usb/misc/ldusb.c
-> @@ -464,7 +464,7 @@ static ssize_t ld_usb_read(struct file *file, char __user *buffer, size_t count,
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> index 16700170bc34..25a38ed27aa8 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -359,7 +359,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  			return PTR_ERR(data->pinctrl_hsic_active);
+>  		}
 >  
->  	/* wait for data */
->  	spin_lock_irq(&dev->rbsl);
-> -	if (dev->ring_head == dev->ring_tail) {
-> +	while (dev->ring_head == dev->ring_tail) {
->  		dev->interrupt_in_done = 0;
->  		spin_unlock_irq(&dev->rbsl);
->  		if (file->f_flags & O_NONBLOCK) {
-> @@ -474,12 +474,17 @@ static ssize_t ld_usb_read(struct file *file, char __user *buffer, size_t count,
->  		retval = wait_event_interruptible(dev->read_wait, dev->interrupt_in_done);
->  		if (retval < 0)
->  			goto unlock_exit;
-> -	} else {
-> -		spin_unlock_irq(&dev->rbsl);
-> +
-> +		spin_lock_irq(&dev->rbsl);
->  	}
-> +	spin_unlock_irq(&dev->rbsl);
->  
->  	/* actual_buffer contains actual_length + interrupt_in_buffer */
->  	actual_buffer = (size_t *)(dev->ring_buffer + dev->ring_tail * (sizeof(size_t)+dev->interrupt_in_endpoint_size));
-> +	if (*actual_buffer > sizeof(size_t) + dev->interrupt_in_endpoint_size) {
+> -		data->hsic_pad_regulator = devm_regulator_get(dev, "hsic");
+> +		data->hsic_pad_regulator =
+> +				devm_regulator_get_optional(dev, "hsic");
+>  		if (PTR_ERR(data->hsic_pad_regulator) == -EPROBE_DEFER) {
+>  			return -EPROBE_DEFER;
+>  		} else if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
 
-Bah, this should have been just
-
-	if (*actual_buffer > dev->interrupt_in_endpoint_size)
-
-will send a v2.
-	
-> +		retval = -EIO;
-> +		goto unlock_exit;
-> +	}
->  	bytes_to_read = min(count, *actual_buffer);
->  	if (bytes_to_read < *actual_buffer)
->  		dev_warn(&dev->intf->dev, "Read buffer overflow, %zd bytes dropped\n",
-
-Johan
