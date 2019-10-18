@@ -2,272 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5819CDBCC1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 07:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1FA4DBD4F
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 07:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390975AbfJRFOt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 01:14:49 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:13074 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727606AbfJRFOt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 01:14:49 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9I3iJbG021364;
-        Thu, 17 Oct 2019 20:45:23 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=proofpoint;
- bh=LJoY2+XmZjbZ99duS4omd2ij6NvlkpBYbWV8mn0nQtw=;
- b=PBgR4zrU8XKNJsi/8oqPmL3UGSFXOK+OumFB2HH9J7Ac6NMNCQCestA6mOzNOjf5ZjAm
- r+Zhg9S49ua4c+wKKU4Zm/ugWR7WKRVvvBoZp02EaSB0GyP1sK4howE07niGFQlpZTFA
- RwUx0pbJx8ddHz4Llbaggd1dVipcX3stWzcy9rdrPRtoL1Dm0kRLHCSw/CTABW4ymEQe
- mhHVJ2G7TjSlrnt6C7dg0HyTUv1cY2QPblzinH1c+nWwFXVUSDFGJT8XBEi4Q/KWQIF/
- 8R2X5PE+3/ukmgB1YMJWQ9BmXA7qwNLsuV5oDu+2ODtSzDcbBuPoJXkTUnNNcIyJJ9rA hw== 
-Received: from nam03-dm3-obe.outbound.protection.outlook.com (mail-dm3nam03lp2056.outbound.protection.outlook.com [104.47.41.56])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 2vkadyptbm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 17 Oct 2019 20:45:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nMXPHSWbiV4IAFui+nHZ93TAwEHHSn4xZqUC0yhX1bg+3vY5CnX3RgM2eJjKcz9g0h8V8NdfsfXagJPl7GdL369pqWlPXtIPZQ+57AWmmrhmYjAHgR6dkytgwIkbzfy1q+TtRPc2VqWo1tWIbQPAR0FLRqZAjphnt8l82MStojBKynhMT+plG/R1hzVHS9Y6khY/gXsB0OiT2MKItbPrm3yIyWm4Vc7oDL672CF3oRxyvdwRhfWcX07JFfbOl+RabaIL43AZ+LHczuotoACQEJC1qudb08Mj5Wjg+maDy9D7L5g+wGNcp/yX9tgQds5qjRivqnbbOKLCo84BQptx8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LJoY2+XmZjbZ99duS4omd2ij6NvlkpBYbWV8mn0nQtw=;
- b=oFEFslrm565eCiBb1aOfrTYuEnnO9MneQKrxfRUgVfbOryiwyX3hyZlR2xsgvCb+pTOXpbndXAxsdZtRTm3JXLvJfYTXtiDgyd3GfoFnf0eqWeFdZnm4qOr10X12eE86UmSVkXEEqlj91NV8B99bGvLzCl3Ts3GbCcduw1Ovrzzcq+7gPD6EYTH3sbiUiVh3+s670d5VBUdLzZZmQ6IiF8DY6yy89zAXk++QQBvD9nbeBywGowD5agWfBATNfqNpNSnQy16GysvvX/1BrQ52tUVUJRuAmYu4w+1ciIIz7Z/1SZXU8Y0MaAoXi8urzhrlHwE2PuJ+K7MyOHY0tMIIxg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
- dkim=pass header.d=cadence.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LJoY2+XmZjbZ99duS4omd2ij6NvlkpBYbWV8mn0nQtw=;
- b=e3ChQM4+wdH/7YR4xFUfkNUs+sVxikgH8787rdKLabXzENvwvZ4Z4OnMRp0V4yFD44NR9dJ4/6qyZVwLxjsU/YzxBgJgOYefDqy7wbjhrM/FhmLERiAchrPsmf8vaKivMCzOb9WG5Cc2sURRf0CBvdoKqX+Re0nKhUvs7wYny6s=
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com (52.135.204.159) by
- BYAPR07MB5880.namprd07.prod.outlook.com (20.179.91.141) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.17; Fri, 18 Oct 2019 03:45:14 +0000
-Received: from BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::8dae:bee9:340a:b770]) by BYAPR07MB4709.namprd07.prod.outlook.com
- ([fe80::8dae:bee9:340a:b770%6]) with mapi id 15.20.2347.024; Fri, 18 Oct 2019
- 03:45:13 +0000
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
-        "linux-kernel@lists.codethink.co.uk" 
-        <linux-kernel@lists.codethink.co.uk>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] usb: cdns3: include host-export,h for cdns3_host_init
-Thread-Topic: [PATCH] usb: cdns3: include host-export,h for cdns3_host_init
-Thread-Index: AQHVhOil1G1yVVv1uUOM6DPOXlftnqdfv0Vw
-Date:   Fri, 18 Oct 2019 03:45:13 +0000
-Message-ID: <BYAPR07MB47099123D3A6BD193491FD34DD6C0@BYAPR07MB4709.namprd07.prod.outlook.com>
-References: <20191017124427.17055-1-ben.dooks@codethink.co.uk>
-In-Reply-To: <20191017124427.17055-1-ben.dooks@codethink.co.uk>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-dg-tag-bcast: {3DE89042-74AB-4755-9D53-B536026EFFC6};
- {51BD6E37-66BD-4186-8AFE-835F952BA4E6};
- {F0B656D1-F768-43A1-A424-45742A6E25CF}
-x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFw?=
- =?us-ascii?Q?cGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEy?=
- =?us-ascii?Q?OWUzNWJcbXNnc1xtc2ctYWU5MTAzYTQtZjE1OS0xMWU5LTg3NGItYTQ0Y2M4?=
- =?us-ascii?Q?YzMwYmQ0XGFtZS10ZXN0XGFlOTEwM2E1LWYxNTktMTFlOS04NzRiLWE0NGNj?=
- =?us-ascii?Q?OGMzMGJkNGJvZHkudHh0IiBzej0iMjE0MCIgdD0iMTMyMTU4NDM5MTA1MDIx?=
- =?us-ascii?Q?OTYwIiBoPSJCTjNkVHU0OGwxUVV3RG52VWUyNDZPODBSaVk9IiBpZD0iIiBi?=
- =?us-ascii?Q?bD0iMCIgYm89IjEiIGNpPSJjQUFBQUVSSFUxUlNSVUZOQ2dVQUFNQUtBQUFk?=
- =?us-ascii?Q?bUE4eFhValZBWXl2STI1UXRPa1JoME1jVFhBZCs2UU9BQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQndDQUFDa0NBQUFjQUFBQUt3QkFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFEQUFBQSs1UWJnUUFBQUFBQUFBQUFBQUFBQUt3QkFBQUFBQUFBZ0FB?=
- =?us-ascii?Q?QUFBWUFBQUFCQUFBQU4wOUREVVJ4ZDAyMmVGVkRaRHZVNVFFQUFBQ1lzRHFO?=
- =?us-ascii?Q?NDFlNlFhNWdWME1tVUFNckFRQUFBQmxPbmwrMjVOaER0ZEkvZEJSWGUyd0JB?=
- =?us-ascii?Q?QUFBYkdSUmk2SUN0MG1iRjJwM1k2cXBkQUVBQUFCMUJIbWswY0lrUzdoaEc5?=
- =?us-ascii?Q?NkVwRXFHQUFBQUFGSGY3amhHQkJKQ3UvSHhHUU56UUtDQUFBQUFCZ0FBQUFF?=
- =?us-ascii?Q?QUFBQ3kzQmN3TkRidFM1YmpybkMybDdoS0FRQUFBRVI2dEdWOVlRWkpqb214?=
- =?us-ascii?Q?eS9kdkpiSUJBQUFBOTdIUUVyLytja0N2ZmJNVDAzOVlEQUVBQUFDNjg3TE90?=
- =?us-ascii?Q?d2E0VHBnNlpWazM4L2Q3QVFBQUFEd0o5bStMNW1aRXZob0xFc2krNG9vQUFB?=
- =?us-ascii?Q?QUFtWllCVllCVjZrYXhjaithYUxvTmRhUUFBQUFEQUFBQVFBQUFBQUVBQUFC?=
- =?us-ascii?Q?akFHUUFiZ0JmQUhNQWJ3QjFBSElBWXdCbEFHTUFid0JrQUdVQVh3QmpBRzhB?=
- =?us-ascii?Q?YmdCbUFHa0FaQUJsQUc0QWRBQnBBR0VBYkFBQUFESUFBQUFCQUFBQVl3QmhB?=
- =?us-ascii?Q?R1FBWlFCdUFHTUFaUUJmQUdNQWJ3QnVBR1lBYVFCa0FHVUFiZ0IwQUdrQVlR?=
- =?us-ascii?Q?QnNBQUFBS2dBQUFBQUFBQUJqQUdRQWJnQWdBSE1BYndCMUFISUFZd0JsQUNB?=
- =?us-ascii?Q?QVl3QnZBR1FBWlFCekFBQUFuZ0FBQUdNQVlRQmtBR1VBYmdCakFHVUFYd0Jq?=
- =?us-ascii?Q?QUc4QWJnQm1BR2tBWkFCbEFHNEFkQUJwQUdFQWJBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFB?=
- =?us-ascii?Q?QUFDZUFBQUFZd0JoQUdRQVpRQnVBR01BWlFCZkFHUUFaUUJ6QUdrQVp3QnVB?=
- =?us-ascii?Q?RjhBY3dCNUFITUFkQUJsQUcwQWN3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFC?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCakFHRUFa?=
- =?us-ascii?Q?QUJsQUc0QVl3QmxBRjhBY0FCeUFHOEFaQUIxQUdNQWRBQnpBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBSE1BYndCMUFISUFZd0JsQUdNQWJ3?=
- =?us-ascii?Q?QmtBR1VBWHdCaEFITUFiUUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
- =?us-ascii?Q?QUFBQUNlQUFBQWN3QnZBSFVBY2dCakFHVUFZd0J2QUdRQVpRQmZBR01BYndC?=
- =?us-ascii?Q?aUFHOEFiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJ6QUc4?=
- =?us-ascii?Q?QWRRQnlBR01BWlFCakFHOEFaQUJsQUY4QVl3QndBSEFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFJQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFITUFid0IxQUhJQVl3QmxBR01B?=
- =?us-ascii?Q?YndCa0FHVUFYd0JqQUhNQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFD?=
- =?us-ascii?Q?QUFBQUFBQ2VBQUFBY3dCdkFIVUFjZ0JqQUdVQVl3QnZBR1FBWlFCZkFHVUFk?=
- =?us-ascii?Q?UUJ3QUdnQWJ3QnlBR2tBWVFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQnpB?=
- =?us-ascii?Q?RzhBZFFCeUFHTUFaUUJqQUc4QVpBQmxBRjhBWmdCdkFISUFkQUJ5QUdFQWJn?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUhNQWJ3QjFBSElBWXdCbEFH?=
- =?us-ascii?Q?TUFid0JrQUdVQVh3QnFBR0VBZGdCaEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFB?=
- =?us-ascii?Q?QUNBQUFBQUFDZUFBQUFjd0J2QUhVQWNnQmpBR1VBWXdCdkFHUUFaUUJmQUhB?=
- =?us-ascii?Q?QWVRQjBBR2dBYndCdUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFC?=
- =?us-ascii?Q?ekFHOEFkUUJ5QUdNQVpRQmpBRzhBWkFCbEFGOEFjZ0IxQUdJQWVRQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBSE1BYndCMUFISUFZd0Js?=
- =?us-ascii?Q?QUdNQWJ3QmtBR1VBWHdCekFIUUFiQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFB?=
- =?us-ascii?Q?QUFBQ0FBQUFBQUNlQUFBQWN3QnZBSFVBY2dCakFHVUFZd0J2QUdRQVpRQmZB?=
- =?us-ascii?Q?SFlBWWdBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
- =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0i?=
- =?us-ascii?Q?Lz48L21ldGE+?=
-x-dg-paste: 
-x-dg-rorf: true
-x-originating-ip: [185.217.253.59]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9bc83e85-ce07-4a7f-5477-08d7537d952b
-x-ms-traffictypediagnostic: BYAPR07MB5880:
-x-microsoft-antispam-prvs: <BYAPR07MB58806FAE75C18C94C55FC5FADD6C0@BYAPR07MB5880.namprd07.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01949FE337
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(366004)(396003)(136003)(376002)(36092001)(199004)(189003)(476003)(6116002)(3846002)(52536014)(81156014)(81166006)(11346002)(446003)(8676002)(8936002)(7736002)(2906002)(305945005)(74316002)(2501003)(5660300002)(486006)(316002)(110136005)(9686003)(6246003)(4326008)(55016002)(25786009)(54906003)(6436002)(229853002)(99286004)(33656002)(7696005)(26005)(478600001)(102836004)(76176011)(6506007)(86362001)(186003)(14454004)(66066001)(66946007)(76116006)(14444005)(256004)(66556008)(66476007)(64756008)(66446008)(71190400001)(71200400001)(142933001);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5880;H:BYAPR07MB4709.namprd07.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: cadence.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BexY+BK92UBXifccpzQ/Cdps81DvQz0k/W8S01Y/3esoiKFSQh/mH4ufEFUFFFNqL5iNTPMNMYIw/4LMDHUMkJgQrxTtg6B/En9tE34Nchmg5vFoAm3nZ4dXjI2Pu2dDQ0UJuZYeAtMvx1Jphq0DzzfOhIbv9OxFERRGcXUAKbB2MwlKquC4+jSdez+Xm64adCYEgd2ziWndW+fDjUQYSBeRTbUh0DObprAiFtUvTrZANzRB+hFPMiSI0ciqNU2vK0nf6sq2wE1DpNIPbWzcQISgrPHPhVNhLVLjc3FV1jTv1eHOjxcDZZhTcxU7fT0IOgry75rLlVpH2f1D66C64zhpXLvtmC5CRvXC1jNoyQPhm7LczmPWR2Q3V14FRnrCY7s7IEUvME6aQX9e3D+8T+WCW/Y/7P2HdMf2krbG87U=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S2503735AbfJRFz7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 01:55:59 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:40157 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391913AbfJRFz7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 01:55:59 -0400
+Received: by mail-wr1-f67.google.com with SMTP id o28so4790970wro.7
+        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2019 22:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0RX/eZVxJTs9fdKiBk/fJa6nhTLf1toXcxAcB3Pwujk=;
+        b=sfw7CJKy5k8boS6JMeROudXdBBBjjIVKJrZYxCI6saAh0WDUnKZ5Gv4p2lUzQTLblg
+         Pam9xKNx4ksKyqH8JysNrdhaGzWFxvLlxY23dPDalnzM6FAtgYVAUvv0V0yGWF37Ow1p
+         dv5gGTgZomYK8VbHoXBLpDztiZFM/xIK+yGpq+q+l9icE0vv+DiNxPI5NBSB9ffDhKNY
+         erAby/3GNgQBsoOlV6n9h8RDimV1kJhSW1oQ/FMQ5cuyd5rVG+l4ZslbC6rpw93MnIT6
+         lyt/IPVcp73hXjs/W4fSd+SegGPzBmHOgJS7TtMa/S5fgEaxTqGGdp/r27xPuOVUc77J
+         JsOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0RX/eZVxJTs9fdKiBk/fJa6nhTLf1toXcxAcB3Pwujk=;
+        b=j1hOZMpR4bG5mEiDEUufQH0qZALx7VDZbmLOEYrzAx4k1lT5EJ8UjR+xlgJEclYPDG
+         mPjM5/gJWXLBlOBpfkq4s3k1zub3hpsyzoMpMW2n/z1ge82Yt/LBkPQ2NJIzzhzQ1ItQ
+         MbQApl6uP0L7GoyxWYn/gRnlzloRGRPDpTnrnFxqIIopK67xbjUSUS7gOXAuAjitHnin
+         6pI136friKKiUqbcXO9YqsbKshRyKlsFunbZDuLrBg03ZBOl2/Gak4QHvlS4h5lu6ISA
+         quviKnJTRgQO8/CCGoCEctQAltNfd0k9Ui9nHk65MRLb09NbrdzNIFOsWG2nz30rjiya
+         IaIw==
+X-Gm-Message-State: APjAAAXOonY9O7vzz+N4Vyi6TinWYk5/+wDtYHOtQnDNB8TMk6cZMtna
+        eoQVq4i9Hb2Y/uwiQwBUKugVYFDMzLVCDQ95NVGOag==
+X-Google-Smtp-Source: APXvYqyVa2tdZUqgwmas2Off/KMa7do38JBAZiNLti1ibsNaD8x0PeLlp8nm8+4re5slTCw/ZLGPlAqydiSGFc9te/0=
+X-Received: by 2002:a5d:50c9:: with SMTP id f9mr5917799wrt.36.1571378156662;
+ Thu, 17 Oct 2019 22:55:56 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9bc83e85-ce07-4a7f-5477-08d7537d952b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Oct 2019 03:45:13.3637
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: FSujvEfWNjGaEOpt4be35hPP9Xer+fTdl5QLN5X6qxCSknYqeRMTYtEcSrlup9zGCiuHo2E3plx7Cgeea9jaIEwpifYlHV06YcxG1bP06u8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5880
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-10-18_01:2019-10-17,2019-10-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- adultscore=0 mlxlogscore=999 clxscore=1011 priorityscore=1501
- suspectscore=0 spamscore=0 malwarescore=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1908290000 definitions=main-1910180035
+References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
+ <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com> <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+ <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com> <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
+ <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com>
+In-Reply-To: <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Thu, 17 Oct 2019 22:55:45 -0700
+Message-ID: <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
+Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
-
->The cdns3_host_init() function is declared in host-export.h
->but host.c does not include it. Add the include to have
->the declaration present (and remove the declaration of
->cdns3_host_exit which is now static).
+On Wed, Oct 16, 2019 at 12:27 AM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 10/15/19 7:39 AM, John Stultz wrote:
+> > On Thu, Oct 3, 2019 at 1:51 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >> On 03-10-2019 22:37, John Stultz wrote:
+> >>> Fair point. I'm sort of taking a larger patchset and trying to break
+> >>> it up into more easily reviewable chunks, but I guess here I mis-cut.
+> >>>
+> >>> The user is the hikey960 gpio hub driver here:
+> >>>     https://git.linaro.org/people/john.stultz/android-dev.git/commit/?id=b06158a2d3eb00c914f12c76c93695e92d9af00f
+> >>
+> >> Hmm, that seems to tie the TypeC data-role to the power-role, which
+> >> is not going to work with role swapping.
+> >
+> > Thanks again for the feedback here. Sorry for the slow response. Been
+> > reworking some of the easier changes but am starting to look at how to
+> > address your feedback here.
+> >
+> >> What is controlling the usb-role-switch, and thus ultimately
+> >> causing the notifier you are suggesting to get called ?
+> >
+> > The tcpm_mux_set() call via tcpm_state_machine_work()
+> >
+> >> Things like TYPEC_VBUS_POWER_OFF and TYPEC_VBUS_POWER_ON
+> >> really beg to be modeled as a regulator and then the
+> >> Type-C controller (using e.g. the drivers/usb/typec/tcpm/tcpm.c
+> >> framework) can use that regulator to control things.
+> >> in case of the tcpm.c framework it can then use that
+> >> regulator to implement the set_vbus callback.
+> >
+> > So I'm looking at the bindings and I'm not sure exactly how to tie a
+> > regulator style driver into the tcpm for this?
+> > Looking at the driver I just see this commented out bit:
+> >     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/typec/tcpm/tcpm.c#n3075
+> >
+> > Do you happen to have a pointer to something closer to what you are describing?
 >
->Fixes the following sparse warning:
->
->drivers/usb/cdns3/host.c:58:5: warning: symbol 'cdns3_host_init' was not d=
-eclared. Should it be static?
+> Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb302.c
+> you need to do something similar in your Type-C controller driver and
+> export the GPIO as as a gpio-controlled regulator and tie the regulator to
+> the connector.
 
-It should not be static. It can be called from core.c file.
-It will be static only if CONFIG_USB_CDNS3_HOST will not be defined and in
-this case function will be declared in host-export.h  as static.=20
+Thanks for the suggestion, I really appreciate it! One more question
+though, since I'm using the tcpci_rt1711h driver, which re-uses the
+somewhat sparse tcpci.c implementation, would you recommend trying to
+add generic regulator support to the tcpci code or trying to extend
+the implementation somehow allow the tcpci_rt1711h driver replace just
+the set_vbus function?
 
-For me It doesn't look like driver issue.=20
-
->
->Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
->---
->Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->Cc: Pawel Laszczak <pawell@cadence.com>
->Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
->Cc: "Ben Dooks
->Cc: linux-usb@vger.kernel.org
->---
-> drivers/usb/cdns3/host-export.h | 1 -
-> drivers/usb/cdns3/host.c        | 1 +
-> 2 files changed, 1 insertion(+), 1 deletion(-)
->
->diff --git a/drivers/usb/cdns3/host-export.h b/drivers/usb/cdns3/host-expo=
-rt.h
->index b498a170b7e8..ae11810f8826 100644
->--- a/drivers/usb/cdns3/host-export.h
->+++ b/drivers/usb/cdns3/host-export.h
->@@ -12,7 +12,6 @@
-> #ifdef CONFIG_USB_CDNS3_HOST
->
-> int cdns3_host_init(struct cdns3 *cdns);
->-void cdns3_host_exit(struct cdns3 *cdns);
-
-We can't remove this function. It is invoked from core.c file.=20
-If you remove it from host-export.h then it will not be visible there.=20
-
->
-> #else
->
->diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
->index 2733a8f71fcd..ad788bf3fe4f 100644
->--- a/drivers/usb/cdns3/host.c
->+++ b/drivers/usb/cdns3/host.c
->@@ -12,6 +12,7 @@
-> #include <linux/platform_device.h>
-> #include "core.h"
-> #include "drd.h"
->+#include "host-export.h"
-
-Why host must include this file. This function is implemented
-In host.c and is used only in  core.c file .=20
-
->
-> static int __cdns3_host_init(struct cdns3 *cdns)
-> {
->--
->2.23.0
-
-
-Regards,
-Pawell
-
+thanks
+-john
