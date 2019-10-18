@@ -2,144 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3761DBDA7
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 08:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982FDDBF63
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 10:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504375AbfJRG2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 02:28:19 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41094 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392981AbfJRG2T (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 02:28:19 -0400
-Received: by mail-lf1-f67.google.com with SMTP id r2so3766686lfn.8;
-        Thu, 17 Oct 2019 23:28:17 -0700 (PDT)
+        id S2442161AbfJRIGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 04:06:25 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:40923 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2442159AbfJRIGZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 04:06:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571385983;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AueYkt1KhewDQYWLSoW/pmDep2RIg04euyPWY35AI9w=;
+        b=WMsD8L0M8WI+PA/WkCrX8nsg+X+INLOyX9JmfvwlsF4dZC1bHveFHGo2HpIPFcQQSJGSZe
+        VOq8GaPqfGlIAbSTmYHCUxYn4vAFZszi6LVknKLeigu8vxiiicM0Xj/+afaSR/q3GzYa0y
+        T0A0Gp+jt4xzPXL7aeJsfsu66RpQZlc=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-269-2uEYAMOYOPeopd6b0evJvg-1; Fri, 18 Oct 2019 04:06:22 -0400
+Received: by mail-wm1-f70.google.com with SMTP id l184so813429wmf.6
+        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 01:06:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HA+v2crwooYFKSKrTiGe2KsjMCQ2nDCEIwDutBW6fgI=;
-        b=imT+hKvvaiKMrTZ1GLTI3q/pa9qJvg3WuBqYTz7DfYLRFNfIOcMbARaXpKTUcduTR6
-         UEcAYIF/xQ5k/w68H04BnHMRlHPKcHQ05hSAJ+cIBzYxTAMyIepvHtrTFUy723Egt1Lo
-         BQziNs8p9BoCWhSoHfArRwkyeK9bZK6RQQwKMcgUDsaBvpWrkVBPZAe5twXVmONG8Z4D
-         J5aCwq4UrQNlNDUNDEYysm6RhTw6nVvBU77lOul/noqw8p3c214HDzUN71/GcV0nvr3y
-         DiJ/rH76gssko7wzE217R4/eOXTdmL8vh2YOPCGwigmY7T5mfI7RuNmZJxYL2p9zA8P9
-         8+3Q==
-X-Gm-Message-State: APjAAAVvB+Q6s6922eJZupu2vRRnU1YEIJUqL5oKO0QBR5aLEFVLLrEV
-        RJ/uEVKVsXX2I2vpKywxjzg=
-X-Google-Smtp-Source: APXvYqzYWf+hwmnBslcKf7OLM8O+vbY5mJy2SnP1mey2Y2WQsHGJ2XjBYRttmQ9ZsUAhZeLspQsE/A==
-X-Received: by 2002:ac2:555e:: with SMTP id l30mr4730572lfk.163.1571380096494;
-        Thu, 17 Oct 2019 23:28:16 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id d25sm2017001lfj.15.2019.10.17.23.28.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 23:28:15 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.2)
-        (envelope-from <johan@kernel.org>)
-        id 1iLLkQ-0001pj-P3; Fri, 18 Oct 2019 08:28:26 +0200
-Date:   Fri, 18 Oct 2019 08:28:26 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     syzbot <syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, andreyknvl@google.com, cai@lca.pw,
-        info@metux.net, isaacm@codeaurora.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, willy@infradead.org
-Subject: Re: BUG: bad usercopy in ld_usb_read (3)
-Message-ID: <20191018062826.GE21827@localhost>
-References: <00000000000087ce3a0595115382@google.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=VP1zhflDz8B0kkQ83/WshvBQYqQO+15WgGKLtiGwYF0=;
+        b=scs2/4NJPvnM3ygh3/PTxsffuYTIPFXMiApS03pAds87cNSXmhgJ1uiX6YvOz4dPdN
+         3brLvhrkb2iuzxOTCUS+7zLOFQswp9qTX3p73acmW6J3hRwFB+B396EfzloX8+9c4pw+
+         khlBxdgSK8i9NlsQ81oIynyxaqSE44FDtoqv4zZGKAruojWZn3oK2q+cthuRaWpELj+S
+         YUiFZi13bEfm3kkfO2RWzAXlzDi0OVJ2dh+1lP7aplYOQAwusToBHzae2D8LEQmWPAFL
+         Havbf3/6AwlDDnjJu3cFqSgDrmaCcIlCC3oON5JBqWhjPAYgSk4hZI8ZzUEB9Wv6cxsV
+         zAcQ==
+X-Gm-Message-State: APjAAAVH1GaSzXW9jtt9gGdyontlyiKdmrGZHCZI/J1R9xIyRUvLfKTx
+        eTBcTn6hdU/DJPv5YejdcJsmbZq6rcHALllf0+4maNF1M3lvAhP/Pg8eHHq/s1IU5eI4JRjC3ME
+        VngrQtC5C13N8Ta7Zr2m4
+X-Received: by 2002:a1c:55c4:: with SMTP id j187mr6447027wmb.155.1571385980980;
+        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyZVd1ccyO/Ym3el/1+WjQ1WmMCkhdIX12XtPQT7ZY+XQ7DuXpVt6/IuFyKiUT17eAeClDQkg==
+X-Received: by 2002:a1c:55c4:: with SMTP id j187mr6446987wmb.155.1571385980715;
+        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
+Received: from shalem.localdomain (2001-1c00-0c14-2800-ec23-a060-24d5-2453.cable.dynamic.v6.ziggo.nl. [2001:1c00:c14:2800:ec23:a060:24d5:2453])
+        by smtp.gmail.com with ESMTPSA id h7sm4729423wrt.17.2019.10.18.01.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Oct 2019 01:06:20 -0700 (PDT)
+Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20191002231617.3670-1-john.stultz@linaro.org>
+ <20191002231617.3670-3-john.stultz@linaro.org>
+ <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com>
+ <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
+ <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com>
+ <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
+ <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com>
+ <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
+Date:   Fri, 18 Oct 2019 10:06:18 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000087ce3a0595115382@google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
+Content-Language: en-US
+X-MC-Unique: 2uEYAMOYOPeopd6b0evJvg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 06:42:11PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1756ff77600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=acee996f6938b9ded381
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+acee996f6938b9ded381@syzkaller.appspotmail.com
-> 
-> ldusb 5-1:0.28: Read buffer overflow, 177886378725897 bytes dropped
-> usercopy: Kernel memory exposure attempt detected from process stack  
-> (offset 0, size 2147479552)!
-> ------------[ cut here ]------------
-> kernel BUG at mm/usercopy.c:99!
-> invalid opcode: 0000 [#1] SMP KASAN
-> CPU: 1 PID: 6543 Comm: syz-executor.5 Not tainted 5.4.0-rc3+ #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-> Google 01/01/2011
-> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
-> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40  
-> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51  
-> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
-> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
-> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
-> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
-> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
-> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
-> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->   __check_object_size mm/usercopy.c:282 [inline]
->   __check_object_size.cold+0x91/0xbb mm/usercopy.c:256
->   check_object_size include/linux/thread_info.h:119 [inline]
->   check_copy_size include/linux/thread_info.h:150 [inline]
->   copy_to_user include/linux/uaccess.h:151 [inline]
->   ld_usb_read+0x31a/0x760 drivers/usb/misc/ldusb.c:492
->   __vfs_read+0x76/0x100 fs/read_write.c:425
->   vfs_read+0x1ea/0x430 fs/read_write.c:461
->   ksys_read+0x1e8/0x250 fs/read_write.c:587
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> RIP: 0033:0x459a59
-> Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-> 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-> ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-> RSP: 002b:00007fb330337c78 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000459a59
-> RDX: 00000000ffffffad RSI: 0000000020003200 RDI: 0000000000000004
-> RBP: 000000000075bfc8 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fb3303386d4
-> R13: 00000000004c7120 R14: 00000000004dcae8 R15: 00000000ffffffff
-> Modules linked in:
-> ---[ end trace 0fa22c64036b6ebe ]---
-> RIP: 0010:usercopy_abort+0xb9/0xbb mm/usercopy.c:99
-> Code: e8 32 51 d6 ff 49 89 d9 4d 89 e8 4c 89 e1 41 56 48 89 ee 48 c7 c7 40  
-> d9 cd 85 ff 74 24 08 41 57 48 8b 54 24 20 e8 46 e3 c0 ff <0f> 0b e8 06 51  
-> d6 ff e8 31 8b fd ff 8b 54 24 04 49 89 d8 4c 89 e1
-> RSP: 0018:ffff8881d35f7c58 EFLAGS: 00010282
-> RAX: 0000000000000061 RBX: ffffffff85cdd660 RCX: 0000000000000000
-> RDX: 0000000000000000 RSI: ffffffff8128bcbd RDI: ffffed103a6bef7d
-> RBP: ffffffff85cdd820 R08: 0000000000000061 R09: fffffbfff11b23be
-> R10: fffffbfff11b23bd R11: ffffffff88d91def R12: ffffffff85cdda40
-> R13: ffffffff85cdd660 R14: 000000007ffff000 R15: ffffffff85cdd660
-> FS:  00007fb330338700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f07cea47000 CR3: 00000001cc11e000 CR4: 00000000001406e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Hi,
 
-#syz dup: KASAN: slab-out-of-bounds Read in ld_usb_read (3)
+On 18-10-2019 07:55, John Stultz wrote:
+> On Wed, Oct 16, 2019 at 12:27 AM Hans de Goede <hdegoede@redhat.com> wrot=
+e:
+>> On 10/15/19 7:39 AM, John Stultz wrote:
+>>> On Thu, Oct 3, 2019 at 1:51 PM Hans de Goede <hdegoede@redhat.com> wrot=
+e:
+>>>> On 03-10-2019 22:37, John Stultz wrote:
+>>>>> Fair point. I'm sort of taking a larger patchset and trying to break
+>>>>> it up into more easily reviewable chunks, but I guess here I mis-cut.
+>>>>>
+>>>>> The user is the hikey960 gpio hub driver here:
+>>>>>      https://git.linaro.org/people/john.stultz/android-dev.git/commit=
+/?id=3Db06158a2d3eb00c914f12c76c93695e92d9af00f
+>>>>
+>>>> Hmm, that seems to tie the TypeC data-role to the power-role, which
+>>>> is not going to work with role swapping.
+>>>
+>>> Thanks again for the feedback here. Sorry for the slow response. Been
+>>> reworking some of the easier changes but am starting to look at how to
+>>> address your feedback here.
+>>>
+>>>> What is controlling the usb-role-switch, and thus ultimately
+>>>> causing the notifier you are suggesting to get called ?
+>>>
+>>> The tcpm_mux_set() call via tcpm_state_machine_work()
+>>>
+>>>> Things like TYPEC_VBUS_POWER_OFF and TYPEC_VBUS_POWER_ON
+>>>> really beg to be modeled as a regulator and then the
+>>>> Type-C controller (using e.g. the drivers/usb/typec/tcpm/tcpm.c
+>>>> framework) can use that regulator to control things.
+>>>> in case of the tcpm.c framework it can then use that
+>>>> regulator to implement the set_vbus callback.
+>>>
+>>> So I'm looking at the bindings and I'm not sure exactly how to tie a
+>>> regulator style driver into the tcpm for this?
+>>> Looking at the driver I just see this commented out bit:
+>>>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git=
+/tree/drivers/usb/typec/tcpm/tcpm.c#n3075
+>>>
+>>> Do you happen to have a pointer to something closer to what you are des=
+cribing?
+>>
+>> Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb3=
+02.c
+>> you need to do something similar in your Type-C controller driver and
+>> export the GPIO as as a gpio-controlled regulator and tie the regulator =
+to
+>> the connector.
+>=20
+> Thanks for the suggestion, I really appreciate it! One more question
+> though, since I'm using the tcpci_rt1711h driver, which re-uses the
+> somewhat sparse tcpci.c implementation, would you recommend trying to
+> add generic regulator support to the tcpci code or trying to extend
+> the implementation somehow allow the tcpci_rt1711h driver replace just
+> the set_vbus function?
 
-Fix under way.
+I have the feeling that this is more of a question for Heikki.
 
-Johan
+My first instinct is: if you are using tcpci can't you put all
+the hacks you need for the usb connection shared between hub
+and type-c in your firmware ?
+
+Regards,
+
+Hans
+
