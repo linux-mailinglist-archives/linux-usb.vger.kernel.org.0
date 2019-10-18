@@ -2,163 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 543DFDC11E
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 11:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A3ADC13D
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 11:39:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391919AbfJRJeA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 05:34:00 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:37361 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391617AbfJRJd7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 05:33:59 -0400
-Received: by mail-qt1-f196.google.com with SMTP id n17so8163619qtr.4
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 02:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pE1CurwBz5WOK/o7RHgRSfOlxAfMbJGYVS5GAQqtQnM=;
-        b=Ta4janmUpPHvzLRibRX0UjcZdCJXuOa21yDABoT12e1FR94459ebZ8RGYR09Uuoqzb
-         qMqyxx/gqckZBg8AB4f0/gfjpQ2Ub5owrI43O2NUxEU4Gg3u2rs5MRyjEeK3FRzorNF8
-         rO6lqwWtWczKmMEnopyLR5u3rBrRJ7XfUiUm6xJRueGTh24TI1yE+rDolJSo8pLhFMr3
-         at8NdjjnQfodeWjiNE9LkfGFyS1EeSRlVXwACU+pln0FLCiBBsL66hNpH8xkk1dk0QNd
-         KFDBLhbV06muAXnUt90vPatURRsD7ne3hQqZqvP6rzhMZAVZnw0LZq2ppGBFggsScFmN
-         jbUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pE1CurwBz5WOK/o7RHgRSfOlxAfMbJGYVS5GAQqtQnM=;
-        b=IOw2tWrEa4AgK8+aGLhAuJMzdXbY31q9Lzy/qp9uYDK+qaupr8JxgbVimsCWn0NlZB
-         Dt0pHYK3Oaf4AHPryuW5LEpE+iVIlnJlsIo2X9/NWrIbiiUABizVbXfeZQhzyzHIUbY5
-         5B/+phidID6PYZ1IZ4x5JoyMsghMuFJnBqtkkjUrSGFymz1O83jBr2EZfZyOaLDdYQeq
-         aSfRgRy0yjyD+Em2k3hlmRAVudPu1hIBQq9lfllZSEg9xjbXUK7ztggrKLo5iUd2Wv3S
-         jyxrmGLSsJfAyVJlFMb5LItPJ6hDuRHHFig320DKn2AB0HNgCTf6PGaImWbixhpf5bFs
-         7Grg==
-X-Gm-Message-State: APjAAAUPnQui/QdwGiAtRoLdnwnledt6YVrCP9QSO/ahtNPT5YnPfb8Z
-        1br8ZWZXPcAo9huceS8+n4vkV1/pzGsFfrUJXQiL1Q==
-X-Google-Smtp-Source: APXvYqwPVEJQ3WduZvVjVj+X5eckRpyLUSjGJlSiTXoBE2or+OtRK0PrvPkYm/MMJQ4O9EeUMjAU85WJs3IWc5nrkTg=
-X-Received: by 2002:a0c:c3c5:: with SMTP id p5mr8755561qvi.34.1571391238265;
- Fri, 18 Oct 2019 02:33:58 -0700 (PDT)
+        id S2407632AbfJRJjS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 05:39:18 -0400
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:13336 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407427AbfJRJjR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 05:39:17 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5da988470000>; Fri, 18 Oct 2019 02:39:19 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 18 Oct 2019 02:39:15 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 18 Oct 2019 02:39:15 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Oct
+ 2019 09:39:15 +0000
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 18 Oct
+ 2019 09:39:15 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Fri, 18 Oct 2019 09:39:15 +0000
+Received: from nkristam-ubuntu.nvidia.com (Not Verified[10.19.66.147]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5da988400000>; Fri, 18 Oct 2019 02:39:15 -0700
+From:   Nagarjuna Kristam <nkristam@nvidia.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
+        <mark.rutland@arm.com>, <robh+dt@kernel.org>, <kishon@ti.com>
+CC:     <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Nagarjuna Kristam" <nkristam@nvidia.com>
+Subject: [Patch V11 01/11] phy: tegra: xusb: Add XUSB dual mode support on Tegra210
+Date:   Fri, 18 Oct 2019 15:08:06 +0530
+Message-ID: <1571391496-20834-2-git-send-email-nkristam@nvidia.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1571391496-20834-1-git-send-email-nkristam@nvidia.com>
+References: <1571391496-20834-1-git-send-email-nkristam@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-References: <CALRZ7UuS10CvHvDxMyFyN_wZF_xvzrABT-E_NRt1jKKtXk6Rng@mail.gmail.com>
-In-Reply-To: <CALRZ7UuS10CvHvDxMyFyN_wZF_xvzrABT-E_NRt1jKKtXk6Rng@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 18 Oct 2019 11:33:46 +0200
-Message-ID: <CACT4Y+YxieAS3QrFk9ON6FiYnFzMO_CyzZBo9iTX25fLGzDj+g@mail.gmail.com>
-Subject: Re: WARNING: ODEBUG bug in del_timer
-To:     zzoru <zzoru007@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        usb-storage@lists.one-eyed-alien.net,
-        LKML <linux-kernel@vger.kernel.org>, dokyungs@uci.edu,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1571391559; bh=uplC7C3AwS9xTkDY3gNfmGlsF18xBuoOOiOFKVwMsSg=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=aDmfHjm8rBGIeZgu6mpHHLk0nOZzv/KyI14pIDQvDZaH8J08aWpsM3i50imjVsr+j
+         hCbEvgnVO6C1vpdZ6KQmLjFM+nw/pUHl6eSEpEzhsgLYqiRjR9ZsdzfyxNgrIfXbxP
+         5sYJDIIHR+JRCJG+b/aB5VebGlw3nhSTmvnSj8Gvq/rzKW5EDLR3+m/P6sQJPniovJ
+         IaVBPhucNv/s8rPPkosKkl1HT3Ik5APbffZNWqXfmzA3ov+tivrS3sHkxsj7kJJwvM
+         f2fQSDlX8dxckaRI6Wu00SLLC6a06Wg3FjtKcm31mmdiGMJ7bh3AieE+xJF2F1+b2v
+         X0xlYH5gANjlg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 11:59 AM zzoru <zzoru007@gmail.com> wrote:
->
-> We found the following crash on Linux 5.4-rc1 (Not patched in currnet
-> HEAD commit 3b1f00aceb7a67bf079a5a64aa5c6baf78a8f442)
-> with our customized syzkaller.
+Configure the port capabilities based on usb_dr_mode settings.
 
-Hi zzoru,
+Based on work by JC Kuo <jckuo@nvidia.com>.
 
-Do you mind sharing what customizations you did to syzkaller? Are
-these related to USB? I've noticed several reports were related to USB
-subsystem.
+Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+Reviewed-by: JC Kuo <jckuo@nvidia.com>
+Acked-by: Thierry Reding <treding@nvidia.com>
+---
+ drivers/phy/tegra/xusb-tegra210.c | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
-> ODEBUG: assert_init not available (active state 0) object type:
-> timer_list hint: 0x0
-> WARNING: CPU: 0 PID: 141 at linux/lib/debugobjects.c:484
-> debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
-> Kernel panic - not syncing: panic_on_warn set ...
-> CPU: 0 PID: 141 Comm: kworker/0:3 Not tainted 5.4.0-rc1 #5
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  __dump_stack linux/lib/dump_stack.c:77 [inline]
->  dump_stack+0x7c/0xbb linux/lib/dump_stack.c:113
->  panic+0x205/0x48e linux/kernel/panic.c:220
->  __warn+0x19c/0x1c0 linux/kernel/panic.c:581
->  report_bug+0x1a9/0x2b0 linux/lib/bug.c:195
->  fixup_bug.part.11+0x32/0x80 linux/arch/x86/kernel/traps.c:179
->  fixup_bug linux/arch/x86/include/asm/irqflags.h:54 [inline]
->  do_error_trap+0xf5/0x160 linux/arch/x86/kernel/traps.c:272
->  do_invalid_op+0x31/0x40 linux/arch/x86/kernel/traps.c:291
->  invalid_op+0x23/0x30 linux/arch/x86/entry/entry_64.S:1028
-> RIP: 0010:debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
-> Code: 3c dd 80 05 9a 85 48 89 fa 48 c1 ea 03 80 3c 02 00 75 7f 48 8b
-> 14 dd 80 05 9a 85 4c 89 ee 48 c7 c7 00 fb 99 85 e8 d2 a7 43 ff <0f> 0b
-> 83 05 cd bd 70 05 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-> RSP: 0018:ffff888017017668 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: 0000000000000005 RCX: ffffffff814153b0
-> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a41f730
-> RBP: 0000000000000001 R08: ffffed1003483ee7 R09: ffffed1003483ee7
-> R10: 0000000000000001 R11: ffffed1003483ee6 R12: ffffffff86908460
-> R13: ffffffff859a01a0 R14: ffffffff812b6bc0 R15: ffff888017fb0420
->  debug_object_assert_init+0x290/0x430 linux/lib/debugobjects.c:866
->  debug_timer_assert_init linux/kernel/time/timer.c:729 [inline]
->  debug_assert_init linux/kernel/time/timer.c:774 [inline]
->  del_timer+0x67/0xf0 linux/kernel/time/timer.c:1196
->  realtek_cr_destructor+0x5a/0x90 linux/drivers/usb/storage/realtek_cr.c:937
->  usb_stor_release_resources linux/drivers/usb/storage/usb.c:817 [inline]
->  release_everything+0xc0/0x2c0 linux/drivers/usb/storage/usb.c:879
->  usb_unbind_interface+0x19f/0x810 linux/drivers/usb/core/driver.c:423
->  __device_release_driver linux/drivers/base/dd.c:1134 [inline]
->  device_release_driver_internal+0x429/0x4f0 linux/drivers/base/dd.c:1165
->  bus_remove_device+0x2d1/0x490 linux/drivers/base/bus.c:532
->  device_del+0x403/0xaa0 linux/drivers/base/core.c:2375
->  usb_disable_device+0x1d7/0x5f0 linux/drivers/usb/core/message.c:1237
->  usb_disconnect+0x25a/0x840 linux/drivers/usb/core/hub.c:2199
->  hub_port_connect linux/drivers/usb/core/hub.c:4949 [inline]
->  hub_port_connect_change linux/drivers/usb/core/hub.c:5213 [inline]
->  port_event linux/drivers/usb/core/hub.c:5359 [inline]
->  hub_event+0x11f5/0x3610 linux/drivers/usb/core/hub.c:5441
->  process_one_work+0x8b5/0x17c0 linux/kernel/workqueue.c:2269
->  worker_thread+0x82/0xb80 linux/kernel/workqueue.c:2415
->  kthread+0x325/0x3e0 linux/kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 linux/arch/x86/entry/entry_64.S:352
-> Dumping ftrace buffer:
->    (ftrace buffer empty)
-> Kernel Offset: disabled
->
-> Following is my analysis of this bug (Just add some comments in source code):
-> https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L887-L891
-> static int realtek_cr_autosuspend_setup(struct us_data *us)
-> {
->     ...
->     if (retval != STATUS_SUCCESS) {
->         usb_stor_dbg(us, "Read status fail\n");
->         return -EIO; // Error!
->     }
->     ...
->     timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn,
-> 0); // rts51x_suspend_timer wasn't be initialized. When
-> realtek_cr_autosuspend_setup just returns an error.
-> }
->
->
-> https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L1010-L1012
->
-> #ifdef CONFIG_REALTEK_AUTOPM
-> if (ss_en)
->     realtek_cr_autosuspend_setup(us); // There isn't any check about
-> return code.
-> #endif
->
-> https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L936-L939
-> static void realtek_cr_destructor(void *extra)
-> {
->     ...
->     if (ss_en) {
->         del_timer(&chip->rts51x_suspend_timer); // Ouch! :(
->         chip->timer_expires = 0;
->     }
->     ...
-> }
+diff --git a/drivers/phy/tegra/xusb-tegra210.c b/drivers/phy/tegra/xusb-tegra210.c
+index 0c0df68..0351c4a 100644
+--- a/drivers/phy/tegra/xusb-tegra210.c
++++ b/drivers/phy/tegra/xusb-tegra210.c
+@@ -39,7 +39,10 @@
+ #define XUSB_PADCTL_USB2_PAD_MUX_USB2_BIAS_PAD_XUSB 0x1
+ 
+ #define XUSB_PADCTL_USB2_PORT_CAP 0x008
++#define XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_DISABLED(x) (0x0 << ((x) * 4))
+ #define XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_HOST(x) (0x1 << ((x) * 4))
++#define XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_DEVICE(x) (0x2 << ((x) * 4))
++#define XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_OTG(x) (0x3 << ((x) * 4))
+ #define XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_MASK(x) (0x3 << ((x) * 4))
+ 
+ #define XUSB_PADCTL_SS_PORT_MAP 0x014
+@@ -64,6 +67,7 @@
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(x) (0x084 + (x) * 0x40)
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT 7
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK 0x3
++#define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_VAL 0x1
+ #define XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18 (1 << 6)
+ 
+ #define XUSB_PADCTL_USB2_OTG_PADX_CTL0(x) (0x088 + (x) * 0x40)
+@@ -957,7 +961,14 @@ static int tegra210_usb2_phy_power_on(struct phy *phy)
+ 
+ 	value = padctl_readl(padctl, XUSB_PADCTL_USB2_PORT_CAP);
+ 	value &= ~XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_MASK(index);
+-	value |= XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_HOST(index);
++	if (port->mode == USB_DR_MODE_UNKNOWN)
++		value |= XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_DISABLED(index);
++	else if (port->mode == USB_DR_MODE_PERIPHERAL)
++		value |= XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_DEVICE(index);
++	else if (port->mode == USB_DR_MODE_HOST)
++		value |= XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_HOST(index);
++	else if (port->mode == USB_DR_MODE_OTG)
++		value |= XUSB_PADCTL_USB2_PORT_CAP_PORTX_CAP_OTG(index);
+ 	padctl_writel(padctl, value, XUSB_PADCTL_USB2_PORT_CAP);
+ 
+ 	value = padctl_readl(padctl, XUSB_PADCTL_USB2_OTG_PADX_CTL0(index));
+@@ -989,7 +1000,12 @@ static int tegra210_usb2_phy_power_on(struct phy *phy)
+ 			     XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+ 	value &= ~(XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_MASK <<
+ 		   XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT);
+-	value |= XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
++	if (port->mode == USB_DR_MODE_HOST)
++		value |= XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_FIX18;
++	else
++		value |=
++		      XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_VAL <<
++		      XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPAD_CTL1_VREG_LEV_SHIFT;
+ 	padctl_writel(padctl, value,
+ 		      XUSB_PADCTL_USB2_BATTERY_CHRG_OTGPADX_CTL1(index));
+ 
+-- 
+2.7.4
+
