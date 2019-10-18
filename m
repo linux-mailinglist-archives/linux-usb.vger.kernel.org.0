@@ -2,112 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC874DBC2B
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 06:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A523BDBCCF
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 07:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409535AbfJRE4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 00:56:49 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:57887 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389158AbfJRE4t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 00:56:49 -0400
-X-UUID: 456865fc1cb443a58d46027694256ed7-20191018
-X-UUID: 456865fc1cb443a58d46027694256ed7-20191018
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <min.guo@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 421628261; Fri, 18 Oct 2019 11:41:25 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 18 Oct
- 2019 11:41:19 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 18 Oct 2019 11:41:18 +0800
-Message-ID: <1571370080.28949.5.camel@mhfsdcap03>
-Subject: Re: [PATCH RESEND v7 1/6] dt-bindings: usb: musb: Add support for
- MediaTek musb controller
-From:   Min Guo <min.guo@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
-        <hdegoede@redhat.com>
-Date:   Fri, 18 Oct 2019 11:41:20 +0800
-In-Reply-To: <20191017140841.GA20279@bogus>
-References: <20191017082554.27953-1-min.guo@mediatek.com>
-         <20191017082554.27953-2-min.guo@mediatek.com>
-         <20191017140841.GA20279@bogus>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: CB98BBEA4BB874D3A0D88CACED1C5CC76A62CDA4161EE13A5117F18AFA2C7BDE2000:8
-X-MTK:  N
+        id S2406851AbfJRFUF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 01:20:05 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:41334 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726533AbfJRFUE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 01:20:04 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t3so2676457pga.8
+        for <linux-usb@vger.kernel.org>; Thu, 17 Oct 2019 22:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=b6Qjq8AUYqxvUIoRvUfuNcrTuVzAtoJKx0iC24h3W6Q=;
+        b=qsRzvoy+sgdccSc/9lY7QPJLY+I/HimHOBY016sU94Cf2HM40sF0dcya5pCRvmxn1n
+         JbHCmzGOB/rnlf8PdZzH3reIznLJACJTxLBo7SFplhEx+Fvr4QYvNjjiQxWEtSHV8Ifm
+         8zkep2HSObXq8nqkSUaKC72vjy2zaltjDUgU/dzy3vrIc0mCpCeUqkbmWzjUDx8hn+nV
+         XWOcYuDTrFosjDfv2ryrBz6aGf/Lufoc8aWnm7yLH+TLVg0xMndVRu4QVXMAyEFTzku9
+         1sLKILfWG/HgcdQWvYCa1BmjmCxd+D3/vjy4Ic3/YLsg2kDONmrU4+y0TPhCCo7PQWxx
+         lSow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=b6Qjq8AUYqxvUIoRvUfuNcrTuVzAtoJKx0iC24h3W6Q=;
+        b=U4SsxoXTrafQOexRZUq8K0nRQTvp7h6NpH6zYTBzffrJoNm6+CixOjALHyD+ajri5A
+         Hi6dvWE7BFINg//khw10s8bRaINyMfT/7dUcGZAE6XxorpCc31O0EejgZtgUaIvqTsGA
+         X+yMqKPeDYLmGs9sWwULBI0dAiCnwNm1AGBzXrhXa+zqY7UXjG6bIVqBQC3QiHSmJoeH
+         RTeZZOuY13+swMAyywvhJ6EGDidzhh29BjFTErUGKOZhPrq7ea9qcBFwTUcmkXTTGDFA
+         /ONo7d+sUAEyBnqF2FvP5/2KinV0CevejD8jbp7+WyMJFRWF5AUZDd8OkCxwEJABBkz8
+         2ueQ==
+X-Gm-Message-State: APjAAAWBJw4z09pgJV3xjnnt9gtzJzLaJIPSblQtoLClcqQlcji3MIA/
+        ahi5sNrnkL9txY+c94Ke4ThFrho8yDLgQA==
+X-Google-Smtp-Source: APXvYqwFwUZeFChu7WpLEw16VuxL9InaC08dTKbSTOfjeDZJqJRRSS+JpoQoNN3a+wpZ+KYoaSO0sw==
+X-Received: by 2002:a63:7845:: with SMTP id t66mr7583920pgc.31.1571368950729;
+        Thu, 17 Oct 2019 20:22:30 -0700 (PDT)
+Received: from goorm.ap-northeast-2.compute.internal (ec2-13-125-234-98.ap-northeast-2.compute.amazonaws.com. [13.125.234.98])
+        by smtp.gmail.com with ESMTPSA id ev20sm3841105pjb.19.2019.10.17.20.22.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Oct 2019 20:22:29 -0700 (PDT)
+From:   GwanYeong Kim <gy741.kim@gmail.com>
+To:     valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, gregkh@linuxfoundation.org, allison@lohutok.net,
+        opensource@jilayne.com, changcheng.liu@intel.com,
+        tglx@linutronix.de, linux-usb@vger.kernel.org,
+        GwanYeong Kim <gy741.kim@gmail.com>
+Subject: [PATCH v3] usbip: tools: Fix read_usb_vudc_device() error path handling
+Date:   Fri, 18 Oct 2019 03:22:23 +0000
+Message-Id: <20191018032223.4644-1-gy741.kim@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <948530c4-0f42-1244-faee-aad531074bf3@kernel.org>
+References: <948530c4-0f42-1244-faee-aad531074bf3@kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-10-17 at 09:08 -0500, Rob Herring wrote:
-> On Thu, 17 Oct 2019 16:25:49 +0800, <min.guo@mediatek.com> wrote:
-> > From: Min Guo <min.guo@mediatek.com>
-> > 
-> > This adds support for MediaTek musb controller in
-> > host, peripheral and otg mode.
-> > 
-> > Signed-off-by: Min Guo <min.guo@mediatek.com>
-> > ---
-> > changes in v7:
-> > 1. Modify compatible as
-> > - compatible : should be one of:
-> >                "mediatek,mt2701-musb"
-> >                ...
-> >                followed by "mediatek,mtk-musb"
-> > 2. Change usb connector child node compatible as "gpio-usb-b-connector" 
-> > 
-> > changes in v6:
-> > 1. Modify usb connector child node
-> > 
-> > changes in v5:
-> > suggested by Rob:
-> > 1. Modify compatible as 
-> > - compatible : should be one of:
-> >                "mediatek,mt-2701"
-> >                ...
-> >                followed by "mediatek,mtk-musb"
-> > 2. Add usb connector child node
-> > 
-> > changes in v4:
-> > suggested by Sergei:
-> > 1. String alignment
-> > 
-> > changes in v3:
-> > 1. no changes
-> > 
-> > changes in v2:
-> > suggested by Bin:
-> > 1. Modify DRC to DRD
-> > suggested by Rob:
-> > 2. Drop the "<soc-model>-musb" in compatible
-> > 3. Remove phy-names
-> > 4. Add space after comma in clock-names
-> > ---
-> >  .../devicetree/bindings/usb/mediatek,musb.txt      | 55 ++++++++++++++++++++++
-> >  1 file changed, 55 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
-> > 
-> 
-> Please add Acked-by/Reviewed-by tags when posting new versions. However,
-> there's no need to repost patches *only* to add the tags. The upstream
-> maintainer will do that for acks received on the version they apply.
+This isn't really accurate right. fread() doesn't always
+return 0 in error. It could return < number of elements
+and set errno.
 
-> If a tag was not added on purpose, please state why and what changed.
-OK,thanks. I will add Acked-by/Reviewed-by tags in the next version.
+Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
+---
+ tools/usb/usbip/libsrc/usbip_device_driver.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
+index 051d7d3f443b..927a151fa9aa 100644
+--- a/tools/usb/usbip/libsrc/usbip_device_driver.c
++++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
+@@ -69,7 +69,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+ 	FILE *fd = NULL;
+ 	struct udev_device *plat;
+ 	const char *speed;
+-	int ret = 0;
++	size_t ret;
+ 
+ 	plat = udev_device_get_parent(sdev);
+ 	path = udev_device_get_syspath(plat);
+@@ -79,8 +79,10 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+ 	if (!fd)
+ 		return -1;
+ 	ret = fread((char *) &descr, sizeof(descr), 1, fd);
+-	if (ret < 0)
++	if (ret != 1) {
++		err("Cannot read vudc device descr file: %s", strerror(errno));
+ 		goto err;
++	}
+ 	fclose(fd);
+ 
+ 	copy_descr_attr(dev, &descr, bDeviceClass);
+-- 
+2.17.1
 
