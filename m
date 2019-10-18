@@ -2,99 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B9DFDCE4E
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41ECDCE7B
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Oct 2019 20:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505870AbfJRSjU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Oct 2019 14:39:20 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53008 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2505856AbfJRSjU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 14:39:20 -0400
-Received: by mail-wm1-f68.google.com with SMTP id r19so7169808wmh.2
-        for <linux-usb@vger.kernel.org>; Fri, 18 Oct 2019 11:39:18 -0700 (PDT)
+        id S1730794AbfJRSl6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Oct 2019 14:41:58 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:40686 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728350AbfJRSl6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Oct 2019 14:41:58 -0400
+Received: by mail-il1-f194.google.com with SMTP id o16so6447713ilq.7;
+        Fri, 18 Oct 2019 11:41:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f4CnMsn4AbSRNn1EVCaabWmq8sv54L0ZTWdVo5HeLwA=;
-        b=f1TWdlYaruRtAyn1ngSsZ6uQn90ArDxO5LBV1SCnegvCTBjunLuFQdCC5GQcOic5kV
-         XFX4SOPayd3RrflTHaz9+t1hM4dPpdExngdo3PnFxk5kowUq+zvTsVLEbj2AUks6p20x
-         iQHFEDttYjw/iF8/w/yPlasZfFcKXzwcThXlvx8iXO6IZu/+6bD9Si5igH998rahS9kD
-         wCtSdgazQwuBZ7W127ThETW+39wbFdle7JTJlO+jOfYJ/a4KN4EGaVf7O2oRqubH7fEQ
-         XdqNT2/L8jTS95upwtA+kgQwGiJxlXO8kpGvnzsiPJcVm/lBKiwBaH9+SueZ4aw1uEBh
-         zaoA==
+        bh=tJXKGhc1AW/l0WKj0IcIOpG/c9m//aZTCOArzVW/AZw=;
+        b=s/JGYncSzqI2bGxfMPGTrEU6YMN+uue1Pn3GVsKkV6CewWE7VwswNVssbghypg2B5r
+         O4iy4KgD9IPaIpFP1Uuji4WcIqDJT35onsmfK/8ZfnRxgjJsluFIvQAdyj05RUO4yYWn
+         H7HjIFAhkdyk24buc2FvoJdcOydo3D7fY/UyXBLwK5FpIvTu7RbaQzEn9jIHuObUYlp2
+         oK487cyGVr2lFBqaJ2ttjFXOGKB7R4lDPOvMCsTCGzqExsRoh+Oo5Uh+Qmlt68zO8QeV
+         YbgbC6FAgo6rUOqcP+bIWbmOMvA5jnoaldwbwttz2cDmoOkgNNZ/3xmBk/6q7AYUJ5uy
+         PLNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f4CnMsn4AbSRNn1EVCaabWmq8sv54L0ZTWdVo5HeLwA=;
-        b=hHn/1zU0MqDTqtWnf6UrgyHc/zB0PPUIbz996QMAc9qc4BCpgW9MySZGvAKGes3gc2
-         RY29TD6Cq24qe9JdLEzkcEc7N0NKCbTq1njvrRz5MCvyJ+2rwWNByqnA8SyVoxlB3cA3
-         9qWio2t560ZES2pq6i7ET8jy5mjpkE/um8SGpRgJ+hr+sTmWutcASLb84/FUZvGPVTNV
-         rCxO3eZi4nbtEHvtM606gtMpsmI3SZQXjPT8f4AGJjHgM/3ZdSU3OEy0DbwvwH/ek+eh
-         jjahH27XR1O6ving37e66e8klc2AMPZ7HsHfMPlGIrtJeUMJt/qNnfyknn2nLRMej08G
-         7Ahg==
-X-Gm-Message-State: APjAAAW5A2SGn/M2FEB74PViHbOf6ibY03fhUdbtK2EyIv4v019mC5cQ
-        RSwO1VQ16cnNFcMaUCRG020VBIXNSOokBgwAR6fDYQ==
-X-Google-Smtp-Source: APXvYqwQBRN+0AP3sy+6+jMt6ece72V8onGhRTBZvT/3iOom/I8z+sXUkSfEcU0M5YrBcGzh2NdoipI884i3PRHW/D4=
-X-Received: by 2002:a1c:f201:: with SMTP id s1mr8322752wmc.59.1571423957896;
- Fri, 18 Oct 2019 11:39:17 -0700 (PDT)
+        bh=tJXKGhc1AW/l0WKj0IcIOpG/c9m//aZTCOArzVW/AZw=;
+        b=NVlGuxJfvM/8PuMo3ediHtIIALkbs332SdT1EMjA37bc3Nuc7vdCM893mKCU7R61Ck
+         aP+bpgG7pmJxAqYRQMN1QiuIFK49KigTQLrLCmr+ZLHoGCCeAUb5CTKwa4C/T6gA81Hn
+         QRKCcKYuowBEFXx7dJmln/crAHAwQYV7Ciaru3iks7KeP9iOWFGf2ZAF9nm3bWMs/JCg
+         DZFqaAaPo12Gx8wwCDGIoXq5zlQqMNiqjM+guMQFlZY7KIAA4pnBgNYh0VA6BExns3hf
+         g0p3kvrRfZSyMSwdXqjb/KN/+XIcOb4Jnim8U5E8BdX8hB4kC8+IaOZh9BGy167yjFkP
+         1c0w==
+X-Gm-Message-State: APjAAAVReqOq3wtIE6nQ51lGMW9GDaMCjgDEg/WcKvTC5/LeBOvm4W8K
+        GRBSs7Uta27KZpIDA4otBtKNwqPj5g3p9cOnz9w=
+X-Google-Smtp-Source: APXvYqzVGnrRdxkCssJMUgVLUGTgfJ2Oe03f70oC9SJo+hLMFSxkpBPACOQ7WecE05oJWVeLVBFKMSyBLSuR6dgWN3A=
+X-Received: by 2002:a92:b682:: with SMTP id m2mr11544098ill.64.1571424117434;
+ Fri, 18 Oct 2019 11:41:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191002231617.3670-1-john.stultz@linaro.org> <20191002231617.3670-3-john.stultz@linaro.org>
- <2e369349-41f6-bd15-2829-fa886f209b39@redhat.com> <CALAqxLVcQ7yZuJCUEqGmvqcz5u0Gd=xJzqLbmiXKR+LJrOhvMQ@mail.gmail.com>
- <b8695418-9d3a-96a6-9587-c9a790f49740@redhat.com> <CALAqxLVh6GbiKmuK60e6f+_dWh-TS2ZLrwx0WsSo5bKp-F3iLA@mail.gmail.com>
- <648e2943-42f5-e07d-5bb4-f6fd8b38b726@redhat.com> <CALAqxLWh0=GRod5ORpi+ENpWCkmY39mUw_=NV67sKY8qH_otZw@mail.gmail.com>
- <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
-In-Reply-To: <f2236442-111d-cd84-fc47-0737df71cf3a@redhat.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 18 Oct 2019 11:39:06 -0700
-Message-ID: <CALAqxLWHbhst5KXAGCswKVp7ztzFHxdb6nskfze+Jk+xWo2Ssw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 2/3] usb: roles: Add usb role switch notifier.
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+References: <20191015141945.16067-1-ben.dooks@codethink.co.uk>
+In-Reply-To: <20191015141945.16067-1-ben.dooks@codethink.co.uk>
+From:   Sylvain Lemieux <slemieux.tyco@gmail.com>
+Date:   Fri, 18 Oct 2019 14:41:46 -0400
+Message-ID: <CA+rxa6q3M_o9E95-W5DrtNkzhuuVRBjS74U_TQKLCOde+nG0vw@mail.gmail.com>
+Subject: Re: [PATCH] usb: ohci-nxp: fix use of integer as pointer
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     linux-kernel@lists.codethink.co.uk,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 1:06 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> On 18-10-2019 07:55, John Stultz wrote:
-> > On Wed, Oct 16, 2019 at 12:27 AM Hans de Goede <hdegoede@redhat.com> wrote:
-> >> Look at the tcpm_set_vbus implementation in drivers/usb/typec/tcpm/fusb302.c
-> >> you need to do something similar in your Type-C controller driver and
-> >> export the GPIO as as a gpio-controlled regulator and tie the regulator to
-> >> the connector.
-> >
-> > Thanks for the suggestion, I really appreciate it! One more question
-> > though, since I'm using the tcpci_rt1711h driver, which re-uses the
-> > somewhat sparse tcpci.c implementation, would you recommend trying to
-> > add generic regulator support to the tcpci code or trying to extend
-> > the implementation somehow allow the tcpci_rt1711h driver replace just
-> > the set_vbus function?
+On Tue, Oct 15, 2019 at 10:19 AM Ben Dooks <ben.dooks@codethink.co.uk> wrote:
 >
-> I have the feeling that this is more of a question for Heikki.
+> The hcd pointer in ohci_hcd_nxp_probe() is
+> being initialised with a 0, so fix to NULL to
+> avoid the following sparse warning:
 >
-> My first instinct is: if you are using tcpci can't you put all
-> the hacks you need for the usb connection shared between hub
-> and type-c in your firmware ?
+> drivers/usb/host/ohci-nxp.c:153:31: warning: Using plain integer as NULL pointer
+>
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+> ---
+[...]
 
-I appreciate the suggestion, but I'm not aware of any USB firmware for
-the board, nor do I think I have any such source.  :(
-
-thanks
--john
+> --- a/drivers/usb/host/ohci-nxp.c
+> +++ b/drivers/usb/host/ohci-nxp.c
+> @@ -150,7 +150,7 @@ static void ohci_nxp_stop_hc(void)
+>
+>  static int ohci_hcd_nxp_probe(struct platform_device *pdev)
+>  {
+> -       struct usb_hcd *hcd = 0;
+> +       struct usb_hcd *hcd = NULL;
+>         const struct hc_driver *driver = &ohci_nxp_hc_driver;
+>         struct resource *res;
+>         int ret = 0, irq;
+> --
+> 2.23.0
+>
+Acked-by: Sylvain Lemieux <slemieux.tyco@gmail.com>
