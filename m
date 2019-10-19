@@ -2,87 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01421DD803
-	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2019 12:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6344DD82D
+	for <lists+linux-usb@lfdr.de>; Sat, 19 Oct 2019 12:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726192AbfJSKJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Oct 2019 06:09:55 -0400
-Received: from mout.kundenserver.de ([212.227.17.10]:57501 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725283AbfJSKJy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 19 Oct 2019 06:09:54 -0400
-Received: from mail-qk1-f175.google.com ([209.85.222.175]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Md66H-1hmA0q38lP-00aBTh; Sat, 19 Oct 2019 12:09:52 +0200
-Received: by mail-qk1-f175.google.com with SMTP id u184so7726616qkd.4;
-        Sat, 19 Oct 2019 03:09:50 -0700 (PDT)
-X-Gm-Message-State: APjAAAV6BC7+dJNdNnbp0uBhqhWjVJbpXA0P+NWDqHRQrLjjeNPea+9O
-        UsfK6mxzuQugSbt2MHqE8UxQN6gKkEIDC4IrnOw=
-X-Google-Smtp-Source: APXvYqxDnkD1LGxVOqOKBA1bv73+2FIM7aUPofN3DdgTjR6MZneEs/uqd6EIDns9KMja9p9yGzmHvgB/h9FVcJa5zrw=
-X-Received: by 2002:a37:a614:: with SMTP id p20mr4599817qke.352.1571479789607;
- Sat, 19 Oct 2019 03:09:49 -0700 (PDT)
+        id S1725823AbfJSKhz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 19 Oct 2019 06:37:55 -0400
+Received: from ms-10.1blu.de ([178.254.4.101]:41266 "EHLO ms-10.1blu.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725810AbfJSKhz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 19 Oct 2019 06:37:55 -0400
+Received: from [84.135.228.213] (helo=[192.168.178.51])
+        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <ben@besd.de>)
+        id 1iLm7N-0008Mg-OQ; Sat, 19 Oct 2019 12:37:53 +0200
+Subject: Re: [USB EHCI DRIVER] [Regression] EHCI no longer working in 5.4
+ series kernel
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, hch@lst.de
+References: <Pine.LNX.4.44L0.1910171830550.4074-100000@netrider.rowland.org>
+From:   Benedikt Schemmer <ben@besd.de>
+Message-ID: <4c0b469f-771b-8709-45db-0cedef78a10a@besd.de>
+Date:   Sat, 19 Oct 2019 12:37:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <803f6fa5-b929-007c-5302-4a2d5042241c@roeck-us.net>
-In-Reply-To: <803f6fa5-b929-007c-5302-4a2d5042241c@roeck-us.net>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 19 Oct 2019 12:09:33 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0t-P_w705z0BSXxzj8MmmKVCagLtidiP+NX51zGce0ag@mail.gmail.com>
-Message-ID: <CAK8P3a0t-P_w705z0BSXxzj8MmmKVCagLtidiP+NX51zGce0ag@mail.gmail.com>
-Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:JoUK9zIsRwlckwxRsQPyrjTR+CJ+e1NzjrnywlpJZpvLQsrki/O
- 6oqUixG3wGmHbC1gSpDeC2OejM6V4LXMb9u1x0OmYrMxGcagKms+P8T/tjhy15NahnZvLsx
- 1gNVUhsGYzHMtoVbEaqcMjalLGwbYPFfNThqwVnR8BgbXGDhRMK7Adn2Vavriz2ulAIvmZU
- H5PZHrbqDUGaqIhXvsl4Q==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pA8x/njXmAI=:U9yaOvxfltjLDDMpfRuSsq
- 3HS+Uk5OMnTj7jXsSqT09WlnY5kJE4lyndiUAbmRhkwH8a1mpWaZtSeNW5l9XHblbovqqlFen
- I2hdy64SanS7+hdxQClxrj9MOTCMH+jQ/guAzqyyIS+ZJghWWRA96XK07WeYTSksO3Z3wi4PL
- oeUQfeMOmonDkSFZQJSU0pUDf5ibRuBWvHgYEqc4ZFCtQoMh4HxHg4DcDHz0GcvNIW8zWcUi+
- kGvUwPLgDOL+yFjxr4/A3kz9Dyp14ontGslHGkjqxAOAVjxv5J33fiBooNoR5GvtvGscuR2lq
- suA01emt1k4nZL14WT/4N/ifAN322ft1kJa84NI7AHbBVjq+Ty7vVxQJynTFU9qV2TtVeePTh
- z6LuoYpDlFdSQRZE9ZHsyb7Zbahb2icMEExmeS1b+ZHYjPQQSvKmuopKiOnFdVjBzVpbAs7Sq
- OWKgo9HdQ3faFXmP1ql0IgKuQZAqcUuGMxzZ3qQRC6iZ+w6Fjnw74/gf6IBz3WfI6QsztRmxr
- IChwQdXXDBnXtNhHmN5s+cYfz3SB5+3akBzydwjYiFDmkVYlrVsdsXPNkFi5WLrKvEs+jRXnT
- 7x949r2gXzMwOU6maKqn9s+IqzNassNQF5qaczd5/st4LlH7WfivxkcQH4ofJColsHPGPKZh8
- iktcGfmOnhb78/0TpIR8Pj7ulZJkGfkCzLvPJIWmyicG65izSidWtbu0o4peBVdS3AWBMLVL+
- RO1hs5zPp4BOBWIHL0DmrFqHNsNyUF9ne462ySkT6FJvnaVrgtoV5lzoQCIgWh5yfmbR3zfdh
- +cJJ58BOZyJDYKmZfk9jV62B7juGiiPu74mnB7POA41ONooMvzSSBTNUZFPGnif+VoMzuLyEz
- 8oK7rdh0sSaKcju6RlWA==
+In-Reply-To: <Pine.LNX.4.44L0.1910171830550.4074-100000@netrider.rowland.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Con-Id: 150997
+X-Con-U: 0-ben
+X-Originating-IP: 84.135.228.213
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 19, 2019 at 3:03 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> On 10/18/19 8:40 AM, Arnd Bergmann wrote:
->
-> I don't get very far.
->
-> $ make-arm pxa_defconfig
-> arch/arm/Kconfig:677: can't open file "arch/arm/plat-pxa/Kconfig"
-> scripts/kconfig/Makefile:90: recipe for target 'pxa_defconfig' failed
+Hello Alan, hello Christoph,
 
->
-> Did I pick the wrong tree ?
+>> I recently started compiling the 5.4. kernel starting with rc3 and noticed that both my keyboard and mouse aren't working
+>> when connected to the motherboards USB ports (they work fine when connected to an xhci extension card) and they work fine
+>> with the 5.3 series up to 5.3.6
 
-It seems that one line got lost in a rebase and ended up in a different patch
-that was not part of the series. I updated the git tree now.
+finally:
 
-        Arnd
+249baa54790171438524ba97e8e0485dd6aa2762 is the first bad commit
+commit 249baa54790171438524ba97e8e0485dd6aa2762
+Author: Christoph Hellwig <hch@lst.de>
+Date:   Tue Aug 6 15:01:38 2019 +0300
+
+    dma-mapping: provide a better default ->get_required_mask
+
+    Most dma_map_ops instances are IOMMUs that work perfectly fine in 32-bits
+    of IOVA space, and the generic direct mapping code already provides its
+    own routines that is intelligent based on the amount of memory actually
+    present.  Wire up the dma-direct routine for the ARM direct mapping code
+    as well, and otherwise default to the constant 32-bit mask.  This way
+    we only need to override it for the occasional odd IOMMU that requires
+    64-bit IOVA support, or IOMMU drivers that are more efficient if they
+    can fall back to the direct mapping.
+
+    Signed-off-by: Christoph Hellwig <hch@lst.de>
+
+:040000 040000 99ba74322d98c2a8dc96fb03bf9cbb0bc20bff42 ad137a4ff5f2b810b71f12e0ad053c91e318ed25 M	arch
+:040000 040000 0e0709ea4d18cefbd5dd6bddc9731aea71513e0f 46cd62afd5ffdc15187311fe33238e1ca743b9a5 M	kernel
+
+Cheers,
+Benedikt
+
+
+git bisect log
+git bisect start
+# bad: [bc88f85c6c09306bd21917e1ae28205e9cd775a7] kthread: make __kthread_queue_delayed_work static
+git bisect bad bc88f85c6c09306bd21917e1ae28205e9cd775a7
+# good: [4d856f72c10ecb060868ed10ff1b1453943fc6c8] Linux 5.3
+git bisect good 4d856f72c10ecb060868ed10ff1b1453943fc6c8
+# good: [81160dda9a7aad13c04e78bb2cfd3c4630e3afab] Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
+git bisect good 81160dda9a7aad13c04e78bb2cfd3c4630e3afab
+# bad: [a703d279c57e1bfe2b6536c3a17c1c498b416d24] Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+git bisect bad a703d279c57e1bfe2b6536c3a17c1c498b416d24
+# good: [29d9d76a72ce0d8485796c0f930007444684bff0] Merge tag 'drm-intel-next-2019-08-22' of git://anongit.freedesktop.org/drm/drm-intel into drm-next
+git bisect good 29d9d76a72ce0d8485796c0f930007444684bff0
+# bad: [3c2edc36a77420d8be05d656019dbc8c31535992] Merge tag 'pinctrl-v5.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl
+git bisect bad 3c2edc36a77420d8be05d656019dbc8c31535992
+# good: [7a0d796100daa8e75cda2c166c85d57775704fd4] Merge tag 'for-linus-5.4-ofs1' of git://git.kernel.org/pub/scm/linux/kernel/git/hubcap/linux
+git bisect good 7a0d796100daa8e75cda2c166c85d57775704fd4
+# bad: [a9f8b38a071b468276a243ea3ea5a0636e848cf2] Merge tag 'for-linus-5.4-1' of git://github.com/cminyard/linux-ipmi
+git bisect bad a9f8b38a071b468276a243ea3ea5a0636e848cf2
+# bad: [671df189537883f36cf9c7d4f9495bfac0f86627] Merge tag 'dma-mapping-5.4' of git://git.infradead.org/users/hch/dma-mapping
+git bisect bad 671df189537883f36cf9c7d4f9495bfac0f86627
+# good: [c9fe5630dae1df2328d82042602e2c4d1add8d57] Merge tag 'configfs-for-5.4' of git://git.infradead.org/users/hch/configfs
+git bisect good c9fe5630dae1df2328d82042602e2c4d1add8d57
+# good: [7a01ee42209c00e551c7cfb581be7a207a376f00] dma-mapping: remove the dma_mmap_from_dev_coherent export
+git bisect good 7a01ee42209c00e551c7cfb581be7a207a376f00
+# bad: [a8e6d950cdc1012aede8a84d85f902a53d895174] xen/arm: use dev_is_dma_coherent
+git bisect bad a8e6d950cdc1012aede8a84d85f902a53d895174
+# bad: [512317401f6a337e617ec284d20dec5fa3a951ec] dma-mapping: always use VM_DMA_COHERENT for generic DMA remap
+git bisect bad 512317401f6a337e617ec284d20dec5fa3a951ec
+# good: [d9295532d5725e5926d76470acdfd239c8d2aad3] dma-mapping: remove the dma_declare_coherent_memory export
+git bisect good d9295532d5725e5926d76470acdfd239c8d2aad3
+# bad: [fe9041c245196c6c61091ccc2c74b73ab9a5fc50] vmalloc: lift the arm flag for coherent mappings to common code
+git bisect bad fe9041c245196c6c61091ccc2c74b73ab9a5fc50
+# bad: [249baa54790171438524ba97e8e0485dd6aa2762] dma-mapping: provide a better default ->get_required_mask
+git bisect bad 249baa54790171438524ba97e8e0485dd6aa2762
+# first bad commit: [249baa54790171438524ba97e8e0485dd6aa2762] dma-mapping: provide a better default ->get_required_mask
+
+
+Am 18.10.19 um 00:31 schrieb Alan Stern:
+> On Thu, 17 Oct 2019, Benedikt Schemmer wrote:
+> 
+>> Hi all,
+>>
+>> I recently started compiling the 5.4. kernel starting with rc3 and noticed that both my keyboard and mouse aren't working
+>> when connected to the motherboards USB ports (they work fine when connected to an xhci extension card) and they work fine
+>> with the 5.3 series up to 5.3.6
+> 
+> Can you use git bisect to track the problem down to a particular commit?
+> 
+> Alan Stern
+> 
