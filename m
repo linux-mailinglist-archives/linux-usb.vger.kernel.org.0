@@ -2,106 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B125DDF01
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2019 17:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60651DE090
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Oct 2019 22:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbfJTPET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Oct 2019 11:04:19 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:42042 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726373AbfJTPES (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Oct 2019 11:04:18 -0400
-Received: by mail-pg1-f195.google.com with SMTP id f14so6063636pgi.9;
-        Sun, 20 Oct 2019 08:04:18 -0700 (PDT)
+        id S1726405AbfJTUzf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Oct 2019 16:55:35 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:34900 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726130AbfJTUzf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Oct 2019 16:55:35 -0400
+Received: by mail-qk1-f194.google.com with SMTP id w2so10481403qkf.2
+        for <linux-usb@vger.kernel.org>; Sun, 20 Oct 2019 13:55:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6KJryP+tfJkdTokhyTPIITwV+Wsv8Q6hUTNNl5bzzlQ=;
-        b=RO3Utzmv1T/sYXFpUu3+q9zHe+Wsi9u+r9LXoQagQ9syZqHCrCfd1X9lFdELC6S/f/
-         I563WrsLVyg4L/CeL79q6w3+wqe7jxutMRuXqGc4ifIGBY06ETjRh8KXaJv1mc1MCkir
-         3azQPpmW4gxGs4cpQvdE9LR+7VBLcJ2p63YnaaYX3ofHN41p9P4kxRYbejq2aZkTFRom
-         dgtr5gd9grs587l8oCl8AAcfZrz/Cu25Ek+6neiRdqwHIiHQT++c244KUyllnhTaKDgx
-         /aZidpQFg57jQo9ZsFSquuiNcM9ZOZ2Faf3R1eTlyzUScnuEuC9308Wq7tRncgFiOLB/
-         U0Eg==
+        h=sender:from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xprtaVLLRocAwDuKpYGwwGyqUyANfK4gHcGmtZilAgQ=;
+        b=bKK8f9dv4akHL1shbXd9m7KZmnuj82fNp4YRQYSk60k6W9o9JEIEAtxmohxsod5RI/
+         AhByzJhllMTvb/PesQAI4l6e+RWY8EvbxhljeSajBFclTwwZT0lm4htdGp+DZGEY8dQB
+         Zts+dp98BKH9ZGqHX7QBwuoFlHPKAlavt6GVRXDsJO8EUcFtVctal4yNgz7xuke3JiCm
+         v9cOh44F7nrNbKRt+gMB7ap4y0XKs9rdVtHMLVdGLuhdWq8pxPPvVuWXGUyYGX4NXz+7
+         4PBCRZQQpVKQ/qzu85NQQfrsKYgo8Zz1hYCAu6t0IhTMcrcUiAdvkgRUObC2MNn6Tugs
+         PzQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6KJryP+tfJkdTokhyTPIITwV+Wsv8Q6hUTNNl5bzzlQ=;
-        b=BdT1irr0gXxu0HjkkUYKlOMI34C0BZRXetoLbOEuG2OWEx7sxGLHNE7LAB+l33relX
-         p+rNVV1zy9DgznaKpsS/I293iqyQ9a4REkkxsdP2F7gcN7jGR9DngzzPJAcvX4FWrbXs
-         LS+GyAU2/1jXylSKIpcdnFFN1gbOev7NXzgZGgH8jL2o1eiW+YXgPbEqaEI4RQMSBjtZ
-         cu4YlETkz0cbbYlmjFwgGuZ/8mFMEljgT25ANHUowE6CRZQsbp0/Brda9ifGidvVBqPq
-         ZCYZiz1NgI2/1RQhtnfPDlgvREABc+gnScEkxQOcUwwboTKpSkHFqgwn9AFt8nDEmz0m
-         eViQ==
-X-Gm-Message-State: APjAAAUFcYaAXONqrUihnY6KR+YxM/pCHg46lNpcz5a5+zAr6VmRv5jr
-        yMkKjcLjPF1IIlSadJ71bqq/57Ba
-X-Google-Smtp-Source: APXvYqxnCw3hmpRBqaP4/BqEO2jPlw1xBBiIrZUWcSTeHT9FxonciwqUb5YDYe/CIlSvaLxj6C3blg==
-X-Received: by 2002:a17:90a:e98d:: with SMTP id v13mr23021514pjy.64.1571583857934;
-        Sun, 20 Oct 2019 08:04:17 -0700 (PDT)
-Received: from haramaki ([2400:4051:c520:1e00:e0af:68c6:243:d109])
-        by smtp.gmail.com with ESMTPSA id 206sm11709853pge.80.2019.10.20.08.04.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2019 08:04:16 -0700 (PDT)
-Received: by haramaki (Postfix, from userid 1000)
-        id 9C2B912C1F72; Mon, 21 Oct 2019 00:04:14 +0900 (JST)
-From:   Kazutoshi Noguchi <noguchi.kazutosi@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, noguchi.kazutosi@gmail.com
-Subject: [PATCH] r8152: add device id for Lenovo ThinkPad USB-C Dock Gen 2
-Date:   Mon, 21 Oct 2019 00:03:07 +0900
-Message-Id: <20191020150306.11902-1-noguchi.kazutosi@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:sender:from:date:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xprtaVLLRocAwDuKpYGwwGyqUyANfK4gHcGmtZilAgQ=;
+        b=UHy+1SmEIyCRhaJIop0O9ev3BVwae/ho6/fN5UahRUgzf4rhWQ+4qbXn7hGVE0e/f4
+         zjCwBoMqWrckW/cRonacBm76Dsok7oChXCEHJ0bNOVOTpnXPNZ8PYc278wTslzJkuelm
+         J5/tn+F9OFAkv0oy6Lfn2AYqkZsUmfM2qSxwekyRuTxJFYbqNvS/sx98MyNFaL8VSwZn
+         +WiOHRfK1fLepRI/6ui6sjctQGxbGpYw3Ej4kGUGFk/OQ76Wy4USywWMNJirLwz/xobH
+         kp7yK4XTTGhuiTIfdUKBk6qliR7VGHtW6vUqUbYlmffHbGKGiTDOCOZKe/pqc998cTOc
+         hdXQ==
+X-Gm-Message-State: APjAAAXrpVQT9UYTn+nGuHjdzxzCmvgXq9zBW+lfhy+HlZZTURvjKnqm
+        9M/t98QX0Gr674LtYR5M9YjqKXnoD2s=
+X-Google-Smtp-Source: APXvYqycecsrpJ0VmJpRHNBEhKDthJIouq/RlHVgdOx7OhYktBkfvZh8FisDoSs/RFd7f3DCUqRCPg==
+X-Received: by 2002:a05:620a:38d:: with SMTP id q13mr17892487qkm.314.1571604933857;
+        Sun, 20 Oct 2019 13:55:33 -0700 (PDT)
+Received: from rani.riverdale.lan ([2001:470:1f07:5f3::b55f])
+        by smtp.gmail.com with ESMTPSA id g10sm6770682qkm.38.2019.10.20.13.55.33
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 20 Oct 2019 13:55:33 -0700 (PDT)
+From:   Arvind Sankar <nivedita@alum.mit.edu>
+X-Google-Original-From: Arvind Sankar <arvind@rani.riverdale.lan>
+Date:   Sun, 20 Oct 2019 16:55:31 -0400
+To:     Benedikt Schemmer <ben@besd.de>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        hch@lst.de
+Subject: Re: [USB EHCI DRIVER] [Regression] EHCI no longer working in 5.4
+ series kernel
+Message-ID: <20191020205529.GA2451134@rani.riverdale.lan>
+References: <Pine.LNX.4.44L0.1910171830550.4074-100000@netrider.rowland.org>
+ <5328c3b3-d527-42a6-d3b8-18a4ef842227@besd.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5328c3b3-d527-42a6-d3b8-18a4ef842227@besd.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This device is sold as 'ThinkPad USB-C Dock Gen 2 (40AS)'.
-Chipset is RTL8153 and works with r8152.
-Without this, the generic cdc_ether grabs the device, and the device jam
-connected networks up when the machine suspends.
+On Sat, Oct 19, 2019 at 02:52:16PM +0200, Benedikt Schemmer wrote:
+> reverting that specific commit on top of todays linux git (d418d070057c) produces a good kernel
 
-Signed-off-by: Kazutoshi Noguchi <noguchi.kazutosi@gmail.com>
----
- drivers/net/usb/cdc_ether.c | 7 +++++++
- drivers/net/usb/r8152.c     | 1 +
- 2 files changed, 8 insertions(+)
-
-diff --git a/drivers/net/usb/cdc_ether.c b/drivers/net/usb/cdc_ether.c
-index 32f53de5b1fe..fe630438f67b 100644
---- a/drivers/net/usb/cdc_ether.c
-+++ b/drivers/net/usb/cdc_ether.c
-@@ -787,6 +787,13 @@ static const struct usb_device_id	products[] = {
- 	.driver_info = 0,
- },
- 
-+/* ThinkPad USB-C Dock Gen 2 (based on Realtek RTL8153) */
-+{
-+	USB_DEVICE_AND_INTERFACE_INFO(LENOVO_VENDOR_ID, 0xa387, USB_CLASS_COMM,
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
-+	.driver_info = 0,
-+},
-+
- /* NVIDIA Tegra USB 3.0 Ethernet Adapters (based on Realtek RTL8153) */
- {
- 	USB_DEVICE_AND_INTERFACE_INFO(NVIDIA_VENDOR_ID, 0x09ff, USB_CLASS_COMM,
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index cee9fef925cd..d4a95b50bda6 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -5755,6 +5755,7 @@ static const struct usb_device_id rtl8152_table[] = {
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
-+	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff)},
- 	{REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601)},
--- 
-2.20.1
-
+Hi Ben, the fix is in https://lore.kernel.org/lkml/20191008143357.GA599223@rani.riverdale.lan/
+> 
+> Am 18.10.19 um 00:31 schrieb Alan Stern:
+> > On Thu, 17 Oct 2019, Benedikt Schemmer wrote:
+> > 
+> >> Hi all,
+> >>
+> >> I recently started compiling the 5.4. kernel starting with rc3 and noticed that both my keyboard and mouse aren't working
+> >> when connected to the motherboards USB ports (they work fine when connected to an xhci extension card) and they work fine
+> >> with the 5.3 series up to 5.3.6
+> > 
+> > Can you use git bisect to track the problem down to a particular commit?
+> > 
+> > Alan Stern
+> > 
