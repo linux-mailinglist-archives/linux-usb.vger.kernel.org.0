@@ -2,179 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AF3DE557
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 09:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D709DE6C1
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 10:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727226AbfJUHcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 03:32:14 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:34740 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbfJUHcO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 03:32:14 -0400
-Received: by mail-qk1-f194.google.com with SMTP id f18so11025511qkm.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 00:32:13 -0700 (PDT)
+        id S1727040AbfJUIjv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 04:39:51 -0400
+Received: from mail-ua1-f68.google.com ([209.85.222.68]:39339 "EHLO
+        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726181AbfJUIju (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 04:39:50 -0400
+Received: by mail-ua1-f68.google.com with SMTP id b14so3558777uap.6;
+        Mon, 21 Oct 2019 01:39:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=googlemail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SYy1/LrxYgUepstMy8ztXvJpwYGOSfKv6Ncg1+uVmSg=;
-        b=NAnf6DN1LdnUJkuORHQl3vM9RWvqgsvaEScEAkiWAIfW9covbvp06qDeLpzocBwTwQ
-         ZOO42HfViZMhbzoUV5PRGlItfYF2NujVeNv4jc8oZDLGr5tIntC9PZ0mZaY8oOX7R9iW
-         +E3f+gXQpdtDZs2yCF7GSye0sQPmki++DJ++OZe9BUc5cD04QllfO25o45aGuMkrZdAN
-         j/tXIJHC6ApNvsEi0PfaQwgd6NpgI2oECTLo+Q34sLEl+LdWKVubWY2a3Nl3y5koPiG2
-         mUaiWm6l9nRl2CuDO1ZHORUoUvbAYqp2zwP2TxDicnM6ZjVvNyTcqQl4RBSsoZ92wZxj
-         LTRw==
+        bh=GDHAImBPnfYdcTZv5QN22K8grMSnjgjEI3IeurJ6b2A=;
+        b=RhHHQGjo61Z4HtNc5YxV5my1PmI/qYMRqvqJ3DZ/MvVMoFetpkKn2n9NqDQHhDXIN4
+         ZKuMbLKgGeM8LejyvWt+0Kp8kDiKUfI2/Ioa/++6elGSm6B7VJ/B91mso+HwE30IxCd7
+         NynlnBmQfhIi+wIPUjmtxkp04tDCAe39OfQRnesRIiayHgi4fo0e7ttK9W4L7tR7Stt/
+         kEVtyetjHTn1dIVXDtkELAo/LpSKmECtMyMZDgCPAhPu/Ru0H5JX8rvBkxr2qAnPrR0R
+         j084ygG2bbVYYHjfHHqv5SevHODqVmahfN6qphkWixIR9E2/CfBkJUnd4vW2Fe5q4CVD
+         hslg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SYy1/LrxYgUepstMy8ztXvJpwYGOSfKv6Ncg1+uVmSg=;
-        b=QMLsQb9smERgaBjl7op3zhFZLMQp4HGFxkqN/otV9oxC1JJ8883T8eJVL/L7K6Ln4E
-         gYRzqmo7lmRcnswSCTFSiucScSGqOkghpk3MK8dpE7XtvK2pK25khOUqxupLKk+NOOVU
-         Q8xTvwOmLb5DSss/cGaMnrHBL+Pia9+8zOKeKObYIxpv30vwzno8e7AGSEoPmNAkYYjl
-         S1VejDJKN3MSTkuJZ9AiUQiw8EYsrFJecUV+Npw9obxVnRAqrMEmdEPbJA10hd+REv5I
-         40geMr/A2FD5jEMmhLHMTsJ5B3W6ODyCv9ElJzUiipP+Fy5Gzqph4KPV5VKEbDRij/GA
-         qLng==
-X-Gm-Message-State: APjAAAWcxAu1ozyAMA5+k7CT0AFrF3olnJLiRzpNrweMoB9Km+hNyKuJ
-        4RFF9mjiwXi4+kQ9X3Gpu7XG2i9mWJxx+2+HpK8s2Q==
-X-Google-Smtp-Source: APXvYqy/FLbdKNrgK9P+aIODEkPEpmqv+KgCYbzQW8yo7HQznHSxGL3RI6LwSR90HaOz00MNtMb7taoUivccFhuGvgA=
-X-Received: by 2002:a37:4a87:: with SMTP id x129mr20642441qka.43.1571643132113;
- Mon, 21 Oct 2019 00:32:12 -0700 (PDT)
+        bh=GDHAImBPnfYdcTZv5QN22K8grMSnjgjEI3IeurJ6b2A=;
+        b=UD+4jZlhrJpl3ioYZfUMDERIwgKyAa0/aB6ZEuwzeI0gpjYladxUvj64O+XhDeVBro
+         F1u6wYEHm9H4O1WwjkkyvXsjDI7TE0TR5kl7OJY8kjSXNI8vAuSHakCuWArKhcgjMPQ9
+         dlaVORIrWz2Mfl7gJcI8Rh8bCLF0k1lBNFq7jPq8fvuSBc+uj4Fn9o8VDUFJjKhLtLv2
+         t/hryBcORXmItq+CCP1fO+v2blI5CCyLRfm6L5nYVBG4zFf3eujEM61+SZ+xSE6gNgwh
+         7pTCz3S/ACH7VNxvNXns+8bhhuNrzac2phZ0OCTfOm3r6PQWzuXXldC3npBhq/OiGnGR
+         m/Xw==
+X-Gm-Message-State: APjAAAU13CctgGIrzAZeLVapbSWI5rkfMj74tLrpmhzdTgK9s7hmxLBZ
+        9tdrMRMxMd20kEuSqLdYw9mUG88eTZeEASS1lTM=
+X-Google-Smtp-Source: APXvYqwHj5MQjpWZVXcmDx/PyiCrd2a4eCq9uZekfMZ/S11wGH1cgzOkPg5Wt/zzVKEOqLpE0vIbkA5d/0N4RGR89E4=
+X-Received: by 2002:a9f:200a:: with SMTP id 10mr11924965uam.42.1571647189530;
+ Mon, 21 Oct 2019 01:39:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <CALRZ7UuS10CvHvDxMyFyN_wZF_xvzrABT-E_NRt1jKKtXk6Rng@mail.gmail.com>
- <CACT4Y+YxieAS3QrFk9ON6FiYnFzMO_CyzZBo9iTX25fLGzDj+g@mail.gmail.com> <CALRZ7Uvy_QQPPc6wgvDadxD6gemOmjpxCDpYPt=zsi9_1Xjvng@mail.gmail.com>
-In-Reply-To: <CALRZ7Uvy_QQPPc6wgvDadxD6gemOmjpxCDpYPt=zsi9_1Xjvng@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 21 Oct 2019 09:32:00 +0200
-Message-ID: <CACT4Y+Z3PgnruKivBQPbD0-HEn_Hz7huQ0EHr2_7=RURjZwJ+A@mail.gmail.com>
-Subject: Re: WARNING: ODEBUG bug in del_timer
-To:     zzoru <zzoru007@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        usb-storage@lists.one-eyed-alien.net,
-        LKML <linux-kernel@vger.kernel.org>, dokyungs@uci.edu,
-        syzkaller <syzkaller@googlegroups.com>,
-        Andrey Konovalov <andreyknvl@google.com>
+References: <CAGm1_kvZpYH+NP8JfYJWE2v3E9v+yFs20L8MSKsAjfC_g+GmaQ@mail.gmail.com>
+ <CAGm1_ktjndofS_N-qh7GVRuJFG1Jn87rf4D8Lt2XMj=+RrL2aw@mail.gmail.com>
+ <20190930145711.GG5610@atomide.com> <20190930152330.GH5610@atomide.com>
+ <20190930195411.6porqtm7tlokgel3@earth.universe> <20191001080339.GF13531@localhost>
+ <CAGm1_ksg2x9USqB+XGhkMQpA-zc77Ha1-j+foPJFR7R3XPZsNg@mail.gmail.com>
+ <20191001164351.GJ5610@atomide.com> <20191001220321.GK5610@atomide.com>
+ <CAGm1_kv12P1hb7PXSQUo3EXXrCUCQV0ptoQpxewGYHJgROL=cQ@mail.gmail.com>
+ <20191002165219.GL5610@atomide.com> <CAGm1_kt4W+2uN_6WduUtR+NwKCmQMZwNRHQQ7kVJt0PqmoobaA@mail.gmail.com>
+In-Reply-To: <CAGm1_kt4W+2uN_6WduUtR+NwKCmQMZwNRHQQ7kVJt0PqmoobaA@mail.gmail.com>
+From:   Yegor Yefremov <yegorslists@googlemail.com>
+Date:   Mon, 21 Oct 2019 10:39:21 +0200
+Message-ID: <CAGm1_kvK+Xkd0Yx8AUvTPMejLTm7jr5+2dzrwNLkG2ivuUC6bw@mail.gmail.com>
+Subject: Re: musb: cppi41: broken high speed FTDI functionality when connected
+ to musb directly
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>, vkoul@kernel.org,
+        Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
+        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
+        Giulio Benetti <giulio.benetti@benettiengineering.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 19, 2019 at 1:36 AM zzoru <zzoru007@gmail.com> wrote:
->
-> Hi
->
-> The customizations are related to driver fuzzing.
-> We added some more descriptions of USB driver & narrowed the
-> constraints (targeted fuzzing).
+Hi Tony,
 
-Please consider upstreaming these improvements to syzkaller.
-
-> And sorry about I have not much time to make patches of these bugs.
+On Thu, Oct 3, 2019 at 10:39 AM Yegor Yefremov
+<yegorslists@googlemail.com> wrote:
 >
-> On Fri, Oct 18, 2019 at 2:33 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> Hi Tony,
+>
+> On Wed, Oct 2, 2019 at 6:52 PM Tony Lindgren <tony@atomide.com> wrote:
 > >
-> > On Wed, Oct 16, 2019 at 11:59 AM zzoru <zzoru007@gmail.com> wrote:
+> > * Yegor Yefremov <yegorslists@googlemail.com> [191002 06:57]:
+> > > On Wed, Oct 2, 2019 at 12:03 AM Tony Lindgren <tony@atomide.com> wrote:
+> > > > The other way to fix this would be to just wake up cpp41 in
+> > > > cppi41_dma_prep_slave_sg() and return NULL so that we can
+> > > > have musb_ep_program() continue with PIO while cppi41 is
+> > > > asleep.
+> > > >
+> > > > Anyways, care to try it out and see if it fixes your issue?
 > > >
-> > > We found the following crash on Linux 5.4-rc1 (Not patched in currnet
-> > > HEAD commit 3b1f00aceb7a67bf079a5a64aa5c6baf78a8f442)
-> > > with our customized syzkaller.
+> > > The fix is working but on the first invocation, I get this output
+> > > (minicom provokes the same output):
 > >
-> > Hi zzoru,
+> > > # serialtest.py -c 2 /dev/ttyUSB0 /dev/ttyUSB0
+> > ...
+> > > [  210.940612] [<c065fc94>] (__rpm_callback) from [<c065fd60>]
+> > > (rpm_callback+0x20/0x80)
+> > > [  210.948402] [<c065fd60>] (rpm_callback) from [<c065f7cc>]
+> > > (rpm_resume+0x468/0x7a0)
+> > > [  210.956018] [<c065f7cc>] (rpm_resume) from [<c065fb50>]
+> > > (__pm_runtime_resume+0x4c/0x64)
+> > > [  210.964086] [<c065fb50>] (__pm_runtime_resume) from [<bf020940>]
+> > > (cppi41_dma_prep_slave_sg+0x20/0xfc [cppi41])
 > >
-> > Do you mind sharing what customizations you did to syzkaller? Are
-> > these related to USB? I've noticed several reports were related to USB
-> > subsystem.
+> > OK so that won't work, thanks for testing. Here's the alternative
+> > patch to try along the lines described above that just wakes up
+> > cppi41 and returns NULL so musb_ep_program() can continue with PIO
+> > until cppi41 is awake.
+>
+> I'm out of the office for some weeks and don't have access to my hw.
+> I'll make the test as soon as I'm back.
+
+I've tested your patch with both systems (with and without a hub) and
+everything is working as expected.
+
+Thanks.
+Yegor
+
+> > 8< -----------------------
+> > diff --git a/drivers/dma/ti/cppi41.c b/drivers/dma/ti/cppi41.c
+> > --- a/drivers/dma/ti/cppi41.c
+> > +++ b/drivers/dma/ti/cppi41.c
+> > @@ -586,9 +586,22 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+> >         enum dma_transfer_direction dir, unsigned long tx_flags, void *context)
+> >  {
+> >         struct cppi41_channel *c = to_cpp41_chan(chan);
+> > +       struct dma_async_tx_descriptor *txd = NULL;
+> > +       struct cppi41_dd *cdd = c->cdd;
+> >         struct cppi41_desc *d;
+> >         struct scatterlist *sg;
+> >         unsigned int i;
+> > +       int error;
+> > +
+> > +       error = pm_runtime_get(cdd->ddev.dev);
+> > +       if (error < 0) {
+> > +               pm_runtime_put_noidle(cdd->ddev.dev);
+> > +
+> > +               return NULL;
+> > +       }
+> > +
+> > +       if (cdd->is_suspended)
+> > +               goto err_out_not_ready;
 > >
-> > > ODEBUG: assert_init not available (active state 0) object type:
-> > > timer_list hint: 0x0
-> > > WARNING: CPU: 0 PID: 141 at linux/lib/debugobjects.c:484
-> > > debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
-> > > Kernel panic - not syncing: panic_on_warn set ...
-> > > CPU: 0 PID: 141 Comm: kworker/0:3 Not tainted 5.4.0-rc1 #5
-> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-> > > rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
-> > > Workqueue: usb_hub_wq hub_event
-> > > Call Trace:
-> > >  __dump_stack linux/lib/dump_stack.c:77 [inline]
-> > >  dump_stack+0x7c/0xbb linux/lib/dump_stack.c:113
-> > >  panic+0x205/0x48e linux/kernel/panic.c:220
-> > >  __warn+0x19c/0x1c0 linux/kernel/panic.c:581
-> > >  report_bug+0x1a9/0x2b0 linux/lib/bug.c:195
-> > >  fixup_bug.part.11+0x32/0x80 linux/arch/x86/kernel/traps.c:179
-> > >  fixup_bug linux/arch/x86/include/asm/irqflags.h:54 [inline]
-> > >  do_error_trap+0xf5/0x160 linux/arch/x86/kernel/traps.c:272
-> > >  do_invalid_op+0x31/0x40 linux/arch/x86/kernel/traps.c:291
-> > >  invalid_op+0x23/0x30 linux/arch/x86/entry/entry_64.S:1028
-> > > RIP: 0010:debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
-> > > Code: 3c dd 80 05 9a 85 48 89 fa 48 c1 ea 03 80 3c 02 00 75 7f 48 8b
-> > > 14 dd 80 05 9a 85 4c 89 ee 48 c7 c7 00 fb 99 85 e8 d2 a7 43 ff <0f> 0b
-> > > 83 05 cd bd 70 05 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
-> > > RSP: 0018:ffff888017017668 EFLAGS: 00010282
-> > > RAX: 0000000000000000 RBX: 0000000000000005 RCX: ffffffff814153b0
-> > > RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a41f730
-> > > RBP: 0000000000000001 R08: ffffed1003483ee7 R09: ffffed1003483ee7
-> > > R10: 0000000000000001 R11: ffffed1003483ee6 R12: ffffffff86908460
-> > > R13: ffffffff859a01a0 R14: ffffffff812b6bc0 R15: ffff888017fb0420
-> > >  debug_object_assert_init+0x290/0x430 linux/lib/debugobjects.c:866
-> > >  debug_timer_assert_init linux/kernel/time/timer.c:729 [inline]
-> > >  debug_assert_init linux/kernel/time/timer.c:774 [inline]
-> > >  del_timer+0x67/0xf0 linux/kernel/time/timer.c:1196
-> > >  realtek_cr_destructor+0x5a/0x90 linux/drivers/usb/storage/realtek_cr.c:937
-> > >  usb_stor_release_resources linux/drivers/usb/storage/usb.c:817 [inline]
-> > >  release_everything+0xc0/0x2c0 linux/drivers/usb/storage/usb.c:879
-> > >  usb_unbind_interface+0x19f/0x810 linux/drivers/usb/core/driver.c:423
-> > >  __device_release_driver linux/drivers/base/dd.c:1134 [inline]
-> > >  device_release_driver_internal+0x429/0x4f0 linux/drivers/base/dd.c:1165
-> > >  bus_remove_device+0x2d1/0x490 linux/drivers/base/bus.c:532
-> > >  device_del+0x403/0xaa0 linux/drivers/base/core.c:2375
-> > >  usb_disable_device+0x1d7/0x5f0 linux/drivers/usb/core/message.c:1237
-> > >  usb_disconnect+0x25a/0x840 linux/drivers/usb/core/hub.c:2199
-> > >  hub_port_connect linux/drivers/usb/core/hub.c:4949 [inline]
-> > >  hub_port_connect_change linux/drivers/usb/core/hub.c:5213 [inline]
-> > >  port_event linux/drivers/usb/core/hub.c:5359 [inline]
-> > >  hub_event+0x11f5/0x3610 linux/drivers/usb/core/hub.c:5441
-> > >  process_one_work+0x8b5/0x17c0 linux/kernel/workqueue.c:2269
-> > >  worker_thread+0x82/0xb80 linux/kernel/workqueue.c:2415
-> > >  kthread+0x325/0x3e0 linux/kernel/kthread.c:255
-> > >  ret_from_fork+0x24/0x30 linux/arch/x86/entry/entry_64.S:352
-> > > Dumping ftrace buffer:
-> > >    (ftrace buffer empty)
-> > > Kernel Offset: disabled
-> > >
-> > > Following is my analysis of this bug (Just add some comments in source code):
-> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L887-L891
-> > > static int realtek_cr_autosuspend_setup(struct us_data *us)
-> > > {
-> > >     ...
-> > >     if (retval != STATUS_SUCCESS) {
-> > >         usb_stor_dbg(us, "Read status fail\n");
-> > >         return -EIO; // Error!
-> > >     }
-> > >     ...
-> > >     timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn,
-> > > 0); // rts51x_suspend_timer wasn't be initialized. When
-> > > realtek_cr_autosuspend_setup just returns an error.
-> > > }
-> > >
-> > >
-> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L1010-L1012
-> > >
-> > > #ifdef CONFIG_REALTEK_AUTOPM
-> > > if (ss_en)
-> > >     realtek_cr_autosuspend_setup(us); // There isn't any check about
-> > > return code.
-> > > #endif
-> > >
-> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L936-L939
-> > > static void realtek_cr_destructor(void *extra)
-> > > {
-> > >     ...
-> > >     if (ss_en) {
-> > >         del_timer(&chip->rts51x_suspend_timer); // Ouch! :(
-> > >         chip->timer_expires = 0;
-> > >     }
-> > >     ...
-> > > }
+> >         d = c->desc;
+> >         for_each_sg(sgl, sg, sg_len, i) {
+> > @@ -611,7 +624,13 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+> >                 d++;
+> >         }
+> >
+> > -       return &c->txd;
+> > +       txd = &c->txd;
+> > +
+> > +err_out_not_ready:
+> > +       pm_runtime_mark_last_busy(cdd->ddev.dev);
+> > +       pm_runtime_put_autosuspend(cdd->ddev.dev);
+> > +
+> > +       return txd;
+> >  }
+> >
+> >  static void cppi41_compute_td_desc(struct cppi41_desc *d)
+> > --
+> > 2.23.0
