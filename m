@@ -2,102 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF344DE4DF
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 08:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AF3DE557
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 09:32:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfJUGzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 02:55:53 -0400
-Received: from mga05.intel.com ([192.55.52.43]:64066 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726480AbfJUGzx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Oct 2019 02:55:53 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Oct 2019 23:55:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,322,1566889200"; 
-   d="scan'208";a="209381357"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 20 Oct 2019 23:55:50 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2019 09:55:49 +0300
-Date:   Mon, 21 Oct 2019 09:55:49 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: tcpm: Add support for configuring DP
- altmode through device-properties
-Message-ID: <20191021065549.GA28049@kuha.fi.intel.com>
-References: <20191018195719.94634-1-hdegoede@redhat.com>
- <20191018195719.94634-2-hdegoede@redhat.com>
+        id S1727226AbfJUHcO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 03:32:14 -0400
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:34740 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727097AbfJUHcO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 03:32:14 -0400
+Received: by mail-qk1-f194.google.com with SMTP id f18so11025511qkm.1
+        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 00:32:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SYy1/LrxYgUepstMy8ztXvJpwYGOSfKv6Ncg1+uVmSg=;
+        b=NAnf6DN1LdnUJkuORHQl3vM9RWvqgsvaEScEAkiWAIfW9covbvp06qDeLpzocBwTwQ
+         ZOO42HfViZMhbzoUV5PRGlItfYF2NujVeNv4jc8oZDLGr5tIntC9PZ0mZaY8oOX7R9iW
+         +E3f+gXQpdtDZs2yCF7GSye0sQPmki++DJ++OZe9BUc5cD04QllfO25o45aGuMkrZdAN
+         j/tXIJHC6ApNvsEi0PfaQwgd6NpgI2oECTLo+Q34sLEl+LdWKVubWY2a3Nl3y5koPiG2
+         mUaiWm6l9nRl2CuDO1ZHORUoUvbAYqp2zwP2TxDicnM6ZjVvNyTcqQl4RBSsoZ92wZxj
+         LTRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SYy1/LrxYgUepstMy8ztXvJpwYGOSfKv6Ncg1+uVmSg=;
+        b=QMLsQb9smERgaBjl7op3zhFZLMQp4HGFxkqN/otV9oxC1JJ8883T8eJVL/L7K6Ln4E
+         gYRzqmo7lmRcnswSCTFSiucScSGqOkghpk3MK8dpE7XtvK2pK25khOUqxupLKk+NOOVU
+         Q8xTvwOmLb5DSss/cGaMnrHBL+Pia9+8zOKeKObYIxpv30vwzno8e7AGSEoPmNAkYYjl
+         S1VejDJKN3MSTkuJZ9AiUQiw8EYsrFJecUV+Npw9obxVnRAqrMEmdEPbJA10hd+REv5I
+         40geMr/A2FD5jEMmhLHMTsJ5B3W6ODyCv9ElJzUiipP+Fy5Gzqph4KPV5VKEbDRij/GA
+         qLng==
+X-Gm-Message-State: APjAAAWcxAu1ozyAMA5+k7CT0AFrF3olnJLiRzpNrweMoB9Km+hNyKuJ
+        4RFF9mjiwXi4+kQ9X3Gpu7XG2i9mWJxx+2+HpK8s2Q==
+X-Google-Smtp-Source: APXvYqy/FLbdKNrgK9P+aIODEkPEpmqv+KgCYbzQW8yo7HQznHSxGL3RI6LwSR90HaOz00MNtMb7taoUivccFhuGvgA=
+X-Received: by 2002:a37:4a87:: with SMTP id x129mr20642441qka.43.1571643132113;
+ Mon, 21 Oct 2019 00:32:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191018195719.94634-2-hdegoede@redhat.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+References: <CALRZ7UuS10CvHvDxMyFyN_wZF_xvzrABT-E_NRt1jKKtXk6Rng@mail.gmail.com>
+ <CACT4Y+YxieAS3QrFk9ON6FiYnFzMO_CyzZBo9iTX25fLGzDj+g@mail.gmail.com> <CALRZ7Uvy_QQPPc6wgvDadxD6gemOmjpxCDpYPt=zsi9_1Xjvng@mail.gmail.com>
+In-Reply-To: <CALRZ7Uvy_QQPPc6wgvDadxD6gemOmjpxCDpYPt=zsi9_1Xjvng@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 21 Oct 2019 09:32:00 +0200
+Message-ID: <CACT4Y+Z3PgnruKivBQPbD0-HEn_Hz7huQ0EHr2_7=RURjZwJ+A@mail.gmail.com>
+Subject: Re: WARNING: ODEBUG bug in del_timer
+To:     zzoru <zzoru007@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        usb-storage@lists.one-eyed-alien.net,
+        LKML <linux-kernel@vger.kernel.org>, dokyungs@uci.edu,
+        syzkaller <syzkaller@googlegroups.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hans,
+On Sat, Oct 19, 2019 at 1:36 AM zzoru <zzoru007@gmail.com> wrote:
+>
+> Hi
+>
+> The customizations are related to driver fuzzing.
+> We added some more descriptions of USB driver & narrowed the
+> constraints (targeted fuzzing).
 
-On Fri, Oct 18, 2019 at 09:57:18PM +0200, Hans de Goede wrote:
-> Add support for configuring display-port altmode through device-properties.
-> 
-> We could try to add a generic mechanism for describing altmodes in
-> device-properties, but various altmodes will likely need altmode specific
-> configuration. E.g. the display-port altmode needs some way to describe
-> which set of DP pins on the GPU is connected to the USB Type-C connector.
-> 
-> As such it is better to have a separate set of altmode specific properties
-> per altmode and this commit adds a property for basic display-port altmode
-> support.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  .../bindings/connector/usb-connector.txt      |  3 ++
->  drivers/usb/typec/tcpm/tcpm.c                 | 33 +++++++++++++++++++
->  2 files changed, 36 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.txt b/Documentation/devicetree/bindings/connector/usb-connector.txt
-> index d357987181ee..7bae3cc9c76a 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.txt
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.txt
-> @@ -38,6 +38,9 @@ Optional properties for usb-c-connector:
->    or Try.SRC, should be "sink" for Try.SNK or "source" for Try.SRC.
->  - data-role: should be one of "host", "device", "dual"(DRD) if typec
->    connector supports USB data.
-> +- displayport-vdo: The presenence of this property indicates that the
-> +  usb-connector supports displayport-altmode (svid 0xff01), the value of
-> +  this property is an u32 with the vdo value for the displayport-altmode,
+Please consider upstreaming these improvements to syzkaller.
 
-No, let's not take this approach.
-
-Every alternate mode a connector supports will need to have its own
-"sub-fwnode" under the connector fwnode. I thought we agreed this
-earlier?
-
-In any case, those sub-nodes will have default device properties named
-"svid" and "vdo". If the alternate mode still needs some other
-details, it can have other device properties that are specific to it,
-but note that displayport alt mode does not need anything extra. The
-"vdo" will already tells which pin configurations the connector
-supports and that is all that the driver needs to know.
-
-After we have the sub-nodes, it's not a big deal to walk through the
-child-nodes the port has during port registration and register the
-port alternate modes at the same time. That we can do in
-typec_register_port(), so we do not need to do it in every driver
-separately.
-
-
-thanks,
-
--- 
-heikki
+> And sorry about I have not much time to make patches of these bugs.
+>
+> On Fri, Oct 18, 2019 at 2:33 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> >
+> > On Wed, Oct 16, 2019 at 11:59 AM zzoru <zzoru007@gmail.com> wrote:
+> > >
+> > > We found the following crash on Linux 5.4-rc1 (Not patched in currnet
+> > > HEAD commit 3b1f00aceb7a67bf079a5a64aa5c6baf78a8f442)
+> > > with our customized syzkaller.
+> >
+> > Hi zzoru,
+> >
+> > Do you mind sharing what customizations you did to syzkaller? Are
+> > these related to USB? I've noticed several reports were related to USB
+> > subsystem.
+> >
+> > > ODEBUG: assert_init not available (active state 0) object type:
+> > > timer_list hint: 0x0
+> > > WARNING: CPU: 0 PID: 141 at linux/lib/debugobjects.c:484
+> > > debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
+> > > Kernel panic - not syncing: panic_on_warn set ...
+> > > CPU: 0 PID: 141 Comm: kworker/0:3 Not tainted 5.4.0-rc1 #5
+> > > Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> > > rel-1.12.1-0-ga5cab58e9a3f-prebuilt.qemu.org 04/01/2014
+> > > Workqueue: usb_hub_wq hub_event
+> > > Call Trace:
+> > >  __dump_stack linux/lib/dump_stack.c:77 [inline]
+> > >  dump_stack+0x7c/0xbb linux/lib/dump_stack.c:113
+> > >  panic+0x205/0x48e linux/kernel/panic.c:220
+> > >  __warn+0x19c/0x1c0 linux/kernel/panic.c:581
+> > >  report_bug+0x1a9/0x2b0 linux/lib/bug.c:195
+> > >  fixup_bug.part.11+0x32/0x80 linux/arch/x86/kernel/traps.c:179
+> > >  fixup_bug linux/arch/x86/include/asm/irqflags.h:54 [inline]
+> > >  do_error_trap+0xf5/0x160 linux/arch/x86/kernel/traps.c:272
+> > >  do_invalid_op+0x31/0x40 linux/arch/x86/kernel/traps.c:291
+> > >  invalid_op+0x23/0x30 linux/arch/x86/entry/entry_64.S:1028
+> > > RIP: 0010:debug_print_object+0x15e/0x220 linux/lib/debugobjects.c:481
+> > > Code: 3c dd 80 05 9a 85 48 89 fa 48 c1 ea 03 80 3c 02 00 75 7f 48 8b
+> > > 14 dd 80 05 9a 85 4c 89 ee 48 c7 c7 00 fb 99 85 e8 d2 a7 43 ff <0f> 0b
+> > > 83 05 cd bd 70 05 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+> > > RSP: 0018:ffff888017017668 EFLAGS: 00010282
+> > > RAX: 0000000000000000 RBX: 0000000000000005 RCX: ffffffff814153b0
+> > > RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a41f730
+> > > RBP: 0000000000000001 R08: ffffed1003483ee7 R09: ffffed1003483ee7
+> > > R10: 0000000000000001 R11: ffffed1003483ee6 R12: ffffffff86908460
+> > > R13: ffffffff859a01a0 R14: ffffffff812b6bc0 R15: ffff888017fb0420
+> > >  debug_object_assert_init+0x290/0x430 linux/lib/debugobjects.c:866
+> > >  debug_timer_assert_init linux/kernel/time/timer.c:729 [inline]
+> > >  debug_assert_init linux/kernel/time/timer.c:774 [inline]
+> > >  del_timer+0x67/0xf0 linux/kernel/time/timer.c:1196
+> > >  realtek_cr_destructor+0x5a/0x90 linux/drivers/usb/storage/realtek_cr.c:937
+> > >  usb_stor_release_resources linux/drivers/usb/storage/usb.c:817 [inline]
+> > >  release_everything+0xc0/0x2c0 linux/drivers/usb/storage/usb.c:879
+> > >  usb_unbind_interface+0x19f/0x810 linux/drivers/usb/core/driver.c:423
+> > >  __device_release_driver linux/drivers/base/dd.c:1134 [inline]
+> > >  device_release_driver_internal+0x429/0x4f0 linux/drivers/base/dd.c:1165
+> > >  bus_remove_device+0x2d1/0x490 linux/drivers/base/bus.c:532
+> > >  device_del+0x403/0xaa0 linux/drivers/base/core.c:2375
+> > >  usb_disable_device+0x1d7/0x5f0 linux/drivers/usb/core/message.c:1237
+> > >  usb_disconnect+0x25a/0x840 linux/drivers/usb/core/hub.c:2199
+> > >  hub_port_connect linux/drivers/usb/core/hub.c:4949 [inline]
+> > >  hub_port_connect_change linux/drivers/usb/core/hub.c:5213 [inline]
+> > >  port_event linux/drivers/usb/core/hub.c:5359 [inline]
+> > >  hub_event+0x11f5/0x3610 linux/drivers/usb/core/hub.c:5441
+> > >  process_one_work+0x8b5/0x17c0 linux/kernel/workqueue.c:2269
+> > >  worker_thread+0x82/0xb80 linux/kernel/workqueue.c:2415
+> > >  kthread+0x325/0x3e0 linux/kernel/kthread.c:255
+> > >  ret_from_fork+0x24/0x30 linux/arch/x86/entry/entry_64.S:352
+> > > Dumping ftrace buffer:
+> > >    (ftrace buffer empty)
+> > > Kernel Offset: disabled
+> > >
+> > > Following is my analysis of this bug (Just add some comments in source code):
+> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L887-L891
+> > > static int realtek_cr_autosuspend_setup(struct us_data *us)
+> > > {
+> > >     ...
+> > >     if (retval != STATUS_SUCCESS) {
+> > >         usb_stor_dbg(us, "Read status fail\n");
+> > >         return -EIO; // Error!
+> > >     }
+> > >     ...
+> > >     timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn,
+> > > 0); // rts51x_suspend_timer wasn't be initialized. When
+> > > realtek_cr_autosuspend_setup just returns an error.
+> > > }
+> > >
+> > >
+> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L1010-L1012
+> > >
+> > > #ifdef CONFIG_REALTEK_AUTOPM
+> > > if (ss_en)
+> > >     realtek_cr_autosuspend_setup(us); // There isn't any check about
+> > > return code.
+> > > #endif
+> > >
+> > > https://github.com/torvalds/linux/blob/e0703556644a531e50b5dc61b9f6ea83af5f6604/drivers/usb/storage/realtek_cr.c#L936-L939
+> > > static void realtek_cr_destructor(void *extra)
+> > > {
+> > >     ...
+> > >     if (ss_en) {
+> > >         del_timer(&chip->rts51x_suspend_timer); // Ouch! :(
+> > >         chip->timer_expires = 0;
+> > >     }
+> > >     ...
+> > > }
