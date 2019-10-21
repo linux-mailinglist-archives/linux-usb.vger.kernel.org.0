@@ -2,60 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01AEADF349
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 18:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2887DDF482
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 19:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727344AbfJUQiN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 12:38:13 -0400
-Received: from outgoing.selfhost.de ([82.98.87.70]:56846 "EHLO
-        outgoing.selfhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727101AbfJUQiN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 12:38:13 -0400
-Received: (qmail 30830 invoked from network); 21 Oct 2019 16:38:10 -0000
-Received: from unknown (HELO mailhost.afaics.de) (postmaster@xqrsonfo.mail.selfhost.de@62.158.107.220)
-  by mailout.selfhost.de with ESMTPA; 21 Oct 2019 16:38:10 -0000
-Received: from cecil.afaics.de (cecil.afaics.de [10.42.100.186])
-        by mailhost.afaics.de (OpenSMTPD) with ESMTP id 3443e968;
-        Mon, 21 Oct 2019 16:38:10 +0000 (UTC)
+        id S1727110AbfJURsF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 13:48:05 -0400
+Received: from iolanthe.rowland.org ([192.131.102.54]:52480 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726672AbfJURsF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 13:48:05 -0400
+Received: (qmail 6668 invoked by uid 2102); 21 Oct 2019 13:48:04 -0400
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 21 Oct 2019 13:48:04 -0400
+Date:   Mon, 21 Oct 2019 13:48:04 -0400 (EDT)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Harald Dunkel <harri@afaics.de>
+cc:     USB list <linux-usb@vger.kernel.org>
 Subject: Re: 5.3.6: I/O error on writing SD card via USB3
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>
-References: <Pine.LNX.4.44L0.1910191052530.4534-100000@netrider.rowland.org>
-From:   Harald Dunkel <harri@afaics.de>
-Message-ID: <2fe6fc2e-d1da-8e74-221b-e750509832ef@afaics.de>
-Date:   Mon, 21 Oct 2019 18:38:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+In-Reply-To: <2fe6fc2e-d1da-8e74-221b-e750509832ef@afaics.de>
+Message-ID: <Pine.LNX.4.44L0.1910211339170.1673-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1910191052530.4534-100000@netrider.rowland.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alan,
+On Mon, 21 Oct 2019, Harald Dunkel wrote:
 
-On 10/19/19 4:57 PM, Alan Stern wrote:
+> Hi Alan,
 > 
-> What happens if you don't use that rather slow 133x SD card?  Do other
-> cards work better?
+> On 10/19/19 4:57 PM, Alan Stern wrote:
+> > 
+> > What happens if you don't use that rather slow 133x SD card?  Do other
+> > cards work better?
+> > 
 > 
-
-No problem with a 32 GByte SDHC card (U1).
-
-> Another possibility: If you attach the card adapter by a USB-2 cable
-> then it will run as a USB-2 device (even when plugged into a USB-3
-> port).  That probably would help -- although it would also slow down
-> the data transfers.  Although, come to think of it, slowing down the
-> transfer rate may be just what this card needs...
+> No problem with a 32 GByte SDHC card (U1).
 > 
+> > Another possibility: If you attach the card adapter by a USB-2 cable
+> > then it will run as a USB-2 device (even when plugged into a USB-3
+> > port).  That probably would help -- although it would also slow down
+> > the data transfers.  Although, come to think of it, slowing down the
+> > transfer rate may be just what this card needs...
+> > 
+> 
+> The USB2 cable worked, too. Actually I had expected that the speed is
+> reduced automatically according to the specs of the card. ???
 
-The USB2 cable worked, too. Actually I had expected that the speed is
-reduced automatically according to the specs of the card. ???
+That is doubtful.  The speed of the connection is determined when the
+connection is first set up.  Unless the reader disconnects itself from 
+the USB bus when a card is removed and reconnects when a card is 
+inserted, the speed can't change.
 
+You can see what the current connection speed is (in units of millions
+of bits per second) by looking in sysfs.  For example:
 
-Regards
-Harri
+	cat /sys/bus/usb/devices/2-10/speed
+
+(or maybe 2-5 instead of 2-10; both paths appeared in the kernel log 
+you posted earlier).
+
+At any rate, it sounds like the 133x card is just too slow to keep up.
+
+Alan Stern
+
