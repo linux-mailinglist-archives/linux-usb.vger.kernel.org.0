@@ -2,79 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C58BDEC57
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 14:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83C64DED2C
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728243AbfJUMfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 08:35:25 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:32900 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727322AbfJUMfY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 08:35:24 -0400
-Received: by mail-pl1-f195.google.com with SMTP id d22so6578715pls.0
-        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 05:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aFSoQzruwDjvkM2UWGpQtdqo3XZFLgQ/imuRyHJ84/w=;
-        b=WtfeZ/g3228cf5xLw6dlCTjipQ97ZzTgXJNeAcjXFaXaKr5vD08JruOKMf72Q2/+bc
-         LcVs33B3N+Z3qov+NTX/S9bs0MfCu0lQ9aAPEhKmOkh7gSlUfD+ELQKAFqKkPxI5ZLhi
-         /NiPLjrZBjaCbKeUoe2mg0ZYAAOMQdcmcTkEzAD61MD5kyQ0jviYU8x8psNZj1qNEKCV
-         XHPfDbFrQMrHBnEhh5qcWpmjQLFvCi85+yGnk3KjKgTiDSRAsXv9hxk6Sxr4GROmxTjS
-         2B1nnzM5tmUjurS1GInwut89mpoAVEZyvikAEnrawh7ijDY7Kaik4LDz3C4e6dZ3IFOD
-         oEIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aFSoQzruwDjvkM2UWGpQtdqo3XZFLgQ/imuRyHJ84/w=;
-        b=K4XJk53ZL19gwB9qkSYuRRNNkbU4S6xJf3Uzv0xaFDLVQHNBYyePkjmTGOoARBcnwB
-         JwBnU6/0lWWRS3pT8J/x2Lzns3vYE7ZbEVYU+EGCOM2PXax1ZVqMFkZehc+GNFxy6kQi
-         D9Z5C4SEtJXRQ5S2+NORwbLkPY8C0NK6pS8DSad50v0ExVWKkRALcuiA7F0u3yh/4e3t
-         6MtfyE5nE3gL0iJdavNN3QQyXBvPRweHb0txKuTMuxlAcJnT/Q7Y3uuVdHUb4z4AjbK8
-         uCv6GL2ecz0PAxUcFCgfisN9n62dN+LFpVTpCTEaZrjKfQ/ZQCthk46pQNnh9TvcWd1O
-         YURQ==
-X-Gm-Message-State: APjAAAXvvCrAkguKiBAzbj24FxgkjLwxhTWEs8Yr3LMpgT2KSDuh63HK
-        lzT/SfSjhwumreDlhQrNZEGLYfGIb+jJA0p8B6VOd4U3
-X-Google-Smtp-Source: APXvYqyv+kk9HcTiXQ61zU6olrRj4Z09puxOfgt1J1jMXxquXGcBRlgvwcyd+eLX0VyQLJoRGmKGBXLgaaVtM7jB7c0=
-X-Received: by 2002:a17:902:6b45:: with SMTP id g5mr24084586plt.336.1571661323722;
- Mon, 21 Oct 2019 05:35:23 -0700 (PDT)
+        id S1728076AbfJUNN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 09:13:58 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:33272 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726767AbfJUNN6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 09:13:58 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9LDDlPM083649;
+        Mon, 21 Oct 2019 08:13:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571663627;
+        bh=cPzbl8QdR5RPkbPtIl/OHqd294nktWDjC5XGUzJXtfk=;
+        h=From:To:CC:Subject:Date;
+        b=Mje5a2I08a3EnqbRuhagvIhfjbmWlTepzH9IDor/7qo9OGEM6AMUw+e0dw/xAopfs
+         GzBcfcXDMAMZcJ0LUn28MQoRMcmRCx+ZH7mJxtSszkJat4Hz4dPiCXsh6O4KL18xCS
+         DOqLB3DraauH02vwbS070Tqm95TjeanLxeEHqnUo=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9LDDlwA106359
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 21 Oct 2019 08:13:47 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 21
+ Oct 2019 08:13:37 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 21 Oct 2019 08:13:37 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9LDDE7e017365;
+        Mon, 21 Oct 2019 08:13:14 -0500
+From:   Roger Quadros <rogerq@ti.com>
+To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
+        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Roger Quadros <rogerq@ti.com>
+Subject: [PATCH v2 0/2] usb: cdns3: Add TI wrapper
+Date:   Mon, 21 Oct 2019 16:13:03 +0300
+Message-ID: <20191021131305.8689-1-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <7a9d6e35873d52ec0ab1e6b9827d9299a1f4fb0d.1571409250.git.andreyknvl@google.com>
- <20191018180652.GA1186697@kroah.com>
-In-Reply-To: <20191018180652.GA1186697@kroah.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 21 Oct 2019 14:35:12 +0200
-Message-ID: <CAAeHK+xk6xo_+D_0xiS-=aP_chaGmeq1kNc0Rdg-KLkXL=h6sA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] USB: dummy-hcd: increase max number of devices to 32
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 8:07 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Oct 18, 2019 at 04:55:56PM +0200, Andrey Konovalov wrote:
-> > This patch increases the maximum number of Dummy UDC/HCD devices to 32.
->
-> Yes, that is a good description of _what_ the patch does, but it does
-> not tell us _why_ you want to do that.
+Hi,
 
-Will do in v2, thanks!
+Texas Instruments SoCs have a wrapper module around the Cadence
+USB3 core. It takes care of clocking and powering the core and providing
+initial configuration to the core.
 
-> Also, no signed-off-by, are you sure you ran your patches through
-> scripts/checkpatch.pl before sending it out?  It's a good idea to do
-> so...
+This series adds the driver for the TI wrapper and associated DT binding
+document. This is for -next kernel. Thanks.
 
-Sorry, missed this, I thought the patch is small enough to not do that :)
+cheers,
+-roger
+
+Changelog:
+
+v2:
+- dt-binding fixes to address Rob's comments
+	- convert dt-binding document name to DT schema
+	- get rid of bootstrap properties
+	- fix DT example
+
+Roger Quadros (2):
+  dt-bindings: usb: Add binding for the TI wrapper for Cadence USB3
+    controller
+  usb: cdns3: Add TI specific wrapper driver
+
+ .../devicetree/bindings/usb/ti,j721e-usb.txt  |  52 ++++
+ drivers/usb/cdns3/Kconfig                     |  10 +
+ drivers/usb/cdns3/Makefile                    |   1 +
+ drivers/usb/cdns3/cdns3-ti.c                  | 236 ++++++++++++++++++
+ 4 files changed, 299 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/ti,j721e-usb.txt
+ create mode 100644 drivers/usb/cdns3/cdns3-ti.c
+
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+
