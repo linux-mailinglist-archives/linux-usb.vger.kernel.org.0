@@ -2,70 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 025BADE374
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 07:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB62DE4A0
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 08:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726847AbfJUFEt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 01:04:49 -0400
-Received: from ms-10.1blu.de ([178.254.4.101]:57206 "EHLO ms-10.1blu.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725900AbfJUFEt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Oct 2019 01:04:49 -0400
-Received: from [82.113.121.227] (helo=[192.168.42.130])
-        by ms-10.1blu.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <ben@besd.de>)
-        id 1iMPs6-0001ve-SS; Mon, 21 Oct 2019 07:04:47 +0200
-Subject: Re: [USB EHCI DRIVER] [Regression] EHCI no longer working in 5.4
- series kernel
-To:     Arvind Sankar <nivedita@alum.mit.edu>
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        hch@lst.de
-References: <Pine.LNX.4.44L0.1910171830550.4074-100000@netrider.rowland.org>
- <5328c3b3-d527-42a6-d3b8-18a4ef842227@besd.de>
- <20191020205529.GA2451134@rani.riverdale.lan>
-From:   Ben <ben@besd.de>
-Message-ID: <4c219b83-4e29-6042-4a73-5bba6a721554@besd.de>
-Date:   Mon, 21 Oct 2019 07:04:45 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726149AbfJUGgg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 02:36:36 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:59134 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726039AbfJUGgf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 02:36:35 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9L6XbXD029570;
+        Sun, 20 Oct 2019 23:36:27 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=r5eFgyGOC0ImaVwGK4I9koALcmz1cOgfXR7cAk2FaeI=;
+ b=N5X5La6oKOLTCIPRFo9phkf5H5hzSnx24/0hnQXzLT/TrYVkbfHTMT2N0pmYMjvq9bUD
+ BjbumOlfxdDvRLN6ITkPDZWXuHSPuZxRoNkGqNsEFi0zU7ygg1dt9veYDBNT74N5wfwM
+ 8jtudiEn7Cyuil7rH5Iu5C3nk/PY2Y76qi5J+fwtppuGY848ezmSpopEnBMQJaKGvrhL
+ K0LKMaT0+tNlBpMoXp9l4RplfZrEKuhLtMZdqvGk5NeBQwmtpZJxDRA8jF6lDrmVWTUb
+ mHjCvu+wjp3uUuboZOIW7b8k7lUv1NHjLwWXv9K+gqzx50tyQUCCqhN1UPa7OVv+zr58 5g== 
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2059.outbound.protection.outlook.com [104.47.36.59])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 2vqx2x590v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 20 Oct 2019 23:36:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X253Csi6byFyzu/2l8ekDqmM0+BQDspFUT3QzrKvkhNFeKJyK9FNjRTZr/Zl9PAWqwuqcTMLh93C72potSBxuUeKqn+YLB4A9+ZJXc1E/DnlckuJ4oWWECVw3TAjFyMtoDlZHyRp3b50c1cD2kyueuXmIIxDaIuFNcqX6/AMKScvL3wicmVDvr58pNJtC59f+Rl52IEYdDSvjZswOuhJOUXiCFT+4wgFp7B8JSwOh8VPTDt3vaEQ1RuelFj1eXf1dTW0IUvA0MWIKP2GgLcR4+1WT1DpxEezMGszjY2L/IGUm00pnK86SjRSWEZer+5nG8LspZQPDzElfgvjWucqcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r5eFgyGOC0ImaVwGK4I9koALcmz1cOgfXR7cAk2FaeI=;
+ b=NKj9+AfS3liKJ867UX0gDK33XAxwxm3x7qsok/qRP6TRElLNVBKW3WfaxZ9jUeB58HxJ1DCNcFlYyrynITmgEywYfd3XdfqJVLY9ZPi76Z5009SVVG31Uei5wPXaB3nTwcRFfkqYYH9tbiE0OqhEyRYIKQg0/BidVXm6B8pP+U+OcRIUoJigwpy+xbNDIflprIJTCCIA6jekFLYHBO5Pz/vfBzn8SWwv/FHs+UhP26QfW0KvVfkDSz972qZK82xBx0J94yjUrGz3F9BEDsEoboKzlABt6bSTa00TsdC/RP/N0VvZpvHpbauukVc+FNaJmfJxFBREB3wTocPOJrJN2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 158.140.1.28) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=cadence.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=r5eFgyGOC0ImaVwGK4I9koALcmz1cOgfXR7cAk2FaeI=;
+ b=hkiVp87XNECQaKgNxY3V6mnTKdVbAcZabqs/U4CACzOGpadeqTByvX9b+vMnz1djf2yNT5WnkO8T94Yrnbo0SQ5LSi6ycf/Mf0cZtbM8CoUtLhvzvm9u/c5/p+N1AwLRAoRo3PLCmj9I1RStf6OZBKqYyXqjCfPrO2YjRzUnZ9Y=
+Received: from CY1PR07CA0021.namprd07.prod.outlook.com
+ (2a01:111:e400:c60a::31) by BYAPR07MB5941.namprd07.prod.outlook.com
+ (2603:10b6:a03:133::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2367.20; Mon, 21 Oct
+ 2019 06:36:24 +0000
+Received: from BY2NAM05FT046.eop-nam05.prod.protection.outlook.com
+ (2a01:111:f400:7e52::205) by CY1PR07CA0021.outlook.office365.com
+ (2a01:111:e400:c60a::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2367.20 via Frontend
+ Transport; Mon, 21 Oct 2019 06:36:24 +0000
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ cadence.com discourages use of 158.140.1.28 as permitted sender)
+Received: from sjmaillnx2.cadence.com (158.140.1.28) by
+ BY2NAM05FT046.mail.protection.outlook.com (10.152.100.183) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.9 via Frontend Transport; Mon, 21 Oct 2019 06:36:24 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id x9L6aK0Q030521
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Sun, 20 Oct 2019 23:36:23 -0700
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3; Mon, 21 Oct 2019 08:36:20 +0200
+Received: from lvlogina.cadence.com (10.165.176.102) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1367.3 via Frontend Transport; Mon, 21 Oct 2019 08:36:19 +0200
+Received: from lvlogina.cadence.com (localhost.localdomain [127.0.0.1])
+        by lvlogina.cadence.com (8.14.4/8.14.4) with ESMTP id x9L6aJ1d007113;
+        Mon, 21 Oct 2019 07:36:19 +0100
+Received: (from jpawar@localhost)
+        by lvlogina.cadence.com (8.14.4/8.14.4/Submit) id x9L6aI2W007105;
+        Mon, 21 Oct 2019 07:36:18 +0100
+From:   Jayshri Pawar <jpawar@cadence.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <felipe.balbi@linux.intel.com>,
+        <heikki.krogerus@linux.intel.com>, <rogerq@ti.com>,
+        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
+        <nsekhar@ti.com>, <nm@ti.com>, <peter.chen@nxp.com>,
+        <kurahul@cadence.com>, <pawell@cadence.com>, <sparmar@cadence.com>,
+        <jpawar@cadence.com>
+Subject: [PATCH] usb: gadget: f_tcm: Provide support to get alternate setting in tcm function
+Date:   Mon, 21 Oct 2019 07:35:00 +0100
+Message-ID: <1571639700-5656-1-git-send-email-jpawar@cadence.com>
+X-Mailer: git-send-email 1.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191020205529.GA2451134@rani.riverdale.lan>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Con-Id: 150997
-X-Con-U: 0-ben
-X-Originating-IP: 82.113.121.227
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-Forefront-Antispam-Report: CIP:158.140.1.28;IPV:CAL;SCL:-1;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(396003)(346002)(136003)(39860400002)(376002)(36092001)(199004)(189003)(26826003)(305945005)(478600001)(7636002)(2906002)(42186006)(7416002)(47776003)(87636003)(50226002)(50466002)(316002)(2351001)(4326008)(26005)(5660300002)(16586007)(356004)(6666004)(14444005)(5024004)(2616005)(6916009)(51416003)(76130400001)(486006)(107886003)(246002)(126002)(476003)(36756003)(86362001)(8936002)(70586007)(70206006)(54906003)(48376002)(8676002)(426003)(336012)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR07MB5941;H:sjmaillnx2.cadence.com;FPR:;SPF:SoftFail;LANG:en;PTR:corp.cadence.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7ed936c8-af50-45df-662b-08d755f0fe46
+X-MS-TrafficTypeDiagnostic: BYAPR07MB5941:
+X-Microsoft-Antispam-PRVS: <BYAPR07MB5941B491BA9E21E3A76E826DC1690@BYAPR07MB5941.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
+X-Forefront-PRVS: 0197AFBD92
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m1oF0SGRE3KgfLahm7xJre/ZK/IoBjm/S7KS0Gu8TOzcR+/F5iC1GMmf3oIHstqDhGN8bROh2OEBiuYaopI3KnNC06NEYXM/xpW5RYnrX50UHJ9wuygO3Q1o3WYAq42iladZZWLUHPhgQUU0zw8U4wWjg+Vi9sB5KZomTDRUO9A6Aw7O3JLZfin7VlUh8A08SKS54K1eLF8HqULkqlZ+9jKF0onSWmisQFNStvhokYJnUWqfyYPPAIqjImhnbB9KglD2tVsUjmUS4jVdo/uBttki/gON8k4snZvfk49WpCLm5GdCuqyNpsvvQAYo8QOxuZSh/7oi5cj4WH56+HqI4JnwWs4v0Taj4qQkAifRlqlxOP3bR4XOkFXyRWGN/9I84jCDoSGld2OAoiw8OWWOwwTVTHcaiIqYyx4MzvNRdP1R+zVyVP1igs9y+kEuRkb1wCtuEp5kYrJ2Hmh7nPybEw==
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Oct 2019 06:36:24.2512
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ed936c8-af50-45df-662b-08d755f0fe46
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.28];Helo=[sjmaillnx2.cadence.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB5941
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-21_02:2019-10-18,2019-10-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxlogscore=380
+ bulkscore=0 clxscore=1011 phishscore=0 adultscore=0 spamscore=0
+ suspectscore=3 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910210059
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks,
+Providing tcm_get_alt in tcm function to support Bulk only protocol and
+USB Attached SCSI protocol
 
-I could have sworn I checked lkml. Thanks for the fix!
+Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
+---
+ drivers/usb/gadget/function/f_tcm.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Any idea why only ehci is affected?
+diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+index 7f01f78b1d23..36504931b2d1 100644
+--- a/drivers/usb/gadget/function/f_tcm.c
++++ b/drivers/usb/gadget/function/f_tcm.c
+@@ -846,7 +846,7 @@ static void uasp_set_alt(struct f_uas *fu)
+ 
+ 	fu->flags = USBG_IS_UAS;
+ 
+-	if (gadget->speed == USB_SPEED_SUPER)
++	if (gadget->speed >= USB_SPEED_SUPER)
+ 		fu->flags |= USBG_USE_STREAMS;
+ 
+ 	config_ep_by_speed(gadget, f, fu->ep_in);
+@@ -2093,6 +2093,16 @@ static void tcm_delayed_set_alt(struct work_struct *wq)
+ 	usb_composite_setup_continue(fu->function.config->cdev);
+ }
+ 
++static int tcm_get_alt(struct usb_function *f, unsigned intf)
++{
++	if (intf == bot_intf_desc.bInterfaceNumber)
++		return USB_G_ALT_INT_BBB;
++	if (intf == uasp_intf_desc.bInterfaceNumber)
++		return USB_G_ALT_INT_UAS;
++
++	return -EOPNOTSUPP;
++}
++
+ static int tcm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+ {
+ 	struct f_uas *fu = to_f_uas(f);
+@@ -2300,6 +2310,7 @@ static struct usb_function *tcm_alloc(struct usb_function_instance *fi)
+ 	fu->function.bind = tcm_bind;
+ 	fu->function.unbind = tcm_unbind;
+ 	fu->function.set_alt = tcm_set_alt;
++	fu->function.get_alt = tcm_get_alt;
+ 	fu->function.setup = tcm_setup;
+ 	fu->function.disable = tcm_disable;
+ 	fu->function.free_func = tcm_free;
+-- 
+2.20.1
 
-Seems a bit odd, that's why I thought it would be a problem with usb driver.
-
-Cheers,
-Benedikt
-
-Am 20.10.19 um 22:55 schrieb Arvind Sankar:
-> On Sat, Oct 19, 2019 at 02:52:16PM +0200, Benedikt Schemmer wrote:
->> reverting that specific commit on top of todays linux git (d418d070057c) produces a good kernel
-> Hi Ben, the fix is in https://lore.kernel.org/lkml/20191008143357.GA599223@rani.riverdale.lan/
->> Am 18.10.19 um 00:31 schrieb Alan Stern:
->>> On Thu, 17 Oct 2019, Benedikt Schemmer wrote:
->>>
->>>> Hi all,
->>>>
->>>> I recently started compiling the 5.4. kernel starting with rc3 and noticed that both my keyboard and mouse aren't working
->>>> when connected to the motherboards USB ports (they work fine when connected to an xhci extension card) and they work fine
->>>> with the 5.3 series up to 5.3.6
->>> Can you use git bisect to track the problem down to a particular commit?
->>>
->>> Alan Stern
->>>
