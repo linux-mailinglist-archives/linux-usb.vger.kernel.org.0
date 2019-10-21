@@ -2,210 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF8BDF53C
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 20:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E369ADF581
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 21:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729997AbfJUSkM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 21 Oct 2019 14:40:12 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:42586 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729779AbfJUSkL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 14:40:11 -0400
-Received: from mail-pg1-f199.google.com ([209.85.215.199])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iMcbA-0001aT-87
-        for linux-usb@vger.kernel.org; Mon, 21 Oct 2019 18:40:08 +0000
-Received: by mail-pg1-f199.google.com with SMTP id l11so3340416pgg.1
-        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 11:40:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=uV/wr5mStYOMFDqP/0q8JQz+au2riqBIlFBstNY30Zc=;
-        b=l7bZMvvyJVMuUZsUpZEyweWG92PuAJAdx8iUCz+RxSLQfFz/jkhoTUi+Bpz4g0Whui
-         zgAHNEtYkv5WdtuY03K4yroOuL7D33PteoREi9NCaXjJeJPlqPB/hp8LeTEuIqwS4M1G
-         yE3MIiyuSTU+ztxJA9c7Hm0q+qR6or2LtXtApoFOpaUXatLo1tRXXnxd+QEdsOkctKRl
-         glWwvndah4eXg+KkKCsHoZc47/E0Ut8U0dY8389IHCT7NolfPIlCvazLMchRAEmPVIFa
-         nmjK8QGvh7g8iahY1md57kZQP+5upzF5IqUKOR+l+61uzkNgCiF6/3X4t9Hi6MoPlLk6
-         Gy7Q==
-X-Gm-Message-State: APjAAAXcLYxL9VDWTkxcsBXYXiWSTxeCxDY0QrpZotE9qhtTcUE2IJVF
-        XrsAJOY1XNiRTwZgmakGZCN0G/Vwsv5OCY5r41JgS3UeM4XvTQuRzaCAbTfXoqg/IHUm6VN+jyO
-        HxFtlm47EsreEXOQiJN868VIk9w+oB4kehuDEOA==
-X-Received: by 2002:a62:870c:: with SMTP id i12mr24621409pfe.103.1571683206832;
-        Mon, 21 Oct 2019 11:40:06 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqy3ZfDTBM98KYJpOua+fOYeuwtOuN36GK2rgrfYo9Ujm2SqfHI2N55tjmZMzIi1FQe01QzYBw==
-X-Received: by 2002:a62:870c:: with SMTP id i12mr24621370pfe.103.1571683206241;
-        Mon, 21 Oct 2019 11:40:06 -0700 (PDT)
-Received: from 2001-b011-380f-3c42-8dca-5b50-948b-6043.dynamic-ip6.hinet.net (2001-b011-380f-3c42-8dca-5b50-948b-6043.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:8dca:5b50:948b:6043])
-        by smtp.gmail.com with ESMTPSA id z12sm18208235pfj.41.2019.10.21.11.40.04
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 11:40:05 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3601\))
-Subject: Re: [PATCH v3] usb: Add a new quirk to let buggy hub enable and
- disable LPM during suspend and resume
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <42d78a3c-489b-870b-2b38-1a5799d66849@linux.intel.com>
-Date:   Tue, 22 Oct 2019 02:40:00 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <A1608421-22BC-4200-9077-3F21164B1E9A@canonical.com>
-References: <Pine.LNX.4.44L0.1910031503050.1797-100000@iolanthe.rowland.org>
- <A6EC775D-CE42-4F34-9B87-478482EF683A@canonical.com>
- <20191018185918.GA1204767@kroah.com>
- <42d78a3c-489b-870b-2b38-1a5799d66849@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-X-Mailer: Apple Mail (2.3601)
+        id S1730021AbfJUTAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 15:00:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50000 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727211AbfJUTAf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Oct 2019 15:00:35 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B8BB92086D;
+        Mon, 21 Oct 2019 19:00:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571684435;
+        bh=A8goXvgDn+Q79XW6cFScFGcegGAkD1EmrCL/sjl4JP0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=N7uX0LA534Yt8PWeWWbeateLkMMDyzWCY/LPKCtf/uxYanstOy/12pHtCLpGc46Ra
+         DrnFVRd22iIkHa5ZI9PWnVpwd4gr1iZVoT5jx4mRvQbdIhc1KxH4+Dvcg9nZTquNTW
+         EMaF8zRXtN4j/ZkD97zk5p/S4tt87+AlEDIMYM7c=
+Subject: Re: [PATCH v3] usbip: tools: Fix read_usb_vudc_device() error path
+ handling
+To:     GwanYeong Kim <gy741.kim@gmail.com>, valentina.manea.m@gmail.com
+Cc:     gregkh@linuxfoundation.org, allison@lohutok.net,
+        opensource@jilayne.com, changcheng.liu@intel.com,
+        tglx@linutronix.de, linux-usb@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <948530c4-0f42-1244-faee-aad531074bf3@kernel.org>
+ <20191018032223.4644-1-gy741.kim@gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <87d9b18e-a7d3-5641-7dbd-31b9f44d3bf6@kernel.org>
+Date:   Mon, 21 Oct 2019 12:59:44 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191018032223.4644-1-gy741.kim@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-> On Oct 21, 2019, at 21:59, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
+On 10/17/19 9:22 PM, GwanYeong Kim wrote:
+> This isn't really accurate right. fread() doesn't always
+> return 0 in error. It could return < number of elements
+> and set errno.
 > 
-> On 18.10.2019 21.59, Greg Kroah-Hartman wrote:
->> On Thu, Oct 17, 2019 at 02:33:00PM +0800, Kai-Heng Feng wrote:
->>> 
->>> 
->>>> On Oct 4, 2019, at 03:04, Alan Stern <stern@rowland.harvard.edu> wrote:
->>>> 
->>>> On Fri, 4 Oct 2019, Kai-Heng Feng wrote:
->>>> 
->>>>> Dell WD15 dock has a topology like this:
->>>>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 10000M
->>>>>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->>>>>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->>>>> 
->>>>> Their IDs:
->>>>> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->>>>> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp.
->>>>> Bus 004 Device 004: ID 0bda:8153 Realtek Semiconductor Corp.
->>>>> 
->>>>> Ethernet cannot be detected after plugging ethernet cable to the dock,
->>>>> the hub and roothub get runtime resumed and runtime suspended
->>>>> immediately:
->>>>> ...
->>>>> [  433.315169] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
->>>>> [  433.315204] usb usb4: usb auto-resume
->>>>> [  433.315226] hub 4-0:1.0: hub_resume
->>>>> [  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
->>>>> [  433.315264] usb usb4-port1: status 0343 change 0001
->>>>> [  433.315279] xhci_hcd 0000:3a:00.0: clear port1 connect change, portsc: 0x10002e2
->>>>> [  433.315293] xhci_hcd 0000:3a:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
->>>>> [  433.317012] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->>>>> [  433.422282] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
->>>>> 
->>>>> At this point the SMSC hub (usb 4-1) enters into compliance mode
->>>>> (USB_SS_PORT_LS_COMP_MOD), and USB core tries to warm-reset it,
->>>>> 
->>>>> [  433.422307] usb usb4-port1: do warm reset
->>>>> [  433.422311] usb 4-1: device reset not allowed in state 8
->>>>> [  433.422339] hub 4-0:1.0: state 7 ports 2 chg 0002 evt 0000
->>>>> [  433.422346] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
->>>>> [  433.422356] usb usb4-port1: do warm reset
->>>>> [  433.422358] usb 4-1: device reset not allowed in state 8
->>>>> [  433.422428] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 0 status  = 0xf0002e2
->>>>> [  433.422455] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 1 status  = 0xe0002a0
->>>>> [  433.422465] hub 4-0:1.0: hub_suspend
->>>>> [  433.422475] usb usb4: bus auto-suspend, wakeup 1
->>>>> [  433.426161] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->>>>> [  433.466209] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.510204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.554051] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.598235] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.642154] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.686204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.730205] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.774203] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.818207] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.862040] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
->>>>> [  433.862053] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->>>>> [  433.862077] xhci_hcd 0000:3a:00.0: xhci_suspend: stopping port polling.
->>>>> [  433.862096] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
->>>>> [  433.862312] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_suspend: 0
->>>>> [  433.862445] xhci_hcd 0000:3a:00.0: PME# enabled
->>>>> [  433.902376] xhci_hcd 0000:3a:00.0: restoring config space at offset 0xc (was 0x0, writing 0x20)
->>>>> [  433.902395] xhci_hcd 0000:3a:00.0: restoring config space at offset 0x4 (was 0x100000, writing 0x100403)
->>>>> [  433.902490] xhci_hcd 0000:3a:00.0: PME# disabled
->>>>> [  433.902504] xhci_hcd 0000:3a:00.0: enabling bus mastering
->>>>> [  433.902547] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
->>>>> [  433.902649] pcieport 0000:00:1b.0: PME: Spurious native interrupt!
->>>>> [  433.902839] xhci_hcd 0000:3a:00.0: Port change event, 4-1, id 3, portsc: 0xb0202e2
->>>>> [  433.902842] xhci_hcd 0000:3a:00.0: resume root hub
->>>>> [  433.902845] xhci_hcd 0000:3a:00.0: handle_port_status: starting port polling.
->>>>> [  433.902877] xhci_hcd 0000:3a:00.0: xhci_resume: starting port polling.
->>>>> [  433.902889] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
->>>>> [  433.902891] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
->>>>> [  433.902919] usb usb4: usb wakeup-resume
->>>>> [  433.902942] usb usb4: usb auto-resume
->>>>> [  433.902966] hub 4-0:1.0: hub_resume
->>>>> ...
->>>>> 
->>>>> However the warm-reset never success, the asserted PCI PME keeps the
->>>>> runtime-resume, warm-reset and runtime-suspend loop which never bring it back
->>>>> and causing spurious interrupts floods.
->>>>> 
->>>>> After some trial and errors, the issue goes away if LPM on the SMSC hub
->>>>> is disabled. Digging further, enabling and disabling LPM during runtime
->>>>> resume and runtime suspend respectively can solve the issue.
->>>>> 
->>>>> So bring back the old LPM behavior as a quirk and use it for the SMSC
->>>>> hub to solve the issue.
->>>>> 
->>>>> Fixes: d590c2311150 ("usb: Avoid unnecessary LPM enabling and disabling during suspend and resume")
->>>>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->>>>> ---
->>>>> v3:
->>>>> - Add forgotten patch revision changelog.
->>>>> 
->>>>> v2:
->>>>> - Explained by Alan, the hub should properly handle U3 -> U0 transition.
->>>>>  So use a quirk to target this buggy device only.
->>>>> 
->>>>> Documentation/admin-guide/kernel-parameters.txt |  3 +++
->>>>> drivers/usb/core/hub.c                          | 15 +++++++++++++++
->>>>> drivers/usb/core/quirks.c                       |  6 ++++++
->>>>> include/linux/usb/quirks.h                      |  3 +++
->>>>> 4 files changed, 27 insertions(+)
->>>> 
->>>> Mathias may want to try something different to fix this problem.  But
->>>> if he doesn't, this patch is okay with me.
->>>> 
->>>> Acked-by: Alan Stern <stern@rowland.harvard.edu>
->>> 
->>> If there's no objection, can we merge this patch?
->> I wanted to have Mathias weigh in on this before merging it...
+> Signed-off-by: GwanYeong Kim <gy741.kim@gmail.com>
+> ---
+>   tools/usb/usbip/libsrc/usbip_device_driver.c | 6 ++++--
+>   1 file changed, 4 insertions(+), 2 deletions(-)
 > 
-> This might need some closer inspection still.
+> diff --git a/tools/usb/usbip/libsrc/usbip_device_driver.c b/tools/usb/usbip/libsrc/usbip_device_driver.c
+> index 051d7d3f443b..927a151fa9aa 100644
+> --- a/tools/usb/usbip/libsrc/usbip_device_driver.c
+> +++ b/tools/usb/usbip/libsrc/usbip_device_driver.c
+> @@ -69,7 +69,7 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+>   	FILE *fd = NULL;
+>   	struct udev_device *plat;
+>   	const char *speed;
+> -	int ret = 0;
+> +	size_t ret;
+>   
+>   	plat = udev_device_get_parent(sdev);
+>   	path = udev_device_get_syspath(plat);
+> @@ -79,8 +79,10 @@ int read_usb_vudc_device(struct udev_device *sdev, struct usbip_usb_device *dev)
+>   	if (!fd)
+>   		return -1;
+>   	ret = fread((char *) &descr, sizeof(descr), 1, fd);
+> -	if (ret < 0)
+> +	if (ret != 1) {
+> +		err("Cannot read vudc device descr file: %s", strerror(errno));
+>   		goto err;
+> +	}
+>   	fclose(fd);
+>   
+>   	copy_descr_attr(dev, &descr, bDeviceClass);
 > 
-> The "Get port status 4-1 read: 0x10202e" means port is not really in compliance mode,
-> instead port has CAS (Cold Attach Status) bit set, meaning parts of xHC needed for
-> link training were probably still powered off when device was plugged in, so device failed
-> to reach a connected, enabled, U0: link state. I needs to be warm reset.
 
-[  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
-Ok, so we should check 0x10202e2 from xHC here, instead of 0x10343.
+Looks good.
 
-> 
-> there is no CAS link state in USB3 spec, so xhci driver reports a compliance mode link state
-> to usb core instead. Both states are resolved by a warm reset.
-> 
-> But looks like warm reset is refused as usb device state is still "suspended" in software:
-> "usb 4-1: device reset not allowed in state 8"
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Thanks for pointing this out. I'll see what's really going on here.
-
-Kai-Heng
-
-> 
-> -Mathias
-
+thanks,
+-- Shuah
