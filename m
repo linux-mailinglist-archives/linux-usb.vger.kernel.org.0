@@ -2,167 +2,310 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2C4DED58
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:20:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621B3DED6D
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727985AbfJUNUj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 09:20:39 -0400
-Received: from mail-eopbgr1410128.outbound.protection.outlook.com ([40.107.141.128]:6397
-        "EHLO JPN01-OS2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727256AbfJUNUj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Oct 2019 09:20:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K3rlQjyVGYImDCqDUCvifnLHVXOh+ajg0I8kD9JT6EIpfeZkpXztqK6kRvaWudfI2v/mpmb+MJdX2EGhepxkMBk3YalYW+HlNqLeaEFrBYtrYor/lFnVgQdqMFVt6jU7oS0zpGCFFW8HqWtP8/4/5laNc053TtEWpccdoovpC9ipZyhMjC2BwwOfbVIO4h+1CutkWZnLRG9OujA7J0ksJqfJkjCgFciWc5gIkz9nQRf7IJ309w1IRKMXuQxEhPhVrELV1LP2LCmkqYpoCXi7PdZkPY9/SCf5EU8PUGeuuFThKgA7vhARzbN28NGvGfenKs5BhOuUI+WuuB+s7dz88A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wex6wrN/P4hp+rD+cn3mU4PWYByjjaCoDbc+06hIQDM=;
- b=M7QmT8Px/KyMCDXIqiMZ4DWsZ9Ur015dFZm5enX4XjP/TX7yoyQL8XXqP/AaXtdiouqAV98Uizcgym9osdahQ6jRWzedrZMbF7GxOVQlGw7KF+qhNfN4ZCmz57p/7bzMTwVxqeuU5FeuHpo/KUYAaB9lszd56UMOlVYof5YLZnBJWCaKSpygyDaK7VFp4yY8BgLTx+TmV4s2Cz6v0kq1UQxFQ5g04IsgmT90DKSgEj9xUSGbYDghj5f/pVDY3RXrXDsx74HkRnMUWtdzslNGBBuQ8JvpK/XazaXbdFzOm9mkrw7zjNV1jr6vso/aKtrKG5n9qiNJFCeFFleAnMeqPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+        id S1728134AbfJUNX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 09:23:28 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:55835 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727344AbfJUNX2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 09:23:28 -0400
+Received: by mail-wm1-f45.google.com with SMTP id g24so4143767wmh.5
+        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 06:23:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wex6wrN/P4hp+rD+cn3mU4PWYByjjaCoDbc+06hIQDM=;
- b=H19QSt+0ziAklIL2MLUmxZL3Ru9LjVlwhxDJ4uTx1CZF7LgFeBh0DYJb2Ncd7w71OLcSjTuC6DTT6hIe+MrJvyKvDh0QRh0uMzRCcCb9+vnb7mCzUkpAW4/9D7PWuOBHDroGvCHFwCnmErkicWmEY8UXbCrFQ01cp9CkG0PeoYU=
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com (52.134.242.17) by
- OSBSPR01MB4.jpnprd01.prod.outlook.com (52.134.225.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2367.20; Mon, 21 Oct 2019 13:20:36 +0000
-Received: from OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::dc33:9b1f:4522:550e]) by OSBPR01MB2103.jpnprd01.prod.outlook.com
- ([fe80::dc33:9b1f:4522:550e%3]) with mapi id 15.20.2347.028; Mon, 21 Oct 2019
- 13:20:35 +0000
-From:   Biju Das <biju.das@bp.renesas.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Guenter Roeck <linux@roeck-us.net>, Ajay Gupta <ajayg@nvidia.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 10/18] usb: typec: hd3ss3220: Give the connector fwnode to
- the port device
-Thread-Topic: [PATCH 10/18] usb: typec: hd3ss3220: Give the connector fwnode
- to the port device
-Thread-Index: AQHViAJOJ+NqmQs8i0+w4I8F8/E1zqdlE94g
-Date:   Mon, 21 Oct 2019 13:20:35 +0000
-Message-ID: <OSBPR01MB210351F044B093C4B3327C71B8690@OSBPR01MB2103.jpnprd01.prod.outlook.com>
-References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
- <20191021112524.79550-11-heikki.krogerus@linux.intel.com>
-In-Reply-To: <20191021112524.79550-11-heikki.krogerus@linux.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=biju.das@bp.renesas.com; 
-x-originating-ip: [193.141.220.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 562fbce7-3786-4256-74c2-08d756297560
-x-ms-office365-filtering-ht: Tenant
-x-ms-traffictypediagnostic: OSBSPR01MB4:
-x-microsoft-antispam-prvs: <OSBSPR01MB4AEDE891FAD66E85FCF6BB8690@OSBSPR01MB4.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-forefront-prvs: 0197AFBD92
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(199004)(189003)(51914003)(13464003)(476003)(6436002)(86362001)(8936002)(52536014)(102836004)(486006)(55016002)(446003)(6246003)(66446008)(64756008)(186003)(229853002)(110136005)(66476007)(54906003)(66946007)(76176011)(3846002)(99286004)(9686003)(6116002)(14454004)(8676002)(66556008)(66066001)(316002)(76116006)(305945005)(478600001)(7736002)(2906002)(74316002)(33656002)(71200400001)(256004)(5660300002)(6506007)(71190400001)(7696005)(14444005)(25786009)(4326008)(26005)(44832011)(53546011)(81166006)(81156014)(11346002);DIR:OUT;SFP:1102;SCL:1;SRVR:OSBSPR01MB4;H:OSBPR01MB2103.jpnprd01.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:0;MX:1;
-received-spf: None (protection.outlook.com: bp.renesas.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oYnERHnVmhk+atK8P01MWixWbww05fabQcJLKRj0KmawgsRY1GcLsMbBAtpl29bc9i9ltaRoNYQHvcFhmokAXJwKQZyhdoXMJo5/15QeqTfARF0smZRWQyBnJRxFXNpFL42HiIeoBLjkEuzKEw2kM+CKehDc+bceH403idNUPyAsSD6q5k/IlbtIgvTaIFLbdlznSZA+WEKjrV0x0FSe6uo41RHez2Ho25uNqEW6lVxFWr45UuKr3FTYM7zf0HVKF1/oPrB9d/u/kocSGMFGYbHaf5xUhLzz9N3tKGuU4NORxEZaR9sbQPDtTsg4DARk2raOQpEIQSumJGIk9e/zCNfEji4pkPhtz+BCRHr94tC96115o/QnupoiDC080BXbCmTWlF/owUs+Cz0BaSLm+BzXgFq7PdFxeo2tmEw3fQGXenMKDT5VFVnvFM6Mr7tx
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CDpQCC3yQaQMDA2jPXME+EFagP8LNoO6pNZidHidAbs=;
+        b=WNtwQkYbCYYxfHd5g5Gg7/NxW/2r1vdfDzKQVM1p0GqmijVDR7ay0t8fQd49OhlVH8
+         v1xTzmO7RCzs8DIzM+GC1R+O/e9f4IXYhWphWBnRs1g9+uSjZ/UW9LNNQ6R6Xe054ORJ
+         rZW1kH/clT1ugXzyFKnFBKBW/sYlqn3lsi+OjTQ52Ws6u5zyNAJmXuHGRrGD/FU/o34N
+         6VMaoced7C9knxUN7e5A0DpnK4WQdf+FwmTioMRySDT67OUqbhIt1+3pNerW9RgQp6Rt
+         0DUE2wRdqWq04NS2c5o1sne3YLzKdy0wiW05agOS2RdADaTvlKraAjujh/a4cgF4HKUu
+         o6nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CDpQCC3yQaQMDA2jPXME+EFagP8LNoO6pNZidHidAbs=;
+        b=RGAYIpOMWdhfw8rYW6O2Fe5UIiSPvP8Da/egk8oZPvMuDbwowcVmToQ7plsgPF+vmZ
+         pqOwnAL/Oxlyuei2VupikFpJA7UO8RRFcOR143/+9aAMuaMFehKlLdiQ3Pa2MTHKstRH
+         yuatlNB6PEjz3l002lq+6Jata+zQBi+TRqGeNsaVkIsX82fHXYcAtdniP+iGFMfJDddY
+         Ah3sFiqvAa+6fQy9qaACf+TzvENDFAxE4Sz584QeJFlDNp4qYq+UinBIlqtrTHS5LQao
+         IW6jzLCLj9Ebd+HIN/zLP0ZQxvKsjKoLOWBOb8dWG/qJiVGyx69e39fdpPxKV3ckBQUD
+         ozSQ==
+X-Gm-Message-State: APjAAAX8sb4Xket5SDyDmJa3wbW2Yio4V/EuSwlLoMufyIjab1WM0QPk
+        +P5y5/yTMxXSR/ayt0D1DWKj8w==
+X-Google-Smtp-Source: APXvYqzMvhIv/kFvCKgvdmqwvVk+AwoAtWuBDkfvwp/J9cbsOyOGAGd2wS++y4H9TfIXc0XMmtYvFg==
+X-Received: by 2002:a05:600c:3cb:: with SMTP id z11mr17883575wmd.134.1571664204796;
+        Mon, 21 Oct 2019 06:23:24 -0700 (PDT)
+Received: from localhost.localdomain (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id k8sm29169887wrg.15.2019.10.21.06.23.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Oct 2019 06:23:24 -0700 (PDT)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: [PATCH] dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue Bindings to YAML schemas
+Date:   Mon, 21 Oct 2019 15:23:22 +0200
+Message-Id: <20191021132322.25256-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 562fbce7-3786-4256-74c2-08d756297560
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Oct 2019 13:20:35.7848
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xSO2f7TpYpHPpX6NuXpYAsTpFmd9JDuEThAxeMvxmPeBJfvGkZ9Hcnq23GT930mFw6A3DNAWJ//+OqzB4Ezptw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBSPR01MB4
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Now that we have the DT validation in place, let's convert the device tree
+bindings for the Amlogic G12A DWC3 Glue Bindings over to a YAML schemas,
+the AXG and GXL glue bindings will be converted later.
 
-Thanks for the patch.
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+---
+ .../devicetree/bindings/usb/amlogic,dwc3.txt  |  88 ------------
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 132 ++++++++++++++++++
+ 2 files changed, 132 insertions(+), 88 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Monday, October 21, 2019 12:25 PM
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>; Ajay Gupta <ajayg@nvidia.com>;
-> linux-usb@vger.kernel.org; Biju Das <biju.das@bp.renesas.com>
-> Subject: [PATCH 10/18] usb: typec: hd3ss3220: Give the connector fwnode t=
-o
-> the port device
->=20
-> The driver already finds the node in order to get reference to the USB ro=
-le
-> switch.
->=20
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Biju Das <biju.das@bp.renesas.com>
-
-Tested-by: Biju Das <biju.das@bp.renesas.com>
-
-Cheers,
-Biju
-
-> ---
->  drivers/usb/typec/hd3ss3220.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.=
-c
-> index db09fa0d85f2..323dfa8160ab 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -178,15 +178,17 @@ static int hd3ss3220_probe(struct i2c_client *clien=
-t,
->  		return -ENODEV;
->=20
->  	hd3ss3220->role_sw =3D fwnode_usb_role_switch_get(connector);
-> -	fwnode_handle_put(connector);
-> -	if (IS_ERR(hd3ss3220->role_sw))
-> -		return PTR_ERR(hd3ss3220->role_sw);
-> +	if (IS_ERR(hd3ss3220->role_sw)) {
-> +		ret =3D PTR_ERR(hd3ss3220->role_sw);
-> +		goto err_put_fwnode;
-> +	}
->=20
->  	typec_cap.prefer_role =3D TYPEC_NO_PREFERRED_ROLE;
->  	typec_cap.driver_data =3D hd3ss3220;
->  	typec_cap.type =3D TYPEC_PORT_DRP;
->  	typec_cap.data =3D TYPEC_PORT_DRD;
->  	typec_cap.ops =3D &hd3ss3220_ops;
-> +	typec_cap.fwnode =3D connector;
->=20
->  	hd3ss3220->port =3D typec_register_port(&client->dev, &typec_cap);
->  	if (IS_ERR(hd3ss3220->port)) {
-> @@ -220,6 +222,8 @@ static int hd3ss3220_probe(struct i2c_client *client,
->  	if (ret < 0)
->  		goto err_unreg_port;
->=20
-> +	fwnode_handle_put(connector);
-> +
->  	dev_info(&client->dev, "probed revision=3D0x%x\n", ret);
->=20
->  	return 0;
-> @@ -227,6 +231,8 @@ static int hd3ss3220_probe(struct i2c_client *client,
->  	typec_unregister_port(hd3ss3220->port);
->  err_put_role:
->  	usb_role_switch_put(hd3ss3220->role_sw);
-> +err_put_fwnode:
-> +	fwnode_handle_put(connector);
->=20
->  	return ret;
->  }
-> --
-> 2.23.0
+diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+index b9f04e617eb7..9a8b631904fd 100644
+--- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+@@ -40,91 +40,3 @@ Example device nodes:
+ 				phy-names = "usb2-phy", "usb3-phy";
+ 			};
+ 		};
+-
+-Amlogic Meson G12A DWC3 USB SoC Controller Glue
+-
+-The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
+-in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
+-only.
+-
+-A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
+-
+-One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
+-
+-The DWC3 Glue controls the PHY routing and power, an interrupt line is
+-connected to the Glue to serve as OTG ID change detection.
+-
+-Required properties:
+-- compatible:	Should be "amlogic,meson-g12a-usb-ctrl"
+-- clocks:	a handle for the "USB" clock
+-- resets:	a handle for the shared "USB" reset line
+-- reg:		The base address and length of the registers
+-- interrupts:	the interrupt specifier for the OTG detection
+-- phys: 	handle to used PHYs on the system
+-	- a <0> phandle can be used if a PHY is not used
+-- phy-names:	names of the used PHYs on the system :
+-	- "usb2-phy0" for USB2 PHY0 if USBHOST_A port is used
+-	- "usb2-phy1" for USB2 PHY1 if USBOTG_B port is used
+-	- "usb3-phy0" for USB3 PHY if USB3_0 is used
+-- dr_mode:	should be "host", "peripheral", or "otg" depending on
+-	the usage and configuration of the OTG Capable port.
+-	- "host" and "peripheral" means a fixed Host or Device only connection
+-	- "otg" means the port can be used as both Host or Device and
+-	  be switched automatically using the OTG ID pin.
+-
+-Optional properties:
+-- vbus-supply:	should be a phandle to the regulator controlling the VBUS
+-		power supply when used in OTG switchable mode
+-
+-Required child nodes:
+-
+-A child node must exist to represent the core DWC3 IP block. The name of
+-the node is not important. The content of the node is defined in dwc3.txt.
+-
+-A child node must exist to represent the core DWC2 IP block. The name of
+-the node is not important. The content of the node is defined in dwc2.txt.
+-
+-PHY documentation is provided in the following places:
+-- Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+-- Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
+-
+-Example device nodes:
+-	usb: usb@ffe09000 {
+-			compatible = "amlogic,meson-g12a-usb-ctrl";
+-			reg = <0x0 0xffe09000 0x0 0xa0>;
+-			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+-			#address-cells = <2>;
+-			#size-cells = <2>;
+-			ranges;
+-
+-			clocks = <&clkc CLKID_USB>;
+-			resets = <&reset RESET_USB>;
+-
+-			dr_mode = "otg";
+-
+-			phys = <&usb2_phy0>, <&usb2_phy1>,
+-			       <&usb3_pcie_phy PHY_TYPE_USB3>;
+-			phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
+-
+-			dwc2: usb@ff400000 {
+-				compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
+-				reg = <0x0 0xff400000 0x0 0x40000>;
+-				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clkc CLKID_USB1_DDR_BRIDGE>;
+-				clock-names = "ddr";
+-				phys = <&usb2_phy1>;
+-				dr_mode = "peripheral";
+-				g-rx-fifo-size = <192>;
+-				g-np-tx-fifo-size = <128>;
+-				g-tx-fifo-size = <128 128 16 16 16>;
+-			};
+-
+-			dwc3: usb@ff500000 {
+-				compatible = "snps,dwc3";
+-				reg = <0x0 0xff500000 0x0 0x100000>;
+-				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+-				dr_mode = "host";
+-				snps,dis_u2_susphy_quirk;
+-				snps,quirk-frame-length-adjustment;
+-			};
+-	};
+diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+new file mode 100644
+index 000000000000..45bcc98ee9a4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+@@ -0,0 +1,132 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019 BayLibre, SAS
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/usb/amlogic,meson-g12a-usb-ctrl.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
++
++maintainers:
++  - Neil Armstrong <narmstrong@baylibre.com>
++
++description: |
++  The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
++  in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
++  only.
++
++  A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
++
++  One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
++
++  The DWC3 Glue controls the PHY routing and power, an interrupt line is
++  connected to the Glue to serve as OTG ID change detection.
++
++properties:
++  compatible:
++    enum:
++      - amlogic,meson-g12a-usb-ctrl
++
++  ranges: true
++
++  "#address-cells":
++    enum: [ 1, 2 ]
++
++  "#size-cells":
++    enum: [ 1, 2 ]
++
++  clocks:
++    minItems: 1
++
++  resets:
++    minItems: 1
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  phy-names:
++    items:
++      - const: usb2-phy0 # USB2 PHY0 if USBHOST_A port is used
++      - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
++      - const: usb3-phy0 # USB3 PHY if USB3_0 is used
++
++  phys:
++    minItems: 1
++    maxItems: 3
++
++  dr_mode:
++    enum:
++      - host # fixed Host connection
++      - peripheral # fixed Device connection
++      - otg # Host or Device and switched automatically using the OTG ID pin
++
++  power-domains:
++    maxItems: 1
++
++  vbus-supply:
++    description: VBUS power supply when used in OTG switchable mode
++    maxItems: 1
++
++patternProperties:
++  "^usb@[0-9a-f]+$":
++    type: object
++
++additionalProperties: false
++
++required:
++  - compatible
++  - "#address-cells"
++  - "#size-cells"
++  - ranges
++  - clocks
++  - resets
++  - reg
++  - interrupts
++  - phy-names
++  - phys
++  - dr_mode
++
++examples:
++  - |
++    usb: usb@ffe09000 {
++          compatible = "amlogic,meson-g12a-usb-ctrl";
++          reg = <0x0 0xffe09000 0x0 0xa0>;
++          interrupts = <16>;
++          #address-cells = <1>;
++          #size-cells = <1>;
++          ranges;
++
++          clocks = <&clkc_usb>;
++          resets = <&reset_usb>;
++
++          dr_mode = "otg";
++
++          phys = <&usb2_phy0>, <&usb2_phy1>, <&usb3_phy0>;
++          phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
++
++          dwc2: usb@ff400000 {
++              compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
++              reg = <0xff400000 0x40000>;
++              interrupts = <31>;
++              clocks = <&clkc_usb1>;
++              clock-names = "ddr";
++              phys = <&usb2_phy1>;
++              dr_mode = "peripheral";
++              g-rx-fifo-size = <192>;
++              g-np-tx-fifo-size = <128>;
++              g-tx-fifo-size = <128 128 16 16 16>;
++          };
++
++          dwc3: usb@ff500000 {
++              compatible = "snps,dwc3";
++              reg = <0xff500000 0x100000>;
++              interrupts = <30>;
++              dr_mode = "host";
++              snps,dis_u2_susphy_quirk;
++              snps,quirk-frame-length-adjustment;
++          };
++    };
++
+-- 
+2.22.0
 
