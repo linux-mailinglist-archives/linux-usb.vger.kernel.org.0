@@ -2,310 +2,285 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 621B3DED6D
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9849DEDAF
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbfJUNX2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 09:23:28 -0400
-Received: from mail-wm1-f45.google.com ([209.85.128.45]:55835 "EHLO
-        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727344AbfJUNX2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Oct 2019 09:23:28 -0400
-Received: by mail-wm1-f45.google.com with SMTP id g24so4143767wmh.5
-        for <linux-usb@vger.kernel.org>; Mon, 21 Oct 2019 06:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CDpQCC3yQaQMDA2jPXME+EFagP8LNoO6pNZidHidAbs=;
-        b=WNtwQkYbCYYxfHd5g5Gg7/NxW/2r1vdfDzKQVM1p0GqmijVDR7ay0t8fQd49OhlVH8
-         v1xTzmO7RCzs8DIzM+GC1R+O/e9f4IXYhWphWBnRs1g9+uSjZ/UW9LNNQ6R6Xe054ORJ
-         rZW1kH/clT1ugXzyFKnFBKBW/sYlqn3lsi+OjTQ52Ws6u5zyNAJmXuHGRrGD/FU/o34N
-         6VMaoced7C9knxUN7e5A0DpnK4WQdf+FwmTioMRySDT67OUqbhIt1+3pNerW9RgQp6Rt
-         0DUE2wRdqWq04NS2c5o1sne3YLzKdy0wiW05agOS2RdADaTvlKraAjujh/a4cgF4HKUu
-         o6nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CDpQCC3yQaQMDA2jPXME+EFagP8LNoO6pNZidHidAbs=;
-        b=RGAYIpOMWdhfw8rYW6O2Fe5UIiSPvP8Da/egk8oZPvMuDbwowcVmToQ7plsgPF+vmZ
-         pqOwnAL/Oxlyuei2VupikFpJA7UO8RRFcOR143/+9aAMuaMFehKlLdiQ3Pa2MTHKstRH
-         yuatlNB6PEjz3l002lq+6Jata+zQBi+TRqGeNsaVkIsX82fHXYcAtdniP+iGFMfJDddY
-         Ah3sFiqvAa+6fQy9qaACf+TzvENDFAxE4Sz584QeJFlDNp4qYq+UinBIlqtrTHS5LQao
-         IW6jzLCLj9Ebd+HIN/zLP0ZQxvKsjKoLOWBOb8dWG/qJiVGyx69e39fdpPxKV3ckBQUD
-         ozSQ==
-X-Gm-Message-State: APjAAAX8sb4Xket5SDyDmJa3wbW2Yio4V/EuSwlLoMufyIjab1WM0QPk
-        +P5y5/yTMxXSR/ayt0D1DWKj8w==
-X-Google-Smtp-Source: APXvYqzMvhIv/kFvCKgvdmqwvVk+AwoAtWuBDkfvwp/J9cbsOyOGAGd2wS++y4H9TfIXc0XMmtYvFg==
-X-Received: by 2002:a05:600c:3cb:: with SMTP id z11mr17883575wmd.134.1571664204796;
-        Mon, 21 Oct 2019 06:23:24 -0700 (PDT)
-Received: from localhost.localdomain (lmontsouris-657-1-212-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id k8sm29169887wrg.15.2019.10.21.06.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Oct 2019 06:23:24 -0700 (PDT)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>
-Subject: [PATCH] dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue Bindings to YAML schemas
-Date:   Mon, 21 Oct 2019 15:23:22 +0200
-Message-Id: <20191021132322.25256-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
+        id S1728898AbfJUNfT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 09:35:19 -0400
+Received: from mga02.intel.com ([134.134.136.20]:1141 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727152AbfJUNfT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Oct 2019 09:35:19 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 06:35:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,323,1566889200"; 
+   d="scan'208";a="209445236"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 21 Oct 2019 06:35:15 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2019 16:35:14 +0300
+Date:   Mon, 21 Oct 2019 16:35:14 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 11/18] usb: typec: ucsi: Simplified registration and I/O
+ API
+Message-ID: <20191021133514.GB28049@kuha.fi.intel.com>
+References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
+ <20191021112524.79550-12-heikki.krogerus@linux.intel.com>
+ <4100b405-d3d9-25aa-0888-24d94053876c@roeck-us.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4100b405-d3d9-25aa-0888-24d94053876c@roeck-us.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that we have the DT validation in place, let's convert the device tree
-bindings for the Amlogic G12A DWC3 Glue Bindings over to a YAML schemas,
-the AXG and GXL glue bindings will be converted later.
+On Mon, Oct 21, 2019 at 06:17:30AM -0700, Guenter Roeck wrote:
+> On 10/21/19 4:25 AM, Heikki Krogerus wrote:
+> > Adding more simplified API for interface registration and
+> > read and write operations.
+> > 
+> > The registration is split into separate creation and
+> > registration phases. That allows the drivers to properly
+> > initialize the interface before registering it if necessary.
+> > 
+> > The read and write operations are supplied in a completely
+> > separate struct ucsi_operations that is passed to the
+> > ucsi_register() function during registration. The new read
+> > and write operations will work more traditionally so that
+> > the read callback function reads a requested amount of data
+> > from an offset, and the write callback functions write the
+> > given data to the offset. The drivers will have to support
+> > both non-blocking writing and blocking writing. In blocking
+> > writing the driver itself is responsible of waiting for the
+> > completion event.
+> > 
+> > The new API makes it possible for the drivers to perform
+> > tasks also independently of the core ucsi.c, and that should
+> > allow for example quirks to be handled completely in the
+> > drivers without the need to touch ucsi.c.
+> > 
+> > The old API is kept until all drivers have been converted to
+> > the new API.
+> > 
+> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > ---
+> >   drivers/usb/typec/ucsi/ucsi.c | 326 +++++++++++++++++++++++++++++++---
+> >   drivers/usb/typec/ucsi/ucsi.h |  58 ++++++
+> >   2 files changed, 355 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > index edd722fb88b8..75f0a5df6a7f 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -98,6 +98,98 @@ static int ucsi_ack(struct ucsi *ucsi, u8 ack)
+> >   	return ret;
+> >   }
+> > +static int ucsi_acknowledge_command(struct ucsi *ucsi)
+> > +{
+> > +	u64 ctrl;
+> > +
+> > +	ctrl = UCSI_ACK_CC_CI;
+> > +	ctrl |= UCSI_ACK_COMMAND_COMPLETE;
+> > +
+> > +	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+> > +}
+> > +
+> > +static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
+> > +{
+> > +	u64 ctrl;
+> > +
+> > +	ctrl = UCSI_ACK_CC_CI;
+> > +	ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
+> > +
+> > +	return ucsi->ops->async_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
+> > +}
+> > +
+> > +static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
+> > +
+> > +static int ucsi_read_error(struct ucsi *ucsi)
+> > +{
+> > +	u16 error;
+> > +	int ret;
+> > +
+> > +	/* Acknowlege the command that failed */
+> > +	ret = ucsi_acknowledge_command(ucsi);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = ucsi_exec_command(ucsi, UCSI_GET_ERROR_STATUS);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, &error, sizeof(error));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	switch (error) {
+> > +	case UCSI_ERROR_INCOMPATIBLE_PARTNER:
+> > +		return -EOPNOTSUPP;
+> > +	case UCSI_ERROR_CC_COMMUNICATION_ERR:
+> > +		return -ECOMM;
+> > +	case UCSI_ERROR_CONTRACT_NEGOTIATION_FAIL:
+> > +		return -EPROTO;
+> > +	case UCSI_ERROR_DEAD_BATTERY:
+> > +		dev_warn(ucsi->dev, "Dead battery condition!\n");
+> > +		return -EPERM;
+> > +	/* The following mean a bug in this driver */
+> > +	case UCSI_ERROR_INVALID_CON_NUM:
+> > +	case UCSI_ERROR_UNREGONIZED_CMD:
+> > +	case UCSI_ERROR_INVALID_CMD_ARGUMENT:
+> > +		dev_err(ucsi->dev, "possible UCSI driver bug (0x%x)\n", error);
+> > +		return -EINVAL;
+> > +	default:
+> > +		dev_err(ucsi->dev, "%s: error without status\n", __func__);
+> > +		return -EIO;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
+> > +{
+> > +	u32 cci;
+> > +	int ret;
+> > +
+> > +	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	if (cci & UCSI_CCI_BUSY)
+> > +		return -EBUSY;
+> > +
+> > +	if (!(cci & UCSI_CCI_COMMAND_COMPLETE))
+> > +		return -EIO;
+> > +
+> > +	if (cci & UCSI_CCI_NOT_SUPPORTED)
+> > +		return -EOPNOTSUPP;
+> > +
+> > +	if (cci & UCSI_CCI_ERROR)
+> > +		return ucsi_read_error(ucsi);
+> 
+> I am a bit concerned that this may result in an endless recursion. Would it
+> be possible to avoid that ?
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
----
- .../devicetree/bindings/usb/amlogic,dwc3.txt  |  88 ------------
- .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 132 ++++++++++++++++++
- 2 files changed, 132 insertions(+), 88 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+We can check is the command is UCSI_GET_ERROR_STATUS, and only call
+ucsi_read_error if it isn't.
 
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-index b9f04e617eb7..9a8b631904fd 100644
---- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-+++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-@@ -40,91 +40,3 @@ Example device nodes:
- 				phy-names = "usb2-phy", "usb3-phy";
- 			};
- 		};
--
--Amlogic Meson G12A DWC3 USB SoC Controller Glue
--
--The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
--in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
--only.
--
--A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
--
--One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
--
--The DWC3 Glue controls the PHY routing and power, an interrupt line is
--connected to the Glue to serve as OTG ID change detection.
--
--Required properties:
--- compatible:	Should be "amlogic,meson-g12a-usb-ctrl"
--- clocks:	a handle for the "USB" clock
--- resets:	a handle for the shared "USB" reset line
--- reg:		The base address and length of the registers
--- interrupts:	the interrupt specifier for the OTG detection
--- phys: 	handle to used PHYs on the system
--	- a <0> phandle can be used if a PHY is not used
--- phy-names:	names of the used PHYs on the system :
--	- "usb2-phy0" for USB2 PHY0 if USBHOST_A port is used
--	- "usb2-phy1" for USB2 PHY1 if USBOTG_B port is used
--	- "usb3-phy0" for USB3 PHY if USB3_0 is used
--- dr_mode:	should be "host", "peripheral", or "otg" depending on
--	the usage and configuration of the OTG Capable port.
--	- "host" and "peripheral" means a fixed Host or Device only connection
--	- "otg" means the port can be used as both Host or Device and
--	  be switched automatically using the OTG ID pin.
--
--Optional properties:
--- vbus-supply:	should be a phandle to the regulator controlling the VBUS
--		power supply when used in OTG switchable mode
--
--Required child nodes:
--
--A child node must exist to represent the core DWC3 IP block. The name of
--the node is not important. The content of the node is defined in dwc3.txt.
--
--A child node must exist to represent the core DWC2 IP block. The name of
--the node is not important. The content of the node is defined in dwc2.txt.
--
--PHY documentation is provided in the following places:
--- Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
--- Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
--
--Example device nodes:
--	usb: usb@ffe09000 {
--			compatible = "amlogic,meson-g12a-usb-ctrl";
--			reg = <0x0 0xffe09000 0x0 0xa0>;
--			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
--
--			clocks = <&clkc CLKID_USB>;
--			resets = <&reset RESET_USB>;
--
--			dr_mode = "otg";
--
--			phys = <&usb2_phy0>, <&usb2_phy1>,
--			       <&usb3_pcie_phy PHY_TYPE_USB3>;
--			phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
--
--			dwc2: usb@ff400000 {
--				compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
--				reg = <0x0 0xff400000 0x0 0x40000>;
--				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&clkc CLKID_USB1_DDR_BRIDGE>;
--				clock-names = "ddr";
--				phys = <&usb2_phy1>;
--				dr_mode = "peripheral";
--				g-rx-fifo-size = <192>;
--				g-np-tx-fifo-size = <128>;
--				g-tx-fifo-size = <128 128 16 16 16>;
--			};
--
--			dwc3: usb@ff500000 {
--				compatible = "snps,dwc3";
--				reg = <0x0 0xff500000 0x0 0x100000>;
--				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
--				dr_mode = "host";
--				snps,dis_u2_susphy_quirk;
--				snps,quirk-frame-length-adjustment;
--			};
--	};
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-new file mode 100644
-index 000000000000..45bcc98ee9a4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-@@ -0,0 +1,132 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2019 BayLibre, SAS
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/usb/amlogic,meson-g12a-usb-ctrl.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
-+
-+maintainers:
-+  - Neil Armstrong <narmstrong@baylibre.com>
-+
-+description: |
-+  The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
-+  in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
-+  only.
-+
-+  A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
-+
-+  One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
-+
-+  The DWC3 Glue controls the PHY routing and power, an interrupt line is
-+  connected to the Glue to serve as OTG ID change detection.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,meson-g12a-usb-ctrl
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    enum: [ 1, 2 ]
-+
-+  "#size-cells":
-+    enum: [ 1, 2 ]
-+
-+  clocks:
-+    minItems: 1
-+
-+  resets:
-+    minItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  phy-names:
-+    items:
-+      - const: usb2-phy0 # USB2 PHY0 if USBHOST_A port is used
-+      - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
-+      - const: usb3-phy0 # USB3 PHY if USB3_0 is used
-+
-+  phys:
-+    minItems: 1
-+    maxItems: 3
-+
-+  dr_mode:
-+    enum:
-+      - host # fixed Host connection
-+      - peripheral # fixed Device connection
-+      - otg # Host or Device and switched automatically using the OTG ID pin
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  vbus-supply:
-+    description: VBUS power supply when used in OTG switchable mode
-+    maxItems: 1
-+
-+patternProperties:
-+  "^usb@[0-9a-f]+$":
-+    type: object
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
-+  - ranges
-+  - clocks
-+  - resets
-+  - reg
-+  - interrupts
-+  - phy-names
-+  - phys
-+  - dr_mode
-+
-+examples:
-+  - |
-+    usb: usb@ffe09000 {
-+          compatible = "amlogic,meson-g12a-usb-ctrl";
-+          reg = <0x0 0xffe09000 0x0 0xa0>;
-+          interrupts = <16>;
-+          #address-cells = <1>;
-+          #size-cells = <1>;
-+          ranges;
-+
-+          clocks = <&clkc_usb>;
-+          resets = <&reset_usb>;
-+
-+          dr_mode = "otg";
-+
-+          phys = <&usb2_phy0>, <&usb2_phy1>, <&usb3_phy0>;
-+          phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
-+
-+          dwc2: usb@ff400000 {
-+              compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
-+              reg = <0xff400000 0x40000>;
-+              interrupts = <31>;
-+              clocks = <&clkc_usb1>;
-+              clock-names = "ddr";
-+              phys = <&usb2_phy1>;
-+              dr_mode = "peripheral";
-+              g-rx-fifo-size = <192>;
-+              g-np-tx-fifo-size = <128>;
-+              g-tx-fifo-size = <128 128 16 16 16>;
-+          };
-+
-+          dwc3: usb@ff500000 {
-+              compatible = "snps,dwc3";
-+              reg = <0xff500000 0x100000>;
-+              interrupts = <30>;
-+              dr_mode = "host";
-+              snps,dis_u2_susphy_quirk;
-+              snps,quirk-frame-length-adjustment;
-+          };
-+    };
-+
+> > +
+> > +	return UCSI_CCI_LENGTH(cci);
+> > +}
+> > +
+> >   static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
+> >   			    void *data, size_t size)
+> >   {
+> > @@ -106,6 +198,26 @@ static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
+> >   	u16 error;
+> >   	int ret;
+> > +	if (ucsi->ops) {
+> > +		ret = ucsi_exec_command(ucsi, ctrl->raw_cmd);
+> > +		if (ret < 0)
+> > +			return ret;
+> > +
+> > +		data_length = ret;
+> > +
+> > +		if (data) {
+> > +			ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, data, size);
+> > +			if (ret)
+> > +				return ret;
+> > +		}
+> > +
+> > +		ret = ucsi_acknowledge_command(ucsi);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		return data_length;
+> > +	}
+> > +
+> >   	ret = ucsi_command(ucsi, ctrl);
+> >   	if (ret)
+> >   		goto err;
+> > @@ -518,7 +630,7 @@ static void ucsi_partner_change(struct ucsi_connector *con)
+> >   		ucsi_altmode_update_active(con);
+> >   }
+> > -static void ucsi_connector_change(struct work_struct *work)
+> > +static void ucsi_handle_connector_change(struct work_struct *work)
+> >   {
+> >   	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
+> >   						  work);
+> > @@ -580,7 +692,10 @@ static void ucsi_connector_change(struct work_struct *work)
+> >   	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
+> >   		ucsi_partner_change(con);
+> > -	ret = ucsi_ack(ucsi, UCSI_ACK_EVENT);
+> > +	if (ucsi->ops)
+> > +		ret = ucsi_acknowledge_connector_change(ucsi);
+> > +	else
+> > +		ret = ucsi_ack(ucsi, UCSI_ACK_EVENT);
+> >   	if (ret)
+> >   		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+> > @@ -591,6 +706,20 @@ static void ucsi_connector_change(struct work_struct *work)
+> >   	mutex_unlock(&con->lock);
+> >   }
+> > +/**
+> > + * ucsi_connector_change - Process Connector Change Event
+> > + * @ucsi: UCSI Interface
+> > + * @num: Connector number
+> > + */
+> > +void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+> > +{
+> > +	struct ucsi_connector *con = &ucsi->connector[num - 1];
+> > +
+> > +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> > +		schedule_work(&con->work);
+> > +}
+> > +EXPORT_SYMBOL_GPL(ucsi_connector_change);
+> > +
+> >   /**
+> >    * ucsi_notify - PPM notification handler
+> >    * @ucsi: Source UCSI Interface for the notifications
+> > @@ -647,6 +776,39 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
+> >   	unsigned long tmo;
+> >   	int ret;
+> > +	if (ucsi->ops) {
+> > +		u64 command = UCSI_PPM_RESET;
+> > +		u32 cci;
+> > +
+> > +		ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command,
+> > +					     sizeof(command));
+> > +		if (ret < 0)
+> > +			return ret;
+> > +
+> > +		tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
+> > +
+> > +		do {
+> > +			if (time_is_before_jiffies(tmo))
+> > +				return -ETIMEDOUT;
+> > +
+> > +			ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> > +			if (ret)
+> > +				return ret;
+> > +
+> > +			if (cci & ~UCSI_CCI_RESET_COMPLETE) {
+> 
+> This repeats the reset command if any bit but UCSI_CCI_RESET_COMPLETE
+> is set. The old code has a comment here; it might be worthwhile to
+> add thesame comment here.
+
+OK. I'll leave the comment.
+
+thanks,
+
 -- 
-2.22.0
-
+heikki
