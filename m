@@ -2,83 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B11DEAE3
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 13:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE94DDEB01
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 13:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728507AbfJUL0M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 07:26:12 -0400
-Received: from mga07.intel.com ([134.134.136.100]:14014 "EHLO mga07.intel.com"
+        id S1728213AbfJULd7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 07:33:59 -0400
+Received: from mga02.intel.com ([134.134.136.20]:58087 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727620AbfJUL0M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Oct 2019 07:26:12 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
+        id S1727685AbfJULd7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Oct 2019 07:33:59 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 04:26:12 -0700
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 04:33:58 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.67,323,1566889200"; 
-   d="scan'208";a="209425881"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Oct 2019 04:26:10 -0700
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>, Ajay Gupta <ajayg@nvidia.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH 18/18] usb: typec: ucsi: Optimise ucsi_unregister()
-Date:   Mon, 21 Oct 2019 14:25:24 +0300
-Message-Id: <20191021112524.79550-19-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
-References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
+   d="scan'208";a="209427634"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.157])
+  by fmsmga001.fm.intel.com with SMTP; 21 Oct 2019 04:33:54 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 21 Oct 2019 14:33:53 +0300
+Date:   Mon, 21 Oct 2019 14:33:53 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191021113353.GX2819@lahna.fi.intel.com>
+References: <20191014061355.29072-1-drake@endlessm.com>
+ <20191014154322.GA190693@google.com>
+ <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD8Lp45hmYhrj9v-=7NKrG2YHmxZKFExDsHCL67hap+Y2iM-uw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to reset the PPM when the interface is
-unregistered. Quietly silencing the notifications and then
-unregistering everything is enough. This speeds up
-ucsi_unregister() a lot.
+Hi,
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/ucsi/ucsi.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Sorry for the delay. I was on vacation last week.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 7437c527ba36..e152dd8530d7 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1042,15 +1042,14 @@ EXPORT_SYMBOL_GPL(ucsi_register);
-  */
- void ucsi_unregister(struct ucsi *ucsi)
- {
--	u64 command;
-+	u64 cmd = UCSI_SET_NOTIFICATION_ENABLE;
- 	int i;
- 
- 	/* Make sure that we are not in the middle of driver initialization */
- 	cancel_work_sync(&ucsi->work);
- 
--	/* Disable everything except command complete notification */
--	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_CMD_COMPLETE;
--	ucsi_send_command(ucsi, command, NULL, 0);
-+	/* Disable notifications */
-+	ucsi->ops->async_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
- 
- 	for (i = 0; i < ucsi->cap.num_connectors; i++) {
- 		cancel_work_sync(&ucsi->connector[i].work);
-@@ -1060,8 +1059,6 @@ void ucsi_unregister(struct ucsi *ucsi)
- 		typec_unregister_port(ucsi->connector[i].port);
- 	}
- 
--	ucsi_reset_ppm(ucsi);
--
- 	kfree(ucsi->connector);
- }
- EXPORT_SYMBOL_GPL(ucsi_unregister);
--- 
-2.23.0
+On Tue, Oct 15, 2019 at 01:31:32PM +0800, Daniel Drake wrote:
+> On Mon, Oct 14, 2019 at 11:43 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > Can you tell if this is because the Ryzen7 XHCI controller is out of
+> > spec, or is the Linux PCI core missing some delay?  If the latter,
+> > fixing the core might fix other devices as well.
+> >
+> > Mika has this patch:
+> > https://lore.kernel.org/r/20190821124519.71594-1-mika.westerberg@linux.intel.com
+> > for similar issues, but I think that patch fixes D3cold->D0
+> > transitions, and your patch appears to be concerned with D3hot->D0
+> > transitions.
+> 
+> It's actually coming out of D3cold here, however what happens right
+> before this is that __pci_start_power_transition() calls
+> pci_platform_power_transition(D0) to leave D3cold state, then
+> pci_update_current_state() reads PMCSR and updates dev->current_state
+> to D3hot.
+> 
+> The 20ms delay for these XHCI controllers is needed precisely at this
+> point - after writing PMCSR to move to D0, and before reading it back
+> to check the result.
+> I tried moving the delay immediately before writing PMCSR, but that
+> doesn't work. Based on that, it seems like it's just a little out of
+> spec.
+> 
+> With Mika's patch, pcie_wait_downstream_accessible() is called for
+> these devices after the state transition has already failed. It also
+> doesn't do any delaying at that point because pci_pcie_type(pdev) ==
+> 0.
 
+Just to be sure, did you try the patch or just looked at it? Because
+what the patch does is that it does the delay when the downstream/root
+port is resumed, not the xHCI itself.
