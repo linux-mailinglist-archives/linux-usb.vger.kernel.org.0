@@ -2,285 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9849DEDAF
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F11FDEE51
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Oct 2019 15:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbfJUNfT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Oct 2019 09:35:19 -0400
-Received: from mga02.intel.com ([134.134.136.20]:1141 "EHLO mga02.intel.com"
+        id S1729126AbfJUNtB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Oct 2019 09:49:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46506 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727152AbfJUNfT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Oct 2019 09:35:19 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Oct 2019 06:35:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,323,1566889200"; 
-   d="scan'208";a="209445236"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 21 Oct 2019 06:35:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 21 Oct 2019 16:35:14 +0300
-Date:   Mon, 21 Oct 2019 16:35:14 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 11/18] usb: typec: ucsi: Simplified registration and I/O
- API
-Message-ID: <20191021133514.GB28049@kuha.fi.intel.com>
-References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
- <20191021112524.79550-12-heikki.krogerus@linux.intel.com>
- <4100b405-d3d9-25aa-0888-24d94053876c@roeck-us.net>
+        id S1728083AbfJUNtB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Oct 2019 09:49:01 -0400
+Received: from localhost (unknown [107.87.137.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C2612053B;
+        Mon, 21 Oct 2019 13:48:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571665738;
+        bh=ySbWnaqJexdqBk/baKlyM5Agouu1qs77BQ86seAmqVQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E13iGTfvwvVEb4mMT8FTeElz6uhJ/XfVhU+BRahFUOWjpvj1qmGUPkJQydFX6hROl
+         MyjylgyBFfLuWERg2YGJxh/QlzVhuWjUhJfKSZyE9CTaKnvXnGjgnD6B2iUvHP/E18
+         XErPOq6Bw6TGFhHbIxNdh4KYA3IX/pInIg8c2iWo=
+Date:   Mon, 21 Oct 2019 09:48:56 -0400
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Oliver Neukum <oneukum@suse.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable <stable@vger.kernel.org>
+Subject: Re: [PATCH RFC v2 2/2] USB: ldusb: fix ring-buffer locking
+Message-ID: <20191021134856.GA35072@kroah.com>
+References: <20191018151955.25135-1-johan@kernel.org>
+ <20191018151955.25135-3-johan@kernel.org>
+ <20191018185458.GA1191145@kroah.com>
+ <20191021085627.GD24768@localhost>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4100b405-d3d9-25aa-0888-24d94053876c@roeck-us.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191021085627.GD24768@localhost>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 06:17:30AM -0700, Guenter Roeck wrote:
-> On 10/21/19 4:25 AM, Heikki Krogerus wrote:
-> > Adding more simplified API for interface registration and
-> > read and write operations.
+On Mon, Oct 21, 2019 at 10:56:27AM +0200, Johan Hovold wrote:
+> On Fri, Oct 18, 2019 at 11:54:58AM -0700, Greg Kroah-Hartman wrote:
+> > On Fri, Oct 18, 2019 at 05:19:55PM +0200, Johan Hovold wrote:
+> > > The custom ring-buffer implementation was merged without any locking
+> > > whatsoever, but a spinlock was later added by commit 9d33efd9a791
+> > > ("USB: ldusb bugfix").
+> > > 
+> > > The lock did not cover the loads from the ring-buffer entry after
+> > > determining the buffer was non-empty, nor the update of the tail index
+> > > once the entry had been processed. The former could lead to stale data
+> > > being returned, while the latter could lead to memory corruption on
+> > > sufficiently weakly ordered architectures.
 > > 
-> > The registration is split into separate creation and
-> > registration phases. That allows the drivers to properly
-> > initialize the interface before registering it if necessary.
+> > Ugh.
 > > 
-> > The read and write operations are supplied in a completely
-> > separate struct ucsi_operations that is passed to the
-> > ucsi_register() function during registration. The new read
-> > and write operations will work more traditionally so that
-> > the read callback function reads a requested amount of data
-> > from an offset, and the write callback functions write the
-> > given data to the offset. The drivers will have to support
-> > both non-blocking writing and blocking writing. In blocking
-> > writing the driver itself is responsible of waiting for the
-> > completion event.
-> > 
-> > The new API makes it possible for the drivers to perform
-> > tasks also independently of the core ucsi.c, and that should
-> > allow for example quirks to be handled completely in the
-> > drivers without the need to touch ucsi.c.
-> > 
-> > The old API is kept until all drivers have been converted to
-> > the new API.
-> > 
-> > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > ---
-> >   drivers/usb/typec/ucsi/ucsi.c | 326 +++++++++++++++++++++++++++++++---
-> >   drivers/usb/typec/ucsi/ucsi.h |  58 ++++++
-> >   2 files changed, 355 insertions(+), 29 deletions(-)
-> > 
-> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> > index edd722fb88b8..75f0a5df6a7f 100644
-> > --- a/drivers/usb/typec/ucsi/ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> > @@ -98,6 +98,98 @@ static int ucsi_ack(struct ucsi *ucsi, u8 ack)
-> >   	return ret;
-> >   }
-> > +static int ucsi_acknowledge_command(struct ucsi *ucsi)
-> > +{
-> > +	u64 ctrl;
-> > +
-> > +	ctrl = UCSI_ACK_CC_CI;
-> > +	ctrl |= UCSI_ACK_COMMAND_COMPLETE;
-> > +
-> > +	return ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-> > +}
-> > +
-> > +static int ucsi_acknowledge_connector_change(struct ucsi *ucsi)
-> > +{
-> > +	u64 ctrl;
-> > +
-> > +	ctrl = UCSI_ACK_CC_CI;
-> > +	ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
-> > +
-> > +	return ucsi->ops->async_write(ucsi, UCSI_CONTROL, &ctrl, sizeof(ctrl));
-> > +}
-> > +
-> > +static int ucsi_exec_command(struct ucsi *ucsi, u64 command);
-> > +
-> > +static int ucsi_read_error(struct ucsi *ucsi)
-> > +{
-> > +	u16 error;
-> > +	int ret;
-> > +
-> > +	/* Acknowlege the command that failed */
-> > +	ret = ucsi_acknowledge_command(ucsi);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ucsi_exec_command(ucsi, UCSI_GET_ERROR_STATUS);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +
-> > +	ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, &error, sizeof(error));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	switch (error) {
-> > +	case UCSI_ERROR_INCOMPATIBLE_PARTNER:
-> > +		return -EOPNOTSUPP;
-> > +	case UCSI_ERROR_CC_COMMUNICATION_ERR:
-> > +		return -ECOMM;
-> > +	case UCSI_ERROR_CONTRACT_NEGOTIATION_FAIL:
-> > +		return -EPROTO;
-> > +	case UCSI_ERROR_DEAD_BATTERY:
-> > +		dev_warn(ucsi->dev, "Dead battery condition!\n");
-> > +		return -EPERM;
-> > +	/* The following mean a bug in this driver */
-> > +	case UCSI_ERROR_INVALID_CON_NUM:
-> > +	case UCSI_ERROR_UNREGONIZED_CMD:
-> > +	case UCSI_ERROR_INVALID_CMD_ARGUMENT:
-> > +		dev_err(ucsi->dev, "possible UCSI driver bug (0x%x)\n", error);
-> > +		return -EINVAL;
-> > +	default:
-> > +		dev_err(ucsi->dev, "%s: error without status\n", __func__);
-> > +		return -EIO;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
-> > +{
-> > +	u32 cci;
-> > +	int ret;
-> > +
-> > +	ret = ucsi->ops->sync_write(ucsi, UCSI_CONTROL, &cmd, sizeof(cmd));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	if (cci & UCSI_CCI_BUSY)
-> > +		return -EBUSY;
-> > +
-> > +	if (!(cci & UCSI_CCI_COMMAND_COMPLETE))
-> > +		return -EIO;
-> > +
-> > +	if (cci & UCSI_CCI_NOT_SUPPORTED)
-> > +		return -EOPNOTSUPP;
-> > +
-> > +	if (cci & UCSI_CCI_ERROR)
-> > +		return ucsi_read_error(ucsi);
+> > This almost looks sane, but what's the odds there is some other issue in
+> > here as well?  Would it make sense to just convert the code to use the
+> > "standard" ring buffer code instead?
 > 
-> I am a bit concerned that this may result in an endless recursion. Would it
-> be possible to avoid that ?
-
-We can check is the command is UCSI_GET_ERROR_STATUS, and only call
-ucsi_read_error if it isn't.
-
-> > +
-> > +	return UCSI_CCI_LENGTH(cci);
-> > +}
-> > +
-> >   static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
-> >   			    void *data, size_t size)
-> >   {
-> > @@ -106,6 +198,26 @@ static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
-> >   	u16 error;
-> >   	int ret;
-> > +	if (ucsi->ops) {
-> > +		ret = ucsi_exec_command(ucsi, ctrl->raw_cmd);
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		data_length = ret;
-> > +
-> > +		if (data) {
-> > +			ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, data, size);
-> > +			if (ret)
-> > +				return ret;
-> > +		}
-> > +
-> > +		ret = ucsi_acknowledge_command(ucsi);
-> > +		if (ret)
-> > +			return ret;
-> > +
-> > +		return data_length;
-> > +	}
-> > +
-> >   	ret = ucsi_command(ucsi, ctrl);
-> >   	if (ret)
-> >   		goto err;
-> > @@ -518,7 +630,7 @@ static void ucsi_partner_change(struct ucsi_connector *con)
-> >   		ucsi_altmode_update_active(con);
-> >   }
-> > -static void ucsi_connector_change(struct work_struct *work)
-> > +static void ucsi_handle_connector_change(struct work_struct *work)
-> >   {
-> >   	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
-> >   						  work);
-> > @@ -580,7 +692,10 @@ static void ucsi_connector_change(struct work_struct *work)
-> >   	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
-> >   		ucsi_partner_change(con);
-> > -	ret = ucsi_ack(ucsi, UCSI_ACK_EVENT);
-> > +	if (ucsi->ops)
-> > +		ret = ucsi_acknowledge_connector_change(ucsi);
-> > +	else
-> > +		ret = ucsi_ack(ucsi, UCSI_ACK_EVENT);
-> >   	if (ret)
-> >   		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
-> > @@ -591,6 +706,20 @@ static void ucsi_connector_change(struct work_struct *work)
-> >   	mutex_unlock(&con->lock);
-> >   }
-> > +/**
-> > + * ucsi_connector_change - Process Connector Change Event
-> > + * @ucsi: UCSI Interface
-> > + * @num: Connector number
-> > + */
-> > +void ucsi_connector_change(struct ucsi *ucsi, u8 num)
-> > +{
-> > +	struct ucsi_connector *con = &ucsi->connector[num - 1];
-> > +
-> > +	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
-> > +		schedule_work(&con->work);
-> > +}
-> > +EXPORT_SYMBOL_GPL(ucsi_connector_change);
-> > +
-> >   /**
-> >    * ucsi_notify - PPM notification handler
-> >    * @ucsi: Source UCSI Interface for the notifications
-> > @@ -647,6 +776,39 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
-> >   	unsigned long tmo;
-> >   	int ret;
-> > +	if (ucsi->ops) {
-> > +		u64 command = UCSI_PPM_RESET;
-> > +		u32 cci;
-> > +
-> > +		ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command,
-> > +					     sizeof(command));
-> > +		if (ret < 0)
-> > +			return ret;
-> > +
-> > +		tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
-> > +
-> > +		do {
-> > +			if (time_is_before_jiffies(tmo))
-> > +				return -ETIMEDOUT;
-> > +
-> > +			ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
-> > +			if (ret)
-> > +				return ret;
-> > +
-> > +			if (cci & ~UCSI_CCI_RESET_COMPLETE) {
+> Yeah, long term that may be the right thing to do, but I wanted a
+> minimal fix addressing the issue at hand without having to reimplement
+> the driver and fix all other (less-critical) issues in there...
 > 
-> This repeats the reset command if any bit but UCSI_CCI_RESET_COMPLETE
-> is set. The old code has a comment here; it might be worthwhile to
-> add thesame comment here.
+> For the ring-buffer corruption / info-leak issue, these two patches
+> should be sufficient though.
+> 
+> Copying the ring-buffer entry to a temporary buffer while holding the
+> lock might still be preferred to avoid having to deal with barrier
+> subtleties. But unless someone speaks out against 2/2, I'd just go ahead
+> and apply it.
 
-OK. I'll leave the comment.
+Ok, feel free to resend this and I'll queue it up, it's gone from my
+queue :(
 
 thanks,
 
--- 
-heikki
+greg k-h
