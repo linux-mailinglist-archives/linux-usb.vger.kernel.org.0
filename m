@@ -2,125 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34626E002C
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 10:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF28E00AC
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 11:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731227AbfJVI7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Oct 2019 04:59:52 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:39367 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728832AbfJVI7w (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 04:59:52 -0400
-Received: by mail-pg1-f201.google.com with SMTP id m20so12121193pgv.6
-        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2019 01:59:52 -0700 (PDT)
+        id S1731433AbfJVJ0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Oct 2019 05:26:17 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40120 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728182AbfJVJ0R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 05:26:17 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so10274887pfb.7;
+        Tue, 22 Oct 2019 02:26:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=LZl6zNSvagqcd/4AyoUyx0eWouXvQtN7q4jWsmfi4io=;
-        b=tfuy+tQwGzR8wBSj4bqW+++GTJLvz/JNlH7jUKHLm9iuvXEQfhb5ZNR9xHYc2Fezxa
-         4JaEb5XDWhwEoZ4mxDhEpCWBwDg5Pts4SEkzpjZjI7XS1V1c/AhFAqoXPtUzk+0aa6Rk
-         emCFtwda12zRaQHYEakvagoMbVU+Q0scW3GD6EJ8l6UOPl7t18ykbui3kBQZ3kSZShQ2
-         ubjOmWTl30P4t5QBJ26DQzGRmoV9c9+9CY0j0iYxxaJBhcvtwsJNdoNsTbAkpK4mThGx
-         7fA6ofgnYZwOsTSE63oMpJ3Hh3kYdWb4hASmlnUnKbPBWAWjY5/Xd1Yq5/KZJN55BADZ
-         02IA==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=DdMpMJAPnmBmCGb18HjxGQhrUj1kKI9wqWAZL3wLOWs=;
+        b=S1DWMhTY89ozmFHQkzFl5Q28aag2OyFasv0X7bDFv76h0glgW/z2aSTZTECEzNHTcv
+         jko++DVwnjYdd+qOqawZrmm8AZt8Sp3b222Tw6dJM1wUwaykte2a//RI8aaRTLLjABqU
+         uxY1LM14teSkX9WooV1VxG0h5gpCrUCUHGufzQ/Rq/oQdxRfE7h0/0pWkib4iOm3ErVE
+         Z9PhPgW855RJD0RRSvJ+ogN73MUuXZslBBgdQFqs8O801UQpYHUrvAxreGxHFueODljA
+         6XO979ZFcWNrOA7oRvHXkru2vCmpExuUQhOwZpXPl3RIPcYWK+QqkT/LaUEu5wXjdKuf
+         +SXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=LZl6zNSvagqcd/4AyoUyx0eWouXvQtN7q4jWsmfi4io=;
-        b=Y/oScytQwVJDzxuBBm7BMi6P+T+uZtuMIPbe2KU8P/pjiElq0JYtQ2MssOXaXuUPlU
-         XtR4cSo8mv00N+d5wcu/EyB0Z7/Jj4H2uzq6u3nN7+sLZhHjM1njlNki5oZh90siuiS4
-         dVHSteycbnzcXO7yDJwC2ffHJhhbNZNpsrQwpqjNC4yEDWOuYZGMSL4m4GwGeQbdI8r2
-         SqeGNepF2BlJXeygv6AICtvk9j2cQperRNz4mXCppajvfUx5iU303PFcDTvLPTteUZHY
-         bxLGvtS7wxjjpzpCLIfHllIP5F50gqLYnFkIAe/ocOD6HIAKLDxUzBu0xnntHW9H+8f5
-         lf8Q==
-X-Gm-Message-State: APjAAAVRIe7TQ4yIhWH/R4ENv33IZBbU+1u0rK12wei+YkHE9hpsPVC8
-        8/RnoQCUFfb1/8+b87607u7is7LVgKdx
-X-Google-Smtp-Source: APXvYqzQ/rX6WZj13Gy2AaMaTZY65r5k/J8i4M18FF8gz4I4aUGooW8mDpkAcV8SY3HIrxQHuXL9DYahdITE
-X-Received: by 2002:a65:609a:: with SMTP id t26mr643896pgu.349.1571734791388;
- Tue, 22 Oct 2019 01:59:51 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 16:59:24 +0800
-Message-Id: <20191022085924.92783-1-pumahsu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.23.0.866.gb869b98d4c-goog
-Subject: [PATCH V2] usb: typec: Add sysfs node to show connector orientation
-From:   Puma Hsu <pumahsu@google.com>
-To:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
-Cc:     badhri@google.com, kyletso@google.com, albertccwang@google.com,
-        rickyniu@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Puma Hsu <pumahsu@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=DdMpMJAPnmBmCGb18HjxGQhrUj1kKI9wqWAZL3wLOWs=;
+        b=edYBAKzg4/Fat7IOI5xf5mh5s/3bO873H53efF5wV2cHAEwkd/jab3zQu4lk44kdPh
+         11fTZuU2JTYrfExnWQFfniwoKWyZM3aOSwkxwPRX1b+81/rsp9HjkMdZ0QY3sn4BrV2m
+         nJrZSxfNEKRTY5+rMlceTXM86xD4bN5Sk1CsrsJMmXVc9R3PnobQEbzbTaM+EB2a7R5l
+         vSPc5Ll/U6YdiyX2WNkQY7Mf4Nlh0WWNe50OF6KAAPZB/PGnM/93FEM0Z1U7IB+Zgsj+
+         NTqdZu/EKJRsKuwdTmmoPlM4KvonVAA5v4JIkPgjEBnX8YgQY3/jAnHWHPofPDcPRX1H
+         vrpg==
+X-Gm-Message-State: APjAAAUtWrNDG+5GjvK5sAq9bae1JLk+qPS7ed4336xjNDPxWbhP4+pF
+        VHMoqfDUomytvc+q5gvB3KI=
+X-Google-Smtp-Source: APXvYqwgWG9OpQkEB7Kl+tkbEIQ+XaDY3+W/SRAzsOjNPH5E+4ZQBagRjyMUhp7M4Mw7SPKih9L6Rw==
+X-Received: by 2002:a63:7344:: with SMTP id d4mr2776662pgn.416.1571736376600;
+        Tue, 22 Oct 2019 02:26:16 -0700 (PDT)
+Received: from localhost.localdomain ([163.152.162.99])
+        by smtp.gmail.com with ESMTPSA id j17sm17423770pfr.70.2019.10.22.02.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Oct 2019 02:26:15 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 18:26:11 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah <shuah@kernel.org>
+Cc:     Julia Lawall <julia.lawall@lip6.fr>, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        valentina.manea.m@gmail.com, kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH] =?iso-8859-1?B?dXNiaXA6oEZp?= =?iso-8859-1?Q?x?= free of
+ unallocated memory in vhci tx
+Message-ID: <20191022092611.GA3941@localhost.localdomain>
+References: <20191021142414.27164-1-suwan.kim027@gmail.com>
+ <alpine.DEB.2.21.1910211706240.2877@hadrien>
+ <936d4cf8-cd5a-a297-8298-e9bc5d3c193d@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <936d4cf8-cd5a-a297-8298-e9bc5d3c193d@kernel.org>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Export the Type-C connector orientation so that user space
-can get this information.
+On Mon, Oct 21, 2019 at 01:28:54PM -0600, shuah wrote:
+> On 10/21/19 9:08 AM, Julia Lawall wrote:
+> > 
+> > 
+> > On Mon, 21 Oct 2019, Suwan Kim wrote:
+> > 
+> > > iso_buffer should be set to NULL after use and free in the while loop.
+> > > In the case of isochronous URB in the while loop, iso_buffer is
+> > > allocated and after sending it to server, buffer is deallocated. And
+> > > then, if the next URB in the while loop is not a isochronous pipe,
+> > > iso_buffer still holds the previously deallocated buffer address and
+> > > kfree tries to free wrong buffer address.
+> > > 
+> > > Fixes: ea44d190764b (“usbip: Implement SG support to vhci-hcd and stub driver”)
+> > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+> > > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> > > ---
+> > >   drivers/usb/usbip/vhci_tx.c | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
+> > > index c3803785f6ef..b290e810d11b 100644
+> > > --- a/drivers/usb/usbip/vhci_tx.c
+> > > +++ b/drivers/usb/usbip/vhci_tx.c
+> > > @@ -73,6 +73,7 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
+> > >   		memset(&pdu_header, 0, sizeof(pdu_header));
+> > >   		memset(&msg, 0, sizeof(msg));
+> > >   		memset(&iov, 0, sizeof(iov));
+> > > +		iso_buffer = NULL;
+> > 
+> > Somehow I would have put it after the kfree, since the kfree makes the
+> > value invalid.  iso_buffer is already initialized to NULL for the first
+> > iteration.  If you want to put the setting to NULL at the top of the loop,
+> > maybe the = NULL in the first line should be removed.
+> > 
+> 
+> It makes sense to clear it after kfree() on line 150.
+> 
+> This kfree() and clearing iso_buffer are necessary only for
+> PIPE_ISOCHRONOUS case.
+> 
+> Please add a comment above that this is for isoc case.
 
-Signed-off-by: Puma Hsu <pumahsu@google.com>
----
- Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
- drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
- 2 files changed, 29 insertions(+)
+Ok. I will send v2.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-index d7647b258c3c..b22f71801671 100644
---- a/Documentation/ABI/testing/sysfs-class-typec
-+++ b/Documentation/ABI/testing/sysfs-class-typec
-@@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
- Description:
- 		Revision number of the supported USB Type-C specification.
- 
-+What:		/sys/class/typec/<port>/connector_orientation
-+Date:		October 2019
-+Contact:	Puma Hsu <pumahsu@google.com>
-+Description:
-+		Indicates which typec connector orientation is configured now.
-+		cc1 is defined as "normal" and cc2 is defined as "reversed".
-+
-+		Valid value:
-+		- unknown (nothing configured)
-+		- normal (configured in cc1 side)
-+		- reversed (configured in cc2 side)
- 
- USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
- 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 94a3eda62add..911d06676aeb 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1245,6 +1245,23 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(usb_power_delivery_revision);
- 
-+static const char * const typec_connector_orientation[] = {
-+	[TYPEC_ORIENTATION_NONE]		= "unknown",
-+	[TYPEC_ORIENTATION_NORMAL]		= "normal",
-+	[TYPEC_ORIENTATION_REVERSE]		= "reversed",
-+};
-+
-+static ssize_t connector_orientation_show(struct device *dev,
-+						struct device_attribute *attr,
-+						char *buf)
-+{
-+	struct typec_port *p = to_typec_port(dev);
-+
-+	return sprintf(buf, "%s\n",
-+		       typec_connector_orientation[p->orientation]);
-+}
-+static DEVICE_ATTR_RO(connector_orientation);
-+
- static struct attribute *typec_attrs[] = {
- 	&dev_attr_data_role.attr,
- 	&dev_attr_power_operation_mode.attr,
-@@ -1255,6 +1272,7 @@ static struct attribute *typec_attrs[] = {
- 	&dev_attr_usb_typec_revision.attr,
- 	&dev_attr_vconn_source.attr,
- 	&dev_attr_port_type.attr,
-+	&dev_attr_connector_orientation.attr,
- 	NULL,
- };
- ATTRIBUTE_GROUPS(typec);
--- 
-2.23.0.866.gb869b98d4c-goog
-
+Regards
+Suwan Kim
