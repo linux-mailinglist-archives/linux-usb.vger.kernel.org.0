@@ -2,118 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DF28E00AC
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 11:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 178CBE00CA
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 11:30:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731433AbfJVJ0R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Oct 2019 05:26:17 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40120 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728182AbfJVJ0R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 05:26:17 -0400
-Received: by mail-pf1-f195.google.com with SMTP id x127so10274887pfb.7;
-        Tue, 22 Oct 2019 02:26:17 -0700 (PDT)
+        id S1731414AbfJVJah (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Oct 2019 05:30:37 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:42219 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730247AbfJVJah (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 05:30:37 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f14so9573788pgi.9;
+        Tue, 22 Oct 2019 02:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=DdMpMJAPnmBmCGb18HjxGQhrUj1kKI9wqWAZL3wLOWs=;
-        b=S1DWMhTY89ozmFHQkzFl5Q28aag2OyFasv0X7bDFv76h0glgW/z2aSTZTECEzNHTcv
-         jko++DVwnjYdd+qOqawZrmm8AZt8Sp3b222Tw6dJM1wUwaykte2a//RI8aaRTLLjABqU
-         uxY1LM14teSkX9WooV1VxG0h5gpCrUCUHGufzQ/Rq/oQdxRfE7h0/0pWkib4iOm3ErVE
-         Z9PhPgW855RJD0RRSvJ+ogN73MUuXZslBBgdQFqs8O801UQpYHUrvAxreGxHFueODljA
-         6XO979ZFcWNrOA7oRvHXkru2vCmpExuUQhOwZpXPl3RIPcYWK+QqkT/LaUEu5wXjdKuf
-         +SXw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AY3OYRvRF5RCA7yU3JGcqprGc0jtpgyWsjOZL4oHax4=;
+        b=Aoy0VAbqaffgC2nbxU/znUht1RKm4xrUw8n/Avw4sTOvXWBbqZ8cENv/vtZzvk7MB1
+         VkI1GlRaxUkb08/wZBcP6ZAQmyx3q5Ucl+G4qgWaSWTUx30j7VvLSzOvOgdeHM3DCqnY
+         hUEeyCoKOnjUn8/ipMB2QDtUvIflFiUzsHJWRpRn02p8oAQa5hGC0hBsTx2Wu6skueZY
+         dLo0qNuxr4oqFbMrpZLqwN1DefSzrCJCSglzo2OYm3McMa7pIvRUhT6SSANYChxhZge/
+         Ixw9EF9LaSpjJCCI19MA5+vY5JBWpbsON1DW/o3CqjqGOX0Iyv0daQezVz9GysOcsUzY
+         ltsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=DdMpMJAPnmBmCGb18HjxGQhrUj1kKI9wqWAZL3wLOWs=;
-        b=edYBAKzg4/Fat7IOI5xf5mh5s/3bO873H53efF5wV2cHAEwkd/jab3zQu4lk44kdPh
-         11fTZuU2JTYrfExnWQFfniwoKWyZM3aOSwkxwPRX1b+81/rsp9HjkMdZ0QY3sn4BrV2m
-         nJrZSxfNEKRTY5+rMlceTXM86xD4bN5Sk1CsrsJMmXVc9R3PnobQEbzbTaM+EB2a7R5l
-         vSPc5Ll/U6YdiyX2WNkQY7Mf4Nlh0WWNe50OF6KAAPZB/PGnM/93FEM0Z1U7IB+Zgsj+
-         NTqdZu/EKJRsKuwdTmmoPlM4KvonVAA5v4JIkPgjEBnX8YgQY3/jAnHWHPofPDcPRX1H
-         vrpg==
-X-Gm-Message-State: APjAAAUtWrNDG+5GjvK5sAq9bae1JLk+qPS7ed4336xjNDPxWbhP4+pF
-        VHMoqfDUomytvc+q5gvB3KI=
-X-Google-Smtp-Source: APXvYqwgWG9OpQkEB7Kl+tkbEIQ+XaDY3+W/SRAzsOjNPH5E+4ZQBagRjyMUhp7M4Mw7SPKih9L6Rw==
-X-Received: by 2002:a63:7344:: with SMTP id d4mr2776662pgn.416.1571736376600;
-        Tue, 22 Oct 2019 02:26:16 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AY3OYRvRF5RCA7yU3JGcqprGc0jtpgyWsjOZL4oHax4=;
+        b=IpVtdDmdCmUMCAK4S6GxUA9q2mhxRbzObju/FZYk00QuBPOXeVAHVsfY2q1W0bIV5o
+         ET/CMTKc1cnxWzgEqxvYX5NfdQhGJBShp2JyGZiRmwqsSuhLcySpCYWmTMMxPjA0Ym77
+         em2H7BJCp47DfYWiSOnHviCZ1sPoJoQ9ZjJ4pbcjNTPtGXF0nMcSY9g0MfxZ2t54Age3
+         vAAoFKBAbGoMZb5ryAHlUK8+CW1qcXCpINukjrSagif8jr2U8dWse4wH4+c/08Hswv9k
+         /OimJmR2UFPrVMCWxLNEhUIkg3roLdm+JzVkdICXpxbqqH0sf0hct90hu7gF/zBsBYLM
+         O5Eg==
+X-Gm-Message-State: APjAAAXw+3GAU3Ag8CAXGp/hc0kzZ5//BNykwRAsFWmA0W49xHJ6tOMu
+        DdSw2WERvRP4+GICvm0EzRo=
+X-Google-Smtp-Source: APXvYqzkbMAPdGYoCpRe1Zf0/xdLKlHkHiGabYQu7GPEUV0MnRH1OOMXiYrlFI6dNnbB81dXPNkfEg==
+X-Received: by 2002:a17:90a:e652:: with SMTP id ep18mr3570699pjb.72.1571736634787;
+        Tue, 22 Oct 2019 02:30:34 -0700 (PDT)
 Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id j17sm17423770pfr.70.2019.10.22.02.26.13
+        by smtp.googlemail.com with ESMTPSA id h8sm2305528pjp.1.2019.10.22.02.30.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2019 02:26:15 -0700 (PDT)
-Date:   Tue, 22 Oct 2019 18:26:11 +0900
+        Tue, 22 Oct 2019 02:30:34 -0700 (PDT)
 From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Julia Lawall <julia.lawall@lip6.fr>, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        valentina.manea.m@gmail.com, kbuild test robot <lkp@intel.com>
-Subject: Re: [PATCH] =?iso-8859-1?B?dXNiaXA6oEZp?= =?iso-8859-1?Q?x?= free of
- unallocated memory in vhci tx
-Message-ID: <20191022092611.GA3941@localhost.localdomain>
-References: <20191021142414.27164-1-suwan.kim027@gmail.com>
- <alpine.DEB.2.21.1910211706240.2877@hadrien>
- <936d4cf8-cd5a-a297-8298-e9bc5d3c193d@kernel.org>
+To:     shuah@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        julia.lawall@lip6.fr, valentina.manea.m@gmail.com,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH v2] usbip: Fix free of unallocated memory in vhci tx
+Date:   Tue, 22 Oct 2019 18:30:17 +0900
+Message-Id: <20191022093017.8027-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <936d4cf8-cd5a-a297-8298-e9bc5d3c193d@kernel.org>
-User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 01:28:54PM -0600, shuah wrote:
-> On 10/21/19 9:08 AM, Julia Lawall wrote:
-> > 
-> > 
-> > On Mon, 21 Oct 2019, Suwan Kim wrote:
-> > 
-> > > iso_buffer should be set to NULL after use and free in the while loop.
-> > > In the case of isochronous URB in the while loop, iso_buffer is
-> > > allocated and after sending it to server, buffer is deallocated. And
-> > > then, if the next URB in the while loop is not a isochronous pipe,
-> > > iso_buffer still holds the previously deallocated buffer address and
-> > > kfree tries to free wrong buffer address.
-> > > 
-> > > Fixes: ea44d190764b (“usbip: Implement SG support to vhci-hcd and stub driver”)
-> > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > Reported-by: Julia Lawall <julia.lawall@lip6.fr>
-> > > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> > > ---
-> > >   drivers/usb/usbip/vhci_tx.c | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
-> > > index c3803785f6ef..b290e810d11b 100644
-> > > --- a/drivers/usb/usbip/vhci_tx.c
-> > > +++ b/drivers/usb/usbip/vhci_tx.c
-> > > @@ -73,6 +73,7 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
-> > >   		memset(&pdu_header, 0, sizeof(pdu_header));
-> > >   		memset(&msg, 0, sizeof(msg));
-> > >   		memset(&iov, 0, sizeof(iov));
-> > > +		iso_buffer = NULL;
-> > 
-> > Somehow I would have put it after the kfree, since the kfree makes the
-> > value invalid.  iso_buffer is already initialized to NULL for the first
-> > iteration.  If you want to put the setting to NULL at the top of the loop,
-> > maybe the = NULL in the first line should be removed.
-> > 
-> 
-> It makes sense to clear it after kfree() on line 150.
-> 
-> This kfree() and clearing iso_buffer are necessary only for
-> PIPE_ISOCHRONOUS case.
-> 
-> Please add a comment above that this is for isoc case.
+iso_buffer should be set to NULL after use and free in the while loop.
+In the case of isochronous URB in the while loop, iso_buffer is
+allocated and after sending it to server, buffer is deallocated. And
+then, if the next URB in the while loop is not a isochronous pipe,
+iso_buffer still holds the previously deallocated buffer address and
+kfree tries to free wrong buffer address.
 
-Ok. I will send v2.
+Fixes: ea44d190764b ("usbip: Implement SG support to vhci-hcd and stub driver")
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+---
+v1 - v2: Move the setting NULL after kfree() and add the comment
+---
+ drivers/usb/usbip/vhci_tx.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Regards
-Suwan Kim
+diff --git a/drivers/usb/usbip/vhci_tx.c b/drivers/usb/usbip/vhci_tx.c
+index c3803785f6ef..0ae40a13a9fe 100644
+--- a/drivers/usb/usbip/vhci_tx.c
++++ b/drivers/usb/usbip/vhci_tx.c
+@@ -147,7 +147,10 @@ static int vhci_send_cmd_submit(struct vhci_device *vdev)
+ 		}
+ 
+ 		kfree(iov);
++		/* This is only for isochronous case */
+ 		kfree(iso_buffer);
++		iso_buffer = NULL;
++
+ 		usbip_dbg_vhci_tx("send txdata\n");
+ 
+ 		total_size += txsize;
+-- 
+2.20.1
+
