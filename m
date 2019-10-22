@@ -2,100 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B51ABE06E1
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 16:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B29BFE077C
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 17:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729871AbfJVO4y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Oct 2019 10:56:54 -0400
-Received: from muru.com ([72.249.23.125]:38852 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726955AbfJVO4y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Oct 2019 10:56:54 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 34B6E80FA;
-        Tue, 22 Oct 2019 14:57:27 +0000 (UTC)
-Date:   Tue, 22 Oct 2019 07:56:49 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Yegor Yefremov <yegorslists@googlemail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Linux-OMAP <linux-omap@vger.kernel.org>, vkoul@kernel.org,
-        Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
-        Andrey Skvortsov <andrej.skvortzov@gmail.com>,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>
-Subject: Re: musb: cppi41: broken high speed FTDI functionality when
- connected to musb directly
-Message-ID: <20191022145649.GI5610@atomide.com>
-References: <20190930152330.GH5610@atomide.com>
- <20190930195411.6porqtm7tlokgel3@earth.universe>
- <20191001080339.GF13531@localhost>
- <CAGm1_ksg2x9USqB+XGhkMQpA-zc77Ha1-j+foPJFR7R3XPZsNg@mail.gmail.com>
- <20191001164351.GJ5610@atomide.com>
- <20191001220321.GK5610@atomide.com>
- <CAGm1_kv12P1hb7PXSQUo3EXXrCUCQV0ptoQpxewGYHJgROL=cQ@mail.gmail.com>
- <20191002165219.GL5610@atomide.com>
- <CAGm1_kt4W+2uN_6WduUtR+NwKCmQMZwNRHQQ7kVJt0PqmoobaA@mail.gmail.com>
- <CAGm1_kvK+Xkd0Yx8AUvTPMejLTm7jr5+2dzrwNLkG2ivuUC6bw@mail.gmail.com>
+        id S1732302AbfJVPbd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Oct 2019 11:31:33 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:33995 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730305AbfJVPbc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 11:31:32 -0400
+Received: by mail-lj1-f193.google.com with SMTP id j19so17695784lja.1;
+        Tue, 22 Oct 2019 08:31:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=EJB7XvTqhwkjvsiq5gN/UX3zka3jCAmlwtv3LG1edKM=;
+        b=GmteRHHVXu7hTKNck9oncJxOalc+3Wn2O/Neg1SgG0y+YprmsuFFXlpvoSuTZ17BwV
+         wnnGWJw3jrTExyJdTz6nEi7Camk1f/OD6K26d5GoA7Lni/IeQ5xiMGs7Ag6S4ehbLvKU
+         WdFjHEB9l6JBuKC7Mbln8PzR8Ov3yJPjNaWoqz4DmF8AzgIETu65FfrWRjCSV3dOupPW
+         5SL7wH2Bk/tNqQmuDSVUajAAbuDnv4L0paULBNcV5WtF5rESmQn+6tDahVOOMUMf/U0J
+         bpuNFeoVkvngd7r9NyvIbDOJGTiAUAZ7GVnjboBOBGL+GHtS+lgTiPAOv6hLAW/jgDMc
+         C4Xg==
+X-Gm-Message-State: APjAAAXY47a8bbQC7tosthE7diIfjXlnTtcKgav1qTspk/Nvvi28pQDv
+        XvRV/ZZdaSfbIG9TNU8Dxcw=
+X-Google-Smtp-Source: APXvYqz7WVVbHykWkvapHIKnSa5f3AP+b6vE+OgP9+nSP9uT98ogjaSLRJqBoOoJ6Wqgl5oBqYNZqA==
+X-Received: by 2002:a2e:6c15:: with SMTP id h21mr18862340ljc.10.1571758290572;
+        Tue, 22 Oct 2019 08:31:30 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id q24sm7556775ljj.6.2019.10.22.08.31.29
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Oct 2019 08:31:29 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iMw8O-0005oL-4R; Tue, 22 Oct 2019 17:31:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        syzbot+a4fbb3bb76cda0ea4e58@syzkaller.appspotmail.com
+Subject: [PATCH] USB: ldusb: fix control-message timeout
+Date:   Tue, 22 Oct 2019 17:31:27 +0200
+Message-Id: <20191022153127.22295-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <000000000000daa63d059580f872@google.com>
+References: <000000000000daa63d059580f872@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGm1_kvK+Xkd0Yx8AUvTPMejLTm7jr5+2dzrwNLkG2ivuUC6bw@mail.gmail.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Yegor Yefremov <yegorslists@googlemail.com> [191021 01:40]:
-> Hi Tony,
-> 
-> On Thu, Oct 3, 2019 at 10:39 AM Yegor Yefremov
-> <yegorslists@googlemail.com> wrote:
-> >
-> > Hi Tony,
-> >
-> > On Wed, Oct 2, 2019 at 6:52 PM Tony Lindgren <tony@atomide.com> wrote:
-> > >
-> > > * Yegor Yefremov <yegorslists@googlemail.com> [191002 06:57]:
-> > > > On Wed, Oct 2, 2019 at 12:03 AM Tony Lindgren <tony@atomide.com> wrote:
-> > > > > The other way to fix this would be to just wake up cpp41 in
-> > > > > cppi41_dma_prep_slave_sg() and return NULL so that we can
-> > > > > have musb_ep_program() continue with PIO while cppi41 is
-> > > > > asleep.
-> > > > >
-> > > > > Anyways, care to try it out and see if it fixes your issue?
-> > > >
-> > > > The fix is working but on the first invocation, I get this output
-> > > > (minicom provokes the same output):
-> > >
-> > > > # serialtest.py -c 2 /dev/ttyUSB0 /dev/ttyUSB0
-> > > ...
-> > > > [  210.940612] [<c065fc94>] (__rpm_callback) from [<c065fd60>]
-> > > > (rpm_callback+0x20/0x80)
-> > > > [  210.948402] [<c065fd60>] (rpm_callback) from [<c065f7cc>]
-> > > > (rpm_resume+0x468/0x7a0)
-> > > > [  210.956018] [<c065f7cc>] (rpm_resume) from [<c065fb50>]
-> > > > (__pm_runtime_resume+0x4c/0x64)
-> > > > [  210.964086] [<c065fb50>] (__pm_runtime_resume) from [<bf020940>]
-> > > > (cppi41_dma_prep_slave_sg+0x20/0xfc [cppi41])
-> > >
-> > > OK so that won't work, thanks for testing. Here's the alternative
-> > > patch to try along the lines described above that just wakes up
-> > > cppi41 and returns NULL so musb_ep_program() can continue with PIO
-> > > until cppi41 is awake.
-> >
-> > I'm out of the office for some weeks and don't have access to my hw.
-> > I'll make the test as soon as I'm back.
-> 
-> I've tested your patch with both systems (with and without a hub) and
-> everything is working as expected.
+USB control-message timeouts are specified in milliseconds, not jiffies.
+Waiting 83 minutes for a transfer to complete is a bit excessive.
 
-OK good to hear, I just sent it out with a proper description as:
+Fixes: 2824bd250f0b ("[PATCH] USB: add ldusb driver")
+Cc: stable <stable@vger.kernel.org>     # 2.6.13
+Reported-by: syzbot+a4fbb3bb76cda0ea4e58@syzkaller.appspotmail.com
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/misc/ldusb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[PATCH] dmaengine: cppi41: Fix issue with musb and ftdi uart
+diff --git a/drivers/usb/misc/ldusb.c b/drivers/usb/misc/ldusb.c
+index dd1ea25e42b1..8f86b4ebca89 100644
+--- a/drivers/usb/misc/ldusb.c
++++ b/drivers/usb/misc/ldusb.c
+@@ -581,7 +581,7 @@ static ssize_t ld_usb_write(struct file *file, const char __user *buffer,
+ 					 1 << 8, 0,
+ 					 dev->interrupt_out_buffer,
+ 					 bytes_to_write,
+-					 USB_CTRL_SET_TIMEOUT * HZ);
++					 USB_CTRL_SET_TIMEOUT);
+ 		if (retval < 0)
+ 			dev_err(&dev->intf->dev,
+ 				"Couldn't submit HID_REQ_SET_REPORT %d\n",
+-- 
+2.23.0
 
-Regards,
-
-Tony
