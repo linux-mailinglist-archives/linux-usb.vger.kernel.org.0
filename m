@@ -2,120 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5463CE1460
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBF10E14D4
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390277AbfJWIhZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 04:37:25 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:37674 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387829AbfJWIhZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 04:37:25 -0400
-Received: by mail-qt1-f195.google.com with SMTP id g50so16968105qtb.4
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 01:37:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8lz7pb4FteEgyJv9IPQ/OLCtPnphrxWGvxhOP9Cg5xg=;
-        b=JwTjN6vydN0+Zf4u7pB30rwoE59an2gXmw4CK43Gw2mUgwv6sHB8dRu5ef+CPKrKi9
-         t37NRMXY7Pqn+GOXFnQVRUhDon6l/NVQ8pA0BemeHOS2xV5gnJeOluyURTVwqiqciHLr
-         qDsbygaUpKyOoJQGtYGQCZ1Z1qPmuIERBA+CkHYIsho9310tefDA69PATQdcjEBUxKvZ
-         zccwGPi/rBKb1ABlUBTM4DzoW7/ny0B2e4mksE9SWdW/VXPMMYWRkgwBwgTZmF6XoI/2
-         9Klci3Rpbj2E75wUXAhDRIwV2xUCPGOaB+CkTyurziCQ8SokD8YBhlXIMeY8vmxGNMh9
-         CpEQ==
+        id S2390410AbfJWI4o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 04:56:44 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:33234 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390358AbfJWI4o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 04:56:44 -0400
+Received: by mail-lf1-f65.google.com with SMTP id y127so15419925lfc.0
+        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 01:56:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8lz7pb4FteEgyJv9IPQ/OLCtPnphrxWGvxhOP9Cg5xg=;
-        b=gtguJZvFywFNvCxdcZQJ8fSoew8cNOmi0xwlIY/bDED93Dox3XlZgGIs91QToAvGX0
-         mnHNjVoC0iUbo5VYb81GjtyHPMYncoK5yJsSQc9zDZqQKCDZjVSttuqghI5q3gmUBHAA
-         RFJP4yRpHSM6HqEOlaB/yMlCkpy8JFexXSTaVhGwDhz0xf6hQTtKDKs0TigdsAc7FG+T
-         U6c9OK1A8lcX2ukxZcP6+41M4Yd0KmeghqfNYwivu1uuDDOrURy48k+UfNwQB4BMZQLV
-         zuUACGogTIUJIG0saNVGtsYEBlTF7v6Bib/SDAyDE+vECrk2MAA0l1r5lqZG7XG2dmMA
-         VGrg==
-X-Gm-Message-State: APjAAAWkKKWMdUrn6ffuwSnL1fCvM+CLpzF4L2cv4EdpTeQ4VWQ+mpRd
-        LmRWPl+IZCKJKBW/m+9o9WYOjG+EaMhVWTp3M4lKSQ==
-X-Google-Smtp-Source: APXvYqzx+Vk1M8As38RQ4hIHR6mJF2kC4m1fQbj0srob4XtBiTnVVZbS/2BQAN6f9QjBuuoyoWNpTyhH+FFLQW+4r9s=
-X-Received: by 2002:a0c:fec3:: with SMTP id z3mr7697922qvs.122.1571819843712;
- Wed, 23 Oct 2019 01:37:23 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4uENUzOt/liWgXC5Xy/eJGbzZSd9cV32wLR2c1sWJFE=;
+        b=g1St2QrKKRIBl2aY2Hbr7wWsiNWKLWn0tvJ4kI5VcwulL+VxscpvMiwEGzyHcvIMTk
+         Qph9v8pfYb5HAEZVHQYjvkI4Io0if82El2xWILXgi0RH0R4Fr8fkJtHletbgsPiqDWqS
+         EtU7e8uzuL5qKtSKGPe4pFSgeb3S2cwtYMX6UOBg6F4YoobSKoUWkDQ4Q4Aw63P2X6By
+         Ki1tjMWnUiKbJnYEzMVtr2C+7JWQouNFd8xoh6GtGt/2Jrb+C1lSFmu2/7oyOPaObrUU
+         1LUjDLKNrz3GsT5odZF+QrPGWE/ihlirwy46sXOgrgxApoNsheoi09ZAjBvCSbbLsolB
+         3riA==
+X-Gm-Message-State: APjAAAU653UrnI1FTwPGZxEdpi0kNzOqAzLiErV5tB5vcJv/+cKUMR04
+        dk6OIQHDoGQKB4O30reZzJA=
+X-Google-Smtp-Source: APXvYqzUoYj7U2TZOwXmLAbrR0dS/V1w+8ljIJmD6ImgfYC5lWm15pP60NHYerNPs7eJLy9iRgXQxw==
+X-Received: by 2002:a19:9144:: with SMTP id y4mr16336244lfj.168.1571821001747;
+        Wed, 23 Oct 2019 01:56:41 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id p86sm10604198lja.100.2019.10.23.01.56.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 01:56:41 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iNCRt-0006OI-Lg; Wed, 23 Oct 2019 10:56:57 +0200
+Date:   Wed, 23 Oct 2019 10:56:57 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Charles Yeh <charlesyeh522@gmail.com>
+Cc:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-usb@vger.kernel.org, charles-yeh@prolific.com.tw
+Subject: Re: [PATCH] [PATCH v8] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
+Message-ID: <20191023085657.GP24768@localhost>
+References: <20190924121400.1497-1-charlesyeh522@gmail.com>
 MIME-Version: 1.0
-References: <cover.1571762488.git.andreyknvl@google.com>
-In-Reply-To: <cover.1571762488.git.andreyknvl@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 23 Oct 2019 10:37:12 +0200
-Message-ID: <CACT4Y+aUf5_+U90BD=1FsS1vVFrH=kskkUJWFyg2cdeRjL1LVw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] kcov: collect coverage from usb and vhost
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190924121400.1497-1-charlesyeh522@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 6:46 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> This patchset extends kcov to allow collecting coverage from the USB
-> subsystem and vhost workers. See the first patch description for details
-> about the kcov extension. The other two patches apply this kcov extension
-> to USB and vhost.
->
-> These patches have been used to enable coverage-guided USB fuzzing with
-> syzkaller for the last few years, see the details here:
->
-> https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
->
-> This patchset has been pushed to the public Linux kernel Gerrit instance:
->
-> https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/1524
+On Tue, Sep 24, 2019 at 08:14:00PM +0800, Charles Yeh wrote:
+> Prolific has developed a new USB to UART chip: PL2303HXN
+> PL2303HXN : PL2303GC/PL2303GS/PL2303GT/PL2303GL/PL2303GE/PL2303GB
+> The Vendor request used by the PL2303HXN (TYPE_HXN) is different from
+> the existing PL2303 series (TYPE_HX & TYPE_01).
+> Therefore, different Vendor requests are used to issue related commands.
+> 
+> 1. Added a new TYPE_HXN type in pl2303_type_data, and then executes
+>    new Vendor request,new flow control and other related instructions
+>    if TYPE_HXN is recognized.
+> 
+> 2. Because the new PL2303HXN only accept the new Vendor request,
+>    the old Vendor request cannot be accepted (the error message
+>    will be returned)
+>    So first determine the TYPE_HX or TYPE_HXN through
+>    PL2303_READ_TYPE_HX_STATUS in pl2303_startup.
+> 
+>   2.1 If the return message is "1", then the PL2303 is the existing
+>       TYPE_HX/ TYPE_01 series.
+>       The other settings in pl2303_startup are to continue execution.
+>   2.2 If the return message is "not 1", then the PL2303 is the new
+>       TYPE_HXN series.
+>       The other settings in pl2303_startup are ignored.
+>       (PL2303HXN will directly use the default value in the hardware,
+>        no need to add additional settings through the software)
+> 
+> 3. In pl2303_open: Because TYPE_HXN is different from the instruction of reset
+>    down/up stream used by TYPE_HX.
+>    Therefore, we will also execute different instructions here.
+> 
+> 4. In pl2303_set_termios: The UART flow control instructions used by
+>    TYPE_HXN/TYPE_HX/TYPE_01 are different.
+>    Therefore, we will also execute different instructions here.
+> 
+> 5. In pl2303_vendor_read & pl2303_vendor_write, since TYPE_HXN is different
+>    from the vendor request instruction used by TYPE_HX/TYPE_01,
+>    it will also execute different instructions here.
+> 
+> 6. In pl2303_update_reg: TYPE_HXN used different register for flow control.
+>    Therefore, we will also execute different instructions here.
+> 
+> Signed-off-by: Charles Yeh <charlesyeh522@gmail.com>
 
-Oh, so much easier to review with side-by-side diffs, context and
-smart in-line colouring!
+Now applied, thanks.
 
-> Changes from RFC v1:
-> - Remove unnecessary #ifdef's from drivers/vhost/vhost.c.
-> - Reset t->kcov when area allocation fails in kcov_remote_start().
-> - Use struct_size to calculate array size in kcov_ioctl().
-> - Add a limit on area_size in kcov_remote_arg.
-> - Added kcov_disable() helper.
-> - Changed encoding of kcov remote handle ids, see the documentation.
-> - Added a comment reference for kcov_sequence task_struct field.
-> - Change common_handle type to u32.
-> - Add checks for handle validity into kcov_ioctl_locked() and
->     kcov_remote_start().
-> - Updated documentation to reflect the changes.
->
-> Andrey Konovalov (3):
->   kcov: remote coverage support
->   usb, kcov: collect coverage from hub_event
->   vhost, kcov: collect coverage from vhost_worker
->
->  Documentation/dev-tools/kcov.rst | 120 ++++++++
->  drivers/usb/core/hub.c           |   5 +
->  drivers/vhost/vhost.c            |   6 +
->  drivers/vhost/vhost.h            |   1 +
->  include/linux/kcov.h             |   6 +
->  include/linux/sched.h            |   6 +
->  include/uapi/linux/kcov.h        |  20 ++
->  kernel/kcov.c                    | 464 ++++++++++++++++++++++++++++---
->  8 files changed, 593 insertions(+), 35 deletions(-)
->
-> --
-> 2.23.0.866.gb869b98d4c-goog
->
+Johan
