@@ -2,213 +2,318 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D284AE16B2
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 11:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DD7E172F
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 11:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390527AbfJWJxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 05:53:17 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:50899 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390246AbfJWJxR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 05:53:17 -0400
-Received: by mail-wm1-f68.google.com with SMTP id q13so10427351wmj.0
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 02:53:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Yt8St3Drd8h/oD7iRr4dScchwBzRRM182GxYTAj3Wdo=;
-        b=CspqCuA//3OCngCe3k/+Y/FOGuuV13qirLiIJlntZ3ZNbyZD1EWLkg5yR4VbRbkf1c
-         hTdhJVycjDMewqC+OwkpePKDDx0Q0GqM/0GWG+tYWLMPusXPhHxDzX9Q1oBfWW3k8e8R
-         qa5h2IlT6x0ZQN7bJ0VsrmGDmcT6uyx4ny+dpVj3dVF6Nt/YjFFb6R95G3UKqtl71BXZ
-         XcTKYiZ3gCu420htXe2/1JPaP/aXMmxVC3Iui9cQmWZbAuQRJWnUG29pmozSfVCq2Ddu
-         laGMX5YXGrpUnZzGIxZ3mEhcdscZizytE8Ijl3kl0+r0h2v49om6OGPZoYWlXn5uIrga
-         GGJg==
+        id S2404288AbfJWJ7V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 05:59:21 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33180 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391116AbfJWJ7V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 05:59:21 -0400
+Received: by mail-lj1-f196.google.com with SMTP id a22so20399544ljd.0;
+        Wed, 23 Oct 2019 02:59:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Yt8St3Drd8h/oD7iRr4dScchwBzRRM182GxYTAj3Wdo=;
-        b=jb7mMmNQDYujbD5B88cNojyzzzy2W9IRBVqBI0E5RR7Mw0N7SUr+Ml8YcSQxeXyYIt
-         3zhefVjL0cDuVICyn04a52E3M0IOLPYDkU2P4sudHmnJPpLW3MVABJdZUMw5Vw5/Pm27
-         EZqRXyzH17gRXoOz4uKgzqhs3XMH9VPVxwkQczqlbQJ+RKO9Q1hLECjPDCmqekEjH08s
-         0rhDG2DdLJzCz9p/fEnzYBbgaBNRH3HfGSXsF71majI3CybvUchxQpGwdiE+Bfz6Njqj
-         d29g2O5UkHE4EsFWNkyGBHcqFxwD1017LgVs5/aZLFREU4PQfW14AztW2sBboriR6UFI
-         V/eQ==
-X-Gm-Message-State: APjAAAXv6JAeBwXX7EamD7A8R5j23k/AuicwqPDd1YPrLdM2sUOTDOuz
-        Qb14VxwtYqi8pMmBzP0M/dd5RIYNsGFP9NBxiWOiGA==
-X-Google-Smtp-Source: APXvYqyOlggvEK8iJl6DlCV3t+YITk/HFloqbr1LCsxqtKA7IRuvgjuphv05hRaw9NiOfMvBJQx6/125/7Bqg+p6h8I=
-X-Received: by 2002:a1c:7219:: with SMTP id n25mr7267116wmc.101.1571824393852;
- Wed, 23 Oct 2019 02:53:13 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=KQhlf6ODdZV33blzT/hWiwM5f6nS4rOfJWZJ1GMcjyk=;
+        b=KGe1sRCO/V4ejWIsgkTWibuNEJwcpsd2omI3taqrHT2P7pXYHhZYZ0BrsmU56g/4a1
+         //3q+Da5JLFscwhZecW1D+puNd8OAxbWeeIq+mKaZxeFZpOEdRSFbb2WTcd7jigagVio
+         S+RyAAdw8hZOV/HDm7DBhufMQLq9YSZDuY8SzzbUYKAeNuXWg59JNKEBmuHymikC5QFT
+         QWhSdF4ekMrtNHa1ZZin1khiBVWoFZjo+Z78L63cEZ+phGSI4jL6X2ZIWUTjWsIBTqO1
+         AByulkMUBPrzK0F8/CWX6dEOD/3ytkLWFnbeFIGd01Oa2PUq11wmBiZkMglmzdVDlOwS
+         /s4g==
+X-Gm-Message-State: APjAAAU7e0wBBt82KM+hynD0mg02ZqNe3zBPdaC/ekzdYFRd52sy32Ho
+        kDTokIkjFLF1IVLo5XSUlSOEzyjI
+X-Google-Smtp-Source: APXvYqwl19/Nz4NiGIDwB4Z//N9KPRnYcydmhLgJcR1K/v7Rqn9mWfFNNuYpy7x0VxTWdKysQU3Zig==
+X-Received: by 2002:a2e:1214:: with SMTP id t20mr21335348lje.191.1571824759004;
+        Wed, 23 Oct 2019 02:59:19 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id o3sm6288136lji.49.2019.10.23.02.59.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 02:59:17 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@kernel.org>)
+        id 1iNDQU-0006hV-EY; Wed, 23 Oct 2019 11:59:34 +0200
+Date:   Wed, 23 Oct 2019 11:59:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+Subject: Re: [PATCH V2 4/7] USB: serial: f81232: Add F81534A support
+Message-ID: <20191023095934.GT24768@localhost>
+References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
+ <20190923022449.10952-5-hpeter+linux_kernel@gmail.com>
 MIME-Version: 1.0
-References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
- <87a7avh8uu.fsf@gmail.com> <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com>
- <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com> <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
- <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com> <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
- <87d0fny5in.fsf@gmail.com> <52a7b158-ab76-432a-4d2c-7b731dc9c2a2@linux.intel.com>
- <CADGPSwgJMKfQChfxMNU4S_xv1vfHr7_GY6rGwgeDOVuW6+mpVg@mail.gmail.com> <CADGPSwhCPvdu=KmQP6RHMJnh292UO0uBAt+KyJqqOWY5DWDc3w@mail.gmail.com>
-In-Reply-To: <CADGPSwhCPvdu=KmQP6RHMJnh292UO0uBAt+KyJqqOWY5DWDc3w@mail.gmail.com>
-From:   alex zheng <tc0721@gmail.com>
-Date:   Wed, 23 Oct 2019 17:52:37 +0800
-Message-ID: <CADGPSwiCY9=kUpKmcUwAhvCHmvGDSrxoBXEkzgQpEpiakKEv6A@mail.gmail.com>
-Subject: Re: BUG report: usb: dwc3: Link TRB triggered an intterupt without
- IOC being setted
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "xiaowei.zheng@dji.com" <xiaowei.zheng@dji.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190923022449.10952-5-hpeter+linux_kernel@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, all
+On Mon, Sep 23, 2019 at 10:24:46AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> The Fintek F81532A/534A/535/536 is USB-to-2/4/8/12 serial ports device
+> and the serial port is default disabled when plugin computer.
+> 
+> The IC is contains devices as following:
+> 	1. HUB (all devices is connected with this hub)
+> 	2. GPIO/Control device. (enable serial port and control GPIOs)
+> 	3. serial port 1 to x (2/4/8/12)
+> 
+> It's most same with F81232, the UART device is difference as follow:
+> 	1. TX/RX bulk size is 128/512bytes
+> 	2. RX bulk layout change:
+> 		F81232: [LSR(1Byte)+DATA(1Byte)][LSR(1Byte)+DATA(1Byte)]...
+> 		F81534A:[LEN][Data.....][LSR]
+> 
+> Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
+> ---
+>  drivers/usb/serial/f81232.c | 131 ++++++++++++++++++++++++++++++++++--
+>  1 file changed, 127 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
+> index e4db0aec9af0..36a17aedc2ae 100644
+> --- a/drivers/usb/serial/f81232.c
+> +++ b/drivers/usb/serial/f81232.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /*
+>   * Fintek F81232 USB to serial adaptor driver
+> + * Fintek F81532A/534A/535/536 USB to 2/4/8/12 serial adaptor driver
+>   *
+>   * Copyright (C) 2012 Greg Kroah-Hartman (gregkh@linuxfoundation.org)
+>   * Copyright (C) 2012 Linux Foundation
+> @@ -21,11 +22,36 @@
+>  #include <linux/usb/serial.h>
+>  #include <linux/serial_reg.h>
+>  
+> +#define F81232_ID		\
+> +	{ USB_DEVICE(0x1934, 0x0706) }	/* 1 port UART device */
+> +
+> +#define F81534A_SERIES_ID	\
+> +	{ USB_DEVICE(0x2c42, 0x1602) },	/* In-Box 2 port UART device */	\
+> +	{ USB_DEVICE(0x2c42, 0x1604) },	/* In-Box 4 port UART device */	\
+> +	{ USB_DEVICE(0x2c42, 0x1605) },	/* In-Box 8 port UART device */	\
+> +	{ USB_DEVICE(0x2c42, 0x1606) },	/* In-Box 12 port UART device */ \
+> +	{ USB_DEVICE(0x2c42, 0x1608) },	/* Non-Flash type */ \
+> +	{ USB_DEVICE(0x2c42, 0x1632) },	/* 2 port UART device */ \
+> +	{ USB_DEVICE(0x2c42, 0x1634) },	/* 4 port UART device */ \
+> +	{ USB_DEVICE(0x2c42, 0x1635) },	/* 8 port UART device */ \
+> +	{ USB_DEVICE(0x2c42, 0x1636) }	/* 12 port UART device */
+> +
+>  static const struct usb_device_id id_table[] = {
 
-We found that this is a known issue of synopsys DWC3 USB controller,
-when the PARKMODE_SS of DWC3 is enable, the controller may hang or do
-wrong TRB schedule in some heavy load conditions.
+Add a prefix here as well?
 
-Setting DISABLE_PARKMODE_SS to 1 can work around this bug.
+> -	{ USB_DEVICE(0x1934, 0x0706) },
+> +	F81232_ID,
+> +	{ }					/* Terminating entry */
+> +};
+> +
+> +static const struct usb_device_id f81534a_id_table[] = {
+> +	F81534A_SERIES_ID,
+> +	{ }					/* Terminating entry */
+> +};
+> +
+> +static const struct usb_device_id all_serial_id_table[] = {
 
-Thank you for your help.
+combined_id_table would be a name more in line with the rest of the
+drivers, if you end up using this one for the MODULE_DEVICE_TABLE.
 
-alex zheng <tc0721@gmail.com> =E4=BA=8E2019=E5=B9=B49=E6=9C=8826=E6=97=A5=
-=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=887:34=E5=86=99=E9=81=93=EF=BC=9A
->
-> add log file.
->
-> alex zheng <tc0721@gmail.com> =E4=BA=8E2019=E5=B9=B49=E6=9C=8826=E6=97=A5=
-=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=886:38=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > Hi,
-> >
-> > Mathias Nyman <mathias.nyman@linux.intel.com> =E4=BA=8E2019=E5=B9=B49=
-=E6=9C=8826=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=8D=884:19=E5=86=99=E9=
-=81=93=EF=BC=9A
-> > >
-> > > On 26.9.2019 8.45, Felipe Balbi wrote:
-> > > >
-> > > > Hi,
-> > > >
-> > > > David Laight <David.Laight@ACULAB.COM> writes:
-> > > >> From: Mathias Nyman
-> > > >>> Sent: 25 September 2019 15:48
-> > > >>>
-> > > >>> On 24.9.2019 17.45, alex zheng wrote:
-> > > >>>> Hi Mathias,
-> > > >> ...
-> > > >>> Logs show your transfer ring has four segments, but hardware fail=
-s to
-> > > >>> jump from the last segment back to first)
-> > > >>>
-> > > >>> Last TRB (LINK TRB) of each segment points to the next segment,
-> > > >>> last segments link trb points back to first segment.
-> > > >>>
-> > > >>> In your case:
-> > > >>> 0x1d117000 -> 0x1eb09000 -> 0x1eb0a000 -> 0x1dbda000 -> (back to =
-0x1d117000)
-> > > >>>
-> > > >>> For some reason your hardware doesn't treat the last TRB at the l=
-ast segment
-> > > >>> as a LINK TRB, instead it just issues a transfer event for it, an=
-d continues to
-> > > >>> the next address instead of jumping back to first segment:
-> > > >>
-> > > >> That could be a cache coherency (or flushing (etc)) issue.
-> > >
-> > > The Link TRB is written very early, right after the ring segment is a=
-llocated,
-> > > and before any other TRBs. 255 other TRBs were written and handled by=
- hw
-> > > on this segment after this, so not very likely a flushing/cache coher=
-ency issue.
-> > >
-> > I  add a flush_cache_all() after queue_trb everytime but it make no
-> > use. It seems
-> > not a flushing/cache coherency issus.
-> >
-> > flush like this:
-> >      inc_enq(xhci, ring, more_trbs_coming);
-> >   + flush_cache_all();
-> >
-> > > >
-> > > > XHCI has a HW-configurable maximum number of segments in a ring. AF=
-AICT,
-> > > > xhci driver doesn't take that into consideration today. Perhaps the=
- HW
-> > > > in question doesn't like more than 3 segments.
-> > > >
-> > > > Mathias, what was the register to check this? Do you remember?
-> > > >
-> > >
-> > > I only recall a limit for the event ring in the HSCPARAMS2 register(E=
-RST MAX),
-> > > not for transfer rings.
-> > >
-> > > Other things to look at would be
-> > >
-> > > - check that Toggle Cycle bit is correct for last segments link TRB (=
-incomplete logs)
-> >
-> > I dump an other error log, more complete logs see attached
-> > file(transfer_error_0926.cap), in the log:
-> > the error link TRB:
-> > 0x1d00dff0: TRB 000000001d068000 status 'Invalid' len 0 slot 0 ep 0
-> > type 'Link' flags e:c
-> > and last segment link TRB:
-> > 0x1eb0aff0: TRB 000000001d00d000 status 'Invalid' len 0 slot 0 ep 0
-> > type 'Link' flags e:C
-> >
-> > > - some old xHCI hardware needed the Chain bit set in link TRB for som=
-e isoc rings
-> > xhci ver is 1.1:
-> > 6.888570] c1 46 (kworker/u8:1) xhci-hcd xhci-hcd.0.auto: HCIVERSION: 0x=
-110
-> >
-> > > - was ring recently expanded?, usually rings start with only two segm=
-ents
-> > The extra segments are expanded after raw data test run a while,
-> > especially when the RNDIS test(iperf3) begin to run.
-> >
-> > Other info:
-> > 1. This issue seems only happened when the raw bulk data test and the
-> > rndis test(other pair endpoints) run at the same time, and happens
-> > more often if we queue trb more quick.
-> > 2. The raw bulk data test case is a libusb test use ep4(in) & ep3(out)
-> > to transfer raw bulk data, and I use iperf3(tcp) to test USB rndis.
-> > 3. The log file attached only show ep4(in) enqueue/dequeue log for
-> > more readable,
-> > 4. More test result show as below:
-> >    1)  run just one raw bulk data test  -->  (always fine)
-> >    2)  run raw rulk data test + rndis test run at the same
-> >         time --> (transfer error in 10 minutes)
-> >    3)  run two raw bulk data test run at the same time (with
-> >         two pair endpoint) --> (transfer error in 10 minutes)
-> > 5. I try to modify the DWC3 hw registers like TX/RX FIFO size,
-> >     GTXTHRCFG/GRXTHRCFG , but also did not work.
-> > 6. Related interface info:
-> >     8801 I:* If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3De0(wlcon) Sub=3D01
-> >     Prot=3D03 Driver=3Drndis_host
-> >     8802 E:  Ad=3D82(I) Atr=3D03(Int.) MxPS=3D   8 Ivl=3D32ms
-> >     8803 I:* If#=3D 1 Alt=3D 0 #EPs=3D 2 Cls=3D0a(data ) Sub=3D00
-> >      Prot=3D00 Driver=3Drndis_host        -----> used in rndis test
-> >      8804 E:  Ad=3D81(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >      8805 E:  Ad=3D01(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >      8809 I:* If#=3D 3 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D43
-> > Prot=3D01 Driver=3D(none)    -----> used in raw bulk test
-> >      8810 E:  Ad=3D03(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >      8811 E:  Ad=3D84(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >      8820 I:* If#=3D 7 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3D43
-> > Prot=3D01 Driver=3D(none)     ----> used in double raw bulk test
-> >      8821 E:  Ad=3D06(O) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >      8822 E:  Ad=3D88(I) Atr=3D02(Bulk) MxPS=3D1024 Ivl=3D0ms
-> >
-> > It seems that there are some conflicts when multiple endpoints work at
-> > the same time on our SOC. Are there any other way can try?
-> >
-> > >
-> >
-> > > Mathias
+> +	F81232_ID,
+> +	F81534A_SERIES_ID,
+>  	{ }					/* Terminating entry */
+>  };
+> -MODULE_DEVICE_TABLE(usb, id_table);
+> +MODULE_DEVICE_TABLE(usb, all_serial_id_table);
+>  
+>  /* Maximum baudrate for F81232 */
+>  #define F81232_MAX_BAUDRATE		1500000
+> @@ -35,6 +61,10 @@ MODULE_DEVICE_TABLE(usb, id_table);
+>  #define F81232_REGISTER_REQUEST		0xa0
+>  #define F81232_GET_REGISTER		0xc0
+>  #define F81232_SET_REGISTER		0x40
+> +#define F81534A_REGISTER_REQUEST	F81232_REGISTER_REQUEST
+> +#define F81534A_GET_REGISTER		F81232_GET_REGISTER
+> +#define F81534A_SET_REGISTER		F81232_SET_REGISTER
+> +#define F81534A_ACCESS_REG_RETRY	2
+
+This patch doesn't use any of these, and looks like you can just use the
+F81232 defines directly anyway.
+
+>  #define SERIAL_BASE_ADDRESS		0x0120
+>  #define RECEIVE_BUFFER_REGISTER		(0x00 + SERIAL_BASE_ADDRESS)
+> @@ -61,6 +91,11 @@ MODULE_DEVICE_TABLE(usb, id_table);
+>  #define F81232_CLK_14_77_MHZ		(BIT(1) | BIT(0))
+>  #define F81232_CLK_MASK			GENMASK(1, 0)
+>  
+> +#define F81534A_MODE_CONF_REG		0x107
+> +#define F81534A_TRIGGER_MASK		GENMASK(3, 2)
+> +#define F81534A_TRIGGER_MULTPILE_4X	BIT(3)
+
+MULTPILE typo?
+
+> +#define F81534A_FIFO_128BYTE		(BIT(1) | BIT(0))
+> +
+>  struct f81232_private {
+>  	struct mutex lock;
+>  	u8 modem_control;
+> @@ -383,6 +418,46 @@ static void f81232_process_read_urb(struct urb *urb)
+>  	tty_flip_buffer_push(&port->port);
+>  }
+>  
+> +static void f81534a_process_read_urb(struct urb *urb)
+> +{
+> +	struct usb_serial_port *port = urb->context;
+> +	unsigned char *data = urb->transfer_buffer;
+> +	char tty_flag;
+> +	unsigned int i;
+> +	u8 lsr;
+> +	u8 len;
+> +
+> +	if (urb->actual_length < 3) {
+> +		dev_err(&port->dev, "error actual_length: %d\n",
+
+Rephrase as "short message received" or similar.
+
+> +				urb->actual_length);
+> +		return;
+> +	}
+> +
+> +	len = data[0];
+> +	if (len != urb->actual_length) {
+> +		dev_err(&port->dev, "len(%d) != urb->actual_length(%d)\n", len,
+> +				urb->actual_length);
+
+Avoid c-expressions in error messages, rephrase this in English (e.g.
+unexpected length or similar).
+
+> +		return;
+> +	}
+> +
+> +	/* bulk-in data: [LEN][Data.....][LSR] */
+> +	lsr = data[len - 1];
+> +	tty_flag = f81232_handle_lsr(port, lsr);
+> +
+> +	if (port->port.console && port->sysrq) {
+> +		for (i = 1; i < urb->actual_length - 1; ++i)
+
+Use len here?
+
+And please add brackets here since the body is a multi-line statement.
+
+> +			if (!usb_serial_handle_sysrq_char(port, data[i]))
+
+Maybe also here.
+
+> +				tty_insert_flip_char(&port->port, data[i],
+> +						tty_flag);
+> +	} else {
+> +		tty_insert_flip_string_fixed_flag(&port->port, &data[1],
+> +							tty_flag,
+> +							urb->actual_length - 2);
+
+len
+
+> +	}
+> +
+> +	tty_flip_buffer_push(&port->port);
+> +}
+> +
+>  static void f81232_break_ctl(struct tty_struct *tty, int break_state)
+>  {
+>  	struct usb_serial_port *port = tty->driver_data;
+> @@ -666,6 +741,23 @@ static int f81232_open(struct tty_struct *tty, struct usb_serial_port *port)
+>  	return 0;
+>  }
+>  
+> +static int f81534a_open(struct tty_struct *tty, struct usb_serial_port *port)
+> +{
+> +	int status;
+> +	u8 val;
+> +
+> +	val = F81534A_TRIGGER_MULTPILE_4X | F81534A_FIFO_128BYTE;
+> +	status = f81232_set_mask_register(port, F81534A_MODE_CONF_REG,
+> +			F81534A_TRIGGER_MASK | F81534A_FIFO_128BYTE, val);
+
+Add also a mask temporary if that can avoid the line break?
+
+> +	if (status) {
+> +		dev_err(&port->dev, "failed to set MODE_CONF_REG: %d\n",
+> +				status);
+> +		return status;
+> +	}
+> +
+> +	return f81232_open(tty, port);
+> +}
+> +
+>  static void f81232_close(struct usb_serial_port *port)
+>  {
+>  	struct f81232_private *port_priv = usb_get_serial_port_data(port);
+> @@ -772,6 +864,11 @@ static int f81232_port_probe(struct usb_serial_port *port)
+>  	return 0;
+>  }
+>  
+> +static int f81534a_port_probe(struct usb_serial_port *port)
+> +{
+> +	return f81232_port_probe(port);
+> +}
+
+Maybe wait with adding this one until you need it and use
+f18232_port_probe below instead.
+
+> +
+>  static int f81232_suspend(struct usb_serial *serial, pm_message_t message)
+>  {
+>  	struct usb_serial_port *port = serial->port[0];
+> @@ -835,14 +932,40 @@ static struct usb_serial_driver f81232_device = {
+>  	.resume =		f81232_resume,
+>  };
+>  
+> +static struct usb_serial_driver f81534a_device = {
+> +	.driver = {
+> +		.owner =	THIS_MODULE,
+> +		.name =		"f81534a",
+> +	},
+> +	.id_table =		f81534a_id_table,
+> +	.num_ports =		1,
+> +	.open =			f81534a_open,
+> +	.close =		f81232_close,
+> +	.dtr_rts =		f81232_dtr_rts,
+> +	.carrier_raised =	f81232_carrier_raised,
+> +	.get_serial =		f81232_get_serial_info,
+> +	.break_ctl =		f81232_break_ctl,
+> +	.set_termios =		f81232_set_termios,
+> +	.tiocmget =		f81232_tiocmget,
+> +	.tiocmset =		f81232_tiocmset,
+> +	.tiocmiwait =		usb_serial_generic_tiocmiwait,
+> +	.tx_empty =		f81232_tx_empty,
+> +	.process_read_urb =	f81534a_process_read_urb,
+> +	.read_int_callback =	f81232_read_int_callback,
+> +	.port_probe =		f81534a_port_probe,
+> +	.suspend =		f81232_suspend,
+> +	.resume =		f81232_resume,
+> +};
+> +
+>  static struct usb_serial_driver * const serial_drivers[] = {
+>  	&f81232_device,
+> +	&f81534a_device,
+>  	NULL,
+>  };
+>  
+> -module_usb_serial_driver(serial_drivers, id_table);
+> +module_usb_serial_driver(serial_drivers, all_serial_id_table);
+>  
+> -MODULE_DESCRIPTION("Fintek F81232 USB to serial adaptor driver");
+> +MODULE_DESCRIPTION("Fintek F81232/532A/534A/535/536 USB to serial driver");
+>  MODULE_AUTHOR("Greg Kroah-Hartman <gregkh@linuxfoundation.org>");
+>  MODULE_AUTHOR("Peter Hong <peter_hong@fintek.com.tw>");
+>  MODULE_LICENSE("GPL v2");
+
+Johan
