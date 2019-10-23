@@ -2,107 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24662E1CEA
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D6EE1D0E
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405954AbfJWNjz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 23 Oct 2019 09:39:55 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:43825 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392089AbfJWNjy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:39:54 -0400
-Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1Mf0Nm-1hmXPR1EIE-00gboz; Wed, 23 Oct 2019 15:39:51 +0200
-Received: by mail-qt1-f177.google.com with SMTP id o49so24470171qta.7;
-        Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
-X-Gm-Message-State: APjAAAU6rjuILI+dBSQWkepJeZcFXjrhStzYWyvwa71wsCNVgYufVnZt
-        iHt9MtJEPLOwsEVZaopkvY4n9SDmIlf2VoWvAbc=
-X-Google-Smtp-Source: APXvYqyt7m8OnGbGOfKvN6UapNf8Y0PixnD+b/5MFVO15QeK4AzpoE5xCHBxjuJT4OWklHgs4L5FWsrmt4sucJ53v+g=
-X-Received: by 2002:ac8:18eb:: with SMTP id o40mr9289234qtk.304.1571837989082;
- Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
+        id S2406018AbfJWNoo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 09:44:44 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40168 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390619AbfJWNon (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:44:43 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x127so12974094pfb.7;
+        Wed, 23 Oct 2019 06:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=bqtujpqNbAQZJihzkVcd83j8KH7ymy87CfXaLggRLzI=;
+        b=gv70QZPxr2QwDImicOJ1btC3vgXVITVLotvnT607VxEd8XS3mo/bGtx97d/jSuVlbr
+         dyknHxENLL/MOdE0rdHVwQVdcdbhcN3/Yi02vJHWZsVEyNMShMjGeH2gqeLtICIPKWvK
+         qbVr+84wC5WFR7qEq6t998irZjaFIzwMFTSQWY8TYE3zrUYVfuami09BD7Y8xpGyOfvy
+         b/rbasGj/axsSZt02719YmCyf0EqBJi+sx+ZeOzpRnkxnnX6J7CW2kamhYMCQQtifDkD
+         jiZrVeHyyOEsCdBaboc2bfyys/BRD0UaTASvn/ktI4dc2JDrFsFqHg/cMfi/7sS7v84b
+         HVwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bqtujpqNbAQZJihzkVcd83j8KH7ymy87CfXaLggRLzI=;
+        b=J96CzqDuln15H4a86c8VE+UayOxIipl9Dbw9P/jT5TmdLt4/WBjv1tlEpZZb3lamWN
+         C2zrwPRHLkTHVwxbv31kZ/k1P7Qpc09GyAGOyuj4XjkwoPz303uHxWoEBmactzDJauDD
+         4PvJjp/0zDNczD/CPfSTs1mk3z/X4Z5y+LCCBZoprOZKxIMHUmD7ksIFfRWCq5BJVza1
+         5uO00ELokeRmw2yLCkzNmVVzhZX6tFbdu/Zy9SGtY9u+ITeaSSZIw020Lgn1n2gOGSk5
+         P3Lo5YL843OsubQhO1nf/Ns9sDsDqAC9ZUXpXuQNUwsgFP/QPNm6lGLtz8PTRTp7DOW+
+         mJaw==
+X-Gm-Message-State: APjAAAWiVq3K9gA6yTEtGJdLs9TRgQmJjEpTeVMfBRW5raHWuPUczwi8
+        GLhn06oeJyGS3B0NC7lhvjX+HYUz
+X-Google-Smtp-Source: APXvYqz4CGQL2G6j+rGwttfWxPjzpe667CQOGCSti7mkoDtHvcYAlhF1fK0vri6y+Q+kUEkfwqg90w==
+X-Received: by 2002:a63:7845:: with SMTP id t66mr9987694pgc.31.1571838282149;
+        Wed, 23 Oct 2019 06:44:42 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c9sm4026398pfb.114.2019.10.23.06.44.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 06:44:41 -0700 (PDT)
+Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector
+ orientation
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Puma Hsu <pumahsu@google.com>
+Cc:     gregkh@linuxfoundation.org, badhri@google.com, kyletso@google.com,
+        albertccwang@google.com, rickyniu@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191022085924.92783-1-pumahsu@google.com>
+ <20191023083221.GB8828@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
+Date:   Wed, 23 Oct 2019 06:44:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20191010202802.1132272-1-arnd@arndb.de> <20191023131049.GG11048@pi3>
-In-Reply-To: <20191023131049.GG11048@pi3>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 23 Oct 2019 15:39:32 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
-Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        linux-leds@vger.kernel.org,
-        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
-        <linux-samsung-soc@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Lihua Yao <ylhuajnu@outlook.com>,
-        Kukjin Kim <kgene@kernel.org>, linux-serial@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
-        Linux PWM List <linux-pwm@vger.kernel.org>,
-        Sergio Prado <sergio.prado@e-labworks.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Lihua Yao <ylhuajnu@163.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-spi <linux-spi@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Provags-ID: V03:K1:NLof35stNYTGVLCCiBOj5shE8fEwjZaac7cdAu2nrrmym/kOcjv
- Qnfa/3i0a5qyJkyMXctYodBV7VP0bHQaFrXIBjwV/gpmENyzPTQE7+sVihuV4liYROCT33b
- 9WO8+gy5V2fG2DuQgIo6thaPwkDMewwBExepC4yasYMIPkDiS0zr+8kJODaOpU4HPFc7gMV
- MPShUYeuOvxdtdljHgfJg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:DaQc5ZGaJsY=:F603/POvpKLPXWa0X1lFEH
- aQjxfOCxGD/pIMHmKlHcbcFD80Nc+ewErQWmvj+Qgp6xaAE5MxfbNNNrin9LMgRKve0v8GrHu
- BPPYcLBIJd/tRGzy7EoHKzi1xCTWBRKPuZW+NRo5Q3c4o6tNWGjXzPGUI9xyOYPIzGuB4sxow
- ECbUMNeq+vtLAQSVxvpHOttzchCbbhPJcjfvA+bQAYJp52FgAuxb7i+4FvHbE4PKIBUfZrfn7
- RTWpJntJNT2FyPouWE44kX34NjZBTj4rpIcCKzq/vJGEBiexW1JIi5IKVdXZvOH5f6ayOyfG4
- N5aMRdit65bReN0guN1SsKJ7uFbD0kzxYt0bE1Mf25djeRlbjBl6eNdESrSyRRUYp5EHOfQ/A
- Sa10vMW4Ena5av/pF9Ivtanmnx43oe8gg/n1e283kgsPXqMvxru3WC5Nzl6w8FtOo8cSrKeIA
- 4cwYy4vh4ukZW7IvGkXi8VTyHR5QO0uX/EIi41POGGpNZfuz2RZFE3OQuaZ2ZAWDyKIDIkMiS
- w6MOzO71LwFlzMud8Juwt083ioitXDvT/9TIYbAIAmfnUtb8NIa87LZjq9LnymQfMT/771jDX
- Pv0pU2J8yDYscI2Ar/9iY65bLYD1odSzwo1yupcBRkEYBk2LtDP2ofqM/FtIHQxHEgUCSL8BF
- +DQWO4nbj5c/D8V8Rcbk6xIsj3dpX/eZmDwcjBHzixCuvxTtC6bkTqxwxXemSc09w9sXO96BH
- 8wrLVBqppvA4u9/3mwzDk1TPdUl264mBZECZMuP2bwYmiOyo6CZ+bMP0dYsot7zDsLQZk6JM2
- zgDILD/0tZiVRCT1r1eA1ueLWwCTN+MFNjGnfX1TAxma6wIGEoHuP9Uzto3sTth328X/tkiaT
- tiL3D4xHp9lUaPHnTz2w==
+In-Reply-To: <20191023083221.GB8828@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 3:11 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
-> > The contents are available for testing in
-> >
-> > git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
->
-> When sending v2, can you Cc:
->
-> Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
-> Lihua Yao <ylhuajnu@outlook.com>
-> (or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
-> Sergio Prado <sergio.prado@e-labworks.com>
-> Sylwester Nawrocki <s.nawrocki@samsung.com>
->
-> These are folks which to my knowledge had working S3C and S5P boards
-> so maybe they could provide testing.
+On 10/23/19 1:32 AM, Heikki Krogerus wrote:
+> +Guenter
+> 
+> On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
+>> Export the Type-C connector orientation so that user space
+>> can get this information.
+>>
+>> Signed-off-by: Puma Hsu <pumahsu@google.com>
+>> ---
+>>   Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
+>>   drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
+>>   2 files changed, 29 insertions(+)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+>> index d7647b258c3c..b22f71801671 100644
+>> --- a/Documentation/ABI/testing/sysfs-class-typec
+>> +++ b/Documentation/ABI/testing/sysfs-class-typec
+>> @@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>>   Description:
+>>   		Revision number of the supported USB Type-C specification.
+>>   
+>> +What:		/sys/class/typec/<port>/connector_orientation
+>> +Date:		October 2019
+>> +Contact:	Puma Hsu <pumahsu@google.com>
+>> +Description:
+>> +		Indicates which typec connector orientation is configured now.
+>> +		cc1 is defined as "normal" and cc2 is defined as "reversed".
+>> +
+>> +		Valid value:
+>> +		- unknown (nothing configured)
+> 
+> "unknown" means we do not know the orientation.
+> 
+>> +		- normal (configured in cc1 side)
+>> +		- reversed (configured in cc2 side)
+> 
+> Guenter, do you think "connector_orientation" OK. I proposed it, but
+> I'm now wondering if something like "polarity" would be better?
+> 
 
-Ok, will do. I've uploaded the modified version based on your comments to
-the above URL for now.
+Yes, or just "orientation". I don't see the value in the "connector_" prefix.
+I also wonder if "unknown" is really correct. Is it really unknown, or
+does it mean that the port is disconnected ?
 
-I'll probably give it a little more time before resending, but they
-could already
-start testing that version.
+Guenter
 
-Thanks a lot for the review!
+>>   USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
+>>   
+>> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+>> index 94a3eda62add..911d06676aeb 100644
+>> --- a/drivers/usb/typec/class.c
+>> +++ b/drivers/usb/typec/class.c >> @@ -1245,6 +1245,23 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
+>>   }
+>>   static DEVICE_ATTR_RO(usb_power_delivery_revision);
+>>   
+>> +static const char * const typec_connector_orientation[] = {
+>> +	[TYPEC_ORIENTATION_NONE]		= "unknown",
+>> +	[TYPEC_ORIENTATION_NORMAL]		= "normal",
+>> +	[TYPEC_ORIENTATION_REVERSE]		= "reversed",
+>> +};
+>> +
+>> +static ssize_t connector_orientation_show(struct device *dev,
+>> +						struct device_attribute *attr,
+>> +						char *buf)
+>> +{
+>> +	struct typec_port *p = to_typec_port(dev);
+>> +
+>> +	return sprintf(buf, "%s\n",
+>> +		       typec_connector_orientation[p->orientation]);
+>> +}
+>> +static DEVICE_ATTR_RO(connector_orientation);
+>> +
+>>   static struct attribute *typec_attrs[] = {
+>>   	&dev_attr_data_role.attr,
+>>   	&dev_attr_power_operation_mode.attr,
+>> @@ -1255,6 +1272,7 @@ static struct attribute *typec_attrs[] = {
+>>   	&dev_attr_usb_typec_revision.attr,
+>>   	&dev_attr_vconn_source.attr,
+>>   	&dev_attr_port_type.attr,
+>> +	&dev_attr_connector_orientation.attr,
+>>   	NULL,
+>>   };
+>>   ATTRIBUTE_GROUPS(typec);
+> 
+> thanks,
+> 
 
-      Arnd
