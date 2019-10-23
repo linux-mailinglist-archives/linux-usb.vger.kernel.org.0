@@ -2,136 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DC55E108B
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 05:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC46E1140
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 06:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732972AbfJWD0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Oct 2019 23:26:42 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:32965 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732895AbfJWD0m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 23:26:42 -0400
-Received: by mail-io1-f66.google.com with SMTP id z19so23209178ior.0
-        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2019 20:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=h+j4esZlyAn6Jj0G1LuKplgHe+Pu/B4eUeGKka5Wc1Q=;
-        b=sRquuot576k5OEV69QqANCFmPKRu3I8HEHwtE8bDIFH4iTCUZFiLXeKrWFsOe2azT7
-         z55TK3jLnrH5cNizZ4FnrfShy2c+Skof/p3Fjzbf57m1Z2iP+8JbrODlmxvF/JsuvUzG
-         a8vHa9Ger6Fvv0eLHXW6gloXznk5lgiClj6OV02Vr7TQrGfnltuNNyNXH0xlQf9Bu+2h
-         Qk+vocBSIP4uz9zkzPmQKi2cE1dBci4362Q9JG00tv7dfrFuUg5yEGOZ77QioaHuV+8X
-         Ey6mdQTEv9fE41eHFQ14hHHeqf67oGHfke+tU1cla+f9Jl0vJsz1j07hZL/z+Eyc7AU6
-         Mzig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=h+j4esZlyAn6Jj0G1LuKplgHe+Pu/B4eUeGKka5Wc1Q=;
-        b=M6On6i8e9ADmyRF7dbx7vYu3bHqMB79ziad0VO5OWbuvQjG4XqCwjRnrdC4zp98Cqh
-         nHLU3OzGtLTS23bORzWRyoJSBpYbsGTp4aMWxHBkoIzx6wn4VlSNkO5lqrP8phvVF06Z
-         T3soeCkmw+IT2MHVeHkVzA9rRsUUPR9inlhMjJ9dReXazUw7DXDpuw00SjHNzpCdnLN0
-         Ev2GnnFC71XTKGEka+CBat4waQ7DS1Mp9LarwiH3rbV0k3C7I3VCkWAIxGo+8+YRhfve
-         yNyJu9nVahD5GifVbTr6ih1fbFCe3nxWsLp1V0zJ88F3WfHp8I7YM/NchrQWBV+5p//w
-         O7Xw==
-X-Gm-Message-State: APjAAAWg/RX+WOssV7vFEom5JEymEk3KK5btMUNqtL+64bvlARJhz3gl
-        T/0/ZMyQkKwOqhhMOTHMxu4CmInFimYt2M+UDORQnA==
-X-Google-Smtp-Source: APXvYqygqvKfL7Ykw3boZKQwFYF5duCex0GHhqhb/QKexuQBFeBJm0daroKda/Sx6MKbPCAfONIR6Gg+O6waKr/5XBg=
-X-Received: by 2002:a6b:c701:: with SMTP id x1mr1239496iof.162.1571801199435;
- Tue, 22 Oct 2019 20:26:39 -0700 (PDT)
+        id S1733183AbfJWExl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 00:53:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59652 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731061AbfJWExl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 00:53:41 -0400
+Received: from localhost (unknown [122.181.210.10])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1D3122173B;
+        Wed, 23 Oct 2019 04:53:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571806420;
+        bh=KmXEO9N15emCT7iHfRUVAzsxcCk2lj537nwdJsgIXJE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PvK6csaJTyaVFUf/KOKnftCZA6SnTccubTAMBReC0Rscti6sxfYml5eUnEtFiyncy
+         HYscRAxdFIqhU6GiTRllBuZz2tTxJXZdWU7k91OQgvJKmUY7k2E6NQWr61toWXC0ew
+         tycYBGN2SuBzTrMA6OkeqKJi/AM99Nt/VCVHkyTs=
+Date:   Wed, 23 Oct 2019 10:23:33 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vinod.koul@intel.com>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        George Cherian <george.cherian@ti.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Johan Hovold <johan@kernel.org>,
+        Peter Ujfalusi <peter.ujfalusi@ti.com>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        dmaengine@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-omap@vger.kernel.org, giulio.benetti@benettiengineering.com,
+        Sebastian Reichel <sre@kernel.org>,
+        Skvortsov <andrej.skvortzov@gmail.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>
+Subject: Re: [PATCH] dmaengine: cppi41: Fix issue with musb and ftdi uart
+Message-ID: <20191023045333.GO2654@vkoul-mobl>
+References: <20191022145545.6449-1-tony@atomide.com>
 MIME-Version: 1.0
-References: <20191022085924.92783-1-pumahsu@google.com> <20191022172731.GA230934@kroah.com>
-In-Reply-To: <20191022172731.GA230934@kroah.com>
-From:   Puma Hsu <pumahsu@google.com>
-Date:   Wed, 23 Oct 2019 11:26:03 +0800
-Message-ID: <CAGCq0LYp4Ua052nSwuZwZBAqCMZcLyt9UMsCPThGg27P=YSjNA@mail.gmail.com>
-Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector orientation
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        Kyle Tso <kyletso@google.com>,
-        Albert Wang <albertccwang@google.com>,
-        Chien Kun Niu <rickyniu@google.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191022145545.6449-1-tony@atomide.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Hi Tony,
 
+On 22-10-19, 07:55, Tony Lindgren wrote:
 
-On Wed, Oct 23, 2019 at 1:27 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
-> > Export the Type-C connector orientation so that user space
-> > can get this information.
-> >
-> > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
-> >  drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
-> >  2 files changed, 29 insertions(+)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > index d7647b258c3c..b22f71801671 100644
-> > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > @@ -108,6 +108,17 @@ Contact: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >  Description:
-> >               Revision number of the supported USB Type-C specification.
-> >
-> > +What:                /sys/class/typec/<port>/connector_orientation
-> > +Date:                October 2019
-> > +Contact:     Puma Hsu <pumahsu@google.com>
-> > +Description:
-> > +             Indicates which typec connector orientation is configured now.
-> > +             cc1 is defined as "normal" and cc2 is defined as "reversed".
->
-> Why the blank line after "Description:"?  Shouldn't "Indicates..." be
-> right after it?
+Patch subject should reflect the patch changes not the fix. The patch
+title here is not telling me anything about the change below. Pls
+consider updating the title.
 
-I checked the coding style for sysfs-class-*, all of them put the
-description at the next line behind "Description:"
-Should I change it?
+> The first dma call done by musb_ep_program() must wait if cppi41 is PM
+> runtime suspended. Otherwise musb_ep_program() continues with other
+> non-dma packets before the DMA transfer is started causing at least ftdi
+> uarts to fail to receive data.
+> 
+> Let's fix the issue by waking up cppi41 with PM runtime calls added to
+> cppi41_dma_prep_slave_sg() and return NULL if still idled. This way we
+> have musb_ep_program() continue with PIO until cppi41 is awake.
+> 
+> Fixes: fdea2d09b997 ("dmaengine: cppi41: Add basic PM runtime support")
 
-> > +
-> > +             Valid value:
-> > +             - unknown (nothing configured)
-> > +             - normal (configured in cc1 side)
-> > +             - reversed (configured in cc2 side)
-> >
-> >  USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
-> >
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 94a3eda62add..911d06676aeb 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> > @@ -1245,6 +1245,23 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
-> >  }
-> >  static DEVICE_ATTR_RO(usb_power_delivery_revision);
-> >
-> > +static const char * const typec_connector_orientation[] = {
-> > +     [TYPEC_ORIENTATION_NONE]                = "unknown",
-> > +     [TYPEC_ORIENTATION_NORMAL]              = "normal",
-> > +     [TYPEC_ORIENTATION_REVERSE]             = "reversed",
-> > +};
-> > +
-> > +static ssize_t connector_orientation_show(struct device *dev,
-> > +                                             struct device_attribute *attr,
-> > +                                             char *buf)
->
-> Can you line this up properly?
+Cc stable?
 
-Yes, I will update it in version3 once the previous problem is confirmed.
+> Cc: Bin Liu <b-liu@ti.com>
+> Cc: giulio.benetti@benettiengineering.com
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Skvortsov <andrej.skvortzov@gmail.com>
+> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+>  drivers/dma/ti/cppi41.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/ti/cppi41.c b/drivers/dma/ti/cppi41.c
+> --- a/drivers/dma/ti/cppi41.c
+> +++ b/drivers/dma/ti/cppi41.c
+> @@ -586,9 +586,22 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+>  	enum dma_transfer_direction dir, unsigned long tx_flags, void *context)
+>  {
+>  	struct cppi41_channel *c = to_cpp41_chan(chan);
+> +	struct dma_async_tx_descriptor *txd = NULL;
+> +	struct cppi41_dd *cdd = c->cdd;
+>  	struct cppi41_desc *d;
+>  	struct scatterlist *sg;
+>  	unsigned int i;
+> +	int error;
+> +
+> +	error = pm_runtime_get(cdd->ddev.dev);
+> +	if (error < 0) {
+> +		pm_runtime_put_noidle(cdd->ddev.dev);
+> +
+> +		return NULL;
+> +	}
+> +
+> +	if (cdd->is_suspended)
+> +		goto err_out_not_ready;
+>  
+>  	d = c->desc;
+>  	for_each_sg(sgl, sg, sg_len, i) {
+> @@ -611,7 +624,13 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+>  		d++;
+>  	}
+>  
+> -	return &c->txd;
+> +	txd = &c->txd;
+> +
+> +err_out_not_ready:
+> +	pm_runtime_mark_last_busy(cdd->ddev.dev);
+> +	pm_runtime_put_autosuspend(cdd->ddev.dev);
+> +
+> +	return txd;
+>  }
+>  
+>  static void cppi41_compute_td_desc(struct cppi41_desc *d)
+> -- 
+> 2.23.0
 
->
-> thanks,
->
-> greg k-h
-
-
-Thanks in advance.
-Puma Hsu
+-- 
+~Vinod
