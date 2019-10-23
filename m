@@ -2,104 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 277FFE18D8
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 13:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB73E1966
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 13:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404696AbfJWLWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 07:22:09 -0400
-Received: from mga09.intel.com ([134.134.136.24]:21010 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404882AbfJWLWI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 07:22:08 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 04:22:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,220,1569308400"; 
-   d="scan'208";a="349365445"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 23 Oct 2019 04:22:04 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 18A978B2; Wed, 23 Oct 2019 14:21:56 +0300 (EEST)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mario.Limonciello@dell.com,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 25/25] thunderbolt: Update documentation with the USB4 information
-Date:   Wed, 23 Oct 2019 14:21:54 +0300
-Message-Id: <20191023112154.64235-26-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191023112154.64235-1-mika.westerberg@linux.intel.com>
-References: <20191023112154.64235-1-mika.westerberg@linux.intel.com>
+        id S2405126AbfJWLxO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 07:53:14 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:36377 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732092AbfJWLxO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 07:53:14 -0400
+Authenticated-By: 
+X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID x9NBqkls003476, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (RTITCASV01.realtek.com.tw[172.21.6.18])
+        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id x9NBqkls003476
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 23 Oct 2019 19:52:46 +0800
+Received: from RTITMBSVM03.realtek.com.tw ([fe80::e1fe:b2c1:57ec:f8e1]) by
+ RTITCASV01.realtek.com.tw ([::1]) with mapi id 14.03.0468.000; Wed, 23 Oct
+ 2019 19:52:45 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+CC:     nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "pmalani@chromium.org" <pmalani@chromium.org>,
+        "grundler@chromium.org" <grundler@chromium.org>,
+        "'Linux Samsung SOC'" <linux-samsung-soc@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: RE: [PATCH net-next] r8152: support request_firmware for RTL8153
+Thread-Topic: [PATCH net-next] r8152: support request_firmware for RTL8153
+Thread-Index: AQHVg84yG1svvwJLbEa5ZZ4zq0Zj+qdnd3YAgACNnOD//4TeAIAAm7jA
+Date:   Wed, 23 Oct 2019 11:52:45 +0000
+Message-ID: <0835B3720019904CB8F7AA43166CEEB2F18ED47C@RTITMBSVM03.realtek.com.tw>
+References: <1394712342-15778-329-Taiwan-albertk@realtek.com>
+        <CGME20191023091648eucas1p12dcc4e9041169e3c7ae43f4ea525dd7f@eucas1p1.samsung.com>
+        <44261242-ff44-0067-bbb9-2241e400ad53@samsung.com>
+        <0835B3720019904CB8F7AA43166CEEB2F18ED3FA@RTITMBSVM03.realtek.com.tw>
+ <c20abd08-5f22-2cc8-15fa-956d06b5b8af@samsung.com>
+In-Reply-To: <c20abd08-5f22-2cc8-15fa-956d06b5b8af@samsung.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.214]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update user's and administrator's guide to mention USB4, how it relates
-to Thunderbolt (it is public spec of Thunderbolt 3) and and how it is
-supported in Linux.
-
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- Documentation/admin-guide/thunderbolt.rst | 25 ++++++++++++++++++-----
- 1 file changed, 20 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
-index 898ad78f3cc7..f44c77860870 100644
---- a/Documentation/admin-guide/thunderbolt.rst
-+++ b/Documentation/admin-guide/thunderbolt.rst
-@@ -1,6 +1,23 @@
--=============
-- Thunderbolt
--=============
-+======================
-+ Thunderbolt and USB4
-+======================
-+USB4 is a public spec based on Thunderbolt 3 with some differences at the
-+register level among other things. There are two different implementations
-+available: firmware connection manager and software connection manager.
-+Typically PCs come with a firmware connection manager for Thunderbolt 3 and
-+early USB4 capable systems. Apple systems on the other hand use software
-+connection manager and the later USB4 compliant devices follow the suit.
-+
-+The Linux Thunderbolt driver supports both and can detect at runtime which
-+connection manager implementation is to be used. To be on the safe side the
-+software connection manager in Linux also advertises security level
-+``user`` which means PCIe tunneling is disabled by default. The
-+documentation below applies to both implementations with the exception that
-+the software connection manager only supports ``user`` security level and
-+is expected to be accompanied with an IOMMU based DMA protection.
-+
-+Security levels and how to use them
-+-----------------------------------
- The interface presented here is not meant for end users. Instead there
- should be a userspace tool that handles all the low-level details, keeps
- a database of the authorized devices and prompts users for new connections.
-@@ -18,8 +35,6 @@ This will authorize all devices automatically when they appear. However,
- keep in mind that this bypasses the security levels and makes the system
- vulnerable to DMA attacks.
- 
--Security levels and how to use them
-------------------------------------
- Starting with Intel Falcon Ridge Thunderbolt controller there are 4
- security levels available. Intel Titan Ridge added one more security level
- (usbonly). The reason for these is the fact that the connected devices can
--- 
-2.23.0
-
+TWFyZWsgU3p5cHJvd3NraSBbbWFpbHRvOm0uc3p5cHJvd3NraUBzYW1zdW5nLmNvbV0NCj4gU2Vu
+dDogV2VkbmVzZGF5LCBPY3RvYmVyIDIzLCAyMDE5IDY6MjMgUE0NClsuLi5dDQo+ID4+IFRoaXMg
+cGF0Y2ggKHdoaWNoIGxhbmRlZCBpbiBsaW51eC1uZXh0IGxhc3QgZGF5cykgY2F1c2VzIGEgZm9s
+bG93aW5nDQo+ID4+IGtlcm5lbCBvb3BzIG9uIHRoZSBBUk0gMzJiaXQgRXh5bm9zNTQyMiBTb0Mg
+YmFzZWQgT2Ryb2lkIFhVNCBib2FyZDoNCj4gPiBQbGVhc2UgdHJ5IHRoZSBmb2xsb3dpbmcgcGF0
+Y2guDQo+IA0KPiBZZXMsIHRoaXMgZml4ZXMgdGhlIGlzc3VlLiBJJ3ZlIGFwcGxpZWQgdGhvc2Ug
+Y2hhbmdlcyBtYW51YWxseSBvbiB0b3Agb2YNCj4gTGludXggbmV4dC0yMDE5MTAyMiwgZHVlIHRv
+IHNvbWUgZGlmZmVyZW5jZXMgaW4gdGhlIGNvbnRleHQuIFdoZW4geW91DQo+IHByZXBhcmUgYSBm
+aW5hbCBwYXRjaCwgZmVlbCBmcmVlIHRvIGFkZDoNCj4gDQo+IFJlcG9ydGVkLWJ5OiBNYXJlayBT
+enlwcm93c2tpIDxtLnN6eXByb3dza2lAc2Ftc3VuZy5jb20+DQo+IEZpeGVzOiA5MzcwZjJkMDVh
+MmEgKCJyODE1Mjogc3VwcG9ydCByZXF1ZXN0X2Zpcm13YXJlIGZvciBSVEw4MTUzIikNCj4gVGVz
+dGVkLWJ5OiBNYXJlayBTenlwcm93c2tpIDxtLnN6eXByb3dza2lAc2Ftc3VuZy5jb20+DQoNClRo
+YW5rcw0KDQpCZXN0IFJlZ2FyZHMsDQpIYXllcw0KDQoNCg0K
