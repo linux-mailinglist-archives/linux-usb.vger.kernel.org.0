@@ -2,172 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84969E1CB5
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24662E1CEA
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392045AbfJWNfZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 09:35:25 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:40159 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731301AbfJWNfY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:35:24 -0400
-Received: by mail-pg1-f195.google.com with SMTP id 15so6825894pgt.7
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 06:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vVilgvsFyNX8l3o19LPHCyMKXEOlo8DFL7KyI287g14=;
-        b=QqK89MD/Yy/DM00W1esVEoeVn3WMhLsa0Vl3e77HqhpfXG1sxJ0v4cgzzmJTrf7pHQ
-         HcpSZgN31RBFHk6C7UnejQDVK6ql1RlvQgrgDpRuB/5HN0jwZ4qnDwnaHbicV36UWhMu
-         KwFlO69OYvODLWqaW+AIKdV+fmaq5vcqsd1PcbjMAAQarx1WdTLAbUb4dcb/kMGuqFyi
-         qqUtZ9oYKNMoCYPjRS0LtILIQLBGu5ytKdhZg1UR7mtZh9zYg+zLmI5gowtGsbfT76ie
-         /iChDTldOkR4Y0RQ/5JfueemrwEfFRlzAfFt3dAVNFnONLrl6PzrYvU6sG2AelLOrRPa
-         I6Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vVilgvsFyNX8l3o19LPHCyMKXEOlo8DFL7KyI287g14=;
-        b=aKvJBapq5y3PVElmWST1sP/x3ztByaxLgTLu/3BznoEAxImFU7ZrO7EYg7uQf3ePrZ
-         Bp1WFYcxkvoapuGqMmyeB7BraS5MZxVrTfIo6oxYBCvbKSfCd5JQvc0ufcdXffF05DYs
-         j87QjG2887pxX3rpb7JgSLuL9Lqd8o8A1MAcAGMCWsGlfInNfPhY/nYlwjc97gzADztF
-         POSkcHmRmwqLcvp/db0Gtf1UWel3qUfRG1sX9QWhRlpZoy5Oji1LzwpJXz63tJSEv23W
-         UPdHOgUOtKGwgLq7g2EIKfN9yK9ufcIYWN3GLS491NNo2RJTZ7EaUZUixUxXsHpaoxle
-         9C7A==
-X-Gm-Message-State: APjAAAVDdVdTrvLUWsRlvcR17/gxjCa+tCZCT0N8ICwRAEyggsNknc41
-        sFCAM9JHF6/TqmmksBgv8U9EqpNGGF8eMiIEgbWQxQ==
-X-Google-Smtp-Source: APXvYqxsyojwtcUMv+o4xED6tZ63YIYmQojsChVXt9dxnYDWrRS7pWDqJ873W66V6rP/TblVEj2JJse9T5W9jYerCBg=
-X-Received: by 2002:a17:90a:6509:: with SMTP id i9mr11551965pjj.47.1571837723368;
- Wed, 23 Oct 2019 06:35:23 -0700 (PDT)
+        id S2405954AbfJWNjz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 23 Oct 2019 09:39:55 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:43825 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392089AbfJWNjy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:39:54 -0400
+Received: from mail-qt1-f177.google.com ([209.85.160.177]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1Mf0Nm-1hmXPR1EIE-00gboz; Wed, 23 Oct 2019 15:39:51 +0200
+Received: by mail-qt1-f177.google.com with SMTP id o49so24470171qta.7;
+        Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
+X-Gm-Message-State: APjAAAU6rjuILI+dBSQWkepJeZcFXjrhStzYWyvwa71wsCNVgYufVnZt
+        iHt9MtJEPLOwsEVZaopkvY4n9SDmIlf2VoWvAbc=
+X-Google-Smtp-Source: APXvYqyt7m8OnGbGOfKvN6UapNf8Y0PixnD+b/5MFVO15QeK4AzpoE5xCHBxjuJT4OWklHgs4L5FWsrmt4sucJ53v+g=
+X-Received: by 2002:ac8:18eb:: with SMTP id o40mr9289234qtk.304.1571837989082;
+ Wed, 23 Oct 2019 06:39:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1571762488.git.andreyknvl@google.com> <26e088ae3ebcaa30afe957aeabaa9f0c653df7d0.1571762488.git.andreyknvl@google.com>
- <CACT4Y+YntxT+cpESOBvbg+h=g-84ECJwQrFg7LM5tbq_zaMd3A@mail.gmail.com>
-In-Reply-To: <CACT4Y+YntxT+cpESOBvbg+h=g-84ECJwQrFg7LM5tbq_zaMd3A@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 23 Oct 2019 15:35:12 +0200
-Message-ID: <CAAeHK+yUTZc+BrGDvvTQD4O0hsDzhp0V6GGFdtnmE6U4yWabKw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] vhost, kcov: collect coverage from vhost_worker
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>
+References: <20191010202802.1132272-1-arnd@arndb.de> <20191023131049.GG11048@pi3>
+In-Reply-To: <20191023131049.GG11048@pi3>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 23 Oct 2019 15:39:32 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
+Message-ID: <CAK8P3a1v2-+geD+JbNP-t418ZjntQNSte4rt8c7N6sJdpb3+DQ@mail.gmail.com>
+Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        linux-leds@vger.kernel.org,
+        "moderated list:ARM/SAMSUNG EXYNOS ARM ARCHITECTURES" 
+        <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Lihua Yao <ylhuajnu@outlook.com>,
+        Kukjin Kim <kgene@kernel.org>, linux-serial@vger.kernel.org,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        =?UTF-8?Q?Pawe=C5=82_Chmiel?= <pawel.mikolaj.chmiel@gmail.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Lihua Yao <ylhuajnu@163.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Provags-ID: V03:K1:NLof35stNYTGVLCCiBOj5shE8fEwjZaac7cdAu2nrrmym/kOcjv
+ Qnfa/3i0a5qyJkyMXctYodBV7VP0bHQaFrXIBjwV/gpmENyzPTQE7+sVihuV4liYROCT33b
+ 9WO8+gy5V2fG2DuQgIo6thaPwkDMewwBExepC4yasYMIPkDiS0zr+8kJODaOpU4HPFc7gMV
+ MPShUYeuOvxdtdljHgfJg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:DaQc5ZGaJsY=:F603/POvpKLPXWa0X1lFEH
+ aQjxfOCxGD/pIMHmKlHcbcFD80Nc+ewErQWmvj+Qgp6xaAE5MxfbNNNrin9LMgRKve0v8GrHu
+ BPPYcLBIJd/tRGzy7EoHKzi1xCTWBRKPuZW+NRo5Q3c4o6tNWGjXzPGUI9xyOYPIzGuB4sxow
+ ECbUMNeq+vtLAQSVxvpHOttzchCbbhPJcjfvA+bQAYJp52FgAuxb7i+4FvHbE4PKIBUfZrfn7
+ RTWpJntJNT2FyPouWE44kX34NjZBTj4rpIcCKzq/vJGEBiexW1JIi5IKVdXZvOH5f6ayOyfG4
+ N5aMRdit65bReN0guN1SsKJ7uFbD0kzxYt0bE1Mf25djeRlbjBl6eNdESrSyRRUYp5EHOfQ/A
+ Sa10vMW4Ena5av/pF9Ivtanmnx43oe8gg/n1e283kgsPXqMvxru3WC5Nzl6w8FtOo8cSrKeIA
+ 4cwYy4vh4ukZW7IvGkXi8VTyHR5QO0uX/EIi41POGGpNZfuz2RZFE3OQuaZ2ZAWDyKIDIkMiS
+ w6MOzO71LwFlzMud8Juwt083ioitXDvT/9TIYbAIAmfnUtb8NIa87LZjq9LnymQfMT/771jDX
+ Pv0pU2J8yDYscI2Ar/9iY65bLYD1odSzwo1yupcBRkEYBk2LtDP2ofqM/FtIHQxHEgUCSL8BF
+ +DQWO4nbj5c/D8V8Rcbk6xIsj3dpX/eZmDwcjBHzixCuvxTtC6bkTqxwxXemSc09w9sXO96BH
+ 8wrLVBqppvA4u9/3mwzDk1TPdUl264mBZECZMuP2bwYmiOyo6CZ+bMP0dYsot7zDsLQZk6JM2
+ zgDILD/0tZiVRCT1r1eA1ueLWwCTN+MFNjGnfX1TAxma6wIGEoHuP9Uzto3sTth328X/tkiaT
+ tiL3D4xHp9lUaPHnTz2w==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 10:36 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+On Wed, Oct 23, 2019 at 3:11 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
+> > The contents are available for testing in
+> >
+> > git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
 >
-> On Tue, Oct 22, 2019 at 6:46 PM Andrey Konovalov <andreyknvl@google.com> wrote:
-> >
-> > This patch adds kcov_remote_start()/kcov_remote_stop() annotations to the
-> > vhost_worker() function, which is responsible for processing vhost works.
-> > Since vhost_worker() threads are spawned per vhost device instance
-> > the common kcov handle is used for kcov_remote_start()/stop() annotations
-> > (see Documentation/dev-tools/kcov.rst for details). As the result kcov can
-> > now be used to collect coverage from vhost worker threads.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  drivers/vhost/vhost.c | 6 ++++++
-> >  drivers/vhost/vhost.h | 1 +
-> >  2 files changed, 7 insertions(+)
-> >
-> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > index 36ca2cf419bf..a5a557c4b67f 100644
-> > --- a/drivers/vhost/vhost.c
-> > +++ b/drivers/vhost/vhost.c
-> > @@ -30,6 +30,7 @@
-> >  #include <linux/sched/signal.h>
-> >  #include <linux/interval_tree_generic.h>
-> >  #include <linux/nospec.h>
-> > +#include <linux/kcov.h>
-> >
-> >  #include "vhost.h"
-> >
-> > @@ -357,7 +358,9 @@ static int vhost_worker(void *data)
-> >                 llist_for_each_entry_safe(work, work_next, node, node) {
-> >                         clear_bit(VHOST_WORK_QUEUED, &work->flags);
-> >                         __set_current_state(TASK_RUNNING);
-> > +                       kcov_remote_start(dev->kcov_handle);
-> >                         work->fn(work);
-> > +                       kcov_remote_stop();
-> >                         if (need_resched())
-> >                                 schedule();
-> >                 }
-> > @@ -546,6 +549,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
-> >
-> >         /* No owner, become one */
-> >         dev->mm = get_task_mm(current);
-> > +       dev->kcov_handle = current->kcov_handle;
+> When sending v2, can you Cc:
 >
-> kcov_handle is not present in task_struct if !CONFIG_KCOV
+> Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+> Lihua Yao <ylhuajnu@outlook.com>
+> (or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
+> Sergio Prado <sergio.prado@e-labworks.com>
+> Sylwester Nawrocki <s.nawrocki@samsung.com>
 >
-> Also this does not use KCOV_SUBSYSTEM_COMMON.
-> We discussed something along the following lines:
->
-> u64 kcov_remote_handle(u64 subsys, u64 id)
-> {
->   WARN_ON(subsys or id has wrong bits set).
+> These are folks which to my knowledge had working S3C and S5P boards
+> so maybe they could provide testing.
 
-Hm, we can't have warnings in kcov_remote_handle() that is exposed in
-uapi headers. What we can do is return 0 (invalid handle) if subsys/id
-have incorrect bits set. And then we can either have another
-kcov_remote_handle() internally (with a different name though) that
-has a warning, or have warning in kcov_remote_start(). WDYT?
+Ok, will do. I've uploaded the modified version based on your comments to
+the above URL for now.
 
->   return ...;
-> }
->
-> kcov_remote_handle(KCOV_SUBSYSTEM_USB, bus);
-> kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, current->kcov_handle);
->
->
-> >         worker = kthread_create(vhost_worker, dev, "vhost-%d", current->pid);
-> >         if (IS_ERR(worker)) {
-> >                 err = PTR_ERR(worker);
-> > @@ -571,6 +575,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
-> >         if (dev->mm)
-> >                 mmput(dev->mm);
-> >         dev->mm = NULL;
-> > +       dev->kcov_handle = 0;
-> >  err_mm:
-> >         return err;
-> >  }
-> > @@ -682,6 +687,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
-> >         if (dev->worker) {
-> >                 kthread_stop(dev->worker);
-> >                 dev->worker = NULL;
-> > +               dev->kcov_handle = 0;
-> >         }
-> >         if (dev->mm)
-> >                 mmput(dev->mm);
-> > diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-> > index e9ed2722b633..a123fd70847e 100644
-> > --- a/drivers/vhost/vhost.h
-> > +++ b/drivers/vhost/vhost.h
-> > @@ -173,6 +173,7 @@ struct vhost_dev {
-> >         int iov_limit;
-> >         int weight;
-> >         int byte_weight;
-> > +       u64 kcov_handle;
-> >  };
-> >
-> >  bool vhost_exceeds_weight(struct vhost_virtqueue *vq, int pkts, int total_len);
-> > --
-> > 2.23.0.866.gb869b98d4c-goog
-> >
+I'll probably give it a little more time before resending, but they
+could already
+start testing that version.
+
+Thanks a lot for the review!
+
+      Arnd
