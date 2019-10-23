@@ -2,74 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F90DE1DC1
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C682DE1DFB
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:20:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404395AbfJWOMW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 10:12:22 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:39820 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1732167AbfJWOMW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 10:12:22 -0400
-Received: (qmail 2590 invoked by uid 2102); 23 Oct 2019 10:12:20 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 23 Oct 2019 10:12:20 -0400
-Date:   Wed, 23 Oct 2019 10:12:20 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Christoph Hellwig <hch@lst.de>
-cc:     Greg KH <greg@kroah.com>,
-        Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
-        Seth Bollinger <Seth.Bollinger@digi.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb-storage: Revert commit 747668dbc061 ("usb-storage:
- Set virt_boundary_mask to avoid SG overflows")
-In-Reply-To: <20191023015348.GA16123@lst.de>
-Message-ID: <Pine.LNX.4.44L0.1910231011190.1878-100000@iolanthe.rowland.org>
+        id S2404578AbfJWOUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 10:20:24 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:38524 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725852AbfJWOUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 10:20:23 -0400
+Received: from pendragon.ideasonboard.com (143.121.2.93.rev.sfr.net [93.2.121.143])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9248F71F;
+        Wed, 23 Oct 2019 16:20:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1571840421;
+        bh=ZN4esrfVTSXQCeDtJTnyp/5+MEwfIxLla+K4wvGg9Y0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vd6gqdYnjc3QUx+9Hm1cEGKJmOsckWahI7KPz4SLSVxEGo74ctV9ftQ80ogqxu16/
+         2JcV1EmHfSj63VX7av7VEhuhQz6ZxMSA+Jz91nBGpRLCQBzIQvoiy5XakXF5qGjE86
+         vUhZFnzdjAwYRhtVRxFNkhxV2XlSKC3K2IsuOjfQ=
+Date:   Wed, 23 Oct 2019 17:20:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     linux-media@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Logitech C270 webcam floods the log
+Message-ID: <20191023142016.GA1904@pendragon.ideasonboard.com>
+References: <20191023151859.30a8ce88@endymion>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191023151859.30a8ce88@endymion>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 23 Oct 2019, Christoph Hellwig wrote:
+Hi Jean,
 
-> On Mon, Oct 21, 2019 at 11:48:06AM -0400, Alan Stern wrote:
-> > There is no longer any reason to keep the virt_boundary_mask setting
-> > for usb-storage.  It was needed in the first place only for handling
-> > devices with a block size smaller than the maxpacket size and where
-> > the host controller was not capable of fully general scatter-gather
-> > operation (that is, able to merge two SG segments into a single USB
-> > packet).  But:
-> > 
-> > 	High-speed or slower connections never use a bulk maxpacket
-> > 	value larger than 512;
-> > 
-> > 	The SCSI layer does not handle block devices with a block size
-> > 	smaller than 512 bytes;
-> > 
-> > 	All the host controllers capable of SuperSpeed operation can
-> > 	handle fully general SG;
-> > 
-> > 	Since commit ea44d190764b ("usbip: Implement SG support to
-> > 	vhci-hcd and stub driver") was merged, the USB/IP driver can
-> > 	also handle SG.
-> > 
-> > Therefore all supported device/controller combinations should be okay
-> > with no need for any special virt_boundary_mask.  So in order to fix
-> > the swiotlb problem, this patch reverts commit 747668dbc061.
+On Wed, Oct 23, 2019 at 03:18:59PM +0200, Jean Delvare wrote:
+> Hi all,
 > 
-> That's great to know.  The same should also apply to uas, shouldn't
-> it?
-
-Ah, yes, excellent point -- I had forgotten about it.  Additional patch 
-coming up soon...
-
-Alan Stern
-
-> Otherwise:
+> When my Logitech C270 webcam is plugged in, my kernel log gets filled
+> with this message:
 > 
-> Acked-by: Christoph Hellwig <hch@lst.de>
+> usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
+> 
+> every 5 seconds. I have the same problem on 3 different Intel-based
+> computers (different generations), using 2 different webcams, same
+> brand "same model".
+>
+> Is Logitech doing crappy hardware these days, or are we doing something
+> wrong? Is there any way to know the reason that triggers the reset?
 
+Is this before or after the uvcvideo driver gets involved ? One easy way
+to check is to move the uvcvideo.ko module out of the way so that it
+doesn't get loaded automatically (or just blacklist it in
+/etc/modprobe.d/) and then plug the camera.
+
+> I would be more than happy to provide any relevant debugging
+> information if anyone is able to make it stop. As it stands, I must
+> plug my webcam before using it and unplug it as soon as I'm done, which
+> isn't exactly convenient.
+
+-- 
+Regards,
+
+Laurent Pinchart
