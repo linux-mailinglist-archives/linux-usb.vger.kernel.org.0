@@ -2,193 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BB36E142E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFB23E143D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390260AbfJWI2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 04:28:13 -0400
-Received: from mail-eopbgr50078.outbound.protection.outlook.com ([40.107.5.78]:62475
-        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390034AbfJWI2M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 04:28:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X+iAsvAvWL/yGg/5qR1lOO+4INOqC2yD16Q+zWSl+hX1JIPh4J1GPP9vIvvoHmALj9LJXYnZTlyr2V23ibgR+IHMzVtZLK2USu8U7GIy/s4vToB29qn0jFa6AJA7rmSnOBWKNfGe/9nhmRxsuPcLUq+Ay51NAy1BT7yF9hs9RqVAZgqodqLJGTD7UX/UwAkfhbRZvhvwpsNyE6THmD2h0Vm7xi3ktdS8T6f65gHWSo6y42KxG/QCqRbPE0gVUpurAa8qVQ4l+fyM2cNQpIswlnlg7RtFjfx2Blf7bQeeU1qMcg7ROI0jJD2jiJhMNPawesKo79aZVu0Dcry9uGBy1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBI8+VpEjy81yxpmbh7MGyAEolNlJ+Yxnl07v6jag3k=;
- b=WA5cXOm9+ZbkgX2Os8pqJf2ZC453OtR4oNsGYSkiV6I7dCYxuzTxUc1CD23LGgiNKFQTbB5SGr7Lfjt0+HSmTmucaASg37him2LJOlu107/G0/wpvKhQejIG3gqAa7BAc2r2xKok5vTTMBE9ORIBcenr9/rMTa3k9iYfPeC1WiQJzKxUrIzX9PA5iRRVwpDrm40RvPRKsJ8AGeuDJW3z62g4/sWszQh7Ynw1Gj2clqPpMRI3NFqEvi+PdlQO+zaHPI8PHbp0g6yKlDw1olhKsN98XQ7NKiMYq+56etmBoUTyoSI4eRDA1JSh8b1yGaxso5vJJrpJXABSg4Y2MK/KVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBI8+VpEjy81yxpmbh7MGyAEolNlJ+Yxnl07v6jag3k=;
- b=YQcBZDf4R0zm7k8ZaETidwdnIX0a4OK7TgybkPeimyhieBfow1qVFhmG/FX85dg91sfRNjADyuSmdOpdMycY1IR0CFK6doMh0316WZAww3DKGmqbHpogVmXT+m0iaSgpAW7ZII+yCmNsXWM0JsKX0BEEEnFScJ3MW7/wPzLwIjo=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB6237.eurprd04.prod.outlook.com (20.179.24.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16; Wed, 23 Oct 2019 08:28:07 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.021; Wed, 23 Oct 2019
- 08:28:07 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Igor Opaniuk <igor.opaniuk@gmail.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Sanchayan Maity <maitysanchayan@gmail.com>,
-        Igor Opaniuk <igor.opaniuk@toradex.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/2] usb: chipidea: use of extcon framework to work for
- non OTG case
-Thread-Topic: [PATCH v1 1/2] usb: chipidea: use of extcon framework to work
- for non OTG case
-Thread-Index: AQHViCsAqaE2F5BkzEikzWHSfo+rUadl6qoAgADFcwCAATcWgA==
-Date:   Wed, 23 Oct 2019 08:28:07 +0000
-Message-ID: <20191023082755.GA8578@b29397-desktop>
-References: <20191021161654.14353-1-igor.opaniuk@gmail.com>
- <20191022020748.GA26973@b29397-desktop>
- <CAByghJbAnAN8dVAa0taPfLiMx2r4evcZhoryfZYyxjYiaFpTsw@mail.gmail.com>
-In-Reply-To: <CAByghJbAnAN8dVAa0taPfLiMx2r4evcZhoryfZYyxjYiaFpTsw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 9cc61e58-47ce-4f6f-e93a-08d75792ee79
-x-ms-traffictypediagnostic: VI1PR04MB6237:|VI1PR04MB6237:
-x-ld-processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-x-microsoft-antispam-prvs: <VI1PR04MB62378EC0BE0C343636CD29168B6B0@VI1PR04MB6237.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 019919A9E4
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(136003)(376002)(39860400002)(346002)(366004)(396003)(189003)(199004)(54906003)(316002)(71190400001)(86362001)(66946007)(66476007)(64756008)(76116006)(66446008)(66556008)(71200400001)(66066001)(25786009)(305945005)(3846002)(6116002)(91956017)(33716001)(7736002)(256004)(4326008)(14444005)(2906002)(229853002)(6246003)(6916009)(44832011)(11346002)(446003)(6436002)(14454004)(6486002)(76176011)(478600001)(1076003)(99286004)(7416002)(102836004)(6506007)(26005)(53546011)(33656002)(476003)(9686003)(8936002)(81166006)(81156014)(6512007)(8676002)(486006)(186003)(5660300002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6237;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Zh5LH72q/kc751CNMU73zv6xWZgPWyvCKJR6sxxhoD0C/7nyfAkkOozByGAcgFsXyUGeggJ9sO+eCWvxaXu46f0mno44WjyubCbNjTx3dTCZbrH7WJGWwvpcJWqsC7hz/lMl0LLKGlMK2JHJP003xzhyfcVWOOULyt9GOM+n6YlceiQbm6GjisIWiG72JqAVpYvgttKykB8ruDtC2tv4DAcbpqLnAquXN9kNnIngW0EiP+9ZeRp0fMpX/k73VpGTos9fDzMwtCj6E3g5V7AhCUUDy6zPjSMrbX+/hOOGmipZ0tzB+RuEnUj++ZIHx2Mz3fmg2leWH2ngUGji9KYUnvP7arOPUjo6vO0hNJa7dzJ+0zN2reoSvQsGrzxVV++T9KzzHULod/ui/uxs+fOkW/F5WTFm+xRPjRCQ/JyhKpgEBx7nhvlbBThjPz5fjaeE
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <06F95D668D4926478A4E443058C4F085@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2390072AbfJWIbY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 04:31:24 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:44266 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389996AbfJWIbY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 04:31:24 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id E7DC1602E0; Wed, 23 Oct 2019 08:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571819480;
+        bh=CyQc1Z/oCK6qmt0Jkv6RaXFR/Kf8d+oTrEZ5DiKMZNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pu6ljqrlFOWRVcK88wT/P9jOb5pVIiG9DDbbgeVu3Wrt/DzUbb93nGwazyI2NUqhv
+         DE2qglNFmEq7Q2nT2/MITcWymxnWR4V4nLmKsE6LiIjjPcUF/qmMAfvkt6nSbaqD3+
+         DIKCxhrhlcvhUdDxZAWfy/RlBY55DOvsPGk1vRfc=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED autolearn=no autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by smtp.codeaurora.org (Postfix) with ESMTP id 555F2602E0;
+        Wed, 23 Oct 2019 08:31:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571819480;
+        bh=CyQc1Z/oCK6qmt0Jkv6RaXFR/Kf8d+oTrEZ5DiKMZNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pu6ljqrlFOWRVcK88wT/P9jOb5pVIiG9DDbbgeVu3Wrt/DzUbb93nGwazyI2NUqhv
+         DE2qglNFmEq7Q2nT2/MITcWymxnWR4V4nLmKsE6LiIjjPcUF/qmMAfvkt6nSbaqD3+
+         DIKCxhrhlcvhUdDxZAWfy/RlBY55DOvsPGk1vRfc=
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cc61e58-47ce-4f6f-e93a-08d75792ee79
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Oct 2019 08:28:07.2833
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vazHGy8wCgUfIC1Bh94aA9Ebvo3Z4QblygpPzTsk2hOj1U+v/npcD7d/6xmeN8EgQE2CQFG4aJnL8Pqoy61xsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6237
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Wed, 23 Oct 2019 01:31:20 -0700
+From:   jackp@codeaurora.org
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 2/2] usb: gadget: composite: Support more than 500mA
+ MaxPower
+In-Reply-To: <871rv3kijy.fsf@gmail.com>
+References: <20191023065753.32722-1-jackp@codeaurora.org>
+ <20191023065753.32722-2-jackp@codeaurora.org> <871rv3kijy.fsf@gmail.com>
+Message-ID: <92d4a38890cbac34e6bb52dcf98f394c@codeaurora.org>
+X-Sender: jackp@codeaurora.org
+User-Agent: Roundcube Webmail/1.2.5
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-10-22 16:54:30, Igor Opaniuk wrote:
-> Hi Peter,
->=20
-> On Tue, Oct 22, 2019 at 5:11 AM Peter Chen <peter.chen@nxp.com> wrote:
-> >
-> > On 19-10-21 19:16:53, Igor Opaniuk wrote:
-> > > From: Stefan Agner <stefan.agner@toradex.com>
-> > >
-> > > The existing usage of extcon in chipidea driver freezes the kernel
-> > > presumably due to OTGSC register access.
-> > >
-> > > Prevent accessing any OTG registers for SoC with dual role devices
-> > > but no true OTG support. Use the flag CI_HDRC_DUAL_ROLE_NOT_OTG for
-> > > those devices and in case extcon is present, do the role switch
-> > > using extcon only.
-> >
-> > Hi Igor & Stefan,
-> >
-> > I have several questions about the problem you met:
-> > - Which vendor's controller you have used?
-> > - What do you mean "no true OTG"? Does it mean no "OTGSC" register?
->=20
-> Probably the commit message adds a bit of confusion here
-> (I've kept the original one from the patch in our downstream kernel,
-> but will probably reword it).
->=20
-> The actual problem is that USB_OTG1_ID pin isn't wired, so we can't rely
-> on the value of ID pin state in OTGSC for the role detection.
-> In our SoM (Colibri iMX6ULL) ID pin from USB connector is wired
-> to SNVS_TAMPER2 which is pinmuxed as GPIO pin (GPIO5_02),
-> [1] (this is schematic for the Carrier Board, not SoM (isn't publicly
-> available),
-> but there is a pretty good explanation + schematic
-> in the section "2.3.2.2 USB 2.0 OTG Schematic Example ").
+On 2019-10-23 00:49, Felipe Balbi wrote:
+> Hi,
+> 
+> Jack Pham <jackp@codeaurora.org> writes:
+>> USB 3.x SuperSpeed peripherals can draw up to 900mA of VBUS power
+>> when in configured state. However, if a configuration wanting to
+>> take advantage of this is added with MaxPower greater than 500
+>> (currently possible if using a ConfigFS gadget) the composite
+>> driver fails to accommodate this for a couple reasons:
+>> 
+>>  - usb_gadget_vbus_draw() when called from set_config() and
+>>    composite_resume() will be passed the MaxPower value without
+>>    regard for the current connection speed, resulting in a
+>>    violation for USB 2.0 since the max is 500mA.
+>> 
+>>  - the bMaxPower of the configuration descriptor would be
+>>    incorrectly encoded, again if the connection speed is only
+>>    at USB 2.0 or below, likely wrapping around UINT8_MAX since
+>>    the 2mA multiplier corresponds to a maximum of 610mA.
+>> 
+>> Fix these by adding checks against the current gadget->speed
+>> when the c->MaxPower value is used and appropriately limit
+>> based on whether it is currently at a low-/full-/high- or super-
+>> speed connection.
+>> 
+>> Incidentally, 900 is not divisble by 8, so even for super-speed
+>> the bMaxPower neds to be capped at 896mA, otherwise due to the
+>                 ^^^^
+>                 needs
+> 
+> Why do you need to cap it? DIV_ROUND_UP() should still work.
 
-Ok, I clear now. Then, you may not use CI_HDRC_DUAL_ROLE_NOT_OTG which
-is for the controller without OTGSC. For imx6ull, access OTGSC will not
-hang the system if USB is NOT at suspend mode.
+The round up causes 900 on the input side to be greater than 900 when 
+doing the
+reverse, i.e. multiplication by 8.
 
-Current upstream design has already considered the user case for switch
-role through GPIO, but there is an issue that the external cable
-wakeup doesn't work, I will submit it later (see ci_extcon_wakeup_int
-implementation at downstream kernel).
+Alternatively we could just do a normal integer division here 
+(effectively
+round down).
 
-You could try to disable runtime-pm to see if the behaviour is expected
-or not, if it is NOT expected, please report what's that?
+>> round-up division a MaxPower of 900 will result in an encoded
+>> value of 904mA and many host stacks (including Linux and Windows)
+>> of a root port will reject the configuration.
+>> 
+>> N.B. USB 3.2 Gen N x 2 allows for up to 1500mA but there doesn't
+>> seem to be any any peripheral controller supported by Linux that
+>> does two lane operation, so for now keeping the clamp at 900
+>> should be fine.
+>> 
+>> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/composite.c | 13 +++++++++++--
+>>  1 file changed, 11 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/usb/gadget/composite.c 
+>> b/drivers/usb/gadget/composite.c
+>> index e1db94d1fe2e..92ce3018f482 100644
+>> --- a/drivers/usb/gadget/composite.c
+>> +++ b/drivers/usb/gadget/composite.c
+>> @@ -438,9 +438,10 @@ static u8 encode_bMaxPower(enum usb_device_speed 
+>> speed,
+>>  	if (!val)
+>>  		return 0;
+>>  	if (speed < USB_SPEED_SUPER)
+>> -		return DIV_ROUND_UP(val, 2);
+>> +		return DIV_ROUND_UP(min(val, 500U), 2);
+>>  	else
+>> -		return DIV_ROUND_UP(val, 8);
+>> +		/* USB 3.x supports 900mA, but that isn't divisible by 8... */
+>> +		return DIV_ROUND_UP(min(val, 896U), 8);
+> 
+> DIV_ROUND_UP(896, 8) = 112
+> DIV_ROUND_UP(900, 8) = 113
+> 
+> Why value do you want here?
 
->=20
-> >
-> > >       if (dr_mode =3D=3D USB_DR_MODE_OTG || dr_mode =3D=3D USB_DR_MOD=
-E_HOST) {
-> > >               ret =3D ci_hdrc_host_init(ci);
-> > > @@ -1145,8 +1208,18 @@ static int ci_hdrc_probe(struct platform_devic=
-e *pdev)
-> > >
-> > >       if (!ci_otg_is_fsm_mode(ci)) {
-> > >               /* only update vbus status for peripheral */
-> > > -             if (ci->role =3D=3D CI_ROLE_GADGET)
-> > > -                     ci_handle_vbus_change(ci);
-> > > +             if (dr_mode =3D=3D USB_DR_MODE_PERIPHERAL) {
-> > > +                     usb_gadget_vbus_connect(&ci->gadget);
-> >
-> > We only use ci->role at runtime, since it has already considered the
-> > dts setting, kernel configuration and hardware setting.
-> >
-> > If your controller doesn't otgsc register, but do need to support
-> > role switch, you may enhance the function ci_get_role
->=20
-> Btw, ci_get_role() implementation still resides in the NXP dowstream kern=
-el
-> and I've never seen anything posted to the ML (if it was, could you
-> please point me to
-> the patch?). I can introduce the new one, which wraps both OTGSC handling
-> + extcon for CI_HDRC_DUAL_ROLE_NOT_OTG controllers.
-
-Sorry about that, I just read code for the upstream kernel with some
-downstream patches on it.
-
->=20
-> Frankly speaking, I don't know the reason why additional workqueue (ci->w=
-ork_dr)
-> was introduced (will try to reach Stefan regarding this).
-> As I see it's valid to call extcon_get_state() from the atomic
-> context, so probably
-> using something like ci_get_role()(or ci_detect_role(), whatever)
-> instead of explicitly
-> retrieving bits from OTGSC in every ID pin check is a good choice.
->=20
-
-There are VBUS and ID events handling which are not non-atomic.
-
---=20
-
-Thanks,
-Peter Chen=
+Right, but now on the host it will do the reverse calculation, i.e. 
+113*8 == 904mA.
+For a root port this would be greater than it's maximum power budget of 
+900mA and
+would result in not selecting the config.
