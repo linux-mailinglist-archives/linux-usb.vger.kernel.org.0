@@ -2,51 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 049E1E20FB
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 18:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 897F1E2126
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 18:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726389AbfJWQvI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 23 Oct 2019 12:51:08 -0400
-Received: from 96.48.hostinglotus.cloud ([119.59.96.48]:36424 "EHLO
-        relay.mtbidc.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726360AbfJWQvH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 12:51:07 -0400
-X-Greylist: delayed 399 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Oct 2019 12:51:06 EDT
-Received: from zimbra110.hostinglotus.com (zimbra110.hostinglotus.com [119.59.101.110])
-        by relay.mtbidc.com (Postfix) with ESMTP id B618C124D1F
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 23:44:24 +0700 (ICT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra110.hostinglotus.com (Postfix) with ESMTP id 83951732A07
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 23:44:24 +0700 (ICT)
-Received: from zimbra110.hostinglotus.com ([127.0.0.1])
-        by localhost (zimbra110.hostinglotus.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 0SriL0h0w4qg for <linux-usb@vger.kernel.org>;
-        Wed, 23 Oct 2019 23:44:24 +0700 (ICT)
-Received: from localhost (localhost [127.0.0.1])
-        by zimbra110.hostinglotus.com (Postfix) with ESMTP id 3AA55735B75
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 23:44:24 +0700 (ICT)
-X-Virus-Scanned: amavisd-new at hostinglotus.com
-Received: from zimbra110.hostinglotus.com ([127.0.0.1])
-        by localhost (zimbra110.hostinglotus.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ok41tuIBmgJT for <linux-usb@vger.kernel.org>;
-        Wed, 23 Oct 2019 23:44:24 +0700 (ICT)
-Received: from mail.worlddidacasia.com (unknown [115.84.113.167])
-        by zimbra110.hostinglotus.com (Postfix) with ESMTPSA id 8A9C0732A07
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 23:44:23 +0700 (ICT)
-From:   "Joe Bryant" <tenminjoe@worlddidacasia.com>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: 8BIT
-Mime-Version: 1.0 (1.0)
-Subject: 
-Message-Id: <2C1895CD-0C8D-4756-A1EA-6F7DF437426F@worlddidacasia.com>
-Date:   Wed, 23 Oct 2019 12:48:36 -0400
-To:     "linux usb" <linux-usb@vger.kernel.org>
-Reply-To: "Joe Bryant" <tenminjoer@yahoo.com>
-X-Mailer: iPhone Mail (15E216)
+        id S1726632AbfJWQ6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 12:58:10 -0400
+Received: from smtp.codeaurora.org ([198.145.29.96]:40226 "EHLO
+        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726265AbfJWQ6K (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 12:58:10 -0400
+Received: by smtp.codeaurora.org (Postfix, from userid 1000)
+        id BE63960DB8; Wed, 23 Oct 2019 16:58:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571849888;
+        bh=e/wbk7W51qosh1x31nJNEuLAxvnQRx8M8ayYRV5U3eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=edqcx+u+rlmocI2E86il4NC0lXAUiJ0VXXX3etgyxoQhitzri37iHd9IHR3m+TQR2
+         UfNZeqL9X0vG9KyyxRLVx74Er4dWWritg0vZkDymTzbh4eogvCPS9DKIVbqjb/l0ek
+         1jdStirZfReVfjq2xKODj+mbER4Ndow2NUIaIkOA=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        pdx-caf-mail.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp@smtp.codeaurora.org)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9D54960DB8;
+        Wed, 23 Oct 2019 16:58:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
+        s=default; t=1571849887;
+        bh=e/wbk7W51qosh1x31nJNEuLAxvnQRx8M8ayYRV5U3eg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i0XqgQqBfDxVfDQ6znF3gcx2COuTjhZ19Nb5eIKcq/bGbJHXbq5vbPqV2SOst+Ezg
+         QbwXeTP6U403KXRPyXTAQh9kXzhHdZhRGTOHPvyXA0mwhlSZaPw8NEQ1x9f/IB+jlt
+         OU9ynhfOTw1gvQQmNdk4JYrXtZJVqTixWAej2H1w=
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9D54960DB8
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
+Date:   Wed, 23 Oct 2019 09:58:04 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Anurag Kumar Vulisha <anuragku@xilinx.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Correct the logic for finding last SG
+ entry
+Message-ID: <20191023165804.GD9754@jackp-linux.qualcomm.com>
+References: <1559141985-17104-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
+ <87y32gcvc1.fsf@linux.intel.com>
+ <BYAPR02MB559181C009B74446A797838DA7170@BYAPR02MB5591.namprd02.prod.outlook.com>
+ <87ftoldh48.fsf@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ftoldh48.fsf@linux.intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linux    https://llk.dk/8urvkl   Joe Bryant
+Hi Anurag,
+
+On Fri, Jun 07, 2019 at 09:49:59AM +0300, Felipe Balbi wrote:
+> Anurag Kumar Vulisha <anuragku@xilinx.com> writes:
+> >>> The dma_map_sg() merges sg1 & sg2 memory regions into sg1-
+> >>>dma_address.
+> >>> Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
+> >>> sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the
+> >>memory
+> >>> regions are merged but the page_link properties like SG_END are not
+> >>> retained into the merged sgs.
+> >>
+> >>isn't this a bug in the scatterlist mapping code? Why doesn't it keep
+> >>SG_END?
+> >>
+> >
+> > Thanks for providing your comment.
+> >
+> > I don't think it is a bug, instead I feel some enhancement needs to be done in
+> > dma-mapping code.
+> >
+> > SG_END represents the last sg entry in the sglist and it is correctly getting
+> > set to the last sg entry.
+> >
+> > The issue happens only when 2 or more sg entry pages are merged into
+> > contiguous dma-able address and sg_is_last() is used to find the last sg entry
+> > with valid dma address.
+> 
+> Right, and that's something that's bound to happen. I'm arguing that, perhaps,
+> dma API should move SG_END in case entries are merged.
+> 
+> > I think that along with sg_is_last() a new flag (SG_DMA_END) and function
+> > (something like sg_dma_is_last() ) needs to be added into dma-mapping code for
+> > identifying the last valid sg entry with valid dma address. So that we can
+> > make use of that function instead of sg_is_last().
+> 
+> Sure, propose a patch to DMA API.
+
+I'm curious if this was ever resolved. I just ran into this exact issue
+with Android ADB which uses 16KB buffers, along with f_fs supporting
+S/G since 5.0, combined with our IOMMU which performs this merging
+behavior, so it resulted in a single TRB getting queued with CHN=1 and
+LST=0 and thus the transfer never completes. Your initial patch resolves
+the issue for me, but upon revisiting this discussion I couldn't tell if
+you had attempted to patch DMA API instead as per Felipe's suggestion.
+
+Thanks,
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
