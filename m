@@ -2,72 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C682DE1DFB
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044D2E1E27
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:29:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404578AbfJWOUY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 10:20:24 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38524 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725852AbfJWOUX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 10:20:23 -0400
-Received: from pendragon.ideasonboard.com (143.121.2.93.rev.sfr.net [93.2.121.143])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9248F71F;
-        Wed, 23 Oct 2019 16:20:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1571840421;
-        bh=ZN4esrfVTSXQCeDtJTnyp/5+MEwfIxLla+K4wvGg9Y0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vd6gqdYnjc3QUx+9Hm1cEGKJmOsckWahI7KPz4SLSVxEGo74ctV9ftQ80ogqxu16/
-         2JcV1EmHfSj63VX7av7VEhuhQz6ZxMSA+Jz91nBGpRLCQBzIQvoiy5XakXF5qGjE86
-         vUhZFnzdjAwYRhtVRxFNkhxV2XlSKC3K2IsuOjfQ=
-Date:   Wed, 23 Oct 2019 17:20:16 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Logitech C270 webcam floods the log
-Message-ID: <20191023142016.GA1904@pendragon.ideasonboard.com>
-References: <20191023151859.30a8ce88@endymion>
+        id S2404795AbfJWO3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 10:29:05 -0400
+Received: from mga06.intel.com ([134.134.136.31]:7610 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403845AbfJWO3F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 10:29:05 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 07:29:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,221,1569308400"; 
+   d="scan'208";a="209932154"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 23 Oct 2019 07:29:01 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 23 Oct 2019 17:29:00 +0300
+Date:   Wed, 23 Oct 2019 17:29:00 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Puma Hsu <pumahsu@google.com>, gregkh@linuxfoundation.org,
+        badhri@google.com, kyletso@google.com, albertccwang@google.com,
+        rickyniu@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector
+ orientation
+Message-ID: <20191023142900.GA15396@kuha.fi.intel.com>
+References: <20191022085924.92783-1-pumahsu@google.com>
+ <20191023083221.GB8828@kuha.fi.intel.com>
+ <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191023151859.30a8ce88@endymion>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jean,
-
-On Wed, Oct 23, 2019 at 03:18:59PM +0200, Jean Delvare wrote:
-> Hi all,
+On Wed, Oct 23, 2019 at 06:44:39AM -0700, Guenter Roeck wrote:
+> On 10/23/19 1:32 AM, Heikki Krogerus wrote:
+> > +Guenter
+> > 
+> > On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
+> > > Export the Type-C connector orientation so that user space
+> > > can get this information.
+> > > 
+> > > Signed-off-by: Puma Hsu <pumahsu@google.com>
+> > > ---
+> > >   Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
+> > >   drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
+> > >   2 files changed, 29 insertions(+)
+> > > 
+> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
+> > > index d7647b258c3c..b22f71801671 100644
+> > > --- a/Documentation/ABI/testing/sysfs-class-typec
+> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
+> > > @@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > >   Description:
+> > >   		Revision number of the supported USB Type-C specification.
+> > > +What:		/sys/class/typec/<port>/connector_orientation
+> > > +Date:		October 2019
+> > > +Contact:	Puma Hsu <pumahsu@google.com>
+> > > +Description:
+> > > +		Indicates which typec connector orientation is configured now.
+> > > +		cc1 is defined as "normal" and cc2 is defined as "reversed".
+> > > +
+> > > +		Valid value:
+> > > +		- unknown (nothing configured)
+> > 
+> > "unknown" means we do not know the orientation.
+> > 
+> > > +		- normal (configured in cc1 side)
+> > > +		- reversed (configured in cc2 side)
+> > 
+> > Guenter, do you think "connector_orientation" OK. I proposed it, but
+> > I'm now wondering if something like "polarity" would be better?
+> > 
 > 
-> When my Logitech C270 webcam is plugged in, my kernel log gets filled
-> with this message:
-> 
-> usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
-> 
-> every 5 seconds. I have the same problem on 3 different Intel-based
-> computers (different generations), using 2 different webcams, same
-> brand "same model".
->
-> Is Logitech doing crappy hardware these days, or are we doing something
-> wrong? Is there any way to know the reason that triggers the reset?
+> Yes, or just "orientation". I don't see the value in the "connector_" prefix.
+> I also wonder if "unknown" is really correct. Is it really unknown, or
+> does it mean that the port is disconnected ?
 
-Is this before or after the uvcvideo driver gets involved ? One easy way
-to check is to move the uvcvideo.ko module out of the way so that it
-doesn't get loaded automatically (or just blacklist it in
-/etc/modprobe.d/) and then plug the camera.
+Unknown means we don't know the orientation. We don't always have that
+information available to us. With UCSI we simply do not know it.
 
-> I would be more than happy to provide any relevant debugging
-> information if anyone is able to make it stop. As it stands, I must
-> plug my webcam before using it and unplug it as soon as I'm done, which
-> isn't exactly convenient.
+I think this file needs to be hidden after all if we don't know the
+cable plug orientation.
+
+How about empty string instead of "unknown"?
+
+thanks,
 
 -- 
-Regards,
-
-Laurent Pinchart
+heikki
