@@ -2,191 +2,187 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F11A1E0D64
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Oct 2019 22:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 284D6E0EFD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 02:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731593AbfJVUnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Oct 2019 16:43:43 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:2950 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727582AbfJVUnn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 16:43:43 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5daf6a020000>; Tue, 22 Oct 2019 13:43:46 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 22 Oct 2019 13:43:41 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 22 Oct 2019 13:43:41 -0700
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 22 Oct
- 2019 20:43:41 +0000
-Received: from NAM03-CO1-obe.outbound.protection.outlook.com (104.47.40.51) by
- HQMAIL109.nvidia.com (172.20.187.15) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Tue, 22 Oct 2019 20:43:41 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SjHAB3BwRop3+2F36bOg700e/8xP/Skdz+w6Ew2DZ4o6ITE+xUgmZGU4ItRDBG6RmxKn/fgHkxLoM8YQt1d5UBt5C/pDAfwI3RRqJfXUOiWCCEbx4VHS7wkcm38ftKoRjlOULVavGeySs6ToR1FG/Kf6f0Ikm28mFdUmR7cGUtQk11CFNteg1yML7To6okF6wXOKm39o+W06yhDfNSSEIPrxR/igoilQMF8pdFG2nYYAPAUq1+pDrQp5ANtHQI/Q75BdfjeTUFyUXEmoo8IkrxAbVoTsA3LcBFyHJsprVPRegKp+idrsrXMfCh8bCv1p3Mbt6ifj40R8n51v9bO7qA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oSqAnOfg5fO/itEBInI7OxJOACpTtSgJZxLGyEl+SVo=;
- b=V3E4GCzQhnRzDy5RZl0+/oAc10LT3L5JCRUM5lzpg6ROIN2uwqctZhTMfnjcIonRYftQ6o6SlIvGm/Qa5CtS8HYCYL2uEXUJ7SpkePUhA203l0CIAfpSbIEdlAakTbpa7vMbfiuMiXW5qY0AwwI7Kbwf1Ak8pV9nXdpY7P8gZxDGOEPHszgDLdOPeOfvPx05hCLZEC2Ycz6rz0Lw5FIzhffrz7R4rw6T+CvjGTW/q04j2u+5zJ/RauNKHwdRuh1++ycXzc4W8bx01FZcq8e6XqUJ+ND6pih9hzqGi0gdzVQaBf60Rw8Hy6wL0EH2Kz++NWWWHeJdNBKzfOEfzBaCRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.176.253.214) by
- BYAPR12MB2856.namprd12.prod.outlook.com (20.179.93.29) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.28; Tue, 22 Oct 2019 20:43:40 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::68ad:82d2:4830:abab]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::68ad:82d2:4830:abab%5]) with mapi id 15.20.2367.022; Tue, 22 Oct 2019
- 20:43:40 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH 00/18] usb: typec: API improvements
-Thread-Topic: [PATCH 00/18] usb: typec: API improvements
-Thread-Index: AQHViAJQgHUdt6QJ7UGQ0C35ghcOm6dljltwgAC5xACAANplMA==
-Date:   Tue, 22 Oct 2019 20:43:40 +0000
-Message-ID: <BYAPR12MB2727707263883A987D12D39FDC680@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
- <BYAPR12MB27275D13BB62F9120EBB9054DC690@BYAPR12MB2727.namprd12.prod.outlook.com>
- <20191022074110.GD28049@kuha.fi.intel.com>
-In-Reply-To: <20191022074110.GD28049@kuha.fi.intel.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-10-22T20:43:39.1377195Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=330b81c3-740b-493f-9dfa-d909ba60db46;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4a21c244-fbbc-4ace-1c0c-08d757308561
-x-ms-traffictypediagnostic: BYAPR12MB2856:
-x-ms-exchange-purlcount: 3
-x-microsoft-antispam-prvs: <BYAPR12MB28565A1C858DF778333BF2E6DC680@BYAPR12MB2856.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 01986AE76B
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(13464003)(189003)(199004)(76116006)(86362001)(6246003)(25786009)(229853002)(6436002)(55016002)(4326008)(52536014)(66066001)(64756008)(6306002)(66446008)(54906003)(66556008)(66476007)(66946007)(33656002)(9686003)(11346002)(7736002)(7696005)(476003)(8676002)(186003)(53546011)(71200400001)(6506007)(5660300002)(74316002)(71190400001)(966005)(6916009)(305945005)(446003)(81156014)(81166006)(102836004)(478600001)(26005)(256004)(8936002)(6116002)(2906002)(3846002)(316002)(14454004)(99286004)(76176011)(486006)(6606295002);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2856;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 5R5QFVdUTjhqi9HO8i3aK/GDyp+4nmXxMawLMFl3wSzgyuNnXhHEwlFNMiAqjt5M6mBOErvCW4FUVnBhTS6SPSxYbwc9aT8TokKdgK2qMIO1bSlYKpZh67ytZoGeZmIaoFZBCy7jtjxb6gnJDAecethGLztmVoKMhS++2gymTyoY/k84kAJVRvPZ2YRUNC+7o8kx0y+KP3YyZ8D6szAjhx8hiKbOi30OY5oWHcJyTIKSfY/gFazYYuWdOEsOKEmZFJF4QEL0HNZ8p6hpz1aXw6qBb+SPrZvrHtyIakW4Rbsp5xCW/GwI7pFP7l7Ju1QNHB7jUbjWT1FsOPsZB6taZ5YtkwP7OEXtOdNV7z10MSEiLtIrZxl0eUqjoBqB64HXzv/ppU/B668J82hGLdtKLZZbx/vCWbRwDlpmQTvg7FIRZUr17TJ/2IRS8sPkdEvvX3SJG9aGkSvHVxxa39hdRN8CmyxSAkoCn4+3MIeze9s=
-x-ms-exchange-transport-forked: True
+        id S1732188AbfJWAPM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Oct 2019 20:15:12 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:47299 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727885AbfJWAPL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Oct 2019 20:15:11 -0400
+Received: by mail-il1-f198.google.com with SMTP id q85so11033014ilk.14
+        for <linux-usb@vger.kernel.org>; Tue, 22 Oct 2019 17:15:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=JH24AAtyajChpUja6+GJRkJf0NIvsivlD1pXa/ZEH7w=;
+        b=LchBg3PT8cqzIoopV5fNoyb6HMrQ5Z44/tIYlBk/SHU9SKhAmVSwQr140rItAYNqcW
+         sEV7TqzdE/F46J4VBlQmexAoSiAanTnWGouo05FXU4YxziLEF+r/HjMYA9iysQjBaSkq
+         uw49SmOphx9CRvog82D43Y0564V05bgfKX2UVnEVGISxMLLczzAHA/T+xy8w5EmOD6Hx
+         nxEkv7z/yM+2pE8/j6qU7q7YLBueTyYeIrB/L+2NID5JC59x0zg9kEWs1NYgIOkrY9ps
+         3skISKZ4Fqcm5kdKVh5yVK8ykrKsAcdQlzptpafKeMSpBqhf2jqURkTcgssahExQSGpm
+         TioA==
+X-Gm-Message-State: APjAAAWh4Zn24gwgmBUd4IDRiPevP0LvO08nqX0ILC1QDZs+oWVqvNrf
+        WN5gQdvy9MLlF/gQSlu4OpSifF7/PbrfCKPRtI5S+fWvq3QL
+X-Google-Smtp-Source: APXvYqylg+sDJpklfUOgIokw07GcsikprsAIepACT+GRFsmzSdse0lHX0sld/zslY6B7QdMAe6b4OreGKbRBwflqDmydIHc8qPOK
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a21c244-fbbc-4ace-1c0c-08d757308561
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Oct 2019 20:43:40.2755
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: F78HL97pEHKfWDdOhEiJn9wCwE5LJKTPQCGCcwNcu1uIx1mu4XQc8EH0Y6ToIFowVqYAFoZ4+hA0Kf6VZ786hg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2856
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571777027; bh=oSqAnOfg5fO/itEBInI7OxJOACpTtSgJZxLGyEl+SVo=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-ms-exchange-purlcount:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=T/jyeMg4euye3ImRnfOII/ycgmTpxJtQcQTjYg52kd+lnGWA3mRZQl6Qyrl8pe2H3
-         9fpjQl2IXs4e6+47PgY6pCtLhu42xXLDsa9CMSxNcEnVu6410wMsMcyUnuWecjj2Pt
-         dD69z1iUFDLFOKdOkzGB4F5Cgti9jF20WyQPpQ0Q0oYFmd5xnSg6dIN7QFhEvZhTCi
-         S07vGAoylTfAvdenKeNHyXfhsiUa4RtnzrO8T5Pidhi5lsKYLfVpjmuwPLOh7WxqHA
-         QnU3OdzhmeYK+P1wWOyvL9vCDFrmWcHPQ9tEWuzLMbyO9HnIguD7YGvIWHAA1PNPCb
-         qseuO83F6W0ug==
+X-Received: by 2002:a92:40d9:: with SMTP id d86mr34902794ill.303.1571789710775;
+ Tue, 22 Oct 2019 17:15:10 -0700 (PDT)
+Date:   Tue, 22 Oct 2019 17:15:10 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005f6416059588cff9@google.com>
+Subject: KASAN: slab-out-of-bounds Read in parse_term_proc_unit
+From:   syzbot <syzbot+f586a582f79122007598@syzkaller.appspotmail.com>
+To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
+        benquike@gmail.com, dan.carpenter@oracle.com, g@b4.vu,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, tiwai@suse.com, yuehaibing@huawei.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
+Hello,
 
-> -----Original Message-----
-> From: linux-usb-owner@vger.kernel.org <linux-usb-owner@vger.kernel.org>
-> On Behalf Of Heikki Krogerus
-> Sent: Tuesday, October 22, 2019 12:41 AM
-> To: Ajay Gupta <ajayg@nvidia.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Guenter Roeck
-> <linux@roeck-us.net>; linux-usb@vger.kernel.org
-> Subject: Re: [PATCH 00/18] usb: typec: API improvements
->=20
-> On Mon, Oct 21, 2019 at 08:41:16PM +0000, Ajay Gupta wrote:
-> > Hi Heikki,
-> >
-> > > -----Original Message-----
-> > > From: linux-usb-owner@vger.kernel.org
-> > > <linux-usb-owner@vger.kernel.org> On Behalf Of Heikki Krogerus
-> > > Sent: Monday, October 21, 2019 4:25 AM
-> > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Guenter Roeck <linux@roeck-us.net>; Ajay Gupta
-> > > <ajayg@nvidia.com>; linux-usb@vger.kernel.org
-> > > Subject: [PATCH 00/18] usb: typec: API improvements
-> > >
-> > > Hi,
-> > >
-> > > The first patches in this series (patches 1-8) introduce a small
-> > > change to the USB Type-C Connector Class API. Guenter was kind
-> > > enough to go over those already.
-> > >
-> > > Patches 10-15 improve the ucsi driver API by introducing more
-> > > traditional read and write routines, and the rest is more generic
-> > > optimisations and improvements to the ucsi drivers.
-> > >
-> > > Let me know if there is anything you want to be changed.
-> > This patch set is not taking care of issues discussed at following thre=
-ad.
-> > https://marc.info/?l=3Dlinux-usb&m=3D156995500624107&w=3D2
-> > https://marc.info/?l=3Dlinux-usb&m=3D157012261301682&w=3D2
-> >
-> > We need fixes for above issues so that we can easily manage ppms which
-> > has multiple DP altmodes as discussed in below link.
-> > https://marc.info/?l=3Dlinux-usb&m=3D156778906010780&w=3D2
->=20
-> The goal of this series is not to solve that "issue".
->=20
-> This series is the base work that really has to be done in any case befor=
-e we
-> add any kind of solution for the multi DP alt mode case.
-> Rest assured that we will have support for that soon enough, but let's ju=
-st
-> move one step at a time.
-Ok, sounds good. I tested the series on NVIDIA GPU for ucsi_ccg and it work=
-s fine.
+syzbot found the following crash on:
 
-thanks
-> nvpublic
->=20
-> thanks,
->=20
-> --
-> heikki
+HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=141c4097600000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
+dashboard link: https://syzkaller.appspot.com/bug?extid=f586a582f79122007598
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169fe2df600000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13e2f3ef600000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+f586a582f79122007598@syzkaller.appspotmail.com
+
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+==================================================================
+BUG: KASAN: slab-out-of-bounds in uac_processing_unit_iProcessing  
+include/uapi/linux/usb/audio.h:429 [inline]
+BUG: KASAN: slab-out-of-bounds in parse_term_proc_unit+0x57a/0x5e0  
+sound/usb/mixer.c:896
+Read of size 1 at addr ffff8881d48eeca9 by task kworker/1:2/83
+
+CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.4.0-rc3+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:634
+  uac_processing_unit_iProcessing include/uapi/linux/usb/audio.h:429 [inline]
+  parse_term_proc_unit+0x57a/0x5e0 sound/usb/mixer.c:896
+  __check_input_term+0xc32/0x13f0 sound/usb/mixer.c:984
+  parse_audio_feature_unit sound/usb/mixer.c:1875 [inline]
+  parse_audio_unit+0x101d/0x36f0 sound/usb/mixer.c:2753
+  snd_usb_mixer_controls+0x715/0xb90 sound/usb/mixer.c:3095
+  snd_usb_create_mixer+0x2b5/0x1890 sound/usb/mixer.c:3445
+  usb_audio_probe+0xc76/0x2010 sound/usb/card.c:653
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0xae6/0x16f0 drivers/base/core.c:2201
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5183 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5323 [inline]
+  port_event drivers/usb/core/hub.c:5469 [inline]
+  hub_event+0x1dd0/0x37e0 drivers/usb/core/hub.c:5551
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Allocated by task 83:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:510 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
+  kmalloc include/linux/slab.h:561 [inline]
+  usb_get_configuration+0x314/0x3050 drivers/usb/core/config.c:857
+  usb_enumerate_device drivers/usb/core/hub.c:2369 [inline]
+  usb_new_device+0xd3/0x160 drivers/usb/core/hub.c:2505
+  hub_port_connect drivers/usb/core/hub.c:5183 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5323 [inline]
+  port_event drivers/usb/core/hub.c:5469 [inline]
+  hub_event+0x1dd0/0x37e0 drivers/usb/core/hub.c:5551
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+
+Freed by task 0:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
+  slab_free_hook mm/slub.c:1424 [inline]
+  slab_free_freelist_hook mm/slub.c:1475 [inline]
+  slab_free mm/slub.c:3018 [inline]
+  kfree+0xe4/0x320 mm/slub.c:3967
+  free_task+0xe3/0x110 kernel/fork.c:472
+  __put_task_struct+0x1e2/0x4c0 kernel/fork.c:748
+  put_task_struct include/linux/sched/task.h:119 [inline]
+  delayed_put_task_struct+0x1b4/0x2c0 kernel/exit.c:182
+  __rcu_reclaim kernel/rcu/rcu.h:222 [inline]
+  rcu_do_batch kernel/rcu/tree.c:2157 [inline]
+  rcu_core+0x630/0x1ca0 kernel/rcu/tree.c:2377
+  __do_softirq+0x221/0x912 kernel/softirq.c:292
+
+The buggy address belongs to the object at ffff8881d48eec00
+  which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 169 bytes inside of
+  192-byte region [ffff8881d48eec00, ffff8881d48eecc0)
+The buggy address belongs to the page:
+page:ffffea0007523b80 refcount:1 mapcount:0 mapping:ffff8881da002a00  
+index:0x0
+flags: 0x200000000000200(slab)
+raw: 0200000000000200 ffffea000753ce40 0000000e0000000e ffff8881da002a00
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+  ffff8881d48eeb80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+  ffff8881d48eec00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ffff8881d48eec80: 00 00 00 00 03 fc fc fc fc fc fc fc fc fc fc fc
+                                   ^
+  ffff8881d48eed00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ffff8881d48eed80: 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
