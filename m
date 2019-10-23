@@ -2,96 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F40BE1846
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 12:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2334E18CD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 13:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390631AbfJWKxB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 06:53:01 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:37449 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390491AbfJWKxB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 06:53:01 -0400
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iNEG8-0006gT-J6; Wed, 23 Oct 2019 12:52:56 +0200
-Received: from ukl by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iNEG7-0004Jp-Ok; Wed, 23 Oct 2019 12:52:55 +0200
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Richard Leitner <richard.leitner@skidata.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Carsten Stelling <carsten.stelling@goerlitz.com>
-Subject: [PATCH 3/3] usb: usb251xb: Add support for USB2422
-Date:   Wed, 23 Oct 2019 12:52:50 +0200
-Message-Id: <20191023105250.16537-3-u.kleine-koenig@pengutronix.de>
+        id S2404715AbfJWLWA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 07:22:00 -0400
+Received: from mga14.intel.com ([192.55.52.115]:29695 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404659AbfJWLWA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 07:22:00 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 04:21:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,220,1569308400"; 
+   d="scan'208";a="399359438"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga006.fm.intel.com with ESMTP; 23 Oct 2019 04:21:55 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 001041CC; Wed, 23 Oct 2019 14:21:54 +0300 (EEST)
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mario.Limonciello@dell.com,
+        Anthony Wong <anthony.wong@canonical.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/25] thunderbolt: Add support for USB4
+Date:   Wed, 23 Oct 2019 14:21:29 +0300
+Message-Id: <20191023112154.64235-1-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191023105250.16537-1-u.kleine-koenig@pengutronix.de>
-References: <20191023105250.16537-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB2422 uses a different package that the USB251x and only comes in
-a variant with 2 downstream ports. Other than that it is software
-compatible.
+Hi,
 
-Tested-by: Carsten Stelling <carsten.stelling@goerlitz.com>
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/usb/misc/usb251xb.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+USB4 is the public specification of Thunderbolt 3 protocol and can be
+downloaded here:
 
-diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-index d91ef9cf3623..7e4e4787f746 100644
---- a/drivers/usb/misc/usb251xb.c
-+++ b/drivers/usb/misc/usb251xb.c
-@@ -154,6 +154,14 @@ struct usb251xb_data {
- 	char product_str[USB251XB_STRING_BUFSIZE / 2]; /* ASCII string */
- };
- 
-+static const struct usb251xb_data usb2422_data = {
-+	.product_id = 0x2422,
-+	.port_cnt = 2,
-+	.led_support = false,
-+	.bat_support = true,
-+	.product_str = "USB2422",
-+};
-+
- static const struct usb251xb_data usb2512b_data = {
- 	.product_id = 0x2512,
- 	.port_cnt = 2,
-@@ -588,6 +596,9 @@ static int usb251xb_get_ofdata(struct usb251xb *hub,
- 
- static const struct of_device_id usb251xb_of_match[] = {
- 	{
-+		.compatible = "microchip,usb2422",
-+		.data = &usb2422_data,
-+	}, {
- 		.compatible = "microchip,usb2512b",
- 		.data = &usb2512b_data,
- 	}, {
-@@ -688,6 +699,7 @@ static int usb251xb_i2c_probe(struct i2c_client *i2c,
- }
- 
- static const struct i2c_device_id usb251xb_id[] = {
-+	{ "usb2422", 0 },
- 	{ "usb2512b", 0 },
- 	{ "usb2512bi", 0 },
- 	{ "usb2513b", 0 },
+  https://www.usb.org/sites/default/files/USB4%20Specification_1.zip
+
+USB4 is about tunneling different protocols over a single cable (in the
+same way as Thunderbolt). The current USB4 spec supports PCIe, Display Port
+and USB 3.x, and also software based protocols such as networking between
+domains (hosts).
+
+So far PCs have been using firmware based Connection Manager (FW CM, ICM)
+and Apple systems have been using software based one (SW CM, ECM). A
+Connection Manager is the entity that handles creation of different tunnel
+types through the USB4 (and Thunderbolt) fabric. With USB4 the plan is to
+have software based Connection Manager everywhere but some early systems
+will also support firmware to allow OS downgrade for example.
+
+Current Linux Thunderbolt driver supports both "modes" and can detect which
+one to use dynamically.
+
+This series first adds support for Thunderbolt 3 devices to the software
+connection manager and then extends that to support USB4 compliant hosts
+and devices (this applies to both firmware and software based connection
+managers). With this series the following features are supported also for
+USB4 compliant devices:
+
+  - PCIe tunneling
+  - Display Port tunneling
+  - USB 3.x tunneling
+  - P2P networking (implemented in drivers/net/thunderbolt.c)
+  - Host and device NVM firmware upgrade
+
+The previous RFC version of the series can be seen here:
+
+  https://lore.kernel.org/lkml/20191001113830.13028-1-mika.westerberg@linux.intel.com/
+
+Changes from the RFC version:
+
+  * Spelled out what are ICM, and SW CM (and ECM)
+  * Log warning in tb_switch_add() instead of the caller
+  * Use Lukas' suggestion in port walk helper macro and also drop
+    tb_switch_for_each_remote_port() and tb_switch_for_each_connected_port()
+  * Rework icm.c::add_switch() so that we don't need to pass huge amount of
+    parameters to it
+  * Add rx/tx versions of link width/speed attributes following convention
+    used in USB bus (with the exception that we provide rx_speed and
+    tx_speed as well).
+  * Spell out DROM and try to clarify what linking in patch [11/25] means.
+  * Add a new patch that expands controller name in existing tb_switch_is_xy()
+    functions and do the same for tb_switch_is_ar()/tr().
+  * Move register name conversion pathes up in the series so that we can
+    apply them for v5.5 already.
+  * Update changelog of patch [14/25] so that it only mentions Titan Ridge.
+  * Rename CONFIG_THUNDERBOLT to CONFIG_USB4, this should be more future
+    proof.
+  * Check if TMU is enabled in tb_switch_tmu_enable().
+  * Use "usb3" and "USB3" in USB 3.x tunneling functionality instead of
+    plain "usb".
+  * Reword documentation patch [25/25] according to received comments.
+  * Introduce icm_firmware_running().
+
+I did not yet add the hw_vendor_id and hw_product_id attributes because I
+clocked that 'dd if=nvm_activeX/nvmem of=/dev/null bs=64 count=2' (that's
+what fwupd does) takes typically less than 10 ms when the controller is
+powered on. That should not slow down fwupd. We can add them later if it is
+really a problem (I'm just trying to avoid adding too much attributes that
+we need to maintain forever).
+
+I think patches 1 to 17 can be applied for v5.5 already since they are
+pretty much about adding support for existing Thunderbolt 3 devices to the
+software connection manager. This allows Apple systems with Alpine or Titan
+Ridge controller to work without need to start the firmware. Please let me
+know if there are objections.
+
+USB4 support patches 18 - 25 have been tested on development hardware but
+since it is rather early stage hardware we have not been able to properly
+test all features such as power management (which is why it is currently
+missing in this series).
+
+Mika Westerberg (22):
+  thunderbolt: Introduce tb_switch_is_icm()
+  thunderbolt: Log switch route string on config read/write timeout
+  thunderbolt: Log error if adding switch fails
+  thunderbolt: Convert basic adapter register names to follow the USB4 spec
+  thunderbolt: Convert PCIe adapter register names to follow the USB4 spec
+  thunderbolt: Convert DP adapter register names to follow the USB4 spec
+  thunderbolt: Make tb_sw_write() take const parameter
+  thunderbolt: Add helper macro to iterate over switch ports
+  thunderbolt: Refactor add_switch() into two functions
+  thunderbolt: Add support for lane bonding
+  thunderbolt: Add default linking between lane adapters if not provided by DROM
+  thunderbolt: Expand controller name in tb_switch_is_xy()
+  thunderbolt: Add downstream PCIe port mappings for Alpine and Titan Ridge
+  thunderbolt: Add Display Port CM handshake for Titan Ridge devices
+  thunderbolt: Add Display Port adapter pairing and resource management
+  thunderbolt: Add bandwidth management for Display Port tunnels
+  thunderbolt: Do not start firmware unless asked by the user
+  thunderbolt: Make tb_find_port() available to other files
+  thunderbolt: Call tb_eeprom_get_drom_offset() from tb_eeprom_read_n()
+  thunderbolt: Add initial support for USB4
+  thunderbolt: Update Kconfig entry to USB4
+  thunderbolt: Update documentation with the USB4 information
+
+Rajmohan Mani (3):
+  thunderbolt: Make tb_switch_find_cap() available to other files
+  thunderbolt: Add support for Time Management Unit
+  thunderbolt: Add support for USB 3.x tunnels
+
+ .../ABI/testing/sysfs-bus-thunderbolt         |  28 +
+ Documentation/admin-guide/thunderbolt.rst     |  25 +-
+ drivers/Makefile                              |   2 +-
+ drivers/net/Kconfig                           |   2 +-
+ drivers/thunderbolt/Kconfig                   |  11 +-
+ drivers/thunderbolt/Makefile                  |   4 +-
+ drivers/thunderbolt/cap.c                     |  17 +-
+ drivers/thunderbolt/ctl.c                     |   8 +-
+ drivers/thunderbolt/eeprom.c                  | 146 +--
+ drivers/thunderbolt/icm.c                     | 157 +--
+ drivers/thunderbolt/lc.c                      | 193 +++-
+ drivers/thunderbolt/nhi.c                     |   3 +
+ drivers/thunderbolt/nhi.h                     |   2 +
+ drivers/thunderbolt/path.c                    |  52 +-
+ drivers/thunderbolt/switch.c                  | 943 +++++++++++++++---
+ drivers/thunderbolt/tb.c                      | 536 ++++++++--
+ drivers/thunderbolt/tb.h                      | 182 +++-
+ drivers/thunderbolt/tb_msgs.h                 |   2 +
+ drivers/thunderbolt/tb_regs.h                 | 160 ++-
+ drivers/thunderbolt/tmu.c                     | 383 +++++++
+ drivers/thunderbolt/tunnel.c                  | 527 +++++++++-
+ drivers/thunderbolt/tunnel.h                  |  19 +-
+ drivers/thunderbolt/usb4.c                    | 763 ++++++++++++++
+ drivers/thunderbolt/xdomain.c                 |  11 +-
+ 24 files changed, 3718 insertions(+), 458 deletions(-)
+ create mode 100644 drivers/thunderbolt/tmu.c
+ create mode 100644 drivers/thunderbolt/usb4.c
+
 -- 
 2.23.0
 
