@@ -2,119 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 897F1E2126
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 18:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FF8E215C
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 19:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726632AbfJWQ6K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 12:58:10 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:40226 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726265AbfJWQ6K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 12:58:10 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id BE63960DB8; Wed, 23 Oct 2019 16:58:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1571849888;
-        bh=e/wbk7W51qosh1x31nJNEuLAxvnQRx8M8ayYRV5U3eg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=edqcx+u+rlmocI2E86il4NC0lXAUiJ0VXXX3etgyxoQhitzri37iHd9IHR3m+TQR2
-         UfNZeqL9X0vG9KyyxRLVx74Er4dWWritg0vZkDymTzbh4eogvCPS9DKIVbqjb/l0ek
-         1jdStirZfReVfjq2xKODj+mbER4Ndow2NUIaIkOA=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9D54960DB8;
-        Wed, 23 Oct 2019 16:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1571849887;
-        bh=e/wbk7W51qosh1x31nJNEuLAxvnQRx8M8ayYRV5U3eg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i0XqgQqBfDxVfDQ6znF3gcx2COuTjhZ19Nb5eIKcq/bGbJHXbq5vbPqV2SOst+Ezg
-         QbwXeTP6U403KXRPyXTAQh9kXzhHdZhRGTOHPvyXA0mwhlSZaPw8NEQ1x9f/IB+jlt
-         OU9ynhfOTw1gvQQmNdk4JYrXtZJVqTixWAej2H1w=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9D54960DB8
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 23 Oct 2019 09:58:04 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Anurag Kumar Vulisha <anuragku@xilinx.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "v.anuragkumar@gmail.com" <v.anuragkumar@gmail.com>
-Subject: Re: [PATCH] usb: dwc3: gadget: Correct the logic for finding last SG
- entry
-Message-ID: <20191023165804.GD9754@jackp-linux.qualcomm.com>
-References: <1559141985-17104-1-git-send-email-anurag.kumar.vulisha@xilinx.com>
- <87y32gcvc1.fsf@linux.intel.com>
- <BYAPR02MB559181C009B74446A797838DA7170@BYAPR02MB5591.namprd02.prod.outlook.com>
- <87ftoldh48.fsf@linux.intel.com>
+        id S1727283AbfJWRE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 13:04:26 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:40244 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727249AbfJWRE0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 13:04:26 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9NH3xeQ006228;
+        Wed, 23 Oct 2019 12:03:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571850239;
+        bh=UBTc3V+c2TiqjrYhKmFzYaRZfUW/MVg36Zg7zo1cHxA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=BD5siyVt4YjHNuoQZuBql3swzI7/DszTfYUWg59d+XVlMWT5f1gooVNzBOyQZ0h27
+         X9CPgsGI1li7j7sP/ZoXH8pXrif+FD9ouTgiJExUZ5G90dMbhm2UHNLlMOccQ0FnaP
+         MyfMX8yBRgYXiK8Op8WMuujYJdPdI+TqiYTRtPdE=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9NH3xfE059061
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 23 Oct 2019 12:03:59 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 23
+ Oct 2019 12:03:49 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 23 Oct 2019 12:03:49 -0500
+Received: from [192.168.2.10] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9NH3ra1018604;
+        Wed, 23 Oct 2019 12:03:54 -0500
+Subject: Re: [PATCH] dmaengine: cppi41: Fix cppi41_dma_prep_slave_sg() when
+ idle
+To:     Tony Lindgren <tony@atomide.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vinod.koul@intel.com>
+CC:     Alexandre Bailon <abailon@baylibre.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Johan Hovold <johan@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        <dmaengine@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <giulio.benetti@benettiengineering.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Skvortsov <andrej.skvortzov@gmail.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>
+References: <20191023153138.23442-1-tony@atomide.com>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <245e1e8f-7933-bae1-b779-239f33d4d449@ti.com>
+Date:   Wed, 23 Oct 2019 20:04:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ftoldh48.fsf@linux.intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20191023153138.23442-1-tony@atomide.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Anurag,
+Hi Tony,
 
-On Fri, Jun 07, 2019 at 09:49:59AM +0300, Felipe Balbi wrote:
-> Anurag Kumar Vulisha <anuragku@xilinx.com> writes:
-> >>> The dma_map_sg() merges sg1 & sg2 memory regions into sg1-
-> >>>dma_address.
-> >>> Similarly sg3 & sg4 into sg2->dma_address, sg5 & sg6 into the
-> >>> sg3->dma_address and sg6 & sg8 into sg4->dma_address. Here the
-> >>memory
-> >>> regions are merged but the page_link properties like SG_END are not
-> >>> retained into the merged sgs.
-> >>
-> >>isn't this a bug in the scatterlist mapping code? Why doesn't it keep
-> >>SG_END?
-> >>
-> >
-> > Thanks for providing your comment.
-> >
-> > I don't think it is a bug, instead I feel some enhancement needs to be done in
-> > dma-mapping code.
-> >
-> > SG_END represents the last sg entry in the sglist and it is correctly getting
-> > set to the last sg entry.
-> >
-> > The issue happens only when 2 or more sg entry pages are merged into
-> > contiguous dma-able address and sg_is_last() is used to find the last sg entry
-> > with valid dma address.
+On 10/23/19 6:31 PM, Tony Lindgren wrote:
+> Yegor Yefremov <yegorslists@googlemail.com> reported that musb and ftdi
+> uart can fail for the first open of the uart unless connected using
+> a hub.
 > 
-> Right, and that's something that's bound to happen. I'm arguing that, perhaps,
-> dma API should move SG_END in case entries are merged.
+> This is because the first dma call done by musb_ep_program() must wait
+> if cppi41 is PM runtime suspended. Otherwise musb_ep_program() continues
+> with other non-dma packets before the DMA transfer is started causing at
+> least ftdi uarts to fail to receive data.
 > 
-> > I think that along with sg_is_last() a new flag (SG_DMA_END) and function
-> > (something like sg_dma_is_last() ) needs to be added into dma-mapping code for
-> > identifying the last valid sg entry with valid dma address. So that we can
-> > make use of that function instead of sg_is_last().
+> Let's fix the issue by waking up cppi41 with PM runtime calls added to
+> cppi41_dma_prep_slave_sg() and return NULL if still idled. This way we
+> have musb_ep_program() continue with PIO until cppi41 is awake.
 > 
-> Sure, propose a patch to DMA API.
+> Fixes: fdea2d09b997 ("dmaengine: cppi41: Add basic PM runtime support")
+> Cc: Bin Liu <b-liu@ti.com>
+> Cc: giulio.benetti@benettiengineering.com
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Skvortsov <andrej.skvortzov@gmail.com>
+> Reported-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+> 
+> Please consider adding Cc stable v4.9+ tag when committing
+> 
+> ---
+>  drivers/dma/ti/cppi41.c | 21 ++++++++++++++++++++-
+>  1 file changed, 20 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/dma/ti/cppi41.c b/drivers/dma/ti/cppi41.c
+> --- a/drivers/dma/ti/cppi41.c
+> +++ b/drivers/dma/ti/cppi41.c
+> @@ -586,9 +586,22 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+>  	enum dma_transfer_direction dir, unsigned long tx_flags, void *context)
+>  {
+>  	struct cppi41_channel *c = to_cpp41_chan(chan);
+> +	struct dma_async_tx_descriptor *txd = NULL;
+> +	struct cppi41_dd *cdd = c->cdd;
+>  	struct cppi41_desc *d;
+>  	struct scatterlist *sg;
+>  	unsigned int i;
+> +	int error;
+> +
+> +	error = pm_runtime_get(cdd->ddev.dev);
 
-I'm curious if this was ever resolved. I just ran into this exact issue
-with Android ADB which uses 16KB buffers, along with f_fs supporting
-S/G since 5.0, combined with our IOMMU which performs this merging
-behavior, so it resulted in a single TRB getting queued with CHN=1 and
-LST=0 and thus the transfer never completes. Your initial patch resolves
-the issue for me, but upon revisiting this discussion I couldn't tell if
-you had attempted to patch DMA API instead as per Felipe's suggestion.
+If pm_runtime_get()
+pm_runtime_mark_last_busy()+pm_runtime_put_autosuspend() around a code
+which updates a descriptor in _memory_ helps then this best described as
+works by luck ;)
 
-Thanks,
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I have a feeling that if you put enough delay between prepare_sg and
+issue_pending in the usb driver then it will keep failing, no?
+
+fwiw, in the cppi41_dma_issue_pending() the driver does:
+
+	error = pm_runtime_get(cdd->ddev.dev);
+...
+	if (!cdd->is_suspended)
+		cppi41_run_queue(cdd);
+...
+	pm_runtime_mark_last_busy(cdd->ddev.dev);
+	pm_runtime_put_autosuspend(cdd->ddev.dev);
+
+Without waiting for the transfer to complete?
+
+If issue_pending is not starting the transfer right away then the whole
+pm handling is broken in there. imho.
+
+runtime_get in prep_slave_sg and runtime_put when the transfer is finished?
+
+> +	if (error < 0) {
+> +		pm_runtime_put_noidle(cdd->ddev.dev);
+> +
+> +		return NULL;
+> +	}
+> +
+> +	if (cdd->is_suspended)
+> +		goto err_out_not_ready;
+>  
+>  	d = c->desc;
+>  	for_each_sg(sgl, sg, sg_len, i) {
+> @@ -611,7 +624,13 @@ static struct dma_async_tx_descriptor *cppi41_dma_prep_slave_sg(
+>  		d++;
+>  	}
+>  
+> -	return &c->txd;
+> +	txd = &c->txd;
+> +
+> +err_out_not_ready:
+> +	pm_runtime_mark_last_busy(cdd->ddev.dev);
+> +	pm_runtime_put_autosuspend(cdd->ddev.dev);
+> +
+> +	return txd;
+>  }
+>  
+>  static void cppi41_compute_td_desc(struct cppi41_desc *d)
+> 
+
+- Peter
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
