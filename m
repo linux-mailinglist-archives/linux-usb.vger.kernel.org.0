@@ -2,67 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC5CE1B27
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 14:47:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C95AE1BD9
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391043AbfJWMqy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 08:46:54 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:34108 "EHLO
+        id S2405623AbfJWNK5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 23 Oct 2019 09:10:57 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:35592 "EHLO
         mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390104AbfJWMqy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 08:46:54 -0400
-Received: by mail-ed1-f68.google.com with SMTP id b72so6685555edf.1;
-        Wed, 23 Oct 2019 05:46:51 -0700 (PDT)
+        with ESMTP id S1726032AbfJWNK4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:10:56 -0400
+Received: by mail-ed1-f68.google.com with SMTP id k2so5018362edx.2;
+        Wed, 23 Oct 2019 06:10:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=A4xxnHET7dHUr6+FUOOYWQtG2S2xuT97YaAB9hJ4Qfs=;
-        b=W1KbQtpmWt/MKHEj4j+1dunbkRU3GsIeHmt9O4c6PTD4o5+0m3nkzP/9XKQfMH96LA
-         6U1o3t7Ji/LjmA2FMI4qd2pnpUyUq3/wSFEnREVh/MVym/kiIiJusdzDZs/dpWR6PTgi
-         kipHrAzEQBz/AFPEg//hgUbNLRLL89XbYbtGWx0Y/vgyGxuYl/Gfv36N/XyMtss/xHIj
-         qemA7p+4rwfj5cemtT9SwMLwUBNNG1EYNvoJB0SiY6S0xdBnFv0gyNFh7mJVMOpGflQ/
-         745CQhBcqsggL/DhIw/0vqjSNmEMSryWsasH7vrIPFM9AZmoqvaMiI+Gzi5OuTGasDIQ
-         AQ/A==
-X-Gm-Message-State: APjAAAV37q8Np60BTXdX8Erm9fpcstLjyWHKQXv8jcZkuZcYrClq47F1
-        NpstkAoU6O7Li2HXwAa1Mwc85N9oBE4=
-X-Google-Smtp-Source: APXvYqyIj+x4DPnQ8/wfFlKsi+/SJbuj1ZkWeMFOp0eV28T9/zZeeEOdXwSG8Og+Eu/s2dSay0QajQ==
-X-Received: by 2002:a50:f683:: with SMTP id d3mr15725304edn.70.1571834810704;
-        Wed, 23 Oct 2019 05:46:50 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=lzwXfyhUE7yc9zrzbjqMe71sKuHvjq9U3aqm0Bd1AoI=;
+        b=S/A3aIGnph7/r49FdcX/+rOROLnuReURWi9z5AaaiFgwNDyHNguoHy2jLTKIg0AobS
+         Ii8Aob7iyqUE9px3EJl+QbMXPlHqS2i4AJjUkEXgVYMOpJB5ylqfR28AxSRz0LGrE0oN
+         dz0N+b0G4A1+WoZyqXNpZC27TiMgZrwh3OQIocjQVBgN+3XtOoyCaMvlIaqATpBbxqeb
+         aH+TRLRapqnj+ldkTcAZ0Bi9oR73bzEGJ0oLBkEdJwU7OEXluqUoH1Bhl4rcsWPwWDMa
+         DGF3xhA2WaMsusqyac2NzMIPJnBzhBlKnq/yDYu7/oI4+szOWAtVn2bNxBf1GiYtQfaY
+         jRtQ==
+X-Gm-Message-State: APjAAAXIBu2F0LkRRidZBYch85DAr88A/27wF1+klG85knTLuwFmQPUI
+        Ki2dfON5MI5tkKTRGbG4ylA=
+X-Google-Smtp-Source: APXvYqyft44OcCGb0xN0+fC1gmfK8usNRgvA/I5KY4vuTv2zLifQ5kptU9qNo1AQahi2rM4m7Aa/dg==
+X-Received: by 2002:aa7:c595:: with SMTP id g21mr36717915edq.79.1571836252860;
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
 Received: from pi3 ([194.230.155.217])
-        by smtp.googlemail.com with ESMTPSA id d8sm279944edb.18.2019.10.23.05.46.49
+        by smtp.googlemail.com with ESMTPSA id b12sm785479edq.75.2019.10.23.06.10.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 05:46:50 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 14:46:48 +0200
+        Wed, 23 Oct 2019 06:10:52 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 15:10:49 +0200
 From:   Krzysztof Kozlowski <krzk@kernel.org>
 To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Kukjin Kim <kgene@kernel.org>, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linus.walleij@linaro.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 03/36] usb: gadget: s3c: use platform resources
-Message-ID: <20191023124648.GE11048@pi3>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-clk@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org,
+        Lihua Yao <ylhuajnu@163.com>,
+        =?utf-8?B?UGF3ZcWC?= Chmiel <pawel.mikolaj.chmiel@gmail.com>,
+        Lihua Yao <ylhuajnu@outlook.com>,
+        Sergio Prado <sergio.prado@e-labworks.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>
+Subject: Re: [PATCH 00/36] ARM: samsung platform cleanup
+Message-ID: <20191023131049.GG11048@pi3>
 References: <20191010202802.1132272-1-arnd@arndb.de>
- <20191010203043.1241612-1-arnd@arndb.de>
- <20191010203043.1241612-3-arnd@arndb.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191010203043.1241612-3-arnd@arndb.de>
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191010202802.1132272-1-arnd@arndb.de>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:29:47PM +0200, Arnd Bergmann wrote:
-> The resources are correctly initialized, so just use them
-> instead of relying on hardcoded data from platform headers.
+On Thu, Oct 10, 2019 at 10:28:02PM +0200, Arnd Bergmann wrote:
+> I've spent some time looking at the remaining ARMv4/ARMv5 platforms
+> that are not part of ARCH_MULTIPLATFORM, and tried to get them closer
+> to that. Here is what came out of that for the samsung platforms:
+> 
+> * Exynos and s5pv210 are made independent of plat-samsung
+> * device drivers stop using mach/*.h headers for s3c24xx
+>   (and other platforms not in this series)
+> * s3c24xx and s3c64xx get merged into mach-s3c, removing
+>   the need for plat-samsung (I have other patches for the
+>   remaining plat-* directories)
+> * mach/io.h gets cleaned up to only be needed for BAST
+>   PC104 mode (looking for ideas to proceed)
+> * mach/irqs.h remains for now, this still needs to be converted
+>   to sparse IRQs.
+> 
+> Some bits are a little ugly, but overall I think this a big
+> improvement.
+> 
+> The contents are available for testing in
+> 
+> git://kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git s3c-multiplatform
 
-Generic comment to all patches - you seem to break commit msg lines
-slightly too early. In certain cases it makes them unnecessarily longer.
-Maybe your editor has to be fixed to wrap at 75 column.
+When sending v2, can you Cc:
+
+Paweł Chmiel <pawel.mikolaj.chmiel@gmail.com>
+Lihua Yao <ylhuajnu@outlook.com>
+(or Lihua Yao <ylhuajnu@163.com> if outlook.com bounces)
+Sergio Prado <sergio.prado@e-labworks.com>
+Sylwester Nawrocki <s.nawrocki@samsung.com>
+
+These are folks which to my knowledge had working S3C and S5P boards
+so maybe they could provide testing.
 
 Best regards,
 Krzysztof
