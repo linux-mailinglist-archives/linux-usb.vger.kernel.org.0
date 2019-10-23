@@ -2,157 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D6EE1D0E
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:44:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1710CE1D4A
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 15:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406018AbfJWNoo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 09:44:44 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40168 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390619AbfJWNon (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:44:43 -0400
-Received: by mail-pf1-f193.google.com with SMTP id x127so12974094pfb.7;
-        Wed, 23 Oct 2019 06:44:43 -0700 (PDT)
+        id S2391683AbfJWNu0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 09:50:26 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33337 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389887AbfJWNuZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 09:50:25 -0400
+Received: by mail-qt1-f193.google.com with SMTP id r5so32416246qtd.0
+        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 06:50:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=bqtujpqNbAQZJihzkVcd83j8KH7ymy87CfXaLggRLzI=;
-        b=gv70QZPxr2QwDImicOJ1btC3vgXVITVLotvnT607VxEd8XS3mo/bGtx97d/jSuVlbr
-         dyknHxENLL/MOdE0rdHVwQVdcdbhcN3/Yi02vJHWZsVEyNMShMjGeH2gqeLtICIPKWvK
-         qbVr+84wC5WFR7qEq6t998irZjaFIzwMFTSQWY8TYE3zrUYVfuami09BD7Y8xpGyOfvy
-         b/rbasGj/axsSZt02719YmCyf0EqBJi+sx+ZeOzpRnkxnnX6J7CW2kamhYMCQQtifDkD
-         jiZrVeHyyOEsCdBaboc2bfyys/BRD0UaTASvn/ktI4dc2JDrFsFqHg/cMfi/7sS7v84b
-         HVwQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YRkY+aBxE9hZdBe1FL06hzEtAF+venmJUi6XuiuleYs=;
+        b=Z7umXCP9MjNBDxPLTg06CWYluvjLNqLabwT5jgh+mIUUCO3NtEoNw8SSOy1h2gvBQs
+         ti0A6f88arX4+LZVmjzwpPSUcFoX09Ef6GbbDpjhCUl+hVboNOf7Z+I0yex3UmoHTNI4
+         pFy9UyRqQLlxWUt4FMv/sQgIKTlzdWxa8ZyljGm0umJ/IDY092SX0ezWjhlv0nZKTBGL
+         Fw207fL5ChkW4et6Mv/Kcuu5n6Egiyr/4ILm3tWn6maGZlUeh3qjIY3d8WzHiIjhH0K8
+         7nfgM4adsYjAD2BidWLEm0dimQhZWtGeAZCXHU+75V6n3O9urs7kBVw2Jd+3gved2aLR
+         tpRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bqtujpqNbAQZJihzkVcd83j8KH7ymy87CfXaLggRLzI=;
-        b=J96CzqDuln15H4a86c8VE+UayOxIipl9Dbw9P/jT5TmdLt4/WBjv1tlEpZZb3lamWN
-         C2zrwPRHLkTHVwxbv31kZ/k1P7Qpc09GyAGOyuj4XjkwoPz303uHxWoEBmactzDJauDD
-         4PvJjp/0zDNczD/CPfSTs1mk3z/X4Z5y+LCCBZoprOZKxIMHUmD7ksIFfRWCq5BJVza1
-         5uO00ELokeRmw2yLCkzNmVVzhZX6tFbdu/Zy9SGtY9u+ITeaSSZIw020Lgn1n2gOGSk5
-         P3Lo5YL843OsubQhO1nf/Ns9sDsDqAC9ZUXpXuQNUwsgFP/QPNm6lGLtz8PTRTp7DOW+
-         mJaw==
-X-Gm-Message-State: APjAAAWiVq3K9gA6yTEtGJdLs9TRgQmJjEpTeVMfBRW5raHWuPUczwi8
-        GLhn06oeJyGS3B0NC7lhvjX+HYUz
-X-Google-Smtp-Source: APXvYqz4CGQL2G6j+rGwttfWxPjzpe667CQOGCSti7mkoDtHvcYAlhF1fK0vri6y+Q+kUEkfwqg90w==
-X-Received: by 2002:a63:7845:: with SMTP id t66mr9987694pgc.31.1571838282149;
-        Wed, 23 Oct 2019 06:44:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c9sm4026398pfb.114.2019.10.23.06.44.40
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Oct 2019 06:44:41 -0700 (PDT)
-Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector
- orientation
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Puma Hsu <pumahsu@google.com>
-Cc:     gregkh@linuxfoundation.org, badhri@google.com, kyletso@google.com,
-        albertccwang@google.com, rickyniu@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191022085924.92783-1-pumahsu@google.com>
- <20191023083221.GB8828@kuha.fi.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
-Date:   Wed, 23 Oct 2019 06:44:39 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YRkY+aBxE9hZdBe1FL06hzEtAF+venmJUi6XuiuleYs=;
+        b=YVbEey5UJmSfEuE4OQZOZ62iO2DjGI9tdS3W6Yx7m1KwZ1FkifXJ9qB2zer5dsX7UE
+         otHVua/wJQgGsSeQp6ZwFxmCGJjP9zbjyExBLhkAOsFuZgcTqioZptUr4o+buzI9Hi6t
+         J0sxcttT760GJZoeQXB7vRx1BznuvKW/xtgleWcaxWHzdqNh5ed7/Y0vrgEr1Cj913DI
+         Pto3SSdiRO9o6l3UdWAJZSx7AHSsyW5SyklPqWWC5EhPKCfSTh+t4TvWxRkJ5rnpTTyR
+         nrt6YBC01kI2k6u5EZVJ+DjfGx0qZRfTkxsjg3XCtF7PXI/ng1f2PjlursP4jdW4pq3t
+         JpjA==
+X-Gm-Message-State: APjAAAV38gy7tHttgJlZv6wddlTFaOH2zdyE+AKsyiEEVSTRWp9vU9C6
+        oFeCfPJFUI3NVTaqKuvz9nQZDvGZnavATaKad0msKA==
+X-Google-Smtp-Source: APXvYqzw4YjCo83icRV+mrEHZmgPfBbFlldrPD5LYUxGJwtTpywYc9LXV0/W6t7MKVG/gnLc8w/UCFAy4gNRXqYJWlg=
+X-Received: by 2002:aed:24af:: with SMTP id t44mr8934014qtc.57.1571838623993;
+ Wed, 23 Oct 2019 06:50:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191023083221.GB8828@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1571762488.git.andreyknvl@google.com> <26e088ae3ebcaa30afe957aeabaa9f0c653df7d0.1571762488.git.andreyknvl@google.com>
+ <CACT4Y+YntxT+cpESOBvbg+h=g-84ECJwQrFg7LM5tbq_zaMd3A@mail.gmail.com> <CAAeHK+yUTZc+BrGDvvTQD4O0hsDzhp0V6GGFdtnmE6U4yWabKw@mail.gmail.com>
+In-Reply-To: <CAAeHK+yUTZc+BrGDvvTQD4O0hsDzhp0V6GGFdtnmE6U4yWabKw@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 23 Oct 2019 15:50:12 +0200
+Message-ID: <CACT4Y+b+RTYjUyB1h0SYjEq8vmOZas3ByjeJqVU1LrjxpRKy2Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] vhost, kcov: collect coverage from vhost_worker
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/23/19 1:32 AM, Heikki Krogerus wrote:
-> +Guenter
-> 
-> On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
->> Export the Type-C connector orientation so that user space
->> can get this information.
->>
->> Signed-off-by: Puma Hsu <pumahsu@google.com>
->> ---
->>   Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
->>   drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
->>   2 files changed, 29 insertions(+)
->>
->> diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
->> index d7647b258c3c..b22f71801671 100644
->> --- a/Documentation/ABI/testing/sysfs-class-typec
->> +++ b/Documentation/ABI/testing/sysfs-class-typec
->> @@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
->>   Description:
->>   		Revision number of the supported USB Type-C specification.
->>   
->> +What:		/sys/class/typec/<port>/connector_orientation
->> +Date:		October 2019
->> +Contact:	Puma Hsu <pumahsu@google.com>
->> +Description:
->> +		Indicates which typec connector orientation is configured now.
->> +		cc1 is defined as "normal" and cc2 is defined as "reversed".
->> +
->> +		Valid value:
->> +		- unknown (nothing configured)
-> 
-> "unknown" means we do not know the orientation.
-> 
->> +		- normal (configured in cc1 side)
->> +		- reversed (configured in cc2 side)
-> 
-> Guenter, do you think "connector_orientation" OK. I proposed it, but
-> I'm now wondering if something like "polarity" would be better?
-> 
+On Wed, Oct 23, 2019 at 3:35 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> On Wed, Oct 23, 2019 at 10:36 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+> >
+> > On Tue, Oct 22, 2019 at 6:46 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > >
+> > > This patch adds kcov_remote_start()/kcov_remote_stop() annotations to the
+> > > vhost_worker() function, which is responsible for processing vhost works.
+> > > Since vhost_worker() threads are spawned per vhost device instance
+> > > the common kcov handle is used for kcov_remote_start()/stop() annotations
+> > > (see Documentation/dev-tools/kcov.rst for details). As the result kcov can
+> > > now be used to collect coverage from vhost worker threads.
+> > >
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > ---
+> > >  drivers/vhost/vhost.c | 6 ++++++
+> > >  drivers/vhost/vhost.h | 1 +
+> > >  2 files changed, 7 insertions(+)
+> > >
+> > > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > > index 36ca2cf419bf..a5a557c4b67f 100644
+> > > --- a/drivers/vhost/vhost.c
+> > > +++ b/drivers/vhost/vhost.c
+> > > @@ -30,6 +30,7 @@
+> > >  #include <linux/sched/signal.h>
+> > >  #include <linux/interval_tree_generic.h>
+> > >  #include <linux/nospec.h>
+> > > +#include <linux/kcov.h>
+> > >
+> > >  #include "vhost.h"
+> > >
+> > > @@ -357,7 +358,9 @@ static int vhost_worker(void *data)
+> > >                 llist_for_each_entry_safe(work, work_next, node, node) {
+> > >                         clear_bit(VHOST_WORK_QUEUED, &work->flags);
+> > >                         __set_current_state(TASK_RUNNING);
+> > > +                       kcov_remote_start(dev->kcov_handle);
+> > >                         work->fn(work);
+> > > +                       kcov_remote_stop();
+> > >                         if (need_resched())
+> > >                                 schedule();
+> > >                 }
+> > > @@ -546,6 +549,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+> > >
+> > >         /* No owner, become one */
+> > >         dev->mm = get_task_mm(current);
+> > > +       dev->kcov_handle = current->kcov_handle;
+> >
+> > kcov_handle is not present in task_struct if !CONFIG_KCOV
+> >
+> > Also this does not use KCOV_SUBSYSTEM_COMMON.
+> > We discussed something along the following lines:
+> >
+> > u64 kcov_remote_handle(u64 subsys, u64 id)
+> > {
+> >   WARN_ON(subsys or id has wrong bits set).
+>
+> Hm, we can't have warnings in kcov_remote_handle() that is exposed in
+> uapi headers. What we can do is return 0 (invalid handle) if subsys/id
+> have incorrect bits set. And then we can either have another
+> kcov_remote_handle() internally (with a different name though) that
+> has a warning, or have warning in kcov_remote_start(). WDYT?
 
-Yes, or just "orientation". I don't see the value in the "connector_" prefix.
-I also wonder if "unknown" is really correct. Is it really unknown, or
-does it mean that the port is disconnected ?
+I would probably add the warning to kcov_remote_start(). This avoids
+the need for another function and will catch a wrong ID if caller
+generated it by some other means.
+And then ioctls should also detect bad handles passed in and return
+EINVAL. Then we will cover errors for both kernel and user programs.
 
-Guenter
-
->>   USB Type-C partner devices (eg. /sys/class/typec/port0-partner/)
->>   
->> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
->> index 94a3eda62add..911d06676aeb 100644
->> --- a/drivers/usb/typec/class.c
->> +++ b/drivers/usb/typec/class.c >> @@ -1245,6 +1245,23 @@ static ssize_t usb_power_delivery_revision_show(struct device *dev,
->>   }
->>   static DEVICE_ATTR_RO(usb_power_delivery_revision);
->>   
->> +static const char * const typec_connector_orientation[] = {
->> +	[TYPEC_ORIENTATION_NONE]		= "unknown",
->> +	[TYPEC_ORIENTATION_NORMAL]		= "normal",
->> +	[TYPEC_ORIENTATION_REVERSE]		= "reversed",
->> +};
->> +
->> +static ssize_t connector_orientation_show(struct device *dev,
->> +						struct device_attribute *attr,
->> +						char *buf)
->> +{
->> +	struct typec_port *p = to_typec_port(dev);
->> +
->> +	return sprintf(buf, "%s\n",
->> +		       typec_connector_orientation[p->orientation]);
->> +}
->> +static DEVICE_ATTR_RO(connector_orientation);
->> +
->>   static struct attribute *typec_attrs[] = {
->>   	&dev_attr_data_role.attr,
->>   	&dev_attr_power_operation_mode.attr,
->> @@ -1255,6 +1272,7 @@ static struct attribute *typec_attrs[] = {
->>   	&dev_attr_usb_typec_revision.attr,
->>   	&dev_attr_vconn_source.attr,
->>   	&dev_attr_port_type.attr,
->> +	&dev_attr_connector_orientation.attr,
->>   	NULL,
->>   };
->>   ATTRIBUTE_GROUPS(typec);
-> 
-> thanks,
-> 
-
+>
+> >   return ...;
+> > }
+> >
+> > kcov_remote_handle(KCOV_SUBSYSTEM_USB, bus);
+> > kcov_remote_handle(KCOV_SUBSYSTEM_COMMON, current->kcov_handle);
+> >
+> >
+> > >         worker = kthread_create(vhost_worker, dev, "vhost-%d", current->pid);
+> > >         if (IS_ERR(worker)) {
+> > >                 err = PTR_ERR(worker);
+> > > @@ -571,6 +575,7 @@ long vhost_dev_set_owner(struct vhost_dev *dev)
+> > >         if (dev->mm)
+> > >                 mmput(dev->mm);
+> > >         dev->mm = NULL;
+> > > +       dev->kcov_handle = 0;
+> > >  err_mm:
+> > >         return err;
+> > >  }
+> > > @@ -682,6 +687,7 @@ void vhost_dev_cleanup(struct vhost_dev *dev)
+> > >         if (dev->worker) {
+> > >                 kthread_stop(dev->worker);
+> > >                 dev->worker = NULL;
+> > > +               dev->kcov_handle = 0;
+> > >         }
+> > >         if (dev->mm)
+> > >                 mmput(dev->mm);
+> > > diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+> > > index e9ed2722b633..a123fd70847e 100644
+> > > --- a/drivers/vhost/vhost.h
+> > > +++ b/drivers/vhost/vhost.h
+> > > @@ -173,6 +173,7 @@ struct vhost_dev {
+> > >         int iov_limit;
+> > >         int weight;
+> > >         int byte_weight;
+> > > +       u64 kcov_handle;
+> > >  };
+> > >
+> > >  bool vhost_exceeds_weight(struct vhost_virtqueue *vq, int pkts, int total_len);
+> > > --
+> > > 2.23.0.866.gb869b98d4c-goog
+> > >
