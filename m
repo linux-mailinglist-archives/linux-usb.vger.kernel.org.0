@@ -2,136 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AFFE1EC2
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 17:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A47E1F3D
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 17:25:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406425AbfJWPBb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 11:01:31 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36763 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391742AbfJWPBb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 11:01:31 -0400
-Received: by mail-pg1-f193.google.com with SMTP id 23so12322867pgk.3;
-        Wed, 23 Oct 2019 08:01:31 -0700 (PDT)
+        id S2406687AbfJWPYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 11:24:42 -0400
+Received: from mail-wr1-f74.google.com ([209.85.221.74]:42867 "EHLO
+        mail-wr1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392433AbfJWPYk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 11:24:40 -0400
+Received: by mail-wr1-f74.google.com with SMTP id e25so10596309wra.9
+        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 08:24:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=VGcDW9u8glpHl9NWHGsEcLSGow06v5uvF5GnWslAJA8=;
-        b=TC+G+a72DBXrWYs0MMstftfx3Qr0BKRNdRe24DkeVHt1AIk+muBu5ffO+gugjhax0e
-         cp7hTk+uFKfxSDqlo5jnH4pu5V8IU4KMl7ptHNzRx4H/+XiPz0np8FSEQ0nuGqDfb2M4
-         h8m1drU0GhVVuOjdNnIoK4ZNHOZaFISsHap/V9o3tP51TLfqNyJUQSTqU/gd7KJKAoSP
-         XLSBIlP/zyMCeu6zPBl/LNTWDD2IuC2183Ag9W3wPSOlg17qDhJ6ZgBHlqt3avrsYs6K
-         1TBcbl9aaMewyX8vJ8Mgy73M2Z+NVC7cbd2gAXdUl5hEMAmSERedHoHuU2KHhMk//O60
-         hFlg==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=sl8Rii3oW8FrPppkHNfXTlYWCFHCdXZbJp62ZIanwPg=;
+        b=ghJIP1Ctautskm3gCcyff8Fxk9XjUZJnGCzEtm3Rl/xa3OQaA7z8Hj2K2nk/9K0ZVV
+         OF+hfWb+AgK9wd8dgydPemrquzm2MQhbeGLmyaDDzkHnJbU6bTw4am6muwzKs1pG0gMl
+         ViCBVAS6V8lonROATMQ/xHp4LMBWEuofzZhWqM+57MOvtOV6KIQiMs91jjbuC1SjFMGQ
+         TJ/G+y0wWzii5SyCE4xCYBgtIQas6JpF8l6FkKmIrRdoyJTr31mPOxcMkwBwaQ7eOSIi
+         WNIVEkpKXUoPyA5U3Rj8yghYjCOUpqT2B9yQusYIqZ18ZfTLxbudeUdV6xgfDpt47nqA
+         jmNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VGcDW9u8glpHl9NWHGsEcLSGow06v5uvF5GnWslAJA8=;
-        b=LRdmpMNMy31KvvYcGpOxt8s4wDgOZq+JsxAASXxt1zqp+Io+YPVRfggWVK8xebX7Nt
-         nHdBtMYoBT/Vcqd10/mTB5m5oYFI50X3DrZEqFzF8vUU0iJGIbVmoSTj6yUW4wJ9Q+Fm
-         e5qY2aY1E/vw3Obw7jkwGMeOTQShjvbP8AhTESQg4DM9XQiJaU1BiJLS2XseEss7EAGr
-         VpYefZyYzSYJhUlBAuceT5G4E4BN41YRoYua6AtzQhWVeoHSZZukycbOd9PgD/RcnDz/
-         xS3Q5VRBM7QsEtF0vd2YUjz6IF+YN4dngkyiivFhaHjN9LWR30y9EaTvAelQWikDbyz/
-         RxQQ==
-X-Gm-Message-State: APjAAAVRfSmi7TVzNS3moYqILki9Q+tP40hTmHPCiSOAty9Ys1xWntA0
-        dPN7rGRw7nADikPHFq36yCQ=
-X-Google-Smtp-Source: APXvYqzgjaZFWfZd7bF5LRqqP9IX6KdtfB6Z5qmJ4+Fk322t5Henb/vokuna0Zn55kHmvbshyCFCHQ==
-X-Received: by 2002:a63:78f:: with SMTP id 137mr10662728pgh.110.1571842890449;
-        Wed, 23 Oct 2019 08:01:30 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q71sm21951953pjb.26.2019.10.23.08.01.27
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 23 Oct 2019 08:01:28 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 08:01:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Puma Hsu <pumahsu@google.com>, gregkh@linuxfoundation.org,
-        badhri@google.com, kyletso@google.com, albertccwang@google.com,
-        rickyniu@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector
- orientation
-Message-ID: <20191023150126.GA16612@roeck-us.net>
-References: <20191022085924.92783-1-pumahsu@google.com>
- <20191023083221.GB8828@kuha.fi.intel.com>
- <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
- <20191023142900.GA15396@kuha.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191023142900.GA15396@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=sl8Rii3oW8FrPppkHNfXTlYWCFHCdXZbJp62ZIanwPg=;
+        b=Y5uWTacE8nKHq5/lxauPcxNqLtcG3Akd/RV+1gZvYHvS8Ga34sdEF1tz1EzbsSklLJ
+         E6mX+HdR15wtuqXsLCG1scxqvuxhuv8yxMmzxm1o4MJbVX00t9ksfR3DQh8REdIjL4y4
+         wb+ACXL7rnqQYdeEKuSYz2TVPfhj0hpp+acRQ4VcN4vv5yX6PFc4XnDdkSQ74AQAzOfC
+         up41XURVjoy0xN9xIZ4v/ehX5XO3/To2N77rTsy0jUb9p8wbtqHD2Iks+g3M54PWtIGo
+         CEOxRjdmkbtHJ0HkBfyWrO7KMXU7NrGNBKBcTCnTpLcBUAomMq4flzp0rPWbCc/5lCzk
+         SsWQ==
+X-Gm-Message-State: APjAAAUxMpr0+6Ln+yNBRq/ziNnujuxzsRtvaf4v8JGCGKrg3SfxW8wz
+        4yE6J0bIV1r6aD+FpderBkK6jAkXIF2ZT3GoOWmF38QbpqKQukLZdblNKK/MomCSYtYjZkgrowc
+        Q1MTCjAD32RT8Oj+2T0PU1D/gzQdTiKDi1qd8wE4tCru6h4MlQfnkTlrr8K6wZDw6MpEDnEBWr1
+        U4
+X-Google-Smtp-Source: APXvYqyjuZuZmULkMOG81SOZwdNmn4nrXac1sf+c/F+14+2oEH7lN31t5wlahvJCBOuTrGSQ8vrMv/7kGc0xWT1F
+X-Received: by 2002:a5d:4491:: with SMTP id j17mr8733249wrq.46.1571844275774;
+ Wed, 23 Oct 2019 08:24:35 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 17:24:28 +0200
+Message-Id: <cover.1571844200.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.0.rc0.303.g954a862665-goog
+Subject: [PATCH v2 0/3] kcov: collect coverage from usb and vhost
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     linux-usb@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 05:29:00PM +0300, Heikki Krogerus wrote:
-> On Wed, Oct 23, 2019 at 06:44:39AM -0700, Guenter Roeck wrote:
-> > On 10/23/19 1:32 AM, Heikki Krogerus wrote:
-> > > +Guenter
-> > > 
-> > > On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
-> > > > Export the Type-C connector orientation so that user space
-> > > > can get this information.
-> > > > 
-> > > > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > > > ---
-> > > >   Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
-> > > >   drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
-> > > >   2 files changed, 29 insertions(+)
-> > > > 
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > > > index d7647b258c3c..b22f71801671 100644
-> > > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > > @@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > >   Description:
-> > > >   		Revision number of the supported USB Type-C specification.
-> > > > +What:		/sys/class/typec/<port>/connector_orientation
-> > > > +Date:		October 2019
-> > > > +Contact:	Puma Hsu <pumahsu@google.com>
-> > > > +Description:
-> > > > +		Indicates which typec connector orientation is configured now.
-> > > > +		cc1 is defined as "normal" and cc2 is defined as "reversed".
-> > > > +
-> > > > +		Valid value:
-> > > > +		- unknown (nothing configured)
-> > > 
-> > > "unknown" means we do not know the orientation.
-> > > 
-> > > > +		- normal (configured in cc1 side)
-> > > > +		- reversed (configured in cc2 side)
-> > > 
-> > > Guenter, do you think "connector_orientation" OK. I proposed it, but
-> > > I'm now wondering if something like "polarity" would be better?
-> > > 
-> > 
-> > Yes, or just "orientation". I don't see the value in the "connector_" prefix.
-> > I also wonder if "unknown" is really correct. Is it really unknown, or
-> > does it mean that the port is disconnected ?
-> 
-> Unknown means we don't know the orientation. We don't always have that
-> information available to us. With UCSI we simply do not know it.
-> 
-> I think this file needs to be hidden after all if we don't know the
-> cable plug orientation.
-> 
-Making the attribute appear and disappear may cause difficulties for
-userspace.
+This patchset extends kcov to allow collecting coverage from the USB
+subsystem and vhost workers. See the first patch description for details
+about the kcov extension. The other two patches apply this kcov extension
+to USB and vhost.
 
-> How about empty string instead of "unknown"?
-> 
-An empty string might also be challenging for userspace.
+These patches have been used to enable coverage-guided USB fuzzing with
+syzkaller for the last few years, see the details here:
 
-"unknown" is fine if it is really unknown. With that in mind,
-I wonder what value that attribute has for userspace, but presumably
-there must be some use case. I assume it is purely informational.
+https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
 
-In summary, I would suggest to name the attribute either "orientation"
-or "polarity".
+This patchset has been pushed to the public Linux kernel Gerrit instance:
 
-Thanks,
-Guenter
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/1524
+
+Changes v1 -> v2:
+- Changed common_handle type back to u64 (to allow extending it in the
+  future).
+- Reworked kcov_remote_handle() helpers.
+- Fixed vhost annotations when CONFIG_KCOV is not enabled.
+- Use kcov_disable() instead of kcov_remote_reset() when
+  KCOV_REMOTE_ENABLE fails.
+
+Changes RFC v1 -> v1:
+- Remove unnecessary #ifdef's from drivers/vhost/vhost.c.
+- Reset t->kcov when area allocation fails in kcov_remote_start().
+- Use struct_size to calculate array size in kcov_ioctl().
+- Add a limit on area_size in kcov_remote_arg.
+- Added kcov_disable() helper.
+- Changed encoding of kcov remote handle ids, see the documentation.
+- Added a comment reference for kcov_sequence task_struct field.
+- Change common_handle type to u32.
+- Add checks for handle validity into kcov_ioctl_locked() and
+    kcov_remote_start().
+- Updated documentation to reflect the changes.
+
+Andrey Konovalov (3):
+  kcov: remote coverage support
+  usb, kcov: collect coverage from hub_event
+  vhost, kcov: collect coverage from vhost_worker
+
+ Documentation/dev-tools/kcov.rst | 128 +++++++++
+ drivers/usb/core/hub.c           |   5 +
+ drivers/vhost/vhost.c            |   6 +
+ drivers/vhost/vhost.h            |   1 +
+ include/linux/kcov.h             |  23 ++
+ include/linux/sched.h            |   6 +
+ include/uapi/linux/kcov.h        |  25 ++
+ kernel/kcov.c                    | 480 ++++++++++++++++++++++++++++---
+ 8 files changed, 639 insertions(+), 35 deletions(-)
+
+-- 
+2.24.0.rc0.303.g954a862665-goog
+
