@@ -2,150 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25796E2653
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 00:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 211AFE2682
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 00:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405953AbfJWWWT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 18:22:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53940 "EHLO mail.kernel.org"
+        id S2407979AbfJWWkF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 18:40:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56724 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389112AbfJWWWS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:22:18 -0400
-Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
+        id S2389112AbfJWWkF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 18:40:05 -0400
+Received: from localhost (unknown [69.71.4.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E28112173B;
-        Wed, 23 Oct 2019 22:22:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 39A77205F4;
+        Wed, 23 Oct 2019 22:40:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571869337;
-        bh=6Rbgh0+34r9cF1cQinXhfyAQRKfEhqrc9mI/6IrPXxw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Juvdf1ok/t8o2WngMzUbP/+XV4ybqjNmijrY09FnB08RG3NGsoLsiamQL+maUpXmO
-         tKJY8Zegt9n+3CzBYC60X379EO+qeCI6N7reZCJGGNqO70y5xuAHo77ekSmWKvri44
-         mwPmicsQP0sC+coJFExV89IehHmBhcoxII5e8jlM=
-Date:   Wed, 23 Oct 2019 15:22:16 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-usb@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v2 1/3] kcov: remote coverage support
-Message-Id: <20191023152216.796aeafd832ba5351d86d3ca@linux-foundation.org>
-In-Reply-To: <beeae42e313ef57b4630cc9f36e2e78ad42fd5b7.1571844200.git.andreyknvl@google.com>
-References: <cover.1571844200.git.andreyknvl@google.com>
-        <beeae42e313ef57b4630cc9f36e2e78ad42fd5b7.1571844200.git.andreyknvl@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        s=default; t=1571870404;
+        bh=Mvc796uh7XdGeYEf88nGaaIFTmKKJuc15645rrTX+T8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CaKDo0ra+NoXHBObmBxTilzzkUjyfFexh4UhQkrkGTAhGpcwL+LsvDCOLnCiXalVj
+         foE/IXg6310WUDiwe0NUxwjN2zZTr5YAzXv524UtMkLT42q4RZz7WYYzUKP3ReFsb5
+         um/bTnDT9P4vNxFa01l5Q78bRo9k8lGj7JTFoK7w=
+Date:   Wed, 23 Oct 2019 17:40:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Daniel Drake <drake@endlessm.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191023224003.GA31692@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191022093349.GC2819@lahna.fi.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 23 Oct 2019 17:24:29 +0200 Andrey Konovalov <andreyknvl@google.com> wrote:
+On Tue, Oct 22, 2019 at 12:33:49PM +0300, Mika Westerberg wrote:
+> On Tue, Oct 22, 2019 at 10:40:00AM +0800, Daniel Drake wrote:
+> > On Mon, Oct 21, 2019 at 7:33 PM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > > Just to be sure, did you try the patch or just looked at it? Because
+> > > what the patch does is that it does the delay when the downstream/root
+> > > port is resumed, not the xHCI itself.
+> > 
+> > I tried it, it didn't fix the problem.
+> 
+> :(
+> 
+> It may very well be that this particular xHCI controller needs more than
+> that 10ms from D3hot -> D0 transition. Again the PCIe spec says the 10ms
+> is the minimum time system software needs to delay but it does not say
+> what would be the maximum time the function absolutely must be properly
+> in D0.
 
-> This patch adds background thread coverage collection ability to kcov.
-> 
-> With KCOV_ENABLE coverage is collected only for syscalls that are issued
-> from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
-> coverage for arbitrary parts of the kernel code, provided that those parts
-> are annotated with kcov_remote_start()/kcov_remote_stop().
-> 
-> This allows to collect coverage from two types of kernel background
-> threads: the global ones, that are spawned during kernel boot and are
-> always running (e.g. USB hub_event()); and the local ones, that are
-> spawned when a user interacts with some kernel interface (e.g. vhost
-> workers).
-> 
-> To enable collecting coverage from a global background thread, a unique
-> global handle must be assigned and passed to the corresponding
-> kcov_remote_start() call. Then a userspace process can pass a list of such
-> handles to the KCOV_REMOTE_ENABLE ioctl in the handles array field of the
-> kcov_remote_arg struct. This will attach the used kcov device to the code
-> sections, that are referenced by those handles.
-> 
-> Since there might be many local background threads spawned from different
-> userspace processes, we can't use a single global handle per annotation.
-> Instead, the userspace process passes a non-zero handle through the
-> common_handle field of the kcov_remote_arg struct. This common handle gets
-> saved to the kcov_handle field in the current task_struct and needs to be
-> passed to the newly spawned threads via custom annotations. Those threads
-> should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
-> 
-> Internally kcov stores handles as u64 integers. The top byte of a handle
-> is used to denote the id of a subsystem that this handle belongs to, and
-> the lower 4 bytes are used to denote a handle id within that subsystem.
-> A reserved value 0 is used as a subsystem id for common handles as they
-> don't belong to a particular subsystem. The bytes 4-7 are currently
-> reserved and must be zero. In the future the number of bytes used for the
-> subsystem or handle ids might be increased.
-> 
-> When a particular userspace proccess collects coverage by via a common
-> handle, kcov will collect coverage for each code section that is annotated
-> to use the common handle obtained as kcov_handle from the current
-> task_struct. However non common handles allow to collect coverage
-> selectively from different subsystems.
-> 
-> ...
->
-> +static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
-> +{
-> +	struct kcov_remote *remote;
-> +
-> +	if (kcov_remote_find(handle))
-> +		return ERR_PTR(-EEXIST);
-> +	remote = kmalloc(sizeof(*remote), GFP_ATOMIC);
-> +	if (!remote)
-> +		return ERR_PTR(-ENOMEM);
-> +	remote->handle = handle;
-> +	remote->kcov = kcov;
-> +	hash_add(kcov_remote_map, &remote->hnode, handle);
-> +	return remote;
-> +}
-> +
->
-> ...
->
-> +		spin_lock(&kcov_remote_lock);
-> +		for (i = 0; i < remote_arg->num_handles; i++) {
-> +			kcov_debug("handle %llx\n", remote_arg->handles[i]);
-> +			if (!kcov_check_handle(remote_arg->handles[i],
-> +						false, true, false)) {
-> +				spin_unlock(&kcov_remote_lock);
-> +				kcov_disable(t, kcov);
-> +				return -EINVAL;
-> +			}
-> +			remote = kcov_remote_add(kcov, remote_arg->handles[i]);
-> +			if (IS_ERR(remote)) {
-> +				spin_unlock(&kcov_remote_lock);
-> +				kcov_disable(t, kcov);
-> +				return PTR_ERR(remote);
-> +			}
-> +		}
+Hmm, PCIe r5.0, sec 2.3.1, says devices are permitted to return
+Configuration Request Retry Status (CRS) after a "reset initiated in
+response to a D3hot to D0uninitialized" transition.
 
-It's worrisome that this code can perform up to 65536 GFP_ATOMIC
-allocations without coming up for air.  The possibility of ENOMEM or of
-causing collateral problems is significant.  It doesn't look too hard
-to change this to use GFP_KERNEL?
+I think that applies to this device because your lspci [1] shows:
 
-> +u64 kcov_common_handle(void)
-> +{
-> +	return current->kcov_handle;
-> +}
+	Capabilities: [50] Power Management version 3
+		Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+		Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
 
-I don't immediately understand what this "common handle" thing is all about. 
-Code is rather lacking in this sort of high-level commentary?
+so No_Soft_Reset is clear, which means the D3hot to D0 transition goes
+to D0uninitialized.
 
+pci_raw_set_power_state() *does* delay, generally for 10ms:
 
+  pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr);
+  if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
+    pci_dev_d3_sleep(dev);
+  pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+
+but there's no mention of CRS, so I think that config read is liable
+to fail with CRS if the device isn't ready, and we won't notice.
+
+I think we need something like the patch below.  We already do
+basically the same thing in pci_pm_reset().
+
+[1] https://gist.github.com/dsd/bd9370b35defdf43680b81ecb34381d5
+
+diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+index e7982af9a5d8..e8702388830f 100644
+--- a/drivers/pci/pci.c
++++ b/drivers/pci/pci.c
+@@ -883,9 +883,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+ 	 * Mandatory power management transition delays; see PCI PM 1.1
+ 	 * 5.6.1 table 18
+ 	 */
+-	if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
++	if (state == PCI_D3hot || dev->current_state == PCI_D3hot) {
+ 		pci_dev_d3_sleep(dev);
+-	else if (state == PCI_D2 || dev->current_state == PCI_D2)
++		pci_dev_wait(dev, "D3 transition", PCIE_RESET_READY_POLL_MS);
++	} else if (state == PCI_D2 || dev->current_state == PCI_D2)
+ 		udelay(PCI_PM_D2_DELAY);
+ 
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
