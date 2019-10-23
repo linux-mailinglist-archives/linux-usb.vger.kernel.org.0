@@ -2,217 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 054B0E13F6
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:21:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1047E142C
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 10:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390247AbfJWIVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 04:21:03 -0400
-Received: from relmlor2.renesas.com ([210.160.252.172]:59379 "EHLO
-        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390212AbfJWIVD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 04:21:03 -0400
-X-IronPort-AV: E=Sophos;i="5.68,220,1569250800"; 
-   d="scan'208";a="29573740"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 23 Oct 2019 17:21:01 +0900
-Received: from localhost.localdomain (unknown [10.166.252.89])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6EF3B400494D;
-        Wed, 23 Oct 2019 17:21:01 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH] dt-bindings: usb: renesas: usb3-peri: convert bindings to json-schema
-Date:   Wed, 23 Oct 2019 17:20:16 +0900
-Message-Id: <1571818816-13941-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        id S2390318AbfJWI13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 04:27:29 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45076 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390260AbfJWI13 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 04:27:29 -0400
+Received: by mail-lf1-f68.google.com with SMTP id v8so14738739lfa.12;
+        Wed, 23 Oct 2019 01:27:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+BrgSnZCer5UhRsZl4X7zqgqCerRzQvBH6cwLmm1CnM=;
+        b=HI/6Ls542Gr4OKd2Ngr8Ak3SU1zpNWkkmq+6GBvXR8AHzw+qZOmWsyGKHHxpnEOnpz
+         YLSzpQGx67Xkx/cXesSM20PlRkyOrX9/RUsnb6PV63EEq8hY6YFHYMgCFl+iaW28J6qB
+         5ZPNIh0Reh509Rddtku+ngn+DbbVK/k8PXxIIOTek1XmebPVTCL4D/inITSNk0PoQ98o
+         1P4IGRJ4AOL5D/08h9OJKNG148BhQDovoUDgjeU5t19FPRuovYRjBhHNI1YneNu7VUvA
+         O9DzPPieGsRlCxQLD/O42wqtFakq+kfpP6TE8m0PhigGhmRELZYU3KzY347tHU0dX3gH
+         bFbg==
+X-Gm-Message-State: APjAAAXlui92r8iAVPdlkt5Vr9e9sF3n+np3ABK/yGuIToOuIFyjeG6X
+        ViAWiZ1HcUKsWJrvy9Asgh6esPiW
+X-Google-Smtp-Source: APXvYqw+9/yUnQGsArwINEUVGFu4MzLP/NJVoAT3Vw0w3glyFhkEnq2gFz1VWCtf6lPdUnJevJNOzg==
+X-Received: by 2002:ac2:5507:: with SMTP id j7mr22043724lfk.75.1571819247001;
+        Wed, 23 Oct 2019 01:27:27 -0700 (PDT)
+Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
+        by smtp.gmail.com with ESMTPSA id n3sm9001439lfl.62.2019.10.23.01.27.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 23 Oct 2019 01:27:26 -0700 (PDT)
+Received: from johan by xi.terra with local (Exim 4.92.2)
+        (envelope-from <johan@xi.terra>)
+        id 1iNBza-00064N-Md; Wed, 23 Oct 2019 10:27:42 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>,
+        syzbot+863724e7128e14b26732@syzkaller.appspotmail.com
+Subject: [PATCH] can: peak_usb: fix slab info leak
+Date:   Wed, 23 Oct 2019 10:27:05 +0200
+Message-Id: <20191023082705.23283-1-johan@kernel.org>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <0000000000007a638805951153c5@google.com>
+References: <0000000000007a638805951153c5@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert Renesas USB 3.0 Peripheral controller bindings documentation
-to json-schema.
+Fix a small slab info leak due to a failure to clear the command buffer
+at allocation.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+The first 16 bytes of the command buffer are always sent to the device
+in pcan_usb_send_cmd() even though only the first two may have been
+initialised in case no argument payload is provided (e.g. when waiting
+for a response).
+
+Fixes: bb4785551f64 ("can: usb: PEAK-System Technik USB adapters driver core")
+Cc: stable <stable@vger.kernel.org>     # 3.4
+Reported-by: syzbot+863724e7128e14b26732@syzkaller.appspotmail.com
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- .../devicetree/bindings/usb/renesas,usb3-peri.txt  | 65 ---------------
- .../devicetree/bindings/usb/renesas,usb3-peri.yaml | 92 ++++++++++++++++++++++
- 2 files changed, 92 insertions(+), 65 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
- create mode 100644 Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+ drivers/net/can/usb/peak_usb/pcan_usb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
-deleted file mode 100644
-index 1343dfc..00000000
---- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Renesas Electronics USB3.0 Peripheral driver
--
--Required properties:
--  - compatible: Must contain one of the following:
--	- "renesas,r8a774a1-usb3-peri"
--	- "renesas,r8a774b1-usb3-peri"
--	- "renesas,r8a774c0-usb3-peri"
--	- "renesas,r8a7795-usb3-peri"
--	- "renesas,r8a7796-usb3-peri"
--	- "renesas,r8a77965-usb3-peri"
--	- "renesas,r8a77990-usb3-peri"
--	- "renesas,rcar-gen3-usb3-peri" for a generic R-Car Gen3 or RZ/G2
--	  compatible device
--
--    When compatible with the generic version, nodes must list the
--    SoC-specific version corresponding to the platform first
--    followed by the generic version.
--
--  - reg: Base address and length of the register for the USB3.0 Peripheral
--  - interrupts: Interrupt specifier for the USB3.0 Peripheral
--  - clocks: clock phandle and specifier pair
--
--Optional properties:
--  - phys: phandle + phy specifier pair
--  - phy-names: must be "usb"
--  - usb-role-switch: support role switch. see usb/generic.txt
--
--Sub-nodes:
--- any connector to the data bus of this controller should be modelled using the
--  OF graph bindings specified in bindings/graph.txt, if the "usb-role-switch"
--  property is used.
--
--Example of R-Car H3 ES1.x:
--	usb3_peri0: usb@ee020000 {
--		compatible = "renesas,r8a7795-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee020000 0 0x400>;
--		interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 328>;
--	};
--
--	usb3_peri1: usb@ee060000 {
--		compatible = "renesas,r8a7795-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee060000 0 0x400>;
--		interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 327>;
--	};
--
--Example of RZ/G2E:
--	usb3_peri0: usb@ee020000 {
--		compatible = "renesas,r8a774c0-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee020000 0 0x400>;
--		interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 328>;
--		companion = <&xhci0>;
--		usb-role-switch;
--
--		port {
--			usb3_role_switch: endpoint {
--				remote-endpoint = <&hd3ss3220_ep>;
--			};
--		};
--	};
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-new file mode 100644
-index 00000000..489a8cd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-@@ -0,0 +1,92 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/renesas,usb3-peri.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Renesas USB 3.0 Peripheral controller
-+
-+maintainers:
-+  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - renesas,r8a774a1-usb3-peri # RZ/G2M
-+              - renesas,r8a774b1-usb3-peri # RZ/G2N
-+              - renesas,r8a774c0-usb3-peri # RZ/G2E
-+              - renesas,r8a7795-usb3-peri  # R-Car H3
-+              - renesas,r8a7796-usb3-peri  # R-Car M3-W
-+              - renesas,r8a77965-usb3-peri # R-Car M3-N
-+              - renesas,r8a77990-usb3-peri # R-Car E3
-+          - const: renesas,rcar-gen3-usb3-peri
-+
-+  reg:
-+    # Base address and length of the register for the USB 3.0 Peripheral
-+    maxItems: 1
-+
-+  interrupts:
-+    # Interrupt specifier for the USB3.0 Peripheral
-+    maxItems: 1
-+
-+  clocks:
-+    # clock phandle and specifier pair
-+    maxItems: 1
-+
-+  phys:
-+    description: phandle + phy specifier pair.
-+
-+  phy-names:
-+    const: usb
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  usb-role-switch:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: |
-+      Support role switch. See usb/generic.txt.
-+
-+  companion:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: |
-+      See usb/generic.txt.
-+
-+  port:
-+    description: |
-+      any connector to the data bus of this controller should be modelled
-+      using the OF graph bindings specified in bindings/graph.txt, if the
-+      "usb-role-switch" property is used.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - clocks
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/r8a774c0-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a774c0-sysc.h>
-+
-+    usb3_peri0: usb@ee020000 {
-+        compatible = "renesas,r8a774c0-usb3-peri", "renesas,rcar-gen3-usb3-peri";
-+        reg = <0 0xee020000 0 0x400>;
-+        interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cpg CPG_MOD 328>;
-+        companion = <&xhci0>;
-+        usb-role-switch;
-+
-+        port {
-+            usb3_role_switch: endpoint {
-+                remote-endpoint = <&hd3ss3220_ep>;
-+            };
-+        };
-+    };
+diff --git a/drivers/net/can/usb/peak_usb/pcan_usb_core.c b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+index 65dce642b86b..0b7766b715fd 100644
+--- a/drivers/net/can/usb/peak_usb/pcan_usb_core.c
++++ b/drivers/net/can/usb/peak_usb/pcan_usb_core.c
+@@ -750,7 +750,7 @@ static int peak_usb_create_dev(const struct peak_usb_adapter *peak_usb_adapter,
+ 	dev = netdev_priv(netdev);
+ 
+ 	/* allocate a buffer large enough to send commands */
+-	dev->cmd_buf = kmalloc(PCAN_USB_MAX_CMD_LEN, GFP_KERNEL);
++	dev->cmd_buf = kzalloc(PCAN_USB_MAX_CMD_LEN, GFP_KERNEL);
+ 	if (!dev->cmd_buf) {
+ 		err = -ENOMEM;
+ 		goto lbl_free_candev;
 -- 
-2.7.4
+2.23.0
 
