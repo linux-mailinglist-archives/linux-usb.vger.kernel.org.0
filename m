@@ -2,128 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F353FE1962
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 13:52:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0557DE198F
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 14:05:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405108AbfJWLwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 07:52:46 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:46992 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732092AbfJWLwq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 07:52:46 -0400
-Received: by mail-lf1-f67.google.com with SMTP id t8so15804911lfc.13;
-        Wed, 23 Oct 2019 04:52:45 -0700 (PDT)
+        id S2405209AbfJWMFX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 08:05:23 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46307 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732349AbfJWMFW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 08:05:22 -0400
+Received: by mail-lf1-f65.google.com with SMTP id t8so15837940lfc.13;
+        Wed, 23 Oct 2019 05:05:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=UP5gdkUuUJ2fsIKZrjEEkYxT+1Zl1EyXr08pcip8sao=;
-        b=ZOwB7v2fJxbfdvIDy77oGHpdx0ITObnIMzLP1PBA0JYHycFiCFTimtItIut2yaexKd
-         Nvw9nLxfhtbFpmjUSdzOmVq74vn0R+SnDGIf9Zd9zgtJBGyw5L7wMJiaDrp4OrQFvlQ/
-         gllURpAn+uBcYT2QYmqeNDvD0C5wTyTHVqylvt4EKVPLDQLWIZN2bxKPdvsIPKJ4dhsQ
-         79tWPVmD0A04/28kdiIrdqSxOQD0K8hld1jwB69hFG+X8BjDPlqUQEIPCTv11aPQqqn1
-         +IJ91s3X0GznTY/541ho3JC7cdnmJ2of77P40E2+lUP+HFX5I58PV/hfvF3dm/7cfEhM
-         XgAw==
-X-Gm-Message-State: APjAAAW16DTjjcrGwAFdZ0e7hn36uy/C+sMIFMy73uEm0rpF5TYLxsxz
-        HsOAvJpHOJHgNnQzJirvCSM=
-X-Google-Smtp-Source: APXvYqyRaVJn6WIOly1Fo+ZbC/dp1NYNTs+N33NvoETznb2nPYT//qen03pc4/5IirEEcUHwT5GFNQ==
-X-Received: by 2002:a19:5517:: with SMTP id n23mr5873958lfe.139.1571831564526;
-        Wed, 23 Oct 2019 04:52:44 -0700 (PDT)
+        bh=FflFEPeHnXlhmV3gvAD87PsvImRbVXArSfc/aAArtdE=;
+        b=KoZkiSdsQtJ01eR+0x/WdkgsSOMN28kE9irB+TLFB6umuM8DoZh5OLYNPu129uzyPk
+         CoNz8SIS9AzL8ZMmW7tsrJf2fZJN5VmhVPHiu2UBr89r65Eq9W3+vuQhgivOAcQ/mJxB
+         HjHAMDe4gQRQlItf/GUg3ZAwnUXcdeIL4W+wHM80O4mY4/IgJM8MkT997UcfOQGdtknh
+         uYtvvlOvRac+TwhskzQGdDZSdKs7E4O7uv8LDw6vKSd7YJdzw9C4M0zblPmGSZ5kaqEp
+         TfqokcMAVfJBg3zhN+9Sbk9TTccM9rkFIEG3trdQh0Aas6l1YNPJStEOhL8CnEDN2jhN
+         05bQ==
+X-Gm-Message-State: APjAAAW7KOpdQt3UHjd4VYovdX+jWYyTUWYgwNrzTgL/BOWK09NIutRN
+        k/Rh6XmlHovJrVJ0KqD4c4k=
+X-Google-Smtp-Source: APXvYqwdJcGfab9FVaptvMJMMOV4McUvguU06cuyiOWtJZns59apBKG9XWpfsn1dyuYk4FFAD8u7sg==
+X-Received: by 2002:ac2:414f:: with SMTP id c15mr13155348lfi.157.1571832320679;
+        Wed, 23 Oct 2019 05:05:20 -0700 (PDT)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id u24sm6049489ljl.64.2019.10.23.04.52.43
+        by smtp.gmail.com with ESMTPSA id q16sm9321119lfb.74.2019.10.23.05.05.19
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Oct 2019 04:52:43 -0700 (PDT)
+        Wed, 23 Oct 2019 05:05:19 -0700 (PDT)
 Received: from johan by xi.terra with local (Exim 4.92.2)
         (envelope-from <johan@kernel.org>)
-        id 1iNFCG-00074i-P9; Wed, 23 Oct 2019 13:53:00 +0200
-Date:   Wed, 23 Oct 2019 13:53:00 +0200
+        id 1iNFOS-0007AO-Mz; Wed, 23 Oct 2019 14:05:36 +0200
+Date:   Wed, 23 Oct 2019 14:05:36 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
 Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         peter_hong@fintek.com.tw,
         "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-Subject: Re: [PATCH V2 5/7] USB: serial: f81232: Set F81534A serial port with
- RS232 mode
-Message-ID: <20191023115300.GU24768@localhost>
+Subject: Re: [PATCH V2 6/7] USB: serial: f81232: Add generator for F81534A
+Message-ID: <20191023120536.GV24768@localhost>
 References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
- <20190923022449.10952-6-hpeter+linux_kernel@gmail.com>
+ <20190923022449.10952-7-hpeter+linux_kernel@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190923022449.10952-6-hpeter+linux_kernel@gmail.com>
+In-Reply-To: <20190923022449.10952-7-hpeter+linux_kernel@gmail.com>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 10:24:47AM +0800, Ji-Ze Hong (Peter Hong) wrote:
-> The Fintek F81532A/534A/535/536 is USB-to-2/4/8/12 serial ports device
-> and the serial ports are default disabled. Each port contains max 3 pins
-> GPIO and the 3 pins are default pull high with input mode.
+On Mon, Sep 23, 2019 at 10:24:48AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+> The Fintek F81534A series is contains 1 HUB / 1 GPIO device / n UARTs,
+> but the UART is default disable and need enabled by GPIO device(2c42/16F8).
 > 
-> When the serial port had activated (running probe()), we'll transform the
-> 3 pins from GPIO function publicly to control Tranceiver privately use.
-
-I'm not sure I understand what you're saying here.
-
-> We'll default set to 0/0/1 for control transceiver to RS232 mode.
+> When F81534A plug to host, we can only see 1 HUB & 1 GPIO device and we
+> need write 0x8fff to GPIO device register F81534A_CMD_ENABLE_PORT(116h)
+> to enable all available serial ports.
 > 
-> Otherwise, If the serial port is not active, the 3 pins is in GPIO mode
-> and controlled by global GPIO device with VID/PID: 2c42/16f8.
-
-Does this mean that you can control the three GPIOs either through the
-serial device or through the gpio-control device (which are two separate
-USB devices)?
-
 > Signed-off-by: Ji-Ze Hong (Peter Hong) <hpeter+linux_kernel@gmail.com>
 > ---
->  drivers/usb/serial/f81232.c | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
+>  drivers/usb/serial/f81232.c | 135 +++++++++++++++++++++++++++++++++++-
+>  1 file changed, 134 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/usb/serial/f81232.c b/drivers/usb/serial/f81232.c
-> index 36a17aedc2ae..01cb5a5ea1d2 100644
+> index 01cb5a5ea1d2..82cc1e6cff62 100644
 > --- a/drivers/usb/serial/f81232.c
 > +++ b/drivers/usb/serial/f81232.c
-> @@ -96,6 +96,15 @@ MODULE_DEVICE_TABLE(usb, all_serial_id_table);
->  #define F81534A_TRIGGER_MULTPILE_4X	BIT(3)
->  #define F81534A_FIFO_128BYTE		(BIT(1) | BIT(0))
+> @@ -36,6 +36,9 @@
+>  	{ USB_DEVICE(0x2c42, 0x1635) },	/* 8 port UART device */ \
+>  	{ USB_DEVICE(0x2c42, 0x1636) }	/* 12 port UART device */
 >  
-> +/* Serial port self GPIO control, 2bytes [control&output data][input data] */
-> +#define F81534A_GPIO_REG		0x10e
-> +#define F81534A_GPIO_MODE2_DIR		BIT(6) /* 1: input, 0: output */
-> +#define F81534A_GPIO_MODE1_DIR		BIT(5)
-> +#define F81534A_GPIO_MODE0_DIR		BIT(4)
-> +#define F81534A_GPIO_MODE2_OUTPUT	BIT(2)
-> +#define F81534A_GPIO_MODE1_OUTPUT	BIT(1)
-> +#define F81534A_GPIO_MODE0_OUTPUT	BIT(0)
+> +#define F81534A_CTRL_ID		\
+> +	{ USB_DEVICE(0x2c42, 0x16f8) }	/* Global control device */
+> +
+>  static const struct usb_device_id id_table[] = {
+>  	F81232_ID,
+>  	{ }					/* Terminating entry */
+> @@ -46,6 +49,11 @@ static const struct usb_device_id f81534a_id_table[] = {
+>  	{ }					/* Terminating entry */
+>  };
+>  
+> +static const struct usb_device_id f81534a_ctrl_id_table[] = {
+> +	F81534A_CTRL_ID,
+> +	{ }					/* Terminating entry */
+> +};
+> +
+>  static const struct usb_device_id all_serial_id_table[] = {
+>  	F81232_ID,
+>  	F81534A_SERIES_ID,
+> @@ -105,6 +113,8 @@ MODULE_DEVICE_TABLE(usb, all_serial_id_table);
+>  #define F81534A_GPIO_MODE1_OUTPUT	BIT(1)
+>  #define F81534A_GPIO_MODE0_OUTPUT	BIT(0)
+>  
+> +#define F81534A_CMD_ENABLE_PORT		0x116
+
+Maybe use a distinct prefix for requests to the control device (e.g.
+F81534A_CTRL_).
+
 > +
 >  struct f81232_private {
 >  	struct mutex lock;
 >  	u8 modem_control;
-> @@ -866,6 +875,14 @@ static int f81232_port_probe(struct usb_serial_port *port)
+> @@ -853,6 +863,95 @@ static void f81232_lsr_worker(struct work_struct *work)
+>  		dev_warn(&port->dev, "read LSR failed: %d\n", status);
+>  }
 >  
->  static int f81534a_port_probe(struct usb_serial_port *port)
->  {
+> +static int f81534a_ctrl_set_register(struct usb_device *dev, u16 reg, u16 size,
+> +					void *val)
+> +{
+> +	int retry = F81534A_ACCESS_REG_RETRY;
+> +	int status;
+> +	u8 *tmp;
+> +
+> +	tmp = kmalloc(size, GFP_KERNEL);
+> +	if (!tmp)
+> +		return -ENOMEM;
+> +
+> +	memcpy(tmp, val, size);
+
+Use kmemdup().
+
+> +
+> +	while (retry--) {
+> +		status = usb_control_msg(dev,
+> +					usb_sndctrlpipe(dev, 0),
+> +					F81534A_REGISTER_REQUEST,
+> +					F81534A_SET_REGISTER,
+> +					reg,
+> +					0,
+> +					tmp,
+> +					size,
+> +					USB_CTRL_SET_TIMEOUT);
+> +		if (status != size) {
+> +			status = usb_translate_errors(status);
+> +			if (status == -EIO)
+> +				continue;
+
+This will retry on short transfers, is that what you intended?
+
+> +
+> +			status = -EIO;
+> +		} else {
+> +			status = 0;
+> +		}
+> +
+> +		break;
+> +	}
+> +
+> +	if (status) {
+> +		dev_err(&dev->dev, "set ctrl reg: %x, failed status: %d\n", reg,
+> +				status);
+> +	}
+> +
+> +	kfree(tmp);
+> +	return status;
+> +}
+> +
+> +static int f81534a_ctrl_enable_all_ports(struct usb_interface *intf)
+> +{
+> +	struct usb_device *dev = interface_to_usbdev(intf);
+> +	unsigned char enable[2];
 > +	int status;
 > +
-> +	/* tri-state with pull-high, default RS232 Mode */
-> +	status = f81232_set_register(port, F81534A_GPIO_REG,
-> +					F81534A_GPIO_MODE2_DIR);
-> +	if (status)
-> +		return status;
+> +	/* enable all available serial ports */
+> +	enable[0] = 0xff;
+> +	enable[1] = 0x8f;
 
-Ok, so you reset the tranceiver config on every probe.
-
-Are the three GPIOs always connected to one particular tranceiver, or
-are they truly general purpose?
-
-In the latter case, it doesn't seem like a good idea to drive pins 0
-and 1 low here as you have know idea what they're used for.
+What are these magic constants?
 
 > +
->  	return f81232_port_probe(port);
->  }
+> +	status = f81534a_ctrl_set_register(dev, F81534A_CMD_ENABLE_PORT,
+> +			sizeof(enable), enable);
+> +	if (status)
+> +		dev_warn(&dev->dev, "set CMD_ENABLE_PORT failed: %d\n", status);
+> +
+> +	return status;
+> +}
+> +
+> +static int f81534a_ctrl_probe(struct usb_interface *intf,
+> +				const struct usb_device_id *id)
+> +{
+> +	struct usb_device *dev = interface_to_usbdev(intf);
+> +	int status;
+> +
+> +	status = f81534a_ctrl_enable_all_ports(intf);
+> +	if (status)
+> +		return status;
+> +
+> +	dev = usb_get_dev(dev);
+
+This isn't strictly needed.
+
+> +	return 0;
+> +}
 
 Johan
