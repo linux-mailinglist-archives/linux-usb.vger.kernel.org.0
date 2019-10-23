@@ -2,76 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E347EE1FEF
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 17:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17A46E1FF6
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 17:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390940AbfJWPwh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 11:52:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40588 "EHLO mail.kernel.org"
+        id S2404237AbfJWPzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 11:55:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390909AbfJWPwg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 11:52:36 -0400
-Received: from localhost (unknown [122.181.210.10])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2390909AbfJWPzR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 11:55:17 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D58C220679;
-        Wed, 23 Oct 2019 15:52:33 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 354432086D;
+        Wed, 23 Oct 2019 15:55:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571845955;
-        bh=gw+u2oDxao9S2OF9vDMVHJXR1sZpwCsxQL+71vaNdXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n6oem8MVv8qFbVXjuuk8lYoQjHeKNKEUbjKgmjPgh9NnWMgkQqnE1w91Zjd4v2P+m
-         ST7+KtZ2qUQCJMXvxbWBW80lyXoP8Z2bSi5GVTSbQQKjjk41FBesVs1Gkf1nZjzrbo
-         P2zTiE8t4vbIzOgpazRcSm2hrdy/+6YUFJ8i2sSw=
-Date:   Wed, 23 Oct 2019 21:22:28 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vinod.koul@intel.com>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        George Cherian <george.cherian@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Johan Hovold <johan@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        dmaengine@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, giulio.benetti@benettiengineering.com,
-        Sebastian Reichel <sre@kernel.org>,
-        Skvortsov <andrej.skvortzov@gmail.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>
-Subject: Re: [PATCH] dmaengine: cppi41: Fix cppi41_dma_prep_slave_sg() when
- idle
-Message-ID: <20191023154759.GT2654@vkoul-mobl>
-References: <20191023153138.23442-1-tony@atomide.com>
+        s=default; t=1571846116;
+        bh=Y7Lr0dSo9vPkjoOvo8jyQHCOR5ujworwo+eRGqcgAag=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=A2m/3DgN3LZVEw2SKZeypXEA3sbaslgNkWzggAAlTdPpxHX7wBuxYjY/STyNCtnwk
+         eTfoBoUmihaVKi2SOpWBzk9y78VKv9lt0K35sz2JHIE/9Xe0XqtTAqX1pEB+hSdCUk
+         4D/7jeVpDgg94i2xV1Ohb+TBqwpK35CnUXBspFzU=
+Subject: Re: [PATCH v2] usbip: Fix free of unallocated memory in vhci tx
+To:     Julia Lawall <julia.lawall@lip6.fr>,
+        Suwan Kim <suwan.kim027@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, valentina.manea.m@gmail.com,
+        kbuild test robot <lkp@intel.com>, shuah <shuah@kernel.org>
+References: <20191022093017.8027-1-suwan.kim027@gmail.com>
+ <alpine.DEB.2.21.1910221151180.2637@hadrien>
+From:   shuah <shuah@kernel.org>
+Message-ID: <2c3acd02-9687-80fb-27c9-d64d7932b7ab@kernel.org>
+Date:   Wed, 23 Oct 2019 09:55:15 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191023153138.23442-1-tony@atomide.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <alpine.DEB.2.21.1910221151180.2637@hadrien>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 23-10-19, 08:31, Tony Lindgren wrote:
-> Yegor Yefremov <yegorslists@googlemail.com> reported that musb and ftdi
-> uart can fail for the first open of the uart unless connected using
-> a hub.
+On 10/22/19 3:51 AM, Julia Lawall wrote:
 > 
-> This is because the first dma call done by musb_ep_program() must wait
-> if cppi41 is PM runtime suspended. Otherwise musb_ep_program() continues
-> with other non-dma packets before the DMA transfer is started causing at
-> least ftdi uarts to fail to receive data.
 > 
-> Let's fix the issue by waking up cppi41 with PM runtime calls added to
-> cppi41_dma_prep_slave_sg() and return NULL if still idled. This way we
-> have musb_ep_program() continue with PIO until cppi41 is awake.
+> On Tue, 22 Oct 2019, Suwan Kim wrote:
+> 
+>> iso_buffer should be set to NULL after use and free in the while loop.
+>> In the case of isochronous URB in the while loop, iso_buffer is
+>> allocated and after sending it to server, buffer is deallocated. And
+>> then, if the next URB in the while loop is not a isochronous pipe,
+>> iso_buffer still holds the previously deallocated buffer address and
+>> kfree tries to free wrong buffer address.
+>>
+>> Fixes: ea44d190764b ("usbip: Implement SG support to vhci-hcd and stub driver")
+>> Reported-by: kbuild test robot <lkp@intel.com>
+>> Reported-by: Julia Lawall <julia.lawall@lip6.fr>
+>> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> 
+> Reviewed-by: Julia Lawall <julia.lawall@lip6.fr>
+> 
+>> ---
+>> v1 - v2: Move the setting NULL after kfree() and add the comment
+>> ---
 
-Applied and tagged stable, thanks
--- 
-~Vinod
+Thanks.
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
