@@ -2,104 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43374E25C4
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 23:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40363E2613
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 00:04:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405842AbfJWVtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 17:49:14 -0400
-Received: from muru.com ([72.249.23.125]:39646 "EHLO muru.com"
+        id S2407842AbfJWWER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 18:04:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390165AbfJWVtO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 17:49:14 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 09F8280CF;
-        Wed, 23 Oct 2019 21:49:45 +0000 (UTC)
-Date:   Wed, 23 Oct 2019 14:49:08 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Grygorii Strashko <grygorii.strashko@ti.com>
-Cc:     Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        dmaengine@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, giulio.benetti@benettiengineering.com,
-        Sebastian Reichel <sre@kernel.org>,
-        Skvortsov <andrej.skvortzov@gmail.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>
-Subject: Re: [PATCH] dmaengine: cppi41: Fix cppi41_dma_prep_slave_sg() when
- idle
-Message-ID: <20191023214908.GU5610@atomide.com>
-References: <20191023153138.23442-1-tony@atomide.com>
- <245e1e8f-7933-bae1-b779-239f33d4d449@ti.com>
- <20191023171628.GO5610@atomide.com>
- <5deab8a9-5796-5367-213e-90c5961b8498@ti.com>
- <20191023191859.GQ5610@atomide.com>
- <7d578fe1-2d60-4a6e-48b0-73d66c39f783@ti.com>
- <20191023201829.GR5610@atomide.com>
- <c3f0ae57-bc74-bab9-c8f9-b4ca751d657e@ti.com>
- <20191023212734.GT5610@atomide.com>
- <78bf336e-8078-df79-2e3e-42c6cf8a3ae8@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <78bf336e-8078-df79-2e3e-42c6cf8a3ae8@ti.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+        id S2405661AbfJWWER (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 18:04:17 -0400
+Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 475632084C;
+        Wed, 23 Oct 2019 22:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571868254;
+        bh=ZxZ2bjgrY8LxhC2gxwLipAEf5uWwjrnOAtpoB5RPRXI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nNtl5XCv0j9A48YnWaF5iTudfCQq33+QXJgRHWDYDg2YmEqbZCLDe+NCQQetvnR/b
+         3CtLgVZL25LnwIFN+itO3rrgLffBBVQHhKExtJ614qS8GnmXP7HXLzSds5ViMnMXX/
+         nrTddbLuRTbdz423kAsG34HKFcGZ+DmZP7edoe2A=
+Date:   Wed, 23 Oct 2019 15:04:13 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     linux-usb@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v2 0/3] kcov: collect coverage from usb and vhost
+Message-Id: <20191023150413.8aa05549bd840deccfed5539@linux-foundation.org>
+In-Reply-To: <cover.1571844200.git.andreyknvl@google.com>
+References: <cover.1571844200.git.andreyknvl@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Grygorii Strashko <grygorii.strashko@ti.com> [191023 21:43]:
+On Wed, 23 Oct 2019 17:24:28 +0200 Andrey Konovalov <andreyknvl@google.com> wrote:
+
+> This patchset extends kcov to allow collecting coverage from the USB
+> subsystem and vhost workers. See the first patch description for details
+> about the kcov extension. The other two patches apply this kcov extension
+> to USB and vhost.
 > 
-> 
-> On 24/10/2019 00:27, Tony Lindgren wrote:
-> > * Grygorii Strashko <grygorii.strashko@ti.com> [191023 20:56]:
-> > > On 23/10/2019 23:18, Tony Lindgren wrote:
-> > > > And no, adding pm_runtime_get_sync() to issue_pending is not
-> > > > a solution. There may be clocks and regulators that need to
-> > > > be powered up, and we don't want to use pm_runtime_irq_safe()
-> > > > because of the permanent use count on the parent.
-> > > 
-> > > 5 cents.
-> > > 
-> > > I think the right thing might be to get rid of pm_runtime_xxx()
-> > > in cppi41_dma_issue_pending(). So overall approach will be:
-> > > 
-> > > - new job -> cppi41_dma_prep_slave_sg() -> pm_runtime_get()
-> > > - issue_pending: fill backlog if suspended or run_queue if active (pm_runtime_active())
-> > > - job done: dmaengine_desc_get_callback_invoke() ->
-> > > 
-> > > 	dmaengine_desc_get_callback_invoke();
-> > > 	pm_runtime_mark_last_busy(cdd->ddev.dev);
-> > > 	pm_runtime_put_autosuspend(cdd->ddev.dev);
-> > >    in all places.
-> > > 
-> > > It even might allow to get rid of cdd->lock.
-> > 
-> > Well I don't think cppi41_dma_prep_slave_sg() is necessarily
-> > paired with anything currently.
-> 
-> It should - dma cmpletion callbacks have to be called somewhere.
+> These patches have been used to enable coverage-guided USB fuzzing with
+> syzkaller for the last few years
 
-Well what I meant is there's no guarantee that we have
-cppi41_dma_issue_pending() followed by cppi41_dma_prep_slave_sg()
-currently :)
+I find it surprising that this material is so focused on USB.  Is
+there something unique about USB that gave rise to this situation, or
+is it expected that the new kcov feature will be used elsewhere in the
+kernel?
 
->  This can potentially leading
-> > to pm_runtime_get() called multiple times?
-> 
-> That's the idea - increase pm_counter as many times as jobs submitted.
-
-Right, but that needs to be done in a paired manner so the
-API is clear to everyone and does not lead into unpaired
-PM runtime calls.
-
-Regards,
-
-Tony
+If the latter, which are the expected subsystems?
