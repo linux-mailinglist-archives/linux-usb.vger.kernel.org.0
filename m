@@ -2,102 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 044D2E1E27
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED65E1E50
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Oct 2019 16:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404795AbfJWO3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 10:29:05 -0400
-Received: from mga06.intel.com ([134.134.136.31]:7610 "EHLO mga06.intel.com"
+        id S2392294AbfJWOjm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 10:39:42 -0400
+Received: from mga12.intel.com ([192.55.52.136]:39183 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2403845AbfJWO3F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Oct 2019 10:29:05 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S2389921AbfJWOjl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 10:39:41 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 07:29:04 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 23 Oct 2019 07:39:41 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,221,1569308400"; 
-   d="scan'208";a="209932154"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 23 Oct 2019 07:29:01 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 23 Oct 2019 17:29:00 +0300
-Date:   Wed, 23 Oct 2019 17:29:00 +0300
+   d="scan'208";a="209934319"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 23 Oct 2019 07:39:40 -0700
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Puma Hsu <pumahsu@google.com>, gregkh@linuxfoundation.org,
-        badhri@google.com, kyletso@google.com, albertccwang@google.com,
-        rickyniu@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2] usb: typec: Add sysfs node to show connector
- orientation
-Message-ID: <20191023142900.GA15396@kuha.fi.intel.com>
-References: <20191022085924.92783-1-pumahsu@google.com>
- <20191023083221.GB8828@kuha.fi.intel.com>
- <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Ajay Gupta <ajayg@nvidia.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v2 00/18] usb: typec: API improvements
+Date:   Wed, 23 Oct 2019 17:39:21 +0300
+Message-Id: <20191023143939.39668-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <644d890b-86e8-f05a-cd4c-32937d971a45@roeck-us.net>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 06:44:39AM -0700, Guenter Roeck wrote:
-> On 10/23/19 1:32 AM, Heikki Krogerus wrote:
-> > +Guenter
-> > 
-> > On Tue, Oct 22, 2019 at 04:59:24PM +0800, Puma Hsu wrote:
-> > > Export the Type-C connector orientation so that user space
-> > > can get this information.
-> > > 
-> > > Signed-off-by: Puma Hsu <pumahsu@google.com>
-> > > ---
-> > >   Documentation/ABI/testing/sysfs-class-typec | 11 +++++++++++
-> > >   drivers/usb/typec/class.c                   | 18 ++++++++++++++++++
-> > >   2 files changed, 29 insertions(+)
-> > > 
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-typec b/Documentation/ABI/testing/sysfs-class-typec
-> > > index d7647b258c3c..b22f71801671 100644
-> > > --- a/Documentation/ABI/testing/sysfs-class-typec
-> > > +++ b/Documentation/ABI/testing/sysfs-class-typec
-> > > @@ -108,6 +108,17 @@ Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > >   Description:
-> > >   		Revision number of the supported USB Type-C specification.
-> > > +What:		/sys/class/typec/<port>/connector_orientation
-> > > +Date:		October 2019
-> > > +Contact:	Puma Hsu <pumahsu@google.com>
-> > > +Description:
-> > > +		Indicates which typec connector orientation is configured now.
-> > > +		cc1 is defined as "normal" and cc2 is defined as "reversed".
-> > > +
-> > > +		Valid value:
-> > > +		- unknown (nothing configured)
-> > 
-> > "unknown" means we do not know the orientation.
-> > 
-> > > +		- normal (configured in cc1 side)
-> > > +		- reversed (configured in cc2 side)
-> > 
-> > Guenter, do you think "connector_orientation" OK. I proposed it, but
-> > I'm now wondering if something like "polarity" would be better?
-> > 
-> 
-> Yes, or just "orientation". I don't see the value in the "connector_" prefix.
-> I also wonder if "unknown" is really correct. Is it really unknown, or
-> does it mean that the port is disconnected ?
+Hi,
 
-Unknown means we don't know the orientation. We don't always have that
-information available to us. With UCSI we simply do not know it.
+There is now a check in ucsi_exec_command() that makes sure we do not
+call ucsi_read_error() with UCSI_GET_ERROR_STATUS command. That should
+prevent endless recursion from happening.
 
-I think this file needs to be hidden after all if we don't know the
-cable plug orientation.
+The original cover letter:
 
-How about empty string instead of "unknown"?
+The first patches in this series (patches 1-8) introduce a small
+change to the USB Type-C Connector Class API. Guenter was kind enough
+to go over those already.
+
+Patches 10-15 improve the ucsi driver API by introducing more
+traditional read and write routines, and the rest is more generic
+optimisations and improvements to the ucsi drivers.
+
+Let me know if there is anything you want to be changed.
 
 thanks,
 
+Heikki Krogerus (18):
+  usb: typec: Copy everything from struct typec_capability during
+    registration
+  usb: typec: Introduce typec_get_drvdata()
+  usb: typec: Separate the operations vector
+  usb: typec: tcpm: Start using struct typec_operations
+  usb: typec: tps6598x: Start using struct typec_operations
+  usb: typec: ucsi: Start using struct typec_operations
+  usb: typec: hd3ss3220: Start using struct typec_operations
+  usb: typec: Remove the callback members from struct typec_capability
+  usb: typec: Remove unused members from struct typec_capability
+  usb: typec: hd3ss3220: Give the connector fwnode to the port device
+  usb: typec: ucsi: Simplified registration and I/O API
+  usb: typec: ucsi: acpi: Move to the new API
+  usb: typec: ucsi: ccg: Move to the new API
+  usb: typec: ucsi: Remove the old API
+  usb: typec: ucsi: Remove struct ucsi_control
+  usb: typec: ucsi: Remove all bit-fields
+  usb: typec: ucsi: New error codes
+  usb: typec: ucsi: Optimise ucsi_unregister()
+
+ drivers/usb/typec/class.c            |  42 +-
+ drivers/usb/typec/hd3ss3220.c        |  36 +-
+ drivers/usb/typec/tcpm/tcpm.c        |  45 +-
+ drivers/usb/typec/tps6598x.c         |  49 ++-
+ drivers/usb/typec/ucsi/displayport.c |  40 +-
+ drivers/usb/typec/ucsi/trace.c       |  11 -
+ drivers/usb/typec/ucsi/trace.h       |  79 +---
+ drivers/usb/typec/ucsi/ucsi.c        | 609 ++++++++++++++-------------
+ drivers/usb/typec/ucsi/ucsi.h        | 417 +++++++-----------
+ drivers/usb/typec/ucsi/ucsi_acpi.c   |  94 ++++-
+ drivers/usb/typec/ucsi/ucsi_ccg.c    | 170 ++++----
+ include/linux/usb/typec.h            |  41 +-
+ 12 files changed, 777 insertions(+), 856 deletions(-)
+
 -- 
-heikki
+2.23.0
+
