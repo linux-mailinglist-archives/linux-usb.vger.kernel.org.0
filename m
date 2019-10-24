@@ -2,45 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96980E34A8
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 15:47:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF64BE34A6
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 15:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390294AbfJXNrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 09:47:13 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:51279 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393794AbfJXNrM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 09:47:12 -0400
-Received: by mail-io1-f70.google.com with SMTP id x13so25720193ioa.18
-        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 06:47:09 -0700 (PDT)
+        id S2393764AbfJXNrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 09:47:10 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:42460 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390294AbfJXNrJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 09:47:09 -0400
+Received: by mail-il1-f198.google.com with SMTP id y4so9540828ilg.9
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 06:47:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=t2Yf9L/jBVvBAHkV3yxbLEvtZ5yOPvbhkvRuGLMDhJk=;
-        b=VjFl5alMtGoz7JteWdJ5HMe1AH65fW4rjNx5ZFv9k4Vt952zmIIUZpDBlRTY9mq+Pd
-         aFHW9c03UvGI5lsPHeORdqhFWMtO1NTCixBGcEmD926Ca78RHvu1wdN7nXC2TV7zd9Ne
-         kMZrhVrGIvOEAwlTuiUK08DelhPsWtuKfnvTQFQA2n4jFzOs9AqcB4aROnlJ22VG5SS3
-         Z0nXC/YgZemQkvQct4sGLUGwerJb0U0e9IJE2QOKKc1wZqaF6SBoV7jXL9cxvpsBeP+/
-         o5JaUu2dZ5Hw29+9C3fRaDZ4LVVc137U9QHzUjHBuVKIkbTG/mZFy2Oh8/n6B6lae4Zs
-         mU3w==
-X-Gm-Message-State: APjAAAUNGfGr1TjWd9GIz5xeAEz7CrBSfgVp578Yw3aU2gmj/DlH9kJs
-        EWlcRRZJZqeY/ESHAHOGMpChaVopAzMlGp2zTuvhGIMrqVON
-X-Google-Smtp-Source: APXvYqyC4sdEy11y07JTP5+9irjs97ov2ZNLsdTU94ijiWJNUO9SeMFZ36861bQ4WlArQN0D9fkIp83R8dTI541peCgTmGGF24tG
+        bh=laGJg/ITA0QZDqhx2+KD2negO7qyTZ2zFKV8v0w7O54=;
+        b=k0f+hyO04T/P90+6Gofe/vJQzd/hX0VJ+LmXjSGaoFztLBSRYZUgoo0TuC3rPlKgmB
+         K9asbunorLGaMPRorjei93q+i9xwGwcW+HFJP34qEmsFSGN3NEJ2+MHLt+5DY7+4MSsT
+         WHcgi7WSmQD2LdRkNovSro5/BjHmrLfV0LhB9qzbIjHgI1gDDDSi+aFTfuTRGlXMhNOF
+         QKl9Wr0OwNIhyCdIJW6xTc7XYXa+UAhcvfNSOyTBiV3MBqDKnHS5zgGURGPDLNqxoRXU
+         gHKy4Auabj65F5V20r0JPZR7Oc8JVeHa2Fyjur4c8u8ADZJKtIfv/j8mP/cu0Raocz+1
+         UV2Q==
+X-Gm-Message-State: APjAAAWaAUnMm3M5IGIaf41p75fDuZjgyHU5dUCYg2mvFN273QVdMw2q
+        dOUlunMqtai0un10ziOzYTKoYEae4nhJ7YBOfGwI8gL4P0V1
+X-Google-Smtp-Source: APXvYqxNbhylOM/zQfqXCs0IhtVFm68yuCUa5QbK8V/In+I9GYJrWp56z5nUn953E0abnkZYettHEO8nbKLmeCU/Vyq4p2l67uEG
 MIME-Version: 1.0
-X-Received: by 2002:a6b:ea19:: with SMTP id m25mr2163572ioc.256.1571924828662;
+X-Received: by 2002:a02:a199:: with SMTP id n25mr14962560jah.92.1571924828332;
  Thu, 24 Oct 2019 06:47:08 -0700 (PDT)
 Date:   Thu, 24 Oct 2019 06:47:08 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000006bb9c0595a84569@google.com>
-Subject: KASAN: use-after-free Read in build_audio_procunit
-From:   syzbot <syzbot+fd965c77e4711eb13b82@syzkaller.appspotmail.com>
-To:     alsa-devel@alsa-project.org, andreyknvl@google.com,
-        benquike@gmail.com, dan.carpenter@oracle.com, g@b4.vu,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        perex@perex.cz, rfontana@redhat.com,
+Message-ID: <00000000000001b0a40595a84593@google.com>
+Subject: KASAN: use-after-free Read in parse_term_proc_unit
+From:   syzbot <syzbot+97e24236f1e2918ad968@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, alsa-devel@alsa-project.org,
+        andreyknvl@google.com, benquike@gmail.com,
+        dan.carpenter@oracle.com, g@b4.vu, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, perex@perex.cz,
         syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        tiwai@suse.com, wang6495@umn.edu
+        tiwai@suse.com, wang6495@umn.edu, yuehaibing@huawei.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -53,28 +53,28 @@ syzbot found the following crash on:
 
 HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=17cdccc4e00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a38628e00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-dashboard link: https://syzkaller.appspot.com/bug?extid=fd965c77e4711eb13b82
+dashboard link: https://syzkaller.appspot.com/bug?extid=97e24236f1e2918ad968
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13fe752f600000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17989fd8e00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12184764e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1432ae28e00000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+fd965c77e4711eb13b82@syzkaller.appspotmail.com
+Reported-by: syzbot+97e24236f1e2918ad968@syzkaller.appspotmail.com
 
 usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
 usb 1-1: Product: syz
 usb 1-1: Manufacturer: syz
 usb 1-1: SerialNumber: syz
 ==================================================================
-BUG: KASAN: use-after-free in uac_extension_unit_iExtension  
-include/uapi/linux/usb/audio.h:483 [inline]
-BUG: KASAN: use-after-free in build_audio_procunit+0xeab/0x13f0  
-sound/usb/mixer.c:2434
-Read of size 1 at addr ffff8881d4c0140d by task kworker/0:1/12
+BUG: KASAN: use-after-free in uac_processing_unit_iProcessing  
+include/uapi/linux/usb/audio.h:429 [inline]
+BUG: KASAN: use-after-free in parse_term_proc_unit+0x57a/0x5e0  
+sound/usb/mixer.c:896
+Read of size 1 at addr ffff8881d5346d0e by task kworker/1:2/83
 
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.4.0-rc3+ #0
+CPU: 1 PID: 83 Comm: kworker/1:2 Not tainted 5.4.0-rc3+ #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
 Workqueue: usb_hub_wq hub_event
@@ -84,10 +84,11 @@ Call Trace:
   print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
   kasan_report+0xe/0x20 mm/kasan/common.c:634
-  uac_extension_unit_iExtension include/uapi/linux/usb/audio.h:483 [inline]
-  build_audio_procunit+0xeab/0x13f0 sound/usb/mixer.c:2434
-  parse_audio_extension_unit sound/usb/mixer.c:2483 [inline]
-  parse_audio_unit+0x1812/0x36f0 sound/usb/mixer.c:2761
+  uac_processing_unit_iProcessing include/uapi/linux/usb/audio.h:429 [inline]
+  parse_term_proc_unit+0x57a/0x5e0 sound/usb/mixer.c:896
+  __check_input_term+0xc32/0x13f0 sound/usb/mixer.c:984
+  parse_audio_feature_unit sound/usb/mixer.c:1875 [inline]
+  parse_audio_unit+0x101d/0x36f0 sound/usb/mixer.c:2753
   snd_usb_mixer_controls+0x715/0xb90 sound/usb/mixer.c:3095
   snd_usb_create_mixer+0x2b5/0x1890 sound/usb/mixer.c:3445
   usb_audio_probe+0xc76/0x2010 sound/usb/card.c:653
@@ -119,7 +120,7 @@ Call Trace:
   kthread+0x318/0x420 kernel/kthread.c:255
   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-Allocated by task 12:
+Allocated by task 83:
   save_stack+0x1b/0x80 mm/kasan/common.c:69
   set_track mm/kasan/common.c:77 [inline]
   __kasan_kmalloc mm/kasan/common.c:510 [inline]
@@ -141,7 +142,7 @@ Allocated by task 12:
   kthread+0x318/0x420 kernel/kthread.c:255
   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-Freed by task 12:
+Freed by task 83:
   save_stack+0x1b/0x80 mm/kasan/common.c:69
   set_track mm/kasan/common.c:77 [inline]
   kasan_set_free_info mm/kasan/common.c:332 [inline]
@@ -170,25 +171,25 @@ Freed by task 12:
   kthread+0x318/0x420 kernel/kthread.c:255
   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-The buggy address belongs to the object at ffff8881d4c01400
+The buggy address belongs to the object at ffff8881d5346d00
   which belongs to the cache kmalloc-192 of size 192
-The buggy address is located 13 bytes inside of
-  192-byte region [ffff8881d4c01400, ffff8881d4c014c0)
+The buggy address is located 14 bytes inside of
+  192-byte region [ffff8881d5346d00, ffff8881d5346dc0)
 The buggy address belongs to the page:
-page:ffffea0007530040 refcount:1 mapcount:0 mapping:ffff8881da002a00  
+page:ffffea000754d180 refcount:1 mapcount:0 mapping:ffff8881da002a00  
 index:0x0
 flags: 0x200000000000200(slab)
-raw: 0200000000000200 ffffea000754fec0 0000000200000002 ffff8881da002a00
+raw: 0200000000000200 ffffea0007548ac0 0000000900000009 ffff8881da002a00
 raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 
 Memory state around the buggy address:
-  ffff8881d4c01300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  ffff8881d4c01380: 00 00 00 07 fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff8881d4c01400: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d5346c00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ffff8881d5346c80: 00 00 00 00 05 fc fc fc fc fc fc fc fc fc fc fc
+> ffff8881d5346d00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
                        ^
-  ffff8881d4c01480: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
-  ffff8881d4c01500: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d5346d80: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+  ffff8881d5346e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
 
