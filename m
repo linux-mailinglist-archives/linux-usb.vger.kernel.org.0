@@ -2,126 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBAAE2C9D
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 10:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 864ABE2C84
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 10:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731423AbfJXIwF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 04:52:05 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:46134 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730467AbfJXIwE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 04:52:04 -0400
-Received: by mail-pl1-f194.google.com with SMTP id q21so3444120plr.13;
-        Thu, 24 Oct 2019 01:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uPX6O9l+kuYjBcPYdh37KOiS7f3AWvLRqvSNRDK/hlY=;
-        b=rrxFfBuNj1V+uFY7mLjfFUPtV4lB6aOMWJC30bQxiPaE9cV/lD9sVOk3SIk3xxu0UX
-         7F6JWvBWNVcMfeQWKPE8B5LBRJjebHT/fuosPKegNwFQzyIYFqbONhmfvmuGJ4lcZfxN
-         MDyqg014EdBJuLkMqaIOgHYKfC8AYe+RSXf2U0eV33pxwwElrd7XoEzdWfO0gI2utY+f
-         2uNL8ed8lY1uV4upV/zKMvG/NspEHAmx+GchOcN00B0baykx4rU66sP4SS9BkTDBMdRV
-         25+LfK7LnYZKNtfAg4wEHKm85FsLkusC2tgS3ToH08UFikNjzerI4RCY9jdRwyBgtwdb
-         pgsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uPX6O9l+kuYjBcPYdh37KOiS7f3AWvLRqvSNRDK/hlY=;
-        b=Pp7aTGlLmlj69k73EB4mIzKLJsspL7zQ11zRs/Tj+Slgr3TtCi4ZuOP7S1n2aYLcB1
-         AomH5N7XunEwzrWWxuz7LM26PUMb9hTdHNEyGUtcceHS43f6tj1otwrnBhmyhbIFxQpL
-         WzFWKY30QiCG7JMzKI4ZITb0s4BXSbQoBzp3/CfT9ZhhMMAd7jnXYbS+7PKZQAAXEDaf
-         kX5h9bL1wf7/5MVXDjARPKAlCa+1Wwxozf7fczPUXIwCqW60QLh9pg4z9i+TVrvDK5d5
-         Clzds1qJEeP5ZkiZeQbtGfzn/udA2+o1Z5IodxKh6pFFmMSo49EoXHPY8CgySm6Cz1me
-         odUg==
-X-Gm-Message-State: APjAAAWG/pPwv+v+EHnlliDcfkibmj/d5HRh6NiAQ7WJ6de33PHBLZqI
-        nLd+/DG1pAIi1wNYfEkuo+o=
-X-Google-Smtp-Source: APXvYqwhJuw0T1sHz53pKJca5ZWdTYoQJUWebP9bGeR93OHzONyszouIpVMtloMWhRzOz/GbyuihGw==
-X-Received: by 2002:a17:902:b60a:: with SMTP id b10mr15125831pls.130.1571907123451;
-        Thu, 24 Oct 2019 01:52:03 -0700 (PDT)
-Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
-        by smtp.gmail.com with ESMTPSA id s191sm23097338pgc.94.2019.10.24.01.52.01
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Oct 2019 01:52:02 -0700 (PDT)
-Subject: Re: [PATCH V2 5/7] USB: serial: f81232: Set F81534A serial port with
- RS232 mode
-To:     Johan Hovold <johan@kernel.org>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
-        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
-References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
- <20190923022449.10952-6-hpeter+linux_kernel@gmail.com>
- <20191023115300.GU24768@localhost>
-From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
-Message-ID: <f3a8b0bd-79f7-3bef-4d07-69774c87873a@gmail.com>
-Date:   Thu, 24 Oct 2019 16:52:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        id S2438390AbfJXIva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 04:51:30 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:46838 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730621AbfJXIva (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 04:51:30 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9O8p7Pp085877;
+        Thu, 24 Oct 2019 03:51:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571907067;
+        bh=54djgH10KG/rVSnq5F8we0LmCw2lCjZh+du4GsdmEvs=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=QtrCVhPHsEj2wOocfkyA9jH2Qkcpyed05iPaxpH9sfQGNXJaooFfi5NN0O9EqX2uQ
+         CATjIV6nA3+ZYd4L41pvYSv5wtVyVIPty8whwwhky9oOHwY4bMxsuNeBHxhyWO8tVf
+         PyKeNrhT9tgNA1Lhcb+RjjSBvbOxcGwy7EpY3kBM=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9O8p7T6006768
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Oct 2019 03:51:07 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 24
+ Oct 2019 03:50:55 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 24 Oct 2019 03:50:55 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9O8p1kH035606;
+        Thu, 24 Oct 2019 03:51:01 -0500
+Subject: Re: [PATCH] dmaengine: cppi41: Fix cppi41_dma_prep_slave_sg() when
+ idle
+To:     Tony Lindgren <tony@atomide.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Alexandre Bailon <abailon@baylibre.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Johan Hovold <johan@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
+        <dmaengine@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>,
+        <giulio.benetti@benettiengineering.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Skvortsov <andrej.skvortzov@gmail.com>,
+        Yegor Yefremov <yegorslists@googlemail.com>
+References: <20191023153138.23442-1-tony@atomide.com>
+ <245e1e8f-7933-bae1-b779-239f33d4d449@ti.com>
+ <20191023171628.GO5610@atomide.com>
+ <5deab8a9-5796-5367-213e-90c5961b8498@ti.com>
+ <20191023191859.GQ5610@atomide.com>
+ <7d578fe1-2d60-4a6e-48b0-73d66c39f783@ti.com>
+ <20191023201829.GR5610@atomide.com>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <4bcd75d8-b7c5-5006-d80f-c5bda0cdf011@ti.com>
+Date:   Thu, 24 Oct 2019 11:52:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191023115300.GU24768@localhost>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20191023201829.GR5610@atomide.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Johan,
 
-Johan Hovold 於 2019/10/23 下午 07:53 寫道:
-> On Mon, Sep 23, 2019 at 10:24:47AM +0800, Ji-Ze Hong (Peter Hong) wrote:
->> The Fintek F81532A/534A/535/536 is USB-to-2/4/8/12 serial ports device
->> and the serial ports are default disabled. Each port contains max 3 pins
->> GPIO and the 3 pins are default pull high with input mode.
+
+On 23/10/2019 23.18, Tony Lindgren wrote:
+> * Peter Ujfalusi <peter.ujfalusi@ti.com> [191023 19:55]:
+>> On 10/23/19 10:18 PM, Tony Lindgren wrote:
+>>> We'd have to allow dma consumer driver call pm_runtime_get_sync()
+>>> on the dma device. Something similar maybe to what we have
+>>> for phy_pm_runtime_get_sync(). Or just get the device handle for
+>>> dma so the consumer can call pm_runtime_get_sync() on it.
 >>
->> When the serial port had activated (running probe()), we'll transform the
->> 3 pins from GPIO function publicly to control Tranceiver privately use.
+>> How much a pm_runtime_get_sync(dmadev) is different when it is issued by
+>> the client driver compared to when the dma driver issues it for it's own
+>> device?
 > 
-> I'm not sure I understand what you're saying here.
+> Well the consumer device could call pm_runtime_get_sync(dmadev)
+> when the USB cable is connected for example, and then call
+> pm_runtime_pu(dmadev) when let's say the USB cable is disconnected.
+
+And the USB cable connect/disconnect is handled in interrupt -> you need
+to call pm_runtime_get_sync(dmadev) from interrupt context and need to
+mark the dmadev to pm_runtime_irq_safe()
+
+> Without using pm_runtime_irq_safe() we currently don't have a
+> clear path for doing this where the pm_runtime_get_sync(dmadev)
+> may sleep.
 > 
->> We'll default set to 0/0/1 for control transceiver to RS232 mode.
+>> But I still fail to see the difference between the events before this
+>> patch and with the case when there is a 100ms delay between prep_sg and
+>> issue_pending.
 >>
->> Otherwise, If the serial port is not active, the 3 pins is in GPIO mode
->> and controlled by global GPIO device with VID/PID: 2c42/16f8.
+>> Before this patch:
+>>
+>> prep_sg()
+>> issue_pending() <- runtime_get() /  put_autosuspend()
+>> 		   _not_ starting transfer
+>> runtime_resume() <- starts the transfer
+>>
+>> With this patch and than 100ms delay between prep_sg and issue_pending:
+>>
+>> prep_sg() <- runtime_get() /  put_autosuspend()
+>> runtime_resume() <- not starting transfer
+>> issue_pending() <- runtime_get() /  put_autosuspend()
+>> 		   starts the transfer
+>>
+>> With this patch, but more than 100ms delay in between:
+>>
+>> prep_sg() <- runtime_get() /  put_autosuspend()
+>> runtime_resume() <- not starting transfer
+>>> 100ms delay
+>> runtime_suspend()
+>> issue_pending() <- runtime_get() /  put_autosuspend()
+>> 		   _not_ starting transfer
+>> runtime_resume() <- starts the transfer
+>>
+>> pm_runtime_get_sync() in issue_pending would be the solution to avoid
+>> delayed execution, but the usb driver should not assume that DMA is
+>> completed as soon as issue_pending returned.
 > 
-> Does this mean that you can control the three GPIOs either through the
-> serial device or through the gpio-control device (which are two separate
-> USB devices)?
-> 
+> Oh I see. Yes the consumer driver would need to check for
+> the completed dma transfer in all cases. The delay issues
+> should not currently happen in the musb_ep_program() problem
+> case as it gets called from IRQ context.
 
-Yes, when 1 F81534A connect to Host, it'll report device as following.
-	virtual HUB
-		GPIO Device.
-		serial port 1
-		...
-		serial port n
+the cppi41 driver solely relies on irq to check is the transfer is
+completed (based on the cookie status).
+So yeah, musb have no other choice than trust that the transfer is done
+in a timely manner.
 
-The link are F81534A pin-out:
-	https://imgur.com/a/AZHqQ1N
+> And no, adding pm_runtime_get_sync() to issue_pending is not
+> a solution. There may be clocks and regulators that need to
+> be powered up, and we don't want to use pm_runtime_irq_safe()
+> because of the permanent use count on the parent.
 
-So we can control F81534A series all GPIO pins via GPIO Device.
-Serial ports are also control MODE0_x,  MODE1_x,  MODE2_x
-(e.g. UART1 MODE0_1,  MODE1_1,  MODE2_1), but when Serial ports
-is h/w disabled (DTR pull low), the mode pin will change to GPIO pin.
+I think the only way to handle this is to keep the DMA enabled as long
+as the USB cable is connected.
+Either to introduce dma_pm_runtime_get_sync(struct dma_chan *c) and
+dma_pm_runtime_put(struct dma_chan *c) or some better name.
 
+It's use would be optional, but for USB you would call them for cable
+connect the get_sync (from a work) and put it on disconnect.
 
-> Ok, so you reset the tranceiver config on every probe.
-> 
-> Are the three GPIOs always connected to one particular tranceiver, or
-> are they truly general purpose?
-> 
-> In the latter case, it doesn't seem like a good idea to drive pins 0
-> and 1 low here as you have know idea what they're used for.
+The driver internally would not need to be changed, I think this patch
+could be removed as well.
 
-If we want to change the mode pin to GPIO pin, it need do h/w disable.
-It the serial ports are activated, the 3 pin will be mode pin and set
-default 0/0/1 to RS232 mode due to this driver not implement RS422/485
-currently.
+- Péter
 
-Thanks
--- 
-With Best Regards,
-Peter Hong
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
