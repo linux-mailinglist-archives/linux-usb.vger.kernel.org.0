@@ -2,41 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7190E2800
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 04:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1112BE2801
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 04:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436769AbfJXCPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 22:15:51 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:42370 "EHLO
+        id S2436786AbfJXCP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 22:15:57 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:58626 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436605AbfJXCPu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 22:15:50 -0400
-Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+        by vger.kernel.org with ESMTP id S2436605AbfJXCP5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 22:15:57 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A2F0AC0B5E;
-        Thu, 24 Oct 2019 02:15:50 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id CB69EC0239;
+        Thu, 24 Oct 2019 02:15:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1571883350; bh=7xLxcdEgHbiLNDQ1pFvSRTSIsYs+h4+L9ave6PTVtXg=;
+        t=1571883356; bh=Qj7MaDOXqFXYmlayYiTBixG3sFATVpQdY6vxqDaCJsk=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=Lxxsf6iXmQPbtRU3Mbi6UI3GYreTDWlHc8NkEY6MDHj3hoT/EJjEoNX+AtfoJGZrg
-         hPdN6wX0cBaCOey5WE22U0jSQ4iUDLSTa5SgzevOmcJojXAyTnQRZ3oiaD4X6EMElR
-         uve1EZ1jAtui7nyCXPk0xfcmftPV1+VaUyCR+3oWdFnhW3BGvS7IW4jtTDsCk/iEHr
-         Fb7BYXqkEdu9++sFad2X1VWggUp0PIwDthyhThgP1/jl5s7fil6filS5oLiVMMSZof
-         Y4OfeujZlw2HzSYtGPMwgUvLTjYqRJNLoM7TOAJ0ILsNsawLubFGB+s3y4M43L1ULm
-         w5F+r/TCoE37g==
+        b=DlqzONlFsAj34HfpUSLwLGNiwFdfoZ1KkW/hiJg6Z/eu/djBPNzeaDlTiyeaCqxfB
+         LdrpYcBYrwrk4pob3y3EgQ61SOaSspcqNF55jbqCiDNMqs0pHnh3qKRk6QIEnOWfYM
+         Eqrcy5+X1rba7MenOZ9xL/VXtzCLywZZI4abpAxZ9QWXdTbgflqXX1k+NErJy9q5p+
+         LG/G/cLh6DWCKTG6lW2FWneI/ayGyRueRpnmqapecLOcHmSyM4LSXBVqHDqlZXEjAJ
+         ZoOMfTEMoXe5VaZe/o5kPhbfrtLT1P1vHkeVEAvVVRCrMsUg7L5FTAyAM3i3HBusO0
+         xIwXnNN2zkpWQ==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8B9CBA0064;
-        Thu, 24 Oct 2019 02:15:49 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 23 Oct 2019 19:15:49 -0700
-Date:   Wed, 23 Oct 2019 19:15:49 -0700
-Message-Id: <d759de030cb07b5c0ec41f034972eae5dea8a838.1571882179.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 9C0F5A005A;
+        Thu, 24 Oct 2019 02:15:55 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 23 Oct 2019 19:15:55 -0700
+Date:   Wed, 23 Oct 2019 19:15:55 -0700
+Message-Id: <11954a39aa8a2ee06c561ffad60932f50366af59.1571882179.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1571882179.git.thinhn@synopsys.com>
 References: <cover.1571882179.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 2/4] usb: dwc3: gadget: Set link state to RX_Detect on disconnect
+Subject: [PATCH v2 3/4] usb: dwc3: gadget: Clear DCTL.ULSTCHNGREQ before set
 To:     Felipe Balbi <balbi@kernel.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         linux-usb@vger.kernel.org
@@ -46,29 +46,29 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When DWC3 receives disconnect event, it needs to set the link state to
-RX_Detect.
-
-DWC_usb3 3.30a programming guide 4.1.7
+Send a no-action link state change request before the actual request
+so DWC3 can send the same request whenever we call
+dwc3_gadget_set_link_state().
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
- drivers/usb/dwc3/gadget.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/gadget.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 85adc718808a..5856c8c96418 100644
+index 5856c8c96418..7f97856e6b20 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -2743,6 +2743,8 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- {
- 	int			reg;
- 
-+	dwc3_gadget_set_link_state(dwc, DWC3_LINK_STATE_RX_DET);
-+
+@@ -111,6 +111,9 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
  	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 	reg &= ~DWC3_DCTL_INITU1ENA;
- 	reg &= ~DWC3_DCTL_INITU2ENA;
+ 	reg &= ~DWC3_DCTL_ULSTCHNGREQ_MASK;
+ 
++	/* set no action before sending new link state change */
++	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
++
+ 	/* set requested state */
+ 	reg |= DWC3_DCTL_ULSTCHNGREQ(state);
+ 	dwc3_writel(dwc->regs, DWC3_DCTL, reg);
 -- 
 2.11.0
 
