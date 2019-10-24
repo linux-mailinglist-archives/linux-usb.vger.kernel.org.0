@@ -2,93 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B569E3914
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 19:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6900CE393F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 19:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409950AbfJXRA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 13:00:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2405976AbfJXRAZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Oct 2019 13:00:25 -0400
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B8CA620650;
-        Thu, 24 Oct 2019 17:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571936425;
-        bh=UDrL7Eh7U+eVIgDXosqXMSMhduI5UY6yvtzf3Iu2KLo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=K/FZbRWQuMpqS+6cyL7g0IqL6xVs2eJwzYG2NRs4oNg5To1xEo5ukILSYaTLiSpsB
-         gTjRi8KiCTnsnVyTDrajfuPx/rOBbF2ogQmOwgcwlKMt0knR8C/sZU/m3iefvTHHUp
-         XQ5kVHp8GJkqHHrcjhOEkPw7HiBABTr/deI+2Kd0=
-Date:   Thu, 24 Oct 2019 12:00:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Message-ID: <20191024170023.GA135695@google.com>
+        id S2410178AbfJXRFZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 13:05:25 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:34316 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2410167AbfJXRFY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 13:05:24 -0400
+Received: by mail-pf1-f193.google.com with SMTP id b128so15551707pfa.1
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 10:05:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CIO55DYRO8/Sqnegy2P280zVH4OxbpijeMxu8q5hbbU=;
+        b=Z84yxueceYvAKI1Vsj2Pp9zazCMndjR2vX/4k4nTAg2YtRG5P4NQxwBV8jGn2QkWcq
+         S0OCtfIcvqRDbr2tNnMHCtRnmjqZiII9PY0YYxb7DfED0GnBz+70dOAA8bG5Ual7qKcQ
+         w/L4N9cWxzihx+tdZX6CSrgkQoWvrxjHfWNJcyCK4qE9UDcF7jEeMd6K4fW6L94W4YM7
+         VY8pltd2tItIyl/lvKUlFJuMlFpYBkoutNe5MjAXevHSn5H3zbOKqjgM8H+l32fX73z8
+         MxNhK4HTPuxmYzhR6y3WX3S5L0WO+wwv9WdCNsbAblpeQEFf+yf1MdzqTMu8uf3a5oj8
+         aN5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CIO55DYRO8/Sqnegy2P280zVH4OxbpijeMxu8q5hbbU=;
+        b=MLAXi19tpZ5Ki8wrqzq0k12SiJNiuvmbNA0hPUxhRqqTxeH7hRjtRvobVy2p9wzk6K
+         iTQTSYxaxAi4wyhreWaEzlEy1BhV7NLsJ6xr84Xvwi0R5kQ/00Pk8dxt7VtS7wa+9AEp
+         ypoo2ROlTuF0GYcbttPRr50GNaaa7X8zjTcQ78Txv+JvFSjG+KzBKBnTDnCJO1gaEO4M
+         8RXzmq3BIDeEkN4LMEP47pFVAnMRE6u2xCXFW7/DjdkIbTzgSjC97JZ1utgK6napp9dY
+         6oq2bx4y0CwKFSAOHc+cR2aEX3OO+15If7yartH8Er7p8fCx1G8S19LqQ/v+v8ah4C80
+         ssaA==
+X-Gm-Message-State: APjAAAUgtLwGnNc8Y56+DzFWxvK+wIYwZOOraGZ26Gxvv28r9hjplgAG
+        S9d5+Jk+azUMfc/UOc/+CPLwQdRO46qpnO+OZ0uoFw==
+X-Google-Smtp-Source: APXvYqzJ6Bu2BTN89OuCgCVnCf3KZRGeb5SSP7/2r93wg0nwSaGriLrPX1gEwkg5bLg3xA2GPpXSkptfQM/ti2QnJ4w=
+X-Received: by 2002:a17:90a:6509:: with SMTP id i9mr8289658pjj.47.1571936723212;
+ Thu, 24 Oct 2019 10:05:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD8Lp46KZmTzxjYN6T7u1xH0AODr38hFcCgR-COtvduK9ZuANQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <0000000000004f221d0595a86c33@google.com> <Pine.LNX.4.44L0.1910241053590.1676-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1910241053590.1676-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 24 Oct 2019 19:05:11 +0200
+Message-ID: <CAAeHK+xHTtkSRkMv5kV1hKcR3mhTPkyfUparka3oRBSs6U8yLQ@mail.gmail.com>
+Subject: Re: divide error in dummy_timer
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+8ab8bf161038a8768553@syzkaller.appspotmail.com>,
+        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 11:28:59AM +0800, Daniel Drake wrote:
-> On Thu, Oct 24, 2019 at 6:40 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > I think we need something like the patch below.  We already do
-> > basically the same thing in pci_pm_reset().
+On Thu, Oct 24, 2019 at 5:04 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Thu, 24 Oct 2019, syzbot wrote:
+>
+> > Hello,
 > >
-> > [1] https://gist.github.com/dsd/bd9370b35defdf43680b81ecb34381d5
+> > syzbot found the following crash on:
 > >
-> > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > index e7982af9a5d8..e8702388830f 100644
-> > --- a/drivers/pci/pci.c
-> > +++ b/drivers/pci/pci.c
-> > @@ -883,9 +883,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
-> >          * Mandatory power management transition delays; see PCI PM 1.1
-> >          * 5.6.1 table 18
-> >          */
-> > -       if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
-> > +       if (state == PCI_D3hot || dev->current_state == PCI_D3hot) {
-> >                 pci_dev_d3_sleep(dev);
-> > -       else if (state == PCI_D2 || dev->current_state == PCI_D2)
-> > +               pci_dev_wait(dev, "D3 transition", PCIE_RESET_READY_POLL_MS);
-> > +       } else if (state == PCI_D2 || dev->current_state == PCI_D2)
-> >                 udelay(PCI_PM_D2_DELAY);
+> > HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+> > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=11e2fda7600000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5fe29bc39eff9627
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=8ab8bf161038a8768553
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f664e4e00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14674000e00000
 > >
-> >         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
-> 
-> You also need to move the pci_dev_wait function definition higher up
-> in the file.
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+8ab8bf161038a8768553@syzkaller.appspotmail.com
+> >
+> > divide error: 0000 [#1] SMP KASAN
+> > CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.4.0-rc3+ #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> > Google 01/01/2011
+> > RIP: 0010:transfer drivers/usb/gadget/udc/dummy_hcd.c:1426 [inline]
+> > RIP: 0010:dummy_timer+0xad5/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1950
+> > Code: 0f 84 f5 fd ff ff e8 8a 55 ab fd 89 de 44 89 e7 e8 70 56 ab fd 41 39
+> > dc 0f 82 b0 08 00 00 e8 72 55 ab fd 44 89 e0 31 d2 31 ff <f7> f3 89 d6 89
+> > 94 24 c0 00 00 00 e8 cb 56 ab fd 8b 94 24 c0 00 00
+> > RSP: 0018:ffff8881db209b20 EFLAGS: 00010046
+> > RAX: 0000000000000040 RBX: 0000000000000000 RCX: ffffffff8392c330
+> > RDX: 0000000000000000 RSI: ffffffff8392c33e RDI: 0000000000000000
+> > RBP: 0000000000000000 R08: ffffffff86c2b200 R09: ffffed103b641353
+> > R10: ffffed103b641352 R11: 0000000000000003 R12: 0000000000000040
+> > R13: ffff8881d58c0000 R14: dffffc0000000000 R15: ffff8881d78d5a00
+> > FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007fb771a61000 CR3: 00000001d2295000 CR4: 00000000001406f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >   <IRQ>
+> >   call_timer_fn+0x179/0x650 kernel/time/timer.c:1404
+> >   expire_timers kernel/time/timer.c:1449 [inline]
+> >   __run_timers kernel/time/timer.c:1773 [inline]
+> >   __run_timers kernel/time/timer.c:1740 [inline]
+> >   run_timer_softirq+0x5e3/0x1490 kernel/time/timer.c:1786
+> >   __do_softirq+0x221/0x912 kernel/softirq.c:292
+> >   invoke_softirq kernel/softirq.c:373 [inline]
+> >   irq_exit+0x178/0x1a0 kernel/softirq.c:413
+> >   exiting_irq arch/x86/include/asm/apic.h:536 [inline]
+> >   smp_apic_timer_interrupt+0x12f/0x500 arch/x86/kernel/apic/apic.c:1137
+> >   apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+> >   </IRQ>
+> > RIP: 0010:default_idle+0x28/0x2e0 arch/x86/kernel/process.c:581
+> > Code: 90 90 41 56 41 55 65 44 8b 2d f4 00 92 7a 41 54 55 53 0f 1f 44 00 00
+> > e8 c6 b2 d3 fb e9 07 00 00 00 0f 00 2d ea a5 52 00 fb f4 <65> 44 8b 2d d0
+> > 00 92 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
+> > RSP: 0018:ffffffff86c07da8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+> > RAX: 0000000000000007 RBX: ffffffff86c2b200 RCX: 0000000000000000
+> > RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffffff86c2ba4c
+> > RBP: fffffbfff0d85640 R08: ffffffff86c2b200 R09: 0000000000000000
+> > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+> > R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> >   cpuidle_idle_call kernel/sched/idle.c:154 [inline]
+> >   do_idle+0x3b6/0x500 kernel/sched/idle.c:263
+> >   cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:355
+> >   start_kernel+0x82a/0x864 init/main.c:784
+> >   secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:241
+> > Modules linked in:
+> > ---[ end trace 02e2d9c7c53d85a5 ]---
+> > RIP: 0010:transfer drivers/usb/gadget/udc/dummy_hcd.c:1426 [inline]
+> > RIP: 0010:dummy_timer+0xad5/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1950
+> > Code: 0f 84 f5 fd ff ff e8 8a 55 ab fd 89 de 44 89 e7 e8 70 56 ab fd 41 39
+> > dc 0f 82 b0 08 00 00 e8 72 55 ab fd 44 89 e0 31 d2 31 ff <f7> f3 89 d6 89
+> > 94 24 c0 00 00 00 e8 cb 56 ab fd 8b 94 24 c0 00 00
+> > RSP: 0018:ffff8881db209b20 EFLAGS: 00010046
+> > RAX: 0000000000000040 RBX: 0000000000000000 RCX: ffffffff8392c330
+> > RDX: 0000000000000000 RSI: ffffffff8392c33e RDI: 0000000000000000
+> > RBP: 0000000000000000 R08: ffffffff86c2b200 R09: ffffed103b641353
+> > R10: ffffed103b641352 R11: 0000000000000003 R12: 0000000000000040
+> > R13: ffff8881d58c0000 R14: dffffc0000000000 R15: ffff8881d78d5a00
+> > FS:  0000000000000000(0000) GS:ffff8881db200000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007fb771a61000 CR3: 00000001d2295000 CR4: 00000000001406f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >
+> >
+> > ---
+> > This bug is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> >
+> > syzbot will keep track of this bug report. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > syzbot can test patches for this bug, for details see:
+> > https://goo.gl/tpsmEJ#testing-patches
+>
+> Is this really the sort of thing we need to catch?  It isn't a bug in
+> any existing kernel code, as far as I know.  Maybe only gadgetfs and
+> configfs need to worry about it.
 
-OK, that would need a little tweaking.  Also, we should only need this
-for the D3hot->D0 transition and probably only when No_Soft_Reset is
-clear.  We shouldn't need it for the D0->D3hot transition, since
-that's not a reset.
+Hi Alan,
 
-> Tested and that doesn't help this case unfortunately. pci_dev_wait
-> doesn't do anything since PCI_COMMAND value at this point is 0x100403
+Do you mean that the gadget driver must ensure that the max packet
+size in the endpoint descriptor is not zero? Do HCDs rely on that? I
+can add this check into the driver we use for USB fuzzing.
 
-That's really strange.  Your original message showed:
+Thanks!
 
-  xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-  xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-
-The first line is from pci_raw_set_power_state() reading PCI_PM_CTRL,
-but we can't tell whether the read failed and we got ~0, or it
-succeeded and we got something with just the low two bits set.  Can
-you print out the whole value so we can see what happened?
-
-The second line is from pci_enable_resources() reading PCI_COMMAND,
-and it got *0*, not 0x0403 as you got from the CRS experiment.
+>
+> Alan Stern
+>
+> #syz test: https://github.com/google/kasan.git 22be26f7
+>
+>  drivers/usb/gadget/udc/dummy_hcd.c |    2 ++
+>  1 file changed, 2 insertions(+)
+>
+> Index: usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/gadget/udc/dummy_hcd.c
+> +++ usb-devel/drivers/usb/gadget/udc/dummy_hcd.c
+> @@ -522,6 +522,8 @@ static int dummy_enable(struct usb_ep *_
+>          * For SS devices the wMaxPacketSize is limited by 1024.
+>          */
+>         max = usb_endpoint_maxp(desc);
+> +       if (max == 0)
+> +               return -EINVAL;
+>
+>         /* drivers must not request bad settings, since lower levels
+>          * (hardware or its drivers) may not check.  some endpoints
+>
