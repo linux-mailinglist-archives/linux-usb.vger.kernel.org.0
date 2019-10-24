@@ -2,162 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E01F9E2DDF
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 11:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90BA8E2E9B
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 12:17:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732349AbfJXJsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 05:48:52 -0400
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:59478 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730318AbfJXJsw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 05:48:52 -0400
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D94BAC0C3C;
-        Thu, 24 Oct 2019 09:48:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1571910531; bh=vqymZi07lX4tTN+Un/XJwrwInG0vEKloyVoO/PcgCkg=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=JRaspS+8wQcPjD4NnriWztpVjxMrJXBidIfuV50nnfz+bSJ2kc7ettKmudywVMDT1
-         VqZKwolQYNbYQI2oIvR78R9863V7Z38NYzmFfHlGJvSH4/1dSEl5eGTG5T7uZMDeqp
-         gqbNNfHn64WepoUDZuYC2qZ3WbaC3MuM/EoWthp8TP7qfOiJpO5dhtJS3cgxJJWFKH
-         cX3iPFZLY9hhW+Ha+f1In8Ee8Lx4ZmJmUau6IkfkKS4VfOSIBVWAIrCdaJBsYJESCf
-         doSG3uVyKQn8BE6EfKwqG/a4cK2SDnXH3URiL17nHrdMu1CG+eYmevuy8VizGvwN+o
-         GK2Zybq9ZxzRw==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id B8B64A006B;
-        Thu, 24 Oct 2019 09:48:44 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 24 Oct 2019 02:47:49 -0700
-Received: from NAM04-CO1-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Thu, 24 Oct 2019 02:47:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MLbO637rUBRvq2kUxMpcHDtS7KGg/meTxUYCspr04cWp/D6G+TyPhGrYVU3tJgJkJRjAmWOoW7zg7UOHCQNXZ4oEbXyhHOXljqWZbINIspghbo2+8XOD9/UqXTNCQtmpRztWQV6q/H58lxOQyqoQQFTMGtB6v2bAYBPZ6KzkZ3Sp/ppKumBq3BwlzuTf1K7Aba6r9bM/edsWjqkyHZSO5k31XQ3NJpIrETXMObl2gFsYHc6wW90dy1gH9Ezo8n4dkdtQZhvwoqEeavFW/xlmI44mUusOjNtt8dfTLE7k4ySOE2UfocuC5WJfMvhQVinV2eRQzNKcuJNIKFXlp4he8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqymZi07lX4tTN+Un/XJwrwInG0vEKloyVoO/PcgCkg=;
- b=Dh+CaD2TRO2qGebnxh7lk1ddVus4WDxYSc2xR4RLRJ7vG7Wh6rtgM64mExlG665AYWzE8Eau6KNdBdbpPmgdrB0WCoFALrHC7Eb+sQTo1eOUkF2YRPh5QIFKCAwm0SqFyXr1fAiOcpJVvSRqR0g5p9WI9og9CFDGOVb8Eb9oTG02wMFcbAwDTbjthfIStkitfRebe9A3zZR5Q17DJVx7/+HsPCBJWHx+uaZFnN1FaoveTvRF4y1TykwwsxRd39hHSt2eVCxhOoeAETMMjdXrdlqpDIZ1IRFv7kM9d7FjCT1YDa8f/R3ETlXTQYJwz4pIa1gYNNqtUAw6mNdDeB6uCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vqymZi07lX4tTN+Un/XJwrwInG0vEKloyVoO/PcgCkg=;
- b=N4ufjp4idxxNDOxyDtm/4doqg5InCtarCjTSpGY2v0o2MiGIA8qhyCPkf6aXweZlGr2JiMpmIhJtHA5QFvM0vKUni2FWxFrz967pyQOdRXXn8Dsa2m2IxO4tArqbPtbsHYO775W2pXRiUKwIxpB5zq6gt08GY5t6Sy2P66TLDtU=
-Received: from CH2PR12MB4088.namprd12.prod.outlook.com (20.180.5.200) by
- CH2PR12MB4311.namprd12.prod.outlook.com (20.180.6.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.22; Thu, 24 Oct 2019 09:48:20 +0000
-Received: from CH2PR12MB4088.namprd12.prod.outlook.com
- ([fe80::a499:32d2:91a1:1715]) by CH2PR12MB4088.namprd12.prod.outlook.com
- ([fe80::a499:32d2:91a1:1715%6]) with mapi id 15.20.2367.025; Thu, 24 Oct 2019
- 09:48:20 +0000
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-CC:     "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "stefan.wahren@i2se.com" <stefan.wahren@i2se.com>,
-        "mka@chromium.org" <mka@chromium.org>,
-        Alexandru M Stan <amstan@chromium.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] usb: dwc2: Fix NULL qh in dwc2_queue_transaction
-Thread-Topic: [PATCH v2] usb: dwc2: Fix NULL qh in dwc2_queue_transaction
-Thread-Index: AQHVieX3H84sjbtrEUOt2I85DdzzGadpjIiA
-Date:   Thu, 24 Oct 2019 09:48:20 +0000
-Message-ID: <bcd6d6ff-2b62-c73d-03ea-ed103d01d026@synopsys.com>
-References: <20191023140530.v2.1.I9850aab29e945168070b0a9c50c421d5485e7d97@changeid>
-In-Reply-To: <20191023140530.v2.1.I9850aab29e945168070b0a9c50c421d5485e7d97@changeid>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        id S2393254AbfJXKRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 06:17:32 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:56684 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2393238AbfJXKRb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 06:17:31 -0400
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9OAGrZv062102;
+        Thu, 24 Oct 2019 05:16:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571912213;
+        bh=EDshKvGHmjEvne+M6Hf6EnpsTzXcgkgN/NsvR3Me/fA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=OrB2X0i9vOq6STYWMQhlOd7VV5xFv+QVlwTG1BAPg777P1hzOCNNZhelH9YhXYCOQ
+         lg1j5kiGCgOF3IDjWqkCya4vuWdak+qw8hK5rFVOpJyMKx/Kp2NE9XeuzJmbiElybP
+         H65Rde5K804+tD8617dKMLFIkhVh6k0S6ftkivYs=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9OAGr9w004417
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 24 Oct 2019 05:16:53 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 24
+ Oct 2019 05:16:43 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Thu, 24 Oct 2019 05:16:43 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9OAGose119563;
+        Thu, 24 Oct 2019 05:16:51 -0500
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add binding for the TI wrapper
+ for Cadence USB3 controller
+To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
+        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>
+References: <20191021131305.8689-1-rogerq@ti.com>
+ <20191021131305.8689-2-rogerq@ti.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <3fdcbd1f-f9e2-2363-56f4-30d2f8ea4560@ti.com>
+Date:   Thu, 24 Oct 2019 13:16:50 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=hminas@synopsys.com; 
-x-originating-ip: [92.123.244.188]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f855e89e-8ae7-4112-6fb7-08d758674df0
-x-ms-traffictypediagnostic: CH2PR12MB4311:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <CH2PR12MB4311DFA58FE80C88F7B54772A76A0@CH2PR12MB4311.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:156;
-x-forefront-prvs: 0200DDA8BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(136003)(396003)(39860400002)(376002)(366004)(189003)(199004)(71200400001)(71190400001)(486006)(476003)(31686004)(6512007)(6306002)(478600001)(31696002)(86362001)(6436002)(6486002)(229853002)(2906002)(36756003)(6116002)(3846002)(11346002)(256004)(14444005)(446003)(2616005)(5660300002)(66556008)(65806001)(65956001)(66946007)(66066001)(66476007)(99286004)(110136005)(54906003)(8676002)(8936002)(66446008)(81166006)(7736002)(305945005)(76116006)(966005)(91956017)(81156014)(64756008)(14454004)(4326008)(316002)(102836004)(26005)(76176011)(186003)(53546011)(6506007)(58126008)(25786009)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:CH2PR12MB4311;H:CH2PR12MB4088.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: d9r52e5+JbPI/FkQJV4ZM50yG/hZsLZKV7318Xs+8R7e0jXg84boscDqzBmLxQj5TIbjpquhcwnQgpuJZsLbhHYBra1ouhx1xUHKDfk4WkojeG3kHfRqBj9tbINf3GVamAB7WGR5l3ISUuueawRxDFITs67i9njL+Ij4ioMZbKpcrOopt6JrA38WrMnuuaKhl2BaAGpNQEfttVIkkFRMzoVMf37UolPDeYLnPThLU63nzknFTini5eYu1KedM5ywyL9PqE6XFMxvIW7hj1FsFOdc2JHRA/lWdxyOHL+EIlqykfe+u4DcwQSsopY1TQRrqFRMGkZwFb/eMnTknyTlWk6+hgoAHaIT+GXAzUimHOIIPHbYDka7tB+zH3iE+q9OOAliSVmA/AZ1N493EmHxjIp60gNGUsxXm/QZo0ly56m5YoLWLLQkJcD1ARbYGdc4iaDKpdGimdyNxAFN8q8v+j0yFY4GWNj9d7jiiw/EGN4=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BDF7DCB2DCE30A4880A9087654969F83@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: f855e89e-8ae7-4112-6fb7-08d758674df0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 24 Oct 2019 09:48:20.6731
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RlwoQpwfNJd4Yjpy6wtSZ65Quj1IG/JLbW796eBdkDGUHyKMXkrUv/XYaP3DbLi5Av0I3myaaZatCofdrw9QWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4311
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <20191021131305.8689-2-rogerq@ti.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDEwLzI0LzIwMTkgMTowNiBBTSwgRG91Z2xhcyBBbmRlcnNvbiB3cm90ZToNCj4gRnJv
-bTogQWxleGFuZHJ1IE0gU3RhbiA8YW1zdGFuQGNocm9taXVtLm9yZz4NCj4gDQo+IFdoZW4gYSB1
-c2IgZGV2aWNlIGRpc2Nvbm5lY3RzIGluIGEgY2VydGFpbiB3YXksIGR3YzJfcXVldWVfdHJhbnNh
-Y3Rpb24NCj4gc3RpbGwgZ2V0cyBjYWxsZWQgYWZ0ZXIgZHdjMl9oY2RfY2xlYW51cF9jaGFubmVs
-cy4NCj4gDQo+IGR3YzJfaGNkX2NsZWFudXBfY2hhbm5lbHMgZG9lcyAiY2hhbm5lbC0+cWggPSBO
-VUxMOyIgYnV0DQo+IGR3YzJfcXVldWVfdHJhbnNhY3Rpb24gc3RpbGwgd2FudHMgdG8gZGVyZWZl
-cmVuY2UgcWguDQo+IFRoaXMgYWRkcyBhIGNoZWNrIGZvciBhIG51bGwgcWguDQo+IA0KPiBTaWdu
-ZWQtb2ZmLWJ5OiBBbGV4YW5kcnUgTSBTdGFuIDxhbXN0YW5AY2hyb21pdW0ub3JnPg0KPiBbZGlh
-bmRlcnM6IHJlYmFzZWQgdG8gbWFpbmxpbmVdDQo+IFNpZ25lZC1vZmYtYnk6IERvdWdsYXMgQW5k
-ZXJzb24gPGRpYW5kZXJzQGNocm9taXVtLm9yZz4NCg0KQWNrZWQtYnk6IE1pbmFzIEhhcnV0eXVu
-eWFuIDxobWluYXNAc3lub3BzeXMuY29tPg0KDQo+IC0tLQ0KPiBXaGlsZSB0ZXN0aW5nIGEgbmV3
-ZXIgdmVyc2lvbiBvZiB0aGUgTGludXgga2VybmVsIG9uIHJrMzI4OC12ZXlyb24NCj4gZGV2aWNl
-cyB3ZSBzYXcgYSBidW5jaCBvZiBjcmFzaGVzIHJlcG9ydGVkIGluIGR3YzJfcXVldWVfdHJhbnNh
-Y3Rpb24oKQ0KPiB3aGVyZSBjaGFuLT5xaCB3YXMgTlVMTCBbMV0uICBJIGRvbid0IGtub3cgaG93
-IHRvIHJlcHJvZHVjZSB0aG9zZQ0KPiBjcmFzaGVzIG15c2VsZiwgYnV0IEkgbm90aWNlZCB0aGF0
-IGluIG91ciAzLjE0IGtlcm5lbCB3ZSBoYWQgYSBwYXRjaA0KPiB0aGF0IHByb2JhYmx5IGZpeGVk
-IGl0LiAgVGhhdCBwYXRjaCB3YXMgc2VudCB1cHN0cmVhbSBhZ2VzIGFnbyBbMl0gYnV0DQo+IG5l
-dmVyIGxhbmRlZC4gIEhlcmUgSSd2ZSByZWJhc2VkIHRoZSBwYXRjaC4gIFdoaWxlIEkgaGF2ZW4n
-dA0KPiByZXByb2R1Y2VkIHRoZSBjcmFzaCBteXNlbGYsIGl0IHNlZW1zIGZhaXJseSBsaWtlbHkg
-dGhhdCB0aGlzIHdpbGwgZml4DQo+IHRoZSBwcm9ibGVtLg0KPiANCj4gWzFdIGh0dHBzOi8vdXJs
-ZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwcy0zQV9fY3JidWcuY29tXzEwMTcz
-ODgmZD1Ed0lEQVEmYz1EUEw2X1hfNkprWEZ4N0FYV3FCMHRnJnI9Y1FCS3Q0cS1xek5WQzUzck5B
-d3V3cGxIMjNWNjFySFFoaFVMdmRMQTBVOCZtPWNub3pUbHkxRHRJMDFwWjR3YndFR1NRVzNUdENz
-aXdhTlV5NXNuNXZnMHcmcz03Yk9XMUZUZWxRRUpuWmVySVdIV29zSUJpWVQ2ZHZ3YnNtWVRyWXl6
-S2ZBJmU9DQo+IFsyXSBodHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9
-aHR0cHMtM0FfX2xvcmUua2VybmVsLm9yZ19yXzE0NDI5NTI2NTEtMkQ0MzQxLTJEMi0yRGdpdC0y
-RHNlbmQtMkRlbWFpbC0yRGFtc3Rhbi00MGNocm9taXVtLm9yZyZkPUR3SURBUSZjPURQTDZfWF82
-SmtYRng3QVhXcUIwdGcmcj1jUUJLdDRxLXF6TlZDNTNyTkF3dXdwbEgyM1Y2MXJIUWhoVUx2ZExB
-MFU4Jm09Y25velRseTFEdEkwMXBaNHdid0VHU1FXM1R0Q3Npd2FOVXk1c241dmcwdyZzPXZtWmpG
-Vlduc0ZQVTZTZ3h3NUlwSi1OWUlBYkRxeVcwaXRKeTAwTUxZU3MmZT0NCj4gDQo+IENoYW5nZXMg
-aW4gdjI6DQo+IC0gUmViYXNlZCB0byBtYWlubGluZQ0KPiANCj4gICBkcml2ZXJzL3VzYi9kd2My
-L2hjZC5jIHwgMiArLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMSBkZWxl
-dGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzIvaGNkLmMgYi9kcml2
-ZXJzL3VzYi9kd2MyL2hjZC5jDQo+IGluZGV4IDgxYWZlNTUzYWE2Ni4uYjkwZjg1OGFmOTYwIDEw
-MDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9kd2MyL2hjZC5jDQo+ICsrKyBiL2RyaXZlcnMvdXNi
-L2R3YzIvaGNkLmMNCj4gQEAgLTI4MjQsNyArMjgyNCw3IEBAIHN0YXRpYyBpbnQgZHdjMl9xdWV1
-ZV90cmFuc2FjdGlvbihzdHJ1Y3QgZHdjMl9oc290ZyAqaHNvdGcsDQo+ICAgCQlsaXN0X21vdmVf
-dGFpbCgmY2hhbi0+c3BsaXRfb3JkZXJfbGlzdF9lbnRyeSwNCj4gICAJCQkgICAgICAgJmhzb3Rn
-LT5zcGxpdF9vcmRlcik7DQo+ICAgDQo+IC0JaWYgKGhzb3RnLT5wYXJhbXMuaG9zdF9kbWEpIHsN
-Cj4gKwlpZiAoaHNvdGctPnBhcmFtcy5ob3N0X2RtYSAmJiBjaGFuLT5xaCkgew0KPiAgIAkJaWYg
-KGhzb3RnLT5wYXJhbXMuZG1hX2Rlc2NfZW5hYmxlKSB7DQo+ICAgCQkJaWYgKCFjaGFuLT54ZmVy
-X3N0YXJ0ZWQgfHwNCj4gICAJCQkgICAgY2hhbi0+ZXBfdHlwZSA9PSBVU0JfRU5EUE9JTlRfWEZF
-Ul9JU09DKSB7DQo+IA0K
+Hi,
+
+On 21/10/2019 16:13, Roger Quadros wrote:
+> TI platforms have a wrapper module around the Cadence USB3
+> controller. Add binding information for that.
+
+Please ignore this. I missed converting this to yaml format.
+Will send v3.
+
+cheers,
+-roger
+> 
+> Cc: Rob Herring <robh@kernel.org>
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
+> ---
+>   .../devicetree/bindings/usb/ti,j721e-usb.txt  | 52 +++++++++++++++++++
+>   1 file changed, 52 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/usb/ti,j721e-usb.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/ti,j721e-usb.txt b/Documentation/devicetree/bindings/usb/ti,j721e-usb.txt
+> new file mode 100644
+> index 000000000000..bac57c26b09b
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/ti,j721e-usb.txt
+> @@ -0,0 +1,52 @@
+> +Binding for the TI specific wrapper for the Cadence USBSS-DRD controller
+> +
+> +Required properties:
+> +  - compatible: Should contain "ti,j721e-usb"
+> +  - reg: Physical base address and size of the wrappers register area.
+> +  - power-domains: Should contain a phandle to a PM domain provider node
+> +                   and an args specifier containing the USB device id
+> +                   value. This property is as per the binding documentation:
+> +                   Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
+> +  - clocks: Clock phandles to usb2_refclk and lpm_clk
+> +  - clock-names: Should contain "ref" and "lpm"
+> +
+> +Optional properties:
+> + - ti,usb2-only: If present, it restricts the controller to USB2.0 mode of
+> +		 operation. Must be present if USB3 PHY is not available
+> +		 for USB.
+> + - ti,vbus-divider: Should be present if USB VBUS line is connected to the
+> +		 VBUS pin of the SoC via a 1/3 voltage divider.
+> +
+> +Sub-nodes:
+> +The USB2 PHY and the Cadence USB3 controller should be the sub-nodes.
+> +
+> +Example:
+> +
+> +	ti_usb0: cdns_usb@4104000 {
+> +		compatible = "ti,j721e-usb";
+> +		reg = <0x00 0x4104000 0x00 0x100>;
+> +		power-domains = <&k3_pds 288 TI_SCI_PD_EXCLUSIVE>;
+> +		clocks = <&k3_clks 288 15>, <&k3_clks 288 3>;
+> +		clock-names = "ref", "lpm";
+> +		assigned-clocks = <&k3_clks 288 15>;	/* USB2_REFCLK */
+> +		assigned-clock-parents = <&k3_clks 288 16>; /* HFOSC0 */
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		usb0: usb@6000000 {
+> +			compatible = "cdns,usb3";
+> +			reg = <0x00 0x6000000 0x00 0x10000>,
+> +			      <0x00 0x6010000 0x00 0x10000>,
+> +			      <0x00 0x6020000 0x00 0x10000>;
+> +			reg-names = "otg", "xhci", "dev";
+> +			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,	/* irq.0 */
+> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,	/* irq.6 */
+> +				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;	/* otgirq.0 */
+> +			interrupt-names = "host",
+> +					  "peripheral",
+> +					  "otg";
+> +			maximum-speed = "super-speed";
+> +			dr_mode = "otg";
+> +		};
+> +	};
+> 
+
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
