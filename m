@@ -2,87 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EAD6E2B29
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 09:32:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5281E2B40
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 09:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408610AbfJXHc2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 24 Oct 2019 03:32:28 -0400
-Received: from mga14.intel.com ([192.55.52.115]:60448 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404582AbfJXHc2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Oct 2019 03:32:28 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 00:32:28 -0700
-X-IronPort-AV: E=Sophos;i="5.68,223,1569308400"; 
-   d="scan'208";a="192102228"
-Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 00:32:23 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
+        id S2408664AbfJXHku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 03:40:50 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37549 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408660AbfJXHku (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 03:40:50 -0400
+Received: by mail-lj1-f194.google.com with SMTP id l21so23896272lje.4
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 00:40:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JPxiGhM5jRhlwHtnCIN5tDoQSbhFV2F/bKlTq8On7Yc=;
+        b=i5fxJt9a5fJOI692aJw6RO8RT1YxLreAKshwhvfWPpsOcbT8uSjszOVeisgIr3beAI
+         DFsiED5apInER6smWDbxyzhOy/DlKj8zdp5QvGS4mJC+wu8Rv/1U1pZDcWsT6Hvf2M8+
+         w4nM52/7O9ZTWt55RCipUjyyXdlOWUptgTYHs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JPxiGhM5jRhlwHtnCIN5tDoQSbhFV2F/bKlTq8On7Yc=;
+        b=qUBAxlqevg74LnpH+WORyC7E1WUDDXiPShn3/IrzGC7/iTdNxBisDr6CDN6Qv511cs
+         31E7uqYL7vR5KW5pl9iRfYitb65A79mk0SS8FjaIaUmsgW5g3fSlaPdeVDFbOMns0/QK
+         ddqq8Rrg9bSzeMG1GdDrlC0574CrLsYS6d3NGnNOP2vAgZx9DZR+9QxD7AZA79p27TZw
+         ECUlM8e+AtzbBLRV4wde7MF+qoA1CmL2miz6fujn6tXDm+YgF4Gbma/xI0T5grOgFwoS
+         Y4qGUM9YN/iC2wYRY5iOO0lUGgi1WaochsbJ8l09hjgRgm7AaB3ft19Iv0rqsuWFCGpj
+         /V9A==
+X-Gm-Message-State: APjAAAWvWrMxDjFg/3wxoZk86+6xk9oN5lYHGMFRdSyJ1GBJ9xtGlb2X
+        g7QlsBcnYJypi6wTQL2SWahpiQ==
+X-Google-Smtp-Source: APXvYqxX7Ws0oMg6WWgYA8lKqNAh68XyMJ4+E23AKZSb5ZI1mB2xMPsqfoKbR82T9sdrg7zZ36zRSg==
+X-Received: by 2002:a2e:b0d8:: with SMTP id g24mr22382743ljl.159.1571902846813;
+        Thu, 24 Oct 2019 00:40:46 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id m6sm10356184ljj.3.2019.10.24.00.40.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 24 Oct 2019 00:40:46 -0700 (PDT)
+Subject: Re: [PATCH v4] string-choice: add yesno(), onoff(),
+ enableddisabled(), plural() helpers
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jani Nikula <jani.nikula@intel.com>
 Cc:     linux-kernel@vger.kernel.org,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
         Rodrigo Vivi <rodrigo.vivi@intel.com>,
         intel-gfx@lists.freedesktop.org,
         Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH v4] string-choice: add yesno(), onoff(), enableddisabled(), plural() helpers
-In-Reply-To: <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20191023131308.9420-1-jani.nikula@intel.com> <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
-Date:   Thu, 24 Oct 2019 10:32:20 +0300
-Message-ID: <877e4uegzf.fsf@intel.com>
+        linux-usb@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>
+References: <20191023131308.9420-1-jani.nikula@intel.com>
+ <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <18589470-c428-f4c8-6e3e-c8cfed3ad6e0@rasmusvillemoes.dk>
+Date:   Thu, 24 Oct 2019 09:40:45 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 23 Oct 2019, Andrew Morton <akpm@linux-foundation.org> wrote:
+On 24/10/2019 00.56, Andrew Morton wrote:
 > On Wed, 23 Oct 2019 16:13:08 +0300 Jani Nikula <jani.nikula@intel.com> wrote:
->
->> The kernel has plenty of ternary operators to choose between constant
->> strings, such as condition ? "yes" : "no", as well as value == 1 ? "" :
->> "s":
->> 
->> $ git grep '? "yes" : "no"' | wc -l
->> 258
->> $ git grep '? "on" : "off"' | wc -l
->> 204
->> $ git grep '? "enabled" : "disabled"' | wc -l
->> 196
->> $ git grep '? "" : "s"' | wc -l
->> 25
->> 
->> Additionally, there are some occurences of the same in reverse order,
->> split to multiple lines, or otherwise not caught by the simple grep.
->> 
->> Add helpers to return the constant strings. Remove existing equivalent
->> and conflicting functions in i915, cxgb4, and USB core. Further
->> conversion can be done incrementally.
->> 
->> The main goal here is to abstract recurring patterns, and slightly clean
->> up the code base by not open coding the ternary operators.
->
-> Fair enough.
->
->> --- /dev/null
->> +++ b/include/linux/string-choice.h
->> @@ -0,0 +1,31 @@
->> +/* SPDX-License-Identifier: MIT */
->> +/*
->> + * Copyright © 2019 Intel Corporation
->> + */
->> +
->> +#ifndef __STRING_CHOICE_H__
->> +#define __STRING_CHOICE_H__
->> +
->> +#include <linux/types.h>
+> 
 >> +
 >> +static inline const char *yesno(bool v)
 >> +{
@@ -105,35 +95,36 @@ On Wed, 23 Oct 2019, Andrew Morton <akpm@linux-foundation.org> wrote:
 >> +}
 >> +
 >> +#endif /* __STRING_CHOICE_H__ */
->
+> 
 > These aren't very good function names.  Better to create a kernel-style
 > namespace such as "choice_" and then add the expected underscores:
->
+> 
 > choice_yes_no()
 > choice_enabled_disabled()
 > choice_plural()
 
-I was merely using existing function names used in several drivers in
-the kernel. But I can rename no problem.
-
-Are your suggestions the names we can settle on now, or should I expect
-to receive more opinions, but only after I send v5?
-
-> (Example: note that slabinfo.c already has an "onoff()").
-
-Under tools/ though? I did mean to address all conflicts in this patch.
-
+I think I prefer the short names (no choice_ prefix), it's rather
+obvious what they do. I also asked for underscores, especially for the
+enableddisabled case, but Jani didn't want to change existing callers.
+But I'll keep out of the naming discussion from now on.
 > Also, I worry that making these functions inline means that each .o
-> file will contain its own copy of the strings ("yes", "no", "enabled",
+> file will contain its own copy of the strings 
+
+They will, in .rodata.str1.1
+
+("yes", "no", "enabled",
 > etc) if the .c file calls the relevant helper.  I'm not sure if the
-> linker is smart enough (yet) to fix this up.  If not, we will end up
-> with a smaller kernel by uninlining these functions. 
-> lib/string-choice.c would suit.
->
+> linker is smart enough (yet) to fix this up. 
+
+AFAIK, that's an optimization the linker has done forever - the whole
+reason the SHF_MERGE | SHF_STRINGS (the MS in readelf -S output) flags
+exist (and AFAICT they have been part of the ELF spec since forever) is
+so the linker can do that trick. So no, do not make them ool.
+
 > And doing this will cause additional savings: calling a single-arg
 > out-of-line function generates less .text than calling yesno().  When I
 > did this: 
->
+> 
 > --- a/include/linux/string-choice.h~string-choice-add-yesno-onoff-enableddisabled-plural-helpers-fix
 > +++ a/include/linux/string-choice.h
 > @@ -8,10 +8,7 @@
@@ -148,25 +139,105 @@ Under tools/ though? I did mean to address all conflicts in this patch.
 >  
 >  static inline const char *onoff(bool v)
 >  {
->
+> 
 > The text segment of drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.o
 > (78 callsites) shrunk by 118 bytes.
+> 
 
-So we've already been back and forth on that particular topic in the
-history of this patch. v2 had lib/string-choice.c and no inlines [1].
+Interesting, and not at all what I see. Mind dumping rss_config_show
+before/after? Even better, cxgb4_debugfs.s before/after. Here's what I get:
 
-In the end, starting to use functions, inline or not, will let us rework
-the implementation as we see fit, without touching the callers.
+static inline yesno:
 
-Again, it's no problem to go back to lib/string-choice.c, *once* more,
-and the effort is trivial, but the ping-pong is getting old.
+     cbb:       49 c7 c4 00 00 00 00    mov    $0x0,%r12        cbe:
+R_X86_64_32S       .rodata.str1.1+0x197
+     cc2:       44 89 ea                mov    %r13d,%edx
+     cc5:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        cc8:
+R_X86_64_32S       .rodata.str1.1+0x1b7
+     ccc:       48 c7 c5 00 00 00 00    mov    $0x0,%rbp        ccf:
+R_X86_64_32S       .rodata.str1.1+0x19b
 
+Load "yes" into %12 and "no" into %rbp (or vice versa).
 
-BR,
-Jani.
+     cd3:       4d 89 e7                mov    %r12,%r15
+     cd6:       e8 00 00 00 00          callq  cdb
+<rss_config_show+0x3b>       cd7: R_X86_64_PC32      seq_printf-0x4
+     cdb:       45 85 ed                test   %r13d,%r13d
+     cde:       4c 89 e2                mov    %r12,%rdx
+     ce1:       48 89 df                mov    %rbx,%rdi
+     ce4:       48 0f 49 d5             cmovns %rbp,%rdx
+     ce8:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        ceb:
+R_X86_64_32S       .rodata.str1.1+0x1cb
+     cef:       e8 00 00 00 00          callq  cf4
+<rss_config_show+0x54>       cf0: R_X86_64_PC32      seq_printf-0x4
+     cf4:       41 f7 c5 00 00 00 40    test   $0x40000000,%r13d
+     cfb:       4c 89 e2                mov    %r12,%rdx
+     cfe:       48 89 df                mov    %rbx,%rdi
+     d01:       48 0f 44 d5             cmove  %rbp,%rdx
+     d05:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        d08:
+R_X86_64_32S       .rodata.str1.1+0x1e1
+     d0c:       e8 00 00 00 00          callq  d11
+<rss_config_show+0x71>       d0d: R_X86_64_PC32      seq_printf-0x4
 
+Test a bit, move "yes" into %rdx, conditionally move "no" into %rdx
+instead, call seq_printf.
 
-[1] http://lore.kernel.org/r/20190930141842.15075-1-jani.nikula@intel.com
+     d11:       41 f7 c5 00 00 00 20    test   $0x20000000,%r13d
+     d18:       4c 89 e2                mov    %r12,%rdx
+     d1b:       48 89 df                mov    %rbx,%rdi
+     d1e:       48 0f 44 d5             cmove  %rbp,%rdx
+     d22:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        d25:
+R_X86_64_32S       .rodata.str1.1+0x1f7
+     d29:       e8 00 00 00 00          callq  d2e
+<rss_config_show+0x8e>       d2a: R_X86_64_PC32      seq_printf-0x4
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+etc. That's a marginal (i.e., after the preamble storing "yes" and "no"
+in callee-saved registers) cost of six instructions/29 bytes per
+seq_printf, three of which are to implement the yesno() call.
+
+extern const char *yesno():
+
+   64e7:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        64ea:
+R_X86_64_32S      .rodata.str1.1+0x8e4
+    64ee:       89 ea                   mov    %ebp,%edx
+    64f0:       41 89 ed                mov    %ebp,%r13d
+    64f3:       e8 00 00 00 00          callq  64f8
+<rss_config_show+0x28>      64f4: R_X86_64_PC32     seq_printf-0x4
+    64f8:       89 ef                   mov    %ebp,%edi
+    64fa:       c1 ef 1f                shr    $0x1f,%edi
+    64fd:       e8 00 00 00 00          callq  6502
+<rss_config_show+0x32>      64fe: R_X86_64_PC32     yesno-0x4
+
+Three instructions to prepare the argument to yesno and call it.
+
+    6502:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        6505:
+R_X86_64_32S      .rodata.str1.1+0x8f8
+    6509:       48 89 c2                mov    %rax,%rdx
+
+One more to put the return from yesno in the right register.
+
+    650c:       48 89 df                mov    %rbx,%rdi
+    650f:       e8 00 00 00 00          callq  6514
+<rss_config_show+0x44>      6510: R_X86_64_PC32     seq_printf-0x4
+
+So not a lot, but still one more instruction, for a total of 31 bytes.
+bloat-o-meter says
+
+$ scripts/bloat-o-meter
+drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.o.{1,2}
+add/remove: 0/0 grow/shrink: 3/0 up/down: 301/0 (301)
+Function                                     old     new   delta
+rss_config_show                             2343    2482    +139
+rss_vf_config_show                           263     363    +100
+rss_pf_config_show                           342     404     +62
+
+which is more then 2*78, but I haven't looked at the code patterns in
+the other functions.
+
+Did you use size(1) to compare when you say "text segment"? That would
+include .rodata (and, more importantly, .rodata.strX.Y) in its text
+column. Maybe your compiler doesn't do string literal merging (since the
+linker does it anyway), so your .rodata.str1.1 might contain several
+copies of "yes" and "no", but they shouldn't really be counted.
+
+Rasmus
