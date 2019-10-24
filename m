@@ -2,63 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5329FE332E
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 14:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30B8E3389
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 15:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502221AbfJXMzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 08:55:53 -0400
-Received: from alexa-out-blr-02.qualcomm.com ([103.229.18.198]:8043 "EHLO
-        alexa-out-blr-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730413AbfJXMzw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 08:55:52 -0400
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by alexa-out-blr-02.qualcomm.com with ESMTP/TLS/AES256-SHA; 24 Oct 2019 18:19:41 +0530
-IronPort-SDR: tpI/Cblpl7aMfDEkeqpjOqB9pXTFd3pi51h/wxyFT4WYjBDVRUfgqiN3hhhb000PSvlXW2hrfY
- Buiht9obEoz5yccv4rhxQqGJ45Lv42G/cCH5zchIIG1ptAr/fu/nxNtQ9w1viTOeBHeuMZ/gyC
- qMpwKoJegvbu+nhJtUzvaAS2M3iMAwIWzK4OzrsVnQ52zYaCkOfs60uHZdRHOPbRgdqHEDKviq
- GqfCqqP0bRIyDFNusRT04nczEWC8U2xlhR0bHfsU8kV18KUIPv0YSRnudoRiIyDrEZIL1u+SIV
- nispmSru0p414/PkNMAU1UCN
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 24 Oct 2019 18:19:28 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id 7D8F91945; Thu, 24 Oct 2019 18:19:27 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     agross@kernel.org, balbi@kernel.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, mgautam@codeaurora.org,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH 2/2] dt-bindings: usb: qcom,dwc3: Add compatible for SC7180
-Date:   Thu, 24 Oct 2019 18:18:48 +0530
-Message-Id: <1571921328-13898-3-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1571921328-13898-1-git-send-email-sanm@codeaurora.org>
-References: <1571921328-13898-1-git-send-email-sanm@codeaurora.org>
+        id S2502362AbfJXNLH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 09:11:07 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41762 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730867AbfJXNLH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 09:11:07 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t10so11834595plr.8
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 06:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Xo0WkUjWDnE/H4X4N+cQZqf98SENyk0SBmAI3sBPGIg=;
+        b=t/LA5FmdSWO2uLJcRujTTOOL5Hdq4SSWNNzt8gtbUWoxM6Wsx5tjOqE1izAXivO0Ia
+         AgBOnEXQDAWeIqWePIuwWicCQbMmdWgCUgf1Kf2Lc1UZeDBLyXaf1AvQU3D2yMVaUuAv
+         OBi7x+7VaZjtscab1aWVmwprqqv5CNubZTit1UUJ+JmvUHKvn1wFiTszs0JauF//be0+
+         g/ppiwm/nlPZ141Zc5VJWQUcGu4YM/wzRRzGmeQsFB88P9FJ7Xn5fiZfSuPsLf0v8fEW
+         BlW1Cm5bvXgD6AP/CydfVi4ccRS1AETvzKQs3ZofIEK0GOtFu0LtgzTPc0CMPg4H2g1U
+         uxOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Xo0WkUjWDnE/H4X4N+cQZqf98SENyk0SBmAI3sBPGIg=;
+        b=NEghTyiisf8V/Hef/PSo1wxAO+lo/21f+KuupF08Ji5ebx1qn3s5QiwHKCmL4KP+kv
+         OlWtQsV+sp6SHhPQd7GtsC2jyAxtLJNy/hydEWIFthauaVkhQkZ72e1lfaPX3hM7xXS0
+         kgECcseCR2b3ObenM7vERj/g+JkQefPow0oGqtuJIFWS4G6Q9/NRjO04HcJic0myAiHT
+         l1xkoXqXD9vnRkCdXqW5On92X+rYlRuzurwxa+tYFLfkM9NvHRvgfRqymHKDCo2QeDUY
+         7tGdw4HHrcEOFTRQnTDNJaL8FBV++yBsLriJBJvCNx5q689SwCIMlSnvhc2ngFwXAM19
+         SdrA==
+X-Gm-Message-State: APjAAAWA+nH3ABlxyBjfI/8XkUUGNbhqY9TnFYkK8HYoz2SX+MWIUkyG
+        CovX2jEbiHSe75N7LLoJFkZ7u920SBckNqMwCgTn7gzo
+X-Google-Smtp-Source: APXvYqyy5qlLBB9opQM1zjilQUiju2zRB6OI/DofEJGzghw2O2H+RqiQobefmx7Itav5M1rRYtcWroC7W5dIZdO1IdA=
+X-Received: by 2002:a17:902:9696:: with SMTP id n22mr14759199plp.252.1571922666109;
+ Thu, 24 Oct 2019 06:11:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <df26802a60c09d155291c2abbcb51e4530eb19d7.1571762488.git.andreyknvl@google.com>
+ <201910240119.fyrtJQLH%lkp@intel.com>
+In-Reply-To: <201910240119.fyrtJQLH%lkp@intel.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 24 Oct 2019 15:10:54 +0200
+Message-ID: <CAAeHK+zeY2YLkf8+T2PQ6Q288XYphCnj6bP7EKdsfePAXrS4mw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] kcov: remote coverage support
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, USB list <linux-usb@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add compatible for SC7180 SOC in device tree bindings
+On Wed, Oct 23, 2019 at 7:20 PM kbuild test robot <lkp@intel.com> wrote:
+>
+> Hi Andrey,
+>
+> Thank you for the patch! Yet something to improve:
+>
+> [auto build test ERROR on linus/master]
+> [cannot apply to v5.4-rc4 next-20191023]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+>
+> url:    https://github.com/0day-ci/linux/commits/Andrey-Konovalov/kcov-collect-coverage-from-usb-and-vhost/20191023-185245
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 3b7c59a1950c75f2c0152e5a9cd77675b09233d6
+> config: arm-allmodconfig (attached as .config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
+> reproduce:
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # save the attached .config to linux build tree
+>         GCC_VERSION=7.4.0 make.cross ARCH=arm
+>
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+>
+> All errors (new ones prefixed by >>):
+>
+>    kernel/kcov.o: In function `kcov_remote_stop':
+> >> kcov.c:(.text+0x1094): undefined reference to `__aeabi_uldivmod'
+>    kcov.c:(.text+0x1144): undefined reference to `__aeabi_uldivmod'
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
- Documentation/devicetree/bindings/usb/qcom,dwc3.txt | 1 +
- 1 file changed, 1 insertion(+)
+OK, looks like arm32 can't divide 64 bit integers. Will fix in v3.
 
-diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.txt b/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-index cb695aa..c27c58d 100644
---- a/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-+++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.txt
-@@ -6,6 +6,7 @@ Required properties:
- 			"qcom,msm8996-dwc3" for msm8996 SOC.
- 			"qcom,msm8998-dwc3" for msm8998 SOC.
- 			"qcom,sdm845-dwc3" for sdm845 SOC.
-+			"qcom,sc7180-dwc3" for sc7180 SOC.
- - reg:			Offset and length of register set for QSCRATCH wrapper
- - power-domains:	specifies a phandle to PM domain provider node
- - clocks:		A list of phandle + clock-specifier pairs for the
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+>
+> ---
+> 0-DAY kernel test infrastructure                Open Source Technology Center
+> https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
