@@ -2,163 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D577E3C41
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 21:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AEDE3CAB
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 21:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407661AbfJXTpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 15:45:18 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:58156 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407590AbfJXTpS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 15:45:18 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9OJdhhh054750;
-        Thu, 24 Oct 2019 19:45:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=/TnQJ5UGPVxiEvHbnKiUchL/F1tRGlidcvPpnZv7wV4=;
- b=FEmemtBDIflI9JbfrghljbX94c8L6T8miPEQKi1VdsZ5iQN5+IFv56zeLYfJgJCgMPMl
- 6OkMa/lQNi92oN8lB3JWgP9Fd022ECaEEPfjJPl+KLE8H7TiKCV0p2/CnFB+WItEUqAT
- voCz74rkDC6uYA+D2KAEyaWtd81iOouTxXQQ/hWaH911NHUn+1/ZOhGmchh+BellrBVh
- xKRmripbpgYe8wPhU+WIs3b4tNO34va4wKY5po2aChRx4KjncAkNnyLrnzBgzM/ePDqP
- FQL1YuiiabqXuxGhs34queFMQ7JVTVc1RkC94XYfvNKakHBX96bFKsqMhHo2wUrgAMi6 9Q== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2vqu4r5nkm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Oct 2019 19:45:10 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9OJbhix099139;
-        Thu, 24 Oct 2019 19:45:10 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2vtsk5k4rr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 24 Oct 2019 19:45:10 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9OJj8Qc023168;
-        Thu, 24 Oct 2019 19:45:08 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 24 Oct 2019 12:45:07 -0700
-Date:   Thu, 24 Oct 2019 22:45:00 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     kbuild@lists.01.org, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, shuah@kernel.org
-Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
- uninitialized symbol 'nents'.
-Message-ID: <20191024194500.GD23523@kadam>
-References: <20191022092839.GD10833@kadam>
- <20191023071120.GA3061@localhost.localdomain>
+        id S1726460AbfJXT73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 15:59:29 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:42955 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726060AbfJXT73 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 15:59:29 -0400
+Received: by mail-ot1-f65.google.com with SMTP id b16so74314otk.9;
+        Thu, 24 Oct 2019 12:59:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x0F8kOEXNZOfO+KIT0hQfdKv4yLZvQqLGUo1yR7k0NA=;
+        b=snuxE3aHoCZdXiCfya3k+KjX1hRdlD81yjj5m/zXuf5AkSmy4EOBjVolf3jlV5YW9D
+         Fjjr3kLr3wloPS2UonX0HIUFkETx2i5bJ/JX6BKqwshEBRgw2BVj0qGwvZgMPqGRRY3g
+         TxBw8H6kjqwMKbYCQYhiB0uXC4la7Rfu8uoD9LCHXKAvZeNloqkQnej4z7VrR/YbhY6i
+         0zeggDxB2WzPZqRZxlZ3lnORVRDURl7L8gC9WUYD2udicNGwo5g1QFsiLq3uR7Hgbtdv
+         U2x36BuSqPfEeybobiQOJG9I5OfV1Zu/u1cOaAuqqvo2XIb7kF1mrYudZ0TjtwZtZLwR
+         3CyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x0F8kOEXNZOfO+KIT0hQfdKv4yLZvQqLGUo1yR7k0NA=;
+        b=arc5PvR1REhKWHtx/CQ++UvaTLHEYw3TR/vMz6TjACaw8qmnPBMr3/RhZj8tIg+r+G
+         bM6H0BOhVuIWutp1G4LxEkUJXk4reYUQm7btgwjEfW0rooQczga6Ri478GhcMWTOWDce
+         XRkaiEBNxc+2ABbnmjV2xYxz3wSs5FdmuSbIpWh1SXYDyNdFPy1A2FV+7OLEAtV80VAN
+         kapCXQR1bMU3PlwDiMtA8lH0bo4pJTPFAQsEwWnfCl2/JQxp70E3NNKIL+fOwca3yf5C
+         5iJQVxWq3i7gL4jgc9HC7hT3VY+162lG5Sx2o41amDMdQddsfxYkHaZX6BZM0MJuWsFD
+         xy7A==
+X-Gm-Message-State: APjAAAUcgXo5ktPefcV+mRefW5rQnxvFa1HtSRAjus1qDVjR3JOlpAx+
+        9wd26Nf4S54WxvoZ0xUsYSheNIOJRl5i58JtnKM=
+X-Google-Smtp-Source: APXvYqwfrFMeaEKve/AdMM1rYLh7RtVdW3+WPD9G7iO/wQWEsl/rRNnNoOdK2OWQnig+oY+jXCbIZdvOKxvVAdAvS30=
+X-Received: by 2002:a05:6830:13d8:: with SMTP id e24mr5940324otq.42.1571947168180;
+ Thu, 24 Oct 2019 12:59:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191023071120.GA3061@localhost.localdomain>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9420 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910240185
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9420 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910240185
+References: <20191021132322.25256-1-narmstrong@baylibre.com>
+In-Reply-To: <20191021132322.25256-1-narmstrong@baylibre.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 24 Oct 2019 21:59:17 +0200
+Message-ID: <CAFBinCAv7fVBbZaUW-5unjcuOAWtEbDsjZFa=WeSRff7_Zrf2A@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue
+ Bindings to YAML schemas
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
-> On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   7d194c2100ad2a6dded545887d02754948ca5241
-> > commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
-> > date:   7 weeks ago
-> > 
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > 
-> > New smatch warnings:
-> > drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
-> > 
-> > Old smatch warnings:
-> > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
-> > 
-> > # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea44d190764b4422af4d1c29eaeb9e69e353b406
-> > git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > git remote update linus
-> > git checkout ea44d190764b4422af4d1c29eaeb9e69e353b406
-> > vim +/nents +505 drivers/usb/usbip/stub_rx.c
-> > 
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  453  static void stub_recv_cmd_submit(struct stub_device *sdev,
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  454  				 struct usbip_header *pdu)
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  455  {
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  456  	struct stub_priv *priv;
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  457  	struct usbip_device *ud = &sdev->ud;
-> > 2d8f4595d1f275 drivers/staging/usbip/stub_rx.c Max Vozeler        2011-01-12  458  	struct usb_device *udev = sdev->udev;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  459  	struct scatterlist *sgl = NULL, *sg;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  460  	void *buffer = NULL;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  461  	unsigned long long buf_len;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  462  	int nents;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  463  	int num_urbs = 1;
-> > c6688ef9f29762 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  464  	int pipe = get_pipe(sdev, pdu);
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  465  	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  466  	int support_sg = 1;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  467  	int np = 0;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  468  	int ret, i;
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  469  
-> > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  470  	if (pipe == -1)
-> > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  471  		return;
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  472  
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  473  	priv = stub_priv_alloc(sdev, pdu);
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  474  	if (!priv)
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  475  		return;
-> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  476  
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  477  	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  478  
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  479  	/* allocate urb transfer buffer, if needed */
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  480  	if (buf_len) {
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  481  		if (use_sg) {
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  482  			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  483  			if (!sgl)
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  484  				goto err_malloc;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  485  		} else {
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  486  			buffer = kzalloc(buf_len, GFP_KERNEL);
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  487  			if (!buffer)
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  488  				goto err_malloc;
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  489  		}
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  490  	}
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  491  
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  492  	/* Check if the server's HCD supports SG */
-> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  493  	if (use_sg && !udev->bus->sg_tablesize) {
-> > 
-> > Smatch thinks "use_sg" can be true when "buf_len" is zero.  It's hard
-> > to tell if Smatch is right or wrong without more context...
-> 
-> This is a bit strange. The meaning of "use_sg" is that client will
-> use scatter-gather and client's urb->num_sgs is not zero. And buffer
-> length should not be zero.
-> 
-> usb_sg and buf_len are both client-dependent variables, so I think
-> if they have wrong value in the server side, the client must have
-> sent use_sg and buf_len with incorrect values.
-> 
-> Did this error occur when compiling?
+Hi Neil,
 
-Smatch is doing static analysis, yes.
+On Mon, Oct 21, 2019 at 3:23 PM Neil Armstrong <narmstrong@baylibre.com> wrote:
+[...]
+> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> new file mode 100644
+> index 000000000000..45bcc98ee9a4
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> @@ -0,0 +1,132 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2019 BayLibre, SAS
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/amlogic,meson-g12a-usb-ctrl.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
+> +
+> +maintainers:
+> +  - Neil Armstrong <narmstrong@baylibre.com>
+> +
+> +description: |
+> +  The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
+> +  in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
+> +  only.
+> +
+> +  A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
+optionnaly -> optionally
 
-> If then, Did Smatch also consider vhci tx side?
+> +
+> +  One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
+One of the USB2 PHYs...
 
-I'm not really sure...  I can't reproduce the warning because on my
-system Smatch doesn't parse usbip_recv() correctly so it ends up
-silencing that warning.  :/
+with these two fixed:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-regards,
-dan carpenter
+[...]
+> +  phy-names:
+> +    items:
+> +      - const: usb2-phy0 # USB2 PHY0 if USBHOST_A port is used
+> +      - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
+> +      - const: usb3-phy0 # USB3 PHY if USB3_0 is used
+> +
+> +  phys:
+> +    minItems: 1
+> +    maxItems: 3
+(off-topic and probably a question for Rob: do you know the validation
+mechanism knows that phys and phy-names belong together. so if one phy
+is omitted then phy-names can be shorter than 3 entries?)
 
+
+Martin
