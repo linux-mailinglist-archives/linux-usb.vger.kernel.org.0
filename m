@@ -2,80 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A3EE2802
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 04:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC47E28DA
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 05:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436810AbfJXCQE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 22:16:04 -0400
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:58630 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2436605AbfJXCQD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 22:16:03 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 41AD9C0239;
-        Thu, 24 Oct 2019 02:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1571883363; bh=Ot6jUybTLjzITL1McgAzEtE8wQEtYOI7xyxGMxD6Oug=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=H3FrKHiMGVE8ZRF88hZwOt3UE2UAH8nHsKDhuw1h9NnNTkoeEL6k1rAbzXSxc6CuU
-         tRqD9ipf8dULTej9HDNrad8ScMpzzXEMPTe395KdusGj/Pq+kQtvZge2tn8GD8xHaH
-         KT6Z0+7e4NVljNWJL/LBB1q1KtwbHipTDtRvpllEk9zm9wli10/GReN1Bf6UeIJD6m
-         QxvgQLJQ6nuNwfSZwwqmV03tTYiVB8kHBoFMDdB4gz2EZrRfZ1qES/Me9yPt4Ctf0u
-         4fzic6PqUgVtyqgLosB8J/2ZTNqofOL5/UBzbI23NQEDxVhQMYJbBscI4J7TGyTKlU
-         Glruct7RwbOTQ==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 0CC8DA005A;
-        Thu, 24 Oct 2019 02:16:01 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 23 Oct 2019 19:16:01 -0700
-Date:   Wed, 23 Oct 2019 19:16:01 -0700
-Message-Id: <e0476716179b30482124d3c7c75820774e8ca0b1.1571882179.git.thinhn@synopsys.com>
-In-Reply-To: <cover.1571882179.git.thinhn@synopsys.com>
-References: <cover.1571882179.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 4/4] usb: dwc3: debug: Remove newline printout
-To:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        id S2392912AbfJXD3M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 23:29:12 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:38290 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390629AbfJXD3M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 23:29:12 -0400
+Received: by mail-qt1-f196.google.com with SMTP id o25so22319319qtr.5
+        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 20:29:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CacFV/lTRmHt6F6mhHUKL10O5L8H3YTLLCMha7hrL0Q=;
+        b=THz42nOH1jaoEtXaeQaTmQlMy/YfB6LGy17zRJPG1zcWDqtEM7HwK46nnnnGY0fkKD
+         BnXyr1jkqA9JCWCblDHeTxOYJ8j4Ysq77YEwm4uZsGgc+ysyqxXbf3Rx2va/es5TnfZk
+         wFWj/o0BeRDu3PsghlyiUcBaiojjVUIhMtrRmzpTIHDcui579+6DZhm/qLY1uyJDFEvn
+         1xTb1w6F6KYSTI78V0DooalbyVStBl0sk8C3puGcm4i+NjC3yOTqbWtF+KhHYgLx3sFX
+         OMBBFR8trx3SRArl8fj2Wm+H2PqJ0AKi/JYGKsTRjOp07bIxYsKFVVdYIbkloV3PW/uX
+         V6Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CacFV/lTRmHt6F6mhHUKL10O5L8H3YTLLCMha7hrL0Q=;
+        b=N95RP9gnEh11mWftUWKFzPCca+8tGl3doXRMarNr06KaVfL8fzV/TtaY3lFD5KuAch
+         1BNtSWdJL4W0GKBOIFh+bBp+ktWJiItxMddq1NF71O7eyQlTki5NbtQJ6dpdVItUrxnf
+         6REq7g3LABUohBwBK42E7Ucl37Xu23kIx5PAwTWzpJ1/trsrFvHTaxansbE9C5htuAZl
+         pQ0OpBt2D/teklINEY0BxIsMLkzfqrdXvkI9BS3cKSEWDnObiTXazRrwJJSwL6AnolYG
+         jSSbA55Sc2Q5bzye5VHi/huYHnAzKB0T5lcDcnw/focVyps0usi5qPXI3ipr33n0vk73
+         ju4g==
+X-Gm-Message-State: APjAAAW+UjvGlxTZeXyT0vJZP7FR0rCTvoU/z1Iujf/zWxyLjj3gX8Yg
+        u6kDM1ByqoF3iGtzz9OIVeYDZlHL112lk3NLWcLjig==
+X-Google-Smtp-Source: APXvYqyZrz7NqARmFL2eBIDTA+kjbyBSTICNGBsHWH2dyFreIV4B7r6FTsTK1VCom+KCShQPX0OFG3VuirMV5q5t4FQ=
+X-Received: by 2002:ac8:c86:: with SMTP id n6mr445293qti.80.1571887750853;
+ Wed, 23 Oct 2019 20:29:10 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191022093349.GC2819@lahna.fi.intel.com> <20191023224003.GA31692@google.com>
+In-Reply-To: <20191023224003.GA31692@google.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Thu, 24 Oct 2019 11:28:59 +0800
+Message-ID: <CAD8Lp46KZmTzxjYN6T7u1xH0AODr38hFcCgR-COtvduK9ZuANQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The newline from the unknown link state tracepoint doesn't follow the
-other tracepoints, and it looks unsightly. Let's remove it.
+On Thu, Oct 24, 2019 at 6:40 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> I think we need something like the patch below.  We already do
+> basically the same thing in pci_pm_reset().
+>
+> [1] https://gist.github.com/dsd/bd9370b35defdf43680b81ecb34381d5
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index e7982af9a5d8..e8702388830f 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -883,9 +883,10 @@ static int pci_raw_set_power_state(struct pci_dev *dev, pci_power_t state)
+>          * Mandatory power management transition delays; see PCI PM 1.1
+>          * 5.6.1 table 18
+>          */
+> -       if (state == PCI_D3hot || dev->current_state == PCI_D3hot)
+> +       if (state == PCI_D3hot || dev->current_state == PCI_D3hot) {
+>                 pci_dev_d3_sleep(dev);
+> -       else if (state == PCI_D2 || dev->current_state == PCI_D2)
+> +               pci_dev_wait(dev, "D3 transition", PCIE_RESET_READY_POLL_MS);
+> +       } else if (state == PCI_D2 || dev->current_state == PCI_D2)
+>                 udelay(PCI_PM_D2_DELAY);
+>
+>         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
 
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/debug.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+You also need to move the pci_dev_wait function definition higher up
+in the file.
+Tested and that doesn't help this case unfortunately. pci_dev_wait
+doesn't do anything since PCI_COMMAND value at this point is 0x100403
+:(
 
-diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-index 9baabed87d61..e56beb9d1e36 100644
---- a/drivers/usb/dwc3/debug.h
-+++ b/drivers/usb/dwc3/debug.h
-@@ -112,7 +112,7 @@ dwc3_gadget_link_string(enum dwc3_link_state link_state)
- 	case DWC3_LINK_STATE_RESUME:
- 		return "Resume";
- 	default:
--		return "UNKNOWN link state\n";
-+		return "UNKNOWN link state";
- 	}
- }
- 
-@@ -141,7 +141,7 @@ dwc3_gadget_hs_link_string(enum dwc3_link_state link_state)
- 	case DWC3_LINK_STATE_RESUME:
- 		return "Resume";
- 	default:
--		return "UNKNOWN link state\n";
-+		return "UNKNOWN link state";
- 	}
- }
- 
--- 
-2.11.0
-
+Daniel
