@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5281E2B40
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 09:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B6CE2B8B
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 09:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408664AbfJXHku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 03:40:50 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:37549 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408660AbfJXHku (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 03:40:50 -0400
-Received: by mail-lj1-f194.google.com with SMTP id l21so23896272lje.4
-        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 00:40:47 -0700 (PDT)
+        id S2408772AbfJXH5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 03:57:05 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38395 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408769AbfJXH5F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 03:57:05 -0400
+Received: by mail-lf1-f68.google.com with SMTP id q28so15059076lfa.5
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 00:57:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=rasmusvillemoes.dk; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JPxiGhM5jRhlwHtnCIN5tDoQSbhFV2F/bKlTq8On7Yc=;
-        b=i5fxJt9a5fJOI692aJw6RO8RT1YxLreAKshwhvfWPpsOcbT8uSjszOVeisgIr3beAI
-         DFsiED5apInER6smWDbxyzhOy/DlKj8zdp5QvGS4mJC+wu8Rv/1U1pZDcWsT6Hvf2M8+
-         w4nM52/7O9ZTWt55RCipUjyyXdlOWUptgTYHs=
+        bh=k3oPwwXbd7aVpRc6mBG49c0derbL+ABsS83WbajBnnw=;
+        b=bzZWVk1xf3C9Ge+H3fkjakaR/mYMcxx2L27X/iVa2ADAj8YO0NmKGyQENunfk67bSo
+         A/Im4Lh6qWQl5euFpS1xIDgwzN1hBwLC6m3nD4Ra9JQaXHtEY8zHvRjrexwE3tFOS4QE
+         zrI7roAbGySgX/PGnKZNHY7qZ6M6BwFbTLwec=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=JPxiGhM5jRhlwHtnCIN5tDoQSbhFV2F/bKlTq8On7Yc=;
-        b=qUBAxlqevg74LnpH+WORyC7E1WUDDXiPShn3/IrzGC7/iTdNxBisDr6CDN6Qv511cs
-         31E7uqYL7vR5KW5pl9iRfYitb65A79mk0SS8FjaIaUmsgW5g3fSlaPdeVDFbOMns0/QK
-         ddqq8Rrg9bSzeMG1GdDrlC0574CrLsYS6d3NGnNOP2vAgZx9DZR+9QxD7AZA79p27TZw
-         ECUlM8e+AtzbBLRV4wde7MF+qoA1CmL2miz6fujn6tXDm+YgF4Gbma/xI0T5grOgFwoS
-         Y4qGUM9YN/iC2wYRY5iOO0lUGgi1WaochsbJ8l09hjgRgm7AaB3ft19Iv0rqsuWFCGpj
-         /V9A==
-X-Gm-Message-State: APjAAAWvWrMxDjFg/3wxoZk86+6xk9oN5lYHGMFRdSyJ1GBJ9xtGlb2X
-        g7QlsBcnYJypi6wTQL2SWahpiQ==
-X-Google-Smtp-Source: APXvYqxX7Ws0oMg6WWgYA8lKqNAh68XyMJ4+E23AKZSb5ZI1mB2xMPsqfoKbR82T9sdrg7zZ36zRSg==
-X-Received: by 2002:a2e:b0d8:: with SMTP id g24mr22382743ljl.159.1571902846813;
-        Thu, 24 Oct 2019 00:40:46 -0700 (PDT)
+        bh=k3oPwwXbd7aVpRc6mBG49c0derbL+ABsS83WbajBnnw=;
+        b=uPDUniUayemiavQpfTHPFwylUfz5JIdDQClJ9VZte5vqlyODMRGLYYv30aihYorFQT
+         k1YCfGsbaT8pLiiILJAii11R4Nuredo3ab4RH0/jfz/24kJzKjlodYmlRdzySUH7dv+r
+         U5d8PsBe3w05oIfoLfyCO9GnA3yNdd2Liprfkqe6Rj5FV2MXydflqKONXieRAsAM9FTK
+         rtG6Cmj6SvlrX1JgAM7pP+gcq2pRmgcHmpS5wTGr0YiHT77TE14ul8R+FjLNpWvT5lwL
+         SnanKUq02MPGnb6KnyxEYWNGixhKipzwyTSk7ygWN4ZKfPcnOghdMSSKYI02dfObEyuJ
+         CLsg==
+X-Gm-Message-State: APjAAAUL5APmxPpL6Cj2lhUVdbixRTqHqIbOOQkEok/2OI61i9mrdWXi
+        T+D7k58CDExie2Gb76LTQd6Avw==
+X-Google-Smtp-Source: APXvYqyDWxfhIyP/h3s0Oi6ErhsqhkZHAZBagsFf5qH/cpxvtKTTFtgwYnDOPtqZTw3woyGFBLgpuw==
+X-Received: by 2002:ac2:5ec2:: with SMTP id d2mr9235070lfq.112.1571903822235;
+        Thu, 24 Oct 2019 00:57:02 -0700 (PDT)
 Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id m6sm10356184ljj.3.2019.10.24.00.40.45
+        by smtp.gmail.com with ESMTPSA id e8sm8739712ljf.1.2019.10.24.00.57.01
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 24 Oct 2019 00:40:46 -0700 (PDT)
+        Thu, 24 Oct 2019 00:57:01 -0700 (PDT)
 Subject: Re: [PATCH v4] string-choice: add yesno(), onoff(),
  enableddisabled(), plural() helpers
 To:     Andrew Morton <akpm@linux-foundation.org>,
@@ -55,13 +55,14 @@ Cc:     linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>
 References: <20191023131308.9420-1-jani.nikula@intel.com>
  <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
+ <18589470-c428-f4c8-6e3e-c8cfed3ad6e0@rasmusvillemoes.dk>
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <18589470-c428-f4c8-6e3e-c8cfed3ad6e0@rasmusvillemoes.dk>
-Date:   Thu, 24 Oct 2019 09:40:45 +0200
+Message-ID: <26bc9c97-363b-2a07-8338-e3fdc576ce68@rasmusvillemoes.dk>
+Date:   Thu, 24 Oct 2019 09:57:00 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
+In-Reply-To: <18589470-c428-f4c8-6e3e-c8cfed3ad6e0@rasmusvillemoes.dk>
 Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -70,174 +71,19 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24/10/2019 00.56, Andrew Morton wrote:
-> On Wed, 23 Oct 2019 16:13:08 +0300 Jani Nikula <jani.nikula@intel.com> wrote:
-> 
->> +
->> +static inline const char *yesno(bool v)
->> +{
->> +	return v ? "yes" : "no";
->> +}
->> +
->> +static inline const char *onoff(bool v)
->> +{
->> +	return v ? "on" : "off";
->> +}
->> +
->> +static inline const char *enableddisabled(bool v)
->> +{
->> +	return v ? "enabled" : "disabled";
->> +}
->> +
->> +static inline const char *plural(long v)
->> +{
->> +	return v == 1 ? "" : "s";
->> +}
->> +
->> +#endif /* __STRING_CHOICE_H__ */
-> 
-> These aren't very good function names.  Better to create a kernel-style
-> namespace such as "choice_" and then add the expected underscores:
-> 
-> choice_yes_no()
-> choice_enabled_disabled()
-> choice_plural()
+On 24/10/2019 09.40, Rasmus Villemoes wrote:
 
-I think I prefer the short names (no choice_ prefix), it's rather
-obvious what they do. I also asked for underscores, especially for the
-enableddisabled case, but Jani didn't want to change existing callers.
-But I'll keep out of the naming discussion from now on.
-> Also, I worry that making these functions inline means that each .o
-> file will contain its own copy of the strings 
+> column. Maybe your compiler doesn't do string literal merging (since the
+> linker does it anyway), so your .rodata.str1.1 might contain several
+> copies of "yes" and "no", but they shouldn't really be counted.
 
-They will, in .rodata.str1.1
+Sorry, that's of course nonsense - the strings only appear once in the
+TU (inside the static inline function), so gcc must treat them all as
+the same object - as opposed to the case where the implementation was
 
-("yes", "no", "enabled",
-> etc) if the .c file calls the relevant helper.  I'm not sure if the
-> linker is smart enough (yet) to fix this up. 
+#define yesno(x) ((x) ? "yes" : "no")
 
-AFAIK, that's an optimization the linker has done forever - the whole
-reason the SHF_MERGE | SHF_STRINGS (the MS in readelf -S output) flags
-exist (and AFAICT they have been part of the ELF spec since forever) is
-so the linker can do that trick. So no, do not make them ool.
-
-> And doing this will cause additional savings: calling a single-arg
-> out-of-line function generates less .text than calling yesno().  When I
-> did this: 
-> 
-> --- a/include/linux/string-choice.h~string-choice-add-yesno-onoff-enableddisabled-plural-helpers-fix
-> +++ a/include/linux/string-choice.h
-> @@ -8,10 +8,7 @@
->  
->  #include <linux/types.h>
->  
-> -static inline const char *yesno(bool v)
-> -{
-> -	return v ? "yes" : "no";
-> -}
-> +const char *yesno(bool v);
->  
->  static inline const char *onoff(bool v)
->  {
-> 
-> The text segment of drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.o
-> (78 callsites) shrunk by 118 bytes.
-> 
-
-Interesting, and not at all what I see. Mind dumping rss_config_show
-before/after? Even better, cxgb4_debugfs.s before/after. Here's what I get:
-
-static inline yesno:
-
-     cbb:       49 c7 c4 00 00 00 00    mov    $0x0,%r12        cbe:
-R_X86_64_32S       .rodata.str1.1+0x197
-     cc2:       44 89 ea                mov    %r13d,%edx
-     cc5:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        cc8:
-R_X86_64_32S       .rodata.str1.1+0x1b7
-     ccc:       48 c7 c5 00 00 00 00    mov    $0x0,%rbp        ccf:
-R_X86_64_32S       .rodata.str1.1+0x19b
-
-Load "yes" into %12 and "no" into %rbp (or vice versa).
-
-     cd3:       4d 89 e7                mov    %r12,%r15
-     cd6:       e8 00 00 00 00          callq  cdb
-<rss_config_show+0x3b>       cd7: R_X86_64_PC32      seq_printf-0x4
-     cdb:       45 85 ed                test   %r13d,%r13d
-     cde:       4c 89 e2                mov    %r12,%rdx
-     ce1:       48 89 df                mov    %rbx,%rdi
-     ce4:       48 0f 49 d5             cmovns %rbp,%rdx
-     ce8:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        ceb:
-R_X86_64_32S       .rodata.str1.1+0x1cb
-     cef:       e8 00 00 00 00          callq  cf4
-<rss_config_show+0x54>       cf0: R_X86_64_PC32      seq_printf-0x4
-     cf4:       41 f7 c5 00 00 00 40    test   $0x40000000,%r13d
-     cfb:       4c 89 e2                mov    %r12,%rdx
-     cfe:       48 89 df                mov    %rbx,%rdi
-     d01:       48 0f 44 d5             cmove  %rbp,%rdx
-     d05:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        d08:
-R_X86_64_32S       .rodata.str1.1+0x1e1
-     d0c:       e8 00 00 00 00          callq  d11
-<rss_config_show+0x71>       d0d: R_X86_64_PC32      seq_printf-0x4
-
-Test a bit, move "yes" into %rdx, conditionally move "no" into %rdx
-instead, call seq_printf.
-
-     d11:       41 f7 c5 00 00 00 20    test   $0x20000000,%r13d
-     d18:       4c 89 e2                mov    %r12,%rdx
-     d1b:       48 89 df                mov    %rbx,%rdi
-     d1e:       48 0f 44 d5             cmove  %rbp,%rdx
-     d22:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        d25:
-R_X86_64_32S       .rodata.str1.1+0x1f7
-     d29:       e8 00 00 00 00          callq  d2e
-<rss_config_show+0x8e>       d2a: R_X86_64_PC32      seq_printf-0x4
-
-etc. That's a marginal (i.e., after the preamble storing "yes" and "no"
-in callee-saved registers) cost of six instructions/29 bytes per
-seq_printf, three of which are to implement the yesno() call.
-
-extern const char *yesno():
-
-   64e7:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        64ea:
-R_X86_64_32S      .rodata.str1.1+0x8e4
-    64ee:       89 ea                   mov    %ebp,%edx
-    64f0:       41 89 ed                mov    %ebp,%r13d
-    64f3:       e8 00 00 00 00          callq  64f8
-<rss_config_show+0x28>      64f4: R_X86_64_PC32     seq_printf-0x4
-    64f8:       89 ef                   mov    %ebp,%edi
-    64fa:       c1 ef 1f                shr    $0x1f,%edi
-    64fd:       e8 00 00 00 00          callq  6502
-<rss_config_show+0x32>      64fe: R_X86_64_PC32     yesno-0x4
-
-Three instructions to prepare the argument to yesno and call it.
-
-    6502:       48 c7 c6 00 00 00 00    mov    $0x0,%rsi        6505:
-R_X86_64_32S      .rodata.str1.1+0x8f8
-    6509:       48 89 c2                mov    %rax,%rdx
-
-One more to put the return from yesno in the right register.
-
-    650c:       48 89 df                mov    %rbx,%rdi
-    650f:       e8 00 00 00 00          callq  6514
-<rss_config_show+0x44>      6510: R_X86_64_PC32     seq_printf-0x4
-
-So not a lot, but still one more instruction, for a total of 31 bytes.
-bloat-o-meter says
-
-$ scripts/bloat-o-meter
-drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.o.{1,2}
-add/remove: 0/0 grow/shrink: 3/0 up/down: 301/0 (301)
-Function                                     old     new   delta
-rss_config_show                             2343    2482    +139
-rss_vf_config_show                           263     363    +100
-rss_pf_config_show                           342     404     +62
-
-which is more then 2*78, but I haven't looked at the code patterns in
-the other functions.
-
-Did you use size(1) to compare when you say "text segment"? That would
-include .rodata (and, more importantly, .rodata.strX.Y) in its text
-column. Maybe your compiler doesn't do string literal merging (since the
-linker does it anyway), so your .rodata.str1.1 might contain several
-copies of "yes" and "no", but they shouldn't really be counted.
+So that can't explain why you saw a smaller text segment using the OOL
+version.
 
 Rasmus
