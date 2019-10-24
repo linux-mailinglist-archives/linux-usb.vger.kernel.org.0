@@ -2,167 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 864ABE2C84
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 10:51:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34CF8E2CC3
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 11:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438390AbfJXIva (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 04:51:30 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:46838 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730621AbfJXIva (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 04:51:30 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9O8p7Pp085877;
-        Thu, 24 Oct 2019 03:51:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571907067;
-        bh=54djgH10KG/rVSnq5F8we0LmCw2lCjZh+du4GsdmEvs=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=QtrCVhPHsEj2wOocfkyA9jH2Qkcpyed05iPaxpH9sfQGNXJaooFfi5NN0O9EqX2uQ
-         CATjIV6nA3+ZYd4L41pvYSv5wtVyVIPty8whwwhky9oOHwY4bMxsuNeBHxhyWO8tVf
-         PyKeNrhT9tgNA1Lhcb+RjjSBvbOxcGwy7EpY3kBM=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9O8p7T6006768
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 24 Oct 2019 03:51:07 -0500
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Thu, 24
- Oct 2019 03:50:55 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Thu, 24 Oct 2019 03:50:55 -0500
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9O8p1kH035606;
-        Thu, 24 Oct 2019 03:51:01 -0500
-Subject: Re: [PATCH] dmaengine: cppi41: Fix cppi41_dma_prep_slave_sg() when
- idle
-To:     Tony Lindgren <tony@atomide.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Bin Liu <b-liu@ti.com>, Daniel Mack <zonque@gmail.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Johan Hovold <johan@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        <dmaengine@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-omap@vger.kernel.org>,
-        <giulio.benetti@benettiengineering.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Skvortsov <andrej.skvortzov@gmail.com>,
-        Yegor Yefremov <yegorslists@googlemail.com>
-References: <20191023153138.23442-1-tony@atomide.com>
- <245e1e8f-7933-bae1-b779-239f33d4d449@ti.com>
- <20191023171628.GO5610@atomide.com>
- <5deab8a9-5796-5367-213e-90c5961b8498@ti.com>
- <20191023191859.GQ5610@atomide.com>
- <7d578fe1-2d60-4a6e-48b0-73d66c39f783@ti.com>
- <20191023201829.GR5610@atomide.com>
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-Message-ID: <4bcd75d8-b7c5-5006-d80f-c5bda0cdf011@ti.com>
-Date:   Thu, 24 Oct 2019 11:52:02 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2388310AbfJXJCE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 05:02:04 -0400
+Received: from mail-lj1-f176.google.com ([209.85.208.176]:43474 "EHLO
+        mail-lj1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727079AbfJXJCE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 05:02:04 -0400
+Received: by mail-lj1-f176.google.com with SMTP id n14so24123038ljj.10
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 02:02:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dawes-za-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=sA1E5AfB56QRzsAe6f0UUw9vruE6VfSgiGLjQ4iUUhk=;
+        b=XscpeN5xwKeDT/qlkBa2GLc1Msjk2FSCHk1JG/sD4cfup8b12yKIMC1DM92DDXyAUw
+         QKWJ376IU+f2+NsVinkM4SG1Avbo+sqi0CQSTCKxpuErY46fI0zcDqoL3nLwl85vynFA
+         Brd9Nr2EsGguPRmHRz5Q8grhYjUBRJnzuTYrnGCdqJ2dc3ESYwclv/1tHWbxADR4FoM3
+         jytdy3kFg7z5N2Ar+WYA8PWwoSewnZuPmcot97N8O0WjigyfBzeP6lAinY0rqAKrKJfx
+         ME8u+q0T5u8y9ySz/t9yhzACOg+V1BfpeuDTbe38tDU9flwyjypM49lyQ3jvVPQorDwT
+         9K8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=sA1E5AfB56QRzsAe6f0UUw9vruE6VfSgiGLjQ4iUUhk=;
+        b=lxFN0WvVCauogTmJfXDPP9C0L8et/xrfTu+n+W2AUdT/KviLU1nr25KrxvacmAh+tm
+         q64TR8dBD59aFDNK/n6n/D8RysxvfDbVLclcN0hd2jkVe/jRnrtPh1uMGj/Rlr6FjK+Q
+         XxkByPHavoXuccvFWWxgIcQkhykz8K1elQa6HGAQ9bqXqchQNFCUYf7LM1bvzg5VP5yJ
+         AtNznjHrnnnkt2Tj0pvU1KR7eaju4H4mN8doDiS1pAUFiTBFfcsS5QdWiCNNMHw1I+75
+         PrhUpoLC+ju4gf7mQai/gNtB0mRHsllSiQlPrVhOSjnuInFBmLuKqzeR0rWKUC+MDdxb
+         qLvg==
+X-Gm-Message-State: APjAAAU08GzU6Gi+h6tgk/MdoPoiKxv3pWpBtU15n+h+HB4GZtFWRs5v
+        FT1NNNVc+NHFx7V9k9kepl2jKB/XWoNQ43OfdYQm+RIfYbE=
+X-Google-Smtp-Source: APXvYqw19oEPpXdgkQGjYwqMszcdeS5GVmoXvY2SxHur40XuOFPV22Ga5RWzkgctj/5wxPldXW2rKPlYHyxd7jz3adQ=
+X-Received: by 2002:a2e:6c0e:: with SMTP id h14mr10072784ljc.92.1571907721618;
+ Thu, 24 Oct 2019 02:02:01 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191023201829.GR5610@atomide.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+From:   Rogan Dawes <rogan@dawes.za.net>
+Date:   Thu, 24 Oct 2019 11:01:50 +0200
+Message-ID: <CAOYdKdiYdnH246mZSRZ==dhjcM3Oah5vFP1Nh=m4SgyvJKNn2w@mail.gmail.com>
+Subject: Programmatically switching a USB port from Host to Device mode (not OTG)
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi folks
 
+I am using a GL.Inet AR750S (Slate) travel router, which is based on
+the QCA9563 SoC.
 
-On 23/10/2019 23.18, Tony Lindgren wrote:
-> * Peter Ujfalusi <peter.ujfalusi@ti.com> [191023 19:55]:
->> On 10/23/19 10:18 PM, Tony Lindgren wrote:
->>> We'd have to allow dma consumer driver call pm_runtime_get_sync()
->>> on the dma device. Something similar maybe to what we have
->>> for phy_pm_runtime_get_sync(). Or just get the device handle for
->>> dma so the consumer can call pm_runtime_get_sync() on it.
->>
->> How much a pm_runtime_get_sync(dmadev) is different when it is issued by
->> the client driver compared to when the dma driver issues it for it's own
->> device?
-> 
-> Well the consumer device could call pm_runtime_get_sync(dmadev)
-> when the USB cable is connected for example, and then call
-> pm_runtime_pu(dmadev) when let's say the USB cable is disconnected.
+I am trying to see if there is any way that I can get it to operate in
+a USB Gadget mode.
 
-And the USB cable connect/disconnect is handled in interrupt -> you need
-to call pm_runtime_get_sync(dmadev) from interrupt context and need to
-mark the dmadev to pm_runtime_irq_safe()
+According to twitter support
+(https://twitter.com/GLiNetWiFi/status/1187190831746179073), the
+router's external port is connected directly to USB1 on the SoC, and
+the internal port is connected via a USB hub to USB2.
 
-> Without using pm_runtime_irq_safe() we currently don't have a
-> clear path for doing this where the pm_runtime_get_sync(dmadev)
-> may sleep.
-> 
->> But I still fail to see the difference between the events before this
->> patch and with the case when there is a 100ms delay between prep_sg and
->> issue_pending.
->>
->> Before this patch:
->>
->> prep_sg()
->> issue_pending() <- runtime_get() /  put_autosuspend()
->> 		   _not_ starting transfer
->> runtime_resume() <- starts the transfer
->>
->> With this patch and than 100ms delay between prep_sg and issue_pending:
->>
->> prep_sg() <- runtime_get() /  put_autosuspend()
->> runtime_resume() <- not starting transfer
->> issue_pending() <- runtime_get() /  put_autosuspend()
->> 		   starts the transfer
->>
->> With this patch, but more than 100ms delay in between:
->>
->> prep_sg() <- runtime_get() /  put_autosuspend()
->> runtime_resume() <- not starting transfer
->>> 100ms delay
->> runtime_suspend()
->> issue_pending() <- runtime_get() /  put_autosuspend()
->> 		   _not_ starting transfer
->> runtime_resume() <- starts the transfer
->>
->> pm_runtime_get_sync() in issue_pending would be the solution to avoid
->> delayed execution, but the usb driver should not assume that DMA is
->> completed as soon as issue_pending returned.
-> 
-> Oh I see. Yes the consumer driver would need to check for
-> the completed dma transfer in all cases. The delay issues
-> should not currently happen in the musb_ep_program() problem
-> case as it gets called from IRQ context.
+According to the datasheet which I found at
+https://github.com/Deoptim/atheros/QCA9563_July_2014.pdf, USB1 should
+be a Host-only port, while USB2 should be device-capable.
+Unfortunately, the hub chip makes it impossible to test USB2.
 
-the cppi41 driver solely relies on irq to check is the transfer is
-completed (based on the cookie status).
-So yeah, musb have no other choice than trust that the transfer is done
-in a timely manner.
+So, my question is, is it possible to modify the device tree to
+configure USB1 in gadget mode (even though according to the datasheet,
+this is a reserved configuration) ?
 
-> And no, adding pm_runtime_get_sync() to issue_pending is not
-> a solution. There may be clocks and regulators that need to
-> be powered up, and we don't want to use pm_runtime_irq_safe()
-> because of the permanent use count on the parent.
+Is it possible that a pure software configuration change may be
+sufficient to change the role of the port, or would I need to remove
+pull-up/down resistors as well to see if this could work?
 
-I think the only way to handle this is to keep the DMA enabled as long
-as the USB cable is connected.
-Either to introduce dma_pm_runtime_get_sync(struct dma_chan *c) and
-dma_pm_runtime_put(struct dma_chan *c) or some better name.
+Many thanks!
 
-It's use would be optional, but for USB you would call them for cable
-connect the get_sync (from a work) and put it on disconnect.
-
-The driver internally would not need to be changed, I think this patch
-could be removed as well.
-
-- Péter
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Rogan
