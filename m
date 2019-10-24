@@ -2,66 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B041E272F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 01:53:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1F33E279B
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 03:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392809AbfJWXxI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Oct 2019 19:53:08 -0400
-Received: from smtprelay0151.hostedemail.com ([216.40.44.151]:53121 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389801AbfJWXxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Oct 2019 19:53:07 -0400
-X-Greylist: delayed 378 seconds by postgrey-1.27 at vger.kernel.org; Wed, 23 Oct 2019 19:53:07 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 09B031807882E
-        for <linux-usb@vger.kernel.org>; Wed, 23 Oct 2019 23:46:50 +0000 (UTC)
-Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 8C573181D3417;
-        Wed, 23 Oct 2019 23:46:48 +0000 (UTC)
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::,RULES_HIT:41:355:379:599:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1537:1566:1593:1594:1711:1714:1730:1747:1777:1792:2393:2559:2562:2693:2828:3138:3139:3140:3141:3142:3622:3866:3868:3870:4321:5007:6119:8603:10004:10400:11026:11232:11473:11658:11914:12297:12740:12760:12895:13069:13255:13311:13357:13439:14659:14721:21080:21433:21451:21627:30054:30070:30091,0,RBL:47.151.135.224:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
-X-HE-Tag: plot32_3b2e9464b9b05
-X-Filterd-Recvd-Size: 1614
-Received: from XPS-9350.home (unknown [47.151.135.224])
-        (Authenticated sender: joe@perches.com)
-        by omf20.hostedemail.com (Postfix) with ESMTPA;
-        Wed, 23 Oct 2019 23:46:46 +0000 (UTC)
-Message-ID: <dbecfcf9ed62c481bb040c619af3b1ee5a7de848.camel@perches.com>
-Subject: Re: [PATCH v4] string-choice: add yesno(), onoff(),
- enableddisabled(), plural() helpers
-From:   Joe Perches <joe@perches.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jani Nikula <jani.nikula@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Vishal Kulkarni <vishal@chelsio.com>, netdev@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Julia Lawall <julia.lawall@lip6.fr>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Date:   Wed, 23 Oct 2019 16:46:45 -0700
-In-Reply-To: <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
-References: <20191023131308.9420-1-jani.nikula@intel.com>
-         <20191023155619.43e0013f0c8c673a5c508c1e@linux-foundation.org>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.32.1-2 
+        id S2390009AbfJXBLC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Oct 2019 21:11:02 -0400
+Received: from verein.lst.de ([213.95.11.211]:43036 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388218AbfJXBLC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Oct 2019 21:11:02 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id BD36968BE1; Thu, 24 Oct 2019 03:10:59 +0200 (CEST)
+Date:   Thu, 24 Oct 2019 03:10:59 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <greg@kroah.com>, Oliver Neukum <oneukum@suse.com>,
+        Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
+        Seth Bollinger <Seth.Bollinger@digi.com>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] UAS: Revert commit 3ae62a42090f ("UAS: fix alignment
+ of scatter/gather segments")
+Message-ID: <20191024011059.GB5067@lst.de>
+References: <20191023015348.GA16123@lst.de> <Pine.LNX.4.44L0.1910231132470.1878-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1910231132470.1878-100000@iolanthe.rowland.org>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 2019-10-23 at 15:56 -0700, Andrew Morton wrote:
-> And doing this will cause additional savings: calling a single-arg
-> out-of-line function generates less .text than calling yesno().
+On Wed, Oct 23, 2019 at 11:34:33AM -0400, Alan Stern wrote:
+> Commit 3ae62a42090f ("UAS: fix alignment of scatter/gather segments"),
+> copying a similar commit for usb-storage, attempted to solve a problem
+> involving scatter-gather I/O and USB/IP by setting the
+> virt_boundary_mask for mass-storage devices.
+> 
+> However, it now turns out that the analogous change in usb-storage
+> interacted badly with commit 09324d32d2a0 ("block: force an unlimited
+> segment size on queues with a virt boundary"), which was added later.
+> A typical error message is:
+> 
+> 	ehci-pci 0000:00:13.2: swiotlb buffer is full (sz: 327680 bytes),
+> 	total 32768 (slots), used 97 (slots)
+> 
+> There is no longer any reason to keep the virt_boundary_mask setting
+> in the uas driver.  It was needed in the first place only for
+> handling devices with a block size smaller than the maxpacket size and
+> where the host controller was not capable of fully general
+> scatter-gather operation (that is, able to merge two SG segments into
+> a single USB packet).  But:
+> 
+> 	High-speed or slower connections never use a bulk maxpacket
+> 	value larger than 512;
+> 
+> 	The SCSI layer does not handle block devices with a block size
+> 	smaller than 512 bytes;
+> 
+> 	All the host controllers capable of SuperSpeed operation can
+> 	handle fully general SG;
+> 
+> 	Since commit ea44d190764b ("usbip: Implement SG support to
+> 	vhci-hcd and stub driver") was merged, the USB/IP driver can
+> 	also handle SG.
+> 
+> Therefore all supported device/controller combinations should be okay
+> with no need for any special virt_boundary_mask.  So in order to head
+> off potential problems similar to those affecting usb-storage, this
+> patch reverts commit 3ae62a42090f.
+> 
+> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> CC: Oliver Neukum <oneukum@suse.com>
+> CC: <stable@vger.kernel.org>
 
-I get no change in size at all with any of
-	extern
-	static __always_inline
-with either of bool or int argument.
+Looks good,
 
-gcc 8.3, defconfig with CONFIG_CHELSIO_T4
-
-
+Acked-by: Christoph Hellwig <hch@lst.de>
