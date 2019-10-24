@@ -2,187 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3E7E3FB9
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 00:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C64E4075
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 01:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732902AbfJXWxN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 18:53:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41512 "EHLO mail.kernel.org"
+        id S1733240AbfJXX7K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 19:59:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57372 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732652AbfJXWxM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Oct 2019 18:53:12 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1731922AbfJXX7J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Oct 2019 19:59:09 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 600642084C;
-        Thu, 24 Oct 2019 22:53:10 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0D04A21BE5;
+        Thu, 24 Oct 2019 23:59:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571957590;
-        bh=Y1oucRG4hSr47h5aFopNwsmqhPOE/ZaQNZFiaGjg8Zs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=S1DISRYo+DwP3KzQdR7xYMVH+Obb8narWXAeF7V+pS16BtzDS2+uWO2HHIKoYs+n/
-         GQmxWmIS8Q4Hfg8mkuviTsZhNbREHQ74OduAyfSkgwDCXBOnoJewM7h/kI/KspFvHD
-         BHwAYjvm/ULYvW0KPN8MkfvaKDqfVn896lMpqYHU=
-Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
- uninitialized symbol 'nents'.
-To:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Suwan Kim <suwan.kim027@gmail.com>
-Cc:     kbuild@lists.01.org, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
+        s=default; t=1571961548;
+        bh=a/612v51V67JQto4Q9B5ZAq4SDuSUffERC3MjVZlvzQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FLKyYhRTbZ+/+IsLcbdEP5BKSXEhbWMmIVlLS9FtMbHpRTEcfHgQeEPyhskQ1t1CU
+         xncLjQCMgcgw92AAmidj76BEJIazepTQm+zp6MZzE8V4iXprTMLgEjFOJjahfRZWGD
+         bm9roxJxzS9yzjC8jMbJtKm4MnaSA47vUui31rco=
+Date:   Thu, 24 Oct 2019 16:59:07 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20191022092839.GD10833@kadam>
- <20191023071120.GA3061@localhost.localdomain> <20191024194500.GD23523@kadam>
-From:   shuah <shuah@kernel.org>
-Message-ID: <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
-Date:   Thu, 24 Oct 2019 16:52:52 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191024194500.GD23523@kadam>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v2 0/3] kcov: collect coverage from usb and vhost
+Message-Id: <20191024165907.d56f8050b5097639263c0a41@linux-foundation.org>
+In-Reply-To: <CAAeHK+xLS8TVioJeqYrf9Kso9TsiWiH0O-k+RrRBCKPPS9_Hrg@mail.gmail.com>
+References: <cover.1571844200.git.andreyknvl@google.com>
+        <20191023150413.8aa05549bd840deccfed5539@linux-foundation.org>
+        <CAAeHK+xLS8TVioJeqYrf9Kso9TsiWiH0O-k+RrRBCKPPS9_Hrg@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/24/19 1:45 PM, Dan Carpenter wrote:
-> On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
->> On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
->>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->>> head:   7d194c2100ad2a6dded545887d02754948ca5241
->>> commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
->>> date:   7 weeks ago
->>>
->>> If you fix the issue, kindly add following tag
->>> Reported-by: kbuild test robot <lkp@intel.com>
->>> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->>>
->>> New smatch warnings:
->>> drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
->>>
->>> Old smatch warnings:
->>> drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
->>>
->>> # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea44d190764b4422af4d1c29eaeb9e69e353b406
->>> git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->>> git remote update linus
->>> git checkout ea44d190764b4422af4d1c29eaeb9e69e353b406
->>> vim +/nents +505 drivers/usb/usbip/stub_rx.c
->>>
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  453  static void stub_recv_cmd_submit(struct stub_device *sdev,
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  454  				 struct usbip_header *pdu)
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  455  {
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  456  	struct stub_priv *priv;
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  457  	struct usbip_device *ud = &sdev->ud;
->>> 2d8f4595d1f275 drivers/staging/usbip/stub_rx.c Max Vozeler        2011-01-12  458  	struct usb_device *udev = sdev->udev;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  459  	struct scatterlist *sgl = NULL, *sg;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  460  	void *buffer = NULL;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  461  	unsigned long long buf_len;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  462  	int nents;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  463  	int num_urbs = 1;
->>> c6688ef9f29762 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  464  	int pipe = get_pipe(sdev, pdu);
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  465  	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  466  	int support_sg = 1;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  467  	int np = 0;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  468  	int ret, i;
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  469
->>> 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  470  	if (pipe == -1)
->>> 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  471  		return;
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  472
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  473  	priv = stub_priv_alloc(sdev, pdu);
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  474  	if (!priv)
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  475  		return;
->>> 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  476
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  477  	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  478
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  479  	/* allocate urb transfer buffer, if needed */
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  480  	if (buf_len) {
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  481  		if (use_sg) {
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  482  			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  483  			if (!sgl)
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  484  				goto err_malloc;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  485  		} else {
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  486  			buffer = kzalloc(buf_len, GFP_KERNEL);
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  487  			if (!buffer)
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  488  				goto err_malloc;
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  489  		}
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  490  	}
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  491
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  492  	/* Check if the server's HCD supports SG */
->>> ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  493  	if (use_sg && !udev->bus->sg_tablesize) {
->>>
->>> Smatch thinks "use_sg" can be true when "buf_len" is zero.  It's hard
->>> to tell if Smatch is right or wrong without more context...
->>
->> This is a bit strange. The meaning of "use_sg" is that client will
->> use scatter-gather and client's urb->num_sgs is not zero. And buffer
->> length should not be zero.
->>
->> usb_sg and buf_len are both client-dependent variables, so I think
->> if they have wrong value in the server side, the client must have
->> sent use_sg and buf_len with incorrect values.
->>
->> Did this error occur when compiling?
+On Thu, 24 Oct 2019 14:47:31 +0200 Andrey Konovalov <andreyknvl@google.com> wrote:
+
+> > is it expected that the new kcov feature will be used elsewhere in the
+> > kernel?
+> >
+> > If the latter, which are the expected subsystems?
 > 
-> Smatch is doing static analysis, yes.
-> 
->> If then, Did Smatch also consider vhci tx side?
-> 
-> I'm not really sure...  I can't reproduce the warning because on my
-> system Smatch doesn't parse usbip_recv() correctly so it ends up
-> silencing that warning.  :/
-> 
+> Currently we encountered two cases where this is useful: USB and vhost
+> workers. Most probably there are more subsystems that will benefit
+> from this kcov extension to get better fuzzing coverage. I don't have
+> a list of them, but the provided interface should be easy to use when
+> more of such cases are encountered.
 
-Hi Suwan,
+It would be helpful to add such a list to the changelog.  Best-effort
+and approximate is OK - just to help people understand the eventual
+usefulness of the proposal.
 
-This is a problem that needs fixing. nents
-
-        /* allocate urb transfer buffer, if needed */
-         if (buf_len) {
-                 if (use_sg) {
-                         sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
-
-nents gets initialized here by sgl_alloc()
-
-                         if (!sgl)
-                                 goto err_malloc;
-                 } else {
-                         buffer = kzalloc(buf_len, GFP_KERNEL);
-                         if (!buffer)
-                                 goto err_malloc;
-                 }
-         }
-
-         /* Check if the server's HCD supports SG */
-         if (use_sg && !udev->bus->sg_tablesize) {
-                 /*
-                  * If the server's HCD doesn't support SG, break a 
-single SG
-                  * request into several URBs and map each SG list entry to
-                  * corresponding URB buffer. The previously allocated SG
-                  * list is stored in priv->sgl (If the server's HCD 
-support SG,
-                  * SG list is stored only in urb->sg) and it is used as an
-                  * indicator that the server split single SG request into
-                  * several URBs. Later, priv->sgl is used by 
-stub_complete() and
-                  * stub_send_ret_submit() to reassemble the divied URBs.
-                  */
-                 support_sg = 0;
-                 num_urbs = nents;
-
-I think nents will be valid here. Is there need for this additional
-check here? You can fold this into the previous use_sg check, right
-after the sg_alloc() success, I would think.
-
-                 priv->completed_urbs = 0;
-                 pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
-         }
-
-
-thanks,
--- Shuah
 
