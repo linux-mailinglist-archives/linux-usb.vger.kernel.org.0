@@ -2,86 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67C6FE3BF3
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 21:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D577E3C41
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 21:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437196AbfJXTRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 15:17:19 -0400
-Received: from iolanthe.rowland.org ([192.131.102.54]:59948 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2437182AbfJXTRS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 15:17:18 -0400
-Received: (qmail 6262 invoked by uid 2102); 24 Oct 2019 15:17:18 -0400
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Oct 2019 15:17:18 -0400
-Date:   Thu, 24 Oct 2019 15:17:18 -0400 (EDT)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     syzbot <syzbot+8ab8bf161038a8768553@syzkaller.appspotmail.com>,
-        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        id S2407661AbfJXTpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 15:45:18 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:58156 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407590AbfJXTpS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 15:45:18 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9OJdhhh054750;
+        Thu, 24 Oct 2019 19:45:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=/TnQJ5UGPVxiEvHbnKiUchL/F1tRGlidcvPpnZv7wV4=;
+ b=FEmemtBDIflI9JbfrghljbX94c8L6T8miPEQKi1VdsZ5iQN5+IFv56zeLYfJgJCgMPMl
+ 6OkMa/lQNi92oN8lB3JWgP9Fd022ECaEEPfjJPl+KLE8H7TiKCV0p2/CnFB+WItEUqAT
+ voCz74rkDC6uYA+D2KAEyaWtd81iOouTxXQQ/hWaH911NHUn+1/ZOhGmchh+BellrBVh
+ xKRmripbpgYe8wPhU+WIs3b4tNO34va4wKY5po2aChRx4KjncAkNnyLrnzBgzM/ePDqP
+ FQL1YuiiabqXuxGhs34queFMQ7JVTVc1RkC94XYfvNKakHBX96bFKsqMhHo2wUrgAMi6 9Q== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2vqu4r5nkm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Oct 2019 19:45:10 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9OJbhix099139;
+        Thu, 24 Oct 2019 19:45:10 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2vtsk5k4rr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 24 Oct 2019 19:45:10 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9OJj8Qc023168;
+        Thu, 24 Oct 2019 19:45:08 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 24 Oct 2019 12:45:07 -0700
+Date:   Thu, 24 Oct 2019 22:45:00 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     kbuild@lists.01.org, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: divide error in dummy_timer
-In-Reply-To: <CAAeHK+yu2MYmh86wJ_DxYoUEU-vp9R+jXRVMh_SpsSNFdHVO7g@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1910241507450.1318-100000@iolanthe.rowland.org>
+        linux-usb@vger.kernel.org, shuah@kernel.org
+Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
+ uninitialized symbol 'nents'.
+Message-ID: <20191024194500.GD23523@kadam>
+References: <20191022092839.GD10833@kadam>
+ <20191023071120.GA3061@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191023071120.GA3061@localhost.localdomain>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9420 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910240185
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9420 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910240185
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 24 Oct 2019, Andrey Konovalov wrote:
-
-> On Thu, Oct 24, 2019 at 7:57 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Thu, 24 Oct 2019, Andrey Konovalov wrote:
-> >
-> > > > Is this really the sort of thing we need to catch?  It isn't a bug in
-> > > > any existing kernel code, as far as I know.  Maybe only gadgetfs and
-> > > > configfs need to worry about it.
-> > >
-> > > Hi Alan,
-> > >
-> > > Do you mean that the gadget driver must ensure that the max packet
-> > > size in the endpoint descriptor is not zero? Do HCDs rely on that? I
-> > > can add this check into the driver we use for USB fuzzing.
-> >
-> > Well, if there are any gadget drivers in the kernel which do set an
-> > endpoint's maxpacket size to 0, they should be fixed.  I'm not aware of
-> > any.
-> >
-> > Of course, gadget drivers in userspace are always suspect.  That's why
-> > I suggested having gadgetfs and configfs perform this check.  Even so
-> > it's not really a _security_ risk, because only the superuser is
-> > allowed to run a userspace gadget driver.  (Although obviously it is
-> > better to have a clean failure than to crash the system when a buggy
-> > program runs with superuser privileges.)
-> >
-> > Yes, HCDs do depend on endpoints having reasonable maxpacket values.  I
-> > suppose the core should check for this.  Currently we check for values
-> > that are too large or invalid in other ways (like high-speed bulk
-> > endpoints with maxpacket != 512), but we don't check for 0.
+On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
+> On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   7d194c2100ad2a6dded545887d02754948ca5241
+> > commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
+> > date:   7 weeks ago
+> > 
+> > If you fix the issue, kindly add following tag
+> > Reported-by: kbuild test robot <lkp@intel.com>
+> > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > 
+> > New smatch warnings:
+> > drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
+> > 
+> > Old smatch warnings:
+> > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
+> > 
+> > # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea44d190764b4422af4d1c29eaeb9e69e353b406
+> > git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > git remote update linus
+> > git checkout ea44d190764b4422af4d1c29eaeb9e69e353b406
+> > vim +/nents +505 drivers/usb/usbip/stub_rx.c
+> > 
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  453  static void stub_recv_cmd_submit(struct stub_device *sdev,
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  454  				 struct usbip_header *pdu)
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  455  {
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  456  	struct stub_priv *priv;
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  457  	struct usbip_device *ud = &sdev->ud;
+> > 2d8f4595d1f275 drivers/staging/usbip/stub_rx.c Max Vozeler        2011-01-12  458  	struct usb_device *udev = sdev->udev;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  459  	struct scatterlist *sgl = NULL, *sg;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  460  	void *buffer = NULL;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  461  	unsigned long long buf_len;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  462  	int nents;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  463  	int num_urbs = 1;
+> > c6688ef9f29762 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  464  	int pipe = get_pipe(sdev, pdu);
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  465  	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  466  	int support_sg = 1;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  467  	int np = 0;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  468  	int ret, i;
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  469  
+> > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  470  	if (pipe == -1)
+> > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  471  		return;
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  472  
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  473  	priv = stub_priv_alloc(sdev, pdu);
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  474  	if (!priv)
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  475  		return;
+> > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  476  
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  477  	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  478  
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  479  	/* allocate urb transfer buffer, if needed */
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  480  	if (buf_len) {
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  481  		if (use_sg) {
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  482  			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  483  			if (!sgl)
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  484  				goto err_malloc;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  485  		} else {
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  486  			buffer = kzalloc(buf_len, GFP_KERNEL);
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  487  			if (!buffer)
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  488  				goto err_malloc;
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  489  		}
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  490  	}
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  491  
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  492  	/* Check if the server's HCD supports SG */
+> > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  493  	if (use_sg && !udev->bus->sg_tablesize) {
+> > 
+> > Smatch thinks "use_sg" can be true when "buf_len" is zero.  It's hard
+> > to tell if Smatch is right or wrong without more context...
 > 
-> Oh, I think I've confused the terms here. I meant to ask about UDCs.
-> The question is whether it's OK to try and emulate a gadget with
-> maxpacket = 0 on a board with a hardware UDC? Or can it cause issues?
-> The fact that HCDs must ensure correct maxpacket values of course
-> makes sense.
+> This is a bit strange. The meaning of "use_sg" is that client will
+> use scatter-gather and client's urb->num_sgs is not zero. And buffer
+> length should not be zero.
+> 
+> usb_sg and buf_len are both client-dependent variables, so I think
+> if they have wrong value in the server side, the client must have
+> sent use_sg and buf_len with incorrect values.
+> 
+> Did this error occur when compiling?
 
-It doesn't make any sense to have an endpoint with maxpacket = 0 --
-either real or emulated.  The USB spec doesn't prohibit them (probably
-an oversight), but such endpoints would be useless since it would not
-be possible to transfer any data to/from them.
+Smatch is doing static analysis, yes.
 
-And as you surmised, it wouldn't be at all surprising for UDC drivers
-to crash (much like dummy-hcd does) when faced with an endpoint having
-maxpacket = 0.  Best to rule out the possibility entirely.
+> If then, Did Smatch also consider vhci tx side?
 
-Alan Stern
+I'm not really sure...  I can't reproduce the warning because on my
+system Smatch doesn't parse usbip_recv() correctly so it ends up
+silencing that warning.  :/
+
+regards,
+dan carpenter
 
