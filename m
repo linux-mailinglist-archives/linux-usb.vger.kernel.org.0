@@ -2,82 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5F4E2A76
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 08:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44DAE2B0E
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 09:27:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437692AbfJXGdQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 02:33:16 -0400
-Received: from cable.insite.cz ([84.242.75.189]:45757 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727750AbfJXGdQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Oct 2019 02:33:16 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id D09AAA1A40B04;
-        Thu, 24 Oct 2019 08:33:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1571898791; bh=gQ/xEn4pbToz5mF04We/UEV+YjtLQxG+NFCq9gnkQh4=;
-        h=Subject:From:To:References:Date:In-Reply-To:From;
-        b=e+amU0Mypm60aHqQfi1AaF9f5C7NPe0yvISwa/4KQU+ZZm9/pCrT24w7mC2pZcQkR
-         jRaORt3JE4NWEwHP2bbQ1ML0tD+S+1/9I5YnHdQrmpGW9eElwBxVPLk/Zx7+qTup/f
-         VAIcgnPgzQymYLVcCzzHGoJq+Dv4bBfTTNrqYjZ8=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id TsOkM0FXex11; Thu, 24 Oct 2019 08:33:11 +0200 (CEST)
-Received: from [192.168.100.32] (unknown [192.168.100.32])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id A7B68A1A40B01;
-        Thu, 24 Oct 2019 08:33:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1571898791; bh=gQ/xEn4pbToz5mF04We/UEV+YjtLQxG+NFCq9gnkQh4=;
-        h=Subject:From:To:References:Date:In-Reply-To:From;
-        b=e+amU0Mypm60aHqQfi1AaF9f5C7NPe0yvISwa/4KQU+ZZm9/pCrT24w7mC2pZcQkR
-         jRaORt3JE4NWEwHP2bbQ1ML0tD+S+1/9I5YnHdQrmpGW9eElwBxVPLk/Zx7+qTup/f
-         VAIcgnPgzQymYLVcCzzHGoJq+Dv4bBfTTNrqYjZ8=
-Subject: Re: usb: dwc2: Re: Maximum packet size in dwc2 gadget HS mode < 1024
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-References: <3496ebef-c3b6-d884-8bd8-fed48e875b10@ivitera.com>
- <52dc70dc-86e4-c47a-ae49-1f201b066b2e@ivitera.com>
- <97fed6c8-e780-021f-4f93-64701a14bc3f@synopsys.com>
- <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
- <deb8918a-14f5-ca3f-53d5-0d99d406fc3c@ivitera.com>
-Message-ID: <79aba6ae-befe-878e-cc17-e1fde9ac6a80@ivitera.com>
-Date:   Thu, 24 Oct 2019 08:33:11 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2408577AbfJXH1F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 03:27:05 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:40869 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408568AbfJXH1F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 03:27:05 -0400
+Received: by mail-qt1-f195.google.com with SMTP id o49so28633210qta.7
+        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 00:27:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rR+/2C/x3kiaj39AAUm04JfYyfeKX8N8SiuzYvghj0s=;
+        b=hrzuVLf6ajJ+WcLgB9Lbeu+QpAKrWbF2mPO3sT9AzVHmiPQ8GqYWJy+AD/rywikhqB
+         kIC2LFBHqmBatWlJcp+iSROqXmTBz7Dd++TJT5kItpu82Z9Gty9fgCQ4N9UWAAHbwP0F
+         A4Y9IuMKaITHBf9ElHLWQpsXNa1+seMtGTfUDEwXo1HoTQN4WuLIZROZLtq9P0s3Uldb
+         1eevF1n6l3IiVU0DYm0huy3PlsYWiOIvPsX6Nm7PYpi+djps9p7blVDq638WYodKNHRM
+         KLn+qX1P9g6t+BtjPQywgvJJjDDsSc5C0xltydxvDS6PIejjVYDnTS07VNS5svGYtvP6
+         MvnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rR+/2C/x3kiaj39AAUm04JfYyfeKX8N8SiuzYvghj0s=;
+        b=J1HV8zj6/jsdiHP1otBFglUwOE28Xmn+4lz3zciTjHWaeSjtAgnAtuFBZJW21krMUP
+         gXoe/UEkNl/TNwVkiR8p+F6YcqAxY5eDJTorIH4pLk1TnFitpD71qemMglDyXm5hTasg
+         8x1c8jaZT6beFlXEc3qJEHxBDerwgbkAO2Er8KZ+jBgq39UhtvqrY2qWk7JWTWpQYerb
+         KH0GtYfa0G183GaSXetmp3Vg6wf4VFsxCMGaPdz9xTftmx13hEbIG9qg3Jh5xXinQbEU
+         NpgksJTMI1/YxTqF4dZDUegCDHahUMZW15mVHEnID6W/FK+bsVb4QuPeqiXuwCSbZKBQ
+         x6xQ==
+X-Gm-Message-State: APjAAAX9a0YvQDYM8DACm8YWpoITopJZlCE73CunC9KRPTe/oKIFmyX4
+        bNDlcHKQGw+c3iIYthnjuebLZWmRdb9c3//U6atxFw==
+X-Google-Smtp-Source: APXvYqzLkvPiMyJIYtWQ5uRQfPL6nkIrOlG3sj9/1E1Wc1lj5bM1AzSKU18YzvgzGKdHfFrN7b/Qd0KdcTZhcyEtoVY=
+X-Received: by 2002:a0c:95ca:: with SMTP id t10mr7062131qvt.22.1571902023325;
+ Thu, 24 Oct 2019 00:27:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <deb8918a-14f5-ca3f-53d5-0d99d406fc3c@ivitera.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <cover.1571844200.git.andreyknvl@google.com> <beeae42e313ef57b4630cc9f36e2e78ad42fd5b7.1571844200.git.andreyknvl@google.com>
+In-Reply-To: <beeae42e313ef57b4630cc9f36e2e78ad42fd5b7.1571844200.git.andreyknvl@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 24 Oct 2019 09:26:52 +0200
+Message-ID: <CACT4Y+a6t08RmtSYfF=3TuASx9ReCEe0Qp0AP=GbCtNyL2j+TA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] kcov: remote coverage support
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        KVM list <kvm@vger.kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        netdev <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        David Windsor <dwindsor@gmail.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+On Wed, Oct 23, 2019 at 5:24 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>
+> This patch adds background thread coverage collection ability to kcov.
+...
+> +static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
+> +{
+> +       struct kcov_remote *remote;
+> +
+> +       if (kcov_remote_find(handle))
+> +               return ERR_PTR(-EEXIST);
+> +       remote = kmalloc(sizeof(*remote), GFP_ATOMIC);
+> +       if (!remote)
+> +               return ERR_PTR(-ENOMEM);
+> +       remote->handle = handle;
+> +       remote->kcov = kcov;
+> +       hash_add(kcov_remote_map, &remote->hnode, handle);
 
-Dne 13. 10. 19 v 20:39 Pavel Hofman napsal(a):
-> Hi Minas
-> Dne 11. 10. 19 v 9:45 Minas Harutyunyan napsal(a):
->> Hi Pavel,
->>
->>>
->> Could you please send regdump and debug log for failing case.
->>
-> 
-> Thanks a lot for your reply.
-> 
-> Attaching regdump-960bytes.txt for 32kHz/16b/15ch both playback and 
-> capture,  bInterval=4 in 
+I think it will make sense to check that there is no existing kcov
+with the same handle registered. Such condition will be extremely hard
+to debug based on episodically missing coverage.
 
+...
+>  void kcov_task_exit(struct task_struct *t)
+>  {
+>         struct kcov *kcov;
+> @@ -256,15 +401,23 @@ void kcov_task_exit(struct task_struct *t)
+>         kcov = t->kcov;
+>         if (kcov == NULL)
+>                 return;
+> +
+>         spin_lock(&kcov->lock);
+> +       kcov_debug("t = %px, kcov->t = %px\n", t, kcov->t);
+> +       /*
+> +        * If !kcov->remote, this checks that t->kcov->t == t.
+> +        * If kcov->remote == true then the exiting task is either:
+> +        * 1. a remote task between kcov_remote_start() and kcov_remote_stop(),
+> +        *    in this case t != kcov->t and we'll print a warning; or
 
-I do not know if the debug info was sufficient. Please should I provide 
-more?
+Why? Is kcov->t == NULL for remote kcov's? May be worth mentioning in
+the comment b/c it's a very condensed form to check lots of different
+things at once.
 
-Thanks a lot.
+Otherwise the series look good to me:
 
-Best regards,
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 
-Pavel.
+But Andrew's comments stand. It's possible I understand all of this
+only because I already know how it works and why it works this way.
