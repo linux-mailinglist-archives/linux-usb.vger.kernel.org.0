@@ -2,66 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE839E3671
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 17:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B11AE36A0
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Oct 2019 17:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502953AbfJXPWC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 11:22:02 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:56891 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403837AbfJXPWC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 11:22:02 -0400
-Received: by mail-io1-f69.google.com with SMTP id a22so25920254ioq.23
-        for <linux-usb@vger.kernel.org>; Thu, 24 Oct 2019 08:22:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=RqIARasz4PZZfM4Zlv+NGn5c1w9s+0zeajPkvbZDLG8=;
-        b=nN9TYtq/QzuxLK4d7LA6Wr5H3VPAlnN5S4RFjHzPlKPfhIHdtVCHzAXonkUjVKTNt0
-         Z/j9o1aCrON2KvxgRUXvgasVegeW+ISBQRPD/7bFdkDY5pho0Ruv9fmrl00QEd7ymmhU
-         u4Hi3wN/UjcAJ8RDqLEi8mFHrEhZnIdLDkF0X2HJ1KdnhBVMvCTiVQt5Tn6dxid57qWS
-         g37BfTcAn+d137TklZKDMWmncFOjuEn885Kzb1LV5p/o1r44CC+oGQ7j0SJv5/83i+TW
-         mrJLhzsb5HFWnW+UO4xHKb8svfIRcxIyfoRs7ZCqBNiWMvRia4AmwrpZI86rdWcFrv0s
-         H46g==
-X-Gm-Message-State: APjAAAUGF872qM9npScq+EJlg+E6+On8Xl0fEy7C7NB8+5GY45n68wqn
-        hO8KhgOImr4Kz1T6j6ohYCLfgmBQxVzf3qWDHj3mN6u5heif
-X-Google-Smtp-Source: APXvYqz6vdsYutSN8ENa8kZoFnbo8JHWDQwsquQngY3sXxodHpUDPiFWzl7IoLyB1BKrLE8AbVM57hBZFomIkEzJJH8XROc00gIS
-MIME-Version: 1.0
-X-Received: by 2002:a92:8394:: with SMTP id p20mr4880575ilk.73.1571930521777;
- Thu, 24 Oct 2019 08:22:01 -0700 (PDT)
-Date:   Thu, 24 Oct 2019 08:22:01 -0700
-In-Reply-To: <Pine.LNX.4.44L0.1910241053590.1676-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005cc1890595a998a7@google.com>
-Subject: Re: divide error in dummy_timer
-From:   syzbot <syzbot+8ab8bf161038a8768553@syzkaller.appspotmail.com>
-To:     Jacky.Cao@sony.com, andreyknvl@google.com, balbi@kernel.org,
-        chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        id S2503203AbfJXP1u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 11:27:50 -0400
+Received: from albert.telenet-ops.be ([195.130.137.90]:60154 "EHLO
+        albert.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503201AbfJXP1u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 11:27:50 -0400
+Received: from ramsan ([84.195.182.253])
+        by albert.telenet-ops.be with bizsmtp
+        id HTTo2100U5USYZQ06TTodF; Thu, 24 Oct 2019 17:27:49 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iNf1g-00078G-QT; Thu, 24 Oct 2019 17:27:48 +0200
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iNf1g-0007yY-PQ; Thu, 24 Oct 2019 17:27:48 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Li Yang <leoyang.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Jiri Kosina <trivial@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH trivial] usb: Spelling s/disconnet/disconnect/
+Date:   Thu, 24 Oct 2019 17:27:47 +0200
+Message-Id: <20191024152747.30617-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Fix misspellings of "disconnect".
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/usb/chipidea/udc.c            | 2 +-
+ drivers/usb/gadget/udc/fsl_udc_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Reported-and-tested-by:  
-syzbot+8ab8bf161038a8768553@syzkaller.appspotmail.com
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 8f18e7b6cadf4306..0b6166a64d72a762 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -1612,7 +1612,7 @@ static int ci_udc_selfpowered(struct usb_gadget *_gadget, int is_on)
+ }
+ 
+ /* Change Data+ pullup status
+- * this func is used by usb_gadget_connect/disconnet
++ * this func is used by usb_gadget_connect/disconnect
+  */
+ static int ci_udc_pullup(struct usb_gadget *_gadget, int is_on)
+ {
+diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
+index 20141c3096f68ab4..7114a0ef4b13b4e6 100644
+--- a/drivers/usb/gadget/udc/fsl_udc_core.c
++++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+@@ -1208,7 +1208,7 @@ static int fsl_vbus_draw(struct usb_gadget *gadget, unsigned mA)
+ }
+ 
+ /* Change Data+ pullup status
+- * this func is used by usb_gadget_connect/disconnet
++ * this func is used by usb_gadget_connect/disconnect
+  */
+ static int fsl_pullup(struct usb_gadget *gadget, int is_on)
+ {
+-- 
+2.17.1
 
-Tested on:
-
-commit:         22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5fe29bc39eff9627
-dashboard link: https://syzkaller.appspot.com/bug?extid=8ab8bf161038a8768553
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14f2fda7600000
-
-Note: testing is done by a robot and is best-effort only.
