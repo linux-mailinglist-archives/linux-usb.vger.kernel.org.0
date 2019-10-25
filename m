@@ -2,101 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E92E48E3
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 12:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E88E49B2
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 13:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2438556AbfJYKvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 06:51:09 -0400
-Received: from mout.kundenserver.de ([217.72.192.74]:45981 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392198AbfJYKvJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 06:51:09 -0400
-Received: from mail-qk1-f181.google.com ([209.85.222.181]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mj831-1hlZxU1VH3-00fEqI; Fri, 25 Oct 2019 12:51:05 +0200
-Received: by mail-qk1-f181.google.com with SMTP id q70so1261022qke.12;
-        Fri, 25 Oct 2019 03:51:04 -0700 (PDT)
-X-Gm-Message-State: APjAAAWA6fFViRcJqREnWWJ4XnLSnh9uc5TR3f3XkJRs4iop43nFUxmc
-        NGQ8ccT6lVNGOrvmjR3QEB2RQ+274bWdUrVtGAM=
-X-Google-Smtp-Source: APXvYqx2Oor6PcLHOX4Sy8TtHwX6a9dti7RuLVSJPm8RZ72aJo7WkeFnANJ7SePVIoWyJuP+ht+PknNC97FPJwMamtQ=
-X-Received: by 2002:a37:58d:: with SMTP id 135mr2252602qkf.394.1572000663226;
- Fri, 25 Oct 2019 03:51:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191018154052.1276506-1-arnd@arndb.de> <87v9slg9k5.fsf@belgarion.home>
- <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
- <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
- <87r239f2g8.fsf@belgarion.home> <87eez1rhqo.fsf@belgarion.home>
-In-Reply-To: <87eez1rhqo.fsf@belgarion.home>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 25 Oct 2019 12:50:46 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
-Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
-Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
-To:     Robert Jarzmik <robert.jarzmik@free.fr>
-Cc:     Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        IDE-ML <linux-ide@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
-        linux-mtd <linux-mtd@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:bBFl5bX9BqXoDP8OrdvcfGlrYLRY5B1GUhWZJswEMUsHfqL7ZPS
- wNKiBQqI9J4lWaKwMKWpeuRP8Q7gNW1Huux28MpdQbLQHsG8keYqULuxokAyz8cXvUuDQNr
- Y4OmkYoxdwxMOhV/OoYmkmbTVaeZ1jGsBbuhOyjPDaixMEDPYwwWYKYrS8WnrToePTYktVe
- isgPlih4bJp7b5na0cbDg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+amIHTsvEsM=:wxrSdcXp8fCl0WvOtbji8T
- eiMYbEG4cst6pRKOmo34ky4eqFrbI9L+1xHjnaiY+H7o5c4AvretiveY6HsD/8Q4GCTo+d4EF
- 6KHQlLX/3bCOUITQRQRqZXMcO8+d/5yBWQ4PLvO/++od9zW+FSeEXlBspQqZItGbvkewyaSgM
- V2RuqHgZsRHubh1xP1lsxIE2YLtSonVpvh2iNYDMLLKocefeURCWHULZHpLKqb637/1ILOFmh
- oY55eIQP5dCvyMde+02h4Sc41A/coK0VSMYnmjZbIdabokN8wJmd5BpuqN52whvBKMyQB7Drx
- +rJNk043np+L19CHym/KU1GD0+Jh/hYMmdbAesunIc/XFNfshrJppNPggA2jYuD+WHt0GoW0h
- vIRvBMeg6dWxtHSt5iN2OWe8YRwmJozAghx6eaxs/+mtKjhlwdb8pg8wgjMJTT4UVZPNck6ai
- ETIxAKLIg48ERY2PKPCwjHZWIF59mr9ihwrIm7/PoRVzhB2DgY1bXT+r0Xf1ifNLX95PYOB5M
- zAGClTyzoyjzTzKwNgwcV4nTh4Je81xIc8FEG8D5S5n2odlouWYtMUHvQkobX+2UgP+dk+Rdq
- Yf9piYlNy1SKL1OHQdycWsLTFQ3jMWeWKCJRb5PSzWdnYIqeBZU1jM0z+jjUqPYhNrA/3/oIY
- 6RHI26+ovszi6E37l9e4YOUqQLgkyayuNJDsaLxUKkKdzoog8Z1n6LZPKD/u4+MRIXZCKCrGx
- pWVDvdMh6MitMHpzAZXm52z3k1A8T63a1CoAVUlqw1z/kLR1+hrsr4BnhFtpR4HNXe8FSWIge
- SE0Vg8VrS1FRrUX3m8HXrRagLwmAmfEk5PCq5WPOx/NjbgPEUnw5nqQ9HVCS9jOGnKIZvBw5Z
- /NMhJY+Zi7eyYSpPjOOA==
+        id S2439450AbfJYLSL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 07:18:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:42533 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2439235AbfJYLSL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 07:18:11 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iNxJV-0002cs-0I; Fri, 25 Oct 2019 10:59:25 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     davem@davemloft.net, oliver@neukum.org
+Cc:     hayeswang@realtek.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH 1/2] r8152: Pass driver_info to REALTEK_USB_DEVICE() macro
+Date:   Fri, 25 Oct 2019 18:59:18 +0800
+Message-Id: <20191025105919.689-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 10:50 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
-> Robert Jarzmik <robert.jarzmik@free.fr> writes:
-> >>> I've now pushed it to
-> >>>
-> >>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
-> >>> pxa-multiplatform
-> >>
-> >> Sorry for the duplication, I had some problems with email configuration
-> >> so my reply got rejected, let's see if it goes through this time.
-> > I have it now, thanks, I'll test and review as soon as I can.
-> >
-> > Cheers.
->
-> Ok Arnd, I have a preliminary test report.
->
-> I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
-> only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
-> the regulator framework (which is a known issue [1]), your version seems
-> equivalent so far in terms of runtime to Linux 5.4-rc3).
->
-> The sound and RTC seem broken, but not by you ...
->
-> I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
-> time, and try to review as well the mach-pxa part.
+REALTEK_USB_DEVICE() in current form doesn't take driver_info as its
+parameter.
 
-Awesome, thanks for testing so far and for the report!
+However, driver_info can be useful to add device specific information so
+let's adjust REALTEK_USB_DEVICE() macro to be able to do that.
 
-        Arnd
+It'll be used by later patch.
+
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/net/usb/r8152.c | 38 ++++++++++++++++++++------------------
+ 1 file changed, 20 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index d3c30ccc8577..1a987d4e45ab 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -6725,12 +6725,13 @@ static void rtl8152_disconnect(struct usb_interface *intf)
+ 	}
+ }
+ 
+-#define REALTEK_USB_DEVICE(vend, prod)	\
++#define REALTEK_USB_DEVICE(vend, prod, info)	\
+ 	.match_flags = USB_DEVICE_ID_MATCH_DEVICE | \
+ 		       USB_DEVICE_ID_MATCH_INT_CLASS, \
+ 	.idVendor = (vend), \
+ 	.idProduct = (prod), \
+-	.bInterfaceClass = USB_CLASS_VENDOR_SPEC \
++	.bInterfaceClass = USB_CLASS_VENDOR_SPEC, \
++	.driver_info = (info) \
+ }, \
+ { \
+ 	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO | \
+@@ -6739,25 +6740,26 @@ static void rtl8152_disconnect(struct usb_interface *intf)
+ 	.idProduct = (prod), \
+ 	.bInterfaceClass = USB_CLASS_COMM, \
+ 	.bInterfaceSubClass = USB_CDC_SUBCLASS_ETHERNET, \
+-	.bInterfaceProtocol = USB_CDC_PROTO_NONE
++	.bInterfaceProtocol = USB_CDC_PROTO_NONE, \
++	.driver_info = (info) \
+ 
+ /* table of devices that work with this driver */
+ static const struct usb_device_id rtl8152_table[] = {
+-	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8050)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8152)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff)},
+-	{REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8050, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8152, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff, 0)},
++	{REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601, 0)},
+ 	{}
+ };
+ 
+-- 
+2.17.1
+
