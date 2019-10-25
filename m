@@ -2,103 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D025E45CD
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 10:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEA2E460E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 10:45:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405118AbfJYIfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 04:35:11 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:53748 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2404282AbfJYIfL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 04:35:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1571992510;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gsc+0cnWp+SeXo5Ab/Z5m/x0oLsQUzNBoPuLzeohPH8=;
-        b=NOPUEBQcEdYBmqATxtXkRECvwvwTFH+9JO5ZYGM6BHmE/mluTOZi+2GQUBQyru2lR6UaZ4
-        1iYY5FOhu12pgVbavx/TQkfDfBV9WRRAe37Mf0+MJSFznfgbKUMPSOo0gbGPEnZC7mPyq3
-        dUL/Jzb7wLq4cjMVOw5lX8zi5Dp5tlg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-331-Yt-flKkyMo6CKNT7t3AOmw-1; Fri, 25 Oct 2019 04:35:05 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5E9E800D41;
-        Fri, 25 Oct 2019 08:35:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-121-40.rdu2.redhat.com [10.10.121.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AFDF84100;
-        Fri, 25 Oct 2019 08:35:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wiMho2AhcTWC3-3zGK7639XL9UT=AheMXY0pxGHDACn6g@mail.gmail.com>
-References: <CAHk-=wiMho2AhcTWC3-3zGK7639XL9UT=AheMXY0pxGHDACn6g@mail.gmail.com> <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk> <30394.1571936252@warthog.procyon.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 11/10] pipe: Add fsync() support [ver #2]
+        id S2408439AbfJYIpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 04:45:13 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40122 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407543AbfJYIpN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 04:45:13 -0400
+Received: by mail-wr1-f65.google.com with SMTP id o28so1318638wro.7
+        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2019 01:45:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=QljUEfnAFjPhi1Cpeu2+3TNeN7NOO8V2PLCDzIO4TxA=;
+        b=h8tCSMCbn6S2V/9/0tqMW7XfM6Lx7Aid2dbQnkDVZH/aWFVCEjpr8pmJ6KvRNpOC4g
+         G9R7x19+rarr9DFL0s3xGhjaw9AhZdwwXH63/jAa7hKTTLBfN+JQOZmXfxwyySQSwv2r
+         3dvjuRNxJPPdPvhdm6YpjwX04K59tzPPbBuN80icjqEon59gV1W/iX3ORCRYfCL0S+p4
+         X+oRe7GGdGm2b6q9oeNl8qA2+wtREPQKqMmErg0rbEbE4C8ys2lnnD/PerDP7AvWAvmV
+         XnyCwECQm8H+Iau4iJR/3LfLpigaMgucxAS5OniDB2SPrLCS0pTMiDN1cIrjnwP7XdYD
+         1OOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=QljUEfnAFjPhi1Cpeu2+3TNeN7NOO8V2PLCDzIO4TxA=;
+        b=jyEUARHpsLb0Lb/5BSeNBYG5Ek8GzHt5wG3KA9kZuXG7JDFTC9zm+ErG4eREKJzuxV
+         W0nz0MYDwRDqpq5YonrZaFEx1JYIWxUR9QKdjyJZW/Xs3PSY0k/L6x4H0gUHXEO/X/+L
+         wpwDD6uvii16SqxA7bB5ifM4m7AOexX1QMrKjvkb3jFb5OQmEMqd1NDPSMQuKwweqHJD
+         luWJOlFMlSbLLUGbO+UfwFuVsH0QkXvsYIzNEUajXOlZqsn7GtPluJcce4GYjIvXG99D
+         C6c/GyWEoMNsXEvU5E4B3CyROvJMMW6JjoXVlFCRvlBh9XlONc+UtWMdWlbv9TyFJqTQ
+         uDEw==
+X-Gm-Message-State: APjAAAWMOlwaqlk7lIitwDohJZLXse/fIU4uzOjjP+io95hEjwGL4Wlp
+        n41WFWiqCO40w/0QuGiwcxYP+7UrbICEvNFP2rQ=
+X-Google-Smtp-Source: APXvYqxEK/mImiGcPOoAPdtj1UU9haau8tNDoYwiz5GRhJi5nFO8EU55ZnjEuoJpBgIHQ86d3nkxEHbk+UFS4AvYlXU=
+X-Received: by 2002:adf:d1aa:: with SMTP id w10mr1748787wrc.127.1571993111044;
+ Fri, 25 Oct 2019 01:45:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-ID: <9190.1571992499.1@warthog.procyon.org.uk>
-Date:   Fri, 25 Oct 2019 09:34:59 +0100
-Message-ID: <9191.1571992499@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-MC-Unique: Yt-flKkyMo6CKNT7t3AOmw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
+References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
+ <87a7avh8uu.fsf@gmail.com> <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com>
+ <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com> <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
+ <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com> <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
+ <87d0fny5in.fsf@gmail.com> <52a7b158-ab76-432a-4d2c-7b731dc9c2a2@linux.intel.com>
+ <CADGPSwgJMKfQChfxMNU4S_xv1vfHr7_GY6rGwgeDOVuW6+mpVg@mail.gmail.com>
+ <CADGPSwhCPvdu=KmQP6RHMJnh292UO0uBAt+KyJqqOWY5DWDc3w@mail.gmail.com>
+ <CADGPSwiCY9=kUpKmcUwAhvCHmvGDSrxoBXEkzgQpEpiakKEv6A@mail.gmail.com> <87v9sfixv3.fsf@gmail.com>
+In-Reply-To: <87v9sfixv3.fsf@gmail.com>
+From:   alex zheng <tc0721@gmail.com>
+Date:   Fri, 25 Oct 2019 16:44:34 +0800
+Message-ID: <CADGPSwhg=HgGL+J0kvgu=uZAo+_E9W3Aj3nLRDsyr4FoLs=8Wg@mail.gmail.com>
+Subject: Re: BUG report: usb: dwc3: Link TRB triggered an intterupt without
+ IOC being setted
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        David Laight <David.Laight@aculab.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "xiaowei.zheng@dji.com" <xiaowei.zheng@dji.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Hi,
 
-> > The keyrings testsuite needs the ability to wait for all the outstandin=
-g
-> > notifications in the queue to have been processed so that it can then g=
-o
-> > through them to find out whether the notifications it expected have bee=
-n
-> > emitted.
->=20
-> Can't you just do
->=20
->     ioctl(fd, FIONREAD, &count);
->=20
-> in a loop instead? "No paperwork. Just sprinkle some msleep() crack on
-> him, and let's get out of here"
+Felipe Balbi <felipe.balbi@linux.intel.com> =E4=BA=8E2019=E5=B9=B410=E6=9C=
+=8823=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=886:02=E5=86=99=E9=81=93=
+=EF=BC=9A
+>
+>
+> Hi,
+>
+> (please don't top-post)
+>
+> alex zheng <tc0721@gmail.com> writes:
+> > Hi, all
+> >
+> > We found that this is a known issue of synopsys DWC3 USB controller,
+> > when the PARKMODE_SS of DWC3 is enable, the controller may hang or do
+> > wrong TRB schedule in some heavy load conditions.
+> >
+> > Setting DISABLE_PARKMODE_SS to 1 can work around this bug.
+>
+> Is this something that affects some versions but not others? If the
+> case, we should teach the driver to handle this based on a revision
+> check.
 
-Using FIONREAD like this means that I would have to quiesce the tests in or=
-der
-to sync up.  For the moment that's fine, but at some point I would like to =
-be
-able to stress test the system by running tests in parallel against the sam=
-e
-keyring.  Each test needs to check with the monitor whether its keys have
-generated the appropriate notifications against a backdrop of events being
-continuously generated by other tests.
+It seems that all DWC3 USB3.0 controller witch have parkmode_ss may
+run into this issue, but we did not do a further test, and I find that
+there is already a fix patch in maillist yesterday, see title: usb:
+"dwc3: Update entries for disabling SS instances in park mode"
 
-I can hold this patch for now.  Let me see if I can come up with a better w=
-ay
-to do it.  Maybe it can be done by dead reckoning, holding up until either
-we've counted out a complete ring-full of notifications or read() has come =
-up
-empty.
+>
+> cheers
 
-David
 
+>
+> --
+> balbi
