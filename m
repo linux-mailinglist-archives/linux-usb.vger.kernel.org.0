@@ -2,134 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75015E5456
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 21:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E319DE54E4
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 22:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727066AbfJYT2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 15:28:07 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:44743 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbfJYT2H (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 15:28:07 -0400
-Received: by mail-qt1-f196.google.com with SMTP id z22so4903649qtq.11;
-        Fri, 25 Oct 2019 12:28:06 -0700 (PDT)
+        id S1727957AbfJYUKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 16:10:24 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:39187 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbfJYUKY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 16:10:24 -0400
+Received: by mail-oi1-f193.google.com with SMTP id v138so2424521oif.6;
+        Fri, 25 Oct 2019 13:10:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CzMMsMrSkm3rm7Rium87GUG3E2V7vUHhdCpiWBcDQKw=;
-        b=LYbewjTVAApXV+AKpK4wNVHkmFKAV/kFlS/FsXDWutHRoZT6JFyy2CGC2ryqXP1AjX
-         cbeg8gVroTnYl+p2TAfC3x/QPCYtI2sDux2mhn3RkEJyrEc/n6S3AdZDquSHr7dlgbHN
-         pPo5YODC301IyjHCh+2JeZ+FVJWnv/Hup/7XuEA3+uXuGpRWWR5xtT5tMgHwJ9Ff5s6L
-         5SVaypclrnl6tHDzMxERLbI2UmUPGB0cJUPplRj6qwmgznyBaKMB8yFK1X89GeBoQMFJ
-         A0j+W7U3IHHlna6R7xNbBChBTEz//srCrCr698BI8qi1YKSmprnI6uJZbKMrRt+pe0BW
-         FjBA==
-X-Gm-Message-State: APjAAAVi3YeDjGT/7c0oYh06Xjz5CvV3Z33HNL8D5bwmJbolw3zKMijv
-        BPVJP/t1cVHsnrFi6f9SjOC7EbUjD0Y=
-X-Google-Smtp-Source: APXvYqxYaWOX88EtFy1OKQmONuRL2fbSamE0YS+v2Oas5D3gPYtDocSOlJ747BQlv8I8DRl3+CuiMg==
-X-Received: by 2002:ac8:22f1:: with SMTP id g46mr4881761qta.12.1572031685848;
-        Fri, 25 Oct 2019 12:28:05 -0700 (PDT)
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com. [209.85.160.171])
-        by smtp.gmail.com with ESMTPSA id q204sm2160934qke.39.2019.10.25.12.28.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 25 Oct 2019 12:28:05 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id t8so4949318qtc.6;
-        Fri, 25 Oct 2019 12:28:05 -0700 (PDT)
-X-Received: by 2002:ac8:6683:: with SMTP id d3mr4815167qtp.286.1572031684902;
- Fri, 25 Oct 2019 12:28:04 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=E0aSqqQFk6FlgluTswnJmfefV24lB3iric22ShoTlBg=;
+        b=og3+YXwYri52qPiyrZclCqtkRW4UZpbMTlXnFUvzpMwn1Ly331SfWq5Eg0RumAIrgs
+         4RiMGHYBcAn0xDrDYVSwHB8YRBs8nbUyJoB7SOH42Oy0URHgjl6TM/4CIs/Mk2BHydkJ
+         tWMMZAbrUCmM1TTToMiRUQhARl0+fJvobt7SLFjRP3FEeKdwIvsoF67Zy4FR2FYhBQoh
+         VnEhpUO6yY6s84Ca1xYYTQQEhrkh2hfI0OXw/hx5zw4iEyAXzp5QXRi2Cs57yI6rQS+w
+         pYHADuUKgw7Sxjj3XTjKBnaoYy4TO0ndE6fgrHIu3ekVJu3XDPnEwvYZIjcjc3LoE7GR
+         R+3A==
+X-Gm-Message-State: APjAAAW71xKelnKt4qG9jKp60PC7alTRjmXLH7f5xUq42cPbXdWZG8k+
+        uALc/DXrfuWOYo8L8puGq/tpmOo=
+X-Google-Smtp-Source: APXvYqy/HeraBjME9wYcyWenGUt9mnz1kGw6zr3COTFo8MFtdYiDJEIygclcgNx9MS4BUfE0lclDBg==
+X-Received: by 2002:aca:5116:: with SMTP id f22mr4629829oib.30.1572034223854;
+        Fri, 25 Oct 2019 13:10:23 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id v6sm855896oie.4.2019.10.25.13.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2019 13:10:23 -0700 (PDT)
+Date:   Fri, 25 Oct 2019 15:10:22 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>
+Cc:     felipe.balbi@linux.intel.com, gregkh@linuxfoundation.org,
+        pawell@cadence.com, peter.chen@nxp.com, nsekhar@ti.com,
+        kurahul@cadence.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Roger Quadros <rogerq@ti.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add binding for the TI wrapper
+ for Cadence USB3 controller
+Message-ID: <20191025201022.GA28229@bogus>
+References: <20191024114717.30984-1-rogerq@ti.com>
+ <20191024114717.30984-2-rogerq@ti.com>
 MIME-Version: 1.0
-References: <20191024152833.30698-1-geert+renesas@glider.be>
-In-Reply-To: <20191024152833.30698-1-geert+renesas@glider.be>
-From:   Li Yang <leoyang.li@nxp.com>
-Date:   Fri, 25 Oct 2019 14:27:53 -0500
-X-Gmail-Original-Message-ID: <CADRPPNT8QTbnLo+Oqsqm6c04XJEvwZOaijBb0VcB2_QenjKxgg@mail.gmail.com>
-Message-ID: <CADRPPNT8QTbnLo+Oqsqm6c04XJEvwZOaijBb0VcB2_QenjKxgg@mail.gmail.com>
-Subject: Re: [PATCH trivial] usb: Spelling s/enpoint/endpoint/
-To:     Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, Bin Liu <b-liu@ti.com>,
-        Jiri Kosina <trivial@kernel.org>, linux-usb@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191024114717.30984-2-rogerq@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 1:09 PM Geert Uytterhoeven
-<geert+renesas@glider.be> wrote:
->
-> Fix misspellings of "endpoint".
-
-It is amazing that we have the same typo in so many different drivers. :)
-
->
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Acked-by: Li Yang <leoyang.li@nxp.com>
-
+On Thu, 24 Oct 2019 14:47:16 +0300, Roger Quadros wrote:
+> TI platforms have a wrapper module around the Cadence USB3
+> controller. Add binding information for that.
+> 
+> Signed-off-by: Roger Quadros <rogerq@ti.com>
+> Cc: Rob Herring <robh@kernel.org>
 > ---
->  drivers/usb/dwc2/core.h             | 2 +-
->  drivers/usb/gadget/udc/fsl_qe_udc.h | 4 ++--
->  drivers/usb/gadget/udc/mv_u3d.h     | 2 +-
->  drivers/usb/musb/musb_gadget.c      | 2 +-
->  4 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-> index d08d070a0fb6f598..968e03b89d04d5d8 100644
-> --- a/drivers/usb/dwc2/core.h
-> +++ b/drivers/usb/dwc2/core.h
-> @@ -134,7 +134,7 @@ struct dwc2_hsotg_req;
->   * @target_frame: Targeted frame num to setup next ISOC transfer
->   * @frame_overrun: Indicates SOF number overrun in DSTS
->   *
-> - * This is the driver's state for each registered enpoint, allowing it
-> + * This is the driver's state for each registered endpoint, allowing it
->   * to keep track of transactions that need doing. Each endpoint has a
->   * lock to protect the state, to try and avoid using an overall lock
->   * for the host controller as much as possible.
-> diff --git a/drivers/usb/gadget/udc/fsl_qe_udc.h b/drivers/usb/gadget/udc/fsl_qe_udc.h
-> index 2c537a904ee73950..53ca0ff7c2cbd48c 100644
-> --- a/drivers/usb/gadget/udc/fsl_qe_udc.h
-> +++ b/drivers/usb/gadget/udc/fsl_qe_udc.h
-> @@ -333,8 +333,8 @@ struct qe_udc {
->         u32 resume_state;       /* USB state to resume*/
->         u32 usb_state;          /* USB current state */
->         u32 usb_next_state;     /* USB next state */
-> -       u32 ep0_state;          /* Enpoint zero state */
-> -       u32 ep0_dir;            /* Enpoint zero direction: can be
-> +       u32 ep0_state;          /* Endpoint zero state */
-> +       u32 ep0_dir;            /* Endpoint zero direction: can be
->                                 USB_DIR_IN or USB_DIR_OUT*/
->         u32 usb_sof_count;      /* SOF count */
->         u32 errors;             /* USB ERRORs count */
-> diff --git a/drivers/usb/gadget/udc/mv_u3d.h b/drivers/usb/gadget/udc/mv_u3d.h
-> index 982625b7197a0d9c..66b84f792f646bb9 100644
-> --- a/drivers/usb/gadget/udc/mv_u3d.h
-> +++ b/drivers/usb/gadget/udc/mv_u3d.h
-> @@ -138,7 +138,7 @@ struct mv_u3d_op_regs {
->         u32     doorbell;       /* doorbell register */
->  };
->
-> -/* control enpoint enable registers */
-> +/* control endpoint enable registers */
->  struct epxcr {
->         u32     epxoutcr0;      /* ep out control 0 register */
->         u32     epxoutcr1;      /* ep out control 1 register */
-> diff --git a/drivers/usb/musb/musb_gadget.c b/drivers/usb/musb/musb_gadget.c
-> index 2cb31fc0cd601eb4..f62ffaede1abba48 100644
-> --- a/drivers/usb/musb/musb_gadget.c
-> +++ b/drivers/usb/musb/musb_gadget.c
-> @@ -1315,7 +1315,7 @@ static int musb_gadget_dequeue(struct usb_ep *ep, struct usb_request *request)
->  }
->
->  /*
-> - * Set or clear the halt bit of an endpoint. A halted enpoint won't tx/rx any
-> + * Set or clear the halt bit of an endpoint. A halted endpoint won't tx/rx any
->   * data but will queue requests.
->   *
->   * exported to ep0 code
-> --
-> 2.17.1
->
+>  .../devicetree/bindings/usb/ti,j721e-usb.yaml | 86 +++++++++++++++++++
+>  1 file changed, 86 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
