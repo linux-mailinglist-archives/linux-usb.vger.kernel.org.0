@@ -2,33 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F2B2E452D
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 10:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F8C2E4584
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 10:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407602AbfJYIER (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 04:04:17 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51668 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2405453AbfJYIER (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 25 Oct 2019 04:04:17 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id EB135B930;
-        Fri, 25 Oct 2019 08:04:14 +0000 (UTC)
-From:   Daniel Wagner <dwagner@suse.de>
-To:     netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniel Wagner <dwagner@suse.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Stefan Wahren <wahrenst@gmx.net>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Miller <davem@davemloft.net>
-Subject: [PATCH] net: usb: lan78xx: Disable interrupts before calling generic_handle_irq()
-Date:   Fri, 25 Oct 2019 10:04:13 +0200
-Message-Id: <20191025080413.22665-1-dwagner@suse.de>
+        id S2408268AbfJYIXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 04:23:33 -0400
+Received: from mga07.intel.com ([134.134.136.100]:36083 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405562AbfJYIXd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 04:23:33 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Oct 2019 01:23:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,228,1569308400"; 
+   d="scan'208";a="210332062"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 25 Oct 2019 01:23:25 -0700
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, Ajay Gupta <ajayg@nvidia.com>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v3 00/18] usb: typec: API improvements
+Date:   Fri, 25 Oct 2019 11:23:06 +0300
+Message-Id: <20191025082324.75731-1-heikki.krogerus@linux.intel.com>
 X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -37,101 +35,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-lan78xx_status() will run with interrupts enabled due to the change in
-ed194d136769 ("usb: core: remove local_irq_save() around ->complete()
-handler"). generic_handle_irq() expects to be run with IRQs disabled.
-
-[    4.886203] 000: irq 79 handler irq_default_primary_handler+0x0/0x8 enabled interrupts
-[    4.886243] 000: WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:152 __handle_irq_event_percpu+0x154/0x168
-[    4.896294] 000: Modules linked in:
-[    4.896301] 000: CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.3.6 #39
-[    4.896310] 000: Hardware name: Raspberry Pi 3 Model B+ (DT)
-[    4.896315] 000: pstate: 60000005 (nZCv daif -PAN -UAO)
-[    4.896321] 000: pc : __handle_irq_event_percpu+0x154/0x168
-[    4.896331] 000: lr : __handle_irq_event_percpu+0x154/0x168
-[    4.896339] 000: sp : ffff000010003cc0
-[    4.896346] 000: x29: ffff000010003cc0 x28: 0000000000000060
-[    4.896355] 000: x27: ffff000011021980 x26: ffff00001189c72b
-[    4.896364] 000: x25: ffff000011702bc0 x24: ffff800036d6e400
-[    4.896373] 000: x23: 000000000000004f x22: ffff000010003d64
-[    4.896381] 000: x21: 0000000000000000 x20: 0000000000000002
-[    4.896390] 000: x19: ffff8000371c8480 x18: 0000000000000060
-[    4.896398] 000: x17: 0000000000000000 x16: 00000000000000eb
-[    4.896406] 000: x15: ffff000011712d18 x14: 7265746e69206465
-[    4.896414] 000: x13: ffff000010003ba0 x12: ffff000011712df0
-[    4.896422] 000: x11: 0000000000000001 x10: ffff000011712e08
-[    4.896430] 000: x9 : 0000000000000001 x8 : 000000000003c920
-[    4.896437] 000: x7 : ffff0000118cc410 x6 : ffff0000118c7f00
-[    4.896445] 000: x5 : 000000000003c920 x4 : 0000000000004510
-[    4.896453] 000: x3 : ffff000011712dc8 x2 : 0000000000000000
-[    4.896461] 000: x1 : 73a3f67df94c1500 x0 : 0000000000000000
-[    4.896466] 000: Call trace:
-[    4.896471] 000:  __handle_irq_event_percpu+0x154/0x168
-[    4.896481] 000:  handle_irq_event_percpu+0x50/0xb0
-[    4.896489] 000:  handle_irq_event+0x40/0x98
-[    4.896497] 000:  handle_simple_irq+0xa4/0xf0
-[    4.896505] 000:  generic_handle_irq+0x24/0x38
-[    4.896513] 000:  intr_complete+0xb0/0xe0
-[    4.896525] 000:  __usb_hcd_giveback_urb+0x58/0xd8
-[    4.896533] 000:  usb_giveback_urb_bh+0xd0/0x170
-[    4.896539] 000:  tasklet_action_common.isra.0+0x9c/0x128
-[    4.896549] 000:  tasklet_hi_action+0x24/0x30
-[    4.896556] 000:  __do_softirq+0x120/0x23c
-[    4.896564] 000:  irq_exit+0xb8/0xd8
-[    4.896571] 000:  __handle_domain_irq+0x64/0xb8
-[    4.896579] 000:  bcm2836_arm_irqchip_handle_irq+0x60/0xc0
-[    4.896586] 000:  el1_irq+0xb8/0x140
-[    4.896592] 000:  arch_cpu_idle+0x10/0x18
-[    4.896601] 000:  do_idle+0x200/0x280
-[    4.896608] 000:  cpu_startup_entry+0x20/0x28
-[    4.896615] 000:  rest_init+0xb4/0xc0
-[    4.896623] 000:  arch_call_rest_init+0xc/0x14
-[    4.896632] 000:  start_kernel+0x454/0x480
-
-Fixes: ed194d136769 ("usb: core: remove local_irq_save() around ->complete() handler")
-Cc: Woojung Huh <woojung.huh@microchip.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Andrew Lunn <andrew@lunn.ch>
-Cc: Stefan Wahren <wahrenst@gmx.net>
-Cc: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: David Miller <davem@davemloft.net>
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
-
 Hi,
 
-This patch just fixes the warning. There are still problems left (the
-unstable NFS report from me) but I suggest to look at this
-separately. The initial patch to revert all the irqdomain code might
-just hide the problem. At this point I don't know what's going on so I
-rather go baby steps. The revert is still possible if nothing else
-works.
+I modified ucsi_acpi.c so that the behavior matches exactly the
+behaviour of the Connector Change Event handling before these patches.
 
-Thanks,
-Daniel
+The cover letter from v2:
 
- drivers/net/usb/lan78xx.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+There is now a check in ucsi_exec_command() that makes sure we do not
+call ucsi_read_error() with UCSI_GET_ERROR_STATUS command. That should
+prevent endless recursion from happening.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 62948098191f..f24a1b0b801f 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -1264,8 +1264,11 @@ static void lan78xx_status(struct lan78xx_net *dev, struct urb *urb)
- 		netif_dbg(dev, link, dev->net, "PHY INTR: 0x%08x\n", intdata);
- 		lan78xx_defer_kevent(dev, EVENT_LINK_RESET);
- 
--		if (dev->domain_data.phyirq > 0)
-+		if (dev->domain_data.phyirq > 0) {
-+			local_irq_disable();
- 			generic_handle_irq(dev->domain_data.phyirq);
-+			local_irq_enable();
-+		}
- 	} else
- 		netdev_warn(dev->net,
- 			    "unexpected interrupt: 0x%08x\n", intdata);
+The original cover letter:
+
+The first patches in this series (patches 1-8) introduce a small
+change to the USB Type-C Connector Class API. Guenter was kind enough
+to go over those already.
+
+Patches 10-15 improve the ucsi driver API by introducing more
+traditional read and write routines, and the rest is more generic
+optimisations and improvements to the ucsi drivers.
+
+Let me know if there is anything you want to be changed.
+
+thanks,
+
+Heikki Krogerus (18):
+  usb: typec: Copy everything from struct typec_capability during
+    registration
+  usb: typec: Introduce typec_get_drvdata()
+  usb: typec: Separate the operations vector
+  usb: typec: tcpm: Start using struct typec_operations
+  usb: typec: tps6598x: Start using struct typec_operations
+  usb: typec: ucsi: Start using struct typec_operations
+  usb: typec: hd3ss3220: Start using struct typec_operations
+  usb: typec: Remove the callback members from struct typec_capability
+  usb: typec: Remove unused members from struct typec_capability
+  usb: typec: hd3ss3220: Give the connector fwnode to the port device
+  usb: typec: ucsi: Simplified registration and I/O API
+  usb: typec: ucsi: acpi: Move to the new API
+  usb: typec: ucsi: ccg: Move to the new API
+  usb: typec: ucsi: Remove the old API
+  usb: typec: ucsi: Remove struct ucsi_control
+  usb: typec: ucsi: Remove all bit-fields
+  usb: typec: ucsi: New error codes
+  usb: typec: ucsi: Optimise ucsi_unregister()
+
+ drivers/usb/typec/class.c            |  42 +-
+ drivers/usb/typec/hd3ss3220.c        |  36 +-
+ drivers/usb/typec/tcpm/tcpm.c        |  45 +-
+ drivers/usb/typec/tps6598x.c         |  49 ++-
+ drivers/usb/typec/ucsi/displayport.c |  40 +-
+ drivers/usb/typec/ucsi/trace.c       |  11 -
+ drivers/usb/typec/ucsi/trace.h       |  79 +---
+ drivers/usb/typec/ucsi/ucsi.c        | 609 ++++++++++++++-------------
+ drivers/usb/typec/ucsi/ucsi.h        | 417 +++++++-----------
+ drivers/usb/typec/ucsi/ucsi_acpi.c   |  93 +++-
+ drivers/usb/typec/ucsi/ucsi_ccg.c    | 170 ++++----
+ include/linux/usb/typec.h            |  41 +-
+ 12 files changed, 776 insertions(+), 856 deletions(-)
+
 -- 
 2.23.0
 
