@@ -2,335 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A19E41F3
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 05:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26864E41FB
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 05:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391738AbfJYDJI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Oct 2019 23:09:08 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:7906 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2389230AbfJYDJI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Oct 2019 23:09:08 -0400
-X-UUID: 49568c31a3bd4ae7aa666cd7b3e49b89-20191025
-X-UUID: 49568c31a3bd4ae7aa666cd7b3e49b89-20191025
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 1986252158; Fri, 25 Oct 2019 09:49:48 +0800
-Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS32N1.mediatek.inc
- (172.27.4.71) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Fri, 25 Oct
- 2019 09:49:45 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Fri, 25 Oct 2019 09:49:44 +0800
-Message-ID: <1571968186.18464.3.camel@mhfsdcap03>
-Subject: Re: [PATCH v3 2/2] usb: cdns3: Add TI specific wrapper driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Roger Quadros <rogerq@ti.com>
-CC:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
-        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
-Date:   Fri, 25 Oct 2019 09:49:46 +0800
-In-Reply-To: <20191024114717.30984-3-rogerq@ti.com>
-References: <20191024114717.30984-1-rogerq@ti.com>
-         <20191024114717.30984-3-rogerq@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S2392007AbfJYDN7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Oct 2019 23:13:59 -0400
+Received: from mail-eopbgr80052.outbound.protection.outlook.com ([40.107.8.52]:4434
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2391987AbfJYDN7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Oct 2019 23:13:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iuiDbnTlplcEAsL/+Cqwm9VTRsG1jzmQlu7CcM6vVnB/SRxMz5MlieibXv/w3BSY7oqBhndkjWpxrG9SZ4zNs96VKmZR6UIlO7omjJOltn/5yZHPJqv8rwI4LzlgdFDZKLa4y6VOz6wpefuKwUQ6hJqdnGYTNTPCrjEjXooYW0XcrUrRvRsRDu03R3WDrcYkSCGaXVEvoAoAx+iTv+7BlCDLaeMZq+B3+cc5n3jSkmvt3DjS31NTGevoRM4woNt6KEq4iNnZpHL37lFe1l+vFLK75W0UH44UJUa3ICewq6upqSQezB9vvjAqdL+wSCmDUmKbZ9FAVEE7Z685AQLXGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=grUJUlgj5/Db6iMX81Vp7dEE8np1Pq+4rlUmyolSJcs=;
+ b=gPP6dC7BlfBZFF5ZsfhwFk+t9HeGKM8CczsbJz1eGP1Etz2fm2rOvqcdAf1HI3qfTbA+noenbL6vlZTVbDRN2wIn+E/ZnoeamkZrkNvWDiJVSlhTipHE6qW1PuvDl85zCcoDLBcTBe3DRHnvRv3dHpkkd9p8bcNeQnI5FJSvDlQkBfhZhg4X+xZVTYPMlLjf4JUsnfYEo2989XLDgnFu5Nxa8LDxoZeqZ69/nWrFq1hlkDK9f0SrHHXbsHb5d/kJVtZ2gMz3Hf9u/4P1eYlPTh+MTmahOjAPOX7XTP61dIz7ne3gTzrzOQMMF+NlvHCwbsPFzIgpTWAGpk1iHg3b9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=grUJUlgj5/Db6iMX81Vp7dEE8np1Pq+4rlUmyolSJcs=;
+ b=U61crKF3vRsvDUzEtN4waZwQNzANd/oNL4IdFqAimnlPU1bKEU3GghsyaFnB+KCGfcvfddvGYmK8I3Tsb6q4/V3eB5PYwU12VtOD9qKf2CF+AFWj5Ynjz1Kp6X/qf1m4TyXtE/bFU2tHfbToQZ8pysydGK/zV5RsyfMIUyXhcPA=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB3966.eurprd04.prod.outlook.com (10.171.183.24) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.20; Fri, 25 Oct 2019 03:13:55 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.023; Fri, 25 Oct 2019
+ 03:13:54 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Pawel Laszczak <pawell@cadence.com>
+CC:     Roger Quadros <rogerq@ti.com>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+Thread-Topic: [PATCH] usb: cdns3: gadget: Don't manage pullups
+Thread-Index: AQHViYCigHhLS+QXN0CJz1D+9q4PbKdn8nSAgAK+9IA=
+Date:   Fri, 25 Oct 2019 03:13:54 +0000
+Message-ID: <20191025031343.GA13392@b29397-desktop>
+References: <20191023090232.27237-1-rogerq@ti.com>
+ <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
+In-Reply-To: <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 6887b738-7b52-4303-e213-08d758f95e5e
+x-ms-traffictypediagnostic: VI1PR04MB3966:
+x-microsoft-antispam-prvs: <VI1PR04MB39663FD17B5248EF99371E438B650@VI1PR04MB3966.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-forefront-prvs: 02015246A9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(136003)(366004)(39860400002)(376002)(346002)(396003)(199004)(189003)(476003)(66946007)(66556008)(66476007)(66446008)(76116006)(446003)(64756008)(91956017)(33716001)(2906002)(486006)(7736002)(6512007)(11346002)(316002)(14454004)(6486002)(3846002)(6116002)(33656002)(25786009)(44832011)(9686003)(229853002)(305945005)(54906003)(6916009)(81166006)(8936002)(8676002)(478600001)(4326008)(81156014)(102836004)(86362001)(6246003)(99286004)(76176011)(66574012)(1076003)(186003)(5660300002)(66066001)(14444005)(6506007)(53546011)(6436002)(256004)(26005)(71190400001)(71200400001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3966;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: +h9yFB4wPPT7tnIidnyi6DPLbw4EBu4RTtUrtbdBKhxqhhLyAJVvjHiCSb5zSA1r191KvrE1EMecZ8PlSxk3bHZhlr9vKDDooHBlMuRtiv0NoZBUpcjOePU276qh8viOTkMQcKT3BmLRp4AEFHsUNsLyETM/ygM/BmYsvBcuhCCNQpu9HPICLtn46qx0iOosVkhTmeGUumzYHwxuplRj2qtuwJZjUKTnGsyNvjpyZm8o3ciOYkiqWee59OoAr8Lm/NklkC8C2xPJ3RpIwptDdCV7UWBxdjHyl+k2UbJWgiI6RBIPcrS9xNZudXUvjOuEmSmgbYbObGH29rHLrIn1G9Td9sNKro0BnnlgTXR1o8hh57pS5U8s68muJ0zdyuEc4v8KXSAzPvWFuAD1T9V9pF2RiRvGjvAonnrcqpS1UKiKybkLJf4jyHavPZwsyBbA
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <AB5B58989835C5428788BF3A068EA261@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 3AC33AF4A9FE5BD081ED7950EDBEB3978C63142DE1505C4174253A93B01C45552000:8
-X-MTK:  N
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6887b738-7b52-4303-e213-08d758f95e5e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2019 03:13:54.7863
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ZHAKWQwZsGeNQMhxggBz8NfzxjcdI2/PKqTIaHVLAnlrxfJ/9PrOBfYf/EWejBFL4v1jPNIuPWuvMiQZA5rzig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3966
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 2019-10-24 at 14:47 +0300, Roger Quadros wrote:
-> The J721e platform comes with 2 Cadence USB3 controller
-> instances. This driver supports the TI specific wrapper
-> on this platform.
-> 
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> Signed-off-by: Sekhar Nori <nsekhar@ti.com>
-> ---
->  drivers/usb/cdns3/Kconfig    |  10 ++
->  drivers/usb/cdns3/Makefile   |   1 +
->  drivers/usb/cdns3/cdns3-ti.c | 236 +++++++++++++++++++++++++++++++++++
->  3 files changed, 247 insertions(+)
->  create mode 100644 drivers/usb/cdns3/cdns3-ti.c
-> 
-> diff --git a/drivers/usb/cdns3/Kconfig b/drivers/usb/cdns3/Kconfig
-> index d0331613a355..2a1e89d12ed9 100644
-> --- a/drivers/usb/cdns3/Kconfig
-> +++ b/drivers/usb/cdns3/Kconfig
-> @@ -43,4 +43,14 @@ config USB_CDNS3_PCI_WRAP
->  	  If you choose to build this driver as module it will
->  	  be dynamically linked and module will be called cdns3-pci.ko
->  
-> +config USB_CDNS3_TI
-> +	tristate "Cadence USB3 support on TI platforms"
-> +	depends on ARCH_K3 || COMPILE_TEST
-> +	default USB_CDNS3
-> +	help
-> +	  Say 'Y' or 'M' here if you are building for Texas Instruments
-> +	  platforms that contain Cadence USB3 controller core.
-> +
-> +	  e.g. J721e.
-> +
->  endif
-> diff --git a/drivers/usb/cdns3/Makefile b/drivers/usb/cdns3/Makefile
-> index a703547350bb..948e6b88d1a9 100644
-> --- a/drivers/usb/cdns3/Makefile
-> +++ b/drivers/usb/cdns3/Makefile
-> @@ -14,3 +14,4 @@ endif
->  cdns3-$(CONFIG_USB_CDNS3_HOST)		+= host.o
->  
->  obj-$(CONFIG_USB_CDNS3_PCI_WRAP)	+= cdns3-pci-wrap.o
-> +obj-$(CONFIG_USB_CDNS3_TI)		+= cdns3-ti.o
-> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-> new file mode 100644
-> index 000000000000..89620e40023f
-> --- /dev/null
-> +++ b/drivers/usb/cdns3/cdns3-ti.c
-> @@ -0,0 +1,236 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * cdns3-ti.c - TI specific Glue layer for Cadence USB Controller
-> + *
-> + * Copyright (C) 2019 Texas Instruments Incorporated - http://www.ti.com
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/io.h>
-> +#include <linux/of_platform.h>
-> +#include <linux/pm_runtime.h>
-> +
-> +/* USB Wrapper register offsets */
-> +#define USBSS_PID		0x0
-> +#define	USBSS_W1		0x4
-> +#define USBSS_STATIC_CONFIG	0x8
-> +#define USBSS_PHY_TEST		0xc
-> +#define	USBSS_DEBUG_CTRL	0x10
-> +#define	USBSS_DEBUG_INFO	0x14
-> +#define	USBSS_DEBUG_LINK_STATE	0x18
-> +#define	USBSS_DEVICE_CTRL	0x1c
-> +
-> +/* Wrapper 1 register bits */
-> +#define USBSS_W1_PWRUP_RST		BIT(0)
-> +#define USBSS_W1_OVERCURRENT_SEL	BIT(8)
-> +#define USBSS_W1_MODESTRAP_SEL		BIT(9)
-> +#define USBSS_W1_OVERCURRENT		BIT(16)
-> +#define USBSS_W1_MODESTRAP_MASK		GENMASK(18, 17)
-> +#define USBSS_W1_MODESTRAP_SHIFT	17
-> +#define USBSS_W1_USB2_ONLY		BIT(19)
-> +
-> +/* Static config register bits */
-> +#define USBSS1_STATIC_PLL_REF_SEL_MASK	GENMASK(8, 5)
-> +#define USBSS1_STATIC_PLL_REF_SEL_SHIFT	5
-> +#define USBSS1_STATIC_LOOPBACK_MODE_MASK	GENMASK(4, 3)
-> +#define USBSS1_STATIC_LOOPBACK_MODE_SHIFT	3
-> +#define USBSS1_STATIC_VBUS_SEL_MASK	GENMASK(2, 1)
-> +#define USBSS1_STATIC_VBUS_SEL_SHIFT	1
-> +#define USBSS1_STATIC_LANE_REVERSE	BIT(0)
-> +
-> +/* Modestrap modes */
-> +enum modestrap_mode { USBSS_MODESTRAP_MODE_NONE,
-> +		      USBSS_MODESTRAP_MODE_HOST,
-> +		      USBSS_MODESTRAP_MODE_PERIPHERAL};
-> +
-> +struct cdns_ti {
-> +	struct device *dev;
-> +	void __iomem *usbss;
-> +	int usb2_only:1;
-> +	int vbus_divider:1;
-> +	struct clk *usb2_refclk;
-> +	struct clk *lpm_clk;
-> +};
-> +
-> +static const int cdns_ti_rate_table[] = {	/* in KHZ */
-> +	9600,
-> +	10000,
-> +	12000,
-> +	19200,
-> +	20000,
-> +	24000,
-> +	25000,
-> +	26000,
-> +	38400,
-> +	40000,
-> +	58000,
-> +	50000,
-> +	52000,
-> +};
-> +
-> +static inline u32 cdns_ti_readl(struct cdns_ti *data, u32 offset)
-> +{
-> +	return readl(data->usbss + offset);
-> +}
-> +
-> +static inline void cdns_ti_writel(struct cdns_ti *data, u32 offset, u32 value)
-> +{
-> +	writel(value, data->usbss + offset);
-> +}
-> +
-> +static int cdns_ti_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *node = pdev->dev.of_node;
-> +	struct cdns_ti *data;
-> +	struct resource	*res;
-> +	int error;
-> +	u32 reg;
-> +	int rate_code, i;
-> +	unsigned long rate;
-> +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, data);
-> +
-> +	data->dev = dev;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	data->usbss = devm_ioremap_resource(dev, res);
-> +	if (IS_ERR(data->usbss))
-> +		return PTR_ERR(data->usbss);
-use devm_platform_ioremap_resource() ?
+On 19-10-23 09:17:45, Pawel Laszczak wrote:
+> Hi,
+>=20
+> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
 
-> +
-> +	data->usb2_refclk = devm_clk_get(dev, "ref");
-> +	if (IS_ERR(data->usb2_refclk)) {
-> +		dev_err(dev, "can't get usb2_refclk\n");
-> +		return PTR_ERR(data->usb2_refclk);
-> +	}
-> +
-> +	data->lpm_clk = devm_clk_get(dev, "lpm");
-> +	if (IS_ERR(data->lpm_clk)) {
-> +		dev_err(dev, "can't get lpm_clk\n");
-> +		return PTR_ERR(data->lpm_clk);
-> +	}
-> +
-> +	rate = clk_get_rate(data->usb2_refclk);
-> +	rate /= 1000;	/* To KHz */
-> +	for (i = 0; i < ARRAY_SIZE(cdns_ti_rate_table); i++) {
-> +		if (cdns_ti_rate_table[i] == rate)
-> +			break;
-> +	}
-> +
-> +	if (i == ARRAY_SIZE(cdns_ti_rate_table)) {
-> +		dev_err(dev, "unsupported usb2_refclk rate: %lu KHz\n", rate);
-> +		return -EINVAL;
-> +	}
-> +
-> +	rate_code = i;
-> +
-> +	pm_runtime_enable(dev);
-> +	error = pm_runtime_get_sync(dev);
-> +	if (error < 0) {
-> +		dev_err(dev, "pm_runtime_get_sync failed: %d\n", error);
-> +		goto err_get;
-> +	}
-> +
-> +	/* assert RESET */
-> +	reg = cdns_ti_readl(data, USBSS_W1);
-> +	reg &= ~USBSS_W1_PWRUP_RST;
-> +	cdns_ti_writel(data, USBSS_W1, reg);
-> +
-> +	/* set static config */
-> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-> +	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
-> +	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
-> +
-> +	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
-> +	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
-> +	if (data->vbus_divider)
-> +		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
-> +
-> +	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
-> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-> +
-> +	/* set USB2_ONLY mode if requested */
-> +	reg = cdns_ti_readl(data, USBSS_W1);
-> +	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
-> +	if (data->usb2_only)
-> +		reg |= USBSS_W1_USB2_ONLY;
-> +
-> +	/* set default modestrap */
-> +	reg |= USBSS_W1_MODESTRAP_SEL;
-> +	reg &= ~USBSS_W1_MODESTRAP_MASK;
-> +	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
-> +	cdns_ti_writel(data, USBSS_W1, reg);
-> +
-> +	/* de-assert RESET */
-> +	reg |= USBSS_W1_PWRUP_RST;
-> +	cdns_ti_writel(data, USBSS_W1, reg);
-> +
-> +	error = of_platform_populate(node, NULL, NULL, dev);
-> +	if (error) {
-> +		dev_err(dev, "failed to create children: %d\n", error);
-> +		goto err;
-> +	}
-> +
-> +	return 0;
-> +
-> +err:
-> +	pm_runtime_put_sync(data->dev);
-> +err_get:
-> +	pm_runtime_disable(data->dev);
-> +
-> +	return error;
-> +}
-> +
-> +static int cdns_ti_remove_core(struct device *dev, void *c)
-> +{
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +
-> +	platform_device_unregister(pdev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cdns_ti_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +
-> +	device_for_each_child(dev, NULL, cdns_ti_remove_core);
-> +	pm_runtime_put_sync(dev);
-> +	pm_runtime_disable(dev);
-> +
-> +	platform_set_drvdata(pdev, NULL);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id cdns_ti_of_match[] = {
-> +	{ .compatible = "ti,j721e-usb", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, cdns_ti_of_match);
-> +
-> +static struct platform_driver cdns_ti_driver = {
-> +	.probe		= cdns_ti_probe,
-> +	.remove		= cdns_ti_remove,
-> +	.driver		= {
-> +		.name	= "cdns3-ti",
-> +		.of_match_table	= cdns_ti_of_match,
-> +	},
-> +};
-> +
-> +module_platform_driver(cdns_ti_driver);
-> +
-> +MODULE_ALIAS("platform:cdns3-ti");
-> +MODULE_AUTHOR("Roger Quadros <rogerq@ti.com>");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_DESCRIPTION("Cadence USB3 TI Glue Layer");
+Hi Roger & Pawel,
 
+Assume gadget function has already enabled, if you switch host mode
+to device mode, with your changes, where the device mode will be enabled
+again?
 
+Peter
+>=20
+> Regards,=20
+> Pawel,=20
+>=20
+> >The USB gadget core is supposed to manage pullups
+> >of the controller. Don't manage pullups from within
+> >the controller driver. Otherwise, function drivers
+> >are not able to keep the controller disconnected from
+> >the bus till they are ready. (e.g. g_webcam)
+> >
+> >Signed-off-by: Roger Quadros <rogerq@ti.com>
+> >---
+> >Hi Greg/Felipe,
+> >
+> >This can be used for -rc as it is a bug fix.
+> >
+> >cheers,
+> >-roger
+> >
+> > drivers/usb/cdns3/gadget.c | 4 ----
+> > 1 file changed, 4 deletions(-)
+> >
+> >diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> >index 2ca280f4c054..714382d96055 100644
+> >--- a/drivers/usb/cdns3/gadget.c
+> >+++ b/drivers/usb/cdns3/gadget.c
+> >@@ -2324,8 +2324,6 @@ static void cdns3_gadget_config(struct cdns3_devic=
+e *priv_dev)
+> > 	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
+> >
+> > 	cdns3_configure_dmult(priv_dev, NULL);
+> >-
+> >-	cdns3_gadget_pullup(&priv_dev->gadget, 1);
+> > }
+> >
+> > /**
+> >@@ -2708,8 +2706,6 @@ static int cdns3_gadget_suspend(struct cdns3 *cdns=
+, bool do_wakeup)
+> > 	/* disable interrupt for device */
+> > 	writel(0, &priv_dev->regs->usb_ien);
+> >
+> >-	cdns3_gadget_pullup(&priv_dev->gadget, 0);
+> >-
+> > 	return 0;
+> > }
+> >
+> >--
+> >Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+> >Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>=20
+
+--=20
+
+Thanks,
+Peter Chen=
