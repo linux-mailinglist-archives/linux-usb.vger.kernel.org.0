@@ -2,169 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37311E42E2
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 07:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16300E432C
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 08:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392870AbfJYFaj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 01:30:39 -0400
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:38828 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2392384AbfJYFai (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 01:30:38 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 491C8C04D9;
-        Fri, 25 Oct 2019 05:30:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1571981436; bh=w9YNDAZdHJ+lnoBukS9U1beFiRuAEhgRyt2+jqtNg2g=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=fpitMjVTpKDiumsKWEHcbophlhN1+0F/GdMY+JIbAy03gQhBFUO3N2Bcvq6xN70vW
-         rYSrylITIjOc2DOGii+Wuw3NX5XA69RiTX61ple38xbqddTctIdd0myYBiHrBYhVvt
-         vxZKSDX2RkgkxcERBenJWb4OnurR2GgMSaKTIpXPUu0dA8ZF8H0nkz9Kja8SfB5pk5
-         JxwUKy4hKT+XUnsqXBY58pnPTKxTgb20vssWJSXAmA22m+PP4nI5KrSH2xgYqMKjq0
-         Z4VXjQSz7orN94tJYb009T3elx3bHECQKv40JG5+sGbE54YvZgfKGRFe02DKgDVklv
-         whYxLQEY5RIJg==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 7EBE1A0079;
-        Fri, 25 Oct 2019 05:30:35 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Thu, 24 Oct 2019 22:29:49 -0700
-Received: from NAM03-BY2-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Thu, 24 Oct 2019 22:29:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S/eQh8KJO3S6Hy7Ig1LoUKabb3wuKHTE3b+59Ke6+QbxNSoucNlP8u+NPYJDwenuH5neNDnF5NTjrNFqBL/BxDFHxSh1s1inFMYiTkEyXmdcLBQAx1ES8BesdFuaiRdfNfjyAyo/0UocgHLeAOs8aEX994MF/nbrDctLN0jUAz2iopWIVXT2JN2HlPyk8kS88LjQ12IjaH+EDdYAKFUi90WZSwFJ7HP8H77Yws0ddN/o6Ojx1SahcH4e922opqX1xdkPIGoOEA7GH5O852+EU2dm79H8Ijhw/fSCk9o6q+bAiT5psexzYn8Gxavo6TI0nyvroNdEXRxscOSdip6a1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w9YNDAZdHJ+lnoBukS9U1beFiRuAEhgRyt2+jqtNg2g=;
- b=C3VRA2/Kn3BlGedd2gMMMESv7pQbL4DHQPuQg5sfj9dyKoq9dvEAxq/OGtMYtE96R+IuBfRhOydsmmiN34skfWZvKo5V+bBVsUjpJvde8JeHiUmcPLyv9vUDuVSZUN1k2mIR8x73Tz7Y6kCyzYlN2e0dQOTrqgt0JTVyh549R/pDwqeVqMgNV1KqBz9uKz5/JWYx+xOJb/knysy5rEr5rYwdqFm/5ruIC9p29+295layuqVz1qfUU6AGmIOMXKt8nBsfvEI4xt0PJNMxxKk3wbl8qoG3m9K+dVp1R7egxAnk+Gc/RLeoySuEGxzL3nwT5JL/XisF8sZnPypQLhmVzQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w9YNDAZdHJ+lnoBukS9U1beFiRuAEhgRyt2+jqtNg2g=;
- b=izn9q9veMwBemMpuJIeFrCT0q4WPYPYCTd44c3AXD+fBy4Z+SQC0zq6UOzWqMHpStyG02q+UynReQHVRW2VezqkZaPriRCAPtMi5gzMoWsrxnjQl5iJMsobPV060mjuejF2OVHrTL57nXwK+SMVbCbNIfJak/b4u2GguhHBPRYo=
-Received: from MN2PR12MB4093.namprd12.prod.outlook.com (52.135.51.203) by
- MN2PR12MB3150.namprd12.prod.outlook.com (20.178.241.207) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.20; Fri, 25 Oct 2019 05:30:18 +0000
-Received: from MN2PR12MB4093.namprd12.prod.outlook.com
- ([fe80::85e4:7eb9:af8d:8a9]) by MN2PR12MB4093.namprd12.prod.outlook.com
- ([fe80::85e4:7eb9:af8d:8a9%3]) with mapi id 15.20.2387.023; Fri, 25 Oct 2019
- 05:30:18 +0000
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Li Yang <leoyang.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Bin Liu <b-liu@ti.com>, Jiri Kosina <trivial@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH trivial] usb: Spelling s/enpoint/endpoint/
-Thread-Topic: [PATCH trivial] usb: Spelling s/enpoint/endpoint/
-Thread-Index: AQHVin/SMejy29PKK0advY8hwcY1/adq1ZGA
-Date:   Fri, 25 Oct 2019 05:30:18 +0000
-Message-ID: <aa4cfba1-45de-a646-adde-3eedc8c2341e@synopsys.com>
-References: <20191024152833.30698-1-geert+renesas@glider.be>
-In-Reply-To: <20191024152833.30698-1-geert+renesas@glider.be>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        id S2393993AbfJYGAm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 02:00:42 -0400
+Received: from mout.gmx.net ([212.227.15.18]:59341 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2393967AbfJYGAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 02:00:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1571983222;
+        bh=wZlyKENycmK9lsri3lVZvS+vGwQPRxstzXSq54uEgJo=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=dX1bDxYx3CT2VCRZ5EqGCvuVnkWgIpLus5YsA9xbBXpUbJR2qWlvMUdGx5/OQEX1r
+         k14XlJCS3vq+UitNLKbQQS0qyh/BOXBE2RY1gxxBxi09FuVHOKGEjln8es/E939Ep7
+         aFkYoOEHKFTlXV/4PfuQHRwRBsS8N4q7JKzFSWGY=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.162] ([37.4.249.112]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MowKi-1he8Hw1ZDK-00qTcW; Fri, 25
+ Oct 2019 08:00:22 +0200
+Subject: Re: [PATCH] net: usb: lan78xx: Use phy_mac_interrupt() for interrupt
+ handling
+To:     Daniel Wagner <dwagner@suse.de>, UNGLinuxDriver@microchip.com
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rt-users@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20191018082817.111480-1-dwagner@suse.de>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Message-ID: <a8ce75ca-f756-309e-11b4-6ad597e94ad9@gmx.net>
+Date:   Fri, 25 Oct 2019 08:00:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=hminas@synopsys.com; 
-x-originating-ip: [2.18.65.213]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 61e7bc0a-37a8-4591-49f2-08d7590c6c33
-x-ms-traffictypediagnostic: MN2PR12MB3150:
-x-microsoft-antispam-prvs: <MN2PR12MB31506476BF3D3E1494D9468DA7650@MN2PR12MB3150.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 02015246A9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(366004)(346002)(39860400002)(136003)(199004)(189003)(2616005)(76116006)(2906002)(4326008)(26005)(8936002)(316002)(14444005)(81156014)(110136005)(256004)(8676002)(66476007)(66946007)(64756008)(91956017)(31696002)(476003)(58126008)(478600001)(66556008)(65956001)(65806001)(66446008)(102836004)(54906003)(11346002)(14454004)(36756003)(186003)(53546011)(486006)(6116002)(3846002)(71200400001)(71190400001)(25786009)(5660300002)(81166006)(229853002)(99286004)(6512007)(31686004)(6436002)(66066001)(6486002)(86362001)(7736002)(6246003)(76176011)(446003)(305945005)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR12MB3150;H:MN2PR12MB4093.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: rjeyoBUwW7y/+tTZlNundP4HbCD+CDSvk8XXC3mO9ojmsluUtj8m0yXUvmh8Y2aVlC65oLcqNr3qLeb7Oq0J38ix3DZSR4lcmfctIfW9Y5Zg3xalZ7L7jS676m+L5HaGseSpmCWpNASa4OOL4ClOb4BNwn+AtDecB6Pf9VjQNAYNFSS/L9c/gve9cNDOahtqwYwxuWGttorn8t8LIYoUL1DE/H3MXFQLTHoTlVGeZRwQUuysujnY6DKjl0GivZO4YLst8nweco2O/yPenB+3if3pOvTQ1CRK7fe2aBV9B004yFIJf6dTIX5i7h1NHxtFt5SqH//WuSPGji0pJ99HAqBVsyyFCt5D8HaFpIfD05aDj/70R4dfjUNT0Mas6xiqK1Nu7rsiZPsvtzKjE5fRqmCpE1UR9POtvj4fs6TEe2cx2s/OsX8xo3t1DmemtcOC
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <69ED6765E5239746AD05322D69345781@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61e7bc0a-37a8-4591-49f2-08d7590c6c33
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2019 05:30:18.4600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bY3f2KcQKWfhqm5CnURwu6tEffQAaWPWWBoNUmLzRlCQFpOcIuB3V9INFH5zYIJzkDONQ7duzt5eDXOLLvVXRw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3150
-X-OriginatorOrg: synopsys.com
+In-Reply-To: <20191018082817.111480-1-dwagner@suse.de>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:loHQDQWry2EsaXAbHdVuW9BsRZL5d6w37/LhjAdnn4zbwdK+I2F
+ bJvlGDW9j6Zik3ReSxnWZsFVcOgNyv5ehuSgjzw1kvQh/TGiIoQ1QOi6FMaSI5+xHNcr0wB
+ nAejnS/bYom/Xd3AdVOBJYCNX+7Bh3mply9te/INQjz9oZHSPStnarRAmlpzXilNK+QMUJN
+ DKmerXE06uXHtLyz81yUw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:EPY1KEOBwA8=:HgIsmDJp2gMfjRXKreHUOD
+ sItz/VQ9rbfCjFXmW0zLDZn6l/K2eyt/Hgrb8UZYIhNOH8wfg6Dg8FHPV+TDSBS9A3br6aD5j
+ EljSBhFJLAhZ1KvF4/1qemD4+lCY6xut3A52zroXkZkmvbBOueaD0dCDkp31Kmrx6djCL/6l1
+ jsfV65ep2Z3JajfUJRoS4uF64agzXTUt+tqU7EuWBPL7dDZGDxT3ScRAKLmoJ36PecMUMScs1
+ Rro534Y+FWAEXJNba2MIUZXCzExOjNw+yjYd5M/YJ9HiKpl6z10I2SKzkbJe3CcsQplleV1Eq
+ vd23GaVI73Fv/qBj7iee+w5S8m2HsHazYsKSKASvHvO7snXPJPgMti/yIc6kxOjz4lRe6oFYy
+ c42BiOUVnXCwC02nX16BA+FGydw8gWNmK3l3JsXbvUhFY4xnT7t7vX3dIdAKf6ul0SRTAk9MT
+ 5wu+secPp1zOqGpPtqFV9nBMCs2DITd8/kCG9fTZ95DGdBYfUv8Qs3cg5uV00dubA5ZPz4yBi
+ x8haQfdG3t6oQJGhLQeqN3ojTq4w9rg5N9NrgnsaGDjeFjzb81CSgdaIxaWrvR/VBkAby1wSO
+ VfTcvgqtbvYerDOG1gEUhf097wFf2vnBAoL9SXkvTSHQXl3R2fzHBAaiRdGQ+lJKZNSNxRgW5
+ Kohwtf1i27UL3lr/ap80SnYxgGmlVQ8BjtMk8EUWbmYe9u+MHHPFqmkrdswXrNg++LECU/Yqp
+ cem3BjZUR1dIoRZq+NNJxOWFbS9xI1oa3w43rNa6gkyt7cbpV94D8SyHIyU+tTf0wy066AeZN
+ peJrmzJQ+Uo81xPrQk1XUn0gkW4piUl1ehTs0OhD7ThGhRrL3fj0luX9aHTRlh4oGBrMyyu+w
+ 7+E6I4U+68Mutlz7y4Q90F/lrLPlLKGpfmwdknPumkAYcM70zY1j9Oae2RkuJzh6dzYPkHSao
+ caZxwmCcrCaSUpJ/HIO8Byf29iH5Gf+U39WAwrEIpB9bX5toGUwLjvcmcuWBN0kn4mELLiKJu
+ KC5g/3xYPRZ0e/QgtVY9dCKvQwHVRijF7UnAiuWDjREye8rO7FcSOm6kkTfP1BL6fOAXiPfOD
+ iAjIzMD8ZEexIe8kxI7DqA/wmREgTRYq6tqPZmV5usQnxj7QtXbMn4UB9ro0YjzZWcTcUDh+a
+ cPu3JT9RLvCEaqRSOWIJJUuJrPCOdXbMCN5pm1HSs+JUVIMwxVAOPefqU+EpXz5wOSnuk4CNC
+ AnFfwMEosnCpVkxtjU0Vp8qtwM4sFjHbUGa8Pz2M4HZTK1WEvKBtUUdha/is=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DQoNCk9uIDEwLzI0LzIwMTkgNzoyOCBQTSwgR2VlcnQgVXl0dGVyaG9ldmVuIHdyb3RlOg0KPiBG
-aXggbWlzc3BlbGxpbmdzIG9mICJlbmRwb2ludCIuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBHZWVy
-dCBVeXR0ZXJob2V2ZW4gPGdlZXJ0K3JlbmVzYXNAZ2xpZGVyLmJlPg0KDQpBY2tlZC1ieTogTWlu
-YXMgSGFydXR5dW55YW4gPGhtaW5hc0BzeW5vcHN5cy5jb20+DQoNCj4gLS0tDQo+ICAgZHJpdmVy
-cy91c2IvZHdjMi9jb3JlLmggICAgICAgICAgICAgfCAyICstDQo+ICAgZHJpdmVycy91c2IvZ2Fk
-Z2V0L3VkYy9mc2xfcWVfdWRjLmggfCA0ICsrLS0NCj4gICBkcml2ZXJzL3VzYi9nYWRnZXQvdWRj
-L212X3UzZC5oICAgICB8IDIgKy0NCj4gICBkcml2ZXJzL3VzYi9tdXNiL211c2JfZ2FkZ2V0LmMg
-ICAgICB8IDIgKy0NCj4gICA0IGZpbGVzIGNoYW5nZWQsIDUgaW5zZXJ0aW9ucygrKSwgNSBkZWxl
-dGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MyL2NvcmUuaCBiL2Ry
-aXZlcnMvdXNiL2R3YzIvY29yZS5oDQo+IGluZGV4IGQwOGQwNzBhMGZiNmY1OTguLjk2OGUwM2I4
-OWQwNGQ1ZDggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzIvY29yZS5oDQo+ICsrKyBi
-L2RyaXZlcnMvdXNiL2R3YzIvY29yZS5oDQo+IEBAIC0xMzQsNyArMTM0LDcgQEAgc3RydWN0IGR3
-YzJfaHNvdGdfcmVxOw0KPiAgICAqIEB0YXJnZXRfZnJhbWU6IFRhcmdldGVkIGZyYW1lIG51bSB0
-byBzZXR1cCBuZXh0IElTT0MgdHJhbnNmZXINCj4gICAgKiBAZnJhbWVfb3ZlcnJ1bjogSW5kaWNh
-dGVzIFNPRiBudW1iZXIgb3ZlcnJ1biBpbiBEU1RTDQo+ICAgICoNCj4gLSAqIFRoaXMgaXMgdGhl
-IGRyaXZlcidzIHN0YXRlIGZvciBlYWNoIHJlZ2lzdGVyZWQgZW5wb2ludCwgYWxsb3dpbmcgaXQN
-Cj4gKyAqIFRoaXMgaXMgdGhlIGRyaXZlcidzIHN0YXRlIGZvciBlYWNoIHJlZ2lzdGVyZWQgZW5k
-cG9pbnQsIGFsbG93aW5nIGl0DQo+ICAgICogdG8ga2VlcCB0cmFjayBvZiB0cmFuc2FjdGlvbnMg
-dGhhdCBuZWVkIGRvaW5nLiBFYWNoIGVuZHBvaW50IGhhcyBhDQo+ICAgICogbG9jayB0byBwcm90
-ZWN0IHRoZSBzdGF0ZSwgdG8gdHJ5IGFuZCBhdm9pZCB1c2luZyBhbiBvdmVyYWxsIGxvY2sNCj4g
-ICAgKiBmb3IgdGhlIGhvc3QgY29udHJvbGxlciBhcyBtdWNoIGFzIHBvc3NpYmxlLg0KPiBkaWZm
-IC0tZ2l0IGEvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9mc2xfcWVfdWRjLmggYi9kcml2ZXJzL3Vz
-Yi9nYWRnZXQvdWRjL2ZzbF9xZV91ZGMuaA0KPiBpbmRleCAyYzUzN2E5MDRlZTczOTUwLi41M2Nh
-MGZmN2MyY2JkNDhjIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2ZzbF9x
-ZV91ZGMuaA0KPiArKysgYi9kcml2ZXJzL3VzYi9nYWRnZXQvdWRjL2ZzbF9xZV91ZGMuaA0KPiBA
-QCAtMzMzLDggKzMzMyw4IEBAIHN0cnVjdCBxZV91ZGMgew0KPiAgIAl1MzIgcmVzdW1lX3N0YXRl
-OyAgICAgICAvKiBVU0Igc3RhdGUgdG8gcmVzdW1lKi8NCj4gICAJdTMyIHVzYl9zdGF0ZTsgICAg
-ICAgICAgLyogVVNCIGN1cnJlbnQgc3RhdGUgKi8NCj4gICAJdTMyIHVzYl9uZXh0X3N0YXRlOyAg
-ICAgLyogVVNCIG5leHQgc3RhdGUgKi8NCj4gLQl1MzIgZXAwX3N0YXRlOyAgICAgICAgICAvKiBF
-bnBvaW50IHplcm8gc3RhdGUgKi8NCj4gLQl1MzIgZXAwX2RpcjsgICAgICAgICAgICAvKiBFbnBv
-aW50IHplcm8gZGlyZWN0aW9uOiBjYW4gYmUNCj4gKwl1MzIgZXAwX3N0YXRlOyAgICAgICAgICAv
-KiBFbmRwb2ludCB6ZXJvIHN0YXRlICovDQo+ICsJdTMyIGVwMF9kaXI7ICAgICAgICAgICAgLyog
-RW5kcG9pbnQgemVybyBkaXJlY3Rpb246IGNhbiBiZQ0KPiAgIAkJCQlVU0JfRElSX0lOIG9yIFVT
-Ql9ESVJfT1VUKi8NCj4gICAJdTMyIHVzYl9zb2ZfY291bnQ7ICAgICAgLyogU09GIGNvdW50ICov
-DQo+ICAgCXUzMiBlcnJvcnM7ICAgICAgICAgICAgIC8qIFVTQiBFUlJPUnMgY291bnQgKi8NCj4g
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvbXZfdTNkLmggYi9kcml2ZXJzL3Vz
-Yi9nYWRnZXQvdWRjL212X3UzZC5oDQo+IGluZGV4IDk4MjYyNWI3MTk3YTBkOWMuLjY2Yjg0Zjc5
-MmY2NDZiYjkgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2dhZGdldC91ZGMvbXZfdTNkLmgN
-Cj4gKysrIGIvZHJpdmVycy91c2IvZ2FkZ2V0L3VkYy9tdl91M2QuaA0KPiBAQCAtMTM4LDcgKzEz
-OCw3IEBAIHN0cnVjdCBtdl91M2Rfb3BfcmVncyB7DQo+ICAgCXUzMglkb29yYmVsbDsJLyogZG9v
-cmJlbGwgcmVnaXN0ZXIgKi8NCj4gICB9Ow0KPiAgIA0KPiAtLyogY29udHJvbCBlbnBvaW50IGVu
-YWJsZSByZWdpc3RlcnMgKi8NCj4gKy8qIGNvbnRyb2wgZW5kcG9pbnQgZW5hYmxlIHJlZ2lzdGVy
-cyAqLw0KPiAgIHN0cnVjdCBlcHhjciB7DQo+ICAgCXUzMgllcHhvdXRjcjA7CS8qIGVwIG91dCBj
-b250cm9sIDAgcmVnaXN0ZXIgKi8NCj4gICAJdTMyCWVweG91dGNyMTsJLyogZXAgb3V0IGNvbnRy
-b2wgMSByZWdpc3RlciAqLw0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvbXVzYi9tdXNiX2dh
-ZGdldC5jIGIvZHJpdmVycy91c2IvbXVzYi9tdXNiX2dhZGdldC5jDQo+IGluZGV4IDJjYjMxZmMw
-Y2Q2MDFlYjQuLmY2MmZmYWVkZTFhYmJhNDggMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL211
-c2IvbXVzYl9nYWRnZXQuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9tdXNiL211c2JfZ2FkZ2V0LmMN
-Cj4gQEAgLTEzMTUsNyArMTMxNSw3IEBAIHN0YXRpYyBpbnQgbXVzYl9nYWRnZXRfZGVxdWV1ZShz
-dHJ1Y3QgdXNiX2VwICplcCwgc3RydWN0IHVzYl9yZXF1ZXN0ICpyZXF1ZXN0KQ0KPiAgIH0NCj4g
-ICANCj4gICAvKg0KPiAtICogU2V0IG9yIGNsZWFyIHRoZSBoYWx0IGJpdCBvZiBhbiBlbmRwb2lu
-dC4gQSBoYWx0ZWQgZW5wb2ludCB3b24ndCB0eC9yeCBhbnkNCj4gKyAqIFNldCBvciBjbGVhciB0
-aGUgaGFsdCBiaXQgb2YgYW4gZW5kcG9pbnQuIEEgaGFsdGVkIGVuZHBvaW50IHdvbid0IHR4L3J4
-IGFueQ0KPiAgICAqIGRhdGEgYnV0IHdpbGwgcXVldWUgcmVxdWVzdHMuDQo+ICAgICoNCj4gICAg
-KiBleHBvcnRlZCB0byBlcDAgY29kZQ0KPiANCg==
+Am 18.10.19 um 10:28 schrieb Daniel Wagner:
+> handle_simple_irq() expect interrupts to be disabled. The USB
+> framework is using threaded interrupts, which implies that interrupts
+> are re-enabled as soon as it has run.
+>
+> This reverts the changes from cc89c323a30e ("lan78xx: Use irq_domain
+> for phy interrupt from USB Int. EP").
+>
+> [    4.886203] 000: irq 79 handler irq_default_primary_handler+0x0/0x8 enabled interrupts
+> [    4.886243] 000: WARNING: CPU: 0 PID: 0 at kernel/irq/handle.c:152 __handle_irq_event_percpu+0x154/0x168
+> [    4.896294] 000: Modules linked in:
+> [    4.896301] 000: CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.3.6 #39
+> [    4.896310] 000: Hardware name: Raspberry Pi 3 Model B+ (DT)
+> [    4.896315] 000: pstate: 60000005 (nZCv daif -PAN -UAO)
+> [    4.896321] 000: pc : __handle_irq_event_percpu+0x154/0x168
+> [    4.896331] 000: lr : __handle_irq_event_percpu+0x154/0x168
+> [    4.896339] 000: sp : ffff000010003cc0
+> [    4.896346] 000: x29: ffff000010003cc0 x28: 0000000000000060
+> [    4.896355] 000: x27: ffff000011021980 x26: ffff00001189c72b
+> [    4.896364] 000: x25: ffff000011702bc0 x24: ffff800036d6e400
+> [    4.896373] 000: x23: 000000000000004f x22: ffff000010003d64
+> [    4.896381] 000: x21: 0000000000000000 x20: 0000000000000002
+> [    4.896390] 000: x19: ffff8000371c8480 x18: 0000000000000060
+> [    4.896398] 000: x17: 0000000000000000 x16: 00000000000000eb
+> [    4.896406] 000: x15: ffff000011712d18 x14: 7265746e69206465
+> [    4.896414] 000: x13: ffff000010003ba0 x12: ffff000011712df0
+> [    4.896422] 000: x11: 0000000000000001 x10: ffff000011712e08
+> [    4.896430] 000: x9 : 0000000000000001 x8 : 000000000003c920
+> [    4.896437] 000: x7 : ffff0000118cc410 x6 : ffff0000118c7f00
+> [    4.896445] 000: x5 : 000000000003c920 x4 : 0000000000004510
+> [    4.896453] 000: x3 : ffff000011712dc8 x2 : 0000000000000000
+> [    4.896461] 000: x1 : 73a3f67df94c1500 x0 : 0000000000000000
+> [    4.896466] 000: Call trace:
+> [    4.896471] 000:  __handle_irq_event_percpu+0x154/0x168
+> [    4.896481] 000:  handle_irq_event_percpu+0x50/0xb0
+> [    4.896489] 000:  handle_irq_event+0x40/0x98
+> [    4.896497] 000:  handle_simple_irq+0xa4/0xf0
+> [    4.896505] 000:  generic_handle_irq+0x24/0x38
+> [    4.896513] 000:  intr_complete+0xb0/0xe0
+> [    4.896525] 000:  __usb_hcd_giveback_urb+0x58/0xd8
+> [    4.896533] 000:  usb_giveback_urb_bh+0xd0/0x170
+> [    4.896539] 000:  tasklet_action_common.isra.0+0x9c/0x128
+> [    4.896549] 000:  tasklet_hi_action+0x24/0x30
+> [    4.896556] 000:  __do_softirq+0x120/0x23c
+> [    4.896564] 000:  irq_exit+0xb8/0xd8
+> [    4.896571] 000:  __handle_domain_irq+0x64/0xb8
+> [    4.896579] 000:  bcm2836_arm_irqchip_handle_irq+0x60/0xc0
+> [    4.896586] 000:  el1_irq+0xb8/0x140
+> [    4.896592] 000:  arch_cpu_idle+0x10/0x18
+> [    4.896601] 000:  do_idle+0x200/0x280
+> [    4.896608] 000:  cpu_startup_entry+0x20/0x28
+> [    4.896615] 000:  rest_init+0xb4/0xc0
+> [    4.896623] 000:  arch_call_rest_init+0xc/0x14
+> [    4.896632] 000:  start_kernel+0x454/0x480
+>
+> [dwagner: Updated Jisheng's initial patch]
+>
+> Fixes: cc89c323a30e ("lan78xx: Use irq_domain for phy interrupt from USB Int. EP")
+> Cc: Woojung Huh <woojung.huh@microchip.com>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Andrew Lunn <andrew@lunn.ch>
+> Cc: Stefan Wahren <wahrenst@gmx.net>
+> Cc: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
+> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Daniel Wagner <dwagner@suse.de>
+> ---
+
+Acked-by: Stefan Wahren <wahrenst@gmx.net>
+
