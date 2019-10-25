@@ -2,90 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FBEEE48BD
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 12:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81E92E48E3
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 12:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732328AbfJYKmx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 06:42:53 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:43542 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2394431AbfJYKmx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 06:42:53 -0400
-Received: by mail-wr1-f67.google.com with SMTP id c2so1740076wrr.10
-        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2019 03:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:mime-version:message-id:in-reply-to
-         :references:user-agent:content-transfer-encoding;
-        bh=BW9HOrChNvPqeSlqhew0nSz/3RdIb+BlRHw9yj12kQs=;
-        b=rZNsrGJkEz6baJxIGhnfLAIuLIy66mHV8Om4QjTQAXUq9KiwT9xBWX/UDDhA6C3LHP
-         X6UP4Yb9XpzrjaWBR6IxROkzQy9UGksGrn2s55vJleTpmE7OyvhjnYTtrYDZFQhHKSry
-         Roo5T63x5M3YILo7Rf686yMxQdPAaQKtTpbMRr/QyLsIxijEPW12zgBcO7UGcsPQXzbq
-         5XAamls/oo2NUlXRVaHiImKhFKpw8ihQ+PBr0ul0E0neYF1lCepnQUnbPSt4WqJDR8Q/
-         Hlp/WxXsVA3p43e4GgJm5uhgNlbM6Jn7Xquvc4AkR7sml8etz38+45uQoNKFczDnFmvo
-         p6pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:mime-version:message-id
-         :in-reply-to:references:user-agent:content-transfer-encoding;
-        bh=BW9HOrChNvPqeSlqhew0nSz/3RdIb+BlRHw9yj12kQs=;
-        b=oxaAF2LU0xBWvnbzSjjMY5SrLM9IgwqoBp+dBsRB+9cSLOdHVTIKF/gIgayWrVNm04
-         0eVlEYC5HHV9h/tfdzKpshW2PGNg9sD63c/Y6K8OpDvf1Fxnzl6kjSekDfjb2YtGBira
-         RfLCOB5ZfQ24S4uFq/6W5bPmws9iFAvibMzJ3lYVQ7h/HdLrJoBpr0exd3gLbUk+SzZb
-         rLoxFcdbGI3G+0699Z/y73v9xV8DcNrmvHRMoa35oPheLK6DUSaBWFDwN/FTUVQzOS08
-         s83P/o6ULdvfdE4V4Wx7bz+UYf26ItZnGuK49eXeS99UP7PJcI5+yPXaB7Hzu1HLml8M
-         2sqQ==
-X-Gm-Message-State: APjAAAX+2Ff4S0tvRJFrY2ugLnHWwhV2oOil9RozcYjsstXIOup+4DKO
-        tX3Qok/TwghsBWKQyPXeuyYve6QhmRU=
-X-Google-Smtp-Source: APXvYqyMvkWhYPa0FkQRBs5Mnkx3Hc2IfRfgowjw35dT0W4NL90v2jXRI3Y8BcAsWOMBWnA1kitYiQ==
-X-Received: by 2002:a05:6000:18d:: with SMTP id p13mr2325133wrx.396.1572000171736;
-        Fri, 25 Oct 2019 03:42:51 -0700 (PDT)
-Received: from localhost ([94.73.41.211])
-        by smtp.gmail.com with ESMTPSA id j14sm2189614wrj.35.2019.10.25.03.42.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 03:42:50 -0700 (PDT)
-From:   Vicente Bergas <vicencb@gmail.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Will Deacon <will.deacon@arm.com>,
-        MarcZyngier <marc.zyngier@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-rockchip@lists.infradead.org>
-Subject: Re: [PATCH] usb: dwc3: Add shutdown to =?iso-8859-1?Q?platform=5Fdriver?=
-Date:   Fri, 25 Oct 2019 12:42:49 +0200
+        id S2438556AbfJYKvJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 06:51:09 -0400
+Received: from mout.kundenserver.de ([217.72.192.74]:45981 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392198AbfJYKvJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 06:51:09 -0400
+Received: from mail-qk1-f181.google.com ([209.85.222.181]) by
+ mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1Mj831-1hlZxU1VH3-00fEqI; Fri, 25 Oct 2019 12:51:05 +0200
+Received: by mail-qk1-f181.google.com with SMTP id q70so1261022qke.12;
+        Fri, 25 Oct 2019 03:51:04 -0700 (PDT)
+X-Gm-Message-State: APjAAAWA6fFViRcJqREnWWJ4XnLSnh9uc5TR3f3XkJRs4iop43nFUxmc
+        NGQ8ccT6lVNGOrvmjR3QEB2RQ+274bWdUrVtGAM=
+X-Google-Smtp-Source: APXvYqx2Oor6PcLHOX4Sy8TtHwX6a9dti7RuLVSJPm8RZ72aJo7WkeFnANJ7SePVIoWyJuP+ht+PknNC97FPJwMamtQ=
+X-Received: by 2002:a37:58d:: with SMTP id 135mr2252602qkf.394.1572000663226;
+ Fri, 25 Oct 2019 03:51:03 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <7e062766-6d2c-44b3-a513-f976bda40704@gmail.com>
-In-Reply-To: <87pnil2kc2.fsf@gmail.com>
-References: <4d18d4f7-a00e-bd60-6361-51054eba3bca@arm.com>
- <20190817174140.6394-1-vicencb@gmail.com>
- <8d48017a-64c5-4b25-8d85-113ffcf502c9@gmail.com> <87v9uix1sv.fsf@gmail.com>
- <645526b8-bfed-4cc6-9500-1843c5fe0da9@gmail.com>
- <0edb55d4-3bad-47ac-9d29-8d994d182e67@gmail.com> <877e4wj7ly.fsf@gmail.com>
- <fcddc3d9-f36a-4b7b-be3f-ee720fbacb05@gmail.com> <87pnil2kc2.fsf@gmail.com>
-User-Agent: Trojita
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20191018154052.1276506-1-arnd@arndb.de> <87v9slg9k5.fsf@belgarion.home>
+ <CAK8P3a1JDtHsOW=iaxEycbJ4TBkR9MHUyDMeJnwxCtb=tefnBQ@mail.gmail.com>
+ <CAK8P3a0376Anmoc8VWXcEBg+z2B+1vcxJoywYYROBQNxpVmZuA@mail.gmail.com>
+ <87r239f2g8.fsf@belgarion.home> <87eez1rhqo.fsf@belgarion.home>
+In-Reply-To: <87eez1rhqo.fsf@belgarion.home>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 25 Oct 2019 12:50:46 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
+Message-ID: <CAK8P3a0L3_Hs48X5bh0UD2L_AaxLcUOQ_YS7ZpSd5W-8xcgAog@mail.gmail.com>
+Subject: Re: [PATCH 00/46] ARM: pxa: towards multiplatform support
+To:     Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        IDE-ML <linux-ide@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        linux-leds@vger.kernel.org, linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-mtd <linux-mtd@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:bBFl5bX9BqXoDP8OrdvcfGlrYLRY5B1GUhWZJswEMUsHfqL7ZPS
+ wNKiBQqI9J4lWaKwMKWpeuRP8Q7gNW1Huux28MpdQbLQHsG8keYqULuxokAyz8cXvUuDQNr
+ Y4OmkYoxdwxMOhV/OoYmkmbTVaeZ1jGsBbuhOyjPDaixMEDPYwwWYKYrS8WnrToePTYktVe
+ isgPlih4bJp7b5na0cbDg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:+amIHTsvEsM=:wxrSdcXp8fCl0WvOtbji8T
+ eiMYbEG4cst6pRKOmo34ky4eqFrbI9L+1xHjnaiY+H7o5c4AvretiveY6HsD/8Q4GCTo+d4EF
+ 6KHQlLX/3bCOUITQRQRqZXMcO8+d/5yBWQ4PLvO/++od9zW+FSeEXlBspQqZItGbvkewyaSgM
+ V2RuqHgZsRHubh1xP1lsxIE2YLtSonVpvh2iNYDMLLKocefeURCWHULZHpLKqb637/1ILOFmh
+ oY55eIQP5dCvyMde+02h4Sc41A/coK0VSMYnmjZbIdabokN8wJmd5BpuqN52whvBKMyQB7Drx
+ +rJNk043np+L19CHym/KU1GD0+Jh/hYMmdbAesunIc/XFNfshrJppNPggA2jYuD+WHt0GoW0h
+ vIRvBMeg6dWxtHSt5iN2OWe8YRwmJozAghx6eaxs/+mtKjhlwdb8pg8wgjMJTT4UVZPNck6ai
+ ETIxAKLIg48ERY2PKPCwjHZWIF59mr9ihwrIm7/PoRVzhB2DgY1bXT+r0Xf1ifNLX95PYOB5M
+ zAGClTyzoyjzTzKwNgwcV4nTh4Je81xIc8FEG8D5S5n2odlouWYtMUHvQkobX+2UgP+dk+Rdq
+ Yf9piYlNy1SKL1OHQdycWsLTFQ3jMWeWKCJRb5PSzWdnYIqeBZU1jM0z+jjUqPYhNrA/3/oIY
+ 6RHI26+ovszi6E37l9e4YOUqQLgkyayuNJDsaLxUKkKdzoog8Z1n6LZPKD/u4+MRIXZCKCrGx
+ pWVDvdMh6MitMHpzAZXm52z3k1A8T63a1CoAVUlqw1z/kLR1+hrsr4BnhFtpR4HNXe8FSWIge
+ SE0Vg8VrS1FRrUX3m8HXrRagLwmAmfEk5PCq5WPOx/NjbgPEUnw5nqQ9HVCS9jOGnKIZvBw5Z
+ /NMhJY+Zi7eyYSpPjOOA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Friday, October 25, 2019 12:25:17 PM CEST, Felipe Balbi wrote:
-> hi,
+On Thu, Oct 24, 2019 at 10:50 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
+> Robert Jarzmik <robert.jarzmik@free.fr> writes:
+> >>> I've now pushed it to
+> >>>
+> >>> git://git.kernel.org:/pub/scm/linux/kernel/git/arnd/playground.git
+> >>> pxa-multiplatform
+> >>
+> >> Sorry for the duplication, I had some problems with email configuration
+> >> so my reply got rejected, let's see if it goes through this time.
+> > I have it now, thanks, I'll test and review as soon as I can.
+> >
+> > Cheers.
 >
-> Vicente Bergas <vicencb@gmail.com> writes:
+> Ok Arnd, I have a preliminary test report.
 >
->> On Wednesday, October 23, 2019 8:31:21 AM CEST, Felipe Balbi wrote: ...
+> I tested only the pxa27x (mioa701), which happens to have a lot of drivers, and
+> only the platform_data flavor (ie. no device-tree test yet). Apart a panic in
+> the regulator framework (which is a known issue [1]), your version seems
+> equivalent so far in terms of runtime to Linux 5.4-rc3).
 >
-> Do you want to send it as a formal patch or shall I do it?
+> The sound and RTC seem broken, but not by you ...
+>
+> I'll continue the test onwards for pxa3xx and pxa2xx when I'll gather a bit of
+> time, and try to review as well the mach-pxa part.
 
-All yours. Thank you for reviewing and proposing this solution.
+Awesome, thanks for testing so far and for the report!
 
-Regards,
-  Vicente.
-
+        Arnd
