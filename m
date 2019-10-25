@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F7FE4CC6
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 15:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABD6E4D59
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 16:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505091AbfJYNzd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 09:55:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49456 "EHLO mail.kernel.org"
+        id S2393718AbfJYN7F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 09:59:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54800 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505083AbfJYNzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:55:31 -0400
+        id S1731381AbfJYN7F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 09:59:05 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0DDB420679;
-        Fri, 25 Oct 2019 13:55:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id DE21921E6F;
+        Fri, 25 Oct 2019 13:59:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572011730;
-        bh=ISAo5vn+007S4sNbFtUYwHTVpHMeCjtJiDa8U5Y8dL8=;
+        s=default; t=1572011944;
+        bh=luNhTd4Wph/2JoBgh1xl7TIz2ZYbQxAZF6SRn6Jv7ng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hb4gnpL3439t+4wd2yE4+MTDvR7QzxLYPov89HFW3itLisjc+p3lpTUUkU32kjyZk
-         8IQqMONps4cglNIX4qYN919tUBdoDXhtDHCFuO0eMAd13iFZSHQfeaVsghwMZtCpap
-         fQaQXfMjnoOcEZuouEOz4mXl34chbGkPXGK6FDao=
+        b=C/VDpWfAZAoYbxSNjCuKoMz8sPp9gTCvESPo4S3bclgPObIESKExTOjJZe+rC4wE5
+         ea+1bS3NtGJhhOOFa7ZVgxc5gKP7gcYOR9UflTAgiXnGkk8RcECjeV2vuxlIaCpHBf
+         o2EC19yKKe3YI0KUo2XGdfcRHRlfMry2OMsqJQHk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
@@ -30,12 +30,12 @@ Cc:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 13/33] net: usb: sr9800: fix uninitialized local variable
-Date:   Fri, 25 Oct 2019 09:54:45 -0400
-Message-Id: <20191025135505.24762-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 10/16] net: usb: sr9800: fix uninitialized local variable
+Date:   Fri, 25 Oct 2019 09:58:34 -0400
+Message-Id: <20191025135842.25977-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191025135505.24762-1-sashal@kernel.org>
-References: <20191025135505.24762-1-sashal@kernel.org>
+In-Reply-To: <20191025135842.25977-1-sashal@kernel.org>
+References: <20191025135842.25977-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -61,7 +61,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index 35f39f23d8814..8f8c9ede88c26 100644
+index 004c955c1fd1b..da0ae16f5c74c 100644
 --- a/drivers/net/usb/sr9800.c
 +++ b/drivers/net/usb/sr9800.c
 @@ -336,7 +336,7 @@ static void sr_set_multicast(struct net_device *net)
