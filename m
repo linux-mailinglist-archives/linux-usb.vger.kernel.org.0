@@ -2,143 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BF9E47F8
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 11:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D6EE4854
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 12:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436755AbfJYJ72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 05:59:28 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:54864 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408510AbfJYJ72 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 05:59:28 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9P9xKrK066500;
-        Fri, 25 Oct 2019 04:59:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571997560;
-        bh=V6hOD5dytEB/3BCbaVXsPiwjMD39duocB15Lwiy7XLU=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=hfOx8YhLPWRW7wJRbqNBJ5mw+F8j9L+oe9BMdToXpsp09kwVmjN6EZOJvwO2uj7SS
-         cMWaPs07XcDgR7OdghbpebCYu67pTRGMVN64KCF64D2pmOxpLOfLrMvqmb9pPf22a+
-         JYFM/F5Jg1NPIn9+zkdhTQcIvDJt7VxWtEecH1N4=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9P9xKuQ077394
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 25 Oct 2019 04:59:20 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 25
- Oct 2019 04:59:09 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Fri, 25 Oct 2019 04:59:09 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9P9xHaw053809;
-        Fri, 25 Oct 2019 04:59:18 -0500
-Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
-To:     Peter Chen <peter.chen@nxp.com>,
+        id S2409108AbfJYKN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 06:13:56 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:34314 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405970AbfJYKN4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 06:13:56 -0400
+Received: by mail-lf1-f68.google.com with SMTP id f5so1282009lfp.1;
+        Fri, 25 Oct 2019 03:13:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=pX8I7MddPjhiQt1tmFZPNzNEVzJyim/J8/uVuvd/pfQ=;
+        b=oo3kXop08vDvHnbsuRDxvT3y0x5vjdOTyTKqP76miGg7pBdv3KOUZXIr4VhcTJwVk5
+         cCCtzymOA5BNbym+xOUJKM35VS0/ZgAWJPo0ON2oIuXKq7ZXupCwAQ0YtyiYiS5sUBRw
+         90aydh/cL4t4kEu0vV7qjjaqrAeOJRgVIVU241m1Pv/JFZq4dmYkkZC3OThYMcbgUh/V
+         IEfgLKA1W0ITNpVuITJzzH22vq0wOjVzJeMVXRe/NxWr4dfEUPrS/q93zHVJ+sbsagRZ
+         KtJHlAS/+6DzSh4iR3ENN7z5Q6rPfxW8i2NkyOxOTEPo4Qh3AVRXnRcVpwSta3qmR/Ed
+         yHVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=pX8I7MddPjhiQt1tmFZPNzNEVzJyim/J8/uVuvd/pfQ=;
+        b=CNlOJ50lamSe86pxaaC0DDTUOdQPlxbzhJNbNlFwlTN1vA3Lwu6cF4g6ozBfpPkpZW
+         UO1vSFH03M+q0df5HcJ5Q5KeYMGxelWveWbnjkfEIUMI4l2Um2hjuJVL23Lyng9Hwp4a
+         NGcbnszN1YoIRXH/EuVVG3CW5F5pAVh8hZs34T7onAmIU+98rmGnmAuWPtYUOOEv6aZh
+         IdyhzACJzREhI4RRGT90GTEVHWnSTnlN6ND/wop3GWMsBb8j275sKlr3O5dNNdiXLWg7
+         RZEXmtZ8pmdsFejSzCq2A6YjlC9Ozv+A6hWBPWxp/bASAIM2rBKBK6fg0hiIrTUBJdaJ
+         vyNA==
+X-Gm-Message-State: APjAAAXJBzayKt0FcDFkoCsIVyCmKoq9IiECkSQLTZmTiRKuEcU9UCrm
+        DjVC/mDIKX46ZJhFp3PNcR48kVtz0dq4NdwX
+X-Google-Smtp-Source: APXvYqzcJ4s/IAQ2BA+QGiJZPkxDc8DDgYD+6MmPWEX6PPu+11wNM6nHgaxqryM5bir0htVl93PYxA==
+X-Received: by 2002:ac2:4215:: with SMTP id y21mr2097986lfh.85.1571998433190;
+        Fri, 25 Oct 2019 03:13:53 -0700 (PDT)
+Received: from saruman (85-76-160-55-nat.elisa-mobile.fi. [85.76.160.55])
+        by smtp.gmail.com with ESMTPSA id k82sm792084lje.101.2019.10.25.03.13.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2019 03:13:52 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>,
         Pawel Laszczak <pawell@cadence.com>
-CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
+Cc:     "felipe.balbi\@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar\@ti.com" <nsekhar@ti.com>,
         Rahul Kumar <kurahul@cadence.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20191023090232.27237-1-rogerq@ti.com>
- <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20191025031343.GA13392@b29397-desktop>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
-Date:   Fri, 25 Oct 2019 12:59:17 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+In-Reply-To: <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
+References: <20191023090232.27237-1-rogerq@ti.com> <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com> <20191025031343.GA13392@b29397-desktop> <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
+Date:   Fri, 25 Oct 2019 13:14:33 +0300
+Message-ID: <87y2x9xhbq.fsf@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191025031343.GA13392@b29397-desktop>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Peter,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On 25/10/2019 06:13, Peter Chen wrote:
-> On 19-10-23 09:17:45, Pawel Laszczak wrote:
->> Hi,
->>
->> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
-> 
-> Hi Roger & Pawel,
-> 
-> Assume gadget function has already enabled, if you switch host mode
-> to device mode, with your changes, where the device mode will be enabled
-> again?
 
-When it switches from device mode to host the UDC is removed. When we switch
-back from host to device mode the UDC is added, so,
+Hi,
 
-usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
-udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
-gadget->ops->pullup()
+Roger Quadros <rogerq@ti.com> writes:
+> On 25/10/2019 06:13, Peter Chen wrote:
+>> On 19-10-23 09:17:45, Pawel Laszczak wrote:
+>>> Hi,
+>>>
+>>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
+>>=20
+>> Hi Roger & Pawel,
+>>=20
+>> Assume gadget function has already enabled, if you switch host mode
+>> to device mode, with your changes, where the device mode will be enabled
+>> again?
+>
+> When it switches from device mode to host the UDC is removed. When we swi=
+tch
+> back from host to device mode the UDC is added, so,
+>
+> usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
+> udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
+> gadget->ops->pullup()
 
-cheers,
--roger
-> 
-> Peter
->>
->> Regards,
->> Pawel,
->>
->>> The USB gadget core is supposed to manage pullups
->>> of the controller. Don't manage pullups from within
->>> the controller driver. Otherwise, function drivers
->>> are not able to keep the controller disconnected from
->>> the bus till they are ready. (e.g. g_webcam)
->>>
->>> Signed-off-by: Roger Quadros <rogerq@ti.com>
->>> ---
->>> Hi Greg/Felipe,
->>>
->>> This can be used for -rc as it is a bug fix.
->>>
->>> cheers,
->>> -roger
->>>
->>> drivers/usb/cdns3/gadget.c | 4 ----
->>> 1 file changed, 4 deletions(-)
->>>
->>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
->>> index 2ca280f4c054..714382d96055 100644
->>> --- a/drivers/usb/cdns3/gadget.c
->>> +++ b/drivers/usb/cdns3/gadget.c
->>> @@ -2324,8 +2324,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
->>> 	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
->>>
->>> 	cdns3_configure_dmult(priv_dev, NULL);
->>> -
->>> -	cdns3_gadget_pullup(&priv_dev->gadget, 1);
->>> }
->>>
->>> /**
->>> @@ -2708,8 +2706,6 @@ static int cdns3_gadget_suspend(struct cdns3 *cdns, bool do_wakeup)
->>> 	/* disable interrupt for device */
->>> 	writel(0, &priv_dev->regs->usb_ien);
->>>
->>> -	cdns3_gadget_pullup(&priv_dev->gadget, 0);
->>> -
->>> 	return 0;
->>> }
->>>
->>> --
->>> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
->>> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
->>
-> 
+I agree with Roger here. UDC shouldn't try to manage pullups
+directly. If there are any bugs related to role switch, we should fix it
+in udc core, so the fix applies to everyone ;-)
 
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl2yywkACgkQzL64meEa
+mQZhnA/+KbCx3ho/LG/P+vHwaG8HWQT4rebxmRH2GjM8sbRwREGP0EDPJORGHscd
+oLLXpFnLcoaph2dRzJaLi51CMdseCkEoPAC5ElNMRixhhIE0hvA6GEFlJh2CaBEl
+tQtMZ5PTurQam4i8biyu9sGZtOzmg2LIibUsP5bcGJAqgPMSlmvuOpMaDBGuYi5I
+4mvbwAszsizQT1skMDFiIuHYIMQ9shAOLkTz2k6ARC7nLFKtqBcaM/zSwkxrW3E3
+u1CL7HQqWa5IDC4L2OvvVCdjc9JWMY35k1yvf4vGChyTUPLdksIo2TFJ5k3MSkP4
+0djrSTQbox0iHimscZbaD9iPEX02/0et9M9/Lf+0phQ6GT5gRaDfRF+KN/gu5Jbo
+EUTJIsmOKaXuLW0pxLs2HwiudpE3de8VG28acQayqCq5JEMcffGVOrsoBczE+0M9
+jueAqXvy/e96hq5MnIsF40N9sWQG4qq53gChj7KU0VRlVlhXoIfP8hw59O4FCuPI
+zw0RnmwhjMGyinh0E97j9WXRa6PjsjMWX68f1cOs1JSM08T+YdoiW9bjZK3yNqBG
+PchUVJ5GgGiIEP02APziCb2rwCLFztI5wiZ4IlItQcyNxnRRqlB1jV1ilaN35Q0e
+qlq6pcytzDHpvGQ/P8ehMJfWpDOxDwYpX58f5x7Jloue2aWT1bE=
+=SMdL
+-----END PGP SIGNATURE-----
+--=-=-=--
