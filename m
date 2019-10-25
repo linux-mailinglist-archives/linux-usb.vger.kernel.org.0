@@ -2,93 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F2DE4FA2
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 16:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649DFE5132
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 18:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440505AbfJYOz6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 10:55:58 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33865 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440053AbfJYOz6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 10:55:58 -0400
-Received: by mail-pg1-f196.google.com with SMTP id k20so1722736pgi.1
-        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2019 07:55:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uz4/0VPc/LVukLtMH9NhgPAHFSuVAg4MXjZpYQG2Cug=;
-        b=kzXXFivdIXnezZh2d4gyu7vzJF5cXjKUlAIPh8UbB5DtUdP69of+z0nRjLSmJULktc
-         Oaxg9pRiWydy9+E/vr4+X2rmXid7SzM7P7y9oK0N5KlaFC0EUFOQElk1kpaW/sx2Hnuh
-         9gC4gZp8TIlfJjLu2w7MmmH+nikH3jfkv9dZap01epOJgjkhRtUMWT1LMnrNpu4mNzB+
-         8lIU1DooMXK0d57lbWsewqS0yVXX48h0jg+JBSQsTNkn2gVO1usBvvJrajUbQsGoEDEB
-         T7WJmskUIV04qbejZb5PnOG07PeoBXx6ujjnDitLSeAAuorIN/aa0OjqGAiCLC8Ka0lI
-         TY3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uz4/0VPc/LVukLtMH9NhgPAHFSuVAg4MXjZpYQG2Cug=;
-        b=LAWrnED2wcfd2NI/EKJXzqt/CSzse28KUO8T03NrzCOH9O99rUtRN4pEAN5Y/V/Kjf
-         4MNCtGoTbK8iv1z78hzJ9j9Fvicgs5Gi3e7rFQ8n3//tsW3NhW4+tLe8sNdaWtf5lkNT
-         H9ZQjYIJYVcPSwfUXo4XRJNfnmygO0DGoCwhoD2aXupgHjJCDptS1rnAAXnYXyB+H/+n
-         0HYuTsNWEwn8mgIHLcZNccEGJxcHvJuSS8CIpY96Wi7w6MoLq4tdeUMXAmFoauHIGMho
-         ex+dKiElsmT6kHvHCL/Q8F0e5XQz6ACkmq+CC9J0NwS3FX0tOcJz2mGvKUvo+JGtXsyX
-         mZRA==
-X-Gm-Message-State: APjAAAV/BonlTX668Y1g+UqzAS77D0J6lG+FiZqpAA8w1rQXZxRGcSA2
-        PYYzGxNaYejO/EmgcDpNQjQ2f4WzRR5WZaIZxJKIXA==
-X-Google-Smtp-Source: APXvYqzXpb3waTwiwI+DaMsBjdc/rLbQDrJ0oa43fOWX+CbQABahbkpC0tOVTlDgChdL0k3xaam+TWttL48GzdAM1VM=
-X-Received: by 2002:a17:90a:6509:: with SMTP id i9mr4657102pjj.47.1572015356966;
- Fri, 25 Oct 2019 07:55:56 -0700 (PDT)
+        id S2633046AbfJYQ2R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 12:28:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2633030AbfJYQ2Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 12:28:16 -0400
+Received: from localhost (odyssey.drury.edu [64.22.249.253])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1EDEB2084C;
+        Fri, 25 Oct 2019 16:28:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572020895;
+        bh=F4aiAi9ADhSGPQCvGinop62RHQp0ZQn5qwx29oeDixA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=2bGYBxw+568mSl8OsguyvePly25AljkkwKgzBxProDmgj+SDk1zHWuc8z0bcWQLR2
+         gai7EXWk/RAqIWZcAgHIqlQ9UO4sFJAL1Q5Yf0KUaS8ztRaPNXDkHo+RQbYI6uHfVs
+         hYVWQaamwj0t74GtqJOIX2JY8F+VHfhkA4bCHtOY=
+Date:   Fri, 25 Oct 2019 11:28:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191025162814.GA130180@google.com>
 MIME-Version: 1.0
-References: <cover.1571844200.git.andreyknvl@google.com> <20191023150413.8aa05549bd840deccfed5539@linux-foundation.org>
- <CAAeHK+xLS8TVioJeqYrf9Kso9TsiWiH0O-k+RrRBCKPPS9_Hrg@mail.gmail.com> <20191024165907.d56f8050b5097639263c0a41@linux-foundation.org>
-In-Reply-To: <20191024165907.d56f8050b5097639263c0a41@linux-foundation.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 25 Oct 2019 16:55:45 +0200
-Message-ID: <CAAeHK+yBL1montfzqeFXxK9-kGsuHLzD0VWccPiKahF0Wt8i0Q@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] kcov: collect coverage from usb and vhost
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 1:59 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Thu, 24 Oct 2019 14:47:31 +0200 Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> > > is it expected that the new kcov feature will be used elsewhere in the
-> > > kernel?
-> > >
-> > > If the latter, which are the expected subsystems?
+On Fri, Oct 25, 2019 at 03:11:49PM +0800, Daniel Drake wrote:
+> On Fri, Oct 25, 2019 at 1:00 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > That's really strange.  Your original message showed:
 > >
-> > Currently we encountered two cases where this is useful: USB and vhost
-> > workers. Most probably there are more subsystems that will benefit
-> > from this kcov extension to get better fuzzing coverage. I don't have
-> > a list of them, but the provided interface should be easy to use when
-> > more of such cases are encountered.
->
-> It would be helpful to add such a list to the changelog.  Best-effort
-> and approximate is OK - just to help people understand the eventual
-> usefulness of the proposal.
+> >   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> >   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> >
+> > The first line is from pci_raw_set_power_state() reading PCI_PM_CTRL,
+> > but we can't tell whether the read failed and we got ~0, or it
+> > succeeded and we got something with just the low two bits set.  Can
+> > you print out the whole value so we can see what happened?
+> >
+> > The second line is from pci_enable_resources() reading PCI_COMMAND,
+> > and it got *0*, not 0x0403 as you got from the CRS experiment.
+> 
+> Thanks for persisting here. In more detail:
+> 
+> pci_pm_resume_noirq
+> - pci_pm_default_resume_early
+> -- pci_raw_set_power_state(D0)
+> 
+> At this point, pci_dev_wait() reads PCI_COMMAND to be 0x100403 (32-bit
+> read) - so no wait.
 
-OK, I'll add it to the cover letter in v3, thanks!
+Just thinking out loud here: This is before writing PCI_PM_CTRL.  The
+device should be in D3hot and 0x100403 is PCI_COMMAND_IO |
+PCI_COMMAND_MEMORY | PCI_COMMAND_INTX_DISABLE (and
+PCI_STATUS_CAP_LIST), which mostly matches your lspci (it's missing
+PCI_COMMAND_MASTER, but maybe that got turned off during suspend).
+It's a little strange that PCI_COMMAND_IO is set because 03:00.3 has
+no I/O BARs, but maybe that was set by BIOS at boot-time.
+
+> pci_raw_set_power_state writes to PM_CTRL and then reads it back
+> with value 0x3.
+
+When you write D0 to PCI_PM_CTRL the device does a soft reset, so
+pci_raw_set_power_state() delays before the next access.
+
+When you read PCI_PM_CTRL again, I think you *should* get either
+0x0000 (indicating that the device is in D0) or 0xffff (if the read
+failed with a Config Request Retry Status (CRS) because the device
+wasn't ready yet).
+
+I can't explain why you would read 0x0003 (not 0xffff) from
+PCI_PM_CTRL.
+
+What happens if you do a dword read from PCI_VENDOR_ID here (after the
+delay but before pci_dev_wait() or reading PCI_PM_CTRL)?
+
+We have CRS "software visibility" enabled, and the expectation in the
+spec is that software will read PCI_VENDOR_ID to see whether the
+device is ready: 0x0001 means the read got a CRS completion (device
+isn't ready), valid Vendor ID means device is ready, and 0xffff
+indicates some other error.
+
+pci_dev_wait() reads PCI_COMMAND, not PCI_VENDOR_ID, so maybe there's
+some wrinkle in how that's handled.
+
+You might also try changing pci_enable_crs() to disable
+PCI_EXP_RTCTL_CRSSVE instead of enabling it to see if that makes any
+difference.  CRS SV has kind of a checkered history and I'm a little
+dubious about whether it buys us anything.
+
+> >   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> 
+> At the point of return from pci_pm_resume_noirq, an extra check I
+> added shows that PCI_COMMAND has value 0x403 (16-bit read).
+
+If PCI_COMMAND is non-zero at that point, I think something's wrong.
+It should be zero by the time pci_raw_set_power_state() reads
+PCI_PM_CTRL after the D3 delay.  By that time, we assume the reset has
+happened and the device is in D0uninitialized and fully accessible.
+
+> 35ms later, pci_pm_resume is entered, and I checked that at this
+> point, PCI_COMMAND has value 0.
+> It then goes on to reach pci_enable_resources().
+> >   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> 
+> The change in PCI_COMMAND value is just down to timing.
+> At the end of pci_pm_resume_noirq(), if I log PCI_COMMAND, wait 10ms,
+> and log PCI_COMMAND again, I see it transition from 0x403 to 0.
+> 
+> Daniel
