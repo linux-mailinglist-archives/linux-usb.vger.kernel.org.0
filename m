@@ -2,105 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEA2E460E
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 10:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69BF9E47F8
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 11:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408439AbfJYIpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 04:45:13 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40122 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407543AbfJYIpN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 04:45:13 -0400
-Received: by mail-wr1-f65.google.com with SMTP id o28so1318638wro.7
-        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2019 01:45:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QljUEfnAFjPhi1Cpeu2+3TNeN7NOO8V2PLCDzIO4TxA=;
-        b=h8tCSMCbn6S2V/9/0tqMW7XfM6Lx7Aid2dbQnkDVZH/aWFVCEjpr8pmJ6KvRNpOC4g
-         G9R7x19+rarr9DFL0s3xGhjaw9AhZdwwXH63/jAa7hKTTLBfN+JQOZmXfxwyySQSwv2r
-         3dvjuRNxJPPdPvhdm6YpjwX04K59tzPPbBuN80icjqEon59gV1W/iX3ORCRYfCL0S+p4
-         X+oRe7GGdGm2b6q9oeNl8qA2+wtREPQKqMmErg0rbEbE4C8ys2lnnD/PerDP7AvWAvmV
-         XnyCwECQm8H+Iau4iJR/3LfLpigaMgucxAS5OniDB2SPrLCS0pTMiDN1cIrjnwP7XdYD
-         1OOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QljUEfnAFjPhi1Cpeu2+3TNeN7NOO8V2PLCDzIO4TxA=;
-        b=jyEUARHpsLb0Lb/5BSeNBYG5Ek8GzHt5wG3KA9kZuXG7JDFTC9zm+ErG4eREKJzuxV
-         W0nz0MYDwRDqpq5YonrZaFEx1JYIWxUR9QKdjyJZW/Xs3PSY0k/L6x4H0gUHXEO/X/+L
-         wpwDD6uvii16SqxA7bB5ifM4m7AOexX1QMrKjvkb3jFb5OQmEMqd1NDPSMQuKwweqHJD
-         luWJOlFMlSbLLUGbO+UfwFuVsH0QkXvsYIzNEUajXOlZqsn7GtPluJcce4GYjIvXG99D
-         C6c/GyWEoMNsXEvU5E4B3CyROvJMMW6JjoXVlFCRvlBh9XlONc+UtWMdWlbv9TyFJqTQ
-         uDEw==
-X-Gm-Message-State: APjAAAWMOlwaqlk7lIitwDohJZLXse/fIU4uzOjjP+io95hEjwGL4Wlp
-        n41WFWiqCO40w/0QuGiwcxYP+7UrbICEvNFP2rQ=
-X-Google-Smtp-Source: APXvYqxEK/mImiGcPOoAPdtj1UU9haau8tNDoYwiz5GRhJi5nFO8EU55ZnjEuoJpBgIHQ86d3nkxEHbk+UFS4AvYlXU=
-X-Received: by 2002:adf:d1aa:: with SMTP id w10mr1748787wrc.127.1571993111044;
- Fri, 25 Oct 2019 01:45:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <CADGPSwj3aTJjjHvPSZVgxNRGikznL5i=-8Q2hOUb1LoLbWcRDA@mail.gmail.com>
- <87a7avh8uu.fsf@gmail.com> <CADGPSwjTn1KwMcxKdajNwxbLi09-SQ1Eu=1m57Z+LNnj0i2BeA@mail.gmail.com>
- <106544ca-7a01-0a86-e785-c7c520ebdc4b@linux.intel.com> <CADGPSwi87a5+3mCGAgptHgpBsQk9STQrEKs-kC6Nw55nPdRtOw@mail.gmail.com>
- <5431a9df-3816-b525-c3bc-4e7462d0f38f@linux.intel.com> <f5cd8ff1767c48a0bd86e743ae128b10@AcuMS.aculab.com>
- <87d0fny5in.fsf@gmail.com> <52a7b158-ab76-432a-4d2c-7b731dc9c2a2@linux.intel.com>
- <CADGPSwgJMKfQChfxMNU4S_xv1vfHr7_GY6rGwgeDOVuW6+mpVg@mail.gmail.com>
- <CADGPSwhCPvdu=KmQP6RHMJnh292UO0uBAt+KyJqqOWY5DWDc3w@mail.gmail.com>
- <CADGPSwiCY9=kUpKmcUwAhvCHmvGDSrxoBXEkzgQpEpiakKEv6A@mail.gmail.com> <87v9sfixv3.fsf@gmail.com>
-In-Reply-To: <87v9sfixv3.fsf@gmail.com>
-From:   alex zheng <tc0721@gmail.com>
-Date:   Fri, 25 Oct 2019 16:44:34 +0800
-Message-ID: <CADGPSwhg=HgGL+J0kvgu=uZAo+_E9W3Aj3nLRDsyr4FoLs=8Wg@mail.gmail.com>
-Subject: Re: BUG report: usb: dwc3: Link TRB triggered an intterupt without
- IOC being setted
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        David Laight <David.Laight@aculab.com>,
+        id S2436755AbfJYJ72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 05:59:28 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:54864 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408510AbfJYJ72 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 05:59:28 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9P9xKrK066500;
+        Fri, 25 Oct 2019 04:59:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1571997560;
+        bh=V6hOD5dytEB/3BCbaVXsPiwjMD39duocB15Lwiy7XLU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=hfOx8YhLPWRW7wJRbqNBJ5mw+F8j9L+oe9BMdToXpsp09kwVmjN6EZOJvwO2uj7SS
+         cMWaPs07XcDgR7OdghbpebCYu67pTRGMVN64KCF64D2pmOxpLOfLrMvqmb9pPf22a+
+         JYFM/F5Jg1NPIn9+zkdhTQcIvDJt7VxWtEecH1N4=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9P9xKuQ077394
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 25 Oct 2019 04:59:20 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Fri, 25
+ Oct 2019 04:59:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Fri, 25 Oct 2019 04:59:09 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9P9xHaw053809;
+        Fri, 25 Oct 2019 04:59:18 -0500
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+To:     Peter Chen <peter.chen@nxp.com>,
+        Pawel Laszczak <pawell@cadence.com>
+CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "xiaowei.zheng@dji.com" <xiaowei.zheng@dji.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191023090232.27237-1-rogerq@ti.com>
+ <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20191025031343.GA13392@b29397-desktop>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
+Date:   Fri, 25 Oct 2019 12:59:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191025031343.GA13392@b29397-desktop>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Peter,
 
-Felipe Balbi <felipe.balbi@linux.intel.com> =E4=BA=8E2019=E5=B9=B410=E6=9C=
-=8823=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=8D=886:02=E5=86=99=E9=81=93=
-=EF=BC=9A
->
->
-> Hi,
->
-> (please don't top-post)
->
-> alex zheng <tc0721@gmail.com> writes:
-> > Hi, all
-> >
-> > We found that this is a known issue of synopsys DWC3 USB controller,
-> > when the PARKMODE_SS of DWC3 is enable, the controller may hang or do
-> > wrong TRB schedule in some heavy load conditions.
-> >
-> > Setting DISABLE_PARKMODE_SS to 1 can work around this bug.
->
-> Is this something that affects some versions but not others? If the
-> case, we should teach the driver to handle this based on a revision
-> check.
+On 25/10/2019 06:13, Peter Chen wrote:
+> On 19-10-23 09:17:45, Pawel Laszczak wrote:
+>> Hi,
+>>
+>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
+> 
+> Hi Roger & Pawel,
+> 
+> Assume gadget function has already enabled, if you switch host mode
+> to device mode, with your changes, where the device mode will be enabled
+> again?
 
-It seems that all DWC3 USB3.0 controller witch have parkmode_ss may
-run into this issue, but we did not do a further test, and I find that
-there is already a fix patch in maillist yesterday, see title: usb:
-"dwc3: Update entries for disabling SS instances in park mode"
+When it switches from device mode to host the UDC is removed. When we switch
+back from host to device mode the UDC is added, so,
 
->
-> cheers
+usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
+udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
+gadget->ops->pullup()
 
+cheers,
+-roger
+> 
+> Peter
+>>
+>> Regards,
+>> Pawel,
+>>
+>>> The USB gadget core is supposed to manage pullups
+>>> of the controller. Don't manage pullups from within
+>>> the controller driver. Otherwise, function drivers
+>>> are not able to keep the controller disconnected from
+>>> the bus till they are ready. (e.g. g_webcam)
+>>>
+>>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>>> ---
+>>> Hi Greg/Felipe,
+>>>
+>>> This can be used for -rc as it is a bug fix.
+>>>
+>>> cheers,
+>>> -roger
+>>>
+>>> drivers/usb/cdns3/gadget.c | 4 ----
+>>> 1 file changed, 4 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+>>> index 2ca280f4c054..714382d96055 100644
+>>> --- a/drivers/usb/cdns3/gadget.c
+>>> +++ b/drivers/usb/cdns3/gadget.c
+>>> @@ -2324,8 +2324,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
+>>> 	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
+>>>
+>>> 	cdns3_configure_dmult(priv_dev, NULL);
+>>> -
+>>> -	cdns3_gadget_pullup(&priv_dev->gadget, 1);
+>>> }
+>>>
+>>> /**
+>>> @@ -2708,8 +2706,6 @@ static int cdns3_gadget_suspend(struct cdns3 *cdns, bool do_wakeup)
+>>> 	/* disable interrupt for device */
+>>> 	writel(0, &priv_dev->regs->usb_ien);
+>>>
+>>> -	cdns3_gadget_pullup(&priv_dev->gadget, 0);
+>>> -
+>>> 	return 0;
+>>> }
+>>>
+>>> --
+>>> Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+>>> Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+>>
+> 
 
->
-> --
-> balbi
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
