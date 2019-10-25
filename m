@@ -2,99 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5531E442B
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 09:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0A1E4480
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 09:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406597AbfJYHMC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 03:12:02 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:36716 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406483AbfJYHMC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 03:12:02 -0400
-Received: by mail-qt1-f195.google.com with SMTP id d17so1827361qto.3
-        for <linux-usb@vger.kernel.org>; Fri, 25 Oct 2019 00:12:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y7vqZokkWR7+GS48fmUuYPLXAvMVfo/8O1D4NDWeFmk=;
-        b=pUUaQH/DWoTBzQnNWB49dUdGsOItZ8Aw3Z1dpyC4yDjlb3YPs0Vlt1zYm7jMKzhU+1
-         tD/wEqY6JXtuNzmgznccgw8Ws7Kza/6M00d6PL6nYmeDrSldcurPwryoWtCGOBmNUcy3
-         LJ+klXQDEQQ0BE9k3X5GECDYO5L+VDT0uaX/zNJtm5SIDSqBoElQGlT6pIpJJlbDsXBw
-         aYT4FYxp5z7ZU1qRBbQq4MKS56NMl0GiqMqat4OdwC+dNLOt3DdLmaZH1771NfKHCdbO
-         PrxOC3oLuCzWLYipExuIFT+BqpWbB4kfm7yq1dc6NDBdyDWICDx+Qluy247SFdZAA6dn
-         9dTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y7vqZokkWR7+GS48fmUuYPLXAvMVfo/8O1D4NDWeFmk=;
-        b=HxAsNryAt46qR9yzMGGiXZsxUUOAmcMEsSsIFfcbSnbRs6GrRhb57krbTj8q+6ww/t
-         zym3wY+d4ld+xX3jRp0kDUwt/06tZRdIKmRG3z/L30BHDD2y9zMBrtiqRn51itWAKXi3
-         yuMTtLEckutw+YNNYtpWvnwMjx85d2SFroUwtOMVWJG0FvYZlrF8cWoPim83lNfWh2fv
-         /KZYEQASorZIMkEjg231JZTz8u1JSXVc4rDrJcJEse2oRJRozlEbiUAKdcZV0+6jD7XD
-         DHbXj5+2LiL8adFPK9U7jejK8dpdVjIO0mhOIEUCZst1G55dIB6mrFTXC5zOxp/uA53X
-         UFfg==
-X-Gm-Message-State: APjAAAXEz6JFo9DJzFjBDDDfF8XoMP6SB0n5m95yRencNDIRvfca+L7Z
-        f9QttE8mzAn9hz2Bq9WP/ftmML0trkO6fsA2GlZxLA==
-X-Google-Smtp-Source: APXvYqxi0EwTymF9nPtPsY0B3bV61Maul6DeZgSQS9AcKD6MolLYaJRmKgrwOZcedSJQ5182NorU5pc7KvYAJ3TWejs=
-X-Received: by 2002:ac8:4508:: with SMTP id q8mr1655147qtn.110.1571987520725;
- Fri, 25 Oct 2019 00:12:00 -0700 (PDT)
+        id S2393141AbfJYHdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 03:33:08 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34864 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726479AbfJYHdI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 03:33:08 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C7075AFB7;
+        Fri, 25 Oct 2019 07:33:05 +0000 (UTC)
+Date:   Fri, 25 Oct 2019 09:33:04 +0200
+From:   Daniel Wagner <dwagner@suse.de>
+To:     Stefan Wahren <wahrenst@gmx.net>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rt-users@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] net: usb: lan78xx: Use phy_mac_interrupt() for interrupt
+ handling
+Message-ID: <20191025073304.zqw2yxaulkyopk5y@beryllium.lan>
+References: <20191018082817.111480-1-dwagner@suse.de>
+ <20191018131532.dsfhyiilsi7cy4cm@linutronix.de>
+ <20191022101747.001b6d06@cakuba.netronome.com>
+ <20191023074719.gcov5xfrcvns5tlg@beryllium.lan>
+ <20191023080640.zcw2f2v7fpanoewm@beryllium.lan>
+ <20191024104317.32bp32krrjmfb36p@linutronix.de>
+ <20191024110610.lwwy75dkgwjdxml6@beryllium.lan>
+ <20191024141216.wz2dcdxy4mrl2q5a@beryllium.lan>
+ <78ab19da-2f30-86e0-fad1-667f5e6ba8b1@gmx.net>
 MIME-Version: 1.0
-References: <CAD8Lp46KZmTzxjYN6T7u1xH0AODr38hFcCgR-COtvduK9ZuANQ@mail.gmail.com>
- <20191024170023.GA135695@google.com>
-In-Reply-To: <20191024170023.GA135695@google.com>
-From:   Daniel Drake <drake@endlessm.com>
-Date:   Fri, 25 Oct 2019 15:11:49 +0800
-Message-ID: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Linux Upstreaming Team <linux@endlessm.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <78ab19da-2f30-86e0-fad1-667f5e6ba8b1@gmx.net>
+User-Agent: NeoMutt/20180716
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 1:00 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> That's really strange.  Your original message showed:
->
->   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
->   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
->
-> The first line is from pci_raw_set_power_state() reading PCI_PM_CTRL,
-> but we can't tell whether the read failed and we got ~0, or it
-> succeeded and we got something with just the low two bits set.  Can
-> you print out the whole value so we can see what happened?
->
-> The second line is from pci_enable_resources() reading PCI_COMMAND,
-> and it got *0*, not 0x0403 as you got from the CRS experiment.
+Hi Stefan,
 
-Thanks for persisting here. In more detail:
+On Thu, Oct 24, 2019 at 07:25:37PM +0200, Stefan Wahren wrote:
+> Am 24.10.19 um 16:12 schrieb Daniel Wagner:
+> > On Thu, Oct 24, 2019 at 01:06:10PM +0200, Daniel Wagner wrote:
+> >
+> > Sebastians suggested to try the RPi kernel. The rpi-5.2.y kernel
+> > behaves exactly the same. That is one PHY interrupt and later on NFS
+> > timeouts.
+> >
+> > According their website the current shipped RPi kernel is in version
+> > 4.18. Here is what happends with rpi-4.18.y:
+> 
+> No, it's 4.19. It's always a LTS kernel.
 
-pci_pm_resume_noirq
-- pci_pm_default_resume_early
--- pci_raw_set_power_state(D0)
+Ah okay and obviously, 4.19 works also nicely. No surprise here.
 
-At this point, pci_dev_wait() reads PCI_COMMAND to be 0x100403 (32-bit
-read) - so no wait.
-pci_raw_set_power_state writes to PM_CTRL and then reads it back with value 0x3.
->   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> I'm curious, what's the motivation behind this? The rpi tree contains
+> additional hacks, so i'm not sure the results are comparable. Also the
+> USB host driver is a different one.
 
-At the point of return from pci_pm_resume_noirq, an extra check I
-added shows that PCI_COMMAND has value 0x403 (16-bit read).
-35ms later, pci_pm_resume is entered, and I checked that at this
-point, PCI_COMMAND has value 0.
-It then goes on to reach pci_enable_resources().
->   xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+The idea was to see what the PHY interrupt is doing. As it turns out
+the RPi tree and mainline have almost the same infrastructure code
+here (irqdomain). There are some additional tweaks in the RPi
+kernel. My initial revert patch removed all this infrastructure code,
+which is probably not a good idea. If the way forward is to steal the
+bits and pieces from the RPi tree which should keep this code in
+place.
 
-The change in PCI_COMMAND value is just down to timing.
-At the end of pci_pm_resume_noirq(), if I log PCI_COMMAND, wait 10ms,
-and log PCI_COMMAND again, I see it transition from 0x403 to 0.
+With the local_irq_disable() patch, which I am going to send asap, the
+warning which everyone is seeing should be gone. So one bug down.
 
+> > There are no NFS timeouts and commands like 'apt update' work reasoble
+> > fast. So no long delays or hangs. Time to burn this hardware.
+> 
+> Since enabling lan78xx for Raspberry Pi 3B+, we found a lot of driver
+> issues. So i'm not really surprised, that there are still more of them.
+
+If the vendor would work on fixing the bugs it would not be real
+problem.
+
+Thanks,
 Daniel
+
