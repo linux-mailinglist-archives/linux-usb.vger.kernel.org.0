@@ -2,77 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B61D0E4D8A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 16:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94104E4F07
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 16:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2505591AbfJYN6a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 09:58:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53856 "EHLO mail.kernel.org"
+        id S2404059AbfJYO2Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 10:28:24 -0400
+Received: from mga02.intel.com ([134.134.136.20]:10575 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2505583AbfJYN63 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 25 Oct 2019 09:58:29 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 34576222C4;
-        Fri, 25 Oct 2019 13:58:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572011909;
-        bh=luNhTd4Wph/2JoBgh1xl7TIz2ZYbQxAZF6SRn6Jv7ng=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=roiNtfXwAdVws01VZTSxheCoMCIx0m+hicEoqxNfTni7cyAyeuxrXNiUPbqbKGNgc
-         CVA4i6QEXKVz4VRcTrJZg8qEvl4oybIJLFxHv9OHuIo/5vB48SsrEqEzef0vrMhL5F
-         uvE53m693SGwY2KyDVFkFYCRfnoBqqJ3oFK/4ilM=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
-        syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 13/20] net: usb: sr9800: fix uninitialized local variable
-Date:   Fri, 25 Oct 2019 09:57:53 -0400
-Message-Id: <20191025135801.25739-13-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191025135801.25739-1-sashal@kernel.org>
-References: <20191025135801.25739-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S1730064AbfJYO2Y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 10:28:24 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Oct 2019 07:28:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,228,1569308400"; 
+   d="scan'208";a="192554834"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by orsmga008.jf.intel.com with ESMTP; 25 Oct 2019 07:28:22 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/3] xhci fixes for usb-linus
+Date:   Fri, 25 Oct 2019 17:30:26 +0300
+Message-Id: <1572013829-14044-1-git-send-email-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Hi Greg
 
-[ Upstream commit 77b6d09f4ae66d42cd63b121af67780ae3d1a5e9 ]
+A few xhci fixes for usb-linus, solving a couple endianness issues, and a
+use-after-free regression reported by Johan Hovold
 
-Make sure res does not contain random value if the call to
-sr_read_cmd fails for some reason.
+-Mathias
 
-Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
-Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/sr9800.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Ben Dooks (Codethink) (1):
+  usb: xhci: fix __le32/__le64 accessors in debugfs code
 
-diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
-index 004c955c1fd1b..da0ae16f5c74c 100644
---- a/drivers/net/usb/sr9800.c
-+++ b/drivers/net/usb/sr9800.c
-@@ -336,7 +336,7 @@ static void sr_set_multicast(struct net_device *net)
- static int sr_mdio_read(struct net_device *net, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(net);
--	__le16 res;
-+	__le16 res = 0;
- 
- 	mutex_lock(&dev->phy_mutex);
- 	sr_set_sw_mii(dev);
+Mathias Nyman (1):
+  xhci: Fix use-after-free regression in xhci clear hub TT
+    implementation
+
+Samuel Holland (1):
+  usb: xhci: fix Immediate Data Transfer endianness
+
+ drivers/usb/host/xhci-debugfs.c | 24 +++++++++---------
+ drivers/usb/host/xhci-ring.c    |  2 ++
+ drivers/usb/host/xhci.c         | 54 ++++++++++++++++++++++++++++++++++-------
+ 3 files changed, 59 insertions(+), 21 deletions(-)
+
 -- 
-2.20.1
+2.7.4
 
