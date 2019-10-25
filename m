@@ -2,71 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 439D4E4C98
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 15:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F7FE4CC6
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Oct 2019 15:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504877AbfJYNqP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 09:46:15 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:46077 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504878AbfJYNqO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 09:46:14 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1iNzuu-00050C-Ca; Fri, 25 Oct 2019 13:46:12 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Antoine Jacquet <royale@zerezo.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: zr364xx: remove redundant assigmnent to idx, clean up code
-Date:   Fri, 25 Oct 2019 14:46:12 +0100
-Message-Id: <20191025134612.30703-1-colin.king@canonical.com>
+        id S2505091AbfJYNzd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 09:55:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49456 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2505083AbfJYNzb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Oct 2019 09:55:31 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DDB420679;
+        Fri, 25 Oct 2019 13:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572011730;
+        bh=ISAo5vn+007S4sNbFtUYwHTVpHMeCjtJiDa8U5Y8dL8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=hb4gnpL3439t+4wd2yE4+MTDvR7QzxLYPov89HFW3itLisjc+p3lpTUUkU32kjyZk
+         8IQqMONps4cglNIX4qYN919tUBdoDXhtDHCFuO0eMAd13iFZSHQfeaVsghwMZtCpap
+         fQaQXfMjnoOcEZuouEOz4mXl34chbGkPXGK6FDao=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
+        syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 13/33] net: usb: sr9800: fix uninitialized local variable
+Date:   Fri, 25 Oct 2019 09:54:45 -0400
+Message-Id: <20191025135505.24762-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191025135505.24762-1-sashal@kernel.org>
+References: <20191025135505.24762-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+From: Valentin Vidic <vvidic@valentin-vidic.from.hr>
 
-The variable cable_type is being initialized with a value that
-is never read and is being re-assigned a little later on. Replace
-the redundant initializtion with the assignment that occurs a little
-later. Also initialize frm too rather than have a later assignment.
+[ Upstream commit 77b6d09f4ae66d42cd63b121af67780ae3d1a5e9 ]
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Make sure res does not contain random value if the call to
+sr_read_cmd fails for some reason.
+
+Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/zr364xx/zr364xx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/net/usb/sr9800.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index aff78d63b869..57dbcc8083bf 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -555,14 +555,12 @@ static int zr364xx_read_video_callback(struct zr364xx_camera *cam,
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index 35f39f23d8814..8f8c9ede88c26 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -336,7 +336,7 @@ static void sr_set_multicast(struct net_device *net)
+ static int sr_mdio_read(struct net_device *net, int phy_id, int loc)
  {
- 	unsigned char *pdest;
- 	unsigned char *psrc;
--	s32 idx = -1;
--	struct zr364xx_framei *frm;
-+	s32 idx = cam->cur_frame;
-+	struct zr364xx_framei *frm = &cam->buffer.frame[idx];
- 	int i = 0;
- 	unsigned char *ptr = NULL;
+ 	struct usbnet *dev = netdev_priv(net);
+-	__le16 res;
++	__le16 res = 0;
  
- 	_DBG("buffer to user\n");
--	idx = cam->cur_frame;
--	frm = &cam->buffer.frame[idx];
- 
- 	/* swap bytes if camera needs it */
- 	if (cam->method == METHOD0) {
+ 	mutex_lock(&dev->phy_mutex);
+ 	sr_set_sw_mii(dev);
 -- 
 2.20.1
 
