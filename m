@@ -2,144 +2,234 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12339E57B1
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 03:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370A5E581C
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 04:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726105AbfJZBEf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 21:04:35 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:41482 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725887AbfJZBEf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 21:04:35 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 9B69160AA8; Sat, 26 Oct 2019 01:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572051874;
-        bh=3yaT7z9yykYv3jW7oWej3mtZutvEctXePluI1eVXsLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZjM3Rkp2k/mi5LvMEziuSvFH9FTuvUXVFtlcV0TCTSscMYOM+Sx8ys5hqEsEEBNl0
-         G/SEPVIKd+9jbJp2OsL1D/qqwaI0KowIbClYte8nKCNogJHcvrq8sp5f9fMgxOdUoa
-         +bD3tvb9Mr53pvS3Db6M6rqYIiuSxWf1lCxFGcl0=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8A3286076A;
-        Sat, 26 Oct 2019 01:04:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572051873;
-        bh=3yaT7z9yykYv3jW7oWej3mtZutvEctXePluI1eVXsLk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MJ0aAPM+d7Q+3x7rnL37DGAq3l7mTTHiz/O6s+rKuyrBKYzzY4/ARFkdlaA/FicyO
-         mfrj1oPkoTSwL5gohmm3hvlZmlgStutXPlrKr9jgr0WrL7eY4OCNPgtZ4Ypu00V4s7
-         lsOm4QjiijVsT2xhCW9k5GRX5YGcii4kvvS0wKEk=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8A3286076A
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH v2 2/2] usb: gadget: composite: Support more than 500mA MaxPower
-Date:   Fri, 25 Oct 2019 18:04:06 -0700
-Message-Id: <20191026010406.24071-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191023065753.32722-1-jackp@codeaurora.org>
-References: <20191023065753.32722-1-jackp@codeaurora.org>
+        id S1726032AbfJZCls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 22:41:48 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33534 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725957AbfJZCls (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 22:41:48 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c184so2947201pfb.0;
+        Fri, 25 Oct 2019 19:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=djftLTI6SR5uMqaa99UH/gv0dadwEjva6NX8TGWdKiM=;
+        b=DE/kmQODrwVaCK6qad2QXWWq0B+tL8G8hH5iPvdZUnSz7HsLjv64uhGi5YS8HSSntx
+         vebaKCcJYE/BCZwkWKnxRP4emMi+6e2sVftGH14rBJwt8QOCi8LkY6jkNmoBrRkN0zSC
+         NMuacsR2RK4SosvgHkyIAkbSMrcCtln1RyLL/5NUsrqHlZwbfEQecSuBHCozFKU1upWU
+         4LF3qQmE56LbpXwFPnVIgYm9dV2SEdfb+BNh/TkXPW3bGNn3/5QsfbLNv6nJjoiz1eNy
+         b1fDQU1gHmgy36+0092U2eilf/2Mn4GKMC5jhAT+Cg8PbmMTBC7MRUWCJT2YWua8zT0Y
+         4R8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=djftLTI6SR5uMqaa99UH/gv0dadwEjva6NX8TGWdKiM=;
+        b=n3Nk4i47f3uBILN7oqb4yOJk20Zs04U7cjU6OMi1OMmWCvHTRh1Oo6hvKFrjlw5Hyu
+         uEXFvYRzOY0CcOee+oMUrZWwKu8JOU1HOrPLeIls3D0WwlmKUR32Lip7BYU76+EqCf7f
+         kmlowe+0H103fRMzMhxpvVqvpsSQkeFbTFn+tbzypmvHTxEcTCFf6DecMo0Rm+Xm5C5Y
+         2AjfHsyg0MpbXdKaXPaqbhE5UEsDTlNUgrT5zSM8VWgd8sj6OpFSZOX0KNUEJN8IIpZU
+         ReFbxaL5S4HA6vRU3paIGtTHX4dEtw1U7uRMP1ywNFvwBrSCRoaHXc3HbL9WZ0PA7RCY
+         RyHw==
+X-Gm-Message-State: APjAAAWHMBR9ARmTXJfWNO0GVEysBWxirdnQImIXe4dWfavH5xzL2DST
+        GuVx000HEEyYVDMwOyjkNlw=
+X-Google-Smtp-Source: APXvYqxO7pDGnVczJQjopLSupQIquaCeOh8F2CjyTf9Y1YWv8SETT/2CfniI+qr1y0mp70WLCjq4rQ==
+X-Received: by 2002:a17:90a:c505:: with SMTP id k5mr7770342pjt.84.1572057707252;
+        Fri, 25 Oct 2019 19:41:47 -0700 (PDT)
+Received: from localhost.localdomain ([221.155.202.134])
+        by smtp.gmail.com with ESMTPSA id e16sm3724083pgt.68.2019.10.25.19.41.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2019 19:41:46 -0700 (PDT)
+Date:   Sat, 26 Oct 2019 11:41:41 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah <shuah@kernel.org>, Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
+ uninitialized symbol 'nents'.
+Message-ID: <20191026024141.GA3339@localhost.localdomain>
+References: <20191022092839.GD10833@kadam>
+ <20191023071120.GA3061@localhost.localdomain>
+ <20191024194500.GD23523@kadam>
+ <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 3.x SuperSpeed peripherals can draw up to 900mA of VBUS power
-when in configured state. However, if a configuration wanting to
-take advantage of this is added with MaxPower greater than 500
-(currently possible if using a ConfigFS gadget) the composite
-driver fails to accommodate this for a couple reasons:
+On Thu, Oct 24, 2019 at 04:52:52PM -0600, shuah wrote:
+> On 10/24/19 1:45 PM, Dan Carpenter wrote:
+> > On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
+> > > On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
+> > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > head:   7d194c2100ad2a6dded545887d02754948ca5241
+> > > > commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
+> > > > date:   7 weeks ago
+> > > > 
+> > > > If you fix the issue, kindly add following tag
+> > > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > > 
+> > > > New smatch warnings:
+> > > > drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
+> > > > 
+> > > > Old smatch warnings:
+> > > > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
 
- - usb_gadget_vbus_draw() when called from set_config() and
-   composite_resume() will be passed the MaxPower value without
-   regard for the current connection speed, resulting in a
-   violation for USB 2.0 since the max is 500mA.
+Here, ret is not initialized, meaning priv->num_urbs is 0.
+priv->urbs must be greater than zero.
+priv->num_urbs = 0 means nents is 0 (line 505)
 
- - the bMaxPower of the configuration descriptor would be
-   incorrectly encoded, again if the connection speed is only
-   at USB 2.0 or below, likely wrapping around UINT8_MAX since
-   the 2mA multiplier corresponds to a maximum of 510mA.
+Dan, What is the relationship between old and new warnings?
+priv->num_urbs is set as value of "num_urbs" at stub_recv_cmd_submit()
+and "num_urbs" is initialized as 1 first. "num_urbs" will be reset
+only at the place where smatch new warnings happened (line 505).
 
-Fix these by adding checks against the current gadget->speed
-when the c->MaxPower value is used and appropriately limit
-based on whether it is currently at a low-/full-/high- or super-
-speed connection.
+So, In my opinion, old smatch warnings should occur after the new
+smatch warnings. Does this look right to you?
 
-Incidentally, 900 is not divisible by 8, so even for Superspeed
-the bMaxPower needs to be capped at 896mA, otherwise due to the
-round-up division a MaxPower of 900mA will result in an encoded
-value of 0x71. When a host stack (including Linux and Windows)
-enumerates this on a single port root hub, it reads this value
-back and decodes (multiplies by 8) to get 904mA which is strictly
-greater than 900mA that is typically budgeted for that port,
-causing it to reject the configuration.
+> > > > # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea44d190764b4422af4d1c29eaeb9e69e353b406
+> > > > git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > > git remote update linus
+> > > > git checkout ea44d190764b4422af4d1c29eaeb9e69e353b406
+> > > > vim +/nents +505 drivers/usb/usbip/stub_rx.c
+> > > > 
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  453  static void stub_recv_cmd_submit(struct stub_device *sdev,
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  454  				 struct usbip_header *pdu)
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  455  {
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  456  	struct stub_priv *priv;
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  457  	struct usbip_device *ud = &sdev->ud;
+> > > > 2d8f4595d1f275 drivers/staging/usbip/stub_rx.c Max Vozeler        2011-01-12  458  	struct usb_device *udev = sdev->udev;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  459  	struct scatterlist *sgl = NULL, *sg;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  460  	void *buffer = NULL;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  461  	unsigned long long buf_len;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  462  	int nents;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  463  	int num_urbs = 1;
+> > > > c6688ef9f29762 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  464  	int pipe = get_pipe(sdev, pdu);
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  465  	int use_sg = pdu->u.cmd_submit.transfer_flags & URB_DMA_MAP_SG;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  466  	int support_sg = 1;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  467  	int np = 0;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  468  	int ret, i;
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  469
+> > > > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  470  	if (pipe == -1)
+> > > > 635f545a7e8be7 drivers/usb/usbip/stub_rx.c     Shuah Khan         2017-12-07  471  		return;
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  472
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  473  	priv = stub_priv_alloc(sdev, pdu);
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  474  	if (!priv)
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  475  		return;
+> > > > 4d7b5c7f8ad49b drivers/staging/usbip/stub_rx.c Takahiro Hirofuchi 2008-07-09  476
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  477  	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  478
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  479  	/* allocate urb transfer buffer, if needed */
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  480  	if (buf_len) {
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  481  		if (use_sg) {
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  482  			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  483  			if (!sgl)
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  484  				goto err_malloc;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  485  		} else {
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  486  			buffer = kzalloc(buf_len, GFP_KERNEL);
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  487  			if (!buffer)
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  488  				goto err_malloc;
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  489  		}
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  490  	}
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  491
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  492  	/* Check if the server's HCD supports SG */
+> > > > ea44d190764b44 drivers/usb/usbip/stub_rx.c     Suwan Kim          2019-08-28  493  	if (use_sg && !udev->bus->sg_tablesize) {
+> > > > 
+> > > > Smatch thinks "use_sg" can be true when "buf_len" is zero.  It's hard
+> > > > to tell if Smatch is right or wrong without more context...
+> > > 
+> > > This is a bit strange. The meaning of "use_sg" is that client will
+> > > use scatter-gather and client's urb->num_sgs is not zero. And buffer
+> > > length should not be zero.
+> > > 
+> > > usb_sg and buf_len are both client-dependent variables, so I think
+> > > if they have wrong value in the server side, the client must have
+> > > sent use_sg and buf_len with incorrect values.
+> > > 
+> > > Did this error occur when compiling?
+> > 
+> > Smatch is doing static analysis, yes.
+> > 
+> > > If then, Did Smatch also consider vhci tx side?
+> > 
+> > I'm not really sure...  I can't reproduce the warning because on my
+> > system Smatch doesn't parse usbip_recv() correctly so it ends up
+> > silencing that warning.  :/
+> > 
+> 
+> Hi Suwan,
+> 
+> This is a problem that needs fixing. nents
+> 
+>        /* allocate urb transfer buffer, if needed */
+>         if (buf_len) {
+>                 if (use_sg) {
+>                         sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+> 
+> nents gets initialized here by sgl_alloc()
+> 
+>                         if (!sgl)
+>                                 goto err_malloc;
+>                 } else {
+>                         buffer = kzalloc(buf_len, GFP_KERNEL);
+>                         if (!buffer)
+>                                 goto err_malloc;
+>                 }
+>         }
+> 
+>         /* Check if the server's HCD supports SG */
+>         if (use_sg && !udev->bus->sg_tablesize) {
+>                 /*
+>                  * If the server's HCD doesn't support SG, break a single SG
+>                  * request into several URBs and map each SG list entry to
+>                  * corresponding URB buffer. The previously allocated SG
+>                  * list is stored in priv->sgl (If the server's HCD support
+> SG,
+>                  * SG list is stored only in urb->sg) and it is used as an
+>                  * indicator that the server split single SG request into
+>                  * several URBs. Later, priv->sgl is used by stub_complete()
+> and
+>                  * stub_send_ret_submit() to reassemble the divied URBs.
+>                  */
+>                 support_sg = 0;
+>                 num_urbs = nents;
+> 
+> I think nents will be valid here. Is there need for this additional
+> check here? You can fold this into the previous use_sg check, right
+> after the sg_alloc() success, I would think.
+> 
+>                 priv->completed_urbs = 0;
+>                 pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
+>         }
+> 
+> 
+> thanks,
+> -- Shuah
 
-N.B. USB 3.2 Gen N x 2 allows for up to 1500mA but there doesn't
-seem to be any any peripheral controller supported by Linux that
-does two lane operation, so for now keeping the clamp at 900
-should be fine.
+I agree with you. Is it your intention to check as follows?
 
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
----
-v2: Fix typos in commit text and reworded the blurb about rounding
+	/* Check if the server's HCD supports SG */
+	if (use_sg && !nents &&  !udev->bus->sg_tablesize) {
+                     ^ Additinal check in here?
 
- drivers/usb/gadget/composite.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+In my opinion, it would be nice to initialize nents to zero first,
+and then check in the above if statement to see if nents was set
+in sgl_free().
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index e1db94d1fe2e..92ce3018f482 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -438,9 +438,10 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
- 	if (!val)
- 		return 0;
- 	if (speed < USB_SPEED_SUPER)
--		return DIV_ROUND_UP(val, 2);
-+		return DIV_ROUND_UP(min(val, 500U), 2);
- 	else
--		return DIV_ROUND_UP(val, 8);
-+		/* USB 3.x supports 900mA, but that isn't divisible by 8... */
-+		return DIV_ROUND_UP(min(val, 896U), 8);
- }
- 
- static int config_buf(struct usb_configuration *config,
-@@ -852,6 +853,10 @@ static int set_config(struct usb_composite_dev *cdev,
- 
- 	/* when we return, be sure our power usage is valid */
- 	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-+	if (gadget->speed < USB_SPEED_SUPER)
-+		power = min(power, 500U);
-+	else
-+		power = min(power, 900U);
- done:
- 	usb_gadget_vbus_draw(gadget, power);
- 	if (result >= 0 && cdev->delayed_status)
-@@ -2289,6 +2294,10 @@ void composite_resume(struct usb_gadget *gadget)
- 		}
- 
- 		maxpower = cdev->config->MaxPower;
-+		if (gadget->speed < USB_SPEED_SUPER)
-+			maxpower = min_t(u16, maxpower, 500U);
-+		else
-+			maxpower = min_t(u16, maxpower, 900U);
- 
- 		usb_gadget_vbus_draw(gadget, maxpower ?
- 			maxpower : CONFIG_USB_GADGET_VBUS_DRAW);
--- 
-2.21.0
-
+Regards,
+Suwan Kim
