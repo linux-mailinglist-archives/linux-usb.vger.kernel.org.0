@@ -2,68 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 370A5E581C
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 04:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990B7E585E
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 05:40:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726032AbfJZCls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Oct 2019 22:41:48 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33534 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbfJZCls (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 22:41:48 -0400
-Received: by mail-pf1-f196.google.com with SMTP id c184so2947201pfb.0;
-        Fri, 25 Oct 2019 19:41:47 -0700 (PDT)
+        id S1726082AbfJZDkT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Oct 2019 23:40:19 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34089 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726010AbfJZDkS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Oct 2019 23:40:18 -0400
+Received: by mail-pg1-f196.google.com with SMTP id k20so2927340pgi.1;
+        Fri, 25 Oct 2019 20:40:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=djftLTI6SR5uMqaa99UH/gv0dadwEjva6NX8TGWdKiM=;
-        b=DE/kmQODrwVaCK6qad2QXWWq0B+tL8G8hH5iPvdZUnSz7HsLjv64uhGi5YS8HSSntx
-         vebaKCcJYE/BCZwkWKnxRP4emMi+6e2sVftGH14rBJwt8QOCi8LkY6jkNmoBrRkN0zSC
-         NMuacsR2RK4SosvgHkyIAkbSMrcCtln1RyLL/5NUsrqHlZwbfEQecSuBHCozFKU1upWU
-         4LF3qQmE56LbpXwFPnVIgYm9dV2SEdfb+BNh/TkXPW3bGNn3/5QsfbLNv6nJjoiz1eNy
-         b1fDQU1gHmgy36+0092U2eilf/2Mn4GKMC5jhAT+Cg8PbmMTBC7MRUWCJT2YWua8zT0Y
-         4R8A==
+         :content-disposition:in-reply-to:user-agent;
+        bh=QKAUsu8Rk5LnbcISzIFxCS8PZCCL0OvgupAEOWTsqkY=;
+        b=Jo8ATkdNe57lEiIERcoSakrJ381O1DYm36kft44vW0pTBz+WbylRD3SXDUL7v3n8KG
+         O5CH+W5mHIxR7/pv4XUo9f3e8Fmf68E6Eb9C5o5jUfqmU9aD+mXBCZY/6i4VBFbvtzQ3
+         dNAj0nfnEgGI0iDsPG4+L4ofb1Ev/WAdtFTI5IhTnPxbfKpxs7EK41Tf/4i61QFr83sf
+         /cjhLTZpx9BlZ2QR+yZPZDelZC5et5MhSeyoq0cDIQGuP9DMwXINGqx5iUXAmeYKZM5F
+         WmGZe8sv0QgOMuoHV/D6rGQhxGdmHu5OppD5NI2R/SFb3c0sFxgkYDxNqOWZiZIdmlwY
+         4amA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=djftLTI6SR5uMqaa99UH/gv0dadwEjva6NX8TGWdKiM=;
-        b=n3Nk4i47f3uBILN7oqb4yOJk20Zs04U7cjU6OMi1OMmWCvHTRh1Oo6hvKFrjlw5Hyu
-         uEXFvYRzOY0CcOee+oMUrZWwKu8JOU1HOrPLeIls3D0WwlmKUR32Lip7BYU76+EqCf7f
-         kmlowe+0H103fRMzMhxpvVqvpsSQkeFbTFn+tbzypmvHTxEcTCFf6DecMo0Rm+Xm5C5Y
-         2AjfHsyg0MpbXdKaXPaqbhE5UEsDTlNUgrT5zSM8VWgd8sj6OpFSZOX0KNUEJN8IIpZU
-         ReFbxaL5S4HA6vRU3paIGtTHX4dEtw1U7uRMP1ywNFvwBrSCRoaHXc3HbL9WZ0PA7RCY
-         RyHw==
-X-Gm-Message-State: APjAAAWHMBR9ARmTXJfWNO0GVEysBWxirdnQImIXe4dWfavH5xzL2DST
-        GuVx000HEEyYVDMwOyjkNlw=
-X-Google-Smtp-Source: APXvYqxO7pDGnVczJQjopLSupQIquaCeOh8F2CjyTf9Y1YWv8SETT/2CfniI+qr1y0mp70WLCjq4rQ==
-X-Received: by 2002:a17:90a:c505:: with SMTP id k5mr7770342pjt.84.1572057707252;
-        Fri, 25 Oct 2019 19:41:47 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QKAUsu8Rk5LnbcISzIFxCS8PZCCL0OvgupAEOWTsqkY=;
+        b=LSaLvrEHsB8fECbGb23pmvD1wrbcBHLrjiqOBG+LWB95BPRKIAQmYATwj3Gp7/UOwN
+         0yV6s+kA8jJ3pi8cP6h9c0NoIVzz6iLimpNcxjHtY5C4yyj3wZbfSj3sY/pYf2CFvtq6
+         Fi0YO/mwgwpXnaAANCOuArriPJG+2EH5zGSwmonmSst7GRJJEcYdMT+8N9+GcsqMplJ3
+         OCeiq4ULn5E4FJeFm34groC6CuExmqBWnc7hSfHcjwLaioiBrdhIiODSXM/ojXrjT7Cg
+         8eWVYeIg5i4AgZTMlHrYRlMvwkm8mJHfLA8A8P/sPu4bet6E4kv1bq2WqVYCWGa7wBTt
+         Gu4g==
+X-Gm-Message-State: APjAAAUbh8w4ab72HSHjhyT/GSn9HEhAc77zx+vuAN4k6SE3AZruEw3e
+        5FkcVD1J1hYU4J3X2KoFtDk=
+X-Google-Smtp-Source: APXvYqx1Ib6nW2Z/frUzTZBEkaZY2AMfvzLlboBcvNI2D/1PV4RtILcYRZf7qxoIdlRgwDgsbEEwfQ==
+X-Received: by 2002:a17:90a:8c06:: with SMTP id a6mr8267928pjo.135.1572061216112;
+        Fri, 25 Oct 2019 20:40:16 -0700 (PDT)
 Received: from localhost.localdomain ([221.155.202.134])
-        by smtp.gmail.com with ESMTPSA id e16sm3724083pgt.68.2019.10.25.19.41.44
+        by smtp.gmail.com with ESMTPSA id dw6sm3487547pjb.21.2019.10.25.20.40.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 19:41:46 -0700 (PDT)
-Date:   Sat, 26 Oct 2019 11:41:41 +0900
+        Fri, 25 Oct 2019 20:40:15 -0700 (PDT)
+Date:   Sat, 26 Oct 2019 12:40:10 +0900
 From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>, Dan Carpenter <dan.carpenter@oracle.com>
+To:     shuah <shuah@kernel.org>
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
         kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
  uninitialized symbol 'nents'.
-Message-ID: <20191026024141.GA3339@localhost.localdomain>
+Message-ID: <20191026034010.GA6411@localhost.localdomain>
 References: <20191022092839.GD10833@kadam>
  <20191023071120.GA3061@localhost.localdomain>
  <20191024194500.GD23523@kadam>
  <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
@@ -89,19 +86,7 @@ On Thu, Oct 24, 2019 at 04:52:52PM -0600, shuah wrote:
 > > > > 
 > > > > Old smatch warnings:
 > > > > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
-
-Here, ret is not initialized, meaning priv->num_urbs is 0.
-priv->urbs must be greater than zero.
-priv->num_urbs = 0 means nents is 0 (line 505)
-
-Dan, What is the relationship between old and new warnings?
-priv->num_urbs is set as value of "num_urbs" at stub_recv_cmd_submit()
-and "num_urbs" is initialized as 1 first. "num_urbs" will be reset
-only at the place where smatch new warnings happened (line 505).
-
-So, In my opinion, old smatch warnings should occur after the new
-smatch warnings. Does this look right to you?
-
+> > > > 
 > > > > # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ea44d190764b4422af4d1c29eaeb9e69e353b406
 > > > > git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
 > > > > git remote update linus
@@ -212,24 +197,36 @@ smatch warnings. Does this look right to you?
 > I think nents will be valid here. Is there need for this additional
 > check here? You can fold this into the previous use_sg check, right
 > after the sg_alloc() success, I would think.
-> 
->                 priv->completed_urbs = 0;
->                 pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
->         }
-> 
-> 
-> thanks,
-> -- Shuah
 
-I agree with you. Is it your intention to check as follows?
+Or Is it your intention to check as follows?
+I think this looks good.
+
+	...
+	int nents = 0
+
+	...
+
+	/* allocate urb transfer buffer, if needed */
+	if (buf_len) {
+		if (use_sg) {
+			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+			if (!sgl)
+				goto err_malloc;
+		} else {
+			buffer = kzalloc(buf_len, GFP_KERNEL);
+			if (!buffer)
+				goto err_malloc;
+		}
+	}
+
+	/* Additional check here */
+	if (use_sg && !nents) {
+		err_message;
+		goto err_urbs;
+	}
 
 	/* Check if the server's HCD supports SG */
-	if (use_sg && !nents &&  !udev->bus->sg_tablesize) {
-                     ^ Additinal check in here?
-
-In my opinion, it would be nice to initialize nents to zero first,
-and then check in the above if statement to see if nents was set
-in sgl_free().
+	if (use_sg && !udev->bus->sg_tablesize) {
 
 Regards,
 Suwan Kim
