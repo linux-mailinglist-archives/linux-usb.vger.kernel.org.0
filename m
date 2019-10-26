@@ -2,42 +2,41 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD85E5BB8
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 15:25:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB8FE5B6D
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 15:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728407AbfJZNZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Oct 2019 09:25:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44486 "EHLO mail.kernel.org"
+        id S1729560AbfJZNW5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Oct 2019 09:22:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44690 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729459AbfJZNWn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 26 Oct 2019 09:22:43 -0400
+        id S1728442AbfJZNWy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 26 Oct 2019 09:22:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FB20222CD;
-        Sat, 26 Oct 2019 13:22:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 190FC21E6F;
+        Sat, 26 Oct 2019 13:22:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572096163;
-        bh=ujLst6JtZwRSd+wBg3q4vJSyk3J/9wsGc6v0hbwbTTY=;
+        s=default; t=1572096173;
+        bh=luNhTd4Wph/2JoBgh1xl7TIz2ZYbQxAZF6SRn6Jv7ng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eY8K3gr167PBeQJwAxBcsycz1QEj3D/JBptkvinMNEKxQfkgNrcswdEig3Eedd5yY
-         u5Ie2igUlxry/iJSHtCK+U+ba/fZiv0Woqva2Vgx1uBsKojYCbYZvmDVove/1SzuH9
-         mG/sbb+i9zZ40sOAT4xC8n1ifWGbAfBK8UVYC6no=
+        b=Cmx97NV08U27OMV4gp1ixJLQdA0KTB1UYBvEm5vTnw1sHZD2hZzm+T2HnHgxcKo2V
+         AvVs07RmM6DhnWje5RXtTD1gBYZZfhkh/Mh64KbK8Q0BSNikT0/GO4PFoKFFRynqMm
+         /0/acYYB09tyN/UeghHBHvJ/e/Hja0//c9Tescjk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Daniele Palmas <dnlplm@gmail.com>,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 13/21] net: usb: qmi_wwan: add Telit 0x1050 composition
-Date:   Sat, 26 Oct 2019 09:22:09 -0400
-Message-Id: <20191026132217.4380-13-sashal@kernel.org>
+Cc:     Valentin Vidic <vvidic@valentin-vidic.from.hr>,
+        syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 18/21] net: usb: sr9800: fix uninitialized local variable
+Date:   Sat, 26 Oct 2019 09:22:14 -0400
+Message-Id: <20191026132217.4380-18-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191026132217.4380-1-sashal@kernel.org>
 References: <20191026132217.4380-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -46,34 +45,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Daniele Palmas <dnlplm@gmail.com>
+From: Valentin Vidic <vvidic@valentin-vidic.from.hr>
 
-[ Upstream commit e0ae2c578d3909e60e9448207f5d83f785f1129f ]
+[ Upstream commit 77b6d09f4ae66d42cd63b121af67780ae3d1a5e9 ]
 
-This patch adds support for Telit FN980 0x1050 composition
+Make sure res does not contain random value if the call to
+sr_read_cmd fails for some reason.
 
-0x1050: tty, adb, rmnet, tty, tty, tty, tty
-
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
-Acked-by: Bjørn Mork <bjorn@mork.no>
-Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Reported-by: syzbot+f1842130bbcfb335bac1@syzkaller.appspotmail.com
+Signed-off-by: Valentin Vidic <vvidic@valentin-vidic.from.hr>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/usb/sr9800.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 0d48714c3f286..cfc37962f6e3d 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -922,6 +922,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
- 	{QMI_FIXED_INTF(0x2357, 0x9000, 4)},	/* TP-LINK MA260 */
- 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
-+	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
- 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+diff --git a/drivers/net/usb/sr9800.c b/drivers/net/usb/sr9800.c
+index 004c955c1fd1b..da0ae16f5c74c 100644
+--- a/drivers/net/usb/sr9800.c
++++ b/drivers/net/usb/sr9800.c
+@@ -336,7 +336,7 @@ static void sr_set_multicast(struct net_device *net)
+ static int sr_mdio_read(struct net_device *net, int phy_id, int loc)
+ {
+ 	struct usbnet *dev = netdev_priv(net);
+-	__le16 res;
++	__le16 res = 0;
+ 
+ 	mutex_lock(&dev->phy_mutex);
+ 	sr_set_sw_mii(dev);
 -- 
 2.20.1
 
