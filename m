@@ -2,40 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3528E5B2A
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 15:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C83FE5BF4
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Oct 2019 15:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727001AbfJZNVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 26 Oct 2019 09:21:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42692 "EHLO mail.kernel.org"
+        id S1727715AbfJZN1C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Oct 2019 09:27:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43502 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727504AbfJZNVB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 26 Oct 2019 09:21:01 -0400
+        id S1729123AbfJZNVm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 26 Oct 2019 09:21:42 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8985E222C9;
-        Sat, 26 Oct 2019 13:20:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7689D222BE;
+        Sat, 26 Oct 2019 13:21:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572096060;
-        bh=gJOIq6DLbnNigNe4FwTklnHE3ntXFFrsVq6k3vM7U8s=;
+        s=default; t=1572096102;
+        bh=JQPnHHefjD50QpW9G8R7ACml4N1RMeIAqydYYqU13aM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R2L1/bq1v9aoMqfu22SFdLa8IkPpwr/KYLqWQk9hm3t5mXhUpAUvSyDzJhlhDTPB8
-         0LCZg8N49tQZ/hSxizaT0UOgpTWQg6CK6/qAJVo0rowN5CByZhYA+zE9SKpFfyFP4Y
-         GZQX4Jq4+i8RK8uX1ejPYiPV/Et495hHaJEh1Aww=
+        b=aRjznIpWp+z8bDSGEhJ4Hk8kjoZCX2TIFoEdfUdk4qU1mStNGQd+tqe26gea004bI
+         oIf/9ZLXARaRFAB3wr36juZZ0ArqVKX5wm5Kz3FgJZRZDbIhoZSIih5u1v0uTJfsdb
+         owVDqWncYXBlRL+E2iMHOznnZdWxDn5TLcfwx9i8=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>, Daniel Wagner <dwagner@suse.de>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Daniele Palmas <dnlplm@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 56/59] net: usb: lan78xx: Connect PHY before registering MAC
-Date:   Sat, 26 Oct 2019 09:19:07 -0400
-Message-Id: <20191026131910.3435-56-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 17/33] net: usb: qmi_wwan: add Telit 0x1050 composition
+Date:   Sat, 26 Oct 2019 09:20:54 -0400
+Message-Id: <20191026132110.4026-17-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191026131910.3435-1-sashal@kernel.org>
-References: <20191026131910.3435-1-sashal@kernel.org>
+In-Reply-To: <20191026132110.4026-1-sashal@kernel.org>
+References: <20191026132110.4026-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -44,63 +46,34 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Andrew Lunn <andrew@lunn.ch>
+From: Daniele Palmas <dnlplm@gmail.com>
 
-[ Upstream commit 38b4fe320119859c11b1dc06f6b4987a16344fa1 ]
+[ Upstream commit e0ae2c578d3909e60e9448207f5d83f785f1129f ]
 
-As soon as the netdev is registers, the kernel can start using the
-interface. If the driver connects the MAC to the PHY after the netdev
-is registered, there is a race condition where the interface can be
-opened without having the PHY connected.
+This patch adds support for Telit FN980 0x1050 composition
 
-Change the order to close this race condition.
+0x1050: tty, adb, rmnet, tty, tty, tty, tty
 
-Fixes: 92571a1aae40 ("lan78xx: Connect phy early")
-Reported-by: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
-Tested-by: Daniel Wagner <dwagner@suse.de>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/usb/lan78xx.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index e20266bd209e2..06d2499ba127c 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -3796,10 +3796,14 @@ static int lan78xx_probe(struct usb_interface *intf,
- 	/* driver requires remote-wakeup capability during autosuspend. */
- 	intf->needs_remote_wakeup = 1;
- 
-+	ret = lan78xx_phy_init(dev);
-+	if (ret < 0)
-+		goto out4;
-+
- 	ret = register_netdev(netdev);
- 	if (ret != 0) {
- 		netif_err(dev, probe, netdev, "couldn't register the device\n");
--		goto out4;
-+		goto out5;
- 	}
- 
- 	usb_set_intfdata(intf, dev);
-@@ -3812,14 +3816,10 @@ static int lan78xx_probe(struct usb_interface *intf,
- 	pm_runtime_set_autosuspend_delay(&udev->dev,
- 					 DEFAULT_AUTOSUSPEND_DELAY);
- 
--	ret = lan78xx_phy_init(dev);
--	if (ret < 0)
--		goto out5;
--
- 	return 0;
- 
- out5:
--	unregister_netdev(netdev);
-+	phy_disconnect(netdev->phydev);
- out4:
- 	usb_free_urb(dev->urb_intr);
- out3:
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index e406a05e79dcd..57e9166b4bff3 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1252,6 +1252,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x2357, 0x0201, 4)},	/* TP-LINK HSUPA Modem MA180 */
+ 	{QMI_FIXED_INTF(0x2357, 0x9000, 4)},	/* TP-LINK MA260 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1040, 2)},	/* Telit LE922A */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x1050, 2)},	/* Telit FN980 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
 -- 
 2.20.1
 
