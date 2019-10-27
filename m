@@ -2,73 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE81DE639D
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2019 16:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6191AE63B0
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2019 16:22:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727020AbfJ0PGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Oct 2019 11:06:06 -0400
-Received: from mailgate.kemenperin.go.id ([202.47.80.81]:42596 "EHLO
-        mailgate.kemenperin.go.id" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726682AbfJ0PGG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Oct 2019 11:06:06 -0400
-X-Greylist: delayed 610 seconds by postgrey-1.27 at vger.kernel.org; Sun, 27 Oct 2019 11:06:04 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id B171424644D;
-        Sun, 27 Oct 2019 21:55:04 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id ([127.0.0.1])
-        by localhost (mailgate.kemenperin.go.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Zpl5nuU3z-5k; Sun, 27 Oct 2019 21:55:04 +0700 (WIB)
-Received: from mailgate.kemenperin.go.id (localhost [127.0.0.1])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTPS id E0559246437;
-        Sun, 27 Oct 2019 21:55:03 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mailgate.kemenperin.go.id E0559246437
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kemenperin.go.id;
-        s=3298A942-BBC6-11E3-B333-483736368EC2; t=1572188104;
-        bh=CdJUuNmnaz+JwxdLgu3ylou+sN+ggZFLm9mAitGjxBc=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=cvgx2eN6PwK9/br7IaDApdpXjgZ4ouCIZK9LztUJKh/cjsYrGB3OTawIQMTx65RAC
-         msxcnQHGK7Gfdh6A08ojSU7Sr/XNE01cV2eqmzpRT9mPvCr+yOfPKyd7+tS+yKhF+Y
-         zLBNk73H1+m3ol/Rung2tuGj2BKjAMPyMiBfhNs8=
-Received: from mailgate.kemenperin.go.id (mailgate.kemenperin.go.id [10.1.0.89])
-        by mailgate.kemenperin.go.id (Postfix) with ESMTP id DC4CD24643C;
-        Sun, 27 Oct 2019 21:55:00 +0700 (WIB)
-Date:   Sun, 27 Oct 2019 21:55:00 +0700 (WIB)
-From:   Simple Federal Credit Union <heppy-septiawan@kemenperin.go.id>
-Reply-To: "simpelfedcredit22@outlook.com" <simpelfedcredit22@outlook.com>
-Message-ID: <455937020.318103.1572188100859.JavaMail.zimbra@kemenperin.go.id>
-Subject: =?utf-8?Q?p=C5=AFj=C4=8Dka?=
+        id S1727237AbfJ0PWa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Oct 2019 11:22:30 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:43966 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726682AbfJ0PWa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Oct 2019 11:22:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ABDhaHUlk58M0GS8x0OMrJzxXgr2v5RmyRmLK7Waq+g=; b=dUZFeTqfxrYApphqMY5veHBsj
+        A+RBT+sV9JAtjLVJ+WGOvwNXNw/oX5Nmdvk/AvVWpQtUikMzhdcFtLs1khOn6BULZkyos9EyCedJ5
+        hnt6JriZauG8vb9KgHx/w5MlX/0VsPY2qith2hEChaeTwdY1U4gqTqvfXNegsgqDSyxL508wE6OTp
+        rSaIg8nxkLmtsXAZhqw2s7U224aDC3inBSdoJfjj10LxclpiVy3dsmRybQQ2cjBiPNh9YfQem1O52
+        i64kZVSne/xbFmaWrYMJPXP1/NB8tION2wFu8JyUehQlS7P6++7uDvnUPpIJ80aCkyA7RRWHTg8rb
+        VpLLc/GSg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iOkN5-0005Zc-Hn; Sun, 27 Oct 2019 15:22:23 +0000
+Date:   Sun, 27 Oct 2019 08:22:23 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     torvalds@linux-foundation.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 11/10] pipe: Add fsync() support [ver #2]
+Message-ID: <20191027152223.GA21194@infradead.org>
+References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
+ <30394.1571936252@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Thread-Index: Q7lq2e9UyGnN2urAqH995ob4PCvpQg==
-Thread-Topic: =?utf-8?B?cMWvasSNa2E=?=
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <30394.1571936252@warthog.procyon.org.uk>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Ahoj mil=C3=BD z=C3=A1kazn=C3=ADk,
+On Thu, Oct 24, 2019 at 05:57:32PM +0100, David Howells wrote:
+> pipe: Add fsync() support
+> 
+> The keyrings testsuite needs the ability to wait for all the outstanding
+> notifications in the queue to have been processed so that it can then go
+> through them to find out whether the notifications it expected have been
+> emitted.
+> 
+> Implement fsync() support for pipes to provide this.  The tailmost buffer
+> at the point of calling is marked and fsync adds itself to the list of
+> waiters, noting the tail position to be waited for and marking the buffer
+> as no longer mergeable.  Then when the buffer is consumed, if the flag is
+> set, any matching waiters are woken up.
 
-Toto je jednoduch=C3=BD feder=C3=A1ln=C3=AD =C3=BAv=C4=9Brov=C3=BD svaz, kt=
-er=C3=BD nab=C3=ADz=C3=ADme p=C5=AFj=C4=8Dku od 5 000 do 30 000 000 EUR na =
-obdob=C3=AD 1 a=C5=BE 30 let a s =C3=BArokem 3%. Jsme proto p=C5=99ipraveni=
- v=C3=A1m pomoci v soukrom=C3=BDch v=C4=9B=C5=99itel=C3=ADch / investic=C3=
-=ADch a nab=C3=ADz=C3=ADme osobn=C3=AD p=C5=AFj=C4=8Dku, p=C5=AFj=C4=8Dku n=
-a spu=C5=A1t=C4=9Bn=C3=AD, vzd=C4=9Bl=C3=A1vac=C3=AD / zem=C4=9Bd=C4=9Blsko=
-u p=C5=AFj=C4=8Dku, nemovitost / stavebn=C3=AD p=C5=AFj=C4=8Dku, p=C5=AFj=
-=C4=8Dku na nemovitost, p=C5=AFj=C4=8Dky bez dluhu, p=C5=AFj=C4=8Dku na mob=
-iln=C3=AD d=C5=AFm, p=C5=AFj=C4=8Dku na tvrd=C3=A9 pen=C3=ADze, zaji=C5=A1t=
-=C4=9Bn=C3=A9 / nezaji=C5=A1t=C4=9Bn=C3=A9 p=C5=AFj=C4=8Dka, investi=C4=8Dn=
-=C3=AD financov=C3=A1n=C3=AD, expanzn=C3=AD p=C5=AFj=C4=8Dka, Jv kapit=C3=
-=A1l / rehabilita=C4=8Dn=C3=AD p=C5=AFj=C4=8Dky, akcie / refinan=C4=8Dn=C3=
-=AD p=C5=AFj=C4=8Dky atd. z=C3=A1jemc=C5=AFm z kter=C3=A9koli zem=C4=9B by =
-n=C3=A1s m=C4=9Bli kontaktovat e-mailem: simpelfedcredit22@outlook.com
-
-Cel=C3=A9 jm=C3=A9no:
-Telefonn=C3=AD =C4=8D=C3=ADslo:
-Pot=C5=99ebn=C3=A1 v=C3=BD=C5=A1e p=C5=AFj=C4=8Dky:
-Doba trv=C3=A1n=C3=AD:
-
-D=C3=ADk,
-Eric.
+I am _really_ worried about overloading fsync for this behavior.  fsync
+hasn't done anything for 50 years, and suddenly adding any action
+is not helpful.  If you can't use FIONREAD please add a new ioctls
+instead, and document it properly.
