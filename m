@@ -2,111 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45EEEE626E
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2019 13:15:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDB96E62D5
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Oct 2019 15:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbfJ0MPJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Oct 2019 08:15:09 -0400
-Received: from mout.gmx.net ([212.227.15.15]:57777 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726661AbfJ0MPJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 27 Oct 2019 08:15:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1572178483;
-        bh=hzFiu0s1u36lbFL+Sm9oiww/ZbzJI1xnUJXEm4icdTo=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=BW1zpR5Ta7ncnQqOvekklsntEhirIr3KAOSW4A1k6viRfqDhznCRywCckhtCrsSRY
-         yXOszMhui/P0zQDkJPYy9lHJtQItD6tMmZd59UjROu5MBh3M2RKwGSYA5j5CGNAGK2
-         iWNz9V4NmjVHq+J6MlbLmHFLdp5QzAwXS5kUL7DY=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.162] ([37.4.249.112]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4zAs-1hxAjH1PAS-010qGa; Sun, 27
- Oct 2019 13:14:43 +0100
-Subject: Re: [PATCH] net: usb: lan78xx: Disable interrupts before calling
- generic_handle_irq()
-To:     Daniel Wagner <dwagner@suse.de>, netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Miller <davem@davemloft.net>
-References: <20191025080413.22665-1-dwagner@suse.de>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <46b35c32-4383-c630-3c52-b59bf7908c36@gmx.net>
-Date:   Sun, 27 Oct 2019 13:14:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726836AbfJ0OD6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Oct 2019 10:03:58 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:35804 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbfJ0OD5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Oct 2019 10:03:57 -0400
+Received: by mail-lj1-f195.google.com with SMTP id m7so8570652lji.2
+        for <linux-usb@vger.kernel.org>; Sun, 27 Oct 2019 07:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aUtxqBrTqUG2JQM67qlbeu/gWrmsCKLHs/nf3HjwR6o=;
+        b=UBVoDLidxhGRZnO3t3s9odW+975NWscpsgyn72pMoIFtMXrLI8gYCDX8RoEk4dUGpu
+         XShVkulYmvYa4f4vPiGJkAOAAjj/NBHXSLZISLlhGaOzl5SAbZ6BhT9CpKJEgEzb8LhN
+         G2c7dQQvyPPapIvGT5FeHB9zbcHI3CN4A0Ff0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aUtxqBrTqUG2JQM67qlbeu/gWrmsCKLHs/nf3HjwR6o=;
+        b=iqBEASLZUTQMbR7KY69J6iTBZ9wl3p2xM4SBxyov9zwDvRZiffSU91YKoph/85/aHz
+         8t9GqOvhERBn2vt8B93f+N2GkmevDubdrNoUACSE1Vgsio08z8dp3Fa9HU4gtTuug3Sn
+         VbESceB01hB58ipixNekRyzHQ5v4upKe6hJ9SImc4u375bcC6kMER0zK1QUE2pMW7z4d
+         QgxL3/tcuR+Rc6Zvd8SFajvTNu+PfIlVasXQfdd4jZUr9P5EdO3WBRmCkTv/9L9cHExj
+         CENDy3op80AOg3tb6O36EOUgS1Kq0ZLIdpNtHy/RMyzxEoehdInAwdsezxlhXT2NvF8N
+         38Yg==
+X-Gm-Message-State: APjAAAU4Ym6Y+w7zC37Bhli8ttEV5DOx/7Ef5uhWQWT8XlgtdZaS88ES
+        e1MZ2bOgfupzcTHc2VcjBwjf4VmwPljPxg==
+X-Google-Smtp-Source: APXvYqz1DPohM0HiXD5+XrDc2dKbRWnRhgEVmsCPhiepiGjHZ+o91YkHO1AEag04D0q+KggQMNCmzg==
+X-Received: by 2002:a05:651c:293:: with SMTP id b19mr8450187ljo.176.1572185034598;
+        Sun, 27 Oct 2019 07:03:54 -0700 (PDT)
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
+        by smtp.gmail.com with ESMTPSA id x76sm6131321ljb.81.2019.10.27.07.03.52
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Oct 2019 07:03:52 -0700 (PDT)
+Received: by mail-lj1-f181.google.com with SMTP id c4so8532754lja.11
+        for <linux-usb@vger.kernel.org>; Sun, 27 Oct 2019 07:03:52 -0700 (PDT)
+X-Received: by 2002:a05:651c:331:: with SMTP id b17mr8760744ljp.133.1572185032112;
+ Sun, 27 Oct 2019 07:03:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191025080413.22665-1-dwagner@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:v5mliJ6wThw2tCSLVO1SujmRbc7WST509PmL6NPAFGOCl91mn0g
- jNStYQ+eGPj6wJxQjHQ5LtN/PPobbST2tTkBAusWDg7ybb4EqFqEm4a1pyQaCXQOQHd11ey
- qIXVnd41DoYn6wQS0J8cKkYnEYkpHLiB/ep1+7NjtY6HtHzoXk4VHsHgSUsUzmzkU9DsdZC
- 826JCv8X1iACsy65Cf+Rg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:yATG3UeRTho=:pzoxsdOfAetcRZpiMmoqvp
- Wwn5rj6pv4xPdBlSUOZ0fLxCkfwRX3dYFyNd0NESSPLANMWoEe2kXXdq6skOEBf5ZFgreaJBL
- D0qxWhf70A2hOnfE2V6u28uOAcpU5OYmSySUogUnil6Z0OkA8IquWQ4rBTfcyDUv0KaGyAge9
- GVtqDzMpP13dTOL4THucv1kBNAReon4w2aqFHAWF3vuVgWUUzczWtBhxg7Xb6F4wlXg4i1MC0
- 0Fjn5DCZcmj+uH/XwGfRwU1Yapogm6upnslUEcnXCP2OnyiE/Jr7m+MFBUFcBeVzdhy6/cjCj
- Od3czv8t9YMwBZMlbsCV+aqbNt9m31yloWjebnpZuWt6k6OkfIgdvxRriTAGt239jaAKRAp3Q
- h2Z3FhHIhZctAItslVRY2IfckA/fk8DchXZq02gtV95uTrgmQMDdobKdeEzgMKRsdGXCNlIlZ
- iaq2x7TaDDfe6i4Wc2bP3qiukBpqEVWATav4bpm1Wt0gf6SWRFGxwGtjioyUstKFirhrVJ4U9
- lhIVfKmvrIR4PRH66ARDXr2+oQ52S4Z/0OdOletgMWwfV80+L8cA5aHwjQYotP1mbL4UBsvpE
- cuyOUlngv9cGiiHkPg03c+Vtl0lEG+VhX9c3B+JE2dixgfPAXYUkUuOrzxp1vC2cn5NMJxLNZ
- SMgEubzRwPB/1Cr877RzY+FoHs5Iz6gfvbKzdOnNbjfk93SYYtYIC+la+XjvqulCWtjC24thQ
- o8GJfQ81xKCSh/ziusBFOSVoFxBLnVi3KmM8Ltn2BP4HPKf//fe93AvR6KZVqgGqCiDRBQe4O
- V76j+vnJTgAK0X6l/JDTcB1ckIPI78sQkqV2Et2sQZsqoYA/Lp/CPZfRwYUcCaRIkZkAz38GY
- lJXHhpIbzF4adaVI1U3E9ncy0/VnpOlzruhlK7gDb4HzQN3q4x8azJFHzMdNgamGBNrhmh3SH
- /kYvqPeNt2YHB/l9ieBu8DX73o5WENIxV+oFoH+a/URhsQrzzRGcwFw5snpuhZG4Npsyeq5dK
- dduKqWBHCjNCYy60rEVu5vOz6kOJVvJexkowK2iLwH5tLXwT8ZS5Irx1J6y9pQT/56zlzIriC
- QHGCaKBqVGhiUx0DQLGuxrvqKsJkjAeN7TklEgapHh1OEICKsFIsS+k85EHJ4lQsf0K6YQutB
- yTL4oCmJsyU6tmzWksmq5FQjf4puKKhO6ZWTJ0j/kjCMDCW6FuH4VCdXA6gq3KfKV6r9VaDYA
- ohon6T6zQ9PWvQzf6ql4PZLXOY3an4ARZGQ734QCvJWjb2/Z9rZmhZe1q4QI=
+References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
+ <157186186167.3995.7568100174393739543.stgit@warthog.procyon.org.uk>
+In-Reply-To: <157186186167.3995.7568100174393739543.stgit@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 27 Oct 2019 10:03:35 -0400
+X-Gmail-Original-Message-ID: <CAHk-=wh7cf3ANq-G9MmwSQiUK2d-=083C0HV_8hTGe2Mb4X7JA@mail.gmail.com>
+Message-ID: <CAHk-=wh7cf3ANq-G9MmwSQiUK2d-=083C0HV_8hTGe2Mb4X7JA@mail.gmail.com>
+Subject: Re: [RFC PATCH 04/10] pipe: Use head and tail pointers for the ring,
+ not cursor and length [ver #2]
+To:     David Howells <dhowells@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Daniel,
+This still has signs of that earlier series:
 
-Am 25.10.19 um 10:04 schrieb Daniel Wagner:
-> ...
+On Wed, Oct 23, 2019 at 4:17 PM David Howells <dhowells@redhat.com> wrote:
 >
-> Fixes: ed194d136769 ("usb: core: remove local_irq_save() around ->complete() handler")
-> Cc: Woojung Huh <woojung.huh@microchip.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Cc: Stefan Wahren <wahrenst@gmx.net>
-> Cc: Jisheng Zhang <Jisheng.Zhang@synaptics.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: David Miller <davem@davemloft.net>
-> Signed-off-by: Daniel Wagner <dwagner@suse.de>
-> ---
->
-> Hi,
->
-> This patch just fixes the warning. There are still problems left (the
-> unstable NFS report from me) but I suggest to look at this
-> separately. The initial patch to revert all the irqdomain code might
-> just hide the problem. At this point I don't know what's going on so I
-> rather go baby steps. The revert is still possible if nothing else
-> works.
+>                 if (rem >= ibuf->len) {
+>                         *obuf = *ibuf;
+>                         ibuf->ops = NULL;
+> -                       pipe->curbuf = (pipe->curbuf + 1) & (pipe->buffers - 1);
+> -                       pipe->nrbufs--;
+> +                       tail++;
+> +                       pipe_commit_read(pipe, tail);
+>                 } else {
+>                         if (!pipe_buf_get(pipe, ibuf))
+>                                 goto out_free;
 
-did you ever see this pseudo lan78xx-irqs fire? I examined
-/proc/interrupts on RPi 3B+ and always saw a 0.
+with those odd "pipe_commit_read/write()" helpers.
 
-FWIW you can have:
+They make no sense, and they don't make things more legible.
 
-Tested-by: Stefan Wahren <wahrenst@gmx.net>
+It's shorter and more obvious to just write
 
-for this patch.
+   pipe->head = head;
 
-Regards
-Stefan
+than it is to write
 
+   pipe_commit_write(pipe, head);
+
+Even when the addition of the notifications,  it's all under the
+pipe->wait.lock, so it's all just regular assignments.
+
+Now, if at some point it starts doing fancy lockless things, at _that_
+point the updates might become more complex, but that's a potential
+future thing that wouldn't be relevant for a while, and isn't a reason
+to make the code more obscure now.
+
+Hmm?
+
+             Linus
