@@ -2,109 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4B0E6F61
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 10:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CC4AE700E
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 11:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732544AbfJ1JwX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Oct 2019 05:52:23 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:56314 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730895AbfJ1JwX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 05:52:23 -0400
-Received: from mail-pl1-f197.google.com ([209.85.214.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iP1hG-0001zh-09
-        for linux-usb@vger.kernel.org; Mon, 28 Oct 2019 09:52:22 +0000
-Received: by mail-pl1-f197.google.com with SMTP id x18so5669939plm.10
-        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2019 02:52:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=ucd8G3ncCjjGAR+QruBIbeyIMVOY8PJbSpfeucAn18s=;
-        b=bJkyW5e4iPCpuxPbj4ilm9dAA95egIxLxHcdwZR406lsSf4yX/foaNdk8R+K+XU1Wm
-         oO9baa1GQctYLfva6SMYTyYhI3bS2kww5250z6ecPHOyzfX7K59JNYSsjV5/ksslFiao
-         kXf/DaiEm4IRb7/xVv8GqsFrlpWnk86yo5SLWmKxxJEmaqhXC8H9PBN6G04jaTYCK4dD
-         HJezCQ7xNVU+LQgLr1QV225KNsw2Nbv0cx/Cokv94LcPLhXBAEWoiypidkdJIYguKpmu
-         knwyVS2F/5X4Xd6eRSX0G/lzUaoobialgEYrlb5J1CdmzzABbV31oVYK09Z5+NOV5Dg6
-         D4hw==
-X-Gm-Message-State: APjAAAUoRuVlvA/Prq3xFIQQ2sfMn4Vixq+wQvsG0U1IOUCUEv4+X3L4
-        3aYDkELdGskBqJDNAnuC7WREfiPQuFgH6FiO5+ZH4DBMuSX9bAr8XRPEk83RKgxckKfSdXGO5To
-        xO+U55Sf44AzUB3o7+psKDvv4EY8fdJUgj03OJg==
-X-Received: by 2002:a63:165b:: with SMTP id 27mr19770766pgw.420.1572256340310;
-        Mon, 28 Oct 2019 02:52:20 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyuaevUyIwsBsO17w+abwittBHPXUZ7Jv2gyLyiWwnNViaUN5dJY0+6QbfKjXTeFouFVnZ9Kw==
-X-Received: by 2002:a63:165b:: with SMTP id 27mr19770721pgw.420.1572256339916;
-        Mon, 28 Oct 2019 02:52:19 -0700 (PDT)
-Received: from 2001-b011-380f-3c42-74a9-e8b4-eac5-9609.dynamic-ip6.hinet.net (2001-b011-380f-3c42-74a9-e8b4-eac5-9609.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:74a9:e8b4:eac5:9609])
-        by smtp.gmail.com with ESMTPSA id x25sm6334088pfq.73.2019.10.28.02.52.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 28 Oct 2019 02:52:19 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3601\))
-Subject: Re: [PATCH 1/2] r8152: Pass driver_info to REALTEK_USB_DEVICE() macro
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <0835B3720019904CB8F7AA43166CEEB2F18EF1C4@RTITMBSVM03.realtek.com.tw>
-Date:   Mon, 28 Oct 2019 17:52:16 +0800
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "oliver@neukum.org" <oliver@neukum.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <C307CD73-9CDE-4B70-9928-E8B0303CCDB5@canonical.com>
-References: <20191025105919.689-1-kai.heng.feng@canonical.com>
- <0835B3720019904CB8F7AA43166CEEB2F18EF1C4@RTITMBSVM03.realtek.com.tw>
-To:     Hayes Wang <hayeswang@realtek.com>
-X-Mailer: Apple Mail (2.3601)
+        id S2388152AbfJ1K5f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 06:57:35 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:3064 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728554AbfJ1K5f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 06:57:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1572260254; x=1603796254;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5cU6D73Hs2L+9WKhpJ/DxPgX9YooUgDZWEqmp8qc6Tk=;
+  b=nJgmuaInWSWG8RvnihJXpDcP7SUk0Rmg7tMmNYqtW3VxYZe3iDWQjLpr
+   0vkgVE+6XS8tArcfTa7keVcTtR/kN9cYrMtK3ruKobkdIZgTagx8n0Re/
+   ZfzABgPdumpiJdJvJ5ogF/yEwjnX4jrJOUIAurli2Bwjj3BTnCMZJdIpi
+   FkGs1+Rv0bxNwGRe1Pue0kTJgOG6qQOOg4aSOHGHMDt8S9C8UkdGbeExH
+   GmVKJujwKESUxlFWYgPGODVtA/YtBbR46upFthLOQ61NOb+NEZxEUDU/8
+   glFhXq3jpK2dgMrB+TUxHnvfwlJUJR8BIX0iAHzQeH63BH1Gw+zVEMOn9
+   g==;
+IronPort-SDR: cSNpMmvJe7sraI8y4QWZOfDh/HpSWP9U13TLr46Y+RGGjaXfqLQUw8iPCEP862v79fhtqp9NU/
+ st3+h99K8Q6PZuAJg/5+29pM9wfJUjZyxxwL3DhYHt7mmE9WHC6ZvWRP44kigTiex6ISXhNtzB
+ UMOfsB0UOGZEElPUQ0ZQ+LCkzrFY+GY2RZTVELg4KKLZ9vt5Hu98S8VCLrU6DKaGsvjo12HQOr
+ nHB70397KPXloevrpikLcaMDAUcdEgS/03qB1/wfIusSAgxJsCK/nR5+fqC3jdGR7lvVOJjtqj
+ 6v8=
+X-IronPort-AV: E=Sophos;i="5.68,239,1569254400"; 
+   d="scan'208";a="121482191"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 28 Oct 2019 18:57:34 +0800
+IronPort-SDR: diRdj7OC/Q2ftUQIxX76GtC8HdBGTT7aIHOy4dkYpBDfA/RnCBcSl8hlyed9ThrRy2OR+kWd77
+ xMgYNJV2XC2KRcm8iTLRHKN4lAoHeVqpyVbT01wFmVQne0Lkq8b3McIATliwLTDPNpdh31ltql
+ 4hBwc6ThavIPhburudmSKGTVo7OWCbOOUUC7sCXFwEGBUCRAROt6pYz3z3kJ3ovMDagGNSVK7V
+ 5Xrk2RH0mQd+5YVi2afzVHNG0cuY5rMnFJJc4Vr8nl1N0O/yNj8WidjBDvj00Hn/IioNzUCiCC
+ s8doMTX9upVyyoJoHIzODOnM
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 03:52:56 -0700
+IronPort-SDR: HF+d3JKARyFvJYiVVFrIfJUDiGbVDvC+DpJK0P98J87M+BaVK7PE3AJ29odtlXd+wxKO1TZpSZ
+ 4t3cL6MEj8FlE5KZ65xk0U0lfUbtFhfwSbgpVTX1wOVPwTe6VhJY0qzq7LkBJ0qWK2iWjf+AVo
+ uKYz2KzdhccfuG/9ucm/6Bj8vW49UQjmcdAK4qKuSu8pjgYNzhht9Qc8L/Y1UqQZnhQCtOxsCy
+ XYUleEXeLE+gF6g1UxI7kaxkuOVq+EJNaFa3pdvbADzYk0g8yY1uSDdBRojBypHkKl0Ht9+KMj
+ sLc=
+WDCIronportException: Internal
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip02.wdc.com with ESMTP; 28 Oct 2019 03:57:33 -0700
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: [PATCH] scsi: Fix scsi_get/set_resid() interface
+Date:   Mon, 28 Oct 2019 19:57:32 +0900
+Message-Id: <20191028105732.29913-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+struct scsi_cmnd cmd->req.resid_len which is returned and set
+respectively by the helper functions scsi_get_resid() and
+scsi_set_resid() is an unsigned int. Reflect this fact in the interface
+of these helper functions.
 
+Also fix compilation errors due to min() and max() type mismatch
+introduced by this change in scsi debug code and usb transport code.
 
-> On Oct 28, 2019, at 17:41, Hayes Wang <hayeswang@realtek.com> wrote:
-> 
-> Kai-Heng Feng [mailto:kai.heng.feng@canonical.com]
->> Sent: Friday, October 25, 2019 6:59 PM
-> [...]
->> -#define REALTEK_USB_DEVICE(vend, prod)	\
->> +#define REALTEK_USB_DEVICE(vend, prod, info)	\
->> 	.match_flags = USB_DEVICE_ID_MATCH_DEVICE | \
->> 		       USB_DEVICE_ID_MATCH_INT_CLASS, \
->> 	.idVendor = (vend), \
->> 	.idProduct = (prod), \
->> -	.bInterfaceClass = USB_CLASS_VENDOR_SPEC \
->> +	.bInterfaceClass = USB_CLASS_VENDOR_SPEC, \
->> +	.driver_info = (info) \
->> }, \
->> { \
->> 	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO | \
->> @@ -6739,25 +6740,26 @@ static void rtl8152_disconnect(struct
->> usb_interface *intf)
->> 	.idProduct = (prod), \
->> 	.bInterfaceClass = USB_CLASS_COMM, \
->> 	.bInterfaceSubClass = USB_CDC_SUBCLASS_ETHERNET, \
->> -	.bInterfaceProtocol = USB_CDC_PROTO_NONE
->> +	.bInterfaceProtocol = USB_CDC_PROTO_NONE, \
->> +	.driver_info = (info) \
-> 
-> This part is for ECM mode. Add driver_info here is useless,
-> because it is never be used. The driver always changes
-> the ECM mode to vendor mode.
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+---
+ drivers/scsi/scsi_debug.c       | 4 ++--
+ drivers/usb/storage/transport.c | 3 +--
+ include/scsi/scsi_cmnd.h        | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-Thanks for the explanation.
-Since we are going to compare IDs directly in probe(), I'll just drop this patch.
-
-Kai-Heng
-
-> 
-> Best Regards,
-> Hayes
-> 
-> 
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index d323523f5f9d..4daf2637c011 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -1025,7 +1025,7 @@ static int fill_from_dev_buffer(struct scsi_cmnd *scp, unsigned char *arr,
+ static int p_fill_from_dev_buffer(struct scsi_cmnd *scp, const void *arr,
+ 				  int arr_len, unsigned int off_dst)
+ {
+-	int act_len, n;
++	unsigned int act_len, n;
+ 	struct scsi_data_buffer *sdb = &scp->sdb;
+ 	off_t skip = off_dst;
+ 
+@@ -1039,7 +1039,7 @@ static int p_fill_from_dev_buffer(struct scsi_cmnd *scp, const void *arr,
+ 	pr_debug("%s: off_dst=%u, scsi_bufflen=%u, act_len=%u, resid=%d\n",
+ 		 __func__, off_dst, scsi_bufflen(scp), act_len,
+ 		 scsi_get_resid(scp));
+-	n = (int)scsi_bufflen(scp) - ((int)off_dst + act_len);
++	n = scsi_bufflen(scp) - (off_dst + act_len);
+ 	scsi_set_resid(scp, min(scsi_get_resid(scp), n));
+ 	return 0;
+ }
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 96cb0409dd89..238a8088e17f 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -1284,8 +1284,7 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 
+ 		} else {
+ 			residue = min(residue, transfer_length);
+-			scsi_set_resid(srb, max(scsi_get_resid(srb),
+-			                                       (int) residue));
++			scsi_set_resid(srb, max(scsi_get_resid(srb), residue));
+ 		}
+ 	}
+ 
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 91bd749a02f7..3772ae5d40cd 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -190,12 +190,12 @@ static inline unsigned scsi_bufflen(struct scsi_cmnd *cmd)
+ 	return cmd->sdb.length;
+ }
+ 
+-static inline void scsi_set_resid(struct scsi_cmnd *cmd, int resid)
++static inline void scsi_set_resid(struct scsi_cmnd *cmd, unsigned int resid)
+ {
+ 	cmd->req.resid_len = resid;
+ }
+ 
+-static inline int scsi_get_resid(struct scsi_cmnd *cmd)
++static inline unsigned int scsi_get_resid(struct scsi_cmnd *cmd)
+ {
+ 	return cmd->req.resid_len;
+ }
+-- 
+2.21.0
 
