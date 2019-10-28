@@ -2,78 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC358E78AA
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 19:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315A6E7916
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 20:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbfJ1Sl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 14:41:59 -0400
-Received: from foss.arm.com ([217.140.110.172]:44050 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726822AbfJ1Sl7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Oct 2019 14:41:59 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DEA031F1;
-        Mon, 28 Oct 2019 11:41:58 -0700 (PDT)
-Received: from [10.1.197.57] (e110467-lin.cambridge.arm.com [10.1.197.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C8383F71F;
-        Mon, 28 Oct 2019 11:41:58 -0700 (PDT)
-Subject: Re: [PATCH 0/5] add rk3328 usb3 phy driver
-To:     Peter Geis <pgwipeout@gmail.com>, heiko@sntech.de, kishon@ti.com
-Cc:     linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
-        katsuhiro@katsuster.net
-References: <20191028182254.30739-1-pgwipeout@gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <5230f80c-9684-72e0-8f96-602428a9e655@arm.com>
-Date:   Mon, 28 Oct 2019 18:41:56 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1730042AbfJ1TOb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 15:14:31 -0400
+Received: from smtp09.smtpout.orange.fr ([80.12.242.131]:60278 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730050AbfJ1TO0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 15:14:26 -0400
+Received: from belgarion ([90.55.204.252])
+        by mwinf5d17 with ME
+        id K7EJ2100B5TFNlm037EJ4o; Mon, 28 Oct 2019 20:14:24 +0100
+X-ME-Helo: belgarion
+X-ME-Auth: amFyem1pay5yb2JlcnRAb3JhbmdlLmZy
+X-ME-Date: Mon, 28 Oct 2019 20:14:24 +0100
+X-ME-IP: 90.55.204.252
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@arm.linux.org.uk>
+Cc:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
+        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
+References: <20191018154052.1276506-1-arnd@arndb.de>
+        <20191018154201.1276638-5-arnd@arndb.de>
+X-URL:  http://belgarath.falguerolles.org/
+Date:   Mon, 28 Oct 2019 20:14:18 +0100
+In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de> (Arnd Bergmann's message
+        of "Fri, 18 Oct 2019 17:41:20 +0200")
+Message-ID: <87d0egof79.fsf@belgarion.home>
+User-Agent: Gnus/5.130008 (Ma Gnus v0.8) Emacs/26 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <20191028182254.30739-1-pgwipeout@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 28/10/2019 18:22, Peter Geis wrote:
-> It took a lot more effort than originally anticipated, but here it is.
-> This is the driver from [0], updated to work with the current kernel.
-> I've tested it on the rk3328-roc-cc board, both usb 2.0 and usb 3.0
-> devices detect on hotplug.
+Arnd Bergmann <arnd@arndb.de> writes:
 
-Thanks Peter, I'll try to give this a go on my box for confirmation.
+> The mach/hardware.h is included in lots of places, and it provides
+> three different things on pxa:
+>
+> - the cpu_is_pxa* macros
+> - an indirect inclusion of mach/addr-map.h
+> - the __REG() and io_pv2() helper macros
+>
+> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
+> headers, then change all the files that use mach/hardware.h to
+> include the exact set of those three headers that they actually
+> need, allowing for further more targeted cleanup.
+>
+> linux/soc/pxa/cpu.h can remain permanently exported and is now in
+> a global location along with similar headers. pxa-regs.h and
+> addr-map.h are only used in a very small number of drivers now
+> and can be moved to arch/arm/mach-pxa/ directly when those drivers
+> are to pass the necessary data as resources.
 
-One quick comment is that it might be worth importing the version from 
-Rockchip's own kernel tree, as that includes this additional patch which 
-looks like a welcome improvement:
+For the pxa part, that looks fine to me.
+I'd like to focus a bit of Russell's attention to the sa11xx part (reminder in
+[1]), and more specifically :
 
-https://github.com/rockchip-linux/kernel/commit/12efa9acad65b4c3256683c1ccd769687be3ca56#diff-b6317b3425ac054be551abdcda910b68
+ - the change to drivers/pcmcia/soc_common.c
+ - the change to drivers/pcmcia/sa1111_generic.c
 
-Also, as it's a new phy driver, we should keep Kishon (+cc) in the loop 
-as the subsystem maintainer.
+I must admit my knowledge of PCMCIA is relatively poor, and even if the patch
+looks harmless, one never knows if Assebet will ever by same after ...
 
-Robin.
+Cheers.
 
-> [0] https://github.com/FireflyTeam/kernel/commits/roc-rk3328-cc/drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> 
-> Peter Geis (5):
->    phy: rockchip: add inno-usb3 phy driver
->    dt-bindings: clean up rockchip grf binding document
->    Documentation: bindings: add dt documentation for rockchip usb3 phy
->    arm64: dts: rockchip: add usb3 to rk3328 devicetree
->    arm64: dts: rockchip: enable usb3 on rk3328-roc-cc
-> 
->   .../bindings/phy/phy-rockchip-inno-usb3.yaml  |  157 +++
->   .../devicetree/bindings/soc/rockchip/grf.txt  |    8 +-
->   .../devicetree/bindings/usb/rockchip,dwc3.txt |    9 +-
->   .../arm64/boot/dts/rockchip/rk3328-roc-cc.dts |   21 +
->   arch/arm64/boot/dts/rockchip/rk3328.dtsi      |   72 ++
->   drivers/phy/rockchip/Kconfig                  |    9 +
->   drivers/phy/rockchip/Makefile                 |    1 +
->   drivers/phy/rockchip/phy-rockchip-inno-usb3.c | 1107 +++++++++++++++++
->   8 files changed, 1378 insertions(+), 6 deletions(-)
->   create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb3.yaml
->   create mode 100644 drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> 
+--
+Robert
+
+[1] Extract of the patch for Russell's scrutiny
+> diff --git a/drivers/pcmcia/sa1111_generic.c b/drivers/pcmcia/sa1111_generic.c
+> index 11783410223b..2f556fa37c43 100644
+> --- a/drivers/pcmcia/sa1111_generic.c
+> +++ b/drivers/pcmcia/sa1111_generic.c
+> @@ -17,7 +17,6 @@
+>  
+>  #include <pcmcia/ss.h>
+>  
+> -#include <mach/hardware.h>
+>  #include <asm/hardware/sa1111.h>
+>  #include <asm/mach-types.h>
+>  #include <asm/irq.h>
+... zip ...
+
+> diff --git a/drivers/pcmcia/soc_common.c b/drivers/pcmcia/soc_common.c
+> index 3a8c84bb174d..9276a628473d 100644
+> --- a/drivers/pcmcia/soc_common.c
+> +++ b/drivers/pcmcia/soc_common.c
+> @@ -47,8 +47,6 @@
+>  #include <linux/spinlock.h>
+>  #include <linux/timer.h>
+>  
+> -#include <mach/hardware.h>
+> -
+>  #include "soc_common.h"
+>  
+>  static irqreturn_t soc_common_pcmcia_interrupt(int irq, void *dev);
