@@ -2,110 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22343E6EDD
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 10:18:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE623E6EFD
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 10:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387779AbfJ1JS1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35882 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727664AbfJ1JS1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Oct 2019 05:18:27 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A1F3B20717;
-        Mon, 28 Oct 2019 09:18:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572254305;
-        bh=Y0pjFTnEi7fofZFVzScrzdhMzlM8KuUwtUfFJMd6jEM=;
-        h=In-Reply-To:References:Cc:From:Subject:To:Date:From;
-        b=RgzxngTnQ5mhx9Hl2fC158gkHbjFpCK1xE9h+M1GjeCZxXb6MUInbliEaxAObjuqL
-         wSQcKENaW7bda+XlQFMQ4kSrY/CYQhZIb7yuVvXU8ecOVokkeGpi3FpJqjni84Zghu
-         HHQWsB9WCGlUQTC7Hz+Y655Ladb2jywc3qV2avTY=
-Content-Type: text/plain; charset="utf-8"
+        id S1731818AbfJ1JWA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 28 Oct 2019 05:22:00 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:54491 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728941AbfJ1JV7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 05:21:59 -0400
+Authenticated-By: 
+X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID x9S9LbRM014005, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (RTITCASV02.realtek.com.tw[172.21.6.19])
+        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id x9S9LbRM014005
+        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Mon, 28 Oct 2019 17:21:41 +0800
+Received: from RTITMBSVM03.realtek.com.tw ([fe80::e1fe:b2c1:57ec:f8e1]) by
+ RTITCASV02.realtek.com.tw ([::1]) with mapi id 14.03.0468.000; Mon, 28 Oct
+ 2019 17:21:29 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "oliver@neukum.org" <oliver@neukum.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [PATCH 2/2] r8152: Add macpassthru support for ThinkPad Thunderbolt 3 Dock Gen 2
+Thread-Topic: [PATCH 2/2] r8152: Add macpassthru support for ThinkPad
+ Thunderbolt 3 Dock Gen 2
+Thread-Index: AQHViyNIwWDKAImfZESSShiKae+s26dvaNpQ//+TW4CAAMxToA==
+Date:   Mon, 28 Oct 2019 09:21:28 +0000
+Message-ID: <0835B3720019904CB8F7AA43166CEEB2F18EF17F@RTITMBSVM03.realtek.com.tw>
+References: <20191025105919.689-1-kai.heng.feng@canonical.com>
+ <20191025105919.689-2-kai.heng.feng@canonical.com>
+ <0835B3720019904CB8F7AA43166CEEB2F18EEE4D@RTITMBSVM03.realtek.com.tw>
+ <3980F066-6783-45A6-9B34-1D838C2C1A2C@canonical.com>
+In-Reply-To: <3980F066-6783-45A6-9B34-1D838C2C1A2C@canonical.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.214]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191018154201.1276638-5-arnd@arndb.de>
-References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-5-arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Mark Brown <broonie@kernel.org>, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        alsa-devel@alsa-project.org
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH 05/46] ARM: pxa: split up mach/hardware.h
-To:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-User-Agent: alot/0.8.1
-Date:   Mon, 28 Oct 2019 02:18:24 -0700
-Message-Id: <20191028091825.A1F3B20717@mail.kernel.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Arnd Bergmann (2019-10-18 08:41:20)
-> The mach/hardware.h is included in lots of places, and it provides
-> three different things on pxa:
->=20
-> - the cpu_is_pxa* macros
-> - an indirect inclusion of mach/addr-map.h
-> - the __REG() and io_pv2() helper macros
->=20
-> Split it up into separate <linux/soc/pxa/cpu.h> and mach/pxa-regs.h
-> headers, then change all the files that use mach/hardware.h to
-> include the exact set of those three headers that they actually
-> need, allowing for further more targeted cleanup.
->=20
-> linux/soc/pxa/cpu.h can remain permanently exported and is now in
-> a global location along with similar headers. pxa-regs.h and
-> addr-map.h are only used in a very small number of drivers now
-> and can be moved to arch/arm/mach-pxa/ directly when those drivers
-> are to pass the necessary data as resources.
->=20
-> Cc: Michael Turquette <mturquette@baylibre.com>
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Guenter Roeck <linux@roeck-us.net>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: linux-clk@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-input@vger.kernel.org
-> Cc: linux-leds@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-fbdev@vger.kernel.org
-> Cc: linux-watchdog@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Kai-Heng Feng [mailto:kai.heng.feng@canonical.com]
+> Sent: Monday, October 28, 2019 12:58 PM
+[...]
+> >> @@ -6754,6 +6779,8 @@ static const struct usb_device_id rtl8152_table[]
+> = {
+> >> 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f, 0)},
+> >> 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062, 0)},
+> >> 	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069, 0)},
+> >> +	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082,
+> >> +			R8152_QUIRK_LENOVO_MACPASSTHRU)},
+> >
+> > This limits the usage of driver_info. For example, I couldn't
+> > use it to store a pointer address anymore.
+> 
+> But will the driver ever use .driver_info for pointers?
+> There are many driver use it for quirks and quirks only.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+I prefer to keep .driver_info empty, even though it is not
+used currently.
+
+The R8152_QUIRK_LENOVO_MACPASSTHRU is only used to set the
+flag of LENOVO_MACPASSTHRU in probe(), and it is used only once.
+Besides, it could be replaced by checking the vendor ID and
+product ID. Therefore, I don't think it is necessary to use
+driver_info , unless there are more devices needing it.
+
+Best Regards,
+Hayes
+
 
