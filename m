@@ -2,118 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A43BEE6C4A
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 07:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC15FE6C77
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 07:33:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729317AbfJ1GJ7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 02:09:59 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48050 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727559AbfJ1GJ7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Oct 2019 02:09:59 -0400
-Received: from dragon (98.142.130.235.16clouds.com [98.142.130.235])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6DA4220873;
-        Mon, 28 Oct 2019 06:09:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572242998;
-        bh=T8EqyovEiIZHr2MwOzu+mAUM1YvBcgYwUFn7W1qhsKY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gDHgLhOT45zthwB/Wz8w2XgXHgkmFEakpbyYErk9CC6XetrSbeDwAYVXvNQAPO1Rl
-         h2hYQqAwcn24HTSCvkZufbBBi74prcHczFm86+vaIn1mVmKrTJvM5EBWg1Gft4up84
-         UI+tWDa1QngP7YshW09BIGqpczC3Hr1E8fdUZ+xI=
-Date:   Mon, 28 Oct 2019 14:09:31 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Igor Opaniuk <igor.opaniuk@gmail.com>
-Cc:     linux-usb@vger.kernel.org,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Stefan Agner <stefan.agner@toradex.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
-        Igor Opaniuk <igor.opaniuk@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/2] ARM: dts: colibri-imx6ull: add extcon for usbotg1
-Message-ID: <20191028060930.GL16985@dragon>
-References: <20191021161654.14353-1-igor.opaniuk@gmail.com>
- <20191021161654.14353-2-igor.opaniuk@gmail.com>
+        id S1731966AbfJ1GdL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 02:33:11 -0400
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:42898 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731958AbfJ1GdL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 02:33:11 -0400
+Received: by mail-qt1-f193.google.com with SMTP id z17so6455658qts.9
+        for <linux-usb@vger.kernel.org>; Sun, 27 Oct 2019 23:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lBkTGYoh/dOHNRRQTZGhwrY47goGSYR9X3f3Vf7/wZ0=;
+        b=QkosWSF+r3d5jg2253fy6vTFba9J4jp+Ph5Iv28eSEiQlmjM1xSzxuvthU95MvasWE
+         lIDZEjoryrs9wRTdgRo6pGVUj0KN1wBPBz2wgc59FqasJsItT8LKCAG6mdPu3Pss0XL8
+         +CQliuHjFrU936KorGh4C32aHd+mFWnYPn31InjSDPJx3gnKwQMUUTt6HOPmKfZv/8Ge
+         DlH3qrIAT0QYev+pUHo+atX54N29gx3/buN381rP9xGJRuXnQL3KyQv3YKaqsxQBV0nD
+         FCK5VQz0sL+AN2M4giWyd5+2DYyPVThmWOlW1W9FMWJiXgJ3qo9raJHDocIqzm1Bv8W3
+         //bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lBkTGYoh/dOHNRRQTZGhwrY47goGSYR9X3f3Vf7/wZ0=;
+        b=m3reIUmuDUa10RZ2GwVmyjdlF9N43R2kbLR9ncUj8aDI7DM15xw6MSv4Ts/fncik9j
+         mXu4ll0xrXahW+bUkBYts1OybdBw/dhF+9vsPLmzVSMJEDqwIo3OjIilyuAlBNtCrCb5
+         Qchm+KzR7b4I5feAAG+ZLXqzHtO3TOFumzp3XPYyrJRtZfz3VhiXQbtp9pbVI5e9PKEg
+         PZEH6ZYzwHb4tZ2vxjGIan3VH/ci/56dJjlb6R++OvO5kN6nqHHGcXFUPGnXDpnoxoaQ
+         qAX/Yg5d6ZSRkv8AVHhRLnq7CJy7sSN1QqONmvUf/j5eBdRKtQSjKZzgH20kS0BBatOC
+         bQAw==
+X-Gm-Message-State: APjAAAXIeIKI0CYuW2yKkWodWEFv3D4fnLq5Avvzs6X4Cgpy7ZhNlUwu
+        HzXKfjVdVMvPm6wO+pCNGlyXgJVegkq9iA7xNvtTNg==
+X-Google-Smtp-Source: APXvYqzPor6wJQL+hzLzCj6MGVuYSQods0VnQsSXp4V2tO4HqC8rbMhZixpIuLpQRZpbscdmohaKliWvUq29L/2fg3c=
+X-Received: by 2002:ac8:70c3:: with SMTP id g3mr15549995qtp.391.1572244388347;
+ Sun, 27 Oct 2019 23:33:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021161654.14353-2-igor.opaniuk@gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
+ <20191025162814.GA130180@google.com>
+In-Reply-To: <20191025162814.GA130180@google.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Mon, 28 Oct 2019 14:32:57 +0800
+Message-ID: <CAD8Lp44f9EQS93VkYUfnZYPjHMpOVCPuGoKD+dZ+=+tfyZHU5w@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 07:16:54PM +0300, Igor Opaniuk wrote:
-> From: Igor Opaniuk <igor.opaniuk@toradex.com>
-> 
-> Add extcon usb gpio configuration for support dual roles for usbotg1.
-> 
-> USB host/gadget switching test (1. USB NIC emulation; 2. USB storage):
-> 
-> [   52.491957] ci_hdrc ci_hdrc.1: switching to gadget role
-> [   52.502911] mxs_phy 20c9000.usbphy: vbus is not valid
-> [   56.749160] using random self ethernet address
-> [   56.758637] using random host ethernet address
-> [   65.768968] usb0: HOST MAC 00:14:2d:ff:ff:fe
-> [   65.887980] usb0: MAC 00:14:2d:ff:ff:ff
-> [   66.294961] configfs-gadget gadget: high-speed config #1: c
-> [   78.741971] ci_hdrc ci_hdrc.1: switching to host role
-> [   78.747522] ci_hdrc ci_hdrc.1: EHCI Host Controller
-> [   78.790174] ci_hdrc ci_hdrc.1: new USB bus registered, assigned bus
-> number 2
-> [   78.868498] ci_hdrc ci_hdrc.1: USB 2.0 started, EHCI 1.00
-> 
-> Signed-off-by: Igor Opaniuk <igor.opaniuk@toradex.com>
-> ---
-> 
->  arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-> index a78849fd2afa..988f1a800d5a 100644
-> --- a/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-> +++ b/arch/arm/boot/dts/imx6ull-colibri-eval-v3.dtsi
-> @@ -29,6 +29,14 @@
->  		clock-frequency = <16000000>;
->  	};
->  
-> +	extcon_usbc_det: usbc_det {
+On Sat, Oct 26, 2019 at 12:28 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > pci_pm_resume_noirq
+> > - pci_pm_default_resume_early
+> > -- pci_raw_set_power_state(D0)
+> >
+> > At this point, pci_dev_wait() reads PCI_COMMAND to be 0x100403 (32-bit
+> > read) - so no wait.
+>
+> Just thinking out loud here: This is before writing PCI_PM_CTRL. The
 
-Can we find a more generic name for the node?  Also hyphen is preferred
-over underscore in node name.
+It's not - it's after writing PCI_PM_CTRL, but before reading it back.
 
-Shawn
+> device should be in D3hot and 0x100403 is PCI_COMMAND_IO |
+> PCI_COMMAND_MEMORY | PCI_COMMAND_INTX_DISABLE (and
+> PCI_STATUS_CAP_LIST), which mostly matches your lspci (it's missing
+> PCI_COMMAND_MASTER, but maybe that got turned off during suspend).
+> It's a little strange that PCI_COMMAND_IO is set because 03:00.3 has
+> no I/O BARs, but maybe that was set by BIOS at boot-time.
 
-> +		compatible = "linux,extcon-usb-gpio";
-> +		debounce = <25>;
-> +		id-gpio = <&gpio5 2 GPIO_ACTIVE_HIGH>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_snvs_usbc_det>;
-> +	};
-> +
->  	panel: panel {
->  		compatible = "edt,et057090dhu";
->  		backlight = <&bl>;
-> @@ -150,6 +158,7 @@
->  };
->  
->  &usbotg1 {
-> +	extcon = <&extcon_usbc_det &extcon_usbc_det>;
->  	status = "okay";
->  };
->  
-> -- 
-> 2.17.1
-> 
+I also checked PCI_COMMAND before writing PCI_PM_CTRL, it's the same
+value 0x403.
+Immediately after writing PCI_PM_CTRL, it holds the same value.
+10ms later (after pci_dev_d3_sleep()), it holds the same value.
+Another 10ms later, it has value 0.
+
+> > pci_raw_set_power_state writes to PM_CTRL and then reads it back
+> > with value 0x3.
+>
+> When you write D0 to PCI_PM_CTRL the device does a soft reset, so
+> pci_raw_set_power_state() delays before the next access.
+>
+> When you read PCI_PM_CTRL again, I think you *should* get either
+> 0x0000 (indicating that the device is in D0) or 0xffff (if the read
+> failed with a Config Request Retry Status (CRS) because the device
+> wasn't ready yet).
+
+PCI_PM_CTRL stats with value 0x103.
+Then 0 is written and pci_dev_d3_sleep() delays 10ms.
+At this point it has value 0x3.
+After an additional 10ms delay, it has value 0.
+
+> I can't explain why you would read 0x0003 (not 0xffff) from
+> PCI_PM_CTRL.
+>
+> What happens if you do a dword read from PCI_VENDOR_ID here (after the
+> delay but before pci_dev_wait() or reading PCI_PM_CTRL)?
+
+Vendor ID remains 0x1022 at all points.
+
+> You might also try changing pci_enable_crs() to disable
+> PCI_EXP_RTCTL_CRSSVE instead of enabling it to see if that makes any
+> difference.  CRS SV has kind of a checkered history and I'm a little
+> dubious about whether it buys us anything.
+
+I stubbed out that register write which would have otherwise applied
+to 8 PCI devices (but not the XHCI controllers), it still fails in the
+same way unless the delay is increased.
+
+> > >   xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> >
+> > At the point of return from pci_pm_resume_noirq, an extra check I
+> > added shows that PCI_COMMAND has value 0x403 (16-bit read).
+>
+> If PCI_COMMAND is non-zero at that point, I think something's wrong.
+> It should be zero by the time pci_raw_set_power_state() reads
+> PCI_PM_CTRL after the D3 delay.  By that time, we assume the reset has
+> happened and the device is in D0uninitialized and fully accessible.
+
+It looks like we can detect that the reset has failed (or more
+precisely, not quite completed) by reading PCI_COMMAND (value not yet
+0) or PCI_PM_CTRL (doesn't yet indicate D0 state, we already log a
+warning for this case).
+
+From that angle, another workaround possibility is to catch that case
+and then retry the PCI_PM_CTRL write and delay once more.
+
+Daniel
