@@ -2,179 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF00E793B
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 20:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD8EE7A39
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 21:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730890AbfJ1Tbs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 15:31:48 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:43987 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730396AbfJ1Tbs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 15:31:48 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l24so7570258pgh.10;
-        Mon, 28 Oct 2019 12:31:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=v3kvJXcbFkEV09nvemioGfRfs68Gl22rKf+fp6o5KcY=;
-        b=LctBUarBHVK+LJbiZaWPtVv840QdYut23jNX11CEvVa2GTB+Cqj8uGEUiMDecRg3u9
-         Oc883co3hZ2QPb/Wk4mFmt8ONSqTXe1eLQmY6B0AQtKRNo6aqM4/heaWD5jH/KwddO35
-         e6XwAQnuC1AZyuan2Tjw78hTpfDD92WML2gdaBxgmnoSNWuksWfzCIxjVLfm5XkuENIW
-         7kLoxZ/ku/P2/xGOpSWBatIDhCCxhbJRR17gk++qyYgW25Cu+HisQfle1plHYPGBRaxT
-         c9YlB+2UJhKJsnzy0aKriViry3erD7kqGmJTFdZ4LPN1Tav43/ZKd6R6XHJXKnLTMRl4
-         59Mg==
+        id S1727395AbfJ1UiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 16:38:04 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36806 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbfJ1UiE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 16:38:04 -0400
+Received: by mail-pf1-f196.google.com with SMTP id v19so7721457pfm.3;
+        Mon, 28 Oct 2019 13:38:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=v3kvJXcbFkEV09nvemioGfRfs68Gl22rKf+fp6o5KcY=;
-        b=I1NhZn934pibWzYQGjHZz3cYaQkhONfvL+OFu52Xr63hNADiJVq6XeYYrvhOiTl8wu
-         eK0vYoavfytvwUlIHQu+05qJpeL5XeVmWVULsEWfnA7cv62c7YdV4c9Ntq9wwWfwY4ty
-         KzgPwsWiusbnlSJJIhkH/xZM/X2pZZJdVqytnggNkkoTntlWlATu27WSP0B6K3aqFZko
-         8CPAi134MpfeA0zdqyG3okcHSprJhVcCFe9VZ0c99BSDqOxTFYorpyOox1FxC3liSAqy
-         CbR47i4DPjx3YVzqwyqDGMr83tkSkxKvo9BWoLKNbMD8oTWQwiugdE/pO2lvTyUWS9WJ
-         9Z2w==
-X-Gm-Message-State: APjAAAUEiBLZLUsn+g4dcmSYgKeUrtbtV/gVSab5+9lI/dyojVv0mZ1m
-        VKx3EuBEU695bgKpbCMF5iw=
-X-Google-Smtp-Source: APXvYqx7+MIEfdKiVnMEN7PjAvsyZ5OvKzpcY6m0rvve3YkFqyxZZyvnq3JWYwB4Q9IZ5klZwXgZ7w==
-X-Received: by 2002:a17:90a:6302:: with SMTP id e2mr1225776pjj.20.1572291107424;
-        Mon, 28 Oct 2019 12:31:47 -0700 (PDT)
-Received: from saurav ([27.62.167.137])
-        by smtp.gmail.com with ESMTPSA id j14sm11884901pfi.168.2019.10.28.12.31.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 12:31:46 -0700 (PDT)
-Date:   Tue, 29 Oct 2019 01:01:40 +0530
-From:   Saurav Girepunje <saurav.girepunje@gmail.com>
-To:     b-liu@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     saurav.girepunje@hotmail.com
-Subject: [PATCH] usb: musb: Fix external abort on non-linefetch
-Message-ID: <20191028193140.GA27668@saurav>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=O/b/6mghHgpstK0O5SxbK8ykdy2XcpdcIv0f+yaSsWg=;
+        b=JF5Fd/5pDVAMFWfq94wKFOmYZVHVGhorjBzZP0xDgKRVL52NipRHWlADXJb0VJbeeU
+         AnZo1z1WqSqgzgQU9GatrQJzM1CF2ykZFic35arCLReV0dbOO/mhUb1/gT/Q9pim57q5
+         ZT/DS5I5Rmj5u23VeNb4U7T3eA/UfZhEO9cdcEziHZSm0wlhsUlWK18Xoin+9nRupSdS
+         cJRzaRO+Y1vmrQow1mfwvBvNf4RJM2dNriISPRz0sX2VUIyBPP+83R4FVySSrWOc/wf8
+         tdWAxAYhoIfncF7KEd5JmiEkjJ/Yl3dDlA5OrDpc1cY+mf4svVzLgz8oqCdEpyTiklG5
+         0BtQ==
+X-Gm-Message-State: APjAAAX6n3WcRB90oNyo7R3lsNpPdQAJs0PTZdODDU/BVMMYLhKbeS+9
+        uquhzSJZdfZM6UmGpZ3SHCqqfU0eeKE=
+X-Google-Smtp-Source: APXvYqxSgRD0ux8H6DeP+FzTh+T2WeyJlMIO7/sWjeGqsxFWOUS69N6OE09X19aQc/0TurdqYqk6MA==
+X-Received: by 2002:a17:90a:8c14:: with SMTP id a20mr1497653pjo.77.1572295083533;
+        Mon, 28 Oct 2019 13:38:03 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id 129sm12561232pfg.38.2019.10.28.13.38.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Oct 2019 13:38:02 -0700 (PDT)
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     Damien Le Moal <damien.lemoal@wdc.com>, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+Date:   Mon, 28 Oct 2019 13:38:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191028105732.29913-1-damien.lemoal@wdc.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-While setting the usb mode from sysfs. Below error came on kernel
-version 4.19.
+On 10/28/19 3:57 AM, Damien Le Moal wrote:
+> struct scsi_cmnd cmd->req.resid_len which is returned and set
+> respectively by the helper functions scsi_get_resid() and
+> scsi_set_resid() is an unsigned int. Reflect this fact in the interface
+> of these helper functions.
+> [ ... ]
+> -static inline void scsi_set_resid(struct scsi_cmnd *cmd, int resid)
+> +static inline void scsi_set_resid(struct scsi_cmnd *cmd, unsigned int resid)
+>   {
+>   	cmd->req.resid_len = resid;
+>   }
+>   
+> -static inline int scsi_get_resid(struct scsi_cmnd *cmd)
+> +static inline unsigned int scsi_get_resid(struct scsi_cmnd *cmd)
+>   {
+>   	return cmd->req.resid_len;
+>   }
 
-On latest kernel vserion api name changed. Therefore API
-name and backtrace API name are different.
+ From the iSCSI RFC:
 
-    [  821.908066] Backtrace:
-    [  821.910695] [<bf078fc0>] (musb_default_readl [musb_hdrc]) from [<bf0af738>] (dsps_musb_set_mode+0x38/0x12c [musb_dsps])
-    [  821.922059] [<bf0af700>] (dsps_musb_set_mode [musb_dsps]) from [<bf07899c>] (musb_mode_store+0xc8/0x12c [musb_hdrc])
-    [  821.933105]  r7:a0010013 r6:0000000b r5:cd79d200 r4:cb634010
-    [  821.939096] [<bf0788d4>] (musb_mode_store [musb_hdrc]) from [<c0425184>] (dev_attr_store+0x20/0x2c)
-    [  821.948593]  r7:cd79d200 r6:c5abbf78 r5:00000000 r4:bf0788d4
-    [  821.954549] [<c0425164>] (dev_attr_store) from [<c0285b08>] (sysfs_kf_write+0x48/0x4c)
-    [  821.962859]  r5:00000000 r4:c0425164
-    [  821.966620] [<c0285ac0>] (sysfs_kf_write) from [<c0285274>] (kernfs_fop_write+0xfc/0x1fc)
-    [  821.975200]  r5:00000000 r4:cd79d080
-    [  821.978966] [<c0285178>] (kernfs_fop_write) from [<c020ec00>] (__vfs_write+0x34/0x120)
-    [  821.987280]  r10:00000000 r9:0000000b r8:00000000 r7:0000000b r6:c5abbf78 r5:c0285178
-    [  821.995493]  r4:cb67a3c0
-    [  821.998160] [<c020ebcc>] (__vfs_write) from [<c020fae8>] (vfs_write+0xa8/0x170)
-    [  822.005835]  r9:0000000b r8:00000000 r7:c5abbf78 r6:000def80 r5:cb67a3c0 r4:0000000b
-    [  822.013969] [<c020fa40>] (vfs_write) from [<c02108d0>] (SyS_write+0x44/0x98)
-    [  822.021371]  r9:0000000b r8:000def80 r7:00000000 r6:00000000 r5:cb67a3c0 r4:cb67a3c0
-    [  822.029517] [<c021088c>] (SyS_write) from [<c010d8a0>] (ret_fast_syscall+0x0/0x3c)
-    [  822.037467]  r9:c5aba000 r8:c010daa8 r7:00000004 r6:b6f0ad58 r5:000def80 r4:0000000b
-    [  822.045599] Code: e1a0c00d e92dd800 e24cb004 e0801001 (e5910000)
+    SCSI-Presented Data Transfer Length (SPDTL) is the term this document
+    uses (see Section 1.1 for definition) to represent the aggregate data
+    length that the target SCSI layer attempts to transfer using the
+    local iSCSI layer for a task.  Expected Data Transfer Length (EDTL)
+    is the iSCSI term that represents the length of data that the iSCSI
+    layer expects to transfer for a task.  EDTL is specified in the SCSI
+    Command PDU.
 
-    Without pm_runtime_{get,put}_sync calls in place,
-    Similar issue come on "mode_show" and "vbus_store" also.
+    When SPDTL = EDTL for a task, the target iSCSI layer completes the
+    task with no residuals.  Whenever SPDTL differs from EDTL for a task,
+    that task is said to have a residual.
 
-    fix- call pm_runtime_{get,put}_sync before reading/writing
-    usb mode/vbus from sysfs.
+    If SPDTL > EDTL for a task, iSCSI Overflow MUST be signaled in the
+    SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
+    be set to the numerical value of (SPDTL - EDTL).
 
-    As sugguested on commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
-    Merged all the fix which reslove same bug in the same file.
-    "
-      commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
-      Author: Saurav Girepunje <saurav.girepunje@gmail.com>
-      Date:   Thu Aug 8 00:05:03 2019 +0530
+    If SPDTL < EDTL for a task, iSCSI Underflow MUST be signaled in the
+    SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
+    be set to the numerical value of (EDTL - SPDTL).
 
-      usb: musb: Fix external abort on non-linefetch for vbus_store
+    Note that the Overflow and Underflow scenarios are independent of
+    Data-In and Data-Out.  Either scenario is logically possible in
+    either direction of data transfer.
 
-      Without pm_runtime_{get,put}_sync calls in place, writing
-      vbus value via /sys causes the error
+If the residual is changed from signed into unsigned, how is a SCSI LLD 
+expected to report the difference between residual overflow and residual 
+underflow to the SCSI core?
 
-      "Unhandled fault external abort on non-linefetch"
+Thanks,
 
-        On Thu, Aug 08, 2019 at 12:11:46AM +0530, Saurav Girepunje wrote:
-	> Without pm_runtime_{get,put}_sync calls in place, writing
-	> vbus value via /sys causes the error
-	>
-	> "Unhandled fault external abort on non-linefetch"
-	>
-	> Signed-off-by: Saurav Girepunje <saurav.girepunje@xxxxxxxxx>
-
-	Thanks for the patch. Can you please merge another two similar patches
-	you just sent with this one? They all fix the same bug in the same file
-	so could be just in one patch.
-
-	-Bin.
-    "
-
-Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
----
- drivers/usb/musb/musb_core.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-index bd63450af76a..dc7d786feb58 100644
---- a/drivers/usb/musb/musb_core.c
-+++ b/drivers/usb/musb/musb_core.c
-@@ -1723,9 +1723,11 @@ mode_show(struct device *dev, struct device_attribute *attr, char *buf)
- 	unsigned long flags;
- 	int ret;
- 
-+	pm_runtime_get_sync(dev);
- 	spin_lock_irqsave(&musb->lock, flags);
- 	ret = sprintf(buf, "%s\n", usb_otg_state_string(musb->xceiv->otg->state));
- 	spin_unlock_irqrestore(&musb->lock, flags);
-+	pm_runtime_put_sync(dev);
- 
- 	return ret;
- }
-@@ -1738,6 +1740,7 @@ mode_store(struct device *dev, struct device_attribute *attr,
- 	unsigned long	flags;
- 	int		status;
- 
-+	pm_runtime_get_sync(dev);
- 	spin_lock_irqsave(&musb->lock, flags);
- 	if (sysfs_streq(buf, "host"))
- 		status = musb_platform_set_mode(musb, MUSB_HOST);
-@@ -1748,6 +1751,7 @@ mode_store(struct device *dev, struct device_attribute *attr,
- 	else
- 		status = -EINVAL;
- 	spin_unlock_irqrestore(&musb->lock, flags);
-+	pm_runtime_put_sync(dev);
- 
- 	return (status == 0) ? n : status;
- }
-@@ -1766,6 +1770,7 @@ vbus_store(struct device *dev, struct device_attribute *attr,
- 		return -EINVAL;
- 	}
- 
-+	pm_runtime_get_sync(dev);
- 	spin_lock_irqsave(&musb->lock, flags);
- 	/* force T(a_wait_bcon) to be zero/unlimited *OR* valid */
- 	musb->a_wait_bcon = val ? max_t(int, val, OTG_TIME_A_WAIT_BCON) : 0 ;
-@@ -1773,6 +1778,7 @@ vbus_store(struct device *dev, struct device_attribute *attr,
- 		musb->is_active = 0;
- 	musb_platform_try_idle(musb, jiffies + msecs_to_jiffies(val));
- 	spin_unlock_irqrestore(&musb->lock, flags);
-+	pm_runtime_put_sync(dev);
- 
- 	return n;
- }
--- 
-2.20.1
-
+Bart.
