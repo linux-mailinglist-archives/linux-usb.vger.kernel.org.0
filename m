@@ -2,125 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14D8AE70A5
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 12:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7243E7243
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 14:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388642AbfJ1LnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 07:43:01 -0400
-Received: from dougal.metanate.com ([90.155.101.14]:47937 "EHLO metanate.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729941AbfJ1LnA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Oct 2019 07:43:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
-         s=stronger; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=zSqO7Gbt5gFHhPgKnnb70g2Sd1MZYdjH1WNB38pjbSY=; b=OD/lK/7ESCD34gj9SUJGd6S+A4
-        ZYTY7/ZbACOVtsMl9wTwor4rVAA1Zya0eDOfbk8xlvpWMwTiJHDG/5YnGYEBdR/2M5XzbUT3KStaC
-        wLKmPQVXWdWrM7tZNTM38OmcIJjMxZ1FxtDNqNghIoADwFmAbfDpC9+Ubh4Bq4TH6ET4kv2s5rnkp
-        LtJ+UZbX8F2mYHBBjNjzBkXL6S8on3wsHM7r6s76zWDjqjlTK+6MWGJdJPOGLBEAokyE7sQQd2QIY
-        J9MRlwmYxRzGZDXQ9xTAJJP5M1HliW1fWbQsUG4IQSU+dh8OtOc5yXRWNFOeHTrJ0I+rSEINiYE9z
-        r56Ajgxg==;
-Received: from dougal.metanate.com ([192.168.88.1] helo=localhost.localdomain)
-        by email.metanate.com with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <john@metanate.com>)
-        id 1iP3QH-00010o-JZ; Mon, 28 Oct 2019 11:42:57 +0000
-From:   John Keeping <john@metanate.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, John Keeping <john@metanate.com>
-Subject: [PATCH v2 6/6] USB: gadget: f_hid: return ENODEV from read/write after deletion
-Date:   Mon, 28 Oct 2019 11:42:28 +0000
-Message-Id: <20191028114228.3679219-7-john@metanate.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191028114228.3679219-1-john@metanate.com>
-References: <20191024164538.3161474-1-john@metanate.com>
- <20191028114228.3679219-1-john@metanate.com>
+        id S1729810AbfJ1NCK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 09:02:10 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:35221 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728242AbfJ1NCK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 09:02:10 -0400
+Received: by mail-il1-f200.google.com with SMTP id w69so6263292ilk.2
+        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2019 06:02:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+         :content-transfer-encoding;
+        bh=gC/H1e2vQ5MzeSzXVR/okboKIIKlqD1bZOvOe5b3hLY=;
+        b=gpyw5CnUI/K6RSyb/ZthZBbsNdzeMs46yx4fUR/CJSWOtpayTA3Z/F9C39zsN+ACu9
+         FmQzE0oUgZLYiDv852ysiEAq28a3pGURmlO9nsikd+5ynI4PDAwXcexJaYKqxGyhzFW4
+         1axWgDlsRgSPqScS7DzNYsbRDkO1sDDGVEoHMVsXym4GX/+C5hKKcl96vfebaTS6yedj
+         XbDwimjDMiuMEPdqt7QugPp5QW3G+jSUv9f70V/wxLiPPc3tEW+xgmAGueLG1HY/vUzk
+         LHKbIv2FZj96kFqCMo7q2fsYa8l5jzzsfcXxmHCGqVKnKPdRGRgex6CIR1Ubj3rRqvMw
+         D+6Q==
+X-Gm-Message-State: APjAAAXbGqglBcZR8xnP9Zpdj+KIqwt7/y6LuG4LJ1oVTqf9tgWuuGfe
+        yQAZAwjQfRukMpecS4puQvp63AtE91yQkLXYXz27VLlXisUN
+X-Google-Smtp-Source: APXvYqxab6wXiPEzNePyJfeFbIQL7ARHxm4/XW9Gbwnag78FJ6G550sTfhmgJQXebR8f1jA7vOlb/T0vaHFGbKjRDYGxCMAJItfI
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Authenticated: YES
+X-Received: by 2002:a02:b817:: with SMTP id o23mr17127828jam.42.1572267729574;
+ Mon, 28 Oct 2019 06:02:09 -0700 (PDT)
+Date:   Mon, 28 Oct 2019 06:02:09 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000835f920595f81bfa@google.com>
+Subject: BUG: bad host encryption descriptor; descriptor is too short (0 vs 5 needed)
+From:   syzbot <syzbot+48fbe2f8fdcd2fbc1242@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If a file descriptor to /dev/hidgN is kept open after the gadget
-function has been deleted, reading or writing will block indefinitely
-since no requests will ever be processed.
-
-Add a flag to note that the function has been deleted and check this in
-read & write if there is no other action to take.  When setting this
-flag, also wake up any readers/writers so that they get ENODEV
-immediately.
-
-Signed-off-by: John Keeping <john@metanate.com>
----
-v2:
-- No changes
-
- drivers/usb/gadget/function/f_hid.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index 3d848f7a4cca..a65bdf08ca54 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -59,6 +59,7 @@ struct f_hidg {
- 	struct usb_request		*req;
- 
- 	struct kref			kref;
-+	bool				deleted;
- 	int				minor;
- 	struct usb_function		func;
- 
-@@ -271,10 +272,14 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
- 	/* wait for at least one buffer to complete */
- 	while (!READ_COND) {
- 		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-+		if (READ_ONCE(hidg->deleted))
-+			return -ENODEV;
-+
- 		if (file->f_flags & O_NONBLOCK)
- 			return -EAGAIN;
- 
--		if (wait_event_interruptible(hidg->read_queue, READ_COND))
-+		if (wait_event_interruptible(hidg->read_queue,
-+				READ_COND || READ_ONCE(hidg->deleted)))
- 			return -ERESTARTSYS;
- 
- 		spin_lock_irqsave(&hidg->read_spinlock, flags);
-@@ -358,11 +363,14 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
- 	/* write queue */
- 	while (!WRITE_COND) {
- 		spin_unlock_irqrestore(&hidg->write_spinlock, flags);
-+		if (READ_ONCE(hidg->deleted))
-+			return -ENODEV;
-+
- 		if (file->f_flags & O_NONBLOCK)
- 			return -EAGAIN;
- 
--		if (wait_event_interruptible_exclusive(
--				hidg->write_queue, WRITE_COND))
-+		if (wait_event_interruptible_exclusive(hidg->write_queue,
-+				WRITE_COND || READ_ONCE(hidg->deleted)))
- 			return -ERESTARTSYS;
- 
- 		spin_lock_irqsave(&hidg->write_spinlock, flags);
-@@ -1070,6 +1078,10 @@ static void hidg_free(struct usb_function *f)
- 
- 	hidg = func_to_hidg(f);
- 	opts = container_of(f->fi, struct f_hid_opts, func_inst);
-+	WRITE_ONCE(hidg->deleted, true);
-+	wake_up(&hidg->read_queue);
-+	wake_up(&hidg->write_queue);
-+
- 	kref_put(&hidg->kref, hidg_release);
- 	mutex_lock(&opts->lock);
- 	--opts->refcnt;
--- 
-2.23.0
-
+SGVsbG8sDQoNCnN5emJvdCBmb3VuZCB0aGUgZm9sbG93aW5nIGNyYXNoIG9uOg0KDQpIRUFEIGNv
+bW1pdDogICAgMjJiZTI2ZjcgdXNiLWZ1enplcjogbWFpbiB1c2IgZ2FkZ2V0IGZ1enplciBkcml2
+ZXINCmdpdCB0cmVlOiAgICAgICBodHRwczovL2dpdGh1Yi5jb20vZ29vZ2xlL2thc2FuLmdpdCB1
+c2ItZnV6emVyDQpjb25zb2xlIG91dHB1dDogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20v
+eC9sb2cudHh0P3g9MTZlY2NjMGY2MDAwMDANCmtlcm5lbCBjb25maWc6ICBodHRwczovL3N5emth
+bGxlci5hcHBzcG90LmNvbS94Ly5jb25maWc/eD01ZmUyOWJjMzllZmY5NjI3DQpkYXNoYm9hcmQg
+bGluazogaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20vYnVnP2V4dGlkPTQ4ZmJlMmY4ZmRj
+ZDJmYmMxMjQyDQpjb21waWxlcjogICAgICAgZ2NjIChHQ0MpIDkuMC4wIDIwMTgxMjMxIChleHBl
+cmltZW50YWwpDQpzeXogcmVwcm86ICAgICAgaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20v
+eC9yZXByby5zeXo/eD0xMGQwOGU0Y2UwMDAwMA0KQyByZXByb2R1Y2VyOiAgIGh0dHBzOi8vc3l6
+a2FsbGVyLmFwcHNwb3QuY29tL3gvcmVwcm8uYz94PTExZmIwN2ZmNjAwMDAwDQoNCklNUE9SVEFO
+VDogaWYgeW91IGZpeCB0aGUgYnVnLCBwbGVhc2UgYWRkIHRoZSBmb2xsb3dpbmcgdGFnIHRvIHRo
+ZSBjb21taXQ6DQpSZXBvcnRlZC1ieTogc3l6Ym90KzQ4ZmJlMmY4ZmRjZDJmYmMxMjQyQHN5emth
+bGxlci5hcHBzcG90bWFpbC5jb20NCg0KdXNiIDEtMTogY29uZmlnIDAgaW50ZXJmYWNlIDY2IGFs
+dHNldHRpbmcgMCBoYXMgMyBlbmRwb2ludCBkZXNjcmlwdG9ycywgIA0KZGlmZmVyZW50IGZyb20g
+dGhlIGludGVyZmFjZSBkZXNjcmlwdG9yJ3MgdmFsdWU6IDQNCnVzYiAxLTE6IE5ldyBVU0IgZGV2
+aWNlIGZvdW5kLCBpZFZlbmRvcj0xM2RjLCBpZFByb2R1Y3Q9NTYxMSwgIA0KYmNkRGV2aWNlPTQw
+LjE1DQp1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MCwgUHJvZHVjdD0wLCBT
+ZXJpYWxOdW1iZXI9MA0KdXNiIDEtMTogY29uZmlnIDAgZGVzY3JpcHRvcj8/DQpod2EtaGMgMS0x
+OjAuNjY6IFdpcmUgQWRhcHRlciB2MTI1LjUyIG5ld2VyIHRoYW4gZ3Jva2VkIHYxLjANCmh3YS1o
+YyAxLTE6MC42NjogRklYTUU6IFVTQl9NQVhDSElMRFJFTiB0b28gbG93IGZvciBXVVNCIGFkYXB0
+ZXIgKDUzIHBvcnRzKQ0KdXNiIDEtMTogQlVHOiBiYWQgaG9zdCBlbmNyeXB0aW9uIGRlc2NyaXB0
+b3I7IGRlc2NyaXB0b3IgaXMgdG9vIHNob3J0ICgwIHZzICANCjUgbmVlZGVkKQ0KdXNiIDEtMTog
+c3VwcG9ydGVkIGVuY3J5cHRpb24gdHlwZXM6IO+/ve+/ve+/vc+B77+977+977+9fO+/ve+/vc+B
+77+977+977+977+977+977+9z4Hvv73vv73vv70NCnVzYiAxLTE6IEU6IGhvc3QgZG9lc24ndCBz
+dXBwb3J0IENDTS0xIGNyeXB0bw0KaHdhLWhjIDEtMTowLjY2OiBDYW5ub3QgaW5pdGlhbGl6ZSBp
+bnRlcm5hbHM6IC0xOQ0KDQoNCi0tLQ0KVGhpcyBidWcgaXMgZ2VuZXJhdGVkIGJ5IGEgYm90LiBJ
+dCBtYXkgY29udGFpbiBlcnJvcnMuDQpTZWUgaHR0cHM6Ly9nb28uZ2wvdHBzbUVKIGZvciBtb3Jl
+IGluZm9ybWF0aW9uIGFib3V0IHN5emJvdC4NCnN5emJvdCBlbmdpbmVlcnMgY2FuIGJlIHJlYWNo
+ZWQgYXQgc3l6a2FsbGVyQGdvb2dsZWdyb3Vwcy5jb20uDQoNCnN5emJvdCB3aWxsIGtlZXAgdHJh
+Y2sgb2YgdGhpcyBidWcgcmVwb3J0LiBTZWU6DQpodHRwczovL2dvby5nbC90cHNtRUojc3RhdHVz
+IGZvciBob3cgdG8gY29tbXVuaWNhdGUgd2l0aCBzeXpib3QuDQpzeXpib3QgY2FuIHRlc3QgcGF0
+Y2hlcyBmb3IgdGhpcyBidWcsIGZvciBkZXRhaWxzIHNlZToNCmh0dHBzOi8vZ29vLmdsL3Rwc21F
+SiN0ZXN0aW5nLXBhdGNoZXMNCg==
