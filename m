@@ -2,177 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EACE778C
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 18:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC95EE784A
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2019 19:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731959AbfJ1RXW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Oct 2019 13:23:22 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:43043 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404156AbfJ1RXT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 13:23:19 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 3so7314155pfb.10
-        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2019 10:23:18 -0700 (PDT)
+        id S2391124AbfJ1SXN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Oct 2019 14:23:13 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:43261 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730690AbfJ1SXM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Oct 2019 14:23:12 -0400
+Received: by mail-qt1-f195.google.com with SMTP id l15so9380835qtr.10
+        for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2019 11:23:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UflXfL3dwhO51RWNtr30ZieO/LUtszv77VC5R3Td5p4=;
-        b=djoanQkiGA3fqiuTCeMp3PS0KDhFi1gk6EjakgwdacK8Hqk8l3UxxOnnkSpDAvM+ZD
-         tljXKBoM/Gl5mK8Ort4gG8L54R4wqn5HKR5qrEPSHNovOdL1GqR6CBgB+WEjAyr1smkG
-         RXSyvwASJ+KQCGxGJmBSvJC4ZdCK0PsvSUOtqtl8COFWH3EG9a15NN1IeB2tqZBWko/0
-         cQ1SPDIoC3nO8FtJaVzKO5dDuENqFfiOk5axnAjDEMM1O6mD1sHR5yxBwMUg1RqPnrZP
-         fvkc7EbqnRJoVLNXND4vGBALh7PmRcbUeD9eQNcbz7HfnHCjag9qCo5s31LIMqZfHIAX
-         CUsA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jOWlJJy6ChuEnqYHbSHVhhLc41FzhhIbgNvL4gteWmI=;
+        b=l8qmOSK8YchiVh2uO5YBeCgBvBOdUPYnJFFf0qevg1oXdh17RzVfSZ872bS9hseUkQ
+         IBW+IuI5W93nmKGGhxC7bwVX+yEuxGWMJ30t4uYZBeKlvSs96PIldYUBc1mpi5jlRAnR
+         Lc8PrZd3xvcY9SCTpQRLYSuAsww0vkQJGs5Ap6ND9oYyMKcSqqVWNh2vVFaLTE+F0bDC
+         vfQ2EUZMIwLzUhAVlC2mV7d5OpWuSNuwUOYF6sV5/edl11sHTEhmjK8i1cOl/rSotYSZ
+         bPKSAqikVeGkZNlfengbP0a4vgfGpW5noxhaCS4YnRDOiWnuqb0lK4ZiKlw9dnhr/jzI
+         1mDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UflXfL3dwhO51RWNtr30ZieO/LUtszv77VC5R3Td5p4=;
-        b=XReRUwWfneV+wG2QpwuRk3bqlxBSmp0za/ob7GgWbvMekSAM2LqDYUVf+0BNxqzU7H
-         EqSmc3ew7NybRBQTE+AFzq+Mtq4ieWwsqwxBUw2E6L5IaNiVjRunRP8BTJZcgDvBNzpu
-         KyogeqoXRGsZqO3H6B6mnY49kX7K8YNFQg9bAG75b+aXHEOol6AcYv6WGjgbzyQty5qU
-         91HRm2cMKz2Jho2Cpm8tVZU/JGp+kNsKZdw9+0B1Nti2hNpqEF6t3KEcg/YZxKLpfBqE
-         0xFxu0re2Uq80za+bysqHKWq5b+sKle4mGfC4jFElz/FR1DaBvAGbDydLE/GUxURdTbb
-         yUEA==
-X-Gm-Message-State: APjAAAVy+wHjlT95jNRrpyMib7X3VqnZWEuva8/A7EKSYUEyDhhmWYbw
-        7htEevYnGGuTC1NEbxZgdgfq86qwdHF2wljsmiSxEQ==
-X-Google-Smtp-Source: APXvYqytcmgUBglTw+96rAxyA8UoLZEEWQtQv6S5qGrK/cGa88KPzT32foKerAZ8x0LkY9vPTs4Gdwj3wPvVn1QVv48=
-X-Received: by 2002:a17:90a:6509:: with SMTP id i9mr449000pjj.47.1572283397935;
- Mon, 28 Oct 2019 10:23:17 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jOWlJJy6ChuEnqYHbSHVhhLc41FzhhIbgNvL4gteWmI=;
+        b=DmSBHBEgTwYD+FjnljncazVZc0dVajstxnWRxcYS5v7YxMf94EVRvSGoq/vn5x+o5h
+         kg6XiMmMzWSUYS1KtqH0NWr5nWnLUKDJw/mR75zyovGMmyEza+NeGTBzz6ZRPP9wzDT6
+         2+o99DLH5YbQf1gQmYneUGvPnioqLaFF+4fSTmfIxaSs5MR69FyBw37vtURwL46KEjvd
+         zoTSJb+oZ0A9VdXxZIRbFfQx2on2GKZ8kC6nHxGmBnXGeJ14ckL2fniKZErSar9NhSYF
+         Ja8Mkv/jiKfc0hvWv5tlPLLrmKTuxM58nHjVkaN9C2wEimvvG5bAvDUE0KpJXcB/U7+F
+         qLbQ==
+X-Gm-Message-State: APjAAAWOr5uUxPuESiTelKR+n/xbE+eEQ6trBmBpz3JvFYwjoEZYyWlH
+        l0vk6daK5NV8NNBH0XZPcsA=
+X-Google-Smtp-Source: APXvYqzi7aq5Ujye1dzsDxTmyAsUXCY6WWoNzCH9hvO3gsTVvZOy7RJRh/HUOjF4kGBm9w2TjIykbg==
+X-Received: by 2002:a0c:94fb:: with SMTP id k56mr13660455qvk.127.1572286991587;
+        Mon, 28 Oct 2019 11:23:11 -0700 (PDT)
+Received: from firefly.sparksnet ([2601:153:900:a52:6f12:874c:d2b2:a9d0])
+        by smtp.gmail.com with ESMTPSA id x9sm5808631qkl.75.2019.10.28.11.23.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2019 11:23:09 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     heiko@sntech.de
+Cc:     linux-rockchip@lists.infradead.org, linux-usb@vger.kernel.org,
+        katsuhiro@katsuster.net, robin.murphy@arm.com,
+        Peter Geis <pgwipeout@gmail.com>
+Subject: [PATCH 0/5] add rk3328 usb3 phy driver
+Date:   Mon, 28 Oct 2019 18:22:49 +0000
+Message-Id: <20191028182254.30739-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <cover.1571844200.git.andreyknvl@google.com> <beeae42e313ef57b4630cc9f36e2e78ad42fd5b7.1571844200.git.andreyknvl@google.com>
- <20191023152216.796aeafd832ba5351d86d3ca@linux-foundation.org>
-In-Reply-To: <20191023152216.796aeafd832ba5351d86d3ca@linux-foundation.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 28 Oct 2019 18:23:06 +0100
-Message-ID: <CAAeHK+w1SB7Z7ndB3nocO3vKwBhPrr6GFZa6EYeApyppx7gYYw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] kcov: remote coverage support
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 12:22 AM Andrew Morton
-<akpm@linux-foundation.org> wrote:
->
-> On Wed, 23 Oct 2019 17:24:29 +0200 Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> > This patch adds background thread coverage collection ability to kcov.
-> >
-> > With KCOV_ENABLE coverage is collected only for syscalls that are issued
-> > from the current process. With KCOV_REMOTE_ENABLE it's possible to collect
-> > coverage for arbitrary parts of the kernel code, provided that those parts
-> > are annotated with kcov_remote_start()/kcov_remote_stop().
-> >
-> > This allows to collect coverage from two types of kernel background
-> > threads: the global ones, that are spawned during kernel boot and are
-> > always running (e.g. USB hub_event()); and the local ones, that are
-> > spawned when a user interacts with some kernel interface (e.g. vhost
-> > workers).
-> >
-> > To enable collecting coverage from a global background thread, a unique
-> > global handle must be assigned and passed to the corresponding
-> > kcov_remote_start() call. Then a userspace process can pass a list of such
-> > handles to the KCOV_REMOTE_ENABLE ioctl in the handles array field of the
-> > kcov_remote_arg struct. This will attach the used kcov device to the code
-> > sections, that are referenced by those handles.
-> >
-> > Since there might be many local background threads spawned from different
-> > userspace processes, we can't use a single global handle per annotation.
-> > Instead, the userspace process passes a non-zero handle through the
-> > common_handle field of the kcov_remote_arg struct. This common handle gets
-> > saved to the kcov_handle field in the current task_struct and needs to be
-> > passed to the newly spawned threads via custom annotations. Those threads
-> > should in turn be annotated with kcov_remote_start()/kcov_remote_stop().
-> >
-> > Internally kcov stores handles as u64 integers. The top byte of a handle
-> > is used to denote the id of a subsystem that this handle belongs to, and
-> > the lower 4 bytes are used to denote a handle id within that subsystem.
-> > A reserved value 0 is used as a subsystem id for common handles as they
-> > don't belong to a particular subsystem. The bytes 4-7 are currently
-> > reserved and must be zero. In the future the number of bytes used for the
-> > subsystem or handle ids might be increased.
-> >
-> > When a particular userspace proccess collects coverage by via a common
-> > handle, kcov will collect coverage for each code section that is annotated
-> > to use the common handle obtained as kcov_handle from the current
-> > task_struct. However non common handles allow to collect coverage
-> > selectively from different subsystems.
-> >
-> > ...
-> >
-> > +static struct kcov_remote *kcov_remote_add(struct kcov *kcov, u64 handle)
-> > +{
-> > +     struct kcov_remote *remote;
-> > +
-> > +     if (kcov_remote_find(handle))
-> > +             return ERR_PTR(-EEXIST);
-> > +     remote = kmalloc(sizeof(*remote), GFP_ATOMIC);
-> > +     if (!remote)
-> > +             return ERR_PTR(-ENOMEM);
-> > +     remote->handle = handle;
-> > +     remote->kcov = kcov;
-> > +     hash_add(kcov_remote_map, &remote->hnode, handle);
-> > +     return remote;
-> > +}
-> > +
-> >
-> > ...
-> >
-> > +             spin_lock(&kcov_remote_lock);
-> > +             for (i = 0; i < remote_arg->num_handles; i++) {
-> > +                     kcov_debug("handle %llx\n", remote_arg->handles[i]);
-> > +                     if (!kcov_check_handle(remote_arg->handles[i],
-> > +                                             false, true, false)) {
-> > +                             spin_unlock(&kcov_remote_lock);
-> > +                             kcov_disable(t, kcov);
-> > +                             return -EINVAL;
-> > +                     }
-> > +                     remote = kcov_remote_add(kcov, remote_arg->handles[i]);
-> > +                     if (IS_ERR(remote)) {
-> > +                             spin_unlock(&kcov_remote_lock);
-> > +                             kcov_disable(t, kcov);
-> > +                             return PTR_ERR(remote);
-> > +                     }
-> > +             }
->
-> It's worrisome that this code can perform up to 65536 GFP_ATOMIC
-> allocations without coming up for air.  The possibility of ENOMEM or of
-> causing collateral problems is significant.  It doesn't look too hard
-> to change this to use GFP_KERNEL?
+It took a lot more effort than originally anticipated, but here it is.
+This is the driver from [0], updated to work with the current kernel.
+I've tested it on the rk3328-roc-cc board, both usb 2.0 and usb 3.0 
+devices detect on hotplug.
 
-Looking at this again: it seems easy to get rid of locking
-kcov_remote_lock when doing kmalloc, but a bit harder to get rid of
-kcov->lock. Andrew, would it be OK to just change the max number of
-GFP_ATOMIC allocations to 256?
+[0] https://github.com/FireflyTeam/kernel/commits/roc-rk3328-cc/drivers/phy/rockchip/phy-rockchip-inno-usb3.c
 
->
-> > +u64 kcov_common_handle(void)
-> > +{
-> > +     return current->kcov_handle;
-> > +}
->
-> I don't immediately understand what this "common handle" thing is all about.
-> Code is rather lacking in this sort of high-level commentary?
->
->
+Peter Geis (5):
+  phy: rockchip: add inno-usb3 phy driver
+  dt-bindings: clean up rockchip grf binding document
+  Documentation: bindings: add dt documentation for rockchip usb3 phy
+  arm64: dts: rockchip: add usb3 to rk3328 devicetree
+  arm64: dts: rockchip: enable usb3 on rk3328-roc-cc
+
+ .../bindings/phy/phy-rockchip-inno-usb3.yaml  |  157 +++
+ .../devicetree/bindings/soc/rockchip/grf.txt  |    8 +-
+ .../devicetree/bindings/usb/rockchip,dwc3.txt |    9 +-
+ .../arm64/boot/dts/rockchip/rk3328-roc-cc.dts |   21 +
+ arch/arm64/boot/dts/rockchip/rk3328.dtsi      |   72 ++
+ drivers/phy/rockchip/Kconfig                  |    9 +
+ drivers/phy/rockchip/Makefile                 |    1 +
+ drivers/phy/rockchip/phy-rockchip-inno-usb3.c | 1107 +++++++++++++++++
+ 8 files changed, 1378 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb3.yaml
+ create mode 100644 drivers/phy/rockchip/phy-rockchip-inno-usb3.c
+
+-- 
+2.20.1
+
