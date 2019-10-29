@@ -2,108 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B52FE8814
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 13:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D8DE8819
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 13:26:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387806AbfJ2MZV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 08:25:21 -0400
-Received: from mga18.intel.com ([134.134.136.126]:31965 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728465AbfJ2MZV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Oct 2019 08:25:21 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 05:25:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="asc'?scan'208";a="224954166"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Oct 2019 05:25:18 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Roger Quadros <rogerq@ti.com>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     "Bin Liu \[EP\]" <b-liu@ti.com>
-Subject: Re: g_audio breaks with dwc3
-In-Reply-To: <c97b96cf-65f6-5143-838f-a3e9d1a5c5b2@ti.com>
-References: <c97b96cf-65f6-5143-838f-a3e9d1a5c5b2@ti.com>
-Date:   Tue, 29 Oct 2019 14:25:14 +0200
-Message-ID: <87r22vhh79.fsf@gmail.com>
+        id S1727609AbfJ2M0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 08:26:34 -0400
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:34220 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727102AbfJ2M0d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 08:26:33 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TCQQMv063478;
+        Tue, 29 Oct 2019 07:26:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572351987;
+        bh=KcKoz19cXM5HLBkQayGtrDbv0pk6Rspdk0DQiHTWR5c=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=EyiQUBfatKmd5vuIiIUsUJ/HcuDqnqr2e1CpE+Y41LAlefq5XG9EVQQjaZWYKZ2dn
+         BxxHyBw6NYgPdK5bW8yGMbDiGcxOD365pkR7zU2A4arJB9xWJSyfSBVIJQQ47x3bXv
+         F+ao2qL9PvhgAFSDkmfhCfSfCSk2/BnIIcdh3alI=
+Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TCQQNV017567;
+        Tue, 29 Oct 2019 07:26:26 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
+ Oct 2019 07:26:14 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 29 Oct 2019 07:26:26 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TCQOn7020114;
+        Tue, 29 Oct 2019 07:26:24 -0500
+Subject: Re: [PATCH] usb: cdns3: gadget: reset EP_CLAIMED flag while unloading
+To:     Sanket Parmar <sparmar@cadence.com>, <gregkh@linuxfoundation.org>,
+        <felipe.balbi@linux.intel.com>
+CC:     <pawell@cadence.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kurahul@cadence.com>,
+        <peter.chen@nxp.com>, <nsekhar@ti.com>
+References: <20191029122441.5816-1-sparmar@cadence.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <d7f94cd4-774c-5281-4437-1a160d196bb2@ti.com>
+Date:   Tue, 29 Oct 2019 14:26:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20191029122441.5816-1-sparmar@cadence.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
+On 29/10/2019 14:24, Sanket Parmar wrote:
+> EP_CLAIMED flag is used to track the claimed endpoints. While unloading the
+> module, Reset EP_CLAIMED flag for all enabled endpoints. So that it can be
+> reused.
+> 
+> Signed-off-by: Sanket Parmar <sparmar@cadence.com>
 
-Roger Quadros <rogerq@ti.com> writes:
-> I'm on v5.4-rc5 on TI's dra7 platform
->
-> root@dra7xx-evm:~# modprobe g_audio
-> [   79.951077] g_audio gadget: Linux USB Audio Gadget, version: Feb 2, 20=
-12
-> [   79.957849] g_audio gadget: g_audio ready
->
-> Now I plug the EVM's USB to PC host.
->
-> root@dra7xx-evm:~# [   85.359410] g_audio gadget: high-speed config #1: L=
-inux USB Audio Gadget
-> [   85.450574] 8<--- cut here ---
-> [   85.453645] Unable to handle kernel paging request at virtual address =
-ecb769dc
-> [   85.460900] pgd =3D 08bb55ef
-> [   85.463618] [ecb769dc] *pgd=3Daca1141e(bad)
-> [   85.467651] Internal error: Oops: 8000000d [#1] SMP ARM
-> [   85.472897] Modules linked in: usb_f_uac2 u_audio g_audio libcomposite=
- xhci_plat_hcd xhci_hcd usbcore dwc3 evdev udc_core usb_common spi_nor snd_=
-soc_simple_card snd_soc_simple_card_utils leds_gpio led_class 4
-> [   85.523128] CPU: 0 PID: 1240 Comm: irq/170-dwc3 Not tainted 5.4.0-rc5 =
-#50
-> [   85.529945] Hardware name: Generic DRA74X (Flattened Device Tree)
-> [   85.536066] PC is at 0xecb769dc
-> [   85.539240] LR is at dwc3_gadget_giveback+0x44/0x50 [dwc3]
+Reviewed-by: Roger Quadros <rogerq@ti.com>
 
-what's in dwc3_gadget_giveback + 0x44? GDB can tell you that.
+> ---
+> Hi Greg/Felipe,
+> 
+> This can be used for -rc as it is bug fix.
+> 
+> Regards,
+> Sanket
+> 
+>   drivers/usb/cdns3/gadget.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> index 9050b380ab83..2fb78322ed3c 100644
+> --- a/drivers/usb/cdns3/gadget.c
+> +++ b/drivers/usb/cdns3/gadget.c
+> @@ -2381,6 +2381,8 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+>   		writel(EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
+>   		readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
+>   					  !(val & EP_CMD_EPRST), 1, 100);
+> +
+> +		priv_ep->flags &= ~EP_CLAIMED;
+>   	}
+>   
+>   	/* disable interrupt for device */
+> 
 
-> dwc3 trace dump is below
->
-
-[...]
-
-> irq/170-dwc3-1240  [000] d...    85.450567: dwc3_gadget_giveback: : req d=
-4301893 length 0/0 zsI =3D=3D> 0
-
-What the hell??? Where's the endpoint name?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24L6oACgkQzL64meEa
-mQZ/vA//ZvYSmrNWm0cO2qK/ZQ4ghL8UBKseXPArwEGLj90QZo6mV5fOWK9MDbM7
-NFy4KEdBXdr60k8G44s7zNBPerOPW4jjcwKCI6msbSBm3VlSw09iaYCCBG3ig4Kn
-HicnPfK9b2pIPQTx6PbHuibbW8ClbrfZAm0F6G5HOS4Kik+3yyj3HyrOrm7N0OuK
-mKbkpDq9NGvOHInIpvyYWLEE09vV17wlTSeLCj4177dQz+1BmY9gIiymFuguUwVi
-bjDCoahQjFY+0uQOI/OK2YD64JR7yONyRqPKFqtMwMw5QeADEixDt/Si5Xm9jFms
-bJMLKYSPgrEQt9vfr2C8EIU3/1pVbfuvab283V/EwZEshVEbAdP2w9n1xaNppu9a
-o8tKlykN0ZqPkDSQ8q9W8vUXbwm40eGGstYyQsVa4ad3SfTs9FIyfCjRWmubXVw0
-5MX6EgEcu2a6Alq5NyKWni69yjwwAfK0DTlItqcFrfdvt2p0BwJajPw48OC5A3qJ
-QtJuV9OlCgen476TNNHWdFxHRtPWGJRkxYPQUNAWEjqa7CVv4p0DaL80g74o+QFt
-KSLYbYuwoCls1P1b1DTKrRsA0BN1KPOcFZuu3D5O6GsLc9+AXLC7U96fKqg98lOC
-OgkOL79laJxK55gZQxV4TsejJLpJQKzq//Fr4lFKJS4jZ72Z2Yw=
-=QIIu
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+cheers,
+-roger
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
