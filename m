@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E302BE8411
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 10:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9057E8448
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 10:22:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731781AbfJ2JRP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 05:17:15 -0400
-Received: from mga11.intel.com ([192.55.52.93]:3237 "EHLO mga11.intel.com"
+        id S1731656AbfJ2JV6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 05:21:58 -0400
+Received: from mga01.intel.com ([192.55.52.88]:23405 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731694AbfJ2JRO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Oct 2019 05:17:14 -0400
+        id S1727257AbfJ2JV6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Oct 2019 05:21:58 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 02:17:14 -0700
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 02:21:57 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="asc'?scan'208";a="374490234"
+   d="asc'?scan'208";a="229993798"
 Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga005.jf.intel.com with ESMTP; 29 Oct 2019 02:17:09 -0700
+  by fmsmga002.fm.intel.com with ESMTP; 29 Oct 2019 02:21:53 -0700
 From:   Felipe Balbi <balbi@kernel.org>
 To:     John Stultz <john.stultz@linaro.org>,
         lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
+Cc:     Yu Chen <chenyu56@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -32,18 +32,17 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Suzuki K Poulose <suzuki.poulose@arm.com>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Yu Chen <chenyu56@huawei.com>,
         Hans de Goede <hdegoede@redhat.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 6/9] usb: dwc3: Rework resets initialization to be more flexible
-In-Reply-To: <20191028215919.83697-7-john.stultz@linaro.org>
-References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-7-john.stultz@linaro.org>
-Date:   Tue, 29 Oct 2019 11:17:05 +0200
-Message-ID: <87h83rj4ha.fsf@gmail.com>
+        devicetree@vger.kernel.org, John Stultz <john.stultz@linaro.org>
+Subject: Re: [PATCH v4 7/9] usb: dwc3: Registering a role switch in the DRD code.
+In-Reply-To: <20191028215919.83697-8-john.stultz@linaro.org>
+References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-8-john.stultz@linaro.org>
+Date:   Tue, 29 Oct 2019 11:21:49 +0200
+Message-ID: <87eeyvj49e.fsf@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -60,17 +59,121 @@ Content-Transfer-Encoding: quoted-printable
 Hi,
 
 John Stultz <john.stultz@linaro.org> writes:
-> The dwc3 core binding specifies one reset.
+> From: Yu Chen <chenyu56@huawei.com>
 >
-> However some variants of the hardware my not have more.
-                                        ^^
-                                        may
+> The Type-C drivers use USB role switch API to inform the
+> system about the negotiated data role, so registering a role
+> switch in the DRD code in order to support platforms with
+> USB Type-C connectors.
+>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> CC: ShuFan Lee <shufan_lee@richtek.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: Yu Chen <chenyu56@huawei.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Jun Li <lijun.kernel@gmail.com>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Jack Pham <jackp@codeaurora.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+> v2: Fix role_sw and role_switch_default_mode descriptions as
+>     reported by kbuild test robot <lkp@intel.com>
+>
+> v3: Split out the role-switch-default-host logic into its own
+>     patch
+> ---
+>  drivers/usb/dwc3/Kconfig |  1 +
+>  drivers/usb/dwc3/core.h  |  3 ++
+>  drivers/usb/dwc3/drd.c   | 66 +++++++++++++++++++++++++++++++++++++++-
+>  3 files changed, 69 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+> index 89abc6078703..1104745c41a9 100644
+> --- a/drivers/usb/dwc3/Kconfig
+> +++ b/drivers/usb/dwc3/Kconfig
+> @@ -44,6 +44,7 @@ config USB_DWC3_DUAL_ROLE
+>  	bool "Dual Role mode"
+>  	depends on ((USB=3Dy || USB=3DUSB_DWC3) && (USB_GADGET=3Dy || USB_GADGE=
+T=3DUSB_DWC3))
+>  	depends on (EXTCON=3Dy || EXTCON=3DUSB_DWC3)
+> +	select USB_ROLE_SWITCH
 
-According to synopsys databook, there's a single *input* reset signal on
-this IP. What is this extra reset you have?
+so even those using DWC3 as a peripheral-only or host-only driver will
+need role switch?
 
-Is this, perhaps, specific to your glue layer around the synopsys ip?
-Should, perhaps, your extra reset be managed by the glue layer?
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 1c8b349379af..6f19e9891767 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -25,6 +25,7 @@
+>  #include <linux/usb/ch9.h>
+>  #include <linux/usb/gadget.h>
+>  #include <linux/usb/otg.h>
+> +#include <linux/usb/role.h>
+>  #include <linux/ulpi/interface.h>
+>=20=20
+>  #include <linux/phy/phy.h>
+> @@ -951,6 +952,7 @@ struct dwc3_scratchpad_array {
+>   * @hsphy_mode: UTMI phy mode, one of following:
+>   *		- USBPHY_INTERFACE_MODE_UTMI
+>   *		- USBPHY_INTERFACE_MODE_UTMIW
+> + * @role_sw: usb_role_switch handle
+>   * @usb2_phy: pointer to USB2 PHY
+>   * @usb3_phy: pointer to USB3 PHY
+>   * @usb2_generic_phy: pointer to USB2 PHY
+> @@ -1084,6 +1086,7 @@ struct dwc3 {
+>  	struct extcon_dev	*edev;
+>  	struct notifier_block	edev_nb;
+>  	enum usb_phy_interface	hsphy_mode;
+> +	struct usb_role_switch	*role_sw;
+>=20=20
+>  	u32			fladj;
+>  	u32			irq_gadget;
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index c946d64142ad..61d4fd8aead4 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -476,6 +476,52 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc=
+3 *dwc)
+>  	return edev;
+>  }
+>=20=20
+> +static int dwc3_usb_role_switch_set(struct device *dev, enum usb_role ro=
+le)
+> +{
+> +	struct dwc3 *dwc =3D dev_get_drvdata(dev);
+> +	u32 mode;
+> +
+> +	switch (role) {
+> +	case USB_ROLE_HOST:
+> +		mode =3D DWC3_GCTL_PRTCAP_HOST;
+> +		break;
+> +	case USB_ROLE_DEVICE:
+> +		mode =3D DWC3_GCTL_PRTCAP_DEVICE;
+> +		break;
+> +	default:
+> +		mode =3D DWC3_GCTL_PRTCAP_DEVICE;
+> +		break;
+> +	}
+> +
+> +	dwc3_set_mode(dwc, mode);
+> +	return 0;
+> +}
+
+role switching is starting to get way too complicated in DWC3. We now
+have a function that queues a work on the system_freezable_wq that will
+configure PHY and change PRTCAP. Is there a way we can simplify some of
+this a little?
 
 =2D-=20
 balbi
@@ -80,18 +183,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24A5EACgkQzL64meEa
-mQajVg/8C0zUku0Benos6tXfx/tAJJh/qhYsHfs0w1BvYtNy8KYfgq7yyUxX4zh5
-2dbXhYsQ9fHdJgKPYrybO10XU6rPoWUrK+DOCAUjLx7Rj0P0SzkUI1UGXiCLNzvd
-UEpOc14h8+KApJ239yKNWypZUdn+raYjMB2ZTtgjj7Smid8KvU5NBMVBuoOKKEm6
-tIBw+Vsyzosjidd/fXIUkmJ/05dxh8BVUZcn76pfTMbdWPVyf6h0sGmkWCIPkHJ/
-ac0Zow2zWML4LI2ZHDinWaqGS3lYf0r49UeiuNk6P+jnF0+OlhhUzY+XurlLEcI6
-/ey9VqPG6j3/Hyx3EdBUlFDh3BzyQ12Pj41lCadzvPsjEQm/woUxzySByCaFGnp9
-jXaJ3RerRbHcxoIfRuErdw2txreTr+HTWTpsBMPLv2immknoaI38qBBFWsTReDgi
-2WgrJwr5O9ZLF/T2DpBM81WcZLCJQo6pzjetjb49XgJhCFDu0zSLV3A+72dWMR4R
-2XTC73Ha5qwBWiHOSGZIWaEV3I4aBS9jENod8RuzstZwl+IJ+0ITy+DTN5C4LcVi
-s05enHsr6vnk3LJkcA4v53yowDQbOimxWRM2/2a8Wrd4hTWPD/ohSzCr6S6uWY/E
-+Uq6f1uiNzcx9AgTLaIInuloK27pv160JEs7Odw+ooaLDOwGObU=
-=HQbL
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24BK0ACgkQzL64meEa
+mQY9/w/8Dif+Ozfqt8XOrrwyG/De+CLq3qGVGmgTDMdjdKzDVTMi3jd2IMxrVpW5
+oniCtQG26Hqn5+a+UdvAnSsxvaKpMtFrM5mWHkpbNOWRD/VQBO2c4NhjrhgJdk+G
+v+8sMCAp99sGSuoxmHds7MDWRF0TXZB+r8wCDeegsbcoKq5KHsWmYjlT/Svgosbc
++8C1GGsRM9ryFJohV90Mq8IlWRzyY+OdRhiEavPZIuoMDCZg2vv5fVkqPrKOw3e7
+vjtRwmupFK0mKAvJfeHR4ToQuJxCqsltHIe6WrLuxXPB3tCRE1gKowX50ngWrVbs
+LorqGk48ZOawe+8c5WmlzILqWuo5Kaa08cQTIJiewP2ZKnMt6YhpZvnrq3WD9vb1
+ULQNuhqdWn6fVozm7LMKjssnwZhCkJ5uYrXuX+3aKZ9IBvNLw7HH/WlLOdLhjrIp
+b1jHyTZ6jg74ONTEJX+sTdPx0lIq68OP58aC75fF4j8ehVCvK2HN0JTyt1Lu7I0z
+zOv1F0bWhg9YK2YKryWToeVZzVrpIPBvxe1crEnaXPyEAthb8b8g3/h9ARO92s9y
+OA00DY7JLuJ6Gb54ojyaNHICeq6ARTBhEXoJwAF6l/z67RmJSu6MOqaLPjHTyOds
+4xytyZRTp2GKsjzXBCH4JzanI7TASvCmWZ8+xz35WlJOC/YkMxs=
+=ReFr
 -----END PGP SIGNATURE-----
 --=-=-=--
