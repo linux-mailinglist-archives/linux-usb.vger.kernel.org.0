@@ -2,121 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07E77E85C8
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 11:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD95E862C
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 11:57:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727535AbfJ2KeD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 06:34:03 -0400
-Received: from mga11.intel.com ([192.55.52.93]:9190 "EHLO mga11.intel.com"
+        id S1727197AbfJ2K52 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 06:57:28 -0400
+Received: from mga18.intel.com ([134.134.136.126]:25719 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726716AbfJ2KeD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Oct 2019 06:34:03 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1726175AbfJ2K52 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Oct 2019 06:57:28 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 03:34:02 -0700
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 03:57:27 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="asc'?scan'208";a="198884160"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga007.fm.intel.com with ESMTP; 29 Oct 2019 03:33:59 -0700
+   d="scan'208";a="205436911"
+Received: from pipin.fi.intel.com ([10.237.72.175])
+  by FMSMGA003.fm.intel.com with ESMTP; 29 Oct 2019 03:57:26 -0700
 From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "nsekhar\@ti.com" <nsekhar@ti.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
-In-Reply-To: <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
-References: <20191023090232.27237-1-rogerq@ti.com> <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com> <20191025031343.GA13392@b29397-desktop> <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com> <20191029031223.GA26815@b29397-desktop> <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
-Date:   Tue, 29 Oct 2019 12:33:56 +0200
-Message-ID: <875zk7j0x7.fsf@gmail.com>
+To:     Linux USB <linux-usb@vger.kernel.org>
+Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Subject: [PATCH] usb: dwc3: of-simple: add a shutdown
+Date:   Tue, 29 Oct 2019 12:57:24 +0200
+Message-Id: <20191029105724.1344227-1-felipe.balbi@linux.intel.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+In case we're loading a new kernel via kexec, let's make sure to
+cleanup the dwc3 address space correctly. This means that we should
+run the same steps from driver remove, so just extract a reusable
+function for both cases.
 
+Signed-off-by: Felipe Balbi <felipe.balbi@linux.intel.com>
+---
+ drivers/usb/dwc3/dwc3-of-simple.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
-Hi,
+diff --git a/drivers/usb/dwc3/dwc3-of-simple.c b/drivers/usb/dwc3/dwc3-of-simple.c
+index bdac3e7d7b18..e64754be47b4 100644
+--- a/drivers/usb/dwc3/dwc3-of-simple.c
++++ b/drivers/usb/dwc3/dwc3-of-simple.c
+@@ -110,12 +110,9 @@ static int dwc3_of_simple_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
+-static int dwc3_of_simple_remove(struct platform_device *pdev)
++static void __dwc3_of_simple_teardown(struct dwc3_of_simple *simple)
+ {
+-	struct dwc3_of_simple	*simple = platform_get_drvdata(pdev);
+-	struct device		*dev = &pdev->dev;
+-
+-	of_platform_depopulate(dev);
++	of_platform_depopulate(simple->dev);
+ 
+ 	clk_bulk_disable_unprepare(simple->num_clocks, simple->clks);
+ 	clk_bulk_put_all(simple->num_clocks, simple->clks);
+@@ -126,13 +123,27 @@ static int dwc3_of_simple_remove(struct platform_device *pdev)
+ 
+ 	reset_control_put(simple->resets);
+ 
+-	pm_runtime_disable(dev);
+-	pm_runtime_put_noidle(dev);
+-	pm_runtime_set_suspended(dev);
++	pm_runtime_disable(simple->dev);
++	pm_runtime_put_noidle(simple->dev);
++	pm_runtime_set_suspended(simple->dev);
++}
++
++static int dwc3_of_simple_remove(struct platform_device *pdev)
++{
++	struct dwc3_of_simple	*simple = platform_get_drvdata(pdev);
++
++	__dwc3_of_simple_teardown(simple);
+ 
+ 	return 0;
+ }
+ 
++static void dwc3_of_simple_shutdown(struct platform_device *pdev)
++{
++	struct dwc3_of_simple	*simple = platform_get_drvdata(pdev);
++
++	__dwc3_of_simple_teardown(simple);
++}
++
+ static int __maybe_unused dwc3_of_simple_runtime_suspend(struct device *dev)
+ {
+ 	struct dwc3_of_simple	*simple = dev_get_drvdata(dev);
+@@ -190,6 +201,7 @@ MODULE_DEVICE_TABLE(of, of_dwc3_simple_match);
+ static struct platform_driver dwc3_of_simple_driver = {
+ 	.probe		= dwc3_of_simple_probe,
+ 	.remove		= dwc3_of_simple_remove,
++	.shutdown	= dwc3_of_simple_shutdown,
+ 	.driver		= {
+ 		.name	= "dwc3-of-simple",
+ 		.of_match_table = of_dwc3_simple_match,
+-- 
+2.23.0
 
-Roger Quadros <rogerq@ti.com> writes:
-
-> On 29/10/2019 05:12, Peter Chen wrote:
->> On 19-10-25 12:59:17, Roger Quadros wrote:
->>> Peter,
->>>
->>> On 25/10/2019 06:13, Peter Chen wrote:
->>>> On 19-10-23 09:17:45, Pawel Laszczak wrote:
->>>>> Hi,
->>>>>
->>>>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
->>>>
->>>> Hi Roger & Pawel,
->>>>
->>>> Assume gadget function has already enabled, if you switch host mode
->>>> to device mode, with your changes, where the device mode will be enabl=
-ed
->>>> again?
->>>
->>> When it switches from device mode to host the UDC is removed. When we s=
-witch
->>> back from host to device mode the UDC is added, so,
->>>
->>> usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
->>> udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
->>> gadget->ops->pullup()
->>=20
->> Thanks. I have another question how you decide when to store UDC name
->> to /sys/kernel/config/usb_gadget/g1/UDC? Do you have a user daemon progr=
-am
->> to monitor VBUS or external connector? At host mode, the store operation
->> will fail due to there is NO UDC.
->>=20
->
-> Yes, user space needs to monitor /sys/class/usb_role/6000000.usb-role-swi=
-tch/role
->
-> When it becomes "device" the UDC is available and it can prepare to confi=
-gure
-> the UDC.
->
-> Could you please give your Ack for this patch if it is OK? Thanks.
-
-this is already in its way to Linus' tree:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=3D=
-usb-linus&id=3Df3fb802efaef3662744a2215a51294d52a7cfc0e
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24FZQACgkQzL64meEa
-mQb8GxAAkVg88x3zxLiaMlbDSwSkB6A3rUU+t+PeKfW2HC4iQGxWsl3UU34sr1uk
-Lz/vit0HLb11mjHDt3J66hI7gxyqucMjsadiOy6e2H0dk3ehb2GKCEABPTho89l7
-flKFU1cZWqYDUreoL0C7Y2OFMkCU8L9kGUwP6RLinEhleGytnRXxF0IVitWDJYda
-qviXiOFLiAydkwriy1pVTU6gpdK4a8GDUfaoofsS792TD8jy/sOKnHEzLc918/f6
-a82W+Htz9wWuUokddvmw5nlpIE6IVQVWU1RpPnn5d19ZhIORGMg2fq3VEeh7n3s3
-C0np+xS5Re0UIbLoaXGgBjRCKdraCdaM92ODBx4e9HWpBuUwHPbFWY8aSLzerRSz
-kG8CXyN5eWfucdcVCHq9XUuesZwwB0wc+b/I67ayI+rD3wqK9+RV5MGyjdvMwlyG
-f/fZ41Y67JWqUzCAooYLTmdrxjSdSy/TQCbkiV8ghwGYUcUp6VPLxT3qABK+sX95
-3IoSmnIa+oH9ykFTBNLt14v3dKNU/WKdFdSyp6YQKAvUVX7EVQoQFud7+/M4HZi2
-3NlJpenqjvs68T4XmIeonF0/GxNCGFFdFH0DBrYTcWZ+2k2n/rbPNSDcBtpQ2/hF
-ZnSDN1clFqtkAbz5q7JohSYc1ZTjLCTbDa0drHYW97Lh0ylZ5nM=
-=je1a
------END PGP SIGNATURE-----
---=-=-=--
