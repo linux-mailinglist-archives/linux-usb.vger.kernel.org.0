@@ -2,111 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE85E8579
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 11:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E77E85C8
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 11:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730250AbfJ2K0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 06:26:24 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35961 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727875AbfJ2K0X (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 06:26:23 -0400
-Received: by mail-wr1-f65.google.com with SMTP id w18so13023741wrt.3
-        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 03:26:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Y6sgKQh/jeviAiKxhkuPYoJYMnhcj1Qowe4cypLyUC0=;
-        b=E7Ew4GGRsOvJJ4g1Nj6yN3X5aKr9FepS1VeC9AXvDPyGMSrfyDlNqg0pOzz+z31hVf
-         V69NLJaJgajcXLquvOSF/j5r1aTTPTYReMZFoFzzfJ1NnTmgQK0tmY4lbeN6x1ZO7tr5
-         Xb+8zTH1UJeC15LDkDXQQXrFjseT/up/sDXMn4IN2RFmnpJCyzgXaRhhOplMKkfv748K
-         U43qRj/uuNJu3XKzvYMXMDtcDnggb0Win2fBtX/eX8PdptvUgMzMunPgWof7/LhP+Qvx
-         Xu10gK/lMyoU4plaxJhcxiSPQv/aFN1bTirQpJ6XjqaIieuNZQrzrwDclC8tCIsfuc+1
-         O6wg==
-X-Gm-Message-State: APjAAAVCrRnYytHQ9g5dXvjybq5s+8WQNUGIJXTysAwmxJ7hmHI1a+rP
-        Ydz+cbgVF3m/YTHwYDqa5sQ=
-X-Google-Smtp-Source: APXvYqzT1A7V6IPdf7HU0XmLZnGG8uvdicz+UWSDD0n9QuhGMakoscYPD9Zx80pukR27EOdjfSaxWQ==
-X-Received: by 2002:a5d:4f8f:: with SMTP id d15mr19959377wru.126.1572344781479;
-        Tue, 29 Oct 2019 03:26:21 -0700 (PDT)
-Received: from pi (100.50.158.77.rev.sfr.net. [77.158.50.100])
-        by smtp.gmail.com with ESMTPSA id y2sm1578845wmy.2.2019.10.29.03.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 03:26:20 -0700 (PDT)
-Received: from johan by pi with local (Exim 4.92.2)
-        (envelope-from <johan@pi>)
-        id 1iPOgQ-0002pu-Db; Tue, 29 Oct 2019 11:25:02 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 2/2] USB: serial: whiteheat: fix line-speed endianness
-Date:   Tue, 29 Oct 2019 11:23:54 +0100
-Message-Id: <20191029102354.2733-3-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191029102354.2733-1-johan@kernel.org>
-References: <20191029102354.2733-1-johan@kernel.org>
+        id S1727535AbfJ2KeD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 06:34:03 -0400
+Received: from mga11.intel.com ([192.55.52.93]:9190 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726716AbfJ2KeD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Oct 2019 06:34:03 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 03:34:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
+   d="asc'?scan'208";a="198884160"
+Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Oct 2019 03:33:59 -0700
+From:   Felipe Balbi <felipe.balbi@linux.intel.com>
+To:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        "gregkh\@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar\@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+In-Reply-To: <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
+References: <20191023090232.27237-1-rogerq@ti.com> <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com> <20191025031343.GA13392@b29397-desktop> <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com> <20191029031223.GA26815@b29397-desktop> <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
+Date:   Tue, 29 Oct 2019 12:33:56 +0200
+Message-ID: <875zk7j0x7.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add missing endianness conversion when setting the line speed so that
-this driver might work also on big-endian machines.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Also use an unsigned format specifier in the corresponding debug
-message.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/whiteheat.c | 9 ++++++---
- drivers/usb/serial/whiteheat.h | 2 +-
- 2 files changed, 7 insertions(+), 4 deletions(-)
+Hi,
 
-diff --git a/drivers/usb/serial/whiteheat.c b/drivers/usb/serial/whiteheat.c
-index 76cabcb30d21..ca3bd58f2025 100644
---- a/drivers/usb/serial/whiteheat.c
-+++ b/drivers/usb/serial/whiteheat.c
-@@ -636,6 +636,7 @@ static void firm_setup_port(struct tty_struct *tty)
- 	struct device *dev = &port->dev;
- 	struct whiteheat_port_settings port_settings;
- 	unsigned int cflag = tty->termios.c_cflag;
-+	speed_t baud;
- 
- 	port_settings.port = port->port_number + 1;
- 
-@@ -696,11 +697,13 @@ static void firm_setup_port(struct tty_struct *tty)
- 	dev_dbg(dev, "%s - XON = %2x, XOFF = %2x\n", __func__, port_settings.xon, port_settings.xoff);
- 
- 	/* get the baud rate wanted */
--	port_settings.baud = tty_get_baud_rate(tty);
--	dev_dbg(dev, "%s - baud rate = %d\n", __func__, port_settings.baud);
-+	baud = tty_get_baud_rate(tty);
-+	port_settings.baud = cpu_to_le32(baud);
-+	dev_dbg(dev, "%s - baud rate = %u\n", __func__, baud);
- 
- 	/* fixme: should set validated settings */
--	tty_encode_baud_rate(tty, port_settings.baud, port_settings.baud);
-+	tty_encode_baud_rate(tty, baud, baud);
-+
- 	/* handle any settings that aren't specified in the tty structure */
- 	port_settings.lloop = 0;
- 
-diff --git a/drivers/usb/serial/whiteheat.h b/drivers/usb/serial/whiteheat.h
-index 00398149cd8d..269e727a92f9 100644
---- a/drivers/usb/serial/whiteheat.h
-+++ b/drivers/usb/serial/whiteheat.h
-@@ -87,7 +87,7 @@ struct whiteheat_simple {
- 
- struct whiteheat_port_settings {
- 	__u8	port;		/* port number (1 to N) */
--	__u32	baud;		/* any value 7 - 460800, firmware calculates
-+	__le32	baud;		/* any value 7 - 460800, firmware calculates
- 				   best fit; arrives little endian */
- 	__u8	bits;		/* 5, 6, 7, or 8 */
- 	__u8	stop;		/* 1 or 2, default 1 (2 = 1.5 if bits = 5) */
--- 
-2.23.0
+Roger Quadros <rogerq@ti.com> writes:
 
+> On 29/10/2019 05:12, Peter Chen wrote:
+>> On 19-10-25 12:59:17, Roger Quadros wrote:
+>>> Peter,
+>>>
+>>> On 25/10/2019 06:13, Peter Chen wrote:
+>>>> On 19-10-23 09:17:45, Pawel Laszczak wrote:
+>>>>> Hi,
+>>>>>
+>>>>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
+>>>>
+>>>> Hi Roger & Pawel,
+>>>>
+>>>> Assume gadget function has already enabled, if you switch host mode
+>>>> to device mode, with your changes, where the device mode will be enabl=
+ed
+>>>> again?
+>>>
+>>> When it switches from device mode to host the UDC is removed. When we s=
+witch
+>>> back from host to device mode the UDC is added, so,
+>>>
+>>> usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
+>>> udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
+>>> gadget->ops->pullup()
+>>=20
+>> Thanks. I have another question how you decide when to store UDC name
+>> to /sys/kernel/config/usb_gadget/g1/UDC? Do you have a user daemon progr=
+am
+>> to monitor VBUS or external connector? At host mode, the store operation
+>> will fail due to there is NO UDC.
+>>=20
+>
+> Yes, user space needs to monitor /sys/class/usb_role/6000000.usb-role-swi=
+tch/role
+>
+> When it becomes "device" the UDC is available and it can prepare to confi=
+gure
+> the UDC.
+>
+> Could you please give your Ack for this patch if it is OK? Thanks.
+
+this is already in its way to Linus' tree:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=3D=
+usb-linus&id=3Df3fb802efaef3662744a2215a51294d52a7cfc0e
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24FZQACgkQzL64meEa
+mQb8GxAAkVg88x3zxLiaMlbDSwSkB6A3rUU+t+PeKfW2HC4iQGxWsl3UU34sr1uk
+Lz/vit0HLb11mjHDt3J66hI7gxyqucMjsadiOy6e2H0dk3ehb2GKCEABPTho89l7
+flKFU1cZWqYDUreoL0C7Y2OFMkCU8L9kGUwP6RLinEhleGytnRXxF0IVitWDJYda
+qviXiOFLiAydkwriy1pVTU6gpdK4a8GDUfaoofsS792TD8jy/sOKnHEzLc918/f6
+a82W+Htz9wWuUokddvmw5nlpIE6IVQVWU1RpPnn5d19ZhIORGMg2fq3VEeh7n3s3
+C0np+xS5Re0UIbLoaXGgBjRCKdraCdaM92ODBx4e9HWpBuUwHPbFWY8aSLzerRSz
+kG8CXyN5eWfucdcVCHq9XUuesZwwB0wc+b/I67ayI+rD3wqK9+RV5MGyjdvMwlyG
+f/fZ41Y67JWqUzCAooYLTmdrxjSdSy/TQCbkiV8ghwGYUcUp6VPLxT3qABK+sX95
+3IoSmnIa+oH9ykFTBNLt14v3dKNU/WKdFdSyp6YQKAvUVX7EVQoQFud7+/M4HZi2
+3NlJpenqjvs68T4XmIeonF0/GxNCGFFdFH0DBrYTcWZ+2k2n/rbPNSDcBtpQ2/hF
+ZnSDN1clFqtkAbz5q7JohSYc1ZTjLCTbDa0drHYW97Lh0ylZ5nM=
+=je1a
+-----END PGP SIGNATURE-----
+--=-=-=--
