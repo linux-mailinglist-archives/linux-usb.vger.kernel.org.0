@@ -2,53 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A513E91A7
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 22:18:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA62E91F3
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 22:22:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfJ2VSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 17:18:05 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37823 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726313AbfJ2VSE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 17:18:04 -0400
-Received: by mail-ot1-f68.google.com with SMTP id 53so222747otv.4
-        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 14:18:04 -0700 (PDT)
+        id S1729155AbfJ2VVq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 17:21:46 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:42233 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728530AbfJ2VVp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 17:21:45 -0400
+Received: by mail-oi1-f195.google.com with SMTP id i185so117434oif.9
+        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 14:21:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=k+lof7k7UQw8OWzjqMvhsPhGiM5bCAdWAJ4xCnTV+BI=;
-        b=xH+f76fFbXKqh+7qsqw9xod2NKWPThyefhfGZF2rsd/IR8EjLdVxFmsiE6rvYXb1TC
-         AKu85TtcKAHAbOAmcSe3lv82DPFNzdfXU6DLzIvAp1WV4mmL3IZEwFaDW0uZNt7jpCPl
-         RRnCHb9/5wIiEohg3Ac+JYhUD/zzfJT0X/rdUwvs6mezEF/nm7FDU7d0wQ5JdimnUayx
-         oTh9MHhXv5dL1GVsLkL42ekcYydFfgoNtOVcFgLkXw0BvN3pHpUCCX3MebY+rJ4xBWT5
-         5inauOZL/d8WALOZ1xrWtQ5rVsABAzOa+rXWJQxh2+tzUvjEYEHj6fVcGzrNC6u/i3EZ
-         Gr2w==
+        bh=a8xArhRDoNXUbWX4EdmjweiHTW4/JnIyhzo/xyW6XxM=;
+        b=ojI912WJLMKSe3iQP4WzhQapOtESvGrxE3lsv+poUzeRJOvYMlT5VDHYgM0JzH0W+P
+         GwzA2iaxTkr79Yd7ObLdokzSiwQXcbC/T1LuORrYy328g18YaLRVvCn1qXXpijqq92ic
+         y7EvOOdGC232K3ShfM7UVEDVke2LadybNi/xrh83ohR8YkA8eoS19aIBf+woFwI/EvbQ
+         uawUf7MN1Dk0I8RJ/p5G8dDBLsKvnWVo1Yq3Glnb0hp2iL8M192isnr7unr+xY8qMPqO
+         f1/ylqy+PdUlVsVFUJvGsAtP8hnvDi2U50zbUseLrGC+gle/3Qf42CzO81+L00jOcQ/6
+         B9mQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=k+lof7k7UQw8OWzjqMvhsPhGiM5bCAdWAJ4xCnTV+BI=;
-        b=hMbrY67zt6Dw8glN1t8DCmQZf1DGRERyIQO+gTPpqIIv1i1qmzm0YI5vFT+qKoFx/J
-         8SJw+8MabX2GAd+TSkB+Kw0T8bdK0Lomyh+HTbgloYeZ5vgW3N2hxDZj51jE6RyAiYxb
-         2pU8BZ9NjpU2nfHPrz0ftHUrUnfSl+zs9HHKCps48GxRFAXLlPBYvX8I7mcHHjr6vh+x
-         jelLh/wyNgn+LIdoBdUzrgKOHIOfad87obxfWQkN0h87RjZei4jpCORPUZNFQG4vctrt
-         zIY9phNGKwQb1j44X8+2YE1ezK2ggPCkaJQfep2Lf0DIXq1fEu1TQDNscjoAFB7Yh3zx
-         PqHg==
-X-Gm-Message-State: APjAAAU6ouj/cvIZxXzwhh69alq3zAwSh/u7u4Pc3a+b+ISMXOYGQkjB
-        HGXt2noSLky7ycDv3atFbDrgDv2VtUx7ghuo9jXI6w==
-X-Google-Smtp-Source: APXvYqz9bxq6SQCx5y6RV65TPgRFUQTPKSOiFVfkv4eumgw9YTu20bPWChoYFWgrbzJrNph2HvhZobqfBQU4hku3gYA=
-X-Received: by 2002:a9d:5a0b:: with SMTP id v11mr20371012oth.102.1572383883580;
- Tue, 29 Oct 2019 14:18:03 -0700 (PDT)
+        bh=a8xArhRDoNXUbWX4EdmjweiHTW4/JnIyhzo/xyW6XxM=;
+        b=VVQQKsM3enxASUNwe5Y3uLTBnYEWebJV0hYnF6hTBAVR/ltdk7gR1/ag/IAA/wO92P
+         ZA+bMFIQqpIU0zjBvCH+LamkqHl6nr1TuFNWYLfn1y8pWhEPXTB6QvUEzlrPWvBayx9u
+         9cgdngEinHrXxc4+HBGiWyVcjhsBWAYOEiCQr/CkJutQEjzKfFXhQz22wIsTUggRzgJ3
+         57O47N7QyNaFIK+ZMq9j5ytDfXRxmRoePpDwc9TTw3pgRTAAVV0WFS2SNISvy1BlxswS
+         w/rtboF+a6IoyWFh3LHKJp12q/h2eEChhHZkZ+Ti7zlk9omVrSa3dvVYlLyXgSkgt3YN
+         92zg==
+X-Gm-Message-State: APjAAAVhGBFdMHdoGZbNFIst3Fi4drL2gOWr5lnozb/71fopciT++p3t
+        wueWzt+ZO+/yfpgI9g9alekhjefFGVNVKKhTs8vxtQ==
+X-Google-Smtp-Source: APXvYqz9iikOCmyCYThBR+xrlLZBkbgNK8dGvSf09Nn4AtfDYJp882m2GUQge7vjRFhlgRNd3utC76a1kjoznAPknhc=
+X-Received: by 2002:aca:58c2:: with SMTP id m185mr6043338oib.128.1572384104335;
+ Tue, 29 Oct 2019 14:21:44 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-4-john.stultz@linaro.org> <87mudjj4rc.fsf@gmail.com>
-In-Reply-To: <87mudjj4rc.fsf@gmail.com>
+ <20191028215919.83697-3-john.stultz@linaro.org> <87pnifj4tg.fsf@gmail.com>
+In-Reply-To: <87pnifj4tg.fsf@gmail.com>
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 29 Oct 2019 14:17:51 -0700
-Message-ID: <CALAqxLU+9uEcdRVaLfh+eQrDtZbDGod9pRXhBX=prAhg9MXagw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/9] usb: dwc3: Increase timeout for CmdAct cleared by
- device controller
+Date:   Tue, 29 Oct 2019 14:21:31 -0700
+Message-ID: <CALAqxLW4bRKOUchQXM0WKy-SWT7GQrA+6acu_1QMjEwwxCaU0w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/9] usb: dwc3: Execute GCTL Core Soft Reset while
+ switch modes
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -72,28 +72,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 2:11 AM Felipe Balbi <balbi@kernel.org> wrote:
+On Tue, Oct 29, 2019 at 2:09 AM Felipe Balbi <balbi@kernel.org> wrote:
 > John Stultz <john.stultz@linaro.org> writes:
 > > From: Yu Chen <chenyu56@huawei.com>
 > >
-> > It needs more time for the device controller to clear the CmdAct of
-> > DEPCMD on Hisilicon Kirin Soc.
+> > On the HiKey960, we need to do a GCTL soft reset when
+> > switching modes.
+> >
+> > Jack Pham also noted that in the Synopsys databook it
+> > mentions performing a GCTL CoreSoftReset when changing the
+> > PrtCapDir between device & host modes.
+> >
+> > So this patch always does a GCTL Core Soft Reset when
+> > changing the mode.
+> >
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > CC: ShuFan Lee <shufan_lee@richtek.com>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > Cc: Yu Chen <chenyu56@huawei.com>
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Cc: Jun Li <lijun.kernel@gmail.com>
+> > Cc: Valentin Schneider <valentin.schneider@arm.com>
+> > Cc: Jack Pham <jackp@codeaurora.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > ---
+> > v3: Remove quirk conditional, as Jack Pham noted the
+> >     Synopsis databook states this should be done generally.
+> >     Also, at Jacks' suggestion, make the reset call before
+> >     changing the prtcap direction.
+> > ---
+> >  drivers/usb/dwc3/core.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index 999ce5e84d3c..a039e35ec7ad 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -112,6 +112,19 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+> >       dwc->current_dr_role = mode;
+> >  }
+> >
+> > +static void dwc3_gctl_core_soft_reset(struct dwc3 *dwc)
+> > +{
+> > +     u32 reg;
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg |= DWC3_GCTL_CORESOFTRESET;
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +
+> > +     reg = dwc3_readl(dwc->regs, DWC3_GCTL);
+> > +     reg &= ~DWC3_GCTL_CORESOFTRESET;
+> > +     dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+> > +}
+> > +
+> >  static void __dwc3_set_mode(struct work_struct *work)
+> >  {
+> >       struct dwc3 *dwc = work_to_dwc(work);
+> > @@ -154,6 +167,9 @@ static void __dwc3_set_mode(struct work_struct *work)
+> >
+> >       spin_lock_irqsave(&dwc->lock, flags);
+> >
+> > +     /* Execute a GCTL Core Soft Reset when switch mode */
+> > +     dwc3_gctl_core_soft_reset(dwc);
+> > +
 >
-> Why does it need more time? Why is it so that no other platform needs
-> more time, only this one? And which command, specifically, causes
-> problem?
+> This is totally unnecessary. We have several platforms supporting dual
+> role *without* this trick. The only reason why the databook mentions a
+> reset is because some registers are shadowed, meaning that they share
+> the same physical space and just appear as different things for SW. The
+> reason being that Synopsys wanted to reduce the area of the IP and
+> decided to shadow registers which are mutually exclusive.
 
-Hrm. Sadly I don't have that context (again I'm picking up a
-semi-abandoned patchset here), which is unfortunate, as I'm sure
-someone spent a number of hours debugging things to come up with this.
-:)
+Ok. I've dropped this for now. Without this I do see an occasional
+issues seemingly more frequently where he board seems to initialize
+improperly on boot (usb-c is connected, but it doesn't seem to detect
+until I unplug and replug), but it also trips (though seemingly less
+frequently) without this, so this may be just affecting the timing of
+a initialization race issue. I'll watch this for more info and follow
+up on it later.
 
-But alas, I've dropped this for now in my stack, and things seem to be
-working ok so far. I suspect there's some edge case I'll run into, but
-hopefully I'll be able to debug and get more details when that
-happens.
-
-I do appreciate the review and pushback here!
-
-thanks
+Thanks for the review!
 -john
