@@ -2,52 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C20CE8EF1
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 19:06:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A99E8F3E
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 19:26:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbfJ2SGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 14:06:12 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:43304 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726225AbfJ2SGM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 14:06:12 -0400
-Received: by mail-ot1-f68.google.com with SMTP id b19so8226470otq.10
-        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 11:06:11 -0700 (PDT)
+        id S1731376AbfJ2S0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 14:26:14 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:38054 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731367AbfJ2S0O (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 14:26:14 -0400
+Received: by mail-ot1-f66.google.com with SMTP id r14so5870319otn.5
+        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 11:26:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=0ZM8b8P5vjBRG5CkLodYhOC8TCweRQM0qzTpoxN9u0U=;
-        b=x2EU7r5Br0MF1JCHsI77zCy2zedlNT+l4iJofUX5n+L01xGEzh4m8fmznuqOmO56+q
-         rOrscGIMjfMhlnBraN0m7qu2PgepmKG/8I9RxnAKdbYGXjCS/AbWNv6O7x8oiopG2r2Q
-         AhQ/jUTnwPV/LDGubLHR5dkyVKKi96839QjCdjhTJqxzQNRQo+JknZLE875VW2N2sYoR
-         Sgp4Wu+5W+ROonmbAlirQrvylF4DvQxB/K86kdH+tGZEKyZIdaheV6zT3GjCx6oXY+pm
-         d41vB4X+cAGwMmduJZvfVwYFaTMokyDWOA9OBSA+g+DI9IGA7jc05FG5hHnsJRAMhWwZ
-         7N1Q==
+        bh=F0/jbrX4IDouWf5n0Ojei70Kw+dN6xE0YN1q94WIUzA=;
+        b=lKvQS0hHD4pj59HlV6oR0/djUnPuGpWekyavljQi7ntMzsbNBbY5kRUKP+N9n4IUtd
+         maRk/snxO5ptQrmheK+AFhcB0qusQUQU9uqxU+S4Dp7WHJe3cw9tF8YosUx3hoRuYI9r
+         nVedD3689ILaB3NAEDt95fwjMDA4JMq+1bEgKiaTqmc7r9enukmH6wTRiyL/ijQEmkDp
+         0sJWD7FDkSoJ6OaZxsmOw678g00dsavQbZN+uy+jhW6kx0F+GAXZRW8+pIWB/7adGLKJ
+         5GSo+Xo7uAoDCvHllODyrCQKxRPr0HLhXP4igjRfuz9Xb5Z+Q3BpsxOxg+izWGYDwufy
+         SoAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=0ZM8b8P5vjBRG5CkLodYhOC8TCweRQM0qzTpoxN9u0U=;
-        b=cK83TxTqcxHVkb4c7vZZH8Nvasit2eEMyRfnysOnhe9rjfn7+kCChHAwG6NI1r0JXs
-         X4Ao77+8Jw4SrG6AkJQ/plI9lXhgM0P3S7CfQPzuRw8Z1htwBS82ahZCRIwfzVyfYuZq
-         3Twv4rgk7BWml1pIT8KY6xlOt44iEaPVAlYyBaP1KU0sIn0HjTRCxZxc7Z8x9gT/Hs0f
-         WUHcs+WYQB7QS5z/js5vlUyB66a9HRE4zaKtF7+sZ2uYqlMpyc3NkdxNsAAtgGaDZF1z
-         cZkSYszNyGAwNIG667khPoAvuJfj1XmYIaUuKZT0cpoEUSBq4eIL6ffncKkw8MTpu5DZ
-         zOfg==
-X-Gm-Message-State: APjAAAXRmto8jdIzoGHW65OjaViNuL4AefcsBxMRdlgYT+e1OXQyaHx1
-        XiiqDNNYcl8xux7nQl3MhlryoJkwI15co+rpzjobXQ==
-X-Google-Smtp-Source: APXvYqyCbgeKJ2gPPdono1faBX2ScPsARbeE44f3H+kcetlHhwurbl3SHIfKcAZHqerS7OznYb8roY5f9wjnw+RQpLU=
-X-Received: by 2002:a9d:6ad0:: with SMTP id m16mr1327974otq.352.1572372370800;
- Tue, 29 Oct 2019 11:06:10 -0700 (PDT)
+        bh=F0/jbrX4IDouWf5n0Ojei70Kw+dN6xE0YN1q94WIUzA=;
+        b=Y3vGXbHagj9ie6h9M7LREmbSTg5Gvvbi0Vk1iHFYXkiIbwi0SGqatWNc12fn530rDO
+         VLBRvGOn0Rw9fYnWjAiO27DZ9zQMn+Mr+XyZDoqB3oKpaOQTTc6Djb1hA7SY57ceBcU9
+         1oua3fmbaa7xb+DHGeRkIoF0IWWE0f69rbB6xmEReaPiy7oAkW4O4JKbGXN4GxRWxmoI
+         QMfA6imI5ss2jNo5HsxFmKUkJUyAHxqJDkpStA7bqtt+PfhjgKFqcs/tf5q4a8qZEAii
+         4uaFOqfIzJt70IDe2GBIW2AB5V5QEcjv4IqPsommK8DecIqQSfXz2czS1zqEiWcGZ3Tt
+         JbGQ==
+X-Gm-Message-State: APjAAAVrtbwHEwXEUBZXS90BuPMc4NsmyrZAo+Rt0UWKFcdb257ydCB9
+        xsaHJSXNhXJW7vKU5qiHIdQ5wAz/waG2aXvI+WW9lA==
+X-Google-Smtp-Source: APXvYqxMuKgV9hIGV28BZLBjcSzYuevoUIQsOkCa/3osxr8otj1CMRnSYhoMgINxrs/ynaGGsktybzxiSTkQJHs2gQk=
+X-Received: by 2002:a05:6830:ca:: with SMTP id x10mr18348228oto.221.1572373573201;
+ Tue, 29 Oct 2019 11:26:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-7-john.stultz@linaro.org> <87h83rj4ha.fsf@gmail.com>
-In-Reply-To: <87h83rj4ha.fsf@gmail.com>
+ <20191028215919.83697-9-john.stultz@linaro.org> <87bltzj47a.fsf@gmail.com>
+In-Reply-To: <87bltzj47a.fsf@gmail.com>
 From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 29 Oct 2019 11:05:59 -0700
-Message-ID: <CALAqxLX47uELsGbdociUKdC6KgDba-1SBVALmgjD3=jxh=fd8g@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] usb: dwc3: Rework resets initialization to be more flexible
+Date:   Tue, 29 Oct 2019 11:26:01 -0700
+Message-ID: <CALAqxLUcvJ6K-ysOLJj0ddiGyoHGkaJBBiw6RShmWRD8h+wWrQ@mail.gmail.com>
+Subject: Re: [PATCH v4 8/9] dt-bindings: usb: generic: Add role-switch-default-host
+ binding
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     lkml <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -72,33 +73,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 2:17 AM Felipe Balbi <balbi@kernel.org> wrote:
+On Tue, Oct 29, 2019 at 2:23 AM Felipe Balbi <balbi@kernel.org> wrote:
 > John Stultz <john.stultz@linaro.org> writes:
-> > The dwc3 core binding specifies one reset.
+>
+> > Add binding to configure the default role the controller
+> > assumes is host mode when the usb role is USB_ROLE_NONE.
 > >
-> > However some variants of the hardware my not have more.
->                                         ^^
->                                         may
+...
+> > + - role-switch-default-host: boolean, indicating if usb-role-switch is enabled
+> > +                     the device default operation mode of controller while
+> > +                     usb role is USB_ROLE_NONE is host mode. If this is not
+> > +                     set or false, it will be assumed the default is device
+> > +                     mode.
 >
-> According to synopsys databook, there's a single *input* reset signal on
-> this IP. What is this extra reset you have?
->
-> Is this, perhaps, specific to your glue layer around the synopsys ip?
+> Do we also need a role-switch-default-peripheral? Would it be better to
+> have a single role-switch-default property which accepts "host" or
+> "peripheral" arguments?
 
-Likely (again, I unfortunately don't have a ton of detail on the hardware).
+I guess the standard default is peripheral, so this differentiated
+from that, but I agree it might be more forward thinking to let it
+specify a type argument in case there is another option in the future.
 
-> Should, perhaps, your extra reset be managed by the glue layer?
+I'll rework this.
 
-So yes the dwc3-of-simple does much of this already (it handles
-multiple resets, and variable clocks), but unfortunately we seem to
-need new bindings for each device added?  I think the suggestion from
-Rob was due to the sprawl of bindings for the glue code, and the extra
-complexity of the parent node.  So I believe Rob just thought it made
-sense to collapse this down into the core?
-
-I'm not really passionate about either approach, and am happy to
-rework (as long as there is eventual progress :).
-Just let me know what you'd prefer.
-
-thanks
+Thanks again for the review and feedback!
 -john
