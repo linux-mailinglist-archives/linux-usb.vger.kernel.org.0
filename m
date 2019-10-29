@@ -2,167 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC86E8463
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 10:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F71E848D
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 10:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732107AbfJ2JZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 05:25:54 -0400
-Received: from mga04.intel.com ([192.55.52.120]:30668 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730793AbfJ2JZy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Oct 2019 05:25:54 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 02:25:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="asc'?scan'208";a="202786714"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga003.jf.intel.com with ESMTP; 29 Oct 2019 02:25:47 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] usb: dwc3: Add host-mode as default support
-In-Reply-To: <20191028215919.83697-10-john.stultz@linaro.org>
-References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-10-john.stultz@linaro.org>
-Date:   Tue, 29 Oct 2019 11:25:43 +0200
-Message-ID: <878sp3j42w.fsf@gmail.com>
+        id S1727951AbfJ2Jhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 05:37:43 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:36698 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726025AbfJ2Jhm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 05:37:42 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9T9bZaK092543;
+        Tue, 29 Oct 2019 04:37:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572341855;
+        bh=qx0+Boyw2DO4/fAggbJagSOI/nOtPK72Y21e3pUEeAg=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=T5xpMM0ld45ZVNOOYNeji7q/Km5OIyOk1Gb56lArOS+LUzzQXHxrPOkqRKy/xgL6J
+         efbsrEs7SlmMKJxedgv6KVmO2vZp6RadAuEkU317S2111BJr2yfQkwiZFtp1w8VuF9
+         Qfe2Rj+ucAnM0e2oSgEMZ12/Ng/zqjgR0UOMSMkI=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9T9bZHC030105
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Oct 2019 04:37:35 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
+ Oct 2019 04:37:34 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 29 Oct 2019 04:37:34 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9T9bVO6119682;
+        Tue, 29 Oct 2019 04:37:32 -0500
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     Pawel Laszczak <pawell@cadence.com>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191023090232.27237-1-rogerq@ti.com>
+ <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20191025031343.GA13392@b29397-desktop>
+ <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
+ <20191029031223.GA26815@b29397-desktop>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
+Date:   Tue, 29 Oct 2019 11:37:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20191029031223.GA26815@b29397-desktop>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
+On 29/10/2019 05:12, Peter Chen wrote:
+> On 19-10-25 12:59:17, Roger Quadros wrote:
+>> Peter,
+>>
+>> On 25/10/2019 06:13, Peter Chen wrote:
+>>> On 19-10-23 09:17:45, Pawel Laszczak wrote:
+>>>> Hi,
+>>>>
+>>>> Reviewed-by: Pawel Laszczak <pawell@cadence.com>
+>>>
+>>> Hi Roger & Pawel,
+>>>
+>>> Assume gadget function has already enabled, if you switch host mode
+>>> to device mode, with your changes, where the device mode will be enabled
+>>> again?
+>>
+>> When it switches from device mode to host the UDC is removed. When we switch
+>> back from host to device mode the UDC is added, so,
+>>
+>> usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
+>> udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()->
+>> gadget->ops->pullup()
+> 
+> Thanks. I have another question how you decide when to store UDC name
+> to /sys/kernel/config/usb_gadget/g1/UDC? Do you have a user daemon program
+> to monitor VBUS or external connector? At host mode, the store operation
+> will fail due to there is NO UDC.
+> 
 
-John Stultz <john.stultz@linaro.org> writes:
-> Support configuring the default role the controller assumes as
-> host mode when the usb role is USB_ROLE_NONE
->
-> This patch was split out from a larger patch originally by
-> Yu Chen <chenyu56@huawei.com>
->
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> CC: ShuFan Lee <shufan_lee@richtek.com>
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> Cc: Yu Chen <chenyu56@huawei.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Jun Li <lijun.kernel@gmail.com>
-> Cc: Valentin Schneider <valentin.schneider@arm.com>
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Cc: linux-usb@vger.kernel.org
-> Cc: devicetree@vger.kernel.org
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> ---
-> v3: Split this patch out from addition of usb-role-switch
->     handling
-> ---
->  drivers/usb/dwc3/core.h |  3 +++
->  drivers/usb/dwc3/drd.c  | 20 ++++++++++++++++----
->  2 files changed, 19 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 6f19e9891767..3c879c9ab1aa 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -953,6 +953,8 @@ struct dwc3_scratchpad_array {
->   *		- USBPHY_INTERFACE_MODE_UTMI
->   *		- USBPHY_INTERFACE_MODE_UTMIW
->   * @role_sw: usb_role_switch handle
-> + * @role_switch_default_mode: default operation mode of controller while
-> + *			usb role is USB_ROLE_NONE.
->   * @usb2_phy: pointer to USB2 PHY
->   * @usb3_phy: pointer to USB3 PHY
->   * @usb2_generic_phy: pointer to USB2 PHY
-> @@ -1087,6 +1089,7 @@ struct dwc3 {
->  	struct notifier_block	edev_nb;
->  	enum usb_phy_interface	hsphy_mode;
->  	struct usb_role_switch	*role_sw;
-> +	enum usb_dr_mode	role_switch_default_mode;
->=20=20
->  	u32			fladj;
->  	u32			irq_gadget;
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index 61d4fd8aead4..0e3466fe5ac4 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -489,7 +489,10 @@ static int dwc3_usb_role_switch_set(struct device *d=
-ev, enum usb_role role)
->  		mode =3D DWC3_GCTL_PRTCAP_DEVICE;
->  		break;
->  	default:
-> -		mode =3D DWC3_GCTL_PRTCAP_DEVICE;
-> +		if (dwc->role_switch_default_mode =3D=3D USB_DR_MODE_HOST)
-> +			mode =3D DWC3_GCTL_PRTCAP_HOST;
-> +		else
-> +			mode =3D DWC3_GCTL_PRTCAP_DEVICE;
->  		break;
->  	}
->=20=20
-> @@ -515,7 +518,10 @@ static enum usb_role dwc3_usb_role_switch_get(struct=
- device *dev)
->  		role =3D dwc->current_otg_role;
->  		break;
->  	default:
-> -		role =3D USB_ROLE_DEVICE;
-> +		if (dwc->role_switch_default_mode =3D=3D USB_DR_MODE_HOST)
-> +			role =3D USB_ROLE_HOST;
+Yes, user space needs to monitor /sys/class/usb_role/6000000.usb-role-switch/role
 
-look at this, we now have 3 different encodings for role which DWC3
-needs to understand. One is its own PRTCAP_DIR, then there USB_DR_MODE_*
-and now USB_ROLE_*, can we make it so that we only have one private
-encoding and one generic encoding?
+When it becomes "device" the UDC is available and it can prepare to configure
+the UDC.
 
-=2D-=20
-balbi
+Could you please give your Ack for this patch if it is OK? Thanks.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+cheers,
+-roger
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl24BZcACgkQzL64meEa
-mQYHkw//VOw1jqK4AnBJDOHCIzWSFS8jyfQBZHVKuUB7cq6u6e+FFwxkIdlOR1YN
-cIg7lL/gk3bR+eHiuqrTE2A9gp7ocGge/aJvZfsE5d+zVIau8OlKIrnz8X25xTRf
-uG9M7+GiyU2HHoC7EiOalqnP0576os4lyHmEFfomuHiax71frZiyl7DN+phJijgK
-IHmEkMtd1sEA/pGi8G8b/lwGKH5nkGAR4YcvP4kx588301buiT+/kn0RZnOMPoeu
-y1VMO2xP90WiVfVvqW1S5SzbaXSWxqFu7XWQGlBr9XJ678npgxk89GmPMNX3hGXh
-jDlyVp5ctWedJU8fufBMAS7TMLDASZIMPtarWPWwXO+8UomuUOkOj2rUiVkDpIVQ
-FCq5ldfW9Aei4f2+5mtgpQTvqYA5/uJxFxijUAFEncfQqC1h5uIf9gDgUV8p2D/8
-poS2nJwimP5VYox0PV72C5gV8ZGm5WM5HdOEX67JraqrPIXWTS5omXBd86XZzDIo
-gQx5LdiBgxR13WAGLFesbSC3L+Kd0/1fJYFXSMCJjIdkx0bDEgHCxG3FImokDgoK
-qGlFoyxqLHnOSFYMhroMqE7AX1rHZcnQbHZhsI91a+b89plbDagvlWYbrJ7PH/MT
-OOIyQZejlu6BJsmnNPfRUYS5dmDKGVkZCTdwAV42pNA84DA/+bc=
-=HE73
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
