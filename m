@@ -2,87 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0666DE8B92
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 16:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64EC7E8B9B
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2019 16:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389947AbfJ2PPA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 11:15:00 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:37528 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389841AbfJ2PPA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 11:15:00 -0400
-Received: by mail-pg1-f195.google.com with SMTP id p1so9812056pgi.4;
-        Tue, 29 Oct 2019 08:14:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=BpdmLBrAF6vIWkMIKjmn2Nztml/ALZp4Q1mNNsAX6zA=;
-        b=FBsBZ4/PgKstuD1cHzrx6zoEP5CihEbcCLMklC6ghK9nhCqT3mvifXe6kDyT4U4dAa
-         /QHluUsOMOCxQJqj/hgPPHvOPSLQE3VAraEJ97ArqqO+fRitOt1ahmLoTJ4ucEoLJujm
-         HJSJzRGIXOQ4EQVevIiH8r75DGjdjT+jkEWa+wGui3Ht0ynnrooj2DSpvndmv96fUPOH
-         T+UEL5GclguyhzK4faFjhnP5YzJIEcogvNn6T55G3LIa3PflLJwMy1vTRMpUrvBZX0SY
-         5f82WL+VD4sqd2DIKNO26aY1eIEoy6724VeuCE2V4p6MXn5ehInwSY3FLpKa+dQlbsHw
-         8COw==
-X-Gm-Message-State: APjAAAUHKSCduG9EfkVTlsKC0T7vxRB/wWcYJePkueZiE/WAeE4i2iYz
-        g9jgNCK1h6Fk9G29fMhAzHc=
-X-Google-Smtp-Source: APXvYqyQhKFHzk7jdh70TLLVp4Cwd9bRfe/8VfkXsoeqpWNgAlOI0jsF0Xy+1MCAqUR+aa0JrHEGHg==
-X-Received: by 2002:a63:cf45:: with SMTP id b5mr27606615pgj.36.1572362098980;
-        Tue, 29 Oct 2019 08:14:58 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id s23sm13708158pgh.21.2019.10.29.08.14.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Oct 2019 08:14:58 -0700 (PDT)
-Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "usb-storage@lists.one-eyed-alien.net" 
-        <usb-storage@lists.one-eyed-alien.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-References: <20191028105732.29913-1-damien.lemoal@wdc.com>
- <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
- <BYAPR04MB5816FF25422E60C168F78308E7610@BYAPR04MB5816.namprd04.prod.outlook.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <7b3cad63-3c0d-0bff-b400-acf85344bfee@acm.org>
-Date:   Tue, 29 Oct 2019 08:14:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2389990AbfJ2PPd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 11:15:33 -0400
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:60130 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388595AbfJ2PPc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 11:15:32 -0400
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9TFFIwF009724;
+        Tue, 29 Oct 2019 10:15:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572362118;
+        bh=EjyBteXlv8fFNuD+sDu3/51WIDE97L/GH2r4eM1/VIU=;
+        h=From:To:CC:Subject:Date;
+        b=oot3PFX6k2ql4kj9akf+Gf/1g4iR7nF+EYl8sI88me50D9T1lhZI2VVVoERoLPMqt
+         rga57zbqLJqLxxc81xK0rrF/dJivmucyjFYT91RKO3vNFCrtPAc03GQpgl3JAenbcX
+         2kOMkIJJie6MhoCNeuOObkX+uk3kFGMPH6W/GMug=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9TFFIZe085994
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 29 Oct 2019 10:15:18 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 29
+ Oct 2019 10:15:06 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Tue, 29 Oct 2019 10:15:05 -0500
+Received: from lta0400828a.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9TFFF3J127253;
+        Tue, 29 Oct 2019 10:15:16 -0500
+From:   Roger Quadros <rogerq@ti.com>
+To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <pawell@cadence.com>, <peter.chen@nxp.com>, <nsekhar@ti.com>,
+        <kurahul@cadence.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Roger Quadros <rogerq@ti.com>
+Subject: [PATCH] usb: cdns3: gadget: Fix g_audio use case when connected to Super-Speed host
+Date:   Tue, 29 Oct 2019 17:15:14 +0200
+Message-ID: <20191029151514.28495-1-rogerq@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <BYAPR04MB5816FF25422E60C168F78308E7610@BYAPR04MB5816.namprd04.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/29/19 1:17 AM, Damien Le Moal wrote:
-> So I think changing the interface to unsigned int makes sense in that
-> context. Also, unless I am reading this wrong, the above definition you
-> quote always lead to resid >= 0, so I do not see what problem you are
-> worried about. Could you elaborate your concerns please ?
+Take into account gadget driver's speed limit when programming
+controller speed.
 
-Hi Damien,
+Signed-off-by: Roger Quadros <rogerq@ti.com>
+---
+Hi Greg,
 
-SCSI LLDs handle residual overflow in at least two different ways. I 
-think the iSCSI initiator handles this by reporting the DID_BAD_TARGET 
-error code. In the tcm_loop driver I found the following, which I think 
-is incorrect:
+Please apply this for -rc.
+Without this, g_audio is broken on cdns3 USB controller is
+connected to a Super-Speed host.
 
-	set_host_byte(sc, DID_OK);
-	if ((se_cmd->se_cmd_flags & SCF_OVERFLOW_BIT) ||
-	    (se_cmd->se_cmd_flags & SCF_UNDERFLOW_BIT))
-		scsi_set_resid(sc, se_cmd->residual_count);
+cheers,
+-roger
 
-Seeing this made me wonder what the best approach is for a SCSI LLD to 
-report a residual overflow?
+ drivers/usb/cdns3/gadget.c | 31 ++++++++++++++++++++++++++-----
+ 1 file changed, 26 insertions(+), 5 deletions(-)
 
-Thanks,
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 40dad4e8d0dc..1c724c20d468 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -2338,9 +2338,35 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+ {
+ 	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+ 	unsigned long flags;
++	enum usb_device_speed max_speed = driver->max_speed;
+ 
+ 	spin_lock_irqsave(&priv_dev->lock, flags);
+ 	priv_dev->gadget_driver = driver;
++
++	/* limit speed if necessary */
++	max_speed = min(driver->max_speed, gadget->max_speed);
++
++	switch (max_speed) {
++	case USB_SPEED_FULL:
++		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
++		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
++		break;
++	case USB_SPEED_HIGH:
++		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
++		break;
++	case USB_SPEED_SUPER:
++		break;
++	default:
++		dev_err(priv_dev->dev,
++			"invalid maximum_speed parameter %d\n",
++			max_speed);
++		/* fall through */
++	case USB_SPEED_UNKNOWN:
++		/* default to superspeed */
++		max_speed = USB_SPEED_SUPER;
++		break;
++	}
++
+ 	cdns3_gadget_config(priv_dev);
+ 	spin_unlock_irqrestore(&priv_dev->lock, flags);
+ 	return 0;
+@@ -2570,12 +2596,7 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
+ 	/* Check the maximum_speed parameter */
+ 	switch (max_speed) {
+ 	case USB_SPEED_FULL:
+-		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+-		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+-		break;
+ 	case USB_SPEED_HIGH:
+-		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+-		break;
+ 	case USB_SPEED_SUPER:
+ 		break;
+ 	default:
+-- 
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
 
-Bart.
