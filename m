@@ -2,80 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4A0EA121
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 17:09:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FD0EA197
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 17:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbfJ3P6M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 11:58:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59976 "EHLO mail.kernel.org"
+        id S1726884AbfJ3QSn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 12:18:43 -0400
+Received: from smtp.infotech.no ([82.134.31.41]:55291 "EHLO smtp.infotech.no"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726302AbfJ3P6L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:58:11 -0400
-Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67A5521835;
-        Wed, 30 Oct 2019 15:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572451091;
-        bh=iGHn6wtqcL1Csf3+sR5GQHWIShAWQe8Y3G598LkEWoY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TGMUAzD9iEnrz444cROMhrNwhFGpvBpZS/gkZuQNCDnFSiSOzfus1YqTct+RQK9Gx
-         +D+0WjVl5/5qt4ePjXnN/fEb+lpljU2kK7KvQAa5HsNfKJxpAapmlwx6pY9wiWPiTR
-         V1cYv/I/5CpYdO/LpJcV1XbGGLJSXPVNHwwqy1mE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 08/13] USB: legousbtower: fix a signedness bug in tower_probe()
-Date:   Wed, 30 Oct 2019 11:57:46 -0400
-Message-Id: <20191030155751.10960-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155751.10960-1-sashal@kernel.org>
-References: <20191030155751.10960-1-sashal@kernel.org>
+        id S1726261AbfJ3QSn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 12:18:43 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.infotech.no (Postfix) with ESMTP id A5B68204191;
+        Wed, 30 Oct 2019 17:18:35 +0100 (CET)
+X-Virus-Scanned: by amavisd-new-2.6.6 (20110518) (Debian) at infotech.no
+Received: from smtp.infotech.no ([127.0.0.1])
+        by localhost (smtp.infotech.no [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id S4efPonsjrQE; Wed, 30 Oct 2019 17:18:33 +0100 (CET)
+Received: from [192.168.48.23] (host-23-251-188-50.dyn.295.ca [23.251.188.50])
+        by smtp.infotech.no (Postfix) with ESMTPA id 552A320415A;
+        Wed, 30 Oct 2019 17:18:31 +0100 (CET)
+Reply-To: dgilbert@interlog.com
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+ <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+ <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+ <d0899d02-ecb2-7f0b-3d0a-c818a0ec6ceb@acm.org>
+ <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
+From:   Douglas Gilbert <dgilbert@interlog.com>
+Message-ID: <8b2fbab6-b787-470a-f9ed-46622733881c@interlog.com>
+Date:   Wed, 30 Oct 2019 12:18:26 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-CA
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+On 2019-10-30 11:18 a.m., Hannes Reinecke wrote:
+> On 10/30/19 4:12 PM, Bart Van Assche wrote:
+>> On 10/30/19 1:30 AM, Hannes Reinecke wrote:
+>>> On 10/28/19 9:38 PM, Bart Van Assche wrote:
+>>>> If the residual is changed from signed into unsigned, how is a SCSI LLD 
+>>>> expected to report the difference between residual overflow and residual 
+>>>> underflow to the SCSI core?
+>>>
+>>> You don't have to. To quote RFC 3720 page 122:
+>>>
+>>>       bit 5 - (O) set for Residual Overflow.  In this case, the Residual
+>>>         Count indicates the number of bytes that were not transferred
+>>>         because the initiator's Expected Data Transfer Length was not
+>>>         sufficient.  For a bidirectional operation, the Residual Count
+>>>         contains the residual for the write operation.
+>>>
+>>> IE the 'overflow' setting in the iSCSI command response is an indicator that 
+>>> there _would_ be more data if the command request _would_ have specified a 
+>>> larger buffer.
+>>> But as it didn't, the entire buffer was filled, and the overflow counter is set.
+>>> Which, of course, is then ignored by the linux SCSI stack as the request got 
+>>> all data, and the residual is set to zero.
+>>> Then it's left to the caller to re-send with a larger buffer if required. But 
+>>> it's nothing the SCSI stack can nor should be attempting on its own.
+>>
+>> Hi Hannes,
+>>
+>> I do not agree that reporting a residual overflow by calling 
+>> scsi_set_resid(..., 0) is acceptable. For reads a residual overflow means that 
+>> the length specified in the CDB (scsi_bufflen()) exceeds the data buffer size 
+>> (length of scsi_sglist()). I think it's dangerous to report to the block layer 
+>> that such requests completed successfully and with residual zero.
+>>
+> But that is an error on submission, and should be aborted before it even got 
+> send to the drive.
+> 
+> However, this does not relate to the residual, which is handled after the 
+> command completes (and which sparked this entire thread ...).
 
-[ Upstream commit fd47a417e75e2506eb3672ae569b1c87e3774155 ]
+Seen from a pass-through perspective, the resid is just about the near-end
+data transfer between the HBA and pass-through, or as cam3r03 says:
 
-The problem is that sizeof() is unsigned long so negative error codes
-are type promoted to high positive values and the condition becomes
-false.
+− cam_resid;
+     The data residual length member contains the difference in twos complement
+     form of the number of data bytes transferred by the HA for the SCSI
+     command compared with the number of bytes requested by the CCB
+     cam_dxfer_len member. This is calculated by the total number of bytes
+     requested to be transferred by the CCB minus the actual number of bytes
+     transferred by the HA.
 
-Fixes: 1d427be4a39d ("USB: legousbtower: fix slab info leak at probe")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20191011141115.GA4521@mwanda
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/misc/legousbtower.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+[where "HA" is HBA (or the initiator)]
 
-diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index 32b41eb07f00e..8350ecfbcf21a 100644
---- a/drivers/usb/misc/legousbtower.c
-+++ b/drivers/usb/misc/legousbtower.c
-@@ -910,7 +910,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
- 				  get_version_reply,
- 				  sizeof(*get_version_reply),
- 				  1000);
--	if (result < sizeof(*get_version_reply)) {
-+	if (result != sizeof(*get_version_reply)) {
- 		if (result >= 0)
- 			result = -EIO;
- 		dev_err(idev, "get version request failed: %d\n", result);
--- 
-2.20.1
+That makes overflow (negative resid) a bit interesting as it is only
+reasonable that the pass-though user allocated a buffer big enough to
+receive dxfer_len bytes. One would hope that in the READ case of overflow,
+the HBA would have sent the residual bytes to the bit bucket (i.e.
+/dev/null) rather than overfill the data buffer provided by the pass-through.
+
+Handling discrepancies between page length (e.g. of VPD, LOG and MODE pages)
+and the ALLOCATION LENGTH field are defined in the SCSI standards.
+
+That leaves the difficult cases: when there is a discrepancy between what the
+SCSI command (and the storage device) implied as a data length and the
+dxfer_len allocated at the near-end. In some, but not all, cases that is
+detectable before the command is issued.
+
+Overflow can happen, for example if the RDPROTECT field in a READ(10) is
+accidentally set (e.g. because it uses bits previously used for a SPI
+LUN) and the storage device has protection information. That will result
+in an extra 8 bytes per logical block being returned.
+
+Doug Gilbert
+
 
