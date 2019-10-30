@@ -2,123 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE3DE9833
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B521E9866
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:44:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbfJ3IbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 04:31:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34916 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726028AbfJ3IbA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 04:31:00 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 5B53EB2C6;
-        Wed, 30 Oct 2019 08:30:57 +0000 (UTC)
-Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
-To:     Bart Van Assche <bvanassche@acm.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-References: <20191028105732.29913-1-damien.lemoal@wdc.com>
- <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
-Date:   Wed, 30 Oct 2019 09:30:51 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1726262AbfJ3Ioa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 04:44:30 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:54400 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbfJ3Ioa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 04:44:30 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9U8iEeI098145;
+        Wed, 30 Oct 2019 03:44:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572425054;
+        bh=E27tcJBYIvqvaA31Zqpz1NjcSVFU5/7cIiIXtS8r2MU=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Mw37YHGV8JrhVh7Qmt4bWBP3OSmJyp5Oj7izmTpcXhms4HZettDOBj4ae0OH08FvZ
+         N+uMAvcdvv2SuBuNAJqkOIzCM8UOSGQQ+G3x7mFdOHTc3ViSbz8FCrufDTaLqahcFk
+         zAVOLDu7Eoaw1/cASLhzy9zZpUvCvIvvthdZWPX4=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9U8iEIC102783
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 30 Oct 2019 03:44:14 -0500
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 30
+ Oct 2019 03:44:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Wed, 30 Oct 2019 03:44:00 -0500
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9U8iBda078433;
+        Wed, 30 Oct 2019 03:44:11 -0500
+Subject: Re: [PATCH] usb: cdns3: gadget: Fix g_audio use case when connected
+ to Super-Speed host
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        "kurahul@cadence.com" <kurahul@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191029151514.28495-1-rogerq@ti.com>
+ <20191030063636.GE26815@b29397-desktop>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <b780ffea-dca0-310e-1d66-4ceca380b4ee@ti.com>
+Date:   Wed, 30 Oct 2019 10:44:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20191030063636.GE26815@b29397-desktop>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/28/19 9:38 PM, Bart Van Assche wrote:
-> On 10/28/19 3:57 AM, Damien Le Moal wrote:
->> struct scsi_cmnd cmd->req.resid_len which is returned and set
->> respectively by the helper functions scsi_get_resid() and
->> scsi_set_resid() is an unsigned int. Reflect this fact in the interface
->> of these helper functions.
->> [ ... ]
->> -static inline void scsi_set_resid(struct scsi_cmnd *cmd, int resid)
->> +static inline void scsi_set_resid(struct scsi_cmnd *cmd, unsigned int 
->> resid)
->>   {
->>       cmd->req.resid_len = resid;
->>   }
->> -static inline int scsi_get_resid(struct scsi_cmnd *cmd)
->> +static inline unsigned int scsi_get_resid(struct scsi_cmnd *cmd)
->>   {
->>       return cmd->req.resid_len;
->>   }
-> 
->  From the iSCSI RFC:
-> 
->     SCSI-Presented Data Transfer Length (SPDTL) is the term this document
->     uses (see Section 1.1 for definition) to represent the aggregate data
->     length that the target SCSI layer attempts to transfer using the
->     local iSCSI layer for a task.  Expected Data Transfer Length (EDTL)
->     is the iSCSI term that represents the length of data that the iSCSI
->     layer expects to transfer for a task.  EDTL is specified in the SCSI
->     Command PDU.
-> 
->     When SPDTL = EDTL for a task, the target iSCSI layer completes the
->     task with no residuals.  Whenever SPDTL differs from EDTL for a task,
->     that task is said to have a residual.
-> 
->     If SPDTL > EDTL for a task, iSCSI Overflow MUST be signaled in the
->     SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
->     be set to the numerical value of (SPDTL - EDTL).
-> 
->     If SPDTL < EDTL for a task, iSCSI Underflow MUST be signaled in the
->     SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
->     be set to the numerical value of (EDTL - SPDTL).
-> 
->     Note that the Overflow and Underflow scenarios are independent of
->     Data-In and Data-Out.  Either scenario is logically possible in
->     either direction of data transfer.
-> 
-> If the residual is changed from signed into unsigned, how is a SCSI LLD 
-> expected to report the difference between residual overflow and residual 
-> underflow to the SCSI core?
-> 
-You don't have to. To quote RFC 3720 page 122:
 
-      bit 5 - (O) set for Residual Overflow.  In this case, the Residual
-        Count indicates the number of bytes that were not transferred
-        because the initiator's Expected Data Transfer Length was not
-        sufficient.  For a bidirectional operation, the Residual Count
-        contains the residual for the write operation.
 
-IE the 'overflow' setting in the iSCSI command response is an indicator 
-that there _would_ be more data if the command request _would_ have 
-specified a larger buffer.
-But as it didn't, the entire buffer was filled, and the overflow counter 
-is set.
-Which, of course, is then ignored by the linux SCSI stack as the request 
-got all data, and the residual is set to zero.
-Then it's left to the caller to re-send with a larger buffer if 
-required. But it's nothing the SCSI stack can nor should be attempting 
-on its own.
+On 30/10/2019 08:36, Peter Chen wrote:
+> On 19-10-29 17:15:14, Roger Quadros wrote:
+>> Take into account gadget driver's speed limit when programming
+>> controller speed.
+>>
+>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>> ---
+>> Hi Greg,
+>>
+>> Please apply this for -rc.
+>> Without this, g_audio is broken on cdns3 USB controller is
+>> connected to a Super-Speed host.
+>>
+>> cheers,
+>> -roger
+>>
+>>   drivers/usb/cdns3/gadget.c | 31 ++++++++++++++++++++++++++-----
+>>   1 file changed, 26 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+>> index 40dad4e8d0dc..1c724c20d468 100644
+>> --- a/drivers/usb/cdns3/gadget.c
+>> +++ b/drivers/usb/cdns3/gadget.c
+>> @@ -2338,9 +2338,35 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+>>   {
+>>   	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+>>   	unsigned long flags;
+>> +	enum usb_device_speed max_speed = driver->max_speed;
+>>   
+>>   	spin_lock_irqsave(&priv_dev->lock, flags);
+>>   	priv_dev->gadget_driver = driver;
+>> +
+>> +	/* limit speed if necessary */
+>> +	max_speed = min(driver->max_speed, gadget->max_speed);
+>> +
+>> +	switch (max_speed) {
+>> +	case USB_SPEED_FULL:
+>> +		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+>> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>> +		break;
+>> +	case USB_SPEED_HIGH:
+>> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>> +		break;
+>> +	case USB_SPEED_SUPER:
+>> +		break;
+>> +	default:
+>> +		dev_err(priv_dev->dev,
+>> +			"invalid maximum_speed parameter %d\n",
+>> +			max_speed);
+>> +		/* fall through */
+>> +	case USB_SPEED_UNKNOWN:
+>> +		/* default to superspeed */
+>> +		max_speed = USB_SPEED_SUPER;
+>> +		break;
+>> +	}
+>> +
+>>   	cdns3_gadget_config(priv_dev);
+>>   	spin_unlock_irqrestore(&priv_dev->lock, flags);
+>>   	return 0;
+>> @@ -2570,12 +2596,7 @@ static int cdns3_gadget_start(struct cdns3 *cdns)
+>>   	/* Check the maximum_speed parameter */
+>>   	switch (max_speed) {
+>>   	case USB_SPEED_FULL:
+>> -		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+>> -		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>> -		break;
+>>   	case USB_SPEED_HIGH:
+>> -		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>> -		break;
+>>   	case USB_SPEED_SUPER:
+>>   		break;
+>>   	default:
+> 
+> Just a small comment:
+> 
+> You could delete switch-case at cdns3_gadget_start, and just use
+> if() statement, eg:
+> 
+> 	max_speed = usb_get_maximum_speed(cdns->dev);
+> 	if (max_speed == USB_SPEED_UNKNOWN)
+> 		max_speed = USB_SPEED_SUPER;
 
-As such I think the patch is correct.
+But then it will not take care of bailing out for USB_SPEED_WIRELESS,
+USB_SPEED_SUPER_PLUS and any future speeds.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> 
+> Otherwise:
+> 
+> Acked-by: Peter Chen <peter.chen@nxp.com>
+> 
 
-Cheers,
-
-Hannes
 -- 
-Dr. Hannes Reinecke            Teamlead Storage & Networking
-hare@suse.de                              +49 911 74053 688
-SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
-GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
-HRB 21284 (AG Nürnberg)
+cheers,
+-roger
+
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
