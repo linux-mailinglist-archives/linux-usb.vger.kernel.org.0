@@ -2,89 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 466F8E9D56
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 15:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A020E9E8F
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 16:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726594AbfJ3OU6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 10:20:58 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:44210 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726321AbfJ3OU6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 10:20:58 -0400
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9UEKpqT099629;
-        Wed, 30 Oct 2019 09:20:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1572445251;
-        bh=h6h3Qct4hHjh3WsRqxxeJYzZZhBniGFIESojv6iYpo4=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=tLFK+PV5UGf39undFQtz4JsZrh9rMrUSOJ0yJIB+T2x6ZkPtt82HXPunlXUkPQkdL
-         +CB4ulmsBvCYrjiEPetCwDLMU4aLumsLO/jRw3LP8GcRaOjcARjU03Qap2/Sa1xKFV
-         abgo5uxMhvbRhnMLOxgfAa4Ta5ipuKI6//0IfNdE=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id x9UEKphm056166
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 30 Oct 2019 09:20:51 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Wed, 30
- Oct 2019 09:20:38 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Wed, 30 Oct 2019 09:20:38 -0500
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9UEKmD5011862;
-        Wed, 30 Oct 2019 09:20:49 -0500
-Subject: Re: [PATCH v2] usb: cdns3: gadget: Fix g_audio use case when
- connected to Super-Speed host
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <felipe.balbi@linux.intel.com>, <pawell@cadence.com>,
-        <peter.chen@nxp.com>, <nsekhar@ti.com>, <kurahul@cadence.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20191029151514.28495-1-rogerq@ti.com>
- <20191030121607.21739-1-rogerq@ti.com> <20191030133011.GA703854@kroah.com>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <56fb2de5-a017-e910-972f-532e33dfdbd6@ti.com>
-Date:   Wed, 30 Oct 2019 16:20:48 +0200
+        id S1727084AbfJ3PMJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 11:12:09 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44708 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726949AbfJ3PMI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 11:12:08 -0400
+Received: by mail-pg1-f193.google.com with SMTP id e10so1659503pgd.11;
+        Wed, 30 Oct 2019 08:12:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nrnPTyEFl+6aZzJXJflCpowsX8ZrOUs+tX0p0YHuCEE=;
+        b=c3kETC9VO6Jb4m+3nc4C6M5VtTqp/mjVe07vm76svkzvYlF0wPRBYQX6QS41JpLwp0
+         FaZ98DWjdGT5/w3Jsc7eMG02OhZN4OkrR2DhYG5vWAxgaFbb/FL7bhmJZANshwq7GJyR
+         9Q3j/9H5I3PujjJVIf8uO+swOFxFEK9qPYSHpAi+YXA1J/6PZ5EUifZNl5LCLeZ6gEq3
+         F7LuW/jq+brxUNELVMjZtC2Kbo80aPaiKp+BjkvZblqAYY/Rnuxo0n8lN0rJWbLLp4Ln
+         mfwZC2HZXXdVUl2kVbYSAXIJENex0MsO9Gf6w/I8x2o0ob279cD3inno9QC0Qo5+/UcH
+         YhZA==
+X-Gm-Message-State: APjAAAWs+GJzFBG+Tdl/GxviPkMQT/YciVtg4viwSGptE9CvkZKeiVwu
+        sC1FH7UqeCDvhXGavQWQgn4=
+X-Google-Smtp-Source: APXvYqyIheuynv7JrRYiPQ/gSZ0JJ1J8L2s6PYAcq9UqcuxWCofZljR4zxoAk++LMW2H+VPuMY0ieg==
+X-Received: by 2002:a63:5801:: with SMTP id m1mr25588238pgb.139.1572448327681;
+        Wed, 30 Oct 2019 08:12:07 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id z7sm290350pfr.165.2019.10.30.08.12.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Oct 2019 08:12:06 -0700 (PDT)
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     Hannes Reinecke <hare@suse.de>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+ <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+ <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <d0899d02-ecb2-7f0b-3d0a-c818a0ec6ceb@acm.org>
+Date:   Wed, 30 Oct 2019 08:12:04 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191030133011.GA703854@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+In-Reply-To: <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 30/10/2019 15:30, Greg KH wrote:
-> On Wed, Oct 30, 2019 at 02:16:07PM +0200, Roger Quadros wrote:
->> Take into account gadget driver's speed limit when programming
->> controller speed.
->>
->> Fixes: commit 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+On 10/30/19 1:30 AM, Hannes Reinecke wrote:
+> On 10/28/19 9:38 PM, Bart Van Assche wrote:
+>> If the residual is changed from signed into unsigned, how is a SCSI 
+>> LLD expected to report the difference between residual overflow and 
+>> residual underflow to the SCSI core?
+>
+> You don't have to. To quote RFC 3720 page 122:
 > 
-> No need for "commit", doesn't the documentation say the correct format?
-> I haven't looked in a while...
+>       bit 5 - (O) set for Residual Overflow.  In this case, the Residual
+>         Count indicates the number of bytes that were not transferred
+>         because the initiator's Expected Data Transfer Length was not
+>         sufficient.  For a bidirectional operation, the Residual Count
+>         contains the residual for the write operation.
 > 
+> IE the 'overflow' setting in the iSCSI command response is an indicator 
+> that there _would_ be more data if the command request _would_ have 
+> specified a larger buffer.
+> But as it didn't, the entire buffer was filled, and the overflow counter 
+> is set.
+> Which, of course, is then ignored by the linux SCSI stack as the request 
+> got all data, and the residual is set to zero.
+> Then it's left to the caller to re-send with a larger buffer if 
+> required. But it's nothing the SCSI stack can nor should be attempting 
+> on its own.
 
-Sorry, my bad.
+Hi Hannes,
 
-> I can edit it out this time...
+I do not agree that reporting a residual overflow by calling 
+scsi_set_resid(..., 0) is acceptable. For reads a residual overflow 
+means that the length specified in the CDB (scsi_bufflen()) exceeds the 
+data buffer size (length of scsi_sglist()). I think it's dangerous to 
+report to the block layer that such requests completed successfully and 
+with residual zero.
 
-Thanks!
-> 
-> greg k-h
-> 
-
--- 
-cheers,
--roger
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+Bart.
