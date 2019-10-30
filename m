@@ -2,133 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 502C4E9528
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 03:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3E5E952D
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 04:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727166AbfJ3C7j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 22:59:39 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:26172 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726714AbfJ3C7i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 22:59:38 -0400
-X-UUID: 8724ae1046364aa8be58c46b1651877e-20191030
-X-UUID: 8724ae1046364aa8be58c46b1651877e-20191030
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 294978755; Wed, 30 Oct 2019 10:59:24 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
- (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 30 Oct
- 2019 10:59:19 +0800
-Received: from [10.17.3.153] (172.27.4.253) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Wed, 30 Oct 2019 10:59:19 +0800
-Message-ID: <1572404361.18464.24.camel@mhfsdcap03>
-Subject: Re: [PATCH 1/5] phy: rockchip: add inno-usb3 phy driver
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-CC:     <katsuhiro@katsuster.net>, <linux-rockchip@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        "Heiko Stuebner" <heiko@sntech.de>
-Date:   Wed, 30 Oct 2019 10:59:21 +0800
-In-Reply-To: <CAMdYzYoOQ_C_f2v-3XBid8X0fc6z3Bw0XqRi3CQiwCzRLT-_0g@mail.gmail.com>
-References: <20191028182254.30739-1-pgwipeout@gmail.com>
-         <20191028182254.30739-2-pgwipeout@gmail.com>
-         <1572315115.18464.11.camel@mhfsdcap03>
-         <CAMdYzYoOQ_C_f2v-3XBid8X0fc6z3Bw0XqRi3CQiwCzRLT-_0g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S1727228AbfJ3DA3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 23:00:29 -0400
+Received: from mail-eopbgr30073.outbound.protection.outlook.com ([40.107.3.73]:3512
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726714AbfJ3DA3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Oct 2019 23:00:29 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NTe8Vcb31uptQfpb3r/X8p6vcRvV4FqvHtaCsyDZlFM3ezxwaVSRI+SHkFoWkVZ/+hnwEaraEZZaKuKZH2vo/tn37WdtlGGpMPQv6+4YvajyC3zNg+f/GJYRmjQz7kzRKvpnwFdouDJlaeRRnFM27LyH5rQLKjDVuM/TVM9xIcnwube9sotF2Grinka7LEeLwOE3Ok+lxRHNgQIAJES3m2uNVCGVadM+oDJakCmwh+Ac+uHN6ggi9KnBm4cRtHdnWlmRqL/kDe3vyWpVNJmu+fzTfl9t8ANbyitkjPsrhGQ9SXEvEmv1or+NCutgDewkNSctzSbf31IL2KdQYyO7Lw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2gxOMv45ptpqiyt+HmlyCjSSg1T3ZprTAZaIVmwzDeo=;
+ b=YtW4xZuIrRKTRK/R6ixrxo0CugxsOMRisUMD7BWP/lkEMO2INqnHCLRz7e3XSh9+hvWTpnSbF5rHJlR3fEFcJKfgj3y58p01vkkXZ3RFITYzY2E1qVGBQf6O3DBp9cHTPI4pXfHY+90Ih0rJ0zPL74qnG49h/FvUzR8xAEUmMSU2IxpXknsvAqBeWGQgm13p3ZhO0kA1af0hELuBa8iaL5dh3nY9llUMhrJjKRt96ICiq2/HzD+soUBjiRs2OLZZd/40GF6xl/D3f16D5S3fDRSWuO+zYtTTgpViUG0Nn9v5ddBDJQCpMru9Ye6frHTBS8EUScwtiu/UCMnAoZ5ekA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2gxOMv45ptpqiyt+HmlyCjSSg1T3ZprTAZaIVmwzDeo=;
+ b=VgHtmcNaIhJzHIkD2ADRX/00JY2fniKFwCJSdeODXr/HtDu6Ia0mBlE9RU0XnkF0Gd6VRYGfZHspzb5Ww42Y122niNniYdKoYaxcanTvdc1Lre1Va4Q96/b/nfjgv/ILLnq3i5jQJQS2S2QlVGz+g/Fb09tY04qSB3A/UTVAXac=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB5135.eurprd04.prod.outlook.com (20.177.52.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2347.16; Wed, 30 Oct 2019 03:00:25 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.023; Wed, 30 Oct 2019
+ 03:00:25 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Sanket Parmar <sparmar@cadence.com>
+CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "pawell@cadence.com" <pawell@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "rogerq@ti.com" <rogerq@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kurahul@cadence.com" <kurahul@cadence.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>
+Subject: Re: [PATCH] usb: cdns3: gadget: reset EP_CLAIMED flag while unloading
+Thread-Topic: [PATCH] usb: cdns3: gadget: reset EP_CLAIMED flag while
+ unloading
+Thread-Index: AQHVjlPrT/MJnfa1mUOR+qlmLDEOZKdyf6UA
+Date:   Wed, 30 Oct 2019 03:00:25 +0000
+Message-ID: <20191030030014.GD26815@b29397-desktop>
+References: <20191029122441.5816-1-sparmar@cadence.com>
+In-Reply-To: <20191029122441.5816-1-sparmar@cadence.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 3565f3ec-8b93-4a1b-6586-08d75ce55010
+x-ms-traffictypediagnostic: VI1PR04MB5135:
+x-microsoft-antispam-prvs: <VI1PR04MB513518CB5E2EF7C97149313A8B600@VI1PR04MB5135.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-forefront-prvs: 02065A9E77
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(39860400002)(396003)(376002)(366004)(346002)(136003)(199004)(189003)(7736002)(6486002)(6436002)(99286004)(256004)(71190400001)(71200400001)(6512007)(9686003)(33656002)(6116002)(54906003)(76176011)(6916009)(229853002)(305945005)(2906002)(66066001)(478600001)(8936002)(6246003)(3846002)(86362001)(316002)(446003)(5660300002)(26005)(186003)(476003)(25786009)(486006)(4326008)(81166006)(81156014)(44832011)(33716001)(1076003)(66946007)(53546011)(66556008)(64756008)(6506007)(66476007)(4744005)(102836004)(76116006)(11346002)(66446008)(14454004)(8676002)(91956017);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5135;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: zsgWfD3N7ihEL05T04Ji/AnDz7dysAb/74z7LIPW0hX70vBEgcIpXChoTZrC5g5eqg3SHviSsdJCBZqtZGNGkoed+OBSQyXxUiy9ktcOzZG2LEgiAUYiw2obTZF+5e/yWnw8uO5QWOP0xg5ncN+erxnJY4FtxMmcUdYbmMZJIePwQNK+SCWjYbwiPCnRKB+ANIOxqaDwdBTsp3r9tpGvmpiFOTX7RO2aO9x6KreK5cIKpdSbJpMDgA5VqJAiRuLnsJmjU/tiZMgPhjmSgBsKuphLBvep15rZShW4LIJ8b0yG7QkZ6/sMn1e0x86YRsnz1bA3JUbCLtpluzBXiZ9uKTTGddsQZkgJ12rAbsd+e9wePRiS7Z1W9iLYDOVN5cBxhx1ZUeDA/RnSJ7lnVl8giP77Q1eeNwqL8/Pgr8rXs5bC5KRQeIZ+hqAFgB0EgtuX
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <323FD7B0B942E544B8026F03440BAB5A@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-SNTS-SMTP: 0AE19865E2DAD4FAC6FEAE85F7F15EF9A86E6F117FE265F40C325C4671791EE82000:8
-X-MTK:  N
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3565f3ec-8b93-4a1b-6586-08d75ce55010
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2019 03:00:25.6252
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YHWpgvg9lh2Gwaa4FVmNOz6hZKqwxrfUJaIxRbsR8vWafqOAjycM5o8a7XKszS9VkPQKCgIq96kqbj75/8/meg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5135
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2019-10-29 at 11:26 -0400, Peter Geis wrote:
-> On Mon, Oct 28, 2019 at 10:12 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
-> >
-> > On Mon, 2019-10-28 at 18:22 +0000, Peter Geis wrote:
-> > > Add the rockchip innosilicon usb3 phy driver, supporting devices such as the rk3328.
-> > > Pulled from:
-> > > https://github.com/FireflyTeam/kernel/blob/roc-rk3328-cc/drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> > >
-> > > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > > ---
-> > >  drivers/phy/rockchip/Kconfig                  |    9 +
-> > >  drivers/phy/rockchip/Makefile                 |    1 +
-> > >  drivers/phy/rockchip/phy-rockchip-inno-usb3.c | 1107 +++++++++++++++++
-> > >  3 files changed, 1117 insertions(+)
-> > >  create mode 100644 drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> > >
-...
-> > > +static int rk3328_u3phy_pipe_power(struct rockchip_u3phy *u3phy,
-> > > +                                struct rockchip_u3phy_port *u3phy_port,
-> > > +                                bool on)
-> > > +{
-> > > +     unsigned int reg;
-> > > +
-> > > +     if (on) {
-> > > +             reg = readl(u3phy_port->base + 0x1a8);
-> > > +             reg &= ~BIT(4); /* ldo power up */
-> > > +             writel(reg, u3phy_port->base + 0x1a8);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x044);
-> > > +             reg &= ~BIT(4); /* bg power on */
-> > > +             writel(reg, u3phy_port->base + 0x044);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x150);
-> > > +             reg |= BIT(6); /* tx bias enable */
-> > > +             writel(reg, u3phy_port->base + 0x150);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x080);
-> > > +             reg &= ~BIT(2); /* tx cm power up */
-> > > +             writel(reg, u3phy_port->base + 0x080);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x0c0);
-> > > +             /* tx obs enable and rx cm enable */
-> > > +             reg |= (BIT(3) | BIT(4));
-> > > +             writel(reg, u3phy_port->base + 0x0c0);
-> > > +
-> > > +             udelay(1);
-> > > +     } else {
-> > > +             reg = readl(u3phy_port->base + 0x1a8);
-> > > +             reg |= BIT(4); /* ldo power down */
-> > > +             writel(reg, u3phy_port->base + 0x1a8);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x044);
-> > > +             reg |= BIT(4); /* bg power down */
-> > > +             writel(reg, u3phy_port->base + 0x044);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x150);
-> > > +             reg &= ~BIT(6); /* tx bias disable */
-> > > +             writel(reg, u3phy_port->base + 0x150);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x080);
-> > > +             reg |= BIT(2); /* tx cm power down */
-> > > +             writel(reg, u3phy_port->base + 0x080);
-> > > +
-> > > +             reg = readl(u3phy_port->base + 0x0c0);
-> > > +             /* tx obs disable and rx cm disable */
-> > > +             reg &= ~(BIT(3) | BIT(4));
-> > > +             writel(reg, u3phy_port->base + 0x0c0);
-> > > +     }
-> > Try to avoid magic number
-> 
-> Since this was not my driver, I only pulled it in and made the
-> necessary changes to get it working, I tried to refrain from
-> modifications as much as possible.
-> Do you want me to convert these addresses to definitions based on the
-> comments in the code?
-It's better to follow register names defined in register map doc if you
-have
-> 
-> >
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
+On 19-10-29 12:24:41, Sanket Parmar wrote:
+> EP_CLAIMED flag is used to track the claimed endpoints. While unloading t=
+he
+> module, Reset EP_CLAIMED flag for all enabled endpoints. So that it can b=
+e
+> reused.
+>=20
+> Signed-off-by: Sanket Parmar <sparmar@cadence.com>
+> ---
+> Hi Greg/Felipe,
+>=20
+> This can be used for -rc as it is bug fix.
+>=20
+> Regards,
+> Sanket
+>=20
+>  drivers/usb/cdns3/gadget.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+> index 9050b380ab83..2fb78322ed3c 100644
+> --- a/drivers/usb/cdns3/gadget.c
+> +++ b/drivers/usb/cdns3/gadget.c
+> @@ -2381,6 +2381,8 @@ static int cdns3_gadget_udc_stop(struct usb_gadget =
+*gadget)
+>  		writel(EP_CMD_EPRST, &priv_dev->regs->ep_cmd);
+>  		readl_poll_timeout_atomic(&priv_dev->regs->ep_cmd, val,
+>  					  !(val & EP_CMD_EPRST), 1, 100);
+> +
+> +		priv_ep->flags &=3D ~EP_CLAIMED;
+>  	}
+> =20
+>  	/* disable interrupt for device */
+> --=20
 
+Acked-by: Peter Chen <peter.chen@nxp.com>
 
+--=20
+
+Thanks,
+Peter Chen=
