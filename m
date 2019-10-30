@@ -2,122 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E0EE97A8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D17E97DB
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:14:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfJ3ILR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 04:11:17 -0400
-Received: from mail-eopbgr70073.outbound.protection.outlook.com ([40.107.7.73]:50887
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725953AbfJ3ILQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 04:11:16 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iSeul+evWs04N1wKpoY2GR4VtIgaX21UhX2bS2gRmlikN5zW+gqgApG6ZWCiqfeXE6encipftqFENYW+Zcu6b/sgROo79ndRPUQ6w6vM08CjZ3xwzAxq+vFBpHByW26NOI7F0YDfVftS38dZTEJI0WyszphAfAijR1vvpq2Jg2P+5hecgMr5Z6HFvBFu+9xSkp5ORWeLJNu85r2Z9+r2o4gs/x5jHXy8FnYbO+wv0d2/UJQTyRn1XAw8KPFOCnP+JPiA5hoL1JUvAO2asaK2hiFRS6kHz0SvBGb+b2ptUdNYilxoLIUToe1KAKBtszYxgHM673pg3AJgOwZdx8yYLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SUV2RghAhhQluDw5weRzqZLpo+bfQnzeuoMIJSX6oZA=;
- b=MWvOFuZIU3l+GOjtXNVygN+HW+tQx65BQODcUs4TniAoXuv84+mjW8u8mc3kQiDkZ9FejqCmm42J60yXbC7/FRtNv6JZ8kizZk11RIBjrZXIwhHpV+Ao3WH7nqPjuCeEsoR2w+oTsXq+DdyF9x/q+nUM+/S9zrloyjymRwVQaLci2LH7xQoN/nIPC/r333t1Ltmo4Fb2tQpPCsqUa457QvnXlyLj5WveXoNATQCuFX1q5zW6tHozwiKFM6CRjuwS1RRQ5sHjW0tEI3izHu2xEQPIEMWUz3X00RjctfMCA0fMFADhFXA2crVhUTbG8Ess3E09B/iB6ISHqTfNJnzXWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SUV2RghAhhQluDw5weRzqZLpo+bfQnzeuoMIJSX6oZA=;
- b=imeJ6J2qmybODlAHZ/1ZR5mqeRq6jWjdVyP5IdkFVsPilEXrwwMduiiCVXeyBKvqL8rmWWxH2UenO+qOleVqFgM059FkbxlEaAajk0BRp+QtLI2liCmpE1rFnbAuRN7tHZ0F7bX4CBEVdvjGUJVvj+4ieoYeTEYoJzZhMw+Tkts=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB3198.eurprd04.prod.outlook.com (10.170.228.149) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.24; Wed, 30 Oct 2019 08:11:12 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.023; Wed, 30 Oct 2019
- 08:11:12 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
+        id S1726268AbfJ3IOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 04:14:55 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:19059 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725822AbfJ3IOz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 04:14:55 -0400
+X-UUID: 87125db8de6b42c8bcc2ee48db36e41b-20191030
+X-UUID: 87125db8de6b42c8bcc2ee48db36e41b-20191030
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1946478619; Wed, 30 Oct 2019 16:14:49 +0800
+Received: from MTKCAS32.mediatek.inc (172.27.4.184) by MTKMBS31N1.mediatek.inc
+ (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Wed, 30 Oct
+ 2019 16:14:47 +0800
+Received: from [10.17.3.153] (172.27.4.253) by MTKCAS32.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 30 Oct 2019 16:14:46 +0800
+Message-ID: <1572423288.18464.38.camel@mhfsdcap03>
+Subject: Re: [PATCH] usb: mtk-xhci: Set the XHCI_NO_64BIT_SUPPORT quirk
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Tomasz Figa <tfiga@chromium.org>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH -next] usb: gadget: configfs: Fix missing spin_lock_init()
-Thread-Topic: [PATCH -next] usb: gadget: configfs: Fix missing
- spin_lock_init()
-Thread-Index: AQHVjtPm8Ll1Qsa1AEGGJ9d9UTCKQ6dy1XqA
-Date:   Wed, 30 Oct 2019 08:11:12 +0000
-Message-ID: <20191030081101.GF26815@b29397-desktop>
-References: <20191030034046.188808-1-weiyongjun1@huawei.com>
-In-Reply-To: <20191030034046.188808-1-weiyongjun1@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ca1ac4aa-e522-4384-0a44-08d75d10ba8d
-x-ms-traffictypediagnostic: VI1PR04MB3198:
-x-microsoft-antispam-prvs: <VI1PR04MB3198EF3F6CBED45647929A588B600@VI1PR04MB3198.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-forefront-prvs: 02065A9E77
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(366004)(136003)(346002)(39860400002)(396003)(376002)(199004)(189003)(1076003)(476003)(2906002)(305945005)(446003)(66066001)(11346002)(478600001)(7736002)(71200400001)(53546011)(66476007)(66556008)(6506007)(3846002)(64756008)(6116002)(66446008)(256004)(14444005)(4744005)(33656002)(99286004)(102836004)(91956017)(76116006)(71190400001)(66946007)(76176011)(316002)(186003)(5660300002)(8936002)(81156014)(4326008)(81166006)(26005)(8676002)(6486002)(229853002)(6512007)(33716001)(6436002)(86362001)(25786009)(486006)(6916009)(9686003)(6246003)(14454004)(54906003)(44832011);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3198;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: yachmGjSWg7ppr+Z3TYqeVQaUn0faSXfHKdSScJDYVDQOhczzkFTaWMNKnHOnJwZCMfVWihFsydJUUbgpIj+XgbZD7c7+f5mOK4j00nKPt8i1/XH2TXvhAUJVqkndr4ByianWxQX+JMQMypeOqET4mPEHvsbI8VWklx/2dMq6zr7XsPvlYwKD79Jk2jq3BVTIkIYSI+lV072hdofVg0J0DezitBiPb68U33rfcfKcBcRmJqOcDLNECdFlLakxnz3gc1SPCuhhdnDW5yD6UPqdwICQDmCrMXi2mwxYl54EwJyv1DaK9vXl6TUwbo3OBoFKusMJKK4A8E+OHqmA+crw8wUNW1d/uYrzzuK3ljO3YbUBgNdMYUScRjkYZYDyJ4h2eOrqTbfwU0w1dZc8qb24wCQdZbMKj7sNtY63wWSofBoDlCCQngJRgSShIBAE6ay
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <529ED822A2640A4496A79166D00F693B@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Changqi Hu <Changqi.Hu@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Shik Chen <shik@chromium.org>
+Date:   Wed, 30 Oct 2019 16:14:48 +0800
+In-Reply-To: <CAAFQd5AszvSow2vgRq+CbtBzdNO7ysymXp=xerR6dtmi8OxMZw@mail.gmail.com>
+References: <20191010075004.192818-1-tfiga@chromium.org>
+         <1570697118.32135.20.camel@mhfsdcap03>
+         <CAAFQd5AU53=BRUrK_i-0dRYueVoSd3Bg3AtvZUMHgFv3hLuNug@mail.gmail.com>
+         <1570705147.22261.13.camel@mhfsdcap03>
+         <CAAFQd5AszvSow2vgRq+CbtBzdNO7ysymXp=xerR6dtmi8OxMZw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca1ac4aa-e522-4384-0a44-08d75d10ba8d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2019 08:11:12.6460
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iYGqQ7HDimoWi1dt12tQNpgNiX36xCAIABptQGy51kVntoOJPamsGN9etTS0/k3aewCiZlVVmRiP1KUTjedLig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3198
+Content-Transfer-Encoding: 7bit
+X-TM-SNTS-SMTP: 60E1840DBE94508B2E5CDABD7A6FC01DE1971C6B2AD893D3FFBB7A973753CDDD2000:8
+X-MTK:  N
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-10-30 03:40:46, Wei Yongjun wrote:
-> The driver allocates the spinlock but not initialize it.
-> Use spin_lock_init() on it to initialize it correctly.
->=20
-> This is detected by Coccinelle semantic patch.
->=20
-> Fixes: 1a1c851bbd70 ("usb: gadget: configfs: fix concurrent issue between=
- composite APIs")
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> ---
->  drivers/usb/gadget/configfs.c | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
-c
-> index 33852c2b29d1..ab9ac48a751a 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -1544,6 +1544,7 @@ static struct config_group *gadgets_make(
->  	gi->composite.resume =3D NULL;
->  	gi->composite.max_speed =3D USB_SPEED_SUPER;
-> =20
-> +	spin_lock_init(&gi->spinlock);
->  	mutex_init(&gi->lock);
->  	INIT_LIST_HEAD(&gi->string_list);
->  	INIT_LIST_HEAD(&gi->available_func);
->=20
+Hi Tomasz,
 
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
+On Fri, 2019-10-11 at 13:35 +0900, Tomasz Figa wrote:
+> On Thu, Oct 10, 2019 at 7:59 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> >
+> > On Thu, 2019-10-10 at 18:00 +0900, Tomasz Figa wrote:
+> > > Hi Chunfeng,
+> > >
+> > > On Thu, Oct 10, 2019 at 5:45 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+> > > >
+> > > > Hi, Tomasz,
+> > > >
+> > > > On Thu, 2019-10-10 at 16:50 +0900, Tomasz Figa wrote:
+> > > > > MediaTek XHCI host controller does not support 64-bit addressing despite
+> > > > > the AC64 bit of HCCPARAMS1 register being set. The platform-specific
+> > > > > glue sets the DMA mask to 32 bits on its own, but it has no effect,
+> > > > > because xhci_gen_setup() overrides it according to hardware
+> > > > > capabilities.
+> > Yes, this is what I want to do, maybe need remove DMA mask setting in
+> > platform-specific.
+> >
+> > > > >
+> > > > > Use the XHCI_NO_64BIT_SUPPORT quirk to tell the XHCI core to force
+> > > > > 32-bit DMA mask instead.
+> > > > >
+> > > > > Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+> > > > > ---
+> > > > >  drivers/usb/host/xhci-mtk.c | 10 +++++-----
+> > > > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> > > > > index b18a6baef204a..4d101d52cc11b 100644
+> > > > > --- a/drivers/usb/host/xhci-mtk.c
+> > > > > +++ b/drivers/usb/host/xhci-mtk.c
+> > > > > @@ -395,6 +395,11 @@ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
+> > > > >       xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+> > > > >       if (mtk->lpm_support)
+> > > > >               xhci->quirks |= XHCI_LPM_SUPPORT;
+> > > > > +     /*
+> > > > > +      * MTK host controller does not support 64-bit addressing, despite
+> > > > > +      * having the AC64 bit of the HCCPARAMS1 register set.
+> > > > > +      */
+> > > > > +     xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
+> > > > Somes SoCs support 64bits in fact, so can't support this quirk, do you
+> > > > encounter any issues without this quirk?
+> > > >
+> > >
+> > > Thanks for taking a look at this patch.
+> > >
+> > > Yes, on MT8183 the DMA mask ended up being set to 64 bits, but
+> > > according to the information I received from MediaTek, the controller
+> > > on that SoC only supports 32 bits.
+> > As I know, mt8183 doesn't support memory greater than 4G mode.
+> >
+> 
+> We have 4GB of DRAM at 0x40000000-0x140000000 on our board with
+> MT8183. What happens if you attempt to use the memory from
+> 0x100000000-0x140000000 with the XHCI controller on this SoC?
 
---=20
+Sorry for the late reply.
 
-Thanks,
-Peter Chen=
+I've checked it with USB DE, USB IP supports 64bit on MT8183, so no need
+set XHCI_NO_64BIT_SUPPORT. 
+Would you please help to send a new patch to remove local dma mask
+setting, no need set it.
+
+Thanks a lot
+
+
+> 
+> > >
+> > > If some SoCs support only 32 bits and some support 64 bits, we may
+> > > either need to use different DT compatible string for them or add a DT
+> > > property and set the quirk based on that. Right now in upstream we
+> > > have:
+> > >
+> > > 1) "mediatek,mt8173-xhci", used by:
+> > > MT8173
+> > >
+> > > 2)"mediatek,mtk-xhci", used by:
+> > > MT2712
+> > > MT7622
+> > > MT8183 (not yet upstream, but I suppose it's on the mailing lists)
+> > >
+> > > Would you be able to check which of the SoCs above report 64 bits but
+> > > support only 32? (and so would need this quirk)
+> > I'm afraid I can't, almost all MTK SoCs supporting xHCI are using this
+> > driver, AC64 should be set rightly according to addressing capability.
+> >
+> 
+> Does it mean that only MT8183 may be the only SoC with a problem with
+> this capability bit?
+> 
+> Matthias, do you have access to MT2712 and MT7622 devices? I have
+> MT8173 and MT8183, so I can check them, but would be good to check
+> this on the other ones too.
+
+
+> 
+> Best regards,
+> Tomasz
+
+
