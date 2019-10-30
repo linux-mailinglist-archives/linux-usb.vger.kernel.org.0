@@ -2,89 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BD8E98B8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 10:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F8DE98DA
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 10:08:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726711AbfJ3JC4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 05:02:56 -0400
-Received: from mga17.intel.com ([192.55.52.151]:7949 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726184AbfJ3JC4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 05:02:56 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 02:02:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,246,1569308400"; 
-   d="scan'208";a="225264093"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Oct 2019 02:02:51 -0700
-From:   Felipe Balbi <balbi@kernel.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "open list\:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v4 5/9] usb: dwc3: Rework clock initialization to be more flexible
-In-Reply-To: <CALAqxLXcD8V1o01yMrHpeoqU2MfJ=8d3dbzC8T-+aoovDUd8kA@mail.gmail.com>
-References: <20191028215919.83697-1-john.stultz@linaro.org> <20191028215919.83697-6-john.stultz@linaro.org> <87k18nj4mj.fsf@gmail.com> <CALAqxLXcD8V1o01yMrHpeoqU2MfJ=8d3dbzC8T-+aoovDUd8kA@mail.gmail.com>
-Date:   Wed, 30 Oct 2019 11:02:51 +0200
-Message-ID: <87h83qhah0.fsf@gmail.com>
+        id S1726371AbfJ3JIu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 05:08:50 -0400
+Received: from esa4.hgst.iphmx.com ([216.71.154.42]:41540 "EHLO
+        esa4.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726028AbfJ3JIu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 05:08:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1572426529; x=1603962529;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vMCqoRuh5R2oVeUmjkeZMYXWXrajdWHBuSSKi9ZdRdk=;
+  b=W8fGzsJSprKsNCgBpADoTYxXQ96Nd9/fTDR30yUUQSlw/nm/qSZhQtc9
+   Vw2KrSsBBaoMt15ZugyCC/sIiyAvZpF4TCv2Hx1/i5pC9BOJv3GP9T/y8
+   kn9J4Rl1g8E//dvcnvAb0SePab7JB2V4qtjXDlrcJIm2FxT0h5p3Fmh5H
+   5SNvDw4KcPcJA9SN/ZcAYe7LSCnwLit4PlyztbqP4KKP+dAVdigq5CqPX
+   oKZ4RyuI52rapvzCF+mg0g2duSe7p2dfi/vkBTnqiycVkAkEJ4LMj9Uz1
+   wLrBS/tI2jVPJgB8jMFx+ue0W2Amm8aoADNHEeDcf0xhGy/BLN2+sDc/h
+   A==;
+IronPort-SDR: fYvZXvVvlLJvToJ5FOERNH/tjO14JYGlILshBsJhZwmfZJXK4NTwbIXdDc+t9XEa0Cr930U4rF
+ ZvAzWlgG0Wpu/UoD8DrBv8BfCtPqOTkHIMf/1KVuT37jczJ2vYjskZiJ8GJuoeIsT5VKHKSnXq
+ j/CYJHVgdmshKhkLFF2wKBUJyIQsPqU/wld3MR89OPSx/EFNirHcfv8g6Ps/uDWOI4LGv8wXAc
+ zYEx8kbFEM1GrZCbU7ZSZ2aQopSLEwJ9uT/xVJ6kdkR0Mou363SYi/x+lXqDaCARoImsUplvz2
+ Uys=
+X-IronPort-AV: E=Sophos;i="5.68,246,1569254400"; 
+   d="scan'208";a="121676271"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 30 Oct 2019 17:08:49 +0800
+IronPort-SDR: 4uU9LxjHRR1tAS2BDGS289ohA8A4DWL9iM3g4ylvROvJys+fmU3VvofUKNwbL6GKl1UBpJZc9A
+ Sej0VvBSg8gfPL96piZ60fbYZkCVeHl2r5d0Fa6rj6eh7dZCOp9eokWTOHyWNNwreC+eV7GQV4
+ FMYEoQDoHrNxIrfcoM0yg+gheSpPHkmbP8AukVkTSML6FUTQxrykxLb6+PPzsSqiIKDl+8N6Xf
+ yI0Q79c7gVJ18HYT8BL2DlIHzD+Unu0DAUZ74+ABd0V1gU5JbR62zI9VdwWhCQYfS8RUQHM7QP
+ W1p/488zgzbSlJUKG4vwIlP4
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 02:04:07 -0700
+IronPort-SDR: Cou+fOihshBb2UI9JhKi7kP4O6lQHN2/lk6/vis2elXlhA7E8O56rrV4pMg+bwyn/hIRJSY18M
+ G6VLIctIWULMJH4fbTaqX6g2dDBmeIsv8h82QW4jH7pE/7s1kmaIDCrCUg/10CE39I7okN3Nwg
+ g7oFeanGAWTE7C1X3fZ0QsSWBn9UG2c7DcM3hOwOZvrucReqLDtQ4cIIybTHkSfiA4cbg07r9x
+ pKl4CZ725hpGqR1fsQtx8Loo0CV8iLOHzFfo6whLSkps89ORJu9i/C8AIs/6RRMaqHfRK2MHnr
+ JWU=
+WDCIronportException: Internal
+Received: from washi.fujisawa.hgst.com ([10.149.53.254])
+  by uls-op-cesaip01.wdc.com with ESMTP; 30 Oct 2019 02:08:48 -0700
+From:   Damien Le Moal <damien.lemoal@wdc.com>
+To:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: [PATCH v2] scsi: Fix scsi_get/set_resid() interface
+Date:   Wed, 30 Oct 2019 18:08:47 +0900
+Message-Id: <20191030090847.25650-1-damien.lemoal@wdc.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+struct scsi_cmnd cmd->req.resid_len which is returned and set
+respectively by the helper functions scsi_get_resid() and
+scsi_set_resid() is an unsigned int. Reflect this fact in the interface
+of these helper functions.
 
-Hi,
+Also fix compilation errors due to min() and max() type mismatch
+introduced by this change in scsi debug code, usb transport code and in
+the USB ENE card reader driver.
 
-John Stultz <john.stultz@linaro.org> writes:
-> On Tue, Oct 29, 2019 at 2:14 AM Felipe Balbi <balbi@kernel.org> wrote:
->> John Stultz <john.stultz@linaro.org> writes:
->>
->> > The dwc3 core binding specifies three clocks:
->> >   ref, bus_early, and suspend
->> >
->> > which are all controlled in the driver together.
->> >
->> > However some variants of the hardware my not have all three clks
->>                                         ^^
->>                                         may
->>
->> In fact *all* platforms have all three clocks. It's just that in some
->> cases clock pins are shorted together (or take input from same clock).
->>
-> ...
->> another option would be to pass three clocks with the same phandle. That
->> would even make sure that clock usage counts are correct, no?
->
-> Hey Felipe!
->
-> So I actually had done that initially (and it seemed to work), but Rob
-> suggested this way instead.
-> I'm fine with either, as long as having multiple references to the
-> same clk in the enable/disable paths doesn't cause trouble.
->
-> Thanks so much for the review here!
+Signed-off-by: Damien Le Moal <damien.lemoal@wdc.com>
+---
 
-same as the other patch, if we're supposed to describe the HW, then we
-should describe what's actually happening.
+Changes from v1:
+* Fix compilation error in the USB ENE card reader driver
 
+ drivers/scsi/scsi_debug.c        | 4 ++--
+ drivers/usb/storage/ene_ub6250.c | 2 +-
+ drivers/usb/storage/transport.c  | 3 +--
+ include/scsi/scsi_cmnd.h         | 4 ++--
+ 4 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index d323523f5f9d..4daf2637c011 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -1025,7 +1025,7 @@ static int fill_from_dev_buffer(struct scsi_cmnd *scp, unsigned char *arr,
+ static int p_fill_from_dev_buffer(struct scsi_cmnd *scp, const void *arr,
+ 				  int arr_len, unsigned int off_dst)
+ {
+-	int act_len, n;
++	unsigned int act_len, n;
+ 	struct scsi_data_buffer *sdb = &scp->sdb;
+ 	off_t skip = off_dst;
+ 
+@@ -1039,7 +1039,7 @@ static int p_fill_from_dev_buffer(struct scsi_cmnd *scp, const void *arr,
+ 	pr_debug("%s: off_dst=%u, scsi_bufflen=%u, act_len=%u, resid=%d\n",
+ 		 __func__, off_dst, scsi_bufflen(scp), act_len,
+ 		 scsi_get_resid(scp));
+-	n = (int)scsi_bufflen(scp) - ((int)off_dst + act_len);
++	n = scsi_bufflen(scp) - (off_dst + act_len);
+ 	scsi_set_resid(scp, min(scsi_get_resid(scp), n));
+ 	return 0;
+ }
+diff --git a/drivers/usb/storage/ene_ub6250.c b/drivers/usb/storage/ene_ub6250.c
+index 8b1b73065421..98c1aa594e6c 100644
+--- a/drivers/usb/storage/ene_ub6250.c
++++ b/drivers/usb/storage/ene_ub6250.c
+@@ -561,7 +561,7 @@ static int ene_send_scsi_cmd(struct us_data *us, u8 fDir, void *buf, int use_sg)
+ 		residue = min(residue, transfer_length);
+ 		if (us->srb != NULL)
+ 			scsi_set_resid(us->srb, max(scsi_get_resid(us->srb),
+-								(int)residue));
++								residue));
+ 	}
+ 
+ 	if (bcs->Status != US_BULK_STAT_OK)
+diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+index 96cb0409dd89..238a8088e17f 100644
+--- a/drivers/usb/storage/transport.c
++++ b/drivers/usb/storage/transport.c
+@@ -1284,8 +1284,7 @@ int usb_stor_Bulk_transport(struct scsi_cmnd *srb, struct us_data *us)
+ 
+ 		} else {
+ 			residue = min(residue, transfer_length);
+-			scsi_set_resid(srb, max(scsi_get_resid(srb),
+-			                                       (int) residue));
++			scsi_set_resid(srb, max(scsi_get_resid(srb), residue));
+ 		}
+ 	}
+ 
+diff --git a/include/scsi/scsi_cmnd.h b/include/scsi/scsi_cmnd.h
+index 91bd749a02f7..3772ae5d40cd 100644
+--- a/include/scsi/scsi_cmnd.h
++++ b/include/scsi/scsi_cmnd.h
+@@ -190,12 +190,12 @@ static inline unsigned scsi_bufflen(struct scsi_cmnd *cmd)
+ 	return cmd->sdb.length;
+ }
+ 
+-static inline void scsi_set_resid(struct scsi_cmnd *cmd, int resid)
++static inline void scsi_set_resid(struct scsi_cmnd *cmd, unsigned int resid)
+ {
+ 	cmd->req.resid_len = resid;
+ }
+ 
+-static inline int scsi_get_resid(struct scsi_cmnd *cmd)
++static inline unsigned int scsi_get_resid(struct scsi_cmnd *cmd)
+ {
+ 	return cmd->req.resid_len;
+ }
 -- 
-balbi
+2.21.0
+
