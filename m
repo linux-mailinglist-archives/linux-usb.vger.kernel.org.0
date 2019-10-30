@@ -2,92 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84924E9ED2
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 16:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0656EA04B
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 16:57:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbfJ3PYs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 11:24:48 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:41777 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbfJ3PYs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 11:24:48 -0400
-Received: by mail-pl1-f194.google.com with SMTP id t10so1136704plr.8;
-        Wed, 30 Oct 2019 08:24:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5XiSSALIT9IX4x1ndYfnfB6J+j/tWSdimFbCRBrwIbY=;
-        b=eGu/PmwhhBZFOElT7U/hWK0EnHBgzfw1a1YSNi8IGGH9jN5sMIJJeJPrsHqMMlJLPb
-         cXB21F78haD5E09u5IDNS+sG5rEx5cqFl3xvtHYWqvjjMqtutge+eb6mEkVI3aYsbAXF
-         /9I+l5Lu9mmV3Tn4cvv/iR0NfBhn/crtBwEYaaqcx+yKRDDkLQ0xkeuriyNlr6M9ghbp
-         j7COUBvB94UaTK7z8gGfKjEuaYpyBFvp9WgwreOLu1fa6BSxYCLWI2X17YRHNxcaO6Go
-         QtvMxsClAKlsqTy2WXt2icNsYpT4csRCy3xNhCN+Y7w9wyR4mz8LetZqEAah/UTaRg90
-         1QRw==
-X-Gm-Message-State: APjAAAVJgQogdUQYnkdeToF32bYjcUENOiopaDxCQfyHJq+zB7rEVKFT
-        Iq5q/eOzG2kyXYYLP1a77g4=
-X-Google-Smtp-Source: APXvYqy29Kof7dLdvZdRb0clq6VfXn8bbPtsxwxWKBNh55JyTbn3BkFoM3PBBlI4+tlOSHvN8yjvfg==
-X-Received: by 2002:a17:902:467:: with SMTP id 94mr560995ple.115.1572449087207;
-        Wed, 30 Oct 2019 08:24:47 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id c66sm334633pfb.25.2019.10.30.08.24.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Oct 2019 08:24:46 -0700 (PDT)
-Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
-To:     Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-References: <20191028105732.29913-1-damien.lemoal@wdc.com>
- <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
- <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
- <d0899d02-ecb2-7f0b-3d0a-c818a0ec6ceb@acm.org>
- <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <cd135991-d5fb-770c-d5dc-d7658222785b@acm.org>
-Date:   Wed, 30 Oct 2019 08:24:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728535AbfJ3PzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 11:55:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56600 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727363AbfJ3PzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:55:05 -0400
+Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 08DF020656;
+        Wed, 30 Oct 2019 15:55:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572450904;
+        bh=5VyfATjDRZ/d61SscXopb+AgGGmd7/YaQZLg5GFAo3w=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JcFH3O7vCQhGJkLrEJfzqMRUe/TI3ktFTDueQtmOvkDL9OaXp7Va1wHcxl1Dk3i0B
+         WNckttiGoi6Cab5I1NdmrCvXGGDMV8ZN08DwMIE0vKCt1WHay6Z8VUtORoAANAjQhX
+         XXRzdTAjWVpwETBY6lmSLLNNOfF3pexQaBbuY4ls=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 21/38] USB: legousbtower: fix a signedness bug in tower_probe()
+Date:   Wed, 30 Oct 2019 11:53:49 -0400
+Message-Id: <20191030155406.10109-21-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
+References: <20191030155406.10109-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/30/19 8:18 AM, Hannes Reinecke wrote:
-> On 10/30/19 4:12 PM, Bart Van Assche wrote:
->> I do not agree that reporting a residual overflow by calling 
->> scsi_set_resid(..., 0) is acceptable. For reads a residual overflow 
->> means that the length specified in the CDB (scsi_bufflen()) exceeds 
->> the data buffer size (length of scsi_sglist()). I think it's dangerous 
->> to report to the block layer that such requests completed successfully 
->> and with residual zero.
->>
-> But that is an error on submission, and should be aborted before it even 
-> got send to the drive.
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-If such a bug ever gets introduced in the SCSI core, I think that SCSI 
-target code should detect and report it. If the SCSI core receives a 
-response with a residual overflow it can then take appropriate action, 
-e.g. call WARN_ON_ONCE().
+[ Upstream commit fd47a417e75e2506eb3672ae569b1c87e3774155 ]
 
-Users of sg_raw can trigger the residual overflow case easily.
+The problem is that sizeof() is unsigned long so negative error codes
+are type promoted to high positive values and the condition becomes
+false.
 
-> However, this does not relate to the residual, which is handled after 
-> the command completes (and which sparked this entire thread ...).
+Fixes: 1d427be4a39d ("USB: legousbtower: fix slab info leak at probe")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Acked-by: Johan Hovold <johan@kernel.org>
+Link: https://lore.kernel.org/r/20191011141115.GA4521@mwanda
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/misc/legousbtower.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I'm still waiting for an answer to my question of how SCSI LLDs are 
-expected to report a residual overflow to the SCSI core.
+diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+index 62dab2441ec4f..23061f1526b4e 100644
+--- a/drivers/usb/misc/legousbtower.c
++++ b/drivers/usb/misc/legousbtower.c
+@@ -878,7 +878,7 @@ static int tower_probe (struct usb_interface *interface, const struct usb_device
+ 				  get_version_reply,
+ 				  sizeof(*get_version_reply),
+ 				  1000);
+-	if (result < sizeof(*get_version_reply)) {
++	if (result != sizeof(*get_version_reply)) {
+ 		if (result >= 0)
+ 			result = -EIO;
+ 		dev_err(idev, "get version request failed: %d\n", result);
+-- 
+2.20.1
 
-Thanks,
-
-Bart.
