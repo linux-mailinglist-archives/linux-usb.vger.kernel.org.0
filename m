@@ -2,117 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48603E97FB
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE3DE9833
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:31:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726091AbfJ3ITZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 04:19:25 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:54310 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbfJ3ITZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 04:19:25 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U8J7hT009487;
-        Wed, 30 Oct 2019 08:19:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- content-transfer-encoding : in-reply-to; s=corp-2019-08-05;
- bh=bIafaFA6HUgKwXCo2YA8eFCgR93KDB2EKBkIkqUQlYQ=;
- b=sdr9cjVMnTfB0Ft0DVbAJNo2Nbv7Vrb6mlr9KWywCq8lX0SlzizxQygoYcgvtUAGXfwb
- Lw66xtc9MwCffa4X8GvlbyEU2ZUPoNDad13SjLcD9sRckPh9mDmoM4cfHmWyLZmJwsek
- BDP1s+Q7Cv99I7ahE04L9htax12+muewtvJgir2Ndg68qObSNzR8CIyIVHmAWNp9BruL
- VQy9CdMLHQRQf0iFBcTTcpctkQz4qFEJuGAF97F1ySjCMudH/pmtKiUf2VyJX0ujtED9
- nP4hXft2xIeXzTfr4joxjNV6wrwyyUpF2VHB8x9+PpRxJiNMHNjBJzyOk07eKpuIkiso kA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2vxwhfj9sp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Oct 2019 08:19:20 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U8J6CD065699;
-        Wed, 30 Oct 2019 08:19:19 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2vxwj9hbc9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Oct 2019 08:19:19 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9U8JILf022399;
-        Wed, 30 Oct 2019 08:19:18 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 30 Oct 2019 01:19:17 -0700
-Date:   Wed, 30 Oct 2019 11:19:01 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     shuah <shuah@kernel.org>, kbuild@lists.01.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
- uninitialized symbol 'nents'.
-Message-ID: <20191030081628.GD3866@kadam>
-References: <20191022092839.GD10833@kadam>
- <20191023071120.GA3061@localhost.localdomain>
- <20191024194500.GD23523@kadam>
- <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
- <20191026024141.GA3339@localhost.localdomain>
+        id S1726084AbfJ3IbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 04:31:00 -0400
+Received: from mx2.suse.de ([195.135.220.15]:34916 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726028AbfJ3IbA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 04:31:00 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 5B53EB2C6;
+        Wed, 30 Oct 2019 08:30:57 +0000 (UTC)
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+ <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+Date:   Wed, 30 Oct 2019 09:30:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191026024141.GA3339@localhost.localdomain>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=847
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910300082
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=998 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910300083
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Oct 26, 2019 at 11:41:41AM +0900, Suwan Kim wrote:
-> On Thu, Oct 24, 2019 at 04:52:52PM -0600, shuah wrote:
-> > On 10/24/19 1:45 PM, Dan Carpenter wrote:
-> > > On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
-> > > > On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
-> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > > head:   7d194c2100ad2a6dded545887d02754948ca5241
-> > > > > commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
-> > > > > date:   7 weeks ago
-> > > > > 
-> > > > > If you fix the issue, kindly add following tag
-> > > > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> > > > > 
-> > > > > New smatch warnings:
-> > > > > drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
-> > > > > 
-> > > > > Old smatch warnings:
-> > > > > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
+On 10/28/19 9:38 PM, Bart Van Assche wrote:
+> On 10/28/19 3:57 AM, Damien Le Moal wrote:
+>> struct scsi_cmnd cmd->req.resid_len which is returned and set
+>> respectively by the helper functions scsi_get_resid() and
+>> scsi_set_resid() is an unsigned int. Reflect this fact in the interface
+>> of these helper functions.
+>> [ ... ]
+>> -static inline void scsi_set_resid(struct scsi_cmnd *cmd, int resid)
+>> +static inline void scsi_set_resid(struct scsi_cmnd *cmd, unsigned int 
+>> resid)
+>>   {
+>>       cmd->req.resid_len = resid;
+>>   }
+>> -static inline int scsi_get_resid(struct scsi_cmnd *cmd)
+>> +static inline unsigned int scsi_get_resid(struct scsi_cmnd *cmd)
+>>   {
+>>       return cmd->req.resid_len;
+>>   }
 > 
-> Here, ret is not initialized, meaning priv->num_urbs is 0.
-> priv->urbs must be greater than zero.
-> priv->num_urbs = 0 means nents is 0 (line 505)
+>  From the iSCSI RFC:
 > 
-> Dan, What is the relationship between old and new warnings?
-> priv->num_urbs is set as value of "num_urbs" at stub_recv_cmd_submit()
-> and "num_urbs" is initialized as 1 first. "num_urbs" will be reset
-> only at the place where smatch new warnings happened (line 505).
+>     SCSI-Presented Data Transfer Length (SPDTL) is the term this document
+>     uses (see Section 1.1 for definition) to represent the aggregate data
+>     length that the target SCSI layer attempts to transfer using the
+>     local iSCSI layer for a task.  Expected Data Transfer Length (EDTL)
+>     is the iSCSI term that represents the length of data that the iSCSI
+>     layer expects to transfer for a task.  EDTL is specified in the SCSI
+>     Command PDU.
 > 
-> So, In my opinion, old smatch warnings should occur after the new
-> smatch warnings. Does�this look right to�you?
+>     When SPDTL = EDTL for a task, the target iSCSI layer completes the
+>     task with no residuals.  Whenever SPDTL differs from EDTL for a task,
+>     that task is said to have a residual.
+> 
+>     If SPDTL > EDTL for a task, iSCSI Overflow MUST be signaled in the
+>     SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
+>     be set to the numerical value of (SPDTL - EDTL).
+> 
+>     If SPDTL < EDTL for a task, iSCSI Underflow MUST be signaled in the
+>     SCSI Response PDU as specified in [RFC3720].  The Residual Count MUST
+>     be set to the numerical value of (EDTL - SPDTL).
+> 
+>     Note that the Overflow and Underflow scenarios are independent of
+>     Data-In and Data-Out.  Either scenario is logically possible in
+>     either direction of data transfer.
+> 
+> If the residual is changed from signed into unsigned, how is a SCSI LLD 
+> expected to report the difference between residual overflow and residual 
+> underflow to the SCSI core?
+> 
+You don't have to. To quote RFC 3720 page 122:
 
-I don't know exactly how the 0day bot runs Smatch.  If you have cross
-function analysis enabled then silencing the uninitialized "nents"
-warning will also silence the uninitialized "ret" warning.
+      bit 5 - (O) set for Residual Overflow.  In this case, the Residual
+        Count indicates the number of bytes that were not transferred
+        because the initiator's Expected Data Transfer Length was not
+        sufficient.  For a bidirectional operation, the Residual Count
+        contains the residual for the write operation.
 
-regards,
-dan carpenter
+IE the 'overflow' setting in the iSCSI command response is an indicator 
+that there _would_ be more data if the command request _would_ have 
+specified a larger buffer.
+But as it didn't, the entire buffer was filled, and the overflow counter 
+is set.
+Which, of course, is then ignored by the linux SCSI stack as the request 
+got all data, and the residual is set to zero.
+Then it's left to the caller to re-send with a larger buffer if 
+required. But it's nothing the SCSI stack can nor should be attempting 
+on its own.
 
+As such I think the patch is correct.
+
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                              +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
