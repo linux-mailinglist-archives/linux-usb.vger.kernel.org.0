@@ -2,127 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FDEEA3F8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 20:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022E5EA4B0
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 21:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726476AbfJ3TWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 15:22:09 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:36493 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726273AbfJ3TWI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 15:22:08 -0400
-Received: by mail-io1-f70.google.com with SMTP id g126so2661376iof.3
-        for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2019 12:22:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=khoGcAG7R6/Th/Ql7oDqglP9PTs7MZlRnfGjkI25LVM=;
-        b=N4AVsAZFH82pWXJ+1BKLH2esR25mTeBzySd6KBqUeMxXib/Q1oOM1oVC5KEhJcGQfD
-         CYWCjFEZrpVAR66YHiYLUiDvyaNF1YL96ua0NxeiqSaJToFt0RadyEoW+R4NXYrOwC8s
-         XK647bYKqsu0IKNgQPa1SRyRbL6LeueTzxYsFs7i+Oocq/DrvVmsHPxeN7BYWdBbiZzC
-         YmJWR/qLAkuNiHT0jeqExm//pdUKx6hml5j3ulFk1WpIUxzZiD5VYYbTMYcCWu0XQg1v
-         HVzHwh4aFin7d03XdKzBj5NL4z43v4U9Pi/KDuhMrVPhwxrdIZSiyu/rIwrgyDDOnQqh
-         zG2g==
-X-Gm-Message-State: APjAAAUx83V87snq8S7vo6SGx4j+ZPbEQvqucnOLXQrbi6YHKJ+1PTLq
-        dsOY+64xtxfJt4G5XIO8eE7Z80lMOauv1/OBT8VhgRiFvw88
-X-Google-Smtp-Source: APXvYqz0jpZtYd1ylVPYuYGc+K+FpHCDQZ2CiqF98OVVfySYUsaC8liAfwZ5bVayIukFm/18+nLkIlbzusYaB3vapIrCF9sZ2TOJ
+        id S1726658AbfJ3U0g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 16:26:36 -0400
+Received: from mout-u-107.mailbox.org ([91.198.250.252]:59738 "EHLO
+        mout-u-107.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726483AbfJ3U0g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 16:26:36 -0400
+X-Greylist: delayed 323 seconds by postgrey-1.27 at vger.kernel.org; Wed, 30 Oct 2019 16:26:35 EDT
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 473KbW1fLKzKnrB;
+        Wed, 30 Oct 2019 21:21:11 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=loebl.cz; s=MBO0001;
+        t=1572466871;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=f8bOBnoOGqZgfjifbTGsIHEw+IN0eJ6mzihqMPhq8nQ=;
+        b=QT5DmvdS8aaayllfK5K3hpn7X8oVi/fbutdNJJqNfK90Xr8m+hvS8tYm4v3b4pMIkkLsrU
+        De1LodaVNrnl7EmS1689H/V9iZim4hYf+xUFTsGol4PUv3WX4DgYPYXaEZ3m4FeSzn353n
+        GJ2Sh7eSramVPN7XJbJ85dJ5Ll8NjecdOZkqXdAQ/256nnjJ4HAaXvHw1egLPsabnmDLt7
+        dYw5GOPjcGCYmYguxLK+ixHJtiiiZZeFmYgqZrcQ2wZleoa0WWgkAIeZosZQo2ggDsB42F
+        6mxkRUX4ZdCFLDyc8iTNoTlczOGCrrscnaU4p9QaqWuM+dHYw8piiysZQ62nMA==
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id Dsmaop4ybAQD; Wed, 30 Oct 2019 21:21:09 +0100 (CET)
+From:   =?UTF-8?q?Pavel=20L=C3=B6bl?= <pavel@loebl.cz>
+To:     linux-usb@vger.kernel.org
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Pavel=20L=C3=B6bl?= <pavel@loebl.cz>
+Subject: [PATCH] usb: serial: mos7840: Add USB ID to support Moxa UPort 2210
+Date:   Wed, 30 Oct 2019 20:52:53 +0100
+Message-Id: <20191030195253.32579-1-pavel@loebl.cz>
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9059:: with SMTP id v25mr1343320ioq.58.1572463327820;
- Wed, 30 Oct 2019 12:22:07 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 12:22:07 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000013c4c1059625a655@google.com>
-Subject: KMSAN: uninit-value in cdc_ncm_set_dgram_size
-From:   syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, glider@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, oliver@neukum.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    96c6c319 net: kasan: kmsan: support CONFIG_GENERIC_CSUM on..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=11f103bce00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9e324dfe9c7b0360
-dashboard link: https://syzkaller.appspot.com/bug?extid=0631d878823ce2411636
-compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
-80fee25776c2fb61e74c1ecb1a523375c2500b69)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dd9774e00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13651a24e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+0631d878823ce2411636@syzkaller.appspotmail.com
-
-=====================================================
-BUG: KMSAN: uninit-value in cdc_ncm_set_dgram_size+0x6ba/0xbc0  
-drivers/net/usb/cdc_ncm.c:587
-CPU: 0 PID: 11865 Comm: kworker/0:3 Not tainted 5.4.0-rc5+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
-  kmsan_report+0x128/0x220 mm/kmsan/kmsan_report.c:108
-  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:245
-  cdc_ncm_set_dgram_size+0x6ba/0xbc0 drivers/net/usb/cdc_ncm.c:587
-  cdc_ncm_setup drivers/net/usb/cdc_ncm.c:673 [inline]
-  cdc_ncm_bind_common+0x2b54/0x3c50 drivers/net/usb/cdc_ncm.c:928
-  cdc_ncm_bind+0x2de/0x330 drivers/net/usb/cdc_ncm.c:1042
-  usbnet_probe+0x10d3/0x39d0 drivers/net/usb/usbnet.c:1730
-  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
-  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
-  __device_attach+0x489/0x750 drivers/base/dd.c:894
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2202
-  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
-  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
-  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
-  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
-  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
-  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
-  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
-  __device_attach+0x489/0x750 drivers/base/dd.c:894
-  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
-  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
-  device_add+0x25b5/0x2df0 drivers/base/core.c:2202
-  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
-  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
-  port_event drivers/usb/core/hub.c:5359 [inline]
-  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
-  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
-  kthread+0x4b5/0x4f0 kernel/kthread.c:256
-  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
-
-Local variable description: ----max_datagram_size@cdc_ncm_set_dgram_size
-Variable was created at:
-  cdc_ncm_set_dgram_size+0xf5/0xbc0 drivers/net/usb/cdc_ncm.c:564
-  cdc_ncm_set_dgram_size+0xf5/0xbc0 drivers/net/usb/cdc_ncm.c:564
-=====================================================
-
-
+Adds usb ID for MOXA UPort 2210. This device contains mos7820 but
+it passes GPIO0 check implemented by driver and it's detected as
+mos7840. Hence product id check is added to force mos7820 mode.
 ---
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/usb/serial/mos7840.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
+index a698d46ba773..8afc165cc984 100644
+--- a/drivers/usb/serial/mos7840.c
++++ b/drivers/usb/serial/mos7840.c
+@@ -119,10 +119,13 @@
+ /* This driver also supports
+  * ATEN UC2324 device using Moschip MCS7840
+  * ATEN UC2322 device using Moschip MCS7820
++ * MOXA UPort 2210 device using Moschip MCS7820
+  */
+ #define USB_VENDOR_ID_ATENINTL		0x0557
+ #define ATENINTL_DEVICE_ID_UC2324	0x2011
+ #define ATENINTL_DEVICE_ID_UC2322	0x7820
++#define MXU2_VENDOR_ID              0x110a
++#define MXU2_DEVICE_ID_2210         0x2210
+ 
+ /* Interrupt Routine Defines    */
+ 
+@@ -195,6 +198,7 @@ static const struct usb_device_id id_table[] = {
+ 	{USB_DEVICE(USB_VENDOR_ID_BANDB, BANDB_DEVICE_ID_USOPTL2_4)},
+ 	{USB_DEVICE(USB_VENDOR_ID_ATENINTL, ATENINTL_DEVICE_ID_UC2324)},
+ 	{USB_DEVICE(USB_VENDOR_ID_ATENINTL, ATENINTL_DEVICE_ID_UC2322)},
++	{USB_DEVICE(MXU2_VENDOR_ID, MXU2_DEVICE_ID_2210)},
+ 	{}			/* terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, id_table);
+@@ -2030,6 +2034,11 @@ static int mos7840_probe(struct usb_serial *serial,
+ 		goto out;
+ 	}
+ 
++	if (product == MXU2_DEVICE_ID_2210) {
++		device_type = MOSCHIP_DEVICE_ID_7820;
++		goto out;
++	}
++
+ 	buf = kzalloc(VENDOR_READ_LENGTH, GFP_KERNEL);
+ 	if (!buf)
+ 		return -ENOMEM;
+-- 
+2.23.0
+
