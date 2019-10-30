@@ -2,145 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F35EE97F7
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48603E97FB
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 09:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726027AbfJ3ISC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 04:18:02 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:48738 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbfJ3ISC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 04:18:02 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 835C160FB4; Wed, 30 Oct 2019 08:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572423480;
-        bh=kcCm/H5t19My0UWHuNsVdwLkOLGVv4OutbbVfyfm2Kw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iPQoXO98AnaS9mzCJfGV2/EZoQxgxiZo+NKqxGHJl9UA8o32Cd+0JtTdRjB8zDCQa
-         1kKJOlqyOB35r9Cbibb8BPtTCYEG4iG31fGEMQ4DxoeuHHz0s5YYncG9O4HC6lZpC+
-         4xtmqV0Oh4NU0P9BPh52WwanSuUYrhdkRWkzur1I=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher DHE-RSA-AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 967AD60F5C;
-        Wed, 30 Oct 2019 08:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572423479;
-        bh=kcCm/H5t19My0UWHuNsVdwLkOLGVv4OutbbVfyfm2Kw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QTzv35In7ECHebpOM9POewZQEJb9SN7TkxyzDKEWknvOZeKnFsCJvm+mABPdBgMZF
-         3dEp4uD3v1iEEkHVDcEDzDc8rbTRa3WRSQOmyo9hgXvhq9xET0MHTtFy7ob3bLafbq
-         rM4lJWgUvQr1uuCBHEkOh0gEbUka3lEnKsJ/TvVc=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 967AD60F5C
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 30 Oct 2019 01:17:58 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Roger Quadros <rogerq@ti.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Bin Liu [EP]" <b-liu@ti.com>
-Subject: Re: g_audio breaks with dwc3
-Message-ID: <20191030081757.GB12661@jackp-linux.qualcomm.com>
-References: <c97b96cf-65f6-5143-838f-a3e9d1a5c5b2@ti.com>
+        id S1726091AbfJ3ITZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 04:19:25 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54310 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725822AbfJ3ITZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 04:19:25 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U8J7hT009487;
+        Wed, 30 Oct 2019 08:19:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ content-transfer-encoding : in-reply-to; s=corp-2019-08-05;
+ bh=bIafaFA6HUgKwXCo2YA8eFCgR93KDB2EKBkIkqUQlYQ=;
+ b=sdr9cjVMnTfB0Ft0DVbAJNo2Nbv7Vrb6mlr9KWywCq8lX0SlzizxQygoYcgvtUAGXfwb
+ Lw66xtc9MwCffa4X8GvlbyEU2ZUPoNDad13SjLcD9sRckPh9mDmoM4cfHmWyLZmJwsek
+ BDP1s+Q7Cv99I7ahE04L9htax12+muewtvJgir2Ndg68qObSNzR8CIyIVHmAWNp9BruL
+ VQy9CdMLHQRQf0iFBcTTcpctkQz4qFEJuGAF97F1ySjCMudH/pmtKiUf2VyJX0ujtED9
+ nP4hXft2xIeXzTfr4joxjNV6wrwyyUpF2VHB8x9+PpRxJiNMHNjBJzyOk07eKpuIkiso kA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2vxwhfj9sp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Oct 2019 08:19:20 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U8J6CD065699;
+        Wed, 30 Oct 2019 08:19:19 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2vxwj9hbc9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 30 Oct 2019 08:19:19 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9U8JILf022399;
+        Wed, 30 Oct 2019 08:19:18 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 30 Oct 2019 01:19:17 -0700
+Date:   Wed, 30 Oct 2019 11:19:01 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     shuah <shuah@kernel.org>, kbuild@lists.01.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
+ uninitialized symbol 'nents'.
+Message-ID: <20191030081628.GD3866@kadam>
+References: <20191022092839.GD10833@kadam>
+ <20191023071120.GA3061@localhost.localdomain>
+ <20191024194500.GD23523@kadam>
+ <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
+ <20191026024141.GA3339@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <c97b96cf-65f6-5143-838f-a3e9d1a5c5b2@ti.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191026024141.GA3339@localhost.localdomain>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=847
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910300082
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=998 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910300083
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Roger,
+On Sat, Oct 26, 2019 at 11:41:41AM +0900, Suwan Kim wrote:
+> On Thu, Oct 24, 2019 at 04:52:52PM -0600, shuah wrote:
+> > On 10/24/19 1:45 PM, Dan Carpenter wrote:
+> > > On Wed, Oct 23, 2019 at 04:11:20PM +0900, Suwan Kim wrote:
+> > > > On Tue, Oct 22, 2019 at 12:28:39PM +0300, Dan Carpenter wrote:
+> > > > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > > head:   7d194c2100ad2a6dded545887d02754948ca5241
+> > > > > commit: ea44d190764b4422af4d1c29eaeb9e69e353b406 usbip: Implement SG support to vhci-hcd and stub driver
+> > > > > date:   7 weeks ago
+> > > > > 
+> > > > > If you fix the issue, kindly add following tag
+> > > > > Reported-by: kbuild test robot <lkp@intel.com>
+> > > > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > > > 
+> > > > > New smatch warnings:
+> > > > > drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error: uninitialized symbol 'nents'.
+> > > > > 
+> > > > > Old smatch warnings:
+> > > > > drivers/usb/usbip/stub_rx.c:450 stub_recv_xbuff() error: uninitialized symbol 'ret'.
+> 
+> Here, ret is not initialized, meaning priv->num_urbs is 0.
+> priv->urbs must be greater than zero.
+> priv->num_urbs = 0 means nents is 0 (line 505)
+> 
+> Dan, What is the relationship between old and new warnings?
+> priv->num_urbs is set as value of "num_urbs" at stub_recv_cmd_submit()
+> and "num_urbs" is initialized as 1 first. "num_urbs" will be reset
+> only at the place where smatch new warnings happened (line 505).
+> 
+> So, In my opinion, old smatch warnings should occur after the new
+> smatch warnings. Does this look right to you?
 
-Will try to take a stab at this...
+I don't know exactly how the 0day bot runs Smatch.  If you have cross
+function analysis enabled then silencing the uninitialized "nents"
+warning will also silence the uninitialized "ret" warning.
 
-On Tue, Oct 29, 2019 at 01:30:23PM +0200, Roger Quadros wrote:
->     irq/170-dwc3-1240  [000] d...    85.449686: dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
->     irq/170-dwc3-1240  [000] d...    85.449688: dwc3_ctrl_req: Set Interface(Intf = 1, Alt.Setting = 0)
->     irq/170-dwc3-1240  [000] d...    85.449693: dwc3_ep_dequeue: ep1out: req ee75d6ac length 0/256 zsI ==> -115
->     irq/170-dwc3-1240  [000] d...    85.449697: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [20d08] params 00000000 00000000 00000000 --> status: Successful
->     irq/170-dwc3-1240  [000] d...    85.449799: dwc3_free_request: ep1out: req ee75d6ac length 0/256 zsI ==> -115
+regards,
+dan carpenter
 
-req ee75d6ac is dequeued by f_uac2, and immediately freed. There is no
-giveback here, but oddly the givebacks happen at the end of the log
-right before the panic.
-
->     irq/170-dwc3-1240  [000] d...    85.449800: dwc3_ep_dequeue: ep1out: req c26c10a3 length 0/256 zsI ==> -115
->     irq/170-dwc3-1240  [000] d...    85.449803: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [d08] params 00000000 00000000 00000000 --> status: Successful
->     irq/170-dwc3-1240  [000] d...    85.449905: dwc3_free_request: ep1out: req c26c10a3 length 0/256 zsI ==> -115
-
-ditto for req c26c10a3
-
->     irq/170-dwc3-1240  [000] d...    85.449906: dwc3_gadget_ep_disable: ep1out: mps 256/1024 streams 15 burst 0 ring 3/1 flags E:swBp:>
->     irq/170-dwc3-1240  [000] d...    85.449909: dwc3_gadget_ep_cmd: ep1out: cmd 'End Transfer' [c08] params 00000000 00000000 00000000 --> status: Successful
-
-Finally usb_ep_disable() is called on ep1out.
-
->     irq/170-dwc3-1240  [000] d...    85.450013: dwc3_event: event (000020c2): ep0in:  [Status Phase]
->     irq/170-dwc3-1240  [000] d...    85.450013: dwc3_prepare_trb: ep0in: trb 089fca0d buf 00000000fe05b000 size 0 ctrl 00000c33 (HLcs:SC:status2)
->     irq/170-dwc3-1240  [000] d...    85.450019: dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 00000000 fe05b000 00000000 --> status: Successful
->     irq/170-dwc3-1240  [000] d...    85.450026: dwc3_event: event (080201c4): ep1out: Endpoint Command Complete
->     irq/170-dwc3-1240  [000] d...    85.450027: dwc3_event: event (080001c4): ep1out: Endpoint Command Complete
-
-Completions for the two End Transfer commands sent during ep_dequeue().
-
->     irq/170-dwc3-1240  [000] d...    85.450043: dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) [Status Phase]
->     irq/170-dwc3-1240  [000] d...    85.450044: dwc3_complete_trb: ep0out: trb 089fca0d buf 00000000fe05b000 size 0 ctrl 00000c32 (hLcs:SC:status2)
->     irq/170-dwc3-1240  [000] d...    85.450047: dwc3_gadget_giveback: ep0out: req 36600525 length 0/0 zsI ==> 0
->     irq/170-dwc3-1240  [000] d...    85.450049: dwc3_prepare_trb: ep0out: trb 089fca0d buf 00000000fe05b000 size 8 ctrl 00000c23 (HLcs:SC:setup)
->     irq/170-dwc3-1240  [000] d...    85.450055: dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 fe05b000 00000000 --> status: Successful
->     irq/170-dwc3-1240  [000] d...    85.450547: dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
->     irq/170-dwc3-1240  [000] d...    85.450550: dwc3_ctrl_req: Set Interface(Intf = 2, Alt.Setting = 0)
->     irq/170-dwc3-1240  [000] d...    85.450555: dwc3_ep_dequeue: ep1in: req f11a91c0 length 0/192 zsI ==> -115
->     irq/170-dwc3-1240  [000] d...    85.450556: dwc3_gadget_giveback: ep1in: req f11a91c0 length 0/192 zsI ==> -104
->     irq/170-dwc3-1240  [000] d...    85.450557: dwc3_free_request: ep1in: req f11a91c0 length 0/192 zsI ==> -104
->     irq/170-dwc3-1240  [000] d...    85.450559: dwc3_ep_dequeue: ep1in: req d9b92dec length 0/192 zsI ==> -115
->     irq/170-dwc3-1240  [000] d...    85.450560: dwc3_gadget_giveback: ep1in: req d9b92dec length 0/192 zsI ==> -104
->     irq/170-dwc3-1240  [000] d...    85.450561: dwc3_free_request: ep1in: req d9b92dec length 0/192 zsI ==> -104
->     irq/170-dwc3-1240  [000] d...    85.450562: dwc3_gadget_ep_disable: ep1in: mps 192/1024 streams 15 burst 0 ring 0/0 flags E:swbp:<
->     irq/170-dwc3-1240  [000] d...    85.450564: dwc3_gadget_giveback: ep1out: req ee75d6ac length 0/256 zsI ==> -108
->     irq/170-dwc3-1240  [000] d...    85.450566: dwc3_gadget_giveback: ep1out: req c26c10a3 length 0/256 zsI ==> -108
->     irq/170-dwc3-1240  [000] d...    85.450567: dwc3_gadget_giveback: : req d4301893 length 0/0 zsI ==> 0
-
-Giveback happens on above two reqs after they are already freed. Could
-it be due to f_uac2 / u_audio.c performing usb_ep_free_request()
-immediately after usb_ep_dequeue() without waiting for completion?
-
-static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
-{
-...
-	for (i = 0; i < params->req_number; i++) {
-		if (prm->ureq[i].req) {
-			usb_ep_dequeue(ep, prm->ureq[i].req);
-			usb_ep_free_request(ep, prm->ureq[i].req);
-			prm->ureq[i].req = NULL;
-		}
-	}
-
-According to commit 1e19a520a925, the kerneldoc for usb_ep_dequeue() was
-clarified to imply that completion may occur asynchronously, and f_fs.c
-was similarly fixed to wait for the completion after doing a dequeue.
-Sso maybe above snippet is leading to a use-after-free? Maybe the
-req->list traversal in dwc3 when it is doing givebacks is walking over
-freed memory leading to the panic.
-
-Although I am not sure why the givebacks are happening here much later
-than the ep_dequeue and ep_disable on ep1out that happened previously.
-Several ep1in operations happen after that before these ep1out
-givebacks.
-
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
