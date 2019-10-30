@@ -2,105 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BED8E9B0D
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 12:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D284EE9B22
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 12:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726460AbfJ3LqM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 07:46:12 -0400
-Received: from mga17.intel.com ([192.55.52.151]:19266 "EHLO mga17.intel.com"
+        id S1726184AbfJ3LvK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 07:51:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45822 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726065AbfJ3LqL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 07:46:11 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 04:46:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,247,1569308400"; 
-   d="scan'208";a="283529510"
-Received: from pipin.fi.intel.com (HELO pipin) ([10.237.72.175])
-  by orsmga001.jf.intel.com with ESMTP; 30 Oct 2019 04:46:08 -0700
-From:   Felipe Balbi <felipe.balbi@linux.intel.com>
-To:     Roger Quadros <rogerq@ti.com>, gregkh@linuxfoundation.org
-Cc:     pawell@cadence.com, peter.chen@nxp.com, nsekhar@ti.com,
-        kurahul@cadence.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Roger Quadros <rogerq@ti.com>
-Subject: Re: [PATCH] usb: cdns3: gadget: Fix g_audio use case when connected to Super-Speed host
-In-Reply-To: <20191029151514.28495-1-rogerq@ti.com>
+        id S1726065AbfJ3LvJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 07:51:09 -0400
+Received: from localhost (unknown [91.217.168.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id AED9920874;
+        Wed, 30 Oct 2019 11:51:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572436269;
+        bh=rlcndvnVGEnLCgirhge887TBNRINVI5atNmAzUyijMs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=zu2vSxu3X77BFUc82evYsrKClmS5lWteyuo2a1QDC421l6ngfp5mMZzqlJXb8u4Fh
+         PX4ZMPOEqA8diG2CjfceHR63/DxU0V+o3xxG7uzNQrUeuoSw304WnnypvJOw80b+Tg
+         OzC9hd1un7/7CwPOWajtABTuUL9XjXFQkf/GB96E=
+Date:   Wed, 30 Oct 2019 12:51:06 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc:     Roger Quadros <rogerq@ti.com>, pawell@cadence.com,
+        peter.chen@nxp.com, nsekhar@ti.com, kurahul@cadence.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: gadget: Fix g_audio use case when connected
+ to Super-Speed host
+Message-ID: <20191030115106.GA701802@kroah.com>
 References: <20191029151514.28495-1-rogerq@ti.com>
-Date:   Wed, 30 Oct 2019 13:46:07 +0200
-Message-ID: <87y2x2e9s0.fsf@gmail.com>
+ <87y2x2e9s0.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y2x2e9s0.fsf@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Oct 30, 2019 at 01:46:07PM +0200, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Roger Quadros <rogerq@ti.com> writes:
+> 
+> > Take into account gadget driver's speed limit when programming
+> > controller speed.
+> >
+> > Signed-off-by: Roger Quadros <rogerq@ti.com>
+> > ---
+> > Hi Greg,
+> >
+> > Please apply this for -rc.
+> 
+> if you want this in -rc, you should have a Fixes line there.
 
-Hi,
+I agree, I can't take this for -rc as-is :(
 
-Roger Quadros <rogerq@ti.com> writes:
-
-> Take into account gadget driver's speed limit when programming
-> controller speed.
->
-> Signed-off-by: Roger Quadros <rogerq@ti.com>
-> ---
-> Hi Greg,
->
-> Please apply this for -rc.
-
-if you want this in -rc, you should have a Fixes line there.
-
-> Without this, g_audio is broken on cdns3 USB controller is
-> connected to a Super-Speed host.
->
-> cheers,
-> -roger
->
->  drivers/usb/cdns3/gadget.c | 31 ++++++++++++++++++++++++++-----
->  1 file changed, 26 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
-> index 40dad4e8d0dc..1c724c20d468 100644
-> --- a/drivers/usb/cdns3/gadget.c
-> +++ b/drivers/usb/cdns3/gadget.c
-> @@ -2338,9 +2338,35 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
->  {
->  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
->  	unsigned long flags;
-> +	enum usb_device_speed max_speed = driver->max_speed;
->  
->  	spin_lock_irqsave(&priv_dev->lock, flags);
->  	priv_dev->gadget_driver = driver;
-> +
-> +	/* limit speed if necessary */
-> +	max_speed = min(driver->max_speed, gadget->max_speed);
-> +
-> +	switch (max_speed) {
-> +	case USB_SPEED_FULL:
-> +		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
-> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
-> +		break;
-> +	case USB_SPEED_HIGH:
-> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
-> +		break;
-
-seems like this can be simplified a little:
-
-	switch (max_speed) {
-        case USB_SPEED_FULL:
-        	writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
-                /* fallthrough */
-        case USB_SPEED_HIGH:
-		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
-                /* fallthrough */
-	case USB_SPEED_SUPER:
-		break;
-
-	[...]
-
-		
--- 
-balbi
