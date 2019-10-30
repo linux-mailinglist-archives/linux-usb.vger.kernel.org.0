@@ -2,111 +2,270 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 834C6EA669
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 23:38:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 708AFEA767
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 23:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbfJ3Win (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 18:38:43 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36586 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726377AbfJ3Win (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 18:38:43 -0400
-Received: by mail-wr1-f66.google.com with SMTP id w18so4159349wrt.3
-        for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2019 15:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qfICZRpjv9MzZUR3Km31YoPnMoXWt4BCtsBGyOPs+MA=;
-        b=g33Q4U/Y/PsWl2LTH18JY6gpMyFVmPxV9qqWkrT57lR2a/GCy9kyBDrbLXWbaa2fps
-         tOVndw1p6l/7VQHVRvGpLmhpFDr4RJXRgrTPx4hhh43FE6ruFdAPV73fa0XTmGA/7rmy
-         ly6YasutyEzFhYEmiEDQkruKueLdPUY1jDjaw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qfICZRpjv9MzZUR3Km31YoPnMoXWt4BCtsBGyOPs+MA=;
-        b=ZRQnSg7HVtd9HvyhMbneG7Z7FkTSSYK8z1NKyw1X+K/YksrnZ+jqNJHL/3HVxH94Zr
-         ZHabXVns1tyl29puessFAnizq2QPTaOI9G1FH5DLcunQDtZOMckVfevG5aj7Mz4PVS/I
-         LtMqqfeJK6N1qJv6spKhHBzEVs3ly/QXWHt9j8FBPn3ugs2FsRZIkYgfUwMCx6kL5V5v
-         iDQtKKIveuJLsraZFT8bKkZPG6t0RjpPPZureWcgP/twDRJ5w3xFbpztuec0TlpbmG48
-         WF9AGVxTyeX8WKGdq5FooxLya5iqdahlEvIa0io9YVZecZVfwgJCpNBLkOinGTtY3WS5
-         kaig==
-X-Gm-Message-State: APjAAAU+udQopxpNbAU06csKTN8uIomkmZKIiQ/QRelk2h4rbnFO6bWH
-        nD7w0R/BnrsA0pEmE0Cvn4wQLA==
-X-Google-Smtp-Source: APXvYqwy8Lp9RkPFYIcCKVwNc4bwfuBSBiCYr98GupWsvuOSYztGZY5yvtxoKwr5rWH+K4PLLBTR+g==
-X-Received: by 2002:adf:d1a3:: with SMTP id w3mr2258782wrc.9.1572475121267;
-        Wed, 30 Oct 2019 15:38:41 -0700 (PDT)
-Received: from [192.168.1.149] (ip-5-186-115-54.cgn.fibianet.dk. [5.186.115.54])
-        by smtp.gmail.com with ESMTPSA id t24sm1858665wra.55.2019.10.30.15.38.39
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 30 Oct 2019 15:38:40 -0700 (PDT)
-Subject: Re: [RFC PATCH 04/10] pipe: Use head and tail pointers for the ring,
- not cursor and length [ver #2]
-To:     Ilya Dryomov <idryomov@gmail.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1727474AbfJ3W4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 18:56:33 -0400
+Received: from mga01.intel.com ([192.55.52.88]:6045 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727250AbfJ3W4d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 18:56:33 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 15:56:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,248,1569308400"; 
+   d="scan'208";a="283698161"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 30 Oct 2019 15:56:29 -0700
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iPwtB-0001FD-BE; Thu, 31 Oct 2019 06:56:29 +0800
+Date:   Thu, 31 Oct 2019 06:56:13 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     kbuild-all@lists.01.org, linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-api@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
- <157186186167.3995.7568100174393739543.stgit@warthog.procyon.org.uk>
- <CAOi1vP97DMX8zweOLfBDOFstrjC78=6RgxK3PPj_mehCOSeoaw@mail.gmail.com>
- <4892d186-8eb0-a282-e7e6-e79958431a54@rasmusvillemoes.dk>
- <CAOi1vP9paV2-2_S0NgfbZDE6+5kqHXVc9xabHVC-2Ss1MmXkCg@mail.gmail.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <d08d13d9-8eee-9c1e-2f8d-e846063882d7@rasmusvillemoes.dk>
-Date:   Wed, 30 Oct 2019 23:38:38 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+Message-ID: <201910310616.NvJqgsxM%lkp@intel.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
 MIME-Version: 1.0
-In-Reply-To: <CAOi1vP9paV2-2_S0NgfbZDE6+5kqHXVc9xabHVC-2Ss1MmXkCg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191028105732.29913-1-damien.lemoal@wdc.com>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 30/10/2019 23.16, Ilya Dryomov wrote:
-> On Wed, Oct 30, 2019 at 9:35 PM Rasmus Villemoes
-> <linux@rasmusvillemoes.dk> wrote:
->>
->> On 30/10/2019 17.19, Ilya Dryomov wrote:
->>> On Thu, Oct 24, 2019 at 11:49 AM David Howells <dhowells@redhat.com> wrote:
->>>>  /*
->>>> - * We use a start+len construction, which provides full use of the
->>>> - * allocated memory.
->>>> - * -- Florian Coosmann (FGC)
->>>> - *
->>>> + * We use head and tail indices that aren't masked off, except at the point of
->>>> + * dereference, but rather they're allowed to wrap naturally.  This means there
->>>> + * isn't a dead spot in the buffer, provided the ring size < INT_MAX.
->>>> + * -- David Howells 2019-09-23.
->>>
->>> Hi David,
->>>
->>> Is "ring size < INT_MAX" constraint correct?
->>
->> No. As long as one always uses a[idx % size] to access the array, the
->> only requirement is that size is representable in an unsigned int. Then
->> because one also wants to do the % using simple bitmasking, that further
->> restricts one to sizes that are a power of 2, so the end result is that
->> the max size is 2^31 (aka INT_MAX+1).
-> 
-> I think the fact that indices are free running and wrap at a power of
-> two already restricts you to sizes the are a power of two,
+Hi Damien,
 
-Ah, yes, of course. When reducing indices mod n that may already have
-been implicitly reduced mod N, N must be a multiple of n for the result
-to be well-defined.
+I love your patch! Perhaps something to improve:
 
-Rasmus
+[auto build test WARNING on scsi/for-next]
+[cannot apply to v5.4-rc5 next-20191030]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+
+url:    https://github.com/0day-ci/linux/commits/Damien-Le-Moal/scsi-Fix-scsi_get-set_resid-interface/20191030-074824
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+
+   drivers/usb/storage/ene_ub6250.c:2161:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:2161:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:2161:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:2091:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:2091:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:2091:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1935:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got unrestricted __le32 [usertype] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1935:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1935:33: sparse:    got unsigned long const [usertype] size
+   drivers/usb/storage/ene_ub6250.c:501:43: sparse: sparse: incorrect type in initializer (different base types) @@    expected unsigned int transfer_length @@    got restricted __le3unsigned int transfer_length @@
+   drivers/usb/storage/ene_ub6250.c:501:43: sparse:    expected unsigned int transfer_length
+   drivers/usb/storage/ene_ub6250.c:501:43: sparse:    got restricted __le32 [usertype] DataTransferLength
+>> drivers/usb/storage/ene_ub6250.c:563:49: sparse: sparse: incompatible types in comparison expression (different signedness):
+>> drivers/usb/storage/ene_ub6250.c:563:49: sparse:    unsigned int *
+>> drivers/usb/storage/ene_ub6250.c:563:49: sparse:    int *
+   drivers/usb/storage/ene_ub6250.c:702:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got icted __le32 [usertype] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:702:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:702:33: sparse:    got unsigned int [usertype] blenByte
+   drivers/usb/storage/ene_ub6250.c:742:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got icted __le32 [usertype] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:742:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:742:33: sparse:    got unsigned int [usertype] blenByte
+   drivers/usb/storage/ene_ub6250.c:888:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:888:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:888:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:907:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:907:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:907:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:953:18: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:953:18: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:953:18: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:953:18: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:973:34: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:973:34: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:973:34: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:973:34: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:974:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:974:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:974:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:974:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:975:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:975:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:975:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:975:41: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:978:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:978:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:978:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:978:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:992:31: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:996:29: sparse: sparse: cast to restricted __be32
+   drivers/usb/storage/ene_ub6250.c:1028:42: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1028:42: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1028:42: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1028:42: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1052:29: sparse: sparse: cast to restricted __le16
+   drivers/usb/storage/ene_ub6250.c:1055:55: sparse: sparse: cast to restricted __le16
+   drivers/usb/storage/ene_ub6250.c:1167:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1167:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1167:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1200:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1200:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1200:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1231:23: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1231:23: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1231:23: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1231:23: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1277:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1277:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1277:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1359:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1359:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1359:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1543:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1543:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1543:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1662:41: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got icted __le32 [usertype] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1662:41: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1662:41: sparse:    got unsigned int [usertype] blenByte
+   drivers/usb/storage/ene_ub6250.c:1706:49: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1706:49: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1706:49: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1763:41: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got icted __le32 [usertype] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1763:41: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1763:41: sparse:    got unsigned int [usertype] blenByte
+   drivers/usb/storage/ene_ub6250.c:1839:33: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted __le32 [usertype] DataTransferLength @@    got e] DataTransferLength @@
+   drivers/usb/storage/ene_ub6250.c:1839:33: sparse:    expected restricted __le32 [usertype] DataTransferLength
+   drivers/usb/storage/ene_ub6250.c:1839:33: sparse:    got int
+   drivers/usb/storage/ene_ub6250.c:1991:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1991:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1991:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1991:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1992:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1992:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1992:26: sparse: sparse: cast to restricted __be16
+   drivers/usb/storage/ene_ub6250.c:1992:26: sparse: sparse: cast to restricted __be16
+
+vim +563 drivers/usb/storage/ene_ub6250.c
+
+41e568d14ec0ac huajun li    2011-03-04  492  
+41e568d14ec0ac huajun li    2011-03-04  493  static int ene_send_scsi_cmd(struct us_data *us, u8 fDir, void *buf, int use_sg)
+41e568d14ec0ac huajun li    2011-03-04  494  {
+41e568d14ec0ac huajun li    2011-03-04  495  	struct bulk_cb_wrap *bcb = (struct bulk_cb_wrap *) us->iobuf;
+41e568d14ec0ac huajun li    2011-03-04  496  	struct bulk_cs_wrap *bcs = (struct bulk_cs_wrap *) us->iobuf;
+41e568d14ec0ac huajun li    2011-03-04  497  
+41e568d14ec0ac huajun li    2011-03-04  498  	int result;
+41e568d14ec0ac huajun li    2011-03-04  499  	unsigned int residue;
+41e568d14ec0ac huajun li    2011-03-04  500  	unsigned int cswlen = 0, partial = 0;
+41e568d14ec0ac huajun li    2011-03-04  501  	unsigned int transfer_length = bcb->DataTransferLength;
+41e568d14ec0ac huajun li    2011-03-04  502  
+191648d03d2022 Joe Perches  2013-04-19  503  	/* usb_stor_dbg(us, "transport --- ene_send_scsi_cmd\n"); */
+41e568d14ec0ac huajun li    2011-03-04  504  	/* send cmd to out endpoint */
+41e568d14ec0ac huajun li    2011-03-04  505  	result = usb_stor_bulk_transfer_buf(us, us->send_bulk_pipe,
+41e568d14ec0ac huajun li    2011-03-04  506  					    bcb, US_BULK_CB_WRAP_LEN, NULL);
+41e568d14ec0ac huajun li    2011-03-04  507  	if (result != USB_STOR_XFER_GOOD) {
+191648d03d2022 Joe Perches  2013-04-19  508  		usb_stor_dbg(us, "send cmd to out endpoint fail ---\n");
+41e568d14ec0ac huajun li    2011-03-04  509  		return USB_STOR_TRANSPORT_ERROR;
+41e568d14ec0ac huajun li    2011-03-04  510  	}
+41e568d14ec0ac huajun li    2011-03-04  511  
+41e568d14ec0ac huajun li    2011-03-04  512  	if (buf) {
+41e568d14ec0ac huajun li    2011-03-04  513  		unsigned int pipe = fDir;
+41e568d14ec0ac huajun li    2011-03-04  514  
+41e568d14ec0ac huajun li    2011-03-04  515  		if (fDir  == FDIR_READ)
+41e568d14ec0ac huajun li    2011-03-04  516  			pipe = us->recv_bulk_pipe;
+41e568d14ec0ac huajun li    2011-03-04  517  		else
+41e568d14ec0ac huajun li    2011-03-04  518  			pipe = us->send_bulk_pipe;
+41e568d14ec0ac huajun li    2011-03-04  519  
+41e568d14ec0ac huajun li    2011-03-04  520  		/* Bulk */
+41e568d14ec0ac huajun li    2011-03-04  521  		if (use_sg) {
+41e568d14ec0ac huajun li    2011-03-04  522  			result = usb_stor_bulk_srb(us, pipe, us->srb);
+41e568d14ec0ac huajun li    2011-03-04  523  		} else {
+41e568d14ec0ac huajun li    2011-03-04  524  			result = usb_stor_bulk_transfer_sg(us, pipe, buf,
+41e568d14ec0ac huajun li    2011-03-04  525  						transfer_length, 0, &partial);
+41e568d14ec0ac huajun li    2011-03-04  526  		}
+41e568d14ec0ac huajun li    2011-03-04  527  		if (result != USB_STOR_XFER_GOOD) {
+191648d03d2022 Joe Perches  2013-04-19  528  			usb_stor_dbg(us, "data transfer fail ---\n");
+41e568d14ec0ac huajun li    2011-03-04  529  			return USB_STOR_TRANSPORT_ERROR;
+41e568d14ec0ac huajun li    2011-03-04  530  		}
+41e568d14ec0ac huajun li    2011-03-04  531  	}
+41e568d14ec0ac huajun li    2011-03-04  532  
+41e568d14ec0ac huajun li    2011-03-04  533  	/* Get CSW for device status */
+41e568d14ec0ac huajun li    2011-03-04  534  	result = usb_stor_bulk_transfer_buf(us, us->recv_bulk_pipe, bcs,
+41e568d14ec0ac huajun li    2011-03-04  535  					    US_BULK_CS_WRAP_LEN, &cswlen);
+41e568d14ec0ac huajun li    2011-03-04  536  
+41e568d14ec0ac huajun li    2011-03-04  537  	if (result == USB_STOR_XFER_SHORT && cswlen == 0) {
+191648d03d2022 Joe Perches  2013-04-19  538  		usb_stor_dbg(us, "Received 0-length CSW; retrying...\n");
+41e568d14ec0ac huajun li    2011-03-04  539  		result = usb_stor_bulk_transfer_buf(us, us->recv_bulk_pipe,
+41e568d14ec0ac huajun li    2011-03-04  540  					    bcs, US_BULK_CS_WRAP_LEN, &cswlen);
+41e568d14ec0ac huajun li    2011-03-04  541  	}
+41e568d14ec0ac huajun li    2011-03-04  542  
+41e568d14ec0ac huajun li    2011-03-04  543  	if (result == USB_STOR_XFER_STALLED) {
+41e568d14ec0ac huajun li    2011-03-04  544  		/* get the status again */
+191648d03d2022 Joe Perches  2013-04-19  545  		usb_stor_dbg(us, "Attempting to get CSW (2nd try)...\n");
+41e568d14ec0ac huajun li    2011-03-04  546  		result = usb_stor_bulk_transfer_buf(us, us->recv_bulk_pipe,
+41e568d14ec0ac huajun li    2011-03-04  547  						bcs, US_BULK_CS_WRAP_LEN, NULL);
+41e568d14ec0ac huajun li    2011-03-04  548  	}
+41e568d14ec0ac huajun li    2011-03-04  549  
+41e568d14ec0ac huajun li    2011-03-04  550  	if (result != USB_STOR_XFER_GOOD)
+41e568d14ec0ac huajun li    2011-03-04  551  		return USB_STOR_TRANSPORT_ERROR;
+41e568d14ec0ac huajun li    2011-03-04  552  
+41e568d14ec0ac huajun li    2011-03-04  553  	/* check bulk status */
+41e568d14ec0ac huajun li    2011-03-04  554  	residue = le32_to_cpu(bcs->Residue);
+41e568d14ec0ac huajun li    2011-03-04  555  
+f0183a338e4f90 Felipe Balbi 2016-04-18  556  	/*
+f0183a338e4f90 Felipe Balbi 2016-04-18  557  	 * try to compute the actual residue, based on how much data
+f0183a338e4f90 Felipe Balbi 2016-04-18  558  	 * was really transferred and what the device tells us
+f0183a338e4f90 Felipe Balbi 2016-04-18  559  	 */
+41e568d14ec0ac huajun li    2011-03-04  560  	if (residue && !(us->fflags & US_FL_IGNORE_RESIDUE)) {
+41e568d14ec0ac huajun li    2011-03-04  561  		residue = min(residue, transfer_length);
+41e568d14ec0ac huajun li    2011-03-04  562  		if (us->srb != NULL)
+41e568d14ec0ac huajun li    2011-03-04 @563  			scsi_set_resid(us->srb, max(scsi_get_resid(us->srb),
+41e568d14ec0ac huajun li    2011-03-04  564  								(int)residue));
+41e568d14ec0ac huajun li    2011-03-04  565  	}
+41e568d14ec0ac huajun li    2011-03-04  566  
+41e568d14ec0ac huajun li    2011-03-04  567  	if (bcs->Status != US_BULK_STAT_OK)
+41e568d14ec0ac huajun li    2011-03-04  568  		return USB_STOR_TRANSPORT_ERROR;
+41e568d14ec0ac huajun li    2011-03-04  569  
+41e568d14ec0ac huajun li    2011-03-04  570  	return USB_STOR_TRANSPORT_GOOD;
+41e568d14ec0ac huajun li    2011-03-04  571  }
+41e568d14ec0ac huajun li    2011-03-04  572  
+
+:::::: The code at line 563 was first introduced by commit
+:::::: 41e568d14ec0aca1b2bb19563517aad3b06d6805 Staging: Merge ENE UB6250 SD card codes from keucr to drivers/usb/storage
+
+:::::: TO: huajun li <huajun.li.lee@gmail.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
+
+---
+0-DAY kernel test infrastructure                Open Source Technology Center
+https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
