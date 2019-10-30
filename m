@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0656EA04B
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 16:57:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51AA5EA0C2
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 17:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728535AbfJ3PzL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 11:55:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56600 "EHLO mail.kernel.org"
+        id S1728123AbfJ3PxQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 11:53:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727363AbfJ3PzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Oct 2019 11:55:05 -0400
+        id S1727413AbfJ3PxP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Oct 2019 11:53:15 -0400
 Received: from sasha-vm.mshome.net (100.50.158.77.rev.sfr.net [77.158.50.100])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 08DF020656;
-        Wed, 30 Oct 2019 15:55:02 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6D6E321734;
+        Wed, 30 Oct 2019 15:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572450904;
+        s=default; t=1572450795;
         bh=5VyfATjDRZ/d61SscXopb+AgGGmd7/YaQZLg5GFAo3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JcFH3O7vCQhGJkLrEJfzqMRUe/TI3ktFTDueQtmOvkDL9OaXp7Va1wHcxl1Dk3i0B
-         WNckttiGoi6Cab5I1NdmrCvXGGDMV8ZN08DwMIE0vKCt1WHay6Z8VUtORoAANAjQhX
-         XXRzdTAjWVpwETBY6lmSLLNNOfF3pexQaBbuY4ls=
+        b=CUkV1KWzFApbrC0eWa9eNKBKV4sgRol6zEUbE2ASw6HZ2j1InBQhGun9+QwiE4hO0
+         u1AlDqAEtQlzM3FNPAWl9/ZAVO3VCoXzU9IgMUDcIBwEFspGFcZa2CbycSpZ67kTHC
+         TuiKuvRj2uWFIKhYQBSpIzXtvUG8hln2Mdr51E0U=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
@@ -30,12 +30,12 @@ Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 21/38] USB: legousbtower: fix a signedness bug in tower_probe()
-Date:   Wed, 30 Oct 2019 11:53:49 -0400
-Message-Id: <20191030155406.10109-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.3 51/81] USB: legousbtower: fix a signedness bug in tower_probe()
+Date:   Wed, 30 Oct 2019 11:48:57 -0400
+Message-Id: <20191030154928.9432-51-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191030155406.10109-1-sashal@kernel.org>
-References: <20191030155406.10109-1-sashal@kernel.org>
+In-Reply-To: <20191030154928.9432-1-sashal@kernel.org>
+References: <20191030154928.9432-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
