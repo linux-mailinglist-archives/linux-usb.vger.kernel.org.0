@@ -2,148 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AB95E947D
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 02:15:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3370BE94EC
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 03:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726808AbfJ3BPV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 21:15:21 -0400
-Received: from mail-eopbgr140043.outbound.protection.outlook.com ([40.107.14.43]:30725
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725870AbfJ3BPV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Oct 2019 21:15:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fzhF9xs+RLzdXLGKKa/IrPcI2NQRhXPcUFIz6OkkTwWKxiV0vPfY70qq0pfUunAB0IfcGYXGL0qqhLO+FZ6xLCjkbR3x9qNoqdYLEYNyg7rnW79xQpfMYm5ftlCnERjEr4RJ8PIMQx1UsVyy7ZBxL/mUVDyIMQgV+FzEwYtLEkWX6J+vMBnDpuFatJtcK9fvsk/szfCMDMURPQIDH2K/1ApnY0QkIBHizYkv0CpZJbGfR9dqV2sU1kmp/7s41Mrt9a7WzOCEQcnxBWU75aHTNUUUhPNE9zE7Rfs7PEZxZziAauy+tZ8UQRzYI5OvoBELjWOXqdeIamN4wmeuWIN/lA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QUGPifLCn6bsyDm9Tyd3pA/5K+/MlveA4djzpNIYqII=;
- b=l8ne3uetq/FTBIp9MF/+jBCtnuciNFw59WnlwuXf5rxmdQQ9OB83gG/dQ+phahrxvPn7+0Xw7xB3c5F7xevYtbKmE7+FBxA2YzyBahkE8r/IJ0OrYRl/ukRKWuiqoxlhNfxKT/ObY5PEP08rmpWCmsprSSIxD9+FHyFu7SMYP7MAZnGDt9HelakRiwKUbj0DINELtNATS01fxLlG/fsMM7+SxL5LnuzEKgKb0V64STUFy6y/tHIcAmUdjkm7wyN/XThtp69fUePZbxzgfEj3yr+fMFEDCPMM3+tIHQQob/B1xhG8ob98gXNiTdxFTK6zA9BaYmzg4J+gDEvEhXQBkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QUGPifLCn6bsyDm9Tyd3pA/5K+/MlveA4djzpNIYqII=;
- b=NGRociia6sQOTu08DUF4K4nZA21fD3I7IcBo350av/mI8fXPv4w5Mv/Wp/FyJHMJxoRuDQrK/SXn2JKbV9uxsNG3/+8sGFegRIWpfIvFFrpZz+pAzeRddX1FTdx31930nLATu9AxHZ5+DXb+9poizW7/j+wwmHYI2b2mVfSgDNQ=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5582.eurprd04.prod.outlook.com (20.178.123.32) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.22; Wed, 30 Oct 2019 01:15:16 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.023; Wed, 30 Oct 2019
- 01:15:16 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Roger Quadros <rogerq@ti.com>
-CC:     Pawel Laszczak <pawell@cadence.com>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "nsekhar@ti.com" <nsekhar@ti.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
-Thread-Topic: [PATCH] usb: cdns3: gadget: Don't manage pullups
-Thread-Index: AQHViYCigHhLS+QXN0CJz1D+9q4PbKdn8nSAgAK+9ICAAHFQgIAF16UAgABrmoCAAQX0gA==
-Date:   Wed, 30 Oct 2019 01:15:16 +0000
-Message-ID: <20191030011505.GB26815@b29397-desktop>
-References: <20191023090232.27237-1-rogerq@ti.com>
- <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
- <20191025031343.GA13392@b29397-desktop>
- <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
- <20191029031223.GA26815@b29397-desktop>
- <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
-In-Reply-To: <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 5092abc9-f471-4356-47b2-08d75cd69f93
-x-ms-traffictypediagnostic: VI1PR04MB5582:
-x-microsoft-antispam-prvs: <VI1PR04MB55828F0E2423720D86FC80E78B600@VI1PR04MB5582.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02065A9E77
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(189003)(199004)(2906002)(3846002)(66476007)(53546011)(66556008)(5660300002)(66446008)(8936002)(6246003)(33656002)(6506007)(316002)(76176011)(54906003)(64756008)(4326008)(14444005)(76116006)(256004)(102836004)(26005)(1076003)(66946007)(71200400001)(186003)(71190400001)(91956017)(25786009)(9686003)(86362001)(14454004)(7736002)(33716001)(44832011)(476003)(446003)(486006)(6486002)(478600001)(6512007)(305945005)(66066001)(6916009)(8676002)(99286004)(81156014)(81166006)(229853002)(11346002)(6436002)(6116002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5582;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ambccwu2mWMmkD2Rj49i3tnPmMATT6G9eG6D5i33RU8GzAK5wSqM7hYWVE29R5swPcdIFTywo4FDRcVwErnhn+DziZNdMjCEWT4pKYu1gGfsvuq04yeT5rLF6pA+gp3dCge5mUiM2rG1YeAwqrzgc0kqMxeWOF+yE75OvCWmL2258Ku3t73bvyL3GeJrDDzCvlXkdzq91hoVq96vjn5Hf5M5iNRG1c0CH1YFrRUp+CbVujzet3uDeKMrHbZU2ZwoY0hGizIejCU/dICpJoFYqiHA784Pk87Y85vS3mjBlA9gnsdfKGh54XYId4gXlbAfjpQ5HwVPMC5WW7KA1Rne5f6LYbUaXKInZ4iFPvwp05vssW1FlX/8OF9GbDewsj6Z2KJapGDw6jnyV77nuge4GmfsXei7eGjPF0jdgbvVvqizw9zDuU2hsQjpzv6iQon/
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <CB084D01F362324981827E965B9C7C7E@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726262AbfJ3CAQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 22:00:16 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39663 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726108AbfJ3CAP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 22:00:15 -0400
+Received: by mail-pl1-f193.google.com with SMTP id t12so212474plo.6;
+        Tue, 29 Oct 2019 19:00:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4D0rSlERGCFg+HpPsc22n7LM+0fvKRRRI5LIsVOytZs=;
+        b=kPlnOSEFYvjvNe+/OznUbYQJqwKtp3lF/al1O8JlJtS+0XL9rPvJ87r97ZvdCTBsi5
+         MJ0O8OhYwzUFiHHklCGf5gobsgOyxBKXLxgdHBvIeG7B6CbGIEctpz7jPIZ4gVVN9lo8
+         e/SMNfQz8X/gF1dKFtQZ0W2PvtWvtdRQTzlDW7N0B+zlB5rHqE+/OBJq0jzva2GcbTDW
+         3meHJc18Ph4ciGRlGaNpX8zLoRI/gPwEXVpQ5qfLwMgK8ACadwmnGSMdAxeYvYHqCDf7
+         m9H1uhihuFaKUyWJ/APcNunpWA6e7tM3PK2W5KQX/IoAvnULJsT5aJPcttTFNV0xrljE
+         R+1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4D0rSlERGCFg+HpPsc22n7LM+0fvKRRRI5LIsVOytZs=;
+        b=fCR0ld6jLmcyjA6LOdMuCdiUPm4G2gs7+oeAerHbRiej6ghiiNq/JAxTUJ6s4jhcw8
+         EoTAcyrdDLDyMYJWSCaSPXMetlQ5DHTfwdgKljAuMVU9ueb5dCDRCnpZElx8nWG98IAd
+         BqVMOpiPPo1sGLSZU+qoniwcxKvWEscNa5yfl5I0bONooE8+JbousgKkKn1jPD67/kmX
+         qV2N+Sw2VK9aCeYyt7Pbpnlwhfy76lnKKIikUT/fpE/pbI57awOH1YPpXaFVCN+g61fj
+         fwXSu6tPhU5NqT6udlXE1XmsnDZ3V0whKls5qBMGwu9P/fWAUK4tDsnCi94M4xjogHwb
+         F+2A==
+X-Gm-Message-State: APjAAAV8nCaBpCeQ9UediVePnA4RI5e+UtNreOonkQhuCwC+2FhdbIl0
+        q4yilRS4KTSnymhbCAr+khP6KRxx
+X-Google-Smtp-Source: APXvYqzGBAiKExeeLxijQTKVrm2LZ9v6yQdLvEB9xYpsjKHx10zoEGZB6ZnEqBgozW66wfdGEtiP/A==
+X-Received: by 2002:a17:902:7784:: with SMTP id o4mr1893970pll.111.1572400814949;
+        Tue, 29 Oct 2019 19:00:14 -0700 (PDT)
+Received: from [192.168.1.60] (59-120-186-245.HINET-IP.hinet.net. [59.120.186.245])
+        by smtp.gmail.com with ESMTPSA id 184sm420534pfu.58.2019.10.29.19.00.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 29 Oct 2019 19:00:14 -0700 (PDT)
+Subject: Re: [PATCH V2 7/7] USB: serial: f81232: Add gpiolib to GPIO device
+To:     Johan Hovold <johan@kernel.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peter_hong@fintek.com.tw,
+        "Ji-Ze Hong (Peter Hong)" <hpeter+linux_kernel@gmail.com>
+References: <20190923022449.10952-1-hpeter+linux_kernel@gmail.com>
+ <20190923022449.10952-8-hpeter+linux_kernel@gmail.com>
+ <20191023122208.GW24768@localhost>
+From:   "Ji-Ze Hong (Peter Hong)" <hpeter@gmail.com>
+Message-ID: <ef91b42d-e81d-ecdd-c688-0cb3f0b94906@gmail.com>
+Date:   Wed, 30 Oct 2019 10:00:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5092abc9-f471-4356-47b2-08d75cd69f93
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2019 01:15:16.4901
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: beDBP8QifVANxz1VbMFyAWYnoY3nZ31QmiFCdL0ASahhLyYyO3JJISWj5wOX8ih00Tod8q2wweVqhGiv/3uW1A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5582
+In-Reply-To: <20191023122208.GW24768@localhost>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-10-29 11:37:31, Roger Quadros wrote:
->=20
->=20
-> On 29/10/2019 05:12, Peter Chen wrote:
-> > On 19-10-25 12:59:17, Roger Quadros wrote:
-> > > Peter,
-> > >=20
-> > > On 25/10/2019 06:13, Peter Chen wrote:
-> > > > On 19-10-23 09:17:45, Pawel Laszczak wrote:
-> > > > > Hi,
-> > > > >=20
-> > > > > Reviewed-by: Pawel Laszczak <pawell@cadence.com>
-> > > >=20
-> > > > Hi Roger & Pawel,
-> > > >=20
-> > > > Assume gadget function has already enabled, if you switch host mode
-> > > > to device mode, with your changes, where the device mode will be en=
-abled
-> > > > again?
-> > >=20
-> > > When it switches from device mode to host the UDC is removed. When we=
- switch
-> > > back from host to device mode the UDC is added, so,
-> > >=20
-> > > usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
-> > > udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()=
-->
-> > > gadget->ops->pullup()
-> >=20
-> > Thanks. I have another question how you decide when to store UDC name
-> > to /sys/kernel/config/usb_gadget/g1/UDC? Do you have a user daemon prog=
-ram
-> > to monitor VBUS or external connector? At host mode, the store operatio=
-n
-> > will fail due to there is NO UDC.
-> >=20
->=20
-> Yes, user space needs to monitor /sys/class/usb_role/6000000.usb-role-swi=
-tch/role
->=20
-> When it becomes "device" the UDC is available and it can prepare to confi=
-gure
-> the UDC.
->=20
-> Could you please give your Ack for this patch if it is OK? Thanks.
->=20
+Hi Johan,
 
-Acked-by: Peter Chen <peter.chen@nxp.com>
+Johan Hovold 於 2019/10/23 下午 08:22 寫道:
+> On Mon, Sep 23, 2019 at 10:24:49AM +0800, Ji-Ze Hong (Peter Hong) wrote:
+>> The Fintek F81534A series contains 3 GPIOs per UART and The max GPIOs
+>> is 12x3 = 36 GPIOs and this patch will implements GPIO device as a
+>> gpiochip to control all GPIO pins even transforms to transceiver pins.
+> 
+> Depending to your answer to my question whether these pins are truly
+> general purpose or not, this may not be the right interface.
 
---=20
+Our F81534A series contains F81532A/534A/535/536. For the following link
+of F81534A pin-out:
+	https://imgur.com/a/AZHqQ1N
 
-Thanks,
-Peter Chen=
+We had 2 type about GPIO pins, MODEx_y & GPIOxx. All MODEx_y & GPIOxx
+are GPIOs and can be controlled by GPIO device, but they had some
+difference about usage.
+	MODEx_y:
+		1. 3 pins(x: 0/1/2) can be access by UART port y.
+		2. Used to control UART's transceiver normally, but it
+		   also can be configure as GPIO when UART disabled by
+		   H/W (DTR strap to GND).
+	GPIOxx:
+		1. Access only by GPIO device.
+
+The series patch only support RS233 mode for all serial port, So we'll
+direct set all MODEx_y to (0/0/1) for our demo board for default. If
+user really want to use the pin, we had provide the gpiolib with GPIO
+device, but we'll recommend user to use GPIOxy first.
+
+Is any suggest about this ? Could I maintain this for this series patch?
+
+>> +
+>> +	status = devm_gpiochip_add_data(&intf->dev, &priv->chip, priv);
+>> +	if (status) {
+>> +		dev_err(&intf->dev, "failed to register gpiochip: %d\n",
+>> +				status);
+>> +		return status;
+>> +	}
+> 
+> Have you tried disconnecting the device with gpios requested? This used
+> to break gpiolib, but was fixed. Just want to make sure it hasn't
+> regressed.
+
+I had try export GPIOs and detach the F81534A in kernel 5.0.0, it seems
+no problem. Is any link about this issue for me to do more test ?
+
+Thanks
+
+-- 
+With Best Regards,
+Peter Hong
