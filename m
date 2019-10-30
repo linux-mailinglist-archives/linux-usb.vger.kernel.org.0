@@ -2,143 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27096E947C
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 02:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB95E947D
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 02:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfJ3BPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Oct 2019 21:15:15 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:44474 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfJ3BPP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Oct 2019 21:15:15 -0400
-Received: by mail-qt1-f195.google.com with SMTP id z22so920757qtq.11
-        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2019 18:15:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VUfc6lAn/gdWl4VHYUwIgplvuaVBqXuhSoUl/uGlsWc=;
-        b=dfNH2rJu30LT4bIn+Su7Gdd1oGp8P74+AedahtazKLFWg0Leyo2RIboMPFpH6RyybN
-         ysiYfhsdBvAyydCDmu5Qbt7NoiOtqQzRcn62AuV9J3wkKS9Yy2WOSVvuQBGxwUkq0BZt
-         PVLOccAxWfWerpu0VMglD8FXsIyk4Ra9C02t/Emlghx/ZfMMprsZ+H88cvmHEkWzsh1r
-         /8NaETjQFCRPyp0q+kXThXVqgtHBLe9t8DhYtjg+JLEVnsZNzbNKboBeXIGQJDGFjM1V
-         Vo93WCEisKHmRthVlrEFW8hec5IYzL0Fc0Yl0ZXh83dI8xZnQMGi1WVsV36WMw8x1Y7O
-         R/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VUfc6lAn/gdWl4VHYUwIgplvuaVBqXuhSoUl/uGlsWc=;
-        b=cyIwRbieswgnJPzKW15JNBsesXXyjYNfGkSOv2kjHVbDxaBfOKgxbs4rL3DUtVs9xC
-         rSHO7L15b4P6MfcWM4ev0Is+QgbeNMHlXiqu+3/8QGVIy3IgSMuHk7GZEHtKTt6+tacC
-         hRF1hqovPIudGC+i0e8weh3GexWDN+I1Zs1RudRRhBNYSm5BOC55pqRw+3bvRAlMphO2
-         DqHjYQb+4K6NpKOj1+H/PvmnWxWx4prRF9eqZY4wN9MRHAz09aq4ZdFxRMZ11m/MBfM4
-         y6stOhA+oT6t4GDIcUmJAleuK8MpXNQtgW+bP9Z0XqBaMwKX4b9TufMjwk9qPgYYRJkV
-         /2iQ==
-X-Gm-Message-State: APjAAAWe1fWgAV5kiXgZb92VKECJnlTb2CsHlqg+EVQycb768JfG//qZ
-        XKKa021/qX68b0mO1i03QsK3bBQKWRPmEveThYc=
-X-Google-Smtp-Source: APXvYqw1Mq1BLXrYG1IdTBI7uRLqwWBrE36qf+IbqHDoYWuMtr33L57uZHJFk+O7fzLv7RbmlV+G54xbw9rtqKFRppI=
-X-Received: by 2002:aed:35e7:: with SMTP id d36mr2454296qte.59.1572398113953;
- Tue, 29 Oct 2019 18:15:13 -0700 (PDT)
+        id S1726808AbfJ3BPV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Oct 2019 21:15:21 -0400
+Received: from mail-eopbgr140043.outbound.protection.outlook.com ([40.107.14.43]:30725
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725870AbfJ3BPV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 29 Oct 2019 21:15:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fzhF9xs+RLzdXLGKKa/IrPcI2NQRhXPcUFIz6OkkTwWKxiV0vPfY70qq0pfUunAB0IfcGYXGL0qqhLO+FZ6xLCjkbR3x9qNoqdYLEYNyg7rnW79xQpfMYm5ftlCnERjEr4RJ8PIMQx1UsVyy7ZBxL/mUVDyIMQgV+FzEwYtLEkWX6J+vMBnDpuFatJtcK9fvsk/szfCMDMURPQIDH2K/1ApnY0QkIBHizYkv0CpZJbGfR9dqV2sU1kmp/7s41Mrt9a7WzOCEQcnxBWU75aHTNUUUhPNE9zE7Rfs7PEZxZziAauy+tZ8UQRzYI5OvoBELjWOXqdeIamN4wmeuWIN/lA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QUGPifLCn6bsyDm9Tyd3pA/5K+/MlveA4djzpNIYqII=;
+ b=l8ne3uetq/FTBIp9MF/+jBCtnuciNFw59WnlwuXf5rxmdQQ9OB83gG/dQ+phahrxvPn7+0Xw7xB3c5F7xevYtbKmE7+FBxA2YzyBahkE8r/IJ0OrYRl/ukRKWuiqoxlhNfxKT/ObY5PEP08rmpWCmsprSSIxD9+FHyFu7SMYP7MAZnGDt9HelakRiwKUbj0DINELtNATS01fxLlG/fsMM7+SxL5LnuzEKgKb0V64STUFy6y/tHIcAmUdjkm7wyN/XThtp69fUePZbxzgfEj3yr+fMFEDCPMM3+tIHQQob/B1xhG8ob98gXNiTdxFTK6zA9BaYmzg4J+gDEvEhXQBkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QUGPifLCn6bsyDm9Tyd3pA/5K+/MlveA4djzpNIYqII=;
+ b=NGRociia6sQOTu08DUF4K4nZA21fD3I7IcBo350av/mI8fXPv4w5Mv/Wp/FyJHMJxoRuDQrK/SXn2JKbV9uxsNG3/+8sGFegRIWpfIvFFrpZz+pAzeRddX1FTdx31930nLATu9AxHZ5+DXb+9poizW7/j+wwmHYI2b2mVfSgDNQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB5582.eurprd04.prod.outlook.com (20.178.123.32) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.22; Wed, 30 Oct 2019 01:15:16 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2387.023; Wed, 30 Oct 2019
+ 01:15:16 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Roger Quadros <rogerq@ti.com>
+CC:     Pawel Laszczak <pawell@cadence.com>,
+        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: cdns3: gadget: Don't manage pullups
+Thread-Topic: [PATCH] usb: cdns3: gadget: Don't manage pullups
+Thread-Index: AQHViYCigHhLS+QXN0CJz1D+9q4PbKdn8nSAgAK+9ICAAHFQgIAF16UAgABrmoCAAQX0gA==
+Date:   Wed, 30 Oct 2019 01:15:16 +0000
+Message-ID: <20191030011505.GB26815@b29397-desktop>
+References: <20191023090232.27237-1-rogerq@ti.com>
+ <BYAPR07MB4709A6212601A75DCB1A25ACDD6B0@BYAPR07MB4709.namprd07.prod.outlook.com>
+ <20191025031343.GA13392@b29397-desktop>
+ <83a1da01-19d6-65a9-aecd-2027fd62a272@ti.com>
+ <20191029031223.GA26815@b29397-desktop>
+ <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
+In-Reply-To: <0c2c901c-a6f2-a81b-f5b1-e3f442d7c1ae@ti.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5092abc9-f471-4356-47b2-08d75cd69f93
+x-ms-traffictypediagnostic: VI1PR04MB5582:
+x-microsoft-antispam-prvs: <VI1PR04MB55828F0E2423720D86FC80E78B600@VI1PR04MB5582.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 02065A9E77
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(376002)(39860400002)(366004)(136003)(396003)(346002)(189003)(199004)(2906002)(3846002)(66476007)(53546011)(66556008)(5660300002)(66446008)(8936002)(6246003)(33656002)(6506007)(316002)(76176011)(54906003)(64756008)(4326008)(14444005)(76116006)(256004)(102836004)(26005)(1076003)(66946007)(71200400001)(186003)(71190400001)(91956017)(25786009)(9686003)(86362001)(14454004)(7736002)(33716001)(44832011)(476003)(446003)(486006)(6486002)(478600001)(6512007)(305945005)(66066001)(6916009)(8676002)(99286004)(81156014)(81166006)(229853002)(11346002)(6436002)(6116002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5582;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ambccwu2mWMmkD2Rj49i3tnPmMATT6G9eG6D5i33RU8GzAK5wSqM7hYWVE29R5swPcdIFTywo4FDRcVwErnhn+DziZNdMjCEWT4pKYu1gGfsvuq04yeT5rLF6pA+gp3dCge5mUiM2rG1YeAwqrzgc0kqMxeWOF+yE75OvCWmL2258Ku3t73bvyL3GeJrDDzCvlXkdzq91hoVq96vjn5Hf5M5iNRG1c0CH1YFrRUp+CbVujzet3uDeKMrHbZU2ZwoY0hGizIejCU/dICpJoFYqiHA784Pk87Y85vS3mjBlA9gnsdfKGh54XYId4gXlbAfjpQ5HwVPMC5WW7KA1Rne5f6LYbUaXKInZ4iFPvwp05vssW1FlX/8OF9GbDewsj6Z2KJapGDw6jnyV77nuge4GmfsXei7eGjPF0jdgbvVvqizw9zDuU2hsQjpzv6iQon/
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CB084D01F362324981827E965B9C7C7E@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20191028182254.30739-1-pgwipeout@gmail.com> <5230f80c-9684-72e0-8f96-602428a9e655@arm.com>
- <9e5546de-f5b6-7f60-96d0-612249e832ce@arm.com>
-In-Reply-To: <9e5546de-f5b6-7f60-96d0-612249e832ce@arm.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Tue, 29 Oct 2019 21:15:03 -0400
-Message-ID: <CAMdYzYrZhof2DtrNH4+Amu1ZN-6sWw57rC+2joqXSyWVn99wWw@mail.gmail.com>
-Subject: Re: [PATCH 0/5] add rk3328 usb3 phy driver
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, kishon@ti.com,
-        katsuhiro@katsuster.net, linux-rockchip@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5092abc9-f471-4356-47b2-08d75cd69f93
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Oct 2019 01:15:16.4901
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: beDBP8QifVANxz1VbMFyAWYnoY3nZ31QmiFCdL0ASahhLyYyO3JJISWj5wOX8ih00Tod8q2wweVqhGiv/3uW1A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5582
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 29, 2019, 20:18 Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2019-10-28 6:41 pm, Robin Murphy wrote:
-> > On 28/10/2019 18:22, Peter Geis wrote:
-> >> It took a lot more effort than originally anticipated, but here it is.
-> >> This is the driver from [0], updated to work with the current kernel.
-> >> I've tested it on the rk3328-roc-cc board, both usb 2.0 and usb 3.0
-> >> devices detect on hotplug.
-> >
-> > Thanks Peter, I'll try to give this a go on my box for confirmation.
->
-> OK, I hooked it up with a vbus-drv-gpio hacked in - USB 2.0
-> unplug/replug does indeed work fine, but it takes a while to acknowledge
-> an unplug of a USB 3.0 device, and throws a bunch of errors every time:
->
-> [  288.229568] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  290.809599] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  293.389594] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  295.969600] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  295.970418] usb 4-1: USB disconnect, device number 10
-> [  299.209631] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  301.789655] usb usb4-port1: Cannot enable. Maybe the USB cable is bad?
-> [  301.790534] usb usb4-port1: attempt power cycle
->
-> (although new devices are still detected OK eventually)
->
-> Robin.
-(Resending because I forgot the Android Gmail app fails at plain text)
+On 19-10-29 11:37:31, Roger Quadros wrote:
+>=20
+>=20
+> On 29/10/2019 05:12, Peter Chen wrote:
+> > On 19-10-25 12:59:17, Roger Quadros wrote:
+> > > Peter,
+> > >=20
+> > > On 25/10/2019 06:13, Peter Chen wrote:
+> > > > On 19-10-23 09:17:45, Pawel Laszczak wrote:
+> > > > > Hi,
+> > > > >=20
+> > > > > Reviewed-by: Pawel Laszczak <pawell@cadence.com>
+> > > >=20
+> > > > Hi Roger & Pawel,
+> > > >=20
+> > > > Assume gadget function has already enabled, if you switch host mode
+> > > > to device mode, with your changes, where the device mode will be en=
+abled
+> > > > again?
+> > >=20
+> > > When it switches from device mode to host the UDC is removed. When we=
+ switch
+> > > back from host to device mode the UDC is added, so,
+> > >=20
+> > > usb_add_gadget_udc_release()-> check_pending_gadget_drivers()->
+> > > udc_bind_to_driver()->usb_udc_connect_control()->usb_gadget_connect()=
+->
+> > > gadget->ops->pullup()
+> >=20
+> > Thanks. I have another question how you decide when to store UDC name
+> > to /sys/kernel/config/usb_gadget/g1/UDC? Do you have a user daemon prog=
+ram
+> > to monitor VBUS or external connector? At host mode, the store operatio=
+n
+> > will fail due to there is NO UDC.
+> >=20
+>=20
+> Yes, user space needs to monitor /sys/class/usb_role/6000000.usb-role-swi=
+tch/role
+>=20
+> When it becomes "device" the UDC is available and it can prepare to confi=
+gure
+> the UDC.
+>=20
+> Could you please give your Ack for this patch if it is OK? Thanks.
+>=20
 
-Thanks! May I ask which board and what type of USB 3 device it was?
-(I tried a usb3 hub and a Samsung sad)
+Acked-by: Peter Chen <peter.chen@nxp.com>
 
-Also I noticed some odd behavior when I was getting it to work.
-When the u3phy driver loaded but wasn't tied to the controller, it
-would put everything to sleep.
-In this state, the u2 host port also failed to enumerate on boot.
-It's almost as if they have something common between them that isn't
-being accounted for in the u2 driver.
-With the u3phy driver loaded and tied to the controller, I couldn't
-get a low speed device to work in the u2 host port (the aeotec zwave
-stick at 12m) but a hs device works fine.
->
->
-> > One quick comment is that it might be worth importing the version from
-> > Rockchip's own kernel tree, as that includes this additional patch which
-> > looks like a welcome improvement:
-> >
-> > https://github.com/rockchip-linux/kernel/commit/12efa9acad65b4c3256683c1ccd769687be3ca56#diff-b6317b3425ac054be551abdcda910b68
-> >
-> >
-> > Also, as it's a new phy driver, we should keep Kishon (+cc) in the loop
-> > as the subsystem maintainer.
-> >
-> > Robin.
-> >
-> >> [0]
-> >> https://github.com/FireflyTeam/kernel/commits/roc-rk3328-cc/drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> >>
-> >>
-> >> Peter Geis (5):
-> >>    phy: rockchip: add inno-usb3 phy driver
-> >>    dt-bindings: clean up rockchip grf binding document
-> >>    Documentation: bindings: add dt documentation for rockchip usb3 phy
-> >>    arm64: dts: rockchip: add usb3 to rk3328 devicetree
-> >>    arm64: dts: rockchip: enable usb3 on rk3328-roc-cc
-> >>
-> >>   .../bindings/phy/phy-rockchip-inno-usb3.yaml  |  157 +++
-> >>   .../devicetree/bindings/soc/rockchip/grf.txt  |    8 +-
-> >>   .../devicetree/bindings/usb/rockchip,dwc3.txt |    9 +-
-> >>   .../arm64/boot/dts/rockchip/rk3328-roc-cc.dts |   21 +
-> >>   arch/arm64/boot/dts/rockchip/rk3328.dtsi      |   72 ++
-> >>   drivers/phy/rockchip/Kconfig                  |    9 +
-> >>   drivers/phy/rockchip/Makefile                 |    1 +
-> >>   drivers/phy/rockchip/phy-rockchip-inno-usb3.c | 1107 +++++++++++++++++
-> >>   8 files changed, 1378 insertions(+), 6 deletions(-)
-> >>   create mode 100644
-> >> Documentation/devicetree/bindings/phy/phy-rockchip-inno-usb3.yaml
-> >>   create mode 100644 drivers/phy/rockchip/phy-rockchip-inno-usb3.c
-> >>
-> >
-> > _______________________________________________
-> > Linux-rockchip mailing list
-> > Linux-rockchip@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-rockchip
+--=20
+
+Thanks,
+Peter Chen=
