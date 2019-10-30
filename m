@@ -2,169 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B61B6EA388
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 19:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FDEEA3F8
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2019 20:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728260AbfJ3SlX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Oct 2019 14:41:23 -0400
-Received: from smtp.codeaurora.org ([198.145.29.96]:33882 "EHLO
-        smtp.codeaurora.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726242AbfJ3SlX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 14:41:23 -0400
-Received: by smtp.codeaurora.org (Postfix, from userid 1000)
-        id 59843607EF; Wed, 30 Oct 2019 18:41:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572460882;
-        bh=DgP1Gd6SQ180sPb/6jjaHdtoCDqkLu1O44BBHC2Kq24=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ivPmOubR3V5KDaD8iK5tJrnKaEP/wLdrJGXtUR2ISF7E4ZxQwzhPjR1wTNzAM0F9i
-         a0kUc3Aw3g8IurRz0GAknGOfXjX7qxXNOlv/WgQp4aS/ddwQSdkqCsAMPoeThBI2nA
-         3HBBmUlb0vEZyh5lbtGkeqRHaP3q2vm/jRtrber4=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        pdx-caf-mail.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.7 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        DKIM_INVALID,DKIM_SIGNED,SPF_NONE autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp@smtp.codeaurora.org)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8597D6079C;
-        Wed, 30 Oct 2019 18:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=codeaurora.org;
-        s=default; t=1572460878;
-        bh=DgP1Gd6SQ180sPb/6jjaHdtoCDqkLu1O44BBHC2Kq24=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A1Y5ICfliTl3yeY5+Ff1SN7TBvPjAyojZI0oYa0zLcHRbppRgrhl6SWox/dTVr15x
-         ok0xQyacaiT3Z67DQQfs7dxFa6v+/SZmaieZy9uogiRSm49gaUIpkBHBCSf2HdzjPz
-         7O4MjBN4/UtpcwtQRz2W4B3SAHuCpwyIVfeD9LxM=
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8597D6079C
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: pdx-caf-mail.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH v3 2/2] usb: gadget: composite: Support more than 500mA MaxPower
-Date:   Wed, 30 Oct 2019 11:39:54 -0700
-Message-Id: <20191030183954.9791-2-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20191030183954.9791-1-jackp@codeaurora.org>
-References: <20191030183954.9791-1-jackp@codeaurora.org>
+        id S1726476AbfJ3TWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Oct 2019 15:22:09 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:36493 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726273AbfJ3TWI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Oct 2019 15:22:08 -0400
+Received: by mail-io1-f70.google.com with SMTP id g126so2661376iof.3
+        for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2019 12:22:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=khoGcAG7R6/Th/Ql7oDqglP9PTs7MZlRnfGjkI25LVM=;
+        b=N4AVsAZFH82pWXJ+1BKLH2esR25mTeBzySd6KBqUeMxXib/Q1oOM1oVC5KEhJcGQfD
+         CYWCjFEZrpVAR66YHiYLUiDvyaNF1YL96ua0NxeiqSaJToFt0RadyEoW+R4NXYrOwC8s
+         XK647bYKqsu0IKNgQPa1SRyRbL6LeueTzxYsFs7i+Oocq/DrvVmsHPxeN7BYWdBbiZzC
+         YmJWR/qLAkuNiHT0jeqExm//pdUKx6hml5j3ulFk1WpIUxzZiD5VYYbTMYcCWu0XQg1v
+         HVzHwh4aFin7d03XdKzBj5NL4z43v4U9Pi/KDuhMrVPhwxrdIZSiyu/rIwrgyDDOnQqh
+         zG2g==
+X-Gm-Message-State: APjAAAUx83V87snq8S7vo6SGx4j+ZPbEQvqucnOLXQrbi6YHKJ+1PTLq
+        dsOY+64xtxfJt4G5XIO8eE7Z80lMOauv1/OBT8VhgRiFvw88
+X-Google-Smtp-Source: APXvYqz0jpZtYd1ylVPYuYGc+K+FpHCDQZ2CiqF98OVVfySYUsaC8liAfwZ5bVayIukFm/18+nLkIlbzusYaB3vapIrCF9sZ2TOJ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a5d:9059:: with SMTP id v25mr1343320ioq.58.1572463327820;
+ Wed, 30 Oct 2019 12:22:07 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 12:22:07 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000013c4c1059625a655@google.com>
+Subject: KMSAN: uninit-value in cdc_ncm_set_dgram_size
+From:   syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, oliver@neukum.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-USB 3.x SuperSpeed peripherals can draw up to 900mA of VBUS power
-when in configured state. However, if a configuration wanting to
-take advantage of this is added with MaxPower greater than 500
-(currently possible if using a ConfigFS gadget) the composite
-driver fails to accommodate this for a couple reasons:
+Hello,
 
- - usb_gadget_vbus_draw() when called from set_config() and
-   composite_resume() will be passed the MaxPower value without
-   regard for the current connection speed, resulting in a
-   violation for USB 2.0 since the max is 500mA.
+syzbot found the following crash on:
 
- - the bMaxPower of the configuration descriptor would be
-   incorrectly encoded, again if the connection speed is only
-   at USB 2.0 or below, likely wrapping around U8_MAX since
-   the 2mA multiplier corresponds to a maximum of 510mA.
+HEAD commit:    96c6c319 net: kasan: kmsan: support CONFIG_GENERIC_CSUM on..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=11f103bce00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e324dfe9c7b0360
+dashboard link: https://syzkaller.appspot.com/bug?extid=0631d878823ce2411636
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dd9774e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13651a24e00000
 
-Fix these by adding checks against the current gadget->speed
-when the c->MaxPower value is used (set_config() and
-composite_resume()) and appropriately limit based on whether
-it is currently at a low-/full-/high- or super-speed connection.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+0631d878823ce2411636@syzkaller.appspotmail.com
 
-Because 900 is not divisible by 8, with the round-up division
-currently used in encode_bMaxPower() a MaxPower of 900mA will
-result in an encoded value of 0x71. When a host stack (including
-Linux and Windows) enumerates this on a single port root hub, it
-reads this value back and decodes (multiplies by 8) to get 904mA
-which is strictly greater than 900mA that is typically budgeted
-for that port, causing it to reject the configuration. Instead,
-we should be using the round-down behavior of normal integral
-division so that 900 / 8 -> 0x70 or 896mA to stay within range.
-And we might as well change it for the high/full/low case as well
-for consistency.
+=====================================================
+BUG: KMSAN: uninit-value in cdc_ncm_set_dgram_size+0x6ba/0xbc0  
+drivers/net/usb/cdc_ncm.c:587
+CPU: 0 PID: 11865 Comm: kworker/0:3 Not tainted 5.4.0-rc5+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0x191/0x1f0 lib/dump_stack.c:113
+  kmsan_report+0x128/0x220 mm/kmsan/kmsan_report.c:108
+  __msan_warning+0x73/0xe0 mm/kmsan/kmsan_instr.c:245
+  cdc_ncm_set_dgram_size+0x6ba/0xbc0 drivers/net/usb/cdc_ncm.c:587
+  cdc_ncm_setup drivers/net/usb/cdc_ncm.c:673 [inline]
+  cdc_ncm_bind_common+0x2b54/0x3c50 drivers/net/usb/cdc_ncm.c:928
+  cdc_ncm_bind+0x2de/0x330 drivers/net/usb/cdc_ncm.c:1042
+  usbnet_probe+0x10d3/0x39d0 drivers/net/usb/usbnet.c:1730
+  usb_probe_interface+0xd19/0x1310 drivers/usb/core/driver.c:361
+  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
+  __device_attach+0x489/0x750 drivers/base/dd.c:894
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2202
+  usb_set_configuration+0x309f/0x3710 drivers/usb/core/message.c:2027
+  generic_probe+0xe7/0x280 drivers/usb/core/generic.c:210
+  usb_probe_device+0x146/0x200 drivers/usb/core/driver.c:266
+  really_probe+0xd91/0x1f90 drivers/base/dd.c:552
+  driver_probe_device+0x1ba/0x510 drivers/base/dd.c:721
+  __device_attach_driver+0x5b8/0x790 drivers/base/dd.c:828
+  bus_for_each_drv+0x28e/0x3b0 drivers/base/bus.c:430
+  __device_attach+0x489/0x750 drivers/base/dd.c:894
+  device_initial_probe+0x4a/0x60 drivers/base/dd.c:941
+  bus_probe_device+0x131/0x390 drivers/base/bus.c:490
+  device_add+0x25b5/0x2df0 drivers/base/core.c:2202
+  usb_new_device+0x23e5/0x2fb0 drivers/usb/core/hub.c:2536
+  hub_port_connect drivers/usb/core/hub.c:5098 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
+  port_event drivers/usb/core/hub.c:5359 [inline]
+  hub_event+0x581d/0x72f0 drivers/usb/core/hub.c:5441
+  process_one_work+0x1572/0x1ef0 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x189c/0x2460 kernel/workqueue.c:2417
+  kthread+0x4b5/0x4f0 kernel/kthread.c:256
+  ret_from_fork+0x35/0x40 arch/x86/entry/entry_64.S:355
 
-N.B. USB 3.2 Gen N x 2 allows for up to 1500mA but there doesn't
-seem to be any any peripheral controller supported by Linux that
-does two lane operation, so for now keeping the clamp at 900
-should be fine.
+Local variable description: ----max_datagram_size@cdc_ncm_set_dgram_size
+Variable was created at:
+  cdc_ncm_set_dgram_size+0xf5/0xbc0 drivers/net/usb/cdc_ncm.c:564
+  cdc_ncm_set_dgram_size+0xf5/0xbc0 drivers/net/usb/cdc_ncm.c:564
+=====================================================
 
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
+
 ---
-v3: Change round-up to round-down division. Fixed up checks in
-    composite_resume() to look more like that in set_config().
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-v2: Fix typos in commit text and reworded the blurb about rounding
-
- drivers/usb/gadget/composite.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index e1db94d1fe2e..3c5b81311959 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -438,9 +438,13 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
- 	if (!val)
- 		return 0;
- 	if (speed < USB_SPEED_SUPER)
--		return DIV_ROUND_UP(val, 2);
-+		return min(val, 500U) / 2;
- 	else
--		return DIV_ROUND_UP(val, 8);
-+		/*
-+		 * USB 3.x supports up to 900mA, but since 900 isn't divisible
-+		 * by 8 the integral division will effectively cap to 896mA.
-+		 */
-+		return min(val, 900U) / 8;
- }
- 
- static int config_buf(struct usb_configuration *config,
-@@ -852,6 +856,10 @@ static int set_config(struct usb_composite_dev *cdev,
- 
- 	/* when we return, be sure our power usage is valid */
- 	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-+	if (gadget->speed < USB_SPEED_SUPER)
-+		power = min(power, 500U);
-+	else
-+		power = min(power, 900U);
- done:
- 	usb_gadget_vbus_draw(gadget, power);
- 	if (result >= 0 && cdev->delayed_status)
-@@ -2274,7 +2282,7 @@ void composite_resume(struct usb_gadget *gadget)
- {
- 	struct usb_composite_dev	*cdev = get_gadget_data(gadget);
- 	struct usb_function		*f;
--	u16				maxpower;
-+	unsigned			maxpower;
- 
- 	/* REVISIT:  should we have config level
- 	 * suspend/resume callbacks?
-@@ -2288,10 +2296,14 @@ void composite_resume(struct usb_gadget *gadget)
- 				f->resume(f);
- 		}
- 
--		maxpower = cdev->config->MaxPower;
-+		maxpower = cdev->config->MaxPower ?
-+			cdev->config->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
-+		if (gadget->speed < USB_SPEED_SUPER)
-+			maxpower = min(maxpower, 500U);
-+		else
-+			maxpower = min(maxpower, 900U);
- 
--		usb_gadget_vbus_draw(gadget, maxpower ?
--			maxpower : CONFIG_USB_GADGET_VBUS_DRAW);
-+		usb_gadget_vbus_draw(gadget, maxpower);
- 	}
- 
- 	cdev->suspended = 0;
--- 
-2.21.0
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
