@@ -2,78 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3ADEAABA
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2019 07:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A0DEAB1C
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2019 08:51:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbfJaGsy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 31 Oct 2019 02:48:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726479AbfJaGsy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 31 Oct 2019 02:48:54 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 82DAF2083E;
-        Thu, 31 Oct 2019 06:48:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572504533;
-        bh=PWuDB8W5mWU2KdAnWDI61+VoPXli611Ab9ivIcC4oYw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BvyV7dcpTkYgJ7ThJLalOn6gpehVZ/jx/n39ihnqBufn0uk5AHyiBVfY8ULIgvXkn
-         N6YhNI6siUXXawmWovt7edVe1C8KHws22VFg4bUus6rv0Gl4KGXbmc4YtSq0/tVEVR
-         QCAunPRDLSkaI7AdWKaOviTmHHFyDJ4lXOJYe2Fw=
-Date:   Thu, 31 Oct 2019 07:48:49 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Pavel =?iso-8859-1?Q?L=F6bl?= <pavel@loebl.cz>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: Re: [PATCH] usb: serial: mos7840: Add USB ID to support Moxa UPort
- 2210
-Message-ID: <20191031064849.GD727325@kroah.com>
-References: <20191030195253.32579-1-pavel@loebl.cz>
+        id S1726875AbfJaHvR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 31 Oct 2019 03:51:17 -0400
+Received: from mx2.suse.de ([195.135.220.15]:53232 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726698AbfJaHvR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 31 Oct 2019 03:51:17 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A10FBABCE;
+        Thu, 31 Oct 2019 07:51:11 +0000 (UTC)
+Subject: Re: [PATCH] scsi: Fix scsi_get/set_resid() interface
+To:     dgilbert@interlog.com, Bart Van Assche <bvanassche@acm.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
+References: <20191028105732.29913-1-damien.lemoal@wdc.com>
+ <eb8f6e3e-0350-9688-58c8-9d777ba93298@acm.org>
+ <4ee551d0-27a6-b516-ade0-d477fd93bad8@suse.de>
+ <d0899d02-ecb2-7f0b-3d0a-c818a0ec6ceb@acm.org>
+ <571b5f9a-f151-30fb-5720-d7d47a4ef1d7@suse.de>
+ <8b2fbab6-b787-470a-f9ed-46622733881c@interlog.com>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <7ba0414d-7989-31ee-4044-90f541db379f@suse.de>
+Date:   Thu, 31 Oct 2019 08:51:08 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+In-Reply-To: <8b2fbab6-b787-470a-f9ed-46622733881c@interlog.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191030195253.32579-1-pavel@loebl.cz>
-User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 08:52:53PM +0100, Pavel L�bl wrote:
-> Adds usb ID for MOXA UPort 2210. This device contains mos7820 but
-> it passes GPIO0 check implemented by driver and it's detected as
-> mos7840. Hence product id check is added to force mos7820 mode.
-> ---
->  drivers/usb/serial/mos7840.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+On 10/30/19 5:18 PM, Douglas Gilbert wrote:
+> On 2019-10-30 11:18 a.m., Hannes Reinecke wrote:
+>> On 10/30/19 4:12 PM, Bart Van Assche wrote:
+>>> On 10/30/19 1:30 AM, Hannes Reinecke wrote:
+>>>> On 10/28/19 9:38 PM, Bart Van Assche wrote:
+>>>>> If the residual is changed from signed into unsigned, how is a SCSI 
+>>>>> LLD expected to report the difference between residual overflow and 
+>>>>> residual underflow to the SCSI core?
+>>>>
+>>>> You don't have to. To quote RFC 3720 page 122:
+>>>>
+>>>>       bit 5 - (O) set for Residual Overflow.  In this case, the 
+>>>> Residual
+>>>>         Count indicates the number of bytes that were not transferred
+>>>>         because the initiator's Expected Data Transfer Length was not
+>>>>         sufficient.  For a bidirectional operation, the Residual Count
+>>>>         contains the residual for the write operation.
+>>>>
+>>>> IE the 'overflow' setting in the iSCSI command response is an 
+>>>> indicator that there _would_ be more data if the command request 
+>>>> _would_ have specified a larger buffer.
+>>>> But as it didn't, the entire buffer was filled, and the overflow 
+>>>> counter is set.
+>>>> Which, of course, is then ignored by the linux SCSI stack as the 
+>>>> request got all data, and the residual is set to zero.
+>>>> Then it's left to the caller to re-send with a larger buffer if 
+>>>> required. But it's nothing the SCSI stack can nor should be 
+>>>> attempting on its own.
+>>>
+>>> Hi Hannes,
+>>>
+>>> I do not agree that reporting a residual overflow by calling 
+>>> scsi_set_resid(..., 0) is acceptable. For reads a residual overflow 
+>>> means that the length specified in the CDB (scsi_bufflen()) exceeds 
+>>> the data buffer size (length of scsi_sglist()). I think it's 
+>>> dangerous to report to the block layer that such requests completed 
+>>> successfully and with residual zero.
+>>>
+>> But that is an error on submission, and should be aborted before it 
+>> even got send to the drive.
+>>
+>> However, this does not relate to the residual, which is handled after 
+>> the command completes (and which sparked this entire thread ...).
+> 
+> Seen from a pass-through perspective, the resid is just about the near-end
+> data transfer between the HBA and pass-through, or as cam3r03 says:
+> 
+> − cam_resid;
+>      The data residual length member contains the difference in twos 
+> complement
+>      form of the number of data bytes transferred by the HA for the SCSI
+>      command compared with the number of bytes requested by the CCB
+>      cam_dxfer_len member. This is calculated by the total number of bytes
+>      requested to be transferred by the CCB minus the actual number of 
+> bytes
+>      transferred by the HA.
+> 
+> [where "HA" is HBA (or the initiator)]
+> 
+> That makes overflow (negative resid) a bit interesting as it is only
+> reasonable that the pass-though user allocated a buffer big enough to
+> receive dxfer_len bytes. One would hope that in the READ case of overflow,
+> the HBA would have sent the residual bytes to the bit bucket (i.e.
+> /dev/null) rather than overfill the data buffer provided by the 
+> pass-through.
+> 
+Yes. But my point here is that any residual values are handled (and 
+defined) at the protocol level. Any SCSI midlayer protocol like SPC or, 
+indeed, SAM have no concept of residuals.
 
-Hi,
+THe SCSI midlayer chose to add a residual value to document the number 
+of bytes _not_ being handled from hardware.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> Handling discrepancies between page length (e.g. of VPD, LOG and MODE 
+> pages) and the ALLOCATION LENGTH field are defined in the SCSI standards.
+> 
+> That leaves the difficult cases: when there is a discrepancy between 
+> what the
+> SCSI command (and the storage device) implied as a data length and the
+> dxfer_len allocated at the near-end. In some, but not all, cases that is
+> detectable before the command is issued.
+> 
+As mentioned, this needs to be handled in the submission path, and the 
+command should be aborted before being sent to the drive.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+> Overflow can happen, for example if the RDPROTECT field in a READ(10) is
+> accidentally set (e.g. because it uses bits previously used for a SPI
+> LUN) and the storage device has protection information. That will result
+> in an extra 8 bytes per logical block being returned.
+> 
 
-- Your patch does not have a Signed-off-by: line.  Please read the
-  kernel file, Documentation/SubmittingPatches and resend it after
-  adding that line.  Note, the line needs to be in the body of the
-  email, before the patch, not at the bottom of the patch or in the
-  email signature.
+See above. We should intercept such a command, and simply abort it with 
+an appropriate error.
+That goes for internal commands, of course; I know it doesn't work for 
+things like sg_raw, but one could argue that this was precisely the 
+point of that command ...
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Cheers,
 
-thanks,
-
-greg k-h's patch email bot
+Hannes
+-- 
+Dr. Hannes Reinecke            Teamlead Storage & Networking
+hare@suse.de                              +49 911 74053 688
+SUSE LINUX GmbH, Maxfeldstr. 5, 90409 Nürnberg
+GF: Felix Imendörffer, Mary Higgins, Sri Rasiah
+HRB 21284 (AG Nürnberg)
