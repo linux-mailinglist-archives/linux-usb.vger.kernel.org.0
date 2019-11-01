@@ -2,60 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2D79EC908
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 20:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E37BECABA
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 23:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727864AbfKATZQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Nov 2019 15:25:16 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:42031 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727325AbfKATZQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 15:25:16 -0400
-Received: by mail-lj1-f195.google.com with SMTP id n5so299062ljc.9
-        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2019 12:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YYxjqcv/PYLPJKobOoHtNXOrj3psbjFOHnMYal58y3I=;
-        b=c+Gs+TI8cuAjd4kd2hWlKLPAsPgXseDnrsUcVlBiA4ySvAjVj2n7unbZVDl4mRhd8k
-         QGeff69FovwuouMkPqWploEvqGg2xz0OwyPfdogz9QpK6BaN9Ka9RJgzEVo5nEiWZyg/
-         /eJ1qfcbNdodLUDZDnlwBOGgeV6KiV/t48RJo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YYxjqcv/PYLPJKobOoHtNXOrj3psbjFOHnMYal58y3I=;
-        b=I7B3vV+nl7fuUPjpOFIdtQlgg+SMu1XxFWaDuXqWsKcYbWjMiQnW6+llHomxsI9jcs
-         jpWd1vtC0BVi9vlk0+F0jfGbGh9feTIihSgbhpHmN+VGUclsNMUWbgKUyVv19kdU/VfA
-         pHAqf+cGLYLqEUzLbK/7tOaywqbUOQ4Igvif7qy679DRBUg9xD5GLEPhEExxpj7yA+ap
-         +O/7rIonRN1xzHfYWfTPLl4p8pRHS4RontaatQgdpGwb3wA5KChM3sQKMZRaiMb4rXJ5
-         E17KSjvd3GevLvOGVJviP4treYICkjtj+UJP+WPXzkwr4dGDziTSmNjRNqoxC7n+zdfe
-         ayBg==
-X-Gm-Message-State: APjAAAVL/GlkYhK+ayt6TudRbUzTPZjGpjqoqXN7iCFT2UXhY/R0AEdx
-        i9bEhTlkEhIwFbfTwi3438rgYkUqnI8=
-X-Google-Smtp-Source: APXvYqzdrcPuogOfjPl4Dnoz5sERmfNBuSdYUvuza5gOj0GBjdPm1bxuE19QRZ1tEn2z6h9tXMr++w==
-X-Received: by 2002:a2e:91ca:: with SMTP id u10mr7595583ljg.208.1572636312874;
-        Fri, 01 Nov 2019 12:25:12 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id r19sm2820448lfm.61.2019.11.01.12.25.11
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 01 Nov 2019 12:25:11 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id y23so399671ljh.10
-        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2019 12:25:11 -0700 (PDT)
-X-Received: by 2002:a05:651c:154:: with SMTP id c20mr9282919ljd.1.1572636310860;
- Fri, 01 Nov 2019 12:25:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
-In-Reply-To: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 1 Nov 2019 12:24:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjqx4j2vqg-tAwthNP1gcAcj1x4B7sq6Npbi8QJTUMd-A@mail.gmail.com>
-Message-ID: <CAHk-=wjqx4j2vqg-tAwthNP1gcAcj1x4B7sq6Npbi8QJTUMd-A@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/11] pipe: Notification queue preparation [ver #3]
-To:     David Howells <dhowells@redhat.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        id S1727025AbfKAWFh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Nov 2019 18:05:37 -0400
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:33893 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726023AbfKAWFh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 18:05:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572645935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E8+rrZXvUsqeBEaW/X2CqD+QnPOx373OWvmJOxsDZMI=;
+        b=CxRV7R5w1tFCKwkn2VITDPE7KNHlgmKWuJ+JSo/antl9wFd7qtfaTorApkuE4BvjGY04AK
+        1Au6fQEBqqkE12C6PbksYWE6cT9VYqxfbGjUJNy76jULFBjsRI6RY3qO5RtM6rz1b4YDDV
+        lQ7bf1rX3pPXUweE5tFk/E5c2/cjVcA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-395-UyQR-pJ3NNi_-Rohn9Habw-1; Fri, 01 Nov 2019 18:05:32 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 2B3CA1005500;
+        Fri,  1 Nov 2019 22:05:30 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-121-40.rdu2.redhat.com [10.10.121.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 220DF60878;
+        Fri,  1 Nov 2019 22:05:26 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wjqx4j2vqg-tAwthNP1gcAcj1x4B7sq6Npbi8QJTUMd-A@mail.gmail.com>
+References: <CAHk-=wjqx4j2vqg-tAwthNP1gcAcj1x4B7sq6Npbi8QJTUMd-A@mail.gmail.com> <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
@@ -66,43 +51,103 @@ Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux API <linux-api@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC PATCH 00/11] pipe: Notification queue preparation [ver #3]
+MIME-Version: 1.0
+Content-ID: <13963.1572645926.1@warthog.procyon.org.uk>
+Date:   Fri, 01 Nov 2019 22:05:26 +0000
+Message-ID: <13964.1572645926@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: UyQR-pJ3NNi_-Rohn9Habw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 1, 2019 at 10:34 AM David Howells <dhowells@redhat.com> wrote:
->  (1) It removes the nr_exclusive argument from __wake_up_sync_key() as this
->      is always 1.  This prepares for step 2.
->
->  (2) Adds wake_up_interruptible_sync_poll_locked() so that poll can be
->      woken up from a function that's holding the poll waitqueue spinlock.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Side note: we have a couple of cases where I don't think we should use
-the "sync" version at all.
+> Side note: we have a couple of cases where I don't think we should use
+> the "sync" version at all.
+>=20
+> Both pipe_read() and pipe_write() have that
+>=20
+>         if (do_wakeup) {
+>                 wake_up_interruptible_sync_poll(&pipe->wait, ...
+>=20
+> code at the end, outside the loop. But those two wake-ups aren't
+> actually synchronous.
 
-Both pipe_read() and pipe_write() have that
+Changing those to non-sync:
 
-        if (do_wakeup) {
-                wake_up_interruptible_sync_poll(&pipe->wait, ...
+BENCHMARK       BEST            TOTAL BYTES     AVG BYTES       STDDEV
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+pipe                  305816126     36255936983       302132808         888=
+0788
+splice                282402106     27102249370       225852078       21003=
+3443
+vmsplice              440022611     48896995196       407474959        5990=
+6438
 
-code at the end, outside the loop. But those two wake-ups aren't
-actually synchronous.
+Changing the others in pipe_read() and pipe_write() too:
 
-A sync wake is supposedly something where the waker is just about to
-go to sleep, telling the scheduler that "don't bother trying to pick
-another cpu, this process is going to sleep and you can stay here".
+pipe                  305609682     36285967942       302383066         741=
+5744
+splice                282475690     27891475073       232428958       20168=
+7522
+vmsplice              451458280     51949421503       432911845        3492=
+5242
 
-I'm not sure how much this matters, but it does strike me that it's
-wrong. We're not going to sleep at all in that case - this is not the
-"I filled the whole buffer, so I'm going to sleep" case (or the "I've
-read all the data, I'm waiting for more".
+The cumulative patch is attached below.  I'm not sure how well this should
+make a difference with my benchmark programs since each thread can run on i=
+ts
+own CPU.
 
-It's entirely possible that we always wake pipe wakeups to be sync
-just because it's a common pattern (and a common benchmark), but this
-series made me look at it again. Particularly since David has
-benchmarks that don't seem to show a lot of fluctuation with his
-changes - I wonder how much the sync logic buys us (or hurts us)?
+David
+---
+diff --git a/fs/pipe.c b/fs/pipe.c
+index 9cd5cbef9552..c5e3765465f0 100644
+--- a/fs/pipe.c
++++ b/fs/pipe.c
+@@ -332,7 +332,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+ =09=09=09=09do_wakeup =3D 1;
+ =09=09=09=09wake =3D head - (tail - 1) =3D=3D pipe->max_usage / 2;
+ =09=09=09=09if (wake)
+-=09=09=09=09=09wake_up_interruptible_sync_poll_locked(
++=09=09=09=09=09wake_up_locked_poll(
+ =09=09=09=09=09=09&pipe->wait, EPOLLOUT | EPOLLWRNORM);
+ =09=09=09=09spin_unlock_irq(&pipe->wait.lock);
+ =09=09=09=09if (wake)
+@@ -371,7 +371,7 @@ pipe_read(struct kiocb *iocb, struct iov_iter *to)
+=20
+ =09/* Signal writers asynchronously that there is more room. */
+ =09if (do_wakeup) {
+-=09=09wake_up_interruptible_sync_poll(&pipe->wait, EPOLLOUT | EPOLLWRNORM)=
+;
++=09=09wake_up_interruptible_poll(&pipe->wait, EPOLLOUT | EPOLLWRNORM);
+ =09=09kill_fasync(&pipe->fasync_writers, SIGIO, POLL_OUT);
+ =09}
+ =09if (ret > 0)
+@@ -477,7 +477,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ =09=09=09 * syscall merging.
+ =09=09=09 * FIXME! Is this really true?
+ =09=09=09 */
+-=09=09=09wake_up_interruptible_sync_poll_locked(
++=09=09=09wake_up_locked_poll(
+ =09=09=09=09&pipe->wait, EPOLLIN | EPOLLRDNORM);
+=20
+ =09=09=09spin_unlock_irq(&pipe->wait.lock);
+@@ -531,7 +531,7 @@ pipe_write(struct kiocb *iocb, struct iov_iter *from)
+ out:
+ =09__pipe_unlock(pipe);
+ =09if (do_wakeup) {
+-=09=09wake_up_interruptible_sync_poll(&pipe->wait, EPOLLIN | EPOLLRDNORM);
++=09=09wake_up_interruptible_poll(&pipe->wait, EPOLLIN | EPOLLRDNORM);
+ =09=09kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
+ =09}
+ =09if (ret > 0 && sb_start_write_trylock(file_inode(filp)->i_sb)) {
 
-               Linus
