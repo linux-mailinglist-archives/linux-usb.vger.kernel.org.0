@@ -2,233 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9F3EC546
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 16:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14138EC61D
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 16:56:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727810AbfKAPFO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Nov 2019 11:05:14 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:40319 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727555AbfKAPFO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 11:05:14 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 07BEA6A85;
-        Fri,  1 Nov 2019 11:05:13 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 01 Nov 2019 11:05:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=fm1; bh=YDxjSNOMKcpTouvXVfD+yOz3Ma
-        AE9Piluf+18PUN7Fg=; b=gi3lySwP/nMqMuJ9sxDDFp1fYzrQYaqL5TH0BI/hkO
-        XYBNkC3+VB8yNzua5usfVTz1hoEz/zpidPtWiGVsR+J7ltBnnDzwjGTxoBf68gNp
-        fTy50pQ2oN5zeRCzJcqTlQpQrDQIhQ758TskQMRb3iB86EI3Diy4JSlt4vidSyL8
-        xiF680w/NEamIw2xoy7/8kO2Tm7BOhhOu1Jx+lA/Ew5umpFEFYjzjzQ+Z1IQpNHI
-        TIE3aMcrcMx6wD5OWTvgn1/X3zlXzC26axjF6VG5bjAIyqJwcuEtDqZf1xyY/ZB8
-        naKELbtFBWQUO8KTVzXXc44QXtj5GbU0DhlFigsT4FLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=YDxjSNOMKcpTouvXV
-        fD+yOz3MaAE9Piluf+18PUN7Fg=; b=vSEijQZmhtlv9Ijiqys3BtDurrWipYFpd
-        p9lByMnBqW+quQUNeG6jMIBMYKSy/8hiUJYLyjHP47tOpwvWyua+svr7lrHY+C07
-        mf1YHwq3yCRze6LtPKHH80By5fGj1B33kQFD28jLpsZoQSPvqidEEQ0xT8MaOv5s
-        uuqz01+bctjX0h5D1TAnAl/jHBque6gBQ2LCfATJdJKwJK2779TwC4mUEAPF10m0
-        WhNnr0fpLMSvjMlCRx/vpBB2JkSFjPeqf/H4CqQs6KXte6ClOWCzui+Tk3ezxfl0
-        7WKmJoDseXn6TOuwVv2kCKm8xN9lZ5w+zoQLwoAxCXAYLK7O9LaCA==
-X-ME-Sender: <xms:pUm8XbUZRDYF5EFmNMhPMrpRKhS5zd9RocnQGDqULORClBQDuRs-jA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedruddtjedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    govehorghsthgrlhdqhfeguddvqddtvdculdduhedtmdenucfjughrpefhvffufffkofgg
-    gfestdekredtredttdenucfhrhhomhepofgrgihimhgvucftihhprghrugcuoehmrgigih
-    hmvgestggvrhhnohdrthgvtghhqeenucffohhmrghinhepuggvvhhitggvthhrvggvrdho
-    rhhgnecukfhppeeltddrkeelrdeikedrjeeinecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghhnecuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:pUm8XbCHxaQS7o7SQpOikZhl4r_MQ_CMeIzqaHxipzc53LNUIbBbHg>
-    <xmx:pUm8XUzuwIpLE0J33La4OK6Bga86jPSiUDlIkJNI6KkqLkQqOMzYww>
-    <xmx:pUm8XQBCGOk7_07zrVNWIQyspRAFGVjRAKBsgKCQTfclcQBMhmY6PQ>
-    <xmx:p0m8XWCf5n64vM_c5giyeqYgT6HpMM1MyJeD0gsX8bHO3aQ07pyQUA>
-Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 3569080061;
-        Fri,  1 Nov 2019 11:05:09 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     gregkh@linuxfoundation.org, Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        Maxime Ripard <maxime@cerno.tech>
-Subject: [PATCH v2] dt-bindings: usb: Convert Allwinner A10 mUSB controller to a schema
-Date:   Fri,  1 Nov 2019 15:32:16 +0100
-Message-Id: <20191101143216.260890-1-maxime@cerno.tech>
-X-Mailer: git-send-email 2.23.0
+        id S1729384AbfKAP4M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Nov 2019 11:56:12 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:44380 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729356AbfKAP4L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 11:56:11 -0400
+Received: by mail-il1-f195.google.com with SMTP id w1so235988ilq.11
+        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2019 08:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=jkikiuxKNQxBjumG32R/xAOzBpTQzIQOGlQ9PlZMzROUxuROhIRW7LOTcmmKqgHbY3
+         GOAi1JnMWEnE/cHrGKrepuphWKFno/pbedjX9XbUWfuIb71+aWSjlL5ZBdl2tkqhPPKE
+         upGJ5iT/1C19qe7FISRldhXG8lpP7RchXgCPpOby1LewLJ9oB1SrBH33yMLjEi7ivjNF
+         o703S5ww1Ql1WeM1aVK41ldtWwBkirNy1eGYI9RnsPVvXaYfqhEH77U0dn8RQUxe2Nnp
+         f+7QOSjXXt7VdhDDkepSvRzDGCUBO3iHq8K6k3uKK4gkq+wr+4nHyD89dMwGRy4pl6Pa
+         lYoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
+        b=OevUw+dA93dZev/CKIa1mddHMgFSf0IoZ2wroC38wLGn0FLJRaQ/o67XpuGVUhu+Mg
+         3n1Qb5LQKZT4fPmqnNxxd8c1vvLmxK8VC2c0XPE1smW+s9mdj8vYhkYuxh0zAidHQVc+
+         TCIiiMuKi1L92WkfO1FyHhFmwpSOvqvJG2aORrhnAmwdFj+d6jwDkBGpW0gjVKgHoV4f
+         9g7TxJoJEYTZ9eRWzk0nAwpT5WdHClLntFTeh8+g3w2KMXn4o9Ps//NiTAT9SkkHcjXP
+         EXB7AIhIJSnE0SpVa0dqkNiGzTs2GHVvvtQ4tqGVbbo5Ghwe4zySYu5pAGv3moR8w6TM
+         jVGQ==
+X-Gm-Message-State: APjAAAXePA1xE26UvGJu0ma6YNdycqkn6kB7T8sb9IBpvRTCEJbIWksR
+        jCyKRoVhf0rPZeq3T32iZKsqf4/w9IwvFNXlwA==
+X-Google-Smtp-Source: APXvYqykJV+0/JwFtVH+nsMp7ykNvWlhcV0rRy9Az9oSoBx/tmbFcQXrrs+n9sPNEOpMU4VQknLk5nY+7hLQNduMfzM=
+X-Received: by 2002:a92:9ac2:: with SMTP id c63mr13404416ill.8.1572623769676;
+ Fri, 01 Nov 2019 08:56:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:56:08 -0700 (PDT)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Mary Coster, I.M.F director-Benin" 
+        <info.zennitbankplcnigerian@gmail.com>
+Date:   Fri, 1 Nov 2019 16:56:08 +0100
+Message-ID: <CABHzvrmbRd3tt-E2+9AO2XvrMQFKQcn+kao_7DN4rb=grxZAcA@mail.gmail.com>
+Subject: Contact Money Gram international service-Benin to receive your
+ payment funds US$2.500,000 Million
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Allwinner SoCs have an mUSB controller that is supported in Linux, with
-a matching Device Tree binding.
-
-Now that we have the DT validation in place, let's convert the device tree
-bindings for that controller over to a YAML schemas.
-
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-
----
-
-Changes from v1:
-  - Merged compatible entries together
----
- .../bindings/usb/allwinner,sun4i-a10-musb.txt |  28 -----
- .../usb/allwinner,sun4i-a10-musb.yaml         | 100 ++++++++++++++++++
- 2 files changed, 100 insertions(+), 28 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.txt
- create mode 100644 Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.txt b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.txt
-deleted file mode 100644
-index 50abb20fe319..000000000000
---- a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.txt
-+++ /dev/null
-@@ -1,28 +0,0 @@
--Allwinner sun4i A10 musb DRC/OTG controller
---------------------------------------------
--
--Required properties:
-- - compatible      : "allwinner,sun4i-a10-musb", "allwinner,sun6i-a31-musb",
--                     "allwinner,sun8i-a33-musb" or "allwinner,sun8i-h3-musb"
-- - reg             : mmio address range of the musb controller
-- - clocks          : clock specifier for the musb controller ahb gate clock
-- - reset           : reset specifier for the ahb reset (A31 and newer only)
-- - interrupts      : interrupt to which the musb controller is connected
-- - interrupt-names : must be "mc"
-- - phys            : phy specifier for the otg phy
-- - phy-names       : must be "usb"
-- - dr_mode         : Dual-Role mode must be "host" or "otg"
-- - extcon          : extcon specifier for the otg phy
--
--Example:
--
--	usb_otg: usb@1c13000 {
--		compatible = "allwinner,sun4i-a10-musb";
--		reg = <0x01c13000 0x0400>;
--		clocks = <&ahb_gates 0>;
--		interrupts = <38>;
--		interrupt-names = "mc";
--		phys = <&usbphy 0>;
--		phy-names = "usb";
--		extcon = <&usbphy 0>;
--	};
-diff --git a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-new file mode 100644
-index 000000000000..0af70fc8de5a
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-@@ -0,0 +1,100 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/allwinner,sun4i-a10-musb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner A10 mUSB OTG Controller Device Tree Bindings
-+
-+maintainers:
-+  - Chen-Yu Tsai <wens@csie.org>
-+  - Maxime Ripard <maxime.ripard@bootlin.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - const: allwinner,sun4i-a10-musb
-+      - const: allwinner,sun6i-a31-musb
-+      - const: allwinner,sun8i-a33-musb
-+      - const: allwinner,sun8i-h3-musb
-+      - items:
-+          - enum:
-+              - allwinner,sun8i-a83t-musb
-+              - allwinner,sun50i-h6-musb
-+          - const: allwinner,sun8i-a33-musb
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    const: mc
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  phys:
-+    description: PHY specifier for the OTG PHY
-+
-+  phy-names:
-+    const: usb
-+
-+  extcon:
-+    description: Extcon specifier for the OTG PHY
-+
-+  dr_mode:
-+    enum:
-+      - host
-+      - otg
-+      - peripheral
-+
-+  allwinner,sram:
-+    description: Phandle to the device SRAM
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - clocks
-+  - phys
-+  - phy-names
-+  - dr_mode
-+  - extcon
-+
-+if:
-+  properties:
-+    compatible:
-+      contains:
-+        enum:
-+          - allwinner,sun6i-a31-musb
-+          - allwinner,sun8i-a33-musb
-+          - allwinner,sun8i-h3-musb
-+
-+then:
-+  required:
-+    - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    usb_otg: usb@1c13000 {
-+      compatible = "allwinner,sun4i-a10-musb";
-+      reg = <0x01c13000 0x0400>;
-+      clocks = <&ahb_gates 0>;
-+      interrupts = <38>;
-+      interrupt-names = "mc";
-+      phys = <&usbphy 0>;
-+      phy-names = "usb";
-+      extcon = <&usbphy 0>;
-+      dr_mode = "peripheral";
-+    };
-+
-+...
--- 
-2.23.0
-
+Attn Dear,Funds Beneficiary.
+Contact Money Gram international service-Benin to receive your payment
+funds US$2.500,000 Million approved this morning through the UN
+payment settlement organization.
+Contact Person, Mr. John Dave.
+Official Director.Money Gram-Benin
+Email: moneygram.1820@outlook.fr
+Telephone +229 62619517
+Once you get intouch with Mr. John Dave, Money Gram Director, send to
+him your address including your phone numbers. He will be sending the
+transfer to you  $5000.00 USD daily until you received your complete
+payment $2.5m from the office.
+Note,I have paid the whole service fees for you but only small money
+you been required to send to this office is $23.00 only via Money Gram
+transfer.
+God bless
+Mary Coster, I.M.F director-Benin
+m.coster@aol.com
