@@ -2,236 +2,258 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA53EC773
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 18:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4846EC7A6
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2019 18:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728608AbfKARY1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 1 Nov 2019 13:24:27 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46668 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726944AbfKARY0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 13:24:26 -0400
-Received: by mail-lj1-f195.google.com with SMTP id w8so10942875lji.13
-        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2019 10:24:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YNgTx4DJVbSXhNQk3qTxiqUbOGBUshETuzGkv7oBT+Y=;
-        b=ezFMNN3EzbxwYHDgtrrJfWnr8MG1/qvxTSKXDB7DVNCM7pjPz079T56e4PEaiQayL+
-         AKOxjEmvUqeLVyYYgQ1viDl2R3/Bw3cvbtmc6Dm6eByYBIkWRM+v4c4JlGcgdX1QRKlV
-         6SL08rixPJDDE541e6Tv3l3EUHFlqrpof/eDJHYunIeXMlNeVj9+Yl1vOU8F5Cvn3IfS
-         f4Pp4qddwAAhjhoxVtH9TN4Gr8jVRrfhZi4D40l8mAZsn9IkNzcsVXmB2A94tsAsmqbX
-         L2H5ABX0naiJ/jkjmPJR3kyCEZe3dPr6CuurbBHrdG+45IYP8LX43WoFsVNiqax3OWgp
-         NpNg==
-X-Gm-Message-State: APjAAAVHi0VY1HYM+zKH0LEpYm6zEJEN9uaatSeLhzueJBKDxTp6w80e
-        CD3G6IYmVM5Xr3WsOhm6TbQacD32
-X-Google-Smtp-Source: APXvYqyzKfmb++68JTeb4OhOpCsAl/UdN8hQoxfuwqtRhxAN+gPBXmEnIqYxUtUvaeVt33GVl3NtZQ==
-X-Received: by 2002:a2e:7204:: with SMTP id n4mr1383413ljc.139.1572629064143;
-        Fri, 01 Nov 2019 10:24:24 -0700 (PDT)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id e14sm2973524ljb.75.2019.11.01.10.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 10:24:23 -0700 (PDT)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1iQaet-0005K5-Hh; Fri, 01 Nov 2019 18:24:23 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Jonathan Olds <jontio@i4free.co.nz>,
-        Michael Dreher <michael@5dot1.de>, linux-usb@vger.kernel.org
-Subject: [PATCH] USB: serial: ch341: reimplement line-speed handling
-Date:   Fri,  1 Nov 2019 18:24:10 +0100
-Message-Id: <20191101172410.20419-1-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
+        id S1729554AbfKAReS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 1 Nov 2019 13:34:18 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:59800 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729138AbfKAReN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 1 Nov 2019 13:34:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572629651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BnSm/pyC1zFaEEQQT2Q7WTcKwm88OoHgQ5K89nMoPpE=;
+        b=ixJofA81OWIRjy2UNQaNI64lSQF7AhO2sdNk8XSx/HaGc9HfwxDjSf8ijz0dlwkHdeOyIX
+        dZLiCoDpjRDpmOWYDBcHOILPkCRDuVMvlptRlCEj0c9XcC/fk0L2Jk15Q1EJdT2W6R++vF
+        Ad04/v3TCCEUFa8DTSjmmBwX4t1ZhS4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-198-TbZ0HN8tPs2XGeG71slkgg-1; Fri, 01 Nov 2019 13:34:05 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BE672800EB4;
+        Fri,  1 Nov 2019 17:34:03 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-121-40.rdu2.redhat.com [10.10.121.40])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D8DC6600D1;
+        Fri,  1 Nov 2019 17:34:00 +0000 (UTC)
+Subject: [RFC PATCH 00/11] pipe: Notification queue preparation [ver #3]
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>, dhowells@redhat.com,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 01 Nov 2019 17:34:00 +0000
+Message-ID: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/unknown-version
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-MC-Unique: TbZ0HN8tPs2XGeG71slkgg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The current ch341 divisor algorithm was known to give inaccurate results
-for certain higher line speeds. Jonathan Olds <jontio@i4free.co.nz>
-investigated this, determined the basic equations used to derive the
-divisors and confirmed them experimentally [1].
 
-The equations Jonathan used could be generalised further to:
+Here's a set of preparatory patches for building a general notification
+queue on top of pipes.  It makes a number of significant changes:
 
-	baud = 48000000 / (2^(12 - 3 * ps - fact) * div), where
+ (1) It removes the nr_exclusive argument from __wake_up_sync_key() as this
+     is always 1.  This prepares for step 2.
 
-		0 <= ps <= 3,
-		0 <= fact <= 1,
-		2 <= div <= 256 if fact = 0, or
-		9 <= div <= 256 if fact = 1
+ (2) Adds wake_up_interruptible_sync_poll_locked() so that poll can be
+     woken up from a function that's holding the poll waitqueue spinlock.
 
-which will also give better results for lower rates.
+ (3) Change the pipe buffer ring to be managed in terms of unbounded head
+     and tail indices rather than bounded index and length.  This means
+     that reading the pipe only needs to modify one index, not two.
 
-Notably the error is reduced for the following standard rates:
+ (4) A selection of helper functions are provided to query the state of the
+     pipe buffer, plus a couple to apply updates to the pipe indices.
 
-	1152000	(4.0% instead of 15% error)
-	 921600	(0.16% instead of -7.5% error)
-	 576000	(-0.80% instead of -5.6% error)
-	    200	(0.16% instead of -0.69% error)
-	    134	(-0.05% instead of -0.63% error)
-	    110	(0.03% instead of -0.44% error)
+ (5) The pipe ring is allowed to have kernel-reserved slots.  This allows
+     many notification messages to be spliced in by the kernel without
+     allowing userspace to pin too many pages if it writes to the same
+     pipe.
 
-but also for many non-standard ones.
+ (6) Advance the head and tail indices inside the pipe waitqueue lock and
+     use step 2 to poke poll without having to take the lock twice.
 
-The current algorithm also suffered from rounding issues (e.g. 2950000
-was rounded to 2 Mbaud instead of 3 Mbaud resulting in a -32% instead of
-1.7% error).
+ (7) Rearrange pipe_write() to preallocate the buffer it is going to write
+     into and then drop the spinlock.  This allows kernel notifications to
+     then be added the ring whilst it is filling the buffer it allocated.
+     The read side is stalled because the pipe mutex is still held.
 
-The new algorithm was inspired by the current vendor driver even if that
-one only handles two higher rates that require fact=1 by hard coding the
-corresponding divisors [2].
+ (8) Don't wake up readers on a pipe if there was already data in it when
+     we added more.
 
-Michael Dreher <michael@5dot1.de> also did a similar generalisation of
-Jonathan's work and has published his results with a very good summary
-that provides further insights into how this device works [3].
+ (9) Don't wake up writers on a pipe if the ring wasn't full before we
+     removed a buffer.
 
-[1] https://lkml.kernel.org/r/000001d51f34$bad6afd0$30840f70$@co.nz
-[2] http://www.wch.cn/download/CH341SER_LINUX_ZIP.html
-[3] https://github.com/nospam2000/ch341-baudrate-calculation
+The patches can be found here also:
 
-Reported-by: Jonathan Olds <jontio@i4free.co.nz>
-Tested-by: Jonathan Olds <jontio@i4free.co.nz>
-Cc: Michael Dreher <michael@5dot1.de>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+=09http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=
+=3Dnotifications-pipe-prep
+
+PATCHES=09BENCHMARK=09BEST=09=09TOTAL BYTES=09AVG BYTES=09STDDEV
+=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-=09pipe=09=09      307457969=09    36348556755=09      302904639=09       =
+10622403
+-=09splice=09=09      287117614=09    26933658717=09      224447155=09     =
+ 160777958
+-=09vmsplice=09      435180375=09    51302964090=09      427524700=09      =
+ 19083037
+
+rm-nrx=09pipe=09=09      311091179=09    37093181356=09      309109844=09  =
+      7221622
+rm-nrx=09splice=09=09      285628049=09    27916298942=09      232635824=09=
+      158296431
+rm-nrx=09vmsplice=09      417703153=09    47570362546=09      396419687=09 =
+      33960822
+
+wakesl=09pipe=09=09      310698731=09    36772541631=09      306437846=09  =
+      8249347
+wakesl=09splice=09=09      286193726=09    28600435451=09      238336962=09=
+      141169318
+wakesl=09vmsplice=09      436175803=09    50723895824=09      422699131=09 =
+      40724240
+
+ht=09pipe=09=09      305534565=09    36426079543=09      303550662=09      =
+  5673885
+ht=09splice=09=09      243632025=09    23319439010=09      194328658=09    =
+  150479853
+ht=09vmsplice=09      432825176=09    49101781001=09      409181508=09     =
+  44102509
+
+k-rsv=09pipe=09=09      308691523=09    36652267561=09      305435563=09   =
+    12972559
+k-rsv=09splice=09=09      244793528=09    23625172865=09      196876440=09 =
+     125319143
+k-rsv=09vmsplice=09      436119082=09    49460808579=09      412173404=09  =
+     55547525
+
+r-adv-t=09pipe=09=09      310094218=09    36860182219=09      307168185=09 =
+       8081101
+r-adv-t=09splice=09=09      285527382=09    27085052687=09      225708772=
+=09      206918887
+r-adv-t=09vmsplice=09      336885948=09    40128756927=09      334406307=09=
+        5895935
+
+r-cond=09pipe=09=09      308727804=09    36635828180=09      305298568=09  =
+      9976806
+r-cond=09splice=09=09      284467568=09    28445793054=09      237048275=09=
+      200284329
+r-cond=09vmsplice=09      449679489=09    51134833848=09      426123615=09 =
+      66790875
+
+w-preal=09pipe=09=09      307416578=09    36662086426=09      305517386=09 =
+       6216663
+w-preal=09splice=09=09      282655051=09    28455249109=09      237127075=
+=09      194154549
+w-preal=09vmsplice=09      437002601=09    47832160621=09      398601338=09=
+       96513019
+
+w-redun=09pipe=09=09      307279630=09    36329750422=09      302747920=09 =
+       8913567
+w-redun=09splice=09=09      284324488=09    27327152734=09      227726272=
+=09      219735663
+w-redun=09vmsplice=09      451141971=09    51485257719=09      429043814=09=
+       51388217
+
+w-ckful=09pipe=09=09      305055247=09    36374947350=09      303124561=09 =
+       5400728
+w-ckful=09splice=09=09      281575308=09    26841554544=09      223679621=
+=09      215942886
+w-ckful=09vmsplice=09      436653588=09    47564907110=09      396374225=09=
+       82255342
+
+The patches column indicates the point in the patchset at which the benchma=
+rks
+were taken:
+
+=090=09No patches
+=09rm-nrx=09"Remove the nr_exclusive argument from __wake_up_sync_key()"
+=09wakesl=09"Add wake_up_interruptible_sync_poll_locked()"
+=09ht=09"pipe: Use head and tail pointers for the ring, not cursor and leng=
+th"
+=09k-rsv=09"pipe: Allow pipes to have kernel-reserved slots"
+=09r-adv-t=09"pipe: Advance tail pointer inside of wait spinlock in pipe_re=
+ad()"
+=09r-cond=09"pipe: Conditionalise wakeup in pipe_read()"
+=09w-preal=09"pipe: Rearrange sequence in pipe_write() to preallocate slot"
+=09w-redun=09"pipe: Remove redundant wakeup from pipe_write()"
+=09w-ckful=09"pipe: Check for ring full inside of the spinlock in pipe_writ=
+e()"
+
+Changes:
+
+ ver #3:
+
+ (*) Get rid of pipe_commit_{read,write}.
+
+ (*) Port the virtio_console driver.
+
+ (*) Fix pipe_zero().
+
+ (*) Amend some comments.
+
+ (*) Added an additional patch that changes the threshold at which readers
+     wake writers for Konstantin Khlebnikov.
+
+ ver #2:
+
+ (*) Split the notification patches out into a separate branch.
+
+ (*) Removed the nr_exclusive parameter from __wake_up_sync_key().
+
+ (*) Renamed the locked wakeup function.
+
+ (*) Add helpers for empty, full, occupancy.
+
+ (*) Split the addition of ->max_usage out into its own patch.
+
+ (*) Fixed some bits pointed out by Rasmus Villemoes.
+
+ ver #1:
+
+ (*) Build on top of standard pipes instead of having a driver.
+
+David
 ---
- drivers/usb/serial/ch341.c | 97 +++++++++++++++++++++++++++++---------
- 1 file changed, 75 insertions(+), 22 deletions(-)
+David Howells (11):
+      pipe: Reduce #inclusion of pipe_fs_i.h
+      Remove the nr_exclusive argument from __wake_up_sync_key()
+      Add wake_up_interruptible_sync_poll_locked()
+      pipe: Use head and tail pointers for the ring, not cursor and length
+      pipe: Allow pipes to have kernel-reserved slots
+      pipe: Advance tail pointer inside of wait spinlock in pipe_read()
+      pipe: Conditionalise wakeup in pipe_read()
+      pipe: Rearrange sequence in pipe_write() to preallocate slot
+      pipe: Remove redundant wakeup from pipe_write()
+      pipe: Check for ring full inside of the spinlock in pipe_write()
+      pipe: Increase the writer-wakeup threshold to reduce context-switch c=
+ount
 
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 3bb1fff02bed..29f83ce1696e 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -48,12 +48,6 @@
- #define CH341_BIT_DCD 0x08
- #define CH341_BITS_MODEM_STAT 0x0f /* all bits */
- 
--/*******************************/
--/* baudrate calculation factor */
--/*******************************/
--#define CH341_BAUDBASE_FACTOR 1532620800
--#define CH341_BAUDBASE_DIVMAX 3
--
- /* Break support - the information used to implement this was gleaned from
-  * the Net/FreeBSD uchcom.c driver by Takanori Watanabe.  Domo arigato.
-  */
-@@ -144,37 +138,96 @@ static int ch341_control_in(struct usb_device *dev,
- 	return 0;
- }
- 
-+#define CH341_CLKRATE		48000000
-+#define CH341_CLK_DIV(ps, fact)	(1 << (12 - 3 * (ps) - (fact)))
-+#define CH341_MIN_RATE(ps)	(CH341_CLKRATE / (CH341_CLK_DIV((ps), 1) * 512))
-+
-+static const speed_t ch341_min_rates[] = {
-+	CH341_MIN_RATE(0),
-+	CH341_MIN_RATE(1),
-+	CH341_MIN_RATE(2),
-+	CH341_MIN_RATE(3),
-+};
-+
-+/*
-+ * The device line speed is given by the following equation:
-+ *
-+ *	baud = 48000000 / (2^(12 - 3 * ps - fact) * div), where
-+ *
-+ *		0 <= ps <= 3,
-+ *		0 <= fact <= 1,
-+ *		2 <= div <= 256 if fact = 0, or
-+ *		9 <= div <= 256 if fact = 1
-+ */
-+static int ch341_get_divisor(speed_t speed)
-+{
-+	unsigned int fact, div, clk_div;
-+	int ps;
-+
-+	/*
-+	 * Clamp to supported range, this makes the (ps < 0) and (div < 2)
-+	 * sanity checks below redundant.
-+	 */
-+	speed = clamp(speed, 46U, 3000000U);
-+
-+	/*
-+	 * Start with highest possible base clock (fact = 1) that will give a
-+	 * divisor strictly less than 512.
-+	 */
-+	fact = 1;
-+	for (ps = 3; ps >= 0; ps--) {
-+		if (speed > ch341_min_rates[ps])
-+			break;
-+	}
-+
-+	if (ps < 0)
-+		return -EINVAL;
-+
-+	/* Determine corresponding divisor, rounding down. */
-+	clk_div = CH341_CLK_DIV(ps, fact);
-+	div = CH341_CLKRATE / (clk_div * speed);
-+
-+	/* Halve base clock (fact = 0) if required. */
-+	if (div < 9 || div > 255) {
-+		div /= 2;
-+		clk_div *= 2;
-+		fact = 0;
-+	}
-+
-+	if (div < 2)
-+		return -EINVAL;
-+
-+	/*
-+	 * Pick next divisor if resulting rate is closer to the requested one,
-+	 * scale up to avoid rounding errors on low rates.
-+	 */
-+	if (16 * CH341_CLKRATE / (clk_div * div) - 16 * speed >=
-+			16 * speed - 16 * CH341_CLKRATE / (clk_div * (div + 1)))
-+		div++;
-+
-+	return (0x100 - div) << 8 | fact << 2 | ps;
-+}
-+
- static int ch341_set_baudrate_lcr(struct usb_device *dev,
- 				  struct ch341_private *priv, u8 lcr)
- {
--	short a;
-+	int val;
- 	int r;
--	unsigned long factor;
--	short divisor;
- 
- 	if (!priv->baud_rate)
- 		return -EINVAL;
--	factor = (CH341_BAUDBASE_FACTOR / priv->baud_rate);
--	divisor = CH341_BAUDBASE_DIVMAX;
--
--	while ((factor > 0xfff0) && divisor) {
--		factor >>= 3;
--		divisor--;
--	}
- 
--	if (factor > 0xfff0)
-+	val = ch341_get_divisor(priv->baud_rate);
-+	if (val < 0)
- 		return -EINVAL;
- 
--	factor = 0x10000 - factor;
--	a = (factor & 0xff00) | divisor;
--
- 	/*
- 	 * CH341A buffers data until a full endpoint-size packet (32 bytes)
- 	 * has been received unless bit 7 is set.
- 	 */
--	a |= BIT(7);
-+	val |= BIT(7);
- 
--	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, a);
-+	r = ch341_control_out(dev, CH341_REQ_WRITE_REG, 0x1312, val);
- 	if (r)
- 		return r;
- 
--- 
-2.23.0
+
+ drivers/char/virtio_console.c |   16 +-
+ fs/exec.c                     |    1=20
+ fs/fuse/dev.c                 |   31 +++--
+ fs/ocfs2/aops.c               |    1=20
+ fs/pipe.c                     |  228 +++++++++++++++++++++--------------
+ fs/splice.c                   |  190 ++++++++++++++++++-----------
+ include/linux/pipe_fs_i.h     |   64 +++++++++-
+ include/linux/uio.h           |    4 -
+ include/linux/wait.h          |   11 +-
+ kernel/exit.c                 |    2=20
+ kernel/sched/wait.c           |   37 ++++--
+ lib/iov_iter.c                |  269 +++++++++++++++++++++++--------------=
+----
+ security/smack/smack_lsm.c    |    1=20
+ 13 files changed, 527 insertions(+), 328 deletions(-)
 
