@@ -2,111 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8869ED042
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 19:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 029A6ED04B
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 19:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfKBSj7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Nov 2019 14:39:59 -0400
-Received: from mail-il1-f194.google.com ([209.85.166.194]:33427 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726396AbfKBSj7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 14:39:59 -0400
-Received: by mail-il1-f194.google.com with SMTP id m5so2257045ilq.0;
-        Sat, 02 Nov 2019 11:39:57 -0700 (PDT)
+        id S1726689AbfKBSx6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Nov 2019 14:53:58 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:32795 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfKBSx6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 14:53:58 -0400
+Received: by mail-lj1-f195.google.com with SMTP id t5so13501006ljk.0
+        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 11:53:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=l2fsnuICpf2pNNr/nY6h2uctFmb9QvtxpW7xlEFudDU=;
-        b=dkTpji8Cw4WXyrJP4yYJWQQFrK95lJn5Eu5PUGSLFhUZIQojew3wght6UOl/vrWlHR
-         hDYSp/nv8EbyUmnPNkGgjPz9KmH7rlzw2AwrLlVDfiv36BvMXsacDE1p1OiRQViygjzY
-         cnaSMggydoJvuAEtgFQg9Fu2huPvulr2qOWI/F2FRPU1EFEdC1WBECpn9RvR5ljxahE1
-         lavNq+SHWrlIXsRlNNrI4yERoYjLxyarlanoGVYNbnWbvXLgCE0HmBvfUbQ+mKbYxMlQ
-         aaaRI3iJZYQev4krI7RV41ID82tPnUd0PastOp9ANFy+lGsLvDqz9ZfKr8p1o6Ip/CAm
-         6RgQ==
+        bh=UFZsrTxHj8UNSOV0MW3iX+ZNPh241BxYI9RJCfbRj4I=;
+        b=fwWi36Cjm33TVpJsMKyyeNJuPa+EzO/w2jcz8N5ivZnB2LBgFElTwve7u7JUY1CQlk
+         LBP3NYhj8mwMGDKFLZC3aAKJjtxEeb837zFLkONBVlInZ3n9BYz2CiSK5BYhQEqMplN+
+         cxbruKuD+a9IFTjckV4CYWfQYTCffHao0G3wg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=l2fsnuICpf2pNNr/nY6h2uctFmb9QvtxpW7xlEFudDU=;
-        b=i/tlB5orwqzOJlrPgpbhxzF1s4x4sf4KJUms//2AI47UgYVkFOo399WKzv7eYyh19V
-         F51GTo0gtGwZ0faXd95AQQY4FjbJkPXEweC4EEfiyZScFZIKNhy064HrLvG5DVyNbtJ6
-         cBWjiSBEbcQSpEv1nlh2El1ZOz9OqU2RFMEmtluuObNdxyXMLWxZB7eJfuxKxJ+S6A2M
-         JjzmaNwAYE5ZyIkNJfBtJS0wzhCokMulxPwFLWwgHj4bOFVZovSLrIyZ7za6q6e4jWga
-         Sk7IffL8VBoUCfHJi/wNpc8K7R9M31T3sBu4EqEGXvU7T6Nu/Pbod2x3qOS+97Si+pR1
-         QioQ==
-X-Gm-Message-State: APjAAAUNfzTrCdWvLE0WBYkhiOPzexwZiiPmDuPW5LeNw8xSWd8A1JYK
-        zVs0txXj2MAacUaV8uzJopnrTCuUTh0Cmc0bN4k=
-X-Google-Smtp-Source: APXvYqybbgLfcpLhrNmNbOgUk0sLsrbyBRobbpwCyWFxgd+8u2bZU+AJBu46b12talFHHzNQvJf7fVQ2MdkmJngC0kw=
-X-Received: by 2002:a92:108f:: with SMTP id 15mr20341398ilq.250.1572719996909;
- Sat, 02 Nov 2019 11:39:56 -0700 (PDT)
+        bh=UFZsrTxHj8UNSOV0MW3iX+ZNPh241BxYI9RJCfbRj4I=;
+        b=CodfPd8rfI1hhVkhWGEwGANA12tcFD9rRfJNQBggcD5mbgAOnbk1WF6jcGqU9Q0vtF
+         vBmTILfy8GJ/LYzkokrfhjf9TW9cDlIHlDIj07oMOvW8FMXg7wHPa8kR+rPPaMbcKqeY
+         2N2m5HK6NJxlHNXQgsENtlfC2dJtA4qz/aOs3YJNcrvButLCd/Je9lYdbVjMUkMQBVmD
+         ht9KCFGc6dVGa/JMYfrEhiAWoidWMS5oa0Zt9eCxuwYF936mmZjFypPEoJIVLU0PdyX0
+         pdlRJ2gweDqC5ZkyEOl1LtRMoBj34psrwgSHaoNVkBDNk5uch1XxPgNttGqRAMSMVGtw
+         oHcQ==
+X-Gm-Message-State: APjAAAUQsOoPRfksHzTIazvAXLgUnTLlR5Fq6kAffVO/p60Sqk1mQBLM
+        9Lj4sBI11AMwvs2wPxRIcFCyVRxTMQY=
+X-Google-Smtp-Source: APXvYqwsPt/Q8oQNKyoW87AaPncNqBpMtXAGIs6lEzdXEeGB+18RVItGXGqPdxeey7UjAlE1+OmZfA==
+X-Received: by 2002:a2e:7c10:: with SMTP id x16mr4635364ljc.120.1572720835896;
+        Sat, 02 Nov 2019 11:53:55 -0700 (PDT)
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com. [209.85.167.46])
+        by smtp.gmail.com with ESMTPSA id a11sm4191017ljp.97.2019.11.02.11.53.54
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Nov 2019 11:53:54 -0700 (PDT)
+Received: by mail-lf1-f46.google.com with SMTP id f4so9439101lfk.7
+        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 11:53:54 -0700 (PDT)
+X-Received: by 2002:ac2:4c86:: with SMTP id d6mr11465241lfl.106.1572720834124;
+ Sat, 02 Nov 2019 11:53:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20191102172606.26934-1-pbrobinson@gmail.com> <20191102174345.GB3862867@ulmo>
-In-Reply-To: <20191102174345.GB3862867@ulmo>
-From:   Peter Robinson <pbrobinson@gmail.com>
-Date:   Sat, 2 Nov 2019 18:39:45 +0000
-Message-ID: <CALeDE9PChT-A6JP6kZVmgSs9mHQtqUw0EPCGjQ-VK0arBjGBgg@mail.gmail.com>
-Subject: Re: [PATCH] usb: host: xhci-tegra: set MODULE_FIRMWARE for tegra186
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
+ <30394.1571936252@warthog.procyon.org.uk> <c6e044cc-5596-90b7-4418-6ad7009d6d79@yandex-team.ru>
+ <17311.1572534953@warthog.procyon.org.uk>
+In-Reply-To: <17311.1572534953@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 2 Nov 2019 11:53:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg_X_7JSYT-a3qHrzvuWGMyffDWtQ4n7adBp_fe5w0BsA@mail.gmail.com>
+Message-ID: <CAHk-=wg_X_7JSYT-a3qHrzvuWGMyffDWtQ4n7adBp_fe5w0BsA@mail.gmail.com>
+Subject: Re: [RFC PATCH 11/10] pipe: Add fsync() support [ver #2]
+To:     David Howells <dhowells@redhat.com>
+Cc:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 2, 2019 at 5:43 PM Thierry Reding <thierry.reding@gmail.com> wrote:
+On Thu, Oct 31, 2019 at 8:16 AM David Howells <dhowells@redhat.com> wrote:
 >
-> On Sat, Nov 02, 2019 at 05:26:06PM +0000, Peter Robinson wrote:
-> > Set the MODULE_FIRMWARE for tegra186, it's registered for 124/210 and
-> > ensures the firmware is available at the appropriate time such as in
-> > the initrd, else if the firmware is unavailable the driver fails with
-> > the following errors:
+> Konstantin Khlebnikov <khlebnikov@yandex-team.ru> wrote:
 >
-> So the MODULE_FIRMWARE macro alone does not ensure that the firmware is
-> in the correct location, right? Rather, it's the tools that construct
-> the initial ramdisk that make use of the information added by the
-> MODULE_FIRMWARE macro to determine whether or not the firmware needs to
-> be included in the initial ramdisk or not.
+> > Similar synchronization is required for reusing memory after vmsplice()?
+> > I don't see other way how sender could safely change these pages.
+>
+> Sounds like a point - if you have multiple parallel contributors to the pipe
+> via vmsplice(), then FIONREAD is of no use.  To use use FIONREAD, you have to
+> let the pipe become empty before you can be sure.
 
-It works for tegra124 and tegra210, the patches for tegra194 have it
-as well, I have no idea why it was left out for the tegra186. On
-Fedora the 124/210 firmwares get pulled into the initrd when the
-xhci_tegra and deps do but the 186 doesn't, if you "rmmod xhci_tegra;
-modprobe xhci_tegra" once booted it works fine.
+Well, the rules for vmsplice is simply to not change the source pages.
+It's zero-copy, after all.
 
-> > tegra-xusb 3530000.usb: Direct firmware load for nvidia/tegra186/xusb.bin failed with error -2
-> > tegra-xusb 3530000.usb: failed to request firmware: -2
-> > tegra-xusb 3530000.usb: failed to load firmware: -2
-> > tegra-xusb: probe of 3530000.usb failed with error -2
-> >
-> > Fixes: 5f9be5f3f899 ("usb: host: xhci-tegra: Add Tegra186 XUSB support")
-> > Fixes: 488a04d4bb2f ("arm64: tegra: Enable XUSB host controller on Jetson TX2")
-> > Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
-> > ---
-> >  drivers/usb/host/xhci-tegra.c | 1 +
-> >  1 file changed, 1 insertion(+)
->
-> The commit message is slightly misleading, but I guess it's ultimately
-> correct if you run standard tools to generate the initial ramdisk, so:
->
-> Acked-by: Thierry Reding <treding@nvidia.com>
->
-> > diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> > index 2ff7c911fbd0..d25aba8fa219 100644
-> > --- a/drivers/usb/host/xhci-tegra.c
-> > +++ b/drivers/usb/host/xhci-tegra.c
-> > @@ -1433,6 +1433,7 @@ static const struct tegra_xusb_soc tegra186_soc = {
-> >       .scale_ss_clock = false,
-> >       .has_ipfs = false,
-> >  };
-> > +MODULE_FIRMWARE("nvidia/tegra186/xusb.bin");
-> >
-> >  static const struct of_device_id tegra_xusb_of_match[] = {
-> >       { .compatible = "nvidia,tegra124-xusb", .data = &tegra124_soc },
-> > --
-> > 2.23.0
-> >
+If you want to change the source pages, you need to just use write() instead.
+
+That said, even then the right model isn't fsync(). If you really want
+to have something like "notify me when this buffer has been used", it
+should be some kind of sequence count thing, not a "wait for empty".
+
+Which might be useful in theory, but would be something quite
+different (and honestly, I wouldn't expect it to find all that
+widespread use)
+
+             Linus
