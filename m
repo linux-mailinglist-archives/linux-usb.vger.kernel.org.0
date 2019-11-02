@@ -2,62 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDE63ECFC5
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 17:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E492ECFC9
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 17:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfKBQbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Nov 2019 12:31:32 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46472 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbfKBQbb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 12:31:31 -0400
-Received: by mail-pf1-f194.google.com with SMTP id 193so7786901pfc.13
-        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 09:31:31 -0700 (PDT)
+        id S1726477AbfKBQe6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Nov 2019 12:34:58 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43102 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726450AbfKBQe6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 12:34:58 -0400
+Received: by mail-pg1-f193.google.com with SMTP id l24so8370790pgh.10
+        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 09:34:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5iaKzerYMUzB1c98lb4TvFVnn/xx4MS1uhq0mslrb5c=;
-        b=g2UPoija4WZmkyc5OJ46pFlul951Zi88TRU9+McO4bSz4CdFapCit8jhcP0fCnjg6M
-         z6AAQlQ5xWSc5b8ARHvMyCvL1uyieoGm4uDRPG1B7ar53rYJvD9CWOOS0RYlcJB9L/cg
-         oH9IVsPpFFuuS6WgV6pTShzv+/aMEV/CdouhtfPYELgA+DUMgfUQHzVktmrTpCKLyg59
-         0z6g1PqI327QBpDpRria7ZwgJDNwx3qh1ZUA3qnIRycUxJmPeYwX2fe3x/edLHr47cUY
-         hYFIbC//dFNtw8O8C1NuJ4TQQd1F09sPQbiQrwPNwrYIyna1CaemHl0qxTv8IO3jEplc
-         A1YQ==
+        bh=wVlEMK9DSZq4sC+0XFeDN7tjMzjnUClOJQIrdBXUOmI=;
+        b=XL2+AKehicIwjL/tHvz9JjbquFyr7bdh+sjEO4UhdWaIddIMNOppIXkzznHucF6T88
+         ocZ1Sh1B9hdc5OC5EbLYVkpg5rNnWVNhFCddFka0i5n1I4/g2h/bYdzKUnvBY61H6QQ0
+         kTGBRu/ew3ebJM+clchKoEiyJixuiB5BBmpj0EYWiG+UAi04gN+pRGEtnhW+9Qb2OCx8
+         nrRn0npLRMLoqIsyhFAp/91ylm/A/5Ky2eo+/c0JmrxzK4OCGc8iWSWIitiUaEDfg0yQ
+         qD+FP52RIJK3g8tMhWvD41pvss9Mglr1kFgHC5jIX1H74IpATpegheuk3pD1LgMnNWRm
+         asjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
          :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=5iaKzerYMUzB1c98lb4TvFVnn/xx4MS1uhq0mslrb5c=;
-        b=IHmAChJtVwiNC0W4cn15usKamtjF2Qr8CW5JA3QzEcweZMNOK5CsiGM6ESpHW9pLUd
-         z/iVV6ZBtfSU3Drkwt6pWymUaWoZlSgA73GSBO//0w47fl6REVuFfdpgGAqvr/yFinpB
-         S/IvmNqNQ0ZZHHpwteWxuwpxRt9H0WGvXQLwZFwhKOjws9dINmBjYfQifMWj8BQQ/0/L
-         kfQOuNyg+Z2WLYVnhPhbqdwg9MrnVkc/x8x1ffJMY4yQ5toUVAbXqGD5hwcOJNQGlVjH
-         jdsz9oTX3X5d0kcLKroF1hInAPbdesHt7a676ACWlZwxyHBADQnt7p2AEYtAtiEgMUhk
-         10/w==
-X-Gm-Message-State: APjAAAVUSTGYe9vlHdZ7dIGqKxxVU+Xszv9BPxo4q/ju4F11nhPJ380g
-        O3tE+4IQAUqMlqqSCii2ZftNFGA0
-X-Google-Smtp-Source: APXvYqxSneka3bnoGdIv3BKPEhps68C5sIsmIKW+jbMVtNK0vwBeecpIY+bAnrwT1KUSUggR9to+gg==
-X-Received: by 2002:a62:7c52:: with SMTP id x79mr20893326pfc.18.1572712290683;
-        Sat, 02 Nov 2019 09:31:30 -0700 (PDT)
+        bh=wVlEMK9DSZq4sC+0XFeDN7tjMzjnUClOJQIrdBXUOmI=;
+        b=KSwlqs0wSK+WxOtKV1D10lyuYDaMiAa53rexBzoIHGEgNpMZsTK2BrkY2+nKpinhdn
+         s6iThtFRfK5kZWPcKrqmkPU665c77tkqGT6Ij0S5+m5K5sdiywoHijz7nBp5j/+GfXUi
+         vwK5eM17NNHCpeEp9wEdHBPCzp1UqHDe7aQZDwt4p4rAePy6PhM9OGWc0KmTG4N/5Nt5
+         Qxwou1bJWQcSFDjDeYipvgiPkjMpMbCh1G6WHmMqOb4pctAo34JfRgFV1wmBFWL+S9eo
+         mqKyUceI1xHbIElol1z8a0p1HnnIGWpTd6rFBOpE0xhmujD+qlkLzzvSEzY1fesKwr9D
+         Szmw==
+X-Gm-Message-State: APjAAAXHGPMLtz2aJvSbdqLT/tp6gvxxpdy92cq00Q7g9yBE9J/bqEZh
+        /npNh6YwU0RURijSCc29L0mLAKN3
+X-Google-Smtp-Source: APXvYqzPay0H2liAEBMbuVSRy5N2gavO/nc1GxGbZF9h6uvcChThPKDy2i7Wx+gkx0FSXnRsepO2IQ==
+X-Received: by 2002:a62:e519:: with SMTP id n25mr21140582pff.144.1572712497034;
+        Sat, 02 Nov 2019 09:34:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a29sm14649271pfr.49.2019.11.02.09.31.29
+        by smtp.gmail.com with ESMTPSA id d25sm14781205pfq.70.2019.11.02.09.34.55
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 02 Nov 2019 09:31:30 -0700 (PDT)
-Subject: Re: [PATCH v3 12/18] usb: typec: ucsi: acpi: Move to the new API
+        Sat, 02 Nov 2019 09:34:56 -0700 (PDT)
+Subject: Re: [PATCH v3 13/18] usb: typec: ucsi: ccg: Move to the new API
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
 References: <20191025082324.75731-1-heikki.krogerus@linux.intel.com>
- <20191025082324.75731-13-heikki.krogerus@linux.intel.com>
+ <20191025082324.75731-14-heikki.krogerus@linux.intel.com>
 From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d40c258c-790a-2412-94f2-c664a11eade2@roeck-us.net>
-Date:   Sat, 2 Nov 2019 09:31:29 -0700
+Message-ID: <638c43d4-6de0-81a3-018b-dc1e9488ec22@roeck-us.net>
+Date:   Sat, 2 Nov 2019 09:34:55 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191025082324.75731-13-heikki.krogerus@linux.intel.com>
+In-Reply-To: <20191025082324.75731-14-heikki.krogerus@linux.intel.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -68,182 +68,313 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On 10/25/19 1:23 AM, Heikki Krogerus wrote:
 > Replacing the old "cmd" and "sync" callbacks with an
-> implementation of struct ucsi_operations. The ACPI
-> notification (interrupt) handler will from now on read the
-> CCI (Command Status and Connector Change Indication)
-> register, and call ucsi_connector_change() function and/or
-> complete pending command completions based on it.
+> implementation of struct ucsi_operations. The interrupt
+> handler will from now on read the CCI (Command Status and
+> Connector Change Indication) register, and call
+> ucsi_connector_change() function and/or complete pending
+> command completions based on it.
 > 
 > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Tested-by: Ajay Gupta <ajayg@nvidia.com>
 > ---
->   drivers/usb/typec/ucsi/ucsi_acpi.c | 93 ++++++++++++++++++++++++------
->   1 file changed, 74 insertions(+), 19 deletions(-)
+>   drivers/usb/typec/ucsi/ucsi_ccg.c | 170 +++++++++++++++---------------
+>   1 file changed, 85 insertions(+), 85 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> index a18112a83fae..88d2401e3e61 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-> @@ -19,7 +19,9 @@
->   struct ucsi_acpi {
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index d772fce51905..43442580a13c 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -176,8 +176,8 @@ struct ccg_resp {
+>   struct ucsi_ccg {
 >   	struct device *dev;
 >   	struct ucsi *ucsi;
 > -	struct ucsi_ppm ppm;
-> +	void __iomem *base;
+>   	struct i2c_client *client;
+> +
+>   	struct ccg_dev_info info;
+>   	/* version info for boot, primary and secondary */
+>   	struct version_info version[FW2 + 1];
+> @@ -196,6 +196,8 @@ struct ucsi_ccg {
+>   	/* fw build with vendor information */
+>   	u16 fw_build;
+>   	struct work_struct pm_work;
+> +
 > +	struct completion complete;
-> +	unsigned long flags;
->   	guid_t guid;
 >   };
 >   
-> @@ -39,27 +41,75 @@ static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+>   static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+> @@ -243,7 +245,7 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
 >   	return 0;
 >   }
 >   
-> -static int ucsi_acpi_cmd(struct ucsi_ppm *ppm, struct ucsi_control *ctrl)
-> +static int ucsi_acpi_read(struct ucsi *ucsi, unsigned int offset,
-> +			  void *val, size_t val_len)
+> -static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
+> +static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
 >   {
-> -	struct ucsi_acpi *ua = container_of(ppm, struct ucsi_acpi, ppm);
-> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> +	int ret;
-> +
-> +	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memcpy(val, (const void __force *)(ua->base + offset), val_len);
-> +
-
-Would it be better to use memcpy_fromio() and memcpy_toio() if
-ua->base indeed points to iomem ?
-
-> +	return 0;
-> +}
-> +
-> +static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
-> +				 const void *val, size_t val_len)
-> +{
-> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
->   
-> -	ppm->data->ctrl.raw_cmd = ctrl->raw_cmd;
-> +	memcpy((void __force *)(ua->base + offset), val, val_len);
->   
->   	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
+>   	struct i2c_client *client = uc->client;
+>   	unsigned char *buf;
+> @@ -317,88 +319,89 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
+>   	return -ETIMEDOUT;
 >   }
 >   
-> -static int ucsi_acpi_sync(struct ucsi_ppm *ppm)
-> +static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
+> -static int ucsi_ccg_send_data(struct ucsi_ccg *uc)
+> +static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
+> +			 void *val, size_t val_len)
+>   {
+> -	u8 *ppm = (u8 *)uc->ppm.data;
+> -	int status;
+> -	u16 rab;
+> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
+>   
+> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, message_out));
+> -	status = ccg_write(uc, rab, ppm +
+> -			   offsetof(struct ucsi_data, message_out),
+> -			   sizeof(uc->ppm.data->message_out));
+> -	if (status < 0)
+> -		return status;
+> -
+> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, ctrl));
+> -	return ccg_write(uc, rab, ppm + offsetof(struct ucsi_data, ctrl),
+> -			 sizeof(uc->ppm.data->ctrl));
+> +	return ccg_read(ucsi_get_drvdata(ucsi), reg, val, val_len);
+>   }
+>   
+> -static int ucsi_ccg_recv_data(struct ucsi_ccg *uc)
+> +static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
 > +				const void *val, size_t val_len)
 >   {
-> -	struct ucsi_acpi *ua = container_of(ppm, struct ucsi_acpi, ppm);
-> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
-> +	int ret;
-> +
-> +	set_bit(COMMAND_PENDING, &ua->flags);
-> +
-> +	ret = ucsi_acpi_async_write(ucsi, offset, val, val_len);
-> +	if (ret)
-> +		goto out_clear_bit;
+> -	u8 *ppm = (u8 *)uc->ppm.data;
+> -	int status;
+> -	u16 rab;
+> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
 >   
-> -	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-> +	if (!wait_for_completion_timeout(&ua->complete, msecs_to_jiffies(5000)))
+> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, cci));
+> -	status = ccg_read(uc, rab, ppm + offsetof(struct ucsi_data, cci),
+> -			  sizeof(uc->ppm.data->cci));
+> -	if (status < 0)
+> -		return status;
+> -
+> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, message_in));
+> -	return ccg_read(uc, rab, ppm + offsetof(struct ucsi_data, message_in),
+> -			sizeof(uc->ppm.data->message_in));
+> +	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
+>   }
+>   
+> -static int ucsi_ccg_ack_interrupt(struct ucsi_ccg *uc)
+> +static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
+> +			       const void *val, size_t val_len)
+>   {
+> -	int status;
+> -	unsigned char data;
+> +	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+> +	int ret;
+>   
+> -	status = ccg_read(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
+> -	if (status < 0)
+> -		return status;
+> +	mutex_lock(&uc->lock);
+> +	pm_runtime_get_sync(uc->dev);
+> +	set_bit(DEV_CMD_PENDING, &uc->flags);
+>   
+> -	return ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
+> -}
+> +	ret = ucsi_ccg_async_write(ucsi, offset, val, val_len);
+> +	if (ret)
+> +		goto err_clear_bit;
+>   
+> -static int ucsi_ccg_sync(struct ucsi_ppm *ppm)
+> -{
+> -	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
+> -	int status;
+> +	if (!wait_for_completion_timeout(&uc->complete, msecs_to_jiffies(5000)))
 > +		ret = -ETIMEDOUT;
-> +
-> +out_clear_bit:
-> +	clear_bit(COMMAND_PENDING, &ua->flags);
-> +
+>   
+> -	status = ucsi_ccg_recv_data(uc);
+> -	if (status < 0)
+> -		return status;
+> +err_clear_bit:
+> +	clear_bit(DEV_CMD_PENDING, &uc->flags);
+> +	pm_runtime_put_sync(uc->dev);
+> +	mutex_unlock(&uc->lock);
+>   
+> -	/* ack interrupt to allow next command to run */
+> -	return ucsi_ccg_ack_interrupt(uc);
 > +	return ret;
 >   }
 >   
-> +static const struct ucsi_operations ucsi_acpi_ops = {
-> +	.read = ucsi_acpi_read,
-> +	.sync_write = ucsi_acpi_sync_write,
-> +	.async_write = ucsi_acpi_async_write
+> -static int ucsi_ccg_cmd(struct ucsi_ppm *ppm, struct ucsi_control *ctrl)
+> -{
+> -	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
+> -
+> -	ppm->data->ctrl.raw_cmd = ctrl->raw_cmd;
+> -	return ucsi_ccg_send_data(uc);
+> -}
+> +static const struct ucsi_operations ucsi_ccg_ops = {
+> +	.read = ucsi_ccg_read,
+> +	.sync_write = ucsi_ccg_sync_write,
+> +	.async_write = ucsi_ccg_async_write
 > +};
-> +
->   static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+>   
+>   static irqreturn_t ccg_irq_handler(int irq, void *data)
 >   {
->   	struct ucsi_acpi *ua = data;
+> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CCI);
+>   	struct ucsi_ccg *uc = data;
+> +	u8 intr_reg;
 > +	u32 cci;
 > +	int ret;
 > +
-> +	ret = ucsi_acpi_read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
 > +	if (ret) {
-> +		dev_err(ua->dev, "failed to read CCI\n");
+> +		dev_err(uc->dev, "failed to read CCI\n");
 
-If I follow the call chain correctly, this would be from ucsi_acpi_dsm(),
-which already logs an error message.
+ccg_read() already logs an error message.
 
-> +		return;
+> +		goto err_clear_irq;
 > +	}
+> +
+> +	if (UCSI_CCI_CONNECTOR(cci))
+> +		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
 >   
-> -	ucsi_notify(ua->ucsi);
-> +	if (test_bit(COMMAND_PENDING, &ua->flags) &&
+> -	ucsi_notify(uc->ucsi);
+> +	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
 > +	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
-> +		complete(&ua->complete);
-> +	else if (UCSI_CCI_CONNECTOR(cci))
-> +		ucsi_connector_change(ua->ucsi, UCSI_CCI_CONNECTOR(cci));
+> +		complete(&uc->complete);
+> +
+> +err_clear_irq:
+> +	ret =  ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
+> +	if (ret)
+> +		dev_err(uc->dev, "failed to clear interrupt\n");
+
+ccg_write() already logs an error message.
+
+>   
+>   	return IRQ_HANDLED;
 >   }
 >   
->   static int ucsi_acpi_probe(struct platform_device *pdev)
-> @@ -90,35 +140,39 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
->   	 * it can not be requested here, and we can not use
->   	 * devm_ioremap_resource().
->   	 */
-> -	ua->ppm.data = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> -	if (!ua->ppm.data)
-> +	ua->base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
-> +	if (!ua->base)
+>   static void ccg_pm_workaround_work(struct work_struct *pm_work)
+>   {
+> -	struct ucsi_ccg *uc = container_of(pm_work, struct ucsi_ccg, pm_work);
+> -
+> -	ucsi_notify(uc->ucsi);
+> +	ccg_irq_handler(0, container_of(pm_work, struct ucsi_ccg, pm_work));
+>   }
+>   
+>   static int get_fw_info(struct ucsi_ccg *uc)
+> @@ -1027,10 +1030,10 @@ static int ccg_restart(struct ucsi_ccg *uc)
+>   		return status;
+>   	}
+>   
+> -	uc->ucsi = ucsi_register_ppm(dev, &uc->ppm);
+> -	if (IS_ERR(uc->ucsi)) {
+> -		dev_err(uc->dev, "ucsi_register_ppm failed\n");
+> -		return PTR_ERR(uc->ucsi);
+> +	status = ucsi_register(uc->ucsi);
+> +	if (status) {
+> +		dev_err(uc->dev, "failed to register the interface\n");
+> +		return status;
+>   	}
+>   
+>   	return 0;
+> @@ -1047,7 +1050,7 @@ static void ccg_update_firmware(struct work_struct *work)
+>   		return;
+>   
+>   	if (flash_mode != FLASH_NOT_NEEDED) {
+> -		ucsi_unregister_ppm(uc->ucsi);
+> +		ucsi_unregister(uc->ucsi);
+>   		free_irq(uc->irq, uc);
+>   
+>   		ccg_fw_update(uc, flash_mode);
+> @@ -1091,21 +1094,15 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+>   	struct device *dev = &client->dev;
+>   	struct ucsi_ccg *uc;
+>   	int status;
+> -	u16 rab;
+>   
+>   	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
+>   	if (!uc)
 >   		return -ENOMEM;
 >   
-> -	if (!ua->ppm.data->version)
-> -		return -ENODEV;
+> -	uc->ppm.data = devm_kzalloc(dev, sizeof(struct ucsi_data), GFP_KERNEL);
+> -	if (!uc->ppm.data)
+> -		return -ENOMEM;
 > -
->   	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
->   	if (ret)
->   		return ret;
+> -	uc->ppm.cmd = ucsi_ccg_cmd;
+> -	uc->ppm.sync = ucsi_ccg_sync;
+>   	uc->dev = dev;
+>   	uc->client = client;
+>   	mutex_init(&uc->lock);
+> +	init_completion(&uc->complete);
+>   	INIT_WORK(&uc->work, ccg_update_firmware);
+>   	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
 >   
-> -	ua->ppm.cmd = ucsi_acpi_cmd;
-> -	ua->ppm.sync = ucsi_acpi_sync;
-> +	init_completion(&ua->complete);
->   	ua->dev = &pdev->dev;
+> @@ -1133,30 +1130,25 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+>   	if (uc->info.mode & CCG_DEVINFO_PDPORTS_MASK)
+>   		uc->port_num++;
 >   
-> +	ua->ucsi = ucsi_create(&pdev->dev, &ucsi_acpi_ops);
-> +	if (IS_ERR(ua->ucsi))
-> +		return PTR_ERR(ua->ucsi);
+> +	uc->ucsi = ucsi_create(dev, &ucsi_ccg_ops);
+> +	if (IS_ERR(uc->ucsi))
+> +		return PTR_ERR(uc->ucsi);
 > +
-> +	ucsi_set_drvdata(ua->ucsi, ua);
+> +	ucsi_set_drvdata(uc->ucsi, uc);
 > +
->   	status = acpi_install_notify_handler(ACPI_HANDLE(&pdev->dev),
->   					     ACPI_DEVICE_NOTIFY,
->   					     ucsi_acpi_notify, ua);
->   	if (ACPI_FAILURE(status)) {
->   		dev_err(&pdev->dev, "failed to install notify handler\n");
-> +		ucsi_destroy(ua->ucsi);
->   		return -ENODEV;
+>   	status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
+>   				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
+>   				      dev_name(dev), uc);
+>   	if (status < 0) {
+>   		dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
+> -		return status;
+> +		goto out_ucsi_destroy;
 >   	}
 >   
-> -	ua->ucsi = ucsi_register_ppm(&pdev->dev, &ua->ppm);
-> -	if (IS_ERR(ua->ucsi)) {
-> +	ret = ucsi_register(ua->ucsi);
-> +	if (ret) {
->   		acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev),
->   					   ACPI_DEVICE_NOTIFY,
->   					   ucsi_acpi_notify);
-> -		return PTR_ERR(ua->ucsi);
-> +		ucsi_destroy(ua->ucsi);
-> +		return ret;
->   	}
+>   	uc->irq = client->irq;
 >   
->   	platform_set_drvdata(pdev, ua);
-> @@ -130,7 +184,8 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
->   {
->   	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
+> -	uc->ucsi = ucsi_register_ppm(dev, &uc->ppm);
+> -	if (IS_ERR(uc->ucsi)) {
+> -		dev_err(uc->dev, "ucsi_register_ppm failed\n");
+> -		return PTR_ERR(uc->ucsi);
+> -	}
+> -
+> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, version));
+> -	status = ccg_read(uc, rab, (u8 *)(uc->ppm.data) +
+> -			  offsetof(struct ucsi_data, version),
+> -			  sizeof(uc->ppm.data->version));
+> -	if (status < 0) {
+> -		ucsi_unregister_ppm(uc->ucsi);
+> -		return status;
+> -	}
+> +	status = ucsi_register(uc->ucsi);
+> +	if (status)
+> +		goto out_free_irq;
 >   
-> -	ucsi_unregister_ppm(ua->ucsi);
-> +	ucsi_unregister(ua->ucsi);
-> +	ucsi_destroy(ua->ucsi);
+>   	i2c_set_clientdata(client, uc);
 >   
->   	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
->   				   ucsi_acpi_notify);
+> @@ -1167,6 +1159,13 @@ static int ucsi_ccg_probe(struct i2c_client *client,
+>   	pm_runtime_idle(uc->dev);
+>   
+>   	return 0;
+> +
+> +out_free_irq:
+> +	free_irq(uc->irq, uc);
+> +out_ucsi_destroy:
+> +	ucsi_destroy(uc->ucsi);
+> +
+> +	return status;
+>   }
+>   
+>   static int ucsi_ccg_remove(struct i2c_client *client)
+> @@ -1175,8 +1174,9 @@ static int ucsi_ccg_remove(struct i2c_client *client)
+>   
+>   	cancel_work_sync(&uc->pm_work);
+>   	cancel_work_sync(&uc->work);
+> -	ucsi_unregister_ppm(uc->ucsi);
+>   	pm_runtime_disable(uc->dev);
+> +	ucsi_unregister(uc->ucsi);
+> +	ucsi_destroy(uc->ucsi);
+>   	free_irq(uc->irq, uc);
+>   
+>   	return 0;
 > 
 
