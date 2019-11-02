@@ -2,811 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D58ECFD8
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 18:00:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E356AECFF4
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 18:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726675AbfKBRAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Nov 2019 13:00:24 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:41294 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726523AbfKBRAY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 13:00:24 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l3so8407554pgr.8
-        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 10:00:23 -0700 (PDT)
+        id S1726861AbfKBR0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Nov 2019 13:26:13 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53858 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726689AbfKBR0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 13:26:12 -0400
+Received: by mail-wm1-f66.google.com with SMTP id x4so1352819wmi.3;
+        Sat, 02 Nov 2019 10:26:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nHOCmQJ81qBHBTEfH0V84Fbti2y4HY3U/SPL6Sbjbm0=;
-        b=SPsrJVyyHwlwF/K1K64wILcjIMEoga1Sb0bA18lqjUO2uGgaUMKPoTugUzcug8bAzR
-         gqe4AYVKbjig3ojDHu5MrDX+g51DAh7bvSI6lUqQwXOWKdZjUwlIhFS1Z7aPIjA5KrC6
-         M71sVwmkRFOcOz0Gcjq9kIOt2nlJ4twAv7KjBaBCiBf5C9toyNJJXLL4ZOVJ5jRKYn0k
-         1hXi7ZJBPKplQZ56AN5pqpLQqJCWamIr2SMYsx5ank1+uBSRemD8sywzw2vQh/ovgfQz
-         sz172xPjUqJcGVUIwhNPEX3DN0eCyglih973EHu0Y+IyP7VMVblxlgJTQEh3Il1Uul6O
-         FMPQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fyDnq1nN+nBljTccUqkL0S9NbGaMqk/7uGJ95nKwmMY=;
+        b=UQapHqN+wkzlL1+uoBngM6+F2een+XSvY2UaBruXhkgTonLhACYXkUlP9MjGCpZTkA
+         kNmatLBhwJnRITBvYO+QUhpi2ect00W7N9NBQTvovOBJzaP8k6n3kphs8RvmiJGMWHa1
+         zV0TMbDZAsdu8aeR1252Cy7dhiTCtQNh5PLZhOBPL95xHecqw1HW6pfUvi6w1oDMtq2O
+         wtaHDL/9KLnp7R+NJdfATcV8PQWdQ4xTSVAxKnXXfCvuHhd9/wJO79YUpRLjZwbnOWnp
+         q3SaSPuouALuolZEm/Zgrw0URVh9Lxr4juvdM2pXBx/IgkPTPJyh6dW8pZAMxY0k93Lk
+         1sTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=nHOCmQJ81qBHBTEfH0V84Fbti2y4HY3U/SPL6Sbjbm0=;
-        b=tmkenT2geu3qkJssmFxdg3BysxurJWv5FFWtz5HylgRMCkjcdQ6G081jsXdx6LcaBn
-         tyb2yxUrCnAccDUuZo0RtdbfDhMlFIpqPEDe47N/vufFM5obFpU5pFU0b1hOvqCj1uFh
-         JrKttjKr58BycTMC0AcH6QxILJVg82P6XtgCRl0eEafYzhGl9Fv08em366aEBcnfogLn
-         xMF2vjzHZZpfumDXYO+V1dybDLz148bcAHmjMDSCdUqiBD/VgLpNrszqpZKcZhMrmzXf
-         cDAEdQpok37AmLqMFSO6/YJ4kI/iYwHL6lI3EZC2TDO0EWXnyBADCrh42bnVJP4F6i0O
-         QSRA==
-X-Gm-Message-State: APjAAAVtl+mvMXjOkdMqVaZj+c/9hBBmG7IJZU36Jaj93/PLc6G0ngtW
-        J3vQmW2Da87fGu59FTbBhUknL3ed
-X-Google-Smtp-Source: APXvYqyjmOYHgHX3U8spKe68ZmUpopb/5NX+Xxj3pGZLccNXfHyJThET6/FtjQGnFomoqBJdsrD6iA==
-X-Received: by 2002:a63:4501:: with SMTP id s1mr20795034pga.5.1572714022491;
-        Sat, 02 Nov 2019 10:00:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 26sm11550712pjg.21.2019.11.02.10.00.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 02 Nov 2019 10:00:21 -0700 (PDT)
-Subject: Re: [PATCH v3 15/18] usb: typec: ucsi: Remove struct ucsi_control
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
-References: <20191025082324.75731-1-heikki.krogerus@linux.intel.com>
- <20191025082324.75731-16-heikki.krogerus@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <58a97638-49b7-3602-2778-2ddc834365d9@roeck-us.net>
-Date:   Sat, 2 Nov 2019 10:00:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        bh=fyDnq1nN+nBljTccUqkL0S9NbGaMqk/7uGJ95nKwmMY=;
+        b=NSzQ8XYx3CsMql8FlvrkR1XF+V1dtl6GgkT1xqbTOPdLyymSdsoSBCa7Eel0Cgx7K+
+         Xk+KWXlyNn9QpVBFfGK5kaAPlvbs4yI4FAfCVosHl8EWJkQCsVtAzU1sCWQ+S7wf7dor
+         Xn1loEsLxZysD7m44ybAKUZrBmoi5cY5uz9x4t2raDf5mGtcgSZoUzDJPn8cDd7vRm8W
+         BjgxnUm5eSmayfDlriyB8tatG1hcoyT+FbmUKXUjpiJwGsjco9ZrAFZW8+zeoHyAYk4h
+         aWiHp5Nh7YG6FNcNFAesk+fclL/uNHdho0JGJUwnAH6WgD9SWk1oWOLuQCR+I0RsJUbo
+         i5fQ==
+X-Gm-Message-State: APjAAAWE1D9z6IJm9ef36hOJq0/50EwEiv9weJ49NOqWVcDWQWPT+2gt
+        vvFfEq3guZXHSUC5YGAohlA=
+X-Google-Smtp-Source: APXvYqzr8A0WbBfIvXk0hpps0zg3o3Qa35KN4as2AfceMqz6x8DNxVAcrV9xEoD4HrMAHwnwkKWy0A==
+X-Received: by 2002:a1c:113:: with SMTP id 19mr14444772wmb.42.1572715570184;
+        Sat, 02 Nov 2019 10:26:10 -0700 (PDT)
+Received: from morpheus.home.roving-it.com (2.e.6.5.c.a.a.1.a.8.0.3.1.e.3.c.1.8.6.2.1.1.b.f.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:fb11:2681:c3e1:308a:1aac:56e2])
+        by smtp.googlemail.com with ESMTPSA id u10sm13682324wmj.0.2019.11.02.10.26.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Nov 2019 10:26:09 -0700 (PDT)
+From:   Peter Robinson <pbrobinson@gmail.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Cc:     Peter Robinson <pbrobinson@gmail.com>
+Subject: [PATCH] usb: host: xhci-tegra: set MODULE_FIRMWARE for tegra186
+Date:   Sat,  2 Nov 2019 17:26:06 +0000
+Message-Id: <20191102172606.26934-1-pbrobinson@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-In-Reply-To: <20191025082324.75731-16-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/25/19 1:23 AM, Heikki Krogerus wrote:
-> That data structure was used for constructing the commands
-> before executing them, but it was never really useful. Using
-> the structure just complicated the driver. The commands are
-> 64-bit wide, so it is enough to simply fill a u64 variable.
-> No data structures needed.
-> 
-> This simplifies the driver considerable and makes it much
-> easier to for example add support for big endian systems
-> later on.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Tested-by: Ajay Gupta <ajayg@nvidia.com>
+Set the MODULE_FIRMWARE for tegra186, it's registered for 124/210 and
+ensures the firmware is available at the appropriate time such as in
+the initrd, else if the firmware is unavailable the driver fails with
+the following errors:
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+tegra-xusb 3530000.usb: Direct firmware load for nvidia/tegra186/xusb.bin failed with error -2
+tegra-xusb 3530000.usb: failed to request firmware: -2
+tegra-xusb 3530000.usb: failed to load firmware: -2
+tegra-xusb: probe of 3530000.usb failed with error -2
 
-> ---
->   drivers/usb/typec/ucsi/displayport.c |  16 +-
->   drivers/usb/typec/ucsi/trace.c       |  11 --
->   drivers/usb/typec/ucsi/trace.h       |  50 +-----
->   drivers/usb/typec/ucsi/ucsi.c        | 107 +++++++------
->   drivers/usb/typec/ucsi/ucsi.h        | 231 +++++----------------------
->   5 files changed, 115 insertions(+), 300 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
-> index 47424935bc81..d4d5189edfb8 100644
-> --- a/drivers/usb/typec/ucsi/displayport.c
-> +++ b/drivers/usb/typec/ucsi/displayport.c
-> @@ -49,7 +49,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt)
->   {
->   	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
->   	struct ucsi *ucsi = dp->con->ucsi;
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	u8 cur = 0;
->   	int ret;
->   
-> @@ -64,7 +64,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt)
->   		goto err_unlock;
->   	}
->   
-> -	UCSI_CMD_GET_CURRENT_CAM(ctrl, dp->con->num);
-> +	command = UCSI_GET_CURRENT_CAM | UCSI_CONNECTOR_NUMBER(dp->con->num);
->   	ret = ucsi_send_command(ucsi, command, &cur, sizeof(cur));
->   	if (ret < 0) {
->   		if (ucsi->version > 0x0100)
-> @@ -101,7 +101,7 @@ static int ucsi_displayport_enter(struct typec_altmode *alt)
->   static int ucsi_displayport_exit(struct typec_altmode *alt)
->   {
->   	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret = 0;
->   
->   	mutex_lock(&dp->con->lock);
-> @@ -115,8 +115,8 @@ static int ucsi_displayport_exit(struct typec_altmode *alt)
->   		goto out_unlock;
->   	}
->   
-> -	ctrl.raw_cmd = UCSI_CMD_SET_NEW_CAM(dp->con->num, 0, dp->offset, 0);
-> -	ret = ucsi_send_command(dp->con->ucsi, &ctrl, NULL, 0);
-> +	command = UCSI_CMD_SET_NEW_CAM(dp->con->num, 0, dp->offset, 0);
-> +	ret = ucsi_send_command(dp->con->ucsi, command, NULL, 0);
->   	if (ret < 0)
->   		goto out_unlock;
->   
-> @@ -170,14 +170,14 @@ static int ucsi_displayport_status_update(struct ucsi_dp *dp)
->   static int ucsi_displayport_configure(struct ucsi_dp *dp)
->   {
->   	u32 pins = DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   
->   	if (!dp->override)
->   		return 0;
->   
-> -	ctrl.raw_cmd = UCSI_CMD_SET_NEW_CAM(dp->con->num, 1, dp->offset, pins);
-> +	command = UCSI_CMD_SET_NEW_CAM(dp->con->num, 1, dp->offset, pins);
->   
-> -	return ucsi_send_command(dp->con->ucsi, &ctrl, NULL, 0);
-> +	return ucsi_send_command(dp->con->ucsi, command, NULL, 0);
->   }
->   
->   static int ucsi_displayport_vdm(struct typec_altmode *alt,
-> diff --git a/drivers/usb/typec/ucsi/trace.c b/drivers/usb/typec/ucsi/trace.c
-> index 1dabafb74320..48ad1dc1b1b2 100644
-> --- a/drivers/usb/typec/ucsi/trace.c
-> +++ b/drivers/usb/typec/ucsi/trace.c
-> @@ -33,17 +33,6 @@ const char *ucsi_cmd_str(u64 raw_cmd)
->   	return ucsi_cmd_strs[(cmd >= ARRAY_SIZE(ucsi_cmd_strs)) ? 0 : cmd];
->   }
->   
-> -static const char * const ucsi_ack_strs[] = {
-> -	[0]				= "",
-> -	[UCSI_ACK_EVENT]		= "event",
-> -	[UCSI_ACK_CMD]			= "command",
-> -};
-> -
-> -const char *ucsi_ack_str(u8 ack)
-> -{
-> -	return ucsi_ack_strs[(ack >= ARRAY_SIZE(ucsi_ack_strs)) ? 0 : ack];
-> -}
-> -
->   const char *ucsi_cci_str(u32 cci)
->   {
->   	if (cci & GENMASK(7, 0)) {
-> diff --git a/drivers/usb/typec/ucsi/trace.h b/drivers/usb/typec/ucsi/trace.h
-> index 6e3d510b236e..2262229dae8e 100644
-> --- a/drivers/usb/typec/ucsi/trace.h
-> +++ b/drivers/usb/typec/ucsi/trace.h
-> @@ -10,54 +10,18 @@
->   #include <linux/usb/typec_altmode.h>
->   
->   const char *ucsi_cmd_str(u64 raw_cmd);
-> -const char *ucsi_ack_str(u8 ack);
->   const char *ucsi_cci_str(u32 cci);
->   const char *ucsi_recipient_str(u8 recipient);
->   
-> -DECLARE_EVENT_CLASS(ucsi_log_ack,
-> -	TP_PROTO(u8 ack),
-> -	TP_ARGS(ack),
-> -	TP_STRUCT__entry(
-> -		__field(u8, ack)
-> -	),
-> -	TP_fast_assign(
-> -		__entry->ack = ack;
-> -	),
-> -	TP_printk("ACK %s", ucsi_ack_str(__entry->ack))
-> -);
-> -
-> -DEFINE_EVENT(ucsi_log_ack, ucsi_ack,
-> -	TP_PROTO(u8 ack),
-> -	TP_ARGS(ack)
-> -);
-> -
-> -DECLARE_EVENT_CLASS(ucsi_log_control,
-> -	TP_PROTO(struct ucsi_control *ctrl),
-> -	TP_ARGS(ctrl),
-> -	TP_STRUCT__entry(
-> -		__field(u64, ctrl)
-> -	),
-> -	TP_fast_assign(
-> -		__entry->ctrl = ctrl->raw_cmd;
-> -	),
-> -	TP_printk("control=%08llx (%s)", __entry->ctrl,
-> -		ucsi_cmd_str(__entry->ctrl))
-> -);
-> -
-> -DEFINE_EVENT(ucsi_log_control, ucsi_command,
-> -	TP_PROTO(struct ucsi_control *ctrl),
-> -	TP_ARGS(ctrl)
-> -);
-> -
->   DECLARE_EVENT_CLASS(ucsi_log_command,
-> -	TP_PROTO(struct ucsi_control *ctrl, int ret),
-> -	TP_ARGS(ctrl, ret),
-> +	TP_PROTO(u64 command, int ret),
-> +	TP_ARGS(command, ret),
->   	TP_STRUCT__entry(
->   		__field(u64, ctrl)
->   		__field(int, ret)
->   	),
->   	TP_fast_assign(
-> -		__entry->ctrl = ctrl->raw_cmd;
-> +		__entry->ctrl = command;
->   		__entry->ret = ret;
->   	),
->   	TP_printk("%s -> %s (err=%d)", ucsi_cmd_str(__entry->ctrl),
-> @@ -66,13 +30,13 @@ DECLARE_EVENT_CLASS(ucsi_log_command,
->   );
->   
->   DEFINE_EVENT(ucsi_log_command, ucsi_run_command,
-> -	TP_PROTO(struct ucsi_control *ctrl, int ret),
-> -	TP_ARGS(ctrl, ret)
-> +	TP_PROTO(u64 command, int ret),
-> +	TP_ARGS(command, ret)
->   );
->   
->   DEFINE_EVENT(ucsi_log_command, ucsi_reset_ppm,
-> -	TP_PROTO(struct ucsi_control *ctrl, int ret),
-> -	TP_ARGS(ctrl, ret)
-> +	TP_PROTO(u64 command, int ret),
-> +	TP_ARGS(command, ret)
->   );
->   
->   DECLARE_EVENT_CLASS(ucsi_log_connector_status,
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index 6462dadd7540..373dd575c68d 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -131,13 +131,13 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
->   	return UCSI_CCI_LENGTH(cci);
->   }
->   
-> -static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
-> +static int ucsi_run_command(struct ucsi *ucsi, u64 command,
->   			    void *data, size_t size)
->   {
->   	u8 length;
->   	int ret;
->   
-> -	ret = ucsi_exec_command(ucsi, ctrl->raw_cmd);
-> +	ret = ucsi_exec_command(ucsi, command);
->   	if (ret < 0)
->   		return ret;
->   
-> @@ -156,13 +156,13 @@ static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
->   	return length;
->   }
->   
-> -int ucsi_send_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
-> +int ucsi_send_command(struct ucsi *ucsi, u64 command,
->   		      void *retval, size_t size)
->   {
->   	int ret;
->   
->   	mutex_lock(&ucsi->ppm_lock);
-> -	ret = ucsi_run_command(ucsi, ctrl, retval, size);
-> +	ret = ucsi_run_command(ucsi, command, retval, size);
->   	mutex_unlock(&ucsi->ppm_lock);
->   
->   	return ret;
-> @@ -171,11 +171,12 @@ EXPORT_SYMBOL_GPL(ucsi_send_command);
->   
->   int ucsi_resume(struct ucsi *ucsi)
->   {
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   
->   	/* Restore UCSI notification enable mask after system resume */
-> -	UCSI_CMD_SET_NTFY_ENABLE(ctrl, UCSI_ENABLE_NTFY_ALL);
-> -	return ucsi_send_command(ucsi, &ctrl, NULL, 0);
-> +	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
-> +
-> +	return ucsi_send_command(ucsi, command, NULL, 0);
->   }
->   EXPORT_SYMBOL_GPL(ucsi_resume);
->   /* -------------------------------------------------------------------------- */
-> @@ -188,8 +189,8 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
->   	u8 cur;
->   	int i;
->   
-> -	UCSI_CMD_GET_CURRENT_CAM(ctrl, con->num);
-> -	ret = ucsi_run_command(con->ucsi, &ctrl, &cur, sizeof(cur));
-> +	command = UCSI_GET_CURRENT_CAM | UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret = ucsi_run_command(con->ucsi, command, &cur, sizeof(cur));
->   	if (ret < 0) {
->   		if (con->ucsi->version > 0x0100) {
->   			dev_err(con->ucsi->dev,
-> @@ -307,7 +308,7 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
->   	int max_altmodes = UCSI_MAX_ALTMODES;
->   	struct typec_altmode_desc desc;
->   	struct ucsi_altmode alt[2];
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int num = 1;
->   	int ret;
->   	int len;
-> @@ -325,8 +326,11 @@ static int ucsi_register_altmodes(struct ucsi_connector *con, u8 recipient)
->   
->   	for (i = 0; i < max_altmodes;) {
->   		memset(alt, 0, sizeof(alt));
-> -		UCSI_CMD_GET_ALTERNATE_MODES(ctrl, recipient, con->num, i, 1);
-> -		len = ucsi_run_command(con->ucsi, &ctrl, alt, sizeof(alt));
-> +		command = UCSI_GET_ALTERNATE_MODES;
-> +		command |= UCSI_GET_ALTMODE_RECIPIENT(recipient);
-> +		command |= UCSI_GET_ALTMODE_CONNECTOR_NUMBER(con->num);
-> +		command |= UCSI_GET_ALTMODE_OFFSET(i);
-> +		len = ucsi_run_command(con->ucsi, command, alt, sizeof(alt));
->   		if (len <= 0)
->   			return len;
->   
-> @@ -487,13 +491,14 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->   	struct ucsi_connector *con = container_of(work, struct ucsi_connector,
->   						  work);
->   	struct ucsi *ucsi = con->ucsi;
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret;
->   
->   	mutex_lock(&con->lock);
->   
-> -	UCSI_CMD_GET_CONNECTOR_STATUS(ctrl, con->num);
-> -	ret = ucsi_send_command(ucsi, &ctrl, &con->status, sizeof(con->status));
-> +	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret = ucsi_send_command(ucsi, command, &con->status,
-> +				sizeof(con->status));
->   	if (ret < 0) {
->   		dev_err(ucsi->dev, "%s: GET_CONNECTOR_STATUS failed (%d)\n",
->   			__func__, ret);
-> @@ -537,8 +542,9 @@ static void ucsi_handle_connector_change(struct work_struct *work)
->   		 * Running GET_CAM_SUPPORTED command just to make sure the PPM
->   		 * does not get stuck in case it assumes we do so.
->   		 */
-> -		UCSI_CMD_GET_CAM_SUPPORTED(ctrl, con->num);
-> -		ucsi_run_command(con->ucsi, &ctrl, NULL, 0);
-> +		command = UCSI_GET_CAM_SUPPORTED;
-> +		command |= UCSI_CONNECTOR_NUMBER(con->num);
-> +		ucsi_run_command(con->ucsi, command, NULL, 0);
->   	}
->   
->   	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
-> @@ -573,11 +579,12 @@ EXPORT_SYMBOL_GPL(ucsi_connector_change);
->   
->   static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
->   {
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   
-> -	UCSI_CMD_CONNECTOR_RESET(ctrl, con, hard);
-> +	command = UCSI_CONNECTOR_RESET | UCSI_CONNECTOR_NUMBER(con->num);
-> +	command |= hard ? UCSI_CONNECTOR_RESET_HARD : 0;
->   
-> -	return ucsi_send_command(con->ucsi, &ctrl, NULL, 0);
-> +	return ucsi_send_command(con->ucsi, command, NULL, 0);
->   }
->   
->   static int ucsi_reset_ppm(struct ucsi *ucsi)
-> @@ -617,21 +624,21 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
->   	return 0;
->   }
->   
-> -static int ucsi_role_cmd(struct ucsi_connector *con, struct ucsi_control *ctrl)
-> +static int ucsi_role_cmd(struct ucsi_connector *con, u64 command)
->   {
->   	int ret;
->   
-> -	ret = ucsi_send_command(con->ucsi, ctrl, NULL, 0);
-> +	ret = ucsi_send_command(con->ucsi, command, NULL, 0);
->   	if (ret == -ETIMEDOUT) {
-> -		struct ucsi_control c;
-> +		u64 c;
->   
->   		/* PPM most likely stopped responding. Resetting everything. */
->   		mutex_lock(&con->ucsi->ppm_lock);
->   		ucsi_reset_ppm(con->ucsi);
->   		mutex_unlock(&con->ucsi->ppm_lock);
->   
-> -		UCSI_CMD_SET_NTFY_ENABLE(c, UCSI_ENABLE_NTFY_ALL);
-> -		ucsi_send_command(con->ucsi, &c, NULL, 0);
-> +		c = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
-> +		ucsi_send_command(con->ucsi, c, NULL, 0);
->   
->   		ucsi_reset_connector(con, true);
->   	}
-> @@ -642,7 +649,7 @@ static int ucsi_role_cmd(struct ucsi_connector *con, struct ucsi_control *ctrl)
->   static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
->   {
->   	struct ucsi_connector *con = typec_get_drvdata(port);
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret = 0;
->   
->   	mutex_lock(&con->lock);
-> @@ -658,8 +665,10 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
->   	     role == TYPEC_HOST))
->   		goto out_unlock;
->   
-> -	UCSI_CMD_SET_UOR(ctrl, con, role);
-> -	ret = ucsi_role_cmd(con, &ctrl);
-> +	command = UCSI_SET_UOR | UCSI_CONNECTOR_NUMBER(con->num);
-> +	command |= UCSI_SET_UOR_ROLE(role);
-> +	command |= UCSI_SET_UOR_ACCEPT_ROLE_SWAPS;
-> +	ret = ucsi_role_cmd(con, command);
->   	if (ret < 0)
->   		goto out_unlock;
->   
-> @@ -676,7 +685,7 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
->   static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
->   {
->   	struct ucsi_connector *con = typec_get_drvdata(port);
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret = 0;
->   
->   	mutex_lock(&con->lock);
-> @@ -689,8 +698,10 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
->   	if (con->status.pwr_dir == role)
->   		goto out_unlock;
->   
-> -	UCSI_CMD_SET_PDR(ctrl, con, role);
-> -	ret = ucsi_role_cmd(con, &ctrl);
-> +	command = UCSI_SET_PDR | UCSI_CONNECTOR_NUMBER(con->num);
-> +	command |= UCSI_SET_PDR_ROLE(role);
-> +	command |= UCSI_SET_PDR_ACCEPT_ROLE_SWAPS;
-> +	ret = ucsi_role_cmd(con, command);
->   	if (ret < 0)
->   		goto out_unlock;
->   
-> @@ -733,7 +744,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   	struct ucsi_connector *con = &ucsi->connector[index];
->   	struct typec_capability *cap = &con->typec_cap;
->   	enum typec_accessory *accessory = cap->accessory;
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret;
->   
->   	INIT_WORK(&con->work, ucsi_handle_connector_change);
-> @@ -743,8 +754,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   	con->ucsi = ucsi;
->   
->   	/* Get connector capability */
-> -	UCSI_CMD_GET_CONNECTOR_CAPABILITY(ctrl, con->num);
-> -	ret = ucsi_run_command(ucsi, &ctrl, &con->cap, sizeof(con->cap));
-> +	command = UCSI_GET_CONNECTOR_CAPABILITY;
-> +	command |= UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret = ucsi_run_command(ucsi, command, &con->cap, sizeof(con->cap));
->   	if (ret < 0)
->   		return ret;
->   
-> @@ -787,8 +799,9 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   			con->num);
->   
->   	/* Get the status */
-> -	UCSI_CMD_GET_CONNECTOR_STATUS(ctrl, con->num);
-> -	ret = ucsi_run_command(ucsi, &ctrl, &con->status, sizeof(con->status));
-> +	command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
-> +	ret = ucsi_run_command(ucsi, command, &con->status,
-> +			       sizeof(con->status));
->   	if (ret < 0) {
->   		dev_err(ucsi->dev, "con%d: failed to get status\n", con->num);
->   		return 0;
-> @@ -836,7 +849,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
->   int ucsi_init(struct ucsi *ucsi)
->   {
->   	struct ucsi_connector *con;
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int ret;
->   	int i;
->   
-> @@ -850,15 +863,15 @@ int ucsi_init(struct ucsi *ucsi)
->   	}
->   
->   	/* Enable basic notifications */
-> -	UCSI_CMD_SET_NTFY_ENABLE(ctrl, UCSI_ENABLE_NTFY_CMD_COMPLETE |
-> -					UCSI_ENABLE_NTFY_ERROR);
-> -	ret = ucsi_run_command(ucsi, &ctrl, NULL, 0);
-> +	command = UCSI_SET_NOTIFICATION_ENABLE;
-> +	command |= UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR;
-> +	ret = ucsi_run_command(ucsi, command, NULL, 0);
->   	if (ret < 0)
->   		goto err_reset;
->   
->   	/* Get PPM capabilities */
-> -	UCSI_CMD_GET_CAPABILITY(ctrl);
-> -	ret = ucsi_run_command(ucsi, &ctrl, &ucsi->cap, sizeof(ucsi->cap));
-> +	command = UCSI_GET_CAPABILITY;
-> +	ret = ucsi_run_command(ucsi, command, &ucsi->cap, sizeof(ucsi->cap));
->   	if (ret < 0)
->   		goto err_reset;
->   
-> @@ -883,8 +896,8 @@ int ucsi_init(struct ucsi *ucsi)
->   	}
->   
->   	/* Enable all notifications */
-> -	UCSI_CMD_SET_NTFY_ENABLE(ctrl, UCSI_ENABLE_NTFY_ALL);
-> -	ret = ucsi_run_command(ucsi, &ctrl, NULL, 0);
-> +	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
-> +	ret = ucsi_run_command(ucsi, command, NULL, 0);
->   	if (ret < 0)
->   		goto err_unregister;
->   
-> @@ -1005,15 +1018,15 @@ EXPORT_SYMBOL_GPL(ucsi_register);
->    */
->   void ucsi_unregister(struct ucsi *ucsi)
->   {
-> -	struct ucsi_control ctrl;
-> +	u64 command;
->   	int i;
->   
->   	/* Make sure that we are not in the middle of driver initialization */
->   	cancel_work_sync(&ucsi->work);
->   
->   	/* Disable everything except command complete notification */
-> -	UCSI_CMD_SET_NTFY_ENABLE(ctrl, UCSI_ENABLE_NTFY_CMD_COMPLETE)
-> -	ucsi_send_command(ucsi, &ctrl, NULL, 0);
-> +	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_CMD_COMPLETE;
-> +	ucsi_send_command(ucsi, command, NULL, 0);
->   
->   	for (i = 0; i < ucsi->cap.num_connectors; i++) {
->   		cancel_work_sync(&ucsi->connector[i].work);
-> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-> index 29f9e7f0d212..4f1409e06d22 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.h
-> +++ b/drivers/usb/typec/ucsi/ucsi.h
-> @@ -60,178 +60,6 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
->   
->   /* -------------------------------------------------------------------------- */
->   
-> -/* Command Status and Connector Change Indication (CCI) data structure */
-> -struct ucsi_cci {
-> -	u8:1; /* reserved */
-> -	u8 connector_change:7;
-> -	u8 data_length;
-> -	u16:9; /* reserved */
-> -	u16 not_supported:1;
-> -	u16 cancel_complete:1;
-> -	u16 reset_complete:1;
-> -	u16 busy:1;
-> -	u16 ack_complete:1;
-> -	u16 error:1;
-> -	u16 cmd_complete:1;
-> -} __packed;
-> -
-> -/* Default fields in CONTROL data structure */
-> -struct ucsi_command {
-> -	u8 cmd;
-> -	u8 length;
-> -	u64 data:48;
-> -} __packed;
-> -
-> -/* ACK Command structure */
-> -struct ucsi_ack_cmd {
-> -	u8 cmd;
-> -	u8 length;
-> -	u8 cci_ack:1;
-> -	u8 cmd_ack:1;
-> -	u8:6; /* reserved */
-> -} __packed;
-> -
-> -/* Connector Reset Command structure */
-> -struct ucsi_con_rst {
-> -	u8 cmd;
-> -	u8 length;
-> -	u8 con_num:7;
-> -	u8 hard_reset:1;
-> -} __packed;
-> -
-> -/* Set USB Operation Mode Command structure */
-> -struct ucsi_uor_cmd {
-> -	u8 cmd;
-> -	u8 length;
-> -	u16 con_num:7;
-> -	u16 role:3;
-> -#define UCSI_UOR_ROLE_DFP			BIT(0)
-> -#define UCSI_UOR_ROLE_UFP			BIT(1)
-> -#define UCSI_UOR_ROLE_DRP			BIT(2)
-> -	u16:6; /* reserved */
-> -} __packed;
-> -
-> -/* Get Alternate Modes Command structure */
-> -struct ucsi_altmode_cmd {
-> -	u8 cmd;
-> -	u8 length;
-> -	u8 recipient;
-> -#define UCSI_RECIPIENT_CON			0
-> -#define UCSI_RECIPIENT_SOP			1
-> -#define UCSI_RECIPIENT_SOP_P			2
-> -#define UCSI_RECIPIENT_SOP_PP			3
-> -	u8 con_num;
-> -	u8 offset;
-> -	u8 num_altmodes;
-> -} __packed;
-> -
-> -struct ucsi_control {
-> -	union {
-> -		u64 raw_cmd;
-> -		struct ucsi_command cmd;
-> -		struct ucsi_uor_cmd uor;
-> -		struct ucsi_ack_cmd ack;
-> -		struct ucsi_con_rst con_rst;
-> -		struct ucsi_altmode_cmd alt;
-> -	};
-> -};
-> -
-> -#define __UCSI_CMD(_ctrl_, _cmd_)					\
-> -{									\
-> -	(_ctrl_).raw_cmd = 0;						\
-> -	(_ctrl_).cmd.cmd = _cmd_;					\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for CONNECTOR_RESET command. */
-> -#define UCSI_CMD_CONNECTOR_RESET(_ctrl_, _con_, _hard_)			\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_CONNECTOR_RESET)			\
-> -	(_ctrl_).con_rst.con_num = (_con_)->num;			\
-> -	(_ctrl_).con_rst.hard_reset = _hard_;				\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for ACK_CC_CI command. */
-> -#define UCSI_CMD_ACK(_ctrl_, _ack_)					\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_ACK_CC_CI)				\
-> -	(_ctrl_).ack.cci_ack = ((_ack_) == UCSI_ACK_EVENT);		\
-> -	(_ctrl_).ack.cmd_ack = ((_ack_) == UCSI_ACK_CMD);		\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for SET_NOTIFY_ENABLE command. */
-> -#define UCSI_CMD_SET_NTFY_ENABLE(_ctrl_, _ntfys_)			\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_SET_NOTIFICATION_ENABLE)		\
-> -	(_ctrl_).cmd.data = _ntfys_;					\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_CAPABILITY command. */
-> -#define UCSI_CMD_GET_CAPABILITY(_ctrl_)					\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_GET_CAPABILITY)				\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_CONNECTOR_CAPABILITY command. */
-> -#define UCSI_CMD_GET_CONNECTOR_CAPABILITY(_ctrl_, _con_)		\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_GET_CONNECTOR_CAPABILITY)		\
-> -	(_ctrl_).cmd.data = _con_;					\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_ALTERNATE_MODES command. */
-> -#define UCSI_CMD_GET_ALTERNATE_MODES(_ctrl_, _r_, _con_num_, _o_, _num_)\
-> -{									\
-> -	__UCSI_CMD((_ctrl_), UCSI_GET_ALTERNATE_MODES)			\
-> -	_ctrl_.alt.recipient = (_r_);					\
-> -	_ctrl_.alt.con_num = (_con_num_);				\
-> -	_ctrl_.alt.offset = (_o_);					\
-> -	_ctrl_.alt.num_altmodes = (_num_) - 1;				\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_CAM_SUPPORTED command. */
-> -#define UCSI_CMD_GET_CAM_SUPPORTED(_ctrl_, _con_)			\
-> -{									\
-> -	__UCSI_CMD((_ctrl_), UCSI_GET_CAM_SUPPORTED)			\
-> -	_ctrl_.cmd.data = (_con_);					\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_CAM_SUPPORTED command. */
-> -#define UCSI_CMD_GET_CURRENT_CAM(_ctrl_, _con_)			\
-> -{									\
-> -	__UCSI_CMD((_ctrl_), UCSI_GET_CURRENT_CAM)			\
-> -	_ctrl_.cmd.data = (_con_);					\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for GET_CONNECTOR_STATUS command. */
-> -#define UCSI_CMD_GET_CONNECTOR_STATUS(_ctrl_, _con_)			\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, UCSI_GET_CONNECTOR_STATUS)			\
-> -	(_ctrl_).cmd.data = _con_;					\
-> -}
-> -
-> -#define __UCSI_ROLE(_ctrl_, _cmd_, _con_num_)				\
-> -{									\
-> -	__UCSI_CMD(_ctrl_, _cmd_)					\
-> -	(_ctrl_).uor.con_num = _con_num_;				\
-> -	(_ctrl_).uor.role = UCSI_UOR_ROLE_DRP;				\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for SET_UOR command. */
-> -#define UCSI_CMD_SET_UOR(_ctrl_, _con_, _role_)				\
-> -{									\
-> -	__UCSI_ROLE(_ctrl_, UCSI_SET_UOR, (_con_)->num)		\
-> -	(_ctrl_).uor.role |= (_role_) == TYPEC_HOST ? UCSI_UOR_ROLE_DFP : \
-> -			  UCSI_UOR_ROLE_UFP;				\
-> -}
-> -
-> -/* Helper for preparing ucsi_control for SET_PDR command. */
-> -#define UCSI_CMD_SET_PDR(_ctrl_, _con_, _role_)			\
-> -{									\
-> -	__UCSI_ROLE(_ctrl_, UCSI_SET_PDR, (_con_)->num)		\
-> -	(_ctrl_).uor.role |= (_role_) == TYPEC_SOURCE ? UCSI_UOR_ROLE_DFP : \
-> -			UCSI_UOR_ROLE_UFP;				\
-> -}
-> -
->   /* Commands */
->   #define UCSI_PPM_RESET			0x01
->   #define UCSI_CANCEL			0x02
-> @@ -253,28 +81,49 @@ struct ucsi_control {
->   #define UCSI_GET_CONNECTOR_STATUS	0x12
->   #define UCSI_GET_ERROR_STATUS		0x13
->   
-> -/* ACK_CC_CI commands */
-> -#define UCSI_ACK_EVENT			1
-> -#define UCSI_ACK_CMD			2
-> +#define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
-> +
-> +/* CONNECTOR_RESET command bits */
-> +#define UCSI_CONNECTOR_RESET_HARD		BIT(23) /* Deprecated in v1.1 */
->   
-> -/* Bits for ACK CC or CI */
-> +/* ACK_CC_CI bits */
->   #define UCSI_ACK_CONNECTOR_CHANGE		BIT(16)
->   #define UCSI_ACK_COMMAND_COMPLETE		BIT(17)
->   
-> -/* Bits for SET_NOTIFICATION_ENABLE command */
-> -#define UCSI_ENABLE_NTFY_CMD_COMPLETE		BIT(0)
-> -#define UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE	BIT(1)
-> -#define UCSI_ENABLE_NTFY_PWR_OPMODE_CHANGE	BIT(2)
-> -#define UCSI_ENABLE_NTFY_CAP_CHANGE		BIT(5)
-> -#define UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE	BIT(6)
-> -#define UCSI_ENABLE_NTFY_PD_RESET_COMPLETE	BIT(7)
-> -#define UCSI_ENABLE_NTFY_CAM_CHANGE		BIT(8)
-> -#define UCSI_ENABLE_NTFY_BAT_STATUS_CHANGE	BIT(9)
-> -#define UCSI_ENABLE_NTFY_PARTNER_CHANGE		BIT(11)
-> -#define UCSI_ENABLE_NTFY_PWR_DIR_CHANGE		BIT(12)
-> -#define UCSI_ENABLE_NTFY_CONNECTOR_CHANGE	BIT(14)
-> -#define UCSI_ENABLE_NTFY_ERROR			BIT(15)
-> -#define UCSI_ENABLE_NTFY_ALL			0xdbe7
-> +/* SET_NOTIFICATION_ENABLE command bits */
-> +#define UCSI_ENABLE_NTFY_CMD_COMPLETE		BIT(16)
-> +#define UCSI_ENABLE_NTFY_EXT_PWR_SRC_CHANGE	BIT(17)
-> +#define UCSI_ENABLE_NTFY_PWR_OPMODE_CHANGE	BIT(18)
-> +#define UCSI_ENABLE_NTFY_CAP_CHANGE		BIT(19)
-> +#define UCSI_ENABLE_NTFY_PWR_LEVEL_CHANGE	BIT(20)
-> +#define UCSI_ENABLE_NTFY_PD_RESET_COMPLETE	BIT(21)
-> +#define UCSI_ENABLE_NTFY_CAM_CHANGE		BIT(22)
-> +#define UCSI_ENABLE_NTFY_BAT_STATUS_CHANGE	BIT(23)
-> +#define UCSI_ENABLE_NTFY_PARTNER_CHANGE		BIT(24)
-> +#define UCSI_ENABLE_NTFY_PWR_DIR_CHANGE		BIT(25)
-> +#define UCSI_ENABLE_NTFY_CONNECTOR_CHANGE	BIT(26)
-> +#define UCSI_ENABLE_NTFY_ERROR			BIT(27)
-> +#define UCSI_ENABLE_NTFY_ALL			0xdbe70000
-> +
-> +/* SET_UOR command bits */
-> +#define UCSI_SET_UOR_ROLE(_r_)		(((_r_) == TYPEC_HOST ? 1 : 2) << 23)
-> +#define UCSI_SET_UOR_ACCEPT_ROLE_SWAPS		BIT(25)
-> +
-> +/* SET_PDF command bits */
-> +#define UCSI_SET_PDR_ROLE(_r_)		(((_r_) == TYPEC_SOURCE ? 1 : 2) << 23)
-> +#define UCSI_SET_PDR_ACCEPT_ROLE_SWAPS		BIT(25)
-> +
-> +/* GET_ALTERNATE_MODES command bits */
-> +#define UCSI_GET_ALTMODE_RECIPIENT(_r_)		((u64)(_r_) << 16)
-> +#define   UCSI_RECIPIENT_CON			0
-> +#define   UCSI_RECIPIENT_SOP			1
-> +#define   UCSI_RECIPIENT_SOP_P			2
-> +#define   UCSI_RECIPIENT_SOP_PP			3
-> +#define UCSI_GET_ALTMODE_CONNECTOR_NUMBER(_r_)	((u64)(_r_) << 24)
-> +#define UCSI_GET_ALTMODE_OFFSET(_r_)		((u64)(_r_) << 32)
-> +#define UCSI_GET_ALTMODE_NUM_ALTMODES(_r_)	((u64)(_r_) << 40)
-> +
-> +/* -------------------------------------------------------------------------- */
->   
->   /* Error information returned by PPM in response to GET_ERROR_STATUS command. */
->   #define UCSI_ERROR_UNREGONIZED_CMD		BIT(0)
-> @@ -443,7 +292,7 @@ struct ucsi_connector {
->   	struct ucsi_connector_capability cap;
->   };
->   
-> -int ucsi_send_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
-> +int ucsi_send_command(struct ucsi *ucsi, u64 command,
->   		      void *retval, size_t size);
->   
->   void ucsi_altmode_update_active(struct ucsi_connector *con);
-> 
+Fixes: 5f9be5f3f899 ("usb: host: xhci-tegra: Add Tegra186 XUSB support")
+Fixes: 488a04d4bb2f ("arm64: tegra: Enable XUSB host controller on Jetson TX2")
+Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
+---
+ drivers/usb/host/xhci-tegra.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
+index 2ff7c911fbd0..d25aba8fa219 100644
+--- a/drivers/usb/host/xhci-tegra.c
++++ b/drivers/usb/host/xhci-tegra.c
+@@ -1433,6 +1433,7 @@ static const struct tegra_xusb_soc tegra186_soc = {
+ 	.scale_ss_clock = false,
+ 	.has_ipfs = false,
+ };
++MODULE_FIRMWARE("nvidia/tegra186/xusb.bin");
+ 
+ static const struct of_device_id tegra_xusb_of_match[] = {
+ 	{ .compatible = "nvidia,tegra124-xusb", .data = &tegra124_soc },
+-- 
+2.23.0
 
