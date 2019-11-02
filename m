@@ -2,66 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDB1ECDCC
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 09:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E84ECEA0
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 13:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfKBI6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Nov 2019 04:58:37 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39236 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726529AbfKBI6h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 04:58:37 -0400
-Received: by mail-wr1-f68.google.com with SMTP id a11so11894644wra.6
-        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 01:58:36 -0700 (PDT)
+        id S1726810AbfKBMQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Nov 2019 08:16:28 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:44346 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfKBMQ1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 08:16:27 -0400
+Received: by mail-io1-f68.google.com with SMTP id w12so13667835iol.11
+        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 05:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7h7tBVx0HygGOAQxlpEHTQGdRzjwZpYopMv2VEID6ek=;
-        b=IVhXj9GxzVKnvgoeqQptptrdCf7vdi9UnrrJ6l5miq6y7/JWhA7fWOI8//0SauAIgE
-         CaVOh0yXYc5ty3jrO+IvckGhWmlsOhudrNliDQQFMEQEDnFe+9ZVotoRgq4Efn7fZrDg
-         EY+8xHw8LksbqumR36+1MYQ6Q8cOyqOWBlj3ZwvcSIu9vmDFIbfsAtG02nzNiDhJZZCH
-         eURG5TXUI0NS/USSPA1l9FQnHXpLoerwwiPlsyJ0hJhyx2sJUY0UobovWxymI1Aqjcrw
-         /mWH8+6Vfqf0HFciivXC2B3l058FZosw+AtTrsH0nFz65f2pbunAbw6bvORIgjUz49sh
-         NzHg==
+        h=mime-version:from:date:message-id:subject:to;
+        bh=wxcZzS3cKDtizBHzu5MYBxfKlvrYJgDnLg6QIaSCRD8=;
+        b=oZN8jRPelKnFo1NxbuHkWwBgtprdny1Z1c44/pfyImXfqCDVwRHjOYymB4JMWCOnbT
+         Kg20tfKcQKLgs+nx2WaPc4Y+8gYbcXZLSFLGpzw1EJEgOYF/SP5IvZt0LkXkxrnY4Odc
+         YFQH4PIfgenr5gX0oqVxtyKsuKPBszVML9BLsewpD0TzD7X/nvHYOCcXvPI/es5SR4qk
+         5M/1uI7yPT3vkstjT4SesLj/cpK3O77lLckwZyTzBu3S8WWsO65k2r5ZNT760BIe+1ww
+         S0KzMyPOdV62LA700b0aITKGwlD+13rnpXnL4uDOswfFITfbB1gD0BJUoA27VZ6t02zl
+         MZCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7h7tBVx0HygGOAQxlpEHTQGdRzjwZpYopMv2VEID6ek=;
-        b=TD+FGVCQoUnVXxklLA/NZedw1QljL/bAzjxZd1TsQSdJURU8JPtOBHMesFjLqMXy8J
-         V0XFwNd8uwt3Boj1JMv+8SFAbQsvO7FlmgpTcXtbIM4OEXv8wNfU+1uv8oKGzobBcrtk
-         GAWIUiNDFw2kvwP6MVuGulgcv2dV4cEhdGuIEUrSDGlRP8mBHzH7TzJ61ANOMzII1fqC
-         oJOi28oZ/yjYZYEp0OtZDD9J+FOvfocqkRnfY7ROQlmn6JZBSFvagkQ3hVXfRbBANusN
-         jWo68Z/Sz4S7EOogC6fhPYpJrbQSq58fkAqE3oYwDMvhL8WNKeKc0X/26urUorjzApwt
-         4cyA==
-X-Gm-Message-State: APjAAAXv9eTGnJpoJOwX5hpXJxoSmVVl3ig2zQw6q2zY9IciGz6kMVUN
-        e8PJdLJLRx0jk4NLXvdV4DeX79IvEqy1vrhvHyA=
-X-Google-Smtp-Source: APXvYqxfyMhjf8uwOavYyx8QcLjBgQTVp/cMKjAADXK1ddyjtwpYv4jF+SLq25UT25uUk88n/bYArDl4c0SixVvp/mU=
-X-Received: by 2002:adf:c58f:: with SMTP id m15mr14149910wrg.362.1572685115729;
- Sat, 02 Nov 2019 01:58:35 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=wxcZzS3cKDtizBHzu5MYBxfKlvrYJgDnLg6QIaSCRD8=;
+        b=uP5lYZOQwdiMyd8vZ3LQp+GLc8GLzZECwNi6XsGa8lfOvg6wTKS/VgcwuPOp/X1VoU
+         QXN0jqyPCCk60zX3up67TvtSzhwDBciJzy8npOUqsXI4dEYGRKmNmv2ByVoZDDLGrFy9
+         d8Q9Zromrm4bjG3OGf2g4641BMiUcPIPcuGf0pd7vuFZBPnxP3zgK7QHCf73tFWqrdkZ
+         s3wwzuCmd4o5lTnrwB9OzmjP8qPW0zVn8khnif7iyBLyAzznAJvPX3ndhRx+Vzt2fJdl
+         DkYtJjDmPfe4DQ9SJzHGmxsCIHQM63lkdaHfYMM9OUYZ7Ak4kNFYbuZuBWPUey0Oj5Mk
+         ONjg==
+X-Gm-Message-State: APjAAAV4tot1UzjTKvNkhF9Vauy7+3dNCckkg9t8vSDnES/ag6pKXiG/
+        yjn7qAld6ZGEO3M6e3FgZ3cqQIcsEk2X/WY19PA=
+X-Google-Smtp-Source: APXvYqza4cXzXVByjO0vFgyNbbRzrGqxAeGMtbaWuakZ9fqSAXbmfz4O2bIfmfNGBHl3P87I3T6Hxo8fg/9ojX/uV0A=
+X-Received: by 2002:a02:3085:: with SMTP id q127mr1406004jaq.140.1572696987062;
+ Sat, 02 Nov 2019 05:16:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190924121400.1497-1-charlesyeh522@gmail.com> <20191023085657.GP24768@localhost>
-In-Reply-To: <20191023085657.GP24768@localhost>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Sat, 2 Nov 2019 16:58:24 +0800
-Message-ID: <CAAZvQQ7EdZ=5TtU0qHBzACQ=g5equR+F-j2nt+-0F3bYOH4F7A@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v8] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
+Received: by 2002:a6b:4a10:0:0:0:0:0 with HTTP; Sat, 2 Nov 2019 05:16:26 -0700 (PDT)
+From:   Miss Basirat Ibrahim <tarhouni805@gmail.com>
+Date:   Sat, 2 Nov 2019 13:16:26 +0100
+Message-ID: <CAGD2OubikKuf+p7c75T28GLyXrrFW9XqD_j7TSWLMmdr4w=p6w@mail.gmail.com>
+Subject: With due respect From Miss Basirat Ibrahim
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
-> Now applied, thanks.
->
+Hi
 
-Hello sir, when to start updating the patch?
+My Name is Miss.Basirat Ibrahim from Libya, am 23 years old, am
+presently in St.Christopher's Parish for refugee in Burkina Faso under
+United Nations High commission for Refugee,
 
-Charles.
+ I lost my parents in the recent war in  Libya, right now I am in
+Burkina Faso, please save my life i am in danger need your help in
+transferring my inheritance, my father left behind for me in a Bank in
+Burkina Faso here,
+
+ i have every necessary document for the fund, all i needed is a
+foreigner who will
+stand as the foreign partner to my father and beneficiary of the fund.
+
+The money deposited in the Bank is US10.5 MILLION UNITED STATES
+DOLLAR) I just need this fund to be transfer to your bank account so
+that i will come over to your country and complete my education as you
+know that my country have been in deep crisis due to the war .And I
+cannot go back there again because I have nobody again all of my
+family were killed in the war. If you are interested to save me and
+help me receive my inheritance fund into your bank account with utmost
+good faith
+
+Please get back to me.through my private Email    hm36813999@gmail.com
+
+Miss.Basirat Ibrahim.
