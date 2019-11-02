@@ -2,100 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A60B3ECD9B
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 07:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDB1ECDCC
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2019 09:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727188AbfKBGW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 2 Nov 2019 02:22:59 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:46332 "EHLO
+        id S1726593AbfKBI6h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 2 Nov 2019 04:58:37 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39236 "EHLO
         mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfKBGW7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 02:22:59 -0400
-Received: by mail-wr1-f68.google.com with SMTP id b3so5869299wrs.13;
-        Fri, 01 Nov 2019 23:22:58 -0700 (PDT)
+        with ESMTP id S1726529AbfKBI6h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 2 Nov 2019 04:58:37 -0400
+Received: by mail-wr1-f68.google.com with SMTP id a11so11894644wra.6
+        for <linux-usb@vger.kernel.org>; Sat, 02 Nov 2019 01:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DnZE3w7CCpcMCHJ+iwQEUcQqE2nSKRrJMboCP3KTQFY=;
-        b=gzn/rwXqJRcCt1bE63KrnbWrGThu6dSsxNrSdOxHXNMzoWQuG34U4G8FwVOQy+KXNi
-         2r6MRhmJnhigebh2twlSWo4Tsw5RarmpKSiMgSRE+CPgzxGhz8YJLqCxkBV84PEuw0BE
-         sD5M9GMVwhUsnnp0JwsGygnkEfYIPrYPjWgaTuMNDVG4tfHERbwcH2HjkaOVbVgZ7Myy
-         8TyIcW/SPuwuhHg3cb+y7p11ZDkpDSEF2MoMDtCCO9GYGQPp9QpZraLahlZDOu965mtB
-         buRoevjobAyRXdsrHCixxYmJwsmglmWRtn3KEpi/YtYBZNKlgnpEij1ZdJoHmCX218SU
-         O8mw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7h7tBVx0HygGOAQxlpEHTQGdRzjwZpYopMv2VEID6ek=;
+        b=IVhXj9GxzVKnvgoeqQptptrdCf7vdi9UnrrJ6l5miq6y7/JWhA7fWOI8//0SauAIgE
+         CaVOh0yXYc5ty3jrO+IvckGhWmlsOhudrNliDQQFMEQEDnFe+9ZVotoRgq4Efn7fZrDg
+         EY+8xHw8LksbqumR36+1MYQ6Q8cOyqOWBlj3ZwvcSIu9vmDFIbfsAtG02nzNiDhJZZCH
+         eURG5TXUI0NS/USSPA1l9FQnHXpLoerwwiPlsyJ0hJhyx2sJUY0UobovWxymI1Aqjcrw
+         /mWH8+6Vfqf0HFciivXC2B3l058FZosw+AtTrsH0nFz65f2pbunAbw6bvORIgjUz49sh
+         NzHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=DnZE3w7CCpcMCHJ+iwQEUcQqE2nSKRrJMboCP3KTQFY=;
-        b=QfBnFOon5/ALC2G96KHi365XaccnYKLYWruaLU4VDiwdaEYNPKy2dJUDE0bZwva/pW
-         ajFtrt9aAbDZIZgBvk0YCW1ONSDQ5YSDvISNpuJuMu3lrBNC5RhOZCbk+d/1tTZRQcNx
-         NoLJPI7P/vWKAIFG/gb15efMvCmBerPAjz894v16XQV/73XUr79R/XSc7VEcp0hpV+da
-         SZl6O90eUWpxLLj7ia35ipNyZh0lRkEp1GzStVFjjPGlkxIJWt/BWRNfLape7pABXbt4
-         GXOz6myZshpKh/Zl03LWDAbI78sd7txSzyPo6mS70u3I6sGs4u9vgX9xZOGiNd18nsTU
-         F+Kg==
-X-Gm-Message-State: APjAAAUyzmjhQ9srSWUCyGm84rmCWtN77aQ9POyaizZzVZu0o3HyDUSK
-        N8QulXFQO4Y0v0X9j+MzOLVKBzhO8LE=
-X-Google-Smtp-Source: APXvYqx4COqSgTZachBr5uNbIjy9sIhMhq07HGD74ExGQfsHvrVHnROwXefzKiaVHqCizyBR0rd7eg==
-X-Received: by 2002:adf:bc91:: with SMTP id g17mr13253833wrh.71.1572675777478;
-        Fri, 01 Nov 2019 23:22:57 -0700 (PDT)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id i3sm9621147wrw.69.2019.11.01.23.22.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Nov 2019 23:22:57 -0700 (PDT)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] usb: host: fotg210: add missed clk_put calls
-Date:   Sat,  2 Nov 2019 14:22:45 +0800
-Message-Id: <20191102062245.4014-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.23.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7h7tBVx0HygGOAQxlpEHTQGdRzjwZpYopMv2VEID6ek=;
+        b=TD+FGVCQoUnVXxklLA/NZedw1QljL/bAzjxZd1TsQSdJURU8JPtOBHMesFjLqMXy8J
+         V0XFwNd8uwt3Boj1JMv+8SFAbQsvO7FlmgpTcXtbIM4OEXv8wNfU+1uv8oKGzobBcrtk
+         GAWIUiNDFw2kvwP6MVuGulgcv2dV4cEhdGuIEUrSDGlRP8mBHzH7TzJ61ANOMzII1fqC
+         oJOi28oZ/yjYZYEp0OtZDD9J+FOvfocqkRnfY7ROQlmn6JZBSFvagkQ3hVXfRbBANusN
+         jWo68Z/Sz4S7EOogC6fhPYpJrbQSq58fkAqE3oYwDMvhL8WNKeKc0X/26urUorjzApwt
+         4cyA==
+X-Gm-Message-State: APjAAAXv9eTGnJpoJOwX5hpXJxoSmVVl3ig2zQw6q2zY9IciGz6kMVUN
+        e8PJdLJLRx0jk4NLXvdV4DeX79IvEqy1vrhvHyA=
+X-Google-Smtp-Source: APXvYqxfyMhjf8uwOavYyx8QcLjBgQTVp/cMKjAADXK1ddyjtwpYv4jF+SLq25UT25uUk88n/bYArDl4c0SixVvp/mU=
+X-Received: by 2002:adf:c58f:: with SMTP id m15mr14149910wrg.362.1572685115729;
+ Sat, 02 Nov 2019 01:58:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20190924121400.1497-1-charlesyeh522@gmail.com> <20191023085657.GP24768@localhost>
+In-Reply-To: <20191023085657.GP24768@localhost>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Sat, 2 Nov 2019 16:58:24 +0800
+Message-ID: <CAAZvQQ7EdZ=5TtU0qHBzACQ=g5equR+F-j2nt+-0F3bYOH4F7A@mail.gmail.com>
+Subject: Re: [PATCH] [PATCH v8] USB: serial: pl2303: Add new PID to support
+ PL2303HXN (TYPE_HXN)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver forgets to call clk_put when probe fails and remove.
-Add the calls to fix it.
+>
+> Now applied, thanks.
+>
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
----
- drivers/usb/host/fotg210-hcd.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+Hello sir, when to start updating the patch?
 
-diff --git a/drivers/usb/host/fotg210-hcd.c b/drivers/usb/host/fotg210-hcd.c
-index 9e0c98d6bdb0..f967adf2d8df 100644
---- a/drivers/usb/host/fotg210-hcd.c
-+++ b/drivers/usb/host/fotg210-hcd.c
-@@ -5646,8 +5646,10 @@ static int fotg210_hcd_probe(struct platform_device *pdev)
- 	return retval;
- 
- failed_dis_clk:
--	if (!IS_ERR(fotg210->pclk))
-+	if (!IS_ERR(fotg210->pclk)) {
- 		clk_disable_unprepare(fotg210->pclk);
-+		clk_put(fotg210->pclk);
-+	}
- failed_put_hcd:
- 	usb_put_hcd(hcd);
- fail_create_hcd:
-@@ -5665,8 +5667,10 @@ static int fotg210_hcd_remove(struct platform_device *pdev)
- 	struct usb_hcd *hcd = platform_get_drvdata(pdev);
- 	struct fotg210_hcd *fotg210 = hcd_to_fotg210(hcd);
- 
--	if (!IS_ERR(fotg210->pclk))
-+	if (!IS_ERR(fotg210->pclk)) {
- 		clk_disable_unprepare(fotg210->pclk);
-+		clk_put(fotg210->pclk);
-+	}
- 
- 	usb_remove_hcd(hcd);
- 	usb_put_hcd(hcd);
--- 
-2.23.0
-
+Charles.
