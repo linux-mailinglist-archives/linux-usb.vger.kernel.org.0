@@ -2,45 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEA1ED38A
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2019 15:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60650ED3F8
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2019 18:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727683AbfKCOQs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Nov 2019 09:16:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:42736 "EHLO mail.kernel.org"
+        id S1727911AbfKCRPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Nov 2019 12:15:05 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54994 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727444AbfKCOQs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 3 Nov 2019 09:16:48 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 83F2120663;
-        Sun,  3 Nov 2019 14:16:47 +0000 (UTC)
+        id S1727444AbfKCRPF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 3 Nov 2019 12:15:05 -0500
+Subject: Re: [GIT PULL] USB fixes for 5.4-rc6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572790608;
-        bh=5fdRE0Vf9HsjaP8y0vf5TwsptV7mEynWeNXAagIs/RA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TzeJVEBYPhxfzXDpw7cQT/WHPK28cfEViYLjWQMjPF3EEj8tGlHdcOpWPGF0hfYbe
-         m/KJC3AKuagNksKGDLcpXI+hrzPV07myxb48iguDV53tz68nSymy5BGL8pboUQRdid
-         mGOH4d1vUs2P4JiggrI45B/HQJJ+Rd6QPCnluaI4=
-Date:   Sun, 3 Nov 2019 15:16:45 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "yanghui.def@gmail.com" <yanghui.def@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, mirq-linux@rere.qmqm.pl,
-        balbi@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB(u_serial.c): it has a NULL point
-Message-ID: <20191103141645.GA661271@kroah.com>
-References: <5dbeddab.1c69fb81.244fa.5f8c@mx.google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5dbeddab.1c69fb81.244fa.5f8c@mx.google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        s=default; t=1572801305;
+        bh=zy64mMfFoaabPue1WLiYD7/7Haa3CKxc30MQcp2EXfo=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=0uZAeEnNGwA6aEJXXYcOl+7UDBGsmM/XpydXrnFFk7EQKoPtTKAit4kzVUT+ErWhE
+         cPdVawcs32+cB4xPxhpZnvrz4B+u7Inj3kG9le4w/iG0DVuRD1yIJqql+44XdIaiFu
+         dOsaNR1A+BZZXCszxjQE4W9tUaTb9WjpJykW6OXk=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20191103141534.GA661190@kroah.com>
+References: <20191103141534.GA661190@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20191103141534.GA661190@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc6
+X-PR-Tracked-Commit-Id: d8eca64eec7103ab1fbabc0a187dbf6acfb2af93
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3a69c9e522950020d4973317201f4a419ee6d6a3
+Message-Id: <157280130515.32367.149258093078714852.pr-tracker-bot@kernel.org>
+Date:   Sun, 03 Nov 2019 17:15:05 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Nov 03, 2019 at 10:01:11PM +0800, yanghui.def@gmail.com wrote:
+The pull request you sent on Sun, 3 Nov 2019 15:15:34 +0100:
 
-html email is deleted by the list :(
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc6
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3a69c9e522950020d4973317201f4a419ee6d6a3
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
