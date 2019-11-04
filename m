@@ -2,156 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BBDEE58C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 18:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29237EE6E7
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:06:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728287AbfKDRHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 12:07:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45782 "EHLO mail.kernel.org"
+        id S1728800AbfKDSGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 13:06:25 -0500
+Received: from mout.gmx.net ([212.227.15.19]:56523 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727998AbfKDRHu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Nov 2019 12:07:50 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6E5FA2080F;
-        Mon,  4 Nov 2019 17:07:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572887269;
-        bh=Fgriju3JgvjjAT2rtP3Dx+qGRMZaCtKOPLxgWUqBGtk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Azf6yqEdQRwQzpxYWQWGCy2JKWzDrFqCBd7mYKo0ND65qaS+hFYvMC3HRgvBjD9hP
-         FiaV789GVnMQ1f+N71DvTe96533kIoOBnScyps0ntfVIcxiLrTFa9itWgD3jeeXLYt
-         tgx4qmj/4MLn4W8gLj/wfUO5smXGIOl6v0NX5p/I=
-Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
- uninitialized symbol 'nents'.
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20191022092839.GD10833@kadam>
- <20191023071120.GA3061@localhost.localdomain> <20191024194500.GD23523@kadam>
- <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
- <20191026034010.GA6411@localhost.localdomain>
- <fb62566f-632c-d0cd-e06c-5162c753a03f@kernel.org>
- <20191101143439.GA18757@localhost.localdomain>
-From:   shuah <shuah@kernel.org>
-Message-ID: <82478914-2bed-d8d8-0ee2-0460081434db@kernel.org>
-Date:   Mon, 4 Nov 2019 10:07:28 -0700
+        id S1728012AbfKDSGZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Nov 2019 13:06:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1572890760;
+        bh=i/YVkRXw1W5UTTmqjVB4l15sajoU6ZqsE7IG48uUlI0=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=No5ZiOcmUg9BEwYx9x8oiEFNqyBFm9TBXUP0/dK52Fo0dJgffnQrVEaj8op2OfdG9
+         AFhfyNz2rj7NcW0dbwGtPRf75Qircu9uSi3hyinCh1EwFYrj4PPnf/hUNQjErw7HtW
+         jOfIMpwyer2meTEmPK+5XpUfZXpCx6M/B6HB7qAs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.1.164] ([37.4.249.112]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSKyI-1iKyf227UO-00Sb5o; Mon, 04
+ Nov 2019 19:06:00 +0100
+Subject: Re: [PATCH] net: usb: lan78xx: Disable interrupts before calling
+ generic_handle_irq()
+To:     Daniel Wagner <dwagner@suse.de>, netdev@vger.kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Miller <davem@davemloft.net>
+References: <20191025080413.22665-1-dwagner@suse.de>
+ <20191104085703.diajpzpxo6dchuhs@beryllium.lan>
+From:   Stefan Wahren <wahrenst@gmx.net>
+Message-ID: <793b1cfa-dc45-c01c-ef0f-72db6df3ecd1@gmx.net>
+Date:   Mon, 4 Nov 2019 19:05:58 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191101143439.GA18757@localhost.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+In-Reply-To: <20191104085703.diajpzpxo6dchuhs@beryllium.lan>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Provags-ID: V03:K1:+2FOEEptqMf+RzO7I8AY6R0vpsaB7v7bFwPTF71L/23k22IwCw8
+ JYzhXR2mv4+1F9xloVqtO6TxHLtLWwDofr60ce0pyYbvQGD91CoH01M0w398CU0s5zkm0UA
+ HV8sM98GCy2yCQXLsDLVeClndDPTCxEXiIatoBnzHTKMAX7hkLg6EE1gT7o/OmCIFnByawW
+ BwLi3SOFN1N1onxX7AsRQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aRrNqB+ccsI=:fwsVjTKA065NF6oEatWVFt
+ LLQaPUpcoN3YYYhJvGCnARQ34rkirIrhihqUq4x7nwFYcySgj3fAHmECpw3sHq+asJTHoGVT5
+ RXIEZLQKwKMQmhGVoBJ3jqrxpXSpgL8zejKUzO+Y8v1gPl1z+hwNLPxmwP/1CBE1au5vRAmKJ
+ JLl+cCYQ0Jl7PORbzEO6bTv8yyDD33HynvhGug9yKotPgA/74ibojqbx4NeHMRBJuRKKg+m7x
+ f87GtfbBEsjam3dw/banZkdIzgFWpURSC8Ve8jCJ84+XdmSz+eYo3hSY1NzIJNpLiUB4LbsMB
+ fsjv4ocbiNK8ww72fAJGWPsZYjPUMepdykMWywXTNCu3nm+e03KeF45gu8SPq31GUzbQgU0V9
+ +05mkx3TSHkwTq7deg/OZ2INSfOxm1lXDZARVjNd79kB4gDMHnO+BRdn8Vr3GDmvwJ0wvUAw6
+ zItAOi2Csonx6WlcI8CC2cNmOOalm9OMuPTqE+m8QbXLMhHBWut/TE1B/YSBSK2Q/zudEajwB
+ uQxDHsxTpZMFDjMGTP4yqgHm7mAkiWrt1C9LHUvDyscD24lWTLakAiXuPebf0J4xsuECPW5iV
+ 7aM/V+ZRqB1WLhrpJYmg7oFJJLza9ezeX6hPnQoL669A6QZGiKzTUqgDhTh+Lx+Duj/ovNd6c
+ nortiecFni0Lf7CA/y8wG/xoyZ+bluCsSiHIR+a3CuDW/RXb5IRNqQcFsRhL4ae4mhLIyjG54
+ dfyyu6WQneFQNyVUYOIbvvh714Gt0UZfOUozq/cobvd2SDFdLG/edUQoqupKOXQS4vBPSXRbK
+ LDFGjatAuC1FwYyNLXUHSuyz1vU6N4rmiGJRU4bafAIhUbQCFD0xBLRbJAeT0XqbDlvwzJLXZ
+ 2c+xMccDQ4UXXoDzY+afRjZEasP5d1xi9tNQFj+qL3je0b8FwCIHtJwsPQ02SmEXlEdU0LflQ
+ Eezn/RVaz08l491qXhBEJhOGZ+GyuBnoWLq8Y2O37GtiipAy8k7CRTplBGPuE7VPtAxTxcTbf
+ oq547618PQXIc3PvdgeSUDGwcStDMsc3fhEC6/KEkVRT7OiR8OOgT86FM8kK4PkTMOq1rr2up
+ UvjP3lHjIRBVdYDY6Wmk1du5vW3H8p9CZrC0P0OAaq/MJ1h4K4vfQLgOFKyRhtPa+Ag5t4Vu0
+ z+TyoCu2Bm7Pq0q4uu6Acl+p1nKtUls2ZXzpL/Czu1PmsPWwKqTYuiTVNydW57IVKjiJ4b/O4
+ w5DYfRboVkDmnJ+pxrcflIGXohbvQzy7TsikLs67/iUMHlq5K6+L1LZ0+cs0=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/1/19 8:34 AM, Suwan Kim wrote:
-> On Tue, Oct 29, 2019 at 05:07:58AM -0600, shuah wrote:
->> On 10/25/19 9:40 PM, Suwan Kim wrote:
+Hi Daniel,
 
->> under this  check?
-> 
-> I understood. Moving this check after sgl_alloc() does not seem to
-> require any additional checks on nents.
-> 
-> But I think we need to check for the case that Smatch reported that
-> use_sg is true and buf_len is zero.
-> 
-> If there is no error check and an error condition occurs, the URB
-> will be passed to the next step without a buffer.
-
-Yes buf_len needs checking.
-
-> 
-> I attached the code. If you are okay, I will send a patch.
-> 
-
-This code looks good. Couple of comments.
-
-> ---
-> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> index 66edfeea68fe..0b6c4736ffd6 100644
-> --- a/drivers/usb/usbip/stub_rx.c
-> +++ b/drivers/usb/usbip/stub_rx.c
-> @@ -476,12 +476,39 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
-> 
->          buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
-> 
-> +       if (use_sg && !buf_len) {
-> +               dev_err(&udev->dev, "sg buffer with zero length\n");
-> +               goto err_malloc;
-
-This is fine, what happens to the  priv allocated by stub_priv_alloc()?
-Shouldn't that be released?
-
-Can you add a comment above stub_priv_alloc() indicating that it adds
-SDEV_EVENT_ERROR_MALLOC?
-
-> +       }
-> +
->          /* allocate urb transfer buffer, if needed */
->          if (buf_len) {
->                  if (use_sg) {
->                          sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
->                          if (!sgl)
->                                  goto err_malloc;
-> +
-> +                       /* Check if the server's HCD supports SG */
-> +                       if (!udev->bus->sg_tablesize) {
-> +                               /*
-> +                                * If the server's HCD doesn't support SG, break
-> +                                * a single SG request into several URBs and map
-> +                                * each SG list entry to corresponding URB
-> +                                * buffer. The previously allocated SG list is
-> +                                * stored in priv->sgl (If the server's HCD
-> +                                * support SG, SG list is stored only in
-> +                                * urb->sg) and it is used as an indicator that
-> +                                * the server split single SG request into
-> +                                * several URBs. Later, priv->sgl is used by
-> +                                * stub_complete() and stub_send_ret_submit() to
-> +                                * reassemble the divied URBs.
-> +                                */
-> +                               support_sg = 0;
-> +                               num_urbs = nents;
-> +                               priv->completed_urbs = 0;
-> +                               pdu->u.cmd_submit.transfer_flags &=
-> +                                                               ~URB_DMA_MAP_SG;
-> +                       }
->                  } else {
->                          buffer = kzalloc(buf_len, GFP_KERNEL);
->                          if (!buffer)
-> @@ -489,24 +516,6 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
->                  }
->          }
-> 
-> -       /* Check if the server's HCD supports SG */
-> -       if (use_sg && !udev->bus->sg_tablesize) {
-> -               /*
-> -                * If the server's HCD doesn't support SG, break a single SG
-> -                * request into several URBs and map each SG list entry to
-> -                * corresponding URB buffer. The previously allocated SG
-> -                * list is stored in priv->sgl (If the server's HCD support SG,
-> -                * SG list is stored only in urb->sg) and it is used as an
-> -                * indicator that the server split single SG request into
-> -                * several URBs. Later, priv->sgl is used by stub_complete() and
-> -                * stub_send_ret_submit() to reassemble the divied URBs.
-> -                */
-> -               support_sg = 0;
-> -               num_urbs = nents;
-> -               priv->completed_urbs = 0;
-> -               pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
-> -       }
-> -
->          /* allocate urb array */
->          priv->num_urbs = num_urbs;
->          priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), GFP_KERNEL);
-> 
-
-thanks,
--- Shuah
+Am 04.11.19 um 09:57 schrieb Daniel Wagner:
+> On Fri, Oct 25, 2019 at 10:04:13AM +0200, Daniel Wagner wrote:
+>> This patch just fixes the warning. There are still problems left (the
+>> unstable NFS report from me) but I suggest to look at this
+>> separately. The initial patch to revert all the irqdomain code might
+>> just hide the problem. At this point I don't know what's going on so I
+>> rather go baby steps. The revert is still possible if nothing else
+>> works.
+> I replaced my power supply with the official RPi one and the NFS
+> timeouts problems are gone. Also a long test session with different
+> network loads didn't show any problems. I feel so stupid...
+did you never saw a warning about under voltage from the Raspberry Pi
+hwmon driver?
+>
+> Thanks,
+> Daniel
+>
