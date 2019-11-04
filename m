@@ -2,172 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFCC9EE45A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 17:00:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0BBDEE58C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 18:07:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728188AbfKDQA5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 11:00:57 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55540 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727998AbfKDQA4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 11:00:56 -0500
-Received: by mail-wm1-f67.google.com with SMTP id m17so7990780wmi.5
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 08:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version;
-        bh=6ilGxiuyygbgJ91BJLPjx/F0PdqLRxqiJ4GF3dV8ihU=;
-        b=dxFaqn32bPE40sYACqfPVi5uAANE8q8D/rMKn8aj1ddfeRX/eDvzkZCGJfrxg/474h
-         XryK5LbJhbCZJ6tnTtzN5Wp2lMeP5D453UA5cxlqiCK3P/cv5htVRlVQwAC3GA54Bgpr
-         1cMOymEQKNtHhCD6t5xquqAiHET5BqwxToQpzIsugHhkg6BMTPDJS5AX3+zjtSgs4WD7
-         r6XiLJTKslMFR6GPZg1U31TPMuwD45N4Tnmqi6mHR6T7N+nPP8cdqppvXQmRCQEaZLAs
-         zSkPn73uVIpaamxWGLsCmSSaSa0GbZ0riDAhZr3fYNXt8mtee/zHS46uW4wODFUe2fsb
-         cYmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=6ilGxiuyygbgJ91BJLPjx/F0PdqLRxqiJ4GF3dV8ihU=;
-        b=ql9t+P4MSvmjbAwe206U1uu6crBO8U1Aycs2B8sJlhy7jgkvIywAVYuOZcnhs2Hf2+
-         bUO74NEIYrh/plauRMd+dH+3hsxdA1fx0T99Q7Nc9iJKmMUwelqOpi+cg0coU2jBH8Gv
-         ZLNqXtTJfeBPLQrQhInQouPbagyyBzJH1sNBF4xJdoTcB80Necjsk43cygWVGtXOE+lL
-         pkzVTwQdRBorLvDGKGCEA2wrf2ZogfpnWBQ1paSsqaN8GYMFEYVA42uUg5M8FFyRDh2P
-         36DY5FQHlhmPmS3Hk1r3wzmx+qvY/HLk3f3IjdTMQAaWQMJkZLpnpWIPjiNShSPCgBj/
-         6UMA==
-X-Gm-Message-State: APjAAAXNLbHbF6s1IbUhwdT+0m6eiBxCSOxGbO/cnZZay30TO2dQHXyE
-        oO0KoB5MktjkKO3W7feMpjBb0KZbZWDVs64N
-X-Google-Smtp-Source: APXvYqz9QniqmUkTnlQX6SGFL0FdOohcr7i6mkkhTi68CjJaUsuQP1yRsXVaxVkld0s7KvD9ZwZ4OA==
-X-Received: by 2002:a1c:6282:: with SMTP id w124mr23112566wmb.172.1572883254524;
-        Mon, 04 Nov 2019 08:00:54 -0800 (PST)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id y78sm10176394wmd.32.2019.11.04.08.00.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 08:00:53 -0800 (PST)
-Message-ID: <38f1974fad3a98ca578fcf808a843cbd28325e44.camel@unipv.it>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>
-Date:   Mon, 04 Nov 2019 17:00:52 +0100
-In-Reply-To: <237f37abfe8a6985f7ff26d5f199a33c18685f90.camel@unipv.it>
-References: <Pine.LNX.4.44L0.1909251524520.6072-300000@netrider.rowland.org>
-         <c304abca-3ac2-fb19-1328-340ca4f18f80@kernel.dk>
-         <237f37abfe8a6985f7ff26d5f199a33c18685f90.camel@unipv.it>
-Content-Type: multipart/mixed; boundary="=-/eumaMO/ShtWP2soswYE"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1728287AbfKDRHu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 12:07:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45782 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727998AbfKDRHu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Nov 2019 12:07:50 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6E5FA2080F;
+        Mon,  4 Nov 2019 17:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572887269;
+        bh=Fgriju3JgvjjAT2rtP3Dx+qGRMZaCtKOPLxgWUqBGtk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Azf6yqEdQRwQzpxYWQWGCy2JKWzDrFqCBd7mYKo0ND65qaS+hFYvMC3HRgvBjD9hP
+         FiaV789GVnMQ1f+N71DvTe96533kIoOBnScyps0ntfVIcxiLrTFa9itWgD3jeeXLYt
+         tgx4qmj/4MLn4W8gLj/wfUO5smXGIOl6v0NX5p/I=
+Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
+ uninitialized symbol 'nents'.
+To:     Suwan Kim <suwan.kim027@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20191022092839.GD10833@kadam>
+ <20191023071120.GA3061@localhost.localdomain> <20191024194500.GD23523@kadam>
+ <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
+ <20191026034010.GA6411@localhost.localdomain>
+ <fb62566f-632c-d0cd-e06c-5162c753a03f@kernel.org>
+ <20191101143439.GA18757@localhost.localdomain>
+From:   shuah <shuah@kernel.org>
+Message-ID: <82478914-2bed-d8d8-0ee2-0460081434db@kernel.org>
+Date:   Mon, 4 Nov 2019 10:07:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
+In-Reply-To: <20191101143439.GA18757@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 11/1/19 8:34 AM, Suwan Kim wrote:
+> On Tue, Oct 29, 2019 at 05:07:58AM -0600, shuah wrote:
+>> On 10/25/19 9:40 PM, Suwan Kim wrote:
 
---=-/eumaMO/ShtWP2soswYE
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+>> under this  check?
+> 
+> I understood. Moving this check after sgl_alloc() does not seem to
+> require any additional checks on nents.
+> 
+> But I think we need to check for the case that Smatch reported that
+> use_sg is true and buf_len is zero.
+> 
+> If there is no error check and an error condition occurs, the URB
+> will be passed to the next step without a buffer.
 
-Il giorno ven, 27/09/2019 alle 17.47 +0200, Andrea Vai ha scritto:
-> Il giorno mer, 25/09/2019 alle 21.36 +0200, Jens Axboe ha scritto:
-> > On 9/25/19 9:30 PM, Alan Stern wrote:
-> > [...]
-> > > 
-> > > I have attached the two patches to this email.  You should start
-> > with a
-> > > recent kernel source tree and apply the patches by doing:
-> > > 
-> > > 	git apply patch1 patch2
-> > > 
-> > > or something similar.  Then build a kernel from the new source
-> > code and
-> > > test it.
-> > > 
-> > > Ultimately, if nobody can find a way to restore the sequential
-> I/O
-> > > behavior we had prior to commit f664a3cc17b7, that commit may
-> have
-> > to
-> > > be reverted.
-> > 
-> > Don't use patch1, it's buggy. patch2 should be enough to test the
-> > theory.
-
-As I didn't have any answer, I am quoting my last reply here:
+Yes buf_len needs checking.
 
 > 
-> Sorry, but if I cd into the "linux" directory and run the command
-> 
-> # git apply -v patch2
-> 
-> the result is that the patch cannot be applied correctly:
-> 
-> --------------------------------------------------------------------
-> ----------
-> Controllo della patch block/blk-mq.c in corso...
-> error: durante la ricerca per:
-> ?
-> static blk_qc_t blk_mq_make_request(struct request_queue *q, struct
-> bio *bio)?
-> {?
-> 	const int is_sync = op_is_sync(bio->bi_opf);?
-> 	const int is_flush_fua = op_is_flush(bio->bi_opf);?
-> 	struct blk_mq_alloc_data data = { .flags = 0};?
-> 	struct request *rq;?
-> 
-> error: patch non riuscita: block/blk-mq.c:1931
-> error: block/blk-mq.c: la patch non si applica correttamente
-> --------------------------------------------------------------------
-> ----------
-> 
-> The "linux" directory is the one generated by a fresh git clone:
-> 
-> git clone
-> git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> 
-> What am I doing wrong?
+> I attached the code. If you are okay, I will send a patch.
 > 
 
-Meanwhile, Alan tried to help me and gave me another patch (attached),
-which doesn't work too, but gives a different error: "The git diff
-header does not contain information about the file once removed 1
-initial component of the path (row 14)" (actually, this is my
-translation from the original message in Italian: "error:
-l'intestazione git diff non riporta le informazioni sul file una volta
-rimosso 1 componente iniziale del percorso (riga 14)")
+This code looks good. Couple of comments.
 
-I tested the two patches after a fresh git clone today, a few minutes
-ago.
+> ---
+> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+> index 66edfeea68fe..0b6c4736ffd6 100644
+> --- a/drivers/usb/usbip/stub_rx.c
+> +++ b/drivers/usb/usbip/stub_rx.c
+> @@ -476,12 +476,39 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+> 
+>          buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
+> 
+> +       if (use_sg && !buf_len) {
+> +               dev_err(&udev->dev, "sg buffer with zero length\n");
+> +               goto err_malloc;
 
-What can I do?
+This is fine, what happens to the  priv allocated by stub_priv_alloc()?
+Shouldn't that be released?
 
-Thank you,
-Bye
-Andrea
+Can you add a comment above stub_priv_alloc() indicating that it adds
+SDEV_EVENT_ERROR_MALLOC?
 
---=-/eumaMO/ShtWP2soswYE
-Content-Type: message/rfc822; name="patch2_alan"
-Content-Disposition: attachment; filename="patch2_alan"
+> +       }
+> +
+>          /* allocate urb transfer buffer, if needed */
+>          if (buf_len) {
+>                  if (use_sg) {
+>                          sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+>                          if (!sgl)
+>                                  goto err_malloc;
+> +
+> +                       /* Check if the server's HCD supports SG */
+> +                       if (!udev->bus->sg_tablesize) {
+> +                               /*
+> +                                * If the server's HCD doesn't support SG, break
+> +                                * a single SG request into several URBs and map
+> +                                * each SG list entry to corresponding URB
+> +                                * buffer. The previously allocated SG list is
+> +                                * stored in priv->sgl (If the server's HCD
+> +                                * support SG, SG list is stored only in
+> +                                * urb->sg) and it is used as an indicator that
+> +                                * the server split single SG request into
+> +                                * several URBs. Later, priv->sgl is used by
+> +                                * stub_complete() and stub_send_ret_submit() to
+> +                                * reassemble the divied URBs.
+> +                                */
+> +                               support_sg = 0;
+> +                               num_urbs = nents;
+> +                               priv->completed_urbs = 0;
+> +                               pdu->u.cmd_submit.transfer_flags &=
+> +                                                               ~URB_DMA_MAP_SG;
+> +                       }
+>                  } else {
+>                          buffer = kzalloc(buf_len, GFP_KERNEL);
+>                          if (!buffer)
+> @@ -489,24 +516,6 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+>                  }
+>          }
+> 
+> -       /* Check if the server's HCD supports SG */
+> -       if (use_sg && !udev->bus->sg_tablesize) {
+> -               /*
+> -                * If the server's HCD doesn't support SG, break a single SG
+> -                * request into several URBs and map each SG list entry to
+> -                * corresponding URB buffer. The previously allocated SG
+> -                * list is stored in priv->sgl (If the server's HCD support SG,
+> -                * SG list is stored only in urb->sg) and it is used as an
+> -                * indicator that the server split single SG request into
+> -                * several URBs. Later, priv->sgl is used by stub_complete() and
+> -                * stub_send_ret_submit() to reassemble the divied URBs.
+> -                */
+> -               support_sg = 0;
+> -               num_urbs = nents;
+> -               priv->completed_urbs = 0;
+> -               pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
+> -       }
+> -
+>          /* allocate urb array */
+>          priv->num_urbs = num_urbs;
+>          priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), GFP_KERNEL);
+> 
 
-From: Hannes Reinecke <hare@suse.com>
-Signed-off-by: Hannes Reinecke <hare@suse.com>
-Index: usb-devel/block/blk-mq.c
-Date: Mon, 04 Nov 2019 16:58:21 +0100
-Subject: No Subject
-Message-ID: <fe072bc69e13435573d824133c3981f8841cf2c7.camel@suse.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-
---=-/eumaMO/ShtWP2soswYE--
-
+thanks,
+-- Shuah
