@@ -2,142 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07112EE198
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 14:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E828EE1CF
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729222AbfKDNxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 08:53:17 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:1353 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728613AbfKDNxR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 08:53:17 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dc02d510000>; Mon, 04 Nov 2019 05:53:21 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 04 Nov 2019 05:53:15 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 04 Nov 2019 05:53:15 -0800
-Received: from localhost (10.124.1.5) by HQMAIL107.nvidia.com (172.20.187.13)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 4 Nov 2019 13:53:14
- +0000
-Date:   Mon, 4 Nov 2019 14:53:12 +0100
-From:   Thierry Reding <treding@nvidia.com>
-To:     maowenan <maowenan@huawei.com>
-CC:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <nkristam@nvidia.com>, <arnd@arndb.de>, <johan@kernel.org>,
-        <krzk@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
-Subject: Re: [PATCH -next] usb: gadget: Add dependency for USB_TEGRA_XUDC
-Message-ID: <20191104135312.GD996639@ulmo>
-References: <20191104025945.172620-1-maowenan@huawei.com>
- <20191104100410.GB996639@ulmo>
- <51315499-99d0-eca3-a7df-b8dd84628bbd@huawei.com>
+        id S1729058AbfKDOE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 09:04:29 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:43351 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727782AbfKDOE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 09:04:29 -0500
+Received: by mail-lj1-f193.google.com with SMTP id y23so6826273ljh.10
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 06:04:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dawes-za-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=g6EyMF+u5e65vvlDXIzQbx6k4XLQuFfwPRwATGVBBiQ=;
+        b=KAqdt8b4rtahb6hV/AbbPvRwg60iSqtp+wijF4ZM+abKojsqgUlKVfqAdq1/T8DL0l
+         2iLb/0+GsjYFHLnF9Qn2rxKF2+6CmHrlwPrsjc6KWemhqDmMsBZ3jm0rpMCjEZm6D5Ss
+         LZf6HPN5xuesHDMfPwKv4wRfOOfjU1HjitlWimQcXx0pqtPyxIxCmn3qeJoEr45gS9do
+         Vq9p93m6xuW0t2x2D0yvLTE1W2uhVuKlOAKGBYTIPA0NArACzbIhNlNpnlnRmWSqUiRQ
+         6JBXmF7aUHuLm7ggrmXtk8wVg3AU/OKHPbyR9Q92fUGZhEiEgiTCz7HNGrrvCU7eByle
+         g5jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=g6EyMF+u5e65vvlDXIzQbx6k4XLQuFfwPRwATGVBBiQ=;
+        b=tVLh5CpiBB7vDZWNgWb4l5Gg4JtpRiCJgO5k5ndfmVGQDlR5IC0Jm/jPtFCt3Upntp
+         X3PAonMAD+amKTS0tuAyLTF3rSOozNOq3T1f+KzAHsRyKy1iaWrOQI+kmU7iE38E/UP0
+         Aa5EnVIffQzrpKLG9kNqW7Jk6tk0MdiSYfgDCCptCeupJAaNLB/QPem6feFLwRvZI9Lr
+         02xcMlzNFaoOQJFyI0kj1kHMvUQT1TwgzDYnBRP/j2+WaYgQHP8b20YDl0kIt8ntzXJO
+         C81Go/VVtFtBVzinDqgVXKmslczZ/nqe1Vp6HQxVKIbIkxnWXT8GYXK3PbmaFeVFjtXQ
+         VJKw==
+X-Gm-Message-State: APjAAAXaf14NiuvOOvJeKknGtshCPUpBClPMqwU1/eKJ6H2xq+QQuxeQ
+        p313hZzDQEustYv8m54ryN2Mc8Q2vTwgjXfsRbn/HHkvzSU=
+X-Google-Smtp-Source: APXvYqwYCddpFhiwatZCyGwCUepwCypYQApP4gIkFjifaEPr6h/ZWNZQ+B7OPAFJLuzZ8X2gmnCXDMFh4LQ4TqTe1bA=
+X-Received: by 2002:a2e:96c3:: with SMTP id d3mr5065915ljj.248.1572876265663;
+ Mon, 04 Nov 2019 06:04:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <51315499-99d0-eca3-a7df-b8dd84628bbd@huawei.com>
-X-NVConfidentiality: public
-User-Agent: Mutt/1.12.2 (2019-09-21)
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="AkbCVLjbJ9qUtAXD"
-Content-Disposition: inline
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572875601; bh=qmstqNnitagwe9Gh3+JKuCR7mgFkmxx17qK8U75Cw6s=;
-        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
-         MIME-Version:In-Reply-To:X-NVConfidentiality:User-Agent:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:
-         Content-Disposition;
-        b=hZg7xhcVOmG4AYhhyiltf3vBKHI/Y7BGPX1wpRMSIWXGJp2JSp/5awrLBSarCOEGc
-         w1bsMGT3rnepKLZ6FPlsMUApnBX5A43zzAUBmj1wPjRiPP7/yuwWox3xkqQcl9cMY6
-         N8eApCjGvtMwaWkZ1R6BLG4sMVnVRrAdd74cezt26QlB3Z4fvTIx58JPx1HEGu5lot
-         nuU69NJKVP8kCstn8D98wV7gfXDZSbQRO4GPS6fy7equnhSHYw9ynJp38s4BVW3esZ
-         Clo8UI2ueAo+92oMRYah4Jwxl81mNvkvoXvritY2Ja5cjs6RnxMaIMFEgt2tfuJFGM
-         JKKefOA0RkPtw==
+References: <CAOYdKdiYdnH246mZSRZ==dhjcM3Oah5vFP1Nh=m4SgyvJKNn2w@mail.gmail.com>
+In-Reply-To: <CAOYdKdiYdnH246mZSRZ==dhjcM3Oah5vFP1Nh=m4SgyvJKNn2w@mail.gmail.com>
+From:   Rogan Dawes <rogan@dawes.za.net>
+Date:   Mon, 4 Nov 2019 16:04:10 +0200
+Message-ID: <CAOYdKdh7zpu2Evp=MNHnWrB-xjwhC-+Sqrtm29+gZP8LuGORsQ@mail.gmail.com>
+Subject: Re: Programmatically switching a USB port from Host to Device mode
+ (not OTG)
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---AkbCVLjbJ9qUtAXD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, 24 Oct 2019 at 11:01, Rogan Dawes <rogan@dawes.za.net> wrote:
+>
+> Hi folks
+>
+> I am using a GL.Inet AR750S (Slate) travel router, which is based on
+> the QCA9563 SoC.
+>
+> I am trying to see if there is any way that I can get it to operate in
+> a USB Gadget mode.
+>
+> According to twitter support
+> (https://twitter.com/GLiNetWiFi/status/1187190831746179073), the
+> router's external port is connected directly to USB1 on the SoC, and
+> the internal port is connected via a USB hub to USB2.
+>
+> According to the datasheet which I found at
+> https://github.com/Deoptim/atheros/QCA9563_July_2014.pdf, USB1 should
+> be a Host-only port, while USB2 should be device-capable.
+> Unfortunately, the hub chip makes it impossible to test USB2.
+>
+> So, my question is, is it possible to modify the device tree to
+> configure USB1 in gadget mode (even though according to the datasheet,
+> this is a reserved configuration) ?
+>
+> Is it possible that a pure software configuration change may be
+> sufficient to change the role of the port, or would I need to remove
+> pull-up/down resistors as well to see if this could work?
+>
+> Many thanks!
+>
+> Rogan
 
-On Mon, Nov 04, 2019 at 06:50:01PM +0800, maowenan wrote:
->=20
->=20
-> On 2019/11/4 18:04, Thierry Reding wrote:
-> > On Mon, Nov 04, 2019 at 10:59:45AM +0800, Mao Wenan wrote:
-> >> If CONFIG_USB_TEGRA_XUDC=3Dy and CONFIG_USB_ROLE_SWITCH=3Dm,
-> >> below erros can be seen:
-> >> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
-> >> tegra-xudc.c:(.text+0x6b0): undefined reference to `usb_role_switch_un=
-register'
-> >> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
-> >> tegra-xudc.c:(.text+0x1b88): undefined reference to `usb_role_switch_r=
-egister'
-> >> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_=
-sw_work':
-> >> tegra-xudc.c:(.text+0x5ecc): undefined reference to `usb_role_switch_g=
-et_role'
-> >>
-> >> This patch add dependency USB_ROLE_SWITCH for UDC driver.
-> >>
-> >> Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB devic=
-e mode controller")
-> >> Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> >> ---
-> >>  drivers/usb/gadget/udc/Kconfig | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/K=
-config
-> >> index acaec3a..d103154 100644
-> >> --- a/drivers/usb/gadget/udc/Kconfig
-> >> +++ b/drivers/usb/gadget/udc/Kconfig
-> >> @@ -445,6 +445,7 @@ config USB_TEGRA_XUDC
-> >>  	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
-> >>  	depends on ARCH_TEGRA || COMPILE_TEST
-> >>  	depends on PHY_TEGRA_XUSB
-> >> +	depends on USB_ROLE_SWITCH
-> >=20
-> > It looks like most other drivers that use the USB role switch class do
-> > "select" here. Now, that's suboptimal because USB_ROLE_SWITCH is a user-
-> > visible symbol, which can lead to conflicts, so it should be avoided. I
-> > think that in this case it might make sense to hide USB_ROLE_SWITCH and
-> > then convert all "depends on USB_ROLE_SWITCH" occurrences to "select
-> > USB_ROLE_SWITCH". The USB role switch class is, after all, not useful by
-> > itself. It always needs a host and/or gadget driver to make use of it.
-> >=20
->=20
-> Thanks, I send v2 and change 'depends on' to 'select' for this patch.
+I've been trawling the Internet, and trying to understand if there is
+any prior art indicating the feasibility of the QCA9563 actually
+supporting USB Gadget or Peripheral mode, and I came across what
+appears to be a copy of an official tree
+(https://gfiber.googlesource.com/kernel/windcharger/+/ca3986b4fd425176662f005cc996d61dd439d1f2/drivers/usb/gadget/Kconfig)
+provided by Qualcomm to Google for their "windcharger" fibre router.
 
-Great, can you also follow up with a patch to hide the USB_ROLE_SWITCH
-option so that we can avoid any of the pitfalls associated with user-
-visible symbols and "select"?
+It contains commits like:
 
-Thierry
+  commit d95f9bd73fd3a4ebabf7c524941f6b6095388c55
+  Author: Allan Zhang <allanzhang@google.com>
+  Date:   Wed Jan 21 17:00:47 2015 -0800
 
---AkbCVLjbJ9qUtAXD
-Content-Type: application/pgp-signature; name="signature.asc"
+      Initial WindCharger Linux Kernel Ver
 
------BEGIN PGP SIGNATURE-----
+      This for record purpose. It's the QCA-provided AP143/board953x linux
+      kernel, based on linux 2.6.31.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl3ALUgACgkQ3SOs138+
-s6FPmxAAiLkvZmH6WxxECfBraeXgrnYbOZ57nQ8la5FefdC72v96CbsGbHZkiEwU
-HWT4vwaX6QEXHypUWQ86McqO4UNaGtohXcNlhn9X867z/aH1LzYhhLMYAgQpmhVs
-a8HZ4q36s6BIIgrrvF2cvM5ax78SlNxVheWWDj+cyXdKa25ykwUGAdRvDcCzz7VL
-rk/iJhyoNIZLIKtwP+QrEIjVYCfqN7od2nBIP6WewhPKzQA/DtRu1mC0bmr90Fgk
-ApzrC8+iXabXh+RIiyG2+8XTHdQo0Sui5V35KClrWelhokF8AKPejuyTdGOd3O/J
-m7cFSJhPWed9el5rWyY1UcURL9jzCSQ3Cv9ZVUQdhMSXKAf24wirP2OXgMjrq1Sg
-VD6v2BuZer4wY92iPhQ3zRXy/YLxclv94Kn7t4L8aXH6fc0QE09njcGFq/kazmS/
-2HoGlBeRIQRNtwWVlEI+U1fbi4HIbhhgLxfcU/OIfQuVFqWB1hzBY38aXLDvF/2w
-RKZE1CdrxfbM/xGzhhx75LuPfPKnyUUu/MdcNBqwpNpJ9TpTnymqIth9BYSmTGIb
-0rFc14nxRD+KVrinSOWLvPjs5acQXGUEQ8YmcVEqK1i1Q121aQNqWdAK++ls84UU
-z5S5G58ui0C2jyBdvY0utpnaILNB4f9gg7z6wehixGdqUUHReks=
-=vxGA
------END PGP SIGNATURE-----
+      This version targets for no code change and reflects qca code snapshot.
+      Any enhancement will be in individual CL for review.
 
---AkbCVLjbJ9qUtAXD--
+      Change-Id: I7252866c2f87f8ffd26ee64976dd4dccc955e739
+
+Which contains a file arch/mips/configs/board956x-wrap_defconfig
+
+which sets
+
++CONFIG_USB_GADGET_ATH=y
+
+So, I'm wondering how realistic it would be to try to get the
+CONFIG_USB_GADGET_ATH driver ported from this kernel version to
+mainline, or perhaps if someone might take a quick look at it and
+indicate whether the current mainline actually already includes this
+functionality? I do know that AR9331 USB GADGET support does exist in
+mainline via the chipidea driver, and from what I can see, the rest of
+the Qualcomm chips seems to use the same chipset, so perhaps it is as
+simple as configuring the device tree appropriately to use the
+chipidea driver on the appropriate port?
+
+I'm completely happy to try and figure this out myself, but would
+obviously appreciate any pointers from anyone familiar with the
+Qualcomm USB drivers.
+
+Many thanks!
+
+Regards,
+
+Rogan
