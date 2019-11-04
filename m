@@ -2,130 +2,660 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8045EE2B6
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:38:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC73EE2B7
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:38:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbfKDOiq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 09:38:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48074 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727861AbfKDOiq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Nov 2019 09:38:46 -0500
-Received: from localhost (unknown [62.119.166.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 26A2121D7D;
-        Mon,  4 Nov 2019 14:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572878325;
-        bh=B5UuQO+J8loIhp1v4UeAaOlIdXoRPDv7bpQVgIE778Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AVrYxjct5LSE7roOysk7Hok2pg/fVDp7GoCM4i2yM3pnMSfAEHYtHyD+GU+Ly8sxd
-         yr/fD77+MNbsYKf52tGyUtEla23kL3gphS3a9nn+cRJZ6cQ9aThd06aCA+uYWIOyhd
-         bpQqH8zporuM803/tg+ac4kbvNjLiJ0XtMqjJehg=
-Date:   Mon, 4 Nov 2019 15:38:38 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] usb: core: Attempt power cycle when port is in
- eSS.Disabled state
-Message-ID: <20191104143838.GA2183570@kroah.com>
-References: <20191007182840.4867-1-kai.heng.feng@canonical.com>
- <20191007182840.4867-2-kai.heng.feng@canonical.com>
+        id S1728793AbfKDOiz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 09:38:55 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:47083 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728778AbfKDOiy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 09:38:54 -0500
+Received: by mail-pg1-f194.google.com with SMTP id f19so11403640pgn.13
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 06:38:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=RAe3lMBhd5/b1GjoLoFZIxj+8rh53sRUNOLV9bRcjZE=;
+        b=cL0i0YtHHa5SHM+cDld7890EDQpVwkB+3lY7hRc5z3mUhkxts63v4lA13fwazdj0uK
+         M9vbHqDaHUFwwFmb5MtLo32m0hObD3jkuacIHS8bN1lr1GcUuIk+ydi5pnYnrSIEqFWK
+         SvyhW7W34Egb9ncVUrKMk3Xe10EhKSry5EzZ5hZzO1VZ9sUFM3Ad8M/8Pg9EtBrjF/sH
+         BF/mtr1TwcW5ul/xaArgRPo+UIOp+AQjsGqCm8IngdnRSbBph1icPvhBqU0FHvT7y6W9
+         rZmL0bTTTsVVYaQVyi1Pm5LsqlxiZtEDSOPNbFd1f3NAocXmXh3QolfBbzdJhBOxEdis
+         nfHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=RAe3lMBhd5/b1GjoLoFZIxj+8rh53sRUNOLV9bRcjZE=;
+        b=ruqqcM4YCh3BdFvzicxppRB66VTWo3laE9BsjAg++Gpz3JkoBxRo0CRRGZpRNGhExb
+         rYflauumJEiG/Xp4U+MoiyUAHerU6EA+Zr9i7BXo/T7aIfMbdiwaXTW/aLMFBucYMMxN
+         mhyyh5KErR8vecwVSJ7rAj53+UJjozcoV8wNabVldFqxSB79RoY6qPkZZKq/ejCtmDCM
+         2U1bcspSwggOLKIi/hNK7Py0uKlRG5L5z7f/OJ9OgAEcN93000IlqRNuLzmGjY2gfI48
+         b5Kxt0W7+3bZmGnlqCPEN8oNcYCk5Fl1AotNsh3M5yTTEBS2FcE9fOAJUIGMLoeZkizt
+         t6TQ==
+X-Gm-Message-State: APjAAAVlyfYhIMRWqMeuNmIqJ6nYtq1mCcfpWaDHLaYTTKBD1LiDDS4D
+        mI+sIlgp6KmcgGjFc6TLUPQvdp84
+X-Google-Smtp-Source: APXvYqyMGXBKvHPb8HIaWJaAKLAGVgpyEW14hMHA3UjrxpQpYdeJ/vFKOz47aNCPpQGocxKv4kJDGw==
+X-Received: by 2002:a63:eb52:: with SMTP id b18mr29541151pgk.205.1572878333307;
+        Mon, 04 Nov 2019 06:38:53 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a29sm23175714pfr.49.2019.11.04.06.38.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 Nov 2019 06:38:52 -0800 (PST)
+Subject: Re: [PATCH v4 14/18] usb: typec: ucsi: Remove the old API
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
+References: <20191104142435.29960-1-heikki.krogerus@linux.intel.com>
+ <20191104142435.29960-15-heikki.krogerus@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <9c5224d8-f0a4-2d9e-6b49-b98bbbd88361@roeck-us.net>
+Date:   Mon, 4 Nov 2019 06:38:51 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191007182840.4867-2-kai.heng.feng@canonical.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191104142435.29960-15-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 02:28:40AM +0800, Kai-Heng Feng wrote:
-> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
-> then connects to ASMedia xHCI's root hub:
+On 11/4/19 6:24 AM, Heikki Krogerus wrote:
+> The drivers now only use the new API, so removing the old one.
 > 
-> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
->     |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->             |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
-> 
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
-> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
-> 
-> The SMSC hub may disconnect after system resume from suspend. When this
-> happens, the reset resume attempt fails, and the last resort to disable
-> the port and see something comes up later, also fails.
-> 
-> When the issue occurs, the link state stays in eSS.Disabled state
-> despite the warm reset attempts. The USB spec mentioned this can be
-> caused by invalid VBus, and after some expiremets, it does show that the
-> SMSC hub can be brought back after a power cycle.
-> 
-> So let's power cycle the port at the end of reset resume attempt, if
-> it's in eSS.Disabled state.
-> 
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Tested-by: Ajay Gupta <ajayg@nvidia.com>
+
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/usb/core/hub.c | 21 +++++++++++++++++++--
->  1 file changed, 19 insertions(+), 2 deletions(-)
+>   drivers/usb/typec/ucsi/displayport.c |  24 +-
+>   drivers/usb/typec/ucsi/trace.h       |  17 --
+>   drivers/usb/typec/ucsi/ucsi.c        | 346 +++------------------------
+>   drivers/usb/typec/ucsi/ucsi.h        |  41 ----
+>   4 files changed, 43 insertions(+), 385 deletions(-)
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 6655a6a1651b..5f50aca7cf67 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -2739,20 +2739,33 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
->  		|| link_state == USB_SS_PORT_LS_COMP_MOD;
->  }
->  
-> +static bool hub_port_power_cycle_required(struct usb_hub *hub, int port1,
-> +		u16 portstatus)
-> +{
-> +	u16 link_state;
-> +
-> +	if (!hub_is_superspeed(hub->hdev))
-> +		return false;
-> +
-> +	link_state = portstatus & USB_PORT_STAT_LINK_STATE;
-> +	return link_state == USB_SS_PORT_LS_SS_DISABLED;
-> +}
-> +
->  static void hub_port_power_cycle(struct usb_hub *hub, int port1)
->  {
-> +	struct usb_port *port_dev = hub->ports[port1  - 1];
->  	int ret;
->  
->  	ret = usb_hub_set_port_power(hub, port1, false);
->  	if (ret) {
-> -		dev_info(&udev->dev, "failed to disable port power\n");
-> +		dev_info(&port_dev->dev, "failed to disable port power\n");
->  		return;
->  	}
->  
->  	msleep(2 * hub_power_on_good_delay(hub));
->  	ret = usb_hub_set_port_power(hub, port1, true);
->  	if (ret) {
-> -		dev_info(&udev->dev, "failed to enable port power\n");
-> +		dev_info(&port_dev->dev, "failed to enable port power\n");
->  		return;
->  	}
->  
-> @@ -3600,6 +3613,10 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
->  	if (status < 0) {
->  		dev_dbg(&udev->dev, "can't resume, status %d\n", status);
->  		hub_port_logical_disconnect(hub, port1);
-> +		if (hub_port_power_cycle_required(hub, port1, portstatus)) {
-> +			dev_info(&udev->dev, "device in disabled state, attempt power cycle\n");
+> diff --git a/drivers/usb/typec/ucsi/displayport.c b/drivers/usb/typec/ucsi/displayport.c
+> index d99700cb4dca..47424935bc81 100644
+> --- a/drivers/usb/typec/ucsi/displayport.c
+> +++ b/drivers/usb/typec/ucsi/displayport.c
+> @@ -48,6 +48,7 @@ struct ucsi_dp {
+>   static int ucsi_displayport_enter(struct typec_altmode *alt)
+>   {
+>   	struct ucsi_dp *dp = typec_altmode_get_drvdata(alt);
+> +	struct ucsi *ucsi = dp->con->ucsi;
+>   	struct ucsi_control ctrl;
+>   	u8 cur = 0;
+>   	int ret;
+> @@ -59,25 +60,21 @@ static int ucsi_displayport_enter(struct typec_altmode *alt)
+>   
+>   		dev_warn(&p->dev,
+>   			 "firmware doesn't support alternate mode overriding\n");
+> -		mutex_unlock(&dp->con->lock);
+> -		return -EOPNOTSUPP;
+> +		ret = -EOPNOTSUPP;
+> +		goto err_unlock;
+>   	}
+>   
+>   	UCSI_CMD_GET_CURRENT_CAM(ctrl, dp->con->num);
+> -	ret = ucsi_send_command(dp->con->ucsi, &ctrl, &cur, sizeof(cur));
+> +	ret = ucsi_send_command(ucsi, command, &cur, sizeof(cur));
+>   	if (ret < 0) {
+> -		if (dp->con->ucsi->ppm->data->version > 0x0100) {
+> -			mutex_unlock(&dp->con->lock);
+> -			return ret;
+> -		}
+> +		if (ucsi->version > 0x0100)
+> +			goto err_unlock;
+>   		cur = 0xff;
+>   	}
+>   
+>   	if (cur != 0xff) {
+> -		mutex_unlock(&dp->con->lock);
+> -		if (dp->con->port_altmode[cur] == alt)
+> -			return 0;
+> -		return -EBUSY;
+> +		ret = dp->con->port_altmode[cur] == alt ? 0 : -EBUSY;
+> +		goto err_unlock;
+>   	}
+>   
+>   	/*
+> @@ -94,10 +91,11 @@ static int ucsi_displayport_enter(struct typec_altmode *alt)
+>   	dp->vdo_size = 1;
+>   
+>   	schedule_work(&dp->work);
+> -
+> +	ret = 0;
+> +err_unlock:
+>   	mutex_unlock(&dp->con->lock);
+>   
+> -	return 0;
+> +	return ret;
+>   }
+>   
+>   static int ucsi_displayport_exit(struct typec_altmode *alt)
+> diff --git a/drivers/usb/typec/ucsi/trace.h b/drivers/usb/typec/ucsi/trace.h
+> index 783ec9c72055..6e3d510b236e 100644
+> --- a/drivers/usb/typec/ucsi/trace.h
+> +++ b/drivers/usb/typec/ucsi/trace.h
+> @@ -75,23 +75,6 @@ DEFINE_EVENT(ucsi_log_command, ucsi_reset_ppm,
+>   	TP_ARGS(ctrl, ret)
+>   );
+>   
+> -DECLARE_EVENT_CLASS(ucsi_log_cci,
+> -	TP_PROTO(u32 cci),
+> -	TP_ARGS(cci),
+> -	TP_STRUCT__entry(
+> -		__field(u32, cci)
+> -	),
+> -	TP_fast_assign(
+> -		__entry->cci = cci;
+> -	),
+> -	TP_printk("CCI=%08x %s", __entry->cci, ucsi_cci_str(__entry->cci))
+> -);
+> -
+> -DEFINE_EVENT(ucsi_log_cci, ucsi_notify,
+> -	TP_PROTO(u32 cci),
+> -	TP_ARGS(cci)
+> -);
+> -
+>   DECLARE_EVENT_CLASS(ucsi_log_connector_status,
+>   	TP_PROTO(int port, struct ucsi_connector_status *status),
+>   	TP_ARGS(port, status),
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index dffc2cf8db6f..6462dadd7540 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -36,68 +36,6 @@
+>    */
+>   #define UCSI_SWAP_TIMEOUT_MS	5000
+>   
+> -static inline int ucsi_sync(struct ucsi *ucsi)
+> -{
+> -	if (ucsi->ppm && ucsi->ppm->sync)
+> -		return ucsi->ppm->sync(ucsi->ppm);
+> -	return 0;
+> -}
+> -
+> -static int ucsi_command(struct ucsi *ucsi, struct ucsi_control *ctrl)
+> -{
+> -	int ret;
+> -
+> -	trace_ucsi_command(ctrl);
+> -
+> -	set_bit(COMMAND_PENDING, &ucsi->flags);
+> -
+> -	ret = ucsi->ppm->cmd(ucsi->ppm, ctrl);
+> -	if (ret)
+> -		goto err_clear_flag;
+> -
+> -	if (!wait_for_completion_timeout(&ucsi->complete,
+> -					 msecs_to_jiffies(UCSI_TIMEOUT_MS))) {
+> -		dev_warn(ucsi->dev, "PPM NOT RESPONDING\n");
+> -		ret = -ETIMEDOUT;
+> -	}
+> -
+> -err_clear_flag:
+> -	clear_bit(COMMAND_PENDING, &ucsi->flags);
+> -
+> -	return ret;
+> -}
+> -
+> -static int ucsi_ack(struct ucsi *ucsi, u8 ack)
+> -{
+> -	struct ucsi_control ctrl;
+> -	int ret;
+> -
+> -	trace_ucsi_ack(ack);
+> -
+> -	set_bit(ACK_PENDING, &ucsi->flags);
+> -
+> -	UCSI_CMD_ACK(ctrl, ack);
+> -	ret = ucsi->ppm->cmd(ucsi->ppm, &ctrl);
+> -	if (ret)
+> -		goto out_clear_bit;
+> -
+> -	/* Waiting for ACK with ACK CMD, but not with EVENT for now */
+> -	if (ack == UCSI_ACK_EVENT)
+> -		goto out_clear_bit;
+> -
+> -	if (!wait_for_completion_timeout(&ucsi->complete,
+> -					 msecs_to_jiffies(UCSI_TIMEOUT_MS)))
+> -		ret = -ETIMEDOUT;
+> -
+> -out_clear_bit:
+> -	clear_bit(ACK_PENDING, &ucsi->flags);
+> -
+> -	if (ret)
+> -		dev_err(ucsi->dev, "%s: failed\n", __func__);
+> -
+> -	return ret;
+> -}
+> -
+>   static int ucsi_acknowledge_command(struct ucsi *ucsi)
+>   {
+>   	u64 ctrl;
+> @@ -196,115 +134,26 @@ static int ucsi_exec_command(struct ucsi *ucsi, u64 cmd)
+>   static int ucsi_run_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
+>   			    void *data, size_t size)
+>   {
+> -	struct ucsi_control _ctrl;
+> -	u8 data_length;
+> -	u16 error;
+> +	u8 length;
+>   	int ret;
+>   
+> -	if (ucsi->ops) {
+> -		ret = ucsi_exec_command(ucsi, ctrl->raw_cmd);
+> -		if (ret < 0)
+> -			return ret;
+> -
+> -		data_length = ret;
+> +	ret = ucsi_exec_command(ucsi, ctrl->raw_cmd);
+> +	if (ret < 0)
+> +		return ret;
+>   
+> -		if (data) {
+> -			ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, data, size);
+> -			if (ret)
+> -				return ret;
+> -		}
+> +	length = ret;
+>   
+> -		ret = ucsi_acknowledge_command(ucsi);
+> +	if (data) {
+> +		ret = ucsi->ops->read(ucsi, UCSI_MESSAGE_IN, data, size);
+>   		if (ret)
+>   			return ret;
+> -
+> -		return data_length;
+>   	}
+>   
+> -	ret = ucsi_command(ucsi, ctrl);
+> +	ret = ucsi_acknowledge_command(ucsi);
+>   	if (ret)
+> -		goto err;
+> -
+> -	switch (ucsi->status) {
+> -	case UCSI_IDLE:
+> -		ret = ucsi_sync(ucsi);
+> -		if (ret)
+> -			dev_warn(ucsi->dev, "%s: sync failed\n", __func__);
+> -
+> -		if (data)
+> -			memcpy(data, ucsi->ppm->data->message_in, size);
+> -
+> -		data_length = ucsi->ppm->data->cci.data_length;
+> -
+> -		ret = ucsi_ack(ucsi, UCSI_ACK_CMD);
+> -		if (!ret)
+> -			ret = data_length;
+> -		break;
+> -	case UCSI_BUSY:
+> -		/* The caller decides whether to cancel or not */
+> -		ret = -EBUSY;
+> -		break;
+> -	case UCSI_ERROR:
+> -		ret = ucsi_ack(ucsi, UCSI_ACK_CMD);
+> -		if (ret)
+> -			break;
+> -
+> -		_ctrl.raw_cmd = 0;
+> -		_ctrl.cmd.cmd = UCSI_GET_ERROR_STATUS;
+> -		ret = ucsi_command(ucsi, &_ctrl);
+> -		if (ret) {
+> -			dev_err(ucsi->dev, "reading error failed!\n");
+> -			break;
+> -		}
+> -
+> -		memcpy(&error, ucsi->ppm->data->message_in, sizeof(error));
+> -
+> -		/* Something has really gone wrong */
+> -		if (WARN_ON(ucsi->status == UCSI_ERROR)) {
+> -			ret = -ENODEV;
+> -			break;
+> -		}
+> -
+> -		ret = ucsi_ack(ucsi, UCSI_ACK_CMD);
+> -		if (ret)
+> -			break;
+> -
+> -		switch (error) {
+> -		case UCSI_ERROR_INCOMPATIBLE_PARTNER:
+> -			ret = -EOPNOTSUPP;
+> -			break;
+> -		case UCSI_ERROR_CC_COMMUNICATION_ERR:
+> -			ret = -ECOMM;
+> -			break;
+> -		case UCSI_ERROR_CONTRACT_NEGOTIATION_FAIL:
+> -			ret = -EPROTO;
+> -			break;
+> -		case UCSI_ERROR_DEAD_BATTERY:
+> -			dev_warn(ucsi->dev, "Dead battery condition!\n");
+> -			ret = -EPERM;
+> -			break;
+> -		/* The following mean a bug in this driver */
+> -		case UCSI_ERROR_INVALID_CON_NUM:
+> -		case UCSI_ERROR_UNREGONIZED_CMD:
+> -		case UCSI_ERROR_INVALID_CMD_ARGUMENT:
+> -			dev_warn(ucsi->dev,
+> -				 "%s: possible UCSI driver bug - error 0x%x\n",
+> -				 __func__, error);
+> -			ret = -EINVAL;
+> -			break;
+> -		default:
+> -			dev_warn(ucsi->dev,
+> -				 "%s: error without status\n", __func__);
+> -			ret = -EIO;
+> -			break;
+> -		}
+> -		break;
+> -	}
+> -
+> -err:
+> -	trace_ucsi_run_command(ctrl, ret);
+> +		return ret;
+>   
+> -	return ret;
+> +	return length;
+>   }
+>   
+>   int ucsi_send_command(struct ucsi *ucsi, struct ucsi_control *ctrl,
+> @@ -334,7 +183,7 @@ EXPORT_SYMBOL_GPL(ucsi_resume);
+>   void ucsi_altmode_update_active(struct ucsi_connector *con)
+>   {
+>   	const struct typec_altmode *altmode = NULL;
+> -	struct ucsi_control ctrl;
+> +	u64 command;
+>   	int ret;
+>   	u8 cur;
+>   	int i;
+> @@ -342,7 +191,7 @@ void ucsi_altmode_update_active(struct ucsi_connector *con)
+>   	UCSI_CMD_GET_CURRENT_CAM(ctrl, con->num);
+>   	ret = ucsi_run_command(con->ucsi, &ctrl, &cur, sizeof(cur));
+>   	if (ret < 0) {
+> -		if (con->ucsi->ppm->data->version > 0x0100) {
+> +		if (con->ucsi->version > 0x0100) {
+>   			dev_err(con->ucsi->dev,
+>   				"GET_CURRENT_CAM command failed\n");
+>   			return;
+> @@ -695,10 +544,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>   	if (con->status.change & UCSI_CONSTAT_PARTNER_CHANGE)
+>   		ucsi_partner_change(con);
+>   
+> -	if (ucsi->ops)
+> -		ret = ucsi_acknowledge_connector_change(ucsi);
+> -	else
+> -		ret = ucsi_ack(ucsi, UCSI_ACK_EVENT);
+> +	ret = ucsi_acknowledge_connector_change(ucsi);
+>   	if (ret)
+>   		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+>   
+> @@ -723,45 +569,6 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+>   }
+>   EXPORT_SYMBOL_GPL(ucsi_connector_change);
+>   
+> -/**
+> - * ucsi_notify - PPM notification handler
+> - * @ucsi: Source UCSI Interface for the notifications
+> - *
+> - * Handle notifications from PPM of @ucsi.
+> - */
+> -void ucsi_notify(struct ucsi *ucsi)
+> -{
+> -	struct ucsi_cci *cci;
+> -
+> -	/* There is no requirement to sync here, but no harm either. */
+> -	ucsi_sync(ucsi);
+> -
+> -	cci = &ucsi->ppm->data->cci;
+> -
+> -	if (cci->error)
+> -		ucsi->status = UCSI_ERROR;
+> -	else if (cci->busy)
+> -		ucsi->status = UCSI_BUSY;
+> -	else
+> -		ucsi->status = UCSI_IDLE;
+> -
+> -	if (cci->cmd_complete && test_bit(COMMAND_PENDING, &ucsi->flags)) {
+> -		complete(&ucsi->complete);
+> -	} else if (cci->ack_complete && test_bit(ACK_PENDING, &ucsi->flags)) {
+> -		complete(&ucsi->complete);
+> -	} else if (cci->connector_change) {
+> -		struct ucsi_connector *con;
+> -
+> -		con = &ucsi->connector[cci->connector_change - 1];
+> -
+> -		if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+> -			schedule_work(&con->work);
+> -	}
+> -
+> -	trace_ucsi_notify(ucsi->ppm->data->raw_cci);
+> -}
+> -EXPORT_SYMBOL_GPL(ucsi_notify);
+> -
+>   /* -------------------------------------------------------------------------- */
+>   
+>   static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
+> @@ -775,83 +582,39 @@ static int ucsi_reset_connector(struct ucsi_connector *con, bool hard)
+>   
+>   static int ucsi_reset_ppm(struct ucsi *ucsi)
+>   {
+> -	struct ucsi_control ctrl;
+> +	u64 command = UCSI_PPM_RESET;
+>   	unsigned long tmo;
+> +	u32 cci;
+>   	int ret;
+>   
+> -	if (ucsi->ops) {
+> -		u64 command = UCSI_PPM_RESET;
+> -		u32 cci;
+> -
+> -		ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command,
+> -					     sizeof(command));
+> -		if (ret < 0)
+> -			return ret;
+> -
+> -		tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
+> -
+> -		do {
+> -			if (time_is_before_jiffies(tmo))
+> -				return -ETIMEDOUT;
+> -
+> -			ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> -			if (ret)
+> -				return ret;
+> -
+> -			/* If the PPM is still doing something else, reset it again. */
+> -			if (cci & ~UCSI_CCI_RESET_COMPLETE) {
+> -				ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL,
+> -							     &command,
+> -							     sizeof(command));
+> -				if (ret < 0)
+> -					return ret;
+> -			}
+> -
+> -			msleep(20);
+> -		} while (!(cci & UCSI_CCI_RESET_COMPLETE));
+> -
+> -		return 0;
+> -	}
+> -
+> -	ctrl.raw_cmd = 0;
+> -	ctrl.cmd.cmd = UCSI_PPM_RESET;
+> -	trace_ucsi_command(&ctrl);
+> -	ret = ucsi->ppm->cmd(ucsi->ppm, &ctrl);
+> -	if (ret)
+> -		goto err;
+> +	ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL, &command,
+> +				     sizeof(command));
+> +	if (ret < 0)
+> +		return ret;
+>   
+>   	tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
+>   
+>   	do {
+> -		/* Here sync is critical. */
+> -		ret = ucsi_sync(ucsi);
+> -		if (ret)
+> -			goto err;
+> +		if (time_is_before_jiffies(tmo))
+> +			return -ETIMEDOUT;
+>   
+> -		if (ucsi->ppm->data->cci.reset_complete)
+> -			break;
+> +		ret = ucsi->ops->read(ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +		if (ret)
+> +			return ret;
+>   
+>   		/* If the PPM is still doing something else, reset it again. */
+> -		if (ucsi->ppm->data->raw_cci) {
+> -			dev_warn_ratelimited(ucsi->dev,
+> -				"Failed to reset PPM! Trying again..\n");
+> -
+> -			trace_ucsi_command(&ctrl);
+> -			ret = ucsi->ppm->cmd(ucsi->ppm, &ctrl);
+> -			if (ret)
+> -				goto err;
+> +		if (cci & ~UCSI_CCI_RESET_COMPLETE) {
+> +			ret = ucsi->ops->async_write(ucsi, UCSI_CONTROL,
+> +						     &command,
+> +						     sizeof(command));
+> +			if (ret < 0)
+> +				return ret;
+>   		}
+>   
+> -		/* Letting the PPM settle down. */
+>   		msleep(20);
+> +	} while (!(cci & UCSI_CCI_RESET_COMPLETE));
+>   
+> -		ret = -ETIMEDOUT;
+> -	} while (time_is_after_jiffies(tmo));
+> -
+> -err:
+> -	trace_ucsi_reset_ppm(&ctrl, ret);
+> -
+> -	return ret;
+> +	return 0;
+>   }
+>   
+>   static int ucsi_role_cmd(struct ucsi_connector *con, struct ucsi_control *ctrl)
+> @@ -1266,51 +1029,6 @@ void ucsi_unregister(struct ucsi *ucsi)
+>   }
+>   EXPORT_SYMBOL_GPL(ucsi_unregister);
+>   
+> -/**
+> - * ucsi_register_ppm - Register UCSI PPM Interface
+> - * @dev: Device interface to the PPM
+> - * @ppm: The PPM interface
+> - *
+> - * Allocates UCSI instance, associates it with @ppm and returns it to the
+> - * caller, and schedules initialization of the interface.
+> - */
+> -struct ucsi *ucsi_register_ppm(struct device *dev, struct ucsi_ppm *ppm)
+> -{
+> -	struct ucsi *ucsi;
+> -
+> -	ucsi = kzalloc(sizeof(*ucsi), GFP_KERNEL);
+> -	if (!ucsi)
+> -		return ERR_PTR(-ENOMEM);
+> -
+> -	INIT_WORK(&ucsi->work, ucsi_init_work);
+> -	init_completion(&ucsi->complete);
+> -	mutex_init(&ucsi->ppm_lock);
+> -
+> -	ucsi->dev = dev;
+> -	ucsi->ppm = ppm;
+> -
+> -	/*
+> -	 * Communication with the PPM takes a lot of time. It is not reasonable
+> -	 * to initialize the driver here. Using a work for now.
+> -	 */
+> -	queue_work(system_long_wq, &ucsi->work);
+> -
+> -	return ucsi;
+> -}
+> -EXPORT_SYMBOL_GPL(ucsi_register_ppm);
+> -
+> -/**
+> - * ucsi_unregister_ppm - Unregister UCSI PPM Interface
+> - * @ucsi: struct ucsi associated with the PPM
+> - *
+> - * Unregister UCSI PPM that was created with ucsi_register().
+> - */
+> -void ucsi_unregister_ppm(struct ucsi *ucsi)
+> -{
+> -	ucsi_unregister(ucsi);
+> -}
+> -EXPORT_SYMBOL_GPL(ucsi_unregister_ppm);
+> -
+>   MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>");
+>   MODULE_LICENSE("GPL v2");
+>   MODULE_DESCRIPTION("USB Type-C Connector System Software Interface driver");
+> diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+> index d8a8e8f2f912..29f9e7f0d212 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.h
+> +++ b/drivers/usb/typec/ucsi/ucsi.h
+> @@ -398,54 +398,13 @@ struct ucsi_connector_status {
+>   
+>   /* -------------------------------------------------------------------------- */
+>   
+> -struct ucsi;
+> -
+> -struct ucsi_data {
+> -	u16 version;
+> -	u16 reserved;
+> -	union {
+> -		u32 raw_cci;
+> -		struct ucsi_cci cci;
+> -	};
+> -	struct ucsi_control ctrl;
+> -	u32 message_in[4];
+> -	u32 message_out[4];
+> -} __packed;
+> -
+> -/*
+> - * struct ucsi_ppm - Interface to UCSI Platform Policy Manager
+> - * @data: memory location to the UCSI data structures
+> - * @cmd: UCSI command execution routine
+> - * @sync: Refresh UCSI mailbox (the data structures)
+> - */
+> -struct ucsi_ppm {
+> -	struct ucsi_data *data;
+> -	int (*cmd)(struct ucsi_ppm *, struct ucsi_control *);
+> -	int (*sync)(struct ucsi_ppm *);
+> -};
+> -
+> -struct ucsi *ucsi_register_ppm(struct device *dev, struct ucsi_ppm *ppm);
+> -void ucsi_unregister_ppm(struct ucsi *ucsi);
+> -void ucsi_notify(struct ucsi *ucsi);
+> -
+> -/* -------------------------------------------------------------------------- */
+> -
+> -enum ucsi_status {
+> -	UCSI_IDLE = 0,
+> -	UCSI_BUSY,
+> -	UCSI_ERROR,
+> -};
+> -
+>   struct ucsi {
+>   	u16 version;
+>   	struct device *dev;
+> -	struct ucsi_ppm *ppm;
+>   	struct driver_data *driver_data;
+>   
+>   	const struct ucsi_operations *ops;
+>   
+> -	enum ucsi_status status;
+> -	struct completion complete;
+>   	struct ucsi_capability cap;
+>   	struct ucsi_connector *connector;
+>   
+> 
 
-Why dev_info()?  Shouldn't we only care if this fails?
-
-> +			hub_port_power_cycle(hub, port1);
-
-Weren't we only going to do this for the broken types of devices?  And
-not for everything?
-
-thanks,
-
-greg k-h
