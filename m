@@ -2,131 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE2EEE73F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DC0EE762
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:27:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729446AbfKDSUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 13:20:11 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:55184 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728346AbfKDSUL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 13:20:11 -0500
-Received: (qmail 5157 invoked by uid 2102); 4 Nov 2019 13:20:10 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 4 Nov 2019 13:20:10 -0500
-Date:   Mon, 4 Nov 2019 13:20:10 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-In-Reply-To: <38f1974fad3a98ca578fcf808a843cbd28325e44.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1911041316390.1689-200000@iolanthe.rowland.org>
+        id S1729454AbfKDS14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 13:27:56 -0500
+Received: from alln-iport-2.cisco.com ([173.37.142.89]:56290 "EHLO
+        alln-iport-2.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727998AbfKDS14 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 13:27:56 -0500
+X-Greylist: delayed 425 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 13:27:55 EST
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=664; q=dns/txt; s=iport;
+  t=1572892075; x=1574101675;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6eYi3wjyJDjYDvEnI2nl2Du9wgudJvIY7ANx7M1zMok=;
+  b=lZlF6RzDCbzmPeeiW+OAN/NYSEtmr/XTNFZrOiLfEMgPaI3L+WH/V8e0
+   lXuSPPk/rNUNv129pbjFRKPfZ4dpUKOPxdAMBExbAeiTi07aA69YnXjbS
+   foZfYxG7N5KMD9KxsRPXIW4rgbcYXdIaYIIcJyfS/HAJrziARtTNz86//
+   Y=;
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0C2AAB7asBd/4sNJK1mDgsBAQEBAQE?=
+ =?us-ascii?q?BAQEBAQEBAQEBAREBAQEBAQEBAQEBAYF9giBsVTIqkzaRFYR+hTyBZwkBAQE?=
+ =?us-ascii?q?MAQElCgEBhECEECQ4EwIDCwEBBAEBAQIBBQRthTcMhhI/GyE0BSghARKDI4J?=
+ =?us-ascii?q?3D7FdgieJBoFCBhQOgRSMExiBQD+BEYMSPoQtBINWgiwEjHBEiUqHcI8Egi5?=
+ =?us-ascii?q?thiSOGScMmVktjhWILpEpAgQGBQIVgWkiKoEuMxoIGxWDKBI9ERSMDYUEXCA?=
+ =?us-ascii?q?DMQEBAYwrgj4BAQ?=
+X-IronPort-AV: E=Sophos;i="5.68,267,1569283200"; 
+   d="scan'208";a="365533773"
+Received: from alln-core-6.cisco.com ([173.36.13.139])
+  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 04 Nov 2019 18:20:48 +0000
+Received: from zorba ([10.154.200.29])
+        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id xA4IKkpK001680
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 4 Nov 2019 18:20:47 GMT
+Date:   Mon, 4 Nov 2019 10:20:44 -0800
+From:   Daniel Walker <danielwa@cisco.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        xe-linux-external@cisco.com
+Subject: Re: usb-storage: Set virt_boundary_mask to avoid SG overflows
+Message-ID: <20191104182044.GF18744@zorba>
 MIME-Version: 1.0
-Content-Type: MULTIPART/MIXED; BOUNDARY="-1559625215-543176100-1572891610=:1689"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.154.200.29, [10.154.200.29]
+X-Outbound-Node: alln-core-6.cisco.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-  Send mail to mime@docserver.cac.washington.edu for more info.
+Hi,
 
----1559625215-543176100-1572891610=:1689
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+This is a stable defect report.
 
-On Mon, 4 Nov 2019, Andrea Vai wrote:
+We're tracking v4.9 stable for some of our products (i.e. Cisco Systems, Inc.)
+We noticed a speed degradation of roughly %30 on writes to a /dev/sdaX device
+over USB (no file system). We bisected the issue to this commit from Alan Stern.
+We also found a prior report of speed degradation on NTFS,
 
-> > The "linux" directory is the one generated by a fresh git clone:
-> > 
-> > git clone
-> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> > 
-> > What am I doing wrong?
-> > 
-> 
-> Meanwhile, Alan tried to help me and gave me another patch (attached),
-> which doesn't work too, but gives a different error: "The git diff
-> header does not contain information about the file once removed 1
-> initial component of the path (row 14)" (actually, this is my
-> translation from the original message in Italian: "error:
-> l'intestazione git diff non riporta le informazioni sul file una volta
-> rimosso 1 componente iniziale del percorso (riga 14)")
-> 
-> I tested the two patches after a fresh git clone today, a few minutes
-> ago.
-> 
-> What can I do?
+https://lore.kernel.org/linux-usb/Pine.LNX.4.44L0.1908291030400.1306-100000@iolanthe.rowland.org/T/
 
-You should be able to do something like this:
+We have the patch reverted in our v4.9 tree on top of stable. It seems Alan was
+planning to remove these lines. If the lines are planned to be removed is there
+an reason why they haven't been ?
 
-	cd linux
-	patch -p1 </path/to/patch2
-
-and that should work with no errors.  You don't need to use git to 
-apply a patch.
-
-In case that patch2 file was mangled somewhere along the way, I have 
-attached a copy to this message.
-
-Alan Stern
-
----1559625215-543176100-1572891610=:1689
-Content-Type: TEXT/PLAIN; charset=US-ASCII; name=patch2
-Content-Transfer-Encoding: BASE64
-Content-ID: <Pine.LNX.4.44L0.1911041320100.1689@iolanthe.rowland.org>
-Content-Description: 
-Content-Disposition: attachment; filename=patch2
-
-RnJvbTogSGFubmVzIFJlaW5lY2tlIDxoYXJlQHN1c2UuY29tPg0NCg0NCkEg
-c2NoZWR1bGVyIG1pZ2h0IGJlIGF0dGFjaGVkIGV2ZW4gZm9yIGRldmljZXMg
-ZXhwb3NpbmcgbW9yZSB0aGFuDQ0Kb25lIGhhcmR3YXJlIHF1ZXVlLCBzbyB0
-aGUgY2hlY2sgZm9yIHRoZSBudW1iZXIgb2YgaGFyZHdhcmUgcXVldWUNDQpp
-cyBwb2ludGxlc3MgYW5kIHNob3VsZCBiZSByZW1vdmVkLg0NCg0NClNpZ25l
-ZC1vZmYtYnk6IEhhbm5lcyBSZWluZWNrZSA8aGFyZUBzdXNlLmNvbT4NDQot
-LS0NDQogYmxvY2svYmxrLW1xLmMgfCAgICA3ICstLS0tLS0NCiAxIGZpbGUg
-Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDYgZGVsZXRpb25zKC0pDQoNDQpk
-aWZmIC0tZ2l0IGEvYmxvY2svYmxrLW1xLmMgYi9ibG9jay9ibGstbXEuYw0N
-CmluZGV4IDQ0ZmYzYzE0NDJhNC4uZmFhYjU0MmU0ODM2IDEwMDY0NA0NCklu
-ZGV4OiB1c2ItZGV2ZWwvYmxvY2svYmxrLW1xLmMNCj09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT0NCi0tLSB1c2ItZGV2ZWwub3JpZy9ibG9jay9ibGstbXEuYw0K
-KysrIHVzYi1kZXZlbC9ibG9jay9ibGstbXEuYw0KQEAgLTE5NDYsNyArMTk0
-Niw2IEBAIHN0YXRpYyB2b2lkIGJsa19hZGRfcnFfdG9fcGx1ZyhzdHJ1Y3Qg
-YmwNCiANCiBzdGF0aWMgYmxrX3FjX3QgYmxrX21xX21ha2VfcmVxdWVzdChz
-dHJ1Y3QgcmVxdWVzdF9xdWV1ZSAqcSwgc3RydWN0IGJpbyAqYmlvKQ0KIHsN
-Ci0JY29uc3QgaW50IGlzX3N5bmMgPSBvcF9pc19zeW5jKGJpby0+Ymlfb3Bm
-KTsNCiAJY29uc3QgaW50IGlzX2ZsdXNoX2Z1YSA9IG9wX2lzX2ZsdXNoKGJp
-by0+Ymlfb3BmKTsNCiAJc3RydWN0IGJsa19tcV9hbGxvY19kYXRhIGRhdGEg
-PSB7IC5mbGFncyA9IDB9Ow0KIAlzdHJ1Y3QgcmVxdWVzdCAqcnE7DQpAQCAt
-MTk5Miw4ICsxOTkxLDcgQEAgc3RhdGljIGJsa19xY190IGJsa19tcV9tYWtl
-X3JlcXVlc3Qoc3RydQ0KIAkJLyogYnlwYXNzIHNjaGVkdWxlciBmb3IgZmx1
-c2ggcnEgKi8NCiAJCWJsa19pbnNlcnRfZmx1c2gocnEpOw0KIAkJYmxrX21x
-X3J1bl9od19xdWV1ZShkYXRhLmhjdHgsIHRydWUpOw0KLQl9IGVsc2UgaWYg
-KHBsdWcgJiYgKHEtPm5yX2h3X3F1ZXVlcyA9PSAxIHx8IHEtPm1xX29wcy0+
-Y29tbWl0X3JxcyB8fA0KLQkJCQkhYmxrX3F1ZXVlX25vbnJvdChxKSkpIHsN
-CisJfSBlbHNlIGlmIChwbHVnICYmIChxLT5tcV9vcHMtPmNvbW1pdF9ycXMg
-fHwgIWJsa19xdWV1ZV9ub25yb3QocSkpKSB7DQogCQkvKg0KIAkJICogVXNl
-IHBsdWdnaW5nIGlmIHdlIGhhdmUgYSAtPmNvbW1pdF9ycXMoKSBob29rIGFz
-IHdlbGwsIGFzDQogCQkgKiB3ZSBrbm93IHRoZSBkcml2ZXIgdXNlcyBiZC0+
-bGFzdCBpbiBhIHNtYXJ0IGZhc2hpb24uDQpAQCAtMjA0MSw5ICsyMDM5LDYg
-QEAgc3RhdGljIGJsa19xY190IGJsa19tcV9tYWtlX3JlcXVlc3Qoc3RydQ0K
-IAkJCWJsa19tcV90cnlfaXNzdWVfZGlyZWN0bHkoZGF0YS5oY3R4LCBzYW1l
-X3F1ZXVlX3JxLA0KIAkJCQkJJmNvb2tpZSk7DQogCQl9DQotCX0gZWxzZSBp
-ZiAoKHEtPm5yX2h3X3F1ZXVlcyA+IDEgJiYgaXNfc3luYykgfHwNCi0JCQkh
-ZGF0YS5oY3R4LT5kaXNwYXRjaF9idXN5KSB7DQotCQlibGtfbXFfdHJ5X2lz
-c3VlX2RpcmVjdGx5KGRhdGEuaGN0eCwgcnEsICZjb29raWUpOw0KIAl9IGVs
-c2Ugew0KIAkJYmxrX21xX3NjaGVkX2luc2VydF9yZXF1ZXN0KHJxLCBmYWxz
-ZSwgdHJ1ZSwgdHJ1ZSk7DQogCX0NCg==
----1559625215-543176100-1572891610=:1689--
+Thanks,
+Daniel
