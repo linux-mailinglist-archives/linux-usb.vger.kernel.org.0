@@ -2,53 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60650ED3F8
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2019 18:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FDEEED7EC
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 04:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727911AbfKCRPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Nov 2019 12:15:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54994 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727444AbfKCRPF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 3 Nov 2019 12:15:05 -0500
-Subject: Re: [GIT PULL] USB fixes for 5.4-rc6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572801305;
-        bh=zy64mMfFoaabPue1WLiYD7/7Haa3CKxc30MQcp2EXfo=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=0uZAeEnNGwA6aEJXXYcOl+7UDBGsmM/XpydXrnFFk7EQKoPtTKAit4kzVUT+ErWhE
-         cPdVawcs32+cB4xPxhpZnvrz4B+u7Inj3kG9le4w/iG0DVuRD1yIJqql+44XdIaiFu
-         dOsaNR1A+BZZXCszxjQE4W9tUaTb9WjpJykW6OXk=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20191103141534.GA661190@kroah.com>
-References: <20191103141534.GA661190@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20191103141534.GA661190@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc6
-X-PR-Tracked-Commit-Id: d8eca64eec7103ab1fbabc0a187dbf6acfb2af93
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 3a69c9e522950020d4973317201f4a419ee6d6a3
-Message-Id: <157280130515.32367.149258093078714852.pr-tracker-bot@kernel.org>
-Date:   Sun, 03 Nov 2019 17:15:05 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1728938AbfKDDAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 3 Nov 2019 22:00:41 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:5254 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728643AbfKDDAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 3 Nov 2019 22:00:41 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 58D02C6956E1853EB260;
+        Mon,  4 Nov 2019 11:00:39 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.439.0; Mon, 4 Nov 2019 11:00:29 +0800
+From:   Mao Wenan <maowenan@huawei.com>
+To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <treding@nvidia.com>, <nkristam@nvidia.com>, <arnd@arndb.de>,
+        <johan@kernel.org>, <krzk@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Mao Wenan <maowenan@huawei.com>
+Subject: [PATCH -next] usb: gadget: Add dependency for USB_TEGRA_XUDC
+Date:   Mon, 4 Nov 2019 10:59:45 +0800
+Message-ID: <20191104025945.172620-1-maowenan@huawei.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sun, 3 Nov 2019 15:15:34 +0100:
+If CONFIG_USB_TEGRA_XUDC=y and CONFIG_USB_ROLE_SWITCH=m,
+below erros can be seen:
+drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
+tegra-xudc.c:(.text+0x6b0): undefined reference to `usb_role_switch_unregister'
+drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
+tegra-xudc.c:(.text+0x1b88): undefined reference to `usb_role_switch_register'
+drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_sw_work':
+tegra-xudc.c:(.text+0x5ecc): undefined reference to `usb_role_switch_get_role'
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.4-rc6
+This patch add dependency USB_ROLE_SWITCH for UDC driver.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/3a69c9e522950020d4973317201f4a419ee6d6a3
+Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+Signed-off-by: Mao Wenan <maowenan@huawei.com>
+---
+ drivers/usb/gadget/udc/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thank you!
-
+diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+index acaec3a..d103154 100644
+--- a/drivers/usb/gadget/udc/Kconfig
++++ b/drivers/usb/gadget/udc/Kconfig
+@@ -445,6 +445,7 @@ config USB_TEGRA_XUDC
+ 	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
+ 	depends on ARCH_TEGRA || COMPILE_TEST
+ 	depends on PHY_TEGRA_XUSB
++	depends on USB_ROLE_SWITCH
+ 	help
+ 	 Enables NVIDIA Tegra USB 3.0 device mode controller driver.
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.7.4
+
