@@ -2,92 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34694EE291
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41636EE2A8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:35:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728709AbfKDOcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 09:32:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46014 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728683AbfKDOcT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Nov 2019 09:32:19 -0500
-Received: from localhost (unknown [62.119.166.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 815AF21D71;
-        Mon,  4 Nov 2019 14:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572877938;
-        bh=0ENEPJRxHYImUF1CtW2GanU1wL7Gpw0hrwnmI/y9upI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XrhXtgtPN6QSS4XSLXhTP/e6sx9fYrzdi1MQibtX50Gp3mPs+Yb6LEPHOdxq1EoP/
-         0RKqxjOFb1Fe7+d/8Scmv81ag/NVkxe0EPfhQVss5Szi+crnaI7EPlHOTKURoMTvxc
-         O96jjyN0VAL2fImgfeRMAJw+42/MpcTqmeCXp5Jk=
-Date:   Mon, 4 Nov 2019 15:31:57 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mario.Limonciello@dell.com,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/25] thunderbolt: Add support for USB4
-Message-ID: <20191104143157.GA2183186@kroah.com>
-References: <20191023112154.64235-1-mika.westerberg@linux.intel.com>
- <20191101114318.GO2593@lahna.fi.intel.com>
+        id S1728188AbfKDOfq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 09:35:46 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:46827 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728178AbfKDOfq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 09:35:46 -0500
+Received: by mail-pl1-f194.google.com with SMTP id l4so2408089plt.13
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 06:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=nG81jMoViBv4yRurQIY7bis7/i4dpC8VE8koUb2azBI=;
+        b=skm7uwSW2aXtizOHAV9oM4PR2Aw3Vl+MQWCL5t/JjaM0d4871Imt/D07kG9E089/AX
+         1BZLqU9UGhLsy3OWOG831S7qfNgYYwgWpPpewOL0jHBELMv3VuiHI1DPDcxmZKgVevCQ
+         z5fJnGuWHzqUhVwNi1nbbpHHRj+UTOIrWNB82zAdLuAw2jCS6GDBimzWoMmuu5ui6OR3
+         a2r5o1mhcBAIoLwSfZaWCXfNEKipcsi4Z5bC66eXfAP0N+QQyMD6Rw5gwEH8nOEgzH7J
+         /1mz6CcORHOMwZZMrDuP7TI4TN9TNiVLStZmCiOTJSircwTfkDfoZA/tu+EE2b+lzMCN
+         QCrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=nG81jMoViBv4yRurQIY7bis7/i4dpC8VE8koUb2azBI=;
+        b=WDEr8CfnHcPg5SOjpTo4o5HoMImr60L5b9PPgqpLeZv2hc6KcGMjDPeGck8GeoY2d0
+         kHKQtmF3xueGHQ+Lwxkr6/eHQ6Ts9NrfkxRH2E8mTLAlBdkWkpORE00UEMGtIkOOCqLP
+         M8nf1I90RDgo9l5O8HNPIvA8QaKymq3ctZNbD1/a5lbmSQ6DAnfTniqubpcXtivmSQGO
+         IckQV+FGnYWdB0qEn4G37v0m/geOMqaSTfkfNV4s4F4rDqBUrLiWI9rNX3v/LfXSwMd1
+         Rrl5Y4afFRDMm5a5FmtJh8irtKBMfXE5L0FC71Kievv/u0JRAPD4HcJNXvxMm1cXoj2G
+         QJzg==
+X-Gm-Message-State: APjAAAVvz3y32obymzFFRDPZZXLOJoUjn/SVr+uQJzpBCXZN4EAVdYFb
+        2iC3qacVHLjr+5e0p9UVRuusXsuw
+X-Google-Smtp-Source: APXvYqyrU29Xx7VCiZkAZ/QSRFcD0j5i/i/uF0K/UJ8jbsO0ulqhhctfVl0iEft+a/1KETWRBDs3DA==
+X-Received: by 2002:a17:902:14f:: with SMTP id 73mr27934413plb.87.1572878145060;
+        Mon, 04 Nov 2019 06:35:45 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id h13sm18578670pfr.98.2019.11.04.06.35.43
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 Nov 2019 06:35:44 -0800 (PST)
+Subject: Re: [PATCH v4 12/18] usb: typec: ucsi: acpi: Move to the new API
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
+References: <20191104142435.29960-1-heikki.krogerus@linux.intel.com>
+ <20191104142435.29960-13-heikki.krogerus@linux.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <96e841fd-82bb-8f97-6952-aa75624da7a1@roeck-us.net>
+Date:   Mon, 4 Nov 2019 06:35:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191101114318.GO2593@lahna.fi.intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20191104142435.29960-13-heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 01, 2019 at 01:43:18PM +0200, Mika Westerberg wrote:
-> On Wed, Oct 23, 2019 at 02:21:29PM +0300, Mika Westerberg wrote:
-> > Mika Westerberg (22):
-> >   thunderbolt: Introduce tb_switch_is_icm()
-> >   thunderbolt: Log switch route string on config read/write timeout
-> >   thunderbolt: Log error if adding switch fails
-> >   thunderbolt: Convert basic adapter register names to follow the USB4 spec
-> >   thunderbolt: Convert PCIe adapter register names to follow the USB4 spec
-> >   thunderbolt: Convert DP adapter register names to follow the USB4 spec
-> >   thunderbolt: Make tb_sw_write() take const parameter
-> >   thunderbolt: Add helper macro to iterate over switch ports
-> >   thunderbolt: Refactor add_switch() into two functions
-> >   thunderbolt: Add support for lane bonding
-> >   thunderbolt: Add default linking between lane adapters if not provided by DROM
-> >   thunderbolt: Expand controller name in tb_switch_is_xy()
-> >   thunderbolt: Add downstream PCIe port mappings for Alpine and Titan Ridge
-> >   thunderbolt: Add Display Port CM handshake for Titan Ridge devices
-> >   thunderbolt: Add Display Port adapter pairing and resource management
-> >   thunderbolt: Add bandwidth management for Display Port tunnels
-> >   thunderbolt: Do not start firmware unless asked by the user
-> >   thunderbolt: Make tb_find_port() available to other files
-> >   thunderbolt: Call tb_eeprom_get_drom_offset() from tb_eeprom_read_n()
-> >   thunderbolt: Add initial support for USB4
-> >   thunderbolt: Update Kconfig entry to USB4
-> >   thunderbolt: Update documentation with the USB4 information
-> > 
-> > Rajmohan Mani (3):
-> >   thunderbolt: Make tb_switch_find_cap() available to other files
-> >   thunderbolt: Add support for Time Management Unit
-> >   thunderbolt: Add support for USB 3.x tunnels
-> > 
+On 11/4/19 6:24 AM, Heikki Krogerus wrote:
+> Replacing the old "cmd" and "sync" callbacks with an
+> implementation of struct ucsi_operations. The ACPI
+> notification (interrupt) handler will from now on read the
+> CCI (Command Status and Connector Change Indication)
+> register, and call ucsi_connector_change() function and/or
+> complete pending command completions based on it.
 > 
-> I queued patches 1-17 for v5.5. I'll leave the rest of USB4 patches to
-> cook for a while and hopefully we can get them in for v5.6.
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+>   drivers/usb/typec/ucsi/ucsi_acpi.c | 91 +++++++++++++++++++++++-------
+>   1 file changed, 72 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> index a18112a83fae..3f1786170098 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_acpi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+> @@ -19,7 +19,9 @@
+>   struct ucsi_acpi {
+>   	struct device *dev;
+>   	struct ucsi *ucsi;
+> -	struct ucsi_ppm ppm;
+> +	void __iomem *base;
 
-No objection from me, nice work!
+I think it would be a good idea to mention in a comment somewhere that this is not
+really iomem and thus doesn't require memcpy_io functions.
 
-greg k-h
+Guenter
+
+> +	struct completion complete;
+> +	unsigned long flags;
+>   	guid_t guid;
+>   };
+>   
+> @@ -39,27 +41,73 @@ static int ucsi_acpi_dsm(struct ucsi_acpi *ua, int func)
+>   	return 0;
+>   }
+>   
+> -static int ucsi_acpi_cmd(struct ucsi_ppm *ppm, struct ucsi_control *ctrl)
+> +static int ucsi_acpi_read(struct ucsi *ucsi, unsigned int offset,
+> +			  void *val, size_t val_len)
+>   {
+> -	struct ucsi_acpi *ua = container_of(ppm, struct ucsi_acpi, ppm);
+> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> +	int ret;
+> +
+> +	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> +	if (ret)
+> +		return ret;
+> +
+> +	memcpy(val, (const void __force *)(ua->base + offset), val_len);
+> +
+> +	return 0;
+> +}
+> +
+> +static int ucsi_acpi_async_write(struct ucsi *ucsi, unsigned int offset,
+> +				 const void *val, size_t val_len)
+> +{
+> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+>   
+> -	ppm->data->ctrl.raw_cmd = ctrl->raw_cmd;
+> +	memcpy((void __force *)(ua->base + offset), val, val_len);
+>   
+>   	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_WRITE);
+>   }
+>   
+> -static int ucsi_acpi_sync(struct ucsi_ppm *ppm)
+> +static int ucsi_acpi_sync_write(struct ucsi *ucsi, unsigned int offset,
+> +				const void *val, size_t val_len)
+>   {
+> -	struct ucsi_acpi *ua = container_of(ppm, struct ucsi_acpi, ppm);
+> +	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+> +	int ret;
+> +
+> +	set_bit(COMMAND_PENDING, &ua->flags);
+> +
+> +	ret = ucsi_acpi_async_write(ucsi, offset, val, val_len);
+> +	if (ret)
+> +		goto out_clear_bit;
+>   
+> -	return ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
+> +	if (!wait_for_completion_timeout(&ua->complete, msecs_to_jiffies(5000)))
+> +		ret = -ETIMEDOUT;
+> +
+> +out_clear_bit:
+> +	clear_bit(COMMAND_PENDING, &ua->flags);
+> +
+> +	return ret;
+>   }
+>   
+> +static const struct ucsi_operations ucsi_acpi_ops = {
+> +	.read = ucsi_acpi_read,
+> +	.sync_write = ucsi_acpi_sync_write,
+> +	.async_write = ucsi_acpi_async_write
+> +};
+> +
+>   static void ucsi_acpi_notify(acpi_handle handle, u32 event, void *data)
+>   {
+>   	struct ucsi_acpi *ua = data;
+> +	u32 cci;
+> +	int ret;
+> +
+> +	ret = ucsi_acpi_read(ua->ucsi, UCSI_CCI, &cci, sizeof(cci));
+> +	if (ret)
+> +		return;
+>   
+> -	ucsi_notify(ua->ucsi);
+> +	if (test_bit(COMMAND_PENDING, &ua->flags) &&
+> +	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
+> +		complete(&ua->complete);
+> +	else if (UCSI_CCI_CONNECTOR(cci))
+> +		ucsi_connector_change(ua->ucsi, UCSI_CCI_CONNECTOR(cci));
+>   }
+>   
+>   static int ucsi_acpi_probe(struct platform_device *pdev)
+> @@ -90,35 +138,39 @@ static int ucsi_acpi_probe(struct platform_device *pdev)
+>   	 * it can not be requested here, and we can not use
+>   	 * devm_ioremap_resource().
+>   	 */
+> -	ua->ppm.data = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+> -	if (!ua->ppm.data)
+> +	ua->base = devm_ioremap(&pdev->dev, res->start, resource_size(res));
+> +	if (!ua->base)
+>   		return -ENOMEM;
+>   
+> -	if (!ua->ppm.data->version)
+> -		return -ENODEV;
+> -
+>   	ret = guid_parse(UCSI_DSM_UUID, &ua->guid);
+>   	if (ret)
+>   		return ret;
+>   
+> -	ua->ppm.cmd = ucsi_acpi_cmd;
+> -	ua->ppm.sync = ucsi_acpi_sync;
+> +	init_completion(&ua->complete);
+>   	ua->dev = &pdev->dev;
+>   
+> +	ua->ucsi = ucsi_create(&pdev->dev, &ucsi_acpi_ops);
+> +	if (IS_ERR(ua->ucsi))
+> +		return PTR_ERR(ua->ucsi);
+> +
+> +	ucsi_set_drvdata(ua->ucsi, ua);
+> +
+>   	status = acpi_install_notify_handler(ACPI_HANDLE(&pdev->dev),
+>   					     ACPI_DEVICE_NOTIFY,
+>   					     ucsi_acpi_notify, ua);
+>   	if (ACPI_FAILURE(status)) {
+>   		dev_err(&pdev->dev, "failed to install notify handler\n");
+> +		ucsi_destroy(ua->ucsi);
+>   		return -ENODEV;
+>   	}
+>   
+> -	ua->ucsi = ucsi_register_ppm(&pdev->dev, &ua->ppm);
+> -	if (IS_ERR(ua->ucsi)) {
+> +	ret = ucsi_register(ua->ucsi);
+> +	if (ret) {
+>   		acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev),
+>   					   ACPI_DEVICE_NOTIFY,
+>   					   ucsi_acpi_notify);
+> -		return PTR_ERR(ua->ucsi);
+> +		ucsi_destroy(ua->ucsi);
+> +		return ret;
+>   	}
+>   
+>   	platform_set_drvdata(pdev, ua);
+> @@ -130,7 +182,8 @@ static int ucsi_acpi_remove(struct platform_device *pdev)
+>   {
+>   	struct ucsi_acpi *ua = platform_get_drvdata(pdev);
+>   
+> -	ucsi_unregister_ppm(ua->ucsi);
+> +	ucsi_unregister(ua->ucsi);
+> +	ucsi_destroy(ua->ucsi);
+>   
+>   	acpi_remove_notify_handler(ACPI_HANDLE(&pdev->dev), ACPI_DEVICE_NOTIFY,
+>   				   ucsi_acpi_notify);
+> 
+
