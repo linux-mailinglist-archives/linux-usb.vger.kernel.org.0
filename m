@@ -2,372 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F28EE2AE
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:36:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79170EE2B1
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 15:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728624AbfKDOgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 09:36:48 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33602 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728595AbfKDOgs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 09:36:48 -0500
-Received: by mail-pf1-f193.google.com with SMTP id c184so12335402pfb.0
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 06:36:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=QJhsyF93PlEvs/F1Xf2HpFR6dpGnG/rVwAYz8juJcI8=;
-        b=ZhfHusOzCzNsc523AoHLU28wFxwKQ5bRb8ZAS27c0hez9eKhzgKngeV7t/9KcSPiSt
-         KEaPEIpoedBiDEiz6Ht4x/lrMzTfTVWKkJG/2WNkAH7owgdt+oU8h8GDJiIk4wZBRP3b
-         HlEw0Kt8GV/nGjK6MOI2dX7WIlI12IIDGEdaMVV9YTd8ruNrETNU6k7J5DIGgFRDNf5K
-         iv5OK92vRbA+oQLsjWNtFCIR3NVcctnYUdSm8YBFc+cYltdrPSvvU1M25l4cFtgLGCr9
-         p/bMhzW841paVfLI02cmGio1Z3AX+y7Nh+Tc7+fAtAitAiJ7rBuE166SgsWjOfHlxikW
-         SX1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QJhsyF93PlEvs/F1Xf2HpFR6dpGnG/rVwAYz8juJcI8=;
-        b=NQFYkmsiohsH83s9jGX9dSgYLVUthvYpUF6RlJ9jCCVDr1SuhHVmNGvQKup4IMMoEV
-         qMJLeHOeCm/i/hmbtaicbPfMhbWO0LHk0w4043CCw6cdk80acpaha6yZ0dk1QvwC6ww8
-         J7awodhF8mmc++NLo6+NWHkqAAGbTc0GU13ybq6luQiREbY6rBqagry7LxztkSmhSZOh
-         ObTli8wzdjeWx5gyGvniK4k1zcmNMyoyxv6djpLZ/LwrxOBer8eax1o49SrrAif4pxRg
-         XuiokNrm8xfeRzidDxWCx7BlX0KzBc/DV35r86hDMgeSHnqpmr0bEuJP+ftRErsVmKyD
-         3gvg==
-X-Gm-Message-State: APjAAAU/qxqmQmi/vzPr8S303YalD8tBJaS2EovGUFSqvo+XEtHz65mW
-        S5tmRMGqozJGzMbKSsShOdy02xZe
-X-Google-Smtp-Source: APXvYqxbMgudK8ZryPiv0X90wtwze56t3fY1DwSKFgzJvtk3mnJMTmccg3mmIVAfN0WihErTQL3k6Q==
-X-Received: by 2002:a63:5966:: with SMTP id j38mr30128384pgm.304.1572878205801;
-        Mon, 04 Nov 2019 06:36:45 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l33sm2397216pgb.79.2019.11.04.06.36.44
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Nov 2019 06:36:45 -0800 (PST)
-Subject: Re: [PATCH v4 13/18] usb: typec: ucsi: ccg: Move to the new API
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        id S1728510AbfKDOh1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 09:37:27 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:39982 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728287AbfKDOh0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 09:37:26 -0500
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA4ERGoq004129;
+        Mon, 4 Nov 2019 15:37:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=+pqW3tmknQkUaVLMwtyyZmv86PtC0OIFE0YGfYD6OSY=;
+ b=sUE9SHEQzHgrRVmmtmeCgVACIzEsKwviy+pGX1tYxHdIdTWtA505OzSqxbqm+NE2FVJy
+ w32klntmh+IhTYqBlYbkYdj5Oy1DhTzuuyeMv0Zp6a5kNML+8nfufVrpm/s0ZqD0e2Fz
+ okqEJBjBMCMwGFnlNvQgzRemdTTleLRGSfR9G3G1kmQId15m/yixlpDFFxTLYwdfXiSg
+ 1TV93vMCj34PFqkAOmPxuIjhfYa6UMUZCVRH3SlZXhzoNiW070Bh6Wp6VK0pU5WzWbA8
+ Nv9ybJvhu9rGEva5qQRE9Afk4ftpKC7vKiH/X8LQnn4syX4DgW7WwWEfZQEMa5aWM2/g ig== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2w11jn25wy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 Nov 2019 15:37:15 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DB43F10002A;
+        Mon,  4 Nov 2019 15:37:14 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id C433E220FCD;
+        Mon,  4 Nov 2019 15:37:14 +0100 (CET)
+Received: from localhost (10.75.127.45) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 4 Nov 2019 15:37:14
+ +0100
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ajay Gupta <ajayg@nvidia.com>, linux-usb@vger.kernel.org
-References: <20191104142435.29960-1-heikki.krogerus@linux.intel.com>
- <20191104142435.29960-14-heikki.krogerus@linux.intel.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <1a404105-8872-7377-465c-cf792f2fad58@roeck-us.net>
-Date:   Mon, 4 Nov 2019 06:36:44 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+Subject: [PATCH] phy: core: Add consumer device link support
+Date:   Mon, 4 Nov 2019 15:37:13 +0100
+Message-ID: <20191104143713.11137-1-alexandre.torgue@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-In-Reply-To: <20191104142435.29960-14-heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG3NODE3.st.com (10.75.127.9) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-11-04_08:2019-11-04,2019-11-04 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/4/19 6:24 AM, Heikki Krogerus wrote:
-> Replacing the old "cmd" and "sync" callbacks with an
-> implementation of struct ucsi_operations. The interrupt
-> handler will from now on read the CCI (Command Status and
-> Connector Change Indication) register, and call
-> ucsi_connector_change() function and/or complete pending
-> command completions based on it.
-> 
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Tested-by: Ajay Gupta <ajayg@nvidia.com>
+In order to enforce suspend/resume ordering, this commit creates link
+between phy consumers and phy devices. This link avoids to suspend phy
+before phy consumers.
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 
-> ---
->   drivers/usb/typec/ucsi/ucsi_ccg.c | 166 +++++++++++++++---------------
->   1 file changed, 81 insertions(+), 85 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index d772fce51905..3370b3fc37b1 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -176,8 +176,8 @@ struct ccg_resp {
->   struct ucsi_ccg {
->   	struct device *dev;
->   	struct ucsi *ucsi;
-> -	struct ucsi_ppm ppm;
->   	struct i2c_client *client;
-> +
->   	struct ccg_dev_info info;
->   	/* version info for boot, primary and secondary */
->   	struct version_info version[FW2 + 1];
-> @@ -196,6 +196,8 @@ struct ucsi_ccg {
->   	/* fw build with vendor information */
->   	u16 fw_build;
->   	struct work_struct pm_work;
-> +
-> +	struct completion complete;
->   };
->   
->   static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-> @@ -243,7 +245,7 @@ static int ccg_read(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
->   	return 0;
->   }
->   
-> -static int ccg_write(struct ucsi_ccg *uc, u16 rab, u8 *data, u32 len)
-> +static int ccg_write(struct ucsi_ccg *uc, u16 rab, const u8 *data, u32 len)
->   {
->   	struct i2c_client *client = uc->client;
->   	unsigned char *buf;
-> @@ -317,88 +319,85 @@ static int ucsi_ccg_init(struct ucsi_ccg *uc)
->   	return -ETIMEDOUT;
->   }
->   
-> -static int ucsi_ccg_send_data(struct ucsi_ccg *uc)
-> +static int ucsi_ccg_read(struct ucsi *ucsi, unsigned int offset,
-> +			 void *val, size_t val_len)
->   {
-> -	u8 *ppm = (u8 *)uc->ppm.data;
-> -	int status;
-> -	u16 rab;
-> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
->   
-> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, message_out));
-> -	status = ccg_write(uc, rab, ppm +
-> -			   offsetof(struct ucsi_data, message_out),
-> -			   sizeof(uc->ppm.data->message_out));
-> -	if (status < 0)
-> -		return status;
-> -
-> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, ctrl));
-> -	return ccg_write(uc, rab, ppm + offsetof(struct ucsi_data, ctrl),
-> -			 sizeof(uc->ppm.data->ctrl));
-> +	return ccg_read(ucsi_get_drvdata(ucsi), reg, val, val_len);
->   }
->   
-> -static int ucsi_ccg_recv_data(struct ucsi_ccg *uc)
-> +static int ucsi_ccg_async_write(struct ucsi *ucsi, unsigned int offset,
-> +				const void *val, size_t val_len)
->   {
-> -	u8 *ppm = (u8 *)uc->ppm.data;
-> -	int status;
-> -	u16 rab;
-> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(offset);
->   
-> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, cci));
-> -	status = ccg_read(uc, rab, ppm + offsetof(struct ucsi_data, cci),
-> -			  sizeof(uc->ppm.data->cci));
-> -	if (status < 0)
-> -		return status;
-> -
-> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, message_in));
-> -	return ccg_read(uc, rab, ppm + offsetof(struct ucsi_data, message_in),
-> -			sizeof(uc->ppm.data->message_in));
-> +	return ccg_write(ucsi_get_drvdata(ucsi), reg, val, val_len);
->   }
->   
-> -static int ucsi_ccg_ack_interrupt(struct ucsi_ccg *uc)
-> +static int ucsi_ccg_sync_write(struct ucsi *ucsi, unsigned int offset,
-> +			       const void *val, size_t val_len)
->   {
-> -	int status;
-> -	unsigned char data;
-> +	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
-> +	int ret;
->   
-> -	status = ccg_read(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
-> -	if (status < 0)
-> -		return status;
-> +	mutex_lock(&uc->lock);
-> +	pm_runtime_get_sync(uc->dev);
-> +	set_bit(DEV_CMD_PENDING, &uc->flags);
->   
-> -	return ccg_write(uc, CCGX_RAB_INTR_REG, &data, sizeof(data));
-> -}
-> +	ret = ucsi_ccg_async_write(ucsi, offset, val, val_len);
-> +	if (ret)
-> +		goto err_clear_bit;
->   
-> -static int ucsi_ccg_sync(struct ucsi_ppm *ppm)
-> -{
-> -	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
-> -	int status;
-> +	if (!wait_for_completion_timeout(&uc->complete, msecs_to_jiffies(5000)))
-> +		ret = -ETIMEDOUT;
->   
-> -	status = ucsi_ccg_recv_data(uc);
-> -	if (status < 0)
-> -		return status;
-> +err_clear_bit:
-> +	clear_bit(DEV_CMD_PENDING, &uc->flags);
-> +	pm_runtime_put_sync(uc->dev);
-> +	mutex_unlock(&uc->lock);
->   
-> -	/* ack interrupt to allow next command to run */
-> -	return ucsi_ccg_ack_interrupt(uc);
-> +	return ret;
->   }
->   
-> -static int ucsi_ccg_cmd(struct ucsi_ppm *ppm, struct ucsi_control *ctrl)
-> -{
-> -	struct ucsi_ccg *uc = container_of(ppm, struct ucsi_ccg, ppm);
-> -
-> -	ppm->data->ctrl.raw_cmd = ctrl->raw_cmd;
-> -	return ucsi_ccg_send_data(uc);
-> -}
-> +static const struct ucsi_operations ucsi_ccg_ops = {
-> +	.read = ucsi_ccg_read,
-> +	.sync_write = ucsi_ccg_sync_write,
-> +	.async_write = ucsi_ccg_async_write
-> +};
->   
->   static irqreturn_t ccg_irq_handler(int irq, void *data)
->   {
-> +	u16 reg = CCGX_RAB_UCSI_DATA_BLOCK(UCSI_CCI);
->   	struct ucsi_ccg *uc = data;
-> +	u8 intr_reg;
-> +	u32 cci;
-> +	int ret;
-> +
-> +	ret = ccg_read(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = ccg_read(uc, reg, (void *)&cci, sizeof(cci));
-> +	if (ret)
-> +		goto err_clear_irq;
-> +
-> +	if (UCSI_CCI_CONNECTOR(cci))
-> +		ucsi_connector_change(uc->ucsi, UCSI_CCI_CONNECTOR(cci));
-> +
-> +	if (test_bit(DEV_CMD_PENDING, &uc->flags) &&
-> +	    cci & (UCSI_CCI_ACK_COMPLETE | UCSI_CCI_COMMAND_COMPLETE))
-> +		complete(&uc->complete);
->   
-> -	ucsi_notify(uc->ucsi);
-> +err_clear_irq:
-> +	ccg_write(uc, CCGX_RAB_INTR_REG, &intr_reg, sizeof(intr_reg));
->   
->   	return IRQ_HANDLED;
->   }
->   
->   static void ccg_pm_workaround_work(struct work_struct *pm_work)
->   {
-> -	struct ucsi_ccg *uc = container_of(pm_work, struct ucsi_ccg, pm_work);
-> -
-> -	ucsi_notify(uc->ucsi);
-> +	ccg_irq_handler(0, container_of(pm_work, struct ucsi_ccg, pm_work));
->   }
->   
->   static int get_fw_info(struct ucsi_ccg *uc)
-> @@ -1027,10 +1026,10 @@ static int ccg_restart(struct ucsi_ccg *uc)
->   		return status;
->   	}
->   
-> -	uc->ucsi = ucsi_register_ppm(dev, &uc->ppm);
-> -	if (IS_ERR(uc->ucsi)) {
-> -		dev_err(uc->dev, "ucsi_register_ppm failed\n");
-> -		return PTR_ERR(uc->ucsi);
-> +	status = ucsi_register(uc->ucsi);
-> +	if (status) {
-> +		dev_err(uc->dev, "failed to register the interface\n");
-> +		return status;
->   	}
->   
->   	return 0;
-> @@ -1047,7 +1046,7 @@ static void ccg_update_firmware(struct work_struct *work)
->   		return;
->   
->   	if (flash_mode != FLASH_NOT_NEEDED) {
-> -		ucsi_unregister_ppm(uc->ucsi);
-> +		ucsi_unregister(uc->ucsi);
->   		free_irq(uc->irq, uc);
->   
->   		ccg_fw_update(uc, flash_mode);
-> @@ -1091,21 +1090,15 @@ static int ucsi_ccg_probe(struct i2c_client *client,
->   	struct device *dev = &client->dev;
->   	struct ucsi_ccg *uc;
->   	int status;
-> -	u16 rab;
->   
->   	uc = devm_kzalloc(dev, sizeof(*uc), GFP_KERNEL);
->   	if (!uc)
->   		return -ENOMEM;
->   
-> -	uc->ppm.data = devm_kzalloc(dev, sizeof(struct ucsi_data), GFP_KERNEL);
-> -	if (!uc->ppm.data)
-> -		return -ENOMEM;
-> -
-> -	uc->ppm.cmd = ucsi_ccg_cmd;
-> -	uc->ppm.sync = ucsi_ccg_sync;
->   	uc->dev = dev;
->   	uc->client = client;
->   	mutex_init(&uc->lock);
-> +	init_completion(&uc->complete);
->   	INIT_WORK(&uc->work, ccg_update_firmware);
->   	INIT_WORK(&uc->pm_work, ccg_pm_workaround_work);
->   
-> @@ -1133,30 +1126,25 @@ static int ucsi_ccg_probe(struct i2c_client *client,
->   	if (uc->info.mode & CCG_DEVINFO_PDPORTS_MASK)
->   		uc->port_num++;
->   
-> +	uc->ucsi = ucsi_create(dev, &ucsi_ccg_ops);
-> +	if (IS_ERR(uc->ucsi))
-> +		return PTR_ERR(uc->ucsi);
-> +
-> +	ucsi_set_drvdata(uc->ucsi, uc);
-> +
->   	status = request_threaded_irq(client->irq, NULL, ccg_irq_handler,
->   				      IRQF_ONESHOT | IRQF_TRIGGER_HIGH,
->   				      dev_name(dev), uc);
->   	if (status < 0) {
->   		dev_err(uc->dev, "request_threaded_irq failed - %d\n", status);
-> -		return status;
-> +		goto out_ucsi_destroy;
->   	}
->   
->   	uc->irq = client->irq;
->   
-> -	uc->ucsi = ucsi_register_ppm(dev, &uc->ppm);
-> -	if (IS_ERR(uc->ucsi)) {
-> -		dev_err(uc->dev, "ucsi_register_ppm failed\n");
-> -		return PTR_ERR(uc->ucsi);
-> -	}
-> -
-> -	rab = CCGX_RAB_UCSI_DATA_BLOCK(offsetof(struct ucsi_data, version));
-> -	status = ccg_read(uc, rab, (u8 *)(uc->ppm.data) +
-> -			  offsetof(struct ucsi_data, version),
-> -			  sizeof(uc->ppm.data->version));
-> -	if (status < 0) {
-> -		ucsi_unregister_ppm(uc->ucsi);
-> -		return status;
-> -	}
-> +	status = ucsi_register(uc->ucsi);
-> +	if (status)
-> +		goto out_free_irq;
->   
->   	i2c_set_clientdata(client, uc);
->   
-> @@ -1167,6 +1155,13 @@ static int ucsi_ccg_probe(struct i2c_client *client,
->   	pm_runtime_idle(uc->dev);
->   
->   	return 0;
-> +
-> +out_free_irq:
-> +	free_irq(uc->irq, uc);
-> +out_ucsi_destroy:
-> +	ucsi_destroy(uc->ucsi);
-> +
-> +	return status;
->   }
->   
->   static int ucsi_ccg_remove(struct i2c_client *client)
-> @@ -1175,8 +1170,9 @@ static int ucsi_ccg_remove(struct i2c_client *client)
->   
->   	cancel_work_sync(&uc->pm_work);
->   	cancel_work_sync(&uc->work);
-> -	ucsi_unregister_ppm(uc->ucsi);
->   	pm_runtime_disable(uc->dev);
-> +	ucsi_unregister(uc->ucsi);
-> +	ucsi_destroy(uc->ucsi);
->   	free_irq(uc->irq, uc);
->   
->   	return 0;
-> 
+---
+
+Hi,
+
+To manage device_link in phy-core I had to "balance" get and put APIs a bit
+more. Fot this reason, you'll find updates in Renesas usbhs rcar and rza drivers
+as phy API changes.
+
+Regards
+Alex
+
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index b04f4fe85ac2..8dfb4868c8c3 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -29,7 +29,7 @@ static void devm_phy_release(struct device *dev, void *res)
+ {
+ 	struct phy *phy = *(struct phy **)res;
+ 
+-	phy_put(phy);
++	phy_put(dev, phy);
+ }
+ 
+ static void devm_phy_provider_release(struct device *dev, void *res)
+@@ -566,12 +566,12 @@ struct phy *of_phy_get(struct device_node *np, const char *con_id)
+ EXPORT_SYMBOL_GPL(of_phy_get);
+ 
+ /**
+- * phy_put() - release the PHY
+- * @phy: the phy returned by phy_get()
++ * of_phy_put() - release the PHY
++ * @phy: the phy returned by of_phy_get()
+  *
+- * Releases a refcount the caller received from phy_get().
++ * Releases a refcount the caller received from of_phy_get().
+  */
+-void phy_put(struct phy *phy)
++void of_phy_put(struct phy *phy)
+ {
+ 	if (!phy || IS_ERR(phy))
+ 		return;
+@@ -584,6 +584,20 @@ void phy_put(struct phy *phy)
+ 	module_put(phy->ops->owner);
+ 	put_device(&phy->dev);
+ }
++EXPORT_SYMBOL_GPL(of_phy_put);
++
++/**
++ * phy_put() - release the PHY
++ * @dev: device that wants to release this phy
++ * @phy: the phy returned by phy_get()
++ *
++ * Releases a refcount the caller received from phy_get().
++ */
++void phy_put(struct device *dev, struct phy *phy)
++{
++	device_link_remove(dev, &phy->dev);
++	of_phy_put(phy);
++}
+ EXPORT_SYMBOL_GPL(phy_put);
+ 
+ /**
+@@ -651,6 +665,7 @@ struct phy *phy_get(struct device *dev, const char *string)
+ {
+ 	int index = 0;
+ 	struct phy *phy;
++	struct device_link *link;
+ 
+ 	if (string == NULL) {
+ 		dev_WARN(dev, "missing string\n");
+@@ -672,6 +687,13 @@ struct phy *phy_get(struct device *dev, const char *string)
+ 
+ 	get_device(&phy->dev);
+ 
++	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++	if (!link) {
++		dev_err(dev, "failed to create device link to %s\n",
++			dev_name(phy->dev.parent));
++		return ERR_PTR(-EINVAL);
++	}
++
+ 	return phy;
+ }
+ EXPORT_SYMBOL_GPL(phy_get);
+@@ -765,6 +787,7 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+ 			    const char *con_id)
+ {
+ 	struct phy **ptr, *phy;
++	struct device_link *link;
+ 
+ 	ptr = devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
+ 	if (!ptr)
+@@ -778,6 +801,13 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+ 		devres_free(ptr);
+ 	}
+ 
++	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++	if (!link) {
++		dev_err(dev, "failed to create device link to %s\n",
++			dev_name(phy->dev.parent));
++		return ERR_PTR(-EINVAL);
++	}
++
+ 	return phy;
+ }
+ EXPORT_SYMBOL_GPL(devm_of_phy_get);
+@@ -798,6 +828,7 @@ struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+ 				     int index)
+ {
+ 	struct phy **ptr, *phy;
++	struct device_link *link;
+ 
+ 	ptr = devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
+ 	if (!ptr)
+@@ -819,6 +850,13 @@ struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+ 	*ptr = phy;
+ 	devres_add(dev, ptr);
+ 
++	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
++	if (!link) {
++		dev_err(dev, "failed to create device link to %s\n",
++			dev_name(phy->dev.parent));
++		return ERR_PTR(-EINVAL);
++	}
++
+ 	return phy;
+ }
+ EXPORT_SYMBOL_GPL(devm_of_phy_get_by_index);
+diff --git a/drivers/usb/renesas_usbhs/rcar2.c b/drivers/usb/renesas_usbhs/rcar2.c
+index 440d213e1749..791908f8cf73 100644
+--- a/drivers/usb/renesas_usbhs/rcar2.c
++++ b/drivers/usb/renesas_usbhs/rcar2.c
+@@ -34,7 +34,7 @@ static int usbhs_rcar2_hardware_exit(struct platform_device *pdev)
+ 	struct usbhs_priv *priv = usbhs_pdev_to_priv(pdev);
+ 
+ 	if (priv->phy) {
+-		phy_put(priv->phy);
++		phy_put(&pdev->dev, priv->phy);
+ 		priv->phy = NULL;
+ 	}
+ 
+diff --git a/drivers/usb/renesas_usbhs/rza2.c b/drivers/usb/renesas_usbhs/rza2.c
+index 021749594389..3eed3334a17f 100644
+--- a/drivers/usb/renesas_usbhs/rza2.c
++++ b/drivers/usb/renesas_usbhs/rza2.c
+@@ -29,7 +29,7 @@ static int usbhs_rza2_hardware_exit(struct platform_device *pdev)
+ {
+ 	struct usbhs_priv *priv = usbhs_pdev_to_priv(pdev);
+ 
+-	phy_put(priv->phy);
++	phy_put(&pdev->dev, priv->phy);
+ 	priv->phy = NULL;
+ 
+ 	return 0;
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index 56d3a100006a..19eddd64c8f6 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -234,7 +234,8 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+ 			    const char *con_id);
+ struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+ 				     int index);
+-void phy_put(struct phy *phy);
++void of_phy_put(struct phy *phy);
++void phy_put(struct device *dev, struct phy *phy);
+ void devm_phy_put(struct device *dev, struct phy *phy);
+ struct phy *of_phy_get(struct device_node *np, const char *con_id);
+ struct phy *of_phy_simple_xlate(struct device *dev,
+@@ -419,7 +420,11 @@ static inline struct phy *devm_of_phy_get_by_index(struct device *dev,
+ 	return ERR_PTR(-ENOSYS);
+ }
+ 
+-static inline void phy_put(struct phy *phy)
++static inline void of_phy_put(struct phy *phy)
++{
++}
++
++static inline void phy_put(struct device *dev, struct phy *phy)
+ {
+ }
+ 
+-- 
+2.17.1
 
