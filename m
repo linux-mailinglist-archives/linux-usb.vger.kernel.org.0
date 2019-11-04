@@ -2,93 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29237EE6E7
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:06:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE2EEE73F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728800AbfKDSGZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 13:06:25 -0500
-Received: from mout.gmx.net ([212.227.15.19]:56523 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728012AbfKDSGZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Nov 2019 13:06:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1572890760;
-        bh=i/YVkRXw1W5UTTmqjVB4l15sajoU6ZqsE7IG48uUlI0=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=No5ZiOcmUg9BEwYx9x8oiEFNqyBFm9TBXUP0/dK52Fo0dJgffnQrVEaj8op2OfdG9
-         AFhfyNz2rj7NcW0dbwGtPRf75Qircu9uSi3hyinCh1EwFYrj4PPnf/hUNQjErw7HtW
-         jOfIMpwyer2meTEmPK+5XpUfZXpCx6M/B6HB7qAs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.1.164] ([37.4.249.112]) by mail.gmx.com (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSKyI-1iKyf227UO-00Sb5o; Mon, 04
- Nov 2019 19:06:00 +0100
-Subject: Re: [PATCH] net: usb: lan78xx: Disable interrupts before calling
- generic_handle_irq()
-To:     Daniel Wagner <dwagner@suse.de>, netdev@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Marc Zyngier <maz@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Jisheng Zhang <Jisheng.Zhang@synaptics.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Miller <davem@davemloft.net>
-References: <20191025080413.22665-1-dwagner@suse.de>
- <20191104085703.diajpzpxo6dchuhs@beryllium.lan>
-From:   Stefan Wahren <wahrenst@gmx.net>
-Message-ID: <793b1cfa-dc45-c01c-ef0f-72db6df3ecd1@gmx.net>
-Date:   Mon, 4 Nov 2019 19:05:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729446AbfKDSUL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 13:20:11 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:55184 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728346AbfKDSUL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 13:20:11 -0500
+Received: (qmail 5157 invoked by uid 2102); 4 Nov 2019 13:20:10 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Nov 2019 13:20:10 -0500
+Date:   Mon, 4 Nov 2019 13:20:10 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <38f1974fad3a98ca578fcf808a843cbd28325e44.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1911041316390.1689-200000@iolanthe.rowland.org>
 MIME-Version: 1.0
-In-Reply-To: <20191104085703.diajpzpxo6dchuhs@beryllium.lan>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Provags-ID: V03:K1:+2FOEEptqMf+RzO7I8AY6R0vpsaB7v7bFwPTF71L/23k22IwCw8
- JYzhXR2mv4+1F9xloVqtO6TxHLtLWwDofr60ce0pyYbvQGD91CoH01M0w398CU0s5zkm0UA
- HV8sM98GCy2yCQXLsDLVeClndDPTCxEXiIatoBnzHTKMAX7hkLg6EE1gT7o/OmCIFnByawW
- BwLi3SOFN1N1onxX7AsRQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aRrNqB+ccsI=:fwsVjTKA065NF6oEatWVFt
- LLQaPUpcoN3YYYhJvGCnARQ34rkirIrhihqUq4x7nwFYcySgj3fAHmECpw3sHq+asJTHoGVT5
- RXIEZLQKwKMQmhGVoBJ3jqrxpXSpgL8zejKUzO+Y8v1gPl1z+hwNLPxmwP/1CBE1au5vRAmKJ
- JLl+cCYQ0Jl7PORbzEO6bTv8yyDD33HynvhGug9yKotPgA/74ibojqbx4NeHMRBJuRKKg+m7x
- f87GtfbBEsjam3dw/banZkdIzgFWpURSC8Ve8jCJ84+XdmSz+eYo3hSY1NzIJNpLiUB4LbsMB
- fsjv4ocbiNK8ww72fAJGWPsZYjPUMepdykMWywXTNCu3nm+e03KeF45gu8SPq31GUzbQgU0V9
- +05mkx3TSHkwTq7deg/OZ2INSfOxm1lXDZARVjNd79kB4gDMHnO+BRdn8Vr3GDmvwJ0wvUAw6
- zItAOi2Csonx6WlcI8CC2cNmOOalm9OMuPTqE+m8QbXLMhHBWut/TE1B/YSBSK2Q/zudEajwB
- uQxDHsxTpZMFDjMGTP4yqgHm7mAkiWrt1C9LHUvDyscD24lWTLakAiXuPebf0J4xsuECPW5iV
- 7aM/V+ZRqB1WLhrpJYmg7oFJJLza9ezeX6hPnQoL669A6QZGiKzTUqgDhTh+Lx+Duj/ovNd6c
- nortiecFni0Lf7CA/y8wG/xoyZ+bluCsSiHIR+a3CuDW/RXb5IRNqQcFsRhL4ae4mhLIyjG54
- dfyyu6WQneFQNyVUYOIbvvh714Gt0UZfOUozq/cobvd2SDFdLG/edUQoqupKOXQS4vBPSXRbK
- LDFGjatAuC1FwYyNLXUHSuyz1vU6N4rmiGJRU4bafAIhUbQCFD0xBLRbJAeT0XqbDlvwzJLXZ
- 2c+xMccDQ4UXXoDzY+afRjZEasP5d1xi9tNQFj+qL3je0b8FwCIHtJwsPQ02SmEXlEdU0LflQ
- Eezn/RVaz08l491qXhBEJhOGZ+GyuBnoWLq8Y2O37GtiipAy8k7CRTplBGPuE7VPtAxTxcTbf
- oq547618PQXIc3PvdgeSUDGwcStDMsc3fhEC6/KEkVRT7OiR8OOgT86FM8kK4PkTMOq1rr2up
- UvjP3lHjIRBVdYDY6Wmk1du5vW3H8p9CZrC0P0OAaq/MJ1h4K4vfQLgOFKyRhtPa+Ag5t4Vu0
- z+TyoCu2Bm7Pq0q4uu6Acl+p1nKtUls2ZXzpL/Czu1PmsPWwKqTYuiTVNydW57IVKjiJ4b/O4
- w5DYfRboVkDmnJ+pxrcflIGXohbvQzy7TsikLs67/iUMHlq5K6+L1LZ0+cs0=
+Content-Type: MULTIPART/MIXED; BOUNDARY="-1559625215-543176100-1572891610=:1689"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Daniel,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+  Send mail to mime@docserver.cac.washington.edu for more info.
 
-Am 04.11.19 um 09:57 schrieb Daniel Wagner:
-> On Fri, Oct 25, 2019 at 10:04:13AM +0200, Daniel Wagner wrote:
->> This patch just fixes the warning. There are still problems left (the
->> unstable NFS report from me) but I suggest to look at this
->> separately. The initial patch to revert all the irqdomain code might
->> just hide the problem. At this point I don't know what's going on so I
->> rather go baby steps. The revert is still possible if nothing else
->> works.
-> I replaced my power supply with the official RPi one and the NFS
-> timeouts problems are gone. Also a long test session with different
-> network loads didn't show any problems. I feel so stupid...
-did you never saw a warning about under voltage from the Raspberry Pi
-hwmon driver?
->
-> Thanks,
-> Daniel
->
+---1559625215-543176100-1572891610=:1689
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+
+On Mon, 4 Nov 2019, Andrea Vai wrote:
+
+> > The "linux" directory is the one generated by a fresh git clone:
+> > 
+> > git clone
+> > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > 
+> > What am I doing wrong?
+> > 
+> 
+> Meanwhile, Alan tried to help me and gave me another patch (attached),
+> which doesn't work too, but gives a different error: "The git diff
+> header does not contain information about the file once removed 1
+> initial component of the path (row 14)" (actually, this is my
+> translation from the original message in Italian: "error:
+> l'intestazione git diff non riporta le informazioni sul file una volta
+> rimosso 1 componente iniziale del percorso (riga 14)")
+> 
+> I tested the two patches after a fresh git clone today, a few minutes
+> ago.
+> 
+> What can I do?
+
+You should be able to do something like this:
+
+	cd linux
+	patch -p1 </path/to/patch2
+
+and that should work with no errors.  You don't need to use git to 
+apply a patch.
+
+In case that patch2 file was mangled somewhere along the way, I have 
+attached a copy to this message.
+
+Alan Stern
+
+---1559625215-543176100-1572891610=:1689
+Content-Type: TEXT/PLAIN; charset=US-ASCII; name=patch2
+Content-Transfer-Encoding: BASE64
+Content-ID: <Pine.LNX.4.44L0.1911041320100.1689@iolanthe.rowland.org>
+Content-Description: 
+Content-Disposition: attachment; filename=patch2
+
+RnJvbTogSGFubmVzIFJlaW5lY2tlIDxoYXJlQHN1c2UuY29tPg0NCg0NCkEg
+c2NoZWR1bGVyIG1pZ2h0IGJlIGF0dGFjaGVkIGV2ZW4gZm9yIGRldmljZXMg
+ZXhwb3NpbmcgbW9yZSB0aGFuDQ0Kb25lIGhhcmR3YXJlIHF1ZXVlLCBzbyB0
+aGUgY2hlY2sgZm9yIHRoZSBudW1iZXIgb2YgaGFyZHdhcmUgcXVldWUNDQpp
+cyBwb2ludGxlc3MgYW5kIHNob3VsZCBiZSByZW1vdmVkLg0NCg0NClNpZ25l
+ZC1vZmYtYnk6IEhhbm5lcyBSZWluZWNrZSA8aGFyZUBzdXNlLmNvbT4NDQot
+LS0NDQogYmxvY2svYmxrLW1xLmMgfCAgICA3ICstLS0tLS0NCiAxIGZpbGUg
+Y2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDYgZGVsZXRpb25zKC0pDQoNDQpk
+aWZmIC0tZ2l0IGEvYmxvY2svYmxrLW1xLmMgYi9ibG9jay9ibGstbXEuYw0N
+CmluZGV4IDQ0ZmYzYzE0NDJhNC4uZmFhYjU0MmU0ODM2IDEwMDY0NA0NCklu
+ZGV4OiB1c2ItZGV2ZWwvYmxvY2svYmxrLW1xLmMNCj09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT0NCi0tLSB1c2ItZGV2ZWwub3JpZy9ibG9jay9ibGstbXEuYw0K
+KysrIHVzYi1kZXZlbC9ibG9jay9ibGstbXEuYw0KQEAgLTE5NDYsNyArMTk0
+Niw2IEBAIHN0YXRpYyB2b2lkIGJsa19hZGRfcnFfdG9fcGx1ZyhzdHJ1Y3Qg
+YmwNCiANCiBzdGF0aWMgYmxrX3FjX3QgYmxrX21xX21ha2VfcmVxdWVzdChz
+dHJ1Y3QgcmVxdWVzdF9xdWV1ZSAqcSwgc3RydWN0IGJpbyAqYmlvKQ0KIHsN
+Ci0JY29uc3QgaW50IGlzX3N5bmMgPSBvcF9pc19zeW5jKGJpby0+Ymlfb3Bm
+KTsNCiAJY29uc3QgaW50IGlzX2ZsdXNoX2Z1YSA9IG9wX2lzX2ZsdXNoKGJp
+by0+Ymlfb3BmKTsNCiAJc3RydWN0IGJsa19tcV9hbGxvY19kYXRhIGRhdGEg
+PSB7IC5mbGFncyA9IDB9Ow0KIAlzdHJ1Y3QgcmVxdWVzdCAqcnE7DQpAQCAt
+MTk5Miw4ICsxOTkxLDcgQEAgc3RhdGljIGJsa19xY190IGJsa19tcV9tYWtl
+X3JlcXVlc3Qoc3RydQ0KIAkJLyogYnlwYXNzIHNjaGVkdWxlciBmb3IgZmx1
+c2ggcnEgKi8NCiAJCWJsa19pbnNlcnRfZmx1c2gocnEpOw0KIAkJYmxrX21x
+X3J1bl9od19xdWV1ZShkYXRhLmhjdHgsIHRydWUpOw0KLQl9IGVsc2UgaWYg
+KHBsdWcgJiYgKHEtPm5yX2h3X3F1ZXVlcyA9PSAxIHx8IHEtPm1xX29wcy0+
+Y29tbWl0X3JxcyB8fA0KLQkJCQkhYmxrX3F1ZXVlX25vbnJvdChxKSkpIHsN
+CisJfSBlbHNlIGlmIChwbHVnICYmIChxLT5tcV9vcHMtPmNvbW1pdF9ycXMg
+fHwgIWJsa19xdWV1ZV9ub25yb3QocSkpKSB7DQogCQkvKg0KIAkJICogVXNl
+IHBsdWdnaW5nIGlmIHdlIGhhdmUgYSAtPmNvbW1pdF9ycXMoKSBob29rIGFz
+IHdlbGwsIGFzDQogCQkgKiB3ZSBrbm93IHRoZSBkcml2ZXIgdXNlcyBiZC0+
+bGFzdCBpbiBhIHNtYXJ0IGZhc2hpb24uDQpAQCAtMjA0MSw5ICsyMDM5LDYg
+QEAgc3RhdGljIGJsa19xY190IGJsa19tcV9tYWtlX3JlcXVlc3Qoc3RydQ0K
+IAkJCWJsa19tcV90cnlfaXNzdWVfZGlyZWN0bHkoZGF0YS5oY3R4LCBzYW1l
+X3F1ZXVlX3JxLA0KIAkJCQkJJmNvb2tpZSk7DQogCQl9DQotCX0gZWxzZSBp
+ZiAoKHEtPm5yX2h3X3F1ZXVlcyA+IDEgJiYgaXNfc3luYykgfHwNCi0JCQkh
+ZGF0YS5oY3R4LT5kaXNwYXRjaF9idXN5KSB7DQotCQlibGtfbXFfdHJ5X2lz
+c3VlX2RpcmVjdGx5KGRhdGEuaGN0eCwgcnEsICZjb29raWUpOw0KIAl9IGVs
+c2Ugew0KIAkJYmxrX21xX3NjaGVkX2luc2VydF9yZXF1ZXN0KHJxLCBmYWxz
+ZSwgdHJ1ZSwgdHJ1ZSk7DQogCX0NCg==
+---1559625215-543176100-1572891610=:1689--
