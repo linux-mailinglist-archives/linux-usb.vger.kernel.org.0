@@ -2,75 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DC0EE762
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96778EE796
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 19:45:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729454AbfKDS14 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 13:27:56 -0500
-Received: from alln-iport-2.cisco.com ([173.37.142.89]:56290 "EHLO
-        alln-iport-2.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727998AbfKDS14 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 13:27:56 -0500
-X-Greylist: delayed 425 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 13:27:55 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=664; q=dns/txt; s=iport;
-  t=1572892075; x=1574101675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6eYi3wjyJDjYDvEnI2nl2Du9wgudJvIY7ANx7M1zMok=;
-  b=lZlF6RzDCbzmPeeiW+OAN/NYSEtmr/XTNFZrOiLfEMgPaI3L+WH/V8e0
-   lXuSPPk/rNUNv129pbjFRKPfZ4dpUKOPxdAMBExbAeiTi07aA69YnXjbS
-   foZfYxG7N5KMD9KxsRPXIW4rgbcYXdIaYIIcJyfS/HAJrziARtTNz86//
-   Y=;
-X-IronPort-Anti-Spam-Filtered: true
-X-IronPort-Anti-Spam-Result: =?us-ascii?q?A0C2AAB7asBd/4sNJK1mDgsBAQEBAQE?=
- =?us-ascii?q?BAQEBAQEBAQEBAREBAQEBAQEBAQEBAYF9giBsVTIqkzaRFYR+hTyBZwkBAQE?=
- =?us-ascii?q?MAQElCgEBhECEECQ4EwIDCwEBBAEBAQIBBQRthTcMhhI/GyE0BSghARKDI4J?=
- =?us-ascii?q?3D7FdgieJBoFCBhQOgRSMExiBQD+BEYMSPoQtBINWgiwEjHBEiUqHcI8Egi5?=
- =?us-ascii?q?thiSOGScMmVktjhWILpEpAgQGBQIVgWkiKoEuMxoIGxWDKBI9ERSMDYUEXCA?=
- =?us-ascii?q?DMQEBAYwrgj4BAQ?=
-X-IronPort-AV: E=Sophos;i="5.68,267,1569283200"; 
-   d="scan'208";a="365533773"
-Received: from alln-core-6.cisco.com ([173.36.13.139])
-  by alln-iport-2.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 04 Nov 2019 18:20:48 +0000
-Received: from zorba ([10.154.200.29])
-        by alln-core-6.cisco.com (8.15.2/8.15.2) with ESMTPS id xA4IKkpK001680
-        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 4 Nov 2019 18:20:47 GMT
-Date:   Mon, 4 Nov 2019 10:20:44 -0800
-From:   Daniel Walker <danielwa@cisco.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        xe-linux-external@cisco.com
+        id S1729558AbfKDSpM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 13:45:12 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:55328 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728346AbfKDSpM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 13:45:12 -0500
+Received: (qmail 5423 invoked by uid 2102); 4 Nov 2019 13:45:11 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 4 Nov 2019 13:45:11 -0500
+Date:   Mon, 4 Nov 2019 13:45:11 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Daniel Walker <danielwa@cisco.com>
+cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <stable@vger.kernel.org>,
+        <xe-linux-external@cisco.com>
 Subject: Re: usb-storage: Set virt_boundary_mask to avoid SG overflows
-Message-ID: <20191104182044.GF18744@zorba>
+In-Reply-To: <20191104182044.GF18744@zorba>
+Message-ID: <Pine.LNX.4.44L0.1911041344050.1689-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Auto-Response-Suppress: DR, OOF, AutoReply
-X-Outbound-SMTP-Client: 10.154.200.29, [10.154.200.29]
-X-Outbound-Node: alln-core-6.cisco.com
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, 4 Nov 2019, Daniel Walker wrote:
 
-This is a stable defect report.
+> Hi,
+> 
+> This is a stable defect report.
+> 
+> We're tracking v4.9 stable for some of our products (i.e. Cisco Systems, Inc.)
+> We noticed a speed degradation of roughly %30 on writes to a /dev/sdaX device
+> over USB (no file system). We bisected the issue to this commit from Alan Stern.
+> We also found a prior report of speed degradation on NTFS,
+> 
+> https://lore.kernel.org/linux-usb/Pine.LNX.4.44L0.1908291030400.1306-100000@iolanthe.rowland.org/T/
+> 
+> We have the patch reverted in our v4.9 tree on top of stable. It seems Alan was
+> planning to remove these lines. If the lines are planned to be removed is there
+> an reason why they haven't been ?
 
-We're tracking v4.9 stable for some of our products (i.e. Cisco Systems, Inc.)
-We noticed a speed degradation of roughly %30 on writes to a /dev/sdaX device
-over USB (no file system). We bisected the issue to this commit from Alan Stern.
-We also found a prior report of speed degradation on NTFS,
+See https://marc.info/?l=linux-usb&m=157167288816325&w=2
 
-https://lore.kernel.org/linux-usb/Pine.LNX.4.44L0.1908291030400.1306-100000@iolanthe.rowland.org/T/
+Alan Stern
 
-We have the patch reverted in our v4.9 tree on top of stable. It seems Alan was
-planning to remove these lines. If the lines are planned to be removed is there
-an reason why they haven't been ?
-
-Thanks,
-Daniel
