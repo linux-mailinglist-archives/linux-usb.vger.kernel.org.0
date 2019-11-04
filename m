@@ -2,71 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A64EDB5D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 10:15:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 059A0EDB89
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 10:18:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726441AbfKDJP0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 04:15:26 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:38071 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKDJPZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 04:15:25 -0500
-Received: by mail-lj1-f195.google.com with SMTP id v8so1057483ljh.5
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 01:15:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=V84pd6/ipO6JPFb5cfwq7s+PIYE671g1slMfMreuSaY=;
-        b=eZh16Pi68bYLnBHroEA38OBoXredUWWCsy6QvaM7cI/gkJb98ftsCCVC3erK6xh3cM
-         nR9JeSW+gS4uPUbv/6bppfsAvWDwXSv9AWBl+3lS0NP5+TYi9f1J2ySxx6tWM/Vk3R9y
-         O1Gmq/QmheWCKQhvl4yvELc6cPjhnkkxemfMi6zGp7uIYzF4bvZxuMmTktWX4i5WNtTP
-         wlfT/81NDksfm8zywmeflEaZTuxIhP7+1itqRJ6Bf8ZPDI1SeWlZGxrEr44B30R1CEeU
-         11EUzOnBV1DtoD3SgN1YvUBGqniBWyyC9+qRDfKlszaCboVEte2uZhcRtBGU27hhTmT+
-         U3ow==
-X-Gm-Message-State: APjAAAW1300oQQvskdPR++K/MFVRd8Sb5gbc5Sq6u1d+jiXfYGgiaCHE
-        hQmlaleAzKWN2y0cj4Hum0E=
-X-Google-Smtp-Source: APXvYqwTSB5FW0+O5ITShgjEd7+6FTx5X+/DY1Zc9kz9DTJf2OQ6HINvsLoxzKEjjd3mNGp+oEyAxg==
-X-Received: by 2002:a05:651c:305:: with SMTP id a5mr18301552ljp.144.1572858923767;
-        Mon, 04 Nov 2019 01:15:23 -0800 (PST)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id 68sm3912782ljf.26.2019.11.04.01.15.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 01:15:22 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1iRYSH-0006d1-Vy; Mon, 04 Nov 2019 10:15:22 +0100
-Date:   Mon, 4 Nov 2019 10:15:21 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Charles Yeh <charlesyeh522@gmail.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Subject: Re: [PATCH] [PATCH v8] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-Message-ID: <20191104091521.GF3657@localhost>
-References: <20190924121400.1497-1-charlesyeh522@gmail.com>
- <20191023085657.GP24768@localhost>
- <CAAZvQQ7EdZ=5TtU0qHBzACQ=g5equR+F-j2nt+-0F3bYOH4F7A@mail.gmail.com>
+        id S1727332AbfKDJS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 04:18:57 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:48538 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726364AbfKDJS4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 04:18:56 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xA49IbI6105735;
+        Mon, 4 Nov 2019 03:18:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1572859117;
+        bh=xyN+0QGhuX6XIChTqWK1p/za3+ammgLwym9ib1UkJJ4=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=Tx7ICpZ3S+zJ0aOGPFGVZVvDuC0EmTa+ZtUmmSk4eXkPchWt5eOcBnx4f2YiHYNT0
+         dhPSjLoNxkLjNF8/tyH7gNHdQhwMVl6oK576rzeAp6MZa7wnfM/n49H2jR9yBJE/yq
+         /Zyegf4C2J6HlloYAwB3XYMFP0FEvApK/xw/DcTQ=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA49Ibv1032561;
+        Mon, 4 Nov 2019 03:18:37 -0600
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Mon, 4 Nov
+ 2019 03:18:22 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
+ Frontend Transport; Mon, 4 Nov 2019 03:18:22 -0600
+Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xA49IY72065139;
+        Mon, 4 Nov 2019 03:18:34 -0600
+Subject: Re: [PATCH v2] usb: cdns3: gadget: Fix g_audio use case when
+ connected to Super-Speed host
+To:     Pawel Laszczak <pawell@cadence.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "peter.chen@nxp.com" <peter.chen@nxp.com>,
+        "nsekhar@ti.com" <nsekhar@ti.com>,
+        Rahul Kumar <kurahul@cadence.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191029151514.28495-1-rogerq@ti.com>
+ <20191030121607.21739-1-rogerq@ti.com> <87pnide1k7.fsf@gmail.com>
+ <44b07e90-a9de-ea99-25c6-dc72cf39bbe1@ti.com> <875zk5dw0m.fsf@gmail.com>
+ <86a7fbc4-136f-78bb-4677-784199842c9f@ti.com>
+ <BYAPR07MB4709B96934FAED77689ED89EDD7C0@BYAPR07MB4709.namprd07.prod.outlook.com>
+From:   Roger Quadros <rogerq@ti.com>
+Message-ID: <03bb6f7e-5545-3047-d3f4-4fa9789d0bcb@ti.com>
+Date:   Mon, 4 Nov 2019 11:18:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAZvQQ7EdZ=5TtU0qHBzACQ=g5equR+F-j2nt+-0F3bYOH4F7A@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <BYAPR07MB4709B96934FAED77689ED89EDD7C0@BYAPR07MB4709.namprd07.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 02, 2019 at 04:58:24PM +0800, Charles Yeh wrote:
-> > Now applied, thanks.
+
+
+On 03/11/2019 10:17, Pawel Laszczak wrote:
+> Hi,
 > 
-> Hello sir, when to start updating the patch?
+>>>
+>>> Hi,
+>>>
+>>> Roger Quadros <rogerq@ti.com> writes:
+>>>
+>>>> Hi,
+>>>>
+>>>> On 31/10/2019 10:55, Felipe Balbi wrote:
+>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> Roger Quadros <rogerq@ti.com> writes:
+>>>>>
+>>>>>> Take into account gadget driver's speed limit when programming
+>>>>>> controller speed.
+>>>>>>
+>>>>>> Fixes: commit 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+>>>>>> Signed-off-by: Roger Quadros <rogerq@ti.com>
+>>>>>> Acked-by: Peter Chen <peter.chen@nxp.com>
+>>>>>> ---
+>>>>>>
+>>>>>> Changelog:
+>>>>>> v2
+>>>>>> - Add Fixes line
+>>>>>>
+>>>>>>     drivers/usb/cdns3/gadget.c | 31 ++++++++++++++++++++++++++-----
+>>>>>>     1 file changed, 26 insertions(+), 5 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+>>>>>> index 40dad4e8d0dc..1c724c20d468 100644
+>>>>>> --- a/drivers/usb/cdns3/gadget.c
+>>>>>> +++ b/drivers/usb/cdns3/gadget.c
+>>>>>> @@ -2338,9 +2338,35 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+>>>>>>     {
+>>>>>>     	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+>>>>>>     	unsigned long flags;
+>>>>>> +	enum usb_device_speed max_speed = driver->max_speed;
+>>>>>>
+>>>>>>     	spin_lock_irqsave(&priv_dev->lock, flags);
+>>>>>>     	priv_dev->gadget_driver = driver;
+>>>>>> +
+>>>>>> +	/* limit speed if necessary */
+>>>>>> +	max_speed = min(driver->max_speed, gadget->max_speed);
+>>>>>> +
+>>>>>> +	switch (max_speed) {
+>>>>>> +	case USB_SPEED_FULL:
+>>>>>> +		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+>>>
+>>> so this forces the controller to FS
+>>
+>> Right.
+>>
+>>>
+>>>>>> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>>>
+>>> and this disconnects in superspeed? What is this supposed to do?
+>>>
+>>
+>> It says "Disconnect USB device in SuperSpeed".
+>>
+>> We were asked to set that bit to limit it to HS.
+>>
+>>>>>> +		break;
+>>>>>> +	case USB_SPEED_HIGH:
+>>>>>> +		writel(USB_CONF_USB3DIS, &priv_dev->regs->usb_conf);
+>>>>>> +		break;
+>>>>>> +	case USB_SPEED_SUPER:
+>>>>>> +		break;
+>>>>>> +	default:
+>>>>>> +		dev_err(priv_dev->dev,
+>>>>>> +			"invalid maximum_speed parameter %d\n",
+>>>>>> +			max_speed);
+>>>>>> +		/* fall through */
+>>>>>> +	case USB_SPEED_UNKNOWN:
+>>>>>> +		/* default to superspeed */
+>>>>>> +		max_speed = USB_SPEED_SUPER;
+>>>>>> +		break;
+>>>>>> +	}
+>>>>>
+>>>>> I had suggested some simplification for this case statement.
+>>>>>
+>>>>
+>>>> oops, looks like Greg picked this already.
+>>>>
+>>>> During more tests today I just observed that this patch causes
+>>>> the following regression.
+>>>>
+>>>> Connect EVM to Super-Speed host
+>>>> Load g_audio. (this enumerates as HS which is fine)
+>>>> unload g_audio
+>>>> load g_zero (this enumerates at HS instead of SS).
+>>>>
+>>>> This is because the speed limit that we set doesn't get cleared.
+>>>>
+>>>> Now the bits are write only and there is a way to undo USB_CONF_SFORCE_FS
+>>>> by writing USB_CONF_CFORCE_FS, however there is no corresponding bit
+>>>> to clear USB_CONF_USB3DIS. Only way seems to be USB_CFG_SWRST which
+>>>> is a bit harsh IMO.
+>>>
+>>> Isn't bit 0 enough?
+>>>
+>>> /* Reset USB device configuration. */
+>>> #define USB_CONF_CFGRST		BIT(0)
+>>
+>> Probably not, as explanation of USB3DIS bit says,
+>> "To connect disconnected device, CPU performs
+>> software reset (CFG.SWRST)." which is bit 7. "Device software reset.
+>>
+>> But I'll let Pawel comment on this.
+> 
+> Yes it's the only way to return back to SS mode.
+> The USB speed is detecting during connecting.
+> CFG.SWRST make reconnect.
 
-I'm not sure I understand your question; what did you mean here?
+Can this be done as part of udc_start or udc_stop?
 
-This patch will be included in Linux 5.5, if that's what your asking.
+> 
+> Maybe it would be better to add SS support in g_audio function.
 
-Johan
+Not every gadget needs SS, so this is not the right way IMO.
+
+> 
+>>>
+>>> Also, now that I look at this more carefully, you should move that code
+>>> to udc_set_speed().
+>>>
+>>
+>> Agreed. I'll revise the implementation to move it to udc_set_speed()
+>> once I know how to undo the USB3DIS.
+>>
+
+
+-- 
+cheers,
+-roger
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
