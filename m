@@ -2,70 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDEEED7EC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 04:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B936DED8C2
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 06:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728938AbfKDDAl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 3 Nov 2019 22:00:41 -0500
-Received: from szxga05-in.huawei.com ([45.249.212.191]:5254 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728643AbfKDDAl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 3 Nov 2019 22:00:41 -0500
-Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 58D02C6956E1853EB260;
-        Mon,  4 Nov 2019 11:00:39 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
- 14.3.439.0; Mon, 4 Nov 2019 11:00:29 +0800
-From:   Mao Wenan <maowenan@huawei.com>
-To:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
-        <treding@nvidia.com>, <nkristam@nvidia.com>, <arnd@arndb.de>,
-        <johan@kernel.org>, <krzk@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Mao Wenan <maowenan@huawei.com>
-Subject: [PATCH -next] usb: gadget: Add dependency for USB_TEGRA_XUDC
-Date:   Mon, 4 Nov 2019 10:59:45 +0800
-Message-ID: <20191104025945.172620-1-maowenan@huawei.com>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-CFilter-Loop: Reflected
+        id S1727942AbfKDFw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 00:52:27 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:58474 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726248AbfKDFw1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 00:52:27 -0500
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iRVHs-00032u-IX; Mon, 04 Nov 2019 05:52:25 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] xhci: Increase STS_HALT timeout in xhci_suspend()
+Date:   Mon,  4 Nov 2019 13:52:17 +0800
+Message-Id: <20191104055217.10475-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If CONFIG_USB_TEGRA_XUDC=y and CONFIG_USB_ROLE_SWITCH=m,
-below erros can be seen:
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
-tegra-xudc.c:(.text+0x6b0): undefined reference to `usb_role_switch_unregister'
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
-tegra-xudc.c:(.text+0x1b88): undefined reference to `usb_role_switch_register'
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_sw_work':
-tegra-xudc.c:(.text+0x5ecc): undefined reference to `usb_role_switch_get_role'
+I've recently observed failed xHCI suspend attempt on AMD Raven Ridge
+system:
+kernel: xhci_hcd 0000:04:00.4: WARN: xHC CMD_RUN timeout
+kernel: PM: suspend_common(): xhci_pci_suspend+0x0/0xd0 returns -110
+kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -110
+kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x150 returns -110
+kernel: PM: Device 0000:04:00.4 failed to suspend async: error -110
 
-This patch add dependency USB_ROLE_SWITCH for UDC driver.
+Similar to commit ac343366846a ("xhci: Increase STS_SAVE timeout in
+xhci_suspend()") we also need to increase the HALT timeout to make it be
+able to suspend again.
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
-Signed-off-by: Mao Wenan <maowenan@huawei.com>
+Fixes: f7fac17ca925 ("xhci: Convert xhci_handshake() to use readl_poll_timeout_atomic()")
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- drivers/usb/gadget/udc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/host/xhci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index acaec3a..d103154 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -445,6 +445,7 @@ config USB_TEGRA_XUDC
- 	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on PHY_TEGRA_XUSB
-+	depends on USB_ROLE_SWITCH
- 	help
- 	 Enables NVIDIA Tegra USB 3.0 device mode controller driver.
- 
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 6c17e3fe181a..53720c41891a 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -973,7 +973,7 @@ static bool xhci_pending_portevent(struct xhci_hcd *xhci)
+ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ {
+ 	int			rc = 0;
+-	unsigned int		delay = XHCI_MAX_HALT_USEC;
++	unsigned int		delay = XHCI_MAX_HALT_USEC * 2;
+ 	struct usb_hcd		*hcd = xhci_to_hcd(xhci);
+ 	u32			command;
+ 	u32			res;
 -- 
-2.7.4
+2.17.1
 
