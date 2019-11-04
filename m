@@ -2,66 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1310BEDCA1
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 11:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D965FEDCDB
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2019 11:50:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbfKDKd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 05:33:56 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:53796 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727998AbfKDKdz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 4 Nov 2019 05:33:55 -0500
-Received: by mail-wm1-f66.google.com with SMTP id x4so4871265wmi.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 02:33:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4rwkxadMSlvLNukb63cJrlwfYk6AB4r/i5+Db8K2Kos=;
-        b=uwCAkLrlM5zpyFc2vP9xO8+zeE9i0UlNEJrgGuZ8i3Cn9YiGE0m+C17wpwAxilcL6h
-         EoXimXqQiZt11YY8SWLOZxRQNx37B0VKDdgoFW+9Y3+meCinrZ9CgPR17xcnzwtR3pZy
-         b/ojgGesEaPP+lhVeoRaGeiw6q1pIVtqwPS0u+ZTxhBdSju7EvVLzTbogT5NmwqHZrfW
-         QPmbNqZFLDffsLU3pbrGpZAue+3m4tIl0EkTHafgY6mv4jeenoEeMLVUa58Wyg2uXx6S
-         X464rx40TZRcbWW5o+AsM8dXn65K9PWosu/wWDoe1HK7bpWwfMKqkjrgu4TfDXHa4Xtv
-         7D2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4rwkxadMSlvLNukb63cJrlwfYk6AB4r/i5+Db8K2Kos=;
-        b=VPlS1XBpiFhbAgOCCs3Yo4YPttpXgktnVL0qzq5HL9CyjJN/7C067wSDCPrJjLLvtY
-         SjCnKmC08WkcJ5HIOJYUivFRVnGVkWQ3AdBE+xjJq2U7MY4ZceNuZ2K89wmZBV8JQ8A2
-         9A7Ofix6AScZoTmDxs4NzquQxfFHCHDpGLTfun9APh7RhWxP8ef+lcDcKzRukScxkJUu
-         DYQmzfOo7j6h/MLlsfYHykDAYPuInsCbFWRQHUZUMeC+NrWZwiOo7sXoaVfZnv4qdeC2
-         /XPycc406p37PF83vNrJ0QRlSD3am5HXMFfVf1GzfHptm9mgYX5xipjRADTRs89m4IGI
-         f28A==
-X-Gm-Message-State: APjAAAWBiq5NSMMtc3M9HQBAw/+Axp0kazIrvOmERYBVFMmjqwzyiYxh
-        8Rats7FkA0gvTPrrCoH7TuRuVGrg5lne8DlAWIrgpACE
-X-Google-Smtp-Source: APXvYqznxFp0I5d8wcsSILnPn11gUolctl0QPjv1i88uwttLB/7+yXGIDiXSYYwiKqfePYQfcFyzwk0rZvTfVn6MaTY=
-X-Received: by 2002:a1c:6702:: with SMTP id b2mr21211439wmc.107.1572863633813;
- Mon, 04 Nov 2019 02:33:53 -0800 (PST)
+        id S1728540AbfKDKuN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 4 Nov 2019 05:50:13 -0500
+Received: from szxga05-in.huawei.com ([45.249.212.191]:5257 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726071AbfKDKuN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 4 Nov 2019 05:50:13 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id DE46E2099A79968604F1;
+        Mon,  4 Nov 2019 18:50:10 +0800 (CST)
+Received: from [127.0.0.1] (10.177.96.96) by DGGEMS401-HUB.china.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server id 14.3.439.0; Mon, 4 Nov 2019
+ 18:50:07 +0800
+Subject: Re: [PATCH -next] usb: gadget: Add dependency for USB_TEGRA_XUDC
+To:     Thierry Reding <treding@nvidia.com>
+CC:     <felipe.balbi@linux.intel.com>, <gregkh@linuxfoundation.org>,
+        <nkristam@nvidia.com>, <arnd@arndb.de>, <johan@kernel.org>,
+        <krzk@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>
+References: <20191104025945.172620-1-maowenan@huawei.com>
+ <20191104100410.GB996639@ulmo>
+From:   maowenan <maowenan@huawei.com>
+Message-ID: <51315499-99d0-eca3-a7df-b8dd84628bbd@huawei.com>
+Date:   Mon, 4 Nov 2019 18:50:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.0
 MIME-Version: 1.0
-References: <20190924121400.1497-1-charlesyeh522@gmail.com>
- <20191023085657.GP24768@localhost> <CAAZvQQ7EdZ=5TtU0qHBzACQ=g5equR+F-j2nt+-0F3bYOH4F7A@mail.gmail.com>
- <20191104091521.GF3657@localhost> <CAAZvQQ5jTcEz8C4QDkRGdS+WiDv7YMMiX4kyLfjUTxxpUSPxwg@mail.gmail.com>
- <20191104102713.GG3657@localhost>
-In-Reply-To: <20191104102713.GG3657@localhost>
-From:   Charles Yeh <charlesyeh522@gmail.com>
-Date:   Mon, 4 Nov 2019 18:33:42 +0800
-Message-ID: <CAAZvQQ7RNGVikVyTUu0AaFRqs67fLpj9O1qbaAnuWBmtNMwq0A@mail.gmail.com>
-Subject: Re: [PATCH] [PATCH v8] USB: serial: pl2303: Add new PID to support
- PL2303HXN (TYPE_HXN)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191104100410.GB996639@ulmo>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.177.96.96]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-OK..
-Very thanks for help and explanation..
 
-Charles.
+
+On 2019/11/4 18:04, Thierry Reding wrote:
+> On Mon, Nov 04, 2019 at 10:59:45AM +0800, Mao Wenan wrote:
+>> If CONFIG_USB_TEGRA_XUDC=y and CONFIG_USB_ROLE_SWITCH=m,
+>> below erros can be seen:
+>> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
+>> tegra-xudc.c:(.text+0x6b0): undefined reference to `usb_role_switch_unregister'
+>> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
+>> tegra-xudc.c:(.text+0x1b88): undefined reference to `usb_role_switch_register'
+>> drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_sw_work':
+>> tegra-xudc.c:(.text+0x5ecc): undefined reference to `usb_role_switch_get_role'
+>>
+>> This patch add dependency USB_ROLE_SWITCH for UDC driver.
+>>
+>> Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+>> Signed-off-by: Mao Wenan <maowenan@huawei.com>
+>> ---
+>>  drivers/usb/gadget/udc/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+>> index acaec3a..d103154 100644
+>> --- a/drivers/usb/gadget/udc/Kconfig
+>> +++ b/drivers/usb/gadget/udc/Kconfig
+>> @@ -445,6 +445,7 @@ config USB_TEGRA_XUDC
+>>  	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
+>>  	depends on ARCH_TEGRA || COMPILE_TEST
+>>  	depends on PHY_TEGRA_XUSB
+>> +	depends on USB_ROLE_SWITCH
+> 
+> It looks like most other drivers that use the USB role switch class do
+> "select" here. Now, that's suboptimal because USB_ROLE_SWITCH is a user-
+> visible symbol, which can lead to conflicts, so it should be avoided. I
+> think that in this case it might make sense to hide USB_ROLE_SWITCH and
+> then convert all "depends on USB_ROLE_SWITCH" occurrences to "select
+> USB_ROLE_SWITCH". The USB role switch class is, after all, not useful by
+> itself. It always needs a host and/or gadget driver to make use of it.
+> 
+
+Thanks, I send v2 and change 'depends on' to 'select' for this patch.
+
+> Thierry
+> 
+
