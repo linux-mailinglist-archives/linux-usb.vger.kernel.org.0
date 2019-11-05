@@ -2,120 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F247F0153
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 16:26:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8AFF018F
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 16:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731020AbfKEP02 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 10:26:28 -0500
-Received: from mga07.intel.com ([134.134.136.100]:31556 "EHLO mga07.intel.com"
+        id S2389546AbfKEPfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 10:35:24 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727889AbfKEP02 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Nov 2019 10:26:28 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 07:26:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
-   d="scan'208";a="212559537"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 05 Nov 2019 07:26:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 05 Nov 2019 17:26:24 +0200
-Date:   Tue, 5 Nov 2019 17:26:24 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Mao Wenan <maowenan@huawei.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] usb: roles: Hide option USB_ROLE_SWITCH
-Message-ID: <20191105152624.GC12204@kuha.fi.intel.com>
-References: <20191104135312.GD996639@ulmo>
- <20191104144850.91305-1-maowenan@huawei.com>
- <20191105124218.GB12204@kuha.fi.intel.com>
- <20191105131605.GF10409@kadam>
+        id S2389359AbfKEPfX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Nov 2019 10:35:23 -0500
+Received: from localhost (unknown [62.119.166.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 73B4B2087E;
+        Tue,  5 Nov 2019 15:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572968122;
+        bh=Cbfu3/n7gIxvq4upIXJWRu4k+r0dK46FEC6wlFd+xTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uDGbHOJtbbPko/WrESWxDR7Kk2ZYDJyp8QDmRxfcw7JYrte92PPXyiRCURS9oOoAs
+         UD2slh/B6oZatxV50V538Z2qOi1YsHIjESlcOSY5or2DIPEXmiRy04irh/RLAnykpF
+         PuGMJ27rcsBKo+4amwx4pUlKieFQMdbBYfQUXnGE=
+Date:   Tue, 5 Nov 2019 16:35:16 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Oliver Neukum <oneukum@suse.com>,
+        syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>,
+        David Miller <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: KMSAN: uninit-value in cdc_ncm_set_dgram_size
+Message-ID: <20191105153516.GA2617867@kroah.com>
+References: <00000000000013c4c1059625a655@google.com>
+ <87ftj32v6y.fsf@miraculix.mork.no>
+ <1572952516.2921.6.camel@suse.com>
+ <875zjy33z2.fsf@miraculix.mork.no>
+ <CAG_fn=XXGX5U9oJ2bJDHCwVcp8M+rGDvFDTt4kWFiyWoqL8vAA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191105131605.GF10409@kadam>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG_fn=XXGX5U9oJ2bJDHCwVcp8M+rGDvFDTt4kWFiyWoqL8vAA@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
-
-On Tue, Nov 05, 2019 at 04:16:05PM +0300, Dan Carpenter wrote:
-> On Tue, Nov 05, 2019 at 02:42:18PM +0200, Heikki Krogerus wrote:
-> > On Mon, Nov 04, 2019 at 10:48:50PM +0800, Mao Wenan wrote:
-> > > The USB role switch class is, after all,
-> > > not useful by itself. Hiding USB_ROLE_SWITCH
-> > > so we can avoid any of the pitfalls associated
-> > > with user-visible symbols and "select".
-> > > 
-> > > Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> > > ---
-> > >  drivers/usb/roles/Kconfig | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
-> > > index f8b31aa..1da58d4 100644
-> > > --- a/drivers/usb/roles/Kconfig
-> > > +++ b/drivers/usb/roles/Kconfig
-> > > @@ -1,7 +1,7 @@
-> > >  # SPDX-License-Identifier: GPL-2.0
-> > >  
-> > >  config USB_ROLE_SWITCH
-> > > -	tristate "USB Role Switch Support"
-> > > +	tristate
-> > >  	help
-> > >  	  USB Role Switch is a device that can select the USB role - host or
-> > >  	  device - for a USB port (connector). In most cases dual-role capable
-> > 
-> > You didn't actually convert the "depends on USB_ROLE_SWTICH" to
-> > "select USB_ROLE_SWITCH" before this. You also left the help text that
-> > is now useless.
-> > 
-> > I really think that instead of this, we should just convert all
-> > "select USB_ROLE_SWTICH" to "depends on USB_ROLE_SWITCH".
+On Tue, Nov 05, 2019 at 02:55:09PM +0100, Alexander Potapenko wrote:
+> + Greg K-H
+> On Tue, Nov 5, 2019 at 1:25 PM Bjørn Mork <bjorn@mork.no> wrote:
+> >
+> > Oliver Neukum <oneukum@suse.com> writes:
+> > > Am Montag, den 04.11.2019, 22:22 +0100 schrieb Bjørn Mork:
+> > >> This looks like a false positive to me. max_datagram_size is two bytes
+> > >> declared as
+> > >>
+> > >>         __le16 max_datagram_size;
+> > >>
+> > >> and the code leading up to the access on drivers/net/usb/cdc_ncm.c:587
+> > >> is:
+> > >>
+> > >>         /* read current mtu value from device */
+> > >>         err = usbnet_read_cmd(dev, USB_CDC_GET_MAX_DATAGRAM_SIZE,
+> > >>                               USB_TYPE_CLASS | USB_DIR_IN | USB_RECIP_INTERFACE,
+> > >>                               0, iface_no, &max_datagram_size, 2);
+> > >
+> > > At this point err can be 1.
+> > >
+> > >>         if (err < 0) {
+> > >>                 dev_dbg(&dev->intf->dev, "GET_MAX_DATAGRAM_SIZE failed\n");
+> > >>                 goto out;
+> > >>         }
+> > >>
+> > >>         if (le16_to_cpu(max_datagram_size) == ctx->max_datagram_size)
+> > >>
+> > >>
+> > >>
+> > >> AFAICS, there is no way max_datagram_size can be uninitialized here.
+> > >> usbnet_read_cmd() either read 2 bytes into it or returned an error,
+> > >
+> > > No. usbnet_read_cmd() will return the number of bytes transfered up
+> > > to the number requested or an error.
+> >
+> > Ah, OK. So that could be fixed with e.g.
+> >
+> >   if (err < 2)
+> >        goto out;
+> It'd better be (err < sizeof(max_datagram_size)), and probably in the
+> call to usbnet_read_cmd() as well.
+> >
+> > Or would it be better to add a strict length checking variant of this
+> > API?  There are probably lots of similar cases where we expect a
+> > multibyte value and a short read is (or should be) considered an error.
+> > I can't imagine any situation where we want a 2, 4, 6 or 8 byte value
+> > and expect a flexible length returned.
+> This is really a widespread problem on syzbot: a lot of USB devices
+> use similar code calling usb_control_msg() to read from the device and
+> not checking that the buffer is fully initialized.
 > 
-> The you have to find USB_ROLE_SWITCH first when you want to enable your
-> hardware...  It's feels really confusing when you want to create a
-> .config file...
+> Greg, do you know how often usb_control_msg() is expected to read less
+> than |size| bytes? Is it viable to make it return an error if this
+> happens?
+> Almost nobody is using this function correctly (i.e. checking that it
+> has read the whole buffer before accessing it).
 
-Unfortunately selecting the class alone is not enough. The USB role
-switch on the system may be a dual-role capable USB controller, but it
-may also be a mux that has its own separate driver.
+It could return less than size if the endpoint size isn't the same as
+the message.  I think.  It's been a long time since I've read the USB
+spec in that area, but usually if the size is "short" then status should
+also be set saying something went wrong, right?  Ah wait, you are
+playing the "malicious device" card, I think we always just need to
+check the thing :(
 
-It's equally or even more confusing for the user if the USB drivers
-are enabled, including the dual-role mode, but the connector still
-works only in one role, or in worst case not at all (if there is no
-mux driver and the mux is left in "safe mode" so that the pins on the
-connector are not connected to anything).
+sorry,
 
-I still think that we should make these drivers depend on the class
-instead of just selecting it. That way we at least give the user a
-hint that there are also separate USB role switch drivers that may be
-needed.
-
-> I sometimes think maybe I'm too stupid to configure a kernel these days
-> and that's sort of sad because how is Aunt Tillie supposed to manage?
-
-We can always use something like conditional comments in the
-Kconfig files to make sure that the user is told that in order to
-select the driver, a dependency must be satisfied:
-
-        config MY_AWESOME_DRIVER
-                tristate "My awesome driver!"
-                depends on USB_ROLE_SWITCH
-                help
-                  That's right! IT REALLY IS AWESOME!
-
-        comment "My awesome driver depends on USB_ROLE_SWITCH..."
-                depends on USB_ROLE_SWITCH=n
-
-thanks,
-
--- 
-heikki
+greg k-h
