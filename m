@@ -2,78 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 937C7EFD6C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 13:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CB5EFDA5
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 13:51:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388697AbfKEMmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 07:42:23 -0500
-Received: from mga09.intel.com ([134.134.136.24]:12238 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388649AbfKEMmX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Nov 2019 07:42:23 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 04:42:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
-   d="scan'208";a="212534516"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 05 Nov 2019 04:42:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 05 Nov 2019 14:42:18 +0200
-Date:   Tue, 5 Nov 2019 14:42:18 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Mao Wenan <maowenan@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] usb: roles: Hide option USB_ROLE_SWITCH
-Message-ID: <20191105124218.GB12204@kuha.fi.intel.com>
-References: <20191104135312.GD996639@ulmo>
- <20191104144850.91305-1-maowenan@huawei.com>
+        id S2388791AbfKEMvE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 07:51:04 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:44041 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388635AbfKEMvD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 07:51:03 -0500
+Received: by mail-io1-f69.google.com with SMTP id q13so15440179iot.11
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 04:51:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=/lWajsW87pe+jU9auqaIDGr38Nf06GOlbpdLBf+DWPk=;
+        b=DRQSX12hdowbtXfqKNXo2RzgVI3o3u6dsAIni7Er8RD4U8RHZHPoMsnUc0MI6qBDhE
+         LNz6W4vIClqVAQQxIOY/sUa1dTquoq/McdXIzhKvp4FB39995OMthqujEjGcnVD1OoPm
+         I1Q1KOPkitMdaZB9QgEdsawTosh+Cr+0ewE0Y1vabrcdsqv3mTSt4aV4ffkgMdWvTLBA
+         GrS4RCa/DmzBF2/iRH+HAdEvhayHbrf/7Qq1YrHXYmXrbvDbEIOitnCGAtF7TC+uHt/U
+         Gniwu03VvLQyuTaI5/Fuz5DQTzMxBR3xMBpizmam2MnftUyZEX9WaQe7PXpUTL8nfFvV
+         tVPg==
+X-Gm-Message-State: APjAAAW7UoUS5xzkwyPLLtAocEPOWuLTqeTi24/PGtjFcSRvXzs693/c
+        MUOBMxT1MPjEfVaPV+7Kcgc+dbz+gvZBwHuj2FauyMezEmGU
+X-Google-Smtp-Source: APXvYqzaWIg1tdrmzLbrJ+5MbJ3oMtwvvbO3F0xFNyd06idM/Zc7zKv0xAb30Rx4+qrlCabNIqwresbUOQGkA4+PyMw3U30e2QZG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191104144850.91305-1-maowenan@huawei.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Received: by 2002:a5d:9856:: with SMTP id p22mr15367560ios.29.1572958261043;
+ Tue, 05 Nov 2019 04:51:01 -0800 (PST)
+Date:   Tue, 05 Nov 2019 04:51:01 -0800
+In-Reply-To: <1572952316.2921.3.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000065678d059698e26c@google.com>
+Subject: Re: KMSAN: uninit-value in cdc_ncm_set_dgram_size
+From:   syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 10:48:50PM +0800, Mao Wenan wrote:
-> The USB role switch class is, after all,
-> not useful by itself. Hiding USB_ROLE_SWITCH
-> so we can avoid any of the pitfalls associated
-> with user-visible symbols and "select".
-> 
-> Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> ---
->  drivers/usb/roles/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
-> index f8b31aa..1da58d4 100644
-> --- a/drivers/usb/roles/Kconfig
-> +++ b/drivers/usb/roles/Kconfig
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  config USB_ROLE_SWITCH
-> -	tristate "USB Role Switch Support"
-> +	tristate
->  	help
->  	  USB Role Switch is a device that can select the USB role - host or
->  	  device - for a USB port (connector). In most cases dual-role capable
+Hello,
 
-You didn't actually convert the "depends on USB_ROLE_SWTICH" to
-"select USB_ROLE_SWITCH" before this. You also left the help text that
-is now useless.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-I really think that instead of this, we should just convert all
-"select USB_ROLE_SWTICH" to "depends on USB_ROLE_SWITCH".
+Reported-and-tested-by:  
+syzbot+0631d878823ce2411636@syzkaller.appspotmail.com
 
-thanks,
+Tested on:
 
--- 
-heikki
+commit:         96c6c319 net: kasan: kmsan: support CONFIG_GENERIC_CSUM on..
+git tree:       https://github.com/google/kmsan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9e324dfe9c7b0360
+dashboard link: https://syzkaller.appspot.com/bug?extid=0631d878823ce2411636
+compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+80fee25776c2fb61e74c1ecb1a523375c2500b69)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16b798dce00000
+
+Note: testing is done by a robot and is best-effort only.
