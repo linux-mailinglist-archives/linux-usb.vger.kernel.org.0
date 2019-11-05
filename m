@@ -2,100 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BA5F0220
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 17:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12210F037B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 17:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390029AbfKEQDK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 11:03:10 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:42409 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2389944AbfKEQDJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 11:03:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572969788;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pLj9LlV805f/L7J5FbyPXxXB07oTibsiCCSGb45ogQg=;
-        b=DAxnbXOel7GR/PEe2t6Mrv+03Xuzy/G2FGswsUfLa3WuDKMrcLU58JE3w5zv0Q9mvuNpPY
-        I1VMJVfrzlKq4LH4UyFmZKsbkrhlnt52r9X2+0oUwwfFrHC4TmVAq484vO9YuFSB3J2CDA
-        meGCgBaj17ZWJu0UuOPTyX1me2I6xBY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-350-9SUU8LceOXeOLaVGd4SGTA-1; Tue, 05 Nov 2019 11:03:06 -0500
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B43698017DD;
-        Tue,  5 Nov 2019 16:03:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 980C81FA;
-        Tue,  5 Nov 2019 16:03:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
-References: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
-To:     torvalds@linux-foundation.org, viro@zeniv.linux.org.uk
-Cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Details on the UAPI of implementing notifications on pipes
-MIME-Version: 1.0
-Content-ID: <18579.1572969779.1@warthog.procyon.org.uk>
-Date:   Tue, 05 Nov 2019 16:02:59 +0000
-Message-ID: <18580.1572969779@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-MC-Unique: 9SUU8LceOXeOLaVGd4SGTA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        id S2390262AbfKEQy5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 11:54:57 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:52938 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390226AbfKEQy5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 11:54:57 -0500
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iS26W-0002vf-Uy; Tue, 05 Nov 2019 16:54:53 +0000
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     gregkh@linuxfoundation.org
+Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: [PATCH] usb: Allow USB device to be warm reset in suspended state
+Date:   Wed,  6 Nov 2019 00:54:47 +0800
+Message-Id: <20191105165447.22608-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-So to implement notifications on top of pipes, I've hacked it together a bi=
-t
-in the following ways:
+On Dell WD15 dock, sometimes USB ethernet cannot be detected after plugging
+cable to the ethernet port, the hub and roothub get runtime resumed and
+runtime suspended immediately:
+...
+[  433.315169] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
+[  433.315204] usb usb4: usb auto-resume
+[  433.315226] hub 4-0:1.0: hub_resume
+[  433.315239] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10202e2, return 0x10343
+[  433.315264] usb usb4-port1: status 0343 change 0001
+[  433.315279] xhci_hcd 0000:3a:00.0: clear port1 connect change, portsc: 0x10002e2
+[  433.315293] xhci_hcd 0000:3a:00.0: Get port status 4-2 read: 0x2a0, return 0x2a0
+[  433.317012] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
+[  433.422282] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
+[  433.422307] usb usb4-port1: do warm reset
+[  433.422311] usb 4-1: device reset not allowed in state 8
+[  433.422339] hub 4-0:1.0: state 7 ports 2 chg 0002 evt 0000
+[  433.422346] xhci_hcd 0000:3a:00.0: Get port status 4-1 read: 0x10002e2, return 0x343
+[  433.422356] usb usb4-port1: do warm reset
+[  433.422358] usb 4-1: device reset not allowed in state 8
+[  433.422428] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 0 status  = 0xf0002e2
+[  433.422455] xhci_hcd 0000:3a:00.0: set port remote wake mask, actual port 1 status  = 0xe0002a0
+[  433.422465] hub 4-0:1.0: hub_suspend
+[  433.422475] usb usb4: bus auto-suspend, wakeup 1
+[  433.426161] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
+[  433.466209] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.510204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.554051] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.598235] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.642154] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.686204] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.730205] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.774203] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.818207] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.862040] xhci_hcd 0000:3a:00.0: port 0 polling in bus suspend, waiting
+[  433.862053] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
+[  433.862077] xhci_hcd 0000:3a:00.0: xhci_suspend: stopping port polling.
+[  433.862096] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
+[  433.862312] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_suspend: 0
+[  433.862445] xhci_hcd 0000:3a:00.0: PME# enabled
+[  433.902376] xhci_hcd 0000:3a:00.0: restoring config space at offset 0xc (was 0x0, writing 0x20)
+[  433.902395] xhci_hcd 0000:3a:00.0: restoring config space at offset 0x4 (was 0x100000, writing 0x100403)
+[  433.902490] xhci_hcd 0000:3a:00.0: PME# disabled
+[  433.902504] xhci_hcd 0000:3a:00.0: enabling bus mastering
+[  433.902547] xhci_hcd 0000:3a:00.0: // Setting command ring address to 0x8578fc001
+[  433.902649] pcieport 0000:00:1b.0: PME: Spurious native interrupt!
+[  433.902839] xhci_hcd 0000:3a:00.0: Port change event, 4-1, id 3, portsc: 0xb0202e2
+[  433.902842] xhci_hcd 0000:3a:00.0: resume root hub
+[  433.902845] xhci_hcd 0000:3a:00.0: handle_port_status: starting port polling.
+[  433.902877] xhci_hcd 0000:3a:00.0: xhci_resume: starting port polling.
+[  433.902889] xhci_hcd 0000:3a:00.0: xhci_hub_status_data: stopping port polling.
+[  433.902891] xhci_hcd 0000:3a:00.0: hcd_pci_runtime_resume: 0
+[  433.902919] usb usb4: usb wakeup-resume
+[  433.902942] usb usb4: usb auto-resume
+[  433.902966] hub 4-0:1.0: hub_resume
+...
 
- (1) I'm passing O_TMPFILE to the pipe2() system call to indicate that you
-     want a notifications pipe.  This prohibits splice and co. from being
-     called on it as I don't want to have to try to fix iov_iter_revert() t=
-o
-     handle kernel notifications being intermixed with splices.
+As Mathias pointed out, the hub enters Cold Attach Status state and
+requires a warm reset. However usb_reset_device() bails out early when
+the device is in suspended state, as its callers port_event() and
+hub_event() don't always resume the device.
 
-     The choice of O_TMPFILE was just for convenience, but it needs to be
-     something different.  I could, for instance, add a constant,
-     O_NOTIFICATION_PIPE with the same *value* as O_TMPFILE.  I don't think
-     it's likely that it will make sense to use O_TMPFILE with a pipe, but =
-I
-     also don't want to eat up another O_* constant just for this.
+Since there's nothing wrong to reset a suspended device, allow
+usb_reset_device() to do so to solve the issue.
 
-     Unfortunately, pipe2() doesn't have any other arguments into from whic=
-h I
-     can steal a bit.
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/usb/core/hub.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- (2) I've added a pair of ioctls to configure the notifications bits.  They=
-'re
-     ioctls as I just reused the ioctl code from my devmisc driver.  Should=
- I
-     use fcntl() instead, such as is done for F_SETPIPE_SZ?
-
-     The ioctls do two things: set the ring size to a number of slots (so
-     similarish to F_SETPIPE_SZ) and set filters.
-
-Any thoughts on how better to represent these bits?
-
-Thanks,
-David
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 05a2d51bdbe0..f0194fdbc9b8 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -5877,8 +5877,7 @@ int usb_reset_device(struct usb_device *udev)
+ 	struct usb_host_config *config = udev->actconfig;
+ 	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
+ 
+-	if (udev->state == USB_STATE_NOTATTACHED ||
+-			udev->state == USB_STATE_SUSPENDED) {
++	if (udev->state == USB_STATE_NOTATTACHED) {
+ 		dev_dbg(&udev->dev, "device reset not allowed in state %d\n",
+ 				udev->state);
+ 		return -EINVAL;
+-- 
+2.17.1
 
