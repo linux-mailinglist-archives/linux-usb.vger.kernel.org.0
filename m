@@ -2,116 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40C55EFE37
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 14:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18642EFE52
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 14:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388886AbfKENR0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 08:17:26 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:39318 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388782AbfKENRZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 08:17:25 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5DED5b107142;
-        Tue, 5 Nov 2019 13:16:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=zCxj2FypOGa+nB0i3E2EHjqmNc927yWEmUrHT+72n5c=;
- b=SQQ6Y5aApPKgJEnS/ha0anIYdLmFSfo+4WUfKxNbhciq1/7JrC8FYIrsVtuF0o5iZNvF
- bqTp0g1Zf7b3pe1YbHD9HG0HXzyl0gAqezrc2n+7hXxY1HWSgoyFPCcU+Srrl99xD93p
- BGGGkTEhe2ttolx528xGiE8UMwAn1bk4V6v9oXvbvcfv0H+p3F72wpZoBmks1P92RJIh
- kKZW6vHRF5NypWTIJEQdl//or7IVtfnwvhb7pGvv/bbmFW74zpfYK93D0K9JT4Nng8Gw
- ET8cQho6Plh/9+LccGMsTZ237b2VNJnSOv2EnmZ3fNGorNigtQeG9vEzWAWgyYYIMUWJ Hg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2w11rpx4g7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 13:16:14 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5DFjwx190493;
-        Tue, 5 Nov 2019 13:16:13 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by userp3020.oracle.com with ESMTP id 2w31619xcw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 13:16:13 +0000
-Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA5DGCZM018918;
-        Tue, 5 Nov 2019 13:16:12 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 05 Nov 2019 05:16:11 -0800
-Date:   Tue, 5 Nov 2019 16:16:05 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Mao Wenan <maowenan@huawei.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH -next] usb: roles: Hide option USB_ROLE_SWITCH
-Message-ID: <20191105131605.GF10409@kadam>
-References: <20191104135312.GD996639@ulmo>
- <20191104144850.91305-1-maowenan@huawei.com>
- <20191105124218.GB12204@kuha.fi.intel.com>
+        id S2389019AbfKEN1G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 08:27:06 -0500
+Received: from smtprelay-out1.synopsys.com ([198.182.47.102]:37618 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387784AbfKEN1F (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 08:27:05 -0500
+Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 79DC6C0E70;
+        Tue,  5 Nov 2019 13:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1572960425; bh=yuk71XFhsMnBF5rvpbefnqRCoGp2jrJmNYO+doE2iFU=;
+        h=From:To:Subject:Date:References:In-Reply-To:From;
+        b=jfChspVVx/EsFMK5/K/ArZSkn0YYhe+rTHkNe2oqvIEsCWX68k9xcY7l5HEXHXgIu
+         XyrDSV4usoKO+Ta7WVpEPrOgdcmOJnQq4oAKVGrzD7/bI4P9+W1Pqkg9kvQ3wRcTIP
+         8Hp0XrRPD5Jt3zQrIw7CmuSXNlVguajn+WWWorE/v/boNDMjKwpj3yzh7M/RSoL7+u
+         +1Kwrx8r0p3hrXHx9SWMOUdSGgkM8aEjvAxqRRR1mHFBdmlkm4fp/IkzdOx/xtrG4X
+         nuqWedBPfieglwEs1rt6Hu81lcwKs4b9PjAmdvZrEoTCiEJITmCrtXMR2OSzmwzBKQ
+         xZrUHC+gGj00g==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id CFBADA008D;
+        Tue,  5 Nov 2019 13:27:04 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 5 Nov 2019 05:27:04 -0800
+Received: from NAM01-SN1-obe.outbound.protection.outlook.com (10.13.134.195)
+ by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Tue, 5 Nov 2019 05:27:04 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dlmlXzfGjIgRLiRoaOgTJieXcoYkU8mYN86FfJ9YamFlVeu7npbfeealMGP7x9rMCS3Dh1dD8OiJKXQ1Wz9DbmYftw2sY9SRGEBto86YfmL8mUS/w50Z8u+c3v4qLF1LYZLKZXhF+iQRvh721A2s7TKNyi5WX8YhkKQRUjfS5+xB4XEiRKvh4XWWJmT/dy0F5Nj85XWHhCa9p7Hmozi7EGfaEw5FI374M8kZZl/I1+DtHzaCTSn+5jMs8AxUaTBXqcNR7/vzqwqAfw+iVLAjAj3V+H5xe5YkOAwW833Q3x8LK3XsHFunWpuDQTzy9zE9h3UcOuwG1f+Vodk7Y3XJWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yuk71XFhsMnBF5rvpbefnqRCoGp2jrJmNYO+doE2iFU=;
+ b=HWuqsTfOyeS4Pd0YSFci7WnoWkgCCqBWE+abXa81F7O04lTs04YDvgBdkWXXY2wJMvGso2W14yyOPNt4r4R3NuuCDBg1ZH2mq1U72KbhOe1ML83P0mbQQMjaUkEij6NIzVNF0DewdCjkEvxIBs030/42xf5uOB6oz/5gJDyPgT60C0lp3eC5RWJqp425UByEvMKjgrd0ecmQx+IDT9JB49y3Sli5vrCfYx6AgJ305nuRwj8jIfWg8UYZiNtfcbSWXjiuynfyDaOVqyfvUOHXeXDZRw0ml2101Bfpazar1E9YUM3VUw3CMQSqiCCLLYT3M9d4BLZLaSOlIwGayUVtqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yuk71XFhsMnBF5rvpbefnqRCoGp2jrJmNYO+doE2iFU=;
+ b=GSR6P0cqAOHeEFFcx4hGRmXh71qRygG7sZyFUX90y0Tr+zrykLYVluF6JS2DXfQ8lQShRUc+GyMWZeSdyVTy1K7NIFJp7G2Gb4v+Ivz5XztDYTDs7K51rRrKsueNS8RkZCyZqBvIC3w1dM5du2ZsxOs1kbpOgPuwSFjDN6W8jM4=
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com (52.135.51.203) by
+ MN2PR12MB3248.namprd12.prod.outlook.com (20.179.80.74) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Tue, 5 Nov 2019 13:27:03 +0000
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::85e4:7eb9:af8d:8a9]) by MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::85e4:7eb9:af8d:8a9%3]) with mapi id 15.20.2430.020; Tue, 5 Nov 2019
+ 13:27:03 +0000
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: usb: dwc2: Re: Maximum packet size in dwc2 gadget HS mode < 1024
+Thread-Topic: usb: dwc2: Re: Maximum packet size in dwc2 gadget HS mode < 1024
+Thread-Index: AQHVijUBxoK/MK6P90arc2M4mai0sadpvf8AgA30FACABNJvAIAACwWAgAAVeQA=
+Date:   Tue, 5 Nov 2019 13:27:02 +0000
+Message-ID: <bdaf8a7a-f1b7-e57d-3fe8-0ed25f47b347@synopsys.com>
+References: <3496ebef-c3b6-d884-8bd8-fed48e875b10@ivitera.com>
+ <52dc70dc-86e4-c47a-ae49-1f201b066b2e@ivitera.com>
+ <97fed6c8-e780-021f-4f93-64701a14bc3f@synopsys.com>
+ <60def6a9-89f3-d7b9-4bc1-2f1a7a5ce769@synopsys.com>
+ <deb8918a-14f5-ca3f-53d5-0d99d406fc3c@ivitera.com>
+ <79aba6ae-befe-878e-cc17-e1fde9ac6a80@ivitera.com>
+ <926c3136-1979-4df7-0afb-a91df9a2ab01@synopsys.com>
+ <5f7cc638-ed27-8f8f-95db-c1b198ebb8f5@ivitera.com>
+ <7f1b3cc0-718c-731a-4069-809bf2b2dca4@synopsys.com>
+ <172d6cd4-3e48-3a40-bf1c-4f50ba921838@ivitera.com>
+In-Reply-To: <172d6cd4-3e48-3a40-bf1c-4f50ba921838@ivitera.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=hminas@synopsys.com; 
+x-originating-ip: [23.50.56.162]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ab2330f0-4cc0-40f4-3c75-08d761f3d84c
+x-ms-traffictypediagnostic: MN2PR12MB3248:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR12MB3248EF1162619C6D9E16C829A77E0@MN2PR12MB3248.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6430;
+x-forefront-prvs: 0212BDE3BE
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(39860400002)(376002)(366004)(396003)(136003)(199004)(189003)(6486002)(7736002)(36756003)(26005)(486006)(64756008)(65806001)(76116006)(11346002)(476003)(2501003)(8676002)(53546011)(76176011)(81166006)(81156014)(102836004)(8936002)(66946007)(31686004)(66476007)(186003)(66556008)(66066001)(229853002)(6436002)(58126008)(31696002)(110136005)(86362001)(316002)(6246003)(6116002)(3846002)(305945005)(2906002)(6506007)(65956001)(66446008)(91956017)(99286004)(446003)(2616005)(14454004)(5660300002)(71190400001)(71200400001)(25786009)(256004)(6512007)(478600001)(4744005);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR12MB3248;H:MN2PR12MB4093.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DjSdUygt64su7xQ7gZpQT7iyXu8wzLPkSpuNoczztif8ELF/EHn/ny+iSMsRrS8XGUezMuGo20yI3cd6Odeazk0m/oOJYneRrfQntbq5VMF3rxunreqp28Jj/fT7hTw9qCEUsdoE9x1qxwqejGrwVK05GOrjMW9XKk7CFwdqUOoogvIlxifyteJ5XnQb2ACWlyIDZNVRCkOIlLTZoShVXqPsyF2Bo1Kwm2L5BRgyQwW4pNR8UPHY9OZWeGeOAe6jh1BzsON82PkXYawSmbLDPkJttSbjPKHGzrziW4ebOnGBcwCPveDeQIK7cBf1NLKLihSn2I8zSejedCsgQsY3MNwnV+esRG8YvFIcyKjWDNcyY1aW/suEu9bPh6lRS5t/H95DV4sJav4lBUOUvevUDXfF1Yefk0cIOk+yqdhACWweLIj1fa1hdk5yW8lyGggy
+Content-Type: text/plain; charset="iso-8859-2"
+Content-ID: <1E0BAE7A182181499CE18E2BDB214E9C@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191105124218.GB12204@kuha.fi.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911050109
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911050109
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab2330f0-4cc0-40f4-3c75-08d761f3d84c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Nov 2019 13:27:02.8961
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uZQEbrxAcDWo3SKnCt/xJ474O0F7dRctCuUSZPkzkWpzmX8Nc4cmVibDRI3RCDZQ2u2EAcs1nQGu7bUlOBdSlA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3248
+X-OriginatorOrg: synopsys.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 02:42:18PM +0200, Heikki Krogerus wrote:
-> On Mon, Nov 04, 2019 at 10:48:50PM +0800, Mao Wenan wrote:
-> > The USB role switch class is, after all,
-> > not useful by itself. Hiding USB_ROLE_SWITCH
-> > so we can avoid any of the pitfalls associated
-> > with user-visible symbols and "select".
-> > 
-> > Signed-off-by: Mao Wenan <maowenan@huawei.com>
-> > ---
-> >  drivers/usb/roles/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
-> > index f8b31aa..1da58d4 100644
-> > --- a/drivers/usb/roles/Kconfig
-> > +++ b/drivers/usb/roles/Kconfig
-> > @@ -1,7 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  
-> >  config USB_ROLE_SWITCH
-> > -	tristate "USB Role Switch Support"
-> > +	tristate
-> >  	help
-> >  	  USB Role Switch is a device that can select the USB role - host or
-> >  	  device - for a USB port (connector). In most cases dual-role capable
-> 
-> You didn't actually convert the "depends on USB_ROLE_SWTICH" to
-> "select USB_ROLE_SWITCH" before this. You also left the help text that
-> is now useless.
-> 
-> I really think that instead of this, we should just convert all
-> "select USB_ROLE_SWTICH" to "depends on USB_ROLE_SWITCH".
+Hi Pavel,
 
-The you have to find USB_ROLE_SWITCH first when you want to enable your
-hardware...  It's feels really confusing when you want to create a
-.config file...
 
-I sometimes think maybe I'm too stupid to configure a kernel these days
-and that's sort of sad because how is Aunt Tillie supposed to manage?
+On 11/5/2019 4:10 PM, Pavel Hofman wrote:
+> Dne 05. 11. 19 v 12:30 Minas Harutyunyan napsal(a):
+>> Hi Pavel,
+>>
+>>
+>> Could you please perform follow 3 tests:
+>>
+>> 1. Test#1. Disable all debug prints for dwc2 driver and test again 960
+>> bytes mps.
+>=20
+> Do you mean without any patches, with the existing code? That will=20
+> result in the existing (incorrect) behaviour.
+>=20
+Yes, without any patch, just disable debug prints which will improve=20
+timings.
 
-regards,
-dan carpenter
+Thanks,
+Minas
 
+> I will do all the other tests, thanks alot for your effort.
+>=20
+> Regards,
+>=20
+> Pavel.
