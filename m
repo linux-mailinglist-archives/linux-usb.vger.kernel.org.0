@@ -2,124 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4AEF0A32
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 00:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D5CF0A42
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 00:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729451AbfKEX3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 18:29:24 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:35775 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728847AbfKEX3Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 18:29:24 -0500
-Received: by mail-pg1-f195.google.com with SMTP id q22so8117371pgk.2
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 15:29:24 -0800 (PST)
+        id S1730074AbfKEXhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 18:37:04 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39972 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729549AbfKEXhD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 18:37:03 -0500
+Received: by mail-pg1-f196.google.com with SMTP id 15so15744839pgt.7;
+        Tue, 05 Nov 2019 15:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uZefEQXkrZPkpQwVNjP1FNnT8cq5pBOPC4hnut7eoks=;
-        b=U+V9fSm65CZNELuXfD9XSn2kMn8FDbKu/BW0dpkm+7EOlQjPXTc7IAvZxFzPN/k3h4
-         ZzulMw3QHLSl+jmszHmVIsBHCgSPFLyA2u/i/g3nHIUALGZad9jAuq1o/KFIMXVQFLj2
-         CYI7et0idpEKO7QKQpPR3sNcjjS/L2U7qmXooIhmN3I1SjDMXuFbUG42LWjubBKSdTlL
-         4+gMHH4Q5OD0FD5zyekCnJOzYPqq0zozuLDsRwP5hyYDUkr9z/HYTlywT2A7TnxEBEVf
-         twMGfxlD2rCdG8q9mxaqpvYCAKGGGRMZi1t+yeQnBe4IQpHUgJlS6CIpFRxhgY9QiOBh
-         qMYQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jbOa8JF4MBQR2lZ6+xvcROFm9Impr2oKxSGxSOq96pg=;
+        b=T7otIGjNM+rxJdQzdyBGLkV3wlSlK0ERKVBdMp3P/gK3s8k6YB+I9PX7WzR8GXVgPY
+         FsORAyvugQ6ORE7htS3hSbnu6mVPwgJ5be3ZCjHR7OYWjOlp9F1CX23SX7pjXwoluPMh
+         WEctsoRPF2XL7IV3Dnt249ls5LKiykIvFKx8LsdSwsfwXg4Hwi6AuBTpWNSWoGHBTwl6
+         sbLonNw5C5GbYtxU8DGyl93/qHK/zUp+qP3cr6lpPzXNHR51cXMHYniT0Tt0AuBcnuoC
+         vDTD3T5tfU4Ryc5DIDSAfRwjVavmYUq1TFL7QbVKwuu7WujskeUg5vOzIjOQNpTmzs5p
+         gsBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uZefEQXkrZPkpQwVNjP1FNnT8cq5pBOPC4hnut7eoks=;
-        b=loAc6tZR4HFY8rJi9ESyaXN9sJc8+oz3oz/p51VDPvjwSF03wnO2TDU+JY1piBCG/m
-         vdM7LdYxSz65WhRIwkIlaYKE34bpa23T91c7rX9VubVeCLbf9OYhDJ8WqhEj08aLnzGb
-         nwBNNPu0XvPZX2bzht15qU6ueuk/2sKYTUk/kS7ZzAutXcM+EWahzwRp1DPtJpnwtz1s
-         KIoG+wONJAy8qX3NWuWcWH2gLf0K8be7uB22K/Bc4+3mRilulAczmWeV0xxCWBDMuYy6
-         K6OUU0XUqvzdOvCIQSxKd9zu14kgujzah6+fHIf5T4jKNwS3kHC4cssF8T8aSXCwQBeo
-         zANA==
-X-Gm-Message-State: APjAAAVSS4mG/LykoZ6UItcnbJONLLiO1wfD2Hi34y2eReXAelBS3sLN
-        Ih2WO3WVmlMmqwMRJeMOFvijeQ==
-X-Google-Smtp-Source: APXvYqzTTPcJg1WRbdZiGjAjx1xHEHsK89vvEIg7CtMVy5DYQL0PMnapY5TdYdCEsZs8Rs1A2FpKQg==
-X-Received: by 2002:a63:d1a:: with SMTP id c26mr9582456pgl.24.1572996563641;
-        Tue, 05 Nov 2019 15:29:23 -0800 (PST)
-Received: from ?IPv6:2620:10d:c081:1130::12c1? ([2620:10d:c090:180::d575])
-        by smtp.gmail.com with ESMTPSA id j4sm492799pjf.25.2019.11.05.15.29.20
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 Nov 2019 15:29:22 -0800 (PST)
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Vai <andrea.vai@unipv.it>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <Pine.LNX.4.44L0.1911051326040.1678-100000@iolanthe.rowland.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <61033407-731e-8cf5-8590-b07e2567693a@kernel.dk>
-Date:   Tue, 5 Nov 2019 16:29:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jbOa8JF4MBQR2lZ6+xvcROFm9Impr2oKxSGxSOq96pg=;
+        b=ICHwwKcWwVhwEMEt7VkLaNf0aHOLS5Lu8AyDPMpRL2sUBu7WEZHmF+FKs3uOe6wFOs
+         8sdDh2jumUupoG4ojpawUvjUUmJIQtb0lI5rtFbLdg09r3l+9gr+BkAfoayVGw9sAdPZ
+         cHRRCZTGbluP93tJKI4zV1ULnBBd22LCDkshHrkn3qLHwDWCguZxVG/M1qy85UV4ji1U
+         fSDhARonZuEkK7LtADCYzXrh+gnCnKiiRRNMhd7EYwL24WtiV9FXFQOGfUthwMcLUbPX
+         RzIu6QEN0OOOquzky+E3QaEbmnlo/d8TYT0mNuG5nMeAiSVKvCRAq1/SFSibfKRSzm5H
+         yUfw==
+X-Gm-Message-State: APjAAAWWSuMKcGij5u7eCw+3Ja1VhOlyRZ3pSALu7/jPquI4no+Ivs94
+        9mseGOG/RrFHvbLdSBK4CE8=
+X-Google-Smtp-Source: APXvYqy6TnDZoAcLevkCQceDlWjiDNaPRoDljt1Fyg09m4mm28L5Wnv+mQ2DQxrQ9qKmM8wKNTktYg==
+X-Received: by 2002:a17:90a:25e1:: with SMTP id k88mr2298501pje.14.1572997022758;
+        Tue, 05 Nov 2019 15:37:02 -0800 (PST)
+Received: from debian.net.fpt ([2405:4800:58f7:3f8f:27cb:abb4:d0bd:49cb])
+        by smtp.gmail.com with ESMTPSA id y22sm13641688pfn.6.2019.11.05.15.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 15:37:01 -0800 (PST)
+From:   Phong Tran <tranmanphong@gmail.com>
+To:     syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
+Cc:     2pi@mok.nu, alex.theissen@me.com, andreyknvl@google.com,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Phong Tran <tranmanphong@gmail.com>
+Subject: [PATCH] usb: appledisplay: fix use-after-free in bl_get_brightness
+Date:   Wed,  6 Nov 2019 06:36:52 +0700
+Message-Id: <20191105233652.21033-1-tranmanphong@gmail.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <00000000000042d60805933945b5@google.com>
+References: <00000000000042d60805933945b5@google.com>
 MIME-Version: 1.0
-In-Reply-To: <Pine.LNX.4.44L0.1911051326040.1678-100000@iolanthe.rowland.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 11/5/19 11:31 AM, Alan Stern wrote:
-> On Tue, 5 Nov 2019, Andrea Vai wrote:
-> 
->> Il giorno lun, 04/11/2019 alle 13.20 -0500, Alan Stern ha scritto:
-> 
->>> You should be able to do something like this:
->>>
->>>          cd linux
->>>          patch -p1 </path/to/patch2
->>>
->>> and that should work with no errors.  You don't need to use git to
->>> apply a patch.
->>>
->>> In case that patch2 file was mangled somewhere along the way, I
->>> have
->>> attached a copy to this message.
->>
->> Ok, so the "patch" command worked, the kernel compiled and ran, but
->> the test still failed (273, 108, 104, 260, 177, 236, 179, 1123, 289,
->> 873 seconds to copy a 500MB file, vs. ~30 seconds with the "good"
->> kernel).
->>
->> Let me know what else could I do,
-> 
-> I'm out of suggestions.  If anyone else knows how to make a kernel with
-> no legacy queuing support -- only multiqueue -- issue I/O requests
-> sequentially, please speak up.
+In context of USB disconnect, the delaywork trigger and calling
+appledisplay_bl_get_brightness() and the msgdata was freed.
 
-Do we know for a fact that the device needs strictly serialized requests
-to not stall? And writes in particular? I won't comment on how broken
-that is, just trying to establish this as the problem that's making this
-particular device be slow?
+add the checking return value of usb_control_msg() and only update the
+data while the retval is valid.
 
-I've lost track of this thread, but has mq-deadline been tried as the
-IO scheduler? We do have support for strictly serialized (writes)
-since that's required for zoned device, wouldn't be hard at all to make
-this cover a blacklisted device like this one.
+Reported-by: syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
+Reported-and-tested-by:
+syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
 
-> In the absence of any responses, after a week or so I will submit a
-> patch to revert the f664a3cc17b7 ("scsi: kill off the legacy IO path")
-> commit.
+https://groups.google.com/d/msg/syzkaller-bugs/dRmkh2UYusY/l2a6Mg3FAQAJ
 
-That's not going to be feasible.
+Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+---
+ drivers/usb/misc/appledisplay.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
+index ac92725458b5..3e3dfa5a3954 100644
+--- a/drivers/usb/misc/appledisplay.c
++++ b/drivers/usb/misc/appledisplay.c
+@@ -164,7 +164,8 @@ static int appledisplay_bl_get_brightness(struct backlight_device *bd)
+ 		0,
+ 		pdata->msgdata, 2,
+ 		ACD_USB_TIMEOUT);
+-	brightness = pdata->msgdata[1];
++	if (retval >= 0)
++		brightness = pdata->msgdata[1];
+ 	mutex_unlock(&pdata->sysfslock);
+ 
+ 	if (retval < 0)
 -- 
-Jens Axboe
+2.20.1
 
