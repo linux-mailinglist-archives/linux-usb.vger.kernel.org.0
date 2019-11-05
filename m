@@ -2,124 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76240F04E1
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 19:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BDDF0518
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 19:31:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390700AbfKESSW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Nov 2019 13:18:22 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:55141 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390520AbfKESSV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 13:18:21 -0500
-Received: from mail-pf1-f200.google.com ([209.85.210.200])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iS3PH-0000IR-GS
-        for linux-usb@vger.kernel.org; Tue, 05 Nov 2019 18:18:19 +0000
-Received: by mail-pf1-f200.google.com with SMTP id z21so7713795pfr.4
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 10:18:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=5Wmxaj+BarZSVjtedyoX+TxJZ3eiXoyUdzCwL1PF1ho=;
-        b=kC6rHQtTMVsGT7kYAaPYFNVhYs76Fx6BhoB0hITnFY92yy5WpOK2hJM4rtU4yAnuYV
-         C6QLWTzFnnx5RRuSuGbmw2hj8r8U1aFVgx6I/xUkLodRAubsWWK69ETk7MfeQqNjT7SH
-         Pr/rZ/wgdofdfC2zBTCO0ceGFcA9kew3dRs4CYpIDYP/qeI8Ar7KxRMgb0H7E9ZBmutX
-         3/faw/TBwgVjoerbYLwIW8GcU9xVr6MZxf1KFzINLPI69c6xhfSwndLagRRAQyohzkTg
-         LwcaLguej34MVx/1Y2jXyQeHMRi+y1q+nxWPZSGBPM6KyyjljRR/kDOhPC53WpjYKya1
-         NVxQ==
-X-Gm-Message-State: APjAAAXPt2JHLGMUQt3tErEEfNwgw/hw7ehxUPN1mbgyTr4OhHbpjjPc
-        CkwpUMyuESQf4As7sHUp0AZyNouYvqjg2bL7zWOITrDuyTn4IDtVuUQr8frUikdl7cLy1ddKPsZ
-        5B8zJXVTY7jCWve4IS8zXMCNfmFnqEpZVJByLog==
-X-Received: by 2002:a63:fe15:: with SMTP id p21mr37016351pgh.26.1572977898032;
-        Tue, 05 Nov 2019 10:18:18 -0800 (PST)
-X-Google-Smtp-Source: APXvYqyF6bjih930a3F0/ufrbz/d2a09kvuzfZtw1eo08SNk1T5WctIcXJK6b5IpTtuITWLhmXlIrg==
-X-Received: by 2002:a63:fe15:: with SMTP id p21mr37016317pgh.26.1572977897645;
-        Tue, 05 Nov 2019 10:18:17 -0800 (PST)
-Received: from 2001-b011-380f-3c42-8c92-3808-9862-c817.dynamic-ip6.hinet.net (2001-b011-380f-3c42-8c92-3808-9862-c817.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:8c92:3808:9862:c817])
-        by smtp.gmail.com with ESMTPSA id z1sm93478pju.27.2019.11.05.10.18.16
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 05 Nov 2019 10:18:17 -0800 (PST)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3601.0.10\))
-Subject: Re: [PATCH] usb: Allow USB device to be warm reset in suspended state
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <Pine.LNX.4.44L0.1911051200570.1678-100000@iolanthe.rowland.org>
-Date:   Wed, 6 Nov 2019 02:18:14 +0800
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S2390668AbfKESbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 13:31:47 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:45956 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S2390592AbfKESbr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 13:31:47 -0500
+Received: (qmail 6231 invoked by uid 2102); 5 Nov 2019 13:31:46 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Nov 2019 13:31:46 -0500
+Date:   Tue, 5 Nov 2019 13:31:46 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrea Vai <andrea.vai@unipv.it>
+cc:     Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
         USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
         Kernel development list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <325CE337-2467-4DBF-AF23-E4E5E11EAEFB@canonical.com>
-References: <Pine.LNX.4.44L0.1911051200570.1678-100000@iolanthe.rowland.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-X-Mailer: Apple Mail (2.3601.0.10)
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <0cd6ac36b7ab644576fc0f3f5bd4a880c33855d1.camel@unipv.it>
+Message-ID: <Pine.LNX.4.44L0.1911051326040.1678-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, 5 Nov 2019, Andrea Vai wrote:
 
+> Il giorno lun, 04/11/2019 alle 13.20 -0500, Alan Stern ha scritto:
 
-> On Nov 6, 2019, at 02:07, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > You should be able to do something like this:
+> > 
+> >         cd linux
+> >         patch -p1 </path/to/patch2
+> > 
+> > and that should work with no errors.  You don't need to use git to 
+> > apply a patch.
+> > 
+> > In case that patch2 file was mangled somewhere along the way, I
+> > have 
+> > attached a copy to this message.
 > 
-> On Wed, 6 Nov 2019, Kai-Heng Feng wrote:
+> Ok, so the "patch" command worked, the kernel compiled and ran, but
+> the test still failed (273, 108, 104, 260, 177, 236, 179, 1123, 289,
+> 873 seconds to copy a 500MB file, vs. ~30 seconds with the "good"
+> kernel).
 > 
->> On Dell WD15 dock, sometimes USB ethernet cannot be detected after plugging
->> cable to the ethernet port, the hub and roothub get runtime resumed and
->> runtime suspended immediately:
->> ...
-> 
->> ...
->> 
->> As Mathias pointed out, the hub enters Cold Attach Status state and
->> requires a warm reset. However usb_reset_device() bails out early when
->> the device is in suspended state, as its callers port_event() and
->> hub_event() don't always resume the device.
->> 
->> Since there's nothing wrong to reset a suspended device, allow
->> usb_reset_device() to do so to solve the issue.
-> 
-> I was sure I remembered reading somewhere that suspended devices were
-> not allowed to be reset, but now I can't find that requirement anywhere
-> in the USB spec.
+> Let me know what else could I do,
 
-I don't find it in the USB spec either.
-That said, the following usb_autoresume_device() before reset may resume the device.
-I've also tried using pm_runtime_get_noresume() and it works equally well for my case but I am not sure if we want to change the behavior here.
+I'm out of suggestions.  If anyone else knows how to make a kernel with 
+no legacy queuing support -- only multiqueue -- issue I/O requests 
+sequentially, please speak up.
 
-> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->> drivers/usb/core/hub.c | 3 +--
->> 1 file changed, 1 insertion(+), 2 deletions(-)
->> 
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index 05a2d51bdbe0..f0194fdbc9b8 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -5877,8 +5877,7 @@ int usb_reset_device(struct usb_device *udev)
->> 	struct usb_host_config *config = udev->actconfig;
->> 	struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
->> 
->> -	if (udev->state == USB_STATE_NOTATTACHED ||
->> -			udev->state == USB_STATE_SUSPENDED) {
->> +	if (udev->state == USB_STATE_NOTATTACHED) {
->> 		dev_dbg(&udev->dev, "device reset not allowed in state %d\n",
->> 				udev->state);
->> 		return -EINVAL;
-> 
-> You forgot to update the kerneldoc for this function.
+In the absence of any responses, after a week or so I will submit a
+patch to revert the f664a3cc17b7 ("scsi: kill off the legacy IO path")  
+commit.
 
-Ok, will do that in v2.
-
-Kai-Heng
-
-> 
-> Alan Stern
-> 
+Alan Stern
 
