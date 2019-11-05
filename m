@@ -2,49 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A20AEF76B
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 09:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F7DEF76C
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 09:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730316AbfKEImQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 03:42:16 -0500
-Received: from mail-lf1-f53.google.com ([209.85.167.53]:46379 "EHLO
-        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725806AbfKEImQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 03:42:16 -0500
-Received: by mail-lf1-f53.google.com with SMTP id 19so9280634lft.13
+        id S1730503AbfKEImR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 03:42:17 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38761 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727727AbfKEImR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 03:42:17 -0500
+Received: by mail-lj1-f196.google.com with SMTP id v8so5148350ljh.5
         for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 00:42:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3hw05ePdq7yTQi83DwqWiRaXs9EGG+0kE5BtsB3c9q0=;
-        b=Vkpv7NcEEcugte99t0tq+x6EeP58ZJD1u9FNLmleH4Nf2wsursxrtJWscdntZTEu3f
-         cNo7kBXHvHbqLs0yJO05YM3T70L1xJHQuiSbej/kO32CLfGvhdWQ4bNap6+NNEhAEOMV
-         /Y/XzSU38CA2cHJQ25yTDuVsxUeU/96oPZJ+WFcZSlsLyf+0r3ZX33B701W+5MnpFwfD
-         wS2b5yKeKfzZ2KtGt7lT3YW4Q93XurzKxj9TcWxR7dGJeFSybyjxxeaBEiTgsAl0TXGt
-         lkikHTMD3ZJQyJziaNfaJpxFvkLVI4G0cPg/7ztshtMlFpNfBYu4yEW5/6uRlqVBKiVO
-         yXYA==
-X-Gm-Message-State: APjAAAVLKUeWmesuunyLkT9OBgQ3BxxeApNkrit4kuZIMcPvcrn/DWiX
-        5gHRCa03x3fqe9fY85Koh5Tqe1oM
-X-Google-Smtp-Source: APXvYqxocEXh/F+9cXLz2dBx6nB6IQEnOHgxlPomJvcLW6ZDDg93SeEom2JUg698fLrSv1KuvFT9pg==
-X-Received: by 2002:ac2:5dc1:: with SMTP id x1mr19305233lfq.177.1572943334373;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=wZk4Kgf43x0wsTQIaAQzLC6Ozn9yJOh3cGXpmzunqSg=;
+        b=YR86Ip0Juc/UOOflAE80yFNPF4AZfHIea/Z1jDWPU43IHy8Hf44rJKyKxTaywt3sDL
+         KNb3l0GltdqzdCnFCWgGWmfKE7OGteP9ta55T/61OjfyNEuSSG6Da/stTcPmmLHg+/3l
+         AUZhsmMTDVpO50yi418wiOtdyayPtnwMgulrvTbX2XHHlPMvx+PbU9BEpIFWZxAuDhF7
+         wUBsGfqkNQv8ZiIxCYSH85GIr1RUWRwZxsfdijDNLtC6OqpUT5qjAkR2Hrf76HK1iTKe
+         EeK2K5xcuEb3vfQtv1GvJML5axly+Ax+OhqfcH05eIPt4ek8+99mhlRPwsTvCa05RTg/
+         +7HQ==
+X-Gm-Message-State: APjAAAUO7sv2lIwDxROpswzk8AKyPPIN7qsVu/nYewX2s+QFW35K63S4
+        aST4eXpmeVpYDqmMPRlxwGgyKTJr
+X-Google-Smtp-Source: APXvYqwkgpjTBbUBW9617msa+K0Ov9gVWs9cPXw34P8ijnhPEGxJuW0YhYY8AXrsExjxao46sIYPNw==
+X-Received: by 2002:a2e:9612:: with SMTP id v18mr21265785ljh.234.1572943334788;
         Tue, 05 Nov 2019 00:42:14 -0800 (PST)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id r22sm7935893ljk.31.2019.11.05.00.42.13
+        by smtp.gmail.com with ESMTPSA id k6sm11739141lfc.72.2019.11.05.00.42.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 05 Nov 2019 00:42:13 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@xi.terra>)
-        id 1iRuPl-0004GW-6U; Tue, 05 Nov 2019 09:42:13 +0100
+        id 1iRuPl-0004GZ-A8; Tue, 05 Nov 2019 09:42:13 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Juergen Stuber <starblue@users.sourceforge.net>,
         legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 00/14] USB: legousbtower: misc cleanups
-Date:   Tue,  5 Nov 2019 09:41:38 +0100
-Message-Id: <20191105084152.16322-1-johan@kernel.org>
+Subject: [PATCH 01/14] USB: legousbtower: drop redundant MODULE_LICENSE ifdef
+Date:   Tue,  5 Nov 2019 09:41:39 +0100
+Message-Id: <20191105084152.16322-2-johan@kernel.org>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191105084152.16322-1-johan@kernel.org>
+References: <20191105084152.16322-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -52,31 +54,25 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here's a bunch of clean ups to the legousbtower driver as a promised
-follow up to the earlier set of fixes.
+The MODULE_LICENSE macro is unconditionally defined in module.h, no need
+to ifdef its use.
 
-Johan
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/misc/legousbtower.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-
-Johan Hovold (14):
-  USB: legousbtower: drop redundant MODULE_LICENSE ifdef
-  USB: legousbtower: drop redundant NULL check
-  USB: legousbtower: zero driver data at allocation
-  USB: legousbtower: drop redundant open_count check
-  USB: legousbtower: drop noisy disconnect messages
-  USB: legousbtower: drop redundant interrupt-in running flag
-  USB: legousbtower: stop interrupt-out URB unconditionally
-  USB: legousbtower: remove tower_abort_transfers()
-  USB: legousbtower: clean up pointer declarations in driver data
-  USB: legousbtower: drop unnecessary packed attributes
-  USB: legousbtower: drop redundant endianness comments
-  USB: legousbtower: clean up runaway white space
-  USB: legousbtower: drop superfluous brackets
-  USB: legousbtower: drop superfluous newlines
-
- drivers/usb/misc/legousbtower.c | 303 +++++++++++++-------------------
- 1 file changed, 118 insertions(+), 185 deletions(-)
-
+diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
+index 23061f1526b4..1be84dc13067 100644
+--- a/drivers/usb/misc/legousbtower.c
++++ b/drivers/usb/misc/legousbtower.c
+@@ -962,6 +962,4 @@ module_usb_driver(tower_driver);
+ 
+ MODULE_AUTHOR(DRIVER_AUTHOR);
+ MODULE_DESCRIPTION(DRIVER_DESC);
+-#ifdef MODULE_LICENSE
+ MODULE_LICENSE("GPL");
+-#endif
 -- 
 2.23.0
 
