@@ -2,152 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C93EFD20
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 13:25:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68579EFD46
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 13:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388310AbfKEMZ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 07:25:26 -0500
-Received: from canardo.mork.no ([148.122.252.1]:53839 "EHLO canardo.mork.no"
+        id S2388504AbfKEMhd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 07:37:33 -0500
+Received: from mga07.intel.com ([134.134.136.100]:17754 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387833AbfKEMZ0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Nov 2019 07:25:26 -0500
-Received: from miraculix.mork.no ([IPv6:2a02:2121:34b:47e9:c09a:74ff:fe7f:b715])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id xA5CPB1d025114
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 5 Nov 2019 13:25:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1572956713; bh=tOwwi/WeOCAIXQ192WTBNFpglAaamg3ZODywVvTUHmw=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=TQPqrfusN90nUJlTRNsYyYncuPUeOojDV5YcLmLltY5hrfo64AICKxTw4DIG5zqFE
-         0ST3hDUderArNKlqL89Mw65AK+mf2BghLbW5Il2OLsV+xVFi/GFPx2RcU74UKBcPeM
-         81UTV4gprHWz5YN/XYQX6UmnScSjuCPXZxKdToxk=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1iRxtR-00044x-QL; Tue, 05 Nov 2019 13:25:05 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>,
-        davem@davemloft.net, glider@google.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: KMSAN: uninit-value in cdc_ncm_set_dgram_size
-Organization: m
-References: <00000000000013c4c1059625a655@google.com>
-        <87ftj32v6y.fsf@miraculix.mork.no> <1572952516.2921.6.camel@suse.com>
-Date:   Tue, 05 Nov 2019 13:25:05 +0100
-In-Reply-To: <1572952516.2921.6.camel@suse.com> (Oliver Neukum's message of
-        "Tue, 05 Nov 2019 12:15:16 +0100")
-Message-ID: <875zjy33z2.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S2388269AbfKEMhd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Nov 2019 07:37:33 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 05 Nov 2019 04:37:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,271,1569308400"; 
+   d="scan'208";a="212533952"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 05 Nov 2019 04:37:28 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 05 Nov 2019 14:37:27 +0200
+Date:   Tue, 5 Nov 2019 14:37:27 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Mao Wenan <maowenan@huawei.com>, felipe.balbi@linux.intel.com,
+        gregkh@linuxfoundation.org, nkristam@nvidia.com, arnd@arndb.de,
+        johan@kernel.org, krzk@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH -next] usb: gadget: Add dependency for USB_TEGRA_XUDC
+Message-ID: <20191105123727.GA12204@kuha.fi.intel.com>
+References: <20191104025945.172620-1-maowenan@huawei.com>
+ <20191104100410.GB996639@ulmo>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191104100410.GB996639@ulmo>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oliver Neukum <oneukum@suse.com> writes:
-> Am Montag, den 04.11.2019, 22:22 +0100 schrieb Bj=C3=B8rn Mork:
->> This looks like a false positive to me. max_datagram_size is two bytes
->> declared as
->>=20
->>         __le16 max_datagram_size;
->>=20
->> and the code leading up to the access on drivers/net/usb/cdc_ncm.c:587
->> is:
->>=20
->>         /* read current mtu value from device */
->>         err =3D usbnet_read_cmd(dev, USB_CDC_GET_MAX_DATAGRAM_SIZE,
->>                               USB_TYPE_CLASS | USB_DIR_IN | USB_RECIP_IN=
-TERFACE,
->>                               0, iface_no, &max_datagram_size, 2);
->
-> At this point err can be 1.
->
->>         if (err < 0) {
->>                 dev_dbg(&dev->intf->dev, "GET_MAX_DATAGRAM_SIZE failed\n=
-");
->>                 goto out;
->>         }
->>=20
->>         if (le16_to_cpu(max_datagram_size) =3D=3D ctx->max_datagram_size)
->>=20
->>=20
->>=20
->> AFAICS, there is no way max_datagram_size can be uninitialized here.
->> usbnet_read_cmd() either read 2 bytes into it or returned an error,
->
-> No. usbnet_read_cmd() will return the number of bytes transfered up
-> to the number requested or an error.
+On Mon, Nov 04, 2019 at 11:04:10AM +0100, Thierry Reding wrote:
+> On Mon, Nov 04, 2019 at 10:59:45AM +0800, Mao Wenan wrote:
+> > If CONFIG_USB_TEGRA_XUDC=y and CONFIG_USB_ROLE_SWITCH=m,
+> > below erros can be seen:
+> > drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
+> > tegra-xudc.c:(.text+0x6b0): undefined reference to `usb_role_switch_unregister'
+> > drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
+> > tegra-xudc.c:(.text+0x1b88): undefined reference to `usb_role_switch_register'
+> > drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_sw_work':
+> > tegra-xudc.c:(.text+0x5ecc): undefined reference to `usb_role_switch_get_role'
+> > 
+> > This patch add dependency USB_ROLE_SWITCH for UDC driver.
+> > 
+> > Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
+> > Signed-off-by: Mao Wenan <maowenan@huawei.com>
+> > ---
+> >  drivers/usb/gadget/udc/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+> > index acaec3a..d103154 100644
+> > --- a/drivers/usb/gadget/udc/Kconfig
+> > +++ b/drivers/usb/gadget/udc/Kconfig
+> > @@ -445,6 +445,7 @@ config USB_TEGRA_XUDC
+> >  	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
+> >  	depends on ARCH_TEGRA || COMPILE_TEST
+> >  	depends on PHY_TEGRA_XUSB
+> > +	depends on USB_ROLE_SWITCH
+> 
+> It looks like most other drivers that use the USB role switch class do
+> "select" here. Now, that's suboptimal because USB_ROLE_SWITCH is a user-
+> visible symbol, which can lead to conflicts, so it should be avoided. I
+> think that in this case it might make sense to hide USB_ROLE_SWITCH and
+> then convert all "depends on USB_ROLE_SWITCH" occurrences to "select
+> USB_ROLE_SWITCH". The USB role switch class is, after all, not useful by
+> itself. It always needs a host and/or gadget driver to make use of it.
 
-Ah, OK. So that could be fixed with e.g.
+USB host/gadget drivers actually never operate the role switches. If
+the USB controller on the system is dual-role capable, then the driver
+for that controller can supply the role switch, but it doesn't operate
+it. Note that on some systems the USB host and USB peripheral
+controllers are separate, and there is a mux (like the Intel USB role
+mux) between them and the connector. On those systems the driver for
+the mux represents the USB role switch.
 
-  if (err < 2)
-       goto out;
+The operation of the switch is done from the USB Type-C drivers with
+USB Type-C connectors and from what ever driver can sense the ID-pin
+and VBUS with micro-B/AB connectors, but with other type of
+connectors the role swapping has to be done from user space. The use
+case for that is probable something like Apple CarPlay that requires
+the system to be able to swap the role even if the connector was good
+old Type-A connector.
 
+The point is in any case that the user of the switch is always
+separate from the supplier of the switch.
 
-Or would it be better to add a strict length checking variant of this
-API?  There are probably lots of similar cases where we expect a
-multibyte value and a short read is (or should be) considered an error.
-I can't imagine any situation where we want a 2, 4, 6 or 8 byte value
-and expect a flexible length returned.
+I'm not sure hiding the option and converting all "depends on
+USB_ROLE_SWITCH" to "select USB_ROLE_SWITCH" is the correct thing to
+do. I would do the opposite and convert all "select USB_ROLE_SWTICH"
+to "depends on USB_ROLE_SWITCH", and leave the option user selectable.
 
->> causing the access to be skipped.  Or am I missing something?
->
-> Yes. You can get half the MTU. We have a similar class of bugs
-> with MAC addresses.
+thanks,
 
-Right.  And probably all 16 or 32 bit integer reads...
-
-Looking at the NCM spec, I see that the wording is annoyingly flexible
-wrt length - both ways.  E.g for GetNetAddress:
-
-  To get the entire network address, the host should set wLength to at
-  least 6. The function shall never return more than 6 bytes in response
-  to this command.
-
-Maybe the correct fix is simply to let usbnet_read_cmd() initialize the
-full buffer regardless of what the device returns?  I.e.
-
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index dde05e2fdc3e..df3efafca450 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1982,7 +1982,7 @@ static int __usbnet_read_cmd(struct usbnet *dev, u8 c=
-md, u8 reqtype,
-                   cmd, reqtype, value, index, size);
-=20
-        if (size) {
--               buf =3D kmalloc(size, GFP_KERNEL);
-+               buf =3D kzalloc(size, GFP_KERNEL);
-                if (!buf)
-                        goto out;
-        }
-@@ -1992,7 +1992,7 @@ static int __usbnet_read_cmd(struct usbnet *dev, u8 c=
-md, u8 reqtype,
-                              USB_CTRL_GET_TIMEOUT);
-        if (err > 0 && err <=3D size) {
-         if (data)
--            memcpy(data, buf, err);
-+            memcpy(data, buf, size);
-         else
-             netdev_dbg(dev->net,
-                 "Huh? Data requested but thrown away.\n");
-
-
-
-
-What do you think?
-
-Personally, I don't think it makes sense for a device to return a 1-byte
-mtu or 3-byte mac address. But the spec allows it and this would at
-least make it safe.
-
-We have a couple of similar bugs elsewhere in the same driver, BTW..
-
-
-Bj=C3=B8rn
+-- 
+heikki
