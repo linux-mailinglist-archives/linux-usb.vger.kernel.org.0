@@ -2,164 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F36CEF4B6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 06:14:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B520EF4C2
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 06:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726988AbfKEFOY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Nov 2019 00:14:24 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:37263 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfKEFOY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 00:14:24 -0500
-Received: from mail-pf1-f197.google.com ([209.85.210.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iRrAb-00048b-VR
-        for linux-usb@vger.kernel.org; Tue, 05 Nov 2019 05:14:22 +0000
-Received: by mail-pf1-f197.google.com with SMTP id l20so15299844pff.6
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 21:14:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=JprAQtkugXMNo/gg2BE2hUTsxxRNgFiIwg+1mQgKeVY=;
-        b=DslXYeYPctfXwO3wi+UhjJ01pLuXF+0QcMVkfwcW0HSbEMCgXPp2EXMPmSvJOmKeOT
-         FaDql5Tj39KluxYVnaSC1EAuQ6HK5cYx0BT6LitH0SmL392oj+WiLcAF2ipfV1CuS3sV
-         x6K8t6fbOF80DZf9LmP605rRnu7kiY6sgIdg8RL6rHFpRAQMKs5uSuel7R4wC+DMmJIK
-         3jRqcB/0iL5Aa1pu3ecsi1XQRJbcPVT4OD3oWym74RiuDXQztl4TmvoaFq2Z3pOFMi6X
-         3ucCzT1N2hdi8YLnRt/mfu+UQXcjhXaK/7qB7end3Dn1luNAMyXc4KBH70hgUsi/AiKd
-         QB1Q==
-X-Gm-Message-State: APjAAAV0qvdADPublq6wZkxVNLdV0701czwy+SGVm6KhABMD8yb0Nvyx
-        IO3Z6V2FP6UTpJ6/y3p7k62AsoQ//JGwndR9t/PpvTXoJGlABUPt7A+dE/AOVnZyOnfpbDK36Ad
-        XEY3rtSG2bLcKwdSL9RKJR4R3gvI+ziCh6KpkJg==
-X-Received: by 2002:a62:1b4a:: with SMTP id b71mr35413447pfb.167.1572930860594;
-        Mon, 04 Nov 2019 21:14:20 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxLeAQ3fElRGQNEY/4syv8RZhQVelT90aGVjAH0F7fIO1ra0NmQdetGZnHO/2G4Z3YOLxkD8Q==
-X-Received: by 2002:a62:1b4a:: with SMTP id b71mr35413421pfb.167.1572930860214;
-        Mon, 04 Nov 2019 21:14:20 -0800 (PST)
-Received: from [10.101.46.71] (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id t8sm8783700pji.11.2019.11.04.21.14.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 04 Nov 2019 21:14:19 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3594.4.19\))
-Subject: Re: [PATCH 2/2] usb: core: Attempt power cycle when port is in
- eSS.Disabled state
-From:   Kai Heng Feng <kai.heng.feng@canonical.com>
-In-Reply-To: <20191104143838.GA2183570@kroah.com>
-Date:   Tue, 5 Nov 2019 13:14:16 +0800
-Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <CFDCF282-FBBC-43BC-9E6B-093B752E5C33@canonical.com>
-References: <20191007182840.4867-1-kai.heng.feng@canonical.com>
- <20191007182840.4867-2-kai.heng.feng@canonical.com>
- <20191104143838.GA2183570@kroah.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3594.4.19)
+        id S1730216AbfKEFTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 00:19:07 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:38182 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725973AbfKEFTH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 00:19:07 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA553prF106586;
+        Tue, 5 Nov 2019 05:18:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=Yuh8nhSJRJ/ZoUor/oy9hRqDcQxmnXcCZ8jg3FBxtSo=;
+ b=OX+1ep7kk6SYrYdlHA1gGsXcj8b8I1+8aKFrXAbsHkPvd27MUf21yannfjwQpK1X5/ab
+ BnDOYjRksJkqCPgNFFf4dtfTnunZQWXT+rBqpbkfcTRFa5IVzSxm27nyc/7P+Iitlgc8
+ hXmwMenl2CmcdoWMB0GVZ3Yo9t/R++3NVMyecRDdPGR0eeg1/r9faaw4wCr9pFOufvMZ
+ a0o0uWHLdd0wL+245PStzhVczgr6AlNXCLsrZnpoiqSN5WjpQK6O9+o2A6Z7IGFDTHZ4
+ coW+Dz/jF/tkyBjQQbZimv6vSB91GzoXbN/IaXTVIyL/BR1J64MdtePDmgOvkTgIlhKk XQ== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2w117tup18-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Nov 2019 05:18:49 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA553moj181884;
+        Tue, 5 Nov 2019 05:18:49 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2w3160kwn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 05 Nov 2019 05:18:49 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA55Ijeg016265;
+        Tue, 5 Nov 2019 05:18:45 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 04 Nov 2019 21:18:45 -0800
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Hannes Reinecke <hare@suse.de>,
+        Bart Van Assche <bvanassche@acm.org>,
+        "linux-scsi\@vger.kernel.org" <linux-scsi@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "usb-storage\@lists.one-eyed-alien.net" 
+        <usb-storage@lists.one-eyed-alien.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH v2] scsi: Fix scsi_get/set_resid() interface
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191030090847.25650-1-damien.lemoal@wdc.com>
+        <af516590-58dc-0377-5c54-ac63cffbafc8@acm.org>
+        <BYAPR04MB5816D4B866F2E7CC421E8488E7600@BYAPR04MB5816.namprd04.prod.outlook.com>
+        <a33afd2e-a7d6-5584-dc26-79fb8f3d6a97@acm.org>
+        <a640ee15-515b-6811-9883-48b49ead9276@suse.de>
+        <BYAPR04MB581685E630A8EA91902B2F9BE77E0@BYAPR04MB5816.namprd04.prod.outlook.com>
+Date:   Tue, 05 Nov 2019 00:18:42 -0500
+In-Reply-To: <BYAPR04MB581685E630A8EA91902B2F9BE77E0@BYAPR04MB5816.namprd04.prod.outlook.com>
+        (Damien Le Moal's message of "Tue, 5 Nov 2019 00:11:01 +0000")
+Message-ID: <yq1eeym52a5.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=555
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1911050040
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9431 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=633 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1911050040
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+Damien,
 
-> On Nov 4, 2019, at 10:38 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
-> 
-> On Tue, Oct 08, 2019 at 02:28:40AM +0800, Kai-Heng Feng wrote:
->> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
->> then connects to ASMedia xHCI's root hub:
->> 
->> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
->>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
->>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
->> 
->> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
->> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
->> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
->> 
->> The SMSC hub may disconnect after system resume from suspend. When this
->> happens, the reset resume attempt fails, and the last resort to disable
->> the port and see something comes up later, also fails.
->> 
->> When the issue occurs, the link state stays in eSS.Disabled state
->> despite the warm reset attempts. The USB spec mentioned this can be
->> caused by invalid VBus, and after some expiremets, it does show that the
->> SMSC hub can be brought back after a power cycle.
->> 
->> So let's power cycle the port at the end of reset resume attempt, if
->> it's in eSS.Disabled state.
->> 
->> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
->> ---
->> drivers/usb/core/hub.c | 21 +++++++++++++++++++--
->> 1 file changed, 19 insertions(+), 2 deletions(-)
->> 
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index 6655a6a1651b..5f50aca7cf67 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -2739,20 +2739,33 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
->> 		|| link_state == USB_SS_PORT_LS_COMP_MOD;
->> }
->> 
->> +static bool hub_port_power_cycle_required(struct usb_hub *hub, int port1,
->> +		u16 portstatus)
->> +{
->> +	u16 link_state;
->> +
->> +	if (!hub_is_superspeed(hub->hdev))
->> +		return false;
->> +
->> +	link_state = portstatus & USB_PORT_STAT_LINK_STATE;
->> +	return link_state == USB_SS_PORT_LS_SS_DISABLED;
->> +}
->> +
->> static void hub_port_power_cycle(struct usb_hub *hub, int port1)
->> {
->> +	struct usb_port *port_dev = hub->ports[port1  - 1];
->> 	int ret;
->> 
->> 	ret = usb_hub_set_port_power(hub, port1, false);
->> 	if (ret) {
->> -		dev_info(&udev->dev, "failed to disable port power\n");
->> +		dev_info(&port_dev->dev, "failed to disable port power\n");
->> 		return;
->> 	}
->> 
->> 	msleep(2 * hub_power_on_good_delay(hub));
->> 	ret = usb_hub_set_port_power(hub, port1, true);
->> 	if (ret) {
->> -		dev_info(&udev->dev, "failed to enable port power\n");
->> +		dev_info(&port_dev->dev, "failed to enable port power\n");
->> 		return;
->> 	}
->> 
->> @@ -3600,6 +3613,10 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
->> 	if (status < 0) {
->> 		dev_dbg(&udev->dev, "can't resume, status %d\n", status);
->> 		hub_port_logical_disconnect(hub, port1);
->> +		if (hub_port_power_cycle_required(hub, port1, portstatus)) {
->> +			dev_info(&udev->dev, "device in disabled state, attempt power cycle\n");
-> 
-> Why dev_info()?  Shouldn't we only care if this fails?
+> The SG driver can make use of this field to keep the io header resid
+> as an int, with negative values indicating overflows and positive
+> values underflows.
 
-I’ll lower the level to dev_dbg().
+I am all for synthesizing what SG returns to userland.
 
-> 
->> +			hub_port_power_cycle(hub, port1);
-> 
-> Weren't we only going to do this for the broken types of devices?  And
-> not for everything?
+That is also the case in the context of Hannes' SCSI result revamp. I
+would much prefer to have well-defined and consistent internal kernel
+status fields and then transmogrify those into something compatible with
+what userland applications might expect. As opposed to perpetuating the
+train wreck that is the current scsi_cmnd result.
 
-From what I can understand from the spec, if the device is in eSS.Disabled state, there’s no way out.
-So "power cycling as a last resort” is indeed targets everything.
-
-Kai-Heng
-
-> thanks,
-> 
-> greg k-h
-
+-- 
+Martin K. Petersen	Oracle Linux Engineering
