@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63992EF794
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 09:55:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E66EF773
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 09:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730596AbfKEIy4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 03:54:56 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39903 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730573AbfKEIyz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 03:54:55 -0500
-Received: by mail-lf1-f67.google.com with SMTP id 195so14449915lfj.6
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 00:54:54 -0800 (PST)
+        id S1730601AbfKEImW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 03:42:22 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:46720 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730541AbfKEImV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 03:42:21 -0500
+Received: by mail-lj1-f195.google.com with SMTP id e9so7498787ljp.13
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 00:42:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=4afoqspkcc5RK9XOk5fmMpLRXrhOEIrMZ5sEh9PN/9Y=;
-        b=YyD/07VVYLCToxmXrkPnWcNVGfFoZUrf1sJfcy2fsn0/U8Aumeo884gyNnpnifa8Bv
-         ZyGX0OH6eTu0/q01GiXsqYMNSfRqe2hWH/Q2JLuYkwIlBPQwJnQvl5BRsWVYqtdI3czY
-         UrBjL/qJi/5AAOxSRmCdCoh4tKLN/TfImUdRZpSvABRRn1rzzaNfhJG6NVGu9lxVnsB9
-         4jMeAT5h3cF6vB0IAaB09K0MZEcMA3by0xn7OYGTFtNS4jk8VrBJIuhepYr/Zuwpip9H
-         C0DZ6TdwqVkgdjNsx1jAKzDW5EoEq2fJicxAas2omGMAm4BW5RYnrJuPbohJUIQUeDam
-         N2Bw==
-X-Gm-Message-State: APjAAAXRULijT16F8pDSLQDOb2CjalPNmg8aLW2EyTwGzE/ThRR3npSz
-        nhIe+jKv4ckmAdDoti8NrI8=
-X-Google-Smtp-Source: APXvYqy5inEdoGPeJOoHkLb9eiBFVdXaJe6OPaBXWVAVFc7Y8Q1DejKXrD6QVsGByN96uWPmc6NrQQ==
-X-Received: by 2002:ac2:4989:: with SMTP id f9mr1706265lfl.42.1572944093536;
-        Tue, 05 Nov 2019 00:54:53 -0800 (PST)
+        bh=KzD2kRMqXBk5Yohy1WZyW20m/TFgSNbBGXd2XRm4RLc=;
+        b=UspIH8ziMEILjxCXVD6s9T7GRZ0p+hG+bLP07jBY0GEOwUsz0K8RkL3m3ihnmkji1q
+         daHCpeHl1hvi6FijZj70w//htg98N8ZMU2Gr976JUuzF7m1oB2BQsw8BeiyTR8rufLxl
+         EeQKAGhjOCl3njs6L84FsYg0MgGcMQ2JcpF8U/hbnCfjQV6lyFSHsWZbZXVJCIGTR7pk
+         P5tGOwn1fa3DjYxyDmEUej7tyuLljHQdRjVdoTwMRsi6O/XqLzFRdoj0a8fTbYWd25pM
+         ywGP8IiqoJX+IEG2sj1fJZl0jM+QBKahUqR/jFm9hEfB+b/OvPI/1pAq71fitJlOOEPT
+         gmBw==
+X-Gm-Message-State: APjAAAW34cECWNxjvB8vr0AvcA03kc0J0JbO9hncmQmcviwxlitmrgYS
+        /XOKJJpHC2oUReKeggiPMWE5P0fG
+X-Google-Smtp-Source: APXvYqz/Tf/zHFQUZBgQpN4ukW+wBjTaq52O80nCjCrse6r6pgdXd/roW482mpw8wruO4jF68kn7GA==
+X-Received: by 2002:a05:651c:28a:: with SMTP id b10mr3113831ljo.124.1572943339825;
+        Tue, 05 Nov 2019 00:42:19 -0800 (PST)
 Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id f3sm2342885lfp.0.2019.11.05.00.54.52
+        by smtp.gmail.com with ESMTPSA id e22sm10521721ljg.73.2019.11.05.00.42.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 00:54:52 -0800 (PST)
+        Tue, 05 Nov 2019 00:42:16 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@xi.terra>)
-        id 1iRuPm-0004HX-Cr; Tue, 05 Nov 2019 09:42:14 +0100
+        id 1iRuPm-0004Hc-G4; Tue, 05 Nov 2019 09:42:14 +0100
 From:   Johan Hovold <johan@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Juergen Stuber <starblue@users.sourceforge.net>,
         legousb-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
         Johan Hovold <johan@kernel.org>
-Subject: [PATCH 13/14] USB: legousbtower: drop superfluous brackets
-Date:   Tue,  5 Nov 2019 09:41:51 +0100
-Message-Id: <20191105084152.16322-14-johan@kernel.org>
+Subject: [PATCH 14/14] USB: legousbtower: drop superfluous newlines
+Date:   Tue,  5 Nov 2019 09:41:52 +0100
+Message-Id: <20191105084152.16322-15-johan@kernel.org>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191105084152.16322-1-johan@kernel.org>
 References: <20191105084152.16322-1-johan@kernel.org>
@@ -54,79 +54,58 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop superfluous brackets around single-line blocks.
-
-Also add missing white space around operators in a for-expression being
-modified.
+Drop some superfluous newlines before conditionals which made the code
+harder to read.
 
 Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/misc/legousbtower.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/usb/misc/legousbtower.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
 diff --git a/drivers/usb/misc/legousbtower.c b/drivers/usb/misc/legousbtower.c
-index 6f34b3802332..6b7ea80d5876 100644
+index 6b7ea80d5876..ab4b98b04115 100644
 --- a/drivers/usb/misc/legousbtower.c
 +++ b/drivers/usb/misc/legousbtower.c
-@@ -481,12 +481,10 @@ static __poll_t tower_poll(struct file *file, poll_table *wait)
- 	poll_wait(file, &dev->write_wait, wait);
+@@ -312,7 +312,6 @@ static int tower_open(struct inode *inode, struct file *file)
+ 	int result;
  
- 	tower_check_for_read_packet(dev);
--	if (dev->read_packet_length > 0) {
-+	if (dev->read_packet_length > 0)
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	}
--	if (!dev->interrupt_out_busy) {
-+	if (!dev->interrupt_out_busy)
- 		mask |= EPOLLOUT | EPOLLWRNORM;
--	}
+ 	reset_reply = kmalloc(sizeof(*reset_reply), GFP_KERNEL);
+-
+ 	if (!reset_reply) {
+ 		retval = -ENOMEM;
+ 		goto exit;
+@@ -322,7 +321,6 @@ static int tower_open(struct inode *inode, struct file *file)
+ 	subminor = iminor(inode);
  
- 	return mask;
- }
-@@ -532,9 +530,8 @@ static ssize_t tower_read(struct file *file, char __user *buffer, size_t count,
- 		goto unlock_exit;
- 	}
+ 	interface = usb_find_interface(&tower_driver, subminor);
+-
+ 	if (!interface) {
+ 		pr_err("error, can't find device for minor %d\n", subminor);
+ 		retval = -ENODEV;
+@@ -409,7 +407,6 @@ static int tower_release(struct inode *inode, struct file *file)
+ 	int retval = 0;
  
--	if (read_timeout) {
-+	if (read_timeout)
- 		timeout = jiffies + msecs_to_jiffies(read_timeout);
--	}
+ 	dev = file->private_data;
+-
+ 	if (dev == NULL) {
+ 		retval = -ENODEV;
+ 		goto exit;
+@@ -802,7 +799,6 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
+ 	dev->interrupt_out_interval = interrupt_out_interval ? interrupt_out_interval : dev->interrupt_out_endpoint->bInterval;
  
- 	/* wait for data */
- 	tower_check_for_read_packet(dev);
-@@ -544,9 +541,8 @@ static ssize_t tower_read(struct file *file, char __user *buffer, size_t count,
- 			goto unlock_exit;
- 		}
- 		retval = wait_event_interruptible_timeout(dev->read_wait, dev->interrupt_in_done, dev->packet_timeout_jiffies);
--		if (retval < 0) {
-+		if (retval < 0)
- 			goto unlock_exit;
--		}
+ 	get_version_reply = kmalloc(sizeof(*get_version_reply), GFP_KERNEL);
+-
+ 	if (!get_version_reply) {
+ 		retval = -ENOMEM;
+ 		goto error;
+@@ -835,7 +831,6 @@ static int tower_probe(struct usb_interface *interface, const struct usb_device_
+ 	usb_set_intfdata(interface, dev);
  
- 		/* reset read timeout during read or write activity */
- 		if (read_timeout
-@@ -572,9 +568,8 @@ static ssize_t tower_read(struct file *file, char __user *buffer, size_t count,
- 	spin_lock_irq(&dev->read_buffer_lock);
- 	dev->read_buffer_length -= bytes_to_read;
- 	dev->read_packet_length -= bytes_to_read;
--	for (i=0; i<dev->read_buffer_length; i++) {
-+	for (i = 0; i < dev->read_buffer_length; i++)
- 		dev->read_buffer[i] = dev->read_buffer[i+bytes_to_read];
--	}
- 	spin_unlock_irq(&dev->read_buffer_lock);
- 
- 	retval = bytes_to_read;
-@@ -625,9 +620,8 @@ static ssize_t tower_write(struct file *file, const char __user *buffer, size_t
- 		}
- 		retval = wait_event_interruptible(dev->write_wait,
- 						  !dev->interrupt_out_busy);
--		if (retval) {
-+		if (retval)
- 			goto unlock_exit;
--		}
- 	}
- 
- 	/* write the data into interrupt_out_buffer from userspace */
+ 	retval = usb_register_dev(interface, &tower_class);
+-
+ 	if (retval) {
+ 		/* something prevented us from registering this driver */
+ 		dev_err(idev, "Not able to get a minor for this device.\n");
 -- 
 2.23.0
 
