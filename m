@@ -2,121 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8AFF018F
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 16:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BA5F0220
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 17:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389546AbfKEPfY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 10:35:24 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45910 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389359AbfKEPfX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 5 Nov 2019 10:35:23 -0500
-Received: from localhost (unknown [62.119.166.9])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2390029AbfKEQDK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 11:03:10 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:42409 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2389944AbfKEQDJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 11:03:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572969788;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pLj9LlV805f/L7J5FbyPXxXB07oTibsiCCSGb45ogQg=;
+        b=DAxnbXOel7GR/PEe2t6Mrv+03Xuzy/G2FGswsUfLa3WuDKMrcLU58JE3w5zv0Q9mvuNpPY
+        I1VMJVfrzlKq4LH4UyFmZKsbkrhlnt52r9X2+0oUwwfFrHC4TmVAq484vO9YuFSB3J2CDA
+        meGCgBaj17ZWJu0UuOPTyX1me2I6xBY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-350-9SUU8LceOXeOLaVGd4SGTA-1; Tue, 05 Nov 2019 11:03:06 -0500
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 73B4B2087E;
-        Tue,  5 Nov 2019 15:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572968122;
-        bh=Cbfu3/n7gIxvq4upIXJWRu4k+r0dK46FEC6wlFd+xTQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uDGbHOJtbbPko/WrESWxDR7Kk2ZYDJyp8QDmRxfcw7JYrte92PPXyiRCURS9oOoAs
-         UD2slh/B6oZatxV50V538Z2qOi1YsHIjESlcOSY5or2DIPEXmiRy04irh/RLAnykpF
-         PuGMJ27rcsBKo+4amwx4pUlKieFQMdbBYfQUXnGE=
-Date:   Tue, 5 Nov 2019 16:35:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Oliver Neukum <oneukum@suse.com>,
-        syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: KMSAN: uninit-value in cdc_ncm_set_dgram_size
-Message-ID: <20191105153516.GA2617867@kroah.com>
-References: <00000000000013c4c1059625a655@google.com>
- <87ftj32v6y.fsf@miraculix.mork.no>
- <1572952516.2921.6.camel@suse.com>
- <875zjy33z2.fsf@miraculix.mork.no>
- <CAG_fn=XXGX5U9oJ2bJDHCwVcp8M+rGDvFDTt4kWFiyWoqL8vAA@mail.gmail.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B43698017DD;
+        Tue,  5 Nov 2019 16:03:03 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 980C81FA;
+        Tue,  5 Nov 2019 16:03:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
+References: <157262963995.13142.5568934007158044624.stgit@warthog.procyon.org.uk>
+To:     torvalds@linux-foundation.org, viro@zeniv.linux.org.uk
+Cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Details on the UAPI of implementing notifications on pipes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG_fn=XXGX5U9oJ2bJDHCwVcp8M+rGDvFDTt4kWFiyWoqL8vAA@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-ID: <18579.1572969779.1@warthog.procyon.org.uk>
+Date:   Tue, 05 Nov 2019 16:02:59 +0000
+Message-ID: <18580.1572969779@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-MC-Unique: 9SUU8LceOXeOLaVGd4SGTA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 02:55:09PM +0100, Alexander Potapenko wrote:
-> + Greg K-H
-> On Tue, Nov 5, 2019 at 1:25 PM Bjørn Mork <bjorn@mork.no> wrote:
-> >
-> > Oliver Neukum <oneukum@suse.com> writes:
-> > > Am Montag, den 04.11.2019, 22:22 +0100 schrieb Bjørn Mork:
-> > >> This looks like a false positive to me. max_datagram_size is two bytes
-> > >> declared as
-> > >>
-> > >>         __le16 max_datagram_size;
-> > >>
-> > >> and the code leading up to the access on drivers/net/usb/cdc_ncm.c:587
-> > >> is:
-> > >>
-> > >>         /* read current mtu value from device */
-> > >>         err = usbnet_read_cmd(dev, USB_CDC_GET_MAX_DATAGRAM_SIZE,
-> > >>                               USB_TYPE_CLASS | USB_DIR_IN | USB_RECIP_INTERFACE,
-> > >>                               0, iface_no, &max_datagram_size, 2);
-> > >
-> > > At this point err can be 1.
-> > >
-> > >>         if (err < 0) {
-> > >>                 dev_dbg(&dev->intf->dev, "GET_MAX_DATAGRAM_SIZE failed\n");
-> > >>                 goto out;
-> > >>         }
-> > >>
-> > >>         if (le16_to_cpu(max_datagram_size) == ctx->max_datagram_size)
-> > >>
-> > >>
-> > >>
-> > >> AFAICS, there is no way max_datagram_size can be uninitialized here.
-> > >> usbnet_read_cmd() either read 2 bytes into it or returned an error,
-> > >
-> > > No. usbnet_read_cmd() will return the number of bytes transfered up
-> > > to the number requested or an error.
-> >
-> > Ah, OK. So that could be fixed with e.g.
-> >
-> >   if (err < 2)
-> >        goto out;
-> It'd better be (err < sizeof(max_datagram_size)), and probably in the
-> call to usbnet_read_cmd() as well.
-> >
-> > Or would it be better to add a strict length checking variant of this
-> > API?  There are probably lots of similar cases where we expect a
-> > multibyte value and a short read is (or should be) considered an error.
-> > I can't imagine any situation where we want a 2, 4, 6 or 8 byte value
-> > and expect a flexible length returned.
-> This is really a widespread problem on syzbot: a lot of USB devices
-> use similar code calling usb_control_msg() to read from the device and
-> not checking that the buffer is fully initialized.
-> 
-> Greg, do you know how often usb_control_msg() is expected to read less
-> than |size| bytes? Is it viable to make it return an error if this
-> happens?
-> Almost nobody is using this function correctly (i.e. checking that it
-> has read the whole buffer before accessing it).
+So to implement notifications on top of pipes, I've hacked it together a bi=
+t
+in the following ways:
 
-It could return less than size if the endpoint size isn't the same as
-the message.  I think.  It's been a long time since I've read the USB
-spec in that area, but usually if the size is "short" then status should
-also be set saying something went wrong, right?  Ah wait, you are
-playing the "malicious device" card, I think we always just need to
-check the thing :(
+ (1) I'm passing O_TMPFILE to the pipe2() system call to indicate that you
+     want a notifications pipe.  This prohibits splice and co. from being
+     called on it as I don't want to have to try to fix iov_iter_revert() t=
+o
+     handle kernel notifications being intermixed with splices.
 
-sorry,
+     The choice of O_TMPFILE was just for convenience, but it needs to be
+     something different.  I could, for instance, add a constant,
+     O_NOTIFICATION_PIPE with the same *value* as O_TMPFILE.  I don't think
+     it's likely that it will make sense to use O_TMPFILE with a pipe, but =
+I
+     also don't want to eat up another O_* constant just for this.
 
-greg k-h
+     Unfortunately, pipe2() doesn't have any other arguments into from whic=
+h I
+     can steal a bit.
+
+ (2) I've added a pair of ioctls to configure the notifications bits.  They=
+'re
+     ioctls as I just reused the ioctl code from my devmisc driver.  Should=
+ I
+     use fcntl() instead, such as is done for F_SETPIPE_SZ?
+
+     The ioctls do two things: set the ring size to a number of slots (so
+     similarish to F_SETPIPE_SZ) and set filters.
+
+Any thoughts on how better to represent these bits?
+
+Thanks,
+David
+
