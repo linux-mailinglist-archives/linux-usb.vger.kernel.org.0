@@ -2,131 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70403EF438
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 04:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F36CEF4B6
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 06:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387466AbfKED4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 4 Nov 2019 22:56:21 -0500
-Received: from ec2-52-39-95-60.us-west-2.compute.amazonaws.com ([52.39.95.60]:37503
-        "EHLO ip-172-31-12-161.us-west-2.compute.internal"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387443AbfKED4V (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 4 Nov 2019 22:56:21 -0500
-X-Greylist: delayed 600 seconds by postgrey-1.27 at vger.kernel.org; Mon, 04 Nov 2019 22:56:20 EST
-Received: by ip-172-31-12-161.us-west-2.compute.internal (Postfix, from userid 110)
-        id 781126641F; Tue,  5 Nov 2019 03:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=konbu.org;
-        s=default; t=1572925378;
-        bh=9dAITeCukh7Es6PZQFhpkx/Zm2Noq6O+cDAHH7CuDdM=;
-        h=Date:From:To:Cc:Subject:Message-ID;
-        b=HDSjnqkveb36+dMSl0zquPhARVPlmquIB9wR5+5Lpayu9moXDM3Ir2nnWf7DUfU0e
-         0CLH9FkuVIJMQHd9Iyt1y17AcLCo7NVT4qpGK4VcPtbosPWCnZSbgBwtsOucaMaFAf
-         d6cl0NHisMO3eX6XbO2dhZcUWWD5YKgNUAph8AgY=
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        ip-172-31-12-161.us-west-2.compute.internal
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=5.0 tests=ALL_TRUSTED
-        autolearn=unavailable autolearn_force=no version=3.4.2
-Received: from tungsten (178.231.214.202.rev.vmobile.jp [202.214.231.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ip-172-31-12-161.us-west-2.compute.internal (Postfix) with ESMTPSA id B063A605E5;
-        Tue,  5 Nov 2019 03:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=konbu.org;
-        s=default; t=1572925376;
-        bh=9dAITeCukh7Es6PZQFhpkx/Zm2Noq6O+cDAHH7CuDdM=;
-        h=Date:From:To:Cc:Subject:Message-ID;
-        b=upF4ekXIc6ApcwGybjztjnurbg9j/gWo7ABXKPWKJIR+7H7CFaQk0C/dfbHweLOvG
-         OQQTlEeEBZsLoGvDY18GuPydRxmUC2yizGG75VJeO6b+3B3WsCyrfmzF1qc0jaVjz0
-         C8gq13LMLGTPgBPsT1/CUAdpJCQ26muKrz2BESS4=
-Date:   Tue, 5 Nov 2019 12:39:51 +0900
-From:   Boris ARZUR <boris@konbu.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Gevorg Sahakyan <Gevorg.Sahakyan@synopsys.com>,
-        John Youn <John.Youn@synopsys.com>,
-        William Wu <william.wu@rock-chips.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: Re: [PATCH] usb: dwc2: extend treatment for incomplete transfer
-Message-ID: <20191105033951.GA3498@tungsten>
-References: <20191105032922.GA3041@tungsten>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191105032922.GA3041@tungsten>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        id S1726988AbfKEFOY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Nov 2019 00:14:24 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:37263 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfKEFOY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 00:14:24 -0500
+Received: from mail-pf1-f197.google.com ([209.85.210.197])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iRrAb-00048b-VR
+        for linux-usb@vger.kernel.org; Tue, 05 Nov 2019 05:14:22 +0000
+Received: by mail-pf1-f197.google.com with SMTP id l20so15299844pff.6
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2019 21:14:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=JprAQtkugXMNo/gg2BE2hUTsxxRNgFiIwg+1mQgKeVY=;
+        b=DslXYeYPctfXwO3wi+UhjJ01pLuXF+0QcMVkfwcW0HSbEMCgXPp2EXMPmSvJOmKeOT
+         FaDql5Tj39KluxYVnaSC1EAuQ6HK5cYx0BT6LitH0SmL392oj+WiLcAF2ipfV1CuS3sV
+         x6K8t6fbOF80DZf9LmP605rRnu7kiY6sgIdg8RL6rHFpRAQMKs5uSuel7R4wC+DMmJIK
+         3jRqcB/0iL5Aa1pu3ecsi1XQRJbcPVT4OD3oWym74RiuDXQztl4TmvoaFq2Z3pOFMi6X
+         3ucCzT1N2hdi8YLnRt/mfu+UQXcjhXaK/7qB7end3Dn1luNAMyXc4KBH70hgUsi/AiKd
+         QB1Q==
+X-Gm-Message-State: APjAAAV0qvdADPublq6wZkxVNLdV0701czwy+SGVm6KhABMD8yb0Nvyx
+        IO3Z6V2FP6UTpJ6/y3p7k62AsoQ//JGwndR9t/PpvTXoJGlABUPt7A+dE/AOVnZyOnfpbDK36Ad
+        XEY3rtSG2bLcKwdSL9RKJR4R3gvI+ziCh6KpkJg==
+X-Received: by 2002:a62:1b4a:: with SMTP id b71mr35413447pfb.167.1572930860594;
+        Mon, 04 Nov 2019 21:14:20 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxLeAQ3fElRGQNEY/4syv8RZhQVelT90aGVjAH0F7fIO1ra0NmQdetGZnHO/2G4Z3YOLxkD8Q==
+X-Received: by 2002:a62:1b4a:: with SMTP id b71mr35413421pfb.167.1572930860214;
+        Mon, 04 Nov 2019 21:14:20 -0800 (PST)
+Received: from [10.101.46.71] (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id t8sm8783700pji.11.2019.11.04.21.14.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 04 Nov 2019 21:14:19 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3594.4.19\))
+Subject: Re: [PATCH 2/2] usb: core: Attempt power cycle when port is in
+ eSS.Disabled state
+From:   Kai Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <20191104143838.GA2183570@kroah.com>
+Date:   Tue, 5 Nov 2019 13:14:16 +0800
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <CFDCF282-FBBC-43BC-9E6B-093B752E5C33@canonical.com>
+References: <20191007182840.4867-1-kai.heng.feng@canonical.com>
+ <20191007182840.4867-2-kai.heng.feng@canonical.com>
+ <20191104143838.GA2183570@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+X-Mailer: Apple Mail (2.3594.4.19)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-First post in this list, please be lenient.
 
-Replying to self to give some context: I'm on a Asus c201 (rk3288)
-and I see some crashes with cdc_ether.
+> On Nov 4, 2019, at 10:38 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
+> 
+> On Tue, Oct 08, 2019 at 02:28:40AM +0800, Kai-Heng Feng wrote:
+>> On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
+>> then connects to ASMedia xHCI's root hub:
+>> 
+>> /:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
+>>    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
+>>            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+>> 
+>> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+>> Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
+>> Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+>> 
+>> The SMSC hub may disconnect after system resume from suspend. When this
+>> happens, the reset resume attempt fails, and the last resort to disable
+>> the port and see something comes up later, also fails.
+>> 
+>> When the issue occurs, the link state stays in eSS.Disabled state
+>> despite the warm reset attempts. The USB spec mentioned this can be
+>> caused by invalid VBus, and after some expiremets, it does show that the
+>> SMSC hub can be brought back after a power cycle.
+>> 
+>> So let's power cycle the port at the end of reset resume attempt, if
+>> it's in eSS.Disabled state.
+>> 
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+>> ---
+>> drivers/usb/core/hub.c | 21 +++++++++++++++++++--
+>> 1 file changed, 19 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index 6655a6a1651b..5f50aca7cf67 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -2739,20 +2739,33 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
+>> 		|| link_state == USB_SS_PORT_LS_COMP_MOD;
+>> }
+>> 
+>> +static bool hub_port_power_cycle_required(struct usb_hub *hub, int port1,
+>> +		u16 portstatus)
+>> +{
+>> +	u16 link_state;
+>> +
+>> +	if (!hub_is_superspeed(hub->hdev))
+>> +		return false;
+>> +
+>> +	link_state = portstatus & USB_PORT_STAT_LINK_STATE;
+>> +	return link_state == USB_SS_PORT_LS_SS_DISABLED;
+>> +}
+>> +
+>> static void hub_port_power_cycle(struct usb_hub *hub, int port1)
+>> {
+>> +	struct usb_port *port_dev = hub->ports[port1  - 1];
+>> 	int ret;
+>> 
+>> 	ret = usb_hub_set_port_power(hub, port1, false);
+>> 	if (ret) {
+>> -		dev_info(&udev->dev, "failed to disable port power\n");
+>> +		dev_info(&port_dev->dev, "failed to disable port power\n");
+>> 		return;
+>> 	}
+>> 
+>> 	msleep(2 * hub_power_on_good_delay(hub));
+>> 	ret = usb_hub_set_port_power(hub, port1, true);
+>> 	if (ret) {
+>> -		dev_info(&udev->dev, "failed to enable port power\n");
+>> +		dev_info(&port_dev->dev, "failed to enable port power\n");
+>> 		return;
+>> 	}
+>> 
+>> @@ -3600,6 +3613,10 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
+>> 	if (status < 0) {
+>> 		dev_dbg(&udev->dev, "can't resume, status %d\n", status);
+>> 		hub_port_logical_disconnect(hub, port1);
+>> +		if (hub_port_power_cycle_required(hub, port1, portstatus)) {
+>> +			dev_info(&udev->dev, "device in disabled state, attempt power cycle\n");
+> 
+> Why dev_info()?  Shouldn't we only care if this fails?
 
-Here is how to repro:
-- create heavy usb network load: I tether my phone and
-  netcat some file from it;
-- create heavy CPU load (pushd linux; make -j 6)
-- observe kernel messages:
-dwc2 ff580000.usb: dwc2_hc_chhltd_intr_dma: Channel 7 - ChHltd set, but reason is unknown
-dwc2 ff580000.usb: hcint 0x00000002, intsts 0x04200021
-dwc2 ff580000.usb: ep_type 0x00000002 bulk /* ba: ADDED LOG */
+I’ll lower the level to dev_dbg().
 
-The kernel will write to 0 at line 2494 below in file drivers/usb/dwc2/hcd.c
-2474 static void dwc2_free_dma_aligned_buffer(struct urb *urb)
-2475 {
-/* ... */
-2482 	/* Restore urb->transfer_buffer from the end of the allocated area */
-2483 	memcpy(&stored_xfer_buffer,
-2484 	       PTR_ALIGN(urb->transfer_buffer + urb->transfer_buffer_length,
-2485 			 dma_get_cache_alignment()),
-2486 	       sizeof(urb->transfer_buffer));
-/* ... */
-2494 		memcpy(stored_xfer_buffer, urb->transfer_buffer, length);
-/* ... */
-2500 }
+> 
+>> +			hub_port_power_cycle(hub, port1);
+> 
+> Weren't we only going to do this for the broken types of devices?  And
+> not for everything?
 
-The fix I propose has been working fine on my machine, but I confess
-I am less than familiar with this area...
+From what I can understand from the spec, if the device is in eSS.Disabled state, there’s no way out.
+So "power cycling as a last resort” is indeed targets everything.
 
-My guess is that the kernel misses some deadlines due to contention and we
-see channel halts. I tried treating these as we do the other (with other end
-point types) and it solved the crashes. I verified on next-20191030 that the
-data is correctly transfered over the network (no corruption).
+Kai-Heng
 
-Thank you & regards,
-Boris.
+> thanks,
+> 
+> greg k-h
 
->Channel halt can happen with BULK endpoints when the
->cpu is under high load. Treating it as an error leads
->to a null-pointer dereference in dwc2_free_dma_aligned_buffer().
->
->Signed-off-by: Boris Arzur <boris@konbu.org>
->---
-> drivers/usb/dwc2/hcd_intr.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/usb/dwc2/hcd_intr.c b/drivers/usb/dwc2/hcd_intr.c
->index a052d39b4375..697fed530aeb 100644
->--- a/drivers/usb/dwc2/hcd_intr.c
->+++ b/drivers/usb/dwc2/hcd_intr.c
->@@ -1944,7 +1944,8 @@ static void dwc2_hc_chhltd_intr_dma(struct dwc2_hsotg
->*hsotg,
->                         */
->                        dwc2_hc_ack_intr(hsotg, chan, chnum, qtd);
->                } else {
->-                       if (chan->ep_type == USB_ENDPOINT_XFER_INT ||
->+                       if (chan->ep_type == USB_ENDPOINT_XFER_BULK ||
->+                           chan->ep_type == USB_ENDPOINT_XFER_INT ||
->                            chan->ep_type == USB_ENDPOINT_XFER_ISOC) {
->                                /*
->                                 * A periodic transfer halted with no other
->--
->2.23.0
