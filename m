@@ -2,106 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C49EAEFB80
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 11:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2193BEFC57
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 12:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388759AbfKEKgs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 05:36:48 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41443 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388695AbfKEKgs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 05:36:48 -0500
-Received: by mail-lf1-f65.google.com with SMTP id j14so14706109lfb.8
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 02:36:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=IKV85RxvHyY4pFWFHgYAEhT0nXOYN14ot7DMiLlwbhY=;
-        b=nfq8XfvjctiD/Q9985dQ0rbj1jXJMPuIdhtBmY7picB9yOvXW9f0E/wNi4MXFtX0lJ
-         b5l46XO90Tqw621cu/tviKWjRBU051DzoFnGRKfknwg3/+LVeM99paIFomRmXndZDJA6
-         gQB0QZL0Kgcn6Dj7sAWdLmjCdp6Omel4oeIRZN0K0EBicHZmJlnUpN3SQzxDlnN8CrIN
-         Laa/SWMYgxwuwO/zk4i1bxjUtIUtksamec06CMmdX7tup89+T5vIW4TNJ43hMNDBYY5v
-         eaMKNvoJAnPPGgl4u3jmbH0VHWmd9ePaEjWkNfWRAIyZ20BA/brGNi4eZr74br66XhNF
-         /PxQ==
-X-Gm-Message-State: APjAAAWWyjchDGW3TPZgwMCSSDoU/kYi46tm/45RXJhfC5Sh2juEsIzG
-        gudGB89qwF650C/qDzdyzZs=
-X-Google-Smtp-Source: APXvYqx7AHCv3/M2NZli90sLj0EJ6yPWAqHry3LPESPGyXWX22ex2K0Kdyl3McABJGEwMpvhGeBvLg==
-X-Received: by 2002:a19:a40c:: with SMTP id q12mr7865413lfc.65.1572950205502;
-        Tue, 05 Nov 2019 02:36:45 -0800 (PST)
-Received: from xi.terra (c-51f1e055.07-184-6d6c6d4.bbcust.telenor.se. [85.224.241.81])
-        by smtp.gmail.com with ESMTPSA id k19sm8809567ljg.18.2019.11.05.02.36.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 02:36:43 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1iRwCZ-0001IU-AA; Tue, 05 Nov 2019 11:36:43 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 3/3] USB: idmouse: clean up runaway white space
-Date:   Tue,  5 Nov 2019 11:36:38 +0100
-Message-Id: <20191105103638.4929-4-johan@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191105103638.4929-1-johan@kernel.org>
-References: <20191105103638.4929-1-johan@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1730764AbfKEL17 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 06:27:59 -0500
+Received: from mx2.suse.de ([195.135.220.15]:35292 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730624AbfKEL16 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 5 Nov 2019 06:27:58 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id AE44FB3D1;
+        Tue,  5 Nov 2019 11:27:56 +0000 (UTC)
+Message-ID: <1572952316.2921.3.camel@suse.com>
+Subject: Re: KMSAN: uninit-value in cdc_ncm_set_dgram_size
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+0631d878823ce2411636@syzkaller.appspotmail.com>,
+        davem@davemloft.net, glider@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Tue, 05 Nov 2019 12:11:56 +0100
+In-Reply-To: <00000000000013c4c1059625a655@google.com>
+References: <00000000000013c4c1059625a655@google.com>
+Content-Type: multipart/mixed; boundary="=-tHZcmQBfFGLiVVm2/Dfe"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Drop space between function identifiers and opening parenthesis, which
-was no longer even used consistently within the driver.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/misc/idmouse.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+--=-tHZcmQBfFGLiVVm2/Dfe
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-diff --git a/drivers/usb/misc/idmouse.c b/drivers/usb/misc/idmouse.c
-index 9b9d5df829d5..4afb5ddfd361 100644
---- a/drivers/usb/misc/idmouse.c
-+++ b/drivers/usb/misc/idmouse.c
-@@ -56,7 +56,7 @@ static const struct usb_device_id idmouse_table[] = {
- #define FTIP_SCROLL  0x24
- 
- #define ftip_command(dev, command, value, index) \
--	usb_control_msg (dev->udev, usb_sndctrlpipe (dev->udev, 0), command, \
-+	usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0), command, \
- 	USB_TYPE_VENDOR | USB_RECIP_ENDPOINT | USB_DIR_OUT, value, index, NULL, 0, 1000)
- 
- MODULE_DEVICE_TABLE(usb, idmouse_table);
-@@ -157,8 +157,8 @@ static int idmouse_create_image(struct usb_idmouse *dev)
- 
- 	/* loop over a blocking bulk read to get data from the device */
- 	while (bytes_read < IMGSIZE) {
--		result = usb_bulk_msg (dev->udev,
--				usb_rcvbulkpipe (dev->udev, dev->bulk_in_endpointAddr),
-+		result = usb_bulk_msg(dev->udev,
-+				usb_rcvbulkpipe(dev->udev, dev->bulk_in_endpointAddr),
- 				dev->bulk_in_buffer + bytes_read,
- 				dev->bulk_in_size, &bulk_read, 5000);
- 		if (result < 0) {
-@@ -222,7 +222,7 @@ static int idmouse_open(struct inode *inode, struct file *file)
- 	int result;
- 
- 	/* get the interface from minor number and driver information */
--	interface = usb_find_interface (&idmouse_driver, iminor (inode));
-+	interface = usb_find_interface(&idmouse_driver, iminor(inode));
- 	if (!interface)
- 		return -ENODEV;
- 
-@@ -246,7 +246,7 @@ static int idmouse_open(struct inode *inode, struct file *file)
- 		result = usb_autopm_get_interface(interface);
- 		if (result)
- 			goto error;
--		result = idmouse_create_image (dev);
-+		result = idmouse_create_image(dev);
- 		usb_autopm_put_interface(interface);
- 		if (result)
- 			goto error;
--- 
-2.23.0
+Am Mittwoch, den 30.10.2019, 12:22 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    96c6c319 net: kasan: kmsan: support CONFIG_GENERIC_CSUM on..
+> git tree:       https://github.com/google/kmsan.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=11f103bce00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=9e324dfe9c7b0360
+> dashboard link: https://syzkaller.appspot.com/bug?extid=0631d878823ce2411636
+> compiler:       clang version 9.0.0 (/home/glider/llvm/clang  
+> 80fee25776c2fb61e74c1ecb1a523375c2500b69)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dd9774e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13651a24e00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+0631d878823ce2411636@syzkaller.appspotmail.com
+#syz test: https://github.com/google/kmsan.git 96c6c319
+
+--=-tHZcmQBfFGLiVVm2/Dfe
+Content-Disposition: attachment;
+	filename="0001-CDC-NCM-handle-incomplete-transfer-of-MTU.patch"
+Content-Type: text/x-patch; name="0001-CDC-NCM-handle-incomplete-transfer-of-MTU.patch";
+	charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+RnJvbSAwOTBhYzAzMDViYjQ3ZGE5MzM2YzAxODhlMGU1OWU1MGZmMjI0M2MzIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgpEYXRl
+OiBUdWUsIDUgTm92IDIwMTkgMTI6MDQ6NDQgKzAxMDAKU3ViamVjdDogW1BBVENIXSBDREMtTkNN
+OiBoYW5kbGUgaW5jb21wbGV0ZSB0cmFuc2ZlciBvZiBNVFUKCkEgbWFsaWNpb3VzIGRldmljZSBt
+YXkgZ2l2ZSBoYWxmIGFuIGFuc3dlciB3aGVuIGFza2VkCmZvciBpdHMgTVRVLiBUaGUgZHJpdmVy
+IHdpbGwgcHJvY2VlZCBhZnRlciB0aGlzIHdpdGgKYSBnYXJiYWdlIE1UVS4gQW55dGhpbmcgYnV0
+IGEgY29tcGxldGUgYW5zd2VyIG11c3QgYmUgdHJlYXRlZAphcyBhbiBlcnJvci4KClJlcG9ydGVk
+LWJ5OiBzeXpib3QrMDYzMWQ4Nzg4MjNjZTI0MTE2MzZAc3l6a2FsbGVyLmFwcHNwb3RtYWlsLmNv
+bQpTaWduZWQtb2ZmLWJ5OiBPbGl2ZXIgTmV1a3VtIDxvbmV1a3VtQHN1c2UuY29tPgotLS0KIGRy
+aXZlcnMvbmV0L3VzYi9jZGNfbmNtLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
+b24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC91c2IvY2RjX25j
+bS5jIGIvZHJpdmVycy9uZXQvdXNiL2NkY19uY20uYwppbmRleCAwMGNhYjNmNDNhNGMuLjkzOTQ4
+N2E1ZjRiYyAxMDA2NDQKLS0tIGEvZHJpdmVycy9uZXQvdXNiL2NkY19uY20uYworKysgYi9kcml2
+ZXJzL25ldC91c2IvY2RjX25jbS5jCkBAIC01NzksNyArNTc5LDcgQEAgc3RhdGljIHZvaWQgY2Rj
+X25jbV9zZXRfZGdyYW1fc2l6ZShzdHJ1Y3QgdXNibmV0ICpkZXYsIGludCBuZXdfc2l6ZSkKIAll
+cnIgPSB1c2JuZXRfcmVhZF9jbWQoZGV2LCBVU0JfQ0RDX0dFVF9NQVhfREFUQUdSQU1fU0laRSwK
+IAkJCSAgICAgIFVTQl9UWVBFX0NMQVNTIHwgVVNCX0RJUl9JTiB8IFVTQl9SRUNJUF9JTlRFUkZB
+Q0UsCiAJCQkgICAgICAwLCBpZmFjZV9ubywgJm1heF9kYXRhZ3JhbV9zaXplLCAyKTsKLQlpZiAo
+ZXJyIDwgMCkgeworCWlmIChlcnIgPCAyKSB7CiAJCWRldl9kYmcoJmRldi0+aW50Zi0+ZGV2LCAi
+R0VUX01BWF9EQVRBR1JBTV9TSVpFIGZhaWxlZFxuIik7CiAJCWdvdG8gb3V0OwogCX0KLS0gCjIu
+MTYuNAoK
+
+
+--=-tHZcmQBfFGLiVVm2/Dfe--
 
