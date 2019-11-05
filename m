@@ -2,74 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BDDF0518
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 19:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E3A2F09AD
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 23:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390668AbfKESbr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 13:31:47 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:45956 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S2390592AbfKESbr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 13:31:47 -0500
-Received: (qmail 6231 invoked by uid 2102); 5 Nov 2019 13:31:46 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 5 Nov 2019 13:31:46 -0500
-Date:   Tue, 5 Nov 2019 13:31:46 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrea Vai <andrea.vai@unipv.it>
-cc:     Jens Axboe <axboe@kernel.dk>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-In-Reply-To: <0cd6ac36b7ab644576fc0f3f5bd4a880c33855d1.camel@unipv.it>
-Message-ID: <Pine.LNX.4.44L0.1911051326040.1678-100000@iolanthe.rowland.org>
+        id S1730087AbfKEWkG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 17:40:06 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:44980 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728515AbfKEWkG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 17:40:06 -0500
+Received: by mail-oi1-f196.google.com with SMTP id s71so19138336oih.11;
+        Tue, 05 Nov 2019 14:40:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=AFBMfzuDMMDG66rRSv4aJIAqEOBlWwNMQevtzffyDmI=;
+        b=O8tO/ksp8vgHPv7qA0OfIhfy5IveWORM295TJr8Sm7E06bEwMIWKw5UF1aEWqvyjTP
+         wh9AcfU34Kp3dNcJFnDAV+1BJNBGWLz8+MiY21qif8BYHzpk2eBmjE7zUVcZjnQChDAY
+         1xERN6h0A9bEWg/S3glMiGwhbW4mi587Ajn/b1Wq+YnEHSORDzfvrJeN1z/R/0XXwHwq
+         D6vmKPWIdQ+MfuOUYC2sqUS090/cy+UNUEoN27+i2Jth9CPzu7LvADCaTn8D7x8MTapS
+         pJvR6dt+62dHFhEqwaI5PdGSVHwSLFfrlDNxyQ1dYlgAeFZz3ZB00EZycx0wFrS5mzkX
+         VypQ==
+X-Gm-Message-State: APjAAAVpQBV/BDOYL23AwRopvfZBmULh8G/y4ufb/Gz1td9X82O99/p3
+        AlRTvx7b6sCvBARfGQ86Hw==
+X-Google-Smtp-Source: APXvYqw/eET73Cha942kPsvsxg8kJVX0rHtqR7c6PgeHXrasBspVanHF4zRbTyrJS3fJviU++qmKag==
+X-Received: by 2002:aca:ba87:: with SMTP id k129mr1150141oif.41.1572993605126;
+        Tue, 05 Nov 2019 14:40:05 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id 100sm6623033otl.48.2019.11.05.14.40.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 14:40:04 -0800 (PST)
+Date:   Tue, 5 Nov 2019 16:40:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     gregkh@linuxfoundation.org, Mark Rutland <mark.rutland@arm.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v2] dt-bindings: usb: Convert Allwinner A10 mUSB
+ controller to a schema
+Message-ID: <20191105224003.GA28513@bogus>
+References: <20191101143216.260890-1-maxime@cerno.tech>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191101143216.260890-1-maxime@cerno.tech>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 5 Nov 2019, Andrea Vai wrote:
-
-> Il giorno lun, 04/11/2019 alle 13.20 -0500, Alan Stern ha scritto:
-
-> > You should be able to do something like this:
-> > 
-> >         cd linux
-> >         patch -p1 </path/to/patch2
-> > 
-> > and that should work with no errors.  You don't need to use git to 
-> > apply a patch.
-> > 
-> > In case that patch2 file was mangled somewhere along the way, I
-> > have 
-> > attached a copy to this message.
+On Fri,  1 Nov 2019 15:32:16 +0100, Maxime Ripard wrote:
+> The Allwinner SoCs have an mUSB controller that is supported in Linux, with
+> a matching Device Tree binding.
 > 
-> Ok, so the "patch" command worked, the kernel compiled and ran, but
-> the test still failed (273, 108, 104, 260, 177, 236, 179, 1123, 289,
-> 873 seconds to copy a 500MB file, vs. ~30 seconds with the "good"
-> kernel).
+> Now that we have the DT validation in place, let's convert the device tree
+> bindings for that controller over to a YAML schemas.
 > 
-> Let me know what else could I do,
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> ---
+> 
+> Changes from v1:
+>   - Merged compatible entries together
+> ---
+>  .../bindings/usb/allwinner,sun4i-a10-musb.txt |  28 -----
+>  .../usb/allwinner,sun4i-a10-musb.yaml         | 100 ++++++++++++++++++
+>  2 files changed, 100 insertions(+), 28 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
+> 
 
-I'm out of suggestions.  If anyone else knows how to make a kernel with 
-no legacy queuing support -- only multiqueue -- issue I/O requests 
-sequentially, please speak up.
+Applied, thanks.
 
-In the absence of any responses, after a week or so I will submit a
-patch to revert the f664a3cc17b7 ("scsi: kill off the legacy IO path")  
-commit.
-
-Alan Stern
-
+Rob
