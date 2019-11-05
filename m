@@ -2,89 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B34EFCA6
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 12:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDB1EFCA9
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2019 12:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387784AbfKELs2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 5 Nov 2019 06:48:28 -0500
-Received: from rtits2.realtek.com ([211.75.126.72]:46054 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730627AbfKELs1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 06:48:27 -0500
-Authenticated-By: 
-X-SpamFilter-By: BOX Solutions SpamTrap 5.62 with qID xA5Bm5ku025506, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (RTITCASV02.realtek.com.tw[172.21.6.19])
-        by rtits2.realtek.com.tw (8.15.2/2.57/5.78) with ESMTPS id xA5Bm5ku025506
-        (version=TLSv1 cipher=DHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Tue, 5 Nov 2019 19:48:05 +0800
-Received: from RTITMBSVM03.realtek.com.tw ([fe80::e1fe:b2c1:57ec:f8e1]) by
- RTITCASV02.realtek.com.tw ([::1]) with mapi id 14.03.0468.000; Tue, 5 Nov
- 2019 19:48:05 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "oliver@neukum.org" <oliver@neukum.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] r8152: Add macpassthru support for ThinkPad Thunderbolt 3 Dock Gen 2
-Thread-Topic: [PATCH v2] r8152: Add macpassthru support for ThinkPad
- Thunderbolt 3 Dock Gen 2
-Thread-Index: AQHVk7E2UAb+vVEL20O/iFfFubpdn6d8PDnA//+rqgCAAIxWcA==
-Date:   Tue, 5 Nov 2019 11:48:04 +0000
-Message-ID: <0835B3720019904CB8F7AA43166CEEB2F18F4F92@RTITMBSVM03.realtek.com.tw>
-References: <20191105081526.4206-1-kai.heng.feng@canonical.com>
- <0835B3720019904CB8F7AA43166CEEB2F18F4E9E@RTITMBSVM03.realtek.com.tw>
- <193EF03A-1EF7-4604-BF3A-61201A78D724@canonical.com>
-In-Reply-To: <193EF03A-1EF7-4604-BF3A-61201A78D724@canonical.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.214]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S2388177AbfKELss (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 06:48:48 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55266 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730627AbfKELsr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 06:48:47 -0500
+Received: by mail-wm1-f65.google.com with SMTP id z26so7360987wmi.4
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2019 03:48:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=LpNq9BZEzcBsPjl2fwGhxUI4p8CxhaTMp7/DMtc0Tzw=;
+        b=KI9+aUbcov74z4OaAXNWUWbeLzdg8DbG3S2miuQLMt3Uml7yDXyPmnBaJDTbk0eUef
+         9wiZ7OlgVcK3aYQCtsAnJBZwLGI5ogA7nDHzAyDVvfwxe6YbctPHYwocPHyS/bycuxgI
+         g2uQJ0c4jvgU//F3SyBAddI9l83920U/bo1QcaBmBLgSCeouEBPFpii3p+64ndRAxG97
+         IHGnjUZb4ehLb+agNJlsusvEEaR7EFxQ2gAIFckLDhyOR4WZkhRay33ZVG7y0cBGBAeb
+         Ld3gqMYS9GyNYJmzKdpHsh+whHAjT8yJAGOHzRrU1aG98bKQeLWAMmX5PaKZignuVoD1
+         SNNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=LpNq9BZEzcBsPjl2fwGhxUI4p8CxhaTMp7/DMtc0Tzw=;
+        b=dCaB5S7JMN20xFuEeft0jFrJnogbitjWCzQWR8u65opIUe2DWL/q36oJZXB5nMVnVy
+         ZJ10a7sL0m/zZxDSDI7POZSf/PFFqeIPszzTIsUsR49AA6kRQcn27pAVeMs/gDo51eOp
+         fRAxWGrcL6fpZY12nYOAlHsQXHhRaR9UmaRIBhOGydPd6XhZLaaq6/dYs1o0m/yvbKw7
+         5gzu5ANGtbbqKY2U4v/h3plpbHsavNa6lwgUwxNHcx8iLsGHjlQGLp7iksDUW1ytoyd0
+         a5ytCrXsi8msCIsFyzW995qRPUb0dAo19Kog1AE1TTicFM++NkSiZf/CuyEzH6DsN0V3
+         ds4g==
+X-Gm-Message-State: APjAAAXdkUipEIO9+iDgrOTMUWHTcRJN3Fw094f+U7GgaOlhSOnrKoPb
+        t2uvr81XzuWsRu093LWtP7GRdw==
+X-Google-Smtp-Source: APXvYqweS3le3W871Mi2XCp7mQy9hB83kcFi9F1QrG1nG+PCkN1aNHbQ6+Gba2cPfasng8QNYKKYHw==
+X-Received: by 2002:a7b:ca51:: with SMTP id m17mr3567639wml.110.1572954524617;
+        Tue, 05 Nov 2019 03:48:44 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id v128sm26856481wmb.14.2019.11.05.03.48.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 03:48:43 -0800 (PST)
+Message-ID: <0cd6ac36b7ab644576fc0f3f5bd4a880c33855d1.camel@unipv.it>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>
+Date:   Tue, 05 Nov 2019 12:48:42 +0100
+In-Reply-To: <Pine.LNX.4.44L0.1911041316390.1689-200000@iolanthe.rowland.org>
+References: <Pine.LNX.4.44L0.1911041316390.1689-200000@iolanthe.rowland.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Kai-Heng Feng [mailto:kai.heng.feng@canonical.com]
-> Sent: Tuesday, November 05, 2019 7:18 PM
-[...]
-> >> 	} else {
-> >> -		/* test for RTL8153-BND and RTL8153-BD */
-> >> -		ocp_data = ocp_read_byte(tp, MCU_TYPE_USB, USB_MISC_1);
-> >> -		if ((ocp_data & BND_MASK) == 0 && (ocp_data & BD_MASK) == 0) {
-> >> -			netif_dbg(tp, probe, tp->netdev,
-> >> -				  "Invalid variant for MAC pass through\n");
-> >> -			return -ENODEV;
-> >> +		bypass_test = false;
-> >> +		mac_obj_name = "\\_SB.AMAC";
-> >> +		mac_obj_type = ACPI_TYPE_BUFFER;
-> >> +		mac_strlen = 0x17;
-> >> +	}
-> >> +
-> >> +	if (!bypass_test) {
-> >
-> > Maybe you could combine this with the "else" above.
-> > Then, the variable "bypass_test" could be removed.
+Il giorno lun, 04/11/2019 alle 13.20 -0500, Alan Stern ha scritto:
+> On Mon, 4 Nov 2019, Andrea Vai wrote:
 > 
-> Ok, will do in V3.
+> > > The "linux" directory is the one generated by a fresh git clone:
+> > > 
+> > > git clone
+> > > git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > 
+> > > What am I doing wrong?
+> > > 
+> > 
+> > Meanwhile, Alan tried to help me and gave me another patch
+> (attached),
+> > which doesn't work too, but gives a different error: "The git diff
+> > header does not contain information about the file once removed 1
+> > initial component of the path (row 14)" (actually, this is my
+> > translation from the original message in Italian: "error:
+> > l'intestazione git diff non riporta le informazioni sul file una
+> volta
+> > rimosso 1 componente iniziale del percorso (riga 14)")
+> > 
+> > I tested the two patches after a fresh git clone today, a few
+> minutes
+> > ago.
+> > 
+> > What can I do?
 > 
-> > And the declaration of "ocp_data" could be moved after the "else".
+> You should be able to do something like this:
 > 
-> Isn't putting declarations at the top of the function the preferred way?
+>         cd linux
+>         patch -p1 </path/to/patch2
+> 
+> and that should work with no errors.  You don't need to use git to 
+> apply a patch.
+> 
+> In case that patch2 file was mangled somewhere along the way, I
+> have 
+> attached a copy to this message.
 
-I mean the ocp_data wouldn't be used out of the else,
-so you could move the declaration to the inside of the else.
+Ok, so the "patch" command worked, the kernel compiled and ran, but
+the test still failed (273, 108, 104, 260, 177, 236, 179, 1123, 289,
+873 seconds to copy a 500MB file, vs. ~30 seconds with the "good"
+kernel).
 
-However, I don't think you have to send another patch for this.
-Thanks.
+Let me know what else could I do,
 
-Best Regards,
-Hayes
-
-
+Thanks, and bye
+Andrea
 
