@@ -2,175 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED45F185E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 15:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0944BF1901
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 15:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728028AbfKFOWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 09:22:40 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34836 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726945AbfKFOWk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 09:22:40 -0500
-Received: by mail-pl1-f195.google.com with SMTP id s10so668670plp.2;
-        Wed, 06 Nov 2019 06:22:39 -0800 (PST)
+        id S1727290AbfKFOq0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 09:46:26 -0500
+Received: from mx0b-00128a01.pphosted.com ([148.163.139.77]:48294 "EHLO
+        mx0b-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727028AbfKFOq0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 09:46:26 -0500
+Received: from pps.filterd (m0167090.ppops.net [127.0.0.1])
+        by mx0b-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA6EheJ4001564;
+        Wed, 6 Nov 2019 09:46:05 -0500
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2056.outbound.protection.outlook.com [104.47.36.56])
+        by mx0b-00128a01.pphosted.com with ESMTP id 2w2a75rgj9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 06 Nov 2019 09:46:05 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iuHfSu61n0Sd97TSbE0c6Kn1AXp8tGWSUNDyI2TFJxg1SFfjRYaobzuJbnMHsY7gom86P2Lcxhvf2atSxL1OeGIAdYThBebOxh5f5b04RuGN/WfyGOkCVWJu6cU3/WHq8Bxo61rAWneK5ZXc9Bu/vVgmdwD4TL216dgZG8+cWVPtT3wqvXwCqfu+5yzJFuWlzcBzMSwKPpYelGPwOWaIXGZjRLWg1Ksb8ETLvgGTp0TvBt1SWvdS1bNNIxd3WjPk9aKxwQfpNm2wnQ54YUObFz0dBOpfoYxjYer5LNYM1SqISqGCo61+J5ozaxZEaqXAXXgNT10eYVJYad+AIItiKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ahpW0b/Oe1Z8UABL2r6l6FeqzX/Rahl9EYdYT+UgzsA=;
+ b=Z15d8I1+rhMR5dQKDMPiSeQfpxxktqVj06BRDCgoVONB7A9M69SELmy+nRVWyL5lC7fy2k9Wvk9DSmwTUdFGLs0ItoJnp44JfQMDvBB6Dgc0iPMl8nvDJnOFV5kyuGBMUFWQCemOOWKiNGCGqQwAt4ZLkXaB0TjsEFT3kGNz5Wu4QIDIKggWrKpB2H2UcegBPS4QILIX5ToH95Mo31Y0+cmZHykeFzR7OIjtHWHxsvP+E1dlKK0z288BMEddWGg143TDoHZI4qLEXTX+C2BtXMASv2zvBXqgGYzIsQxpgi6QgLWqabxwJ8QKrjGVyiXozosfi+W+bMufJ8c1nJAJMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.57) smtp.rcpttodomain=kernel.org smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=cc:subject:to:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=VZ2YuX9WkVdA2wqZva8TfQh4uDZmSLYmnIZt2JxlnZI=;
-        b=iy429A2Ct25xdGd6rSxaImff/6n7BsHMEcJ1elNUhEYMpfsceHyGsLNXGfuTPDayK9
-         OFPB5QxinNwR4ztz4fGc0RArA+ldntUVcI17PR4mIv9i9ouOu3OprX0DrvEiucfB3qCe
-         ojrGH8Y2Bej9sf4mQc5Zh2KmXMvlI28OK8qX75pVrssia1PGcmimRnnXmalbb7l9ghEF
-         aSqhve8jp7NQmQsqhN4U0BZ1UsCxu1GttGQU5Kd7foRsDk3M87j5YFPXTImBlyRdyLPW
-         6R37tu0qG1FEROElVWSlVT8h3l2dRpy18ed5l7anPKE2wvGdeGftqxx40ElLgYr6E9Sf
-         tiRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:cc:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VZ2YuX9WkVdA2wqZva8TfQh4uDZmSLYmnIZt2JxlnZI=;
-        b=DnWNB1KhWQVzMZyR+JdHTsrzjTEnIqqatky1IB3VoR2VRN3K0GdNHH7RzvtJRHrGk3
-         gVcNOUdpFQwtOj62HiPubeR/Ti9h66PtThEzRJIQ4vkOVV9H2dhVfGoph1qrXudtiMUd
-         DlkiVFmERhnm028S1XzNaJm86Zw0Xhd2bHFA5cE9ZZ7tzhFmMZ1Wqc6nehfyf6NKQG4e
-         j2tdjlXUxiVcwsjqlNpOxJtSXKvMBiqr+l8seiNcPXAH7vOJO1gpD7SCrMQlPpZkon5a
-         XMfQ6BLSjU8bEWXe25jOS/abHCDVlFRqIaL2fmm8yRJ4MaAONUcV11loI1F1EMj+bIwR
-         7Ipw==
-X-Gm-Message-State: APjAAAXKVSI21YMaUB4XvFRVb6jqFjVsN0/kwnN0ZsWCoEPSjtELY8ad
-        85PVc5sm9RaG/bmh0tZp9pFefk5chklyhA==
-X-Google-Smtp-Source: APXvYqwW8FePfs310Sjh8MLuZtyWmpxZSQ7ZkwcJbVr51fSef7+NsmDIBarHxe3GMmwrsHrOOTtxEw==
-X-Received: by 2002:a17:902:8343:: with SMTP id z3mr2920223pln.200.1573050158836;
-        Wed, 06 Nov 2019 06:22:38 -0800 (PST)
-Received: from ?IPv6:2405:4800:58f7:3f8f:27cb:abb4:d0bd:49cb? ([2405:4800:58f7:3f8f:27cb:abb4:d0bd:49cb])
-        by smtp.gmail.com with ESMTPSA id c184sm26760638pfc.159.2019.11.06.06.22.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Nov 2019 06:22:38 -0800 (PST)
-Cc:     tranmanphong@gmail.com, 2pi@mok.nu, alex.theissen@me.com,
-        andreyknvl@google.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] usb: appledisplay: fix use-after-free in
- bl_get_brightness
-To:     Oliver Neukum <oneukum@suse.com>,
-        syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
-References: <00000000000042d60805933945b5@google.com>
- <20191105233652.21033-1-tranmanphong@gmail.com>
- <1573040577.3090.22.camel@suse.com>
-From:   Phong Tran <tranmanphong@gmail.com>
-Message-ID: <d6c628d0-71ad-7343-d80e-1b0cd0795242@gmail.com>
-Date:   Wed, 6 Nov 2019 21:22:34 +0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ahpW0b/Oe1Z8UABL2r6l6FeqzX/Rahl9EYdYT+UgzsA=;
+ b=dbkvczIS+tkqFQpXKnMK8M7s8zdTfhVXerhS/OV7MCwZ19wTMz3Gp5QwvACTOK9t5DqA75IP4I211ys6zFjd41qO1y9WxvS/SyZraEcvJ3IvvIQe+pv83gOP+bmAQLieUTgTv1k78dbMKNwSgPGIFw+qP4P5RkYlVNZYbh2jfbI=
+Received: from BN3PR03CA0114.namprd03.prod.outlook.com (2603:10b6:400:4::32)
+ by BY5PR03MB5235.namprd03.prod.outlook.com (2603:10b6:a03:21b::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.22; Wed, 6 Nov
+ 2019 14:46:02 +0000
+Received: from SN1NAM02FT022.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::206) by BN3PR03CA0114.outlook.office365.com
+ (2603:10b6:400:4::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.20 via Frontend
+ Transport; Wed, 6 Nov 2019 14:46:02 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.57 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
+Received: from nwd2mta2.analog.com (137.71.25.57) by
+ SN1NAM02FT022.mail.protection.outlook.com (10.152.72.148) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2387.20
+ via Frontend Transport; Wed, 6 Nov 2019 14:46:02 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id xA6Ejo59027660
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Wed, 6 Nov 2019 06:45:50 -0800
+Received: from saturn.ad.analog.com (10.48.65.117) by
+ NWD2HUBCAS7.ad.analog.com (10.64.69.107) with Microsoft SMTP Server id
+ 14.3.408.0; Wed, 6 Nov 2019 09:45:58 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <bigeasy@linutronix.de>, Lars-Peter Clausen <lars@metafoo.de>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH] usb: dwc3: gadget: Handle dequeuing of non queued URB gracefully
+Date:   Wed, 6 Nov 2019 16:45:53 +0200
+Message-ID: <20191106144553.16956-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <1573040577.3090.22.camel@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(346002)(396003)(376002)(136003)(39860400002)(199004)(189003)(2906002)(86362001)(106002)(2870700001)(51416003)(50226002)(336012)(7696005)(48376002)(356004)(6666004)(107886003)(4326008)(36756003)(54906003)(316002)(47776003)(478600001)(186003)(70586007)(70206006)(8676002)(110136005)(5660300002)(26005)(44832011)(1076003)(426003)(246002)(14444005)(50466002)(305945005)(7636002)(8936002)(476003)(2616005)(486006)(126002);DIR:OUT;SFP:1101;SCL:1;SRVR:BY5PR03MB5235;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f6c7db5a-266d-41e8-b1e0-08d762c80b8c
+X-MS-TrafficTypeDiagnostic: BY5PR03MB5235:
+X-Microsoft-Antispam-PRVS: <BY5PR03MB5235CC2EBA7DE2AD23257005F9790@BY5PR03MB5235.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:6430;
+X-Forefront-PRVS: 02135EB356
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XHh1gJQwDOjSsB6nu0ZZnwea6MX14vsuIETpsjuMZgpND1QjC5W6igTvReFJMKh298jf99fsyfSr3cMMzH7NzfMCl0Ae+QPyoYydLGjXu3cFR5McqK1I9uLaWg9ZZBbr5lKuLB+CYKlFB2w0jDiJiKmg7bad8wiNZxwZKRjaJYVAism3wXC3DZiKbs8JbpOS+2/yKXCzQhNdmyA8HxGVJUb5lnIax9mQ8Gd1XKxfb6LQVPWupMt3cYClsFgNMdIqeLsGUL9BHApKfCxKb3rlvosMIVnuvvh6YQN5xyPYlytBq5SxNNpS9lFi1Nxwzi86Qbvpb6V5tn6rZ1pGVGCQ5Ym6HLUNuLxw+AoW0npaLGbEnww5aHtfXmF6+MkcAfj5oOE7NsDzKOiUoe+WA9gaT3wVxHRwWvm0D6R5Vrhrz9mJCc+sS1i1IhV1BB6cdQ/e
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2019 14:46:02.1554
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6c7db5a-266d-41e8-b1e0-08d762c80b8c
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR03MB5235
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-06_04:2019-11-06,2019-11-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 spamscore=0 suspectscore=2
+ clxscore=1011 phishscore=0 lowpriorityscore=0 malwarescore=0
+ mlxlogscore=767 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1911060146
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Lars-Peter Clausen <lars@metafoo.de>
 
+Trying to dequeue and URB that is currently not queued should be a no-op
+and be handled gracefully.
 
-On 11/6/19 6:42 PM, Oliver Neukum wrote:
-> Am Mittwoch, den 06.11.2019, 06:36 +0700 schrieb Phong Tran:
->> In context of USB disconnect, the delaywork trigger and calling
->> appledisplay_bl_get_brightness() and the msgdata was freed.
->>
->> add the checking return value of usb_control_msg() and only update the
->> data while the retval is valid.
-> 
-> Hi,
-> 
-> I am afraid there are some issues with your patch. First, let me stress
-> that you found the right place to fix an issue and you partially fixed
-> an issue. But the the fix you applied is incomplete and left another
-> issue open.
-> 
-> Your patch still allows doing IO to a device that may already be bound
-> to another driver. That is bad, especially as the buffer is already
-> free. Yes, if IO is failing, you have fixed that narrow issue.
-> But it need not fail.
-> 
-> If you look into appledisplay_probe() you will see that it can fail
-> because backlight_device_register() fails. The error handling will
-> thereupon kill the URB and free memory. But it will not kill an already
-> scheduled work. The scheduled work will then call usb_control_msg()
-> on pdata->msgdata, which has been freed. If that IO fails, all is well.
-> If not, the issue still exists.
-> 
-Hello Oliver,
+Use the list field of the URB to indicate whether it is queued or not by
+setting it to the empty list when it is not queued.
 
-argee, there need a cancel workqueue in case error of probe().
+Handling this gracefully allows for race condition free synchronization
+between the complete callback being called to to a completed transfer and
+trying to call usb_ep_dequeue() at the same time.
 
-> Secondly, your error check is off by 2. You are checking only for
-> usb_control_msg() failing. But it can return only one byte instead
-> of two. If that happens, the value you return is stale, although
-> the buffer is correctly allocated.
-> 
-> 	Regards
-> 		Oliver
-> 
-> The correct fix for both issues would be:
-> 
-> #syz test: https://github.com/google/kasan.git e0bd8d79
-> 
->  From 2497a62bdbeb9bd94f690c22d96dd1b8cf22861f Mon Sep 17 00:00:00 2001
-> From: Oliver Neukum <oneukum@suse.com>
-> Date: Wed, 6 Nov 2019 12:36:28 +0100
-> Subject: [PATCH] appledisplay: fix error handling in the scheduled work
-> 
-> The work item can operate on
-> 
-> 1. stale memory left over from the last transfer
-> the actual length of the data transfered needs to be checked
-> 2. memory already freed
-> the error handling in appledisplay_probe() needs
-> to cancel the work in that case
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> ---
->   drivers/usb/misc/appledisplay.c | 8 +++++++-
->   1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
-> index ac92725458b5..ba1eaabc7796 100644
-> --- a/drivers/usb/misc/appledisplay.c
-> +++ b/drivers/usb/misc/appledisplay.c
-> @@ -164,7 +164,12 @@ static int appledisplay_bl_get_brightness(struct backlight_device *bd)
->   		0,
->   		pdata->msgdata, 2,
->   		ACD_USB_TIMEOUT);
-> -	brightness = pdata->msgdata[1];
-> +	if (retval < 2) {
-> +		if (retval >= 0)
-> +			retval = -EMSGSIZE;
-> +	} else {
-> +		brightness = pdata->msgdata[1];
-> +	}
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+---
+ drivers/usb/dwc3/gadget.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-compare with message size (2) can be considered.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a9aba716bf80..b500ec6b0aa8 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -174,7 +174,7 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
+ {
+ 	struct dwc3			*dwc = dep->dwc;
+ 
+-	list_del(&req->list);
++	list_del_init(&req->list);
+ 	req->remaining = 0;
+ 	req->needs_extra_trb = false;
+ 
+@@ -844,6 +844,7 @@ static struct usb_request *dwc3_gadget_ep_alloc_request(struct usb_ep *ep,
+ 	req->epnum	= dep->number;
+ 	req->dep	= dep;
+ 	req->status	= DWC3_REQUEST_STATUS_UNKNOWN;
++	INIT_LIST_HEAD(&req->list);
+ 
+ 	trace_dwc3_alloc_request(req);
+ 
+@@ -1540,6 +1541,10 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
+ 
+ 	spin_lock_irqsave(&dwc->lock, flags);
+ 
++	/* Not queued, nothing to do */
++	if (list_empty(&req->list))
++		goto out0;
++
+ 	list_for_each_entry(r, &dep->pending_list, list) {
+ 		if (r == req)
+ 			break;
+-- 
+2.20.1
 
-if (retval == 2) {
-	brightness = pdata->msgdata[1];
-} else {
-	retval = -EMSGSIZE;
-}
-
-Regards,
-Phong.
-
->   	mutex_unlock(&pdata->sysfslock);
->   
->   	if (retval < 0)
-> @@ -299,6 +304,7 @@ static int appledisplay_probe(struct usb_interface *iface,
->   	if (pdata) {
->   		if (pdata->urb) {
->   			usb_kill_urb(pdata->urb);
-> +			cancel_delayed_work_sync(&pdata->work);
->   			if (pdata->urbdata)
->   				usb_free_coherent(pdata->udev, ACD_URB_BUFFER_LEN,
->   					pdata->urbdata, pdata->urb->transfer_dma);
-> 
