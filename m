@@ -2,79 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA82F1618
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 13:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F608F1637
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 13:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731640AbfKFMcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 07:32:11 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:44174 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731055AbfKFMcL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 07:32:11 -0500
-Received: by mail-io1-f69.google.com with SMTP id q13so17917405iot.11
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2019 04:32:10 -0800 (PST)
+        id S1730526AbfKFMme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 07:42:34 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:37682 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727652AbfKFMme (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 07:42:34 -0500
+Received: by mail-wm1-f53.google.com with SMTP id q130so3155598wme.2
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2019 04:42:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=XS25oZRAGNX588WUhj0ZX4ZZuaEhei2Z6fcyEe7D0tU=;
+        b=dBpR/bUh3r1pN7N1e6BGWZSsEZ7MRlfcmQFQzNmFjYFJK6LXwMM9YM0bBnxqJLjy29
+         UHiCJP9cIn9wCgDP2X6YzWYztnwXLG7ZFSXw8dUPK5H+uAmRF3l+GcPJW1yA+012i68F
+         WI/3Hy/N7y05grVhdDyw0bmsYIfYmkZeSr7ivsz0kB/5tnfWiPDHTrBDi/DZcrsuhSKM
+         rQeb0S7+Ra3rjHnGCy8EGLMmPQxvAIOul/4XNGvPL0aRKnuRs7NngMHlsoXWJXzuzyK8
+         ErGnA3B6IRYBxjvK83cZ33JMHOCRVVKEnCbsE7xQgbCjJlhFQMtbQr+wAPPufmLBfBR4
+         dBsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
          :content-transfer-encoding;
-        bh=3T09uIwIwU5DRUVmjKbkvsI0BQBJlkgqaWi2GtbOfkc=;
-        b=gOcURa5OTbMzqsywJKFZaKf40gi+svMdFbuVLjxfqUDtofD6uuQb0O6dGpqDSJe12c
-         hX9q/5UgaVtMu3sYDS3Z5BREtOpf6tU2RVl402SIAJ5PbKbXI4J3ZQb+9h5jGnp8jydL
-         9Tts6QqM2y7jn8p3nvEny1ccNOjKpYrvlIxOMXyeCxf7p6Cde83ZYzN70fqM+3ZMQdJY
-         yzwMi1eA0urs/p3TAqYftAPgA91wVc0zt4rJY30+d31oTntyOjTc4TscZDLzYEpzulLD
-         QtqxApHZWoHLVquuuyXUSoJ8ko7hqXz95WDJo8MBY+w/JylHs2h6IirRDZw96llJo4yb
-         YvOg==
-X-Gm-Message-State: APjAAAUWPYmX2Ka2SD+bnkAsGosdeLfKcLhjrOI/D2nq3PHJnOZCeELt
-        vJEBpAInPsB/pEUImOQdZOMbmJI42WdCBQk1tWCbHeqaihiL
-X-Google-Smtp-Source: APXvYqwpEVq7BTZNdDKa0IvmpPBiN99qQV0liktGM/r5hF1MG15lgPMZRr51FIyEpW9+iHZZgtOmfjp86OjfpuxHrKJRBzN0ROks
+        bh=XS25oZRAGNX588WUhj0ZX4ZZuaEhei2Z6fcyEe7D0tU=;
+        b=C+aHs+7xyu/KQelrMO2E3RjrTIbN2zafLjzZCKAujgMZcWyIanFFl1rUrz/aOitUlu
+         Pztb/4z0zqdMYRgG8CITd4pxVNrI7vsizx1CD56wVEZrdTk+9HqAXOsGgzeWjakZA+ZY
+         LtsxqShbjwz6ZEOn1MIHcsO9Vz+MKgt0tEexNTMbn1rvkrWGSDZzUFD18pXAVMxYhltk
+         98dtGwsdA3CJBBGOemzOpGpwKJRhQWYdDVKy1dreO0TXrZO5a/PWcILXrVpQRvGWfk+8
+         PL3JG1cGbZjpp0LI4L6KyFWE0HvW1lVlipStUtgMI9ejzfCTNhrTnuYW2+DIIn8XYMTv
+         YQaQ==
+X-Gm-Message-State: APjAAAVGsNyN8wWjsQ0Erz7ZLwjkT9RhVMFD/7CYJOByBDqSyDmX0ZTE
+        dhK3zjkql3TeoAMJCMGDWKkfYZWe
+X-Google-Smtp-Source: APXvYqwCAn8JRFg4QgIwbKFVAjYqPC5kRm0+cKpvQ9cvzoq9Vp04Cq8xV71oCmiW+ONgXY4tcjzoyw==
+X-Received: by 2002:a1c:98c5:: with SMTP id a188mr1859535wme.133.1573044150841;
+        Wed, 06 Nov 2019 04:42:30 -0800 (PST)
+Received: from tesx-pc ([5.95.30.185])
+        by smtp.gmail.com with ESMTPSA id 16sm2930929wmf.0.2019.11.06.04.42.29
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2019 04:42:30 -0800 (PST)
+Date:   Wed, 6 Nov 2019 13:42:17 +0100
+From:   Fabrizio Pelosi <tesfabpel@gmail.com>
+To:     linux-usb@vger.kernel.org
+Subject: Logitech mouse G900 works only after ~6 seconds after plugging it
+ in
+Message-ID: <20191106134217.37e221af@tesx-pc>
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-Received: by 2002:a6b:9089:: with SMTP id s131mr33836149iod.107.1573043530199;
- Wed, 06 Nov 2019 04:32:10 -0800 (PST)
-Date:   Wed, 06 Nov 2019 04:32:10 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d5795d0596acbc93@google.com>
-Subject: BUG: bad host security descriptor; not enough data (2 vs 5 left)
-From:   syzbot <syzbot+8a8429a8b80280ff1c80@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sDQoNCnN5emJvdCBmb3VuZCB0aGUgZm9sbG93aW5nIGNyYXNoIG9uOg0KDQpIRUFEIGNv
-bW1pdDogICAgYjFhYTlkODMgdXNiOiByYXc6IGFkZCByYXctZ2FkZ2V0IGludGVyZmFjZQ0KZ2l0
-IHRyZWU6ICAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUva2FzYW4uZ2l0IHVzYi1mdXp6
-ZXINCmNvbnNvbGUgb3V0cHV0OiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L2xvZy50
-eHQ/eD0xNTNhMWY4YWUwMDAwMA0Ka2VybmVsIGNvbmZpZzogIGh0dHBzOi8vc3l6a2FsbGVyLmFw
-cHNwb3QuY29tL3gvLmNvbmZpZz94PTc5ZGU4MDMzMDAwM2I1ZjcNCmRhc2hib2FyZCBsaW5rOiBo
-dHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9OGE4NDI5YThiODAyODBmZjFj
-ODANCmNvbXBpbGVyOiAgICAgICBnY2MgKEdDQykgOS4wLjAgMjAxODEyMzEgKGV4cGVyaW1lbnRh
-bCkNCnN5eiByZXBybzogICAgICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L3JlcHJv
-LnN5ej94PTEwODkzZmNjZTAwMDAwDQpDIHJlcHJvZHVjZXI6ICAgaHR0cHM6Ly9zeXprYWxsZXIu
-YXBwc3BvdC5jb20veC9yZXByby5jP3g9MTViYmFhNjJlMDAwMDANCg0KSU1QT1JUQU5UOiBpZiB5
-b3UgZml4IHRoZSBidWcsIHBsZWFzZSBhZGQgdGhlIGZvbGxvd2luZyB0YWcgdG8gdGhlIGNvbW1p
-dDoNClJlcG9ydGVkLWJ5OiBzeXpib3QrOGE4NDI5YThiODAyODBmZjFjODBAc3l6a2FsbGVyLmFw
-cHNwb3RtYWlsLmNvbQ0KDQp1c2IgMS0xOiBjb25maWcgMCBpbnRlcmZhY2UgMCBhbHRzZXR0aW5n
-IDAgaGFzIDMgZW5kcG9pbnQgZGVzY3JpcHRvcnMsICANCmRpZmZlcmVudCBmcm9tIHRoZSBpbnRl
-cmZhY2UgZGVzY3JpcHRvcidzIHZhbHVlOiA0DQp1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBmb3Vu
-ZCwgaWRWZW5kb3I9MTNkYywgaWRQcm9kdWN0PTU2MTEsICANCmJjZERldmljZT00MC4xNQ0KdXNi
-IDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTAsIFByb2R1Y3Q9MCwgU2VyaWFsTnVt
-YmVyPTANCnVzYiAxLTE6IGNvbmZpZyAwIGRlc2NyaXB0b3I/Pw0KaHdhLWhjIDEtMTowLjA6IFdp
-cmUgQWRhcHRlciB2MTA2LjUyIG5ld2VyIHRoYW4gZ3Jva2VkIHYxLjANCmh3YS1oYyAxLTE6MC4w
-OiBGSVhNRTogVVNCX01BWENISUxEUkVOIHRvbyBsb3cgZm9yIFdVU0IgYWRhcHRlciAoMTk0IHBv
-cnRzKQ0KdXNiIDEtMTogQlVHOiBiYWQgaG9zdCBzZWN1cml0eSBkZXNjcmlwdG9yOyBub3QgZW5v
-dWdoIGRhdGEgKDIgdnMgNSBsZWZ0KQ0KdXNiIDEtMTogc3VwcG9ydGVkIGVuY3J5cHRpb24gdHlw
-ZXM6IO+/ve+/vc+B77+977+977+9fO+/ve+/vc+B77+977+977+977+977+977+9z4Hvv73vv73v
-v70NCnVzYiAxLTE6IEU6IGhvc3QgZG9lc24ndCBzdXBwb3J0IENDTS0xIGNyeXB0bw0KaHdhLWhj
-IDEtMTowLjA6IENhbm5vdCBpbml0aWFsaXplIGludGVybmFsczogLTE5DQoNCg0KLS0tDQpUaGlz
-IGJ1ZyBpcyBnZW5lcmF0ZWQgYnkgYSBib3QuIEl0IG1heSBjb250YWluIGVycm9ycy4NClNlZSBo
-dHRwczovL2dvby5nbC90cHNtRUogZm9yIG1vcmUgaW5mb3JtYXRpb24gYWJvdXQgc3l6Ym90Lg0K
-c3l6Ym90IGVuZ2luZWVycyBjYW4gYmUgcmVhY2hlZCBhdCBzeXprYWxsZXJAZ29vZ2xlZ3JvdXBz
-LmNvbS4NCg0Kc3l6Ym90IHdpbGwga2VlcCB0cmFjayBvZiB0aGlzIGJ1ZyByZXBvcnQuIFNlZToN
-Cmh0dHBzOi8vZ29vLmdsL3Rwc21FSiNzdGF0dXMgZm9yIGhvdyB0byBjb21tdW5pY2F0ZSB3aXRo
-IHN5emJvdC4NCnN5emJvdCBjYW4gdGVzdCBwYXRjaGVzIGZvciB0aGlzIGJ1ZywgZm9yIGRldGFp
-bHMgc2VlOg0KaHR0cHM6Ly9nb28uZ2wvdHBzbUVKI3Rlc3RpbmctcGF0Y2hlcw0K
+I'm having this issue since some kernel releases but I never took the time to report it since it's not so severe...
+Anyway, if I plug my mouse (a Logitech G900) the device gets detected immediately but starts to work only after ~6 seconds as you can see from the log.
+
+The mouse is connected via USB cable (without the wireless receiver).
+
+I have this issue on a ArchLinux box (running kernel 5.3.8-arch1) and also on a Fedora 31 box.
+
+NOTE: Also reported here: https://bugzilla.kernel.org/show_bug.cgi?id=205449
+
+LOG:
+nov 06 08:29:50 tesx-pc kernel: mousedev: PS/2 mouse device common for all mice
+nov 06 08:29:50 tesx-pc kernel: logitech-hidpp-device 0003:046D:C081.0007: Device not connected
+nov 06 08:29:45 tesx-pc kernel: logitech-hidpp-device 0003:046D:C081.0006: input,hidraw5: USB HID v1.11 Mouse [Logitech Gaming Mouse G900] on usb-0000:0f:00.3-1.2/input0
+nov 06 08:29:45 tesx-pc kernel: input: Logitech Gaming Mouse G900 as /devices/pci0000:00/0000:00:08.1/0000:0f:00.3/usb5/5-1/5-1.2/5-1.2:1.0/0003:046D:C081.0006/input/input36
+nov 06 08:29:45 tesx-pc kernel: hid-generic 0003:046D:C081.0007: input,hiddev4,hidraw6: USB HID v1.11 Keyboard [Logitech Gaming Mouse G900] on usb-0000:0f:00.3-1.2/input1
+nov 06 08:29:45 tesx-pc kernel: input: Logitech Gaming Mouse G900 System Control as /devices/pci0000:00/0000:00:08.1/0000:0f:00.3/usb5/5-1/5-1.2/5-1.2:1.1/0003:046D:C081.0007/input/input33
+nov 06 08:29:45 tesx-pc kernel: input: Logitech Gaming Mouse G900 Consumer Control as /devices/pci0000:00/0000:00:08.1/0000:0f:00.3/usb5/5-1/5-1.2/5-1.2:1.1/0003:046D:C081.0007/input/input32
+nov 06 08:29:45 tesx-pc kernel: input: Logitech Gaming Mouse G900 Keyboard as /devices/pci0000:00/0000:00:08.1/0000:0f:00.3/usb5/5-1/5-1.2/5-1.2:1.1/0003:046D:C081.0007/input/input31
+nov 06 08:29:45 tesx-pc kernel: hid-generic 0003:046D:C081.0006: input,hidraw5: USB HID v1.11 Mouse [Logitech Gaming Mouse G900] on usb-0000:0f:00.3-1.2/input0
+nov 06 08:29:45 tesx-pc kernel: input: Logitech Gaming Mouse G900 as /devices/pci0000:00/0000:00:08.1/0000:0f:00.3/usb5/5-1/5-1.2/5-1.2:1.0/0003:046D:C081.0006/input/input30
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: SerialNumber: 0E6C36503233
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: Manufacturer: Logitech
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: Product: Gaming Mouse G900
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: New USB device found, idVendor=046d, idProduct=c081, bcdDevice= 1.03
+nov 06 08:29:44 tesx-pc kernel: usb 5-1.2: new full-speed USB device number 5 using xhci_hcd
