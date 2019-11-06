@@ -2,143 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E78F3AC8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 22:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8BEF3B1B
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 23:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725992AbfKGVxa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 16:53:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33440 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725870AbfKGVx3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 16:53:29 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9828E222C5;
-        Thu,  7 Nov 2019 21:53:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573163608;
-        bh=q6SKsLHXv+qLDAv/Si1jE9FsC4EPM3DgeowAA3ZAaX8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=IEYJ+z+Mor70QcV2yPq7FiaLWy/3ZTvRV6Xh2eM7/xHDjOvmKWGtDoe1mQSYfMdBc
-         yeyqQm0HIVYRAEhXqnY1mPoCdIIFufty6Fcs/zHKqQVlXu+OQ3CPzOonJTvYYTHxvR
-         6+J+ri0oYQD/oIRQ4Np94MW11oMSPnBmp1gvonaA=
-Received: by mail-qk1-f176.google.com with SMTP id 205so3485224qkk.1;
-        Thu, 07 Nov 2019 13:53:28 -0800 (PST)
-X-Gm-Message-State: APjAAAWcvbBtKAc+5M4yugkY6w24c6HpVtt4uKEEepHwO5/hnbyBk6na
-        LCRPS8J1HHk5lLGEshtd4zK306COH0eRDjEdGg==
-X-Google-Smtp-Source: APXvYqxRrpYDbcHtlqqkdKNshF+TFNs6h/MBQZGDRhUH8Ti1BBiIS+leA9f/5p/0YVNfUwuJ2LVn2w4ciKgHvtx6mNQ=
-X-Received: by 2002:a05:620a:205d:: with SMTP id d29mr5534809qka.152.1573163607663;
- Thu, 07 Nov 2019 13:53:27 -0800 (PST)
+        id S1728271AbfKGWPU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 17:15:20 -0500
+Received: from mx.fm.ukrtelecom.ua ([82.207.79.108]:33118 "EHLO
+        mx.fm.ukrtelecom.ua" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728021AbfKGWPG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 17:15:06 -0500
+X-Greylist: delayed 116151 seconds by postgrey-1.27 at vger.kernel.org; Thu, 07 Nov 2019 17:15:05 EST
+Received: from web4.ukrpost.ua (web4.ukrpost.ua [82.207.79.14])
+        by mx.fm.ukrtelecom.ua  with ESMTP id xA6DwAcM020185-xA6DwAcO020185
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Wed, 6 Nov 2019 15:58:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ukrpost.ua;
+         s=ukrpost; h=Subject:To:Date:From:Content-Type:MIME-Version:Message-ID:
+        Sender:Reply-To:Cc:Content-Transfer-Encoding:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=h3UNy/ZGcy3Tj0FdT9OqfFsPOyudTaLRmC+q/a7EPhs=; b=ZJZdg2B2X0pSB5RAFGuW9tLAJy
+        WnG3fLxiPfJeKzUkiUfAZlt9DLKeQMJ1AQNdjAotsAArlH6o4ADhVxAY358O3XT6VP86JJn1R5Qah
+        iZSVFCuaT4SZEVHvydUGTcPhrmbAsyUl4QS+aa+/VRKjzI4W6L+zmHv9yzIIYeiACRgw=;
+Received: from [127.0.0.1] (port=47878 helo=web4.ukrpost.ua)
+        by web4.ukrpost.ua with esmtp (Exim 4.89)
+        (envelope-from <ozar@ukrpost.ua>)
+        id 1iSLp4-00057H-Ml; Wed, 06 Nov 2019 15:58:10 +0200
+Message-ID: <1818016429.99062.1573048690686.JavaMail.ukrpost@web4.ukrpost.ua>
 MIME-Version: 1.0
-References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-6-john.stultz@linaro.org> <87k18nj4mj.fsf@gmail.com>
-In-Reply-To: <87k18nj4mj.fsf@gmail.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 7 Nov 2019 15:53:16 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJtKMG7FfrHFjKpMx1As954UE2QqzMBOWEB4wGn=rsAug@mail.gmail.com>
-Message-ID: <CAL_JsqJtKMG7FfrHFjKpMx1As954UE2QqzMBOWEB4wGn=rsAug@mail.gmail.com>
-Subject: Re: [PATCH v4 5/9] usb: dwc3: Rework clock initialization to be more flexible
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     John Stultz <john.stultz@linaro.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        ShuFan Lee <shufan_lee@richtek.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Yu Chen <chenyu56@huawei.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_99061_358128589.1573048690686"
+From:   Mariam Abdul <ozar@ukrpost.ua>
+Date:   Wed, 6 Nov 2019 15:58:10 +0200 (EET)
+To:     mismariamabdul@gmail.com
+Subject: =?UTF-8?Q?Gr=C3=BC=C3=9Fe_an_dich,_mein_lieber_Freund?=
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 4:14 AM Felipe Balbi <balbi@kernel.org> wrote:
->
->
-> Hi,
->
-> John Stultz <john.stultz@linaro.org> writes:
->
-> > The dwc3 core binding specifies three clocks:
-> >   ref, bus_early, and suspend
-> >
-> > which are all controlled in the driver together.
-> >
-> > However some variants of the hardware my not have all three clks
->                                         ^^
->                                         may
->
-> In fact *all* platforms have all three clocks. It's just that in some
-> cases clock pins are shorted together (or take input from same clock).
->
-> > So this patch reworks the reading of the clks from the dts to
-> > use devm_clk_bulk_get_all() will will fetch all the clocks
->                               ^^^^
->                               which?
->
-> > specified in the dts together.
-> >
-> > This patch was reccomended by Rob Herring <robh@kernel.org>
-> > as an alternative to creating multiple bindings for each variant
-> > of hardware when the only unique bits were clocks and resets.
-> >
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Mark Rutland <mark.rutland@arm.com>
-> > CC: ShuFan Lee <shufan_lee@richtek.com>
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-> > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > Cc: Yu Chen <chenyu56@huawei.com>
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Cc: Jun Li <lijun.kernel@gmail.com>
-> > Cc: Valentin Schneider <valentin.schneider@arm.com>
-> > Cc: Jack Pham <jackp@codeaurora.org>
-> > Cc: linux-usb@vger.kernel.org
-> > Cc: devicetree@vger.kernel.org
-> > Suggested-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: John Stultz <john.stultz@linaro.org>
-> > ---
-> > v3: Rework dwc3 core rather then adding another dwc-of-simple
-> >     binding.
-> > ---
-> >  drivers/usb/dwc3/core.c | 20 +++++---------------
-> >  1 file changed, 5 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > index a039e35ec7ad..4d4f1836b62c 100644
-> > --- a/drivers/usb/dwc3/core.c
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -305,12 +305,6 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
-> >       return 0;
-> >  }
-> >
-> > -static const struct clk_bulk_data dwc3_core_clks[] = {
-> > -     { .id = "ref" },
-> > -     { .id = "bus_early" },
-> > -     { .id = "suspend" },
-> > -};
->
-> another option would be to pass three clocks with the same phandle. That
-> would even make sure that clock usage counts are correct, no?
+------=_Part_99061_358128589.1573048690686
+Content-Type: text/plain; charset=windows-1251
+Content-Transfer-Encoding: 7bit
 
-If you have the datasheet for the block, then perhaps some suggestion
-of which clocks code be the same. My guess would be ref and suspend.
 
-Maybe suspend is a fixed clock which is unmanaged on HiSilicon
-platforms. If we allow for no clocks on some platforms, then why does
-it have to be all or none?
+Gr??e an dich, mein lieber Freund,
 
-Rob
+Mein Name ist Mariam Abdul, ich schreibe Ihnen diese Nachricht mit Tr?nen in den Augen. Der andauernde B?rgerkrieg in meinem Land Syrien hat mein Leben so sehr beeinflusst. Ich habe letztes Jahr meine Familie verloren. Mein Vater war vor seinem Tod ein reicher Gesch?ftsmann, er machte ?l- und Gasgesch?fte, er machte auch Goldgesch?fte. Er hat ein gro?es Geld verdient (25 MILLIONEN DREIHUNDERT TAUSEND US-DOLLAR). Das Geld ist bei der First Gulf Bank in Dubai (VAE) hinterlegt der Krieg und das T?ten in Syrien jetzt.
+
+Bitte helfen Sie mir, das Geld zu erhalten, und wir k?nnen vereinbaren, dass Sie es investieren, bis ich mich von meiner Krankheit erholt habe und zu Ihnen komme.
+
+Ich m?chte Sie zum Gesch?ftspartner meines verstorbenen Vaters ernennen, und die First Gulf Bank in Dubai ?berweist Ihnen das Geld. Ich werde Ihnen alle Unterlagen und Informationen zur Einzahlung des Geldes zusenden.
+
+Bitte lassen Sie mich wissen, ob Sie dies f?r mich tun k?nnen. Dies ist meine wahre Geschichte. Bitte, ich brauche Ihre Hilfe.
+
+Sie k?nnen mich per E-Mail kontaktieren (mariamabdul523@gmail.com)
+
+Mit freundlichen Gr??en,
+
+Mariam Abdul
+------=_Part_99061_358128589.1573048690686--
