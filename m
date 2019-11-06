@@ -2,125 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 721B1F158F
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 12:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E2AF15B4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 13:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729219AbfKFL7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 06:59:02 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38930 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728716AbfKFL7C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 Nov 2019 06:59:02 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 02267B162;
-        Wed,  6 Nov 2019 11:59:00 +0000 (UTC)
-Message-ID: <1573040577.3090.22.camel@suse.com>
-Subject: Re: [PATCH] usb: appledisplay: fix use-after-free in
- bl_get_brightness
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Phong Tran <tranmanphong@gmail.com>,
-        syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
-Cc:     2pi@mok.nu, alex.theissen@me.com, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Date:   Wed, 06 Nov 2019 12:42:57 +0100
-In-Reply-To: <20191105233652.21033-1-tranmanphong@gmail.com>
-References: <00000000000042d60805933945b5@google.com>
-         <20191105233652.21033-1-tranmanphong@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1731684AbfKFMCz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 07:02:55 -0500
+Received: from mx0a-00128a01.pphosted.com ([148.163.135.77]:17432 "EHLO
+        mx0a-00128a01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729671AbfKFMCy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 07:02:54 -0500
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xA6BrKKY011139;
+        Wed, 6 Nov 2019 07:02:29 -0500
+Received: from nam03-dm3-obe.outbound.protection.outlook.com (mail-dm3nam03lp2054.outbound.protection.outlook.com [104.47.41.54])
+        by mx0a-00128a01.pphosted.com with ESMTP id 2w2a5rqbtm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 06 Nov 2019 07:02:29 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X2Xz2/BcI7SKxbJth96DxcHTgHm85Hj5Rtrl1Xe19gHn3Bhi+K2E+07G97TW/Oddv+Ogh5CWDCRmroui/wsMzVh1cOk5G1vAsY7IlMAfNWZxL6qDRhWwRNwARPQfUN2KfEAhmL1PnDbwhIDvVwT4ydjfHd/do8D29xhE9GY7+S62lOCnFPdb/E23ZOmoJ3dt0I8uoDtqLE6hmuZbQEOSVDIIaoSaw52sQfOHJ/g5Am4ZpIHERntEGsOekDsn8hWaNLOiGuSlf8QcIB9X22QqBxyYZTC0uKwZOO0PORWYaR5Xdzkh4GX7qptcr/1io7Yzcxq+STeu1bblHP9PLtKzew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Icw1DLwKVIlabD5X2NZjvcB3oTqvQN1/67h7TLklTug=;
+ b=Vlg/Q0q7Igc4p597TI4NF0eyo/cK1XXyvuX/xKYlzRiZvA71uCj36If5RgPjMka7Ecisq0TlD0waDWnWlCWpNHf6aGVVUyfR4AMuxqoUEQsWJdOnaiU4p7HaTx5797gkTBQnAIJHvM7FlOAnlDdcnTu3yL/DGXYTIUGVZt3O7JhS42hvkf8Rpx6PIaDq+Y1Vs2Xybue3Upt0i4EJcqse6xgtUs+T6fQAcnlQJ1ECplh8OPJQ0DmPE2zbOSxSS/IKS3YgDGwtEMZSrX3BcSWsOTnlw+VRyIMduaaLLJAYdCaxROCAT4/tEFMh73raHUPGU70kCJgWoPzjI3lWd2ndtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 137.71.25.57) smtp.rcpttodomain=kernel.org smtp.mailfrom=analog.com;
+ dmarc=bestguesspass action=none header.from=analog.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=analog.onmicrosoft.com; s=selector2-analog-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Icw1DLwKVIlabD5X2NZjvcB3oTqvQN1/67h7TLklTug=;
+ b=LpNt4tqAaDAmTKrkwicUVFHlEIUHUykLJvxbMD9o8tisIcpZPlITDERfaInVHloTH4gBa6kNUh8or8dhElF6RGtdE+5cWSp9YC6kuNKA4wW99Mmce2b1zjvXUVq5mZ0bCsaSGTJrP5OCjzPJsvcXgluwsVhg2MXkDvfur54FGbs=
+Received: from BYAPR03CA0028.namprd03.prod.outlook.com (2603:10b6:a02:a8::41)
+ by MN2PR03MB5231.namprd03.prod.outlook.com (2603:10b6:208:1e0::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.20; Wed, 6 Nov
+ 2019 12:02:27 +0000
+Received: from CY1NAM02FT033.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e45::205) by BYAPR03CA0028.outlook.office365.com
+ (2603:10b6:a02:a8::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2408.24 via Frontend
+ Transport; Wed, 6 Nov 2019 12:02:27 +0000
+Received-SPF: Pass (protection.outlook.com: domain of analog.com designates
+ 137.71.25.57 as permitted sender) receiver=protection.outlook.com;
+ client-ip=137.71.25.57; helo=nwd2mta2.analog.com;
+Received: from nwd2mta2.analog.com (137.71.25.57) by
+ CY1NAM02FT033.mail.protection.outlook.com (10.152.75.179) with Microsoft SMTP
+ Server (version=TLS1_0, cipher=TLS_RSA_WITH_AES_256_CBC_SHA) id 15.20.2387.20
+ via Frontend Transport; Wed, 6 Nov 2019 12:02:26 +0000
+Received: from NWD2HUBCAS7.ad.analog.com (nwd2hubcas7.ad.analog.com [10.64.69.107])
+        by nwd2mta2.analog.com (8.13.8/8.13.8) with ESMTP id xA6C2HSr010827
+        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
+        Wed, 6 Nov 2019 04:02:17 -0800
+Received: from saturn.ad.analog.com (10.48.65.117) by
+ NWD2HUBCAS7.ad.analog.com (10.64.69.107) with Microsoft SMTP Server id
+ 14.3.408.0; Wed, 6 Nov 2019 07:02:25 -0500
+From:   Alexandru Ardelean <alexandru.ardelean@analog.com>
+To:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <mina86@mina86.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Alexandru Ardelean <alexandru.ardelean@analog.com>
+Subject: [PATCH] usb: gadget: ffs: ffs_aio_cancel(): Save/restore IRQ flags
+Date:   Wed, 6 Nov 2019 14:02:19 +0200
+Message-ID: <20191106120219.15028-1-alexandru.ardelean@analog.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ADIRoutedOnPrem: True
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:137.71.25.57;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(396003)(376002)(346002)(39860400002)(136003)(199004)(189003)(2616005)(50226002)(7636002)(50466002)(476003)(486006)(14444005)(70586007)(70206006)(336012)(1076003)(126002)(86362001)(8676002)(246002)(6666004)(478600001)(47776003)(426003)(186003)(54906003)(51416003)(316002)(7696005)(110136005)(106002)(8936002)(356004)(48376002)(36756003)(107886003)(26005)(5660300002)(2906002)(2870700001)(4326008)(44832011)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR03MB5231;H:nwd2mta2.analog.com;FPR:;SPF:Pass;LANG:en;PTR:nwd2mail11.analog.com;A:1;MX:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: df58e0c0-ae3b-4d92-c68f-08d762b1312e
+X-MS-TrafficTypeDiagnostic: MN2PR03MB5231:
+X-Microsoft-Antispam-PRVS: <MN2PR03MB52312519F9D19BBB2AE7524BF9790@MN2PR03MB5231.namprd03.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:1728;
+X-Forefront-PRVS: 02135EB356
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RiCdJXhynu0TWKSxn1ttsh22yVPaWmqOQo0HiLwT9xQ9OHrSw+Jia1m/OYdhsoKd3yjTI0qpj+stxYrLM96YPuxkHYCo+f1QXqDc4sr482MOGmx/K/uscyBrHDBDuEbb+urlx6o9qD9mzJLg+2uwGeBqvBpcDYlf320BPa7kSfmkotucNHQZAVoYn5Wx8Lr1MXpfdCkGk9xsgp6EGtYbh0wiMW+B8fF/nUchCOAnDiMrNnmaMEpR7nr6HS7FXv/Fg9xwSEMU67C0VSEkPGxHEG/zNLZw0C9pb+JB4ItjkytV8n9EjHO3aVVjCGSGUPsuazcu+MirmC1Q98n8L5eFAS5l3a820WaqqKx/GV8yIT4lr/WJdqGDmm2s0RlZF3nJK1tr+qF+DXDw6XIB9YiHegRvX0JsVaNZNlljKhFGDgLb19T57yml7j/4sJZEkNOB
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2019 12:02:26.8836
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: df58e0c0-ae3b-4d92-c68f-08d762b1312e
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=eaa689b4-8f87-40e0-9c6f-7228de4d754a;Ip=[137.71.25.57];Helo=[nwd2mta2.analog.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR03MB5231
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-06_03:2019-11-06,2019-11-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ malwarescore=0 lowpriorityscore=0 phishscore=0 adultscore=0 clxscore=1011
+ mlxlogscore=557 priorityscore=1501 bulkscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1911060119
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 06.11.2019, 06:36 +0700 schrieb Phong Tran:
-> In context of USB disconnect, the delaywork trigger and calling
-> appledisplay_bl_get_brightness() and the msgdata was freed.
-> 
-> add the checking return value of usb_control_msg() and only update the
-> data while the retval is valid.
+From: Lars-Peter Clausen <lars@metafoo.de>
 
-Hi,
+ffs_aio_cancel() can be called from both interrupt and thread context. Make
+sure that the current IRQ state is saved and restored by using
+spin_{un,}lock_irq{save,restore}().
 
-I am afraid there are some issues with your patch. First, let me stress
-that you found the right place to fix an issue and you partially fixed
-an issue. But the the fix you applied is incomplete and left another
-issue open.
+Otherwise undefined behavior might occur.
 
-Your patch still allows doing IO to a device that may already be bound
-to another driver. That is bad, especially as the buffer is already
-free. Yes, if IO is failing, you have fixed that narrow issue.
-But it need not fail.
-
-If you look into appledisplay_probe() you will see that it can fail
-because backlight_device_register() fails. The error handling will
-thereupon kill the URB and free memory. But it will not kill an already
-scheduled work. The scheduled work will then call usb_control_msg()
-on pdata->msgdata, which has been freed. If that IO fails, all is well.
-If not, the issue still exists.
-
-Secondly, your error check is off by 2. You are checking only for
-usb_control_msg() failing. But it can return only one byte instead
-of two. If that happens, the value you return is stale, although
-the buffer is correctly allocated.
-
-	Regards
-		Oliver
-
-The correct fix for both issues would be:
-
-#syz test: https://github.com/google/kasan.git e0bd8d79
-
-From 2497a62bdbeb9bd94f690c22d96dd1b8cf22861f Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Wed, 6 Nov 2019 12:36:28 +0100
-Subject: [PATCH] appledisplay: fix error handling in the scheduled work
-
-The work item can operate on
-
-1. stale memory left over from the last transfer
-the actual length of the data transfered needs to be checked
-2. memory already freed
-the error handling in appledisplay_probe() needs
-to cancel the work in that case
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
+Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
+Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
 ---
- drivers/usb/misc/appledisplay.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_fs.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
-index ac92725458b5..ba1eaabc7796 100644
---- a/drivers/usb/misc/appledisplay.c
-+++ b/drivers/usb/misc/appledisplay.c
-@@ -164,7 +164,12 @@ static int appledisplay_bl_get_brightness(struct backlight_device *bd)
- 		0,
- 		pdata->msgdata, 2,
- 		ACD_USB_TIMEOUT);
--	brightness = pdata->msgdata[1];
-+	if (retval < 2) {
-+		if (retval >= 0)
-+			retval = -EMSGSIZE;
-+	} else {
-+		brightness = pdata->msgdata[1];
-+	}
- 	mutex_unlock(&pdata->sysfslock);
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 59d9d512dcda..ed3bcbb84b95 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1160,18 +1160,19 @@ static int ffs_aio_cancel(struct kiocb *kiocb)
+ {
+ 	struct ffs_io_data *io_data = kiocb->private;
+ 	struct ffs_epfile *epfile = kiocb->ki_filp->private_data;
++	unsigned long flags;
+ 	int value;
  
- 	if (retval < 0)
-@@ -299,6 +304,7 @@ static int appledisplay_probe(struct usb_interface *iface,
- 	if (pdata) {
- 		if (pdata->urb) {
- 			usb_kill_urb(pdata->urb);
-+			cancel_delayed_work_sync(&pdata->work);
- 			if (pdata->urbdata)
- 				usb_free_coherent(pdata->udev, ACD_URB_BUFFER_LEN,
- 					pdata->urbdata, pdata->urb->transfer_dma);
+ 	ENTER();
+ 
+-	spin_lock_irq(&epfile->ffs->eps_lock);
++	spin_lock_irqsave(&epfile->ffs->eps_lock, flags);
+ 
+ 	if (likely(io_data && io_data->ep && io_data->req))
+ 		value = usb_ep_dequeue(io_data->ep, io_data->req);
+ 	else
+ 		value = -EINVAL;
+ 
+-	spin_unlock_irq(&epfile->ffs->eps_lock);
++	spin_unlock_irqrestore(&epfile->ffs->eps_lock, flags);
+ 
+ 	return value;
+ }
 -- 
-2.16.4
-
+2.20.1
 
