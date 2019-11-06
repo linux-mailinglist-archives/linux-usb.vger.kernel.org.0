@@ -2,312 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CEAF1435
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 11:45:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6041AF14FE
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 12:25:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731313AbfKFKpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 05:45:05 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40542 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730844AbfKFKpE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 05:45:04 -0500
-Received: by mail-wr1-f66.google.com with SMTP id i10so4443473wrs.7
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2019 02:45:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ho0IuXnlLSu0S9dl4tyqWJ4wOPukxzFH+rPw8w9IP3U=;
-        b=0Djt5Com4Nw6nawSJY2BCWzsF4s4Xk8wxOoGPh18FDbcUJ4GQQiII9UXR5UWrhl9Ho
-         1+hy5If3cGGw6wPamrAt2Ck9f3cdm537ILzhsx/nhU40El7Bti+8EM3DtzCwD0lcdJVq
-         FsOzwh1Lcgt8dIoSZ2KacYGB0OmM198fRKZq1pTGk9mqNz1pKhSmpGx/4skJR6qKeQH/
-         q6yJAgMA1lNxdvJ5c3cg8pzFOPAs5SAPbUukBlMw5+trLF5gSTdqtRrRu8ROe22nAZXh
-         8yF6WN0msw88arX4YfEa+tQBnzkjmrmiQ2cIKVPbH6zBTa2Sz+d5UUDMWbYvrs4kVPHw
-         y1vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ho0IuXnlLSu0S9dl4tyqWJ4wOPukxzFH+rPw8w9IP3U=;
-        b=lpv25djSejAZE5CtJ3qh3vp9+HKdplz4N1hLTfhWNYNYAaT6C1OzLHSW9bL1DeehUd
-         eHTbP6/MW5QXX8dqnOLi/gD08TvZyw0sB5Id1SJiN2g+QP2v572YX77QWe1gQpmJDV2J
-         bTP9QunlBH8qUSDZwQmnQq1tjq1r6QllzYHgXjEnnCcvleBQRwDRLGuu5U3UIWpXpzfg
-         RgBXDzIqow3g1QB6cRd2UcBjRCOYLz1CG1cRcbbK1e7ULoG+cxkjiTX7ZNGcgmDnCuYk
-         5OA8dK5asTzVVqQp4p885kx+F76c+G6JP/juZmpeHirsW35t552EGE/lwVhgvYHucsU8
-         Cwug==
-X-Gm-Message-State: APjAAAVzMKuu/6vakSZGPEU8rJU7jnuhP4AXKUkiriBWPKNamD9NOsU9
-        voGxCcLuytsvK/BYtTzT6+f0zQ==
-X-Google-Smtp-Source: APXvYqxmFcDntelzvf5oc2kIZGTaA8RcxUIN9ppLG7GpMdMZTeYZT5cyAcYce2korwDEVDossgvHyA==
-X-Received: by 2002:adf:fe90:: with SMTP id l16mr1948950wrr.81.1573037100615;
-        Wed, 06 Nov 2019 02:45:00 -0800 (PST)
-Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id u187sm2483023wme.15.2019.11.06.02.44.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2019 02:45:00 -0800 (PST)
-From:   Neil Armstrong <narmstrong@baylibre.com>
-To:     robh+dt@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH v2] dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue Bindings to YAML schemas
-Date:   Wed,  6 Nov 2019 11:44:58 +0100
-Message-Id: <20191106104458.23698-1-narmstrong@baylibre.com>
-X-Mailer: git-send-email 2.22.0
+        id S1731016AbfKFLY6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 06:24:58 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:39136 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725890AbfKFLY6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 06:24:58 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA6BIoCk007402;
+        Wed, 6 Nov 2019 11:23:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=dS9fPvp5JFtr7OtCyzHtVChNlktMu26XAdqZYEjFFTA=;
+ b=jRB0bTsxKRqKXMi5qcaa+HoYJKKVD8K9XF+zZc5PUEs8jq2WW6DtYT7ndX95l+/iNGsE
+ u6IzeZHtq7Rmnq/d3hrW6YVlSzw3U+zqRyi4bqccq6b+2gX60Fu0++ldAW7ETW2WwHoo
+ Jgg7rEqL8NfeUFcchjQgqAXYxQ+EtCF/xupCnE+b1GS+ua++kXEVQi9UiHoCZ9Kl9AU6
+ Ku/4meUoBTbXqg0slKYfSh3O0WnuFcg9KYgdeQj/35HHhHTeGQwAtDrj8aG2HIuaUto1
+ 0628zaUA4Lw1FtKb83TzjddoCLiL5zqFjK3fuXaPCJ8K8ewyCVGQp60lYOIOrN35+ssX 3Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2w12erd805-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Nov 2019 11:23:46 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA6BNE8b128684;
+        Wed, 6 Nov 2019 11:23:45 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2w333x54cv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 06 Nov 2019 11:23:43 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA6BNE45017045;
+        Wed, 6 Nov 2019 11:23:15 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 06 Nov 2019 03:23:14 -0800
+Date:   Wed, 6 Nov 2019 14:23:03 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Mao Wenan <maowenan@huawei.com>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH -next] usb: roles: Hide option USB_ROLE_SWITCH
+Message-ID: <20191106112303.GJ10409@kadam>
+References: <20191104135312.GD996639@ulmo>
+ <20191104144850.91305-1-maowenan@huawei.com>
+ <20191105124218.GB12204@kuha.fi.intel.com>
+ <20191105131605.GF10409@kadam>
+ <20191105152624.GC12204@kuha.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191105152624.GC12204@kuha.fi.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=934
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1911060117
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1911060117
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Now that we have the DT validation in place, let's convert the device tree
-bindings for the Amlogic G12A DWC3 Glue Bindings over to a YAML schemas,
-the AXG and GXL glue bindings will be converted later.
+On Tue, Nov 05, 2019 at 05:26:24PM +0200, Heikki Krogerus wrote:
+> Hi Dan,
+> 
+> On Tue, Nov 05, 2019 at 04:16:05PM +0300, Dan Carpenter wrote:
+> > On Tue, Nov 05, 2019 at 02:42:18PM +0200, Heikki Krogerus wrote:
+> > > On Mon, Nov 04, 2019 at 10:48:50PM +0800, Mao Wenan wrote:
+> > > > The USB role switch class is, after all,
+> > > > not useful by itself. Hiding USB_ROLE_SWITCH
+> > > > so we can avoid any of the pitfalls associated
+> > > > with user-visible symbols and "select".
+> > > > 
+> > > > Signed-off-by: Mao Wenan <maowenan@huawei.com>
+> > > > ---
+> > > >  drivers/usb/roles/Kconfig | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/drivers/usb/roles/Kconfig b/drivers/usb/roles/Kconfig
+> > > > index f8b31aa..1da58d4 100644
+> > > > --- a/drivers/usb/roles/Kconfig
+> > > > +++ b/drivers/usb/roles/Kconfig
+> > > > @@ -1,7 +1,7 @@
+> > > >  # SPDX-License-Identifier: GPL-2.0
+> > > >  
+> > > >  config USB_ROLE_SWITCH
+> > > > -	tristate "USB Role Switch Support"
+> > > > +	tristate
+> > > >  	help
+> > > >  	  USB Role Switch is a device that can select the USB role - host or
+> > > >  	  device - for a USB port (connector). In most cases dual-role capable
+> > > 
+> > > You didn't actually convert the "depends on USB_ROLE_SWTICH" to
+> > > "select USB_ROLE_SWITCH" before this. You also left the help text that
+> > > is now useless.
+> > > 
+> > > I really think that instead of this, we should just convert all
+> > > "select USB_ROLE_SWTICH" to "depends on USB_ROLE_SWITCH".
+> > 
+> > The you have to find USB_ROLE_SWITCH first when you want to enable your
+> > hardware...  It's feels really confusing when you want to create a
+> > .config file...
+> 
+> Unfortunately selecting the class alone is not enough. The USB role
+> switch on the system may be a dual-role capable USB controller, but it
+> may also be a mux that has its own separate driver.
+> 
+> It's equally or even more confusing for the user if the USB drivers
+> are enabled, including the dual-role mode, but the connector still
+> works only in one role, or in worst case not at all (if there is no
+> mux driver and the mux is left in "safe mode" so that the pins on the
+> connector are not connected to anything).
+> 
+> I still think that we should make these drivers depend on the class
+> instead of just selecting it. That way we at least give the user a
+> hint that there are also separate USB role switch drivers that may be
+> needed.
+> 
 
-Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
----
-Changes since v1:
-- fixed typo in description
-- removed dr-mode definition in favor of "true"
+I guess I see your point.  My problem then is just with the menuconfig
+system, not really with this patch.
 
- .../devicetree/bindings/usb/amlogic,dwc3.txt  |  88 ------------
- .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 128 ++++++++++++++++++
- 2 files changed, 128 insertions(+), 88 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> > I sometimes think maybe I'm too stupid to configure a kernel these days
+> > and that's sort of sad because how is Aunt Tillie supposed to manage?
+> 
+> We can always use something like conditional comments in the
+> Kconfig files to make sure that the user is told that in order to
+> select the driver, a dependency must be satisfied:
+> 
+>         config MY_AWESOME_DRIVER
+>                 tristate "My awesome driver!"
+>                 depends on USB_ROLE_SWITCH
+>                 help
+>                   That's right! IT REALLY IS AWESOME!
+> 
+>         comment "My awesome driver depends on USB_ROLE_SWITCH..."
+>                 depends on USB_ROLE_SWITCH=n
+> 
 
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-index b9f04e617eb7..9a8b631904fd 100644
---- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-+++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-@@ -40,91 +40,3 @@ Example device nodes:
- 				phy-names = "usb2-phy", "usb3-phy";
- 			};
- 		};
--
--Amlogic Meson G12A DWC3 USB SoC Controller Glue
--
--The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
--in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
--only.
--
--A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
--
--One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
--
--The DWC3 Glue controls the PHY routing and power, an interrupt line is
--connected to the Glue to serve as OTG ID change detection.
--
--Required properties:
--- compatible:	Should be "amlogic,meson-g12a-usb-ctrl"
--- clocks:	a handle for the "USB" clock
--- resets:	a handle for the shared "USB" reset line
--- reg:		The base address and length of the registers
--- interrupts:	the interrupt specifier for the OTG detection
--- phys: 	handle to used PHYs on the system
--	- a <0> phandle can be used if a PHY is not used
--- phy-names:	names of the used PHYs on the system :
--	- "usb2-phy0" for USB2 PHY0 if USBHOST_A port is used
--	- "usb2-phy1" for USB2 PHY1 if USBOTG_B port is used
--	- "usb3-phy0" for USB3 PHY if USB3_0 is used
--- dr_mode:	should be "host", "peripheral", or "otg" depending on
--	the usage and configuration of the OTG Capable port.
--	- "host" and "peripheral" means a fixed Host or Device only connection
--	- "otg" means the port can be used as both Host or Device and
--	  be switched automatically using the OTG ID pin.
--
--Optional properties:
--- vbus-supply:	should be a phandle to the regulator controlling the VBUS
--		power supply when used in OTG switchable mode
--
--Required child nodes:
--
--A child node must exist to represent the core DWC3 IP block. The name of
--the node is not important. The content of the node is defined in dwc3.txt.
--
--A child node must exist to represent the core DWC2 IP block. The name of
--the node is not important. The content of the node is defined in dwc2.txt.
--
--PHY documentation is provided in the following places:
--- Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
--- Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
--
--Example device nodes:
--	usb: usb@ffe09000 {
--			compatible = "amlogic,meson-g12a-usb-ctrl";
--			reg = <0x0 0xffe09000 0x0 0xa0>;
--			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
--			#address-cells = <2>;
--			#size-cells = <2>;
--			ranges;
--
--			clocks = <&clkc CLKID_USB>;
--			resets = <&reset RESET_USB>;
--
--			dr_mode = "otg";
--
--			phys = <&usb2_phy0>, <&usb2_phy1>,
--			       <&usb3_pcie_phy PHY_TYPE_USB3>;
--			phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
--
--			dwc2: usb@ff400000 {
--				compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
--				reg = <0x0 0xff400000 0x0 0x40000>;
--				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
--				clocks = <&clkc CLKID_USB1_DDR_BRIDGE>;
--				clock-names = "ddr";
--				phys = <&usb2_phy1>;
--				dr_mode = "peripheral";
--				g-rx-fifo-size = <192>;
--				g-np-tx-fifo-size = <128>;
--				g-tx-fifo-size = <128 128 16 16 16>;
--			};
--
--			dwc3: usb@ff500000 {
--				compatible = "snps,dwc3";
--				reg = <0x0 0xff500000 0x0 0x100000>;
--				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
--				dr_mode = "host";
--				snps,dis_u2_susphy_quirk;
--				snps,quirk-frame-length-adjustment;
--			};
--	};
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-new file mode 100644
-index 000000000000..2b2dae2e6b7f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-@@ -0,0 +1,128 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright 2019 BayLibre, SAS
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/usb/amlogic,meson-g12a-usb-ctrl.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
-+
-+maintainers:
-+  - Neil Armstrong <narmstrong@baylibre.com>
-+
-+description: |
-+  The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
-+  in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
-+  only.
-+
-+  A glue connects the DWC3 core to USB2 PHYs and optionally to an USB3 PHY.
-+
-+  One of the USB2 PHYs can be re-routed in peripheral mode to a DWC2 USB IP.
-+
-+  The DWC3 Glue controls the PHY routing and power, an interrupt line is
-+  connected to the Glue to serve as OTG ID change detection.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - amlogic,meson-g12a-usb-ctrl
-+
-+  ranges: true
-+
-+  "#address-cells":
-+    enum: [ 1, 2 ]
-+
-+  "#size-cells":
-+    enum: [ 1, 2 ]
-+
-+  clocks:
-+    minItems: 1
-+
-+  resets:
-+    minItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  phy-names:
-+    items:
-+      - const: usb2-phy0 # USB2 PHY0 if USBHOST_A port is used
-+      - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
-+      - const: usb3-phy0 # USB3 PHY if USB3_0 is used
-+
-+  phys:
-+    minItems: 1
-+    maxItems: 3
-+
-+  dr_mode: true
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  vbus-supply:
-+    description: VBUS power supply when used in OTG switchable mode
-+    maxItems: 1
-+
-+patternProperties:
-+  "^usb@[0-9a-f]+$":
-+    type: object
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - "#address-cells"
-+  - "#size-cells"
-+  - ranges
-+  - clocks
-+  - resets
-+  - reg
-+  - interrupts
-+  - phy-names
-+  - phys
-+  - dr_mode
-+
-+examples:
-+  - |
-+    usb: usb@ffe09000 {
-+          compatible = "amlogic,meson-g12a-usb-ctrl";
-+          reg = <0x0 0xffe09000 0x0 0xa0>;
-+          interrupts = <16>;
-+          #address-cells = <1>;
-+          #size-cells = <1>;
-+          ranges;
-+
-+          clocks = <&clkc_usb>;
-+          resets = <&reset_usb>;
-+
-+          dr_mode = "otg";
-+
-+          phys = <&usb2_phy0>, <&usb2_phy1>, <&usb3_phy0>;
-+          phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
-+
-+          dwc2: usb@ff400000 {
-+              compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
-+              reg = <0xff400000 0x40000>;
-+              interrupts = <31>;
-+              clocks = <&clkc_usb1>;
-+              clock-names = "ddr";
-+              phys = <&usb2_phy1>;
-+              dr_mode = "peripheral";
-+              g-rx-fifo-size = <192>;
-+              g-np-tx-fifo-size = <128>;
-+              g-tx-fifo-size = <128 128 16 16 16>;
-+          };
-+
-+          dwc3: usb@ff500000 {
-+              compatible = "snps,dwc3";
-+              reg = <0xff500000 0x100000>;
-+              interrupts = <30>;
-+              dr_mode = "host";
-+              snps,dis_u2_susphy_quirk;
-+              snps,quirk-frame-length-adjustment;
-+          };
-+    };
-+
--- 
-2.22.0
+Those sorts of help don't show up unless you already meet the
+dependencies or if you search for it.  And if you search for it then it
+already lists the depnds so the comment isn't required...
+
+I guess that in the olden days you used to go through the menus and
+look at all the high level options and figure it out.  These days you
+sort of have to know what you want already.  And then you use the search
+feature to enable it.
+
+The menuconfig system really is very broken.  I've looked at alternative
+ways to do it, but it quite a bit of work involved...
+
+regards,
+dan carpenter
 
