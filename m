@@ -2,27 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A7FF168D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 14:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DCEF1696
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 14:05:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730813AbfKFNFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 08:05:13 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41846 "EHLO mx1.suse.de"
+        id S1731612AbfKFNFg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 08:05:36 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42150 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730733AbfKFNFN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 Nov 2019 08:05:13 -0500
+        id S1731596AbfKFNFf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 6 Nov 2019 08:05:35 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2C4A7B272;
-        Wed,  6 Nov 2019 13:05:12 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 3CEE5B347;
+        Wed,  6 Nov 2019 13:05:34 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
 To:     alex.theissen@me.com, 2pi@mok.nu, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>
 Subject: [PATCH] appledisplay: fix error handling in the scheduled work
-Date:   Wed,  6 Nov 2019 13:49:01 +0100
-Message-Id: <20191106124902.7765-1-oneukum@suse.com>
+Date:   Wed,  6 Nov 2019 13:49:02 +0100
+Message-Id: <20191106124902.7765-2-oneukum@suse.com>
 X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191106124902.7765-1-oneukum@suse.com>
+References: <20191106124902.7765-1-oneukum@suse.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
