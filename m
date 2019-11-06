@@ -2,132 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8CAF114D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 09:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 346B6F117E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 09:54:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731610AbfKFIjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 03:39:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48368 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731551AbfKFIjo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 6 Nov 2019 03:39:44 -0500
-Received: from localhost.localdomain (unknown [223.226.46.117])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BDA752187F;
-        Wed,  6 Nov 2019 08:39:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573029583;
-        bh=3n0e0WMZun+KvTCKIcTClGi7plTjhUdFq8O6kRTeDpE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rNnTVDZGvuJNE9U/We2e99vZEei5l67uDysMZQG5l4KeRRK5bLB0QKTTK2vUeuwxT
-         UOMjAP+CA54iijJNe7JhwkSSmOonkbBluMlisDtt28ngF03460l9OjF8j2ypFjRmRb
-         OSjcOu11IBo20xstiJ7qJ1ZtCFixFc3bu7j10dYU=
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] usb: xhci: provide a debugfs hook for erasing rom
-Date:   Wed,  6 Nov 2019 14:08:43 +0530
-Message-Id: <20191106083843.1718437-5-vkoul@kernel.org>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191106083843.1718437-1-vkoul@kernel.org>
-References: <20191106083843.1718437-1-vkoul@kernel.org>
+        id S1728463AbfKFIyo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 03:54:44 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39969 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726830AbfKFIyo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 03:54:44 -0500
+Received: by mail-pl1-f196.google.com with SMTP id e3so8985588plt.7;
+        Wed, 06 Nov 2019 00:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=n6GjS6HuTnbZ88vQVj4JSFkPPvT/i5ODPCza1wsk6Lc=;
+        b=YjFJBlz0++/RfQRFL30Y70Clnu/B5Hp9fXIBT1QrAOFMv/NsaZC2Flm5rjoMJ20tlw
+         f5e0FEe+rH0OW3NB8daQp/K0Bs8KgObrXvagmBkyDglxa3uFIHg+axqXP935hwlBBBEQ
+         HT6WSpSUcMTsASmr4ElQU7ydbAHQjyqz0F+akDk0u3WSqKoW/bjFKuZkgj8PLWk3upfl
+         i/KjRmaEVmEkXQjWyQ+9zpLOwWPbUvtdZVpM6mlmKK2Fc12N1nMb+ZULqUPr9XXzr+Ql
+         iYdtfEtxgoUHDjMSISrzU291orjEHaXndF3Uhq8yEI/JFXiVeNmv81Jxan2aSkTGWK6Q
+         5+GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=n6GjS6HuTnbZ88vQVj4JSFkPPvT/i5ODPCza1wsk6Lc=;
+        b=CiK9fnFs0/0HZw+dpmx//EYDn9YvaaQwpUgPFbjYUJL5otIUFSZgCQ0NRshbv5MYD1
+         mC62gDwJMD8wZ8/DEaXGaXbN3FwovB60ylgqxD9rgfw5iRjepnc5eUaOoI5REJYeyY7H
+         t9C0kWcIrSu711fPBS0hjx6B7RIhY5w1K4eIyJRyz8OmgjhM04PL6Ts5I7+uqBA79sm/
+         flRq8RrwxEYBYIy0Cx0L/c6P/sDMGC1C05cqJT8VaorXGPzRQk4pLDfWV6i7oEEEzOqr
+         x4QoTrQb6ZvGyUIcst6oUUR695qrZrdjG33b2tELRQ9AArOA5awJyXCtZanSIJkW8GMS
+         lFSw==
+X-Gm-Message-State: APjAAAVzYuxL2QBSsWtSjR+TvJoDbILU4cH7DSXEywLZmI61DN8UzTES
+        AJ9nbdAowskRCfYRCDkTlZLnD6jRLocnl28qiX0=
+X-Google-Smtp-Source: APXvYqxFnaPObwnV4COxhNQXBd8N5/3daW/8Ez/WckSwKSEWB7RTX/MES+iZPC3KFUYBE1ai/zETl1cz5ChX9RR8Tos=
+X-Received: by 2002:a17:902:b40e:: with SMTP id x14mr1434268plr.262.1573030482891;
+ Wed, 06 Nov 2019 00:54:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <1573029503-18369-1-git-send-email-bianpan2016@163.com>
+In-Reply-To: <1573029503-18369-1-git-send-email-bianpan2016@163.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 6 Nov 2019 10:54:32 +0200
+Message-ID: <CAHp75VeQ_3mConCN=u9O_Ckz9O+awHU=s+d3Kn6R35ZfzzAJKg@mail.gmail.com>
+Subject: Re: [PATCH] usb: gadget: pch_udc: fix use after free
+To:     Pan Bian <bianpan2016@163.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-run "echo 1 > /sys/kernel/debug/renesas-usb/rom_erase" to erase firmware
-when driver is loaded.
+On Wed, Nov 6, 2019 at 10:41 AM Pan Bian <bianpan2016@163.com> wrote:
+>
+> The next field of the DMA descriptor is written after releasing the
+> descriptor, which may result in a use-after-free issue. Set the value of
+> the field before it is released to fix the bug.
+>
 
-Subsequent init of driver shall reload the firmware
+Had you chance to read the discussion [1]?
+I Cc to Gustavo to hear from him about destiny of the change.
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/usb/host/xhci-pci.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+[1]: http://lkml.iu.edu/hypermail/linux/kernel/1702.1/00843.html
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 4d0c0fd18c23..ac8f433861e9 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -14,6 +14,7 @@
- #include <linux/acpi.h>
- #include <linux/firmware.h>
- #include <linux/unaligned/access_ok.h>
-+#include <linux/debugfs.h>
- 
- #include "xhci.h"
- #include "xhci-trace.h"
-@@ -493,6 +494,8 @@ static int renesas_fw_verify(struct pci_dev *dev,
- 	return 0;
- }
- 
-+static void debugfs_init(struct pci_dev *pdev);
-+
- static int renesas_check_rom_state(struct pci_dev *pdev)
- {
- 	const struct renesas_fw_entry *entry;
-@@ -516,6 +519,7 @@ static int renesas_check_rom_state(struct pci_dev *pdev)
- 		if (version == entry->expected_version) {
- 			dev_dbg(&pdev->dev, "Detected valid ROM version..\n");
- 			valid_version = true;
-+			debugfs_init(pdev);
- 		}
- 	}
- 	if (valid_version == false)
-@@ -803,6 +807,34 @@ static void renesas_rom_erase(struct pci_dev *pdev)
- 	dev_dbg(&pdev->dev, "ROM Erase... Done success\n");
- }
- 
-+static int debugfs_rom_erase(void *data, u64 value)
-+{
-+	struct pci_dev *pdev = data;
-+
-+	if (value == 1) {
-+		dev_dbg(&pdev->dev, "Userspace requested ROM erase\n");
-+		renesas_rom_erase(pdev);
-+		return 0;
-+	}
-+	return -EINVAL;
-+}
-+DEFINE_DEBUGFS_ATTRIBUTE(rom_erase_ops, NULL, debugfs_rom_erase, "%llu\n");
-+
-+static struct dentry *debugfs_root;
-+
-+static void debugfs_init(struct pci_dev *pdev)
-+{
-+	debugfs_root = debugfs_create_dir("renesas-usb", NULL);
-+
-+	debugfs_create_file("rom_erase", 0200, debugfs_root,
-+			    pdev, &rom_erase_ops);
-+}
-+
-+static void debugfs_exit(void)
-+{
-+	debugfs_remove_recursive(debugfs_root);
-+}
-+
- static bool renesas_download_rom(struct pci_dev *pdev,
- 				 const u32 *fw, size_t step)
- {
-@@ -1248,6 +1280,8 @@ static void xhci_pci_remove(struct pci_dev *dev)
- {
- 	struct xhci_hcd *xhci;
- 
-+	debugfs_exit();
-+
- 	if (renesas_fw_alive_check(dev)) {
- 		/*
- 		 * bail out early, if this was a renesas device w/o FW.
+> Signed-off-by: Pan Bian <bianpan2016@163.com>
+> ---
+>  drivers/usb/gadget/udc/pch_udc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/gadget/udc/pch_udc.c b/drivers/usb/gadget/udc/pch_udc.c
+> index 265dab2bbfac..c5b8ec908aab 100644
+> --- a/drivers/usb/gadget/udc/pch_udc.c
+> +++ b/drivers/usb/gadget/udc/pch_udc.c
+> @@ -1518,8 +1518,8 @@ static void pch_udc_free_dma_chain(struct pch_udc_dev *dev,
+>                 /* do not free first desc., will be done by free for request */
+>                 td = phys_to_virt(addr);
+>                 addr2 = (dma_addr_t)td->next;
+> -               dma_pool_free(dev->data_requests, td, addr);
+>                 td->next = 0x00;
+> +               dma_pool_free(dev->data_requests, td, addr);
+>                 addr = addr2;
+>         }
+>         req->chain_len = 1;
+> --
+> 2.7.4
+>
+
+
 -- 
-2.23.0
-
+With Best Regards,
+Andy Shevchenko
