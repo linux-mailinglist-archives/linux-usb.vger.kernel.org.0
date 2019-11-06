@@ -2,134 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C82D3F1C2E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 18:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E92F202A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 21:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729328AbfKFRNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 12:13:10 -0500
-Received: from mail-il1-f197.google.com ([209.85.166.197]:49325 "EHLO
-        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727824AbfKFRNJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 12:13:09 -0500
-Received: by mail-il1-f197.google.com with SMTP id c2so22260165ilj.16
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2019 09:13:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WsMxdV+W3wwqHTs+iCPhAwFOLdmjVwNTGfvPeK6mtPU=;
-        b=nGXnM3PiTijcGD93mcmybUYsSmIdxis2ikZjGv2QZckVCJlEoSdNYBHrgXcAjkytGL
-         4r75G8Ihx6H/qAbL6ehz7fbA5PSZ9p7Q0CMGqLzvUzgCN72CsfmvG+cQkOIkVAghH9dC
-         Hy7ZJnD5RX+GLpzQENTPFL8GC4XU5vtdmVT8NyhxzGdhfLH2ImlUFrXhlN8ARrALj7V7
-         XOgch3oi3qqXwtb8vFixm02fDpYbd9q63fGGsf6yC34A8H2Gj7gG9CFenEKWR7wvCpDM
-         PW8KMlS15a0i4lIvXni97B2qpAV9Ux+Czgw68ZZ8Q7WXvrrMB1EJBvI5o5u7aKW/GVNy
-         qBjw==
-X-Gm-Message-State: APjAAAXc+odFqMlEhAIXBTUYJJoOb2mtAhLpBCQvbXZlY94nWzNBDx/T
-        5gdintSVhKbENAurZUSPXTzXz26O9E6cLSTitiHJxJBr9BHY
-X-Google-Smtp-Source: APXvYqwHTMiLlD19IQ3V6eu173n6ZHXLVsjnAZM3ONuyfn9BuF6hTyUNFPjT/ah6Po2oS2qSvC4ZwQ0aiAt3nsAl3EYfybEckjmJ
+        id S1731781AbfKFU4i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 15:56:38 -0500
+Received: from gateway34.websitewelcome.com ([192.185.148.140]:15493 "EHLO
+        gateway34.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727903AbfKFU4h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 15:56:37 -0500
+X-Greylist: delayed 1253 seconds by postgrey-1.27 at vger.kernel.org; Wed, 06 Nov 2019 15:56:37 EST
+Received: from cm12.websitewelcome.com (cm12.websitewelcome.com [100.42.49.8])
+        by gateway34.websitewelcome.com (Postfix) with ESMTP id DCD27284F21B
+        for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2019 14:35:42 -0600 (CST)
+Received: from gator4166.hostgator.com ([108.167.133.22])
+        by cmsmtp with SMTP
+        id SS1miZkdAW4frSS1mi2d9r; Wed, 06 Nov 2019 14:35:42 -0600
+X-Authority-Reason: nr=8
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:Subject:From:References:Cc:To:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=XIxA713O4Mg37eoDrUSCzjj+vN9vg0NpHpyRVBkru4U=; b=jk04JwNcYqsa0Df9xUzYTPoZo0
+        RU6yyRfU1vvEj5MAj5fJfMHlCRlg6NEWdlQ5jqDcTx++h0JVYqVNeXycBu+EBYEMGiN47MrfwQwo9
+        dvYu+0U5EgPqJNFiehI3vx9Kp2SY+aZ0+wuJPp4TcWjyj8Da4nHah9cBrXl+5pmj+tiNv9OGR7ehV
+        X3QVD3X4gpZAnZB3c9GZqZsTgnBX+vJOp3Cj9abeNWUVx7bDdrKBY1xiGQcP6St8eLq0/vqmHqdXL
+        RkPT50soZ+jW5M9WasPfdl9Z2S+gxzjVyqQnPGHCzuMhiGJjLy67npY9kxiBG9BlbfvkrOlc/fbzK
+        QFymSZOQ==;
+Received: from [187.192.2.30] (port=35304 helo=[192.168.43.131])
+        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
+        (Exim 4.92)
+        (envelope-from <gustavo@embeddedor.com>)
+        id 1iSS1l-0031aJ-M6; Wed, 06 Nov 2019 14:35:42 -0600
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pan Bian <bianpan2016@163.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        USB <linux-usb@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <1573029503-18369-1-git-send-email-bianpan2016@163.com>
+ <CAHp75VeQ_3mConCN=u9O_Ckz9O+awHU=s+d3Kn6R35ZfzzAJKg@mail.gmail.com>
+From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=gustavo@embeddedor.com; keydata=
+ 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
+ VtSixD1uOgytAP7RWS474w==
+Subject: Re: [PATCH] usb: gadget: pch_udc: fix use after free
+Message-ID: <7827836d-e42f-b688-625d-89d2027cf3d6@embeddedor.com>
+Date:   Wed, 6 Nov 2019 14:35:41 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:360b:: with SMTP id d11mr3776421ila.143.1573060388960;
- Wed, 06 Nov 2019 09:13:08 -0800 (PST)
-Date:   Wed, 06 Nov 2019 09:13:08 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b1c4700596b0a982@google.com>
-Subject: KASAN: global-out-of-bounds Write in kbd_event
-From:   syzbot <syzbot+19340dff067c2d3835c0@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org, jslaby@suse.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rei4dan@gmail.com, slyfox@gentoo.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <CAHp75VeQ_3mConCN=u9O_Ckz9O+awHU=s+d3Kn6R35ZfzzAJKg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 187.192.2.30
+X-Source-L: No
+X-Exim-ID: 1iSS1l-0031aJ-M6
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.43.131]) [187.192.2.30]:35304
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 15
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following crash on:
-
-HEAD commit:    b1aa9d83 usb: raw: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=125cd8fce00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
-dashboard link: https://syzkaller.appspot.com/bug?extid=19340dff067c2d3835c0
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=123d089ae00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14167958e00000
-
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+19340dff067c2d3835c0@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: global-out-of-bounds in clear_bit  
-include/asm-generic/bitops-instrumented.h:56 [inline]
-BUG: KASAN: global-out-of-bounds in kbd_keycode  
-drivers/tty/vt/keyboard.c:1411 [inline]
-BUG: KASAN: global-out-of-bounds in kbd_event+0xe6b/0x3790  
-drivers/tty/vt/keyboard.c:1495
-Write of size 8 at addr ffffffff89a1b2d8 by task syz-executor108/1722
-
-CPU: 1 PID: 1722 Comm: syz-executor108 Not tainted 5.4.0-rc6+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  print_address_description.constprop.0.cold+0x5/0x2fc mm/kasan/report.c:374
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
-  kasan_report+0xe/0x20 mm/kasan/common.c:634
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-  clear_bit include/asm-generic/bitops-instrumented.h:56 [inline]
-  kbd_keycode drivers/tty/vt/keyboard.c:1411 [inline]
-  kbd_event+0xe6b/0x3790 drivers/tty/vt/keyboard.c:1495
-  input_to_handler+0x3b6/0x4c0 drivers/input/input.c:118
-  input_pass_values.part.0+0x2e3/0x720 drivers/input/input.c:145
-  input_pass_values drivers/input/input.c:949 [inline]
-  input_set_keycode+0x290/0x320 drivers/input/input.c:954
-  evdev_handle_set_keycode_v2+0xc4/0x120 drivers/input/evdev.c:882
-  evdev_do_ioctl drivers/input/evdev.c:1150 [inline]
-  evdev_ioctl_handler+0xd49/0x19f0 drivers/input/evdev.c:1284
-  vfs_ioctl fs/ioctl.c:46 [inline]
-  file_ioctl fs/ioctl.c:509 [inline]
-  do_vfs_ioctl+0xd2d/0x1330 fs/ioctl.c:696
-  ksys_ioctl+0x9b/0xc0 fs/ioctl.c:713
-  __do_sys_ioctl fs/ioctl.c:720 [inline]
-  __se_sys_ioctl fs/ioctl.c:718 [inline]
-  __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:718
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x444dc9
-Code: e8 bc af 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 1b d8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007fffaf4eda08 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000444dc9
-RDX: 0000000020000080 RSI: 0000000040284504 RDI: 0000000000000004
-RBP: 00000000006cf018 R08: 090b000000008300 R09: 00000000004002e0
-R10: 000000000000000f R11: 0000000000000246 R12: 0000000000402a70
-R13: 0000000000402b00 R14: 0000000000000000 R15: 0000000000000000
-
-The buggy address belongs to the variable:
-  key_down+0x78/0x80
-
-Memory state around the buggy address:
-  ffffffff89a1b180: fa fa fa fa 04 fa fa fa fa fa fa fa 01 fa fa fa
-  ffffffff89a1b200: fa fa fa fa 00 01 fa fa fa fa fa fa 00 00 00 00
-> ffffffff89a1b280: 00 00 00 00 00 00 00 00 fa fa fa fa 00 00 00 00
-                                                     ^
-  ffffffff89a1b300: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-  ffffffff89a1b380: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On 11/6/19 02:54, Andy Shevchenko wrote:
+> On Wed, Nov 6, 2019 at 10:41 AM Pan Bian <bianpan2016@163.com> wrote:
+>>
+>> The next field of the DMA descriptor is written after releasing the
+>> descriptor, which may result in a use-after-free issue. Set the value of
+>> the field before it is released to fix the bug.
+>>
+> 
+> Had you chance to read the discussion [1]?
+> I Cc to Gustavo to hear from him about destiny of the change.
+> 
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Wow, thanks for reminding me about this thread, Andy.
+I had totally forgotten about this for more than two years... :|
+
+Here is the final version:
+
+https://lore.kernel.org/lkml/20191106202821.GA20347@embeddedor/
+
+Thanks
+--
+Gustavo
+
