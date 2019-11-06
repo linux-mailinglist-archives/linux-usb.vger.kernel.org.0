@@ -2,155 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B5AF1404
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 11:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CEAF1435
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 11:45:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731150AbfKFKe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 05:34:56 -0500
-Received: from relmlor1.renesas.com ([210.160.252.171]:27365 "EHLO
-        relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726656AbfKFKez (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 05:34:55 -0500
-X-IronPort-AV: E=Sophos;i="5.68,274,1569250800"; 
-   d="scan'208";a="30986727"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 06 Nov 2019 19:34:53 +0900
-Received: from localhost.localdomain (unknown [10.166.17.210])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id C4DAD4007F4F;
-        Wed,  6 Nov 2019 19:34:53 +0900 (JST)
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        mark.rutland@arm.com
+        id S1731313AbfKFKpF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 05:45:05 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:40542 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730844AbfKFKpE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 05:45:04 -0500
+Received: by mail-wr1-f66.google.com with SMTP id i10so4443473wrs.7
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2019 02:45:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ho0IuXnlLSu0S9dl4tyqWJ4wOPukxzFH+rPw8w9IP3U=;
+        b=0Djt5Com4Nw6nawSJY2BCWzsF4s4Xk8wxOoGPh18FDbcUJ4GQQiII9UXR5UWrhl9Ho
+         1+hy5If3cGGw6wPamrAt2Ck9f3cdm537ILzhsx/nhU40El7Bti+8EM3DtzCwD0lcdJVq
+         FsOzwh1Lcgt8dIoSZ2KacYGB0OmM198fRKZq1pTGk9mqNz1pKhSmpGx/4skJR6qKeQH/
+         q6yJAgMA1lNxdvJ5c3cg8pzFOPAs5SAPbUukBlMw5+trLF5gSTdqtRrRu8ROe22nAZXh
+         8yF6WN0msw88arX4YfEa+tQBnzkjmrmiQ2cIKVPbH6zBTa2Sz+d5UUDMWbYvrs4kVPHw
+         y1vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ho0IuXnlLSu0S9dl4tyqWJ4wOPukxzFH+rPw8w9IP3U=;
+        b=lpv25djSejAZE5CtJ3qh3vp9+HKdplz4N1hLTfhWNYNYAaT6C1OzLHSW9bL1DeehUd
+         eHTbP6/MW5QXX8dqnOLi/gD08TvZyw0sB5Id1SJiN2g+QP2v572YX77QWe1gQpmJDV2J
+         bTP9QunlBH8qUSDZwQmnQq1tjq1r6QllzYHgXjEnnCcvleBQRwDRLGuu5U3UIWpXpzfg
+         RgBXDzIqow3g1QB6cRd2UcBjRCOYLz1CG1cRcbbK1e7ULoG+cxkjiTX7ZNGcgmDnCuYk
+         5OA8dK5asTzVVqQp4p885kx+F76c+G6JP/juZmpeHirsW35t552EGE/lwVhgvYHucsU8
+         Cwug==
+X-Gm-Message-State: APjAAAVzMKuu/6vakSZGPEU8rJU7jnuhP4AXKUkiriBWPKNamD9NOsU9
+        voGxCcLuytsvK/BYtTzT6+f0zQ==
+X-Google-Smtp-Source: APXvYqxmFcDntelzvf5oc2kIZGTaA8RcxUIN9ppLG7GpMdMZTeYZT5cyAcYce2korwDEVDossgvHyA==
+X-Received: by 2002:adf:fe90:: with SMTP id l16mr1948950wrr.81.1573037100615;
+        Wed, 06 Nov 2019 02:45:00 -0800 (PST)
+Received: from bender.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id u187sm2483023wme.15.2019.11.06.02.44.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2019 02:45:00 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     robh+dt@kernel.org
 Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Subject: [PATCH v2] dt-bindings: usb: renesas: usb3-peri: convert bindings to json-schema
-Date:   Wed,  6 Nov 2019 19:34:53 +0900
-Message-Id: <1573036493-16525-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
-X-Mailer: git-send-email 2.7.4
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: [PATCH v2] dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue Bindings to YAML schemas
+Date:   Wed,  6 Nov 2019 11:44:58 +0100
+Message-Id: <20191106104458.23698-1-narmstrong@baylibre.com>
+X-Mailer: git-send-email 2.22.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Convert Renesas USB 3.0 Peripheral controller bindings documentation
-to json-schema.
+Now that we have the DT validation in place, let's convert the device tree
+bindings for the Amlogic G12A DWC3 Glue Bindings over to a YAML schemas,
+the AXG and GXL glue bindings will be converted later.
 
-Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 ---
- Changes from v1:
- - Remove oneOf from compatible.
- - Remove comments from reg, interrupts and clocks.
- - Add maxItems on phys.
- - Remove generic.txt and graph.txt references.
- https://patchwork.kernel.org/patch/11205923/
+Changes since v1:
+- fixed typo in description
+- removed dr-mode definition in favor of "true"
 
- .../devicetree/bindings/usb/renesas,usb3-peri.txt  | 65 ----------------
- .../devicetree/bindings/usb/renesas,usb3-peri.yaml | 86 ++++++++++++++++++++++
- 2 files changed, 86 insertions(+), 65 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
- create mode 100644 Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+ .../devicetree/bindings/usb/amlogic,dwc3.txt  |  88 ------------
+ .../usb/amlogic,meson-g12a-usb-ctrl.yaml      | 128 ++++++++++++++++++
+ 2 files changed, 128 insertions(+), 88 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
 
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
-deleted file mode 100644
-index 1343dfc..00000000
---- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.txt
-+++ /dev/null
-@@ -1,65 +0,0 @@
--Renesas Electronics USB3.0 Peripheral driver
+diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+index b9f04e617eb7..9a8b631904fd 100644
+--- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+@@ -40,91 +40,3 @@ Example device nodes:
+ 				phy-names = "usb2-phy", "usb3-phy";
+ 			};
+ 		};
+-
+-Amlogic Meson G12A DWC3 USB SoC Controller Glue
+-
+-The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
+-in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
+-only.
+-
+-A glue connects the DWC3 core to USB2 PHYs and optionnaly to an USB3 PHY.
+-
+-One of the USB2 PHY can be re-routed in peripheral mode to a DWC2 USB IP.
+-
+-The DWC3 Glue controls the PHY routing and power, an interrupt line is
+-connected to the Glue to serve as OTG ID change detection.
 -
 -Required properties:
--  - compatible: Must contain one of the following:
--	- "renesas,r8a774a1-usb3-peri"
--	- "renesas,r8a774b1-usb3-peri"
--	- "renesas,r8a774c0-usb3-peri"
--	- "renesas,r8a7795-usb3-peri"
--	- "renesas,r8a7796-usb3-peri"
--	- "renesas,r8a77965-usb3-peri"
--	- "renesas,r8a77990-usb3-peri"
--	- "renesas,rcar-gen3-usb3-peri" for a generic R-Car Gen3 or RZ/G2
--	  compatible device
--
--    When compatible with the generic version, nodes must list the
--    SoC-specific version corresponding to the platform first
--    followed by the generic version.
--
--  - reg: Base address and length of the register for the USB3.0 Peripheral
--  - interrupts: Interrupt specifier for the USB3.0 Peripheral
--  - clocks: clock phandle and specifier pair
+-- compatible:	Should be "amlogic,meson-g12a-usb-ctrl"
+-- clocks:	a handle for the "USB" clock
+-- resets:	a handle for the shared "USB" reset line
+-- reg:		The base address and length of the registers
+-- interrupts:	the interrupt specifier for the OTG detection
+-- phys: 	handle to used PHYs on the system
+-	- a <0> phandle can be used if a PHY is not used
+-- phy-names:	names of the used PHYs on the system :
+-	- "usb2-phy0" for USB2 PHY0 if USBHOST_A port is used
+-	- "usb2-phy1" for USB2 PHY1 if USBOTG_B port is used
+-	- "usb3-phy0" for USB3 PHY if USB3_0 is used
+-- dr_mode:	should be "host", "peripheral", or "otg" depending on
+-	the usage and configuration of the OTG Capable port.
+-	- "host" and "peripheral" means a fixed Host or Device only connection
+-	- "otg" means the port can be used as both Host or Device and
+-	  be switched automatically using the OTG ID pin.
 -
 -Optional properties:
--  - phys: phandle + phy specifier pair
--  - phy-names: must be "usb"
--  - usb-role-switch: support role switch. see usb/generic.txt
+-- vbus-supply:	should be a phandle to the regulator controlling the VBUS
+-		power supply when used in OTG switchable mode
 -
--Sub-nodes:
--- any connector to the data bus of this controller should be modelled using the
--  OF graph bindings specified in bindings/graph.txt, if the "usb-role-switch"
--  property is used.
+-Required child nodes:
 -
--Example of R-Car H3 ES1.x:
--	usb3_peri0: usb@ee020000 {
--		compatible = "renesas,r8a7795-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee020000 0 0x400>;
--		interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 328>;
--	};
+-A child node must exist to represent the core DWC3 IP block. The name of
+-the node is not important. The content of the node is defined in dwc3.txt.
 -
--	usb3_peri1: usb@ee060000 {
--		compatible = "renesas,r8a7795-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee060000 0 0x400>;
--		interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 327>;
--	};
+-A child node must exist to represent the core DWC2 IP block. The name of
+-the node is not important. The content of the node is defined in dwc2.txt.
 -
--Example of RZ/G2E:
--	usb3_peri0: usb@ee020000 {
--		compatible = "renesas,r8a774c0-usb3-peri",
--			     "renesas,rcar-gen3-usb3-peri";
--		reg = <0 0xee020000 0 0x400>;
--		interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&cpg CPG_MOD 328>;
--		companion = <&xhci0>;
--		usb-role-switch;
+-PHY documentation is provided in the following places:
+-- Documentation/devicetree/bindings/phy/meson-g12a-usb2-phy.txt
+-- Documentation/devicetree/bindings/phy/meson-g12a-usb3-pcie-phy.txt
 -
--		port {
--			usb3_role_switch: endpoint {
--				remote-endpoint = <&hd3ss3220_ep>;
+-Example device nodes:
+-	usb: usb@ffe09000 {
+-			compatible = "amlogic,meson-g12a-usb-ctrl";
+-			reg = <0x0 0xffe09000 0x0 0xa0>;
+-			interrupts = <GIC_SPI 16 IRQ_TYPE_LEVEL_HIGH>;
+-			#address-cells = <2>;
+-			#size-cells = <2>;
+-			ranges;
+-
+-			clocks = <&clkc CLKID_USB>;
+-			resets = <&reset RESET_USB>;
+-
+-			dr_mode = "otg";
+-
+-			phys = <&usb2_phy0>, <&usb2_phy1>,
+-			       <&usb3_pcie_phy PHY_TYPE_USB3>;
+-			phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
+-
+-			dwc2: usb@ff400000 {
+-				compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
+-				reg = <0x0 0xff400000 0x0 0x40000>;
+-				interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+-				clocks = <&clkc CLKID_USB1_DDR_BRIDGE>;
+-				clock-names = "ddr";
+-				phys = <&usb2_phy1>;
+-				dr_mode = "peripheral";
+-				g-rx-fifo-size = <192>;
+-				g-np-tx-fifo-size = <128>;
+-				g-tx-fifo-size = <128 128 16 16 16>;
 -			};
--		};
+-
+-			dwc3: usb@ff500000 {
+-				compatible = "snps,dwc3";
+-				reg = <0x0 0xff500000 0x0 0x100000>;
+-				interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+-				dr_mode = "host";
+-				snps,dis_u2_susphy_quirk;
+-				snps,quirk-frame-length-adjustment;
+-			};
 -	};
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
 new file mode 100644
-index 00000000..92d8631
+index 000000000000..2b2dae2e6b7f
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-@@ -0,0 +1,86 @@
-+# SPDX-License-Identifier: GPL-2.0-only
++++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+@@ -0,0 +1,128 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2019 BayLibre, SAS
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/usb/renesas,usb3-peri.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++$id: "http://devicetree.org/schemas/usb/amlogic,meson-g12a-usb-ctrl.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
 +
-+title: Renesas USB 3.0 Peripheral controller
++title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
 +
 +maintainers:
-+  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
++  - Neil Armstrong <narmstrong@baylibre.com>
++
++description: |
++  The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
++  in host-only mode, and a DWC2 IP Core configured for USB2 peripheral mode
++  only.
++
++  A glue connects the DWC3 core to USB2 PHYs and optionally to an USB3 PHY.
++
++  One of the USB2 PHYs can be re-routed in peripheral mode to a DWC2 USB IP.
++
++  The DWC3 Glue controls the PHY routing and power, an interrupt line is
++  connected to the Glue to serve as OTG ID change detection.
 +
 +properties:
 +  compatible:
-+    items:
-+      - enum:
-+          - renesas,r8a774a1-usb3-peri # RZ/G2M
-+          - renesas,r8a774b1-usb3-peri # RZ/G2N
-+          - renesas,r8a774c0-usb3-peri # RZ/G2E
-+          - renesas,r8a7795-usb3-peri  # R-Car H3
-+          - renesas,r8a7796-usb3-peri  # R-Car M3-W
-+          - renesas,r8a77965-usb3-peri # R-Car M3-N
-+          - renesas,r8a77990-usb3-peri # R-Car E3
-+      - const: renesas,rcar-gen3-usb3-peri
++    enum:
++      - amlogic,meson-g12a-usb-ctrl
++
++  ranges: true
++
++  "#address-cells":
++    enum: [ 1, 2 ]
++
++  "#size-cells":
++    enum: [ 1, 2 ]
++
++  clocks:
++    minItems: 1
++
++  resets:
++    minItems: 1
 +
 +  reg:
 +    maxItems: 1
@@ -158,62 +229,85 @@ index 00000000..92d8631
 +  interrupts:
 +    maxItems: 1
 +
-+  clocks:
-+    maxItems: 1
++  phy-names:
++    items:
++      - const: usb2-phy0 # USB2 PHY0 if USBHOST_A port is used
++      - const: usb2-phy1 # USB2 PHY1 if USBOTG_B port is used
++      - const: usb3-phy0 # USB3 PHY if USB3_0 is used
 +
 +  phys:
-+    maxItems: 1
++    minItems: 1
++    maxItems: 3
 +
-+  phy-names:
-+    const: usb
++  dr_mode: true
 +
 +  power-domains:
 +    maxItems: 1
 +
-+  resets:
++  vbus-supply:
++    description: VBUS power supply when used in OTG switchable mode
 +    maxItems: 1
 +
-+  usb-role-switch:
-+    $ref: /schemas/types.yaml#/definitions/flag
-+    description: Support role switch.
-+
-+  companion:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle of a companion.
-+
-+  port:
-+    description: |
-+      any connector to the data bus of this controller should be modelled
-+      using the OF graph bindings specified, if the "usb-role-switch"
-+      property is used.
-+
-+required:
-+  - compatible
-+  - interrupts
-+  - clocks
++patternProperties:
++  "^usb@[0-9a-f]+$":
++    type: object
 +
 +additionalProperties: false
 +
++required:
++  - compatible
++  - "#address-cells"
++  - "#size-cells"
++  - ranges
++  - clocks
++  - resets
++  - reg
++  - interrupts
++  - phy-names
++  - phys
++  - dr_mode
++
 +examples:
 +  - |
-+    #include <dt-bindings/clock/r8a774c0-cpg-mssr.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/power/r8a774c0-sysc.h>
++    usb: usb@ffe09000 {
++          compatible = "amlogic,meson-g12a-usb-ctrl";
++          reg = <0x0 0xffe09000 0x0 0xa0>;
++          interrupts = <16>;
++          #address-cells = <1>;
++          #size-cells = <1>;
++          ranges;
 +
-+    usb3_peri0: usb@ee020000 {
-+        compatible = "renesas,r8a774c0-usb3-peri", "renesas,rcar-gen3-usb3-peri";
-+        reg = <0 0xee020000 0 0x400>;
-+        interrupts = <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&cpg CPG_MOD 328>;
-+        companion = <&xhci0>;
-+        usb-role-switch;
++          clocks = <&clkc_usb>;
++          resets = <&reset_usb>;
 +
-+        port {
-+            usb3_role_switch: endpoint {
-+                remote-endpoint = <&hd3ss3220_ep>;
-+            };
-+        };
++          dr_mode = "otg";
++
++          phys = <&usb2_phy0>, <&usb2_phy1>, <&usb3_phy0>;
++          phy-names = "usb2-phy0", "usb2-phy1", "usb3-phy0";
++
++          dwc2: usb@ff400000 {
++              compatible = "amlogic,meson-g12a-usb", "snps,dwc2";
++              reg = <0xff400000 0x40000>;
++              interrupts = <31>;
++              clocks = <&clkc_usb1>;
++              clock-names = "ddr";
++              phys = <&usb2_phy1>;
++              dr_mode = "peripheral";
++              g-rx-fifo-size = <192>;
++              g-np-tx-fifo-size = <128>;
++              g-tx-fifo-size = <128 128 16 16 16>;
++          };
++
++          dwc3: usb@ff500000 {
++              compatible = "snps,dwc3";
++              reg = <0xff500000 0x100000>;
++              interrupts = <30>;
++              dr_mode = "host";
++              snps,dis_u2_susphy_quirk;
++              snps,quirk-frame-length-adjustment;
++          };
 +    };
++
 -- 
-2.7.4
+2.22.0
 
