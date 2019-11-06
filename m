@@ -2,99 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0D5CF0A42
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 00:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1ACF0BC8
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2019 02:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730074AbfKEXhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 5 Nov 2019 18:37:04 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:39972 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729549AbfKEXhD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 18:37:03 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 15so15744839pgt.7;
-        Tue, 05 Nov 2019 15:37:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jbOa8JF4MBQR2lZ6+xvcROFm9Impr2oKxSGxSOq96pg=;
-        b=T7otIGjNM+rxJdQzdyBGLkV3wlSlK0ERKVBdMp3P/gK3s8k6YB+I9PX7WzR8GXVgPY
-         FsORAyvugQ6ORE7htS3hSbnu6mVPwgJ5be3ZCjHR7OYWjOlp9F1CX23SX7pjXwoluPMh
-         WEctsoRPF2XL7IV3Dnt249ls5LKiykIvFKx8LsdSwsfwXg4Hwi6AuBTpWNSWoGHBTwl6
-         sbLonNw5C5GbYtxU8DGyl93/qHK/zUp+qP3cr6lpPzXNHR51cXMHYniT0Tt0AuBcnuoC
-         vDTD3T5tfU4Ryc5DIDSAfRwjVavmYUq1TFL7QbVKwuu7WujskeUg5vOzIjOQNpTmzs5p
-         gsBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jbOa8JF4MBQR2lZ6+xvcROFm9Impr2oKxSGxSOq96pg=;
-        b=ICHwwKcWwVhwEMEt7VkLaNf0aHOLS5Lu8AyDPMpRL2sUBu7WEZHmF+FKs3uOe6wFOs
-         8sdDh2jumUupoG4ojpawUvjUUmJIQtb0lI5rtFbLdg09r3l+9gr+BkAfoayVGw9sAdPZ
-         cHRRCZTGbluP93tJKI4zV1ULnBBd22LCDkshHrkn3qLHwDWCguZxVG/M1qy85UV4ji1U
-         fSDhARonZuEkK7LtADCYzXrh+gnCnKiiRRNMhd7EYwL24WtiV9FXFQOGfUthwMcLUbPX
-         RzIu6QEN0OOOquzky+E3QaEbmnlo/d8TYT0mNuG5nMeAiSVKvCRAq1/SFSibfKRSzm5H
-         yUfw==
-X-Gm-Message-State: APjAAAWWSuMKcGij5u7eCw+3Ja1VhOlyRZ3pSALu7/jPquI4no+Ivs94
-        9mseGOG/RrFHvbLdSBK4CE8=
-X-Google-Smtp-Source: APXvYqy6TnDZoAcLevkCQceDlWjiDNaPRoDljt1Fyg09m4mm28L5Wnv+mQ2DQxrQ9qKmM8wKNTktYg==
-X-Received: by 2002:a17:90a:25e1:: with SMTP id k88mr2298501pje.14.1572997022758;
-        Tue, 05 Nov 2019 15:37:02 -0800 (PST)
-Received: from debian.net.fpt ([2405:4800:58f7:3f8f:27cb:abb4:d0bd:49cb])
-        by smtp.gmail.com with ESMTPSA id y22sm13641688pfn.6.2019.11.05.15.36.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 15:37:01 -0800 (PST)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
-Cc:     2pi@mok.nu, alex.theissen@me.com, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Phong Tran <tranmanphong@gmail.com>
-Subject: [PATCH] usb: appledisplay: fix use-after-free in bl_get_brightness
-Date:   Wed,  6 Nov 2019 06:36:52 +0700
-Message-Id: <20191105233652.21033-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <00000000000042d60805933945b5@google.com>
-References: <00000000000042d60805933945b5@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1730632AbfKFByp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 5 Nov 2019 20:54:45 -0500
+Received: from mail-m972.mail.163.com ([123.126.97.2]:40900 "EHLO
+        mail-m972.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727252AbfKFByp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 5 Nov 2019 20:54:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id; bh=7vvV5L0601CAUiOPYf
+        8CukAk1WE0CrhJELEoxyFHq0E=; b=R7hQ6h9+LQwyQ2RaM7z1iKkKUx0eNDsSqB
+        K8BSX0Fp49x34ptdaJk3c9AmIgOIylIQABUGJwIAxPF/KHwdrx2E3jDDxVmmGxpC
+        ddpN2CqYayHCZYku7CNiR2ooPgwkZ+urwpOmkUtnvvyIq48gKyJgCIa0MEYU8vMa
+        AHwp7MqZ0=
+Received: from localhost.localdomain (unknown [202.112.113.212])
+        by smtp2 (Coremail) with SMTP id GtxpCgBX4d7bJ8JdCcYxBA--.238S3;
+        Wed, 06 Nov 2019 09:54:38 +0800 (CST)
+From:   Pan Bian <bianpan2016@163.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pan Bian <bianpan2016@163.com>
+Subject: [PATCH 1/1] usb: dwc2: fix potential double free
+Date:   Wed,  6 Nov 2019 09:54:33 +0800
+Message-Id: <1573005273-35877-1-git-send-email-bianpan2016@163.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: GtxpCgBX4d7bJ8JdCcYxBA--.238S3
+X-Coremail-Antispam: 1Uf129KBjvdXoWruFyUCw1rWw48AF45Gw4Uurg_yoW3AFgEgF
+        4YqF47ZrW3Kas8tryjvr1UtrW0k3W8Z3WSqF1vqrWS9F43KrWxZFy09rWF9a45Cw42kF9r
+        AF47tF9rurn7CjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUbeMNUUUUUU==
+X-Originating-IP: [202.112.113.212]
+X-CM-SenderInfo: held01tdqsiiqw6rljoofrz/1tbiQB5lclSIdHvmrgAAsS
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In context of USB disconnect, the delaywork trigger and calling
-appledisplay_bl_get_brightness() and the msgdata was freed.
+The member hsotg->desc_gen_cache is assigned NULL after it is destroyed
+to avoid being freed twice when the call to usb_add_hcd() fails.
 
-add the checking return value of usb_control_msg() and only update the
-data while the retval is valid.
+Fixes: 3b5fcc9ac2f4 ("usb: dwc2: host: use kmem cache to allocate descriptors")
 
-Reported-by: syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
-Reported-and-tested-by:
-syzbot+495dab1f175edc9c2f13@syzkaller.appspotmail.com
-
-https://groups.google.com/d/msg/syzkaller-bugs/dRmkh2UYusY/l2a6Mg3FAQAJ
-
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+Signed-off-by: Pan Bian <bianpan2016@163.com>
 ---
- drivers/usb/misc/appledisplay.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/usb/dwc2/hcd.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/misc/appledisplay.c b/drivers/usb/misc/appledisplay.c
-index ac92725458b5..3e3dfa5a3954 100644
---- a/drivers/usb/misc/appledisplay.c
-+++ b/drivers/usb/misc/appledisplay.c
-@@ -164,7 +164,8 @@ static int appledisplay_bl_get_brightness(struct backlight_device *bd)
- 		0,
- 		pdata->msgdata, 2,
- 		ACD_USB_TIMEOUT);
--	brightness = pdata->msgdata[1];
-+	if (retval >= 0)
-+		brightness = pdata->msgdata[1];
- 	mutex_unlock(&pdata->sysfslock);
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 81afe553aa66..3b943352b296 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -5183,6 +5183,7 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
+ 				"unable to create dwc2 hs isoc desc cache\n");
  
- 	if (retval < 0)
+ 			kmem_cache_destroy(hsotg->desc_gen_cache);
++			hsotg->desc_gen_cache = NULL;
+ 
+ 			/*
+ 			 * Disable descriptor dma mode since it will not be
 -- 
-2.20.1
+2.7.4
 
