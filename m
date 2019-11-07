@@ -2,44 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B0FF3AAD
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 22:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E78F3AC8
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 22:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727428AbfKGVp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 16:45:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57420 "EHLO mail.kernel.org"
+        id S1725992AbfKGVxa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 16:53:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33440 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725924AbfKGVp2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 16:45:28 -0500
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        id S1725870AbfKGVx3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Nov 2019 16:53:29 -0500
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B2B082166E;
-        Thu,  7 Nov 2019 21:45:26 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9828E222C5;
+        Thu,  7 Nov 2019 21:53:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573163126;
-        bh=+2u/MCrAxpfwO9VHiDi1QHr4uX2w6bjyxLIeb9aiSuM=;
+        s=default; t=1573163608;
+        bh=q6SKsLHXv+qLDAv/Si1jE9FsC4EPM3DgeowAA3ZAaX8=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=EeBOEpn5O9c3uDCStbIKsbOshbPZ5+KmIiaLNtaUY40Sjcn2KPWdB1MzA8gh8porv
-         6cQ69EGhxOHOviQRLEB/XSKS338JqkXn88I+MyRe4k8oiOekm4iIrqAHDkjdW0ZFa7
-         egkXfhnno87EqaQHt1MH42gYuJNPCVz7Hm7ZEHYk=
-Received: by mail-qt1-f172.google.com with SMTP id o11so4051685qtr.11;
-        Thu, 07 Nov 2019 13:45:26 -0800 (PST)
-X-Gm-Message-State: APjAAAVXtwl6Q9N6tHEjPdKIMUSS35mDz8yCpHpJY8sUTG6pmcINeNkU
-        p8gCaPFPtmRial/LYCW5kCAuJd70XbCRplabmw==
-X-Google-Smtp-Source: APXvYqzKBN4P3iQsDG0cU0SvIyl2nJbDqpbmXRW32fH1yUlg+6382COgYZuSJvJDggzFTfWEPsdivu2KtE2+LyjYfgk=
-X-Received: by 2002:ac8:458c:: with SMTP id l12mr6736244qtn.300.1573163125922;
- Thu, 07 Nov 2019 13:45:25 -0800 (PST)
+        b=IEYJ+z+Mor70QcV2yPq7FiaLWy/3ZTvRV6Xh2eM7/xHDjOvmKWGtDoe1mQSYfMdBc
+         yeyqQm0HIVYRAEhXqnY1mPoCdIIFufty6Fcs/zHKqQVlXu+OQ3CPzOonJTvYYTHxvR
+         6+J+ri0oYQD/oIRQ4Np94MW11oMSPnBmp1gvonaA=
+Received: by mail-qk1-f176.google.com with SMTP id 205so3485224qkk.1;
+        Thu, 07 Nov 2019 13:53:28 -0800 (PST)
+X-Gm-Message-State: APjAAAWcvbBtKAc+5M4yugkY6w24c6HpVtt4uKEEepHwO5/hnbyBk6na
+        LCRPS8J1HHk5lLGEshtd4zK306COH0eRDjEdGg==
+X-Google-Smtp-Source: APXvYqxRrpYDbcHtlqqkdKNshF+TFNs6h/MBQZGDRhUH8Ti1BBiIS+leA9f/5p/0YVNfUwuJ2LVn2w4ciKgHvtx6mNQ=
+X-Received: by 2002:a05:620a:205d:: with SMTP id d29mr5534809qka.152.1573163607663;
+ Thu, 07 Nov 2019 13:53:27 -0800 (PST)
 MIME-Version: 1.0
 References: <20191028215919.83697-1-john.stultz@linaro.org>
- <20191028215919.83697-7-john.stultz@linaro.org> <87h83rj4ha.fsf@gmail.com>
- <CALAqxLX47uELsGbdociUKdC6KgDba-1SBVALmgjD3=jxh=fd8g@mail.gmail.com> <87k18mhaiq.fsf@gmail.com>
-In-Reply-To: <87k18mhaiq.fsf@gmail.com>
+ <20191028215919.83697-6-john.stultz@linaro.org> <87k18nj4mj.fsf@gmail.com>
+In-Reply-To: <87k18nj4mj.fsf@gmail.com>
 From:   Rob Herring <robh+dt@kernel.org>
-Date:   Thu, 7 Nov 2019 15:45:12 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqL5_6vLJ4sfaNr=76S8kDWEpfKT05xaLktqFM_xH3puGA@mail.gmail.com>
-Message-ID: <CAL_JsqL5_6vLJ4sfaNr=76S8kDWEpfKT05xaLktqFM_xH3puGA@mail.gmail.com>
-Subject: Re: [PATCH v4 6/9] usb: dwc3: Rework resets initialization to be more flexible
+Date:   Thu, 7 Nov 2019 15:53:16 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJtKMG7FfrHFjKpMx1As954UE2QqzMBOWEB4wGn=rsAug@mail.gmail.com>
+Message-ID: <CAL_JsqJtKMG7FfrHFjKpMx1As954UE2QqzMBOWEB4wGn=rsAug@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] usb: dwc3: Rework clock initialization to be more flexible
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
         lkml <linux-kernel@vger.kernel.org>,
@@ -56,68 +55,90 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Valentin Schneider <valentin.schneider@arm.com>,
         Jack Pham <jackp@codeaurora.org>,
         Linux USB List <linux-usb@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
+        devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 4:01 AM Felipe Balbi <balbi@kernel.org> wrote:
+On Tue, Oct 29, 2019 at 4:14 AM Felipe Balbi <balbi@kernel.org> wrote:
 >
 >
 > Hi,
 >
 > John Stultz <john.stultz@linaro.org> writes:
 >
-> > On Tue, Oct 29, 2019 at 2:17 AM Felipe Balbi <balbi@kernel.org> wrote:
-> >> John Stultz <john.stultz@linaro.org> writes:
-> >> > The dwc3 core binding specifies one reset.
-> >> >
-> >> > However some variants of the hardware my not have more.
-> >>                                         ^^
-> >>                                         may
-> >>
-> >> According to synopsys databook, there's a single *input* reset signal on
-> >> this IP. What is this extra reset you have?
-> >>
-> >> Is this, perhaps, specific to your glue layer around the synopsys ip?
+> > The dwc3 core binding specifies three clocks:
+> >   ref, bus_early, and suspend
 > >
-> > Likely (again, I unfortunately don't have a ton of detail on the hardware).
+> > which are all controlled in the driver together.
 > >
-> >> Should, perhaps, your extra reset be managed by the glue layer?
-
-An extra clock or reset is a silly reason to have a whole other node
-and driver. If there's additional blocks and registers, then yes a
-glue node makes sense.
-
-> > So yes the dwc3-of-simple does much of this already (it handles
-> > multiple resets, and variable clocks), but unfortunately we seem to
-> > need new bindings for each device added?  I think the suggestion from
-> > Rob was due to the sprawl of bindings for the glue code, and the extra
-> > complexity of the parent node.  So I believe Rob just thought it made
-> > sense to collapse this down into the core?
-> >
-> > I'm not really passionate about either approach, and am happy to
-> > rework (as long as there is eventual progress :).
-> > Just let me know what you'd prefer.
+> > However some variants of the hardware my not have all three clks
+>                                         ^^
+>                                         may
 >
-> Well, I was under the impression we were supposed to describe the
-> HW. Synopsys IP has a single reset input :-p
+> In fact *all* platforms have all three clocks. It's just that in some
+> cases clock pins are shorted together (or take input from same clock).
+>
+> > So this patch reworks the reading of the clks from the dts to
+> > use devm_clk_bulk_get_all() will will fetch all the clocks
+>                               ^^^^
+>                               which?
+>
+> > specified in the dts together.
+> >
+> > This patch was reccomended by Rob Herring <robh@kernel.org>
+> > as an alternative to creating multiple bindings for each variant
+> > of hardware when the only unique bits were clocks and resets.
+> >
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > CC: ShuFan Lee <shufan_lee@richtek.com>
+> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> > Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> > Cc: Yu Chen <chenyu56@huawei.com>
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Hans de Goede <hdegoede@redhat.com>
+> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Cc: Jun Li <lijun.kernel@gmail.com>
+> > Cc: Valentin Schneider <valentin.schneider@arm.com>
+> > Cc: Jack Pham <jackp@codeaurora.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: devicetree@vger.kernel.org
+> > Suggested-by: Rob Herring <robh@kernel.org>
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > ---
+> > v3: Rework dwc3 core rather then adding another dwc-of-simple
+> >     binding.
+> > ---
+> >  drivers/usb/dwc3/core.c | 20 +++++---------------
+> >  1 file changed, 5 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index a039e35ec7ad..4d4f1836b62c 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -305,12 +305,6 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+> >       return 0;
+> >  }
+> >
+> > -static const struct clk_bulk_data dwc3_core_clks[] = {
+> > -     { .id = "ref" },
+> > -     { .id = "bus_early" },
+> > -     { .id = "suspend" },
+> > -};
+>
+> another option would be to pass three clocks with the same phandle. That
+> would even make sure that clock usage counts are correct, no?
 
-John is. His chip requires 2 resets to use the USB block and the
-compatible provides that distinction. Maybe HiSilicon has a newer or
-customized IP version that has 2 resets. The block could have external
-RAMs (because every process has its own) which may have their own
-reset. With NDA specifications and little knowledge of the full
-revision history, we can really never know. Also, omitting clocks and
-resets from the dwc3 node entirely is just as much not describing the
-h/w (only the glue needs clocks?).
+If you have the datasheet for the block, then perhaps some suggestion
+of which clocks code be the same. My guess would be ref and suspend.
 
-This block is the oddball. I think there's 1 or 2 other blocks where
-this glue node was done, but please stop. If we did this every time
-there's a variation in clocks or resets, we'd pretty much have glue
-nodes everywhere.
+Maybe suspend is a fixed clock which is unmanaged on HiSilicon
+platforms. If we allow for no clocks on some platforms, then why does
+it have to be all or none?
 
 Rob
