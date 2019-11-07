@@ -2,112 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE540F334C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 16:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD7CF33BE
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 16:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730089AbfKGPeK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 10:34:10 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:42643 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729948AbfKGPeK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 10:34:10 -0500
-Received: by mail-io1-f72.google.com with SMTP id w1so2126600ioj.9
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 07:34:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=xXSZuLJlKOSAiQeCDNop2/Po7TAwJIhgGKQhTrYo5uc=;
-        b=IYypLqU+ZztGE8Hd6IwTOEK16KzrHj0n+U4R0XS+d+6tOJ2NjPJao03nDdQ3wPaUAm
-         KEHp8a0WBvVWFJiRkY1Pyh5MpX6zZ7o9O7+hYXsJsImSHz89adwbQztkqQdqFer/k8Xj
-         CKLuVlom9yLRpjP8gjMFe2Bu5pnOrW3HuGOQFDLFVuvw6LpKBasWbrFkX80ItWh8ieU9
-         n0TYka2aScOp+BssoO+bPz3G4BB1QonX2lUgoNCo+fRIh66JTuEXdgH7qJQwYdmZsDzQ
-         tFsff8DFbS73tXOMKkKPsVQXt+rbw0Ej/5+45xD29Pnj4I+Vekx63Ey1Xf7MJqmsRH4f
-         hm7g==
-X-Gm-Message-State: APjAAAVqKKqkJ09mWczR5LTwe19wrOylDu/0q/HtiTWPSS0LRzjPc+La
-        JqBZEPp0zq6nZMU3gfWAY0csVsaV8DK5249f8GR9pWTX8aAC
-X-Google-Smtp-Source: APXvYqyUy/EHdTm3OkPUEXgsq0v+2vA6a+9xeM0aG5CRFMMGKUgoUlk/A9BrfCK35av6wp5etl0ZlVVeGtJY8MGnXPyIKxZzd1JB
+        id S1730193AbfKGPr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 10:47:57 -0500
+Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:32783 "EHLO
+        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726640AbfKGPr5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 10:47:57 -0500
+Received: from [192.168.2.10] ([46.9.232.237])
+        by smtp-cloud8.xs4all.net with ESMTPA
+        id Sk0kiB0F0XYiTSk0nixhjt; Thu, 07 Nov 2019 16:47:55 +0100
+Subject: Re: general protection fault in flexcop_usb_probe
+To:     Oliver Neukum <oneukum@suse.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sean Young <sean@mess.org>
+Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>,
+        linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
+References: <1564472907.25582.16.camel@suse.com>
+ <00000000000081a9c1058ee1d06a@google.com>
+ <CAAeHK+w0vKt94g-h+NOqW-GJKyqikbAfU4sTBeKeJS-sUkZ69g@mail.gmail.com>
+ <1569229570.7831.3.camel@suse.com>
+ <CAAeHK+xspiZSWzzVYbMoAV21T0jFX8g+7D8fwkv413ezNWwT_g@mail.gmail.com>
+ <315c5ac2-c979-e194-0c79-d8704ff7f66a@xs4all.nl>
+ <1573138928.3024.6.camel@suse.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <af0d67e6-7978-c4cc-0be3-40b7865d0016@xs4all.nl>
+Date:   Thu, 7 Nov 2019 16:47:50 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a6b:700a:: with SMTP id l10mr4184214ioc.164.1573140849301;
- Thu, 07 Nov 2019 07:34:09 -0800 (PST)
-Date:   Thu, 07 Nov 2019 07:34:09 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008123610596c36579@google.com>
-Subject: WARNING in ath6kl_htc_pipe_rx_complete
-From:   syzbot <syzbot+555908813b2ea35dae9a@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, davem@davemloft.net, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <1573138928.3024.6.camel@suse.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4wfEzDEFQO0+Ljbf/X5CAKUDUp1DGc6LTsjy891tKcZleyHRduGRHrfrj+d8HzeDe+r0p3ZkhfkW4iF5bzyca9MRHetN1JkxFBQGJ60jqdy65abEHTcpZR
+ v1v+Lofs4i31ExQXZJbjC40Rux+CyOXtPlUU+q/Pke0KReHam96AyyEpaBDS6P7wwMTE4m6Mg7mJj2Nn9QUZjCSe4+T6btrcPonEG6uAYsHTXOBPUthF8mAe
+ eL9OgUUkCJMNtZm5Dfqi3flLIa/SvrXYpNyOre53eg7hvdQcnndnXw3562EWSgNTjGpJtN0PNygR9VSinUzQLRLh6JuSytYkIRfDu9Xs+5Qlnt+keqZYIrnw
+ 2hGCwkU3tMBlrGLHoBuFUg4dTeYra8fwvH0rvogX9lce6CVgvijehHShrILU2SLGG32A7fIlI3Jy4ze2+r1nV1kHRqX87g==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Sean,
 
-syzbot found the following crash on:
+Mauro is very busy, so can you pick this up? And perhaps check patchwork for more
+trivial DVB patches that can be included in a pull request?
 
-HEAD commit:    d60bbfea usb: raw: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1029829ae00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
-dashboard link: https://syzkaller.appspot.com/bug?extid=555908813b2ea35dae9a
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1388a2aae00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13aa35dce00000
+Regards,
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+555908813b2ea35dae9a@syzkaller.appspotmail.com
+	Hans
 
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 17 at drivers/net/wireless/ath/ath6kl/htc_pipe.c:963  
-ath6kl_htc_pipe_rx_complete+0xc58/0xef0  
-drivers/net/wireless/ath/ath6kl/htc_pipe.c:963
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.4.0-rc6+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: events ath6kl_usb_io_comp_work
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2aa/0x6e1 kernel/panic.c:221
-  __warn.cold+0x2f/0x33 kernel/panic.c:582
-  report_bug+0x27b/0x2f0 lib/bug.c:195
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-RIP: 0010:ath6kl_htc_pipe_rx_complete+0xc58/0xef0  
-drivers/net/wireless/ath/ath6kl/htc_pipe.c:963
-Code: 45 31 ed e8 da 0f a6 02 e9 01 fb ff ff 4c 8b 74 24 70 4c 8b 6c 24 60  
-e8 f6 84 74 fe 8b 5c 24 6c e9 3b f9 ff ff e8 e8 84 74 fe <0f> 0b 48 c7 c7  
-40 53 03 86 41 bc ea ff ff ff e8 7f 83 fe ff e9 cb
-RSP: 0018:ffff8881da267c00 EFLAGS: 00010293
-RAX: ffff8881da24b000 RBX: ffff8881cf9d0ba0 RCX: 1ffffffff0c06a9e
-RDX: 0000000000000000 RSI: ffffffff82c9a178 RDI: ffff8881cf9d0c10
-RBP: dffffc0000000000 R08: ffff8881da24b000 R09: fffffbfff11ab3b5
-R10: fffffbfff11ab3b4 R11: ffffffff88d59da7 R12: ffff8881cfc18000
-R13: ffff8881d20ca280 R14: 0000000000000000 R15: 0000000000000000
-  ath6kl_usb_io_comp_work+0x11e/0x160  
-drivers/net/wireless/ath/ath6kl/usb.c:598
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2415
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+On 11/7/19 4:02 PM, Oliver Neukum wrote:
+> Am Montag, den 23.09.2019, 14:51 +0200 schrieb Hans Verkuil:
+>> On 9/23/19 2:46 PM, Andrey Konovalov wrote:
+>>> On Mon, Sep 23, 2019 at 11:21 AM Oliver Neukum <oneukum@suse.com> wrote:
+>>>>
+>>>> Am Freitag, den 20.09.2019, 18:01 +0200 schrieb Andrey Konovalov:
+>>>>
+>>>>>> Reported-and-tested-by:
+>>>>>> syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
+>>>>
+>>>> [..]
+>>>>> Hi Oliver,
+>>>>>
+>>>>> I was wondering if you've submitted this patch anywhere? The bug is
+>>>>> still happening.
+>>>>>
+>>>>> https://syzkaller.appspot.com/bug?id=c0203bd72037d07493f4b7562411e4f5f4553a8f
+>>>>
+>>>> Hi,
+>>>>
+>>>> I definitely did submit it:
+>>>> https://www.mail-archive.com/linux-media@vger.kernel.org/msg148850.html
+>>>
+>>> Hi Mauro,
+>>>
+>>> Do you know what happened to this patch? Did it get lost?
+>>>
+>>> Thanks!
+>>>
+>>
+>> Still sitting unreviewed in patchwork: https://patchwork.linuxtv.org/patch/57785/
+>>
+>> Not sure why this wasn't picked up.
+> 
+> Hi,
+> 
+> AFAICT it is still in the state new. What should I do?
+> 
+> 	Regards
+> 		Oliver
+> 
 
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
