@@ -2,71 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 123F9F3276
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 16:13:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57452F31E4
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 16:01:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388905AbfKGPMY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 10:12:24 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57658 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1729656AbfKGPMY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 10:12:24 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DFC3FB240;
-        Thu,  7 Nov 2019 15:12:22 +0000 (UTC)
-Message-ID: <1573138580.3024.5.camel@suse.com>
-Subject: Re: Logitech C270 webcam floods the log
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Jean Delvare <jdelvare@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org
-Date:   Thu, 07 Nov 2019 15:56:20 +0100
-In-Reply-To: <20191107145238.0e7c9388@endymion>
-References: <20191023151859.30a8ce88@endymion>
-         <20191023142016.GA1904@pendragon.ideasonboard.com>
-         <20191107143941.1649db47@endymion> <20191107145238.0e7c9388@endymion>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729909AbfKGPBo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 10:01:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59040 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727142AbfKGPBo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Nov 2019 10:01:44 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B39172178F;
+        Thu,  7 Nov 2019 15:01:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573138903;
+        bh=2JVcH5qeFuDIIW5zP8B/NsbGEFa1tUZ+rxgAoeNVm7U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gy2k/bTio0Rm4d+60bdIzqiNcYLTgtGBdBOU28bfYiJb5DR/eALeQixnf2TSfCvXS
+         cRKFDUz+VDTn6BUpDCrT/B88BNSMKE1I8jHZa598opei+h3fcyxCfvObK+QiIcn0fA
+         RHjpzoZZzxPlBIW8h/Y5Z2owVIkNhqj7JZSxb0M4=
+Date:   Thu, 7 Nov 2019 16:01:40 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     keithp@keithp.com, linux-usb@vger.kernel.org,
+        Oliver Neukum <oneukum@suse.de>
+Subject: Re: [PATCH] USB: chaoskey: fix error case of a timeout
+Message-ID: <20191107150140.GA154021@kroah.com>
+References: <20191107142856.16774-1-oneukum@suse.com>
+ <20191107142856.16774-2-oneukum@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191107142856.16774-2-oneukum@suse.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 07.11.2019, 14:52 +0100 schrieb Jean Delvare:
-> On Thu, 7 Nov 2019 14:39:41 +0100, Jean Delvare wrote:
-> > On Wed, 23 Oct 2019 17:20:16 +0300, Laurent Pinchart wrote:
-> > > Is this before or after the uvcvideo driver gets involved ? One easy way
-> > > to check is to move the uvcvideo.ko module out of the way so that it
-> > > doesn't get loaded automatically (or just blacklist it in
-> > > /etc/modprobe.d/) and then plug the camera.  
-> > 
-> > I did as you suggested and it turns out that the "reset high-speed USB
-> > device" messages are not printed originally, they start being printed
-> > right after the uvcvideo kernel driver gets loaded. So that would be a
-> > problem with the uvcvideo driver?
-> > 
-> > When unloading the uvcvideo driver, there's one more "reset high-speed
-> > USB device" message and then no more.
+On Thu, Nov 07, 2019 at 03:28:56PM +0100, Oliver Neukum wrote:
+> In case of a timeout or if a signal aborts a read
+> communication with the device needs to be ended
+> lest we overwrite an active URB the next time we
+> do IO to the device, as the URB may still be active.
 > 
-> One more data point: the log flood happens when the uvcvideo driver is
-> loaded but the webcam is unused. If I start e.g. cheese, it takes a
-> long time to start but once started, the log flood stops. As soon as I
-> stop cheese, the log flood starts again.
+> Signed-off-by: Oliver Neukum <oneukum@suse.de>
+> ---
+>  drivers/usb/misc/chaoskey.c | 24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
+> index 34e6cd6f40d3..87067c3d6109 100644
+> --- a/drivers/usb/misc/chaoskey.c
+> +++ b/drivers/usb/misc/chaoskey.c
+> @@ -384,13 +384,17 @@ static int _chaoskey_fill(struct chaoskey *dev)
+>  		!dev->reading,
+>  		(started ? NAK_TIMEOUT : ALEA_FIRST_TIMEOUT) );
+>  
+> -	if (result < 0)
+> +	if (result < 0) {
+> +		usb_kill_urb(dev->urb);
+>  		goto out;
+> +	}
+>  
+> -	if (result == 0)
+> +	if (result == 0) {
+>  		result = -ETIMEDOUT;
+> -	else
+> +		usb_kill_urb(dev->urb);
+> +	} else {
+>  		result = dev->valid;
+> +	}
+>  out:
+>  	/* Let the device go back to sleep eventually */
+>  	usb_autopm_put_interface(dev->interface);
+> @@ -526,7 +530,21 @@ static int chaoskey_suspend(struct usb_interface *interface,
+>  
+>  static int chaoskey_resume(struct usb_interface *interface)
+>  {
+> +	struct chaoskey *dev;
+> +	struct usb_device *udev = interface_to_usbdev(interface);
+> +
+>  	usb_dbg(interface, "resume");
+> +	dev = usb_get_intfdata(interface);
+> +
+> +	/*
+> +	 * We may have lost power.
+> +	 * In that case the device that needs a long time
+> +	 * for the first requests needs an extended timeout
+> +	 * again
+> +	 */
+> +	if (le16_to_cpu(udev->descriptor.idVendor) == ALEA_VENDOR_ID)
+
+What is this helping with?
+
+> +		dev->reads_started = false;
+> +
+>  	return 0;
+>  }
+>  #else
+> -- 
+> 2.16.4
 > 
 
-Hi,
+Why send this twice?
 
-try
+And did this pass the syzbot testing?
 
-usbcore.autosuspend=-1
+thanks,
 
-on the kernel command line.
-
-	Regards
-		Oliver
-
+greg k-h
