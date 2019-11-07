@@ -2,100 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD7CF33BE
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 16:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501C7F3502
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 17:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730193AbfKGPr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 10:47:57 -0500
-Received: from lb2-smtp-cloud8.xs4all.net ([194.109.24.25]:32783 "EHLO
-        lb2-smtp-cloud8.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726640AbfKGPr5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 10:47:57 -0500
-Received: from [192.168.2.10] ([46.9.232.237])
-        by smtp-cloud8.xs4all.net with ESMTPA
-        id Sk0kiB0F0XYiTSk0nixhjt; Thu, 07 Nov 2019 16:47:55 +0100
-Subject: Re: general protection fault in flexcop_usb_probe
-To:     Oliver Neukum <oneukum@suse.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sean Young <sean@mess.org>
-Cc:     syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzbot <syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com>,
-        linux-media@vger.kernel.org, USB list <linux-usb@vger.kernel.org>
-References: <1564472907.25582.16.camel@suse.com>
- <00000000000081a9c1058ee1d06a@google.com>
- <CAAeHK+w0vKt94g-h+NOqW-GJKyqikbAfU4sTBeKeJS-sUkZ69g@mail.gmail.com>
- <1569229570.7831.3.camel@suse.com>
- <CAAeHK+xspiZSWzzVYbMoAV21T0jFX8g+7D8fwkv413ezNWwT_g@mail.gmail.com>
- <315c5ac2-c979-e194-0c79-d8704ff7f66a@xs4all.nl>
- <1573138928.3024.6.camel@suse.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-Message-ID: <af0d67e6-7978-c4cc-0be3-40b7865d0016@xs4all.nl>
-Date:   Thu, 7 Nov 2019 16:47:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1730299AbfKGQwL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 11:52:11 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45719 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729451AbfKGQwL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 11:52:11 -0500
+Received: by mail-lj1-f193.google.com with SMTP id n21so3035246ljg.12
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 08:52:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QmbLva0bcejWfZ5vroXCCCNjtDh9+KzeuzRfAkUcNVw=;
+        b=RC+2jxnet1c9HEhXNBxtTTpEfLinckdbFJn5Bmrik3m/W7Num2OjpLxTQS23AoRNRr
+         Aj4dYDnclnksK9me7oG5iyDsfchGPA4TwVOyMbOGN2PJFpJroPg+VNW7luk63nWV0aoz
+         X/nFl5ue/aQhw5K+6Ogz8TNi8yWG86H2/HKz4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QmbLva0bcejWfZ5vroXCCCNjtDh9+KzeuzRfAkUcNVw=;
+        b=SDHVrf5iucx+0Dei1EhS2kDsOWxiXSGl8B3+11amBkuBVPHJ/60a8vfULIDlA+XiIe
+         hlQdRATEBShAGXEOAt3Zcz3b+0PlTJ9MtPESj4gT0YeEamCxud7DyHQJnATzGtDw/aPj
+         am7ZgXcPaJziazyNR16oCKF5NvFyUq7z79+ZJDl0PIzPFqqCTrg5u4TxAOakHTN4ds+6
+         8tXQZ/Pnbq07NhKo1UFIxj7mEYEjmGdRrDGRIHh0zyc0/z6TnxP9J2wR3pC3I70vKf1P
+         ft2VKvAX0lFelYr4YhZd4GKWCuOP4I9WAPrOdINKL1nkXgJMzD9w6z3+7nto49aX2nsr
+         DY0g==
+X-Gm-Message-State: APjAAAVYcpAkR2F0oel41ZHCubWI2cmklaKiuyCuSEVCVgicgLsSscTF
+        B4vQHXTGh6P4uswRgi3rHU4qCUEHGQQ=
+X-Google-Smtp-Source: APXvYqzcDLu/V7Cqfw/SP0hDyLeG4ymHhFCNFigSUISrKJ2biohMnEDBuPJDyE4F0wwyt32CyTnudA==
+X-Received: by 2002:a2e:3311:: with SMTP id d17mr3227214ljc.237.1573145528646;
+        Thu, 07 Nov 2019 08:52:08 -0800 (PST)
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
+        by smtp.gmail.com with ESMTPSA id u12sm1223636lji.50.2019.11.07.08.52.06
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Nov 2019 08:52:07 -0800 (PST)
+Received: by mail-lf1-f44.google.com with SMTP id d6so1751585lfc.0
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 08:52:06 -0800 (PST)
+X-Received: by 2002:ac2:5bca:: with SMTP id u10mr3159115lfn.134.1573145526683;
+ Thu, 07 Nov 2019 08:52:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <1573138928.3024.6.camel@suse.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfEzDEFQO0+Ljbf/X5CAKUDUp1DGc6LTsjy891tKcZleyHRduGRHrfrj+d8HzeDe+r0p3ZkhfkW4iF5bzyca9MRHetN1JkxFBQGJ60jqdy65abEHTcpZR
- v1v+Lofs4i31ExQXZJbjC40Rux+CyOXtPlUU+q/Pke0KReHam96AyyEpaBDS6P7wwMTE4m6Mg7mJj2Nn9QUZjCSe4+T6btrcPonEG6uAYsHTXOBPUthF8mAe
- eL9OgUUkCJMNtZm5Dfqi3flLIa/SvrXYpNyOre53eg7hvdQcnndnXw3562EWSgNTjGpJtN0PNygR9VSinUzQLRLh6JuSytYkIRfDu9Xs+5Qlnt+keqZYIrnw
- 2hGCwkU3tMBlrGLHoBuFUg4dTeYra8fwvH0rvogX9lce6CVgvijehHShrILU2SLGG32A7fIlI3Jy4ze2+r1nV1kHRqX87g==
+References: <157262967752.13142.696874122947836210.stgit@warthog.procyon.org.uk>
+ <20191107090306.GV29418@shao2-debian>
+In-Reply-To: <20191107090306.GV29418@shao2-debian>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 7 Nov 2019 08:51:50 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiJ+jaT5Ev-wCg7iGNNO_JFUyMDcat0KDdA2b_+n_cZCQ@mail.gmail.com>
+Message-ID: <CAHk-=wiJ+jaT5Ev-wCg7iGNNO_JFUyMDcat0KDdA2b_+n_cZCQ@mail.gmail.com>
+Subject: Re: [pipe] d60337eff1: phoronix-test-suite.noise-level.0.activity_level
+ 144.0% improvement
+To:     lkp report check <rong.a.chen@intel.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sean,
+On Thu, Nov 7, 2019 at 1:03 AM lkp report check <rong.a.chen@intel.com> wrote:
+>
+> FYI, we noticed a 144.0% improvement of phoronix-test-suite.noise-level.0.activity_level due to commit:
+>
+> commit: d60337eff18a3c587832ab8053a567f1da9710d2 ("[RFC PATCH 04/11] pipe: Use head and tail pointers for the ring, not cursor and length [ver #3]")
 
-Mauro is very busy, so can you pick this up? And perhaps check patchwork for more
-trivial DVB patches that can be included in a pull request?
+That sounds nice, but is odd. That commit really shouldn't change
+anything noticeable. David, any idea?
 
-Regards,
-
-	Hans
-
-On 11/7/19 4:02 PM, Oliver Neukum wrote:
-> Am Montag, den 23.09.2019, 14:51 +0200 schrieb Hans Verkuil:
->> On 9/23/19 2:46 PM, Andrey Konovalov wrote:
->>> On Mon, Sep 23, 2019 at 11:21 AM Oliver Neukum <oneukum@suse.com> wrote:
->>>>
->>>> Am Freitag, den 20.09.2019, 18:01 +0200 schrieb Andrey Konovalov:
->>>>
->>>>>> Reported-and-tested-by:
->>>>>> syzbot+d93dff37e6a89431c158@syzkaller.appspotmail.com
->>>>
->>>> [..]
->>>>> Hi Oliver,
->>>>>
->>>>> I was wondering if you've submitted this patch anywhere? The bug is
->>>>> still happening.
->>>>>
->>>>> https://syzkaller.appspot.com/bug?id=c0203bd72037d07493f4b7562411e4f5f4553a8f
->>>>
->>>> Hi,
->>>>
->>>> I definitely did submit it:
->>>> https://www.mail-archive.com/linux-media@vger.kernel.org/msg148850.html
->>>
->>> Hi Mauro,
->>>
->>> Do you know what happened to this patch? Did it get lost?
->>>
->>> Thanks!
->>>
->>
->> Still sitting unreviewed in patchwork: https://patchwork.linuxtv.org/patch/57785/
->>
->> Not sure why this wasn't picked up.
-> 
-> Hi,
-> 
-> AFAICT it is still in the state new. What should I do?
-> 
-> 	Regards
-> 		Oliver
-> 
-
+               Linus
