@@ -2,101 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50555F37B2
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 19:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B0FF3AAD
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 22:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725990AbfKGS74 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 13:59:56 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:39706 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbfKGS74 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 13:59:56 -0500
-Received: by mail-ot1-f65.google.com with SMTP id e17so2960848otk.6
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 10:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rgwxQZHa6ldii1pWiRxVyykr5nSYdGqgGsnTVFnT84Y=;
-        b=iPZ79ADka3j4nmgFew4aV8GDcZgyEwjLMdxp0Mh5gVImbZONvzSBW9L1sDFI8fDn3H
-         tnob8FIWxwGjDxp9eXuUAyD7X+O9J00fk8t56cyUl1HBcq0UNvZEFDD7/H+/lhhzvKYj
-         SgIFewwBSBs+CRZJu4aSqVjtbsfPz4Ia4NSA5kd8fqnHx+ad24lm/tMPtATyuujAgPXh
-         1XKicq1x1Q5xCLuAe65ljYXBxTPoh9Q9cqz2zM2+OCgrTkmSh/OTID/oUW0ztm5864wN
-         wN4GNgZiZRtRUKL6RJ6zJRdQh59WYXHqXthL1ObImv7honOLN59FTmXsawrwD0Dyt9e/
-         vpFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rgwxQZHa6ldii1pWiRxVyykr5nSYdGqgGsnTVFnT84Y=;
-        b=R9mmu287yo40UV0C8B2a0Xml74/vx/KBGQpRvCPhEtc6LU2uRkbFbly0EZ7NI0dWbI
-         lhJWkSxABjOhiKOKzXkwSFN7OEvfzYrm9vlnnJ6ZY73MO8ThN+XKYmIkOUAbBjN3zMGt
-         3xhypeh+L8TXxsrZOGUA9ZKlWM29ZZ698Yuh8iBVOdOfztsJ/iOLLwAZf9kdQJe0bxjs
-         nQ75/5lu/hk42tqDob4Lc8cHcyG8Sql0TkrLyZcqNF0TkLXbswKi5WDbX+Dx2J/f8KsR
-         tu1EHZnNed334NrvmvSpnFf7SNdRGIG8eZtO5hHNbXItE+RY3gCwNaHM6/JEqhG/RqWz
-         Zw/w==
-X-Gm-Message-State: APjAAAV5Ks2lVjASixUdBXJsIIxtG6ErfjfkYqRpAMQlERs5nSoZs65d
-        bI4olUz43jx9PlglU7XWZFeB6d2eLBKfvl9nUjfMjQ==
-X-Google-Smtp-Source: APXvYqzZ2xDwFA4+o+16DbpXyR0jc2MOPlP3+u/QTC5jyvI5FJY3d9mHmZ9im0K4MWchyT/eP41C3qrbM2OhGj3lIpU=
-X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr4513902oth.266.1573153195073;
- Thu, 07 Nov 2019 10:59:55 -0800 (PST)
+        id S1727428AbfKGVp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 16:45:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57420 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725924AbfKGVp2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Nov 2019 16:45:28 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B2B082166E;
+        Thu,  7 Nov 2019 21:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573163126;
+        bh=+2u/MCrAxpfwO9VHiDi1QHr4uX2w6bjyxLIeb9aiSuM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EeBOEpn5O9c3uDCStbIKsbOshbPZ5+KmIiaLNtaUY40Sjcn2KPWdB1MzA8gh8porv
+         6cQ69EGhxOHOviQRLEB/XSKS338JqkXn88I+MyRe4k8oiOekm4iIrqAHDkjdW0ZFa7
+         egkXfhnno87EqaQHt1MH42gYuJNPCVz7Hm7ZEHYk=
+Received: by mail-qt1-f172.google.com with SMTP id o11so4051685qtr.11;
+        Thu, 07 Nov 2019 13:45:26 -0800 (PST)
+X-Gm-Message-State: APjAAAVXtwl6Q9N6tHEjPdKIMUSS35mDz8yCpHpJY8sUTG6pmcINeNkU
+        p8gCaPFPtmRial/LYCW5kCAuJd70XbCRplabmw==
+X-Google-Smtp-Source: APXvYqzKBN4P3iQsDG0cU0SvIyl2nJbDqpbmXRW32fH1yUlg+6382COgYZuSJvJDggzFTfWEPsdivu2KtE2+LyjYfgk=
+X-Received: by 2002:ac8:458c:: with SMTP id l12mr6736244qtn.300.1573163125922;
+ Thu, 07 Nov 2019 13:45:25 -0800 (PST)
 MIME-Version: 1.0
-References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
- <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
- <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it> <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
-In-Reply-To: <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
-From:   Andrea Vai <andrea.vai@unipv.it>
-Date:   Thu, 7 Nov 2019 19:59:44 +0100
-Message-ID: <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
-Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-To:     Damien Le Moal <Damien.LeMoal@wdc.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
+References: <20191028215919.83697-1-john.stultz@linaro.org>
+ <20191028215919.83697-7-john.stultz@linaro.org> <87h83rj4ha.fsf@gmail.com>
+ <CALAqxLX47uELsGbdociUKdC6KgDba-1SBVALmgjD3=jxh=fd8g@mail.gmail.com> <87k18mhaiq.fsf@gmail.com>
+In-Reply-To: <87k18mhaiq.fsf@gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 7 Nov 2019 15:45:12 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL5_6vLJ4sfaNr=76S8kDWEpfKT05xaLktqFM_xH3puGA@mail.gmail.com>
+Message-ID: <CAL_JsqL5_6vLJ4sfaNr=76S8kDWEpfKT05xaLktqFM_xH3puGA@mail.gmail.com>
+Subject: Re: [PATCH v4 6/9] usb: dwc3: Rework resets initialization to be more flexible
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yu Chen <chenyu56@huawei.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[Sorry for the duplicate message, it didn't reach the lists due to
-html formatting]
-Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
-<Damien.LeMoal@wdc.com> ha scritto:
+On Wed, Oct 30, 2019 at 4:01 AM Felipe Balbi <balbi@kernel.org> wrote:
 >
-> On 2019/11/07 16:04, Andrea Vai wrote:
-> > Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto:
+>
+> Hi,
+>
+> John Stultz <john.stultz@linaro.org> writes:
+>
+> > On Tue, Oct 29, 2019 at 2:17 AM Felipe Balbi <balbi@kernel.org> wrote:
+> >> John Stultz <john.stultz@linaro.org> writes:
+> >> > The dwc3 core binding specifies one reset.
+> >> >
+> >> > However some variants of the hardware my not have more.
+> >>                                         ^^
+> >>                                         may
 > >>
+> >> According to synopsys databook, there's a single *input* reset signal on
+> >> this IP. What is this extra reset you have?
 > >>
-> >> Please simply try your write tests after doing this:
-> >>
-> >> echo mq-deadline > /sys/block/<name of your USB
-> >> disk>/queue/scheduler
-> >>
-> >> And confirm that mq-deadline is selected with:
-> >>
-> >> cat /sys/block/<name of your USB disk>/queue/scheduler
-> >> [mq-deadline] kyber bfq none
+> >> Is this, perhaps, specific to your glue layer around the synopsys ip?
 > >
-> > ok, which kernel should I test with this: the fresh git cloned, or the
-> > one just patched with Alan's patch, or doesn't matter which one?
+> > Likely (again, I unfortunately don't have a ton of detail on the hardware).
+> >
+> >> Should, perhaps, your extra reset be managed by the glue layer?
+
+An extra clock or reset is a silly reason to have a whole other node
+and driver. If there's additional blocks and registers, then yes a
+glue node makes sense.
+
+> > So yes the dwc3-of-simple does much of this already (it handles
+> > multiple resets, and variable clocks), but unfortunately we seem to
+> > need new bindings for each device added?  I think the suggestion from
+> > Rob was due to the sprawl of bindings for the glue code, and the extra
+> > complexity of the parent node.  So I believe Rob just thought it made
+> > sense to collapse this down into the core?
+> >
+> > I'm not really passionate about either approach, and am happy to
+> > rework (as long as there is eventual progress :).
+> > Just let me know what you'd prefer.
 >
-> Probably all of them to see if there are any differences.
+> Well, I was under the impression we were supposed to describe the
+> HW. Synopsys IP has a single reset input :-p
 
-with both kernels, the output of
-cat /sys/block/sdh/queue/schedule
+John is. His chip requires 2 resets to use the USB block and the
+compatible provides that distinction. Maybe HiSilicon has a newer or
+customized IP version that has 2 resets. The block could have external
+RAMs (because every process has its own) which may have their own
+reset. With NDA specifications and little knowledge of the full
+revision history, we can really never know. Also, omitting clocks and
+resets from the dwc3 node entirely is just as much not describing the
+h/w (only the glue needs clocks?).
 
-already contains [mq-deadline]: is it correct to assume that the echo
-command and the subsequent testing is useless? What to do now?
+This block is the oddball. I think there's 1 or 2 other blocks where
+this glue node was done, but please stop. If we did this every time
+there's a variation in clocks or resets, we'd pretty much have glue
+nodes everywhere.
 
-Thanks, and bye
-Andrea
+Rob
