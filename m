@@ -2,87 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 501C7F3502
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 17:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B267F351C
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 17:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730299AbfKGQwL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 11:52:11 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:45719 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729451AbfKGQwL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 11:52:11 -0500
-Received: by mail-lj1-f193.google.com with SMTP id n21so3035246ljg.12
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 08:52:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QmbLva0bcejWfZ5vroXCCCNjtDh9+KzeuzRfAkUcNVw=;
-        b=RC+2jxnet1c9HEhXNBxtTTpEfLinckdbFJn5Bmrik3m/W7Num2OjpLxTQS23AoRNRr
-         Aj4dYDnclnksK9me7oG5iyDsfchGPA4TwVOyMbOGN2PJFpJroPg+VNW7luk63nWV0aoz
-         X/nFl5ue/aQhw5K+6Ogz8TNi8yWG86H2/HKz4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QmbLva0bcejWfZ5vroXCCCNjtDh9+KzeuzRfAkUcNVw=;
-        b=SDHVrf5iucx+0Dei1EhS2kDsOWxiXSGl8B3+11amBkuBVPHJ/60a8vfULIDlA+XiIe
-         hlQdRATEBShAGXEOAt3Zcz3b+0PlTJ9MtPESj4gT0YeEamCxud7DyHQJnATzGtDw/aPj
-         am7ZgXcPaJziazyNR16oCKF5NvFyUq7z79+ZJDl0PIzPFqqCTrg5u4TxAOakHTN4ds+6
-         8tXQZ/Pnbq07NhKo1UFIxj7mEYEjmGdRrDGRIHh0zyc0/z6TnxP9J2wR3pC3I70vKf1P
-         ft2VKvAX0lFelYr4YhZd4GKWCuOP4I9WAPrOdINKL1nkXgJMzD9w6z3+7nto49aX2nsr
-         DY0g==
-X-Gm-Message-State: APjAAAVYcpAkR2F0oel41ZHCubWI2cmklaKiuyCuSEVCVgicgLsSscTF
-        B4vQHXTGh6P4uswRgi3rHU4qCUEHGQQ=
-X-Google-Smtp-Source: APXvYqzcDLu/V7Cqfw/SP0hDyLeG4ymHhFCNFigSUISrKJ2biohMnEDBuPJDyE4F0wwyt32CyTnudA==
-X-Received: by 2002:a2e:3311:: with SMTP id d17mr3227214ljc.237.1573145528646;
-        Thu, 07 Nov 2019 08:52:08 -0800 (PST)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id u12sm1223636lji.50.2019.11.07.08.52.06
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2019 08:52:07 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id d6so1751585lfc.0
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 08:52:06 -0800 (PST)
-X-Received: by 2002:ac2:5bca:: with SMTP id u10mr3159115lfn.134.1573145526683;
- Thu, 07 Nov 2019 08:52:06 -0800 (PST)
+        id S1730598AbfKGQyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 11:54:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:50504 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729656AbfKGQyb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Nov 2019 11:54:31 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4F0152077C;
+        Thu,  7 Nov 2019 16:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573145670;
+        bh=NrSOsZi6jOLY0S57+WA9Ehj9OOtiUIdgVBK+A6ZRj3o=;
+        h=Subject:To:References:From:Date:In-Reply-To:From;
+        b=hEaP66T1mEMsezjd0r96IK5fJi75C6B9dAaG3QoHBGcUpcikelUP+gNZ0a/ebtezC
+         pXWhKJGx0w7dCtlJKbGf7h0iS47Ta8tZwZKvXWr/9GpltnxQdT4Ch7TZyy1WXiXot/
+         8YS2SFlvkOOF4o8RfFAVuf07+NXVNIxo1pEfwt8A=
+Subject: Re: KASAN: use-after-free Read in vhci_hub_control
+To:     syzbot <syzbot+600b03e0cf1b73bb23c4@syzkaller.appspotmail.com>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stable@vger.kernel.org,
+        sudipm.mukherjee@gmail.com, syzkaller-bugs@googlegroups.com,
+        valentina.manea.m@gmail.com, shuah <shuah@kernel.org>
+References: <000000000000c460630596c1d40d@google.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <e312222f-d24e-ad18-1801-e266d6497a6a@kernel.org>
+Date:   Thu, 7 Nov 2019 09:54:12 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <157262967752.13142.696874122947836210.stgit@warthog.procyon.org.uk>
- <20191107090306.GV29418@shao2-debian>
-In-Reply-To: <20191107090306.GV29418@shao2-debian>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 7 Nov 2019 08:51:50 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiJ+jaT5Ev-wCg7iGNNO_JFUyMDcat0KDdA2b_+n_cZCQ@mail.gmail.com>
-Message-ID: <CAHk-=wiJ+jaT5Ev-wCg7iGNNO_JFUyMDcat0KDdA2b_+n_cZCQ@mail.gmail.com>
-Subject: Re: [pipe] d60337eff1: phoronix-test-suite.noise-level.0.activity_level
- 144.0% improvement
-To:     lkp report check <rong.a.chen@intel.com>
-Cc:     David Howells <dhowells@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <000000000000c460630596c1d40d@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 7, 2019 at 1:03 AM lkp report check <rong.a.chen@intel.com> wrote:
->
-> FYI, we noticed a 144.0% improvement of phoronix-test-suite.noise-level.0.activity_level due to commit:
->
-> commit: d60337eff18a3c587832ab8053a567f1da9710d2 ("[RFC PATCH 04/11] pipe: Use head and tail pointers for the ring, not cursor and length [ver #3]")
+On 11/7/19 6:42 AM, syzbot wrote:
+> syzbot suspects this bug was fixed by commit:
+> 
+> commit 81f7567c51ad97668d1c3a48e8ecc482e64d4161
+> Author: Shuah Khan (Samsung OSG) <shuah@kernel.org>
+> Date:   Fri Oct 5 22:17:44 2018 +0000
+> 
+>      usb: usbip: Fix BUG: KASAN: slab-out-of-bounds in vhci_hub_control()
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14046c2c600000
+> start commit:   420f51f4 Merge tag 'arm64-fixes' of 
+> git://git.kernel.org/p..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=531a917630d2a492
+> dashboard link: 
+> https://syzkaller.appspot.com/bug?extid=600b03e0cf1b73bb23c4
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1116710a400000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119be4ea400000
+> 
+> If the result looks correct, please mark the bug fixed by replying with:
+> 
+> #syz fix: usb: usbip: Fix BUG: KASAN: slab-out-of-bounds in 
+> vhci_hub_control()
+> 
+> For information about bisection process see: 
+> https://goo.gl/tpsmEJ#bisection
+> 
 
-That sounds nice, but is odd. That commit really shouldn't change
-anything noticeable. David, any idea?
-
-               Linus
+#syz fix: usb: usbip: Fix BUG: KASAN: slab-out-of-bounds in 
+vhci_hub_control()
