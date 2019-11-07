@@ -2,116 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E24F359E
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 18:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6734F358E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 18:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729171AbfKGRWr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 12:22:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35206 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726231AbfKGRWq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 12:22:46 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 47C2CB157;
-        Thu,  7 Nov 2019 17:22:45 +0000 (UTC)
-Message-ID: <1573146400.13325.1.camel@suse.de>
-Subject: Re: [PATCH] USB: chaoskey: fix error case of a timeout
-From:   Oliver Neukum <oneukum@suse.de>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     keithp@keithp.com, linux-usb@vger.kernel.org
-Date:   Thu, 07 Nov 2019 18:06:40 +0100
-In-Reply-To: <20191107150140.GA154021@kroah.com>
-References: <20191107142856.16774-1-oneukum@suse.com>
-         <20191107142856.16774-2-oneukum@suse.com>
-         <20191107150140.GA154021@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1729692AbfKGRSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 12:18:05 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:51247 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726231AbfKGRSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 12:18:05 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573147084;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0SEdWQaGFryuTv/nsU1+nEbvt9xnFrBLM9hi5OTh5uI=;
+        b=J2cHuv+voZOwrqkpB40vFuHdva2o2lHS5g3IGYHYi8FFbmA9qcYwmAsOnDZfeX4ZsY8fHc
+        myX/+BjZMPACLP6l+vRyb/irpq9O5uZ4CJ0Q9Aj2BbakI7VC055amNtxar/c7D2+OFhdZq
+        4SSIodjC64FEG93DkDE9iBQ7AEa5oUY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-383-cIIWMNoZMgeVRr0hN4Mq8A-1; Thu, 07 Nov 2019 12:16:17 -0500
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9F06C1005500;
+        Thu,  7 Nov 2019 17:16:15 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 597AB608B3;
+        Thu,  7 Nov 2019 17:16:10 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <157313376558.29677.12389078014886241663.stgit@warthog.procyon.org.uk>
+References: <157313376558.29677.12389078014886241663.stgit@warthog.procyon.org.uk> <157313371694.29677.15388731274912671071.stgit@warthog.procyon.org.uk>
+To:     torvalds@linux-foundation.org
+Cc:     dhowells@redhat.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Stephen Smalley <sds@tycho.nsa.gov>, nicolas.dichtel@6wind.com,
+        raven@themaw.net, Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 05/14] pipe: Add general notification queue support [ver #2]
+MIME-Version: 1.0
+Content-ID: <28292.1573146969.1@warthog.procyon.org.uk>
+Date:   Thu, 07 Nov 2019 17:16:09 +0000
+Message-ID: <28293.1573146969@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: cIIWMNoZMgeVRr0hN4Mq8A-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 07.11.2019, 16:01 +0100 schrieb Greg KH:
-> On Thu, Nov 07, 2019 at 03:28:56PM +0100, Oliver Neukum wrote:
-> > In case of a timeout or if a signal aborts a read
-> > communication with the device needs to be ended
-> > lest we overwrite an active URB the next time we
-> > do IO to the device, as the URB may still be active.
-> > 
-> > Signed-off-by: Oliver Neukum <oneukum@suse.de>
-> > ---
-> >  drivers/usb/misc/chaoskey.c | 24 +++++++++++++++++++++---
-> >  1 file changed, 21 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
-> > index 34e6cd6f40d3..87067c3d6109 100644
-> > --- a/drivers/usb/misc/chaoskey.c
-> > +++ b/drivers/usb/misc/chaoskey.c
-> > @@ -384,13 +384,17 @@ static int _chaoskey_fill(struct chaoskey *dev)
-> >  		!dev->reading,
-> >  		(started ? NAK_TIMEOUT : ALEA_FIRST_TIMEOUT) );
-> >  
-> > -	if (result < 0)
-> > +	if (result < 0) {
-> > +		usb_kill_urb(dev->urb);
-> >  		goto out;
-> > +	}
-> >  
-> > -	if (result == 0)
-> > +	if (result == 0) {
-> >  		result = -ETIMEDOUT;
-> > -	else
-> > +		usb_kill_urb(dev->urb);
-> > +	} else {
-> >  		result = dev->valid;
-> > +	}
-> >  out:
-> >  	/* Let the device go back to sleep eventually */
-> >  	usb_autopm_put_interface(dev->interface);
-> > @@ -526,7 +530,21 @@ static int chaoskey_suspend(struct usb_interface *interface,
-> >  
-> >  static int chaoskey_resume(struct usb_interface *interface)
-> >  {
-> > +	struct chaoskey *dev;
-> > +	struct usb_device *udev = interface_to_usbdev(interface);
-> > +
-> >  	usb_dbg(interface, "resume");
-> > +	dev = usb_get_intfdata(interface);
-> > +
-> > +	/*
-> > +	 * We may have lost power.
-> > +	 * In that case the device that needs a long time
-> > +	 * for the first requests needs an extended timeout
-> > +	 * again
-> > +	 */
-> > +	if (le16_to_cpu(udev->descriptor.idVendor) == ALEA_VENDOR_ID)
-> 
-> What is this helping with?
+Sigh.  I forgot to build it with the new config options disabled.  I've fix=
+ed
+that up and pushed it to the git tree.
 
-THe quirk is specific for this model. The others do
-not need it.
-
-> > +		dev->reads_started = false;
-> > +
-> >  	return 0;
-> >  }
-> >  #else
-> > -- 
-> > 2.16.4
-> > 
-> 
-> Why send this twice?
-
-There must be an issue in my scripts. Investigating.
-
-> And did this pass the syzbot testing?
-
-Inconclusive. The test crashed but in another place.
-I cannot claim that fix.
-
-	Regards
-		Oliver
+David
 
