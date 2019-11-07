@@ -2,112 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9A4F2FF7
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 14:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44621F3041
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 14:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388442AbfKGNjp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 08:39:45 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38508 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727858AbfKGNjo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 08:39:44 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E32DCAE12;
-        Thu,  7 Nov 2019 13:39:42 +0000 (UTC)
-Date:   Thu, 7 Nov 2019 14:39:41 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Logitech C270 webcam floods the log
-Message-ID: <20191107143941.1649db47@endymion>
-In-Reply-To: <20191023142016.GA1904@pendragon.ideasonboard.com>
-References: <20191023151859.30a8ce88@endymion>
-        <20191023142016.GA1904@pendragon.ideasonboard.com>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        id S2389566AbfKGNnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 08:43:43 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:35657 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388974AbfKGNmG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 08:42:06 -0500
+Received: by mail-io1-f69.google.com with SMTP id n16so1869599iom.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 05:42:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=3/xSqB0zH6bltKSKwelvmk7da+xMY4V8SAPC5pNZohE=;
+        b=c11NH/tGnQJ1lVQNCG3xpfYGrSpmgrRCRT9a1aq85fqtLUsBtkpnw3BxmDgcpgKcGI
+         hhBHiyRx+SvW6KUP7I46AQvzFfABr4rt5/84OEFnAJ0nGZghOknoxSTKQvAyhHZ2YQtu
+         f0DcP9vzEX6NaZvCsNgxlnnACxpY66SuSiQsdjnTl0XKhQ0W/u3vX3X7pDwiK4oxb06K
+         11EXPXG9t+6X5kNItfoXrCLeQu/QFtYzLSuN+DDL1C9JgadrkPXnVvFILvlct7dBqbhA
+         wanN5G64arzlp1MbMjHIi/RuDSTuIHT4OfezfdkYEjLyP2A/oLMJowmQVbz6vi7qTeFD
+         vAzA==
+X-Gm-Message-State: APjAAAUlStCYv0K4S7yLqGEiBzY2aYdR/iTUBHmSK2kUgvH/AoeojLfb
+        1HgE13v9m5w5imouTxa+VH8mo2d6wzljYgtxjdXDL9zm8JrN
+X-Google-Smtp-Source: APXvYqzonUEMbV+hU0AEcPcfvumPPjz/o2sJc+Gcuj9N/CKQCOvzx0Ocr0vqAToOGHZRJPi5y9KSv7V9Lxhz3CjGGUmi6G93H8En
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a6b:204:: with SMTP id 4mr3534207ioc.303.1573134126045;
+ Thu, 07 Nov 2019 05:42:06 -0800 (PST)
+Date:   Thu, 07 Nov 2019 05:42:06 -0800
+In-Reply-To: <00000000000075c8d70574f40fbc@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c460630596c1d40d@google.com>
+Subject: Re: KASAN: use-after-free Read in vhci_hub_control
+From:   syzbot <syzbot+600b03e0cf1b73bb23c4@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, shuah@kernel.org,
+        stable@vger.kernel.org, sudipm.mukherjee@gmail.com,
+        syzkaller-bugs@googlegroups.com, valentina.manea.m@gmail.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Laurent,
+syzbot suspects this bug was fixed by commit:
 
-Thank you very much for your quick reply and sorry for getting back to
-you only today, your message got moved to a different folder by a
-filter rule I did not remember of.
+commit 81f7567c51ad97668d1c3a48e8ecc482e64d4161
+Author: Shuah Khan (Samsung OSG) <shuah@kernel.org>
+Date:   Fri Oct 5 22:17:44 2018 +0000
 
-On Wed, 23 Oct 2019 17:20:16 +0300, Laurent Pinchart wrote:
-> On Wed, Oct 23, 2019 at 03:18:59PM +0200, Jean Delvare wrote:
-> > When my Logitech C270 webcam is plugged in, my kernel log gets filled
-> > with this message:
-> > 
-> > usb 3-4.1: reset high-speed USB device number 4 using xhci_hcd
-> > 
-> > every 5 seconds. I have the same problem on 3 different Intel-based
-> > computers (different generations), using 2 different webcams, same
-> > brand "same model".
-> >
-> > Is Logitech doing crappy hardware these days, or are we doing something
-> > wrong? Is there any way to know the reason that triggers the reset?  
-> 
-> Is this before or after the uvcvideo driver gets involved ? One easy way
-> to check is to move the uvcvideo.ko module out of the way so that it
-> doesn't get loaded automatically (or just blacklist it in
-> /etc/modprobe.d/) and then plug the camera.
+     usb: usbip: Fix BUG: KASAN: slab-out-of-bounds in vhci_hub_control()
 
-I did as you suggested and it turns out that the "reset high-speed USB
-device" messages are not printed originally, they start being printed
-right after the uvcvideo kernel driver gets loaded. So that would be a
-problem with the uvcvideo driver?
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14046c2c600000
+start commit:   420f51f4 Merge tag 'arm64-fixes' of git://git.kernel.org/p..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=531a917630d2a492
+dashboard link: https://syzkaller.appspot.com/bug?extid=600b03e0cf1b73bb23c4
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1116710a400000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=119be4ea400000
 
-When unloading the uvcvideo driver, there's one more "reset high-speed
-USB device" message and then no more.
+If the result looks correct, please mark the bug fixed by replying with:
 
-For what it's worth, 2 things worth noting in the kernel log when the
-device is being detected:
+#syz fix: usb: usbip: Fix BUG: KASAN: slab-out-of-bounds in  
+vhci_hub_control()
 
-usb 3-12: set resolution quirk: cval->res = 384
-(...)
-uvcvideo: Found UVC 1.00 device <unnamed> (046d:0825)
-
-"<unnamed>" seems weird. On the other hand lsusb properly lists it as:
-
-Bus 003 Device 004: ID 046d:0825 Logitech, Inc. Webcam C270
-
-I an older C270 webcam (3 year old, different package) connected to
-another machine, USB device ID is the same, I compared the verbose
-output of lsusb and one difference stands out:
-
-     Interface Descriptor:
-       bLength                 9
-       bDescriptorType         4
-       bInterfaceNumber        1
-       bAlternateSetting       0
-       bNumEndpoints           0
-       bInterfaceClass        14 Video
-       bInterfaceSubClass      2 Video Streaming
-       bInterfaceProtocol      0 
-       iInterface              0 
-       VideoStreaming Interface Descriptor:
-         (...)
--        bmaControls( 0)                    27
--        bmaControls( 1)                    27
--        bmaControls( 2)                    27
-+        bmaControls( 0)                     0
-+        bmaControls( 1)                     4
-+        bmaControls( 2)                     4
-
-(- is the new webcam, + is the old one)
-
-I don't know if this tells anything useful though.
-
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
