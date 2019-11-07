@@ -2,128 +2,293 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB434F2370
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 01:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C867F23AF
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 01:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbfKGAoU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 6 Nov 2019 19:44:20 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:46885 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725989AbfKGAoT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 19:44:19 -0500
-Received: by mail-pl1-f193.google.com with SMTP id l4so120549plt.13;
-        Wed, 06 Nov 2019 16:44:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ve6txvm4TEbZ68vl1TZrP7X3Fq6hJlmUnRCShKqx4Nc=;
-        b=vN47OxNW9OpxtDVgv9BdNwxRsewNx8fSaPUZKaVQUNrcOQ2voRnPDZO4+7ZF+Df2qQ
-         db/BjqbBzRuIHIuu8P3Dgo8tza2VWOkVhntkHXhLOTZ87cQ7YDgUV68nEPJ7pu4Yx0Al
-         645dvDwdGtOzij+4nU1ffGiqD8XHqt9kmWGw5geDoU837WQCM71fbMpt698pFyWW3f8t
-         a6pds0DTuwrGg5zVS3YF8Z+00AbZr221wvFURl2kJvJsFNjee6zXOmPcKnsNXCN00a4p
-         YbpwLqYI68/2st7ssoQxkui/3D5im11vpVa58wRbNNiLrRG13OvUMPrFWe278MqeCfaU
-         291w==
+        id S1732852AbfKGA5G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 6 Nov 2019 19:57:06 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:36102 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725989AbfKGA5E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 6 Nov 2019 19:57:04 -0500
+Received: by mail-oi1-f193.google.com with SMTP id j7so471770oib.3;
+        Wed, 06 Nov 2019 16:57:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ve6txvm4TEbZ68vl1TZrP7X3Fq6hJlmUnRCShKqx4Nc=;
-        b=Jq+kxi8xZkCooeiwqmrCTf+IJEP54uGADLNbkUOiNK9x5bzPaRV0aAvP3Wf8Fsshf0
-         bJK1H+5117kzaXFefVOWsUom5TUlG/SiTfkJmmvCU1QPfg+1KP+5ivRYzFDDBNuz5c7U
-         gQN/tB7mARkhTEphEEl3s8CPPHdkS9vkWvA+/2XX+nO5F4nShzukWJKYEE0NJfLTqhQ6
-         91dzmlZs/yVgS4Jcpyu/NJnks6fDKAJaU01qyP+qFK7TOPF9SJHGeGjxdYiNWSJZtMyq
-         y+CJCfuLITZJQx1w2peNyL7GXqjcLsdsODyQNO3l+pB74qbSUp42dm8bqbilNT+oAN8t
-         0u4g==
-X-Gm-Message-State: APjAAAWoTH6M1+vjQY9h7sIsnJw58j5sS8Wq5RP2/8ZZ1pSytHYov0fY
-        8BKaeXpHVeqKNm7Vi/+dbeo=
-X-Google-Smtp-Source: APXvYqxpy3t28znraTs3FdUzKv0i5TNBoXLmMbIn4EQZShJvFNGc0pT9gU4Ma4CNDnuo+NLeWHI5Zg==
-X-Received: by 2002:a17:902:9005:: with SMTP id a5mr583641plp.204.1573087458695;
-        Wed, 06 Nov 2019 16:44:18 -0800 (PST)
-Received: from debian.net.fpt ([2405:4800:58f7:3f8f:27cb:abb4:d0bd:49cb])
-        by smtp.gmail.com with ESMTPSA id 71sm180385pfx.107.2019.11.06.16.44.15
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wVopP65af2cBXxzoana9KSKEMsEoxhrG9UviCULOUg4=;
+        b=WfXqhr91JSsFNCTC2KnZrddnLYR4lhhNF04xhaxZ5FILgYpr1mq83Rd9NqXo4r0GhF
+         3tjZ5A8Z1k85fAjOvYOIjJtUHgeCxtzT4Vo97GahaV4DTzqevLqJEeNBywMv6ikX8dEG
+         Xk8Vyu4tXsyCaCMPnviESSQJEOYG2J22Vkg9jMtn+jh9Yy+XsWzHix2muhBohGshabQ3
+         kPExhC/6IdEB0ikTUEVTV0LZ5DOuCqN3QflUgUtRAIBR9cIFTHqBeIP3FmvnXTz6GQ76
+         FtieUWtly9B4vbhrtWlwBesste1ygJtyYA7bw+Cjsznbayo2Yl8+2G5hipZZqQsWUnuC
+         6sjw==
+X-Gm-Message-State: APjAAAVQLpB7IrvxU9EEVNIXeVrSebMBJtj7gOEjAGzQX3672VdIBNoF
+        EV8QDW3TeXJ9bSsoVhOO7w==
+X-Google-Smtp-Source: APXvYqzgyGiNH/+b07+ECaPHE7xfGIlXeKVgv1JewsJCDXnRFj3BROp9D0klxCcE7xKAxgV91Gsdqg==
+X-Received: by 2002:aca:ad03:: with SMTP id w3mr816187oie.96.1573088221287;
+        Wed, 06 Nov 2019 16:57:01 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id f9sm218449otq.52.2019.11.06.16.57.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2019 16:44:18 -0800 (PST)
-From:   Phong Tran <tranmanphong@gmail.com>
-To:     syzbot+7dc7c28d4577bbe55b10@syzkaller.appspotmail.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org
-Cc:     glider@google.com, hslester96@gmail.com,
-        kstewart@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Phong Tran <tranmanphong@gmail.com>
-Subject: [PATCH] usb: asix: Fix uninit-value in asix_mdio_write
-Date:   Thu,  7 Nov 2019 07:44:04 +0700
-Message-Id: <20191107004404.23707-1-tranmanphong@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <0000000000009763320594f993ee@google.com>
-References: <0000000000009763320594f993ee@google.com>
+        Wed, 06 Nov 2019 16:57:00 -0800 (PST)
+Date:   Wed, 6 Nov 2019 18:57:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     gregkh@linuxfoundation.org, mark.rutland@arm.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: usb: renesas_usbhs: convert bindings to
+ json-schema
+Message-ID: <20191107005700.GA26323@bogus>
+References: <1573036483-16477-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1573036483-16477-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The local variables use without initilization value.
-This fixes the syzbot report.
+On Wed, Nov 06, 2019 at 07:34:43PM +0900, Yoshihiro Shimoda wrote:
+> Convert Renesas USBHS (HS-USB) controller bindings documentation
+> to json-schema.
+> 
+> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> ---
+>  Changes from v1:
+>  - Remove enum from RZ/A[12] compatibles.
+>  - Remove comments from reg and clocks.
+>  - Change maxItems from 2 to 3 on clocks for USB 2.0 clock selector.
+>  - Add items on clocks.
+>  - Remove $ref from a gpio property.
+>  - Add maxItems on phys, phy-names and resets.
+>  - Remove generic.txt file reference.
+>  - Remove the last blank line.
+>  https://patchwork.kernel.org/patch/11205919/
+> 
+>  .../devicetree/bindings/usb/renesas,usbhs.txt      |  58 ----------
+>  .../devicetree/bindings/usb/renesas,usbhs.yaml     | 128 +++++++++++++++++++++
+>  2 files changed, 128 insertions(+), 58 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/renesas,usbhs.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.txt b/Documentation/devicetree/bindings/usb/renesas,usbhs.txt
+> deleted file mode 100644
+> index 06abe99..00000000
+> --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.txt
+> +++ /dev/null
+> @@ -1,58 +0,0 @@
+> -Renesas Electronics USBHS driver
+> -
+> -Required properties:
+> -  - compatible: Must contain one or more of the following:
+> -
+> -	- "renesas,usbhs-r8a7743" for r8a7743 (RZ/G1M) compatible device
+> -	- "renesas,usbhs-r8a7744" for r8a7744 (RZ/G1N) compatible device
+> -	- "renesas,usbhs-r8a7745" for r8a7745 (RZ/G1E) compatible device
+> -	- "renesas,usbhs-r8a77470" for r8a77470 (RZ/G1C) compatible device
+> -	- "renesas,usbhs-r8a774a1" for r8a774a1 (RZ/G2M) compatible device
+> -	- "renesas,usbhs-r8a774b1" for r8a774b1 (RZ/G2N) compatible device
+> -	- "renesas,usbhs-r8a774c0" for r8a774c0 (RZ/G2E) compatible device
+> -	- "renesas,usbhs-r8a7790" for r8a7790 (R-Car H2) compatible device
+> -	- "renesas,usbhs-r8a7791" for r8a7791 (R-Car M2-W) compatible device
+> -	- "renesas,usbhs-r8a7792" for r8a7792 (R-Car V2H) compatible device
+> -	- "renesas,usbhs-r8a7793" for r8a7793 (R-Car M2-N) compatible device
+> -	- "renesas,usbhs-r8a7794" for r8a7794 (R-Car E2) compatible device
+> -	- "renesas,usbhs-r8a7795" for r8a7795 (R-Car H3) compatible device
+> -	- "renesas,usbhs-r8a7796" for r8a7796 (R-Car M3-W) compatible device
+> -	- "renesas,usbhs-r8a77965" for r8a77965 (R-Car M3-N) compatible device
+> -	- "renesas,usbhs-r8a77990" for r8a77990 (R-Car E3) compatible device
+> -	- "renesas,usbhs-r8a77995" for r8a77995 (R-Car D3) compatible device
+> -	- "renesas,usbhs-r7s72100" for r7s72100 (RZ/A1) compatible device
+> -	- "renesas,usbhs-r7s9210" for r7s9210 (RZ/A2) compatible device
+> -	- "renesas,rcar-gen2-usbhs" for R-Car Gen2 or RZ/G1 compatible devices
+> -	- "renesas,rcar-gen3-usbhs" for R-Car Gen3 or RZ/G2 compatible devices
+> -	- "renesas,rza1-usbhs" for RZ/A1 compatible device
+> -	- "renesas,rza2-usbhs" for RZ/A2 compatible device
+> -
+> -	When compatible with the generic version, nodes must list the
+> -	SoC-specific version corresponding to the platform first followed
+> -	by the generic version.
+> -
+> -  - reg: Base address and length of the register for the USBHS
+> -  - interrupts: Interrupt specifier for the USBHS
+> -  - clocks: A list of phandle + clock specifier pairs.
+> -	    - In case of "renesas,rcar-gen3-usbhs", two clocks are required.
+> -	      First clock should be peripheral and second one should be host.
+> -	    - In case of except above, one clock is required. First clock
+> -	      should be peripheral.
+> -
+> -Optional properties:
+> -  - renesas,buswait: Integer to use BUSWAIT register
+> -  - renesas,enable-gpio: A gpio specifier to check GPIO determining if USB
+> -			 function should be enabled
+> -  - phys: phandle + phy specifier pair
+> -  - phy-names: must be "usb"
+> -  - dmas: Must contain a list of references to DMA specifiers.
+> -  - dma-names : named "ch%d", where %d is the channel number ranging from zero
+> -                to the number of channels (DnFIFOs) minus one.
+> -
+> -Example:
+> -	usbhs: usb@e6590000 {
+> -		compatible = "renesas,usbhs-r8a7790", "renesas,rcar-gen2-usbhs";
+> -		reg = <0 0xe6590000 0 0x100>;
+> -		interrupts = <0 107 IRQ_TYPE_LEVEL_HIGH>;
+> -		clocks = <&mstp7_clks R8A7790_CLK_HSUSB>;
+> -	};
+> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> new file mode 100644
+> index 00000000..1d776d1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+> @@ -0,0 +1,128 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/renesas,usbhs.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas USBHS (HS-USB) controller
+> +
+> +maintainers:
+> +  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: renesas,usbhs-r7s72100 # RZ/A1
+> +          - const: renesas,rza1-usbhs
+> +
+> +      - items:
+> +          - const: renesas,usbhs-r7s9210 # RZ/A2
+> +          - const: renesas,rza2-usbhs
+> +
+> +      - items:
+> +          - enum:
+> +              - renesas,usbhs-r8a7743  # RZ/G1M
+> +              - renesas,usbhs-r8a7744  # RZ/G1N
+> +              - renesas,usbhs-r8a7745  # RZ/G1E
+> +              - renesas,usbhs-r8a77470 # RZ/G1C
+> +              - renesas,usbhs-r8a7790  # R-Car H2
+> +              - renesas,usbhs-r8a7791  # R-Car M2-W
+> +              - renesas,usbhs-r8a7792  # R-Car V2H
+> +              - renesas,usbhs-r8a7793  # R-Car M2-N
+> +              - renesas,usbhs-r8a7794  # R-Car E2
+> +          - const: renesas,rcar-gen2-usbhs
+> +
+> +      - items:
+> +          - enum:
+> +              - renesas,usbhs-r8a774a1 # RZ/G2M
+> +              - renesas,usbhs-r8a774b1 # RZ/G2N
+> +              - renesas,usbhs-r8a774c0 # RZ/G2E
+> +              - renesas,usbhs-r8a7795  # R-Car H3
+> +              - renesas,usbhs-r8a7796  # R-Car M3-W
+> +              - renesas,usbhs-r8a77965 # R-Car M3-N
+> +              - renesas,usbhs-r8a77990 # R-Car E3
+> +              - renesas,usbhs-r8a77995 # R-Car D3
+> +          - const: renesas,rcar-gen3-usbhs
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +    items:
+> +      - description: USB 2.0 host
+> +      - description: USB 2.0 peripheral
+> +      - description: USB 2.0 clock selector
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  renesas,buswait:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Integer to use BUSWAIT register.
+> +
+> +  renesas,enable-gpio:
+> +    description: |
+> +      gpio specifier to check GPIO determining if USB function should be
+> +      enabled.
+> +
+> +  phys:
+> +    maxItems: 1
+> +    items:
+> +      - description: phandle + phy specifier pair.
+> +
+> +  phy-names:
+> +    maxItems: 1
+> +    items:
+> +      - const: usb
+> +
+> +  dmas:
+> +    minItems: 2
+> +    maxItems: 4
+> +
+> +  dma-names:
+> +    minItems: 2
+> +    maxItems: 4
+> +    items:
+> +      - enum: [ch0, ch1, ch2, ch3]
 
-Reported-by: syzbot+7dc7c28d4577bbe55b10@syzkaller.appspotmail.com
+This is saying the 1st item is one of the 4 values and the others are 
+undefined. I think you want:
 
-Test result:
+items:
+  - const: ch0
+  - const: ch1
+  - const: ch2
+  - const: ch3
 
-https://groups.google.com/d/msg/syzkaller-bugs/3H_n05x_sPU/sUoHhxgAAgAJ
+> +
+> +  dr_mode:
+> +    $ref: /schemas/types.yaml#/definitions/string
+> +    description: |
+> +      tells Dual-Role USB controllers that we want to work on a particular
+> +      mode. Valid arguments are "host", "peripheral" and "otg". In case this
+> +      attribute isn't passed via DT, USB DRD controllers should default to OTG.
 
-Signed-off-by: Phong Tran <tranmanphong@gmail.com>
----
- drivers/net/usb/asix_common.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Assume we have a common binding for this and all you need is:
 
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index e39f41efda3e..3c7ccd8a9da8 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -444,8 +444,8 @@ void asix_set_multicast(struct net_device *net)
- int asix_mdio_read(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
--	__le16 res;
--	u8 smsr;
-+	__le16 res = 0;
-+	u8 smsr = 0;
- 	int i = 0;
- 	int ret;
- 
-@@ -478,7 +478,7 @@ void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res = cpu_to_le16(val);
--	u8 smsr;
-+	u8 smsr = 0;
- 	int i = 0;
- 	int ret;
- 
-@@ -508,8 +508,8 @@ void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
- int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
--	__le16 res;
--	u8 smsr;
-+	__le16 res = 0;
-+	u8 smsr = 0;
- 	int i = 0;
- 	int ret;
- 
-@@ -543,7 +543,7 @@ asix_mdio_write_nopm(struct net_device *netdev, int phy_id, int loc, int val)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res = cpu_to_le16(val);
--	u8 smsr;
-+	u8 smsr = 0;
- 	int i = 0;
- 	int ret;
- 
--- 
-2.20.1
+dr_mode: true
 
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - description: USB 2.0 host
+> +      - description: USB 2.0 peripheral
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/r8a7790-cpg-mssr.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/power/r8a7790-sysc.h>
+> +
+> +    usbhs: usb@e6590000 {
+> +        compatible = "renesas,usbhs-r8a7790", "renesas,rcar-gen2-usbhs";
+> +        reg = <0 0xe6590000 0 0x100>;
+> +        interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&cpg CPG_MOD 704>;
+> +    };
+> -- 
+> 2.7.4
+> 
