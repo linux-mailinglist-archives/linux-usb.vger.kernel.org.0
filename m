@@ -2,71 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D09F2BFD
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 11:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894C6F2CE2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 11:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387802AbfKGKTL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 05:19:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727632AbfKGKTK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 05:19:10 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 22BF42084D;
-        Thu,  7 Nov 2019 10:19:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573121949;
-        bh=veSNy8fHpebcc4Qmp98qkfhKdLnCD3QplNB+Rkjzb38=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o5HR5UtWgEVSoCewOeCOvQ+7niFoy1nWzZPd9rnyhJlit/8XKLlyRkgKP+RW4/ARv
-         HU7XR8MtpDVdY6aDdGNgaMpeCijUFZ4hKWFojxo61Cf2PySQZKiJkV6iRoJgNtfzRi
-         PZmi9vfl+T1Q3if4yW5hU8ym1X3VqIneyMPoJIaI=
-Date:   Thu, 7 Nov 2019 11:19:07 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-usb@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Dmitry Vyukov <dvyukov@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        David Windsor <dwindsor@gmail.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH v3 2/3] usb, kcov: collect coverage from hub_event
-Message-ID: <20191107101907.GA1365996@kroah.com>
-References: <cover.1572366574.git.andreyknvl@google.com>
- <de4fe1c219db2d002d905dc1736e2a3bfa1db997.1572366574.git.andreyknvl@google.com>
+        id S1733273AbfKGKzS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 05:55:18 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:34398 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727528AbfKGKzS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 05:55:18 -0500
+Received: by mail-lf1-f66.google.com with SMTP id f5so1259970lfp.1
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 02:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aleksander-es.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TPK50GPjrQoXQ8hD0+RbkmFtGxi2/e2ftn5FMSSFPF4=;
+        b=Wtsk0xn2xgXOzagZqoSEmpZnVaZEg5IExadkuK8+HDd0v+4R5t/CuNMGuqBgYPHYJS
+         aEBhShPEtMrQgMoLzq4DKH39AfjjRNFzJu6lhVS4QWxLIPiT+Ug/glUW6b7S1rBgIThi
+         /ogs8XLfJe5jFUZD/JLYicSccj7jYn533/EO3b597LpZgcNz6z6ZWBK1XeJzXMVixfkd
+         kTkQlyFkaonP6HWXaD+xIa0cQLpLwuSA72nIPRizCFlVdkZs0cvTsP2vmE1j+ERUMsm+
+         Z2J85G6iAPbWL9GP8wfJTgMZ7GzQ3C2Om8h3Zq6/tx/YgKqWPw6JQZMo4V/DCE/CFbBo
+         Fj6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=TPK50GPjrQoXQ8hD0+RbkmFtGxi2/e2ftn5FMSSFPF4=;
+        b=ZJx0eUx3iZXcuGK9EsBbq3DGCiyGk2ojqrVlMU7s/m846kJiZLeWTX/ffMcoI8RRgV
+         8MN5JYQ92MhWEdaKqQ58Qugf0719FjrBvrIETkUDXXZS2uwCBGbnnUjFb97+vSRypKAa
+         JIdDs1DiXwLJmjql6+xc/JiRgLrrJ/wVO/MY7sKnEv43NcX7JHE005WEtwpWlMrkQQep
+         aQQsxebJCLS4zDish+OuyJ14uBCx7GPXgeCn1/4n5NK+Lbv0Shig6LiXnOxznJ2W2s6v
+         HvzbVfF7LbwggcQXipcRiyiNVva0BRBeL8EpL7oRLrwmLH7WmDO+E7eplWGi7cZ9WLYF
+         Dk5A==
+X-Gm-Message-State: APjAAAVk7zKZQdPZGazsTTO1xXdrQSDZMtBOtJzaDFSJOolsemO+SaKg
+        FaRgpsfo3DKx9myMhhTuj893Yw==
+X-Google-Smtp-Source: APXvYqwqxxuBDu1x4vmJeaTVQv1FJjdGVZBPz2iwz+kHyblfJ1Xq1+yLRg0w9FP51km/b0Wa2GzQEQ==
+X-Received: by 2002:ac2:5f0a:: with SMTP id 10mr1928775lfq.57.1573124116279;
+        Thu, 07 Nov 2019 02:55:16 -0800 (PST)
+Received: from localhost.localdomain ([37.46.115.8])
+        by smtp.gmail.com with ESMTPSA id s28sm904756lfp.92.2019.11.07.02.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2019 02:55:15 -0800 (PST)
+From:   Aleksander Morgado <aleksander@aleksander.es>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Aleksander Morgado <aleksander@aleksander.es>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] USB: serial: option: add support for DW5821e with eSIM support
+Date:   Thu,  7 Nov 2019 11:55:08 +0100
+Message-Id: <20191107105508.1010716-1-aleksander@aleksander.es>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de4fe1c219db2d002d905dc1736e2a3bfa1db997.1572366574.git.andreyknvl@google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 05:32:28PM +0100, Andrey Konovalov wrote:
-> This patch adds kcov_remote_start()/kcov_remote_stop() annotations to the
-> hub_event() function, which is responsible for processing events on USB
-> buses, in particular events that happen during USB device enumeration.
-> Since hub_event() is run in a global background kernel thread (see
-> Documentation/dev-tools/kcov.rst for details), each USB bus gets a unique
-> global handle from the USB subsystem kcov handle range. As the result kcov
-> can now be used to collect coverage from events that happen on a
-> particular USB bus.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  drivers/usb/core/hub.c | 5 +++++
->  1 file changed, 5 insertions(+)
+The device exposes AT, NMEA and DIAG ports in both USB configurations.
+Exactly same layout as the default DW5821e module, just a different
+vid/pid.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+P:  Vendor=413c ProdID=81e0 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5821e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+
+P:  Vendor=413c ProdID=81e0 Rev=03.18
+S:  Manufacturer=Dell Inc.
+S:  Product=DW5821e-eSIM Snapdragon X20 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Cc: stable <stable@vger.kernel.org>
+---
+ drivers/usb/serial/option.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 06ab016be0b6..2023f1f4edaf 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -197,6 +197,7 @@ static void option_instat_callback(struct urb *urb);
+ #define DELL_PRODUCT_5804_MINICARD_ATT		0x819b  /* Novatel E371 */
+ 
+ #define DELL_PRODUCT_5821E			0x81d7
++#define DELL_PRODUCT_5821E_ESIM			0x81e0
+ 
+ #define KYOCERA_VENDOR_ID			0x0c88
+ #define KYOCERA_PRODUCT_KPC650			0x17da
+@@ -1044,6 +1045,8 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(DELL_VENDOR_ID, DELL_PRODUCT_5804_MINICARD_ATT, 0xff, 0xff, 0xff) },
+ 	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E),
+ 	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
++	{ USB_DEVICE(DELL_VENDOR_ID, DELL_PRODUCT_5821E_ESIM),
++	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_E100A) },	/* ADU-E100, ADU-310 */
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_500A) },
+ 	{ USB_DEVICE(ANYDATA_VENDOR_ID, ANYDATA_PRODUCT_ADU_620UW) },
+-- 
+2.24.0
+
