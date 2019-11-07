@@ -2,134 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEF6F3789
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 19:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50555F37B2
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 19:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727491AbfKGSsw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 13:48:52 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:41795 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726976AbfKGSsv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 13:48:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573152530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UHB0JrKl2/lgoy546a6o5x0iXWhc257PTYUJn/4Bje0=;
-        b=IzWCw6Joj6xY0pxmrt8uf+HitdTf1u5HxPuCNhyPwd+atj0HVEEvvcfqnXDHJq5Q3iMUs1
-        mYP8gP15+qfCHcfUawOYCNJ0A6HvzQWv3FpQSZZ40HpBK69B913VawjCUjhMl+9oEoazo5
-        wcoHY8T3eYEVFyOIQYvdO6F58R4aLKc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-270-B9RjU769P3eP409e546QHA-1; Thu, 07 Nov 2019 13:48:44 -0500
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70429800C61;
-        Thu,  7 Nov 2019 18:48:41 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54380600D3;
-        Thu,  7 Nov 2019 18:48:38 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALCETrUka9KaOKFbNKUXcA6XvoFxiXPftctSHtN4DL35Cay61w@mail.gmail.com>
-References: <CALCETrUka9KaOKFbNKUXcA6XvoFxiXPftctSHtN4DL35Cay61w@mail.gmail.com> <157313371694.29677.15388731274912671071.stgit@warthog.procyon.org.uk> <157313375678.29677.15875689548927466028.stgit@warthog.procyon.org.uk>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 04/14] pipe: Add O_NOTIFICATION_PIPE [ver #2]
+        id S1725990AbfKGS74 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 13:59:56 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39706 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725818AbfKGS74 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 13:59:56 -0500
+Received: by mail-ot1-f65.google.com with SMTP id e17so2960848otk.6
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 10:59:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rgwxQZHa6ldii1pWiRxVyykr5nSYdGqgGsnTVFnT84Y=;
+        b=iPZ79ADka3j4nmgFew4aV8GDcZgyEwjLMdxp0Mh5gVImbZONvzSBW9L1sDFI8fDn3H
+         tnob8FIWxwGjDxp9eXuUAyD7X+O9J00fk8t56cyUl1HBcq0UNvZEFDD7/H+/lhhzvKYj
+         SgIFewwBSBs+CRZJu4aSqVjtbsfPz4Ia4NSA5kd8fqnHx+ad24lm/tMPtATyuujAgPXh
+         1XKicq1x1Q5xCLuAe65ljYXBxTPoh9Q9cqz2zM2+OCgrTkmSh/OTID/oUW0ztm5864wN
+         wN4GNgZiZRtRUKL6RJ6zJRdQh59WYXHqXthL1ObImv7honOLN59FTmXsawrwD0Dyt9e/
+         vpFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rgwxQZHa6ldii1pWiRxVyykr5nSYdGqgGsnTVFnT84Y=;
+        b=R9mmu287yo40UV0C8B2a0Xml74/vx/KBGQpRvCPhEtc6LU2uRkbFbly0EZ7NI0dWbI
+         lhJWkSxABjOhiKOKzXkwSFN7OEvfzYrm9vlnnJ6ZY73MO8ThN+XKYmIkOUAbBjN3zMGt
+         3xhypeh+L8TXxsrZOGUA9ZKlWM29ZZ698Yuh8iBVOdOfztsJ/iOLLwAZf9kdQJe0bxjs
+         nQ75/5lu/hk42tqDob4Lc8cHcyG8Sql0TkrLyZcqNF0TkLXbswKi5WDbX+Dx2J/f8KsR
+         tu1EHZnNed334NrvmvSpnFf7SNdRGIG8eZtO5hHNbXItE+RY3gCwNaHM6/JEqhG/RqWz
+         Zw/w==
+X-Gm-Message-State: APjAAAV5Ks2lVjASixUdBXJsIIxtG6ErfjfkYqRpAMQlERs5nSoZs65d
+        bI4olUz43jx9PlglU7XWZFeB6d2eLBKfvl9nUjfMjQ==
+X-Google-Smtp-Source: APXvYqzZ2xDwFA4+o+16DbpXyR0jc2MOPlP3+u/QTC5jyvI5FJY3d9mHmZ9im0K4MWchyT/eP41C3qrbM2OhGj3lIpU=
+X-Received: by 2002:a9d:5a0f:: with SMTP id v15mr4513902oth.266.1573153195073;
+ Thu, 07 Nov 2019 10:59:55 -0800 (PST)
 MIME-Version: 1.0
-Content-ID: <6963.1573152517.1@warthog.procyon.org.uk>
-Date:   Thu, 07 Nov 2019 18:48:37 +0000
-Message-ID: <6964.1573152517@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: B9RjU769P3eP409e546QHA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it> <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+In-Reply-To: <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+From:   Andrea Vai <andrea.vai@unipv.it>
+Date:   Thu, 7 Nov 2019 19:59:44 +0100
+Message-ID: <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+Subject: Re: Slow I/O on USB media after commit f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Lutomirski <luto@kernel.org> wrote:
-
-> > Add an O_NOTIFICATION_PIPE flag that can be passed to pipe2() to indica=
-te
-> > that the pipe being created is going to be used for notifications.  Thi=
-s
-> > suppresses the use of splice(), vmsplice(), tee() and sendfile() on the
-> > pipe as calling iov_iter_revert() on a pipe when a kernel notification
-> > message has been inserted into the middle of a multi-buffer splice will=
- be
-> > messy.
+[Sorry for the duplicate message, it didn't reach the lists due to
+html formatting]
+Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
+<Damien.LeMoal@wdc.com> ha scritto:
 >
-> How messy?
+> On 2019/11/07 16:04, Andrea Vai wrote:
+> > Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto:
+> >>
+> >>
+> >> Please simply try your write tests after doing this:
+> >>
+> >> echo mq-deadline > /sys/block/<name of your USB
+> >> disk>/queue/scheduler
+> >>
+> >> And confirm that mq-deadline is selected with:
+> >>
+> >> cat /sys/block/<name of your USB disk>/queue/scheduler
+> >> [mq-deadline] kyber bfq none
+> >
+> > ok, which kernel should I test with this: the fresh git cloned, or the
+> > one just patched with Alan's patch, or doesn't matter which one?
+>
+> Probably all of them to see if there are any differences.
 
-Well, iov_iter_revert() on a pipe iterator simply walks backwards along the
-ring discarding the last N contiguous slots (where N is normally the number=
- of
-slots that were filled by whatever operation is being reverted).
+with both kernels, the output of
+cat /sys/block/sdh/queue/schedule
 
-However, unless the code that transfers stuff into the pipe takes the spinl=
-ock
-spinlock and disables softirqs for the duration of its ring filling, what w=
-ere
-N contiguous slots may now have kernel notifications interspersed - even if=
- it
-has been holding the pipe mutex.
+already contains [mq-deadline]: is it correct to assume that the echo
+command and the subsequent testing is useless? What to do now?
 
-So, now what do you do?  You have to free up just the buffers relevant to t=
-he
-iterator and then you can either compact down the ring to free up the space=
- or
-you can leave null slots and let the read side clean them up, thereby
-reducing the capacity of the pipe temporarily.
-
-Either way, iov_iter_revert() gets more complex and has to hold the spinloc=
-k.
-
-And if you don't take the spinlock whilst you're reverting, more notificati=
-ons
-can come in to make your life more interesting.
-
-There's also a problem with splicing out from a notification pipe that the
-messages are scribed onto preallocated buffers, but now the buffers need
-refcounts and, in any case, are of limited quantity.
-
-> And is there some way to make it impossible for this to happen?
-
-Yes.  That's what I'm doing by declaring the pipe to be unspliceable up fro=
-nt.
-
-> Adding a new flag to pipe2() to avoid messy kernel code seems
-> like a poor tradeoff.
-
-By far the easiest place to check whether a pipe can be spliced to is in
-get_pipe_info().  That's checking the file anyway.  After that, you can't m=
-ake
-the check until the pipe is locked.
-
-Furthermore, if it's not done upfront, the change to the pipe might happen
-during a splicing operation that's residing in pipe_wait()... which drops t=
-he
-pipe mutex.
-
-David
-
+Thanks, and bye
+Andrea
