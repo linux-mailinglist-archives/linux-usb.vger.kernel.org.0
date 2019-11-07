@@ -2,27 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D6D1F31B8
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 15:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D398F31B9
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2019 15:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727093AbfKGOpD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 09:45:03 -0500
-Received: from mx2.suse.de ([195.135.220.15]:42902 "EHLO mx1.suse.de"
+        id S1727340AbfKGOpG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 09:45:06 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42934 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726231AbfKGOpD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 7 Nov 2019 09:45:03 -0500
+        id S1726231AbfKGOpG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 7 Nov 2019 09:45:06 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 79615B4D5;
-        Thu,  7 Nov 2019 14:45:01 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 4073FB4DD;
+        Thu,  7 Nov 2019 14:45:05 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
 To:     keithp@keithp.com, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>, Oliver Neukum <oneukum@suse.de>
 Subject: [PATCH] USB: chaoskey: fix error case of a timeout
-Date:   Thu,  7 Nov 2019 15:28:55 +0100
-Message-Id: <20191107142856.16774-1-oneukum@suse.com>
+Date:   Thu,  7 Nov 2019 15:28:56 +0100
+Message-Id: <20191107142856.16774-2-oneukum@suse.com>
 X-Mailer: git-send-email 2.16.4
+In-Reply-To: <20191107142856.16774-1-oneukum@suse.com>
+References: <20191107142856.16774-1-oneukum@suse.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
