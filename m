@@ -2,127 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 181A6F4D8D
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 14:54:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC37F4E29
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 15:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfKHNyJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Nov 2019 08:54:09 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:54692 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726101AbfKHNyJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 08:54:09 -0500
-Received: by mail-io1-f71.google.com with SMTP id i15so5332870ion.21
-        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2019 05:54:08 -0800 (PST)
+        id S1726741AbfKHOdv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Nov 2019 09:33:51 -0500
+Received: from mail-il1-f196.google.com ([209.85.166.196]:42290 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726651AbfKHOdv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 09:33:51 -0500
+Received: by mail-il1-f196.google.com with SMTP id n18so5288618ilt.9
+        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2019 06:33:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=vjFrtw/BFflYelHD8o98Hq690NNXJ7cJs1titEez/pc=;
+        b=Uc+0XKXhH2reTQzfsdxC5OYZZJp4hWzSccHyFmJI7DDzk7v3gjlNR3eF/0VSskkxIP
+         ojav5IUWz5RjyQ8qtY66iOtKU5hC3q4xVHRIKwKhj56Q8bTWS1AgPQT4RkXea8OHT5oP
+         7vaHluDTMa1pyv+LyC92ZjWHp5Web55G/lHle/LBSJf8KPLx6Q8LA5xwNFs+IQkqkWbT
+         D+cksZX1ery1wFdfcWBA3bN02uh2G2r7yXszcUx172QxTGOEEXDEiGzi2rwtT936e4q9
+         Xsc6WQcyGkgXXPFPtunNfQe8G0RW29QJT+fNFvRFZpuRozyTopfnJ72T16EbpCJzsQL3
+         g6/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=9njApmrwBTyGtT2rIls1ibfEyGXQv7MJRF4nex5faGk=;
-        b=E1+91oJQGNJ3+IliCgHHohoz8UmozkIg5xf5DcXyR6t2QYuCGY9imk/lDR8O71i1Rp
-         ii2VHh4RCU4KL2I+xDrdlyB07FXqxRYrLnJshxF7zTtv0z5nLM3CbHGFvOFeRATGcftf
-         ICmY/G6JL58whQZMGMUQmBMMRl4qAF2xbL4opkBHivn3Dzzcm0pnqlWxMUx1ECoPKHF6
-         eLZNVKHqgO4ourWhNRyHeAhsh+oVbqdVCWDdHOEl6KuJ4CELkAckKTVyY1VvvwCOCXIB
-         1f+gRXGtfQE3h9/+eRRDPC+zY1JzD7GwlmSA163ZHPlfRjgvfz7tkMJEOKVZ2fmOo+By
-         qHOw==
-X-Gm-Message-State: APjAAAVPMY/RqjJCe1mre2k5DpfzCGLYLQhoXF3YLN4ICTqg99cmrCPA
-        Sld1yOYS4AB5mjfKuQXSh6PrYcsE3yO536gYk6VIWlAB73Gp
-X-Google-Smtp-Source: APXvYqycgefMdj0hGu446AltJ4RBPS/dLbn2ZzGFB36mPnHIinSpfjR94NhDkoQ6fYZAwULXQr1preCiY24Kd4PVHM+xtStz9wON
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vjFrtw/BFflYelHD8o98Hq690NNXJ7cJs1titEez/pc=;
+        b=th2Jc7S6aDpgBQ6KOAJK3Hy9DRrGQ/5JrlQvIkWIaGJxH7NeU//lI3x+mQ828wXgJs
+         MpxPgOjG9ZTjdwsF9KvH9Ui6bbKUdKe6EnYTpBnq/kXNzSsQ6bL+hKtBz+EPoIomJLhR
+         wWIC8Iea0QTndBdWF52cEqMtGNEIrGCv/oUq14smpEa0c88BSj/llC/eQFp5IiX2D1mP
+         tJS0iREYyEZH6rhFisJu/FZXFfwxXINZukTNdHN1QEyVZBz8sfNOLkdQjJxjl7Ollyus
+         2xASe+wW0IfAapjB6UT43BuHQCM5HJOYGIgXWVJdskCM7XZQbqWwIh3c+kK+mhF3SuHr
+         43LA==
+X-Gm-Message-State: APjAAAWS+p1hYwQO54BUYncFI61KCzcwiVX6vYad0ajQsuuyFjkYhWS0
+        courhJD7mVTQ34GWfESh2ojUIw==
+X-Google-Smtp-Source: APXvYqzzo8tZh5qGUiRxpACPRILKqdIaMAMNe1+mjb9Boab7B6GRuyqZ5VZjLbkvu6RjAf6QsrNOsQ==
+X-Received: by 2002:a92:8c0a:: with SMTP id o10mr11008361ild.249.1573223629218;
+        Fri, 08 Nov 2019 06:33:49 -0800 (PST)
+Received: from [192.168.1.159] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id d21sm488497ioe.86.2019.11.08.06.33.47
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 06:33:48 -0800 (PST)
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Andrea Vai <andrea.vai@unipv.it>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+ <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+ <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <72fc7fd1-cf86-969c-d1ed-36201cf9510a@kernel.dk>
+Date:   Fri, 8 Nov 2019 07:33:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-Received: by 2002:a92:3651:: with SMTP id d17mr12787422ilf.268.1573221248158;
- Fri, 08 Nov 2019 05:54:08 -0800 (PST)
-Date:   Fri, 08 Nov 2019 05:54:08 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a654800596d61d1d@google.com>
-Subject: WARNING in bcm5974_start_traffic/usb_submit_urb
-From:   syzbot <syzbot+348331f63b034f89b622@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
-        gustavo@embeddedor.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On 11/8/19 1:42 AM, Damien Le Moal wrote:
+> On 2019/11/08 4:00, Andrea Vai wrote:
+>> [Sorry for the duplicate message, it didn't reach the lists due to
+>> html formatting]
+>> Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
+>> <Damien.LeMoal@wdc.com> ha scritto:
+>>>
+>>> On 2019/11/07 16:04, Andrea Vai wrote:
+>>>> Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto:
+>>>>>
+>>>>>
+>>>>> Please simply try your write tests after doing this:
+>>>>>
+>>>>> echo mq-deadline > /sys/block/<name of your USB
+>>>>> disk>/queue/scheduler
+>>>>>
+>>>>> And confirm that mq-deadline is selected with:
+>>>>>
+>>>>> cat /sys/block/<name of your USB disk>/queue/scheduler
+>>>>> [mq-deadline] kyber bfq none
+>>>>
+>>>> ok, which kernel should I test with this: the fresh git cloned, or the
+>>>> one just patched with Alan's patch, or doesn't matter which one?
+>>>
+>>> Probably all of them to see if there are any differences.
+>>
+>> with both kernels, the output of
+>> cat /sys/block/sdh/queue/schedule
+>>
+>> already contains [mq-deadline]: is it correct to assume that the echo
+>> command and the subsequent testing is useless? What to do now?
+> 
+> Probably, yes. Have you obtained a blktrace of the workload during these
+> tests ? Any significant difference in the IO pattern (IO size and
+> randomness) and IO timing (any device idle time where the device has no
+> command to process) ? Asking because the problem may be above the block
+> layer, with the file system for instance.
 
-syzbot found the following crash on:
+blktrace would indeed be super useful, especially if you can do that
+with a kernel that's fast for you, and one with the current kernel
+where it's slow.
 
-HEAD commit:    d60bbfea usb: raw: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1645164ae00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
-dashboard link: https://syzkaller.appspot.com/bug?extid=348331f63b034f89b622
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1687e4aae00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1508a272e00000
+Given that your device is sdh, you simply do:
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+348331f63b034f89b622@syzkaller.appspotmail.com
+# blktrace /dev/sdh
 
-------------[ cut here ]------------
-usb 5-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 1758 at drivers/usb/core/urb.c:477  
-usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Kernel panic - not syncing: panic_on_warn set ...
-CPU: 0 PID: 1758 Comm: syz-executor078 Not tainted 5.4.0-rc6+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  panic+0x2aa/0x6e1 kernel/panic.c:221
-  __warn.cold+0x2f/0x33 kernel/panic.c:582
-  report_bug+0x27b/0x2f0 lib/bug.c:195
-  fixup_bug arch/x86/kernel/traps.c:179 [inline]
-  fixup_bug arch/x86/kernel/traps.c:174 [inline]
-  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
-  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
-  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
-RIP: 0010:usb_submit_urb+0x1188/0x13b0 drivers/usb/core/urb.c:477
-Code: 4d 85 ed 74 2c e8 b8 21 ef fd 4c 89 f7 e8 40 34 1f ff 41 89 d8 44 89  
-e1 4c 89 ea 48 89 c6 48 c7 c7 40 77 14 86 e8 cd bc c4 fd <0f> 0b e9 20 f4  
-ff ff e8 8c 21 ef fd 4c 89 f2 48 b8 00 00 00 00 00
-RSP: 0018:ffff8881ced9f850 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffffffff8128c9cd RDI: ffffed1039db3efc
-RBP: ffff8881d03f4800 R08: ffff8881cfa80000 R09: fffffbfff11ab3b5
-R10: fffffbfff11ab3b4 R11: ffffffff88d59da7 R12: 0000000000000001
-R13: ffff8881caa9c990 R14: ffff8881cfe990a0 R15: ffff8881d52d5900
-  bcm5974_start_traffic drivers/input/mouse/bcm5974.c:799 [inline]
-  bcm5974_start_traffic+0xbd/0x170 drivers/input/mouse/bcm5974.c:783
-  bcm5974_open+0x9f/0x160 drivers/input/mouse/bcm5974.c:839
-  input_open_device+0x16c/0x2c0 drivers/input/input.c:623
-  evdev_open_device drivers/input/evdev.c:414 [inline]
-  evdev_open+0x3fe/0x510 drivers/input/evdev.c:499
-  chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-  do_dentry_open+0x494/0x1120 fs/open.c:797
-  do_last fs/namei.c:3408 [inline]
-  path_openat+0x1430/0x3ff0 fs/namei.c:3525
-  do_filp_open+0x1a1/0x280 fs/namei.c:3555
-  do_sys_open+0x3c0/0x580 fs/open.c:1097
-  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x406781
-Code: 75 14 b8 02 00 00 00 0f 05 48 3d 01 f0 ff ff 0f 83 a4 18 00 00 c3 48  
-83 ec 08 e8 0a fc ff ff 48 89 04 24 b8 02 00 00 00 0f 05 <48> 8b 3c 24 48  
-89 c2 e8 53 fc ff ff 48 89 d0 48 83 c4 08 48 3d 01
-RSP: 002b:00007fac82b3e820 EFLAGS: 00000293 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000406781
-RDX: 0000000000000000 RSI: 0000000000000300 RDI: 00007fac82b3e8d0
-RBP: 00000000006dcc40 R08: 00007fac82b3e830 R09: 00000000006dcc40
-R10: 0000000000000000 R11: 0000000000000293 R12: 00000000006dcc4c
-R13: 00007ffea0a0004f R14: 00007fac82b3f9c0 R15: 00000000006dcc40
-Kernel Offset: disabled
-Rebooting in 86400 seconds..
+and then run the test, then ctrl-c the blktrace. Then do:
 
+# blkparse sdh > output
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+and save that output file. Do both runs, and bzip2 them up. The shorter
+the run you can reproduce with the better, to cut down on the size of
+the traces.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- 
+Jens Axboe
+
