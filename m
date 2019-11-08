@@ -2,94 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5C4F40AF
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 07:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAB3F4259
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 09:43:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729962AbfKHGnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Nov 2019 01:43:01 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36366 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729880AbfKHGnA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 01:43:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573195379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8x+s0gT+EQcwDzJx0Qq2QbxI7ZiAY//ltXx+x3jOGg=;
-        b=K0Vy1weLhKpp+bOYWw9qkFhoWjt5hAnm5TJDvgl+GMj6vYvO4f8cr3fTcdesvFUfFCgcKy
-        ReGybiIDU97z6kY7DmNomlfd+rLZO78KxLyqCFZwh2U/SIFyGLv8PNigXHfLK1tusotyt5
-        zRgKfr8mMlnBgxWHfNOqEDD6HSlFqS0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-217-VLRlQoNXNQOdqlAzq2_FZA-1; Fri, 08 Nov 2019 01:42:56 -0500
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 67DF6477;
-        Fri,  8 Nov 2019 06:42:54 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-254.rdu2.redhat.com [10.10.120.254])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8307A10016DA;
-        Fri,  8 Nov 2019 06:42:51 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CALCETrWeN9CGJHz0dzG1uH5Qjbr+xG3OKZuEd33eBY_rAzVkqQ@mail.gmail.com>
-References: <CALCETrWeN9CGJHz0dzG1uH5Qjbr+xG3OKZuEd33eBY_rAzVkqQ@mail.gmail.com> <157313371694.29677.15388731274912671071.stgit@warthog.procyon.org.uk> <157313375678.29677.15875689548927466028.stgit@warthog.procyon.org.uk> <CALCETrUka9KaOKFbNKUXcA6XvoFxiXPftctSHtN4DL35Cay61w@mail.gmail.com> <6964.1573152517@warthog.procyon.org.uk>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 04/14] pipe: Add O_NOTIFICATION_PIPE [ver #2]
-MIME-Version: 1.0
-Content-ID: <7771.1573195370.1@warthog.procyon.org.uk>
-Date:   Fri, 08 Nov 2019 06:42:50 +0000
-Message-ID: <7772.1573195370@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: VLRlQoNXNQOdqlAzq2_FZA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
+        id S1730254AbfKHInX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Nov 2019 03:43:23 -0500
+Received: from esa2.hgst.iphmx.com ([68.232.143.124]:48719 "EHLO
+        esa2.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728513AbfKHInW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 03:43:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1573202712; x=1604738712;
+  h=from:to:cc:subject:date:message-id:references:
+   content-transfer-encoding:mime-version;
+  bh=fzmauGjiIfNg3tqTMLYZBQMfxky7jbRPSg6Dvq16Nqo=;
+  b=ScJ9cIWjuN7jekmCyJRyBzD/j5c7Z3h9DorNRbsAMC6saCVo6tCNJXYL
+   m9w4XUYiA4NDGjsrOpFlzrSkYfHW94xSq/soJMzhGFnTsUln+g/v/tzo/
+   AHsuJZBmZYQTC3KQU2UbTBLwuOeZjnluBF6+UCOW9s7VZZdruAHnU/PIH
+   fxUhVtdB8x69luXBfex/cOoVKXilxLw9Wbub3wS1xvQgeJrE0Equoy/rW
+   0tsp0+eyyDBEWZ1A6cQ52IMEMzXdWdahdB3wiw/UOjQkENcg08BeWDaxj
+   elyj+9sv4IJEmIPfbgvlVXODePNK26yJj64RF1njIEPiogIrMDbxiw0u+
+   A==;
+IronPort-SDR: kKMXb0+G6kyYrSG6DYwPVdx7mxL1aHofkbmHpCNfU1LZDUZdWZtdGB/d1qQ5Oisur7Yd/76nPp
+ JZmjh2GRDvqughsnP7MGsowTS0CN05/UMoKRj4D1ES623U5iG/7zixkejCPUjLUdmsaZpziqG0
+ VY0BJDWVI19GS5AykpdnhbuCRMhQ+BdFCRxs0gohFc0lrpZmLePg3YMagcrxVC9LHfmPp05ByJ
+ k1atHMegsjJaYZEVhW+mITJEmUZgobOSpoAzI1oBihUN2nm4cPaf59i+/C2w2HpOJ4LXviSTRz
+ qiY=
+X-IronPort-AV: E=Sophos;i="5.68,280,1569254400"; 
+   d="scan'208";a="223682169"
+Received: from mail-bl2nam02lp2050.outbound.protection.outlook.com (HELO NAM02-BL2-obe.outbound.protection.outlook.com) ([104.47.38.50])
+  by ob1.hgst.iphmx.com with ESMTP; 08 Nov 2019 16:44:31 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TPj4kaM6s1i3X21EHjhIvBLwrWMac95ZSpw+BHvhsUYyDG8aH1mBOWZipP89sYmJT+PoQKzWevha3OZvDv+mSZfFHfSAprm4L4TJJ92SuCTIwretmK8X1ZIgyqbERYFgCbifbESEMPomNtlwTYg3+/2T/hxUOOaaIJ3pyaosBfAYGzfT+ST12XsIylW3hXPHtj16GHMrgMtdKZgQao97scqZGsfaSCoMGddXI4HYK9MGGJfTy4rpRyF22696hutZ/6Ndc2F5OD/yK9pYKb0iBCJBCy/z/WePsMFGeLN30D5GvQhqgyrlYtU09vfbi8gWbhASaZIPiUCZr98aNraJkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fzmauGjiIfNg3tqTMLYZBQMfxky7jbRPSg6Dvq16Nqo=;
+ b=h4L3ve8vlmM0cgO5FbaIbz23sZfqEP8CIIzI4ZAM2/+YlsQp+vHRrpQG9I9cpQEv8+2aQuFHB9OeUgXj+bmPuLyBenDHd/c+jeJOVCtxYk3GfD2J6/9i6kWI+l254WKzeLnForAi2KJbx3m4equA3WKxzadtccn9Vs+P+AK32pvFUGTO5pF0AqrOpeOeHMcXzMsUWgb8OgqOEXgx6xbvoxVEtK94K4V6SnCJz/niY5jwdvQyM7Ii9oGZOAhZc1jPgvmV27JgRDNS8qT0MU1Ccy3m3inEE1rGdC8nkAj7TRrEpgGmxc4FhXdkH6lAPC8iqiymAK/v3n+Vg5ZZB/WhfQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fzmauGjiIfNg3tqTMLYZBQMfxky7jbRPSg6Dvq16Nqo=;
+ b=zrRdKhUdr3nIuzGKqysQHK5o+vii/aJWziUZZGsIbYBP18ApxaDmFcmg/Vw0GIBDpx8UkrE+Ti7TQrvj2IbOUfoDE4NGBmzB0vRC6cgFrytywko/Ib9nRs3GQQMubmTl5LdbMwLHRPaHDezXo9pqkp49WVJg2FjTmQUBISh5ceE=
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com (20.179.59.16) by
+ BYAPR04MB5544.namprd04.prod.outlook.com (20.178.232.17) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2408.24; Fri, 8 Nov 2019 08:42:53 +0000
+Received: from BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::4176:5eda:76a2:3c40]) by BYAPR04MB5816.namprd04.prod.outlook.com
+ ([fe80::4176:5eda:76a2:3c40%7]) with mapi id 15.20.2430.023; Fri, 8 Nov 2019
+ 08:42:53 +0000
+From:   Damien Le Moal <Damien.LeMoal@wdc.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Thread-Topic: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Thread-Index: AQHVV3qbTKYWY4pSG0OtJLbZzV/0bg==
+Date:   Fri, 8 Nov 2019 08:42:53 +0000
+Message-ID: <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+ <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Damien.LeMoal@wdc.com; 
+x-originating-ip: [199.255.47.8]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 5507ad9e-be4e-4741-9309-08d76427a565
+x-ms-traffictypediagnostic: BYAPR04MB5544:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR04MB554444E078DED13493B2FC26E77B0@BYAPR04MB5544.namprd04.prod.outlook.com>
+wdcipoutbound: EOP-TRUE
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0215D7173F
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(366004)(136003)(346002)(376002)(39860400002)(199004)(189003)(66476007)(229853002)(54906003)(316002)(71200400001)(71190400001)(6116002)(33656002)(2906002)(6506007)(81166006)(53546011)(3846002)(14444005)(25786009)(478600001)(256004)(6916009)(4326008)(52536014)(81156014)(66446008)(305945005)(8676002)(102836004)(486006)(8936002)(7416002)(7696005)(76176011)(55016002)(7736002)(446003)(186003)(6436002)(5660300002)(476003)(26005)(91956017)(66066001)(76116006)(86362001)(99286004)(66946007)(9686003)(74316002)(66556008)(64756008)(14454004)(6246003);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR04MB5544;H:BYAPR04MB5816.namprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: gbOhCdzZgcgyuzEfkxBy9DM0DX8FwYsrWD1ZRBBxED0S+WKeUbjW5IGXlZdEj3GueeW8LAYL+64XaqwqczQT6HpJCyNwVGbLLcAoOEA1GLFQcgOFZSpnyYIkCWkOrB96HjHHh0N8KBAAPn5f3c3tDWk0Qurn0dXEmZCt6qZAzH0Qlk24/RByqkw2YjjK6luIGngbxWuMweco+iIC/2vkJS/rDWudAzTA+74qT+CZALzzfgLyGNSXBiucBIYRTn7tABFS8yIWiMRBS9iPNat6uA6PwWegv+VB9PsXbjv9PVVzTErAvrVTJiHMoGIjGLpyczzpa61Ofz+lxMrgieSxEtWNhqgtpFk8tqNxeaxBybrb/9Vkyy/lMk8dAVcDWGD5t8lxA/cmRGL9/HFA+Jm1HhLM/0NDhow+9bk32rQNG/zfWyQsqblZTTEs5BBn7eyZ
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5507ad9e-be4e-4741-9309-08d76427a565
+X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2019 08:42:53.5595
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cA5mumSPZa8jvyI8w8aSKP9f2IQZ9kFWB5YfEWyxItqlLBnyJFgfG/qR6vZSNGiPKXDnBXIJ4CxQLlvdxONuFQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR04MB5544
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Andy Lutomirski <luto@kernel.org> wrote:
-
-> I can open a normal pipe from userspace (with pipe() or pipe2()), and
-> I can have two threads.  One thread writes to the pipe with write().
-> The other thread writes with splice().  Everything works fine.
-
-Yes.  Every operation you do on a pipe from userspace is serialised with th=
-e
-pipe mutex - and both ends share the same pipe.
-
-> What's special about notifications?
-
-The post_notification() cannot take the pipe mutex.  It has to be callable
-from softirq context.  Linus's idea is that when you're actually altering t=
-he
-ring pointers you should hold the wake-queue spinlock, and post_notificatio=
-n()
-holds the wake queue spinlock for the duration of the operation.
-
-This means that post_notification() can be writing to the pipe whilst a
-userspace-invoked operation is holding the pipe mutex and is also doing
-something to the ring.
-
-David
-
+On 2019/11/08 4:00, Andrea Vai wrote:=0A=
+> [Sorry for the duplicate message, it didn't reach the lists due to=0A=
+> html formatting]=0A=
+> Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal=0A=
+> <Damien.LeMoal@wdc.com> ha scritto:=0A=
+>>=0A=
+>> On 2019/11/07 16:04, Andrea Vai wrote:=0A=
+>>> Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto:=
+=0A=
+>>>>=0A=
+>>>>=0A=
+>>>> Please simply try your write tests after doing this:=0A=
+>>>>=0A=
+>>>> echo mq-deadline > /sys/block/<name of your USB=0A=
+>>>> disk>/queue/scheduler=0A=
+>>>>=0A=
+>>>> And confirm that mq-deadline is selected with:=0A=
+>>>>=0A=
+>>>> cat /sys/block/<name of your USB disk>/queue/scheduler=0A=
+>>>> [mq-deadline] kyber bfq none=0A=
+>>>=0A=
+>>> ok, which kernel should I test with this: the fresh git cloned, or the=
+=0A=
+>>> one just patched with Alan's patch, or doesn't matter which one?=0A=
+>>=0A=
+>> Probably all of them to see if there are any differences.=0A=
+> =0A=
+> with both kernels, the output of=0A=
+> cat /sys/block/sdh/queue/schedule=0A=
+> =0A=
+> already contains [mq-deadline]: is it correct to assume that the echo=0A=
+> command and the subsequent testing is useless? What to do now?=0A=
+=0A=
+Probably, yes. Have you obtained a blktrace of the workload during these=0A=
+tests ? Any significant difference in the IO pattern (IO size and=0A=
+randomness) and IO timing (any device idle time where the device has no=0A=
+command to process) ? Asking because the problem may be above the block=0A=
+layer, with the file system for instance.=0A=
+=0A=
+> =0A=
+> Thanks, and bye=0A=
+> Andrea=0A=
+> =0A=
+=0A=
+=0A=
+-- =0A=
+Damien Le Moal=0A=
+Western Digital Research=0A=
