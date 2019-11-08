@@ -2,72 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D6DF5103
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 17:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBD5F5158
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 17:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfKHQZE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Nov 2019 11:25:04 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:40358 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726200AbfKHQZE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 11:25:04 -0500
-Received: by mail-pg1-f196.google.com with SMTP id 15so4257369pgt.7;
-        Fri, 08 Nov 2019 08:25:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=9+uoj8lNodCH/yF6mbg/IXWpHQI/7No+l7A/rtoNzfQ=;
-        b=WaT4N+XU7tj8mnvinwvqaIiA25W7zl1cbltShPh9GFu8NOobmPS7wBtYokiPwCbA08
-         UyaC/IopHhD5vjF7mPwwusohB0XqJQ16cL9w7n3D5mffTL+fk47Afd30yUrFRj5l620H
-         z3OvO3xPEcM5gt0wmkZjXJ3u5ItjokKk6UVm4BKXkaZY0Ew+n67rs/I0rKYWAJ+zgjpc
-         64pRmTNjxDalU96txhTcUfQHpWRNj0JaGFS+CoddiSZcMgvHjShUAVX2m6g4bCc0p/yI
-         ZFkKMkmhiILBywUBtzz+Jpf8fx9Ua3gx02kvIclsCEGCtite0lw1Y93tUbocQPoACNot
-         Pwgw==
-X-Gm-Message-State: APjAAAV3QyHEk0miEXquaihu8+vA2f7ldIJVFsc1kQVC2LPj0aLG02sW
-        6N9KdYdEvUsChjz2afcO9yw=
-X-Google-Smtp-Source: APXvYqyR62JXFIcQsnv/9aTkvr/5Zf4QUY+imxly2ODGG0V1kn41lARaY8vNAqGp9+R2uzse4hc3Pw==
-X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr15111619pjj.27.1573230301739;
-        Fri, 08 Nov 2019 08:25:01 -0800 (PST)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id s66sm8704017pfb.38.2019.11.08.08.25.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2019 08:25:00 -0800 (PST)
-Subject: Re: [PATCH v2] scsi: Fix scsi_get/set_resid() interface
-To:     Damien Le Moal <damien.lemoal@wdc.com>, linux-scsi@vger.kernel.org,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S1726049AbfKHQmd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Nov 2019 11:42:33 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38694 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725941AbfKHQmd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 8 Nov 2019 11:42:33 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id C8DB9AC11;
+        Fri,  8 Nov 2019 16:42:31 +0000 (UTC)
+From:   Takashi Iwai <tiwai@suse.de>
+To:     linux-usb@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Justin Piszcz <jpiszcz@lucidpixels.com>
-References: <20191030090847.25650-1-damien.lemoal@wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <11fa0f63-9a0f-faae-1d11-35f21cc64717@acm.org>
-Date:   Fri, 8 Nov 2019 08:24:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191030090847.25650-1-damien.lemoal@wdc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH] usb: gadget: u_audio: Remove superfluous snd_dma_continuous_data()
+Date:   Fri,  8 Nov 2019 17:42:14 +0100
+Message-Id: <20191108164214.611-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10/30/19 2:08 AM, Damien Le Moal wrote:
-> struct scsi_cmnd cmd->req.resid_len which is returned and set
-> respectively by the helper functions scsi_get_resid() and
-> scsi_set_resid() is an unsigned int. Reflect this fact in the interface
-> of these helper functions.
-> 
-> Also fix compilation errors due to min() and max() type mismatch
-> introduced by this change in scsi debug code, usb transport code and in
-> the USB ENE card reader driver.
+The recent change (commit 08422d2c559d: "ALSA: memalloc: Allow NULL
+device for SNDRV_DMA_TYPE_CONTINOUS type") made the PCM preallocation
+helper accepting NULL as the device pointer for the default usage.
+Drop the snd_dma_continuous_data() usage that became superfluous from
+the callers.
 
-Since there is agreement that residual overflow should use another field 
-than scsi_request.resid_len:
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+---
+
+Note that the prerequisite commit 08422d2c559d is found currently only
+on for-next branch of sound git tree, so please give ACK if it's OK,
+so that I can apply on top of it.  Thanks!
+
+ drivers/usb/gadget/function/u_audio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 56906d15fb55..7ec6a996af26 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -585,7 +585,7 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 	sprintf(card->longname, "%s %i", card_name, card->dev->id);
+ 
+ 	snd_pcm_lib_preallocate_pages_for_all(pcm, SNDRV_DMA_TYPE_CONTINUOUS,
+-		snd_dma_continuous_data(GFP_KERNEL), 0, BUFF_SIZE_MAX);
++					      NULL, 0, BUFF_SIZE_MAX);
+ 
+ 	err = snd_card_register(card);
+ 
+-- 
+2.16.4
+
