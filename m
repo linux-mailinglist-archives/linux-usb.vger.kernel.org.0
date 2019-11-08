@@ -2,102 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7C9F5ACB
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 23:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7489FF5BA3
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2019 00:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730933AbfKHWSv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Nov 2019 17:18:51 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33670 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730923AbfKHWSv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 17:18:51 -0500
-Received: by mail-pg1-f193.google.com with SMTP id h27so4903051pgn.0
-        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2019 14:18:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7IqcEdYpIhKi7OhB48nFEV4cOEv0bt3kSka2RQuhHz8=;
-        b=TwbUgVQWwmE9El4cplMMqkhD6lFeocES3EUaM4ERY+x67cSpXlpUv0iPKzXbSuwJWv
-         m+j1IRJnoXZl66UtGaV7D2vEt5/G19fT1Qri0hTubfAKw1Sn/19KXh6eOskZM4yRwdLa
-         Eg+P2n6vrhkm1ROMj9E7U4NZu620y1DJGNS/ZeMzJInzmu0ciIAAf5w8pZKOyT3m95W9
-         5GJ3831+TWQJmCCsY7CprfqE+476rujpBTIEAa/Ma7rDb2LwnkWD0+wUGkweH7UO9sh2
-         AaJMfiyFIS2nW1u2fIP5eXA7g3IU1GyvDEltuUdVWjsmIDsUyhSgbHT8AwKac/YMlBBm
-         4nTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7IqcEdYpIhKi7OhB48nFEV4cOEv0bt3kSka2RQuhHz8=;
-        b=T4KDjYmTxa4VhINLoFGTB1+3jetLgqQYWcpXANV1CARZkPkx+GrlCHXZEm64EW+leM
-         +RVwHa6NnIiHAGZ5I7newMl8SoGid1TXXlwY3NQ3QTsi+D0xfT2/kX9YH4nKQoe2awCG
-         6FL5VIWU/4zmhxSz88nknnZmt+5CpdBfNQfEQ26pLgOjkBFLvDCMbC3AtySrSGXfefZI
-         60BbXFSD+KL0OVAqYllhcrUL6dvZwHF+YwcINxGV6y90IUsLq7nDqFfCInYWcXz4cJ8/
-         QRwpo4EyEC4qg1pNtj0UhDzrVmccoBBe24DXRny2o/rxjOdhkawnMu5XEu7Mpl6Hp19j
-         ggKA==
-X-Gm-Message-State: APjAAAX81VYD9WQ3YF//ePWACoKKwIUMKpJmHrjdm/Z6e71R7UETu3AC
-        +i+aNHoX/EZlt5pxHSOekGNBSlw7BtEL9CSvR1Ia0A==
-X-Google-Smtp-Source: APXvYqzdyUzLuAwMhZW4y2OkjG5vQLw1oKoAkmXM11M5t1OqHZxwhul/lYCXfT3gnN8OvRnQ28xVp9c+pxtGRtMIXwk=
-X-Received: by 2002:a17:90a:35d0:: with SMTP id r74mr16848412pjb.47.1573251530363;
- Fri, 08 Nov 2019 14:18:50 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1573236684.git.andreyknvl@google.com> <Pine.LNX.4.44L0.1911081642461.1498-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1911081642461.1498-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 8 Nov 2019 23:18:39 +0100
-Message-ID: <CAAeHK+zyvqJs_5X61NriLdHoityTdVJ0O=a-xrcq+-7Vb_F0FQ@mail.gmail.com>
-Subject: Re: [PATCH 0/1] usb: gadget: add raw-gadget interface
+        id S1727015AbfKHXFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Nov 2019 18:05:55 -0500
+Received: from vsmx011.vodafonemail.xion.oxcs.net ([153.92.174.89]:54594 "EHLO
+        vsmx011.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726095AbfKHXFz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 18:05:55 -0500
+Received: from vsmx003.vodafonemail.xion.oxcs.net (unknown [192.168.75.197])
+        by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id DF76959D3F7;
+        Fri,  8 Nov 2019 23:05:52 +0000 (UTC)
+Received: from lazy.lzy (unknown [93.212.126.195])
+        by mta-7-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 6EF28534352;
+        Fri,  8 Nov 2019 23:05:38 +0000 (UTC)
+Received: from lazy.lzy (localhost [127.0.0.1])
+        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id xA8N5b6n012018
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 9 Nov 2019 00:05:37 +0100
+Received: (from red@localhost)
+        by lazy.lzy (8.15.2/8.15.2/Submit) id xA8N5aYW012017;
+        Sat, 9 Nov 2019 00:05:36 +0100
+Date:   Sat, 9 Nov 2019 00:05:36 +0100
+From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
+        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        USB list <linux-usb@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
+Message-ID: <20191108230536.GA11931@lazy.lzy>
+References: <20191017175306.GA3014@lazy.lzy>
+ <Pine.LNX.4.44L0.1910171522200.18407-100000@netrider.rowland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Pine.LNX.4.44L0.1910171522200.18407-100000@netrider.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-VADE-STATUS: LEGIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Nov 8, 2019 at 10:45 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, 8 Nov 2019, Andrey Konovalov wrote:
->
-> > This patchset (currently a single patch) adds a new userspace interface
-> > for the USB Gadget subsystem called USB Raw Gadget (I don't mind changing
-> > the name to something else if there are better ideas). This is what
-> > currently being used to enable coverage-buided USB fuzzing with syzkaller:
-> >
-> > https://github.com/google/syzkaller/blob/master/docs/linux/external_fuzzing_usb.md
-> >
-> > Initially I was using GadgetFS (together with the Dummy HCD/UDC module)
-> > to perform emulation of USB devices for fuzzing, but later switched to a
-> > custom written interface. The incentive to implement a different interface
-> > was to provide a somewhat raw and direct access to the USB Gadget layer
-> > for the userspace, where every USB request is passed to the userspace to
-> > get a response. See documentation for the list of differences between
-> > Raw Gadget and GadgetFS.
-> >
-> > This patchset has been pushed to the public Linux kernel Gerrit instance:
-> >
-> > https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2144
-> >
-> > Andrey Konovalov (1):
-> >   usb: gadget: add raw-gadget interface
-> >
-> >  Documentation/usb/index.rst         |    1 +
-> >  Documentation/usb/raw-gadget.rst    |   60 ++
-> >  drivers/usb/gadget/Kconfig          |    9 +
-> >  drivers/usb/gadget/Makefile         |    2 +
-> >  drivers/usb/gadget/raw.c            | 1150 +++++++++++++++++++++++++++
->
-> As a general rule, gadget drivers don't go directly in
-> drivers/usb/gadget.  raw.c counts as a legacy driver (because it's not
-> written to use the composite gadget framework), so it belongs in
-> drivers/usb/gadget/legacy.  That's where the gadgetfs driver lives, for
-> example.
+On Thu, Oct 17, 2019 at 03:23:34PM -0400, Alan Stern wrote:
+> On Thu, 17 Oct 2019, Piergiorgio Sartor wrote:
+> 
+> > > Here is one more thing you can try.  I have no idea whether it will 
+> > > make any difference, but the Changelog entry for the patch you 
+> > > identified suggests that it might help.
+> > > 
+> > > Alan Stern
+> > > 
+> > > 
+> > > 
+> > > Index: usb-devel/drivers/usb/storage/scsiglue.c
+> > > ===================================================================
+> > > --- usb-devel.orig/drivers/usb/storage/scsiglue.c
+> > > +++ usb-devel/drivers/usb/storage/scsiglue.c
+> > > @@ -68,7 +68,6 @@ static const char* host_info(struct Scsi
+> > >  static int slave_alloc (struct scsi_device *sdev)
+> > >  {
+> > >  	struct us_data *us = host_to_us(sdev->host);
+> > > -	int maxp;
+> > >  
+> > >  	/*
+> > >  	 * Set the INQUIRY transfer length to 36.  We don't use any of
+> > > @@ -78,15 +77,6 @@ static int slave_alloc (struct scsi_devi
+> > >  	sdev->inquiry_len = 36;
+> > >  
+> > >  	/*
+> > > -	 * USB has unusual scatter-gather requirements: the length of each
+> > > -	 * scatterlist element except the last must be divisible by the
+> > > -	 * Bulk maxpacket value.  Fortunately this value is always a
+> > > -	 * power of 2.  Inform the block layer about this requirement.
+> > > -	 */
+> > > -	maxp = usb_maxpacket(us->pusb_dev, us->recv_bulk_pipe, 0);
+> > > -	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
+> > > -
+> > > -	/*
+> > >  	 * Some host controllers may have alignment requirements.
+> > >  	 * We'll play it safe by requiring 512-byte alignment always.
+> > >  	 */
+> > 
+> > Hi,
+> > 
+> > I tested the patch.
+> > 
+> > Assumming I did everything properly, add patch,
+> > test, issue not showing up, remove patch, re-test,
+> > issue present.
+> > 
+> > It seems this patch you provide solves the issue.
+> > 
+> > Thanks a lot for the support and the solution.
+> > 
+> > I guess now this patch will be integrated into
+> > mainline sometimes.
+> > Please let me know, in this thread or directly, in
+> > which kernel it will be available.
+> 
+> I'm busy for the next few days, but I will submit the patch next week.
 
-Hi Alan! Sure, I'll move it to legacy/ in v2. Thanks!
+Hi again,
+
+this message to let you know I tested
+kernel 5.3.9 (always from Fedora), to
+which Greg Kroah-Hartman added your
+patch, and everything seems to work
+fine, no problems detected so far.
+
+Thanks,
+
+bye,
+
+-- 
+
+piergiorgio
