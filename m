@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DCEF3D1C
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 01:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C946F3D55
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2019 02:17:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726281AbfKHA5E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 7 Nov 2019 19:57:04 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:38210 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbfKHA5D (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 19:57:03 -0500
-Received: by mail-pg1-f195.google.com with SMTP id 15so3030386pgh.5
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 16:57:03 -0800 (PST)
+        id S1728417AbfKHBR2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 7 Nov 2019 20:17:28 -0500
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41481 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728256AbfKHBR1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 7 Nov 2019 20:17:27 -0500
+Received: by mail-pl1-f193.google.com with SMTP id d29so2858756plj.8
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2019 17:17:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id;
-        bh=GYRc8Evk3wu8EUiuELp77RSTyUut+SJabJSgyybQCKc=;
-        b=IG/WqwKZ2wj070Ivn9cX57KoAHKqmal5mE3JH+W8mKSon9hw52loHkmdZbFDPSY2jQ
-         ys//zHpsG8iMG1uowgXBTGA6cMxirTsWQbwgo8PxEn2jzNTyxFLfM36y1EIle/CQRs+7
-         /KWVfR0o3Ux8s96ccSNEaM0VutEx10G0bdWYpi0I2p2daN3OI9L5FR5gX9kM5PI7ITtd
-         STXZXrQttfyRbiihP4ut0CDumS0MZn7lzPNLc0wTwX7PXm1yHkRzjqUttYkybqHkKawH
-         DR67xXkD9kukt9EXFs2jfpIxVTAYZkY7vkYf7EtJpSPf6OSJv+R5de6XfRc6woF0fc0J
-         244Q==
+        bh=kZcD6GKA7XbCzd3zg1eCgX8HZHAD6+MLe8xQYM7PmDE=;
+        b=jKxk19VdnovnbeBuwPQoZftMD3I3oHzDoPitrIzZx8fcjOoT8jMhScOyC5c0iVp7cT
+         WD+e9SPcrFuUxCDI1jIGQGJbkOLpxhvr2J+MI4rW/Qyx9JWb3tfJW9iifr/XHEqwUIlG
+         P5FpxncR5UUH9ZbW274W8pwlZ45Y46ua8nM7jrHal0jfGsmTsU8mYnpFzTtyrzlVSKgb
+         GrEci+r/HGDFmdHP0zvlNfHFCMRYxShpCqTg03pQoWRiOqDNYzlDLpgUHZkXnm5651Zu
+         Qcp4kM1EWv2uZm2I13rKP0dfth8Rx4/TiIYyZXieqU6Ow3N1Uo2OqKQz2TokvTR2hMfN
+         ixgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=GYRc8Evk3wu8EUiuELp77RSTyUut+SJabJSgyybQCKc=;
-        b=Yfi7TqTTMx6a2aaqw5Sr7LlVizA5sspQRzpnly0BRJkSg7/UILMZlyeLd4mDWtsvt3
-         mNCVmxAC+j6POxInyGJbOwOphaxTwgYJPOmoye7VQ3R1x7+eMM5PXd5WWRPh9pg3pAwd
-         fzqUWNlxo9ZTJt08MS5pRjEaK0ALioQOJhXl0GEkBFwgonHfem5q6E5qihv15KLsJWr2
-         4XV9mhQjRltm9m0rZapesgKw7rFwVO8tRPCcDt2/9eY+2ARLAtGQALDD8ABs/wBsMpy9
-         A5yTQ/m+imZuwMViZOUw44Dr1kD9IKy2zBnNiKArLd53Y9cZenGNfFPqJZ35qN4FwYc2
-         hEPA==
-X-Gm-Message-State: APjAAAWmsHBtFQc7R8pa9MbNXIyYAR28xmaucoePI6uZBiap7FrDg4Eq
-        k77o4OE31HsPkcaNZSFUdo/PoA==
-X-Google-Smtp-Source: APXvYqxPGuXcyQs3WEAMRMpy19Q/rGB2EPMqpq/E5qQg+lPEgnZi1NCqdVAh1vI3toPeT3a4iri5yA==
-X-Received: by 2002:a63:ae02:: with SMTP id q2mr8519964pgf.210.1573174622801;
-        Thu, 07 Nov 2019 16:57:02 -0800 (PST)
-Received: from localhost.localdomain ([2601:1c2:680:1319:692:26ff:feda:3a81])
-        by smtp.gmail.com with ESMTPSA id j14sm3527477pje.17.2019.11.07.16.57.01
+        bh=kZcD6GKA7XbCzd3zg1eCgX8HZHAD6+MLe8xQYM7PmDE=;
+        b=bsBpOZ2Gb4IJX4hZ7ihHllaqaVobWPlJ4s4NRDLF0K0+I/g+hf4iRy9aDjACi6zKRM
+         Ls/FoZxpgHBSIESsnnDJ8usoz946BvRHDMIj9TbZKryKaX5Q89d3+vR/wA2/JcbWODIW
+         FZ5AsVGufTVr8ywlANjaHXF8o25gq0der+eLPvh2K/68zhlw40UGdzMJgXNZU/oIp1iT
+         omB0lu34kIoU56evsyIHrGTF5gkyQ9XqYNsGmGjMiqZXlUV1NGBSmTKHyeVpHTjZihj7
+         btHBH6IbXCTvH+6pFhQuik5nTfNVPKODsKx4BLOzXF5eqPyyVfcq53CqNj3f4ZOZ26kK
+         DaSg==
+X-Gm-Message-State: APjAAAVsT7zd4A82OpR//qVKMEQPveAzdat/6emOErX7yNEvttT6mXHZ
+        0+Vs0nZXod9vJrtAqc2EzcMw4g==
+X-Google-Smtp-Source: APXvYqyB6Q21widSmq8YSXUuNBlkXc+2TtWS9jvD0cuWjYjPPfDOAWNebW12rxcoc0nCFsHsptmgXA==
+X-Received: by 2002:a17:90a:268c:: with SMTP id m12mr9306601pje.69.1573175847075;
+        Thu, 07 Nov 2019 17:17:27 -0800 (PST)
+Received: from localhost.localdomain (c-67-170-172-113.hsd1.or.comcast.net. [67.170.172.113])
+        by smtp.gmail.com with ESMTPSA id s23sm3801627pgh.21.2019.11.07.17.17.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 16:57:02 -0800 (PST)
+        Thu, 07 Nov 2019 17:17:26 -0800 (PST)
 From:   John Stultz <john.stultz@linaro.org>
 To:     lkml <linux-kernel@vger.kernel.org>
 Cc:     John Stultz <john.stultz@linaro.org>,
@@ -57,24 +57,49 @@ Cc:     John Stultz <john.stultz@linaro.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Jun Li <lijun.kernel@gmail.com>,
         Valentin Schneider <valentin.schneider@arm.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [RESEND][PATCH] dt-bindings: usb: rt1711h: Add connector bindings
-Date:   Fri,  8 Nov 2019 00:56:57 +0000
-Message-Id: <20191108005657.31464-1-john.stultz@linaro.org>
+        Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v5 0/3] dwc3 prereqs for HiKey960 USB support
+Date:   Fri,  8 Nov 2019 01:17:20 +0000
+Message-Id: <20191108011723.32390-1-john.stultz@linaro.org>
 X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add connector binding documentation for Richtek RT1711H Type-C
-chip driver
+Just another round here trying to push forward a patch series
+submitted previously by Yu Chen to get HiKey960 dev-board's USB
+functionality working.
 
-It was noted by Rob Herring that the rt1711h binding docs
-doesn't include the connector binding.
+This set is even more narrowly focused on just the role-switch
+support and adding the role-switch-default-mode option (as the
+core extension/glue bindings bits are still in discussion).
 
-Thus this patch adds such documentation following the details
-in Documentation/devicetree/bindings/usb/typec-tcpci.txt
+While Felipe had quite a bit of feedback on the last round, and
+I'm not completely sure how to address all of it yet, I wanted
+to send out this set which tries to address *some* of his
+concerns, so I could get further feedback and make sure I'm on
+the right track.
+
+The current version of the full patchset to enable USB on
+HiKey960 can be found here:
+  https://git.linaro.org/people/john.stultz/android-dev.git/log/?id=d40d8c803c5a79b70e2a6b363fe03442480df7d9
+
+I'd greatly appreciate any feedback or thoughts!
+
+thanks
+-john
+
+New in v5:
+* Just sending out role-switch and role-swith-default-mode
+  changes
+* Reworked role-switch code to not select CONFIG_USB_ROLE_SWITCH
+  and to ifdef out the dependent code if its not enabled, as
+  suggested by Felipe
+* Changed to a string based role-switch-default-mode binding
+  as suggested by Felipe
+
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Rob Herring <robh+dt@kernel.org>
@@ -89,58 +114,22 @@ Cc: Hans de Goede <hdegoede@redhat.com>
 Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: Jun Li <lijun.kernel@gmail.com>
 Cc: Valentin Schneider <valentin.schneider@arm.com>
+Cc: Jack Pham <jackp@codeaurora.org>
 Cc: linux-usb@vger.kernel.org
 Cc: devicetree@vger.kernel.org
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: John Stultz <john.stultz@linaro.org>
----
- .../bindings/usb/richtek,rt1711h.txt          | 29 +++++++++++++++++++
- 1 file changed, 29 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-index d4cf53c071d9..e3fc57e605ed 100644
---- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-+++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.txt
-@@ -6,10 +6,39 @@ Required properties:
-  - interrupts : <a b> where a is the interrupt number and b represents an
-    encoding of the sense and level information for the interrupt.
- 
-+Required sub-node:
-+- connector: The "usb-c-connector" attached to the tcpci chip, the bindings
-+  of connector node are specified in
-+  Documentation/devicetree/bindings/connector/usb-connector.txt
-+
- Example :
- rt1711h@4e {
- 	compatible = "richtek,rt1711h";
- 	reg = <0x4e>;
- 	interrupt-parent = <&gpio26>;
- 	interrupts = <0 IRQ_TYPE_LEVEL_LOW>;
-+
-+	usb_con: connector {
-+		compatible = "usb-c-connector";
-+		label = "USB-C";
-+		data-role = "dual";
-+		power-role = "dual";
-+		try-power-role = "sink";
-+		source-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)>;
-+		sink-pdos = <PDO_FIXED(5000, 2000, PDO_FIXED_USB_COMM)
-+			     PDO_VAR(5000, 12000, 2000)>;
-+		op-sink-microwatt = <10000000>;
-+
-+		ports {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			port@1 {
-+				reg = <1>;
-+				usb_con_ss: endpoint {
-+					remote-endpoint = <&usb3_data_ss>;
-+				};
-+			};
-+		};
-+	};
- };
+John Stultz (2):
+  dt-bindings: usb: generic: Add role-switch-default-mode binding
+  usb: dwc3: Add support for role-switch-default-mode binding
+
+Yu Chen (1):
+  usb: dwc3: Registering a role switch in the DRD code.
+
+ .../devicetree/bindings/usb/generic.txt       |  6 ++
+ drivers/usb/dwc3/core.h                       |  6 ++
+ drivers/usb/dwc3/drd.c                        | 96 ++++++++++++++++++-
+ 3 files changed, 107 insertions(+), 1 deletion(-)
+
 -- 
 2.17.1
 
