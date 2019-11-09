@@ -2,122 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7489FF5BA3
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2019 00:06:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBF0F5D09
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2019 03:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfKHXFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 8 Nov 2019 18:05:55 -0500
-Received: from vsmx011.vodafonemail.xion.oxcs.net ([153.92.174.89]:54594 "EHLO
-        vsmx011.vodafonemail.xion.oxcs.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726095AbfKHXFz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 18:05:55 -0500
-Received: from vsmx003.vodafonemail.xion.oxcs.net (unknown [192.168.75.197])
-        by mta-5-out.mta.xion.oxcs.net (Postfix) with ESMTP id DF76959D3F7;
-        Fri,  8 Nov 2019 23:05:52 +0000 (UTC)
-Received: from lazy.lzy (unknown [93.212.126.195])
-        by mta-7-out.mta.xion.oxcs.net (Postfix) with ESMTPA id 6EF28534352;
-        Fri,  8 Nov 2019 23:05:38 +0000 (UTC)
-Received: from lazy.lzy (localhost [127.0.0.1])
-        by lazy.lzy (8.15.2/8.14.5) with ESMTPS id xA8N5b6n012018
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Sat, 9 Nov 2019 00:05:37 +0100
-Received: (from red@localhost)
-        by lazy.lzy (8.15.2/8.15.2/Submit) id xA8N5aYW012017;
-        Sat, 9 Nov 2019 00:05:36 +0100
-Date:   Sat, 9 Nov 2019 00:05:36 +0100
-From:   Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Piergiorgio Sartor <piergiorgio.sartor@nexgo.de>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: reeze while write on external usb 3.0 hard disk [Bug 204095]
-Message-ID: <20191108230536.GA11931@lazy.lzy>
-References: <20191017175306.GA3014@lazy.lzy>
- <Pine.LNX.4.44L0.1910171522200.18407-100000@netrider.rowland.org>
+        id S1726146AbfKICjE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 8 Nov 2019 21:39:04 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:41412 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726061AbfKICjE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 8 Nov 2019 21:39:04 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA92cvQI178667;
+        Sat, 9 Nov 2019 02:38:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=Q0kudnsn3um9Rdf4ICa07b/1x2v2i55v58omAGfOCg4=;
+ b=OzRXxjAeMpbVUigiH9u8cWWsEuMfXP4qG2Jat8OJkZS6Mh9hmf/6DPyxg/EFZ96O1tQk
+ 9cRJ1c9fM8tuiLpST57o9OwKLT52to5SHwX/3AHo6juHOMsTr80G+AELWtr74KdTPPKn
+ ZfgVD4o5Nl5yBCN11g6lcvZUVPUFuP3dLdNMWjGt3DhW66ltiVvxj9U51Ptj1w0aboQc
+ dC5KjBcoPGC+Ba4FXGeXtN8LFQNiLpvfLvp1mI4OVL8LqbibXL4UiXA3vbE7jCcG1EpU
+ 8B+0aDBxJ5iq+3xi/a2estGqHJ41Hm6f1kvNe7RlersnhUUqkobsf0p/2vtf4UTfSEF9 kg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2w5hgv8cke-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 09 Nov 2019 02:38:57 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA92XF5Q064106;
+        Sat, 9 Nov 2019 02:36:56 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2w5kh3vwxc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 09 Nov 2019 02:36:56 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA92aq9o006538;
+        Sat, 9 Nov 2019 02:36:53 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 08 Nov 2019 18:36:52 -0800
+To:     Damien Le Moal <damien.lemoal@wdc.com>
+Cc:     linux-scsi@vger.kernel.org,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Justin Piszcz <jpiszcz@lucidpixels.com>
+Subject: Re: [PATCH v2] scsi: Fix scsi_get/set_resid() interface
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191030090847.25650-1-damien.lemoal@wdc.com>
+Date:   Fri, 08 Nov 2019 21:36:49 -0500
+In-Reply-To: <20191030090847.25650-1-damien.lemoal@wdc.com> (Damien Le Moal's
+        message of "Wed, 30 Oct 2019 18:08:47 +0900")
+Message-ID: <yq136exvkqm.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1910171522200.18407-100000@netrider.rowland.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-VADE-STATUS: LEGIT
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9435 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=533
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911090024
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9435 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=634 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911090025
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 03:23:34PM -0400, Alan Stern wrote:
-> On Thu, 17 Oct 2019, Piergiorgio Sartor wrote:
-> 
-> > > Here is one more thing you can try.  I have no idea whether it will 
-> > > make any difference, but the Changelog entry for the patch you 
-> > > identified suggests that it might help.
-> > > 
-> > > Alan Stern
-> > > 
-> > > 
-> > > 
-> > > Index: usb-devel/drivers/usb/storage/scsiglue.c
-> > > ===================================================================
-> > > --- usb-devel.orig/drivers/usb/storage/scsiglue.c
-> > > +++ usb-devel/drivers/usb/storage/scsiglue.c
-> > > @@ -68,7 +68,6 @@ static const char* host_info(struct Scsi
-> > >  static int slave_alloc (struct scsi_device *sdev)
-> > >  {
-> > >  	struct us_data *us = host_to_us(sdev->host);
-> > > -	int maxp;
-> > >  
-> > >  	/*
-> > >  	 * Set the INQUIRY transfer length to 36.  We don't use any of
-> > > @@ -78,15 +77,6 @@ static int slave_alloc (struct scsi_devi
-> > >  	sdev->inquiry_len = 36;
-> > >  
-> > >  	/*
-> > > -	 * USB has unusual scatter-gather requirements: the length of each
-> > > -	 * scatterlist element except the last must be divisible by the
-> > > -	 * Bulk maxpacket value.  Fortunately this value is always a
-> > > -	 * power of 2.  Inform the block layer about this requirement.
-> > > -	 */
-> > > -	maxp = usb_maxpacket(us->pusb_dev, us->recv_bulk_pipe, 0);
-> > > -	blk_queue_virt_boundary(sdev->request_queue, maxp - 1);
-> > > -
-> > > -	/*
-> > >  	 * Some host controllers may have alignment requirements.
-> > >  	 * We'll play it safe by requiring 512-byte alignment always.
-> > >  	 */
-> > 
-> > Hi,
-> > 
-> > I tested the patch.
-> > 
-> > Assumming I did everything properly, add patch,
-> > test, issue not showing up, remove patch, re-test,
-> > issue present.
-> > 
-> > It seems this patch you provide solves the issue.
-> > 
-> > Thanks a lot for the support and the solution.
-> > 
-> > I guess now this patch will be integrated into
-> > mainline sometimes.
-> > Please let me know, in this thread or directly, in
-> > which kernel it will be available.
-> 
-> I'm busy for the next few days, but I will submit the patch next week.
 
-Hi again,
+Damien,
 
-this message to let you know I tested
-kernel 5.3.9 (always from Fedora), to
-which Greg Kroah-Hartman added your
-patch, and everything seems to work
-fine, no problems detected so far.
+> struct scsi_cmnd cmd->req.resid_len which is returned and set
+> respectively by the helper functions scsi_get_resid() and
+> scsi_set_resid() is an unsigned int. Reflect this fact in the
+> interface of these helper functions.
 
-Thanks,
-
-bye,
+Applied to 5.5/scsi-queue, thanks!
 
 -- 
-
-piergiorgio
+Martin K. Petersen	Oracle Linux Engineering
