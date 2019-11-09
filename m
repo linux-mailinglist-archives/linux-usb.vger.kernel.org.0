@@ -2,73 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85280F5E3B
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2019 10:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3B0F5E5A
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2019 11:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726146AbfKIJXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Nov 2019 04:23:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53760 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726143AbfKIJXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Nov 2019 04:23:50 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726381AbfKIKJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Nov 2019 05:09:30 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:29578 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726372AbfKIKJ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 9 Nov 2019 05:09:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1573294168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=COvRkfB7QtwqnVTHt3MVS0PoIAM0aB4odeSnRONVuV8=;
+        b=blY6In19Qh645f6S3D5+mJFJIRMZu3daa/CKH7TR0bbBVBuEqw7To6jIeHF0BPBWb5fR5S
+        8PEHnMnfW4H7gupuIF27lNsZAYYCzsLa1CjveAcC0CMMNwvtYwZ+VxSNDKwek3HR/k6zA6
+        FP6nuJGufhLJ7EsXnqVT2LIxw7Nm+4o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-338-Hi_ndLc_MxiC1ic0MmTclQ-1; Sat, 09 Nov 2019 05:09:24 -0500
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0F99A21848;
-        Sat,  9 Nov 2019 09:23:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573291429;
-        bh=1uZNhCJco3iSw4+Yp3Lu1MZSy6NQ42JT8dH/17Rw4OQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dkptnO0sGN6m8yGX4Q4wOMqK8hYm51vaLG8T2DruDrdaz7WUVL46ZdGxdALBlqaX2
-         J7XWqYJc/PF1vcZkHpwZpeSnBUk5WV1BFemiTuWMiN8LWYdB+vWscuEQNOvUCWGW5E
-         HipPaejh86XtFh0+xHJPar4GBzG5G4Ffza+75Eos=
-Date:   Sat, 9 Nov 2019 10:23:46 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Feeding bugzilla.kernel.org USB component to the linux-usb list
-Message-ID: <20191109092346.GF1293712@kroah.com>
-References: <20191106210455.hpe63idbcz3yw54z@chatter.i7.local>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BCE591800D7D;
+        Sat,  9 Nov 2019 10:09:22 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-23.pek2.redhat.com [10.72.8.23])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F31EA5D9E2;
+        Sat,  9 Nov 2019 10:09:09 +0000 (UTC)
+Date:   Sat, 9 Nov 2019 18:09:03 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Andrea Vai <andrea.vai@unipv.it>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191109100903.GA7696@ming.t460p>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+ <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+ <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-MC-Unique: Hi_ndLc_MxiC1ic0MmTclQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Content-Disposition: inline
-In-Reply-To: <20191106210455.hpe63idbcz3yw54z@chatter.i7.local>
-User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 06, 2019 at 04:04:55PM -0500, Konstantin Ryabitsev wrote:
-> Hi, all:
-> 
-> I noticed that Greg has an auto-reply for any new bugs opened on
-> bugzilla.kernel.org for the USB component:
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=205449
-> 
-> Would it make more sense to feed those into the mailing list instead of
-> asking bug submitters to send a new email? Anyone responding to the bugmail
-> sent to the list will be properly recorded in the bug comments (and if they
-> don't have an account on bugzilla.kernel.org, a stub account will be
-> automatically created).
-> 
-> It seems like that would be a friendlier setup that doesn't require bug
-> submitters to do any more work, but I leave it up to you. This scheme is
-> already used by other projects, e.g.:
-> https://lore.kernel.org/linux-xfs/bug-202349-201763@https.bugzilla.kernel.org%2F/
-> 
-> You can see Dave Chinner replying to bugmail directly and it being recorded
-> in the bug entry:
-> https://lore.kernel.org/linux-xfs/20190124233132.GO4205@dastard/
-> https://bugzilla.kernel.org/show_bug.cgi?id=202349#c7
-> 
-> Please let me know if that's something you would like.
+On Fri, Nov 08, 2019 at 08:42:53AM +0000, Damien Le Moal wrote:
+> On 2019/11/08 4:00, Andrea Vai wrote:
+> > [Sorry for the duplicate message, it didn't reach the lists due to
+> > html formatting]
+> > Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
+> > <Damien.LeMoal@wdc.com> ha scritto:
+> >>
+> >> On 2019/11/07 16:04, Andrea Vai wrote:
+> >>> Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha scritto=
+:
+> >>>>
+> >>>>
+> >>>> Please simply try your write tests after doing this:
+> >>>>
+> >>>> echo mq-deadline > /sys/block/<name of your USB
+> >>>> disk>/queue/scheduler
+> >>>>
+> >>>> And confirm that mq-deadline is selected with:
+> >>>>
+> >>>> cat /sys/block/<name of your USB disk>/queue/scheduler
+> >>>> [mq-deadline] kyber bfq none
+> >>>
+> >>> ok, which kernel should I test with this: the fresh git cloned, or th=
+e
+> >>> one just patched with Alan's patch, or doesn't matter which one?
+> >>
+> >> Probably all of them to see if there are any differences.
+> >=20
+> > with both kernels, the output of
+> > cat /sys/block/sdh/queue/schedule
+> >=20
+> > already contains [mq-deadline]: is it correct to assume that the echo
+> > command and the subsequent testing is useless? What to do now?
+>=20
+> Probably, yes. Have you obtained a blktrace of the workload during these
+> tests ? Any significant difference in the IO pattern (IO size and
+> randomness) and IO timing (any device idle time where the device has no
+> command to process) ? Asking because the problem may be above the block
+> layer, with the file system for instance.
 
-Yeah, I guess it's about time to just set up the feed to do that, thanks
-for bringing it up again, I had forgotten about it.
+You may get the IO pattern via the previous trace=20
 
-thanks,
+https://lore.kernel.org/linux-usb/20190710024439.GA2621@ming.t460p/
 
-greg k-h
+IMO, if it is related write order, one possibility could be that
+the queue lock is killed in .make_request_fn().
+
+
+Thanks,
+Ming
+
