@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85319F624A
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E55F6279
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727716AbfKJCmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Nov 2019 21:42:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37104 "EHLO mail.kernel.org"
+        id S1728265AbfKJCnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Nov 2019 21:43:20 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41074 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727702AbfKJCmA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:42:00 -0500
+        id S1728253AbfKJCnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:43:19 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A4AD321924;
-        Sun, 10 Nov 2019 02:41:59 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB32121D7B;
+        Sun, 10 Nov 2019 02:43:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353720;
-        bh=1WDmaeQnzHdPuKnUb+DOjRMz6dZ0mYdB0EDJCkGbeH0=;
+        s=default; t=1573353798;
+        bh=hwEnfSrRKF/vEjZnGBCUmDoqUXJUVgPMbVJ6QRvL9Iw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LA2MbHg7iUZJ/GS5AgBWqYX8HE2UNImI/XBkSAZmKB2Xoxi1lCIJxm6y6OU6QNdbq
-         4DYq8tHaYkHrKVMW3xSySFaL/tqOPfVw94iKVAMI7S4nHPsGXE+/vPbCk+55vY9sWO
-         nzwft1Glb0QfuNu6K+eN3Rk64Mw3FBFsCDgSHzSo=
+        b=ZajjaPChSchmKSBP82RK9spptkioIiUcnF4PDmj+Z3doUgqAY/lxBqMiw4TPZb2Px
+         XSn7P9dmZVBEpifCo+o7+jxShfpjmOF4SE4ZNDIXiXmMzbtNQ0zpF0zhklyFbUoSyv
+         y2547ljk8hZ7PQIo1FVSQ42vMif5fCYeG7rNJwZE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Loic Poulain <loic.poulain@linaro.org>,
-        Peter Chen <peter.chen@nxp.com>,
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 053/191] usb: chipidea: Fix otg event handler
-Date:   Sat,  9 Nov 2019 21:37:55 -0500
-Message-Id: <20191110024013.29782-53-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 097/191] usb: gadget: uvc: configfs: Drop leaked references to config items
+Date:   Sat,  9 Nov 2019 21:38:39 -0500
+Message-Id: <20191110024013.29782-97-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
 References: <20191110024013.29782-1-sashal@kernel.org>
@@ -43,46 +43,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Loic Poulain <loic.poulain@linaro.org>
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit 59739131e0ca06db7560f9073fff2fb83f6bc2a5 ]
+[ Upstream commit 86f3daed59bceb4fa7981d85e89f63ebbae1d561 ]
 
-At OTG work running time, it's possible that several events need to be
-addressed (e.g. ID and VBUS events). The current implementation handles
-only one event at a time which leads to ignoring the other one. Fix it.
+Some of the .allow_link() and .drop_link() operations implementations
+call config_group_find_item() and then leak the reference to the
+returned item. Fix this by dropping those references where needed.
 
-Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/otg.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/function/uvc_configfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/chipidea/otg.c b/drivers/usb/chipidea/otg.c
-index db4ceffcf2a61..f25d4827fd49c 100644
---- a/drivers/usb/chipidea/otg.c
-+++ b/drivers/usb/chipidea/otg.c
-@@ -203,14 +203,17 @@ static void ci_otg_work(struct work_struct *work)
- 	}
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index b51f0d2788269..dc4edba95a478 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -544,6 +544,7 @@ static int uvcg_control_class_allow_link(struct config_item *src,
+ unlock:
+ 	mutex_unlock(&opts->lock);
+ out:
++	config_item_put(header);
+ 	mutex_unlock(su_mutex);
+ 	return ret;
+ }
+@@ -579,6 +580,7 @@ static void uvcg_control_class_drop_link(struct config_item *src,
+ unlock:
+ 	mutex_unlock(&opts->lock);
+ out:
++	config_item_put(header);
+ 	mutex_unlock(su_mutex);
+ }
  
- 	pm_runtime_get_sync(ci->dev);
-+
- 	if (ci->id_event) {
- 		ci->id_event = false;
- 		ci_handle_id_switch(ci);
--	} else if (ci->b_sess_valid_event) {
-+	}
-+
-+	if (ci->b_sess_valid_event) {
- 		ci->b_sess_valid_event = false;
- 		ci_handle_vbus_change(ci);
--	} else
--		dev_err(ci->dev, "unexpected event occurs at %s\n", __func__);
-+	}
-+
- 	pm_runtime_put_sync(ci->dev);
+@@ -2038,6 +2040,7 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
+ unlock:
+ 	mutex_unlock(&opts->lock);
+ out:
++	config_item_put(header);
+ 	mutex_unlock(su_mutex);
+ 	return ret;
+ }
+@@ -2078,6 +2081,7 @@ static void uvcg_streaming_class_drop_link(struct config_item *src,
+ unlock:
+ 	mutex_unlock(&opts->lock);
+ out:
++	config_item_put(header);
+ 	mutex_unlock(su_mutex);
+ }
  
- 	enable_irq(ci->irq);
 -- 
 2.20.1
 
