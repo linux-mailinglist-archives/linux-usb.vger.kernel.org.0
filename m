@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E51F642C
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46943F6458
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729652AbfKJC5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Nov 2019 21:57:44 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47266 "EHLO mail.kernel.org"
+        id S1727973AbfKJC7W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Nov 2019 21:59:22 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47198 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729400AbfKJC4s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:56:48 -0500
+        id S1729304AbfKJC4r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:56:47 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5425621D82;
-        Sun, 10 Nov 2019 02:47:21 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E16E5222CE;
+        Sun, 10 Nov 2019 02:47:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354042;
-        bh=FTJPCXRcxDMOJSToYEtqeq6c2U9ZZgf1fojkXraSZa8=;
+        s=default; t=1573354051;
+        bh=OQxAjtgjoRmh71w/KKY3w4GztgCDEsVjgMRHOe26tms=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tYyDDN4Gkq7VhvlbKkoFee632hy7LO4/lsthpccbMIaw1eNdplslwnpcSWCEGySx2
-         nh/VJOduTv7yTNfKxml5KEHuyw0y1AnC50akeJcxGbZNaVwUugzJaAqgcoqgDCryVk
-         jaJo4h2z8qCPPrAGK/zOoGXmfAD0ngzX7mDJ+P+8=
+        b=CQGFTodDPnUnVCTKhNFIAAwe7HiQuJi6gyBbdBBaiDmXEgFL4MliBHLQ4jTgUMjH+
+         0rpd+qubxigkMt0XZOwf+/VmbbEyVORUWaAa7L4OrqgwxRNBwtnIZA8y8baYfUq4qy
+         8WnK6PxbiXDONJZrr9Yc3BGQA3URPUPe8y/fG/Z0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 054/109] usb: gadget: uvc: configfs: Drop leaked references to config items
-Date:   Sat,  9 Nov 2019 21:44:46 -0500
-Message-Id: <20191110024541.31567-54-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 061/109] usb: gadget: uvc: Only halt video streaming endpoint in bulk mode
+Date:   Sat,  9 Nov 2019 21:44:53 -0500
+Message-Id: <20191110024541.31567-61-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024541.31567-1-sashal@kernel.org>
 References: <20191110024541.31567-1-sashal@kernel.org>
@@ -45,55 +46,40 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-[ Upstream commit 86f3daed59bceb4fa7981d85e89f63ebbae1d561 ]
+[ Upstream commit 8dbf9c7abefd5c1434a956d5c6b25e11183061a3 ]
 
-Some of the .allow_link() and .drop_link() operations implementations
-call config_group_find_item() and then leak the reference to the
-returned item. Fix this by dropping those references where needed.
+When USB requests for video data fail to be submitted, the driver
+signals a problem to the host by halting the video streaming endpoint.
+This is only valid in bulk mode, as isochronous transfers have no
+handshake phase and can't thus report a stall. The usb_ep_set_halt()
+call returns an error when using isochronous endpoints, which we happily
+ignore, but some UDCs complain in the kernel log. Fix this by only
+trying to halt the endpoint in bulk mode.
 
 Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Tested-by: Paul Elder <paul.elder@ideasonboard.com>
 Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/uvc_configfs.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/gadget/function/uvc_video.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 844cb738bafd0..fc604439b25a1 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -543,6 +543,7 @@ static int uvcg_control_class_allow_link(struct config_item *src,
- unlock:
- 	mutex_unlock(&opts->lock);
- out:
-+	config_item_put(header);
- 	mutex_unlock(su_mutex);
- 	return ret;
- }
-@@ -578,6 +579,7 @@ static void uvcg_control_class_drop_link(struct config_item *src,
- unlock:
- 	mutex_unlock(&opts->lock);
- out:
-+	config_item_put(header);
- 	mutex_unlock(su_mutex);
- }
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 540917f54506a..d6bab12b0b47d 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -136,7 +136,9 @@ static int uvcg_video_ep_queue(struct uvc_video *video, struct usb_request *req)
+ 	ret = usb_ep_queue(video->ep, req, GFP_ATOMIC);
+ 	if (ret < 0) {
+ 		printk(KERN_INFO "Failed to queue request (%d).\n", ret);
+-		usb_ep_set_halt(video->ep);
++		/* Isochronous endpoints can't be halted. */
++		if (usb_endpoint_xfer_bulk(video->ep->desc))
++			usb_ep_set_halt(video->ep);
+ 	}
  
-@@ -2037,6 +2039,7 @@ static int uvcg_streaming_class_allow_link(struct config_item *src,
- unlock:
- 	mutex_unlock(&opts->lock);
- out:
-+	config_item_put(header);
- 	mutex_unlock(su_mutex);
  	return ret;
- }
-@@ -2077,6 +2080,7 @@ static void uvcg_streaming_class_drop_link(struct config_item *src,
- unlock:
- 	mutex_unlock(&opts->lock);
- out:
-+	config_item_put(header);
- 	mutex_unlock(su_mutex);
- }
- 
 -- 
 2.20.1
 
