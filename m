@@ -2,35 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2621DF630F
-	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD61F63FD
+	for <lists+linux-usb@lfdr.de>; Sun, 10 Nov 2019 03:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729412AbfKJCtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 9 Nov 2019 21:49:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58166 "EHLO mail.kernel.org"
+        id S1729542AbfKJCtr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 9 Nov 2019 21:49:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728520AbfKJCtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:49:18 -0500
+        id S1729527AbfKJCtq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 9 Nov 2019 21:49:46 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D2D6225AD;
-        Sun, 10 Nov 2019 02:49:17 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 16C40225AE;
+        Sun, 10 Nov 2019 02:49:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573354158;
-        bh=hdjgwnbCXaX75t0UDxSR3kAVZIU9Y421d0mh+DbJK0U=;
+        s=default; t=1573354185;
+        bh=SWnbQ6ESsCx2svhKme4+smyFG/NDFa640/NUKAqdQIE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GLkvVpWxcHSuIfpPspY/JzQfQRr/z8U/wEgci0ehaOdIjcyqCpRdnIabsujTNyjXE
-         y8F6Oq8lucfv4iIqB83G0Jpv4gZ6/xcWcCPpc1Hz3y5IGwLV1Pnr0UAorWzP9MYsy+
-         yfj7e22BIcXWXvaR7O/GVHyAbqfE2RmSpbDWkokk=
+        b=K3ixPP4BTK7FkESH9MsA+O3Jf4z4MpJXNr4aGksBpQWVG6+Qi4iIWYvmGNsTbotrC
+         uMX64K4QZiKjKW67NEom3uqVGXZuRpUXNJtiHlQ3KEKgTU7y8gsMhQcbvEQ/AslKTN
+         jEX2k04WMamh28TjII+5oJScdzWABZ3U5cLmkCgc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Nicolas Adell <nicolas.adell@actia.fr>,
-        Peter Chen <peter.chen@nxp.com>,
+Cc:     Joel Pepper <joel.pepper@rwth-aachen.de>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 15/66] usb: chipidea: imx: enable OTG overcurrent in case USB subsystem is already started
-Date:   Sat,  9 Nov 2019 21:47:54 -0500
-Message-Id: <20191110024846.32598-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 34/66] usb: gadget: uvc: configfs: Prevent format changes after linking header
+Date:   Sat,  9 Nov 2019 21:48:13 -0500
+Message-Id: <20191110024846.32598-34-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191110024846.32598-1-sashal@kernel.org>
 References: <20191110024846.32598-1-sashal@kernel.org>
@@ -43,37 +44,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Nicolas Adell <nicolas.adell@actia.fr>
+From: Joel Pepper <joel.pepper@rwth-aachen.de>
 
-[ Upstream commit 1dedbdf2bbb1ede8d96f35f9845ecae179dc1988 ]
+[ Upstream commit cb2200f7af8341aaf0c6abd7ba37e4c667c41639 ]
 
-When initializing the USB subsystem before starting the kernel,
-OTG overcurrent detection is disabled. In case the OTG polarity of
-overcurrent is low active, the overcurrent detection is never enabled
-again and events cannot be reported as expected. Because imx usb
-overcurrent polarity is low active by default, only detection needs
-to be enable in usbmisc init function.
+While checks are in place to avoid attributes and children of a format
+being manipulated after the format is linked into the streaming header,
+the linked flag was never actually set, invalidating the protections.
+Update the flag as appropriate in the header link calls.
 
-Signed-off-by: Nicolas Adell <nicolas.adell@actia.fr>
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Joel Pepper <joel.pepper@rwth-aachen.de>
+Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/usbmisc_imx.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/gadget/function/uvc_configfs.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-index 20d02a5e418d9..c6577f489d0f6 100644
---- a/drivers/usb/chipidea/usbmisc_imx.c
-+++ b/drivers/usb/chipidea/usbmisc_imx.c
-@@ -273,6 +273,8 @@ static int usbmisc_imx6q_init(struct imx_usbmisc_data *data)
- 	} else if (data->oc_polarity == 1) {
- 		/* High active */
- 		reg &= ~(MX6_BM_OVER_CUR_DIS | MX6_BM_OVER_CUR_POLARITY);
-+	} else {
-+		reg &= ~(MX6_BM_OVER_CUR_DIS);
- 	}
- 	writel(reg, usbmisc->base + data->index * 4);
+diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
+index 3803dda54666b..3d843e14447bb 100644
+--- a/drivers/usb/gadget/function/uvc_configfs.c
++++ b/drivers/usb/gadget/function/uvc_configfs.c
+@@ -772,6 +772,7 @@ static int uvcg_streaming_header_allow_link(struct config_item *src,
+ 	format_ptr->fmt = target_fmt;
+ 	list_add_tail(&format_ptr->entry, &src_hdr->formats);
+ 	++src_hdr->num_fmt;
++	++target_fmt->linked;
  
+ out:
+ 	mutex_unlock(&opts->lock);
+@@ -810,6 +811,8 @@ static int uvcg_streaming_header_drop_link(struct config_item *src,
+ 			break;
+ 		}
+ 
++	--target_fmt->linked;
++
+ out:
+ 	mutex_unlock(&opts->lock);
+ 	mutex_unlock(su_mutex);
 -- 
 2.20.1
 
