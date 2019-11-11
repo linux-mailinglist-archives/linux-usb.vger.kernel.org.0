@@ -2,80 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 673A0F77B9
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 16:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB841F7874
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 17:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726943AbfKKPeK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 10:34:10 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:46227 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726924AbfKKPeJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 10:34:09 -0500
-Received: by mail-io1-f69.google.com with SMTP id r4so13744759ioo.13
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 07:34:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to
-         :content-transfer-encoding;
-        bh=Eem3IaTbbSLwsUl9KTPHSC07uTZATLVtcwEUy7E4wPk=;
-        b=XSz4sx2iYXo1ypISTCxwZlNVPDnugeLZ8wEnpnQQrcsPQYF6fRoa+BuluVMctGzpm5
-         ZeaNghNKNlD6cSn1AqudRtYr3xPhKj5zbzZvnUBdTPqpb7UMcMtVbEBMrMb4AnIBknyF
-         W7WA9JnqN3t9CD1RGujYIZn1Nw5e6tZV+9j0f0A370JZsDPRlQLw6YPrgPfkz9AnFlBd
-         upiWf9uuHz6e+gTgm5xScpN+pV9IkJXRWnkCXKS1cT4YBnZHFaRnumzppDwdmMhyVaFm
-         +pmwAgg8RNIBl2sZipYiUw8JuoPbFgQtUUTBd3HPr9Qonhg/lxgDxdPSgIO9olx+8gDM
-         0Y1g==
-X-Gm-Message-State: APjAAAUQfnfDXJPH8gDXG50NveIWGI4aFpZC2zNdyPoUy1M0JJdE1E43
-        M9r9u+YTlpA01V1TD68okQz0VUR0/NF3447EGnADd3FuqgeY
-X-Google-Smtp-Source: APXvYqwzOtpPSLcPHyFEB6tbhrOTMcZpApXLcuD4o4Hm5kiK+xr2mEgaBiZMdgAMi3AN9o8BiiysZZQhux/cS40TdFSXMuEB7ptk
-MIME-Version: 1.0
-X-Received: by 2002:a92:79d2:: with SMTP id u201mr31723321ilc.103.1573486448973;
- Mon, 11 Nov 2019 07:34:08 -0800 (PST)
-Date:   Mon, 11 Nov 2019 07:34:08 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9a391059713dc1f@google.com>
-Subject: BUG: bad host security descriptor; not enough data (4 vs 5 left)
-From:   syzbot <syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        id S1726939AbfKKQJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 11:09:55 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:52663 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726845AbfKKQJz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 11:09:55 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id BCFC3441;
+        Mon, 11 Nov 2019 11:09:53 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 11 Nov 2019 11:09:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:content-transfer-encoding:in-reply-to; s=fm2; bh=o
+        eyjArZgJ+1Z8cibJW3qRiB63aJn/zAHRvlgC7SdXqY=; b=Zjhq+j97kXg1XZLZ4
+        cP/2Ybs7wiLplr+MQdOywg6JReeMcq3Qv2/ho29x0Ees/sE8O2qxiCntExo7qXdU
+        QLbouwpnlNY6F5PgrjCBmudhWUYFxD6Jlp87IO7dZpdMOwWgbhDgt68J3UAByqJv
+        rklCTtJjRu2V/LmCHltfuKqpZ4i/XHZ/68oxywBBJmV8053h8nUz+1uBjx5jAlq+
+        q3tM1UBskH4QrV8F1QDp8tLx054SuO8wCPs5uC6u/wSWWMkWMuSHZvv//ntDsd75
+        B4NcVomDekgRWXiR8incT9vNtzTJNp1NzPXgxonNfDZMWCoUls3qAhNWlgQRo949
+        a19iw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=oeyjArZgJ+1Z8cibJW3qRiB63aJn/zAHRvlgC7SdX
+        qY=; b=rrxBxMF+yfq+XRzctJjhXnSAX7gViLnPfUqN8S48yJMHSjnT+8wocrOzD
+        pN297cFDRXouiSz8rc+kRh/7Rp8ROZD73TBoc5fVK2OCsPjsqoluspoFrG5MXjCn
+        rOusezSRYoV9S95kpioSbqEE6MEqjRQh/kkBYv9yXfoVtJeVIo70suVnURBUTzbT
+        w5WA/p2Ci0FVauEuEvHRNRy8h+iATqRjquu8HzlfyMQ67l005i0X+15hn7CTO4jN
+        V4WCyK1KZVDpDUjQH9gBPi5Ef5lMGx3T5mOW9xpgrQNisPYYQp3+LiZFL2tfnyMc
+        6QppLWLHS7sKY7aaLTZGWAq8hnaJg==
+X-ME-Sender: <xms:0YfJXSFzbP6X5ca6cnWGmy0diMTIYZNUbW6K0hX7kEpThfms-QQmEQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedruddvjedgkeekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgoufhushhpvggtthffohhmrghinhculdegledmne
+    cujfgurhepfffhvffukfhfgggtugfgjggfsehtqhertddtreejnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucffohhmrghinhepghhithhhuh
+    gsrdgtohhmpdgrphhpshhpohhtrdgtohhmnecukfhppeekfedrkeeirdekledruddtjeen
+    ucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecuvehluh
+    hsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:0YfJXcrFkq4RB7KzbemiaKh9MDhQ8-wVlcIU0wG9VWs3hnw3xLwidQ>
+    <xmx:0YfJXYhyr7RQp8Ub6OJo8mn_PY4MjG2pNEkUtg1LIZG0oMfXx-Xd5A>
+    <xmx:0YfJXToUwrCzWr0gsb4t2e4LzrDgHi1QeNdRa2BV_7RDZBw1s8iA9Q>
+    <xmx:0YfJXfy-llGru0LVWNepI5ExzRCapeRpjaqQez7-nrURT7qTLIHKig>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id A04C38005B;
+        Mon, 11 Nov 2019 11:09:52 -0500 (EST)
+Date:   Mon, 11 Nov 2019 17:09:50 +0100
+From:   Greg KH <greg@kroah.com>
+To:     syzbot <syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
-Content-Transfer-Encoding: base64
+Subject: Re: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+Message-ID: <20191111160950.GA870254@kroah.com>
+References: <000000000000d9a391059713dc1f@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <000000000000d9a391059713dc1f@google.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGVsbG8sDQoNCnN5emJvdCBmb3VuZCB0aGUgZm9sbG93aW5nIGNyYXNoIG9uOg0KDQpIRUFEIGNv
-bW1pdDogICAgMzE4M2MwMzcgdXNiOiBnYWRnZXQ6IGFkZCByYXctZ2FkZ2V0IGludGVyZmFjZQ0K
-Z2l0IHRyZWU6ICAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9nb29nbGUva2FzYW4uZ2l0IHVzYi1m
-dXp6ZXINCmNvbnNvbGUgb3V0cHV0OiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L2xv
-Zy50eHQ/eD0xMjUyNWRjNmUwMDAwMA0Ka2VybmVsIGNvbmZpZzogIGh0dHBzOi8vc3l6a2FsbGVy
-LmFwcHNwb3QuY29tL3gvLmNvbmZpZz94PTc5ZGU4MDMzMDAwM2I1ZjcNCmRhc2hib2FyZCBsaW5r
-OiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/ZXh0aWQ9ZDkzNGE5MDM2MzQ2ZTAy
-MTVkOGYNCmNvbXBpbGVyOiAgICAgICBnY2MgKEdDQykgOS4wLjAgMjAxODEyMzEgKGV4cGVyaW1l
-bnRhbCkNCnN5eiByZXBybzogICAgICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L3Jl
-cHJvLnN5ej94PTE0YWM3NDA2ZTAwMDAwDQpDIHJlcHJvZHVjZXI6ICAgaHR0cHM6Ly9zeXprYWxs
-ZXIuYXBwc3BvdC5jb20veC9yZXByby5jP3g9MTNlZWEzOWFlMDAwMDANCg0KSU1QT1JUQU5UOiBp
-ZiB5b3UgZml4IHRoZSBidWcsIHBsZWFzZSBhZGQgdGhlIGZvbGxvd2luZyB0YWcgdG8gdGhlIGNv
-bW1pdDoNClJlcG9ydGVkLWJ5OiBzeXpib3QrZDkzNGE5MDM2MzQ2ZTAyMTVkOGZAc3l6a2FsbGVy
-LmFwcHNwb3RtYWlsLmNvbQ0KDQp1c2IgMS0xOiBjb25maWcgMCBpbnRlcmZhY2UgMCBhbHRzZXR0
-aW5nIDAgaGFzIDMgZW5kcG9pbnQgZGVzY3JpcHRvcnMsICANCmRpZmZlcmVudCBmcm9tIHRoZSBp
-bnRlcmZhY2UgZGVzY3JpcHRvcidzIHZhbHVlOiA0DQp1c2IgMS0xOiBOZXcgVVNCIGRldmljZSBm
-b3VuZCwgaWRWZW5kb3I9MTNkYywgaWRQcm9kdWN0PTU2MTEsICANCmJjZERldmljZT0yZi4xNQ0K
-dXNiIDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTAsIFByb2R1Y3Q9MCwgU2VyaWFs
-TnVtYmVyPTANCnVzYiAxLTE6IGNvbmZpZyAwIGRlc2NyaXB0b3I/Pw0KaHdhLWhjIDEtMTowLjA6
-IFdpcmUgQWRhcHRlciB2MTA2LjUyIG5ld2VyIHRoYW4gZ3Jva2VkIHYxLjANCmh3YS1oYyAxLTE6
-MC4wOiBGSVhNRTogVVNCX01BWENISUxEUkVOIHRvbyBsb3cgZm9yIFdVU0IgYWRhcHRlciAoMTk0
-IHBvcnRzKQ0KdXNiIDEtMTogQlVHOiBiYWQgaG9zdCBzZWN1cml0eSBkZXNjcmlwdG9yOyBub3Qg
-ZW5vdWdoIGRhdGEgKDQgdnMgNSBsZWZ0KQ0KdXNiIDEtMTogc3VwcG9ydGVkIGVuY3J5cHRpb24g
-dHlwZXM6IO+/vVMD0IHvv73vv73vv718YwPQge+/ve+/ve+/ve+/vWMD0IHvv73vv73vv70NCnVz
-YiAxLTE6IEU6IGhvc3QgZG9lc24ndCBzdXBwb3J0IENDTS0xIGNyeXB0bw0KaHdhLWhjIDEtMTow
-LjA6IFdpcmVsZXNzIFVTQiBIV0EgaG9zdCBjb250cm9sbGVyDQpod2EtaGMgMS0xOjAuMDogbmV3
-IFVTQiBidXMgcmVnaXN0ZXJlZCwgYXNzaWduZWQgYnVzIG51bWJlciAxMQ0KDQoNCi0tLQ0KVGhp
-cyBidWcgaXMgZ2VuZXJhdGVkIGJ5IGEgYm90LiBJdCBtYXkgY29udGFpbiBlcnJvcnMuDQpTZWUg
-aHR0cHM6Ly9nb28uZ2wvdHBzbUVKIGZvciBtb3JlIGluZm9ybWF0aW9uIGFib3V0IHN5emJvdC4N
-CnN5emJvdCBlbmdpbmVlcnMgY2FuIGJlIHJlYWNoZWQgYXQgc3l6a2FsbGVyQGdvb2dsZWdyb3Vw
-cy5jb20uDQoNCnN5emJvdCB3aWxsIGtlZXAgdHJhY2sgb2YgdGhpcyBidWcgcmVwb3J0LiBTZWU6
-DQpodHRwczovL2dvby5nbC90cHNtRUojc3RhdHVzIGZvciBob3cgdG8gY29tbXVuaWNhdGUgd2l0
-aCBzeXpib3QuDQpzeXpib3QgY2FuIHRlc3QgcGF0Y2hlcyBmb3IgdGhpcyBidWcsIGZvciBkZXRh
-aWxzIHNlZToNCmh0dHBzOi8vZ29vLmdsL3Rwc21FSiN0ZXN0aW5nLXBhdGNoZXMNCg==
+On Mon, Nov 11, 2019 at 07:34:08AM -0800, syzbot wrote:
+> Hello,
+>=20
+> syzbot found the following crash on:
+>=20
+> HEAD commit:    3183c037 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12525dc6e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D79de80330003b=
+5f7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd934a9036346e02=
+15d8f
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14ac7406e00=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13eea39ae00000
+>=20
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com
+>=20
+> usb 1-1: config 0 interface 0 altsetting 0 has 3 endpoint descriptors,
+> different from the interface descriptor's value: 4
+> usb 1-1: New USB device found, idVendor=3D13dc, idProduct=3D5611,
+> bcdDevice=3D2f.15
+> usb 1-1: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=3D0
+> usb 1-1: config 0 descriptor??
+> hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
+> hwa-hc 1-1:0.0: FIXME: USB_MAXCHILDREN too low for WUSB adapter (194 port=
+s)
+> usb 1-1: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+> usb 1-1: supported encryption types: =EF=BF=BDS=03=D0=81=EF=BF=BD=EF=BF=
+=BD=EF=BF=BD|c=03=D0=81=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDc=03=D0=81=EF=BF=
+=BD=EF=BF=BD=EF=BF=BD
+> usb 1-1: E: host doesn't support CCM-1 crypto
+> hwa-hc 1-1:0.0: Wireless USB HWA host controller
+> hwa-hc 1-1:0.0: new USB bus registered, assigned bus number 11
+
+wusb code, hah.  It's about to be deleted from the kernel because no one
+uses it and there is no hardware out there.  I wouldn't spend a ton of
+time fuzzing it.
+
+One more good reason to just delete it soon...
+
+thanks,
+
+greg k-h
