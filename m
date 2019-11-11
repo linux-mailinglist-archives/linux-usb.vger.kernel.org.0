@@ -2,120 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82607F75ED
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 15:05:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CABD0F7607
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 15:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbfKKOFk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 09:05:40 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:36729 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726871AbfKKOFj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 09:05:39 -0500
-Received: by mail-ot1-f67.google.com with SMTP id f10so11330945oto.3;
-        Mon, 11 Nov 2019 06:05:39 -0800 (PST)
+        id S1726973AbfKKOLE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 09:11:04 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42306 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726832AbfKKOLD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 09:11:03 -0500
+Received: by mail-pg1-f196.google.com with SMTP id q17so9535529pgt.9;
+        Mon, 11 Nov 2019 06:11:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hkWWZbsPhAe/B+lg1NTrPkrZfdIPdtnDPLZ91eTI/hg=;
-        b=lwVw/MSbrrSR96HQiTRGjp4qyBLP9BUVvOJ7zUjQCJ+Bl51zdrH0ZeOYPfQadmnrQv
-         LC5pnKVzGGUcbXy6983YIevobRGuUKI8LfdKq87vJVZ+tQLGuXqUNjr6WV+SKGRZeNG5
-         SAUmQffDJJdfo3GY1YHH0dmHFc7/IFMLCI++HYj0MOvgYZwynSc8XJ58ylbJ0pq+J+3d
-         tw4DkYPn71ln2qqUxDBP/pCGu2ZTb0zVjMcLZjiGi/NSbiSK3er1e+4bLrJoUjs79t5Q
-         XRTuWN3LbqzYx5ByPRiLLGnmUAIv/qwtEknadUJmdAlv4XPahOJY0XdT9crvnySe5hmr
-         KWJQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rI5QC9ISB879Ba1DyMVl2oGSc/o9FCdZnmRMtbc4lMk=;
+        b=iYQYWxawSmVE3P2Gsfi6nXJ4i08atEe1waG4+4z0bVa+k5GKm+PtIZoDiXhGzrI+z/
+         uACnGvZq5WTh7UxDOm673vKaqRCECsucIfs7fmqbMsIbwLoQQcVstbWsAUdIyim4GH6u
+         G/1Cxs+6uZF/T/ELfZ0QINl4nHsZkKVQP5x0j9uBnAFL5+GRujVpK7oKgB4m+WGRax4K
+         GHvp75+CfzCQWNgFS9RYN1yji/XN1DJGXWZLeEpVc1gRGeI9d3SmOBYEMrjXyZyb+WTU
+         VokhWtmvHNKH5m0wUSLHDmZ79K+J1URGbonSJPlFzP6XOhqkYEV2NbznJkdmEu0hVZVB
+         /8ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hkWWZbsPhAe/B+lg1NTrPkrZfdIPdtnDPLZ91eTI/hg=;
-        b=GzagR0fdtY7WlsJVA/cI5mq1yR091sWgCAuwT46BZc+sJciyhR7bkizfC9t4KBbSL2
-         tbg3bynXyFZL2h3cmgzFn+Ic8nKjsnUnyx0qjRYSbqw1s8CDp2sPl20g9HeCn+TGo4hV
-         82hqInCTSqYpBLcNI4y0pgh7pLOcJjyvoCrDgfUzCxDUHk96vbnLvhgz5rWJDY5PP7MN
-         Qi8nexvejVWjDWjGP2PsSlp9DatjKfi72qC0yrZk5+0/TAbFhdJDoYzoeEVUYa4lvH73
-         8DwH24aOTxSNEaaFNEO/9FUM/WH4+UHc49l6I0nMw0pUaXLmR9aaXdapd6hUJZ6+9Cpq
-         kFJA==
-X-Gm-Message-State: APjAAAWa8wyjkSCrVs3wrKB2C3k1dWiSuSiCdTMaU5NW/ZFbkbCB9vd8
-        y+EGNSTO/gJQZH6992rH6NQpa3E/pwmKlbq2LT8=
-X-Google-Smtp-Source: APXvYqwKDHSLwIppJngXejpzqHPV4YxZhwzU8jDUQEbttYpesGP+AXtsC0jFnvcDk5ZDCNQNKmxcyJVC4p07NzbkNRQ=
-X-Received: by 2002:a05:6830:3:: with SMTP id c3mr8817650otp.15.1573481138383;
- Mon, 11 Nov 2019 06:05:38 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rI5QC9ISB879Ba1DyMVl2oGSc/o9FCdZnmRMtbc4lMk=;
+        b=RNCW3fsggiFLExLqjH1NPydEJ+OEcq3fmUZD17bUzvSpYhtEbVHXH+xUmH/iGbjySy
+         MhWY9F6t7l5WMUMhSEvNtRNqydSLZRu/6AleniYum8dgYxCs52IF9aZiUG3QNhc6MlsU
+         fhwVdndnlw4UZptcO9GvGFQ5ywHT4CR0BaQBrVgISLv7U3WYtSqXgW50/m0PNk6tj3wx
+         W8q1+hM/t/P7cqNhBRpZB87xYG8iRR24LX2jXRuy1hIQYDCDEvyIrsfm1iTP/zWNY/9e
+         D2zCdQzH9IKf1xQUJpoHPCCZyMh0an70WA63vbBkKLy+jLLdyxs3/L8nk4kJ+rayidWK
+         ZmfA==
+X-Gm-Message-State: APjAAAV8NrDXa3Pt2bAB5eDoU3xXEJgPF4SUm28RDEmegfJB5WB3lFO1
+        NI1ZHXLhtSNIu6x44DlSK5c=
+X-Google-Smtp-Source: APXvYqxk3KtKKsslHqhzEITqYs0MBUgnmFsfR3PUYFJIXyhbNnl+dx7JNv8qvgw/aG4JjYXyue9+jg==
+X-Received: by 2002:a63:3c6:: with SMTP id 189mr28773962pgd.4.1573481462969;
+        Mon, 11 Nov 2019 06:11:02 -0800 (PST)
+Received: from localhost.localdomain ([221.155.202.134])
+        by smtp.gmail.com with ESMTPSA id 206sm2875318pfu.45.2019.11.11.06.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 06:11:02 -0800 (PST)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        dan.carpenter@oracle.com, valentina.manea.m@gmail.com,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: [PATCH] usbip: Fix uninitialized symbol 'nents' in stub_recv_cmd_submit()
+Date:   Mon, 11 Nov 2019 23:10:35 +0900
+Message-Id: <20191111141035.27788-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <20191014141718.22603-1-narmstrong@baylibre.com>
- <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
- <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com> <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
-In-Reply-To: <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
-From:   Tim <elatllat@gmail.com>
-Date:   Mon, 11 Nov 2019 09:05:27 -0500
-Message-ID: <CA+3zgmtJqN-3Q-kjMhh58B+T7z_1TA-C6be7+UP6nuQb7eq=8A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-To:     Jun Li <lijun.kernel@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Speculation;
+Smatch reported that nents is not initialized and used in
+stub_recv_cmd_submit(). nents is currently initialized by sgl_alloc()
+and used to allocate multiple URBs when host controller doesn't
+support scatter-gather DMA. The use of uninitialized nents means that
+buf_len is zero and use_sg is true. But buffer length should not be
+zero when an URB uses scatter-gather DMA.
 
-Maybe the kernel maintainers prefer to optimistically permit future
-products to easily remove workarounds via quirk flags.
-Even if data from testing were shown, and it did not impact
-performance, code reduction and clarity are desirable.
+To prevent this situation, add the conditional that checks buf_len
+and use_sg. And move the use of nents right after the sgl_alloc() to
+avoid the use of uninitialized nents.
 
-On Sun, Nov 10, 2019 at 8:58 PM Jun Li <lijun.kernel@gmail.com> wrote:
->
-> Hi Neil
->
-> As I got the information from Synopsys, this bug exists on current IP ver=
-sions,
-> and per my tests with external USB3 hub + 2 Super speed udisks on data
-> read by dd, I can reproduce this issue with different kernel versions, al=
-so I
-> didn't see obvious performance drop by dd tests after disable park mode f=
-or
-> super speed, so should we just disable it by default so no need a quirk?
->
-> Li Jun
->
-> Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=A5=E5=
-=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=888:42=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > Thanks for working on this Neil,
-> > Is there something that needs doing for this patch to make it into 5.3 =
-or 5.4?
-> > As previously mentioned the patch set fixes the issue on affected hardw=
-are;
-> >     https://patchwork.kernel.org/patch/11164515/
-> >
-> >
-> >
-> > On Wed, Oct 23, 2019 at 4:11 PM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Mon, Oct 14, 2019 at 04:17:16PM +0200, Neil Armstrong wrote:
-> > > > This patch updates the documentation with the information related
-> > > > to the quirks that needs to be added for disabling all SuperSpeed X=
-HCi
-> > > > instances in park mode.
-> > > >
-> > > > CC: Dongjin Kim <tobetter@gmail.com>
-> > > > Cc: Jianxin Pan <jianxin.pan@amlogic.com>
-> > > > Reported-by: Tim <elatllat@gmail.com>
-> > > > Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > >
-> > > Sigh, what's one more to the never ending list of quirks...
-> > >
-> > > Acked-by: Rob Herring <robh@kernel.org>
+If the error occurs, it adds SDEV_EVENT_ERROR_MALLOC and stub_priv
+will be released by stub event handler and connection will be shut
+down.
+
+Fixes: ea44d190764b ("usbip: Implement SG support to vhci-hcd and stub driver")
+Reported-by: kbuild test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+---
+ drivers/usb/usbip/stub_rx.c | 50 ++++++++++++++++++++++++-------------
+ 1 file changed, 32 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
+index 66edfeea68fe..e2b019532234 100644
+--- a/drivers/usb/usbip/stub_rx.c
++++ b/drivers/usb/usbip/stub_rx.c
+@@ -470,18 +470,50 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+ 	if (pipe == -1)
+ 		return;
+ 
++	/*
++	 * Smatch reported the error case where use_sg is true and buf_len is 0.
++	 * In this case, It adds SDEV_EVENT_ERROR_MALLOC and stub_priv will be
++	 * released by stub event handler and connection will be shut down.
++	 */
+ 	priv = stub_priv_alloc(sdev, pdu);
+ 	if (!priv)
+ 		return;
+ 
+ 	buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
+ 
++	if (use_sg && !buf_len) {
++		dev_err(&udev->dev, "sg buffer with zero length\n");
++		goto err_malloc;
++	}
++
+ 	/* allocate urb transfer buffer, if needed */
+ 	if (buf_len) {
+ 		if (use_sg) {
+ 			sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
+ 			if (!sgl)
+ 				goto err_malloc;
++
++			/* Check if the server's HCD supports SG */
++			if (!udev->bus->sg_tablesize) {
++				/*
++				 * If the server's HCD doesn't support SG, break
++				 * a single SG request into several URBs and map
++				 * each SG list entry to corresponding URB
++				 * buffer. The previously allocated SG list is
++				 * stored in priv->sgl (If the server's HCD
++				 * support SG, SG list is stored only in
++				 * urb->sg) and it is used as an indicator that
++				 * the server split single SG request into
++				 * several URBs. Later, priv->sgl is used by
++				 * stub_complete() and stub_send_ret_submit() to
++				 * reassemble the divied URBs.
++				 */
++				support_sg = 0;
++				num_urbs = nents;
++				priv->completed_urbs = 0;
++				pdu->u.cmd_submit.transfer_flags &=
++								~URB_DMA_MAP_SG;
++			}
+ 		} else {
+ 			buffer = kzalloc(buf_len, GFP_KERNEL);
+ 			if (!buffer)
+@@ -489,24 +521,6 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
+ 		}
+ 	}
+ 
+-	/* Check if the server's HCD supports SG */
+-	if (use_sg && !udev->bus->sg_tablesize) {
+-		/*
+-		 * If the server's HCD doesn't support SG, break a single SG
+-		 * request into several URBs and map each SG list entry to
+-		 * corresponding URB buffer. The previously allocated SG
+-		 * list is stored in priv->sgl (If the server's HCD support SG,
+-		 * SG list is stored only in urb->sg) and it is used as an
+-		 * indicator that the server split single SG request into
+-		 * several URBs. Later, priv->sgl is used by stub_complete() and
+-		 * stub_send_ret_submit() to reassemble the divied URBs.
+-		 */
+-		support_sg = 0;
+-		num_urbs = nents;
+-		priv->completed_urbs = 0;
+-		pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
+-	}
+-
+ 	/* allocate urb array */
+ 	priv->num_urbs = num_urbs;
+ 	priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), GFP_KERNEL);
+-- 
+2.21.0
+
