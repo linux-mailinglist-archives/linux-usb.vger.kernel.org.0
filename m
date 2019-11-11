@@ -2,116 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FE7F7981
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 18:09:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDC3F8171
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 21:40:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbfKKRJJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 12:09:09 -0500
-Received: from tr-host.de ([138.201.124.202]:55504 "EHLO kolab.tr-host.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726845AbfKKRJJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Nov 2019 12:09:09 -0500
-X-Greylist: delayed 481 seconds by postgrey-1.27 at vger.kernel.org; Mon, 11 Nov 2019 12:09:08 EST
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tr-host.de; s=dkim;
-        t=1573491666;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6uciDxJ7Zwh7ytZ1p2UtI1a07rDUGGTmb26HMosgxvg=;
-        b=L0IqW5hXAtaxmWZrqp1TTM/wlitDJAXJ6s7xa6Yk8dXIFg6qIov/y4TI0gnlzG2t12DwuC
-        c+2pWM8PQnThYwoEKDa5xCWoBNChJb+Wpr3nipJ38sAl4k08a/WEBWvf7rggpXAgMrc7Ff
-        K1YF+ET9lJ8H0Z2wH3AylPFeX4dH66A=
-Received: from kolab.tr-host.de (localhost [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: haensch@tr-host.de)
-        by kolab.tr-host.de (Postfix) with ESMTPSA id 534623AFD338
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 18:01:06 +0100 (CET)
+        id S1727040AbfKKUkK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 15:40:10 -0500
+Received: from mail-qv1-f43.google.com ([209.85.219.43]:44769 "EHLO
+        mail-qv1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbfKKUkK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 15:40:10 -0500
+Received: by mail-qv1-f43.google.com with SMTP id d3so3857171qvs.11
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 12:40:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KWsJltbq87WWGSx0qLH+vFmnEknVQOYa6Q27qNFO+8M=;
+        b=CMBrRIPtS9n+H6ufOEASSmEeOoNx1Rxy2x1KFWPR9VpsJdBsQcrcHb4sjQwKtVpbJB
+         jmNsvOXrjRpmLTNyu6m991f5tUMUQfU87cnXEw4yHj6I2cw5dfaOGvBbqGtvj/lEweeu
+         i4QwWFwIYl9TJjfYjwTzNSFcxkDvncdZcGxpI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KWsJltbq87WWGSx0qLH+vFmnEknVQOYa6Q27qNFO+8M=;
+        b=QMvHg4WEfBJIgRhdVyToLvm8pjtkMWGPyVFeOjf7wc9WA1gRptoVEKispkaoqHOsay
+         xvWVqVxNFp60zmUPO9x8b9bTQYKB2bHGTJqFEuE5cz1Px33iRtdherYdiaSP/oqYhWRG
+         4dVW1d7xIyidiyv1tfH9xw7m9uVKD++ET6vhC12Tz/+8fIFGnMJg76DrLMUjMNo34pjC
+         ZXKcM3aDwHomuTXCuVZ6uvKh7uadtBOdz9AifM47muP2hoNxvgKxfEasqJky6gl2/ftQ
+         69sfZxVKas7e1MCkXpbFPv+KVzjfoKlrKbfY9zS/SHnIfG6Hp6a87nVuUQH6ENmJfBG0
+         hCyQ==
+X-Gm-Message-State: APjAAAUcF2p6JsVIfGS4mZMqVuhSBnT5PSMy1TV9Qt6XtajjYslzsnaS
+        CAG/n1GCUHgGh4UkWjHrheG7r5eWjhGXvw==
+X-Google-Smtp-Source: APXvYqyoZb3k5q87RriSg5gAnRpAkOCvomuszA5915gtYOWcLILQ7xeVlKXWmWk0RsfIWrW4sZ7qhA==
+X-Received: by 2002:a0c:942d:: with SMTP id h42mr8783781qvh.118.1573504809266;
+        Mon, 11 Nov 2019 12:40:09 -0800 (PST)
+Received: from chatter.i7.local (107-179-243-71.cpe.teksavvy.com. [107.179.243.71])
+        by smtp.gmail.com with ESMTPSA id f23sm7384061qkh.94.2019.11.11.12.40.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 12:40:08 -0800 (PST)
+Date:   Mon, 11 Nov 2019 15:40:07 -0500
+From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Feeding bugzilla.kernel.org USB component to the linux-usb list
+Message-ID: <20191111204007.46d6kq53rwpiiv4x@chatter.i7.local>
+References: <20191106210455.hpe63idbcz3yw54z@chatter.i7.local>
+ <20191109092346.GF1293712@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 11 Nov 2019 18:01:06 +0100
-From:   Alexander Haensch <ah.outfittery@tr-host.de>
-To:     linux-usb@vger.kernel.org
-Subject: USB3.0 PCI-E Card with NEC chip crashes host on systemd-suspend
-User-Agent: Kolab 16/Roundcube 1.4-git
-Message-ID: <f76fef8389e10154cc49759f0f5753d4@tr-host.de>
-X-Sender: ah.outfittery@tr-host.de
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191109092346.GF1293712@kroah.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I have an evolving problem with a PCI-E Card. Since some time i cannot 
-wake the system anymore if i suspend-to-ram with systemd-suspend.
-The wakeup works 1 time only. After a second suspend. The system somehow 
-wakes up with fan turning on, but does not show any reaction to input. 
-Display stays off. I have to hard reset the system to get it back.
-For me the problem started with 4.20 series but it was working partly 
-until recently by disconnection the peripherals from the USB card.
-Since 5.2 (i think) it is too broken so my temporary fix is to remove 
-the card.
+On Sat, Nov 09, 2019 at 10:23:46AM +0100, Greg KH wrote:
+> On Wed, Nov 06, 2019 at 04:04:55PM -0500, Konstantin Ryabitsev wrote:
+> > Hi, all:
+> > 
+> > I noticed that Greg has an auto-reply for any new bugs opened on
+> > bugzilla.kernel.org for the USB component:
+> > 
+> > https://bugzilla.kernel.org/show_bug.cgi?id=205449
+> > 
+> > Would it make more sense to feed those into the mailing list instead of
+> > asking bug submitters to send a new email? Anyone responding to the bugmail
+> > sent to the list will be properly recorded in the bug comments (and if they
+> > don't have an account on bugzilla.kernel.org, a stub account will be
+> > automatically created).
+> > 
+> > It seems like that would be a friendlier setup that doesn't require bug
+> > submitters to do any more work, but I leave it up to you. This scheme is
+> > already used by other projects, e.g.:
+> > https://lore.kernel.org/linux-xfs/bug-202349-201763@https.bugzilla.kernel.org%2F/
+> > 
+> > You can see Dave Chinner replying to bugmail directly and it being recorded
+> > in the bug entry:
+> > https://lore.kernel.org/linux-xfs/20190124233132.GO4205@dastard/
+> > https://bugzilla.kernel.org/show_bug.cgi?id=202349#c7
+> > 
+> > Please let me know if that's something you would like.
+> 
+> Yeah, I guess it's about time to just set up the feed to do that, thanks
+> for bringing it up again, I had forgotten about it.
 
-Unfortunately i have no idea to debug this, as i am not getting any 
-messages after the second suspend.
+Okay, I will go ahead and set it up. You will see a worrisome email from 
+bugzilla about me impersonating the list account, but it can be ignored.
 
-Here is a dmesg of the xhci module since boot until first suspend. After 
-first suspend, the device is not logging anything:
--- snip --
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: xHCI Host Controller
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: new USB bus 
-registered, assigned bus number 8
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: hcc params 
-0x014042cb hci version 0x96 quirks 0x0000000000000004
-Nov 10 16:31:14 alex kernel: input: Logitech Logitech Illuminated 
-Keyboard Consumer Control as 
-/devices/pci0000:00/0000:00:13.0/usb5/5-1/5-1:1.1/0003:046D:C318.0003/input/input7
-Nov 10 16:31:14 alex kernel: usb usb8: New USB device found, 
-idVendor=1d6b, idProduct=0002, bcdDevice= 5.03
-Nov 10 16:31:14 alex kernel: usb usb8: New USB device strings: Mfr=3, 
-Product=2, SerialNumber=1
-Nov 10 16:31:14 alex kernel: usb usb8: Product: xHCI Host Controller
-Nov 10 16:31:14 alex kernel: usb usb8: Manufacturer: Linux 5.3.9-gentoo 
-xhci-hcd
-Nov 10 16:31:14 alex kernel: usb usb8: SerialNumber: 0000:06:00.0
-Nov 10 16:31:14 alex kernel: hub 8-0:1.0: USB hub found
-Nov 10 16:31:14 alex kernel: hub 8-0:1.0: 2 ports detected
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: xHCI Host Controller
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: new USB bus 
-registered, assigned bus number 9
-Nov 10 16:31:14 alex kernel: xhci_hcd 0000:06:00.0: Host supports USB 
-3.0 SuperSpeed
-Nov 10 16:31:14 alex kernel: usb usb9: We don't know the algorithms for 
-LPM for this host, disabling LPM.
-Nov 10 16:31:14 alex kernel: usb usb9: New USB device found, 
-idVendor=1d6b, idProduct=0003, bcdDevice= 5.03
-Nov 10 16:31:14 alex kernel: usb usb9: New USB device strings: Mfr=3, 
-Product=2, SerialNumber=1
-Nov 10 16:31:14 alex kernel: usb usb9: Product: xHCI Host Controller
-Nov 10 16:31:14 alex kernel: usb usb9: Manufacturer: Linux 5.3.9-gentoo 
-xhci-hcd
-Nov 10 16:31:14 alex kernel: usb usb9: SerialNumber: 0000:06:00.0
-Nov 10 16:31:14 alex kernel: hub 9-0:1.0: USB hub found
-Nov 10 16:31:14 alex kernel: hub 9-0:1.0: 2 ports detected
-.
-.
-.
-Nov 10 17:15:10 alex kernel: xhci_hcd 0000:06:00.0: WARN: xHC CMD_RUN 
-timeout
-Nov 10 17:15:10 alex kernel: PM: suspend_common(): 
-xhci_pci_suspend+0x0/0xc0 [xhci_pci] returns -110
-Nov 10 17:15:10 alex kernel: PM: pci_pm_suspend(): 
-hcd_pci_suspend+0x0/0x20 returns -110
-Nov 10 17:15:10 alex kernel: PM: dpm_run_callback(): 
-pci_pm_suspend+0x0/0x130 returns -110
-Nov 10 17:15:10 alex kernel: PM: Device 0000:06:00.0 failed to suspend 
-async: error -110
-.
-Nov 10 17:15:10 alex kernel: PM: Some devices failed to suspend, or 
-early wake event detected
-.
-.
-.
--- snap --
-
+Best,
+-K
