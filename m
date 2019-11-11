@@ -2,71 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CD05F74CE
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 14:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82607F75ED
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 15:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfKKN2e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 08:28:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40934 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726910AbfKKN2e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 11 Nov 2019 08:28:34 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9D3AE2196E;
-        Mon, 11 Nov 2019 13:28:31 +0000 (UTC)
-Date:   Mon, 11 Nov 2019 14:28:29 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, stable <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] USB: serial: mos7840: fix remote wakeup
-Message-ID: <20191111132829.GC450958@kroah.com>
-References: <20191107132119.2159-1-johan@kernel.org>
- <20191107132119.2159-2-johan@kernel.org>
+        id S1726979AbfKKOFk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 09:05:40 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:36729 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfKKOFj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 09:05:39 -0500
+Received: by mail-ot1-f67.google.com with SMTP id f10so11330945oto.3;
+        Mon, 11 Nov 2019 06:05:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hkWWZbsPhAe/B+lg1NTrPkrZfdIPdtnDPLZ91eTI/hg=;
+        b=lwVw/MSbrrSR96HQiTRGjp4qyBLP9BUVvOJ7zUjQCJ+Bl51zdrH0ZeOYPfQadmnrQv
+         LC5pnKVzGGUcbXy6983YIevobRGuUKI8LfdKq87vJVZ+tQLGuXqUNjr6WV+SKGRZeNG5
+         SAUmQffDJJdfo3GY1YHH0dmHFc7/IFMLCI++HYj0MOvgYZwynSc8XJ58ylbJ0pq+J+3d
+         tw4DkYPn71ln2qqUxDBP/pCGu2ZTb0zVjMcLZjiGi/NSbiSK3er1e+4bLrJoUjs79t5Q
+         XRTuWN3LbqzYx5ByPRiLLGnmUAIv/qwtEknadUJmdAlv4XPahOJY0XdT9crvnySe5hmr
+         KWJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hkWWZbsPhAe/B+lg1NTrPkrZfdIPdtnDPLZ91eTI/hg=;
+        b=GzagR0fdtY7WlsJVA/cI5mq1yR091sWgCAuwT46BZc+sJciyhR7bkizfC9t4KBbSL2
+         tbg3bynXyFZL2h3cmgzFn+Ic8nKjsnUnyx0qjRYSbqw1s8CDp2sPl20g9HeCn+TGo4hV
+         82hqInCTSqYpBLcNI4y0pgh7pLOcJjyvoCrDgfUzCxDUHk96vbnLvhgz5rWJDY5PP7MN
+         Qi8nexvejVWjDWjGP2PsSlp9DatjKfi72qC0yrZk5+0/TAbFhdJDoYzoeEVUYa4lvH73
+         8DwH24aOTxSNEaaFNEO/9FUM/WH4+UHc49l6I0nMw0pUaXLmR9aaXdapd6hUJZ6+9Cpq
+         kFJA==
+X-Gm-Message-State: APjAAAWa8wyjkSCrVs3wrKB2C3k1dWiSuSiCdTMaU5NW/ZFbkbCB9vd8
+        y+EGNSTO/gJQZH6992rH6NQpa3E/pwmKlbq2LT8=
+X-Google-Smtp-Source: APXvYqwKDHSLwIppJngXejpzqHPV4YxZhwzU8jDUQEbttYpesGP+AXtsC0jFnvcDk5ZDCNQNKmxcyJVC4p07NzbkNRQ=
+X-Received: by 2002:a05:6830:3:: with SMTP id c3mr8817650otp.15.1573481138383;
+ Mon, 11 Nov 2019 06:05:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191107132119.2159-2-johan@kernel.org>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20191014141718.22603-1-narmstrong@baylibre.com>
+ <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
+ <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com> <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
+In-Reply-To: <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
+From:   Tim <elatllat@gmail.com>
+Date:   Mon, 11 Nov 2019 09:05:27 -0500
+Message-ID: <CA+3zgmtJqN-3Q-kjMhh58B+T7z_1TA-C6be7+UP6nuQb7eq=8A@mail.gmail.com>
+Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
+ disabling SS instances in park mode
+To:     Jun Li <lijun.kernel@gmail.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Dongjin Kim <tobetter@gmail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 07, 2019 at 02:21:19PM +0100, Johan Hovold wrote:
-> The driver was setting the device remote-wakeup feature during probe in
-> violation of the USB specification (which says it should only be set
-> just prior to suspending the device). This could potentially waste
-> power during suspend as well as lead to spurious wakeups.
-> 
-> Note that USB core would clear the remote-wakeup feature at first
-> resume.
-> 
-> Fixes: 3f5429746d91 ("USB: Moschip 7840 USB-Serial Driver")
-> Cc: stable <stable@vger.kernel.org>     # 2.6.19
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/usb/serial/mos7840.c | 5 -----
->  1 file changed, 5 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-> index 3eeeee38debc..ab4bf8d6d7df 100644
-> --- a/drivers/usb/serial/mos7840.c
-> +++ b/drivers/usb/serial/mos7840.c
-> @@ -2290,11 +2290,6 @@ static int mos7840_port_probe(struct usb_serial_port *port)
->  			goto error;
->  		} else
->  			dev_dbg(&port->dev, "ZLP_REG5 Writing success status%d\n", status);
-> -
-> -		/* setting configuration feature to one */
-> -		usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
-> -				0x03, 0x00, 0x01, 0x00, NULL, 0x00,
-> -				MOS_WDR_TIMEOUT);
->  	}
->  	return 0;
->  error:
-> -- 
-> 2.23.0
+Speculation;
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Maybe the kernel maintainers prefer to optimistically permit future
+products to easily remove workarounds via quirk flags.
+Even if data from testing were shown, and it did not impact
+performance, code reduction and clarity are desirable.
+
+On Sun, Nov 10, 2019 at 8:58 PM Jun Li <lijun.kernel@gmail.com> wrote:
+>
+> Hi Neil
+>
+> As I got the information from Synopsys, this bug exists on current IP ver=
+sions,
+> and per my tests with external USB3 hub + 2 Super speed udisks on data
+> read by dd, I can reproduce this issue with different kernel versions, al=
+so I
+> didn't see obvious performance drop by dd tests after disable park mode f=
+or
+> super speed, so should we just disable it by default so no need a quirk?
+>
+> Li Jun
+>
+> Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=A5=E5=
+=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=888:42=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> > Thanks for working on this Neil,
+> > Is there something that needs doing for this patch to make it into 5.3 =
+or 5.4?
+> > As previously mentioned the patch set fixes the issue on affected hardw=
+are;
+> >     https://patchwork.kernel.org/patch/11164515/
+> >
+> >
+> >
+> > On Wed, Oct 23, 2019 at 4:11 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Mon, Oct 14, 2019 at 04:17:16PM +0200, Neil Armstrong wrote:
+> > > > This patch updates the documentation with the information related
+> > > > to the quirks that needs to be added for disabling all SuperSpeed X=
+HCi
+> > > > instances in park mode.
+> > > >
+> > > > CC: Dongjin Kim <tobetter@gmail.com>
+> > > > Cc: Jianxin Pan <jianxin.pan@amlogic.com>
+> > > > Reported-by: Tim <elatllat@gmail.com>
+> > > > Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > >
+> > > Sigh, what's one more to the never ending list of quirks...
+> > >
+> > > Acked-by: Rob Herring <robh@kernel.org>
