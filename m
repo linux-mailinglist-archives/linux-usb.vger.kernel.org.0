@@ -2,191 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 249E3F6CF9
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 03:45:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED04F6E8F
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 07:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfKKCpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 10 Nov 2019 21:45:40 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35041 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbfKKCpk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 10 Nov 2019 21:45:40 -0500
-Received: by mail-pf1-f195.google.com with SMTP id d13so9664504pfq.2;
-        Sun, 10 Nov 2019 18:45:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=9yPK2EU4Y6olUQqyKYIXFSS0g7og8dn+NrGRRQnxjSM=;
-        b=HVAiIkmM32cspgfFVwlouAsnUs1z+cUvA1cx681ljGb5uZsIt5CIgIR3CtKIcIC8ZR
-         ZUpxVF3X/isKMBf9ejQHs7Om3DxjwIZKiy1BW8GAcMymOnv9Iz5Jeo6WbHuwpHelOn3s
-         bhtRmGxfcASCtFYUDmLaWPQD1h6MqbPIO0HOQ+On7orBT1VAAew3h2DErKiw2AGu+0jr
-         gt1rdw1yGACyujSAxtp35ysUVCc1xTom/WEJDzeNjilV5NZpQl7Nec5Dt+6+ba4eUqmT
-         sMrRFpRZ9RdXzyuKUaT7jTYRkW+O3AkLFcmfl53hljq0GvrwebqIkyYAjHUJ8PwG+TEO
-         b6QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9yPK2EU4Y6olUQqyKYIXFSS0g7og8dn+NrGRRQnxjSM=;
-        b=JcZgcmI2S0jDV+GTCzfy8HnNBCkkONtpN44E5QoLb44ZdL+Sal1jzgwA30ToaDV9Gr
-         kVOjrCKhxe2i25VtMIaw/f/xDOoMkUNg7qGknCVVEl9aC4aRigLHV4IwQLoIKXogfkh9
-         FWVk+FscMARuGlbLWAzRQLP+CBSbScCpEmEOjGcOf6OdXBMhbp1pXME5ZB62LAvA5GKS
-         QI/yOHvlFixqPraaEQvxp2n5n2Jurm+rEpgEsSTJp/y8j3Cl6YaM60Mq7rbe3A/yMxAk
-         XRSWpJDBPSdZB74LyxOReK8l8xVwYOCbMnujd1uKcZ3TqgVQ1CQWimVY2OZy5WTQA+pv
-         o3fA==
-X-Gm-Message-State: APjAAAU5n/OHH7x48ydJf236RPOZOR+v8kQf/uQFozxDjSoyMHPmVs+h
-        wYqqkte1ZGoACsosarRcAGEuC+Hi
-X-Google-Smtp-Source: APXvYqwt3YyvbxFc4wXXkbZsYQKFP3vvSSKelaTJm63wYpeNFnEthyoi/Z9hxM96+RetlcG811whDw==
-X-Received: by 2002:a62:7847:: with SMTP id t68mr17720505pfc.140.1573440339337;
-        Sun, 10 Nov 2019 18:45:39 -0800 (PST)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id f8sm13646492pgd.64.2019.11.10.18.45.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 10 Nov 2019 18:45:38 -0800 (PST)
-Date:   Mon, 11 Nov 2019 11:45:32 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, kbuild@lists.01.org,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: drivers/usb/usbip/stub_rx.c:505 stub_recv_cmd_submit() error:
- uninitialized symbol 'nents'.
-Message-ID: <20191111024532.GA3424@localhost.localdomain>
-References: <20191022092839.GD10833@kadam>
- <20191023071120.GA3061@localhost.localdomain>
- <20191024194500.GD23523@kadam>
- <ce76c90b-3431-9342-8b75-882d582c6366@kernel.org>
- <20191026034010.GA6411@localhost.localdomain>
- <fb62566f-632c-d0cd-e06c-5162c753a03f@kernel.org>
- <20191101143439.GA18757@localhost.localdomain>
- <82478914-2bed-d8d8-0ee2-0460081434db@kernel.org>
+        id S1726843AbfKKGai (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 01:30:38 -0500
+Received: from mail-eopbgr50085.outbound.protection.outlook.com ([40.107.5.85]:60644
+        "EHLO EUR03-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726360AbfKKGai (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 11 Nov 2019 01:30:38 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KYs8Cj4xKwW+Tj1FbnxM77xE02sH4SMR0j1+6nu31ltFdm2uv4sad/03pNPdipYpTn6aI/rXep5YqUu1HoGH0nq3ILTNEK5pFpTQC5bh02+fOTEuBeUnt0E6pNd34SiEQueXm+JsuwKzWqCAw03NEEdw9IRyK/9AcMS3Ul+X6I2bIsIvJtBtyXls8ohC0G/BylXvyYhQGVW6CqgMSXk62O7EBrpaj7KRo04/Uz1Dx45rI1x1u3BqiTl4SfsTv9DgIds17ZQJbJ7FC/ey+Aj3o6o/phDuivD9+JIgCK1L64cgP3cBBXSoISGbtCG7llghwB1u5Wm3PpEyQ73xPh6MAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PJt4Na847FfHW3pDzZ1vGDkHnDnE8RzvVwTpeb1lpIc=;
+ b=hLvWCAb1U4KtcOhIFLmkD0A8KDAbY7nPhESrdQq+ysG53GBeSTQ63HDeemte6dvuXJvUV2+HRRTUG3RV9fa5mbrwPrJUhw+3tWnnlugRGBIdo5QV/whtr5Z7fPqkjpkZl3n7lUer8b5K/gb5KnA463DzTaeCT0F8RgV4A67rHq7LgLuH89OFLQ/IoMV3MILNPQQPMlMbVunv4JSPH+BxK2JJT04CAHBtynydBTp8/lfWsFs1xKfymbiJp9iu6NfjXK5ViL+Ub5grlXP6dEslEUqD9zpcwz4159BxWzKwpzxhNRqOHNnsJgsB4bkk7Hnee+GwSj1/jEJZgkz5yaFODw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PJt4Na847FfHW3pDzZ1vGDkHnDnE8RzvVwTpeb1lpIc=;
+ b=DILc+lWAOXDcVUeeczx0S7CgZqmxeVNl8OPoMPrI6c8vnV1bbn6AcGSn5JhyE9nE86Rp0WFpgzXdx3oknxzd+PtSC4H6O62j/Sf+KvPAStbCh+UyG6+6iDCQ48ndg9WtD3OGEvzZoTIB+do3gxYZlf0/6/VIn09ZBkK5yOK0zMc=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4640.eurprd04.prod.outlook.com (20.177.54.204) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2430.24; Mon, 11 Nov 2019 06:30:34 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::68e3:e1a6:78fd:7133%3]) with mapi id 15.20.2430.027; Mon, 11 Nov 2019
+ 06:30:34 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     "balbi@kernel.org" <balbi@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
+        Peter Chen <peter.chen@nxp.com>
+Subject: [PATCH v2 1/2] usb: phy: show USB charger type for user
+Thread-Topic: [PATCH v2 1/2] usb: phy: show USB charger type for user
+Thread-Index: AQHVmFmGwrIgMa+oY0OfmGbZQWkTfw==
+Date:   Mon, 11 Nov 2019 06:30:34 +0000
+Message-ID: <20191111063349.3013-1-peter.chen@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.17.1
+x-clientproxiedby: HK2PR02CA0158.apcprd02.prod.outlook.com
+ (2603:1096:201:1f::18) To VI1PR04MB5327.eurprd04.prod.outlook.com
+ (2603:10a6:803:5c::23)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 2fb6df10-f498-4b97-1ac8-08d76670a870
+x-ms-traffictypediagnostic: VI1PR04MB4640:|VI1PR04MB4640:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB464069230121889F6786995C8B740@VI1PR04MB4640.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1360;
+x-forefront-prvs: 0218A015FA
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(136003)(39860400002)(366004)(396003)(199004)(189003)(316002)(44832011)(36756003)(52116002)(476003)(5660300002)(14454004)(2351001)(2616005)(102836004)(6916009)(1076003)(6506007)(386003)(54906003)(6116002)(3846002)(71200400001)(71190400001)(99286004)(86362001)(4326008)(486006)(5640700003)(64756008)(66556008)(66476007)(6486002)(478600001)(6436002)(66946007)(186003)(6512007)(66066001)(8936002)(256004)(14444005)(66446008)(1730700003)(81156014)(81166006)(50226002)(8676002)(2906002)(26005)(305945005)(7736002)(2501003)(25786009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4640;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Mx+h+zCl2rIGXNsuEzoEh/xh5E0kw3l5Fkt9IR+HwHx4ibyoW7wiAd9A6iBP7Iuw0AkiGTyfTeXvWUWarjmLp1D3j033aQf/nxUUxPFLWbwQGY9Ffxw88z0sylIG6aIw8IIIIy8ziebsQXFY53sNFFq57VWNtnM31G0YdUEbb+tX+MGJmkK5iyPad9vnD0v6AYWjmj84prlDCYyvWt6koPPeQGaaF5XSVyQB7UzCHTUF4VxrjEYpeqw81PQxso5T/2oPQ7wOn9r2N3CDlVsMeixnb2zk8gDekvDDYh+9uH5Mp2LevwPQF9cYcj9RObsXJ3Vn2/djyS9esSIvsBnD6tIZkjdmyOZzuna/r8RSm4/4drOFDcskpNKxbk1ADd/966f7bqM0lnKT4PB0NN3+VJ7EwVA4qIFYOAqPlL8Qlq6z0SK82QvxL5ux+3Z6oELd
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82478914-2bed-d8d8-0ee2-0460081434db@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fb6df10-f498-4b97-1ac8-08d76670a870
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Nov 2019 06:30:34.6272
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: mI3lPwQCprxoY81NoAkt+1UTjBA+fB1wuNCfobjcBVrPIhi6zup2685hP0GHlZx1XP5PHoeugiIFfSP+2GYM2w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4640
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 04, 2019 at 10:07:28AM -0700, shuah wrote:
-> On 11/1/19 8:34 AM, Suwan Kim wrote:
-> > On Tue, Oct 29, 2019 at 05:07:58AM -0600, shuah wrote:
-> > > On 10/25/19 9:40 PM, Suwan Kim wrote:
-> 
-> > > under this  check?
-> > 
-> > I understood. Moving this check after sgl_alloc() does not seem to
-> > require any additional checks on nents.
-> > 
-> > But I think we need to check for the case that Smatch reported that
-> > use_sg is true and buf_len is zero.
-> > 
-> > If there is no error check and an error condition occurs, the URB
-> > will be passed to the next step without a buffer.
-> 
-> Yes buf_len needs checking.
-> 
-> > 
-> > I attached the code. If you are okay, I will send a patch.
-> > 
-> 
-> This code looks good. Couple of comments.
-> 
-> > ---
-> > diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> > index 66edfeea68fe..0b6c4736ffd6 100644
-> > --- a/drivers/usb/usbip/stub_rx.c
-> > +++ b/drivers/usb/usbip/stub_rx.c
-> > @@ -476,12 +476,39 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
-> > 
-> >          buf_len = (unsigned long long)pdu->u.cmd_submit.transfer_buffer_length;
-> > 
-> > +       if (use_sg && !buf_len) {
-> > +               dev_err(&udev->dev, "sg buffer with zero length\n");
-> > +               goto err_malloc;
-> 
-> This is fine, what happens to the  priv allocated by stub_priv_alloc()?
-> Shouldn't that be released?
+Current USB charger framework only shows charger state for user, but the
+user may also need charger type for further use, add support for it.
 
-Hi, Shuah, sorry about the late reply.
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v2:
+- Some string unalignment for usb_chger_type
+- Add ABI documentation for USB charger uevent
 
-We don't need to release stub_priv in this error path.
-If the malloc error occurs and SDEV_EVENT_ERROR_MALLOC is inserted,
-event handler is called and releases the priv list of stub_device.
-And then, event handler shutdown the connection.
-(stub_shutdown_connection)
+ drivers/usb/phy/phy.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-> Can you add a comment above stub_priv_alloc() indicating that it adds
-> SDEV_EVENT_ERROR_MALLOC?
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index 0277f62739a2..ad2554630889 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -34,6 +34,14 @@ struct phy_devm {
+ 	struct notifier_block *nb;
+ };
+=20
++static const char *const usb_chger_type[] =3D {
++	[UNKNOWN_TYPE]			=3D "USB_CHARGER_UNKNOWN_TYPE",
++	[SDP_TYPE]			=3D "USB_CHARGER_SDP_TYPE",
++	[CDP_TYPE]			=3D "USB_CHARGER_CDP_TYPE",
++	[DCP_TYPE]			=3D "USB_CHARGER_DCP_TYPE",
++	[ACA_TYPE]			=3D "USB_CHARGER_ACA_TYPE",
++};
++
+ static struct usb_phy *__usb_find_phy(struct list_head *list,
+ 	enum usb_phy_type type)
+ {
+@@ -98,7 +106,8 @@ static void usb_phy_notify_charger_work(struct work_stru=
+ct *work)
+ {
+ 	struct usb_phy *usb_phy =3D container_of(work, struct usb_phy, chg_work);
+ 	char uchger_state[50] =3D { 0 };
+-	char *envp[] =3D { uchger_state, NULL };
++	char uchger_type[50] =3D { 0 };
++	char *envp[] =3D { uchger_state, uchger_type, NULL };
+ 	unsigned int min, max;
+=20
+ 	switch (usb_phy->chg_state) {
+@@ -122,6 +131,8 @@ static void usb_phy_notify_charger_work(struct work_str=
+uct *work)
+ 		return;
+ 	}
+=20
++	snprintf(uchger_type, ARRAY_SIZE(uchger_type),
++		 "USB_CHARGER_TYPE=3D%s", usb_chger_type[usb_phy->chg_type]);
+ 	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
+ }
+=20
+--=20
+2.17.1
 
-Yes, I will.
-
-Regards,
-Suwan Kim
-
-> > +       }
-> > +
-> >          /* allocate urb transfer buffer, if needed */
-> >          if (buf_len) {
-> >                  if (use_sg) {
-> >                          sgl = sgl_alloc(buf_len, GFP_KERNEL, &nents);
-> >                          if (!sgl)
-> >                                  goto err_malloc;
-> > +
-> > +                       /* Check if the server's HCD supports SG */
-> > +                       if (!udev->bus->sg_tablesize) {
-> > +                               /*
-> > +                                * If the server's HCD doesn't support SG, break
-> > +                                * a single SG request into several URBs and map
-> > +                                * each SG list entry to corresponding URB
-> > +                                * buffer. The previously allocated SG list is
-> > +                                * stored in priv->sgl (If the server's HCD
-> > +                                * support SG, SG list is stored only in
-> > +                                * urb->sg) and it is used as an indicator that
-> > +                                * the server split single SG request into
-> > +                                * several URBs. Later, priv->sgl is used by
-> > +                                * stub_complete() and stub_send_ret_submit() to
-> > +                                * reassemble the divied URBs.
-> > +                                */
-> > +                               support_sg = 0;
-> > +                               num_urbs = nents;
-> > +                               priv->completed_urbs = 0;
-> > +                               pdu->u.cmd_submit.transfer_flags &=
-> > +                                                               ~URB_DMA_MAP_SG;
-> > +                       }
-> >                  } else {
-> >                          buffer = kzalloc(buf_len, GFP_KERNEL);
-> >                          if (!buffer)
-> > @@ -489,24 +516,6 @@ static void stub_recv_cmd_submit(struct stub_device *sdev,
-> >                  }
-> >          }
-> > 
-> > -       /* Check if the server's HCD supports SG */
-> > -       if (use_sg && !udev->bus->sg_tablesize) {
-> > -               /*
-> > -                * If the server's HCD doesn't support SG, break a single SG
-> > -                * request into several URBs and map each SG list entry to
-> > -                * corresponding URB buffer. The previously allocated SG
-> > -                * list is stored in priv->sgl (If the server's HCD support SG,
-> > -                * SG list is stored only in urb->sg) and it is used as an
-> > -                * indicator that the server split single SG request into
-> > -                * several URBs. Later, priv->sgl is used by stub_complete() and
-> > -                * stub_send_ret_submit() to reassemble the divied URBs.
-> > -                */
-> > -               support_sg = 0;
-> > -               num_urbs = nents;
-> > -               priv->completed_urbs = 0;
-> > -               pdu->u.cmd_submit.transfer_flags &= ~URB_DMA_MAP_SG;
-> > -       }
-> > -
-> >          /* allocate urb array */
-> >          priv->num_urbs = num_urbs;
-> >          priv->urbs = kmalloc_array(num_urbs, sizeof(*priv->urbs), GFP_KERNEL);
-> > 
-> 
-> thanks,
-> -- Shuah
