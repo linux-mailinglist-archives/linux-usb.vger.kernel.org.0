@@ -2,115 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B57A9F7043
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 10:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 726CBF726D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2019 11:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbfKKJQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 04:16:31 -0500
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:47113 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726768AbfKKJQa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 04:16:30 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id D10C34BB;
-        Mon, 11 Nov 2019 04:16:28 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 11 Nov 2019 04:16:29 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=767pSBRJ5shuYMbgPGJ/NNfiJLw
-        uGxahyROFUAPFCyc=; b=QL7E7y/EkKZiIaXtSdO5xlErh7sWmESOBvYArr7CVfp
-        eQzc3UERDa9ID9hdy2lFIlSKG6qxAErTf3njeANYlVShDy6UuKgA7ijVOvSazPcr
-        g3wjoXv9ZEYeqkbXvf0xTRSWRhXoa1JYrOQt2QjNXGY0UjKrpaPoCwunhc7kKjpb
-        /frGGcTi8OBPNTf8rvHE3WO9zkj3pDCRuchNBLsC22DpVKVMK6qSAL+QAJF0ZvId
-        utlEu3dYSA+MdZeJj/OfIlrYwLTu+kHwKlBxe0T/sjFJirwbVVtvZg9tz2skBtgb
-        uIRhrA1vAjindtTZDdMuPzbNunRo9atznS0r8/pQOhQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=767pSB
-        RJ5shuYMbgPGJ/NNfiJLwuGxahyROFUAPFCyc=; b=bDztKrrAvA8V+7wLK3MLVe
-        m8W/bcOJD8KxIyKB8OkXlQb0Y3RFA6OsgJx61wa5oIIG5+hDfQVPgsl7LWhb0p/+
-        CT+mslvrBRj7y02GVeqDbQxbQquw6kAu7SXKQrHIr36J5XLqTphRRnaHX2zJKrLw
-        3Du7MBVCEO7FZh58iviSUnQ9aA2j/QYYn9KDTo4a3JdK/+Z3yrKKPdciuyhU5crQ
-        3LWP5KfWvJZ4dxW4zBxAXjNSxkKfjlqolNIGNH/8oH88a1nWMsEoD8yWATMpcd8X
-        A+gaQo3VAbFQXhxOkPn9ubd42Yyj/3VBXnDOW/SoYSsYkQGIgiRVKAFeL6ey8jVw
-        ==
-X-ME-Sender: <xms:6ybJXeu0x1QJJObgsILvHQe3sOcXCVOvVrYyrT1UytIqV59h2uVRsQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedruddvjedgtdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
-    vehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:6ybJXZfJyvDt3neyds_yxO2il2OqimVf6hPU5EQM6QAV3J2PtmykCA>
-    <xmx:6ybJXXZ18rQyPBzQhbADNALFi019tBRuNUERxXgmFmzdQVC9g2o3Ww>
-    <xmx:6ybJXUVQZqXp4-UBlASkwi0BVT8d-IaH2XgMqMnhdOezzcBG0xRdbg>
-    <xmx:7CbJXe0xMG9EQdfRsehkw-9hE_MmqmKB8aUY2nxGKil6KH1KfHK83w>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0FF8F3060060;
-        Mon, 11 Nov 2019 04:16:26 -0500 (EST)
-Date:   Mon, 11 Nov 2019 10:16:24 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     "# 4 . 7" <stable@vger.kernel.org>, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-omap@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-mtd@lists.infradead.org
-Subject: Re: [BACKPORT 4.14.y 04/18] usb: dwc3: Allow disabling of
- metastability workaround
-Message-ID: <20191111091624.GA4139389@kroah.com>
-References: <20190905161759.28036-1-mathieu.poirier@linaro.org>
- <20190905161759.28036-5-mathieu.poirier@linaro.org>
- <20190910143601.GD3362@kroah.com>
- <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
+        id S1726955AbfKKKqR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 05:46:17 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:35613 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726877AbfKKKqP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 05:46:15 -0500
+Received: by mail-wr1-f66.google.com with SMTP id s5so2966106wrw.2
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 02:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=yxRDzZD0x5jD7UV3+6FgosgP6nkWD8N7G9X6bEPt3Ko=;
+        b=Tu38d6k7Kks+jbAkbbo/OmauYHik4AILQ5Y/vMGRYIxYmJXSBQUMT31+rWKpB8n5C+
+         tzW7pQ2VBLpQr7W/IRcsXy2+2ofxFz49LK4wk4TIKJwTnqGExvFmjQ6x5NwmR2GsgVE/
+         OhEKZ6KCX4TNbqXG3Zk0Y7ijGbW5Wtodg5sBNY/HxvUat1oMQlLr9n8jw60jFI3TATxV
+         KAPF7mE/JMtDxDlQOzIXD76pvW+iVkurq16aOnThc/JVc3OyfyjWso0irPU8djwKiPh+
+         nrg/srnzANwefFwC2rqwpa5/9jhzkRGsNSMNRnVae66vvTWuLmNQIc0ac7Y8RWOS0laK
+         tjUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=yxRDzZD0x5jD7UV3+6FgosgP6nkWD8N7G9X6bEPt3Ko=;
+        b=pUhArsJhpuU8Jxl9OkqzR27kYiPL7s9Z9nO4Pgdww2ZnoIVrmbMpS6ppXd7XLUnHa8
+         FN8yW/up9boPDPWKyIBpWD2PeXnmFgoiQGweaqDGACDe5dffH10Ri2/Hj7MXgJhJ3aao
+         Y7dhn0gU8W+ZGayun47QTawqwkT1hnUxt5805HM9EaePQiSxNfqGOQNo/MoGDoPat9g4
+         PzhWj4I/LjxWdmuZr6AXhFsELIkqaIxK5v9euKTdT7fNwmo/yYmm1zJYM5/ZrNBXkw4+
+         NbVShf19QzGZ5mkkCX6xDFwwd/X5Em5CvLwxWhYcK9uUn38K3HzZOIuMRgPvNRICjan3
+         gCfA==
+X-Gm-Message-State: APjAAAVf4tHkd0aJAxVYuiudH4TaOlf05YTT+93oYM1No3x9YzclU024
+        ErrVdf9c5ZXvwR1S0CW523LWQQ==
+X-Google-Smtp-Source: APXvYqxqlbmvGsUuWvUwKyWh56kj/hB+AZN1goluANcijZ7NQ7eKypL+NIUquzFnIJw7f56MBUSAmw==
+X-Received: by 2002:a5d:4585:: with SMTP id p5mr20987500wrq.134.1573469173805;
+        Mon, 11 Nov 2019 02:46:13 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id w18sm14288552wrl.2.2019.11.11.02.46.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 02:46:13 -0800 (PST)
+Message-ID: <83c6176bf08d52bf71a4635d62a1c2c4ad97a88d.camel@unipv.it>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Ming Lei <ming.lei@redhat.com>, Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Date:   Mon, 11 Nov 2019 11:46:12 +0100
+In-Reply-To: <72fc7fd1-cf86-969c-d1ed-36201cf9510a@kernel.dk>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+         <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+         <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+         <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+         <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+         <BYAPR04MB5816ECD4302AD94338CB9072E77B0@BYAPR04MB5816.namprd04.prod.outlook.com>
+         <72fc7fd1-cf86-969c-d1ed-36201cf9510a@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANLsYkwkq2fLWsGXHxr2tSBLHdfe4JXgu8ehuD1FOEQeDAPNnA@mail.gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 08:01:40AM -0600, Mathieu Poirier wrote:
-> On Tue, 10 Sep 2019 at 08:36, Greg KH <greg@kroah.com> wrote:
-> >
-> > On Thu, Sep 05, 2019 at 10:17:45AM -0600, Mathieu Poirier wrote:
-> > > From: Roger Quadros <rogerq@ti.com>
-> > >
-> > > commit 42bf02ec6e420e541af9a47437d0bdf961ca2972 upstream
-> > >
-> > > Some platforms (e.g. TI's DRA7 USB2 instance) have more trouble
-> > > with the metastability workaround as it supports only
-> > > a High-Speed PHY and the PHY can enter into an Erratic state [1]
-> > > when the controller is set in SuperSpeed mode as part of
-> > > the metastability workaround.
-> > >
-> > > This causes upto 2 seconds delay in enumeration on DRA7's USB2
-> > > instance in gadget mode.
-> > >
-> > > If these platforms can be better off without the workaround,
-> > > provide a device tree property to suggest that so the workaround
-> > > is avoided.
-> > >
-> > > [1] Device mode enumeration trace showing PHY Erratic Error.
-> > >      irq/90-dwc3-969   [000] d...    52.323145: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.560646: dwc3_event: event (00000901): Erratic Error [U0]
-> > >      irq/90-dwc3-969   [000] d...    52.798144: dwc3_event: event (00000901): Erratic Error [U0]
-> >
-> > Does the DT also need to get updated with this new id for this?  Is that
-> > a separate patch somewhere?
+Il giorno ven, 08/11/2019 alle 07.33 -0700, Jens Axboe ha scritto:
+> On 11/8/19 1:42 AM, Damien Le Moal wrote:
+> > On 2019/11/08 4:00, Andrea Vai wrote:
+> >> [Sorry for the duplicate message, it didn't reach the lists due
+> to
+> >> html formatting]
+> >> Il giorno gio 7 nov 2019 alle ore 08:54 Damien Le Moal
+> >> <Damien.LeMoal@wdc.com> ha scritto:
+> >>>
+> >>> On 2019/11/07 16:04, Andrea Vai wrote:
+> >>>> Il giorno mer, 06/11/2019 alle 22.13 +0000, Damien Le Moal ha
+> scritto:
+> >>>>>
+> >>>>>
+> >>>>> Please simply try your write tests after doing this:
+> >>>>>
+> >>>>> echo mq-deadline > /sys/block/<name of your USB
+> >>>>> disk>/queue/scheduler
+> >>>>>
+> >>>>> And confirm that mq-deadline is selected with:
+> >>>>>
+> >>>>> cat /sys/block/<name of your USB disk>/queue/scheduler
+> >>>>> [mq-deadline] kyber bfq none
+> >>>>
+> >>>> ok, which kernel should I test with this: the fresh git cloned,
+> or the
+> >>>> one just patched with Alan's patch, or doesn't matter which
+> one?
+> >>>
+> >>> Probably all of them to see if there are any differences.
+> >>
+> >> with both kernels, the output of
+> >> cat /sys/block/sdh/queue/schedule
+> >>
+> >> already contains [mq-deadline]: is it correct to assume that the
+> echo
+> >> command and the subsequent testing is useless? What to do now?
+> > 
+> > Probably, yes. Have you obtained a blktrace of the workload during
+> these
+> > tests ? Any significant difference in the IO pattern (IO size and
+> > randomness) and IO timing (any device idle time where the device
+> has no
+> > command to process) ? Asking because the problem may be above the
+> block
+> > layer, with the file system for instance.
 > 
-> The upstream commit is:
+> blktrace would indeed be super useful, especially if you can do that
+> with a kernel that's fast for you, and one with the current kernel
+> where it's slow.
 > 
-> b8c9c6fa2002 ARM: dts: dra7: Disable USB metastability workaround for USB2
+> Given that your device is sdh, you simply do:
 > 
-> Should I just send the latter or you prefer a resend with both patches?
+> # blktrace /dev/sdh
+> 
+> and then run the test, then ctrl-c the blktrace. Then do:
+> 
+> # blkparse sdh > output
+> 
+> and save that output file. Do both runs, and bzip2 them up. The
+> shorter
+> the run you can reproduce with the better, to cut down on the size
+> of
+> the traces.
 
-I've queued this up now, along with the rest of this series, thanks.
+Sorry, the next message from Ming...
 
-greg k-h
+-----
+You may get the IO pattern via the previous trace 
+https://lore.kernel.org/linux-usb/20190710024439.GA2621@ming.t460p/
+
+IMO, if it is related write order, one possibility could be that
+the queue lock is killed in .make_request_fn().
+-----
+
+...made me wonder if I should really do the blkparse trace test, or
+not. So please confirm if it's needed (testing is quite time-consuming 
+, so I'd like to do it if it's needed).
+
+Thanks, and bye,
+Andrea
+
