@@ -2,99 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0DB3F8D95
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 12:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D2B6F8EC1
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 12:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfKLLHM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 06:07:12 -0500
-Received: from mga11.intel.com ([192.55.52.93]:52058 "EHLO mga11.intel.com"
+        id S1726188AbfKLLkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 06:40:39 -0500
+Received: from mga14.intel.com ([192.55.52.115]:7040 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725887AbfKLLHL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Nov 2019 06:07:11 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1725881AbfKLLkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Nov 2019 06:40:39 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Nov 2019 03:07:10 -0800
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Nov 2019 03:40:39 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,296,1569308400"; 
-   d="scan'208";a="214057935"
-Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 12 Nov 2019 03:07:08 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Nov 2019 13:07:07 +0200
-Date:   Tue, 12 Nov 2019 13:07:07 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Ajay Gupta <ajayg@nvidia.com>
+   d="scan'208";a="229348095"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Nov 2019 03:40:38 -0800
+Subject: Re: [PATCH] xhci-pci: Allow host runtime PM as default also for Intel
+ Ice Lake xHCI
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 00/18] usb: typec: API improvements
-Message-ID: <20191112110707.GB4013@kuha.fi.intel.com>
-References: <20191021112524.79550-1-heikki.krogerus@linux.intel.com>
- <BYAPR12MB27275D13BB62F9120EBB9054DC690@BYAPR12MB2727.namprd12.prod.outlook.com>
- <20191022074110.GD28049@kuha.fi.intel.com>
- <BYAPR12MB2727707263883A987D12D39FDC680@BYAPR12MB2727.namprd12.prod.outlook.com>
- <20191023080603.GA8828@kuha.fi.intel.com>
- <BYAPR12MB27273BEE5E6EC8F290BF8CFFDC6B0@BYAPR12MB2727.namprd12.prod.outlook.com>
- <BYAPR12MB2727DC214FE8D4AA1CC50E83DC740@BYAPR12MB2727.namprd12.prod.outlook.com>
- <20191112110030.GA4013@kuha.fi.intel.com>
+        linux-usb@vger.kernel.org
+References: <20191112100817.79783-1-mika.westerberg@linux.intel.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <1014eec1-111a-d8a3-7089-060fa2e66cf4@linux.intel.com>
+Date:   Tue, 12 Nov 2019 13:42:53 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191112110030.GA4013@kuha.fi.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191112100817.79783-1-mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 01:00:34PM +0200, Heikki Krogerus wrote:
-> Hi Ajay,
+On 12.11.2019 12.08, Mika Westerberg wrote:
+> Intel Ice Lake has two xHCI controllers one on PCH and the other as part
+> of the CPU itself. The latter is also part of the so called Type C
+> Subsystem (TCSS) sharing ACPI power resources with the PCIe root ports
+> and the Thunderbolt controllers. In order to put the whole TCSS block
+> into D3cold the xHCI needs to be runtime suspended as well when idle.
 > 
-> On Mon, Nov 11, 2019 at 04:51:05PM +0000, Ajay Gupta wrote:
-> > Hi Heikki,
-> > > > > > > > The first patches in this series (patches 1-8) introduce a
-> > > > > > > > small change to the USB Type-C Connector Class API. Guenter
-> > > > > > > > was kind enough to go over those already.
-> > > > > > > >
-> > > > > > > > Patches 10-15 improve the ucsi driver API by introducing more
-> > > > > > > > traditional read and write routines, and the rest is more
-> > > > > > > > generic optimisations and improvements to the ucsi drivers.
-> > > > > > > >
-> > > > > > > > Let me know if there is anything you want to be changed.
-> > > > > > > This patch set is not taking care of issues discussed at following thread.
-> > > > > > > https://marc.info/?l=linux-usb&m=156995500624107&w=2
-> > > > > > > https://marc.info/?l=linux-usb&m=157012261301682&w=2
-> > > > > > >
-> > > > > > > We need fixes for above issues so that we can easily manage ppms
-> > > > > > > which has multiple DP altmodes as discussed in below link.
-> > > > > > > https://marc.info/?l=linux-usb&m=156778906010780&w=2
-> > > > > >
-> > > > > > The goal of this series is not to solve that "issue".
-> > > > > >
-> > > > > > This series is the base work that really has to be done in any
-> > > > > > case before we add any kind of solution for the multi DP alt mode case.
-> > > > > > Rest assured that we will have support for that soon enough, but
-> > > > > > let's just move one step at a time.
-> > Since this series is gone so what is the plan for updated changes as
-> > discussed at
-> > https://marc.info/?l=linux-usb&m=157079026214073&w=2 
-> > 
-> > This is needed to support ppms which has multiple DP altmodes as 
-> > discussed at
-> > https://marc.info/?l=linux-usb&m=156778906010780&w=2 
+> For this reason allow runtime PM as default for Ice Lake TCSS xHCI
+> controller.
 > 
-> Give me a few more weeks. I'm sorry for the delay, but I have to
-> finish some other tasks. Can you work on this in the mean time?
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>   drivers/usb/host/xhci-pci.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 1e0236e90687..a0025d23b257 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -48,6 +48,7 @@
+>   #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI		0x15e9
+>   #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
+>   #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
+> +#define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
+>   
+>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+>   #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+> @@ -212,7 +213,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>   	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI ||
+>   	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI ||
+>   	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
+> -	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI))
+> +	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+> +	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI))
+>   		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+>   
+>   	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+> 
 
-Actually, if you can prepare the proposal you had earlier, I think we
-can just go ahead with it now. If I have some "better" idea how to
-handle the multi-DP alt modes, then I can prepare a separate proposal
-for it after we have your initial solution. I do have an idea for a
-solution, but I don't want to block this any longer.
+Thanks, adding to queue
 
-
-thanks,
-
--- 
-heikki
+-Mathias
