@@ -2,155 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FB32F8BDF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 10:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4935EF8BE3
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 10:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbfKLJdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 04:33:37 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:34181 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725835AbfKLJdh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 04:33:37 -0500
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iUSYJ-0008Gs-D8; Tue, 12 Nov 2019 10:33:35 +0100
-Received: from mol by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iUSYJ-0003NS-2z; Tue, 12 Nov 2019 10:33:35 +0100
-From:   Michael Olbrich <m.olbrich@pengutronix.de>
-To:     linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        Michael Olbrich <m.olbrich@pengutronix.de>
-Subject: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
-Date:   Tue, 12 Nov 2019 10:33:18 +0100
-Message-Id: <20191112093318.12936-1-m.olbrich@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        id S1727439AbfKLJeb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 04:34:31 -0500
+Received: from mga18.intel.com ([134.134.136.126]:11236 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726986AbfKLJea (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Nov 2019 04:34:30 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Nov 2019 01:34:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,295,1569308400"; 
+   d="scan'208";a="229296073"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 12 Nov 2019 01:34:28 -0800
+Subject: Re: xhci-ring: "needs XHCI_TRUST_TX_LENGTH quirk" in kernel log
+To:     Eli Billauer <eli.billauer@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org
+References: <5DCA343A.4000304@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <553d3af1-dcd6-0db2-094d-64e7aa749e23@linux.intel.com>
+Date:   Tue, 12 Nov 2019 11:36:43 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <5DCA343A.4000304@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-'delayed_status' and 'deactivations' are used completely independent but
-they share the same spinlock. This can result in spinlock recursion:
+On 12.11.2019 6.25, Eli Billauer wrote:
+> Hello,
+> 
+> Connecting a custom designed (on FPGA) USB 3.0 device to a Renesas uPD720202 (1912:0015) and kernel v5.3.0, I get a lot of messages in the kernel log, while transmitting data at a high bandwidth through a BULK IN endpoint:
+> 
+> handle_tx_event: 36590 callbacks suppressed
+> xhci_hcd 0000:03:00.0: WARN Successful completion on short TX for slot 1 ep 18: needs XHCI_TRUST_TX_LENGTH quirk?
+> (last message repeated several times)
+> 
+> The driver in charge, as reported by lspci, is xhci_hcd.
+> 
+> Probably relevant details:
+> 
+> * The buffer size of the USB transactions is 32 kiB and up (with libusb). With e.g. 16 kiB buffers these log messages don't appear.
+> * The device produces short packets occasionally. When only full-length packets are sent, these log messages don't appear.
+> * Other than these log messages, everything works fine. In particular, there are no errors in the data exchange in either situation.
+> * This problem doesn't happen when running the same test on an Intel B150 chipset’s USB 3.0 xHCI controller (8086:a12f).
+> 
+> I don't really know what this warning means, but this whole thing kind-of reminds the "WARN Event TRB for slot x ep y with no TDs queued" issue that was solved recently. Just a wild guess.
+> 
 
-BUG: spinlock recursion on CPU#1, uvc-gadget/322
- lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .owner_cpu: 1
-CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-20190916-1+ #55
-Hardware name: XXXXX (DT)
-Call trace:
- dump_backtrace+0x0/0x178
- show_stack+0x24/0x30
- dump_stack+0xc0/0x104
- spin_dump+0x90/0xa0
- do_raw_spin_lock+0xd8/0x108
- _raw_spin_lock_irqsave+0x40/0x50
- composite_disconnect+0x2c/0x80
- usb_gadget_disconnect+0x84/0x150
- usb_gadget_deactivate+0x64/0x120
- usb_function_deactivate+0x70/0x80
- uvc_function_disconnect+0x20/0x58
- uvc_v4l2_release+0x34/0x90
- v4l2_release+0xbc/0xf0
- __fput+0xb0/0x218
- ____fput+0x20/0x30
- task_work_run+0xa0/0xd0
- do_notify_resume+0x2f4/0x340
- work_pending+0x8/0x14
+It just means that we got an event from the xHC host saying the transfer was
+completed with completion code "Success" even if we didn't get as many bytes as was requested.
+Driver is expecting a completion code of Short Packet.
 
-Fix this by using separate spinlocks.
+> Any idea how this can be fixed?
+> 
 
-Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
----
- drivers/usb/gadget/composite.c | 9 +++++----
- drivers/usb/gadget/configfs.c  | 1 +
- include/linux/usb/composite.h  | 4 +++-
- 3 files changed, 9 insertions(+), 5 deletions(-)
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 1e0236e90687..687182afc59b 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -228,6 +228,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+         }
+         if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
+             pdev->device == 0x0015) {
++               xhci->quirks |= XHCI_TRUST_TX_LENGTH;
+                 xhci->quirks |= XHCI_RESET_ON_RESUME;
+                 xhci->quirks |= XHCI_ZERO_64B_REGS;
+         }
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index 76883ff4f5bb..35c792e5b408 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -346,14 +346,14 @@ int usb_function_deactivate(struct usb_function *function)
- 	unsigned long			flags;
- 	int				status = 0;
- 
--	spin_lock_irqsave(&cdev->lock, flags);
-+	spin_lock_irqsave(&cdev->deactivations_lock, flags);
- 
- 	if (cdev->deactivations == 0)
- 		status = usb_gadget_deactivate(cdev->gadget);
- 	if (status == 0)
- 		cdev->deactivations++;
- 
--	spin_unlock_irqrestore(&cdev->lock, flags);
-+	spin_unlock_irqrestore(&cdev->deactivations_lock, flags);
- 	return status;
- }
- EXPORT_SYMBOL_GPL(usb_function_deactivate);
-@@ -374,7 +374,7 @@ int usb_function_activate(struct usb_function *function)
- 	unsigned long			flags;
- 	int				status = 0;
- 
--	spin_lock_irqsave(&cdev->lock, flags);
-+	spin_lock_irqsave(&cdev->deactivations_lock, flags);
- 
- 	if (WARN_ON(cdev->deactivations == 0))
- 		status = -EINVAL;
-@@ -384,7 +384,7 @@ int usb_function_activate(struct usb_function *function)
- 			status = usb_gadget_activate(cdev->gadget);
- 	}
- 
--	spin_unlock_irqrestore(&cdev->lock, flags);
-+	spin_unlock_irqrestore(&cdev->deactivations_lock, flags);
- 	return status;
- }
- EXPORT_SYMBOL_GPL(usb_function_activate);
-@@ -2196,6 +2196,7 @@ static int composite_bind(struct usb_gadget *gadget,
- 		return status;
- 
- 	spin_lock_init(&cdev->lock);
-+	spin_lock_init(&cdev->deactivations_lock);
- 	cdev->gadget = gadget;
- 	set_gadget_data(gadget, cdev);
- 	INIT_LIST_HEAD(&cdev->configs);
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 025129942894..45f717fcdb89 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -521,6 +521,7 @@ static const struct config_item_type gadget_root_type = {
- static void composite_init_dev(struct usb_composite_dev *cdev)
- {
- 	spin_lock_init(&cdev->lock);
-+	spin_lock_init(&cdev->deactivations_lock);
- 	INIT_LIST_HEAD(&cdev->configs);
- 	INIT_LIST_HEAD(&cdev->gstrings);
- }
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 8675e145ea8b..86eb6f2c03ac 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -505,8 +505,10 @@ struct usb_composite_dev {
- 	 */
- 	int				delayed_status;
- 
--	/* protects deactivations and delayed_status counts*/
-+	/* protects delayed_status counts*/
- 	spinlock_t			lock;
-+	/* protects deactivations counts*/
-+	spinlock_t			deactivations_lock;
- 
- 	/* public: */
- 	unsigned int			setup_pending:1;
--- 
-2.20.1
+You could give it a try and see if everything works normally.
 
+But this quirk is now quite common.
+Could make sense to get rid of it completely and just handle this case as default driver behavior.
+
+-Mathias
