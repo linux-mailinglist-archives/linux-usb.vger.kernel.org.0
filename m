@@ -2,118 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB93BF92DE
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 15:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6775F9433
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 16:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726923AbfKLOlM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 09:41:12 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:34901 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbfKLOlL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 09:41:11 -0500
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iUXLy-00032n-JI; Tue, 12 Nov 2019 15:41:10 +0100
-Received: from mol by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iUXLw-0005WA-PK; Tue, 12 Nov 2019 15:41:08 +0100
-Date:   Tue, 12 Nov 2019 15:41:08 +0100
-From:   Michael Olbrich <m.olbrich@pengutronix.de>
-To:     Alexandru Ardelean <alexandru.ardelean@analog.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org,
-        bigeasy@linutronix.de, Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH] usb: dwc3: gadget: Handle dequeuing of non queued URB
- gracefully
-Message-ID: <20191112144108.GA1859@pengutronix.de>
-Mail-Followup-To: Alexandru Ardelean <alexandru.ardelean@analog.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        balbi@kernel.org, gregkh@linuxfoundation.org, bigeasy@linutronix.de,
-        Lars-Peter Clausen <lars@metafoo.de>
-References: <20191106144553.16956-1-alexandru.ardelean@analog.com>
+        id S1727344AbfKLP11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 10:27:27 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:48206 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725954AbfKLP10 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 10:27:26 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xACFQb3f062774;
+        Tue, 12 Nov 2019 09:26:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573572397;
+        bh=rMWe4kuCSfHHy9n9O/rcq81d4pIroGuMrSEkGSdS+F4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=qJC2c4gGQYe+XtOFSW8zlZ6fbeLzlhIG1/N+9RR3wjmUmTZcQjDPq3tizAB62H9Wf
+         ykV72RpP4wOCZ6+JGW04RXYY12/H1BdOJBATx7dzGQ23h9ee8UEBaXfiimW+PtPDcM
+         HSUerMrRmbZG0F0zAhB+t6ZLeVTMnjlwz+S4Vj3o=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xACFQbnS126537;
+        Tue, 12 Nov 2019 09:26:37 -0600
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 12
+ Nov 2019 09:26:20 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 12 Nov 2019 09:26:20 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xACFQbDL011087;
+        Tue, 12 Nov 2019 09:26:37 -0600
+Date:   Tue, 12 Nov 2019 09:28:57 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v2 05/13] usb: musb: create debugfs directory under usb
+ root
+Message-ID: <20191112152857.GA5853@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1573541519-28488-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1573541519-28488-5-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20191106144553.16956-1-alexandru.ardelean@analog.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 15:39:32 up 75 days,  2:53, 130 users,  load average: 3.78, 4.01,
- 2.72
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <1573541519-28488-5-git-send-email-chunfeng.yun@mediatek.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 06, 2019 at 04:45:53PM +0200, Alexandru Ardelean wrote:
-> From: Lars-Peter Clausen <lars@metafoo.de>
-> 
-> Trying to dequeue and URB that is currently not queued should be a no-op
-> and be handled gracefully.
-> 
-> Use the list field of the URB to indicate whether it is queued or not by
-> setting it to the empty list when it is not queued.
-> 
-> Handling this gracefully allows for race condition free synchronization
-> between the complete callback being called to to a completed transfer and
-> trying to call usb_ep_dequeue() at the same time.
-> 
-> Signed-off-by: Lars-Peter Clausen <lars@metafoo.de>
-> Signed-off-by: Alexandru Ardelean <alexandru.ardelean@analog.com>
+Hi,
 
-Thanks, no more "dwc3 fe200000.usb: request 00000000cdd42e4a was not queued
-to ep2in" messages with this patch applied.
+On Tue, Nov 12, 2019 at 02:51:51PM +0800, Chunfeng Yun wrote:
+> Now the USB gadget subsystem can use the USB debugfs root directory,
+> so move musb's directory from the root of the debugfs filesystem into
+> the root of usb
 
-Tested-by: Michael Olbrich <m.olbrich@pengutronix.de>
+My opinion is this move is unnecessary. I breaks existing debug tools or
+documentation which is already published on Internet. 
 
-> ---
->  drivers/usb/dwc3/gadget.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index a9aba716bf80..b500ec6b0aa8 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -174,7 +174,7 @@ static void dwc3_gadget_del_and_unmap_request(struct dwc3_ep *dep,
->  {
->  	struct dwc3			*dwc = dep->dwc;
->  
-> -	list_del(&req->list);
-> +	list_del_init(&req->list);
->  	req->remaining = 0;
->  	req->needs_extra_trb = false;
->  
-> @@ -844,6 +844,7 @@ static struct usb_request *dwc3_gadget_ep_alloc_request(struct usb_ep *ep,
->  	req->epnum	= dep->number;
->  	req->dep	= dep;
->  	req->status	= DWC3_REQUEST_STATUS_UNKNOWN;
-> +	INIT_LIST_HEAD(&req->list);
->  
->  	trace_dwc3_alloc_request(req);
->  
-> @@ -1540,6 +1541,10 @@ static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
->  
->  	spin_lock_irqsave(&dwc->lock, flags);
->  
-> +	/* Not queued, nothing to do */
-> +	if (list_empty(&req->list))
-> +		goto out0;
-> +
->  	list_for_each_entry(r, &dep->pending_list, list) {
->  		if (r == req)
->  			break;
+-Bin.
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
