@@ -2,42 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F71F9808
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 19:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFD6F9965
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 20:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727276AbfKLSAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 13:00:24 -0500
-Received: from [211.53.128.215] ([211.53.128.215]:35512 "EHLO MAIL.isd.co.kr"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727216AbfKLSAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Nov 2019 13:00:23 -0500
-Received: from 192.168.1.163 (217.217.179.17) by MAIL.isd.co.kr (10.10.10.22)
- with Microsoft SMTP Server id 14.3.123.3; Wed, 13 Nov 2019 02:57:40 +0900
-Date:   Tue, 12 Nov 2019 18:57:42 +0100
-From:   Peter Wong <choimj@isd.co.kr>
-Reply-To: Peter Wong <pw178484@gmail.com>
-To:     <linux-usb@vger.kernel.org>
-Message-ID: <9266600.155156.1573581464203.JavaMail.cash@webmail.isd.co.kr>
-Subject: Investment opportunity
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [217.217.179.17]
+        id S1727041AbfKLTK6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 12 Nov 2019 14:10:58 -0500
+Received: from server1.fuixiutex.com ([62.210.76.37]:60944 "EHLO
+        server1.fuixiutex.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726980AbfKLTK6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 14:10:58 -0500
+X-Greylist: delayed 1332 seconds by postgrey-1.27 at vger.kernel.org; Tue, 12 Nov 2019 14:10:58 EST
+Received: from [192.168.1.2] (unknown [31.209.108.68])
+        by server1.fuixiutex.com (Postfix) with ESMTPA id 4A52A10D5026
+        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2019 19:48:41 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 server1.fuixiutex.com 4A52A10D5026
+Message-Id: <FHCJ1EBX-YY2D-ZU2K-YQ42-0NPHVDQVAL22@gmail.com>
+Mime-Version: 1.0
+From:   william yun <williamyun6@gmail.com>
+To:     "linux-usb" <linux-usb@vger.kernel.org>
+Subject: Hallo
+Date:   Tue, 12 Nov 2019 20:48:43 +0200
+X-Bounce-Tracking-Info: <bGludXgtdXNiCQkJbGludXgtdXNiQHZnZXIua2VybmVsLm9yZwlIYWxsbwkxMAkJMTM2MjgwCWJvdW5jZQlubwlubw==>
+Content-type: text/plain; charset=iso-8859-1; format=flowed
+Content-transfer-encoding: 8BIT
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings,
+Ich habe ein Geschäft von 24,5 Mio. USD für Sie. Bei Interesse antworten Sie bitte für weitere Details.
 
-Find attached email very confidential. reply for more details
+Dankeschön,
 
-Thanks.
-Peter Wong
+Grüße,
 
+Wilhelm.
 
-
-
-----------------------------------------------------
-This email was sent by the shareware version of Postman Professional.
 
