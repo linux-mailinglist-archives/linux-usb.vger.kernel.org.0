@@ -2,176 +2,359 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9319BF9A2C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 21:03:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 200B8F9AE8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 21:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbfKLUDL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 15:03:11 -0500
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:38388 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726008AbfKLUDL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 15:03:11 -0500
-Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 1B479C03A5;
-        Tue, 12 Nov 2019 20:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1573588991; bh=zK9Q6HFL83ySXBTsD3GpXA1NE5l0MqCWkh5WT8iAP6o=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=j4QoyoAzcjou+RlQYLUWwG7FHnPxwOVsapAxKsDMTOUNepFAfLL0R2BTXxnHO+DlW
-         KYylu4CCMextZ7Rg4+HjOrrxmCKUT2yGeO9BD3+HeFe4bGY2+gJM9ZliUg9YbMORuQ
-         bWDyUiiPBJQ8Z8oYTWIMBxTSzpe5wvkky4WUD+G9vBS+e9amcxNUpFwiXs8atVQ+ma
-         oi3340goUwwvg/ubj6xO7vXdRU9L+PsFV0cy2a9NXBLwPYuMIcE63BNXjMKeNdlDH5
-         KD0zJwqbyK7tjammo896IpntsbhlYEUqOXuDudDFIzPTKJ4Duhzpg76C7jrH9fnjXj
-         devDLAnta2yTQ==
-Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 2A7DFA0066;
-        Tue, 12 Nov 2019 20:03:08 +0000 (UTC)
-Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
- US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 12 Nov 2019 12:03:08 -0800
-Received: from NAM02-CY1-obe.outbound.protection.outlook.com (10.13.134.195)
- by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
- 14.3.408.0; Tue, 12 Nov 2019 12:03:08 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VEDGAgpM2xau8uNlQ0YGKWYwYmCFjVPSy5LMem3C3w38YuxFdhMijsghL1nvwOHYW+8LpgrdzR2U61eV2aPVB5SZnBpnz5XGoc47EDjZOUK9UpnFTI7mzTgdkRVsaxRvUHirgvT/h8qeDaTAbRTOlkyMkbeBFaIUAZNvA5EzqaXMd5DduOzUj3yR2lcE6fopco0sCKIlijShs/8vcbdnRqkU4RpmGt7p7yD8xCFSyNE+sffv2M9eIS9h+pxgQC3q33dTv3dyE8YrNHwcKrqSlXuwSC/YUyoH3i8n7YCxq0PGVLJOaq83e6C28ZOOGXe2RJt9/jKW5amwV4IQrOilkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zK9Q6HFL83ySXBTsD3GpXA1NE5l0MqCWkh5WT8iAP6o=;
- b=l58tYD4pGG0/3NqztBRAsJJR8xuZyXtPA94BXFD7p9e78Z15gnUQoxOqUz+dR0xHLEJ/Fv4u4r1gm7lMXbFHd/e+7VppmDsxO087RiTFwg2vDn1HANZk4P5+Wi4SC9cKZxly4pVp33jnpGxpOW8KgNDl4TFa9MSm2bWFL3r5crkGg9FMfqbWSvz8AOgltiT/7YqWp5TvVI8YTrSpNR251H1bRunPLMn2BXQGRS11tULfR265icuPkkSXatUPw0ytlRTQvB5wdHEHOcavn8+KGBlBeVwEGxbmd7FWlkf/4cxnNaPi9AjoCo4O2xOwHYfyglPCSBE8nOitQnlFXUZjgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zK9Q6HFL83ySXBTsD3GpXA1NE5l0MqCWkh5WT8iAP6o=;
- b=PQkRx3mXba1VUu07emqgr31+j0ZKEmj2GJRPsYM3cKEe+5om8eiEVCziBI/xlNg0+FjPzfAu2R8YBILlYVqbIuj6RfhpG/ftGZk9jdNCHNaZniEyZ8SSC/IN0QcYEf82KOWCWs8XK6KfR4Q8EG43USeyNA4uymdFHIPKTOmZW20=
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com (10.172.78.22) by
- CY4PR1201MB0039.namprd12.prod.outlook.com (10.172.79.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.24; Tue, 12 Nov 2019 20:03:06 +0000
-Received: from CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::cdbe:cf8c:dfb7:68d3]) by CY4PR1201MB0037.namprd12.prod.outlook.com
- ([fe80::cdbe:cf8c:dfb7:68d3%4]) with mapi id 15.20.2430.027; Tue, 12 Nov 2019
- 20:03:06 +0000
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To:     Jun Li <lijun.kernel@gmail.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Tim <elatllat@gmail.com>, Felipe Balbi <balbi@kernel.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-Thread-Topic: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-Thread-Index: AQHVgpo3wnUWK/PjlkCI40UJSqKuHadotvaAgByUcgCAABZzgIACCBMAgAAfDQCAAJo0gA==
-Date:   Tue, 12 Nov 2019 20:03:05 +0000
-Message-ID: <45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com>
-References: <20191014141718.22603-1-narmstrong@baylibre.com>
- <20191014141718.22603-2-narmstrong@baylibre.com>
- <20191023201141.GA21235@bogus>
- <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com>
- <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
- <c32007f5-88b9-45c5-b542-b1dc4dbc76ea@baylibre.com>
- <CAKgpwJVHF6Ytdt9kq5SwiixFDLym_UPG51aXag1nVVay0pzofQ@mail.gmail.com>
-In-Reply-To: <CAKgpwJVHF6Ytdt9kq5SwiixFDLym_UPG51aXag1nVVay0pzofQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=thinhn@synopsys.com; 
-x-originating-ip: [149.117.75.13]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: afcbffa1-8383-4206-e196-08d767ab5517
-x-ms-traffictypediagnostic: CY4PR1201MB0039:
-x-ms-exchange-purlcount: 1
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <CY4PR1201MB00399323EE8E606B071EB37EAA770@CY4PR1201MB0039.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 021975AE46
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(136003)(39860400002)(376002)(366004)(189003)(199004)(66946007)(66476007)(6246003)(8936002)(2906002)(81156014)(229853002)(6486002)(15650500001)(316002)(81166006)(99286004)(66446008)(64756008)(76116006)(91956017)(6116002)(6436002)(110136005)(54906003)(3846002)(66556008)(8676002)(5660300002)(66066001)(966005)(31686004)(6636002)(478600001)(14454004)(53546011)(4326008)(76176011)(71190400001)(6512007)(71200400001)(14444005)(256004)(25786009)(86362001)(11346002)(446003)(6306002)(36756003)(31696002)(476003)(486006)(186003)(7736002)(102836004)(26005)(2616005)(6506007)(305945005)(7416002);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR1201MB0039;H:CY4PR1201MB0037.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: synopsys.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: /TQJ/nyKj5OX+K3ZJ6mXNqadk/4w9oA7I8cpmOwTur95j0QJ8OLYouKnq1vL1drXFxW24fj7Hvn38qG5GSnOozhck8R+3hn4qpvu8yCOvElv75A2f3tUJhN3NO14xwMAO1qNm5iqbyOk+qSCbv619D5KNGunvlk0D5rGqM+VhCVaJQPjujyVwJn+DeMV8qNgFdSjUqUDc54fMfhay3z1bBhy2cYcW//ZMk3QyKx4odYuImngHY6EzNG/wXC6Eube/NO1qtHny4HCyBX8HFKNFIwgW3ehvEm0ZvuyPOfOnuaOj4LECJ1LcKox4HYItOerGDkSQdYWXLM7h2W5PXQDhq1OUm6Cf889qPgz9LANPc0RPerToQUZBl6zMzEl0SCP2bZynqMbTZ6zZfgVV+PDcQFeXAlFdsFG+UumM1UcgbfO9AOX3As17NyJ3XKTNewfGovG0rDMAxzXBtteyU0zZiE1mZnutRafF6iGlp+FR+I=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0AB26A2159416647A439552D6B4ADD6C@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1726912AbfKLUlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 15:41:35 -0500
+Received: from mga01.intel.com ([192.55.52.88]:18758 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726376AbfKLUlf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Nov 2019 15:41:35 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Nov 2019 12:41:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,297,1569308400"; 
+   d="gz'50?scan'50,208,50";a="216155355"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 Nov 2019 12:41:30 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1iUcyg-0007GL-AG; Wed, 13 Nov 2019 04:41:30 +0800
+Date:   Wed, 13 Nov 2019 04:41:12 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     Michael Olbrich <m.olbrich@pengutronix.de>
+Cc:     kbuild-all@lists.01.org, linux-usb@vger.kernel.org,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        Michael Olbrich <m.olbrich@pengutronix.de>
+Subject: Re: [PATCH 1/2] usb: dwc3: gadget: make starting isoc transfers more
+ robust
+Message-ID: <201911130443.5tw3QYyL%lkp@intel.com>
+References: <20191111152645.13792-2-m.olbrich@pengutronix.de>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: afcbffa1-8383-4206-e196-08d767ab5517
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Nov 2019 20:03:05.8772
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gxiSWHRY+gh67gUL0CtW5EG7OCWOunjzU+ArqSgQVzJfgG83qmrwD2dafGRxmUhMNDOZeoLNtOlWrjXtBJ25tQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0039
-X-OriginatorOrg: synopsys.com
+Content-Type: multipart/mixed; boundary="6nfbmd6w2qko774b"
+Content-Disposition: inline
+In-Reply-To: <20191111152645.13792-2-m.olbrich@pengutronix.de>
+X-Patchwork-Hint: ignore
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGksDQoNCkp1biBMaSB3cm90ZToNCj4gVGhpcyBidWcgZXhpc3RzIG9uIGFsbCBjdXJyZW50IHZl
-cnNpb25zIHBlciBpbmZvcm1hdGlvbiBJIGdvdCBmcm9tIFN5bm9wc3lzLg0KPiArIFRoaW5oIE5n
-dXllbiA8dGhpbmhuQHN5bm9wc3lzLmNvbT4uDQo+DQo+IExpIEp1bg0KDQpUaGUgR1VDVEwxLlBB
-UktNT0RFX0RJU0FCTEVfU1MgaXMgb25seSBhdmFpbGFibGUgaW4gZHdjX3VzYjMgY29udHJvbGxl
-ciANCnJ1bm5pbmcgaW4gaG9zdCBtb2RlLiBUaGlzIHNob3VsZCBub3QgYmUgc2V0IGZvciBvdGhl
-ciBJUHMuDQoNClRoaXMgY2FuIGJlIGRpc2FibGVkIGJ5IGRlZmF1bHQgYmFzZWQgb24gSVAsIGJ1
-dCBJIHJlY29tbWVuZCB0byBoYXZlIGEgDQpwcm9wZXJ0eSB0byBlbmFibGUgdGhpcyBmZWF0dXJl
-IGZvciBkZXZpY2VzIHRoYXQgbmVlZCB0aGlzLg0KDQoNCj4NCj4gTmVpbCBBcm1zdHJvbmcgPG5h
-cm1zdHJvbmdAYmF5bGlicmUuY29tPiDkuo4yMDE55bm0MTHmnIgxMuaXpeWRqOS6jCDkuIvljYg1
-OjAw5YaZ6YGT77yaDQo+PiBIaSBMaSwNCj4+DQo+PiBPbiAxMS8xMS8yMDE5IDAyOjU4LCBKdW4g
-TGkgd3JvdGU6DQo+Pj4gSGkgTmVpbA0KPj4+DQo+Pj4gQXMgSSBnb3QgdGhlIGluZm9ybWF0aW9u
-IGZyb20gU3lub3BzeXMsIHRoaXMgYnVnIGV4aXN0cyBvbiBjdXJyZW50IElQIHZlcnNpb25zLA0K
-Pj4+IGFuZCBwZXIgbXkgdGVzdHMgd2l0aCBleHRlcm5hbCBVU0IzIGh1YiArIDIgU3VwZXIgc3Bl
-ZWQgdWRpc2tzIG9uIGRhdGENCj4+PiByZWFkIGJ5IGRkLCBJIGNhbiByZXByb2R1Y2UgdGhpcyBp
-c3N1ZSB3aXRoIGRpZmZlcmVudCBrZXJuZWwgdmVyc2lvbnMsIGFsc28gSQ0KPj4+IGRpZG4ndCBz
-ZWUgb2J2aW91cyBwZXJmb3JtYW5jZSBkcm9wIGJ5IGRkIHRlc3RzIGFmdGVyIGRpc2FibGUgcGFy
-ayBtb2RlIGZvcg0KPj4+IHN1cGVyIHNwZWVkLCBzbyBzaG91bGQgd2UganVzdCBkaXNhYmxlIGl0
-IGJ5IGRlZmF1bHQgc28gbm8gbmVlZCBhIHF1aXJrPw0KPj4gSSBkb24ndCBoYXZlIGFueSBvcGlu
-aW9uIG9uIHRoaXMsIEkgdGhpbmsgdGhlIFVTQiAmIERXQzMgbWFpbnRhaW5lcnMgc2hvdWxkIGRl
-Y2lkZQ0KPj4gaG93IHRvIGhhbmRsZSB0aGlzLg0KPj4NCj4+IERpZCBTeW5vcHN5cyBzcGVjaWZp
-ZWQgYSByYW5nZSBvZiBhZmZlY3RlZCBJUCB2ZXJzaW9uID8NCj4+DQo+PiBOZWlsDQo+Pg0KPj4+
-IExpIEp1bg0KPj4+DQo+Pj4gVGltIDxlbGF0bGxhdEBnbWFpbC5jb20+IOS6jjIwMTnlubQxMeac
-iDEx5pel5ZGo5LiAIOS4iuWNiDg6NDLlhpnpgZPvvJoNCj4+Pj4gVGhhbmtzIGZvciB3b3JraW5n
-IG9uIHRoaXMgTmVpbCwNCj4+Pj4gSXMgdGhlcmUgc29tZXRoaW5nIHRoYXQgbmVlZHMgZG9pbmcg
-Zm9yIHRoaXMgcGF0Y2ggdG8gbWFrZSBpdCBpbnRvIDUuMyBvciA1LjQ/DQo+Pj4+IEFzIHByZXZp
-b3VzbHkgbWVudGlvbmVkIHRoZSBwYXRjaCBzZXQgZml4ZXMgdGhlIGlzc3VlIG9uIGFmZmVjdGVk
-IGhhcmR3YXJlOw0KPj4+PiAgICAgIGh0dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92
-Mi91cmw/dT1odHRwcy0zQV9fcGF0Y2h3b3JrLmtlcm5lbC5vcmdfcGF0Y2hfMTExNjQ1MTVfJmQ9
-RHdJRmFRJmM9RFBMNl9YXzZKa1hGeDdBWFdxQjB0ZyZyPXU5RllveEt0eWhqckdGY3lpeEZZcVRq
-dzFaWDBWc0cyZDhGQ216a1RZLXcmbT1CQ2ZSSE05ZTg2MDM5U3UwLVF2S195VWpObllybmxfQmN2
-eFR0Vml5cFQ4JnM9YVY1dTd1eE5YNm9UTEIzXy1xTnV6ck52eWlxeF9yUEM2UDlUTXFHLUxORSZl
-PQ0KPj4+Pg0KPj4+Pg0KPj4+Pg0KPj4+PiBPbiBXZWQsIE9jdCAyMywgMjAxOSBhdCA0OjExIFBN
-IFJvYiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+IHdyb3RlOg0KPj4+Pj4gT24gTW9uLCBPY3Qg
-MTQsIDIwMTkgYXQgMDQ6MTc6MTZQTSArMDIwMCwgTmVpbCBBcm1zdHJvbmcgd3JvdGU6DQo+Pj4+
-Pj4gVGhpcyBwYXRjaCB1cGRhdGVzIHRoZSBkb2N1bWVudGF0aW9uIHdpdGggdGhlIGluZm9ybWF0
-aW9uIHJlbGF0ZWQNCj4+Pj4+PiB0byB0aGUgcXVpcmtzIHRoYXQgbmVlZHMgdG8gYmUgYWRkZWQg
-Zm9yIGRpc2FibGluZyBhbGwgU3VwZXJTcGVlZCBYSENpDQo+Pj4+Pj4gaW5zdGFuY2VzIGluIHBh
-cmsgbW9kZS4NCj4+Pj4+Pg0KPj4+Pj4+IENDOiBEb25namluIEtpbSA8dG9iZXR0ZXJAZ21haWwu
-Y29tPg0KPj4+Pj4+IENjOiBKaWFueGluIFBhbiA8amlhbnhpbi5wYW5AYW1sb2dpYy5jb20+DQo+
-Pj4+Pj4gUmVwb3J0ZWQtYnk6IFRpbSA8ZWxhdGxsYXRAZ21haWwuY29tPg0KPj4+Pj4+IFNpZ25l
-ZC1vZmYtYnk6IE5laWwgQXJtc3Ryb25nIDxuYXJtc3Ryb25nQGJheWxpYnJlLmNvbT4NCj4+Pj4+
-PiAtLS0NCj4+Pj4+PiAgIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvZHdj
-My50eHQgfCAyICsrDQo+Pj4+Pj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspDQo+
-Pj4+PiBTaWdoLCB3aGF0J3Mgb25lIG1vcmUgdG8gdGhlIG5ldmVyIGVuZGluZyBsaXN0IG9mIHF1
-aXJrcy4uLg0KPj4+Pj4NCj4+Pj4+IEFja2VkLWJ5OiBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwu
-b3JnPg0KDQpCUiwNClRoaW5oDQo=
+
+--6nfbmd6w2qko774b
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi Michael,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on balbi-usb/next]
+[also build test WARNING on v5.4-rc7 next-20191111]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+
+url:    https://github.com/0day-ci/linux/commits/Michael-Olbrich/usb-dwc3-gadget-improve-isoc-handling/20191113-032659
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git next
+reproduce: make htmldocs
+
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   Warning: The Sphinx 'sphinx_rtd_theme' HTML theme was not found. Make sure you have the theme installed to produce pretty HTML output. Falling back to the default theme.
+   WARNING: dot(1) not found, for better output quality install graphviz from http://www.graphviz.org
+   WARNING: convert(1) not found, for SVG to PDF conversion install ImageMagick (https://www.imagemagick.org)
+   include/linux/regulator/machine.h:196: warning: Function parameter or member 'max_uV_step' not described in 'regulation_constraints'
+   include/linux/regulator/driver.h:223: warning: Function parameter or member 'resume' not described in 'regulator_ops'
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file drivers/dma-buf/reservation.c
+   Error: Cannot open file include/linux/reservation.h
+   Error: Cannot open file include/linux/reservation.h
+   include/linux/spi/spi.h:190: warning: Function parameter or member 'driver_override' not described in 'spi_device'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'quotactl' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'quota_on' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'sb_free_mnt_opts' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'sb_eat_lsm_opts' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'sb_kern_mount' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'sb_show_options' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'sb_add_mnt_opt' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'd_instantiate' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'getprocattr' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'setprocattr' not described in 'security_list_options'
+   include/linux/lsm_hooks.h:1822: warning: Function parameter or member 'locked_down' not described in 'security_list_options'
+   lib/genalloc.c:1: warning: 'gen_pool_add_virt' not found
+   lib/genalloc.c:1: warning: 'gen_pool_alloc' not found
+   lib/genalloc.c:1: warning: 'gen_pool_free' not found
+   lib/genalloc.c:1: warning: 'gen_pool_alloc_algo' not found
+   drivers/gpio/gpiolib-of.c:92: warning: Excess function parameter 'dev' description in 'of_gpio_need_valid_mask'
+   include/linux/i2c.h:337: warning: Function parameter or member 'init_irq' not described in 'i2c_client'
+>> drivers/usb/dwc3/core.h:724: warning: Function parameter or member 'last_frame_number' not described in 'dwc3_ep'
+   drivers/usb/typec/bus.c:1: warning: 'typec_altmode_register_driver' not found
+   drivers/usb/typec/bus.c:1: warning: 'typec_altmode_unregister_driver' not found
+   drivers/usb/typec/class.c:1: warning: 'typec_altmode_unregister_notifier' not found
+   drivers/usb/typec/class.c:1: warning: 'typec_altmode_register_notifier' not found
+   include/linux/w1.h:277: warning: Function parameter or member 'of_match_table' not described in 'w1_family'
+   fs/posix_acl.c:647: warning: Function parameter or member 'inode' not described in 'posix_acl_update_mode'
+   fs/posix_acl.c:647: warning: Function parameter or member 'mode_p' not described in 'posix_acl_update_mode'
+   fs/posix_acl.c:647: warning: Function parameter or member 'acl' not described in 'posix_acl_update_mode'
+   kernel/dma/coherent.c:1: warning: no structured comments found
+   include/linux/input/sparse-keymap.h:43: warning: Function parameter or member 'sw' not described in 'key_entry'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'dev_scratch' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'list' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'ip_defrag_offset' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'skb_mstamp_ns' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member '__cloned_offset' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'head_frag' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member '__pkt_type_offset' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'encapsulation' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'encap_hdr_csum' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'csum_valid' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member '__pkt_vlan_present_offset' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'vlan_present' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'csum_complete_sw' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'csum_level' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'inner_protocol_type' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'remcsum_offload' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'sender_cpu' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'reserved_tailroom' not described in 'sk_buff'
+   include/linux/skbuff.h:888: warning: Function parameter or member 'inner_ipproto' not described in 'sk_buff'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_addrpair' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_portpair' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_ipv6only' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_net_refcnt' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_v6_daddr' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_v6_rcv_saddr' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_cookie' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_listener' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_tw_dr' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_rcv_wnd' not described in 'sock_common'
+   include/net/sock.h:233: warning: Function parameter or member 'skc_tw_rcv_nxt' not described in 'sock_common'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_rx_skb_cache' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_wq_raw' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'tcp_rtx_queue' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_tx_skb_cache' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_route_forced_caps' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_txtime_report_errors' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_validate_xmit_skb' not described in 'sock'
+   include/net/sock.h:515: warning: Function parameter or member 'sk_bpf_storage' not described in 'sock'
+   include/net/sock.h:2450: warning: Function parameter or member 'tcp_rx_skb_cache_key' not described in 'DECLARE_STATIC_KEY_FALSE'
+   include/net/sock.h:2450: warning: Excess function parameter 'sk' description in 'DECLARE_STATIC_KEY_FALSE'
+   include/net/sock.h:2450: warning: Excess function parameter 'skb' description in 'DECLARE_STATIC_KEY_FALSE'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'gso_partial_features' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'l3mdev_ops' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'xfrmdev_ops' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'tlsdev_ops' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'name_assign_type' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'ieee802154_ptr' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'mpls_ptr' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'xdp_prog' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'gro_flush_timeout' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'nf_hooks_ingress' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member '____cacheline_aligned_in_smp' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'qdisc_hash' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'xps_cpus_map' not described in 'net_device'
+   include/linux/netdevice.h:2053: warning: Function parameter or member 'xps_rxqs_map' not described in 'net_device'
+   include/linux/phylink.h:56: warning: Function parameter or member '__ETHTOOL_DECLARE_LINK_MODE_MASK(advertising' not described in 'phylink_link_state'
+   include/linux/phylink.h:56: warning: Function parameter or member '__ETHTOOL_DECLARE_LINK_MODE_MASK(lp_advertising' not described in 'phylink_link_state'
+   include/linux/rculist.h:374: warning: Excess function parameter 'cond' description in 'list_for_each_entry_rcu'
+   include/linux/rculist.h:651: warning: Excess function parameter 'cond' description in 'hlist_for_each_entry_rcu'
+   mm/util.c:1: warning: 'get_user_pages_fast' not found
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:335: warning: Excess function parameter 'dev' description in 'amdgpu_gem_prime_export'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_dma_buf.c:336: warning: Excess function parameter 'dev' description in 'amdgpu_gem_prime_export'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c:142: warning: Function parameter or member 'blockable' not described in 'amdgpu_mn_read_lock'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:347: warning: cannot understand function prototype: 'struct amdgpu_vm_pt_cursor '
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:348: warning: cannot understand function prototype: 'struct amdgpu_vm_pt_cursor '
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:494: warning: Function parameter or member 'start' not described in 'amdgpu_vm_pt_first_dfs'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: Function parameter or member 'adev' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: Function parameter or member 'vm' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: Function parameter or member 'start' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: Function parameter or member 'cursor' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:546: warning: Function parameter or member 'entry' not described in 'for_each_amdgpu_vm_pt_dfs_safe'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:821: warning: Function parameter or member 'level' not described in 'amdgpu_vm_bo_param'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'params' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'bo' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'level' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'pe' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'addr' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'count' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'incr' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:1283: warning: Function parameter or member 'flags' not described in 'amdgpu_vm_update_flags'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c:2821: warning: Function parameter or member 'pasid' not described in 'amdgpu_vm_make_compute'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c:378: warning: Excess function parameter 'entry' description in 'amdgpu_irq_dispatch'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c:379: warning: Function parameter or member 'ih' not described in 'amdgpu_irq_dispatch'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_irq.c:379: warning: Excess function parameter 'entry' description in 'amdgpu_irq_dispatch'
+   drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:1: warning: no structured comments found
+   drivers/gpu/drm/amd/amdgpu/amdgpu_ras.c:1: warning: no structured comments found
+   drivers/gpu/drm/amd/amdgpu/amdgpu_pm.c:1: warning: 'pp_dpm_sclk pp_dpm_mclk pp_dpm_pcie' not found
+   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:132: warning: Incorrect use of kernel-doc format:          * @atomic_obj
+   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:238: warning: Incorrect use of kernel-doc format:          * gpu_info FW provided soc bounding box struct or 0 if not
+   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.h:243: warning: Function parameter or member 'atomic_obj' not described in 'amdgpu_display_manager'
+
+vim +724 drivers/usb/dwc3/core.h
+
+72246da40f3719 Felipe Balbi 2011-08-19 @724  
+
+:::::: The code at line 724 was first introduced by commit
+:::::: 72246da40f3719af3bfd104a2365b32537c27d83 usb: Introduce DesignWare USB3 DRD Driver
+
+:::::: TO: Felipe Balbi <balbi@ti.com>
+:::::: CC: Greg Kroah-Hartman <gregkh@suse.de>
+
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
+
+--6nfbmd6w2qko774b
+Content-Type: application/gzip
+Content-Disposition: attachment; filename=".config.gz"
+Content-Transfer-Encoding: base64
+
+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
+
+--6nfbmd6w2qko774b--
