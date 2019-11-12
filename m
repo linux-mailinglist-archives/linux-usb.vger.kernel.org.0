@@ -2,94 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A28A3F8761
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 05:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 542DDF88D7
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 07:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbfKLEZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 23:25:58 -0500
-Received: from mail-wm1-f53.google.com ([209.85.128.53]:55997 "EHLO
-        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726910AbfKLEZ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 23:25:58 -0500
-Received: by mail-wm1-f53.google.com with SMTP id b11so1540448wmb.5
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 20:25:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :content-transfer-encoding;
-        bh=o6iwpRiDO0vPj6iGT20Dh1tRzNDhva6KOXdaIVQ5tIE=;
-        b=aQUFIvATMODa8lrZqhJKjoecdAXeY5QyFSzIjYbgNewbIi0I3EB0w5K/SxHbMSoYH8
-         LHqBvrB9Qf/HtSf2kqCvT+zRkNqYCtouz9ma8TmWigqKpsaXSru1EtxMTmk3rjzZWi+n
-         EX4N3TNfXYy0dkCUbItM3++aoG/F9Q2yyE0gDxQwmg0vpHRJk5YZxqyBJDWgtdyg0X0F
-         dMYUPiScygwbm12dkUrg68ELXA3a0oYDqr1rQ3QN3sH4WiSOV8l8OqbBuU+2MRTVZjax
-         Ai16UOJNxWJuVKBcH06qEAnIqYxXjjKrQ88CUOe6TuWazHC1Ld3kdnFurkNdfPqLrf8l
-         95pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:content-transfer-encoding;
-        bh=o6iwpRiDO0vPj6iGT20Dh1tRzNDhva6KOXdaIVQ5tIE=;
-        b=BaO9NDwJgu1M+hlkDiDPUL2+6RTYUte35PUXW0X+9Z7YcLM2fpgHtcbzAxBhrvx7I0
-         IxNveii3IURI2Dspa+44rY1AJSrv1DWDKU3HeU/LVah0MKDgQra0Wtnd7H4IQ69jDWVE
-         n3gmxokqx+bo+W1vdeCT17epd+eldc3rQ8PhW8/1VqXQUhVBeRi9SyBCc+C7MQpuyW8v
-         A7Dxf/0hLMDgVchP/UXycvdEVIMwLD64kgyC5XYLaHIpjJ85ivDED8HEwmTMcpSvt1My
-         Grx+7T19L4K8oAYr+edblWJWvsowFQUxCLyUARSk1Ahlnd3j+Tx+ngbDrA3BvWuYkpd/
-         npJQ==
-X-Gm-Message-State: APjAAAXW5s4ggpYr8jyPkvoPYQPi8fpaDTY2aGqk7Gpt/JkEoufiqOT4
-        Xb2ZtcM3lUVwuF2jGg4XI2g=
-X-Google-Smtp-Source: APXvYqzB7PyS8tZaRQwUq5Z7JdNQ2s07mgh9EvOgR+46ZWMLlfjn3Lw9zF4afP0sIjVczF4Jxs00iQ==
-X-Received: by 2002:a1c:9a4f:: with SMTP id c76mr1929700wme.103.1573532756653;
-        Mon, 11 Nov 2019 20:25:56 -0800 (PST)
-Received: from [109.186.90.35] (109-186-90-35.bb.netvision.net.il. [109.186.90.35])
-        by smtp.gmail.com with ESMTPSA id b15sm10171755wrx.77.2019.11.11.20.25.54
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 11 Nov 2019 20:25:55 -0800 (PST)
-Message-ID: <5DCA343A.4000304@gmail.com>
-Date:   Tue, 12 Nov 2019 06:25:30 +0200
-From:   Eli Billauer <eli.billauer@gmail.com>
-User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
+        id S1727080AbfKLGwJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 01:52:09 -0500
+Received: from mailgw01.mediatek.com ([210.61.82.183]:3766 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725283AbfKLGwJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 01:52:09 -0500
+X-UUID: 225456d538b04c4998060d30a6ac8cf6-20191112
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=d8BFCFk1jWo76KszBymxQCa+dx51d98IKSWXcuFIpgA=;
+        b=HKcMpgHZ0Ij+spH0BoNSPXCa0NI/iEymiLXFw+LVn8Vcz/nHXie7RV7j15gGvl7mEOJnT78eq7l8yitBVAccSw0V1BzKWeZV1CxgBF4buzRUvqy2IIDg2KttPLo/FKclmaeRPvJFKlfhRzfbMIVMxrHKQNILtL65yy7rCg/9Q80=;
+X-UUID: 225456d538b04c4998060d30a6ac8cf6-20191112
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1160445928; Tue, 12 Nov 2019 14:52:04 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs08n1.mediatek.inc (172.21.101.55) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Tue, 12 Nov 2019 14:52:02 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Tue, 12 Nov 2019 14:52:00 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>, Bin Liu <b-liu@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v2 01/13] media: uvcvideo: drop error check of debugfs_create_dir()
+Date:   Tue, 12 Nov 2019 14:51:47 +0800
+Message-ID: <1573541519-28488-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     linux-usb@vger.kernel.org
-Subject: xhci-ring: "needs XHCI_TRUST_TX_LENGTH quirk" in kernel log
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-Connecting a custom designed (on FPGA) USB 3.0 device to a Renesas 
-uPD720202 (1912:0015) and kernel v5.3.0, I get a lot of messages in the 
-kernel log, while transmitting data at a high bandwidth through a BULK 
-IN endpoint:
-
-handle_tx_event: 36590 callbacks suppressed
-xhci_hcd 0000:03:00.0: WARN Successful completion on short TX for slot 1 
-ep 18: needs XHCI_TRUST_TX_LENGTH quirk?
-(last message repeated several times)
-
-The driver in charge, as reported by lspci, is xhci_hcd.
-
-Probably relevant details:
-
-* The buffer size of the USB transactions is 32 kiB and up (with 
-libusb). With e.g. 16 kiB buffers these log messages don't appear.
-* The device produces short packets occasionally. When only full-length 
-packets are sent, these log messages don't appear.
-* Other than these log messages, everything works fine. In particular, 
-there are no errors in the data exchange in either situation.
-* This problem doesn't happen when running the same test on an Intel 
-B150 chipset’s USB 3.0 xHCI controller (8086:a12f).
-
-I don't really know what this warning means, but this whole thing 
-kind-of reminds the "WARN Event TRB for slot x ep y with no TDs queued" 
-issue that was solved recently. Just a wild guess.
-
-Any idea how this can be fixed?
-
-Thanks and regards,
-    Eli
+Tm8gbmVlZCBjaGVjayB0aGUgcmV0dXJuIHZhbHVlIG9mIGRlYnVnZnNfY3JlYXRlX2RpcigpDQoN
+ClNpZ25lZC1vZmYtYnk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4N
+Ci0tLQ0KdjI6DQogIDEuIGFiYW5kb24gbmV3IEFQSSB1c2JfZGVidWdmc19jcmVhdGVfZGlyKCks
+IGFuZCBkcm9wIGVycm9yIGNoZWNrDQotLS0NCiBkcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjX2Rl
+YnVnZnMuYyB8IDEwICstLS0tLS0tLS0NCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
+IDkgZGVsZXRpb25zKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL21lZGlhL3VzYi91dmMvdXZj
+X2RlYnVnZnMuYyBiL2RyaXZlcnMvbWVkaWEvdXNiL3V2Yy91dmNfZGVidWdmcy5jDQppbmRleCBk
+MmIxMDk5NTlkODIuLjJiOGFmNGI1NDExNyAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvbWVkaWEvdXNi
+L3V2Yy91dmNfZGVidWdmcy5jDQorKysgYi9kcml2ZXJzL21lZGlhL3VzYi91dmMvdXZjX2RlYnVn
+ZnMuYw0KQEAgLTEwOCwxNSArMTA4LDcgQEAgdm9pZCB1dmNfZGVidWdmc19jbGVhbnVwX3N0cmVh
+bShzdHJ1Y3QgdXZjX3N0cmVhbWluZyAqc3RyZWFtKQ0KIA0KIHZvaWQgdXZjX2RlYnVnZnNfaW5p
+dCh2b2lkKQ0KIHsNCi0Jc3RydWN0IGRlbnRyeSAqZGlyOw0KLQ0KLQlkaXIgPSBkZWJ1Z2ZzX2Ny
+ZWF0ZV9kaXIoInV2Y3ZpZGVvIiwgdXNiX2RlYnVnX3Jvb3QpOw0KLQlpZiAoSVNfRVJSX09SX05V
+TEwoZGlyKSkgew0KLQkJdXZjX3ByaW50ayhLRVJOX0lORk8sICJVbmFibGUgdG8gY3JlYXRlIGRl
+YnVnZnMgZGlyZWN0b3J5XG4iKTsNCi0JCXJldHVybjsNCi0JfQ0KLQ0KLQl1dmNfZGVidWdmc19y
+b290X2RpciA9IGRpcjsNCisJdXZjX2RlYnVnZnNfcm9vdF9kaXIgPSBkZWJ1Z2ZzX2NyZWF0ZV9k
+aXIoInV2Y3ZpZGVvIiwgdXNiX2RlYnVnX3Jvb3QpOw0KIH0NCiANCiB2b2lkIHV2Y19kZWJ1Z2Zz
+X2NsZWFudXAodm9pZCkNCi0tIA0KMi4yMy4wDQo=
 
