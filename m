@@ -2,134 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6775F9433
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 16:27:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ACE5F9513
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 17:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727344AbfKLP11 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 10:27:27 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:48206 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725954AbfKLP10 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 10:27:26 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xACFQb3f062774;
-        Tue, 12 Nov 2019 09:26:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573572397;
-        bh=rMWe4kuCSfHHy9n9O/rcq81d4pIroGuMrSEkGSdS+F4=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=qJC2c4gGQYe+XtOFSW8zlZ6fbeLzlhIG1/N+9RR3wjmUmTZcQjDPq3tizAB62H9Wf
-         ykV72RpP4wOCZ6+JGW04RXYY12/H1BdOJBATx7dzGQ23h9ee8UEBaXfiimW+PtPDcM
-         HSUerMrRmbZG0F0zAhB+t6ZLeVTMnjlwz+S4Vj3o=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xACFQbnS126537;
-        Tue, 12 Nov 2019 09:26:37 -0600
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 12
- Nov 2019 09:26:20 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 12 Nov 2019 09:26:20 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xACFQbDL011087;
-        Tue, 12 Nov 2019 09:26:37 -0600
-Date:   Tue, 12 Nov 2019 09:28:57 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: Re: [PATCH v2 05/13] usb: musb: create debugfs directory under usb
- root
-Message-ID: <20191112152857.GA5853@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Cristian Birsan <cristian.birsan@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Yangtao Li <tiny.windzz@gmail.com>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <1573541519-28488-1-git-send-email-chunfeng.yun@mediatek.com>
- <1573541519-28488-5-git-send-email-chunfeng.yun@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1573541519-28488-5-git-send-email-chunfeng.yun@mediatek.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        id S1726645AbfKLQFv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 11:05:51 -0500
+Received: from mx2.suse.de ([195.135.220.15]:32862 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725954AbfKLQFv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 12 Nov 2019 11:05:51 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 0358DB281;
+        Tue, 12 Nov 2019 16:05:50 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] USBIP: add config dependency for SGL_ALLOC
+Date:   Tue, 12 Nov 2019 16:49:39 +0100
+Message-Id: <20191112154939.21217-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.16.4
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+USBIP uses lib/scatterlist.h
+Hence it needs to set CONFIG_SGL_ALLOC
 
-On Tue, Nov 12, 2019 at 02:51:51PM +0800, Chunfeng Yun wrote:
-> Now the USB gadget subsystem can use the USB debugfs root directory,
-> so move musb's directory from the root of the debugfs filesystem into
-> the root of usb
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/usbip/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-My opinion is this move is unnecessary. I breaks existing debug tools or
-documentation which is already published on Internet. 
-
--Bin.
+diff --git a/drivers/usb/usbip/Kconfig b/drivers/usb/usbip/Kconfig
+index 2f86b28fa3da..7bbae7a08642 100644
+--- a/drivers/usb/usbip/Kconfig
++++ b/drivers/usb/usbip/Kconfig
+@@ -4,6 +4,7 @@ config USBIP_CORE
+ 	tristate "USB/IP support"
+ 	depends on NET
+ 	select USB_COMMON
++	select SGL_ALLOC
+ 	---help---
+ 	  This enables pushing USB packets over IP to allow remote
+ 	  machines direct access to USB devices. It provides the
+-- 
+2.16.4
 
