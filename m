@@ -2,136 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC91F8697
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 02:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A28A3F8761
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2019 05:26:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfKLBsi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 11 Nov 2019 20:48:38 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:46769 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbfKLBsh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 20:48:37 -0500
-Received: by mail-wr1-f68.google.com with SMTP id b3so16669678wrs.13;
-        Mon, 11 Nov 2019 17:48:35 -0800 (PST)
+        id S1726924AbfKLEZ6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 11 Nov 2019 23:25:58 -0500
+Received: from mail-wm1-f53.google.com ([209.85.128.53]:55997 "EHLO
+        mail-wm1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726910AbfKLEZ6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 11 Nov 2019 23:25:58 -0500
+Received: by mail-wm1-f53.google.com with SMTP id b11so1540448wmb.5
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2019 20:25:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=/bjIqi6hO/adh9b46mmU09qR2JgvrPKcPXsn9PKpydQ=;
-        b=HbDnTVrRBD0jVKHLLydC03N06oTzh50Z5atOgRLw2IGC+WSPbw+CBtnAhZ9mE6wenq
-         YZlYtu47iMNQxdTRXULdKWL6bgV6ccf7NJPqCMhENEYrsbFeApa63dcWoooL2277eHhG
-         ULwctVuQtS33qqUFutyjmnVJ64CqDpvbk4bVYxkVA0Pbaa0IhzN7mR3chlCBkhlJxNFt
-         hkqoMZeAmwadBaR1u6Onx0G5lGSUj8Cu8gXOn5UXAaGUNzUVVpoxOh3D3qq32OKnZW5u
-         bZ16EvG8hQ0eKh9Da6QFH21godYwbZpHmRMYJpXAfszDFFhiIGnyIT1DmujUS6AxKbix
-         pRzw==
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :content-transfer-encoding;
+        bh=o6iwpRiDO0vPj6iGT20Dh1tRzNDhva6KOXdaIVQ5tIE=;
+        b=aQUFIvATMODa8lrZqhJKjoecdAXeY5QyFSzIjYbgNewbIi0I3EB0w5K/SxHbMSoYH8
+         LHqBvrB9Qf/HtSf2kqCvT+zRkNqYCtouz9ma8TmWigqKpsaXSru1EtxMTmk3rjzZWi+n
+         EX4N3TNfXYy0dkCUbItM3++aoG/F9Q2yyE0gDxQwmg0vpHRJk5YZxqyBJDWgtdyg0X0F
+         dMYUPiScygwbm12dkUrg68ELXA3a0oYDqr1rQ3QN3sH4WiSOV8l8OqbBuU+2MRTVZjax
+         Ai16UOJNxWJuVKBcH06qEAnIqYxXjjKrQ88CUOe6TuWazHC1Ld3kdnFurkNdfPqLrf8l
+         95pQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=/bjIqi6hO/adh9b46mmU09qR2JgvrPKcPXsn9PKpydQ=;
-        b=H8DvR7dLqduD4P4wecSmJ9kZZ1NJxKRf7CiJLl9/4HJN5kQi4ImeW75XTecKz41bDy
-         s4sKoznxxzgRE8rQrykvW+5C9EFtrDOTRv9yueRuTv8mgrdwxds9LC01Bln1NVxZS43U
-         mYZxboZsa/ioq1itEmBTiNHWdT2EhEjoAbkbmWlHeHZe9h7oMChIOZcAtg8QwShTQ++5
-         ulrGdqRn8vuX/HMrVLU4/Mp1ZhQlBnJcwvUGRBb9yuh1EUuQHC16+1FcMq9welQOHXgt
-         w/IuUl18oTPFWWCP1ZHTZJ4A8XpcJAWI93lBW+U8BLgvygMdyf+89lHjruiwbXKKe4Xa
-         wUzw==
-X-Gm-Message-State: APjAAAXfm0VCsH6/3raD3h/+2GKFIZ9JFAVo9inon8634reybNL73opB
-        q8HZ2T4CNk/GBE0aRYN2cBKXnQrFrPVbYGy5eoI=
-X-Google-Smtp-Source: APXvYqxuxcgymK9jAB/5KQHDa1nDO97DkTPn+jtJT1mWCOODP321UsjLE7Cfn2IHOUjA0/iissWb1hTqLp0z9NvLe7Q=
-X-Received: by 2002:adf:8088:: with SMTP id 8mr22613309wrl.230.1573523315058;
- Mon, 11 Nov 2019 17:48:35 -0800 (PST)
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:content-transfer-encoding;
+        bh=o6iwpRiDO0vPj6iGT20Dh1tRzNDhva6KOXdaIVQ5tIE=;
+        b=BaO9NDwJgu1M+hlkDiDPUL2+6RTYUte35PUXW0X+9Z7YcLM2fpgHtcbzAxBhrvx7I0
+         IxNveii3IURI2Dspa+44rY1AJSrv1DWDKU3HeU/LVah0MKDgQra0Wtnd7H4IQ69jDWVE
+         n3gmxokqx+bo+W1vdeCT17epd+eldc3rQ8PhW8/1VqXQUhVBeRi9SyBCc+C7MQpuyW8v
+         A7Dxf/0hLMDgVchP/UXycvdEVIMwLD64kgyC5XYLaHIpjJ85ivDED8HEwmTMcpSvt1My
+         Grx+7T19L4K8oAYr+edblWJWvsowFQUxCLyUARSk1Ahlnd3j+Tx+ngbDrA3BvWuYkpd/
+         npJQ==
+X-Gm-Message-State: APjAAAXW5s4ggpYr8jyPkvoPYQPi8fpaDTY2aGqk7Gpt/JkEoufiqOT4
+        Xb2ZtcM3lUVwuF2jGg4XI2g=
+X-Google-Smtp-Source: APXvYqzB7PyS8tZaRQwUq5Z7JdNQ2s07mgh9EvOgR+46ZWMLlfjn3Lw9zF4afP0sIjVczF4Jxs00iQ==
+X-Received: by 2002:a1c:9a4f:: with SMTP id c76mr1929700wme.103.1573532756653;
+        Mon, 11 Nov 2019 20:25:56 -0800 (PST)
+Received: from [109.186.90.35] (109-186-90-35.bb.netvision.net.il. [109.186.90.35])
+        by smtp.gmail.com with ESMTPSA id b15sm10171755wrx.77.2019.11.11.20.25.54
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 11 Nov 2019 20:25:55 -0800 (PST)
+Message-ID: <5DCA343A.4000304@gmail.com>
+Date:   Tue, 12 Nov 2019 06:25:30 +0200
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
-References: <20191014141718.22603-1-narmstrong@baylibre.com>
- <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
- <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com>
- <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com> <CA+3zgmtJqN-3Q-kjMhh58B+T7z_1TA-C6be7+UP6nuQb7eq=8A@mail.gmail.com>
-In-Reply-To: <CA+3zgmtJqN-3Q-kjMhh58B+T7z_1TA-C6be7+UP6nuQb7eq=8A@mail.gmail.com>
-From:   Jun Li <lijun.kernel@gmail.com>
-Date:   Tue, 12 Nov 2019 09:48:22 +0800
-Message-ID: <CAKgpwJWj9nqF-j2e+hNZZUtqGY92-2o1cUNWWh0ugePrwjbtsA@mail.gmail.com>
-Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-To:     Tim <elatllat@gmail.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Felipe Balbi <balbi@kernel.org>, khilman@baylibre.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     linux-usb@vger.kernel.org
+Subject: xhci-ring: "needs XHCI_TRUST_TX_LENGTH quirk" in kernel log
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-by a quirk, those platforms without this quirk can't benefit this fix.
+Hello,
 
-if later this bug is fixed by some reversion of dwc3 IP, we can easily
-remove the workaround by a IP version check:
-if (dwc->revision < DWC3_REVISION_PARK_MODE_FIXED)
-{
-          disable park mode for ss;
-}
+Connecting a custom designed (on FPGA) USB 3.0 device to a Renesas 
+uPD720202 (1912:0015) and kernel v5.3.0, I get a lot of messages in the 
+kernel log, while transmitting data at a high bandwidth through a BULK 
+IN endpoint:
 
-Li Jun
+handle_tx_event: 36590 callbacks suppressed
+xhci_hcd 0000:03:00.0: WARN Successful completion on short TX for slot 1 
+ep 18: needs XHCI_TRUST_TX_LENGTH quirk?
+(last message repeated several times)
 
-Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=A5=E5=91=
-=A8=E4=B8=80 =E4=B8=8B=E5=8D=8810:05=E5=86=99=E9=81=93=EF=BC=9A
->
-> Speculation;
->
-> Maybe the kernel maintainers prefer to optimistically permit future
-> products to easily remove workarounds via quirk flags.
-> Even if data from testing were shown, and it did not impact
-> performance, code reduction and clarity are desirable.
->
-> On Sun, Nov 10, 2019 at 8:58 PM Jun Li <lijun.kernel@gmail.com> wrote:
-> >
-> > Hi Neil
-> >
-> > As I got the information from Synopsys, this bug exists on current IP v=
-ersions,
-> > and per my tests with external USB3 hub + 2 Super speed udisks on data
-> > read by dd, I can reproduce this issue with different kernel versions, =
-also I
-> > didn't see obvious performance drop by dd tests after disable park mode=
- for
-> > super speed, so should we just disable it by default so no need a quirk=
-?
-> >
-> > Li Jun
-> >
-> > Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=A5=
-=E5=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=888:42=E5=86=99=E9=81=93=EF=BC=9A
-> > >
-> > > Thanks for working on this Neil,
-> > > Is there something that needs doing for this patch to make it into 5.=
-3 or 5.4?
-> > > As previously mentioned the patch set fixes the issue on affected har=
-dware;
-> > >     https://patchwork.kernel.org/patch/11164515/
-> > >
-> > >
-> > >
-> > > On Wed, Oct 23, 2019 at 4:11 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Mon, Oct 14, 2019 at 04:17:16PM +0200, Neil Armstrong wrote:
-> > > > > This patch updates the documentation with the information related
-> > > > > to the quirks that needs to be added for disabling all SuperSpeed=
- XHCi
-> > > > > instances in park mode.
-> > > > >
-> > > > > CC: Dongjin Kim <tobetter@gmail.com>
-> > > > > Cc: Jianxin Pan <jianxin.pan@amlogic.com>
-> > > > > Reported-by: Tim <elatllat@gmail.com>
-> > > > > Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
-> > > > >  1 file changed, 2 insertions(+)
-> > > >
-> > > > Sigh, what's one more to the never ending list of quirks...
-> > > >
-> > > > Acked-by: Rob Herring <robh@kernel.org>
+The driver in charge, as reported by lspci, is xhci_hcd.
+
+Probably relevant details:
+
+* The buffer size of the USB transactions is 32 kiB and up (with 
+libusb). With e.g. 16 kiB buffers these log messages don't appear.
+* The device produces short packets occasionally. When only full-length 
+packets are sent, these log messages don't appear.
+* Other than these log messages, everything works fine. In particular, 
+there are no errors in the data exchange in either situation.
+* This problem doesn't happen when running the same test on an Intel 
+B150 chipset’s USB 3.0 xHCI controller (8086:a12f).
+
+I don't really know what this warning means, but this whole thing 
+kind-of reminds the "WARN Event TRB for slot x ep y with no TDs queued" 
+issue that was solved recently. Just a wild guess.
+
+Any idea how this can be fixed?
+
+Thanks and regards,
+    Eli
+
