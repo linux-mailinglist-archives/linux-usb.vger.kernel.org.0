@@ -2,77 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E51A2FB24E
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 15:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF990FB3CC
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 16:36:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727168AbfKMONE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 09:13:04 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:47612 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbfKMONE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 09:13:04 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xADED3pV039206;
-        Wed, 13 Nov 2019 08:13:03 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573654383;
-        bh=ZBfVRFm0Attwl+399Jx41ryxjyG/8UC0G8MW0wnVKnA=;
-        h=From:To:CC:Subject:Date;
-        b=gd5UABAb0wjG6IDP+mXbZA2gA5L99cIoncp4KmnYnpLk9wvbCqUnss3L69b/aG3aS
-         2HlSgmXCb7koxTD/LIAmcdAYPHGUsbJAiy3FHbymLNF85y6JSh7N0bb+3REiczYqLE
-         3ONd3JEhzCq/0GXgoKdjjDAHcApggSECOXJd5Myw=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xADED2T9130351
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 Nov 2019 08:13:03 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
- Nov 2019 08:12:44 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 13 Nov 2019 08:12:44 -0600
-Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xADED2qE053284;
-        Wed, 13 Nov 2019 08:13:02 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] usb: dwc3: turn off VBUS when leaving host mode
-Date:   Wed, 13 Nov 2019 08:15:21 -0600
-Message-ID: <20191113141521.1696-1-b-liu@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727640AbfKMPg1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 10:36:27 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:41304 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726251AbfKMPg0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 10:36:26 -0500
+Received: (qmail 2521 invoked by uid 2102); 13 Nov 2019 10:36:25 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 13 Nov 2019 10:36:25 -0500
+Date:   Wed, 13 Nov 2019 10:36:25 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Peter Chen <peter.chen@nxp.com>
+cc:     Michael Olbrich <m.olbrich@pengutronix.de>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
+In-Reply-To: <20191113063414.GA30608@b29397-desktop>
+Message-ID: <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-VBUS should be turned off when leaving the host mode.
-Set GCTL_PRTCAP to device mode in teardown to de-assert DRVVBUS pin to
-turn off VBUS power.
+On Wed, 13 Nov 2019, Peter Chen wrote:
 
-Fixes: 5f94adfeed97 ("usb: dwc3: core: refactor mode initialization to its own function")
-Signed-off-by: Bin Liu <b-liu@ti.com>
----
- drivers/usb/dwc3/core.c | 1 +
- 1 file changed, 1 insertion(+)
+> On 19-11-12 10:33:18, Michael Olbrich wrote:
+> > 'delayed_status' and 'deactivations' are used completely independent but
+> > they share the same spinlock. This can result in spinlock recursion:
+> > 
+> > BUG: spinlock recursion on CPU#1, uvc-gadget/322
+> >  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .owner_cpu: 1
+> > CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-20190916-1+ #55
+> > Hardware name: XXXXX (DT)
+> > Call trace:
+> >  dump_backtrace+0x0/0x178
+> >  show_stack+0x24/0x30
+> >  dump_stack+0xc0/0x104
+> >  spin_dump+0x90/0xa0
+> >  do_raw_spin_lock+0xd8/0x108
+> >  _raw_spin_lock_irqsave+0x40/0x50
+> >  composite_disconnect+0x2c/0x80
+> >  usb_gadget_disconnect+0x84/0x150
+> >  usb_gadget_deactivate+0x64/0x120
+> >  usb_function_deactivate+0x70/0x80
+> >  uvc_function_disconnect+0x20/0x58
+> >  uvc_v4l2_release+0x34/0x90
+> >  v4l2_release+0xbc/0xf0
+> >  __fput+0xb0/0x218
+> >  ____fput+0x20/0x30
+> >  task_work_run+0xa0/0xd0
+> >  do_notify_resume+0x2f4/0x340
+> >  work_pending+0x8/0x14
+> > 
+> > Fix this by using separate spinlocks.
+> 
+> This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Issue
+> ->disconnect() callback from usb_gadget_disconnect()"), which adds
+> gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
+> with your patch, you may cc to stable tree.
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 97d6ae3c4df2..76ac9cd54e64 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1201,6 +1201,7 @@ static void dwc3_core_exit_mode(struct dwc3 *dwc)
- 		break;
- 	case USB_DR_MODE_HOST:
- 		dwc3_host_exit(dwc);
-+		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
- 		break;
- 	case USB_DR_MODE_OTG:
- 		dwc3_drd_exit(dwc);
--- 
-2.17.1
+I wasn't aware of the dual usage of that lock in the composite core 
+(and 0a55187a1ec8c touches only the gadget core, not composite.c).
+
+In any case, I don't have a good feel for how the locking is supposed 
+to work in the composite core.  This is really something Felipe should 
+look at.
+
+Would a better fix be to change usb_function_deactivate() so that it
+doesn't hold the lock while calling usb_gadget_deactivate()?  Maybe
+increment cdev->deactivations unconditionally before dropping the lock
+(for mutual exclusion) and then decrement it again if the call fails?
+
+Alan Stern
 
