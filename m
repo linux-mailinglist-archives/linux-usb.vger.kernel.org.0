@@ -2,123 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C88FDFB678
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 18:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22245FB78A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 19:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726392AbfKMRc0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 12:32:26 -0500
-Received: from mga11.intel.com ([192.55.52.93]:5879 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726115AbfKMRc0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Nov 2019 12:32:26 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Nov 2019 09:32:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,301,1569308400"; 
-   d="scan'208";a="257197669"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 13 Nov 2019 09:32:24 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 22701EB; Wed, 13 Nov 2019 19:32:22 +0200 (EET)
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] xhci: Fix memory leak in xhci_add_in_port()
-Date:   Wed, 13 Nov 2019 20:32:22 +0300
-Message-Id: <20191113173222.33468-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.24.0
+        id S1728367AbfKMS3Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 13:29:24 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:54704 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727074AbfKMS3Y (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 13:29:24 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xADIT0iJ118599;
+        Wed, 13 Nov 2019 18:29:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=sGr/DIDnGTYsdgAAQOAvzvtrIvWYjXZuC3b0kLtXOyQ=;
+ b=qA7Rtcc1IjJd8veNVWpkLuSGb6JekNurHL20+l6ioCTm0Ig7SWhXpAbRiQ3x7u6epKP6
+ IBS1VVe/9rTZhbbmXWlBNTfTJ4W3CQvdfpOQVnToGNSBpGACYkOo8D10B+JodCm7v5VH
+ qyYmmAP3T+pPnQ2bAQWVq6GUgNMJN/pn6EC/97fVSgp6FYAtxdmlS9tyu4wdkemmtXq9
+ wqGshAqHvOlsQphxP2AbxocamwN0gATjkjm6pllyPJv8KFr/ZzNs8vuqEUfgpoO2znpN
+ 517d381eIE2qY5GwLT33S/lbrXPmjGMrJdIKnbR3NBZZC+TpUAMigWxuIVYSCw5bwgjt Lg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2w5ndqedyq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Nov 2019 18:29:16 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xADISxlZ160232;
+        Wed, 13 Nov 2019 18:29:15 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2w7vppqqp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 Nov 2019 18:29:03 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xADISeZw031201;
+        Wed, 13 Nov 2019 18:28:40 GMT
+Received: from kili.mountain (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 13 Nov 2019 10:28:40 -0800
+Date:   Wed, 13 Nov 2019 21:28:31 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Oliver Neukum <oliver@neukum.org>
+Cc:     "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: [PATCH net] net: cdc_ncm: Signedness bug in cdc_ncm_set_dgram_size()
+Message-ID: <20191113182831.yjbmhwacirh6kgzr@kili.mountain>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9440 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911130158
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9440 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911130158
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When xHCI is part of Alpine or Titan Ridge Thunderbolt controller and
-the xHCI device is hot-removed as a result of unplugging a dock for
-example, the driver leaks memory it allocates for xhci->usb3_rhub.psi
-and xhci->usb2_rhub.psi in xhci_add_in_port() as reported by kmemleak:
+This code is supposed to test for negative error codes and partial
+reads, but because sizeof() is size_t (unsigned) type then negative
+error codes are type promoted to high positive values and the condition
+doesn't work as expected.
 
-unreferenced object 0xffff922c24ef42f0 (size 16):
-  comm "kworker/u16:2", pid 178, jiffies 4294711640 (age 956.620s)
-  hex dump (first 16 bytes):
-    21 00 0c 00 12 00 dc 05 23 00 e0 01 00 00 00 00  !.......#.......
-  backtrace:
-    [<000000007ac80914>] xhci_mem_init+0xcf8/0xeb7
-    [<0000000001b6d775>] xhci_init+0x7c/0x160
-    [<00000000db443fe3>] xhci_gen_setup+0x214/0x340
-    [<00000000fdffd320>] xhci_pci_setup+0x48/0x110
-    [<00000000541e1e03>] usb_add_hcd.cold+0x265/0x747
-    [<00000000ca47a56b>] usb_hcd_pci_probe+0x219/0x3b4
-    [<0000000021043861>] xhci_pci_probe+0x24/0x1c0
-    [<00000000b9231f25>] local_pci_probe+0x3d/0x70
-    [<000000006385c9d7>] pci_device_probe+0xd0/0x150
-    [<0000000070241068>] really_probe+0xf5/0x3c0
-    [<0000000061f35c0a>] driver_probe_device+0x58/0x100
-    [<000000009da11198>] bus_for_each_drv+0x79/0xc0
-    [<000000009ce45f69>] __device_attach+0xda/0x160
-    [<00000000df201aaf>] pci_bus_add_device+0x46/0x70
-    [<0000000088a1bc48>] pci_bus_add_devices+0x27/0x60
-    [<00000000ad9ee708>] pci_bus_add_devices+0x52/0x60
-unreferenced object 0xffff922c24ef3318 (size 8):
-  comm "kworker/u16:2", pid 178, jiffies 4294711640 (age 956.620s)
-  hex dump (first 8 bytes):
-    34 01 05 00 35 41 0a 00                          4...5A..
-  backtrace:
-    [<000000007ac80914>] xhci_mem_init+0xcf8/0xeb7
-    [<0000000001b6d775>] xhci_init+0x7c/0x160
-    [<00000000db443fe3>] xhci_gen_setup+0x214/0x340
-    [<00000000fdffd320>] xhci_pci_setup+0x48/0x110
-    [<00000000541e1e03>] usb_add_hcd.cold+0x265/0x747
-    [<00000000ca47a56b>] usb_hcd_pci_probe+0x219/0x3b4
-    [<0000000021043861>] xhci_pci_probe+0x24/0x1c0
-    [<00000000b9231f25>] local_pci_probe+0x3d/0x70
-    [<000000006385c9d7>] pci_device_probe+0xd0/0x150
-    [<0000000070241068>] really_probe+0xf5/0x3c0
-    [<0000000061f35c0a>] driver_probe_device+0x58/0x100
-    [<000000009da11198>] bus_for_each_drv+0x79/0xc0
-    [<000000009ce45f69>] __device_attach+0xda/0x160
-    [<00000000df201aaf>] pci_bus_add_device+0x46/0x70
-    [<0000000088a1bc48>] pci_bus_add_devices+0x27/0x60
-    [<00000000ad9ee708>] pci_bus_add_devices+0x52/0x60
-
-Fix this by calling kfree() for the both psi objects in
-xhci_mem_cleanup().
-
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Fixes: 332f989a3b00 ("CDC-NCM: handle incomplete transfer of MTU")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 ---
-I'm not 100% sure the kfree()s below are in correct place so please double
-check :)
+ drivers/net/usb/cdc_ncm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/usb/host/xhci-mem.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index e16eda6e2b8b..3b1388fa2f36 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1909,13 +1909,17 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 	xhci->usb3_rhub.num_ports = 0;
- 	xhci->num_active_eps = 0;
- 	kfree(xhci->usb2_rhub.ports);
-+	kfree(xhci->usb2_rhub.psi);
- 	kfree(xhci->usb3_rhub.ports);
-+	kfree(xhci->usb3_rhub.psi);
- 	kfree(xhci->hw_ports);
- 	kfree(xhci->rh_bw);
- 	kfree(xhci->ext_caps);
- 
- 	xhci->usb2_rhub.ports = NULL;
-+	xhci->usb2_rhub.psi = NULL;
- 	xhci->usb3_rhub.ports = NULL;
-+	xhci->usb3_rhub.psi = NULL;
- 	xhci->hw_ports = NULL;
- 	xhci->rh_bw = NULL;
- 	xhci->ext_caps = NULL;
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index a245597a3902..c2c82e6391b4 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -579,7 +579,7 @@ static void cdc_ncm_set_dgram_size(struct usbnet *dev, int new_size)
+ 	err = usbnet_read_cmd(dev, USB_CDC_GET_MAX_DATAGRAM_SIZE,
+ 			      USB_TYPE_CLASS | USB_DIR_IN | USB_RECIP_INTERFACE,
+ 			      0, iface_no, &max_datagram_size, sizeof(max_datagram_size));
+-	if (err < sizeof(max_datagram_size)) {
++	if (err != sizeof(max_datagram_size)) {
+ 		dev_dbg(&dev->intf->dev, "GET_MAX_DATAGRAM_SIZE failed\n");
+ 		goto out;
+ 	}
 -- 
-2.24.0
+2.11.0
 
