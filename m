@@ -2,55 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 249D6FAE27
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 11:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2A6FAE41
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 11:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727241AbfKMKLR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 05:11:17 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:40936 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727080AbfKMKLR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 05:11:17 -0500
-Received: by mail-wm1-f67.google.com with SMTP id f3so1310745wmc.5
-        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2019 02:11:15 -0800 (PST)
+        id S1726910AbfKMKOM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 05:14:12 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36617 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727237AbfKMKOL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 05:14:11 -0500
+Received: by mail-wr1-f66.google.com with SMTP id r10so1667681wrx.3
+        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2019 02:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=aleksander-es.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+WeywjYhif8cbDEqMOV9DoOxbQ0mSoumc3+tLKw1uLM=;
-        b=H4cg+YZkn91KQnCu6mBp6aYcM6J1FTJ2Nx1UCRlGMBcC7vGLScX1L623Mp/ugSGMgF
-         BKu01xFWg8RZDf/qyhPH9EC2ZfRzylzJYMg2w5rAlL7G6jckM1fn/gS4QDqxcyLixycS
-         2Z3XsDxqlZejK5hp71L8Jqu7I7eqHz2TfY6gBGQbEvm/GdZTexGJH/M9AKKhnvQQND5C
-         FSp7te8fAZRfzQFihdNGMrOuDSNUMWa5rbHrHISIwmPrDS4NzecStq1pMB+WKWjHFxhS
-         eyLrKJT1L/PXDljA4hIN0iFTDMTbBGyasH5COY1vmYpOvB4CK9d62cKLslGA8nIwS8Av
-         cTXw==
+        bh=RP3pP9qx8PCTjW6ZCkvepli+qjDt0nMAodv/R1yDn3Y=;
+        b=nV/2ekFOhvDZZSXzQJJzLLvSkxSf4msK6zLARVltWW9El0bV4nyNyPCkKPS7uup+Gd
+         UR1ekr9/fINRBfnnbZObfgKMnmW7qT0WeUDgbw4L50gAZH6X9tsqtHc5FeEZhpo65Cdi
+         GbEK8aR4hcPeCwbvyHvGgLBZKxoCMiOYCEKaXZ8EiBUqGKsu3rvb9mzo9vxDLma+VJVP
+         TG0y42fEhoOWmDId0RtrhvAl+ZPGLL3uB+u5i2asAT2nQ+Vsx5o236mhM3i4nSLPrz44
+         n8LL+HTZw3d0mThUW6Sw0i4iXdp9qFVdfYFuZBzCGeyP2S9oWCJHRU1B8cWa+5v4kye5
+         CIcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=+WeywjYhif8cbDEqMOV9DoOxbQ0mSoumc3+tLKw1uLM=;
-        b=uUSmVvK/Gh9ipB+p9CpYyO1v3V9J1reOeLzAIxgw02OZ8MnigX/bQy93PjBTlBudnE
-         j9R5nt2Zqwzl9Yu6ow1h5HC8Pn7L/4wrEhlN42IRYNYKW4kYOC7TLbj/+2xHPZ3uJ1lR
-         SfhcFcL2Fvv0Dgt/yNhtG1Qpz3y4vtp9lghpLEGTHd9fdt1HUQFagEgWJxX2mAi8FI3Y
-         Qn7ieLg+QkrYa68VvTPFX3uLncMUQq9shjFEPmPwvifG/5v/akXeGkCNe4/CgmWPImnz
-         XGZThM7SUXhuYpAG0iYFoiaQEtaLVsg6u8ckl329yYhOgwV5QoFDK7sMLR0ok17whviI
-         TrbQ==
-X-Gm-Message-State: APjAAAXsPn6YauPwu0F8agBZ9xA6JHV7Mfw0DRHWvFqhI7OANG7WRu7H
-        J+19qGDpIZfZuOgHC8wrCIcXag==
-X-Google-Smtp-Source: APXvYqwst42K3LwIDuk0tBKtjOq4ShX05R4CRWd8xFX1teo1ExSOwBayxYOUvI9Fdmk6xfk9T6RxKA==
-X-Received: by 2002:a1c:ed16:: with SMTP id l22mr1918443wmh.151.1573639875005;
-        Wed, 13 Nov 2019 02:11:15 -0800 (PST)
+        bh=RP3pP9qx8PCTjW6ZCkvepli+qjDt0nMAodv/R1yDn3Y=;
+        b=IGm721HWCC6k2sKNPOU6rCE4bnpv5gwJ6NVKlfGEl3k12405sdfhj+MsEkmKqySDC1
+         58o386QW70AN1J80YWLYfy0YORi5oOVqUIO4OofekCyGppgIkxTjKwV5kIeF7SktcdFF
+         p/92gtQbFwCxoaDijS7SBWFEnx1uocjJHXAfmnXG83v8ZSc47dIEfk9T1aJtmm24lkO9
+         et5XMQC3aORuHjammJTnMUwtkxgxAPOx2iZRFKZikXlGD9yb83x4Qe9gUdtFRjWiUcSX
+         LQ2zZyb3fYJEfb7INgrUYTPl4PSe+Wn68Z9MEhky6WJal977PYEKbNemoGBKmhu2B6nI
+         mYpQ==
+X-Gm-Message-State: APjAAAVlZzHCoZG1CgV+3tqPV/yPgX+AXI1IejvbqOp6AZvnEZgje6z6
+        hapn7JUvf4nbsxEb/TNXMuDKCQ==
+X-Google-Smtp-Source: APXvYqw6qY0JTtU1D/gprl/kp1t6XQ7/cafR+AroSkVG2viQcXV2oyOneg4YQkBIFPHZcD5jWwhJ3Q==
+X-Received: by 2002:adf:d18b:: with SMTP id v11mr2135670wrc.308.1573640049846;
+        Wed, 13 Nov 2019 02:14:09 -0800 (PST)
 Received: from ares.lan (232.red-88-3-18.dynamicip.rima-tde.net. [88.3.18.232])
-        by smtp.gmail.com with ESMTPSA id k4sm1896719wmk.26.2019.11.13.02.11.13
+        by smtp.gmail.com with ESMTPSA id y15sm2076324wrh.94.2019.11.13.02.14.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2019 02:11:14 -0800 (PST)
+        Wed, 13 Nov 2019 02:14:09 -0800 (PST)
 From:   Aleksander Morgado <aleksander@aleksander.es>
-To:     bjorn@mork.no, davem@davemloft.net, netdev@vger.kernel.org,
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org
-Cc:     Aleksander Morgado <aleksander@aleksander.es>
-Subject: [PATCH] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
-Date:   Wed, 13 Nov 2019 11:11:10 +0100
-Message-Id: <20191113101110.496306-1-aleksander@aleksander.es>
+Cc:     stable@vger.kernel.org,
+        Aleksander Morgado <aleksander@aleksander.es>
+Subject: [PATCH] USB: serial: option: add support for Foxconn T77W968 LTE modules
+Date:   Wed, 13 Nov 2019 11:14:05 +0100
+Message-Id: <20191113101405.496557-1-aleksander@aleksander.es>
 X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -60,9 +61,8 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 These are the Foxconn-branded variants of the Dell DW5821e modules,
-same USB layout as those.
-
-The QMI interface is exposed in USB configuration #1:
+same USB layout as those. The device exposes AT, NMEA and DIAG ports
+in both USB configurations.
 
 P:  Vendor=0489 ProdID=e0b4 Rev=03.18
 S:  Manufacturer=FII
@@ -76,24 +76,51 @@ I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
 I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
+P:  Vendor=0489 ProdID=e0b4 Rev=03.18
+S:  Manufacturer=FII
+S:  Product=T77W968 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 7 Cfg#= 2 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
+I:  If#=0x1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
+I:  If#=0x6 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+
 Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
 ---
- drivers/net/usb/qmi_wwan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/serial/option.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 56d334b9ad45..4196c0e32740 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1371,6 +1371,8 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
- 	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
- 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
-+	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
-+	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 2023f1f4edaf..787f004f24fc 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -555,6 +555,11 @@ static void option_instat_callback(struct urb *urb);
+ #define WETELECOM_PRODUCT_6802			0x6802
+ #define WETELECOM_PRODUCT_WMD300		0x6803
  
- 	/* 4. Gobi 1000 devices */
- 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
++/* Foxconn products */
++#define FOXCONN_VENDOR_ID			0x0489
++#define FOXCONN_PRODUCT_T77W968			0xe0b4
++#define FOXCONN_PRODUCT_T77W968_ESIM		0xe0b5
++
+ 
+ /* Device flags */
+ 
+@@ -1999,6 +2004,10 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = RSVD(4) | RSVD(5) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+ 	  .driver_info = RSVD(6) },
++	{ USB_DEVICE(FOXCONN_VENDOR_ID, FOXCONN_PRODUCT_T77W968),
++	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
++	{ USB_DEVICE(FOXCONN_VENDOR_ID, FOXCONN_PRODUCT_T77W968_ESIM),
++	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
 -- 
 2.24.0
 
