@@ -2,237 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F97FAE6A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 11:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA54BFAE7A
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 11:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbfKMKZp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 05:25:45 -0500
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:12304 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726165AbfKMKZp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 05:25:45 -0500
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xADALufT008931;
-        Wed, 13 Nov 2019 02:25:36 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=Qv+nswBlN/yxOM1n66f0Z8KLhFb3u5YARiapow+iAxk=;
- b=Tzbu17RgwtTGa1sMMDJUBZP/6cRvOtAG6i7KopyfTP1Gulgl3IOb56jopC7FqS74prHS
- mlVLiOC3alOX2KZe6KpY7SHp2g9NrWBfFfGn1+lrl1f/YoFG14FlST7DBBkFBMmcrJW+
- sRfzac3gSbtar+IREVCsD3AowEN6q+8yl0th2H10N6sSdKIiQD/lhLNhjivIAgCN4dGP
- O5pLIqr1j8SwRlwpCyb4DxF1KmqR+YP4OefES64reC1nBSRC8CH8HlAApNsAdRVoBtpr
- Qh0Mi2A9n6maVQJRs/X3NLG0JXwq7ZLy5fDyyDIqx4KRX/0CHGWFXO+mhaYXmjJScmqq cA== 
-Received: from nam03-co1-obe.outbound.protection.outlook.com (mail-co1nam03lp2053.outbound.protection.outlook.com [104.47.40.53])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 2w7prsw7n3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Nov 2019 02:25:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MUP7sZWzn6mLc5MQO8fWcOo6hcydRZ8Pn3cmJUGsE671kDqM/BgIKQ/N/CDU5q+ItPRPBt7JPB8F+iHfpMswX0DjopIveukKBdWRoWTxpumoqjNv86pEmCqiVelv/cVA5Kgw7R/gxfa9K1GV0lFjr4LY5jWBkwaF2uQDKcw4H9esJvyHfNpluqPu/TF0kBLtz6y29XQMDY3pNq+mR8ogimAn19FkYLfrnE7zJ7xMawng5cH34KmMgMlzlE/hSTHLVeTjEeK7z9U2tbhZyPu2sexunuEIk5XeJX0+FFlPh6uDzGvLkkA7ua4hNB9yihAaRtVPrGMCBjjEK8pLVxxD4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qv+nswBlN/yxOM1n66f0Z8KLhFb3u5YARiapow+iAxk=;
- b=CvssYLeUcFcCZLGnca2exhu3N7Wp0iTXV5ffnBHnOd5cw2sPdeOkN/FTxenuKD8nz/W2hi0DOzrHs4PBFuDftejJeJPNm6DITSz9lDiQFRPVW+uCaZcxAjixbsGU5WnK9hfOk3ewKocNXGV1E4MkcU7dR2EoY71c+wpkrYKIKYHcst9/TySye+UvNxKrxC6KLeHZ89hxo5FjUpUV1c1Np2z/srStz9Ni1MSTzSXA0fhz0n0jGSpwYcCEocYqVQNCYrxkv7dckslp9lcPdoQyj8+dwRmD8jN8YTJ+SKyuWbEuuK3c+yeOCkCOgI+BhH5GO964OamuDykzSLVg0nAkYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 199.43.4.28) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=cadence.com;
- dmarc=fail (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qv+nswBlN/yxOM1n66f0Z8KLhFb3u5YARiapow+iAxk=;
- b=vDTJ59vnMXahkNsIp6milx+qPCHKLmLcpWELQFiYVTpu5PmExKai2YhrgyloXxYbZ5FkqyfzF5z41KrQMNlitWeJSZpt4i0Pw0mTH5KDxYVuQ9sIfH0i5T1m4mBAv0yX5hV1rLK4xurl6AWUbRRRFdo1pm4jWlxukHQOcx2UB1U=
-Received: from MN2PR07CA0021.namprd07.prod.outlook.com (2603:10b6:208:1a0::31)
- by DM5PR07MB4038.namprd07.prod.outlook.com (2603:10b6:4:ba::39) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.25; Wed, 13 Nov
- 2019 10:25:33 +0000
-Received: from DM3NAM05FT010.eop-nam05.prod.protection.outlook.com
- (2a01:111:f400:7e51::204) by MN2PR07CA0021.outlook.office365.com
- (2603:10b6:208:1a0::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2430.22 via Frontend
- Transport; Wed, 13 Nov 2019 10:25:33 +0000
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- cadence.com discourages use of 199.43.4.28 as permitted sender)
-Received: from rmmaillnx1.cadence.com (199.43.4.28) by
- DM3NAM05FT010.mail.protection.outlook.com (10.152.98.117) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.15 via Frontend Transport; Wed, 13 Nov 2019 10:25:33 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id xADAPTSJ005709
-        (version=TLSv1/SSLv3 cipher=AES256-SHA bits=256 verify=OK);
-        Wed, 13 Nov 2019 05:25:30 -0500
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3; Wed, 13 Nov 2019 11:25:29 +0100
-Received: from lvlogina.cadence.com (10.165.176.102) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1367.3 via Frontend Transport; Wed, 13 Nov 2019 11:25:29 +0100
-Received: from lvlogina.cadence.com (localhost.localdomain [127.0.0.1])
-        by lvlogina.cadence.com (8.14.4/8.14.4) with ESMTP id xADAPSrx013724;
-        Wed, 13 Nov 2019 10:25:28 GMT
-Received: (from jpawar@localhost)
-        by lvlogina.cadence.com (8.14.4/8.14.4/Submit) id xADAPQEx013570;
-        Wed, 13 Nov 2019 10:25:26 GMT
-From:   Jayshri Pawar <jpawar@cadence.com>
-To:     <linux-usb@vger.kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <felipe.balbi@linux.intel.com>,
-        <heikki.krogerus@linux.intel.com>, <rogerq@ti.com>,
-        <linux-kernel@vger.kernel.org>, <jbergsagel@ti.com>,
-        <nsekhar@ti.com>, <nm@ti.com>, <peter.chen@nxp.com>,
-        <kurahul@cadence.com>, <pawell@cadence.com>, <sparmar@cadence.com>,
-        <jpawar@cadence.com>
-Subject: [RFC PATCH] usb: gadget: f_tcm: Added DMA32 flag while allocation of command buffer
-Date:   Wed, 13 Nov 2019 10:24:32 +0000
-Message-ID: <1573640672-10344-1-git-send-email-jpawar@cadence.com>
-X-Mailer: git-send-email 1.9.0
+        id S1727452AbfKMK2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 05:28:05 -0500
+Received: from canardo.mork.no ([148.122.252.1]:54275 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727374AbfKMK2F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Nov 2019 05:28:05 -0500
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id xADARvwe000540
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 13 Nov 2019 11:27:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1573640878; bh=P6+yU5QsfqoGNEzxVibdDpCcnn3di0eFZU5up5TTlnQ=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=cUakuC4WIQsu9IRTJTDsQBjJbIs2f5iHuIReRrjRlCIioJKr1gY7DG/kyI9yBSX4b
+         UgqCXaHrtKTVvfQTHOaNkcFa1hg9xoQcGtMnxX74E/IB9vv6ppLcym2X+/iLlSY7XI
+         jEZVe5rKb4ZMM7QBTM6aZWhlFCLzNM5jrLQR+IOE=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1iUpsT-0006a0-QL; Wed, 13 Nov 2019 11:27:57 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Aleksander Morgado <aleksander@aleksander.es>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
+Organization: m
+References: <20191113101110.496306-1-aleksander@aleksander.es>
+Date:   Wed, 13 Nov 2019 11:27:57 +0100
+In-Reply-To: <20191113101110.496306-1-aleksander@aleksander.es> (Aleksander
+        Morgado's message of "Wed, 13 Nov 2019 11:11:10 +0100")
+Message-ID: <87woc4qdea.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-Forefront-Antispam-Report: CIP:199.43.4.28;IPV:CAL;SCL:-1;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(136003)(39860400002)(346002)(396003)(376002)(189003)(36092001)(199004)(7416002)(6916009)(76130400001)(186003)(26005)(16586007)(2906002)(2351001)(50466002)(126002)(54906003)(476003)(316002)(51416003)(36756003)(48376002)(486006)(8936002)(2616005)(42186006)(50226002)(305945005)(336012)(426003)(8676002)(81156014)(81166006)(87636003)(478600001)(47776003)(70206006)(14444005)(70586007)(107886003)(4326008)(356004)(6666004)(86362001)(26826003)(5660300002);DIR:OUT;SFP:1101;SCL:1;SRVR:DM5PR07MB4038;H:rmmaillnx1.cadence.com;FPR:;SPF:SoftFail;LANG:en;PTR:InfoDomainNonexistent;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d0a6d906-0013-4d21-aa7b-08d76823d0ba
-X-MS-TrafficTypeDiagnostic: DM5PR07MB4038:
-X-Microsoft-Antispam-PRVS: <DM5PR07MB40388175F033149180858A7FC1760@DM5PR07MB4038.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
-X-Forefront-PRVS: 0220D4B98D
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tUaSlvoq2Npd2VGVMJEaNe3JQ12vY0Jf9jyTPNaJP2UvacmxOmX3uFMV9KWjIMmz3l2UJnE5+k6FM/FsIDvnKOro7oVh1618evSrhREIPJpEfEptfVp9XCA9qVThtTCUhNsyZNLzrm0UZHONli5fDe8lgUAyb/0zEHr+Iew40EXv7C3GvWpuZYhbJ5TU1ptVM2DrC2ViMEjEtTh6fpA9Y4Dy7EQ+O70MCIRcKEly7xGSHHLC/qMXP5cTkiykFRkHLxIaoAasCXaTdXYtsAQG7cmRTNIS6BwhyhdbgXGSLwauBf98BoqOOkzZHkZXKPsfFpXC4Jbzf+mUZkfYulO/trvxpTppovipKvNpjSzO9yDxDzCnNdls86rMk7kw4vaeCNP4d4A9nE+21GQxb/fH1FsaE+Uw6OaM06JIK8l7MmLzvEvxk7giRaJLoLazd6QHKx7y6C9z5aFLbDvUROnTBg==
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Nov 2019 10:25:33.0472
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d0a6d906-0013-4d21-aa7b-08d76823d0ba
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.28];Helo=[rmmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR07MB4038
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-11-13_02:2019-11-13,2019-11-13 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 adultscore=0
- spamscore=0 clxscore=1011 impostorscore=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 suspectscore=1
- mlxlogscore=996 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-1910280000 definitions=main-1911130098
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is a problem when function driver allocate memory for buffer
-used by DMA from outside dma_mask space.
-It appears during testing f_tcm driver with cdns3 controller.
-In the result cdns3 driver was not able to map virtual buffer to DMA.
-This fix should be improved depending on dma_mask associated with device.
-Adding GFP_DMA32 flag while allocationg command data buffer only for 32
-bit controllers.
+Aleksander Morgado <aleksander@aleksander.es> writes:
 
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
----
- drivers/usb/gadget/function/f_tcm.c | 20 ++++++++++++++------
- include/linux/usb/gadget.h          |  2 ++
- 2 files changed, 16 insertions(+), 6 deletions(-)
+> These are the Foxconn-branded variants of the Dell DW5821e modules,
+> same USB layout as those.
+>
+> The QMI interface is exposed in USB configuration #1:
+>
+> P:  Vendor=3D0489 ProdID=3De0b4 Rev=3D03.18
+> S:  Manufacturer=3DFII
+> S:  Product=3DT77W968 LTE
+> S:  SerialNumber=3D0123456789ABCDEF
+> C:  #Ifs=3D 6 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
+> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3Dqmi_wwan
+> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Drive=
+r=3Dusbhid
+> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
+r=3Doption
+> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
+r=3Doption
+> I:  If#=3D0x4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
+r=3Doption
+> I:  If#=3D0x5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
+r=3Doption
+>
+> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+> ---
+>  drivers/net/usb/qmi_wwan.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+> index 56d334b9ad45..4196c0e32740 100644
+> --- a/drivers/net/usb/qmi_wwan.c
+> +++ b/drivers/net/usb/qmi_wwan.c
+> @@ -1371,6 +1371,8 @@ static const struct usb_device_id products[] =3D {
+>  	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
+>  	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
+>  	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
+> +	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
+> +	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM s=
+upport*/
+>=20=20
+>  	/* 4. Gobi 1000 devices */
+>  	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
 
-diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
-index 36504931b2d1..a78d5fad3d84 100644
---- a/drivers/usb/gadget/function/f_tcm.c
-+++ b/drivers/usb/gadget/function/f_tcm.c
-@@ -213,7 +213,8 @@ static int bot_send_read_response(struct usbg_cmd *cmd)
- 	}
- 
- 	if (!gadget->sg_supported) {
--		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
-+		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
-+					gadget->dma_flag);
- 		if (!cmd->data_buf)
- 			return -ENOMEM;
- 
-@@ -257,7 +258,8 @@ static int bot_send_write_request(struct usbg_cmd *cmd)
- 	}
- 
- 	if (!gadget->sg_supported) {
--		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_KERNEL);
-+		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_KERNEL |
-+					gadget->dma_flag);
- 		if (!cmd->data_buf)
- 			return -ENOMEM;
- 
-@@ -305,6 +307,7 @@ static void bot_cmd_complete(struct usb_ep *ep, struct usb_request *req)
- static int bot_prepare_reqs(struct f_uas *fu)
- {
- 	int ret;
-+	struct usb_gadget *gadget = fuas_to_gadget(fu);
- 
- 	fu->bot_req_in = usb_ep_alloc_request(fu->ep_in, GFP_KERNEL);
- 	if (!fu->bot_req_in)
-@@ -327,7 +330,8 @@ static int bot_prepare_reqs(struct f_uas *fu)
- 	fu->bot_status.req->complete = bot_status_complete;
- 	fu->bot_status.csw.Signature = cpu_to_le32(US_BULK_CS_SIGN);
- 
--	fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL);
-+	fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL |
-+				gadget->dma_flag);
- 	if (!fu->cmd.buf)
- 		goto err_buf;
- 
-@@ -515,7 +519,8 @@ static int uasp_prepare_r_request(struct usbg_cmd *cmd)
- 	struct uas_stream *stream = cmd->stream;
- 
- 	if (!gadget->sg_supported) {
--		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
-+		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
-+					gadget->dma_flag);
- 		if (!cmd->data_buf)
- 			return -ENOMEM;
- 
-@@ -763,11 +768,13 @@ static int uasp_alloc_stream_res(struct f_uas *fu, struct uas_stream *stream)
- 
- static int uasp_alloc_cmd(struct f_uas *fu)
- {
-+	struct usb_gadget *gadget = fuas_to_gadget(fu);
- 	fu->cmd.req = usb_ep_alloc_request(fu->ep_cmd, GFP_KERNEL);
- 	if (!fu->cmd.req)
- 		goto err;
- 
--	fu->cmd.buf = kmalloc(fu->ep_cmd->maxpacket, GFP_KERNEL);
-+	fu->cmd.buf = kmalloc(fu->ep_cmd->maxpacket, GFP_KERNEL |
-+				gadget->dma_flag);
- 	if (!fu->cmd.buf)
- 		goto err_buf;
- 
-@@ -980,7 +987,8 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
- 	struct usb_gadget *gadget = fuas_to_gadget(fu);
- 
- 	if (!gadget->sg_supported) {
--		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
-+		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
-+					gadget->dma_flag);
- 		if (!cmd->data_buf)
- 			return -ENOMEM;
- 
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 124462d65eac..d6c9cd222600 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -373,6 +373,7 @@ struct usb_gadget_ops {
-  * @connected: True if gadget is connected.
-  * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
-  *	indicates that it supports LPM as per the LPM ECN & errata.
-+ * @dma_flag: dma zone to be used for buffer allocation.
-  *
-  * Gadgets have a mostly-portable "gadget driver" implementing device
-  * functions, handling all usb configurations and interfaces.  Gadget
-@@ -427,6 +428,7 @@ struct usb_gadget {
- 	unsigned			deactivated:1;
- 	unsigned			connected:1;
- 	unsigned			lpm_capable:1;
-+	unsigned int			dma_flag;
- };
- #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
- 
--- 
-2.20.1
+Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
 
+Just one question, which I should have asked about the DW5821e too: Is
+it possible to configure the firmware of these modems to USB2 only, and
+do they work with the qmi_wwan driver then?
+
+I suspect that these modems really need the SET_DTR quirk...  Or rather
+that I should get around to making that default, as it seems most new
+stuff needs it and most old stuff doesn't care.
+
+
+Bj=C3=B8rn
