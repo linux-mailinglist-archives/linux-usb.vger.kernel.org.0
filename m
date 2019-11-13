@@ -2,107 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4E8FABD4
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 09:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8784BFAD86
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 10:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfKMIPY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 03:15:24 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33144 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725966AbfKMIPY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 03:15:24 -0500
-Received: by mail-oi1-f195.google.com with SMTP id m193so1026910oig.0;
-        Wed, 13 Nov 2019 00:15:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Whr69WnB3YGY82P+1Ky0EeEFdRsVKLIHk2RMx93/NgQ=;
-        b=S8lsLluMXpoEKrsxTw1fQa75jHbUEsfD7E8XGVjgr7IdUB4hA1plKZy8kguQ842Ya9
-         LB5LSJ1PNeIaFg7L/weKoJmIMmdmgWfRJ3KOMqZY4BYhuq+8PUb4tBfqdNduO5EbMIBg
-         SINPDXqc5ZBjLrQoI0WnGGHZgngcnrf6wDqlIwGL5bgCBcMPhvwhZkP+bDIeovQm84Sw
-         dipyjuLepuQGhCkUDn5U44cFG+RTHGxp9WMeSV/tGOipNU/OP4CXALO6MxDNZ/mPldYc
-         nLUxqgQOC/Ttaqwd4yxbTcoy7wC2nPWQrZx05QbGMaQDGo6w5ts0tSt/zLtr4HEVXFNp
-         X8MA==
-X-Gm-Message-State: APjAAAUwr0IHFeHgtKwoYlStNKynKzM3x1Df6VQyWHgt4gOZNtM0Gl+K
-        Nl4nYp39pUGBBZKrNI0VipIDtPOW0ZddJk5PIWA=
-X-Google-Smtp-Source: APXvYqwGsmRX60vFrFjj0w3IbwFDreJ07/ZVB5RlYtF9WAF3z+Ln+6XWyMWXJ+W55i9W6JMRyCas0d3k2KWuMKoPROM=
-X-Received: by 2002:aca:fc92:: with SMTP id a140mr1745123oii.153.1573632921784;
- Wed, 13 Nov 2019 00:15:21 -0800 (PST)
+        id S1727588AbfKMJra (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 04:47:30 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:59152 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727578AbfKMJr3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 04:47:29 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAD9lPO0084421;
+        Wed, 13 Nov 2019 03:47:25 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573638445;
+        bh=eGjBTMj+RQxCssIXFWDGuYzJCRzhhvflhoF8CYxUAQ0=;
+        h=From:To:CC:Subject:Date;
+        b=oTjqyiq0v57Z/KPHhuwD733ovHJPe9UNw9XADR40XKCNAfXNB4NtRs5CwatiJZVKD
+         +85C078VzhYgrRvSkG9xl4buxJG5g4PqL/N9tQJOUtivLAHkxjU6cDfyuqGvbSqwwV
+         n791WkyEVv0G1mMGXgG7Ngb9HWbzkDhKZOkvAyCw=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAD9lPRg072648;
+        Wed, 13 Nov 2019 03:47:25 -0600
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 13
+ Nov 2019 03:47:07 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 13 Nov 2019 03:47:24 -0600
+Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAD9lMc8083574;
+        Wed, 13 Nov 2019 03:47:23 -0600
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+To:     <gregkh@linuxfoundation.org>, <yoshihiro.shimoda.uh@renesas.com>
+CC:     <vkoul@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] usb: renesas_usbhs: Use dma_request_chan() directly for channel request
+Date:   Wed, 13 Nov 2019 11:48:38 +0200
+Message-ID: <20191113094838.2141-1-peter.ujfalusi@ti.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <1571818808-12495-1-git-send-email-yoshihiro.shimoda.uh@renesas.com>
- <20191029184822.GA5031@bogus>
-In-Reply-To: <20191029184822.GA5031@bogus>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 13 Nov 2019 09:15:10 +0100
-Message-ID: <CAMuHMdWDzhwbu6_Gw6ed5DsNVkmtGuN56Bxfy3rfuQzh27PL_A@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: renesas_usbhs: convert bindings to json-schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Chris Brandt <Chris.Brandt@renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
+dma_request_slave_channel_reason() is:
+#define dma_request_slave_channel_reason(dev, name) \
+	dma_request_chan(dev, name)
 
-On Tue, Oct 29, 2019 at 9:01 PM Rob Herring <robh@kernel.org> wrote:
-> On Wed, Oct 23, 2019 at 05:20:08PM +0900, Yoshihiro Shimoda wrote:
-> > Convert Renesas USBHS (HS-USB) controller bindings documentation
-> > to json-schema.
-> >
-> > Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+---
+ drivers/usb/renesas_usbhs/fifo.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> > @@ -0,0 +1,121 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/renesas,usbhs.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas USBHS (HS-USB) controller
-> > +
-> > +maintainers:
-> > +  - Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - renesas,usbhs-r7s72100 # RZ/A1
->
-> If you don't expect new SoCs, this could be a 'const' instead.
-
-There are others, but we don't have them enabled in upstream.
-[v3 ...] Can be reverted back to enum when the need arises, though.
-
-> > +          - const: renesas,rza1-usbhs
-> > +
-> > +      - items:
-> > +          - enum:
-> > +              - renesas,usbhs-r7s9210 # RZ/A2
-
-Likewise, I guess.
-
-> > +          - const: renesas,rza2-usbhs
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+index 86637cd066cf..01c6a48c41bc 100644
+--- a/drivers/usb/renesas_usbhs/fifo.c
++++ b/drivers/usb/renesas_usbhs/fifo.c
+@@ -1273,11 +1273,11 @@ static void usbhsf_dma_init_dt(struct device *dev, struct usbhs_fifo *fifo,
+ 	 */
+ 	snprintf(name, sizeof(name), "ch%d", channel);
+ 	if (channel & 1) {
+-		fifo->tx_chan = dma_request_slave_channel_reason(dev, name);
++		fifo->tx_chan = dma_request_chan(dev, name);
+ 		if (IS_ERR(fifo->tx_chan))
+ 			fifo->tx_chan = NULL;
+ 	} else {
+-		fifo->rx_chan = dma_request_slave_channel_reason(dev, name);
++		fifo->rx_chan = dma_request_chan(dev, name);
+ 		if (IS_ERR(fifo->rx_chan))
+ 			fifo->rx_chan = NULL;
+ 	}
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Peter
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
+Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+
