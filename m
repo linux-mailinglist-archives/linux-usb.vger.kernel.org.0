@@ -2,105 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA54BFAE7A
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 11:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0E0FAFD0
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 12:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727452AbfKMK2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 05:28:05 -0500
-Received: from canardo.mork.no ([148.122.252.1]:54275 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727374AbfKMK2F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Nov 2019 05:28:05 -0500
-Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id xADARvwe000540
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Wed, 13 Nov 2019 11:27:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1573640878; bh=P6+yU5QsfqoGNEzxVibdDpCcnn3di0eFZU5up5TTlnQ=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=cUakuC4WIQsu9IRTJTDsQBjJbIs2f5iHuIReRrjRlCIioJKr1gY7DG/kyI9yBSX4b
-         UgqCXaHrtKTVvfQTHOaNkcFa1hg9xoQcGtMnxX74E/IB9vv6ppLcym2X+/iLlSY7XI
-         jEZVe5rKb4ZMM7QBTM6aZWhlFCLzNM5jrLQR+IOE=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1iUpsT-0006a0-QL; Wed, 13 Nov 2019 11:27:57 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Aleksander Morgado <aleksander@aleksander.es>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
-Organization: m
-References: <20191113101110.496306-1-aleksander@aleksander.es>
-Date:   Wed, 13 Nov 2019 11:27:57 +0100
-In-Reply-To: <20191113101110.496306-1-aleksander@aleksander.es> (Aleksander
-        Morgado's message of "Wed, 13 Nov 2019 11:11:10 +0100")
-Message-ID: <87woc4qdea.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727644AbfKMLit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 06:38:49 -0500
+Received: from sonic307-53.consmr.mail.ir2.yahoo.com ([87.248.110.30]:35301
+        "EHLO sonic307-53.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726086AbfKMLit (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 06:38:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1573645125; bh=F+7QXJPRuyxKv+5YqLXXhHJC5uuItS/uRvnxFMJ0nnQ=; h=Date:From:Reply-To:Subject:From:Subject; b=LDQ9YsliWwd4IXYTmDoAkY+f29BVyL3tBZ9BNvlFy2kQYjm3oB4VRFLSLKkRbYKFskf1FemC0X4Wk/lCuY3h8rPxsAX9zt6CQpbyqIygauyAaa19Ma4yC/t9uhydRH7mClJozXBHIf3RoKHsHG1YWFR5RR1zVGytn9LZ+zfU44c0qTCYmG9PTAM94ctQIJfw4Hmda02gZzKe23VQsRMJspuXubRby5m4eCZb0TIqfbaPwmZbyOZ8Bs7FeO6wjlwYS/gPc+hhXoZZw0NL1LEM8Vd40gSjvaebjAw/Y74IhvWPEzGMkvj1jI5AHNbjSNkw0LxCJi2TF0IrWbgyvwDkTA==
+X-YMail-OSG: TwukZ8EVM1mdgCwGVSN1Y5mBaONyxf8M8pLLIjOP_IWRWtg78Q9B8DMfGQa9t2f
+ yVS.nIBZvfPZDwvVdAbbfLSe.7BkDaJq2FnqOcBd.leEc85.GnmPNKIMVB0siYBddxQSiPvAqBEc
+ lYyR7taOKXzhd7Ue9s3G8Loy8gWhWPjR5SnvupDxsx9M7CM3XiACme2wLs3e.GaorLDFJTMa4gw0
+ 9WPe_zLDq37.KEz80RV1xxZ3MXoFWjBENgMCRjRlvEPx7vnAh.ZFx8hKt0rUOBIMC4IEnGm7ANJG
+ WpC8pXSwj4PPu6lRT1Uiw7GGVHMZQoRqPL92NXsXhPYHx3BN0ICGuJgwv3QQIf4J4LX3Irutf8_X
+ y9MBRoZr_fVwi1fTPesDl18HGoJh1hQXm_Xw0tRuKx.vASni8dqvpk6K1EWDEAtQh_CYoS9GEi2S
+ SlC.ybcyA2uUcUqDbEcBKYgi2CVhEVq0X0TWJc1njl0L5CWK9Ta2pn1TEe4F_T2P27CnKAkfhxTf
+ ULBbU.OHVlPqMu7MJJO92GhKDF6LahU2kfeC2M2s8efxOZ2o5ymMGl2kbrSpilnr23KSF5H_NAUv
+ DHlI8WmQ7PNjO3zcWr5SowqOxzMF.q1L2mn67Bbi649T1wqBmaUeDyUqizHClkQcjBYOkH4YpgFf
+ bIzUpq9kVPxI7Exrz57gNUoM5mY7pgWGdKMvOuVzAD5ULFehX8y0A2nbo1asDX.Cr9gLFqbEW27h
+ RGLkq4paksON3y3y4C0Y9W_gfq.qri5LhzLX4wIDLQglhrR1cCNGqZiLP_FK42534kkAyJko.L1E
+ Tz6pNq_FfIyU_HDRm0ViaTMSzTnU9JSY_7bVxEo1eulGZ17Po82Cxg1MFOavQl8i_KtPJJO8nWOc
+ hgbvryQVB.g7LALqHTuHWRlT80IecilMWRce1HvVeWjwSUrHw9PvPYLjAHMMVoYGp9lmDoZvOZWS
+ 3WpKTLJ567yRIc.RS9Or2pVYpXLuaDYe45r8JdbG8UeeETfmC1gMN1esazG1NG39ZrLeY_rfUew.
+ Ry.HfmKeIY6y9WUJj4uZJUZ28SfNbGWTi0rMlLWD3XU2K8V3O8r106eo.9QMuYnUIifjqujZQBHx
+ Ab20cnacZQzoPoBOS.JnGqpXsgwEn92bmvjVjOmhpHTQw8PI0AvpE9vhkgP6whB8db4Mc.UhZK_G
+ 7BEAKjpguEF7J0tApOLcVi5.n5ASWbV3dG8ZVmEARKU5Alqwz__2NtVsJ962kYoGjCJ.xR23U0Vq
+ psWDu9gA6K.2U7mME0a5LE_BOTL_OsaEnaRhFXkiBW4IBhNNasep6JiXXGa_U1Xarj_2iw6.rHN4
+ l
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Wed, 13 Nov 2019 11:38:45 +0000
+Date:   Wed, 13 Nov 2019 11:38:42 +0000 (UTC)
+From:   MR DAN KOURE <dankoure2@gmail.com>
+Reply-To: dkoure73@gmail.com
+Message-ID: <419854262.4679420.1573645122183@mail.yahoo.com>
+Subject: BUSINESS CO-OPERATION BENEFIT.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Aleksander Morgado <aleksander@aleksander.es> writes:
-
-> These are the Foxconn-branded variants of the Dell DW5821e modules,
-> same USB layout as those.
->
-> The QMI interface is exposed in USB configuration #1:
->
-> P:  Vendor=3D0489 ProdID=3De0b4 Rev=3D03.18
-> S:  Manufacturer=3DFII
-> S:  Product=3DT77W968 LTE
-> S:  SerialNumber=3D0123456789ABCDEF
-> C:  #Ifs=3D 6 Cfg#=3D 1 Atr=3Da0 MxPwr=3D500mA
-> I:  If#=3D0x0 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
-r=3Dqmi_wwan
-> I:  If#=3D0x1 Alt=3D 0 #EPs=3D 1 Cls=3D03(HID  ) Sub=3D00 Prot=3D00 Drive=
-r=3Dusbhid
-> I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
-r=3Doption
-> I:  If#=3D0x3 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
-r=3Doption
-> I:  If#=3D0x4 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3D00 Prot=3D00 Drive=
-r=3Doption
-> I:  If#=3D0x5 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Drive=
-r=3Doption
->
-> Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
-> ---
->  drivers/net/usb/qmi_wwan.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-> index 56d334b9ad45..4196c0e32740 100644
-> --- a/drivers/net/usb/qmi_wwan.c
-> +++ b/drivers/net/usb/qmi_wwan.c
-> @@ -1371,6 +1371,8 @@ static const struct usb_device_id products[] =3D {
->  	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
->  	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
->  	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
-> +	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
-> +	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM s=
-upport*/
->=20=20
->  	/* 4. Gobi 1000 devices */
->  	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
-
-Acked-by: Bj=C3=B8rn Mork <bjorn@mork.no>
-
-Just one question, which I should have asked about the DW5821e too: Is
-it possible to configure the firmware of these modems to USB2 only, and
-do they work with the qmi_wwan driver then?
-
-I suspect that these modems really need the SET_DTR quirk...  Or rather
-that I should get around to making that default, as it seems most new
-stuff needs it and most old stuff doesn't care.
 
 
-Bj=C3=B8rn
+Dear Friend,
+
+I am Mr Dan Koure work with the department of Audit and accounting manager here in the Bank,
+
+Please i need your assistance for the transferring of this abandon (US$4.5M DOLLARS) to your bank account for both of us benefit.
+
+I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
+
+Below information that is needed from you.
+
+1)Private telephone number...
+2)Age...
+3)Nationality...
+4)Occupation ...
+5)Full Name....
+Thanks.
+
+Mr Dan Koure
