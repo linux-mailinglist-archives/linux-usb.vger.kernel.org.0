@@ -2,67 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0E0FAFD0
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 12:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E06FB031
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 13:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727644AbfKMLit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 06:38:49 -0500
-Received: from sonic307-53.consmr.mail.ir2.yahoo.com ([87.248.110.30]:35301
-        "EHLO sonic307-53.consmr.mail.ir2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726086AbfKMLit (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 06:38:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1573645125; bh=F+7QXJPRuyxKv+5YqLXXhHJC5uuItS/uRvnxFMJ0nnQ=; h=Date:From:Reply-To:Subject:From:Subject; b=LDQ9YsliWwd4IXYTmDoAkY+f29BVyL3tBZ9BNvlFy2kQYjm3oB4VRFLSLKkRbYKFskf1FemC0X4Wk/lCuY3h8rPxsAX9zt6CQpbyqIygauyAaa19Ma4yC/t9uhydRH7mClJozXBHIf3RoKHsHG1YWFR5RR1zVGytn9LZ+zfU44c0qTCYmG9PTAM94ctQIJfw4Hmda02gZzKe23VQsRMJspuXubRby5m4eCZb0TIqfbaPwmZbyOZ8Bs7FeO6wjlwYS/gPc+hhXoZZw0NL1LEM8Vd40gSjvaebjAw/Y74IhvWPEzGMkvj1jI5AHNbjSNkw0LxCJi2TF0IrWbgyvwDkTA==
-X-YMail-OSG: TwukZ8EVM1mdgCwGVSN1Y5mBaONyxf8M8pLLIjOP_IWRWtg78Q9B8DMfGQa9t2f
- yVS.nIBZvfPZDwvVdAbbfLSe.7BkDaJq2FnqOcBd.leEc85.GnmPNKIMVB0siYBddxQSiPvAqBEc
- lYyR7taOKXzhd7Ue9s3G8Loy8gWhWPjR5SnvupDxsx9M7CM3XiACme2wLs3e.GaorLDFJTMa4gw0
- 9WPe_zLDq37.KEz80RV1xxZ3MXoFWjBENgMCRjRlvEPx7vnAh.ZFx8hKt0rUOBIMC4IEnGm7ANJG
- WpC8pXSwj4PPu6lRT1Uiw7GGVHMZQoRqPL92NXsXhPYHx3BN0ICGuJgwv3QQIf4J4LX3Irutf8_X
- y9MBRoZr_fVwi1fTPesDl18HGoJh1hQXm_Xw0tRuKx.vASni8dqvpk6K1EWDEAtQh_CYoS9GEi2S
- SlC.ybcyA2uUcUqDbEcBKYgi2CVhEVq0X0TWJc1njl0L5CWK9Ta2pn1TEe4F_T2P27CnKAkfhxTf
- ULBbU.OHVlPqMu7MJJO92GhKDF6LahU2kfeC2M2s8efxOZ2o5ymMGl2kbrSpilnr23KSF5H_NAUv
- DHlI8WmQ7PNjO3zcWr5SowqOxzMF.q1L2mn67Bbi649T1wqBmaUeDyUqizHClkQcjBYOkH4YpgFf
- bIzUpq9kVPxI7Exrz57gNUoM5mY7pgWGdKMvOuVzAD5ULFehX8y0A2nbo1asDX.Cr9gLFqbEW27h
- RGLkq4paksON3y3y4C0Y9W_gfq.qri5LhzLX4wIDLQglhrR1cCNGqZiLP_FK42534kkAyJko.L1E
- Tz6pNq_FfIyU_HDRm0ViaTMSzTnU9JSY_7bVxEo1eulGZ17Po82Cxg1MFOavQl8i_KtPJJO8nWOc
- hgbvryQVB.g7LALqHTuHWRlT80IecilMWRce1HvVeWjwSUrHw9PvPYLjAHMMVoYGp9lmDoZvOZWS
- 3WpKTLJ567yRIc.RS9Or2pVYpXLuaDYe45r8JdbG8UeeETfmC1gMN1esazG1NG39ZrLeY_rfUew.
- Ry.HfmKeIY6y9WUJj4uZJUZ28SfNbGWTi0rMlLWD3XU2K8V3O8r106eo.9QMuYnUIifjqujZQBHx
- Ab20cnacZQzoPoBOS.JnGqpXsgwEn92bmvjVjOmhpHTQw8PI0AvpE9vhkgP6whB8db4Mc.UhZK_G
- 7BEAKjpguEF7J0tApOLcVi5.n5ASWbV3dG8ZVmEARKU5Alqwz__2NtVsJ962kYoGjCJ.xR23U0Vq
- psWDu9gA6K.2U7mME0a5LE_BOTL_OsaEnaRhFXkiBW4IBhNNasep6JiXXGa_U1Xarj_2iw6.rHN4
- l
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ir2.yahoo.com with HTTP; Wed, 13 Nov 2019 11:38:45 +0000
-Date:   Wed, 13 Nov 2019 11:38:42 +0000 (UTC)
-From:   MR DAN KOURE <dankoure2@gmail.com>
-Reply-To: dkoure73@gmail.com
-Message-ID: <419854262.4679420.1573645122183@mail.yahoo.com>
-Subject: BUSINESS CO-OPERATION BENEFIT.
+        id S1726489AbfKMMGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 07:06:41 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:38553 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725987AbfKMMGl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 07:06:41 -0500
+Received: by mail-il1-f193.google.com with SMTP id u17so1552453ilq.5
+        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2019 04:06:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=aleksander-es.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gn4nGl4/aU01Q6EzAa3fpLh2f+Que5/VESf/QKj0oZY=;
+        b=B1QP5B6eYq5LIlbVCQ59Z/Wwfeh6EV1ejBq9r7gfsJ22xS8X98NsaKrc9b+P7hZpPv
+         BCTLc5hPIapniArXqGXuTVlAffhf97jI9aglCS8yiQ/r1cWqKoZykVnr+7E5qArCpVsx
+         1hdfsYwt4IAGsYLUn03gjDQh80fxN0PhdWxJ0Vv9aMT5FLNuWOB9dXTasCpFyE39xAcK
+         5QwjaV7XZamUhbWTM9dTtu9s1eMUWHYi/MYiWZucblfYxILMiUgiu4WQvi4O+eCX+OLO
+         hTvXfdxsu9iJFS8QjVmGpZLiUt8/FWdCskfms/z9yYYmmI+Z9dyMqZFwV+ye00/q85E7
+         lWBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gn4nGl4/aU01Q6EzAa3fpLh2f+Que5/VESf/QKj0oZY=;
+        b=aeidHS+NMHd2SX6oCZu0w8YnqKFEOh2bn0eKB+f9m3+PA+LxixV3h4KI2N0jRnbwfb
+         zCRhS+j0D6CORUGaKckmXIZDLZ7CSutubEXLLM8Z+XXmVQweFYZt6VRpk7N6q+FVdfMl
+         S0VRYuvhuQvzMbAdXGloOWkc56NTdi11D0lP6uXmoCWYzJwmEdCrkzbtLTd6oJacO5Ol
+         2pTJlrRSIu0L9oJTfDNMunk0fipD5TwDUbs/3w0LfcslGJt9nqr5m7JF0K5IxTOJmIyW
+         EcJUA5Fv7/bcckCzft00SRslVqmKHeL/0C3hauJ+ZrYXgnrUV0PerR6BWBXXQ3+c/Dvo
+         LsZg==
+X-Gm-Message-State: APjAAAWMUPTLLPRe9ICjvqNflqFISoQ+CDGiK91WotVQAvNcqx8izKKt
+        FNUxJ8dll14C7jNCnkG0qHaZ93yfnpCupClhgSlF2g==
+X-Google-Smtp-Source: APXvYqzPCgGtqD2CF1uekMJM7Mq641wAEaCPHuI1isGZ1xM5pAaXJGFVfBWal2CA40hcAcKiwZAyn86B635ps7JiwHM=
+X-Received: by 2002:a92:5d8d:: with SMTP id e13mr3579936ilg.32.1573646798728;
+ Wed, 13 Nov 2019 04:06:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+References: <20191113101110.496306-1-aleksander@aleksander.es> <87woc4qdea.fsf@miraculix.mork.no>
+In-Reply-To: <87woc4qdea.fsf@miraculix.mork.no>
+From:   Aleksander Morgado <aleksander@aleksander.es>
+Date:   Wed, 13 Nov 2019 13:06:27 +0100
+Message-ID: <CAAP7ucK5Wqcprj9c5sGLaE88-77EA3fB=sb7_0EK+7eoFAJxMw@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
+To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+> Just one question, which I should have asked about the DW5821e too: Is
+> it possible to configure the firmware of these modems to USB2 only, and
+> do they work with the qmi_wwan driver then?
+>
 
+I know these modules force a USB 2.0-only mode when they switch to
+fastboot to allow firmware upgrade, but there is no way to configure
+the firmware to boot into USB 2.0-only mode while in modem mode.
 
-Dear Friend,
-
-I am Mr Dan Koure work with the department of Audit and accounting manager here in the Bank,
-
-Please i need your assistance for the transferring of this abandon (US$4.5M DOLLARS) to your bank account for both of us benefit.
-
-I have every inquiry details to make the bank believe you and release the fund in within 5 banking working days with your full co-operation with me after success.
-
-Below information that is needed from you.
-
-1)Private telephone number...
-2)Age...
-3)Nationality...
-4)Occupation ...
-5)Full Name....
-Thanks.
-
-Mr Dan Koure
+-- 
+Aleksander
+https://aleksander.es
