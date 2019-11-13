@@ -2,52 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20590FAA32
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 07:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC0AFAAAB
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 08:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726285AbfKMGcB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 01:32:01 -0500
-Received: from mail-eopbgr00074.outbound.protection.outlook.com ([40.107.0.74]:49479
+        id S1726010AbfKMHNm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 02:13:42 -0500
+Received: from mail-eopbgr00078.outbound.protection.outlook.com ([40.107.0.78]:51783
         "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725858AbfKMGcB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 13 Nov 2019 01:32:01 -0500
+        id S1725908AbfKMHNm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 13 Nov 2019 02:13:42 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TldWNxQcW02NydTMtqFpfj/3+/cX72h3qIW+ycbZUQ30sqILBKwTnvPri8quM2pWI30G6w/Bkmuz8RrFaCg8m2ptq2dhTtWtAl442DfBjlmh4V7C6+3/clwJBDsAR2mW0+JC3I/QZAf5PLXPATrk2hA1ZxuZFeEwtn6ltdMtFi3sddkl0OQTAfl5f5m2mb7iTaT2PWZk/8RS0490oXKy67G2BM+HbqzZk9kySmOybUcKfsrOM2PcJtC5NWFKAXqQKdWtTsFlnFPsLs//v8CmhdYxufT+nrAVt+zlytVpECflZFOaED3Azxcw2yYMerkewDWDxINg8BclnaFBKj/riA==
+ b=UccYmiHbS09oymdtjR2Qm77nwQVD13C0R4MLBJDZJwInTXn5l1QfGfPzIpmPWn7Ha3SUZEPNFyO2Q1rf8yY8qyBtEC23ma5AU/X1z6Yo8n8eMdQtavXZiSTIC+796M/2U/Q5v0KyXipmXrvE9b8T0KATkmepRHbkS4Bx7mCp08d8gMifJbL2BRhvUuKoansyozUHt+wM+MokElmt+HfppuSL2NTfHeRni14VrCCsKng0pyH5yFI9PtFRYrIbcDoisnyapI9vz6sYIc+GG8yrUIhiUoed0XUAzOiprCH1dESWY9VsQpXFsE+xwyRnjheWsPJw2Gg33JlR6CoKJwOU6A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vkXQl1iMrAdZslXPvn4N2pMZSSYVfopXDfEg3ObCP7w=;
- b=gDmUC6CpJAp8xRrEQgK6ysOlGHOvVNobUizK2SHt1ap4O6DkYHytPIiF6XvWEC2Ud/chVGsvPH9dH6ASnJ0jUkcVsU0HUi9nJqdKQelTA8cM7Z5HRV/e45X4Q1pBBQ7kcgChb3RyYEJx4CYK9dBWOmry/yI03s4hMwG1HKEOZyu4O+e5KRJ+nZY+cHUXCMs/YXaltN9l5OhrGMNiDytLBatci4DBcXyOlmVS5PnkS/XoETf3swRB6Fvt65ww4I1QQ71wwebNPi4C0hT86CeaYxqQWBkVeFJwHKkpTyfky6gdwEllRUsGRb7WACSOAzTOeCDgMt7wAXZ0Op1mgeH89g==
+ bh=g4erIvFYSbuSKD748g/0qZZheuh/FiHv57w4AW0I5hE=;
+ b=lTfLWPxPR+l2p6MW7E+U838ZTu99NIdajmEI8++UldDXUhSPx5fN7txUp2LSIaK1DCxcRtYjytMNLNZbZC9IhS/yHNhWbJIPKuGYhKGCVB1LrM1vThx+agOGxo1RC7RjzYJlj7VT4H7nhaCoAQVlmcZgf1v6NZLWiGsA3/I2GzVvLHIG5C59royw28y4G+wJfo6fY3FtLLy8f/5sPhK759Xb36ZHilgf/x7yoZUhZ4DwIF7Pxg//SP7J+WRqtia0cuVM5mz2H973Fdwqb3Cyycol9OL2FZIbdXN9shZUhmKrlxHAw4iPT4n0RIw/LIpDxP3zBwe02C/TGfpaOywNig==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vkXQl1iMrAdZslXPvn4N2pMZSSYVfopXDfEg3ObCP7w=;
- b=YXDTsRA2Bj334oVMZeKdYreoDTysg8F6YnVRnbgf2HFxBUG1L7aLB81mfp2oX6+aPUzdjPYjcsFTCY87d66GzipKuqbHldV6yBv/r8dWWQlDrLGtai5G6z3OkWZKa3lH9gylcYhOqdUUUwONhU33o3YbHlq0eWu7uNfS5f4NMnI=
+ bh=g4erIvFYSbuSKD748g/0qZZheuh/FiHv57w4AW0I5hE=;
+ b=puFhWNIFAjppLBDSNFdIFrPck9TBAA1cSbxaTa8F3imiJOIziCDw/v3WG6WgJXXAYvI0WzkPP82Zl7JYg0dKBd76MA7Ep45GhUCgEyK7nqUbvSIFV3ceKOdyg4En1Z2H5XGJ0oj7ZDNFDonOH7WPMC28QF3U8P/5WomQNVtXTOk=
 Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5037.eurprd04.prod.outlook.com (20.177.49.219) with Microsoft SMTP
+ VI1PR04MB6128.eurprd04.prod.outlook.com (20.179.27.208) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.24; Wed, 13 Nov 2019 06:31:56 +0000
+ 15.20.2451.23; Wed, 13 Nov 2019 07:13:38 +0000
 Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
  ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
  ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2451.023; Wed, 13 Nov 2019
- 06:31:56 +0000
+ 07:13:38 +0000
 From:   Peter Chen <peter.chen@nxp.com>
-To:     Michael Olbrich <m.olbrich@pengutronix.de>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     hui yang <yanghui.def@gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "mirq-linux@rere.qmqm.pl" <mirq-linux@rere.qmqm.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
-Thread-Topic: [PATCH] usb: gadget: composite: split spinlock to avoid
- recursion
-Thread-Index: AQHVmTxEIjD1nt2RjUO3vLFSiYOzzqeIpkIA
-Date:   Wed, 13 Nov 2019 06:31:55 +0000
-Message-ID: <20191113063414.GA30608@b29397-desktop>
-References: <20191112093318.12936-1-m.olbrich@pengutronix.de>
-In-Reply-To: <20191112093318.12936-1-m.olbrich@pengutronix.de>
+Subject: Re: [PATCH 2/2] USB(u_serial.c): it has a NULL point
+Thread-Topic: [PATCH 2/2] USB(u_serial.c): it has a NULL point
+Thread-Index: AQHVkfCf1ocBuOTQN0Sry43xj2y2mqd5ZEuAgAkcL4CABkAJAA==
+Date:   Wed, 13 Nov 2019 07:13:38 +0000
+Message-ID: <20191113071558.GB30608@b29397-desktop>
+References: <1572749044-6091-1-git-send-email-yanghui.def@gmail.com>
+ <20191103124201.GB619218@kroah.com>
+ <CA+wXOo2nzANnbfFA6mHa3ZQxyA6bYgL9CM3Ykq12m_rxkRyQ4Q@mail.gmail.com>
+In-Reply-To: <CA+wXOo2nzANnbfFA6mHa3ZQxyA6bYgL9CM3Ykq12m_rxkRyQ4Q@mail.gmail.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -57,171 +59,76 @@ authentication-results: spf=none (sender IP is )
 x-originating-ip: [119.31.174.66]
 x-ms-publictraffictype: Email
 x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: d5a53291-8d9d-4cef-d046-08d768032e07
-x-ms-traffictypediagnostic: VI1PR04MB5037:
-x-microsoft-antispam-prvs: <VI1PR04MB5037653D0B57DCF78BF6EBBF8B760@VI1PR04MB5037.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-office365-filtering-correlation-id: 21239bd8-b42c-408f-f268-08d7680901b0
+x-ms-traffictypediagnostic: VI1PR04MB6128:
+x-microsoft-antispam-prvs: <VI1PR04MB612819522DA4733D21DAC6528B760@VI1PR04MB6128.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:5797;
 x-forefront-prvs: 0220D4B98D
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(376002)(346002)(396003)(39860400002)(366004)(136003)(199004)(189003)(256004)(6246003)(76116006)(66446008)(1076003)(99286004)(66476007)(64756008)(9686003)(66556008)(91956017)(6916009)(4326008)(6506007)(53546011)(54906003)(316002)(26005)(66946007)(14444005)(186003)(6512007)(102836004)(5660300002)(6436002)(66066001)(71200400001)(71190400001)(478600001)(6116002)(3846002)(25786009)(7736002)(6486002)(44832011)(76176011)(2906002)(229853002)(8936002)(33656002)(11346002)(446003)(476003)(305945005)(8676002)(81166006)(486006)(81156014)(86362001)(14454004)(33716001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5037;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(136003)(376002)(366004)(39860400002)(396003)(346002)(189003)(199004)(305945005)(229853002)(71200400001)(91956017)(76116006)(86362001)(6116002)(44832011)(33716001)(3846002)(71190400001)(6916009)(6436002)(256004)(6486002)(14444005)(7736002)(33656002)(6512007)(9686003)(76176011)(99286004)(186003)(66066001)(26005)(102836004)(476003)(4326008)(6506007)(446003)(11346002)(53546011)(5660300002)(8676002)(81156014)(14454004)(81166006)(54906003)(2906002)(25786009)(66556008)(66446008)(64756008)(1076003)(478600001)(6246003)(66946007)(8936002)(316002)(486006)(66476007);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB6128;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 46BtI0Cg9f9h3E7lg/5OaZTFzvrg81e8KiHd2AxU/nrqBHMEbflB80Hqk5S96Pjpxg+NVD9MgsevxEEc3DZbQyOlGKRnCTLXPyub1aFevUusvVlO3tkTNz5GApFvEmHkyWemQx6V6vjgMrK1VcVX+uGBcuTFEpNIxQt4o5h3K2ylE4UgktrJlvGVjKmKGvz5J7zHubMYQ/+/BglA9vgF8cHAM27ZJwm8tkUCaLgnDll2uAMgJXaw1VI8I2EewQ/XZ0gypb2NYGHNz1LO2l2K1/oCNvUaCZccgyNtC0/l9NfHftqu9A7XYoruRUjSwtmtb5fksBZGaT4xFMYXjiYTdEgQV7Erl5fUoio2PhExHJAjMoz6cxh8wuSl8Q4a3Frbg8m+VO/S2IowJ/v+EBiKLUXRW8W6lKwD2/RmzyqsZ0bEDCW14S01VQXTSV2xugKM
+x-microsoft-antispam-message-info: gT8DO5FtbDORg+NI/+RTtCAepqE/jvpJPAUIESZg1jSVUAPdzumdN/uCYw4ZlGfibDjqI5p1JK4B9LrZhB+llbIlSw3VG3PrnLIgYyheOqO7mLBcI6R4bcuQOknYVI1yNrj48UEEvGUqYTxsK67tZPlBMtJ1Zx3mvge43KvKVpWOS0G9Kuzyr1uFSSCYp4j0ISOkVPcZutz6yw4yeJsu+BTNZjEEU4umT8ON6kgv7DR4VJfk2QEUzdkv2CHSvIdsOIeAc3oTWkvNGPsYzgHoFXM9KiyaDuvLSy98T8rdC+T13rHurLqHb0ijDFR9b2Je+wDCpgc6dPDyreaJmk+sOhUMExEgylSgsrBaCiUtqXhD5CiPGFYS8UaVJom1bSItODSDC5KkE4B2mRUJpL88cFJEhcLxCKNKWSSF8R/V2UHXCPrGRU85+9GG2rpyNQ3N
 x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F27BA1A301D1514CAFC165B036B58A9C@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <35B72E1DCD32444CB92A0C8506DDBE16@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d5a53291-8d9d-4cef-d046-08d768032e07
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 06:31:55.8551
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21239bd8-b42c-408f-f268-08d7680901b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Nov 2019 07:13:38.7493
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nZ4xCZlp7A+8+ubCjMuEqjTo6qnZUdbHD2HyFWykQy7ogD1FqM8WctEfH6LTQCHbmZ4BtLAsF+ajDQVyFSUARg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5037
+X-MS-Exchange-CrossTenant-userprincipalname: 8bdKIKy3NWVxp7HNFIPknU4NoXB27biSuJzugrLAwKdmTOS6MF5fhb2/QkHZxJNkiL5ODav8sL9acRxlHy100A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6128
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-11-12 10:33:18, Michael Olbrich wrote:
-> 'delayed_status' and 'deactivations' are used completely independent but
-> they share the same spinlock. This can result in spinlock recursion:
->=20
-> BUG: spinlock recursion on CPU#1, uvc-gadget/322
->  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .own=
-er_cpu: 1
-> CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-201909=
-16-1+ #55
-> Hardware name: XXXXX (DT)
-> Call trace:
->  dump_backtrace+0x0/0x178
->  show_stack+0x24/0x30
->  dump_stack+0xc0/0x104
->  spin_dump+0x90/0xa0
->  do_raw_spin_lock+0xd8/0x108
->  _raw_spin_lock_irqsave+0x40/0x50
->  composite_disconnect+0x2c/0x80
->  usb_gadget_disconnect+0x84/0x150
->  usb_gadget_deactivate+0x64/0x120
->  usb_function_deactivate+0x70/0x80
->  uvc_function_disconnect+0x20/0x58
->  uvc_v4l2_release+0x34/0x90
->  v4l2_release+0xbc/0xf0
->  __fput+0xb0/0x218
->  ____fput+0x20/0x30
->  task_work_run+0xa0/0xd0
->  do_notify_resume+0x2f4/0x340
->  work_pending+0x8/0x14
->=20
-> Fix this by using separate spinlocks.
-
-This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Issue
-->disconnect() callback from usb_gadget_disconnect()"), which adds
-gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
-with your patch, you may cc to stable tree.
-
->=20
-> Signed-off-by: Michael Olbrich <m.olbrich@pengutronix.de>
-> ---
->  drivers/usb/gadget/composite.c | 9 +++++----
->  drivers/usb/gadget/configfs.c  | 1 +
->  include/linux/usb/composite.h  | 4 +++-
->  3 files changed, 9 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composit=
-e.c
-> index 76883ff4f5bb..35c792e5b408 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -346,14 +346,14 @@ int usb_function_deactivate(struct usb_function *fu=
-nction)
->  	unsigned long			flags;
->  	int				status =3D 0;
-> =20
-> -	spin_lock_irqsave(&cdev->lock, flags);
-> +	spin_lock_irqsave(&cdev->deactivations_lock, flags);
-> =20
->  	if (cdev->deactivations =3D=3D 0)
->  		status =3D usb_gadget_deactivate(cdev->gadget);
->  	if (status =3D=3D 0)
->  		cdev->deactivations++;
-> =20
-> -	spin_unlock_irqrestore(&cdev->lock, flags);
-> +	spin_unlock_irqrestore(&cdev->deactivations_lock, flags);
->  	return status;
->  }
->  EXPORT_SYMBOL_GPL(usb_function_deactivate);
-> @@ -374,7 +374,7 @@ int usb_function_activate(struct usb_function *functi=
-on)
->  	unsigned long			flags;
->  	int				status =3D 0;
-> =20
-> -	spin_lock_irqsave(&cdev->lock, flags);
-> +	spin_lock_irqsave(&cdev->deactivations_lock, flags);
-> =20
->  	if (WARN_ON(cdev->deactivations =3D=3D 0))
->  		status =3D -EINVAL;
-> @@ -384,7 +384,7 @@ int usb_function_activate(struct usb_function *functi=
-on)
->  			status =3D usb_gadget_activate(cdev->gadget);
->  	}
-> =20
-> -	spin_unlock_irqrestore(&cdev->lock, flags);
-> +	spin_unlock_irqrestore(&cdev->deactivations_lock, flags);
->  	return status;
->  }
->  EXPORT_SYMBOL_GPL(usb_function_activate);
-> @@ -2196,6 +2196,7 @@ static int composite_bind(struct usb_gadget *gadget=
-,
->  		return status;
-> =20
->  	spin_lock_init(&cdev->lock);
-> +	spin_lock_init(&cdev->deactivations_lock);
->  	cdev->gadget =3D gadget;
->  	set_gadget_data(gadget, cdev);
->  	INIT_LIST_HEAD(&cdev->configs);
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.=
-c
-> index 025129942894..45f717fcdb89 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -521,6 +521,7 @@ static const struct config_item_type gadget_root_type=
- =3D {
->  static void composite_init_dev(struct usb_composite_dev *cdev)
->  {
->  	spin_lock_init(&cdev->lock);
-> +	spin_lock_init(&cdev->deactivations_lock);
->  	INIT_LIST_HEAD(&cdev->configs);
->  	INIT_LIST_HEAD(&cdev->gstrings);
->  }
-> diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.=
-h
-> index 8675e145ea8b..86eb6f2c03ac 100644
-> --- a/include/linux/usb/composite.h
-> +++ b/include/linux/usb/composite.h
-> @@ -505,8 +505,10 @@ struct usb_composite_dev {
->  	 */
->  	int				delayed_status;
-> =20
-> -	/* protects deactivations and delayed_status counts*/
-> +	/* protects delayed_status counts*/
->  	spinlock_t			lock;
-
-In fact, this lock is used many places, not only at setup delayed cases.
-You may change comments or delete the comments.
-
-> +	/* protects deactivations counts*/
-
-Add one space after 'counts'.
-
-> +	spinlock_t			deactivations_lock;
-> =20
-
---=20
-
-Thanks,
-Peter Chen=
+T24gMTktMTEtMDkgMTU6NDk6MTMsIGh1aSB5YW5nIHdyb3RlOg0KPiBJJ20gc29ycnkgZm9yIG15
+IGZhdWx0IC4gTm93IEkgc2VuZCB0byBldmVyeW9uZSAuDQo+IA0KPiBXaGVuIHdlIHVzZSBVU0Ig
+dG8gdHJhbnNtaXQgZGF0YQ0KPiB3aXRoIFBDLCB0aGUgcGhvbmUgd2lsbCBjcmFzaGVkIExvdyBw
+cm9iYWJpbGl0eSAuDQo+IFdlIGZvdW5kIHBvcnQtPnBvcnQudHR5IGJlY2FtZSBOVUxMLg0KDQpX
+b3VsZCB5b3UgcGxlYXNlIGRlYnVnIG1vcmUsIGl0IHNlZW1zIGdzIG9wZW4vY2xvc2UgKGdzX29w
+ZW4vZ3NfY2xvc2UpDQphcmUgc29tZXRoaW5nIHdyb25nLiBUaGUgdmFsdWUgcG9ydC0+cG9ydC50
+dHkgYW5kIHBvcnQtPnBvcnQuY291bnQNCmFyZSBpbmNvbnNpc3RlbnQuDQoNClBldGVyDQoNCj4g
+DQo+IFRoYW5rcw0KPiANCj4gR3JlZyBLSCA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+IOS6
+jjIwMTnlubQxMeaciDPml6Xlkajml6Ug5LiL5Y2IODo0MuWGmemBk++8mg0KPiA+DQo+ID4gT24g
+U3VuLCBOb3YgMDMsIDIwMTkgYXQgMTA6NDQ6MDRBTSArMDgwMCwgaHVpIHlhbmcgd3JvdGU6DQo+
+ID4gPiBGcm9tOiBZYW5nSHVpIDx5YW5naHVpLmRlZkBnbWFpbC5jb20+DQo+ID4gPg0KPiA+ID4g
+VW5hYmxlIHRvIGhhbmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IHZpcnR1
+YWwgYWRkcmVzcyAwMDAwMDJhMA0KPiA+ID4gS2VybmVsIEJVRyBhdCB0dHlfd2FrZXVwKzB4MTgv
+MHg4Yw0KPiA+ID4gWzwwMDAwMDAwMDk1MTM1ZTlkPl0gdHR5X3dha2V1cCsweDE4LzB4OGMNCj4g
+PiA+IFs8MDAwMDAwMDBjMzVmMTllND5dIGdzX3N0YXJ0X2lvKzB4YzgvMHgxNTgNCj4gPiA+IFs8
+MDAwMDAwMDBiMTFiMTg0ZT5dIGdzZXJpYWxfY29ubmVjdCsweGQwLzB4MTc0DQo+ID4gPiBbPDAw
+MDAwMDAwNjQyMjAxZGU+XSBhY21fc2V0X2FsdCsweDcwLzB4MTgwDQo+ID4gPiBbPDAwMDAwMDAw
+YTlkMzhlOGI+XSBjb21wb3NpdGVfc2V0dXArMHgxODQ4LzB4MWE3Yw0KPiA+ID4gWzwwMDAwMDAw
+MDcyYzg4NzgxPl0gYW5kcm9pZF9zZXR1cCsweDFlYy8weDFmNA0KPiA+ID4gWzwwMDAwMDAwMDRj
+MDEyN2E1Pl0gbXNtX3VkY19pcnErMHg4ZDAvMHhjMGMNCj4gPiA+IFs8MDAwMDAwMDBmOGJiOWFj
+Zj5dIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg3NC8weDI5NA0KPiA+ID4gWzwwMDAwMDAw
+MGFmZDU3MjU2Pl0gaGFuZGxlX2lycV9ldmVudCsweDYwLzB4YzgNCj4gPiA+IFs8MDAwMDAwMDA3
+NjcxOWIyND5dIGhhbmRsZV9mYXN0ZW9pX2lycSsweGM4LzB4MWM0DQo+ID4gPiBbPDAwMDAwMDAw
+NDIxZjNkODc+XSBnZW5lcmljX2hhbmRsZV9pcnErMHgzNC8weDRjDQo+ID4gPiBbPDAwMDAwMDAw
+YjJmMmQzNDM+XSBfX2hhbmRsZV9kb21haW5faXJxKzB4NmMvMHhiYw0KPiA+ID4gWzwwMDAwMDAw
+MGM3NDMyNWU4Pl0gZ2ljX2hhbmRsZV9pcnErMHg2Yy8weGUwDQo+ID4gPiB5ZXMsd2UgY2FuIHNl
+ZSB0aGUgcG9ydC0+cG9ydC50dHk9PU5VTEwsIHNvIHN5c3RlbSBjcmFzaGVkDQo+ID4gPg0KPiA+
+ID4gU2lnbmVkLW9mZi1ieTogWWFuZ0h1aSA8eWFuZ2h1aS5kZWZAZ21haWwuY29tPg0KPiA+ID4g
+LS0tDQo+ID4gPiAgZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMgfCAyICsr
+DQo+ID4gPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKQ0KPiA+ID4NCj4gPiA+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9nYWRnZXQvZnVuY3Rpb24vdV9zZXJpYWwuYyBiL2RyaXZl
+cnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X3NlcmlhbC5jDQo+ID4gPiBpbmRleCA2NWY2MzRlLi5h
+MWMyYWMyIDEwMDY0NA0KPiA+ID4gLS0tIGEvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vf
+c2VyaWFsLmMNCj4gPiA+ICsrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X3Nlcmlh
+bC5jDQo+ID4gPiBAQCAtNTYyLDYgKzU2Miw4IEBAIHN0YXRpYyBpbnQgZ3Nfc3RhcnRfaW8oc3Ry
+dWN0IGdzX3BvcnQgKnBvcnQpDQo+ID4gPg0KPiA+ID4gICAgICAgLyogdW5ibG9jayBhbnkgcGVu
+ZGluZyB3cml0ZXMgaW50byBvdXIgY2lyY3VsYXIgYnVmZmVyICovDQo+ID4gPiAgICAgICBpZiAo
+c3RhcnRlZCkgew0KPiA+ID4gKyAgICAgICAgICAgICBpZiAocG9ydC0+cG9ydC50dHkgPT0gTlVM
+TCkNCj4gPiA+ICsgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLUVJTzsNCj4gPg0KPiA+IEhv
+dyBjYW4gdGhpcyBoYXBwZW4/ICBTaG91bGRuJ3QgdGhpcyBiZSBoYW5kbGVkIGVhcmxpZXI/DQo+
+ID4NCj4gPiBJZiBub3QsIGNhbiB5b3UgZG9jdW1lbnQgdGhpcyBob3cgdGhpcyBjYW4gYmUgdHJ1
+ZSBhbmQgd2hhdCBzaG91bGQgYmUNCj4gPiBkb25lIGFib3V0IGl0Pw0KPiA+DQo+ID4gdGhhbmtz
+LA0KPiA+DQo+ID4gZ3JlZyBrLWgNCg0KLS0gDQoNClRoYW5rcywNClBldGVyIENoZW4=
