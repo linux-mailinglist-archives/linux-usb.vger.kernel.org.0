@@ -2,76 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F3DFA0D3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 02:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D3AFA078
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 02:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728398AbfKMBwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 12 Nov 2019 20:52:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41956 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728393AbfKMBwq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:52:46 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2B6E8222CD;
-        Wed, 13 Nov 2019 01:52:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573609965;
-        bh=3/Uq4ZXq7sa6LCZZyXYuOU63UAjEPvJQybSyyern0yY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EBxt6jR3M3+of01X1yS8ASWrD7YCyvBIXkV1D+Z0HnDzegGpYx90wUxT09tp0HikB
-         oHmUfmx45jcuSx5alvwPeU+cmJWOC/5lNgwQImGwE9QuhkcEmlpa3XZ6gnZ+PwUCll
-         5b/8MTgvh8PxpByUSZnzi0ExJt1Lcq047gvmUY1c=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 096/209] USB: serial: cypress_m8: fix interrupt-out transfer length
-Date:   Tue, 12 Nov 2019 20:48:32 -0500
-Message-Id: <20191113015025.9685-96-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
-References: <20191113015025.9685-1-sashal@kernel.org>
+        id S1727031AbfKMBuR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 12 Nov 2019 20:50:17 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:15598 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726957AbfKMBuQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 12 Nov 2019 20:50:16 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dcb61200001>; Tue, 12 Nov 2019 17:49:20 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 12 Nov 2019 17:50:16 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 12 Nov 2019 17:50:16 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov
+ 2019 01:50:15 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 13 Nov 2019 01:50:15 +0000
+Received: from henryl-tu10x.nvidia.com (Not Verified[10.19.109.97]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dcb61560003>; Tue, 12 Nov 2019 17:50:15 -0800
+From:   Henry Lin <henryl@nvidia.com>
+CC:     <hch@infradead.org>, Henry Lin <henryl@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] usb: xhci: only set D3hot for pci device
+Date:   Wed, 13 Nov 2019 09:49:27 +0800
+Message-ID: <20191113014927.11915-1-henryl@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191112071831.1043-1-henryl@nvidia.com>
+References: <20191112071831.1043-1-henryl@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573609760; bh=Q6Yu1upf0qf3MvZjiXjYRmyX6HZloR3M4NpbMzagMCI=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=LFxhuEfs14CMUq7d4HtyDndDhsKo5I9xGFO/Jg44hkjM1ma9H2JYQ6j0RR57qxhCB
+         fGmQjO6vKhTBzIlHgrysDC6dqDYjYLNTPwolgs4/QX2F5qSrx7H8buA+xNhmgtQJXh
+         9ZgKhdv45KrPEGvHQjG0qLUr1Kdx0hMXeu1UyrN02To5y2B3+KCdIjVM9QVMoQkFJf
+         ACHdmvD6bCzpq2/4T735txn8uFeWfXcpQ/fNzhFRtTuJGvN/kZum7a6GA+waU/437r
+         WATQFRIVU8Q6qetXNX02o9g2HXk0d2zqmj5HmZTxRmboWIJ3HOPRIzoohrIo0l0uIe
+         xeJvLCowCekyQ==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+Xhci driver cannot call pci_set_power_state() on non-pci xhci host
+controllers. For example, NVIDIA Tegra XHCI host controller which acts
+as platform device with XHCI_SPURIOUS_WAKEUP quirk set in some platform
+hits this issue during shutdown.
 
-[ Upstream commit 56445eef55cb5904096fed7a73cf87b755dfffc7 ]
-
-Fix interrupt-out transfer length which was being set to the
-transfer-buffer length rather than the size of the outgoing packet.
-
-Note that no slab data was leaked as the whole transfer buffer is always
-cleared before each transfer.
-
-Fixes: 9aa8dae7b1fa ("cypress_m8: use usb_fill_int_urb where appropriate")
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Henry Lin <henryl@nvidia.com>
 ---
- drivers/usb/serial/cypress_m8.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
-index e0035c0231202..2c58649fd47a4 100644
---- a/drivers/usb/serial/cypress_m8.c
-+++ b/drivers/usb/serial/cypress_m8.c
-@@ -769,7 +769,7 @@ static void cypress_send(struct usb_serial_port *port)
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 6c17e3fe181a..61718b126d2b 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -791,8 +791,11 @@ static void xhci_shutdown(struct usb_hcd *hcd)
+ 			readl(&xhci->op_regs->status));
  
- 	usb_fill_int_urb(port->interrupt_out_urb, port->serial->dev,
- 		usb_sndintpipe(port->serial->dev, port->interrupt_out_endpointAddress),
--		port->interrupt_out_buffer, port->interrupt_out_size,
-+		port->interrupt_out_buffer, actual_size,
- 		cypress_write_int_callback, port, priv->write_urb_interval);
- 	result = usb_submit_urb(port->interrupt_out_urb, GFP_ATOMIC);
- 	if (result) {
+ 	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+-	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+-		pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3hot);
++	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP) {
++		if (dev_is_pci(hcd->self.sysdev))
++			pci_set_power_state(to_pci_dev(hcd->self.sysdev),
++					PCI_D3hot);
++	}
+ }
+ 
+ #ifdef CONFIG_PM
 -- 
-2.20.1
+2.17.1
 
