@@ -2,69 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E06FB031
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 13:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E198FFB081
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2019 13:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726489AbfKMMGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 07:06:41 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:38553 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbfKMMGl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 07:06:41 -0500
-Received: by mail-il1-f193.google.com with SMTP id u17so1552453ilq.5
-        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2019 04:06:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aleksander-es.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gn4nGl4/aU01Q6EzAa3fpLh2f+Que5/VESf/QKj0oZY=;
-        b=B1QP5B6eYq5LIlbVCQ59Z/Wwfeh6EV1ejBq9r7gfsJ22xS8X98NsaKrc9b+P7hZpPv
-         BCTLc5hPIapniArXqGXuTVlAffhf97jI9aglCS8yiQ/r1cWqKoZykVnr+7E5qArCpVsx
-         1hdfsYwt4IAGsYLUn03gjDQh80fxN0PhdWxJ0Vv9aMT5FLNuWOB9dXTasCpFyE39xAcK
-         5QwjaV7XZamUhbWTM9dTtu9s1eMUWHYi/MYiWZucblfYxILMiUgiu4WQvi4O+eCX+OLO
-         hTvXfdxsu9iJFS8QjVmGpZLiUt8/FWdCskfms/z9yYYmmI+Z9dyMqZFwV+ye00/q85E7
-         lWBA==
+        id S1726276AbfKMMfK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 07:35:10 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:39402 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725976AbfKMMfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 07:35:10 -0500
+Received: by mail-io1-f69.google.com with SMTP id e17so1397197ioc.6
+        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2019 04:35:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gn4nGl4/aU01Q6EzAa3fpLh2f+Que5/VESf/QKj0oZY=;
-        b=aeidHS+NMHd2SX6oCZu0w8YnqKFEOh2bn0eKB+f9m3+PA+LxixV3h4KI2N0jRnbwfb
-         zCRhS+j0D6CORUGaKckmXIZDLZ7CSutubEXLLM8Z+XXmVQweFYZt6VRpk7N6q+FVdfMl
-         S0VRYuvhuQvzMbAdXGloOWkc56NTdi11D0lP6uXmoCWYzJwmEdCrkzbtLTd6oJacO5Ol
-         2pTJlrRSIu0L9oJTfDNMunk0fipD5TwDUbs/3w0LfcslGJt9nqr5m7JF0K5IxTOJmIyW
-         EcJUA5Fv7/bcckCzft00SRslVqmKHeL/0C3hauJ+ZrYXgnrUV0PerR6BWBXXQ3+c/Dvo
-         LsZg==
-X-Gm-Message-State: APjAAAWMUPTLLPRe9ICjvqNflqFISoQ+CDGiK91WotVQAvNcqx8izKKt
-        FNUxJ8dll14C7jNCnkG0qHaZ93yfnpCupClhgSlF2g==
-X-Google-Smtp-Source: APXvYqzPCgGtqD2CF1uekMJM7Mq641wAEaCPHuI1isGZ1xM5pAaXJGFVfBWal2CA40hcAcKiwZAyn86B635ps7JiwHM=
-X-Received: by 2002:a92:5d8d:: with SMTP id e13mr3579936ilg.32.1573646798728;
- Wed, 13 Nov 2019 04:06:38 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=xqdtXvTTTPONhkciR3w2Bj2gsEfbK8zDLMwxMbhN7qQ=;
+        b=EYvSJ99F+F9RHBqP9wbDDk2ByE8gdeVi6XmspJMvjnqaHGZKQhO0OIMP1t5KzfU7n1
+         nYW647ToeLWB9OJdDXx5nk8wpM72MOPNqBCxvTvNmjuz/SGtM5gyVPY7BGguuB066cQT
+         VIyjhK7Tp0j6xYia02e+mT9zs2Gq9SZB7bLsGdZe2KOPru0LjQg6isbkPeCs6VoMKMZh
+         SJJMKHyTAJDv8ewLauxp6zI3nmzZAp1YAfYFTWR8YJ9t07wMfwiMxRdLWMel7kFdIoVA
+         YtC3jYmg08WBtm5lCVFV93SpkJc0n2+GBuJ26XtGLCwNpYT1iGgPkhJU/dToQ/wCuwL/
+         J3dw==
+X-Gm-Message-State: APjAAAVG/+dKQ85sa4ZdAbBHOksk8pWctKBM0ieZuSa3uWcMRc3aW1Dw
+        9rWPuhdXVgumcq+EwNCgNSXmFjmSNxlS63kc4/EWhZb3mZ2G
+X-Google-Smtp-Source: APXvYqzV719ubIVLLBjHHvyaILknSra81LMnKSp0gzKvIu5mmmKxABzzgmMAP5h8AfT72XFCtiw9zFcggP8gQ8B2lDp3WXqdv0Ds
 MIME-Version: 1.0
-References: <20191113101110.496306-1-aleksander@aleksander.es> <87woc4qdea.fsf@miraculix.mork.no>
-In-Reply-To: <87woc4qdea.fsf@miraculix.mork.no>
-From:   Aleksander Morgado <aleksander@aleksander.es>
-Date:   Wed, 13 Nov 2019 13:06:27 +0100
-Message-ID: <CAAP7ucK5Wqcprj9c5sGLaE88-77EA3fB=sb7_0EK+7eoFAJxMw@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a02:b48:: with SMTP id 69mr2602942jad.25.1573648508835;
+ Wed, 13 Nov 2019 04:35:08 -0800 (PST)
+Date:   Wed, 13 Nov 2019 04:35:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005ee2a10597399876@google.com>
+Subject: WARNING: ODEBUG bug in input_ff_destroy
+From:   syzbot <syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, dmitry.torokhov@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> Just one question, which I should have asked about the DW5821e too: Is
-> it possible to configure the firmware of these modems to USB2 only, and
-> do they work with the qmi_wwan driver then?
->
+Hello,
 
-I know these modules force a USB 2.0-only mode when they switch to
-fastboot to allow firmware upgrade, but there is no way to configure
-the firmware to boot into USB 2.0-only mode while in modem mode.
+syzbot found the following crash on:
 
--- 
-Aleksander
-https://aleksander.es
+HEAD commit:    3183c037 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=17cf5e72e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=b6c55daa701fc389e286
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b4e53ae00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1173fe72e00000
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object type: timer_list hint:  
+ml_effect_timer+0x0/0x70 drivers/input/ff-memless.c:421
+WARNING: CPU: 0 PID: 1918 at lib/debugobjects.c:481  
+debug_print_object+0x160/0x250 lib/debugobjects.c:481
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 1918 Comm: syz-executor941 Not tainted 5.4.0-rc6+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  panic+0x2aa/0x6e1 kernel/panic.c:221
+  __warn.cold+0x2f/0x33 kernel/panic.c:582
+  report_bug+0x27b/0x2f0 lib/bug.c:195
+  fixup_bug arch/x86/kernel/traps.c:179 [inline]
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:272
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:291
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1028
+RIP: 0010:debug_print_object+0x160/0x250 lib/debugobjects.c:481
+Code: dd 00 c8 da 85 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 bf 00 00 00 48  
+8b 14 dd 00 c8 da 85 48 c7 c7 a0 bd da 85 e8 25 15 30 ff <0f> 0b 83 05 9b  
+bd a2 05 01 48 83 c4 20 5b 5d 41 5c 41 5d c3 48 89
+RSP: 0018:ffff8881d731f738 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8128c9cd RDI: ffffed103ae63ed9
+RBP: 0000000000000001 R08: ffff8881d23bc800 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffffffff86d0b500
+R13: ffffffff812ed560 R14: ffff8881cfb18310 R15: ffff8881ca291d90
+  __debug_check_no_obj_freed lib/debugobjects.c:963 [inline]
+  debug_check_no_obj_freed+0x2df/0x443 lib/debugobjects.c:994
+  slab_free_hook mm/slub.c:1421 [inline]
+  slab_free_freelist_hook mm/slub.c:1475 [inline]
+  slab_free mm/slub.c:3025 [inline]
+  kfree+0x20b/0x320 mm/slub.c:3977
+  input_ff_destroy+0xb9/0x150 drivers/input/ff-core.c:373
+  input_dev_release+0x19/0xd0 drivers/input/input.c:1537
+  device_release+0x71/0x200 drivers/base/core.c:1101
+  kobject_cleanup lib/kobject.c:693 [inline]
+  kobject_release lib/kobject.c:722 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  kobject_put+0x171/0x280 lib/kobject.c:739
+  put_device+0x1b/0x30 drivers/base/core.c:2301
+  input_put_device include/linux/input.h:363 [inline]
+  evdev_free+0x4c/0x70 drivers/input/evdev.c:347
+  device_release+0x71/0x200 drivers/base/core.c:1101
+  kobject_cleanup lib/kobject.c:693 [inline]
+  kobject_release lib/kobject.c:722 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  kobject_put+0x171/0x280 lib/kobject.c:739
+  kobject_cleanup lib/kobject.c:693 [inline]
+  kobject_release lib/kobject.c:722 [inline]
+  kref_put include/linux/kref.h:65 [inline]
+  kobject_put+0x171/0x280 lib/kobject.c:739
+  cdev_put.part.0+0x32/0x50 fs/char_dev.c:365
+  cdev_put fs/char_dev.c:363 [inline]
+  chrdev_open+0x296/0x5c0 fs/char_dev.c:422
+  do_dentry_open+0x494/0x1120 fs/open.c:797
+  do_last fs/namei.c:3408 [inline]
+  path_openat+0x1430/0x3ff0 fs/namei.c:3525
+  do_filp_open+0x1a1/0x280 fs/namei.c:3555
+  do_sys_open+0x3c0/0x580 fs/open.c:1097
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x402000
+Code: 01 f0 ff ff 0f 83 40 0e 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f  
+44 00 00 83 3d 6d 84 2d 00 00 75 14 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 14 0e 00 00 c3 48 83 ec 08 e8 7a 03 00 00
+RSP: 002b:00007ffff4b02e58 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 6666666666666667 RCX: 0000000000402000
+RDX: 0000000000000000 RSI: 000000000000107d RDI: 00007ffff4b02f00
+RBP: 000000000000d9d1 R08: 00007ffff4b02e60 R09: 000000000000d9d1
+R10: 00007ffff4b02e60 R11: 0000000000000246 R12: 00000000004032a0
+R13: 0000000000403330 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
