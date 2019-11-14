@@ -2,100 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C264FC308
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 10:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1184FC3AB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 11:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726597AbfKNJun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Nov 2019 04:50:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54776 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726057AbfKNJun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 14 Nov 2019 04:50:43 -0500
-Received: from localhost (unknown [61.58.47.46])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7CE9520409;
-        Thu, 14 Nov 2019 09:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573725042;
-        bh=bBLmNXYqqfTB/+wigdmi3boQJkJEcM/aKCJWATsyjq4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YniPVf/eS6SKJSKG/uDubvODeLS3/PO70H4MHWneFeGIvOnBgv5jJwVpo8Wn1Hh4L
-         voQaNoJHgFHECgC95C5Zm7QCd8OE83Q4krHhteHt7/MA25w+qAJDyUNwqg9j5E6YO9
-         qV0u4Kqcni73YhZ9l4W/ywegRMi9fLa9CtDwrMVA=
-Date:   Thu, 14 Nov 2019 17:50:39 +0800
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 133/136]
- drivers/usb/gadget/udc/atmel_usba_udc.c:229:46: error: 'usb_debug_root'
- undeclared; did you mean 'usb_ep_ops'?
-Message-ID: <20191114095039.GC631558@kroah.com>
-References: <201911141648.6cE1p47v%lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201911141648.6cE1p47v%lkp@intel.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+        id S1726599AbfKNKIp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Nov 2019 05:08:45 -0500
+Received: from mx2.suse.de ([195.135.220.15]:48652 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726339AbfKNKIp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 14 Nov 2019 05:08:45 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A6777AFDF;
+        Thu, 14 Nov 2019 10:08:43 +0000 (UTC)
+Message-ID: <1573726121.17351.3.camel@suse.com>
+Subject: Re: WARNING: ODEBUG bug in input_ff_destroy
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, dmitry.torokhov@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Thu, 14 Nov 2019 11:08:41 +0100
+In-Reply-To: <0000000000005ee2a10597399876@google.com>
+References: <0000000000005ee2a10597399876@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 04:15:55PM +0800, kbuild test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> head:   9c54450066cc56b1a47b2472333103569c402d0e
-> commit: fc05dc6c6ab3619084ef340f53c4a869cb3ea6e6 [133/136] usb: gadget: atmel: create debugfs directory under usb root
-> config: arm-allmodconfig (attached as .config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         git checkout fc05dc6c6ab3619084ef340f53c4a869cb3ea6e6
->         # save the attached .config to linux build tree
->         GCC_VERSION=7.4.0 make.cross ARCH=arm 
+Am Mittwoch, den 13.11.2019, 04:35 -0800 schrieb syzbot:
+> Hello,
 > 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
+> syzbot found the following crash on:
 > 
-> All errors (new ones prefixed by >>):
+> HEAD commit:    3183c037 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=17cf5e72e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b6c55daa701fc389e286
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b4e53ae00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1173fe72e00000
 > 
->    drivers/usb/gadget/udc/atmel_usba_udc.c: In function 'usba_init_debugfs':
-> >> drivers/usb/gadget/udc/atmel_usba_udc.c:229:46: error: 'usb_debug_root' undeclared (first use in this function); did you mean 'usb_ep_ops'?
->      root = debugfs_create_dir(udc->gadget.name, usb_debug_root);
->                                                  ^~~~~~~~~~~~~~
->                                                  usb_ep_ops
->    drivers/usb/gadget/udc/atmel_usba_udc.c:229:46: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> vim +229 drivers/usb/gadget/udc/atmel_usba_udc.c
-> 
->    223	
->    224	static void usba_init_debugfs(struct usba_udc *udc)
->    225	{
->    226		struct dentry *root;
->    227		struct resource *regs_resource;
->    228	
->  > 229		root = debugfs_create_dir(udc->gadget.name, usb_debug_root);
->    230		udc->debugfs_root = root;
->    231	
->    232		regs_resource = platform_get_resource(udc->pdev, IORESOURCE_MEM,
->    233					CTRL_IOMEM_ID);
->    234	
->    235		if (regs_resource) {
->    236			debugfs_create_file_size("regs", 0400, root, udc,
->    237						 &regs_dbg_fops,
->    238						 resource_size(regs_resource));
->    239		}
->    240	
->    241		usba_ep_init_debugfs(udc, to_usba_ep(udc->gadget.ep0));
->    242	}
->    243	
-> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com
 
-I will go drop this patch from my tree too.  Please fix it up and
-resend.
+#syz test: https://github.com/google/kasan.git 3183c037
 
-thanks,
+asix: fix information leak on short answersFrom b72ba3305d1e0405bfff5b6fc936d3769cd46c42 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Thu, 14 Nov 2019 11:03:45 +0100
+Subject: [PATCH] ff-memless: kill timer in destroy()
 
-greg k-h
+No timer must be left running when the device goes away.
+
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/input/ff-memless.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/input/ff-memless.c b/drivers/input/ff-memless.c
+index 1cb40c7475af..e72543d831cd 100644
+--- a/drivers/input/ff-memless.c
++++ b/drivers/input/ff-memless.c
+@@ -489,6 +489,7 @@ static void ml_ff_destroy(struct ff_device *ff)
+ {
+ 	struct ml_device *ml = ff->private;
+ 
++	del_timer_sync(&ml->timer);
+ 	kfree(ml->private);
+ }
+ 
+-- 
+2.16.4
+
