@@ -2,156 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF669FC745
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 14:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3BAFC84C
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 15:01:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbfKNNXe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 14 Nov 2019 08:23:34 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:42933 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726139AbfKNNXe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 08:23:34 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iVF5v-0005VS-Fn; Thu, 14 Nov 2019 14:23:31 +0100
-Received: from mol by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mol@pengutronix.de>)
-        id 1iVF5u-0003tK-Fh; Thu, 14 Nov 2019 14:23:30 +0100
-Date:   Thu, 14 Nov 2019 14:23:30 +0100
-From:   Michael Olbrich <m.olbrich@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S1727075AbfKNOBR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Nov 2019 09:01:17 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:44630 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726374AbfKNOBR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 09:01:17 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAEE0HuM113268;
+        Thu, 14 Nov 2019 08:00:17 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1573740017;
+        bh=mg4UFFS2ESh3A7IuctheIaBbXKxvehMGp07JMFKAlm0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Mpbs4fWCHa2MujEWCR63FGFbtu7sEjAJx80a0Ie3U5gJrSh3wfAFT6V6CCCnse642
+         ys+4ZwuS5AssKdj7NNk9DtoG1yhneDQGeDKK+yPRdcYOzOzy/47gmxnvex8/A/JEEJ
+         O7RgDe6d2D6COjEaDcBw8754s23pS/NkxNYRndBA=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAEE0H5B116509;
+        Thu, 14 Nov 2019 08:00:17 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 14
+ Nov 2019 08:00:17 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 14 Nov 2019 08:00:17 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAEE0HRI130585;
+        Thu, 14 Nov 2019 08:00:17 -0600
+Date:   Thu, 14 Nov 2019 08:02:34 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Felipe Balbi <balbi@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        <linux-media@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH v2 05/13] usb: musb: create debugfs directory under usb
+ root
+Message-ID: <20191114140234.GB5853@uda0271908>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
-Message-ID: <20191114132330.iw4ucbfaxofi6cfy@pengutronix.de>
-Mail-Followup-To: Alan Stern <stern@rowland.harvard.edu>,
-        Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20191113063414.GA30608@b29397-desktop>
- <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Fabrizio Castro <fabrizio.castro@bp.renesas.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Yangtao Li <tiny.windzz@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <1573541519-28488-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1573541519-28488-5-git-send-email-chunfeng.yun@mediatek.com>
+ <20191112152857.GA5853@uda0271908>
+ <20191114032018.GA122287@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 14:17:51 up 129 days, 19:28, 139 users,  load average: 0.05, 0.13,
- 0.13
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20191114032018.GA122287@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 10:36:25AM -0500, Alan Stern wrote:
-> On Wed, 13 Nov 2019, Peter Chen wrote:
-> > On 19-11-12 10:33:18, Michael Olbrich wrote:
-> > > 'delayed_status' and 'deactivations' are used completely independent but
-> > > they share the same spinlock. This can result in spinlock recursion:
-> > > 
-> > > BUG: spinlock recursion on CPU#1, uvc-gadget/322
-> > >  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .owner_cpu: 1
-> > > CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-20190916-1+ #55
-> > > Hardware name: XXXXX (DT)
-> > > Call trace:
-> > >  dump_backtrace+0x0/0x178
-> > >  show_stack+0x24/0x30
-> > >  dump_stack+0xc0/0x104
-> > >  spin_dump+0x90/0xa0
-> > >  do_raw_spin_lock+0xd8/0x108
-> > >  _raw_spin_lock_irqsave+0x40/0x50
-> > >  composite_disconnect+0x2c/0x80
-> > >  usb_gadget_disconnect+0x84/0x150
-> > >  usb_gadget_deactivate+0x64/0x120
-> > >  usb_function_deactivate+0x70/0x80
-> > >  uvc_function_disconnect+0x20/0x58
-> > >  uvc_v4l2_release+0x34/0x90
-> > >  v4l2_release+0xbc/0xf0
-> > >  __fput+0xb0/0x218
-> > >  ____fput+0x20/0x30
-> > >  task_work_run+0xa0/0xd0
-> > >  do_notify_resume+0x2f4/0x340
-> > >  work_pending+0x8/0x14
-> > > 
-> > > Fix this by using separate spinlocks.
+On Thu, Nov 14, 2019 at 11:20:18AM +0800, Greg Kroah-Hartman wrote:
+> On Tue, Nov 12, 2019 at 09:28:57AM -0600, Bin Liu wrote:
+> > Hi,
 > > 
-> > This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Issue
-> > ->disconnect() callback from usb_gadget_disconnect()"), which adds
-> > gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
-> > with your patch, you may cc to stable tree.
+> > On Tue, Nov 12, 2019 at 02:51:51PM +0800, Chunfeng Yun wrote:
+> > > Now the USB gadget subsystem can use the USB debugfs root directory,
+> > > so move musb's directory from the root of the debugfs filesystem into
+> > > the root of usb
+> > 
+> > My opinion is this move is unnecessary. I breaks existing debug tools or
+> > documentation which is already published on Internet. 
 > 
-> I wasn't aware of the dual usage of that lock in the composite core 
-> (and 0a55187a1ec8c touches only the gadget core, not composite.c).
-> 
-> In any case, I don't have a good feel for how the locking is supposed 
-> to work in the composite core.  This is really something Felipe should 
-> look at.
-> 
-> Would a better fix be to change usb_function_deactivate() so that it
-> doesn't hold the lock while calling usb_gadget_deactivate()?  Maybe
-> increment cdev->deactivations unconditionally before dropping the lock
-> (for mutual exclusion) and then decrement it again if the call fails?
+> Having a "root" directory for a single random driver seems like you are
+> making your driver a "very important" thing in the overall scheme of the
+> kernel, right?  What's wrong with using the usb subdirectory like all
 
-Hmm, I think, that would mean that usb_gadget_activate() may be called
-while usb_gadget_deactivate() is still running right? That's not
-acceptable, is it?
+Agree, it wasn't the right thing to do at the first place. But now
+changing it adds support burden, because people very often refer to the
+old information on the internet which no longer matches to the new
+location. Basically, it is a cost of ABI change.
 
-Anyways. Something else is needed because executing usb_gadget_deactivate()
-under the spinlock has another problem. It's hard to reproduce, but we've
-seen this one:
+> other USB drivers use (after this patch series is merged)?  That feels
+> like a much more "sane" way to handle the wide-open debugfs namespace.
 
-BUG: scheduling while atomic: pipewire/260/0x00000002
-Modules linked in: allegro(C) regmap_mmio v4l2_mem2mem xlnx_vcu st1232 uio_pdrv_genirq
-Preemption disabled at: [<ffffff801061dc40>] usb_function_deactivate+0x30/0x80
-CPU: 1 PID: 260 Comm: pipewire Tainted: G         C O 5.3.0-20191112-1 #2
-Hardware name: Wolfvision ZynqMP PF4 (DT)
-Call trace:
- dump_backtrace+0x0/0x178
- show_stack+0x24/0x30
- dump_stack+0xc0/0x104
- __schedule_bug+0xb0/0xc0
- __schedule+0x354/0x4d8
- schedule+0x44/0xd8
- schedule_timeout+0x1b4/0x380
- wait_for_common+0xc0/0x188
- wait_for_completion_timeout+0x2c/0x38
- dwc3_gadget_pullup+0x90/0xb0
- usb_gadget_disconnect+0x38/0x150
- usb_gadget_deactivate+0x64/0x120
- usb_function_deactivate+0x70/0x80
- uvc_function_disconnect+0x20/0x58
- uvc_v4l2_release+0x34/0x90
- v4l2_release+0xbc/0xf0
- __fput+0x90/0x208
- ____fput+0x20/0x30
- task_work_run+0x98/0xb8
- do_notify_resume+0x2f4/0x340
- work_pending+0x8/0x14
-dwc3 fe200000.usb: timed out waiting for SETUP phase
+Though I commented on this musb patch, my opinion is for this whole
+series, either drop the whole series or apply the whole series.
 
-Or maybe it's incorrect for dwc3_gadget_pullup() to sleep?
+> Yes, there are no rules when it comes to debugfs file names and
+> locations, but let's try to be sane please.
 
-Regards,
-Michael
+Fine with me. I can still support questions such as "can't open
+/sys/kernel/debug/musb-hdrc.0/testmode: No such file or directory".
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+-Bin.
