@@ -2,56 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAEBFC605
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 13:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF669FC745
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 14:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727112AbfKNMOg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Nov 2019 07:14:36 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:53011 "EHLO
+        id S1726958AbfKNNXe convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 14 Nov 2019 08:23:34 -0500
+Received: from metis.ext.pengutronix.de ([85.220.165.71]:42933 "EHLO
         metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727054AbfKNMOg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 07:14:36 -0500
+        with ESMTP id S1726139AbfKNNXe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 08:23:34 -0500
 Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
         by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <mol@pengutronix.de>)
-        id 1iVE12-0006Pg-KZ; Thu, 14 Nov 2019 13:14:24 +0100
+        id 1iVF5v-0005VS-Fn; Thu, 14 Nov 2019 14:23:31 +0100
 Received: from mol by ptx.hi.pengutronix.de with local (Exim 4.89)
         (envelope-from <mol@pengutronix.de>)
-        id 1iVE10-00019c-Dc; Thu, 14 Nov 2019 13:14:22 +0100
-Date:   Thu, 14 Nov 2019 13:14:22 +0100
+        id 1iVF5u-0003tK-Fh; Thu, 14 Nov 2019 14:23:30 +0100
+Date:   Thu, 14 Nov 2019 14:23:30 +0100
 From:   Michael Olbrich <m.olbrich@pengutronix.de>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Peter Chen <peter.chen@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: restart the transfer if a isoc
- request is queued too late
-Message-ID: <20191114121422.qtvyom6nytzwoy2e@pengutronix.de>
-Mail-Followup-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
+Message-ID: <20191114132330.iw4ucbfaxofi6cfy@pengutronix.de>
+Mail-Followup-To: Alan Stern <stern@rowland.harvard.edu>,
+        Peter Chen <peter.chen@nxp.com>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-References: <Pine.LNX.4.44L0.1911131036340.1558-100000@iolanthe.rowland.org>
- <587b0adf-b71d-6fde-407b-46089ed5d695@synopsys.com>
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20191113063414.GA30608@b29397-desktop>
+ <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <587b0adf-b71d-6fde-407b-46089ed5d695@synopsys.com>
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
 X-Sent-From: Pengutronix Hildesheim
 X-URL:  http://www.pengutronix.de/
 X-IRC:  #ptxdist @freenode
 X-Accept-Language: de,en
 X-Accept-Content-Type: text/plain
-X-Uptime: 10:28:11 up 129 days, 15:38, 132 users,  load average: 0.09, 0.18,
- 0.17
+X-Uptime: 14:17:51 up 129 days, 19:28, 139 users,  load average: 0.05, 0.13,
+ 0.13
 User-Agent: NeoMutt/20170113 (1.7.2)
 X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
 X-SA-Exim-Mail-From: mol@pengutronix.de
@@ -62,95 +59,93 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 07:14:59PM +0000, Thinh Nguyen wrote:
-> Alan Stern wrote:
-> > On Wed, 13 Nov 2019, Michael Olbrich wrote:
-> >> On Wed, Nov 13, 2019 at 03:55:01AM +0000, Thinh Nguyen wrote:
-> >>> Michael Olbrich wrote:
-> >>>> Currently, most gadget drivers handle isoc transfers on a best effort
-> >>>> bases: If the request queue runs empty, then there will simply be gaps in
-> >>>> the isoc data stream.
-> >>>>
-> >>>> The UVC gadget depends on this behaviour. It simply provides new requests
-> >>>> when video frames are available and assumes that they are sent as soon as
-> >>>> possible.
-> >>>>
-> >>>> The dwc3 gadget currently works differently: It assumes that there is a
-> >>>> contiguous stream of requests without any gaps. If a request is too late,
-> >>>> then it is dropped by the hardware.
-> >>>> For the UVC gadget this means that a live stream stops after the first
-> >>>> frame because all following requests are late.
-> >>> Can you explain little more how UVC gadget fails?
-> >>> dwc3 controller expects a steady stream of data otherwise it will result
-> >>> in missed_isoc status, and it should be fine as long as new requests are
-> >>> queued. The controller doesn't just drop the request unless there's some
-> >>> other failure.
-> >> UVC (with a live stream) does not fill the complete bandwidth of an
-> >> isochronous endpoint. Let's assume for the example that one video frame
-> >> fills 3 requests. Because it is a live stream, there will be a gap between
-> >> video frames. This is unavoidable, especially for compressed video. So the
-> >> UVC gadget will have requests for the frame numbers 1 2 3 5 6 7 9 10 11 13 14
-> >> 15 and so on.
-> >> The dwc3 hardware tries to send those with frame numbers 1 2 3 4 5 6 7 8 9
-> >> 10 11 12. So except for the fist few requests, all are late and result in a
-> >> missed_isoc. I tried to just ignore the missed_isoc but that did not work
-> >> for me. I only received the first frame at the other end.
-> >> Maybe I missing something here, i don't have access to the hardware
-> >> documentation, so I can only guess from the existing driver.
+On Wed, Nov 13, 2019 at 10:36:25AM -0500, Alan Stern wrote:
+> On Wed, 13 Nov 2019, Peter Chen wrote:
+> > On 19-11-12 10:33:18, Michael Olbrich wrote:
+> > > 'delayed_status' and 'deactivations' are used completely independent but
+> > > they share the same spinlock. This can result in spinlock recursion:
+> > > 
+> > > BUG: spinlock recursion on CPU#1, uvc-gadget/322
+> > >  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .owner_cpu: 1
+> > > CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-20190916-1+ #55
+> > > Hardware name: XXXXX (DT)
+> > > Call trace:
+> > >  dump_backtrace+0x0/0x178
+> > >  show_stack+0x24/0x30
+> > >  dump_stack+0xc0/0x104
+> > >  spin_dump+0x90/0xa0
+> > >  do_raw_spin_lock+0xd8/0x108
+> > >  _raw_spin_lock_irqsave+0x40/0x50
+> > >  composite_disconnect+0x2c/0x80
+> > >  usb_gadget_disconnect+0x84/0x150
+> > >  usb_gadget_deactivate+0x64/0x120
+> > >  usb_function_deactivate+0x70/0x80
+> > >  uvc_function_disconnect+0x20/0x58
+> > >  uvc_v4l2_release+0x34/0x90
+> > >  v4l2_release+0xbc/0xf0
+> > >  __fput+0xb0/0x218
+> > >  ____fput+0x20/0x30
+> > >  task_work_run+0xa0/0xd0
+> > >  do_notify_resume+0x2f4/0x340
+> > >  work_pending+0x8/0x14
+> > > 
+> > > Fix this by using separate spinlocks.
+> > 
+> > This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Issue
+> > ->disconnect() callback from usb_gadget_disconnect()"), which adds
+> > gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
+> > with your patch, you may cc to stable tree.
 > 
-> The reason I asked is because your patch doesn't seem to address the 
-> actual issue.
+> I wasn't aware of the dual usage of that lock in the composite core 
+> (and 0a55187a1ec8c touches only the gadget core, not composite.c).
 > 
-> For the 2 checks you do here
-> 1. There are currently no requests queued in the hardware
-> 2. The current frame number provided by DSTS does not match the frame
->      number returned by the last transfer.
+> In any case, I don't have a good feel for how the locking is supposed 
+> to work in the composite core.  This is really something Felipe should 
+> look at.
 > 
-> For #1, it's already done in the dwc3 driver. (check 
-> dwc3_gadget_endpoint_transfer_in_progress())
+> Would a better fix be to change usb_function_deactivate() so that it
+> doesn't hold the lock while calling usb_gadget_deactivate()?  Maybe
+> increment cdev->deactivations unconditionally before dropping the lock
+> (for mutual exclusion) and then decrement it again if the call fails?
 
-But that's only after a isoc_missed occurred. What exactly does that mean?
-Was the request transferred or not? My tests suggest that it was not
-transferred, so I wanted to catch this before it happens.
+Hmm, I think, that would mean that usb_gadget_activate() may be called
+while usb_gadget_deactivate() is still running right? That's not
+acceptable, is it?
 
-> For #2, it's unlikely that DSTS current frame number will match with the 
-> XferNotReady's frame number. So this check doesn't mean much.
+Anyways. Something else is needed because executing usb_gadget_deactivate()
+under the spinlock has another problem. It's hard to reproduce, but we've
+seen this one:
 
-The frame number is also updated for each "Transfer In Progress" interrupt.
-If they match, then there a new request can still be queued successfully.
-Without this I got unnecessary stop/start transfers in the middle of a
-video frame. But maybe something else was wrong here. I'd need to recheck.
+BUG: scheduling while atomic: pipewire/260/0x00000002
+Modules linked in: allegro(C) regmap_mmio v4l2_mem2mem xlnx_vcu st1232 uio_pdrv_genirq
+Preemption disabled at: [<ffffff801061dc40>] usb_function_deactivate+0x30/0x80
+CPU: 1 PID: 260 Comm: pipewire Tainted: G         C O 5.3.0-20191112-1 #2
+Hardware name: Wolfvision ZynqMP PF4 (DT)
+Call trace:
+ dump_backtrace+0x0/0x178
+ show_stack+0x24/0x30
+ dump_stack+0xc0/0x104
+ __schedule_bug+0xb0/0xc0
+ __schedule+0x354/0x4d8
+ schedule+0x44/0xd8
+ schedule_timeout+0x1b4/0x380
+ wait_for_common+0xc0/0x188
+ wait_for_completion_timeout+0x2c/0x38
+ dwc3_gadget_pullup+0x90/0xb0
+ usb_gadget_disconnect+0x38/0x150
+ usb_gadget_deactivate+0x64/0x120
+ usb_function_deactivate+0x70/0x80
+ uvc_function_disconnect+0x20/0x58
+ uvc_v4l2_release+0x34/0x90
+ v4l2_release+0xbc/0xf0
+ __fput+0x90/0x208
+ ____fput+0x20/0x30
+ task_work_run+0x98/0xb8
+ do_notify_resume+0x2f4/0x340
+ work_pending+0x8/0x14
+dwc3 fe200000.usb: timed out waiting for SETUP phase
 
-> So I'm still wondering how does this patch help resolve your issue.
-
-With this patch, the transfer is restarted for every video frame.
-Otherwise, I just get a lot of isoc_missed and ignoring those did not help.
-No valid data arrived after the first video frame.
-
-> > How about changing the gadget driver instead?  For frames where the UVC
-> > gadget knows no video frame data is available (numbers 4, 8, 12, and so
-> > on in the example above), queue a zero-length request.  Then there
-> > won't be any gaps in the isochronous packet stream.
-> 
-> What Alan suggests may work. Have you tried this?
-
-Yes and it works in general. There are however some problems with that
-approach that I want to avoid:
-
-1. It adds extra overhead to handle the extra zero-length request.
-Especially for encoded video the available bandwidth can be quite a bit
-larger that what is actually used. I want to avoid that.
-
-2. The UVC gadget currently does no know how many zero-length request must
-added. So it needs fill all available request until a new video frame
-arrives. With the current 4 requests that is not a problem right now. But
-that does not scale for USB3 bandwidths. So one thing that I want to do is
-to queue many requests but only enable the interrupt for a few of than.
-From what I can tell from the code, the gadget framework and the dwc3
-driver should already support this.
-This will result in extra latency. There is probably an acceptable
-trade-off with an acceptable interrupt load and latency. But I would like
-to avoid that if possible.
+Or maybe it's incorrect for dwc3_gadget_pullup() to sleep?
 
 Regards,
 Michael
