@@ -2,76 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF665FBD80
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 02:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37ACCFBDEF
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 03:33:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbfKNBbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 13 Nov 2019 20:31:00 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:45797 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726392AbfKNBbA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 20:31:00 -0500
-Received: by mail-oi1-f194.google.com with SMTP id 14so3720521oir.12;
-        Wed, 13 Nov 2019 17:30:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NPZmkyPT605AJagOwd6DqFqPdy9BZ1g9xndRjb0oTmU=;
-        b=pRVkmE20IiiWNIsPQ7YWk1/+EPIvQXvGOp/u2upRpp3QAPUyLSdzuR9WYShtmWwEze
-         pRr/LWvgUski/EygEJJRnBTbYXcrrjvT4dTQSBIDtJXHODKeBPBmdSCfF2qOC3sFLjM8
-         HH7d0M8lUTNFxLxJZWWt1l76DQRmdF/IXZbvj0zf4lKjgCKURsPJoengQZZY34lsr4tK
-         SAwRoSbfmsNyO7WAQCYb/J6bhCcqLzTiaPb5OeD/oauKbIBl5VOBK0GySxHtpEmLGTYi
-         uEbY5+Fq7YS+tpVlyOy1d0xZE9y5sO1ui0mcBho0kPHawByLb5cBogvw8eH8fsZFB3ET
-         W8AQ==
-X-Gm-Message-State: APjAAAXJyzNnP23XPsrwzStFLPosfdX3so3tPA00UXbiB+OtIANlZyZo
-        sGAA8Fo+FcVR0lkCRgqjKw==
-X-Google-Smtp-Source: APXvYqyzRyS3pL4SlXiW0bp1nR8dUvkiggu3JwQlJk9vxIaR821lrhV+Abpdp88G31DGZTOpOOp4eg==
-X-Received: by 2002:aca:40b:: with SMTP id 11mr1460236oie.106.1573695059333;
-        Wed, 13 Nov 2019 17:30:59 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id z189sm1282249oiz.33.2019.11.13.17.30.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2019 17:30:58 -0800 (PST)
-Date:   Wed, 13 Nov 2019 19:30:57 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc:     Cristian Birsan <cristian.birsan@microchip.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH 2/3] dt-bindings: usb: atmel: Mark EP child node as
- deprecated
-Message-ID: <20191114013057.GA20150@bogus>
-References: <20191107153128.11038-1-gregory.clement@bootlin.com>
- <20191107153128.11038-3-gregory.clement@bootlin.com>
+        id S1726953AbfKNCdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 13 Nov 2019 21:33:45 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:10737 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726473AbfKNCdp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 13 Nov 2019 21:33:45 -0500
+X-UUID: 273aaed76625470ebb4fee21e3be15fe-20191114
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=jdpcBWc7HBlDBSHQj9W7l/lAc9ZUoty9ehXTUgWCTGw=;
+        b=DE1IpPyBL+mC1m1knTLKZFTpztGf8k13sLrkBIVTY6cyZX7Le3W/Huc0mCBlTe82eBmGGdmRI5p6xCcEzGIWGgk0rWP47CbEBZXXM86lDwTe2Kf1M/dQ7CGelnvi8/9ZPZkvSYG2hjOKWWyv05Lh/pAkHSveOOjHJTh2Q9HLqt0=;
+X-UUID: 273aaed76625470ebb4fee21e3be15fe-20191114
+Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 2040405152; Thu, 14 Nov 2019 10:33:30 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ MTKMBS31DR.mediatek.inc (172.27.6.102) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 14 Nov 2019 10:33:21 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 14 Nov 2019 10:33:20 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Tianping Fang <tianping.fang@mediatek.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [RFC PATCH] usb: mtu3: fix random remote wakeup
+Date:   Thu, 14 Nov 2019 10:33:11 +0800
+Message-ID: <1573698791-24310-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191107153128.11038-3-gregory.clement@bootlin.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 2075714ACED72CBB15C4DCA956E5D8B2E8C542FC8427F2F77C2C39642685507E2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu,  7 Nov 2019 16:31:27 +0100, Gregory CLEMENT wrote:
-> There is no need to describe the end point in the deice tree. These
-> properties won't be use anymore, so mark them as deprecated to keep
-> the old device tree documented.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  .../devicetree/bindings/usb/atmel-usb.txt     | 56 +------------------
->  1 file changed, 3 insertions(+), 53 deletions(-)
-> 
+V2FrZXVwX3NpZ25hbCB3aWxsIHRvZ2dsZSBzdGF0dXMgYWNjb3JkaW5nIHRvIHNzdXNiX2lwX3Ns
+ZWVwIHNpZ25hbA0KYWZ0ZXIgZGVib3VuY2UgdGltZSwgc28gbmVlZCBhZGQgYSBkZWxheSB0aW1l
+IGFuZCB3YWl0IGZvciB3YWtldXBfc2lnbmFsDQp0b2dnbGUgdG8gY29tcGxldGUsIHRoZW4gZW5h
+YmxlIHRoZSByZW1vdGUgd2FrZXVwLiBNZWFud2hpbGUgcmVkdWNlIHRoZQ0KZGVib3VuY2UgdGlt
+ZSBvZiB3YWtldXBfc2lnbmFsLiBUaGVzZSB3aWxsIGF2b2lkIHNwdXJpb3VzIHdha2V1cCBldmVu
+dC4NCg0KU2lnbmVkLW9mZi1ieTogVGlhbnBpbmcgRmFuZyA8dGlhbnBpbmcuZmFuZ0BtZWRpYXRl
+ay5jb20+DQpTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRl
+ay5jb20+DQotLS0NCk5vdGUsIGRlcGVuZHMgb24gZm9sbG93aW5nIHBhdGNoIG5vdCBtZXJnZWQ6
+DQoNCiAgICBbdjMsMy83XSB1c2I6IG10dTM6IHN1cHBvcnQgaXAtc2xlZXAgd2FrZXVwIGZvciBN
+VDgxODMNCiAgICBodHRwczovL3BhdGNod29yay5rZXJuZWwub3JnL3BhdGNoLzExMTIzMTUxLw0K
+LS0tDQogZHJpdmVycy91c2IvbXR1My9tdHUzX2hvc3QuYyB8IDYgKysrKy0tDQogMSBmaWxlIGNo
+YW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL210dTMvbXR1M19ob3N0LmMgYi9kcml2ZXJzL3VzYi9tdHUzL210dTNfaG9zdC5j
+DQppbmRleCAxODJjOTQzOWMxNWEuLmNhNDhmZjc1MWM4YiAxMDA2NDQNCi0tLSBhL2RyaXZlcnMv
+dXNiL210dTMvbXR1M19ob3N0LmMNCisrKyBiL2RyaXZlcnMvdXNiL210dTMvbXR1M19ob3N0LmMN
+CkBAIC01MywxMiArNTMsMTIgQEAgc3RhdGljIHZvaWQgc3N1c2Jfd2FrZXVwX2lwX3NsZWVwX3Nl
+dChzdHJ1Y3Qgc3N1c2JfbXRrICpzc3VzYiwgYm9vbCBlbmFibGUpDQogCWNhc2UgU1NVU0JfVVdL
+X1YwOg0KIAkJcmVnID0gc3N1c2ItPnV3a19yZWdfYmFzZSArIFBFUklfV0tfQ1RSTDA7DQogCQlt
+c2sgPSAodTMyKShXQzBfSVNfRU4gfCBXQzBfSVNfQygweGYpIHwgV0MwX0lTX1ApOw0KLQkJdmFs
+ID0gZW5hYmxlID8gKFdDMF9JU19FTiB8IFdDMF9JU19DKDB4OCkpIDogMDsNCisJCXZhbCA9IGVu
+YWJsZSA/IChXQzBfSVNfRU4gfCBXQzBfSVNfQygweDMpKSA6IDA7DQogCQlicmVhazsNCiAJY2Fz
+ZSBTU1VTQl9VV0tfVjE6DQogCQlyZWcgPSBzc3VzYi0+dXdrX3JlZ19iYXNlICsgUEVSSV9XS19D
+VFJMMTsNCiAJCW1zayA9IFdDMV9JU19FTiB8IFdDMV9JU19DKDB4ZikgfCBXQzFfSVNfUDsNCi0J
+CXZhbCA9IGVuYWJsZSA/IChXQzFfSVNfRU4gfCBXQzFfSVNfQygweDgpKSA6IDA7DQorCQl2YWwg
+PSBlbmFibGUgPyAoV0MxX0lTX0VOIHwgV0MxX0lTX0MoMHgzKSkgOiAwOw0KIAkJYnJlYWs7DQog
+CWNhc2UgU1NVU0JfVVdLX1YyOg0KIAkJcmVnID0gc3N1c2ItPnV3a19yZWdfYmFzZSArIFBFUklf
+U1NVU0JfU1BNX0NUUkw7DQpAQCAtMTk3LDYgKzE5Nyw4IEBAIGludCBzc3VzYl9ob3N0X2Rpc2Fi
+bGUoc3RydWN0IHNzdXNiX210ayAqc3N1c2IsIGJvb2wgc3VzcGVuZCkNCiAJCQkgICh2YWx1ZSAm
+IFNTVVNCX0lQX1NMRUVQX1NUUyksIDEwMCwgMTAwMDAwKTsNCiAJaWYgKHJldCkNCiAJCWRldl9l
+cnIoc3N1c2ItPmRldiwgImlwIHNsZWVwIGZhaWxlZCEhIVxuIik7DQorCWVsc2UgIC8qIHdhaXQg
+Zm9yIHdha2V1cF9zaWduYWwgdG9nZ2xlIGRvbmUgYWZ0ZXIgZW50ZXIgaXAtc2xlZXAgKi8NCisJ
+CXVzbGVlcF9yYW5nZSgyNDUsIDI1NSk7DQogDQogCXJldHVybiByZXQ7DQogfQ0KLS0gDQoyLjIz
+LjANCg==
 
-Reviewed-by: Rob Herring <robh@kernel.org>
