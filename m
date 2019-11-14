@@ -2,165 +2,279 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95FBFFC529
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 12:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76648FC534
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 12:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbfKNLQP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Nov 2019 06:16:15 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:21759 "EHLO
+        id S1726185AbfKNLSr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Nov 2019 06:18:47 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51541 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726139AbfKNLQP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 06:16:15 -0500
+        with ESMTP id S1726087AbfKNLSr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 06:18:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573730173;
+        s=mimecast20190719; t=1573730325;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=F40K3Dox6f4nYqgz/+HQOkTb9CcnDZVMJ/KY97drq1A=;
-        b=g9qX8HVn67S0Prpux0a0Z5j0WwZhU2TLD2lvTNkoRi1/dufB5vrzov5i+UxiGQlCKzsRgO
-        Gsc80o6Yf19VWLXbZDb46nFROfhirfSLh1tXRnKZHnma1qbhClpzDxnAX43zBpv/i3Gjw1
-        pBL3kYti2et6xjaF1usqjWHjYOgxXYA=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-61-rMJwadfkMpKc0BazYQeAKw-1; Thu, 14 Nov 2019 06:16:12 -0500
-Received: by mail-wr1-f70.google.com with SMTP id g17so4201974wru.4
-        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2019 03:16:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JQ6k37wyHWFobguUyNeb2ucWLK7BLzU9wGKmeknDgXo=;
-        b=VgZzKkQrE0ibok5OwZZfTeQ0j9LUyBg/5QVqtpWMiMc7MZxQnEsNuPnLXYpfe+FtWz
-         pM4A4DWQDahjJw9QdV5oEYLTHpYa4l9/1ZWDP72WElyiqe+xPTHmF5INc2uzkofSG3zy
-         vC9qu5xZIhopGzPwtbylTiXXMZvGDBLu9BplqgIhzbR8I9zIbVokJnb0AcPrvsb4w3VC
-         DqyByDlnGd5nyH9IuT7bXaXv0XCP1DQP2JIqKmSuMQUgfrj/fXnA3iZ7r44KlFXaP++R
-         zboQPwOkTNw6sdONJxGgUXJ2J5gaZIt2zf9IBk8jYEF0kbeeLlsQQGPf6NmGhbK2vXT2
-         KTyA==
-X-Gm-Message-State: APjAAAWaGSiYq7gj08Vz7l6G7YSEP+lrFttX1Chyg2zrARWAMRnB4YKa
-        Gq4M4LPZ6zw3B/Aac2Hy3XTE/KIMnZBYtdY2UGsx17bCQo80lWp/0/Jm/Tv30wQGzrLl9Lk8AVH
-        IYmfBCGD4KEyuP8PhxTBY
-X-Received: by 2002:a1c:9c54:: with SMTP id f81mr7457516wme.89.1573730171051;
-        Thu, 14 Nov 2019 03:16:11 -0800 (PST)
-X-Google-Smtp-Source: APXvYqx8yzq3/68IetRMqwOGoep4Iq1BU9cQjndVLISwMb8BnNeJ/tD11D2+UmTbC80Ocv+JBKVcaQ==
-X-Received: by 2002:a1c:9c54:: with SMTP id f81mr7457488wme.89.1573730170756;
-        Thu, 14 Nov 2019 03:16:10 -0800 (PST)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id t187sm1484486wma.16.2019.11.14.03.16.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2019 03:16:10 -0800 (PST)
-Subject: Re: [PATCH 2/3] usb: typec: tcpm: Add support for configuring DP
- altmode through device-properties
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20191018195719.94634-1-hdegoede@redhat.com>
- <20191018195719.94634-2-hdegoede@redhat.com>
- <20191021065549.GA28049@kuha.fi.intel.com>
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XwljjQeeqS0wEfDP0ymNvPDmW+RGZZM8zC8glh9va6Y=;
+        b=gxP7eoSQThJLTtOJYp2uVRGXz9d+xodSTXHw++dc6dhejLtDmpzYt1UXSt/dEh/EnSIC3o
+        6kmkBqaCnIYtI3kkK7HGZlsWgfuWtORHb7OHhfOOGbpn8sZkvonRGsQoV80F+XAbneAxdc
+        od6tCiqabk9C3sPCIcoypDrryuBzJpg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-143-EJD8_FelPk-3bW89B109ag-1; Thu, 14 Nov 2019 06:18:44 -0500
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4AC851852E24;
+        Thu, 14 Nov 2019 11:18:43 +0000 (UTC)
+Received: from shalem.localdomain.com (unknown [10.36.118.128])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 227A45C541;
+        Thu, 14 Nov 2019 11:18:41 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <5a42617c-12f9-64af-7ea5-8cf6754843aa@redhat.com>
-Date:   Thu, 14 Nov 2019 12:16:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-usb@vger.kernel.org
+Subject: [PATCH resend] usb: typec: tcpm: Remove tcpc_config configuration mechanism
+Date:   Thu, 14 Nov 2019 12:18:40 +0100
+Message-Id: <20191114111840.40876-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20191021065549.GA28049@kuha.fi.intel.com>
-Content-Language: en-US
-X-MC-Unique: rMJwadfkMpKc0BazYQeAKw-1
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MC-Unique: EJD8_FelPk-3bW89B109ag-1
 X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+All configuration can and should be done through fwnodes instead of
+through the tcpc_config struct and there are no existing users left of
+struct tcpc_config, so lets remove it.
 
-Hi,
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 90 ++---------------------------------
+ include/linux/usb/tcpm.h      | 41 ----------------
+ 2 files changed, 3 insertions(+), 128 deletions(-)
 
-On 21-10-2019 08:55, Heikki Krogerus wrote:
-> Hi Hans,
->=20
-> On Fri, Oct 18, 2019 at 09:57:18PM +0200, Hans de Goede wrote:
->> Add support for configuring display-port altmode through device-properti=
-es.
->>
->> We could try to add a generic mechanism for describing altmodes in
->> device-properties, but various altmodes will likely need altmode specifi=
-c
->> configuration. E.g. the display-port altmode needs some way to describe
->> which set of DP pins on the GPU is connected to the USB Type-C connector=
-.
->>
->> As such it is better to have a separate set of altmode specific properti=
-es
->> per altmode and this commit adds a property for basic display-port altmo=
-de
->> support.
->>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>   .../bindings/connector/usb-connector.txt      |  3 ++
->>   drivers/usb/typec/tcpm/tcpm.c                 | 33 +++++++++++++++++++
->>   2 files changed, 36 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.t=
-xt b/Documentation/devicetree/bindings/connector/usb-connector.txt
->> index d357987181ee..7bae3cc9c76a 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.txt
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.txt
->> @@ -38,6 +38,9 @@ Optional properties for usb-c-connector:
->>     or Try.SRC, should be "sink" for Try.SNK or "source" for Try.SRC.
->>   - data-role: should be one of "host", "device", "dual"(DRD) if typec
->>     connector supports USB data.
->> +- displayport-vdo: The presenence of this property indicates that the
->> +  usb-connector supports displayport-altmode (svid 0xff01), the value o=
-f
->> +  this property is an u32 with the vdo value for the displayport-altmod=
-e,
->=20
-> No, let's not take this approach.
->=20
-> Every alternate mode a connector supports will need to have its own
-> "sub-fwnode" under the connector fwnode. I thought we agreed this
-> earlier?
->=20
-> In any case, those sub-nodes will have default device properties named
-> "svid" and "vdo". If the alternate mode still needs some other
-> details, it can have other device properties that are specific to it,
-> but note that displayport alt mode does not need anything extra. The
-> "vdo" will already tells which pin configurations the connector
-> supports and that is all that the driver needs to know.
->=20
-> After we have the sub-nodes, it's not a big deal to walk through the
-> child-nodes the port has during port registration and register the
-> port alternate modes at the same time. That we can do in
-> typec_register_port(), so we do not need to do it in every driver
-> separately.
-
-Yes we did agree to do the sub-fwnode thingie. But since this is a hobby
-project I do not have a whole lot of time to work on this.
-
-So when I started working on this, I though that the approach from this
-patch-set would be more KISS and IMHO it works out well. But the sub-fwnode
-approach is probably more future proof.
-
-Anyways as said I do not have a whole lot of time to work on this,
-if you want to go the sub-fwnode route, perhaps you can do a PoC
-patch series for this? I would be happy to test this and if necessary
-work it into something which works for the DP case.
-
-Doing the port alternate modes registration from typec_register_port()
-does sound like a good idea.
-
-The first patch in this series is independent of this and IMHO it
-would be good to get that upstream regardless of this alt-mode
-registration stuff, so I will resend that as a standalone patch.
-
-Regards,
-
-Hans
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5f61d9977a15..c5fa18759f8e 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -380,9 +380,6 @@ static enum tcpm_state tcpm_default_state(struct tcpm_p=
+ort *port)
+ =09=09=09return SNK_UNATTACHED;
+ =09=09else if (port->try_role =3D=3D TYPEC_SOURCE)
+ =09=09=09return SRC_UNATTACHED;
+-=09=09else if (port->tcpc->config &&
+-=09=09=09 port->tcpc->config->default_role =3D=3D TYPEC_SINK)
+-=09=09=09return SNK_UNATTACHED;
+ =09=09/* Fall through to return SRC_UNATTACHED */
+ =09} else if (port->port_type =3D=3D TYPEC_PORT_SNK) {
+ =09=09return SNK_UNATTACHED;
+@@ -4131,7 +4128,7 @@ static int tcpm_try_role(const struct typec_capabilit=
+y *cap, int role)
+ =09mutex_lock(&port->lock);
+ =09if (tcpc->try_role)
+ =09=09ret =3D tcpc->try_role(tcpc, role);
+-=09if (!ret && (!tcpc->config || !tcpc->config->try_role_hw))
++=09if (!ret)
+ =09=09port->try_role =3D role;
+ =09port->try_src_count =3D 0;
+ =09port->try_snk_count =3D 0;
+@@ -4368,34 +4365,6 @@ void tcpm_tcpc_reset(struct tcpm_port *port)
+ }
+ EXPORT_SYMBOL_GPL(tcpm_tcpc_reset);
+=20
+-static int tcpm_copy_pdos(u32 *dest_pdo, const u32 *src_pdo,
+-=09=09=09  unsigned int nr_pdo)
+-{
+-=09unsigned int i;
+-
+-=09if (nr_pdo > PDO_MAX_OBJECTS)
+-=09=09nr_pdo =3D PDO_MAX_OBJECTS;
+-
+-=09for (i =3D 0; i < nr_pdo; i++)
+-=09=09dest_pdo[i] =3D src_pdo[i];
+-
+-=09return nr_pdo;
+-}
+-
+-static int tcpm_copy_vdos(u32 *dest_vdo, const u32 *src_vdo,
+-=09=09=09  unsigned int nr_vdo)
+-{
+-=09unsigned int i;
+-
+-=09if (nr_vdo > VDO_MAX_OBJECTS)
+-=09=09nr_vdo =3D VDO_MAX_OBJECTS;
+-
+-=09for (i =3D 0; i < nr_vdo; i++)
+-=09=09dest_vdo[i] =3D src_vdo[i];
+-
+-=09return nr_vdo;
+-}
+-
+ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ =09=09=09    struct fwnode_handle *fwnode)
+ {
+@@ -4698,35 +4667,10 @@ static int devm_tcpm_psy_register(struct tcpm_port =
+*port)
+ =09return PTR_ERR_OR_ZERO(port->psy);
+ }
+=20
+-static int tcpm_copy_caps(struct tcpm_port *port,
+-=09=09=09  const struct tcpc_config *tcfg)
+-{
+-=09if (tcpm_validate_caps(port, tcfg->src_pdo, tcfg->nr_src_pdo) ||
+-=09    tcpm_validate_caps(port, tcfg->snk_pdo, tcfg->nr_snk_pdo))
+-=09=09return -EINVAL;
+-
+-=09port->nr_src_pdo =3D tcpm_copy_pdos(port->src_pdo, tcfg->src_pdo,
+-=09=09=09=09=09  tcfg->nr_src_pdo);
+-=09port->nr_snk_pdo =3D tcpm_copy_pdos(port->snk_pdo, tcfg->snk_pdo,
+-=09=09=09=09=09  tcfg->nr_snk_pdo);
+-
+-=09port->nr_snk_vdo =3D tcpm_copy_vdos(port->snk_vdo, tcfg->snk_vdo,
+-=09=09=09=09=09  tcfg->nr_snk_vdo);
+-
+-=09port->operating_snk_mw =3D tcfg->operating_snk_mw;
+-
+-=09port->typec_caps.prefer_role =3D tcfg->default_role;
+-=09port->typec_caps.type =3D tcfg->type;
+-=09port->typec_caps.data =3D tcfg->data;
+-=09port->self_powered =3D tcfg->self_powered;
+-
+-=09return 0;
+-}
+-
+ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *=
+tcpc)
+ {
+ =09struct tcpm_port *port;
+-=09int i, err;
++=09int err;
+=20
+ =09if (!dev || !tcpc ||
+ =09    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc ||
+@@ -4759,15 +4703,10 @@ struct tcpm_port *tcpm_register_port(struct device =
+*dev, struct tcpc_dev *tcpc)
+ =09tcpm_debugfs_init(port);
+=20
+ =09err =3D tcpm_fw_get_caps(port, tcpc->fwnode);
+-=09if ((err < 0) && tcpc->config)
+-=09=09err =3D tcpm_copy_caps(port, tcpc->config);
+ =09if (err < 0)
+ =09=09goto out_destroy_wq;
+=20
+-=09if (!tcpc->config || !tcpc->config->try_role_hw)
+-=09=09port->try_role =3D port->typec_caps.prefer_role;
+-=09else
+-=09=09port->try_role =3D TYPEC_NO_PREFERRED_ROLE;
++=09port->try_role =3D port->typec_caps.prefer_role;
+=20
+ =09port->typec_caps.fwnode =3D tcpc->fwnode;
+ =09port->typec_caps.revision =3D 0x0120;=09/* Type-C spec release 1.2 */
+@@ -4797,29 +4736,6 @@ struct tcpm_port *tcpm_register_port(struct device *=
+dev, struct tcpc_dev *tcpc)
+ =09=09goto out_role_sw_put;
+ =09}
+=20
+-=09if (tcpc->config && tcpc->config->alt_modes) {
+-=09=09const struct typec_altmode_desc *paltmode =3D tcpc->config->alt_mode=
+s;
+-
+-=09=09i =3D 0;
+-=09=09while (paltmode->svid && i < ARRAY_SIZE(port->port_altmode)) {
+-=09=09=09struct typec_altmode *alt;
+-
+-=09=09=09alt =3D typec_port_register_altmode(port->typec_port,
+-=09=09=09=09=09=09=09  paltmode);
+-=09=09=09if (IS_ERR(alt)) {
+-=09=09=09=09tcpm_log(port,
+-=09=09=09=09=09 "%s: failed to register port alternate mode 0x%x",
+-=09=09=09=09=09 dev_name(dev), paltmode->svid);
+-=09=09=09=09break;
+-=09=09=09}
+-=09=09=09typec_altmode_set_drvdata(alt, port);
+-=09=09=09alt->ops =3D &tcpm_altmode_ops;
+-=09=09=09port->port_altmode[i] =3D alt;
+-=09=09=09i++;
+-=09=09=09paltmode++;
+-=09=09}
+-=09}
+-
+ =09mutex_lock(&port->lock);
+ =09tcpm_init(port);
+ =09mutex_unlock(&port->lock);
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index f516955a0cf4..e7979c01c351 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -46,45 +46,6 @@ enum tcpm_transmit_type {
+ =09TCPC_TX_BIST_MODE_2 =3D 7
+ };
+=20
+-/**
+- * struct tcpc_config - Port configuration
+- * @src_pdo:=09PDO parameters sent to port partner as response to
+- *=09=09PD_CTRL_GET_SOURCE_CAP message
+- * @nr_src_pdo:=09Number of entries in @src_pdo
+- * @snk_pdo:=09PDO parameters sent to partner as response to
+- *=09=09PD_CTRL_GET_SINK_CAP message
+- * @nr_snk_pdo:=09Number of entries in @snk_pdo
+- * @operating_snk_mw:
+- *=09=09Required operating sink power in mW
+- * @type:=09Port type (TYPEC_PORT_DFP, TYPEC_PORT_UFP, or
+- *=09=09TYPEC_PORT_DRP)
+- * @default_role:
+- *=09=09Default port role (TYPEC_SINK or TYPEC_SOURCE).
+- *=09=09Set to TYPEC_NO_PREFERRED_ROLE if no default role.
+- * @try_role_hw:True if try.{Src,Snk} is implemented in hardware
+- * @alt_modes:=09List of supported alternate modes
+- */
+-struct tcpc_config {
+-=09const u32 *src_pdo;
+-=09unsigned int nr_src_pdo;
+-
+-=09const u32 *snk_pdo;
+-=09unsigned int nr_snk_pdo;
+-
+-=09const u32 *snk_vdo;
+-=09unsigned int nr_snk_vdo;
+-
+-=09unsigned int operating_snk_mw;
+-
+-=09enum typec_port_type type;
+-=09enum typec_port_data data;
+-=09enum typec_role default_role;
+-=09bool try_role_hw;=09/* try.{src,snk} implemented in hardware */
+-=09bool self_powered;=09/* port belongs to a self powered device */
+-
+-=09const struct typec_altmode_desc *alt_modes;
+-};
+-
+ /* Mux state attributes */
+ #define TCPC_MUX_USB_ENABLED=09=09BIT(0)=09/* USB enabled */
+ #define TCPC_MUX_DP_ENABLED=09=09BIT(1)=09/* DP enabled */
+@@ -92,7 +53,6 @@ struct tcpc_config {
+=20
+ /**
+  * struct tcpc_dev - Port configuration and callback functions
+- * @config:=09Pointer to port configuration
+  * @fwnode:=09Pointer to port fwnode
+  * @get_vbus:=09Called to read current VBUS state
+  * @get_current_limit:
+@@ -121,7 +81,6 @@ struct tcpc_config {
+  * @mux:=09Pointer to multiplexer data
+  */
+ struct tcpc_dev {
+-=09const struct tcpc_config *config;
+ =09struct fwnode_handle *fwnode;
+=20
+ =09int (*init)(struct tcpc_dev *dev);
+--=20
+2.23.0
 
