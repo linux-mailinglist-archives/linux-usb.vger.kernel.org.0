@@ -2,225 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 67AE4FC2FA
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 10:48:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D331FC300
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2019 10:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726263AbfKNJsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 14 Nov 2019 04:48:17 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:36876 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbfKNJsQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 04:48:16 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xAE9m5a5027418;
-        Thu, 14 Nov 2019 03:48:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1573724885;
-        bh=1q4MpOUzBLd6f2gFBx2Y+31uqZ0iVHkf8HwMdleJdbM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=t+rAc2ykt4MRCS1C16dg7sajamEvL5cKc2qB840wHukRFr/2PfmwG0mmJ5jpJvfr0
-         lbz7LUDxLnHvYBQT5jYXf6b/eRgyFjYsmlBkEeUYYh2nb0E+91xP5PSH7sq3H17BDR
-         4hU+5AT+nfsB4MjifWYyE0F1Vg7EQA9nznFGeIx8=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xAE9m51i050470
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 14 Nov 2019 03:48:05 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 14
- Nov 2019 03:48:05 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 14 Nov 2019 03:48:05 -0600
-Received: from [192.168.2.14] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xAE9m2EF044096;
-        Thu, 14 Nov 2019 03:48:02 -0600
-Subject: Re: [RFC PATCH] usb: gadget: f_tcm: Added DMA32 flag while allocation
- of command buffer
-To:     Peter Chen <peter.chen@nxp.com>, Jayshri Pawar <jpawar@cadence.com>
+        id S1726473AbfKNJtY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 14 Nov 2019 04:49:24 -0500
+Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:53502 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726057AbfKNJtY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 14 Nov 2019 04:49:24 -0500
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id DE534C0C42;
+        Thu, 14 Nov 2019 09:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1573724964; bh=+cG6UGj9AUf64OwwL+j5feOuOcTISc3rAdk+VIUujgg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=dj443aZgSiFsbV5tZBqys12mN7FvuYB9/zY2cBfZ6LM15y/UV34RgdvOPfPfCrUgB
+         cjYCXmgle4Irsz3elXaPNrGtFynAJyNn+2VwZzNGfvIe3D9Ipo37AYdzGRsZrkc0Ij
+         5nDjpfiKz8coinp+XvfY6uzkXueGZRj6KC3QGYFpRifpFR9Gu88gvPDNyL22NcgsV7
+         oaD/WnPfgzG4uohuqDElWzeb/zqGrcNThw/2WMzCux23ffDph0y3LgU2+Td/wwTWlN
+         X4KR4R6Alsw8ncjlJ+pSJFtUdosVdei3kII1YDSqH18MW+eLGU2LhAjss7Kk07vUki
+         MxnCvXyT2KU6Q==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id BB556A0148;
+        Thu, 14 Nov 2019 09:49:23 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Thu, 14 Nov 2019 01:49:11 -0800
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (10.13.134.195)
+ by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Thu, 14 Nov 2019 01:49:11 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K0lgGhJMkeXXBYIj65YUCFEBzKQBjcnRROGuQkcfvewkNO4brkPLbJXwFZQdomcRm496dNfI16KkEDxa0Sr8muUPML5LTeMxM/AWzu7gLQ0GDd0H4VY2bKK8H+QVc6nY6d0JMNo263b0Yiyv30ibiYx0/R7dYuXmU6F2VhNUyyyrUDD2Jo8WW1x5VxQMic6mfmL+PY0HvDRTKSjcnRwfN7PzBu36K6MsgVzmjYAegEvYfEJUGZmBJFEjGGcjpRXlA9il1t6YFRj9JwjkwL6jiG+Z4zBjNNpW61G9B5Le1B8vPHizdSXU2EEqdJ2m9FouL3vjQwq+9bBXnBDeKToUnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+cG6UGj9AUf64OwwL+j5feOuOcTISc3rAdk+VIUujgg=;
+ b=J5+n70K9Dlzr8m3d6aw9oX+7X462vTsbezowm97tpbBkBqjjzlSJ25jrGrpAB5hSf7D0KezlHcXPKBQyzQhHiT6pq+32Zjwvj0Gq8/6W5esnBplZ6f6NOU9D5z0JOGR4H+Iv0KnWGXVvipQPZTqz2UhD5gXxdVl0tkG+y6kuzkCe/UyO3t0N/WxFkAHx92bNjOKy2ebe6qPzIjX/U+c1a1BCyKM6+jCMBEcsglf1sPdt9vpv5Q5VbgJywigpidevB64t5mcliTD5z+AJH9GhiAP/9tg7uXEoYBnQs+EyEE8EtyAWxovtTrMF8KRkobmjJ9zYpNzuCITlLvmfQArLOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+cG6UGj9AUf64OwwL+j5feOuOcTISc3rAdk+VIUujgg=;
+ b=HgUNayzJPMCa4mmACiISFjyccA5WEBNzrVQo/k349o02oaDnrIcbmZ4e5k2ScYcnluoK+8+RTmsN5Og960icliX9VeUTLTrziy0Nb3dCsMa/kpIReUtj5ajWy6URnr63XuBDRnxaOyob+pwMh85q5U/Whba9Ml3rvclv2Z4CvC0=
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com (52.135.51.203) by
+ MN2PR12MB3918.namprd12.prod.outlook.com (10.255.236.87) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.23; Thu, 14 Nov 2019 09:49:09 +0000
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::85e4:7eb9:af8d:8a9]) by MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::85e4:7eb9:af8d:8a9%3]) with mapi id 15.20.2451.023; Thu, 14 Nov 2019
+ 09:49:09 +0000
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Pan Bian <bianpan2016@163.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        "kurahul@cadence.com" <kurahul@cadence.com>,
-        "pawell@cadence.com" <pawell@cadence.com>,
-        "sparmar@cadence.com" <sparmar@cadence.com>
-References: <1573640672-10344-1-git-send-email-jpawar@cadence.com>
- <20191114025301.GD30608@b29397-desktop>
-From:   Roger Quadros <rogerq@ti.com>
-Message-ID: <5b567d57-6206-24cf-5886-20e8b5a92a45@ti.com>
-Date:   Thu, 14 Nov 2019 11:48:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191114025301.GD30608@b29397-desktop>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: dwc2: fix potential double free
+Thread-Topic: [PATCH 1/1] usb: dwc2: fix potential double free
+Thread-Index: AQHVlEU5zvY07CTVb0qrP6bsJzHzeaeKePoA
+Date:   Thu, 14 Nov 2019 09:49:09 +0000
+Message-ID: <5baaa3ab-fe75-4351-5acc-ec7fdffce28b@synopsys.com>
+References: <1573005273-35877-1-git-send-email-bianpan2016@163.com>
+In-Reply-To: <1573005273-35877-1-git-send-email-bianpan2016@163.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=hminas@synopsys.com; 
+x-originating-ip: [195.10.9.51]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8e7cddbf-408c-4068-c76a-08d768e7e56c
+x-ms-traffictypediagnostic: MN2PR12MB3918:
+x-microsoft-antispam-prvs: <MN2PR12MB391883CBA5737E77FB32CF0FA7710@MN2PR12MB3918.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:183;
+x-forefront-prvs: 02213C82F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(366004)(136003)(396003)(39850400004)(346002)(189003)(199004)(4326008)(229853002)(102836004)(446003)(110136005)(4744005)(76176011)(54906003)(3846002)(5660300002)(36756003)(316002)(53546011)(6506007)(6116002)(65956001)(65806001)(25786009)(31686004)(6512007)(14454004)(64756008)(66556008)(66476007)(66946007)(476003)(486006)(6436002)(99286004)(2616005)(66066001)(478600001)(58126008)(6486002)(11346002)(305945005)(26005)(7736002)(186003)(86362001)(66446008)(81156014)(256004)(8676002)(8936002)(71190400001)(71200400001)(81166006)(91956017)(76116006)(6246003)(31696002)(2906002);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR12MB3918;H:MN2PR12MB4093.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: QtH/WLuntZ+ZDRoxAjJjbODFoTow8ZaHEmbmZ3zF1fJxL+eU7P2kB62CTavuWxjqJwc2StEwoTQ++NpMdgJYhLwz1Zb/lQIDGsEdD30Zem0KI6sOl213vwiv1EE4QvCjBgI3UfIym10LtVR4dbs1uNY9ntisPTAQ7UcHCrOCaUmZWW8KyJfdah4gm30eZQ0KQVulzeUgTUPWO7gavXHvweL5oLvs7mrE2yy+Zmu5jd4L65sCWd5L++qXRvGZW5n2Ac7z18TJ8goaDDavLcAPqzmDCHdAkZh2QBf56eNf6f3D58kjnoxk8dsmXwkkl9bW3u37HsBJSpZoh9U7f4wTr9fPzwCmGUdfHeLU8S4ErRDGHrMRzmWGSFu2ed+K580jHbt0PGx76IZx3cQY49Zdljxj1+PRTEoq9GgOX5rEMUvHLeZKaZmYg+U9Ounb4TfB
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1F928CD1570E944EB367E1E278E54BE7@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e7cddbf-408c-4068-c76a-08d768e7e56c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2019 09:49:09.0855
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9CH58c4RStvTcMZaoS3XO5o8NO10FTubA55aziilOwYfQKwe0rVVA6AHZIdEt4nE08dXnrq4QdvNgznL9vm3UA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3918
+X-OriginatorOrg: synopsys.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jayshri,
-
-On 14/11/2019 04:50, Peter Chen wrote:
-> On 19-11-13 10:24:32, Jayshri Pawar wrote:
->> There is a problem when function driver allocate memory for buffer
->> used by DMA from outside dma_mask space.
->> It appears during testing f_tcm driver with cdns3 controller.
->> In the result cdns3 driver was not able to map virtual buffer to DMA.
->> This fix should be improved depending on dma_mask associated with device.
->> Adding GFP_DMA32 flag while allocationg command data buffer only for 32
->> bit controllers.
-> 
-> Hi Jayshri,
-> 
-> This issue should be fixed by setting DMA_MASK correctly for controller,
-> you can't limit user's memory region. At usb_ep_queue, the UDC driver
-> will call DMA MAP API, for Cadence, it is usb_gadget_map_request_by_dev.
-> For the system without SMMU (IO-MMU), it will use swiotlb to make sure
-> the data buffer used for DMA transfer is within DMA mask for controller,
-> There is a reserved low memory region for debounce buffer in swiotlb
-> use case.
-> 
-
-/**
-  * struct usb_request - describes one i/o request
-  * @buf: Buffer used for data.  Always provide this; some controllers
-  *	only use PIO, or don't use DMA for some endpoints.
-  * @dma: DMA address corresponding to 'buf'.  If you don't set this
-  *	field, and the usb controller needs one, it is responsible
-  *	for mapping and unmapping the buffer.
-<snip>
-  */
-
-So if dma is not set in the usb_request then controller driver is
-responsible to do a dma_map of the buffer pointed by 'buf' before
-it attemps to do DMA. This should take care of DMA mask and swiotlb.
-
-This patch is not correct.
-
-cheers,
--roger
-
-> Peter
-> 
->>
->> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
->> Signed-off-by: Jayshri Pawar <jpawar@cadence.com>
->> ---
->>   drivers/usb/gadget/function/f_tcm.c | 20 ++++++++++++++------
->>   include/linux/usb/gadget.h          |  2 ++
->>   2 files changed, 16 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
->> index 36504931b2d1..a78d5fad3d84 100644
->> --- a/drivers/usb/gadget/function/f_tcm.c
->> +++ b/drivers/usb/gadget/function/f_tcm.c
->> @@ -213,7 +213,8 @@ static int bot_send_read_response(struct usbg_cmd *cmd)
->>   	}
->>   
->>   	if (!gadget->sg_supported) {
->> -		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
->> +		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
->> +					gadget->dma_flag);
->>   		if (!cmd->data_buf)
->>   			return -ENOMEM;
->>   
->> @@ -257,7 +258,8 @@ static int bot_send_write_request(struct usbg_cmd *cmd)
->>   	}
->>   
->>   	if (!gadget->sg_supported) {
->> -		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_KERNEL);
->> +		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_KERNEL |
->> +					gadget->dma_flag);
->>   		if (!cmd->data_buf)
->>   			return -ENOMEM;
->>   
->> @@ -305,6 +307,7 @@ static void bot_cmd_complete(struct usb_ep *ep, struct usb_request *req)
->>   static int bot_prepare_reqs(struct f_uas *fu)
->>   {
->>   	int ret;
->> +	struct usb_gadget *gadget = fuas_to_gadget(fu);
->>   
->>   	fu->bot_req_in = usb_ep_alloc_request(fu->ep_in, GFP_KERNEL);
->>   	if (!fu->bot_req_in)
->> @@ -327,7 +330,8 @@ static int bot_prepare_reqs(struct f_uas *fu)
->>   	fu->bot_status.req->complete = bot_status_complete;
->>   	fu->bot_status.csw.Signature = cpu_to_le32(US_BULK_CS_SIGN);
->>   
->> -	fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL);
->> +	fu->cmd.buf = kmalloc(fu->ep_out->maxpacket, GFP_KERNEL |
->> +				gadget->dma_flag);
->>   	if (!fu->cmd.buf)
->>   		goto err_buf;
->>   
->> @@ -515,7 +519,8 @@ static int uasp_prepare_r_request(struct usbg_cmd *cmd)
->>   	struct uas_stream *stream = cmd->stream;
->>   
->>   	if (!gadget->sg_supported) {
->> -		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
->> +		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
->> +					gadget->dma_flag);
->>   		if (!cmd->data_buf)
->>   			return -ENOMEM;
->>   
->> @@ -763,11 +768,13 @@ static int uasp_alloc_stream_res(struct f_uas *fu, struct uas_stream *stream)
->>   
->>   static int uasp_alloc_cmd(struct f_uas *fu)
->>   {
->> +	struct usb_gadget *gadget = fuas_to_gadget(fu);
->>   	fu->cmd.req = usb_ep_alloc_request(fu->ep_cmd, GFP_KERNEL);
->>   	if (!fu->cmd.req)
->>   		goto err;
->>   
->> -	fu->cmd.buf = kmalloc(fu->ep_cmd->maxpacket, GFP_KERNEL);
->> +	fu->cmd.buf = kmalloc(fu->ep_cmd->maxpacket, GFP_KERNEL |
->> +				gadget->dma_flag);
->>   	if (!fu->cmd.buf)
->>   		goto err_buf;
->>   
->> @@ -980,7 +987,8 @@ static int usbg_prepare_w_request(struct usbg_cmd *cmd, struct usb_request *req)
->>   	struct usb_gadget *gadget = fuas_to_gadget(fu);
->>   
->>   	if (!gadget->sg_supported) {
->> -		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC);
->> +		cmd->data_buf = kmalloc(se_cmd->data_length, GFP_ATOMIC |
->> +					gadget->dma_flag);
->>   		if (!cmd->data_buf)
->>   			return -ENOMEM;
->>   
->> diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
->> index 124462d65eac..d6c9cd222600 100644
->> --- a/include/linux/usb/gadget.h
->> +++ b/include/linux/usb/gadget.h
->> @@ -373,6 +373,7 @@ struct usb_gadget_ops {
->>    * @connected: True if gadget is connected.
->>    * @lpm_capable: If the gadget max_speed is FULL or HIGH, this flag
->>    *	indicates that it supports LPM as per the LPM ECN & errata.
->> + * @dma_flag: dma zone to be used for buffer allocation.
->>    *
->>    * Gadgets have a mostly-portable "gadget driver" implementing device
->>    * functions, handling all usb configurations and interfaces.  Gadget
->> @@ -427,6 +428,7 @@ struct usb_gadget {
->>   	unsigned			deactivated:1;
->>   	unsigned			connected:1;
->>   	unsigned			lpm_capable:1;
->> +	unsigned int			dma_flag;
->>   };
->>   #define work_to_gadget(w)	(container_of((w), struct usb_gadget, work))
->>   
->> -- 
->> 2.20.1
->>
-> 
-
--- 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+DQoNCk9uIDExLzYvMjAxOSA1OjU0IEFNLCBQYW4gQmlhbiB3cm90ZToNCj4gVGhlIG1lbWJlciBo
+c290Zy0+ZGVzY19nZW5fY2FjaGUgaXMgYXNzaWduZWQgTlVMTCBhZnRlciBpdCBpcyBkZXN0cm95
+ZWQNCj4gdG8gYXZvaWQgYmVpbmcgZnJlZWQgdHdpY2Ugd2hlbiB0aGUgY2FsbCB0byB1c2JfYWRk
+X2hjZCgpIGZhaWxzLg0KPiANCj4gRml4ZXM6IDNiNWZjYzlhYzJmNCAoInVzYjogZHdjMjogaG9z
+dDogdXNlIGttZW0gY2FjaGUgdG8gYWxsb2NhdGUgZGVzY3JpcHRvcnMiKQ0KPiANCj4gU2lnbmVk
+LW9mZi1ieTogUGFuIEJpYW4gPGJpYW5wYW4yMDE2QDE2My5jb20+DQoNCkFja2VkLWJ5OiBNaW5h
+cyBIYXJ1dHl1bnlhbiA8aG1pbmFzQHN5bm9wc3lzLmNvbT4NCg0KPiAtLS0NCj4gICBkcml2ZXJz
+L3VzYi9kd2MyL2hjZC5jIHwgMSArDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCsp
+DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvZHdjMi9oY2QuYyBiL2RyaXZlcnMvdXNi
+L2R3YzIvaGNkLmMNCj4gaW5kZXggODFhZmU1NTNhYTY2Li4zYjk0MzM1MmIyOTYgMTAwNjQ0DQo+
+IC0tLSBhL2RyaXZlcnMvdXNiL2R3YzIvaGNkLmMNCj4gKysrIGIvZHJpdmVycy91c2IvZHdjMi9o
+Y2QuYw0KPiBAQCAtNTE4Myw2ICs1MTgzLDcgQEAgaW50IGR3YzJfaGNkX2luaXQoc3RydWN0IGR3
+YzJfaHNvdGcgKmhzb3RnKQ0KPiAgIAkJCQkidW5hYmxlIHRvIGNyZWF0ZSBkd2MyIGhzIGlzb2Mg
+ZGVzYyBjYWNoZVxuIik7DQo+ICAgDQo+ICAgCQkJa21lbV9jYWNoZV9kZXN0cm95KGhzb3RnLT5k
+ZXNjX2dlbl9jYWNoZSk7DQo+ICsJCQloc290Zy0+ZGVzY19nZW5fY2FjaGUgPSBOVUxMOw0KPiAg
+IA0KPiAgIAkJCS8qDQo+ICAgCQkJICogRGlzYWJsZSBkZXNjcmlwdG9yIGRtYSBtb2RlIHNpbmNl
+IGl0IHdpbGwgbm90IGJlDQo+IA0K
