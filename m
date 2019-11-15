@@ -2,203 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5872FFD6A9
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2019 07:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B89FD6CE
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2019 08:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbfKOG7I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Nov 2019 01:59:08 -0500
-Received: from mail-eopbgr140079.outbound.protection.outlook.com ([40.107.14.79]:6661
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727189AbfKOG7H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Nov 2019 01:59:07 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T0t8gUR8fhxR86p4i9CP3NFJtvDSUYYwP6RLePyQrZ02/nPDOxGY/P2GrKiVS4UpsKKNK4V8wUUp+R+ujE17TERoTBv/mT/Bm+2z+O0mu7GIqmlw6AY6r5Tf7mrElxcz5Ow1EeivcI1FFy2Iex3gelSxq9vyfCFXMYUJG6nYbR8+UkeBJhBrs0nN2wFrSaqRKO3JuR7KP1k447+NyZK4nrNb6yiobIVEpuDw8EYQ3OCi8riX+la9/M+bK0AHvBDg6eBxa67fCG77BULUgoj780ze+eOTgrxpf0N58VGQdAFzEIDYbcn3D43HWpyXwWA7RIK61XV0o6R341wxrDl0CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkcVLIRzZitmeP0mutorBTnD6mFZFeYsbR/pOKTKEUQ=;
- b=Q60xn+WL5DT6Eq+NYB+twPMNfQJebhRo8bPmpidKv5mxNsVEprwa1Xa1VJbLgccBqkAdvEDK78+H2kQLGUZrGtbACisOm75MoJWjYSIDoO3MBLCVpeKInuJUO6pkwPGqs07FBXKkSLwAEpo0PtNH73j839QIzInBqrQm3H2Ik00rw70jijD+yYT9Gp8xxh+4iZEyIa2YXj5rQdGInnzoJvUebtPOEwfLF0KED1C5+ooaTJcsBismT/HgA14iLoWTtCA+FbSOSXtdin5Rpul/mX+p7R02RoTe1KyKLKo26Ta3pWMMGbwpIkq6FA8b4mvqJI2j5BJR5FyPlWMxoLCVAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tkcVLIRzZitmeP0mutorBTnD6mFZFeYsbR/pOKTKEUQ=;
- b=a/J9G08e2/fBfNR/r1NdtwPqEvwcD+3IystAQQZnYswx+HPaJUzh+cNj2TASjg8sWGrGDXYLayjliLq8KloAfqFiYK2Lb1dhVQxN+ihvAqXkhBavP3HAtmt8RFwmqyD8COXfXpUyLhrVgHTdgSh2zCz6CibeP/f/UeF46gCOxdU=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5519.eurprd04.prod.outlook.com (20.178.121.211) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.28; Fri, 15 Nov 2019 06:59:02 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2451.027; Fri, 15 Nov 2019
- 06:59:02 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Olbrich <m.olbrich@pengutronix.de>
-Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
-Thread-Topic: [PATCH] usb: gadget: composite: split spinlock to avoid
- recursion
-Thread-Index: AQHVmTxEIjD1nt2RjUO3vLFSiYOzzqeIpkIAgACXfICAAW0yAIABJ5EA
-Date:   Fri, 15 Nov 2019 06:59:02 +0000
-Message-ID: <20191115070122.GF30608@b29397-desktop>
-References: <20191113063414.GA30608@b29397-desktop>
- <Pine.LNX.4.44L0.1911131021460.1558-100000@iolanthe.rowland.org>
- <20191114132330.iw4ucbfaxofi6cfy@pengutronix.de>
-In-Reply-To: <20191114132330.iw4ucbfaxofi6cfy@pengutronix.de>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 6f857095-a373-41e3-8f7a-08d769994c4c
-x-ms-traffictypediagnostic: VI1PR04MB5519:
-x-microsoft-antispam-prvs: <VI1PR04MB5519DF24B0991C9C70D963EF8B700@VI1PR04MB5519.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02229A4115
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(7916004)(366004)(346002)(376002)(39860400002)(396003)(136003)(199004)(189003)(9686003)(71200400001)(86362001)(305945005)(2906002)(110136005)(71190400001)(6116002)(3846002)(7736002)(11346002)(33656002)(6486002)(99286004)(446003)(229853002)(8936002)(476003)(6436002)(66476007)(66556008)(64756008)(45080400002)(66446008)(66946007)(478600001)(6512007)(66066001)(76176011)(33716001)(316002)(44832011)(14454004)(2501003)(5660300002)(486006)(256004)(14444005)(53546011)(26005)(6246003)(25786009)(102836004)(6506007)(8676002)(81166006)(2171002)(91956017)(81156014)(1076003)(186003)(76116006);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5519;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Q9MqmMVmu/tv+yqbfF8RcHAtWh8HEi4yvZWVRouPx91/3LK7MyFRfME+tY4p9VRhpwYWkGT8ppJqcxS07QfvcUs2NTezHXAAgUOTgQomi+E9m4VCcerhL/U/Skhf/8AV1BgdsZm91ZUW1iA7kME8F/ImgFOOXDoYGofgNmE/PxAsmF1Y+MViwJPApg/x5hljDLf+qdfir3g3iwHwS3VogV811gPR/ApknzIloMjS9C5qCZzHyrVfvoaliMEgdcRPAGwyanuzATTAgvy0mNr5rO48zFYO3c/1dfm6AaRb46nh3UNQ40RGy7Cci77rAVTn6NopWnGGXUFloRgyayVkThWA2kUcZij5ZaQ9g5JTJCAfFknO0nm6SfXv0XskY7kbJb9W1ZqKf5UCikF+qq/Ki2MCSgI1QYa0PQPoChITNAL0eX9qarzbCI1mqDyONCnk
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A50DCA1B20CB2C4B8E5BD598BD7B32FC@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1727096AbfKOHQC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Nov 2019 02:16:02 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:54800 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbfKOHQC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Nov 2019 02:16:02 -0500
+Received: by mail-il1-f197.google.com with SMTP id t67so8102768ill.21
+        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2019 23:16:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=H6KZH6ReRCeo81QQ/gV0mVJ1PcfVuetQ7C4r7dOiHMc=;
+        b=OJGC9VeR+QFoBqPp/pRbRcvQnuKuu511/KUD04MmaLeEvZZ6gbanpL9ycmshhffSHu
+         eFCb25eXVV7VxQH1bCf74/BmC/BNb/81EyQtZwrrF3paEjlkRDri3n5xFV2s1+vIeW0u
+         IKHzvf9LmC0/7U+DQYosuu3REP6CTMkp/7Lcdig9UeU7cJfqhu5o2KrwHDo4l7zagYrM
+         /PdpSdXzv+OqbvyZXm0ciz5q3ulejFjacGpRcJ+6tUS1nwKmYUZOf+JoNydzWNUWJuw7
+         NSVEjecoBxp0vi4l/900CZwdtY1obXp6z5QWXxBH+n7BEoCXRO5h0rttuyT4xcYk1zTK
+         hxFw==
+X-Gm-Message-State: APjAAAWfH/rR8nnK6SqbsnUpMokE+EEfD8qxCUVZDAYdqDj0gKr7jSLx
+        pMGGon7ZdA0C95UY8MvHbFQQV/iWWHaNLM/EDiUvsifnwGw9
+X-Google-Smtp-Source: APXvYqxEFgRrGmZN5G1itaTNv92D1H3tBWtZLApFkC5r1LaLaePjg0oe/UMjPdYY3bktn2CSL/7Ek0Or6H4gQTrEenIjpPECTrWI
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f857095-a373-41e3-8f7a-08d769994c4c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Nov 2019 06:59:02.5514
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oUYQiWCRADZ5D1Tmpurd+Cx6ntsmYGHzMaQ6Gwr9Tyo5k+w3a1iYp0kKVtVIRccPGpyRBmJE4YzCvttrGz8KaQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5519
+X-Received: by 2002:a92:dd8f:: with SMTP id g15mr14045121iln.145.1573802160251;
+ Thu, 14 Nov 2019 23:16:00 -0800 (PST)
+Date:   Thu, 14 Nov 2019 23:16:00 -0800
+In-Reply-To: <1573726121.17351.3.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b56e8b05975d5e11@google.com>
+Subject: Re: WARNING: ODEBUG bug in input_ff_destroy
+From:   syzbot <syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, dmitry.torokhov@gmail.com,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-11-14 14:23:30, Michael Olbrich wrote:
-> On Wed, Nov 13, 2019 at 10:36:25AM -0500, Alan Stern wrote:
-> > On Wed, 13 Nov 2019, Peter Chen wrote:
-> > > On 19-11-12 10:33:18, Michael Olbrich wrote:
-> > > > 'delayed_status' and 'deactivations' are used completely independen=
-t but
-> > > > they share the same spinlock. This can result in spinlock recursion=
-:
-> > > >=20
-> > > > BUG: spinlock recursion on CPU#1, uvc-gadget/322
-> > > >  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322=
-, .owner_cpu: 1
-> > > > CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-=
-20190916-1+ #55
-> > > > Hardware name: XXXXX (DT)
-> > > > Call trace:
-> > > >  dump_backtrace+0x0/0x178
-> > > >  show_stack+0x24/0x30
-> > > >  dump_stack+0xc0/0x104
-> > > >  spin_dump+0x90/0xa0
-> > > >  do_raw_spin_lock+0xd8/0x108
-> > > >  _raw_spin_lock_irqsave+0x40/0x50
-> > > >  composite_disconnect+0x2c/0x80
-> > > >  usb_gadget_disconnect+0x84/0x150
-> > > >  usb_gadget_deactivate+0x64/0x120
-> > > >  usb_function_deactivate+0x70/0x80
-> > > >  uvc_function_disconnect+0x20/0x58
-> > > >  uvc_v4l2_release+0x34/0x90
-> > > >  v4l2_release+0xbc/0xf0
-> > > >  __fput+0xb0/0x218
-> > > >  ____fput+0x20/0x30
-> > > >  task_work_run+0xa0/0xd0
-> > > >  do_notify_resume+0x2f4/0x340
-> > > >  work_pending+0x8/0x14
-> > > >=20
-> > > > Fix this by using separate spinlocks.
-> > >=20
-> > > This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Iss=
-ue
-> > > ->disconnect() callback from usb_gadget_disconnect()"), which adds
-> > > gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
-> > > with your patch, you may cc to stable tree.
-> >=20
-> > I wasn't aware of the dual usage of that lock in the composite core=20
-> > (and 0a55187a1ec8c touches only the gadget core, not composite.c).
-> >=20
-> > In any case, I don't have a good feel for how the locking is supposed=20
-> > to work in the composite core.  This is really something Felipe should=
-=20
-> > look at.
-> >=20
-> > Would a better fix be to change usb_function_deactivate() so that it
-> > doesn't hold the lock while calling usb_gadget_deactivate()?  Maybe
-> > increment cdev->deactivations unconditionally before dropping the lock
-> > (for mutual exclusion) and then decrement it again if the call fails?
->=20
-> Hmm, I think, that would mean that usb_gadget_activate() may be called
-> while usb_gadget_deactivate() is still running right? That's not
-> acceptable, is it?
->=20
+Hello,
 
-I agree with Alan. Return error for usb_function_activate if
-usb_function_deactive is running could be accepted, it seems there is
-no other good way to fix this lock recursion and your below atomic
-issue, let's see what Felipe will say.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-Peter
+Reported-and-tested-by:  
+syzbot+b6c55daa701fc389e286@syzkaller.appspotmail.com
 
-> Anyways. Something else is needed because executing usb_gadget_deactivate=
-()
-> under the spinlock has another problem. It's hard to reproduce, but we've
-> seen this one:
->=20
-> BUG: scheduling while atomic: pipewire/260/0x00000002
-> Modules linked in: allegro(C) regmap_mmio v4l2_mem2mem xlnx_vcu st1232 ui=
-o_pdrv_genirq
-> Preemption disabled at: [<ffffff801061dc40>] usb_function_deactivate+0x30=
-/0x80
-> CPU: 1 PID: 260 Comm: pipewire Tainted: G         C O 5.3.0-20191112-1 #2
-> Hardware name: Wolfvision ZynqMP PF4 (DT)
-> Call trace:
->  dump_backtrace+0x0/0x178
->  show_stack+0x24/0x30
->  dump_stack+0xc0/0x104
->  __schedule_bug+0xb0/0xc0
->  __schedule+0x354/0x4d8
->  schedule+0x44/0xd8
->  schedule_timeout+0x1b4/0x380
->  wait_for_common+0xc0/0x188
->  wait_for_completion_timeout+0x2c/0x38
->  dwc3_gadget_pullup+0x90/0xb0
->  usb_gadget_disconnect+0x38/0x150
->  usb_gadget_deactivate+0x64/0x120
->  usb_function_deactivate+0x70/0x80
->  uvc_function_disconnect+0x20/0x58
->  uvc_v4l2_release+0x34/0x90
->  v4l2_release+0xbc/0xf0
->  __fput+0x90/0x208
->  ____fput+0x20/0x30
->  task_work_run+0x98/0xb8
->  do_notify_resume+0x2f4/0x340
->  work_pending+0x8/0x14
-> dwc3 fe200000.usb: timed out waiting for SETUP phase
->=20
+Tested on:
 
-Hi Michael,
-  =20
+commit:         3183c037 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
+dashboard link: https://syzkaller.appspot.com/bug?extid=b6c55daa701fc389e286
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=12c2e254e00000
 
---=20
-
-Thanks,
-Peter Chen=
+Note: testing is done by a robot and is best-effort only.
