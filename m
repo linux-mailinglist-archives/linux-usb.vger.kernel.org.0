@@ -2,86 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D33FE0CB
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2019 16:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A48FE0DA
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2019 16:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727515AbfKOPDU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Nov 2019 10:03:20 -0500
-Received: from mga12.intel.com ([192.55.52.136]:26618 "EHLO mga12.intel.com"
+        id S1727529AbfKOPGh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 15 Nov 2019 10:06:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59424 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727429AbfKOPDU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 15 Nov 2019 10:03:20 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 15 Nov 2019 07:03:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,308,1569308400"; 
-   d="scan'208";a="406694707"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Nov 2019 07:03:15 -0800
-Subject: Re: [PATCH v2] usb: xhci: only set D3hot for pci device
-To:     Henry Lin <henryl@nvidia.com>
-Cc:     hch@infradead.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191112071831.1043-1-henryl@nvidia.com>
- <20191113014927.11915-1-henryl@nvidia.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <7aa0d839-57f8-54af-4b55-b3e605ae20cc@linux.intel.com>
-Date:   Fri, 15 Nov 2019 17:05:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727406AbfKOPGh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 15 Nov 2019 10:06:37 -0500
+Received: from localhost (118-163-138-88.HINET-IP.hinet.net [118.163.138.88])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ECD8F20733;
+        Fri, 15 Nov 2019 15:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573830396;
+        bh=p8Lm4oWGGcZIYChPATUH4MvrWHysw8jT44UoADT5ksc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r0ywrtuseJ39ngHH7rAFKnKLO1zmL1p/t01jsrkBQtJa+12ZyZwNK0I3SmAuKdV4n
+         /NB/ydbKQhqcwXriTj+j9hjXePUAhs6r1gUy2RC4tXBxhtJOYlMC5x7UOxtHuLuVbh
+         q5sr6WlrNZTTBTuxcbLIA8tdcFzyFRK2Cr3APWQo=
+Date:   Fri, 15 Nov 2019 23:06:33 +0800
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Exporting USB device ids from the kernel
+Message-ID: <20191115150633.GA374386@kroah.com>
+References: <CAAeHK+yyKeV8h6UO2-4zZM_ndUaHcG1Ex5GYHxdmh_GJxDOa4w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191113014927.11915-1-henryl@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+yyKeV8h6UO2-4zZM_ndUaHcG1Ex5GYHxdmh_GJxDOa4w@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.11.2019 3.49, Henry Lin wrote:
-> Xhci driver cannot call pci_set_power_state() on non-pci xhci host
-> controllers. For example, NVIDIA Tegra XHCI host controller which acts
-> as platform device with XHCI_SPURIOUS_WAKEUP quirk set in some platform
-> hits this issue during shutdown.
+On Fri, Nov 15, 2019 at 03:25:38PM +0100, Andrey Konovalov wrote:
+> Hi Greg and Alan,
 > 
-
-The XHCI_SPURIOUS_WAKEUP quirk both resets the controller at shutdown
-and sets it to PCI D3 at remove/shutdown.
-
-Is it so that the NVIDIA Tegra xHC just needs to be reset at shutdown?
-The quirk is not set for Tegra xHC in current mainline kernel.
-
-> Signed-off-by: Henry Lin <henryl@nvidia.com>
-> ---
->   drivers/usb/host/xhci.c | 7 +++++--
->   1 file changed, 5 insertions(+), 2 deletions(-)
+> For USB fuzzing it would be nice to be able to export usb_device_id
+> structs from the kernel to facilitate the fuzzer with generating USB
+> descriptors that match to actual drivers. The same is required for
+> hid_device_id structs, since those are matched separately by the
+> usbhid driver (are there other cases like this?).
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 6c17e3fe181a..61718b126d2b 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -791,8 +791,11 @@ static void xhci_shutdown(struct usb_hcd *hcd)
->   			readl(&xhci->op_regs->status));
->   
->   	/* Yet another workaround for spurious wakeups at shutdown with HSW */
-> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> -		pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3hot);
-> +	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP) {
-> +		if (dev_is_pci(hcd->self.sysdev))
-> +			pci_set_power_state(to_pci_dev(hcd->self.sysdev),
-> +					PCI_D3hot);
-> +	}
+> Currently I have a hacky patch [1] that walks all drivers for USB and
+> HID buses and then prints all device ids for those drivers into the
+> kernel log. Those are manually parsed and built into the fuzzer [2]
+> and then used to generate USB descriptors [3].
 
-Agree that we shouldn't call PCI specific functions in the generic shutdown code.
-Would be better if we could move the PCI parts to xhci-pci.c or hcd-pci.c
+The kernel will spit out all device ids of all USB devices when found if
+you have CONFIG_USB_ANNOUNCE_NEW_DEVICES enabled, if you want to parse
+the log.
 
-Maybe we need to add a xhci_pci_shutdown() function for the xhci pci driver
-that could take care of the pci related shutdown quirks before calling
-usb_hcd_pci_shutdown(), and call that instead of directly calling
-usb_hcd_pci_shutdown().
+Otherwise, just walk usbfs or sysfs and get the ids there.  If you use
+libusb you can do this with just a few lines of code, or worst case,
+just implement the same thing on your own (like lsusb used to do).
+Heck, just copy what lsusb does, or again worst case, parse the output
+of it.
 
--Mathias
+There's also 'lsusb.py' as part of usbutils that shows how to do this
+from within python in userspace, and if you really want it, we also
+export the whole raw usb descriptor is in sysfs as well, if you want to
+not trust how the kernel parses it.
+
+hope this helps,
+
+greg k-h
