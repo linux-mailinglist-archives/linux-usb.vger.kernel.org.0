@@ -2,109 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 460C1FE6C8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2019 22:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71717FEADF
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Nov 2019 06:55:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbfKOVGM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 15 Nov 2019 16:06:12 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:55504 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726598AbfKOVGL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 15 Nov 2019 16:06:11 -0500
-Received: (qmail 7153 invoked by uid 2102); 15 Nov 2019 16:06:10 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 15 Nov 2019 16:06:10 -0500
-Date:   Fri, 15 Nov 2019 16:06:10 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: restart the transfer if a isoc
- request is queued too late
-In-Reply-To: <6d4b87c8-5aca-18cb-81db-a8d2fd4bd86e@synopsys.com>
-Message-ID: <Pine.LNX.4.44L0.1911151549370.1527-100000@iolanthe.rowland.org>
+        id S1727578AbfKPFzD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 16 Nov 2019 00:55:03 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:48659 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727557AbfKPFzC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 16 Nov 2019 00:55:02 -0500
+Received: by mail-io1-f71.google.com with SMTP id q84so8901286iod.15
+        for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2019 21:55:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=dXuE6yVQzJvOqytcSaHG0bqqilbG2j3QAqOwagl/p+c=;
+        b=QpfoOndzUaIDoSGsFWAd0XJ4fy31jASeE+L726R5cE3ZPz3yPq9OzqNx3DRlsHhJgF
+         SZFoaTCnMc0IF6lth50xvzrrAKBI1fZVp0Znll1+QO0bgXZVDXOmSLb0V5jUe7aeW98/
+         rjcG9d08KRzpuDiLZPc6smYcb3dQGY/QzqmaaL0cbZApbmyfTcMkF3BDxWBd3VCDhcbJ
+         6+EftGaohb5BiSSnbDhQt2H1JAv49IYnQF06P6SqeM2ntMmF39mE/tPbXxD0PN7mVvvw
+         x2M5b05vC6TqNzi+OStbV+yW872ZZtdA+k5Us03A5yFcZ7P5ky3mh1Au9p04ZaDfrH2O
+         IFEA==
+X-Gm-Message-State: APjAAAUv9921smt5QO7ttrw2VdsHMkBPtpm2WqMgjNSXWx4LHRkH1rd4
+        XaxiVo8nB684WUFqTWgOQSkSszeBb85DV8dzzg4X2Gjzndp+
+X-Google-Smtp-Source: APXvYqyEqTcdjT71yvmPMzko+ZqzB53EgTrIeU1q8kq16pRC0ZofyGrbd4WMDNRIJgW0Mfr4/fwmwWXBIy5e1AfxMGO9tgXhfdme
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:c6d0:: with SMTP id v16mr4756379ilm.274.1573883700380;
+ Fri, 15 Nov 2019 21:55:00 -0800 (PST)
+Date:   Fri, 15 Nov 2019 21:55:00 -0800
+In-Reply-To: <5dceec29.1c69fb81.4c2d0.e24d@mx.google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e10d500597705abf@google.com>
+Subject: Re: KASAN: use-after-free Read in chaoskey_disconnect
+From:   syzbot <syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com>
+To:     alexandre.belloni@bootlin.com, andreyknvl@google.com,
+        arnd@arndb.de, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        lvivier@redhat.com, mchehab@kernel.org, mpm@selenic.com,
+        swboyd@chromium.org, syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 14 Nov 2019, Thinh Nguyen wrote:
+Hello,
 
-> Michael Olbrich wrote:
+syzbot has tested the proposed patch but the reproducer still triggered  
+crash:
+KASAN: use-after-free Read in chaoskey_disconnect
 
-> >>> How about changing the gadget driver instead?  For frames where the UVC
-> >>> gadget knows no video frame data is available (numbers 4, 8, 12, and so
-> >>> on in the example above), queue a zero-length request.  Then there
-> >>> won't be any gaps in the isochronous packet stream.
-> >> What Alan suggests may work. Have you tried this?
-> > Yes and it works in general. There are however some problems with that
-> > approach that I want to avoid:
-> >
-> > 1. It adds extra overhead to handle the extra zero-length request.
-> > Especially for encoded video the available bandwidth can be quite a bit
-> > larger that what is actually used. I want to avoid that.
+usb 5-1: USB disconnect, device number 2
+==================================================================
+BUG: KASAN: use-after-free in atomic_read  
+include/asm-generic/atomic-instrumented.h:26 [inline]
+BUG: KASAN: use-after-free in refcount_inc_not_zero_checked+0x72/0x1e0  
+lib/refcount.c:123
+Read of size 4 at addr ffff8881d3106020 by task kworker/0:1/12
 
-This comment doesn't seem to make sense.  If the available bandwidth is
-much _larger_ than what is actually used, what's the problem?  You
-don't run into difficulties until the available bandwidth is too
-_small_.
+CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.4.0-rc5+ #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:634
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
+  atomic_read include/asm-generic/atomic-instrumented.h:26 [inline]
+  refcount_inc_not_zero_checked+0x72/0x1e0 lib/refcount.c:123
+  refcount_inc_checked+0x12/0x60 lib/refcount.c:156
+  get_task_struct include/linux/sched/task.h:110 [inline]
+  kthread_stop+0x6c/0x610 kernel/kthread.c:554
+  hwrng_unregister+0x190/0x210 drivers/char/hw_random/core.c:538
+  chaoskey_disconnect+0x1b2/0x200 drivers/usb/misc/chaoskey.c:232
+  usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
+  __device_release_driver drivers/base/dd.c:1134 [inline]
+  device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
+  bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:532
+  device_del+0x420/0xb20 drivers/base/core.c:2376
+  usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+  usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2200
+  hub_port_connect drivers/usb/core/hub.c:5035 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x16f2/0x3800 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
+  process_scheduled_works kernel/workqueue.c:2331 [inline]
+  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-The extra overhead of a zero-length request should be pretty small.  
-After all, the gadget expects to send a packet for every frame anyway,
-more or less.
+Allocated by task 2:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  __kasan_kmalloc mm/kasan/common.c:510 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
+  slab_post_alloc_hook mm/slab.h:584 [inline]
+  slab_alloc_node mm/slub.c:2779 [inline]
+  kmem_cache_alloc_node+0xdc/0x310 mm/slub.c:2815
+  alloc_task_struct_node kernel/fork.c:169 [inline]
+  dup_task_struct kernel/fork.c:865 [inline]
+  copy_process+0x4201/0x6470 kernel/fork.c:1851
+  _do_fork+0x129/0xec0 kernel/fork.c:2366
+  kernel_thread+0xaa/0xe0 kernel/fork.c:2453
+  create_kthread kernel/kthread.c:278 [inline]
+  kthreadd+0x4a2/0x680 kernel/kthread.c:596
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-> > 2. The UVC gadget currently does no know how many zero-length request must
-> > added. So it needs fill all available request until a new video frame
-> > arrives. With the current 4 requests that is not a problem right now. But
-> > that does not scale for USB3 bandwidths. So one thing that I want to do is
-> > to queue many requests but only enable the interrupt for a few of than.
-> >  From what I can tell from the code, the gadget framework and the dwc3
-> > driver should already support this.
-> > This will result in extra latency. There is probably an acceptable
-> > trade-off with an acceptable interrupt load and latency. But I would like
-> > to avoid that if possible.
+Freed by task 9:
+  save_stack+0x1b/0x80 mm/kasan/common.c:69
+  set_track mm/kasan/common.c:77 [inline]
+  kasan_set_free_info mm/kasan/common.c:332 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
+  slab_free_hook mm/slub.c:1424 [inline]
+  slab_free_freelist_hook mm/slub.c:1475 [inline]
+  slab_free mm/slub.c:3025 [inline]
+  kmem_cache_free+0xb9/0x380 mm/slub.c:3041
+  __put_task_struct+0x1e2/0x4c0 kernel/fork.c:748
+  put_task_struct include/linux/sched/task.h:119 [inline]
+  delayed_put_task_struct+0x1b4/0x2c0 kernel/exit.c:182
+  __rcu_reclaim kernel/rcu/rcu.h:222 [inline]
+  rcu_do_batch kernel/rcu/tree.c:2157 [inline]
+  rcu_core+0x630/0x1ca0 kernel/rcu/tree.c:2377
+  __do_softirq+0x221/0x912 kernel/softirq.c:292
 
-There are two different situations to consider:
+The buggy address belongs to the object at ffff8881d3106000
+  which belongs to the cache task_struct of size 5888
+The buggy address is located 32 bytes inside of
+  5888-byte region [ffff8881d3106000, ffff8881d3107700)
+The buggy address belongs to the page:
+page:ffffea00074c4000 refcount:1 mapcount:0 mapping:ffff8881da116000  
+index:0xffff8881d3101800 compound_mapcount: 0
+flags: 0x200000000010200(slab|head)
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da116000
+raw: ffff8881d3101800 0000000080050004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-	In the middle of a video stream, latency isn't an issue.
-	The gadget should expect to send a new packet for each frame,
-	and it doesn't know what to put in that packet until it
-	receives the video data or it knows there won't be any data.
+Memory state around the buggy address:
+  ffff8881d3105f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff8881d3105f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+> ffff8881d3106000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                ^
+  ffff8881d3106080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+  ffff8881d3106100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-	At the start of a video stream, latency can be an issue.  But
-	in this situation the gadget doesn't have to send 0-length
-	requests until there actually is some data available.
 
-Either way, it should be okay.
+Tested on:
 
-As far as interrupt load is concerned, I don't see how it relates to
-the issue of sending 0-length requests.
-
-> I think I understand the problem you're trying to solve now.
-> 
-> The dwc3 driver does not know that there's a gap until after a new 
-> request was queued, which then it will send an END_TRANSFER command and 
-> dequeue all the requests to restart the transfer due to missed_isoc.
-> We do this because the dwc3 driver does not know whether the new request 
-> is actually stale data, and we should not change this behavior.
-> 
-> Now, with UVC, it needs to communicate to the dwc3 driver that there 
-> will be a gap after a certain request (and that the device is expecting 
-> to send 0-length data). This is not a normal operation for isoc 
-> transfer. You may need to introduce a new way for the function driver to 
-> do that, possibly a new field in usb_request structure to indicate that. 
-> However, this seems a little awkward. Maybe others can comment on this.
-
-Note that on the host side, there is a difference between receiving 
-a 0-length packet and receiving no packet at all.  As long as both the 
-host and the gadget expect the isochronous stream to be running, there 
-shouldn't be any gaps if you can avoid it.
-
-Alan Stern
+commit:         ff6409a6 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16dd8772e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3230c37d442895b7
+dashboard link: https://syzkaller.appspot.com/bug?extid=6d8505fcdf25f00ac276
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=14236abae00000
 
