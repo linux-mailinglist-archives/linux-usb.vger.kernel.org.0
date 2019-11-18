@@ -2,93 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8323A1008DC
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 17:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C4A1008DD
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 17:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfKRQEA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 11:04:00 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35669 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726216AbfKRQEA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 11:04:00 -0500
-Received: by mail-ot1-f68.google.com with SMTP id c14so7965658oth.2
-        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2019 08:04:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Rem/p36hqRjeTRexcoTJMcufyxeZ4MVGJQGRmQDv2+A=;
-        b=Vq/vQcsLeOt5gdmiJvXVO5I0YkUs96xHpByQea0oBeZRrvJKKCpoCNLTdRwkctDI4z
-         Z3/vbPXhjESE/29ycmDt7B1m6PKeLvJgtrIy/t+rbRHNhNE8CgZhYC8/KxdbQt8t7o1g
-         dIVIZZJ6RwQaRu0R2jbQOE6vGDakwz6kD5zi/G55HCWL6n1fsApR0HZEGnBwWKs79gcp
-         G+W6LJc7zMYP6VFMZYCbd8PlIC2/4KVMvK5aQfEXHCZ4VGbQh6oNYhaFVhtwAPlJrch+
-         h4RD7XeYt0bctjcNMTYv3cDmoXcH8zyD/UCJpxzAjr/oPCmBuW/tu9lo/00oeOLOly8+
-         yRIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Rem/p36hqRjeTRexcoTJMcufyxeZ4MVGJQGRmQDv2+A=;
-        b=GaImF3Z3ymYMY2thoLHIRxXecXXrrYWZK7TgIN/78o8G4+fd6SI5yn1TbQV3RHtJQp
-         5JPHlpjKL7GiIE89l35lUrGJLAuFU9N1c0Ba52EOQDYrss+uRapGQKTQhrPwtXu6sQqA
-         vO29NWoUdBYfpYDe7SbWfuDEUyURey3rG93HlzQHy93hutypR0MYa48owL8kC9H1lgOm
-         vMGVjg0cLQrkJQNsTuuwewRpJ8gb7+S8yw+j5dXrfMBOjlZmFmWq48CIBB9/Gpn3oCCY
-         HL1KPMPG6Affx2mpq+8IdZYdGF/WzesdOh4lpRJUnLCsLucsVBd1QJ4G4IV4oAMJJdIX
-         fC7Q==
-X-Gm-Message-State: APjAAAW+otMtAmcaqEnswyEtBfyAlSjzKC47ZWswrh8CJhUkbQqN/ihp
-        z5Xjc8lXdeVI7yPCgA2u9fXeYxmHVUfdiBUHbg==
-X-Google-Smtp-Source: APXvYqxstwnfXWuxForAEl1NeIJVugYYSuwNzVNzyYYvVJ+wGYtHrS/tDF9VZoYqFBrq8WkFDoS/jVaqiRq9fEG6bSI=
-X-Received: by 2002:a05:6830:1682:: with SMTP id k2mr9190otr.336.1574093039351;
- Mon, 18 Nov 2019 08:03:59 -0800 (PST)
+        id S1726970AbfKRQFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 11:05:55 -0500
+Received: from mga02.intel.com ([134.134.136.20]:44729 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726216AbfKRQFz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Nov 2019 11:05:55 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 08:05:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,320,1569308400"; 
+   d="scan'208";a="407436437"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Nov 2019 08:05:51 -0800
+Subject: Re: [PATCH] xhci: No XHCI_TRUST_TX_LENGTH check in the absence of
+ matching TD
+To:     eli.billauer@gmail.com
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
+References: <20191113130609.32831-1-eli.billauer@gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <6ad6dceb-a938-a2b7-c535-32bd3404e53d@linux.intel.com>
+Date:   Mon, 18 Nov 2019 18:08:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <CAHG43MtDYqiV6pye91D8_bA-4bMvVHWFHjsDgEMsmhh2n-Z2ww@mail.gmail.com>
- <20191118112837.GE156486@kroah.com> <ead122bf-4fb5-a9a8-053d-37426a4b7605@redhat.com>
- <20191118155859.GA553955@kroah.com>
-In-Reply-To: <20191118155859.GA553955@kroah.com>
-From:   Pacho Ramos <pachoramos@gmail.com>
-Date:   Mon, 18 Nov 2019 17:03:48 +0100
-Message-ID: <CAHG43MukMye9ageQQ5QPYYWvxFpc67Fj5ZL+E8Qi48tyDfxYLQ@mail.gmail.com>
-Subject: Re: JMicron USB to ATA/ATAPI Bridge requires usb-storage quirks to
- disable uas
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Laura Abbott <labbott@redhat.com>,
-        Laura Abbott <labbott@fedoraproject.org>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191113130609.32831-1-eli.billauer@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks a lot!
+On 13.11.2019 15.06, eli.billauer@gmail.com wrote:
+> From: Eli Billauer <eli.billauer@gmail.com>
+> 
+> When an IN transfer ends with a short packet, the xHCI controller is
+> required to submit an event TRB with Completion Code COMP_SHORT_PACKET
+> against the data TRB that was in effect when the short packet arrived, as
+> well as any event TRBs it submits on behalf of this transfer.
+> 
+> Alas, some controllers (e.g. Renesas) mark the subsequent events TRBs (if
+> any) with COMP_SUCCESS. As these subsequent event TRBs are useless, they
+> are ignored on the basis that they have no matching TD queued (it was
+> dequeued in response to the first COMP_SHORT_PACKET event TRB).
+> 
+> Accordingly, the quirk handling and kernel log warning is moved to after
+> the TD match check, in particular in order to avoid unnecessary warnings
+> messages.
+> 
+> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+> ---
+>   drivers/usb/host/xhci-ring.c | 19 +++++++++++--------
+>   1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9741cdeea9d7..96680eb71a45 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2376,14 +2376,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>   	 * transfer type
+>   	 */
+>   	case COMP_SUCCESS:
+> -		if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+> -			break;
+> -		if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+> -			trb_comp_code = COMP_SHORT_PACKET;
+> -		else
+> -			xhci_warn_ratelimited(xhci,
+> -					      "WARN Successful completion on short TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
+> -					      slot_id, ep_index);
+>   	case COMP_SHORT_PACKET:
+>   		break;
+>   	/* Completion codes for endpoint stopped state */
+> @@ -2586,6 +2578,17 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>   			skip_isoc_td(xhci, td, event, ep, &status);
+>   			goto cleanup;
+>   		}
+> +
+> +		if ((trb_comp_code == COMP_SUCCESS) &&
+> +		    (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) != 0)) {
+> +			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+> +				trb_comp_code = COMP_SHORT_PACKET;
+> +			else
+> +				xhci_warn_ratelimited(xhci,
+> +						      "WARN Successful completion on short TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
+> +						      slot_id, ep_index);
+> +		}
+> +
+>   		if (trb_comp_code == COMP_SHORT_PACKET)
+>   			ep_ring->last_td_was_short = true;
+>   		else
+> 
 
-El lun., 18 nov. 2019 a las 17:00, Greg KH
-(<gregkh@linuxfoundation.org>) escribi=C3=B3:
->
-> On Mon, Nov 18, 2019 at 10:44:03AM -0500, Laura Abbott wrote:
-> > On 11/18/19 6:28 AM, Greg KH wrote:
-> > > On Mon, Nov 18, 2019 at 11:07:55AM +0100, Pacho Ramos wrote:
-> > > > Hello,
-> > > >
-> > > > I would like to forward the patch that is being used for years in
-> > > > Fedora and Gentoo to fix connectivity issues of JMicron devices wit=
-h
-> > > > UAS when they got into idle state:
-> > > > https://bugzilla.redhat.com/show_bug.cgi?id=3D1260207
-> > > > https://bugs.gentoo.org/640082
-> > > >
-> > > > The problem is still valid with current kernels, then, I guess the
-> > > > patch wasn't forwarded here or got forgotten for some reason. This
-> > > > patch works fine for current kernel 4.13.11 too
-> > >
-> > > Laura, any reason this patch was never sent upstream to us?  Any
-> > > objection for the patch below to be merged?
-> > >
-> >
-> > Huh this must have completely slipped off my radar. No objections.
-> > Thanks for the follow up!
->
-> Ok, now queued up, thanks.
->
-> greg k-h
+I'd hate to rip out the success case from the switch statement where the other
+completion codes are handled. We're still only making a choice about a warning
+message
+
+How about handling all COMP_SUCCESS cases with remaining data after a short
+transfer as COMP_SHORT_PACKET by default?
+
+The code below won't behave exactly the same as in your patch, but should
+do the trick in your Renesas case as well. Can you try it out?
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9ebaa8e132a9..d23f7408c81f 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2381,7 +2381,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+         case COMP_SUCCESS:
+                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+                         break;
+-               if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
++               if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
++                   ep_ring->last_td_was_short)
+                         trb_comp_code = COMP_SHORT_PACKET;
+                 else
+                         xhci_warn_ratelimited(xhci,
+  
