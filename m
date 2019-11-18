@@ -2,61 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6704FFF7F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 08:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BE8FFFD5
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 08:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfKRH1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 02:27:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45964 "EHLO mail.kernel.org"
+        id S1726472AbfKRHxa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 02:53:30 -0500
+Received: from mga07.intel.com ([134.134.136.100]:29559 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726321AbfKRH1i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Nov 2019 02:27:38 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7853C20726;
-        Mon, 18 Nov 2019 07:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574062058;
-        bh=f8z87rRXBYKLBAXWfLoY7gOgyVc1dfrZu4U5QwzOWCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oOnzg5QitxK7IVofhNcI/e+JIMOgPXxULR6FtqBnDfIQNHU4+hMTK/OT112mM03E2
-         O2DVeGk7/pLvxfr3Xkkv4rH7K3OlnmI4cgFaTayTcUhjiFOEkltqBHAzWhMdslN0Ac
-         MknoyZQV+FJW+4dlr0cIfsyjyXR/EBP1hconGhGI=
-Date:   Mon, 18 Nov 2019 08:26:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB changes for v5.5 merge window
-Message-ID: <20191118072610.GB66760@kroah.com>
-References: <87eey5psvq.fsf@gmail.com>
+        id S1726315AbfKRHxa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Nov 2019 02:53:30 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Nov 2019 23:53:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,319,1569308400"; 
+   d="scan'208";a="196047576"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
+  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2019 23:53:24 -0800
+Subject: Re: [LKP] Re: [pipe] d60337eff1:
+ BUG:kernel_NULL_pointer_dereference,address
+To:     David Howells <dhowells@redhat.com>,
+        kernel test robot <lkp@intel.com>
+Cc:     torvalds@linux-foundation.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        nicolas.dichtel@6wind.com, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lkp@lists.01.org
+References: <9279.1573824532@warthog.procyon.org.uk>
+ <20191110031348.GE29418@shao2-debian>
+ <6853.1573834946@warthog.procyon.org.uk>
+From:   kernel test robot <rong.a.chen@intel.com>
+Message-ID: <35daca93-ff2b-2c7d-b837-72396ca0677a@intel.com>
+Date:   Mon, 18 Nov 2019 15:53:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87eey5psvq.fsf@gmail.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <6853.1573834946@warthog.procyon.org.uk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 09:04:41AM +0200, Felipe Balbi wrote:
-> 
-> Hi Greg,
-> 
-> Here's my pull request for v5.5 merge window. Let me know if you want
-> anything to be changed.
-> 
-> Cheers
-> 
-> The following changes since commit 7d194c2100ad2a6dded545887d02754948ca5241:
-> 
->   Linux 5.4-rc4 (2019-10-20 15:56:22 -0400)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git tags/usb-for-v5.5
+Hi David,
 
-pulled and pushed out, thanks.
+Yes, it can fix the problem.
 
-greg k-h
+Best Regards,
+Rong Chen
+
+On 11/16/2019 12:22 AM, David Howells wrote:
+> Actually, no, this is the fix:
+>
+> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
+> index 7006b5b2106d..be2fc5793ddd 100644
+> --- a/lib/iov_iter.c
+> +++ b/lib/iov_iter.c
+> @@ -537,7 +537,7 @@ static size_t push_pipe(struct iov_iter *i, size_t size,
+>   		buf->ops = &default_pipe_buf_ops;
+>   		buf->page = page;
+>   		buf->offset = 0;
+> -		buf->len = max_t(ssize_t, left, PAGE_SIZE);
+> +		buf->len = min_t(ssize_t, left, PAGE_SIZE);
+>   		left -= buf->len;
+>   		iter_head++;
+>   		pipe->head = iter_head;
+>
+> David
+> _______________________________________________
+> LKP mailing list -- lkp@lists.01.org
+> To unsubscribe send an email to lkp-leave@lists.01.org
+
