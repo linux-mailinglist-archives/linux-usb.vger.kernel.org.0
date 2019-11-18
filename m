@@ -2,104 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C80D1100214
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 11:08:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BDB3100250
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 11:24:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726664AbfKRKII (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 05:08:08 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:33029 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726490AbfKRKII (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 05:08:08 -0500
-Received: by mail-ot1-f49.google.com with SMTP id u13so14005686ote.0
-        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2019 02:08:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=R4VlYB/CflQPVop27wL1pXFTGTTjJyizWlTzfZhqWd0=;
-        b=ooGGf+avlDPX/vSN4XQn4M0+SapZOwMgc0/ZBy8nD5KPNiYAwiMYs4xTbrgQL7rvEG
-         f6EMUZ+eemyXE6Y7EWq1/xaBNzS7gvYjl3PL7bWxX5anvFM9YELTqes+ZG3x6qk00wyg
-         zCgRJjbiY2gf3cW8fR48dCeVFI6CwLlRCHOCTNJOZDzRjdI6Wgh4EIHdTicfyiV4TTkZ
-         9QUeXuuTNK8L8GqJsJa9jgDTVIMbFtCT8TrvHrnKawOudrTgkR5b15Y4Nx8gSWrEh3LA
-         dDs4Xj5QlmnYIDbBiMIm6KB0awLLDVyXffaLbX6edm0bRdL/5BVxMofJj/WEdvS+ZoNR
-         6zmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=R4VlYB/CflQPVop27wL1pXFTGTTjJyizWlTzfZhqWd0=;
-        b=a2sz6sV2E4qPqHdS0u5+wSytiW5+kLnWIrwphP8u+4knBNarrTYY11uElF7iwBbxS0
-         4KG5cvFDj7W4DsM1zrYQw0jbdi9MNAc+e1j9ZWr463dfJzNNA35KLGkhcVXcFeqpawbJ
-         XRfKOUhF5R/xRa+MnM3PPYTMDcv603cBCMEMsQDMZqJrIxu+Z6vCL6Y4Oef/VMWNTT28
-         4oa98SmKLWvi8dXNVec+bFr32wezVsfn/NAA34X3E0OcPTanHtzn4qowd/+kPINhvuxa
-         h33+FDGcaMZFxntJIc4iuvEQDibqaCMa/hd/axjf9Ae3NffKsam/PXFTjPmnZCGZDph5
-         +nbg==
-X-Gm-Message-State: APjAAAU2uea29nkzvDKQPkNPH+JfOiLjyKmsBq5l+uWk5qC3e4J4iqas
-        CUr4AjliIQ/BD/T4grhvid4VSfXMhObY3jgyAtTqDBO3kC8Y
-X-Google-Smtp-Source: APXvYqyWVc5KH+KJgJeGRGsESevzB8k3SjryBza88MdaL0BwqaujwbDvDAlSlweQ0TdM79ijEjM8IofvLPxWwk7Qrsg=
-X-Received: by 2002:a05:6830:2017:: with SMTP id e23mr10688245otp.327.1574071687189;
- Mon, 18 Nov 2019 02:08:07 -0800 (PST)
+        id S1726614AbfKRKY2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 05:24:28 -0500
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:41405 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726461AbfKRKY2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 05:24:28 -0500
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 0748D3C04C0;
+        Mon, 18 Nov 2019 11:24:26 +0100 (CET)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id FajJQDfEdwDF; Mon, 18 Nov 2019 11:24:20 +0100 (CET)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 6F9B53C0022;
+        Mon, 18 Nov 2019 11:24:20 +0100 (CET)
+Received: from lxhi-065.adit-jv.com (10.72.93.66) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Mon, 18 Nov
+ 2019 11:24:19 +0100
+Date:   Mon, 18 Nov 2019 11:24:16 +0100
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Veeraiyan Chidambaram <external.veeraiyan.c@de.adit-jv.com>
+Subject: Re: [PATCH v2 1/3] usb: renesas_usbhs: enable DVSE interrupt
+Message-ID: <20191118102416.GA17554@lxhi-065.adit-jv.com>
+References: <1567771431-13235-1-git-send-email-external.veeraiyan.c@de.adit-jv.com>
+ <20190909130525.GA19423@vmlxhi-102.adit-jv.com>
 MIME-Version: 1.0
-From:   Pacho Ramos <pachoramos@gmail.com>
-Date:   Mon, 18 Nov 2019 11:07:55 +0100
-Message-ID: <CAHG43MtDYqiV6pye91D8_bA-4bMvVHWFHjsDgEMsmhh2n-Z2ww@mail.gmail.com>
-Subject: JMicron USB to ATA/ATAPI Bridge requires usb-storage quirks to
- disable uas
-To:     linux-usb@vger.kernel.org
-Content-Type: multipart/mixed; boundary="000000000000c4889f05979c1f25"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190909130525.GA19423@vmlxhi-102.adit-jv.com>
+X-Originating-IP: [10.72.93.66]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---000000000000c4889f05979c1f25
-Content-Type: text/plain; charset="UTF-8"
+Hi Felipe,
 
-Hello,
+On Mon, Sep 09, 2019 at 03:05:25PM +0200, Eugeniu Rosca wrote:
+> Hi Veeraiyan,
+> 
+> On Fri, Sep 06, 2019 at 02:03:49PM +0200, Veeraiyan Chidambaram wrote:
+> > From: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > 
+> > Commit [1] enabled the possibility of checking the DVST (Device State
+> > Transition) bit of INTSTS0 (Interrupt Status Register 0) and calling
+> > the irq_dev_state() handler if the DVST bit is set. But neither
+> > commit [1] nor commit [2] actually enabled the DVSE (Device State
+> > Transition Interrupt Enable) bit in the INTENB0 (Interrupt Enable
+> > Register 0). As a consequence, irq_dev_state() handler is getting
+> > called as a side effect of other (non-DVSE) interrupts being fired,
+> > which definitely can't be relied upon, if DVST notifications are of
+> > any value.
+> > 
+> > Why this doesn't hurt is because usbhsg_irq_dev_state() currently
+> > doesn't do much except of a dev_dbg(). Once more work is added to
+> > the handler (e.g. detecting device "Suspended" state and notifying
+> > other USB gadget components about it), enabling DVSE becomes a hard
+> > requirement. Do it in a standalone commit for better visibility and
+> > clear explanation.
+> > 
+> > [1] f1407d5 ("usb: renesas_usbhs: Add Renesas USBHS common code")
+> > [2] 2f98382 ("usb: renesas_usbhs: Add Renesas USBHS Gadget")
+> > 
+> > Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > ---
+> > v2: No change
+> > v1: https://patchwork.kernel.org/patch/10581479/
+> 
+> It looks like this series changes the patch order of v1.
+> Could you kindly stick to the original order? Many thanks.
 
-I would like to forward the patch that is being used for years in
-Fedora and Gentoo to fix connectivity issues of JMicron devices with
-UAS when they got into idle state:
-https://bugzilla.redhat.com/show_bug.cgi?id=1260207
-https://bugs.gentoo.org/640082
+I see this _superseded_ patch version (and apparently the whole series)
+present on your "next" branch, as well as on linux-next:
+https://git.kernel.org/pub/scm/linux/kernel/git/balbi/usb.git/commit/?h=next&id=8b20d00f0f08
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=8b20d00f0f08
 
-The problem is still valid with current kernels, then, I guess the
-patch wasn't forwarded here or got forgotten for some reason. This
-patch works fine for current kernel 4.13.11 too
+The most recent v5 version of this series has been recently pushed to
+(not yet visible in upstream):
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?h=usb-testing
 
-Thanks a lot
-
---000000000000c4889f05979c1f25
-Content-Type: text/x-patch; charset="US-ASCII"; 
-	name="2500_usb-storage-Disable-UAS-on-JMicron-SATA-enclosure.patch"
-Content-Disposition: attachment; 
-	filename="2500_usb-storage-Disable-UAS-on-JMicron-SATA-enclosure.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_k349moza0>
-X-Attachment-Id: f_k349moza0
-
-RnJvbSBkMDJhNTUxODIzMDdjMDExMzZiNTk5ZmQwNDhiNDY3OWYyNTlhODRlIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMYXVyYSBBYmJvdHQgPGxhYmJvdHRAZmVkb3JhcHJvamVjdC5v
-cmc+CkRhdGU6IFR1ZSwgOCBTZXAgMjAxNSAwOTo1MzozOCAtMDcwMApTdWJqZWN0OiBbUEFUQ0hd
-IHVzYi1zdG9yYWdlOiBEaXNhYmxlIFVBUyBvbiBKTWljcm9uIFNBVEEgZW5jbG9zdXJlCgpTdGV2
-ZSBFbGxpcyByZXBvcnRlZCBpbmNvcnJlY3QgYmxvY2sgc2l6ZXMgYW5kIGFsaWduZW1lbnQKb2Zm
-c2V0cyB3aXRoIGEgU0FUQSBlbmNsb3N1cmUuIEFkZGluZyBhIHF1aXJrIHRvIGRpc2FibGUKVUFT
-IGZpeGVzIHRoZSBwcm9ibGVtcy4KClJlcG9ydGVkLWJ5OiBTdGV2ZW4gRWxsaXMgPHNlbGxpc0By
-ZWRoYXQuY29tPgpTaWduZWQtb2ZmLWJ5OiBMYXVyYSBBYmJvdHQgPGxhYmJvdHRAZmVkb3JhcHJv
-amVjdC5vcmc+Ci0tLQogZHJpdmVycy91c2Ivc3RvcmFnZS91bnVzdWFsX3Vhcy5oIHwgNyArKysr
-Ky0tCiAxIGZpbGUgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygtKQoKZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL3N0b3JhZ2UvdW51c3VhbF91YXMuaCBiL2RyaXZlcnMvdXNi
-L3N0b3JhZ2UvdW51c3VhbF91YXMuaAppbmRleCBjODVlYTUzLi4yMTZkOTNkIDEwMDY0NAotLS0g
-YS9kcml2ZXJzL3VzYi9zdG9yYWdlL3VudXN1YWxfdWFzLmgKKysrIGIvZHJpdmVycy91c2Ivc3Rv
-cmFnZS91bnVzdWFsX3Vhcy5oCkBAIC0xNDEsMTIgKzE0MSwxNSBAQCBVTlVTVUFMX0RFVigweDIx
-MDksIDB4MDcxMSwgMHgwMDAwLCAweDk5OTksCiAJCVVTQl9TQ19ERVZJQ0UsIFVTQl9QUl9ERVZJ
-Q0UsIE5VTEwsCiAJCVVTX0ZMX05PX0FUQV8xWCksCiAKLS8qIFJlcG9ydGVkLWJ5OiBUYWtlbyBO
-YWtheWFtYSA8amF2aGVyYUBnbXguY29tPiAqLworLyoKKyAqIEluaXRpYWxseSBSZXBvcnRlZC1i
-eTogVGFrZW8gTmFrYXlhbWEgPGphdmhlcmFAZ214LmNvbT4KKyAqIFVBUyBJZ25vcmUgUmVwb3J0
-ZWQgYnkgU3RldmVuIEVsbGlzIDxzZWxsaXNAcmVkaGF0LmNvbT4KKyAqLwogVU5VU1VBTF9ERVYo
-MHgzNTdkLCAweDc3ODgsIDB4MDAwMCwgMHg5OTk5LAogCQkiSk1pY3JvbiIsCiAJCSJKTVM1NjYi
-LAogCQlVU0JfU0NfREVWSUNFLCBVU0JfUFJfREVWSUNFLCBOVUxMLAotCQlVU19GTF9OT19SRVBP
-UlRfT1BDT0RFUyksCisJCVVTX0ZMX05PX1JFUE9SVF9PUENPREVTIHwgVVNfRkxfSUdOT1JFX1VB
-UyksCiAKIC8qIFJlcG9ydGVkLWJ5OiBIYW5zIGRlIEdvZWRlIDxoZGVnb2VkZUByZWRoYXQuY29t
-PiAqLwogVU5VU1VBTF9ERVYoMHg0OTcxLCAweDEwMTIsIDB4MDAwMCwgMHg5OTk5LAotLSAKMi40
-LjMKCg==
---000000000000c4889f05979c1f25--
+-- 
+Best Regards,
+Eugeniu
