@@ -2,54 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE92D10042F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 12:31:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C09310047C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 12:41:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfKRLbc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 06:31:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43728 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726464AbfKRLbc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Nov 2019 06:31:32 -0500
-Received: from localhost (unknown [89.205.134.48])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7116B2073A;
-        Mon, 18 Nov 2019 11:31:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574076692;
-        bh=+jWfvLyq5TP65NzHy/snU+hK9A5O4w1qLhHWeQUIAKA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k6u62zUHa10RorxtNzD5dYzAsRsRmTvE21tnbCnFTHQXIDlZlybDuH/uOtRPl2ztL
-         ze3sjnr6FjfPzPVfVY2yxi3oHkJMRFgEA5q3x0HqCQJaqm52FIc3E2TrWOAfTvFoja
-         zPOiC2aOg3fFlYf4hR2Zy+xKmOUwr9pCRd0JyG3M=
-Date:   Mon, 18 Nov 2019 12:31:17 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [GIT PULL] usb: chipidea: changes for v5.5-rc1
-Message-ID: <20191118113117.GA182126@kroah.com>
-References: <20191118100020.GA10641@b29397-desktop>
+        id S1726579AbfKRLlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 06:41:46 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:38209 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbfKRLlp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 06:41:45 -0500
+Received: by mail-pf1-f194.google.com with SMTP id c13so10276673pfp.5;
+        Mon, 18 Nov 2019 03:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ea8AtOwQ/gMHrbAh9hOSuI0GnsfUP2/RqRm+KGMP9/0=;
+        b=pylT9lIw0bTFkxmKB5JcHLpUUBy7rUAvdmqogLQeU0GQR9WSMJLNIadVaFfawWiNW2
+         YGfcI+owG6oEM8AkrjFbhMhTWs4d5o2Eyw6dyEHKNJC6Hr8VaCKuS5P/yOq2zWsp2vGN
+         PXQusdHZX7lOrdBNgB0AIVrC6aNoYohd0+d06uL+dhEEOAVCyazWXXjnDjZ60kn8DcF4
+         osHCp7HsWKWl0tVp5JnkEqjkpScZBdnXolFGMsqYuAY0bwp93sJ/DI5iW3w2x8QRA8Yz
+         CjS9bgFfJ/yt7gqnF45KWQPeI2nBEv66t6qn9bTLjAps01WHB4uu6Zr7IY71Y9VWk1Nz
+         hYlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ea8AtOwQ/gMHrbAh9hOSuI0GnsfUP2/RqRm+KGMP9/0=;
+        b=VyMit+ll/WJjqUJPG+ewniaFg8Viw4ifzSCQNX+wSM+ITn2mgM7lOoTXw9yz1Pvzr7
+         s4UAU7hdyUnYIVJ3wak8h879iNoPzP6ByneIsWsx47gKjNP7SG7OefJBNyLh7Tw/ReAy
+         o7/PFfeb5BlYj/ruEy1RoAnSeWvmXhkseCkAWHMVth+EHQrbmeM/GsXfwyPjCPFCj72X
+         FA3CaU+1qzEOisxoWkOzMFNcNjA1yBry0MYl1Ge9btwIXyw2se5dHbj08iDQIynCqYmq
+         wMeqLqKUSdr/iS/7TrBW3b6HCWdoE9nY/4sZ6ZWBsJs9kc+saN02m4lSI0kHX686vz/T
+         Q4Aw==
+X-Gm-Message-State: APjAAAUjhzJXgRndEDLoyMSuliQGE8VnX4OQSlsw1c1L7bHIWFY4ZUX9
+        VV5g5LEH57ls6/CXm5TtMKo=
+X-Google-Smtp-Source: APXvYqxPXdfD1riKGP6ycbMcTm7jgmPDhZ6Z9zNCVB7POjIw7Y/66PW6oHD/HEsn3QEHkJNGiDpIUA==
+X-Received: by 2002:a62:2ccf:: with SMTP id s198mr23517241pfs.42.1574077305359;
+        Mon, 18 Nov 2019 03:41:45 -0800 (PST)
+Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
+        by smtp.gmail.com with ESMTPSA id w62sm22656779pfb.15.2019.11.18.03.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2019 03:41:44 -0800 (PST)
+From:   Chuhong Yuan <hslester96@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Chuhong Yuan <hslester96@gmail.com>
+Subject: [PATCH] usb: dwc3: meson-g12a: add missed regulator_disable
+Date:   Mon, 18 Nov 2019 19:41:35 +0800
+Message-Id: <20191118114135.25666-1-hslester96@gmail.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191118100020.GA10641@b29397-desktop>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 10:00:22AM +0000, Peter Chen wrote:
-> The following changes since commit a079973f462a3d506c6a7f00c770a55b167ed094:
-> 
->   usb: typec: tcpm: Remove tcpc_config configuration mechanism (2019-11-16 14:45:31 +0100)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/usb-ci-v5.5-rc1
-> 
+The driver forgets to disable the regulator in probe failure and remove.
+Add the missed calls to fix it.
 
-Pulled and pushed out, thanks.
+Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+---
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-greg k-h
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index 8a3ec1a951fe..d9723d1ad8eb 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -458,7 +458,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 						dwc3_meson_g12a_irq_thread,
+ 						IRQF_ONESHOT, pdev->name, priv);
+ 		if (ret)
+-			return ret;
++			goto err_regulator_disable;
+ 	}
+ 
+ 	dwc3_meson_g12a_usb_init(priv);
+@@ -467,7 +467,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 	for (i = 0 ; i < PHY_COUNT ; ++i) {
+ 		ret = phy_init(priv->phys[i]);
+ 		if (ret)
+-			return ret;
++			goto err_regulator_disable;
+ 	}
+ 
+ 	/* Set PHY Power */
+@@ -517,7 +517,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ err_phys_exit:
+ 	for (i = 0 ; i < PHY_COUNT ; ++i)
+ 		phy_exit(priv->phys[i]);
+-
++err_regulator_disable:
++	if (priv->vbus)
++		regulator_disable(priv->vbus);
+ 	return ret;
+ }
+ 
+@@ -536,6 +538,9 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
+ 		phy_exit(priv->phys[i]);
+ 	}
+ 
++	if (priv->vbus)
++		regulator_disable(priv->vbus);
++
+ 	pm_runtime_disable(dev);
+ 	pm_runtime_put_noidle(dev);
+ 	pm_runtime_set_suspended(dev);
+-- 
+2.24.0
+
