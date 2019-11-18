@@ -2,127 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C4A1008DD
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 17:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35ACC1008EF
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 17:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbfKRQFz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 11:05:55 -0500
-Received: from mga02.intel.com ([134.134.136.20]:44729 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726216AbfKRQFz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Nov 2019 11:05:55 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 08:05:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,320,1569308400"; 
-   d="scan'208";a="407436437"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Nov 2019 08:05:51 -0800
-Subject: Re: [PATCH] xhci: No XHCI_TRUST_TX_LENGTH check in the absence of
- matching TD
-To:     eli.billauer@gmail.com
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
-References: <20191113130609.32831-1-eli.billauer@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <6ad6dceb-a938-a2b7-c535-32bd3404e53d@linux.intel.com>
-Date:   Mon, 18 Nov 2019 18:08:08 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727423AbfKRQMr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 11:12:47 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:33956 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbfKRQMq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 11:12:46 -0500
+Received: by mail-pg1-f195.google.com with SMTP id z188so9869796pgb.1
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2019 08:12:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=A0u0Ton8CaM+A7C4wCTCx/2ZztYL062eKXVkaP4L0oo=;
+        b=jh20GjsSq7mecFgOk52GI0EwY/o42YOONvOVhfvU0gdVZBfuwaScDK/tbVAltB87Ti
+         LmAm8N9mBDQP2PK8aenAMPu4dqE+eYGUxLIYDnqQ5r3UA9AZXsmIzROUYVfVdSUSrNqh
+         ceSFNNk57dA/qXr9ZR0sQWPoNJYW5c+zmzKQ6sM2EpmvBbpuH3h4ez0F/agF+kYK7UYa
+         21ol8+jWCrjt6sDy0EJAH9WiKh9JKTQeRvrL0XWtuWjsCbjCgGrtkWmrEv2bYvkr/bVh
+         do3PZdBy1grZEaF8SbS1uBZEq3qio54rVNfMXccyYsLMZnVJR7WgKLFDVdAemP5pNPFz
+         xrQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=A0u0Ton8CaM+A7C4wCTCx/2ZztYL062eKXVkaP4L0oo=;
+        b=hqeIO1qZebjmqIhnOplTbGJxwAOujk3Emwwk5U1zhrrRe7nPz74eZoJrv5qVEX97KX
+         3bCYtgT8dJ/in/ImO39B22G6ZKYloAYC5BNGq4qMu0wWFFlCTBLOlmYfrOZbP6bwJnxR
+         Iv7KG5cS5GgTlB2XeVyKsDOjLNs44YIkvZu6JDVswgp9i+NpRtKVyof1ygxZZwIH3Auy
+         zzepfDdr8g1hq3InD5muodnITfu+WAH4SbSHCGzng7FPKz+r3EBGRzdJEY8V3nRHtB/l
+         aOuJ+Z2FoNL2+Xt+clzmDeI7R5WDIEDCFyz+YOk9mCou2jL1Jk6CcrNBq7kWZQYCk12V
+         KoSg==
+X-Gm-Message-State: APjAAAXBnbKHwaAzzCjEszwwFfWGUV7ijcJadRUCMmLfY+YBdjeNN2BV
+        LOVUQ26FECWjy0fGO0oy0Jxs89flenQ0N+v8fNSCAg==
+X-Google-Smtp-Source: APXvYqw9xp3z7rfyr7YDgbUWxsGQO26TPFHBnyzGsfxiLzmoqkEF+vF3VWKgg9Y1RWQogQ0lpTl2KWC70EoOZhTvFEU=
+X-Received: by 2002:a63:c804:: with SMTP id z4mr72612pgg.440.1574093565883;
+ Mon, 18 Nov 2019 08:12:45 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191113130609.32831-1-eli.billauer@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CAAeHK+yyKeV8h6UO2-4zZM_ndUaHcG1Ex5GYHxdmh_GJxDOa4w@mail.gmail.com>
+ <Pine.LNX.4.44L0.1911151038480.1527-100000@iolanthe.rowland.org>
+ <CAAeHK+z6m8mXEH-L+W+8FxjasrMX6BGMEdTq_hgUYerp+_0kjA@mail.gmail.com> <20191116084854.GA384892@kroah.com>
+In-Reply-To: <20191116084854.GA384892@kroah.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 18 Nov 2019 17:12:34 +0100
+Message-ID: <CAAeHK+xjUhR077goAHv=re78C6pzzSEBQxU+LZcOs0iCu2ZStg@mail.gmail.com>
+Subject: Re: Exporting USB device ids from the kernel
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13.11.2019 15.06, eli.billauer@gmail.com wrote:
-> From: Eli Billauer <eli.billauer@gmail.com>
-> 
-> When an IN transfer ends with a short packet, the xHCI controller is
-> required to submit an event TRB with Completion Code COMP_SHORT_PACKET
-> against the data TRB that was in effect when the short packet arrived, as
-> well as any event TRBs it submits on behalf of this transfer.
-> 
-> Alas, some controllers (e.g. Renesas) mark the subsequent events TRBs (if
-> any) with COMP_SUCCESS. As these subsequent event TRBs are useless, they
-> are ignored on the basis that they have no matching TD queued (it was
-> dequeued in response to the first COMP_SHORT_PACKET event TRB).
-> 
-> Accordingly, the quirk handling and kernel log warning is moved to after
-> the TD match check, in particular in order to avoid unnecessary warnings
-> messages.
-> 
-> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
-> ---
->   drivers/usb/host/xhci-ring.c | 19 +++++++++++--------
->   1 file changed, 11 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9741cdeea9d7..96680eb71a45 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2376,14 +2376,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->   	 * transfer type
->   	 */
->   	case COMP_SUCCESS:
-> -		if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
-> -			break;
-> -		if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-> -			trb_comp_code = COMP_SHORT_PACKET;
-> -		else
-> -			xhci_warn_ratelimited(xhci,
-> -					      "WARN Successful completion on short TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
-> -					      slot_id, ep_index);
->   	case COMP_SHORT_PACKET:
->   		break;
->   	/* Completion codes for endpoint stopped state */
-> @@ -2586,6 +2578,17 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->   			skip_isoc_td(xhci, td, event, ep, &status);
->   			goto cleanup;
->   		}
-> +
-> +		if ((trb_comp_code == COMP_SUCCESS) &&
-> +		    (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) != 0)) {
-> +			if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-> +				trb_comp_code = COMP_SHORT_PACKET;
-> +			else
-> +				xhci_warn_ratelimited(xhci,
-> +						      "WARN Successful completion on short TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
-> +						      slot_id, ep_index);
-> +		}
-> +
->   		if (trb_comp_code == COMP_SHORT_PACKET)
->   			ep_ring->last_td_was_short = true;
->   		else
-> 
+On Sat, Nov 16, 2019 at 9:49 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Nov 15, 2019 at 05:10:26PM +0100, Andrey Konovalov wrote:
+> > On Fri, Nov 15, 2019 at 4:44 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Fri, 15 Nov 2019, Andrey Konovalov wrote:
+> > >
+> > > > Hi Greg and Alan,
+> > > >
+> > > > For USB fuzzing it would be nice to be able to export usb_device_id
+> > > > structs from the kernel to facilitate the fuzzer with generating USB
+> > > > descriptors that match to actual drivers. The same is required for
+> > > > hid_device_id structs, since those are matched separately by the
+> > > > usbhid driver (are there other cases like this?).
+> > > >
+> > > > Currently I have a hacky patch [1] that walks all drivers for USB and
+> > > > HID buses and then prints all device ids for those drivers into the
+> > > > kernel log. Those are manually parsed and built into the fuzzer [2]
+> > > > and then used to generate USB descriptors [3].
+> > >
+> > > There are so many different flags for those id structures, parsing and
+> > > understanding them must be quite difficult.
+> > >
+> > > > I'm thinking of making a proper patch that will add a debugfs entry
+> > > > like usb/drivers (and usb/hid_drivers?), that can be read to get
+> > > > USB/HID device ids for all loaded drivers. Would that be acceptable?
+> > > > Or should I use some other interface to do that?
+> > >
+> > > I can't think of a better way to get the information from a running
+> > > kernel.
+> > >
+> > > There is another possibility, though.  If the drivers are built as
+> > > modules, the information is already available to userspace tools via
+> > > depmod.  You could get it from the modules.dep.bin file.  This has the
+> > > advantage that it will work even for drivers that aren't currently
+> > > loaded.
+> >
+> > This is the same thing Greg mentions above, right?
+>
+> Yes.
+>
+> > Would this work for drivers that are built into the kernel (as =y)?
+>
+> No, sorry.  There has not been any need to export that information to
+> userspace as nothing has ever needed that.
+>
+> The only reason we exported that at all was to allow modules to
+> auto-load to handle the device.
 
-I'd hate to rip out the success case from the switch statement where the other
-completion codes are handled. We're still only making a choice about a warning
-message
+OK, I see. Ideally we would want to support both builtin drivers and
+modules. I'll then implement the approach with exporting the ids
+through debugfs. I'll send a patch once I have it.
 
-How about handling all COMP_SUCCESS cases with remaining data after a short
-transfer as COMP_SHORT_PACKET by default?
-
-The code below won't behave exactly the same as in your patch, but should
-do the trick in your Renesas case as well. Can you try it out?
-
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9ebaa8e132a9..d23f7408c81f 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2381,7 +2381,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
-         case COMP_SUCCESS:
-                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
-                         break;
--               if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-+               if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
-+                   ep_ring->last_td_was_short)
-                         trb_comp_code = COMP_SHORT_PACKET;
-                 else
-                         xhci_warn_ratelimited(xhci,
-  
+Thanks!
