@@ -2,118 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C09310047C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 12:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 888CD100602
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 13:58:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfKRLlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 06:41:46 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:38209 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726460AbfKRLlp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 06:41:45 -0500
-Received: by mail-pf1-f194.google.com with SMTP id c13so10276673pfp.5;
-        Mon, 18 Nov 2019 03:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ea8AtOwQ/gMHrbAh9hOSuI0GnsfUP2/RqRm+KGMP9/0=;
-        b=pylT9lIw0bTFkxmKB5JcHLpUUBy7rUAvdmqogLQeU0GQR9WSMJLNIadVaFfawWiNW2
-         YGfcI+owG6oEM8AkrjFbhMhTWs4d5o2Eyw6dyEHKNJC6Hr8VaCKuS5P/yOq2zWsp2vGN
-         PXQusdHZX7lOrdBNgB0AIVrC6aNoYohd0+d06uL+dhEEOAVCyazWXXjnDjZ60kn8DcF4
-         osHCp7HsWKWl0tVp5JnkEqjkpScZBdnXolFGMsqYuAY0bwp93sJ/DI5iW3w2x8QRA8Yz
-         CjS9bgFfJ/yt7gqnF45KWQPeI2nBEv66t6qn9bTLjAps01WHB4uu6Zr7IY71Y9VWk1Nz
-         hYlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ea8AtOwQ/gMHrbAh9hOSuI0GnsfUP2/RqRm+KGMP9/0=;
-        b=VyMit+ll/WJjqUJPG+ewniaFg8Viw4ifzSCQNX+wSM+ITn2mgM7lOoTXw9yz1Pvzr7
-         s4UAU7hdyUnYIVJ3wak8h879iNoPzP6ByneIsWsx47gKjNP7SG7OefJBNyLh7Tw/ReAy
-         o7/PFfeb5BlYj/ruEy1RoAnSeWvmXhkseCkAWHMVth+EHQrbmeM/GsXfwyPjCPFCj72X
-         FA3CaU+1qzEOisxoWkOzMFNcNjA1yBry0MYl1Ge9btwIXyw2se5dHbj08iDQIynCqYmq
-         wMeqLqKUSdr/iS/7TrBW3b6HCWdoE9nY/4sZ6ZWBsJs9kc+saN02m4lSI0kHX686vz/T
-         Q4Aw==
-X-Gm-Message-State: APjAAAUjhzJXgRndEDLoyMSuliQGE8VnX4OQSlsw1c1L7bHIWFY4ZUX9
-        VV5g5LEH57ls6/CXm5TtMKo=
-X-Google-Smtp-Source: APXvYqxPXdfD1riKGP6ycbMcTm7jgmPDhZ6Z9zNCVB7POjIw7Y/66PW6oHD/HEsn3QEHkJNGiDpIUA==
-X-Received: by 2002:a62:2ccf:: with SMTP id s198mr23517241pfs.42.1574077305359;
-        Mon, 18 Nov 2019 03:41:45 -0800 (PST)
-Received: from suzukaze.ipads-lab.se.sjtu.edu.cn ([202.120.40.82])
-        by smtp.gmail.com with ESMTPSA id w62sm22656779pfb.15.2019.11.18.03.41.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2019 03:41:44 -0800 (PST)
-From:   Chuhong Yuan <hslester96@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: [PATCH] usb: dwc3: meson-g12a: add missed regulator_disable
-Date:   Mon, 18 Nov 2019 19:41:35 +0800
-Message-Id: <20191118114135.25666-1-hslester96@gmail.com>
-X-Mailer: git-send-email 2.24.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+        id S1726937AbfKRM6x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 07:58:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45950 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726490AbfKRM6x (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 18 Nov 2019 07:58:53 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id D9017B12C;
+        Mon, 18 Nov 2019 12:58:51 +0000 (UTC)
+Message-ID: <1574081930.2698.5.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in chaoskey_disconnect
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com>
+Cc:     linux-usb@vger.kernel.org
+Date:   Mon, 18 Nov 2019 13:58:50 +0100
+In-Reply-To: <0000000000006062280596203360@google.com>
+References: <0000000000006062280596203360@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver forgets to disable the regulator in probe failure and remove.
-Add the missed calls to fix it.
+Am Mittwoch, den 30.10.2019, 05:52 -0700 schrieb syzbot:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    ff6409a6 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15e1ba24e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3230c37d442895b7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=6d8505fcdf25f00ac276
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=169b8904e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166f3104e00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+6d8505fcdf25f00ac276@syzkaller.appspotmail.com
 
-Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
+#syz test: https://github.com/google/kasan.git ff6409a6
+
+From ca453a46d8ecd1e41ce4a39d99a17efb4ee76ab8 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Mon, 18 Nov 2019 13:55:17 +0100
+Subject: [PATCH] chaoskey: DEBUGGING ONLY
+
+THIS IS A SANITY TEST
 ---
- drivers/usb/dwc3/dwc3-meson-g12a.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/usb/misc/chaoskey.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-index 8a3ec1a951fe..d9723d1ad8eb 100644
---- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -458,7 +458,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 						dwc3_meson_g12a_irq_thread,
- 						IRQF_ONESHOT, pdev->name, priv);
- 		if (ret)
--			return ret;
-+			goto err_regulator_disable;
- 	}
+diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
+index 87067c3d6109..252817bc1087 100644
+--- a/drivers/usb/misc/chaoskey.c
++++ b/drivers/usb/misc/chaoskey.c
+@@ -202,7 +202,7 @@ static int chaoskey_probe(struct usb_interface *interface,
+ 	dev->hwrng.read = chaoskey_rng_read;
+ 	dev->hwrng.quality = 1024;
  
- 	dwc3_meson_g12a_usb_init(priv);
-@@ -467,7 +467,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- 	for (i = 0 ; i < PHY_COUNT ; ++i) {
- 		ret = phy_init(priv->phys[i]);
- 		if (ret)
--			return ret;
-+			goto err_regulator_disable;
- 	}
+-	dev->hwrng_registered = (hwrng_register(&dev->hwrng) == 0);
++	//dev->hwrng_registered = (hwrng_register(&dev->hwrng) == 0);
+ 	if (!dev->hwrng_registered)
+ 		usb_err(interface, "Unable to register with hwrng");
  
- 	/* Set PHY Power */
-@@ -517,7 +517,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
- err_phys_exit:
- 	for (i = 0 ; i < PHY_COUNT ; ++i)
- 		phy_exit(priv->phys[i]);
--
-+err_regulator_disable:
-+	if (priv->vbus)
-+		regulator_disable(priv->vbus);
- 	return ret;
- }
- 
-@@ -536,6 +538,9 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
- 		phy_exit(priv->phys[i]);
- 	}
- 
-+	if (priv->vbus)
-+		regulator_disable(priv->vbus);
-+
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
- 	pm_runtime_set_suspended(dev);
 -- 
-2.24.0
+2.16.4
 
