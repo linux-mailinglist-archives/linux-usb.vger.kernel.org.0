@@ -2,82 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BE8FFFD5
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 08:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C0601000C9
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 09:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbfKRHxa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 02:53:30 -0500
-Received: from mga07.intel.com ([134.134.136.100]:29559 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726315AbfKRHxa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 18 Nov 2019 02:53:30 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Nov 2019 23:53:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,319,1569308400"; 
-   d="scan'208";a="196047576"
-Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by orsmga007.jf.intel.com with ESMTP; 17 Nov 2019 23:53:24 -0800
-Subject: Re: [LKP] Re: [pipe] d60337eff1:
- BUG:kernel_NULL_pointer_dereference,address
-To:     David Howells <dhowells@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Cc:     torvalds@linux-foundation.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        nicolas.dichtel@6wind.com, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lkp@lists.01.org
-References: <9279.1573824532@warthog.procyon.org.uk>
- <20191110031348.GE29418@shao2-debian>
- <6853.1573834946@warthog.procyon.org.uk>
-From:   kernel test robot <rong.a.chen@intel.com>
-Message-ID: <35daca93-ff2b-2c7d-b837-72396ca0677a@intel.com>
-Date:   Mon, 18 Nov 2019 15:53:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726460AbfKRIwQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 03:52:16 -0500
+Received: from mail-qv1-f65.google.com ([209.85.219.65]:35764 "EHLO
+        mail-qv1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfKRIwQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 03:52:16 -0500
+Received: by mail-qv1-f65.google.com with SMTP id y18so6194302qve.2
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2019 00:52:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=90C7hPp0jjaPYLe8/qhSTZ7vmNH4K6cF3RIbxB4NlI8=;
+        b=h+DlLwIYPwkEGm7ZwxM9QJLnJfsunRWIedIWJ9B3S7ojb1/F7YdnBvGfpCWtt2P6eE
+         ZHN9kG3Fa8IBk9MopizRa68GDkKaxUIODQul193ZJ4n95myJmTqCaab7imPgHrruhtwh
+         c9xP7YeXINGmtqGVaMBieRXt4fgzVhPTaibcqilhjpTPndqwFNazKjFwVxX2wOCTRcN4
+         k4CIUGjRLoQcM9SWQCl3r7Y5GAGb1LKWQmg7KTAtR4LW9kQ8Du0hgbXlcEkgtxP7Uqam
+         KZ73heL7JguFUx9b73bmSdJkrJk1ceY85PzJZsMP0X49WMs5mAeG57IFT9mRkLgv9awm
+         LGFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=90C7hPp0jjaPYLe8/qhSTZ7vmNH4K6cF3RIbxB4NlI8=;
+        b=a3Jepf3PWhokHGOR7zAdTu63BZpXX/5OTA1PrebQpXUYTsjkFnJtF+5Dyj+zcDQrBD
+         IfFLXheM25d7ELR/udet6tM0ML7i7i2IUCyCBR2qCmn5NCof2w9weS7fQSBlS2JbPpDY
+         oG4jM99ndHL3o51kDFTEPkEfQCbHyeA56FxtdPdiTH5IkAUn2ex5S/S77sHhvJ+REW4k
+         GFSE2L6Q1Pwv2oDZ8cacSZa26njvhiSQc+FFuyPrbciXvptUORS2RML3zJzif9vGa2OJ
+         bCCpZmjq4k76AQXVeP8Zg1My3qPO/YS8h5V8zVKRZJW7BHvfCpAXHdxQQpA6fdjbbW0z
+         ANaQ==
+X-Gm-Message-State: APjAAAXWokL5MXCpTqUrytPPmYday3O19XuMaYQHqP0EC61ACOn5h+P1
+        h016C4LezFsJ6ucz17hJkCcilHxl/His7Dxb+sKo2g==
+X-Google-Smtp-Source: APXvYqx4wlDkliAAM0cS02/2UUhvIK8zKh6KQrQBhzlkEtuIsELYprvnD3s0HH+9QRTRcCKli2zottiLXVwM9jiUuoI=
+X-Received: by 2002:a0c:bf4d:: with SMTP id b13mr3703586qvj.115.1574067134850;
+ Mon, 18 Nov 2019 00:52:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <6853.1573834946@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <CAD8Lp47HgAi-86ni5WHhZT1-sEd7oJEZUiG6KNU66qpmRCfaXw@mail.gmail.com>
+ <20191025162814.GA130180@google.com> <CAD8Lp44f9EQS93VkYUfnZYPjHMpOVCPuGoKD+dZ+=+tfyZHU5w@mail.gmail.com>
+In-Reply-To: <CAD8Lp44f9EQS93VkYUfnZYPjHMpOVCPuGoKD+dZ+=+tfyZHU5w@mail.gmail.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Mon, 18 Nov 2019 16:52:04 +0800
+Message-ID: <CAD8Lp46qQootoWqOA5fyE=y0stqr+9qTmXymvNsmX9ghjox=aw@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi David,
+Hi Bjorn,
 
-Yes, it can fix the problem.
+Any further ideas here? Do we go ahead with the quirk or try to find a
+more generic approach?
 
-Best Regards,
-Rong Chen
-
-On 11/16/2019 12:22 AM, David Howells wrote:
-> Actually, no, this is the fix:
+On Mon, Oct 28, 2019 at 2:32 PM Daniel Drake <drake@endlessm.com> wrote:
+> It looks like we can detect that the reset has failed (or more
+> precisely, not quite completed) by reading PCI_COMMAND (value not yet
+> 0) or PCI_PM_CTRL (doesn't yet indicate D0 state, we already log a
+> warning for this case).
 >
-> diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> index 7006b5b2106d..be2fc5793ddd 100644
-> --- a/lib/iov_iter.c
-> +++ b/lib/iov_iter.c
-> @@ -537,7 +537,7 @@ static size_t push_pipe(struct iov_iter *i, size_t size,
->   		buf->ops = &default_pipe_buf_ops;
->   		buf->page = page;
->   		buf->offset = 0;
-> -		buf->len = max_t(ssize_t, left, PAGE_SIZE);
-> +		buf->len = min_t(ssize_t, left, PAGE_SIZE);
->   		left -= buf->len;
->   		iter_head++;
->   		pipe->head = iter_head;
->
-> David
-> _______________________________________________
-> LKP mailing list -- lkp@lists.01.org
-> To unsubscribe send an email to lkp-leave@lists.01.org
+> From that angle, another workaround possibility is to catch that case
+> and then retry the PCI_PM_CTRL write and delay once more.
 
+Thanks
+Daniel
