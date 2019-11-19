@@ -2,140 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA4D100D59
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2019 21:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33001101258
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 05:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbfKRU4H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 18 Nov 2019 15:56:07 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34754 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726536AbfKRU4G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 15:56:06 -0500
-Received: (qmail 4606 invoked by uid 2102); 18 Nov 2019 15:56:05 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 18 Nov 2019 15:56:05 -0500
-Date:   Mon, 18 Nov 2019 15:56:05 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Michael Olbrich <m.olbrich@pengutronix.de>,
-        Felipe Balbi <balbi@kernel.org>
-cc:     Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: composite: split spinlock to avoid recursion
-In-Reply-To: <20191114132330.iw4ucbfaxofi6cfy@pengutronix.de>
-Message-ID: <Pine.LNX.4.44L0.1911181548090.1479-100000@iolanthe.rowland.org>
+        id S1727217AbfKSEFl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 18 Nov 2019 23:05:41 -0500
+Received: from mail-vk1-f194.google.com ([209.85.221.194]:40570 "EHLO
+        mail-vk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727533AbfKSEFk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 18 Nov 2019 23:05:40 -0500
+Received: by mail-vk1-f194.google.com with SMTP id k24so4717521vko.7
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2019 20:05:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LIrHQsnQ6V+BzwizI1F2l2BgBcA0oa40rJqoMOUJJDE=;
+        b=HCeOD6Tu76jGBNN2vs/QFo9RoiWqR8su519GDX3xUu3RA+PhDKU8rfJhqf8Eytvv3m
+         cBf/KnZYDLRM8fHHTz1XmuDdNZnJR4EsstGmBzLt4vkDu0qpNZGEyWLQGmDCfxkSN7JT
+         FC/a1JUueTcjv7gMT8S3ww/7ayWyICVvJOioc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LIrHQsnQ6V+BzwizI1F2l2BgBcA0oa40rJqoMOUJJDE=;
+        b=dbnq2buRBl5UH2zQD4qtBHyPJ4bkff7/UPtfyIXAsPDugDM9tEWL1Bgvlc3BaYmvAq
+         ab3H8h5GkOZOKPxRdshwi1HD2hF97658DTa8rcNBHNEGDAL14BZ7SffwP2KcJub1LMjl
+         4Vy9khsxrRipLbaQ5LbprdL98iHyPRo/OzHMYQ8iXhNAlP2xkK/6f0SAKM1WxleF/U+5
+         77TC+5RmMnX9LyXhmMk3QRaoBoXEhIeTeyinUfClE15Hip3nDl9vaJCgNfxtFqtLF93A
+         AnYXdflnS2JCMCrs+MvY5I8YSf5np2WpCfjNhdghFOVwvtmVtBFMcE6d3s2E48dPcKub
+         dLYg==
+X-Gm-Message-State: APjAAAX06Cpj71ZFAJB+30AlWxCdjoTP2VEp5h5DeIXux6PSC5Dcn132
+        i7Z9zzOTbkNJ1K1tXUgdZIO7oBICRb27pk5UfTtv3Q==
+X-Google-Smtp-Source: APXvYqxZjldlrzqFPxGpiEuY9hlr4GZvzrs6hiQjg39NYK3ahlpOSUNqc3f8+uwjpnSO86dKp8sB5dxpA5O5JpWNG1o=
+X-Received: by 2002:a1f:3f56:: with SMTP id m83mr13480943vka.51.1574136339707;
+ Mon, 18 Nov 2019 20:05:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+References: <20191117033149.259303-1-ikjn@chromium.org> <20191117071442.GC496402@kroah.com>
+In-Reply-To: <20191117071442.GC496402@kroah.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Tue, 19 Nov 2019 12:05:28 +0800
+Message-ID: <CAATdQgBSPHyhWsAvLE=_Fd990exgaZ+Dzftad7++ZjzGsSkmJA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] usb: override hub device bInterval with device node
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
+        Johan Hovold <johan@kernel.org>,
+        Nicolas Boitchat <drinkcat@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 14 Nov 2019, Michael Olbrich wrote:
+On Sun, Nov 17, 2019 at 3:14 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, Nov 17, 2019 at 11:31:49AM +0800, Ikjoon Jang wrote:
+> > This patchset enables hard wired hub device to use different bInterval
+> > from its descriptor when the hub has a combined device node.
+>
+> If it is a hard-wired hub, why can't you change that interval in the
+> firmware for that hub as you (as a platform owner) have control over
+> that?
 
-> On Wed, Nov 13, 2019 at 10:36:25AM -0500, Alan Stern wrote:
-> > On Wed, 13 Nov 2019, Peter Chen wrote:
-> > > On 19-11-12 10:33:18, Michael Olbrich wrote:
-> > > > 'delayed_status' and 'deactivations' are used completely independent but
-> > > > they share the same spinlock. This can result in spinlock recursion:
-> > > > 
-> > > > BUG: spinlock recursion on CPU#1, uvc-gadget/322
-> > > >  lock: 0xffffffc0570364e0, .magic: dead4ead, .owner: uvc-gadget/322, .owner_cpu: 1
-> > > > CPU: 1 PID: 322 Comm: uvc-gadget Tainted: G         C O      5.3.0-20190916-1+ #55
-> > > > Hardware name: XXXXX (DT)
-> > > > Call trace:
-> > > >  dump_backtrace+0x0/0x178
-> > > >  show_stack+0x24/0x30
-> > > >  dump_stack+0xc0/0x104
-> > > >  spin_dump+0x90/0xa0
-> > > >  do_raw_spin_lock+0xd8/0x108
-> > > >  _raw_spin_lock_irqsave+0x40/0x50
-> > > >  composite_disconnect+0x2c/0x80
-> > > >  usb_gadget_disconnect+0x84/0x150
-> > > >  usb_gadget_deactivate+0x64/0x120
-> > > >  usb_function_deactivate+0x70/0x80
-> > > >  uvc_function_disconnect+0x20/0x58
-> > > >  uvc_v4l2_release+0x34/0x90
-> > > >  v4l2_release+0xbc/0xf0
-> > > >  __fput+0xb0/0x218
-> > > >  ____fput+0x20/0x30
-> > > >  task_work_run+0xa0/0xd0
-> > > >  do_notify_resume+0x2f4/0x340
-> > > >  work_pending+0x8/0x14
-> > > > 
-> > > > Fix this by using separate spinlocks.
-> > > 
-> > > This issue may be introduced by 0a55187a1ec8c ("USB: gadget core: Issue
-> > > ->disconnect() callback from usb_gadget_disconnect()"), which adds
-> > > gadget's disconnect at usb_gadget_disconnect. Add Alan, if he is Ok
-> > > with your patch, you may cc to stable tree.
-> > 
-> > I wasn't aware of the dual usage of that lock in the composite core 
-> > (and 0a55187a1ec8c touches only the gadget core, not composite.c).
-> > 
-> > In any case, I don't have a good feel for how the locking is supposed 
-> > to work in the composite core.  This is really something Felipe should 
-> > look at.
-> > 
-> > Would a better fix be to change usb_function_deactivate() so that it
-> > doesn't hold the lock while calling usb_gadget_deactivate()?  Maybe
-> > increment cdev->deactivations unconditionally before dropping the lock
-> > (for mutual exclusion) and then decrement it again if the call fails?
-> 
-> Hmm, I think, that would mean that usb_gadget_activate() may be called
-> while usb_gadget_deactivate() is still running right? That's not
-> acceptable, is it?
+yes, actually that's the best option, but the hub devices were shipped with
+mask ROM we can't change the descriptors.
 
-It's a little tricky.  The lock in question belongs to the composite 
-core, not the UDC core, so it doesn't really apply to the 
-usb_gadget_{de}activate() routines.
-
-As for mutual exclusion of usb_gadget_activate() and
-usb_gadget_deactivate(), I don't know that anyone has ever considered
-the matter.
-
-> Anyways. Something else is needed because executing usb_gadget_deactivate()
-> under the spinlock has another problem. It's hard to reproduce, but we've
-> seen this one:
-> 
-> BUG: scheduling while atomic: pipewire/260/0x00000002
-> Modules linked in: allegro(C) regmap_mmio v4l2_mem2mem xlnx_vcu st1232 uio_pdrv_genirq
-> Preemption disabled at: [<ffffff801061dc40>] usb_function_deactivate+0x30/0x80
-> CPU: 1 PID: 260 Comm: pipewire Tainted: G         C O 5.3.0-20191112-1 #2
-> Hardware name: Wolfvision ZynqMP PF4 (DT)
-> Call trace:
->  dump_backtrace+0x0/0x178
->  show_stack+0x24/0x30
->  dump_stack+0xc0/0x104
->  __schedule_bug+0xb0/0xc0
->  __schedule+0x354/0x4d8
->  schedule+0x44/0xd8
->  schedule_timeout+0x1b4/0x380
->  wait_for_common+0xc0/0x188
->  wait_for_completion_timeout+0x2c/0x38
->  dwc3_gadget_pullup+0x90/0xb0
->  usb_gadget_disconnect+0x38/0x150
->  usb_gadget_deactivate+0x64/0x120
->  usb_function_deactivate+0x70/0x80
->  uvc_function_disconnect+0x20/0x58
->  uvc_v4l2_release+0x34/0x90
->  v4l2_release+0xbc/0xf0
->  __fput+0x90/0x208
->  ____fput+0x20/0x30
->  task_work_run+0x98/0xb8
->  do_notify_resume+0x2f4/0x340
->  work_pending+0x8/0x14
-> dwc3 fe200000.usb: timed out waiting for SETUP phase
-> 
-> Or maybe it's incorrect for dwc3_gadget_pullup() to sleep?
-
-It isn't documented, so there's no definitive answer.  My feeling is 
-that the UDC driver pullup routines should not sleep, but that's not 
-official.
-
-Of course, Felipe should have the last word on this.
-
-Alan Stern
-
+>
+> thanks,
+>
+> greg k-h
