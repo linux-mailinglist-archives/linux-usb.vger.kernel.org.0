@@ -2,99 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 158CD102331
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 12:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BB710238D
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 12:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728264AbfKSLex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 06:34:53 -0500
-Received: from canardo.mork.no ([148.122.252.1]:48253 "EHLO canardo.mork.no"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727638AbfKSLex (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Nov 2019 06:34:53 -0500
-Received: from miraculix.mork.no ([IPv6:2a02:2121:282:91e0:68e2:39ff:fe1c:1a78])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id xAJBYXhW005061
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Tue, 19 Nov 2019 12:34:34 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1574163275; bh=3c0RkDqtClK7mnfJEI2VW+D7m35xk5cvEa+CdQvxvlU=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=XbtyWj71ebSSkaSbHE9p0BYzxA0Bywzz+D5S1xQB7GAJ4yvnk7o1aA4nqCbtyjyNf
-         /1CKdVbUS2uZ7Y+89h38zHb0G4odf9+ZUzM/3ynNujqk2Nk2/LQt0bmpXPrefl8gnI
-         D2IM6E0b39i+uwWNLNCsIKwDPaJdQ+/CRBn8dcMY=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
-        (envelope-from <bjorn@mork.no>)
-        id 1iX1m8-0007Jf-K6; Tue, 19 Nov 2019 12:34:28 +0100
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Oliver Neukum <oneukum@suse.de>
-Cc:     syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, baijiaju1990@gmail.com,
-        bigeasy@linutronix.de, colin.king@canonical.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        yuehaibing@huawei.com
-Subject: Re: INFO: task hung in wdm_flush
-Organization: m
-References: <0000000000003313f0058fea8435@google.com>
-        <8736ek9qir.fsf@miraculix.mork.no> <1574159504.28617.5.camel@suse.de>
-Date:   Tue, 19 Nov 2019 12:34:28 +0100
-In-Reply-To: <1574159504.28617.5.camel@suse.de> (Oliver Neukum's message of
-        "Tue, 19 Nov 2019 11:31:44 +0100")
-Message-ID: <87pnho85h7.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        id S1727504AbfKSLsd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 06:48:33 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35682 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726351AbfKSLsd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 06:48:33 -0500
+Received: by mail-wm1-f67.google.com with SMTP id 8so3227211wmo.0
+        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 03:48:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:date:from:user-agent:mime-version:to:cc:subject
+         :references:in-reply-to:content-transfer-encoding;
+        bh=ry/N2H6IErxUximdD1yn10PnjeL9UQUa13dI4Z3DXGI=;
+        b=PWBEGZCIclelpZQaf7gRWAL/Bi6mEzGboeWLHPUz6DCTvNyw3hDgB1OdaKR4KuWP2N
+         mJN4tu+2bmvj0TWgi+Bgo0jfCWANyT5pdiJNC8zcaaknM8T5ezD175eWOFf2tLlfF83w
+         w76n1/vQLkfRsd2hi+rz4wuijsTj9il3vR4/XGq7bMgxpeM1ZRk9JLDABTq2WYGaGfHP
+         ug9Ml1ri2MRdYxucc05Utvop6cZrqAI88QY2yLJg47OHhBDTYMCykCOi0MHhp1/ANGld
+         jtclc5Osg1FB1p+drHoxXB5O7Dt40lWC4Sbj3LuxaosoTNT4d4ehkoqfV/qfAsJzjoeY
+         JUoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
+         :cc:subject:references:in-reply-to:content-transfer-encoding;
+        bh=ry/N2H6IErxUximdD1yn10PnjeL9UQUa13dI4Z3DXGI=;
+        b=k5nhHNr/PxTFdmIalQY/oM7c3rc7qm+zyMSI+BuJWOPRm356HBdeboAjYXsd5FzfRx
+         88AW3+4wC19JmUqJirpI4o/Hdvd+ZLKd+0Sewg3QAGhmpb/ymiPI6edkyKfZmjh3Z3xG
+         SUcP4YiiFyJhlzelVqjJ450dS4FR4vGoK1qzyyZ9VYYELuHK0cQJEQCoYhEEsjLSNKCC
+         8wC4NaXsuMMQgLOR39pHbZo8256Lu3jlOR9msN2Pszp+dqXr3ts/+X1YUVRh8KaIIeUU
+         tpNHYCfu6axG+99zisGIj+czcJh7u28VIfwrACxvgo94MqXAiN9jiRbhXUPXVzPJ59kU
+         ZVow==
+X-Gm-Message-State: APjAAAVx9gtL0S62vgKQAmFPUIfSF1uE3c/MLoT7hV0gtvbHyUL7tJo2
+        RE2l+J1Zq0KdDB0XLuFB5eg=
+X-Google-Smtp-Source: APXvYqy41BtqKW8E1Rwq+sLnJEuAG7B1lQpEtCbWeMz5wj/m3VLtPWrnpv2Qpj7hKNkp2TVJO7QMww==
+X-Received: by 2002:a1c:9dd3:: with SMTP id g202mr5238877wme.43.1574164108719;
+        Tue, 19 Nov 2019 03:48:28 -0800 (PST)
+Received: from [89.139.251.88] (89-139-251-88.bb.netvision.net.il. [89.139.251.88])
+        by smtp.gmail.com with ESMTPSA id z8sm26274636wrp.49.2019.11.19.03.48.26
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Tue, 19 Nov 2019 03:48:27 -0800 (PST)
+Message-ID: <5DD3D689.8000609@gmail.com>
+Date:   Tue, 19 Nov 2019 13:48:25 +0200
+From:   Eli Billauer <eli.billauer@gmail.com>
+User-Agent: Mozilla/5.0 (X11; U; Linux x86_64; en-US; rv:1.9.1.12) Gecko/20100907 Fedora/3.0.7-1.fc12 Thunderbird/3.0.7
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.101.4 at canardo
-X-Virus-Status: Clean
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+CC:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci: No XHCI_TRUST_TX_LENGTH check in the absence of
+ matching TD
+References: <20191113130609.32831-1-eli.billauer@gmail.com> <6ad6dceb-a938-a2b7-c535-32bd3404e53d@linux.intel.com>
+In-Reply-To: <6ad6dceb-a938-a2b7-c535-32bd3404e53d@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oliver Neukum <oneukum@suse.de> writes:
-> Am Dienstag, den 19.11.2019, 10:14 +0100 schrieb Bj=C3=B8rn Mork:
+Hello,
+
+I've taken the liberty to add parentheses for sake of clarity, so I 
+tested the following patch (against kernel 5.3.0) with my Resesas USB 
+controller. And as expected, it does the job: The warnings are not printed.
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9741cdeea9d7..b062e3a19e95 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2378,7 +2378,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+      case COMP_SUCCESS:
+          if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+              break;
+-        if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
++        if ((xhci->quirks & XHCI_TRUST_TX_LENGTH) ||
++            ep_ring->last_td_was_short)
+              trb_comp_code = COMP_SHORT_PACKET;
+          else
+              xhci_warn_ratelimited(xhci,
+
+So it solves the problem for me, and hopefully for future Renesas 
+controllers with the same issue.
+
+Regards,
+    Eli
+
+On 18/11/19 18:08, Mathias Nyman wrote:
+> On 13.11.2019 15.06, eli.billauer@gmail.com wrote:
+>> From: Eli Billauer <eli.billauer@gmail.com>
+>>
+>> When an IN transfer ends with a short packet, the xHCI controller is
+>> required to submit an event TRB with Completion Code COMP_SHORT_PACKET
+>> against the data TRB that was in effect when the short packet 
+>> arrived, as
+>> well as any event TRBs it submits on behalf of this transfer.
+>>
+>> Alas, some controllers (e.g. Renesas) mark the subsequent events TRBs 
+>> (if
+>> any) with COMP_SUCCESS. As these subsequent event TRBs are useless, they
+>> are ignored on the basis that they have no matching TD queued (it was
+>> dequeued in response to the first COMP_SHORT_PACKET event TRB).
+>>
+>> Accordingly, the quirk handling and kernel log warning is moved to after
+>> the TD match check, in particular in order to avoid unnecessary warnings
+>> messages.
+>>
+>> Signed-off-by: Eli Billauer <eli.billauer@gmail.com>
+>> ---
+>>   drivers/usb/host/xhci-ring.c | 19 +++++++++++--------
+>>   1 file changed, 11 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index 9741cdeea9d7..96680eb71a45 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -2376,14 +2376,6 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>>        * transfer type
+>>        */
+>>       case COMP_SUCCESS:
+>> -        if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+>> -            break;
+>> -        if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+>> -            trb_comp_code = COMP_SHORT_PACKET;
+>> -        else
+>> -            xhci_warn_ratelimited(xhci,
+>> -                          "WARN Successful completion on short TX 
+>> for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
+>> -                          slot_id, ep_index);
+>>       case COMP_SHORT_PACKET:
+>>           break;
+>>       /* Completion codes for endpoint stopped state */
+>> @@ -2586,6 +2578,17 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>>               skip_isoc_td(xhci, td, event, ep, &status);
+>>               goto cleanup;
+>>           }
+>> +
+>> +        if ((trb_comp_code == COMP_SUCCESS) &&
+>> +            (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) != 0)) {
+>> +            if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+>> +                trb_comp_code = COMP_SHORT_PACKET;
+>> +            else
+>> +                xhci_warn_ratelimited(xhci,
+>> +                              "WARN Successful completion on short 
+>> TX for slot %u ep %u: needs XHCI_TRUST_TX_LENGTH quirk?\n",
+>> +                              slot_id, ep_index);
+>> +        }
+>> +
+>>           if (trb_comp_code == COMP_SHORT_PACKET)
+>>               ep_ring->last_td_was_short = true;
+>>           else
+>>
 >
->> Anyway, I believe this is not a bug.
->>=20
->> wdm_flush will wait forever for the IN_USE flag to be cleared or the
+> I'd hate to rip out the success case from the switch statement where 
+> the other
+> completion codes are handled. We're still only making a choice about a 
+> warning
+> message
 >
-> Damn. Too obvious. So you think we simply have pending output that does
-> just not complete?
-
-I do miss a lot of stuff so I might be wrong, but I can't see any other
-way this can happen.  The out_callback will unconditionally clear the
-IN_USE flag and wake up the wait_queue.
-
->> DISCONNECTING flag to be set. The only way you can avoid this is by
->> creating a device that works normally up to a point and then completely
->> ignores all messages,
+> How about handling all COMP_SUCCESS cases with remaining data after a 
+> short
+> transfer as COMP_SHORT_PACKET by default?
 >
-> Devices may crash. I don't think we can ignore that case.
-
-Sure, but I've never seen that happen without the device falling off the
-bus.  Which is a disconnect.
-
-But I am all for handling this *if* someone reproduces it with a real
-device.  I just don't think it's worth the effort if it's only a
-theoretical problem.
-
->>  but without resetting or disconnecting. It is
->> obviously possible to create such a device. But I think the current
->> error handling is more than sufficient, unless you show me some way to
->> abuse this or reproduce the issue with a real device.
+> The code below won't behave exactly the same as in your patch, but should
+> do the trick in your Renesas case as well. Can you try it out?
 >
-> Malicious devices are real. Potentially at least.
-> But you are right, we need not bend over to handle them well, but we
-> ought to be able to handle them.
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9ebaa8e132a9..d23f7408c81f 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2381,7 +2381,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>         case COMP_SUCCESS:
+>                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+>                         break;
+> -               if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
+> +               if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
+> +                   ep_ring->last_td_was_short)
+>                         trb_comp_code = COMP_SHORT_PACKET;
+>                 else
+>                         xhci_warn_ratelimited(xhci,
+>
+>
 
-Sure, we need to handle malicious devices.  But only if they can be used
-for real harm.
-
-This warning requires physical acceess and is only slightly annoying.
-Like a USB device making loud farting sounds.  You'd just disconnect the
-device.  No need for Linux to detect the sound and handle it
-automatically, I think.
-
-
-Bj=C3=B8rn
