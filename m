@@ -2,56 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDAD10259A
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 14:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA49A1025AE
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 14:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbfKSNk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 08:40:56 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:33110 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726202AbfKSNk4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 08:40:56 -0500
-Received: by mail-pj1-f66.google.com with SMTP id o14so2668057pjr.0
-        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 05:40:55 -0800 (PST)
+        id S1726590AbfKSNoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 08:44:07 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:37217 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725798AbfKSNoH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 08:44:07 -0500
+Received: by mail-wr1-f66.google.com with SMTP id t1so23894943wrv.4
+        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 05:44:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=8pE8pPkHkDDLt3QigEfCxoiBA949a7luPGzhbzhkI8E=;
-        b=J3EQbUz3UlT7bDooirHZ0kCufikX3d3TZJjTS5WunWoT4SnMtg7rjpXYFNnMAFrjge
-         2TBI5xp6AjPS70M1xrVel+xlMr6XLnw3OEI1jft40g+MyR3TByFgOHV1E3d+mx3WMOl3
-         vFZxBav8Wlole8vtayznoAWir5K48IFtZ7NA6HNPyxZJ06yKRfcux9VM6yTBG34Ax9ze
-         ti8YdQxJ1MeNN3ll1JKQtMMuXObzPry6yMKtWF9ZCAeCqhPrjpOnTdiN9l/O4QOKI161
-         VvUgCRDAH0Gnu2wtsNX+DnutAMf6lWaZTlITHnGc41PjgaT5e4/gGAGlJ0hhmjuSqJVn
-         jlaA==
+        bh=NPXkanGwTra9zNtpiDmZpKUZWH2aDlhfF0p9ZK7F60Q=;
+        b=pv4D8ftxPbibEKdKZJTZi2Lc9qYkpTlqxu2BbB/cgRSHniM++dSP3tQzxx+UiuWVEo
+         cxKe776UEWDRRA53ppc+mYyexXr9kShoP+hwT5isSOTrRxpHkXdUTI1oPRK2DAeGRW5N
+         6mGiVeTghCf8vR1Cc19+HYMwybyJLk8VoU/7ZhZTO1/sT1mFKnDKTNKLmDLbrdNfb+JK
+         KW3LK74xxxLD3vuF3B39GWHsoYcZXHUMUBTzGPlzMB+HtkArm+E0RNb0eO/ZMOsVSowe
+         lnZLwSO4UhqBqL82EOdbFZFrtH+qGXkWZuBUM65lNPvQ8LUx2v42FN7igP4IXR0zkefP
+         0b0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=8pE8pPkHkDDLt3QigEfCxoiBA949a7luPGzhbzhkI8E=;
-        b=ZyodPTBRYTvkktnV7rOV9dQS3ijpkXCqEdacSTaGzS/e7QSsM3KDYJpcqMDv5655FN
-         XdKwWDd7hJk6WlR/OZAyCAdT/uNB2IRGeSNr5EnN8n9lnW8ai/A0ADG3Psm1PMSLmJxO
-         7fD3OBimDCa12JrgpKKWF/p0xxKLmWoNw7MpAbVHKHfdCifMontt7HHQE+gC/P3GESy9
-         60abE+p+kx3WJZqQfzAxIcJ7oU9Ff4Bfqski+FQLnXXatSX8ybO1zNzGmg8hWzZJWG/V
-         jkgCLfJwqLrwHyhJwc/gCwLG8xd1IqrlfMo1ivo+RCGISdEHTWKtRqrFfghSbkHD5f7T
-         LVMQ==
-X-Gm-Message-State: APjAAAWuwVvZwmQb+lqMoGc5vL4LM+c+zKkzqy7Sodu4vFwQ0Nnu59DJ
-        V6WOXKSPj9jDnlc7Ck2Ft1cBDmaV9LCt8mUiwDXi4w==
-X-Google-Smtp-Source: APXvYqwFXOSBIQi6BDrDLOlhUUYL/kCooazHhgSGB/efL9ax/Op0/j0hQdhssBB/UyJ5k3mlBTO7Y9NYE1s2U4JDgUo=
-X-Received: by 2002:a17:90a:35d0:: with SMTP id r74mr6527470pjb.47.1574170855102;
- Tue, 19 Nov 2019 05:40:55 -0800 (PST)
+        bh=NPXkanGwTra9zNtpiDmZpKUZWH2aDlhfF0p9ZK7F60Q=;
+        b=XpC+Kd42cJSW95TkhXCDOY7RQ4Pb7NsNn0BzsG4jKSsmNEzr0repW6Eg4s9QdX5l92
+         Qi2nfwVbt57hkcrxcE/l9jvuSjVaGbGcLUK0LefbpOvXoQ9YejhhNcbt17dXy07MFB1a
+         wYTXzlnX6DUSTed4AGCj0ncbfWGTAu9rF8Ylx2wyNnWP01kI0f0YApAqaane8uZamHzb
+         WbbIHzbz1QQqDvx+7hbztDuDVWFXz3wXXLI3uMbs3wURcLlhEMS5sXq9Js6bJ3ItdPlD
+         A2ZH7UrgO5ZUaUZct/VuE/rIPoAarhWASMVrsDymkCdYn4aMepzHEJNYKQDHb/9Oh3nH
+         s4Yg==
+X-Gm-Message-State: APjAAAVJB4DZDtWgAol09tTCyi/ruB0y/VxtzIraxX1Hc3c2WRUPaFR+
+        XS6sMnThpWs4rGCcava+4ZqlsJPzYcLN7+m+FGsjcg==
+X-Google-Smtp-Source: APXvYqwm5INd+u/7dlbsf+OCbUpnB2M9C10GA+buNfmfxhSBZqlwe4C+jIzt0++15S3ZiKcUZgZ1lNe2nOzUe4Nyirs=
+X-Received: by 2002:adf:da52:: with SMTP id r18mr37250231wrl.167.1574171044042;
+ Tue, 19 Nov 2019 05:44:04 -0800 (PST)
 MIME-Version: 1.0
-References: <000000000000caab290588c4083e@google.com>
-In-Reply-To: <000000000000caab290588c4083e@google.com>
+References: <00000000000032a1d60588ec68dd@google.com>
+In-Reply-To: <00000000000032a1d60588ec68dd@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 19 Nov 2019 14:40:42 +0100
-Message-ID: <CAAeHK+wPRC7BFG4_p3jy6d00ahAK2g4Yb_2JtD2MO_3Q8BPp8A@mail.gmail.com>
-Subject: Re: general protection fault in drain_workqueue
-To:     syzbot <syzbot+09139d1a5ed6b898e29d@syzkaller.appspotmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
+Date:   Tue, 19 Nov 2019 14:43:52 +0100
+Message-ID: <CAAeHK+zCKUANWmUsBSq2h1zqCMyAjNHuLw8wG1m4C7UJtU9ynQ@mail.gmail.com>
+Subject: Re: general protection fault in device_del (3)
+To:     syzbot <syzbot+d7f6a4fd149fcdaf780b@syzkaller.appspotmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         LKML <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, petkan@nucleusys.com,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
@@ -59,8 +59,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 13, 2019 at 2:27 PM syzbot
-<syzbot+09139d1a5ed6b898e29d@syzkaller.appspotmail.com> wrote:
+On Wed, May 15, 2019 at 2:37 PM syzbot
+<syzbot+d7f6a4fd149fcdaf780b@syzkaller.appspotmail.com> wrote:
 >
 > Hello,
 >
@@ -68,90 +68,77 @@ On Mon, May 13, 2019 at 2:27 PM syzbot
 >
 > HEAD commit:    43151d6c usb-fuzzer: main usb gadget fuzzer driver
 > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17022474a00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=4183eeef650d1234
-> dashboard link: https://syzkaller.appspot.com/bug?extid=09139d1a5ed6b898e29d
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16a000a0a00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=95aff7278e7ff25e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d7f6a4fd149fcdaf780b
 > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15752dc8a00000
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17605e22a00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1045a49ca00000
 >
 > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+09139d1a5ed6b898e29d@syzkaller.appspotmail.com
+> Reported-by: syzbot+d7f6a4fd149fcdaf780b@syzkaller.appspotmail.com
 >
-> pegasus 4-1:0.103: can't reset MAC
+> usb 1-1: string descriptor 0 read error: -71
+> usb 1-1: claimed gadget: Vendor=0424 ProdID=c001 Bus=01 Device=02
+> usb 1-1: device path: /sys/bus/usb/devices/1-1:0.133
+> most_core: registered new device mdev0 (usb_device 1-1:0.133)
+> usb 1-1: USB disconnect, device number 2
 > kasan: CONFIG_KASAN_INLINE enabled
 > kasan: GPF could be caused by NULL-ptr deref or user memory access
 > general protection fault: 0000 [#1] SMP KASAN PTI
-> CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.1.0-rc3-319004-g43151d6 #6
+> CPU: 1 PID: 17 Comm: kworker/1:0 Not tainted 5.1.0-rc3+ #8
 > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
 > Google 01/01/2011
 > Workqueue: usb_hub_wq hub_event
-> RIP: 0010:__lock_acquire+0xadc/0x37c0 kernel/locking/lockdep.c:3573
-> Code: 00 0f 85 c1 1d 00 00 48 81 c4 10 01 00 00 5b 5d 41 5c 41 5d 41 5e 41
-> 5f c3 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f
-> 85 35 1e 00 00 49 81 7d 00 00 19 01 96 0f 84 e8 f5
-> RSP: 0018:ffff8880a8476e08 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: ffff8880a8469880 RCX: 0000000000000000
-> RDX: 0000000000000010 RSI: 0000000000000000 RDI: 0000000000000001
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffff8880a8477160 R11: ffff8880a8469880 R12: 0000000000000000
-> R13: 0000000000000080 R14: 0000000000000000 R15: 0000000000000001
-> FS:  0000000000000000(0000) GS:ffff8880ad000000(0000) knlGS:0000000000000000
+> RIP: 0010:device_del+0x76/0xb90 drivers/base/core.c:2224
+> Code: f1 f1 f1 f1 c7 40 04 00 07 f3 f3 65 48 8b 04 25 28 00 00 00 48 89 84
+> 24 88 00 00 00 31 c0 e8 c1 ce d7 fe 48 89 d8 48 c1 e8 03 <80> 3c 28 00 0f
+> 85 82 0a 00 00 48 8b 03 4c 8d 63 60 31 f6 4c 8d 7b
+> RSP: 0018:ffff8881d9e4f7c0 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8264999f RDI: 0000000000000000
+> RBP: dffffc0000000000 R08: ffff8881d9e33000 R09: ffffed1039951b26
+> R10: ffffed1039951b25 R11: ffff8881cca8d92f R12: ffff8881cde8f828
+> R13: ffff8881cca8d860 R14: ffff8881cde8f730 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
 > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f3a1f740000 CR3: 0000000090bc0000 CR4: 00000000001406f0
+> CR2: 00007f77df136000 CR3: 00000001cf00a000 CR4: 00000000001406e0
 > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 > Call Trace:
->   lock_acquire+0x10d/0x2f0 kernel/locking/lockdep.c:4211
->   __mutex_lock_common kernel/locking/mutex.c:925 [inline]
->   __mutex_lock+0xfe/0x12b0 kernel/locking/mutex.c:1072
->   drain_workqueue+0x29/0x470 kernel/workqueue.c:2934
->   destroy_workqueue+0x23/0x6d0 kernel/workqueue.c:4320
->   pegasus_dec_workqueue drivers/net/usb/pegasus.c:1133 [inline]
->   pegasus_dec_workqueue drivers/net/usb/pegasus.c:1129 [inline]
->   pegasus_probe+0x1073/0x15e0 drivers/net/usb/pegasus.c:1228
->   usb_probe_interface+0x31d/0x820 drivers/usb/core/driver.c:361
->   really_probe+0x2da/0xb10 drivers/base/dd.c:509
->   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
->   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
->   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
->   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
->   device_add+0xad2/0x16e0 drivers/base/core.c:2106
->   usb_set_configuration+0xdf7/0x1740 drivers/usb/core/message.c:2023
->   generic_probe+0xa2/0xda drivers/usb/core/generic.c:210
->   usb_probe_device+0xc0/0x150 drivers/usb/core/driver.c:266
->   really_probe+0x2da/0xb10 drivers/base/dd.c:509
->   driver_probe_device+0x21d/0x350 drivers/base/dd.c:671
->   __device_attach_driver+0x1d8/0x290 drivers/base/dd.c:778
->   bus_for_each_drv+0x163/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x223/0x3a0 drivers/base/dd.c:844
->   bus_probe_device+0x1f1/0x2a0 drivers/base/bus.c:514
->   device_add+0xad2/0x16e0 drivers/base/core.c:2106
->   usb_new_device.cold+0x537/0xccf drivers/usb/core/hub.c:2534
->   hub_port_connect drivers/usb/core/hub.c:5089 [inline]
+>   device_unregister+0x11/0x30 drivers/base/core.c:2301
+>   hdm_disconnect+0xdf/0x200 drivers/staging/most/usb/usb.c:1208
+>   usb_unbind_interface+0x1c4/0x8b0 drivers/usb/core/driver.c:423
+>   __device_release_driver drivers/base/dd.c:1082 [inline]
+>   device_release_driver_internal+0x431/0x4f0 drivers/base/dd.c:1113
+>   bus_remove_device+0x2ee/0x4c0 drivers/base/bus.c:556
+>   device_del+0x462/0xb90 drivers/base/core.c:2269
+>   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
+>   usb_disconnect+0x284/0x840 drivers/usb/core/hub.c:2197
+>   hub_port_connect drivers/usb/core/hub.c:4940 [inline]
 >   hub_port_connect_change drivers/usb/core/hub.c:5204 [inline]
 >   port_event drivers/usb/core/hub.c:5350 [inline]
->   hub_event+0x138e/0x3b00 drivers/usb/core/hub.c:5432
->   process_one_work+0x90f/0x1580 kernel/workqueue.c:2269
+>   hub_event+0x13f8/0x35a0 drivers/usb/core/hub.c:5432
+>   process_one_work+0x90a/0x1580 kernel/workqueue.c:2269
 >   process_scheduled_works kernel/workqueue.c:2331 [inline]
->   worker_thread+0x7b0/0xe20 kernel/workqueue.c:2417
->   kthread+0x313/0x420 kernel/kthread.c:253
+>   worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
+>   kthread+0x30e/0x420 kernel/kthread.c:253
 >   ret_from_fork+0x3a/0x50 arch/x86/entry/entry_64.S:352
 > Modules linked in:
-> ---[ end trace 01015c397d4bdcc4 ]---
-> RIP: 0010:__lock_acquire+0xadc/0x37c0 kernel/locking/lockdep.c:3573
-> Code: 00 0f 85 c1 1d 00 00 48 81 c4 10 01 00 00 5b 5d 41 5c 41 5d 41 5e 41
-> 5f c3 48 b8 00 00 00 00 00 fc ff df 4c 89 ea 48 c1 ea 03 <80> 3c 02 00 0f
-> 85 35 1e 00 00 49 81 7d 00 00 19 01 96 0f 84 e8 f5
-> RSP: 0018:ffff8880a8476e08 EFLAGS: 00010002
-> RAX: dffffc0000000000 RBX: ffff8880a8469880 RCX: 0000000000000000
-> RDX: 0000000000000010 RSI: 0000000000000000 RDI: 0000000000000001
-> RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffff8880a8477160 R11: ffff8880a8469880 R12: 0000000000000000
-> R13: 0000000000000080 R14: 0000000000000000 R15: 0000000000000001
-> FS:  0000000000000000(0000) GS:ffff8880ad000000(0000) knlGS:0000000000000000
+> ---[ end trace d819a3b977ff54ad ]---
+> RIP: 0010:device_del+0x76/0xb90 drivers/base/core.c:2224
+> Code: f1 f1 f1 f1 c7 40 04 00 07 f3 f3 65 48 8b 04 25 28 00 00 00 48 89 84
+> 24 88 00 00 00 31 c0 e8 c1 ce d7 fe 48 89 d8 48 c1 e8 03 <80> 3c 28 00 0f
+> 85 82 0a 00 00 48 8b 03 4c 8d 63 60 31 f6 4c 8d 7b
+> RSP: 0018:ffff8881d9e4f7c0 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: ffffffff8264999f RDI: 0000000000000000
+> RBP: dffffc0000000000 R08: ffff8881d9e33000 R09: ffffed1039951b26
+> R10: ffffed1039951b25 R11: ffff8881cca8d92f R12: ffff8881cde8f828
+> R13: ffff8881cca8d860 R14: ffff8881cde8f730 R15: 0000000000000000
+> FS:  0000000000000000(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
 > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f3a1f740000 CR3: 0000000090bc0000 CR4: 00000000001406f0
+> CR2: 00007f77df136000 CR3: 00000001cf00a000 CR4: 00000000001406e0
 > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 >
