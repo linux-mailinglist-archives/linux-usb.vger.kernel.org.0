@@ -2,104 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D3F102220
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 11:31:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 158CD102331
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 12:35:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727435AbfKSKbt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 05:31:49 -0500
-Received: from mx2.suse.de ([195.135.220.15]:33454 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725798AbfKSKbt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Nov 2019 05:31:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 33846B19C;
-        Tue, 19 Nov 2019 10:31:47 +0000 (UTC)
-Message-ID: <1574159504.28617.5.camel@suse.de>
-Subject: Re: INFO: task hung in wdm_flush
-From:   Oliver Neukum <oneukum@suse.de>
-To:     =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, baijiaju1990@gmail.com,
+        id S1728264AbfKSLex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 06:34:53 -0500
+Received: from canardo.mork.no ([148.122.252.1]:48253 "EHLO canardo.mork.no"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727638AbfKSLex (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Nov 2019 06:34:53 -0500
+Received: from miraculix.mork.no ([IPv6:2a02:2121:282:91e0:68e2:39ff:fe1c:1a78])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id xAJBYXhW005061
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Tue, 19 Nov 2019 12:34:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1574163275; bh=3c0RkDqtClK7mnfJEI2VW+D7m35xk5cvEa+CdQvxvlU=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=XbtyWj71ebSSkaSbHE9p0BYzxA0Bywzz+D5S1xQB7GAJ4yvnk7o1aA4nqCbtyjyNf
+         /1CKdVbUS2uZ7Y+89h38zHb0G4odf9+ZUzM/3ynNujqk2Nk2/LQt0bmpXPrefl8gnI
+         D2IM6E0b39i+uwWNLNCsIKwDPaJdQ+/CRBn8dcMY=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.92)
+        (envelope-from <bjorn@mork.no>)
+        id 1iX1m8-0007Jf-K6; Tue, 19 Nov 2019 12:34:28 +0100
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Oliver Neukum <oneukum@suse.de>
+Cc:     syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, baijiaju1990@gmail.com,
         bigeasy@linutronix.de, colin.king@canonical.com,
         gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
         yuehaibing@huawei.com
-Date:   Tue, 19 Nov 2019 11:31:44 +0100
-In-Reply-To: <8736ek9qir.fsf@miraculix.mork.no>
+Subject: Re: INFO: task hung in wdm_flush
+Organization: m
 References: <0000000000003313f0058fea8435@google.com>
-         <8736ek9qir.fsf@miraculix.mork.no>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        <8736ek9qir.fsf@miraculix.mork.no> <1574159504.28617.5.camel@suse.de>
+Date:   Tue, 19 Nov 2019 12:34:28 +0100
+In-Reply-To: <1574159504.28617.5.camel@suse.de> (Oliver Neukum's message of
+        "Tue, 19 Nov 2019 11:31:44 +0100")
+Message-ID: <87pnho85h7.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.101.4 at canardo
+X-Virus-Status: Clean
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 19.11.2019, 10:14 +0100 schrieb Bjørn Mork:
-> syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com> writes:
-> 
-> > INFO: task syz-executor121:1726 blocked for more than 143 seconds.
-> >       Not tainted 5.3.0-rc2+ #25
-> > "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> > syz-executor121 D28520  1726   1724 0x80004006
-> > Call Trace:
-> >  schedule+0x9a/0x250 kernel/sched/core.c:3944
-> >  wdm_flush+0x20c/0x370 drivers/usb/class/cdc-wdm.c:590
-> >  filp_close+0xb4/0x160 fs/open.c:1166
-> >  close_files fs/file.c:388 [inline]
-> >  put_files_struct fs/file.c:416 [inline]
-> >  put_files_struct+0x1d8/0x2e0 fs/file.c:413
-> >  exit_files+0x7e/0xa0 fs/file.c:445
-> >  do_exit+0x8bc/0x2c50 kernel/exit.c:873
-> >  do_group_exit+0x125/0x340 kernel/exit.c:982
-> >  get_signal+0x466/0x23d0 kernel/signal.c:2728
-> >  do_signal+0x88/0x14e0 arch/x86/kernel/signal.c:815
-> >  exit_to_usermode_loop+0x1a2/0x200 arch/x86/entry/common.c:159
-> >  prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
-> >  syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
-> >  do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
-> >  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> > RIP: 0033:0x401520
-> > Code: 6e 65 54 61 62 6c 65 00 67 65 74 63 6f 6e 00 5f 69 6e 69 74 00
-> > 69 73 5f 73 65 6c 69 6e 75 78 5f 65 6e 61 62 6c 65 64 00 73 65 <63> 75
-> > 72 69 74 79 5f 67 65 74 65 6e 66 6f 72 63 65 00 67 65 74 5f
-> > RSP: 002b:00007ffd59c75df8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-> > RAX: 0000000000000004 RBX: 0000000000000000 RCX: 0000000000401520
-> > RDX: 0000000000000000 RSI: 0000000000000002 RDI: 00007ffd59c75e10
-> > RBP: 00000000006cc018 R08: 0000000000000000 R09: 000000000000000f
-> > R10: 0000000000000064 R11: 0000000000000246 R12: 0000000000402540
-> > R13: 00000000004025d0 R14: 0000000000000000 R15: 0000000000000000
-> 
-> 
-> Thanks to Eric for reminiding me of this one.  I did look briefly at it
-> before, and meant to revisit it for a more thorough analysis.  And
-> forgot, of corse...
-> 
-> Anyway, I believe this is not a bug.
-> 
-> wdm_flush will wait forever for the IN_USE flag to be cleared or the
+Oliver Neukum <oneukum@suse.de> writes:
+> Am Dienstag, den 19.11.2019, 10:14 +0100 schrieb Bj=C3=B8rn Mork:
+>
+>> Anyway, I believe this is not a bug.
+>>=20
+>> wdm_flush will wait forever for the IN_USE flag to be cleared or the
+>
+> Damn. Too obvious. So you think we simply have pending output that does
+> just not complete?
 
-Damn. Too obvious. So you think we simply have pending output that does
-just not complete?
+I do miss a lot of stuff so I might be wrong, but I can't see any other
+way this can happen.  The out_callback will unconditionally clear the
+IN_USE flag and wake up the wait_queue.
 
-> DISCONNECTING flag to be set. The only way you can avoid this is by
-> creating a device that works normally up to a point and then completely
-> ignores all messages,
+>> DISCONNECTING flag to be set. The only way you can avoid this is by
+>> creating a device that works normally up to a point and then completely
+>> ignores all messages,
+>
+> Devices may crash. I don't think we can ignore that case.
 
-Devices may crash. I don't think we can ignore that case.
+Sure, but I've never seen that happen without the device falling off the
+bus.  Which is a disconnect.
 
->  but without resetting or disconnecting. It is
-> obviously possible to create such a device. But I think the current
-> error handling is more than sufficient, unless you show me some way to
-> abuse this or reproduce the issue with a real device.
+But I am all for handling this *if* someone reproduces it with a real
+device.  I just don't think it's worth the effort if it's only a
+theoretical problem.
 
-Malicious devices are real. Potentially at least.
-But you are right, we need not bend over to handle them well, but we
-ought to be able to handle them.
+>>  but without resetting or disconnecting. It is
+>> obviously possible to create such a device. But I think the current
+>> error handling is more than sufficient, unless you show me some way to
+>> abuse this or reproduce the issue with a real device.
+>
+> Malicious devices are real. Potentially at least.
+> But you are right, we need not bend over to handle them well, but we
+> ought to be able to handle them.
 
-	Regards
-		Oliver
+Sure, we need to handle malicious devices.  But only if they can be used
+for real harm.
 
+This warning requires physical acceess and is only slightly annoying.
+Like a USB device making loud farting sounds.  You'd just disconnect the
+device.  No need for Linux to detect the sound and handle it
+automatically, I think.
+
+
+Bj=C3=B8rn
