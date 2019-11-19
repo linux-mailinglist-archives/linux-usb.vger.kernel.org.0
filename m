@@ -2,93 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D211027D1
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 16:14:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186AE1027DA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 16:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728060AbfKSPO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 10:14:28 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:46568 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727873AbfKSPO2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 10:14:28 -0500
-Received: (qmail 1559 invoked by uid 2102); 19 Nov 2019 10:14:27 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 19 Nov 2019 10:14:27 -0500
-Date:   Tue, 19 Nov 2019 10:14:27 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Ikjoon Jang <ikjn@chromium.org>
-cc:     linux-usb@vger.kernel.org, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Suwan Kim <suwan.kim027@gmail.com>,
-        "Gustavo A . R . Silva" <gustavo@embeddedor.com>,
-        Johan Hovold <johan@kernel.org>,
-        Nicolas Boitchat <drinkcat@chromium.org>
-Subject: Re: [PATCH 0/2] usb: override hub device bInterval with device node
-In-Reply-To: <CAATdQgBPrk=obCOiMAe1zAoP1As21MuzGzn-ixU56EmSkdQr1w@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1911191008440.1506-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1728035AbfKSPQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 10:16:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47842 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727560AbfKSPQt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Nov 2019 10:16:49 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 11D72B49F;
+        Tue, 19 Nov 2019 15:16:47 +0000 (UTC)
+Message-ID: <1574176603.28617.25.camel@suse.com>
+Subject: Re: WARNING in hso_free_net_device
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com
+Cc:     Andrey Konovalov <andreyknvl@google.com>, linux-usb@vger.kernel.org
+Date:   Tue, 19 Nov 2019 16:16:43 +0100
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 19 Nov 2019, Ikjoon Jang wrote:
+#syz test: https://github.com/google/kasan.git eea39f24
 
-> On Sun, Nov 17, 2019 at 11:46 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Sun, 17 Nov 2019, Ikjoon Jang wrote:
-> >
-> > > This patchset enables hard wired hub device to use different bInterval
-> > > from its descriptor when the hub has a combined device node.
-> > >
-> > > When we know the specific hard wired hub supports changing its polling
-> > > interval, we can adjust hub's interval to reduce the time of waking up
-> > > from autosuspend or connect detection of HIDs.
-> >
-> > In fact, _all_ hubs support changing the polling interval.  The value
-> > given in the USB spec is just an upper limit; any smaller value is
-> > equally acceptable.
-> >
-> > So why are you doing this only for hard-wired hubs?  Why not for all
-> > hubs?
-> 
-> Because we only want to apply it to a specific device instance under
-> our control.
+From 9293e8ccebbe11e9f04f7ed88a0029e52d2aa617 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Tue, 19 Nov 2019 16:11:31 +0100
+Subject: [PATCH] hso: fix bailout in error case of probe
 
-Why?  What's so special about that device instance?
+If resources need to be freed after an error in probe, the
+netdev must not be freed because it has never been registered.
+The network layer dislikes that.
 
-For example, why not instead have a poll_interval sysfs attribute for
-all hubs that can be written from userspace?  Then people could reduce
-the autoresume latency for any device they want.
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/net/usb/hso.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> We apply autosuspend to built-in touchpad device for power savings,
-> 
-> Users can attach external hub devices with same VID:PID that we don't want to
-> change the behavior.
-
-Why don't you want to change the behavior?  Or allow the user to change 
-the behavior?
-
->  Maybe disabling autosuspend for external HIDs
-> can be more reasonable for that case?
-
-If it makes sense to to save power for your built-in touchpad device, 
-why doesn't it also make sense to save power for other external HIDs?
-
-> > And is 250 ms really too long to wait for remote wakeup or connect
-> > detection?  What's the real motivation behind this change?
-> 
-> When a user starts to move the cursor while touchpad is in autosuspend state,
-> It takes more than >250ms (worst case can be >500ms) to wake up and response.
-> That makes the cursor stuck for a while and warp to another location suddenly.
-
-All right, that's a good reason.  But doesn't it apply just as well to 
-other devices, not only your built-in touchpad?
-
-Alan Stern
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index dfb8dbbc8015..1b767c1c1411 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -2351,7 +2351,7 @@ static int remove_net_device(struct hso_device *hso_dev)
+ }
+ 
+ /* Frees our network device */
+-static void hso_free_net_device(struct hso_device *hso_dev)
++static void hso_free_net_device(struct hso_device *hso_dev, bool bailout)
+ {
+ 	int i;
+ 	struct hso_net *hso_net = dev2net(hso_dev);
+@@ -2374,7 +2374,7 @@ static void hso_free_net_device(struct hso_device *hso_dev)
+ 	kfree(hso_net->mux_bulk_tx_buf);
+ 	hso_net->mux_bulk_tx_buf = NULL;
+ 
+-	if (hso_net->net)
++	if (hso_net->net && !bailout)
+ 		free_netdev(hso_net->net);
+ 
+ 	kfree(hso_dev);
+@@ -2549,7 +2549,7 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 
+ 	return hso_dev;
+ exit:
+-	hso_free_net_device(hso_dev);
++	hso_free_net_device(hso_dev, true);
+ 	return NULL;
+ }
+ 
+@@ -3126,7 +3126,7 @@ static void hso_free_interface(struct usb_interface *interface)
+ 				rfkill_unregister(rfk);
+ 				rfkill_destroy(rfk);
+ 			}
+-			hso_free_net_device(network_table[i]);
++			hso_free_net_device(network_table[i], false);
+ 		}
+ 	}
+ }
 
