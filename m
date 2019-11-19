@@ -2,207 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 369E810277B
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 15:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07B191027AC
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 16:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727456AbfKSO6G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 09:58:06 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38832 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727316AbfKSO6G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 09:58:06 -0500
-Received: by mail-pf1-f193.google.com with SMTP id c13so12300738pfp.5
-        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 06:58:05 -0800 (PST)
+        id S1728247AbfKSPH5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 10:07:57 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:42907 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726637AbfKSPH4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 10:07:56 -0500
+Received: by mail-wr1-f67.google.com with SMTP id a15so24247813wrf.9
+        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 07:07:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8Iv0SYeCQzXPVK6d6zw+PhVxLjr+hZq6IoPt4clytvA=;
-        b=QJI7Ro6ixcBU7Jip0bWx374Gd/SB4poGcYiSqt2Gx2/rkilbfFufDakZ/feLGSwgYi
-         vy4yE/vie2CtWMoAkGeO+ReKrCXHXC/eLLFfGUwOx/VgUrxTrFezlUEGe6yp8JniHAIU
-         EuqQZ2Af2WOTkhCurjTM3uhV+dLSDOwRclzdwsdHOMCA2CJnWlbUZOQPsJgYOWQtM3mN
-         mNEZ53ujqcHhDFp2eU6zWzkIXDeHYtNhi+BkngUAo2v8SMiS6/5JH0BiMCf/QEZ6GhbB
-         3PyEqs3B6oP+VaZDBWnu6IEXoPvnU/6350LgC7B3o8bP+e9gYC286fN5QBbhT8TA/jq8
-         hraA==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0sOGULTxKGUas/n3eXVssiq7rC3j2ItfoQLTOVZlF3A=;
+        b=RDAaAMxsitYbQpk+FHt0fm0cvrptMukdFgxDWsDiY2wP1w2/CYM2w9j4BJqkCfRYlb
+         KoMZ3anOj4QwdznIDwB2DV1/GlCykLmoeGk4wPvC5nT0BQ7gwJKiAg4x7T1Cpa69wdiL
+         5NwQYYFJaH4NRUSrjGG6Lw0cIZmnhyd6Wg/RlpLmyZNLiN/JM/JHqn6N57pY3fJ2EgaU
+         fUBKQugVQDf7rg11izajPi//DIHhRrVmiSNktVjxPKVH7lyeuK8OUyRJsOyREaAtsNqg
+         e2K0PKDnRIrYbYGTOHqLogvPzrW0P3Jp1HhNeXx9KgSXZSARQZ7bZS7ymdIpVejaOFKL
+         36Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Iv0SYeCQzXPVK6d6zw+PhVxLjr+hZq6IoPt4clytvA=;
-        b=bPRxI7iBqYMI9zVnqdfKmD3MoLWl1D669g9/uY7mrh7VLmlajQZJm/ApCyF9rk7/fl
-         SMPi5+4IF+9sNHxqCR5IyoGa5WTO6n2q4xYfHdPg5V1vYqpyotKKmuRTwDJioKxydarc
-         Bh4xetNkXY2KV1FOMWiw3vL0aNJw1k7edW+nfNT3KPqJS9S3Zl3gDa8/S04sj2ENIvVn
-         aDbDxl1C41sW8aBBNEg/fa/orn+I1KCIVVBKtvzSWm4C0nxg9zMQvoPkJSSgWJLXjyjQ
-         Qcouz+z8uqm9IMEOOB9WA6+0NVAivpWghr3NXiZsNJ8jkqkso07ccrJf57ehbJPXVGSs
-         Ep4g==
-X-Gm-Message-State: APjAAAWQAgTLWkX6E82n2Io2zDC3AP/L3kntNQYNKXvRGXSDb+eYSUiW
-        LFh8GP5DKY8gR7YvrASs6Iza6LfqfGTX48KWObyYCQ==
-X-Google-Smtp-Source: APXvYqw4I7Q9HHJB9PXYlOP8WNTMSs7SVqsTbqHP7cbcCSjaPg653l1nVQWe72vDXXM1eKQRxz//Dq13dUy6nyJhLkA=
-X-Received: by 2002:a65:5648:: with SMTP id m8mr954974pgs.286.1574175484917;
- Tue, 19 Nov 2019 06:58:04 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=0sOGULTxKGUas/n3eXVssiq7rC3j2ItfoQLTOVZlF3A=;
+        b=n5IP2OykbJisx4MZxrfPKO5sUs/ydnBOAt4OREZt4sa4BPvteg3e4TKUTnZoXqizhd
+         hgHf73DU6aMcCi2lB8bsZNilGWIbtNGafc1XxZkDdJKvMymYPL4YJI+FJn77EZ2LubYR
+         JF4heanlVP5+apE1C0jTjPVvYTmLr9LR+1J09x5dZpd4AWYOflyOm56TU3QIYcReNfxq
+         ebhwrjfELi4HcNm2UZ6wZVUpMFLoKb46I9WwslV5RGXVzkjF4HsCTy1ZAhAWXtaCyWi/
+         ZOgFP3t1Bca+TQOmcwZeFy0qf4gi4rsMtU5tAGlyHQnhqVAF9YgWcKrxL9SOJP0THWb+
+         IxRg==
+X-Gm-Message-State: APjAAAWT49hLXNcTW5qyo7418XzOmzD4J+fa4jKyeT7WZ06mo5xBoddS
+        4/jwBTL3GGh7hkFuypLKA0+Bgw==
+X-Google-Smtp-Source: APXvYqwOzHtK7WEaMSazsJpj5LXWd/QnPIMVNqwwEW18JZLpY/0Jbc/ZswjWAFgmJfsm9R0jzo7fQw==
+X-Received: by 2002:a5d:670a:: with SMTP id o10mr29016460wru.312.1574176073903;
+        Tue, 19 Nov 2019 07:07:53 -0800 (PST)
+Received: from [192.168.1.62] (wal59-h01-176-150-251-154.dsl.sta.abo.bbox.fr. [176.150.251.154])
+        by smtp.gmail.com with ESMTPSA id 17sm3319113wmg.19.2019.11.19.07.07.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 19 Nov 2019 07:07:53 -0800 (PST)
+Subject: Re: [PATCH] usb: dwc3: meson-g12a: add missed regulator_disable
+To:     Chuhong Yuan <hslester96@gmail.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20191118114135.25666-1-hslester96@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <cdb697db-fde4-a109-7e15-c52e7d706d67@baylibre.com>
+Date:   Tue, 19 Nov 2019 16:07:52 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <00000000000090564a0590796d2f@google.com>
-In-Reply-To: <00000000000090564a0590796d2f@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 19 Nov 2019 15:57:52 +0100
-Message-ID: <CAAeHK+wfca0d0qgCw96LbRutymzeV4tk34TkLUvO51hCRAp8cg@mail.gmail.com>
-Subject: Re: KASAN: use-after-free Read in iowarrior_disconnect
-To:     syzbot <syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Kees Cook <keescook@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191118114135.25666-1-hslester96@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 4:48 PM syzbot
-<syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following crash on:
->
-> HEAD commit:    d0847550 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=139be302600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=dbc9c80cc095da19
-> dashboard link: https://syzkaller.appspot.com/bug?extid=cfe6d93e0abab9a0de05
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12fe6b02600000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1548189c600000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+cfe6d93e0abab9a0de05@syzkaller.appspotmail.com
->
-> ==================================================================
-> BUG: KASAN: use-after-free in __mutex_lock_common
-> kernel/locking/mutex.c:912 [inline]
-> BUG: KASAN: use-after-free in __mutex_lock+0xf23/0x1360
-> kernel/locking/mutex.c:1077
-> Read of size 8 at addr ffff8881cc866f58 by task kworker/1:5/1755
->
-> CPU: 1 PID: 1755 Comm: kworker/1:5 Not tainted 5.3.0-rc4+ #26
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0xca/0x13e lib/dump_stack.c:113
->   print_address_description+0x6a/0x32c mm/kasan/report.c:351
->   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:482
->   kasan_report+0xe/0x12 mm/kasan/common.c:612
->   __mutex_lock_common kernel/locking/mutex.c:912 [inline]
->   __mutex_lock+0xf23/0x1360 kernel/locking/mutex.c:1077
->   iowarrior_disconnect+0xf0/0x2c0 drivers/usb/misc/iowarrior.c:878
->   usb_unbind_interface+0x1bd/0x8a0 drivers/usb/core/driver.c:423
->   __device_release_driver drivers/base/dd.c:1134 [inline]
->   device_release_driver_internal+0x42f/0x500 drivers/base/dd.c:1165
->   bus_remove_device+0x2dc/0x4a0 drivers/base/bus.c:556
->   device_del+0x420/0xb10 drivers/base/core.c:2339
->   usb_disable_device+0x211/0x690 drivers/usb/core/message.c:1237
->   usb_disconnect+0x284/0x8d0 drivers/usb/core/hub.c:2199
->   hub_port_connect drivers/usb/core/hub.c:4949 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1454/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Allocated by task 1755:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_kmalloc mm/kasan/common.c:487 [inline]
->   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:460
->   kmalloc include/linux/slab.h:552 [inline]
->   kzalloc include/linux/slab.h:748 [inline]
->   iowarrior_probe+0x7a/0x10b2 drivers/usb/misc/iowarrior.c:753
->   usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2165
->   usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
->   generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
->   usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
->   really_probe+0x281/0x6d0 drivers/base/dd.c:548
->   driver_probe_device+0x101/0x1b0 drivers/base/dd.c:721
->   __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
->   bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:454
->   __device_attach+0x217/0x360 drivers/base/dd.c:894
->   bus_probe_device+0x1e4/0x290 drivers/base/bus.c:514
->   device_add+0xae6/0x16f0 drivers/base/core.c:2165
->   usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2536
->   hub_port_connect drivers/usb/core/hub.c:5098 [inline]
->   hub_port_connect_change drivers/usb/core/hub.c:5213 [inline]
->   port_event drivers/usb/core/hub.c:5359 [inline]
->   hub_event+0x1b5c/0x3640 drivers/usb/core/hub.c:5441
->   process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
->   worker_thread+0x96/0xe20 kernel/workqueue.c:2415
->   kthread+0x318/0x420 kernel/kthread.c:255
->   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
-> Freed by task 1857:
->   save_stack+0x1b/0x80 mm/kasan/common.c:69
->   set_track mm/kasan/common.c:77 [inline]
->   __kasan_slab_free+0x130/0x180 mm/kasan/common.c:449
->   slab_free_hook mm/slub.c:1423 [inline]
->   slab_free_freelist_hook mm/slub.c:1474 [inline]
->   slab_free mm/slub.c:3016 [inline]
->   kfree+0xe4/0x2f0 mm/slub.c:3957
->   iowarrior_delete drivers/usb/misc/iowarrior.c:246 [inline]
->   iowarrior_release+0x187/0x280 drivers/usb/misc/iowarrior.c:670
->   __fput+0x2d7/0x840 fs/file_table.c:280
->   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
->   exit_task_work include/linux/task_work.h:22 [inline]
->   do_exit+0x8ef/0x2c00 kernel/exit.c:879
->   do_group_exit+0x125/0x340 kernel/exit.c:983
->   __do_sys_exit_group kernel/exit.c:994 [inline]
->   __se_sys_exit_group kernel/exit.c:992 [inline]
->   __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:992
->   do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:296
->   entry_SYSCALL_64_after_hwframe+0x49/0xbe
->
-> The buggy address belongs to the object at ffff8881cc866f00
->   which belongs to the cache kmalloc-512 of size 512
-> The buggy address is located 88 bytes inside of
->   512-byte region [ffff8881cc866f00, ffff8881cc867100)
-> The buggy address belongs to the page:
-> page:ffffea0007321980 refcount:1 mapcount:0 mapping:ffff8881da002500
-> index:0x0 compound_mapcount: 0
-> flags: 0x200000000010200(slab|head)
-> raw: 0200000000010200 ffffea000733fc80 0000000200000002 ffff8881da002500
-> raw: 0000000000000000 00000000000c000c 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
->
-> Memory state around the buggy address:
->   ffff8881cc866e00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881cc866e80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> > ffff8881cc866f00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                                                      ^
->   ffff8881cc866f80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->   ffff8881cc867000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+On 18/11/2019 12:41, Chuhong Yuan wrote:
+> The driver forgets to disable the regulator in probe failure and remove.
+> Add the missed calls to fix it.
+> 
+> Signed-off-by: Chuhong Yuan <hslester96@gmail.com>
 
-#syz fix: USB: iowarrior: fix use-after-free on disconnect
+Fixes: f90db10779ad ("usb: dwc3: meson-g12a: Add support for IRQ based OTG switching")
+
+> ---
+>  drivers/usb/dwc3/dwc3-meson-g12a.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> index 8a3ec1a951fe..d9723d1ad8eb 100644
+> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
+> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+> @@ -458,7 +458,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  						dwc3_meson_g12a_irq_thread,
+>  						IRQF_ONESHOT, pdev->name, priv);
+>  		if (ret)
+> -			return ret;
+> +			goto err_regulator_disable;
+>  	}
+>  
+>  	dwc3_meson_g12a_usb_init(priv);
+> @@ -467,7 +467,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  	for (i = 0 ; i < PHY_COUNT ; ++i) {
+>  		ret = phy_init(priv->phys[i]);
+>  		if (ret)
+> -			return ret;
+> +			goto err_regulator_disable;
+>  	}
+>  
+>  	/* Set PHY Power */
+> @@ -517,7 +517,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+>  err_phys_exit:
+>  	for (i = 0 ; i < PHY_COUNT ; ++i)
+>  		phy_exit(priv->phys[i]);
+> -
+> +err_regulator_disable:
+> +	if (priv->vbus)
+> +		regulator_disable(priv->vbus);
+>  	return ret;
+>  }
+>  
+> @@ -536,6 +538,9 @@ static int dwc3_meson_g12a_remove(struct platform_device *pdev)
+>  		phy_exit(priv->phys[i]);
+>  	}
+>  
+> +	if (priv->vbus)
+> +		regulator_disable(priv->vbus);
+> +
+>  	pm_runtime_disable(dev);
+>  	pm_runtime_put_noidle(dev);
+>  	pm_runtime_set_suspended(dev);
+> 
+
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
