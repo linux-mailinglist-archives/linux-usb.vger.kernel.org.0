@@ -2,75 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA3510441D
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 20:17:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D160104486
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 20:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727674AbfKTTRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 14:17:19 -0500
-Received: from mail-pl1-f173.google.com ([209.85.214.173]:42363 "EHLO
-        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726236AbfKTTRT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 14:17:19 -0500
-Received: by mail-pl1-f173.google.com with SMTP id j12so217494plt.9
-        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2019 11:17:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:user-agent;
-        bh=PscCw83IIgt8PaIGMnuKIu+49v5Uxw34ntqtiUdpBUs=;
-        b=CxsC6YzPs3GR/73C37e/brxHWDtCEoj+CLnOMJoF+FIHICCyRBleN/gdCl+g75JFtS
-         u2yXpc14sWs5juko284turex9mfZ2szkl5sZX6nEsxwzcH1kcEvv96itLQxOWFu6Hmeh
-         /Hp0nLX3xzv8P/kW5xgMAyZrWW2ONPWmOP+XMvY47j2LLImucBalAGnzWwcPOHpiJ10E
-         V+H6ZXPXP3Z0uEBtOkd48zaC+7Zt0GKJIkoZykOtq734UX3yPu0VCCIGxIKf75PD1N9I
-         tV/mqOieXH49XjM393sNfOpq3vrvgtpzQ1p9aXk72dM0lqbb9vfkhKe/Glj19piFsAwh
-         UWDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:user-agent;
-        bh=PscCw83IIgt8PaIGMnuKIu+49v5Uxw34ntqtiUdpBUs=;
-        b=a7Ccf6fbgliZNPXR1PyxYQgvjyPBrEViIU3bNxp+V8PVmk/51Usk7ABZd4Uhafy4eg
-         znl2CR6an9JRX8p74NDNg7TvUpEJgzniI2hNEIs8oxlWBmG8ZInXZYOsLojkVYzxF0kT
-         kJZl98kJlmZBLgHrsrHjEznkx0dLXOi13rr65eRIWZQOmSkZ33s+zRyTqWCx7zUz4NCQ
-         qYX4MzJ9/8EKe3jMv/FXK9AaLJYY6EV+fA0KBhinx1G9JnB73GMvyDQbN96wlI0nhDeK
-         9rDjqwiV2RfD59+OCh4cjdhmzdYKlDby16E1CIW0agfin8ryE8LWsjv7guoNHg3JH+tu
-         JJkA==
-X-Gm-Message-State: APjAAAX1nL3efOrZ5lVtU6mTE3C/hp3w0k+W7KRnga0sH0LO36EY+6C2
-        AC81o5Ky8uxA/q1taistawC2MtKu/qo=
-X-Google-Smtp-Source: APXvYqwajebQNCIMldp9ymP4BMDfGE8niqhtYrx+ZgGQEQ2wPYp/CxqyXCkD6goB2GfeN17CCMYfJQ==
-X-Received: by 2002:a17:902:9a02:: with SMTP id v2mr4526190plp.221.1574277437726;
-        Wed, 20 Nov 2019 11:17:17 -0800 (PST)
-Received: from gnarnia.home ([47.180.176.91])
-        by smtp.gmail.com with ESMTPSA id p9sm146648pfq.40.2019.11.20.11.17.16
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 20 Nov 2019 11:17:17 -0800 (PST)
-Date:   Wed, 20 Nov 2019 11:17:16 -0800
-From:   evan@gnarbox.com
-To:     linux-usb@vger.kernel.org
-Subject: DJI CINESSD USB Adapter Failures
-Message-ID: <20191120191716.DVZ3qorXy%evan@gnarbox.com>
-User-Agent: mail v14.8.16
+        id S1727800AbfKTTrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 14:47:13 -0500
+Received: from mail.kernel.org ([198.145.29.99]:36426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727378AbfKTTrM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Nov 2019 14:47:12 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 760AA20679;
+        Wed, 20 Nov 2019 19:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574279232;
+        bh=TzLV4YRhBI1Y8XGqiMff3E5PU+5yB3PhvAPoW8EqbA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CjKyqllJtYcxJ15lmX7PN58w2H1GP0hRMOLcRA3QNnKTQnF76ZRooNTOkyJ14Vk3j
+         f8Tyrzp9Eu/a09IaYcbg8tQxoNqOC9ICQb9SgGJyChNQyJ3lEiaETZA4WjEeIupcG4
+         NKoa4aKasxYn2dRkKvsrT6GxVEUYmV/C+nVTHldM=
+Date:   Wed, 20 Nov 2019 20:47:09 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Chen <hzpeterchen@gmail.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
+Subject: Re: [PATCH -next] usb: gadget: configfs: Fix missing spin_lock_init()
+Message-ID: <20191120194709.GA3092233@kroah.com>
+References: <20191030034046.188808-1-weiyongjun1@huawei.com>
+ <20191030081101.GF26815@b29397-desktop>
+ <CAL411-pVmtTr58YFmsotcY+w2KR3kR1hQ1bJOG9CNA-fmPQYGg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAL411-pVmtTr58YFmsotcY+w2KR3kR1hQ1bJOG9CNA-fmPQYGg@mail.gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We're trying to connect a DJI CINESSD USB adapter to our custom
-hardware running kernel 4.9.  It enumerates, communciation fails, then
-it disconnects.  This cycle seems to continue indefinitely.  I've supplied
-links to the dmesg output[0] and the USB protocol analyzer capture[1] of
-this situtation.  Please see the Data Center tool[2] to view the capture.
+On Mon, Nov 18, 2019 at 05:09:39PM +0800, Peter Chen wrote:
+> BR,
+> Peter Chen
+> 
+> On Wed, Oct 30, 2019 at 4:12 PM Peter Chen <peter.chen@nxp.com> wrote:
+> >
+> > On 19-10-30 03:40:46, Wei Yongjun wrote:
+> > > The driver allocates the spinlock but not initialize it.
+> > > Use spin_lock_init() on it to initialize it correctly.
+> > >
+> > > This is detected by Coccinelle semantic patch.
+> > >
+> > > Fixes: 1a1c851bbd70 ("usb: gadget: configfs: fix concurrent issue between composite APIs")
+> > > Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+> > > ---
+> > >  drivers/usb/gadget/configfs.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> > > index 33852c2b29d1..ab9ac48a751a 100644
+> > > --- a/drivers/usb/gadget/configfs.c
+> > > +++ b/drivers/usb/gadget/configfs.c
+> > > @@ -1544,6 +1544,7 @@ static struct config_group *gadgets_make(
+> > >       gi->composite.resume = NULL;
+> > >       gi->composite.max_speed = USB_SPEED_SUPER;
+> > >
+> > > +     spin_lock_init(&gi->spinlock);
+> > >       mutex_init(&gi->lock);
+> > >       INIT_LIST_HEAD(&gi->string_list);
+> > >       INIT_LIST_HEAD(&gi->available_func);
+> > >
+> >
+> > Reviewed-by: Peter Chen <peter.chen@nxp.com>
+> 
+> Hi Felipe & Greg,
+> 
+> We may need this patch for usb/next and usb/linus tree, otherwise, there will
+> be kernel dump if enable lockdep:
 
-The device also does not enumerate properly on a desktop and laptop we
-have running 4.15.  There is a patch[3] that disables LPM for this device.
-After applying that patch the desktop and laptop work.  We already have
-LPM disabled wholesale on our board so this patch did not help.
+Ok, now queued up.
 
-Does anything in the dmesg or capture jump out?  What information can
-I gather or next steps would you recommend?
+thanks,
 
--Evan
-
-[0] https://drive.google.com/open?id=1eDtuSFfCmC7uX0pEdw8L0UPWMPLXzW4B
-[1] https://drive.google.com/open?id=1ew160mTiC5joeJPo0wQvagTr8o1tL3kt
-[2] https://www.totalphase.com/products/data-center/
-[3] https://lore.kernel.org/patchwork/patch/990417/
+greg k-h
