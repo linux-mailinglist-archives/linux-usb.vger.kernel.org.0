@@ -2,109 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97B2A103B71
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 14:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30702103B77
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 14:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730619AbfKTNb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 08:31:56 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:49451 "EHLO
+        id S1730633AbfKTNc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 08:32:56 -0500
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:42771 "EHLO
         wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730607AbfKTNb4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 08:31:56 -0500
+        by vger.kernel.org with ESMTP id S1727442AbfKTNc4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 08:32:56 -0500
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 3183A550;
-        Wed, 20 Nov 2019 08:31:55 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id F1B6D4DA;
+        Wed, 20 Nov 2019 08:32:54 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 20 Nov 2019 08:31:55 -0500
+  by compute6.internal (MEProxy); Wed, 20 Nov 2019 08:32:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
         date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=kGoU8+LPVS69PgWlnUceaK0UkbL
-        eHqqCU710XidawNk=; b=CsLTwXt2RImR2jJWOXBlLjqrDBixx8faeND8kOJO2NX
-        OpBuddtKU5q7Z5bkTDDE+xjbz83WOwDSJTrYk7spNz9LUJy22N96qoaeg49Ww3zg
-        6uN1qyJqeyw64yquUlHcTzt2vlO1r+gCXr8VvaXxYkWRGrkmWN0sVYdbe84gQNVI
-        YMiVvj6ia94mjPBV6KBJ6FM6kjnWQ9cBb+DKQCAetgNjyPR4j9CzM0/rWEVfINcN
-        T6lzWK4XoLssEjRyRczxJLVXUnmTUFcLklVg0LDU8P5SeS1NfkWUF/a6NsQRbctS
-        JmZEXHriXCQZGyUL1XX7WN/JqRio4wKo1spBsBnce7g==
+        :content-type:content-transfer-encoding:in-reply-to; s=fm2; bh=n
+        G1qI7q/zWCkIrCeM/rIvDmve2KkiC1w2QXe0U9BI50=; b=FNqN9ioqSBRcubf7n
+        lS2HJ1gZfSpxcjwAM55efIt+ODEDXmHd+Aof3D3VmTNZx56cebnoHwnwyNofOEa1
+        nRWOPEqzNmcy7e21GGrekFYfM0v46jlGzeRgjNRHSJ5/awg7NYL4rx17eM3ML6Fg
+        CDeIztHDBIz6t8lbhEgeLPIV5gM/6c3ndxv1a27DGJjkf2tSxB4YB0cEOZqryxNd
+        kz7GfRt+s/VcQ8ChLsIpHYbtO53pN9n4JL1Z20MDTuWGb/+fVhKtKtgs0cg3m/4g
+        Um+lbu6OmnnWVBaohKs2GfgF5NafdfB9ISm3ZwQso74p14qf2re1cIbOWn5pu4vc
+        CexPA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=kGoU8+
-        LPVS69PgWlnUceaK0UkbLeHqqCU710XidawNk=; b=FxfxZw/LcvcTiBi4xZ2BDC
-        rWNtClG62C2Mgxx3ATXGL+BvnU11dyQDsk3H9SYLrtOjSBmAP55LGAnjZUwe7yne
-        ejnZdQqiMfPwuCY6MidNaAKkzynVQyDW6TRWWZZZXoOuJoXEhimbYl+I6HPKIyKD
-        dEhbO7N+BvfrlEqcMtMoED769OMcg/fhs3WJw2E9myT7ZPYXZH1FgZdPOQUWCxvh
-        Bv/Ui/DrJ6kit4Xa/sWAA3iIlM60xaQ7AoYgUlfcaxqTDch3yR1Xr7xVobfJz0uH
-        Oqc7ivyTEP+3paRRJqilKzqV9AEakmiPIedDjDHQQ79UqqiIxKxSNZvie4zS5/Sw
-        ==
-X-ME-Sender: <xms:SkDVXdz0a9CJpFaZLUgV-_EWd6OIFfk3BE5qo5DLFtiNQcdPscN1ag>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudehtddgheduucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=nG1qI7q/zWCkIrCeM/rIvDmve2KkiC1w2QXe0U9BI
+        50=; b=ppDu1SJ8RhS6IVG734CpMBXZVIBgZsqABm0mbVPkPAgXUlAn9GETfuFHa
+        vQjARsF2spyyNcX//DikOxiEN5eFb10zyFRTkjpGQCpCE8qc2sNOg9PVWgIIHo2I
+        1Ep2qySmV9zirn1EhjSekipfMEX/G6QnsB54w8QfmrWcGIMor2SxiPuXQlfhCdWY
+        BzXCvKO/BsZcw0FERIebC0LqahhCAhjbHEFrSlhDhJiBQiiBTz0kiY3Mm7T/sPY3
+        4qGDG1ecUYCBO1oDZqFYfg2t3T7juafs/xDcyX14z/pI6hoglRQ6PLB49q3suuP0
+        lcuU45sbhzQ+ci82iodIZhCAOCEiA==
+X-ME-Sender: <xms:hkDVXbHl44XDamYubUp8PoHnidFzCNAOOo1d2Ug02kxmxWDNtYADmA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudehtddghedvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujggfsehttd
-    ertddtredvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhm
-    qeenucfkphepkeefrdekiedrkeelrddutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hgrhgvgheskhhrohgrhhdrtghomhenucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:SkDVXaJ76-dLrK-3qH_-oGuwXx3nFYsF4kI5TvkwA6Ng7ROlZ-S6ug>
-    <xmx:SkDVXWFZGGvKkdMf203xw9X-HtyLtE_bb6MzuabVcmy_pzLT0nbwIA>
-    <xmx:SkDVXTwzSjwRiF7Lt_lASzTppIU1BYVj-FscFWXxyhsVFkIPh3HQJQ>
-    <xmx:SkDVXfM_Vhc-5D75ycpOfjOxGbX64maU-YxhYEnW67DpSpW3qL6CCQ>
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    goufhushhpvggtthffohhmrghinhculdegledmnecujfgurhepfffhvffukfhfgggtugfg
+    jggfsehtqhertddtreejnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorg
+    hhrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrdgtohhmpdgrphhpshhpohhtrdgt
+    ohhmnecukfhppeekfedrkeeirdekledruddtjeenucfrrghrrghmpehmrghilhhfrhhomh
+    epghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:hkDVXcCMMJZMK9W2yG0tJS-UQUP--vox2byeirKIEsHmFvSR6izcGQ>
+    <xmx:hkDVXYN7cshqPyj9sV4ms0tadCQJu0MttEKy00n2Flk_1XCtoD9tWg>
+    <xmx:hkDVXWgo82VMeIqHom5W66EvjjLmXTWdRNVCeewd7uqCjX4BE7uZtA>
+    <xmx:hkDVXXyC3-PoqGHg5g7TQaL3EU07bYXnJt9fZ7oUiCQUv9_DPIxTYA>
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 6D4F93060062;
-        Wed, 20 Nov 2019 08:31:54 -0500 (EST)
-Date:   Wed, 20 Nov 2019 14:31:52 +0100
+        by mail.messagingengine.com (Postfix) with ESMTPA id E01D73060062;
+        Wed, 20 Nov 2019 08:32:53 -0500 (EST)
+Date:   Wed, 20 Nov 2019 14:32:52 +0100
 From:   Greg KH <greg@kroah.com>
-To:     JH <jupiter.hce@gmail.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: kernel: Alignment trap
-Message-ID: <20191120133152.GB2892197@kroah.com>
-References: <CAA=hcWRrES4cpXvqBtD8-pyrUwz-BR03c-hSG-Xr4dei3AQi_w@mail.gmail.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+Message-ID: <20191120133252.GC2892197@kroah.com>
+References: <000000000000d9a391059713dc1f@google.com>
+ <20191111160950.GA870254@kroah.com>
+ <1574248737.14298.33.camel@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAA=hcWRrES4cpXvqBtD8-pyrUwz-BR03c-hSG-Xr4dei3AQi_w@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1574248737.14298.33.camel@suse.com>
 User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Nov 20, 2019 at 09:28:14PM +1100, JH wrote:
-> Hi,
-> 
-> I am running 4G LTE (USB protocol) and WiFi on IMX6 board, the kernel
-> is 4.19.75 LTE. It is not clear where the kernel alignment trap came
-> from, the only thing I could see is the alignment trap message
-> generated immediate after USB GSM communication or mwifiex_sdio. Where
-> that the alignment trap came from? Which parts of the program could
-> contribute the kernel alignment trap, kernel iteself, or USB GSM or
-> mwifiex_sdio? Appreciate clues how to fix it.
-> 
-> Nov 20 05:08:09 solar kernel: usb 1-1: GSM modem (1-port) converter
-> now attached to ttyUSB0
-> Nov 20 05:08:09 solar kernel: option 1-1:1.2: GSM modem (1-port)
-> converter detected
-> Nov 20 05:08:09 solar kernel: usb 1-1: GSM modem (1-port) converter
-> now attached to ttyUSB1
-> Nov 20 05:08:10 solar kernel: mwifiex_sdio mmc0:0001:1: info: trying
-> to associate to 'Solar Analytics Wifi' bssid 78:8a:20:49:4b:c5
-> Nov 20 05:08:10 solar kernel: mwifiex_sdio mmc0:0001:1: info:
-> associated to bssid 78:8a:20:49:4b:c5 successfully
-> Nov 20 05:08:10 solar kernel: IPv6: ADDRCONF(NETDEV_CHANGE): mlan0:
-> link becomes ready
-> Nov 20 05:23:13 solar kernel: mwifiex_sdio mmc0:0001:1: info:
-> successfully disconnected from 78:8a:20:49:4b:c5: reason code 3
-> Nov 20 05:23:13 solar kernel: IPv6: ADDRCONF(NETDEV_UP): mlan0: link
-> is not ready
-> Nov 20 05:23:18 solar kernel: Alignment trap: not handling instruction
-> e8532f00 at [<b6c802b6>]
-> Nov 20 05:23:18 solar kernel: Unhandled fault: alignment exception
-> (0x001) at 0x38626667
-> Nov 20 05:23:18 solar kernel: pgd = 34bdb7e7
-> Nov 20 05:23:18 solar kernel: [38626667] *pgd=00000000
+On Wed, Nov 20, 2019 at 12:18:57PM +0100, Oliver Neukum wrote:
+> Am Montag, den 11.11.2019, 17:09 +0100 schrieb Greg KH:
+> > On Mon, Nov 11, 2019 at 07:34:08AM -0800, syzbot wrote:
+> > > Hello,
+> > >=20
+> > > syzbot found the following crash on:
+> > >=20
+> > > HEAD commit:    3183c037 usb: gadget: add raw-gadget interface
+> > > git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D12525dc6e=
+00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D79de80330=
+003b5f7
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd934a903634=
+6e0215d8f
+> > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D14ac740=
+6e00000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D13eea39ae=
+00000
+> > >=20
+> > > IMPORTANT: if you fix the bug, please add the following tag to the co=
+mmit:
+> > > Reported-by: syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com
+> > >=20
+> > > usb 1-1: config 0 interface 0 altsetting 0 has 3 endpoint descriptors,
+> > > different from the interface descriptor's value: 4
+> > > usb 1-1: New USB device found, idVendor=3D13dc, idProduct=3D5611,
+> > > bcdDevice=3D2f.15
+> > > usb 1-1: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=
+=3D0
+> > > usb 1-1: config 0 descriptor??
+> > > hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
+> > > hwa-hc 1-1:0.0: FIXME: USB_MAXCHILDREN too low for WUSB adapter (194 =
+ports)
+> > > usb 1-1: BUG: bad host security descriptor; not enough data (4 vs 5 l=
+eft)
+> > > usb 1-1: supported encryption types: =EF=BF=BDS=03=D0=81=EF=BF=BD=EF=
+=BF=BD=EF=BF=BD|c=03=D0=81=EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDc=03=D0=81=EF=
+=BF=BD=EF=BF=BD=EF=BF=BD
+> > > usb 1-1: E: host doesn't support CCM-1 crypto
+> > > hwa-hc 1-1:0.0: Wireless USB HWA host controller
+> > > hwa-hc 1-1:0.0: new USB bus registered, assigned bus number 11
+> >=20
+> > wusb code, hah.  It's about to be deleted from the kernel because no one
+> > uses it and there is no hardware out there.  I wouldn't spend a ton of
+> > time fuzzing it.
+> >=20
+> > One more good reason to just delete it soon...
+>=20
+> Unfortunately that is not an option for the stable trees.
 
-You should have a much longer tracedump after this, right?  Can you
-provide that please?
-
-And why do you think this was a USB issue?
+Well, we can just mark the thing as BROKEN.  I strongly doubt anyone is
+using it as there is no hardware out there.
 
 thanks,
 
