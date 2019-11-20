@@ -2,52 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3911C1045CD
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 22:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41BC1046AC
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 23:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725936AbfKTVbj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 16:31:39 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:35402 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725842AbfKTVbj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 16:31:39 -0500
-Received: (qmail 6083 invoked by uid 2102); 20 Nov 2019 16:31:38 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 20 Nov 2019 16:31:38 -0500
-Date:   Wed, 20 Nov 2019 16:31:38 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     evan@gnarbox.com
-cc:     linux-usb@vger.kernel.org
-Subject: Re: DJI CINESSD USB Adapter Failures
-In-Reply-To: <20191120191716.DVZ3qorXy%evan@gnarbox.com>
-Message-ID: <Pine.LNX.4.44L0.1911201630150.1498-100000@iolanthe.rowland.org>
+        id S1726270AbfKTWkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 17:40:03 -0500
+Received: from mail-io1-f70.google.com ([209.85.166.70]:56694 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726202AbfKTWkD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 17:40:03 -0500
+Received: by mail-io1-f70.google.com with SMTP id u6so691717ion.23
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2019 14:40:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=TNGq4S5KwP/7sHt+hvFUBeVEHK1kVFfzs68hMvNqFa4=;
+        b=Zp1bfJsaUOQeixiexecCYoaMHO89YIj8zD6d2X+MTIwuptiye632SnhIyRaUFlZSaL
+         xpt3GUZ0Ugq25U/33cM4qe/cgm8d4i51eB0LIiQRfbOyr/Pak8zWrFVv693uf2r//Rkz
+         I/xQpHno1LZPQVJky6+FiDNkAPkrZBoDogNtBI1EjgEj6aoddzip1Y2Q7cWgYuZKPZNX
+         gJChKiOM02Z+L3lfwJINLxcZEMdpH7/30IN4+ymgzEKxa6rfD79yB0KTS9Sv58YOul3t
+         Jrngo+kznHqMLacVr1hiE226oVrOpl4EehHQ2QQvzhq9M4eJ75ogkfJ1ivPTvhWKblX0
+         8M1Q==
+X-Gm-Message-State: APjAAAV7mFfatVjWqTEUgZoWP27XtrvBUBgw3C6lKXozFjxzZxk7/tt+
+        CKDQQJcY2HgY7ynONu/CSejl68SvohgCWPCr4qKw2g/xN1U6
+X-Google-Smtp-Source: APXvYqzCSScjzWZXDy0EOWnZzsQBk9L6IYOj/OvO/b+j/CGB+bGHVFEsRc8JsCnUldoEU+3XVMWNcgNgD9lP25t9SctyFLkDw5q7
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Received: by 2002:a92:5d88:: with SMTP id e8mr6004485ilg.95.1574289601331;
+ Wed, 20 Nov 2019 14:40:01 -0800 (PST)
+Date:   Wed, 20 Nov 2019 14:40:01 -0800
+In-Reply-To: <1574169714.28617.7.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000076092b0597cedce2@google.com>
+Subject: Re: INFO: task hung in wdm_flush
+From:   syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>
+To:     bjorn@mork.no, linux-usb@vger.kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 20 Nov 2019 evan@gnarbox.com wrote:
+Hello,
 
-> We're trying to connect a DJI CINESSD USB adapter to our custom
-> hardware running kernel 4.9.  It enumerates, communciation fails, then
-> it disconnects.  This cycle seems to continue indefinitely.  I've supplied
-> links to the dmesg output[0] and the USB protocol analyzer capture[1] of
-> this situtation.  Please see the Data Center tool[2] to view the capture.
-> 
-> The device also does not enumerate properly on a desktop and laptop we
-> have running 4.15.  There is a patch[3] that disables LPM for this device.
-> After applying that patch the desktop and laptop work.  We already have
-> LPM disabled wholesale on our board so this patch did not help.
-> 
-> Does anything in the dmesg or capture jump out?  What information can
-> I gather or next steps would you recommend?
+syzbot tried to test the proposed patch but build/boot failed:
 
-Have you tried running the same 4.9 kernel on the desktop or laptop as
-on the custom board?  If that fails, you'll know what needs to be
-fixed.
+failed to apply patch:
+checking file drivers/usb/class/cdc-wdm.c
+Hunk #1 FAILED at 587.
+Hunk #2 FAILED at 596.
+2 out of 2 hunks FAILED
 
-Alan Stern
+
+
+Tested on:
+
+commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=854768b99f19e89d7f81
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1779956ae00000
 
