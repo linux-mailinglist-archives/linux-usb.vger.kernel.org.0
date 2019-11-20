@@ -2,73 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E21810375B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 11:22:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DD7103781
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 11:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728362AbfKTKWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 05:22:43 -0500
-Received: from mailout1.hostsharing.net ([83.223.95.204]:55351 "EHLO
-        mailout1.hostsharing.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726757AbfKTKWn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 05:22:43 -0500
-X-Greylist: delayed 418 seconds by postgrey-1.27 at vger.kernel.org; Wed, 20 Nov 2019 05:22:42 EST
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "*.hostsharing.net", Issuer "COMODO RSA Domain Validation Secure Server CA" (not verified))
-        by mailout1.hostsharing.net (Postfix) with ESMTPS id 47FF8101933DF;
-        Wed, 20 Nov 2019 11:15:43 +0100 (CET)
-Received: from localhost (pd95be530.dip0.t-ipconnect.de [217.91.229.48])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by h08.hostsharing.net (Postfix) with ESMTPSA id EA2C260E00CA;
-        Wed, 20 Nov 2019 11:15:42 +0100 (CET)
-X-Mailbox-Line: From 77c07f00a6a9d94323c4a060a3c72817b0703b97 Mon Sep 17 00:00:00 2001
-Message-Id: <77c07f00a6a9d94323c4a060a3c72817b0703b97.1574244795.git.lukas@wunner.de>
-From:   Lukas Wunner <lukas@wunner.de>
-Date:   Wed, 20 Nov 2019 11:15:15 +0100
-Subject: [PATCH] usb: dwc2: Drop unlock/lock upon queueing a work item
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
+        id S1728636AbfKTK2Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 05:28:16 -0500
+Received: from mail-il1-f170.google.com ([209.85.166.170]:37864 "EHLO
+        mail-il1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727924AbfKTK2Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 05:28:16 -0500
+Received: by mail-il1-f170.google.com with SMTP id s5so2877881iln.4
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2019 02:28:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=7fJ7F08J9U7Fr6MXxHh1Vbug8WabRnCGXh/I0XbTQUU=;
+        b=MHHJzVM0/LyX5VXz3M1pTpkiE9ggEXlIisBUYjOuBaZ/M7vXkfxAYx6C2dxs378boK
+         wUzmmLKNHPx3I+nRnaxezUi2Pc+vKHwHmInb02JouLLpiCfInt/4ebfsI5ivmq607qJS
+         7fs1yOjmWl8OVbdX2agqTVFTyj5g/eNEg1FhyQE5AxEH+Azl1WxL2DuU6NhvZlm7ABOV
+         7ftPMmCB372xSrPqRImi6ILg9iaE6S44fkQSALyfvhbmfLOUzWn4UHgqcDtbftsCfHkC
+         s3L1/t6XnUtxHs26bC8ujTJqGFYKGRBdXJo8GjbHaMNC2T4QRDY0U8Wu9EiotVORHIvU
+         Fm4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=7fJ7F08J9U7Fr6MXxHh1Vbug8WabRnCGXh/I0XbTQUU=;
+        b=nP9jC2EtbsrynSENPvGhQ1xzTmEFdHugWQ7UnQopK9hFVMYsmvjrGqTtbW/DuiBfzY
+         w10g2NSqzyaMK70nlBhFAiPl1k5kpKFgkwqY94trykVHXyE5NtDC7t1ajgXBiZcyCcq9
+         zhTWNKLQtWSEp/dIWIyYqA3I6tBx2xdzJn6yPi0sAQOCkMwGyyZLsKmKcY+ZwfC9x6jg
+         fMaH1Krii4OxlsNaOKspCxGbdd//8vqnhL7n5G9HPyv8X2pZo9oiGAUhesRy+T1dGyWy
+         KfXymgHuKKKTlir9+WPzAynpvLLEnK487JrKN3fQnuLnTJZF/PDoCKnFwoDMh+LSo2/I
+         +IZA==
+X-Gm-Message-State: APjAAAUwNXEmWuZqTwlaL7KQQRELSTbCpGSYWsK7feN2kbNSjHV39Tf8
+        MRKtd7AaTUlxxYlsmpg94xGcY8rrXSU4w4VBeOZ7rhh6
+X-Google-Smtp-Source: APXvYqxTTKHomYtMeoFhJN0DtwiPXEjTulObN/lyI3gdxzuplOuu25FFBWCP47j8UDxsCpH5IpVIhxfgxOUtc/SBtoU=
+X-Received: by 2002:a92:d849:: with SMTP id h9mr2713233ilq.301.1574245695089;
+ Wed, 20 Nov 2019 02:28:15 -0800 (PST)
+MIME-Version: 1.0
+Received: by 2002:ac0:aa09:0:0:0:0:0 with HTTP; Wed, 20 Nov 2019 02:28:14
+ -0800 (PST)
+From:   JH <jupiter.hce@gmail.com>
+Date:   Wed, 20 Nov 2019 21:28:14 +1100
+Message-ID: <CAA=hcWRrES4cpXvqBtD8-pyrUwz-BR03c-hSG-Xr4dei3AQi_w@mail.gmail.com>
+Subject: kernel: Alignment trap
+To:     linux-usb <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The original dwc_otg driver used a DWC_WORKQ_SCHEDULE() wrapper to queue
-work items.  Because that wrapper acquired the driver's global spinlock,
-an unlock/lock dance was necessary whenever a work item was queued up
-while the global spinlock was already held.
+Hi,
 
-The dwc2 driver dropped DWC_WORKQ_SCHEDULE() in favor of a direct call
-to queue_work(), but retained the (now gratuitous) unlock/lock dance in
-dwc2_handle_conn_id_status_change_intr().  Drop it.
+I am running 4G LTE (USB protocol) and WiFi on IMX6 board, the kernel
+is 4.19.75 LTE. It is not clear where the kernel alignment trap came
+from, the only thing I could see is the alignment trap message
+generated immediate after USB GSM communication or mwifiex_sdio. Where
+that the alignment trap came from? Which parts of the program could
+contribute the kernel alignment trap, kernel iteself, or USB GSM or
+mwifiex_sdio? Appreciate clues how to fix it.
 
-Signed-off-by: Lukas Wunner <lukas@wunner.de>
----
- drivers/usb/dwc2/core_intr.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Nov 20 05:08:09 solar kernel: usb 1-1: GSM modem (1-port) converter
+now attached to ttyUSB0
+Nov 20 05:08:09 solar kernel: option 1-1:1.2: GSM modem (1-port)
+converter detected
+Nov 20 05:08:09 solar kernel: usb 1-1: GSM modem (1-port) converter
+now attached to ttyUSB1
+Nov 20 05:08:10 solar kernel: mwifiex_sdio mmc0:0001:1: info: trying
+to associate to 'Solar Analytics Wifi' bssid 78:8a:20:49:4b:c5
+Nov 20 05:08:10 solar kernel: mwifiex_sdio mmc0:0001:1: info:
+associated to bssid 78:8a:20:49:4b:c5 successfully
+Nov 20 05:08:10 solar kernel: IPv6: ADDRCONF(NETDEV_CHANGE): mlan0:
+link becomes ready
+Nov 20 05:23:13 solar kernel: mwifiex_sdio mmc0:0001:1: info:
+successfully disconnected from 78:8a:20:49:4b:c5: reason code 3
+Nov 20 05:23:13 solar kernel: IPv6: ADDRCONF(NETDEV_UP): mlan0: link
+is not ready
+Nov 20 05:23:18 solar kernel: Alignment trap: not handling instruction
+e8532f00 at [<b6c802b6>]
+Nov 20 05:23:18 solar kernel: Unhandled fault: alignment exception
+(0x001) at 0x38626667
+Nov 20 05:23:18 solar kernel: pgd = 34bdb7e7
+Nov 20 05:23:18 solar kernel: [38626667] *pgd=00000000
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 6af6add3d4c0..876ff31261d5 100644
---- a/drivers/usb/dwc2/core_intr.c
-+++ b/drivers/usb/dwc2/core_intr.c
-@@ -288,14 +288,9 @@ static void dwc2_handle_conn_id_status_change_intr(struct dwc2_hsotg *hsotg)
- 
- 	/*
- 	 * Need to schedule a work, as there are possible DELAY function calls.
--	 * Release lock before scheduling workq as it holds spinlock during
--	 * scheduling.
- 	 */
--	if (hsotg->wq_otg) {
--		spin_unlock(&hsotg->lock);
-+	if (hsotg->wq_otg)
- 		queue_work(hsotg->wq_otg, &hsotg->wf_otg);
--		spin_lock(&hsotg->lock);
--	}
- }
- 
- /**
--- 
-2.24.0
+Thank you.
 
+Kind regards,
+
+- jh
