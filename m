@@ -2,72 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 993D1102C65
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2019 20:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDE61030BD
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 01:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727224AbfKSTNS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 14:13:18 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:46525 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727194AbfKSTNS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 19 Nov 2019 14:13:18 -0500
-Received: by mail-oi1-f193.google.com with SMTP id n14so20004483oie.13
-        for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2019 11:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=mz5OqrqUSeG2Ec9nRC63vaTt1tA0ak8NabEWxjjWQY4=;
-        b=r2y8UZlKfSZBvIt9U1H6SOEQ2Puxbk8SQ8i30HScOjdAB4i7fJPhvShmxhV8Ovt7ci
-         VEIV54hZp9HdlEa6kKa3JEyyq1yFeGzqAYTstIPXbUroFIq72ibOWR26OEyelxdFCs15
-         28oZBmr1LW1PVzcaxuAFV0ik9y/ORBIx186sGue9ut6ZfD12E95axen0sTCX10MCFFeX
-         N9GroJW3bx3jK4Y/k9ov2+9zHiIaJg6yBCngHDgPQN0ufjqwD6mvlk4QhgJdEl9cflWc
-         PLG5JU5foIS7tf0VBWatGTsJiVKj2Zohql4Ih9QvBcW8gMnIKvIkuanFZA3yN/w7kptd
-         7KnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=mz5OqrqUSeG2Ec9nRC63vaTt1tA0ak8NabEWxjjWQY4=;
-        b=twSRVnj8ryPFjNmgu9+B95FtGTbnxG95zCa2mgJpL45iazMaQLmj0JBdfR7kKYNcf1
-         SbRVcsMY+ZqIqBGbfUwm4h5E6k/aop4FaLApC6Do531hcAVUejSo1u9HnAr+7l1tjWq7
-         lMXCi6lBHGhcGLiUhl8tQ6FD6BXuLlItc4A9EAVLPfYkCsIYGLPJNk4hS0UcC/ojHgbL
-         2vER3v5bRRkiJQAjSAGnA9nkrSVEXaDrVcL3HfLpbjBD+KUsmheZNO5jkta3gSS2Nzw1
-         mQA4GwB83oKdYveFSE9qssB3EqRNklxfUThdNn20jERn/0Gtl5gBmZBb55BK4BS9APJe
-         VGRQ==
-X-Gm-Message-State: APjAAAVvQ2moOnXimmIcNIhupPdNhyd2iRxAJ77c9nPOYemsQWcy9ZH8
-        /i6TlPuy+RbLsu/5HKD4d78wPiOfpvo5rkOgfMc=
-X-Google-Smtp-Source: APXvYqy2d/ahACWh9oS1tOagc3XXxFRsfAjowhcXqSOtSZtG9hVFrhknItA2WqGf69hahJB54t/ZvC5E5urJzGIcVMw=
-X-Received: by 2002:a54:481a:: with SMTP id j26mr5771644oij.20.1574190796226;
- Tue, 19 Nov 2019 11:13:16 -0800 (PST)
+        id S1727468AbfKTA2k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 19 Nov 2019 19:28:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58870 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727222AbfKTA2j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 19 Nov 2019 19:28:39 -0500
+Received: from localhost (unknown [69.71.4.100])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1BC5D2084D;
+        Wed, 20 Nov 2019 00:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574209718;
+        bh=uyR59o43ciPihfOLlm+jFPkrRvHx0fqxk7WTiYtlnDs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=VpkH0n93WocNeWy7Qne8PFIEzNfDs+LpLjg+8Bpjr4yUaDrVmOTFp8NbjfwAS69wo
+         q81uTL7vivWwT+mJcavxetuQ/6VdbA3GijeYuxs0cOP9WqBSvcU48RG6oyfiFgfFZ+
+         764DrcmjHMSWcQTVVryyvLYHL5eKZr16NEzskBX0=
+Date:   Tue, 19 Nov 2019 18:28:36 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
+        linux@endlessm.com, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+Message-ID: <20191120002836.GA247344@google.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:97ec:0:0:0:0:0 with HTTP; Tue, 19 Nov 2019 11:13:15
- -0800 (PST)
-Reply-To: pauwilliams37@gmail.com
-From:   Williams Paul <williamsetemba@gmail.com>
-Date:   Tue, 19 Nov 2019 19:13:15 +0000
-Message-ID: <CACPABGpJOP4mfQx95Z7mBZK9sEfg4Ydtw6q1wpVsP1QKmxE-iQ@mail.gmail.com>
-Subject: SUPPLY!!
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191014061355.29072-1-drake@endlessm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
+On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
+> On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
 
+Can you include specific models here in case we revisit this or find a
+generic solution that needs to be tested to make sure we don't regress
+these platforms?
 
-Greetings,
-I have a very profitable business I would like your company to handle
-on partnership basis.
-There is this wealthy cattle farmer who needs a very important cattle
-vaccine being sold in Europe.
-We will get the vaccine at a price of USD 575 per carton and sell to
-the farmer at USD 1250 per carton.
-He needs more than 3500 cartons now.
+Maybe a bugzilla with complete "lspci -vvnn" and dmesg logs?
 
-Can you get back to me for details.
+> the XHCI controller fails to resume from runtime suspend or s2idle,
+> and USB becomes unusable from that point.
+> 
+> xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
+> xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
+> xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
+> xhci_hcd 0000:03:00.4: PCI post-resume error -110!
+> xhci_hcd 0000:03:00.4: HC died; cleaning up
+> 
+> The D3-to-D0 transition is successful if the D3 delay is increased
+> to 20ms. Add an appropriate quirk for the affected hardware.
 
-regards.
+IIUC, we're doing a D3cold-to-D0 transition in this path:
 
-Mr.  Williams
+  pci_pm_default_resume_early
+    pci_power_up
+      platform_pci_set_power_state(PCI_D0)    # turn on via ACPI
+      pci_raw_set_power_state(PCI_D0)
+        pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr)
+        # pmcsr says device is in D3hot
+        pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr)
+        # sets to D0
+        pci_dev_d3_sleep                      # <-- need more time here
+
+I would sort of expect that ACPI would be putting the device in D0,
+not leaving it in D3hot, but maybe that's just my ignorance.
+
+In any case, I think you need more time after writing PCI_PM_CTRL to
+transition from D3hot to D0.  Right?
+
+> Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
+> Signed-off-by: Daniel Drake <drake@endlessm.com>
+> ---
+>  drivers/pci/quirks.c | 30 +++++++++++++++++++++++-------
+>  1 file changed, 23 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index 320255e5e8f8..4570439a6a6c 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -1871,19 +1871,35 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x2609, quirk_intel_pcie_pm);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260a, quirk_intel_pcie_pm);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL,	0x260b, quirk_intel_pcie_pm);
+>  
+> +static void quirk_d3_delay(struct pci_dev *dev, unsigned int delay)
+> +{
+> +	if (dev->d3_delay >= delay)
+> +		return;
+> +
+> +	dev->d3_delay = delay;
+> +	pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
+> +		 dev->d3_delay);
+
+This delay is for a D3hot -> D0 transition, right?  Can you make the
+message say "D3hot" explicitly?  And maybe include "d3hot" in the
+function name as well?
+
+> +}
+
+This is a nice bit of refactoring; could you split it into a separate
+patch that only does the refactor, followed by another that adds the
+Ryzen quirk?
+
+>  static void quirk_radeon_pm(struct pci_dev *dev)
+>  {
+>  	if (dev->subsystem_vendor == PCI_VENDOR_ID_APPLE &&
+> -	    dev->subsystem_device == 0x00e2) {
+> -		if (dev->d3_delay < 20) {
+> -			dev->d3_delay = 20;
+> -			pci_info(dev, "extending delay after power-on from D3 to %d msec\n",
+> -				 dev->d3_delay);
+> -		}
+> -	}
+> +	    dev->subsystem_device == 0x00e2)
+> +		quirk_d3_delay(dev, 20);
+>  }
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
+>  
+> +/*
+> + * Ryzen7 XHCI controllers fail upon resume from runtime suspend or s2idle
+> + * unless an extended D3 delay is used.
+> + */
+> +static void quirk_ryzen_xhci_d3(struct pci_dev *dev)
+> +{
+> +	quirk_d3_delay(dev, 20);
+> +}
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3);
+> +
+>  #ifdef CONFIG_X86_IO_APIC
+>  static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
+>  {
+> -- 
+> 2.20.1
+> 
