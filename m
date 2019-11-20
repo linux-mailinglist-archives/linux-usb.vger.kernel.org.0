@@ -2,65 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E7C103809
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 11:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6513910388F
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 12:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728932AbfKTKz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 05:55:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34622 "EHLO mx1.suse.de"
+        id S1729096AbfKTLTD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 06:19:03 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45644 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727230AbfKTKz4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Nov 2019 05:55:56 -0500
+        id S1727127AbfKTLTD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Nov 2019 06:19:03 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id E8F146A54D;
-        Wed, 20 Nov 2019 10:55:53 +0000 (UTC)
-Message-ID: <1574247349.14298.30.camel@suse.com>
-Subject: Re: INFO: task hung in chaoskey_disconnect
+        by mx1.suse.de (Postfix) with ESMTP id 2A556BA64;
+        Wed, 20 Nov 2019 11:19:01 +0000 (UTC)
+Message-ID: <1574248737.14298.33.camel@suse.com>
+Subject: Re: BUG: bad host security descriptor; not enough data (4 vs 5 left)
 From:   Oliver Neukum <oneukum@suse.com>
-To:     Stephen Boyd <swboyd@chromium.org>, alexandre.belloni@bootlin.com,
-        andreyknvl@google.com, arnd@arndb.de, b.zolnierkie@samsung.com,
-        gregkh@linuxfoundation.org, herbert@gondor.apana.org.au,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, lvivier@redhat.com,
-        mchehab+samsung@kernel.org, mpm@selenic.com,
-        syzbot <syzbot+f41c4f7c6d8b0b778780@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com
-Date:   Wed, 20 Nov 2019 11:55:49 +0100
-In-Reply-To: <5dcee59a.1c69fb81.188d.e4b9@mx.google.com>
-References: <000000000000cdaa560596acbc4e@google.com>
-         <5dcee59a.1c69fb81.188d.e4b9@mx.google.com>
+To:     Greg KH <greg@kroah.com>,
+        syzbot <syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Date:   Wed, 20 Nov 2019 12:18:57 +0100
+In-Reply-To: <20191111160950.GA870254@kroah.com>
+References: <000000000000d9a391059713dc1f@google.com>
+         <20191111160950.GA870254@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Mailer: Evolution 3.26.6 
 Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 15.11.2019, 09:51 -0800 schrieb Stephen Boyd:
-> Quoting syzbot (2019-11-06 04:32:09)
+Am Montag, den 11.11.2019, 17:09 +0100 schrieb Greg KH:
+> On Mon, Nov 11, 2019 at 07:34:08AM -0800, syzbot wrote:
 > > Hello,
 > > 
 > > syzbot found the following crash on:
 > > 
-> > HEAD commit:    b1aa9d83 usb: raw: add raw-gadget interface
+> > HEAD commit:    3183c037 usb: gadget: add raw-gadget interface
 > > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=16ae2adce00000
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12525dc6e00000
 > > kernel config:  https://syzkaller.appspot.com/x/.config?x=79de80330003b5f7
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=f41c4f7c6d8b0b778780
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=d934a9036346e0215d8f
 > > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10248158e00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16afbf7ce00000
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14ac7406e00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13eea39ae00000
 > > 
 > > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+f41c4f7c6d8b0b778780@syzkaller.appspotmail.com
+> > Reported-by: syzbot+d934a9036346e0215d8f@syzkaller.appspotmail.com
+> > 
+> > usb 1-1: config 0 interface 0 altsetting 0 has 3 endpoint descriptors,
+> > different from the interface descriptor's value: 4
+> > usb 1-1: New USB device found, idVendor=13dc, idProduct=5611,
+> > bcdDevice=2f.15
+> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > usb 1-1: config 0 descriptor??
+> > hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
+> > hwa-hc 1-1:0.0: FIXME: USB_MAXCHILDREN too low for WUSB adapter (194 ports)
+> > usb 1-1: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+> > usb 1-1: supported encryption types: �SЁ���|cЁ����cЁ���
+> > usb 1-1: E: host doesn't support CCM-1 crypto
+> > hwa-hc 1-1:0.0: Wireless USB HWA host controller
+> > hwa-hc 1-1:0.0: new USB bus registered, assigned bus number 11
 > 
-> I suspect this is because of the kthread getting stuck problem reported
-> by Maciej. Maybe try the commit that Herbert picked up.
+> wusb code, hah.  It's about to be deleted from the kernel because no one
+> uses it and there is no hardware out there.  I wouldn't spend a ton of
+> time fuzzing it.
+> 
+> One more good reason to just delete it soon...
 
-Do you have a commit ID so we can test an exported patch?
+Unfortunately that is not an option for the stable trees. Before I try
+something quick and dirty here, I have a question for the testing team.
+
+What exactly crashed? There is nothing in the logs? Did you undergo
+an absolute freeze of the machine? Or do you tested for the word "BUG"
+in the logs?
 
 	Regards
 		Oliver
