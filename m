@@ -2,107 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A172110311B
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 02:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FF7103460
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 07:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727587AbfKTB1I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 19 Nov 2019 20:27:08 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727262AbfKTB1H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 19 Nov 2019 20:27:07 -0500
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 52C1E22461;
-        Wed, 20 Nov 2019 01:27:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574213225;
-        bh=D7abHCeD4TPvV2CC5GlYUE+dpzX7mKsMT4oa0/yvIRw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eOnkCcpi3XzYZrccf26EVRVyjaGrzkJM2FuzIDz2a6nLVVzbAKGJvodiPcmIUpL3n
-         gvLbf/JklQkvF0ImVVa7jx4efmK2auYAzjeEnnvBU1Q65nizUJ4S0UKbhUJEeKDjdz
-         rdCWWF+ApEM0lz17r/TTjMw7fMaTerpB/fD8csH0=
-Received: by mail-lf1-f53.google.com with SMTP id d6so18745704lfc.0;
-        Tue, 19 Nov 2019 17:27:05 -0800 (PST)
-X-Gm-Message-State: APjAAAUKRq3XKE8QT0x5qE0h/21pDFj44fuQ8cctQ3kEraAAenqEU+lf
-        Qkkok+3kqgbXLelxZfNoQpnxYjfrZaZRWbKP1bY=
-X-Google-Smtp-Source: APXvYqwRCZuOLwwW4yV+7MFk/VIFl8MVP82eHlcf4qaQKdX30EKfsryD1YdVJwUyn/6jRxu7hGaF3j94H2BVMIxjCZE=
-X-Received: by 2002:a19:da1a:: with SMTP id r26mr450883lfg.60.1574213223486;
- Tue, 19 Nov 2019 17:27:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20191119144315.11261-1-krzk@kernel.org> <CAL_Jsq+1hHneSW5DzLNxU00AqQJ49chTyULJ0S3JR-CqfOfTgA@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+1hHneSW5DzLNxU00AqQJ49chTyULJ0S3JR-CqfOfTgA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Date:   Wed, 20 Nov 2019 09:26:51 +0800
-X-Gmail-Original-Message-ID: <CAJKOXPep1ftnw0gGEtzmSZaZBaAiyDhCsVygRfNAQ4egiJK1tA@mail.gmail.com>
-Message-ID: <CAJKOXPep1ftnw0gGEtzmSZaZBaAiyDhCsVygRfNAQ4egiJK1tA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: power: Fix path to power-domain.txt bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        id S1726450AbfKTGni (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 01:43:38 -0500
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:38623 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725263AbfKTGni (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 01:43:38 -0500
+X-UUID: 2e485fbe26bd4f209722b36a74f4b267-20191120
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Po3I97gPH5un+YvUqz4HBd2ziZlvEJRiQYNqrIBg6bI=;
+        b=GnBW0GXYrUuKbjd3RTHcMK6R3FbEAwxisI/6RgxDa6zyF8nBDbzC9Mf/3BM7FVVDMqTzuLGcMZ475J3YTcOtxhMG6wVfNnUYqnIoMgyonLxPZ74VgvjdpoliyQA7rt6rSbt8lx6KyYKXYRdBKJD813/jh9qIS36GYAYGqCgIDP0=;
+X-UUID: 2e485fbe26bd4f209722b36a74f4b267-20191120
+Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 164379485; Wed, 20 Nov 2019 14:43:19 +0800
+Received: from mtkcas07.mediatek.inc (172.21.101.84) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 20 Nov 2019 14:43:20 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 20 Nov 2019 14:42:56 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Cristian Birsan <cristian.birsan@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Bin Liu <b-liu@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
         <linux-arm-kernel@lists.infradead.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        etnaviv@lists.freedesktop.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [RESEND PATCH v3 1/3] usb: musb: create debugfs directory under usb root
+Date:   Wed, 20 Nov 2019 14:43:01 +0800
+Message-ID: <1574232183-5760-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 01F70002478959B1D1A85763158DDF05B970B212D28ECF207AC1A07659EF2B4C2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 20 Nov 2019 at 01:02, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Nov 19, 2019 at 8:43 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> >
-> > With split of power domain controller bindings to power-domain.yaml, the
-> > consumer part was renamed to power-domain.txt.  Update the references in
-> > other bindings.
-> >
-> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Fixes: abb4805e343a ("dt-bindings: power: Convert Samsung Exynos Power Domain bindings to json-schema")
-> > Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
-> > ---
-> >  Documentation/devicetree/bindings/clock/clk-exynos-audss.txt  | 2 +-
-> >  Documentation/devicetree/bindings/clock/exynos5433-clock.txt  | 2 +-
-> >  .../devicetree/bindings/clock/renesas,r8a7778-cpg-clocks.txt  | 2 +-
-> >  .../devicetree/bindings/clock/renesas,r8a7779-cpg-clocks.txt  | 2 +-
-> >  .../bindings/clock/renesas,rcar-gen2-cpg-clocks.txt           | 2 +-
-> >  .../devicetree/bindings/clock/renesas,rz-cpg-clocks.txt       | 2 +-
-> >  .../devicetree/bindings/display/etnaviv/etnaviv-drm.txt       | 2 +-
-> >  Documentation/devicetree/bindings/display/msm/dpu.txt         | 2 +-
-> >  Documentation/devicetree/bindings/display/msm/mdp5.txt        | 2 +-
-> >  Documentation/devicetree/bindings/dsp/fsl,dsp.yaml            | 2 +-
-> >  Documentation/devicetree/bindings/media/imx7-mipi-csi2.txt    | 2 +-
-> >  .../devicetree/bindings/media/mediatek-jpeg-decoder.txt       | 2 +-
-> >  Documentation/devicetree/bindings/media/mediatek-mdp.txt      | 2 +-
-> >  Documentation/devicetree/bindings/opp/qcom-nvmem-cpufreq.txt  | 2 +-
-> >  Documentation/devicetree/bindings/pci/pci-keystone.txt        | 2 +-
-> >  Documentation/devicetree/bindings/phy/ti,phy-am654-serdes.txt | 2 +-
-> >  Documentation/devicetree/bindings/power/qcom,rpmpd.txt        | 2 +-
-> >  Documentation/devicetree/bindings/power/renesas,rcar-sysc.txt | 2 +-
-> >  .../devicetree/bindings/usb/nvidia,tegra124-xusb.txt          | 4 ++--
-> >  19 files changed, 20 insertions(+), 20 deletions(-)
->
-> Please no. Can you just undo the renaming back to power_domain.txt
+Tm93IHRoZSBVU0IgZ2FkZ2V0IHN1YnN5c3RlbSBjYW4gdXNlIHRoZSBVU0IgZGVidWdmcyByb290
+IGRpcmVjdG9yeSwNCnNvIG1vdmUgbXVzYidzIGRpcmVjdG9yeSBmcm9tIHRoZSByb290IG9mIHRo
+ZSBkZWJ1Z2ZzIGZpbGVzeXN0ZW0gaW50bw0KdGhlIHJvb3Qgb2YgdXNiDQoNClNpZ25lZC1vZmYt
+Ynk6IENodW5mZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCi0tLQ0KdjM6IG5v
+IGNoYW5nZXMNCg0KdjI6DQogIDEuIGFiYW5kb24gbmV3IEFQSSB1c2JfZGVidWdmc19jcmVhdGVf
+ZGlyKCksIGFuZCB1c2UgdXNiX2RlYnVnX3Jvb3QNCi0tLQ0KIGRyaXZlcnMvdXNiL211c2IvbXVz
+Yl9kZWJ1Z2ZzLmMgfCAyICstDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRl
+bGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9tdXNiL211c2JfZGVidWdmcy5j
+IGIvZHJpdmVycy91c2IvbXVzYi9tdXNiX2RlYnVnZnMuYw0KaW5kZXggZjQyODU4ZTJiNTRjLi43
+YjYyODFhYjYyZWQgMTAwNjQ0DQotLS0gYS9kcml2ZXJzL3VzYi9tdXNiL211c2JfZGVidWdmcy5j
+DQorKysgYi9kcml2ZXJzL3VzYi9tdXNiL211c2JfZGVidWdmcy5jDQpAQCAtMzI1LDcgKzMyNSw3
+IEBAIHZvaWQgbXVzYl9pbml0X2RlYnVnZnMoc3RydWN0IG11c2IgKm11c2IpDQogew0KIAlzdHJ1
+Y3QgZGVudHJ5ICpyb290Ow0KIA0KLQlyb290ID0gZGVidWdmc19jcmVhdGVfZGlyKGRldl9uYW1l
+KG11c2ItPmNvbnRyb2xsZXIpLCBOVUxMKTsNCisJcm9vdCA9IGRlYnVnZnNfY3JlYXRlX2Rpcihk
+ZXZfbmFtZShtdXNiLT5jb250cm9sbGVyKSwgdXNiX2RlYnVnX3Jvb3QpOw0KIAltdXNiLT5kZWJ1
+Z2ZzX3Jvb3QgPSByb290Ow0KIA0KIAlkZWJ1Z2ZzX2NyZWF0ZV9maWxlKCJyZWdkdW1wIiwgU19J
+UlVHTywgcm9vdCwgbXVzYiwgJm11c2JfcmVnZHVtcF9mb3BzKTsNCi0tIA0KMi4yMy4wDQo=
 
-The renaming was done to make it consistent with yaml and other
-bindings but indeed it creates some churn... I'll send rename-undo
-then.
-
-Best regards,
-Krzysztof
