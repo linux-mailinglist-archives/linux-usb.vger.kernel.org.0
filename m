@@ -2,86 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4AE104414
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 20:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA3510441D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2019 20:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727574AbfKTTQp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 14:16:45 -0500
-Received: from a27-21.smtp-out.us-west-2.amazonses.com ([54.240.27.21]:57398
-        "EHLO a27-21.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726236AbfKTTQo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 14:16:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1574277403;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
-        bh=ysEVlFSsz2PUiWOZ41QMYdlfsngVTjcEZPWdndUQq/4=;
-        b=i8pNQf1QaLpBVtZYOcYf3+PYq5YTp4vMVNXKhKyr6NTYWHZ/I2iFs0I6MVhu21O1
-        HzL7UFiyZmO0s2W1Mjjh7GXNQkhD6ly4bjq8yjxgb8G1Qitlpz9RN897o4DemYeKNGd
-        GjTWEN/Pc9Ba4tgZnim5rz9ybfTOX2PDzaJSPxnM=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
-        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1574277403;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Feedback-ID;
-        bh=ysEVlFSsz2PUiWOZ41QMYdlfsngVTjcEZPWdndUQq/4=;
-        b=RMkQ4XWTdc8ecSAOpyUf2ofBLnKDq9vcK6JQhirnUG5ZAehs5+XgimWmakKCeZ3P
-        zi+3tfkaHoWr78FkuH1c8ObF7KIYQzfBmFdT1khYcGRf6I2ReovUKZMTD3dHGyjBIhU
-        JrqlW6d/HUHiBKSX3Aqc75nOh73U2hzSAzeIuCqE=
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.0
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B85EDC433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 20 Nov 2019 19:16:43 +0000
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Henry Lin <henryl@nvidia.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: xhci: only set D3hot for pci device
-Message-ID: <0101016e8a3ed308-9e380a62-79e0-4334-9d23-7c4d59142618-000000@us-west-2.amazonses.com>
-References: <20191113014927.11915-1-henryl@nvidia.com>
- <20191119081656.8746-1-henryl@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191119081656.8746-1-henryl@nvidia.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-SES-Outgoing: 2019.11.20-54.240.27.21
-Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
+        id S1727674AbfKTTRT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 14:17:19 -0500
+Received: from mail-pl1-f173.google.com ([209.85.214.173]:42363 "EHLO
+        mail-pl1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726236AbfKTTRT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 14:17:19 -0500
+Received: by mail-pl1-f173.google.com with SMTP id j12so217494plt.9
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2019 11:17:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gnarbox-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:subject:message-id:user-agent;
+        bh=PscCw83IIgt8PaIGMnuKIu+49v5Uxw34ntqtiUdpBUs=;
+        b=CxsC6YzPs3GR/73C37e/brxHWDtCEoj+CLnOMJoF+FIHICCyRBleN/gdCl+g75JFtS
+         u2yXpc14sWs5juko284turex9mfZ2szkl5sZX6nEsxwzcH1kcEvv96itLQxOWFu6Hmeh
+         /Hp0nLX3xzv8P/kW5xgMAyZrWW2ONPWmOP+XMvY47j2LLImucBalAGnzWwcPOHpiJ10E
+         V+H6ZXPXP3Z0uEBtOkd48zaC+7Zt0GKJIkoZykOtq734UX3yPu0VCCIGxIKf75PD1N9I
+         tV/mqOieXH49XjM393sNfOpq3vrvgtpzQ1p9aXk72dM0lqbb9vfkhKe/Glj19piFsAwh
+         UWDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:user-agent;
+        bh=PscCw83IIgt8PaIGMnuKIu+49v5Uxw34ntqtiUdpBUs=;
+        b=a7Ccf6fbgliZNPXR1PyxYQgvjyPBrEViIU3bNxp+V8PVmk/51Usk7ABZd4Uhafy4eg
+         znl2CR6an9JRX8p74NDNg7TvUpEJgzniI2hNEIs8oxlWBmG8ZInXZYOsLojkVYzxF0kT
+         kJZl98kJlmZBLgHrsrHjEznkx0dLXOi13rr65eRIWZQOmSkZ33s+zRyTqWCx7zUz4NCQ
+         qYX4MzJ9/8EKe3jMv/FXK9AaLJYY6EV+fA0KBhinx1G9JnB73GMvyDQbN96wlI0nhDeK
+         9rDjqwiV2RfD59+OCh4cjdhmzdYKlDby16E1CIW0agfin8ryE8LWsjv7guoNHg3JH+tu
+         JJkA==
+X-Gm-Message-State: APjAAAX1nL3efOrZ5lVtU6mTE3C/hp3w0k+W7KRnga0sH0LO36EY+6C2
+        AC81o5Ky8uxA/q1taistawC2MtKu/qo=
+X-Google-Smtp-Source: APXvYqwajebQNCIMldp9ymP4BMDfGE8niqhtYrx+ZgGQEQ2wPYp/CxqyXCkD6goB2GfeN17CCMYfJQ==
+X-Received: by 2002:a17:902:9a02:: with SMTP id v2mr4526190plp.221.1574277437726;
+        Wed, 20 Nov 2019 11:17:17 -0800 (PST)
+Received: from gnarnia.home ([47.180.176.91])
+        by smtp.gmail.com with ESMTPSA id p9sm146648pfq.40.2019.11.20.11.17.16
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 Nov 2019 11:17:17 -0800 (PST)
+Date:   Wed, 20 Nov 2019 11:17:16 -0800
+From:   evan@gnarbox.com
+To:     linux-usb@vger.kernel.org
+Subject: DJI CINESSD USB Adapter Failures
+Message-ID: <20191120191716.DVZ3qorXy%evan@gnarbox.com>
+User-Agent: mail v14.8.16
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 04:16:56PM +0800, Henry Lin wrote:
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 6c17e3fe181a..e59346488f64 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -770,7 +770,7 @@ static void xhci_stop(struct usb_hcd *hcd)
->   *
->   * This will only ever be called with the main usb_hcd (the USB3 roothub).
->   */
-> -static void xhci_shutdown(struct usb_hcd *hcd)
-> +void xhci_shutdown(struct usb_hcd *hcd)
->  {
->  	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
->  
-> @@ -789,10 +789,6 @@ static void xhci_shutdown(struct usb_hcd *hcd)
->  	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
->  			"xhci_shutdown completed - status = %x",
->  			readl(&xhci->op_regs->status));
-> -
-> -	/* Yet another workaround for spurious wakeups at shutdown with HSW */
-> -	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-> -		pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3hot);
->  }
+We're trying to connect a DJI CINESSD USB adapter to our custom
+hardware running kernel 4.9.  It enumerates, communciation fails, then
+it disconnects.  This cycle seems to continue indefinitely.  I've supplied
+links to the dmesg output[0] and the USB protocol analyzer capture[1] of
+this situtation.  Please see the Data Center tool[2] to view the capture.
 
-Shouldn't this function also now need to be EXPORTed?
+The device also does not enumerate properly on a desktop and laptop we
+have running 4.15.  There is a patch[3] that disables LPM for this device.
+After applying that patch the desktop and laptop work.  We already have
+LPM disabled wholesale on our board so this patch did not help.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Does anything in the dmesg or capture jump out?  What information can
+I gather or next steps would you recommend?
+
+-Evan
+
+[0] https://drive.google.com/open?id=1eDtuSFfCmC7uX0pEdw8L0UPWMPLXzW4B
+[1] https://drive.google.com/open?id=1ew160mTiC5joeJPo0wQvagTr8o1tL3kt
+[2] https://www.totalphase.com/products/data-center/
+[3] https://lore.kernel.org/patchwork/patch/990417/
