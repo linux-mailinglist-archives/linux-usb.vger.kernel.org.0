@@ -2,87 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FF710575F
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 17:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 928F9105797
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 17:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbfKUQrA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 11:47:00 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:37541 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726379AbfKUQq7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 11:46:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574354818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0Qn10hWiy8/uuGhAalu5dcn/1mOJukydQej1fnpUxnI=;
-        b=PtWa9axGY/iI8kLfNNo1nOSUTVzZA3g13C+aY36NpOCyOHYgg7j5YRVHUu5Gp/VmMOtkPj
-        K/2dEC55qBKtV7xtZ2JcHUyO57X+gY2xk2i41naH4xd1YMu8DAv8D21c+XRfvj+RRgJc71
-        m0wDyKSF75BHV7Qet+c+qkowEm07ORo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-26-6h2M2xD7NiC0_q3MyI91Sg-1; Thu, 21 Nov 2019 11:46:54 -0500
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D4899107ACCC;
-        Thu, 21 Nov 2019 16:46:52 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F1DB310631CE;
-        Thu, 21 Nov 2019 16:46:51 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 10:46:51 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
-        <kstewart@linuxfoundation.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
-        <viro@zeniv.linux.org.uk>, zaitcev@redhat.com
-Subject: Re: possible deadlock in mon_bin_vma_fault
-Message-ID: <20191121104651.0d50d2bd@suzdal.zaitcev.lan>
-In-Reply-To: <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
-References: <20191121084842.095edf87@suzdal.zaitcev.lan>
-        <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
-Organization: Red Hat, Inc.
+        id S1727197AbfKUQy3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 11:54:29 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:43220 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727188AbfKUQy3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 11:54:29 -0500
+Received: (qmail 2590 invoked by uid 2102); 21 Nov 2019 11:54:28 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 21 Nov 2019 11:54:28 -0500
+Date:   Thu, 21 Nov 2019 11:54:28 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Ikjoon Jang <ikjn@chromium.org>
+cc:     linux-usb@vger.kernel.org,
+        GregKroah-Hartman <gregkh@linuxfoundation.org>,
+        RobHerring <robh+dt@kernel.org>,
+        MarkRutland <mark.rutland@arm.com>,
+        SuwanKim <suwan.kim027@gmail.com>,
+        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
+        JohanHovold <johan@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <drinkcat@chromium.org>
+Subject: Re: [PATCH v2 2/2] usb: overridable hub bInterval by device node
+In-Reply-To: <20191121051819.111593-1-ikjn@chromium.org>
+Message-ID: <Pine.LNX.4.44L0.1911211153110.1553-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: 6h2M2xD7NiC0_q3MyI91Sg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 21 Nov 2019 11:20:20 -0500 (EST)
-Alan Stern <stern@rowland.harvard.edu> wrote:
+On Thu, 21 Nov 2019, Ikjoon Jang wrote:
 
-> On Thu, 21 Nov 2019, Pete Zaitcev wrote:
->=20
-> > Anyway... If you are looking at it too, what do you think about not usi=
-ng
-> > any locks in mon_bin_vma_fault() at all? Isn't it valid? I think I trie=
-d
-> > to be "safe", but it only uses things that are constants unless we're
-> > opening and closing; a process cannot make page faults unless it has
-> > some thing mapped; and that is only possible if device is open and stay=
-s
-> > open. Can you find a hole in this reasoning? =20
->=20
-> I think you're right.  But one thing concerns me: What happens if the=20
-> same buffer is mapped by more than one process?  Do you allow that?
+> This patch enables hub device to override its own endpoint descriptor's
+> bInterval when the hub has a device node with "hub,interval" property.
+> 
+> When we know reducing autosuspend delay for built-in HIDs is better for
+> power saving, we can reduce it to the optimal value. But if a parent hub
+> has a long bInterval, mouse lags a lot from more frequent autosuspend.
+> So this enables overriding bInterval for a hard wired hub device only
+> when we know that reduces the power consumption.
+> 
+> Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> ---
+>  drivers/usb/core/config.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+> index 5f40117e68e7..d2d9c6d6e00a 100644
+> --- a/drivers/usb/core/config.c
+> +++ b/drivers/usb/core/config.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/usb.h>
+>  #include <linux/usb/ch9.h>
+>  #include <linux/usb/hcd.h>
+> +#include <linux/usb/of.h>
+>  #include <linux/usb/quirks.h>
+>  #include <linux/module.h>
+>  #include <linux/slab.h>
+> @@ -257,6 +258,11 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
+>  	memcpy(&endpoint->desc, d, n);
+>  	INIT_LIST_HEAD(&endpoint->urb_list);
+>  
+> +	/* device node property overrides bInterval */
+> +	if (usb_of_has_combined_node(to_usb_device(ddev)))
+> +		of_property_read_u8(ddev->of_node, "hub, interval",
 
-Yes, we allow 2 processes reading from mmap in the same time.
-They may miss events, but there should be no issue to the internal
-consistency of any pointers in usbmon, and no crashes or deadlocks.
-Also, we cannot prohibit that. Imagine a process that does open(),
-mmap(), fork()/clone().
+Does it matter that this says "hub, interval" whereas the documentation 
+says "hub,interval" (with no space character)?
 
--- Pete
+> +				    &d->bInterval);
+> +
+>  	/*
+>  	 * Fix up bInterval values outside the legal range.
+>  	 * Use 10 or 8 ms if no proper value can be guessed.
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
 
