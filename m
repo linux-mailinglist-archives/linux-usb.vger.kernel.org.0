@@ -2,166 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 915D3105B5E
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 21:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B412105D32
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 00:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726858AbfKUUw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 15:52:27 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:58632 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbfKUUw1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 15:52:27 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xALKnNGp101533;
-        Thu, 21 Nov 2019 20:50:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=JqMqk6Pam98kfZFKlDoAMn1so5XjHeYutDiswf96RFU=;
- b=sRJg4b6jEE3FX2oCNtwZ3h7BrtDVOvdJXXXsQzMgYNFaT4KkWQQZBvCr16tl3uDvg3QL
- hbUZIinoXwIE7c9h1GLbhs0NmFIgSikwqy1uesZmB2XfjcW9Q+bzTywvrhIYVC7Pov1m
- KYjCQ3fvDcl3ETtHADppgN1sJjOjAfudpFle9vKC7IFdZBGj/1rhnlrYdiAl8Q+OEwlc
- oW696zYDYubgmamGDUGG6FjQOBkZ2X6g0XvAgaRPXkCfldVTawfPvEE+zL/OOiyo+Vbo
- 4vwStNp3RSACWtqoUgag2JAo5RCGXT5Uny8+F7rnqlKIgy+hCaQxW9g0kLR5Jc0egKBb Rw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2wa92q6uu1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Nov 2019 20:50:16 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xALKiT7a129317;
-        Thu, 21 Nov 2019 20:50:15 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2wd4700v9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 21 Nov 2019 20:50:15 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xALKo7PE022130;
-        Thu, 21 Nov 2019 20:50:11 GMT
-Received: from kadam (/41.210.146.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 21 Nov 2019 12:50:07 -0800
-Date:   Thu, 21 Nov 2019 23:49:56 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     syzbot <syzbot+a36ab65c6653d7ccdd62@syzkaller.appspotmail.com>
-Cc:     alsa-devel@alsa-project.org, andreyknvl@google.com,
-        benquike@gmail.com, g@b4.vu, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com,
-        wang6495@umn.edu
-Subject: Re: general protection fault in snd_usb_create_mixer
-Message-ID: <20191121204956.GE617@kadam>
-References: <0000000000002129080597dce70d@google.com>
+        id S1726510AbfKUXig (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 18:38:36 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25753 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725956AbfKUXid (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 18:38:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574379511;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ghZgmhA3nVCEWICxd7VTKOzTCHKcObUKDPVYCLTv4Ck=;
+        b=ZlKrVj+9nZxbsCccnN7bXhSNnoFUsHnVQ6MkoQASGNs8zUfp5d2zCZ9xkFfvLDCqXtRWnT
+        PDIRm8XWQhEhLc2LTKXmWCUq+xEQTmPD+hbcEXG3Kwd1jDrMYHIeDgbHXCCsOimfYJU+LX
+        VpALlWRgzE8uUwCPlLy6QZHuglRw7tI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-409-Z-j3Ug8tOQu_Q-bSctTCQA-1; Thu, 21 Nov 2019 18:38:30 -0500
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0BB9C80268B;
+        Thu, 21 Nov 2019 23:38:28 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B6825DA66;
+        Thu, 21 Nov 2019 23:38:26 +0000 (UTC)
+Date:   Thu, 21 Nov 2019 17:38:25 -0600
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
+        <kstewart@linuxfoundation.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
+        <viro@zeniv.linux.org.uk>, zaitcev@redhat.com
+Subject: Re: possible deadlock in mon_bin_vma_fault
+Message-ID: <20191121173825.1527c3a5@suzdal.zaitcev.lan>
+In-Reply-To: <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
+References: <20191121084842.095edf87@suzdal.zaitcev.lan>
+        <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
+Organization: Red Hat, Inc.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000002129080597dce70d@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9448 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911210173
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9448 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911210174
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-MC-Unique: Z-j3Ug8tOQu_Q-bSctTCQA-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 07:25:09AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following crash on:
-> 
-> HEAD commit:    46178223 usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=176f9836e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a36ab65c6653d7ccdd62
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1447d3bae00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ef3a86e00000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+a36ab65c6653d7ccdd62@syzkaller.appspotmail.com
-> 
-> usb 1-1: 208:241 : does not exist
-> usb 1-1: 208:242 : does not exist
-> usb 1-1: 208:243 : does not exist
-> usb 1-1: 208:244 : does not exist
-> usb 1-1: 208:245 : does not exist
-> usb 1-1: 208:246 : does not exist
-> usb 1-1: 208:247 : does not exist
-> usb 1-1: 208:248 : does not exist
-> usb 1-1: 208:249 : does not exist
-> usb 1-1: 208:250 : does not exist
+On Thu, 21 Nov 2019 11:20:20 -0500 (EST)
+Alan Stern <stern@rowland.harvard.edu> wrote:
 
-These error messages are because:
+> On Thu, 21 Nov 2019, Pete Zaitcev wrote:
+>=20
+> > Anyway... If you are looking at it too, what do you think about not usi=
+ng
+> > any locks in mon_bin_vma_fault() at all? Isn't it valid? I think I trie=
+d
+> > to be "safe", but it only uses things that are constants unless we're
+> > opening and closing; a process cannot make page faults unless it has
+> > some thing mapped; and that is only possible if device is open and stay=
+s
+> > open. Can you find a hole in this reasoning? =20
+>=20
+> I think you're right. [...]
 
-sound/usb/card.c
-   128  static int snd_usb_create_stream(struct snd_usb_audio *chip, int ctrlif, int interface)
-   129  {
-   130          struct usb_device *dev = chip->dev;
-   131          struct usb_host_interface *alts;
-   132          struct usb_interface_descriptor *altsd;
-   133          struct usb_interface *iface = usb_ifnum_to_if(dev, interface);
-   134  
-   135          if (!iface) {
-   136                  dev_err(&dev->dev, "%u:%d : does not exist\n",
-   137                          ctrlif, interface);
-   138                  return -EINVAL;
-   139          }
+How about the appended patch, then? You like?
 
-"iface" is NULL.  The caller ignores the -EINVAL (correctly I think).
+Do you happen to know how to refer to a syzbot report in a commit message?
 
-Then the NULL dereference happens in snd_usb_mixer_controls_badd()
+-- Pete
 
-sound/usb/mixer.c
-  2903  static int snd_usb_mixer_controls_badd(struct usb_mixer_interface *mixer,
-  2904                                         int ctrlif)
-  2905  {
-  2906          struct usb_device *dev = mixer->chip->dev;
-  2907          struct usb_interface_assoc_descriptor *assoc;
-  2908          int badd_profile = mixer->chip->badd_profile;
-  2909          struct uac3_badd_profile *f;
-  2910          const struct usbmix_ctl_map *map;
-  2911          int p_chmask = 0, c_chmask = 0, st_chmask = 0;
-  2912          int i;
-  2913  
-  2914          assoc = usb_ifnum_to_if(dev, ctrlif)->intf_assoc;
-  2915  
-  2916          /* Detect BADD capture/playback channels from AS EP descriptors */
-  2917          for (i = 0; i < assoc->bInterfaceCount; i++) {
-  2918                  int intf = assoc->bFirstInterface + i;
-  2919  
-  2920                  struct usb_interface *iface;
-  2921                  struct usb_host_interface *alts;
-  2922                  struct usb_interface_descriptor *altsd;
-  2923                  unsigned int maxpacksize;
-  2924                  char dir_in;
-  2925                  int chmask, num;
-  2926  
-  2927                  if (intf == ctrlif)
-  2928                          continue;
-  2929  
-  2930                  iface = usb_ifnum_to_if(dev, intf);
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-iface is not checked.
+commit 628f3bbf37eee21cce4cfbfaa6a796b129d7736d
+Author: Pete Zaitcev <zaitcev@kotori.zaitcev.us>
+Date:   Thu Nov 21 17:24:00 2019 -0600
 
-Should it be "if (!iface) continue;?"
+    usb: Fix a deadlock in usbmon between mmap and read
+   =20
+    Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
 
-  2931                  num = iface->num_altsetting;
-  2932  
-  2933                  if (num < 2)
-  2934                          return -EINVAL;
-  2935  
-
-I'm not sure.
-
-regards,
-dan carpenter
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index ac2b4fcc265f..fb7df9810bad 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1039,12 +1039,18 @@ static long mon_bin_ioctl(struct file *file, unsign=
+ed int cmd, unsigned long arg
+=20
+ =09=09mutex_lock(&rp->fetch_lock);
+ =09=09spin_lock_irqsave(&rp->b_lock, flags);
+-=09=09mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
+-=09=09kfree(rp->b_vec);
+-=09=09rp->b_vec  =3D vec;
+-=09=09rp->b_size =3D size;
+-=09=09rp->b_read =3D rp->b_in =3D rp->b_out =3D rp->b_cnt =3D 0;
+-=09=09rp->cnt_lost =3D 0;
++=09=09if (rp->mmap_active) {
++=09=09=09mon_free_buff(vec, size/CHUNK_SIZE);
++=09=09=09kfree(vec);
++=09=09=09ret =3D -EBUSY;
++=09=09} else {
++=09=09=09mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
++=09=09=09kfree(rp->b_vec);
++=09=09=09rp->b_vec  =3D vec;
++=09=09=09rp->b_size =3D size;
++=09=09=09rp->b_read =3D rp->b_in =3D rp->b_out =3D rp->b_cnt =3D 0;
++=09=09=09rp->cnt_lost =3D 0;
++=09=09}
+ =09=09spin_unlock_irqrestore(&rp->b_lock, flags);
+ =09=09mutex_unlock(&rp->fetch_lock);
+ =09=09}
+@@ -1093,11 +1099,11 @@ static long mon_bin_ioctl(struct file *file, unsign=
+ed int cmd, unsigned long arg
+ =09=09=09return ret;
+ =09=09if (put_user(ret, &uptr->nfetch))
+ =09=09=09return -EFAULT;
+-=09=09ret =3D 0;
+ =09=09}
+ =09=09break;
+=20
+-=09case MON_IOCG_STATS: {
++=09case MON_IOCG_STATS:
++=09=09{
+ =09=09struct mon_bin_stats __user *sp;
+ =09=09unsigned int nevents;
+ =09=09unsigned int ndropped;
+@@ -1113,7 +1119,6 @@ static long mon_bin_ioctl(struct file *file, unsigned=
+ int cmd, unsigned long arg
+ =09=09=09return -EFAULT;
+ =09=09if (put_user(nevents, &sp->queued))
+ =09=09=09return -EFAULT;
+-
+ =09=09}
+ =09=09break;
+=20
+@@ -1216,13 +1221,21 @@ mon_bin_poll(struct file *file, struct poll_table_s=
+truct *wait)
+ static void mon_bin_vma_open(struct vm_area_struct *vma)
+ {
+ =09struct mon_reader_bin *rp =3D vma->vm_private_data;
++=09unsigned long flags;
++
++=09spin_lock_irqsave(&rp->b_lock, flags);
+ =09rp->mmap_active++;
++=09spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+=20
+ static void mon_bin_vma_close(struct vm_area_struct *vma)
+ {
++=09unsigned long flags;
++
+ =09struct mon_reader_bin *rp =3D vma->vm_private_data;
++=09spin_lock_irqsave(&rp->b_lock, flags);
+ =09rp->mmap_active--;
++=09spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+=20
+ /*
+@@ -1234,16 +1247,12 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault=
+ *vmf)
+ =09unsigned long offset, chunk_idx;
+ =09struct page *pageptr;
+=20
+-=09mutex_lock(&rp->fetch_lock);
+ =09offset =3D vmf->pgoff << PAGE_SHIFT;
+-=09if (offset >=3D rp->b_size) {
+-=09=09mutex_unlock(&rp->fetch_lock);
++=09if (offset >=3D rp->b_size)
+ =09=09return VM_FAULT_SIGBUS;
+-=09}
+ =09chunk_idx =3D offset / CHUNK_SIZE;
+ =09pageptr =3D rp->b_vec[chunk_idx].pg;
+ =09get_page(pageptr);
+-=09mutex_unlock(&rp->fetch_lock);
+ =09vmf->page =3D pageptr;
+ =09return 0;
+ }
 
