@@ -2,145 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 879E8104878
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 03:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 775F51048A7
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 03:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725936AbfKUC2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 21:28:13 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:10333 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725904AbfKUC2N (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 21:28:13 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd5f17c0000>; Wed, 20 Nov 2019 18:07:56 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 20 Nov 2019 18:07:55 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 20 Nov 2019 18:07:55 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
- 2019 02:07:54 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 21 Nov 2019 02:07:54 +0000
-Received: from henryl-tu10x.nvidia.com (Not Verified[10.19.109.104]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dd5f1790000>; Wed, 20 Nov 2019 18:07:54 -0800
-From:   Henry Lin <henryl@nvidia.com>
-CC:     <jackp@codeaurora.org>, Henry Lin <henryl@nvidia.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S1726343AbfKUCmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 21:42:32 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:51156 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725842AbfKUCmc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 20 Nov 2019 21:42:32 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 88DC0200575;
+        Thu, 21 Nov 2019 03:42:29 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 24D7A20007A;
+        Thu, 21 Nov 2019 03:42:24 +0100 (CET)
+Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 46CA040286;
+        Thu, 21 Nov 2019 10:42:17 +0800 (SGT)
+From:   Ran Wang <ran.wang_1@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] usb: xhci: only set D3hot for pci device
-Date:   Thu, 21 Nov 2019 10:07:03 +0800
-Message-ID: <20191121020703.10173-1-henryl@nvidia.com>
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
+        Leo Li <leoyang.li@nxp.com>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ran Wang <ran.wang_1@nxp.com>
+Subject: [PATCH v3 1/2] usb: dwc3: Add chip-specific compatible string
+Date:   Thu, 21 Nov 2019 10:42:05 +0800
+Message-Id: <20191121024206.32933-1-ran.wang_1@nxp.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191119081656.8746-1-henryl@nvidia.com>
-References: <20191119081656.8746-1-henryl@nvidia.com>
-X-NVConfidentiality: public
-MIME-Version: 1.0
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574302076; bh=LFURWC9StPxfn6pVQEi+FakzbyuQQSR3hqKKmpk8NqQ=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
-         Content-Type;
-        b=YLlnwWS5RGPSQ4Z/IvIeMsVUpkgvbLNLTam0/Zpc4q6SniI63/wDZa+McjKrp3Wql
-         aOI/OPWDYcaSbHsi+efWgjjpLimdgLokcq1dFsvoCqerKL+hPy6Y4C/q3pZad9hKzf
-         u6RKn1TsJRcMqRaJiTN5FciRDhfgMC+ZQzorRz7mRuQhFH0WSVz2huMbbjIDL+qrvm
-         wKh42EdUthKAqIembwRt7tXcnlGkZ+XYjVweOW7ewhKhKjfnu558td03tBoxFgh8h4
-         Dw9ekg72dGT+dE4B5O7Fr2hc9K1YN+GxHglvPOs5Cgw/Ecx1/FnSdsNmgZR9pmPUbv
-         YZmvbGBpIBSjw==
-To:     unlisted-recipients:; (no To-header on input)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Xhci driver cannot call pci_set_power_state() on non-pci xhci host
-controllers. For example, NVIDIA Tegra XHCI host controller which acts
-as platform device with XHCI_SPURIOUS_WAKEUP quirk set in some platform
-hits this issue during shutdown.
+Some Layerscape paltforms (such as LS1088A, LS2088A, etc) require update HW
+default cache type configuration to fix DWC3 init failure when applying
+property dma-coherent.
 
-Signed-off-by: Henry Lin <henryl@nvidia.com>
----
-v4:
-  1. export xhci_shutdown for CONFIG_USB_XHCI_PCI=m
----
- drivers/usb/host/xhci-pci.c | 13 +++++++++++++
- drivers/usb/host/xhci.c     |  7 ++-----
- drivers/usb/host/xhci.h     |  1 +
- 3 files changed, 16 insertions(+), 5 deletions(-)
+Note that the cache type configuration is actually native feature of DWC3,
+not additional desgin coming from SoC, so add this support here.
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 1e0236e90687..1904ef56f61c 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -519,6 +519,18 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
- }
- #endif /* CONFIG_PM */
+Signed-off-by: Ran Wang <ran.wang_1@nxp.com>
+---
+Change in v3:
+	- Update commit subject according to content change, originanl one is
+	  'usb: dwc3: Add node to update cache type setting'
+	- Replace sub-node definition with chip-specifc compatible string.
+
+Change in v2:
+	- New file.
+
+ Documentation/devicetree/bindings/usb/dwc3.txt | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+index 66780a4..043c312e 100644
+--- a/Documentation/devicetree/bindings/usb/dwc3.txt
++++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+@@ -4,7 +4,21 @@ DWC3- USB3 CONTROLLER. Complies to the generic USB binding properties
+       as described in 'usb/generic.txt'
  
-+static void xhci_pci_shutdown(struct usb_hcd *hcd)
-+{
-+	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
-+	struct pci_dev		*pdev = to_pci_dev(hcd->self.controller);
+ Required properties:
+- - compatible: must be "snps,dwc3"
++ - compatible: must be "snps,dwc3" and (if applicable) may contain a
++	chip-specific compatible string in front of it to allow dwc3 driver be
++	able to update cache type configuration accordingly, otherwise
++	Layerscape SoC will encounter USB init failure when adding property
++	dma-coherent on device tree.
++	Example:
++	* "fsl,ls1012a-dwc3", "snps,dwc3"
++	* "fsl,ls1021a-dwc3", "snps,dwc3"
++	* "fsl,ls1028a-dwc3", "snps,dwc3"
++	* "fsl,ls1043a-dwc3", "snps,dwc3"
++	* "fsl,ls1046a-dwc3", "snps,dwc3"
++	* "fsl,ls1088a-dwc3", "snps,dwc3"
++	* "fsl,ls2088a-dwc3", "snps,dwc3"
++	* "fsl,lx2160a-dwc3", "snps,dwc3"
 +
-+	xhci_shutdown(hcd);
-+
-+	/* Yet another workaround for spurious wakeups at shutdown with HSW */
-+	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
-+		pci_set_power_state(pdev, PCI_D3hot);
-+}
-+
- /*-------------------------------------------------------------------------*/
- 
- /* PCI driver selection metadata; PCI hotplugging uses this */
-@@ -554,6 +566,7 @@ static int __init xhci_pci_init(void)
- #ifdef CONFIG_PM
- 	xhci_pci_hc_driver.pci_suspend = xhci_pci_suspend;
- 	xhci_pci_hc_driver.pci_resume = xhci_pci_resume;
-+	xhci_pci_hc_driver.shutdown = xhci_pci_shutdown;
- #endif
- 	return pci_register_driver(&xhci_pci_driver);
- }
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 6c17e3fe181a..90aa811165f1 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -770,7 +770,7 @@ static void xhci_stop(struct usb_hcd *hcd)
-  *
-  * This will only ever be called with the main usb_hcd (the USB3 roothub).
-  */
--static void xhci_shutdown(struct usb_hcd *hcd)
-+void xhci_shutdown(struct usb_hcd *hcd)
- {
- 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
- 
-@@ -789,11 +789,8 @@ static void xhci_shutdown(struct usb_hcd *hcd)
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"xhci_shutdown completed - status = %x",
- 			readl(&xhci->op_regs->status));
--
--	/* Yet another workaround for spurious wakeups at shutdown with HSW */
--	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
--		pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3hot);
- }
-+EXPORT_SYMBOL_GPL(xhci_shutdown);
- 
- #ifdef CONFIG_PM
- static void xhci_save_registers(struct xhci_hcd *xhci)
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index f9f88626a57a..973d665052a2 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -2050,6 +2050,7 @@ int xhci_start(struct xhci_hcd *xhci);
- int xhci_reset(struct xhci_hcd *xhci);
- int xhci_run(struct usb_hcd *hcd);
- int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks);
-+void xhci_shutdown(struct usb_hcd *hcd);
- void xhci_init_driver(struct hc_driver *drv,
- 		      const struct xhci_driver_overrides *over);
- int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
+  - reg : Address and length of the register set for the device
+  - interrupts: Interrupts used by the dwc3 controller.
+  - clock-names: should contain "ref", "bus_early", "suspend"
 -- 
-2.17.1
+2.7.4
 
