@@ -2,76 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE9E10507C
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 11:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C118105115
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 12:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726170AbfKUK2T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 05:28:19 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34242 "EHLO mx1.suse.de"
+        id S1726719AbfKULHg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 06:07:36 -0500
+Received: from mx2.suse.de ([195.135.220.15]:56098 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726014AbfKUK2T (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Nov 2019 05:28:19 -0500
+        id S1726170AbfKULHg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Nov 2019 06:07:36 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 2488BB2B0;
-        Thu, 21 Nov 2019 10:28:18 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 3FC37B2B3;
+        Thu, 21 Nov 2019 11:07:35 +0000 (UTC)
+Message-ID: <1574334450.14298.53.camel@suse.com>
+Subject: Re: INFO: task hung in wdm_flush
 From:   Oliver Neukum <oneukum@suse.com>
-To:     lee.jones@linaro.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] mfd: dln2: more sanity checking for endpoints
-Date:   Thu, 21 Nov 2019 11:28:10 +0100
-Message-Id: <20191121102810.27205-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.16.4
+To:     syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
+        bjorn@mork.no, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Cc:     andreyknvl@google.com
+Date:   Thu, 21 Nov 2019 12:07:30 +0100
+In-Reply-To: <00000000000076092b0597cedce2@google.com>
+References: <00000000000076092b0597cedce2@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-It is not enough to check for the number of endpoints.
-The types must also be correct.
+Am Mittwoch, den 20.11.2019, 14:40 -0800 schrieb syzbot:
+> Hello,
+> 
+> syzbot tried to test the proposed patch but build/boot failed:
+> 
+> failed to apply patch:
+> checking file drivers/usb/class/cdc-wdm.c
+> Hunk #1 FAILED at 587.
+> Hunk #2 FAILED at 596.
+> 2 out of 2 hunks FAILED
 
-Reported-and-tested-by: syzbot+48a2851be24583b864dc@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/mfd/dln2.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+This is unexpected.
+> 
+> 
+> 
+> Tested on:
+> 
+> commit:         e96407b4 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git
 
-diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
-index 381593fbe50f..7841c11411d0 100644
---- a/drivers/mfd/dln2.c
-+++ b/drivers/mfd/dln2.c
-@@ -722,6 +722,8 @@ static int dln2_probe(struct usb_interface *interface,
- 		      const struct usb_device_id *usb_id)
- {
- 	struct usb_host_interface *hostif = interface->cur_altsetting;
-+	struct usb_endpoint_descriptor *epin;
-+	struct usb_endpoint_descriptor *epout;
- 	struct device *dev = &interface->dev;
- 	struct dln2_dev *dln2;
- 	int ret;
-@@ -731,12 +733,19 @@ static int dln2_probe(struct usb_interface *interface,
- 	    hostif->desc.bNumEndpoints < 2)
- 		return -ENODEV;
- 
-+	epin = &hostif->endpoint[0].desc;
-+	epout = &hostif->endpoint[1].desc;
-+	if (!usb_endpoint_is_bulk_out(epout))
-+		return -ENODEV;
-+	if (!usb_endpoint_is_bulk_in(epin))
-+		return -ENODEV;
-+
- 	dln2 = kzalloc(sizeof(*dln2), GFP_KERNEL);
- 	if (!dln2)
- 		return -ENOMEM;
- 
--	dln2->ep_out = hostif->endpoint[0].desc.bEndpointAddress;
--	dln2->ep_in = hostif->endpoint[1].desc.bEndpointAddress;
-+	dln2->ep_out = epout->bEndpointAddress;
-+	dln2->ep_in = epin->bEndpointAddress;
- 	dln2->usb_dev = usb_get_dev(interface_to_usbdev(interface));
- 	dln2->interface = interface;
- 	usb_set_intfdata(interface, dln2);
--- 
-2.16.4
+If I do a git am on the branch usb-fuzzer-usb-testing-2019.11.19,
+the patch applies. Which branch do I need to backport to?
+
+	Reagrds
+		Oliver
 
