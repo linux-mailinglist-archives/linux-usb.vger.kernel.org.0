@@ -2,97 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 269421049BB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 05:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E601049E6
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 06:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfKUEzD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 23:55:03 -0500
-Received: from mail.kernel.org ([198.145.29.99]:58314 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726014AbfKUEzD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Nov 2019 23:55:03 -0500
-Received: from localhost (unknown [106.200.225.208])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C9AE72084D;
-        Thu, 21 Nov 2019 04:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574312102;
-        bh=EHOrsfRdI53kt2AZnYvdC6eT8fyjKvcaa2iGnH8NEY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VNfuYb2PfVhyh8HHNdtuOcHapqSB8yKuWt5IiN3JAUMA3b1TbPmlyPecfPFCdDKjU
-         qg8TnUmgLrp8xopFJFF9ZPmLcF2knUKTNRU7kWBRk3YiFWWNovMNXIPIo/spTYZ8l2
-         zvfyJIvUfcJgIQhDnZfCLCQnuZ4eDn203z5FsE2s=
-Date:   Thu, 21 Nov 2019 10:24:57 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/4] usb: xhci: Add support for Renesas USB controllers
-Message-ID: <20191121045457.GH82508@vkoul-mobl>
-References: <20191106083843.1718437-1-vkoul@kernel.org>
+        id S1726270AbfKUFKo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 00:10:44 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46395 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725819AbfKUFKo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 00:10:44 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 193so1020191pfc.13
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2019 21:10:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msCu0QpwL+TYH2H0S7A59z3R+0BjpgNq8syAjSNxH5A=;
+        b=L/OQosoCwe6MxD5gy1A0NnLJOkaGqqtWsSD3IhTXsXHBvOFV0eT/u4HEoDnvJmMAJn
+         YGM2wbDk98aSrs1dW2Px/8o6lCMHN97PlNFo1yKoFWgF5BRG/CWgVPgafPfqqXKOfw61
+         qWYZW4aQ5Zkj6KYGcwlV/6dc9qH0PaNin8UaA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=msCu0QpwL+TYH2H0S7A59z3R+0BjpgNq8syAjSNxH5A=;
+        b=bf7ftP0wrqav0c3iZu2ydcTobw2m4kKhk6Iq0FX5DKz2w5O4wnyeLDvhdQfh6xuL1d
+         rYM8/hX8olhN+Z0V3ZNM58KDrfHqJvofWbb7CQVqXTqqS/C7n6UX7N9Pa+lD8UsB9jNJ
+         jA7Ha6riNZEDl3ntz5PZNWWHRh9mA7FOnpG8VgGvny+UomN2rO06ADcAG833XNx6T6ko
+         a3fs5MoIseIzaSDPxdQlKbAZz9gkVG/3+iyHx7OQoacfOa6tuEuc9e1t9rgpLkwYieZx
+         4G6JyjWLvJilwVBw7Upxrk6pGPttYQa35KFRoi8WmLNceoWMP+VDRd870/e7oTPt9uor
+         CkFw==
+X-Gm-Message-State: APjAAAXpXXj+MX7YLZHwCq4EfOcM+T+ckztioAjwOL9j/Vt2M1+UhB3U
+        OYPEnYRMp4QQwhOW3poSYvJyIgXN9PM1hg==
+X-Google-Smtp-Source: APXvYqzxE1UUlMo4o5lL/9FGxnbsO+/yKZx/OP3POMctvwZK6KLKxRCCVHn6zJamnA++y2PEy02TYg==
+X-Received: by 2002:a62:6385:: with SMTP id x127mr8745328pfb.244.1574313043585;
+        Wed, 20 Nov 2019 21:10:43 -0800 (PST)
+Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:254e:2b40:ef8:ee17])
+        by smtp.gmail.com with ESMTPSA id x2sm1329257pfj.90.2019.11.20.21.10.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2019 21:10:42 -0800 (PST)
+From:   Ikjoon Jang <ikjn@chromium.org>
+To:     linux-usb@vger.kernel.org
+Cc:     GregKroah-Hartman <gregkh@linuxfoundation.org>,
+        RobHerring <robh+dt@kernel.org>,
+        MarkRutland <mark.rutland@arm.com>,
+        AlanStern <stern@rowland.harvard.edu>,
+        SuwanKim <suwan.kim027@gmail.com>,
+        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
+        IkjoonJang <ikjn@chromium.org>, JohanHovold <johan@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        drinkcat@chromium.org
+Subject: [PATCH v2 0/2] usb: override hub device bInterval with device
+Date:   Thu, 21 Nov 2019 13:06:34 +0800
+Message-Id: <20191121050634.108727-1-ikjn@chromium.org>
+X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191106083843.1718437-1-vkoul@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 06-11-19, 14:08, Vinod Koul wrote:
-> This series add support for Renesas USB controllers uPD720201 and uPD720202.
-> These require firmware to be loaded and in case devices have ROM those can
-> also be programmed if empty. If ROM is programmed, it runs from ROM as well.
-> 
-> This includes two patches from Christian which supported these controllers
-> w/o ROM and later my patches for ROM support and multiple firmware versions.
+This patchset enables hard wired hub device to use different bInterval
+from its descriptor when the hub has a combined device node.
 
-Greg, Mathias
+When we know reducing autosuspend delay for built-in HIDs is better for
+power saving, we can reduce it to the optimal value. But if a parent hub
+has a long bInterval, mouse lags a lot from more frequent autosuspend.
+So this enables overriding bInterval for a hard wired hub device only
+when we know that reduces the power consumption.
 
-Any feedback on this?
+Ikjoon Jang (2):
+  dt-bindings: usb: add "hub,interval" property
+  usb: overridable hub bInterval by device node
 
-> 
-> Changes in v5:
->  Added a debugfs rom erase patch, helps in debugging
->  Squashed patch 1 & 2 as requested by Mathias
-> 
-> Changes in v4:
->  Rollback the delay values as we got device failures
-> 
-> Changes in v3:
->   Dropped patch 2 as discussed with Christian
->   Removed aligned 8 bytes check
->   Change order for firware search from highest version to lowest
->   Added entry for new firmware for device 0x14 as well
->   Add tested by Christian
-> 
-> Changes in v2:
->   used macros for timeout count and delay
->   removed renesas_fw_alive_check
->   cleaned renesas_fw_callback
->   removed recurion for renesas_fw_download
->   added MODULE_FIRMWARE
->   added comment for multiple fw order
-> 
-> Christian Lamparter (1):
->   usb: xhci: add firmware loader for uPD720201 and uPD720202 w/o ROM
-> 
-> Vinod Koul (3):
->   usb: xhci: Add ROM loader for uPD720201
->   usb: xhci: allow multiple firmware versions
->   usb: xhci: provide a debugfs hook for erasing rom
-> 
->  drivers/usb/host/xhci-pci.c | 911 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 911 insertions(+)
-> 
-> -- 
-> 2.23.0
+ Documentation/devicetree/bindings/usb/usb-device.txt | 4 ++++
+ drivers/usb/core/config.c                            | 6 ++++++
+ 2 files changed, 10 insertions(+)
 
 -- 
-~Vinod
+2.24.0.432.g9d3f5f5b63-goog
+
