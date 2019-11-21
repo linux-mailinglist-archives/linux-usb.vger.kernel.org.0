@@ -2,86 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72CCB1054D6
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 15:48:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317C5105522
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 16:14:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726568AbfKUOss (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 09:48:48 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43510 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726502AbfKUOss (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 09:48:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574347727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vBwingZgYTW82TS3d0tJl0goOomstXZnkfoRxFBHZCI=;
-        b=WdAFI0ORqDnlMqkMvA2jZd58zx/zDb7fhnRddLjQ2naQajGXv8UCSo+YE2bkHZkxMFDucD
-        +/MsvDsJJXuC93b0K/+/6QQTXZDaN9ciaKV0DPvBC3783/9U4OBzFHpyWb2Bpio2Jez9Yi
-        E4arRkUSST8wDJYV6sZH9lBvvMb49dU=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-183-eeECgZNrMhGjSDmNcxSs8g-1; Thu, 21 Nov 2019 09:48:46 -0500
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6B111883524;
-        Thu, 21 Nov 2019 14:48:43 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B32B60BDA;
-        Thu, 21 Nov 2019 14:48:42 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 08:48:42 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
-        <kstewart@linuxfoundation.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
-        <viro@zeniv.linux.org.uk>, zaitcev@redhat.com
-Subject: Re: possible deadlock in mon_bin_vma_fault
-Message-ID: <20191121084842.095edf87@suzdal.zaitcev.lan>
-In-Reply-To: <Pine.LNX.4.44L0.1911201343580.1498-100000@iolanthe.rowland.org>
-References: <20191120111235.7d306f23@suzdal.zaitcev.lan>
-        <Pine.LNX.4.44L0.1911201343580.1498-100000@iolanthe.rowland.org>
-Organization: Red Hat, Inc.
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: eeECgZNrMhGjSDmNcxSs8g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        id S1726980AbfKUPOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 10:14:30 -0500
+Received: from mout.kundenserver.de ([212.227.126.131]:60673 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbfKUPOa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 10:14:30 -0500
+Received: from orion.localdomain ([95.115.120.75]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MG9To-1idHoc0tI4-00GbeK; Thu, 21 Nov 2019 16:14:26 +0100
+From:   "Enrico Weigelt, metux IT consult" <info@metux.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH] drivers: usb: Kconfig: cleanup indentions
+Date:   Thu, 21 Nov 2019 16:14:08 +0100
+Message-Id: <20191121151408.22401-1-info@metux.net>
+X-Mailer: git-send-email 2.11.0
+X-Provags-ID: V03:K1:e0kRH53v0W+OvWbKhNygQRuPlIl1lH04eIKBgnWV2/bRi3zzsK+
+ Ud+VkMN4dX7d3S5YIynTl17SJr26oj8OyG0VPBtiAeNsE4OOBm0KPHHjE8S0M9aah2bbDyY
+ WCGciBf0nNcnxCqxIs5kuXlyYP5g4guPAGqZxSf3KeEKpFMWxAdUOvqdO3jlJt/fTQUP3cj
+ yk477NdmjY1B6WuDVR0LQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:LzmVPn3/Sqw=:3J8CsX7sgEx47rB8SXR1V5
+ 0ArIgnCtEFl5sq+PoKy67VGNoAAE7GIr98/RBz2Sq0K9DFm8S1WPpZwaO9jFlUZAw63qfuBVY
+ WU5Idh4KPRIjc2yfK3beGpZ90TRXKyEaTNawrwHXtz5RssnwGXUPeEL2XIcVpETNo0V+Nx38o
+ O6Rdhl1CsAfdMOltFel1ClI6So8fSkWzHopc3k6FcYSvQJQfYH81NQzalTko0Vm5Rvdi0Kbo1
+ z/DHh3qx0phtca/YZO8BIpSrPRrTIxP7j6VxGS/RQq9YUVGjV1/agWzMxkCW3y83OXUl6mPFF
+ MaP7TADxH2gsZ5ppa4fTDT3x4ANDeCQHx8MgvR2JgurEDDts2lsyXCw+0udDtiO+2IHv6ajnL
+ LfZeOkKc2vmZQmCnDzR0U67nATDmBEFlkk/Z6w4xE2fsi9Ol5lgPV+ggTsfsa7wmFPsCHJH/M
+ /vaklRW1cjN89qOJNvn7YOBgqLFZYvvJdcWXde27wWXx2CaObqaArFJbIjA9AT831rDQP9sHl
+ 1bALVfMAvT5cKYbCkveJoxU1xhRRbLTzrjr2xH2McilO84jX3PZ7jyB37fgqpfYUUHx6Sdmhp
+ WvDZXz3pv/E3fjq5cPzmEvfCHSmzu7bC4OelP0rRMtJy1ngCxuN/3tZAXRndb/JArRLZ8RSHv
+ DLbqxeymoBjS+Jei/cZNOHxEp2C0W0rouXwyqI67DrcnG611AQGBkIeZZRcsQ09jMepz0lTod
+ 1Ndhih2Pm7beiDrH5ADyOWaT5yfUYnf2U3GqMb0arhRuf5TwWGNT/5YOUH53N8kuiQED//Uqe
+ L2s3pxpanZYHK6ORJZftemJTHj+jJLA5b2SfTiBQ7rIJ40gun2SR9W4eJI4Z2GKZyM3Mc1+GF
+ juzvFM+2jlbR9zb09TgA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 20 Nov 2019 13:47:00 -0500 (EST)
-Alan Stern <stern@rowland.harvard.edu> wrote:
+Make the code look a little bit nicer.
 
-> > +               if (rp->mmap_active)
-> > +                       return -EBUSY;
+Signed-off-by: Enrico Weigelt, metux IT consult <info@metux.net>
+---
+ drivers/usb/dwc3/Kconfig | 30 +++++++++++++++---------------
+ drivers/usb/misc/Kconfig | 24 ++++++++++++------------
+ 2 files changed, 27 insertions(+), 27 deletions(-)
 
-> Like that, yes, but the test has to be made while fetch_lock is held. =20
-
-Certainly, thanks. I was rushing just to add a postscriptum.
-
-> Incidentally, the comment for fetch_lock says that it protects b_read=20
-> and b_out, but mon_bin_vma_fault doesn't use either of those fields.
-
-I probably should change that comment to "protect the integrity of the
-circular buffer, such as b_out".
-
-Anyway... If you are looking at it too, what do you think about not using
-any locks in mon_bin_vma_fault() at all? Isn't it valid? I think I tried
-to be "safe", but it only uses things that are constants unless we're
-opening and closing; a process cannot make page faults unless it has
-some thing mapped; and that is only possible if device is open and stays
-open. Can you find a hole in this reasoning?
-
--- Pete
+diff --git a/drivers/usb/dwc3/Kconfig b/drivers/usb/dwc3/Kconfig
+index 556a876c7896..7695841a108f 100644
+--- a/drivers/usb/dwc3/Kconfig
++++ b/drivers/usb/dwc3/Kconfig
+@@ -97,24 +97,24 @@ config USB_DWC3_KEYSTONE
+ 	  Say 'Y' or 'M' here if you have one such device
+ 
+ config USB_DWC3_MESON_G12A
+-       tristate "Amlogic Meson G12A Platforms"
+-       depends on OF && COMMON_CLK
+-       depends on ARCH_MESON || COMPILE_TEST
+-       default USB_DWC3
+-       select USB_ROLE_SWITCH
++	tristate "Amlogic Meson G12A Platforms"
++	depends on OF && COMMON_CLK
++	depends on ARCH_MESON || COMPILE_TEST
++	default USB_DWC3
++	select USB_ROLE_SWITCH
+ 	select REGMAP_MMIO
+-       help
+-         Support USB2/3 functionality in Amlogic G12A platforms.
+-	 Say 'Y' or 'M' if you have one such device.
++	help
++	  Support USB2/3 functionality in Amlogic G12A platforms.
++	  Say 'Y' or 'M' if you have one such device.
+ 
+ config USB_DWC3_OF_SIMPLE
+-       tristate "Generic OF Simple Glue Layer"
+-       depends on OF && COMMON_CLK
+-       default USB_DWC3
+-       help
+-         Support USB2/3 functionality in simple SoC integrations.
+-	 Currently supports Xilinx and Qualcomm DWC USB3 IP.
+-	 Say 'Y' or 'M' if you have one such device.
++	tristate "Generic OF Simple Glue Layer"
++	depends on OF && COMMON_CLK
++	default USB_DWC3
++	help
++	  Support USB2/3 functionality in simple SoC integrations.
++	   Currently supports Xilinx and Qualcomm DWC USB3 IP.
++	   Say 'Y' or 'M' if you have one such device.
+ 
+ config USB_DWC3_ST
+ 	tristate "STMicroelectronics Platforms"
+diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+index 9bce583aada3..4df29c6f7856 100644
+--- a/drivers/usb/misc/Kconfig
++++ b/drivers/usb/misc/Kconfig
+@@ -162,7 +162,7 @@ config USB_IOWARRIOR
+ 	help
+ 	  Say Y here if you want to support the IO Warrior devices from Code
+ 	  Mercenaries.  This includes support for the following devices:
+-	  	IO Warrior 40
++		IO Warrior 40
+ 		IO Warrior 24
+ 		IO Warrior 56
+ 		IO Warrior 24 Power Vampire
+@@ -181,8 +181,8 @@ config USB_TEST
+ 	  including sample test device firmware and "how to use it".
+ 
+ config USB_EHSET_TEST_FIXTURE
+-        tristate "USB EHSET Test Fixture driver"
+-        help
++	tristate "USB EHSET Test Fixture driver"
++	help
+ 	  Say Y here if you want to support the special test fixture device
+ 	  used for the USB-IF Embedded Host High-Speed Electrical Test procedure.
+ 
+@@ -233,17 +233,17 @@ config USB_HUB_USB251XB
+ 	  Say Y or M here if you need to configure such a device via SMBus.
+ 
+ config USB_HSIC_USB3503
+-       tristate "USB3503 HSIC to USB20 Driver"
+-       depends on I2C
+-       select REGMAP_I2C
+-       help
+-         This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
++	tristate "USB3503 HSIC to USB20 Driver"
++	depends on I2C
++	select REGMAP_I2C
++	help
++	  This option enables support for SMSC USB3503 HSIC to USB 2.0 Driver.
+ 
+ config USB_HSIC_USB4604
+-       tristate "USB4604 HSIC to USB20 Driver"
+-       depends on I2C
+-       help
+-         This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
++	tristate "USB4604 HSIC to USB20 Driver"
++	depends on I2C
++	help
++	  This option enables support for SMSC USB4604 HSIC to USB 2.0 Driver.
+ 
+ config USB_LINK_LAYER_TEST
+ 	tristate "USB Link Layer Test driver"
+-- 
+2.11.0
 
