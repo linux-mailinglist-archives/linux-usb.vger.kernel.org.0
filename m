@@ -2,66 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4526D1052D5
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 14:23:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A989105301
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 14:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726500AbfKUNXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 08:23:23 -0500
-Received: from mx2.suse.de ([195.135.220.15]:37352 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726342AbfKUNXX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Nov 2019 08:23:23 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 7BC9DB089;
-        Thu, 21 Nov 2019 13:23:21 +0000 (UTC)
-Message-ID: <1574342596.29504.1.camel@suse.com>
-Subject: Re: Logitech USB wireless reciever m280
-From:   Oliver Neukum <oneukum@suse.com>
-To:     =?UTF-8?Q?=D0=94=D0=BC=D0=B8=D1=82=D1=80=D0=B8=D0=B9_?=
-         =?UTF-8?Q?=D0=9C=D0=B0=D0=BD=D0=B6=D1=83=D1=80=D0=B0?= 
-        <dimitriusman@gmail.com>, linux-usb@vger.kernel.org
-Date:   Thu, 21 Nov 2019 14:23:16 +0100
-In-Reply-To: <CAPSdnVC_708+Fk6enHhcBdOG-iQoyoiDtD9S4sV3LLzk0agJCg@mail.gmail.com>
-References: <CAPSdnVC_OFsSNBmAqSJyHe5giv1n7EpCM9YzuUjye462-60BHQ@mail.gmail.com>
-         <CAPSdnVC_708+Fk6enHhcBdOG-iQoyoiDtD9S4sV3LLzk0agJCg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727126AbfKUN3C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 08:29:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727121AbfKUN3A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 21 Nov 2019 08:29:00 -0500
+Received: from localhost.localdomain (unknown [118.189.143.39])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 33A692067D;
+        Thu, 21 Nov 2019 13:28:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574342940;
+        bh=tNWvoPXSaRpuFIsU8oDqXtHXbsh3Jbs2EGRtmTxYfhU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=h2K44BZiUxE6gXUCb3vxe/ZoY4HHwFT8UcBmjeILen+rmF78zvP5KNFIkwFUEbOOs
+         DF61ATB3CkvOJvzYtGb4MUhjk5jZxsfVECKjKDL/9ssZ5GqgbWodOlfXMdLA57d6MP
+         eCVz0zQDG0uvkksMUfPTy6772MokTSVT11nQCpiw=
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: serial: Fix Kconfig indentation
+Date:   Thu, 21 Nov 2019 21:28:56 +0800
+Message-Id: <20191121132856.29130-1-krzk@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Donnerstag, den 21.11.2019, 14:22 +0200 schrieb Дмитрий Манжура:
-> Hello,
-> 
-> Logitech wireless receiver m280 not working and not detecting via
-> lsusb on distros with kernel 5.2+
-> 
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 003 Device 002: ID 04f2:b5e0 Chicony Electronics Co., Ltd VGA WebCam
-> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 001 Device 002: ID 04ca:3015 Lite-On Technology Corp.
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> On kernel 4.19 its working fine
-> 
-> Once i trace this error
-> 
-> kernel: usb 3-2: new full-speed USB device number 4 using xhci_hcd
-> kernel: usb 3-2: device descriptor read/all, error -71
-> kernel: usb 3-2: new full-speed USB device number 5 using xhci_hcd
-> kernel: usb 3-2: unable to read config index 0 descriptor/start: -71
-> kernel: usb 3-2: can't read configurations, error -71
-> kernel: usb usb3-port2: attempt power cycle
+Adjust indentation from spaces to tab (+optional two spaces) as in
+coding style with command like:
+	$ sed -e 's/^        /\t/' -i */Kconfig
 
-Hi,
+Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+---
+ drivers/usb/serial/Kconfig | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-this indicates a low level issue in XHCI. Could you bisect?
-
-	Regards
-		Oliver
+diff --git a/drivers/usb/serial/Kconfig b/drivers/usb/serial/Kconfig
+index 0a8c16a8cda2..ed4a18b435a0 100644
+--- a/drivers/usb/serial/Kconfig
++++ b/drivers/usb/serial/Kconfig
+@@ -269,16 +269,16 @@ config USB_SERIAL_F8153X
+ 
+ 
+ config USB_SERIAL_GARMIN
+-       tristate "USB Garmin GPS driver"
+-       help
+-	 Say Y here if you want to connect to your Garmin GPS.
+-	 Should work with most Garmin GPS devices which have a native USB port.
++	tristate "USB Garmin GPS driver"
++	help
++	  Say Y here if you want to connect to your Garmin GPS.
++	  Should work with most Garmin GPS devices which have a native USB port.
+ 
+-	 See <http://sourceforge.net/projects/garmin-gps> for the latest
+-	 version of the driver.
++	  See <http://sourceforge.net/projects/garmin-gps> for the latest
++	  version of the driver.
+ 
+-	 To compile this driver as a module, choose M here: the
+-	 module will be called garmin_gps.
++	  To compile this driver as a module, choose M here: the
++	  module will be called garmin_gps.
+ 
+ config USB_SERIAL_IPW
+ 	tristate "USB IPWireless (3G UMTS TDD) Driver"
+-- 
+2.17.1
 
