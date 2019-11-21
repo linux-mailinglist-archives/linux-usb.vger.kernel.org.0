@@ -2,143 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC87010483E
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 02:53:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 879E8104878
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 03:28:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbfKUBxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 20 Nov 2019 20:53:53 -0500
-Received: from nat-hk.nvidia.com ([203.18.50.4]:26598 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725819AbfKUBxx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 20 Nov 2019 20:53:53 -0500
-Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd5ee2f0000>; Thu, 21 Nov 2019 09:53:51 +0800
-Received: from HKMAIL103.nvidia.com ([10.18.16.12])
-  by hkpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 20 Nov 2019 17:53:49 -0800
+        id S1725936AbfKUC2N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 20 Nov 2019 21:28:13 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:10333 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725904AbfKUC2N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 20 Nov 2019 21:28:13 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd5f17c0000>; Wed, 20 Nov 2019 18:07:56 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 20 Nov 2019 18:07:55 -0800
 X-PGP-Universal: processed;
-        by hkpgpgate102.nvidia.com on Wed, 20 Nov 2019 17:53:49 -0800
-Received: from HKMAIL103.nvidia.com (10.18.16.12) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
- 2019 01:53:48 +0000
-Received: from NAM05-CO1-obe.outbound.protection.outlook.com (104.47.48.56) by
- HKMAIL103.nvidia.com (10.18.16.12) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Thu, 21 Nov 2019 01:53:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bvgObiOIu/9r3CDoxCjQKGDe+5ySVMzDDsKT5xoZJj2fpvyNluhtV/qBg1vA42kuKN9WnDvMHYXLtbVDYapToq9NsUvaPQRQSyZhmdZxnrTX8h7SZdaUAqf0a5QMuKSEqoS8jTtf/lQdocAUsyf1RrpSkCFkErrwlY51mlJ9Y+9AYhHDvUTjbU6tvGN0240qFNWiSOKDpJztJsaL2DMlMNdBvTiEqgCIpXQncpAbOPF155F7iolpx7zhlT1z5JErXde0PyFv8uJi6wEr16SsU4F7hZLCScHyaIlqRasL/AiDwdZGAALrLiZ6vfVpXpYVQJ2fGANwTLEiy9De7Q+wrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=as+OtNCW2+16zGX976SmPal+sVVgxX+4F/Ac+dE8XCM=;
- b=np0sjRzu2K0BDUfEqS6cMXlDvNAVdmn1QqcQ54ikYQtkm+b2i7diICYj8bLO2xcPOqcoIHBrZVjhULgCK8H5DiWM6RtTwy48hCLqs9O0x7Jh3/83hQrw9zzQP2T8asKkHCG9IoMudXvrCmAEETfDTLL4kc6a87YJX+UZWX1XSFfeUyAfZr+XmLKyixmsSxJn2pp5vCWdDV+n74jQImWGJ1ZyGXPdYuKrDw33PsyOcYa3b+2v3r5DKoFDfGhs/yemhxl+GtX4NPy7cup8MPI+B11LMFVZRiNgNlVBHK0JqTMXoPCvEXs24dwPxJPabgPX4qDGvlPoJYn4MG/82KdiNA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from MN2PR12MB3389.namprd12.prod.outlook.com (20.178.242.161) by
- MN2PR12MB3136.namprd12.prod.outlook.com (20.178.244.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2451.26; Thu, 21 Nov 2019 01:53:43 +0000
-Received: from MN2PR12MB3389.namprd12.prod.outlook.com
- ([fe80::457a:dc11:397f:d4ce]) by MN2PR12MB3389.namprd12.prod.outlook.com
- ([fe80::457a:dc11:397f:d4ce%7]) with mapi id 15.20.2451.032; Thu, 21 Nov 2019
- 01:53:43 +0000
+        by hqpgpgate101.nvidia.com on Wed, 20 Nov 2019 18:07:55 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
+ 2019 02:07:54 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Thu, 21 Nov 2019 02:07:54 +0000
+Received: from henryl-tu10x.nvidia.com (Not Verified[10.19.109.104]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dd5f1790000>; Wed, 20 Nov 2019 18:07:54 -0800
 From:   Henry Lin <henryl@nvidia.com>
-To:     Jack Pham <jackp@codeaurora.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
+CC:     <jackp@codeaurora.org>, Henry Lin <henryl@nvidia.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] usb: xhci: only set D3hot for pci device
-Thread-Topic: [PATCH v3] usb: xhci: only set D3hot for pci device
-Thread-Index: AQHVnrHTQOCmI7fogkC/eeXWnSpur6eUcLKAgABuKww=
-Date:   Thu, 21 Nov 2019 01:53:42 +0000
-Message-ID: <MN2PR12MB33896F7985965196603FE7FCAC4E0@MN2PR12MB3389.namprd12.prod.outlook.com>
-References: <20191113014927.11915-1-henryl@nvidia.com>
- <20191119081656.8746-1-henryl@nvidia.com>,<0101016e8a3ed405-a70f7e87-8c4b-4759-910f-9b9753a9dabb-000000@us-west-2.amazonses.com>
-In-Reply-To: <0101016e8a3ed405-a70f7e87-8c4b-4759-910f-9b9753a9dabb-000000@us-west-2.amazonses.com>
-Accept-Language: en-US, zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=henryl@nvidia.com; 
-x-originating-ip: [59.124.78.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6bdb6837-589a-4d1c-df15-08d76e25a375
-x-ms-traffictypediagnostic: MN2PR12MB3136:
-x-microsoft-antispam-prvs: <MN2PR12MB313675B1AC8F1D51E2234C6FAC4E0@MN2PR12MB3136.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0228DDDDD7
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(199004)(189003)(9686003)(74316002)(33656002)(66476007)(6436002)(54906003)(26005)(14454004)(52536014)(66446008)(66556008)(66946007)(316002)(446003)(8676002)(7736002)(11346002)(476003)(486006)(6246003)(81166006)(6916009)(229853002)(25786009)(2906002)(102836004)(478600001)(4326008)(186003)(81156014)(55016002)(8936002)(4744005)(305945005)(3846002)(6116002)(66066001)(86362001)(6506007)(76116006)(91956017)(71200400001)(71190400001)(76176011)(256004)(5660300002)(99286004)(64756008)(7696005)(32563001);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB3136;H:MN2PR12MB3389.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ViUEaG1GUTGJq+SlQ83Xf3ADpWWkDpZipOE3J7Cj5crWzqnlXSquQpuNKAsfdbOi5Dmqlj7l40KuNNdCiOX8NgUSOFaK7Z+ETNBX1PWL6Jykvx5I4Lqtl+pPlecuEsOcX2Qc2TowIvsI39WZ7Bse7zi8Cjhjf457hXSXMZYyv0BEX/Gl6tLBpWaJegwD+EOkR2LS+xL9jhg33xtvIRxg9afYqj/cJT0OTIPLJ8kj6Hr26/e7jdNBc9nS9dI8zC7sGjP/4xT+3O604LHxOchmNJSuh0FGz68jVMLnu2qNwBR9Gn7M+F49guhksPmNYO6LXiO+bS1RDw2qTO81W1hl4qIvZIxONqFpqammkJn/SpLjgboBFXfsqMdqvY7mgV+YoOlLApWlB9rGjDtllYRZlhw3VAPXTwl/rCEKMnWlTfXr3s85Fnbs0bTXXReWXJC4
-x-ms-exchange-transport-forked: True
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v4] usb: xhci: only set D3hot for pci device
+Date:   Thu, 21 Nov 2019 10:07:03 +0800
+Message-ID: <20191121020703.10173-1-henryl@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20191119081656.8746-1-henryl@nvidia.com>
+References: <20191119081656.8746-1-henryl@nvidia.com>
+X-NVConfidentiality: public
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6bdb6837-589a-4d1c-df15-08d76e25a375
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Nov 2019 01:53:43.0151
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EjJx8wNbSi+zNVkxaSmO6ZNtoDW5KL5E2QPAFXG3eaUiikV6CLHXcd3sfJQTyGfomjfT+WNcG+zspi2GEliOXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3136
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574301231; bh=as+OtNCW2+16zGX976SmPal+sVVgxX+4F/Ac+dE8XCM=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=GLDmQ/zqldOZ/0r6ScD/9fL6tM14HDx/N47iQXhi7pI1yCSlPUSjM/ekaDFvmhuGZ
-         WDe+aN2h+yMXYbuhK/BlsXEmS1qOf8VMb5J2bCSj0bQ8ZP50DPkm0newGDgAttPTgf
-         Vrjn5ZwQkBjtJEpmFXckYICIQAWPVFRzKq8FR0g8o3PtTbU1Sk1KOinlzweNSgpeqE
-         OXEjAMvmm/qhzjGfX/Crc/FPfeEAWhPKMKpoWkeezX5A1giOHbBcEKTwyh5eQbtRuf
-         t0J7QZrueB/OST6yey/EnJtBlfwrzVQWyLSgPC3OeBdU1RS8vXNkhTGhmRKbhd5DOv
-         Fyi9wYXXd1kzA==
+        t=1574302076; bh=LFURWC9StPxfn6pVQEi+FakzbyuQQSR3hqKKmpk8NqQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:X-NVConfidentiality:MIME-Version:
+         Content-Type;
+        b=YLlnwWS5RGPSQ4Z/IvIeMsVUpkgvbLNLTam0/Zpc4q6SniI63/wDZa+McjKrp3Wql
+         aOI/OPWDYcaSbHsi+efWgjjpLimdgLokcq1dFsvoCqerKL+hPy6Y4C/q3pZad9hKzf
+         u6RKn1TsJRcMqRaJiTN5FciRDhfgMC+ZQzorRz7mRuQhFH0WSVz2huMbbjIDL+qrvm
+         wKh42EdUthKAqIembwRt7tXcnlGkZ+XYjVweOW7ewhKhKjfnu558td03tBoxFgh8h4
+         Dw9ekg72dGT+dE4B5O7Fr2hc9K1YN+GxHglvPOs5Cgw/Ecx1/FnSdsNmgZR9pmPUbv
+         YZmvbGBpIBSjw==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> @@ -770,7 +770,7 @@ static void xhci_stop(struct usb_hcd *hcd)=0A=
->>   *=0A=
->>   * This will only ever be called with the main usb_hcd (the USB3 roothu=
-b).=0A=
->>   */=0A=
->> -static void xhci_shutdown(struct usb_hcd *hcd)=0A=
->> +void xhci_shutdown(struct usb_hcd *hcd)=0A=
->>  {=0A=
->>       struct xhci_hcd *xhci =3D hcd_to_xhci(hcd);=0A=
->>=0A=
->> @@ -789,10 +789,6 @@ static void xhci_shutdown(struct usb_hcd *hcd)=0A=
->>       xhci_dbg_trace(xhci, trace_xhci_dbg_init,=0A=
->>                       "xhci_shutdown completed - status =3D %x",=0A=
->>                       readl(&xhci->op_regs->status));=0A=
->> -=0A=
->> -     /* Yet another workaround for spurious wakeups at shutdown with HS=
-W */=0A=
->> -     if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)=0A=
->> -             pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3ho=
-t);=0A=
->>  }=0A=
-=0A=
->Shouldn't this function also now need to be EXPORTed?=0A=
-Yes. I will add EXPORT_SYMBOL_GPL() for it.=
+Xhci driver cannot call pci_set_power_state() on non-pci xhci host
+controllers. For example, NVIDIA Tegra XHCI host controller which acts
+as platform device with XHCI_SPURIOUS_WAKEUP quirk set in some platform
+hits this issue during shutdown.
+
+Signed-off-by: Henry Lin <henryl@nvidia.com>
+---
+v4:
+  1. export xhci_shutdown for CONFIG_USB_XHCI_PCI=m
+---
+ drivers/usb/host/xhci-pci.c | 13 +++++++++++++
+ drivers/usb/host/xhci.c     |  7 ++-----
+ drivers/usb/host/xhci.h     |  1 +
+ 3 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 1e0236e90687..1904ef56f61c 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -519,6 +519,18 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
+ }
+ #endif /* CONFIG_PM */
+ 
++static void xhci_pci_shutdown(struct usb_hcd *hcd)
++{
++	struct xhci_hcd		*xhci = hcd_to_xhci(hcd);
++	struct pci_dev		*pdev = to_pci_dev(hcd->self.controller);
++
++	xhci_shutdown(hcd);
++
++	/* Yet another workaround for spurious wakeups at shutdown with HSW */
++	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
++		pci_set_power_state(pdev, PCI_D3hot);
++}
++
+ /*-------------------------------------------------------------------------*/
+ 
+ /* PCI driver selection metadata; PCI hotplugging uses this */
+@@ -554,6 +566,7 @@ static int __init xhci_pci_init(void)
+ #ifdef CONFIG_PM
+ 	xhci_pci_hc_driver.pci_suspend = xhci_pci_suspend;
+ 	xhci_pci_hc_driver.pci_resume = xhci_pci_resume;
++	xhci_pci_hc_driver.shutdown = xhci_pci_shutdown;
+ #endif
+ 	return pci_register_driver(&xhci_pci_driver);
+ }
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 6c17e3fe181a..90aa811165f1 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -770,7 +770,7 @@ static void xhci_stop(struct usb_hcd *hcd)
+  *
+  * This will only ever be called with the main usb_hcd (the USB3 roothub).
+  */
+-static void xhci_shutdown(struct usb_hcd *hcd)
++void xhci_shutdown(struct usb_hcd *hcd)
+ {
+ 	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
+ 
+@@ -789,11 +789,8 @@ static void xhci_shutdown(struct usb_hcd *hcd)
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+ 			"xhci_shutdown completed - status = %x",
+ 			readl(&xhci->op_regs->status));
+-
+-	/* Yet another workaround for spurious wakeups at shutdown with HSW */
+-	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+-		pci_set_power_state(to_pci_dev(hcd->self.sysdev), PCI_D3hot);
+ }
++EXPORT_SYMBOL_GPL(xhci_shutdown);
+ 
+ #ifdef CONFIG_PM
+ static void xhci_save_registers(struct xhci_hcd *xhci)
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index f9f88626a57a..973d665052a2 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2050,6 +2050,7 @@ int xhci_start(struct xhci_hcd *xhci);
+ int xhci_reset(struct xhci_hcd *xhci);
+ int xhci_run(struct usb_hcd *hcd);
+ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks);
++void xhci_shutdown(struct usb_hcd *hcd);
+ void xhci_init_driver(struct hc_driver *drv,
+ 		      const struct xhci_driver_overrides *over);
+ int xhci_disable_slot(struct xhci_hcd *xhci, u32 slot_id);
+-- 
+2.17.1
+
