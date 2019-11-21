@@ -2,158 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D852E1054CB
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 15:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CCB1054D6
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 15:48:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbfKUOpK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 09:45:10 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:52358 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbfKUOpK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 09:45:10 -0500
-Received: by mail-io1-f70.google.com with SMTP id o5so2371386iob.19
-        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2019 06:45:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=gKVEHAypeETPe8BrGsTwrpNX1ECF4WGPfjBww5LbXIE=;
-        b=J6KWJHSzlstDYKBqwv38wyg5cyOS6hBlMIlyGifH5AOM3WsEB4msRaTQaaGmgG4rUP
-         w8KF96SsLsfczUrh+k5JBfUp7LTJ7kpd1d9qz+w87p+3DPgqDhThZCPddB24pcK84v3u
-         NAKo+gu+b2zHEPShhPoyIsW3Y7N23tmfKhEN+IyM47u/6i9ApGA8W4bNT0MVabpJ04Km
-         tvuMVu1aQhGfUySA12Xb0gX2rZra2qdC8OeTOJxDv8diSMq1Jfwz5sMi/t7xpa3B738y
-         yYRszxzxrzpFogdBgLqpNuIgumDHNC8s6tm5BmkiMlR2VWMX+wP1MdZqjy8Fww1LH17+
-         3Wgw==
-X-Gm-Message-State: APjAAAUU/6k9QC/rlWkEcBkYk9OidxZEhWupyzDkpewUaN0snlqrgxbx
-        1lePJB3WiGDCsVDbnhrWl5netJpGOokgraWedD/vg9txpWQ0
-X-Google-Smtp-Source: APXvYqxZ3Qw0R6eFPKZCR7qRh2nPXw7qOlHgzU6f4Hf5Qk1q8lnrgvdMAX6Pp1H4q86+9fHJuXYS3a+iyTb3/yjV/hgXlTBd9LeB
+        id S1726568AbfKUOss (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 09:48:48 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:43510 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726502AbfKUOss (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 09:48:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574347727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vBwingZgYTW82TS3d0tJl0goOomstXZnkfoRxFBHZCI=;
+        b=WdAFI0ORqDnlMqkMvA2jZd58zx/zDb7fhnRddLjQ2naQajGXv8UCSo+YE2bkHZkxMFDucD
+        +/MsvDsJJXuC93b0K/+/6QQTXZDaN9ciaKV0DPvBC3783/9U4OBzFHpyWb2Bpio2Jez9Yi
+        E4arRkUSST8wDJYV6sZH9lBvvMb49dU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-183-eeECgZNrMhGjSDmNcxSs8g-1; Thu, 21 Nov 2019 09:48:46 -0500
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6B111883524;
+        Thu, 21 Nov 2019 14:48:43 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B32B60BDA;
+        Thu, 21 Nov 2019 14:48:42 +0000 (UTC)
+Date:   Thu, 21 Nov 2019 08:48:42 -0600
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
+        <kstewart@linuxfoundation.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
+        <viro@zeniv.linux.org.uk>, zaitcev@redhat.com
+Subject: Re: possible deadlock in mon_bin_vma_fault
+Message-ID: <20191121084842.095edf87@suzdal.zaitcev.lan>
+In-Reply-To: <Pine.LNX.4.44L0.1911201343580.1498-100000@iolanthe.rowland.org>
+References: <20191120111235.7d306f23@suzdal.zaitcev.lan>
+        <Pine.LNX.4.44L0.1911201343580.1498-100000@iolanthe.rowland.org>
+Organization: Red Hat, Inc.
 MIME-Version: 1.0
-X-Received: by 2002:a6b:8e47:: with SMTP id q68mr4633416iod.274.1574347509632;
- Thu, 21 Nov 2019 06:45:09 -0800 (PST)
-Date:   Thu, 21 Nov 2019 06:45:09 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000109c040597dc5843@google.com>
-Subject: INFO: rcu detected stall in hub_event
-From:   syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-MC-Unique: eeECgZNrMhGjSDmNcxSs8g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Wed, 20 Nov 2019 13:47:00 -0500 (EST)
+Alan Stern <stern@rowland.harvard.edu> wrote:
 
-syzbot found the following crash on:
+> > +               if (rp->mmap_active)
+> > +                       return -EBUSY;
 
-HEAD commit:    46178223 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=15a05836e00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
-dashboard link: https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1061395ae00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13653d1ce00000
+> Like that, yes, but the test has to be made while fetch_lock is held. =20
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
+Certainly, thanks. I was rushing just to add a postscriptum.
 
-rcu: INFO: rcu_sched self-detected stall on CPU
-rcu: 	0-....: (10499 ticks this GP) idle=8ea/1/0x4000000000000002  
-softirq=1810/1810 fqs=5108
-	(t=10500 jiffies g=1553 q=595)
-NMI backtrace for cpu 0
-CPU: 0 PID: 12 Comm: kworker/0:1 Not tainted 5.4.0-rc6+ #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-Call Trace:
-  <IRQ>
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xca/0x13e lib/dump_stack.c:113
-  nmi_cpu_backtrace.cold+0x55/0x96 lib/nmi_backtrace.c:101
-  nmi_trigger_cpumask_backtrace+0x1b0/0x1c7 lib/nmi_backtrace.c:62
-  trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
-  rcu_dump_cpu_stacks+0x169/0x1b3 kernel/rcu/tree_stall.h:254
-  print_cpu_stall kernel/rcu/tree_stall.h:455 [inline]
-  check_cpu_stall kernel/rcu/tree_stall.h:529 [inline]
-  rcu_pending kernel/rcu/tree.c:2795 [inline]
-  rcu_sched_clock_irq.cold+0x4da/0x936 kernel/rcu/tree.c:2244
-  update_process_times+0x25/0x60 kernel/time/timer.c:1726
-  tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:167
-  tick_sched_timer+0x42/0x130 kernel/time/tick-sched.c:1299
-  __run_hrtimer kernel/time/hrtimer.c:1514 [inline]
-  __hrtimer_run_queues+0x303/0xc60 kernel/time/hrtimer.c:1576
-  hrtimer_interrupt+0x2e8/0x730 kernel/time/hrtimer.c:1638
-  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1110 [inline]
-  smp_apic_timer_interrupt+0xf5/0x500 arch/x86/kernel/apic/apic.c:1135
-  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
-  </IRQ>
-RIP: 0010:hid_apply_multiplier drivers/hid/hid-core.c:1058 [inline]
-RIP: 0010:hid_setup_resolution_multiplier+0x33b/0x990  
-drivers/hid/hid-core.c:1114
-Code: e8 2a 96 ed fc 48 8d 7d 04 48 89 f8 48 c1 e8 03 42 0f b6 14 38 48 89  
-f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 0c 05 00 00 <44> 8b 6d 04 bf  
-02 00 00 00 44 89 ee e8 64 97 ed fc 41 83 fd 02 74
-RSP: 0018:ffff8881da226cd8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
-RAX: 0000000000000007 RBX: 0000000000000000 RCX: ffffffff8450902c
-RDX: 0000000000000000 RSI: ffffffff84509036 RDI: ffff8881d4df1204
-RBP: ffff8881d4df1200 R08: ffff8881da211800 R09: ffffc900004770cc
-R10: fffff5200009241b R11: ffffc900004920db R12: ffff8881c6640000
-R13: 0000000000000000 R14: ffff8881d4df1200 R15: dffffc0000000000
-  hid_open_report+0x438/0x640 drivers/hid/hid-core.c:1225
-  hid_parse include/linux/hid.h:1017 [inline]
-  ms_probe+0x12d/0x4d0 drivers/hid/hid-microsoft.c:388
-  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2212
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2202
-  hid_add_device drivers/hid/hid-core.c:2368 [inline]
-  hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2317
-  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2202
-  usb_set_configuration+0xdf6/0x1670 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0xae6/0x16f0 drivers/base/core.c:2202
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1df8/0x3800 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2269
-  process_scheduled_works kernel/workqueue.c:2331 [inline]
-  worker_thread+0x7ab/0xe20 kernel/workqueue.c:2417
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> Incidentally, the comment for fetch_lock says that it protects b_read=20
+> and b_out, but mon_bin_vma_fault doesn't use either of those fields.
 
+I probably should change that comment to "protect the integrity of the
+circular buffer, such as b_out".
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Anyway... If you are looking at it too, what do you think about not using
+any locks in mon_bin_vma_fault() at all? Isn't it valid? I think I tried
+to be "safe", but it only uses things that are constants unless we're
+opening and closing; a process cannot make page faults unless it has
+some thing mapped; and that is only possible if device is open and stays
+open. Can you find a hole in this reasoning?
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-- Pete
+
