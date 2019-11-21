@@ -2,97 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D46B105936
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 19:15:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 915D3105B5E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2019 21:52:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbfKUSPC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 13:15:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:53426 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726279AbfKUSPC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 21 Nov 2019 13:15:02 -0500
-Received: from localhost (unknown [69.71.4.100])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 78F07206CB;
-        Thu, 21 Nov 2019 18:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574360101;
-        bh=ijyd7cvmLy8JKNJbgtDDlfBXxuIHmN+a8yLmCNyGDqQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VgwLmUNzZRbIdTmWHbDI8KdQQ+ScwxNVOV7pkZGey2MAv2Ut5eFUXXTW67vDabEOV
-         RHtsfLKq8QC+/GnTC3C0fo9kMAqptOayz2c1bZmnXLhoIdEEcn/zAk22QVqBcSuHCI
-         kM/dv9vzFnnBE3Ix/ZmKNfzQenYhqT4eob4P/E1s=
-Date:   Thu, 21 Nov 2019 12:15:00 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Daniel Drake <drake@endlessm.com>
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Message-ID: <20191121181500.GA55996@google.com>
+        id S1726858AbfKUUw1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 15:52:27 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:58632 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbfKUUw1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 15:52:27 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xALKnNGp101533;
+        Thu, 21 Nov 2019 20:50:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=JqMqk6Pam98kfZFKlDoAMn1so5XjHeYutDiswf96RFU=;
+ b=sRJg4b6jEE3FX2oCNtwZ3h7BrtDVOvdJXXXsQzMgYNFaT4KkWQQZBvCr16tl3uDvg3QL
+ hbUZIinoXwIE7c9h1GLbhs0NmFIgSikwqy1uesZmB2XfjcW9Q+bzTywvrhIYVC7Pov1m
+ KYjCQ3fvDcl3ETtHADppgN1sJjOjAfudpFle9vKC7IFdZBGj/1rhnlrYdiAl8Q+OEwlc
+ oW696zYDYubgmamGDUGG6FjQOBkZ2X6g0XvAgaRPXkCfldVTawfPvEE+zL/OOiyo+Vbo
+ 4vwStNp3RSACWtqoUgag2JAo5RCGXT5Uny8+F7rnqlKIgy+hCaQxW9g0kLR5Jc0egKBb Rw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 2wa92q6uu1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Nov 2019 20:50:16 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xALKiT7a129317;
+        Thu, 21 Nov 2019 20:50:15 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2wd4700v9b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 21 Nov 2019 20:50:15 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xALKo7PE022130;
+        Thu, 21 Nov 2019 20:50:11 GMT
+Received: from kadam (/41.210.146.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 21 Nov 2019 12:50:07 -0800
+Date:   Thu, 21 Nov 2019 23:49:56 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     syzbot <syzbot+a36ab65c6653d7ccdd62@syzkaller.appspotmail.com>
+Cc:     alsa-devel@alsa-project.org, andreyknvl@google.com,
+        benquike@gmail.com, g@b4.vu, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        perex@perex.cz, syzkaller-bugs@googlegroups.com, tiwai@suse.com,
+        wang6495@umn.edu
+Subject: Re: general protection fault in snd_usb_create_mixer
+Message-ID: <20191121204956.GE617@kadam>
+References: <0000000000002129080597dce70d@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191120002836.GA247344@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <0000000000002129080597dce70d@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9448 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1911210173
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9448 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1911210174
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 06:28:36PM -0600, Bjorn Helgaas wrote:
-> On Mon, Oct 14, 2019 at 02:13:55PM +0800, Daniel Drake wrote:
-> > On Asus laptops with AMD Ryzen7 3700U and AMD Ryzen5 3500U,
+On Thu, Nov 21, 2019 at 07:25:09AM -0800, syzbot wrote:
+> Hello,
 > 
-> Can you include specific models here in case we revisit this or find a
-> generic solution that needs to be tested to make sure we don't regress
-> these platforms?
+> syzbot found the following crash on:
 > 
-> Maybe a bugzilla with complete "lspci -vvnn" and dmesg logs?
+> HEAD commit:    46178223 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=176f9836e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=a36ab65c6653d7ccdd62
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1447d3bae00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ef3a86e00000
 > 
-> > the XHCI controller fails to resume from runtime suspend or s2idle,
-> > and USB becomes unusable from that point.
-> > 
-> > xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-> > xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-> > xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
-> > xhci_hcd 0000:03:00.4: PCI post-resume error -110!
-> > xhci_hcd 0000:03:00.4: HC died; cleaning up
-> > 
-> > The D3-to-D0 transition is successful if the D3 delay is increased
-> > to 20ms. Add an appropriate quirk for the affected hardware.
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+a36ab65c6653d7ccdd62@syzkaller.appspotmail.com
 > 
-> IIUC, we're doing a D3cold-to-D0 transition in this path:
-> 
->   pci_pm_default_resume_early
->     pci_power_up
->       platform_pci_set_power_state(PCI_D0)    # turn on via ACPI
->       pci_raw_set_power_state(PCI_D0)
->         pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr)
->         # pmcsr says device is in D3hot
->         pci_write_config_word(dev, dev->pm_cap + PCI_PM_CTRL, pmcsr)
->         # sets to D0
->         pci_dev_d3_sleep                      # <-- need more time here
-> 
-> I would sort of expect that ACPI would be putting the device in D0,
-> not leaving it in D3hot, but maybe that's just my ignorance.
+> usb 1-1: 208:241 : does not exist
+> usb 1-1: 208:242 : does not exist
+> usb 1-1: 208:243 : does not exist
+> usb 1-1: 208:244 : does not exist
+> usb 1-1: 208:245 : does not exist
+> usb 1-1: 208:246 : does not exist
+> usb 1-1: 208:247 : does not exist
+> usb 1-1: 208:248 : does not exist
+> usb 1-1: 208:249 : does not exist
+> usb 1-1: 208:250 : does not exist
 
-I definitely was not understanding this correctly.  There is no path
-for a D3cold -> D3hot transition.  Per spec (PCIe r5.0, sec 5.8), the
-only legal exit from D3cold is to D0uninitialized.
+These error messages are because:
 
-I know you tried a debug patch to call pci_dev_wait(), and it didn't
-work, but I'm not sure exactly where it was called.  I have these
-patches on my pci/pm branch for v5.5:
+sound/usb/card.c
+   128  static int snd_usb_create_stream(struct snd_usb_audio *chip, int ctrlif, int interface)
+   129  {
+   130          struct usb_device *dev = chip->dev;
+   131          struct usb_host_interface *alts;
+   132          struct usb_interface_descriptor *altsd;
+   133          struct usb_interface *iface = usb_ifnum_to_if(dev, interface);
+   134  
+   135          if (!iface) {
+   136                  dev_err(&dev->dev, "%u:%d : does not exist\n",
+   137                          ctrlif, interface);
+   138                  return -EINVAL;
+   139          }
 
-  bae26849372b ("PCI/PM: Move pci_dev_wait() definition earlier")
-  395f121e6199 ("PCI/PM: Wait for device to become ready after power-on")
+"iface" is NULL.  The caller ignores the -EINVAL (correctly I think).
 
-The latter adds the wait just before we call
-pci_raw_set_power_state().  If the device is responding with CRS
-status, that should be the point where we'd see it.  If you have a
-chance to try it, I'd be interested in the results.  Here's the
-branch:
+Then the NULL dereference happens in snd_usb_mixer_controls_badd()
 
-https://git.kernel.org/pub/scm/linux/kernel/git/helgaas/pci.git/commit/?h=pci/pm&id=395f121e61994bc135bb669eb35325d5457d669d
+sound/usb/mixer.c
+  2903  static int snd_usb_mixer_controls_badd(struct usb_mixer_interface *mixer,
+  2904                                         int ctrlif)
+  2905  {
+  2906          struct usb_device *dev = mixer->chip->dev;
+  2907          struct usb_interface_assoc_descriptor *assoc;
+  2908          int badd_profile = mixer->chip->badd_profile;
+  2909          struct uac3_badd_profile *f;
+  2910          const struct usbmix_ctl_map *map;
+  2911          int p_chmask = 0, c_chmask = 0, st_chmask = 0;
+  2912          int i;
+  2913  
+  2914          assoc = usb_ifnum_to_if(dev, ctrlif)->intf_assoc;
+  2915  
+  2916          /* Detect BADD capture/playback channels from AS EP descriptors */
+  2917          for (i = 0; i < assoc->bInterfaceCount; i++) {
+  2918                  int intf = assoc->bFirstInterface + i;
+  2919  
+  2920                  struct usb_interface *iface;
+  2921                  struct usb_host_interface *alts;
+  2922                  struct usb_interface_descriptor *altsd;
+  2923                  unsigned int maxpacksize;
+  2924                  char dir_in;
+  2925                  int chmask, num;
+  2926  
+  2927                  if (intf == ctrlif)
+  2928                          continue;
+  2929  
+  2930                  iface = usb_ifnum_to_if(dev, intf);
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+iface is not checked.
+
+Should it be "if (!iface) continue;?"
+
+  2931                  num = iface->num_altsetting;
+  2932  
+  2933                  if (num < 2)
+  2934                          return -EINVAL;
+  2935  
+
+I'm not sure.
+
+regards,
+dan carpenter
+
