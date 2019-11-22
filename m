@@ -2,100 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 882881065F1
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 07:29:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 186E01066D1
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 08:11:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727736AbfKVFu3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 00:50:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55008 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727725AbfKVFu3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Nov 2019 00:50:29 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 459102070E;
-        Fri, 22 Nov 2019 05:50:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574401828;
-        bh=ifwruHAoHqHKLv+HjbF5JGJp7pgttRgm2PgncmfAWrs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VfaJo8jLZPKwwa0r//JrrvKBAgjxaNFkyNE4qqLAqDgshZ91g+LJ+dJ5kQfEuIwau
-         CwtLJWd28IDprh9rFlelG0ZF/+Dqivb2XdmQr2TUv/ZiQ5g0U24QBq36rhU+bd7QvX
-         pF4i96dpqaCBdRofT9naouugx1q+WvUmNaHvOWYo=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Roger Quadros <rogerq@ti.com>, Johan Hovold <johan@kernel.org>,
-        Ladislav Michl <ladis@linux-mips.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S1726548AbfKVHLD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Nov 2019 02:11:03 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:61411 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbfKVHLC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 02:11:02 -0500
+X-Greylist: delayed 902 seconds by postgrey-1.27 at vger.kernel.org; Fri, 22 Nov 2019 02:11:01 EST
+Received: from droid10.amlogic.com (10.18.11.213) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.1591.10; Fri, 22 Nov 2019
+ 14:56:24 +0800
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 070/219] usb: ehci-omap: Fix deferred probe for phy handling
-Date:   Fri, 22 Nov 2019 00:46:42 -0500
-Message-Id: <20191122054911.1750-63-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191122054911.1750-1-sashal@kernel.org>
-References: <20191122054911.1750-1-sashal@kernel.org>
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Hanjie Lin <hanjie.lin@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+Subject: [PATCH 0/6] arm64: meson: Add support for USB on Amlogic A1
+Date:   Fri, 22 Nov 2019 14:55:51 +0800
+Message-ID: <1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.18.11.213]
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Roger Quadros <rogerq@ti.com>
+This patchset adds support for USB on Amlogic A1 SoCs.
 
-[ Upstream commit 8dc7623bf608495b6e6743e805807c7840673573 ]
+This patchset is composed with :
+- bindings of the PHY
+- bindings of the USB Control Glue
+- PHY Driver
+- USB Control Glue driver
+- dts of the PHY
+- dts of the USB Controller
 
-PHY model is being used on omap5 platforms even if port mode
-is not OMAP_EHCI_PORT_MODE_PHY. So don't guess if PHY is required
-or not based on PHY mode.
+The Amlogic A1 USB Complex is composed of :
+- 1 DWC3 USB controller for USB2 Host functionality
+- 1 USB2 PHY for USB2 Host functionality
 
-If PHY is provided in device tree, it must be required. So, if
-devm_usb_get_phy_by_phandle() gives us an error code other
-than -ENODEV (no PHY) then error out.
+The USB Control Glue setups the clocks and the reset about DWC3 USB
+controller, and binds to the USB2 PHY. It also configures the 8bit
+UTMI interfaces for the USB2 PHY, including setting USB2 phy mode.
 
-This fixes USB Ethernet on omap5-uevm if PHY happens to
-probe after EHCI thus causing a -EPROBE_DEFER.
+The USB2 PHY driver initializes the phy analog settings, phy PLL 
+setup and phy tuning.
 
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Ladislav Michl <ladis@linux-mips.org>
-Reported-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Signed-off-by: Roger Quadros <rogerq@ti.com>
-Tested-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
-Acked-by: Tony Lindgren <tony@atomide.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/host/ehci-omap.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+This patchset is based on A1 clock/power domain/reset series at [0].
 
-diff --git a/drivers/usb/host/ehci-omap.c b/drivers/usb/host/ehci-omap.c
-index 7e4c13346a1ee..7d20296cbe9f9 100644
---- a/drivers/usb/host/ehci-omap.c
-+++ b/drivers/usb/host/ehci-omap.c
-@@ -159,11 +159,12 @@ static int ehci_hcd_omap_probe(struct platform_device *pdev)
- 		/* get the PHY device */
- 		phy = devm_usb_get_phy_by_phandle(dev, "phys", i);
- 		if (IS_ERR(phy)) {
--			/* Don't bail out if PHY is not absolutely necessary */
--			if (pdata->port_mode[i] != OMAP_EHCI_PORT_MODE_PHY)
-+			ret = PTR_ERR(phy);
-+			if (ret == -ENODEV) { /* no PHY */
-+				phy = NULL;
- 				continue;
-+			}
- 
--			ret = PTR_ERR(phy);
- 			if (ret != -EPROBE_DEFER)
- 				dev_err(dev, "Can't get PHY for port %d: %d\n",
- 					i, ret);
+[0]
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=185477
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=180055
+https://patchwork.kernel.org/project/linux-amlogic/list/?series=189643
+
+Hanjie Lin (6):
+  dt-bindings: phy: Add Amlogic G12A USB2 PHY Bindings
+  dt-bindings: usb: dwc3: Add the Amlogic A1 Family DWC3 Glue Bindings
+  phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+  usb: dwc3: Add Amlogic A1 DWC3 glue
+  arm64: dts: meson: a1: Enable USB2 PHY
+  arm64: dts: meson: a1: Enable DWC3 controller
+
+ .../bindings/phy/amlogic,meson-a1-usb2-phy.yaml    |  55 +++
+ .../devicetree/bindings/usb/amlogic,dwc3.txt       |  53 +++
+ arch/arm64/boot/dts/amlogic/meson-a1.dtsi          |  41 +++
+ drivers/phy/amlogic/Kconfig                        |  13 +
+ drivers/phy/amlogic/Makefile                       |   1 +
+ drivers/phy/amlogic/phy-meson-a1-usb2.c            | 327 +++++++++++++++++
+ drivers/usb/dwc3/Kconfig                           |  11 +
+ drivers/usb/dwc3/Makefile                          |   1 +
+ drivers/usb/dwc3/dwc3-meson-a1.c                   | 397 +++++++++++++++++++++
+ 9 files changed, 899 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+ create mode 100644 drivers/phy/amlogic/phy-meson-a1-usb2.c
+ create mode 100644 drivers/usb/dwc3/dwc3-meson-a1.c
+
 -- 
-2.20.1
+2.7.4
 
