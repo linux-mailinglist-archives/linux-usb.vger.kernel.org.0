@@ -2,72 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFCD1075F6
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 17:49:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9CE1075FC
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 17:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfKVQtH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 11:49:07 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:46952 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbfKVQtG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 11:49:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=zkBbTkR9+RQ8WB3BuKpXSyZe0/mEGlkgI57xBgxZNRc=; b=GooJ2PIP4cqsx+FKkXw6i69B5
-        Vw8EYYJ4vfuKJ02Gyqu73yLTjjiPChG2VPMVF8yGwFmD9X1xhm14rrokW/YvlP7h+bD58X75BvY6L
-        35KxOgxeWByiOrzLhoK5f+P1CCXRV4Wqk1qSl3zNnlN+p1qzufBkW8V5+lEsgjNOmut0leVbYBhO0
-        /fz9CleTSlMMIAK9wkbezrCJfpfGT/Ty2kZ9UyI1fMLpiCQvdQdxNnTIaORxzbxgccGsMGZ3tze/M
-        nSL1vGvfV3EZ1HKuvnIg+3+BLvH+Rq2X7I7Hh1yJBDZXvxvcPf/EuPW4+vHxqL2lT+esWWkUpv6zl
-        AbagTiCIg==;
-Received: from [2601:1c0:6280:3f0::5a22]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iYC7F-0006o1-Sy; Fri, 22 Nov 2019 16:49:05 +0000
-To:     USB list <linux-usb@vger.kernel.org>,
-        Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] usb: drop comment about 2 uhci drivers
-Message-ID: <5f93d906-4f5c-2a78-c1c7-36cf07e94bcc@infradead.org>
-Date:   Fri, 22 Nov 2019 08:49:04 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1727112AbfKVQvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Nov 2019 11:51:55 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:59722 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726686AbfKVQvy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 11:51:54 -0500
+Received: (qmail 6639 invoked by uid 2102); 22 Nov 2019 11:51:53 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 22 Nov 2019 11:51:53 -0500
+Date:   Fri, 22 Nov 2019 11:51:53 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
+        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: INFO: rcu detected stall in hub_event
+In-Reply-To: <000000000000109c040597dc5843@google.com>
+Message-ID: <Pine.LNX.4.44L0.1911221150350.1511-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Thu, 21 Nov 2019, syzbot wrote:
 
-Drop the ancient comment about 2 usb/uhci drivers since there are
-no longer 2 of them.
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    46178223 usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=15a05836e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1061395ae00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13653d1ce00000
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
+> 
+> rcu: INFO: rcu_sched self-detected stall on CPU
 
-Cc: Johan Hovold <johan@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
+> RIP: 0010:hid_apply_multiplier drivers/hid/hid-core.c:1058 [inline]
+> RIP: 0010:hid_setup_resolution_multiplier+0x33b/0x990  
+> drivers/hid/hid-core.c:1114
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
- drivers/usb/serial/Kconfig |    3 ---
- 1 file changed, 3 deletions(-)
+Diagnostic patch.
 
---- linux-next-20191122.orig/drivers/usb/serial/Kconfig
-+++ linux-next-20191122/drivers/usb/serial/Kconfig
-@@ -129,9 +129,6 @@ config USB_SERIAL_DIGI_ACCELEPORT
- 	  parallel port on the USB 2 appears as a third serial port on Linux.
- 	  The Digi Acceleport USB 8 is not yet supported by this driver.
+#syz test: https://github.com/google/kasan.git 46178223
+
+ drivers/hid/hid-core.c |   17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -1055,8 +1055,13 @@ static void hid_apply_multiplier(struct
+ 	 */
+ 	multiplier_collection = &hid->collection[multiplier->usage->collection_index];
+ 	while (multiplier_collection->parent_idx != -1 &&
+-	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
++	       multiplier_collection->type != HID_COLLECTION_LOGICAL) {
++		hid_info(hid, "collection %d %px parent %d\n",
++	multiplier_collection - hid->collection, multiplier_collection,
++	multiplier_collection->parent_idx);
+ 		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
++	}
++	hid_info(hid, "Got collection\n");
  
--	  This driver works under SMP with the usb-uhci driver.  It does not
--	  work under SMP with the uhci driver.
--
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called digi_acceleport.
+ 	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
  
+@@ -1069,6 +1074,7 @@ static void hid_apply_multiplier(struct
+ 						      effective_multiplier);
+ 		}
+ 	}
++	hid_info(hid, "Applied multiplier\n");
+ }
+ 
+ /*
+@@ -1103,16 +1109,23 @@ void hid_setup_resolution_multiplier(str
+ 
+ 	rep_enum = &hid->report_enum[HID_FEATURE_REPORT];
+ 	list_for_each_entry(rep, &rep_enum->report_list, list) {
++		hid_info(hid, "Start report %px maxfield %d\n",
++	rep, rep->maxfield);
+ 		for (i = 0; i < rep->maxfield; i++) {
+ 			/* Ignore if report count is out of bounds. */
+ 			if (rep->field[i]->report_count < 1)
+ 				continue;
+ 
++			hid_info(hid, "Field %d %px maxusage %d\n",
++	i, rep->field[i], rep->field[i]->maxusage);
+ 			for (j = 0; j < rep->field[i]->maxusage; j++) {
+ 				usage = &rep->field[i]->usage[j];
+-				if (usage->hid == HID_GD_RESOLUTION_MULTIPLIER)
++				if (usage->hid == HID_GD_RESOLUTION_MULTIPLIER) {
++					hid_info(hid, "Usage %d %px\n",
++	j, usage);
+ 					hid_apply_multiplier(hid,
+ 							     rep->field[i]);
++				}
+ 			}
+ 		}
+ 	}
 
