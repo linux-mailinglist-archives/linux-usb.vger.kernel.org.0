@@ -2,153 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7FE1079FB
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 22:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2056F107A69
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 23:13:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfKVVbm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 16:31:42 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:44764 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726089AbfKVVbm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 16:31:42 -0500
-Received: by mail-pj1-f67.google.com with SMTP id w8so3559093pjh.11
-        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2019 13:31:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HbJjs9npQivb+peN/P+/x5LBE//DdoQclSZUko6OYFA=;
-        b=RFawcsOwCqAQEn5boyIcXR16Ki/HBDzNNs0+cfhfK/kOpeyl3s8AHaiARmdz+ZidjB
-         tJ2SwyEjjvDTYo3b8eRbD4+idgXO6jzJhsyQsU1N9jFOBUKU/ICLSLcrNrwVSAG26FRt
-         mgbyxJR2ijBrYIlmXhPJo5cnY7XAXQ2RV9AGiTEH0Ie5M7qcw0YKVIywOI+Y1qNXGqUD
-         vjmWo0N4xOcDGJEox/RXx1+0KyCIDwXccWf5MjxA9sNtL6+MUWVe9cZxWK76dKG76+wX
-         rEezAue56G/PQbfE7FrX69tJh7oZX4SgtzibTF05UKvBRhgEORQef9S4SFRKg6WHZIa9
-         2JHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HbJjs9npQivb+peN/P+/x5LBE//DdoQclSZUko6OYFA=;
-        b=r8lVGdeqgfbaDiIUtlzyiDsQlzyReBpVBwtdBRquQOcKUQ9iXTeGA30O7/ubftNZfs
-         1bYLSmhUgk6e2zpJ3Og5RpE+dfb3k2iPMHat3rPqRbILek+h5bSk5CSl4IBlt3/XsdKo
-         NjeZ6sTijgQOy388cCSD0EtQro5r35ewR3yqM24vAMO5wvT2hOMB0pvdl+FxWWzrv41J
-         4qKBQ4QNpx7ulfPsrADrCj7vHRK3RSOetwolMm32ZDemG8EQUj4TNn9SbjH0MOwuSSiM
-         2BRRQ2jTUbVKxRPXBYhK5uKEPfqA4ME1C29gP+b6HDG1jftW43FbRlguKdgJCahDUWKx
-         j/AQ==
-X-Gm-Message-State: APjAAAX/5D1NzSDMYtJG64QVnmVGmr7SHv5V3osrul//NfiE00ayRc4V
-        OBOFEUBMDUjbuQInD9jcuVwza8emNHogOnh3doZMGg==
-X-Google-Smtp-Source: APXvYqwp9oirAfneUwU+SoycQWx2Iqme1ayHmlDX0a5gLCpzGo05spCaML0qO0qityULcE1WRKI5UM8d92l2Uk+Stzw=
-X-Received: by 2002:a17:902:9682:: with SMTP id n2mr16075888plp.336.1574458300970;
- Fri, 22 Nov 2019 13:31:40 -0800 (PST)
-MIME-Version: 1.0
-References: <000000000000109c040597dc5843@google.com> <Pine.LNX.4.44L0.1911221150350.1511-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1911221150350.1511-100000@iolanthe.rowland.org>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Sat, 23 Nov 2019 06:31:30 +0900
-Message-ID: <CAAeHK+xQo8S8mmMgrOHOwC3iOnZJOZvYNaAei-tMrJA36R6OMQ@mail.gmail.com>
-Subject: Re: INFO: rcu detected stall in hub_event
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1726759AbfKVWNV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Nov 2019 17:13:21 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:60358 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726089AbfKVWNV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 17:13:21 -0500
+Received: (qmail 8878 invoked by uid 2102); 22 Nov 2019 17:13:20 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 22 Nov 2019 17:13:20 -0500
+Date:   Fri, 22 Nov 2019 17:13:20 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Pete Zaitcev <zaitcev@redhat.com>
+cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
+        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
+        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
+        <kstewart@linuxfoundation.org>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
         USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
+        <viro@zeniv.linux.org.uk>
+Subject: Re: possible deadlock in mon_bin_vma_fault
+In-Reply-To: <20191122145243.6ece9bed@suzdal.zaitcev.lan>
+Message-ID: <Pine.LNX.4.44L0.1911221700420.1511-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Nov 23, 2019 at 1:51 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Thu, 21 Nov 2019, syzbot wrote:
->
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    46178223 usb: gadget: add raw-gadget interface
-> > git tree:       https://github.com/google/kasan.git usb-fuzzer
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15a05836e00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1061395ae00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13653d1ce00000
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
-> >
-> > rcu: INFO: rcu_sched self-detected stall on CPU
->
-> > RIP: 0010:hid_apply_multiplier drivers/hid/hid-core.c:1058 [inline]
-> > RIP: 0010:hid_setup_resolution_multiplier+0x33b/0x990
-> > drivers/hid/hid-core.c:1114
+On Fri, 22 Nov 2019, Pete Zaitcev wrote:
 
-I'm not sure, but the stack trace reminds me of this issue, so this
-report might be related:
+> > It would be more elegant to do the rp->mmap_active test before calling
+> > kcalloc and mon_alloc_buf.  But of course that's a pretty minor thing.
+> 
+> Indeed it feels wrong that so much work gets discarded. However, memory
+> allocations can block, right? In the same time, our main objective here is
+> to make sure that when a page fault happens, we fill in the page that VMA
+> is intended to refer, and not one that was re-allocated. Therefore, I'm
+> trying to avoid a situation where:
+> 
+> 1. thread A checks mmap_active, finds it at zero and proceeds into the
+> reallocation ioctl
+> 2. thread A sleeps in get_free_page()
+> 3. thread B runs mmap() and succeeds
+> 4. thread A obtains its pages and proceeds to substitute the buffer
+> 5. thread B (or any other) pagefaults and ends with the new, unexpected page
+> 
+> The code is not pretty, but I don't see an alternative. Heck, I would
+> love you to find more races if you can.
 
-https://groups.google.com/d/msg/syzkaller-bugs/X0zVbh8aFEM/NsPcshjxBgAJ
+The alternative is to have the routines for mmap() hold fetch_lock
+instead of b_lock.  mmap() is allowed to sleep, so that would be okay.  
+Then you would also hold fetch_lock while checking mmap_active and
+doing the memory allocations.  That would prevent any races -- in your
+example above, thread A would acquire fetch_lock in step 1, so thread B
+would block in step 3 until step 4 was finished.  Hence B would end up 
+mapping the correct pages.
 
->
-> Diagnostic patch.
->
-> #syz test: https://github.com/google/kasan.git 46178223
->
->  drivers/hid/hid-core.c |   17 +++++++++++++++--
->  1 file changed, 15 insertions(+), 2 deletions(-)
->
-> Index: usb-devel/drivers/hid/hid-core.c
-> ===================================================================
-> --- usb-devel.orig/drivers/hid/hid-core.c
-> +++ usb-devel/drivers/hid/hid-core.c
-> @@ -1055,8 +1055,13 @@ static void hid_apply_multiplier(struct
->          */
->         multiplier_collection = &hid->collection[multiplier->usage->collection_index];
->         while (multiplier_collection->parent_idx != -1 &&
-> -              multiplier_collection->type != HID_COLLECTION_LOGICAL)
-> +              multiplier_collection->type != HID_COLLECTION_LOGICAL) {
-> +               hid_info(hid, "collection %d %px parent %d\n",
-> +       multiplier_collection - hid->collection, multiplier_collection,
-> +       multiplier_collection->parent_idx);
->                 multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
-> +       }
-> +       hid_info(hid, "Got collection\n");
->
->         effective_multiplier = hid_calculate_multiplier(hid, multiplier);
->
-> @@ -1069,6 +1074,7 @@ static void hid_apply_multiplier(struct
->                                                       effective_multiplier);
->                 }
->         }
-> +       hid_info(hid, "Applied multiplier\n");
->  }
->
->  /*
-> @@ -1103,16 +1109,23 @@ void hid_setup_resolution_multiplier(str
->
->         rep_enum = &hid->report_enum[HID_FEATURE_REPORT];
->         list_for_each_entry(rep, &rep_enum->report_list, list) {
-> +               hid_info(hid, "Start report %px maxfield %d\n",
-> +       rep, rep->maxfield);
->                 for (i = 0; i < rep->maxfield; i++) {
->                         /* Ignore if report count is out of bounds. */
->                         if (rep->field[i]->report_count < 1)
->                                 continue;
->
-> +                       hid_info(hid, "Field %d %px maxusage %d\n",
-> +       i, rep->field[i], rep->field[i]->maxusage);
->                         for (j = 0; j < rep->field[i]->maxusage; j++) {
->                                 usage = &rep->field[i]->usage[j];
-> -                               if (usage->hid == HID_GD_RESOLUTION_MULTIPLIER)
-> +                               if (usage->hid == HID_GD_RESOLUTION_MULTIPLIER) {
-> +                                       hid_info(hid, "Usage %d %px\n",
-> +       j, usage);
->                                         hid_apply_multiplier(hid,
->                                                              rep->field[i]);
-> +                               }
->                         }
->                 }
->         }
->
+In practice, I don't see this being a routine problem.  How often do 
+multiple threads independently try to mmap the same usbmon buffer?
+
+Still, let's see syzbot reacts to your current patch.  The line below 
+is how you ask syzbot to test a candidate patch.
+
+Alan Stern
+
+#syz test: linux-4.19.y f6e27dbb1afa
+
+commit 5252eb4c8297fedbf1c5f1e67da44efe00e6ef6b
+Author: Pete Zaitcev <zaitcev@kotori.zaitcev.us>
+Date:   Thu Nov 21 17:24:00 2019 -0600
+
+    usb: Fix a deadlock in usbmon between mmap and read
+    
+    Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+    Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
+
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index ac2b4fcc265f..f48a23adbc35 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1039,12 +1039,18 @@ static long mon_bin_ioctl(struct file *file, unsigned int cmd, unsigned long arg
+ 
+ 		mutex_lock(&rp->fetch_lock);
+ 		spin_lock_irqsave(&rp->b_lock, flags);
+-		mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
+-		kfree(rp->b_vec);
+-		rp->b_vec  = vec;
+-		rp->b_size = size;
+-		rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
+-		rp->cnt_lost = 0;
++		if (rp->mmap_active) {
++			mon_free_buff(vec, size/CHUNK_SIZE);
++			kfree(vec);
++			ret = -EBUSY;
++		} else {
++			mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
++			kfree(rp->b_vec);
++			rp->b_vec  = vec;
++			rp->b_size = size;
++			rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
++			rp->cnt_lost = 0;
++		}
+ 		spin_unlock_irqrestore(&rp->b_lock, flags);
+ 		mutex_unlock(&rp->fetch_lock);
+ 		}
+@@ -1216,13 +1222,21 @@ mon_bin_poll(struct file *file, struct poll_table_struct *wait)
+ static void mon_bin_vma_open(struct vm_area_struct *vma)
+ {
+ 	struct mon_reader_bin *rp = vma->vm_private_data;
++	unsigned long flags;
++
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	rp->mmap_active++;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+ 
+ static void mon_bin_vma_close(struct vm_area_struct *vma)
+ {
++	unsigned long flags;
++
+ 	struct mon_reader_bin *rp = vma->vm_private_data;
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	rp->mmap_active--;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+ 
+ /*
+@@ -1234,16 +1248,12 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
+ 	unsigned long offset, chunk_idx;
+ 	struct page *pageptr;
+ 
+-	mutex_lock(&rp->fetch_lock);
+ 	offset = vmf->pgoff << PAGE_SHIFT;
+-	if (offset >= rp->b_size) {
+-		mutex_unlock(&rp->fetch_lock);
++	if (offset >= rp->b_size)
+ 		return VM_FAULT_SIGBUS;
+-	}
+ 	chunk_idx = offset / CHUNK_SIZE;
+ 	pageptr = rp->b_vec[chunk_idx].pg;
+ 	get_page(pageptr);
+-	mutex_unlock(&rp->fetch_lock);
+ 	vmf->page = pageptr;
+ 	return 0;
+ }
+
+
+
