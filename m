@@ -2,275 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0884B10743F
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 15:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C82210749B
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 16:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbfKVOuQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 09:50:16 -0500
-Received: from relay2-d.mail.gandi.net ([217.70.183.194]:49615 "EHLO
-        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfKVOuP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 09:50:15 -0500
-X-Originating-IP: 90.66.177.178
-Received: from localhost (lfbn-1-2888-178.w90-66.abo.wanadoo.fr [90.66.177.178])
-        (Authenticated sender: gregory.clement@bootlin.com)
-        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id 3A96840004;
-        Fri, 22 Nov 2019 14:50:12 +0000 (UTC)
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Cristian Birsan <cristian.birsan@microchip.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/3] usb: gadget: udc: atmel: Don't use DT to configure end point
-In-Reply-To: <20191107153128.11038-2-gregory.clement@bootlin.com>
-References: <20191107153128.11038-1-gregory.clement@bootlin.com> <20191107153128.11038-2-gregory.clement@bootlin.com>
-Date:   Fri, 22 Nov 2019 15:50:11 +0100
-Message-ID: <871ru0x8ws.fsf@FE-laptop>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S1727022AbfKVPLF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 22 Nov 2019 10:11:05 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:33075 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726765AbfKVPLF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 10:11:05 -0500
+Received: from mail-pg1-f197.google.com ([209.85.215.197])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <kai.heng.feng@canonical.com>)
+        id 1iYAaN-0007As-11
+        for linux-usb@vger.kernel.org; Fri, 22 Nov 2019 15:11:03 +0000
+Received: by mail-pg1-f197.google.com with SMTP id u8so4043791pgl.4
+        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2019 07:11:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=qkB6AbE907XpVgdpESoP4CNG4PJ+o+uogInoHk0U4Hs=;
+        b=DdL2D3VUztYohw3QkIGPjia1T3xe1+yphdY1pR5ehd3y52PinVGutjXXAgTn+RgzHW
+         VM+0KTgTLX5qqoBr9BSC2m5XIzIVUl9a3W4g5SQOzHZaoaxh5mjD42XMRuhkqz0bCpcy
+         ZdrhfJbYGPpYzyC6ERtjM3LHTVEc/IjgTzYNCGooacCqIarrQ6C+vsnJvszlgJ4a4Mgg
+         Dt2AXALvQeRCc6wGAGGwiJQaIdDu2ff6IcjBG5AVp5iA+/h5vL+RMfc/+nqCHjKXffFW
+         7f4dQEFJ8lhfqmUo9YjdI6rG+8RYcYwvg5KT6Qg5H5PkC/ye9aY3Bk5iBy3QtpXpjUr8
+         Rl7w==
+X-Gm-Message-State: APjAAAVVh4PoUeFIBcmDpNSzICxEZHVX018K1WK+ZJBT9TopEZ/E5YDa
+        aO4zsToBq+0A/pgrYhpu7vT8mCsO12smA3xyhwU7v+eJAzaGOQBfGxHL5jN5axYFEpL6iADJp9R
+        ScZiTdP7eWUBjOzq5jTG8hYylX4ZrW4i0/S+tvw==
+X-Received: by 2002:aa7:9f89:: with SMTP id z9mr18510220pfr.123.1574435461685;
+        Fri, 22 Nov 2019 07:11:01 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxMX5SshWBdgscTDd4hE1lsIQJmQ3SGSboZ20e6AVMAsclKG1g7dazYpE2FBs50MliytPM4AA==
+X-Received: by 2002:aa7:9f89:: with SMTP id z9mr18510183pfr.123.1574435461280;
+        Fri, 22 Nov 2019 07:11:01 -0800 (PST)
+Received: from 2001-b011-380f-3c42-fdb3-9820-72e8-2639.dynamic-ip6.hinet.net (2001-b011-380f-3c42-fdb3-9820-72e8-2639.dynamic-ip6.hinet.net. [2001:b011:380f:3c42:fdb3:9820:72e8:2639])
+        by smtp.gmail.com with ESMTPSA id t15sm7437334pgb.0.2019.11.22.07.10.59
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 22 Nov 2019 07:11:00 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 13.0 \(3601.0.10\))
+Subject: Re: ERROR Transfer event TRB DMA ptr not part of current TD ep_index
+ 2 comp_code 13
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+In-Reply-To: <23a9798e-704f-3444-42e2-e583a6991950@linux.intel.com>
+Date:   Fri, 22 Nov 2019 23:10:55 +0800
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <F6AF08A8-8532-4A58-AE33-C1B02CBDC993@canonical.com>
+References: <F9C894A9-D1D8-455E-B5F6-C5EA08A80C79@canonical.com>
+ <4552b779-4b5a-7e81-39ec-0a4229b5d84d@linux.intel.com>
+ <871B8184-D636-4F02-B9E9-B13A8BE078E8@canonical.com>
+ <23a9798e-704f-3444-42e2-e583a6991950@linux.intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+X-Mailer: Apple Mail (2.3601.0.10)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-> The endpoint configuration used to be stored in the device tree,
-> however the configuration depend on the "version" of the controller
-> itself.
->
-> This information is already documented by the compatible string. It
-> then possible to just rely on the compatible string and completely
-> remove the full ep configuration done in the device tree as it was
-> already the case for all the other USB device controller.
-
-Do you have any feedback about this patch ?
-
-The binding being reviewed is there any chance that this patch will be
-merged?
-
-Thanks,
-
-Gregory
 
 
->
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  drivers/usb/gadget/udc/atmel_usba_udc.c | 112 +++++++++++++++---------
->  drivers/usb/gadget/udc/atmel_usba_udc.h |  12 +++
->  2 files changed, 84 insertions(+), 40 deletions(-)
->
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.c b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> index 86ffc8307864..2db833caeb09 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.c
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.c
-> @@ -2040,10 +2040,56 @@ static const struct usba_udc_errata at91sam9g45_errata = {
->  	.pulse_bias = at91sam9g45_pulse_bias,
->  };
->  
-> +static const struct usba_ep_config ep_config_sam9[] __initconst = {
-> +	{ .nr_banks = 1 },				/* ep 0 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 1 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 2 */
-> +	{ .nr_banks = 3, .can_dma = 1 },		/* ep 3 */
-> +	{ .nr_banks = 3, .can_dma = 1 },		/* ep 4 */
-> +	{ .nr_banks = 3, .can_dma = 1, .can_isoc = 1 },	/* ep 5 */
-> +	{ .nr_banks = 3, .can_dma = 1, .can_isoc = 1 },	/* ep 6 */
-> +};
-> +
-> +static const struct usba_ep_config ep_config_sama5[] __initconst = {
-> +	{ .nr_banks = 1 },				/* ep 0 */
-> +	{ .nr_banks = 3, .can_dma = 1, .can_isoc = 1 },	/* ep 1 */
-> +	{ .nr_banks = 3, .can_dma = 1, .can_isoc = 1 },	/* ep 2 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 3 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 4 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 5 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 6 */
-> +	{ .nr_banks = 2, .can_dma = 1, .can_isoc = 1 },	/* ep 7 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 8 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 9 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 10 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 11 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 12 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 13 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 14 */
-> +	{ .nr_banks = 2, .can_isoc = 1 },		/* ep 15 */
-> +};
-> +
-> +static const struct usba_udc_config udc_at91sam9rl_cfg = {
-> +	.errata = &at91sam9rl_errata,
-> +	.config = ep_config_sam9,
-> +	.num_ep = ARRAY_SIZE(ep_config_sam9),
-> +};
-> +
-> +static const struct usba_udc_config udc_at91sam9g45_cfg = {
-> +	.errata = &at91sam9g45_errata,
-> +	.config = ep_config_sam9,
-> +	.num_ep = ARRAY_SIZE(ep_config_sam9),
-> +};
-> +
-> +static const struct usba_udc_config udc_sama5d3_cfg = {
-> +	.config = ep_config_sama5,
-> +	.num_ep = ARRAY_SIZE(ep_config_sama5),
-> +};
-> +
->  static const struct of_device_id atmel_udc_dt_ids[] = {
-> -	{ .compatible = "atmel,at91sam9rl-udc", .data = &at91sam9rl_errata },
-> -	{ .compatible = "atmel,at91sam9g45-udc", .data = &at91sam9g45_errata },
-> -	{ .compatible = "atmel,sama5d3-udc" },
-> +	{ .compatible = "atmel,at91sam9rl-udc", .data = &udc_at91sam9rl_cfg },
-> +	{ .compatible = "atmel,at91sam9g45-udc", .data = &udc_at91sam9g45_cfg },
-> +	{ .compatible = "atmel,sama5d3-udc", .data = &udc_sama5d3_cfg },
->  	{ /* sentinel */ }
->  };
->  
-> @@ -2052,18 +2098,19 @@ MODULE_DEVICE_TABLE(of, atmel_udc_dt_ids);
->  static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
->  						    struct usba_udc *udc)
->  {
-> -	u32 val;
->  	struct device_node *np = pdev->dev.of_node;
->  	const struct of_device_id *match;
->  	struct device_node *pp;
->  	int i, ret;
->  	struct usba_ep *eps, *ep;
-> +	const struct usba_udc_config *udc_config;
->  
->  	match = of_match_node(atmel_udc_dt_ids, np);
->  	if (!match)
->  		return ERR_PTR(-EINVAL);
->  
-> -	udc->errata = match->data;
-> +	udc_config = match->data;
-> +	udc->errata = udc_config->errata;
->  	udc->pmc = syscon_regmap_lookup_by_compatible("atmel,at91sam9g45-pmc");
->  	if (IS_ERR(udc->pmc))
->  		udc->pmc = syscon_regmap_lookup_by_compatible("atmel,at91sam9rl-pmc");
-> @@ -2079,8 +2126,7 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
->  
->  	if (fifo_mode == 0) {
->  		pp = NULL;
-> -		while ((pp = of_get_next_child(np, pp)))
-> -			udc->num_ep++;
-> +		udc->num_ep = udc_config->num_ep;
->  		udc->configured_ep = 1;
->  	} else {
->  		udc->num_ep = usba_config_fifo_table(udc);
-> @@ -2097,52 +2143,38 @@ static struct usba_ep * atmel_udc_of_init(struct platform_device *pdev,
->  
->  	pp = NULL;
->  	i = 0;
-> -	while ((pp = of_get_next_child(np, pp)) && i < udc->num_ep) {
-> +	while (i < udc->num_ep) {
-> +		const struct usba_ep_config *ep_cfg = &udc_config->config[i];
-> +
->  		ep = &eps[i];
->  
-> -		ret = of_property_read_u32(pp, "reg", &val);
-> -		if (ret) {
-> -			dev_err(&pdev->dev, "of_probe: reg error(%d)\n", ret);
-> -			goto err;
-> -		}
-> -		ep->index = fifo_mode ? udc->fifo_cfg[i].hw_ep_num : val;
-> +		ep->index = fifo_mode ? udc->fifo_cfg[i].hw_ep_num : i;
-> +
-> +		/* Only the first EP is 64 bytes */
-> +		if (ep->index == 0)
-> +			ep->fifo_size = 64;
-> +		else
-> +			ep->fifo_size = 1024;
->  
-> -		ret = of_property_read_u32(pp, "atmel,fifo-size", &val);
-> -		if (ret) {
-> -			dev_err(&pdev->dev, "of_probe: fifo-size error(%d)\n", ret);
-> -			goto err;
-> -		}
->  		if (fifo_mode) {
-> -			if (val < udc->fifo_cfg[i].fifo_size) {
-> +			if (ep->fifo_size < udc->fifo_cfg[i].fifo_size)
->  				dev_warn(&pdev->dev,
-> -					 "Using max fifo-size value from DT\n");
-> -				ep->fifo_size = val;
-> -			} else {
-> +					 "Using default max fifo-size value\n");
-> +			else
->  				ep->fifo_size = udc->fifo_cfg[i].fifo_size;
-> -			}
-> -		} else {
-> -			ep->fifo_size = val;
->  		}
->  
-> -		ret = of_property_read_u32(pp, "atmel,nb-banks", &val);
-> -		if (ret) {
-> -			dev_err(&pdev->dev, "of_probe: nb-banks error(%d)\n", ret);
-> -			goto err;
-> -		}
-> +		ep->nr_banks = ep_cfg->nr_banks;
->  		if (fifo_mode) {
-> -			if (val < udc->fifo_cfg[i].nr_banks) {
-> +			if (ep->nr_banks < udc->fifo_cfg[i].nr_banks)
->  				dev_warn(&pdev->dev,
-> -					 "Using max nb-banks value from DT\n");
-> -				ep->nr_banks = val;
-> -			} else {
-> +					 "Using default max nb-banks value\n");
-> +			else
->  				ep->nr_banks = udc->fifo_cfg[i].nr_banks;
-> -			}
-> -		} else {
-> -			ep->nr_banks = val;
->  		}
->  
-> -		ep->can_dma = of_property_read_bool(pp, "atmel,can-dma");
-> -		ep->can_isoc = of_property_read_bool(pp, "atmel,can-isoc");
-> +		ep->can_dma = ep_cfg->can_dma;
-> +		ep->can_isoc = ep_cfg->can_isoc;
->  
->  		sprintf(ep->name, "ep%d", ep->index);
->  		ep->ep.name = ep->name;
-> diff --git a/drivers/usb/gadget/udc/atmel_usba_udc.h b/drivers/usb/gadget/udc/atmel_usba_udc.h
-> index a0225e4543d4..48e332439ed5 100644
-> --- a/drivers/usb/gadget/udc/atmel_usba_udc.h
-> +++ b/drivers/usb/gadget/udc/atmel_usba_udc.h
-> @@ -290,6 +290,12 @@ struct usba_ep {
->  #endif
->  };
->  
-> +struct usba_ep_config {
-> +	u8					nr_banks;
-> +	unsigned int				can_dma:1;
-> +	unsigned int				can_isoc:1;
-> +};
-> +
->  struct usba_request {
->  	struct usb_request			req;
->  	struct list_head			queue;
-> @@ -307,6 +313,12 @@ struct usba_udc_errata {
->  	void (*pulse_bias)(struct usba_udc *udc);
->  };
->  
-> +struct usba_udc_config {
-> +	const struct usba_udc_errata *errata;
-> +	const struct usba_ep_config *config;
-> +	const int num_ep;
-> +};
-> +
->  struct usba_udc {
->  	/* Protect hw registers from concurrent modifications */
->  	spinlock_t lock;
-> -- 
-> 2.24.0.rc1
->
+> On Nov 22, 2019, at 20:17, Mathias Nyman <mathias.nyman@linux.intel.com> wrote:
 
--- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+[snipped]
+
+> 
+> The event ring is already overwritten with new events when dumped.
+> 
+> Could you apply the code below, it will dump both the endpoint transfer ring
+> and the event ring at the right moment:
+
+The log is quite large so I pasted it here:
+https://pastebin.ubuntu.com/p/wWpS8ctNrb/
+
+Kai-Heng
+
+> 
+> Attached as a patch as well.
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 620846f30b4f..a1a9a408c479 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -201,6 +201,31 @@ void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring)
+>  * @more_trbs_coming:  Will you enqueue more TRBs before calling
+>  *                     prepare_transfer()?
+>  */
+> +
+> +static int xhci_dump_ring(struct xhci_hcd *xhci, struct xhci_ring *ring)
+> +{
+> +       struct xhci_segment     *seg;
+> +       dma_addr_t              dma;
+> +       union xhci_trb          *trb;
+> +       int                     i, j;
+> +
+> +       seg = ring->first_seg;
+> +
+> +       for (i = 0; i < ring->num_segs; i++) {
+> +               for (j = 0; j < TRBS_PER_SEGMENT; j++) {
+> +                       trb = &seg->trbs[j];
+> +                       dma = seg->dma + j * sizeof(*trb);
+> +                       xhci_err(xhci, "%pad: %s\n", &dma,
+> +                                xhci_decode_trb(le32_to_cpu(trb->generic.field[0]),
+> +                                                le32_to_cpu(trb->generic.field[1]),
+> +                                                le32_to_cpu(trb->generic.field[2]),
+> +                                                le32_to_cpu(trb->generic.field[3])));
+> +               }
+> +               seg = seg->next;
+> +       }
+> +       return 0;
+> +}
+> +
+> static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
+>                        bool more_trbs_coming)
+> {
+> @@ -2318,6 +2343,7 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>        u32 trb_comp_code;
+>        int td_num = 0;
+>        bool handling_skipped_tds = false;
+> +       static unsigned int err_cnt;
+>         slot_id = TRB_TO_SLOT_ID(le32_to_cpu(event->flags));
+>        ep_index = TRB_TO_EP_ID(le32_to_cpu(event->flags)) - 1;
+> @@ -2579,6 +2605,12 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>                                trb_in_td(xhci, ep_ring->deq_seg,
+>                                          ep_ring->dequeue, td->last_trb,
+>                                          ep_trb_dma, true);
+> +                               if (err_cnt++ == 5) {
+> +                                       xhci_err(xhci, "EVENT RING:\n");
+> +                                       xhci_dump_ring(xhci, xhci->event_ring);
+> +                                       xhci_err(xhci, "ENDPOINT RING:\n");
+> +                                       xhci_dump_ring(xhci, ep_ring);
+> +                               }
+>                                return -ESHUTDOWN;
+>                        }
+> <0001-xhci-dump-event-ring-and-endpoint-ring-if-TRB-not-fo.patch>
+
