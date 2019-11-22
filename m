@@ -2,69 +2,637 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6A0107604
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 17:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973FC107658
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 18:22:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727446AbfKVQxC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 11:53:02 -0500
-Received: from mga02.intel.com ([134.134.136.20]:35043 "EHLO mga02.intel.com"
+        id S1727451AbfKVRWu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Nov 2019 12:22:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:50202 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726620AbfKVQxC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 22 Nov 2019 11:53:02 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 22 Nov 2019 08:53:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,230,1571727600"; 
-   d="scan'208";a="201578209"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 22 Nov 2019 08:53:00 -0800
-Subject: Re: [PATCH] xhci: Increase STS_HALT timeout in xhci_suspend()
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Atroshko, Yevhen" <Yevhen.Atroshko@amd.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <20191104055217.10475-1-kai.heng.feng@canonical.com>
- <34F5BCC9-18EE-466D-BBAF-B3D3C1CD525B@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Message-ID: <032e9537-1a84-9e01-20f8-9cd9e394ca3d@linux.intel.com>
-Date:   Fri, 22 Nov 2019 18:54:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        id S1726046AbfKVRWs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Nov 2019 12:22:48 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 901CFDA7;
+        Fri, 22 Nov 2019 09:22:46 -0800 (PST)
+Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C19063F6C4;
+        Fri, 22 Nov 2019 09:22:44 -0800 (PST)
+Subject: Re: [PATCH 3/3] ARM: dts: at91: Remove the USB EP child node
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Cristian Birsan <cristian.birsan@microchip.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     devicetree@vger.kernel.org,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20191107153128.11038-1-gregory.clement@bootlin.com>
+ <20191107153128.11038-4-gregory.clement@bootlin.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <b13e902f-b375-02d3-e03d-80b5ae29f64c@arm.com>
+Date:   Fri, 22 Nov 2019 17:22:43 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
  Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <34F5BCC9-18EE-466D-BBAF-B3D3C1CD525B@canonical.com>
+In-Reply-To: <20191107153128.11038-4-gregory.clement@bootlin.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 22.11.2019 18.36, Kai-Heng Feng wrote:
-> Hi Matthias,
+On 07/11/2019 3:31 pm, Gregory CLEMENT wrote:
+> The endpoint configuration used to be stored in the device tree,
+> however the configuration depend on the "version" of the controller
+> itself.
 > 
->> On Nov 4, 2019, at 13:52, Kai-Heng Feng <kai.heng.feng@canonical.com> wrote:
->>
->> I've recently observed failed xHCI suspend attempt on AMD Raven Ridge
->> system:
->> kernel: xhci_hcd 0000:04:00.4: WARN: xHC CMD_RUN timeout
->> kernel: PM: suspend_common(): xhci_pci_suspend+0x0/0xd0 returns -110
->> kernel: PM: pci_pm_suspend(): hcd_pci_suspend+0x0/0x30 returns -110
->> kernel: PM: dpm_run_callback(): pci_pm_suspend+0x0/0x150 returns -110
->> kernel: PM: Device 0000:04:00.4 failed to suspend async: error -110
->>
->> Similar to commit ac343366846a ("xhci: Increase STS_SAVE timeout in
->> xhci_suspend()") we also need to increase the HALT timeout to make it be
->> able to suspend again.
-> 
-> Seems like there are more broken AMD xHCI in the wild, so please merge this patch if there's no further concerns.
-> 
-> Kai-Heng
+> Then the EP child node are useless and describe as deprecated in the
+> documentation binding: remove all the nodes from the SoC device tree
+> file.
 
-Added to queue,
+Just as a drive-by comment, it's presumably worth getting rid of the 
+#address-cells and #size-cells properties too (here and in the binding 
+example).
 
--Mathias
+Robin.
+
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>   arch/arm/boot/dts/at91sam9g45.dtsi |  52 -------------
+>   arch/arm/boot/dts/at91sam9rl.dtsi  |  52 -------------
+>   arch/arm/boot/dts/at91sam9x5.dtsi  |  52 -------------
+>   arch/arm/boot/dts/sama5d2.dtsi     | 118 -----------------------------
+>   arch/arm/boot/dts/sama5d3.dtsi     | 105 -------------------------
+>   arch/arm/boot/dts/sama5d4.dtsi     | 118 -----------------------------
+>   6 files changed, 497 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/at91sam9g45.dtsi b/arch/arm/boot/dts/at91sam9g45.dtsi
+> index 691c95ea6175..63bfe546cd8d 100644
+> --- a/arch/arm/boot/dts/at91sam9g45.dtsi
+> +++ b/arch/arm/boot/dts/at91sam9g45.dtsi
+> @@ -1204,58 +1204,6 @@
+>   				clocks = <&udphs_clk>, <&utmi>;
+>   				clock-names = "pclk", "hclk";
+>   				status = "disabled";
+> -
+> -				ep@0 {
+> -					reg = <0>;
+> -					atmel,fifo-size = <64>;
+> -					atmel,nb-banks = <1>;
+> -				};
+> -
+> -				ep@1 {
+> -					reg = <1>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@2 {
+> -					reg = <2>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@3 {
+> -					reg = <3>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@4 {
+> -					reg = <4>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@5 {
+> -					reg = <5>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@6 {
+> -					reg = <6>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+>   			};
+>   
+>   			clk32k: sckc@fffffd50 {
+> diff --git a/arch/arm/boot/dts/at91sam9rl.dtsi b/arch/arm/boot/dts/at91sam9rl.dtsi
+> index 8643b7151565..e118bacb7d7c 100644
+> --- a/arch/arm/boot/dts/at91sam9rl.dtsi
+> +++ b/arch/arm/boot/dts/at91sam9rl.dtsi
+> @@ -308,58 +308,6 @@
+>   				clocks = <&pmc PMC_TYPE_PERIPHERAL 22>, <&pmc PMC_TYPE_CORE PMC_UTMI>;
+>   				clock-names = "pclk", "hclk";
+>   				status = "disabled";
+> -
+> -				ep@0 {
+> -					reg = <0>;
+> -					atmel,fifo-size = <64>;
+> -					atmel,nb-banks = <1>;
+> -				};
+> -
+> -				ep@1 {
+> -					reg = <1>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@2 {
+> -					reg = <2>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@3 {
+> -					reg = <3>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@4 {
+> -					reg = <4>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@5 {
+> -					reg = <5>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@6 {
+> -					reg = <6>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+>   			};
+>   
+>   			dma0: dma-controller@ffffe600 {
+> diff --git a/arch/arm/boot/dts/at91sam9x5.dtsi b/arch/arm/boot/dts/at91sam9x5.dtsi
+> index 7c2eb93f8cac..685a1b9f3ae5 100644
+> --- a/arch/arm/boot/dts/at91sam9x5.dtsi
+> +++ b/arch/arm/boot/dts/at91sam9x5.dtsi
+> @@ -876,58 +876,6 @@
+>   				clocks = <&pmc PMC_TYPE_CORE PMC_UTMI>, <&pmc PMC_TYPE_PERIPHERAL 23>;
+>   				clock-names = "hclk", "pclk";
+>   				status = "disabled";
+> -
+> -				ep@0 {
+> -					reg = <0>;
+> -					atmel,fifo-size = <64>;
+> -					atmel,nb-banks = <1>;
+> -				};
+> -
+> -				ep@1 {
+> -					reg = <1>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@2 {
+> -					reg = <2>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <2>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@3 {
+> -					reg = <3>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@4 {
+> -					reg = <4>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -				};
+> -
+> -				ep@5 {
+> -					reg = <5>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+> -
+> -				ep@6 {
+> -					reg = <6>;
+> -					atmel,fifo-size = <1024>;
+> -					atmel,nb-banks = <3>;
+> -					atmel,can-dma;
+> -					atmel,can-isoc;
+> -				};
+>   			};
+>   
+>   			watchdog: watchdog@fffffe40 {
+> diff --git a/arch/arm/boot/dts/sama5d2.dtsi b/arch/arm/boot/dts/sama5d2.dtsi
+> index 2e2c1a7b1d1d..daafcffbe033 100644
+> --- a/arch/arm/boot/dts/sama5d2.dtsi
+> +++ b/arch/arm/boot/dts/sama5d2.dtsi
+> @@ -122,124 +122,6 @@
+>   			clocks = <&pmc PMC_TYPE_PERIPHERAL 42>, <&pmc PMC_TYPE_CORE PMC_UTMI>;
+>   			clock-names = "pclk", "hclk";
+>   			status = "disabled";
+> -
+> -			ep@0 {
+> -				reg = <0>;
+> -				atmel,fifo-size = <64>;
+> -				atmel,nb-banks = <1>;
+> -			};
+> -
+> -			ep@1 {
+> -				reg = <1>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@2 {
+> -				reg = <2>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@3 {
+> -				reg = <3>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@4 {
+> -				reg = <4>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@5 {
+> -				reg = <5>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@6 {
+> -				reg = <6>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@7 {
+> -				reg = <7>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@8 {
+> -				reg = <8>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@9 {
+> -				reg = <9>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@10 {
+> -				reg = <10>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@11 {
+> -				reg = <11>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@12 {
+> -				reg = <12>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@13 {
+> -				reg = <13>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@14 {
+> -				reg = <14>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@15 {
+> -				reg = <15>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+>   		};
+>   
+>   		usb1: ohci@400000 {
+> diff --git a/arch/arm/boot/dts/sama5d3.dtsi b/arch/arm/boot/dts/sama5d3.dtsi
+> index f770aace0efd..dfd095f33f95 100644
+> --- a/arch/arm/boot/dts/sama5d3.dtsi
+> +++ b/arch/arm/boot/dts/sama5d3.dtsi
+> @@ -1402,111 +1402,6 @@
+>   			clocks = <&udphs_clk>, <&utmi>;
+>   			clock-names = "pclk", "hclk";
+>   			status = "disabled";
+> -
+> -			ep@0 {
+> -				reg = <0>;
+> -				atmel,fifo-size = <64>;
+> -				atmel,nb-banks = <1>;
+> -			};
+> -
+> -			ep@1 {
+> -				reg = <1>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@2 {
+> -				reg = <2>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@3 {
+> -				reg = <3>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -			};
+> -
+> -			ep@4 {
+> -				reg = <4>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -			};
+> -
+> -			ep@5 {
+> -				reg = <5>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -			};
+> -
+> -			ep@6 {
+> -				reg = <6>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -			};
+> -
+> -			ep@7 {
+> -				reg = <7>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -			};
+> -
+> -			ep@8 {
+> -				reg = <8>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@9 {
+> -				reg = <9>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@10 {
+> -				reg = <10>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@11 {
+> -				reg = <11>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@12 {
+> -				reg = <12>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@13 {
+> -				reg = <13>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@14 {
+> -				reg = <14>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+> -
+> -			ep@15 {
+> -				reg = <15>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -			};
+>   		};
+>   
+>   		usb1: ohci@600000 {
+> diff --git a/arch/arm/boot/dts/sama5d4.dtsi b/arch/arm/boot/dts/sama5d4.dtsi
+> index 6ab27a7b388d..0ece6b22d287 100644
+> --- a/arch/arm/boot/dts/sama5d4.dtsi
+> +++ b/arch/arm/boot/dts/sama5d4.dtsi
+> @@ -105,124 +105,6 @@
+>   			clocks = <&pmc PMC_TYPE_PERIPHERAL 47>, <&pmc PMC_TYPE_CORE PMC_UTMI>;
+>   			clock-names = "pclk", "hclk";
+>   			status = "disabled";
+> -
+> -			ep@0 {
+> -				reg = <0>;
+> -				atmel,fifo-size = <64>;
+> -				atmel,nb-banks = <1>;
+> -			};
+> -
+> -			ep@1 {
+> -				reg = <1>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@2 {
+> -				reg = <2>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <3>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@3 {
+> -				reg = <3>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@4 {
+> -				reg = <4>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@5 {
+> -				reg = <5>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@6 {
+> -				reg = <6>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@7 {
+> -				reg = <7>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-dma;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@8 {
+> -				reg = <8>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@9 {
+> -				reg = <9>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@10 {
+> -				reg = <10>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@11 {
+> -				reg = <11>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@12 {
+> -				reg = <12>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@13 {
+> -				reg = <13>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@14 {
+> -				reg = <14>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+> -
+> -			ep@15 {
+> -				reg = <15>;
+> -				atmel,fifo-size = <1024>;
+> -				atmel,nb-banks = <2>;
+> -				atmel,can-isoc;
+> -			};
+>   		};
+>   
+>   		usb1: ohci@500000 {
+> 
