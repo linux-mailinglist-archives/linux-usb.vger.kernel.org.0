@@ -2,189 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B412105D32
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 00:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AFE1105EDB
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 04:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfKUXig (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 21 Nov 2019 18:38:36 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:25753 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725956AbfKUXid (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 18:38:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574379511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ghZgmhA3nVCEWICxd7VTKOzTCHKcObUKDPVYCLTv4Ck=;
-        b=ZlKrVj+9nZxbsCccnN7bXhSNnoFUsHnVQ6MkoQASGNs8zUfp5d2zCZ9xkFfvLDCqXtRWnT
-        PDIRm8XWQhEhLc2LTKXmWCUq+xEQTmPD+hbcEXG3Kwd1jDrMYHIeDgbHXCCsOimfYJU+LX
-        VpALlWRgzE8uUwCPlLy6QZHuglRw7tI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-Z-j3Ug8tOQu_Q-bSctTCQA-1; Thu, 21 Nov 2019 18:38:30 -0500
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0BB9C80268B;
-        Thu, 21 Nov 2019 23:38:28 +0000 (UTC)
-Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4B6825DA66;
-        Thu, 21 Nov 2019 23:38:26 +0000 (UTC)
-Date:   Thu, 21 Nov 2019 17:38:25 -0600
-From:   Pete Zaitcev <zaitcev@redhat.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>,
-        <arnd@arndb.de>, <gregkh@linuxfoundation.org>,
-        <jrdr.linux@gmail.com>, <keescook@chromium.org>,
-        <kstewart@linuxfoundation.org>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
-        <viro@zeniv.linux.org.uk>, zaitcev@redhat.com
-Subject: Re: possible deadlock in mon_bin_vma_fault
-Message-ID: <20191121173825.1527c3a5@suzdal.zaitcev.lan>
-In-Reply-To: <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
-References: <20191121084842.095edf87@suzdal.zaitcev.lan>
-        <Pine.LNX.4.44L0.1911211118450.1553-100000@iolanthe.rowland.org>
-Organization: Red Hat, Inc.
+        id S1726830AbfKVDAh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 21 Nov 2019 22:00:37 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:42856 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbfKVDAh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 21 Nov 2019 22:00:37 -0500
+Received: by mail-qt1-f193.google.com with SMTP id t20so6176070qtn.9
+        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2019 19:00:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aQXzMZojDdxTeVrFDC7oCHSUIlgKVBtiaKVu10Zcb/M=;
+        b=j6OIwOyNVokNpMoYYRKV/i/g7qXb25aWC8/hPaKT6Fyn0ySkiz/DvN9nnm1eHhRXJv
+         NB4dJ9QjiBgw31V9+ejfMxr5LH4cEbuQ1r10OdFXunZSS+h7YM5KHvGBLR8PAuIsg7b5
+         RLakVpXGDy7gdlcsL8NMsaJdPxViJTdwg7s5Lc9qsKM1FSf8+LOoP4Dg5UieaC3JZP9w
+         nHNeidIW3mejXB9pjC0q4eBbxrpZD5yRWVftc7G9+pdZj1TEI8ObSHpHVzaXSsF5aAe3
+         NP3Ndjpb7ZQm1LlK3gbcHONUUSI7oe6HAFULHGAG+01SGKvvd6Vqx4osGB1obXD3j5py
+         Mwag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aQXzMZojDdxTeVrFDC7oCHSUIlgKVBtiaKVu10Zcb/M=;
+        b=pGDqzh44fmqcupEQ9zWZJxvQGfK6IjioJvYvYiXe/gPuWZXhnreTKDNQhft5bsIABA
+         /geMwfRWc1TuQAERiybr1ohtcKib7kNK4TCD4bGaoVNr2tr0i07O0aTlavy4Tc7LTUnA
+         Bq9XynL9RFmP5LTOmoKqG38Ns+eOFaFapq40oWx2EHxuL5vW9ulM6pEE3hHDJb6trF6Q
+         mGGiHxTClfcJxee3obZxK2Q4MBXwfH9LEzHdS7JkhHP9RlFY1RdxxH7r7ZafQapi4C3u
+         HtkyAVmlBb6/MikFf3zOAPUeFhqbSQ3eLCRSUuBo6Q1KcxguCNHbGalsq8B1QCBi3Pfq
+         MgAQ==
+X-Gm-Message-State: APjAAAVYfGz5oDPTZ2pWbCFFAdTQXL64ij74YsctBkZCGaLi28GwRRzT
+        IePV40L2XD7pMnNUTobibUm67T69qRJc8pp3yI5HXg==
+X-Google-Smtp-Source: APXvYqxF++WJ4ysxQKliHFnNspapcsV/8c2phT5X5JEGqZj6yvwOy4roCA3ODgFlgFW8HPMqC7ELqBtX2Q4ycCqZrZU=
+X-Received: by 2002:ac8:60d3:: with SMTP id i19mr12182666qtm.391.1574391635899;
+ Thu, 21 Nov 2019 19:00:35 -0800 (PST)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-X-MC-Unique: Z-j3Ug8tOQu_Q-bSctTCQA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+References: <20191120002836.GA247344@google.com> <20191121181500.GA55996@google.com>
+In-Reply-To: <20191121181500.GA55996@google.com>
+From:   Daniel Drake <drake@endlessm.com>
+Date:   Fri, 22 Nov 2019 11:00:24 +0800
+Message-ID: <CAD8Lp47o6PqKnQYBba0o_8LSGhd3_APhVuXAVsJRT7TedeqXDg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 21 Nov 2019 11:20:20 -0500 (EST)
-Alan Stern <stern@rowland.harvard.edu> wrote:
+On Fri, Nov 22, 2019 at 2:15 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> I definitely was not understanding this correctly.  There is no path
+> for a D3cold -> D3hot transition.  Per spec (PCIe r5.0, sec 5.8), the
+> only legal exit from D3cold is to D0uninitialized.
 
-> On Thu, 21 Nov 2019, Pete Zaitcev wrote:
->=20
-> > Anyway... If you are looking at it too, what do you think about not usi=
-ng
-> > any locks in mon_bin_vma_fault() at all? Isn't it valid? I think I trie=
-d
-> > to be "safe", but it only uses things that are constants unless we're
-> > opening and closing; a process cannot make page faults unless it has
-> > some thing mapped; and that is only possible if device is open and stay=
-s
-> > open. Can you find a hole in this reasoning? =20
->=20
-> I think you're right. [...]
+I'm also learning these details as we go.
 
-How about the appended patch, then? You like?
+During runtime suspend, the ACPI _PS3 method (which does exist on this
+device) is called, then _PR3 resources are turned off, which (I think)
+means that the state should now be D3cold.
 
-Do you happen to know how to refer to a syzbot report in a commit message?
+During runtime resume, the ACPI _PR0 resources are turned on, then
+ACPI _PS0 method is called (and does exist on this device), and my
+reading is that this should put the device in D0.
 
--- Pete
+But then when pci_update_current_state() is called, it reads pmcsr as
+3 (D3hot). That's not what I would expect. I guess this means that
+this platform's _PR3/_PS3 do not actually allow us to put the device
+into D3cold, and/or the _PR0/_PS0 transition does not actually
+transition the device to D0.
 
-commit 628f3bbf37eee21cce4cfbfaa6a796b129d7736d
-Author: Pete Zaitcev <zaitcev@kotori.zaitcev.us>
-Date:   Thu Nov 21 17:24:00 2019 -0600
+While there is some ACPI strangeness here, the D3hot vs D3cold thing
+is perhaps not the most relevant point. If I hack the code to avoid
+D3cold altogether, just trying to do D0->D3hot->D0, it fails in the
+same way.
 
-    usb: Fix a deadlock in usbmon between mmap and read
-   =20
-    Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+> I know you tried a debug patch to call pci_dev_wait(), and it didn't
+> work, but I'm not sure exactly where it was called.  I have these
+> patches on my pci/pm branch for v5.5:
+>
+>   bae26849372b ("PCI/PM: Move pci_dev_wait() definition earlier")
+>   395f121e6199 ("PCI/PM: Wait for device to become ready after power-on")
+>
+> The latter adds the wait just before we call
+> pci_raw_set_power_state().  If the device is responding with CRS
+> status, that should be the point where we'd see it.  If you have a
+> chance to try it, I'd be interested in the results.
 
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index ac2b4fcc265f..fb7df9810bad 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -1039,12 +1039,18 @@ static long mon_bin_ioctl(struct file *file, unsign=
-ed int cmd, unsigned long arg
-=20
- =09=09mutex_lock(&rp->fetch_lock);
- =09=09spin_lock_irqsave(&rp->b_lock, flags);
--=09=09mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
--=09=09kfree(rp->b_vec);
--=09=09rp->b_vec  =3D vec;
--=09=09rp->b_size =3D size;
--=09=09rp->b_read =3D rp->b_in =3D rp->b_out =3D rp->b_cnt =3D 0;
--=09=09rp->cnt_lost =3D 0;
-+=09=09if (rp->mmap_active) {
-+=09=09=09mon_free_buff(vec, size/CHUNK_SIZE);
-+=09=09=09kfree(vec);
-+=09=09=09ret =3D -EBUSY;
-+=09=09} else {
-+=09=09=09mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
-+=09=09=09kfree(rp->b_vec);
-+=09=09=09rp->b_vec  =3D vec;
-+=09=09=09rp->b_size =3D size;
-+=09=09=09rp->b_read =3D rp->b_in =3D rp->b_out =3D rp->b_cnt =3D 0;
-+=09=09=09rp->cnt_lost =3D 0;
-+=09=09}
- =09=09spin_unlock_irqrestore(&rp->b_lock, flags);
- =09=09mutex_unlock(&rp->fetch_lock);
- =09=09}
-@@ -1093,11 +1099,11 @@ static long mon_bin_ioctl(struct file *file, unsign=
-ed int cmd, unsigned long arg
- =09=09=09return ret;
- =09=09if (put_user(ret, &uptr->nfetch))
- =09=09=09return -EFAULT;
--=09=09ret =3D 0;
- =09=09}
- =09=09break;
-=20
--=09case MON_IOCG_STATS: {
-+=09case MON_IOCG_STATS:
-+=09=09{
- =09=09struct mon_bin_stats __user *sp;
- =09=09unsigned int nevents;
- =09=09unsigned int ndropped;
-@@ -1113,7 +1119,6 @@ static long mon_bin_ioctl(struct file *file, unsigned=
- int cmd, unsigned long arg
- =09=09=09return -EFAULT;
- =09=09if (put_user(nevents, &sp->queued))
- =09=09=09return -EFAULT;
--
- =09=09}
- =09=09break;
-=20
-@@ -1216,13 +1221,21 @@ mon_bin_poll(struct file *file, struct poll_table_s=
-truct *wait)
- static void mon_bin_vma_open(struct vm_area_struct *vma)
- {
- =09struct mon_reader_bin *rp =3D vma->vm_private_data;
-+=09unsigned long flags;
-+
-+=09spin_lock_irqsave(&rp->b_lock, flags);
- =09rp->mmap_active++;
-+=09spin_unlock_irqrestore(&rp->b_lock, flags);
- }
-=20
- static void mon_bin_vma_close(struct vm_area_struct *vma)
- {
-+=09unsigned long flags;
-+
- =09struct mon_reader_bin *rp =3D vma->vm_private_data;
-+=09spin_lock_irqsave(&rp->b_lock, flags);
- =09rp->mmap_active--;
-+=09spin_unlock_irqrestore(&rp->b_lock, flags);
- }
-=20
- /*
-@@ -1234,16 +1247,12 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault=
- *vmf)
- =09unsigned long offset, chunk_idx;
- =09struct page *pageptr;
-=20
--=09mutex_lock(&rp->fetch_lock);
- =09offset =3D vmf->pgoff << PAGE_SHIFT;
--=09if (offset >=3D rp->b_size) {
--=09=09mutex_unlock(&rp->fetch_lock);
-+=09if (offset >=3D rp->b_size)
- =09=09return VM_FAULT_SIGBUS;
--=09}
- =09chunk_idx =3D offset / CHUNK_SIZE;
- =09pageptr =3D rp->b_vec[chunk_idx].pg;
- =09get_page(pageptr);
--=09mutex_unlock(&rp->fetch_lock);
- =09vmf->page =3D pageptr;
- =09return 0;
- }
+pci_dev_wait() doesn't have any effect no matter where you put it
+because we have yet to observe this device presenting a CRS-like
+condition. According to our earlier experiments, PCI_VENDOR_ID and
+PCI_COMMAND never return the ~0 value that would be needed for
+pci_dev_wait() to have any effect.
 
+I tried the branch anyway and it doesn't solve the issue.
+
+I haven't finished gathering all the logs you asked for, but I tried
+to summarize my current understanding at
+https://bugzilla.kernel.org/show_bug.cgi?id=205587 - hopefully that
+helps.
+
+Thanks
+Daniel
