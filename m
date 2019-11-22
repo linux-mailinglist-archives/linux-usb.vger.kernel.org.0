@@ -2,119 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8091077E4
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 20:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64B791078E6
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2019 20:54:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726939AbfKVTQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 22 Nov 2019 14:16:35 -0500
-Received: from mail-wm1-f43.google.com ([209.85.128.43]:54729 "EHLO
-        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726744AbfKVTQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 22 Nov 2019 14:16:34 -0500
-Received: by mail-wm1-f43.google.com with SMTP id x26so8322545wmk.4
-        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2019 11:16:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=kLw3pFSIZDVbnCzJ9DTnz/kpdFIQj08MUYSImiLSK9M=;
-        b=lAULhbd8gCUzzbSRRCbFnF6HAk0C7AHCoTACxfKB1tGKbxZSaDKIWDVgNHcAchLKv8
-         LDscNLVVrwROJqNW/pTga43LR4PFONqZ7jHpBUOBg71E3CkWo1YRYhaaqichBafqJfKF
-         y1rvUMfk4dHQAWQJDnFFWv26VPlA3Vqtqq2QWXvLiG0x0tMjKXr1IB3gh9MgBAFdtLVJ
-         as+HJxKP7zNBtroVe5un15GzXgCXdDsVj8YIZrYL8pjzhQHQvbOcOVFECaRLTc1enM3e
-         F2Q8pRjvMyCrDZYlMM9fVE1FRmDSieqznFogt6IAF67w6W8vbx5SUMzCF7Ycu1oo/c4b
-         hVHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=kLw3pFSIZDVbnCzJ9DTnz/kpdFIQj08MUYSImiLSK9M=;
-        b=AMVGycojndxSAvQ07PTe2kV5d3uUgbU4wcjMIkpfnlbTW8uIwnz9L599jkA17q+NxO
-         AM6aAUIb4njADzZzHTQzc9v7AxSDLgGEZjFlAu9PvXolBWvaNUGgCkrHhozupp9E7TUX
-         f3TJJaSxLFjZMctesgBGu/9XHcSEKt4Urhd0cKSQxlb9wteiFb7CWIVP3l1iWjoTrfVW
-         acPNtq0TV3D0LlA5I45hrddAlm80IqI7YFVNNTl8PLjuf4KsJoEcTnClOHl5LaldH6Hm
-         /1iGsvo5temGTDQNbb64YOJlWW34WC3pf5gXxEmGJ8oQQaRIE1iU1/UnxjYMMuMcYZsT
-         9avw==
-X-Gm-Message-State: APjAAAXVmfm3KWuz9j0+ofLAfGufChu+yufc0iPQbhO67nE+7TFNxYI/
-        WXWx5MJofbhgV9K2Vaak0oh3YQ==
-X-Google-Smtp-Source: APXvYqyS5KI1oHFoY6/zQrlq8Yiqp7iqxRVDi01q+CokCcH37IjXgrnE6wN04s/h+IuCAivbEKXemw==
-X-Received: by 2002:a7b:c34a:: with SMTP id l10mr14130871wmj.66.1574450191767;
-        Fri, 22 Nov 2019 11:16:31 -0800 (PST)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id t14sm8525469wrw.87.2019.11.22.11.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2019 11:16:31 -0800 (PST)
-Message-ID: <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Date:   Fri, 22 Nov 2019 20:16:30 +0100
-In-Reply-To: <20191109222828.GA30568@ming.t460p>
-References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
-         <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
-         <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
-         <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
-         <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
-         <20191109222828.GA30568@ming.t460p>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1727305AbfKVTtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 22 Nov 2019 14:49:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:48698 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727295AbfKVTtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 22 Nov 2019 14:49:18 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5D2EA207FA;
+        Fri, 22 Nov 2019 19:49:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574452158;
+        bh=5eoak+mG+mcguMksu8j3IrzoHYAFKuEkrFK2NPhaFjQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Q+0K1hu8wDDxqQwGp9/SGlLK/T1U94zGCWMrJ5AXuowjNUFLqeZEfbjHCqA6aPDzx
+         19rGP91JfBpWwbaPSJeAtWPIMXMaCLB6lU09bIid9pvOdD2HC/3ml3dyR9wlgd/VO4
+         rJpdAYfGv+8hz1dE9EqNfCzTBm76YUWvkVICTuec=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Aleksander Morgado <aleksander@aleksander.es>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 15/25] net: usb: qmi_wwan: add support for Foxconn T77W968 LTE modules
+Date:   Fri, 22 Nov 2019 14:48:48 -0500
+Message-Id: <20191122194859.24508-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191122194859.24508-1-sashal@kernel.org>
+References: <20191122194859.24508-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno dom, 10/11/2019 alle 06.28 +0800, Ming Lei ha scritto:
-> Another thing we could try is to use 'none' via the following
-> command:
-> 
->  echo none > /sys/block/sdh/queue/scheduler  #suppose 'sdh' points
-> to the usb storage disk
-> 
-> Because USB storage HBA is single hw queue, which depth is 1. This
-> way
-> should change to dispatch IO in the order of bio submission.
-> 
-> Andrea, could you switch io scheduler to none and update us if
-> difference
-> can be made?
+From: Aleksander Morgado <aleksander@aleksander.es>
 
-Using the new kernel, there is indeed a difference because the time to
-copy a file is 1800 seconds with [mq-deadline], and 340 seconds with
-[none]. But that is still far away from the old kernel, which performs
-the copy of the same file in 76 seconds.
+[ Upstream commit 802753cb0b141cf5170ab97fe7e79f5ca10d06b0 ]
 
-Side notes:
+These are the Foxconn-branded variants of the Dell DW5821e modules,
+same USB layout as those.
 
-- The numbers above are average values calculated on 100 trials for
-each  different situation. As previously noticed on this thread, with
-the new kernel the times are also very different among the different
-trials in the same situation. With the old kernel the standard
-deviation on the times in a set of 100 trials is much smaller (to give
-some mean/sigma values: m=1800->s=530; m=340->s=131; m=76->s=13; ).
+The QMI interface is exposed in USB configuration #1:
 
-- The size of the transferred file has been 1GB in these trials.
-Smaller files don't always give appreciable differences, but if you
-want I can also provide those data. Of course, I can also provide the
-raw data of each set of trials.
+P:  Vendor=0489 ProdID=e0b4 Rev=03.18
+S:  Manufacturer=FII
+S:  Product=T77W968 LTE
+S:  SerialNumber=0123456789ABCDEF
+C:  #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 1 Cls=03(HID  ) Sub=00 Prot=00 Driver=usbhid
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+I:  If#=0x5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=ff Driver=option
 
-Thanks,
-and bye,
+Signed-off-by: Aleksander Morgado <aleksander@aleksander.es>
+Acked-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Andrea
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 9f037c50054df..b55fd76348f9f 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1306,6 +1306,8 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0191, 4)},	/* Quectel EG91 */
+ 	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
+ 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
++	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
++	{QMI_FIXED_INTF(0x0489, 0xe0b5, 0)},	/* Foxconn T77W968 LTE with eSIM support*/
+ 
+ 	/* 4. Gobi 1000 devices */
+ 	{QMI_GOBI1K_DEVICE(0x05c6, 0x9212)},	/* Acer Gobi Modem Device */
+-- 
+2.20.1
 
