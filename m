@@ -2,130 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A63107D57
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2019 07:52:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6625B107D70
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2019 08:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726525AbfKWGwk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 23 Nov 2019 01:52:40 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:41189 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725800AbfKWGwj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Nov 2019 01:52:39 -0500
-Received: by mail-qt1-f193.google.com with SMTP id 59so5110547qtg.8
-        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2019 22:52:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=P+MUZ1y2xb9PhY7+WKJzGw1iInQZnQRbBnrxCn4UQzw=;
-        b=ef4pBY7xeFKFfeQ/8fzoBtrVicRJxFcNv7xwZsVE9YZFB7OBVPVFbdxHC66O3jBsXS
-         kSO2Qg57e2UCBOtT7P3IdscYIZRF1sAbTXGNsuv78EbZ2oNQK48+yBd0fsSK4Vw/87Jp
-         ZQxW2xuyAvXmL/koRI3Bqlxh8WPdUDRqr7BR33qnH8Ri5603dDwQxHzy3UBys5pKdShU
-         EfuBt6tK9bBhsB6Ryl/YyG2R3mCFm7E/BKb56qV+35we7vLeMTDcWz+OxS2WOQqjCAXG
-         ny+h43woX108oFb4ptQp5vPXaCcQBbAUiACKS08iXmBdo05M6nBaczjFDA+62NNx6wFp
-         KHHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=P+MUZ1y2xb9PhY7+WKJzGw1iInQZnQRbBnrxCn4UQzw=;
-        b=JcKx61dXXjzLdU4JaDpS2YDNN1ODAsNiY5rGXvJ0khd8baPopSrxE3YZLbZJ/gsWnG
-         YoiZYjc8Q4un7+tUKO8OsuHvTWuTcFzZRBjyUZqAg05AH5scsrX8c48jJulLzBrMYvyH
-         84pJ4Xp/0QHl63DaB8JegLnGI0XIWr/I6Hg5TgF+0L0oXqyPrehXxcasKXnZVH8LcFTu
-         qKIBzKFj13jg+JyXIUZ3u8aFQ0duUoI25aOAfJ7i3fmVJgY8jxN+vzxGynuQQ1YHenCg
-         BypeVoxwqvF300AyW9jHLY4yshDnOtfsavQ0GS7nSKWknvcbzhgO47fXP1+Ug7x1jF+a
-         fn/A==
-X-Gm-Message-State: APjAAAU2ssI0hy+lMb3f2xccCc+OeSjUnT48AHgcJlVvZ7blw15ATr2U
-        HHokZhInUaqD0HxsFrIgjk6qn2KA5nUmRgEsQjUJSSWm340=
-X-Google-Smtp-Source: APXvYqxRxRqDo8SO2OOlMLZfct/me9RRZCPwi7R45+Yk8t+IxHBz+O3PzExEgN5YTAvYjB2pKNIM8zj3NhGe7QGyzkI=
-X-Received: by 2002:aed:24af:: with SMTP id t44mr4069018qtc.57.1574491957069;
- Fri, 22 Nov 2019 22:52:37 -0800 (PST)
-MIME-Version: 1.0
-References: <0000000000003313f0058fea8435@google.com> <8736ek9qir.fsf@miraculix.mork.no>
- <1574159504.28617.5.camel@suse.de> <87pnho85h7.fsf@miraculix.mork.no>
-In-Reply-To: <87pnho85h7.fsf@miraculix.mork.no>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 23 Nov 2019 07:52:25 +0100
-Message-ID: <CACT4Y+YgLm2m0JG6qKKn9OpyXT9kKEPeyLSVGSfLbUukoCnB+g@mail.gmail.com>
-Subject: Re: INFO: task hung in wdm_flush
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-Cc:     Oliver Neukum <oneukum@suse.de>,
-        syzbot <syzbot+854768b99f19e89d7f81@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Jia-Ju Bai <baijiaju1990@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Colin King <colin.king@canonical.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        id S1726704AbfKWH2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 23 Nov 2019 02:28:46 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:54990 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725973AbfKWH2p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 23 Nov 2019 02:28:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574494124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0VpnZxogNfmq2zNOxOpvLIFykqFG115bnmJucwdOn3c=;
+        b=Hw7ATIl79D+5HDUKbY622mwKXiC7i4wkPxvkLAo8D120Xjde+Dduohk4zpFhq7UzGldH6b
+        wE8Fq8XEvKQBAAD4Cl7Wt+hyVfR1IQ70ZsKCfw802FvCERe1gG+oI2l6Yeu0C9XYTUeMGu
+        QN0+AHjkyds2HmoV/OTym+qp5l+As6g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-177-sWOOPYRKPNKL7Lq1o5RkHg-1; Sat, 23 Nov 2019 02:28:40 -0500
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7E2DA1800D40;
+        Sat, 23 Nov 2019 07:28:37 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-17.pek2.redhat.com [10.72.8.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 38DDE10013A1;
+        Sat, 23 Nov 2019 07:28:24 +0000 (UTC)
+Date:   Sat, 23 Nov 2019 15:28:20 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
         USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        yuehaibing@huawei.com
-Content-Type: text/plain; charset="UTF-8"
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191123072726.GC25356@ming.t460p>
+References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
+ <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
+ <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
+ <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
+ <20191109222828.GA30568@ming.t460p>
+ <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
+MIME-Version: 1.0
+In-Reply-To: <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MC-Unique: sWOOPYRKPNKL7Lq1o5RkHg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 12:34 PM Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
->
-> Oliver Neukum <oneukum@suse.de> writes:
-> > Am Dienstag, den 19.11.2019, 10:14 +0100 schrieb Bj=C3=B8rn Mork:
-> >
-> >> Anyway, I believe this is not a bug.
-> >>
-> >> wdm_flush will wait forever for the IN_USE flag to be cleared or the
-> >
-> > Damn. Too obvious. So you think we simply have pending output that does
-> > just not complete?
->
-> I do miss a lot of stuff so I might be wrong, but I can't see any other
-> way this can happen.  The out_callback will unconditionally clear the
-> IN_USE flag and wake up the wait_queue.
->
-> >> DISCONNECTING flag to be set. The only way you can avoid this is by
-> >> creating a device that works normally up to a point and then completel=
-y
-> >> ignores all messages,
-> >
-> > Devices may crash. I don't think we can ignore that case.
->
-> Sure, but I've never seen that happen without the device falling off the
-> bus.  Which is a disconnect.
->
-> But I am all for handling this *if* someone reproduces it with a real
-> device.  I just don't think it's worth the effort if it's only a
-> theoretical problem.
->
-> >>  but without resetting or disconnecting. It is
-> >> obviously possible to create such a device. But I think the current
-> >> error handling is more than sufficient, unless you show me some way to
-> >> abuse this or reproduce the issue with a real device.
-> >
-> > Malicious devices are real. Potentially at least.
-> > But you are right, we need not bend over to handle them well, but we
-> > ought to be able to handle them.
->
-> Sure, we need to handle malicious devices.  But only if they can be used
-> for real harm.
->
-> This warning requires physical acceess and is only slightly annoying.
-> Like a USB device making loud farting sounds.  You'd just disconnect the
-> device.  No need for Linux to detect the sound and handle it
-> automatically, I think.
+On Fri, Nov 22, 2019 at 08:16:30PM +0100, Andrea Vai wrote:
+> Il giorno dom, 10/11/2019 alle 06.28 +0800, Ming Lei ha scritto:
+> > Another thing we could try is to use 'none' via the following
+> > command:
+> >=20
+> >  echo none > /sys/block/sdh/queue/scheduler  #suppose 'sdh' points
+> > to the usb storage disk
+> >=20
+> > Because USB storage HBA is single hw queue, which depth is 1. This
+> > way
+> > should change to dispatch IO in the order of bio submission.
+> >=20
+> > Andrea, could you switch io scheduler to none and update us if
+> > difference
+> > can be made?
+>=20
+> Using the new kernel, there is indeed a difference because the time to
+> copy a file is 1800 seconds with [mq-deadline], and 340 seconds with
+> [none]. But that is still far away from the old kernel, which performs
+> the copy of the same file in 76 seconds.
 
-Hi Bj=C3=B8rn,
+Please post the log of 'lsusb -v', and I will try to make a patch for
+addressing the issue.
 
-Besides the production use you are referring to, there are 2 cases we
-should take into account as well:
-1. Testing.
-Any kernel testing system needs a binary criteria for detecting kernel
-bugs. It seems right to detect unkillable hung tasks as kernel bugs.
-Which means that we need to resolve this in some way regardless of the
-production scenario.
-2. Reliable killing of processes.
-It's a very important property that an admin or script can reliably
-kill whatever process/container they need to kill for whatever reason.
-This case results in an unkillable process, which means scripts will
-fail, automated systems will misbehave, admins will waste time (if
-they are qualified to resolve this at all).
+
+thanks,=20
+Ming
+
