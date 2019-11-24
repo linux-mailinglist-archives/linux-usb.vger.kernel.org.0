@@ -2,131 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C15091084FD
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2019 21:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBA9B108559
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2019 23:39:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726895AbfKXUzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Nov 2019 15:55:31 -0500
-Received: from netrider.rowland.org ([192.131.102.5]:40937 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726840AbfKXUzb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Nov 2019 15:55:31 -0500
-Received: (qmail 4767 invoked by uid 500); 24 Nov 2019 15:55:30 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 24 Nov 2019 15:55:30 -0500
-Date:   Sun, 24 Nov 2019 15:55:30 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@netrider.rowland.org
-To:     syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <arnd@arndb.de>,
-        <gregkh@linuxfoundation.org>, <jrdr.linux@gmail.com>,
-        <keescook@chromium.org>, <kstewart@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>,
-        <viro@zeniv.linux.org.uk>, <zaitcev@redhat.com>
-Subject: Re: possible deadlock in mon_bin_vma_fault
-In-Reply-To: <000000000000ce3cc905981c64bd@google.com>
-Message-ID: <Pine.LNX.4.44L0.1911241553390.4632-100000@netrider.rowland.org>
+        id S1727085AbfKXWj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Nov 2019 17:39:29 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:42102 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726855AbfKXWj3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Nov 2019 17:39:29 -0500
+Received: by mail-pj1-f65.google.com with SMTP id y21so5535275pjn.9
+        for <linux-usb@vger.kernel.org>; Sun, 24 Nov 2019 14:39:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=mJ03a7hesWJNvR2m6hfpaM5qF0D6avZONNtvx1zsFJc=;
+        b=Gj7RiQOKmCUl7rlYZQVUi2mKCnOg5I0nw9OU8vIyXYd/0QJI7iGZFzb8A/gjk4E+JS
+         xOJdNEEuiSMhWnxlWAyzY3TDGJab6QkRA5Q+e9FeTPuhzQ/AEYUFZFzloPjD3PGACWym
+         SEtEro4s2JPqte8X2Pf+p3nxA+N3yyFlbPqGMcKI8aDGrB0AgcK8nlBEFgq8bE004dIh
+         ycirnv1uJfo4XBMc96OLuvYRyUlFwaYIcnglL6w3TuhledodxCYZZRFQooR3B5aUumvb
+         hEGV7k4M4T8W6jyExL6fLt9Cdlr+RPuD8Cuar7Te9Tl2EzW4Kqj/FvMFbWqiEPCIjWrv
+         +rWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=mJ03a7hesWJNvR2m6hfpaM5qF0D6avZONNtvx1zsFJc=;
+        b=NKuavAdAEF+Eii7RRFsn2Ovs1/ax0TsRbUf6ujCbHf3GmbH8rpDtHLddMu5YKiPV4c
+         hnEA28kSaNfcf7myXcxHVE52Vo87S9n5CDagEHZjVgQrJUx1Cq2fErnTAW1cjuhV2B9t
+         YxUGrKbWu+1DLCpPOJ5qANeAQEGvKcIOta6hmYcNzeHv4AFeeCrx3tEEK2ZULcoUA11v
+         eA3aOjw+s7cjZF9wh5s40n+Tw0QA/oF2evtudHvg5fQh/H5yx66IrjwccPaaw3hlJi9J
+         a/bAAXJRcc82k5kKTEVmXBWV7U3zx0g4DzrgY2Hxya0mj70mAq4L86wtg3LeLE2jzoCl
+         jnww==
+X-Gm-Message-State: APjAAAU9Q+X0ILDVRO+WXVzZVlHJQk5FxgvM+Sp/XU87k5L2Q0uvIr4f
+        O3QocIjwBgEgPkVgi6AuqTt/gw==
+X-Google-Smtp-Source: APXvYqx50D+Wd5N5bU/VCxdp0oBYsPZSpIdT6ez+EmZyigA36yD5gxhbXBGUlO6FDAZGYYvd6plU4Q==
+X-Received: by 2002:a17:902:409:: with SMTP id 9mr26724818ple.25.1574635166883;
+        Sun, 24 Nov 2019 14:39:26 -0800 (PST)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id y12sm5619986pjy.0.2019.11.24.14.39.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 24 Nov 2019 14:39:26 -0800 (PST)
+Date:   Sun, 24 Nov 2019 14:39:19 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     davem@davemloft.net, keescook@chromium.org, kvalo@codeaurora.org,
+        saeedm@mellanox.com, jeffrey.t.kirsher@intel.com,
+        luciano.coelho@intel.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] Fix -Wcast-function-type net drivers
+Message-ID: <20191124143919.63711421@cakuba.netronome.com>
+In-Reply-To: <20191124094306.21297-1-tranmanphong@gmail.com>
+References: <20191124094306.21297-1-tranmanphong@gmail.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 24 Nov 2019, syzbot wrote:
-
-> Hello,
+On Sun, 24 Nov 2019 16:43:01 +0700, Phong Tran wrote:
+> This series is for fixing the compiler warning while enable
+> -Wcast-function-type.
 > 
-> syzbot tried to test the proposed patch but build/boot failed:
+> Almost is incompatible callback prototype in using tasklet.
+> The void (*func)(unsigned long) instead of void (*func)(struct foo*).
 > 
-> failed to apply patch:
-> checking file drivers/usb/mon/mon_bin.c
-> patch: **** unexpected end of file in patch
+> Reported by: https://github.com/KSPP/linux/issues/20
 
-One more try...
+Hi Tran, thanks for the patches. Could you split the series into two -
+the wireless changes and the USB changes?
 
-Alan Stern
-
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v5.3
-
-commit 5252eb4c8297fedbf1c5f1e67da44efe00e6ef6b
-Author: Pete Zaitcev <zaitcev@kotori.zaitcev.us>
-Date:   Thu Nov 21 17:24:00 2019 -0600
-
-     usb: Fix a deadlock in usbmon between mmap and read
-
-     Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
-     Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
-
-diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
-index ac2b4fcc265f..f48a23adbc35 100644
---- a/drivers/usb/mon/mon_bin.c
-+++ b/drivers/usb/mon/mon_bin.c
-@@ -1039,12 +1039,18 @@ static long mon_bin_ioctl(struct file *file, unsigned int cmd, unsigned long arg
- 
- 		mutex_lock(&rp->fetch_lock);
- 		spin_lock_irqsave(&rp->b_lock, flags);
--		mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
--		kfree(rp->b_vec);
--		rp->b_vec  = vec;
--		rp->b_size = size;
--		rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
--		rp->cnt_lost = 0;
-+		if (rp->mmap_active) {
-+			mon_free_buff(vec, size/CHUNK_SIZE);
-+			kfree(vec);
-+			ret = -EBUSY;
-+		} else {
-+			mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
-+			kfree(rp->b_vec);
-+			rp->b_vec  = vec;
-+			rp->b_size = size;
-+			rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
-+			rp->cnt_lost = 0;
-+		}
- 		spin_unlock_irqrestore(&rp->b_lock, flags);
- 		mutex_unlock(&rp->fetch_lock);
- 		}
-@@ -1216,13 +1222,21 @@ mon_bin_poll(struct file *file, struct poll_table_struct *wait)
- static void mon_bin_vma_open(struct vm_area_struct *vma)
- {
- 	struct mon_reader_bin *rp = vma->vm_private_data;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&rp->b_lock, flags);
- 	rp->mmap_active++;
-+	spin_unlock_irqrestore(&rp->b_lock, flags);
- }
- 
- static void mon_bin_vma_close(struct vm_area_struct *vma)
- {
-+	unsigned long flags;
-+
- 	struct mon_reader_bin *rp = vma->vm_private_data;
-+	spin_lock_irqsave(&rp->b_lock, flags);
- 	rp->mmap_active--;
-+	spin_unlock_irqrestore(&rp->b_lock, flags);
- }
- 
- /*
-@@ -1234,16 +1248,12 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
- 	unsigned long offset, chunk_idx;
- 	struct page *pageptr;
- 
--	mutex_lock(&rp->fetch_lock);
- 	offset = vmf->pgoff << PAGE_SHIFT;
--	if (offset >= rp->b_size) {
--		mutex_unlock(&rp->fetch_lock);
-+	if (offset >= rp->b_size)
- 		return VM_FAULT_SIGBUS;
--	}
- 	chunk_idx = offset / CHUNK_SIZE;
- 	pageptr = rp->b_vec[chunk_idx].pg;
- 	get_page(pageptr);
--	mutex_unlock(&rp->fetch_lock);
- 	vmf->page = pageptr;
- 	return 0;
- }
-
-
+Those usually go via slightly different trees.
