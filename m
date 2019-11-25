@@ -2,126 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CE0108B6C
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 11:11:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DFC108BA3
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 11:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727215AbfKYKLG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 05:11:06 -0500
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:34675 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727433AbfKYKLG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 05:11:06 -0500
-Received: by mail-wm1-f49.google.com with SMTP id j18so15790123wmk.1
-        for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2019 02:11:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Bwpubt5kO9MpF6+DhDd9tFXMqNxMMg0/sf7IorDXQyk=;
-        b=vSvVHULp7DD7lYRvr2dnS4yvZFxgC2sHfS0hqs1sHp7uGdaRTaNLgh0nB15KXx49yI
-         d9ndwlfx2sBiMePPGdCUiqrUVJmYbHkrbYzXF1vesYOZZldXSUjTo0a2hTmF9sjR9QyD
-         6dxBUB1R7IAurqg4iAsu2obFxdeuVcAGHjc2J6u/3AGjCcEp8zpO6q7DjhE7qiu26MJN
-         n9Yw/S1l3/MMIS/hPH2Wb1cTFITadmvYybyppnsA7vXNq8pdC/rO5U2rhFgsastbCupJ
-         wdlwv5oVuAWFt07xWyzgcbt/Y0Hi1PQsGRAp1XBC1tThcm+in8vhIenirOlQClvvhFD9
-         3BDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Bwpubt5kO9MpF6+DhDd9tFXMqNxMMg0/sf7IorDXQyk=;
-        b=l4l1icKK26vQgKco2ZWc8g/H7LSWqCCs6/fWBINQGVl5T8cz4bR4CynpVOTy9eJnS0
-         9lv1zIHjkL1k0/iAznP5t7xl7jkFIsMukhmEGORuBvsVM0cBvAqjVFv7JoScrzDVFzeV
-         mEIICKI/8gX3xTLqj5DUe5qmKmYHvTbiqJJzD0aMk0xVBygI4x3KKQg2/Zyn4dJVYUtS
-         UwHIdiBmClErP/HxoLkiJZ9LiCaDDWuU3UyYidQMIiG3VfKZJAhrHno/3OHHcaz47XpI
-         lOLf+hHVe7SfJkjF1WoNPgjBRlDwYkO1j2jJqiqchkc0DjTtxoNPe9YfGgUvzQdsP5IA
-         onCQ==
-X-Gm-Message-State: APjAAAUww6+d7w0O58vqPJbF0lgMIduXjN5BoMzQ2COz2mHArVvhJT5V
-        6AhT4msiV5hs4RdDpOeGrmdwNg==
-X-Google-Smtp-Source: APXvYqxYaE+TwA2dYd5tAr202DSVevWFDYjL18tBGvRXf25h/jnPJLpvFlNOJvKfFSjgx+2nhWTsXg==
-X-Received: by 2002:a05:600c:2257:: with SMTP id a23mr29322180wmm.143.1574676662350;
-        Mon, 25 Nov 2019 02:11:02 -0800 (PST)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id 4sm8142393wmd.33.2019.11.25.02.11.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Nov 2019 02:11:01 -0800 (PST)
-Message-ID: <bf47a6c620b847fa9e27f8542eb761529f3e0381.camel@unipv.it>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Date:   Mon, 25 Nov 2019 11:11:00 +0100
-In-Reply-To: <20191125035437.GA3806@ming.t460p>
-References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
-         <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
-         <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
-         <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
-         <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
-         <20191109222828.GA30568@ming.t460p>
-         <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
-         <20191123072726.GC25356@ming.t460p>
-         <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>
-         <20191125035437.GA3806@ming.t460p>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1727395AbfKYK1V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 05:27:21 -0500
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:9554 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727316AbfKYK1V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 05:27:21 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAPAR8Jf008268;
+        Mon, 25 Nov 2019 11:27:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-type; s=STMicroelectronics;
+ bh=JQQc+TZBsDysMWIa2Q9eivvaXwP3EA8yawln7WVtzwo=;
+ b=QAJLln2KJAVwx3plWGTXdhZfpOLmJfkuxW/s0PWJ7QPNTdeuXsrF3NzSCVuLIpicpw2p
+ dgi38Bt3m05T3PBg+VGkz7Sj9ki6IB93UsVcaQm0nGV+4a2Di8YvowxaBqfr0l3glKt2
+ fUrK2qx/eGIqMBUJ4Yw3wDg1hgm1XsTQ7fl3VLdcBqOs9qZfcwYRl+hka9Np2T4VFqF+
+ A9Vqbzrj3/SvL5cXIkcZkD1iZvSrwUxZADmPhqJkvuGRntIGPFshbaJAUgSkVJFOwOR9
+ fEyMNI4oX17iXab0LIdstPazMFWiSM0m94fiPt0p6YLsm2TAkcA1R2SiOnTHe9lwBkw3 uw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2weu428m9r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 25 Nov 2019 11:27:11 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EDF08100034;
+        Mon, 25 Nov 2019 11:27:10 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B86092B0115;
+        Mon, 25 Nov 2019 11:27:10 +0100 (CET)
+Received: from localhost (10.75.127.47) by SFHDAG3NODE2.st.com (10.75.127.8)
+ with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 25 Nov 2019 11:27:10
+ +0100
+From:   Amelie Delaunay <amelie.delaunay@st.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Benjamin Gaignard <benjamin.gaignard@st.com>,
+        Amelie Delaunay <amelie.delaunay@st.com>
+Subject: [PATCH 0/2] USB DWC2 support for STM32MP15 SoCs USB OTG
+Date:   Mon, 25 Nov 2019 11:26:57 +0100
+Message-ID: <20191125102659.22853-1-amelie.delaunay@st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-25_02:2019-11-21,2019-11-25 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno lun, 25/11/2019 alle 11.54 +0800, Ming Lei ha scritto:
-> On Sat, Nov 23, 2019 at 04:44:55PM +0100, Andrea Vai wrote:
-> > Il giorno sab, 23/11/2019 alle 15.28 +0800, Ming Lei ha scritto:
-> > > 
-> > > Please post the log of 'lsusb -v', and I will try to make a
-> patch
-> > > for
-> > > addressing the issue.
-> > 
-> > attached,
-> 
-> Please apply the attached patch, and re-build & install & reboot
-> kernel.
-> 
-> This time, please don't switch io scheduler.
+Adds support for STM32MP15 SoCs USB OTG HS and FS based on DWC2 IP.
 
-# patch -p1 < usb.patch outputs:
+STM32MP15 SoCs embeds a DWC2 IP that can be used in HS or in FS, and
+uses an external Vbus and ID level detection to support OTG operations.
 
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file block/blk-mq.c
-Hunk #1 succeeded at 1465 (offset 29 lines).
-Hunk #2 succeeded at 3061 (offset 13 lines).
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file drivers/scsi/scsi_lib.c
-Hunk #1 succeeded at 1902 (offset -37 lines).
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file drivers/usb/storage/scsiglue.c
-Hunk #1 succeeded at 651 (offset -10 lines).
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file include/linux/blk-mq.h
-Hunk #1 succeeded at 226 (offset -162 lines).
-(Stripping trailing CRs from patch; use --binary to disable.)
-patching file include/scsi/scsi_host.h
-patch unexpectedly ends in middle of line
-patch unexpectedly ends in middle of line
+Amelie Delaunay (2):
+  dt-bindings: usb: dwc2: add support for STM32MP15 SoCs USB OTG HS and
+    FS
+  usb: dwc2: add support for STM32MP15 SoCs USB OTG HS and FS
 
-Just to be sure I have to go on, is this correct? Sounds like an error
-but I don't know if it is important.
+ .../devicetree/bindings/usb/dwc2.txt          |  5 +
+ drivers/usb/dwc2/core.h                       |  8 ++
+ drivers/usb/dwc2/hw.h                         |  8 ++
+ drivers/usb/dwc2/params.c                     | 33 +++++++
+ drivers/usb/dwc2/platform.c                   | 94 ++++++++++++++++++-
+ 5 files changed, 146 insertions(+), 2 deletions(-)
 
-Thanks,
-Andrea
+-- 
+2.17.1
 
