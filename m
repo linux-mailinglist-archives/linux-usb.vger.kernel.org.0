@@ -2,159 +2,170 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 629FD108722
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 05:20:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3564108981
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 08:51:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727457AbfKYEUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Nov 2019 23:20:46 -0500
-Received: from mail-eopbgr40062.outbound.protection.outlook.com ([40.107.4.62]:65423
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727397AbfKYEUp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 24 Nov 2019 23:20:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DAomdFpg7LGQvwRUGGv3gHno5EA5Pp38Da0sngNkBmpxDeTwdkVlXtoCSp0y1iiuth/mhDOcpaMWJ72RfnPFIyQrBZcHA6DflIGmP6KkFnXLw7QKdMVeeepPwl7hGJL/XWsCsnjpkbUi+wo9r7VMpLQhT5j5OFr0XeuaWxz7k4sY0KSxyTySEmnobZV381iecDjz/+eKPumq0hTmq20iJDYctnb7idbr54AB/XcZs6Mj0eCoEahW9L+DP0rHWw2Eq1whOcbsLh768tBmUkdy6shfstymE8wIeQQOAlxEqaPMrp8Gh8FCl+mXWlGUZN356YvvjdLS4yR9HCUDPN9RcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=opkWY90ZME6YU5qDnpBVlkuhn/A8phiAeae6EWKgQ1s=;
- b=egMj/KwFk969AHortMbVJAZAJsvqCRb6xtqJyKrZL+Y8kvV31sW/Slu5+iNSPmaHpLS+WIxEvwdgTS8SMu5jFeH0vZ9d7eggS4x4Hvn2GyJMMpFMerdSQ/xkxfWYXayJEpkpNMUiqQETkCCDr6UEUSZ4Jjq8zzTTrhBx35s22Cnm8rMXuS69E3NWt1QqiYgSFIk994ieHpvz6nlTmrxmgOJeKzyI3GptSkg+yt49yekg2f6EA07B6MhIsV0Zm41EQYNIMsnTXCfUTIRXMxDC5Pktx98clz5lZHHdkggS90eugtqRzclc1DEwtALKt227jMLOyBkB+IJqSg0kTVa6iQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=opkWY90ZME6YU5qDnpBVlkuhn/A8phiAeae6EWKgQ1s=;
- b=qx4oxid4V35G1aXKZJQCnjAnDWwwuE7xfzqL1ukqY31I3l43kX2dK5lIHS8+6grXrKn55l3jvvg8UH/+AIXfuq/4CaGX/JXqMsdqYnGBF9XH6acySdylUqeELa0o2BVlQGvjrt6NZ1JwS+qQRE8RE7DojubH+7Irn2nhqnMv5fk=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB4061.eurprd04.prod.outlook.com (10.171.182.160) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2474.19; Mon, 25 Nov 2019 04:20:42 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2474.023; Mon, 25 Nov 2019
- 04:20:42 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Henry Lin <henryl@nvidia.com>
-CC:     Felipe Balbi <balbi@kernel.org>,
+        id S1725823AbfKYHvz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 02:51:55 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:18618 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725535AbfKYHvz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 02:51:55 -0500
+Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Mon, 25 Nov
+ 2019 15:52:19 +0800
+Subject: Re: [PATCH 2/6] dt-bindings: usb: dwc3: Add the Amlogic A1 Family
+ DWC3 Glue Bindings
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Romain Izard <romain.izard.pro@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: gadget: f_ncm: fix wrong usb_ep
-Thread-Topic: [PATCH] usb: gadget: f_ncm: fix wrong usb_ep
-Thread-Index: AQHVoCLqKGYVyVjGs0eFFEwrEIcffKebTxyA
-Date:   Mon, 25 Nov 2019 04:20:42 +0000
-Message-ID: <20191125042039.GA10953@b29397-desktop>
-References: <20191121041858.15746-1-henryl@nvidia.com>
-In-Reply-To: <20191121041858.15746-1-henryl@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.66]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: cee1ef73-0916-4f5b-f283-08d7715ed5ae
-x-ms-traffictypediagnostic: VI1PR04MB4061:
-x-microsoft-antispam-prvs: <VI1PR04MB4061B83F1EF9156BA0D8F1F48B4A0@VI1PR04MB4061.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-forefront-prvs: 0232B30BBC
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(199004)(189003)(71190400001)(6116002)(33656002)(3846002)(7736002)(71200400001)(229853002)(305945005)(81166006)(81156014)(8936002)(478600001)(6916009)(14454004)(2906002)(8676002)(5660300002)(26005)(1076003)(6506007)(53546011)(86362001)(102836004)(6246003)(66066001)(25786009)(316002)(6512007)(186003)(76116006)(99286004)(66446008)(66946007)(66476007)(66556008)(64756008)(33716001)(76176011)(44832011)(4326008)(446003)(11346002)(256004)(6436002)(54906003)(9686003)(6486002)(91956017);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4061;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 1WOKQpCMeMT701tODKfRyOuZoSfY6Tn5wineIpMS8rmfQqsrT+OHl2r8OHwaEcCX13MQ9QI8vOa2RaGp/3j5hj+YtrRfYzxAZt22XX3preXZPs+fZtGOurEiMH/sRYnZWWH0ipD+0vP7CLKVOJXSUxH+Jncxs9ohxfh4PIdsbIXMV5Puh/+ZfVkFYtPLwKD7NaYoS9YL9AaS7Sv0VnJB3bBpaOqMvMtN5w5VzdScv1A+/T50XBdOBzs1II9WgXmRZ8cjHTcz9Aj82a2OW+JBI/Vds644lj2qoaZzKaJBNJbRAUVa/iD+W5pFlg65wfJfA0vYeqTc0EUOTVVVl4/G0KudEW7qgYWBSot0CkDFa19+EdiMH/MTzMtoClym4zX0Y7bP/OFnsPJkG5M+b5zRIPJ1zG9znR/nNT3ejMhDcuOps63T0KSrgASuo3YKC99I
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <A862E450F1C70248B7A53919C1AC6362@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Yue Wang <yue.wang@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com>
+ <1574405757-76184-3-git-send-email-hanjie.lin@amlogic.com>
+ <462c13a6-a2ea-44c7-d43d-46ac82d43bf7@baylibre.com>
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+Message-ID: <5357b6c2-e10b-71a3-1e1b-2b641cf5e2df@amlogic.com>
+Date:   Mon, 25 Nov 2019 15:52:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cee1ef73-0916-4f5b-f283-08d7715ed5ae
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2019 04:20:42.0412
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qV6xQgLbN33VXn70+AkjTrlKsqyTqbzc56m9Y3YRwWm4/2FaJZlLsITZSjizEb4UAEVaS40kkmMusL9ILzgv4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4061
+In-Reply-To: <462c13a6-a2ea-44c7-d43d-46ac82d43bf7@baylibre.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.38.198]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-11-21 12:18:57, Henry Lin wrote:
-> Gadget driver should always use config_ep_by_speed() to initialize
-> usb_ep struct according to usb device's operating speed. Otherwise,
-> usb_ep struct may be wrong if usb devcie's operating speed is changed.
->=20
 
-Would you please share the use case how to reproduce it?
 
-Peter
-> Signed-off-by: Henry Lin <henryl@nvidia.com>
-> ---
->  drivers/usb/gadget/function/f_ncm.c | 28 ++++++++++++----------------
->  1 file changed, 12 insertions(+), 16 deletions(-)
->=20
-> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/fun=
-ction/f_ncm.c
-> index 2d6e76e4cffa..420b9c96f2fe 100644
-> --- a/drivers/usb/gadget/function/f_ncm.c
-> +++ b/drivers/usb/gadget/function/f_ncm.c
-> @@ -870,11 +870,10 @@ static int ncm_set_alt(struct usb_function *f, unsi=
-gned intf, unsigned alt)
->  		DBG(cdev, "reset ncm control %d\n", intf);
->  		usb_ep_disable(ncm->notify);
-> =20
-> -		if (!(ncm->notify->desc)) {
-> -			DBG(cdev, "init ncm ctrl %d\n", intf);
-> -			if (config_ep_by_speed(cdev->gadget, f, ncm->notify))
-> -				goto fail;
-> -		}
-> +		DBG(cdev, "init ncm ctrl %d\n", intf);
-> +		if (config_ep_by_speed(cdev->gadget, f, ncm->notify))
-> +			goto fail;
-> +
->  		usb_ep_enable(ncm->notify);
-> =20
->  	/* Data interface has two altsettings, 0 and 1 */
-> @@ -897,17 +896,14 @@ static int ncm_set_alt(struct usb_function *f, unsi=
-gned intf, unsigned alt)
->  		if (alt =3D=3D 1) {
->  			struct net_device	*net;
-> =20
-> -			if (!ncm->port.in_ep->desc ||
-> -			    !ncm->port.out_ep->desc) {
-> -				DBG(cdev, "init ncm\n");
-> -				if (config_ep_by_speed(cdev->gadget, f,
-> -						       ncm->port.in_ep) ||
-> -				    config_ep_by_speed(cdev->gadget, f,
-> -						       ncm->port.out_ep)) {
-> -					ncm->port.in_ep->desc =3D NULL;
-> -					ncm->port.out_ep->desc =3D NULL;
-> -					goto fail;
-> -				}
-> +			DBG(cdev, "init ncm\n");
-> +			if (config_ep_by_speed(cdev->gadget, f,
-> +					       ncm->port.in_ep) ||
-> +			    config_ep_by_speed(cdev->gadget, f,
-> +					       ncm->port.out_ep)) {
-> +				ncm->port.in_ep->desc =3D NULL;
-> +				ncm->port.out_ep->desc =3D NULL;
-> +				goto fail;
->  			}
-> =20
->  			/* TODO */
-> --=20
-> 2.17.1
->=20
+On 2019/11/22 16:52, Neil Armstrong wrote:
+> Hi,
+> 
+> 
+> On 22/11/2019 07:55, Hanjie Lin wrote:
+>> The Amlogic A1 SoC Family embeds 1 USB Controllers:
+>>  - a DWC3 IP configured as Host for USB2 and USB3
+>>
+>> A glue connects the controllers to the USB2 PHY of A1 SoC.
+>>
+>> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+>> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+>> ---
+>>  .../devicetree/bindings/usb/amlogic,dwc3.txt       | 53 ++++++++++++++++++++++
+>>  1 file changed, 53 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+>> index 6ffb09b..63dc60b 100644
+>> --- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+>> +++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
+>> @@ -128,3 +128,56 @@ Example device nodes:
+>>  				snps,quirk-frame-length-adjustment;
+>>  			};
+>>  	};
+>> +
+>> +Amlogic Meson A1 DWC3 USB SoC Controller Glue
+>> +
+>> +The Amlogic A1 embeds a DWC3 USB IP Core configured for USB2 in
+>> +host-only mode.
+>> +
+>> +Required properties:
+>> +- compatible:	Should be "amlogic,meson-a1-usb-ctrl"
+>> +- clocks:       The clocks needed by the usb controller
+>> +- clock-names:  Should contain the name of the clocks: "usb_ctrl", "usb_bus",
+>> +                "xtal_usb_phy", "xtal_usb_ctrl"
+>> +- resets:	a handle for the shared "USB" reset line
+>> +- reg:		The base address and length of the registers
+>> +- phys: 	handle to used PHYs on the system
+>> +	- a <0> phandle can be used if a PHY is not used
+>> +- phy-names:	names of the used PHYs on the system :
+>> +	- "usb2-phy0" for USB2 PHY if USBHOST port is used
+>> +
+>> +Required child nodes:
+>> +
+>> +A child node must exist to represent the core DWC3 IP block. The name of
+>> +the node is not important. The content of the node is defined in dwc3.txt.
+>> +
+>> +PHY documentation is provided in the following places:
+>> +- Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
+>> +
+>> +Example device nodes:
+>> +	usb: usb@ffe09000 {
+>> +			status = "okay";
+>> +			compatible = "amlogic,meson-a1-usb-ctrl";
+>> +			reg = <0x0 0xffe09000 0x0 0xa0>;
+>> +			#address-cells = <2>;
+>> +			#size-cells = <2>;
+>> +			ranges;
+>> +
+>> +			clocks = <&clkc_periphs CLKID_USB_CTRL>,
+>> +				 <&clkc_periphs CLKID_USB_BUS>,
+>> +				 <&clkc_periphs CLKID_XTAL_USB_PHY>,
+>> +				 <&clkc_periphs CLKID_XTAL_USB_CTRL>;
+>> +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_phy", "xtal_usb_ctrl";
+>> +			resets = <&reset RESET_USBCTRL>;
+>> +			phys = <&usb2_phy0>;
+>> +			phy-names = "usb2-phy0";
+>> +
+>> +			dwc3: usb@ff400000 {
+>> +					compatible = "snps,dwc3";
+>> +					reg = <0x0 0xff400000 0x0 0x100000>;
+>> +					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+>> +					dr_mode = "host";
+>> +					snps,dis_u2_susphy_quirk;
+>> +					snps,quirk-frame-length-adjustment = <0x20>;
+>> +			};
+>> +	};
+>>
+> 
+> This seems very similar to the g12a bindings, seems you could update the yaml g12a bindings
+> with specific clocks and required for amlogic,meson-a1-usb-ctrl.
+> 
+> Neil
+> 
+> .
+> 
 
---=20
+Hi Neil
+Thanks for the comment.
 
-Thanks,
-Peter Chen=
+1, G12A have usb2-phy0/usb2-phy1/usb3-phy0 three phys and an interrupt to support host/peripheral/otg modes.
+   A1 has one usb2-phy0 phy and only support host mode.
+   
+2, G12A glue/phy drivers are for G12A SoCs, there are some diffrences to A1.
+   G12A glue driver have dr_mode and interrupts two attributes to support otg mode while A1 hasn't this requirement.
+   G12A glue driver has a hard coding vbus regulator code to support otg mode while A1 hasn't this requirement.
+   G12A glue driver has a hard coding support phys while A1 only supports host mode.
+   	enum {
+		USB2_HOST_PHY = 0,
+		USB2_OTG_PHY,
+		USB3_HOST_PHY,
+		PHY_COUNT,
+		};
+   G12A glue driver only supports one clock while A1 needs four clocks.
+   G12A and A1 phy drivers have different register configurations since hardware differences.
+   
+3, We have estimated these differences and we thought it's more clear and readable to have a dedicated glue/phy
+   driver for A1 SoCs, so also dedicated dt-bindings.
+
