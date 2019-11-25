@@ -2,110 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 673941091C9
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 17:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2F210928B
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 18:04:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728840AbfKYQ16 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 11:27:58 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:40694 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728683AbfKYQ16 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 11:27:58 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAPG94Ds116096;
-        Mon, 25 Nov 2019 16:27:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=Ozj67Jx8rsVBGI2LZIF1JcPq6UpIs76jAtotIqJKFIQ=;
- b=FennXwzGvPbvbeKjFDo1f177eq1Ef+oXqgdzTHt5bi2LQjVLu/ChuCJY3n/obDYZZnfO
- evuM0GtrR+kWCpwT8r/ab02Ye+ZHc1aQQwzyabu+3T2/hX8WVGUcK8veoOamhmR8FLmS
- ATqtsFLSkoYNdgFzAi9oZuLOiGPdWDuBsvOaIrtty+8RP4FdKlqnS8TKylqt02plhp0b
- Q95AoL2M0osq2dnhscs3QH8n1mDfU5+vuPGRtyVuzKzRqOEfJY6fYkdFDatmH+GjGYNl
- uZThZEsp4uAULTPNiOfjb98GcI2z6Id1S9Fi3bA2pFQUFDziDqFwmfMJ5bserMVz3BgA Kg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2wevqq0scx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Nov 2019 16:27:47 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAPG8I2N055296;
-        Mon, 25 Nov 2019 16:27:47 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 2wfewaqgnv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 25 Nov 2019 16:27:46 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAPGRh4G008991;
-        Mon, 25 Nov 2019 16:27:43 GMT
-Received: from char.us.oracle.com (/10.152.32.25)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 25 Nov 2019 08:27:43 -0800
-Received: by char.us.oracle.com (Postfix, from userid 1000)
-        id 2164A6A0133; Mon, 25 Nov 2019 11:31:11 -0500 (EST)
-Date:   Mon, 25 Nov 2019 11:31:11 -0500
-From:   Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-To:     Jayshri Dajiram Pawar <jpawar@cadence.com>
-Cc:     Roger Quadros <rogerq@ti.com>, Peter Chen <peter.chen@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jbergsagel@ti.com" <jbergsagel@ti.com>,
-        "nsekhar@ti.com" <nsekhar@ti.com>, "nm@ti.com" <nm@ti.com>,
-        Rahul Kumar <kurahul@cadence.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Sanket Parmar <sparmar@cadence.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>
-Subject: Re: [RFC PATCH] usb: gadget: f_tcm: Added DMA32 flag while
- allocation of command buffer
-Message-ID: <20191125163111.GB21800@char.us.oracle.com>
-References: <1573640672-10344-1-git-send-email-jpawar@cadence.com>
- <20191114025301.GD30608@b29397-desktop>
- <5b567d57-6206-24cf-5886-20e8b5a92a45@ti.com>
- <MN2PR07MB6288D92B4AB6CF1B622A797CC1700@MN2PR07MB6288.namprd07.prod.outlook.com>
- <cefc03a1-b70a-bb40-289e-fbf4f9c79faf@ti.com>
- <20191115180215.GC23860@char.us.oracle.com>
- <MN2PR07MB6288E654268FBEB6DFC36F6FC1490@MN2PR07MB6288.namprd07.prod.outlook.com>
+        id S1729067AbfKYREj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 12:04:39 -0500
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:38860 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729049AbfKYREh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 12:04:37 -0500
+Received: by mail-pf1-f174.google.com with SMTP id c13so7666697pfp.5
+        for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2019 09:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=Q8Y0etMiJA8Fg6G1Iyc7V4yqyP4bp9mrc2XhmhODDZ4=;
+        b=xjL1upXnhhgvUxEan9YPfS2ENkzW82X4CqryT5ghQmUwyR4PYyQw1sNbKkZ0RhMNZt
+         LHddgoZZwfe6/0yMd+iUGYGQ/ivMPzkXZ1oXvwB32Ky/vrgK/OdciG+YuxxihbJrIlz7
+         M9JxI01ech17vkiQtUDo2eL4heCMEYzKVm2t/kzTYqJArJUJQJGCDHD7rFc+jDgAOBuw
+         Jqee7b1JBJSZCRJe74lVyAZ0ltWUWbLp22DdQjicgpZ2/7jvHkvYS2YUgMZHUd5+j82K
+         Do6orGVBjvq7zh2jakLwt019NetdneHXM7RWO4Hyrsp5ty2hMZG0OF7RNIBKfz8g4h0W
+         Av8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=Q8Y0etMiJA8Fg6G1Iyc7V4yqyP4bp9mrc2XhmhODDZ4=;
+        b=aEydpdjp7PWK3XuaZ1pFK8QEeZKbPnbFFDtPRFpRiDY+FAQWzkn/1RX9JeSPJ4yjdW
+         H6tSkT5GEaNNSOHI1rXKWAa9dc1oZxW0G9VbKzqCv0nkugQvWtR2D5PUb62OaG9ek3b6
+         KmaCNk0FrjbhkrL5NaA4qBWLFBlq5sDnWU6ZFgtnnWwo+L/3NsVCYe1lRjbwszVFlAeX
+         Q2ghBNzSS1rIqVMKxwf5rEgpxMenGJ4m38+/6NW+A1vIsGKE3rRckNv56Wjx3ILWVQrf
+         q1YByiYCfzcOetQ+X1lz9WRwJaK/W/nFYqMHpGpkvwos7IniUfbPCxz8KYU9VN/x9Zqh
+         39jg==
+X-Gm-Message-State: APjAAAXcHKd8PZANxWuAuCMM+nBIAYqwWysgOBbmDAtx+u+V966sGBsm
+        4YnlLC/HS4B2Z19qM1ciP7MkVA==
+X-Google-Smtp-Source: APXvYqwtpbUIHwHCKc2J7U/N+MsXBLJBXnILlCbzjATOR22XpH+YtDln+ICA0c7BVEgz5by3lfq7iw==
+X-Received: by 2002:a63:a03:: with SMTP id 3mr33194073pgk.117.1574701476491;
+        Mon, 25 Nov 2019 09:04:36 -0800 (PST)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id l21sm8773079pjt.28.2019.11.25.09.04.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Nov 2019 09:04:36 -0800 (PST)
+Date:   Mon, 25 Nov 2019 09:04:27 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Phong Tran <tranmanphong@gmail.com>
+Cc:     davem@davemloft.net, keescook@chromium.org, kvalo@codeaurora.org,
+        saeedm@mellanox.com, jeffrey.t.kirsher@intel.com,
+        luciano.coelho@intel.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] Fix -Wcast-function-type net drivers
+Message-ID: <20191125090427.787126fa@cakuba.netronome.com>
+In-Reply-To: <252466a8-2cad-7e4a-2a87-ade95365fa75@gmail.com>
+References: <20191124094306.21297-1-tranmanphong@gmail.com>
+        <20191124143919.63711421@cakuba.netronome.com>
+        <252466a8-2cad-7e4a-2a87-ade95365fa75@gmail.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MN2PR07MB6288E654268FBEB6DFC36F6FC1490@MN2PR07MB6288.namprd07.prod.outlook.com>
-User-Agent: Mutt/1.9.1 (2017-09-22)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=977
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1911250140
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9452 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1911250140
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-. massive snip..
-> > > Why is swiotlb buffer getting full? How much is it on your system?
+On Mon, 25 Nov 2019 22:06:49 +0700, Phong Tran wrote:
+> Sent in different series:
 > 
-> On our system swiotlb max mapping size is 256KB.
-> UASP receive data state tries to queue and map buffer of length 524288 (512KB), which is greater than 256KB that's why swiotlb buffer is getting full.
+> [wireless]
+> https://lore.kernel.org/lkml/20191125150215.29263-1-tranmanphong@gmail.com/
+> 
+> [USB]
+> https://lore.kernel.org/linux-usb/20191125145443.29052-1-tranmanphong@gmail.com/
 
-What is the reason for the UASP not being able to break the buffer in say two
-256KB sg entries?
-
-> 
-> > > Are you sure that dma_unmap is happening on requests that complete?
-> > else we'll just keep hogging the swiotlb buffer.
-> 
-> Yes, dma_unmap is happening on requests that complete.
-> 
-> I could map buffer of length 512KB with  IO_TLB_SEGSIZE changed to 256.
-> With this max mapping size is increased to  256*2048 = 512KB.
-
-If we go this route (which I rather dislike as this is a workaround, because
-what if the next time there is 1MB buffer? Do we keep on increasing this?) - then
-this should be dynamic and an option on the 'swiotlb' command line.
+Thank you!
