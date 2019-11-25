@@ -2,118 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12752108EF2
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 14:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6230108F01
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 14:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfKYNde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 08:33:34 -0500
-Received: from mail.kapsi.fi ([91.232.154.25]:46097 "EHLO mail.kapsi.fi"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727497AbfKYNde (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 25 Nov 2019 08:33:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
-         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
-        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=qXIOLXLUvREKWOjexp0rNM4qehc0b6PN+dZkfXxuP0k=; b=gjYeqBVQ0oXUgwcgAbY7GzVQVy
-        fYgmY5dflOcMHx4qpU14rrKKe8aLfGihg+d+e0P72Q/M/tE3ckaOYZUOOZ4SM86S/A7jgCShEV2/A
-        Ra9RpsDldfp3pjc4An50v2E9ofdhNNz0bY5B4txq/amo5G6tDJKVqnhJLRzKGXeuxc9sUXWwacv15
-        gmyVwzyVZk5BffRufkTr6H/Tuh/1iiGTDL88YNsw5blquCKQI4kiyYAJJEf+4ZZmFS2L59KouXmc/
-        w9QZbHWCe25DFRpv1cwslBxq8sbebm9F3K+s0jpRSXk1+Ghh5/h91lLzprMqB5IkB1YgiI9EBVext
-        k3xonaww==;
-Received: from [193.209.96.43] (helo=[10.21.26.179])
-        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <cyndis@kapsi.fi>)
-        id 1iZEUb-0003B6-L4; Mon, 25 Nov 2019 15:33:29 +0200
-Subject: Re: [PATCH 03/10] usb: host: xhci-tegra: Avoid a fixed duration sleep
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20191125123210.1564323-1-thierry.reding@gmail.com>
- <20191125123210.1564323-4-thierry.reding@gmail.com>
-From:   Mikko Perttunen <cyndis@kapsi.fi>
-Message-ID: <3d6e2b34-bc66-60fd-1db9-8804ec9b027d@kapsi.fi>
-Date:   Mon, 25 Nov 2019 15:33:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727602AbfKYNhy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 08:37:54 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:39168 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725862AbfKYNhy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 08:37:54 -0500
+Received: by mail-ot1-f65.google.com with SMTP id w24so12586455otk.6;
+        Mon, 25 Nov 2019 05:37:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7I8z2XIpJjId5ryuiZ7tTW11CMQe8kAhWaZCPRxJpjc=;
+        b=XpzTWRcUwhIRkjg3TVIMV9FXdyzKu7/2K9oZ/TfWc7ZI7MzEobDf5qa2t5kHpNMj32
+         glLLIRgQCQ2GTFZlV5aIpyN6mjjjkqBuMYkhwt5HwfHlt5pVtaHy5zrctDRYByXGNJ7a
+         hgvmlQClLa+k+cQEvlZXB9WKhT7GYZoM70Aning2k4pXlC+Axt91No1idEEmbBlHl6XX
+         VmIpZ8sh62JGftJQzB3e4vU40S8sR2xgiJQaSdpUeuuL8IY17yyAJUSpNshhiVOBHIp/
+         jGbINFoGy9t98GGX+S1r5z+yUKnV6H2heLd9xhaDOoHBJ+m23sz2V2G6rTc8S6IvgJst
+         xy+A==
+X-Gm-Message-State: APjAAAXS9Ew5mf3XlivOcVt9m41QD/XSftDhiwpbPdfiAqIPIVjvXeDx
+        XT3OY97EThHR+rq16vpFs9sMuVcnR2jqTvwGYok=
+X-Google-Smtp-Source: APXvYqyxR7cIli33WmFNqWgI7Fy0UCyvtp7aViv6RX+2MxAwqt0IK8X/TAZsk1zjr4pG0MDcemycbDywOsbqbcBfSgY=
+X-Received: by 2002:a05:6830:232a:: with SMTP id q10mr20788376otg.262.1574689073565;
+ Mon, 25 Nov 2019 05:37:53 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191125123210.1564323-4-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 193.209.96.43
-X-SA-Exim-Mail-From: cyndis@kapsi.fi
-X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
+References: <20191120002836.GA247344@google.com> <20191121181500.GA55996@google.com>
+ <CAD8Lp47o6PqKnQYBba0o_8LSGhd3_APhVuXAVsJRT7TedeqXDg@mail.gmail.com>
+ <CAJZ5v0hxa9OGF-w82ZkQ0n_p5VM7uOdKD_UrdGVoz0MAfeqy0w@mail.gmail.com> <CAD8Lp47kV-C_wf02=s-KKKgB6EVsjNVET9kqYuxfdHFDWbAShw@mail.gmail.com>
+In-Reply-To: <CAD8Lp47kV-C_wf02=s-KKKgB6EVsjNVET9kqYuxfdHFDWbAShw@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 25 Nov 2019 14:37:42 +0100
+Message-ID: <CAJZ5v0hieeb+UQ8CnO+z53KQz6YxLifL+GXkuNjHUM1b5zCE3A@mail.gmail.com>
+Subject: Re: [PATCH] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Linux Upstreaming Team <linux@endlessm.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25.11.2019 14.32, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Do not use a fixed duration sleep to wait for the DMA controller to
-> become ready. Instead, poll the L2IMEMOP_RESULT register for the VLD
-> flag to determine when the XUSB controller's DMA master is ready.
-> 
-> Based on work by JC Kuo <jckuo@nvidia.com>.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->   drivers/usb/host/xhci-tegra.c | 19 ++++++++++++++++++-
->   1 file changed, 18 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index 5cfd54862670..d15fd16168ae 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -101,6 +101,8 @@
->   #define  L2IMEMOP_ACTION_SHIFT			24
->   #define  L2IMEMOP_INVALIDATE_ALL		(0x40 << L2IMEMOP_ACTION_SHIFT)
->   #define  L2IMEMOP_LOAD_LOCKED_RESULT		(0x11 << L2IMEMOP_ACTION_SHIFT)
-> +#define XUSB_CSB_MEMPOOL_L2IMEMOP_RESULT	0x101a18
-> +#define  L2IMEMOP_RESULT_VLD			BIT(31)
->   #define XUSB_CSB_MP_APMAP			0x10181c
->   #define  APMAP_BOOTPATH				BIT(31)
->   
-> @@ -893,7 +895,22 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
->   
->   	csb_writel(tegra, 0, XUSB_FALC_DMACTL);
->   
-> -	msleep(50);
-> +	/* wait for RESULT_VLD to get set */
-> +	timeout = jiffies + msecs_to_jiffies(10);
-> +
-> +	do {
-> +		value = csb_readl(tegra, XUSB_CSB_MEMPOOL_L2IMEMOP_RESULT);
-> +		if (value & L2IMEMOP_RESULT_VLD)
-> +			break;
-> +
-> +		usleep_range(50, 100);
-> +	} while (time_is_after_jiffies(timeout));
-> +
-> +	value = csb_readl(tegra, XUSB_CSB_MEMPOOL_L2IMEMOP_RESULT);
-> +	if ((value & L2IMEMOP_RESULT_VLD) == 0) {
-> +		dev_err(dev, "DMA controller not ready %#010x\n", value);
-> +		return -EBUSY;
-> +	}
->   
->   	csb_writel(tegra, le32_to_cpu(header->boot_codetag),
->   		   XUSB_FALC_BOOTVEC);
-> 
+On Mon, Nov 25, 2019 at 4:45 AM Daniel Drake <drake@endlessm.com> wrote:
+>
+> On Fri, Nov 22, 2019 at 7:15 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > But then when pci_update_current_state() is called, it reads pmcsr as
+> > > 3 (D3hot). That's not what I would expect. I guess this means that
+> > > this platform's _PR3/_PS3 do not actually allow us to put the device
+> > > into D3cold,
+> >
+> > That you can't really say.
+> >
+> > Anyway, it is not guaranteed to do that.  For example, the power
+> > resource(s) listed by _PR3 for the device may be referenced by
+> > something else too which prevents them from being turned off.
+> >
+> > > and/or the _PR0/_PS0 transition does not actually transition the device to D0.
+> >
+> > Yes.
+> >
+> > Which may be the case if the power resource(s) in _PR3 have not been
+> > turned off really.
+> >
+> > [To debug this a bit more, you can enable dynamic debug in
+> > drivers/acpi/device_pm.c.]
+>
+> We checked in an earlier thread before I figured out the timing detail
+> - these power resources are being turned off at this point.
+>
+> > > While there is some ACPI strangeness here, the D3hot vs D3cold thing
+> > > is perhaps not the most relevant point. If I hack the code to avoid
+> > > D3cold altogether, just trying to do D0->D3hot->D0, it fails in the
+> > > same way.
+> >
+> > OK, but then you don't really flip the power resource(s), so that only
+> > means that _PS0 does not restore D0, but in general it only is valid
+> > to execute _PS0 after _PS3 (if both are present which is the case
+> > here), so this is not conclusive again.
+>
+> _PS0 is called after _PS3 in the above case.
+>
+> My feeling is that on this platform, we are not actually entering
+> D3cold at any point. Linux appears to be powering off the specified
+> ACPI power domains, but after turning them back on and executing _PS0
+> to move to D0initialized, the pmcsr still reporting D3 state seems
+> highly suspicious to me.
 
-readx_poll_timeout? I think you can define a local macro to "curry" the 
-'tegra' argument to csb_readl..
+Well, it very well may just mean that the device didn't have enough
+time to get to D0 before reading its PMCSR and it reports a
+(internally) cached value.
 
-#define tegra_csb_readl(x) csb_readl(tegra, x)
-readx_poll_timeout(tegra_csb_readl, ...)
+> Also, I just experimented adding a pmscr register read to the end of
+> pci_set_power_state() , after pci_platform_power_transition() has been
+> called. If the power was truly cut and we're in D3cold then I would
+> expect this to fail. However the register read succeeds and returns
+> the same value 0x103.
 
-Cheers,
-Mikko
+Yes, that is more conclusive.  [In theory it may still not have enough
+time to complete the transition before the read, so you can add a
+reasonable delay in there and retest, but I don't really expect that
+to make any difference. :-)]
+
+> During resume, Linux seems to have accurately detected this failure to
+> transition to D3cold in pci_update_current_state() by reading pmcsr
+> and setting dev->current_state to D3hot accordingly. We then deal with
+> what looks like a D3hot->D0 transition, which suffers the same failure
+> as seen when I force Linux to avoid D3cold and actually do a "real"
+> D0->D3hot->D0 cycle.
+>
+> Presumably on a platform where D3cold actually works, after the device
+> has then been moved to D0uninitialized via ACPI _PS0 and _PR0,
+> pci_update_current_state() would then read pmcsr and update
+> dev->current_state to have value D0?
+
+Yes, that'd be the expected behavior in that case.
+
+> So in terms of the review comment questioning if the function name
+> quirk_d3_delay() and accompanying message "extending delay after
+> power-on from D3 to %d msec\n" is good (or whether it should say D3hot
+> or D3cold), maybe it should say D3hot.
+
+That would be more accurate in my view.
+
+> Plus a comment noting that D3cold doesn't actually seem to be fully cold on this platform, so
+> we're actually dealing with a D3hot -> D0 transition?
+
+Sounds reasonable to me.
+
+Thanks!
