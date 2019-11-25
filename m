@@ -2,205 +2,282 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE2D109557
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 23:02:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3450109591
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 23:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfKYWCx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 17:02:53 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:33726 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725912AbfKYWCx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 17:02:53 -0500
-Received: by mail-oi1-f195.google.com with SMTP id x21so7575838oic.0;
-        Mon, 25 Nov 2019 14:02:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lzw1koOlG6AU/5fLlo3Vm5FYX8EGSzhUjEGJB0YbmZI=;
-        b=Euc8qOQryfLxQGHFEmQspkPxC5+krVH0fJqiVlzF/VBEUJZ77CwlRrhVWol+93ELp+
-         3tXRgpl+gI9iHklzMUyyAKdGwZPbninkagQyjKK2c9FJeers6WbSTLt/E9vL00IZ/JOD
-         b9no+vQduOZ7CoAvlRR22JSGsNietL09Npvy9t5NfxiEFXe9MVXuFekcqXoGSmpsYbrN
-         RHa+Nl3eqAZsQriZ/q8HkHkGHj86A/zF4eEXlq+RYAkJJrYUApHE34RXkJjXf7OLizyw
-         CBWb4Ds9a93pNbBtfTADm9RGWhynlJId5mBtvvksMTDa/axGG8rAAvyTT9uu4Gh+Ozw1
-         PIbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lzw1koOlG6AU/5fLlo3Vm5FYX8EGSzhUjEGJB0YbmZI=;
-        b=hnI0c11fe4rzSaa8GN7jQGnED5YHXhkGc6EopXNEG5fqB4k7mNt88a5XtyvvAiHHKM
-         qyfFuxzuxCuLYJEIAAYY87FPt6e7Bhsx9hR4rX5xUil0k5ITZBltIBeuvdz9JeqwyJZJ
-         4SPyRdNnzxJyWrstLyRWozJrI/+PCTSaYKBpdMGXR38sJNbXoUCY8Vmdpuht9m9CjD+D
-         f1esUzyUl0ayboimXwZv7cJVC+taiSitWEmY+WdQkbYGkk1XqzawH+2Ju+Jh2KC45Ies
-         M17E0Ui9OXcK32+ewyojgqIDbYDDfMNInzQ/W3dS4WcoMaWvArklhnQu4GTI7/Isshsd
-         fBSw==
-X-Gm-Message-State: APjAAAVXs12dWS3pfx8LA4BNivCJjDA1r+nNHRnSfpHti7253LhTrBjN
-        NGvNej2W47nCYDHF/BHb03vOZs56HNCIigiCKZA=
-X-Google-Smtp-Source: APXvYqz2+uidMUMLdNPqKNBo+rgLlQc8P1ma/5QS/iXoES2Nu/oybeV80n0xcKuG+JaAuSMC59DQ4pufmrhKpQozzCc=
-X-Received: by 2002:aca:110f:: with SMTP id 15mr911822oir.47.1574719371254;
- Mon, 25 Nov 2019 14:02:51 -0800 (PST)
-MIME-Version: 1.0
-References: <1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com>
- <CAFBinCDA=ZekRC0hgQnPLRZM3LMnqBZ6TWCvXhyixAmgDyTAsw@mail.gmail.com> <5c0029ec-7377-4c1a-0062-3b59a87f8dea@amlogic.com>
-In-Reply-To: <5c0029ec-7377-4c1a-0062-3b59a87f8dea@amlogic.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 25 Nov 2019 23:02:40 +0100
-Message-ID: <CAFBinCBypbB4W42GOAc8ejAYHVQLTDRdat_z_L92TZvC2p+5rQ@mail.gmail.com>
-Subject: Re: [PATCH 0/6] arm64: meson: Add support for USB on Amlogic A1
-To:     Hanjie Lin <hanjie.lin@amlogic.com>
-Cc:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        id S1725946AbfKYWkC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 17:40:02 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51752 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726947AbfKYWkB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 17:40:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574721599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5sKIYkJNyPnvls7YymGjYgeRReOTkIWJFCCY/KNJN4E=;
+        b=EjuYjEx5/34jJmXXXgzxWlzOf6AGaCWqQ+45PcraM3dV28GUr6y94qzfB8NZ/j2sTREux2
+        cp+X6plr+xEi7gBrEGwxw9OAfX2Bzoyij/3JMvSk2iHkshzVl/Id06JY7iDKfgugRIFGVN
+        9ikpa0GIRgAjgt7p9FEzr+3qffVcrRY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-52-YNICEyQ8MOCH5iLhyx9JEQ-1; Mon, 25 Nov 2019 17:39:56 -0500
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A9750DB20;
+        Mon, 25 Nov 2019 22:39:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-161.rdu2.redhat.com [10.10.120.161])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C15825D9CA;
+        Mon, 25 Nov 2019 22:39:50 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     torvalds@linux-foundation.org
+cc:     dhowells@redhat.com, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Content-Type: text/plain; charset="UTF-8"
+        Peter Zijlstra <peterz@infradead.org>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] pipe: Notification queue preparation
+MIME-Version: 1.0
+Content-ID: <31451.1574721589.1@warthog.procyon.org.uk>
+Date:   Mon, 25 Nov 2019 22:39:49 +0000
+Message-ID: <31452.1574721589@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-MC-Unique: YNICEyQ8MOCH5iLhyx9JEQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Hanjie,
+Hi Linus,
 
-On Mon, Nov 25, 2019 at 8:53 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
->
->
->
-> On 2019/11/22 15:52, Martin Blumenstingl wrote:
-> > Hello Hanjie,
-> >
-> > On Fri, Nov 22, 2019 at 7:55 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
-> > [...]
-> >>   dt-bindings: phy: Add Amlogic G12A USB2 PHY Bindings
-> >>   dt-bindings: usb: dwc3: Add the Amlogic A1 Family DWC3 Glue Bindings
-> >>   phy: amlogic: Add Amlogic A1 USB2 PHY Driver
-> > drivers/phy/amlogic/phy-meson-g12a-usb2.c seems very similar to the A1
-> > USB2 PHY you are introducing here.
-> >
-> >>   usb: dwc3: Add Amlogic A1 DWC3 glue
-> > drivers/usb/dwc3/dwc3-meson-g12a.c is also very similar to the dwc3 glue.
-> >
-> > I have two questions:
-> > - how is the PHY and the dwc3 glue different from G12A (or SM1)?
-> > - why do we need a separate set of new drivers (instead of updating
-> > the existing drivers)?
-> >
-> > We try to use one driver for the same IP block, even if there are
-> > several revisions with small differences (for example the SAR ADC
-> > driver supports all SoC generations from Meson8 to G12A/G12B/SM1,
-> > because 80-90% of the code is shared across all revisions).
-> >
-> >
-> > Martin
-> >
-> > .
-> >
->
-> Hi Martin,
->
-> thanks for the comment.
->
-> 1, G12A have usb2-phy0/usb2-phy1/usb3-phy0 three phys and an interrupt to support host/peripheral/otg modes.
->    A1 has one usb2-phy0 phy and only support host mode.
-dwc3-meson-g12a treats PHYs as optional
-so if you only pass "usb2-phy0" and skip usb2-phy1/usb3-phy0 then it
-will still work fine
-(I didn't check whether the binding also reflects this)
+Can you pull this please?  This is my set of preparatory patches for
+building a general notification queue on top of pipes.  It makes a number
+of significant changes:
 
-> 2, G12A glue/phy drivers are for G12A SoCs, there are some diffrences to A1.
->    G12A glue driver have dr_mode and interrupts two attributes to support otg mode while A1 hasn't this requirement.
-dwc3-meson-g12a ignores the interrupt for HOST-only mode
-(I didn't check whether the IRQ is optional in the dt-binding)
+ (1) It removes the nr_exclusive argument from __wake_up_sync_key() as this
+     is always 1.  This prepares for step 2.
 
->    G12A glue driver has a hard coding vbus regulator code to support otg mode while A1 hasn't this requirement.
-my understanding is that whether a board has a VBUS regulator depends
-on the board design. it has nothing to do with the SoC itself
+ (2) Adds wake_up_interruptible_sync_poll_locked() so that poll can be
+     woken up from a function that's holding the poll waitqueue spinlock.
 
->    G12A glue driver has a hard coding support phys while A1 only supports host mode.
->         enum {
->                 USB2_HOST_PHY = 0,
->                 USB2_OTG_PHY,
->                 USB3_HOST_PHY,
->                 PHY_COUNT,
->                 };
-this goes together with comment #1 - you can skip USB2_OTG_PHY and
-USB3_HOST_PHY and the driver should still work fine
+     [btw, I realise that I haven't un-sync'd the
+      wake_up_interruptible_sync_poll() calls as you tentatively suggested.
+      I can send a follow up patch to fix that if you still want it]
 
->    G12A glue driver only supports one clock while A1 needs four clocks.
-indeed, the dwc3-meson-g12a needs to be updated to support this
-I don't think that I have used it myself yet but there's the
-clk_bulk_data framework
-it seems to fit this use-case pretty well: define an arbitrary number
-of clocks for G12A/B an another set of clocks for A1 - then use the
-clk_bulk_data framework to enable/disable them all at once
+ (3) Change the pipe buffer ring to be managed in terms of unbounded head
+     and tail indices rather than bounded index and length.  This means
+     that reading the pipe only needs to modify one index, not two.
 
->    G12A and A1 phy drivers have different register configurations since hardware differences.
-other drivers have similar requirements: (mostly) identical register
-layout but different values per SoC
-here are two examples (I'm not sure if they are good examples though):
-Lantiq/Intel SoC [0] and Allwinner SoCs [1]
+ (4) A selection of helper functions are provided to query the state of the
+     pipe buffer, plus a couple to apply updates to the pipe indices.
 
-I compared your driver with phy-meson-g12a-usb2 and only found four differences:
-1) PHY_CTRL_R18_MPLL_DCO_CLK_SEL is set for A1
-2) PHY_CTRL_R13_UPDATE_PMA_SIGNALS is not set for A1
-3) PHY_CTRL_R21 is updated twice for A1 (once for earlier gen SoCs)
-4) A1 doesn't reference the "xtal" clock
+ (5) The pipe ring is allowed to have kernel-reserved slots.  This allows
+     many notification messages to be spliced in by the kernel without
+     allowing userspace to pin too many pages if it writes to the same
+     pipe.
 
-Difference 4) seems to be a general problem because there seems to be
-a PLL inside the PHY registers and that PLL must be fed by some input
-clock
-So I believe that there is some clock input (which is currently
-missing from your A1 USB2 PHY driver)
+ (6) Advance the head and tail indices inside the pipe waitqueue lock and
+     use step 2 to poke poll without having to take the lock twice.
 
-> 3, We have estimated these differences and we thought it's more clear and readable to have a dedicated glue/phy
->    driver for A1 SoCs, so also dedicated dt-bindings.
-I think we should separate the driver and dt-bindings
+ (7) Rearrange pipe_write() to preallocate the buffer it is going to write
+     into and then drop the spinlock.  This allows kernel notifications to
+     then be added the ring whilst it is filling the buffer it allocated.
+     The read side is stalled because the pipe mutex is still held.
 
-Based on what I have seen so far my preference for the PHY is:
-- use the existing dt-binding, because it seems to be the same IP
-block with different register configuration
-- use the existing driver because there are only three different
-register values (to me it feels like a dedicated driver for these
-means more overhead for little benefit)
+ (8) Don't wake up readers on a pipe if there was already data in it when
+     we added more.
 
-for the glue I think:
-- extend the existing dt-bindings and make some of the PHYs and the
-interrupt line optional. making the PHYs optional will be needed when
-adding GXL/GXM/AXG support anyways
-- use the existing driver and make the clock inputs depend on the SoC
-- everything else should already work as is
+ (9) Don't wake up writers on a pipe if the ring wasn't full before we
+     removed a buffer.
 
-please let me know if I missed something:
-comparing/reviewing the new and existing drivers is harder than just
-copying the existing one and modifying that copy
-(this is one of the reasons why I think that duplicating code makes
-the drivers harder to maintain)
+PATCHES=09BENCHMARK=09BEST=09=09TOTAL BYTES=09AVG BYTES=09STDDEV
+=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=09=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=09=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+-=09pipe=09=09      307457969=09    36348556755=09      302904639=09       =
+10622403
+-=09splice=09=09      287117614=09    26933658717=09      224447155=09     =
+ 160777958
+-=09vmsplice=09      435180375=09    51302964090=09      427524700=09      =
+ 19083037
 
-I also thought about the negative consequences of extending the
-existing driver(s).
-modifying the existing code could break the driver for existing boards.
-however, I think that is not a problem because BayLibre's Kernel CI
-labs have good coverage for G12A, G12B and SM1.
-so if you add some A1 boards there (or host your own lab with A1
-boards) any breakage will be found early (the Kernel CI bot even does
-git bisect and sends emails)
+rm-nrx=09pipe=09=09      311091179=09    37093181356=09      309109844=09  =
+      7221622
+rm-nrx=09splice=09=09      285628049=09    27916298942=09      232635824=09=
+      158296431
+rm-nrx=09vmsplice=09      417703153=09    47570362546=09      396419687=09 =
+      33960822
 
+wakesl=09pipe=09=09      310698731=09    36772541631=09      306437846=09  =
+      8249347
+wakesl=09splice=09=09      286193726=09    28600435451=09      238336962=09=
+      141169318
+wakesl=09vmsplice=09      436175803=09    50723895824=09      422699131=09 =
+      40724240
 
-Martin
+ht=09pipe=09=09      305534565=09    36426079543=09      303550662=09      =
+  5673885
+ht=09splice=09=09      243632025=09    23319439010=09      194328658=09    =
+  150479853
+ht=09vmsplice=09      432825176=09    49101781001=09      409181508=09     =
+  44102509
 
+k-rsv=09pipe=09=09      308691523=09    36652267561=09      305435563=09   =
+    12972559
+k-rsv=09splice=09=09      244793528=09    23625172865=09      196876440=09 =
+     125319143
+k-rsv=09vmsplice=09      436119082=09    49460808579=09      412173404=09  =
+     55547525
 
-[0] https://github.com/torvalds/linux/blob/d2912cb15bdda8ba4a5dd73396ad62641af2f520/drivers/phy/lantiq/phy-lantiq-rcu-usb2.c#L47
-[1] https://github.com/torvalds/linux/blob/c942fddf8793b2013be8c901b47d0a8dc02bf99f/drivers/phy/allwinner/phy-sun4i-usb.c#L862
+r-adv-t=09pipe=09=09      310094218=09    36860182219=09      307168185=09 =
+       8081101
+r-adv-t=09splice=09=09      285527382=09    27085052687=09      225708772=
+=09      206918887
+r-adv-t=09vmsplice=09      336885948=09    40128756927=09      334406307=09=
+        5895935
+
+r-cond=09pipe=09=09      308727804=09    36635828180=09      305298568=09  =
+      9976806
+r-cond=09splice=09=09      284467568=09    28445793054=09      237048275=09=
+      200284329
+r-cond=09vmsplice=09      449679489=09    51134833848=09      426123615=09 =
+      66790875
+
+w-preal=09pipe=09=09      307416578=09    36662086426=09      305517386=09 =
+       6216663
+w-preal=09splice=09=09      282655051=09    28455249109=09      237127075=
+=09      194154549
+w-preal=09vmsplice=09      437002601=09    47832160621=09      398601338=09=
+       96513019
+
+w-redun=09pipe=09=09      307279630=09    36329750422=09      302747920=09 =
+       8913567
+w-redun=09splice=09=09      284324488=09    27327152734=09      227726272=
+=09      219735663
+w-redun=09vmsplice=09      451141971=09    51485257719=09      429043814=09=
+       51388217
+
+w-ckful=09pipe=09=09      305055247=09    36374947350=09      303124561=09 =
+       5400728
+w-ckful=09splice=09=09      281575308=09    26841554544=09      223679621=
+=09      215942886
+w-ckful=09vmsplice=09      436653588=09    47564907110=09      396374225=09=
+       82255342
+
+The patches column indicates the point in the patchset at which the benchma=
+rks
+were taken:
+
+=090=09No patches
+=09rm-nrx=09"Remove the nr_exclusive argument from __wake_up_sync_key()"
+=09wakesl=09"Add wake_up_interruptible_sync_poll_locked()"
+=09ht=09"pipe: Use head and tail pointers for the ring, not cursor and leng=
+th"
+=09k-rsv=09"pipe: Allow pipes to have kernel-reserved slots"
+=09r-adv-t=09"pipe: Advance tail pointer inside of wait spinlock in pipe_re=
+ad()"
+=09r-cond=09"pipe: Conditionalise wakeup in pipe_read()"
+=09w-preal=09"pipe: Rearrange sequence in pipe_write() to preallocate slot"
+=09w-redun=09"pipe: Remove redundant wakeup from pipe_write()"
+=09w-ckful=09"pipe: Check for ring full inside of the spinlock in pipe_writ=
+e()"
+
+Changes:
+
+ (*) Fix some bugs spotted by kbuild.
+
+ ver #3:
+
+ (*) Get rid of pipe_commit_{read,write}.
+
+ (*) Port the virtio_console driver.
+
+ (*) Fix pipe_zero().
+
+ (*) Amend some comments.
+
+ (*) Added an additional patch that changes the threshold at which readers
+     wake writers for Konstantin Khlebnikov.
+
+ ver #2:
+
+ (*) Split the notification patches out into a separate branch.
+
+ (*) Removed the nr_exclusive parameter from __wake_up_sync_key().
+
+ (*) Renamed the locked wakeup function.
+
+ (*) Add helpers for empty, full, occupancy.
+
+ (*) Split the addition of ->max_usage out into its own patch.
+
+ (*) Fixed some bits pointed out by Rasmus Villemoes.
+
+ ver #1:
+
+ (*) Build on top of standard pipes instead of having a driver.
+
+David
+---
+The following changes since commit da0c9ea146cbe92b832f1b0f694840ea8eb33cce=
+:
+
+  Linux 5.4-rc2 (2019-10-06 14:27:30 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/=
+notifications-pipe-prep-20191115
+
+for you to fetch changes up to 3c0edea9b29f9be6c093f236f762202b30ac9431:
+
+  pipe: Remove sync on wake_ups (2019-11-15 16:22:54 +0000)
+
+----------------------------------------------------------------
+Pipework for general notification queue
+
+----------------------------------------------------------------
+David Howells (12):
+      pipe: Reduce #inclusion of pipe_fs_i.h
+      Remove the nr_exclusive argument from __wake_up_sync_key()
+      Add wake_up_interruptible_sync_poll_locked()
+      pipe: Use head and tail pointers for the ring, not cursor and length
+      pipe: Allow pipes to have kernel-reserved slots
+      pipe: Advance tail pointer inside of wait spinlock in pipe_read()
+      pipe: Conditionalise wakeup in pipe_read()
+      pipe: Rearrange sequence in pipe_write() to preallocate slot
+      pipe: Remove redundant wakeup from pipe_write()
+      pipe: Check for ring full inside of the spinlock in pipe_write()
+      pipe: Increase the writer-wakeup threshold to reduce context-switch c=
+ount
+      pipe: Remove sync on wake_ups
+
+ drivers/char/virtio_console.c |  16 ++-
+ fs/exec.c                     |   1 -
+ fs/fuse/dev.c                 |  31 +++--
+ fs/ocfs2/aops.c               |   1 -
+ fs/pipe.c                     | 232 +++++++++++++++++++++---------------
+ fs/splice.c                   | 190 +++++++++++++++++------------
+ include/linux/pipe_fs_i.h     |  64 +++++++++-
+ include/linux/uio.h           |   4 +-
+ include/linux/wait.h          |  11 +-
+ kernel/exit.c                 |   2 +-
+ kernel/sched/wait.c           |  37 ++++--
+ lib/iov_iter.c                | 269 ++++++++++++++++++++++++--------------=
+----
+ security/smack/smack_lsm.c    |   1 -
+ 13 files changed, 529 insertions(+), 330 deletions(-)
+
