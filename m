@@ -2,51 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72ECF1093F2
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 20:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF1110951C
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 22:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfKYTHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 14:07:10 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:53070 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725799AbfKYTHK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 14:07:10 -0500
-Received: from localhost (c-73-35-209-67.hsd1.wa.comcast.net [73.35.209.67])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 15AF71500C696;
-        Mon, 25 Nov 2019 11:07:09 -0800 (PST)
-Date:   Mon, 25 Nov 2019 11:07:08 -0800 (PST)
-Message-Id: <20191125.110708.76766634808358006.davem@davemloft.net>
-To:     tranmanphong@gmail.com
-Cc:     gregkh@linuxfoundation.org, oneukum@suse.com,
-        alexios.zavras@intel.com, johan@kernel.org, allison@lohutok.net,
-        tglx@linutronix.de, benquike@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] drivers: net: usbnet: Fix -Wcast-function-type
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191125145443.29052-2-tranmanphong@gmail.com>
-References: <20191125145443.29052-1-tranmanphong@gmail.com>
-        <20191125145443.29052-2-tranmanphong@gmail.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 25 Nov 2019 11:07:09 -0800 (PST)
+        id S1725924AbfKYVYG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 16:24:06 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:58250 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1725912AbfKYVYG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 16:24:06 -0500
+Received: (qmail 5654 invoked by uid 2102); 25 Nov 2019 16:24:05 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 25 Nov 2019 16:24:05 -0500
+Date:   Mon, 25 Nov 2019 16:24:05 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
+        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: INFO: rcu detected stall in hub_event
+In-Reply-To: <00000000000003b7c305982885e3@google.com>
+Message-ID: <Pine.LNX.4.44L0.1911251622420.1565-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Phong Tran <tranmanphong@gmail.com>
-Date: Mon, 25 Nov 2019 21:54:43 +0700
+#syz test: https://github.com/google/kasan.git 46178223
 
-> @@ -1573,6 +1573,12 @@ static void usbnet_bh (struct timer_list *t)
->  	}
->  }
->  
-> +static void usbnet_bh_tasklet (unsigned long data)
-                                ^
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -1057,6 +1057,8 @@ static void hid_apply_multiplier(struct
+ 	while (multiplier_collection->parent_idx != -1 &&
+ 	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
+ 		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
++	if (multiplier_collection->type != HID_COLLECTION_LOGICAL)
++		multiplier_collection = NULL;
+ 
+ 	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
+ 
+@@ -1191,6 +1193,9 @@ int hid_open_report(struct hid_device *d
+ 	}
+ 	device->collection_size = HID_DEFAULT_NUM_COLLECTIONS;
+ 
++	/* Needed for usages before the first collection */
++	device->collection[0].parent_idx = -1;
++
+ 	ret = -EINVAL;
+ 	while ((start = fetch_item(start, end, &item)) != NULL) {
+ 
 
-Please remove this space and resubmit the patch series.
