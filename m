@@ -2,72 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81D181092D5
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 18:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB56109388
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 19:31:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727560AbfKYRaO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 12:30:14 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:58018 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1725828AbfKYRaN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 12:30:13 -0500
-Received: (qmail 4379 invoked by uid 2102); 25 Nov 2019 12:30:12 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 25 Nov 2019 12:30:12 -0500
-Date:   Mon, 25 Nov 2019 12:30:12 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Jiri Kosina <jikos@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-cc:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        <linux-input@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: INFO: rcu detected stall in hub_event
-In-Reply-To: <CAAeHK+xQo8S8mmMgrOHOwC3iOnZJOZvYNaAei-tMrJA36R6OMQ@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1911251216350.1565-100000@iolanthe.rowland.org>
+        id S1729342AbfKYSbC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 13:31:02 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:46447 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727893AbfKYSbB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 13:31:01 -0500
+Received: by mail-ot1-f66.google.com with SMTP id n23so13469740otr.13;
+        Mon, 25 Nov 2019 10:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=BCZ9ElPD8Y4mMVCJfLlg/SGue6w7FXoSD8+x6lVDs1s=;
+        b=eZGAgP/idKZThrSPvrPiCfLyzW5jhcikm8RwTOJBovl2QwxTySqDFf3TdSkwQODWZf
+         Z58I2e/pAks8TePJ51X31q/EBjLxiXkAoSoZObXJrcdCU6bw6c6bx/ASq4AraEi+GyhA
+         LXvDEkPOSco4x6Nnl24VLv0Mu9wRCXoH6hhLtkivS8jncZ8Mfph2Kp++lmdJrTULv2Nv
+         wBl5OFc2zce81jDsDgNbFoqfCJ5TS+Xuc6CwXfvwOVawGl5ougOnvt5+oXShugSKTJEN
+         f6LT4tgp1tzhILnN1/8aw+2+6VE+MtUpWtn8gUrg6FDDS32GrMmj4PfLUKLRTERS4Ryo
+         pT6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=BCZ9ElPD8Y4mMVCJfLlg/SGue6w7FXoSD8+x6lVDs1s=;
+        b=eYV3CV0CVTOX6/yEmMQnigtnMR7O79x3FTHY/PvtqhD6yKbc8iVphYd5LZQkP1IZRo
+         4w23QQgHNsg/bO9oBVYI4R577cZdI9dcdHNoJDeZ4If2ae9icIkDV8+sokR51rH8Bdap
+         7Zh3YNF3lizGzZ2qg9jfcqN4OUFE3qG8XLd9HeJKhLk2lKPquCcTvlNcepz3GptMaFz1
+         49gUzgiM5NSKerJEdLzQATcnIuB71HOiybXuV5JxqSDf4hG6kDk4bt77VRLYrCKJ/z+X
+         hdNr43R+c+FffHK2czznYfFsIJXYbF4eQqxVSglGv/tPTu2qZxvMgQyipb1Z6MdCJ+Xj
+         KLwQ==
+X-Gm-Message-State: APjAAAU+60lf2dTqn0GFhI4KinZiJHp+c//InH5wo66B0tjD3E3NiUgF
+        kc67nJzSA7LfAF11jy9xmvVV17Vz
+X-Google-Smtp-Source: APXvYqzwUc7mU5ZKhRAJscRFaWCmTKKzSUWU3snVxFfwS2r440ohfnEsqHgRCDfXTj/JgGh/mY431Q==
+X-Received: by 2002:a05:6830:1e7b:: with SMTP id m27mr21520339otr.8.1574706660772;
+        Mon, 25 Nov 2019 10:31:00 -0800 (PST)
+Received: from [192.168.1.112] (cpe-24-31-245-230.kc.res.rr.com. [24.31.245.230])
+        by smtp.gmail.com with ESMTPSA id p3sm2667663oti.22.2019.11.25.10.30.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2019 10:31:00 -0800 (PST)
+Subject: Re: [PATCH 3/5] drivers: net: b43legacy: Fix -Wcast-function-type
+To:     Phong Tran <tranmanphong@gmail.com>, davem@davemloft.net,
+        keescook@chromium.org
+Cc:     kvalo@codeaurora.org, saeedm@mellanox.com,
+        jeffrey.t.kirsher@intel.com, luciano.coelho@intel.com,
+        netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191124094306.21297-1-tranmanphong@gmail.com>
+ <20191124094306.21297-4-tranmanphong@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+Message-ID: <8eb8d6fd-de20-2d04-8210-ad8304d7da9e@lwfinger.net>
+Date:   Mon, 25 Nov 2019 12:30:59 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <20191124094306.21297-4-tranmanphong@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jiri:
-
-On Sat, 23 Nov 2019, Andrey Konovalov wrote:
-
-> I'm not sure, but the stack trace reminds me of this issue, so this
-> report might be related:
+On 11/24/19 3:43 AM, Phong Tran wrote:
+> correct usage prototype of callback in tasklet_init().
+> Report by https://github.com/KSPP/linux/issues/20
 > 
-> https://groups.google.com/d/msg/syzkaller-bugs/X0zVbh8aFEM/NsPcshjxBgAJ
+> Signed-off-by: Phong Tran <tranmanphong@gmail.com>
+> ---
+>   drivers/net/wireless/broadcom/b43legacy/main.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
 
-No, the issue is quite different, although it is also a bug in the HID
-parser.  The big problem is that the parser assumes all usages will
-belong to a collection.
+The subject should be "b43legacy: .....". Otherwise it is OK.
 
-There's also a second, smaller bug: hid_apply_multipler() assumes every
-Resolution Multiplier control is associated with a Logical Collection
-(i.e., there's no way the routine can ever set multiplier_collection to
-NULL) even though there's a big quotation from the HID Usage Table
-manual at the start of the function saying that they don't have to be.  
-This bug can be fixed easily, though.
+Tested-by: Larry Finger <Larry.Finger@lwfinger.net>
 
-The first bug is more troublesome.  hid_add_usage() explicitly sets the 
-parser->local.collection_index[] entry to 0 if the current collection 
-stack is empty.  But there's no way to distinguish this 0 from a 
-genuine index value that happens to point to the first collection!
+Larry
 
-So what should happen when a usage appears outside of all collections?  
-Is it a bug in the report descriptor (the current code suggests that it 
-is not)?
-
-Or should we use a different sentinel value for the collection_index[]
-entry, one that cannot be confused with a genuine value, such as
-UINT_MAX?
-
-Awaiting your suggestion...
-
-Alan Stern
+> 
+> diff --git a/drivers/net/wireless/broadcom/b43legacy/main.c b/drivers/net/wireless/broadcom/b43legacy/main.c
+> index 4325e91736eb..8b6b657c4b85 100644
+> --- a/drivers/net/wireless/broadcom/b43legacy/main.c
+> +++ b/drivers/net/wireless/broadcom/b43legacy/main.c
+> @@ -1275,8 +1275,9 @@ static void handle_irq_ucode_debug(struct b43legacy_wldev *dev)
+>   }
+>   
+>   /* Interrupt handler bottom-half */
+> -static void b43legacy_interrupt_tasklet(struct b43legacy_wldev *dev)
+> +static void b43legacy_interrupt_tasklet(unsigned long data)
+>   {
+> +	struct b43legacy_wldev *dev = (struct b43legacy_wldev *)data;
+>   	u32 reason;
+>   	u32 dma_reason[ARRAY_SIZE(dev->dma_reason)];
+>   	u32 merged_dma_reason = 0;
+> @@ -3741,7 +3742,7 @@ static int b43legacy_one_core_attach(struct ssb_device *dev,
+>   	b43legacy_set_status(wldev, B43legacy_STAT_UNINIT);
+>   	wldev->bad_frames_preempt = modparam_bad_frames_preempt;
+>   	tasklet_init(&wldev->isr_tasklet,
+> -		     (void (*)(unsigned long))b43legacy_interrupt_tasklet,
+> +		     b43legacy_interrupt_tasklet,
+>   		     (unsigned long)wldev);
+>   	if (modparam_pio)
+>   		wldev->__using_pio = true;
+> 
 
