@@ -2,202 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD8A1086E7
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 04:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 629FD108722
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 05:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727110AbfKYDzA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Nov 2019 22:55:00 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:55822 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726990AbfKYDy7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Nov 2019 22:54:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574654098;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7CPOHOcFtU4rdB9Bxe7jxRbzwI9Lm1XbZyUIUwlUdhY=;
-        b=Lnq7IvwPBma6ZsX6jFZkefNCNyRkv4+G8MDE1ySZc+B32+S31q9bXFAkOdhoANpmAkf28s
-        8IpmKVMk8mvdCAZcTVHMXQRQr7xcqTadjSpuTAlEC6Qc196DS+sVKcbGVpRaWgNDDQJeEY
-        XXA1bkVqZmCzhN73c5HR3AZg+mI2lTQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-ozaAnZOCOr6nsvFH9H5FQw-1; Sun, 24 Nov 2019 22:54:54 -0500
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7AA5B801E63;
-        Mon, 25 Nov 2019 03:54:52 +0000 (UTC)
-Received: from ming.t460p (ovpn-8-16.pek2.redhat.com [10.72.8.16])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0B29F60C18;
-        Mon, 25 Nov 2019 03:54:42 +0000 (UTC)
-Date:   Mon, 25 Nov 2019 11:54:37 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Andrea Vai <andrea.vai@unipv.it>
-Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191125035437.GA3806@ming.t460p>
-References: <Pine.LNX.4.44L0.1911061044070.1694-100000@iolanthe.rowland.org>
- <BYAPR04MB5816640CEF40CB52430BBD3AE7790@BYAPR04MB5816.namprd04.prod.outlook.com>
- <b22c1dd95e6a262cf2667bee3913b412c1436746.camel@unipv.it>
- <BYAPR04MB58167B95AF6B7CDB39D24C52E7780@BYAPR04MB5816.namprd04.prod.outlook.com>
- <CAOsYWL3NkDw6iK3q81=5L-02w=VgPF_+tYvfgnTihgCcwKgA+g@mail.gmail.com>
- <20191109222828.GA30568@ming.t460p>
- <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
- <20191123072726.GC25356@ming.t460p>
- <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>
+        id S1727457AbfKYEUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Nov 2019 23:20:46 -0500
+Received: from mail-eopbgr40062.outbound.protection.outlook.com ([40.107.4.62]:65423
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727397AbfKYEUp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 24 Nov 2019 23:20:45 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DAomdFpg7LGQvwRUGGv3gHno5EA5Pp38Da0sngNkBmpxDeTwdkVlXtoCSp0y1iiuth/mhDOcpaMWJ72RfnPFIyQrBZcHA6DflIGmP6KkFnXLw7QKdMVeeepPwl7hGJL/XWsCsnjpkbUi+wo9r7VMpLQhT5j5OFr0XeuaWxz7k4sY0KSxyTySEmnobZV381iecDjz/+eKPumq0hTmq20iJDYctnb7idbr54AB/XcZs6Mj0eCoEahW9L+DP0rHWw2Eq1whOcbsLh768tBmUkdy6shfstymE8wIeQQOAlxEqaPMrp8Gh8FCl+mXWlGUZN356YvvjdLS4yR9HCUDPN9RcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=opkWY90ZME6YU5qDnpBVlkuhn/A8phiAeae6EWKgQ1s=;
+ b=egMj/KwFk969AHortMbVJAZAJsvqCRb6xtqJyKrZL+Y8kvV31sW/Slu5+iNSPmaHpLS+WIxEvwdgTS8SMu5jFeH0vZ9d7eggS4x4Hvn2GyJMMpFMerdSQ/xkxfWYXayJEpkpNMUiqQETkCCDr6UEUSZ4Jjq8zzTTrhBx35s22Cnm8rMXuS69E3NWt1QqiYgSFIk994ieHpvz6nlTmrxmgOJeKzyI3GptSkg+yt49yekg2f6EA07B6MhIsV0Zm41EQYNIMsnTXCfUTIRXMxDC5Pktx98clz5lZHHdkggS90eugtqRzclc1DEwtALKt227jMLOyBkB+IJqSg0kTVa6iQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=opkWY90ZME6YU5qDnpBVlkuhn/A8phiAeae6EWKgQ1s=;
+ b=qx4oxid4V35G1aXKZJQCnjAnDWwwuE7xfzqL1ukqY31I3l43kX2dK5lIHS8+6grXrKn55l3jvvg8UH/+AIXfuq/4CaGX/JXqMsdqYnGBF9XH6acySdylUqeELa0o2BVlQGvjrt6NZ1JwS+qQRE8RE7DojubH+7Irn2nhqnMv5fk=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4061.eurprd04.prod.outlook.com (10.171.182.160) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.19; Mon, 25 Nov 2019 04:20:42 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2474.023; Mon, 25 Nov 2019
+ 04:20:42 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Henry Lin <henryl@nvidia.com>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Romain Izard <romain.izard.pro@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_ncm: fix wrong usb_ep
+Thread-Topic: [PATCH] usb: gadget: f_ncm: fix wrong usb_ep
+Thread-Index: AQHVoCLqKGYVyVjGs0eFFEwrEIcffKebTxyA
+Date:   Mon, 25 Nov 2019 04:20:42 +0000
+Message-ID: <20191125042039.GA10953@b29397-desktop>
+References: <20191121041858.15746-1-henryl@nvidia.com>
+In-Reply-To: <20191121041858.15746-1-henryl@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: cee1ef73-0916-4f5b-f283-08d7715ed5ae
+x-ms-traffictypediagnostic: VI1PR04MB4061:
+x-microsoft-antispam-prvs: <VI1PR04MB4061B83F1EF9156BA0D8F1F48B4A0@VI1PR04MB4061.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0232B30BBC
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(376002)(396003)(366004)(346002)(39860400002)(136003)(199004)(189003)(71190400001)(6116002)(33656002)(3846002)(7736002)(71200400001)(229853002)(305945005)(81166006)(81156014)(8936002)(478600001)(6916009)(14454004)(2906002)(8676002)(5660300002)(26005)(1076003)(6506007)(53546011)(86362001)(102836004)(6246003)(66066001)(25786009)(316002)(6512007)(186003)(76116006)(99286004)(66446008)(66946007)(66476007)(66556008)(64756008)(33716001)(76176011)(44832011)(4326008)(446003)(11346002)(256004)(6436002)(54906003)(9686003)(6486002)(91956017);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4061;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1WOKQpCMeMT701tODKfRyOuZoSfY6Tn5wineIpMS8rmfQqsrT+OHl2r8OHwaEcCX13MQ9QI8vOa2RaGp/3j5hj+YtrRfYzxAZt22XX3preXZPs+fZtGOurEiMH/sRYnZWWH0ipD+0vP7CLKVOJXSUxH+Jncxs9ohxfh4PIdsbIXMV5Puh/+ZfVkFYtPLwKD7NaYoS9YL9AaS7Sv0VnJB3bBpaOqMvMtN5w5VzdScv1A+/T50XBdOBzs1II9WgXmRZ8cjHTcz9Aj82a2OW+JBI/Vds644lj2qoaZzKaJBNJbRAUVa/iD+W5pFlg65wfJfA0vYeqTc0EUOTVVVl4/G0KudEW7qgYWBSot0CkDFa19+EdiMH/MTzMtoClym4zX0Y7bP/OFnsPJkG5M+b5zRIPJ1zG9znR/nNT3ejMhDcuOps63T0KSrgASuo3YKC99I
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <A862E450F1C70248B7A53919C1AC6362@eurprd04.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: ozaAnZOCOr6nsvFH9H5FQw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: multipart/mixed; boundary="45Z9DzgjV8m4Oswq"
-Content-Disposition: inline
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cee1ef73-0916-4f5b-f283-08d7715ed5ae
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2019 04:20:42.0412
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qV6xQgLbN33VXn70+AkjTrlKsqyTqbzc56m9Y3YRwWm4/2FaJZlLsITZSjizEb4UAEVaS40kkmMusL9ILzgv4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4061
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---45Z9DzgjV8m4Oswq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Sat, Nov 23, 2019 at 04:44:55PM +0100, Andrea Vai wrote:
-> Il giorno sab, 23/11/2019 alle 15.28 +0800, Ming Lei ha scritto:
-> >=20
-> > Please post the log of 'lsusb -v', and I will try to make a patch
-> > for
-> > addressing the issue.
+On 19-11-21 12:18:57, Henry Lin wrote:
+> Gadget driver should always use config_ep_by_speed() to initialize
+> usb_ep struct according to usb device's operating speed. Otherwise,
+> usb_ep struct may be wrong if usb devcie's operating speed is changed.
 >=20
-> attached,
 
-Please apply the attached patch, and re-build & install & reboot kernel.
+Would you please share the use case how to reproduce it?
 
-This time, please don't switch io scheduler.
+Peter
+> Signed-off-by: Henry Lin <henryl@nvidia.com>
+> ---
+>  drivers/usb/gadget/function/f_ncm.c | 28 ++++++++++++----------------
+>  1 file changed, 12 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/fun=
+ction/f_ncm.c
+> index 2d6e76e4cffa..420b9c96f2fe 100644
+> --- a/drivers/usb/gadget/function/f_ncm.c
+> +++ b/drivers/usb/gadget/function/f_ncm.c
+> @@ -870,11 +870,10 @@ static int ncm_set_alt(struct usb_function *f, unsi=
+gned intf, unsigned alt)
+>  		DBG(cdev, "reset ncm control %d\n", intf);
+>  		usb_ep_disable(ncm->notify);
+> =20
+> -		if (!(ncm->notify->desc)) {
+> -			DBG(cdev, "init ncm ctrl %d\n", intf);
+> -			if (config_ep_by_speed(cdev->gadget, f, ncm->notify))
+> -				goto fail;
+> -		}
+> +		DBG(cdev, "init ncm ctrl %d\n", intf);
+> +		if (config_ep_by_speed(cdev->gadget, f, ncm->notify))
+> +			goto fail;
+> +
+>  		usb_ep_enable(ncm->notify);
+> =20
+>  	/* Data interface has two altsettings, 0 and 1 */
+> @@ -897,17 +896,14 @@ static int ncm_set_alt(struct usb_function *f, unsi=
+gned intf, unsigned alt)
+>  		if (alt =3D=3D 1) {
+>  			struct net_device	*net;
+> =20
+> -			if (!ncm->port.in_ep->desc ||
+> -			    !ncm->port.out_ep->desc) {
+> -				DBG(cdev, "init ncm\n");
+> -				if (config_ep_by_speed(cdev->gadget, f,
+> -						       ncm->port.in_ep) ||
+> -				    config_ep_by_speed(cdev->gadget, f,
+> -						       ncm->port.out_ep)) {
+> -					ncm->port.in_ep->desc =3D NULL;
+> -					ncm->port.out_ep->desc =3D NULL;
+> -					goto fail;
+> -				}
+> +			DBG(cdev, "init ncm\n");
+> +			if (config_ep_by_speed(cdev->gadget, f,
+> +					       ncm->port.in_ep) ||
+> +			    config_ep_by_speed(cdev->gadget, f,
+> +					       ncm->port.out_ep)) {
+> +				ncm->port.in_ep->desc =3D NULL;
+> +				ncm->port.out_ep->desc =3D NULL;
+> +				goto fail;
+>  			}
+> =20
+>  			/* TODO */
+> --=20
+> 2.17.1
+>=20
+
+--=20
 
 Thanks,
-Ming
-
---45Z9DzgjV8m4Oswq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment; filename="usb.patch"
-Content-Transfer-Encoding: quoted-printable
-
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 5c9adcaa27ac..eecb46020bfb 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -1436,7 +1436,13 @@ static void __blk_mq_delay_run_hw_queue(struct blk_m=
-q_hw_ctx *hctx, bool async,
- =09if (unlikely(blk_mq_hctx_stopped(hctx)))
- =09=09return;
-=20
--=09if (!async && !(hctx->flags & BLK_MQ_F_BLOCKING)) {
-+=09/*
-+=09 * Some single-queue devices may need to dispatch IO in order
-+=09 * which was guaranteed for the legacy queue via the big queue
-+=09 * lock. Now we reply on single hctx->run_work for that.
-+=09 */
-+=09if (!async && !(hctx->flags & (BLK_MQ_F_BLOCKING |
-+=09=09=09=09=09BLK_MQ_F_STRICT_DISPATCH_ORDER))) {
- =09=09int cpu =3D get_cpu();
- =09=09if (cpumask_test_cpu(cpu, hctx->cpumask)) {
- =09=09=09__blk_mq_run_hw_queue(hctx);
-@@ -3042,6 +3048,10 @@ int blk_mq_alloc_tag_set(struct blk_mq_tag_set *set)
- =09if (!set->ops->get_budget ^ !set->ops->put_budget)
- =09=09return -EINVAL;
-=20
-+=09if (set->queue_depth > 1 && (set->flags &
-+=09=09=09=09BLK_MQ_F_STRICT_DISPATCH_ORDER))
-+=09=09return -EINVAL;
-+
- =09if (set->queue_depth > BLK_MQ_MAX_DEPTH) {
- =09=09pr_info("blk-mq: reduced tag depth to %u\n",
- =09=09=09BLK_MQ_MAX_DEPTH);
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index d3d237a09a78..563188844143 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1939,6 +1939,9 @@ int scsi_mq_setup_tags(struct Scsi_Host *shost)
- =09shost->tag_set.flags =3D BLK_MQ_F_SHOULD_MERGE;
- =09shost->tag_set.flags |=3D
- =09=09BLK_ALLOC_POLICY_TO_MQ_FLAG(shost->hostt->tag_alloc_policy);
-+=09if (shost->hostt->strict_dispatch_order)
-+=09=09shost->tag_set.flags |=3D BLK_MQ_F_STRICT_DISPATCH_ORDER;
-+
- =09shost->tag_set.driver_data =3D shost;
-=20
- =09return blk_mq_alloc_tag_set(&shost->tag_set);
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.=
-c
-index 6737fab94959..77795edad8e8 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -661,6 +661,18 @@ static const struct scsi_host_template usb_stor_host_t=
-emplate =3D {
- =09/* we do our own delay after a device or bus reset */
- =09.skip_settle_delay =3D=09=091,
-=20
-+
-+=09/*
-+=09 * Some USB storage, such as Kingston Technology DataTraveler 100
-+=09 * G3/G4/SE9 G2(ID 0951:1666), requires IO dispatched in the
-+=09 * sequential order, otherwise IO performance may drop drastically.
-+=09 *
-+=09 * can_queue is always 1, so we set .strict_dispatch_order for
-+=09 * USB mass storage HBA. Another reason is that there can be such
-+=09 * kind of devices too.
-+=09 */
-+=09.strict_dispatch_order =3D=091,
-+
- =09/* sysfs device attributes */
- =09.sdev_attrs =3D=09=09=09sysfs_device_attr_list,
-=20
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index dc03e059fdff..844539690a27 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -388,6 +388,7 @@ struct blk_mq_ops {
- enum {
- =09BLK_MQ_F_SHOULD_MERGE=09=3D 1 << 0,
- =09BLK_MQ_F_TAG_SHARED=09=3D 1 << 1,
-+=09BLK_MQ_F_STRICT_DISPATCH_ORDER=09=3D 1 << 2,
- =09BLK_MQ_F_BLOCKING=09=3D 1 << 5,
- =09BLK_MQ_F_NO_SCHED=09=3D 1 << 6,
- =09BLK_MQ_F_ALLOC_POLICY_START_BIT =3D 8,
-diff --git a/include/scsi/scsi_host.h b/include/scsi/scsi_host.h
-index d4452d0ea3c7..f932d6fa1a4c 100644
---- a/include/scsi/scsi_host.h
-+++ b/include/scsi/scsi_host.h
-@@ -442,6 +442,13 @@ struct scsi_host_template {
- =09/* True if the low-level driver supports blk-mq only */
- =09unsigned force_blk_mq:1;
-=20
-+=09/*
-+=09 * True if the low-level driver needs IO to be dispatched in
-+=09 * the order provided by legacy IO path. The flag is only
-+=09 * valid for single queue device.
-+=09 */
-+=09unsigned strict_dispatch_order:1;
-+
- =09/*
- =09 * Countdown for host blocking with no commands outstanding.
- =09 */
-
---45Z9DzgjV8m4Oswq--
-
+Peter Chen=
