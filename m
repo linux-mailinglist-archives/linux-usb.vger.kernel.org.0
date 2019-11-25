@@ -2,69 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD497108587
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 00:24:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D27C51085E5
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2019 01:11:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727051AbfKXXYD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 24 Nov 2019 18:24:03 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:56055 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726957AbfKXXYC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Nov 2019 18:24:02 -0500
-Received: by mail-il1-f200.google.com with SMTP id p21so4723812ilk.22
-        for <linux-usb@vger.kernel.org>; Sun, 24 Nov 2019 15:24:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=lvmYFxQ4tMpUppOKxWLXexXQSrq67jjHmSMnYwsK918=;
-        b=C+t/qQdVXz5YIoZTgyM+iVw4/F74B45/ihw/gANzWPzVHe10BQIJ+rOP18mGvmAa7R
-         qVjqi6XqSKjP3MG5b1w6jaMBdeqAs0ymgsqzLVKRhqjiCZ1iBXIIqtj9g+Rl0VJryg6M
-         j9o36wCSKOdnWRYYILYzaVNUJHUNk+GNm/Eme7bxB9TA/+97cuO+Dz3oh8Qy3FhchAyS
-         S0WxGE+bAmkTSkG0vhKCrDgL8s8G4I8nSLOpRGajvwe/VPzFGDv/BY+eZCftSiXzyKeC
-         ds+obwxybkgxA1eL7o3dr1Laye+LNxsx4XC5iX4xpCPTYEQS2Abixpm91QPHCPePdqo/
-         YFGQ==
-X-Gm-Message-State: APjAAAXgxYmWWWVIcgRaW566WqgnPl/5H2BRsW2v08pvkECu6K0jxEgb
-        GhJrkWIqO+1De8SSe5GgQ4UVX1t6XQxuoRqKoeSAe8kLAVdX
-X-Google-Smtp-Source: APXvYqzybgh35xlc8OCAZI+HDDxRXvIzbywSitZ5fmZRerPy++yQAdBkreUmqiN9FAW1Gh+w6H3FG23oukUmVPMMPPcj1XreIAIA
-MIME-Version: 1.0
-X-Received: by 2002:a92:7405:: with SMTP id p5mr31061111ilc.261.1574637840449;
- Sun, 24 Nov 2019 15:24:00 -0800 (PST)
-Date:   Sun, 24 Nov 2019 15:24:00 -0800
-In-Reply-To: <Pine.LNX.4.44L0.1911241553390.4632-100000@netrider.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000214afd05981ff1a8@google.com>
-Subject: Re: possible deadlock in mon_bin_vma_fault
-From:   syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
+        id S1727052AbfKYAK4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 24 Nov 2019 19:10:56 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:29436 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726887AbfKYAK4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 24 Nov 2019 19:10:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574640653;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UNfSn0Go7nr/5TpyDxXNoKwOWWktGBW2yIqrNptZ/0Q=;
+        b=SjvUfzmqMme5/O62rnwg+oIADGzOxHIVr0twYZwWuTSb+yy/wzJlr3BtnkMTXBtGqliTCg
+        t+EsjEKwOnqrd6L/gtAOdDwnh6paBJ1n4JVpD1KogpAELSQoSF08wJx39HDLjB1/jU5fiF
+        kGESrUVHDe3PnZEAOApX4+3hoKZgTtk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-120-A21YCl6aO_GiDSeGDnec8Q-1; Sun, 24 Nov 2019 19:10:52 -0500
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E9DB418B9FC1;
+        Mon, 25 Nov 2019 00:10:49 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 673D85C1D4;
+        Mon, 25 Nov 2019 00:10:48 +0000 (UTC)
+Date:   Sun, 24 Nov 2019 18:10:47 -0600
+From:   Pete Zaitcev <zaitcev@redhat.com>
+Cc:     andreyknvl@google.com, arnd@arndb.de, gregkh@linuxfoundation.org,
         jrdr.linux@gmail.com, keescook@chromium.org,
         kstewart@linuxfoundation.org, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        viro@zeniv.linux.org.uk, zaitcev@redhat.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        zaitcev@redhat.com, tglx@linutronix.de, viro@zeniv.linux.org.uk
+Subject: Re: possible deadlock in mon_bin_vma_fault
+Message-ID: <20191124181047.7cb9e8fb@suzdal.zaitcev.lan>
+In-Reply-To: <000000000000214afd05981ff1a8@google.com>
+References: <Pine.LNX.4.44L0.1911241553390.4632-100000@netrider.rowland.org>
+        <000000000000214afd05981ff1a8@google.com>
+Organization: Red Hat, Inc.
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MC-Unique: A21YCl6aO_GiDSeGDnec8Q-1
+X-Mimecast-Spam-Score: 2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Sun, 24 Nov 2019 15:24:00 -0800
+syzbot <syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com> wrote:
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+> syzbot has tested the proposed patch and the reproducer did not trigger  
+> crash:
 
-Reported-and-tested-by:  
-syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
+Okay. Alan, what is the most appropriate tree for me to submit now?
+Does Greg have one?
 
-Tested on:
+Do you want Reviewed-by or something?
 
-commit:         4d856f72 Linux 5.3
-git tree:        
-git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git v5.3
-kernel config:  https://syzkaller.appspot.com/x/.config?x=86071634b2594991
-dashboard link: https://syzkaller.appspot.com/bug?extid=56f9673bb4cdcbeb0e92
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=11ff3eeee00000
+-- Pete
 
-Note: testing is done by a robot and is best-effort only.
