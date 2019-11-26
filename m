@@ -2,29 +2,26 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB3510A118
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 16:18:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC5010A11D
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 16:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728386AbfKZPSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Nov 2019 10:18:08 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:40342 "HELO
+        id S1728454AbfKZPUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Nov 2019 10:20:15 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:40362 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1728357AbfKZPSI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 10:18:08 -0500
-Received: (qmail 1786 invoked by uid 2102); 26 Nov 2019 10:18:07 -0500
+        with SMTP id S1727532AbfKZPUP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 10:20:15 -0500
+Received: (qmail 1799 invoked by uid 2102); 26 Nov 2019 10:20:14 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 26 Nov 2019 10:18:07 -0500
-Date:   Tue, 26 Nov 2019 10:18:07 -0500 (EST)
+  by localhost with SMTP; 26 Nov 2019 10:20:14 -0500
+Date:   Tue, 26 Nov 2019 10:20:14 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Jiri Kosina <jikos@kernel.org>
-cc:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>,
-        <andreyknvl@google.com>, <benjamin.tissoires@redhat.com>,
-        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
-Subject: Re: INFO: rcu detected stall in hub_event
-In-Reply-To: <nycvar.YFH.7.76.1911260848090.1799@cbobk.fhfr.pm>
-Message-ID: <Pine.LNX.4.44L0.1911261008430.1508-100000@iolanthe.rowland.org>
+To:     Greg KH <greg@kroah.com>, Pete Zaitcev <zaitcev@redhat.com>
+cc:     USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: mon: Fix a deadlock in usbmon between mmap and read
+In-Reply-To: <20191126004407.4b72ef7f@suzdal.zaitcev.lan>
+Message-ID: <Pine.LNX.4.44L0.1911261018110.1508-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -32,22 +29,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 26 Nov 2019, Jiri Kosina wrote:
+On Tue, 26 Nov 2019, Pete Zaitcev wrote:
 
-> On Mon, 25 Nov 2019, Alan Stern wrote:
+> The problem arises because our read() function grabs a lock of the
+> circular buffer, finds something of interest, then invokes copy_to_user()
+> straight from the buffer, which in turn takes mm->mmap_sem. In the same
+> time, the callback mon_bin_vma_fault() is invoked under mm->mmap_sem.
+> It attempts to take the fetch lock and deadlocks.
 > 
-> > #syz test: https://github.com/google/kasan.git 46178223
+> This patch does away with protecting of our page list with any
+> semaphores, and instead relies on the kernel not close the device
+> while mmap is active in a process.
 > 
-> Alan, did you get a test result from syzbot on this patch? My mailbox 
-> doesn't seem to have it.
+> In addition, we prohibit re-sizing of a buffer while mmap is active.
+> This way, when (now unlocked) fault is processed, it works with the
+> page that is intended to be mapped-in, and not some other random page.
+> Note that this may have an ABI impact, but hopefully no legitimate
+> program is this wrong.
+> 
+> Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+> Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
 
-No response, not yet.  syzbot seems to be very slow testing the patches
-for this bug report.  The earlier ones I submitted also took over a day
-to finish.
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-BTW, even if this patch fixes the problem, I don't think setting 
-collection[0].parent_idx to -1 is a very good solution.  It's brittle 
-and doesn't address the underlying ambiguity.
+Also this should have:
+
+Fixes: 46eb14a6e158 ("USB: fix usbmon BUG trigger")
+CC: <stable@vger.kernel.org>
 
 Alan Stern
 
