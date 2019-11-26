@@ -2,52 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E2210A387
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 18:45:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FB3610A55A
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 21:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728198AbfKZRpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Nov 2019 12:45:19 -0500
-Received: from muru.com ([72.249.23.125]:43626 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726926AbfKZRpT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 26 Nov 2019 12:45:19 -0500
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 85583806C;
-        Tue, 26 Nov 2019 17:45:56 +0000 (UTC)
-Date:   Tue, 26 Nov 2019 09:45:15 -0800
-From:   Tony Lindgren <tony@atomide.com>
-To:     Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH] usb: musb: fix idling for suspend after disconnect
- interrupt
-Message-ID: <20191126174515.GZ35479@atomide.com>
-References: <20191126034151.38154-1-tony@atomide.com>
- <5ae7f3aa-3992-a810-f5d4-0b5bb8fa6356@cogentembedded.com>
+        id S1726926AbfKZUVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Nov 2019 15:21:02 -0500
+Received: from mail-io1-f72.google.com ([209.85.166.72]:48570 "EHLO
+        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726077AbfKZUVB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 15:21:01 -0500
+Received: by mail-io1-f72.google.com with SMTP id e15so11368519ioh.15
+        for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2019 12:21:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=Akqz/I3ZQjzJAvOshpOikoMNQL6Gvzwc2tf/r4zF6dU=;
+        b=JMfCqGQWlUhZt1fB4QeVPrjRvxTYtblzkyz2m6AXFyetoN2K52lBZwYp/6pXT+UOzm
+         fIOeEjGmHpfSScMi/90qvm9/0fA0Dl+xMIblxQlYzVRZEcNHchAmQ0OqBrq60grq44Es
+         uLgTPyvhMSKoDGrfsY17o4HhV+1AcBUXEoI+AUQ0MiprIRLOeBmyHjyc7VWcURd+7rAi
+         nLEaEdl24PO74dmJ5fFX5otderBiS++4A0Qe38VXySLPybxejtMhx7hR5S12ndwTPr5q
+         mSYVtVY55O2MUweeLVTZD8ZtLF+OQjA5Jl/tRgGwrJ/ommttFChrtVodDPY0CCbdFbRv
+         6a6Q==
+X-Gm-Message-State: APjAAAWDI6ooG7hLDRs6ibDHBrxzHCRoVXIJTepmpV8RXv5MRlx+suRF
+        D6GsZuzTl+J0NXUh1ZGAjDbq/jWmWHWfZSU2+MXc2HyTvEyM
+X-Google-Smtp-Source: APXvYqxxt+AtVd7wJwjD/XwA+BiQAFWZyeEQ9AZkTAMgW35eXYOdSR6F9M34n0LFgQjt6IDNtDcVbmhTyrwMkTBoVKAOblxNDQnz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5ae7f3aa-3992-a810-f5d4-0b5bb8fa6356@cogentembedded.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+X-Received: by 2002:a02:ce51:: with SMTP id y17mr464455jar.1.1574799661213;
+ Tue, 26 Nov 2019 12:21:01 -0800 (PST)
+Date:   Tue, 26 Nov 2019 12:21:01 -0800
+In-Reply-To: <Pine.LNX.4.44L0.1911251622420.1565-100000@iolanthe.rowland.org>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006630680598459e6e@google.com>
+Subject: Re: INFO: rcu detected stall in hub_event
+From:   syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Sergei Shtylyov <sergei.shtylyov@cogentembedded.com> [191126 10:21]:
-> Hello!
-> 
-> On 26.11.2019 6:41, Tony Lindgren wrote:
-> 
-> > When disconnected as USB B-device, we sometimes get a suspend interrupt
-> > after disconnect interrupt. In that case we have devctl set to 99 with
-> > VBUS still valid and musb_pm_runtime_check_session() wrongly things we
-> 
->     Thinks?
+Hello,
 
-Thanks will fix.
+syzbot has tested the proposed patch and the reproducer did not trigger  
+crash:
 
-Tony
+Reported-and-tested-by:  
+syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         46178223 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
+dashboard link: https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1177cc0ee00000
+
+Note: testing is done by a robot and is best-effort only.
