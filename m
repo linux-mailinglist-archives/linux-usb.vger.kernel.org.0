@@ -2,66 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB3610A55A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 21:21:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B489310A651
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 23:04:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfKZUVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Nov 2019 15:21:02 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:48570 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbfKZUVB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 15:21:01 -0500
-Received: by mail-io1-f72.google.com with SMTP id e15so11368519ioh.15
-        for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2019 12:21:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=Akqz/I3ZQjzJAvOshpOikoMNQL6Gvzwc2tf/r4zF6dU=;
-        b=JMfCqGQWlUhZt1fB4QeVPrjRvxTYtblzkyz2m6AXFyetoN2K52lBZwYp/6pXT+UOzm
-         fIOeEjGmHpfSScMi/90qvm9/0fA0Dl+xMIblxQlYzVRZEcNHchAmQ0OqBrq60grq44Es
-         uLgTPyvhMSKoDGrfsY17o4HhV+1AcBUXEoI+AUQ0MiprIRLOeBmyHjyc7VWcURd+7rAi
-         nLEaEdl24PO74dmJ5fFX5otderBiS++4A0Qe38VXySLPybxejtMhx7hR5S12ndwTPr5q
-         mSYVtVY55O2MUweeLVTZD8ZtLF+OQjA5Jl/tRgGwrJ/ommttFChrtVodDPY0CCbdFbRv
-         6a6Q==
-X-Gm-Message-State: APjAAAWDI6ooG7hLDRs6ibDHBrxzHCRoVXIJTepmpV8RXv5MRlx+suRF
-        D6GsZuzTl+J0NXUh1ZGAjDbq/jWmWHWfZSU2+MXc2HyTvEyM
-X-Google-Smtp-Source: APXvYqxxt+AtVd7wJwjD/XwA+BiQAFWZyeEQ9AZkTAMgW35eXYOdSR6F9M34n0LFgQjt6IDNtDcVbmhTyrwMkTBoVKAOblxNDQnz
-MIME-Version: 1.0
-X-Received: by 2002:a02:ce51:: with SMTP id y17mr464455jar.1.1574799661213;
- Tue, 26 Nov 2019 12:21:01 -0800 (PST)
-Date:   Tue, 26 Nov 2019 12:21:01 -0800
-In-Reply-To: <Pine.LNX.4.44L0.1911251622420.1565-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006630680598459e6e@google.com>
-Subject: Re: INFO: rcu detected stall in hub_event
-From:   syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
+        id S1726192AbfKZWEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Nov 2019 17:04:14 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:42858 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726072AbfKZWEO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 17:04:14 -0500
+Received: from localhost (c-73-35-209-67.hsd1.wa.comcast.net [73.35.209.67])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id D970B14D44125;
+        Tue, 26 Nov 2019 14:04:12 -0800 (PST)
+Date:   Tue, 26 Nov 2019 14:04:12 -0800 (PST)
+Message-Id: <20191126.140412.327150078421405319.davem@davemloft.net>
+To:     tranmanphong@gmail.com
+Cc:     alexios.zavras@intel.com, allison@lohutok.net, benquike@gmail.com,
+        gregkh@linuxfoundation.org, johan@kernel.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+        netdev@vger.kernel.org, oneukum@suse.com, tglx@linutronix.de
+Subject: Re: [Patch v2 0/2] Fix -Wcast-function-type usb net drivers
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20191126135413.19929-1-tranmanphong@gmail.com>
+References: <20191125.110708.76766634808358006.davem@davemloft.net>
+        <20191126135413.19929-1-tranmanphong@gmail.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 26 Nov 2019 14:04:13 -0800 (PST)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+From: Phong Tran <tranmanphong@gmail.com>
+Date: Tue, 26 Nov 2019 20:54:11 +0700
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+> Change log with v1:
+>  - Modify suffix of patch subject.
+>  - Did the checkpatch.pl (remove the space, add a blank line).
 
-Reported-and-tested-by:  
-syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         46178223 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=99c88c44660624e7
-dashboard link: https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1177cc0ee00000
-
-Note: testing is done by a robot and is best-effort only.
+Series applied, thanks.
