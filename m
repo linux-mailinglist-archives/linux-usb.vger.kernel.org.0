@@ -2,70 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 813D0109FDB
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 15:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB3510A118
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 16:18:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728206AbfKZOFD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 26 Nov 2019 09:05:03 -0500
-Received: from out30-57.freemail.mail.aliyun.com ([115.124.30.57]:47442 "EHLO
-        out30-57.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728198AbfKZOFC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 09:05:02 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Tj9VXT6_1574777093;
-Received: from localhost(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0Tj9VXT6_1574777093)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 26 Nov 2019 22:04:58 +0800
-From:   Wen Yang <wenyang@linux.alibaba.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wen Yang <wenyang@linux.alibaba.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: fix use after free in typec_register_port()
-Date:   Tue, 26 Nov 2019 22:04:52 +0800
-Message-Id: <20191126140452.14048-1-wenyang@linux.alibaba.com>
-X-Mailer: git-send-email 2.23.0
+        id S1728386AbfKZPSI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Nov 2019 10:18:08 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:40342 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1728357AbfKZPSI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 10:18:08 -0500
+Received: (qmail 1786 invoked by uid 2102); 26 Nov 2019 10:18:07 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 26 Nov 2019 10:18:07 -0500
+Date:   Tue, 26 Nov 2019 10:18:07 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Jiri Kosina <jikos@kernel.org>
+cc:     syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>,
+        <andreyknvl@google.com>, <benjamin.tissoires@redhat.com>,
+        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <syzkaller-bugs@googlegroups.com>
+Subject: Re: INFO: rcu detected stall in hub_event
+In-Reply-To: <nycvar.YFH.7.76.1911260848090.1799@cbobk.fhfr.pm>
+Message-ID: <Pine.LNX.4.44L0.1911261008430.1508-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We can't use "port->sw" and/or "port->mux" after it has been freed.
+On Tue, 26 Nov 2019, Jiri Kosina wrote:
 
-Fixes: 23481121c81d ("usb: typec: class: Don't use port parent for getting mux handles")
-Signed-off-by: Wen Yang <wenyang@linux.alibaba.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/usb/typec/class.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> On Mon, 25 Nov 2019, Alan Stern wrote:
+> 
+> > #syz test: https://github.com/google/kasan.git 46178223
+> 
+> Alan, did you get a test result from syzbot on this patch? My mailbox 
+> doesn't seem to have it.
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 7ece6ca..91d6227 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1612,14 +1612,16 @@ struct typec_port *typec_register_port(struct device *parent,
- 
- 	port->sw = typec_switch_get(&port->dev);
- 	if (IS_ERR(port->sw)) {
-+		ret = PTR_ERR(port->sw);
- 		put_device(&port->dev);
--		return ERR_CAST(port->sw);
-+		return ERR_PTR(ret);
- 	}
- 
- 	port->mux = typec_mux_get(&port->dev, NULL);
- 	if (IS_ERR(port->mux)) {
-+		ret = PTR_ERR(port->mux);
- 		put_device(&port->dev);
--		return ERR_CAST(port->mux);
-+		return ERR_PTR(ret);
- 	}
- 
- 	ret = device_add(&port->dev);
--- 
-1.8.3.1
+No response, not yet.  syzbot seems to be very slow testing the patches
+for this bug report.  The earlier ones I submitted also took over a day
+to finish.
+
+BTW, even if this patch fixes the problem, I don't think setting 
+collection[0].parent_idx to -1 is a very good solution.  It's brittle 
+and doesn't address the underlying ambiguity.
+
+Alan Stern
 
