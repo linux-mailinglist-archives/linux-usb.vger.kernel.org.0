@@ -2,174 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9C310984A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 05:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D33B3109958
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 07:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbfKZEUR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 23:20:17 -0500
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:1377 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726947AbfKZEUR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 23:20:17 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ddca8010001>; Mon, 25 Nov 2019 20:20:17 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 25 Nov 2019 20:20:15 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 25 Nov 2019 20:20:15 -0800
-Received: from [10.24.193.46] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 26 Nov
- 2019 04:20:12 +0000
-Subject: Re: [PATCH v4 3/5] dt-bindings: phy: tegra: Add Tegra194 support
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        JC Kuo <jckuo@nvidia.com>, "Rob Herring" <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        <linux-tegra@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <20191009024343.30218-1-jckuo@nvidia.com>
- <20191009024343.30218-4-jckuo@nvidia.com> <20191009233900.GA9109@bogus>
- <20191014131752.GF422231@ulmo>
- <CAL_Jsq+aKxfAir3skanfqmM+nFFzXPFL4eMa-+pq1kH-90YTbg@mail.gmail.com>
- <57692050-8284-a31f-71fd-7441823f3f2b@nvidia.com>
- <20191017120128.GE3122066@ulmo>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <0fd1f30c-5155-e1df-69b9-a49271b7cbce@nvidia.com>
-Date:   Tue, 26 Nov 2019 09:51:57 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1727031AbfKZGoN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 26 Nov 2019 01:44:13 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:31967 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725765AbfKZGoN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 26 Nov 2019 01:44:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574750651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AA6T7xv+06nQ3X4XoERqasPoAqy6ZSuOPw2D/IX71ZM=;
+        b=GtdIYkUbq+/gd6Kuu08RfdQFZAUrLiB/d5o+yigVwaHxS9gBG+AuHhYryhLtjfns5VfbPX
+        1Z3eAawMomSLXySvP33JlD18ZDQUqfJWpxhFyuWUsCrOOfGdXIWQOjLqBSGQdyOrT9Sxln
+        v5WPaqJcvi022WBhQiUqESQjekMTgsI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-234-hOm5zK7nP6WW5rzY7c8eMg-1; Tue, 26 Nov 2019 01:44:10 -0500
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 32ED880183C
+        for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2019 06:44:08 +0000 (UTC)
+Received: from suzdal.zaitcev.lan (ovpn-117-3.phx2.redhat.com [10.3.117.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F016C5C1D8;
+        Tue, 26 Nov 2019 06:44:07 +0000 (UTC)
+Date:   Tue, 26 Nov 2019 00:44:07 -0600
+From:   Pete Zaitcev <zaitcev@redhat.com>
+To:     <linux-usb@vger.kernel.org>
+Cc:     Pete Zaitcev <zaitcev@redhat.com>
+Subject: [PATCH] usb: mon: Fix a deadlock in usbmon between mmap and read
+Message-ID: <20191126004407.4b72ef7f@suzdal.zaitcev.lan>
+Organization: Red Hat, Inc.
 MIME-Version: 1.0
-In-Reply-To: <20191017120128.GE3122066@ulmo>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-MC-Unique: hOm5zK7nP6WW5rzY7c8eMg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574742017; bh=z3EDY6Eao4JzaFtK6U1s4QYBS3tl1Z7pp75azK3pO0o=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=GhNKSt0c59jg+kLa61P4Y7fUmS5B6/57P69x4BbS3s3kr9ya+cgppsDi9gAODDoOM
-         CHe9bpxybhbX5WkOTH1zyXv455rh2nUDr1mBks7ZMTsXoZjc5MyfZm05DW5RAqacQX
-         zDvMrj6WnkiaQj63jDEMcfeSaUph5eAu0mH4BAjoK/2kiMkLK7ey1Zr8lS8tybxXtI
-         33RfTA9tQ5cEBvZU4qyb5Dt2v7MWl7ow4luF8uqK2i+BRAv/RsF7r2nN779yZYuXa1
-         Mm9i5l7ltO05tkpPW7zAGM9wkSVR5qOr46u53lpEL7nihLrxSmdrXZBgKhNRKnx2mi
-         m+l2KPQXG1Y+Q==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The problem arises because our read() function grabs a lock of the
+circular buffer, finds something of interest, then invokes copy_to_user()
+straight from the buffer, which in turn takes mm->mmap_sem. In the same
+time, the callback mon_bin_vma_fault() is invoked under mm->mmap_sem.
+It attempts to take the fetch lock and deadlocks.
 
+This patch does away with protecting of our page list with any
+semaphores, and instead relies on the kernel not close the device
+while mmap is active in a process.
 
-On 17-10-2019 17:31, Thierry Reding wrote:
-> On Thu, Oct 17, 2019 at 03:48:52PM +0800, JC Kuo wrote:
->> Hi Thierry, Hi Rob, Hi Kishon,
->> Please let me know your thoughts of the below implementation.
->>
->> 1. Add a "bool disable_gen2" to "phy->attrs" structure.
->> 2. In _of_phy_get() of phy-core.c to add the follow to parse a generic property.
->>
->> 	phy->attrs.disable_gen2 = of_property_read_bool(args.np,
->> 							"usb-disable-gen2");
-> 
-> Regarding this, I'm not sure how Rob imagined the generic properties to
-> work. Perhaps he was thinking about something like the max-link-speed
-> property found in the PCI bindings.
-> 
-> We could have something like this:
-> 
->   - max-link-speed:
->       If present this property specifies the USB generation supported on
->       the PHY/port. Must be:
->         1: for USB 3.1 Gen 1 (a.k.a. USB 3.0)
->         2: for USB 3.1 Gen 2
-> 
-> I'm not sure if we need to consider anything prior to USB 3.0. I suppose
-> we could do a similar mapping to what I proposed for the PHY ->set_mode
-> callback:
-> 
->   - max-link-speed:
->       If present this property specifies the USB generation supported on
->       the PHY/port. Must be:
->         0x0100: for USB 1.0 (Low-Speed)
->         0x0101: for USB 1.1 (Full-Speed)
->         0x0200: for USB 2.0 (Hi-Speed)
->         0x0300: for USB 3.0 (SuperSpeed) (a.k.a. USB 3.1 Gen 1)
->         0x0301: for USB 3.1 (SuperSpeed 10 Gbit/s) (a.k.a. USB 3.1 Gen 2)
->         0x0302: for USB 3.2 (SuperSpeed 20 Gbit/s) (a.k.a. USB 3.2 Gen 2 x 2)
->         ...
-> 
-> Or those could just be sequentially enumerated, like in the above
-> example.
-> 
-> Rob, any thoughts?
-> 
-> Thierry
-> 
+In addition, we prohibit re-sizing of a buffer while mmap is active.
+This way, when (now unlocked) fault is processed, it works with the
+page that is intended to be mapped-in, and not some other random page.
+Note that this may have an ABI impact, but hopefully no legitimate
+program is this wrong.
 
-"Documentation/devicetree/bindings/usb/generic.txt" file already has dt-property named
-maximum-speed, which fulfills current requirement. So to disable gen2 feature simply
-add below entry to corresponding usb3 port entry.
-		padctl@3520000 {
-			status = "okay";
+Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com
+---
+ drivers/usb/mon/mon_bin.c |   32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-			ports {
-				usb3-3 {
-					maximum-speed = "super-speed";
-				};
-		};
+diff --git a/drivers/usb/mon/mon_bin.c b/drivers/usb/mon/mon_bin.c
+index ac2b4fcc265f..f48a23adbc35 100644
+--- a/drivers/usb/mon/mon_bin.c
++++ b/drivers/usb/mon/mon_bin.c
+@@ -1039,12 +1039,18 @@ static long mon_bin_ioctl(struct file *file, unsigned int cmd, unsigned long arg
+ 
+ 		mutex_lock(&rp->fetch_lock);
+ 		spin_lock_irqsave(&rp->b_lock, flags);
+-		mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
+-		kfree(rp->b_vec);
+-		rp->b_vec  = vec;
+-		rp->b_size = size;
+-		rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
+-		rp->cnt_lost = 0;
++		if (rp->mmap_active) {
++			mon_free_buff(vec, size/CHUNK_SIZE);
++			kfree(vec);
++			ret = -EBUSY;
++		} else {
++			mon_free_buff(rp->b_vec, rp->b_size/CHUNK_SIZE);
++			kfree(rp->b_vec);
++			rp->b_vec  = vec;
++			rp->b_size = size;
++			rp->b_read = rp->b_in = rp->b_out = rp->b_cnt = 0;
++			rp->cnt_lost = 0;
++		}
+ 		spin_unlock_irqrestore(&rp->b_lock, flags);
+ 		mutex_unlock(&rp->fetch_lock);
+ 		}
+@@ -1216,13 +1222,21 @@ mon_bin_poll(struct file *file, struct poll_table_struct *wait)
+ static void mon_bin_vma_open(struct vm_area_struct *vma)
+ {
+ 	struct mon_reader_bin *rp = vma->vm_private_data;
++	unsigned long flags;
++
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	rp->mmap_active++;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+ 
+ static void mon_bin_vma_close(struct vm_area_struct *vma)
+ {
++	unsigned long flags;
++
+ 	struct mon_reader_bin *rp = vma->vm_private_data;
++	spin_lock_irqsave(&rp->b_lock, flags);
+ 	rp->mmap_active--;
++	spin_unlock_irqrestore(&rp->b_lock, flags);
+ }
+ 
+ /*
+@@ -1234,16 +1248,12 @@ static vm_fault_t mon_bin_vma_fault(struct vm_fault *vmf)
+ 	unsigned long offset, chunk_idx;
+ 	struct page *pageptr;
+ 
+-	mutex_lock(&rp->fetch_lock);
+ 	offset = vmf->pgoff << PAGE_SHIFT;
+-	if (offset >= rp->b_size) {
+-		mutex_unlock(&rp->fetch_lock);
++	if (offset >= rp->b_size)
+ 		return VM_FAULT_SIGBUS;
+-	}
+ 	chunk_idx = offset / CHUNK_SIZE;
+ 	pageptr = rp->b_vec[chunk_idx].pg;
+ 	get_page(pageptr);
+-	mutex_unlock(&rp->fetch_lock);
+ 	vmf->page = pageptr;
+ 	return 0;
+ }
 
-Read the property using API usb_get_maximum_speed.
-
-Thanks,
-Nagarjuna
->> 3. In individual phy driver, to add SOC/PHY specific programming accordingly.
->>
->> Thanks,
->> JC
->>
->> On 10/14/19 9:40 PM, Rob Herring wrote:
->>> On Mon, Oct 14, 2019 at 8:17 AM Thierry Reding <thierry.reding@gmail.com> wrote:
->>>>
->>>> On Wed, Oct 09, 2019 at 06:39:00PM -0500, Rob Herring wrote:
->>>>> On Wed, Oct 09, 2019 at 10:43:41AM +0800, JC Kuo wrote:
->>>>>> Extend the bindings to cover the set of features found in Tegra194.
->>>>>> Note that, technically, there are four more supplies connected to the
->>>>>> XUSB pad controller (DVDD_PEX, DVDD_PEX_PLL, HVDD_PEX and HVDD_PEX_PLL)
->>>>>> , but the power sequencing requirements of Tegra194 require these to be
->>>>>> under the control of the PMIC.
->>>>>>
->>>>>> Tegra194 XUSB PADCTL supports up to USB 3.1 Gen 2 speed, however, it is
->>>>>> possible for some platforms have long signal trace that could not
->>>>>> provide sufficient electrical environment for Gen 2 speed. To deal with
->>>>>> this, a new device node property "nvidia,disable-gen2" was added to
->>>>>> Tegra194 that be used to specifically disable Gen 2 speed for a
->>>>>> particular USB 3.0 port so that the port can be limited to Gen 1 speed
->>>>>> and avoid the instability.
->>>>>
->>>>> I suspect this may be a common issue and we should have a common
->>>>> property. Typically, this kind of property is in the controller though
->>>>> and supports multiple speed limits. See PCI bindings for inspiration.
->>>>
->>>> Given that support for gen 2 speeds is dependent on signal trace length,
->>>> it doesn't really make sense to restrict the whole controller to a given
->>>> speed if only the signal trace for a single port exceeds the limit for
->>>> which gen 2 would work.
->>>>
->>>> Also, the USB PHYs are in a different hardware block than the USB
->>>> controller, so this really is a property of the PHY block, not the USB
->>>> controller.
->>>
->>> Okay, but still should be common for USB PHYs IMO.
->>>
->>> Rob
->>>
