@@ -2,99 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C69771097E6
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 03:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D985109822
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2019 04:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbfKZCuc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 25 Nov 2019 21:50:32 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:15900 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbfKZCuc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 25 Nov 2019 21:50:32 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ddc92fb0000>; Mon, 25 Nov 2019 18:50:35 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 25 Nov 2019 18:50:31 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 25 Nov 2019 18:50:31 -0800
-Received: from [10.19.108.118] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 26 Nov
- 2019 02:50:30 +0000
-Subject: Re: [PATCH 01/10] usb: host: xhci-tegra: Fix "tega" -> "tegra" typo
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jon Hunter <jonathanh@nvidia.com>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        <linux-usb@vger.kernel.org>, <linux-tegra@vger.kernel.org>
-References: <20191125123210.1564323-1-thierry.reding@gmail.com>
- <20191125123210.1564323-2-thierry.reding@gmail.com>
-X-Nvconfidentiality: public
-From:   JC Kuo <jckuo@nvidia.com>
-Message-ID: <d5fcfb0c-7c2f-7d1c-b7e7-20977d60f062@nvidia.com>
-Date:   Tue, 26 Nov 2019 10:50:28 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727296AbfKZDnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 25 Nov 2019 22:43:20 -0500
+Received: from muru.com ([72.249.23.125]:43572 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726962AbfKZDnU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 25 Nov 2019 22:43:20 -0500
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id DB06D80EA;
+        Tue, 26 Nov 2019 03:43:56 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        Merlijn Wajer <merlijn@wizzup.org>,
+        Pavel Machek <pavel@ucw.cz>, Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH] usb: musb: fix idling for suspend after disconnect interrupt
+Date:   Mon, 25 Nov 2019 19:41:51 -0800
+Message-Id: <20191126034151.38154-1-tony@atomide.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-In-Reply-To: <20191125123210.1564323-2-thierry.reding@gmail.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574736635; bh=1H+dEd1NafKkz8/NDNK4+pWjOWEcyCrUNoNf0H+F4FU=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=EXzB2l7ddoOb3O6rWpRg53hOCr32QJ5dVlZ9kaiJdzIIkSoJQsv2HbzK2928k5SKW
-         RBVKOuQUUypOufwWKMD9xfVkW90CqY+E7ohEQV19DS8/j7ZFx0g1vj3A0WQSphk7MD
-         Pge5TFL88Bswhz5XjzAeruKQpKdOOVrmogW3GeQZgVpvTKAQvTbCt3YTCsNGoFGoxM
-         Haqdn/rE1nIVILBRdiAoR5mUCiSdMROaqygDpA0kT0aktvWuEQEQSDx5JkrlTX8FOl
-         2yZQeRbZQ8dfGc2LhtCVu/zbln1rQIwPIf1hx3p8+jPjANuLV4YBM7CGhM2gIMbbMi
-         bRvcRru6cj10g==
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reviewed-by: JC Kuo <jckuo@nvidia.com>
+When disconnected as USB B-device, we sometimes get a suspend interrupt
+after disconnect interrupt. In that case we have devctl set to 99 with
+VBUS still valid and musb_pm_runtime_check_session() wrongly things we
+have an active session. We have no other interrupts after disconnect
+coming in this case at least with the omap2430 glue.
 
-On 11/25/19 8:32 PM, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> The tegra_xusb_mbox_regs structure was misspelled tega_xusb_mbox_regs.
-> Fortunately this was done consistently so it didn't cause any issues.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  drivers/usb/host/xhci-tegra.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-> index bf9065438320..aa1c4e5fd750 100644
-> --- a/drivers/usb/host/xhci-tegra.c
-> +++ b/drivers/usb/host/xhci-tegra.c
-> @@ -145,7 +145,7 @@ struct tegra_xusb_phy_type {
->  	unsigned int num;
->  };
->  
-> -struct tega_xusb_mbox_regs {
-> +struct tegra_xusb_mbox_regs {
->  	u16 cmd;
->  	u16 data_in;
->  	u16 data_out;
-> @@ -166,7 +166,7 @@ struct tegra_xusb_soc {
->  		} usb2, ulpi, hsic, usb3;
->  	} ports;
->  
-> -	struct tega_xusb_mbox_regs mbox;
-> +	struct tegra_xusb_mbox_regs mbox;
->  
->  	bool scale_ss_clock;
->  	bool has_ipfs;
-> 
+Let's fix the issue by checking the interrupt status again with
+delayed work for the devctl 99 case. In the suspend after disconnect
+case the devctl session bit has cleared by then and musb can idle.
+For a typical USB B-device connect case we just continue with normal
+interrupts.
+
+Cc: Merlijn Wajer <merlijn@wizzup.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Sebastian Reichel <sre@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/usb/musb/musb_core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -1943,6 +1943,9 @@ ATTRIBUTE_GROUPS(musb);
+ #define MUSB_QUIRK_B_INVALID_VBUS_91	(MUSB_DEVCTL_BDEVICE | \
+ 					 (2 << MUSB_DEVCTL_VBUS_SHIFT) | \
+ 					 MUSB_DEVCTL_SESSION)
++#define MUSB_QUIRK_B_DISCONNECT_99	(MUSB_DEVCTL_BDEVICE | \
++					 (3 << MUSB_DEVCTL_VBUS_SHIFT) | \
++					 MUSB_DEVCTL_SESSION)
+ #define MUSB_QUIRK_A_DISCONNECT_19	((3 << MUSB_DEVCTL_VBUS_SHIFT) | \
+ 					 MUSB_DEVCTL_SESSION)
+ 
+@@ -1965,6 +1968,11 @@ static void musb_pm_runtime_check_session(struct musb *musb)
+ 	s = MUSB_DEVCTL_FSDEV | MUSB_DEVCTL_LSDEV |
+ 		MUSB_DEVCTL_HR;
+ 	switch (devctl & ~s) {
++	case MUSB_QUIRK_B_DISCONNECT_99:
++		musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
++		schedule_delayed_work(&musb->irq_work,
++				      msecs_to_jiffies(1000));
++		break;
+ 	case MUSB_QUIRK_B_INVALID_VBUS_91:
+ 		if (musb->quirk_retries && !musb->flush_irq_work) {
+ 			musb_dbg(musb,
+-- 
+2.24.0
