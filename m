@@ -2,95 +2,252 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7193810B08A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 14:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E5910B1BF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 16:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbfK0NqA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 08:46:00 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39853 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbfK0NqA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 08:46:00 -0500
-Received: by mail-pg1-f193.google.com with SMTP id b137so8542688pga.6;
-        Wed, 27 Nov 2019 05:45:59 -0800 (PST)
+        id S1727010AbfK0PBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 10:01:34 -0500
+Received: from mail-wr1-f53.google.com ([209.85.221.53]:35167 "EHLO
+        mail-wr1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfK0PBd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 10:01:33 -0500
+Received: by mail-wr1-f53.google.com with SMTP id s5so27043377wrw.2
+        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2019 07:01:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=vERrabrkgnxjnqX37A97qe7ZrBqlXA28PjfJM9OLHEs=;
-        b=vhDKKtQVYa3uip6zJLAtdyym54VzS7Sz3TDkyaSZUFFl5hi9nWz6QzzYE8u6jkR32Y
-         myj890qYqUsJX79AIl3LKV4oLNaP477NtxC7V+dNWLL1uuCBzGEqMtaof+giXgg9Tavg
-         NrdfO6FnRRgL2W6OTd66GktIBvTYvl3mCrqKVKy0YWXejGLmoPjsFmEatgYTfr+xL1gr
-         MoRbC8y4/P29OUsENhxLXESjLWjLvEnnZjD+Rla9QVO68H/dLZcM4rBwMFFK0yJRgwf3
-         9Psm/nytw4EM1Re/JT/6N+lBrAx/CxZaVc5T8L5D4O7suSxJGHdW8d7yM5ZMz+sG8G0M
-         xXeg==
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version;
+        bh=DNtJfauRBjFymYT75xk9xDJ5e1t0+VIC2tL8E64Wwmg=;
+        b=mNDWyUpBm4o5wr3Yxmhc9+VvHho9d0e6U6uQ+fvdgX9eH1rvYpznP6bW/3KlFczztc
+         Xrq5fUtzuMGoFYv7LKy6XF+MHt4LeCQeqbkLfdHvrIYCPaqd+Y/hQ+/QEiU0UXDFFvmY
+         zjMHVb80hKDMpC25zlDpdUKGkjVRh9vqGXGBr+L5RFHac+kb+8GPX/aqiEAuBres8fjm
+         uzJxido8ezFW30zke+hqJs/2asHkbwSFinOtUMQr3jOWTcB5SNJZ3XU34NewdTGnMYWO
+         NsQA7OzHCSJf4uPr1ah3a/7wrNiga39gx3cleL9JnpeLI6bBIorpTMTbLiJZvtM3D6mz
+         heJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=vERrabrkgnxjnqX37A97qe7ZrBqlXA28PjfJM9OLHEs=;
-        b=Rl8UOdSflk3lqz6s0MrGzxOElRQw1EOeWlw14XnwqVFb2TX18129IFB6RSDXYm+aFG
-         5iQXpUTsJYv8bZwgQm4nF5r0EFFNUrxsgxirZMIJ3dHH+OMwciph0rrvfBUo78kg1QP5
-         NVNkHFbFTtLHmlrsjW6NS0ZHoT9uWrzl9yuNHrvUIMXDpdKYzza8drUZcAJkcErY5Cyo
-         xTtMGZw7BI+N6yl24U26E2WmYl7YgfEmp/SLV7uDeJ3ira2untY2kdc96Un1iso9oaGs
-         UMdKtNOXjdOpU5DKaZxJQygHtlFocX3oO62GlpvmSdJ3ByZ8mlvRO/RBV8ZHw6hQlaqV
-         HDqA==
-X-Gm-Message-State: APjAAAWxKHR6XinzaaAyBOm4KWW2sKnyuGNeFmtKPV8xKcnN2UjzV7VQ
-        GCgTS3spvlLp0CVyYLlIpyk=
-X-Google-Smtp-Source: APXvYqxW18iovg6dNYrWZseSM/kB1zPWk7S6zPWhKn7TTU+vLpJWFXlK/ZNf5Wz7oAxx/5gxXb9iXg==
-X-Received: by 2002:a05:6a00:10:: with SMTP id h16mr49317604pfk.27.1574862359419;
-        Wed, 27 Nov 2019 05:45:59 -0800 (PST)
-Received: from nishad ([106.51.232.103])
-        by smtp.gmail.com with ESMTPSA id p5sm16813534pgj.63.2019.11.27.05.45.56
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 27 Nov 2019 05:45:58 -0800 (PST)
-Date:   Wed, 27 Nov 2019 19:15:52 +0530
-From:   Nishad Kamdar <nishadkamdar@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: aqc111: Use the correct style for SPDX License
- Identifier
-Message-ID: <20191127134548.GA29603@nishad>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version;
+        bh=DNtJfauRBjFymYT75xk9xDJ5e1t0+VIC2tL8E64Wwmg=;
+        b=bfqPG6PuJmNcLVZfRQXOSLKnn/MXLCrg7wJQzxtlDmqRfHikpbl8fS3Yz5bFt28AlG
+         u/UUwHC6oPjC3OC/a+rxGK98uxMWGxU2l94kViOaoTyese2z9LolT97QmEi5RlKK+2ag
+         WWpyq9RzR0xhE7jg5cxBwuZNpNgq7EJ8SN5rJXuTVyxafA0OhVKDhPGFohShHSL63PIp
+         R4rFDApx2qVTYjUTm3f0yBFl/WDfWmu2ksU4l1xAi4Zgle7e1Or/nt0Hi9SWhu3ccA4g
+         GmS/uGNxaa+6A9Nkafmrm40HmMZqhYCRC/nj0meLV8jVciO+5Hp/wfPtrjurBOdNWywn
+         gwlw==
+X-Gm-Message-State: APjAAAVzC7CHiTFtwYsWDboGrg36u7jknvk2Br+sgyVfE9+PG/ME4J13
+        L8XCNrXJbu16yBxSV1n5BdDrng==
+X-Google-Smtp-Source: APXvYqzWWLOCz/LwlGp5T9LK4jRya8X6hKqCVK3/+ryFCO6besvGDPKn1GlAwoUcKy2c0iMvLW3MIg==
+X-Received: by 2002:a5d:4692:: with SMTP id u18mr6157318wrq.206.1574866890252;
+        Wed, 27 Nov 2019 07:01:30 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id z6sm20213883wro.18.2019.11.27.07.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2019 07:01:29 -0800 (PST)
+Message-ID: <f9c04d802c99fca3886c6d46215f39a4ba171eee.camel@unipv.it>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     Ming Lei <ming.lei@redhat.com>
+Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Date:   Wed, 27 Nov 2019 16:01:28 +0100
+In-Reply-To: <20191127130854.GA12140@ming.t460p>
+References: <20191125102928.GA20489@ming.t460p>
+         <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
+         <20191125151535.GA8044@ming.t460p>
+         <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
+         <20191126023253.GA24501@ming.t460p>
+         <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+         <20191126091533.GB32135@ming.t460p>
+         <e852331e72532dbfdc7981d958b1cd05ded41317.camel@unipv.it>
+         <20191127020533.GA7190@ming.t460p>
+         <3af3666920e7d46f8f0c6d88612f143ffabc743c.camel@unipv.it>
+         <20191127130854.GA12140@ming.t460p>
+Content-Type: multipart/mixed; boundary="=-DgnQFQ4zgEplvIMKoKcv"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch corrects the SPDX License Identifier style in
-header files related to drivers for USB Network devices.
-This patch gives an explicit block comment to the
-SPDX License Identifier.
 
-Changes made by using a script provided by Joe Perches here:
-https://lkml.org/lkml/2019/2/7/46.
+--=-DgnQFQ4zgEplvIMKoKcv
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-Suggested-by: Joe Perches <joe@perches.com>
-Signed-off-by: Nishad Kamdar <nishadkamdar@gmail.com>
----
- drivers/net/usb/aqc111.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Il giorno mer, 27/11/2019 alle 21.08 +0800, Ming Lei ha scritto:
+> On Wed, Nov 27, 2019 at 10:39:40AM +0100, Andrea Vai wrote:
+> > Il giorno mer, 27/11/2019 alle 10.05 +0800, Ming Lei ha scritto:
+> > > 
+> > > 
+> > > It can be workaround via the following change:
+> > > 
+> > > /lib/modules/5.4.0+/build/include/generated/autoconf.h:
+> > > 
+> > > //#define CONFIG_CC_HAS_ASM_INLINE 1
+> > 
+> > Thanks, it worked, trace attached. Produced by: start the trace
+> script
+> > (with the pendrive already plugged), wait some seconds, run the
+> test
+> > (1 trial, 1 GB), wait for the test to finish, stop the trace.
+> > 
+> > The copy took 2659 seconds, roughly as already seen before.
+> 
+> Thanks for collecting the log.
+> 
+> From the log, some of write IOs are out-of-order, such as, the 1st
+> one
+> is 378880.
+> 
+> 16.41240 2   266     266     kworker/2:1H    block_rq_issue   b'W'
+> 370656 240
+> 16.41961 3   485     485     kworker/3:1H    block_rq_issue   b'W'
+> 378880 240
+> 16.73729 2   266     266     kworker/2:1H    block_rq_issue   b'W'
+> 370896 240
+> 17.71161 2   266     266     kworker/2:1H    block_rq_issue   b'W'
+> 379120 240
+> 18.02344 2   266     266     kworker/2:1H    block_rq_issue   b'W'
+> 371136 240
+> 18.94314 3   485     485     kworker/3:1H    block_rq_issue   b'W'
+> 379360 240
+> 19.25624 2   266     266     kworker/2:1H    block_rq_issue   b'W'
+> 371376 240
+> 
+> IO latency is increased a lot since the 1st out-of-order request(usb
+> storage HBA is single queue depth, one request can be issued only
+> if 
+> the previous issued request is completed).
+> 
+> The reason is that there are two kind of tasks which inserts rq to
+> device.
+> One is the 'cp' process, the other is kworker/u8:*.  The out-of-
+> order
+> happens during the two task's interleaving.
+> 
+> Under such situation, I believe that the old legacy IO path may not
+> guarantee the order too. In blk_queue_bio(), after get_request()
+> allocates one request, the queue lock is released.  And request is
+> actually inserted & issued from blk_flush_plug_list() under the
+> branch of 'if (plug)'. If requests are from two tasks, then request
+> is inserted/issued from two plug list, and no order can be
+> guaranteed.
+> 
+> In my test, except for several requests from the beginning, all
+> other
+> requests are inserted via the kworker thread(guess it is writeback
+> wq),
+> that is why I can't observe the issue in my test.
+> 
+> As Schmid suggested, you may run the same test on old kernel with
+> legacy io path, and see if the performance is still good.
+> 
+> Also, could you share the following info about your machine? So that
+> I can build my VM guest in this setting for reproducing your
+> situation
+> (requests are inserted from two types of threads).
+> 
+> - lscpu
+attached,
 
-diff --git a/drivers/net/usb/aqc111.h b/drivers/net/usb/aqc111.h
-index 4d68b3a6067c..b562db4da337 100644
---- a/drivers/net/usb/aqc111.h
-+++ b/drivers/net/usb/aqc111.h
-@@ -1,5 +1,5 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later
-- * Aquantia Corp. Aquantia AQtion USB to 5GbE Controller
-+/* SPDX-License-Identifier: GPL-2.0-or-later */
-+/* Aquantia Corp. Aquantia AQtion USB to 5GbE Controller
-  * Copyright (C) 2003-2005 David Hollis <dhollis@davehollis.com>
-  * Copyright (C) 2005 Phil Chang <pchang23@sbcglobal.net>
-  * Copyright (C) 2002-2003 TiVo Inc.
--- 
-2.17.1
+> - free -h
+              total        used        free      shared  buff/cache   available
+Mem:           23Gi       4,2Gi        11Gi       448Mi       7,0Gi        18Gi
+Swap:         3,7Gi          0B       3,7Gi
+
+> - lsblk -d $USB_DISK
+
+NAME MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sdg    8:96   1 28,8G  0 disk 
+
+
+> - exact commands for mount the disk, and running the copy operation
+
+I attached the whole script to this thread, I attach it again to this
+message and copy the relevant lines here:
+
+  mount UUID=$uuid /mnt/pendrive 2>&1 |tee -a $logfile
+  SECONDS=0
+  cp $testfile /mnt/pendrive 2>&1 |tee -a $logfile
+  umount /mnt/pendrive 2>&1 |tee -a $logfile
+
+Meanwhile, I am going on with the further tests as suggested
+
+Thanks,
+Andrea
+
+--=-DgnQFQ4zgEplvIMKoKcv
+Content-Disposition: attachment; filename="lscpu.txt"
+Content-Type: text/plain; name="lscpu.txt"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+QXJjaGl0ZWN0dXJlOiAgICAgICAgeDg2XzY0CkNQVSBvcC1tb2RlKHMpOiAgICAgIDMyLWJpdCwg
+NjQtYml0CkJ5dGUgT3JkZXI6ICAgICAgICAgIExpdHRsZSBFbmRpYW4KQWRkcmVzcyBzaXplczog
+ICAgICAgMzkgYml0cyBwaHlzaWNhbCwgNDggYml0cyB2aXJ0dWFsCkNQVShzKTogICAgICAgICAg
+ICAgIDQKT24tbGluZSBDUFUocykgbGlzdDogMC0zClRocmVhZChzKSBwZXIgY29yZTogIDEKQ29y
+ZShzKSBwZXIgc29ja2V0OiAgNApTb2NrZXQocyk6ICAgICAgICAgICAxCk5VTUEgbm9kZShzKTog
+ICAgICAgIDEKVmVuZG9yIElEOiAgICAgICAgICAgR2VudWluZUludGVsCkNQVSBmYW1pbHk6ICAg
+ICAgICAgIDYKTW9kZWw6ICAgICAgICAgICAgICAgNjAKTW9kZWwgbmFtZTogICAgICAgICAgSW50
+ZWwoUikgQ29yZShUTSkgaTUtNDQzMCBDUFUgQCAzLjAwR0h6ClN0ZXBwaW5nOiAgICAgICAgICAg
+IDMKQ1BVIE1IejogICAgICAgICAgICAgMTY3NC43MjcKQ1BVIG1heCBNSHo6ICAgICAgICAgMzIw
+MCwwMDAwCkNQVSBtaW4gTUh6OiAgICAgICAgIDgwMCwwMDAwCkJvZ29NSVBTOiAgICAgICAgICAg
+IDU5ODYuMTYKVmlydHVhbGl6YXRpb246ICAgICAgVlQteApMMWQgY2FjaGU6ICAgICAgICAgICAz
+MksKTDFpIGNhY2hlOiAgICAgICAgICAgMzJLCkwyIGNhY2hlOiAgICAgICAgICAgIDI1NksKTDMg
+Y2FjaGU6ICAgICAgICAgICAgNjE0NEsKTlVNQSBub2RlMCBDUFUocyk6ICAgMC0zCkZsYWdzOiAg
+ICAgICAgICAgICAgIGZwdSB2bWUgZGUgcHNlIHRzYyBtc3IgcGFlIG1jZSBjeDggYXBpYyBzZXAg
+bXRyciBwZ2UgbWNhIGNtb3YgcGF0IHBzZTM2IGNsZmx1c2ggZHRzIGFjcGkgbW14IGZ4c3Igc3Nl
+IHNzZTIgc3MgaHQgdG0gcGJlIHN5c2NhbGwgbnggcGRwZTFnYiByZHRzY3AgbG0gY29uc3RhbnRf
+dHNjIGFyY2hfcGVyZm1vbiBwZWJzIGJ0cyByZXBfZ29vZCBub3BsIHh0b3BvbG9neSBub25zdG9w
+X3RzYyBjcHVpZCBhcGVyZm1wZXJmIHBuaSBwY2xtdWxxZHEgZHRlczY0IG1vbml0b3IgZHNfY3Bs
+IHZteCBlc3QgdG0yIHNzc2UzIHNkYmcgZm1hIGN4MTYgeHRwciBwZGNtIHBjaWQgc3NlNF8xIHNz
+ZTRfMiB4MmFwaWMgbW92YmUgcG9wY250IHRzY19kZWFkbGluZV90aW1lciBhZXMgeHNhdmUgYXZ4
+IGYxNmMgcmRyYW5kIGxhaGZfbG0gYWJtIGNwdWlkX2ZhdWx0IGVwYiBpbnZwY2lkX3NpbmdsZSBw
+dGkgc3NiZCBpYnJzIGlicGIgc3RpYnAgdHByX3NoYWRvdyB2bm1pIGZsZXhwcmlvcml0eSBlcHQg
+dnBpZCBlcHRfYWQgZnNnc2Jhc2UgdHNjX2FkanVzdCBibWkxIGF2eDIgc21lcCBibWkyIGVybXMg
+aW52cGNpZCB4c2F2ZW9wdCBkdGhlcm0gaWRhIGFyYXQgcGxuIHB0cyBtZF9jbGVhciBmbHVzaF9s
+MWQK
+
+
+--=-DgnQFQ4zgEplvIMKoKcv
+Content-Type: application/x-shellscript; name="test"
+Content-Disposition: attachment; filename="test"
+Content-Transfer-Encoding: base64
+
+IyEvYmluL2Jhc2gKCnRlc3RmaWxlPS9Ob0JhY2t1cC90ZXN0ZmlsZQpsb2dmaWxlPS9ob21lL2Fu
+ZHJlYS90cm91Ymxlc2hvb3RpbmcvMjAxOTA0MThfbGVudGV6emFEYXIvMjAxOTA0MThfbGVudGV6
+emFEYXIudHh0Cm5Ucmllcz0kMSAjIE51bWJlciBvZiB0cmllcyB3ZSBkbwoKIyB1dWlkPSI2YTlk
+M2MwNS02NzU4LTQ5YzAtYTQ2ZS02Y2UyMjE0NzhlYjMiICNPREQKIyB1dWlkPSIwNTE0MTIzOS00
+ZWE1LTQ5NGQtYWE5MS1hY2Q2N2RiODljZTUiICMgRVZFTgojIHV1aWQ9ImNjYjdlZTZjLWNmOGQt
+NGI4Ny1hZTlmLWEyZTEzZjVjMDBlOCIgIyBTU0QKdXVpZD0iZjg3NTQxZjAtZmM3Mi00NTQ0LTlm
+MWMtZTNlZTUyMTJkYWY5IiAjRzMgYmlhbmNhCgplY2hvICJTdGFydGluZyAkblRyaWVzIHRyaWVz
+IHdpdGg6IiB8IHRlZSAtYSAkbG9nZmlsZQp1bmFtZSAtYSB8IHRlZSAtYSAkbG9nZmlsZQpscyAt
+bGggJHRlc3RmaWxlIDI+JjEgfCB0ZWUgLWEgJGxvZ2ZpbGUKYmxraWQgMj4mMSB8IHRlZSAtYSAk
+bG9nZmlsZQplY2hvIC1uICJjYXQgL3N5cy9ibG9jay9zZGYvcXVldWUvc2NoZWR1bGVyIC0tPiAi
+CmNhdCAvc3lzL2Jsb2NrL3NkZi9xdWV1ZS9zY2hlZHVsZXIgMj4mMSB8IHRlZSAtYSAkbG9nZmls
+ZQpmb3IgKCggaz0xOyBrPD0kblRyaWVzOyBrKysgKSk7IGRvIAogIGVjaG8gLW4gIkluaXppbzog
+IiB8IHRlZSAtYSAkbG9nZmlsZQogIGRhdGUgfCB0ciAtZCAiXG4iIHwgdGVlIC1hICRsb2dmaWxl
+CiAgdG91Y2ggaW5pemlvIDI+JjEgfHRlZSAtYSAkbG9nZmlsZQogIG1vdW50IFVVSUQ9JHV1aWQg
+L21udC9wZW5kcml2ZSAyPiYxIHx0ZWUgLWEgJGxvZ2ZpbGUKICBTRUNPTkRTPTAKICBjcCAkdGVz
+dGZpbGUgL21udC9wZW5kcml2ZSAyPiYxIHx0ZWUgLWEgJGxvZ2ZpbGUKICB1bW91bnQgL21udC9w
+ZW5kcml2ZSAyPiYxIHx0ZWUgLWEgJGxvZ2ZpbGUKICB0ZW1wbz0kU0VDT05EUwogIHRvdWNoIGZp
+bmUgMj4mMSB8dGVlIC1hICRsb2dmaWxlCiAgZWNobyAtbiAiLi4uZmluZTogIiB8IHRlZSAtYSAk
+bG9nZmlsZQogIGRhdGUgfCB0ciAtZCAiXG4iIHwgdGVlIC1hICRsb2dmaWxlCiAgZWNobyAiIC0t
+PiBjaSBobyBtZXNzbyAkdGVtcG8gc2Vjb25kaSEiIHwgdGVlIC1hICRsb2dmaWxlCmRvbmUK
+
+
+--=-DgnQFQ4zgEplvIMKoKcv--
 
