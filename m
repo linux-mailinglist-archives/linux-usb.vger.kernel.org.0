@@ -2,100 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E76F910B30B
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 17:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB88810B33E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 17:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726983AbfK0QQg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 11:16:36 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:39758 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbfK0QQg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 11:16:36 -0500
-Received: by mail-wm1-f67.google.com with SMTP id s14so1392126wmh.4
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2019 08:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=moELcd/jkr7vQOtvllvWgDrPt6P9qhS3kXSqfGxAJ0I=;
-        b=FTInKfLPMivjRtKNClr+p2YQHkX5U50egPgyrGseSw0WV5Mg+2JHE6Vln4vi6AcXOk
-         6SgIAG/HyxGSKH4rZ2AiDituXb3Ja49PD/i+95umMPZ2kJhyDWVYhcGNNOwmNi8YfNox
-         pCAtGAvWUBVMjvxbMGy/ikM5sjc6Xh39vYd9Mr7vssRhF9jIbbKb/9h5IsNn1+LsizWA
-         HKRkNLKKXKkGaksFOeqzxOYMPWzlF9jz6zNRq63jPpAgx0e7M3KYlfHX5wlFWG/V1v0j
-         BIWx5+l2NcL3CCYyC7BOOHm+6zlxXVS3RggG33AGt+4HZS3yHvVXnRAD6mpb9a4Kb6rD
-         m+6w==
+        id S1727051AbfK0QaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 11:30:02 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48924 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726984AbfK0QaC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 11:30:02 -0500
+Received: by mail-io1-f69.google.com with SMTP id e15so13382535ioh.15
+        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2019 08:30:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=moELcd/jkr7vQOtvllvWgDrPt6P9qhS3kXSqfGxAJ0I=;
-        b=Mu5k6IctryY+t5a/6ccMZeKyylySBjN958Crbo//Thr11ILAyzY2J2OWW7GbjhqiKf
-         jbEcLIu0iHVU0HjJffI7UV6qGzMCN5qE29ym3q92z8srnZ3iH+aZ+BemBnLUrYUCldki
-         XUGbdNI37X2L2iBEBiWgwKiTk8/GLo4zVq33/nfIvHmzFfRUkrU/ESPJ72llzQ0f06FI
-         8tSNIAKQ/1dArMX003MlvJEkzcidZb6dcM2ZKG8lta8gjxTCsRSXAFJCXECKA5tN74N/
-         9WaulZAY4u9/mxgzdLl+dZ79Qhq6ruyUv66B9T4yza2Yw5ImO0HQW3b5MrXwIZBEgnkt
-         tHrQ==
-X-Gm-Message-State: APjAAAWCkQ8SqvOgAocmmfZxdPeHgUaa0pUxGVeiCmWO8xNnT2EQJsv7
-        n4f6skDtzORKD9uKOD3SJUXn8ELt+CcgusQyp7G9Qw==
-X-Google-Smtp-Source: APXvYqwBG57VuX/+VOxHz1AZKhwlXywJLwM+IZt/VfZagKkutCb5FPqqipFqpNBLsVflNuxheKtXKQdhawRMHt5VzeI=
-X-Received: by 2002:a7b:c392:: with SMTP id s18mr4688291wmj.61.1574871394328;
- Wed, 27 Nov 2019 08:16:34 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=/v0Hc4dmadTjmLQ47Pq0iPN4XeBjrXjDm/J4YGW+vXM=;
+        b=Ijoot3fP69WYOcWqZeOc7khATr+NftKSwzJGvZem/sbO/8LtFuJS25fqlo38fP6xNG
+         kvu8/5eiXVMp9jf6RxhAw8KRQKL7k7PvWEzDQ8GrC/9FuYbBgZbtcqrdwYRNwG+ATJsd
+         fjNTkJRG1G+uLfD6YQIarbNeAIIw0fz/oGJWkKaaNUu+vc4FDpYz0glbtgL1hURDfiLO
+         62w7wqp5Oun9t9mtPaydTFtrWtd9delz8+fGBJaWrN39NjTe4/Wx+QQZ7Ebqh3SerBBA
+         a1zKsAYM7uh5d2++gZ2rL8LxMGf/9Hkn/8crKNQkWG2eegZOQry+3DI/R24fxAZ82QaD
+         Ieuw==
+X-Gm-Message-State: APjAAAX+ngOG2GgrBsdUCm5649jsNnE8x09KYshueHIkBmsXhmfIXhF3
+        5JCrFPXYqXjcH9RjRzESVM57IaIQfFUEQVJWTpGFuTVtQWvN
+X-Google-Smtp-Source: APXvYqweiOhb0X7bKUsqOaVzESnajjnOfo+XaUTkk4+XLeHQemnaAqH5FKDJ/G/9YTevZc0kIqEuRJ3DGFhDxDJdKs6N0HCqqrzC
 MIME-Version: 1.0
-References: <20191127153015.58171-1-ardb@kernel.org> <b9f82108-edd8-d701-4a4f-f5d0e918d863@linux.intel.com>
-In-Reply-To: <b9f82108-edd8-d701-4a4f-f5d0e918d863@linux.intel.com>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Wed, 27 Nov 2019 17:16:23 +0100
-Message-ID: <CAKv+Gu8Rgmn9EywOOY6niKwN40v8sNLDZq3eHapB7pUo_-JHtA@mail.gmail.com>
-Subject: Re: [PATCH] xhci: enable XHCI_TRUST_TX_LENGTH quirk for ThunderX2
- builtin hosts
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a92:906:: with SMTP id y6mr7675093ilg.157.1574872201158;
+ Wed, 27 Nov 2019 08:30:01 -0800 (PST)
+Date:   Wed, 27 Nov 2019 08:30:01 -0800
+In-Reply-To: <1574850465.2485.10.camel@suse.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001dec4905985682c9@google.com>
+Subject: Re: KASAN: use-after-free Read in si470x_int_in_callback (2)
+From:   syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org, oneukum@suse.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 27 Nov 2019 at 16:56, Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 27.11.2019 17.30, Ard Biesheuvel wrote:
-> > When using a USB webcam on a ThunderX2 workstation, the kernel log
-> > gets flooded with messages like
-> >
-> >    xhci_hcd 0000:00:0f.0:
-> >    WARN Successful completion on short TX for slot 7 ep 2: needs XHCI_TRUST_TX_LENGTH quirk?
-> >
-> > Enabling the quirk manually makes the issue go away, so let's enable
-> > it unconditionally for this hardware.
-> >
->
-> This issue starts to be common for many vendors, many report successful
-> completions after a initial short transfer in a TD
->
-> Does the patch below help in your case? It worked for a Renesas controller
-> with similar issues. It's a more generic solution.
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 9ebaa8e132a9..d23f7408c81f 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2381,7 +2381,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->          case COMP_SUCCESS:
->                  if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
->                          break;
-> -               if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
-> +               if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
-> +                   ep_ring->last_td_was_short)
->                          trb_comp_code = COMP_SHORT_PACKET;
->                  else
->                          xhci_warn_ratelimited(xhci,
+Hello,
 
-Yes, that works too. If you roll that into a patch
+syzbot has tested the proposed patch but the reproducer still triggered  
+crash:
+INFO: rcu detected stall in dummy_timer
 
-Tested-by: Ard Biesheuvel <ardb@kernel.org>
+radio-si470x 5-1:0.0: non-zero urb status (-71)
+radio-si470x 3-1:0.0: non-zero urb status (-71)
+rcu: INFO: rcu_sched self-detected stall on CPU
+rcu: 	1-....: (8213 ticks this GP) idle=4f6/1/0x4000000000000004  
+softirq=3368/3368 fqs=3
+	(t=10501 jiffies g=2713 q=134)
+NMI backtrace for cpu 1
+CPU: 1 PID: 1853 Comm: syz-executor.2 Not tainted 5.4.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xca/0x13e lib/dump_stack.c:113
+  nmi_cpu_backtrace.cold+0x55/0x96 lib/nmi_backtrace.c:101
+  nmi_trigger_cpumask_backtrace+0x1b0/0x1c7 lib/nmi_backtrace.c:62
+  trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
+  rcu_dump_cpu_stacks+0x169/0x1b3 kernel/rcu/tree_stall.h:254
+  print_cpu_stall kernel/rcu/tree_stall.h:455 [inline]
+  check_cpu_stall kernel/rcu/tree_stall.h:529 [inline]
+  rcu_pending kernel/rcu/tree.c:2795 [inline]
+  rcu_sched_clock_irq.cold+0x4da/0x936 kernel/rcu/tree.c:2244
+  update_process_times+0x25/0x60 kernel/time/timer.c:1726
+  tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:167
+  tick_sched_timer+0x42/0x130 kernel/time/tick-sched.c:1299
+  __run_hrtimer kernel/time/hrtimer.c:1514 [inline]
+  __hrtimer_run_queues+0x303/0xc60 kernel/time/hrtimer.c:1576
+  hrtimer_interrupt+0x2e8/0x730 kernel/time/hrtimer.c:1638
+  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1110 [inline]
+  smp_apic_timer_interrupt+0xf5/0x500 arch/x86/kernel/apic/apic.c:1135
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160  
+[inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x40/0x50  
+kernel/locking/spinlock.c:191
+Code: e8 95 14 b3 fb 48 89 ef e8 6d f3 b3 fb f6 c7 02 75 11 53 9d e8 61 ba  
+d0 fb 65 ff 0d a2 67 8f 7a 5b 5d c3 e8 02 be d0 fb 53 9d <eb> ed 0f 1f 40  
+00 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 fd 65 ff
+RSP: 0018:ffff8881db309b08 EFLAGS: 00000206 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: 0000000000000206 RCX: 0000000000000002
+RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff8881ce7fb84c
+RBP: ffff8881d50f0000 R08: ffff8881ce7fb000 R09: fffffbfff11b23b8
+R10: fffffbfff11b23b7 R11: ffffffff88d91dbf R12: 0000000000000080
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff8881c6617500
+  spin_unlock_irqrestore include/linux/spinlock.h:393 [inline]
+  dummy_timer+0x131b/0x2fa2 drivers/usb/gadget/udc/dummy_hcd.c:1980
+  call_timer_fn+0x179/0x650 kernel/time/timer.c:1404
+  expire_timers kernel/time/timer.c:1449 [inline]
+  __run_timers kernel/time/timer.c:1773 [inline]
+  __run_timers kernel/time/timer.c:1740 [inline]
+  run_timer_softirq+0x5e3/0x1490 kernel/time/timer.c:1786
+  __do_softirq+0x221/0x912 kernel/softirq.c:292
+  invoke_softirq kernel/softirq.c:373 [inline]
+  irq_exit+0x178/0x1a0 kernel/softirq.c:413
+  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
+  smp_apic_timer_interrupt+0x12f/0x500 arch/x86/kernel/apic/apic.c:1137
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:830
+  </IRQ>
+RIP: 0010:arch_local_irq_restore arch/x86/include/asm/irqflags.h:85 [inline]
+RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:160  
+[inline]
+RIP: 0010:_raw_spin_unlock_irqrestore+0x40/0x50  
+kernel/locking/spinlock.c:191
+Code: e8 95 14 b3 fb 48 89 ef e8 6d f3 b3 fb f6 c7 02 75 11 53 9d e8 61 ba  
+d0 fb 65 ff 0d a2 67 8f 7a 5b 5d c3 e8 02 be d0 fb 53 9d <eb> ed 0f 1f 40  
+00 66 2e 0f 1f 84 00 00 00 00 00 55 48 89 fd 65 ff
+RSP: 0018:ffff8881cd477ba8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: 0000000000000246 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffff8881ce7fb84c
+RBP: ffff8881db325b00 R08: ffff8881ce7fb000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff8881db325b80 R14: 0000000000000000 R15: ffff8881db325b00
+  unlock_hrtimer_base kernel/time/hrtimer.c:898 [inline]
+  hrtimer_start_range_ns+0x5bf/0xb00 kernel/time/hrtimer.c:1133
+  hrtimer_start_expires include/linux/hrtimer.h:435 [inline]
+  hrtimer_sleeper_start_expires kernel/time/hrtimer.c:1792 [inline]
+  do_nanosleep+0x1b9/0x650 kernel/time/hrtimer.c:1868
+  hrtimer_nanosleep+0x249/0x4f0 kernel/time/hrtimer.c:1924
+  __do_sys_nanosleep kernel/time/hrtimer.c:1958 [inline]
+  __se_sys_nanosleep kernel/time/hrtimer.c:1945 [inline]
+  __x64_sys_nanosleep+0x19d/0x220 kernel/time/hrtimer.c:1945
+  do_syscall_64+0xb7/0x580 arch/x86/entry/common.c:290
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x457f00
+Code: c0 5b 5d c3 66 0f 1f 44 00 00 8b 04 24 48 83 c4 18 5b 5d c3 66 0f 1f  
+44 00 00 83 3d 51 e8 61 00 00 75 14 b8 23 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 0f 83 24 d3 fb ff c3 48 83 ec 08 e8 ea 46 00 00
+RSP: 002b:00007ffe6aaf7d48 EFLAGS: 00000246 ORIG_RAX: 0000000000000023
+RAX: ffffffffffffffda RBX: 000000000000961f RCX: 0000000000457f00
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00007ffe6aaf7d50
+RBP: 0000000000000004 R08: 0000000000000001 R09: 0000000002432940
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+R13: 00007ffe6aaf7da0 R14: 0000000000008efa R15: 00007ffe6aaf7db0
+radio-si470x 1-1:0.0: non-zero urb status (-71)
+radio-si470x 5-1:0.0: non-zero urb status (-71)
+radio-si470x 3-1:0.0: non-zero urb status (-71)
+radio-si470x 4-1:0.0: non-zero urb status (-71)
+radio-si470x 1-1:0.0: non-zero urb status (-71)
+radio-si470x 2-1:0.0: non-zero urb status (-71)
+radio-si470x 6-1:0.0: non-zero urb status (-71)
+radio-si470x 6-1:0.0: non-zero urb status (-71)
+radio-si470x 2-1:0.0: non-zero urb status (-71)
 
-and please consider cc'ing stable as well.
+
+Tested on:
+
+commit:         22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+git tree:       https://github.com/google/kasan.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=177ca17ae00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1226e536e00000
+
