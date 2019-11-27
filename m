@@ -2,71 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F1710B27C
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 16:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3E210B2D0
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 16:56:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfK0Pec (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 10:34:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48964 "EHLO mail.kernel.org"
+        id S1726593AbfK0P4o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 10:56:44 -0500
+Received: from mga01.intel.com ([192.55.52.88]:63404 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726634AbfK0Pec (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Nov 2019 10:34:32 -0500
-Received: from localhost.localdomain (laubervilliers-657-1-83-120.w92-154.abo.wanadoo.fr [92.154.90.120])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C718120674;
-        Wed, 27 Nov 2019 15:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574868871;
-        bh=FfbdKllQDnkZD4QyuZi0M3fsdqc7yCEQncfHcxcQzik=;
-        h=From:To:Cc:Subject:Date:From;
-        b=F7UYeNp5wF0QL4Spk/psqMHKRX+3VN2RIXRUrQcPXbPVsJJyUG5m9sMPaIeGRAf91
-         jMuhzSIOP6N+/lOySV0W1a0biwZSiQxQC3cJvraCZJKoHzJvHIEAmzyGo3ofVucSB/
-         gyDFMIybnjxsagJMBJuEQmdsT+Ivm3imwlInpz2Y=
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-usb@vger.kernel.org
-Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH] xhci: enable XHCI_TRUST_TX_LENGTH quirk for ThunderX2 builtin hosts
-Date:   Wed, 27 Nov 2019 16:30:15 +0100
-Message-Id: <20191127153015.58171-1-ardb@kernel.org>
-X-Mailer: git-send-email 2.20.1
+        id S1726514AbfK0P4n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Nov 2019 10:56:43 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Nov 2019 07:56:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,250,1571727600"; 
+   d="scan'208";a="292100662"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 27 Nov 2019 07:56:41 -0800
+Subject: Re: [PATCH] xhci: enable XHCI_TRUST_TX_LENGTH quirk for ThunderX2
+ builtin hosts
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-usb@vger.kernel.org
+Cc:     mathias.nyman@intel.com, gregkh@linuxfoundation.org
+References: <20191127153015.58171-1-ardb@kernel.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <b9f82108-edd8-d701-4a4f-f5d0e918d863@linux.intel.com>
+Date:   Wed, 27 Nov 2019 17:58:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191127153015.58171-1-ardb@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When using a USB webcam on a ThunderX2 workstation, the kernel log
-gets flooded with messages like
+On 27.11.2019 17.30, Ard Biesheuvel wrote:
+> When using a USB webcam on a ThunderX2 workstation, the kernel log
+> gets flooded with messages like
+> 
+>    xhci_hcd 0000:00:0f.0:
+>    WARN Successful completion on short TX for slot 7 ep 2: needs XHCI_TRUST_TX_LENGTH quirk?
+> 
+> Enabling the quirk manually makes the issue go away, so let's enable
+> it unconditionally for this hardware.
+> 
 
-  xhci_hcd 0000:00:0f.0:
-  WARN Successful completion on short TX for slot 7 ep 2: needs XHCI_TRUST_TX_LENGTH quirk?
+This issue starts to be common for many vendors, many report successful
+completions after a initial short transfer in a TD
 
-Enabling the quirk manually makes the issue go away, so let's enable
-it unconditionally for this hardware.
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- drivers/usb/host/xhci-pci.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 1e0236e90687..331b5900dd72 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -256,7 +256,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if ((pdev->vendor == PCI_VENDOR_ID_BROADCOM ||
- 	     pdev->vendor == PCI_VENDOR_ID_CAVIUM) &&
- 	     pdev->device == 0x9026)
--		xhci->quirks |= XHCI_RESET_PLL_ON_DISCONNECT;
-+		xhci->quirks |= XHCI_RESET_PLL_ON_DISCONNECT |
-+				XHCI_TRUST_TX_LENGTH;
- 
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
--- 
-2.20.1
-
+Does the patch below help in your case? It worked for a Renesas controller
+with similar issues. It's a more generic solution.
+  
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 9ebaa8e132a9..d23f7408c81f 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2381,7 +2381,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+         case COMP_SUCCESS:
+                 if (EVENT_TRB_LEN(le32_to_cpu(event->transfer_len)) == 0)
+                         break;
+-               if (xhci->quirks & XHCI_TRUST_TX_LENGTH)
++               if (xhci->quirks & XHCI_TRUST_TX_LENGTH ||
++                   ep_ring->last_td_was_short)
+                         trb_comp_code = COMP_SHORT_PACKET;
+                 else
+                         xhci_warn_ratelimited(xhci,
