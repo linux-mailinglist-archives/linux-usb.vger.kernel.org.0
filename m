@@ -2,238 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEA0010AF10
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 12:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A0410AFEB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 14:09:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726822AbfK0Lyg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 06:54:36 -0500
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:41585 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726618AbfK0Lyf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 06:54:35 -0500
-Received: by mail-oi1-f193.google.com with SMTP id e9so19834073oif.8
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2019 03:54:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=AFS2VN7Af+/qYqe1SYOcJvD3i0CRNktr7ur96fjeC7k=;
-        b=C9iq9OEjW2VEo2cSK5doe6syDFkNq4yQcjUQpM5E5MdO8b8HJA7h9M6PE7rDX5lWtA
-         3SQjEpcdVtFUyjsWasUQfbKSiYCLKdCy/9VFDrkEDlRAgC+5jVf3cKe07A4MgqdJ0z1i
-         S9L7meOOmyLNlU/9r0zGTRVZNexI3dBDuNv8qwTWVBHHlEEl5oxPWnJMdbtTMUv1Y7lL
-         zevyzzgLuFeqf7yERJd8KnCWMbwI/cBFycEreBjtzSrcniI+iNVmjAy9P9Q/rK7stSCk
-         ZE3Ksl1GyJoQ2qAEfP2a23qRDbD66syeUJR8DHdydA4EtSHZ5VIREORLdVghVMiyN8EA
-         BnZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=AFS2VN7Af+/qYqe1SYOcJvD3i0CRNktr7ur96fjeC7k=;
-        b=Y4D8ka0HRzZpfAjJ2NxOFb2QY7qlvkoXpmcfk8JW01/Zxn3Y0Djy72JZ+GxH0TNUwT
-         nz+4HXngEZOEY2pOgoQpYV74gdejp+xsp2W/CQCu8d4xpnTyoW7tZR/XopzZBZYU63t0
-         sGWA5sMvBN6CDqdWewFeu9WtrXq08EtLAgC8rxbizNf6bo52WIbSr976EZk3aLCLxco+
-         NsQqdsccmtXhhCWdYq+tGT95jWY/qRHjKDsWM6qt1MLMRi0gZowF56SCloSTyGCscgJo
-         4wy5rLAWT/T2bDJeOKhiYiuHg+jkMmgAIBgvNe/e8xhFf8zAowFaKpsBblBhBzkcK/6p
-         X+1g==
-X-Gm-Message-State: APjAAAU7IFZtQvhG7Rd6g51NlnRhMko02yztApi7pXfWHof3HZL+Q1yS
-        WK2lGChGapQhQFqhdg1EeP/rE418mHlq/JkR3clJObgkmubr
-X-Google-Smtp-Source: APXvYqzfXxbyO07qn7OUDtBrOWjrzFUYGNkrIJXuzAF5xEoIsUunV0R5SyF46uKlmAe5ca01FJgxa5NA9PEr2SPRNoE=
-X-Received: by 2002:a05:6808:906:: with SMTP id w6mr3536396oih.122.1574855672732;
- Wed, 27 Nov 2019 03:54:32 -0800 (PST)
+        id S1726822AbfK0NJS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 08:09:18 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:60242 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726546AbfK0NJR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 08:09:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574860155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M6+DDtUgzApiQu4YHE35MwvUiV8KTCoPHcuxsyEvH7Q=;
+        b=jLjkmwL7tWJjaR54VnbOkWCyZCZRj/8uZubIlvfOg3yN+xZJKATBFIe6OkfjMs5/ru9VMK
+        IlrsL2EfqcbyIRvQIg7fWdVOzbJsspHYW/Nyyq5VeSZbJX/5VszLRB7GBH5Z6qIvJbkxe2
+        OHReTMHq9qcCOa6pa4RXia7wZlWVM2c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-7-ijxwCcqoNMurXxKPrFl-Jw-1; Wed, 27 Nov 2019 08:09:13 -0500
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB275DB6B;
+        Wed, 27 Nov 2019 13:09:10 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AB1BB608B9;
+        Wed, 27 Nov 2019 13:09:00 +0000 (UTC)
+Date:   Wed, 27 Nov 2019 21:08:54 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191127130854.GA12140@ming.t460p>
+References: <20191125102928.GA20489@ming.t460p>
+ <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
+ <20191125151535.GA8044@ming.t460p>
+ <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
+ <20191126023253.GA24501@ming.t460p>
+ <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+ <20191126091533.GB32135@ming.t460p>
+ <e852331e72532dbfdc7981d958b1cd05ded41317.camel@unipv.it>
+ <20191127020533.GA7190@ming.t460p>
+ <3af3666920e7d46f8f0c6d88612f143ffabc743c.camel@unipv.it>
 MIME-Version: 1.0
-References: <CAHG43MvgR1E18A-2znZsL2scfACQvy-9FrNcd+ZPq1ZzKcntJw@mail.gmail.com>
-In-Reply-To: <CAHG43MvgR1E18A-2znZsL2scfACQvy-9FrNcd+ZPq1ZzKcntJw@mail.gmail.com>
-From:   Pacho Ramos <pachoramos@gmail.com>
-Date:   Wed, 27 Nov 2019 12:54:21 +0100
-Message-ID: <CAHG43MtjJkdbtek5L4RUK2p5+hRftuQ=ShqLFfWJdkPthhFtiA@mail.gmail.com>
-Subject: Re: ID 174c:55aa ASMedia Technology issues with UAS driver
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <3af3666920e7d46f8f0c6d88612f143ffabc743c.camel@unipv.it>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: ijxwCcqoNMurXxKPrFl-Jw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As I read in drivers/usb/storage/uas-detect.h it seems that these
-problems can hit some 174c:55aa devices and not others as it seems
-they are difficult to detect
+On Wed, Nov 27, 2019 at 10:39:40AM +0100, Andrea Vai wrote:
+> Il giorno mer, 27/11/2019 alle 10.05 +0800, Ming Lei ha scritto:
+> >=20
+> >=20
+> > It can be workaround via the following change:
+> >=20
+> > /lib/modules/5.4.0+/build/include/generated/autoconf.h:
+> >=20
+> > //#define CONFIG_CC_HAS_ASM_INLINE 1
+>=20
+> Thanks, it worked, trace attached. Produced by: start the trace script
+> (with the pendrive already plugged), wait some seconds, run the test
+> (1 trial, 1 GB), wait for the test to finish, stop the trace.
+>=20
+> The copy took 2659 seconds, roughly as already seen before.
 
-According to lsusb -v output, my MaxPower is 0mA... that would point
-to a ASM1153 - with working uas support... but it's not really working
-:/
+Thanks for collecting the log.
 
-I have tried on some different systems, and it seems it fails on
-laptops (two Dell with Gentoo and kernel 5.3.11 and  5.2.8 and one
-Asus with Windows10 (!)). While it seems to work fine with a
-non-laptop systems like an Optiplex 7050 (with Gentoo and kernel
-5.3.11).
+From the log, some of write IOs are out-of-order, such as, the 1st one
+is 378880.
 
-I then tried to see if it was working on another non-laptop system (a
-Precision 7920 running Ubuntu 18.10 with their 5.0.0-36 kernel)... but
-it fails there too with errors like:
-[ 7027.520636] scsi 11:0:0:0: Direct-Access     USB      3.0
-   0    PQ: 0 ANSI: 6
-[ 7027.521160] sd 11:0:0:0: Attached scsi generic sg7 type 0
-[ 7027.521599] sd 11:0:0:0: [sdg] 976773168 512-byte logical blocks:
-(500 GB/466 GiB)
-[ 7027.521708] sd 11:0:0:0: [sdg] Write Protect is off
-[ 7027.521710] sd 11:0:0:0: [sdg] Mode Sense: 43 00 00 00
-[ 7027.521872] sd 11:0:0:0: [sdg] Write cache: enabled, read cache:
-enabled, doesn't support DPO or FUA
-[ 7027.522069] sd 11:0:0:0: [sdg] Optimal transfer size 33553920 bytes
-[ 7027.544118]  sdg: sdg1
-[ 7027.545533] sd 11:0:0:0: [sdg] Attached SCSI disk
-[ 7124.329288] sd 11:0:0:0: [sdg] tag#17 uas_eh_abort_handler 0
-uas-tag 1 inflight: CMD IN
-[ 7124.329292] sd 11:0:0:0: [sdg] tag#17 CDB: Read(10) 28 00 39 7c 24
-c0 00 01 00 00
-[ 7124.332005] sd 11:0:0:0: [sdg] tag#16 uas_eh_abort_handler 0
-uas-tag 2 inflight: CMD IN
-[ 7124.332006] sd 11:0:0:0: [sdg] tag#16 CDB: Read(10) 28 00 39 7c 23
-c0 00 01 00 00
-[ 7124.389294] scsi host11: uas_eh_device_reset_handler start
-[ 7124.517883] usb 2-6: reset SuperSpeed Gen 1 USB device number 6
-using xhci_hcd
-[ 7124.541470] scsi host11: uas_eh_device_reset_handler success
-[ 7157.097289] sd 11:0:0:0: [sdg] tag#9 uas_eh_abort_handler 0 uas-tag
-1 inflight: CMD IN
-[ 7157.097294] sd 11:0:0:0: [sdg] tag#9 CDB: Read(10) 28 00 39 7e 86
-c0 00 01 00 00
-[ 7157.097537] sd 11:0:0:0: [sdg] tag#8 uas_eh_abort_handler 0 uas-tag
-2 inflight: CMD IN
-[ 7157.097538] sd 11:0:0:0: [sdg] tag#8 CDB: Read(10) 28 00 39 7e 85
-c0 00 01 00 00
-[ 7157.173290] scsi host11: uas_eh_device_reset_handler start
-[ 7157.301822] usb 2-6: reset SuperSpeed Gen 1 USB device number 6
-using xhci_hcd
-[ 7157.325396] scsi host11: uas_eh_device_reset_handler success
-[ 7191.913297] sd 11:0:0:0: [sdg] tag#13 uas_eh_abort_handler 0
-uas-tag 1 inflight: CMD IN
-[ 7191.913301] sd 11:0:0:0: [sdg] tag#13 CDB: Read(10) 28 00 39 81 ba
-c0 00 01 00 00
-[ 7191.915558] sd 11:0:0:0: [sdg] tag#12 uas_eh_abort_handler 0
-uas-tag 2 inflight: CMD IN
-[ 7191.915560] sd 11:0:0:0: [sdg] tag#12 CDB: Read(10) 28 00 39 81 b9
-c0 00 01 00 00
-[ 7191.981287] scsi host11: uas_eh_device_reset_handler start
-[ 7192.109849] usb 2-6: reset SuperSpeed Gen 1 USB device number 6
-using xhci_hcd
-[ 7192.133493] scsi host11: uas_eh_device_reset_handler success
+16.41240 2   266     266     kworker/2:1H    block_rq_issue   b'W' 370656 2=
+40
+16.41961 3   485     485     kworker/3:1H    block_rq_issue   b'W' 378880 2=
+40
+16.73729 2   266     266     kworker/2:1H    block_rq_issue   b'W' 370896 2=
+40
+17.71161 2   266     266     kworker/2:1H    block_rq_issue   b'W' 379120 2=
+40
+18.02344 2   266     266     kworker/2:1H    block_rq_issue   b'W' 371136 2=
+40
+18.94314 3   485     485     kworker/3:1H    block_rq_issue   b'W' 379360 2=
+40
+19.25624 2   266     266     kworker/2:1H    block_rq_issue   b'W' 371376 2=
+40
 
-I am a bit lost then.. maybe it's an issue with the power of the USB
-ports? :/ For example in the Ubuntu system, I have just tried to force
-it to use usb-storage and it also fails... but going back to the
-Optiplex system... it still works fine, like being a completely normal
-device. But I don't see what could show my the difference between the
-working system and the rest. In any case, I also post here how dmesg
-output looks in the system that works fine when I connect the device
-to see if maybe you see a difference
-[1016267.790343] usb 2-1: new SuperSpeed Gen 1 USB device number 5
-using xhci_hcd
-[1016267.802969] usb 2-1: New USB device found, idVendor=3D174c,
-idProduct=3D55aa, bcdDevice=3D 1.00
-[1016267.802970] usb 2-1: New USB device strings: Mfr=3D2, Product=3D3,
-SerialNumber=3D1
-[1016267.802971] usb 2-1: Product: 3.0
-[1016267.802971] usb 2-1: Manufacturer: USB
-[1016267.802972] usb 2-1: SerialNumber: 000000000001
-[1016267.808691] scsi host4: uas
-[1016267.809680] scsi 4:0:0:0: Direct-Access     USB      3.0
-    0    PQ: 0 ANSI: 6
-[1016267.810080] sd 4:0:0:0: Attached scsi generic sg2 type 0
-[1016267.810744] sd 4:0:0:0: [sdb] 976773168 512-byte logical blocks:
-(500 GB/466 GiB)
-[1016267.810871] sd 4:0:0:0: [sdb] Write Protect is off
-[1016267.810872] sd 4:0:0:0: [sdb] Mode Sense: 43 00 00 00
-[1016267.811022] sd 4:0:0:0: [sdb] Write cache: enabled, read cache:
-enabled, doesn't support DPO or FUA
-[1016267.811199] sd 4:0:0:0: [sdb] Optimal transfer size 33553920 bytes
-[1016267.833485]  sdb: sdb1
-[1016267.835000] sd 4:0:0:0: [sdb] Attached SCSI disk
+IO latency is increased a lot since the 1st out-of-order request(usb
+storage HBA is single queue depth, one request can be issued only if=20
+the previous issued request is completed).
 
-Thanks a lot
+The reason is that there are two kind of tasks which inserts rq to device.
+One is the 'cp' process, the other is kworker/u8:*.  The out-of-order
+happens during the two task's interleaving.
 
-El dom., 24 nov. 2019 a las 20:49, Pacho Ramos
-(<pachoramos@gmail.com>) escribi=C3=B3:
->
-> Hello,
->
-> I was reviewing a problem I was hitting with one of my boxes to
-> connect external drives. The hard disk was working fine when it was
-> under the original laptop that it belonged to and also works fine if I
-> move it to a different usb box.
->
-> I think it's an issue with this box and it seems a common issue as
-> reported in other places:
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1742318
-> https://unix.stackexchange.com/questions/441668/debian-usb3-hdd-uas-i-o-e=
-rrors
-> https://www.raspberrypi.org/forums/viewtopic.php?t=3D245931
-> https://www.raspberrypi.org/forums/viewtopic.php?t=3D237829
-> https://forum.manjaro.org/t/usb-disk-not-working-in-a-usb3-0-port/50736
->
-> In summary, the disk works fine at the start but, after leaving it
-> idle some minutes, it reports and I/O error and gets remounted because
-> of that.
->
-> Errors are like:
-> [243037.109604] Buffer I/O error on dev sdc1, logical block 15262021,
-> async page read
-> [243038.045009] Buffer I/O error on dev sdc1, logical block 15262021,
-> async page read
-> [243038.750870] Buffer I/O error on dev sdc1, logical block 15262021,
-> async page read
->
-> or also:
-> [243416.635232] Buffer I/O error on dev sdd1, logical block 15262021,
-> async page read
->
-> [243172.126230] scsi 2:0:0:0: Direct-Access     USB      3.0
->    0    PQ: 0 ANSI: 6
-> [243172.126564] sd 2:0:0:0: Attached scsi generic sg2 type 0
-> [243172.127195] sd 2:0:0:0: [sdc] 976773168 512-byte logical blocks:
-> (500 GB/466 GiB)
-> [243172.127332] sd 2:0:0:0: [sdc] Write Protect is off
-> [243172.127333] sd 2:0:0:0: [sdc] Mode Sense: 43 00 00 00
-> [243172.127494] sd 2:0:0:0: [sdc] Write cache: enabled, read cache:
-> enabled, doesn't support DPO or FUA
-> [243172.127732] sd 2:0:0:0: [sdc] Optimal transfer size 33553920 bytes
-> [243172.166800]  sdc: sdc1
-> [243172.185089] sd 2:0:0:0: [sdc] Attached SCSI disk
-> [243416.635232] Buffer I/O error on dev sdd1, logical block 15262021,
-> async page read
-> [243616.891249] usb 2-3: USB disconnect, device number 6
-> [243616.893787] sd 2:0:0:0: [sdc] Synchronizing SCSI cache
-> [243617.013118] sd 2:0:0:0: [sdc] Synchronize Cache(10) failed:
-> Result: hostbyte=3DDID_ERROR driverbyte=3DDRIVER_OK
-> [243617.268239] usb 2-3: new SuperSpeed Gen 1 USB device number 7 using x=
-hci_hcd
-> [243617.281559] usb 2-3: New USB device found, idVendor=3D174c,
-> idProduct=3D55aa, bcdDevice=3D 1.00
-> [243617.281560] usb 2-3: New USB device strings: Mfr=3D2, Product=3D3,
-> SerialNumber=3D1
-> [243617.281561] usb 2-3: Product: 3.0
-> [243617.281562] usb 2-3: Manufacturer: USB
-> [243617.281562] usb 2-3: SerialNumber: 000000000001
-> [243617.285598] scsi host2: uas
-> [243617.285946] scsi 2:0:0:0: Direct-Access     USB      3.0
->    0    PQ: 0 ANSI: 6
-> [243617.286547] sd 2:0:0:0: Attached scsi generic sg2 type 0
-> [243617.287053] sd 2:0:0:0: [sdc] 976773168 512-byte logical blocks:
-> (500 GB/466 GiB)
-> [243617.287171] sd 2:0:0:0: [sdc] Write Protect is off
-> [243617.287172] sd 2:0:0:0: [sdc] Mode Sense: 43 00 00 00
-> [243617.287332] sd 2:0:0:0: [sdc] Write cache: enabled, read cache:
-> enabled, doesn't support DPO or FUA
-> [243617.287522] sd 2:0:0:0: [sdc] Optimal transfer size 33553920 bytes
-> [243619.819009]  sdc: sdc1
-> [243619.835850] sd 2:0:0:0: [sdc] Attached SCSI disk
->
-> I am running kernel 5.3.11 on Gentoo and I attach the lsusb -v output
-> for this device. What could I do to contribute to get this problem
-> solved? Any concrete test? I would like to get this solved as, sadly,
-> it seems that many hard disk boxes include this chipset and cause this
-> issues.
->
-> Thanks a lot
+Under such situation, I believe that the old legacy IO path may not
+guarantee the order too. In blk_queue_bio(), after get_request()
+allocates one request, the queue lock is released.  And request is
+actually inserted & issued from blk_flush_plug_list() under the
+branch of 'if (plug)'. If requests are from two tasks, then request
+is inserted/issued from two plug list, and no order can be guaranteed.
+
+In my test, except for several requests from the beginning, all other
+requests are inserted via the kworker thread(guess it is writeback wq),
+that is why I can't observe the issue in my test.
+
+As Schmid suggested, you may run the same test on old kernel with
+legacy io path, and see if the performance is still good.
+
+Also, could you share the following info about your machine? So that
+I can build my VM guest in this setting for reproducing your situation
+(requests are inserted from two types of threads).
+
+- lscpu
+- free -h
+- lsblk -d $USB_DISK
+- exact commands for mount the disk, and running the copy operation
+
+Thanks,
+Ming
+
