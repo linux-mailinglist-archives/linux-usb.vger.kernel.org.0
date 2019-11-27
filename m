@@ -2,53 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3DC010B6CA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 20:30:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFCC10BC4E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 22:20:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727588AbfK0TaP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 14:30:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727584AbfK0TaP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Nov 2019 14:30:15 -0500
-Subject: Re: [GIT PULL] USB patches for 5.5-rc1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574883014;
-        bh=HFzDpYBqwM1W3YW9Bs9iAzDMOU5jliYDarxxZcTu4JE=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Ezt6vrLAVcCgkUVSwi3vdwD4bhBOma01h9ZZj2fNqzHh7FIdLni25U2xfIpfjNqK+
-         AXufTKRZRhwQHDCx3HxtNY5axzp1ZYgzsQpP7LK1Q4UStV3OeaB8QfpjdaR0Tqp2rh
-         tz2OoHCr0/B+luXXRTn5M+2ytkX74/zL3Nr72izI=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20191127160338.GA3032225@kroah.com>
-References: <20191127160338.GA3032225@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20191127160338.GA3032225@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc1
-X-PR-Tracked-Commit-Id: 91a9f2d3f9762e59cca251d2c6cef8cda1a4e62b
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 59274c7164807d27b24e6c068dfe734f7bea4623
-Message-Id: <157488301460.32229.14515015033470207938.pr-tracker-bot@kernel.org>
-Date:   Wed, 27 Nov 2019 19:30:14 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1727698AbfK0VTu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 16:19:50 -0500
+Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:39526 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727303AbfK0VTs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 16:19:48 -0500
+X-Greylist: delayed 545 seconds by postgrey-1.27 at vger.kernel.org; Wed, 27 Nov 2019 16:19:48 EST
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 59E7E423C5;
+        Wed, 27 Nov 2019 21:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1574889043; bh=8GexeTKdrJVGUozw9tp34nM+7HL1tTaIP6RQMWGkyWM=;
+        h=Date:From:Subject:To:Cc:From;
+        b=g8mGxjIETzgoHoPpeATQD+H8V5GfnrxjLW+dpee3/bb3mAFrVshyLQhyLcgZejALX
+         rCftaVNTcpEuCu9LiUPIxuDArs/ALsGJNhzi+IyFsERRvASrw6aOuiP/3SQjEQabVY
+         s0Ky+FlXCjQcYEeczyhwAbcUfx9udDkluNaO5v2xQsPMBrmtENoWc72niQ/v5y87WS
+         qZv+g3vYCSQZMSBuldocwgMTKB+dollEmt2NiNmhDFq7Xt2844TjwDi71SWglCmKVS
+         7B18hayHZ7Bx2FxFakgeaoRSLN58alwTSTkG9nCotno+N1BPquY0FOF4k2pSiqEJ7L
+         xE/LyTgeHYQ8g==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id AEFBEA006D;
+        Wed, 27 Nov 2019 21:10:41 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 27 Nov 2019 13:10:41 -0800
+Date:   Wed, 27 Nov 2019 13:10:41 -0800
+Message-Id: <cover.1574888929.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH 0/2] usb: dwc3: gadget: Fix END_TRANSFER handling
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Wed, 27 Nov 2019 17:03:38 +0100:
+This patch series adds a couple of fixes related to handling
+END_TRANSFER command.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc1
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/59274c7164807d27b24e6c068dfe734f7bea4623
 
-Thank you!
+Thinh Nguyen (2):
+  usb: dwc3: gadget: Clear started flag for non-IOC
+  usb: dwc3: ep0: Clear started flag on completion
+
+ drivers/usb/dwc3/ep0.c    | 8 ++++++++
+ drivers/usb/dwc3/gadget.c | 3 +++
+ 2 files changed, 11 insertions(+)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.11.0
+
