@@ -2,104 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F5910AAD7
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 07:55:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F12B10AAEA
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 08:10:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726292AbfK0GzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 01:55:23 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:36229 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726281AbfK0GzX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 01:55:23 -0500
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id F1887948;
-        Wed, 27 Nov 2019 01:55:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 27 Nov 2019 01:55:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=Fnh93xvY+sEJGHFFgEbHiCaLzHu
-        JgzCqGygPt0+g9mM=; b=FnSFx+OQMsKAkyuj/1hUwacpAKWmzJsasgMXSjA1j7s
-        Z5W8BXfOmk1/sharZBsrUIG/kaywz2KfpQm7oNv0dorz/sWrgb7zCmaIMpmwkxP1
-        EBa+DxfxDaYlRdq2U8nxxiS2h5zmw5EYd9yvCwze5J6QWPEEku3WgPTZLZqXXTim
-        qHTSmDFTcUU1YTAM2ZokPNV2lX2t9oljkoa9N4N885NgeK3LQfobzh02sA0jH5b4
-        CdLoVCmAa8mxlRWCGeoLaEMH/IdP7tjAK+VwGKO+hMnQT+i9N2r89gQpTGk3AE9I
-        80ICzP/qUc0lP7UYv5ZEmXBCxuCWQD6DqFE2Ka+1Dgg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Fnh93x
-        vY+sEJGHFFgEbHiCaLzHuJgzCqGygPt0+g9mM=; b=UBSnBLKPHWBXWfuks7VVAb
-        vzNHqyArUbW1kP6FjEVQ37kY1tn3GWsmk9D1XMwDI1k9u/7yBXWFXa4rBys+gsHg
-        7bRc+GIulKCE+atwe5xArTp5iJcmF2eMsxjkY5hr/kcqddDX1UkKvM51bgEyaM4G
-        pLBLJEEL7oN5E7/y7Uwxe7NXFTL+nIMwwSPsKfcvCSfd26iZYRynZ68azi8hKYaY
-        vctYjTbF9hspifkcPN/z/mCoWmX0dWwuXKsSvL6EfApnWK0pdR5QRc8FcYsVwlBD
-        yDT/mI6CEcoFiEsbnxPwNrIwhuyLa+pqRnOaAgqL2qTPf/OTwUKXTJdq0NxXj1Fg
-        ==
-X-ME-Sender: <xms:2R3eXYy107v5IV81lmjoPLB-fNyDpP3VXrBxDud3nfp4M56oe6xUUA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeigedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
-    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
-    ucevlhhushhtvghrufhiiigvpedu
-X-ME-Proxy: <xmx:2R3eXdE4bOa6yvixgo7DaCzppSrkU_QpScbr2W7znHTNbp8ktqF9NA>
-    <xmx:2R3eXY43FJwwuiAfOq67q878OLYabvkc5s2s2f2aChVD4MMQ4-8B0g>
-    <xmx:2R3eXcVn9mqDP0spojIO9Q0FC1TAJ8OMDBnPtfNVo_9tfMOVnc7FDg>
-    <xmx:2R3eXS3T7jtAzweItfe5_4NG7bil58hD7uAxCXKgFWor74XCR-6VwA>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id F360C306005C;
-        Wed, 27 Nov 2019 01:55:20 -0500 (EST)
-Date:   Wed, 27 Nov 2019 07:55:19 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Pete Zaitcev <zaitcev@redhat.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] usb: mon: Fix a deadlock in usbmon between mmap and read
-Message-ID: <20191127065519.GA1724976@kroah.com>
-References: <20191126004407.4b72ef7f@suzdal.zaitcev.lan>
- <Pine.LNX.4.44L0.1911261018110.1508-100000@iolanthe.rowland.org>
- <20191126223509.69fb61ed@suzdal.zaitcev.lan>
+        id S1726136AbfK0HKn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 02:10:43 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:49597 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbfK0HKn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 02:10:43 -0500
+Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Wed, 27 Nov
+ 2019 15:11:07 +0800
+Subject: Re: [PATCH 0/6] arm64: meson: Add support for USB on Amlogic A1
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com>
+ <CAFBinCDA=ZekRC0hgQnPLRZM3LMnqBZ6TWCvXhyixAmgDyTAsw@mail.gmail.com>
+ <5c0029ec-7377-4c1a-0062-3b59a87f8dea@amlogic.com>
+ <CAFBinCBypbB4W42GOAc8ejAYHVQLTDRdat_z_L92TZvC2p+5rQ@mail.gmail.com>
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+Message-ID: <0e8a96b4-9815-2d81-3dc9-3b51b878492e@amlogic.com>
+Date:   Wed, 27 Nov 2019 15:11:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191126223509.69fb61ed@suzdal.zaitcev.lan>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <CAFBinCBypbB4W42GOAc8ejAYHVQLTDRdat_z_L92TZvC2p+5rQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.38.198]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Nov 26, 2019 at 10:35:09PM -0600, Pete Zaitcev wrote:
-> On Tue, 26 Nov 2019 10:20:14 -0500 (EST)
-> Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> > > Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
-> > > Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com  
-> > 
-> > Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> Thanks.
-> 
-> > Fixes: 46eb14a6e158 ("USB: fix usbmon BUG trigger")
-> 
-> Indeed... Either I didn't think that one through, or the copy_to_user
-> used not to take the mmap_sem.
-> 
-> > CC: <stable@vger.kernel.org>
-> 
-> Do we really need this? The problem was in the code for more than 10 years.
-> It's not like anyone is exploiting systems because of it.
 
-Well now we all have a simple reproducer for it, so yes, it should be
-backported.  I'm doing that for all of the syzbot stuff.
 
-> If we do need it, I should cc: the submission to the same place too, right?
+On 2019/11/26 6:02, Martin Blumenstingl wrote:
+> Hi Hanjie,
+> 
+> On Mon, Nov 25, 2019 at 8:53 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
+>>
+>>
+>>
+>> On 2019/11/22 15:52, Martin Blumenstingl wrote:
+>>> Hello Hanjie,
+>>>
+>>> On Fri, Nov 22, 2019 at 7:55 AM Hanjie Lin <hanjie.lin@amlogic.com> wrote:
+>>> [...]
+>>>>   dt-bindings: phy: Add Amlogic G12A USB2 PHY Bindings
+>>>>   dt-bindings: usb: dwc3: Add the Amlogic A1 Family DWC3 Glue Bindings
+>>>>   phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+>>> drivers/phy/amlogic/phy-meson-g12a-usb2.c seems very similar to the A1
+>>> USB2 PHY you are introducing here.
+>>>
+>>>>   usb: dwc3: Add Amlogic A1 DWC3 glue
+>>> drivers/usb/dwc3/dwc3-meson-g12a.c is also very similar to the dwc3 glue.
+>>>
+>>> I have two questions:
+>>> - how is the PHY and the dwc3 glue different from G12A (or SM1)?
+>>> - why do we need a separate set of new drivers (instead of updating
+>>> the existing drivers)?
+>>>
+>>> We try to use one driver for the same IP block, even if there are
+>>> several revisions with small differences (for example the SAR ADC
+>>> driver supports all SoC generations from Meson8 to G12A/G12B/SM1,
+>>> because 80-90% of the code is shared across all revisions).
+>>>
+>>>
+>>> Martin
+>>>
+>>> .
+>>>
+>>
+>> Hi Martin,
+>>
+>> thanks for the comment.
+>>
+>> 1, G12A have usb2-phy0/usb2-phy1/usb3-phy0 three phys and an interrupt to support host/peripheral/otg modes.
+>>    A1 has one usb2-phy0 phy and only support host mode.
+> dwc3-meson-g12a treats PHYs as optional
+> so if you only pass "usb2-phy0" and skip usb2-phy1/usb3-phy0 then it
+> will still work fine
+> (I didn't check whether the binding also reflects this)
+> 
+>> 2, G12A glue/phy drivers are for G12A SoCs, there are some diffrences to A1.
+>>    G12A glue driver have dr_mode and interrupts two attributes to support otg mode while A1 hasn't this requirement.
+> dwc3-meson-g12a ignores the interrupt for HOST-only mode
+> (I didn't check whether the IRQ is optional in the dt-binding)
+> 
+>>    G12A glue driver has a hard coding vbus regulator code to support otg mode while A1 hasn't this requirement.
+> my understanding is that whether a board has a VBUS regulator depends
+> on the board design. it has nothing to do with the SoC itself
+> 
+>>    G12A glue driver has a hard coding support phys while A1 only supports host mode.
+>>         enum {
+>>                 USB2_HOST_PHY = 0,
+>>                 USB2_OTG_PHY,
+>>                 USB3_HOST_PHY,
+>>                 PHY_COUNT,
+>>                 };
+> this goes together with comment #1 - you can skip USB2_OTG_PHY and
+> USB3_HOST_PHY and the driver should still work fine
+> 
+>>    G12A glue driver only supports one clock while A1 needs four clocks.
+> indeed, the dwc3-meson-g12a needs to be updated to support this
+> I don't think that I have used it myself yet but there's the
+> clk_bulk_data framework
+> it seems to fit this use-case pretty well: define an arbitrary number
+> of clocks for G12A/B an another set of clocks for A1 - then use the
+> clk_bulk_data framework to enable/disable them all at once
+> 
+>>    G12A and A1 phy drivers have different register configurations since hardware differences.
+> other drivers have similar requirements: (mostly) identical register
+> layout but different values per SoC
+> here are two examples (I'm not sure if they are good examples though):
+> Lantiq/Intel SoC [0] and Allwinner SoCs [1]
+> 
+> I compared your driver with phy-meson-g12a-usb2 and only found four differences:
+> 1) PHY_CTRL_R18_MPLL_DCO_CLK_SEL is set for A1
+> 2) PHY_CTRL_R13_UPDATE_PMA_SIGNALS is not set for A1
+> 3) PHY_CTRL_R21 is updated twice for A1 (once for earlier gen SoCs)
+> 4) A1 doesn't reference the "xtal" clock
+> 
+> Difference 4) seems to be a general problem because there seems to be
+> a PLL inside the PHY registers and that PLL must be fed by some input
+> clock
+> So I believe that there is some clock input (which is currently
+> missing from your A1 USB2 PHY driver)
+> 
+>> 3, We have estimated these differences and we thought it's more clear and readable to have a dedicated glue/phy
+>>    driver for A1 SoCs, so also dedicated dt-bindings.
+> I think we should separate the driver and dt-bindings
+> 
+> Based on what I have seen so far my preference for the PHY is:
+> - use the existing dt-binding, because it seems to be the same IP
+> block with different register configuration
+> - use the existing driver because there are only three different
+> register values (to me it feels like a dedicated driver for these
+> means more overhead for little benefit)
+> 
+> for the glue I think:
+> - extend the existing dt-bindings and make some of the PHYs and the
+> interrupt line optional. making the PHYs optional will be needed when
+> adding GXL/GXM/AXG support anyways
+> - use the existing driver and make the clock inputs depend on the SoC
+> - everything else should already work as is
+> 
+> please let me know if I missed something:
+> comparing/reviewing the new and existing drivers is harder than just
+> copying the existing one and modifying that copy
+> (this is one of the reasons why I think that duplicating code makes
+> the drivers harder to maintain)
+> 
+> I also thought about the negative consequences of extending the
+> existing driver(s).
+> modifying the existing code could break the driver for existing boards.
+> however, I think that is not a problem because BayLibre's Kernel CI
+> labs have good coverage for G12A, G12B and SM1.
+> so if you add some A1 boards there (or host your own lab with A1
+> boards) any breakage will be found early (the Kernel CI bot even does
+> git bisect and sends emails)
+> 
+> 
+> Martin
+> 
+> 
+> [0] https://github.com/torvalds/linux/blob/d2912cb15bdda8ba4a5dd73396ad62641af2f520/drivers/phy/lantiq/phy-lantiq-rcu-usb2.c#L47
+> [1] https://github.com/torvalds/linux/blob/c942fddf8793b2013be8c901b47d0a8dc02bf99f/drivers/phy/allwinner/phy-sun4i-usb.c#L862
+> 
+> .
+> 
 
-Nope, the tag is just fine, that's all that is needed.  I'll add the
-above to the patch when applying it to my trees.
+Hi Martin:
 
-thanks,
+Okay.
+We will try to move A1 usb phy/ctrl driver into G12A driver and send a V2 patch later.
 
-greg k-h
+Thanks.
