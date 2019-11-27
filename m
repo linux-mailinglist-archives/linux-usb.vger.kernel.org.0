@@ -2,113 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A49B810AD89
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 11:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E00C10AEFC
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 12:50:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726496AbfK0K1t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 05:27:49 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47792 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726204AbfK0K1t (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 27 Nov 2019 05:27:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 1B51FACE0;
-        Wed, 27 Nov 2019 10:27:47 +0000 (UTC)
-Message-ID: <1574850465.2485.10.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in si470x_int_in_callback (2)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Date:   Wed, 27 Nov 2019 11:27:45 +0100
-In-Reply-To: <000000000000f47f0b0595307ddc@google.com>
-References: <000000000000f47f0b0595307ddc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1727007AbfK0LuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 06:50:14 -0500
+Received: from mga14.intel.com ([192.55.52.115]:6425 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726320AbfK0LuO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 27 Nov 2019 06:50:14 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Nov 2019 03:50:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,249,1571727600"; 
+   d="scan'208";a="217370860"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga001.fm.intel.com with SMTP; 27 Nov 2019 03:50:11 -0800
+Received: by lahna (sSMTP sendmail emulation); Wed, 27 Nov 2019 13:50:10 +0200
+Date:   Wed, 27 Nov 2019 13:50:10 +0200
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Daniel Drake <drake@endlessm.com>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        rafael.j.wysocki@intel.com, linux@endlessm.com,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] PCI: add generic quirk function for increasing
+ D3hot delay
+Message-ID: <20191127115010.GA11621@lahna.fi.intel.com>
+References: <20191127053836.31624-1-drake@endlessm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191127053836.31624-1-drake@endlessm.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 18.10.2019, 07:53 -0700 schrieb syzbot:
-> Hello,
+On Wed, Nov 27, 2019 at 01:38:35PM +0800, Daniel Drake wrote:
+> Separate the D3 delay increase functionality out of quirk_radeon_pm() into
+> its own function so that it can be shared with other quirks, including
+> the AMD Ryzen XHCI quirk that will be introduced in a followup commit.
 > 
-> syzbot found the following crash on:
+> Tweak the function name and message to indicate more clearly that the
+> delay relates to a D3hot-to-D0 transition.
 > 
-> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=102b65cf600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b9060e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d3b94b600000
-> 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
+> Signed-off-by: Daniel Drake <drake@endlessm.com>
 
-#syz test: https://github.com/google/kasan.git 22be26f7
-
-From 497dce10b022c0cfbba450a47d634aa212ecafa1 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Mon, 18 Nov 2019 14:41:51 +0100
-Subject: [PATCH] si470x: prevent resubmission
-
-Starting IO to a device is not necessarily a NOP in every error
-case. So we need to terminate all IO in every case of probe
-failure and disconnect with absolute certainty.
-
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/media/radio/si470x/radio-si470x-usb.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index fedff68d8c49..8663828d93a5 100644
---- a/drivers/media/radio/si470x/radio-si470x-usb.c
-+++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -542,6 +542,8 @@ static int si470x_start_usb(struct si470x_device *radio)
- 		radio->int_in_running = 0;
- 	}
- 	radio->status_rssi_auto_update = radio->int_in_running;
-+	if (retval < 0)
-+		return retval;
- 
- 	/* start radio */
- 	retval = si470x_start(radio);
-@@ -734,7 +736,8 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 	/* start radio */
- 	retval = si470x_start_usb(radio);
- 	if (retval < 0)
--		goto err_buf;
-+		/* the urb may be running even after an error */
-+		goto err_all;
- 
- 	/* set initial frequency */
- 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
-@@ -749,7 +752,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 
- 	return 0;
- err_all:
--	usb_kill_urb(radio->int_in_urb);
-+	usb_poison_urb(radio->int_in_urb);
- err_buf:
- 	kfree(radio->buffer);
- err_ctrl:
-@@ -824,7 +827,7 @@ static void si470x_usb_driver_disconnect(struct usb_interface *intf)
- 	mutex_lock(&radio->lock);
- 	v4l2_device_disconnect(&radio->v4l2_dev);
- 	video_unregister_device(&radio->videodev);
--	usb_kill_urb(radio->int_in_urb);
-+	usb_poison_urb(radio->int_in_urb);
- 	usb_set_intfdata(intf, NULL);
- 	mutex_unlock(&radio->lock);
- 	v4l2_device_put(&radio->v4l2_dev);
--- 
-2.16.4
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
