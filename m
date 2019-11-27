@@ -2,121 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A668E10AA4A
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 06:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F5910AAD7
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 07:55:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726634AbfK0Fip (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 00:38:45 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37864 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726560AbfK0Fio (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 00:38:44 -0500
-Received: by mail-pl1-f196.google.com with SMTP id bb5so9235688plb.4
-        for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2019 21:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=endlessm-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=A1crt5ZX5/o6tqZ8uQeAgWxnW6il/kNy0inAaXVelWg=;
-        b=03QmaYAqqV7p+2/P0ek7syQoGHcAgOXji2fJRE13ydAmBy/qMCG4aBhnyp/RnL1MEg
-         HngVDerDsYPHadSYiO2t4A6vPf3vU5YfWkQDy5yL4v1TI3qCgXvSaj4y5WRLv+tfioR3
-         P6kREx5Mc4tkwL8LHBfqCxMBlBtAGowVmk05raMfkzNZVAarD7Thw/yPmXlH8TrCYhGQ
-         Sw+AiR0DHihdJZk+CYuI5j4FcWDUzeS462dvKaGpvi8lRY428rEUO96BPQ1NfRBcU06h
-         qQXH+ROoIhA8KeSWq5lQQAw7bgUdUd4foBxqPnL182bs9eam/JqCS9bXC3bCIaEyNcrW
-         y59Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A1crt5ZX5/o6tqZ8uQeAgWxnW6il/kNy0inAaXVelWg=;
-        b=DwHWBoMHVPaZqp8+V9sose8N0sKVVoo5PesjiJ1WOw7WvcU3KU+oLUJDT5E4mHZC9w
-         egvWAWGkK+0K08QDDJtF04BwxzZ8IWpunq6Fyv9J4ruqh7+6ML7MMvZRKCn0pOWCZXah
-         ALrNeXrb3xdPe7Wa9DzF03EjJapfNbOmuPfK7EztmAUpZgfyYv+zOH8Lx4odAt712eUl
-         eUxkJv9ZtBZyzUXOWjllMpyHRZ+L6w5V/Am87b4r5t+HHHZEbT9kCwX22K2BB+XPU0rg
-         dReplK6lpWZ+FK+sh9uN2gqeC8L+gWWHt1J1o6NvEyfx0dtc14TEKrHhgeS4QMn/DH6D
-         lS3g==
-X-Gm-Message-State: APjAAAW+N/XjAR2g1W6u7bKbA95w7fr/Xg+ALuAQyfD13kWENRAmqXvm
-        3ul5UCARsUwXV/Dl2Rj2BstGXg==
-X-Google-Smtp-Source: APXvYqwaICaiIi2qlVP9oI/G9SEz3ACyQkNtE5h1JyLUsyrXggjU2y9sZVHDzZcDGoCT3MoOKaOHAw==
-X-Received: by 2002:a17:902:5a04:: with SMTP id q4mr2318041pli.34.1574833124051;
-        Tue, 26 Nov 2019 21:38:44 -0800 (PST)
-Received: from limbo.local (123-204-46-122.static.seed.net.tw. [123.204.46.122])
-        by smtp.gmail.com with ESMTPSA id y8sm14088008pfl.8.2019.11.26.21.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Nov 2019 21:38:43 -0800 (PST)
-From:   Daniel Drake <drake@endlessm.com>
-To:     bhelgaas@google.com
-Cc:     linux-pci@vger.kernel.org, rafael.j.wysocki@intel.com,
-        linux@endlessm.com, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, mika.westerberg@linux.intel.com
-Subject: [PATCH v2 2/2] PCI: increase D3 delay for AMD Ryzen5/7 XHCI controllers
-Date:   Wed, 27 Nov 2019 13:38:36 +0800
-Message-Id: <20191127053836.31624-2-drake@endlessm.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191127053836.31624-1-drake@endlessm.com>
-References: <20191127053836.31624-1-drake@endlessm.com>
+        id S1726292AbfK0GzX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 01:55:23 -0500
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:36229 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726281AbfK0GzX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 01:55:23 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id F1887948;
+        Wed, 27 Nov 2019 01:55:21 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 27 Nov 2019 01:55:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=Fnh93xvY+sEJGHFFgEbHiCaLzHu
+        JgzCqGygPt0+g9mM=; b=FnSFx+OQMsKAkyuj/1hUwacpAKWmzJsasgMXSjA1j7s
+        Z5W8BXfOmk1/sharZBsrUIG/kaywz2KfpQm7oNv0dorz/sWrgb7zCmaIMpmwkxP1
+        EBa+DxfxDaYlRdq2U8nxxiS2h5zmw5EYd9yvCwze5J6QWPEEku3WgPTZLZqXXTim
+        qHTSmDFTcUU1YTAM2ZokPNV2lX2t9oljkoa9N4N885NgeK3LQfobzh02sA0jH5b4
+        CdLoVCmAa8mxlRWCGeoLaEMH/IdP7tjAK+VwGKO+hMnQT+i9N2r89gQpTGk3AE9I
+        80ICzP/qUc0lP7UYv5ZEmXBCxuCWQD6DqFE2Ka+1Dgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=Fnh93x
+        vY+sEJGHFFgEbHiCaLzHuJgzCqGygPt0+g9mM=; b=UBSnBLKPHWBXWfuks7VVAb
+        vzNHqyArUbW1kP6FjEVQ37kY1tn3GWsmk9D1XMwDI1k9u/7yBXWFXa4rBys+gsHg
+        7bRc+GIulKCE+atwe5xArTp5iJcmF2eMsxjkY5hr/kcqddDX1UkKvM51bgEyaM4G
+        pLBLJEEL7oN5E7/y7Uwxe7NXFTL+nIMwwSPsKfcvCSfd26iZYRynZ68azi8hKYaY
+        vctYjTbF9hspifkcPN/z/mCoWmX0dWwuXKsSvL6EfApnWK0pdR5QRc8FcYsVwlBD
+        yDT/mI6CEcoFiEsbnxPwNrIwhuyLa+pqRnOaAgqL2qTPf/OTwUKXTJdq0NxXj1Fg
+        ==
+X-ME-Sender: <xms:2R3eXYy107v5IV81lmjoPLB-fNyDpP3VXrBxDud3nfp4M56oe6xUUA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeigedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
+    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
+    ucevlhhushhtvghrufhiiigvpedu
+X-ME-Proxy: <xmx:2R3eXdE4bOa6yvixgo7DaCzppSrkU_QpScbr2W7znHTNbp8ktqF9NA>
+    <xmx:2R3eXY43FJwwuiAfOq67q878OLYabvkc5s2s2f2aChVD4MMQ4-8B0g>
+    <xmx:2R3eXcVn9mqDP0spojIO9Q0FC1TAJ8OMDBnPtfNVo_9tfMOVnc7FDg>
+    <xmx:2R3eXS3T7jtAzweItfe5_4NG7bil58hD7uAxCXKgFWor74XCR-6VwA>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id F360C306005C;
+        Wed, 27 Nov 2019 01:55:20 -0500 (EST)
+Date:   Wed, 27 Nov 2019 07:55:19 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Pete Zaitcev <zaitcev@redhat.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB list <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] usb: mon: Fix a deadlock in usbmon between mmap and read
+Message-ID: <20191127065519.GA1724976@kroah.com>
+References: <20191126004407.4b72ef7f@suzdal.zaitcev.lan>
+ <Pine.LNX.4.44L0.1911261018110.1508-100000@iolanthe.rowland.org>
+ <20191126223509.69fb61ed@suzdal.zaitcev.lan>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191126223509.69fb61ed@suzdal.zaitcev.lan>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Asus UX434DA (AMD Ryzen7 3700U) and Asus X512DK (AMD Ryzen5 3500U),
-the XHCI controller fails to resume from runtime suspend or s2idle,
-and USB becomes unusable from that point.
+On Tue, Nov 26, 2019 at 10:35:09PM -0600, Pete Zaitcev wrote:
+> On Tue, 26 Nov 2019 10:20:14 -0500 (EST)
+> Alan Stern <stern@rowland.harvard.edu> wrote:
+> 
+> > > Signed-off-by: Pete Zaitcev <zaitcev@redhat.com>
+> > > Reported-by: syzbot+56f9673bb4cdcbeb0e92@syzkaller.appspotmail.com  
+> > 
+> > Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+> 
+> Thanks.
+> 
+> > Fixes: 46eb14a6e158 ("USB: fix usbmon BUG trigger")
+> 
+> Indeed... Either I didn't think that one through, or the copy_to_user
+> used not to take the mmap_sem.
+> 
+> > CC: <stable@vger.kernel.org>
+> 
+> Do we really need this? The problem was in the code for more than 10 years.
+> It's not like anyone is exploiting systems because of it.
 
-xhci_hcd 0000:03:00.4: Refused to change power state, currently in D3
-xhci_hcd 0000:03:00.4: enabling device (0000 -> 0002)
-xhci_hcd 0000:03:00.4: WARN: xHC restore state timeout
-xhci_hcd 0000:03:00.4: PCI post-resume error -110!
-xhci_hcd 0000:03:00.4: HC died; cleaning up
+Well now we all have a simple reproducer for it, so yes, it should be
+backported.  I'm doing that for all of the syzbot stuff.
 
-During suspend, a transition to D3cold is attempted, however the affected
-platforms do not seem to cut the power to the PCI device when in this
-state, so the device stays in D3hot.
+> If we do need it, I should cc: the submission to the same place too, right?
 
-Upon resume, the D3hot-to-D0 transition is successful only if the D3 delay
-is increased to 20ms. The transition failure does not appear to be
-detectable as a CRS condition. Add a PCI quirk to increase the delay on the
-affected hardware.
+Nope, the tag is just fine, that's all that is needed.  I'll add the
+above to the patch when applying it to my trees.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=205587
-Link: http://lkml.kernel.org/r/CAD8Lp47Vh69gQjROYG69=waJgL7hs1PwnLonL9+27S_TcRhixA@mail.gmail.com
-Signed-off-by: Daniel Drake <drake@endlessm.com>
----
- drivers/pci/quirks.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+thanks,
 
-v2: split out the creation of quirk_d3hot_delay() into its own patch
-
-diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-index 3b4021e719530..222108f1a602e 100644
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@ -1889,6 +1889,22 @@ static void quirk_radeon_pm(struct pci_dev *dev)
- }
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ATI, 0x6741, quirk_radeon_pm);
- 
-+/*
-+ * Ryzen5/7 XHCI controllers fail upon resume from runtime suspend or s2idle.
-+ * https://bugzilla.kernel.org/show_bug.cgi?id=205587
-+ *
-+ * The kernel attempts to transition these devices to D3cold, but that seems
-+ * to be ineffective on the platforms in question; the PCI device appears to
-+ * remain on in D3hot state. The D3hot-to-D0 transition then requires an
-+ * extended delay in order to succeed.
-+ */
-+static void quirk_ryzen_xhci_d3hot(struct pci_dev *dev)
-+{
-+	quirk_d3hot_delay(dev, 20);
-+}
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e0, quirk_ryzen_xhci_d3hot);
-+DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AMD, 0x15e1, quirk_ryzen_xhci_d3hot);
-+
- #ifdef CONFIG_X86_IO_APIC
- static int dmi_disable_ioapicreroute(const struct dmi_system_id *d)
- {
--- 
-2.20.1
-
+greg k-h
