@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D25FE10BFAE
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 22:45:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3123510BFDB
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2019 22:50:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727722AbfK0VpS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 27 Nov 2019 16:45:18 -0500
-Received: from dc8-smtprelay2.synopsys.com ([198.182.47.102]:34670 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727963AbfK0VpS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 16:45:18 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E493AC0382;
-        Wed, 27 Nov 2019 21:45:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1574891117; bh=6Hfao375F+NO+iwnFV8Dj3+NEuvO6/Yjg572T9OTy0M=;
-        h=Date:From:Subject:To:Cc:From;
-        b=QuDHZYdXO70yU3Lv81gOlGCOS6Aqja7Wq1Ez99Idu8cdj8U1xz1HM61O3XoORUu9z
-         WE0wKP6czUy4AxgF4cg+UW2cWGyP6H5hGwnYy9WuyLioWmpaqTnQdZjSDzGb/41KYM
-         hfSb6Z2CNOtJLDFp2bzx7RgFLfNabEaA080cwQ5GM5VL4PuZOelokDVSDRKBeDrZnY
-         VACaSrLI9nuUqE3DM2w4ym8i1jbBmLJEx5OaqBsBGzAaVuvpEmH4Ycc/Qc/NcmufJw
-         sCD8SKLcJ6laYu51JLdU3q8q7kHU2DkjeAOUmqTJswUgltrmP2/02B2TgmS6FCxeNh
-         cuesFZFYB198Q==
-Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8F042A007B;
-        Wed, 27 Nov 2019 21:45:16 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 27 Nov 2019 13:45:15 -0800
-Date:   Wed, 27 Nov 2019 13:45:15 -0800
-Message-Id: <bbb1564aa649a6b5b97160ec3ef9fefdd8c85aea.1574891043.git.thinhn@synopsys.com>
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH] usb: dwc3: gadget: Check for NULL descriptor
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        stable@vger.kernel.org
+        id S1727501AbfK0VuA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 27 Nov 2019 16:50:00 -0500
+Received: from kvm5.telegraphics.com.au ([98.124.60.144]:49304 "EHLO
+        kvm5.telegraphics.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727194AbfK0Vt7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 27 Nov 2019 16:49:59 -0500
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by kvm5.telegraphics.com.au (Postfix) with ESMTP id 7D0BD22B48;
+        Wed, 27 Nov 2019 16:49:55 -0500 (EST)
+Date:   Thu, 28 Nov 2019 08:49:53 +1100 (AEDT)
+From:   Finn Thain <fthain@telegraphics.com.au>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+cc:     Andrea Vai <andrea.vai@unipv.it>, Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+In-Reply-To: <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+Message-ID: <alpine.LNX.2.21.1.1911280830520.8@nippy.intranet>
+References: <20191109222828.GA30568@ming.t460p>         <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>         <20191123072726.GC25356@ming.t460p>         <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>         <20191125035437.GA3806@ming.t460p>
+         <bf47a6c620b847fa9e27f8542eb761529f3e0381.camel@unipv.it>         <20191125102928.GA20489@ming.t460p>         <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>         <20191125151535.GA8044@ming.t460p>        
+ <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>         <20191126023253.GA24501@ming.t460p> <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it> <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
+ <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The function driver may try to enable an unconfigured endpoint. This
-check make sure that we do not attempt to access a NULL descriptor and
-crash.
+On Wed, 27 Nov 2019, Schmid, Carsten wrote:
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
----
- drivers/usb/dwc3/gadget.c | 3 +++
- 1 file changed, 3 insertions(+)
+> > 
+> > The sheer volume of testing (probably some terabytes by now) would 
+> > exercise the wear leveling algorithm in the FTL.
+> > 
+> But with "old kernel" the copy operation still is "fast", as far as i 
+> understood. If FTL (e.g. wear leveling) would slow down, we would see 
+> that also in the old kernel, right?
+> 
+> Andrea, can you confirm that the same device used with the old fast 
+> kernel is still fast today?
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 7f97856e6b20..00f8f079bbf2 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -619,6 +619,9 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
- 	u32			reg;
- 	int			ret;
- 
-+	if (!desc)
-+		return -EINVAL;
-+
- 	if (!(dep->flags & DWC3_EP_ENABLED)) {
- 		ret = dwc3_gadget_start_config(dep);
- 		if (ret)
+You seem to be saying we should optimize the kernel for a pathological 
+use-case merely because it used to be fast before the blk-mq conversion. 
+That makes no sense to me. I suppose you have information that I don't.
+
+I assume that your employer (and the other corporations involved in this) 
+have plenty of regression test results from a variety of flash hardware to 
+show that the regression is real and the device is not pathological.
+
+I'm not privy to any of that information so I will shut up and leave you 
+guys to it.
+
 -- 
-2.11.0
 
+> > This in itself seems unlikely to improve performance significantly. 
+> > But if the flash memory came from a bad batch, perhaps it would have 
+> > that effect.
+> > 
+> > To find out, someone may need to source another (genuine) Kingston 
+> > DataTraveller device.
+> > 
