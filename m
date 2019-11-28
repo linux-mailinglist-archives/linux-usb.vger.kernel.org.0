@@ -2,124 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D2EF10C811
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2019 12:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5EB10C819
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2019 12:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726633AbfK1Lih (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 28 Nov 2019 06:38:37 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:34085 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbfK1Lig (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Nov 2019 06:38:36 -0500
-Received: by mail-wm1-f66.google.com with SMTP id j18so7200989wmk.1
-        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2019 03:38:33 -0800 (PST)
+        id S1726885AbfK1LkS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 28 Nov 2019 06:40:18 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:33205 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726401AbfK1LkR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 28 Nov 2019 06:40:17 -0500
+Received: by mail-wr1-f48.google.com with SMTP id b6so1067923wrq.0
+        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2019 03:40:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7dzXAN2X2L6bGPvK4PFvG9vdURbUoCe50bDBU3Z9XwI=;
-        b=KeHVV1r+lyB6FTTM8bE+Y10Z5uaKh2EjYaJu/C5ZfN/1HDQmh8sIhqWJJNiyQZZ0/F
-         QIvpkEBOlu6tiG0p5EO/SNsYNB6jhkVdi36Wobvo3BIkF6nuBU8Kc2eoUVgDHzXZzZvS
-         eoeK4d2bMGa/NrFMyzZiH8nlZ086wekBcpicq4B0/3AFTqifl43Q3akZproFcEpY2OaR
-         nVcSH3VUGRoy95JIuOp3fxbXPsf++7WEcQgVzz1LyaRC7ACaZvwCn3NEALSTtzY5cHn1
-         4lMOV5B09daTu/aMMeCoa6ct92q29yUAV6f3s9tGZy3WFm1u+gS0UDYkZHCwHQdOCJN7
-         /c/g==
+        d=unipv-it.20150623.gappssmtp.com; s=20150623;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=GcaV7TSgPi16GI1scwVAVOuBQ2pZxQwhgEx6hTrOkns=;
+        b=WExpWIl8B8mTd7QDNWiNnXNoTCMETcR94FWgcoGbGKbcGVIEioeu6sorw0ZZwkEiCX
+         JVeAuKrT4RA+TX/KomUnci2tzbFQLHobalFPZyYMN3wXLEKOFDJ+/iHE4StbMGKorpPp
+         GLzuCcNiK18hAB8AOYGF3JxRuq4p+9DsyEz6Cn2VeC1l/p/R6mD6QiSsxJib9Bem3/2o
+         jRV1/OJIRlnUp5pldlPZLRAMVLeHQ1nvx5P7UnXfjGv34mmXEKc7fi2Un6BQUQrIeboM
+         HEsZieuixSP6Od0SKNAd7Z+AXyktouVnMwhQgWsu/aZSobFdEzKJT2qq80jXDDEJCYe2
+         zcIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=7dzXAN2X2L6bGPvK4PFvG9vdURbUoCe50bDBU3Z9XwI=;
-        b=GRqo7pAHUN+IyP8L/HlfAUdUW879b4xFaw97nbiohlfTOqC7KRiUAW+R02t6PJ3wra
-         PYq2D4OjZxxlleTteG1f92GdV4hQ7djp+kYuXns5eNYfdaa2d6Wg9qF4SXyA3Gd7ZpKx
-         w1OdentB2QKCPTASqgCctE4JF/vzgOu7JwC29D8GlVqjsJUDFS9x2Go7HUaS2dJ+Hbip
-         1zavbKWAdQNAumUuARzReFpiiiO6iZpvDUB2yOaWTajYjUyo+u8jA1Cnsno7rcK3TNWL
-         By4p9CL8qRE7sURJ2ZQxa5gQJVgcsl6m+2y0KgpSJkHXo9UIp6+B4zAKrlW4YDunWBza
-         ezzQ==
-X-Gm-Message-State: APjAAAUe92aIqDR7LtfQnxYtK3H1LHmGi/qV8Sq+ILU9itFz2Vf05e6V
-        KSWz/BfIJjm+oNuos8Gif81PREohGESdao0Ed6Y=
-X-Google-Smtp-Source: APXvYqwmrhL+T92X8GSWKUUzYbbHF9p4pljSxW3oaar+nWfgXzT3Fw3oznVN29gGWmBWKLCZETMqBOIV+bbGpEohyqA=
-X-Received: by 2002:a1c:1b15:: with SMTP id b21mr1015684wmb.104.1574941112317;
- Thu, 28 Nov 2019 03:38:32 -0800 (PST)
-MIME-Version: 1.0
-Reply-To: sebastient766@gmail.com
-Received: by 2002:adf:df83:0:0:0:0:0 with HTTP; Thu, 28 Nov 2019 03:38:31
- -0800 (PST)
-From:   =?UTF-8?B?TXIuU8OpYmFzdGllbiBUb25p?= <sebastient766@gmail.com>
-Date:   Thu, 28 Nov 2019 11:38:31 +0000
-X-Google-Sender-Auth: 6oKAvRkzYv1-sXc3jTH1UUVk4AE
-Message-ID: <CAOmrfMuOFbuqNzcOMA8Op8548JiM+OAXTkQp_DzWoaeWAxopOA@mail.gmail.com>
-Subject: Dear Friend,
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=GcaV7TSgPi16GI1scwVAVOuBQ2pZxQwhgEx6hTrOkns=;
+        b=jWz6KcfWGSglhOYdnYBtOkGq5geSuBvTiVISGKhROCpJmdMgXGxJBO1CdzrfnbBVDY
+         3YSx0uSAuF4PqwcOMmrJdq6v6b17jMf5tOnF7NU7nFVnci3aKf1bQZ1mwUCtRo5JkK/h
+         EV8BBl5q6BgijzN6aqbYbUwpEhkbzgkyDauTHQdSzjRCSvrDBGH82FFzFkxgPEopxv71
+         Tpu8TR2F/mHcVSiMgKm4w8TCagdV5BdlGUmNTgwKQ3DiqdGtaj6S7w68i5E10SFYUUSZ
+         1Ig+hWuN5IEA8/CqKy6gi0g4DJ1tCyQEzWCtusiFIrGxAwxxqAAfivOj8Kx53+3Cs4Gf
+         fVfA==
+X-Gm-Message-State: APjAAAWkx+KhPmiQEMeZi71Qyk8EXYaePu3lVszJPvpkkl6eydQZqM4k
+        WJPjs4SALicpaiJUGwUCU37CJQ==
+X-Google-Smtp-Source: APXvYqzJoJ36WVXfKX0byebk+wUH2f5FUSX/9U7e2SD/NjLo+igkMeM0znDoPQjo8YplBf0zzGssHA==
+X-Received: by 2002:adf:fa08:: with SMTP id m8mr50371389wrr.276.1574941215165;
+        Thu, 28 Nov 2019 03:40:15 -0800 (PST)
+Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
+        by smtp.gmail.com with ESMTPSA id l7sm3963426wrq.61.2019.11.28.03.40.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Nov 2019 03:40:14 -0800 (PST)
+Message-ID: <d12d516dea813f8c603b6fcd43afb3aeec1957f5.camel@unipv.it>
+Subject: Re: AW: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+From:   Andrea Vai <andrea.vai@unipv.it>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>
+Cc:     Ming Lei <ming.lei@redhat.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+Date:   Thu, 28 Nov 2019 12:40:11 +0100
+In-Reply-To: <fa9566db62474d7aa5473cf7a1f0da8d@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <20191109222828.GA30568@ming.t460p>
+         <fa3b0cf1f88e42e1200101bccbc797e4e7778d58.camel@unipv.it>
+         <20191123072726.GC25356@ming.t460p>
+         <a9ffcca93657cbbb56819fd883c474a702423b41.camel@unipv.it>
+         <20191125035437.GA3806@ming.t460p>
+         <bf47a6c620b847fa9e27f8542eb761529f3e0381.camel@unipv.it>
+         <20191125102928.GA20489@ming.t460p>
+         <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
+         <20191125151535.GA8044@ming.t460p>
+         <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
+         <20191126023253.GA24501@ming.t460p>
+         <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+         <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
+         <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+         <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
+         <fa9566db62474d7aa5473cf7a1f0da8d@SVR-IES-MBX-03.mgc.mentorg.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-FROM MR.S=C3=89BASTIEN TONI
-AUDIT& ACCOUNT MANAGER
-BANK OF AFRICA (B.O.A)
-OUAGADOUGOU BURKINA FASO
-WEST AFRICA.
+Il giorno gio, 28/11/2019 alle 08.12 +0000, Schmid, Carsten ha
+scritto:
+> 
+> [...]
+> 
+> I assume the only thing that you change between the benchmarks
+> is the kernel (and the modules, of course), right, Andrea?
+> 
 
-Dear Friend,
+It's my production machine, so apart from the changes involved in a
+"normal use of a PC" I can say that there are no changes I am aware of
+(apart from the kernel, and other changes you told me to do, such as
+changing the IO scheduler, etc)... but please remember I am not an
+expert, so feel free to ask me what other kind of changes I can tell
+you about.
 
-With due respect, I have decided to contact you on
-abusinesstransaction  that will be beneficial to both of us. At the
-bank last account and  auditing evaluation, my staffs came across an
-old account which was being maintained by a foreign client who we
-learn was among the deceased passengers of motor accident on
-November.2003, the deceased was unable to run this account since his
-death. Theaccount has  remained dormant without the knowledge of his
-family since it was put in a  safe deposit account in the bank for
-future investment by the client.
+Thanks,
+Andrea
 
-Since his demise, even the members of his family haven't applied for
-claims  over this fund and it has been in the safe deposit account
-until I  discovered that it cannot be claimed since our client
-isaforeign national
-and we are sure that he has no next of kin here to file claims over
-the money. As the director of the department, this  discovery was
-brought to my office so as to decide what is to bedone.I  decided to
-seek ways through which to transfer this money out of the bank  and
-out of the country too.
-
-The total amount in the account is 18.6 million with my positions as
-staffs  of the bank, I am handicapped because I cannot operate foreign
-accounts and  cannot lay bonafide claim over this money. The client
-was a foreign  national and you will only be asked to act as his next
-of kin and I will  supply you with all the necessary information and
-bank data to assist you in being able to transfer this money to any
-bank of your  choice where this money could be transferred into.The
-total sum will be  shared as follows: 50% for me, 50% for you and
-expenses incidental occur  during the transfer will be incur by both
-of us. The transfer is risk free on both sides hence you are going to
-follow my instruction till the fund  transfer to your account. Since I
-work in this bank that is why you should  be confident in the success
-of this transaction because you will be updated with information as at
-when desired.
-
-I will wish you to keep this transaction secret and confidential as I
-am  hoping to retire with my share of this money at the end of
-transaction  which will be when this money is safety in your account.
-I will then come over to your country for sharing according to the
-previously agreed percentages. You might even have to advise me on
-possibilities of investment in your country or elsewhere of our
-choice. May  God help you to help me to a restive retirement, Amen,And
-You have to  contact me through my private e-mail
-at(sebastient766@gmail.com)Please for further information and inquires
-feel free to contact me back immediately for more explanation and
-better  understanding I want you to assure me your capability of
-handling this  project with trust by providing me your following
-information details such as:
-
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:.....................
-(6)YOUR COUNTRY:.....................
-
-Yours sincerely,
-Mr.S=C3=A9bastien Toni
