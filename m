@@ -2,101 +2,381 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CEE9410D924
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 18:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F276210DABD
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 22:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727086AbfK2Rl1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Nov 2019 12:41:27 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52169 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726970AbfK2Rl1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 12:41:27 -0500
-Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <kai.heng.feng@canonical.com>)
-        id 1iakGi-0005XR-JC; Fri, 29 Nov 2019 17:41:25 +0000
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: [PATCH v2 2/2] USB: core: Attempt power cycle port when it's in eSS.Disabled state
-Date:   Sat, 30 Nov 2019 01:41:15 +0800
-Message-Id: <20191129174115.31683-2-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191129174115.31683-1-kai.heng.feng@canonical.com>
-References: <20191129174115.31683-1-kai.heng.feng@canonical.com>
+        id S1727179AbfK2VFL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Nov 2019 16:05:11 -0500
+Received: from mail-il1-f198.google.com ([209.85.166.198]:54159 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727051AbfK2VFL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 16:05:11 -0500
+Received: by mail-il1-f198.google.com with SMTP id d3so1093410ilg.20
+        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:05:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=MOavzUREPQ8i/q84h2ZPB6MhiH5OTrZWV4yOEWUafz8=;
+        b=ZD1LLqknCus5FNPPg1pcZHTQBNQs2VVN8DcpCJ8ePbXUBjsMdD5y0BuktXd93cDegj
+         8QgGhxlbU2jjQ38Vz+twoLXYZOozaOq95dv2Pm+KB3E1fZyqL6HBVvrsK0C8pU2tUeaT
+         OaUUnuTIugH1ECWHJw31r8GTXTWq9eCAzwBfY+Xf+k/5o9YPmzRic26suY8d8i8v1aD0
+         fnW8/TAPMfTFnBloyNCP63lMMLwJHcxkO07QkKNABbehk8FvmtQoyL6sH0EtHxqwJ93K
+         +FJakV3jVbVinup0Sgysp41NnTlykbFTzD9p1ymt1SGWijH25RW5iBUQymXeJ3NE69oc
+         ZKcA==
+X-Gm-Message-State: APjAAAUaa6HWftV1LEUcPAK2lFpySXvFvLR5M3tl1WiV4fqV0qQlSQRt
+        gUHMTcArMvFQfot3mxHtzZL5Pzjdx21L6vOLT9QkpNYeRZ8w
+X-Google-Smtp-Source: APXvYqxDioRseda04LZuKuLqGzexp22qflDTHv5gavNLGv+jJ3l2gJFBiSo/iUlMH8VsU9mxo2MW7TN7q89fwYa9bm3Df3h16Ocn
+MIME-Version: 1.0
+X-Received: by 2002:a02:a15d:: with SMTP id m29mr2667010jah.88.1575061508388;
+ Fri, 29 Nov 2019 13:05:08 -0800 (PST)
+Date:   Fri, 29 Nov 2019 13:05:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b50c8b05988295f0@google.com>
+Subject: possible deadlock in i2c_transfer
+From:   syzbot <syzbot+136e62496b7564bb81cf@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, wsa@the-dreams.de
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Dell TB16, Realtek USB ethernet (r8152) connects to an SMSC hub which
-then connects to ASMedia xHCI's root hub:
+Hello,
 
-/:  Bus 04.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/2p, 5000M
-    |__ Port 1: Dev 2, If 0, Class=Hub, Driver=hub/7p, 5000M
-            |__ Port 2: Dev 3, If 0, Class=Vendor Specific Class, Driver=r8152, 5000M
+syzbot found the following crash on:
 
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 004 Device 002: ID 0424:5537 Standard Microsystems Corp. USB5537B
-Bus 004 Device 003: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit Ethernet Adapter
+HEAD commit:    32b5e2b2 usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=117c767ee00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d88612251f7691bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=136e62496b7564bb81cf
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14d808a6e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1652d82ae00000
 
-The SMSC hub may disconnect after system resume from suspend. When this
-happens, the reset resume attempt fails, and the last resort to disable
-the port and see something comes up later, also fails.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+136e62496b7564bb81cf@syzkaller.appspotmail.com
 
-When the issue occurs, the link state stays in eSS.Disabled state
-despite the warm reset attempts. Accoding to spec this can be caused by
-invalid VBus, after some expiremets, the SMSC hub can be brought back
-after a powercycle.
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+============================================
+WARNING: possible recursive locking detected
+5.4.0-syzkaller #0 Not tainted
+--------------------------------------------
+kworker/1:1/78 is trying to acquire lock:
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: __i2c_lock_bus_helper  
+drivers/i2c/i2c-core.h:44 [inline]
+ffff8881c5c58208 (i2c_register_adapter){+.+.}, at: i2c_transfer+0x1d3/0x3b0  
+drivers/i2c/i2c-core-base.c:2041
 
-So let's power cycle the port at the end of reset resume attempt, if
-it's in eSS.Disabled state.
+but task is already holding lock:
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: __i2c_lock_bus_helper  
+drivers/i2c/i2c-core.h:44 [inline]
+ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_transfer+0x1d3/0x3b0  
+drivers/i2c/i2c-core-base.c:2041
 
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+other info that might help us debug this:
+  Possible unsafe locking scenario:
+
+        CPU0
+        ----
+   lock(i2c_register_adapter);
+   lock(i2c_register_adapter);
+
+  *** DEADLOCK ***
+
+  May be due to missing lock nesting notation
+
+7 locks held by kworker/1:1/78:
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+__write_once_size include/linux/compiler.h:226 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at: atomic64_set  
+include/asm-generic/atomic-instrumented.h:855 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+atomic_long_set include/asm-generic/atomic-long.h:40 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at: set_work_data  
+kernel/workqueue.c:615 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
+  #0: ffff8881d8836528 ((wq_completion)usb_hub_wq){+.+.}, at:  
+process_one_work+0x827/0x1530 kernel/workqueue.c:2235
+  #1: ffff8881d8ec7dd0 ((work_completion)(&hub->events)){+.+.}, at:  
+process_one_work+0x85b/0x1530 kernel/workqueue.c:2239
+  #2: ffff8881d51c7200 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #2: ffff8881d51c7200 (&dev->mutex){....}, at: hub_event+0x1b2/0x3860  
+drivers/usb/core/hub.c:5498
+  #3: ffff8881cf9eb200 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #3: ffff8881cf9eb200 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #4: ffff8881cf9ec190 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #4: ffff8881cf9ec190 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #5: ffff8881d5123180 (&dev->mutex){....}, at: device_lock  
+include/linux/device.h:1493 [inline]
+  #5: ffff8881d5123180 (&dev->mutex){....}, at: __device_attach+0x7b/0x360  
+drivers/base/dd.c:871
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at: i2c_lock_bus  
+include/linux/i2c.h:755 [inline]
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at:  
+__i2c_lock_bus_helper drivers/i2c/i2c-core.h:44 [inline]
+  #6: ffff8881d51925c0 (i2c_register_adapter){+.+.}, at:  
+i2c_transfer+0x1d3/0x3b0 drivers/i2c/i2c-core-base.c:2041
+
+stack backtrace:
+CPU: 1 PID: 78 Comm: kworker/1:1 Not tainted 5.4.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_deadlock_bug kernel/locking/lockdep.c:2371 [inline]
+  check_deadlock kernel/locking/lockdep.c:2412 [inline]
+  validate_chain kernel/locking/lockdep.c:2955 [inline]
+  __lock_acquire.cold+0x114/0x288 kernel/locking/lockdep.c:3955
+  lock_acquire+0x127/0x320 kernel/locking/lockdep.c:4485
+  __rt_mutex_lock kernel/locking/rtmutex.c:1471 [inline]
+  rt_mutex_lock_nested+0x3e/0x60 kernel/locking/rtmutex.c:1484
+  i2c_lock_bus include/linux/i2c.h:755 [inline]
+  __i2c_lock_bus_helper drivers/i2c/i2c-core.h:44 [inline]
+  i2c_transfer+0x1d3/0x3b0 drivers/i2c/i2c-core-base.c:2041
+  tc90522_master_xfer.part.0+0x65c/0xbf0  
+drivers/media/dvb-frontends/tc90522.c:708
+  tc90522_master_xfer+0x35/0x4e drivers/media/dvb-frontends/tc90522.c:643
+  __i2c_transfer drivers/i2c/i2c-core-base.c:1984 [inline]
+  __i2c_transfer+0x49d/0x1620 drivers/i2c/i2c-core-base.c:1949
+  i2c_transfer drivers/i2c/i2c-core-base.c:2045 [inline]
+  i2c_transfer+0x1e6/0x3b0 drivers/i2c/i2c-core-base.c:2016
+  dvb_pll_attach+0x228/0x850 drivers/media/dvb-frontends/dvb-pll.c:816
+  dvb_pll_probe+0xfe/0x174 drivers/media/dvb-frontends/dvb-pll.c:884
+  i2c_device_probe+0x74e/0xa40 drivers/i2c/i2c-core-base.c:389
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  i2c_new_client_device+0x57f/0x9b0 drivers/i2c/i2c-core-base.c:777
+  i2c_new_device+0x19/0x50 drivers/i2c/i2c-core-base.c:820
+  dvb_module_probe+0xf9/0x220 drivers/media/dvb-core/dvbdev.c:986
+  friio_tuner_attach+0x12b/0x1d0 drivers/media/usb/dvb-usb-v2/gl861.c:457
+  dvb_usbv2_adapter_frontend_init  
+drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:676 [inline]
+  dvb_usbv2_adapter_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:805  
+[inline]
+  dvb_usbv2_init drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:866 [inline]
+  dvb_usbv2_probe.cold+0x2550/0x25d7  
+drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:981
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 2
+usb 1-1: new high-speed USB device number 3 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 3
+usb 1-1: new high-speed USB device number 4 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 4
+usb 1-1: new high-speed USB device number 5 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 5
+usb 1-1: new high-speed USB device number 6 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 6
+usb 1-1: new high-speed USB device number 7 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 7
+usb 1-1: new high-speed USB device number 8 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 8
+usb 1-1: new high-speed USB device number 9 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 9
+usb 1-1: new high-speed USB device number 10 using dummy_hcd
+usb 1-1: Using ep0 maxpacket: 8
+usb 1-1: New USB device found, idVendor=7a69, idProduct=0001,  
+bcdDevice=19.36
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: dvb_usb_v2: found a '774 Friio White ISDB-T USB2.0' in warm state
+usb 1-1: dvb_usb_v2: will pass the complete MPEG2 transport stream to the  
+software demuxer
+dvbdev: DVB: registering new adapter (774 Friio White ISDB-T USB2.0)
+usb 1-1: media controller created
+dvbdev: dvb_create_media_entity: media entity 'dvb-demux' registered.
+tc90522 0-0018: Toshiba TC90522 attached.
+usb 1-1: DVB: registering adapter 0 frontend 0 (Toshiba TC90522 ISDB-T  
+module)...
+dvbdev: dvb_create_media_entity: media entity 'Toshiba TC90522 ISDB-T  
+module' registered.
+dvb_pll: probe of 1-0060 failed with error -12
+usb 1-1: USB disconnect, device number 10
+
+
 ---
-v2:
-- Lower dev_info() to dev_dbg().
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- drivers/usb/core/hub.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 6b6cd76ac5e6..a2e6001046f5 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2739,6 +2739,18 @@ static bool hub_port_warm_reset_required(struct usb_hub *hub, int port1,
- 		|| link_state == USB_SS_PORT_LS_COMP_MOD;
- }
- 
-+static bool hub_port_power_cycle_required(struct usb_hub *hub, int port1,
-+		u16 portstatus)
-+{
-+	u16 link_state;
-+
-+	if (!hub_is_superspeed(hub->hdev))
-+		return false;
-+
-+	link_state = portstatus & USB_PORT_STAT_LINK_STATE;
-+	return link_state == USB_SS_PORT_LS_SS_DISABLED;
-+}
-+
- static void hub_port_power_cycle(struct usb_hub *hub, int port1)
- {
- 	struct usb_port *port_dev = hub->ports[port1  - 1];
-@@ -3601,6 +3613,10 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 	if (status < 0) {
- 		dev_dbg(&udev->dev, "can't resume, status %d\n", status);
- 		hub_port_logical_disconnect(hub, port1);
-+		if (hub_port_power_cycle_required(hub, port1, portstatus)) {
-+			dev_dbg(&udev->dev, "device in disabled state, attempt power cycle\n");
-+			hub_port_power_cycle(hub, port1);
-+		}
- 	} else  {
- 		/* Try to enable USB2 hardware LPM */
- 		usb_enable_usb2_hardware_lpm(udev);
--- 
-2.17.1
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
