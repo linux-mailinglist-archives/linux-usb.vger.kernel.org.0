@@ -2,122 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2BEB10D552
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 13:01:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2AE610D5B9
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 13:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726780AbfK2MBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Nov 2019 07:01:11 -0500
-Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:45771 "EHLO
-        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725892AbfK2MBL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 07:01:11 -0500
-X-Greylist: delayed 979 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Nov 2019 07:01:10 EST
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.west.internal (Postfix) with ESMTP id C9AFC646;
-        Fri, 29 Nov 2019 06:44:49 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 29 Nov 2019 06:44:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        subject:to:cc:references:from:message-id:date:mime-version
-        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=4
-        e2fQd04m1vD23T4e+mMcwBXh6jch9xWoh1g3p5EFNM=; b=PNW4u+dxBIB7GYjUc
-        5cVpZNCZbEQ158cwoGvGOmH8UqFc9yCSQSRiUpp2xV4fGEp7gWbDSh+soLvM/Q9m
-        4/ElHSwYwU0ADCSsDjkXti2e1yVb8LSYgQzPrCoFkCKZSK+9IlRTwBM4GXXBnmYi
-        /xqWXwFvaiDVm5+38ZX2qslsGxD3hVLF2CrpB1gHXuKh9xOXcKcoP/hjmubacWRp
-        +yRIzcUCLJ/VbKK776HJAGPEt3ih0AkwbxzWRNBzR2ZfHV88zMiN11HIPzjqAVkt
-        r3/D3SJevnlEWWtxJljIexyrC46VNiIWcmXb6ADd0J7pLKuse5ZXNetN0f21zv6Y
-        UfcAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:in-reply-to:message-id:mime-version:references
-        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; bh=4e2fQd04m1vD23T4e+mMcwBXh6jch9xWoh1g3p5EF
-        NM=; b=mL4JuWTOb40bZlY0aKiockV256QmMxMSGFBsYwqSuFFj8BYxJecUwu0zR
-        D9JNQAPErJ0v9SwTltEmJaueQWICGpNAwP6spWoyGUVe8evZv1F4gJIM5QZoMg66
-        3F18RZO6ymMfOGE2NKP6cfamgTMvW/x9q5LyLnwydxCZxJSlLCThJkVciD+1ChPH
-        Tgo9ho29XvG+wPLkUYHGDztyC+e5YRWQKOYczkxV5X6qiYxNnI3Ki+6MG5D6utOQ
-        AwYzEpLd7DuCvC7y75jTzEKYKsakJUMM3QUmObGmoFbqykrC/wvK6/Pm0Q6QeCbM
-        A4o3zxAADVexQIigQGwvJ9CY4A5Aw==
-X-ME-Sender: <xms:rwThXf6LqYyUpA4XOYTv8LZUzEwI0-X9q6NyyGFmJnqGe7BQDFemSg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeiledgvdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepuegvrhhn
-    ugcuufgthhhusggvrhhtuceosghspghlihhsthhssegrrghkvghfrdhfrghsthhmrghilh
-    drfhhmqeenucfkphepudejiedrudekledrieekrddukeelnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpegsshgplhhishhtshesrggrkhgvfhdrfhgrshhtmhgrihhlrdhfmhenucevlh
-    hushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:rwThXZLEQyvD35ShVq7905tfxTAjhpSIpeFkjUadDZsOTfYITzaOcA>
-    <xmx:rwThXRfLuOLAeyid7IieP9YyJboN_VL-DRzb42Ksj_z7h2Zb3q3Qbg>
-    <xmx:rwThXUcsWMkatz2g7m8shZwvlHOWP_UJJwdlWGch7cpuvZ5Ygt02fg>
-    <xmx:sQThXfANaxN2Q1ld4f-QZIHWTiaDs0WByWyGaKE3QzzLbCfj_6vPSv7Yep0>
-Received: from [192.168.1.20] (vol21-h02-176-189-68-189.dsl.sta.abo.bbox.fr [176.189.68.189])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 0D64730600A7;
-        Fri, 29 Nov 2019 06:44:45 -0500 (EST)
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-To:     Ming Lei <ming.lei@redhat.com>, Andrea Vai <andrea.vai@unipv.it>
-Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-References: <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
- <20191125151535.GA8044@ming.t460p>
- <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
- <20191126023253.GA24501@ming.t460p>
- <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
- <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
- <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
- <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
- <20191128091712.GD15549@ming.t460p>
- <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
- <20191129005734.GB1829@ming.t460p>
-From:   Bernd Schubert <bs_lists@aakef.fastmail.fm>
-Message-ID: <3c57bba1-831b-fc97-d5f7-e670f43fbbdc@aakef.fastmail.fm>
-Date:   Fri, 29 Nov 2019 12:44:53 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726834AbfK2Mde convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 29 Nov 2019 07:33:34 -0500
+Received: from smtp.qindel.com ([89.140.90.34]:42522 "EHLO thor.qindel.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726822AbfK2Mde (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 Nov 2019 07:33:34 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by thor.qindel.com (Postfix) with ESMTP id 7DA876074E
+        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:32 +0100 (CET)
+Received: from thor.qindel.com ([127.0.0.1])
+        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 8oVuAlbVGonn for <linux-usb@vger.kernel.org>;
+        Fri, 29 Nov 2019 13:24:32 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by thor.qindel.com (Postfix) with ESMTP id 51DDF60760
+        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:32 +0100 (CET)
+X-Virus-Scanned: amavisd-new at thor.qindel.com
+Received: from thor.qindel.com ([127.0.0.1])
+        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id fv1hoqjZi5VV for <linux-usb@vger.kernel.org>;
+        Fri, 29 Nov 2019 13:24:32 +0100 (CET)
+Received: from gverdu.qindel.com (gverdu.qindel.com [172.26.8.99])
+        by thor.qindel.com (Postfix) with ESMTPSA id 26CAC6074E
+        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:31 +0100 (CET)
+From:   Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
+To:     linux-usb@vger.kernel.org
+Subject: usbip tools from 5.4 fail to build due to unaligned pointer value warning
+Date:   Fri, 29 Nov 2019 13:24:30 +0100
+Message-ID: <6296180.lmSoKh01SJ@gverdu.qindel.com>
 MIME-Version: 1.0
-In-Reply-To: <20191129005734.GB1829@ming.t460p>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->> Trace attached. Produced by: start the trace script
->> (with the pendrive already plugged), wait some seconds, run the test
->> (1 trial, 1 GB), wait for the test to finish, stop the trace.
->>
->> The copy took 73 seconds, roughly as already seen before with the fast
->> old kernel.
-> 
-> This trace shows a good write IO order because the writeback IOs are
-> queued to block layer serially from the 'cp' task and writeback wq.
-> 
-> However, writeback IO order is changed in current linus tree because
-> the IOs are queued to block layer concurrently from the 'cp' task
-> and writeback wq. It might be related with killing queue_congestion
-> by blk-mq.
+Hello,
 
-What about using direct-io to ensure order is guaranteed? Pity that 'cp'
-doesn't seem to have an option for it. But dd should do the trick.
-Andrea, can you replace cp with a dd command (on the slow kernel)?
+Building the usbip tools from 4.15 is failing under Fedora 30, gcc version 
+9.2.1:
 
-dd if=<path-to-src-file> of=<path-to-copy-on-flash-device> bs=1M
-oflag=direct
 
- - Bernd
+
+$ make                                                                                                                                                                                                                                                                          
+make  all-recursive
+make[1]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip'
+Making all in libsrc
+make[2]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip/
+libsrc'
+make[2]: Nothing to be done for 'all'.
+make[2]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip/libsrc'
+Making all in src
+make[2]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip/src'
+  CC       usbip_network.o
+usbip_network.c: In function ‘usbip_net_pack_usb_device’:
+usbip_network.c:79:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   79 |  usbip_net_pack_uint32_t(pack, &udev->busnum);
+      |                                ^~~~~~~~~~~~~
+usbip_network.c:80:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   80 |  usbip_net_pack_uint32_t(pack, &udev->devnum);
+      |                                ^~~~~~~~~~~~~
+usbip_network.c:81:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   81 |  usbip_net_pack_uint32_t(pack, &udev->speed);
+      |                                ^~~~~~~~~~~~
+usbip_network.c:83:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   83 |  usbip_net_pack_uint16_t(pack, &udev->idVendor);
+      |                                ^~~~~~~~~~~~~~~
+usbip_network.c:84:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   84 |  usbip_net_pack_uint16_t(pack, &udev->idProduct);
+      |                                ^~~~~~~~~~~~~~~~
+usbip_network.c:85:32: error: taking address of packed member of ‘struct 
+usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
+of-packed-member]
+   85 |  usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
+      |                                ^~~~~~~~~~~~~~~~
+In file included from usbip_network.c:21:
+usbip_network.c: In function ‘usbip_net_send_op_common’:
+usbip_network.h:36:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   36 |  usbip_net_pack_uint16_t(pack, &(op_common)->version);\
+      |                                ^~~~~~~~~~~~~~~~~~~~~
+usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  143 |  PACK_OP_COMMON(1, &op_common);
+      |  ^~~~~~~~~~~~~~
+usbip_network.h:37:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   37 |  usbip_net_pack_uint16_t(pack, &(op_common)->code);\
+      |                                ^~~~~~~~~~~~~~~~~~
+usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  143 |  PACK_OP_COMMON(1, &op_common);
+      |  ^~~~~~~~~~~~~~
+usbip_network.h:38:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   38 |  usbip_net_pack_uint32_t(pack, &(op_common)->status);\
+      |                                ^~~~~~~~~~~~~~~~~~~~
+usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  143 |  PACK_OP_COMMON(1, &op_common);
+      |  ^~~~~~~~~~~~~~
+usbip_network.c: In function ‘usbip_net_recv_op_common’:
+usbip_network.h:36:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   36 |  usbip_net_pack_uint16_t(pack, &(op_common)->version);\
+      |                                ^~~~~~~~~~~~~~~~~~~~~
+usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  167 |  PACK_OP_COMMON(0, &op_common);
+      |  ^~~~~~~~~~~~~~
+usbip_network.h:37:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   37 |  usbip_net_pack_uint16_t(pack, &(op_common)->code);\
+      |                                ^~~~~~~~~~~~~~~~~~
+usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  167 |  PACK_OP_COMMON(0, &op_common);
+      |  ^~~~~~~~~~~~~~
+usbip_network.h:38:32: error: taking address of packed member of ‘struct 
+op_common’ may result in an unaligned pointer value [-Werror=address-of-
+packed-member]
+   38 |  usbip_net_pack_uint32_t(pack, &(op_common)->status);\
+      |                                ^~~~~~~~~~~~~~~~~~~~
+usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
+  167 |  PACK_OP_COMMON(0, &op_common);
+      |  ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[2]: *** [Makefile:430: usbip_network.o] Error 1
+make[2]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip/src'
+make[1]: *** [Makefile:497: all-recursive] Error 1
+make[1]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip'
+make: *** [Makefile:365: all] Error 2
+
+It looks like this is due to gcc having added new warnings. For now I've 
+worked around it with -Wno-error=address-of-packed-member as I understand this 
+isn't a problem on x86.
+
+
+
+
