@@ -2,67 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A82810D4C5
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 12:27:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BEB10D552
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 13:01:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726871AbfK2L1E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 29 Nov 2019 06:27:04 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:46321 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726215AbfK2L1C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 06:27:02 -0500
-Received: by mail-io1-f71.google.com with SMTP id b186so7550701iof.13
-        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 03:27:01 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=1R/eyR91b2qzrd9oYXwpA7kVnLlS3eW/CPo2xuZ2tZs=;
-        b=Qfwrb8MW1O455VV8x5l1wrqDcRZaqDAvAd8M8J57et21LsLgf3P4BoWJcP0keUXLa0
-         Fl3D/lXBD6ZyTaqWbwW3Bq+zeFq5wfC1Y9zXSI+mL/lq+Io0TSz8u6niIbsEXLJx7LSq
-         w7zg13eOA4pOw6T76E/J/eebWQFxUfqg11fzbvaXf8mSGo51lfjjCb0XuIosBkiZrK1b
-         RWxOxU+sA3cio07nzR7rfAbGhso+MWlV8pBBZXS47Qy/Aq+OuNWZlLBz/5Qdh/JAsL4v
-         mlEFJWH8VhP1RMjlC8No3PuiO5HJ0KcRZ73XW0Olw37MAuO9w6mi05+LXFjo2lWiwQFY
-         3WLA==
-X-Gm-Message-State: APjAAAU+zRrlmh8PwXTKiqWXVZIY6Vo87/Cbu4Oc8WbCQQJCSdHx/uef
-        b4nXqJJYCsHc3+gbOjvr2kbf6Q3OCx2hFb7oOJnH4Grsj1y9
-X-Google-Smtp-Source: APXvYqx2WOuve6jGICcXm51Pk+hIsPcOb1OO3yj2Zia1Hs0+ZR99DkvW/INJgLvPm6G6NaW5WS+Y11Kyq0HaFv6HhYvElj2iUAAo
+        id S1726780AbfK2MBL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Nov 2019 07:01:11 -0500
+Received: from wnew2-smtp.messagingengine.com ([64.147.123.27]:45771 "EHLO
+        wnew2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725892AbfK2MBL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 07:01:11 -0500
+X-Greylist: delayed 979 seconds by postgrey-1.27 at vger.kernel.org; Fri, 29 Nov 2019 07:01:10 EST
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
+        by mailnew.west.internal (Postfix) with ESMTP id C9AFC646;
+        Fri, 29 Nov 2019 06:44:49 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Fri, 29 Nov 2019 06:44:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
+        subject:to:cc:references:from:message-id:date:mime-version
+        :in-reply-to:content-type:content-transfer-encoding; s=fm1; bh=4
+        e2fQd04m1vD23T4e+mMcwBXh6jch9xWoh1g3p5EFNM=; b=PNW4u+dxBIB7GYjUc
+        5cVpZNCZbEQ158cwoGvGOmH8UqFc9yCSQSRiUpp2xV4fGEp7gWbDSh+soLvM/Q9m
+        4/ElHSwYwU0ADCSsDjkXti2e1yVb8LSYgQzPrCoFkCKZSK+9IlRTwBM4GXXBnmYi
+        /xqWXwFvaiDVm5+38ZX2qslsGxD3hVLF2CrpB1gHXuKh9xOXcKcoP/hjmubacWRp
+        +yRIzcUCLJ/VbKK776HJAGPEt3ih0AkwbxzWRNBzR2ZfHV88zMiN11HIPzjqAVkt
+        r3/D3SJevnlEWWtxJljIexyrC46VNiIWcmXb6ADd0J7pLKuse5ZXNetN0f21zv6Y
+        UfcAA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=4e2fQd04m1vD23T4e+mMcwBXh6jch9xWoh1g3p5EF
+        NM=; b=mL4JuWTOb40bZlY0aKiockV256QmMxMSGFBsYwqSuFFj8BYxJecUwu0zR
+        D9JNQAPErJ0v9SwTltEmJaueQWICGpNAwP6spWoyGUVe8evZv1F4gJIM5QZoMg66
+        3F18RZO6ymMfOGE2NKP6cfamgTMvW/x9q5LyLnwydxCZxJSlLCThJkVciD+1ChPH
+        Tgo9ho29XvG+wPLkUYHGDztyC+e5YRWQKOYczkxV5X6qiYxNnI3Ki+6MG5D6utOQ
+        AwYzEpLd7DuCvC7y75jTzEKYKsakJUMM3QUmObGmoFbqykrC/wvK6/Pm0Q6QeCbM
+        A4o3zxAADVexQIigQGwvJ9CY4A5Aw==
+X-ME-Sender: <xms:rwThXf6LqYyUpA4XOYTv8LZUzEwI0-X9q6NyyGFmJnqGe7BQDFemSg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeiledgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepuegvrhhn
+    ugcuufgthhhusggvrhhtuceosghspghlihhsthhssegrrghkvghfrdhfrghsthhmrghilh
+    drfhhmqeenucfkphepudejiedrudekledrieekrddukeelnecurfgrrhgrmhepmhgrihhl
+    fhhrohhmpegsshgplhhishhtshesrggrkhgvfhdrfhgrshhtmhgrihhlrdhfmhenucevlh
+    hushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:rwThXZLEQyvD35ShVq7905tfxTAjhpSIpeFkjUadDZsOTfYITzaOcA>
+    <xmx:rwThXRfLuOLAeyid7IieP9YyJboN_VL-DRzb42Ksj_z7h2Zb3q3Qbg>
+    <xmx:rwThXUcsWMkatz2g7m8shZwvlHOWP_UJJwdlWGch7cpuvZ5Ygt02fg>
+    <xmx:sQThXfANaxN2Q1ld4f-QZIHWTiaDs0WByWyGaKE3QzzLbCfj_6vPSv7Yep0>
+Received: from [192.168.1.20] (vol21-h02-176-189-68-189.dsl.sta.abo.bbox.fr [176.189.68.189])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 0D64730600A7;
+        Fri, 29 Nov 2019 06:44:45 -0500 (EST)
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+To:     Ming Lei <ming.lei@redhat.com>, Andrea Vai <andrea.vai@unipv.it>
+Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>
+References: <e5093535c60fd5dff8f92b76dcd52a1030938f62.camel@unipv.it>
+ <20191125151535.GA8044@ming.t460p>
+ <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
+ <20191126023253.GA24501@ming.t460p>
+ <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+ <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
+ <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+ <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
+ <20191128091712.GD15549@ming.t460p>
+ <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
+ <20191129005734.GB1829@ming.t460p>
+From:   Bernd Schubert <bs_lists@aakef.fastmail.fm>
+Message-ID: <3c57bba1-831b-fc97-d5f7-e670f43fbbdc@aakef.fastmail.fm>
+Date:   Fri, 29 Nov 2019 12:44:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c525:: with SMTP id m5mr52192194ili.91.1575026820788;
- Fri, 29 Nov 2019 03:27:00 -0800 (PST)
-Date:   Fri, 29 Nov 2019 03:27:00 -0800
-In-Reply-To: <20191129104156.GH29518@localhost>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002a380f05987a8239@google.com>
-Subject: Re: WARNING: ODEBUG bug in rsi_probe
-From:   syzbot <syzbot+1d1597a5aa3679c65b9f@syzkaller.appspotmail.com>
-To:     amitkarwar@gmail.com, andreyknvl@google.com, davem@davemloft.net,
-        johan@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        siva8118@gmail.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <20191129005734.GB1829@ming.t460p>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+>> Trace attached. Produced by: start the trace script
+>> (with the pendrive already plugged), wait some seconds, run the test
+>> (1 trial, 1 GB), wait for the test to finish, stop the trace.
+>>
+>> The copy took 73 seconds, roughly as already seen before with the fast
+>> old kernel.
+> 
+> This trace shows a good write IO order because the writeback IOs are
+> queued to block layer serially from the 'cp' task and writeback wq.
+> 
+> However, writeback IO order is changed in current linus tree because
+> the IOs are queued to block layer concurrently from the 'cp' task
+> and writeback wq. It might be related with killing queue_congestion
+> by blk-mq.
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+What about using direct-io to ensure order is guaranteed? Pity that 'cp'
+doesn't seem to have an option for it. But dd should do the trick.
+Andrea, can you replace cp with a dd command (on the slow kernel)?
 
-Reported-and-tested-by:  
-syzbot+1d1597a5aa3679c65b9f@syzkaller.appspotmail.com
+dd if=<path-to-src-file> of=<path-to-copy-on-flash-device> bs=1M
+oflag=direct
 
-Tested on:
-
-commit:         d34f9519 usb-fuzzer: main usb gadget fuzzer driver
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c73d1bb5aeaeae20
-dashboard link: https://syzkaller.appspot.com/bug?extid=1d1597a5aa3679c65b9f
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=122808a6e00000
-
-Note: testing is done by a robot and is best-effort only.
+ - Bernd
