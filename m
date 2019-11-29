@@ -2,157 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2AE610D5B9
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 13:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62FE910D623
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 14:32:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726834AbfK2Mde convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 29 Nov 2019 07:33:34 -0500
-Received: from smtp.qindel.com ([89.140.90.34]:42522 "EHLO thor.qindel.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726822AbfK2Mde (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Nov 2019 07:33:34 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 7DA876074E
-        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:32 +0100 (CET)
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 8oVuAlbVGonn for <linux-usb@vger.kernel.org>;
-        Fri, 29 Nov 2019 13:24:32 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 51DDF60760
-        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:32 +0100 (CET)
-X-Virus-Scanned: amavisd-new at thor.qindel.com
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id fv1hoqjZi5VV for <linux-usb@vger.kernel.org>;
-        Fri, 29 Nov 2019 13:24:32 +0100 (CET)
-Received: from gverdu.qindel.com (gverdu.qindel.com [172.26.8.99])
-        by thor.qindel.com (Postfix) with ESMTPSA id 26CAC6074E
-        for <linux-usb@vger.kernel.org>; Fri, 29 Nov 2019 13:24:31 +0100 (CET)
-From:   Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
-To:     linux-usb@vger.kernel.org
-Subject: usbip tools from 5.4 fail to build due to unaligned pointer value warning
-Date:   Fri, 29 Nov 2019 13:24:30 +0100
-Message-ID: <6296180.lmSoKh01SJ@gverdu.qindel.com>
+        id S1726804AbfK2Nco (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Nov 2019 08:32:44 -0500
+Received: from mail.kernel.org ([198.145.29.99]:42408 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726763AbfK2Nco (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 29 Nov 2019 08:32:44 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E7E120869;
+        Fri, 29 Nov 2019 13:32:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1575034362;
+        bh=Cfq5ZK607ycaOvEhaKgpcopj1W/rScjfdVMbA32VOQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qxbH69XdPxZ6BmRWFheMW6GbMmQrJuQVVyBywQW6+vy9oPSY56QlEkRbjXj7Pl7sL
+         fcjRYOQtfFNNJrx1WXcnwDPbbwATOJm6cWrNpFFCZ39I2FuC4jIGocdJkeyUcLdlx/
+         m5LlegVXCkmbuJEgkd/EMRltQFjv9KkOo3gjvg48=
+Date:   Fri, 29 Nov 2019 14:32:39 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     devel@driverdev.osuosl.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/4] staging: gigaset: fix crashes on probe
+Message-ID: <20191129133239.GA3703941@kroah.com>
+References: <20191129101753.9721-1-johan@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191129101753.9721-1-johan@kernel.org>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Fri, Nov 29, 2019 at 11:17:49AM +0100, Johan Hovold wrote:
+> Syzbot has been reporting a GPF on probe in the gigaset ISDN driver,
+> which have since been moved to staging.
+> 
+> The first patch fixes that issue, and the next one fixes a second crash
+> found during testing.
+> 
+> The third patch addresses a benign warning in USB core which syzbot is
+> bound to report once the crashes have been fixed.
+> 
+> And while I hate playing checkpatch games, the final patch addresses a
+> checkpatch warning introduced on purpose by the third patch.
 
-Building the usbip tools from 4.15 is failing under Fedora 30, gcc version 
-9.2.1:
+I'll take these after 5.5-rc1, but then it is time to just delete all of
+drivers/staging/isdn/ from my tree, so don't worry about them after that
+:)
 
+thanks,
 
-
-$ make                                                                                                                                                                                                                                                                          
-make  all-recursive
-make[1]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip'
-Making all in libsrc
-make[2]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip/
-libsrc'
-make[2]: Nothing to be done for 'all'.
-make[2]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip/libsrc'
-Making all in src
-make[2]: Entering directory '/home/vadim/git/linux-orig/tools/usb/usbip/src'
-  CC       usbip_network.o
-usbip_network.c: In function ‘usbip_net_pack_usb_device’:
-usbip_network.c:79:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   79 |  usbip_net_pack_uint32_t(pack, &udev->busnum);
-      |                                ^~~~~~~~~~~~~
-usbip_network.c:80:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   80 |  usbip_net_pack_uint32_t(pack, &udev->devnum);
-      |                                ^~~~~~~~~~~~~
-usbip_network.c:81:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   81 |  usbip_net_pack_uint32_t(pack, &udev->speed);
-      |                                ^~~~~~~~~~~~
-usbip_network.c:83:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   83 |  usbip_net_pack_uint16_t(pack, &udev->idVendor);
-      |                                ^~~~~~~~~~~~~~~
-usbip_network.c:84:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   84 |  usbip_net_pack_uint16_t(pack, &udev->idProduct);
-      |                                ^~~~~~~~~~~~~~~~
-usbip_network.c:85:32: error: taking address of packed member of ‘struct 
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-   85 |  usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
-      |                                ^~~~~~~~~~~~~~~~
-In file included from usbip_network.c:21:
-usbip_network.c: In function ‘usbip_net_send_op_common’:
-usbip_network.h:36:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   36 |  usbip_net_pack_uint16_t(pack, &(op_common)->version);\
-      |                                ^~~~~~~~~~~~~~~~~~~~~
-usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  143 |  PACK_OP_COMMON(1, &op_common);
-      |  ^~~~~~~~~~~~~~
-usbip_network.h:37:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   37 |  usbip_net_pack_uint16_t(pack, &(op_common)->code);\
-      |                                ^~~~~~~~~~~~~~~~~~
-usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  143 |  PACK_OP_COMMON(1, &op_common);
-      |  ^~~~~~~~~~~~~~
-usbip_network.h:38:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   38 |  usbip_net_pack_uint32_t(pack, &(op_common)->status);\
-      |                                ^~~~~~~~~~~~~~~~~~~~
-usbip_network.c:143:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  143 |  PACK_OP_COMMON(1, &op_common);
-      |  ^~~~~~~~~~~~~~
-usbip_network.c: In function ‘usbip_net_recv_op_common’:
-usbip_network.h:36:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   36 |  usbip_net_pack_uint16_t(pack, &(op_common)->version);\
-      |                                ^~~~~~~~~~~~~~~~~~~~~
-usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  167 |  PACK_OP_COMMON(0, &op_common);
-      |  ^~~~~~~~~~~~~~
-usbip_network.h:37:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   37 |  usbip_net_pack_uint16_t(pack, &(op_common)->code);\
-      |                                ^~~~~~~~~~~~~~~~~~
-usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  167 |  PACK_OP_COMMON(0, &op_common);
-      |  ^~~~~~~~~~~~~~
-usbip_network.h:38:32: error: taking address of packed member of ‘struct 
-op_common’ may result in an unaligned pointer value [-Werror=address-of-
-packed-member]
-   38 |  usbip_net_pack_uint32_t(pack, &(op_common)->status);\
-      |                                ^~~~~~~~~~~~~~~~~~~~
-usbip_network.c:167:2: note: in expansion of macro ‘PACK_OP_COMMON’
-  167 |  PACK_OP_COMMON(0, &op_common);
-      |  ^~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[2]: *** [Makefile:430: usbip_network.o] Error 1
-make[2]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip/src'
-make[1]: *** [Makefile:497: all-recursive] Error 1
-make[1]: Leaving directory '/home/vadim/git/linux-orig/tools/usb/usbip'
-make: *** [Makefile:365: all] Error 2
-
-It looks like this is due to gcc having added new warnings. For now I've 
-worked around it with -Wno-error=address-of-packed-member as I understand this 
-isn't a problem on x86.
-
-
-
-
+greg k-h
