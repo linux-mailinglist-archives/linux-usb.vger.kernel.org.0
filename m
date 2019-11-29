@@ -2,66 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FD0710D64A
-	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 14:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B67D610D650
+	for <lists+linux-usb@lfdr.de>; Fri, 29 Nov 2019 14:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbfK2Ntu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 29 Nov 2019 08:49:50 -0500
-Received: from smtp.qindel.com ([89.140.90.34]:44512 "EHLO thor.qindel.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726853AbfK2Ntt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 29 Nov 2019 08:49:49 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 663226075E;
-        Fri, 29 Nov 2019 14:49:47 +0100 (CET)
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id RUQ3ooiQwruf; Fri, 29 Nov 2019 14:49:47 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 3BF0260760;
-        Fri, 29 Nov 2019 14:49:47 +0100 (CET)
-X-Virus-Scanned: amavisd-new at thor.qindel.com
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id UuPGYUMi6S_O; Fri, 29 Nov 2019 14:49:47 +0100 (CET)
-Received: from gverdu.qindel.com (gverdu.qindel.com [172.26.8.99])
-        by thor.qindel.com (Postfix) with ESMTPSA id 08EDC6075E;
-        Fri, 29 Nov 2019 14:49:44 +0100 (CET)
-From:   Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: usbip tools from 5.4 fail to build due to unaligned pointer value warning
-Date:   Fri, 29 Nov 2019 14:49:45 +0100
-Message-ID: <2248932.DWrUWtNFSA@gverdu.qindel.com>
-In-Reply-To: <20191129133327.GB3703941@kroah.com>
-References: <6296180.lmSoKh01SJ@gverdu.qindel.com> <20191129133327.GB3703941@kroah.com>
+        id S1726808AbfK2Nvq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 29 Nov 2019 08:51:46 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42408 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726741AbfK2Nvq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 29 Nov 2019 08:51:46 -0500
+Received: by mail-lj1-f195.google.com with SMTP id e28so7911055ljo.9;
+        Fri, 29 Nov 2019 05:51:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=r/Fi0MEV5r+tBjNoZsXiqWGS8fmABPhyE3GLMwdmTOs=;
+        b=A9aOx9cEixFVBs4U7f43jObb7HqMvxNxX9koUHd5bYC48PoJUB5V9r+aDgdAOTSXTS
+         QqT9/+g50Dx4MlMHWN4mMXAlli+XgrGnUEq36CVd90f8F8VRQoeODYPUIXUHUAsxSkBy
+         Y9IlQfTCdxmXDVbR7vyVugDCb1PbnvIMaz9KhvU3w+bmbsM+6X8EQ8DAi8KCbW7Sl8C4
+         IYKaeHxOQGs6NoT/fWVrb4QoX4mZylE+p79c5Sevz4FTAHHVv4/GJjjqPda6MgarT6Od
+         IYAmUV5WSGyoT/iYdp387sCXEwGLfWFbwVBQHm/WNq/C5vGUHH3pvwf7PTj58VugzYmG
+         L5kw==
+X-Gm-Message-State: APjAAAUFkfW0LtN7xEplIoLpYE4BTwtOgqOprObUGvWq1Rof8zvBf4bA
+        3w+jhLloJb5vEsnOk57ST4I=
+X-Google-Smtp-Source: APXvYqzYOIhahw5q4/27xdaWNr1ynP0NYIT6X4+7RsS/yjJYtt4WrdyvUoYMvOR/STunO0LIzBZ0Kg==
+X-Received: by 2002:a2e:7013:: with SMTP id l19mr38235479ljc.201.1575035504338;
+        Fri, 29 Nov 2019 05:51:44 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id u7sm3157258lfn.31.2019.11.29.05.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 Nov 2019 05:51:43 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1iaggT-0005iP-Ue; Fri, 29 Nov 2019 14:51:46 +0100
+Date:   Fri, 29 Nov 2019 14:51:45 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Johan Hovold <johan@kernel.org>, devel@driverdev.osuosl.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/4] staging: gigaset: fix crashes on probe
+Message-ID: <20191129135145.GJ29518@localhost>
+References: <20191129101753.9721-1-johan@kernel.org>
+ <20191129133239.GA3703941@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191129133239.GA3703941@kroah.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-В письме от пятница, 29 ноября 2019 г. 14:33:27 CET пользователь Greg KH 
-написал:
-> On Fri, Nov 29, 2019 at 01:24:30PM +0100, Vadim Troshchinskiy wrote:
-> > Hello,
+On Fri, Nov 29, 2019 at 02:32:39PM +0100, Greg Kroah-Hartman wrote: > On Fri, Nov 29, 2019 at 11:17:49AM +0100, Johan Hovold wrote:
+> > Syzbot has been reporting a GPF on probe in the gigaset ISDN driver,
+> > which have since been moved to staging.
 > > 
-> > Building the usbip tools from 4.15 is failing under Fedora 30, gcc version
+> > The first patch fixes that issue, and the next one fixes a second crash
+> > found during testing.
+> > 
+> > The third patch addresses a benign warning in USB core which syzbot is
+> > bound to report once the crashes have been fixed.
+> > 
+> > And while I hate playing checkpatch games, the final patch addresses a
+> > checkpatch warning introduced on purpose by the third patch.
 > 
-> > 9.2.1:
-> When 4.15 was released, there was no such gcc version :)
-> 
-> 4.15 is long end-of-life, please use a more modern kernel release with
-> newer versions of gcc.
+> I'll take these after 5.5-rc1, but then it is time to just delete all of
+> drivers/staging/isdn/ from my tree, so don't worry about them after that
+> :)
 
-Ah, my apologies, had a bit of a mix-up here. This compilation problem was on 
-v5.4 as it says in the title, I'm working on porting something from 4.15 and 
-accidentally put that there.
+Sounds good to me. :)
 
+But we should probably get these backported before dropping
+staging/isdn. Not sure if syzbot is run against older stable trees as
+well, but if so, you may want to consider adding a stable-tag also to
+patch 3/4.
 
-
-
-
-
+Johan
