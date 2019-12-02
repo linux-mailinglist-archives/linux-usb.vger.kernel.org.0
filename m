@@ -2,115 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6F210E63C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 08:01:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2922910E649
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 08:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfLBHBo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Dec 2019 02:01:44 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36034 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfLBHBo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 02:01:44 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z3so42728090wru.3
-        for <linux-usb@vger.kernel.org>; Sun, 01 Dec 2019 23:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OIeJzPkfZfkQW+lmWkeb7QT4hklfgkIqwhLk0IajLpI=;
-        b=N0aMOxI3Jdo7KPnUkFwlOU6WRz95oOUare7m7+UEZEH1gf0oxUY2Sg6BwmHMnmqsxA
-         16sb6a2cCJGC6N9a5Z8MFlD6SRdnSa3brpX3oIbIX6dwHxxVrJLoNemalxtDUjRfi7hd
-         B3+FaHjMo5z29AI7l8M6we/KAb458Hf2uVKk2fUC905zKCOK0bMfgi/cIOrgBp9nDmES
-         u1FdhoQaIs3KeZp6rld6IjQJ2r1kugusvB8awjLaI/lXY4lxX8wTJejXHVuhseopbF2F
-         lgTWq6l9iGr61CHvvTtWwcC5ZnjgxQTnPK4qL6Ka329egpWKhyXa6h3IUARfOIxTZKIf
-         iwYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OIeJzPkfZfkQW+lmWkeb7QT4hklfgkIqwhLk0IajLpI=;
-        b=qf0f05nj255AJGAiI3SGdnim/NBusld4pXhh4BUQIMPrguWegC7uD0EtlISaLW1su0
-         FYpywIed3YsToYC2N9H0O7QUFWELqpkM94GG1m0+tuhOq0pp2Ym8rvFVlR3La+SN5zhI
-         EACz6+QsS9nhZZLwLWSxXZRJUkXzm7ZtIG7/AcK2H78kyq7KpkxHRJi3EKY4xak/fpSi
-         j8oYp2ZPOIXdrxpb+fIBitFdXDmVk1d1/OLrfPBJA+J0RkMh8/1Nbyf/MYCYdVKFAvrW
-         dxwXLRmohzDta9VLpa7HSekd4TwR6Drd93wGNyUwVPrJIyy2KTnWxBvDjhFZ0eTLpOoS
-         0lsg==
-X-Gm-Message-State: APjAAAVweGUfIx8HcP3S1CvT+AQuxd29V8hIGfIA8Chy2IQdM+QTT/lC
-        mPwapxGw8jtoLFR+f0Fc7rb2gA==
-X-Google-Smtp-Source: APXvYqyl7g6ZdPSB/hceL6L6wfDEpdQFMZPEbs1pMw1w54KtldT/IG0NSVgZ9wWB3C2j/9a6/78T0g==
-X-Received: by 2002:adf:eb08:: with SMTP id s8mr24816066wrn.5.1575270102144;
-        Sun, 01 Dec 2019 23:01:42 -0800 (PST)
-Received: from brian.unipv.it ([37.163.132.5])
-        by smtp.gmail.com with ESMTPSA id y139sm18984178wmd.24.2019.12.01.23.01.38
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 01 Dec 2019 23:01:41 -0800 (PST)
-Date:   Mon, 2 Dec 2019 08:01:35 +0100
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Bernd Schubert <bs_lists@aakef.fastmail.fm>
-Cc:     Ming Lei <ming.lei@redhat.com>,
-        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191202070135.GA4634@brian.unipv.it>
-References: <0876e232feace900735ac90d27136288b54dafe1.camel@unipv.it>
- <20191126023253.GA24501@ming.t460p>
- <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
- <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
- <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
- <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
- <20191128091712.GD15549@ming.t460p>
- <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
- <20191129005734.GB1829@ming.t460p>
- <3c57bba1-831b-fc97-d5f7-e670f43fbbdc@aakef.fastmail.fm>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3c57bba1-831b-fc97-d5f7-e670f43fbbdc@aakef.fastmail.fm>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+        id S1726002AbfLBHMG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Dec 2019 02:12:06 -0500
+Received: from a27-55.smtp-out.us-west-2.amazonses.com ([54.240.27.55]:54644
+        "EHLO a27-55.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725914AbfLBHMG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 02:12:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575270725;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References;
+        bh=3477CrG681lrfC7TA2/zTKr4w73EI6NRnLjMYutiB0Y=;
+        b=Ou1hRc+kQL5ti5kfL99SkUzJ/4NWgFC8dWwHcUUJYVXbkuGgJfMAb5A4E+JsaT28
+        7JjAYfkl1DRM2ZRHgMqAJbLOwvoYLFRlPOlcRvklxmiEFU4qHmlKG0/+bhuUf7Mrv31
+        1/tBB6cYN88ak94m/X65jjTbjXNMnmg2q0niRi9g=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575270725;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:Feedback-ID;
+        bh=3477CrG681lrfC7TA2/zTKr4w73EI6NRnLjMYutiB0Y=;
+        b=IzWFdp99nAiAybOFxzT6dZ+yCRTOca7/7LalpCIXHnVXY27oxj1xzX1LENvYsTSF
+        E04a7bsuvBHugDAvwGOWLdgVEfn3zdw4g6FJEo4fDsx5ALYx6e0/41msmLbC+B/nQNb
+        ja5cEq+8mC/vCAr4A70myk6Lup4+80OZewUhoMOg=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3975BC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     jackp@codeaurora.org, mgautam@codeaurora.org,
+        Sriharsha Allenki <sallenki@codeaurora.org>
+Subject: [PATCH] usb: dwc3: Do not process request if HWO is set for its TRB
+Date:   Mon, 2 Dec 2019 07:12:05 +0000
+Message-ID: <0101016ec573b5ae-2af3092c-f485-4087-b38f-915f5a21d8a4-000000@us-west-2.amazonses.com>
+X-Mailer: git-send-email 1.9.1
+In-Reply-To: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org>
+References: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org>
+X-SES-Outgoing: 2019.12.02-54.240.27.55
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/11/19 12:44:53, Bernd Schubert wrote:
-> >> Trace attached. Produced by: start the trace script
-> >> (with the pendrive already plugged), wait some seconds, run the test
-> >> (1 trial, 1 GB), wait for the test to finish, stop the trace.
-> >>
-> >> The copy took 73 seconds, roughly as already seen before with the fast
-> >> old kernel.
-> > 
-> > This trace shows a good write IO order because the writeback IOs are
-> > queued to block layer serially from the 'cp' task and writeback wq.
-> > 
-> > However, writeback IO order is changed in current linus tree because
-> > the IOs are queued to block layer concurrently from the 'cp' task
-> > and writeback wq. It might be related with killing queue_congestion
-> > by blk-mq.
-> 
-> What about using direct-io to ensure order is guaranteed? Pity that 'cp'
-> doesn't seem to have an option for it. But dd should do the trick.
-> Andrea, can you replace cp with a dd command (on the slow kernel)?
-> 
-> dd if=<path-to-src-file> of=<path-to-copy-on-flash-device> bs=1M
-> oflag=direct
+If the HWO bit is set for the TRB (or the first TRB if scatter-gather
+is used) of a request, it implies that core is still processing it.
+In that case do not reclaim that TRB and do not giveback the
+request to the function driver, else it will result in a SMMU
+translation fault when core tries to access the buffer
+corresponding to this TRB.
 
-On the "new bad patched" kernel, this command take 68 seconds to complete (mean on 100 trials, with a narrow standard deviation), so perfectly
-aligned with the cp command on the old fast good kernel.
+Signed-off-by: Sriharsha Allenki <sallenki@codeaurora.org>
+---
+ drivers/usb/dwc3/gadget.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Thanks, and bye
-Andrea
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a9aba71..4a2c5fc 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2476,6 +2476,14 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
+ {
+ 	int ret;
+ 
++	/*
++	 * If the HWO is set, it implies the TRB is still being
++	 * processed by the core. Hence do not reclaim it until
++	 * it is processed by the core.
++	 */
++	if (req->trb->ctrl & DWC3_TRB_CTRL_HWO)
++		return 1;
++
+ 	if (req->num_pending_sgs)
+ 		ret = dwc3_gadget_ep_reclaim_trb_sg(dep, req, event,
+ 				status);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
+
