@@ -2,215 +2,183 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C776410E79A
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 10:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D7510E8D6
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 11:30:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727366AbfLBJZI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Dec 2019 04:25:08 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:40257 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfLBJZH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 04:25:07 -0500
-Received: by mail-il1-f198.google.com with SMTP id s10so4047338ilh.7
-        for <linux-usb@vger.kernel.org>; Mon, 02 Dec 2019 01:25:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=s/fzY9n/Wc759s+X5jwa5PXhW5V1f6rxMUh+sQv+EIU=;
-        b=klOJIahfwCNYZLnYjLJ8vTRG+a4uiAUk9DlpUvlgTkiFiplYU1BfigFpAtLooBtuth
-         ACARGGF38umTyfXI0V1VissDE97WSwvBybQWgihw5VLQoVnNjSZsmUSEoQQchj5YywDw
-         lmQqg/6LfHG3p6RHlsUQpG8HythaICdrMj0RbBfe60+142D/dzgLFAQ70TC/CZEK4cwP
-         PihvnpnTyip0A5+AuyoJULZaCszaNJsw9GjFfKgEbLC3nZlJNPoaJgagnk5Ipluanjs6
-         bLsb2gQzHNFfkBzKYjxcz9NVN+Ih90EQ5+5PYCyA8Iy+ArsErWePSE4gf0OD47Znio4S
-         e/Vw==
-X-Gm-Message-State: APjAAAXJwHIsvNFxZ3u4OjS1C5/+tBM4/ItUvD0tZ1n8QtOHrUcxzmeG
-        iVNyn1JD2bTDhWFuTrYfbBKHCQs1zbgqpm1aRgCOtlBmPMeA
-X-Google-Smtp-Source: APXvYqxUgkfSuyTzo7urgNwiNWOccCUAD3r/7Xc6+I7tBgXjkAdKtW2Xb8ndo2wJJNzCx0qC3O1QWtMZvde93oeGiTGB9b+IeVx2
+        id S1727453AbfLBKa1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Dec 2019 05:30:27 -0500
+Received: from a27-10.smtp-out.us-west-2.amazonses.com ([54.240.27.10]:41054
+        "EHLO a27-10.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727567AbfLBKa0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 05:30:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575282625;
+        h=From:Subject:To:Cc:References:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=T7tiXcPk+13Hn0v3yKw/4ZHpZXNaKh+VOtQu9qRy8fI=;
+        b=BPGup07iWaX7SXpAGFnGSZL9CcLO5MxgVTYqLc45F2KxPh3y2Houl2hXMY27r1me
+        JlDS8IaLlbkFVbx3HRgab8u77aTuTSBS/xc8fGzvji0g5rNZqmMrc51XuU+6TndbPWK
+        GDk6r3QNH2C3YpPqyJw1KBiV5OsqD3jr0dkudGdY=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575282625;
+        h=From:Subject:To:Cc:References:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+        bh=T7tiXcPk+13Hn0v3yKw/4ZHpZXNaKh+VOtQu9qRy8fI=;
+        b=H0flUtbooSlohKm/QclEWAfEw2tz4df01ekcmePk6nOpqhFiySlHCihB7ZkMcE4G
+        yOO/rInaxJX6l5ZRLPB8T3QvScHKetY94LR7hmNuGJfqmJsRkDI2NK0U/BL/AohI4QC
+        /gqiTZ+5kDZEVMHEHEOzGLGmwrvwZcOmqJ07evcU=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2FA5AC2BB55
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: Do not process request if HWO is set for its
+ TRB
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     jackp@codeaurora.org, mgautam@codeaurora.org
+References: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org>
+ <1575270714-29994-1-git-send-email-sallenki@codeaurora.org>
+ <87tv6jch61.fsf@gmail.com>
+Message-ID: <0101016ec6294c21-99711286-dbda-4d62-b8c7-e9f28e99b261-000000@us-west-2.amazonses.com>
+Date:   Mon, 2 Dec 2019 10:30:25 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:8995:: with SMTP id w21mr6775582ilk.231.1575278706708;
- Mon, 02 Dec 2019 01:25:06 -0800 (PST)
-Date:   Mon, 02 Dec 2019 01:25:06 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bc5c0e0598b52778@google.com>
-Subject: KASAN: use-after-free Write in as102_release
-From:   syzbot <syzbot+edff65c4ade21b5db190@syzkaller.appspotmail.com>
-To:     allison@lohutok.net, andreyknvl@google.com,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mchehab@kernel.org, rfontana@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+In-Reply-To: <87tv6jch61.fsf@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-SES-Outgoing: 2019.12.02-54.240.27.10
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Felipe Balbi,
 
-syzbot found the following crash on:
+Thanks for the reviewing the patch and for the comments.
 
-HEAD commit:    32b5e2b2 usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=1255457ae00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d88612251f7691bd
-dashboard link: https://syzkaller.appspot.com/bug?extid=edff65c4ade21b5db190
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+On 12/2/2019 1:06 PM, Felipe Balbi wrote:
+> Hi,
+>
+> Sriharsha Allenki<sallenki@codeaurora.org>  writes:
+>
+>> If the HWO bit is set for the TRB (or the first TRB if scatter-gather
+>> is used) of a request, it implies that core is still processing it.
+>> In that case do not reclaim that TRB and do not giveback the
+>> request to the function driver, else it will result in a SMMU
+>> translation fault when core tries to access the buffer
+>> corresponding to this TRB.
+> This is not entirely true. There are cases where driver *must* clear HWO
+> bit manually and driver currently accounts for that. Care to explain
 
-Unfortunately, I don't have any reproducer for this crash yet.
+Based on my understanding I am trying to list down the two cases where
+driver must clear HWO bit manually and how the patch would not regress 
+these.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+edff65c4ade21b5db190@syzkaller.appspotmail.com
+Additionally, I want to add that this patch is checking for req->trb 
+(not the
+TRB pointed by the *trb_dequeue*) which will be pointing to the first 
+TRB in the
+case of SG and in the case of linear it point to the TRB containing
+the data (not theextra_trb or the trb to handle zero length packet).
 
-==================================================================
-BUG: KASAN: use-after-free in atomic_fetch_sub  
-include/asm-generic/atomic-instrumented.h:199 [inline]
-BUG: KASAN: use-after-free in refcount_sub_and_test  
-include/linux/refcount.h:253 [inline]
-BUG: KASAN: use-after-free in refcount_dec_and_test  
-include/linux/refcount.h:281 [inline]
-BUG: KASAN: use-after-free in kref_put include/linux/kref.h:64 [inline]
-BUG: KASAN: use-after-free in as102_release+0x58/0xd8  
-drivers/media/usb/as102/as102_usb_drv.c:458
-Write of size 4 at addr ffff8881adb84140 by task syz-executor.5/16315
+*Case-1*:
+We are in the middle of series of chained TRBs and we received a short
+transfer along the way. Here is the code handling this case:
 
-CPU: 1 PID: 16315 Comm: syz-executor.5 Not tainted 5.4.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-Call Trace:
-  __dump_stack lib/dump_stack.c:77 [inline]
-  dump_stack+0xef/0x16e lib/dump_stack.c:118
-  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
-  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
-  kasan_report+0xe/0x20 mm/kasan/common.c:634
-  check_memory_region_inline mm/kasan/generic.c:185 [inline]
-  check_memory_region+0x128/0x190 mm/kasan/generic.c:192
-  atomic_fetch_sub include/asm-generic/atomic-instrumented.h:199 [inline]
-  refcount_sub_and_test include/linux/refcount.h:253 [inline]
-  refcount_dec_and_test include/linux/refcount.h:281 [inline]
-  kref_put include/linux/kref.h:64 [inline]
-  as102_release+0x58/0xd8 drivers/media/usb/as102/as102_usb_drv.c:458
-  __fput+0x2d7/0x840 fs/file_table.c:280
-  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
-  exit_task_work include/linux/task_work.h:22 [inline]
-  do_exit+0x8ab/0x2bc0 kernel/exit.c:797
-  do_group_exit+0x125/0x340 kernel/exit.c:895
-  get_signal+0x466/0x23c0 kernel/signal.c:2734
-  do_signal+0x88/0x1490 arch/x86/kernel/signal.c:815
-  exit_to_usermode_loop+0x1a2/0x200 arch/x86/entry/common.c:160
-  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
-  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
-  do_syscall_64+0x4d1/0x5b0 arch/x86/entry/common.c:304
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x45a4e7
-Code: Bad RIP value.
-RSP: 002b:00007f8274f103c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: fffffffffffffffc RBX: 0000000000000000 RCX: 000000000045a4e7
-RDX: 00007f8274f10810 RSI: 0000000080085502 RDI: 0000000000000003
-RBP: 000000000075bf20 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
-R13: 00000000004ca701 R14: 00000000004e2e78 R15: 00000000ffffffff
-
-Allocated by task 17:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  __kasan_kmalloc mm/kasan/common.c:510 [inline]
-  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:483
-  kmalloc include/linux/slab.h:556 [inline]
-  kzalloc include/linux/slab.h:690 [inline]
-  as102_usb_probe+0x4e/0x3d0 drivers/media/usb/as102/as102_usb_drv.c:350
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-Freed by task 17:
-  save_stack+0x1b/0x80 mm/kasan/common.c:69
-  set_track mm/kasan/common.c:77 [inline]
-  kasan_set_free_info mm/kasan/common.c:332 [inline]
-  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:471
-  slab_free_hook mm/slub.c:1424 [inline]
-  slab_free_freelist_hook mm/slub.c:1457 [inline]
-  slab_free mm/slub.c:3004 [inline]
-  kfree+0xdc/0x310 mm/slub.c:3956
-  as102_usb_probe.cold+0x133/0x366  
-drivers/media/usb/as102/as102_usb_drv.c:412
-  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
-  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
-  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
-  really_probe+0x281/0x6d0 drivers/base/dd.c:548
-  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
-  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
-  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
-  __device_attach+0x217/0x360 drivers/base/dd.c:894
-  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
-  device_add+0x1480/0x1c20 drivers/base/core.c:2487
-  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
-  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
-  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
-  port_event drivers/usb/core/hub.c:5470 [inline]
-  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
-  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
-  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
-  kthread+0x318/0x420 kernel/kthread.c:255
-  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-
-The buggy address belongs to the object at ffff8881adb84000
-  which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 320 bytes inside of
-  4096-byte region [ffff8881adb84000, ffff8881adb85000)
-The buggy address belongs to the page:
-page:ffffea0006b6e000 refcount:1 mapcount:0 mapping:ffff8881da00c280  
-index:0x0 compound_mapcount: 0
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da00c280
-raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
-  ffff8881adb84000: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881adb84080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ffff8881adb84100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                            ^
-  ffff8881adb84180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-  ffff8881adb84200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+         /*
+          * If we're in the middle of series of chained TRBs and we
+          * receive a short transfer along the way, DWC3 will skip
+          * through all TRBs including the last TRB in the chain (the
+          * where CHN bit is zero. DWC3 will also avoid clearing HWO
+          * bit and SW has to do it manually.
+          *
+          * We're going to do that here to avoid problems of HW trying
+          * to use bogus TRBs for transfers.
+          */
+         if (chain && (trb->ctrl & DWC3_TRB_CTRL_HWO))
+                 trb->ctrl &= ~DWC3_TRB_CTRL_HWO;
 
 
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+This case occurs only after the first TRB of the chain is processed, 
+which we
+arechecking in the patch. Although, this piece of code has been no-op
+after introducingthe function "dwc3_gadget_ep_reclaim_trb_sg".This function
+checks for the HWO and does notcall the 
+"dwc3_gadget_ep_reclaim_completed_trb"
+if it is set.Hence this condition mostly likely will never hit.
 
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+*Case-2*:
+The second case is wherewe append the actual data buffer TRB with an 
+extra_trb
+for unaligned OUT transfer. Code handling this is:
+
+         /*
+          * If we're dealing with unaligned size OUT transfer, we will 
+be left
+          * with one TRB pending in the ring. We need to manually clear 
+HWO bit
+          * from that TRB.
+          */
+
+         if (req->needs_extra_trb && !(trb->ctrl & DWC3_TRB_CTRL_CHN)) {
+                 trb->ctrl &= ~DWC3_TRB_CTRL_HWO;
+                 return 1;
+         }
+
+This also requires that the actual data buffer TRB should be processed 
+and then
+we areexpected to reclaim this extra_trb. If the TRB corresponding to the
+actual data (req->trb)is not processed we are not expecting this 
+extra_trb to be
+reclaimed.
+
+
+So, both these cases occurs and valid only if the first TRB/TRB 
+containing the
+dataof the request(req->trb) is processed.The proposed change is looking
+for thecompletion of this TRB, soI don't think this change will regress the
+above mentioned cases.
+> what problem you actually found? Preferrably with tracepoint data
+> showing the fault.
+Test case here involves f_fs driver in AIO mode and we see ~8 TRBs in 
+the queue
+with HWO set and UPDATE_XFER done. In the failure case I see thatas part of
+processingthe interrupt generated by the core for the completion of the 
+first TRB,
+the driver isgoing ahead and giving backthe requests of all theother 
+queued TRBs,
+whichinvolves removing the SMMU mapping of the buffers associated with 
+the requests.
+But these are still active and when core processesthese TRBs and their
+correspondingun-mapped buffers, I see a translationfaultraised by the SMMU.
+
+I hope I have answered your queries, please let me know if I am still 
+missing something here.
+>> Signed-off-by: Sriharsha Allenki<sallenki@codeaurora.org>
+>> ---
+>>   drivers/usb/dwc3/gadget.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index a9aba71..4a2c5fc 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2476,6 +2476,14 @@ static int dwc3_gadget_ep_cleanup_completed_request(struct dwc3_ep *dep,
+>>   {
+>>   	int ret;
+>>   
+>> +	/*
+>> +	 * If the HWO is set, it implies the TRB is still being
+>> +	 * processed by the core. Hence do not reclaim it until
+>> +	 * it is processed by the core.
+>> +	 */
+>> +	if (req->trb->ctrl & DWC3_TRB_CTRL_HWO)
+>> +		return 1;
+> I'm pretty sure you're regressing a bunch of other cases here.
+>
