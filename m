@@ -2,34 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8296710EDAE
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 18:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220A210F0E3
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 20:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727721AbfLBRDA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Dec 2019 12:03:00 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34080 "HELO
+        id S1727973AbfLBTnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Dec 2019 14:43:40 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:34206 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727460AbfLBRDA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 12:03:00 -0500
-Received: (qmail 4189 invoked by uid 2102); 2 Dec 2019 12:02:59 -0500
+        with SMTP id S1727686AbfLBTnj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 14:43:39 -0500
+Received: (qmail 4882 invoked by uid 2102); 2 Dec 2019 14:43:38 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Dec 2019 12:02:59 -0500
-Date:   Mon, 2 Dec 2019 12:02:59 -0500 (EST)
+  by localhost with SMTP; 2 Dec 2019 14:43:38 -0500
+Date:   Mon, 2 Dec 2019 14:43:38 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Michael Olbrich <m.olbrich@pengutronix.de>
-cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        <linux-media@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: restart the transfer if a isoc
- request is queued too late
-In-Reply-To: <20191202154120.o4yt266cat6uzxd7@pengutronix.de>
-Message-ID: <Pine.LNX.4.44L0.1912021103470.1559-100000@iolanthe.rowland.org>
+To:     Erkka Talvitie <erkka.talvitie@vincit.fi>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
+        <claus.baumgartner@med.ge.com>
+Subject: Re: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
+In-Reply-To: <1046f0c10876628227b7c9f303b0582a20406b14.1575030959.git.erkka.talvitie@vincit.fi>
+Message-ID: <Pine.LNX.4.44L0.1912021349440.1559-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -37,130 +30,112 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 2 Dec 2019, Michael Olbrich wrote:
+On Fri, 29 Nov 2019, Erkka Talvitie wrote:
 
-> > > My current test-case is video frames with 450kB on average at 30fps. This
-> > > currently results in ~10 CPU load for the threaded interrupt handler.
-> > > At least in my test, filling the actual video data into the frame has very
-> > > little impact. So if I reserve 900kB to support occasionally larger video
-> > > frames, then I expect that this CPU load will almost double in all cases,
-> > > not just when the video frames are larger.
-> > 
-> > This is the sort of thing you need to confirm by experimenting.  It is 
-> > not at all clear that doubling the interrupt rate will also double the 
-> > CPU load, especially if half of the interrupts don't require the CPU to 
-> > do much work.
+> When disconnecting a USB hub that has some child device(s) connected to it
+> (such as a USB mouse), then the stack tries to clear halt and
+> reset device(s) which are _already_ physically disconnected.
+
+That behavior is understandable.  The kernel doesn't know that the
+device has been disconnected until it can process the notification from
+an upstream hub, and it can't process that notification while it's
+trying to reset the device.
+
+> The issue has been reproduced with:
 > 
-> As I noted before, actually filling in the video data is only a small part
-> of the measured CPU load. To put in in more precise numbers:
+> CPU: IMX6D5EYM10AD or MCIMX6D5EYM10AE.
+> SW: U-Boot 2019.07 and kernel 4.19.40.
 > 
-> From my limited understanding, there are 8000 interrupts per second
-> regardless of the bandwidth (or maybe less for very low bandwidth
-> configurations?).
-> Just queuing requests without any content (so skipping the buffer handling
-> and 'encode()' in uvc_video_complete()) results in ~17% CPU load.
+> In this situation there will be error bit for MMF active yet the
+> CERR equals EHCI_TUNE_CERR + halt.
 
-Can you tell dwc3 to request only 4000 interrupts per second?  Or 2000?
-Or even 60?
+Why?  In general, setting the MMF bit does not cause the halt bit to be 
+set (set Table 4-13 in the EHCI spec).  In fact, MMF refers to errors 
+that occur on the host, not bus errors caused by a disconnected device.
 
-> If I fill in the data for a video stream with ~1.8MB per frame and 30 fps
-> (and empty requests for the rest) then the CPU load goes up to ~19.5%.
+> Existing implementation
+> interprets this as a stall [1] (chapter 8.4.5).
 
-I assume you're talking about a SuperSpeed USB connection here, since 
-high speed can handle no more than 0.8 MB per frame at 30 fps.
+That is the correct thing to do.  When a transaction error occurs
+during a Complete-Split transaction, the host controller is supposed to
+decrement the CERR value, set the XACT bit, and retry the transaction
+unless the CERR value is 0 or there isn't enough time left in the
+microframe.
 
-> This number remains the same for different bandwidths (and therefore
-> different request sizes and a different zero-length request percentage).
+The fact that you saw CERR equal to EHCI_TUNE_CERR and XACT clear
+probably means that your EHCI hardware is not behaving properly.
+
+> Fix for the issue is at first to check for a stall that comes after
+> an error (the CERR has been decreased).
 > 
-> With my patches the CPU load changes as expected. The 2.5% to fill the data
-> remains and the rest goes down with less interrupts.
+> Then after that, check for other errors.
 > 
-> I am hoping that more batching will help here a bit. But either way the
-> overhead of queuing zero-length request is significant.
+> And at last check for stall without other errors (the CERR equals
+> EHCI_TUNE_CERR as stall does not decrease the CERR [2] (table 3-16)).
+> 
+> What happens after the fix is that when disconnecting a hub with
+> attached device(s) the situation is not interpret as a stall.
+> 
+> The specification [2] is not clear about error priorities, but
+> since there is no explicit error bit for the stall, it is
+> assumed to be lower priority than other errors.
 
-Hmmm.  It may be that my thinking has been prejudiced by a 
-host-centered attitude, and things may work out different on the gadget 
-side.
+On the contrary, the specification is very clear.  Since transaction
+errors cause CERR to be decremented until it reaches 0, a nonzero value
+for CERR means the endpoint was halted for some other reason.  And the
+only other reason is a stall.  (Or end of the microframe, but there's 
+no way to tell if that happened.)
 
-There's one aspect I'm not clear on.  Suppose you decide to skip
-submitting requests for USB microframes 5 - 7 (at 8000 microframes
-per second, as you mentioned) and then submit a request to be queued
-for microframe 8.  How does the UDC driver know which microframe to use
-for that request?  Does it always use the first available microframe?
+> [1] https://www.usb.org/document-library/usb-20-specification, usb_20.pdf
+> [2] https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/ehci-specification-for-usb.pdf
+> 
+> Signed-off-by: Erkka Talvitie <erkka.talvitie@vincit.fi>
 
+Can you duplicate this behavior on a standard PC, say with an Intel
+EHCI controller?
 
-> My problem is this:
-> Let's assume a (for simplicity) that I have a video stream that fills
-> almost the full available bandwidth. And two reduce the bandwidth, two
-> interrupts will be requested for each video frame.
+>  drivers/usb/host/ehci-q.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> index 3276304..da7fd12 100644
+> --- a/drivers/usb/host/ehci-q.c
+> +++ b/drivers/usb/host/ehci-q.c
+> @@ -206,8 +206,9 @@ static int qtd_copy_status (
+>  		if (token & QTD_STS_BABBLE) {
+>  			/* FIXME "must" disable babbling device's port too */
+>  			status = -EOVERFLOW;
+> -		/* CERR nonzero + halt --> stall */
+> -		} else if (QTD_CERR(token)) {
+> +		/* CERR nonzero and less than EHCI_TUNE_CERR + halt --> stall.
+> +		   This handles situation where stall comes after an error. */
 
-Let's assume the video frame rate is 30 fps.  Since you say almost the
-full available bandwidth is in use, the number of USB microframes per
-video frame must be just under 8000 / 30, or around 266.
+This comment doesn't make sense.  Who cares whether a stall comes after
+an error or not?  It's still a stall and should be reported.
 
-> - When the first frame arrives, the whole frame is queued.
+> +		} else if (QTD_CERR(token) && QTD_CERR(token) < EHCI_TUNE_CERR) {
+>  			status = -EPIPE;
 
-Requiring 266 microframes, let's say starting at microframe 0.
+If an error occurs and the transaction is retried and the retry gets a
+stall, then the final status should be -EPIPE, not something else.
 
-> - When the first half of the frame is transmitted the first interrupt
->   arrives.
+>  		/* In theory, more than one of the following bits can be set
+> @@ -228,6 +229,10 @@ static int qtd_copy_status (
+>  				usb_pipeendpoint(urb->pipe),
+>  				usb_pipein(urb->pipe) ? "in" : "out");
+>  			status = -EPROTO;
+> +		/* CERR equals EHCI_TUNE_CERR, no other errors + halt --> stall.
+> +		   This handles situation where stall comes without error bits set. */
 
-That would be at microframe 133.
+If CERR is equal to EHCI_TUNE_CERR then no other errors could have 
+occurred (since any error will decrement CERR).  So why shouldn't this 
+case be included with the earlier case?
 
-> - The second frame has not yet arrived so half a frame worth of 0-length
->   requests are queued.
-
-133 microframes, extending out to microframe 399.
-
-> - When the second half of the frame is transmitted the second interrupt
->   arrives.
-
-At the end of microframe 266.
-
-> - The second frame has still not yet arrived so another half a frame worth
->   of 0-length requests are queued.
-
-At this point, it has been about 266/8000 s = 33.25 ms since the first 
-video frame arrived.  But at a rate of 30 fps, the interval between 
-frames should be 33.33 ms.  So either something is wrong or else the 
-second frame is just about to arrive.
-
-(Since the frame rate is slightly lower than the rate of transmission
-of the USB data, it's inevitable that every so often you'll get an
-interrupt just before a frame arrives.)
-
-> - Immediately afterwards the second frame arrives from userspace. At this
->   point, almost one frame worth of 0-length requests are queued so the
->   second frame will have an extra latency of almost one frame.
-
-I see.  There is another way to approach this, however.  When you get a
-USB interrupt and no video data is available, nothing says you have to
-queue an entire frame (or half-frame) worth of 0-length packets.  
-Instead, queue a request containing 2 ms (for example) of 0-length
-packets.  Presumably the next video frame will arrive during those 2 ms
-(since it's _expected_ to arrive in no more than 0.08 ms), and from
-then on you'll be okay until once again the USB data has caught up to
-the video data.
-
-On the other hand, I don't know how the UVC driver manages the
-alignment between USB packets and video frames on the host end.  
-Perhaps it would prefer something slightly different -- that would be
-another good question to ask the UVC maintainer (CC'ed).
-
-> With my patch this does not happen and the transmission of the second
-> starts immediately.
-
-> The question is, can we do better than that? What could be done in the
-> driver if it knows that 0-length requests must be transmitted because no
-> new data is available?
-
-It does seems reasonable to require that when a UDC driver encounters a
-gap in an isochronous stream, it should associate the next request with
-the first available microframe.  If dcw3 did that then you wouldn't 
-have to worry about filling extra space with 0-length packets.
-
-But if we make this change, it should be documented in an appropriate
-place and it should apply to all UDC drivers -- not just dwc3.
+> +		} else if (QTD_CERR(token)) {
+> +			status = -EPIPE;
+>  		} else {	/* unknown */
+>  			status = -EPROTO;
+>  		}
 
 Alan Stern
 
