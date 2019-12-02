@@ -2,245 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2871A10EC8C
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 16:41:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECD210ECF4
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 17:20:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727480AbfLBPl2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Dec 2019 10:41:28 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:59547 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727435AbfLBPl1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 10:41:27 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mol@pengutronix.de>)
-        id 1ibnpC-0007tX-Oz; Mon, 02 Dec 2019 16:41:22 +0100
-Received: from mol by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <mol@pengutronix.de>)
-        id 1ibnpB-0002io-10; Mon, 02 Dec 2019 16:41:21 +0100
-Date:   Mon, 2 Dec 2019 16:41:21 +0100
-From:   Michael Olbrich <m.olbrich@pengutronix.de>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: restart the transfer if a isoc
- request is queued too late
-Message-ID: <20191202154120.o4yt266cat6uzxd7@pengutronix.de>
-Mail-Followup-To: Alan Stern <stern@rowland.harvard.edu>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20191128113633.5slzlehhwlmnc3zr@pengutronix.de>
- <Pine.LNX.4.44L0.1911281242330.19734-100000@netrider.rowland.org>
+        id S1727617AbfLBQUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Dec 2019 11:20:15 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44352 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727484AbfLBQUP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 11:20:15 -0500
+Received: by mail-wr1-f67.google.com with SMTP id q10so8884389wrm.11
+        for <linux-usb@vger.kernel.org>; Mon, 02 Dec 2019 08:20:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nkQwRTM95cBLi6Fj4wKSDDrfWsyTN93GtdThgMXaKqk=;
+        b=f7kXw7u/a7/bLGkPeWpm/zCKXXNYZyM6YrDDujzaCbyuMDz8pvol3xbj1XnS+IoKP0
+         HdDrTi8XKOl5UJH65tEHpgaBczcn5VArtBHcE+YUFFHSJPB7JPCFOTi6QJ/4B4w1JcPl
+         9Hq0/EJ3CojJcSIDkwvRQ6RNiBsAGEfcTc9NbH+Jzuwftoi5An9dm6Af0vGizMeIlu4U
+         k7jZ4fEOyUYC+O90CEGvcJQnxZdtw6E+/n1LaZ+R+AkM4QSTDXefPC5B1GNasno/mIyk
+         uviOd9CPka4RkZXzg3ZLlnlsj6gLRa5uQx0PDmDEzraJmB5p2mFGk78YBQ85YHe7Y4cx
+         GHxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nkQwRTM95cBLi6Fj4wKSDDrfWsyTN93GtdThgMXaKqk=;
+        b=l2TZT8yxyJtdOwcejbQ0u2SsLvTCQ5WtOcxpN7E47LhVLrEW3qp6cUDcsiZKswuorx
+         X4pjqDWLOucSXQ5W7Ea/YD4sWyB22TQrnONGBEGmGV85MrcXzPedCqMjSuohkKKRTxku
+         20cOcVvfxaO1B7+DFKzewwQiNfgGNdcYzjFLpePa30RZSZcQnDoJU6FQ57a55pvpAuZu
+         gtCQ67QAqG8y8btudSqPKosvDkeUa0TVd5NGhpIqD0Jr78oADuqNlir7Um6JV5Br+df8
+         KQeDLWTbLqrty1WNPW1Y1iV82FOL8dffs9ZUnBAFj5X75cbxc22wPdgbxHRsJNy94tDR
+         6eGg==
+X-Gm-Message-State: APjAAAXM2sAkpwNK9OrepQLtL/cgQe1cewtt0FvrgxxJl67m3/pIVQZN
+        WTlmEEYE/fjLLX+YwVl6QlWtrSZLEUFxuH60RP5yuw==
+X-Google-Smtp-Source: APXvYqw7opHk2i1e3BTEjCDkaoqsXb92Pyx1AEXJ8tbLXEsvesR7uQowzy3hMXhZfcLOOI+ALl4mzxIKYrMfO0/GkI8=
+X-Received: by 2002:adf:db86:: with SMTP id u6mr74079656wri.318.1575303611611;
+ Mon, 02 Dec 2019 08:20:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Pine.LNX.4.44L0.1911281242330.19734-100000@netrider.rowland.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 16:41:02 up 147 days, 21:51, 137 users,  load average: 0.42, 0.30,
- 0.27
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mol@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <CAAeHK+yyKeV8h6UO2-4zZM_ndUaHcG1Ex5GYHxdmh_GJxDOa4w@mail.gmail.com>
+ <Pine.LNX.4.44L0.1911151038480.1527-100000@iolanthe.rowland.org>
+ <CAAeHK+z6m8mXEH-L+W+8FxjasrMX6BGMEdTq_hgUYerp+_0kjA@mail.gmail.com>
+ <20191116084854.GA384892@kroah.com> <CAAeHK+xjUhR077goAHv=re78C6pzzSEBQxU+LZcOs0iCu2ZStg@mail.gmail.com>
+ <20191118163958.GA595190@kroah.com> <CAAeHK+zWYAMJ5FQeTYNpCVH8Cnbyh11=0fqSh=oaEJLxNaXusQ@mail.gmail.com>
+ <20191118175718.GA603730@kroah.com>
+In-Reply-To: <20191118175718.GA603730@kroah.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 2 Dec 2019 17:19:55 +0100
+Message-ID: <CAAeHK+yxShqFwKaR4fASbgZHVdBD9Y3GSSCFxzy5yO2NZTQGhg@mail.gmail.com>
+Subject: Re: Exporting USB device ids from the kernel
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        USB list <linux-usb@vger.kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Nov 28, 2019 at 12:59:53PM -0500, Alan Stern wrote:
-> On Thu, 28 Nov 2019, Michael Olbrich wrote:
-> > On Fri, Nov 15, 2019 at 04:06:10PM -0500, Alan Stern wrote:
-> > > On Thu, 14 Nov 2019, Thinh Nguyen wrote:
-> > > > Michael Olbrich wrote:
-> > > > >>> How about changing the gadget driver instead?  For frames where the UVC
-> > > > >>> gadget knows no video frame data is available (numbers 4, 8, 12, and so
-> > > > >>> on in the example above), queue a zero-length request.  Then there
-> > > > >>> won't be any gaps in the isochronous packet stream.
-> > > > >> What Alan suggests may work. Have you tried this?
-> > > > > Yes and it works in general. There are however some problems with that
-> > > > > approach that I want to avoid:
+On Mon, Nov 18, 2019 at 6:57 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Nov 18, 2019 at 06:42:25PM +0100, Andrey Konovalov wrote:
+> > On Mon, Nov 18, 2019 at 5:40 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Mon, Nov 18, 2019 at 05:12:34PM +0100, Andrey Konovalov wrote:
+> > > > On Sat, Nov 16, 2019 at 9:49 AM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
 > > > > >
-> > > > > 1. It adds extra overhead to handle the extra zero-length request.
-> > > > > Especially for encoded video the available bandwidth can be quite a bit
-> > > > > larger that what is actually used. I want to avoid that.
-> > > 
-> > > This comment doesn't seem to make sense.  If the available bandwidth is
-> > > much _larger_ than what is actually used, what's the problem?  You
-> > > don't run into difficulties until the available bandwidth is too
-> > > _small_.
-> > > 
-> > > The extra overhead of a zero-length request should be pretty small.  
-> > > After all, the gadget expects to send a packet for every frame anyway,
-> > > more or less.
-> > 
-> > My current test-case is video frames with 450kB on average at 30fps. This
-> > currently results in ~10 CPU load for the threaded interrupt handler.
-> > At least in my test, filling the actual video data into the frame has very
-> > little impact. So if I reserve 900kB to support occasionally larger video
-> > frames, then I expect that this CPU load will almost double in all cases,
-> > not just when the video frames are larger.
-> 
-> This is the sort of thing you need to confirm by experimenting.  It is 
-> not at all clear that doubling the interrupt rate will also double the 
-> CPU load, especially if half of the interrupts don't require the CPU to 
-> do much work.
+> > > > > On Fri, Nov 15, 2019 at 05:10:26PM +0100, Andrey Konovalov wrote:
+> > > > > > On Fri, Nov 15, 2019 at 4:44 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > > > > >
+> > > > > > > On Fri, 15 Nov 2019, Andrey Konovalov wrote:
+> > > > > > >
+> > > > > > > > Hi Greg and Alan,
+> > > > > > > >
+> > > > > > > > For USB fuzzing it would be nice to be able to export usb_device_id
+> > > > > > > > structs from the kernel to facilitate the fuzzer with generating USB
+> > > > > > > > descriptors that match to actual drivers. The same is required for
+> > > > > > > > hid_device_id structs, since those are matched separately by the
+> > > > > > > > usbhid driver (are there other cases like this?).
+> > > > > > > >
+> > > > > > > > Currently I have a hacky patch [1] that walks all drivers for USB and
+> > > > > > > > HID buses and then prints all device ids for those drivers into the
+> > > > > > > > kernel log. Those are manually parsed and built into the fuzzer [2]
+> > > > > > > > and then used to generate USB descriptors [3].
+> > > > > > >
+> > > > > > > There are so many different flags for those id structures, parsing and
+> > > > > > > understanding them must be quite difficult.
+> > > > > > >
+> > > > > > > > I'm thinking of making a proper patch that will add a debugfs entry
+> > > > > > > > like usb/drivers (and usb/hid_drivers?), that can be read to get
+> > > > > > > > USB/HID device ids for all loaded drivers. Would that be acceptable?
+> > > > > > > > Or should I use some other interface to do that?
+> > > > > > >
+> > > > > > > I can't think of a better way to get the information from a running
+> > > > > > > kernel.
+> > > > > > >
+> > > > > > > There is another possibility, though.  If the drivers are built as
+> > > > > > > modules, the information is already available to userspace tools via
+> > > > > > > depmod.  You could get it from the modules.dep.bin file.  This has the
+> > > > > > > advantage that it will work even for drivers that aren't currently
+> > > > > > > loaded.
+> > > > > >
+> > > > > > This is the same thing Greg mentions above, right?
+> > > > >
+> > > > > Yes.
+> > > > >
+> > > > > > Would this work for drivers that are built into the kernel (as =y)?
+> > > > >
+> > > > > No, sorry.  There has not been any need to export that information to
+> > > > > userspace as nothing has ever needed that.
+> > > > >
+> > > > > The only reason we exported that at all was to allow modules to
+> > > > > auto-load to handle the device.
+> > > >
+> > > > OK, I see. Ideally we would want to support both builtin drivers and
+> > > > modules. I'll then implement the approach with exporting the ids
+> > > > through debugfs. I'll send a patch once I have it.
+> > >
+> > > Note, this is part of the build/link process (see what
+> > > MODULE_DEVICE_TABLE() does), so I don't know if you will be able to do
+> > > it in debugfs very easily.
+> >
+> > Take a look at the patch I've linked [1]. It iterates all drivers on
+> > the USB bus via bus_for_each_drv and then iterates both builtin ids
+> > (in usb_device_id_dump_static) and the ones that come from modules (in
+> > usb_device_id_dump_dynamic) (at least that's how I understand the code
+> > that I've written :). The patch just does that in a weird place and
+> > prints ids to kernel log. It seems it should be easy to change it to
+> > do the same in a read() handler of a debugfs entry.
+> >
+> > [1] https://github.com/google/syzkaller/blob/master/tools/syz-usbgen/usb_ids.patch
+>
+> Iterating over all of that is a mess, why not stick with the stuff we
+> already are generating for modules to use?
+>
+> > > Why not put it in /sys/module/MODULE_NAME/ ?
+> >
+> > I can look into this, if that's what you prefer. In this case we'll
+> > need to iterate over all dirs in /sys/module to find the ones that
+> > export some USB ids. Seems less convenient than a single debugfs file
+> > approach, but would also work AFAIU.
+>
+> It could be done at build time, like the MODULE_DEVICE_TABLE() logic
+> works, and that way you get it for all bus types, not just USB.  And
+> this is a module issue really, right?  Yes, the mapping from module name
+> to driver name is not always the same, but it should be close.
 
-As I noted before, actually filling in the video data is only a small part
-of the measured CPU load. To put in in more precise numbers:
+I've tried to change MODULE_DEVICE_TABLE to always emit a device table
+regardless of whether a module is being compiled or not. This doesn't
+work just like that, because many modules use the same name for the
+device table, and I get linking errors. Is this the approach you had
+in mind? What would you suggest to do with name clash issue?
 
-From my limited understanding, there are 8000 interrupts per second
-regardless of the bandwidth (or maybe less for very low bandwidth
-configurations?).
-Just queuing requests without any content (so skipping the buffer handling
-and 'encode()' in uvc_video_complete()) results in ~17% CPU load.
+>
+> Otherwise, something in the driver core would be good to do, again, that
+> way you get this for all busses/drivers.
 
-If I fill in the data for a video stream with ~1.8MB per frame and 30 fps
-(and empty requests for the rest) then the CPU load goes up to ~19.5%.
-This number remains the same for different bandwidths (and therefore
-different request sizes and a different zero-length request percentage).
-
-With my patches the CPU load changes as expected. The 2.5% to fill the data
-remains and the rest goes down with less interrupts.
-
-I am hoping that more batching will help here a bit. But either way the
-overhead of queuing zero-length request is significant.
-
-> > > > > 2. The UVC gadget currently does no know how many zero-length request must
-> > > > > added. So it needs fill all available request until a new video frame
-> > > > > arrives. With the current 4 requests that is not a problem right now. But
-> > > > > that does not scale for USB3 bandwidths. So one thing that I want to do is
-> > > > > to queue many requests but only enable the interrupt for a few of than.
-> > > > >  From what I can tell from the code, the gadget framework and the dwc3
-> > > > > driver should already support this.
-> > > > > This will result in extra latency. There is probably an acceptable
-> > > > > trade-off with an acceptable interrupt load and latency. But I would like
-> > > > > to avoid that if possible.
-> > > 
-> > > There are two different situations to consider:
-> > > 
-> > > 	In the middle of a video stream, latency isn't an issue.
-> > > 	The gadget should expect to send a new packet for each frame,
-> > > 	and it doesn't know what to put in that packet until it
-> > > 	receives the video data or it knows there won't be any data.
-> > > 
-> > > 	At the start of a video stream, latency can be an issue.  But
-> > > 	in this situation the gadget doesn't have to send 0-length
-> > > 	requests until there actually is some data available.
-> > > 
-> > > Either way, it should be okay.
-> > > 
-> > > As far as interrupt load is concerned, I don't see how it relates to
-> > > the issue of sending 0-length requests.
-> > 
-> > Maybe I don't understand, how 0-length requests work. My current
-> > understanding is, that they are queued like any other request.
-> 
-> That's right.
-> 
-> > If I want to reduce the number of interrupts then I need to queue more
-> > requests and only ask for an interrupt for some of them. This means that
-> > potentially a lot of 0-length requests requests are queued when a new video
-> > frame arrives and this means extra latency for the frame.
-> 
-> Let's say you ask for an interrupt for only even-numbered requests.  
-> Then there would be at most one 0-length request queued when a new
-> video frame arrives.  Processing that 0-length request should require
-> very little CPU time (almost none) because it contains no data, so the
-> extra latency would be negligible.
-> 
-> > I think the worst-case latency is 2x the time between two interrupts.
-> > So less interrupts mean more latency.
-> 
-> What matters is the interrupt rate.  If you double the rate at which 
-> transfers are queued but ask for an interrupt on only half of them, 
-> then the overall interrupt rate will remain the same and so will the 
-> average latency.
-> 
-> > The stop/start transfer this patch implements, the video frame can be sent
-> > immediately without any extra latency.
-> 
-> The same would be true if you queued a request at the full isochronous
-> rate.  If video data is present, put it in the request; if not then
-> queue a 0-length request.
-
-My problem is this:
-Let's assume a (for simplicity) that I have a video stream that fills
-almost the full available bandwidth. And two reduce the bandwidth, two
-interrupts will be requested for each video frame.
-
-- When the first frame arrives, the whole frame is queued.
-- When the first half of the frame is transmitted the first interrupt
-  arrives.
-- The second frame has not yet arrived so half a frame worth of 0-length
-  requests are queued.
-- When the second half of the frame is transmitted the second interrupt
-  arrives.
-- The second frame has still not yet arrived so another half a frame worth
-  of 0-length requests are queued.
-- Immediately afterwards the second frame arrives from userspace. At this
-  point, almost one frame worth of 0-length requests are queued so the
-  second frame will have an extra latency of almost one frame.
-
-With my patch this does not happen and the transmission of the second
-starts immediately.
-
-> > > > Now, with UVC, it needs to communicate to the dwc3 driver that there 
-> > > > will be a gap after a certain request (and that the device is expecting 
-> > > > to send 0-length data). This is not a normal operation for isoc 
-> > > > transfer. You may need to introduce a new way for the function driver to 
-> > > > do that, possibly a new field in usb_request structure to indicate that. 
-> > > > However, this seems a little awkward. Maybe others can comment on this.
-> > 
-> > I'm not sure how this is supposed to work. What exactly can the dwc3 driver
-> > / hardware do to handle a gap?
-> 
-> Are you talking about the driver on the gadget side or on the host 
-> side?  The rules for the host-side driver are spelled out in the 
-> kerneldoc for usb_submit_urb().  As far as I know, there is no 
-> equivalent set of rules for the gadget-side drivers.
-
-I'm unsure about the extra API Thinh was talking about. Right now in my
-tests I'm queuing normal requests with 'request->length = 0' when no video
-data is available. This has the problems described above.
-
-The question is, can we do better than that? What could be done in the
-driver if it knows that 0-length requests must be transmitted because no
-new data is available?
-
-> > > Note that on the host side, there is a difference between receiving 
-> > > a 0-length packet and receiving no packet at all.  As long as both the 
-> > > host and the gadget expect the isochronous stream to be running, there 
-> > > shouldn't be any gaps if you can avoid it.
-> > 
-> > Huh, so how is this handled on other hardware? From what I can tell the UVC
-> > gadget works with other drivers and I've not found any special handling for
-> > this. Is there no packet sent or are 0-length packet generated implicitly
-> > somewhere?
-> 
-> I don't know.  You can ask the UVC maintainer for more information; my 
-> guess is that it treats 0-length packets and missing packets the same.  
-> After all, what else could it do?  Either way, there is no data.
-
-Ok.
-
-Michael
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Could you point me to some source files where this would go into?
+AFAIU with this we'll still need to implement a pretty printer for
+each device table type, right?
