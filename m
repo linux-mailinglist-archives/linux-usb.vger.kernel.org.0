@@ -2,140 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 220A210F0E3
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2019 20:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B97EC10F4F3
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 03:24:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbfLBTnk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Dec 2019 14:43:40 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:34206 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1727686AbfLBTnj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 14:43:39 -0500
-Received: (qmail 4882 invoked by uid 2102); 2 Dec 2019 14:43:38 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 2 Dec 2019 14:43:38 -0500
-Date:   Mon, 2 Dec 2019 14:43:38 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Erkka Talvitie <erkka.talvitie@vincit.fi>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <claus.baumgartner@med.ge.com>
-Subject: Re: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
-In-Reply-To: <1046f0c10876628227b7c9f303b0582a20406b14.1575030959.git.erkka.talvitie@vincit.fi>
-Message-ID: <Pine.LNX.4.44L0.1912021349440.1559-100000@iolanthe.rowland.org>
+        id S1726395AbfLCCYA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Dec 2019 21:24:00 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:48145 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726024AbfLCCYA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Dec 2019 21:24:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1575339838;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=O0EX3vVcvGDZXblDe7Rv/FsS5mhTO0YUbuVmRSPhwMA=;
+        b=JOfNcYP+tQLdE4QsiUXNjjhhJ7qei9NVmFOCzyJuMMcCkN+TkDyY8K/L3poDUxkNMXUvHc
+        L4oRMqPqH3LjuKwO5FUijqMNUi1si1oT1BdE54gRE9dnPP5AgTpzEBGGtWu10WdSliG0xV
+        eyAyQQ83IIACz6AjGPGCt9AJqFVx8CI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-368-2M_xvtKyM3isUt9S-04QCw-1; Mon, 02 Dec 2019 21:23:55 -0500
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7833CDB62;
+        Tue,  3 Dec 2019 02:23:52 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-19.pek2.redhat.com [10.72.8.19])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9E10B10016DA;
+        Tue,  3 Dec 2019 02:23:41 +0000 (UTC)
+Date:   Tue, 3 Dec 2019 10:23:37 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191203022337.GE25002@ming.t460p>
+References: <20191126023253.GA24501@ming.t460p>
+ <0598fe2754bf0717d81f7e72d3e9b3230c608cc6.camel@unipv.it>
+ <alpine.LNX.2.21.1.1911271055200.8@nippy.intranet>
+ <cb6e84781c4542229a3f31572cef19ab@SVR-IES-MBX-03.mgc.mentorg.com>
+ <c1358b840b3a4971aa35a25d8495c2c8953403ea.camel@unipv.it>
+ <20191128091712.GD15549@ming.t460p>
+ <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
+ <20191129005734.GB1829@ming.t460p>
+ <20191129023555.GA8620@ming.t460p>
+ <320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+In-Reply-To: <320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MC-Unique: 2M_xvtKyM3isUt9S-04QCw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 29 Nov 2019, Erkka Talvitie wrote:
+On Fri, Nov 29, 2019 at 03:41:01PM +0100, Andrea Vai wrote:
+> Il giorno ven, 29/11/2019 alle 10.35 +0800, Ming Lei ha scritto:
+> > On Fri, Nov 29, 2019 at 08:57:34AM +0800, Ming Lei wrote:
+> >=20
+> > > [...]
+> >=20
+> > > Andrea, can you collect the following log when running the test
+> > > on current new(bad) kernel?
+> > >=20
+> > > =09/usr/share/bcc/tools/stackcount  -K blk_mq_make_request
+> >=20
+> > Instead, please run the following trace, given insert may be
+> > called from other paths, such as flush plug:
+> >=20
+> > =09/usr/share/bcc/tools/stackcount -K t:block:block_rq_insert
+>=20
+> Attached, for new (patched) bad kernel.
+>=20
+> Produced by: start the trace script (with the pendrive already
+> plugged), wait some seconds, run the test (1 trial, 1 GB), wait for
+> the test to finish, stop the trace.
+>=20
+> The copy took ~1700 seconds.
 
-> When disconnecting a USB hub that has some child device(s) connected to it
-> (such as a USB mouse), then the stack tries to clear halt and
-> reset device(s) which are _already_ physically disconnected.
+See the two path[1][2] of inserting request, and path[1] is triggered
+4358 times, and the path[2] is triggered 5763 times.
 
-That behavior is understandable.  The kernel doesn't know that the
-device has been disconnected until it can process the notification from
-an upstream hub, and it can't process that notification while it's
-trying to reset the device.
+The path[2] is expected behaviour. Not sure path [1] is correct, given
+ext4_release_file() is supposed to be called when this inode is
+released. That means the file is closed 4358 times during 1GB file
+copying to usb storage.
 
-> The issue has been reproduced with:
-> 
-> CPU: IMX6D5EYM10AD or MCIMX6D5EYM10AE.
-> SW: U-Boot 2019.07 and kernel 4.19.40.
-> 
-> In this situation there will be error bit for MMF active yet the
-> CERR equals EHCI_TUNE_CERR + halt.
+Cc filesystem list.
 
-Why?  In general, setting the MMF bit does not cause the halt bit to be 
-set (set Table 4-13 in the EHCI spec).  In fact, MMF refers to errors 
-that occur on the host, not bus errors caused by a disconnected device.
 
-> Existing implementation
-> interprets this as a stall [1] (chapter 8.4.5).
+[1] insert requests when returning to user mode from syscall
 
-That is the correct thing to do.  When a transaction error occurs
-during a Complete-Split transaction, the host controller is supposed to
-decrement the CERR value, set the XACT bit, and retry the transaction
-unless the CERR value is 0 or there isn't enough time left in the
-microframe.
+  b'blk_mq_sched_request_inserted'
+  b'blk_mq_sched_request_inserted'
+  b'dd_insert_requests'
+  b'blk_mq_sched_insert_requests'
+  b'blk_mq_flush_plug_list'
+  b'blk_flush_plug_list'
+  b'io_schedule_prepare'
+  b'io_schedule'
+  b'rq_qos_wait'
+  b'wbt_wait'
+  b'__rq_qos_throttle'
+  b'blk_mq_make_request'
+  b'generic_make_request'
+  b'submit_bio'
+  b'ext4_io_submit'
+  b'ext4_writepages'
+  b'do_writepages'
+  b'__filemap_fdatawrite_range'
+  b'ext4_release_file'
+  b'__fput'
+  b'task_work_run'
+  b'exit_to_usermode_loop'
+  b'do_syscall_64'
+  b'entry_SYSCALL_64_after_hwframe'
+    4358
 
-The fact that you saw CERR equal to EHCI_TUNE_CERR and XACT clear
-probably means that your EHCI hardware is not behaving properly.
+[2] insert requests from writeback wq context
 
-> Fix for the issue is at first to check for a stall that comes after
-> an error (the CERR has been decreased).
-> 
-> Then after that, check for other errors.
-> 
-> And at last check for stall without other errors (the CERR equals
-> EHCI_TUNE_CERR as stall does not decrease the CERR [2] (table 3-16)).
-> 
-> What happens after the fix is that when disconnecting a hub with
-> attached device(s) the situation is not interpret as a stall.
-> 
-> The specification [2] is not clear about error priorities, but
-> since there is no explicit error bit for the stall, it is
-> assumed to be lower priority than other errors.
+  b'blk_mq_sched_request_inserted'
+  b'blk_mq_sched_request_inserted'
+  b'dd_insert_requests'
+  b'blk_mq_sched_insert_requests'
+  b'blk_mq_flush_plug_list'
+  b'blk_flush_plug_list'
+  b'io_schedule_prepare'
+  b'io_schedule'
+  b'rq_qos_wait'
+  b'wbt_wait'
+  b'__rq_qos_throttle'
+  b'blk_mq_make_request'
+  b'generic_make_request'
+  b'submit_bio'
+  b'ext4_io_submit'
+  b'ext4_bio_write_page'
+  b'mpage_submit_page'
+  b'mpage_process_page_bufs'
+  b'mpage_prepare_extent_to_map'
+  b'ext4_writepages'
+  b'do_writepages'
+  b'__writeback_single_inode'
+  b'writeback_sb_inodes'
+  b'__writeback_inodes_wb'
+  b'wb_writeback'
+  b'wb_workfn'
+  b'process_one_work'
+  b'worker_thread'
+  b'kthread'
+  b'ret_from_fork'
+    5763
 
-On the contrary, the specification is very clear.  Since transaction
-errors cause CERR to be decremented until it reaches 0, a nonzero value
-for CERR means the endpoint was halted for some other reason.  And the
-only other reason is a stall.  (Or end of the microframe, but there's 
-no way to tell if that happened.)
-
-> [1] https://www.usb.org/document-library/usb-20-specification, usb_20.pdf
-> [2] https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/ehci-specification-for-usb.pdf
-> 
-> Signed-off-by: Erkka Talvitie <erkka.talvitie@vincit.fi>
-
-Can you duplicate this behavior on a standard PC, say with an Intel
-EHCI controller?
-
->  drivers/usb/host/ehci-q.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> index 3276304..da7fd12 100644
-> --- a/drivers/usb/host/ehci-q.c
-> +++ b/drivers/usb/host/ehci-q.c
-> @@ -206,8 +206,9 @@ static int qtd_copy_status (
->  		if (token & QTD_STS_BABBLE) {
->  			/* FIXME "must" disable babbling device's port too */
->  			status = -EOVERFLOW;
-> -		/* CERR nonzero + halt --> stall */
-> -		} else if (QTD_CERR(token)) {
-> +		/* CERR nonzero and less than EHCI_TUNE_CERR + halt --> stall.
-> +		   This handles situation where stall comes after an error. */
-
-This comment doesn't make sense.  Who cares whether a stall comes after
-an error or not?  It's still a stall and should be reported.
-
-> +		} else if (QTD_CERR(token) && QTD_CERR(token) < EHCI_TUNE_CERR) {
->  			status = -EPIPE;
-
-If an error occurs and the transaction is retried and the retry gets a
-stall, then the final status should be -EPIPE, not something else.
-
->  		/* In theory, more than one of the following bits can be set
-> @@ -228,6 +229,10 @@ static int qtd_copy_status (
->  				usb_pipeendpoint(urb->pipe),
->  				usb_pipein(urb->pipe) ? "in" : "out");
->  			status = -EPROTO;
-> +		/* CERR equals EHCI_TUNE_CERR, no other errors + halt --> stall.
-> +		   This handles situation where stall comes without error bits set. */
-
-If CERR is equal to EHCI_TUNE_CERR then no other errors could have 
-occurred (since any error will decrement CERR).  So why shouldn't this 
-case be included with the earlier case?
-
-> +		} else if (QTD_CERR(token)) {
-> +			status = -EPIPE;
->  		} else {	/* unknown */
->  			status = -EPROTO;
->  		}
-
-Alan Stern
+Thanks,
+Ming
 
