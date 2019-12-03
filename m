@@ -2,47 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA5D10FB92
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 11:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE1C10FB96
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 11:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbfLCKPl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Dec 2019 05:15:41 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42351 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726363AbfLCKPl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 05:15:41 -0500
-Received: by mail-pf1-f193.google.com with SMTP id l22so1616962pff.9
-        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2019 02:15:41 -0800 (PST)
+        id S1726741AbfLCKP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Dec 2019 05:15:58 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:41642 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbfLCKP5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 05:15:57 -0500
+Received: by mail-pl1-f196.google.com with SMTP id bd4so1514255plb.8
+        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2019 02:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=la8F/ukOCmlxZOPSk03ZdEI5AybzNjyoXK4eemJfXxE=;
-        b=G226RTXHw3qcB+VS063+Ay6A/MbQWClSU74oKAEWlESOOxPKzIsw6XIGv1bELVqcNg
-         jmYzwjk2ghqoJSwOP6SlpYxj33qgOQyzC2jq3UkuNRyXEsJNFzg0z+zIMQ9IZJ448EZd
-         ctOO2I5biTxKUYaUd8ePhb5JWZ4NK5eJwEbOs=
+        bh=YrHITFCHdeD4+yA1cax6B7EYeghey89WnNbNyeOQhYw=;
+        b=f2J3JfSjMMQW4lP+yVzQFbEn4Aiben8OJjuINWOcR5DXVhob+s2ix0xLzjwfNxGkyR
+         jCx6fz/TB9QQ4IoJ56yCtbbtAOTmG4FEYzyh0B5MDRwDDDDrGrUJrzDjVCCddfzNVECR
+         GcVsk8Mc5sv8YOkbWdtvY80b8aAQ7At6I5U3Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=la8F/ukOCmlxZOPSk03ZdEI5AybzNjyoXK4eemJfXxE=;
-        b=MbN9syhELVQEB0HK5y0S4Pf0FeHnhQKI4lUI4DvJ7ltN/VdOCFxBrCjAIlH+vlGyub
-         ynS5KWldS+YnwKqRdAocCf/m0eOFgGff2X7rp9u8gkvlaCwMqwmmawBcJCzu7aM0ek91
-         Ewu7E2TsjLK8ipJiKErSKLnNTsyJCY8X5PNHxFd3da+sok4f94xIxKzzZYo/I5NytUct
-         T/Pi/VsAALj08ERBG4E2tDQ2qaWgy+MQZO8ZnuRcRsEwJgGuoBqv67JTsvK6bhDtKYnC
-         MdPc2hzDRc/s2YqHohDf/cyhhZeRW41d0cFMKL+pYkIrz38SDcqcVQasz9U9MiNhWENk
-         oFeA==
-X-Gm-Message-State: APjAAAXUAsmr5wi8VaDs8veP7uskhtY51I9AMVUh8o5qsT19cNeVIWFl
-        eNE/PKgycUKDOiWXce//KyXZ6Q==
-X-Google-Smtp-Source: APXvYqxi6mHP/CPl92Tl/wfPvYWI3JtJFadHEo9LlGyht/c7K25YTpYXkaeEZu0Y3pG5p+MUZJWu0Q==
-X-Received: by 2002:a62:b504:: with SMTP id y4mr3894348pfe.251.1575368141054;
-        Tue, 03 Dec 2019 02:15:41 -0800 (PST)
+        bh=YrHITFCHdeD4+yA1cax6B7EYeghey89WnNbNyeOQhYw=;
+        b=NVIutNub9bWoki14as5yDvWzr3Enw8QzMyfy6C0OlKiw6ZrPv+UCydAErkyipfULQ5
+         ZyuGOo6Chp6W5EnGSwQsi7+jHg++jGY+yjmVI9zYG44kwJH2TacVl7V1LIczAWFqchrC
+         Skhu/FTXZRK6n2VgZchuEBONDGjkeAMllQYQS9TYsPDZmTmJ4y6wxra0VaSbtOhjky6A
+         V+KBPtM7CO+LbIMuAyRG3Jzp11S3q8cPV6tdcMOyrcfCH7gKT3RyO8wfBtjzChFr9K9d
+         LWgHjai3uMbO/l42agwKRi7JicPZSaYAbBH5mUrieJ0XMQkq82jk35iday8+4nUcPDQk
+         mx9Q==
+X-Gm-Message-State: APjAAAXjCxY+GJtsAvB4cUIcXpfRXk3vV4mUbG/GYNfVhAodTikS7Xw5
+        LrsnBppAyaSwR9XfPCA7MjEocmYH0tVGsg==
+X-Google-Smtp-Source: APXvYqwy1Cn4JTSApVIsHMb6V6BA1uS11JBgw/FaCROu8sNlG7sAcc2JMQI0h0RMKGl+scq8u+oxXw==
+X-Received: by 2002:a17:902:8d83:: with SMTP id v3mr4100209plo.205.1575368156923;
+        Tue, 03 Dec 2019 02:15:56 -0800 (PST)
 Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:254e:2b40:ef8:ee17])
-        by smtp.gmail.com with ESMTPSA id x11sm2943131pfn.53.2019.12.03.02.15.38
+        by smtp.gmail.com with ESMTPSA id 129sm3070545pfw.71.2019.12.03.02.15.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 02:15:40 -0800 (PST)
+        Tue, 03 Dec 2019 02:15:56 -0800 (PST)
 From:   Ikjoon Jang <ikjn@chromium.org>
-To:     devicetree@vger.kernel.org
+To:     linux-usb@vger.kernel.org
 Cc:     GregKroah-Hartman <gregkh@linuxfoundation.org>,
         RobHerring <robh+dt@kernel.org>,
         MarkRutland <mark.rutland@arm.com>,
@@ -50,11 +50,11 @@ Cc:     GregKroah-Hartman <gregkh@linuxfoundation.org>,
         SuwanKim <suwan.kim027@gmail.com>,
         "GustavoA . R . Silva" <gustavo@embeddedor.com>,
         IkjoonJang <ikjn@chromium.org>, JohanHovold <johan@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         drinkcat@chromium.org
-Subject: [PATCH v4 1/2] dt-bindings: usb: add "hub,interval" property
-Date:   Tue,  3 Dec 2019 18:15:36 +0800
-Message-Id: <20191203101536.199222-1-ikjn@chromium.org>
+Subject: [PATCH v4 2/2] usb: overridable hub bInterval by device node
+Date:   Tue,  3 Dec 2019 18:15:52 +0800
+Message-Id: <20191203101552.199339-1-ikjn@chromium.org>
 X-Mailer: git-send-email 2.24.0.393.g34dc348eaf-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -63,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add "hub,interval" property to usb-device, so hub device can override
-endpoint descriptor's bInterval.
+This patch enables hub device to override its own endpoint descriptor's
+bInterval when the hub has a device node with "hub,interval" property.
 
 When we know reducing autosuspend delay for built-in HIDs is better for
 power saving, we can reduce it to the optimal value. But if a parent hub
@@ -73,32 +73,38 @@ So this enables overriding bInterval for a hard wired hub device only
 when we know that reduces the power consumption.
 
 Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 ---
- Documentation/devicetree/bindings/usb/usb-device.txt | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/core/config.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/usb-device.txt b/Documentation/devicetree/bindings/usb/usb-device.txt
-index 036be172b1ae..44bef2ff2704 100644
---- a/Documentation/devicetree/bindings/usb/usb-device.txt
-+++ b/Documentation/devicetree/bindings/usb/usb-device.txt
-@@ -66,6 +66,9 @@ Required properties for host-controller nodes with device nodes:
- - #size-cells: shall be 0
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index 5f40117e68e7..95ec5af42a1c 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -6,6 +6,7 @@
+ #include <linux/usb.h>
+ #include <linux/usb/ch9.h>
+ #include <linux/usb/hcd.h>
++#include <linux/usb/of.h>
+ #include <linux/usb/quirks.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+@@ -257,6 +258,14 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
+ 	memcpy(&endpoint->desc, d, n);
+ 	INIT_LIST_HEAD(&endpoint->urb_list);
  
- 
-+Optional properties for hub nodes
-+- hub,interval: bInterval of status change endpoint. The range is 1-255.
++	/* device node property overrides bInterval */
++	if (usb_of_has_combined_node(to_usb_device(ddev))) {
++		u32 interval = 0;
++		if (!of_property_read_u32(ddev->of_node, "hub,interval",
++				    &interval))
++			d->bInterval = min_t(u8, interval, 255);
++	}
 +
- Example:
- 
- &usb1 {	/* host controller */
-@@ -75,6 +78,7 @@ Example:
- 	hub@1 {		/* hub connected to port 1 */
- 		compatible = "usb5e3,608";
- 		reg = <1>;
-+		hub,interval = <8>;
- 	};
- 
- 	device@2 {	/* device connected to port 2 */
+ 	/*
+ 	 * Fix up bInterval values outside the legal range.
+ 	 * Use 10 or 8 ms if no proper value can be guessed.
 -- 
 2.24.0.393.g34dc348eaf-goog
 
