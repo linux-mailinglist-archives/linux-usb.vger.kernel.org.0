@@ -2,109 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE1C10FB96
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 11:16:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 883C210FBFC
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 11:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbfLCKP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Dec 2019 05:15:58 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:41642 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbfLCKP5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 05:15:57 -0500
-Received: by mail-pl1-f196.google.com with SMTP id bd4so1514255plb.8
-        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2019 02:15:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YrHITFCHdeD4+yA1cax6B7EYeghey89WnNbNyeOQhYw=;
-        b=f2J3JfSjMMQW4lP+yVzQFbEn4Aiben8OJjuINWOcR5DXVhob+s2ix0xLzjwfNxGkyR
-         jCx6fz/TB9QQ4IoJ56yCtbbtAOTmG4FEYzyh0B5MDRwDDDDrGrUJrzDjVCCddfzNVECR
-         GcVsk8Mc5sv8YOkbWdtvY80b8aAQ7At6I5U3Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YrHITFCHdeD4+yA1cax6B7EYeghey89WnNbNyeOQhYw=;
-        b=NVIutNub9bWoki14as5yDvWzr3Enw8QzMyfy6C0OlKiw6ZrPv+UCydAErkyipfULQ5
-         ZyuGOo6Chp6W5EnGSwQsi7+jHg++jGY+yjmVI9zYG44kwJH2TacVl7V1LIczAWFqchrC
-         Skhu/FTXZRK6n2VgZchuEBONDGjkeAMllQYQS9TYsPDZmTmJ4y6wxra0VaSbtOhjky6A
-         V+KBPtM7CO+LbIMuAyRG3Jzp11S3q8cPV6tdcMOyrcfCH7gKT3RyO8wfBtjzChFr9K9d
-         LWgHjai3uMbO/l42agwKRi7JicPZSaYAbBH5mUrieJ0XMQkq82jk35iday8+4nUcPDQk
-         mx9Q==
-X-Gm-Message-State: APjAAAXjCxY+GJtsAvB4cUIcXpfRXk3vV4mUbG/GYNfVhAodTikS7Xw5
-        LrsnBppAyaSwR9XfPCA7MjEocmYH0tVGsg==
-X-Google-Smtp-Source: APXvYqwy1Cn4JTSApVIsHMb6V6BA1uS11JBgw/FaCROu8sNlG7sAcc2JMQI0h0RMKGl+scq8u+oxXw==
-X-Received: by 2002:a17:902:8d83:: with SMTP id v3mr4100209plo.205.1575368156923;
-        Tue, 03 Dec 2019 02:15:56 -0800 (PST)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:254e:2b40:ef8:ee17])
-        by smtp.gmail.com with ESMTPSA id 129sm3070545pfw.71.2019.12.03.02.15.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 02:15:56 -0800 (PST)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     linux-usb@vger.kernel.org
-Cc:     GregKroah-Hartman <gregkh@linuxfoundation.org>,
-        RobHerring <robh+dt@kernel.org>,
-        MarkRutland <mark.rutland@arm.com>,
-        AlanStern <stern@rowland.harvard.edu>,
-        SuwanKim <suwan.kim027@gmail.com>,
-        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
-        IkjoonJang <ikjn@chromium.org>, JohanHovold <johan@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        drinkcat@chromium.org
-Subject: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-Date:   Tue,  3 Dec 2019 18:15:52 +0800
-Message-Id: <20191203101552.199339-1-ikjn@chromium.org>
-X-Mailer: git-send-email 2.24.0.393.g34dc348eaf-goog
+        id S1726254AbfLCKrK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Dec 2019 05:47:10 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:4759 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725829AbfLCKrJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 05:47:09 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5de63d300000>; Tue, 03 Dec 2019 02:47:12 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 03 Dec 2019 02:47:09 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 03 Dec 2019 02:47:09 -0800
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 3 Dec
+ 2019 10:47:08 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 3 Dec 2019 10:47:08 +0000
+Received: from ubuntu.nvidia.com (Not Verified[10.19.108.185]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5de63d2c0000>; Tue, 03 Dec 2019 02:47:08 -0800
+From:   EJ Hsu <ejh@nvidia.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     EJ Hsu <ejh@nvidia.com>
+Subject: [PATCH] usb: gadget: fix wrong endpoint desc
+Date:   Tue, 3 Dec 2019 02:46:48 -0800
+Message-ID: <20191203104648.29291-1-ejh@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1575370032; bh=i+YoYJgZKpTHJVaCLv5Tc3M44v3VWcXzjHq/E5ZpnhU=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         X-NVConfidentiality:MIME-Version:Content-Type;
+        b=fQEDc9l0Cu5XjCeazJZ+ByJnMmjBHqZfBiwxijWg6xuKMOIHGPRPn/XhrVS+8yono
+         csVecjGKux5VoTEe1Yd27j5/Ykn98kEhSfn+u5a/nITk7kcBVS7jwu95XKPVrkF3UU
+         E3Qfbq0V2/JtwQrYiObvZ/+5xGmgaNT9oEdsnyTShgX0ZgxVy5f+ztKMgSAdoYnSPd
+         3tzSEcykFQFscMYU5X/r+2AsW/DwTkwH6j3USSJwoQN9/9ivGAjLF0u8M4ucrpwEsW
+         wuIs+G10mVegxCzQSRIwjVFzfanbLg4v9p38d3knGzS0VQFwrkLYHmoTFDhBFm/4g0
+         aTS1ZCpmrupyg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch enables hub device to override its own endpoint descriptor's
-bInterval when the hub has a device node with "hub,interval" property.
+Gadget driver should always use config_ep_by_speed() to initialize
+usb_ep struct according to usb device's operating speed. Otherwise,
+usb_ep struct may be wrong if usb devcie's operating speed is changed.
 
-When we know reducing autosuspend delay for built-in HIDs is better for
-power saving, we can reduce it to the optimal value. But if a parent hub
-has a long bInterval, mouse lags a lot from more frequent autosuspend.
-So this enables overriding bInterval for a hard wired hub device only
-when we know that reduces the power consumption.
-
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: EJ Hsu <ejh@nvidia.com>
 ---
- drivers/usb/core/config.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/gadget/function/f_ecm.c   | 4 ++++
+ drivers/usb/gadget/function/f_rndis.c | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
-index 5f40117e68e7..95ec5af42a1c 100644
---- a/drivers/usb/core/config.c
-+++ b/drivers/usb/core/config.c
-@@ -6,6 +6,7 @@
- #include <linux/usb.h>
- #include <linux/usb/ch9.h>
- #include <linux/usb/hcd.h>
-+#include <linux/usb/of.h>
- #include <linux/usb/quirks.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-@@ -257,6 +258,14 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
- 	memcpy(&endpoint->desc, d, n);
- 	INIT_LIST_HEAD(&endpoint->urb_list);
+diff --git a/drivers/usb/gadget/function/f_ecm.c b/drivers/usb/gadget/function/f_ecm.c
+index 6ce044008cf6..494fe4e38a65 100644
+--- a/drivers/usb/gadget/function/f_ecm.c
++++ b/drivers/usb/gadget/function/f_ecm.c
+@@ -623,6 +623,10 @@ static void ecm_disable(struct usb_function *f)
  
-+	/* device node property overrides bInterval */
-+	if (usb_of_has_combined_node(to_usb_device(ddev))) {
-+		u32 interval = 0;
-+		if (!of_property_read_u32(ddev->of_node, "hub,interval",
-+				    &interval))
-+			d->bInterval = min_t(u8, interval, 255);
+ 	if (ecm->port.in_ep->enabled)
+ 		gether_disconnect(&ecm->port);
++	else {
++		ecm->port.in_ep->desc = NULL;
++		ecm->port.out_ep->desc = NULL;
 +	}
-+
- 	/*
- 	 * Fix up bInterval values outside the legal range.
- 	 * Use 10 or 8 ms if no proper value can be guessed.
+ 
+ 	usb_ep_disable(ecm->notify);
+ 	ecm->notify->desc = NULL;
+diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
+index d48df36622b7..0d8e4a364ca6 100644
+--- a/drivers/usb/gadget/function/f_rndis.c
++++ b/drivers/usb/gadget/function/f_rndis.c
+@@ -618,6 +618,7 @@ static void rndis_disable(struct usb_function *f)
+ 	gether_disconnect(&rndis->port);
+ 
+ 	usb_ep_disable(rndis->notify);
++	rndis->notify->desc = NULL;
+ }
+ 
+ /*-------------------------------------------------------------------------*/
 -- 
-2.24.0.393.g34dc348eaf-goog
+2.17.1
 
