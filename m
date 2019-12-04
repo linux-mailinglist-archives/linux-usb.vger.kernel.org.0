@@ -2,150 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9255F112D8E
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 15:37:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32566112DFD
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 16:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727880AbfLDOhv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Dec 2019 09:37:51 -0500
-Received: from mail-lj1-f182.google.com ([209.85.208.182]:44752 "EHLO
-        mail-lj1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727828AbfLDOhv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Dec 2019 09:37:51 -0500
-Received: by mail-lj1-f182.google.com with SMTP id c19so8326470lji.11
-        for <linux-usb@vger.kernel.org>; Wed, 04 Dec 2019 06:37:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vincit.fi; s=ticniv;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=tkLXK6VQG3KfE6q03OG3UE6V/Mi9CntyQ2ezY/hk8iw=;
-        b=ZMDgnS3Uc6uItislWA5uEX5neeZd+pB4E5SChJ+yExp0yRLwUzMZKR4eMoWQ6HX9lb
-         5M3cs4S+9Me1+IZyOxLbPlrGue35PyeVbkU9RxmHcDchb6MQ7Ssk4yqn2ZeyAIKoVQaL
-         /jCjv2GBf5/pQI4Ptqb2gBhQe7SWzIL0vh8I4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=tkLXK6VQG3KfE6q03OG3UE6V/Mi9CntyQ2ezY/hk8iw=;
-        b=GlVtxLoR1fb26jFOw4bnMVfJcJ8g8Py6W/bSUPCAFpYYjLIVnzI2P4N7UqxASdupco
-         dHyJ3Gb58YIXiJwLFgK28z3usm87oiLgRHeICkzXhMjVmtiv85HqJIM+ouD1qNI77w4v
-         uRchb1spovi7m/m3jxikEqVhYxRfPXOs5MMt/o0G2H6OJ6aDbFBKtk8HHPT57H5UArnc
-         O7UMIZIW6yewd57a9S5dJ6wfUaSR6OFWnOiZgQ5P8c8QShK1toT922FmdUURVXVpyLes
-         8AeNdjIJzQZvkkPVnI+sNFlfCkdD4qSMslKQqs+45Dyjyyhqm7dXL3CoKSRFgC87yMB1
-         yFNA==
-X-Gm-Message-State: APjAAAWj0aOfAsKpjMC/8P7e5N/5TxmBNDcawqJXpQb6hRDuqwiKTKFR
-        1UcXw59QC0Wk1Qr/aYN1Jw/Rtg==
-X-Google-Smtp-Source: APXvYqxushvN7XBAQWjtdb48D/znyWHCT/JcCq8vDXC1eyltCwSYrQm5hEtBY4unhhYhDr+rg1INqw==
-X-Received: by 2002:a2e:6e10:: with SMTP id j16mr2278047ljc.202.1575470269558;
-        Wed, 04 Dec 2019 06:37:49 -0800 (PST)
-Received: from LAPTOPJ4R3A4KE ([213.255.177.137])
-        by smtp.gmail.com with ESMTPSA id u21sm3227287ljl.93.2019.12.04.06.37.48
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 04 Dec 2019 06:37:48 -0800 (PST)
-From:   "Erkka Talvitie" <erkka.talvitie@vincit.fi>
-To:     "'Alan Stern'" <stern@rowland.harvard.edu>
-Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <claus.baumgartner@med.ge.com>
-References: <020901d5aaa5$415457f0$c3fd07d0$@vincit.fi> <Pine.LNX.4.44L0.1912040917500.3941-100000@netrider.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1912040917500.3941-100000@netrider.rowland.org>
-Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
-Date:   Wed, 4 Dec 2019 16:37:47 +0200
-Message-ID: <020b01d5aab0$65fb6d40$31f247c0$@vincit.fi>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+        id S1728090AbfLDPDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Dec 2019 10:03:43 -0500
+Received: from mx2.suse.de ([195.135.220.15]:38616 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727878AbfLDPDn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Dec 2019 10:03:43 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 4AE96AECA;
+        Wed,  4 Dec 2019 15:03:40 +0000 (UTC)
+Message-ID: <1575471809.30318.6.camel@suse.com>
+Subject: Re: KASAN: use-after-free Read in si470x_int_in_callback (2)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>,
+        andreyknvl@google.com, hverkuil@xs4all.nl,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Date:   Wed, 04 Dec 2019 16:03:29 +0100
+In-Reply-To: <000000000000f47f0b0595307ddc@google.com>
+References: <000000000000f47f0b0595307ddc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.26.6 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHP/pTeHAczo3DSAljG/2X+o/A4s6e1Yf/w
-Content-Language: fi
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Alan Stern <stern@rowland.harvard.edu>
-> Sent: keskiviikko 4. joulukuuta 2019 16.24
-> To: Erkka Talvitie <erkka.talvitie@vincit.fi>
-> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> claus.baumgartner@med.ge.com
-> Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is
-> disconnected
+Am Freitag, den 18.10.2019, 07:53 -0700 schrieb syzbot:
+> Hello,
 > 
-> On Wed, 4 Dec 2019, Erkka Talvitie wrote:
+> syzbot found the following crash on:
 > 
-> > > > So if CERR == EHCI_TUNE_CERR and the QTD_PID != 1 (not IN) then we
-> > > > should return -EPIPE, as the existing code does.  But if QTD_PID
-> > > > == 1 then the code should continue, as your patch does -- with one
-> > > > difference: Put the additional check for EHCI_TUNE_CERR between
-> > > > the tests for DBE and XACT instead of after XACT (because XACT
-> > > > would decrement CERR whereas DBE wouldn't).
-> > >
-> > > Good point, I agree.
-> > >
-> > > >
-> > > > Can you make that change and test it?
-> > >
-> > > Sure, I have made the change and test it as soon as possible.
-> >
-> > I am not actually totally sure if I understood you correctly, but I
-tested a
-> change where the first stall check is like this (PID_CODE_IN is defined as
-1):
-> >
-> > -               } else if (QTD_CERR(token)) {
-> > +               } else if (QTD_CERR(token) && (QTD_PID (token) !=
-> > + PID_CODE_IN)) {
-> >                         status = -EPIPE;
-> >
-> > And the second stall check (now between DBE and XACT):
-> > +               } else if (QTD_CERR(token)) {
-> > +                       status = -EPIPE;
-> >
-> > Is this what you meant? Please correct me if I am wrong.
+> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=102b65cf600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b9060e00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d3b94b600000
 > 
-> Actually, what I meant for the first part was:
-> 
-> 		} else if (QTD_CERR(token) &&
-> 				(QTD_CERR(token)
-> < EHCI_TUNE_CERR ||
-> 				 QTD_PID(token) !=
-> PID_CODE_IN)) {
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
 
-Ok, now I understand the change. Good.
+JUST IN CASE
+Final test before submission
 
-> 
-> And of course there should be a comment before this line, explaining what
-it
-> does.  By the way, the accepted format for multi-line comments
-> is:
-> 
-> 		/*
-> 		 * Blah blah blah
-> 		 * Blah blah blah
-> 		 */
-> 
+#syz test: https://github.com/google/kasan.git 22be26f7
 
-Thanks for the information. I noticed that my comments were different than
-the existing ones in the file and I was already about to change my comments
-to match the existing style.
+From ccc2a7baec5a5117216972b1c502c5a0b97de0c4 Mon Sep 17 00:00:00 2001
+From: Oliver Neukum <oneukum@suse.com>
+Date: Wed, 4 Dec 2019 13:40:19 +0100
+Subject: [PATCH] si470x: fixup error handling of the interrupt URB
 
-> The second part of the patch looks okay (but again, with a comment).
+The error handling of the interrupt URB is not correct
+in every case and assumes that low level errors
+are either transient or end with a disconnect.
 
-Yes, I will add the comment here also.
+Starting IO to a device is not necessarily a NOP in every error
+case. So we need to terminate all IO in every case of probe
+failure and disconnect with absolute certainty.
+We also must not retry forever in an error case.
+As this is unlikely in an actual device, we just give
+up.
 
-> 
-> > Anyways with these changes the issue does not reproduce.
-> 
-> Very good.
+Reported-and-tested-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/media/radio/si470x/radio-si470x-usb.c | 20 ++++++++++----------
+ 1 file changed, 10 insertions(+), 10 deletions(-)
 
-I will do the changes and re-test.
-
-> 
-> Alan Stern
-
-Erkka Talvitie
+diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
+index fedff68d8c49..1b974c2683a6 100644
+--- a/drivers/media/radio/si470x/radio-si470x-usb.c
++++ b/drivers/media/radio/si470x/radio-si470x-usb.c
+@@ -370,15 +370,12 @@ static void si470x_int_in_callback(struct urb *urb)
+ 	unsigned char tmpbuf[3];
+ 
+ 	if (urb->status) {
+-		if (urb->status == -ENOENT ||
++		if (!(urb->status == -ENOENT ||
+ 				urb->status == -ECONNRESET ||
+-				urb->status == -ESHUTDOWN) {
+-			return;
+-		} else {
++				urb->status == -ESHUTDOWN))
+ 			dev_warn(&radio->intf->dev,
+ 			 "non-zero urb status (%d)\n", urb->status);
+-			goto resubmit; /* Maybe we can recover. */
+-		}
++		return;
+ 	}
+ 
+ 	/* Sometimes the device returns len 0 packets */
+@@ -463,6 +460,7 @@ static void si470x_int_in_callback(struct urb *urb)
+ 	/* Resubmit if we're still running. */
+ 	if (radio->int_in_running && radio->usbdev) {
+ 		retval = usb_submit_urb(radio->int_in_urb, GFP_ATOMIC);
++		printk(KERN_ERR"In resubmit code path with result %d\n", retval);
+ 		if (retval) {
+ 			dev_warn(&radio->intf->dev,
+ 			       "resubmitting urb failed (%d)", retval);
+@@ -542,6 +540,8 @@ static int si470x_start_usb(struct si470x_device *radio)
+ 		radio->int_in_running = 0;
+ 	}
+ 	radio->status_rssi_auto_update = radio->int_in_running;
++	if (retval < 0)
++		return retval;
+ 
+ 	/* start radio */
+ 	retval = si470x_start(radio);
+@@ -734,7 +734,8 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 	/* start radio */
+ 	retval = si470x_start_usb(radio);
+ 	if (retval < 0)
+-		goto err_buf;
++		/* the urb may be running even after an error */
++		goto err_all;
+ 
+ 	/* set initial frequency */
+ 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
+@@ -749,8 +750,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
+ 
+ 	return 0;
+ err_all:
+-	usb_kill_urb(radio->int_in_urb);
+-err_buf:
++	usb_poison_urb(radio->int_in_urb);
+ 	kfree(radio->buffer);
+ err_ctrl:
+ 	v4l2_ctrl_handler_free(&radio->hdl);
+@@ -824,7 +824,7 @@ static void si470x_usb_driver_disconnect(struct usb_interface *intf)
+ 	mutex_lock(&radio->lock);
+ 	v4l2_device_disconnect(&radio->v4l2_dev);
+ 	video_unregister_device(&radio->videodev);
+-	usb_kill_urb(radio->int_in_urb);
++	usb_poison_urb(radio->int_in_urb);
+ 	usb_set_intfdata(intf, NULL);
+ 	mutex_unlock(&radio->lock);
+ 	v4l2_device_put(&radio->v4l2_dev);
+-- 
+2.16.4
 
