@@ -2,152 +2,260 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32566112DFD
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 16:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4821112E8A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 16:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728090AbfLDPDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Dec 2019 10:03:43 -0500
-Received: from mx2.suse.de ([195.135.220.15]:38616 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727878AbfLDPDn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Dec 2019 10:03:43 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4AE96AECA;
-        Wed,  4 Dec 2019 15:03:40 +0000 (UTC)
-Message-ID: <1575471809.30318.6.camel@suse.com>
-Subject: Re: KASAN: use-after-free Read in si470x_int_in_callback (2)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     syzbot <syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com>,
-        andreyknvl@google.com, hverkuil@xs4all.nl,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Date:   Wed, 04 Dec 2019 16:03:29 +0100
-In-Reply-To: <000000000000f47f0b0595307ddc@google.com>
-References: <000000000000f47f0b0595307ddc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
+        id S1728364AbfLDPd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Dec 2019 10:33:26 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:22716 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728256AbfLDPd0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Dec 2019 10:33:26 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx08-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xB4FRIox030249;
+        Wed, 4 Dec 2019 16:33:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=DQtKxYxpLyCymX7c2WtC2FRksiu3f9j9VGwC5BSuu8A=;
+ b=Zh1oWN4l+Y/LuquBQRAkqFTVFgbfJqnt/KkoNnNwpSSY31SW00R/E3Cd7dSMTVNE8JfH
+ GcTMPEozk3nmTiFCvi6ZcFes5Jg4SZ1DAOcAS1uowSPp3x4sw6cIP3hhXXdh4F7CPgPx
+ PC9JnO+L2QVi4gVj0fBxcUskN4h+q71unavEw4G1XbDKxz0Sn3uKo0scAnFvs41K71UF
+ WkdNVS1nP9DOfSl8BQdqjmWdbGvvMLQ3//33MR18mpbAkeBflMwdmmuWJ1+wyVGJe8f6
+ OYiOOjRaOLufNPj5g8n4KFK453tFvqLUffJzFMJVzxo0lcr8dNnN2g7O7EMtjhA+26N6 Pg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx08-00178001.pphosted.com with ESMTP id 2wkeea65jp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 04 Dec 2019 16:33:15 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 062F410002A;
+        Wed,  4 Dec 2019 16:33:14 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E0E4D2C38D0;
+        Wed,  4 Dec 2019 16:33:14 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.45) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 4 Dec
+ 2019 16:33:14 +0100
+Subject: Re: [PATCH] phy: core: Add consumer device link support
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>
+References: <20191104143713.11137-1-alexandre.torgue@st.com>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <faff6224-11b6-b055-1a80-fda0ff7c1724@st.com>
+Date:   Wed, 4 Dec 2019 16:33:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191104143713.11137-1-alexandre.torgue@st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.45]
+X-ClientProxiedBy: SFHDAG3NODE1.st.com (10.75.127.7) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-12-04_03:2019-12-04,2019-12-04 signatures=0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 18.10.2019, 07:53 -0700 schrieb syzbot:
-> Hello,
+Hi,
+
+Gentle ping, in case you missed this.
+
+Regards
+Alex
+
+On 11/4/19 3:37 PM, Alexandre Torgue wrote:
+> In order to enforce suspend/resume ordering, this commit creates link
+> between phy consumers and phy devices. This link avoids to suspend phy
+> before phy consumers.
 > 
-> syzbot found the following crash on:
+> Signed-off-by: Alexandre Torgue <alexandre.torgue@st.com>
 > 
-> HEAD commit:    22be26f7 usb-fuzzer: main usb gadget fuzzer driver
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=102b65cf600000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=387eccb7ac68ec5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9ca7a12fd736d93e0232
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=143b9060e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d3b94b600000
+> ---
 > 
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-
-JUST IN CASE
-Final test before submission
-
-#syz test: https://github.com/google/kasan.git 22be26f7
-
-From ccc2a7baec5a5117216972b1c502c5a0b97de0c4 Mon Sep 17 00:00:00 2001
-From: Oliver Neukum <oneukum@suse.com>
-Date: Wed, 4 Dec 2019 13:40:19 +0100
-Subject: [PATCH] si470x: fixup error handling of the interrupt URB
-
-The error handling of the interrupt URB is not correct
-in every case and assumes that low level errors
-are either transient or end with a disconnect.
-
-Starting IO to a device is not necessarily a NOP in every error
-case. So we need to terminate all IO in every case of probe
-failure and disconnect with absolute certainty.
-We also must not retry forever in an error case.
-As this is unlikely in an actual device, we just give
-up.
-
-Reported-and-tested-by: syzbot+9ca7a12fd736d93e0232@syzkaller.appspotmail.com
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/media/radio/si470x/radio-si470x-usb.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/media/radio/si470x/radio-si470x-usb.c b/drivers/media/radio/si470x/radio-si470x-usb.c
-index fedff68d8c49..1b974c2683a6 100644
---- a/drivers/media/radio/si470x/radio-si470x-usb.c
-+++ b/drivers/media/radio/si470x/radio-si470x-usb.c
-@@ -370,15 +370,12 @@ static void si470x_int_in_callback(struct urb *urb)
- 	unsigned char tmpbuf[3];
- 
- 	if (urb->status) {
--		if (urb->status == -ENOENT ||
-+		if (!(urb->status == -ENOENT ||
- 				urb->status == -ECONNRESET ||
--				urb->status == -ESHUTDOWN) {
--			return;
--		} else {
-+				urb->status == -ESHUTDOWN))
- 			dev_warn(&radio->intf->dev,
- 			 "non-zero urb status (%d)\n", urb->status);
--			goto resubmit; /* Maybe we can recover. */
--		}
-+		return;
- 	}
- 
- 	/* Sometimes the device returns len 0 packets */
-@@ -463,6 +460,7 @@ static void si470x_int_in_callback(struct urb *urb)
- 	/* Resubmit if we're still running. */
- 	if (radio->int_in_running && radio->usbdev) {
- 		retval = usb_submit_urb(radio->int_in_urb, GFP_ATOMIC);
-+		printk(KERN_ERR"In resubmit code path with result %d\n", retval);
- 		if (retval) {
- 			dev_warn(&radio->intf->dev,
- 			       "resubmitting urb failed (%d)", retval);
-@@ -542,6 +540,8 @@ static int si470x_start_usb(struct si470x_device *radio)
- 		radio->int_in_running = 0;
- 	}
- 	radio->status_rssi_auto_update = radio->int_in_running;
-+	if (retval < 0)
-+		return retval;
- 
- 	/* start radio */
- 	retval = si470x_start(radio);
-@@ -734,7 +734,8 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 	/* start radio */
- 	retval = si470x_start_usb(radio);
- 	if (retval < 0)
--		goto err_buf;
-+		/* the urb may be running even after an error */
-+		goto err_all;
- 
- 	/* set initial frequency */
- 	si470x_set_freq(radio, 87.5 * FREQ_MUL); /* available in all regions */
-@@ -749,8 +750,7 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
- 
- 	return 0;
- err_all:
--	usb_kill_urb(radio->int_in_urb);
--err_buf:
-+	usb_poison_urb(radio->int_in_urb);
- 	kfree(radio->buffer);
- err_ctrl:
- 	v4l2_ctrl_handler_free(&radio->hdl);
-@@ -824,7 +824,7 @@ static void si470x_usb_driver_disconnect(struct usb_interface *intf)
- 	mutex_lock(&radio->lock);
- 	v4l2_device_disconnect(&radio->v4l2_dev);
- 	video_unregister_device(&radio->videodev);
--	usb_kill_urb(radio->int_in_urb);
-+	usb_poison_urb(radio->int_in_urb);
- 	usb_set_intfdata(intf, NULL);
- 	mutex_unlock(&radio->lock);
- 	v4l2_device_put(&radio->v4l2_dev);
--- 
-2.16.4
-
+> Hi,
+> 
+> To manage device_link in phy-core I had to "balance" get and put APIs a bit
+> more. Fot this reason, you'll find updates in Renesas usbhs rcar and rza drivers
+> as phy API changes.
+> 
+> Regards
+> Alex
+> 
+> diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+> index b04f4fe85ac2..8dfb4868c8c3 100644
+> --- a/drivers/phy/phy-core.c
+> +++ b/drivers/phy/phy-core.c
+> @@ -29,7 +29,7 @@ static void devm_phy_release(struct device *dev, void *res)
+>   {
+>   	struct phy *phy = *(struct phy **)res;
+>   
+> -	phy_put(phy);
+> +	phy_put(dev, phy);
+>   }
+>   
+>   static void devm_phy_provider_release(struct device *dev, void *res)
+> @@ -566,12 +566,12 @@ struct phy *of_phy_get(struct device_node *np, const char *con_id)
+>   EXPORT_SYMBOL_GPL(of_phy_get);
+>   
+>   /**
+> - * phy_put() - release the PHY
+> - * @phy: the phy returned by phy_get()
+> + * of_phy_put() - release the PHY
+> + * @phy: the phy returned by of_phy_get()
+>    *
+> - * Releases a refcount the caller received from phy_get().
+> + * Releases a refcount the caller received from of_phy_get().
+>    */
+> -void phy_put(struct phy *phy)
+> +void of_phy_put(struct phy *phy)
+>   {
+>   	if (!phy || IS_ERR(phy))
+>   		return;
+> @@ -584,6 +584,20 @@ void phy_put(struct phy *phy)
+>   	module_put(phy->ops->owner);
+>   	put_device(&phy->dev);
+>   }
+> +EXPORT_SYMBOL_GPL(of_phy_put);
+> +
+> +/**
+> + * phy_put() - release the PHY
+> + * @dev: device that wants to release this phy
+> + * @phy: the phy returned by phy_get()
+> + *
+> + * Releases a refcount the caller received from phy_get().
+> + */
+> +void phy_put(struct device *dev, struct phy *phy)
+> +{
+> +	device_link_remove(dev, &phy->dev);
+> +	of_phy_put(phy);
+> +}
+>   EXPORT_SYMBOL_GPL(phy_put);
+>   
+>   /**
+> @@ -651,6 +665,7 @@ struct phy *phy_get(struct device *dev, const char *string)
+>   {
+>   	int index = 0;
+>   	struct phy *phy;
+> +	struct device_link *link;
+>   
+>   	if (string == NULL) {
+>   		dev_WARN(dev, "missing string\n");
+> @@ -672,6 +687,13 @@ struct phy *phy_get(struct device *dev, const char *string)
+>   
+>   	get_device(&phy->dev);
+>   
+> +	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> +	if (!link) {
+> +		dev_err(dev, "failed to create device link to %s\n",
+> +			dev_name(phy->dev.parent));
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+>   	return phy;
+>   }
+>   EXPORT_SYMBOL_GPL(phy_get);
+> @@ -765,6 +787,7 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+>   			    const char *con_id)
+>   {
+>   	struct phy **ptr, *phy;
+> +	struct device_link *link;
+>   
+>   	ptr = devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
+>   	if (!ptr)
+> @@ -778,6 +801,13 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+>   		devres_free(ptr);
+>   	}
+>   
+> +	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> +	if (!link) {
+> +		dev_err(dev, "failed to create device link to %s\n",
+> +			dev_name(phy->dev.parent));
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+>   	return phy;
+>   }
+>   EXPORT_SYMBOL_GPL(devm_of_phy_get);
+> @@ -798,6 +828,7 @@ struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+>   				     int index)
+>   {
+>   	struct phy **ptr, *phy;
+> +	struct device_link *link;
+>   
+>   	ptr = devres_alloc(devm_phy_release, sizeof(*ptr), GFP_KERNEL);
+>   	if (!ptr)
+> @@ -819,6 +850,13 @@ struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+>   	*ptr = phy;
+>   	devres_add(dev, ptr);
+>   
+> +	link = device_link_add(dev, &phy->dev, DL_FLAG_STATELESS);
+> +	if (!link) {
+> +		dev_err(dev, "failed to create device link to %s\n",
+> +			dev_name(phy->dev.parent));
+> +		return ERR_PTR(-EINVAL);
+> +	}
+> +
+>   	return phy;
+>   }
+>   EXPORT_SYMBOL_GPL(devm_of_phy_get_by_index);
+> diff --git a/drivers/usb/renesas_usbhs/rcar2.c b/drivers/usb/renesas_usbhs/rcar2.c
+> index 440d213e1749..791908f8cf73 100644
+> --- a/drivers/usb/renesas_usbhs/rcar2.c
+> +++ b/drivers/usb/renesas_usbhs/rcar2.c
+> @@ -34,7 +34,7 @@ static int usbhs_rcar2_hardware_exit(struct platform_device *pdev)
+>   	struct usbhs_priv *priv = usbhs_pdev_to_priv(pdev);
+>   
+>   	if (priv->phy) {
+> -		phy_put(priv->phy);
+> +		phy_put(&pdev->dev, priv->phy);
+>   		priv->phy = NULL;
+>   	}
+>   
+> diff --git a/drivers/usb/renesas_usbhs/rza2.c b/drivers/usb/renesas_usbhs/rza2.c
+> index 021749594389..3eed3334a17f 100644
+> --- a/drivers/usb/renesas_usbhs/rza2.c
+> +++ b/drivers/usb/renesas_usbhs/rza2.c
+> @@ -29,7 +29,7 @@ static int usbhs_rza2_hardware_exit(struct platform_device *pdev)
+>   {
+>   	struct usbhs_priv *priv = usbhs_pdev_to_priv(pdev);
+>   
+> -	phy_put(priv->phy);
+> +	phy_put(&pdev->dev, priv->phy);
+>   	priv->phy = NULL;
+>   
+>   	return 0;
+> diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+> index 56d3a100006a..19eddd64c8f6 100644
+> --- a/include/linux/phy/phy.h
+> +++ b/include/linux/phy/phy.h
+> @@ -234,7 +234,8 @@ struct phy *devm_of_phy_get(struct device *dev, struct device_node *np,
+>   			    const char *con_id);
+>   struct phy *devm_of_phy_get_by_index(struct device *dev, struct device_node *np,
+>   				     int index);
+> -void phy_put(struct phy *phy);
+> +void of_phy_put(struct phy *phy);
+> +void phy_put(struct device *dev, struct phy *phy);
+>   void devm_phy_put(struct device *dev, struct phy *phy);
+>   struct phy *of_phy_get(struct device_node *np, const char *con_id);
+>   struct phy *of_phy_simple_xlate(struct device *dev,
+> @@ -419,7 +420,11 @@ static inline struct phy *devm_of_phy_get_by_index(struct device *dev,
+>   	return ERR_PTR(-ENOSYS);
+>   }
+>   
+> -static inline void phy_put(struct phy *phy)
+> +static inline void of_phy_put(struct phy *phy)
+> +{
+> +}
+> +
+> +static inline void phy_put(struct device *dev, struct phy *phy)
+>   {
+>   }
+>   
+> 
