@@ -2,255 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD721104AD
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2019 20:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC02112122
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 02:49:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726995AbfLCTBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Dec 2019 14:01:12 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:46858 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726057AbfLCTBM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 14:01:12 -0500
-Received: (qmail 5328 invoked by uid 2102); 3 Dec 2019 14:01:10 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 3 Dec 2019 14:01:10 -0500
-Date:   Tue, 3 Dec 2019 14:01:10 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Erkka Talvitie <erkka.talvitie@vincit.fi>
-cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
-        <claus.baumgartner@med.ge.com>
-Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
-In-Reply-To: <01d701d5a9bd$79fc5230$6df4f690$@vincit.fi>
-Message-ID: <Pine.LNX.4.44L0.1912031147050.1505-100000@iolanthe.rowland.org>
+        id S1726162AbfLDBtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Dec 2019 20:49:08 -0500
+Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:41302 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726107AbfLDBtI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Dec 2019 20:49:08 -0500
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 21E1E404FC;
+        Wed,  4 Dec 2019 01:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1575424147; bh=5G3Tfi9QbP6Gkkc9zWpZlXVImf771SG4AJym0YgjMkI=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=VXVXUHlXKGAZm8k5lCm/JrqEoN4cArsE4BvFwVO8c41pnDB/eY3XAIECu0KIs5awn
+         yYy81uqCAq1iB23CLnMys5soID8IQgjxFz2RMPu2UFlIvevNLkjNy/IRBshagsaxZU
+         iEjPnWjvWXPRFNsUAHP8YjJ34TXVAAX4prB6e6y/yhJSD+KOBoxH3qkln1szGdwRzG
+         qoD5cLIvty5EjYAFe37MNHJQ9fJgKAyvJFkWk0ogowE2Il7odFMpUgxE2sTQOXst1w
+         Ch45rb8ZvTeLx2xXm4gRU6ll8y+JAzmzOivaqRhT6UcROQKXdo+qPel741/eAJ9hRu
+         jTuV62mp1p1Lw==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id D8145A008E;
+        Wed,  4 Dec 2019 01:49:00 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Tue, 3 Dec 2019 17:48:53 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (10.13.177.249)
+ by mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Tue, 3 Dec 2019 17:48:53 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JsY5+Z1hK9trPA8CMMKLMY9xrLQ8A8WgAZe5Ki83U9Vaw4TIGY3b9PTgQqpVO3SRQHHtsGV3JJCFBKvn6GDVbexi4qnqFIIMCr3nOBVU+kvk621xQuQXqQ0y9dxaEbjjZLrJezciaXiNIsyGiTF01+r19Mmkyhk/4PiA31wJ4eo7fUTrPRIz635Rvy9fkLfTFOJebjP41vpKXMNBDQCl+f9XBy2HbGTNVrapkIh6KfMkEm8OV9CFfxj0jPqTAoh5wQugAXQISHQbSq6Bv6U4xnu2hV/N3g9wvzgVbZO9aMmpTrXl6x2O0RnxlQUZj2RJTwfddARGVWX5QSS6/aFSFg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5G3Tfi9QbP6Gkkc9zWpZlXVImf771SG4AJym0YgjMkI=;
+ b=l3VlsRV6ovaY8nhr1Lcam/SNAZClwAHMuhopIf/NF1c5bOr92DapS7/IIQzmyjtlFmAGSv7LbGlrPEwMskAu67afNLZH0CC8bl9OJR0jEB27wAKb6E6FsPOVqRR7ZRn3J1GvuCqA5p9f+HsgLTLPPC1YUkK2SU/yUxI+R7E4fiD0ScbxLR1tD4wIvOXZDRL+PeThvkjU9vPqBk5jH6gxHlC5fQG8WgnWPzilN1UcJSgpmQEp/e049JYbgUn2VVhfuVHN83KnOGIWYnnVBp19Gs0kw2TmCPEbhzY/RBuwDxCLV40Kr2pKvvdOhf2swHZXMrRg/ysmyNS9Gae4FzGBfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5G3Tfi9QbP6Gkkc9zWpZlXVImf771SG4AJym0YgjMkI=;
+ b=VZxtF2ppX6wAKmwcbdVkxQSIjmzJlG/M0z0m/dPrFlCd+dxQCrXRT9z166swy+RuJaDYnPhotVFUBmWFd4kokCdWH5chKuFuh84p0vHUYjI00hw2VDDLAiQ0k+0rWYxSayEHRvrX6W38s2IkuR0Ql0yHimg3hgasRfbC9ufN94A=
+Received: from CY4PR1201MB0037.namprd12.prod.outlook.com (10.172.78.22) by
+ CY4PR1201MB0181.namprd12.prod.outlook.com (10.172.79.139) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2495.22; Wed, 4 Dec 2019 01:48:51 +0000
+Received: from CY4PR1201MB0037.namprd12.prod.outlook.com
+ ([fe80::5d88:202f:2fff:24b4]) by CY4PR1201MB0037.namprd12.prod.outlook.com
+ ([fe80::5d88:202f:2fff:24b4%8]) with mapi id 15.20.2495.014; Wed, 4 Dec 2019
+ 01:48:51 +0000
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3: gadget: Check for NULL descriptor
+Thread-Topic: [PATCH] usb: dwc3: gadget: Check for NULL descriptor
+Thread-Index: AQHVpWwJjRcuVvPds0SRD8AQcHPAOqeoee0AgADFLgA=
+Date:   Wed, 4 Dec 2019 01:48:51 +0000
+Message-ID: <b2277d8d-8b7f-15cd-fa18-e8c3d08ead4a@synopsys.com>
+References: <bbb1564aa649a6b5b97160ec3ef9fefdd8c85aea.1574891043.git.thinhn@synopsys.com>
+ <87sgm18q1x.fsf@gmail.com>
+In-Reply-To: <87sgm18q1x.fsf@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=thinhn@synopsys.com; 
+x-originating-ip: [149.117.75.12]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 062299fa-0d59-4037-b6e3-08d7785c1d0d
+x-ms-traffictypediagnostic: CY4PR1201MB0181:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CY4PR1201MB01812D12518FA644DF8CAD5AAA5D0@CY4PR1201MB0181.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3631;
+x-forefront-prvs: 0241D5F98C
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(396003)(366004)(376002)(39860400002)(136003)(199004)(189003)(316002)(66446008)(64756008)(6486002)(229853002)(66476007)(7736002)(76116006)(81156014)(8676002)(66946007)(2501003)(14444005)(4744005)(256004)(305945005)(5660300002)(6116002)(2906002)(14454004)(3846002)(31686004)(81166006)(76176011)(71190400001)(6512007)(4326008)(6436002)(86362001)(8936002)(71200400001)(6246003)(446003)(66556008)(36756003)(25786009)(54906003)(11346002)(478600001)(6506007)(186003)(2616005)(31696002)(99286004)(110136005)(102836004)(26005);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR1201MB0181;H:CY4PR1201MB0037.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 1bC7FyqWluvBcKeJXI3w7TLQzLscuOv+qfkLUoT0NzgkvlE4HXO/O1q8GPXZb6kOOjmkN6K4tTPrPVzrS053CyftbsY0+1OucRITD9TppL+jsqnjbh39/gPC8C55FEsPmIvuJep2sNFRZfS0omvm+1v0HPUpgZIrf//oshQHodT8LRlSeMQgujz5BVTw7isLGtyx8pXhlttr+AWE72EmnMvuaP4P9kDQQ3fcyb4hmNHSq3VT62bo2Vl4qzIuZwxzRJKaNxlbJVBawkIMboDkUUY82LmXquBrNpYJ73+iaCpISE1MGCzoYD49z1CQKwXb6fTt7yBOh3MZiq9Wg4gGqgyDH9q+397XF41/3Liyj2GSRInJED2BrnZGhdKEY7IGqAo9EiIlogZWKHkpRnUBXB0PqX5hhRaF1/N/r7/RGvnsYpXDjHgYnhoL0yKLKfg7
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <545755798B32FD47BDB749AE3367AC57@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+X-MS-Exchange-CrossTenant-Network-Message-Id: 062299fa-0d59-4037-b6e3-08d7785c1d0d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2019 01:48:51.4527
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rbmgIdnIqBlnQQFqJQ4xxFLDd4GKBFEzip/7Pq+cxn+z9tGh1EBGYMkZgCDICilNzr4tPu3d9p/va7PGqW4XKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0181
+X-OriginatorOrg: synopsys.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 3 Dec 2019, Erkka Talvitie wrote:
-
-> Thank you for the comments.
-> 
-> > -----Original Message-----
-> > From: Alan Stern <stern@rowland.harvard.edu>
-> > Sent: maanantai 2. joulukuuta 2019 21.44
-> > To: Erkka Talvitie <erkka.talvitie@vincit.fi>
-> > Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> > claus.baumgartner@med.ge.com
-> > Subject: Re: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is
-> > disconnected
-> > 
-> > On Fri, 29 Nov 2019, Erkka Talvitie wrote:
-> > 
-> > > When disconnecting a USB hub that has some child device(s) connected
-> > > to it (such as a USB mouse), then the stack tries to clear halt and
-> > > reset device(s) which are _already_ physically disconnected.
-> > 
-> > That behavior is understandable.  The kernel doesn't know that the device
-> > has been disconnected until it can process the notification from an
-> upstream
-> > hub, and it can't process that notification while it's trying to reset the
-> device.
-> > 
-> 
-> Ok. I was thinking that in this use case , it should not be trying to clear
-> the halt (and reset the device when the clear halt fails). And this behavior
-> was altered by this RFC.
-
-Actually, the situation is a little different from what I described
-above.  When you unplug the high-speed hub, the kernel doesn't know the
-hub has been disconnected until it receives a notification from the
-upstream hub.  The kernel checks for those notifications at roughly
-250-ms intervals, so it can take up to that long before the kernel
-realizes the high-speed hub is gone.  Until that time, the kernel will
-keep trying to reset and communicate with the hub and the devices that
-were attached to it.
-
-You can see this in the logs that you posted in your original report.  
-In each case, the "cannot reset" and -71 errors lasted for less than 
-250 ms.
-
-I just tried doing the same experiment on my PC (which does use all 
-Intel hardware and an EHCI controller).  Here's the output from when I 
-unplugged the high-speed hub:
-
-[ 6321.245528] usb 1-1.4: clear tt 4 (00a0) error -71
-[ 6321.250903] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.255155] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.259403] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.263657] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.267905] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.267910] usb 1-1.4-port4: Cannot enable. Maybe the USB cable is bad?
-[ 6321.272155] usb 1-1.4-port4: cannot disable (err = -71)
-[ 6321.276405] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.280653] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.284905] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.289155] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.293403] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.293407] usb 1-1.4-port4: Cannot enable. Maybe the USB cable is bad?
-[ 6321.297656] usb 1-1.4-port4: cannot disable (err = -71)
-[ 6321.301904] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.306152] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.310402] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.314653] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.318904] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.318908] usb 1-1.4-port4: Cannot enable. Maybe the USB cable is bad?
-[ 6321.323154] usb 1-1.4-port4: cannot disable (err = -71)
-[ 6321.327404] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.331651] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.335902] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.340155] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.344402] usb 1-1.4-port4: cannot reset (err = -71)
-[ 6321.344406] usb 1-1.4-port4: Cannot enable. Maybe the USB cable is bad?
-[ 6321.348652] usb 1-1.4-port4: cannot disable (err = -71)
-[ 6321.352904] usb 1-1.4-port4: cannot disable (err = -71)
-[ 6321.357154] hub 1-1.4:1.0: hub_ext_port_status failed (err = -71)
-[ 6321.437000] usb 1-1.4: USB disconnect, device number 9
-[ 6321.437010] usb 1-1.4.4: USB disconnect, device number 10
-
-As you can see, the time interval runs from 6321.245 to 6321.437, 
-roughly 192 ms < 250 ms.  This is the expected behavior.
-
-I did not try to check whether the MMF bit got set or what value CERR 
-had.
-
-
-> But as in this use case the CERR has not been decreased yet there is error
-> bit active (MMF) do you see it is still correct to interpret it as a stall
-> (even when the halt bit is set)?
-
-See below.
-
-> I have tried to find out more details about our EHCI controller version, but
-> I have only found out those CPU versions. It might help in a search whether
-> this could be a HW issue.
-
-
-> > > The specification [2] is not clear about error priorities, but since
-> > > there is no explicit error bit for the stall, it is assumed to be
-> > > lower priority than other errors.
-> > 
-> > On the contrary, the specification is very clear.  Since transaction
-> errors cause
-> > CERR to be decremented until it reaches 0, a nonzero value for CERR means
-> > the endpoint was halted for some other reason.  And the only other reason
-> > is a stall.  (Or end of the microframe, but there's no way to tell if that
-> > happened.)
->  
-> I see your point. EHCI specification states that babble is a serious error
-> and it will also cause the halt. The babble error bit is checked first. But
-> the specification does not say about order of the other errors or about what
-> to do if there is an error, no retries executed, yet a halt (stall). For
-> example should the XactErr be checked before the MMF.
-
-I think the order doesn't matter.  In fact, it's possible that both 
-errors occurred, since the transaction gets retried multiple times.
-
-> >(Or end of the microframe, but there's no way to tell if that happened.)
-> 
-> I was not able to locate this from the specification. Could you please point
-> out where this statement is from?
-
-"Enhanced Host Controller Interface Specification for Universal Serial 
-Bus", rev 1.0 (2002), p. 110:
-
-Transaction Error (XactErr). Timeout, data CRC failure, etc. The CErr
-field is decremented and the XactErr bit in the Status field is set to
-a one. The complete split transaction is immediately retried (if Cerr
-is non-zero). If there is not enough time in the micro-frame to
-complete the retry and the endpoint is an IN, or CErr is decremented to
-a zero from a one, the queue is halted. If there is not enough time in
-the micro-frame to complete the retry and the endpoint is an OUT and
-CErr is not zero, then this state is exited (i.e. return to Do Start
-Split). This results in a retry of the entire OUT split transaction, at
-the next poll period. Refer to Chapter 11 Hubs (specifically the
-section full- and low-speed Interrupts) in the USB Specification
-Revision 2.0 for detailed requirements on why these errors must be
-immediately retried. •
-
-> Could the way to tell if "end of microframe" happened, be what is done here
-> - check for MMF error bit and if CERR has not been decreased?
-
-No, because the "end of microframe" situation happens when the host 
-controller is handling a transaction error, whereas MMF gets set when 
-the host controller detects an error on the host.
-
-> > > diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> > > index 3276304..da7fd12 100644
-> > > --- a/drivers/usb/host/ehci-q.c
-> > > +++ b/drivers/usb/host/ehci-q.c
-> > > @@ -206,8 +206,9 @@ static int qtd_copy_status (
-> > >  		if (token & QTD_STS_BABBLE) {
-> > >  			/* FIXME "must" disable babbling
-> > device's port too */
-> > >  			status = -EOVERFLOW;
-> > > -		/* CERR nonzero + halt --> stall */
-> > > -		} else if (QTD_CERR(token)) {
-> > > +		/* CERR nonzero and less than
-> > EHCI_TUNE_CERR + halt --> stall.
-> > > +		   This handles situation where stall comes after
-> > an error. */
-> > 
-> > This comment doesn't make sense.  Who cares whether a stall comes after
-> > an error or not?  It's still a stall and should be reported.
-> 
-> This was basically a comment trying to answer to this commit:
-> ba516de332c0  USB: EHCI: check for STALL before other errors
-> 
->     "The existing code doesn't do this properly, because it tests for MMF
->     (Missed MicroFrame) and DBE (Data Buffer Error) before testing the
->     retry counter.  Thus, if a transaction gets either MMF or DBE the
->     corresponding flag is set and the transaction is retried.  If the
->     second attempt receives a STALL then -EPIPE is the correct return
->     value.  But the existing code would see the MMF or DBE flag instead
->     and return -EPROTO, -ENOSR, or -ECOMM."
-> 
-> The comment tries to explain that it will not revert the fix made in the
-> commit ba516de332c0.
-
-Okay, I get it.  You're trying to rely on the strange behavior of the 
-MMF bit.
-
-I'm not sure this is a good idea.  Suppose MMF gets set for some other 
-reason (a genuine error on the host) and then the transaction gets a 
-STALL on the next retry.  Since host errors don't decrement CERR, your 
-patch would cause the driver to return -EPROTO instead of -EPIPE.
-
-> > > +		} else if (QTD_CERR(token) &&
-> > QTD_CERR(token) < EHCI_TUNE_CERR) {
-> > >  			status = -EPIPE;
-> > 
-> > If an error occurs and the transaction is retried and the retry gets a
-> stall, then
-> > the final status should be -EPIPE, not something else.
-> 
-> This is how the RFC also works. If the transaction has been retried and gets
-> stall then -EPIPE is returned.
-> Or if there are no errors but there is a stall then -EPIPE is returned.
-> 
-> The only difference in this patch in comparison to the existing
-> implementation is that if there is an error but the 
-> transaction has not been retried it is not interpret as a stall even if
-> there is a halt.
-
-Sometimes that will be the right behavior and other times it won't.  
-However, it looks like there may be a way to tell which situation we
-are in.  Setting the MMF bit will cause the queue to halt immediately
-if the transaction is IN, but not if it is OUT (see Table 4-13 in the 
-EHCI spec).
-
-So if CERR == EHCI_TUNE_CERR and the QTD_PID != 1 (not IN) then we
-should return -EPIPE, as the existing code does.  But if QTD_PID == 1
-then the code should continue, as your patch does -- with one
-difference: Put the additional check for EHCI_TUNE_CERR between the
-tests for DBE and XACT instead of after XACT (because XACT would
-decrement CERR whereas DBE wouldn't).
-
-Can you make that change and test it?
-
-Alan Stern
-
+SGkgRmVsaXBlLA0KDQpGZWxpcGUgQmFsYmkgd3JvdGU6DQo+IEhpLA0KPg0KPiBUaGluaCBOZ3V5
+ZW4gPFRoaW5oLk5ndXllbkBzeW5vcHN5cy5jb20+IHdyaXRlczoNCj4NCj4+IFRoZSBmdW5jdGlv
+biBkcml2ZXIgbWF5IHRyeSB0byBlbmFibGUgYW4gdW5jb25maWd1cmVkIGVuZHBvaW50LiBUaGlz
+DQo+PiBjaGVjayBtYWtlIHN1cmUgdGhhdCB3ZSBkbyBub3QgYXR0ZW1wdCB0byBhY2Nlc3MgYSBO
+VUxMIGRlc2NyaXB0b3IgYW5kDQo+PiBjcmFzaC4NCj4+DQo+PiBDYzogc3RhYmxlQHZnZXIua2Vy
+bmVsLm9yZw0KPj4gU2lnbmVkLW9mZi1ieTogVGhpbmggTmd1eWVuIDx0aGluaG5Ac3lub3BzeXMu
+Y29tPg0KPj4gLS0tDQo+PiAgIGRyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMgfCAzICsrKw0KPj4g
+ICAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspDQo+Pg0KPj4gZGlmZiAtLWdpdCBhL2Ry
+aXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMgYi9kcml2ZXJzL3VzYi9kd2MzL2dhZGdldC5jDQo+PiBp
+bmRleCA3Zjk3ODU2ZTZiMjAuLjAwZjhmMDc5YmJmMiAxMDA2NDQNCj4+IC0tLSBhL2RyaXZlcnMv
+dXNiL2R3YzMvZ2FkZ2V0LmMNCj4+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZ2FkZ2V0LmMNCj4+
+IEBAIC02MTksNiArNjE5LDkgQEAgc3RhdGljIGludCBfX2R3YzNfZ2FkZ2V0X2VwX2VuYWJsZShz
+dHJ1Y3QgZHdjM19lcCAqZGVwLCB1bnNpZ25lZCBpbnQgYWN0aW9uKQ0KPj4gICAJdTMyCQkJcmVn
+Ow0KPj4gICAJaW50CQkJcmV0Ow0KPj4gICANCj4+ICsJaWYgKCFkZXNjKQ0KPj4gKwkJcmV0dXJu
+IC1FSU5WQUw7DQo+IEkgd291bGQgcmF0aGVyIGhhdmUgYSBkZXZfV0FSTigpIChhbmQgcmV0dXJu
+IC1FSU5WQUwpIGFkZGVkIHRvDQo+IHVzYl9lcF9lbmFibGUoKSBzbyB3ZSBjYXRjaCB0aG9zZSBk
+b2luZyB0aGlzLiBUaGF0IHdheSB3ZSBkb24ndCBoYXZlIHRvDQo+IHBhdGNoIGV2ZXJ5IFVEQy4N
+Cj4NCg0KU3VyZSwgd2UgY2FuIGRvIHRoYXQuDQoNClRoYW5rcywNClRoaW5oDQo=
