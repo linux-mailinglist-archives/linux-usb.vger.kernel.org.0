@@ -2,110 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EB3112B23
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 13:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AACC112B4D
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 13:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727472AbfLDMOy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Dec 2019 07:14:54 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:37325 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727445AbfLDMOy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Dec 2019 07:14:54 -0500
-Received: by mail-lj1-f195.google.com with SMTP id u17so7854774lja.4
-        for <linux-usb@vger.kernel.org>; Wed, 04 Dec 2019 04:14:53 -0800 (PST)
+        id S1727849AbfLDMWW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Dec 2019 07:22:22 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:46523 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727845AbfLDMWU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Dec 2019 07:22:20 -0500
+Received: by mail-ed1-f65.google.com with SMTP id m8so6399942edi.13
+        for <linux-usb@vger.kernel.org>; Wed, 04 Dec 2019 04:22:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=sender:from:to:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=8UD3n+eNOTqgH9ZpohiKTsWGGGn7XXdOv7rmJPWYULM=;
-        b=jRFWVvcTScWNVAzmFra1gYC8pD/TcCImr+A+dIQoU1MkcjUvlCKRIc+pKYMq7nUdXb
-         Bnf6ME6gZIEBJRSfbR6yQ35+enhaCZ82GU6JU8r3YHHExA8b8ZpHrkcAP2E3QrRfiD0G
-         wen3s/pZXwBAm4kfbTbRk2k9ubg1WNM85wM813wEnlNTHdRimYTu5PiZBuspxUr/2/xd
-         NHugg0QkUUZjjSyMAZ16gt4Gan363d7+belQYpt2hDYCRzdcik2I25fZJzW/6eRiVZCo
-         hZZum0ptHeVfozWrA0S1LfwqaGD7X8TTms9MwnelkQOj0GeSoIivT6oLShd3Vkmr9LQY
-         R8AQ==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=itksFv5A2JLOzo6XVqVzXmSzWKIpGqZTNHrb4xFvrqPmHJ7WwaeLkksg0/ZJSVtv31
+         pzvXZ3OHhHMsql2Vo9oheJQHErj5CDGd5ZvPVjxDn+I4JgVPrQl1nkJy5Nb7wvQoUvM+
+         46lpgbsOy0h7DJvRAy1OQQg0Oi/exT7Imiyfeu4Gtmu6VGYFysEjNlBfvwObnE6M1THW
+         GbhC/d5DVONSKdw6y/qH20L4wjeyxlxCBE+xa1i44NzWc0HgEODgSNCM/bGDvmjdXP55
+         pwYVn13D99Hhzzv+p4qHdhRZEM3zwIJF+S9QDszHcSxOoAqtygRSNU+xVzjWpE9QCD88
+         4SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=8UD3n+eNOTqgH9ZpohiKTsWGGGn7XXdOv7rmJPWYULM=;
-        b=eCtVpXbNpQqqWGcboU7eksoV7GQiTHR+zoJLfpfHIyvtSNFZKIKOXHRonIUy+XcoKk
-         CY8dKtXJHXyJThKMeEoSeXgpS2OjOHXJhHbMaiGi7Ady0NleomWfeXSrms8nxERMy1vS
-         KcDDb5aqUvTkR5pdQjaBBjOSwU7QM5Ec4ZDHzqs+gZuDj+cyI40dCVJyqBZM9daQ7QDI
-         jlKgwmBAZfba9gAI49qXhYplL3Q+04j0GhSfZM4EnOZRZM3j0nbQ29RcornctHa0Naom
-         pnzolmG/2GqjH6Nk+CgB70ZtZzGhe9MVkL0L9ZnMDWwO7l3dcYf4KrlR76oO8sD0GOCc
-         9m6Q==
-X-Gm-Message-State: APjAAAXn9FoMgnw6vXMvNPIW0JA8tpZEsmEwlx1/M7HweXCAW58KrpGy
-        4BShhi+az/rpWGjI8E5fmWIrcqBT
-X-Google-Smtp-Source: APXvYqwus28E9OLLwNKY3ecIcoxapgG9KzlZkJ4P03CXYyQBpRSCG3sJUjBA/9hYGCf3k2+Lu76SrQ==
-X-Received: by 2002:a2e:b52a:: with SMTP id z10mr1777846ljm.178.1575461692341;
-        Wed, 04 Dec 2019 04:14:52 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id m9sm3199784lfj.57.2019.12.04.04.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 04:14:51 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     EJ Hsu <ejh@nvidia.com>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] usb: gadget: fix wrong endpoint desc
-In-Reply-To: <MN2PR12MB4126C72DAA5292DA99477FAACF5D0@MN2PR12MB4126.namprd12.prod.outlook.com>
-References: <20191203104648.29291-1-ejh@nvidia.com> <87y2vt8ua9.fsf@gmail.com> <MN2PR12MB4126C72DAA5292DA99477FAACF5D0@MN2PR12MB4126.namprd12.prod.outlook.com>
-Date:   Wed, 04 Dec 2019 14:15:41 +0200
-Message-ID: <875ziwffrm.fsf@gmail.com>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
+        b=gA0Xx94d534FfwQ/lu24UwFHOMWMWGi3ftlGX5PCMZSkolCFlIMkRqhJuJB50E+q1N
+         Zo7gRCrOxi+MTxIVPVpMe77eu6MDCDxoihYqNFSW/j5E+jyPTVzSMIVlmzkqVV3bel7L
+         dqJiTvnUEArj2eSMrMLOaTghmkXBNIEIgU9JXCS9wmA9CE7LOdTLpp99/15KoIYPYwWu
+         g8tDxufmBNWVCTxmM/7XIIkC8T+u6c3x7qVmWxmn91XCWKYwvDvEJucLSqSTMMRz/A3g
+         9vBiVDvtbB6DN5suhkuvEqQmsWbrlcgsy1ZXN+xZgtnZvQdWcinhbZZ5LicqkBst5RTJ
+         LSag==
+X-Gm-Message-State: APjAAAWqOZ8KGwusHjuUg2mT0UJI/m/nrSFN+kEgZRE/vsCAhPze3+QY
+        apPUJG8dwPY/KxgWlTCSeSd/sE3VrLz+fg85wCVQFg2W
+X-Google-Smtp-Source: APXvYqwlH4d/NgUk6+TTgeshJl/W0Z846j+vPwdmJMmvDKA5s5alEIOymc5OFboGvVzTvSBGNMpJNF0KpHbTN+gxpY4=
+X-Received: by 2002:aa7:d84b:: with SMTP id f11mr3689948eds.96.1575462136339;
+ Wed, 04 Dec 2019 04:22:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:22:15
+ -0800 (PST)
+Reply-To: moneygram.1820@outlook.fr
+From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" <eco.bank1204@gmail.com>
+Date:   Wed, 4 Dec 2019 13:22:15 +0100
+Message-ID: <CAOE+jABwsq4QTifFZJGuzmZ8p9kMY_tMmS5N39hvEALE6d=OJw@mail.gmail.com>
+Subject: God has remembered your prayers I have already sent you Money Gram
+ payment of $5000.00 today, MG 1029-8096
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Attn, dear Beneficiary.
 
+God has remembered your prayers
+I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
+This is because we have finally concluded to effect your transfer
+funds of $4.8,000.000usd
+through MONEY GRAM International Fund transfer Service
+Each payment will be sending to you by $5000.00 daily until the
+($4.8,000.000usd) is completely transferred
+we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
+So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
 
-Hi,
+Contact person Mrs. Alan Ude
+Dir. MONEY GRAM Service,Benin
+Phone number: +229 98856728
+E-mail: moneygram.1820@outlook.fr
 
-EJ Hsu <ejh@nvidia.com> writes:
-> Felipe Balb writes:
->>EJ Hsu <ejh@nvidia.com> writes:
->>> Gadget driver should always use config_ep_by_speed() to initialize=20
->>> usb_ep struct according to usb device's operating speed. Otherwise,=20
->>> usb_ep struct may be wrong if usb devcie's operating speed is changed.
->>
->>your commit log doesn't match the patch body. What gives?
->
-> The key point in this patch is that we want to make sure the desc pointer=
- in
-> usb_ep struct will be set to NULL when gadget is disconnected. This will =
-force
-> it to call config_ep_by_speed() to correctly initialize usb_ep struct bas=
-ed on=20
-> the new operating speed when gadget is re-connected later.
+Ask him to give you the complete mtcn, sender name, question and
+answer to enable you
+pick up the $5000.00 sent today,
+Also you are instructed to re-confirm your information's
+to Mrs.Alan Ude as listed below to avoid wrong transactions.
 
-this would be a commit log that matches the implementation ;-)
+(1Your Full name:............................................
+(2 Phone number.....................................................
+(3 Contact address:.....................................
+(4 Age:..................................................................
+(5 Country..............................................
+(6) Sex .................................................................
+(7) your occupation...........................................
 
-=2D-=20
-balbi
+(8)Passport/By Attach or Drivers License Number:
+Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
+Note please: I have paid service fees for you but the only money you
+are required
+to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
+pick up your transfer today.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Send it to via Money Gram
+Receiver's Name-----Alan Ude
+Country----------Benin
+Address-----------Cotonou
+Quest--------Honest
+Ans-----------Trust
 
------BEGIN PGP SIGNATURE-----
+I done all my best for you to receive your transfer now ok.
+We need your urgent reply
+Best Regards
+Rev.Dr Emmanuel Okoye
+CEO Ecobank-benin
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3no28ACgkQzL64meEa
-mQbvxg//ZtMewK42OldERG6roCzHGKmmyP3pAuSo0fmhKBV70ciyNtfybosbJWbj
-rrYlecvxaR2sR0uA1BG3fRwWO97U4J5iB0hDzzp8Oc07M1RHnbiR15r9yhUCRLSG
-7csp8bDocoFja3wHI+jwIIwRil2LxfPHVPQNNSabz1dqxtavxbE/NtZtkZVuzTxJ
-+f82DQ2q1BbBg0rgH2Enhz+uB5QRL8QeTN506s3r7G8xsxmHrSIj1mRaTHXw7Z0B
-IRf4NrapuEkfXAjpGyn6G0v+cWWZtbQQm8Rjgd0Y00mgU84pDGjVuYkDQg0yM40Z
-E7BByxgIaZu/jJeM1v9f86mG9RPMjm0+rusFfnqu60rNiJBc5Ws0kwG94lV9QJ1l
-rgM4H/543mxSkyzhsaey4G9VNSok7z4Vrd/eZlay21KrQ2UW+Fe8/1zjPS9GQXqP
-xAOHgbrIRo+/uDbMnbJrDjKsNXn5C6An15Q4BVKt7CqnBtfrwAZwYvqbRQwuBuGY
-pfZ4xm6cYiE1S37XKeyhHnlsC4sYg/e3E8OehdUT2+XMkJiLqvE/xJ+qyssietdp
-n7Iiv1TPdKDK1U0qyvRDeslBs4t+W6jMuZEpT5rtgjPJ9HsFZ+yatA7TI5OByEy+
-9IvAKcgCz+nwKBChD32D37GL4R8Z10wYNX2Z9XPlmWSzvu99wkk=
-=JYnM
------END PGP SIGNATURE-----
---=-=-=--
+If we did not receive it urgent from you today,
+I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
+representative.
