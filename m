@@ -2,87 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C274D1142A9
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 15:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA291142CD
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 15:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729519AbfLEO0h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 09:26:37 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45116 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729402AbfLEO0h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 09:26:37 -0500
-Received: by mail-lj1-f196.google.com with SMTP id d20so3761253ljc.12;
-        Thu, 05 Dec 2019 06:26:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FPiOMjJ2rQ9P8n4Ma3k63SEaCRn4xx4awe4inxl+t/I=;
-        b=aN3wqPjMXvVUeLwYiWDFQgknsauXIVhiRmKFhuUwjKM8TXtkBYr42qJv9nVUiOCsoC
-         pGPvVON/Hy9K7wvQvm6un9dAFB6CPLkK458w4GwgRr2+yFgDoG0ERsUf3BoULCRaO+Tj
-         WkjW41jKYCISxActDbz1Tal5cjQ/F6bSexV7590+sWSR3hAbk5l5888/kNqVMpqZA1GY
-         DAgodg0KrFGhub9KfvsFf8MpAGMA6C8BZ1r+aNE8mlkfVVYA/SKSEeVBCqXqp9HkNeQv
-         3dFgE8f/DetikoqMttME7wqSjjbq38ALW4QDzJTtB/A8ilgTXFuSHbMm9YO2WHIeq3iE
-         l+Cg==
-X-Gm-Message-State: APjAAAX49iYT6acaHrTpAyalWGarr6Kq4BjICoHT1cMpV9hnLPN8plTs
-        hRrQKMHHf2oy/34tpoxd7Aw=
-X-Google-Smtp-Source: APXvYqzb4cLM/qctOgqo1PA/b3FzFA5gxEnEqCCSI8qwFiyJ8WN0zrZ3X7VCu0P4Lh5tl2rFEtEQRA==
-X-Received: by 2002:a2e:3312:: with SMTP id d18mr5836966ljc.222.1575555994820;
-        Thu, 05 Dec 2019 06:26:34 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id x29sm5866487lfg.45.2019.12.05.06.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 06:26:34 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1ics5Z-0001Kf-0i; Thu, 05 Dec 2019 15:26:41 +0100
-Date:   Thu, 5 Dec 2019 15:26:41 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        GregKroah-Hartman <gregkh@linuxfoundation.org>,
-        RobHerring <robh+dt@kernel.org>,
-        MarkRutland <mark.rutland@arm.com>,
-        AlanStern <stern@rowland.harvard.edu>,
-        SuwanKim <suwan.kim027@gmail.com>,
-        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>
-Subject: Re: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-Message-ID: <20191205142641.GL10631@localhost>
-References: <20191203101552.199339-1-ikjn@chromium.org>
- <20191203165301.GH10631@localhost>
- <CAATdQgCqYrd_aXN5GDsso+F3WadNx3DQKK3Efk3tgkrv2VXjyw@mail.gmail.com>
- <20191204075533.GI10631@localhost>
- <CAATdQgBcuJenS2VSm+y4Yhn5mWE1P0CGJQ3NRdoe68dd2SRPGg@mail.gmail.com>
+        id S1729514AbfLEOiA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 09:38:00 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:43537 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729402AbfLEOiA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 09:38:00 -0500
+Received: (qmail 17027 invoked by uid 500); 5 Dec 2019 09:37:59 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 5 Dec 2019 09:37:59 -0500
+Date:   Thu, 5 Dec 2019 09:37:59 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Erkka Talvitie <erkka.talvitie@vincit.fi>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
+        <claus.baumgartner@med.ge.com>
+Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
+In-Reply-To: <021d01d5ab57$c2f1ab20$48d50160$@vincit.fi>
+Message-ID: <Pine.LNX.4.44L0.1912050929350.14919-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAATdQgBcuJenS2VSm+y4Yhn5mWE1P0CGJQ3NRdoe68dd2SRPGg@mail.gmail.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 03:32:38PM +0800, Ikjoon Jang wrote:
-> On Wed, Dec 4, 2019 at 3:55 PM Johan Hovold <johan@kernel.org> wrote:
+On Thu, 5 Dec 2019, Erkka Talvitie wrote:
 
-> > But related to my question above, why do you need to do this during
-> > enumeration? Why not just set the lower interval value in the hub
-> > driver?
+> I tested this change and the issue did not reproduce.
 > 
-> Because I want device tree's bInterval to be checked against the same rules
-> defined in usb_parse_endpoint(). e.g. although hardware says its maximum
-> is 255, but the practical limit is still 0 to 16, so the code can
-> print warnings when bInterval from device node is too weird.
+> However when I was writing the comments for the patch I started to think
+> what happens in this following scenario:
+> 
+> The PID Code is IN.
+> 
+> 1. First there will be XACT, the CERR is decremented, let's say from 3 to 2
+> and the host controller executes a retry.
+> 2. On this next try there will happen the condition mentioned in the Table
+> 4-13 of the EHCI specification so that the MMF is set and the queue is
+> halted (because it is IN).
+> 3. To my understanding now the execution enters to this first stall check
+> if, as CERR is > 0 and CERR < EHCI_TUNE_CERR.
+> 4. The -EPIPE (stall) is returned when actually the queue was halted due to
+> MMF - not stall - and the -EPROTO should be returned.
+> 
+> Is my logic correct or am I missing something?
 
-But that could be handled refactoring the code in question or similar.
+The same thought had occurred to me.
 
-The fundamental problem here is that you're using devicetree, which is
-supposed to only describe the hardware, to encode policy which should be
-deferred to user space.
+> If you agree with me then I would like to present you a bit more bold (in a
+> sense of amount of refactoring) RFC. In high level this another RFC
+> separates 1. error check and 2. stall check. For me this approach is a bit
+> easier to understand from the code. Or then please  propose another
+> solution.
 
-So I think you need to figure out an interface that allows user space to
-set the polling interval for any hub at runtime instead.
+I was going to suggest: Just check for MMF and PID == IN before
+checking for STALL.  Everything else can remain the way it is.
 
-Johan
+Alan Stern
+
+
