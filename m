@@ -2,189 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3831135E8
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2019 20:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CC41138E7
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 01:40:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728176AbfLDTrb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Dec 2019 14:47:31 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33730 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727978AbfLDTrb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Dec 2019 14:47:31 -0500
-Received: by mail-ot1-f67.google.com with SMTP id d17so404541otc.0;
-        Wed, 04 Dec 2019 11:47:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=fSSVErsABcgNucVFgv5+Tl4j1dQ1k3yEdUF30rVKxw4=;
-        b=VYKCU2jpcPNPvypurFBJJFtx6mZL479ZBJ01plaESMHd09d+C5do7nY2EEsjaJGxFt
-         aPVEO9fewos+ejckeD7l646IrZ2pQT06HAdcMUwf75FP2L4cl9YgttEba9Dg+2JSivlT
-         3XSac+rAzA5ZdwaRDDvX57B1DVU5aY61WWZ3n4a29cFFJNGTtbbKr60PnI+HI8KHG5Dx
-         N1QUqu19JyXfvbSYyztbbsZKW3XhGI4nsKmgHjhMNQjJyGtbCvZ3DmoMURWkKRtBbvW5
-         3Zo9SXR3qhhkMja7xs70bIZUAs3HcAGZISk+F437haYNESw64yFiBg7Yyy+PqFwoNnzD
-         3ZVQ==
-X-Gm-Message-State: APjAAAVni3C5w2jBcrwEMNy4vp/mTDGXJtS1+yj5uLKIU+1EaImkxYDa
-        gQIYqDmQ7zWrpIYf4QLDcA==
-X-Google-Smtp-Source: APXvYqxY2MsGzWJvDlpDlLINS+8WTf3i42eiHW+sHpQvD7zrhiISXrPtnUrz0ib1/oyxO1uD0zp+0w==
-X-Received: by 2002:a9d:24c1:: with SMTP id z59mr3539199ota.207.1575488849689;
-        Wed, 04 Dec 2019 11:47:29 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id y24sm2637031oix.31.2019.12.04.11.47.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2019 11:47:28 -0800 (PST)
-Date:   Wed, 4 Dec 2019 13:47:28 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Hanjie Lin <hanjie.lin@amlogic.com>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Yue Wang <yue.wang@amlogic.com>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-Subject: Re: [PATCH 2/6] dt-bindings: usb: dwc3: Add the Amlogic A1 Family
- DWC3 Glue Bindings
-Message-ID: <20191204194728.GA21130@bogus>
-References: <1574405757-76184-1-git-send-email-hanjie.lin@amlogic.com>
- <1574405757-76184-3-git-send-email-hanjie.lin@amlogic.com>
- <462c13a6-a2ea-44c7-d43d-46ac82d43bf7@baylibre.com>
- <5357b6c2-e10b-71a3-1e1b-2b641cf5e2df@amlogic.com>
+        id S1728549AbfLEAkU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Wed, 4 Dec 2019 19:40:20 -0500
+Received: from nef2.ens.fr ([129.199.96.40]:56237 "EHLO nef.ens.fr"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728011AbfLEAkT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Dec 2019 19:40:19 -0500
+X-ENS-nef-client: 129.199.127.85
+Received: from mail.phys.ens.fr (mail.phys.ens.fr [129.199.127.85])
+          by nef.ens.fr (8.14.4/1.01.28121999) with ESMTP id xB50eH2t015328
+          for <linux-usb@vger.kernel.org>; Thu, 5 Dec 2019 01:40:17 +0100
+Received: from dalek.localnet (tudia.pck.nerim.net [213.41.147.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by mail.phys.ens.fr (Postfix) with ESMTPSA id 07FA71A14DE
+        for <linux-usb@vger.kernel.org>; Thu,  5 Dec 2019 01:40:16 +0100 (CET)
+From:   =?ISO-8859-1?Q?=C9ric?= Brunet <eric.brunet@ens.fr>
+To:     linux-usb@vger.kernel.org
+Subject: Bug report: dvd player on USB3 port shows first GiB only
+Date:   Thu, 05 Dec 2019 01:40:16 +0100
+Message-ID: <9269932.zcQTiTrDoZ@dalek>
+In-Reply-To: <7725295.NyiUUSuA9g@dalek>
+References: <7725295.NyiUUSuA9g@dalek>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5357b6c2-e10b-71a3-1e1b-2b641cf5e2df@amlogic.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+X-Rspamd-Queue-Id: 07FA71A14DE
+X-Spamd-Result: default: False [-5.03 / 150.00];
+         ARC_NA(0.00)[];
+         R_SPF_NEUTRAL(0.00)[?all:c];
+         FROM_HAS_DN(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         TO_DN_NONE(0.00)[];
+         HFILTER_HELO_IP_A(1.00)[dalek.localnet];
+         RCPT_COUNT_ONE(0.00)[1];
+         DMARC_NA(0.00)[ens.fr];
+         HFILTER_HELO_NORES_A_OR_MX(0.30)[dalek.localnet];
+         NEURAL_HAM(-0.00)[-1.000,0];
+         IP_SCORE(-3.73)[ip: (-9.81), ipnet: 213.41.128.0/17(-4.91), asn: 13193(-3.89), country: FR(-0.06)];
+         RCVD_COUNT_ZERO(0.00)[0];
+         FROM_EQ_ENVFROM(0.00)[];
+         R_DKIM_NA(0.00)[];
+         MID_RHS_NOT_FQDN(0.50)[];
+         ASN(0.00)[asn:13193, ipnet:213.41.128.0/17, country:FR];
+         MIME_TRACE(0.00)[0:+];
+         BAYES_HAM(-3.00)[100.00%]
+X-Rspamd-Server: mail
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.4.3 (nef.ens.fr [129.199.96.32]); Thu, 05 Dec 2019 01:40:17 +0100 (CET)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 03:52:18PM +0800, Hanjie Lin wrote:
-> 
-> 
-> On 2019/11/22 16:52, Neil Armstrong wrote:
-> > Hi,
-> > 
-> > 
-> > On 22/11/2019 07:55, Hanjie Lin wrote:
-> >> The Amlogic A1 SoC Family embeds 1 USB Controllers:
-> >>  - a DWC3 IP configured as Host for USB2 and USB3
-> >>
-> >> A glue connects the controllers to the USB2 PHY of A1 SoC.
-> >>
-> >> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
-> >> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
-> >> ---
-> >>  .../devicetree/bindings/usb/amlogic,dwc3.txt       | 53 ++++++++++++++++++++++
-> >>  1 file changed, 53 insertions(+)
-> >>
-> >> diff --git a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-> >> index 6ffb09b..63dc60b 100644
-> >> --- a/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-> >> +++ b/Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
-> >> @@ -128,3 +128,56 @@ Example device nodes:
-> >>  				snps,quirk-frame-length-adjustment;
-> >>  			};
-> >>  	};
-> >> +
-> >> +Amlogic Meson A1 DWC3 USB SoC Controller Glue
-> >> +
-> >> +The Amlogic A1 embeds a DWC3 USB IP Core configured for USB2 in
-> >> +host-only mode.
-> >> +
-> >> +Required properties:
-> >> +- compatible:	Should be "amlogic,meson-a1-usb-ctrl"
-> >> +- clocks:       The clocks needed by the usb controller
-> >> +- clock-names:  Should contain the name of the clocks: "usb_ctrl", "usb_bus",
-> >> +                "xtal_usb_phy", "xtal_usb_ctrl"
-> >> +- resets:	a handle for the shared "USB" reset line
-> >> +- reg:		The base address and length of the registers
-> >> +- phys: 	handle to used PHYs on the system
-> >> +	- a <0> phandle can be used if a PHY is not used
-> >> +- phy-names:	names of the used PHYs on the system :
-> >> +	- "usb2-phy0" for USB2 PHY if USBHOST port is used
-> >> +
-> >> +Required child nodes:
-> >> +
-> >> +A child node must exist to represent the core DWC3 IP block. The name of
-> >> +the node is not important. The content of the node is defined in dwc3.txt.
-> >> +
-> >> +PHY documentation is provided in the following places:
-> >> +- Documentation/devicetree/bindings/phy/amlogic,meson-a1-usb2-phy.yaml
-> >> +
-> >> +Example device nodes:
-> >> +	usb: usb@ffe09000 {
-> >> +			status = "okay";
-> >> +			compatible = "amlogic,meson-a1-usb-ctrl";
-> >> +			reg = <0x0 0xffe09000 0x0 0xa0>;
-> >> +			#address-cells = <2>;
-> >> +			#size-cells = <2>;
-> >> +			ranges;
-> >> +
-> >> +			clocks = <&clkc_periphs CLKID_USB_CTRL>,
-> >> +				 <&clkc_periphs CLKID_USB_BUS>,
-> >> +				 <&clkc_periphs CLKID_XTAL_USB_PHY>,
-> >> +				 <&clkc_periphs CLKID_XTAL_USB_CTRL>;
-> >> +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_phy", "xtal_usb_ctrl";
-> >> +			resets = <&reset RESET_USBCTRL>;
-> >> +			phys = <&usb2_phy0>;
-> >> +			phy-names = "usb2-phy0";
-> >> +
-> >> +			dwc3: usb@ff400000 {
-> >> +					compatible = "snps,dwc3";
-> >> +					reg = <0x0 0xff400000 0x0 0x100000>;
-> >> +					interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
-> >> +					dr_mode = "host";
-> >> +					snps,dis_u2_susphy_quirk;
-> >> +					snps,quirk-frame-length-adjustment = <0x20>;
-> >> +			};
-> >> +	};
-> >>
-> > 
-> > This seems very similar to the g12a bindings, seems you could update the yaml g12a bindings
-> > with specific clocks and required for amlogic,meson-a1-usb-ctrl.
-> > 
-> > Neil
-> > 
-> > .
-> > 
-> 
-> Hi Neil
-> Thanks for the comment.
-> 
-> 1, G12A have usb2-phy0/usb2-phy1/usb3-phy0 three phys and an interrupt to support host/peripheral/otg modes.
->    A1 has one usb2-phy0 phy and only support host mode.
->    
-> 2, G12A glue/phy drivers are for G12A SoCs, there are some diffrences to A1.
->    G12A glue driver have dr_mode and interrupts two attributes to support otg mode while A1 hasn't this requirement.
->    G12A glue driver has a hard coding vbus regulator code to support otg mode while A1 hasn't this requirement.
->    G12A glue driver has a hard coding support phys while A1 only supports host mode.
->    	enum {
-> 		USB2_HOST_PHY = 0,
-> 		USB2_OTG_PHY,
-> 		USB3_HOST_PHY,
-> 		PHY_COUNT,
-> 		};
->    G12A glue driver only supports one clock while A1 needs four clocks.
->    G12A and A1 phy drivers have different register configurations since hardware differences.
->    
-> 3, We have estimated these differences and we thought it's more clear and readable to have a dedicated glue/phy
->    driver for A1 SoCs, so also dedicated dt-bindings.
+Hi,
+ 
+When I plug my external dvd player on my laptop, only the first GiB of the
+dvd can be accessed. In practice, when I read the dvd, vlc or other
+programs crash after about 20 minutes of movie.
+ 
+In fact, the lseek(fd, 0, SEEK_END) system call returns 1073741312 ( which
+is equal to 1 GiB - 512 B) whereas the DVD is about 7 GiB.
+ 
+This occurs on any DVD. The DVD player works correctly on other computers.
+ 
+What is different on my computer is that it is quite new (6 months old) and
+only has USB3 ports. My DVD player has a USB2 plug and I am using a small
+adapter between the two plugs. I have tried several adapters.
+ 
+I have found a work-around (so that it is not a hardware fault). To see the
+full DVD, I need to 1) suspend the laptop with the DVD player unplugged
+2) plug the DVD player. I hear its motor running for a couple of seconds
+3) wait for the motor to stop
+4) resume the laptop with the DVD player still plugged in
+ 
+Then, I can access the whole DVD and watch my movies. I imagine that when I
+plug the dvd in the suspended computer, the device discovery is done by the
+bios, and this is what makes the difference, but hey! I know nothing about
+this stuff and I am probably wrong.
+ 
+Note that plugging the DVD player with the computer awake and doing a
+suspend/resume cycle is not enough.
+ 
+The computer is a Dell XPS-13. I am currently running an up-to-date fedora
+31, with kernel 5.3.13-300.fc31. However, I have had this problem since I
+got the computer 6 months ago, and I was then with fedora 30 (or maybe 29 ?
+I don't remember). I kept hoping that the problem would magically go away
+after some update...
+ 
+I am not sure what information to provide. Here is what happens in dmesg
+when I plug in the DVD:
+ 
+[ 1330.427205] usb 1-1: new high-speed USB device number 5 using xhci_hcd 
+[ 1330.561344] usb 1-1: New USB device found, idVendor=0e8d, idProduct=1887, bcdDevice= 0.00 
+[ 1330.561349] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3 
+[ 1330.561352] usb 1-1: Product: HP External USB Optical Drive 
+[ 1330.561355] usb 1-1: Manufacturer: Hewlett-Packard Company 
+[ 1330.561357] usb 1-1: SerialNumber: KZ6E4D43127          
+[ 1330.565611] usb-storage 1-1:1.0: USB Mass Storage device detected 
+[ 1330.565893] scsi host0: usb-storage 1-1:1.0 
+[ 1331.601229] scsi 0:0:0:0: CD-ROM            hp       CDDVDW GP60NB50  RP02 PQ: 0 ANSI: 0 
+[ 1331.607883] sr 0:0:0:0: Power-on or device reset occurred 
+[ 1331.622188] sr 0:0:0:0: [sr0] scsi3-mmc drive: 24x/24x writer dvd-ram cd/rw xa/form2 cdda tray 
+[ 1331.623078] sr 0:0:0:0: Attached scsi CD-ROM sr0 
+[ 1331.623618] sr 0:0:0:0: Attached scsi generic sg0 type 5 
+[ 1331.763885] pktcdvd: pktcdvd0: writer mapped to sr0 
+[ 1344.560361] sr 0:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE 
+[ 1344.560368] sr 0:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]  
+[ 1344.560374] sr 0:0:0:0: [sr0] tag#0 Add. Sense: Read of scrambled sector without authentication 
+[ 1344.560380] sr 0:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 00 02 00 00 00 02 00 00 00 
+[ 1344.560386] blk_update_request: I/O error, dev sr0, sector 2048 op 0x0:(READ) flags 0x80700 phys_seg 1 prio class 0 
+[ 1344.679369] sr 0:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE 
+[ 1344.679376] sr 0:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]  
+[ 1344.679382] sr 0:0:0:0: [sr0] tag#0 Add. Sense: Read of scrambled sector without authentication 
+[ 1344.679387] sr 0:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 00 02 01 00 00 01 00 00 00 
+[ 1344.679393] blk_update_request: I/O error, dev sr0, sector 2052 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0 
+[ 1344.679398] Buffer I/O error on dev sr0, logical block 513, async page read 
+[ 1345.517292] sr 0:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE 
+[ 1345.517300] sr 0:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]  
+[ 1345.517306] sr 0:0:0:0: [sr0] tag#0 Add. Sense: Read of scrambled sector without authentication 
+[ 1345.517311] sr 0:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 07 fe 80 00 00 3c 00 00 00 
+[ 1345.517317] blk_update_request: I/O error, dev sr0, sector 2095616 op 0x0:(READ) flags 0x80700 phys_seg 26 prio class 0 
+[ 1345.588259] sr 0:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE 
+[ 1345.588267] sr 0:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]  
+[ 1345.588273] sr 0:0:0:0: [sr0] tag#0 Add. Sense: Read of scrambled sector without authentication 
+[ 1345.588278] sr 0:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 07 fe 80 00 00 01 00 00 00 
+[ 1345.588284] blk_update_request: I/O error, dev sr0, sector 2095616 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0 
+[ 1345.588290] Buffer I/O error on dev sr0, logical block 523904, async page read 
+[ 1345.659237] sr 0:0:0:0: [sr0] tag#0 FAILED Result: hostbyte=DID_OK driverbyte=DRIVER_SENSE 
+[ 1345.659245] sr 0:0:0:0: [sr0] tag#0 Sense Key : Illegal Request [current]  
+[ 1345.659251] sr 0:0:0:0: [sr0] tag#0 Add. Sense: Read of scrambled sector without authentication 
+[ 1345.659257] sr 0:0:0:0: [sr0] tag#0 CDB: Read(10) 28 00 00 07 fe 81 00 00 01 00 00 00 
+[ 1345.659262] blk_update_request: I/O error, dev sr0, sector 2095620 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0 
+[ 1345.659268] Buffer I/O error on dev sr0, logical block 523905, async page read
 
-Fair enough, I guess. But you're not sharing anything from the 
-amlogic,dwc3.txt binding, so make a new doc. And please make it a DT 
-schema.
+What else can I give you ?
 
-Rob
+I am not subscribed to the mailing-list; please CC me any answer.
+ 
+Thanks,
+ 
+	Éric Brunet
+
+
