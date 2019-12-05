@@ -2,257 +2,143 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A58611431F
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 15:56:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AED58114321
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 15:57:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729489AbfLEO4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 09:56:39 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:41980 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729187AbfLEO4j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 09:56:39 -0500
-Received: by mail-lf1-f68.google.com with SMTP id m30so2703601lfp.8
-        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 06:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s7lJKp8V/0X9lAvhTddZQVaN+3G+ix+QQhM/9ih6VGA=;
-        b=GJejUrg8tFlA5Ut0p9a8bMzRu++iJuFtD1goVst24m6EyKR78ezla4MgAuW33V4YZd
-         V0jupjSQtxmERrC3DxdDBxOZBytz1W9bpRiWqkZGatOgEGuVxErPwp0OeHht5zUnent6
-         2nj3GRyYGlBdvtozA3xWzxr6aR+FKvAPLdWM5iUAlqSgMyuOEPW4Cc04i+mgYCEOJ6+T
-         0vcuv/kHXa50cokeApnga+VDpfs1YgFIDq4DOm5aY/YnEiyMB1krgjLLHYhgQsVbSFwP
-         n5sL36V+I445YZu1nUV3Ez7jy19VtjBZRr6AfWWt0zYcN/VF1Kz+KUqcGSpKApTofYfq
-         qXBg==
+        id S1729514AbfLEO51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 09:57:27 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:42892 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729099AbfLEO50 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 09:57:26 -0500
+Received: by mail-lj1-f195.google.com with SMTP id e28so3900799ljo.9
+        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 06:57:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=s7lJKp8V/0X9lAvhTddZQVaN+3G+ix+QQhM/9ih6VGA=;
-        b=LveQrYAropzKdngvD5YXBx5HVrI2rQ4yf8FRd1tyX0za6QhH8pS/d3ixJAhvhOs8wJ
-         4SmjfY2VGy9dZlJt78R439GbAHXSMI+qtn4262e+fAvzijPrZynq5rh6xLbMfYz3704f
-         NA4pN3Lgo5qe8E+TVUAUkqT3nr5orjxzz6uoFi+27VIxEmWQnkVRMN5sUa7mF4UAURcP
-         i5qFo0blO9+WEzjQKbYxzeuRUXM4gR/AaFAivvkwGjAwTil/qXPDxT2NrvEejTDXF9PD
-         tc0iB/1y//pqMyxq2MNkPPpdmCEx+57m2uX/cWKWxoUk2qK2no0+HNwmabLPgiu/lddL
-         hGig==
-X-Gm-Message-State: APjAAAXI1qw27VUWRBLrLjuPos32uhppTqRtkdGGEFogfClWJkES79GC
-        sBR0Dhfm4OETCb3G/ht/uzNRIQ==
-X-Google-Smtp-Source: APXvYqymrjS/NNnR1tdy05mq8Vesr0hMo9mFm3ahAKXWxg7hDTNe5bBh5YUTszIZNv9trMjGnt2nkQ==
-X-Received: by 2002:a19:ec14:: with SMTP id b20mr1468063lfa.63.1575557796685;
-        Thu, 05 Dec 2019 06:56:36 -0800 (PST)
-Received: from genomnajs.ideon.se ([85.235.10.227])
-        by smtp.gmail.com with ESMTPSA id f11sm5833131lfa.9.2019.12.05.06.56.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4tP/vxsDWo41ziEvbrEBzA2Vswgi6d5c0Mggp3F7FXk=;
+        b=syqw3jscTe2z9TX/xqPcGLdiUOT8GsxU51nCLTl/W5YlJ1W5R2/LH56X4mf/8Zec93
+         dD9Xd4qVap62gVJM25rx6dG+Yu5ACUa01aSDBkjC5yTTIlsJIruaFK6n3Geek2rl5w1z
+         /IU9yctTnmgrFPpvHHhY7Zf/TQXbP2OJPl8e48h2apvHH2Fx99I2aJkvclEYptvL/PDU
+         VhZ3fXpID113QgdJqvAhgO7G8pcHosoK5JESUJe/feTBNxhCtYpCz/DeaFpzBiVjjbtY
+         WVL1qw2p2TUAkNBUNN0FEROO7W9bTZwxiY7VAA5IKYQDzYm2wzqEUoh9vG12nPw4Wgmt
+         gGOw==
+X-Gm-Message-State: APjAAAU/vwuD7O4XBaInK62N0rqUIQn7tkPvLu+HiSbosusCpgLVbe3Z
+        e2C6A/sO/kcj0BxOPWYM9rI=
+X-Google-Smtp-Source: APXvYqx44SyNN6yXKKcWIL45SkARnsgSx0qmnu1NBN3fz/XlC+GbhOEPTrEi63nXw84Xiz4ZrxkgUg==
+X-Received: by 2002:a2e:9f47:: with SMTP id v7mr5652519ljk.124.1575557844924;
+        Thu, 05 Dec 2019 06:57:24 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id d9sm2544170lja.73.2019.12.05.06.57.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Dec 2019 06:56:35 -0800 (PST)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] usb: usb3503: Convert to use GPIO descriptors
-Date:   Thu,  5 Dec 2019 15:56:33 +0100
-Message-Id: <20191205145633.187511-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.23.0
+        Thu, 05 Dec 2019 06:57:24 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1icsZP-0001UO-4Q; Thu, 05 Dec 2019 15:57:31 +0100
+Date:   Thu, 5 Dec 2019 15:57:31 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH RESEND 1/1] usb: serial: option: add ZLP support for
+ 0x1bc7/0x9010
+Message-ID: <20191205145731.GM10631@localhost>
+References: <20191118133251.21401-1-dnlplm@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191118133251.21401-1-dnlplm@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This converts the USB3503 to pick GPIO descriptors from the
-device tree instead of iteratively picking out GPIO number
-references and then referencing these from the global GPIO
-numberspace.
+On Mon, Nov 18, 2019 at 02:32:51PM +0100, Daniele Palmas wrote:
+> Telit FN980 flashing device 0x1bc7/0x9010 requires zero packet
+> to be sent if out data size is equal to the endpoint max size.
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> ---
+>  drivers/usb/serial/option.c   | 8 ++++++++
+>  drivers/usb/serial/usb-wwan.h | 1 +
+>  drivers/usb/serial/usb_wwan.c | 9 +++++++++
+>  3 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index e9491d400a24..c13e063cb399 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -567,6 +567,9 @@ static void option_instat_callback(struct urb *urb);
+>  /* Interface must have two endpoints */
+>  #define NUMEP2		BIT(16)
+>  
+> +/* Device needs ZLP */
+> +#define ZLP		BIT(17)
+> +
+>  
+>  static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE(OPTION_VENDOR_ID, OPTION_PRODUCT_COLT) },
+> @@ -1196,6 +1199,8 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = NCTRL(0) | RSVD(1) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1901, 0xff),	/* Telit LN940 (MBIM) */
+>  	  .driver_info = NCTRL(0) },
+> +	{ USB_DEVICE(TELIT_VENDOR_ID, 0x9010),				/* Telit SBL FN980 flashing device */
+> +	  .driver_info = NCTRL(0) | ZLP },
 
-The USB3503 is only used from device tree among the in-tree
-platforms. If board files would still desire to use it they can
-provide machine descriptor tables.
+Hmm. Could you post the lsusb -v output for this device?
 
-Make sure to preserve semantics such as the reset delay
-introduced by Stefan.
+I wonder whether using option is the right thing to do here. We're just
+currently throwing everything modem related in here it seems. :)
 
-Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: Stefan Agner <stefan@agner.ch>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/usb/misc/usb3503.c            | 94 ++++++++++-----------------
- include/linux/platform_data/usb3503.h |  3 -
- 2 files changed, 35 insertions(+), 62 deletions(-)
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, ZTE_PRODUCT_MF622, 0xff, 0xff, 0xff) }, /* ZTE WCDMA products */
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(ZTE_VENDOR_ID, 0x0002, 0xff, 0xff, 0xff),
+>  	  .driver_info = RSVD(1) },
+> @@ -2097,6 +2102,9 @@ static int option_attach(struct usb_serial *serial)
+>  	if (!(device_flags & NCTRL(iface_desc->bInterfaceNumber)))
+>  		data->use_send_setup = 1;
+>  
+> +	if (device_flags & ZLP)
+> +		data->use_zlp = 1;
+> +
+>  	spin_lock_init(&data->susp_lock);
+>  
+>  	usb_set_serial_data(serial, data);
+> diff --git a/drivers/usb/serial/usb-wwan.h b/drivers/usb/serial/usb-wwan.h
+> index 1c120eaf4091..934e9361cf6b 100644
+> --- a/drivers/usb/serial/usb-wwan.h
+> +++ b/drivers/usb/serial/usb-wwan.h
+> @@ -38,6 +38,7 @@ struct usb_wwan_intf_private {
+>  	spinlock_t susp_lock;
+>  	unsigned int suspended:1;
+>  	unsigned int use_send_setup:1;
+> +	unsigned int use_zlp:1;
+>  	int in_flight;
+>  	unsigned int open_ports;
+>  	void *private;
+> diff --git a/drivers/usb/serial/usb_wwan.c b/drivers/usb/serial/usb_wwan.c
+> index 7e855c87e4f7..8066b5e2d305 100644
+> --- a/drivers/usb/serial/usb_wwan.c
+> +++ b/drivers/usb/serial/usb_wwan.c
+> @@ -228,6 +228,15 @@ int usb_wwan_write(struct tty_struct *tty, struct usb_serial_port *port,
+>  		} else {
+>  			intfdata->in_flight++;
+>  			spin_unlock_irqrestore(&intfdata->susp_lock, flags);
+> +			if (intfdata->use_zlp) {
+> +				unsigned int ep_maxp;
+> +
+> +				ep_maxp = usb_maxpacket(port->serial->dev,
+> +							this_urb->pipe, 1);
+> +
+> +				if (ep_maxp && (todo % ep_maxp == 0))
+> +					this_urb->transfer_flags |= URB_ZERO_PACKET;
 
-diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
-index 72f39a9751b5..c3c1f65f4196 100644
---- a/drivers/usb/misc/usb3503.c
-+++ b/drivers/usb/misc/usb3503.c
-@@ -7,11 +7,10 @@
- 
- #include <linux/clk.h>
- #include <linux/i2c.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/delay.h>
- #include <linux/slab.h>
- #include <linux/module.h>
--#include <linux/of_gpio.h>
- #include <linux/platform_device.h>
- #include <linux/platform_data/usb3503.h>
- #include <linux/regmap.h>
-@@ -47,19 +46,19 @@ struct usb3503 {
- 	struct device		*dev;
- 	struct clk		*clk;
- 	u8	port_off_mask;
--	int	gpio_intn;
--	int	gpio_reset;
--	int	gpio_connect;
-+	struct gpio_desc	*intn;
-+	struct gpio_desc 	*reset;
-+	struct gpio_desc 	*connect;
- 	bool	secondary_ref_clk;
- };
- 
- static int usb3503_reset(struct usb3503 *hub, int state)
- {
--	if (!state && gpio_is_valid(hub->gpio_connect))
--		gpio_set_value_cansleep(hub->gpio_connect, 0);
-+	if (!state && hub->connect)
-+		gpiod_set_value_cansleep(hub->connect, 0);
- 
--	if (gpio_is_valid(hub->gpio_reset))
--		gpio_set_value_cansleep(hub->gpio_reset, state);
-+	if (hub->reset)
-+		gpiod_set_value_cansleep(hub->reset, state);
- 
- 	/* Wait T_HUBINIT == 4ms for hub logic to stabilize */
- 	if (state)
-@@ -115,8 +114,8 @@ static int usb3503_connect(struct usb3503 *hub)
- 		}
- 	}
- 
--	if (gpio_is_valid(hub->gpio_connect))
--		gpio_set_value_cansleep(hub->gpio_connect, 1);
-+	if (hub->connect)
-+		gpiod_set_value_cansleep(hub->connect, 1);
- 
- 	hub->mode = USB3503_MODE_HUB;
- 	dev_info(dev, "switched to HUB mode\n");
-@@ -163,13 +162,11 @@ static int usb3503_probe(struct usb3503 *hub)
- 	int err;
- 	u32 mode = USB3503_MODE_HUB;
- 	const u32 *property;
-+	enum gpiod_flags flags;
- 	int len;
- 
- 	if (pdata) {
- 		hub->port_off_mask	= pdata->port_off_mask;
--		hub->gpio_intn		= pdata->gpio_intn;
--		hub->gpio_connect	= pdata->gpio_connect;
--		hub->gpio_reset		= pdata->gpio_reset;
- 		hub->mode		= pdata->initial_mode;
- 	} else if (np) {
- 		u32 rate = 0;
-@@ -230,59 +227,38 @@ static int usb3503_probe(struct usb3503 *hub)
- 			}
- 		}
- 
--		hub->gpio_intn	= of_get_named_gpio(np, "intn-gpios", 0);
--		if (hub->gpio_intn == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		hub->gpio_connect = of_get_named_gpio(np, "connect-gpios", 0);
--		if (hub->gpio_connect == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
--		hub->gpio_reset = of_get_named_gpio(np, "reset-gpios", 0);
--		if (hub->gpio_reset == -EPROBE_DEFER)
--			return -EPROBE_DEFER;
- 		of_property_read_u32(np, "initial-mode", &mode);
- 		hub->mode = mode;
- 	}
- 
--	if (hub->port_off_mask && !hub->regmap)
--		dev_err(dev, "Ports disabled with no control interface\n");
--
--	if (gpio_is_valid(hub->gpio_intn)) {
--		int val = hub->secondary_ref_clk ? GPIOF_OUT_INIT_LOW :
--						   GPIOF_OUT_INIT_HIGH;
--		err = devm_gpio_request_one(dev, hub->gpio_intn, val,
--					    "usb3503 intn");
--		if (err) {
--			dev_err(dev,
--				"unable to request GPIO %d as interrupt pin (%d)\n",
--				hub->gpio_intn, err);
--			return err;
--		}
--	}
--
--	if (gpio_is_valid(hub->gpio_connect)) {
--		err = devm_gpio_request_one(dev, hub->gpio_connect,
--				GPIOF_OUT_INIT_LOW, "usb3503 connect");
--		if (err) {
--			dev_err(dev,
--				"unable to request GPIO %d as connect pin (%d)\n",
--				hub->gpio_connect, err);
--			return err;
--		}
--	}
--
--	if (gpio_is_valid(hub->gpio_reset)) {
--		err = devm_gpio_request_one(dev, hub->gpio_reset,
--				GPIOF_OUT_INIT_LOW, "usb3503 reset");
-+	if (hub->secondary_ref_clk)
-+		flags = GPIOD_OUT_LOW;
-+	else
-+		flags = GPIOD_OUT_HIGH;
-+	hub->intn = devm_gpiod_get_optional(dev, "intn", flags);
-+	if (IS_ERR(hub->intn))
-+		return PTR_ERR(hub->intn);
-+	if (hub->intn)
-+		gpiod_set_consumer_name(hub->intn, "usb3503 intn");
-+
-+	hub->connect = devm_gpiod_get_optional(dev, "connect", GPIOD_OUT_LOW);
-+	if (IS_ERR(hub->connect))
-+		return PTR_ERR(hub->connect);
-+	if (hub->connect)
-+		gpiod_set_consumer_name(hub->connect, "usb3503 connect");
-+
-+	hub->reset = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
-+	if (IS_ERR(hub->reset))
-+		return PTR_ERR(hub->reset);
-+	if (hub->reset) {
- 		/* Datasheet defines a hardware reset to be at least 100us */
- 		usleep_range(100, 10000);
--		if (err) {
--			dev_err(dev,
--				"unable to request GPIO %d as reset pin (%d)\n",
--				hub->gpio_reset, err);
--			return err;
--		}
-+		gpiod_set_consumer_name(hub->reset, "usb3503 reset");
- 	}
- 
-+	if (hub->port_off_mask && !hub->regmap)
-+		dev_err(dev, "Ports disabled with no control interface\n");
-+
- 	usb3503_switch_mode(hub, hub->mode);
- 
- 	dev_info(dev, "%s: probed in %s mode\n", __func__,
-diff --git a/include/linux/platform_data/usb3503.h b/include/linux/platform_data/usb3503.h
-index e049d51c1353..d01ef97ddf36 100644
---- a/include/linux/platform_data/usb3503.h
-+++ b/include/linux/platform_data/usb3503.h
-@@ -17,9 +17,6 @@ enum usb3503_mode {
- struct usb3503_platform_data {
- 	enum usb3503_mode	initial_mode;
- 	u8	port_off_mask;
--	int	gpio_intn;
--	int	gpio_connect;
--	int	gpio_reset;
- };
- 
- #endif
--- 
-2.23.0
+No need to do the transfer_length calculations here, the host-controller
+driver will take care of that. Just set URB_ZERO_PACKET unconditionally
+if the device requires it.
 
+> +			}
+>  			err = usb_submit_urb(this_urb, GFP_ATOMIC);
+>  			if (err) {
+>  				dev_err(&port->dev,
+
+Johan
