@@ -2,61 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FEF1145F9
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 18:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD46114600
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 18:33:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730093AbfLERdB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 12:33:01 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46671 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729396AbfLERdB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 12:33:01 -0500
-Received: by mail-lj1-f193.google.com with SMTP id z17so4470603ljk.13
-        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 09:32:59 -0800 (PST)
+        id S1730157AbfLERd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 12:33:26 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41554 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730151AbfLERd0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 12:33:26 -0500
+Received: by mail-lj1-f194.google.com with SMTP id h23so4520748ljc.8
+        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 09:33:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wcGyAgv2BiiKMB4o1JPjh3c4/KLE1QL1Cs5ZGEHCDIc=;
-        b=h8R8qn2a8yMheUZxZicjSxy1mjJzLS/SXEZWNWhN2n29VR1l3aKAlm1cuqN3fZyRfk
-         7RiJ2tHBwlnu/dxOScE0uVy3iZQZ7SYeh67Cd1w1vNd2lAU44JJHrRfgT90jo1Vxdgk6
-         hfczULjbW6MoOj6k0umoQaFr+3JFVFJeh4/gg=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=/eKd/FDqrplPYUuvbR0AiU2l8M+m4LPxDGweCaRKq6w=;
+        b=M56np70zVr1VfiJPsuEXyT4OG9+Mgq+nZRonIdlMO0qNjSITB1EVwHnE+jM9THnBNz
+         3vX00ZNLigUAoH1Qop/bcwkoEis8chlXpTrSREoavAISt/m/5l5mLyPd23rMwP17l/QA
+         7M9TY3swoS1z9u0iCZT3it6ySOEzIm2iiZPAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wcGyAgv2BiiKMB4o1JPjh3c4/KLE1QL1Cs5ZGEHCDIc=;
-        b=G3ThVmn4ZrQs3pxHlJjBJhcO484JVBrsJi4sCHSNRny9nK/OzY9CijmftXJfFSydls
-         QFyRJh77PjWSKXY9YdgypVSoIvoy+NDmLmT5piTjXvX/Y8F6yrdYvjqIl2KCIH3wvu/j
-         mxAvUnbJ2yQ1tVpsPyjJ8m3FEbhOyucjJ4zC1W6P42Wmmai+g3dIatdWczawc/gBrBjM
-         XNQ+aQn2Qid4HpDa4bz3ZMDgzvxEjhzMs8X7gnqy/wFQ1mcZT61rupKirG6jl5pJoLcJ
-         TeqeYKvsnqAFeygS/YJAzbxh2JuY9f1Edd74gob2DM2JLBJQukhooZWPh4Eqy3nZej6u
-         KMHQ==
-X-Gm-Message-State: APjAAAWzNJUrAcWUILia8K6mXvXU+dOnrA3v+sEiX5JKustojFA+n1nk
-        8pmjvVIH6II6s2ccFY78m5x05bPrBvk=
-X-Google-Smtp-Source: APXvYqzu9t4ZfAg8CduUHUZiqWn8femDDwiUfcuuT/m2EAF5VFTzp6YzD6hwBS+exb10EGjdExbTxA==
-X-Received: by 2002:a2e:3608:: with SMTP id d8mr1693543lja.152.1575567178728;
-        Thu, 05 Dec 2019 09:32:58 -0800 (PST)
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com. [209.85.208.169])
-        by smtp.gmail.com with ESMTPSA id k24sm6203669ljj.27.2019.12.05.09.32.58
+         :message-id:subject:to;
+        bh=/eKd/FDqrplPYUuvbR0AiU2l8M+m4LPxDGweCaRKq6w=;
+        b=iQSDuuoO/sceJQkicW4LiNkrEIRaqCNhKbD6YY1t/OK7IoTCysrCBvQK5wVtzQspEi
+         tkHv0l4Yq3nZ/6MS9F0V5/GIDW2vZYovSlSAebvFnvsXN2TtGzHzg7GLDNW8zaRciBTX
+         qSgcNva0g4IdmD6ZK/OqJsDpNHsKyLB2An36TF8IipMhssgChgDIdbzTcCXSpgjaWw4q
+         xOUz/uVQuDR/cCHU8ltc4GqH+d9dyyYnSpmPmESpguevbD6kfBndcBFGPkoBVIlXRch+
+         bv23eg+5ctEg8UZ+nvmX1BEUq5yYmEn8TaNLgVfxVVmqlDB9HYYS0Bh1YVtN7M1nHFS3
+         3MIQ==
+X-Gm-Message-State: APjAAAU1wV0Wvf6pxgN5H3yBMnPdvjZ3xCX7BsckrWaa7SVi2FuVKH18
+        Jo/7Rf+6zca+vbUKGfah7rDJkeWVRCY=
+X-Google-Smtp-Source: APXvYqyqZhsWc4QVlVaXYa5H465/9EH1mq/rldKxYtLniW4w+sKszXyifVgqySubmzNiTxpq27J9JQ==
+X-Received: by 2002:a2e:88d6:: with SMTP id a22mr5979461ljk.163.1575567203546;
+        Thu, 05 Dec 2019 09:33:23 -0800 (PST)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id c9sm4319635ljd.28.2019.12.05.09.33.20
         for <linux-usb@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 05 Dec 2019 09:32:58 -0800 (PST)
-Received: by mail-lj1-f169.google.com with SMTP id 21so4575752ljr.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 09:32:58 -0800 (PST)
-X-Received: by 2002:a2e:91cb:: with SMTP id u11mr3763207ljg.82.1575566707941;
- Thu, 05 Dec 2019 09:25:07 -0800 (PST)
+        Thu, 05 Dec 2019 09:33:21 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id b15so3125328lfc.4
+        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 09:33:20 -0800 (PST)
+X-Received: by 2002:ac2:430e:: with SMTP id l14mr2520386lfh.79.1575567200366;
+ Thu, 05 Dec 2019 09:33:20 -0800 (PST)
 MIME-Version: 1.0
-References: <31452.1574721589@warthog.procyon.org.uk> <20191205125826.GK2734@twin.jikos.cz>
- <1593.1575554217@warthog.procyon.org.uk> <CAHk-=wgwwJ+ZEtycujFdNmpS8TjwCYyT+oHfV7d-GekyaX91xg@mail.gmail.com>
-In-Reply-To: <CAHk-=wgwwJ+ZEtycujFdNmpS8TjwCYyT+oHfV7d-GekyaX91xg@mail.gmail.com>
+References: <20191205125826.GK2734@twin.jikos.cz> <31452.1574721589@warthog.procyon.org.uk>
+ <1593.1575554217@warthog.procyon.org.uk> <20191205172127.GW2734@suse.cz>
+In-Reply-To: <20191205172127.GW2734@suse.cz>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 5 Dec 2019 09:24:51 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wi_on1EAbVi1Q01i7=0_GL=nKmz6s9677YZf74H8=Sw0g@mail.gmail.com>
-Message-ID: <CAHk-=wi_on1EAbVi1Q01i7=0_GL=nKmz6s9677YZf74H8=Sw0g@mail.gmail.com>
+Date:   Thu, 5 Dec 2019 09:33:04 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whw+R5GVQdpV6J_5afQ=76vtBPzBPRj6-zG1tnhT32Pag@mail.gmail.com>
+Message-ID: <CAHk-=whw+R5GVQdpV6J_5afQ=76vtBPzBPRj6-zG1tnhT32Pag@mail.gmail.com>
 Subject: Re: [GIT PULL] pipe: Notification queue preparation
-To:     David Howells <dhowells@redhat.com>
-Cc:     David Sterba <dsterba@suse.cz>,
+To:     David Sterba <dsterba@suse.cz>,
+        David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>, raven@themaw.net,
@@ -73,27 +73,40 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 5, 2019 at 9:12 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Dec 5, 2019 at 9:22 AM David Sterba <dsterba@suse.cz> wrote:
 >
-> It would be interesting to hear if somebody else is waiting on the
-> read side too.
+> I rerun the test again (with a different address where it's stuck), there's
+> nothing better I can get from the debug info, it always points to pipe_wait,
+> disassembly points to.
 
-Looking once more at that commit, I find at least one bug, but I'm
-pretty sure that's not the cause of this problem.
+Hah. I see another bug.
 
-DavidH, watch out for things like this:
+"pipe_wait()" depends on the fact that all events that wake it up
+happen with the pipe lock held.
 
--       for (idx = 0; idx < pipe->nrbufs && rem < len; idx++)
-+       for (idx = tail; idx < head && rem < len; idx++)
+But we do some of the "do_wakeup()" handling outside the pipe lock now
+on the reader side
 
-which is a completely buggy conversion.
+        __pipe_unlock(pipe);
 
-You can't compare tail and head with an inequality, it gets the
-wraparound case wrong.
+        /* Signal writers asynchronously that there is more room. */
+        if (do_wakeup) {
+                wake_up_interruptible_poll(&pipe->wait, EPOLLOUT | EPOLLWRNORM);
+                kill_fasync(&pipe->fasync_writers, SIGIO, POLL_OUT);
+        }
 
-But I found only one of those, and it's fuse-specific, plus the
-overflow would take a long time to trigger, so I'm pretty sure this
-isn't what DavidS is reporting.
+However, that isn't new to this series _either_, so I don't think
+that's it. It does wake up things inside the lock _too_ if it ended up
+emptying a whole buffer.
+
+So it could be triggered by timing and behavior changes, but I doubt
+this pipe_wait() thing is it either. The fact that it bisects to the
+thing that changes things to use head/tail pointers makes me think
+there's some other incorrect update or comparison somewhere.
+
+That said, "pipe_wait()" is an abomination. It should use a proper
+wait condition and use wait_event(), but the code predates all of
+that. I suspect pipe_wait() goes back to the dark ages with the BKL
+and no actual races between kernel code.
 
                Linus
