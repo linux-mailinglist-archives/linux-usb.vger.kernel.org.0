@@ -2,93 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7780E114800
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 21:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45071114815
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 21:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbfLEUUJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 15:20:09 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:43864 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbfLEUUJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 15:20:09 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xB5KK5wg096970;
-        Thu, 5 Dec 2019 14:20:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1575577205;
-        bh=mJd0a+dUybmP+Qhi7sQSDg+RFvptJi1GCzRBNu0+c5s=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Z/1Dao01K6xMIe/6C6tCUqI27+0EuaN+mc5nU5PW95PT/jpkAGBRErICIojm95L4K
-         tEGJz+Ofyp+HlbusKXSZNUzzPC5jOm72nXVz2WQxb3iS8klfroKjkRVoarw7TkK/0T
-         tFWb5uEAJj2GGzqQDpaugh+B6HPKmrjszAnawJnE=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xB5KK5TW109652
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 5 Dec 2019 14:20:05 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 5 Dec
- 2019 14:20:04 -0600
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 5 Dec 2019 14:20:03 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xB5KK3rL015154;
-        Thu, 5 Dec 2019 14:20:03 -0600
-Date:   Thu, 5 Dec 2019 14:19:36 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-usb@vger.kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>
-Subject: Re: [PATCH] musb: davinci: Convert to use GPIO descriptor
-Message-ID: <20191205201936.GA19754@uda0271908>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>, linux-usb@vger.kernel.org,
-        Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Tony Lindgren <tony@atomide.com>
-References: <20191205142200.145252-1-linus.walleij@linaro.org>
+        id S1729703AbfLEU1O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 15:27:14 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:38278 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729187AbfLEU1N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 15:27:13 -0500
+Received: by mail-lj1-f196.google.com with SMTP id k8so5100332ljh.5
+        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 12:27:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=K2nboj5xrRkV1yqHjA0Aj2mbWgmjh4x0SrJcMaszVtA=;
+        b=TY6MoxQFBEklRwMxXtPk7pq3Wq5Rwa2J/YtugYsq/w1lH9+ERuu6f1+z8+8JuKIiKx
+         YDkuPczmV+9Qf+ENZhlePKKmJs1rLUEQ7rx1SKksdo9OxMTgxyWfNyX7ZM9ZSUbccBnx
+         JYw40/VtEd257BEbFslSJIyKBygobO7WiYq+0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=K2nboj5xrRkV1yqHjA0Aj2mbWgmjh4x0SrJcMaszVtA=;
+        b=RguP17eKoLek3v1PD+ExJmexM1LHV7k5uZSPoBGZhq340x5+eTALNeZY9fS/Ub5gWS
+         jIt+ceYz2Dw3l2v04Lnc9KDe3OxGAn8mbPicqn9s+SLbjSREO/455PWAN0ofGEFr8VB7
+         kKyR2/rz0nTeI8gkGgk7nY4hsr10EKFTt5YR4cU2S9ys+HFaXAGTcldUGbcJfKbwJ5WH
+         bNKPxQmHSy+h/9ARb/Tz9ZBgyQcibPPSJ8NBPVEvaOcajlxbFQ6CVAC+XrQu/wcNm9mN
+         JrrUVN6wfXDGTq57Uh5agY3ofTvmU6zX94ooybo6t4IYE1GcUi34EcCLLylAtAZg9+kI
+         0bVQ==
+X-Gm-Message-State: APjAAAUPEBZzofCgVI2KGxaPAQkZtxsGCaMWcuRfah/cbmeUousoDvS6
+        lyM1gsi0wTiTCJji2QrWaynS+iDIy74=
+X-Google-Smtp-Source: APXvYqwu9nva5wd25MzLKo8NVw6dDnw7lmwT5tFmfMrynezVJWZYIOAh9j8dwNMQy6N87iiGiiFw2A==
+X-Received: by 2002:a2e:91cb:: with SMTP id u11mr4174530ljg.82.1575577630728;
+        Thu, 05 Dec 2019 12:27:10 -0800 (PST)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id f14sm5400737lfc.49.2019.12.05.12.27.09
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Dec 2019 12:27:09 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id k8so5100177ljh.5
+        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 12:27:09 -0800 (PST)
+X-Received: by 2002:a05:651c:239:: with SMTP id z25mr4294750ljn.48.1575577628995;
+ Thu, 05 Dec 2019 12:27:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191205142200.145252-1-linus.walleij@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <31555.1574810303@warthog.procyon.org.uk>
+In-Reply-To: <31555.1574810303@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 5 Dec 2019 12:26:53 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wj+_n63ps_-Rvwgo4S7rd2eLAVcJwbZee7iHZaO+1hvYQ@mail.gmail.com>
+Message-ID: <CAHk-=wj+_n63ps_-Rvwgo4S7rd2eLAVcJwbZee7iHZaO+1hvYQ@mail.gmail.com>
+Subject: Re: [GIT PULL] pipe: General notification queue
+To:     David Howells <dhowells@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Zijlstra <peterz@infradead.org>, raven@themaw.net,
+        Christian Brauner <christian@brauner.io>,
+        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
+On Tue, Nov 26, 2019 at 3:18 PM David Howells <dhowells@redhat.com> wrote:
+>
+> Can you consider pulling my general notification queue patchset after
+> you've pulled the preparatory pipework patchset?  Or should it be deferred
+> to the next window?
 
-On Thu, Dec 05, 2019 at 03:22:00PM +0100, Linus Walleij wrote:
-> The DaVinci MUSB glue contains an optional GPIO line to
-> control VBUS power, convert this to use a GPIO descriptor
-> and augment the EVM board file to provide this descriptor.
-> 
-> I can't get this driver to compile properly and it depends
-> on broken but when I didn get it to compile brokenly, it
-> did at least not complain about THIS code being broken so
-> I don't think I broke the driver any more than what it
-> already is.
-> 
-> I did away with the ifdefs that do not work with
-> multiplatform anyway so the day someone decides to
-> resurrect the code, the path to get it working should be
-> easier as well since DaVinci is now multiplatform.
+So it's perhaps obvious by now, but I had delayed this pull request
+because I was waiting to see if there were any reports of issues with
+the core pipe changes.
 
-Generally I don't take such patches unless they are part of the effort
-to un-broken the driver. But is this patch a prerequisite of any cleanup
-in DaVinci family or ARM architecture? What is the motivation of this
-patch?
+And considering that there clearly _is_ something going on with the
+pipe changes, I'm not going to pull this for this merge window.
 
-Sekhar/Tony,
+I'm obviously hoping that we'll figure out what the btrfs-test issue
+is asap, but even if we do, it's too late to pull stuff on top of our
+current situation right now.
 
-This DaVinci glue driver has been marked as BROKEN since 2013 and seems
-no one complained about it. Is there any development on the DaVinci
-devices still active? Does it make sense to remove this driver out of
-the kernel instead?
+I suspect this is what you expected anyway (considering your own query
+about the next merge window), but I thought I'd reply to it explicitly
+since I had kept this pull request in my "maybe" queue, but with the
+pipe thread from this morning it's dropped from that.
 
--Bin.
+            Linus
