@@ -2,25 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE22F1145C3
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 18:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F591145DF
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2019 18:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730040AbfLERVg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 12:21:36 -0500
-Received: from mx2.suse.de ([195.135.220.15]:55218 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726028AbfLERVg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Dec 2019 12:21:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A0BB8B31B;
-        Thu,  5 Dec 2019 17:21:33 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 0D3F8DA733; Thu,  5 Dec 2019 18:21:27 +0100 (CET)
-Date:   Thu, 5 Dec 2019 18:21:27 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     David Howells <dhowells@redhat.com>
-Cc:     torvalds@linux-foundation.org,
+        id S1730177AbfLERZc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 12:25:32 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:39786 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1730036AbfLERZb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 12:25:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1575566730;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=w59JjKWkV4ZxKRNKisQ9Y1kZnArUOKkU4g6jxO2GRWU=;
+        b=gjjB6qzl1hOgpkbSSGcDvkJhwqpULaN31RPQGPQhP0K9qTunYFSnXtiiWXANgDnrVbx2hT
+        Xj5m4i/lssARIP2ImXwU7pKH3J5n3+fQ9fYIHvJk4uA2FSkJI2+9QL8n+bwq4KTq7Pl2l8
+        e6d3p+UU55f+KRdVZHT5y9qX2c+iyY4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-252-3O5RBmQEOS2GZnfvW0B_UQ-1; Thu, 05 Dec 2019 12:25:26 -0500
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8264E107ACC4;
+        Thu,  5 Dec 2019 17:25:24 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-250.rdu2.redhat.com [10.10.120.250])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A463419756;
+        Thu,  5 Dec 2019 17:25:21 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20191205172127.GW2734@suse.cz>
+References: <20191205172127.GW2734@suse.cz> <20191205125826.GK2734@twin.jikos.cz> <31452.1574721589@warthog.procyon.org.uk> <1593.1575554217@warthog.procyon.org.uk>
+To:     dsterba@suse.cz
+Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
         Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Peter Zijlstra <peterz@infradead.org>, raven@themaw.net,
@@ -30,70 +50,27 @@ Cc:     torvalds@linux-foundation.org,
         linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Subject: Re: [GIT PULL] pipe: Notification queue preparation
-Message-ID: <20191205172127.GW2734@suse.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, David Howells <dhowells@redhat.com>,
-        torvalds@linux-foundation.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>, keyrings@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191205125826.GK2734@twin.jikos.cz>
- <31452.1574721589@warthog.procyon.org.uk>
- <1593.1575554217@warthog.procyon.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1593.1575554217@warthog.procyon.org.uk>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-ID: <21492.1575566720.1@warthog.procyon.org.uk>
+Date:   Thu, 05 Dec 2019 17:25:20 +0000
+Message-ID: <21493.1575566720@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-MC-Unique: 3O5RBmQEOS2GZnfvW0B_UQ-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 05, 2019 at 01:56:57PM +0000, David Howells wrote:
-> David Sterba <dsterba@suse.cz> wrote:
-> 
-> > [<0>] pipe_write+0x1be/0x4b0
-> 
-> Can you get me a line number of that?  Assuming you've built with -g, load
-> vmlinux into gdb and do "i li pipe_write+0x1be".
+I've just posted a couple of patches - can you check to see if they fix you=
+r
+problem?
 
-I built it with -g (DEBUG_INFO) but there's no output for the command (gdb 8.2):
+https://lore.kernel.org/linux-fsdevel/157556649610.20869.853707964949534356=
+7.stgit@warthog.procyon.org.uk/T/#t
 
-(gdb) i li pipe_write+0x1be
-Function "pipe_write+0x1be" not defined.
+Thanks,
+David
 
-But the address can tell something:
-
-(gdb) l *(pipe_write+0x1be)
-0xffffffff81390b8e is in pipe_write (fs/pipe.c:509).
-warning: Source file is more recent than executable.
-504                             kill_fasync(&pipe->fasync_readers, SIGIO, POLL_IN);
-505                             do_wakeup = 0;
-506                     }
-507                     pipe->waiting_writers++;
-508                     pipe_wait(pipe);
-509                     pipe->waiting_writers--;
-510             }
-511     out:
-512             __pipe_unlock(pipe);
-513             if (do_wakeup) {
-
-I rerun the test again (with a different address where it's stuck), there's
-nothing better I can get from the debug info, it always points to pipe_wait,
-disassembly points to:
-
-   0xffffffff81390b71 <+417>:   jne    0xffffffff81390c23 <pipe_write+595>
-   0xffffffff81390b77 <+423>:   test   %ecx,%ecx
-   0xffffffff81390b79 <+425>:   jne    0xffffffff81390b95 <pipe_write+453>
-   0xffffffff81390b7b <+427>:   addl   $0x1,0x110(%rbx)
-   0xffffffff81390b82 <+434>:   mov    %rbx,%rdi
-   0xffffffff81390b85 <+437>:   callq  0xffffffff813908c0 <pipe_wait>
-   0xffffffff81390b8a <+442>:   subl   $0x1,0x110(%rbx)
-
-(pipe_write+0x1ba == 0xffffffff81390b8a)
