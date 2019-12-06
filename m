@@ -2,133 +2,200 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF9C114B2E
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 03:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD543114B63
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 04:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727030AbfLFCt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 21:49:29 -0500
-Received: from nat-hk.nvidia.com ([203.18.50.4]:43712 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726806AbfLFCt2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Dec 2019 21:49:28 -0500
-Received: from hkpgpgate101.nvidia.com (Not Verified[10.18.92.100]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5de9c1b50000>; Fri, 06 Dec 2019 10:49:25 +0800
-Received: from HKMAIL103.nvidia.com ([10.18.16.12])
-  by hkpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 05 Dec 2019 18:49:25 -0800
-X-PGP-Universal: processed;
-        by hkpgpgate101.nvidia.com on Thu, 05 Dec 2019 18:49:25 -0800
-Received: from HKMAIL104.nvidia.com (10.18.16.13) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Dec
- 2019 02:49:25 +0000
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.103)
- by HKMAIL104.nvidia.com (10.18.16.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Fri, 6 Dec 2019 02:49:25 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MCIL1TpYXVT5p8vDULKTWTU4sX24AwTx2P+mlIH/g85EsJbH54l9J+ZE7sTARXJQrXfFJUvU6zsjifrZtJ6OL5Z43ERm69C/04cF6hj5sTvvYDfYwa2/cjvN+TdLQyGWdhQ5caideaWh9azZYJhzTW8sf7Pw4JpkF5IGcQGtMNp4FrVX3nRuuWld4JmKZHWQ68Rc29i4j0OwSSuogB0Fl1O8iWMvI2FZkG6vr22SxDBFLL7nlM3SK0JF/qkpd6VkyV74MjjB99n2fnEiWMidauv0wsDvjpzvk2y40Wr1RMOIelRyRD8TUGL5WB9Ln0OSN/bEdgkOw481W1cw1L4z1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I1HrtIEwydgswEd0qVDWHajIpDeeNCF32zsbcU0UZEc=;
- b=F37yOKabNu49jkNOLYXRxYHTQDGN6sElCY9hm7W1pO5xWpR7+3cTEuhuc/3eAdcYlj2P2nIew6nAtT+fkFL6lC/XcDeii6PiPegKKt8mljKzfPgXZGqRH9X7JEzho5S04JohYAthlwA7XJLzbBhBRnQ/3smu6eEUWm6aCGZNz5bZVQ+IgpahB7LyiwRx5Pj7J5odjTCwBKbQh0In5KE7GdLp4U9WtUUKGP7JGOiJM0W4gHT27X9iSjC7qPA/eXXAT+KDCzByB9zjmbgzIJEruj+BUvhXWUaO8AXwvdPDapPCi1Pkm16v4atZRoaUChSI6J5Forl7c1wHnzxTAM7YlA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from MN2PR12MB4126.namprd12.prod.outlook.com (10.255.125.12) by
- MN2PR12MB3021.namprd12.prod.outlook.com (20.178.240.158) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.16; Fri, 6 Dec 2019 02:49:23 +0000
-Received: from MN2PR12MB4126.namprd12.prod.outlook.com
- ([fe80::2572:7735:8756:b5f0]) by MN2PR12MB4126.namprd12.prod.outlook.com
- ([fe80::2572:7735:8756:b5f0%6]) with mapi id 15.20.2516.014; Fri, 6 Dec 2019
- 02:49:22 +0000
-From:   EJ Hsu <ejh@nvidia.com>
-To:     "balbi@kernel.org" <balbi@kernel.org>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        WK Tsai <wtsai@nvidia.com>
-Subject: RE: [PATCH v3] usb: gadget: fix wrong endpoint desc
-Thread-Topic: [PATCH v3] usb: gadget: fix wrong endpoint desc
-Thread-Index: AQHVqnVfdqrGApTTNkSKTKfO4HSvBKesaZLg
-Date:   Fri, 6 Dec 2019 02:49:22 +0000
-Message-ID: <MN2PR12MB4126A38922971576E429A7EBCF5F0@MN2PR12MB4126.namprd12.prod.outlook.com>
-References: <20191204073456.57616-1-ejh@nvidia.com>
-In-Reply-To: <20191204073456.57616-1-ejh@nvidia.com>
-Accept-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ejh@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-12-06T02:49:20.6036059Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=b7ce0e37-821d-4e46-8bec-39f3b0528030;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
-authentication-results: spf=none (sender IP is ) smtp.mailfrom=ejh@nvidia.com; 
-x-originating-ip: [59.124.78.18]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 65228996-8db9-4b0b-6509-08d779f6e65c
-x-ms-traffictypediagnostic: MN2PR12MB3021:|MN2PR12MB3021:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR12MB3021352CF0ED0A1F139358E6CF5F0@MN2PR12MB3021.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3513;
-x-forefront-prvs: 0243E5FD68
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(346002)(136003)(376002)(396003)(189003)(199004)(186003)(11346002)(52536014)(86362001)(2906002)(26005)(316002)(66556008)(66446008)(558084003)(64756008)(66476007)(66946007)(76116006)(33656002)(71200400001)(54906003)(71190400001)(8936002)(9686003)(305945005)(55016002)(7696005)(6506007)(14454004)(102836004)(76176011)(4326008)(478600001)(1730700003)(81166006)(81156014)(25786009)(5640700003)(8676002)(99286004)(107886003)(6916009)(229853002)(74316002)(5660300002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB3021;H:MN2PR12MB4126.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Z9iw9xTKvF3QmeXlYbWlqw8B98n2kPLT3Z0lOed1jRwGssBo7vpqbF4N0Na0/UQXROpilR1rM7XVIlnPLME42GQOxPpjD/n6Z+5XBI52/pIiSttrdJNAgW2ML5G7eGyEdDv/znKLjkMKypUoKLKbuCNokZByBjNb4t/dsabkSGERs9jZMUG7rbS/I9mozrA/J9DNEMMTgUfL3YnA49cum/y0h/K4LeAzUePaPKaJUcJYpT8WEc0kx6+KVrLcma8LtNFGCSqCRV/wtgWidvfivwCFDloCgMn9tLDmqE6+TI3tGgQq91ptiua08fj8p3bnNGXiS7E2iJmMQ0Npmv8gBU44HCr+kIQqpn7003OkEaxh6z8queABETl+dMGY1ZIK05LuKp67ldzMuj7XgZpBJH01maxrCaetLspYfV3d+lwy1ks6kS3OHjPXe8fXRKFQ
+        id S1726203AbfLFDYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 22:24:12 -0500
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:54713 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726097AbfLFDYL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 22:24:11 -0500
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 8740B74D;
+        Thu,  5 Dec 2019 22:24:10 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute7.internal (MEProxy); Thu, 05 Dec 2019 22:24:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:message-id
+        :mime-version:subject:to:x-me-proxy:x-me-proxy:x-me-sender
+        :x-me-sender:x-sasl-enc; s=fm1; bh=+KywNJcKwAzlFqyB5781DwOqGjElJ
+        +2Kh0r1wpHwyIY=; b=qy6OjjpxoKP5jbwAVaHDe/dtvFAcBMiQc+ZSOfuPeTu23
+        gpm8sYfdG/8ba3V+ayu4kS0anOilgYQRjTft7EO9kYczo6iGFXl3bODY1Fd3JFGv
+        gFjJmrRjNJNDIijQtgYaloWhwgqxXzj0jOf4fu6woByKBuSMW1I6hfZWL1oTKFYM
+        5MfQPyTo86Xy7dwblDwSxrDc/mNDlkRgH66k4nQeg2ySN1mZzcSYIcMFwqJjZqNC
+        LbY+bBKLcpGoo2C8EKr4EQlwh+xV5JoZiCpicfBHK1oxt5np+uEmajk+R7FmnhIQ
+        LSuc+Ls1fiRecVXIPsAZ5NV6etNXgUy1VDVkjG07A==
+X-ME-Sender: <xms:2cnpXc6w_kSdbDEDc-YTtnuiyYJRe3CtBOtXw6YxDL9z_U1_t5I2JQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudekvddgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfggtggusehgtderredttdejnecuhfhrohhmpeforghrvghkucfo
+    rghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvhhish
+    hisghlvghthhhinhhgshhlrggsrdgtohhmqeenucffohhmrghinhepghhithhhuhgsrdgt
+    ohhmnecukfhppeeluddrieehrdefgedrfeefnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrghrmhgrrhgvkhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhmnecuvehl
+    uhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:2snpXUqs9VdhABcjqw4nnwUAZu3T8VGx0zifXD0QxN5I9FoUhNkefQ>
+    <xmx:2snpXdO3UF_JQAsrOO9GHqL4lgUP0vWAdHergsztM-ltRtUzbjPXzA>
+    <xmx:2snpXc2rJxKmb_HemUf_r5Drugdqh4BVynVHNu-vKYN-rp5JJQHK0A>
+    <xmx:2snpXRZNt6O7AOSEiDwhhW86hyM4QO2WMUUvI34RDngHGmIWMR_g7g>
+Received: from mail-itl (ip5b412221.dynamic.kabel-deutschland.de [91.65.34.33])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 2C50780062;
+        Thu,  5 Dec 2019 22:24:09 -0500 (EST)
+Date:   Fri, 6 Dec 2019 04:24:06 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Suwan Kim <suwan.kim027@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Subject: "usbip: Implement SG support to vhci-hcd and stub driver" causes a
+ deadlock
+Message-ID: <20191206032406.GE1208@mail-itl>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 65228996-8db9-4b0b-6509-08d779f6e65c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2019 02:49:22.8909
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sLSKcrpSb49evagPIv1Wsj48g6HIFSs889puSrsCP0KIAD7pZHKiEdfsxCPvHolM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3021
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1575600566; bh=I1HrtIEwydgswEd0qVDWHajIpDeeNCF32zsbcU0UZEc=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-ms-exchange-transport-forked:x-microsoft-antispam-prvs:
-         x-ms-oob-tlc-oobclassifiers:x-forefront-prvs:
-         x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:MIME-Version:
-         X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=TTunSMVCOK3K4NGi0kFIC2r5tqdW6PXwz/asLR4+dTn3jnYZ/kS0Qaj8u50cQLPFw
-         ToheFMAuVebfKf3DeSoddqxlpLPslZ88edl+Zk23uRiou4gFc5QrjXPXRN8VmSSnNB
-         vqdjKHfV6jsy7XHcE6gDRVr3ztvWiquyi2X+YHtA3EimDd+srdRbJ0sbpl7XgPsboo
-         Zff1VbPGHSNvHxY8utnNGo/6n/ZhYYxqEdIj/g6jawI/T5omwhWHb++g+f6KEN8Gk7
-         ZgRvNCvpcYl4Ms5bJsQaMLNL+MnMzCAKCNNDK8BaXv2NO5NVHkYNn08RQ8QCOpTPgJ
-         WE19aFs3zVJyw==
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="5xSkJheCpeK0RUEJ"
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Reviewed-by: Peter Chen <peter.chen@nxp.com>
 
-Add a "Reviewed-by" from Peter since this patch has been reviewed in v2 and=
- only typo fix in v3.
+--5xSkJheCpeK0RUEJ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: "usbip: Implement SG support to vhci-hcd and stub driver" causes a
+ deadlock
 
-Thanks,
-EJ
---nvpublic
+Hello,
+
+I've hit an issue with recent 4.19 and 5.4 kernels. In short: if I
+connect Yubikey 4 and use its CCID interface (for example `ykman oath
+list` command), the client side hangs (100% reliably). After 60s I get a
+message that a CPU hangs waiting for a spinlock (see below).
+
+I've bisected it to a ea44d190764b4422af ("usbip: Implement SG support
+to vhci-hcd and stub driver") commit. Which indeed is also backported to
+4.19.
+
+Any idea what is going on here? I can easily provide more information,
+if you tell me how to get it.
+
+The kernel log:
+[ 6452.701016] usb 1-1: New USB device found, idVendor=3D1050, idProduct=3D=
+0407, bcdDevice=3D 4.27
+[ 6452.701049] usb 1-1: New USB device strings: Mfr=3D1, Product=3D2, Seria=
+lNumber=3D0
+[ 6452.701075] usb 1-1: Product: Yubikey 4 OTP+U2F+CCID
+[ 6452.701092] usb 1-1: Manufacturer: Yubico
+[ 6452.711566] input: Yubico Yubikey 4 OTP+U2F+CCID as /devices/platform/vh=
+ci_hcd.0/usb1/1-1/1-1:1.0/0003:1050:0407.0001/input/input1
+[ 6452.762251] hid-generic 0003:1050:0407.0001: input,hidraw0: USB HID v1.1=
+0 Keyboard [Yubico Yubikey 4 OTP+U2F+CCID] on usb-vhci_hcd.0-1/input0
+[ 6452.770270] hid-generic 0003:1050:0407.0002: hiddev96,hidraw1: USB HID v=
+1.10 Device [Yubico Yubikey 4 OTP+U2F+CCID] on usb-vhci_hcd.0-1/input1
+[ 6530.805002] vhci_hcd: unlink->seqnum 111
+[ 6530.805024] vhci_hcd: urb->status -104
+[ 6531.386607] usb 1-1: recv xbuf, 42
+[ 6531.386701] vhci_hcd: stop threads
+[ 6531.386718] vhci_hcd: release socket
+[ 6531.386734] vhci_hcd: disconnect device
+[ 6531.386800] usb 1-1: USB disconnect, device number 2
+[ 6591.409099] rcu: INFO: rcu_sched detected stalls on CPUs/tasks:
+[ 6591.409130] rcu:     1-...!: (0 ticks this GP) idle=3D53a/1/0x4000000000=
+000000 softirq=3D18978/18978 fqs=3D0=20
+[ 6591.409158] rcu:     (detected by 0, t=3D60002 jiffies, g=3D17933, q=3D8=
+93)
+[ 6591.409181] Sending NMI from CPU 0 to CPUs 1:
+[ 6591.410415] NMI backtrace for cpu 1
+[ 6591.410416] CPU: 1 PID: 338 Comm: kworker/1:2 Tainted: G           O    =
+  4.19.84-1.pvops.qubes.x86_64 #1
+[ 6591.410417] Workqueue: usb_hub_wq hub_event
+[ 6591.410417] RIP: 0010:_raw_spin_lock_irqsave+0x22/0x40
+[ 6591.410418] Code: 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 53 9c 58 0f 1f =
+44 00 00 48 89 c3 fa 66 0f 1f 44 00 00 31 c0 ba 01 00 00 00 f0 0f b1 17 <85=
+> c0 75 05 48 89 d8 5b c3 89 c6 e8 3e 1c 7e ff 66 90 48 89 d8 5b
+[ 6591.410419] RSP: 0000:ffffc900009dfaf8 EFLAGS: 00000046
+[ 6591.410419] RAX: 0000000000000000 RBX: 0000000000000082 RCX: 00000000000=
+00000
+[ 6591.410420] RDX: 0000000000000001 RSI: ffff88801e633e40 RDI: ffff8880067=
+40be0
+[ 6591.410420] RBP: ffff888006740be0 R08: 0000000000000000 R09: ffffffff813=
+46f00
+[ 6591.410420] R10: ffff888014f5b5d8 R11: 0000000000000000 R12: 00000000fff=
+fff94
+[ 6591.410421] R13: ffff88803ff06000 R14: ffff88803ff06000 R15: ffff88801e6=
+33e40
+[ 6591.410421] FS:  0000000000000000(0000) GS:ffff8880f5b00000(0000) knlGS:=
+0000000000000000
+[ 6591.410421] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 6591.410422] CR2: 00005eede8b122a8 CR3: 000000000220a002 CR4: 00000000003=
+606e0
+[ 6591.410422] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 00000000000=
+00000
+[ 6591.410423] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 00000000000=
+00400
+[ 6591.410423] Call Trace:
+[ 6591.410423]  vhci_urb_dequeue+0x2b/0x280 [vhci_hcd]
+[ 6591.410423]  usb_hcd_flush_endpoint+0x119/0x190
+[ 6591.410424]  usb_disable_endpoint+0x7b/0xa0
+[ 6591.410424]  usb_disable_interface+0x3e/0x50
+[ 6591.410424]  usb_unbind_interface+0x117/0x250
+[ 6591.410425]  device_release_driver_internal+0x17d/0x240
+[ 6591.410425]  bus_remove_device+0xe5/0x150
+[ 6591.410425]  device_del+0x161/0x360
+[ 6591.410426]  ? usb_remove_ep_devs+0x1b/0x30
+[ 6591.410426]  usb_disable_device+0x93/0x240
+[ 6591.410426]  usb_disconnect+0x90/0x270
+[ 6591.410427]  hub_port_connect+0x83/0xab0
+[ 6591.410427]  hub_event+0x8d1/0xab0
+[ 6591.410427]  process_one_work+0x191/0x370
+[ 6591.410428]  worker_thread+0x4f/0x3b0
+[ 6591.410428]  kthread+0xf8/0x130
+[ 6591.410428]  ? rescuer_thread+0x340/0x340
+[ 6591.410428]  ? kthread_create_worker_on_cpu+0x70/0x70
+[ 6591.410429]  ret_from_fork+0x35/0x40
+[ 6591.410432] rcu: rcu_sched kthread starved for 60002 jiffies! g17933 f0x=
+0 RCU_GP_WAIT_FQS(5) ->state=3D0x402 ->cpu=3D1
+[ 6591.411962] rcu: RCU grace-period kthread stack dump:
+[ 6591.411980] rcu_sched       I    0    10      2 0x80000000
+[ 6591.411998] Call Trace:
+[ 6591.412015]  ? __schedule+0x3f5/0x870
+[ 6591.412030]  schedule+0x32/0x80
+[ 6591.412044]  schedule_timeout+0x16f/0x350
+[ 6591.412059]  ? __next_timer_interrupt+0xc0/0xc0
+[ 6591.412077]  rcu_gp_kthread+0x569/0x950
+[ 6591.412092]  kthread+0xf8/0x130
+[ 6591.412106]  ? rcu_nocb_kthread+0x560/0x560
+[ 6591.412119]  ? kthread_create_worker_on_cpu+0x70/0x70
+[ 6591.412136]  ret_from_fork+0x35/0x40
+
+Some more details are available here:
+https://github.com/QubesOS/qubes-issues/issues/5498
+
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+
+--5xSkJheCpeK0RUEJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAl3pydYACgkQ24/THMrX
+1yzqqwf/SggFYZuRHLkV72PIClH0xnHlnK4u/mbYwQm20kMw3HRYg/3LxiEYNklN
+yQR3vDnQS0DcBVUDornDZXL+FBOb8xLTKzucaJHoX26ZJTW4RqFB8X8MHY+0DA9m
+NVYJkjm6mnbkfXs7fsYVpWRF9LHFj3yQOuTvaL/QURrvlLKaKPUHo5d9zgMR0neS
+pqQ0hktcb90FB4tPqX5CVhWKaZiKg5y6Eduis1K/8MVGwK8s/76qgI5dibkzVTc8
+cLWcBY3P5NTteHWOcGy6A91WW5TU8Cdj694uEndK80/w9r0CDyJyC3P2b+PbmacV
+cNKjPkedZirbNKN2np/GY0jjeH4RMg==
+=+a+X
+-----END PGP SIGNATURE-----
+
+--5xSkJheCpeK0RUEJ--
