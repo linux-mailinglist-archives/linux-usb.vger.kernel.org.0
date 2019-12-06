@@ -2,130 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 416BF115144
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 14:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE021151E6
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 15:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726370AbfLFNpt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 08:45:49 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36206 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726246AbfLFNpt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 08:45:49 -0500
-Received: by mail-ot1-f68.google.com with SMTP id i4so5838450otr.3
-        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2019 05:45:48 -0800 (PST)
+        id S1726237AbfLFOG6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 09:06:58 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43899 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfLFOG5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 09:06:57 -0500
+Received: by mail-wr1-f65.google.com with SMTP id d16so7852846wre.10;
+        Fri, 06 Dec 2019 06:06:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sre7idJ66ns9HmqMMb7e5mWZwsJ1nL57ygQluA76u3k=;
-        b=gCNs62mWzKEv6640t6pTWokgoQ7DetFtygvJZvPhmcA1HyAdqHQ6kC1kMhsRglY3xc
-         Gfto8kjaJAehVU3wfcHfrglM+DenPz6KRsE303NkoS64BQ1pXY4/qtZAI6rUVHUz13v0
-         vFQPgZTBP8n0wLEC008FGzkb6ydvILQQD55XchGNft2YiTIDsScXuNcq1D9Fqn2SXNks
-         /MynJBZCkLwB/tqNncT0cq/qlrZb/6acEzcorGaI5RHXWA1d0N9KyEE8xu6wY3dh6iET
-         7FktlNTrOhopuOY1ekUlDuhsy5tnuHIF2eq1qeJnAd4srVGSj5eNIa9H6f23odMZxT/j
-         gG1Q==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4wX7YZhl6Ff/TTsQn22noU9DFT307Fj94r/I2C42B5M=;
+        b=s5BlYqtux58eV5lRL4Uq2IgtCuQDGFX6K4yYEX0RLhOvM3Ev+yyjmjvhEzSc4m6u5W
+         jb4uvcXUSxel+xjdiYswRfRC8BGStqpcpfwwzDk4yDSocO+kMqxosulqaHzNql5g5Igw
+         iebSpEnPO6xxnv1I0k7+3fhwhuTwTax9VTxhIZ0mZ8nFdpYfve4AYmnuyO+1hALiCK4N
+         MVSQ+zILy5pB8h7E7FmQuPcUbEaWj5Ljo+3174S4ewX24BofvINu/1hAyt7Ff8ZwgQOx
+         YnEh+9aQXMLhA2Fj8DYQiQrzfJueHslv/mnmqWO/V8W0UnTLQMuV1n5EEmXTZeGKIqQf
+         DB8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sre7idJ66ns9HmqMMb7e5mWZwsJ1nL57ygQluA76u3k=;
-        b=Ou/LRW7jbnObqdqwefn90inzjtNCeyRqGiX1wMqgRR29uIsHZxSx5lGVmnjYNwohte
-         hiNfNRZ0Fx11CMAs5tyqq7h2oxHA4EYwvq1DN4gNwduNbu6KTgi7fQN5CU928N08SZ+x
-         aV8o3UNUDSEAIjaytsXI5VrTd83WazquQWvHlrj/ean75eHOXetngRgZhmVZBbCL09K8
-         vFODLW7MWD6j2On/NydZ46CkvYaiu9MCY01tn26dPSgLjnnzHVo/pfKIpbBbX2yiNwgi
-         Ny8jowozFL3kUxU0Lch5IxIHhKJ9quY77NzzY/Y2MPFh30UTMlpf61L+vkHNXLRz0EE/
-         yh5g==
-X-Gm-Message-State: APjAAAVA0OIjQk/hP6HYsA7SX3JN2IaspX1d1en3gZ4zEyZE2e/Q05Ws
-        w4P0wHXjfK4UfuuN7FRPWUMT12vlihFolQr7KokCp1MtWqw=
-X-Google-Smtp-Source: APXvYqy1ytWcZ4+jFawCM3T2yZXO4KBaIpQ3boyExdFNcnIbciwVGfRsCvJMHJrbaNtbpnERU5/k69RnTqppOG3ekEg=
-X-Received: by 2002:a05:6830:1d6a:: with SMTP id l10mr9493578oti.233.1575639948274;
- Fri, 06 Dec 2019 05:45:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4wX7YZhl6Ff/TTsQn22noU9DFT307Fj94r/I2C42B5M=;
+        b=sgkvquldmbZpDGwv3AhqlKOwqGZ0zpf92q6UKb4n4whMRCe3nKXSlv9TsvkHGaWymN
+         E/O1gPNjMb82vaPj7JS+WE28dzdqR9pYXxZwBUVyYhyTcc575yQqc8x2z2/PrsYtrh92
+         ct6AQIKapG4yMc6NlLR+z/ZILKMCbCxtcMC8LCEfZcPKrwfHpJxs+LYZf+DUNpCU+Dzd
+         rzghl92N0EXtbu6dvWBV5O9E0yqHMf48tTBnkMNBOP4R9Vrnc5bJ3us8UxhCgxOSBdeA
+         JOAwMl88IyQtpjW7WC+zu5CW6NWAUQDQuU+KQaLENMqOCWx96B1hgFzvgdBzni07j1BF
+         Sqyw==
+X-Gm-Message-State: APjAAAXLEfoSWnR2sSh4lrwdMyW3m+QGC4WgvcrwGfRWeF4Tifod+MKg
+        POJChT0tgnFbU4/qegOlWNQ=
+X-Google-Smtp-Source: APXvYqwnTTJ2tyrORPrY6W2zm5gkzKjRRH1E///pg1euVt9Ly9T6rXuscLFZOBZEjE9nXQ866fBg6w==
+X-Received: by 2002:adf:fe12:: with SMTP id n18mr15443671wrr.158.1575641215691;
+        Fri, 06 Dec 2019 06:06:55 -0800 (PST)
+Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
+        by smtp.gmail.com with ESMTPSA id s10sm16299299wrw.12.2019.12.06.06.06.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2019 06:06:54 -0800 (PST)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH v2 00/10] usb: host: xhci-tegra: Implement basic ELPG support
+Date:   Fri,  6 Dec 2019 15:06:43 +0100
+Message-Id: <20191206140653.2085561-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-References: <9e91020876029cfefc9211ff747685eba9536426.1575638983.git.andreyknvl@google.com>
-In-Reply-To: <9e91020876029cfefc9211ff747685eba9536426.1575638983.git.andreyknvl@google.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 6 Dec 2019 14:45:37 +0100
-Message-ID: <CANpmjNMVW_=8Mg3gERZFKd7NyJS3AS2e7nO33B0PczAsXm7xqg@mail.gmail.com>
-Subject: Re: [PATCH v2] kcov: fix struct layout for kcov_remote_arg
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 6 Dec 2019 at 14:31, Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> Make the layout of kcov_remote_arg the same for 32-bit and 64-bit code.
-> This makes it more convenient to write userspace apps that can be compiled
-> into 32-bit or 64-bit binaries and still work with the same 64-bit kernel.
-> Also use proper __u32 types in uapi headers instead of unsigned ints.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+From: Thierry Reding <treding@nvidia.com>
 
-Acked-by: Marco Elver <elver@google.com>
+Hi,
 
-Thanks!
+this series of patches is an attempt to split up JC's large patch adding
+ELPG support into more manageable chunks. The original patch can be
+found here:
 
-> ---
->
-> Changes v1->v2:
-> - Use __aligned_u64 instead of adding a __u32 reserved field.
->
->  Documentation/dev-tools/kcov.rst | 10 +++++-----
->  include/uapi/linux/kcov.h        | 10 +++++-----
->  2 files changed, 10 insertions(+), 10 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-> index 36890b026e77..1c4e1825d769 100644
-> --- a/Documentation/dev-tools/kcov.rst
-> +++ b/Documentation/dev-tools/kcov.rst
-> @@ -251,11 +251,11 @@ selectively from different subsystems.
->  .. code-block:: c
->
->      struct kcov_remote_arg {
-> -       unsigned        trace_mode;
-> -       unsigned        area_size;
-> -       unsigned        num_handles;
-> -       uint64_t        common_handle;
-> -       uint64_t        handles[0];
-> +       __u32           trace_mode;
-> +       __u32           area_size;
-> +       __u32           num_handles;
-> +       __aligned_u64   common_handle;
-> +       __aligned_u64   handles[0];
->      };
->
->      #define KCOV_INIT_TRACE                    _IOR('c', 1, unsigned long)
-> diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
-> index 409d3ad1e6e2..1d0350e44ae3 100644
-> --- a/include/uapi/linux/kcov.h
-> +++ b/include/uapi/linux/kcov.h
-> @@ -9,11 +9,11 @@
->   * and the comment before kcov_remote_start() for usage details.
->   */
->  struct kcov_remote_arg {
-> -       unsigned int    trace_mode;     /* KCOV_TRACE_PC or KCOV_TRACE_CMP */
-> -       unsigned int    area_size;      /* Length of coverage buffer in words */
-> -       unsigned int    num_handles;    /* Size of handles array */
-> -       __u64           common_handle;
-> -       __u64           handles[0];
-> +       __u32           trace_mode;     /* KCOV_TRACE_PC or KCOV_TRACE_CMP */
-> +       __u32           area_size;      /* Length of coverage buffer in words */
-> +       __u32           num_handles;    /* Size of handles array */
-> +       __aligned_u64   common_handle;
-> +       __aligned_u64   handles[0];
->  };
->
->  #define KCOV_REMOTE_MAX_HANDLES                0x100
-> --
-> 2.24.0.393.g34dc348eaf-goog
->
+        http://patchwork.ozlabs.org/patch/1115804/
+
+That patch was part of a larger series that also added a couple more
+features to more aggressively save power. This series is more limited in
+scope and at the same time tries to address most of the comments that
+were voiced during review of JC's original posting.
+
+Note that this series is primarily targetted at getting system suspend
+and resume to work properly on Jetson TX2 and later, now that we can
+actually resume from system sleep on these systems. The code should also
+work on Tegra210 and earlier, though Tegra210 is still missing a bit of
+the very low-level plumbing to make the system resume properly from
+sleep.
+
+I've verified that after this I can successfully use the XHCI on Jetson
+TX2 after a system suspend/resume cycle.
+
+Note that I've claimed ownership of these patches because they differ
+from JC's patches significantly in many areas and are also a bit
+crippled compared to JC's original in terms of features. I've credited
+JC in the commit message, but didn't want him to get any blame from me
+potentially messing this up.
+
+JC, if you think this is still in line with what you had in mind, let me
+know and I'll restore your authorship.
+
+Changes in v2:
+- add Reviewed-by from JC on the one patch that is not originally his
+- remove some useless gotos as pointed out by Mathias
+
+Thierry
+
+Thierry Reding (10):
+  usb: host: xhci-tegra: Fix "tega" -> "tegra" typo
+  usb: host: xhci-tegra: Separate firmware request and load
+  usb: host: xhci-tegra: Avoid a fixed duration sleep
+  usb: host: xhci-tegra: Use CNR as firmware ready indicator
+  usb: host: xhci-tegra: Extract firmware enable helper
+  usb: host: xhci-tegra: Reuse stored register base address
+  usb: host: xhci-tegra: Enable runtime PM as late as possible
+  usb: host: xhci-tegra: Add support for XUSB context save/restore
+  usb: host: xhci-tegra: Add XUSB controller context
+  usb: host: xhci-tegra: Implement basic ELPG support
+
+ drivers/usb/host/xhci-tegra.c | 439 +++++++++++++++++++++++++++++-----
+ 1 file changed, 380 insertions(+), 59 deletions(-)
+
+-- 
+2.23.0
+
