@@ -2,171 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9860F114FE3
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 12:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B95114FF1
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 12:45:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726234AbfLFLnB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 06:43:01 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:37058 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726116AbfLFLnB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 06:43:01 -0500
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191206114259euoutp014ad68ef37c60357eb176ca912f88bd2d~dxXuvm4rU2645326453euoutp01k
-        for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2019 11:42:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191206114259euoutp014ad68ef37c60357eb176ca912f88bd2d~dxXuvm4rU2645326453euoutp01k
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1575632579;
-        bh=kuwIWw6rIR2Cn0TDLhKvKd4G6docWipEzHSuNoUUdis=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=X5hVhUD+K//ex8lrkAqPlYwQNPewTngQInA79rndSMhASM/gvlFGdjKXfeVknx5VG
-         J1uJBLbKWvqT5MMto3iXkDMSTECCKJ5idrb2Ckk9Imsde1JQV5p0K4UtVwEvlOAdra
-         SbSGqbXvtAymw2wOUvhDS0hKdnWCMgt9K8quB6fg=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20191206114259eucas1p2a71adfe70785ae5cc6520bd0ffa9e7f8~dxXuoI2mH1133911339eucas1p24;
-        Fri,  6 Dec 2019 11:42:59 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 66.28.61286.3CE3AED5; Fri,  6
-        Dec 2019 11:42:59 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191206114258eucas1p1068933c6dbd00a63af1ce507da0628f2~dxXuHj-LC2632926329eucas1p1l;
-        Fri,  6 Dec 2019 11:42:58 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20191206114258eusmtrp1f1f0e580dfd96a8d2c1a9adc825b0718~dxXuG9LtN1063710637eusmtrp1G;
-        Fri,  6 Dec 2019 11:42:58 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-bd-5dea3ec31e90
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 0F.30.07950.2CE3AED5; Fri,  6
-        Dec 2019 11:42:58 +0000 (GMT)
-Received: from [106.120.51.15] (unknown [106.120.51.15]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191206114258eusmtip21a2782061b9c950c405bc011d055bfff~dxXt0hlrW2948529485eusmtip2O;
-        Fri,  6 Dec 2019 11:42:58 +0000 (GMT)
-Subject: Re: [PATCH] usb: usb3503: Convert to use GPIO descriptors
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <402598f1-3230-c48f-c1c0-feda19cb2261@samsung.com>
-Date:   Fri, 6 Dec 2019 12:42:58 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.1
+        id S1726116AbfLFLpJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 06:45:09 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:46260 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfLFLpJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 06:45:09 -0500
+Received: by mail-io1-f71.google.com with SMTP id b186so4597716iof.13
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2019 03:45:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=WwcMHlZvXL6UgIvTRk3+yp2b9NSnw3Ab998ZqH2qKIY=;
+        b=YkQJVJS2v1iqZbyaeRSCTi0aw3yityDbXrSC7ebs4wfdP23BAghXO2y5BkFXtShlMV
+         FTRRGWI6qJwR+h6dKo7Osze4QTlwRhW8Ow6P9ryepgEB8K4fOIAewlG93jSoxJJZ9ehw
+         Qyzv6aRxG6b42W/gmQSUyfUBHqs2Pp9i2+DSbpRv57wayqNY87HoSwTOrCJ7VnhtudTh
+         Vtq3pxy3uAF2Id1zTJGeT6WWQMm8qY0D+G3i856UWMm8oV6DVvIl5zsuf8IedNwpCCis
+         /+RR8eFoQRNNJ5R/vhRfidw/V4jt1rm1cpzGVs273A9zcxw49BQopeL0EOnQuobf+Q/L
+         4tSQ==
+X-Gm-Message-State: APjAAAWFMmw1qkyxAQGHbrtTT20UyRmY5Y7OqO102g1ZgM7/nVmC78aA
+        pcHnMzt3YtL0Us9MF1XNvjAj1NOJAGmPwz2jeGglmXHk/jBy
+X-Google-Smtp-Source: APXvYqzgll03aE8X9bFCGOT20brtJScO4ej/ot6L53zHSm0cdOyTfQoEBT/Rm1Yhmg0NbYtPqkdGCdtvJ8qw0mogLxB9luxXcxQL
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdaV9zoVzpZ3SW-Nvjo6ytUCEjA6fWuW1FSBciQ24j5SZg@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFKsWRmVeSWpSXmKPExsWy7djP87qH7V7FGhz5JGXRvm8ui0Xz4vVs
-        FufPb2C3mPJnOZPFomWtzBab17WzO7B5LP5+j9lj06pONo871/aweeyfu4bdo+XkfhaPz5vk
-        AtiiuGxSUnMyy1KL9O0SuDLW704rmCJS0ThhNlsD4wGBLkZODgkBE4lT94+xdTFycQgJrGCU
-        aP3+kRXC+cIo8fRKDxOE85lRYt7Wn6wwLcvWPWeGSCxnlHg0/yo7hPOWUeLTvDYWkCphASeJ
-        D7PngNkiAjoS3dt+gs1lFjjPKLH27yGwUWwChhJdb7vYQGxeATuJx79Xg8VZBFQkWm81AE3l
-        4BAViJXoWJ4BUSIocXLmE7CZnAKBEv+/zAVrZRaQl9j+dg4zhC0ucevJfLCzJQS2sUuc+HSD
-        BWSOhICLRN9tNogPhCVeHd/CDmHLSJye3MMCUd/MKPHw3Fp2CKeHUeJy0wxGiCpricPHL7KC
-        DGIW0JRYv0sfIuwoMa33PiPEfD6JG28FIW7gk5i0bTozRJhXoqNNCKJaTWLW8XVwaw9euMQ8
-        gVFpFpLPZiH5ZhaSb2Yh7F3AyLKKUTy1tDg3PbXYMC+1XK84Mbe4NC9dLzk/dxMjMAWd/nf8
-        0w7Gr5eSDjEKcDAq8fDO+PwiVog1say4MvcQowQHs5IIbzrfy1gh3pTEyqrUovz4otKc1OJD
-        jNIcLErivMaLgFIC6YklqdmpqQWpRTBZJg5OqQZG2zqpctXnuSkTf0VOWKY9mf2IQArXlqc+
-        32b9z/tsPqFZ0eykYdzjEwXa9jwXPrHaNbuybdfOm9+wxu9Sy4/syEtlC0pvf7YR13G/dslV
-        fLZ9bu8Lj+PZiYXGXueYBRKisrgksqYuXpeXcOPF0iBRmwzDIrtOnS0L1ZdsO/Wnd900/qQ1
-        xW+UWIozEg21mIuKEwHp4dsCPQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xe7qH7F7FGhzbb2XRvm8ui0Xz4vVs
-        FufPb2C3mPJnOZPFomWtzBab17WzO7B5LP5+j9lj06pONo871/aweeyfu4bdo+XkfhaPz5vk
-        Atii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DLW
-        704rmCJS0ThhNlsD4wGBLkZODgkBE4ll654zdzFycQgJLGWUuDTvBjtEQkbi5LQGVghbWOLP
-        tS42iKLXjBJP3n5jBEkICzhJfJg9hwXEFhHQkeje9pMVpIhZ4CKjxIkz7awQHYeZJF7eXgg2
-        lk3AUKLrLcgoTg5eATuJx79Xg61gEVCRaL3VAFYjKhAr8X3lJ0aIGkGJkzOfgG3gFAiU+P9l
-        Llgvs4CZxLzND5khbHmJ7W/nQNniEreezGeawCg0C0n7LCQts5C0zELSsoCRZRWjSGppcW56
-        brGRXnFibnFpXrpecn7uJkZg3G079nPLDsaud8GHGAU4GJV4eGd8fhErxJpYVlyZe4hRgoNZ
-        SYQ3ne9lrBBvSmJlVWpRfnxRaU5q8SFGU6DnJjJLiSbnA1NCXkm8oamhuYWlobmxubGZhZI4
-        b4fAwRghgfTEktTs1NSC1CKYPiYOTqkGxry/lilhzg8uKDB5tSRJPbor9ePAvYn3FadUVoed
-        n82/Ozb0z78l7Jcb/XZ1LJx1UCRhy6qy7U5/dRaIm+VMOfF3ydELh7m/xRfutTsyla3jooYu
-        R+TxHMX0W0ZL3/UInW9omPUtXHn1Cj5168lWlVN2x8Re2fp7zZszl5QS/pU6P0s8rfrCJ0uJ
-        pTgj0VCLuag4EQASYXlV0QIAAA==
-X-CMS-MailID: 20191206114258eucas1p1068933c6dbd00a63af1ce507da0628f2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb
-References: <CGME20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb@eucas1p1.samsung.com>
-        <20191205145633.187511-1-linus.walleij@linaro.org>
-        <39902b1d-656c-2dc9-34bc-3bfe715db22f@samsung.com>
-        <e4ba86d5-3c25-8b2c-981c-efaad4ebc60c@samsung.com>
-        <CACRpkdaV9zoVzpZ3SW-Nvjo6ytUCEjA6fWuW1FSBciQ24j5SZg@mail.gmail.com>
+X-Received: by 2002:a02:13c2:: with SMTP id 185mr6769712jaz.0.1575632708138;
+ Fri, 06 Dec 2019 03:45:08 -0800 (PST)
+Date:   Fri, 06 Dec 2019 03:45:08 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000dd7e7e05990793c1@google.com>
+Subject: KASAN: slab-out-of-bounds Read in hid_field_extract
+From:   syzbot <syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Linus,
+Hello,
 
-On 06.12.2019 10:56, Linus Walleij wrote:
-> On Fri, Dec 6, 2019 at 10:14 AM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 06.12.2019 08:55, Marek Szyprowski wrote:
->>> NAK.
->>>
->>> Sorry, but this patch breaks USB3503 HUB operation on Arndale5250
->>> board. A brief scan through the code reveals that the whole control
->>> logic for the 'intn' gpio is lost.
->> Well, I've checked further and 'intn' logic is there. The issue with
->> Arndale5250 board is something different. Changing the gpio active
->> values in arch/arm/boot/dts/exynos5250-arndale.dts from GPIO_ACTIVE_LOW
->> to GPIO_ACTIVE_HIGH fixed operation of usb3503 HUB. I really wonder why
->> it worked fine with non-descriptor code and the ACTIVE_LOW DT flags...
->>
->> I'm not sure how to handle this. Old code works also fine with DT flags
->> changed to GPIO_ACTIVE_HIGH, which seems to be a proper value for those
->> gpio lines.
-> We should of course fix up the device trees so the polarity in them
-> is correct.
+syzbot found the following crash on:
 
-Okay. I've checked the driver and dts:
+HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=11d12861e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
+dashboard link: https://syzkaller.appspot.com/bug?extid=09ef48aa58261464b621
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101a781ee00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15d71c2ae00000
 
-According to the USB3503 datasheet, reset-gpios should be ACTIVE_LOW 
-probably for the all boards. The driver itself should be then fixed to 
-set reset line to the opposite values: HIGH (ASSERTED) during probe and 
-suspend, and LOW (DE-ASSERTED) during normal operation.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com
 
-With the above assumptions, the following DTS should be fixed:
+==================================================================
+BUG: KASAN: slab-out-of-bounds in __extract drivers/hid/hid-core.c:1345  
+[inline]
+BUG: KASAN: slab-out-of-bounds in hid_field_extract+0x150/0x170  
+drivers/hid/hid-core.c:1365
+Read of size 1 at addr ffff8881cf50f000 by task swapper/0/0
 
-arch/arm/boot/dts/exynos4412-odroid-common.dtsi: invert RESET gpio 
-polarity (to ACTIVE_LOW)
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.4.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+  __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:638
+  __extract drivers/hid/hid-core.c:1345 [inline]
+  hid_field_extract+0x150/0x170 drivers/hid/hid-core.c:1365
+  hid_input_field drivers/hid/hid-core.c:1537 [inline]
+  hid_report_raw_event+0x448/0xed0 drivers/hid/hid-core.c:1757
+  hid_input_report+0x315/0x3f0 drivers/hid/hid-core.c:1824
+  hid_irq_in+0x50e/0x690 drivers/hid/usbhid/hid-core.c:284
+  __usb_hcd_giveback_urb+0x1f2/0x470 drivers/usb/core/hcd.c:1648
+  usb_hcd_giveback_urb+0x368/0x420 drivers/usb/core/hcd.c:1713
+  dummy_timer+0x123d/0x2fdb drivers/usb/gadget/udc/dummy_hcd.c:1966
+  call_timer_fn+0x179/0x650 kernel/time/timer.c:1404
+  expire_timers kernel/time/timer.c:1449 [inline]
+  __run_timers kernel/time/timer.c:1773 [inline]
+  __run_timers kernel/time/timer.c:1740 [inline]
+  run_timer_softirq+0x5e3/0x1490 kernel/time/timer.c:1786
+  __do_softirq+0x221/0x912 kernel/softirq.c:292
+  invoke_softirq kernel/softirq.c:373 [inline]
+  irq_exit+0x178/0x1a0 kernel/softirq.c:413
+  exiting_irq arch/x86/include/asm/apic.h:536 [inline]
+  smp_apic_timer_interrupt+0x12f/0x500 arch/x86/kernel/apic/apic.c:1137
+  apic_timer_interrupt+0xf/0x20 arch/x86/entry/entry_64.S:829
+  </IRQ>
+RIP: 0010:default_idle+0x28/0x2e0 arch/x86/kernel/process.c:700
+Code: cc cc 41 56 41 55 65 44 8b 2d 1c e6 89 7a 41 54 55 53 0f 1f 44 00 00  
+e8 76 ed cb fb e9 07 00 00 00 0f 00 2d 2a 6c 4a 00 fb f4 <65> 44 8b 2d f8  
+e5 89 7a 0f 1f 44 00 00 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffffff86c07da8 EFLAGS: 00000246 ORIG_RAX: ffffffffffffff13
+RAX: 0000000000000007 RBX: ffffffff86c2b240 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000006 RDI: ffffffff86c2ba8c
+RBP: fffffbfff0d85648 R08: ffffffff86c2b240 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+  cpuidle_idle_call kernel/sched/idle.c:154 [inline]
+  do_idle+0x3c3/0x4e0 kernel/sched/idle.c:269
+  cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:361
+  start_kernel+0x82a/0x864 init/main.c:784
+  secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:242
 
-arch/arm/boot/dts/exynos5250-arndale.dts: invert CONNECT gpio polarity 
-(to ACTIVE_HIGH)
+Allocated by task 12:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  __kasan_kmalloc mm/kasan/common.c:512 [inline]
+  __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:485
+  kmalloc include/linux/slab.h:561 [inline]
+  hcd_buffer_alloc+0x1ed/0x290 drivers/usb/core/buffer.c:132
+  usb_alloc_coherent+0x5d/0x80 drivers/usb/core/usb.c:910
+  hid_alloc_buffers drivers/hid/usbhid/hid-core.c:846 [inline]
+  usbhid_start+0x60b/0x22f0 drivers/hid/usbhid/hid-core.c:1075
+  hid_hw_start+0x5d/0x130 drivers/hid/hid-core.c:2022
+  ms_probe+0x159/0x4d0 drivers/hid/hid-microsoft.c:394
+  hid_device_probe+0x2be/0x3f0 drivers/hid/hid-core.c:2255
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  hid_add_device drivers/hid/hid-core.c:2411 [inline]
+  hid_add_device+0x33c/0x9a0 drivers/hid/hid-core.c:2360
+  usbhid_probe+0xa81/0xfa0 drivers/hid/usbhid/hid-core.c:1386
+  usb_probe_interface+0x305/0x7a0 drivers/usb/core/driver.c:361
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_set_configuration+0xe67/0x1740 drivers/usb/core/message.c:2023
+  generic_probe+0x9d/0xd5 drivers/usb/core/generic.c:210
+  usb_probe_device+0x99/0x100 drivers/usb/core/driver.c:266
+  really_probe+0x281/0x6d0 drivers/base/dd.c:548
+  driver_probe_device+0x104/0x210 drivers/base/dd.c:721
+  __device_attach_driver+0x1c2/0x220 drivers/base/dd.c:828
+  bus_for_each_drv+0x162/0x1e0 drivers/base/bus.c:430
+  __device_attach+0x217/0x360 drivers/base/dd.c:894
+  bus_probe_device+0x1e4/0x290 drivers/base/bus.c:490
+  device_add+0x1480/0x1c20 drivers/base/core.c:2487
+  usb_new_device.cold+0x6a4/0xe79 drivers/usb/core/hub.c:2537
+  hub_port_connect drivers/usb/core/hub.c:5184 [inline]
+  hub_port_connect_change drivers/usb/core/hub.c:5324 [inline]
+  port_event drivers/usb/core/hub.c:5470 [inline]
+  hub_event+0x1e59/0x3860 drivers/usb/core/hub.c:5552
+  process_one_work+0x92b/0x1530 kernel/workqueue.c:2264
+  worker_thread+0x96/0xe20 kernel/workqueue.c:2410
+  kthread+0x318/0x420 kernel/kthread.c:255
+  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-arch/arm/boot/dts/exynos5410-odroidxu.dts: invert RESET gpio polarity 
-(to ACTIVE_LOW)
+Freed by task 238:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  kasan_set_free_info mm/kasan/common.c:334 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:473
+  slab_free_hook mm/slub.c:1425 [inline]
+  slab_free_freelist_hook mm/slub.c:1458 [inline]
+  slab_free mm/slub.c:3005 [inline]
+  kfree+0xdc/0x310 mm/slub.c:3957
+  uevent_show+0x2b9/0x360 drivers/base/core.c:1529
+  dev_attr_show+0x4b/0x90 drivers/base/core.c:1225
+  sysfs_kf_seq_show+0x1f8/0x410 fs/sysfs/file.c:60
+  seq_read+0x4b9/0x10f0 fs/seq_file.c:229
+  kernfs_fop_read+0xe9/0x560 fs/kernfs/file.c:251
+  __vfs_read+0x76/0x100 fs/read_write.c:425
+  vfs_read+0x1ea/0x430 fs/read_write.c:461
+  ksys_read+0x127/0x250 fs/read_write.c:587
+  do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts: invert RESET 
-gpio polarity (to ACTIVE_LOW), not sure about INTN gpio
+The buggy address belongs to the object at ffff8881cf50e000
+  which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 0 bytes to the right of
+  4096-byte region [ffff8881cf50e000, ffff8881cf50f000)
+The buggy address belongs to the page:
+page:ffffea00073d4200 refcount:1 mapcount:0 mapping:ffff8881da40c280  
+index:0x0 compound_mapcount: 0
+raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da40c280
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
 
-arch/arm/boot/dts/sun8i-a83t-cubietruck-plus.dts: invert RESET gpio 
-polarity (to ACTIVE_LOW)
+Memory state around the buggy address:
+  ffff8881cf50ef00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ffff8881cf50ef80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ffff8881cf50f000: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                    ^
+  ffff8881cf50f080: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff8881cf50f100: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+==================================================================
 
-I've tested such changes with your patch on Odroid X2, U3, XU and 
-Arndale boards - USB3503 worked fine.
 
-I can prepare patchset with the above changes (dts and the driver logic).
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> If the compatibility with elder device trees is mandatory I will make
-> a quirk into the gpiolib-of.c that enforce active high on this specific
-> GPIO line. This is pretty straight-forward, I can just use the compatible
-> of the board and usb3503 in combination to enforce it.
-
-Frankly, I don't care about compatibility with old dtbs. It is already 
-broken by other changes in the bindings.
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
