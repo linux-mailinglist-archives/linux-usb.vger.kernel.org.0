@@ -2,90 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB35D1150F2
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 14:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F151150FD
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 14:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbfLFNVc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 08:21:32 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43770 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbfLFNVc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 08:21:32 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a13so7615942ljm.10
-        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2019 05:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0gHoEDyloYkfzEPNSS6uEQmV6zqlFrICEVvBJMY5Ms8=;
-        b=nzjyFBHRYOpqjcKpHHACGU75XMNohRYxY3jL07dTPgdsoDuuF84wI0heY+ELzoyIHv
-         /FROUtlTzRyfwsyI2GyeDX7RVwEQMBMmhk0mKdQN+zySHzU4LAlEoec8P5G+LBD02rtg
-         XYYgxHZdNO4yMwnu+Lq1TraT/tVimwYXwvyKTswid8JQ0ax2D663gCTWrZvifvM3F2jQ
-         ZxquFfXYB9USWi7njaLRr5iUPbjwQBli6ccvSezx6B8GEvTb36Flg/OYjwRdfMWl0ZBK
-         Uko1FX2T+w2F/IaxZ9XIPXJ7Nh4246499Fvb3kuEZ5x5sQeTuEiGfmdoGq5wqtzKcT+E
-         uDfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0gHoEDyloYkfzEPNSS6uEQmV6zqlFrICEVvBJMY5Ms8=;
-        b=LjjyizFdP5jFqfqWAcvMwrtta+PaV7jUqs2ZLz6qi/VBZNyECY4tOGhSJK+rEadyiN
-         jB+iWXxA47cLQ5Pvs0rWREd5VjPwSfa0kmwxEsEahHSZqXjpZXU0YvNFDP/tDtCZ3Bv9
-         AVde3H7dwW+GzvgQajrej5stwYpOLSbCtm7bf4aLiNVAnJBfn03iPx7fN9wgaU/aBtRj
-         muRt8Cl8XODuZ8R1ML4TPq8luz/P0GKdOYw9msJfaP7QjJthcXx8pIuag9Fzw0xNjpW/
-         34nUladkVHZCMhXYvK1UK4sbV5rO1ZaoHMTsnJejIO8A6SGcErkZUwjPqIHXXHO5XsZC
-         4qSg==
-X-Gm-Message-State: APjAAAUc6B+O0w94YZwDLc5jSb1ZMLt5aE3lrhyrB2+M4KFyR9zMpwxp
-        YiV1ClXRgEkt/rEYlyf1XGZ3eE/yn+JXiWW2YzOtoQ==
-X-Google-Smtp-Source: APXvYqzZjz1qTmUyRJMXv2yDBwl/pZEU99zbPdxrMg0D4sa/u0KAyg8a9d0KcM0YBVHAAez6hXSVMCWb1sF4c28kBzw=
-X-Received: by 2002:a2e:8045:: with SMTP id p5mr8665666ljg.251.1575638490622;
- Fri, 06 Dec 2019 05:21:30 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb@eucas1p1.samsung.com>
- <20191205145633.187511-1-linus.walleij@linaro.org> <39902b1d-656c-2dc9-34bc-3bfe715db22f@samsung.com>
- <e4ba86d5-3c25-8b2c-981c-efaad4ebc60c@samsung.com> <CACRpkdZmPN-3_+VgBcrC_DczT4HzBWAg6tDa1hd=yAktnpYPdA@mail.gmail.com>
- <cc924d9c-d8b2-d14e-f758-556551557e5d@samsung.com>
-In-Reply-To: <cc924d9c-d8b2-d14e-f758-556551557e5d@samsung.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 6 Dec 2019 14:21:19 +0100
-Message-ID: <CACRpkdYABrazSkSn0Qn-dCguxhgJUiQ2viDRMw4VAggafmZrQQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: usb3503: Convert to use GPIO descriptors
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726214AbfLFN2x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 08:28:53 -0500
+Received: from xavier.telenet-ops.be ([195.130.132.52]:51588 "EHLO
+        xavier.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726171AbfLFN2x (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 08:28:53 -0500
+Received: from ramsan ([84.195.182.253])
+        by xavier.telenet-ops.be with bizsmtp
+        id adUr2100C5USYZQ01dUr2F; Fri, 06 Dec 2019 14:28:52 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1idDf9-0006FD-Ag; Fri, 06 Dec 2019 14:28:51 +0100
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1idDf9-0007f1-89; Fri, 06 Dec 2019 14:28:51 +0100
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-usb@vger.kernel.org, linux-sh@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] usb: host: ehci-sh: Remove unused platform data support
+Date:   Fri,  6 Dec 2019 14:28:49 +0100
+Message-Id: <20191206132849.29406-1-geert+renesas@glider.be>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 6, 2019 at 12:53 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
-> On 06.12.2019 10:58, Linus Walleij wrote:
-> > On Fri, Dec 6, 2019 at 10:14 AM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> >
-> > BTW:
-> >
-> >> I really wonder why
-> >> it worked fine with non-descriptor code and the ACTIVE_LOW DT flags...
-> > The old code ignored the polarity flags in the device tree and
-> > assumed everything was active high, that's how. It could as well
-> > be hardcoded to 1337.
->
-> Okay, then to restore current driver behavior after your patch, one has
-> to change gpio flags in all dts to ACTIVE_HIGH...
+ehci_sh_platdata was never used, remove it. It can be resurrected from
+git history when needed.
 
-Yeah :/
+This basically reverts commit 3e0c70d050c7ed6d ("usb: ehci-sh: Add PHY
+init function with platform data").
 
-I think we should do a two-stage rocket here, if you make a patch to
-all the DTS files I will make sure to add some logic enforcing the
-right line levels in this patch as well.
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/usb/host/ehci-sh.c            |  7 -------
+ include/linux/platform_data/ehci-sh.h | 16 ----------------
+ 2 files changed, 23 deletions(-)
+ delete mode 100644 include/linux/platform_data/ehci-sh.h
 
-I'll make sure to assert reset expecting it to be flagged as active low.
+diff --git a/drivers/usb/host/ehci-sh.c b/drivers/usb/host/ehci-sh.c
+index 2afde14dc425c261..c25c51d26f26035b 100644
+--- a/drivers/usb/host/ehci-sh.c
++++ b/drivers/usb/host/ehci-sh.c
+@@ -8,7 +8,6 @@
+  */
+ #include <linux/platform_device.h>
+ #include <linux/clk.h>
+-#include <linux/platform_data/ehci-sh.h>
+ 
+ struct ehci_sh_priv {
+ 	struct clk *iclk, *fclk;
+@@ -76,7 +75,6 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
+ {
+ 	struct resource *res;
+ 	struct ehci_sh_priv *priv;
+-	struct ehci_sh_platdata *pdata;
+ 	struct usb_hcd *hcd;
+ 	int irq, ret;
+ 
+@@ -89,8 +87,6 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
+ 		goto fail_create_hcd;
+ 	}
+ 
+-	pdata = dev_get_platdata(&pdev->dev);
+-
+ 	/* initialize hcd */
+ 	hcd = usb_create_hcd(&ehci_sh_hc_driver, &pdev->dev,
+ 			     dev_name(&pdev->dev));
+@@ -127,9 +123,6 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
+ 	clk_enable(priv->fclk);
+ 	clk_enable(priv->iclk);
+ 
+-	if (pdata && pdata->phy_init)
+-		pdata->phy_init();
+-
+ 	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+ 	if (ret != 0) {
+ 		dev_err(&pdev->dev, "Failed to add hcd");
+diff --git a/include/linux/platform_data/ehci-sh.h b/include/linux/platform_data/ehci-sh.h
+deleted file mode 100644
+index 219bd79dabfc0a0e..0000000000000000
+--- a/include/linux/platform_data/ehci-sh.h
++++ /dev/null
+@@ -1,16 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0
+- *
+- * EHCI SuperH driver platform data
+- *
+- * Copyright (C) 2012  Nobuhiro Iwamatsu <nobuhiro.iwamatsu.yj@renesas.com>
+- * Copyright (C) 2012  Renesas Solutions Corp.
+- */
+-
+-#ifndef __USB_EHCI_SH_H
+-#define __USB_EHCI_SH_H
+-
+-struct ehci_sh_platdata {
+-	void (*phy_init)(void); /* Phy init function */
+-};
+-
+-#endif /* __USB_EHCI_SH_H */
+-- 
+2.17.1
 
-Yours,
-Linus Walleij
