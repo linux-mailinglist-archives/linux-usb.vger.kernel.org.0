@@ -2,123 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C32115101
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 14:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39474115106
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 14:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726201AbfLFNbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 08:31:14 -0500
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:42820 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726171AbfLFNbO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 08:31:14 -0500
-Received: by mail-qt1-f202.google.com with SMTP id e8so4992904qtg.9
-        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2019 05:31:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=OuMl2Padgi2F86LngiXW/rNKGPqLqyPoo2tKLqo+OZ0=;
-        b=aq5hmJ8/VLFT+W7QgPHzcpnRBd7dANE61topUxdtfQql1yj91FQAEXDVn9EicxiMhZ
-         xurBhpeq7rANhxnf+7uxkxe5txTE/ynIHd+exOTEYUIi7PZ2I3qgF8qYRPL6XP8Heg9N
-         hFmzWsK1AXYnb1Du/Xh4YAUS8f4bf2LzzSD4c1KzHAMkrZKBfpbb9hqXABIjgn3Hji6H
-         bKL67YNg6+sGguM3Ar83PaxGR3x7Yhx4t/xJ07wStJOSZBDnPMNF/1JqB+P16ZjNbQaY
-         c/EhzeWtQyPQkLzFS970HBgRD2k8IyVLkfQ6l7njD6M8COrqs+RZer7RDPvH+Tueyqli
-         jQxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=OuMl2Padgi2F86LngiXW/rNKGPqLqyPoo2tKLqo+OZ0=;
-        b=Ju86F0xnSd//zRrlgsyzgQfZm3tVh8RceF6kGPZI+vVvMN0LkA0UAEiSuu/WP57m47
-         +AZoeCyl6nhOovxHmf3UCOfxidfzqYmFGiIfBHH2p3taHk4/pJH9S2Q3O5RsFF9lDhAL
-         NuLpuW3ScHSb1rb+pcHEIA7yuScFPY7zns8wokPWJEHlEPBZz8V4B4Z6oIR2EzkXjrWK
-         nmVtkpFDsh5gfL1XT6Gr1ukgd7pTwCIQLTujNjL5rfSiY3Uzqv7FiEtYEdAydfS++Nck
-         ePizRH1lO2qdEXz95NnkRGIYmasccKL8UNKkbOfDyLo9vOwAu1Nz0qdz+LRweom4g58J
-         UDFg==
-X-Gm-Message-State: APjAAAWFSWQL4xthDKyH2ZeZj/IOG+6P55ujOKGTpOD6O5eVJs1lUxTU
-        6Fxy+QCExseYrFOkpi7zmlqW/4wIaLtf7Xgry8K4YnO3YZV2nupL1AVpooUSv1bTmRvB4S2pQy8
-        tP8dZaKqZKnOtuWwhjgEtxZDCnPK2evX5C1lVQF/KsUPPMB+y+dKh6u6prxq3UccT0AsTrptHTy
-        /6
-X-Google-Smtp-Source: APXvYqzMp0oW8UTSsFXrzpQYp4Gyrxm04PWtL4iunaDNSy7yDWnj6tE5mH3i/jWKt7xBBt3heTmpptyZOljrCFJX
-X-Received: by 2002:a0c:b455:: with SMTP id e21mr12584924qvf.72.1575639073416;
- Fri, 06 Dec 2019 05:31:13 -0800 (PST)
-Date:   Fri,  6 Dec 2019 14:31:09 +0100
-Message-Id: <9e91020876029cfefc9211ff747685eba9536426.1575638983.git.andreyknvl@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.24.0.393.g34dc348eaf-goog
-Subject: [PATCH v2] kcov: fix struct layout for kcov_remote_arg
-From:   Andrey Konovalov <andreyknvl@google.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S1726237AbfLFNd0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 08:33:26 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:38547 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726213AbfLFNd0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 08:33:26 -0500
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191206133323euoutp0265fccf674d66321540d2ac351954545f~dy4HY_Gc50353003530euoutp02d
+        for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2019 13:33:23 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191206133323euoutp0265fccf674d66321540d2ac351954545f~dy4HY_Gc50353003530euoutp02d
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1575639203;
+        bh=CcxllySEdyf3C3JiKM7KeKc9NaD41RLksUaGT/pxOnY=;
+        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
+        b=AtRcM0JC1+o6gmP8BcjhtYtq0MtEKJSsAmrqJwlFQRzEb/cIxNU1LLhYrzKTbSPVT
+         W/tc5Vtxc7r6bUYvVZWFNk9JX3XfDu9CbUKyBGSJSU91ctTdvaiCOWR1R6BYKomh2R
+         F/aBZuNRh/C7qAB33TyFkmfKUwmyK277cxVX80NA=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191206133322eucas1p1c06e33e785f94611dfe20785a227b13b~dy4HCNf1A2458824588eucas1p1i;
+        Fri,  6 Dec 2019 13:33:22 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id DB.26.61286.2A85AED5; Fri,  6
+        Dec 2019 13:33:22 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191206133322eucas1p2ba5c0f6c937c44273eed2f09d6bd7802~dy4GqlNQf3064130641eucas1p2F;
+        Fri,  6 Dec 2019 13:33:22 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20191206133322eusmtrp111fbe766a0870dee5eedbf5aea0fa446~dy4GqFMj41912219122eusmtrp1S;
+        Fri,  6 Dec 2019 13:33:22 +0000 (GMT)
+X-AuditID: cbfec7f2-f0bff7000001ef66-ea-5dea58a2d0d3
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2B.DC.07950.2A85AED5; Fri,  6
+        Dec 2019 13:33:22 +0000 (GMT)
+Received: from [106.120.51.15] (unknown [106.120.51.15]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20191206133322eusmtip237b48ebaf1ed9eedf375a8eafb45cf87~dy4GWwhrr0131801318eusmtip2R;
+        Fri,  6 Dec 2019 13:33:22 +0000 (GMT)
+Subject: Re: [PATCH] usb: usb3503: Convert to use GPIO descriptors
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
         Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        "Jacky . Cao @ sony . com" <Jacky.Cao@sony.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Stefan Agner <stefan@agner.ch>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+Message-ID: <c39f102f-532d-fb07-b5f4-920412fafef7@samsung.com>
+Date:   Fri, 6 Dec 2019 14:33:21 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        Thunderbird/60.9.1
+MIME-Version: 1.0
+In-Reply-To: <CACRpkdYABrazSkSn0Qn-dCguxhgJUiQ2viDRMw4VAggafmZrQQ@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJKsWRmVeSWpSXmKPExsWy7djP87qLIl7FGqxuNbBo3zeXxaJ58Xo2
+        i/PnN7BbTPmznMli0bJWZovN69rZHdg8Fn+/x+yxaVUnm8eda3vYPPbPXcPu0XJyP4vH501y
+        AWxRXDYpqTmZZalF+nYJXBkNa/4yFcznqrh9ey1jA2MPRxcjB4eEgInE7a2sXYycHEICKxgl
+        rh5W6GLkArK/MEq0TP7CDJH4zCjRuFwTxAapn/xoFytE0XJGiZ6jO1kgnLeMEmtXr2QHqRIW
+        cJL4MHsOC4gtIqAj0b3tJ1gHs8B5oKK/h8D2sQkYSnS97WIDsXkF7CR2n/sGFmcRUJHYt34e
+        G8h5ogKxEh3LMyBKBCVOznwCNpNTIFDizPM7YLuYBeQltr+dwwxhi0vcejKfCWSXhMAmdomV
+        izayQ5ztInFr3xtmCFtY4tXxLVBxGYnTk3tYIBqaGSUenlvLDuH0MEpcbprBCFFlLXH4+EVW
+        kIuYBTQl1u/Shwg7Skzrvc8ICUc+iRtvBSGO4JOYtG06M0SYV6KjTQiiWk1i1vF1cGsPXrjE
+        PIFRaRaS12YheWcWkndmIexdwMiyilE8tbQ4Nz212DAvtVyvODG3uDQvXS85P3cTIzABnf53
+        /NMOxq+Xkg4xCnAwKvHwzvj8IlaINbGsuDL3EKMEB7OSCG8638tYId6UxMqq1KL8+KLSnNTi
+        Q4zSHCxK4rzGi4BSAumJJanZqakFqUUwWSYOTqkGxn1HFzVqFLWGpenG2W14LHpnadUSm/cz
+        PewepQVH/udXzgn7NUX+y+es7qIlhiK1uZdd5X5pvv6sF/ik0ttAR32qRTM3K9vlt7K72C4b
+        3Vf98HKzvNGuEz33/1qwnmMpE/HYIbOQf8Wc0x63fFperGEu4are57hzz3f97mrxzxeWq+26
+        PqHwrhJLcUaioRZzUXEiADxXAXA8AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrHIsWRmVeSWpSXmKPExsVy+t/xe7qLIl7FGjybJ27Rvm8ui0Xz4vVs
+        FufPb2C3mPJnOZPFomWtzBab17WzO7B5LP5+j9lj06pONo871/aweeyfu4bdo+XkfhaPz5vk
+        Atii9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX07WxSUnMyy1KL9O0S9DIa
+        1vxlKpjPVXH79lrGBsYeji5GTg4JAROJyY92sXYxcnEICSxllGg7+ZcRIiEjcXJaAyuELSzx
+        51oXG4gtJPCaUeLjRhcQW1jASeLD7DksILaIgI5E97afYIOYBS4ySpw40w41dT+zxPJ7S8Em
+        sQkYSnS9hZjEK2AnsfvcN7A4i4CKxL7188DiogKxEt9XfmKEqBGUODnzCdgGToFAiTPP77CD
+        2MwCZhLzNj9khrDlJba/nQNli0vcejKfaQKj0Cwk7bOQtMxC0jILScsCRpZVjCKppcW56bnF
+        RnrFibnFpXnpesn5uZsYgXG37djPLTsYu94FH2IU4GBU4uGd8flFrBBrYllxZe4hRgkOZiUR
+        3nS+l7FCvCmJlVWpRfnxRaU5qcWHGE2BnpvILCWanA9MCXkl8YamhuYWlobmxubGZhZK4rwd
+        AgdjhATSE0tSs1NTC1KLYPqYODilGhhTzvhOeXa0PFZF/w1vf/bPY4+7L996ktx84wBrsPdc
+        /RnlSV5L96z+L5DTkfDlT3T7jC/b37ZGRE24rq3M3ntwf6SWz8w5m6af3af5MPHS43PnChne
+        b4lYJqXMcbh9b6HtNWVl/vCKc5+iPxx9pRk+KaF46nR3l5eyYS8XNtZGTffX7He7Xc6ixFKc
+        kWioxVxUnAgA8OW+z9ECAAA=
+X-CMS-MailID: 20191206133322eucas1p2ba5c0f6c937c44273eed2f09d6bd7802
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb
+References: <CGME20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb@eucas1p1.samsung.com>
+        <20191205145633.187511-1-linus.walleij@linaro.org>
+        <39902b1d-656c-2dc9-34bc-3bfe715db22f@samsung.com>
+        <e4ba86d5-3c25-8b2c-981c-efaad4ebc60c@samsung.com>
+        <CACRpkdZmPN-3_+VgBcrC_DczT4HzBWAg6tDa1hd=yAktnpYPdA@mail.gmail.com>
+        <cc924d9c-d8b2-d14e-f758-556551557e5d@samsung.com>
+        <CACRpkdYABrazSkSn0Qn-dCguxhgJUiQ2viDRMw4VAggafmZrQQ@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make the layout of kcov_remote_arg the same for 32-bit and 64-bit code.
-This makes it more convenient to write userspace apps that can be compiled
-into 32-bit or 64-bit binaries and still work with the same 64-bit kernel.
-Also use proper __u32 types in uapi headers instead of unsigned ints.
+Hi Linus,
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
+On 06.12.2019 14:21, Linus Walleij wrote:
+> On Fri, Dec 6, 2019 at 12:53 PM Marek Szyprowski
+> <m.szyprowski@samsung.com> wrote:
+>> On 06.12.2019 10:58, Linus Walleij wrote:
+>>> On Fri, Dec 6, 2019 at 10:14 AM Marek Szyprowski
+>>> <m.szyprowski@samsung.com> wrote:
+>>>
+>>> BTW:
+>>>
+>>>> I really wonder why
+>>>> it worked fine with non-descriptor code and the ACTIVE_LOW DT flags...
+>>> The old code ignored the polarity flags in the device tree and
+>>> assumed everything was active high, that's how. It could as well
+>>> be hardcoded to 1337.
+>> Okay, then to restore current driver behavior after your patch, one has
+>> to change gpio flags in all dts to ACTIVE_HIGH...
+> Yeah :/
+>
+> I think we should do a two-stage rocket here, if you make a patch to
+> all the DTS files I will make sure to add some logic enforcing the
+> right line levels in this patch as well.
+>
+> I'll make sure to assert reset expecting it to be flagged as active low.
 
-Changes v1->v2:
-- Use __aligned_u64 instead of adding a __u32 reserved field.
+Frankly, if delay applying this patch one release after the DTS changes 
+are applied, no workarounds in gpio core are needed. In such case we 
+combine your patch with a driver logic cleanup for the reset gpio, so 
+DTS can use ACTIVE_LOW flag then.
 
- Documentation/dev-tools/kcov.rst | 10 +++++-----
- include/uapi/linux/kcov.h        | 10 +++++-----
- 2 files changed, 10 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index 36890b026e77..1c4e1825d769 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -251,11 +251,11 @@ selectively from different subsystems.
- .. code-block:: c
- 
-     struct kcov_remote_arg {
--	unsigned	trace_mode;
--	unsigned	area_size;
--	unsigned	num_handles;
--	uint64_t	common_handle;
--	uint64_t	handles[0];
-+	__u32		trace_mode;
-+	__u32		area_size;
-+	__u32		num_handles;
-+	__aligned_u64	common_handle;
-+	__aligned_u64	handles[0];
-     };
- 
-     #define KCOV_INIT_TRACE			_IOR('c', 1, unsigned long)
-diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
-index 409d3ad1e6e2..1d0350e44ae3 100644
---- a/include/uapi/linux/kcov.h
-+++ b/include/uapi/linux/kcov.h
-@@ -9,11 +9,11 @@
-  * and the comment before kcov_remote_start() for usage details.
-  */
- struct kcov_remote_arg {
--	unsigned int	trace_mode;	/* KCOV_TRACE_PC or KCOV_TRACE_CMP */
--	unsigned int	area_size;	/* Length of coverage buffer in words */
--	unsigned int	num_handles;	/* Size of handles array */
--	__u64		common_handle;
--	__u64		handles[0];
-+	__u32		trace_mode;	/* KCOV_TRACE_PC or KCOV_TRACE_CMP */
-+	__u32		area_size;	/* Length of coverage buffer in words */
-+	__u32		num_handles;	/* Size of handles array */
-+	__aligned_u64	common_handle;
-+	__aligned_u64	handles[0];
- };
- 
- #define KCOV_REMOTE_MAX_HANDLES		0x100
+Best regards
 -- 
-2.24.0.393.g34dc348eaf-goog
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
