@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 250211151EB
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 15:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C22A1151EC
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 15:07:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726269AbfLFOHC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 09:07:02 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37720 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbfLFOHC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 09:07:02 -0500
-Received: by mail-wr1-f65.google.com with SMTP id w15so7933096wru.4;
-        Fri, 06 Dec 2019 06:07:00 -0800 (PST)
+        id S1726271AbfLFOHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 09:07:03 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42027 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfLFOHD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 09:07:03 -0500
+Received: by mail-wr1-f68.google.com with SMTP id a15so7859595wrf.9;
+        Fri, 06 Dec 2019 06:07:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=r+qw/KtpSnFUlLnEiXkCoitlkbC2ot04gXVHUo3aq5g=;
-        b=U2e01gsaO6D0oFjk1pJaoOCVOMVQvKTyxkgqZZlC1QmBjmxOiDXxOh4ArZiMyHzGJi
-         IoA0beyKXC8KYkPHUgbG9XOaNInvpfRNClK8pUmFmjelWfnIHlePMj+R00sD4mR1yOOe
-         9ckasAaiwnGzI4+INrnqYLvNfbvS1kFYUoEvd+Y6pHcAUNEcBlGqI9pTyv/jN37yhKAO
-         aMRzkPtWTQ/dan9y9t+Wtybq0ghkloP4xZDBCzaXIqP+PmgtCa2UuKAaXXbw+SJ3txY4
-         J+pbxgso4WpLdVVGUtSOgV5NvOZAKSn15Jqz1OX9T7xDEfCzxT9Uvh560m71T7MU9ogR
-         HVSQ==
+        bh=0VJGaxbi6i6aCC2UDQdo84Bf2JzYtiGZVASwYuZ6xg4=;
+        b=CU/3JMTmqKP3QMw1+UdIUNuPAEZLOSHuUDzw4Cf5YTL929W4bOmwDnGn72d/T7l5rw
+         c+h8c7EOXZ6SHVZnguaZs/b9rnjHeD85Tt/vSG9qtwL8hO6xJhI6QU6yjojHsJsXt5Cf
+         PjiLtMiHDAsyA5f3Oif4HluIKVA9lyBSDo6Yk91Elq0VsjDV2hp5+tyxT+LLr45m04fO
+         EyI/qSsLMsojdOmKtSKCjWHZeL25bVv8xmRSEakBVxxQ7s46pjLwsRuo8CAnDBBpP1OZ
+         TbvKDowKjkEeeLOVICM9YwnBLWfWaYXODlWMgw/bhCJnMrYzspqK4zRWCbLwqalgiCD/
+         YGUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=r+qw/KtpSnFUlLnEiXkCoitlkbC2ot04gXVHUo3aq5g=;
-        b=GWI7SF5aiChjYwHkPeCiuWPB/YuhwajteIrZCD5U65LMJkhGzJKCLJoa2T/NZ8B+br
-         5yM8T7lBaWq/zjGRBzpcyrh0OsBlmtTpkAmokeHB8QtueKu1MIBQtejyEKshLhg8yWSg
-         lOn4ycGtMoDmJaIOQ0LAfBlWHSWepH6peZJzaLeK92+k6VgNzQC2N8Wcg0shn/KP0svr
-         8WzMNqnL9pbhj4+rR6oUFH95uQvKvM5KoPsOE3oKh51SZK7inGatbK+I2j5dWeKj7ZxG
-         UmUQJ9j/tYB+dQc9ZwPnrEQRVuzA3aQprreQATOuIeJW9JQB40nOATjdTqAiVh9Kit2Y
-         Aiuw==
-X-Gm-Message-State: APjAAAW4fYBoE1N+bVdjBRJdUI/bQ8iAdsnARaoP7LkPfj1K2IAy9jat
-        YD8R7IQbNFFDrLjzle2gdZOUMktyybc=
-X-Google-Smtp-Source: APXvYqwdsykxvaOISNNGQDaC194gKkcLiZnZ2qUq/NmcMin/7SFxFsMPYxniDL7twHznVzfL1MZrGA==
-X-Received: by 2002:adf:c74f:: with SMTP id b15mr15928939wrh.272.1575641219627;
-        Fri, 06 Dec 2019 06:06:59 -0800 (PST)
+        bh=0VJGaxbi6i6aCC2UDQdo84Bf2JzYtiGZVASwYuZ6xg4=;
+        b=kUnQNnGDfav0KYznRaeNdm5iSd6hW5BYws/S6PumExFd3j6Gim2pqfISAM+XoofNir
+         s52uLBnPqLd/6QaquyUPssaQcDNszNTiYfWyKcij9lcjQhw0eM8MeY6SqVUdFnMofHNU
+         57X1k+zXLbsHdQE71PnEzaGAShSPI+PWruBx8S70/DXE+E1l9ddN2jxUv5RvWgHVqxGU
+         sfT3zu2Asm9JIN6th7CViBFuTX17Sjt68qnOHvOsee1wTUzI6thhSBs+2Md/xr36BF6M
+         cd33kSymXAls8nGUEHyZnEj/mtTfwat1+CFAoXfSVuWeNI1D4zDGVq8b49YhdKvwLuhE
+         g3+Q==
+X-Gm-Message-State: APjAAAXtnfHP8Gi6dai5p/gDYcj8UzStIwq82eHMvPPx8uxgQPP2DZQL
+        LZZMS9c5GK2jFRiVRwrlmR4=
+X-Google-Smtp-Source: APXvYqyf3mB980rFZ1TWpo5G50G8837RUqQ4IpcYD7nw5yCNXh3IXeAs3x5OSaGgBd5unF0tAmhDMA==
+X-Received: by 2002:a5d:51cc:: with SMTP id n12mr1207474wrv.177.1575641221596;
+        Fri, 06 Dec 2019 06:07:01 -0800 (PST)
 Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
-        by smtp.gmail.com with ESMTPSA id f12sm3356148wmf.28.2019.12.06.06.06.58
+        by smtp.gmail.com with ESMTPSA id z12sm3541794wmd.16.2019.12.06.06.07.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Dec 2019 06:06:58 -0800 (PST)
+        Fri, 06 Dec 2019 06:07:00 -0800 (PST)
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -51,9 +51,9 @@ Cc:     Jon Hunter <jonathanh@nvidia.com>, JC Kuo <jckuo@nvidia.com>,
         Nagarjuna Kristam <nkristam@nvidia.com>,
         Sowjanya Komatineni <skomatineni@nvidia.com>,
         linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH v2 02/10] usb: host: xhci-tegra: Separate firmware request and load
-Date:   Fri,  6 Dec 2019 15:06:45 +0100
-Message-Id: <20191206140653.2085561-3-thierry.reding@gmail.com>
+Subject: [PATCH v2 03/10] usb: host: xhci-tegra: Avoid a fixed duration sleep
+Date:   Fri,  6 Dec 2019 15:06:46 +0100
+Message-Id: <20191206140653.2085561-4-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20191206140653.2085561-1-thierry.reding@gmail.com>
 References: <20191206140653.2085561-1-thierry.reding@gmail.com>
@@ -66,108 +66,64 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Thierry Reding <treding@nvidia.com>
 
-Subsequent patches for system suspend/resume support will need to reload
-the firmware on resume. Since the firmware remains in system memory, the
-driver doesn't need to reload it from the filesystem. However, the XUSB
-controller will be reset across suspend/resume, so it needs to load the
-firmware into its microcontroller on resume.
-
-Split the firmware request and the firmware load code into two separate
-functions so that the driver can reuse the firmware in system memory to
-reload the microcontroller on resume.
+Do not use a fixed duration sleep to wait for the DMA controller to
+become ready. Instead, poll the L2IMEMOP_RESULT register for the VLD
+flag to determine when the XUSB controller's DMA master is ready.
 
 Based on work by JC Kuo <jckuo@nvidia.com>.
 
 Signed-off-by: Thierry Reding <treding@nvidia.com>
 ---
- drivers/usb/host/xhci-tegra.c | 40 ++++++++++++++++++++++++++---------
- 1 file changed, 30 insertions(+), 10 deletions(-)
+ drivers/usb/host/xhci-tegra.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index aa1c4e5fd750..5cfd54862670 100644
+index 5cfd54862670..e80fce712fd5 100644
 --- a/drivers/usb/host/xhci-tegra.c
 +++ b/drivers/usb/host/xhci-tegra.c
-@@ -793,17 +793,10 @@ static int tegra_xusb_runtime_resume(struct device *dev)
- 	return err;
- }
+@@ -11,6 +11,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/firmware.h>
+ #include <linux/interrupt.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -101,6 +102,8 @@
+ #define  L2IMEMOP_ACTION_SHIFT			24
+ #define  L2IMEMOP_INVALIDATE_ALL		(0x40 << L2IMEMOP_ACTION_SHIFT)
+ #define  L2IMEMOP_LOAD_LOCKED_RESULT		(0x11 << L2IMEMOP_ACTION_SHIFT)
++#define XUSB_CSB_MEMPOOL_L2IMEMOP_RESULT	0x101a18
++#define  L2IMEMOP_RESULT_VLD			BIT(31)
+ #define XUSB_CSB_MP_APMAP			0x10181c
+ #define  APMAP_BOOTPATH				BIT(31)
  
--static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
-+static int tegra_xusb_request_firmware(struct tegra_xusb *tegra)
- {
--	unsigned int code_tag_blocks, code_size_blocks, code_blocks;
- 	struct tegra_xusb_fw_header *header;
--	struct device *dev = tegra->dev;
- 	const struct firmware *fw;
--	unsigned long timeout;
--	time64_t timestamp;
--	struct tm time;
--	u64 address;
--	u32 value;
- 	int err;
+@@ -836,6 +839,7 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
+ 	struct tm time;
+ 	u64 address;
+ 	u32 value;
++	int err;
  
- 	err = request_firmware(&fw, tegra->soc->firmware, tegra->dev);
-@@ -828,6 +821,24 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
- 	memcpy(tegra->fw.virt, fw->data, tegra->fw.size);
- 	release_firmware(fw);
+ 	header = (struct tegra_xusb_fw_header *)tegra->fw.virt;
  
-+	return 0;
-+}
-+
-+static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
-+{
-+	unsigned int code_tag_blocks, code_size_blocks, code_blocks;
-+	struct tegra_xusb_fw_header *header;
-+	struct xhci_cap_regs __iomem *cap;
-+	struct xhci_op_regs __iomem *op;
-+	struct device *dev = tegra->dev;
-+	unsigned long timeout;
-+	time64_t timestamp;
-+	struct tm time;
-+	u64 address;
-+	u32 value;
-+
-+	header = (struct tegra_xusb_fw_header *)tegra->fw.virt;
-+
- 	if (csb_readl(tegra, XUSB_CSB_MP_ILOAD_BASE_LO) != 0) {
- 		dev_info(dev, "Firmware already loaded, Falcon state %#x\n",
- 			 csb_readl(tegra, XUSB_FALC_CPUCTL));
-@@ -1208,10 +1219,16 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 		goto put_rpm;
- 	}
+@@ -893,7 +897,16 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
  
-+	err = tegra_xusb_request_firmware(tegra);
+ 	csb_writel(tegra, 0, XUSB_FALC_DMACTL);
+ 
+-	msleep(50);
++	/* wait for RESULT_VLD to get set */
++#define tegra_csb_readl(offset) csb_readl(tegra, offset)
++	err = readx_poll_timeout(tegra_csb_readl,
++				 XUSB_CSB_MEMPOOL_L2IMEMOP_RESULT, value,
++				 value & L2IMEMOP_RESULT_VLD, 100, 10000);
 +	if (err < 0) {
-+		dev_err(&pdev->dev, "failed to request firmware: %d\n", err);
-+		goto disable_phy;
++		dev_err(dev, "DMA controller not ready %#010x\n", value);
++		return err;
 +	}
-+
- 	err = tegra_xusb_load_firmware(tegra);
- 	if (err < 0) {
- 		dev_err(&pdev->dev, "failed to load firmware: %d\n", err);
--		goto put_rpm;
-+		goto free_firmware;
- 	}
++#undef tegra_csb_readl
  
- 	tegra->hcd->regs = tegra->regs;
-@@ -1221,7 +1238,7 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 	err = usb_add_hcd(tegra->hcd, tegra->xhci_irq, IRQF_SHARED);
- 	if (err < 0) {
- 		dev_err(&pdev->dev, "failed to add USB HCD: %d\n", err);
--		goto put_rpm;
-+		goto free_firmware;
- 	}
- 
- 	device_wakeup_enable(tegra->hcd->self.controller);
-@@ -1281,6 +1298,9 @@ static int tegra_xusb_probe(struct platform_device *pdev)
- 		tegra_xusb_runtime_suspend(&pdev->dev);
- put_hcd:
- 	usb_put_hcd(tegra->hcd);
-+free_firmware:
-+	dma_free_coherent(&pdev->dev, tegra->fw.size, tegra->fw.virt,
-+			  tegra->fw.phys);
- disable_phy:
- 	tegra_xusb_phy_disable(tegra);
- 	pm_runtime_disable(&pdev->dev);
+ 	csb_writel(tegra, le32_to_cpu(header->boot_codetag),
+ 		   XUSB_FALC_BOOTVEC);
 -- 
 2.23.0
 
