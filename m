@@ -2,33 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EF51153C6
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 16:00:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD8A21153D6
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 16:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbfLFPAS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 10:00:18 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:45552 "HELO
+        id S1726400AbfLFPET (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 10:04:19 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:45592 "HELO
         iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726258AbfLFPAS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 10:00:18 -0500
-Received: (qmail 1696 invoked by uid 2102); 6 Dec 2019 10:00:16 -0500
+        with SMTP id S1726259AbfLFPET (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 10:04:19 -0500
+Received: (qmail 1779 invoked by uid 2102); 6 Dec 2019 10:04:18 -0500
 Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 6 Dec 2019 10:00:16 -0500
-Date:   Fri, 6 Dec 2019 10:00:16 -0500 (EST)
+  by localhost with SMTP; 6 Dec 2019 10:04:18 -0500
+Date:   Fri, 6 Dec 2019 10:04:18 -0500 (EST)
 From:   Alan Stern <stern@rowland.harvard.edu>
 X-X-Sender: stern@iolanthe.rowland.org
-To:     Ikjoon Jang <ikjn@chromium.org>
-cc:     Johan Hovold <johan@kernel.org>, <linux-usb@vger.kernel.org>,
-        GregKroah-Hartman <gregkh@linuxfoundation.org>,
-        RobHerring <robh+dt@kernel.org>,
-        MarkRutland <mark.rutland@arm.com>,
-        SuwanKim <suwan.kim027@gmail.com>,
-        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Nicolas Boichat <drinkcat@chromium.org>
-Subject: Re: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-In-Reply-To: <CAATdQgBK4gWvR06YJ3Z_y5NeqLKYY7Ajc0KG78rG2deR3Ga11A@mail.gmail.com>
-Message-ID: <Pine.LNX.4.44L0.1912060958550.1618-100000@iolanthe.rowland.org>
+To:     Jayshri Pawar <jpawar@cadence.com>
+cc:     linux-usb@vger.kernel.org, <gregkh@linuxfoundation.org>,
+        <felipe.balbi@linux.intel.com>, <heikki.krogerus@linux.intel.com>,
+        <rogerq@ti.com>, <linux-kernel@vger.kernel.org>,
+        <jbergsagel@ti.com>, <nsekhar@ti.com>, <nm@ti.com>,
+        <peter.chen@nxp.com>, <kurahul@cadence.com>, <pawell@cadence.com>,
+        <sparmar@cadence.com>
+Subject: Re: [RFC PATCH v2] usb:gadget: Fixed issue with config_ep_by_speed
+ function.
+In-Reply-To: <1575632539-13528-1-git-send-email-jpawar@cadence.com>
+Message-ID: <Pine.LNX.4.44L0.1912061001050.1618-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
 Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
@@ -36,54 +35,51 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 6 Dec 2019, Ikjoon Jang wrote:
+On Fri, 6 Dec 2019, Jayshri Pawar wrote:
 
-> On Thu, Dec 5, 2019 at 10:26 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Thu, Dec 05, 2019 at 03:32:38PM +0800, Ikjoon Jang wrote:
-> > > On Wed, Dec 4, 2019 at 3:55 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > > > But related to my question above, why do you need to do this during
-> > > > enumeration? Why not just set the lower interval value in the hub
-> > > > driver?
-> > >
-> > > Because I want device tree's bInterval to be checked against the same rules
-> > > defined in usb_parse_endpoint(). e.g. although hardware says its maximum
-> > > is 255, but the practical limit is still 0 to 16, so the code can
-> > > print warnings when bInterval from device node is too weird.
-> >
-> > But that could be handled refactoring the code in question or similar.
-> >
+> This patch adds additional parameter alt to config_ep_by_speed function.
+> This additional parameter allows to improve this function and
+> find proper usb_ss_ep_comp_descriptor.
 > 
-> Yes, that should be worked. I can't exactly figure out how to refactor
-> the code for now, but maybe parsed endpoint descriptors are being
-> checked with default hard wired bInterval value and after that
-> an overridden value should be checked again.
+> Problem has appeared during testing f_tcm (BOT/UAS) driver function.
 > 
-> Actually I don't care about the details of software policies. I just want
-> all devices to be handled in the same manner without any further
-> special treatments.
+> f_tcm function for SS use array of headers for both  BOT/UAS alternate
+> setting:
 > 
-> > The fundamental problem here is that you're using devicetree, which is
-> > supposed to only describe the hardware, to encode policy which should be
-> > deferred to user space.
+> static struct usb_descriptor_header *uasp_ss_function_desc[] = {
+>         (struct usb_descriptor_header *) &bot_intf_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+>         (struct usb_descriptor_header *) &bot_bi_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+>         (struct usb_descriptor_header *) &bot_bo_ep_comp_desc,
 > 
-> The hub hardware has a default bInterval inside which is actually
-> adjustable. So I can think setting bInterval is to describe the hardware
-> rather than policy.
+>         (struct usb_descriptor_header *) &uasp_intf_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bi_desc,
+>         (struct usb_descriptor_header *) &uasp_bi_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_bi_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_bo_desc,
+>         (struct usb_descriptor_header *) &uasp_bo_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_bo_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_status_desc,
+>         (struct usb_descriptor_header *) &uasp_status_in_ep_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_status_pipe_desc,
+>         (struct usb_descriptor_header *) &uasp_ss_cmd_desc,
+>         (struct usb_descriptor_header *) &uasp_cmd_comp_desc,
+>         (struct usb_descriptor_header *) &uasp_cmd_pipe_desc,
+>         NULL,
+> };
+> 
+> The first 5 descriptors are associated with BOT alternate setting,
+> and others are associated  with UAS.
 
-If the hardware is adjustable, why don't you adjust the hardware 
-instead of changing the software?
+If the first 5 descriptors are really associated with the BOT alternate
+setting, why is the second descriptor named uasp_ss_bi_desc?  And why
+is the fourth descriptor named uasp_ss_bo_desc?  These names suggest
+they are associated with UAS.
 
-> > So I think you need to figure out an interface that allows user space to
-> > set the polling interval for any hub at runtime instead.
-> 
-> Changing the interval at runtime is an another way to solve the
-> power consumption problem, but it's not so easy. At least xhci needs
-> to restart an endpoint and no devices are changing the interval after
-> enumeration stage.
-
-Restarting endpoints is easy; just call usb_set_interface().
+If the same descriptors are used for both settings, the names should 
+reflect this.  For example, they could be called bot_uasp_ss_bi_desc 
+and bot_uasp_ss_bo_desc.
 
 Alan Stern
 
