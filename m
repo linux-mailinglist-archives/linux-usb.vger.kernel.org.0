@@ -2,172 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62B2B1149D1
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 00:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF5EC114AE0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2019 03:25:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726214AbfLEXYI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Dec 2019 18:24:08 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:32820 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726160AbfLEXYH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 18:24:07 -0500
-Received: by mail-qk1-f193.google.com with SMTP id c124so4963240qkg.0
-        for <linux-usb@vger.kernel.org>; Thu, 05 Dec 2019 15:24:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=EwXWXF/Aa2ZOUht7Ynv0b7/RyyTkuJEnmNHrYGq1Crk=;
-        b=CNb488X0D1yoPbCpt09Y7Y2C2vNdjvkKJxOygmbo4X7O+jY/7ZP4/eZ5nX0h7KVDnx
-         bcL2GxqzdXC9VLKFcwKExaZlaCH4XUiChVYpcvRqd0XnJxg/gfI3YledyqwCzVZKUeb9
-         FEXviYvBEn4pSS2eeSRLiUZbWKrxL+SGoDlj4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=EwXWXF/Aa2ZOUht7Ynv0b7/RyyTkuJEnmNHrYGq1Crk=;
-        b=U/FmYN89qeQ/7X1WjD2tsmcDNwNWLbvowEL4UvNLlaxJ9Tsp4bvz2+OArQyIrd5FFp
-         TW+kfq74rwk0tdZbkjOfcshnr/Js9QMJBCH11XIOLOg+HEElXAEZp5SB4+939yQ5XNcH
-         lSMRBdC3XloP/rMcgXfLwstY0JCpZaiC0sTF2xFiw5ANOZIk4rTw2S86W3A9L3of91aw
-         dAlbHCiMmCbzsQC8hM9JjMRbgkri2T1pRqFJETglveelJSZKLaw3z9ThAjNOxrXSEar0
-         xoEUhJlgG1gvxEh4RU3Pt+H5fik5B6WFOexQYe8KnJOVbRa0sFTGRI32qXr764Uuy8xo
-         1BMg==
-X-Gm-Message-State: APjAAAWdlJ+vsEw2z7F9sutXQryBamod4Gfwr6BKLcUp5M3w3R7YACpi
-        RIZyxr0A0PDTOQZ4UC1ycki7qa58bEaDkDpH6NmjCQ==
-X-Google-Smtp-Source: APXvYqxrvwOC8hdAeBQTzBFvV+4m1/8LoI9OJycQvo2tlxRVMzOvea3iGYP0WphM2H7m5YLhZ0MY9JO/Av1tg6qTITA=
-X-Received: by 2002:a37:6c6:: with SMTP id 189mr10426152qkg.179.1575588246451;
- Thu, 05 Dec 2019 15:24:06 -0800 (PST)
+        id S1726134AbfLFCZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Dec 2019 21:25:12 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13257 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726037AbfLFCZL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Dec 2019 21:25:11 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5de9bbda0000>; Thu, 05 Dec 2019 18:24:26 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 05 Dec 2019 18:24:30 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 05 Dec 2019 18:24:30 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 6 Dec
+ 2019 02:24:30 +0000
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.175)
+ by HQMAIL111.nvidia.com (172.20.187.18) with Microsoft SMTP Server (TLS) id
+ 15.0.1473.3 via Frontend Transport; Fri, 6 Dec 2019 02:24:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IaB9GmKin+1kXy6CWq7hRRLGDnCcyfxyJpWzMXRJbFEXB0CgPiMiettK3axUskzYhzTKeoXglhLc7xLfebV/EdTsbnKnPy1A1SqhiTZP74vTId+C7kF3neCyHrbq8PWAigSHWXsSJuYeCea2C/YjoE+6statx0NTW6GjbOaj4ac3fYZbu8NA3vXsVd7IFnxaBjd4R7Ipg9JdYvKvadHr/hD0hkp4RtbBROkfDl1BmxQpOwsBp9HVRG65q0pGag1OkhQLsJEyItHCz9mlHe+pX8oJqMoBhpmO2h59I6HrEWCyr1MmFT0qoj9rN+1PL62ff6WsmXBZXrhA9gmbZuVaqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ukPw5cAMop+xPhmXmBPUz8DYEYteJr/5uuQEP7t//J0=;
+ b=Qg3hOcoNukplN3vqUb8LJ0JCzkNrr32gt1gbUh9RA2kBNJEqto4qHiEnrD2X/iFsuopi4Kv79IM9wf8xB/EvJ3S4tKA1KRfu4Y1sgrp1+ymi2H7gmt4i3dWZGKP47vn00FUtAkIMBg4KRbK9M5ENoa3BJ2I9uwkTxR9mFeiEwXTUHSwZ9PZrO0AeJprRSFj1L/TTU+il0MJTGkpbUXFBkSawA6z9IwxOPc8OtTU6pDiUZrxlIhR8QetD9feGld43Cju8dmrVlfjGxQtnfp2H3cV6lkcGtCha+XnplaKz/EzrMBLCo2xvhkYh9eoOb2pOnIVzGsuIcz9KO5jDxt6vGw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+Received: from MN2PR12MB4126.namprd12.prod.outlook.com (10.255.125.12) by
+ MN2PR12MB4077.namprd12.prod.outlook.com (52.135.50.79) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2516.14; Fri, 6 Dec 2019 02:24:29 +0000
+Received: from MN2PR12MB4126.namprd12.prod.outlook.com
+ ([fe80::2572:7735:8756:b5f0]) by MN2PR12MB4126.namprd12.prod.outlook.com
+ ([fe80::2572:7735:8756:b5f0%6]) with mapi id 15.20.2516.014; Fri, 6 Dec 2019
+ 02:24:29 +0000
+From:   EJ Hsu <ejh@nvidia.com>
+To:     Peter Chen <peter.chen@nxp.com>
+CC:     "balbi@kernel.org" <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v2] usb: gadget: fix wrong endpoint desc
+Thread-Topic: [PATCH v2] usb: gadget: fix wrong endpoint desc
+Thread-Index: AQHVqmRr1WcqqGE7wkeK/+mD/3x9VaepjgKAgALUjkA=
+Date:   Fri, 6 Dec 2019 02:24:28 +0000
+Message-ID: <MN2PR12MB4126D73F5E8981DA53C8F647CF5F0@MN2PR12MB4126.namprd12.prod.outlook.com>
+References: <20191204053322.35776-1-ejh@nvidia.com>
+ <20191204070646.GA25122@b29397-desktop>
+In-Reply-To: <20191204070646.GA25122@b29397-desktop>
+Accept-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ejh@nvidia.com;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-12-06T02:24:25.0899276Z;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
+ Information Protection;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=5505fdac-df4d-49a6-9e5e-1a3d37c4824c;
+ MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
+authentication-results: spf=none (sender IP is ) smtp.mailfrom=ejh@nvidia.com; 
+x-originating-ip: [59.124.78.18]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: aa3c7e80-5847-44b2-db95-08d779f36bf1
+x-ms-traffictypediagnostic: MN2PR12MB4077:
+x-microsoft-antispam-prvs: <MN2PR12MB40772582F6C098FA846737D0CF5F0@MN2PR12MB4077.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0243E5FD68
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(346002)(136003)(396003)(376002)(366004)(189003)(199004)(478600001)(99286004)(7696005)(76116006)(14454004)(4326008)(25786009)(66946007)(102836004)(316002)(6916009)(52536014)(186003)(4744005)(66476007)(66446008)(53546011)(76176011)(64756008)(54906003)(66556008)(5660300002)(71200400001)(55016002)(81166006)(11346002)(305945005)(8936002)(74316002)(26005)(8676002)(6506007)(229853002)(33656002)(86362001)(81156014)(71190400001)(9686003)(2906002);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB4077;H:MN2PR12MB4126.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nvidia.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WcHFpIJ0u/AdAgEU5arkJ8Cyejq57osSUPjMrZvVagAUqbLsK+JB/HxvZYTPmK96Jx0Rg93Shqhb+HhIvr1zo0ZVJoNq4PCg1CiV4fSQkCgVXG0C5cCM2Mr2g4K800Jp6BqNmPfam3qsRcIm0HBjKsvQo1mvPp1IiG7HnPpfIPRKwbdMCyBsZFE4Mkt6wgPDicx50PNtXkrWF9MTbJbaLgTDRHZQ5DqrBiefpMvu5dI1wZplI2apQUjgn6oPhLOpoxZCg3B9CELSr9ZLSn5PCo/Yn9r+uKwDdqeyDPC0YT6pqMAXU1kz/b7v5uUOa+Xl9hpYcKyFUULyFOcGCl1SKmgqvsGGsudeBCv6Glp8EZHAMX0R0QQCVrYxrqn0NH6yrn9x9lOEoeaejnYpNGlfl0XxtmsyHOM7lkSqO2sia9Jb8evxtZh3B0Q0SsHmzniy
+x-ms-exchange-transport-forked: True
 MIME-Version: 1.0
-References: <3edaf835-7cde-37d9-5a0a-5a9b21a02968@gmx.at> <4dfc2bca-e333-4f05-e795-23cbe481d53e@linux.intel.com>
- <485bd962-2a2d-1e15-54c6-3685fb7597a3@gmx.at> <50ecb110-8ab6-929b-e33e-025e04a12bc8@linux.intel.com>
- <CACeCKaezMBWH+cnmOdOc+hizW3SNU+Sb5h5PWXdt9f2GcOVfFQ@mail.gmail.com> <7da29d7d-836a-8f37-5f07-e180bebcb1ca@gmx.at>
-In-Reply-To: <7da29d7d-836a-8f37-5f07-e180bebcb1ca@gmx.at>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Thu, 5 Dec 2019 15:23:55 -0800
-Message-ID: <CACeCKacMS1BEL1GLc1T5FcQBPULqyaM3C5cBrq=k31d1-tHDHw@mail.gmail.com>
-Subject: Re: Regression: USB/xhci issues on some systems with newer kernel versions
-To:     Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>,
-        Grant Grundler <grundler@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa3c7e80-5847-44b2-db95-08d779f36bf1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2019 02:24:28.9209
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yKwAomzjZutFAUA/hCBrP7Hl2xiH7xicgoWXrd4QMHGuIaNXEIHPrVE3pQ5C8XkJ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4077
+X-OriginatorOrg: Nvidia.com
+Content-Language: en-US
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1575599066; bh=+BoWdeS9eLdzG4OK9/4N0kdaZANQju6YGqyoQoaozlw=;
+        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
+         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
+         Thread-Index:Date:Message-ID:References:In-Reply-To:
+         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
+         authentication-results:x-originating-ip:x-ms-publictraffictype:
+         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
+         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
+         x-forefront-prvs:x-forefront-antispam-report:received-spf:
+         x-ms-exchange-senderadcheck:x-microsoft-antispam:
+         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
+         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
+         X-MS-Exchange-CrossTenant-originalarrivaltime:
+         X-MS-Exchange-CrossTenant-fromentityheader:
+         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
+         X-MS-Exchange-CrossTenant-userprincipalname:
+         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
+         Content-Language:Content-Type:Content-Transfer-Encoding;
+        b=IFdRPZXDq/OHz7IujnY9z+yCm8a+WABPkp4ZuNiKbz/cGGOQ1u4syL61kJ7rdl9Xk
+         14LgBNm+GThISD+oZaM2ZXU4nY8OfVmRFVFzZfq8UjCQChMXFvz8dd9LOUvXtk3DKp
+         xuwvUrZko7NwajgExn908ktFUSQAzMuv408gbCFWZQjQsb2KduhkpFHIC2szX1lUAM
+         I1KOcRa6AMoKjG13fEkyeXGOu57FiW50LK8TMna1PIL14UYtoSordq8sCGQ0+qFwXd
+         m4kx3JQ1ss2iAu6vDYbUOVrchk1nkCTWa7xuADSfqzpBzIpG7GYz3df2JxhmkS1vGQ
+         AyVDBo1sYUAYg==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bernhard,
+Hi Peter,=20
 
-Thanks for the response. I just checked and looks like we backported
-that patch onto our 4.19 kernel, so it would explain why you aren't
-seen the issue on 4.19.
+Peter Chen wrote:
+> On 19-12-03 21:33:22, EJ Hsu wrote:
+> > Gadget driver should always use config_ep_by_speed() to initialize
+> > usb_ep struct according to usb device's operating speed. Otherwise,
+> > usb_ep struct may be wrong if usb devcie's operating speed is changed=
+.
+> >
+> > The key point in this patch is that we want to make sure the
+> > descpointer
+>=20
+> Typo
+>=20
+> Otherwise:
+> Reviewed-by: Peter Chen <peter.chen@nxp.com>
+>=20
 
-On Thu, Dec 5, 2019 at 3:19 PM Bernhard Gebetsberger
-<bernhard.gebetsberger@gmx.at> wrote:
->
-> Hi,
->
-> The issue I have hasn't been resolved. I'm currently running a custom kernel, with the
-> commitf8f80be501aa2f10669585c3e328fad079d8cb3a reverted, which works fine for me. I'm not
-> sure if the issue you have is related to mine, because I don't have any issues with 4.19,
-> and I'm also using a different driver(rt2800usb).
->
-> - Bernhard
->
-> Am 05.12.19 um 21:34 schrieb Prashant Malani:
-> > Hi Mathias and Bernhard,
-> >
-> > I was interested in knowing if this issue was resolved (sounded like
-> > this was deemed to be a hardware error, but I'm not sure).
-> > The reason I ask is that we've recently noticed a similar error
-> > popping up while using Realtek rtl8153a-based ethernet USB dongles
-> > (these use the r8152 driver) on kernel 4.19 :
-> > " hci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to
-> > incorrect slot or ep state."
-> > This is generally followed by the dongle getting reset, and the
-> > process repeats itself continuously.
-> >
-> > I can share more detailed logs if required. The specific dongle I used
-> > was LinkSys USB3GIGV1 (I think the official link is :
-> > https://www.linksys.com/us/support-product?pid=01t80000003fwbWAAQ)
-> >
-> > Some interesting data points:
-> > - This issue doesn't manifest itself on kernel 4.4 or 4.14 but does
-> > show up on 4.19
-> > - This issue didn't manifest itself on 4.19 either before recent
-> > changes were incorporated to patch the dongle firmware (commit
-> > 9370f2d05a2a150b0aa719a3070b26d478180df3 on the linux mainline
-> > branch). After the firmware patching changes went in, 4.19 started
-> > exhibiting this issue (4.4 and 4.14 still don't exhibit it).
-> >
-> > Thanks and Best regards!
-> >
-> >
-> > On Mon, Oct 14, 2019 at 6:01 AM Mathias Nyman
-> > <mathias.nyman@linux.intel.com> wrote:
-> >> On 3.10.2019 18.13, Bernhard Gebetsberger wrote:
-> >>> I sent the instructions to one of the users in the bug tracker.
-> >>> Here is the download link for his logs: https://www.sendspace.com/file/413hlj
-> >>>
-> >> Thanks.
-> >> Traces show driver handles the Transaction error normally by issuing a endpoint reset,
-> >> which is successful, but after that there is no activity on that endpoint even if there
-> >> are over 120 transfers requests (TRB) pending.
-> >> After over 40 seconds the class driver starts canceling the pending transfers.
-> >>
-> >> after soft retry the xhci driver should ring the doorbell of the endpoint, and hardware
-> >> should start processing pending TRBs, but ring is not handling pending TRBs
-> >> Looks like either driver or hardware fails to start the endpoint ring again
-> >>
-> >> I'll add some more tracing to check driver correctly rings the endpoint doorbell.
-> >>
-> >>
-> >> Details of trace:
-> >>
-> >> -Several TRBs (over 120) queued for slot 4 ep 3 (ep1in-bulk), starting at 0xff2d1000, up to 0xff2d1800 (0x10 per TRB)
-> >>
-> >>    164.884097: xhci_urb_enqueue: ep1in-bulk: urb 000000005ebe7973 pipe 3221259648 slot 4 length 0/3860 sgs 0/0 stream 0 flags 00010200
-> >>    164.884099: xhci_queue_trb: BULK: Buffer 00000000f9e2304c length 3860 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-> >>    164.884101: xhci_inc_enq: BULK 00000000be510b60: enq 0x00000000ff2d1010(0x00000000ff2d1000) deq 0x00000000ff2d1000(0x00000000ff2d1000)
-> >>    ...
-> >>    164.884304: xhci_urb_enqueue: ep1in-bulk: urb 00000000fee4e260 pipe 3221259648 slot 4 length 0/3860 sgs 0/0 stream 0 flags 00010200
-> >>    164.884304: xhci_queue_trb: BULK: Buffer 00000000ff3a304c length 3860 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:c
-> >>    164.884304: xhci_inc_enq: BULK 00000000be510b60: enq 0x00000000ff2d1800(0x00000000ff2d1000) deq 0x00000000ff2d1000(0x00000000ff2d1000)
-> >>
-> >> -Transaction error 3 seconds later for TRB at 0xff2d1000
-> >>
-> >>    167.578273: xhci_handle_event: EVENT: TRB 00000000ff2d1000 status 'USB Transaction Error' len 3860 slot 4 ep 3 type 'Transfer Event' flags e:c
-> >>    167.578288: xhci_handle_transfer: BULK: Buffer 00000000f9e2304c length 3860 TD size 0 intr 0 type 'Normal' flags b:i:I:c:s:I:e:C
-> >>
-> >> -Soft retry by issuing a host side reset endpoint command,
-> >>
-> >>    167.578297: xhci_queue_trb: CMD: Reset Endpoint Command: ctx 0000000000000000 slot 4 ep 3 flags C
-> >>    167.578416: xhci_handle_event: EVENT: TRB 00000000ffefe440 status 'Success' len 0 slot 4 ep 0 type 'Command Completion Event' flags e:c
-> >>
-> >> -Host side of endpoint reset successful, endpoint is in stopped state as it should
-> >>
-> >>    167.578417: xhci_handle_command: CMD: Reset Endpoint Command: ctx 0000000000000000 slot 4 ep 3 flags C
-> >>    167.578419: xhci_handle_cmd_reset_ep: State stopped mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst
-> >>
-> >> -Driver should ring endpoint doorbell, and hardware should continue procressing TRBs
-> >> No activity at all on slot 4 ep 3, other endpoints continue running normally.
-> >> Check driver really rang ep doorbell
-> >>
-> >> A lot later class driver asks to cancel pending tranfer:
-> >>
-> >>    214.132531: xhci_urb_dequeue: ep1in-bulk: urb 000000005ebe7973 pipe 3221259648 slot 4 length 0/3860 sgs 0/0 stream 0 flags 00010200
-> >>    214.132548: xhci_dbg_cancel_urb: Cancel URB 000000005ebe7973, dev 2, ep 0x81, starting at offset 0xff2d1000
-> >>
-> >> -xhci driver tries to stop endpoint to cancel transfer:
-> >>
-> >>    214.132555: xhci_queue_trb: CMD: Stop Ring Command: slot 4 sp 0 ep 3 flags C
-> >>
-> >> -but it fails as slot is not in a proper state to be stopped, ep is in halted state after failed stop attempt.
-> >>
-> >>    214.132679: xhci_handle_event: EVENT: TRB 00000000ffefe450 status 'Context State Error' len 0 slot 4 ep 0 type 'Command Completion Event' flags e:C
-> >>    214.132680: xhci_handle_command: CMD: Stop Ring Command: slot 4 sp 0 ep 3 flags C
-> >>    214.132682: xhci_handle_cmd_stop_ep: State halted mult 1 max P. Streams 0 interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 0 maxp 512
-> >>
-> >> -After this endpoint stays in halted state, xhci driver fails to recover from this while canceling the reset of the TRBs
-> >>
-> >> -Mathias
+I have uploaded a new patch following your feedback.
+Could you please help to review it again?
+
+Thanks,
+EJ
+-------------------------------------------------------------------------=
+----------
+This email message is for the sole use of the intended recipient(s) and m=
+ay contain
+confidential information.  Any unauthorized review, use, disclosure or di=
+stribution
+is prohibited.  If you are not the intended recipient, please contact the=
+=20sender by
+reply email and destroy all copies of the original message.
+-------------------------------------------------------------------------=
+----------
