@@ -2,97 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB824115C56
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2019 14:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4F05115DC7
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2019 18:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726409AbfLGNSb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 7 Dec 2019 08:18:31 -0500
-Received: from mail-vs1-f65.google.com ([209.85.217.65]:44420 "EHLO
-        mail-vs1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726399AbfLGNSb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Dec 2019 08:18:31 -0500
-Received: by mail-vs1-f65.google.com with SMTP id p6so7097598vsj.11
-        for <linux-usb@vger.kernel.org>; Sat, 07 Dec 2019 05:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=jr+Z8tw0NpTtZMlceWQb0wEh/jnmOC4gqPRFiZKPXVY=;
-        b=s8duYlU/p7NvARQVa7YkTiVN3k1fe+TdN1y7snRwLZHiZxvJp9k8cTQds1nOqrEUoL
-         DLL1ErUxlTM/iW/HUnARezBsYWewgVxl6o2uV6LsBtVGM9EAC+XabC8ru17bWxNyItn9
-         K8GgoEUCjqGsO3lspfgi9tOVGEjHq8ZwdwO63nr0YLLkybMjtRo11BKmelSX96Nfv52w
-         4QXfn/SygHSXhfjFrc0FWF4aAelE0MG220CTgkudfVSnMcTtdlGZiGGBZ4DoClgiHgTo
-         ir6y8oZrz3IpH3nRgHdKsy9Ptpoh23l2rPUeHuWjw2kIYWxXjo84FkspUc0jVdHL2HF1
-         uLSw==
+        id S1726555AbfLGRfK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 7 Dec 2019 12:35:10 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:37683 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726513AbfLGRfJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 7 Dec 2019 12:35:09 -0500
+Received: by mail-il1-f197.google.com with SMTP id t19so7999252ila.4
+        for <linux-usb@vger.kernel.org>; Sat, 07 Dec 2019 09:35:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=jr+Z8tw0NpTtZMlceWQb0wEh/jnmOC4gqPRFiZKPXVY=;
-        b=c1pFuXt9ghn8rvVKO95feDBLD4gQSsLMNW3qOnkMeaMv7/1iBbslNI+fazBkoJUfag
-         QN9FtuMPFx0bCn6wNIhrhM8VokIulzt8e7AgwboMlmaLBpyApGaiEfQCchXlklmSKKEA
-         cOa/SyawLGu+QYyIZcYnpyBDdmqz1KzfQVH1vZy+wR7Cxi6N7hMFG37GlOlkfR2sK4Wi
-         uIrRsvq7E4ZEqIITT+8PikBAxLkfHLx0ffEj0GIP1eITEjug4oEz/wT+1zxiD/p2XV0E
-         aVY4b4X/hF+rYWc+eStrD86wdkC0qL/hzccJkH81ISld8WfvIEG8o4Hs62IPo6esxdBD
-         JA/w==
-X-Gm-Message-State: APjAAAUoTt2Bp0U7lLfUJjXq/4zGn1QhQHPP3dB1h794obg+TxL43YzC
-        f8zOagW6+Neejq6xqtTQSKy8XOe8ahz0KehtMBM=
-X-Google-Smtp-Source: APXvYqxRDcfuvP7Tyl4Ze2ZtVr5bvpzkLZkmqooRWLhTRfOV3rFkj3bQzAFIXPPFRdNOQmIGYkMcXPB1AJ4jRXamCP0=
-X-Received: by 2002:a67:de98:: with SMTP id r24mr13920746vsk.139.1575724710205;
- Sat, 07 Dec 2019 05:18:30 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=PssgSEg/sffQDcKK+621ku6PbuChp8EAKykjz+P/qoA=;
+        b=OPTNVBx6GRLPjN9Nll5106FnhJ6m++MlliXiJ0atjIglB0aBtvdN03MweD7NWWOwBi
+         I8HivIM9UzG5ls6YSXsBpsuflcav1QqHDqJiN1eztuwugdG7X29JlWUcET5BVJgK91yr
+         YROtHUijJZaAv9xW4TaF/ncptrtQUyGWAD7p2/kjYbg+uNOAzJqotF+57LmqyQlU4QeU
+         RsQVykYD7Ktu2hNZI0igg/qnX9AG03vSA8dslgnPDnI6mRZ4Z7eqwXXYik2mQRAwAU69
+         +Y6IQoZeCAQ2Mir5jwvZo/nD1ocPJ/3ZzuhlV98BgvS9QXy2eqIFcWKBhbT+eNT8auE9
+         Mkyg==
+X-Gm-Message-State: APjAAAUGrgPS8DgA9pKKw9Pvhkv7Og/4d7bBGCySem34dQvqDBU3zfjF
+        pghqeTdnek5exxDqLzgq4qPnPA+PCnnvczSbgL3+XbR2hFJH
+X-Google-Smtp-Source: APXvYqzfmmLpffgywS+1zLmFa/YMDlmc9SXPol0s2NAySfPATYZliKe3wbaCdSZ3EZKOQ2a7FhhQXg+ZRIGKe6UmuHzE6z5dhuEV
 MIME-Version: 1.0
-Received: by 2002:a67:72c1:0:0:0:0:0 with HTTP; Sat, 7 Dec 2019 05:18:27 -0800 (PST)
-Reply-To: 3114494846@qq.com
-From:   "Mrs. Janet Keuler" <atmcardpaymecenter1972@gmail.com>
-Date:   Sat, 7 Dec 2019 05:18:27 -0800
-Message-ID: <CABXrEytxjKp_s21x=3SE-RCTa9qgFJsCDBiB1UtotztUmNd6dQ@mail.gmail.com>
-Subject: YOUR COMPENSATION PAYMENT OF $1,500,000.00 USD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-Received: by 2002:a6b:e008:: with SMTP id z8mr14498726iog.246.1575740109054;
+ Sat, 07 Dec 2019 09:35:09 -0800 (PST)
+Date:   Sat, 07 Dec 2019 09:35:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000756ba505992095eb@google.com>
+Subject: WARNING in video_unregister_device
+From:   syzbot <syzbot+107e71ba620a63af4335@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Attention: Beneficiary,
+Hello,
 
-NOTE: IF YOU RECEIVED THIS MESSAGE IN YOUR SPAM / BULK FOLDER, THAT IS
-BECAUSE OF THE RESTRICTIONS IMPLEMENTED BY YOUR INTERNET SERVICE
-PROVIDER, WE URGE YOU TO TREAT IT GENUINELY.
+syzbot found the following crash on:
 
-This is the second time we are notifying you about the statue of your
-compensation payment of ( $1,500,000.00). Be inform that We have been
-authorized by the United Nations Compensation Commission (UNCC) to
-release your compensation payment totaling the sum of US$1,500,000.00
-through MoneyGram money transfer service. You will be receiving the
-sum of US$5,000.00 daily until the total sum of US $1,500,000.00 is
-completely transferred to you.
+HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=1486d1bce00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
+dashboard link: https://syzkaller.appspot.com/bug?extid=107e71ba620a63af4335
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1399bb7ae00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e80e41e00000
 
-Besides,we have already credited your first payment of US$5,000.00
-today,therefore,you are advice to contact our director of foreign
-Remittance Department MR.ROBERT TAIWO and request him to give you the
-details of your first payment such as Money Transfer Control Number
-(MTCN) and senders name to enable you pick up your first payment of
-US$5,000.00 at any MoneyGram office located around you. Kindly contact
-him through the information stated below for faster process.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+107e71ba620a63af4335@syzkaller.appspotmail.com
 
-CONTACT PERSON: MR.ROBERT TAIWO
-E-MAIL:  ( transfermoney212@foxmail.com )
-TEL: (+229) 96 54 83 88
+usbvision_radio_close: Final disconnect
+------------[ cut here ]------------
+sysfs group 'power' not found for kobject 'radio5'
+WARNING: CPU: 1 PID: 1791 at fs/sysfs/group.c:278 sysfs_remove_group  
+fs/sysfs/group.c:278 [inline]
+WARNING: CPU: 1 PID: 1791 at fs/sysfs/group.c:278  
+sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 1 PID: 1791 Comm: v4l_id Not tainted 5.4.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  panic+0x2aa/0x6e1 kernel/panic.c:221
+  __warn.cold+0x2f/0x30 kernel/panic.c:582
+  report_bug+0x27b/0x2f0 lib/bug.c:195
+  fixup_bug arch/x86/kernel/traps.c:174 [inline]
+  fixup_bug arch/x86/kernel/traps.c:169 [inline]
+  do_error_trap+0x12b/0x1e0 arch/x86/kernel/traps.c:267
+  do_invalid_op+0x32/0x40 arch/x86/kernel/traps.c:286
+  invalid_op+0x23/0x30 arch/x86/entry/entry_64.S:1027
+RIP: 0010:sysfs_remove_group fs/sysfs/group.c:278 [inline]
+RIP: 0010:sysfs_remove_group+0x155/0x1b0 fs/sysfs/group.c:269
+Code: 48 89 d9 49 8b 14 24 48 b8 00 00 00 00 00 fc ff df 48 c1 e9 03 80 3c  
+01 00 75 41 48 8b 33 48 c7 c7 e0 ba d0 85 e8 73 1f 87 ff <0f> 0b eb 95 e8  
+22 d4 d9 ff e9 d2 fe ff ff 48 89 df e8 15 d4 d9 ff
+RSP: 0018:ffff8881ce73fc50 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffffffff85f34ac0 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff8128ebcd RDI: ffffed1039ce7f7c
+RBP: 0000000000000000 R08: ffff8881cf2f1880 R09: ffffed103b6a439f
+R10: ffffed103b6a439e R11: ffff8881db521cf7 R12: ffff8881ce638af8
+R13: ffffffff85f35060 R14: 0000000000000000 R15: ffff8881ce638fb8
+  dpm_sysfs_remove+0x97/0xb0 drivers/base/power/sysfs.c:741
+  device_del+0x18b/0xd30 drivers/base/core.c:2641
+  device_unregister+0x11/0x30 drivers/base/core.c:2696
+  video_unregister_device+0xa2/0xc0 drivers/media/v4l2-core/v4l2-dev.c:1076
+  usbvision_unregister_video+0x83/0x120  
+drivers/media/usb/usbvision/usbvision-video.c:1244
+  usbvision_release+0x10d/0x1c0  
+drivers/media/usb/usbvision/usbvision-video.c:1357
+  usbvision_radio_close.cold+0x2b/0x74  
+drivers/media/usb/usbvision/usbvision-video.c:1130
+  v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+  __fput+0x2d7/0x840 fs/file_table.c:280
+  task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+  tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+  exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:164
+  prepare_exit_to_usermode arch/x86/entry/common.c:195 [inline]
+  syscall_return_slowpath arch/x86/entry/common.c:278 [inline]
+  do_syscall_64+0x4d1/0x5b0 arch/x86/entry/common.c:304
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
+RIP: 0033:0x7f0fec1542b0
+Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0  
+07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff  
+ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+RSP: 002b:00007ffd13444a48 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f0fec1542b0
+RDX: 0000000000000013 RSI: 0000000080685600 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+R13: 00007ffd13444ba0 R14: 0000000000000000 R15: 0000000000000000
+Kernel Offset: disabled
+Rebooting in 86400 seconds..
 
-REMEMBER TO FORWARD HIM YOUR FULL INFORMATION AS REQUIRED BELOW TO
-ENABLE HIM LOCATE YOUR PAYMENT FILE AND ATTEND TO YOU IMMEDIATELY.
 
-1. Your Full Name:
-2. Address:
-3. Age:
-4. Occupation:
-5. Telephone:
-6. Country:
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-NOTE: that the amount to be paid to you is (USD1.500, 000.00), we
-expect your urgent response to this email to enable us monitor the
-transaction effectively.
-
-Best Regards
-Mrs. Janet Keuler.
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
