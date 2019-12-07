@@ -2,61 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17735115A4A
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2019 01:30:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DAB115A72
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2019 01:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfLGAaC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Dec 2019 19:30:02 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:37968 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726653AbfLGA34 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 19:29:56 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y17so9649230wrh.5
-        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2019 16:29:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=LXxoS6Ed7of6jWaofmDfQc8/u3Mg9Maolmr3Vpf9Rmy6M9EqjFAuvGQ8h9p7LhnwAL
-         J2FbblgdkGgZHafRFxx28eRdV2u28AyUlEZcVvHuYvVm3rtf1quwzUCMSvqmMRhzvXWg
-         Lr2BVgHFftpJuxoM6FIG7HwvD6NJoH8mvEjpjvV8POe7OxPQSgcaMvRkWz9Uiu2DLDQI
-         zLbCM6eF/2UqhYCC9SzqWLAqDFWNhNPH2Mzqdx7SMOIQYQVzi+r4mUYfVbZ4zkg6G/Rf
-         GMyYZz2zxEAODyOdyEtKF6h6LvlYj6nQy3cPNK/qqQ+yOafhqpdxqfrrNrKMk4+XdZU4
-         ueNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=S7m9By4/eRnSy0vxdfJ6TocT5eJ8gcKLceyHvlHTn3o=;
-        b=YRAGn8HMZP5d5LSW3vwzucZT6YVGSIDOv6WBf8wJsEcqlhiPQ+EuA8Ww505+ylkRZ0
-         PNtNtuiCNM4fPlEMcctcKMFAfFNNpkMChh0BT8AZ/azZ0l0uIGmcVdUU3Mo6u3Qe23kh
-         V68m7r3xzE0b07fG2shbqX97HhExnB4AXCsTs9m0/eiO1yzYePZoC5AEYBRR5ZzVAg0J
-         G25gkK/swjrnycpBZqK4VE7M1NG6l1ccV0842qw87wRrGyhY5mNW8ObkKnea3U/ht9W+
-         hwQfE9usgktciitIy/70jbYJ9fLtUraIMz9YdyJ+hQlkrI+dzTuW3JBTjH/MKlI0UqEA
-         OHBw==
-X-Gm-Message-State: APjAAAXdl3l/On+VPUEphXkByQnT5RLpME0RGW7oNAP6ljDpIaMZnygA
-        bPkLqMAJYX9oKSo8MwGlv94pbtkuXSBYDkgQxVcUv5x8
-X-Google-Smtp-Source: APXvYqwrh3pZjAB0r+TmXxbhmAM/apODdHlIT+82DMPTCRz8CUTTqPzcZB7T3FAp1SOvDrWQKKNsT0CStxod+O7hBLs=
-X-Received: by 2002:adf:e591:: with SMTP id l17mr16654604wrm.139.1575678594023;
- Fri, 06 Dec 2019 16:29:54 -0800 (PST)
+        id S1726386AbfLGA6M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Dec 2019 19:58:12 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:38001 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726377AbfLGA6L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Dec 2019 19:58:11 -0500
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id A567F22779;
+        Fri,  6 Dec 2019 19:58:10 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute7.internal (MEProxy); Fri, 06 Dec 2019 19:58:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=m4jD/J
+        cWNVWweueCdPtJZopsoCDmrb0R2TVVc2eENC0=; b=UUhFUa+XuYZfkMYsi6q83r
+        4Wp7G0JhwiXtmFx3lBL0N6DFQL0gI/ZSwhLL/ZpeSJZEO3ay1bRp9T1abEJ6rX6P
+        y8WW34euQQXd3Zh2VKC6jqF4FGvfO3jKiIBqzDNUg8/w4t9tYot8p9FRcnJb6tf4
+        aX5FgiXBCADRXYW9JO0BGIqjVRj8XhLyffuoDbsfVxuNQp+2xp4wfmxPa7Yll3Q3
+        UQwCjdZwc7L8r+kopkOBPVsLOK66Lf8rzXmbf15w76VGoR28n8wHDAI45UXdEMd0
+        mkq/d0XAM6WL2JvOxNWcsneZE3JqnhyBfe7cBVSq4dXm0ChYuntJ1O7Chapq7KIA
+        ==
+X-ME-Sender: <xms:IvnqXSwr_J1AykBnQcEN7OVIL5j3BZzrMhhhTQNF7f_3nGYM0yP-9w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudekgedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
+    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
+    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucfkphepledurdeihedrfeegrdef
+    feenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehinhhvihhsihgslh
+    gvthhhihhnghhslhgrsgdrtghomhenucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:IvnqXZcnt5dBGcCCd0FQOJUyg3GXn4OFDGJec6wdVOXLDpG99gqjpw>
+    <xmx:IvnqXYID-tOK91SzFUZuReNnvXqe_nwUkLWHWBzqzBcWee-PU2Xj6w>
+    <xmx:IvnqXS1QH7f62Fehcq15IAmvzl_tXfAfHoIw8iPTzHr0Zd7-Hh_jFw>
+    <xmx:IvnqXX5VZJdpk5iNIYSCdTSPW2KHEgpT6vXwo5TWCYki8FKZCGGa_A>
+Received: from mail-itl (ip5b412221.dynamic.kabel-deutschland.de [91.65.34.33])
+        by mail.messagingengine.com (Postfix) with ESMTPA id B947530600D3;
+        Fri,  6 Dec 2019 19:58:09 -0500 (EST)
+Date:   Sat, 7 Dec 2019 01:58:07 +0100
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Suwan Kim <suwan.kim027@gmail.com>, linux-usb@vger.kernel.org,
+        Valentina Manea <valentina.manea.m@gmail.com>
+Subject: Re: "usbip: Implement SG support to vhci-hcd and stub driver" causes
+ a deadlock
+Message-ID: <20191207005807.GQ1122@mail-itl>
+References: <20191206032406.GE1208@mail-itl>
+ <20191206065058.GA9792@localhost.localdomain>
+ <20191206205742.GP1122@mail-itl>
+ <49f180e4-0e36-1615-0988-31b0199c4e2b@linuxfoundation.org>
 MIME-Version: 1.0
-Received: by 2002:a5d:678e:0:0:0:0:0 with HTTP; Fri, 6 Dec 2019 16:29:53 -0800 (PST)
-Reply-To: mrs.aalia.ahmed@gmail.com
-From:   "Mrs.Aalia.Ahmed" <adamhana1907@gmail.com>
-Date:   Sat, 7 Dec 2019 00:29:53 +0000
-Message-ID: <CAOGreO=8t36s1Mau26bRqTQErHsnOf5ki10AJ6EA4tNedNUo8g@mail.gmail.com>
-Subject: OK
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xn9xNsWbHJd/50IB"
+Content-Disposition: inline
+In-Reply-To: <49f180e4-0e36-1615-0988-31b0199c4e2b@linuxfoundation.org>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings My Dearest One.
 
-My name is Mrs.Aalia.Ahmed, i saw your profile and became interested
-in you, please contact me through my email address
-(mrs.aalia.ahmed@gmail.com) to know each other and i have something
-very important to tell you, i wait for your response to my email ID.
-(mrs.aalia.ahmed@gmail.com
+--xn9xNsWbHJd/50IB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: "usbip: Implement SG support to vhci-hcd and stub driver" causes
+ a deadlock
+
+On Fri, Dec 06, 2019 at 02:12:08PM -0700, Shuah Khan wrote:
+> On 12/6/19 1:57 PM, Marek Marczykowski-G=C3=B3recki wrote:
+> > On Fri, Dec 06, 2019 at 03:50:58PM +0900, Suwan Kim wrote:
+> > > On Fri, Dec 06, 2019 at 04:24:06AM +0100, Marek Marczykowski-G=C3=B3r=
+ecki wrote:
+> > > > Hello,
+> > > >=20
+> > > > I've hit an issue with recent 4.19 and 5.4 kernels. In short: if I
+> > > > connect Yubikey 4 and use its CCID interface (for example `ykman oa=
+th
+> > > > list` command), the client side hangs (100% reliably). After 60s I =
+get a
+> > > > message that a CPU hangs waiting for a spinlock (see below).
+> > > >=20
+> > > > I've bisected it to a ea44d190764b4422af ("usbip: Implement SG supp=
+ort
+> > > > to vhci-hcd and stub driver") commit. Which indeed is also backport=
+ed to
+> > > > 4.19.
+> > > >=20
+> > > > Any idea what is going on here? I can easily provide more informati=
+on,
+> > > > if you tell me how to get it.
+> > > >=20
+> > >=20
+> > > Hi,
+> > >=20
+> > > Thanks for reporting. Could you turn on lockdep and USBIP_DEBUG
+> > > in kernel config and send dmesg log? It will be helpful to figure
+> > > out lock dependency in vhci_hcd.
+> >=20
+> > Hmm, I've tried, but I don't see much more information there (see
+> > below). I've just enabled PROVE_LOCKING and USBIP_DEBUG. Do I need to do
+> > anything more, like some boot option?
+> >=20
+> > Also, this one (as the previous one) is from 4.19.84. Interestingly, on
+> > 4.19.87 I don't get the message at all.
+> >=20
+> > Hmm, I've done also another test: got 4.19.84 with "usbip: Implement SG
+> > support to vhci-hcd and stub driver" reverted and it still hangs...
+> >=20
+> > I'm going for another bisect round (4.19.81 works, 4.19.84 doesn't).
+>=20
+> Does 4.19.82 work?
+
+Yes, it does, or at least something after 4.19.82 works (9da271c1c).
+
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+
+--xn9xNsWbHJd/50IB
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAl3q+R4ACgkQ24/THMrX
+1ywQuggAj0l82ZNqfTNKPifDGHnGTYrwsHTO2gzCQ7Bso5iU74fe+f8IocCJqoSp
+Kms9gZcH14Jtc7uIfkSFLUBr19p/JbmK5uFtw5wookpcVqJAP1R+3lQmFz/xqBsf
+7B5SGsxk2VpplH58WLemOOvLxt7nYSwfXb0EKiadAj7ZjJyT7egMRRVxfQsK5J53
+NTEe4KE4ENiwG2ko/4spa6aoyfYmznulilsTkePDJvVsSPbwy4P1NvJ5BEa2U63U
+dOQ2zQxDn79EW+TXFPQ7+FiyQaT/q4HR014O9d072KU3yv7kyWUAdmeDL+PGdnEi
+rHJtZdZGMEglgod+dn33TwCNcwFJoA==
+=kWqC
+-----END PGP SIGNATURE-----
+
+--xn9xNsWbHJd/50IB--
