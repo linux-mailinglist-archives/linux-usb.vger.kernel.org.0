@@ -2,141 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 114441165C0
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 05:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3411165C2
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 05:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726957AbfLIEGF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Dec 2019 23:06:05 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:43041 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726823AbfLIEGF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Dec 2019 23:06:05 -0500
-Received: by mail-vk1-f196.google.com with SMTP id s62so3968522vkb.10
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 20:06:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SSKZQVNYBrUoRU4TPgH9Xi7HOKeo/fTJhl3EcFgABvc=;
-        b=bYE7UvRj8WqhH/yPnmNYzBwI9HgYLmCbDkmqzmiM6urz1iwQWs3gJP4jUyz3Nk3Cl4
-         mZJ0unsgC7SUGo4APlmBV0tzbpoinfMIDbAGlv5Kmp1K1xUSURUJfKfItDQyq/w535tp
-         U5hyBNlIHd4inJvg287aAk+wQyGQ+ybxr8HgY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SSKZQVNYBrUoRU4TPgH9Xi7HOKeo/fTJhl3EcFgABvc=;
-        b=rVDhHmEEPu/ITXCB5wf8ZAt0yBgnTWT0Ok/vOB8QO/ubgVMJaOa8XjEZjZiCII/IVG
-         1jLH5aFIjBphDwH3p6BksATEeg0qFrtDZTDLeGeRUYoPSNrareCCXOA5CtWIq8pclTyi
-         KG5OpO7xqX7iFsQ6vf/XCHkqUGuym9B221cQioVcfBvNZzp9y3+fl85LvlDVUtnEH8qH
-         sj2afCeb1kiWiCMivWIlTDI4piztZmvdYIY77oi4FT2mW6H+vBdz8lcvMI+KDDTOXFjR
-         d/dAqxbjXmmdPKQKRlUo9v85ib/hsLWG38Equl9pXkI9L3oUG6g7gxG0k+9I79WcaH3x
-         jIJw==
-X-Gm-Message-State: APjAAAXyCYYV8PK9GSL4WphklO1vELepeQOtHTu6svfKmGdSl9XDSqGZ
-        RH186b/inTVnFMqCgcFyc9o3b+F+z0rBMBWFEbRlUQ==
-X-Google-Smtp-Source: APXvYqxiLiVTMXxIQfcCgISplvC33Dty2tzSU0elJdJeDv4SwXtUrMMWJ6sQkhk52auJFaw3mV3pedUilqtbw7keBOA=
-X-Received: by 2002:a1f:8fd3:: with SMTP id r202mr22038987vkd.77.1575864364344;
- Sun, 08 Dec 2019 20:06:04 -0800 (PST)
+        id S1726926AbfLIEIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Dec 2019 23:08:38 -0500
+Received: from mga03.intel.com ([134.134.136.65]:20803 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726834AbfLIEIi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 8 Dec 2019 23:08:38 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 08 Dec 2019 20:08:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,294,1571727600"; 
+   d="scan'208";a="244312348"
+Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
+  by fmsmga002.fm.intel.com with ESMTP; 08 Dec 2019 20:08:37 -0800
+Received: from FMSMSX109.amr.corp.intel.com (10.18.116.9) by
+ FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Sun, 8 Dec 2019 20:08:37 -0800
+Received: from shsmsx103.ccr.corp.intel.com (10.239.4.69) by
+ fmsmsx109.amr.corp.intel.com (10.18.116.9) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Sun, 8 Dec 2019 20:08:36 -0800
+Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.109]) by
+ SHSMSX103.ccr.corp.intel.com ([169.254.4.29]) with mapi id 14.03.0439.000;
+ Mon, 9 Dec 2019 12:08:35 +0800
+From:   "Yuan, Shengquan" <shengquan.yuan@intel.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Question for usbmon/SET_ADDRESS request
+Thread-Topic: Question for usbmon/SET_ADDRESS request
+Thread-Index: AdWuRcnxiBS1b5xIR76NSftKb1T3Rg==
+Date:   Mon, 9 Dec 2019 04:08:34 +0000
+Message-ID: <47EE7DDB963B974E8D97CE7497B454D43FED8BE2@shsmsx102.ccr.corp.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.239.127.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20191203101552.199339-1-ikjn@chromium.org> <20191203165301.GH10631@localhost>
- <CAATdQgCqYrd_aXN5GDsso+F3WadNx3DQKK3Efk3tgkrv2VXjyw@mail.gmail.com>
- <20191204075533.GI10631@localhost> <CAATdQgBcuJenS2VSm+y4Yhn5mWE1P0CGJQ3NRdoe68dd2SRPGg@mail.gmail.com>
- <20191205142641.GL10631@localhost> <CAATdQgBK4gWvR06YJ3Z_y5NeqLKYY7Ajc0KG78rG2deR3Ga11A@mail.gmail.com>
- <20191206152604.GO10631@localhost>
-In-Reply-To: <20191206152604.GO10631@localhost>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 9 Dec 2019 12:05:53 +0800
-Message-ID: <CAATdQgDAZ21bEXh+YFh+fCdBxnuRi-1_x0o_hpxW0Vj0zY-j8A@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        GregKroah-Hartman <gregkh@linuxfoundation.org>,
-        RobHerring <robh+dt@kernel.org>,
-        MarkRutland <mark.rutland@arm.com>,
-        AlanStern <stern@rowland.harvard.edu>,
-        SuwanKim <suwan.kim027@gmail.com>,
-        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 6, 2019 at 11:25 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, Dec 06, 2019 at 11:57:30AM +0800, Ikjoon Jang wrote:
-> > On Thu, Dec 5, 2019 at 10:26 PM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > On Thu, Dec 05, 2019 at 03:32:38PM +0800, Ikjoon Jang wrote:
-> > > > On Wed, Dec 4, 2019 at 3:55 PM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > > > But related to my question above, why do you need to do this during
-> > > > > enumeration? Why not just set the lower interval value in the hub
-> > > > > driver?
-> > > >
-> > > > Because I want device tree's bInterval to be checked against the same rules
-> > > > defined in usb_parse_endpoint(). e.g. although hardware says its maximum
-> > > > is 255, but the practical limit is still 0 to 16, so the code can
-> > > > print warnings when bInterval from device node is too weird.
-> > >
-> > > But that could be handled refactoring the code in question or similar.
-> >
-> > Yes, that should be worked. I can't exactly figure out how to refactor
-> > the code for now, but maybe parsed endpoint descriptors are being
-> > checked with default hard wired bInterval value and after that
-> > an overridden value should be checked again.
-> >
-> > Actually I don't care about the details of software policies. I just want
-> > all devices to be handled in the same manner without any further
-> > special treatments.
->
-> I'd say you're indeed trying to give a specific device special
-> treatment. ;)
-
-yeah right, I'm giving one treatment but I mean not any further.
-
->
-> > > The fundamental problem here is that you're using devicetree, which is
-> > > supposed to only describe the hardware, to encode policy which should be
-> > > deferred to user space.
-> >
-> > The hub hardware has a default bInterval inside which is actually
-> > adjustable. So I can think setting bInterval is to describe the hardware
-> > rather than policy.
->
-> No, the USB spec says bInterval is a maximum requested value and that
-> the host is free to poll more often. And that's policy.
-
-Honestly I'm a bit confused on the border line between hardware
-and software definition. That's quite reasonable it's policy that software
-can poll more often than hardware specified, but can we think it's just
-overriding hardware property specifying maximum value from beginning?
-Is it still policy? or 'overriding hardware property' part is already not
-a hardware description? :-S
-
->
-> > > So I think you need to figure out an interface that allows user space to
-> > > set the polling interval for any hub at runtime instead.
-> >
-> > Changing the interval at runtime is an another way to solve the
-> > power consumption problem, but it's not so easy. At least xhci needs
-> > to restart an endpoint and no devices are changing the interval after
-> > enumeration stage.
->
-> The usb-hid driver actually supports configuring the polling rate
-> for devices like mice and keyboards after enumeration (through a module
-> parameter, but still).
->
-> Unfortunately, the xhci driver does not yet support this and always uses
-> the device maximum bInterval. A bug report for this was filed many years
-> ago, perhaps it's time to address that (adding Mathias on CC):
->
->         https://bugzilla.kernel.org/show_bug.cgi?id=82571
-
-Thanks!
-
->
-> Johan
+SGksDQoNCkkgdHJpZWQgdG8gdXNlIHVzYm1vbiB0byBjYXB0dXJlIHRoZSBVU0IgcGFja2V0cyB3
+aGVuIGluc2VydGluZyBhIHUtZGlzaywgaG93ZXZlciwgSSBkaWRuJ3Qgc2VlIHRoZSBTRVRfQURE
+UkVTUyByZXF1ZXN0DQoNCkJlbG93IGlzIHRoZSBwYWNrZXQgbGlzdCwgIGluIHBhY2tldCA4OCwg
+dGhlIGhvc3Qgc3VkZGVubHkgdXNlcyBhZGRyZXNzIDc0IHRvIGNvbW11bmljYXRlIHdpdGggVS1k
+aXNrLiAgSSBhbSB3b25kZXJpbmcgd2hldGhlciB1c2Jtb24gd2lsbCBjYXB0dXJlIFNFVF9BRERS
+RVNTIHJlcXVlc3Q/DQoNCjcxCTguNDYzNTE0CWhvc3QJMS4xLjEJVVNCCTY0CVVSQl9JTlRFUlJV
+UFQgaW4NCjcyCTguNDYzNTM2CWhvc3QJMS4xLjAJVVNCSFVCCTY0CUdFVF9TVEFUVVMgUmVxdWVz
+dCAgICAgW1BvcnQgNl0NCjczCTguNDYzNTUzCTEuMS4wCWhvc3QJVVNCSFVCCTY4CUdFVF9TVEFU
+VVMgUmVzcG9uc2UgICAgW1BvcnQgNl0NCjc0CTguNDYzNjEzCWhvc3QJMS4xLjAJVVNCSFVCCTY0
+CVNFVF9GRUFUVVJFIFJlcXVlc3QgICAgW1BvcnQgNjogUE9SVF9SRVNFVF0NCjc1CTguNDYzNjI2
+CTEuMS4wCWhvc3QJVVNCSFVCCTY0CVNFVF9GRUFUVVJFIFJlc3BvbnNlICAgW1BvcnQgNjogUE9S
+VF9SRVNFVF0NCjc2CTguNTIzNDY5CWhvc3QJMS4xLjAJVVNCSFVCCTY0CUdFVF9TVEFUVVMgUmVx
+dWVzdCAgICAgW1BvcnQgNl0NCjc3CTguNTIzNDg3CTEuMS4wCWhvc3QJVVNCSFVCCTY4CUdFVF9T
+VEFUVVMgUmVzcG9uc2UgICAgW1BvcnQgNl0NCjc4CTguNTIzNDk1CWhvc3QJMS4xLjAJVVNCSFVC
+CTY0CUNMRUFSX0ZFQVRVUkUgUmVxdWVzdCAgW1BvcnQgNjogQ19QT1JUX1JFU0VUXQ0KNzkJOC41
+MjM1MDEJMS4xLjAJaG9zdAlVU0JIVUIJNjQJQ0xFQVJfRkVBVFVSRSBSZXNwb25zZSBbUG9ydCA2
+OiBDX1BPUlRfUkVTRVRdDQo4MAk4LjU4MzY5MAlob3N0CTEuMC4wCVVTQgk2NAlHRVQgREVTQ1JJ
+UFRPUiBSZXF1ZXN0IERFVklDRQ0KODEJOC41ODM3ODEJMS4wLjAJaG9zdAlVU0IJODIJR0VUIERF
+U0NSSVBUT1IgUmVzcG9uc2UgREVWSUNFDQo4Mgk4LjU4MzgyMAlob3N0CTEuMS4wCVVTQkhVQgk2
+NAlTRVRfRkVBVFVSRSBSZXF1ZXN0ICAgIFtQb3J0IDY6IFBPUlRfUkVTRVRdDQo4Mwk4LjU4Mzgz
+NwkxLjEuMAlob3N0CVVTQkhVQgk2NAlTRVRfRkVBVFVSRSBSZXNwb25zZSAgIFtQb3J0IDY6IFBP
+UlRfUkVTRVRdDQo4NAk4LjY0MzY0Mwlob3N0CTEuMS4wCVVTQkhVQgk2NAlHRVRfU1RBVFVTIFJl
+cXVlc3QgICAgIFtQb3J0IDZdDQo4NQk4LjY0MzY2NgkxLjEuMAlob3N0CVVTQkhVQgk2OAlHRVRf
+U1RBVFVTIFJlc3BvbnNlICAgIFtQb3J0IDZdDQo4Ngk4LjY0MzY3NQlob3N0CTEuMS4wCVVTQkhV
+Qgk2NAlDTEVBUl9GRUFUVVJFIFJlcXVlc3QgIFtQb3J0IDY6IENfUE9SVF9SRVNFVF0NCjg3CTgu
+NjQzNjgwCTEuMS4wCWhvc3QJVVNCSFVCCTY0CUNMRUFSX0ZFQVRVUkUgUmVzcG9uc2UgW1BvcnQg
+NjogQ19QT1JUX1JFU0VUXQ0KODgJOC43MjM1NTgJaG9zdAkxLjc0LjAJVVNCCTY0CUdFVCBERVND
+UklQVE9SIFJlcXVlc3QgREVWSUNFDQo4OQk4LjcyMzY1MAkxLjc0LjAJaG9zdAlVU0IJODIJR0VU
+IERFU0NSSVBUT1IgUmVzcG9uc2UgREVWSUNFDQo5MAk4LjcyMzY5Mglob3N0CTEuNzQuMAlVU0IJ
+NjQJR0VUIERFU0NSSVBUT1IgUmVxdWVzdCBCT1MNCg0KVGhhbmtzDQotQXVzdGluDQo=
