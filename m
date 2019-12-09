@@ -2,101 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DCCA116B20
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 11:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E010F116B48
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 11:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727534AbfLIKek (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 05:34:40 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37666 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727421AbfLIKej (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 05:34:39 -0500
-Received: by mail-lf1-f68.google.com with SMTP id b15so10279248lfc.4
-        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 02:34:38 -0800 (PST)
+        id S1727614AbfLIKll (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 05:41:41 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:42603 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727567AbfLIKll (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 05:41:41 -0500
+Received: by mail-ot1-f66.google.com with SMTP id 66so11745378otd.9
+        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 02:41:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=64DqL3IzZjciHWWJLUTKeX5nAWdg61GDZhAuYNVZBxE=;
-        b=fuRB4N00AOC2wnGfYA8ZaE+p3L4uglqU+9qEosyU3UoYWjG96QQSfjWspVo5HfH7tl
-         G3+2KoQ1RS0P632vlbP8gdxLL7t3ypFeaqF0Lr8S03/XPkcwG74SQGnJF6zgfDmxQ+1B
-         y6EI6yW8KhH36xcebyHpwPv41kZ4kHf/ujteO6oFT9X7dqQfuoSVRkGFF/YQ7zFgZAGb
-         CXMun9LpnIPr8DQVFSFVPOFYRS17cQx+18TgkIVMYvAMfYob2nYRarWh5W5Ys7E5WAAi
-         d9qEyjcn7Eko6+dEWGMPllm2hVgk4uonmM+Dh2UX7qz+ozHQXTWn480Q5Y5pBp0e1qSE
-         4XQw==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gYzrRHvROzWEHsbqPSdryz7OtZViUV/3m1bnx/0ZnPI=;
+        b=v6h4FTXLN9u6J4OWpD223dFncNFgKD0HCKx1Fs7MqMEpYaNbIdbl5SEPnroSLWBCCZ
+         Pmd5pNexM0K6YHXvVmdsQ9zEgsE5IWhUllrKlhXjM738xi1ut70t1lipkaAAM5RP2EsS
+         3PObG+shQwNfifO8asmPHBCi7ynvNXQ+iB41dte30Ag9mgKTag6vG2SLwsY8tOB1sn9B
+         XyL45Ld302H/GNgtzEWuokz4l4ZQpaElYFPC/BmjzCAs9tdBlzZ1KmeQKldMvGL/u6KA
+         +is4N4ZjiQo5+qI7V3+4ZHN2HY6EykmpiBLR56IoJUO9/Tn6NDfs5wVLARpwACv3r+Kl
+         HFgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=64DqL3IzZjciHWWJLUTKeX5nAWdg61GDZhAuYNVZBxE=;
-        b=JHCHW8Kd5uRH5dTaMzy9gpNLgX4hwLY4PHoYQhp+Yv3zumPdUlrS6PJdLh2tCbicDe
-         AMpl592LAY9gsNYG6NxKQhzVF5iKXcBIBRoBK9AOuQH90Usz5IHEn60CaBnP+Qpsbhwb
-         zAfS2p6kHsPKEw/EJAwKJpghl5gEnI/OWw1+kWhUWHgOOGrgEjMEzHztuKz/ng07OvKe
-         yiGfp4O9w6dvkuSlX6QCPLcYEhoBDqtXT2SLfEo4ZZy1E9XK/kYew9FNsD5HTcpnZw0N
-         jFrJqEXow/o9cayDzEGt8C1rSXM9/XHsmh9ukUg0o2PIlCpaGI1aTolO0CooJbbqkZSv
-         DQ6A==
-X-Gm-Message-State: APjAAAVwuVSxijDlDvIYb8v1EnvyD+wzcz+0HdcdKyo1aC+4KTmgoyNm
-        gJTpKY6pkjQ184f5p+iUMbV7RjWW
-X-Google-Smtp-Source: APXvYqwbmEOV4AJZPHFhJ2jiOCulHhkqHTmsdlP7FMayUMfBGVRlEjvDDoKvkd73K4N3sa9UgrF12w==
-X-Received: by 2002:ac2:5337:: with SMTP id f23mr1864639lfh.192.1575887677598;
-        Mon, 09 Dec 2019 02:34:37 -0800 (PST)
-Received: from google.com ([2620:0:1043:12:60fa:1524:8dd0:6d])
-        by smtp.gmail.com with ESMTPSA id s16sm5221396lfc.35.2019.12.09.02.34.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Dec 2019 02:34:36 -0800 (PST)
-Date:   Mon, 9 Dec 2019 11:34:35 +0100
-From:   Lionel Koenig <lionel.koenig@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        Jonas Stenvall <jonas.stenvall.umea@gmail.com>
-Subject: [PATCH] USB: gadget: u_audio: Initialize capture memory
-Message-ID: <20191209103435.GA55498@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gYzrRHvROzWEHsbqPSdryz7OtZViUV/3m1bnx/0ZnPI=;
+        b=TaxgfNTAUejfMmxRAMD/mvP7JjrYfuAw5W+BtFcPbkbVOCvk0Lp6eU4NxTZY0W2ZDv
+         ZgB6WwLp0UyfXJiJSJFxCfMDumU4P7D/ZPAf1sHRipUv8NTJXO3uesK97r7WZSAUIFZY
+         OnshQoJhKLs2s9w0QZK8LG6dzzzCznVPSXZ1b4/jeRFEKtwKCztExhuU1HVNuXZY5Zfl
+         7AInC8I3FdBrOuB5g2/A2c3uJ6CKfLBQ/rsd5CrQLdkd5LQe2yh9kS8fFiaF5IH0ZcDe
+         FFvf4/QNG1+pXzw0A3d7UQb7mdeLeWZtVIxzyb8f3Wjg3Nh9Y/iquZJVX6y9qmNVaLhU
+         YFEA==
+X-Gm-Message-State: APjAAAV02NatPx+oKjxLGpE5CAbn5soBEug/V0Acbsosn1KOG3DNdjVn
+        ReO9zspu9/QwtbAl6Rjj0AvbolLBGmsu/WBVCun+s6UM
+X-Google-Smtp-Source: APXvYqzwkO87e91T9s6pX+vP9Q4cIqivs7kZxM8F08a/F1nYK6lwny6bIiLPiQceTcD8kSb/cfntoj886BGCc3fmmqY=
+X-Received: by 2002:a9d:7a46:: with SMTP id z6mr21115890otm.194.1575888100901;
+ Mon, 09 Dec 2019 02:41:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191205142200.145252-1-linus.walleij@linaro.org>
+ <20191205201936.GA19754@uda0271908> <CACRpkdb1dY-fnH8Muse7gFoxzA2PhpLFskWJ+dz6DHbvm7H7zQ@mail.gmail.com>
+In-Reply-To: <CACRpkdb1dY-fnH8Muse7gFoxzA2PhpLFskWJ+dz6DHbvm7H7zQ@mail.gmail.com>
+From:   Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Date:   Mon, 9 Dec 2019 11:41:29 +0100
+Message-ID: <CAMpxmJWRbQOFP_Ftq7q89P-f=3A3Q_wCKaRv6Zki=UJPsPqjvg@mail.gmail.com>
+Subject: Re: [PATCH] musb: davinci: Convert to use GPIO descriptor
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
+        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Using USB audio gadget in capture mode with an non blocking API may
-result in getting uninitialized memory samples. That ensure that the
-memory is initialized to 0 when the stream is prepared.
+pon., 9 gru 2019 o 01:25 Linus Walleij <linus.walleij@linaro.org> napisa=C5=
+=82(a):
+>
+> On Thu, Dec 5, 2019 at 9:20 PM Bin Liu <b-liu@ti.com> wrote:
+> > On Thu, Dec 05, 2019 at 03:22:00PM +0100, Linus Walleij wrote:
+> > > The DaVinci MUSB glue contains an optional GPIO line to
+> > > control VBUS power, convert this to use a GPIO descriptor
+> > > and augment the EVM board file to provide this descriptor.
+> > >
+> > > I can't get this driver to compile properly and it depends
+> > > on broken but when I didn get it to compile brokenly, it
+> > > did at least not complain about THIS code being broken so
+> > > I don't think I broke the driver any more than what it
+> > > already is.
+> > >
+> > > I did away with the ifdefs that do not work with
+> > > multiplatform anyway so the day someone decides to
+> > > resurrect the code, the path to get it working should be
+> > > easier as well since DaVinci is now multiplatform.
+> >
+> > Generally I don't take such patches unless they are part of the effort
+> > to un-broken the driver. But is this patch a prerequisite of any cleanu=
+p
+> > in DaVinci family or ARM architecture? What is the motivation of this
+> > patch?
+>
+> The motivation is the clean-up of the internal GPIO API for the
+> kernel. It is described in drivers/gpio/TODO
+>
+> I can propose a patch simply deleting the code if you prefer that,
+> then whoever want to resurrect it can still get it out of git if
+> they need. As long as nothing includes <linux/gpio.h> anymore,
+> I am happy.
+>
+> Yours,
+> Linus Walleij
 
-Signed-off-by: Lionel Koenig <lionel.koenig@gmail.com>
----
- drivers/usb/gadget/function/u_audio.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+I have a related WiP series that removes calls to legacy GPIO API from
+the dm355-evm which uses the same driver. Hopefully this week I'll
+have some time to take a look at it, especially since I've got the
+relevant HW now. Who knows, maybe I'll even resurrect this code. :)
 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index 7ec6a996af26..6d708494ca77 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -317,6 +317,14 @@ static int uac_pcm_open(struct snd_pcm_substream *substream)
- 	return 0;
- }
- 
-+static int uac_pcm_prepare(struct snd_pcm_substream *substream)
-+{
-+	struct snd_pcm_runtime *runtime = substream->runtime;
-+
-+	memset(runtime->dma_area,  0, runtime->dma_bytes);
-+	return 0;
-+}
-+
- /* ALSA cries without these function pointers */
- static int uac_pcm_null(struct snd_pcm_substream *substream)
- {
-@@ -331,7 +339,7 @@ static const struct snd_pcm_ops uac_pcm_ops = {
- 	.hw_free = uac_pcm_hw_free,
- 	.trigger = uac_pcm_trigger,
- 	.pointer = uac_pcm_pointer,
--	.prepare = uac_pcm_null,
-+	.prepare = uac_pcm_prepare,
- };
- 
- static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
--- 
-2.24.0.393.g34dc348eaf-goog
+In other words: please hold off removing of this driver.
 
+Best regards,
+Bartosz Golaszewski
