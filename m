@@ -2,500 +2,1340 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A46311166F9
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 07:35:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D44D11695C
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 10:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfLIGft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 01:35:49 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43482 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726014AbfLIGft (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 01:35:49 -0500
-Received: by mail-pf1-f195.google.com with SMTP id h14so6671187pfe.10
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 22:35:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=5tkzE1ChYC7YxGGc+NTxbiv9iM0VwKR/CR/NiqJxBhI=;
-        b=faGtHs4ctuXAuzM6LpYLFICbCyIKECDy2HLpamKgvQt6W6c6qVL6MIMjK3bY9byhYD
-         DHBzko0VDWANGK7cg8I9tWPlJn2MvAD02Zv9YtbLMqWnTP2aoxmuimI2Yur/0kcLsRAs
-         zWtXUMpgeqhUr8SuN6XVnqeAXbhvojKdaz/O8hY6qSE1ZrCRi5bMlzYVYOfp+va8yY41
-         oA8sXlLjOOoQDifddrlbf26BcOieMHLzq+L4cNpcgRUzweuPhwTYMp+ffzGfpljnhsYM
-         y+/mvQw5iMiD7c2pKwuysMq7jZXW8AyfFCTz6j7PYJIp9LqYp0HQYk6T2Hnyab9vY9pY
-         gASQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=5tkzE1ChYC7YxGGc+NTxbiv9iM0VwKR/CR/NiqJxBhI=;
-        b=O5sIBJ6KOOHfExtEKelKPTlO/TJ4kLbNP0i/FfEE2PLG+AJW9n25KQPH7Aw6o+s/30
-         iDGeONCJ0EkMJd9IoVmcaWSqR59c2okOkpnwSNw5g/T7jWnAf3KUSs6G3ec/vdNPjjpC
-         qJYOsaUaj+Oke6FjZ43ekm5vkE3R+ny3qCHNKkZaLKv0nulp2Z/mcW4MaLh2nznoGu7R
-         /scJKBM1ZU1/50mtnwJ+VdOlI9TXRXng8qUt8XTAzEXSfYxJ2Qat4dW3ntNAxnkOSB56
-         Q4bnGkAo/jrFvzb7wmSgILr3KsCq281oWLyWy5bJMoYDYNYV4jqP74Gfg0KWA8TFYAZU
-         Wpyw==
-X-Gm-Message-State: APjAAAVHDTO4uZOtUSxwDZzs73IVTA4L2mVlVpDSYW9myXWxv7cnKPxR
-        Lp0fNMTC8MWgSje481X+01o=
-X-Google-Smtp-Source: APXvYqx7W8LMVRkXAJ7uvr4XwkpGd8vYI/K/3EcAKuYDl+d3YVuFiLDxsh37591e9xLHMeZE783INw==
-X-Received: by 2002:aa7:8d03:: with SMTP id j3mr28925348pfe.162.1575873348124;
-        Sun, 08 Dec 2019 22:35:48 -0800 (PST)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id k9sm11174412pje.26.2019.12.08.22.35.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Dec 2019 22:35:47 -0800 (PST)
-Date:   Mon, 9 Dec 2019 15:35:43 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>
-Subject: Re: "usbip: Implement SG support to vhci-hcd and stub driver" causes
- a deadlock
-Message-ID: <20191209063543.GA2473@localhost.localdomain>
-References: <20191206032406.GE1208@mail-itl>
- <20191206065058.GA9792@localhost.localdomain>
- <20191206205742.GP1122@mail-itl>
- <20191209020130.GA2909@localhost.localdomain>
- <20191209033740.GA27394@mail-itl>
+        id S1727347AbfLIJdp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 04:33:45 -0500
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:42357 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727113AbfLIJdp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 04:33:45 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 11AD722844;
+        Mon,  9 Dec 2019 04:33:44 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 09 Dec 2019 04:33:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=CzRTS+zLwSmz8j9boPn7XwoLe7
+        GpXZpeUy5iQWVdTl8=; b=mCHRontePT0dkN2Uc+PgE7Ry1r9Id9oZZjLiIWFSoA
+        tQ486B9P46ngnYrD7n8CLeiwDOBK3cVqfLNfB/ctS2Ez8KDPiqerb4KzDrLsKgjV
+        Gw4kEj3QJtY9c1/e1RpZqagOs524vDuekrPNtopWmqZg32gfZ/BRFFFc5JijE9s1
+        KhcuSd/j//hbKzsyvyS6tmOaC8dKuRkMh8HFfdEK65pnGID/CCZaHtAdRfJOFjRW
+        KLouCUja8MBOcRz1lwtdCW6Vqpwn85cUvB9j4s3SVRCf9Qev+SCZBjwmwZVNDv6f
+        IqnzIfh2tkxj1Gk4OBtR7XmBwKOmXXpNLUofYDCD5EYw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=CzRTS+zLwSmz8j9bo
+        Pn7XwoLe7GpXZpeUy5iQWVdTl8=; b=mKfT+gADxrdn337JEUgNb1f3HtGQeWcji
+        JTQeeRcb2X2jGRSZ41ff9Fu400js2MISCOEAfRWYcFuyxb0FpNPH17c0rEepXZXS
+        DdT8CagzsXfk+atobRI9NMhrBLc0EErWpjTFrEDipaw+om8lEF2By8k119ExU1mb
+        eCzgKYRlTr3qrybODE5dP6BsuuWoNXeKsvNrv0kASfoNiqNxFuYCru06KWkA8jNX
+        yJurCwuVbowBSL4J2Vi2Ms7z2u7gNeaFgnN0yuFQeDIyVjVLjQNk3ULh5pVgdJqc
+        AqOWXOYdwjFSwcPXviac6sB2wjShqFBRoeWmjqd8REhofxyTu/xug==
+X-ME-Sender: <xms:9xTuXZSqig6A2_yJNxf_FdkVy7Cz0Qv1O_YHrb7SAikxslkFaSWjIw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeltddgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeforgigihhmvgcu
+    tfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuffhomhgrihhnpe
+    guvghvihgtvghtrhgvvgdrohhrghenucfkphepledtrdekledrieekrdejieenucfrrghr
+    rghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthhenucevlhhush
+    htvghrufhiiigvpedu
+X-ME-Proxy: <xmx:9xTuXZIv3hwdsgKinZMavgfDE-RRdmUqCbfpV6XL9Pb8VIienU-51w>
+    <xmx:9xTuXThtlahYfs4ZyZkaDh1azq0nuJ5LisPj_vlcAemgSV0XmFcEGQ>
+    <xmx:9xTuXUL3ARr6e92QJdQ0Ik7OdafC-ZsAfxLR0SghWjO_atoQGVjAeA>
+    <xmx:-BTuXVh5u3eMsiqxNl0CuTYqc1kt47QHgSwL1wjazCcXEOiQJYf1QQ>
+Received: from localhost (lfbn-1-10718-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 8EDE230600AB;
+        Mon,  9 Dec 2019 04:33:42 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Chen-Yu Tsai <wens@csie.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: [PATCH v2] dt-bindings: usb: Convert Allwinner USB PHY controller to a schema
+Date:   Mon,  9 Dec 2019 10:33:40 +0100
+Message-Id: <20191209093340.50552-1-maxime@cerno.tech>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191209033740.GA27394@mail-itl>
-User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 04:37:40AM +0100, Marek Marczykowski-Górecki wrote:
-> On Mon, Dec 09, 2019 at 11:01:30AM +0900, Suwan Kim wrote:
-> > On Fri, Dec 06, 2019 at 09:57:42PM +0100, Marek Marczykowski-Górecki wrote:
-> > > On Fri, Dec 06, 2019 at 03:50:58PM +0900, Suwan Kim wrote:
-> > > > On Fri, Dec 06, 2019 at 04:24:06AM +0100, Marek Marczykowski-Górecki wrote:
-> > > > > Hello,
-> > > > > 
-> > > > > I've hit an issue with recent 4.19 and 5.4 kernels. In short: if I
-> > > > > connect Yubikey 4 and use its CCID interface (for example `ykman oath
-> > > > > list` command), the client side hangs (100% reliably). After 60s I get a
-> > > > > message that a CPU hangs waiting for a spinlock (see below).
-> > > > > 
-> > > > > I've bisected it to a ea44d190764b4422af ("usbip: Implement SG support
-> > > > > to vhci-hcd and stub driver") commit. Which indeed is also backported to
-> > > > > 4.19.
-> > > > > 
-> > > > > Any idea what is going on here? I can easily provide more information,
-> > > > > if you tell me how to get it.
-> > > > > 
-> > > > 
-> > > > Hi,
-> > > > 
-> > > > Thanks for reporting. Could you turn on lockdep and USBIP_DEBUG
-> > > > in kernel config and send dmesg log? It will be helpful to figure
-> > > > out lock dependency in vhci_hcd.
-> > > 
-> > > Hmm, I've tried, but I don't see much more information there (see
-> > > below). I've just enabled PROVE_LOCKING and USBIP_DEBUG. Do I need to do
-> > > anything more, like some boot option?
-> > > 
-> > > Also, this one (as the previous one) is from 4.19.84. Interestingly, on
-> > > 4.19.87 I don't get the message at all.
-> > > 
-> > > Hmm, I've done also another test: got 4.19.84 with "usbip: Implement SG
-> > > support to vhci-hcd and stub driver" reverted and it still hangs...
-> > 
-> > If so, deadlock is caused by other causes, and why is it different
-> > from the results of bisect?
-> 
-> No idea, but as you've seen in the other email, another bisect returned
-> exactly the same commit.
-> 
-> 
-> > > I'm going for another bisect round (4.19.81 works, 4.19.84 doesn't).
-> > > 
-> > > [  212.890519] usb 1-1: recv xbuf, 42
-> > 
-> > This message is printed by receive error and before that, driver
-> > canceled URB transmission. we need to know the exact situation
-> > before this message.
-> 
-> I've added some more messages and found recv_size is 0.
+The Allwinner SoCs have a USB PHY controller that is supported in Linux,
+with a matching Device Tree binding.
 
-That is the bug point. "size" is urb->actual_length that means
-amount of data actually received from device. And "copy" is
-amount of data received from usbip server. So, in this situation,
-vhci-hcd received all the data from usbip server even if there
-are more sg entries left. So, "copy == 0" means vhci-hcd receives
-all data from the server and we should check "if (copy == 0)" in
-for_each_sg() loop of usbip_recv_xbuff() to exit the loop and not
-to add error event.
+Now that we have the DT validation in place, let's convert the device tree
+bindings for that controller over to a YAML schemas.
 
-> 
-> > Could you send me a longer log messages showing the situation
-> > before "[  212.890519] usb 1-1: recv xbuf, 42"?
-> 
-> Sure, with added extra messages (debug patch below).
-> 
-> [  131.397522] usb 1-1: num_sgs 0
-> [  131.406588] usb 1-1: num_sgs 0
-> [  131.410621] usb 1-1: num_sgs 0
-> [  131.411950] usb 1-1: num_sgs 0
-> [  131.413186] usb 1-1: num_sgs 0
-> [  131.414590] usb 1-1: num_sgs 0
-> [  131.417086] usb 1-1: num_sgs 0
-> [  131.418188] usb 1-1: num_sgs 0
-> [  131.419228] usb 1-1: num_sgs 0
-> [  131.420248] usb 1-1: num_sgs 0
-> [  131.457315] usb 1-1: num_sgs 5
-> [  131.457345] usb 1-1: size 42, copy 42 recv 42, recv_size 42, sg->length 16384
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Device sent 42 bytes data (size 42) and vhci-hcd received 42 bytes
-data from the server. vhci-hcd received all the data and It should
-exit the loop.
+---
 
-> [  131.457359] usb 1-1: size 42, copy 0 recv -22, recv_size 0, sg->length 16384
-> [  131.457372] usb 1-1: recv xbuf, 42 size 42
-> [  131.458263] vhci_hcd: vhci_shutdown_connection:1024: stop threads
-> [  131.458318] vhci_hcd: vhci_shutdown_connection:1032: release socket
-> [  131.458431] vhci_hcd: vhci_shutdown_connection:1058: disconnect device
-> [  131.460171] usb 1-1: USB disconnect, device number 2
-> 
-> (...)
-> 
-> If I add "if (!recv_size) continue;" there, it works!
+Changes from v1:
+  - Split the schemas into files of their own to make it more readable
+---
+ .../phy/allwinner,sun4i-a10-usb-phy.yaml      | 105 ++++++++++++++
+ .../phy/allwinner,sun50i-a64-usb-phy.yaml     | 106 ++++++++++++++
+ .../phy/allwinner,sun50i-h6-usb-phy.yaml      | 105 ++++++++++++++
+ .../phy/allwinner,sun5i-a13-usb-phy.yaml      |  93 ++++++++++++
+ .../phy/allwinner,sun6i-a31-usb-phy.yaml      | 119 +++++++++++++++
+ .../phy/allwinner,sun8i-a23-usb-phy.yaml      | 102 +++++++++++++
+ .../phy/allwinner,sun8i-a83t-usb-phy.yaml     | 122 ++++++++++++++++
+ .../phy/allwinner,sun8i-h3-usb-phy.yaml       | 137 ++++++++++++++++++
+ .../phy/allwinner,sun8i-r40-usb-phy.yaml      | 119 +++++++++++++++
+ .../phy/allwinner,sun8i-v3s-usb-phy.yaml      |  86 +++++++++++
+ .../devicetree/bindings/phy/sun4i-usb-phy.txt |  68 ---------
+ 11 files changed, 1094 insertions(+), 68 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun4i-a10-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun50i-h6-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun5i-a13-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-a23-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-a83t-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-r40-usb-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-v3s-usb-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/sun4i-usb-phy.txt
 
-I think we should check "copy" not the "recv_size" because "copy"
-shows the amount of data received from the server.
-
-int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
-...
-...
-	if (urb->num_sgs) {
-		copy = size;
-		for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-			int recv_size;
-
-			if (copy < sg->length)
-				recv_size = copy;
-			else
-				recv_size = sg->length;
-
-			recv = usbip_recv(ud->tcp_socket, sg_virt(sg),
-						recv_size);
-
-			if (recv != recv_size)
-				goto error;
-
-			copy -= recv;
-			ret += recv;
-			
-			/* Add here */
-			if (!copy)
-				break;
-			^^^^^^^^^^^^^^
-		}
-
-Regards,
-Suwan Kim
-
-> > And please also send the result of "lsusb -v".
-> 
-> Bus 003 Device 006: ID 1050:0407 Yubico.com Yubikey 4 OTP+U2F+CCID
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0 
->   bDeviceSubClass         0 
->   bDeviceProtocol         0 
->   bMaxPacketSize0        64
->   idVendor           0x1050 Yubico.com
->   idProduct          0x0407 Yubikey 4 OTP+U2F+CCID
->   bcdDevice            4.34
->   iManufacturer           1 Yubico
->   iProduct                2 Yubikey 4 OTP+U2F+CCID
->   iSerial                 0 
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0096
->     bNumInterfaces          3
->     bConfigurationValue     1
->     iConfiguration          0 
->     bmAttributes         0x80
->       (Bus Powered)
->     MaxPower               30mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass         3 Human Interface Device
->       bInterfaceSubClass      1 Boot Interface Subclass
->       bInterfaceProtocol      1 Keyboard
->       iInterface              0 
->         HID Device Descriptor:
->           bLength                 9
->           bDescriptorType        33
->           bcdHID               1.10
->           bCountryCode            0 Not supported
->           bNumDescriptors         1
->           bDescriptorType        34 Report
->           wDescriptorLength      71
->           Report Descriptor: (length is 71)
->             Item(Global): Usage Page, data= [ 0x01 ] 1
->                             Generic Desktop Controls
->             Item(Local ): Usage, data= [ 0x06 ] 6
->                             Keyboard
->             Item(Main  ): Collection, data= [ 0x01 ] 1
->                             Application
->             Item(Global): Usage Page, data= [ 0x07 ] 7
->                             Keyboard
->             Item(Local ): Usage Minimum, data= [ 0xe0 ] 224
->                             Control Left
->             Item(Local ): Usage Maximum, data= [ 0xe7 ] 231
->                             GUI Right
->             Item(Global): Logical Minimum, data= [ 0x00 ] 0
->             Item(Global): Logical Maximum, data= [ 0x01 ] 1
->             Item(Global): Report Size, data= [ 0x01 ] 1
->             Item(Global): Report Count, data= [ 0x08 ] 8
->             Item(Main  ): Input, data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): Report Count, data= [ 0x01 ] 1
->             Item(Global): Report Size, data= [ 0x08 ] 8
->             Item(Main  ): Input, data= [ 0x01 ] 1
->                             Constant Array Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): Report Count, data= [ 0x05 ] 5
->             Item(Global): Report Size, data= [ 0x01 ] 1
->             Item(Global): Usage Page, data= [ 0x08 ] 8
->                             LEDs
->             Item(Local ): Usage Minimum, data= [ 0x01 ] 1
->                             NumLock
->             Item(Local ): Usage Maximum, data= [ 0x05 ] 5
->                             Kana
->             Item(Main  ): Output, data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): Report Count, data= [ 0x01 ] 1
->             Item(Global): Report Size, data= [ 0x03 ] 3
->             Item(Main  ): Output, data= [ 0x01 ] 1
->                             Constant Array Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Global): Report Count, data= [ 0x06 ] 6
->             Item(Global): Report Size, data= [ 0x08 ] 8
->             Item(Global): Logical Minimum, data= [ 0x00 ] 0
->             Item(Global): Logical Maximum, data= [ 0x65 ] 101
->             Item(Global): Usage Page, data= [ 0x07 ] 7
->                             Keyboard
->             Item(Local ): Usage Minimum, data= [ 0x00 ] 0
->                             No Event
->             Item(Local ): Usage Maximum, data= [ 0x65 ] 101
->                             Keyboard Application (Windows Key for Win95 or Compose)
->             Item(Main  ): Input, data= [ 0x00 ] 0
->                             Data Array Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Local ): Usage, data= [ 0x03 ] 3
->                             Keyboard Error Undefined
->             Item(Global): Report Size, data= [ 0x08 ] 8
->             Item(Global): Report Count, data= [ 0x08 ] 8
->             Item(Main  ): Feature, data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Main  ): End Collection, data=none
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0008  1x 8 bytes
->         bInterval              10
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass         3 Human Interface Device
->       bInterfaceSubClass      0 
->       bInterfaceProtocol      0 
->       iInterface              0 
->         HID Device Descriptor:
->           bLength                 9
->           bDescriptorType        33
->           bcdHID               1.10
->           bCountryCode            0 Not supported
->           bNumDescriptors         1
->           bDescriptorType        34 Report
->           wDescriptorLength      34
->           Report Descriptor: (length is 34)
->             Item(Global): Usage Page, data= [ 0xd0 0xf1 ] 61904
->                             (null)
->             Item(Local ): Usage, data= [ 0x01 ] 1
->                             (null)
->             Item(Main  ): Collection, data= [ 0x01 ] 1
->                             Application
->             Item(Local ): Usage, data= [ 0x20 ] 32
->                             (null)
->             Item(Global): Logical Minimum, data= [ 0x00 ] 0
->             Item(Global): Logical Maximum, data= [ 0xff 0x00 ] 255
->             Item(Global): Report Size, data= [ 0x08 ] 8
->             Item(Global): Report Count, data= [ 0x40 ] 64
->             Item(Main  ): Input, data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Local ): Usage, data= [ 0x21 ] 33
->                             (null)
->             Item(Global): Logical Minimum, data= [ 0x00 ] 0
->             Item(Global): Logical Maximum, data= [ 0xff 0x00 ] 255
->             Item(Global): Report Size, data= [ 0x08 ] 8
->             Item(Global): Report Count, data= [ 0x40 ] 64
->             Item(Main  ): Output, data= [ 0x02 ] 2
->                             Data Variable Absolute No_Wrap Linear
->                             Preferred_State No_Null_Position Non_Volatile Bitfield
->             Item(Main  ): End Collection, data=none
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x04  EP 4 OUT
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               2
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x84  EP 4 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               2
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        2
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass        11 Chip/SmartCard
->       bInterfaceSubClass      0 
->       bInterfaceProtocol      0 
->       iInterface              0 
->       ChipCard Interface Descriptor:
->         bLength                54
->         bDescriptorType        33
->         bcdCCID              1.00
->         nMaxSlotIndex           0
->         bVoltageSupport         7  5.0V 3.0V 1.8V 
->         dwProtocols             2  T=1
->         dwDefaultClock       4000
->         dwMaxiumumClock      4000
->         bNumClockSupported      0
->         dwDataRate         307200 bps
->         dwMaxDataRate      307200 bps
->         bNumDataRatesSupp.      0
->         dwMaxIFSD            2038
->         dwSyncProtocols  00000000 
->         dwMechanical     00000000 
->         dwFeatures       000400FE
->           Auto configuration based on ATR
->           Auto activation on insert
->           Auto voltage selection
->           Auto clock change
->           Auto baud rate change
->           Auto parameter negotiation made by CCID
->           Short and extended APDU level exchange
->         dwMaxCCIDMsgLen      3072
->         bClassGetResponse    echo
->         bClassEnvelope       echo
->         wlcdLayout           none
->         bPINSupport             0 
->         bMaxCCIDBusySlots       1
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0008  1x 8 bytes
->         bInterval              32
-> Device Status:     0x0000
->   (Bus Powered)
-> 
-> 
-> 
-> And the debug patch:
-> 
-> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
-> index d88a5b15f..89b87d5ed 100644
-> --- a/drivers/usb/usbip/usbip_common.c
-> +++ b/drivers/usb/usbip/usbip_common.c
-> @@ -709,6 +709,7 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
->  		/* should not happen, probably malicious packet */
->  		goto error;
->  
-> +	dev_err(&urb->dev->dev, "num_sgs %d\n", urb->num_sgs);
->  	if (urb->num_sgs) {
->  		copy = size;
->  		for_each_sg(urb->sg, sg, urb->num_sgs, i) {
-> @@ -721,6 +722,7 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
->  
->  			recv = usbip_recv(ud->tcp_socket, sg_virt(sg),
->  						recv_size);
-> +			dev_err(&urb->dev->dev, "size %d, copy %d recv %d, recv_size %d, sg->length %d\n", size, copy, recv, recv_size, sg->length);
->  
->  			if (recv != recv_size)
->  				goto error;
-> @@ -740,7 +742,7 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
->  	return ret;
->  
->  error:
-> -	dev_err(&urb->dev->dev, "recv xbuf, %d\n", ret);
-> +	dev_err(&urb->dev->dev, "recv xbuf, %d size %d\n", ret, size);
->  	if (ud->side == USBIP_STUB || ud->side == USBIP_VUDC)
->  		usbip_event_add(ud, SDEV_EVENT_ERROR_TCP);
->  	else
-> 
-> 
-> -- 
-> Best Regards,
-> Marek Marczykowski-Górecki
-> Invisible Things Lab
-> A: Because it messes up the order in which people normally read text.
-> Q: Why is top-posting such a bad thing?
-
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun4i-a10-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun4i-a10-usb-phy.yaml
+new file mode 100644
+index 000000000000..020ef9e4c411
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun4i-a10-usb-phy.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun4i-a10-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A10 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    enum:
++      - allwinner,sun4i-a10-usb-phy
++      - allwinner,sun7i-a20-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU1 registers
++      - description: PHY PMU2 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu1
++      - const: pmu2
++
++  clocks:
++    maxItems: 1
++    description: USB PHY bus clock
++
++  clock-names:
++    const: usb_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++      - description: USB Host 2 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++      - const: usb2_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++  usb2_vbus-supply:
++    description: Regulator controlling USB2 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun4i-a10-ccu.h>
++    #include <dt-bindings/reset/sun4i-a10-ccu.h>
++
++    usbphy: phy@01c13400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun4i-a10-usb-phy";
++        reg = <0x01c13400 0x10>, <0x01c14800 0x4>, <0x01c1c800 0x4>;
++        reg-names = "phy_ctrl", "pmu1", "pmu2";
++        clocks = <&ccu CLK_USB_PHY>;
++        clock-names = "usb_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>,
++                 <&ccu RST_USB_PHY2>;
++        reset-names = "usb0_reset", "usb1_reset", "usb2_reset";
++        usb0_id_det-gpios = <&pio 7 19 GPIO_ACTIVE_HIGH>;
++        usb0_vbus_det-gpios = <&pio 7 22 GPIO_ACTIVE_HIGH>;
++        usb0_vbus-supply = <&reg_usb0_vbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++        usb2_vbus-supply = <&reg_usb2_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+new file mode 100644
+index 000000000000..fd6e126fcf18
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+@@ -0,0 +1,106 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A64 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun50i-a64-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU0 registers
++      - description: PHY PMU1 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu0
++      - const: pmu1
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun50i-a64-ccu.h>
++    #include <dt-bindings/reset/sun50i-a64-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun50i-a64-usb-phy";
++        reg = <0x01c19400 0x14>,
++              <0x01c1a800 0x4>,
++              <0x01c1b800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu0",
++                    "pmu1";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>;
++        clock-names = "usb0_phy",
++                      "usb1_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>;
++        reset-names = "usb0_reset",
++                      "usb1_reset";
++        usb0_id_det-gpios = <&pio 7 9 GPIO_ACTIVE_HIGH>; /* PH9 */
++        usb0_vbus_power-supply = <&usb_power_supply>;
++        usb0_vbus-supply = <&reg_drivevbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun50i-h6-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun50i-h6-usb-phy.yaml
+new file mode 100644
+index 000000000000..7670411002c9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun50i-h6-usb-phy.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun50i-h6-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner H6 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun50i-h6-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU0 registers
++      - description: PHY PMU3 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu0
++      - const: pmu3
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb3_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb3_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb3_vbus-supply:
++    description: Regulator controlling USB3 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun50i-h6-ccu.h>
++    #include <dt-bindings/reset/sun50i-h6-ccu.h>
++
++    phy@5100400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun50i-h6-usb-phy";
++        reg = <0x05100400 0x24>,
++              <0x05101800 0x4>,
++              <0x05311800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu0",
++                    "pmu3";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY3>;
++        clock-names = "usb0_phy",
++                      "usb3_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY3>;
++        reset-names = "usb0_reset",
++                      "usb3_reset";
++        usb0_id_det-gpios = <&pio 2 6 GPIO_ACTIVE_HIGH>; /* PC6 */
++        usb0_vbus-supply = <&reg_vcc5v>;
++        usb3_vbus-supply = <&reg_vcc5v>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun5i-a13-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun5i-a13-usb-phy.yaml
+new file mode 100644
+index 000000000000..9b319381d1ad
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun5i-a13-usb-phy.yaml
+@@ -0,0 +1,93 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun5i-a13-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A13 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun5i-a13-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU1 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu1
++
++  clocks:
++    maxItems: 1
++    description: USB OTG PHY bus clock
++
++  clock-names:
++    const: usb_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun5i-ccu.h>
++    #include <dt-bindings/reset/sun5i-ccu.h>
++
++    phy@1c13400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun5i-a13-usb-phy";
++        reg = <0x01c13400 0x10>, <0x01c14800 0x4>;
++        reg-names = "phy_ctrl", "pmu1";
++        clocks = <&ccu CLK_USB_PHY0>;
++        clock-names = "usb_phy";
++        resets = <&ccu RST_USB_PHY0>, <&ccu RST_USB_PHY1>;
++        reset-names = "usb0_reset", "usb1_reset";
++        usb0_id_det-gpios = <&pio 6 2 (GPIO_ACTIVE_HIGH | GPIO_PULL_UP)>; /* PG2 */
++        usb0_vbus_det-gpios = <&pio 6 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>; /* PG1 */
++        usb0_vbus-supply = <&reg_usb0_vbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-usb-phy.yaml
+new file mode 100644
+index 000000000000..b0ed01bbf3db
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-usb-phy.yaml
+@@ -0,0 +1,119 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun6i-a31-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A31 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun6i-a31-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU1 registers
++      - description: PHY PMU2 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu1
++      - const: pmu2
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++      - description: USB Host 1 PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++      - const: usb2_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++      - description: USB Host 2 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++      - const: usb2_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++  usb2_vbus-supply:
++    description: Regulator controlling USB2 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun6i-a31-ccu.h>
++    #include <dt-bindings/reset/sun6i-a31-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun6i-a31-usb-phy";
++        reg = <0x01c19400 0x10>,
++              <0x01c1a800 0x4>,
++              <0x01c1b800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu1",
++                    "pmu2";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>,
++                 <&ccu CLK_USB_PHY2>;
++        clock-names = "usb0_phy",
++                      "usb1_phy",
++                      "usb2_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>,
++                 <&ccu RST_USB_PHY2>;
++        reset-names = "usb0_reset",
++                      "usb1_reset",
++                      "usb2_reset";
++        usb0_id_det-gpios = <&pio 0 15 GPIO_ACTIVE_HIGH>; /* PA15 */
++        usb0_vbus_det-gpios = <&pio 0 16 GPIO_ACTIVE_HIGH>; /* PA16 */
++        usb0_vbus_power-supply = <&usb_power_supply>;
++        usb0_vbus-supply = <&reg_drivevbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++        usb2_vbus-supply = <&reg_usb2_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-a23-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-a23-usb-phy.yaml
+new file mode 100644
+index 000000000000..b0674406f8aa
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-a23-usb-phy.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun8i-a23-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A23 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    enum:
++      - allwinner,sun8i-a23-usb-phy
++      - allwinner,sun8i-a33-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU1 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu1
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun8i-a23-a33-ccu.h>
++    #include <dt-bindings/reset/sun8i-a23-a33-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun8i-a23-usb-phy";
++        reg = <0x01c19400 0x10>, <0x01c1a800 0x4>;
++        reg-names = "phy_ctrl", "pmu1";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>;
++        clock-names = "usb0_phy",
++                      "usb1_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>;
++        reset-names = "usb0_reset",
++                      "usb1_reset";
++        usb0_id_det-gpios = <&pio 1 3 GPIO_ACTIVE_HIGH>; /* PB3 */
++        usb0_vbus_power-supply = <&usb_power_supply>;
++        usb0_vbus-supply = <&reg_drivevbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-a83t-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-a83t-usb-phy.yaml
+new file mode 100644
+index 000000000000..48dc9c834a9b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-a83t-usb-phy.yaml
+@@ -0,0 +1,122 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun8i-a83t-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner A83t USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun8i-a83t-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU1 registers
++      - description: PHY PMU2 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu1
++      - const: pmu2
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++      - description: USB Host 1 PHY bus clock
++      - description: USB HSIC 12MHz clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++      - const: usb2_phy
++      - const: usb2_hsic_12M
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++      - description: USB Host 2 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++      - const: usb2_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++  usb2_vbus-supply:
++    description: Regulator controlling USB2 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun8i-a83t-ccu.h>
++    #include <dt-bindings/reset/sun8i-a83t-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun8i-a83t-usb-phy";
++        reg = <0x01c19400 0x10>,
++              <0x01c1a800 0x14>,
++              <0x01c1b800 0x14>;
++        reg-names = "phy_ctrl",
++                    "pmu1",
++                    "pmu2";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>,
++                 <&ccu CLK_USB_HSIC>,
++                 <&ccu CLK_USB_HSIC_12M>;
++        clock-names = "usb0_phy",
++                      "usb1_phy",
++                      "usb2_phy",
++                      "usb2_hsic_12M";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>,
++                 <&ccu RST_USB_HSIC>;
++        reset-names = "usb0_reset",
++                      "usb1_reset",
++                      "usb2_reset";
++        usb0_id_det-gpios = <&pio 7 11 GPIO_ACTIVE_HIGH>; /* PH11 */
++        usb0_vbus_power-supply = <&usb_power_supply>;
++        usb0_vbus-supply = <&reg_drivevbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++        usb2_vbus-supply = <&reg_usb2_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+new file mode 100644
+index 000000000000..60c344585276
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+@@ -0,0 +1,137 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun8i-h3-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner H3 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun8i-h3-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU0 registers
++      - description: PHY PMU1 registers
++      - description: PHY PMU2 registers
++      - description: PHY PMU3 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu0
++      - const: pmu1
++      - const: pmu2
++      - const: pmu3
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++      - description: USB Host 1 PHY bus clock
++      - description: USB Host 2 PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++      - const: usb2_phy
++      - const: usb3_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++      - description: USB Host 2 Controller reset
++      - description: USB Host 3 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++      - const: usb2_reset
++      - const: usb3_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++  usb2_vbus-supply:
++    description: Regulator controlling USB2 Host controller
++
++  usb3_vbus-supply:
++    description: Regulator controlling USB3 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun8i-h3-ccu.h>
++    #include <dt-bindings/reset/sun8i-h3-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun8i-h3-usb-phy";
++        reg = <0x01c19400 0x2c>,
++              <0x01c1a800 0x4>,
++              <0x01c1b800 0x4>,
++              <0x01c1c800 0x4>,
++              <0x01c1d800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu0",
++                    "pmu1",
++                    "pmu2",
++                    "pmu3";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>,
++                 <&ccu CLK_USB_PHY2>,
++                 <&ccu CLK_USB_PHY3>;
++        clock-names = "usb0_phy",
++                      "usb1_phy",
++                      "usb2_phy",
++                      "usb3_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>,
++                 <&ccu RST_USB_PHY2>,
++                 <&ccu RST_USB_PHY3>;
++        reset-names = "usb0_reset",
++                      "usb1_reset",
++                      "usb2_reset",
++                      "usb3_reset";
++        usb0_id_det-gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>; /* PG12 */
++        usb0_vbus-supply = <&reg_usb0_vbus>;
++        usb1_vbus-supply = <&reg_usb1_vbus>;
++        usb2_vbus-supply = <&reg_usb2_vbus>;
++        usb3_vbus-supply = <&reg_usb3_vbus>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-r40-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-r40-usb-phy.yaml
+new file mode 100644
+index 000000000000..a2bb36790fbd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-r40-usb-phy.yaml
+@@ -0,0 +1,119 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun8i-r40-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner R40 USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun8i-r40-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU0 registers
++      - description: PHY PMU1 registers
++      - description: PHY PMU2 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu0
++      - const: pmu1
++      - const: pmu2
++
++  clocks:
++    items:
++      - description: USB OTG PHY bus clock
++      - description: USB Host 0 PHY bus clock
++      - description: USB Host 1 PHY bus clock
++
++  clock-names:
++    items:
++      - const: usb0_phy
++      - const: usb1_phy
++      - const: usb2_phy
++
++  resets:
++    items:
++      - description: USB OTG reset
++      - description: USB Host 1 Controller reset
++      - description: USB Host 2 Controller reset
++
++  reset-names:
++    items:
++      - const: usb0_reset
++      - const: usb1_reset
++      - const: usb2_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++  usb1_vbus-supply:
++    description: Regulator controlling USB1 Host controller
++
++  usb2_vbus-supply:
++    description: Regulator controlling USB2 Host controller
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun8i-r40-ccu.h>
++    #include <dt-bindings/reset/sun8i-r40-ccu.h>
++
++    phy@1c13400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun8i-r40-usb-phy";
++        reg = <0x01c13400 0x14>,
++              <0x01c14800 0x4>,
++              <0x01c19800 0x4>,
++              <0x01c1c800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu0",
++                    "pmu1",
++                    "pmu2";
++        clocks = <&ccu CLK_USB_PHY0>,
++                 <&ccu CLK_USB_PHY1>,
++                 <&ccu CLK_USB_PHY2>;
++        clock-names = "usb0_phy",
++                      "usb1_phy",
++                      "usb2_phy";
++        resets = <&ccu RST_USB_PHY0>,
++                 <&ccu RST_USB_PHY1>,
++                 <&ccu RST_USB_PHY2>;
++        reset-names = "usb0_reset",
++                      "usb1_reset",
++                      "usb2_reset";
++        usb1_vbus-supply = <&reg_vcc5v0>;
++        usb2_vbus-supply = <&reg_vcc5v0>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-v3s-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-v3s-usb-phy.yaml
+new file mode 100644
+index 000000000000..eadfd0c9493c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-v3s-usb-phy.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: GPL-2.0
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/allwinner,sun8i-v3s-usb-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner V3s USB PHY Device Tree Bindings
++
++maintainers:
++  - Chen-Yu Tsai <wens@csie.org>
++  - Maxime Ripard <mripard@kernel.org>
++
++properties:
++  "#phy-cells":
++    const: 1
++
++  compatible:
++    const: allwinner,sun8i-v3s-usb-phy
++
++  reg:
++    items:
++      - description: PHY Control registers
++      - description: PHY PMU0 registers
++
++  reg-names:
++    items:
++      - const: phy_ctrl
++      - const: pmu0
++
++  clocks:
++    maxItems: 1
++    description: USB OTG PHY bus clock
++
++  clock-names:
++    const: usb0_phy
++
++  resets:
++    maxItems: 1
++    description: USB OTG reset
++
++  reset-names:
++    const: usb0_reset
++
++  usb0_id_det-gpios:
++    description: GPIO to the USB OTG ID pin
++
++  usb0_vbus_det-gpios:
++    description: GPIO to the USB OTG VBUS detect pin
++
++  usb0_vbus_power-supply:
++    description: Power supply to detect the USB OTG VBUS
++
++  usb0_vbus-supply:
++    description: Regulator controlling USB OTG VBUS
++
++required:
++  - "#phy-cells"
++  - compatible
++  - clocks
++  - clock-names
++  - reg
++  - reg-names
++  - resets
++  - reset-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
++    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
++
++    phy@1c19400 {
++        #phy-cells = <1>;
++        compatible = "allwinner,sun8i-v3s-usb-phy";
++        reg = <0x01c19400 0x2c>,
++              <0x01c1a800 0x4>;
++        reg-names = "phy_ctrl",
++                    "pmu0";
++        clocks = <&ccu CLK_USB_PHY0>;
++        clock-names = "usb0_phy";
++        resets = <&ccu RST_USB_PHY0>;
++        reset-names = "usb0_reset";
++        usb0_id_det-gpios = <&pio 5 6 GPIO_ACTIVE_HIGH>;
++    };
+diff --git a/Documentation/devicetree/bindings/phy/sun4i-usb-phy.txt b/Documentation/devicetree/bindings/phy/sun4i-usb-phy.txt
+deleted file mode 100644
+index f2e120af17f0..000000000000
+--- a/Documentation/devicetree/bindings/phy/sun4i-usb-phy.txt
++++ /dev/null
+@@ -1,68 +0,0 @@
+-Allwinner sun4i USB PHY
+------------------------
+-
+-Required properties:
+-- compatible : should be one of
+-  * allwinner,sun4i-a10-usb-phy
+-  * allwinner,sun5i-a13-usb-phy
+-  * allwinner,sun6i-a31-usb-phy
+-  * allwinner,sun7i-a20-usb-phy
+-  * allwinner,sun8i-a23-usb-phy
+-  * allwinner,sun8i-a33-usb-phy
+-  * allwinner,sun8i-a83t-usb-phy
+-  * allwinner,sun8i-h3-usb-phy
+-  * allwinner,sun8i-r40-usb-phy
+-  * allwinner,sun8i-v3s-usb-phy
+-  * allwinner,sun50i-a64-usb-phy
+-  * allwinner,sun50i-h6-usb-phy
+-- reg : a list of offset + length pairs
+-- reg-names :
+-  * "phy_ctrl"
+-  * "pmu0" for H3, V3s, A64 or H6
+-  * "pmu1"
+-  * "pmu2" for sun4i, sun6i, sun7i, sun8i-a83t or sun8i-h3
+-  * "pmu3" for sun8i-h3 or sun50i-h6
+-- #phy-cells : from the generic phy bindings, must be 1
+-- clocks : phandle + clock specifier for the phy clocks
+-- clock-names :
+-  * "usb_phy" for sun4i, sun5i or sun7i
+-  * "usb0_phy", "usb1_phy" and "usb2_phy" for sun6i
+-  * "usb0_phy", "usb1_phy" for sun8i
+-  * "usb0_phy", "usb1_phy", "usb2_phy" and "usb2_hsic_12M" for sun8i-a83t
+-  * "usb0_phy", "usb1_phy", "usb2_phy" and "usb3_phy" for sun8i-h3
+-  * "usb0_phy" and "usb3_phy" for sun50i-h6
+-- resets : a list of phandle + reset specifier pairs
+-- reset-names :
+-  * "usb0_reset"
+-  * "usb1_reset"
+-  * "usb2_reset" for sun4i, sun6i, sun7i, sun8i-a83t or sun8i-h3
+-  * "usb3_reset" for sun8i-h3 and sun50i-h6
+-
+-Optional properties:
+-- usb0_id_det-gpios : gpio phandle for reading the otg id pin value
+-- usb0_vbus_det-gpios : gpio phandle for detecting the presence of usb0 vbus
+-- usb0_vbus_power-supply: power-supply phandle for usb0 vbus presence detect
+-- usb0_vbus-supply : regulator phandle for controller usb0 vbus
+-- usb1_vbus-supply : regulator phandle for controller usb1 vbus
+-- usb2_vbus-supply : regulator phandle for controller usb2 vbus
+-- usb3_vbus-supply : regulator phandle for controller usb3 vbus
+-
+-Example:
+-	usbphy: phy@01c13400 {
+-		#phy-cells = <1>;
+-		compatible = "allwinner,sun4i-a10-usb-phy";
+-		/* phy base regs, phy1 pmu reg, phy2 pmu reg */
+-		reg = <0x01c13400 0x10 0x01c14800 0x4 0x01c1c800 0x4>;
+-		reg-names = "phy_ctrl", "pmu1", "pmu2";
+-		clocks = <&usb_clk 8>;
+-		clock-names = "usb_phy";
+-		resets = <&usb_clk 0>, <&usb_clk 1>, <&usb_clk 2>;
+-		reset-names = "usb0_reset", "usb1_reset", "usb2_reset";
+-		pinctrl-names = "default";
+-		pinctrl-0 = <&usb0_id_detect_pin>, <&usb0_vbus_detect_pin>;
+-		usb0_id_det-gpios = <&pio 7 19 GPIO_ACTIVE_HIGH>; /* PH19 */
+-		usb0_vbus_det-gpios = <&pio 7 22 GPIO_ACTIVE_HIGH>; /* PH22 */
+-		usb0_vbus-supply = <&reg_usb0_vbus>;
+-		usb1_vbus-supply = <&reg_usb1_vbus>;
+-		usb2_vbus-supply = <&reg_usb2_vbus>;
+-	};
+-- 
+2.23.0
 
