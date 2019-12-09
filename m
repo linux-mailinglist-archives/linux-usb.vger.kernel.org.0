@@ -2,43 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE6B116BB1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 12:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA167116BB5
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 12:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbfLILFK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 06:05:10 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:32972 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727143AbfLILFK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 06:05:10 -0500
-Received: by mail-io1-f69.google.com with SMTP id i8so10468096ioi.0
+        id S1727502AbfLILFT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 06:05:19 -0500
+Received: from mail-il1-f197.google.com ([209.85.166.197]:36551 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727377AbfLILFL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 06:05:11 -0500
+Received: by mail-il1-f197.google.com with SMTP id v15so11364503iln.3
         for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 03:05:10 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=xM5VP4PpCu1ndTXZ/Sfzh9qHLEM9aOg4KzWtzZmLLg0=;
-        b=GfVHkMWWK3cH4ohgqipVcRbJS+2/P15enl/zUwiiT2lPP5rA/7XwX4RH9noD0ypNCC
-         EngSTiObOwGyVctzgHBf8FICfQGLGdoIEAMz5ap/QyWSoOMlOgBO+icE+qlNqIhEZhKj
-         uee1qXp7ZJtUUwA52gZVpnFHtj466jzqrMr/ZoOpMYTdNULGfD1SGcdET0XC5CgVNuXi
-         W1BYgctPM5Nvko73hGrpSCGWWavHM6DfInNdGuO5k5VtOnxdulFucHCzds+OL+H4zC6d
-         pTjOLyHepgYxA/JsRVP4I+SH7ryWWFnzIGi0prq+jYuVdMGcCHUETKZGYa8g3kltj9q/
-         7mrg==
-X-Gm-Message-State: APjAAAWgHNGokJ+ZdAnJKd7FD94JXK8SSuCw+bBityhh3WJAvIDeJh/p
-        YMgy7VU29h+M/BaDPz0xV4/u1QgXmcyFmtOzdW3FW4bqOHF8
-X-Google-Smtp-Source: APXvYqwJKyhBY6fvxrYABN0tOrXmGfhukYlUZ1WxNbV3wtseGBlncv05zIfjOEgrMPkqHG/w93JOwb4Iz7tpqJrWgv/RV4/o6Ygd
+        bh=FkCEOdhvgMw9DxYiG45rKRNFL4YjSybxgvChDYzQ4lw=;
+        b=VHXxd+JMyVsF9pXePvMvsuhdlhSw0l7oM+5cL2QFb7wmmSGWcy+XlLMXCjkyuGp0ZQ
+         jOvX37fuk2BB8/I2m64HU8CmuNNkpJJg38p2/Ek4GFEyEWWXZyqRZpHoVyB8gf5EwmbH
+         /GaZ/QgC/bTlNDD1wnR8GVsTuJ+VG5CDQzpcx7a8NVXG1a3zJuKyt0qdAAX1rtIYc1fn
+         IZ0p1iFxQdqfC7hRA24xVlyRwEnwFSet1BE6HIJi+sSkPWc3dZm8NaMTPN5l6mmgsoJW
+         7sRLFaO54cCl4yBApxySsrmHAXVuHgc/5lcHf+H4cjJyI8FOZpEF08Joie5wQvNxs7Di
+         iv+A==
+X-Gm-Message-State: APjAAAVibvX8pntmRaXsjmlcmxfMS3cXZFQEcMif5izMjS8hwA+/QepH
+        hR+XII4f0BWsiEN5xFsIMztQpQklGi2fn2MgzbC5oLkXkSrZ
+X-Google-Smtp-Source: APXvYqy0Eiz4i3U9+aD172tA2dwV/98dLE+n89X1DdYN9MKB1MdXAa0BbX0aiqiyfcdBs5MMGFnEpMqpRxjxwJn2wa0qBwhzv33X
 MIME-Version: 1.0
-X-Received: by 2002:a5d:96c6:: with SMTP id r6mr6639913iol.236.1575889509728;
+X-Received: by 2002:a92:1a0a:: with SMTP id a10mr25882531ila.295.1575889509952;
  Mon, 09 Dec 2019 03:05:09 -0800 (PST)
 Date:   Mon, 09 Dec 2019 03:05:09 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006eca960599435e76@google.com>
-Subject: KASAN: slab-out-of-bounds Write in hidinput_setkeycode
-From:   syzbot <syzbot+aed9115d05783f14777a@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
+Message-ID: <000000000000723a620599435efd@google.com>
+Subject: KASAN: slab-out-of-bounds Write in sysrq_filter
+From:   syzbot <syzbot+00b7ed8a789d74bb5a4b@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, gregkh@linuxfoundation.org, jslaby@suse.com,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        rydberg@bitmath.org, syzkaller-bugs@googlegroups.com
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
@@ -51,24 +50,26 @@ syzbot found the following crash on:
 
 HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
 git tree:       https://github.com/google/kasan.git usb-fuzzer
-console output: https://syzkaller.appspot.com/x/log.txt?x=13c9bb7ae00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11110cdee00000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
-dashboard link: https://syzkaller.appspot.com/bug?extid=aed9115d05783f14777a
+dashboard link: https://syzkaller.appspot.com/bug?extid=00b7ed8a789d74bb5a4b
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13145c2ee00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17dca1eae00000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1342f446e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155fd196e00000
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+aed9115d05783f14777a@syzkaller.appspotmail.com
+Reported-by: syzbot+00b7ed8a789d74bb5a4b@syzkaller.appspotmail.com
 
 ==================================================================
 BUG: KASAN: slab-out-of-bounds in clear_bit  
 include/asm-generic/bitops-instrumented.h:56 [inline]
-BUG: KASAN: slab-out-of-bounds in hidinput_setkeycode+0x16e/0x390  
-drivers/hid/hid-input.c:165
-Write of size 8 at addr ffff8881cf9649e8 by task syz-executor105/1717
+BUG: KASAN: slab-out-of-bounds in sysrq_handle_keypress  
+drivers/tty/sysrq.c:845 [inline]
+BUG: KASAN: slab-out-of-bounds in sysrq_filter+0x8ff/0xeb0  
+drivers/tty/sysrq.c:884
+Write of size 8 at addr ffff8881cff93dc8 by task syz-executor237/1717
 
-CPU: 1 PID: 1717 Comm: syz-executor105 Not tainted 5.4.0-syzkaller #0
+CPU: 1 PID: 1717 Comm: syz-executor237 Not tainted 5.4.0-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
 Google 01/01/2011
 Call Trace:
@@ -80,8 +81,12 @@ Call Trace:
   check_memory_region_inline mm/kasan/generic.c:185 [inline]
   check_memory_region+0x128/0x190 mm/kasan/generic.c:192
   clear_bit include/asm-generic/bitops-instrumented.h:56 [inline]
-  hidinput_setkeycode+0x16e/0x390 drivers/hid/hid-input.c:165
-  input_set_keycode+0x104/0x320 drivers/input/input.c:935
+  sysrq_handle_keypress drivers/tty/sysrq.c:845 [inline]
+  sysrq_filter+0x8ff/0xeb0 drivers/tty/sysrq.c:884
+  input_to_handler+0x152/0x4c0 drivers/input/input.c:102
+  input_pass_values.part.0+0x2de/0x710 drivers/input/input.c:145
+  input_pass_values drivers/input/input.c:949 [inline]
+  input_set_keycode+0x290/0x320 drivers/input/input.c:954
   evdev_handle_set_keycode_v2+0xc4/0x120 drivers/input/evdev.c:882
   evdev_do_ioctl drivers/input/evdev.c:1150 [inline]
   evdev_ioctl_handler+0xd49/0x19f0 drivers/input/evdev.c:1284
@@ -94,27 +99,28 @@ Call Trace:
   __x64_sys_ioctl+0x6f/0xb0 fs/ioctl.c:748
   do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
   entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x446d59
-Code: e8 2c ae 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
+RIP: 0033:0x444dc9
+Code: e8 bc af 02 00 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7  
 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
 ff 0f 83 1b d8 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007ffd75eec118 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007ffd75eec120 RCX: 0000000000446d59
-RDX: 0000000020000080 RSI: 0000000040284504 RDI: 0000000000000005
-RBP: 0000000000000000 R08: 0000000000000000 R09: 00000000004029f0
-R10: 00007ffd75eebc70 R11: 0000000000000246 R12: 0000000000404a00
-R13: 0000000000404a90 R14: 0000000000000000 R15: 0000000000000000
+RSP: 002b:00007ffea62b3f68 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00000000004002e0 RCX: 0000000000444dc9
+RDX: 00000000200000c0 RSI: 0000000040284504 RDI: 0000000000000004
+RBP: 00000000006cf018 R08: 7d03000000008300 R09: 00000000004002e0
+R10: 000000000000000f R11: 0000000000000246 R12: 0000000000402a70
+R13: 0000000000402b00 R14: 0000000000000000 R15: 0000000000000000
 
-Allocated by task 12:
+Allocated by task 78:
   save_stack+0x1b/0x80 mm/kasan/common.c:71
   set_track mm/kasan/common.c:79 [inline]
   __kasan_kmalloc mm/kasan/common.c:512 [inline]
   __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:485
   kmalloc include/linux/slab.h:556 [inline]
   kzalloc include/linux/slab.h:670 [inline]
-  input_allocate_device+0x3e/0x260 drivers/input/input.c:1810
-  hidinput_allocate drivers/hid/hid-input.c:1654 [inline]
-  hidinput_connect+0x3cab/0xdb90 drivers/hid/hid-input.c:1899
+  sysrq_connect+0x46/0x290 drivers/tty/sysrq.c:902
+  input_attach_handler+0x194/0x200 drivers/input/input.c:1024
+  input_register_device.cold+0xf5/0x246 drivers/input/input.c:2224
+  hidinput_connect+0x4f8d/0xdb90 drivers/hid/hid-input.c:1927
   hid_connect+0x965/0xbb0 drivers/hid/hid-core.c:1923
   hid_hw_start drivers/hid/hid-core.c:2027 [inline]
   hid_hw_start+0xa2/0x130 drivers/hid/hid-core.c:2018
@@ -159,27 +165,46 @@ Allocated by task 12:
   kthread+0x318/0x420 kernel/kthread.c:255
   ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
 
-Freed by task 0:
-(stack is not available)
+Freed by task 350:
+  save_stack+0x1b/0x80 mm/kasan/common.c:71
+  set_track mm/kasan/common.c:79 [inline]
+  kasan_set_free_info mm/kasan/common.c:334 [inline]
+  __kasan_slab_free+0x130/0x180 mm/kasan/common.c:473
+  slab_free_hook mm/slub.c:1425 [inline]
+  slab_free_freelist_hook mm/slub.c:1458 [inline]
+  slab_free mm/slub.c:3005 [inline]
+  kfree+0xdc/0x310 mm/slub.c:3957
+  load_elf_binary+0x2435/0x4f00 fs/binfmt_elf.c:1088
+  search_binary_handler fs/exec.c:1658 [inline]
+  search_binary_handler+0x16b/0x580 fs/exec.c:1635
+  exec_binprm fs/exec.c:1701 [inline]
+  __do_execve_file.isra.0+0x1304/0x21e0 fs/exec.c:1821
+  do_execveat_common fs/exec.c:1867 [inline]
+  do_execve fs/exec.c:1884 [inline]
+  __do_sys_execve fs/exec.c:1960 [inline]
+  __se_sys_execve fs/exec.c:1955 [inline]
+  __x64_sys_execve+0x8a/0xb0 fs/exec.c:1955
+  do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
+  entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-The buggy address belongs to the object at ffff8881cf964000
-  which belongs to the cache kmalloc-2k of size 2048
-The buggy address is located 488 bytes to the right of
-  2048-byte region [ffff8881cf964000, ffff8881cf964800)
+The buggy address belongs to the object at ffff8881cff93c00
+  which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 456 bytes inside of
+  512-byte region [ffff8881cff93c00, ffff8881cff93e00)
 The buggy address belongs to the page:
-page:ffffea00073e5800 refcount:1 mapcount:0 mapping:ffff8881da40c000  
+page:ffffea00073fe400 refcount:1 mapcount:0 mapping:ffff8881da402500  
 index:0x0 compound_mapcount: 0
-raw: 0200000000010200 dead000000000100 dead000000000122 ffff8881da40c000
-raw: 0000000000000000 0000000000080008 00000001ffffffff 0000000000000000
+raw: 0200000000010200 0000000000000000 0000000100000001 ffff8881da402500
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
 page dumped because: kasan: bad access detected
 
 Memory state around the buggy address:
-  ffff8881cf964880: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff8881cf964900: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> ffff8881cf964980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                                                           ^
-  ffff8881cf964a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-  ffff8881cf964a80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff8881cff93c80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  ffff8881cff93d00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> ffff8881cff93d80: 00 00 00 00 00 00 fc fc fc fc fc fc fc fc fc fc
+                                               ^
+  ffff8881cff93e00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+  ffff8881cff93e80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
 ==================================================================
 
 
