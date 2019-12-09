@@ -2,63 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E892116A23
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 10:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EF0116A4E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 10:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727376AbfLIJuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 04:50:44 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:46832 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725994AbfLIJuo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 04:50:44 -0500
-Received: by mail-lj1-f193.google.com with SMTP id z17so14784164ljk.13
-        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 01:50:42 -0800 (PST)
+        id S1727202AbfLIJ5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 04:57:44 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:39650 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727113AbfLIJ5o (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 04:57:44 -0500
+Received: by mail-lf1-f68.google.com with SMTP id c9so9682764lfi.6
+        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 01:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=56nR1lTRvIj+nDSBHflOg6Z39BdJb7yi7mbZMm//o9g=;
-        b=IlQhud/IByvPmOeM4lZLnp+Hv73aceLkiP97dDDEXIZ+437SeG5bg3NnVvNScGXD8C
-         gWbP2aTn+BHZZpCrl0d0BxMpwA5Nu2rN6fCAJ1/fKZ3UyfzMD+0k2Ib/RMO3PyWjYfPx
-         UkNL7R/nosf9sVt+031hjqDfIpvZrtUDuNIND6Z7DQkwWDwH+2zU/m1q8X+SEVFCylnj
-         TUOxR98JwOiOPvxUjpSVz0/curegcuxUkstoMvw0lsjGhKw4Zl84l5Tps720J4yXeb3S
-         0nTGga0gTS6txPnz6Kc0pZ+2GT41FGR7hvsC8a7Yb8yZOJppqujTDCTTeWEgR1el9aPl
-         9ncg==
+        d=vincit.fi; s=ticniv;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=mg28/52mMYOa2uKx0WHB1toSNsjd9OF2uhKQYSOnkVQ=;
+        b=NuClSs2D1++lC6WCtR/o7mjPnTWNGZCCQFz+JdCw60v9i+IUtLa7gXWslvWxBmGdeS
+         HUW3f4Gm5LNJGHpf9r4vXlLRbRl9+nEvuKHDknvy5pyzLzXSDCdkDbXQctjesB6NPswO
+         mxv4BxhBb9K+R2/K0JdHP2pDlUrMc86krKpBc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=56nR1lTRvIj+nDSBHflOg6Z39BdJb7yi7mbZMm//o9g=;
-        b=qmZrJkHppxeR3gqpoPPLdCOO25K97algM5wRFgwGQNwNhBTJjnkclMfVQvQeO1BlYC
-         /8xWT44Bgnl1kAYgF0902WQi+Od3N/cjHvWIlph6u6yESgeSSEVJvtn31s/88gxr+XIZ
-         1g66SV6LYP2uJ6zAfXgn8fFxySrIdFy632ba1cpug2rNckn3qOMwyN47MGq7Wn7iU5MS
-         TPaooMTpDDZOQnZGN8/z5p7NBls8EzaAADT+R/AsvB2DYO8veslJ0CzkRDOuoHclWDO/
-         xn5UNYO9jBVKtq9c7VwpoSm3VTUHlANAbXKzMOo4frlWy8QvT+Y86TuY5wOObYCRzv/J
-         o6Cw==
-X-Gm-Message-State: APjAAAXi94+WMF3ZyMrmdKF/FC79WRadTzW63QdJsob1GAlzv1k3v14e
-        +tLoi4mWesrVXy7Nv0Sr+hO5fHkeRahqLQlFGmE=
-X-Google-Smtp-Source: APXvYqwC4pKKMUo/6J2C4nBKC0J9cq59Yh0iaqiNCrV68c2zuBN/xyrH7gShDkahNym0op1yV0cMhyjyTRucof9orHI=
-X-Received: by 2002:a2e:86c4:: with SMTP id n4mr11622730ljj.97.1575885041343;
- Mon, 09 Dec 2019 01:50:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=mg28/52mMYOa2uKx0WHB1toSNsjd9OF2uhKQYSOnkVQ=;
+        b=Lwz5CCBMxDWQpTArqET+HLk/3Akyk09I3hJulEXqQRX7xeQ3WQveqvupXbhkOUfm9Q
+         OqH0Cecv0Nss9HmQHk5cX8AbcRT6nUjm7aLya+9rR85WR73eNNEBcrqLQHWP1FoIgtwk
+         TaoJboqyeqHttKVZEcnzw4e/jT5s5yIHY7J1KomChbxjDbbFb0F+gVZu+9hdh+bMqozH
+         3JMMDBH9ga5Eg3JywMdzZU6+ev+/j0WVYlV52xk7UIiLTEOtEwaKsErE/tgW4CgavSa5
+         eDt+3io3oFUOaIBIzVpJDOAGa5IwtDVHdQqpBZcgQboxG9aZY97QBgzPTWhBw5XZDmCW
+         f6cQ==
+X-Gm-Message-State: APjAAAUX/3rbYxgDgk0tIVa/PLMupJaBxo4NrwufClsP4zJ/qUifxi5d
+        VK5/5EeF3bOhHXInrkVoE22Igl/rNEE=
+X-Google-Smtp-Source: APXvYqw/hll16Ket+BaPvda1Kk0W9GuQ+KOdBKpwBKWZOlewqd2/nLginMyuYK1D2VF8CreSBXmtig==
+X-Received: by 2002:a19:ac45:: with SMTP id r5mr14865240lfc.131.1575885461807;
+        Mon, 09 Dec 2019 01:57:41 -0800 (PST)
+Received: from LAPTOPJ4R3A4KE ([213.255.177.137])
+        by smtp.gmail.com with ESMTPSA id d24sm10614591lja.82.2019.12.09.01.57.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 09 Dec 2019 01:57:40 -0800 (PST)
+From:   "Erkka Talvitie" <erkka.talvitie@vincit.fi>
+To:     "'Alan Stern'" <stern@rowland.harvard.edu>
+Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <claus.baumgartner@med.ge.com>
+References: <021d01d5ab57$c2f1ab20$48d50160$@vincit.fi> <Pine.LNX.4.44L0.1912050929350.14919-100000@netrider.rowland.org> <022001d5ab7c$b1e27380$15a75a80$@vincit.fi>
+In-Reply-To: <022001d5ab7c$b1e27380$15a75a80$@vincit.fi>
+Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
+Date:   Mon, 9 Dec 2019 11:57:34 +0200
+Message-ID: <023701d5ae77$14ec9d50$3ec5d7f0$@vincit.fi>
 MIME-Version: 1.0
-Received: by 2002:a05:6504:291:0:0:0:0 with HTTP; Mon, 9 Dec 2019 01:50:40
- -0800 (PST)
-Reply-To: barr.onuh2019@gmail.com
-From:   Onuh Uwahm <elemeke3@gmail.com>
-Date:   Mon, 9 Dec 2019 09:50:40 +0000
-Message-ID: <CANW7iFSXUgUmrC_nX8pWmtL1NitqfJskvWdWTkQxc_raTMMMFQ@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQH4AYzE91VgTdVGdTtRvjAH4Jg/hAJWW2imAroTpnWnRGba0A==
+Content-Language: fi
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear friend, I am Barrister Onuh Uwham. I need your assistance to
-claim the fund sum of ($13.580 Million) that was left by my late
-client a citizen of your country who died in the year 21/04/2009 on an
-auto crash, this huge amount of money is about to be confiscated by
-the holding bank. I wish to present you as the next of kin to the
-bank, I expect your urgent response indicating your full interest by
-contacting me urgently for more detail about it and advice on how to
-proceed with it.
+
+
+> -----Original Message-----
+> From: Erkka Talvitie <erkka.talvitie@vincit.fi>
+> Sent: torstai 5. joulukuuta 2019 17.00
+> To: 'Alan Stern' <stern@rowland.harvard.edu>
+> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+> claus.baumgartner@med.ge.com
+> Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is
+> disconnected
+> 
+> 
+> 
+> > -----Original Message-----
+> > From: Alan Stern <stern@rowland.harvard.edu>
+> > Sent: torstai 5. joulukuuta 2019 16.38
+> > To: Erkka Talvitie <erkka.talvitie@vincit.fi>
+> > Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+> > claus.baumgartner@med.ge.com
+> > Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is
+> > disconnected
+> >
+> > On Thu, 5 Dec 2019, Erkka Talvitie wrote:
+> >
+> > > I tested this change and the issue did not reproduce.
+> > >
+> > > However when I was writing the comments for the patch I started to
+> > > think what happens in this following scenario:
+> > >
+> > > The PID Code is IN.
+> > >
+> > > 1. First there will be XACT, the CERR is decremented, let's say from
+> > > 3 to 2 and the host controller executes a retry.
+> > > 2. On this next try there will happen the condition mentioned in the
+> > > Table
+> > > 4-13 of the EHCI specification so that the MMF is set and the queue
+> > > is halted (because it is IN).
+> > > 3. To my understanding now the execution enters to this first stall
+> > > check if, as CERR is > 0 and CERR < EHCI_TUNE_CERR.
+> > > 4. The -EPIPE (stall) is returned when actually the queue was halted
+> > > due to MMF - not stall - and the -EPROTO should be returned.
+> > >
+> > > Is my logic correct or am I missing something?
+> >
+> > The same thought had occurred to me.
+> >
+> > > If you agree with me then I would like to present you a bit more
+> > > bold (in a sense of amount of refactoring) RFC. In high level this
+> > > another RFC separates 1. error check and 2. stall check. For me this
+> > > approach is a bit easier to understand from the code. Or then please
+> > > propose another solution.
+> >
+> > I was going to suggest: Just check for MMF and PID == IN before
+> > checking
+> for
+> > STALL.  Everything else can remain the way it is.
+> 
+> Ok, just to double check:
+> 
+> I take the existing driver code (I will not apply the earlier RFC on top
+of
+> that) and apply one more check before the original stall check (that is):
+> } else if (QTD_CERR(token)) {
+> 
+> The check that I will add is checking MMF bit && PID == IN, and this check
+> comes right after the babble check, right?
+> 
+> Good, seems like a simple change. Yet I still prefer to test the change.
+> Unfortunately that goes to the next week as we have a national holiday
+> tomorrow.
+> I will get back to you most likely on Monday.
+
+I tested this change and it removes the error messages from the output.
+
+> 
+> >
+> > Alan Stern
+> >
+> Erkka Talvitie
+
+Erkka Talvitie
+
