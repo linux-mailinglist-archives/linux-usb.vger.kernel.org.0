@@ -2,68 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96204116598
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 04:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 114441165C0
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 05:06:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727070AbfLIDr7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Dec 2019 22:47:59 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:38191 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727066AbfLIDr7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Dec 2019 22:47:59 -0500
-Received: by mail-ua1-f68.google.com with SMTP id z17so5042774uac.5
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 19:47:59 -0800 (PST)
+        id S1726957AbfLIEGF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Dec 2019 23:06:05 -0500
+Received: from mail-vk1-f196.google.com ([209.85.221.196]:43041 "EHLO
+        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726823AbfLIEGF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Dec 2019 23:06:05 -0500
+Received: by mail-vk1-f196.google.com with SMTP id s62so3968522vkb.10
+        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 20:06:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Y+vxa3qCisuYX81ZvQKh/06NrXG6iSdwdH4Sz/s9g3g=;
-        b=k8jJUyVSl6cE4W+fWhINdIPhwRBP5gNyjYOHsG6BtSo72KlCvh7X4RDiFph7rJprIi
-         XyazImi+bK0wINFqmmHwu03wtt5n94j9ydqfRE1VwIEqu6u4HXz3sipGT/0IrBaoGQFT
-         OcGMO3nxsp+5D+E0hapuUO37q/Xcf3Z0IImYE=
+        bh=SSKZQVNYBrUoRU4TPgH9Xi7HOKeo/fTJhl3EcFgABvc=;
+        b=bYE7UvRj8WqhH/yPnmNYzBwI9HgYLmCbDkmqzmiM6urz1iwQWs3gJP4jUyz3Nk3Cl4
+         mZJ0unsgC7SUGo4APlmBV0tzbpoinfMIDbAGlv5Kmp1K1xUSURUJfKfItDQyq/w535tp
+         U5hyBNlIHd4inJvg287aAk+wQyGQ+ybxr8HgY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Y+vxa3qCisuYX81ZvQKh/06NrXG6iSdwdH4Sz/s9g3g=;
-        b=I76eyK9A+XBV1epW+XLHElUnF8C9phSVVFEsYiR4y7zYDHUziYd/UXyrUkSRdpbF/3
-         uqPL892SVCNZG31AM68esKNQ7lK9rMPm3KmJ5OhuqX3ivNS2NC3o2ukQLqz2beTTn1oM
-         OWBqfJYwAAvjMsWcYfDh0cXbyNbAxPWj61r9aXAR/GPrUJwpbzrYeHP9uuwFTmbin4EN
-         4M1g1TZD1aHeDu48rF7gTKc0rC11XTVLb9QSOkrCUR7FZTncVW1DOaLrGBQzS8+NGPgo
-         jSQMQ6QhurSlK5Stfd2P28OS98wCtFPDWM0Ffww09ipRaaKEIa5ji3BSSxPT1qEb2rsD
-         vo9Q==
-X-Gm-Message-State: APjAAAUdbyoyllK52Z+Tmiu9yeQRp8zKW6QMuXUhLtyqwk4vsCZQLo0b
-        oWTlXJ1FxC9blqD3a8Pd31c1R6RaxT1hC4GOyo+D/w==
-X-Google-Smtp-Source: APXvYqw2Y9m8C3sZpyxjV87zZFwVpnaCBxRbzi4DdUd8/DIvSJj/1SrjcwuU7XlgujbYOE7ZR3vziSReJMhZOUXDYC0=
-X-Received: by 2002:ab0:3487:: with SMTP id c7mr20535526uar.25.1575863278400;
- Sun, 08 Dec 2019 19:47:58 -0800 (PST)
+        bh=SSKZQVNYBrUoRU4TPgH9Xi7HOKeo/fTJhl3EcFgABvc=;
+        b=rVDhHmEEPu/ITXCB5wf8ZAt0yBgnTWT0Ok/vOB8QO/ubgVMJaOa8XjEZjZiCII/IVG
+         1jLH5aFIjBphDwH3p6BksATEeg0qFrtDZTDLeGeRUYoPSNrareCCXOA5CtWIq8pclTyi
+         KG5OpO7xqX7iFsQ6vf/XCHkqUGuym9B221cQioVcfBvNZzp9y3+fl85LvlDVUtnEH8qH
+         sj2afCeb1kiWiCMivWIlTDI4piztZmvdYIY77oi4FT2mW6H+vBdz8lcvMI+KDDTOXFjR
+         d/dAqxbjXmmdPKQKRlUo9v85ib/hsLWG38Equl9pXkI9L3oUG6g7gxG0k+9I79WcaH3x
+         jIJw==
+X-Gm-Message-State: APjAAAXyCYYV8PK9GSL4WphklO1vELepeQOtHTu6svfKmGdSl9XDSqGZ
+        RH186b/inTVnFMqCgcFyc9o3b+F+z0rBMBWFEbRlUQ==
+X-Google-Smtp-Source: APXvYqxiLiVTMXxIQfcCgISplvC33Dty2tzSU0elJdJeDv4SwXtUrMMWJ6sQkhk52auJFaw3mV3pedUilqtbw7keBOA=
+X-Received: by 2002:a1f:8fd3:: with SMTP id r202mr22038987vkd.77.1575864364344;
+ Sun, 08 Dec 2019 20:06:04 -0800 (PST)
 MIME-Version: 1.0
-References: <CAATdQgBK4gWvR06YJ3Z_y5NeqLKYY7Ajc0KG78rG2deR3Ga11A@mail.gmail.com>
- <Pine.LNX.4.44L0.1912060958550.1618-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1912060958550.1618-100000@iolanthe.rowland.org>
+References: <20191203101552.199339-1-ikjn@chromium.org> <20191203165301.GH10631@localhost>
+ <CAATdQgCqYrd_aXN5GDsso+F3WadNx3DQKK3Efk3tgkrv2VXjyw@mail.gmail.com>
+ <20191204075533.GI10631@localhost> <CAATdQgBcuJenS2VSm+y4Yhn5mWE1P0CGJQ3NRdoe68dd2SRPGg@mail.gmail.com>
+ <20191205142641.GL10631@localhost> <CAATdQgBK4gWvR06YJ3Z_y5NeqLKYY7Ajc0KG78rG2deR3Ga11A@mail.gmail.com>
+ <20191206152604.GO10631@localhost>
+In-Reply-To: <20191206152604.GO10631@localhost>
 From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 9 Dec 2019 11:47:47 +0800
-Message-ID: <CAATdQgAxCja9L33QFQOEfPjOrGc5-pTGXifsYnxAZ+LOLkcuxA@mail.gmail.com>
+Date:   Mon, 9 Dec 2019 12:05:53 +0800
+Message-ID: <CAATdQgDAZ21bEXh+YFh+fCdBxnuRi-1_x0o_hpxW0Vj0zY-j8A@mail.gmail.com>
 Subject: Re: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
         GregKroah-Hartman <gregkh@linuxfoundation.org>,
         RobHerring <robh+dt@kernel.org>,
         MarkRutland <mark.rutland@arm.com>,
+        AlanStern <stern@rowland.harvard.edu>,
         SuwanKim <suwan.kim027@gmail.com>,
         "GustavoA . R . Silva" <gustavo@embeddedor.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 6, 2019 at 11:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+On Fri, Dec 6, 2019 at 11:25 PM Johan Hovold <johan@kernel.org> wrote:
 >
-> On Fri, 6 Dec 2019, Ikjoon Jang wrote:
->
+> On Fri, Dec 06, 2019 at 11:57:30AM +0800, Ikjoon Jang wrote:
 > > On Thu, Dec 5, 2019 at 10:26 PM Johan Hovold <johan@kernel.org> wrote:
 > > >
 > > > On Thu, Dec 05, 2019 at 03:32:38PM +0800, Ikjoon Jang wrote:
@@ -79,7 +83,6 @@ On Fri, Dec 6, 2019 at 11:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 > > > > print warnings when bInterval from device node is too weird.
 > > >
 > > > But that could be handled refactoring the code in question or similar.
-> > >
 > >
 > > Yes, that should be worked. I can't exactly figure out how to refactor
 > > the code for now, but maybe parsed endpoint descriptors are being
@@ -89,7 +92,13 @@ On Fri, Dec 6, 2019 at 11:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 > > Actually I don't care about the details of software policies. I just want
 > > all devices to be handled in the same manner without any further
 > > special treatments.
-> >
+>
+> I'd say you're indeed trying to give a specific device special
+> treatment. ;)
+
+yeah right, I'm giving one treatment but I mean not any further.
+
+>
 > > > The fundamental problem here is that you're using devicetree, which is
 > > > supposed to only describe the hardware, to encode policy which should be
 > > > deferred to user space.
@@ -98,13 +107,15 @@ On Fri, Dec 6, 2019 at 11:00 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 > > adjustable. So I can think setting bInterval is to describe the hardware
 > > rather than policy.
 >
-> If the hardware is adjustable, why don't you adjust the hardware
-> instead of changing the software?
+> No, the USB spec says bInterval is a maximum requested value and that
+> the host is free to poll more often. And that's policy.
 
-sorry, I meant "hardware has a default value but it's actually
-adjustable (by software)". Adjusting hardware is the best option but
-our hub doesn't allow to do that, so the current approach is patching
-a hardware descriptor on enumeration stage.
+Honestly I'm a bit confused on the border line between hardware
+and software definition. That's quite reasonable it's policy that software
+can poll more often than hardware specified, but can we think it's just
+overriding hardware property specifying maximum value from beginning?
+Is it still policy? or 'overriding hardware property' part is already not
+a hardware description? :-S
 
 >
 > > > So I think you need to figure out an interface that allows user space to
@@ -115,13 +126,17 @@ a hardware descriptor on enumeration stage.
 > > to restart an endpoint and no devices are changing the interval after
 > > enumeration stage.
 >
-> Restarting endpoints is easy; just call usb_set_interface().
+> The usb-hid driver actually supports configuring the polling rate
+> for devices like mice and keyboards after enumeration (through a module
+> parameter, but still).
+>
+> Unfortunately, the xhci driver does not yet support this and always uses
+> the device maximum bInterval. A bug report for this was filed many years
+> ago, perhaps it's time to address that (adding Mathias on CC):
+>
+>         https://bugzilla.kernel.org/show_bug.cgi?id=82571
 
-I thought just changing urb->interval at runtime will be more acceptable.
-Maybe I'll need an another approach if this patch is unacceptable.
-
-Thank you!
+Thanks!
 
 >
-> Alan Stern
->
+> Johan
