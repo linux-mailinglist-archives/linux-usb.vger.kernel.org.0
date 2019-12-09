@@ -2,144 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 992C311757C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 20:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A24511764E
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 20:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726841AbfLITRa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 14:17:30 -0500
-Received: from mail-bn8nam11on2071.outbound.protection.outlook.com ([40.107.236.71]:33555
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726819AbfLITR3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Dec 2019 14:17:29 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cPsbqamz008su5SKjyONAGtStuo1pNJ3Am0bVYvvWIXfgBeSigiTAAuQ0n5Vm13r+Nu0ae2bQjpZ5ynd3WUcqCKvplCg/2bxrBDbOSIf5X8/GIecUv/p0SELVORMfAZMawQ7ZgzCJZ2g1hkZLLDPzdRP2E/izLGtRySmOnv8pv1VkMzTuVJZd3s2Ya1dll+8BV8WKUFN+C/Xhsmwb9nYi2jI1qPKug+2OoxYP904PJKhNtRCod4+yJmvyK34s5or6Mn4FHkSgtJWJUG8+uBVS3e4+MFnq1FCEkivddrOitbY3ERMo6niWI9oR7BMfZWB26obftNVUN+ftodOix4u6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mxQpBbCaBdYdeeTMM0HiLrpDt/1vEpZSZywQUTQ48k0=;
- b=Ov0q1/zuJmxTZ7LMSvJ25U0s93cWvtx4LMG3An0bz+h/KBXt7Nfs4yE78U42LbhH5ucnDUFqGGs717ki7ZlQ4FJ22HoyCYCZ7qw6w039j8KRuuI6Mmm+0ucsdjcH2fKi7tvJA4Szla1XbkbPnOI2wNixNjpRQKPgBlNvmTLRkm/Z2g+mQLf7YtGTOHQae3j38h6PCsewJMcPmJhqHPoPWKG21N92XJvMHCPayFHPnYi1Xz7mpLd1QrWlCHcoGSkZn1Hn/MD6JLj4wsSIk2WMn/xLlJguXUwlun+X+n9xMY7+bcJHAbWcroIFDrQ8C9rl9KV26C1ev5LIoJe6VLVsuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
- dkim=pass header.d=silabs.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mxQpBbCaBdYdeeTMM0HiLrpDt/1vEpZSZywQUTQ48k0=;
- b=Fm8zp0Xqrs/X1XWc9AFSOUWTbjUs51Ohh5RY+DSJ6FmyJuQeoBwR5Pe3fTo+utfHmaLjTBp6DHmUinLsOzsiSdghCwbrJUQBGn1g/VW3BClguMCeIxgOs0TWWU0bfk6EMoUyM8c97OH6Rd9OsiWHx+Ax5s/ExVGJLxb4l4fvdS0=
-Received: from BL0PR11MB3297.namprd11.prod.outlook.com (10.167.235.29) by
- BL0PR11MB3249.namprd11.prod.outlook.com (10.167.235.155) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2516.16; Mon, 9 Dec 2019 19:17:26 +0000
-Received: from BL0PR11MB3297.namprd11.prod.outlook.com
- ([fe80::529:e8b:5e30:87a3]) by BL0PR11MB3297.namprd11.prod.outlook.com
- ([fe80::529:e8b:5e30:87a3%7]) with mapi id 15.20.2516.018; Mon, 9 Dec 2019
- 19:17:26 +0000
-From:   Brant Merryman <Brant.Merryman@silabs.com>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Brant Merryman <Brant.Merryman@silabs.com>
-Subject: [PATCH] Proper RTS control when buffers fill
-Thread-Topic: [PATCH] Proper RTS control when buffers fill
-Thread-Index: AQHVrsVK8PotWc8F5k2Pc+4Ew0PTFA==
-Date:   Mon, 9 Dec 2019 19:17:26 +0000
-Message-ID: <E0F3E0D5-4652-4DF0-B576-3FDB0274A5CD@silabs.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Brant.Merryman@silabs.com; 
-x-originating-ip: [207.207.39.84]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1b231a20-193d-4cef-846d-08d77cdc6d30
-x-ms-traffictypediagnostic: BL0PR11MB3249:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <BL0PR11MB3249B7E8B15A7A0B2163F661E5580@BL0PR11MB3249.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:820;
-x-forefront-prvs: 02462830BE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(136003)(376002)(346002)(39860400002)(396003)(189003)(199004)(186003)(76116006)(26005)(36756003)(91956017)(5660300002)(316002)(305945005)(66946007)(6506007)(66446008)(2616005)(71190400001)(64756008)(71200400001)(66476007)(86362001)(110136005)(66556008)(478600001)(6512007)(2906002)(33656002)(6486002)(8936002)(8676002)(81156014)(4326008)(107886003)(81166006);DIR:OUT;SFP:1101;SCL:1;SRVR:BL0PR11MB3249;H:BL0PR11MB3297.namprd11.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: silabs.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0OWU2YUldQIVQI+Swk7xP5KDr/6GPFZUwv3aTt47aDZj1Q+npQkOgb58bJKiRpiEt3ybV/vukIcnjCBQrvlKscfkNWu9DhmpwuMLk42UeZx9qJ/R41j3oynm3rhSGaZ7R5kDEidI0e+wmwnC/n7n4SrN0VYfc3zKXxtUaFuWOcEFIXK++yd6u5m08bzy6Tki8RBhLovRjg9VVj5mB6JUh1vILKDe43nQwfYtgnK9G9cTb16UdAjPrZ253ammjL8+0+anwYfcQWm5Q7RoTP2eomUN9Z0FM8pnqiEt46+rTTh+sgStulIMyXh8zY0meC315mStE2H+I1psxFkMkyYP9tgG7p19//VbMARhfDRQ39ELJmRBe7P29DOhJ9wuCg2ef5Al0BjChrsQOdYmttoITxHcW7AEQ7gm0mq9JB+hldbYCAiC59Oz02Zgy/HRrXuX
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <98A695EA9A4F45459DC76174B7080ED4@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S1726595AbfLITvm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 14:51:42 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:38416 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726366AbfLITvm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 14:51:42 -0500
+Received: (qmail 6629 invoked by uid 2102); 9 Dec 2019 14:51:41 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 9 Dec 2019 14:51:41 -0500
+Date:   Mon, 9 Dec 2019 14:51:41 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <benjamin.tissoires@redhat.com>,
+        <jikos@kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: KASAN: slab-out-of-bounds Read in hid_field_extract
+In-Reply-To: <0000000000008eb2c605994a2b38@google.com>
+Message-ID: <Pine.LNX.4.44L0.1912091448420.1462-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-OriginatorOrg: silabs.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b231a20-193d-4cef-846d-08d77cdc6d30
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2019 19:17:26.0541
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7ejUrLhVUQLiMUX2z1lwRY9sDVDrkQlgpncfhnLxaALCpBPSDUJoAYYZDj4RugTXrUM+MadZ7hsoRJfcJrDv+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3249
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Enables usb generic functions for throttle/unthrottle to prevent USB data
-loss. CP210x hardware disables RTS but leaves CTS when in hardware flow
-control mode and port is closed. When re-opening the serial port, if CTS
-is enabled, then RTS must be re-enabled inside the driver.
+On Mon, 9 Dec 2019, syzbot wrote:
 
-Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
----
- drivers/usb/serial/cp210x.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer still triggered  
+> crash:
+> KASAN: slab-out-of-bounds Read in hid_field_extract
+> 
+> microsoft 0003:045E:07DA.0001: Report rsize 4096 csize 1
+> microsoft 0003:045E:07DA.0001: Field offset 0 size 12 count 4899
+> ==================================================================
+> BUG: KASAN: slab-out-of-bounds in __extract drivers/hid/hid-core.c:1345  
+> [inline]
+> BUG: KASAN: slab-out-of-bounds in hid_field_extract+0x150/0x170  
+> drivers/hid/hid-core.c:1365
+> Read of size 1 at addr ffff8881cc759000 by task swapper/1/0
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index f5143eedbc48..fd54181e741b 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -272,6 +272,8 @@ static struct usb_serial_driver cp210x_device =3D {
- 	.break_ctl		=3D cp210x_break_ctl,
- 	.set_termios		=3D cp210x_set_termios,
- 	.tx_empty		=3D cp210x_tx_empty,
-+	.throttle		=3D usb_serial_generic_throttle,
-+	.unthrottle		=3D usb_serial_generic_unthrottle,
- 	.tiocmget		=3D cp210x_tiocmget,
- 	.tiocmset		=3D cp210x_tiocmset,
- 	.attach			=3D cp210x_attach,
-@@ -915,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_p=
-ort *port,
- 	u32 baud;
- 	u16 bits;
- 	u32 ctl_hs;
-+	u32 flow_repl;
-=20
- 	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
-=20
-@@ -1013,8 +1016,24 @@ static void cp210x_get_termios_port(struct usb_seria=
-l_port *port,
- 	cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
- 			sizeof(flow_ctl));
- 	ctl_hs =3D le32_to_cpu(flow_ctl.ulControlHandshake);
-+	flow_repl =3D le32_to_cpu(flow_ctl.ulFlowReplace);
-+	/* CP210x hardware disables RTS but leaves CTS when in hardware
-+	 * flow control mode and port is closed.
-+	 * This allows data to flow out, but new data will not come into
-+	 * the port. When re-opening the port, if CTS is enabled, then RTS
-+	 * must be re-enabled. in the driver
-+	 */
- 	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
- 		dev_dbg(dev, "%s - flow control =3D CRTSCTS\n", __func__);
-+		flow_repl &=3D ~CP210X_SERIAL_RTS_MASK;
-+		flow_repl |=3D CP210X_SERIAL_RTS_SHIFT(
-+			CP210X_SERIAL_RTS_FLOW_CTL);
-+
-+		flow_ctl.ulControlHandshake =3D cpu_to_le32(ctl_hs);
-+		flow_ctl.ulFlowReplace =3D cpu_to_le32(flow_repl);
-+		cp210x_write_reg_block(port, CP210X_SET_FLOW,
-+			&flow_ctl, sizeof(flow_ctl));
-+
- 		cflag |=3D CRTSCTS;
- 	} else {
- 		dev_dbg(dev, "%s - flow control =3D NONE\n", __func__);
--- =
+Nobody bothers to check for ridiculously long reports?  This field had 
+report_size = 12 and report_count = 4899!
+
+Alan Stern
+
+#syz test: https://github.com/google/kasan.git 1f22d15c
+
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -267,6 +267,10 @@ static int hid_add_field(struct hid_pars
+ 
+ 	offset = report->size;
+ 	report->size += parser->global.report_size * parser->global.report_count;
++	if (report->size > HID_MAX_BUFFER_SIZE << 3) {
++		hid_err(parser->device, "report is too long\n");
++		return -1;
++	}
+ 
+ 	if (!parser->local.usage_index) /* Ignore padding fields */
+ 		return 0;
+@@ -1488,6 +1492,7 @@ static void hid_input_field(struct hid_d
+ 	if (!value)
+ 		return;
+ 
++	hid_info(hid, "Field offset %u size %u count %u\n", offset, size, count);
+ 	for (n = 0; n < count; n++) {
+ 
+ 		value[n] = min < 0 ?
+@@ -1712,6 +1717,7 @@ int hid_report_raw_event(struct hid_devi
+ 	}
+ 
+ 	if (hid->claimed != HID_CLAIMED_HIDRAW && report->maxfield) {
++		hid_info(hid, "Report rsize %u csize %u\n", rsize, csize);
+ 		for (a = 0; a < report->maxfield; a++)
+ 			hid_input_field(hid, report->field[a], cdata, interrupt);
+ 		hdrv = hid->driver;
+
+
+
