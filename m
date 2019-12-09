@@ -2,99 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D60D11635C
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Dec 2019 19:11:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0F77116454
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2019 01:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726534AbfLHSLM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Dec 2019 13:11:12 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:46060 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726220AbfLHSLL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Dec 2019 13:11:11 -0500
-Received: by mail-lj1-f195.google.com with SMTP id d20so12993544ljc.12
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 10:11:10 -0800 (PST)
+        id S1726596AbfLIAZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Dec 2019 19:25:18 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33955 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726422AbfLIAZS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Dec 2019 19:25:18 -0500
+Received: by mail-lj1-f196.google.com with SMTP id m6so13621588ljc.1
+        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 16:25:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4bP+MLqv2/4jxjq5G8WI3V8blQrwy5vvH8NjA0Oq9xU=;
-        b=H0B9voLfv9AYLRDixmAeg/5DRF8QLotazZN/4owvkzDMXfPsktWaen4Q3k9MedABQL
-         0pB2E+DsxZ88pf8Iftm8Zpi/eUzhjTeP2HrbKUH1z9La6YaZoUY5Mc7J6SV7VX3rGun9
-         NOn+0S2wMJe3ABAu0HEETzU4Av3UFzbmNvuFQ=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=KF5aTv6n3DfUqCuMnzLXrdfOWA6J0PeAoUE3gVOIfho=;
+        b=eazPkT9OY2g279/0q9bTe4jPHcwjQ4NGY5UhzkTncLoyS0QY9I7hLcPhLinitxKGT6
+         2vwlRBkRA6vNxVNQlNJxAI9eL7tVZlnsq9F3cPox34bjJI7My8gdVF9JwgSmMpr/1KmF
+         nKIuCcIvE5M064ayt1KoOyQa7Uu5I6gEchCT403WP03JNGv5x5ZXXNqC84dq7grBf2/e
+         ptM3uOA0OZQ28dw4vcJ41sQvKRJBSF/r6j+zakDW+2ITZI3sFO0PYkmM8Zrx+Q4AAHYy
+         j9k6RmBLJwduznVwPo/7hxqdfO+Gx7MBTeuon+CPTxnVil+y/JL9PHclTfiOoMFHlUiT
+         Q+ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4bP+MLqv2/4jxjq5G8WI3V8blQrwy5vvH8NjA0Oq9xU=;
-        b=ttiG8+Gz52eEgTMMMO1WVJ78NreQo61FDY6dozQdUvlksHXozrdk7UPXwhUzSG4yqr
-         glgq0jQmsqwYgg+Q7a9f4eUDFCi+FvG/Ayr8od5kz6EhqDDRgWr5LsOdYIe1qody6j7B
-         TRLd6DtX04h/66SUlBNz97aYMLuQaKXt4loayUoVditzF9CeKzeDc8N+8G6tRpgM2J0S
-         pa8O6yZFgJDdEKZmpTpKCMxcDZNdZhKa1fk0pPP+uutqkK7vBwN1GEDf6evCE26qFKGM
-         QQi2jLMp2KIIODVzTprVJ2rcf6h7XBSAZq/HJ7KAlGE3GsieIYr51tW899oioKamEwgO
-         mjTw==
-X-Gm-Message-State: APjAAAVywZdcNRPjINBJ9lIqjb/psNDKpJYGpYIWZeK4RSw80q9/A7Sg
-        R+WwDamRSsFu5rUL9IXI6Qfg0EMRNBs=
-X-Google-Smtp-Source: APXvYqzbQKq59zgeIjn7y8aSapxE1WfcMGP+6y/7ru+h0qLU35K1XFlm5cG4afiCOY6A/gmczfOR0w==
-X-Received: by 2002:a2e:80cc:: with SMTP id r12mr1005293ljg.154.1575828669219;
-        Sun, 08 Dec 2019 10:11:09 -0800 (PST)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id l8sm9828055ljj.96.2019.12.08.10.11.07
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Dec 2019 10:11:08 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id f15so8102943lfl.13
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2019 10:11:07 -0800 (PST)
-X-Received: by 2002:ac2:465e:: with SMTP id s30mr10244080lfo.134.1575828667708;
- Sun, 08 Dec 2019 10:11:07 -0800 (PST)
+         :message-id:subject:to;
+        bh=KF5aTv6n3DfUqCuMnzLXrdfOWA6J0PeAoUE3gVOIfho=;
+        b=ScmAwaf5Sj6FIdLeVczAnkmAIawibDnf9/r7GaR8koLq6kcz7aGmlh/VC68EUSPEUB
+         Xje1a6B3EeSh31SpnqcnnelBvX7f5ao7KYbmPx6ysW+mepMbgSmlSn2iZozwzsAVO5hO
+         x9wzyPIZvtukECXHp+CuIuglKDj/FH/oQfGzsoHdkTcohTVG7jvwuB+ErGp8j8rCRpBW
+         T5qQ3qCofXXokqjEZI7JLU609qRHrHKOjQIfFN4NYkcFjBrZ+jhaYfo2h+SCreJdopzr
+         MvWdQ8PdR6tfmr2zL9hV879FHYBnWUMWz63vrKsFsamzQWbouwdwkhPPoBOpMfN5P5pE
+         6zsA==
+X-Gm-Message-State: APjAAAXLRh/MU29hxjaG82QviVX1I/XV2Xf8EEZNiJKNz/r5emOG+Dns
+        9ubPFiQjqu8pgDfpKJXehnhgLfeV8mxKMFN8jTxJYw==
+X-Google-Smtp-Source: APXvYqwA4f0EBjRe0txq2g8UUi2gwyPzDi1AwLLBW1NyB9fdBSfdKji4BbOoYaWmQDSAbN40LFGN6UMMnsJL2sk1Y2o=
+X-Received: by 2002:a2e:8544:: with SMTP id u4mr2212275ljj.191.1575851115853;
+ Sun, 08 Dec 2019 16:25:15 -0800 (PST)
 MIME-Version: 1.0
-References: <157186182463.3995.13922458878706311997.stgit@warthog.procyon.org.uk>
- <157186186167.3995.7568100174393739543.stgit@warthog.procyon.org.uk>
- <20191206214725.GA2108@latitude> <CAHk-=wga0MPEH5hsesi4Cy+fgaaKENMYpbg2kK8UA0qE3iupgw@mail.gmail.com>
- <20191207000015.GA1757@latitude> <CAHk-=wjEa5oNcQ9+9fai1Awqktf+hzz_HZmChi8HZJWcL62+Cw@mail.gmail.com>
- <20191208175602.GA1844@latitude>
-In-Reply-To: <20191208175602.GA1844@latitude>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 8 Dec 2019 10:10:51 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgh9zUy9nbiCgGjtrgw1V9Vk=01Ncju-0iib5Jn-V1arw@mail.gmail.com>
-Message-ID: <CAHk-=wgh9zUy9nbiCgGjtrgw1V9Vk=01Ncju-0iib5Jn-V1arw@mail.gmail.com>
-Subject: Re: [RFC PATCH 04/10] pipe: Use head and tail pointers for the ring,
- not cursor and length [ver #2]
-To:     Johannes Hirte <johannes.hirte@datenkhaos.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>, raven@themaw.net,
-        Christian Brauner <christian@brauner.io>,
-        keyrings@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191205142200.145252-1-linus.walleij@linaro.org> <20191205201936.GA19754@uda0271908>
+In-Reply-To: <20191205201936.GA19754@uda0271908>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 9 Dec 2019 01:25:04 +0100
+Message-ID: <CACRpkdb1dY-fnH8Muse7gFoxzA2PhpLFskWJ+dz6DHbvm7H7zQ@mail.gmail.com>
+Subject: Re: [PATCH] musb: davinci: Convert to use GPIO descriptor
+To:     Bin Liu <b-liu@ti.com>, Linus Walleij <linus.walleij@linaro.org>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        Sekhar Nori <nsekhar@ti.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Dec 8, 2019 at 9:56 AM Johannes Hirte
-<johannes.hirte@datenkhaos.de> wrote:
+On Thu, Dec 5, 2019 at 9:20 PM Bin Liu <b-liu@ti.com> wrote:
+> On Thu, Dec 05, 2019 at 03:22:00PM +0100, Linus Walleij wrote:
+> > The DaVinci MUSB glue contains an optional GPIO line to
+> > control VBUS power, convert this to use a GPIO descriptor
+> > and augment the EVM board file to provide this descriptor.
+> >
+> > I can't get this driver to compile properly and it depends
+> > on broken but when I didn get it to compile brokenly, it
+> > did at least not complain about THIS code being broken so
+> > I don't think I broke the driver any more than what it
+> > already is.
+> >
+> > I did away with the ifdefs that do not work with
+> > multiplatform anyway so the day someone decides to
+> > resurrect the code, the path to get it working should be
+> > easier as well since DaVinci is now multiplatform.
 >
-> whereas with a fresh cloned repo I get:
->
-> v5.4-13331-g9455d25f4e3b
->
-> I assume the later is right. With this version the bug seems to be
-> fixed, regardless of the commit count. Tested with different websites
-> and firefox works as expected again.
+> Generally I don't take such patches unless they are part of the effort
+> to un-broken the driver. But is this patch a prerequisite of any cleanup
+> in DaVinci family or ARM architecture? What is the motivation of this
+> patch?
 
-Ok, good. It was almost certainly the select/poll race fix - Mariusz
-Ceier reported a problem with youtube hanging, and confirmed that the
-poll/select fix seems to have cleared that one up. I suspect that your
-hang on fb and spiegel.de were the same thing.
+The motivation is the clean-up of the internal GPIO API for the
+kernel. It is described in drivers/gpio/TODO
 
-So I think the pipe code is stable again with current -git. Thanks for
-reporting and testing,
+I can propose a patch simply deleting the code if you prefer that,
+then whoever want to resurrect it can still get it out of git if
+they need. As long as nothing includes <linux/gpio.h> anymore,
+I am happy.
 
-             Linus
+Yours,
+Linus Walleij
