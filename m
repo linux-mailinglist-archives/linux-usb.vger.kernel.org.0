@@ -2,97 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2944C1186DB
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2201186E9
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbfLJLox (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 06:44:53 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42735 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727370AbfLJLot (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:44:49 -0500
-Received: by mail-lj1-f194.google.com with SMTP id e28so19473404ljo.9;
-        Tue, 10 Dec 2019 03:44:48 -0800 (PST)
+        id S1727486AbfLJLpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 06:45:19 -0500
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:43278 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727295AbfLJLpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:45:15 -0500
+Received: by mail-lf1-f50.google.com with SMTP id 9so13442220lfq.10
+        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 03:45:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=O8YFI9ZrqH4e0oIKw4V/GECqRBDRWFzJ0oL1cBNncqo=;
+        b=DloFO4NonMTCQNIdTlqsD4MRa2T8kIflQrvnrlb2JWciylyzjVkRXfqK5CjWkND65a
+         aXel6VyhIU1PBK1qYLN0SKk8HLAC1gjovqSuwMpxa8RSfZZZHeLyTmGdE3x8lhUE4D+p
+         62r57zHB2gRpMdrMGa8v2GlxQcEptAge8EW2kD4Pi5KbyH4ILCY1seEJu7dPVvTCMDcs
+         ljE1ON21heknDtglmZEJCUlKzKZyM5fH1ZZyrrZhCBMmP3CMvbRcKDmVmIze+OcWdXhq
+         XyAWsxlkw4qz1AC1N8XLUAWahT5QPE0Dwyr/N5soW0mgzOXmDQffN6r/uVtZT3ljniA4
+         Foww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qWOB2/IV9LlS7RQezdilUBmbfySScHur6xA52oFN8Mk=;
-        b=Q2NcCZ9MkksL/3NQxvpoyzOR6VBFKo9p5yK/8B6NjPgFUfI3t6ZsTrMcwRVlM1iMYy
-         lcs484KF5ZFwH90hZC9hK7Yb9hj6BCUxyjQVi1XeVWZ3hdPawEYFAmSiF7HM6snygMsM
-         VxaD/DYKZ6BNgNcqNH5wg9WK4Z1/cwn2sKLrz35Wudcc1W8tbPqXfX+UuQGcne75voB6
-         MTjGIjYX2MF2epTY2TwmTLkGm/3bJZcKfSxIWSuE0uIrU/N1ZHmqmtfhgmc9fdNyWxx+
-         wgQjhB6YARFsH8Cmzy7P4SRhsy8IHavrPIRWnT50nnDcIMURZ/zxck3PjJ1SPXW+V4zj
-         pTjQ==
-X-Gm-Message-State: APjAAAWJDqm4L3C20tKD48CfAkWW6hICiueJ15Tc2pFfSVDwHkcOgdVM
-        l/jlGPVXmeuk6xspFlWtsMc=
-X-Google-Smtp-Source: APXvYqynsdHOtBWjaFSURKa7gPhmEPTZGQhZLn7lMHihEI1WubA2H/zTUly8AXEPYsJuWUpQ+LO9+w==
-X-Received: by 2002:a2e:5850:: with SMTP id x16mr1332994ljd.228.1575978287598;
-        Tue, 10 Dec 2019 03:44:47 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id x84sm1425212lfa.97.2019.12.10.03.44.42
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=O8YFI9ZrqH4e0oIKw4V/GECqRBDRWFzJ0oL1cBNncqo=;
+        b=JhLhWc66v8RBdvcyB+0GTxPlaPLAXtREs3F7lAg+CM2qH1cA3WNscne9HWF5b654sJ
+         fFVqZrgd01bzYLOuniOiDS9cNn0UVAI1zFVan3KxksrYKxm/rJh9VahpvXYcCFT2jTnv
+         YHaAnMF6goDmp7FDIaCsgvYjFaP/vh0S3zLE3xgk6BgXhif17Pzass58RDd2KjMvtrqQ
+         Mh+6CI7ziVADph9EKTSXj4t09nmTthlwCfJA5Jprzuz1gBI+Hk1o9bxTLBCryCJpXl9S
+         QqFw29ZTKkgEGNmfGs/UhUvzaQnGx/qNW7+6txhksAebcvgniyTvqrNG7tm7knvVJHpw
+         rfnQ==
+X-Gm-Message-State: APjAAAXHSfjlCrc8AlQyLLAe7/pNXHSJZE1uM4vnxNMSVf91FVaQo/ho
+        ocqNRMxppkl7bAf09XEi301D7T6MV/8=
+X-Google-Smtp-Source: APXvYqzX7jj7jn6vW7hHuxvhUdUanZIXJ6mhjRXRqUvAPelf1rVSzTGVpmxfQN/kfbtBbiR9LGWFHA==
+X-Received: by 2002:a19:f519:: with SMTP id j25mr18911046lfb.41.1575978314410;
+        Tue, 10 Dec 2019 03:45:14 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id h18sm1596408ljk.94.2019.12.10.03.45.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 03:44:43 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1iedwa-0001II-Td; Tue, 10 Dec 2019 12:44:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     QCA ath9k Development <ath9k-devel@qca.qualcomm.com>,
-        Arend van Spriel <arend@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Jes Sorensen <Jes.Sorensen@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Siva Rebbagondla <siva8118@gmail.com>,
-        Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 7/7] zd1211rw: fix storage endpoint lookup
-Date:   Tue, 10 Dec 2019 12:44:26 +0100
-Message-Id: <20191210114426.4713-8-johan@kernel.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191210114426.4713-1-johan@kernel.org>
-References: <20191210114426.4713-1-johan@kernel.org>
+        Tue, 10 Dec 2019 03:45:13 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sriharsha Allenki <sallenki@codeaurora.org>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     jackp@codeaurora.org, mgautam@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: Do not process request if HWO is set for its TRB
+In-Reply-To: <4c34d724-6a45-dc21-2d10-337f358015ce@codeaurora.org>
+References: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org> <1575270714-29994-1-git-send-email-sallenki@codeaurora.org> <87tv6jch61.fsf@gmail.com> <0101016ec6294c21-99711286-dbda-4d62-b8c7-e9f28e99b261-000000@us-west-2.amazonses.com> <871rtla8xd.fsf@gmail.com> <4c34d724-6a45-dc21-2d10-337f358015ce@codeaurora.org>
+Date:   Tue, 10 Dec 2019 13:46:04 +0200
+Message-ID: <878snkl7yb.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure to use the current alternate setting when verifying the
-storage interface descriptors to avoid submitting an URB to an invalid
-endpoint.
 
-Failing to do so could cause the driver to misbehave or trigger a WARN()
-in usb_submit_urb() that kernels with panic_on_warn set would choke on.
+Hi,
 
-Fixes: a1030e92c150 ("[PATCH] zd1211rw: Convert installer CDROM device into WLAN device")
-Cc: stable <stable@vger.kernel.org>     # 2.6.19
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/wireless/zydas/zd1211rw/zd_usb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Sriharsha Allenki <sallenki@codeaurora.org> writes:
+>>>> what problem you actually found? Preferrably with tracepoint data
+>>>> showing the fault.
+>>> Test case here involves f_fs driver in AIO mode and we see ~8 TRBs in
+>>> the queue with HWO set and UPDATE_XFER done. In the failure case I see
+>>> thatas part of processingthe interrupt generated by the core for the
+>>> completion of the first TRB, the driver isgoing ahead and giving
+>> we shouldn't get completion interrupt for the first TRB, only the
+>> last. Care to share tracepoint data?
+>
+> We have seen the issue only once and we do not have any tracepoint
+> data for it. But with the internal logging we have in our downstream code,
+> I see a race between dequeue from the function driver, and the giveback
+> as part of the completion (XferInProgress).
 
-diff --git a/drivers/net/wireless/zydas/zd1211rw/zd_usb.c b/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-index 7b5c2fe5bd4d..8ff0374126e4 100644
---- a/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-+++ b/drivers/net/wireless/zydas/zd1211rw/zd_usb.c
-@@ -1263,7 +1263,7 @@ static void print_id(struct usb_device *udev)
- static int eject_installer(struct usb_interface *intf)
- {
- 	struct usb_device *udev = interface_to_usbdev(intf);
--	struct usb_host_interface *iface_desc = &intf->altsetting[0];
-+	struct usb_host_interface *iface_desc = intf->cur_altsetting;
- 	struct usb_endpoint_descriptor *endpoint;
- 	unsigned char *cmd;
- 	u8 bulk_out_ep;
+Which other changes do you have in your downstream code? Could this
+problem be caused by some of the changes in your downstream tree?
+
+> A request (say Request-1) is dequeued before we could notify it's
+> completion to the gadget driver. Because of this, as part of handling
+> the completion event for the Request-1 we gaveback the next
+> request(Request-2) in the queue which is yet to be processed by the
+> core leading to the mentioned SMMU fault.
+
+I really need to see tracepoint of this happening. Every list
+modification happens with locks held.
+
+> Normally, the core should not process the TRBs once a request
+> has been dequeued because of the stop_active_transfer as part of
+> dequeue, but I see a timeout when issuing the end transfer command
+> during dequeue because of which core is still processing the TRBs
+> in the queue.
+
+Ok, so that's the real problem. End Transfer times out. Are you fixing
+the wrong thing?
+
+Please, collect trace point data with UPSTREAM kernel. You can't report
+a bug on a downstream kernel without reproducing it in the upstream;
+otherwise we will be running in circles here.
+
 -- 
-2.24.0
-
+balbi
