@@ -2,180 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F09118EFD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 18:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D86C1190F5
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 20:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727495AbfLJR3K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 12:29:10 -0500
-Received: from pio-pvt-msa2.bahnhof.se ([79.136.2.41]:42878 "EHLO
-        pio-pvt-msa2.bahnhof.se" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727425AbfLJR3J (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 12:29:09 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTP id 1E1C240F6E;
-        Tue, 10 Dec 2019 18:29:07 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at bahnhof.se
-X-Spam-Flag: NO
-X-Spam-Score: -1.899
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.899 tagged_above=-999 required=6.31
-        tests=[BAYES_00=-1.9, URIBL_BLOCKED=0.001]
-        autolearn=ham autolearn_force=no
-Received: from pio-pvt-msa2.bahnhof.se ([127.0.0.1])
-        by localhost (pio-pvt-msa2.bahnhof.se [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id mJTN02ncIR5s; Tue, 10 Dec 2019 18:29:06 +0100 (CET)
-Received: from localhost (h-41-252.A163.priv.bahnhof.se [46.59.41.252])
-        (Authenticated sender: mb547485)
-        by pio-pvt-msa2.bahnhof.se (Postfix) with ESMTPA id 19CD240F6D;
-        Tue, 10 Dec 2019 18:29:05 +0100 (CET)
-Date:   Tue, 10 Dec 2019 18:29:05 +0100
-From:   Fredrik Noring <noring@nocrew.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christoph Hellwig <hch@lst.de>, linux-usb@vger.kernel.org
-Subject: [PATCH v2] USB: Fix incorrect DMA allocations for local memory pool
- drivers
-Message-ID: <20191210172905.GA52526@sx9>
-References: <20191130165055.GA46622@sx9>
- <20191210112210.GA3774386@kroah.com>
+        id S1726647AbfLJTsB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 14:48:01 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:51532 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1726071AbfLJTsB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 14:48:01 -0500
+Received: (qmail 6212 invoked by uid 2102); 10 Dec 2019 14:47:59 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Dec 2019 14:47:59 -0500
+Date:   Tue, 10 Dec 2019 14:47:59 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <hverkuil@xs4all.nl>,
+        <jrdr.linux@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <mchehab@kernel.org>, <rfontana@redhat.com>,
+        <syzkaller-bugs@googlegroups.com>, <tglx@linutronix.de>
+Subject: Re: KASAN: use-after-free Read in usbvision_v4l2_open
+In-Reply-To: <0000000000006ab7cc05994cbae2@google.com>
+Message-ID: <Pine.LNX.4.44L0.1912101440100.1647-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20191210112210.GA3774386@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix commit 7b81cb6bddd2 ("usb: add a HCD_DMA flag instead of
-guestimating DMA capabilities") where local memory USB drivers
-erroneously allocate DMA memory instead of pool memory, causing
+On Mon, 9 Dec 2019, syzbot wrote:
 
-	OHCI Unrecoverable Error, disabled
-	HC died; cleaning up
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1296f42ae00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=c7b0ec009a216143df30
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> 
+> Unfortunately, I don't have any reproducer for this crash yet.
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: use-after-free in __mutex_lock_common  
+> kernel/locking/mutex.c:1043 [inline]
+> BUG: KASAN: use-after-free in __mutex_lock+0x124d/0x1360  
+> kernel/locking/mutex.c:1106
+> Read of size 8 at addr ffff8881cad4d8b8 by task v4l_id/4526
+> 
+> CPU: 0 PID: 4526 Comm: v4l_id Not tainted 5.4.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+> Google 01/01/2011
+> Call Trace:
+>   __dump_stack lib/dump_stack.c:77 [inline]
+>   dump_stack+0xef/0x16e lib/dump_stack.c:118
+>   print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
+>   __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
+>   kasan_report+0xe/0x20 mm/kasan/common.c:638
+>   __mutex_lock_common kernel/locking/mutex.c:1043 [inline]
+>   __mutex_lock+0x124d/0x1360 kernel/locking/mutex.c:1106
+>   usbvision_v4l2_open+0x77/0x340  
+> drivers/media/usb/usbvision/usbvision-video.c:314
+>   v4l2_open+0x20f/0x3d0 drivers/media/v4l2-core/v4l2-dev.c:423
+>   chrdev_open+0x219/0x5c0 fs/char_dev.c:414
+>   do_dentry_open+0x494/0x1120 fs/open.c:797
+>   do_last fs/namei.c:3412 [inline]
+>   path_openat+0x142b/0x4030 fs/namei.c:3529
+>   do_filp_open+0x1a1/0x280 fs/namei.c:3559
+>   do_sys_open+0x3c0/0x580 fs/open.c:1097
+>   do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
 
-The order between hcd_uses_dma() and hcd->localmem_pool is now
-arranged as in hcd_buffer_alloc() and hcd_buffer_free(), with the
-test for hcd->localmem_pool placed first.
+This looks like a race in v4l2_open(): The function drops the
+videodev_lock mutex before calling the video driver's open routine, and
+the device can be unregistered during the short time between.
 
-As an alternative, one might consider adjusting hcd_uses_dma() with
+This patch tries to make the race much more likely to happen, for 
+testing and verification.
 
- static inline bool hcd_uses_dma(struct usb_hcd *hcd)
- {
--	return IS_ENABLED(CONFIG_HAS_DMA) && (hcd->driver->flags & HCD_DMA);
-+	return IS_ENABLED(CONFIG_HAS_DMA) &&
-+		(hcd->driver->flags & HCD_DMA) &&
-+		(hcd->localmem_pool == NULL);
- }
+Andrey, will syzbot run the same test with this patch, even though it 
+says it doesn't have a reproducer?
 
-One can also consider unsetting HCD_DMA for local memory pool drivers.
+Alan Stern
 
-Fixes: 7b81cb6bddd2 ("usb: add a HCD_DMA flag instead of guestimating DMA capabilities")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Fredrik Noring <noring@nocrew.org>
----
-Hi Greg,
+#syz test: https://github.com/google/kasan.git 1f22d15c
 
-> This patch doesn't apply against 5.5-rc1, can you refresh it and resend?
-
-Sure, please find updated patch v2 attached below.
-
-Changes in v2:
-- Update to v5.5-rc1 resolving conflict with commit b3d53f5fce5d ("usb: core: Remove redundant vmap checks")
-- Fix "Fixes:" line
-- Add "Cc: stable <stable@vger.kernel.org>"
----
- drivers/usb/core/hcd.c         | 42 +++++++++++++++++-----------------
- drivers/usb/storage/scsiglue.c |  3 ++-
- 2 files changed, 23 insertions(+), 22 deletions(-)
-
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 281568d464f9..aa45840d8273 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -1409,7 +1409,17 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 	if (usb_endpoint_xfer_control(&urb->ep->desc)) {
- 		if (hcd->self.uses_pio_for_control)
- 			return ret;
--		if (hcd_uses_dma(hcd)) {
-+		if (hcd->localmem_pool) {
-+			ret = hcd_alloc_coherent(
-+					urb->dev->bus, mem_flags,
-+					&urb->setup_dma,
-+					(void **)&urb->setup_packet,
-+					sizeof(struct usb_ctrlrequest),
-+					DMA_TO_DEVICE);
-+			if (ret)
-+				return ret;
-+			urb->transfer_flags |= URB_SETUP_MAP_LOCAL;
-+		} else if (hcd_uses_dma(hcd)) {
- 			if (object_is_on_stack(urb->setup_packet)) {
- 				WARN_ONCE(1, "setup packet is on stack\n");
- 				return -EAGAIN;
-@@ -1424,23 +1434,22 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 						urb->setup_dma))
- 				return -EAGAIN;
- 			urb->transfer_flags |= URB_SETUP_MAP_SINGLE;
--		} else if (hcd->localmem_pool) {
--			ret = hcd_alloc_coherent(
--					urb->dev->bus, mem_flags,
--					&urb->setup_dma,
--					(void **)&urb->setup_packet,
--					sizeof(struct usb_ctrlrequest),
--					DMA_TO_DEVICE);
--			if (ret)
--				return ret;
--			urb->transfer_flags |= URB_SETUP_MAP_LOCAL;
- 		}
+Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
++++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+@@ -1585,6 +1585,7 @@ static void usbvision_disconnect(struct
+ 		wake_up_interruptible(&usbvision->wait_frame);
+ 		wake_up_interruptible(&usbvision->wait_stream);
+ 	} else {
++		msleep(100);
+ 		usbvision_release(usbvision);
  	}
  
- 	dir = usb_urb_dir_in(urb) ? DMA_FROM_DEVICE : DMA_TO_DEVICE;
- 	if (urb->transfer_buffer_length != 0
- 	    && !(urb->transfer_flags & URB_NO_TRANSFER_DMA_MAP)) {
--		if (hcd_uses_dma(hcd)) {
-+		if (hcd->localmem_pool) {
-+			ret = hcd_alloc_coherent(
-+					urb->dev->bus, mem_flags,
-+					&urb->transfer_dma,
-+					&urb->transfer_buffer,
-+					urb->transfer_buffer_length,
-+					dir);
-+			if (ret == 0)
-+				urb->transfer_flags |= URB_MAP_LOCAL;
-+		} else if (hcd_uses_dma(hcd)) {
- 			if (urb->num_sgs) {
- 				int n;
+Index: usb-devel/drivers/media/v4l2-core/v4l2-dev.c
+===================================================================
+--- usb-devel.orig/drivers/media/v4l2-core/v4l2-dev.c
++++ usb-devel/drivers/media/v4l2-core/v4l2-dev.c
+@@ -419,9 +419,10 @@ static int v4l2_open(struct inode *inode
+ 	video_get(vdev);
+ 	mutex_unlock(&videodev_lock);
+ 	if (vdev->fops->open) {
+-		if (video_is_registered(vdev))
++		if (video_is_registered(vdev)) {
++			msleep(200);
+ 			ret = vdev->fops->open(filp);
+-		else
++		} else
+ 			ret = -ENODEV;
+ 	}
  
-@@ -1491,15 +1500,6 @@ int usb_hcd_map_urb_for_dma(struct usb_hcd *hcd, struct urb *urb,
- 				else
- 					urb->transfer_flags |= URB_DMA_MAP_SINGLE;
- 			}
--		} else if (hcd->localmem_pool) {
--			ret = hcd_alloc_coherent(
--					urb->dev->bus, mem_flags,
--					&urb->transfer_dma,
--					&urb->transfer_buffer,
--					urb->transfer_buffer_length,
--					dir);
--			if (ret == 0)
--				urb->transfer_flags |= URB_MAP_LOCAL;
- 		}
- 		if (ret && (urb->transfer_flags & (URB_SETUP_MAP_SINGLE |
- 				URB_SETUP_MAP_LOCAL)))
-diff --git a/drivers/usb/storage/scsiglue.c b/drivers/usb/storage/scsiglue.c
-index 66a4dcbbb1fc..f4c2359abb1b 100644
---- a/drivers/usb/storage/scsiglue.c
-+++ b/drivers/usb/storage/scsiglue.c
-@@ -135,7 +135,8 @@ static int slave_configure(struct scsi_device *sdev)
- 	 * For such controllers we need to make sure the block layer sets
- 	 * up bounce buffers in addressable memory.
- 	 */
--	if (!hcd_uses_dma(bus_to_hcd(us->pusb_dev->bus)))
-+	if (!hcd_uses_dma(bus_to_hcd(us->pusb_dev->bus)) ||
-+			(bus_to_hcd(us->pusb_dev->bus)->localmem_pool != NULL))
- 		blk_queue_bounce_limit(sdev->request_queue, BLK_BOUNCE_HIGH);
- 
- 	/*
--- 
-2.23.0
 
