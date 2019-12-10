@@ -2,222 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12E89117E8B
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 04:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC6111804F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 07:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfLJDuf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 22:50:35 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:7373 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726619AbfLJDuf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 22:50:35 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5def16040000>; Mon, 09 Dec 2019 19:50:28 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 09 Dec 2019 19:50:34 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 09 Dec 2019 19:50:34 -0800
-Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 03:50:33 +0000
-Received: from [10.24.193.46] (172.20.13.39) by DRHQMAIL107.nvidia.com
- (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 10 Dec
- 2019 03:50:30 +0000
-Subject: Re: [PATCH 03/18] phy: tegra: xusb: Add usb-role-switch support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
-        <robh+dt@kernel.org>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1575629421-7039-1-git-send-email-nkristam@nvidia.com>
- <1575629421-7039-4-git-send-email-nkristam@nvidia.com>
- <20191206145445.GD2085684@ulmo>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <9ce40f6c-e742-79f0-ee99-517571c46bc3@nvidia.com>
-Date:   Tue, 10 Dec 2019 09:22:23 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
-MIME-Version: 1.0
-In-Reply-To: <20191206145445.GD2085684@ulmo>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- DRHQMAIL107.nvidia.com (10.27.9.16)
-Content-Type: text/plain; charset="windows-1252"
+        id S1727127AbfLJGUw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 10 Dec 2019 01:20:52 -0500
+Received: from mga02.intel.com ([134.134.136.20]:37151 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726085AbfLJGUw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Dec 2019 01:20:52 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 09 Dec 2019 22:20:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,298,1571727600"; 
+   d="scan'208";a="210311341"
+Received: from fmsmsx103.amr.corp.intel.com ([10.18.124.201])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Dec 2019 22:20:51 -0800
+Received: from fmsmsx151.amr.corp.intel.com (10.18.125.4) by
+ FMSMSX103.amr.corp.intel.com (10.18.124.201) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Mon, 9 Dec 2019 22:20:49 -0800
+Received: from shsmsx153.ccr.corp.intel.com (10.239.6.53) by
+ FMSMSX151.amr.corp.intel.com (10.18.125.4) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Mon, 9 Dec 2019 22:20:43 -0800
+Received: from shsmsx102.ccr.corp.intel.com ([169.254.2.109]) by
+ SHSMSX153.ccr.corp.intel.com ([169.254.12.195]) with mapi id 14.03.0439.000;
+ Tue, 10 Dec 2019 14:20:41 +0800
+From:   "Yuan, Shengquan" <shengquan.yuan@intel.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: Question for usbmon/SET_ADDRESS request
+Thread-Topic: Question for usbmon/SET_ADDRESS request
+Thread-Index: AdWuRcnxiBS1b5xIR76NSftKb1T3RgAG9baAADABIoA=
+Date:   Tue, 10 Dec 2019 06:20:40 +0000
+Message-ID: <47EE7DDB963B974E8D97CE7497B454D43FED94AD@shsmsx102.ccr.corp.intel.com>
+References: <47EE7DDB963B974E8D97CE7497B454D43FED8BE2@shsmsx102.ccr.corp.intel.com>
+ <Pine.LNX.4.44L0.1912091018270.1462-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912091018270.1462-100000@iolanthe.rowland.org>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1575949828; bh=aIFYXzL74CPu1pOPMHd8motPMl3uNcZkSE0kei/OXaE=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ZQVxtU4Mh0l2o2B8MfVPxBw8aF1y6zRSLnWEkqN6KX5J9iB+2eR4fdcF2SW7O1o7c
-         pmr9ZarKPuitlQ6MaKsgaRA0p949nstsW1za16xvtp8Av5qH+kb0kq2zokfdJe9in1
-         hma/T05tg9T+1/ZqJ8WewV7I6lwD1+Ol0LkwpwsAt5zICIKN97lVFUwb79/LKtlAYp
-         J+MyIm+/Lx7ow9OkP+0GsMp+f0z4/3sYJuvCRmIcLL/v5mTYKsX0xsWnV2mNCTkaog
-         zHMbwqJGYWWEQsCLziqvkebPduYJLDHAh/LCRG1GjWFT0RwqYg9EQxBqy6Y59rOJG8
-         Q7lnJr9hZMq0w==
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.239.127.40]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
+MIME-Version: 1.0
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 06-12-2019 20:24, Thierry Reding wrote:
-> On Fri, Dec 06, 2019 at 04:20:06PM +0530, Nagarjuna Kristam wrote:
->> If usb-role-switch property is present in USB 2 port, register
->> usb-role-switch to receive usb role changes.
->>
->> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
->> ---
->>  drivers/phy/tegra/Kconfig |  1 +
->>  drivers/phy/tegra/xusb.c  | 40 ++++++++++++++++++++++++++++++++++++++++
->>  drivers/phy/tegra/xusb.h  |  3 +++
->>  3 files changed, 44 insertions(+)
->>
->> diff --git a/drivers/phy/tegra/Kconfig b/drivers/phy/tegra/Kconfig
->> index f9817c3..df07c4d 100644
->> --- a/drivers/phy/tegra/Kconfig
->> +++ b/drivers/phy/tegra/Kconfig
->> @@ -2,6 +2,7 @@
->>  config PHY_TEGRA_XUSB
->>  	tristate "NVIDIA Tegra XUSB pad controller driver"
->>  	depends on ARCH_TEGRA
->> +	select USB_CONN_GPIO
->>  	help
->>  	  Choose this option if you have an NVIDIA Tegra SoC.
->>  
->> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
->> index f98ec39..da60a63 100644
->> --- a/drivers/phy/tegra/xusb.c
->> +++ b/drivers/phy/tegra/xusb.c
->> @@ -523,6 +523,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>  	port->dev.type = &tegra_xusb_port_type;
->>  	port->dev.of_node = of_node_get(np);
->>  	port->dev.parent = padctl->dev;
->> +	port->dev.driver = padctl->dev->driver;
->>  
->>  	err = dev_set_name(&port->dev, "%s-%u", name, index);
->>  	if (err < 0)
->> @@ -532,6 +533,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>  	if (err < 0)
->>  		goto unregister;
->>  
->> +	dev_set_drvdata(&port->dev, port);
-> You never seem to use dev_get_drvdata() to get at this. Also, you can
-> get at it via container_of(), so this is only marginally useful to begin
-> with.
 > 
-Its actually used in API tegra_xusb_role_sw_set, but thats in patch 0004.
-Will move this line to 0004 patch to align with the usage.
+> On Mon, 9 Dec 2019, Yuan, Shengquan wrote:
+> 
+> > Hi,
+> >
+> > I tried to use usbmon to capture the USB packets when inserting a
+> > u-disk, however, I didn't see the SET_ADDRESS request
+> 
+> To understand what's going on, you need to know how usbmon works.  It
+> intercepts data at the point where the kernel sends it to or receives it from the
+> host controller driver.  usbmon is not directly aware of the actual packets that
+> get transmitted on the USB bus.
+> 
+> > Below is the packet list, in packet 88, the host suddenly uses address
+> > 74 to communicate with U-disk.  I am wondering whether usbmon will
+> > capture SET_ADDRESS request?
+> >
+> > 71	8.463514	host	1.1.1	USB	64	URB_INTERRUPT in
+> > 72	8.463536	host	1.1.0	USBHUB	64	GET_STATUS Request     [Port 6]
+> > 73	8.463553	1.1.0	host	USBHUB	68	GET_STATUS Response    [Port 6]
+> > 74	8.463613	host	1.1.0	USBHUB	64	SET_FEATURE Request    [Port 6: PORT_RESET]
+> > 75	8.463626	1.1.0	host	USBHUB	64	SET_FEATURE Response   [Port 6: PORT_RESET]
+> > 76	8.523469	host	1.1.0	USBHUB	64	GET_STATUS Request     [Port 6]
+> > 77	8.523487	1.1.0	host	USBHUB	68	GET_STATUS Response    [Port 6]
+> > 78	8.523495	host	1.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 6: C_PORT_RESET]
+> > 79	8.523501	1.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 6: C_PORT_RESET]
+> > 80	8.583690	host	1.0.0	USB	64	GET DESCRIPTOR Request DEVICE
+> > 81	8.583781	1.0.0	host	USB	82	GET DESCRIPTOR Response DEVICE
+> > 82	8.583820	host	1.1.0	USBHUB	64	SET_FEATURE Request    [Port 6: PORT_RESET]
+> > 83	8.583837	1.1.0	host	USBHUB	64	SET_FEATURE Response   [Port 6: PORT_RESET]
+> > 84	8.643643	host	1.1.0	USBHUB	64	GET_STATUS Request     [Port 6]
+> > 85	8.643666	1.1.0	host	USBHUB	68	GET_STATUS Response    [Port 6]
+> > 86	8.643675	host	1.1.0	USBHUB	64	CLEAR_FEATURE Request  [Port 6: C_PORT_RESET]
+> > 87	8.643680	1.1.0	host	USBHUB	64	CLEAR_FEATURE Response [Port 6: C_PORT_RESET]
+> > 88	8.723558	host	1.74.0	USB	64	GET DESCRIPTOR Request DEVICE
+> > 89	8.723650	1.74.0	host	USB	82	GET DESCRIPTOR Response DEVICE
+> > 90	8.723692	host	1.74.0	USB	64	GET DESCRIPTOR Request BOS
+> 
+> usbmon _will_ capture Set-Address packets if the kernel sends them.
+> However, the kernel does not always send them.
+> 
+> I'm going to guess that the USB host controller for your bus 1 is xHCI.
+> Unlike other types of host controller, an xHCI host controller automatically
+> sends a Set-Address packet whenever it discovers a new device has been
+> plugged in, with no need for the kernel to tell it to do so.  As a result, there is
+> no data for usbmon to intercept and so no Set-Address packet shows up in the
+> usbmon output.
+> 
+> Alan Stern
 
->>  	return 0;
->>  
->>  unregister:
->> @@ -541,6 +543,7 @@ static int tegra_xusb_port_init(struct tegra_xusb_port *port,
->>  
->>  static void tegra_xusb_port_unregister(struct tegra_xusb_port *port)
->>  {
->> +	usb_role_switch_unregister(port->usb_role_sw);
->>  	device_unregister(&port->dev);
->>  }
->>  
->> @@ -551,11 +554,39 @@ static const char *const modes[] = {
->>  	[USB_DR_MODE_OTG] = "otg",
->>  };
->>  
->> +static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role role)
->> +{
->> +	dev_dbg(dev, "%s calling notifier for role is %d\n", __func__, role);
->> +
->> +	return 0;
->> +}
->> +
->> +static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
->> +{
->> +	int err = 0;
->> +	struct usb_role_switch_desc role_sx_desc = {
->> +					.set = tegra_xusb_role_sw_set,
->> +					.fwnode = dev_fwnode(&port->dev),
->> +						   };
->> +
->> +	port->usb_role_sw = usb_role_switch_register(&port->dev,
->> +						&role_sx_desc);
->> +	if (IS_ERR(port->usb_role_sw)) {
->> +		err = PTR_ERR(port->usb_role_sw);
->> +		if (err != EPROBE_DEFER)
->> +			dev_err(&port->dev, "Failed to register USB role SW: %d",
->> +				err);
->> +	}
->> +
->> +	return err;
->> +}
->> +
->>  static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port *usb2)
->>  {
->>  	struct tegra_xusb_port *port = &usb2->base;
->>  	struct device_node *np = port->dev.of_node;
->>  	const char *mode;
->> +	int err;
->>  
->>  	usb2->internal = of_property_read_bool(np, "nvidia,internal");
->>  
->> @@ -572,6 +603,15 @@ static int tegra_xusb_usb2_port_parse_dt(struct tegra_xusb_usb2_port *usb2)
->>  		usb2->mode = USB_DR_MODE_HOST;
->>  	}
->>  
->> +	if (of_property_read_bool(np, "usb-role-switch")) {
->> +		/* populate connector entry */
->> +		of_platform_populate(np, NULL, NULL, &port->dev);
-> I think we want to clean this up on failure, don't we? Otherwise we
-> might end up trying to register the same platform device multiple times.
-> Also, do we want to depopulate when the port is removed again?
-> 
-> Have you tried unloading and loading the driver to see if that works?
-> 
-> Thierry
-> 
-platform needs to be depopulate on error/remove and will add corresponding code.
-padctl driver can be unloaded after unloading all dependent drivers. re-loading
-caused failure of usb role switch due to missing depopulate. Will update changes
-to consider the same.
+Yes. You are right. I re-do the capture on an old laptop with UHCI controller, and now get the SET ADDRESS message.
 
-Thanks,
-Nagarjuna
->> +
->> +		err = tegra_xusb_setup_usb_role_switch(port);
->> +		if (err < 0)
->> +			return err;
->> +	}
->> +
->>  	usb2->supply = devm_regulator_get(&port->dev, "vbus");
->>  	return PTR_ERR_OR_ZERO(usb2->supply);
->>  }
->> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
->> index da94fcc..9f27899 100644
->> --- a/drivers/phy/tegra/xusb.h
->> +++ b/drivers/phy/tegra/xusb.h
->> @@ -12,6 +12,7 @@
->>  #include <linux/workqueue.h>
->>  
->>  #include <linux/usb/otg.h>
->> +#include <linux/usb/role.h>
->>  
->>  /* legacy entry points for backwards-compatibility */
->>  int tegra_xusb_padctl_legacy_probe(struct platform_device *pdev);
->> @@ -266,6 +267,8 @@ struct tegra_xusb_port {
->>  	struct list_head list;
->>  	struct device dev;
->>  
->> +	struct usb_role_switch *usb_role_sw;
->> +
->>  	const struct tegra_xusb_port_ops *ops;
->>  };
->>  
->> -- 
->> 2.7.4
->>
+67      4.616278        1.1.0   host    USBHUB  64      CLEAR_FEATURE Response [Port 5: C_PORT_RESET]
+68      4.676011        host    1.0.0   USB     64      GET DESCRIPTOR Request DEVICE
+69      4.676123        1.0.0   host    USB     82      GET DESCRIPTOR Response DEVICE
+70      4.676139        host    1.1.0   USBHUB  64      SET_FEATURE Request    [Port 5: PORT_RESET]
+71      4.676152        1.1.0   host    USBHUB  64      SET_FEATURE Response   [Port 5: PORT_RESET]
+72      4.744000        host    1.1.0   USBHUB  64      GET_STATUS Request     [Port 5]
+73      4.744250        1.1.0   host    USBHUB  68      GET_STATUS Response    [Port 5]
+74      4.744266        host    1.1.0   USBHUB  64      CLEAR_FEATURE Request  [Port 5: C_PORT_RESET]
+75      4.744278        1.1.0   host    USBHUB  64      CLEAR_FEATURE Response [Port 5: C_PORT_RESET]
+76      4.804004        host    1.0.0   USB     64      SET ADDRESS Request
+77      4.804122        1.0.0   host    USB     64      SET ADDRESS Response
+78      4.832003        host    1.6.0   USB     64      GET DESCRIPTOR Request DEVICE
+79      4.832117        1.6.0   host    USB     82      GET DESCRIPTOR Response DEVICE
+80      4.832141        host    1.6.0   USB     64      GET DESCRIPTOR Request BOS
+
+Thank you very much :)
+
