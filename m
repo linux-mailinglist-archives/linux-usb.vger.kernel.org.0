@@ -2,148 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D7B1190F2
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 20:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFD411910F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 20:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbfLJTsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 14:48:04 -0500
-Received: from mail-io1-f69.google.com ([209.85.166.69]:48783 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726743AbfLJTsD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 14:48:03 -0500
-Received: by mail-io1-f69.google.com with SMTP id e15so14073496ioh.15
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 11:48:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=EpJ1D8lGNCCnF6AyqKcMgQqopgAaZAfpppfEN6g4mew=;
-        b=rz0akNoBPRoKRNIT/YN5lQmOkRz/iRKydnzL/a5WEEAW9IN6t1OCMgxJ/b2WA9lhoV
-         VY6++kPSxaBXm9/YsxHo63aBcWHJo0T7cLlxUUU8AG4pxvmBdRKLO/dqCkRhOY5iKmGP
-         87Wlgfcp1tHoODDVAgzf6D/UzvtfIb0oP3AATMJOje3kfIwwepY4pvTrFZdMvVT9VcJt
-         eP19xrkgSAU7ehIWNh3JdHv75VpfYEf+gxD+hDi2qiXZ7wlEZsnWGzY8R8MbXzxuPVMm
-         ObjH0/+IHvkiZkgIu7BOHMnPVzAjI6Nra9EzjiGIhGLWpzsiSz4nfxZ1hMwmT7aiA5D/
-         QsAg==
-X-Gm-Message-State: APjAAAVhAh37KLCoBR/G6AQtQrrcyqzf6EiA/x9d3fDzdD91QIdA86CC
-        YmAstK27+feqPzuy+AhfokVLkANFo8n4ptyuBTQHD5AKDIhR
-X-Google-Smtp-Source: APXvYqwuqiWxFJXsBzogBCZjMGzDiTKUypBZbe+oMoucxW8s2E2Cb8cXBp3EE0k/qlPWuuAizvelDPXY0UPuH6oDIY+R0HfGA4r5
+        id S1726689AbfLJTxK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 14:53:10 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35814 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbfLJTxK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 14:53:10 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBAJr32k029399;
+        Tue, 10 Dec 2019 13:53:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576007584;
+        bh=yo7sZxfjugdMo8ZFuedB2icaA5L7ymj3/COg0IqvRm0=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=Gt9zLh2wwit4Fz3gxo8h5LFl0P6nDAAQn8RSp5Ct9uDjRhN0aT3opw2Yuo+n1/XTm
+         9t2Fcrua7foIVe3OCoKtAZFz6d2XvqHwzc8p2zr9TocsuATjMmE0fjHf8IOE6UcsZO
+         wEydWZWtxy74Gmd4DoXa2gbq9h0qZwgZHBRpzE24=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBAJr2oc100175;
+        Tue, 10 Dec 2019 13:53:03 -0600
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 10
+ Dec 2019 13:53:03 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 10 Dec 2019 13:53:03 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBAJr3Qp054301;
+        Tue, 10 Dec 2019 13:53:03 -0600
+Date:   Tue, 10 Dec 2019 13:52:30 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <od@zcrc.me>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 7/7] usb: musb: jz4740: Disable pullup at init
+Message-ID: <20191210195230.GA16429@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191210171110.62141-1-paul@crapouillou.net>
+ <20191210171110.62141-7-paul@crapouillou.net>
 MIME-Version: 1.0
-X-Received: by 2002:a02:2385:: with SMTP id u127mr5450623jau.127.1576007282986;
- Tue, 10 Dec 2019 11:48:02 -0800 (PST)
-Date:   Tue, 10 Dec 2019 11:48:02 -0800
-In-Reply-To: <Pine.LNX.4.44L0.1912101440100.1647-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000441a4205995eca11@google.com>
-Subject: Re: Re: KASAN: use-after-free Read in usbvision_v4l2_open
-From:   syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     andreyknvl@google.com, hverkuil@xs4all.nl, jrdr.linux@gmail.com,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org, mchehab@kernel.org, rfontana@redhat.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191210171110.62141-7-paul@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> On Mon, 9 Dec 2019, syzbot wrote:
+Hi,
 
->> Hello,
+On Tue, Dec 10, 2019 at 06:11:10PM +0100, Paul Cercueil wrote:
+> The pullup may be already enabled before the driver is initialized.
+> It has to be disabled at init time, as we cannot guarantee that a gadget
+> driver will be bound to the UDC.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> ---
+> 
+> Notes:
+>     v3: New patch
+> 
+>  drivers/usb/musb/jz4740.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+> index f948eca654f3..1af9e4053312 100644
+> --- a/drivers/usb/musb/jz4740.c
+> +++ b/drivers/usb/musb/jz4740.c
+> @@ -75,6 +75,7 @@ static const struct musb_hdrc_config jz4740_musb_config = {
+>  static int jz4740_musb_init(struct musb *musb)
+>  {
+>  	struct device *dev = musb->controller->parent;
+> +	u8 power;
+>  	int err;
+>  
+>  	if (dev->of_node)
+> @@ -97,6 +98,14 @@ static int jz4740_musb_init(struct musb *musb)
+>  	musb->isr = jz4740_musb_interrupt;
+>  	musb->dma_share_usb_irq = true;
+>  
+> +	/*
+> +	 * If the SoC booted from USB the pullup might still be set.
+> +	 * Disable it until a gadget is bound.
+> +	 */
+> +	power = musb_readb(musb->mregs, MUSB_POWER);
+> +	power &= ~MUSB_POWER_SOFTCONN;
+> +	musb_writeb(musb->mregs, MUSB_POWER, power);
+> +
+>  	return 0;
+>  }
 
->> syzbot found the following crash on:
+It is preferred the glue drivers don't touch the controller core
+registers if possible. Please try the following patch instead.
 
->> HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
->> git tree:       https://github.com/google/kasan.git usb-fuzzer
->> console output: https://syzkaller.appspot.com/x/log.txt?x=1296f42ae00000
->> kernel config:   
->> https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
->> dashboard link:  
->> https://syzkaller.appspot.com/bug?extid=c7b0ec009a216143df30
->> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+-Bin.
 
->> Unfortunately, I don't have any reproducer for this crash yet.
+------------- >8 ------------
+t a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 683b719c5026..2f9105e8ea38 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2317,6 +2317,9 @@ musb_init_controller(struct device *dev, int nIrq, void __iomem *ctrl)
+        musb_disable_interrupts(musb);
+        musb_writeb(musb->mregs, MUSB_DEVCTL, 0);
 
->> IMPORTANT: if you fix the bug, please add the following tag to the  
->> commit:
->> Reported-by: syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com
-
->> ==================================================================
->> BUG: KASAN: use-after-free in __mutex_lock_common
->> kernel/locking/mutex.c:1043 [inline]
->> BUG: KASAN: use-after-free in __mutex_lock+0x124d/0x1360
->> kernel/locking/mutex.c:1106
->> Read of size 8 at addr ffff8881cad4d8b8 by task v4l_id/4526
-
->> CPU: 0 PID: 4526 Comm: v4l_id Not tainted 5.4.0-syzkaller #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
->> Google 01/01/2011
->> Call Trace:
->>    __dump_stack lib/dump_stack.c:77 [inline]
->>    dump_stack+0xef/0x16e lib/dump_stack.c:118
->>    print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
->>    __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
->>    kasan_report+0xe/0x20 mm/kasan/common.c:638
->>    __mutex_lock_common kernel/locking/mutex.c:1043 [inline]
->>    __mutex_lock+0x124d/0x1360 kernel/locking/mutex.c:1106
->>    usbvision_v4l2_open+0x77/0x340
->> drivers/media/usb/usbvision/usbvision-video.c:314
->>    v4l2_open+0x20f/0x3d0 drivers/media/v4l2-core/v4l2-dev.c:423
->>    chrdev_open+0x219/0x5c0 fs/char_dev.c:414
->>    do_dentry_open+0x494/0x1120 fs/open.c:797
->>    do_last fs/namei.c:3412 [inline]
->>    path_openat+0x142b/0x4030 fs/namei.c:3529
->>    do_filp_open+0x1a1/0x280 fs/namei.c:3559
->>    do_sys_open+0x3c0/0x580 fs/open.c:1097
->>    do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
->>    entry_SYSCALL_64_after_hwframe+0x49/0xbe
-
-> This looks like a race in v4l2_open(): The function drops the
-> videodev_lock mutex before calling the video driver's open routine, and
-> the device can be unregistered during the short time between.
-
-> This patch tries to make the race much more likely to happen, for
-> testing and verification.
-
-> Andrey, will syzbot run the same test with this patch, even though it
-> says it doesn't have a reproducer?
-
-> Alan Stern
-
-> #syz test: https://github.com/google/kasan.git 1f22d15c
-
-This crash does not have a reproducer. I cannot test it.
-
-
-> Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-> ===================================================================
-> --- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
-> +++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-> @@ -1585,6 +1585,7 @@ static void usbvision_disconnect(struct
->   		wake_up_interruptible(&usbvision->wait_frame);
->   		wake_up_interruptible(&usbvision->wait_stream);
->   	} else {
-> +		msleep(100);
->   		usbvision_release(usbvision);
->   	}
-
-> Index: usb-devel/drivers/media/v4l2-core/v4l2-dev.c
-> ===================================================================
-> --- usb-devel.orig/drivers/media/v4l2-core/v4l2-dev.c
-> +++ usb-devel/drivers/media/v4l2-core/v4l2-dev.c
-> @@ -419,9 +419,10 @@ static int v4l2_open(struct inode *inode
->   	video_get(vdev);
->   	mutex_unlock(&videodev_lock);
->   	if (vdev->fops->open) {
-> -		if (video_is_registered(vdev))
-> +		if (video_is_registered(vdev)) {
-> +			msleep(200);
->   			ret = vdev->fops->open(filp);
-> -		else
-> +		} else
->   			ret = -ENODEV;
->   	}
-
-
++       /* MUSB_POWER_SOFTCONN might be already set, jz4740 does this. */
++       musb_writeb(musb->mregs, MUSB_POWER, 0);
++
+        /* Init IRQ workqueue before request_irq */
+        INIT_DELAYED_WORK(&musb->irq_work, musb_irq_work);
+        INIT_DELAYED_WORK(&musb->deassert_reset_work, musb_deassert_reset);
