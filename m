@@ -2,106 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2201186E9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022421186FA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727486AbfLJLpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 06:45:19 -0500
-Received: from mail-lf1-f50.google.com ([209.85.167.50]:43278 "EHLO
-        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727295AbfLJLpP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:45:15 -0500
-Received: by mail-lf1-f50.google.com with SMTP id 9so13442220lfq.10
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 03:45:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=O8YFI9ZrqH4e0oIKw4V/GECqRBDRWFzJ0oL1cBNncqo=;
-        b=DloFO4NonMTCQNIdTlqsD4MRa2T8kIflQrvnrlb2JWciylyzjVkRXfqK5CjWkND65a
-         aXel6VyhIU1PBK1qYLN0SKk8HLAC1gjovqSuwMpxa8RSfZZZHeLyTmGdE3x8lhUE4D+p
-         62r57zHB2gRpMdrMGa8v2GlxQcEptAge8EW2kD4Pi5KbyH4ILCY1seEJu7dPVvTCMDcs
-         ljE1ON21heknDtglmZEJCUlKzKZyM5fH1ZZyrrZhCBMmP3CMvbRcKDmVmIze+OcWdXhq
-         XyAWsxlkw4qz1AC1N8XLUAWahT5QPE0Dwyr/N5soW0mgzOXmDQffN6r/uVtZT3ljniA4
-         Foww==
+        id S1727489AbfLJLsC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 06:48:02 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:33206 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727381AbfLJLsB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:48:01 -0500
+Received: by mail-lf1-f66.google.com with SMTP id n25so13511968lfl.0;
+        Tue, 10 Dec 2019 03:47:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=O8YFI9ZrqH4e0oIKw4V/GECqRBDRWFzJ0oL1cBNncqo=;
-        b=JhLhWc66v8RBdvcyB+0GTxPlaPLAXtREs3F7lAg+CM2qH1cA3WNscne9HWF5b654sJ
-         fFVqZrgd01bzYLOuniOiDS9cNn0UVAI1zFVan3KxksrYKxm/rJh9VahpvXYcCFT2jTnv
-         YHaAnMF6goDmp7FDIaCsgvYjFaP/vh0S3zLE3xgk6BgXhif17Pzass58RDd2KjMvtrqQ
-         Mh+6CI7ziVADph9EKTSXj4t09nmTthlwCfJA5Jprzuz1gBI+Hk1o9bxTLBCryCJpXl9S
-         QqFw29ZTKkgEGNmfGs/UhUvzaQnGx/qNW7+6txhksAebcvgniyTvqrNG7tm7knvVJHpw
-         rfnQ==
-X-Gm-Message-State: APjAAAXHSfjlCrc8AlQyLLAe7/pNXHSJZE1uM4vnxNMSVf91FVaQo/ho
-        ocqNRMxppkl7bAf09XEi301D7T6MV/8=
-X-Google-Smtp-Source: APXvYqzX7jj7jn6vW7hHuxvhUdUanZIXJ6mhjRXRqUvAPelf1rVSzTGVpmxfQN/kfbtBbiR9LGWFHA==
-X-Received: by 2002:a19:f519:: with SMTP id j25mr18911046lfb.41.1575978314410;
-        Tue, 10 Dec 2019 03:45:14 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id h18sm1596408ljk.94.2019.12.10.03.45.13
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fo/kQPoTgufoLl6OwS4X1boPbPzO5kmha82cPWUC2hI=;
+        b=OdNe0vn+8QvjfD8P6ecHAg/78T9yojBKTgVES0rTqrwJ1Zmy20dX2afqpFVknXapY2
+         W3OZQTRXrUhYcPcKcD4IgjlU+ioQDUYOLP1NmWBGHlhvoBsyu8k46DA+eaXWFEcnpe8/
+         zT4i5XuL1KmwBMabU7yV/yN4C86cCw0vxffqwWge9WYZR8gr7/k4ukoviGHai4kOO+Eg
+         1DOfZ/+aI6DCRAsP5FzTGeZ5yZFUfSWHRe/2jCUpcRiIztCGP3nRmEWUr7YKE+Ukuwm2
+         hykpNogYp3dWv6bLP7yr6B1eZtbqtGLOojYHj4Jxa/Q+Un10S7EsdDw2fmvbRN7ccE91
+         cRRA==
+X-Gm-Message-State: APjAAAXJ+LrgAJncIsn7f9e8n0hCcPlHf9ECqnTBt4QSzkR2JZaia4Xb
+        CbOjeZ5acO93W4UQIUzarFmM/hSS
+X-Google-Smtp-Source: APXvYqxRUBIZ41AnH3QnCgB0Q1gJnSjg59UHuxgq9xRqKYyhr1qDqMrwe00Je2S+QZyu/YP+ZLbnuA==
+X-Received: by 2002:ac2:4849:: with SMTP id 9mr18316401lfy.11.1575978478770;
+        Tue, 10 Dec 2019 03:47:58 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id e21sm1757836lfc.63.2019.12.10.03.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 03:45:13 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sriharsha Allenki <sallenki@codeaurora.org>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     jackp@codeaurora.org, mgautam@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: Do not process request if HWO is set for its TRB
-In-Reply-To: <4c34d724-6a45-dc21-2d10-337f358015ce@codeaurora.org>
-References: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org> <1575270714-29994-1-git-send-email-sallenki@codeaurora.org> <87tv6jch61.fsf@gmail.com> <0101016ec6294c21-99711286-dbda-4d62-b8c7-e9f28e99b261-000000@us-west-2.amazonses.com> <871rtla8xd.fsf@gmail.com> <4c34d724-6a45-dc21-2d10-337f358015ce@codeaurora.org>
-Date:   Tue, 10 Dec 2019 13:46:04 +0200
-Message-ID: <878snkl7yb.fsf@gmail.com>
+        Tue, 10 Dec 2019 03:47:58 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@xi.terra>)
+        id 1iedzk-0001LN-An; Tue, 10 Dec 2019 12:48:00 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Florian Schilhabel <florian.c.schilhabel@googlemail.com>,
+        devel@driverdev.osuosl.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH 0/2] staging: fix USB altsetting bugs
+Date:   Tue, 10 Dec 2019 12:47:49 +0100
+Message-Id: <20191210114751.5119-1-johan@kernel.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+We had quite a few drivers using the first alternate setting instead of
+the current one when doing descriptor sanity checks. This is mostly an
+issue on kernels with panic_on_warn set due to a WARN() in
+usb_submit_urb(), but since we've started backporting such fixes (e.g.
+as reported by syzbot), I've marked these for stable as well.
 
-Hi,
+Johan
 
-Sriharsha Allenki <sallenki@codeaurora.org> writes:
->>>> what problem you actually found? Preferrably with tracepoint data
->>>> showing the fault.
->>> Test case here involves f_fs driver in AIO mode and we see ~8 TRBs in
->>> the queue with HWO set and UPDATE_XFER done. In the failure case I see
->>> thatas part of processingthe interrupt generated by the core for the
->>> completion of the first TRB, the driver isgoing ahead and giving
->> we shouldn't get completion interrupt for the first TRB, only the
->> last. Care to share tracepoint data?
->
-> We have seen the issue only once and we do not have any tracepoint
-> data for it. But with the internal logging we have in our downstream code,
-> I see a race between dequeue from the function driver, and the giveback
-> as part of the completion (XferInProgress).
 
-Which other changes do you have in your downstream code? Could this
-problem be caused by some of the changes in your downstream tree?
+Johan Hovold (2):
+  staging: rtl8188eu: fix interface sanity check
+  staging: rtl8712: fix interface sanity check
 
-> A request (say Request-1) is dequeued before we could notify it's
-> completion to the gadget driver. Because of this, as part of handling
-> the completion event for the Request-1 we gaveback the next
-> request(Request-2) in the queue which is yet to be processed by the
-> core leading to the mentioned SMMU fault.
-
-I really need to see tracepoint of this happening. Every list
-modification happens with locks held.
-
-> Normally, the core should not process the TRBs once a request
-> has been dequeued because of the stop_active_transfer as part of
-> dequeue, but I see a timeout when issuing the end transfer command
-> during dequeue because of which core is still processing the TRBs
-> in the queue.
-
-Ok, so that's the real problem. End Transfer times out. Are you fixing
-the wrong thing?
-
-Please, collect trace point data with UPSTREAM kernel. You can't report
-a bug on a downstream kernel without reproducing it in the upstream;
-otherwise we will be running in circles here.
+ drivers/staging/rtl8188eu/os_dep/usb_intf.c | 2 +-
+ drivers/staging/rtl8712/usb_intf.c          | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 -- 
-balbi
+2.24.0
+
