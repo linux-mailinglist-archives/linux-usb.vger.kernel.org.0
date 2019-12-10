@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7801190FD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 20:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D7B1190F2
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 20:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726598AbfLJTsQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 14:48:16 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:46532 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbfLJTsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 14:48:02 -0500
-Received: by mail-il1-f198.google.com with SMTP id s85so15283587ild.13
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 11:48:02 -0800 (PST)
+        id S1726801AbfLJTsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 14:48:04 -0500
+Received: from mail-io1-f69.google.com ([209.85.166.69]:48783 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726743AbfLJTsD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 14:48:03 -0500
+Received: by mail-io1-f69.google.com with SMTP id e15so14073496ioh.15
+        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 11:48:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
          :from:to:cc;
         bh=EpJ1D8lGNCCnF6AyqKcMgQqopgAaZAfpppfEN6g4mew=;
-        b=TKKDutrPo7Fo6bWuR4j2/jiRUvy+3oNLI4lc0MZUzJpfZWDcajHU+0JR1b6+jR5fg/
-         J6SA5HX+FXQj8yZj1eW/aFDuTUXWhxusTks56MEw4yOPN3kMzTlX2dn+w/EtYQSt3S47
-         +PEiac4hc+sbcqZU6sFsXBcl0uMxd7s+O2orkI/4MFejt7Y8gaWiLZCzoiOOYukHDlNm
-         PoyDBeD9kl96umL8i6w6WsdmSIDNi01Me2Ho95IqQwBUIR+kcMEKn+g5h/ohRPHRrfQ6
-         qMdEHRmJ6g0KbFvdAOLlgR/rtLTKcHQhIB4V+X4KsQEITjwLKv8XazkaKbuZNL3/afYf
-         GODA==
-X-Gm-Message-State: APjAAAX0luoN5llLSuQwrOPjpCc2LH7stbJO60G68OvbvK9jPDE6nbc6
-        wR+dVcfIcvRiE3bXdABb9ttDLug4CTJMBIHLr5saDjfP1hbC
-X-Google-Smtp-Source: APXvYqxKD48ONsQ6nd5juqNdffFaYjK5nU3Y6JRWaFArNPVl+DXJ+YsIUSBXX56eZo+5lxcnBCxl8zBrHunWIDie2WOBj/1rR/k5
+        b=rz0akNoBPRoKRNIT/YN5lQmOkRz/iRKydnzL/a5WEEAW9IN6t1OCMgxJ/b2WA9lhoV
+         VY6++kPSxaBXm9/YsxHo63aBcWHJo0T7cLlxUUU8AG4pxvmBdRKLO/dqCkRhOY5iKmGP
+         87Wlgfcp1tHoODDVAgzf6D/UzvtfIb0oP3AATMJOje3kfIwwepY4pvTrFZdMvVT9VcJt
+         eP19xrkgSAU7ehIWNh3JdHv75VpfYEf+gxD+hDi2qiXZ7wlEZsnWGzY8R8MbXzxuPVMm
+         ObjH0/+IHvkiZkgIu7BOHMnPVzAjI6Nra9EzjiGIhGLWpzsiSz4nfxZ1hMwmT7aiA5D/
+         QsAg==
+X-Gm-Message-State: APjAAAVhAh37KLCoBR/G6AQtQrrcyqzf6EiA/x9d3fDzdD91QIdA86CC
+        YmAstK27+feqPzuy+AhfokVLkANFo8n4ptyuBTQHD5AKDIhR
+X-Google-Smtp-Source: APXvYqwuqiWxFJXsBzogBCZjMGzDiTKUypBZbe+oMoucxW8s2E2Cb8cXBp3EE0k/qlPWuuAizvelDPXY0UPuH6oDIY+R0HfGA4r5
 MIME-Version: 1.0
-X-Received: by 2002:a02:cd3b:: with SMTP id h27mr16048577jaq.18.1576007281775;
- Tue, 10 Dec 2019 11:48:01 -0800 (PST)
-Date:   Tue, 10 Dec 2019 11:48:01 -0800
+X-Received: by 2002:a02:2385:: with SMTP id u127mr5450623jau.127.1576007282986;
+ Tue, 10 Dec 2019 11:48:02 -0800 (PST)
+Date:   Tue, 10 Dec 2019 11:48:02 -0800
 In-Reply-To: <Pine.LNX.4.44L0.1912101440100.1647-100000@iolanthe.rowland.org>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000031a0af05995eca0b@google.com>
+Message-ID: <000000000000441a4205995eca11@google.com>
 Subject: Re: Re: KASAN: use-after-free Read in usbvision_v4l2_open
 From:   syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
