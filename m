@@ -2,107 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F884118078
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 07:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07AAE1180C4
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 07:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfLJGbe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 01:31:34 -0500
-Received: from mail-lf1-f52.google.com ([209.85.167.52]:33953 "EHLO
-        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbfLJGbd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 01:31:33 -0500
-Received: by mail-lf1-f52.google.com with SMTP id l18so12754856lfc.1
-        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 22:31:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vincit.fi; s=ticniv;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=5shTmzUfuKIhmVLnQ8kRZWthltGvpn+r/5Li0kF/BOM=;
-        b=DEbZxD0hmuFnIVv1w6U1DYbXfEnjv63iekNLWYKG9xegUyuj+5MrJDR/cty1LW9U8D
-         n2U4pjNoWesNn03bMk6IpE/zvHaznYhifE8iUo2wEwnNz69qm1KKMQS0EJgm6of3HdBq
-         N4qdZJPVzw79yhNRQuhMkG/jQKO4JHYttPadw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=5shTmzUfuKIhmVLnQ8kRZWthltGvpn+r/5Li0kF/BOM=;
-        b=qDMeJVb9iibYzYSQAW50qj7WhYRJUA2niSplAWcDYm3UZEmPU6gCxbMF2rAM/5Cybh
-         23B22FGjfI00u6I4hU4yZTZVbUmeCZO9f9xksfdSuu5zsjwkp7DAe1U+Cty3JIzwzSrG
-         n21k3PQHcgP+0xrdTUc5aED7xPq7GiZeDBL2ue4JGGMRap0DYAPuutgomLdj3QWL13xk
-         kNYxTJYJm0lJgOgjKlkOhxZJx/cspGt1VVHbJMmf7os89gKJvqTuZmVQarLJ+wciDlpl
-         y1GQBLSuFBn/jc7TAfMT5tpaG3IqQjSZRJqcdjEz5Rpm594KQYRIkdrOrOvvo+5KBTi4
-         yDjg==
-X-Gm-Message-State: APjAAAWYH2T1ZVs8sMwsMv9t/eSG2NRa8VVR8MoKAcHmqoa9ZyQTlZ+w
-        gNtIvXBptuPOTZXfYbD/roVCAA==
-X-Google-Smtp-Source: APXvYqzVkcfNL6NbCH8mIq5tkf3UWsMKHRc+84y8CP7i5s79S6rIZCfQH5/wSe2gkVXdf3GMvGj8vg==
-X-Received: by 2002:ac2:531b:: with SMTP id c27mr17327209lfh.91.1575959491446;
-        Mon, 09 Dec 2019 22:31:31 -0800 (PST)
-Received: from LAPTOPJ4R3A4KE ([213.255.177.137])
-        by smtp.gmail.com with ESMTPSA id m8sm362765lfp.4.2019.12.09.22.31.30
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 09 Dec 2019 22:31:30 -0800 (PST)
-From:   "Erkka Talvitie" <erkka.talvitie@vincit.fi>
-To:     "'Alan Stern'" <stern@rowland.harvard.edu>
-Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <claus.baumgartner@med.ge.com>
-References: <023701d5ae77$14ec9d50$3ec5d7f0$@vincit.fi> <Pine.LNX.4.44L0.1912091024060.1462-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1912091024060.1462-100000@iolanthe.rowland.org>
-Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is disconnected
-Date:   Tue, 10 Dec 2019 08:31:23 +0200
-Message-ID: <024601d5af23$717be9c0$5473bd40$@vincit.fi>
+        id S1727231AbfLJGuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 01:50:08 -0500
+Received: from a27-187.smtp-out.us-west-2.amazonses.com ([54.240.27.187]:52540
+        "EHLO a27-187.smtp-out.us-west-2.amazonses.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726950AbfLJGuI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 01:50:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=zsmsymrwgfyinv5wlfyidntwsjeeldzt; d=codeaurora.org; t=1575960607;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding;
+        bh=TEKWj/GnHTqeC9oZDHoE3QJNzvsPumLFGAOLFPGxvLY=;
+        b=B8CnQG/KIBCtU1VNsr2rehdik9WM9neFH9SSFgW5eG/QYyPXA1g/Cl0u3vgpWk0H
+        09GSQD+/g/yc+vkG4tVAJdR4Bz2tCCcAmMpyzRuq4n4vTN4LUOnBwhki0MMuv+s3hHA
+        x1FnKm1EkIEHZ0IVsaY6BapmDulD6Ypgb3cOt5yw=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple;
+        s=gdwg2y3kokkkj5a55z2ilkup5wp5hhxx; d=amazonses.com; t=1575960607;
+        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:In-Reply-To:Content-Type:Content-Transfer-Encoding:Feedback-ID;
+        bh=TEKWj/GnHTqeC9oZDHoE3QJNzvsPumLFGAOLFPGxvLY=;
+        b=WJ9rL5+8JgZWwFhLPIeoPluK6kk1z/jn4j1l8/n1FI2aMgeF51GtgQPUnXUMrP+8
+        QOsCtj/CbGPjVH9324g5ZK6KtW1GltWihZoyFjUD9pnmhZrWP27q40EjXypdyUh8Qh7
+        RIwfdFu8WIlQybFUfaRLvFCfrdKO/qEs36VioSqM=
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A0F2EC43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sallenki@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: Do not process request if HWO is set for its
+ TRB
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Cc:     jackp@codeaurora.org, mgautam@codeaurora.org
+References: <1574946055-3788-1-git-send-email-sallenki@codeaurora.org>
+ <1575270714-29994-1-git-send-email-sallenki@codeaurora.org>
+ <87tv6jch61.fsf@gmail.com>
+ <0101016ec6294c21-99711286-dbda-4d62-b8c7-e9f28e99b261-000000@us-west-2.amazonses.com>
+ <871rtla8xd.fsf@gmail.com>
+From:   Sriharsha Allenki <sallenki@codeaurora.org>
+Message-ID: <0101016eee927967-22f4fa8c-a10a-41d8-9f74-0e6914ed3ee4-000000@us-west-2.amazonses.com>
+Date:   Tue, 10 Dec 2019 06:50:07 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
+In-Reply-To: <871rtla8xd.fsf@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQEgy+2hV8GaGvt0FrMJEW6YCkfoGakcrpAQ
-Content-Language: fi
+Content-Language: en-US
+X-SES-Outgoing: 2019.12.10-54.240.27.187
+Feedback-ID: 1.us-west-2.CZuq2qbDmUIuT3qdvXlRHZZCpfZqZ4GtG9v3VKgRyF0=:AmazonSES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Felipe,
 
+On 12/3/2019 6:00 PM, Felipe Balbi wrote:
+> Hi,
+>
+> Sriharsha Allenki <sallenki@codeaurora.org> writes:
+>
+>> This case occurs only after the first TRB of the chain is processed,
+>> which we arechecking in the patch. Although, this piece of code has
+>> been no-op after introducingthe function
+>> "dwc3_gadget_ep_reclaim_trb_sg".This function checks for the HWO and
+>> does notcall the "dwc3_gadget_ep_reclaim_completed_trb" if it is
+>> set.Hence this condition mostly likely will never hit.
+> You're missing one important detail: If we have e.g. 200 TRBs in a
+> single SG-list and we receive a short packet on TRB 10, we will have 190
+> TRBs with HWO bit left set and your patch prevents the driver from
+> clearing that bit. Yes, you are regressing a very special case.
 
-> -----Original Message-----
-> From: Alan Stern <stern@rowland.harvard.edu>
-> Sent: maanantai 9. joulukuuta 2019 17.25
-> To: Erkka Talvitie <erkka.talvitie@vincit.fi>
-> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> claus.baumgartner@med.ge.com
-> Subject: RE: [RFCv1 1/1] USB: EHCI: Do not return -EPIPE when hub is
-> disconnected
-> 
-> On Mon, 9 Dec 2019, Erkka Talvitie wrote:
-> 
-> > > Ok, just to double check:
-> > >
-> > > I take the existing driver code (I will not apply the earlier RFC on
-> > > top
-> > of
-> > > that) and apply one more check before the original stall check (that
-is):
-> > > } else if (QTD_CERR(token)) {
-> > >
-> > > The check that I will add is checking MMF bit && PID == IN, and this
-> > > check comes right after the babble check, right?
-> > >
-> > > Good, seems like a simple change. Yet I still prefer to test the
-change.
-> > > Unfortunately that goes to the next week as we have a national
-> > > holiday tomorrow.
-> > > I will get back to you most likely on Monday.
-> >
-> > I tested this change and it removes the error messages from the output.
-> 
-> Great!  Okay, feel free to submit a new patch.
+Iam checking only the first TRB of the chain and not the TRB pointed
+by the current dequeue pointer.
+>
+>>> what problem you actually found? Preferrably with tracepoint data
+>>> showing the fault.
+>> Test case here involves f_fs driver in AIO mode and we see ~8 TRBs in
+>> the queue with HWO set and UPDATE_XFER done. In the failure case I see
+>> thatas part of processingthe interrupt generated by the core for the
+>> completion of the first TRB, the driver isgoing ahead and giving
+> we shouldn't get completion interrupt for the first TRB, only the
+> last. Care to share tracepoint data?
 
-Thank you, a new patch was submitted.
+We have seen the issue only once and we do not have any tracepoint
+data for it. But with the internal logging we have in our downstream code,
+I see a race between dequeue from the function driver, and the giveback
+as part of the completion (XferInProgress).
 
-> 
-> Alan Stern
+A request (say Request-1) is dequeued before we could notify it's
+completion to the gadget driver. Because of this, as part of handling
+the completion event for the Request-1 we gaveback the next
+request(Request-2) in the queue which is yet to be processed by the
+core leading to the mentioned SMMU fault.
 
-Erkka Talvitie
+Normally, the core should not process the TRBs once a request
+has been dequeued because of the stop_active_transfer as part of
+dequeue, but I see a timeout when issuing the end transfer command
+during dequeue because of which core is still processing the TRBs
+in the queue.
 
+Regards,
+Sriharsha
+
+>
+>> backthe requests of all theother queued TRBs, whichinvolves removing
+>> the SMMU mapping of the buffers associated with the requests.  But
+>> these are still active and when core processesthese TRBs and their
+>> correspondingun-mapped buffers, I see a translationfaultraised by the
+>> SMMU.
+>>
+>> I hope I have answered your queries, please let me know if I am still 
+>> missing something here.
+> yes, tracepoint data showing the problem. Thank you
+>
