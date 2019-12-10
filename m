@@ -2,86 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF9AF118680
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB8F118694
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727558AbfLJLiO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 06:38:14 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:39907 "EHLO
+        id S1727398AbfLJLjD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 06:39:03 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:45180 "EHLO
         mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727407AbfLJLhy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:37:54 -0500
-Received: by mail-lf1-f66.google.com with SMTP id y1so2112276lfb.6;
-        Tue, 10 Dec 2019 03:37:52 -0800 (PST)
+        with ESMTP id S1727224AbfLJLjD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:39:03 -0500
+Received: by mail-lf1-f66.google.com with SMTP id 203so13388149lfa.12;
+        Tue, 10 Dec 2019 03:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=paNqhFZXRyT6E8o7LJGyUT8QuWl+b8l39w8bSosKx14=;
+        b=SxP3aG/tYco+shyDZW0JDd7hC0NmrwFqKdXDdflrJT0VgS9+2aa9PPcSfkbv6SM1ly
+         S1K9BGc0enhfrnyyXCN7xxa+EH8MWl1Y1yITChe8YrldAgCSfG99FnOQa1u1xP4Vlpw1
+         Uyg9OElyCQh8tJRVdWbcc+OYPMigbyHjsbX0IYduKgqQdUWSxUX1GCA9XgafG0sWHSDo
+         12Z+AU4TMbaGLRaUJ/fvH9XB4zSv+bVAloQNJBFxuEnPiHal/pqRsm0nvJ2+lyEMtf5J
+         JgQnJ807b/jVr/8Dz7Nr10tb08FR9W+e20de2TDFLnB0ZSwkxE4TaGkyxjuqQokP8ULR
+         Uwug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=gizESJPdbXxmJNJeGwhGZnMnlbvzjtAzhsJxIVT6qdY=;
-        b=mwNvFNSxoM7/7S0054957ZfHrptP32CUtj0SL5MQ2LCqMZpWqhaTub7ZBuQVNoWAc5
-         T+fJZx/duFNzSvLbW3klt1nae6s7wLMscazySjVkSb7UuvTx+F20g/94fiPUCEzpEMTH
-         7xleGnqBqX1GDDzoQduPZUqwuMY42azI46xTLfAXBIGvkNGCDlf7XVCwVy+ugBar1cIM
-         u3rMWmfVhafIcLnLxU7pU5ZMsdAbZqSCeoGoIhq6TYDmyurJwMyjAQKYSeu0LU9qKP71
-         3ODcNSJgKaNuZ96edUzvWFZI+DeKkfYIjh6Z/T3dJ5Hi0UZ7d7ADXMrmrzgegoi3dwDj
-         bn4w==
-X-Gm-Message-State: APjAAAXKGCKnTwa/WY4hRf4ycaQvUTyGkSXfDLcCPqArF58HrvGkFS8P
-        wQL5+bO2SNTXXH55Yl+MtXCr1fQA
-X-Google-Smtp-Source: APXvYqy6D+qpHF61I1Tn+xu/XYGTKK0i1vpyVAhneBoDXI+DraQ+/PosTwlLTDMvhQC2Yk4jQocOGw==
-X-Received: by 2002:a19:2389:: with SMTP id j131mr17056148lfj.86.1575977871489;
-        Tue, 10 Dec 2019 03:37:51 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id 207sm1941884ljj.72.2019.12.10.03.37.47
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=paNqhFZXRyT6E8o7LJGyUT8QuWl+b8l39w8bSosKx14=;
+        b=OMI1vaXtHDO8hhBBjPc4nApEc+1Y0WKw3Wg43vcTMhZ7r+KqUTS9yN7kLmtMMBiFSh
+         JU+eNvX345uNznxviw2e7s3lHRQR4USOZZgpACcglqzT0R/KQrzAdtx0xZMNOkoSP9M7
+         TfVnvPTWqcNzA+xL5tRof0Xl7xm6Phxe4zQjaQaIkkRfbFojlJp2lKR4jBFLN9ZI2uX+
+         WUAajodwAx30RBLITKdaD2l7/w+ZhUWwHYV7Ag4QHnRfDwZR9NLOXmnvCeDAS8Y5jzLP
+         DH07MjOiKpxfYPIbqBDvjd521YugHdAZDqvWl568gnztTXMv8IEEFd1Q2ikHmpk7y+Y4
+         xb+g==
+X-Gm-Message-State: APjAAAWRiK0cjI86CsBu90EQFGhuB41pyp0i8Vo/3aJwHpBveUwHJ5fR
+        se8qWWF1YPyI79GGoBVViLEtIEu7X4g=
+X-Google-Smtp-Source: APXvYqxthsAEkGc+kltqcDBPVN+6AY4Dy5v9qfgB8teyAZxHCmQS9eSDcJsDXKz8bReOAMmkbgsN2w==
+X-Received: by 2002:a05:6512:21d:: with SMTP id a29mr11710124lfo.186.1575977940594;
+        Tue, 10 Dec 2019 03:39:00 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id a19sm1929493ljd.90.2019.12.10.03.38.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 03:37:49 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@xi.terra>)
-        id 1iedpu-00014F-Cx; Tue, 10 Dec 2019 12:37:50 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Florian Echtler <floe@butterbrot.org>
-Subject: [PATCH 7/7] Input: sur40: fix interface sanity checks
-Date:   Tue, 10 Dec 2019 12:37:37 +0100
-Message-Id: <20191210113737.4016-8-johan@kernel.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191210113737.4016-1-johan@kernel.org>
-References: <20191210113737.4016-1-johan@kernel.org>
+        Tue, 10 Dec 2019 03:38:59 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>,
+        linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     kernel@puri.sm, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Subject: Re: suspend problem with dwc3 gadget / g_multi when usb disconnected
+In-Reply-To: <38edc05e-680b-d881-49fc-e8230a93b2c8@puri.sm>
+References: <38edc05e-680b-d881-49fc-e8230a93b2c8@puri.sm>
+Date:   Tue, 10 Dec 2019 13:39:47 +0200
+Message-ID: <87blsgl88s.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure to use the current alternate setting when verifying the
-interface descriptors to avoid binding to an invalid interface.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-This in turn could cause the driver to misbehave or trigger a WARN() in
-usb_submit_urb() that kernels with panic_on_warn set would choke on.
 
-Fixes: bdb5c57f209c ("Input: add sur40 driver for Samsung SUR40 (aka MS Surface 2.0/Pixelsense)")
-Cc: stable <stable@vger.kernel.org>     # 3.13
-Cc: Florian Echtler <floe@butterbrot.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/input/touchscreen/sur40.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi,
 
-diff --git a/drivers/input/touchscreen/sur40.c b/drivers/input/touchscreen/sur40.c
-index 1dd47dda71cd..34d31c7ec8ba 100644
---- a/drivers/input/touchscreen/sur40.c
-+++ b/drivers/input/touchscreen/sur40.c
-@@ -661,7 +661,7 @@ static int sur40_probe(struct usb_interface *interface,
- 	int error;
- 
- 	/* Check if we really have the right interface. */
--	iface_desc = &interface->altsetting[0];
-+	iface_desc = interface->cur_altsetting;
- 	if (iface_desc->desc.bInterfaceClass != 0xFF)
- 		return -ENODEV;
- 
--- 
-2.24.0
+Martin Kepplinger <martin.kepplinger@puri.sm> writes:
+> I'm running today's linux-next with this defconfig on a librem 5 devkit:
+>
+> https://source.puri.sm/martin.kepplinger/linux-next/blob/next-20191205/li=
+brem5/arch/arm64/configs/librem5_defconfig
+>
+> So I want to have host and gadget mode (G_MULTI, most importantly a
+> serial ACM console), and I'm having trouble with S3 suspend:
+>
+> * The most interesting case here: When I boot with USB disconnected
+> (from the battery) I can't suspend or unload dwc3. After "echo mem >
+> /sys/power/state" I get nothing in the my logs except
+>
+> [   18.107380] PM: suspend entry (deep)
+>
+> and the system hangs. similarly, I can't work around this by rmmod -f
+> dwc3. What can go wrong here? I don't know enough about usb hci and why
+> this shouldn't work. What can I do to help you here?
+>
+> * When I boot with USB connected, then unplug USB, I get:
+>
+> [   19.289602] dwc3 38100000.usb: request 000000006a19695c was not
+> queued to ep3in
 
+please capture ftrace logs from dwc3. We have documentation for this:
+
+https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html
+
+(note to self: update email address :-)
+
+> and then try to suspend:
+>
+> root@pureos:/home/purism# echo mem > /sys/power/state
+> [   37.863066] xhci-hcd xhci-hcd.0.auto: xHCI host controller not
+> responding, assume dead
+> [   37.871345] xhci-hcd xhci-hcd.0.auto: HC died; cleaning up
+> [   37.877260] PM: dpm_run_callback(): platform_pm_suspend+0x0/0x78
+> returns -22
+> [   37.884626] PM: Device xhci-hcd.0.auto failed to suspend async: error =
+-22
+> [   37.891728] PM: Some devices failed to suspend, or early wake event
+> detected
+> bash: echo: write error: Invalid argument
+>
+>
+> * When I keep USB connected, the behaviour is similar actually, but
+> rmmod works (but that use-case is not that interesting to me).
+>
+>
+> Since my experience with USB drivers is limited, I'm glad to hear about
+> any of your experience with dwc3- or more general gadget-problems with
+> suspend and that or a similar configuration.
+>
+> Without G_MULTI and dwc3 host-only, suspend works btw. And all the above
+> is basically identical on previous stable kernels too.
+
+Have you tried any other gadget drivers or just g-multi? Care to try
+with something simple like g-zero?
+
+cheers
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3vhAMACgkQzL64meEa
+mQYPVQ/+KolGBV6DSxWa+ZuofyRKG3rnfK7xflYuCxqLBrMW7gTOyWmm5DnzKVtv
+f9KusJuNOQbNEDwT0qFhIDYbiBAO3yPHeOqhXwWN9Hmj3SdtEeD0MVXY/PgQLX0Y
+OBDyNrOUsC4MWf60kaghPJXnUJBTaUTJFVkTWPKJ3b/m+ZrSn7R+L1BJKApTSpZg
+ByHB+IM04svwQXQst59g3p03rHg01YI9V7lJMPbmHVhykXjY0Hal9u8b7q+EjoCc
+lH886XMe25FvS6JuZYnns4Cu58LjtVCYEU5XVbE+K8liJLm5JYCtyJTPXeIv7Fzd
+jROhaDW1LYDjsUpb+9XZS4AW09RaqOK6NkPbxwfq1i0B/8j15ofzTF2mb1buNCw2
+tV8guoiXgCsiA6Lwk2PNh69joqMotLLqzjPnmOt/iDtCAR2JNr3ppLHxb1OlUQFo
+oCMDePQYbZ2gJlHnJADLD3vZjmIeol0fM9d4WQIUURfanrOwan6kuo8c18gZGQYW
+rdJIWPE/E4PZ1oq4147Hv/Ar8xK0UAeSCmSLG1cm6E+XZfZXqJ0Tuti7ybs8LzDk
+5Db9PCKjp15mN+D+EukKCTQXfV2OwQ4EVJN1NkS+BlEz5cYy2JlF+awRYMDDwcOU
+jvTy3fgS+mOWIglfIuH8YhScSTm+2GpOl8PB0+6ECNpQMEbpmXg=
+=69+K
+-----END PGP SIGNATURE-----
+--=-=-=--
