@@ -2,92 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1233C1194FC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 22:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E4B119656
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 22:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbfLJVRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 16:17:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38100 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729112AbfLJVMu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:12:50 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 49B2D208C3;
-        Tue, 10 Dec 2019 21:12:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012370;
-        bh=RN7ybzdrDD1oADSRPOyNshLaTeRNJcRNmclj/bSGKyE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y2zA06opgfaC5Zgw4ozyE6RIiKB7LaglzhsmPC6JzIwEO+C4FHvHCqOPQh6elvktB
-         kqfDzDzVJfy7T8xi+7s9/tT9lhngm1TpTMX4Imd13DQ/AG09Nr5EBXCGClmTVGVTCy
-         0xu3EzF9duainQOvEAgxfPlUWjZS5meku7WSoBJA=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 296/350] xhci-pci: Allow host runtime PM as default also for Intel Ice Lake xHCI
-Date:   Tue, 10 Dec 2019 16:06:41 -0500
-Message-Id: <20191210210735.9077-257-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
-References: <20191210210735.9077-1-sashal@kernel.org>
+        id S1728555AbfLJV0N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 16:26:13 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:51930 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727938AbfLJV0M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 16:26:12 -0500
+Received: (qmail 7209 invoked by uid 2102); 10 Dec 2019 16:26:11 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Dec 2019 16:26:11 -0500
+Date:   Tue, 10 Dec 2019 16:26:11 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Jiri Kosina <jikos@kernel.org>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        <linux-input@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH] HID: Fix slab-out-of-bounds read in hid_field_extract
+In-Reply-To: <Pine.LNX.4.44L0.1912091318210.1462-100000@iolanthe.rowland.org>
+Message-ID: <Pine.LNX.4.44L0.1912101622030.1647-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
+The syzbot fuzzer found a slab-out-of-bounds bug in the HID report
+handler.  The bug was caused by a report descriptor which included a
+field with size 12 bits and count 4899, for a total size of 7349
+bytes.
 
-[ Upstream commit 07a594f353655b1628f598add352e7e754f44869 ]
+The usbhid driver uses at most a single-page 4-KB buffer for reports.
+In the test there wasn't any problem about overflowing the buffer,
+since only one byte was received from the device.  Rather, the bug
+occurred when the HID core tried to extract the data from the report
+fields, which caused it to try reading data beyond the end of the
+allocated buffer.
 
-Intel Ice Lake has two xHCI controllers one on PCH and the other as part
-of the CPU itself. The latter is also part of the so called Type C
-Subsystem (TCSS) sharing ACPI power resources with the PCIe root ports
-and the Thunderbolt controllers. In order to put the whole TCSS block
-into D3cold the xHCI needs to be runtime suspended as well when idle.
+This patch fixes the problem by rejecting any report whose total
+length exceeds the HID_MAX_BUFFER_SIZE limit (minus one byte to allow
+for a possible report index).  In theory a device could have a report
+longer than that, but if there was such a thing we wouldn't handle it 
+correctly anyway.
 
-For this reason allow runtime PM as default for Ice Lake TCSS xHCI
-controller.
+Reported-and-tested-by: syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+CC: <stable@vger.kernel.org>
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/1573836603-10871-5-git-send-email-mathias.nyman@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-pci.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 1e0236e906879..a0025d23b2573 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -48,6 +48,7 @@
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI		0x15e9
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
-+#define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
+
+[as1926]
+
+
+ drivers/hid/hid-core.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
+
+Index: usb-devel/drivers/hid/hid-core.c
+===================================================================
+--- usb-devel.orig/drivers/hid/hid-core.c
++++ usb-devel/drivers/hid/hid-core.c
+@@ -268,6 +268,12 @@ static int hid_add_field(struct hid_pars
+ 	offset = report->size;
+ 	report->size += parser->global.report_size * parser->global.report_count;
  
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
-@@ -212,7 +213,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI ||
- 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
--	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI))
-+	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI))
- 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
++	/* Total size check: Allow for possible report index byte */
++	if (report->size > (HID_MAX_BUFFER_SIZE - 1) << 3) {
++		hid_err(parser->device, "report is too long\n");
++		return -1;
++	}
++
+ 	if (!parser->local.usage_index) /* Ignore padding fields */
+ 		return 0;
  
- 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
--- 
-2.20.1
 
