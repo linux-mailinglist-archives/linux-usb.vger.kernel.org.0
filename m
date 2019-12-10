@@ -2,112 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 014AF118BE1
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 16:03:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0302F118C2E
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 16:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727502AbfLJPDA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 10:03:00 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38766 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727272AbfLJPDA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 10:03:00 -0500
-Received: by mail-lj1-f193.google.com with SMTP id k8so20232792ljh.5;
-        Tue, 10 Dec 2019 07:02:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zZvlC4T9nIKrmQ0za8Fs/QkXcNOS/gB1wIJZfDFQaxw=;
-        b=NUecQHZ3IkeyD16Naef7ZaGgEeLuY5VXoi+u9DxfhKmzYjm21jH36a1ucl9QRzow0N
-         CvZmHfvhw9dyXdWLvS7amu+1llZXCMdu2JZ7wfzg3TGgRLz6EyQRqtUyBi4Q1WpK6ezZ
-         k9t6wecnzk7O8f8VERMFDM6Sqm/Au256B1UxlKFaK6tIOfXz+EUz91z22Tv8gqZcQR/C
-         4AscOLwy3irOIMC5Cx8W1Fcj86iNjHk0gutplRHYTxfrl8zEc5aDHCjLy51GdvCyEDSE
-         S7TdtpNhRMntZ5mtxxmnzzH7/S2Uu3lp2dxFmWh/ORK9W55SldPqIlg3TkD4FE+pP6MX
-         Xx3w==
-X-Gm-Message-State: APjAAAVafjyDw9UJED8RpQJ7IL2UmahkaQFH4hDyfTsFeoM52dzQZIW7
-        0wJg8klEzZ9vLXS+oaioH6A43QPZ
-X-Google-Smtp-Source: APXvYqyYOVuyJGcheKE6lebutv2vO1Q1g7X4vaGbCew/f8TJnvXKBtkx8qoTAWNpjTw/AY/O3Bn8hA==
-X-Received: by 2002:a2e:9e16:: with SMTP id e22mr12832375ljk.220.1575990178082;
-        Tue, 10 Dec 2019 07:02:58 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id i19sm2047375ljj.24.2019.12.10.07.02.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 07:02:57 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1ieh2Q-0007jT-Bt; Tue, 10 Dec 2019 16:02:58 +0100
-Date:   Tue, 10 Dec 2019 16:02:58 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Ikjoon Jang <ikjn@chromium.org>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        GregKroah-Hartman <gregkh@linuxfoundation.org>,
-        RobHerring <robh+dt@kernel.org>,
-        MarkRutland <mark.rutland@arm.com>,
-        AlanStern <stern@rowland.harvard.edu>,
-        SuwanKim <suwan.kim027@gmail.com>,
-        "GustavoA . R . Silva" <gustavo@embeddedor.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v4 2/2] usb: overridable hub bInterval by device node
-Message-ID: <20191210150258.GR10631@localhost>
-References: <20191203101552.199339-1-ikjn@chromium.org>
- <20191203165301.GH10631@localhost>
- <CAATdQgCqYrd_aXN5GDsso+F3WadNx3DQKK3Efk3tgkrv2VXjyw@mail.gmail.com>
- <20191204075533.GI10631@localhost>
- <CAATdQgBcuJenS2VSm+y4Yhn5mWE1P0CGJQ3NRdoe68dd2SRPGg@mail.gmail.com>
- <20191205142641.GL10631@localhost>
- <CAATdQgBK4gWvR06YJ3Z_y5NeqLKYY7Ajc0KG78rG2deR3Ga11A@mail.gmail.com>
- <20191206152604.GO10631@localhost>
- <CAATdQgDAZ21bEXh+YFh+fCdBxnuRi-1_x0o_hpxW0Vj0zY-j8A@mail.gmail.com>
+        id S1727559AbfLJPM3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 10:12:29 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:50526 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1727211AbfLJPM3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 10:12:29 -0500
+Received: (qmail 1791 invoked by uid 2102); 10 Dec 2019 10:12:28 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 10 Dec 2019 10:12:28 -0500
+Date:   Tue, 10 Dec 2019 10:12:28 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Erkka Talvitie <erkka.talvitie@vincit.fi>
+cc:     gregkh@linuxfoundation.org, <linux-usb@vger.kernel.org>,
+        <claus.baumgartner@med.ge.com>
+Subject: Re: [PATCH] USB: EHCI: Do not return -EPIPE when hub is disconnected
+In-Reply-To: <1ec66c398699e95ca2b5755f6cbb8c5d2453dd71.1575893227.git.erkka.talvitie@vincit.fi>
+Message-ID: <Pine.LNX.4.44L0.1912101004240.1647-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAATdQgDAZ21bEXh+YFh+fCdBxnuRi-1_x0o_hpxW0Vj0zY-j8A@mail.gmail.com>
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 12:05:53PM +0800, Ikjoon Jang wrote:
-> On Fri, Dec 6, 2019 at 11:25 PM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > On Fri, Dec 06, 2019 at 11:57:30AM +0800, Ikjoon Jang wrote:
-> > > On Thu, Dec 5, 2019 at 10:26 PM Johan Hovold <johan@kernel.org> wrote:
+On Tue, 10 Dec 2019, Erkka Talvitie wrote:
 
-> > > > The fundamental problem here is that you're using devicetree, which is
-> > > > supposed to only describe the hardware, to encode policy which should be
-> > > > deferred to user space.
-> > >
-> > > The hub hardware has a default bInterval inside which is actually
-> > > adjustable. So I can think setting bInterval is to describe the hardware
-> > > rather than policy.
-> >
-> > No, the USB spec says bInterval is a maximum requested value and that
-> > the host is free to poll more often. And that's policy.
+> When disconnecting a USB hub that has some child device(s) connected to it
+> (such as a USB mouse), then the stack tries to clear halt and
+> reset device(s) which are _already_ physically disconnected.
 > 
-> Honestly I'm a bit confused on the border line between hardware
-> and software definition. That's quite reasonable it's policy that software
-> can poll more often than hardware specified, but can we think it's just
-> overriding hardware property specifying maximum value from beginning?
-> Is it still policy? or 'overriding hardware property' part is already not
-> a hardware description? :-S
+> The issue has been reproduced with:
+> 
+> CPU: IMX6D5EYM10AD or MCIMX6D5EYM10AE.
+> SW: U-Boot 2019.07 and kernel 4.19.40.
+> 
+> CPU: HP Proliant Microserver Gen8.
+> SW: Linux version 4.2.3-300.fc23.x86_64
+> 
+> In this situation there will be error bit for MMF active yet the
+> CERR equals EHCI_TUNE_CERR + halt. Existing implementation
+> interprets this as a stall [1] (chapter 8.4.5).
+> 
+> The possible conditions when the MMF will be active + halt
+> can be found from [2] (Table 4-13).
+> 
+> Fix for the issue is to check whether MMF is active and PID Code is
+> IN before checking for the stall. If these conditions are true then
+> it is not a stall.
+> 
+> What happens after the fix is that when disconnecting a hub with
+> attached device(s) the situation is not interpret as a stall.
+> 
+> [1] https://www.usb.org/document-library/usb-20-specification, usb_20.pdf
+> [2] https://www.intel.com/content/dam/www/public/us/en/documents/technical-specifications/ehci-specification-for-usb.pdf
+> 
+> Signed-off-by: Erkka Talvitie <erkka.talvitie@vincit.fi>
+> ---
 
-The hardware is supposed to give you the upper limit, and then software
-is allowed to poll more often if it wants to and is able to do so.
+Basically good, but you should always run patches through the 
+scripts/checkpatch.pl script before sending them.  There are several 
+places where the formatting needs to be fixed.
 
-In this case that decision depends partly on what is connected to the
-hub but also on how that device in turn has been configured,
-specifically, whether runtime PM has been enabled or not.
+>  drivers/usb/host/ehci-q.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> index 3276304..285622d 100644
+> --- a/drivers/usb/host/ehci-q.c
+> +++ b/drivers/usb/host/ehci-q.c
+> @@ -27,6 +27,10 @@
+>  
+>  /*-------------------------------------------------------------------------*/
+>  
+> +/* PID Codes that are used here, from EHCI specification, Table 3-16. */
+> +#define PID_CODE_IN    1
+> +#define PID_CODE_SETUP 2
+> +
+>  /* fill a qtd, returning how much of the buffer we were able to queue up */
+>  
+>  static int
+> @@ -190,7 +194,7 @@ static int qtd_copy_status (
+>  	int	status = -EINPROGRESS;
+>  
+>  	/* count IN/OUT bytes, not SETUP (even short packets) */
+> -	if (likely (QTD_PID (token) != 2))
+> +	if (likely (QTD_PID (token) != PID_CODE_SETUP))
 
-Someone who doesn't use the downstream device, or who prefers to never
-suspend it, may not be willing to pay the price for polling the hub more
-frequently, for example. 
+This should be "QTD_PID(token)" with no extra space before the left
+paren, and similarly for "likely(".  I realize you just kept the code
+the way it already was, but we prefer to fix formatting errors like
+these whenever the line gets changed, even if it's for a different
+reason.
 
-So this ends up being very much a policy decision which should be left
-for user space.
+>  		urb->actual_length += length - QTD_LENGTH (token);
+>  
+>  	/* don't modify error codes */
+> @@ -206,6 +210,11 @@ static int qtd_copy_status (
+>  		if (token & QTD_STS_BABBLE) {
+>  			/* FIXME "must" disable babbling device's port too */
+>  			status = -EOVERFLOW;
+> +		/* When MMF is active and PID Code is IN, queue is halted.
+> +		 * EHCI Specification, Table 4-13.
+> +		 */
 
-But if you can come up with a generic interface for this, it could be
-useful in other setups as well (non-DT, hot-pluggable, etc).
+Multi-line comments should be formatted like thus:
 
-Johan
+		/*
+		 * When MMF...
+		 * EHCI ...
+		 */
+
+> +		} else if((token & QTD_STS_MMF) && (QTD_PID(token) == PID_CODE_IN)) {
+
+Try to avoid letting code extend beyond column 80 (for example, you 
+could beak the line following the "&&").  Also, there should be a space 
+between the "if" and the left paren -- the "if" isn't a function call!
+
+> +			status = -EPROTO;
+>  		/* CERR nonzero + halt --> stall */
+>  		} else if (QTD_CERR(token)) {
+>  			status = -EPIPE;
+
+When you fix up these minor issues and resubmit, you can add:
+
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Alan Stern
+
