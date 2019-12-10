@@ -2,51 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0F4118655
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:33:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB32118690
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 12:38:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727340AbfLJLdQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 06:33:16 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:32989 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727162AbfLJLdO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:33:14 -0500
-Received: by mail-lj1-f194.google.com with SMTP id 21so19513288ljr.0;
-        Tue, 10 Dec 2019 03:33:12 -0800 (PST)
+        id S1727268AbfLJLhu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 06:37:50 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36585 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727018AbfLJLhu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 06:37:50 -0500
+Received: by mail-lf1-f67.google.com with SMTP id n12so13449726lfe.3;
+        Tue, 10 Dec 2019 03:37:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Blqzm8+uJKvQuA0CbBCrZIVx4YR1ZVnP2Lq7em2cyqU=;
-        b=uIsFRSpXYpbsB3qwKImibSBrF+IbCHbbPYNWQtRgjLODgQxa655ByJ9ezyf2/j/ePL
-         sjmvkt6xMrhPZla7N3ceaPPA7OdaxogjLsFaH6rj5azn6TqPiYWpt1JbkE39GuLCscp4
-         F6ME7wD4sKmEyIj4wDaPpTBKTNT3naSvx9leKdDmhVll46Uu3Pwg6XjNyPkXbX/Ba4IP
-         XwpfN4Jh3Dzw0zZQvXB3YOKMAHyqjQ27fV4ayNDXegz6v2G9VEXj8Bt42wHjbqH685MZ
-         0tVPetmJGl72xiI/XJDoiwH/IuzLdl5VlkF0OshrmhB80WT2X0d49iYo0AZjttu+Q81X
-         GMbA==
-X-Gm-Message-State: APjAAAVjq8/iaM9dL03hCJLpo9s4QaXLpcBkIURWt8j0pC/v36X53eug
-        pdvNwA35mn9G9UGdlHrrzoc=
-X-Google-Smtp-Source: APXvYqyIW5IfmyQIRr8p5hkGBqsmCvU2d723wr+Rta8PDZbIsTTmqLcYTIyuETrZVRpDC52t7Wr7qg==
-X-Received: by 2002:a2e:b0c9:: with SMTP id g9mr9586456ljl.134.1575977591464;
-        Tue, 10 Dec 2019 03:33:11 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=eZNh4wJZKItTijN7b21HY0LHSvrpQd4qo9HGr6Bov0E=;
+        b=opQkfcEyqSy+csA1rofEkp47kBDF+RS+7SAIVI79+qe5WO8ojUs0ORHYwePDZDsOzQ
+         ZDedP4lG/VtxU6JXvO1HZkQVErAI3YmzE33X4v7E2H/vFW058hQ+9LxPgkQjywiTBV5C
+         9UcgjnI8FPWrNiGEfN0z/4K8ndKzt/4hhpDWclwPAZH+0CXpxL4yQv9Q77lrz9DFboUF
+         +26NiMEFgCiGfXs90/R1KbedPKFJJb+1TrHSHhc5/MwVVSZsufH1xeU2VtRLZVVmcbFl
+         DSuXEKwVHZ6AO6yo1MAOBs/X0G8KXAEvIWN5vTlr1U7176qEjL98wH5uvn5i6w9Wht73
+         sKbQ==
+X-Gm-Message-State: APjAAAUpKN5ZGiVKyFLM9pbbDqg+u8FV+YQ99RN3yL03KV8P67g1P4nj
+        EcOeqg3HD30tdPruYmQwNZM=
+X-Google-Smtp-Source: APXvYqyH2sZx4j1DatpQAz63dwGw0x8MR1eQzWOeAfY68uPQNR5xqAk6lAkC2IotvJr0VQ7gi2dqfQ==
+X-Received: by 2002:a19:f514:: with SMTP id j20mr17098761lfb.31.1575977868238;
+        Tue, 10 Dec 2019 03:37:48 -0800 (PST)
 Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id i16sm1387353lfo.87.2019.12.10.03.33.09
+        by smtp.gmail.com with ESMTPSA id q27sm1628548ljc.65.2019.12.10.03.37.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 03:33:09 -0800 (PST)
+        Tue, 10 Dec 2019 03:37:47 -0800 (PST)
 Received: from johan by xi.terra with local (Exim 4.92.3)
         (envelope-from <johan@xi.terra>)
-        id 1iedlQ-00010S-4r; Tue, 10 Dec 2019 12:33:12 +0100
+        id 1iedpt-00013f-Mb; Tue, 10 Dec 2019 12:37:49 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Marc Kleine-Budde <mkl@pengutronix.de>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH 2/2] can: gs_usb: use descriptors of current altsetting
-Date:   Tue, 10 Dec 2019 12:32:31 +0100
-Message-Id: <20191210113231.3797-3-johan@kernel.org>
+Subject: [PATCH 0/7] Input: fix USB alsetting bugs
+Date:   Tue, 10 Dec 2019 12:37:30 +0100
+Message-Id: <20191210113737.4016-1-johan@kernel.org>
 X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191210113231.3797-1-johan@kernel.org>
-References: <20191210113231.3797-1-johan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -54,37 +51,33 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make sure to always use the descriptors of the current alternate setting
-to avoid future issues when accessing fields that may differ between
-settings.
+We had quite a few driver using the first alternate setting instead of
+the current one when doing descriptor sanity checks. This is mostly an
+issue on kernels with panic_on_warn set due to a WARN() in
+usb_submit_urn(). Since we've started backporting such fixes (e.g. as
+reported by syzbot), I've marked these for stable as well.
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/can/usb/gs_usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Included are also a couple of related clean ups to prevent future
+issues.
 
-diff --git a/drivers/net/can/usb/gs_usb.c b/drivers/net/can/usb/gs_usb.c
-index 2f74f6704c12..a4b4b742c80c 100644
---- a/drivers/net/can/usb/gs_usb.c
-+++ b/drivers/net/can/usb/gs_usb.c
-@@ -918,7 +918,7 @@ static int gs_usb_probe(struct usb_interface *intf,
- 			     GS_USB_BREQ_HOST_FORMAT,
- 			     USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 			     1,
--			     intf->altsetting[0].desc.bInterfaceNumber,
-+			     intf->cur_altsetting->desc.bInterfaceNumber,
- 			     hconf,
- 			     sizeof(*hconf),
- 			     1000);
-@@ -941,7 +941,7 @@ static int gs_usb_probe(struct usb_interface *intf,
- 			     GS_USB_BREQ_DEVICE_CONFIG,
- 			     USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_INTERFACE,
- 			     1,
--			     intf->altsetting[0].desc.bInterfaceNumber,
-+			     intf->cur_altsetting->desc.bInterfaceNumber,
- 			     dconf,
- 			     sizeof(*dconf),
- 			     1000);
+Johan
+
+
+Johan Hovold (7):
+  Input: pegasus_notetaker: fix endpoint sanity check
+  Input: aiptek: fix endpoint sanity check
+  Input: aiptek: use descriptors of current altsetting
+  Input: gtco: fix endpoint sanity check
+  Input: gtco: fix extra-descriptor debug message
+  Input: gtco: drop redundant variable reinit
+  Input: sur40: fix interface sanity checks
+
+ drivers/input/tablet/aiptek.c            |  8 ++++----
+ drivers/input/tablet/gtco.c              | 13 ++++---------
+ drivers/input/tablet/pegasus_notetaker.c |  2 +-
+ drivers/input/touchscreen/sur40.c        |  2 +-
+ 4 files changed, 10 insertions(+), 15 deletions(-)
+
 -- 
 2.24.0
 
