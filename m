@@ -2,77 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA291188C7
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 13:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305341188E4
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 13:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727386AbfLJMrZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 07:47:25 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40528 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727370AbfLJMrY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 07:47:24 -0500
-Received: by mail-lj1-f194.google.com with SMTP id s22so19719339ljs.7
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 04:47:23 -0800 (PST)
+        id S1727528AbfLJMwj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 07:52:39 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:45595 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727131AbfLJMwi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 07:52:38 -0500
+Received: by mail-lf1-f68.google.com with SMTP id 203so13569090lfa.12;
+        Tue, 10 Dec 2019 04:52:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=YlrnZd/4mlbWTYlkVUDQdyjxHkAmnShBmNrnbD3Wr/A=;
-        b=YNLN+/hZPa732MM9fFTw9Q+kw/4KSD8DW4vKnthqpYb+XfVZBY0KG/janBGThmLuxa
-         1e1SBORlHkZIa+qQfFG5tXohnsqL/sZlEVT23DUChP94PAOO24pTL/o0e+xvvYiwTwle
-         fM8Qy/iSASPJbafJrhNJo89t77PcaGwT2stFZWlmHKhbBGtsTkhFuRDNBDhBPDkWDEPP
-         jz4HtED0VYyvKILoQWF1XChbScTCG+oH8LORauXCtWDYwPxdHDQ2vzPzMOgt7iuAJnZQ
-         aam3WW+Iv4lpktEplAdSVUb4RAqk35CvU7x/ndHPgBtZyMYh4zm1jQjwkdpuho9HnkB/
-         Pudg==
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=11UaFwrHfBxR4VmejSkI+P2hNy7cLkOsHvj3YmzzITk=;
+        b=S5C/VJJScB2LEJiC/XQgc5RPmVOlqTmdOnlt+WltPzuZAZ3r/SuxvI795SLmvWcd2S
+         wVkYoCQbWhfdt2gfaV92jSUIleizBDO0d00Fn76BO80nIxNnYKY0wV+mZWvb5o09sdCn
+         EShU3YyP/ttbe4DAVTgx47RLl+cB9WZVjYI111I9NYdKoRRXwNeAuKKo6Y8JbGMITxh9
+         +1tFjziK5J33mHefo4XzxtnRLTZcJreIvXh7X6dzxL9TawFNceY4nDY5/Zmy8P9T58Rh
+         m/COqz/vCRuNiGS7Fi52+SJ5Y8sTxPt0M9w4mdGLyhojz3v50N5K1k09Rglr9BboVrHV
+         Gbaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=YlrnZd/4mlbWTYlkVUDQdyjxHkAmnShBmNrnbD3Wr/A=;
-        b=Qjc9u5CKi1oqT4mygyGC0ECQmHte6Dps9aeXhYL9ddbpccv6lHKmX5G5jnn6CIAn/q
-         rBUKTzAAqUqCFGYbVOC8mUmmJozhGoD8U103objLoBn8pOhOsQsT3ErV/OFKHJQWNIEl
-         8SspFgEZ9v/zTfy2CvsU128nFSPvI4aAxRJpAcbEEYpLHFFoZiBjjiEnEkz70XYX5HlG
-         gza1JX0MoG+5/AiKXD5KqkJYx7UMMZRxWke9sldPHST7EwtFLfUL64nBOkwnNZwSDce7
-         pmw50zyTOHM9+hzh7hBAewJODeAPC2BxfS/GFU0AQ1ZrBc0MEFY1Sp7A/k+rbMaitru8
-         +U9w==
-X-Gm-Message-State: APjAAAW1wl5aFM+TB1+xvz9y7jKBLvT1jpalqKSz3jAEdf0u5TOSlfjC
-        +8/GF1Od5cyYJWi7RalR1EU=
-X-Google-Smtp-Source: APXvYqxbGqB2247KMtQDbyeADGDYB86wf+JN8sBoajdMplmNLx/mmrbKUkKAWEY7RFFS16qtR624eg==
-X-Received: by 2002:a2e:96da:: with SMTP id d26mr19985573ljj.6.1575982042671;
-        Tue, 10 Dec 2019 04:47:22 -0800 (PST)
-Received: from google.com ([2620:0:1043:12:60fa:1524:8dd0:6d])
-        by smtp.gmail.com with ESMTPSA id n3sm1511338lfk.61.2019.12.10.04.47.21
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=11UaFwrHfBxR4VmejSkI+P2hNy7cLkOsHvj3YmzzITk=;
+        b=oQA4oYeR+xnSyxxwviQ/Bx1Q/kehMd9ZaArpkT26gOe1jZJmFZOOt4uXIr8NT5Qv2N
+         y06tzoGpVDeI+bWNJ38CJMgJ1hy0k/O9cbHB51VHw63C2H8T0N5fpD+zAlvQ1aavCRN0
+         FXJiWzwIi4SCtVrElL+dX7qC1NnxlSF8AK9t/8Cm98lqIxBHb2MgI5p3hQpOl61PKkAh
+         2LDjJVdn0Uc3Tb0hZr96Jo4KxtYy0+5fbHY6NEG0LqG0y/p6c/hnSXgO9oiL//5rGsJo
+         QjN/HpB+hRD0wraNZ3ioWSsg5OKnGP+DjlAG8Vqfak8TMohqajqVQ0FNOm8eWksXdJcY
+         Mfzg==
+X-Gm-Message-State: APjAAAUvPqoYzND2WT5/YsKE6W4gnjmliOPJUGpXgRCaQsqMbH46d1NW
+        4+hdNhncORcsEY68Swj48R3pbFpx3r/gBw==
+X-Google-Smtp-Source: APXvYqzzI+4OeMeScvMefnCEK2izwgK4Om0C9FFpINZSG4PKKLUvQb0UDx1j2JXPTDNuBMOv4v3kiw==
+X-Received: by 2002:ac2:5503:: with SMTP id j3mr3846606lfk.104.1575982356327;
+        Tue, 10 Dec 2019 04:52:36 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id b14sm1497204lff.68.2019.12.10.04.52.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 04:47:21 -0800 (PST)
-From:   Lionel Koenig <lionel.koenig@gmail.com>
-X-Google-Original-From: Lionel Koenig <lionelk@google.com>
-Date:   Tue, 10 Dec 2019 13:47:20 +0100
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Lionel Koenig <lionel.koenig@gmail.com>, linux-usb@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Jonas Stenvall <jonas.stenvall.umea@gmail.com>
-Subject: Re: [PATCH] USB: gadget: u_audio: Initialize capture memory
-Message-ID: <20191210124720.GA259315@google.com>
-References: <20191209103435.GA55498@google.com>
- <s5hr21dfxzl.wl-tiwai@suse.de>
+        Tue, 10 Dec 2019 04:52:35 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc2: Fix SET/CLEAR_FEATURE and GET_STATUS flows
+In-Reply-To: <f8af9e4b892a8d005f0ae3d42401fee532f44a27.1574938826.git.hminas@synopsys.com>
+References: <f8af9e4b892a8d005f0ae3d42401fee532f44a27.1574938826.git.hminas@synopsys.com>
+Date:   Tue, 10 Dec 2019 14:53:23 +0200
+Message-ID: <8736dsl4u4.fsf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s5hr21dfxzl.wl-tiwai@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 02:07:58PM +0100, Takashi Iwai wrote:
-> Below is a totally untested patch.  It re-uses the existing function
-> to fill silence for the given stream more generically.
-> 
-> Let me know if this works.  If it's OK, I'll submit and merge with a
-> proper change log.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-I tested the provided patch. It does work as I expected.
-Thanks a lot for that.
-Best regards,
-Lionel
+
+Hi,
+
+Minas Harutyunyan <Minas.Harutyunyan@synopsys.com> writes:
+
+> SET/CLEAR_FEATURE for Remote Wakeup allowance not handled correctly.
+> GET_STATUS handling provided not correct data on DATA Stage.
+> Issue seen when gadget's dr_mode set to "otg" mode and connected
+> to MacOS.
+> Both are fixed and tested using USBCV Ch.9 tests.
+>
+> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+
+do you want to add a Fixes tag here?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3vlUMACgkQzL64meEa
+mQYByw/9HWPfvaKdOzHIfsGeER+5WTWkVsu78JVr7uxZ9yqO3kEBpf+ZdDDDNWVi
+1X5pHUQ+7shHjh9acj6oViLAtC/CVWXTjn1s7xVSQ8mOg6AqTM16Av/hGw7JhoNF
+ceUOahRIl5XerPntLQgmEDDDV+HO3GDwStnxpnnku6XDc8LPBGObJc7C924g1kaJ
+uomMzXNL4T3YEbsMHzLu/804tDgqQ/TQ7URhVmwmsSLtRj+z3TzJl95U4DxzN2Qi
+Kq+M3Zn5jZqPAaKlDTrOthIwTDhzkLehzjzJFc/KX9hIgt43czBiwmbwNxKhSmwq
+RucDRfqqMIPPgOXLmrmrTmE5EoWHBJtfsjTaRMkst6oJCHfqLbV8Ri2+m5ZubdDm
+D8/xj6huukqGTqPoJn5oFEkghqidKl+nPbFdC+75rwm63SQE5O0etGehkT/gZJG1
+wP2Dgadj5bExPVMbyui9aHtDITUrCsN84Z1y8iRw9BLavUnb8XgUj6jkC+bc86Ha
+qUrEdKPa2qt5Sl75xqjrXdB4DuKOH3xNJIDZkSqaluF2VIx1jJipFOYMywSddrFf
+gtH24FFk6y9ZqumJprFBe6x5IZvxkfvNFWKjltWuxETvqpyUwOQ/Se48dG63CEnJ
+FYMa/BbezrG3LjKGvjDSU6lDo8BfAL88qkqp2O6S5+qphMlLfew=
+=6wKo
+-----END PGP SIGNATURE-----
+--=-=-=--
