@@ -2,142 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD011191B3
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 21:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1233C1194FC
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 22:19:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726769AbfLJURD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 15:17:03 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:51810 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1726689AbfLJURC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 15:17:02 -0500
-Received: (qmail 6917 invoked by uid 2102); 10 Dec 2019 15:17:01 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 10 Dec 2019 15:17:01 -0500
-Date:   Tue, 10 Dec 2019 15:17:01 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
-cc:     andreyknvl@google.com, <hverkuil@xs4all.nl>,
-        <jrdr.linux@gmail.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>, <mchehab@kernel.org>,
-        <rfontana@redhat.com>, <syzkaller-bugs@googlegroups.com>,
-        <tglx@linutronix.de>
-Subject: Re: Re: KASAN: use-after-free Read in usbvision_v4l2_open
-In-Reply-To: <00000000000031a0af05995eca0b@google.com>
-Message-ID: <Pine.LNX.4.44L0.1912101513580.1647-100000@iolanthe.rowland.org>
+        id S1727199AbfLJVRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 16:17:41 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38100 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729112AbfLJVMu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:12:50 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49B2D208C3;
+        Tue, 10 Dec 2019 21:12:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576012370;
+        bh=RN7ybzdrDD1oADSRPOyNshLaTeRNJcRNmclj/bSGKyE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=y2zA06opgfaC5Zgw4ozyE6RIiKB7LaglzhsmPC6JzIwEO+C4FHvHCqOPQh6elvktB
+         kqfDzDzVJfy7T8xi+7s9/tT9lhngm1TpTMX4Imd13DQ/AG09Nr5EBXCGClmTVGVTCy
+         0xu3EzF9duainQOvEAgxfPlUWjZS5meku7WSoBJA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 296/350] xhci-pci: Allow host runtime PM as default also for Intel Ice Lake xHCI
+Date:   Tue, 10 Dec 2019 16:06:41 -0500
+Message-Id: <20191210210735.9077-257-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
+References: <20191210210735.9077-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 10 Dec 2019, syzbot wrote:
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-> > On Mon, 9 Dec 2019, syzbot wrote:
-> 
-> >> Hello,
-> 
-> >> syzbot found the following crash on:
-> 
-> >> HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
-> >> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> >> console output: https://syzkaller.appspot.com/x/log.txt?x=1296f42ae00000
-> >> kernel config:   
-> >> https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
-> >> dashboard link:  
-> >> https://syzkaller.appspot.com/bug?extid=c7b0ec009a216143df30
-> >> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> 
-> >> Unfortunately, I don't have any reproducer for this crash yet.
-> 
-> >> IMPORTANT: if you fix the bug, please add the following tag to the  
-> >> commit:
-> >> Reported-by: syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com
-> 
-> >> ==================================================================
-> >> BUG: KASAN: use-after-free in __mutex_lock_common
-> >> kernel/locking/mutex.c:1043 [inline]
-> >> BUG: KASAN: use-after-free in __mutex_lock+0x124d/0x1360
-> >> kernel/locking/mutex.c:1106
-> >> Read of size 8 at addr ffff8881cad4d8b8 by task v4l_id/4526
-> 
-> >> CPU: 0 PID: 4526 Comm: v4l_id Not tainted 5.4.0-syzkaller #0
-> >> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> >> Google 01/01/2011
-> >> Call Trace:
-> >>    __dump_stack lib/dump_stack.c:77 [inline]
-> >>    dump_stack+0xef/0x16e lib/dump_stack.c:118
-> >>    print_address_description.constprop.0+0x36/0x50 mm/kasan/report.c:374
-> >>    __kasan_report.cold+0x1a/0x33 mm/kasan/report.c:506
-> >>    kasan_report+0xe/0x20 mm/kasan/common.c:638
-> >>    __mutex_lock_common kernel/locking/mutex.c:1043 [inline]
-> >>    __mutex_lock+0x124d/0x1360 kernel/locking/mutex.c:1106
-> >>    usbvision_v4l2_open+0x77/0x340
-> >> drivers/media/usb/usbvision/usbvision-video.c:314
-> >>    v4l2_open+0x20f/0x3d0 drivers/media/v4l2-core/v4l2-dev.c:423
-> >>    chrdev_open+0x219/0x5c0 fs/char_dev.c:414
-> >>    do_dentry_open+0x494/0x1120 fs/open.c:797
-> >>    do_last fs/namei.c:3412 [inline]
-> >>    path_openat+0x142b/0x4030 fs/namei.c:3529
-> >>    do_filp_open+0x1a1/0x280 fs/namei.c:3559
-> >>    do_sys_open+0x3c0/0x580 fs/open.c:1097
-> >>    do_syscall_64+0xb7/0x5b0 arch/x86/entry/common.c:294
-> >>    entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> 
-> > This looks like a race in v4l2_open(): The function drops the
-> > videodev_lock mutex before calling the video driver's open routine, and
-> > the device can be unregistered during the short time between.
-> 
-> > This patch tries to make the race much more likely to happen, for
-> > testing and verification.
-> 
-> > Andrey, will syzbot run the same test with this patch, even though it
-> > says it doesn't have a reproducer?
-> 
-> > Alan Stern
-> 
-> > #syz test: https://github.com/google/kasan.git 1f22d15c
-> 
-> This crash does not have a reproducer. I cannot test it.
+[ Upstream commit 07a594f353655b1628f598add352e7e754f44869 ]
 
-Let's try the same patch with a different bug report -- one that has a
-reproducer.  I assume that syzbot gets the bug identity from the
-email's From: line (which has been updated acoordingly) rather than the 
-Subject: line.
+Intel Ice Lake has two xHCI controllers one on PCH and the other as part
+of the CPU itself. The latter is also part of the so called Type C
+Subsystem (TCSS) sharing ACPI power resources with the PCIe root ports
+and the Thunderbolt controllers. In order to put the whole TCSS block
+into D3cold the xHCI needs to be runtime suspended as well when idle.
 
-#syz test: https://github.com/google/kasan.git 1f22d15c
+For this reason allow runtime PM as default for Ice Lake TCSS xHCI
+controller.
 
-Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-===================================================================
---- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
-+++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
-@@ -1585,6 +1585,7 @@ static void usbvision_disconnect(struct
- 		wake_up_interruptible(&usbvision->wait_frame);
- 		wake_up_interruptible(&usbvision->wait_stream);
- 	} else {
-+		msleep(100);
- 		usbvision_release(usbvision);
- 	}
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Link: https://lore.kernel.org/r/1573836603-10871-5-git-send-email-mathias.nyman@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 1e0236e906879..a0025d23b2573 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -48,6 +48,7 @@
+ #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI		0x15e9
+ #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
+ #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
++#define PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI		0x8a13
  
-Index: usb-devel/drivers/media/v4l2-core/v4l2-dev.c
-===================================================================
---- usb-devel.orig/drivers/media/v4l2-core/v4l2-dev.c
-+++ usb-devel/drivers/media/v4l2-core/v4l2-dev.c
-@@ -419,9 +419,10 @@ static int v4l2_open(struct inode *inode
- 	video_get(vdev);
- 	mutex_unlock(&videodev_lock);
- 	if (vdev->fops->open) {
--		if (video_is_registered(vdev))
-+		if (video_is_registered(vdev)) {
-+			msleep(200);
- 			ret = vdev->fops->open(filp);
--		else
-+		} else
- 			ret = -ENODEV;
- 	}
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+@@ -212,7 +213,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ALPINE_RIDGE_C_4C_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_2C_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
  
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
+-- 
+2.20.1
 
