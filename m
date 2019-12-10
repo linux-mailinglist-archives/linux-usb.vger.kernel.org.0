@@ -2,160 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FEFB118D01
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 16:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D57C2118E42
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 17:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727211AbfLJPuv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 10 Dec 2019 10:50:51 -0500
-Received: from smtp.qindel.com ([89.140.90.34]:59140 "EHLO thor.qindel.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727178AbfLJPuv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Dec 2019 10:50:51 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 6AB106055F;
-        Tue, 10 Dec 2019 16:50:49 +0100 (CET)
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Q4OGcQ4Ho6eB; Tue, 10 Dec 2019 16:50:49 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by thor.qindel.com (Postfix) with ESMTP id 30B47605C1;
-        Tue, 10 Dec 2019 16:50:49 +0100 (CET)
-X-Virus-Scanned: amavisd-new at thor.qindel.com
-Received: from thor.qindel.com ([127.0.0.1])
-        by localhost (thor.qindel.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 2uWwDMPfPC9A; Tue, 10 Dec 2019 16:50:49 +0100 (CET)
-Received: from gverdu.qindel.com (gverdu.qindel.com [172.26.8.99])
-        by thor.qindel.com (Postfix) with ESMTPSA id BB6856055F;
-        Tue, 10 Dec 2019 16:50:45 +0100 (CET)
-From:   Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     Valentina Manea <valentina.manea.m@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] usbip: Remove unaligned pointer usage from usbip tools
-Date:   Tue, 10 Dec 2019 16:50:45 +0100
-Message-ID: <5176009.64u6Zm7RkX@gverdu.qindel.com>
+        id S1727590AbfLJQza (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 11:55:30 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:49648 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727541AbfLJQz3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 11:55:29 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBAGtS3p021249;
+        Tue, 10 Dec 2019 10:55:28 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1575996928;
+        bh=n7bWpTtUNGULyAuIrBTsF52K4yyT7sT54IS8E5MilTY=;
+        h=From:To:CC:Subject:Date;
+        b=QkDpdlx+2pIRorssFf1iU6TnjGFOPrsftYzFlx0KImsYuKuwIRxayKjtWwjh1ZbCt
+         YjiUUnFTyosZ6euBYvqpnCZf1fkC5h2xssT+vnvDWeAaiR6tidXJQ32Lo1uL9iPRkf
+         TTCYhyM4zxthkwuFG4MyiYeMLWKvrDHYsy1sM5Po=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBAGtSvR073659
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 10 Dec 2019 10:55:28 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 10
+ Dec 2019 10:55:28 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 10 Dec 2019 10:55:28 -0600
+Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBAGtSPE006664;
+        Tue, 10 Dec 2019 10:55:28 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>
+Subject: [PATCH 0/2] musb fixes for v5.5-rc2
+Date:   Tue, 10 Dec 2019 10:54:52 -0600
+Message-ID: <20191210165454.13772-1-b-liu@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The usbip tools use packed structs for network communication. Taking the
-address of a packed member of a struct can crash the program with SIGBUS
-on architectures with strict alignment requirements.
+Hi Greg,
 
-Also, recent versions of GCC detect this situation and emit a warning that
-is fatal due to -Werror being used.
+Here are couple patches for musb fixes for v5.5 -rc. Please let me know
+if any change is needed.
 
-error: taking address of packed member of ‘struct
-usbip_usb_device’ may result in an unaligned pointer value [-Werror=address-
-of-packed-member]
-
-Fix this by copying the data to an aligned location and operating there.
-
-Signed-off-by: Vadim Troshchinskiy <vtroshchinskiy@qindel.com>
+Regards,
+-Bin.
 ---
- tools/usb/usbip/src/usbip_network.c | 30 +++++++++++++++--------------
- tools/usb/usbip/src/usbip_network.h | 12 ++++++------
- 2 files changed, 22 insertions(+), 20 deletions(-)
 
-diff --git a/tools/usb/usbip/src/usbip_network.c b/tools/usb/usbip/src/usbip_network.c
-index d595d72693fb..1c0038ee0abd 100644
---- a/tools/usb/usbip/src/usbip_network.c
-+++ b/tools/usb/usbip/src/usbip_network.c
-@@ -50,39 +50,41 @@ void usbip_setup_port_number(char *arg)
- 	info("using port %d (\"%s\")", usbip_port, usbip_port_string);
- }
- 
--void usbip_net_pack_uint32_t(int pack, uint32_t *num)
-+void usbip_net_pack_uint32_t(int pack, uint8_t *num)
- {
- 	uint32_t i;
-+	memcpy(&i, num, sizeof(i));
- 
- 	if (pack)
--		i = htonl(*num);
-+		i = htonl(i);
- 	else
--		i = ntohl(*num);
-+		i = ntohl(i);
- 
--	*num = i;
-+	memcpy(num, &i, sizeof(i));
- }
- 
--void usbip_net_pack_uint16_t(int pack, uint16_t *num)
-+void usbip_net_pack_uint16_t(int pack, uint8_t *num)
- {
- 	uint16_t i;
-+	memcpy(&i, num, sizeof(i));
- 
- 	if (pack)
--		i = htons(*num);
-+		i = htons(i);
- 	else
--		i = ntohs(*num);
-+		i = ntohs(i);
- 
--	*num = i;
-+	memcpy(num, &i, sizeof(i));
- }
- 
- void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev)
- {
--	usbip_net_pack_uint32_t(pack, &udev->busnum);
--	usbip_net_pack_uint32_t(pack, &udev->devnum);
--	usbip_net_pack_uint32_t(pack, &udev->speed);
-+	usbip_net_pack_uint32_t(pack, (uint8_t*)&udev->busnum);
-+	usbip_net_pack_uint32_t(pack, (uint8_t*)&udev->devnum);
-+	usbip_net_pack_uint32_t(pack, (uint8_t*)&udev->speed);
- 
--	usbip_net_pack_uint16_t(pack, &udev->idVendor);
--	usbip_net_pack_uint16_t(pack, &udev->idProduct);
--	usbip_net_pack_uint16_t(pack, &udev->bcdDevice);
-+	usbip_net_pack_uint16_t(pack, (uint8_t*)&udev->idVendor);
-+	usbip_net_pack_uint16_t(pack, (uint8_t*)&udev->idProduct);
-+	usbip_net_pack_uint16_t(pack, (uint8_t*)&udev->bcdDevice);
- }
- 
- void usbip_net_pack_usb_interface(int pack __attribute__((unused)),
-diff --git a/tools/usb/usbip/src/usbip_network.h b/tools/usb/usbip/src/usbip_network.h
-index 555215eae43e..821dd65877cc 100644
---- a/tools/usb/usbip/src/usbip_network.h
-+++ b/tools/usb/usbip/src/usbip_network.h
-@@ -33,9 +33,9 @@ struct op_common {
- } __attribute__((packed));
- 
- #define PACK_OP_COMMON(pack, op_common)  do {\
--	usbip_net_pack_uint16_t(pack, &(op_common)->version);\
--	usbip_net_pack_uint16_t(pack, &(op_common)->code);\
--	usbip_net_pack_uint32_t(pack, &(op_common)->status);\
-+	usbip_net_pack_uint16_t(pack, (uint8_t*)&(op_common)->version);\
-+	usbip_net_pack_uint16_t(pack, (uint8_t*)&(op_common)->code);\
-+	usbip_net_pack_uint32_t(pack, (uint8_t*)&(op_common)->status);\
- } while (0)
- 
- /* ---------------------------------------------------------------------- */
-@@ -163,11 +163,11 @@ struct op_devlist_reply_extra {
- } while (0)
- 
- #define PACK_OP_DEVLIST_REPLY(pack, reply)  do {\
--	usbip_net_pack_uint32_t(pack, &(reply)->ndev);\
-+	usbip_net_pack_uint32_t(pack, (uint8_t*)&(reply)->ndev);\
- } while (0)
- 
--void usbip_net_pack_uint32_t(int pack, uint32_t *num);
--void usbip_net_pack_uint16_t(int pack, uint16_t *num);
-+void usbip_net_pack_uint32_t(int pack, uint8_t *num);
-+void usbip_net_pack_uint16_t(int pack, uint8_t *num);
- void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev);
- void usbip_net_pack_usb_interface(int pack, struct usbip_usb_interface *uinf);
- 
+Jia-Ju Bai (1):
+  usb: musb: Fix a possible null-pointer dereference in
+    musb_handle_intr_connect()
+
+Mans Rullgard (1):
+  usb: musb: sunxi: propagate devicetree node to glue pdev
+
+ drivers/usb/musb/musb_core.c | 3 ++-
+ drivers/usb/musb/sunxi.c     | 2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
+
 -- 
-2.21.0
-
-
-
+2.17.1
 
