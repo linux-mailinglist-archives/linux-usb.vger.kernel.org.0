@@ -2,66 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD738117BB9
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 00:46:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D34BD117C6F
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2019 01:31:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727387AbfLIXqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Dec 2019 18:46:05 -0500
-Received: from mail-il1-f199.google.com ([209.85.166.199]:40263 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727330AbfLIXqB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 18:46:01 -0500
-Received: by mail-il1-f199.google.com with SMTP id s10so12949345ilh.7
-        for <linux-usb@vger.kernel.org>; Mon, 09 Dec 2019 15:46:01 -0800 (PST)
+        id S1727286AbfLJAba (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Dec 2019 19:31:30 -0500
+Received: from mail-pg1-f182.google.com ([209.85.215.182]:45771 "EHLO
+        mail-pg1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726495AbfLJAba (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Dec 2019 19:31:30 -0500
+Received: by mail-pg1-f182.google.com with SMTP id b9so7565641pgk.12;
+        Mon, 09 Dec 2019 16:31:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zjPlYsXto14p5C8VyRSUAcHDdeX9MtJK0hekckR4MXo=;
+        b=g82o5qI7mDhodYDhxVUVWF29yNsIXatSkuuuG6dnNOlFU4Yx6F6L/CpNU++bVnI99t
+         p3KFvDen0v+7zmqvLamKhgL4Mxb5ZwgqUEXnRri3QuqjKpDDFlE/5/rSppO9XXw/xlel
+         +kWMFzxa1IoV09s3d9TPMn5+8hnjWqp3nGUNuyvApOPWCdjjxjWT4G7TapPXgedS3APa
+         jTnXi8qSmdrirkpmuwRQXxJWy++btMmhc8+DDgFErq0hzHhXqGA+8K4hQJBFxrAF/Dg3
+         7Ufuu62XhGBnKLscX67DsmHAxJmxcuwMAnuAhZHlh20u89cMRoI93vEhFAkJCJyQ5lDv
+         BKeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=hWaIex+koh6jdBsw/jvRJQ3HQOaL7kSrdmI8OfB4npk=;
-        b=Q9657R7XTBpylHWGa0tlYm1ezcP/f25YdObd1+SwtHz1nkkccOS3e1887fZ20DkSa7
-         6r9m98W/ZLusTDDNy2McJxXdjsuS8ugYx3tWoUpaCMh4+KkW6hlOrym3PjjgQWOw+A1r
-         gRUysOHALPqaKBgPnWlLcCs27BHNFkqTi3w4X1yLPhQAHO8GIdYTZsRmS7mWZmMwG29/
-         /93VIAEAGjI7sMzQpy+A+Jg0yDQQLJTYbGGlyOKxHCAPe8bCeoQgG7zHG/nfXRjPdwlr
-         3HdPcYZfMg3GKkrNHt/FlaNF5V/3bxzQwvsyu1OdkVaydAYTEnMnNLSA2noG9YC6u4YC
-         qA7Q==
-X-Gm-Message-State: APjAAAXtSJg7MS6r3xOffKg7r/FgtwNlKVR6gw7oZxiFYbUCmPCm5H2z
-        tsIeOSI+2xVymp3HwR0Z4qk5NEISojmt43eqruq2DT80n52G
-X-Google-Smtp-Source: APXvYqycbY+HQGkGdjQbePP8cr8ECSXGxrDkL3BMEEnHcpRL29CgV9t9BGQj2mNNgZ2EV+ADomhx9vWT9AVPvaH1ZJgv29P59Yt5
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zjPlYsXto14p5C8VyRSUAcHDdeX9MtJK0hekckR4MXo=;
+        b=Y8TpLXxyT3hN24/tL/AC09X7d9v7sAGlbVl+mV8Sa1PZiqdfcuSHOBsS+6zy9KBxMP
+         7JzrO9vBePH+wZqb3YwqKAimeysg8TXesZgZ6XvVKk2rF8ATLKgK4RNz87JrMiXaE9PD
+         wEiJ2RSKBBV+kQ0smTNv7cy8tV4eHRV9s7bk5GFSHSzkLZa4439YuMndC4WVhyhZpIpS
+         /udDB+vIEfcmzsZxZNmivw75Bzw2rZYT/zrVqBGWznj7+XE2xXHgrbO8sVRrh3URyujX
+         pDinDffYL1QGQfwkOw7tokSotBG3egtFN+WQg/iem2cI/piv4LhCU86N+ywHkC48MC7h
+         BuVQ==
+X-Gm-Message-State: APjAAAW/vXJmEakMYZQN5m82sfe9q5QXNtm9xlHhfvuIbdBzkgsKICUQ
+        lDUH4/TmDqMAcwo1NTmgcAE=
+X-Google-Smtp-Source: APXvYqxgCVjiBlLvOzrXkYi4DsGr7KRIgKnrMDxsZRlwIJgkioFp0j4UvaQxzZH/Ss+gYPXkrL+6Fg==
+X-Received: by 2002:a63:5243:: with SMTP id s3mr20771167pgl.449.1575937889690;
+        Mon, 09 Dec 2019 16:31:29 -0800 (PST)
+Received: from localhost.localdomain (S0106d80d17472dbd.wp.shawcable.net. [24.79.253.190])
+        by smtp.gmail.com with ESMTPSA id 5sm468157pjc.29.2019.12.09.16.31.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2019 16:31:29 -0800 (PST)
+From:   jassisinghbrar@gmail.com
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        mark.rutland@arm.com
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jassi Brar <jaswinder.singh@linaro.org>
+Subject: [PATCHv1 1/2] dt-bindings: max3421-udc: add dt bindings for MAX3420 UDC
+Date:   Mon,  9 Dec 2019 18:31:24 -0600
+Message-Id: <20191210003124.32376-1-jassisinghbrar@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Received: by 2002:a5d:96c6:: with SMTP id r6mr9224856iol.236.1575935160916;
- Mon, 09 Dec 2019 15:46:00 -0800 (PST)
-Date:   Mon, 09 Dec 2019 15:46:00 -0800
-In-Reply-To: <Pine.LNX.4.44L0.1912091448420.1462-100000@iolanthe.rowland.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000074a59505994dfff0@google.com>
-Subject: Re: KASAN: slab-out-of-bounds Read in hid_field_extract
-From:   syzbot <syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+From: Jassi Brar <jaswinder.singh@linaro.org>
 
-syzbot has tested the proposed patch and the reproducer did not trigger  
-crash:
+Add YAML dt bindings for Maxim MAX3420 UDC controller.
 
-Reported-and-tested-by:  
-syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+---
+ .../bindings/usb/maxim,max3420-udc.yaml       | 60 +++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
 
-Tested on:
+diff --git a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
+new file mode 100644
+index 000000000000..cf4eec8a618e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: GPL-2.0-only
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/maxim,max3420-udc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MAXIM MAX3420/1 USB Peripheral Controller
++
++maintainers:
++  - Jassi Brar <jaswinder.singh@linaro.org>
++
++description: |
++  The controller provices USB2.0 compliant FullSpeed peripheral
++  implementation over the  SPI interface.
++
++  Specifications about the part can be found at:
++    http://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
++
++properties:
++  compatible:
++    enum:
++      - maxim,max3420-udc
++      - maxim,max3421-udc
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 1
++    maxItems: 2
++    items:
++      - const: udc
++      - const: vbus
++
++  spi-max-frequency:
++    maximum: 26000000
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++
++examples:
++  - |
++      #include <dt-bindings/gpio/gpio.h>
++      #include <dt-bindings/interrupt-controller/irq.h>
++      spi0 {
++            #address-cells = <1>;
++            #size-cells = <0>;
++
++            udc@0 {
++                  compatible = "maxim,max3420-udc";
++                  reg = <0>;
++                  interrupt-parent = <&gpio>;
++                  interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
++                  interrupt-names = "udc", "vbus";
++                  spi-max-frequency = <12500000>;
++            };
++      };
+-- 
+2.20.1
 
-commit:         1f22d15c usb: gadget: add raw-gadget interface
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
-dashboard link: https://syzkaller.appspot.com/bug?extid=09ef48aa58261464b621
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=146cae41e00000
-
-Note: testing is done by a robot and is best-effort only.
