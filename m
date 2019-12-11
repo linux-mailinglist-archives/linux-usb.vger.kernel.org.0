@@ -2,72 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCFA711AD2C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4830211AD2D
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729823AbfLKOST (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 09:18:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57264 "EHLO mail.kernel.org"
+        id S1729826AbfLKOS0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 09:18:26 -0500
+Received: from mga07.intel.com ([134.134.136.100]:52849 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729671AbfLKOST (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Dec 2019 09:18:19 -0500
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id ED51F214AF;
-        Wed, 11 Dec 2019 14:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576073899;
-        bh=+H4MGUo0gC4uetQ+rmXNbqxXzXtjav/zslpd/VoejfI=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=U/4wOD/HWDijvXYTZYe/fGkWMDDh/8J1ohOQn/O2hHQSyj5axQ5Tdt6TNUzFKr2En
-         tfRrTv9mwnIjhWVyWkU0Z//81RgrgFPyBH40ouF2uQ6m/utkzh77mT0hKqhroUo2qD
-         oqB7RDJmcW3EHtMH9k7QNn+lar2neL8dcuHYdB8Q=
-Date:   Wed, 11 Dec 2019 15:18:15 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [PATCH] HID: Fix slab-out-of-bounds read in hid_field_extract
-In-Reply-To: <Pine.LNX.4.44L0.1912101622030.1647-100000@iolanthe.rowland.org>
-Message-ID: <nycvar.YFH.7.76.1912111517570.4603@cbobk.fhfr.pm>
-References: <Pine.LNX.4.44L0.1912101622030.1647-100000@iolanthe.rowland.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1729671AbfLKOS0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Dec 2019 09:18:26 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 06:18:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,301,1571727600"; 
+   d="scan'208";a="414868188"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga006.fm.intel.com with ESMTP; 11 Dec 2019 06:18:20 -0800
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/6] xhci fixes for usb-linus
+Date:   Wed, 11 Dec 2019 16:20:01 +0200
+Message-Id: <20191211142007.8847-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 10 Dec 2019, Alan Stern wrote:
+Hi Greg
 
-> The syzbot fuzzer found a slab-out-of-bounds bug in the HID report
-> handler.  The bug was caused by a report descriptor which included a
-> field with size 12 bits and count 4899, for a total size of 7349
-> bytes.
-> 
-> The usbhid driver uses at most a single-page 4-KB buffer for reports.
-> In the test there wasn't any problem about overflowing the buffer,
-> since only one byte was received from the device.  Rather, the bug
-> occurred when the HID core tried to extract the data from the report
-> fields, which caused it to try reading data beyond the end of the
-> allocated buffer.
-> 
-> This patch fixes the problem by rejecting any report whose total
-> length exceeds the HID_MAX_BUFFER_SIZE limit (minus one byte to allow
-> for a possible report index).  In theory a device could have a report
-> longer than that, but if there was such a thing we wouldn't handle it 
-> correctly anyway.
-> 
-> Reported-and-tested-by: syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> CC: <stable@vger.kernel.org>
+A few xhci fixes that resolve a race condition, a memory leak, incorrect
+irqrestore and other issues.
 
-Thanks for hunting this down Alan. Applied.
+-Mathias
+
+Henry Lin (1):
+  usb: xhci: only set D3hot for pci device
+
+Kai-Heng Feng (1):
+  xhci: Increase STS_HALT timeout in xhci_suspend()
+
+Mathias Nyman (3):
+  xhci: fix USB3 device initiated resume race with roothub autosuspend
+  xhci: handle some XHCI_TRUST_TX_LENGTH quirks cases as default
+    behaviour.
+  xhci: make sure interrupts are restored to correct state
+
+Mika Westerberg (1):
+  xhci: Fix memory leak in xhci_add_in_port()
+
+ drivers/usb/host/xhci-hub.c  | 22 ++++++++++++++++------
+ drivers/usb/host/xhci-mem.c  |  4 ++++
+ drivers/usb/host/xhci-pci.c  | 13 +++++++++++++
+ drivers/usb/host/xhci-ring.c |  6 +++---
+ drivers/usb/host/xhci.c      |  9 +++------
+ drivers/usb/host/xhci.h      |  1 +
+ 6 files changed, 40 insertions(+), 15 deletions(-)
 
 -- 
-Jiri Kosina
-SUSE Labs
+2.17.1
 
