@@ -2,91 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DCB11B782
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 17:09:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A23411B7D3
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 17:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388884AbfLKQIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 11:08:14 -0500
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:54485 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731122AbfLKQIN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 11:08:13 -0500
-Received: from callcc.thunk.org (guestnat-104-132-34-105.corp.google.com [104.132.34.105] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id xBBG7jbj026860
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 11 Dec 2019 11:07:46 -0500
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id A4C13421A48; Wed, 11 Dec 2019 11:07:45 -0500 (EST)
-Date:   Wed, 11 Dec 2019 11:07:45 -0500
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Ming Lei <ming.lei@redhat.com>
-Cc:     Andrea Vai <andrea.vai@unipv.it>,
-        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-Message-ID: <20191211160745.GA129186@mit.edu>
-References: <20191128091712.GD15549@ming.t460p>
- <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
- <20191129005734.GB1829@ming.t460p>
- <20191129023555.GA8620@ming.t460p>
- <320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it>
- <20191203022337.GE25002@ming.t460p>
- <8196b014b1a4d91169bf3b0d68905109aeaf2191.camel@unipv.it>
- <20191210080550.GA5699@ming.t460p>
- <20191211024137.GB61323@mit.edu>
- <20191211040058.GC6864@ming.t460p>
+        id S1731156AbfLKQKl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 11:10:41 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:39814 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731206AbfLKQKk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 11:10:40 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBBGAc5R080369;
+        Wed, 11 Dec 2019 10:10:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576080638;
+        bh=a/ybdcnI6Ok1jxxFg1Wfn1E1tSZcHHuOUa0tzf5C/a4=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=ZL+f33m2Nj7E4SnJUyq4gIhjnnwBAK9hTAeGfegyf6UwmiUHzNFWroWV4NM7K1z4J
+         KnnqqeWqPWnKoxIsZaboOH62e6HoKZ0FjFw+Uu1qTAa7ZRtYPteMj+BKYympxo7YjN
+         teBG7rqlT6eB+UGKjRC4c9WMpsY/FYS1C1bMRf0M=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBBGAcOE059096
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 11 Dec 2019 10:10:38 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 11
+ Dec 2019 10:10:38 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Wed, 11 Dec 2019 10:10:38 -0600
+Received: from uda0271908.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBBGAcH6001814;
+        Wed, 11 Dec 2019 10:10:38 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     <linux-usb@vger.kernel.org>
+CC:     Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH v2] usb: dwc3: turn off VBUS when leaving host mode
+Date:   Wed, 11 Dec 2019 10:10:03 -0600
+Message-ID: <20191211161003.14950-1-b-liu@ti.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <87blseyle9.fsf@kernel.org>
+References: <87blseyle9.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191211040058.GC6864@ming.t460p>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 12:00:58PM +0800, Ming Lei wrote:
-> I didn't reproduce the issue in my test environment, and follows
-> Andrea's test commands[1]:
-> 
->   mount UUID=$uuid /mnt/pendrive 2>&1 |tee -a $logfile
->   SECONDS=0
->   cp $testfile /mnt/pendrive 2>&1 |tee -a $logfile
->   umount /mnt/pendrive 2>&1 |tee -a $logfile
-> 
-> The 'cp' command supposes to open/close the file just once, however
-> ext4_release_file() & write pages is observed to run for 4358 times
-> when executing the above 'cp' test.
+VBUS should be turned off when leaving the host mode.
+Set GCTL_PRTCAP to device mode in teardown to de-assert DRVVBUS pin to
+turn off VBUS power.
 
-Why are we sure the ext4_release_file() / _fput() is coming from the
-cp command, as opposed to something else that might be running on the
-system under test?  _fput() is called by the kernel when the last
-reference to a struct file is released.  (Specifically, if you have a
-fd which is dup'ed, it's only when the last fd corresponding to the
-struct file is closed, and the struct file is about to be released,
-does the file system's f_ops->release function get called.)
+Fixes: 5f94adfeed97 ("usb: dwc3: core: refactor mode initialization to its own function")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bin Liu <b-liu@ti.com>
+---
+v2: cover dr_mode == OTG too.
 
-So the first question I'd ask is whether there is anything else going
-on the system, and whether the writes are happening to the USB thumb
-drive, or to some other storage device.  And if there is something
-else which is writing to the pendrive, maybe that's why no one else
-has been able to reproduce the OP's complaint....
+ drivers/usb/dwc3/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-    	      	 	    	     - Ted
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index f561c6c9e8a9..1d85c42b9c67 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1246,6 +1246,9 @@ static void dwc3_core_exit_mode(struct dwc3 *dwc)
+ 		/* do nothing */
+ 		break;
+ 	}
++
++	/* de-assert DRVVBUS for HOST and OTG mode */
++	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+ }
+ 
+ static void dwc3_get_properties(struct dwc3 *dwc)
+-- 
+2.17.1
+
