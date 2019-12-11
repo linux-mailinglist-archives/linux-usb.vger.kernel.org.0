@@ -2,40 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2E9D11B09F
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 16:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E770E11B5F2
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 16:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732862AbfLKPYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 10:24:37 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58498 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1732644AbfLKPYg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:24:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id CDBCCAD6B
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 15:24:34 +0000 (UTC)
-Message-ID: <1576077871.23599.4.camel@suse.com>
-Subject: status of support for Media Agnostic USB
-From:   Oliver Neukum <oneukum@suse.com>
-To:     linux-usb@vger.kernel.org
-Date:   Wed, 11 Dec 2019 16:24:31 +0100
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.26.6 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        id S1731226AbfLKP5o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 10:57:44 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:55102 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1731692AbfLKPO6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 10:14:58 -0500
+Received: (qmail 1776 invoked by uid 2102); 11 Dec 2019 10:14:57 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 11 Dec 2019 10:14:57 -0500
+Date:   Wed, 11 Dec 2019 10:14:57 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: Re: KASAN: use-after-free Read in usbvision_v4l2_open
+In-Reply-To: <CAAeHK+wFBYX8-L-D8w_nep3W=QjYoLAZbc=-0eoWK684wnuayA@mail.gmail.com>
+Message-ID: <Pine.LNX.4.44L0.1912111010490.1549-100000@iolanthe.rowland.org>
+MIME-Version: 1.0
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, 11 Dec 2019, Andrey Konovalov wrote:
 
-I recently hit upon some old patches for MA USB on the list.
-It looks like the discussion never went far. Is there anybody
-still interested in them? It looks like Windows 10 finally supports it
-and we are missing a feature.
+> On Tue, Dec 10, 2019 at 9:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Tue, 10 Dec 2019, syzbot wrote:
+> >
+> > > > On Mon, 9 Dec 2019, syzbot wrote:
+> > >
+> > > >> Hello,
+> > >
+> > > >> syzbot found the following crash on:
+> > >
+> > > >> HEAD commit:    1f22d15c usb: gadget: add raw-gadget interface
+> > > >> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> > > >> console output: https://syzkaller.appspot.com/x/log.txt?x=1296f42ae00000
+> > > >> kernel config:
+> > > >> https://syzkaller.appspot.com/x/.config?x=8ccee2968018adcb
+> > > >> dashboard link:
+> > > >> https://syzkaller.appspot.com/bug?extid=c7b0ec009a216143df30
+> > > >> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > >
+> > > >> Unfortunately, I don't have any reproducer for this crash yet.
+> > >
+> > > >> IMPORTANT: if you fix the bug, please add the following tag to the
+> > > >> commit:
+> > > >> Reported-by: syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com
 
-	Regards
-		Oliver
+> > > This crash does not have a reproducer. I cannot test it.
+> >
+> > Let's try the same patch with a different bug report -- one that has a
+> > reproducer.  I assume that syzbot gets the bug identity from the
+> > email's From: line (which has been updated acoordingly) rather than the
+> > Subject: line.
+> 
+> Did you get a response for this test? I see the test attempt on the
+> dashboard (the patch failed to build), but I didn't get an email with
+> the result.
+
+No response so far.  On the other hand, syzbot has been a bit slow to 
+respond to my tests recently (typical turnaround time is several 
+hours).  I don't know what's going on.
+
+Alan Stern
 
