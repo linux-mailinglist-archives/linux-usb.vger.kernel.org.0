@@ -2,111 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C59FF11AD39
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C994A11AD49
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729857AbfLKOSl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 09:18:41 -0500
-Received: from mga07.intel.com ([134.134.136.100]:52849 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727554AbfLKOSl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Dec 2019 09:18:41 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 11 Dec 2019 06:18:40 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,301,1571727600"; 
-   d="scan'208";a="414868256"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Dec 2019 06:18:38 -0800
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 6/6] xhci: make sure interrupts are restored to correct state
-Date:   Wed, 11 Dec 2019 16:20:07 +0200
-Message-Id: <20191211142007.8847-7-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191211142007.8847-1-mathias.nyman@linux.intel.com>
-References: <20191211142007.8847-1-mathias.nyman@linux.intel.com>
+        id S1729877AbfLKOXJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 09:23:09 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33710 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729791AbfLKOXJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 09:23:09 -0500
+Received: by mail-pf1-f195.google.com with SMTP id y206so1907437pfb.0
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 06:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/QWzNDzzrfxQTmZnQXAnuGOpRW2t5ObwF4zriIuU40Y=;
+        b=X+BARLPnnb5Z0xTDzxhmbC3H9nKkYVim4Rh4phE9EBm7qNO7aIUaJGuD1TC9KIUIzm
+         XTbb0b69nRjKZAUnvb2lPL1NgxsVRCsWAxY9+bewiEBcSjDmyYURfskgytpo9lkqF9UI
+         ewq0eeSIIBhDWGuDL9ls7sulVX7i3SCfU1FuIXgdC+kTP2QNU0X8P6HI59thze0Fw5Z1
+         CC7Vi5z5iDvdTn4YUjm6IJ3jx3eDpb9J2NjXaLgGdvFOzunh1x56XR0vK0OkO3M4FlaO
+         fmo1UspdQF/4Z1pua/UZ0ObIWIOjHLCgQ2dngWCIr+z958SLHosToJDAGJXqhpWimXwh
+         6hWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/QWzNDzzrfxQTmZnQXAnuGOpRW2t5ObwF4zriIuU40Y=;
+        b=kmCrQjx4fTXgEI3mtThcIUIZSekHASCJokYMDiaRXhz36T2NseRllet/7PbwmWhP5R
+         RzSzMhWqK4Usqe3wAmS6ICDJSu7vaUgMEp5kx9I3nYVuo4I7J8mfKJlsNNOj2n7HJ9jB
+         OQinVSmawH3wr7+QKxWwr3yGlLsCnjmC/+tK80nBrIuQ8PEnaMuh2myEQvaFRyEhJWcp
+         cG1zFEWKqf3QprMKJARtv7XLjdNh4tYsknpKYkgSuhyGD+cJ2uA6on68wSKYZh+ak9gU
+         ojNz39ExxRKd2u/EC2F6uusyx8ExYTfBT5AWtp9+RfaSnmhVC8bdALr4M5heyRPc4XGU
+         LnWw==
+X-Gm-Message-State: APjAAAWlbmBOW8qF7XhpCnaHqudcngTtVIbK7HaD9cqeIb75IkgtMeK+
+        6tWufQlD49M8BoKmAhYRJLX9TQdNeMfsRDZilji8/Q==
+X-Google-Smtp-Source: APXvYqyC3Yj5w8PRUHoADlHDrvA7T1UCFsuw0q62MHrJCRrNQF+pmIjqG0dinlqqjVMygtBbuXda+56UkHWlZ16Mb2M=
+X-Received: by 2002:a65:678f:: with SMTP id e15mr4437984pgr.130.1576074187917;
+ Wed, 11 Dec 2019 06:23:07 -0800 (PST)
+MIME-Version: 1.0
+References: <CAAeHK+wY+35uBvr0=FnKsWOj91QhXuVE++V7frn5AihAPLvo5Q@mail.gmail.com>
+ <Pine.LNX.4.44L0.1912101508470.1647-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912101508470.1647-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 11 Dec 2019 15:22:56 +0100
+Message-ID: <CAAeHK+xTjUdP5D+DzRD-ZBd-8MmhWxT5n=CqO5u37FrEy6T-8Q@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in usbvision_v4l2_open
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Dmitry Vyukov <dvyukov@google.com>
+Cc:     syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-spin_unlock_irqrestore() might be called with stale flags after
-reading port status, possibly restoring interrupts to a incorrect
-state.
+On Tue, Dec 10, 2019 at 9:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Tue, 10 Dec 2019, Andrey Konovalov wrote:
+>
+> > On Tue, Dec 10, 2019 at 8:48 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> > > This looks like a race in v4l2_open(): The function drops the
+> > > videodev_lock mutex before calling the video driver's open routine, and
+> > > the device can be unregistered during the short time between.
+> > >
+> > > This patch tries to make the race much more likely to happen, for
+> > > testing and verification.
+> > >
+> > > Andrey, will syzbot run the same test with this patch, even though it
+> > > says it doesn't have a reproducer?
+> >
+> > Hi Alan,
+> >
+> > No, unfortunately there's nothing to run if there's no reproducer.
+> > It's technically possible to run the same program log that triggered
+> > the bug initially, but since the bug wasn't reproduced with this log
+> > even without the patch, there isn't much sense in running it with the
+> > patch applied.
+>
+> Actually it does make sense.  That bug was caused by a race, and the
+> patch tries to make the race much more likely to happen, so the same
+> test should fail again.
+>
+> But never mind; I'll try a different approach.  There's another syzbot
+> bug report, one with a reproducer, and with this patch in place it
+> should trigger the same race.  I'll try submitting it that way.
+>
+> By the way, do you know why syzbot sent _two_ reply messages?  One with
+> message ID <00000000000031a0af05995eca0b@google.com> and the other with
+> message ID <000000000000441a4205995eca11@google.com>?  It seems like
+> overkill.
 
-If a usb2 port just finished resuming while the port status is read
-the spin lock will be temporary released and re-acquired in a separate
-function. The flags parameter is passed as value instead of a pointer,
-not updating flags properly before the final spin_unlock_irqrestore()
-is called.
-
-Cc: <stable@vger.kernel.org> # v3.12+
-Fixes: 8b3d45705e54 ("usb: Fix xHCI host issues on remote wakeup.")
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index 4b870cd6c575..7a3a29e5e9d2 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -806,7 +806,7 @@ static void xhci_del_comp_mod_timer(struct xhci_hcd *xhci, u32 status,
- 
- static int xhci_handle_usb2_port_link_resume(struct xhci_port *port,
- 					     u32 *status, u32 portsc,
--					     unsigned long flags)
-+					     unsigned long *flags)
- {
- 	struct xhci_bus_state *bus_state;
- 	struct xhci_hcd	*xhci;
-@@ -860,11 +860,11 @@ static int xhci_handle_usb2_port_link_resume(struct xhci_port *port,
- 		xhci_test_and_clear_bit(xhci, port, PORT_PLC);
- 		xhci_set_link_state(xhci, port, XDEV_U0);
- 
--		spin_unlock_irqrestore(&xhci->lock, flags);
-+		spin_unlock_irqrestore(&xhci->lock, *flags);
- 		time_left = wait_for_completion_timeout(
- 			&bus_state->rexit_done[wIndex],
- 			msecs_to_jiffies(XHCI_MAX_REXIT_TIMEOUT_MS));
--		spin_lock_irqsave(&xhci->lock, flags);
-+		spin_lock_irqsave(&xhci->lock, *flags);
- 
- 		if (time_left) {
- 			slot_id = xhci_find_slot_id_by_port(hcd, xhci,
-@@ -967,7 +967,7 @@ static void xhci_get_usb3_port_status(struct xhci_port *port, u32 *status,
- }
- 
- static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
--				      u32 portsc, unsigned long flags)
-+				      u32 portsc, unsigned long *flags)
- {
- 	struct xhci_bus_state *bus_state;
- 	u32 link_state;
-@@ -1017,7 +1017,7 @@ static void xhci_get_usb2_port_status(struct xhci_port *port, u32 *status,
- static u32 xhci_get_port_status(struct usb_hcd *hcd,
- 		struct xhci_bus_state *bus_state,
- 	u16 wIndex, u32 raw_port_status,
--		unsigned long flags)
-+		unsigned long *flags)
- 	__releases(&xhci->lock)
- 	__acquires(&xhci->lock)
- {
-@@ -1140,7 +1140,7 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
- 		}
- 		trace_xhci_get_port_status(wIndex, temp);
- 		status = xhci_get_port_status(hcd, bus_state, wIndex, temp,
--					      flags);
-+					      &flags);
- 		if (status == 0xffffffff)
- 			goto error;
- 
--- 
-2.17.1
-
+Hm, I'm not sure. Dmitry?
