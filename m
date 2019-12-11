@@ -2,56 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8652B11A021
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 01:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8A611A028
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 01:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbfLKAlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 19:41:21 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:35919 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfLKAlV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 19:41:21 -0500
-Received: by mail-lf1-f68.google.com with SMTP id n12so15280163lfe.3
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 16:41:19 -0800 (PST)
+        id S1726619AbfLKAqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 19:46:07 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:44229 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbfLKAqH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 19:46:07 -0500
+Received: by mail-ot1-f65.google.com with SMTP id x3so17245625oto.11;
+        Tue, 10 Dec 2019 16:46:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=Fid9ZEccLBptzoOJUgvqGVoJRsstB5d1nYDlvhpYNSg=;
-        b=JG3KwdCUiVNMSTx7r0pzWyjVfD4m7NeN/mcgO0qKMj4CVWBxgwvAWDaKFtrgWVhboQ
-         HRsn3Qyx8I9cJvSMhRzC9yaWn5jD7rdAGxHbWaNAWC5K7ftuCrIMPHswXTZXRN0V16St
-         9/T0uTq+RU864TLg7/3C47EjONKCVttEJ7ojJgVOVt81Q2yOXMAvBairnnCVoRlyLRs/
-         zrn5iJhF15QDsKFmSAmozEtC3+vqnbkYLXa4JV5sNore9CjZ9FH9s29B7MlvPkXhKQin
-         FVmzlXmAOm6Ga8s0TszglWJ/EVNXYFXsIKHm7e/U0r47s2tgjXQRaY5GNWr5iEb9O5xb
-         fPXQ==
+        bh=dNo8gQB2Lns6lssefACZcuCEFfgXMn9otoHM3Ump6ZU=;
+        b=MSQi9449EbBVtE8SBD/GOeFr9lc1VEeadwIPv0OUHQIqzCemeFd7M/BqaTHJH2HbFC
+         VyC2WdGAJ0Oy7BMvm6c+VXsJmVA9T5O44nKl/i7bv6PirSOnQbfzSRo6tWVFKd5w1Tzp
+         EM+9Ny2MRBFb5NHvtnHw5Dye3NOTdNk7MqGkiIxyjoSL4Fv19pYxLtPnlF66mlPaY0BU
+         ccadh1t27sktMAwSiei7ID54Jtbum+31GKoG2tV0xt3XzxvvBIYyHzo1sRSy99F1emGF
+         BpQeZnZqYUN6v+/AO5QZoW5U5JqSERSUYzkuCLqTi/DD2JIqIxn8V8guYI5nTfJyhAcF
+         Toaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Fid9ZEccLBptzoOJUgvqGVoJRsstB5d1nYDlvhpYNSg=;
-        b=XDildU1t6GbRXlYd1iyo+BijQg/+C9uL9Q5Sju5gD3KS4Ktw28kjZvshdejL+7VBPJ
-         0DsWS8dgE4LkN9e05nqwnM1cqaN5GjkM9JiB+QARbPoUp4kcQ2BBs4Zb5uKM70vQ0u6X
-         d7333+vfc0oExoJgobVkRmJ4s+R5l8tDpePS3cjJEJw6UIQKNmW9Ji7WoH0uhbn5b36l
-         bUTzmXEItohec4Ro+rX/m/zMxt6IguE+ZKm/guo1S4fg2OwuWNzw3FLs+ve6Q1hy5ew8
-         Rss6dLDnxdfxqFsTb1/RqRMkqpsh4zOBe0diro+ysRc/P4aUKkBhCdQK6Ts3aOSuleeF
-         VChA==
-X-Gm-Message-State: APjAAAV8imabQuowZwIqJwfWVUvUXS5t0fDv3OOpl8JVK8a48p356jI9
-        +5zNnOF60Z79GodUG8clv7BUVZj7GY0Trzw3a1i7QA==
-X-Google-Smtp-Source: APXvYqxXaC784UcLWEbh36E4RfuirOQlzwnQX6O81XmmUmoIhTqxDQidxOuKIc2qZThQbLcPv8uIqCkIIFTQssOAyOY=
-X-Received: by 2002:ac2:5c4b:: with SMTP id s11mr387792lfp.133.1576024879216;
- Tue, 10 Dec 2019 16:41:19 -0800 (PST)
+        bh=dNo8gQB2Lns6lssefACZcuCEFfgXMn9otoHM3Ump6ZU=;
+        b=YqcGZO+Ni9INFPO5Azmc4aJmV13XVhoWEiC/RLvx8iXp/UOL+6IZl20XkuvlbrEpeg
+         79jnf94A4odAphi3f064Scrw3z3YsUEIdGjeGb9ucQfjcDPsQnwayJdY4+h35GdBNdGL
+         S6gbCiNMmeVQuhTEfjLfF03DS9MioAggST7JUy9QLW2O1e36bHDFVxLGNJF3N7VA7OpE
+         mqzM/RBSIj+MPgk/ov9CGw5GJR9STCKmVo/UUT86JjEx4kgmDY7NKcT+1PzOGNngmtYT
+         gpLvJZCnENsg0mPEs0xWWh1Bv/D8u6uW8fYX7m/3LDSGSsFfA7OCGmW+M11Nz3iUz0cF
+         9fkA==
+X-Gm-Message-State: APjAAAXz1o4+FH5gPoIocJXydWYmteqp6s24sLCAuVdjliXSdsyZDxu4
+        yvFPKKmjQ1vC08WISTm8wDvEuXO1yUU7lYgA8Co=
+X-Google-Smtp-Source: APXvYqxlHTr1UZyzC6aCajvAM4W2Nsg3YlT+KI7UUGo3jxS4zv5rW02mvvBuzLyLP3MDtSmh3sJHzcCwjpOwaw6OzaY=
+X-Received: by 2002:a9d:4f0e:: with SMTP id d14mr452420otl.90.1576025165539;
+ Tue, 10 Dec 2019 16:46:05 -0800 (PST)
 MIME-Version: 1.0
-References: <20191205142200.145252-1-linus.walleij@linaro.org>
- <20191205201936.GA19754@uda0271908> <CACRpkdb1dY-fnH8Muse7gFoxzA2PhpLFskWJ+dz6DHbvm7H7zQ@mail.gmail.com>
- <CAMpxmJWRbQOFP_Ftq7q89P-f=3A3Q_wCKaRv6Zki=UJPsPqjvg@mail.gmail.com>
-In-Reply-To: <CAMpxmJWRbQOFP_Ftq7q89P-f=3A3Q_wCKaRv6Zki=UJPsPqjvg@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Dec 2019 01:41:07 +0100
-Message-ID: <CACRpkdZLWJWsKb=qH+Go6SUAhkd8tR6LyjPAugBWKutSaE7rcg@mail.gmail.com>
-Subject: Re: [PATCH] musb: davinci: Convert to use GPIO descriptor
-To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Cc:     Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
-        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>
+References: <20191014141718.22603-1-narmstrong@baylibre.com>
+ <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
+ <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com>
+ <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
+ <c32007f5-88b9-45c5-b542-b1dc4dbc76ea@baylibre.com> <CAKgpwJVHF6Ytdt9kq5SwiixFDLym_UPG51aXag1nVVay0pzofQ@mail.gmail.com>
+ <45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com> <ce35b6d2-7ed1-be2d-6e38-4c6e89340a40@baylibre.com>
+In-Reply-To: <ce35b6d2-7ed1-be2d-6e38-4c6e89340a40@baylibre.com>
+From:   Tim <elatllat@gmail.com>
+Date:   Tue, 10 Dec 2019 19:45:54 -0500
+Message-ID: <CA+3zgmtWQwdJG5NT-t7__Mqt5u_U3m4+HEL6p4PWxx5NES7_AQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
+ disabling SS instances in park mode
+To:     Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Dongjin Kim <tobetter@gmail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Rob Herring <robh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
@@ -59,52 +75,108 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 9, 2019 at 11:41 AM Bartosz Golaszewski
-<bgolaszewski@baylibre.com> wrote:
-> pon., 9 gru 2019 o 01:25 Linus Walleij <linus.walleij@linaro.org> napisa=
-=C5=82(a):
-> >
-> > On Thu, Dec 5, 2019 at 9:20 PM Bin Liu <b-liu@ti.com> wrote:
-> > > On Thu, Dec 05, 2019 at 03:22:00PM +0100, Linus Walleij wrote:
-> > > > The DaVinci MUSB glue contains an optional GPIO line to
-> > > > control VBUS power, convert this to use a GPIO descriptor
-> > > > and augment the EVM board file to provide this descriptor.
-> > > >
-> > > > I can't get this driver to compile properly and it depends
-> > > > on broken but when I didn get it to compile brokenly, it
-> > > > did at least not complain about THIS code being broken so
-> > > > I don't think I broke the driver any more than what it
-> > > > already is.
-> > > >
-> > > > I did away with the ifdefs that do not work with
-> > > > multiplatform anyway so the day someone decides to
-> > > > resurrect the code, the path to get it working should be
-> > > > easier as well since DaVinci is now multiplatform.
-> > >
-> > > Generally I don't take such patches unless they are part of the effor=
-t
-> > > to un-broken the driver. But is this patch a prerequisite of any clea=
-nup
-> > > in DaVinci family or ARM architecture? What is the motivation of this
-> > > patch?
-> >
-> > The motivation is the clean-up of the internal GPIO API for the
-> > kernel. It is described in drivers/gpio/TODO
-> >
-> > I can propose a patch simply deleting the code if you prefer that,
-> > then whoever want to resurrect it can still get it out of git if
-> > they need. As long as nothing includes <linux/gpio.h> anymore,
-> > I am happy.
-> >
-> > Yours,
-> > Linus Walleij
+Just writing to say;
+this patch is still performing well on 5.5.0-rc1, and
+there is no speed improvement by adding DWC3_GUCTL_NAK_PER_ENH_HS BIT(17)
+    I get up to 3890 ms second lag with "ping -s 5120 $IP" when
+copying between USB HDDs either way, but at least this patch stops the
+crashing.
+
+
+On Tue, Dec 10, 2019 at 3:55 AM Neil Armstrong <narmstrong@baylibre.com> wr=
+ote:
 >
-> I have a related WiP series that removes calls to legacy GPIO API from
-> the dm355-evm which uses the same driver. Hopefully this week I'll
-> have some time to take a look at it, especially since I've got the
-> relevant HW now. Who knows, maybe I'll even resurrect this code. :)
-
-Excellent Bartosz, thanks for looking into this.
-
-Yours,
-Linus Walleij
+> Hi,
+>
+> On 12/11/2019 21:03, Thinh Nguyen wrote:
+> > Hi,
+> >
+> > Jun Li wrote:
+> >> This bug exists on all current versions per information I got from Syn=
+opsys.
+> >> + Thinh Nguyen <thinhn@synopsys.com>.
+> >>
+> >> Li Jun
+> >
+> > The GUCTL1.PARKMODE_DISABLE_SS is only available in dwc_usb3 controller
+> > running in host mode. This should not be set for other IPs.
+> >
+> > This can be disabled by default based on IP, but I recommend to have a
+> > property to enable this feature for devices that need this.
+>
+> Thanks, so this patchset is the right way to solve this.
+>
+> Felipe, would it be possible to have it merged for next release ?
+> Should I resend it ?
+>
+> Thanks,
+> Neil
+>
+> >
+> >
+> >>
+> >> Neil Armstrong <narmstrong@baylibre.com> =E4=BA=8E2019=E5=B9=B411=E6=
+=9C=8812=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=885:00=E5=86=99=E9=81=
+=93=EF=BC=9A
+> >>> Hi Li,
+> >>>
+> >>> On 11/11/2019 02:58, Jun Li wrote:
+> >>>> Hi Neil
+> >>>>
+> >>>> As I got the information from Synopsys, this bug exists on current I=
+P versions,
+> >>>> and per my tests with external USB3 hub + 2 Super speed udisks on da=
+ta
+> >>>> read by dd, I can reproduce this issue with different kernel version=
+s, also I
+> >>>> didn't see obvious performance drop by dd tests after disable park m=
+ode for
+> >>>> super speed, so should we just disable it by default so no need a qu=
+irk?
+> >>> I don't have any opinion on this, I think the USB & DWC3 maintainers =
+should decide
+> >>> how to handle this.
+> >>>
+> >>> Did Synopsys specified a range of affected IP version ?
+> >>>
+> >>> Neil
+> >>>
+> >>>> Li Jun
+> >>>>
+> >>>> Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=
+=A5=E5=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=888:42=E5=86=99=E9=81=93=EF=BC=9A
+> >>>>> Thanks for working on this Neil,
+> >>>>> Is there something that needs doing for this patch to make it into =
+5.3 or 5.4?
+> >>>>> As previously mentioned the patch set fixes the issue on affected h=
+ardware;
+> >>>>>      https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__patchwo=
+rk.kernel.org_patch_11164515_&d=3DDwIFaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3Du9F=
+YoxKtyhjrGFcyixFYqTjw1ZX0VsG2d8FCmzkTY-w&m=3DBCfRHM9e86039Su0-QvK_yUjNnYrnl=
+_BcvxTtViypT8&s=3DaV5u7uxNX6oTLB3_-qNuzrNvyiqx_rPC6P9TMqG-LNE&e=3D
+> >>>>>
+> >>>>>
+> >>>>>
+> >>>>> On Wed, Oct 23, 2019 at 4:11 PM Rob Herring <robh@kernel.org> wrote=
+:
+> >>>>>> On Mon, Oct 14, 2019 at 04:17:16PM +0200, Neil Armstrong wrote:
+> >>>>>>> This patch updates the documentation with the information related
+> >>>>>>> to the quirks that needs to be added for disabling all SuperSpeed=
+ XHCi
+> >>>>>>> instances in park mode.
+> >>>>>>>
+> >>>>>>> CC: Dongjin Kim <tobetter@gmail.com>
+> >>>>>>> Cc: Jianxin Pan <jianxin.pan@amlogic.com>
+> >>>>>>> Reported-by: Tim <elatllat@gmail.com>
+> >>>>>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
+> >>>>>>> ---
+> >>>>>>>   Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+> >>>>>>>   1 file changed, 2 insertions(+)
+> >>>>>> Sigh, what's one more to the never ending list of quirks...
+> >>>>>>
+> >>>>>> Acked-by: Rob Herring <robh@kernel.org>
+> >
+> > BR,
+> > Thinh
+> >
+>
