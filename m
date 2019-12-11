@@ -2,41 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B2111A14D
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 03:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 093D511A14E
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 03:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727536AbfLKCZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 21:25:56 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:33114 "EHLO
+        id S1727561AbfLKC0C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 21:26:02 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:33120 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727230AbfLKCZ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 21:25:56 -0500
+        by vger.kernel.org with ESMTP id S1727230AbfLKC0B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 21:26:01 -0500
 Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 66F51C0BBA;
-        Wed, 11 Dec 2019 02:25:55 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 586A5C0BB2;
+        Wed, 11 Dec 2019 02:26:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1576031155; bh=uGpipuytTO5b4imdpUVUtAyYcLl2bzSceakdLK1ldhs=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=C4rWLMvVHOEF2s4ghSfkGCR3/upqOkGIr9iwGfWy2ab4bHUtLoq6ktIZNccQ2aMm/
-         tx0tRnorjR8gae5mweM1mOUkSCjqiJH2GbRFonDo43FHWIKZz9wTYEUvg2Otz6dcs5
-         huiCzuHl3dgz1TaKqWa3yHY2y02SmC6z8pzknA/9AJWN5ZGNqc/FvY3Wruv0qefbUI
-         2w6Wadg3dGBjqWs/MikXqeIUfrnjdoclXwpqmQFm0EL/UQr4/5Vcu2uwrMiK6LCt3R
-         RfpbVotN64qZnTWfjWG8XFp7+YDdz8zv2VuTe1NN/5KlE6T3IyB9i94HFT4jdXv3Lq
-         U2HeQ+D/LGUAg==
+        t=1576031161; bh=F4WtGHXeSe2dNwnpc2CsnY/H6ze1l7a+mon+9FETNaU=;
+        h=Date:From:Subject:To:Cc:From;
+        b=RTp9Hd1jpZwXO+OpXsdEIOI7kdUmsvwJTOhCfCwBDtnnj4sdviGmmvx8k/ZFka1+Q
+         enry4Q4tH+pgMgxJ4xJAg5gDJiB0+ZalCpmnia92IfPWDrFh3Y6xZc19Y3otnEGweG
+         r/Emv57harVe1t+0DrXA91XhA2zPnMvhvzqM87AinDtz/pxtNuu8Q0x44oCxOAVUmu
+         sUcoXIg39iT10xg1GTS6PEeygtGBjm2HhtFd2JPlIuRlSuRaYcbeD4yKyPQpJu+YOH
+         pJl2rV3Pzln5QY7FcNE1YOXWwRhVQJRimVVDEY30StvXl2gFjFSd4cuLGdhUitlDZJ
+         2OxuSsP9avTdw==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1C8B2A0066;
-        Wed, 11 Dec 2019 02:25:54 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Tue, 10 Dec 2019 18:25:54 -0800
-Date:   Tue, 10 Dec 2019 18:25:54 -0800
-Message-Id: <2129c01baf47afc46c0d7d4a7567dff72193abc4.1576030839.git.thinhn@synopsys.com>
-In-Reply-To: <cover.1576030839.git.thinhn@synopsys.com>
-References: <cover.1576030839.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 2B49FA005E;
+        Wed, 11 Dec 2019 02:26:00 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Tue, 10 Dec 2019 18:26:00 -0800
+Date:   Tue, 10 Dec 2019 18:26:00 -0800
+Message-Id: <20c05d4e60c97b03314ede8d7f2d7c29b34f665f.1576028945.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 1/2] usb: dwc3: Fix GTXFIFOSIZ.TXFDEP macro name
+Subject: [PATCH v2] usb: dwc3: gadget: Do link recovery for SS and SSP
 To:     Felipe Balbi <balbi@kernel.org>
 Cc:     John Youn <John.Youn@synopsys.com>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -46,51 +44,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Change the macro name DWC3_GTXFIFOSIZ_TXFDEF to DWC3_GTXFIFOSIZ_TXFDEP
-to match with the register name GTXFIFOSIZ.TXFDEP.
+The controller always supports link recovery for device in SS and SSP.
+Remove the speed limit check. Also, when the device is in RESUME or
+RESET state, it means the controller received the resume/reset request.
+The driver must send the link recovery to acknowledge the request. They
+are valid states for the driver to send link recovery.
 
-Fixes: 457e84b6624b ("usb: dwc3: gadget: dynamically re-size TxFifos")
-Fixes: 0cab8d26d6e5 ("usb: dwc3: Update DWC_usb31 GTXFIFOSIZ reg fields")
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Fixes: ee5cd41c9117 ("usb: dwc3: Update speed checks for SuperSpeedPlus")
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
 Changes in v2 -
   Added Fixes tags
 
- drivers/usb/dwc3/core.h   | 4 ++--
- drivers/usb/dwc3/gadget.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/dwc3/gadget.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 1c8b349379af..6a6baadcb697 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -305,8 +305,8 @@
- 
- /* Global TX Fifo Size Register */
- #define DWC31_GTXFIFOSIZ_TXFRAMNUM	BIT(15)		/* DWC_usb31 only */
--#define DWC31_GTXFIFOSIZ_TXFDEF(n)	((n) & 0x7fff)	/* DWC_usb31 only */
--#define DWC3_GTXFIFOSIZ_TXFDEF(n)	((n) & 0xffff)
-+#define DWC31_GTXFIFOSIZ_TXFDEP(n)	((n) & 0x7fff)	/* DWC_usb31 only */
-+#define DWC3_GTXFIFOSIZ_TXFDEP(n)	((n) & 0xffff)
- #define DWC3_GTXFIFOSIZ_TXFSTADDR(n)	((n) & 0xffff0000)
- 
- /* Global Event Size Registers */
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 3dcdde9080f5..5da266173146 100644
+index a9aba716bf80..3dcdde9080f5 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -2216,9 +2216,9 @@ static int dwc3_gadget_init_in_endpoint(struct dwc3_ep *dep)
+@@ -1712,7 +1712,6 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	u32			reg;
  
- 	size = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(dep->number >> 1));
- 	if (dwc3_is_usb31(dwc))
--		size = DWC31_GTXFIFOSIZ_TXFDEF(size);
-+		size = DWC31_GTXFIFOSIZ_TXFDEP(size);
- 	else
--		size = DWC3_GTXFIFOSIZ_TXFDEF(size);
-+		size = DWC3_GTXFIFOSIZ_TXFDEP(size);
+ 	u8			link_state;
+-	u8			speed;
  
- 	/* FIFO Depth is in MDWDITH bytes. Multiply */
- 	size *= mdwidth;
+ 	/*
+ 	 * According to the Databook Remote wakeup request should
+@@ -1722,16 +1721,13 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+ 	 */
+ 	reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+ 
+-	speed = reg & DWC3_DSTS_CONNECTSPD;
+-	if ((speed == DWC3_DSTS_SUPERSPEED) ||
+-	    (speed == DWC3_DSTS_SUPERSPEED_PLUS))
+-		return 0;
+-
+ 	link_state = DWC3_DSTS_USBLNKST(reg);
+ 
+ 	switch (link_state) {
++	case DWC3_LINK_STATE_RESET:
+ 	case DWC3_LINK_STATE_RX_DET:	/* in HS, means Early Suspend */
+ 	case DWC3_LINK_STATE_U3:	/* in HS, means SUSPEND */
++	case DWC3_LINK_STATE_RESUME:
+ 		break;
+ 	default:
+ 		return -EINVAL;
 -- 
 2.11.0
 
