@@ -2,84 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CFC711A64C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 09:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D7711A67C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 10:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728365AbfLKIxq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 03:53:46 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:39331 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726983AbfLKIxq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 03:53:46 -0500
-Received: by mail-lj1-f196.google.com with SMTP id e10so23099523ljj.6
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 00:53:44 -0800 (PST)
+        id S1727298AbfLKJKK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 04:10:10 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36775 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727253AbfLKJKK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 04:10:10 -0500
+Received: by mail-pj1-f66.google.com with SMTP id n96so8695038pjc.3
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 01:10:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=kshy38W1TW5FXCvp8jFWU0CvYYATg6x7lAa7FeX+g98=;
+        b=VvYsaohLHNLu1EsIcFYVeHXp6vjcfYisrZwhSu9udjpgErWFl3auubw8w2EULCLTjW
+         7lCnNJvdA8YwdlrGyxGgo30+eMCZ2MHsDaPfs1YfVOszcCdAI0ApJk+q/IMz3UvMZXYT
+         dlH/y2/3/O8fge92j4W5E+MzjilrAE1gzW9viZWKkMbJJFWlQZXdxnLsF2PBHFBcrIEk
+         Vj4Yidp3jCG6JymJ7c38Qn+lmd3+/mTD++RKTApfTYY9nbUSBd1Fjg81l3BBe7X5ex6x
+         VHnmgQ90YutVOO2g8mm9glIq4FNPb5R+lyxm/S2RV7JR3Sj5gVWYDjtve1Aa5p7hrhpa
+         pJGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zSls4t623tUVEVK9z4n8AGT6MLJJOckHndddKIzts7E=;
-        b=OXsWanpQsPDeIInLdjPOrRg5ZiCvfhIXWjMFUGP/v3D38PoyUE1Am0NnijBrQJBHUd
-         AsHPL6tj3oH4p7A4QUXdl4o4d0ayjBoD3RX+8i+Hk2miszkwyg/wVZw4AMOUb/f2/nE2
-         i7ve1koXgd42O6EzuaecP76CZSq4Gm4MZQZnmxRwuQqtK812PsQUwzhlp0rVOXbHojbM
-         rOX+Nr9fwyQSpNxMXvqYeQfHEcPLCQNSGNOUIG/mB8i8Lw/jr6tVPi9dBN4iQCE7WP2O
-         sVxvpkDiZwJ4VPVlV/BbRr1GWs3pjovy5RdmrH6A++B8Y8rzHgF+wglmVO7lEhAKIbQn
-         8gwQ==
-X-Gm-Message-State: APjAAAUdeODEEe+FGl3yYnS18scUhuBUUNjmYoR5+nTX144lcqMbvs8p
-        BmmJB5hiPTkpnF7IWJeQDSAKtuiV
-X-Google-Smtp-Source: APXvYqw5k68mza6DznzCz4K9bfXKO4RpdnDN5ZhAhFaP36pk7MK9+NamfryBA0wUJp5P8s4PS90zkg==
-X-Received: by 2002:a2e:6a03:: with SMTP id f3mr1252913ljc.232.1576054423789;
-        Wed, 11 Dec 2019 00:53:43 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id u20sm702607lju.34.2019.12.11.00.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 00:53:42 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1iexkf-00030J-3E; Wed, 11 Dec 2019 09:53:45 +0100
-Date:   Wed, 11 Dec 2019 09:53:45 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Johan Hovold <johan@kernel.org>, Bin Liu <b-liu@ti.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] usb: musb: sunxi: propagate devicetree node to glue
- pdev
-Message-ID: <20191211085345.GT10631@localhost>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=kshy38W1TW5FXCvp8jFWU0CvYYATg6x7lAa7FeX+g98=;
+        b=EkQWLeqkbzrvxO73DIeJvAOfmOgIv0oJPQ/cxkqIdkzt5HFYFHSnwOGPiaF0fkLG12
+         1Y9Z5OZxI5WvE7GuJ3jQiv1SfBC77KWenqd3XDfo5UuXRrt+gSdE7uwRsX3WYdXib14g
+         e/F75TkBD5mZadZIzFAdA5R0s2nW1BsLMSjJv8PCI7G278QtRrCXa3uVgDgP6/k81rPF
+         JnMd01EAckWykevo9YP8ZIMmKuJI6fq2auu/uxBcAIE5ulDyg7SZc9f2nYH7oOiDltpy
+         9f6YW9aeV6jRZW2tXs5ctc+Rt5XpwF2zf0I9rkPvJqi0KkYGe7tlkRS4x39tR/uCgrQ0
+         kadw==
+X-Gm-Message-State: APjAAAU7JszgA1MpLV/ura1K6+qF/VBWs7mwvt1euhbGWkSF9h9aoiSU
+        g2MI3+ZvpQHXT9F84FKixtptnTYa
+X-Google-Smtp-Source: APXvYqy00NcoYzfFDWZsw4R/oEEywdy4MgVAIQ1Luoomf9Z7sGlSjC1zyIz4BRA0KU0zAUOoaDoDvw==
+X-Received: by 2002:a17:902:6909:: with SMTP id j9mr2116170plk.136.1576055409630;
+        Wed, 11 Dec 2019 01:10:09 -0800 (PST)
+Received: from ?IPv6:2402:f000:1:1501:200:5efe:166.111.139.117? ([2402:f000:1:1501:200:5efe:a66f:8b75])
+        by smtp.gmail.com with ESMTPSA id u3sm1945556pga.72.2019.12.11.01.10.07
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 11 Dec 2019 01:10:09 -0800 (PST)
+Subject: Re: [PATCH 2/2] usb: musb: Fix a possible null-pointer dereference in
+ musb_handle_intr_connect()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bin Liu <b-liu@ti.com>
+Cc:     linux-usb@vger.kernel.org
 References: <20191210165454.13772-1-b-liu@ti.com>
- <20191210165454.13772-2-b-liu@ti.com>
- <20191211080528.GA415633@kroah.com>
- <20191211084935.GS10631@localhost>
- <20191211085122.GA500642@kroah.com>
+ <20191210165454.13772-3-b-liu@ti.com> <20191211080910.GA426347@kroah.com>
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+Message-ID: <dc1cbf76-a2c4-a861-0847-d3434b843fee@gmail.com>
+Date:   Wed, 11 Dec 2019 17:10:17 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191211085122.GA500642@kroah.com>
+In-Reply-To: <20191211080910.GA426347@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 09:51:22AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Dec 11, 2019 at 09:49:35AM +0100, Johan Hovold wrote:
-> > On Wed, Dec 11, 2019 at 09:05:28AM +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Dec 10, 2019 at 10:54:53AM -0600, Bin Liu wrote:
-> > > > From: Mans Rullgard <mans@mansr.com>
-> > > > 
-> > > > In order for devicetree nodes to be correctly associated with attached
-> > > > devices, the controller node needs to be propagated to the glue device.
-> > > > 
-> > > > Signed-off-by: Mans Rullgard <mans@mansr.com>
-> > > > Signed-off-by: Bin Liu <b-liu@ti.com>
-> > > > ---
-> > > >  drivers/usb/musb/sunxi.c | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > 
-> > > Does this need to go to stable kernel(s)?  If so, what commit does this
-> > > fix fix?
-> > 
-> > No, I'd say it's a new feature.
-> 
-> Then why is it needed for 5.5-final and not for 5.6-rc1?
 
-Right, it shouldn't be needed in 5.5.
 
-Johan
+On 2019/12/11 16:09, Greg Kroah-Hartman wrote:
+> On Tue, Dec 10, 2019 at 10:54:54AM -0600, Bin Liu wrote:
+>> From: Jia-Ju Bai <baijiaju1990@gmail.com>
+>>
+>> In musb_handle_intr_connect(), there is an if statement on line 783 to
+>> check whether musb->hcd is NULL:
+>>      if (musb->hcd)
+>>
+>> When musb->hcd is NULL, it is used on line 797:
+>>      musb_host_poke_root_hub(musb);
+>>          if (musb->hcd->status_urb)
+>>
+>> Thus, a possible null-pointer dereference may occur.
+> Maybe, if musb->hcd really ever could be NULL.
+>
+> In looking at the code, I don't see where that could happen, do you?
+> Why is that check there in the first place?
+>
+> What sets musb->hcd to NULL in the first place?
+
+In fact, my static analysis tool identifies an if check about musb->hcd, 
+so it infers that musb->hcd could be NULL here.
+But it does not try to find any explicit place that set musb->hcd to NULL.
+
+If musb->hcd is never NULL here, we can just delete the related if check.
+
+
+Best wishes,
+Jia-Ju Bai
