@@ -2,98 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D33119F21
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 00:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8652B11A021
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 01:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfLJXOM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 18:14:12 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:34481 "EHLO
+        id S1726608AbfLKAlV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 19:41:21 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:35919 "EHLO
         mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726631AbfLJXOM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 18:14:12 -0500
-Received: by mail-lf1-f68.google.com with SMTP id l18so15153697lfc.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 15:14:10 -0800 (PST)
+        with ESMTP id S1726062AbfLKAlV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 19:41:21 -0500
+Received: by mail-lf1-f68.google.com with SMTP id n12so15280163lfe.3
+        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 16:41:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y5an3uiCjiV6aBec5mJqVa6m+5HL+owl0rpw015ZHfA=;
-        b=hzjb1Oz0AtzDCvW5qERw8MVMMnLibZJXse6EPTaHJ0Wau59lgzmAYrKFNYXyXtZQsQ
-         au0JvCMJprf93j96pKv/cC3r90VJ8x2snYOqYHjeRY8X2yrCmdERVmR3bQN0Kbx2zGc9
-         TmIPzAyzkhin2IOwu/vkLtZjCQklziqVfAA5SX7UKAaj4BZe97LfBoWZmghZNL+8in5V
-         lxcTg89A8NuxwqRCwseesKL7DspdeXShGTrnlPaMFPxTGh9ZMjYsUBQ5GCyZ4HWXZzd6
-         iASO5Gtq96X5Cd472ViaoQM6BXXsK8Nmj0IaYItnrdqo3ODO//dkTqET456pyFMsUZHh
-         THvg==
+         :cc:content-transfer-encoding;
+        bh=Fid9ZEccLBptzoOJUgvqGVoJRsstB5d1nYDlvhpYNSg=;
+        b=JG3KwdCUiVNMSTx7r0pzWyjVfD4m7NeN/mcgO0qKMj4CVWBxgwvAWDaKFtrgWVhboQ
+         HRsn3Qyx8I9cJvSMhRzC9yaWn5jD7rdAGxHbWaNAWC5K7ftuCrIMPHswXTZXRN0V16St
+         9/T0uTq+RU864TLg7/3C47EjONKCVttEJ7ojJgVOVt81Q2yOXMAvBairnnCVoRlyLRs/
+         zrn5iJhF15QDsKFmSAmozEtC3+vqnbkYLXa4JV5sNore9CjZ9FH9s29B7MlvPkXhKQin
+         FVmzlXmAOm6Ga8s0TszglWJ/EVNXYFXsIKHm7e/U0r47s2tgjXQRaY5GNWr5iEb9O5xb
+         fPXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y5an3uiCjiV6aBec5mJqVa6m+5HL+owl0rpw015ZHfA=;
-        b=pD3omo46TM0E1DxPgRmhK5Xl2WG4icaJps6LC1RbECNvpOIL81kG26r3l5MOho7eZL
-         B/thUEwgrPDQvMeF+ws0by+keB00l2abdtiZGOo42qhp2qeyVZ2/5GPN9X8tu2HSLOu3
-         FMCyEiBy492R1oR1Y4/Mm0xhpLvtD1Au2t8SKjR4VE5wf8dVheppjxU/mbF4V8A/FtT7
-         D8NhlllLZMM7o+C6rvVn7UbMfCW/g1q4Cz1XdLonlUj2dpmMsjog3DFsB5621cW98JR3
-         k8aCiQyzrp8jAY/F3V2fp5lYbj8Kiz4OdxBcIQWN9LSS70wsFnGSXLcUYpkqcRPq0lbs
-         pTTg==
-X-Gm-Message-State: APjAAAW5T/2D5DTnfvecDfMq3t4hjY59yxtZPH9nVCF0G/HH860YM7b/
-        Hce9puVz89CMf3hQiI0bqLLqPc22LC73/+/jAw2xyEpZ3Co=
-X-Google-Smtp-Source: APXvYqxUWR4LFsaDQ+gNcyuSyBeEU+H1QqKIJozS4it8NsollBoDp1T3SH1r3kAZ+wHIG37+HuSFWHfxBxENG8ljbyo=
-X-Received: by 2002:ac2:4945:: with SMTP id o5mr219870lfi.93.1576019650100;
- Tue, 10 Dec 2019 15:14:10 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Fid9ZEccLBptzoOJUgvqGVoJRsstB5d1nYDlvhpYNSg=;
+        b=XDildU1t6GbRXlYd1iyo+BijQg/+C9uL9Q5Sju5gD3KS4Ktw28kjZvshdejL+7VBPJ
+         0DsWS8dgE4LkN9e05nqwnM1cqaN5GjkM9JiB+QARbPoUp4kcQ2BBs4Zb5uKM70vQ0u6X
+         d7333+vfc0oExoJgobVkRmJ4s+R5l8tDpePS3cjJEJw6UIQKNmW9Ji7WoH0uhbn5b36l
+         bUTzmXEItohec4Ro+rX/m/zMxt6IguE+ZKm/guo1S4fg2OwuWNzw3FLs+ve6Q1hy5ew8
+         Rss6dLDnxdfxqFsTb1/RqRMkqpsh4zOBe0diro+ysRc/P4aUKkBhCdQK6Ts3aOSuleeF
+         VChA==
+X-Gm-Message-State: APjAAAV8imabQuowZwIqJwfWVUvUXS5t0fDv3OOpl8JVK8a48p356jI9
+        +5zNnOF60Z79GodUG8clv7BUVZj7GY0Trzw3a1i7QA==
+X-Google-Smtp-Source: APXvYqxXaC784UcLWEbh36E4RfuirOQlzwnQX6O81XmmUmoIhTqxDQidxOuKIc2qZThQbLcPv8uIqCkIIFTQssOAyOY=
+X-Received: by 2002:ac2:5c4b:: with SMTP id s11mr387792lfp.133.1576024879216;
+ Tue, 10 Dec 2019 16:41:19 -0800 (PST)
 MIME-Version: 1.0
-References: <CGME20191205145641eucas1p1e3f40dff8a0c8e9ca47425e2370eabbb@eucas1p1.samsung.com>
- <20191205145633.187511-1-linus.walleij@linaro.org> <39902b1d-656c-2dc9-34bc-3bfe715db22f@samsung.com>
- <e4ba86d5-3c25-8b2c-981c-efaad4ebc60c@samsung.com> <CACRpkdaV9zoVzpZ3SW-Nvjo6ytUCEjA6fWuW1FSBciQ24j5SZg@mail.gmail.com>
- <402598f1-3230-c48f-c1c0-feda19cb2261@samsung.com> <CACRpkdZBOFXxm_n+A+Oz=MubkSTKG7aUX+9jonB5vm+_XPK_DA@mail.gmail.com>
- <bb1432d3-1fee-9c3d-0ae1-af305deed636@samsung.com>
-In-Reply-To: <bb1432d3-1fee-9c3d-0ae1-af305deed636@samsung.com>
+References: <20191205142200.145252-1-linus.walleij@linaro.org>
+ <20191205201936.GA19754@uda0271908> <CACRpkdb1dY-fnH8Muse7gFoxzA2PhpLFskWJ+dz6DHbvm7H7zQ@mail.gmail.com>
+ <CAMpxmJWRbQOFP_Ftq7q89P-f=3A3Q_wCKaRv6Zki=UJPsPqjvg@mail.gmail.com>
+In-Reply-To: <CAMpxmJWRbQOFP_Ftq7q89P-f=3A3Q_wCKaRv6Zki=UJPsPqjvg@mail.gmail.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 11 Dec 2019 00:13:58 +0100
-Message-ID: <CACRpkdbPpxY2s8fqNuoYcrQUY1TJXmy__qbJ6nbw4XYrqtNHNQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: usb3503: Convert to use GPIO descriptors
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Krzysztof Kozlowski <krzk@kernel.org>
+Date:   Wed, 11 Dec 2019 01:41:07 +0100
+Message-ID: <CACRpkdZLWJWsKb=qH+Go6SUAhkd8tR6LyjPAugBWKutSaE7rcg@mail.gmail.com>
+Subject: Re: [PATCH] musb: davinci: Convert to use GPIO descriptor
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Bin Liu <b-liu@ti.com>, linux-usb <linux-usb@vger.kernel.org>,
+        Sekhar Nori <nsekhar@ti.com>, Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 9, 2019 at 5:33 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
-> On 06.12.2019 14:43, Linus Walleij wrote:
-> > On Fri, Dec 6, 2019 at 12:43 PM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
+On Mon, Dec 9, 2019 at 11:41 AM Bartosz Golaszewski
+<bgolaszewski@baylibre.com> wrote:
+> pon., 9 gru 2019 o 01:25 Linus Walleij <linus.walleij@linaro.org> napisa=
+=C5=82(a):
 > >
-> >> arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts: invert RESET
-> >> gpio polarity (to ACTIVE_LOW), not sure about INTN gpio
-> > AFAICT INTN should be set to ACTIVE_HIGH if it is working with the
-> > current code in the kernel.
+> > On Thu, Dec 5, 2019 at 9:20 PM Bin Liu <b-liu@ti.com> wrote:
+> > > On Thu, Dec 05, 2019 at 03:22:00PM +0100, Linus Walleij wrote:
+> > > > The DaVinci MUSB glue contains an optional GPIO line to
+> > > > control VBUS power, convert this to use a GPIO descriptor
+> > > > and augment the EVM board file to provide this descriptor.
+> > > >
+> > > > I can't get this driver to compile properly and it depends
+> > > > on broken but when I didn get it to compile brokenly, it
+> > > > did at least not complain about THIS code being broken so
+> > > > I don't think I broke the driver any more than what it
+> > > > already is.
+> > > >
+> > > > I did away with the ifdefs that do not work with
+> > > > multiplatform anyway so the day someone decides to
+> > > > resurrect the code, the path to get it working should be
+> > > > easier as well since DaVinci is now multiplatform.
+> > >
+> > > Generally I don't take such patches unless they are part of the effor=
+t
+> > > to un-broken the driver. But is this patch a prerequisite of any clea=
+nup
+> > > in DaVinci family or ARM architecture? What is the motivation of this
+> > > patch?
 > >
-> > However it is pretty confusing with the "N" at the end of INTN,
-> > indicating negative polarity. Maybe it means something else,
-> > I haven't checked the datasheet. Maybe all boards have inverters
-> > on these lines so they come out active high.
+> > The motivation is the clean-up of the internal GPIO API for the
+> > kernel. It is described in drivers/gpio/TODO
+> >
+> > I can propose a patch simply deleting the code if you prefer that,
+> > then whoever want to resurrect it can still get it out of git if
+> > they need. As long as nothing includes <linux/gpio.h> anymore,
+> > I am happy.
+> >
+> > Yours,
+> > Linus Walleij
 >
-> Well, this line is indeed active low. The datasheet names it 'int_n'.
-> However I think it makes sense to keep it as ACTIVE_HIGH, because the
-> 'n' is already in the gpio name (and dt binding). In contrary, the reset
-> gpio pin/binding is named without the 'n', thus I want to clarify it as
-> active low. The datasheet names it 'reset_n'.
+> I have a related WiP series that removes calls to legacy GPIO API from
+> the dm355-evm which uses the same driver. Hopefully this week I'll
+> have some time to take a look at it, especially since I've got the
+> relevant HW now. Who knows, maybe I'll even resurrect this code. :)
 
-Agreed.
-
-> If you are okay with this approach, I will send a patchset fixing
-> polarity in DTS together with your patch converting the driver to gpio
-> descriptors with the fixup for the reset gpio polarity.
-
-Yes this approach should work, will you fold in fixes to my
-patch (like asserting reset high) as well or do you want me
-to send a v2?
+Excellent Bartosz, thanks for looking into this.
 
 Yours,
 Linus Walleij
