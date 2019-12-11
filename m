@@ -2,142 +2,217 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E4211A480
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 07:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E4A11A4C8
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 08:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728033AbfLKG1L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 01:27:11 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:46351 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727958AbfLKG1K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 01:27:10 -0500
-Received: by mail-pl1-f196.google.com with SMTP id k20so986816pll.13
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 22:27:10 -0800 (PST)
+        id S1726451AbfLKHE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 02:04:29 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41674 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726151AbfLKHE3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 02:04:29 -0500
+Received: by mail-lf1-f65.google.com with SMTP id m30so15767211lfp.8
+        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 23:04:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=+2OIhcsv7+Ya8FvLqq5aM0OeC7F+VfxerqHBeKPZ98U=;
-        b=hY5dH80IcKlg9pZiU1BrkH59S/TNd41X3cqWEBo4nIWNXyuO4UY1sUQmGAG/kXqvPp
-         IJQl5Qe0yBS9iZAjStjWIeM4QyTYt6JsO2EPVqfrZhVufe+EPLtu90/27vShlH2X/phb
-         U5aGGJu7+jzX0UIk+0HJIpedKobMWkLna2YP4QUKbMyoCD3x/qCvyLU7GOpsyj0gNmPJ
-         iZPrwn8Yn+pVIvfL9P0bfwDaav7T+jHOR+bS+Ed8l35zD/kbxsY1BqynFRZDfxPqxM/9
-         7Uu4is89/ukp/YgGuzmyL7L5TgRftEm3rKD2E8IZcXI/NxC2ne5EbEPENXy0wEz6tdQt
-         VUNg==
+        d=vincit.fi; s=ticniv;
+        h=from:to:cc:references:in-reply-to:subject:date:message-id
+         :mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=XNMG6GKj2NXVBB37gpma/mg5NGu0I4q3OQ4Bmc6kCpo=;
+        b=EwePhHWY21uWZ5nancuGAA3ZZL8vqNmmB+tbJnRIxrjwIbKk9FVmRobcWGcREoXjwi
+         WLfVyu5iuO6WcGM20DO1ehjQk78sjtb9Qc9tSZYNKOCsS8nKxIoKd1rjurnLPstJwrRR
+         m5DnCW0y7r7iziVFdO+LJgdWkdwe4pJPk+Cds=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=+2OIhcsv7+Ya8FvLqq5aM0OeC7F+VfxerqHBeKPZ98U=;
-        b=gOizRNRSNfNNcNeMV77SN4Vh/b9ZjO5PitMlZh66CDC+Ck9CHpjgeGjSX0bArXIdkN
-         PUei3ofaNnicICxYeKkLF8n5CgyEiFPjZNy/+QCIhhvKv+xTDEGRTDEbfI7Qk/nYe7Zd
-         m/KygyqnH5aiXhX8pc6KpOJw9xAQN6zAjR63I7yjrsxEP1sA0x5Lmk0ke16kGpbhJd1u
-         rBNpg/s5pQLtSQ0WNSssetuP6Xw1hvobJbZSlWVRnpvAqd9iviwXWv690FzoTfTP+0yH
-         r0x0mO6Cmwycj2r3v0ihWhIoF4nd3q3loodl1hWDJvkDbx8TEuCFmhZJ5h0pOCK3mutT
-         UeWQ==
-X-Gm-Message-State: APjAAAUS/E8I9WsPrmYASYoxeCuWodfzFHdPvzkqwpuf4zY8hNw7XwhI
-        R9Y+SLRtnq2fgCuFav443jyk8fxo
-X-Google-Smtp-Source: APXvYqyhPox4VtlZY7mBAdujGwIfI/KIr+SCTngCT81nj/5tRTn2ZlRPszpMSnziMWyoFj7UBXwJzQ==
-X-Received: by 2002:a17:902:9a94:: with SMTP id w20mr1484866plp.54.1576045630095;
-        Tue, 10 Dec 2019 22:27:10 -0800 (PST)
-Received: from localhost.localdomain ([163.152.162.99])
-        by smtp.gmail.com with ESMTPSA id z23sm1119287pgj.43.2019.12.10.22.27.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 22:27:09 -0800 (PST)
-Date:   Wed, 11 Dec 2019 15:27:05 +0900
-From:   Suwan Kim <suwan.kim027@gmail.com>
-To:     Marek =?iso-8859-1?Q?Marczykowski-G=F3recki?= 
-        <marmarek@invisiblethingslab.com>
-Cc:     linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Valentina Manea <valentina.manea.m@gmail.com>
-Subject: Re: "usbip: Implement SG support to vhci-hcd and stub driver" causes
- a deadlock
-Message-ID: <20191211062705.GA11367@localhost.localdomain>
-References: <20191206065058.GA9792@localhost.localdomain>
- <20191206205742.GP1122@mail-itl>
- <20191209020130.GA2909@localhost.localdomain>
- <20191209033740.GA27394@mail-itl>
- <20191209063543.GA2473@localhost.localdomain>
- <20191209141959.GC11116@mail-itl>
- <20191210142535.GA4489@localhost.localdomain>
- <20191210153221.GG11116@mail-itl>
- <20191211030754.GA5190@localhost.localdomain>
- <20191211032032.GL11116@mail-itl>
+        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
+         :message-id:mime-version:content-transfer-encoding:thread-index
+         :content-language;
+        bh=XNMG6GKj2NXVBB37gpma/mg5NGu0I4q3OQ4Bmc6kCpo=;
+        b=G25Zh4YQKRV5II7aKaW92YLFJcCSPmvqB5JG5E3UBGhC7Wp9L/L7GcNi8yGVOuZBrb
+         7GBWE7g2+awX+iL87dTAWxFuksk0txfCXnMExT7Vn5kqkS6n7axwwtsCrYKQiKrJzSNa
+         mWQFFTcfp89tZ54eQ2XDqwyY1FgnirwT9DJ1kYgos2BDGlN+HfRloQT4e+K57n39r4k1
+         HqnLgmwNE8CqQIspzkC3yQt7rsX3rL2gE/ItJwSNTGD+wD92XfuOZQy4GwqQAMA/f+/8
+         3n420p4TtBOAJfepLDOxwnMPone4bgIx+19K0bNglMdn7HXDpNk6FIBnTfG6fVLLEj4m
+         +rgw==
+X-Gm-Message-State: APjAAAXLX4HElFo6W3N3itAagwHa9BLJyaYWlBxYaWBPE8zhctf/0AaW
+        yZXNBvvxGSzxSx/+Xr9NsDlntA==
+X-Google-Smtp-Source: APXvYqzt2W7l/AwM7TWljKqCEncujBjPPRV0Y2SAdAdZwpG8jO5JyK/5woahh4JAPKBdhI41X1xs2A==
+X-Received: by 2002:ac2:48bc:: with SMTP id u28mr1098708lfg.81.1576047866454;
+        Tue, 10 Dec 2019 23:04:26 -0800 (PST)
+Received: from LAPTOPJ4R3A4KE ([213.255.177.137])
+        by smtp.gmail.com with ESMTPSA id y72sm594353lfa.12.2019.12.10.23.04.24
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 10 Dec 2019 23:04:25 -0800 (PST)
+From:   "Erkka Talvitie" <erkka.talvitie@vincit.fi>
+To:     "'Alan Stern'" <stern@rowland.harvard.edu>
+Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
+        <claus.baumgartner@med.ge.com>
+References: <1ec66c398699e95ca2b5755f6cbb8c5d2453dd71.1575893227.git.erkka.talvitie@vincit.fi> <Pine.LNX.4.44L0.1912101004240.1647-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912101004240.1647-100000@iolanthe.rowland.org>
+Subject: RE: [PATCH] USB: EHCI: Do not return -EPIPE when hub is disconnected
+Date:   Wed, 11 Dec 2019 09:04:22 +0200
+Message-ID: <000401d5aff1$387f1790$a97d46b0$@vincit.fi>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191211032032.GL11116@mail-itl>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQGmTT+zG7Q1oofVq4vr3p+FUaNtWagTQahA
+Content-Language: fi
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 04:20:32AM +0100, Marek Marczykowski-Górecki wrote:
-> On Wed, Dec 11, 2019 at 12:07:54PM +0900, Suwan Kim wrote:
-> > HCD should giveback URB to driver calling usb_hcd_giveback_urb().
-> > But in the case of transaction error, vhci_recv_ret_submit()
-> > terminates without giveback URB. So, I think the error path in
-> > usbip_recv_xbuff and usbip_recv_iso should unlink URB from ep and
-> > insert proper error code in urb->status that indicates error
-> > status to driver and handle giveback URB to driver.
-> > 
-> > Then hub_irq doesn't need to flush error URB.
-> > That will be helpful to graceful connection shutdown.
-> > 
-> > 
-> > static void vhci_recv_ret_submit(struct vhci_device *vdev,
-> > 				 struct usbip_header *pdu)
-> > ...
-> > ...
-> > 	if (usbip_recv_xbuff(ud, urb) < 0) {
-> > 		urb->status = -EPIPE;
-> > 		goto error;	// goto error path
-> > 	}
-> > 
-> > 	/* recv iso_packet_descriptor */
-> > 	if (usbip_recv_iso(ud, urb) < 0) {
-> > 		urb->status = -EPIPE;
-> > 		goto error;	// goto error path
-> > 	}
-> > ...
-> > ...
-> > error://error path
-> > 	spin_lock_irqsave(&vhci->lock, flags);
-> > 	usb_hcd_unlink_urb_from_ep(vhci_hcd_to_hcd(vhci_hcd), urb);
-> > 	spin_unlock_irqrestore(&vhci->lock, flags);
-> > 
-> > 	usb_hcd_giveback_urb(vhci_hcd_to_hcd(vhci_hcd), urb, urb->status);
-> > 
-> > 	usbip_dbg_vhci_rx("Leave\n");
-> > }
+Thanks for the review.
+
+> -----Original Message-----
+> From: Alan Stern <stern@rowland.harvard.edu>
+> Sent: tiistai 10. joulukuuta 2019 17.12
+> To: Erkka Talvitie <erkka.talvitie@vincit.fi>
+> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
+> claus.baumgartner@med.ge.com
+> Subject: Re: [PATCH] USB: EHCI: Do not return -EPIPE when hub is
+> disconnected
 > 
-> Yup, that works! Now the error is handled gracefully instead of hanging.
+> On Tue, 10 Dec 2019, Erkka Talvitie wrote:
+> 
+> > When disconnecting a USB hub that has some child device(s) connected
+> > to it (such as a USB mouse), then the stack tries to clear halt and
+> > reset device(s) which are _already_ physically disconnected.
+> >
+> > The issue has been reproduced with:
+> >
+> > CPU: IMX6D5EYM10AD or MCIMX6D5EYM10AE.
+> > SW: U-Boot 2019.07 and kernel 4.19.40.
+> >
+> > CPU: HP Proliant Microserver Gen8.
+> > SW: Linux version 4.2.3-300.fc23.x86_64
+> >
+> > In this situation there will be error bit for MMF active yet the CERR
+> > equals EHCI_TUNE_CERR + halt. Existing implementation interprets this
+> > as a stall [1] (chapter 8.4.5).
+> >
+> > The possible conditions when the MMF will be active + halt can be
+> > found from [2] (Table 4-13).
+> >
+> > Fix for the issue is to check whether MMF is active and PID Code is IN
+> > before checking for the stall. If these conditions are true then it is
+> > not a stall.
+> >
+> > What happens after the fix is that when disconnecting a hub with
+> > attached device(s) the situation is not interpret as a stall.
+> >
+> > [1] https://www.usb.org/document-library/usb-20-specification,
+> > usb_20.pdf [2]
+> >
+> https://www.intel.com/content/dam/www/public/us/en/documents/techn
+> ical
+> > -specifications/ehci-specification-for-usb.pdf
+> >
+> > Signed-off-by: Erkka Talvitie <erkka.talvitie@vincit.fi>
+> > ---
+> 
+> Basically good, but you should always run patches through the
+> scripts/checkpatch.pl script before sending them.  There are several
+places
+> where the formatting needs to be fixed.
 
-Marek, Could you test if it works too?
+Ok, I will do that.
 
-Regards,
-Suwan Kim
+> 
+> >  drivers/usb/host/ehci-q.c | 11 ++++++++++-
+> >  1 file changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
+> > index 3276304..285622d 100644
+> > --- a/drivers/usb/host/ehci-q.c
+> > +++ b/drivers/usb/host/ehci-q.c
+> > @@ -27,6 +27,10 @@
+> >
+> >
+> > /*--------------------------------------------------------------------
+> > -----*/
+> >
+> > +/* PID Codes that are used here, from EHCI specification, Table 3-16.
+*/
+> > +#define PID_CODE_IN    1
+> > +#define PID_CODE_SETUP 2
+> > +
+> >  /* fill a qtd, returning how much of the buffer we were able to queue
+> > up */
+> >
+> >  static int
+> > @@ -190,7 +194,7 @@ static int qtd_copy_status (
+> >  	int	status = -EINPROGRESS;
+> >
+> >  	/* count IN/OUT bytes, not SETUP (even short packets) */
+> > -	if (likely (QTD_PID (token) != 2))
+> > +	if (likely (QTD_PID (token) != PID_CODE_SETUP))
+> 
+> This should be "QTD_PID(token)" with no extra space before the left paren,
+> and similarly for "likely(".  I realize you just kept the code the way it
+already
+> was, but we prefer to fix formatting errors like these whenever the line
+gets
+> changed, even if it's for a different reason.
 
+Sure, I will fix those.
 
-diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-index 33f8972ba842..19a807e398eb 100644
---- a/drivers/usb/usbip/vhci_rx.c
-+++ b/drivers/usb/usbip/vhci_rx.c
-@@ -78,11 +78,11 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
+> 
+> >  		urb->actual_length += length - QTD_LENGTH
+> (token);
+> >
+> >  	/* don't modify error codes */
+> > @@ -206,6 +210,11 @@ static int qtd_copy_status (
+> >  		if (token & QTD_STS_BABBLE) {
+> >  			/* FIXME "must" disable babbling
+> device's port too */
+> >  			status = -EOVERFLOW;
+> > +		/* When MMF is active and PID Code is IN,
+> queue is halted.
+> > +		 * EHCI Specification, Table 4-13.
+> > +		 */
+> 
+> Multi-line comments should be formatted like thus:
+> 
+> 		/*
+> 		 * When MMF...
+> 		 * EHCI ...
+> 		 */
 
-        /* recv transfer buffer */
-        if (usbip_recv_xbuff(ud, urb) < 0)
--               return;
-+               urb->status = -EPIPE;
+I will fix this.
 
-        /* recv iso_packet_descriptor */
-        if (usbip_recv_iso(ud, urb) < 0)
--               return;
-+               urb->status = -EPIPE;
+> 
+> > +		} else if((token & QTD_STS_MMF) &&
+> (QTD_PID(token) == PID_CODE_IN))
+> > +{
+> 
+> Try to avoid letting code extend beyond column 80 (for example, you could
+> beak the line following the "&&").  Also, there should be a space between
+> the "if" and the left paren -- the "if" isn't a function call!
 
-        /* restore the padding in iso packets */
-        usbip_pad_iso(ud, urb);
+This is a strange thing since in my editor there is a margin line visible
+with 80 characters wide.
+And this line is inside limits, actually my editor states that the line is
+77 chars long.
+That said, I will break the line from the && and fix the if.
+
+> 
+> > +			status = -EPROTO;
+> >  		/* CERR nonzero + halt --> stall */
+> >  		} else if (QTD_CERR(token)) {
+> >  			status = -EPIPE;
+> 
+> When you fix up these minor issues and resubmit, you can add:
+> 
+> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
+
+Thank you!
+ 
+
+> 
+> Alan Stern
+
+Erkka Talvitie
+
