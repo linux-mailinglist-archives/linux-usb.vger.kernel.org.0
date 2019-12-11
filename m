@@ -2,111 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 830D011ADFF
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F1511AE21
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 15:47:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbfLKOlH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 09:41:07 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:38983 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729686AbfLKOlH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 09:41:07 -0500
-Received: by mail-lf1-f67.google.com with SMTP id y1so5572575lfb.6
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 06:41:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=q+GGh7e2EcjsBLeLLpaAmVmyjv7hx2udZkjwQtL6404=;
-        b=gJj9o8YyjLAF/bL0+I2dcXV4+2rVS1dmBlPmXJVmUpd/Aio9ruCxqMiQ9KC3VHCYqE
-         FEbMkXBcWQ9kpfUV2vr0CudexnbS/dZMwayLOD1B0HV1SJquYkylKXQNXjKGt9AL9JEc
-         668FfUfiowwGvwLKBj+YyZUbuEs2eXUR9p8h/KXWTUl+Sl3SeTfQLGCbBMJNhBTMUbSI
-         NDStcZPqvAXT/R/d1Q8bGTfoW7Jdc9oCeGyAsVwbiViu/AOTH8PzNzCbUaJRUCw6DGCs
-         WhtYWUWiOm9guH0S+4is4YUvjJFuTmeruLuK3UimL8pUPD/GhrwLGsFUHDeUdiOLdsE3
-         D71g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=q+GGh7e2EcjsBLeLLpaAmVmyjv7hx2udZkjwQtL6404=;
-        b=RMg+J6z4IKptAsuhE8s5l50EoAamr7t7aLvrkkGvaNoxAsS8v48MXKzq14XhTYY43p
-         q4LeV2n/PS93i4uhEQQ5wTuwp2TkD1sGoLvgHLUTyR4Jd19nXk1grtbp6RgSwNiukmol
-         5qHlIxcnbWQ4VHVFPMX4I+2BrDsmj9kqekcZ+eMcJ3y3wwnYfY9T2Y+L8g1QRdjXw/Rd
-         /0Xhwp3jnQU1/6xE7ddm603aDe1rOM0KjX+01nLDZgx16YOdHniIFP3eKkNNFw21ugog
-         fMmeZfTOdDEHN52zSfVFCDUht0OGl52UcCditocI3HkRP+DKcROJ4t3/gnqmrDtqYIHn
-         dsNQ==
-X-Gm-Message-State: APjAAAVXYqcL5+78GuYlmWPiRux/51ojbV+o6Dbb7o8WrKYJe7SPitYy
-        4LeazIJfvGzcVLy+CKQlZY6lWsFoHKo=
-X-Google-Smtp-Source: APXvYqxh2e93qP5NkPG4DN2YlLAcs94/hYXN4SuIYdDVurXcL74rqT+cUXLJ5A29j1SH4USKhSirDQ==
-X-Received: by 2002:ac2:4946:: with SMTP id o6mr2455641lfi.170.1576075265061;
-        Wed, 11 Dec 2019 06:41:05 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id x85sm1311939ljb.20.2019.12.11.06.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 06:41:04 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Roger Quadros <rogerq@ti.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: turn off VBUS when leaving host mode
-In-Reply-To: <20191210134815.GC26131@uda0271908>
-References: <20191113141521.1696-1-b-liu@ti.com> <87blt9psrd.fsf@gmail.com> <f12d3637-ad95-b5f5-f331-df791e85ab3a@ti.com> <87r21ncgy1.fsf@gmail.com> <20191209171522.GA26131@uda0271908> <875ziol7q5.fsf@gmail.com> <20191210134815.GC26131@uda0271908>
-Date:   Wed, 11 Dec 2019 16:41:50 +0200
-Message-ID: <87blseyle9.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+        id S1729596AbfLKOqw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 09:46:52 -0500
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:55192 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729029AbfLKOqu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 09:46:50 -0500
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20191211144649euoutp0290cfacbc2658845dc89ada3f1554486f~fWGqHDNSI0987809878euoutp02e
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 14:46:49 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20191211144649euoutp0290cfacbc2658845dc89ada3f1554486f~fWGqHDNSI0987809878euoutp02e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1576075609;
+        bh=XB9Dsgs+MX/AW0zv105VApQLwH1V9mP5dnZl5ja9Fws=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=B3eaRYB5Mr5X1qoQKjpAxqQ+/m+bFucthlmfslL7uK4t2T56Rnc4I+gqKXDSvbEZf
+         koSrdW0qg9CccebV2zHfS6EXlRLe/RLoUBYHRm6aNB3VNs41I0c7jDESUTylIJWB2j
+         Jg7xhD1QbFizIWDASrrUBTUBAG8v+5VWmkxpRvSA=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20191211144648eucas1p1f40add69b0d3c98ea90cc7eb58bfaa21~fWGpnfauJ0132701327eucas1p1t;
+        Wed, 11 Dec 2019 14:46:48 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 79.19.60679.85101FD5; Wed, 11
+        Dec 2019 14:46:48 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20191211144647eucas1p23d85dee21029f864076eece98aadd525~fWGpBdiL80793007930eucas1p2g;
+        Wed, 11 Dec 2019 14:46:47 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20191211144647eusmtrp2d8491073638ef673156b058d2fc4659a~fWGpAmAX10169801698eusmtrp20;
+        Wed, 11 Dec 2019 14:46:47 +0000 (GMT)
+X-AuditID: cbfec7f4-0e5ff7000001ed07-35-5df101584de4
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 9C.9A.07950.75101FD5; Wed, 11
+        Dec 2019 14:46:47 +0000 (GMT)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20191211144647eusmtip1c700ac96bfe3e4b5c78b020d9f2807c5~fWGoV4f1Q0906009060eusmtip1p;
+        Wed, 11 Dec 2019 14:46:47 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: [PATCH v2 0/4] USB3503: correct GPIOs polarity and update the
+ driver
+Date:   Wed, 11 Dec 2019 15:46:34 +0100
+Message-Id: <20191211144638.24676-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA0WSa0hTYRzGe3fOzjmOZscp+WKlsDBIyEuKvJlJSdApAqMPJcWopSc1ncrm
+        LP1Q6rzkKqkVZtLKpml5d96XaM1yedu8lOxDSlMoDWZ4gTS7OY/at+f//H8Pz5+Xl8JETXwP
+        Ki4xhZUnShPEhABv6Vk274sEcxL/6fdiZJ5awVFDUR0f9XfN4iivU4sjVWkdgSyWehLpp8b4
+        aNTwmECjqmGAiiydPKQrz8FQzdtxEmVlB6Lc/HI+aqzNI9Gy0cI7TDOlPyYwpn6yis+0F4+T
+        jL4yn2A+jXUQTJe2mmQay24w2b1dOFPQVAmYBb3nKcE5QWg0mxCXysr9wi4KYjVLbfzkTpdr
+        Vo2VzACZzmrgREE6CE5PaEg1EFAi+gWAQ4O1PG5YBHBwrAJ3UCJ6AUBz+/GNhM30CuOgCgC7
+        p5/gm4llk3otQdABUG1XE46FG10N4MqdojUKo80Y1KqG1yhXOgJW6mw8h8Zpb7iiyiIcWkgf
+        gq1lH3CuzwtW1b9e64O0gYRf5tsAtzgKDRlz65Ar/GZqIjm9E/5tf8rjAioAbeYakhtuAzia
+        VbSePgi7TcN8NaBWb9oL6wx+nH0EagdWcIcNaWdotbs4bGxValoeYpwthDdzRRy9Bxabajdr
+        3wyNrCMM1FqiuKeTwL7Z57y7wLP4f1UJAJXAnVUqZDGsYn8ie9VXIZUplIkxvlFJMj1Y/Uv9
+        f0yLbcDw65IR0BQQbxWWtH6XiPjSVEWazAgghYndhKbcWYlIGC1NS2flSRfkygRWYQQ7KFzs
+        LgzUzUhEdIw0hY1n2WRWvrHlUU4eGeCELNX95MtGSXrUrivKxUcd0c278z529xYr4ye3LTkL
+        +3p4QcHXBzSlx2L0D7T2yLrgwu2kt83ZHnFLTzTr5l2Q+fy83HAWZaVPPSND6S1KGwDN78IP
+        NPxeVlpnxJfvF/p3iX6G+fr4FRhGzthPh+e4Z4aoaS/83ufYr/MhEjGuiJUG+GByhfQfFhoT
+        TkcDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupikeLIzCtJLcpLzFFi42I5/e/4Xd1wxo+xBm2bzS3OPf7NYrFxxnpW
+        i9P737FYtO+by2LRvHg9m8X58xvYLTY9vsZqcXnXHDaLy80XGS1mnN/HZLFoWSuzxdojd9kt
+        mlqMLdo6l7FabF7Xzm7x89B5JgcBj8Xf7zF7bHi0mtVj56y77B6bVnWyedy5tofNY//cNewe
+        m5fUe7Sc3M/i0bdlFaPH501yAVxRejZF+aUlqQoZ+cUltkrRhhZGeoaWFnpGJpZ6hsbmsVZG
+        pkr6djYpqTmZZalF+nYJehmTfuxgLdgnWHFj0g32BsZGvi5GTg4JAROJh8d3M3cxcnEICSxl
+        lJj9/wUTREJG4uS0BlYIW1jiz7UuNoiiT4wS8zu2MIIk2AQMJbreQiREBDYwSpx5/4QFJMEs
+        cI1ZYtlmaRBbWMBXYs3fOWBTWQRUJX43N7GB2LwCthLbl1xhgdggL7F6wwHmCYw8CxgZVjGK
+        pJYW56bnFhvpFSfmFpfmpesl5+duYgTGw7ZjP7fsYOx6F3yIUYCDUYmHd8H297FCrIllxZW5
+        hxglOJiVRHiPt72LFeJNSaysSi3Kjy8qzUktPsRoCrR8IrOUaHI+MFbzSuINTQ3NLSwNzY3N
+        jc0slMR5OwQOxggJpCeWpGanphakFsH0MXFwSjUwbvbm4rSVmnjpzYlNcyNPlhgpPPm1Tf1r
+        w43JkecrC5z2JzV3L/oa7DSpws8vbppG5iF9zV0yE28e98mRnzdBd8nd0mbVnx/7Xv03+nL0
+        0Mpq/+f3DV515sc9W5s11ajhXq3DvTT1cIfVp54xfzuUeffcBw+/d5MWJAU9fFa1Tc30wF/z
+        pqd9z5RYijMSDbWYi4oTAfL3nrmdAgAA
+X-CMS-MailID: 20191211144647eucas1p23d85dee21029f864076eece98aadd525
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20191211144647eucas1p23d85dee21029f864076eece98aadd525
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20191211144647eucas1p23d85dee21029f864076eece98aadd525
+References: <CGME20191211144647eucas1p23d85dee21029f864076eece98aadd525@eucas1p2.samsung.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Dear All,
+
+A few days ago a patch for USB3503 driver has been posted (see v1 in the
+changelog below), which changes the GPIO API used by the driver to the
+new one (descriptor based). It turned out that this conversion broke USB
+HUB operation on some boards (observed on Arndale5250).
+
+Further analysis revealed that the existing code ignored the GPIO
+polarity flags in the device tree. On the other hand the current GPIO
+polarity flags used by various boards were simply incorrect, as it was
+not possible to test them properly.
+
+This patchset provides some standardisation for the GPIO polarity flags
+for USB3503 chips in various DTS files and adds matching logic to USB3503
+driver. For more information and rationale behind this approach, see the
+thread linked as v1 below.
+
+This patchset has been tested on the following boards:
+Odroid X2, U3, XU and Arndale5250.
+
+The patch for USB3503 driver should be merged one release later than the
+DTS changes to keep the affected boards working in meantime.
+
+Best regards
+Marek Szyprowski
+Samsung R&D Institute Poland
 
 
-Hi,
+Changelog:
+v2:
+- added DTS fixes, assumed that RESET GPIO should be ACTIVE_LOW and all
+  other GPIOs ACTIVE_HIGH
+- integrated a fixup for USB3503 driver inverting the logic behind the
+  RESET GPIO to match the standardised GPIOs polarity
 
-Bin Liu <b-liu@ti.com> writes:
->> > de-assert DRVVBUS. If left GCTL[PRTCAP] to OTG, grounding the ID pin
->> > would make the controller to assert DRVVBUS without any software
->> > involved. So the fix should be the following. Please let me know you
->> > comments.
->>=20
->> But that's expected, no? If port is OTG, then it must obey ID pin rules
->> specified by OTG. IIRC, dwc3 is OTG 2.x compliant, at least the version
->> TI uses.
->
-> It is expected when the usb drivers are bind to the controller. I am
-> trying to solve the issue that DRVVBUS is still asserted on both host
-> port and otg port with ID pin grounded when the drivers are unbind from
-> the controller (after modprobe -r dwc3-omap, DRVVBUS should be
-> de-asserted).
+v1: https://lore.kernel.org/linux-usb/20191205145633.187511-1-linus.walleij@linaro.org/T/
+- initial version, contains only USB3503 driver patch
 
-I see. Now I understand the scenario. Thanks for the explanation, Bin.
 
-Care to send an up-to-date patch so I can queue it?
+Patch summary:
 
-=2D-=20
-balbi
+Linus Walleij (1):
+  usb: usb3503: Convert to use GPIO descriptors
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+Marek Szyprowski (3):
+  ARM: dts: exynos: Correct USB3503 GPIOs polarity
+  ARM: dts: qcom: Correct USB3503 GPIOs polarity
+  ARM: dts: sun8i: a83t: Correct USB3503 GPIOs polarity
 
------BEGIN PGP SIGNATURE-----
+ .../boot/dts/exynos4412-odroid-common.dtsi    |  2 +-
+ arch/arm/boot/dts/exynos5250-arndale.dts      |  2 +-
+ arch/arm/boot/dts/exynos5410-odroidxu.dts     |  2 +-
+ .../dts/qcom-mdm9615-wp8548-mangoh-green.dts  |  2 +-
+ .../boot/dts/sun8i-a83t-cubietruck-plus.dts   |  2 +-
+ drivers/usb/misc/usb3503.c                    | 94 +++++++------------
+ include/linux/platform_data/usb3503.h         |  3 -
+ 7 files changed, 40 insertions(+), 67 deletions(-)
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3xAC4ACgkQzL64meEa
-mQY08g/8CxOxYFPzNwaeTVsAblg0rJtHgWR/6zIuGxYSRPHCgd+lgDeroQa2OVJ8
-bx8xVBCt4dTJ+QDRG6SRUWzlH28gxP+ChWcERD29qi9nofDEhi8ZmFYpzMjG3jN+
-uZ3wV2PSA3laIh3jL9FBZwHNWyay+ia47M0QAt8dSNaojMvoT3u6XCiU703t89qx
-rW9LKJlxuuPcRstdpRMCIPUjoBzvZSlpd3BrLfcyh3sGIhd0tuUpIbGfw7AbS8VH
-iD+TSJLEYPrKc+QYdeZoeelarrMiFLP+4boVqpFqW1Pr82DmCnSXqIt3WoLspKKb
-b8BRq87PDv6QyOMZWt7sEXcjwM/CghXRxEGsziCXtMWkZUEnbii1lsJtQPA48pVV
-nhh5RuMnviX7DoXPoLZ07lU7MfUol6XKq5XwhK1ubdKqCYHKOaw/mGufGvCEIZcc
-6ZJ3rb0acC0v1yA3p72vQbgyCQ9Ooj47PBmfYsnjysQB1H+XNcyUcIn3o2JdghdA
-t4UeQOLyLyv7zAvLzarN7TC1l3KLUkSFaS5ccK3ph7AOH1wZvVgjwt8HsMMkx6tJ
-/FNhigtReIx+m/3rclnpTI5TjvUF7X5ny5bkEH8LsSdzswjrHZZbb5SozNQV8Hap
-x/8h9GmJDL5KpswNr8qJysWzU5dWgaeS/pmTmKt3Ob8bjRAEIq8=
-=7TA6
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+2.17.1
+
