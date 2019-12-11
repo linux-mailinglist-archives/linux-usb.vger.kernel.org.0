@@ -2,58 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1022B11BC88
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 20:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBE011BD36
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 20:43:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727096AbfLKTKd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 14:10:33 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:42554 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbfLKTKc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 14:10:32 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBBJASte023513;
-        Wed, 11 Dec 2019 13:10:28 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576091428;
-        bh=nKnU1b9WLE/FNteiZVJsLC+IhQTpwehDnuT9USqSHa0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=efyKKdhCs7JAHXQmAKQgm7IzkaIJnFW0cNIZz3iguwEt/VFp3FZtzOsTLrKtySlKu
-         r9N5HZ750w23srehZjT38xfcEGpAGaarLC2F17yDJN7WPBYhDVGle8ejiLX3A+7JGF
-         TOhpOFwAQokcIRhu6W4Ily1JDl7JscvNNnb9zf3E=
-Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBBJAS6S037443
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 11 Dec 2019 13:10:28 -0600
-Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 11
- Dec 2019 13:10:28 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 11 Dec 2019 13:10:28 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBBJASrD028535;
-        Wed, 11 Dec 2019 13:10:28 -0600
-Date:   Wed, 11 Dec 2019 13:09:53 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Saurav Girepunje <saurav.girepunje@gmail.com>
-CC:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <saurav.girepunje@hotmail.com>
-Subject: Re: [PATCH] usb: musb: Fix external abort on non-linefetch
-Message-ID: <20191211190953.GH16429@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>,
-        Saurav Girepunje <saurav.girepunje@gmail.com>;,
-        gregkh@linuxfoundation.org;, linux-usb@vger.kernel.org;,
-        linux-kernel@vger.kernel.org;, saurav.girepunje@hotmail.com
-References: <20191027083616.GA13761@saurav>
+        id S1726911AbfLKTnn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 14:43:43 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:42058 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726592AbfLKTnm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 14:43:42 -0500
+Received: by mail-io1-f68.google.com with SMTP id f82so43357ioa.9
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 11:43:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WEsvDQ4frWg0g6hsrfrPUpwL5OB0pB+03rAe/lqxJKs=;
+        b=flsBnhRwZYV3x2jeRLaTFJggFGEUKvXMx7aFjFYS3tsR8jzvWNQoAoI6geow1bE3hH
+         Sm1LHlGve7GLu+f76odVmRz0tXt8hYDqPTJrJRYFvL0aMIGYCHbglAf0y9IBgG5JZcf1
+         BeLTAaE39MIUTOH4uRNWoLbPm1wDCHD8VhJPg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WEsvDQ4frWg0g6hsrfrPUpwL5OB0pB+03rAe/lqxJKs=;
+        b=G3X8XC4FR/QFHqqQDB0l3GvFALjITCYqr0qr3TUe9vtiwBFWdzKUpX1wljyLmb5dGx
+         KEtjvD5nqtpoEmdNfG1WPLr2uEkeo1K01bqlzWSg+5ZILMj67EtyKttW+L/2tFX0Fo1m
+         ayHF9MxCWbpnC7e+NEQbLx6ye1WSLw3c698q6OOdOyxeWn7oeO1AzFvWSIEG/GW6vf+B
+         A81UzFkiJOj7OJ2avIUDbWQTRSfdKgkdKOu4Vm/1IVktVWdNU3TsIQ+xgVb0ot4um++g
+         uz/4KG0WJmgygpju1FMRuDs1RfyFNOHJgS/J4wfN51Btnd4hVIC1yntQVqfM0L0gCaKy
+         HfKg==
+X-Gm-Message-State: APjAAAVuOx+IPYfyZT60dQVGBINSA4lHg4R2vxevZKQ+dsjsyrxk4OOa
+        XPnUZ3ZZOtGBf6p1wxCdsG1h1DFPou8=
+X-Google-Smtp-Source: APXvYqzLNpa+UYjRTKWFABLeqFVAo6kNWPQ85N/ai68igKIRB0iCC+fiy4HoTUWUA0Ydask9+MVHtA==
+X-Received: by 2002:a5d:8442:: with SMTP id w2mr3978520ior.8.1576093421491;
+        Wed, 11 Dec 2019 11:43:41 -0800 (PST)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id 71sm990956ilv.19.2019.12.11.11.43.40
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Dec 2019 11:43:40 -0800 (PST)
+Received: by mail-il1-f179.google.com with SMTP id f6so20497819ilh.9
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 11:43:40 -0800 (PST)
+X-Received: by 2002:a92:d581:: with SMTP id a1mr4374504iln.218.1576093420076;
+ Wed, 11 Dec 2019 11:43:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191027083616.GA13761@saurav>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <1574940787-1004-1-git-send-email-sanm@codeaurora.org> <1574940787-1004-2-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <1574940787-1004-2-git-send-email-sanm@codeaurora.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 11 Dec 2019 11:43:28 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=Uy6ryrbpzFg1sesJkWrgh05tLgvtozx0afJPF_u4-ESA@mail.gmail.com>
+Message-ID: <CAD=FV=Uy6ryrbpzFg1sesJkWrgh05tLgvtozx0afJPF_u4-ESA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] usb: dwc3: Add support for SC7180 SOC
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-usb@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -61,78 +74,49 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-On Sun, Oct 27, 2019 at 02:06:21PM +0530, Saurav Girepunje wrote:
-> While setting the usb mode from sysfs. Below error came on kernel
-> version 4.19.
-> 
-> On latest kernel vserion api name changed. Therefore API
-> name and backtrace API name are different.
-> 
->     [  821.908066] Backtrace:
->     [  821.910695] [<bf078fc0>] (musb_default_readl [musb_hdrc]) from [<bf0af738>] (dsps_musb_set_mode+0x38/0x12c [musb_dsps])
->     [  821.922059] [<bf0af700>] (dsps_musb_set_mode [musb_dsps]) from [<bf07899c>] (musb_mode_store+0xc8/0x12c [musb_hdrc])
->     [  821.933105]  r7:a0010013 r6:0000000b r5:cd79d200 r4:cb634010
->     [  821.939096] [<bf0788d4>] (musb_mode_store [musb_hdrc]) from [<c0425184>] (dev_attr_store+0x20/0x2c)
->     [  821.948593]  r7:cd79d200 r6:c5abbf78 r5:00000000 r4:bf0788d4
->     [  821.954549] [<c0425164>] (dev_attr_store) from [<c0285b08>] (sysfs_kf_write+0x48/0x4c)
->     [  821.962859]  r5:00000000 r4:c0425164
->     [  821.966620] [<c0285ac0>] (sysfs_kf_write) from [<c0285274>] (kernfs_fop_write+0xfc/0x1fc)
->     [  821.975200]  r5:00000000 r4:cd79d080
->     [  821.978966] [<c0285178>] (kernfs_fop_write) from [<c020ec00>] (__vfs_write+0x34/0x120)
->     [  821.987280]  r10:00000000 r9:0000000b r8:00000000 r7:0000000b r6:c5abbf78 r5:c0285178
->     [  821.995493]  r4:cb67a3c0
->     [  821.998160] [<c020ebcc>] (__vfs_write) from [<c020fae8>] (vfs_write+0xa8/0x170)
->     [  822.005835]  r9:0000000b r8:00000000 r7:c5abbf78 r6:000def80 r5:cb67a3c0 r4:0000000b
->     [  822.013969] [<c020fa40>] (vfs_write) from [<c02108d0>] (SyS_write+0x44/0x98)
->     [  822.021371]  r9:0000000b r8:000def80 r7:00000000 r6:00000000 r5:cb67a3c0 r4:cb67a3c0
->     [  822.029517] [<c021088c>] (SyS_write) from [<c010d8a0>] (ret_fast_syscall+0x0/0x3c)
->     [  822.037467]  r9:c5aba000 r8:c010daa8 r7:00000004 r6:b6f0ad58 r5:000def80 r4:0000000b
->     [  822.045599] Code: e1a0c00d e92dd800 e24cb004 e0801001 (e5910000)
-> 
->     Without pm_runtime_{get,put}_sync calls in place,
->     Similar issue come on "mode_show" and "vbus_store" also.
+On Thu, Nov 28, 2019 at 3:35 AM Sandeep Maheswaram <sanm@codeaurora.org> wrote:
+>
+> Add compatible for SC7180 SOC in USB DWC3 driver
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 261af9e..1df2372 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -1,5 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -/* Copyright (c) 2018, The Linux Foundation. All rights reserved.
+> +/* Copyright (c) 2018-2019, The Linux Foundation. All rights reserved.
+>   *
+>   * Inspired by dwc3-of-simple.c
+>   */
+> @@ -753,6 +753,7 @@ static const struct of_device_id dwc3_qcom_of_match[] = {
+>         { .compatible = "qcom,dwc3" },
+>         { .compatible = "qcom,msm8996-dwc3" },
+>         { .compatible = "qcom,msm8998-dwc3" },
+> +       { .compatible = "qcom,sc7180-dwc3" },
+>         { .compatible = "qcom,sdm845-dwc3" },
 
-Do you really get the kernel dump on mode_show() and vbus_store()? It
-shouldn't because the two functions don't access musb registers. What
-platform have you tested on?
+It is, of course, up to Felipe.  ...but in my opinion this is the
+wrong change and instead we should be deleting the SoC-specific
+strings (msm8996, msm8998, sdm845) from this file because they don't
+buy us anything.  To explain how it works:
 
-> 
->     fix- call pm_runtime_{get,put}_sync before reading/writing
->     usb mode/vbus from sysfs.
-> 
->     As sugguested on commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
+1. Device tree should have both the "SoC-specific" and generic
+"qcom,dwc3" strings.  Only the "qcom,dwc3" will actually be used but
+the SoC-specific string is there so if we find a case later where we
+need to handle a SoC-specific quirk then it'll already be there.
 
-This seems to be your private commit id. You don't have to refer to it,
-including the quote below.
+2. Bindings should have both the "SoC-specific" and generic
+"qcom,dwc3" strings.  The binding is describing what's in the device
+tree.
 
->     Merged all the fix which reslove same bug in the same file.
->     "
->       commit '2d15f69ed5c1c33f283e77ec161578badde33eaf'
->       Author: Saurav Girepunje <saurav.girepunje@gmail.com>
->       Date:   Thu Aug 8 00:05:03 2019 +0530
-> 
->       usb: musb: Fix external abort on non-linefetch for vbus_store
-> 
->       Without pm_runtime_{get,put}_sync calls in place, writing
->       vbus value via /sys causes the error
-> 
->       "Unhandled fault external abort on non-linefetch"
-> 
->         On Thu, Aug 08, 2019 at 12:11:46AM +0530, Saurav Girepunje wrote:
-> 	> Without pm_runtime_{get,put}_sync calls in place, writing
-> 	> vbus value via /sys causes the error
-> 	>
-> 	> "Unhandled fault external abort on non-linefetch"
-> 	>
-> 	> Signed-off-by: Saurav Girepunje <saurav.girepunje@xxxxxxxxx>
-> 
-> 	Thanks for the patch. Can you please merge another two similar patches
-> 	you just sent with this one? They all fix the same bug in the same file
-> 	so could be just in one patch.
-> 
-> 	-Bin.
->     "
-> 
-> Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+3. Until we have a SoC-specific quirk to handle, we _don't_ need to
+add the SoC-specific string to the driver itself.
 
--Bin.
+
+-Doug
