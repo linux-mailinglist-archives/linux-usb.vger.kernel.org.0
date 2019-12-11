@@ -2,181 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8A611A028
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 01:46:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1DB11A0DA
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 02:55:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbfLKAqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Dec 2019 19:46:07 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:44229 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfLKAqH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 19:46:07 -0500
-Received: by mail-ot1-f65.google.com with SMTP id x3so17245625oto.11;
-        Tue, 10 Dec 2019 16:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=dNo8gQB2Lns6lssefACZcuCEFfgXMn9otoHM3Ump6ZU=;
-        b=MSQi9449EbBVtE8SBD/GOeFr9lc1VEeadwIPv0OUHQIqzCemeFd7M/BqaTHJH2HbFC
-         VyC2WdGAJ0Oy7BMvm6c+VXsJmVA9T5O44nKl/i7bv6PirSOnQbfzSRo6tWVFKd5w1Tzp
-         EM+9Ny2MRBFb5NHvtnHw5Dye3NOTdNk7MqGkiIxyjoSL4Fv19pYxLtPnlF66mlPaY0BU
-         ccadh1t27sktMAwSiei7ID54Jtbum+31GKoG2tV0xt3XzxvvBIYyHzo1sRSy99F1emGF
-         BpQeZnZqYUN6v+/AO5QZoW5U5JqSERSUYzkuCLqTi/DD2JIqIxn8V8guYI5nTfJyhAcF
-         Toaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=dNo8gQB2Lns6lssefACZcuCEFfgXMn9otoHM3Ump6ZU=;
-        b=YqcGZO+Ni9INFPO5Azmc4aJmV13XVhoWEiC/RLvx8iXp/UOL+6IZl20XkuvlbrEpeg
-         79jnf94A4odAphi3f064Scrw3z3YsUEIdGjeGb9ucQfjcDPsQnwayJdY4+h35GdBNdGL
-         S6gbCiNMmeVQuhTEfjLfF03DS9MioAggST7JUy9QLW2O1e36bHDFVxLGNJF3N7VA7OpE
-         mqzM/RBSIj+MPgk/ov9CGw5GJR9STCKmVo/UUT86JjEx4kgmDY7NKcT+1PzOGNngmtYT
-         gpLvJZCnENsg0mPEs0xWWh1Bv/D8u6uW8fYX7m/3LDSGSsFfA7OCGmW+M11Nz3iUz0cF
-         9fkA==
-X-Gm-Message-State: APjAAAXz1o4+FH5gPoIocJXydWYmteqp6s24sLCAuVdjliXSdsyZDxu4
-        yvFPKKmjQ1vC08WISTm8wDvEuXO1yUU7lYgA8Co=
-X-Google-Smtp-Source: APXvYqxlHTr1UZyzC6aCajvAM4W2Nsg3YlT+KI7UUGo3jxS4zv5rW02mvvBuzLyLP3MDtSmh3sJHzcCwjpOwaw6OzaY=
-X-Received: by 2002:a9d:4f0e:: with SMTP id d14mr452420otl.90.1576025165539;
- Tue, 10 Dec 2019 16:46:05 -0800 (PST)
-MIME-Version: 1.0
-References: <20191014141718.22603-1-narmstrong@baylibre.com>
- <20191014141718.22603-2-narmstrong@baylibre.com> <20191023201141.GA21235@bogus>
- <CA+3zgmsJPsvXgsjDQKKrSG+UNdY3SK+hKCTD2X3hGG+OXejHig@mail.gmail.com>
- <CAKgpwJWU3jB0DWEKE09TOV+YLceBFJ75ZirAXQbuhj8v3FwjXg@mail.gmail.com>
- <c32007f5-88b9-45c5-b542-b1dc4dbc76ea@baylibre.com> <CAKgpwJVHF6Ytdt9kq5SwiixFDLym_UPG51aXag1nVVay0pzofQ@mail.gmail.com>
- <45212db9-e366-2669-5c0a-3c5bd06287f6@synopsys.com> <ce35b6d2-7ed1-be2d-6e38-4c6e89340a40@baylibre.com>
-In-Reply-To: <ce35b6d2-7ed1-be2d-6e38-4c6e89340a40@baylibre.com>
-From:   Tim <elatllat@gmail.com>
-Date:   Tue, 10 Dec 2019 19:45:54 -0500
-Message-ID: <CA+3zgmtWQwdJG5NT-t7__Mqt5u_U3m4+HEL6p4PWxx5NES7_AQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] doc: dt: bindings: usb: dwc3: Update entries for
- disabling SS instances in park mode
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jun Li <lijun.kernel@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        id S1727628AbfLKBzY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Dec 2019 20:55:24 -0500
+Received: from mailgw02.mediatek.com ([1.203.163.81]:56463 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726062AbfLKBzG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Dec 2019 20:55:06 -0500
+X-UUID: 7d516bc1105e42bcb6573526910758b2-20191211
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=aX14XFV3v9enjNQQukse3rEThkp/4nt3pqUfFtZISK0=;
+        b=QWc+PiQ2lsv3Iiw4sm5UWbhpF2+cc7E5zuY3fqc7AR2BifNmE+IWS23zN4P6R/LmxYORdq8gQfEDJ6++4DKc3X5euxw0gb52uXX4wkl0uCozwm/Yl6ogaahqGsI9eOxbrM5q0sGmc8Ehsz4m40I1WZL801GM4rx/1ml4APRSxCI=;
+X-UUID: 7d516bc1105e42bcb6573526910758b2-20191211
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <min.guo@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLS)
+        with ESMTP id 1438635444; Wed, 11 Dec 2019 09:54:53 +0800
+Received: from mtkcas09.mediatek.inc (172.21.101.178) by
+ MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Wed, 11 Dec 2019 09:54:40 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas09.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Wed, 11 Dec 2019 09:54:45 +0800
+From:   <min.guo@mediatek.com>
+To:     Bin Liu <b-liu@ti.com>, Rob Herring <robh+dt@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dongjin Kim <tobetter@gmail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
+        <hdegoede@redhat.com>, Min Guo <min.guo@mediatek.com>
+Subject: [PATCH v9 0/6] Add MediaTek MUSB Controller Driver
+Date:   Wed, 11 Dec 2019 09:54:40 +0800
+Message-ID: <20191211015446.11477-1-min.guo@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-TM-SNTS-SMTP: B8A45FEE1BDC471EAE20714BD3FF23139CF6460935F71E7158ABA2C0EDD2E4BD2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Just writing to say;
-this patch is still performing well on 5.5.0-rc1, and
-there is no speed improvement by adding DWC3_GUCTL_NAK_PER_ENH_HS BIT(17)
-    I get up to 3890 ms second lag with "ping -s 5120 $IP" when
-copying between USB HDDs either way, but at least this patch stops the
-crashing.
+RnJvbTogTWluIEd1byA8bWluLmd1b0BtZWRpYXRlay5jb20+DQoNClRoZXNlIHBhdGNoZXMgaW50
+cm9kdWNlIHRoZSBNZWRpYVRlayBNVVNCIGNvbnRyb2xsZXIgZHJpdmVyLg0KDQpUaGUgZHJpdmVy
+IGNhbiBiZSBjb25maWd1cmVkIGFzIER1YWwtUm9sZSBEZXZpY2UgKERSRCksDQpQZXJpcGhlcmFs
+IE9ubHkgYW5kIEhvc3QgT25seSBtb2Rlcy4gVGhpcyBoYXMgYmVlZCB0ZXN0ZWQgb24NCk1UMjcw
+MSB3aXRoIGEgdmFyaWV0eSBvZiBkZXZpY2VzIGluIGhvc3QgbW9kZSBhbmQgd2l0aCB0aGUgDQpm
+X21hc3MgZ2FkZ2V0IGRyaXZlciBpbiBwZXJpcGhlcmFsIG1vZGUsIHBsdWdnaW5nIG90ZyBjYWJs
+ZXMNCmluL291dCBhIGxvdCBvZiB0aW1lcyBpbiBhbGwgcG9zc2libGUgaW1hZ2luYWJsZSBwbHVn
+IG9yZGVycy4NCg0KY2hhbmdlcyBpbiB2OToNCmNoYW5nZXMgb2YgZHQtYmluZGluZ3MgYW5kIERU
+UzoNCjEuIEFkZCB1c2Itcm9sZS1zd2l0Y2gNCjIuIFJlbW92ZSBsYWJlbCBvZiB1c2IgY29ubmVj
+dG9yIGNoaWxkIG5vZGUNCjMuIENoYW5nZSB1c2IgY29ubmVjdG9yIGNoaWxkIG5vZGUgY29tcGF0
+aWJsZSBhcyAiZ3Bpby11c2ItYi1jb25uZWN0b3IiLCAidXNiLWItY29ubmVjdG9yIjsNCg0KY2hh
+bmdlcyBpbiB2ODoNCmNoYW5nZXMgb2YgZHQtYmluZGluZ3M6DQoxLkFkZCByZXZpZXdlZCBieSBS
+b2INCg0KY2hhbmdlcyBpbiB2NzoNCmNoYW5nZXMgb2YgZHQtYmluZGluZ3MgYW5kIERUUzoNCjEu
+IENoYW5nZSBjb21wYXRpYmxlIHN0cmluZw0KMi4gQ2hhbmdlIHVzYiBjb25uZWN0b3IgY2hpbGQg
+bm9kZSBjb21wYXRpYmxlIGFzICJncGlvLXVzYi1iLWNvbm5lY3RvciIgDQoNCmNoYW5nZXMgaW4g
+djY6DQpjaGFuZ2VzIG9mIGR0LWJpbmRpbmdzOg0KMS4gTW9kaWZ5IHVzYiBjb25uZWN0b3IgY2hp
+bGQgbm9kZQ0KY2hhbmdlcyBvZiBEVFM6DQoxLiBNb2RpZnkgdXNiIGNvbm5lY3RvciBjaGlsZCBu
+b2RlDQpjaGFuZ2VzIG9mIGRyaXZlcjoNCjEuIEFkZCBvZl9wbGF0Zm9ybV9wb3B1bGF0ZSBpbiBw
+cm9iZSB0byBwb3B1bGF0ZSBjb25uZWN0b3IgcGxhdGZvcm1fZGV2aWNlcw0KICAgZnJvbSBkZXZp
+Y2UgdHJlZSBkYXRhDQoyLiBSZXBsYWNlIGV4dGNvbiB3aXRoIHVzYiByb2xlIHN3aXRjaCBtZWNo
+YW5pc20gdG8gc3VwcG9ydCBkdWFsLXJvbGUgbW9kZSwNCiAgIGRlcGVuZHMgb24gWzFdDQozLiBS
+ZW1vdmUgc2V0IHZidXMgZnVuY3Rpb24NCg0KICAgIFsxXSBbdjYsMDkvMTBdIHVzYjogcm9sZXM6
+IGFkZCBVU0IgVHlwZS1CIEdQSU8gY29ubmVjdG9yIGRyaXZlcg0KICAgICAgICBodHRwczovL3Bh
+dGNod29yay5rZXJuZWwub3JnL3BhdGNoLzEwOTY2MzYxLw0KDQpjaGFuZ2VzIGluIHY1Og0KY2hh
+bmdlcyBvZiBkdC1iaW5kaW5ncyBzdWdnZXN0ZWQgYnkgUm9iOg0KMS4gTW9kaWZ5IGNvbXBhdGli
+bGUgYXMgDQotIGNvbXBhdGlibGUgOiBzaG91bGQgYmUgb25lIG9mOg0KICAgICAgICAgICAgICAg
+Im1lZGlhdGVrLG10LTI3MDEiDQogICAgICAgICAgICAgICAuLi4NCiAgICAgICAgICAgICAgIGZv
+bGxvd2VkIGJ5ICJtZWRpYXRlayxtdGstbXVzYiINCjIuIEFkZCB1c2IgY29ubmVjdG9yIGNoaWxk
+IG5vZGUNCmNoYW5nZXMgb2YgRFRTOg0KMS4gQWRkIHVzYiBjb25uZWN0b3IgY2hpbGQgbm9kZQ0K
+Y2hhbmdlcyBvZiBkcml2ZXIgc3VnZ2VzdGVkIGJ5IEJpbjoNCjEuIFJlcGxhY2UgbXVzYl9yZWFk
+YigpIHdpdGggbXVzYl9jbGVhcmIoKSB0byBjbGVhciBkbWEgcGVuZGluZyBpbnRlcnJ1cHRzDQoy
+LiBSZXBsYWNlIG11c2JfcmVhZGIoKSB3aXRoIG11c2JfY2xlYXJiKCkgdG8gY2xlYXIgY29tbW9u
+L3R4L3J4IHBlbmRpbmcgaW50ZXJydXB0cw0KMy4gTWFrZSBtdXNiX2NsZWFyYi93KCkgcmV0dXJu
+IHRoZSB2YWx1ZSBvZiBtdXNiX3JlYWRiL3coKQ0KDQpjaGFuZ2VzIGluIHY0Og0KY2hhbmdlcyBv
+ZiBkdC1iaW5kaW5ncyBzdWdnZXN0ZWQgYnkgU2VyZ2VpOg0KMS4gU3RyaW5nIGFsaWdubWVudA0K
+Y2hhbmdlcyBvZiBkcml2ZXIgc3VnZ2VzdGVkIGJ5IFRvbnkgYW5kIEJpbjoNCjEuIEFkZCBhIG5l
+dyBwYXRjaCBmb3Igc2V0L2dldF90b2dnbGUoKQ0KMi4gQWRkIGEgbmV3IHBhdGNoIGZvciBub2ly
+cSB0eXBlIG9mIGRtYQ0KMy4gQWRkIGEgbmV3IHBhdGNoIG11c2JfY2xlYXJiL3coKQ0KNC4gQWJv
+bmRvbiBwYXRjaCAidXNiOiBtdXNiOiBEZWxldGUgdGhlIGNvbnN0IGF0dHJpYnV0ZSBvZiBhZGRy
+IHBhcmFtZXRlciBpbiByZWFkYi93L2wgaG9va3MiDQoNCmNoYW5nZXMgaW4gdjM6DQpjaGFuZ2Vz
+IG9mIGRyaXZlciBzdWdnZXN0ZWQgYnkgQmluOg0KMS4gQWRkIGEgbmV3IHBhdGNoIGZvciBtdXNi
+X3JlYWRiL3cvbCgpIHRvIHJlbW92ZSBjb25zdCBhdHRyaWJ1dGUgDQoyLiBVc2UgaXNfb3V0IGFz
+IGZ1bmN0aW9uIHBhcmFtZXRlciBpbiBzZXRfdG9nZ2xlL2dldF90b2dnbGUoKSBob29rcw0KMy4g
+UmVtb3ZlICd1OC91MTYgZGF0YScgcGFyYW1ldGVyIGluIGNsZWFyYi93KCkgaG9va3MNCjQuIFJl
+bW92ZSBtdXNiX2RlZmF1bHRfY2xlYXJiL3coKQ0KNS4gUmVwbGFjZSBtdXNiX3JlYWRiL3coKSB3
+aXRoIG11c2JfY2xlYXJiL3coKSB0byBjbGVhciBwZW5kaW5nIGludGVycnVwdHMgDQo2LiBBZGQg
+Y29tbWVudHMgdG8gY2xlYXJiL3coKSBob29rcw0KNy4gUmVwbGFjZSBtdXNiX3NhdmVfdG9nZ2xl
+KCkgd2l0aCBtdXNiLT5pby5nZXRfdG9nZ2xlKCkNCjguIFJlcGxhY2UgbXVzYl9zZXRfdG9nZ2xl
+KCkgd2l0aCBtdXNiLT5pby5zZXRfdG9nZ2xlKCkNCg0KY2hhbmdlcyBpbiB2MjoNCmNoYW5nZXMg
+b2YgZHQtYmluZGluZ3Mgc3VnZ2VzdGVkIGJ5IFJvYiBhbmQgQmluOg0KMS4gTW9kaWZ5IERSQyB0
+byBEUkQNCjIuIERyb3AgdGhlICI8c29jLW1vZGVsPi1tdXNiIiBpbiBjb21wYXRpYmxlDQozLiBS
+ZW1vdmUgcGh5LW5hbWVzDQo0LiBBZGQgc3BhY2UgYWZ0ZXIgY29tbWEgaW4gY2xvY2stbmFtZXMN
+CmR0c2k6DQoxLiBSZW1vdmUgcGh5LW5hbWVzDQpjaGFuZ2VzIG9mIGRyaXZlciBzdWdnZXN0ZWQg
+YnkgQmluOg0KMS4gQWRkIGEgbmV3IHBhdGNoIGZvciBtdXNiX3NldF90b2dnbGUNCjIuIEFkZCBz
+dW1tYXJpemUgb2YgTWVkaWFUZWsgbXVzYiBjb250cm9sbGVyIGRpZmZlcmVuY2VzIGluIHRoZSBj
+b21taXQgbG9nDQozLiBBYm9uZG9uIHBhdGNoICJ1c2I6IG11c2I6IE1vdmUgbXVzYmhzZG1hIG1h
+Y3JvIGRlZmluaXRpb24gdG8gbXVzYl9kbWEuaCINCjQuIEFkZCAifHwgQ09NUElMRV9URVNUIiBp
+biBLY29uZmlnDQo1LiBBZGQgbXVzYl9jbGVhcmIoKSBhbmQgbXVzYl9jbGVhcncoKSBob29rcw0K
+Ni4gQWRkIGdldF90b2dnbGUoKSBhbmQgc2V0X3RvZ2dsZSgpIGhvb2tzDQo3LiBSZXBsYWNlIG11
+c2JfcmVhZGwoKSB3aXRoIG11c2JfcmVhZHcoKSB0byByZWFkIDE2Yml0IHRvZ2dsZSByZWdpc3Rl
+cg0KOC4gTW92ZSBNZWRpYVRlaydzIHByaXZhdGUgdG9nZ2xlIHJlZ2lzdGVycyBmcm9tIG11c2Jf
+cmVncy5oIHRvIG1lZGlhdGVrLmMNCjkuIENyZWF0ZSBtdXNiaHNfZG1hX2NvbnRyb2xsZXJfY3Jl
+YXRlX25vaXJxKCkNCg0KTWluIEd1byAoNik6DQogIGR0LWJpbmRpbmdzOiB1c2I6IG11c2I6IEFk
+ZCBzdXBwb3J0IGZvciBNZWRpYVRlayBtdXNiIGNvbnRyb2xsZXINCiAgYXJtOiBkdHM6IG10Mjcw
+MTogQWRkIHVzYjIgZGV2aWNlIG5vZGVzDQogIHVzYjogbXVzYjogQWRkIGdldC9zZXQgdG9nZ2xl
+IGhvb2tzDQogIHVzYjogbXVzYjogQWRkIG5vaXJxIHR5cGUgb2YgZG1hIGNyZWF0ZSBpbnRlcmZh
+Y2UNCiAgdXNiOiBtdXNiOiBBZGQgbXVzYl9jbGVhcmIvdygpIGludGVyZmFjZQ0KICB1c2I6IG11
+c2I6IEFkZCBzdXBwb3J0IGZvciBNZWRpYVRlayBtdXNiIGNvbnRyb2xsZXINCg0KIC4uLi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdXNiLnR4dCB8ICA1NyArKw0KIGFyY2gvYXJt
+L2Jvb3QvZHRzL210MjcwMS1ldmIuZHRzICAgICAgICAgICAgICB8ICAyMSArDQogYXJjaC9hcm0v
+Ym9vdC9kdHMvbXQyNzAxLmR0c2kgICAgICAgICAgICAgICAgIHwgIDMzICsNCiBkcml2ZXJzL3Vz
+Yi9tdXNiL0tjb25maWcgICAgICAgICAgICAgICAgICAgICAgfCAgIDkgKy0NCiBkcml2ZXJzL3Vz
+Yi9tdXNiL01ha2VmaWxlICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KIGRyaXZlcnMvdXNi
+L211c2IvbWVkaWF0ZWsuYyAgICAgICAgICAgICAgICAgICB8IDU4MiArKysrKysrKysrKysrKysr
+KysNCiBkcml2ZXJzL3VzYi9tdXNiL211c2JfY29yZS5jICAgICAgICAgICAgICAgICAgfCAgNzQg
+KystDQogZHJpdmVycy91c2IvbXVzYi9tdXNiX2NvcmUuaCAgICAgICAgICAgICAgICAgIHwgIDEz
+ICstDQogZHJpdmVycy91c2IvbXVzYi9tdXNiX2RtYS5oICAgICAgICAgICAgICAgICAgIHwgICA5
+ICsNCiBkcml2ZXJzL3VzYi9tdXNiL211c2JfaG9zdC5jICAgICAgICAgICAgICAgICAgfCAgNDYg
+Ky0NCiBkcml2ZXJzL3VzYi9tdXNiL211c2JfaW8uaCAgICAgICAgICAgICAgICAgICAgfCAgMTIg
+Ky0NCiBkcml2ZXJzL3VzYi9tdXNiL211c2Joc2RtYS5jICAgICAgICAgICAgICAgICAgfCAgNTYg
+Ky0NCiBkcml2ZXJzL3VzYi9tdXNiL3N1bnhpLmMgICAgICAgICAgICAgICAgICAgICAgfCAgIDQg
+Ky0NCiBkcml2ZXJzL3VzYi9tdXNiL3R1c2I2MDEwLmMgICAgICAgICAgICAgICAgICAgfCAgIDIg
+Ky0NCiAxNCBmaWxlcyBjaGFuZ2VkLCA4NDcgaW5zZXJ0aW9ucygrKSwgNzIgZGVsZXRpb25zKC0p
+DQogY3JlYXRlIG1vZGUgMTAwNjQ0IERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy91
+c2IvbWVkaWF0ZWssbXVzYi50eHQNCiBjcmVhdGUgbW9kZSAxMDA2NDQgZHJpdmVycy91c2IvbXVz
+Yi9tZWRpYXRlay5jDQoNCi0tIA0KMi4yNC4wDQo=
 
-
-On Tue, Dec 10, 2019 at 3:55 AM Neil Armstrong <narmstrong@baylibre.com> wr=
-ote:
->
-> Hi,
->
-> On 12/11/2019 21:03, Thinh Nguyen wrote:
-> > Hi,
-> >
-> > Jun Li wrote:
-> >> This bug exists on all current versions per information I got from Syn=
-opsys.
-> >> + Thinh Nguyen <thinhn@synopsys.com>.
-> >>
-> >> Li Jun
-> >
-> > The GUCTL1.PARKMODE_DISABLE_SS is only available in dwc_usb3 controller
-> > running in host mode. This should not be set for other IPs.
-> >
-> > This can be disabled by default based on IP, but I recommend to have a
-> > property to enable this feature for devices that need this.
->
-> Thanks, so this patchset is the right way to solve this.
->
-> Felipe, would it be possible to have it merged for next release ?
-> Should I resend it ?
->
-> Thanks,
-> Neil
->
-> >
-> >
-> >>
-> >> Neil Armstrong <narmstrong@baylibre.com> =E4=BA=8E2019=E5=B9=B411=E6=
-=9C=8812=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=8D=885:00=E5=86=99=E9=81=
-=93=EF=BC=9A
-> >>> Hi Li,
-> >>>
-> >>> On 11/11/2019 02:58, Jun Li wrote:
-> >>>> Hi Neil
-> >>>>
-> >>>> As I got the information from Synopsys, this bug exists on current I=
-P versions,
-> >>>> and per my tests with external USB3 hub + 2 Super speed udisks on da=
-ta
-> >>>> read by dd, I can reproduce this issue with different kernel version=
-s, also I
-> >>>> didn't see obvious performance drop by dd tests after disable park m=
-ode for
-> >>>> super speed, so should we just disable it by default so no need a qu=
-irk?
-> >>> I don't have any opinion on this, I think the USB & DWC3 maintainers =
-should decide
-> >>> how to handle this.
-> >>>
-> >>> Did Synopsys specified a range of affected IP version ?
-> >>>
-> >>> Neil
-> >>>
-> >>>> Li Jun
-> >>>>
-> >>>> Tim <elatllat@gmail.com> =E4=BA=8E2019=E5=B9=B411=E6=9C=8811=E6=97=
-=A5=E5=91=A8=E4=B8=80 =E4=B8=8A=E5=8D=888:42=E5=86=99=E9=81=93=EF=BC=9A
-> >>>>> Thanks for working on this Neil,
-> >>>>> Is there something that needs doing for this patch to make it into =
-5.3 or 5.4?
-> >>>>> As previously mentioned the patch set fixes the issue on affected h=
-ardware;
-> >>>>>      https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__patchwo=
-rk.kernel.org_patch_11164515_&d=3DDwIFaQ&c=3DDPL6_X_6JkXFx7AXWqB0tg&r=3Du9F=
-YoxKtyhjrGFcyixFYqTjw1ZX0VsG2d8FCmzkTY-w&m=3DBCfRHM9e86039Su0-QvK_yUjNnYrnl=
-_BcvxTtViypT8&s=3DaV5u7uxNX6oTLB3_-qNuzrNvyiqx_rPC6P9TMqG-LNE&e=3D
-> >>>>>
-> >>>>>
-> >>>>>
-> >>>>> On Wed, Oct 23, 2019 at 4:11 PM Rob Herring <robh@kernel.org> wrote=
-:
-> >>>>>> On Mon, Oct 14, 2019 at 04:17:16PM +0200, Neil Armstrong wrote:
-> >>>>>>> This patch updates the documentation with the information related
-> >>>>>>> to the quirks that needs to be added for disabling all SuperSpeed=
- XHCi
-> >>>>>>> instances in park mode.
-> >>>>>>>
-> >>>>>>> CC: Dongjin Kim <tobetter@gmail.com>
-> >>>>>>> Cc: Jianxin Pan <jianxin.pan@amlogic.com>
-> >>>>>>> Reported-by: Tim <elatllat@gmail.com>
-> >>>>>>> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-> >>>>>>> ---
-> >>>>>>>   Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
-> >>>>>>>   1 file changed, 2 insertions(+)
-> >>>>>> Sigh, what's one more to the never ending list of quirks...
-> >>>>>>
-> >>>>>> Acked-by: Rob Herring <robh@kernel.org>
-> >
-> > BR,
-> > Thinh
-> >
->
