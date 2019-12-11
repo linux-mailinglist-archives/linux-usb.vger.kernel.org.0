@@ -2,217 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E4A11A4C8
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 08:04:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9F311A53B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2019 08:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726451AbfLKHE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 02:04:29 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:41674 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726151AbfLKHE3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 02:04:29 -0500
-Received: by mail-lf1-f65.google.com with SMTP id m30so15767211lfp.8
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2019 23:04:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vincit.fi; s=ticniv;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=XNMG6GKj2NXVBB37gpma/mg5NGu0I4q3OQ4Bmc6kCpo=;
-        b=EwePhHWY21uWZ5nancuGAA3ZZL8vqNmmB+tbJnRIxrjwIbKk9FVmRobcWGcREoXjwi
-         WLfVyu5iuO6WcGM20DO1ehjQk78sjtb9Qc9tSZYNKOCsS8nKxIoKd1rjurnLPstJwrRR
-         m5DnCW0y7r7iziVFdO+LJgdWkdwe4pJPk+Cds=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:thread-index
-         :content-language;
-        bh=XNMG6GKj2NXVBB37gpma/mg5NGu0I4q3OQ4Bmc6kCpo=;
-        b=G25Zh4YQKRV5II7aKaW92YLFJcCSPmvqB5JG5E3UBGhC7Wp9L/L7GcNi8yGVOuZBrb
-         7GBWE7g2+awX+iL87dTAWxFuksk0txfCXnMExT7Vn5kqkS6n7axwwtsCrYKQiKrJzSNa
-         mWQFFTcfp89tZ54eQ2XDqwyY1FgnirwT9DJ1kYgos2BDGlN+HfRloQT4e+K57n39r4k1
-         HqnLgmwNE8CqQIspzkC3yQt7rsX3rL2gE/ItJwSNTGD+wD92XfuOZQy4GwqQAMA/f+/8
-         3n420p4TtBOAJfepLDOxwnMPone4bgIx+19K0bNglMdn7HXDpNk6FIBnTfG6fVLLEj4m
-         +rgw==
-X-Gm-Message-State: APjAAAXLX4HElFo6W3N3itAagwHa9BLJyaYWlBxYaWBPE8zhctf/0AaW
-        yZXNBvvxGSzxSx/+Xr9NsDlntA==
-X-Google-Smtp-Source: APXvYqzt2W7l/AwM7TWljKqCEncujBjPPRV0Y2SAdAdZwpG8jO5JyK/5woahh4JAPKBdhI41X1xs2A==
-X-Received: by 2002:ac2:48bc:: with SMTP id u28mr1098708lfg.81.1576047866454;
-        Tue, 10 Dec 2019 23:04:26 -0800 (PST)
-Received: from LAPTOPJ4R3A4KE ([213.255.177.137])
-        by smtp.gmail.com with ESMTPSA id y72sm594353lfa.12.2019.12.10.23.04.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 10 Dec 2019 23:04:25 -0800 (PST)
-From:   "Erkka Talvitie" <erkka.talvitie@vincit.fi>
-To:     "'Alan Stern'" <stern@rowland.harvard.edu>
-Cc:     <gregkh@linuxfoundation.org>, <linux-usb@vger.kernel.org>,
-        <claus.baumgartner@med.ge.com>
-References: <1ec66c398699e95ca2b5755f6cbb8c5d2453dd71.1575893227.git.erkka.talvitie@vincit.fi> <Pine.LNX.4.44L0.1912101004240.1647-100000@iolanthe.rowland.org>
-In-Reply-To: <Pine.LNX.4.44L0.1912101004240.1647-100000@iolanthe.rowland.org>
-Subject: RE: [PATCH] USB: EHCI: Do not return -EPIPE when hub is disconnected
-Date:   Wed, 11 Dec 2019 09:04:22 +0200
-Message-ID: <000401d5aff1$387f1790$a97d46b0$@vincit.fi>
-MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQGmTT+zG7Q1oofVq4vr3p+FUaNtWagTQahA
-Content-Language: fi
+        id S1728024AbfLKHmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 02:42:52 -0500
+Received: from condef-10.nifty.com ([202.248.20.75]:35811 "EHLO
+        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726230AbfLKHmw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 02:42:52 -0500
+Received: from conuserg-07.nifty.com ([10.126.8.70])by condef-10.nifty.com with ESMTP id xBB7dpgT024558
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 16:39:56 +0900
+Received: from localhost.localdomain (p14092-ipngnfx01kyoto.kyoto.ocn.ne.jp [153.142.97.92]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id xBB7dDR3022506;
+        Wed, 11 Dec 2019 16:39:13 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com xBB7dDR3022506
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1576049954;
+        bh=l8+Ln+RuifKBW/SrlAVL5xQ74EcUovKtu9zNI0gHngc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eWqSG3g1T8eqyALzmsPUhkRNZCG6VFecW178bWzSJs+Bd5uRbMl7C7PoLTw1yf0SP
+         U7X6ezM2sV5QkE01BjDCrw1zX4yIYTEUBngzlIJbQsrwk719CN1PjPCMet1jgezxKh
+         2fHR0vLij6Vs5GSX7GfWI22UkQ2fRB2DsQZfjyaEAhEWWhmlFwF0h+Ux1rhUndsNb2
+         Sc5HZgSP13Ia+QLvs2LA/5VTYqzxZ6BnwQqwy3z3KEGvlHdTvB7Yi4EDcCEOv7xeOz
+         PV/8P3W1xb1iVSCesCCrxcG7OZqYpvJwb2HueLRuGZwjvxNU7CvNiACN1/QTpLQCTM
+         Lr+Zdkb9Vtmnw==
+X-Nifty-SrcIP: [153.142.97.92]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-usb@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
+Cc:     Ulf Magnusson <ulfalizer@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: move choice ... endchoice to legacy/Kconfig
+Date:   Wed, 11 Dec 2019 16:38:57 +0900
+Message-Id: <20191211073857.16780-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the review.
+drivers/usb/gadget/Kconfig includes drivers/usb/gadget/legacy/Kconfig
+inside the 'choice' block. The current Kconfig allows this, but I'd
+like to discourage this usage.
 
-> -----Original Message-----
-> From: Alan Stern <stern@rowland.harvard.edu>
-> Sent: tiistai 10. joulukuuta 2019 17.12
-> To: Erkka Talvitie <erkka.talvitie@vincit.fi>
-> Cc: gregkh@linuxfoundation.org; linux-usb@vger.kernel.org;
-> claus.baumgartner@med.ge.com
-> Subject: Re: [PATCH] USB: EHCI: Do not return -EPIPE when hub is
-> disconnected
-> 
-> On Tue, 10 Dec 2019, Erkka Talvitie wrote:
-> 
-> > When disconnecting a USB hub that has some child device(s) connected
-> > to it (such as a USB mouse), then the stack tries to clear halt and
-> > reset device(s) which are _already_ physically disconnected.
-> >
-> > The issue has been reproduced with:
-> >
-> > CPU: IMX6D5EYM10AD or MCIMX6D5EYM10AE.
-> > SW: U-Boot 2019.07 and kernel 4.19.40.
-> >
-> > CPU: HP Proliant Microserver Gen8.
-> > SW: Linux version 4.2.3-300.fc23.x86_64
-> >
-> > In this situation there will be error bit for MMF active yet the CERR
-> > equals EHCI_TUNE_CERR + halt. Existing implementation interprets this
-> > as a stall [1] (chapter 8.4.5).
-> >
-> > The possible conditions when the MMF will be active + halt can be
-> > found from [2] (Table 4-13).
-> >
-> > Fix for the issue is to check whether MMF is active and PID Code is IN
-> > before checking for the stall. If these conditions are true then it is
-> > not a stall.
-> >
-> > What happens after the fix is that when disconnecting a hub with
-> > attached device(s) the situation is not interpret as a stall.
-> >
-> > [1] https://www.usb.org/document-library/usb-20-specification,
-> > usb_20.pdf [2]
-> >
-> https://www.intel.com/content/dam/www/public/us/en/documents/techn
-> ical
-> > -specifications/ehci-specification-for-usb.pdf
-> >
-> > Signed-off-by: Erkka Talvitie <erkka.talvitie@vincit.fi>
-> > ---
-> 
-> Basically good, but you should always run patches through the
-> scripts/checkpatch.pl script before sending them.  There are several
-places
-> where the formatting needs to be fixed.
+People tend to mess up the structure without noticing that entire
+drivers/usb/gadget/legacy/Kconfig is placed in the choice context.
+In fact, legacy/Kconfig mixes up bool and tristate in the choice,
+and creates nested choice, etc.
 
-Ok, I will do that.
+This commit does not change the behavior, but it will help people
+notice how badly this Kconfig file is written.
 
-> 
-> >  drivers/usb/host/ehci-q.c | 11 ++++++++++-
-> >  1 file changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-> > index 3276304..285622d 100644
-> > --- a/drivers/usb/host/ehci-q.c
-> > +++ b/drivers/usb/host/ehci-q.c
-> > @@ -27,6 +27,10 @@
-> >
-> >
-> > /*--------------------------------------------------------------------
-> > -----*/
-> >
-> > +/* PID Codes that are used here, from EHCI specification, Table 3-16.
-*/
-> > +#define PID_CODE_IN    1
-> > +#define PID_CODE_SETUP 2
-> > +
-> >  /* fill a qtd, returning how much of the buffer we were able to queue
-> > up */
-> >
-> >  static int
-> > @@ -190,7 +194,7 @@ static int qtd_copy_status (
-> >  	int	status = -EINPROGRESS;
-> >
-> >  	/* count IN/OUT bytes, not SETUP (even short packets) */
-> > -	if (likely (QTD_PID (token) != 2))
-> > +	if (likely (QTD_PID (token) != PID_CODE_SETUP))
-> 
-> This should be "QTD_PID(token)" with no extra space before the left paren,
-> and similarly for "likely(".  I realize you just kept the code the way it
-already
-> was, but we prefer to fix formatting errors like these whenever the line
-gets
-> changed, even if it's for a different reason.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Sure, I will fix those.
+ drivers/usb/gadget/Kconfig        | 28 ----------------------------
+ drivers/usb/gadget/legacy/Kconfig | 28 ++++++++++++++++++++++++++++
+ 2 files changed, 28 insertions(+), 28 deletions(-)
 
-> 
-> >  		urb->actual_length += length - QTD_LENGTH
-> (token);
-> >
-> >  	/* don't modify error codes */
-> > @@ -206,6 +210,11 @@ static int qtd_copy_status (
-> >  		if (token & QTD_STS_BABBLE) {
-> >  			/* FIXME "must" disable babbling
-> device's port too */
-> >  			status = -EOVERFLOW;
-> > +		/* When MMF is active and PID Code is IN,
-> queue is halted.
-> > +		 * EHCI Specification, Table 4-13.
-> > +		 */
-> 
-> Multi-line comments should be formatted like thus:
-> 
-> 		/*
-> 		 * When MMF...
-> 		 * EHCI ...
-> 		 */
-
-I will fix this.
-
-> 
-> > +		} else if((token & QTD_STS_MMF) &&
-> (QTD_PID(token) == PID_CODE_IN))
-> > +{
-> 
-> Try to avoid letting code extend beyond column 80 (for example, you could
-> beak the line following the "&&").  Also, there should be a space between
-> the "if" and the left paren -- the "if" isn't a function call!
-
-This is a strange thing since in my editor there is a margin line visible
-with 80 characters wide.
-And this line is inside limits, actually my editor states that the line is
-77 chars long.
-That said, I will break the line from the && and fix the if.
-
-> 
-> > +			status = -EPROTO;
-> >  		/* CERR nonzero + halt --> stall */
-> >  		} else if (QTD_CERR(token)) {
-> >  			status = -EPIPE;
-> 
-> When you fix up these minor issues and resubmit, you can add:
-> 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-
-Thank you!
+diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+index 02ff850278b1..c6db0a0a340c 100644
+--- a/drivers/usb/gadget/Kconfig
++++ b/drivers/usb/gadget/Kconfig
+@@ -483,34 +483,6 @@ config USB_CONFIGFS_F_TCM
+ 	  Both protocols can work on USB2.0 and USB3.0.
+ 	  UAS utilizes the USB 3.0 feature called streams support.
  
-
-> 
-> Alan Stern
-
-Erkka Talvitie
+-choice
+-	tristate "USB Gadget precomposed configurations"
+-	default USB_ETH
+-	optional
+-	help
+-	  A Linux "Gadget Driver" talks to the USB Peripheral Controller
+-	  driver through the abstract "gadget" API.  Some other operating
+-	  systems call these "client" drivers, of which "class drivers"
+-	  are a subset (implementing a USB device class specification).
+-	  A gadget driver implements one or more USB functions using
+-	  the peripheral hardware.
+-
+-	  Gadget drivers are hardware-neutral, or "platform independent",
+-	  except that they sometimes must understand quirks or limitations
+-	  of the particular controllers they work with.  For example, when
+-	  a controller doesn't support alternate configurations or provide
+-	  enough of the right types of endpoints, the gadget driver might
+-	  not be able work with that controller, or might need to implement
+-	  a less common variant of a device class protocol.
+-
+-	  The available choices each represent a single precomposed USB
+-	  gadget configuration. In the device model, each option contains
+-	  both the device instantiation as a child for a USB gadget
+-	  controller, and the relevant drivers for each function declared
+-	  by the device.
+-
+ source "drivers/usb/gadget/legacy/Kconfig"
+ 
+-endchoice
+-
+ endif # USB_GADGET
+diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
+index 119a4e47681f..6e7e1a9202e6 100644
+--- a/drivers/usb/gadget/legacy/Kconfig
++++ b/drivers/usb/gadget/legacy/Kconfig
+@@ -14,6 +14,32 @@
+ # both kinds of controller can also support "USB On-the-Go" (CONFIG_USB_OTG).
+ #
+ 
++choice
++	tristate "USB Gadget precomposed configurations"
++	default USB_ETH
++	optional
++	help
++	  A Linux "Gadget Driver" talks to the USB Peripheral Controller
++	  driver through the abstract "gadget" API.  Some other operating
++	  systems call these "client" drivers, of which "class drivers"
++	  are a subset (implementing a USB device class specification).
++	  A gadget driver implements one or more USB functions using
++	  the peripheral hardware.
++
++	  Gadget drivers are hardware-neutral, or "platform independent",
++	  except that they sometimes must understand quirks or limitations
++	  of the particular controllers they work with.  For example, when
++	  a controller doesn't support alternate configurations or provide
++	  enough of the right types of endpoints, the gadget driver might
++	  not be able work with that controller, or might need to implement
++	  a less common variant of a device class protocol.
++
++	  The available choices each represent a single precomposed USB
++	  gadget configuration. In the device model, each option contains
++	  both the device instantiation as a child for a USB gadget
++	  controller, and the relevant drivers for each function declared
++	  by the device.
++
+ config USB_ZERO
+ 	tristate "Gadget Zero (DEVELOPMENT)"
+ 	select USB_LIBCOMPOSITE
+@@ -489,3 +515,5 @@ config USB_G_WEBCAM
+ 
+ 	  Say "y" to link the driver statically, or "m" to build a
+ 	  dynamically linked module called "g_webcam".
++
++endchoice
+-- 
+2.17.1
 
