@@ -2,80 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4768A11D50C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 19:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3736611D678
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 19:58:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730394AbfLLSPa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 13:15:30 -0500
-Received: from iolanthe.rowland.org ([192.131.102.54]:52846 "HELO
-        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1730034AbfLLSPa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 13:15:30 -0500
-Received: (qmail 3202 invoked by uid 2102); 12 Dec 2019 13:15:29 -0500
-Received: from localhost (sendmail-bs@127.0.0.1)
-  by localhost with SMTP; 12 Dec 2019 13:15:29 -0500
-Date:   Thu, 12 Dec 2019 13:15:29 -0500 (EST)
-From:   Alan Stern <stern@rowland.harvard.edu>
-X-X-Sender: stern@iolanthe.rowland.org
-To:     Andrey Konovalov <andreyknvl@google.com>
-cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH RFC 1/2] kcov: collect coverage from interrupts
-In-Reply-To: <95e7a12ac909e7de584133772efc7ef982a16bbb.1576170740.git.andreyknvl@google.com>
-Message-ID: <Pine.LNX.4.44L0.1912121313030.1352-100000@iolanthe.rowland.org>
-MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+        id S1730543AbfLLS56 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 13:57:58 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:42650 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730261AbfLLS56 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 13:57:58 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5B71E153DFA32;
+        Thu, 12 Dec 2019 10:57:57 -0800 (PST)
+Date:   Thu, 12 Dec 2019 10:57:56 -0800 (PST)
+Message-Id: <20191212.105756.1578737891054881785.davem@davemloft.net>
+To:     cristian.birsan@microchip.com
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: lan78xx: Fix suspend/resume PHY register
+ access error
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20191212115247.26728-1-cristian.birsan@microchip.com>
+References: <20191212115247.26728-1-cristian.birsan@microchip.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 12 Dec 2019 10:57:57 -0800 (PST)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 12 Dec 2019, Andrey Konovalov wrote:
+From: Cristian Birsan <cristian.birsan@microchip.com>
+Date: Thu, 12 Dec 2019 13:52:47 +0200
 
-> This change extends kcov remote coverage support to allow collecting
-> coverage from interrupts in addition to kernel background threads.
+> Lan78xx driver accesses the PHY registers through MDIO bus over USB
+> connection. When performing a suspend/resume, the PHY registers can be
+> accessed before the USB connection is resumed. This will generate an
+> error and will prevent the device to resume correctly.
+> This patch adds the dependency between the MDIO bus and USB device to
+> allow correct handling of suspend/resume.
 > 
-> To collect coverage from code that is executed in interrupt context, a
-> part of that code has to be annotated with kcov_remote_start/stop() in a
-> similar way as how it is done for global kernel background threads. Then
-> the handle used for the annotations has to be passed to the
-> KCOV_REMOTE_ENABLE ioctl.
-> 
-> Internally this patch adjusts the __sanitizer_cov_trace_pc() compiler
-> inserted callback to not bail out when called from interrupt context.
-> kcov_remote_start/stop() are updated to save/restore the current per
-> task kcov state in a per-cpu area (in case the interrupt came when the
-> kernel was already collecting coverage in task context). Coverage from
-> interrupts is collected into pre-allocated per-cpu areas, whose size is
-> controlled by the new CONFIG_KCOV_IRQ_AREA_SIZE.
-> 
-> This patch also cleans up some of kcov debug messages.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
+> Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
+> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
 
-> diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
-> index 4c9d1e49d5ed..faf84ada71a5 100644
-> --- a/drivers/usb/gadget/udc/dummy_hcd.c
-> +++ b/drivers/usb/gadget/udc/dummy_hcd.c
-> @@ -38,6 +38,7 @@
->  #include <linux/usb/gadget.h>
->  #include <linux/usb/hcd.h>
->  #include <linux/scatterlist.h>
-> +#include <linux/kcov.h>
->  
->  #include <asm/byteorder.h>
->  #include <linux/io.h>
-
-That's the only change to this driver.  As such, it doesn't appear to 
-be needed, judging by the patch description.
-
-Alan Stern
-
+Applied and queued up for -stable.
