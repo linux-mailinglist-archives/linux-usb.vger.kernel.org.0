@@ -2,136 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DFD11CC7D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 12:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E3511CC9C
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 12:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729088AbfLLLqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 06:46:06 -0500
-Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:33691 "EHLO
-        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726492AbfLLLqG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 06:46:06 -0500
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id BA1B3725;
-        Thu, 12 Dec 2019 06:46:04 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Thu, 12 Dec 2019 06:46:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=ol6RFW
-        OIya20JlX27c+UNzAio0bqaxzpviWh9kgvntk=; b=DJ6YaoPVWBLH9EEVX9M3nl
-        vfkaWhkcS2rur+gAlk5xib9TIW3fmqG6zrLqaxS9hUgnRlm1EYzMyMGdmI0j3qc7
-        7J7PlEnw43gLOuXw+MA3o1JhEsgz3yZ/Dmk28dytHyB3e6oEu1YwXJZZfdWAC8Sk
-        I8Uaqw1McwM+wDSJmJCb9Bzg7wbhakAX/1cEggCX2Z+1D9iy5AGikL/bVi1kFt6X
-        kVMusyPqV7xISsjTBU1QgAoiCswm5+VEv3Rjs5Zl3AObQA/NT+XHXyFfiEiNYq+M
-        E7sG528MDORuTIRQoy47HU+vWOMgyw5p+nesS1WGcc533oWVq8KGKSC8SLFv5wng
-        ==
-X-ME-Sender: <xms:fCjyXVhT38A60yl56bzcPmJ0Pm_1zcvVYvsVweVdMPdVcVFVuZ4r3Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrudeljedgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
-    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
-    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucfkphepledurdeihedrfeegrdef
-    feenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghksehinhhvihhsihgslh
-    gvthhhihhnghhslhgrsgdrtghomhenucevlhhushhtvghrufhiiigvpedu
-X-ME-Proxy: <xmx:fCjyXQeu4fJb78qZjQ-MgGvc0yTc7mv1Uym0BXewvvrTH7dcafIoBw>
-    <xmx:fCjyXSkX9HZGrOdrMpCPmxFzUdPAZ5SjgQyOlEJE1i5tPq6PFN_3NA>
-    <xmx:fCjyXSrAQlmxHNpeMew9dUyAqHw66-S8HK3FECeeT95qyhMQGSZ5WQ>
-    <xmx:fCjyXZiELqMSNaWzBNwmVM3tb8uS-9f7LHVsLf-JcCBaIoOEBpVbvw>
-Received: from mail-itl (ip5b412221.dynamic.kabel-deutschland.de [91.65.34.33])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 2AF1F80059;
-        Thu, 12 Dec 2019 06:46:03 -0500 (EST)
-Date:   Thu, 12 Dec 2019 12:45:59 +0100
-From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     Suwan Kim <suwan.kim027@gmail.com>
-Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] usbip: Fix receive error in vhci-hcd when using
- scatter-gather
-Message-ID: <20191212114559.GW11116@mail-itl>
-References: <20191212052841.6734-1-suwan.kim027@gmail.com>
- <20191212052841.6734-2-suwan.kim027@gmail.com>
+        id S1729065AbfLLLxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 06:53:18 -0500
+Received: from esa6.microchip.iphmx.com ([216.71.154.253]:3304 "EHLO
+        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbfLLLxR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 06:53:17 -0500
+Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
+  Cristian.Birsan@microchip.com designates 198.175.253.82 as
+  permitted sender) identity=mailfrom;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Cristian.Birsan@microchip.com";
+  x-sender="Cristian.Birsan@microchip.com";
+  x-conformance=spf_only; x-record-type="v=spf1";
+  x-record-text="v=spf1 mx a:ushub1.microchip.com
+  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
+  include:servers.mcsv.net include:mktomail.com
+  include:spf.protection.outlook.com ~all"
+Received-SPF: None (esa6.microchip.iphmx.com: no sender
+  authenticity information available from domain of
+  postmaster@email.microchip.com) identity=helo;
+  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
+  envelope-from="Cristian.Birsan@microchip.com";
+  x-sender="postmaster@email.microchip.com";
+  x-conformance=spf_only
+Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Cristian.Birsan@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
+IronPort-SDR: RNxNNSncMJoztrjRlZKmBxNrxReUXbLQOeWPtryVMnosacAQxIdDqSXHv7BwUNjt2W3G5Ptm5h
+ 0F1YMjhkkUxcU6Ai608qJMkkHG6gasrR6MxMHi+vy/1301dHQf4obN4EDtOnLe7rplJQWrqNwi
+ WeYkkvfhZmoA45bspa7FWhGq4VMOvSaZyYvcXS+LAMAQFVwLa4KU9aNSsENdXNNPENUamyJoJ2
+ 8Y2XgyLD8YPkb0DcVSARjGUWO+QlSUG8clt7Z/kK7KOUJsW3z5RaF4oCut1vMnq9kll+Srau26
+ Sys=
+X-IronPort-AV: E=Sophos;i="5.69,305,1571727600"; 
+   d="scan'208";a="57492404"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2019 04:53:16 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.1713.5; Thu, 12 Dec 2019 04:53:21 -0700
+Received: from cristi-W530.mchp-main.com (10.10.85.251) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.1713.5 via Frontend Transport; Thu, 12 Dec 2019 04:53:19 -0700
+From:   Cristian Birsan <cristian.birsan@microchip.com>
+To:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Cristian Birsan <cristian.birsan@microchip.com>
+Subject: [PATCH] net: usb: lan78xx: Fix suspend/resume PHY register access error
+Date:   Thu, 12 Dec 2019 13:52:47 +0200
+Message-ID: <20191212115247.26728-1-cristian.birsan@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="R7Dyui215VKdTDYA"
-Content-Disposition: inline
-In-Reply-To: <20191212052841.6734-2-suwan.kim027@gmail.com>
+Content-Type: text/plain
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Lan78xx driver accesses the PHY registers through MDIO bus over USB
+connection. When performing a suspend/resume, the PHY registers can be
+accessed before the USB connection is resumed. This will generate an
+error and will prevent the device to resume correctly.
+This patch adds the dependency between the MDIO bus and USB device to
+allow correct handling of suspend/resume.
 
---R7Dyui215VKdTDYA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/2] usbip: Fix receive error in vhci-hcd when using
- scatter-gather
+Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
+Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
+---
+ drivers/net/usb/lan78xx.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Thu, Dec 12, 2019 at 02:28:40PM +0900, Suwan Kim wrote:
-> When vhci uses SG and receives data whose size is smaller than SG
-> buffer size, it tries to receive more data even if it acutally
-> receives all the data from the server. If then, it erroneously adds
-> error event and triggers connection shutdown.
->=20
-> vhci-hcd should check if it received all the data even if there are
-> more SG entries left. So, check if it receivces all the data from
-> the server in for_each_sg() loop.
->=20
-> Fixes: ea44d190764b ("usbip: Implement SG support to vhci-hcd and stub dr=
-iver")
-> Reported-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab=
-=2Ecom>
-> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
+index cf1f3f0a4b9b..d7bf1918ca62 100644
+--- a/drivers/net/usb/lan78xx.c
++++ b/drivers/net/usb/lan78xx.c
+@@ -1808,6 +1808,7 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
+ 	dev->mdiobus->read = lan78xx_mdiobus_read;
+ 	dev->mdiobus->write = lan78xx_mdiobus_write;
+ 	dev->mdiobus->name = "lan78xx-mdiobus";
++	dev->mdiobus->parent = &dev->udev->dev;
+ 
+ 	snprintf(dev->mdiobus->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+ 		 dev->udev->bus->busnum, dev->udev->devnum);
+-- 
+2.17.1
 
-Tested-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingslab.com>
-
-> ---
->  drivers/usb/usbip/usbip_common.c | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_c=
-ommon.c
-> index 6532d68e8808..e4b96674c405 100644
-> --- a/drivers/usb/usbip/usbip_common.c
-> +++ b/drivers/usb/usbip/usbip_common.c
-> @@ -727,6 +727,9 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct =
-urb *urb)
-> =20
->  			copy -=3D recv;
->  			ret +=3D recv;
-> +
-> +			if (!copy)
-> +				break;
->  		}
-> =20
->  		if (ret !=3D size)
-
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
-A: Because it messes up the order in which people normally read text.
-Q: Why is top-posting such a bad thing?
-
---R7Dyui215VKdTDYA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAl3yKHgACgkQ24/THMrX
-1ywSWwf/aXnourZh6+z8Levd5Q3SYBwIJXKYM9bNFOW1KwgCtYhhjVKYKVpkMh0v
-dsn9QNc3Is5A0bp+zfgsqskyDLCJYbtT7nq5UIdSd4xKID0oa6nlz1ODmgfducTI
-HTJ3jCyYoscaJZhCBkMSv0hcnoJQMAta+yr9qZJkYh/E5LnA5yErl8o6juSJ+E7g
-624+4ZHwgYIopr+fFSyD51c42dhrciu4j2C6URNhhJRMVqann/jvQZHT6eaBWfzt
-Uz0o3vfRLg5rBoU7luV2tTqPJOCve7Q+/CGUdawOIqRXs1FqnePq46r9T3VS5T3u
-0rWwX0nGquiKG6pYh/myHMobV2JuCA==
-=UnQt
------END PGP SIGNATURE-----
-
---R7Dyui215VKdTDYA--
