@@ -2,99 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2FE11C6CE
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 09:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF5B11C6D1
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 09:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728201AbfLLIGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 03:06:08 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:45845 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728147AbfLLIGH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 03:06:07 -0500
-Received: by mail-lj1-f196.google.com with SMTP id d20so1162777ljc.12;
-        Thu, 12 Dec 2019 00:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=39HIJuHZ8Kr9jnNgUEG20ZXIWXqKC42ITM1S74AQ/bk=;
-        b=uAJFSqU/HRXk2CC1kQ6ezwrvIfqBnZPl+AJwS8ygQnZQcNY20grUpZAGjGEoW72EEl
-         AZC+0Y22X35tHHC7iW3GqPQpVkWN02fbxQQMO6zenfTYAlzbAtCMFVsAMv8mbTtN0w54
-         rQFug/KOvrGE5M2+KkWVH+Y6ZE3RPZCRN3UqhDnPjaMi/LPnk525U+A1FO4MUjvyrR71
-         kCVYORgiL5I2biPOsoS7uKhz8F4fO9dVS0ilrpC8U3wAM9yIcYY/0HrnlB/4zgaYjTLF
-         kRoY+W+1VyWvafGVdRZy7qiIxGLK382bgr+5jLYKdcoz5HThpG49K1T/1vSVzojofVoj
-         9XUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=39HIJuHZ8Kr9jnNgUEG20ZXIWXqKC42ITM1S74AQ/bk=;
-        b=IHt2iLcZroJ8PrUDUxwh9Gc7s1X3Rbsf8/48kw19ez1PbCE6tO+pddaxHadhk1g92i
-         3T8PsNpdfyz+QZ1NO8Vlw/CWwi+UuBwtUXdE/Z89Q/TE63cPboJXzrZ45Re690qfYLnx
-         Iv/TwLSTsz7VJx0CdjVCBL++FLj+mTEU4IumSOyyHdryJbSM5bjSvwzuFYQaKsxDNgU2
-         5lqcATdgUmZAeSzx/zX5EesJ/g5tvY+46OzqwdLc/J3nmWZmrxVOMQCl6SwTOCYQ4vmr
-         O6OQLDvRl6Pxwn6GXf9yHMsg1AHmMLDaO+krc7qAvTNMvOKsAUGaLqHFYsY+mddXQviV
-         Hljw==
-X-Gm-Message-State: APjAAAWsv3KCFxCqGxvnUKAS4oQ4e89W3lGn2nlZo+3m1h2gNe1OjZUF
-        33zX+qbPfnVNV/D0+KArcupQzxVPupq3mw==
-X-Google-Smtp-Source: APXvYqwixWwRIYU8AcBc8/Id3rU4oUKuVgvXy/a/NwKBNmqYzefpOSVS9rpZTuumKCjAKc6s3Hr5Zw==
-X-Received: by 2002:a2e:b4e7:: with SMTP id s7mr4506318ljm.58.1576137965388;
-        Thu, 12 Dec 2019 00:06:05 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id p26sm2475840lfh.64.2019.12.12.00.06.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 00:06:02 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [RFC PATCH 06/14] usb: devicetree: dwc3: Add max lane and lsm
-In-Reply-To: <aa9816c1efcdd492d698b421a94f0771961f414e.1576118671.git.thinhn@synopsys.com>
-References: <cover.1576118671.git.thinhn@synopsys.com> <aa9816c1efcdd492d698b421a94f0771961f414e.1576118671.git.thinhn@synopsys.com>
-Date:   Thu, 12 Dec 2019 10:06:46 +0200
-Message-ID: <87v9qmvug9.fsf@kernel.org>
+        id S1728174AbfLLIKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 03:10:00 -0500
+Received: from mail-eopbgr00052.outbound.protection.outlook.com ([40.107.0.52]:5255
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728150AbfLLIKA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Dec 2019 03:10:00 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kzCO1HNVnE1uHSdPBNHKWoHBjOiefXyAFifi+nz4bc5OTanjP1vZz9yDG6+DrMbjD6FyERnhRruUv9l1PT4Zw9c0frdIqpvg8Cr1YOpbjHwhxfImGXgRrdq/vamzPldBhxi3z7aFzvf2VZHieYAWnkCnVdOmQehMo42iSXYEykaA7QQ6iCu5piU3ToGyHh84knqFC+ROOvNaAb21enqPOYC8izxSvcHy9P3fXG3i+IjFPi43cCVjAGHicDa8rECQa9+8Bdle3DuBtyvAb+LbKTU0lPNXfUMLZWYx2nATrTFUEnjHBK1ZSZiZvFBJsT07cWB21dYjwTWmd/T8X9KjrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2+bt78+TK9Izlb270cmWwFGCanMsDj6MRnS56lli0hk=;
+ b=IqjxV8MwlMYiBEJ8JtZ8rrYToywVgnmVyoOz03a58iEl9YrGtdqd+P1hik3jrZ71kQVZ/wgYKCRxNC+2TMvcp/Vin2kGBD9NNyqR12p84tiKK44f8NArhCayO1U7FDko4psOxRXoOUH5xDRErCUSqlTSkallQYE8vAouBlHxVhoJWD2JUNle5jz3BOQ8NtkJ3z4ngg5pOBaRbSdkuGmqwR131Xns3sN4/j0m/hwipyiocfdf5VV5R4yFnU1qeoa0uoLHMerVBb8cqVDPdKYvWXEAIGYcYjtduNGHMnKBuiajMSsWiIxGpQuYRFxbcMfUxMf2tbsF3LPVtmtzkEtM6w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2+bt78+TK9Izlb270cmWwFGCanMsDj6MRnS56lli0hk=;
+ b=cQGKGn5d7CWimCcYJvFx6tusHfOh1evFrkR03U2n1gElw9pVuyMiZzhatLjYzm8D4VaisFJoyiEnY379lI1HBEuEIJWfQWTPtx47xE9Jg1Cl66A/+YUTR4W64jeQVBnE7NkV1zGUgz6bTZ+5SgNljpQtqXm5eLNIe6F0gan7XDQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4174.eurprd04.prod.outlook.com (52.134.30.142) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2516.13; Thu, 12 Dec 2019 08:09:56 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2538.017; Thu, 12 Dec 2019
+ 08:09:55 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>, Jun Li <jun.li@nxp.com>,
+        stable <stable@vger.kernel.org>
+Subject: RE: [PATCH 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for sync io
+ mode
+Thread-Topic: [PATCH 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for sync io
+ mode
+Thread-Index: AQHVsKDizJBJhPXRY0awfinO/GM7Sqe2Da2AgAAXwDA=
+Date:   Thu, 12 Dec 2019 08:09:55 +0000
+Message-ID: <VI1PR04MB532743340CE35C4F236FEAB68B550@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <1576123160-28931-1-git-send-email-peter.chen@nxp.com>
+ <878snixcvg.fsf@kernel.org>
+In-Reply-To: <878snixcvg.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.66]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 11caddcc-d467-4796-5450-08d77edaac92
+x-ms-traffictypediagnostic: VI1PR04MB4174:|VI1PR04MB4174:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB41748B41F11CD532998E45418B550@VI1PR04MB4174.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1227;
+x-forefront-prvs: 0249EFCB0B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(189003)(199004)(66946007)(8936002)(186003)(55016002)(86362001)(5660300002)(76116006)(4326008)(54906003)(7696005)(9686003)(52536014)(66446008)(66476007)(64756008)(8676002)(66556008)(33656002)(6506007)(81156014)(81166006)(71200400001)(26005)(316002)(2906002)(478600001)(44832011)(6916009);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4174;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IKj+ASPFdB1BS/vjeKr6BX84YGW1yuXERVRGMMcF6Fov4vZjGxC3FYYLBNG2AlAaYRO7ZwKUNI20S8FSd6ClTtOBhO/7hLPHpo027LAGZJ57zFzpsawH1MUAPYd9ytYisTTm36eJS6mDqUOAzZnIrjt8udJsqNcdr7NM354uYjZDs6ZqLWj5CqtsRmA8Hz/FXmvr1jgfzJN/iJC21f+IvpOaW4YgZpB9yF6NIEgL7HzqUEZ/9szZUXGqD3i0fQdTzAU7DmdDxqNuzlnK2UlzI+ELMcdBrVo6Amo+8mndm57NQRCBteO6ZPEr2O+mn3M19tvDwOwztkuxRbikbFj0jCIMfpSRMfgFgsiC+gfn5siRou6ubDK3Z/QX7Ewn8TV7rXSaMgTAiVYRVstYPQVXns7oQ6BDTRCBcAmPLM7pYV3Jr6WchalPDqHw1i2uyb3w
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11caddcc-d467-4796-5450-08d77edaac92
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Dec 2019 08:09:55.8266
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FCfBLxp9nkw+6KWnlsHzdFgq7kfuW9hqSMiqT+M7QGVDjzhK0iefcWHA1bb+l8iQx3Y2zygfAXUTr174LeaCxw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4174
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+=20
+> Peter Chen <peter.chen@nxp.com> writes:
+> > The UDC core uses req->num_sgs to judge if scatter buffer list is used.
+> > Eg: usb_gadget_map_request_by_dev. For f_fs sync io mode, the request
+> > is re-used for each request, so if the 1st request->length >
+> > PAGE_SIZE, and the 2nd request->length is < PAGE_SIZE, the f_fs uses
+> > the 1st
+> > req->num_sgs for the 2nd request, it causes the UDC core get the wrong
+> > req->num_sgs value (The 2nd request doesn't use sg).
+> >
+> > We set req->num_sgs as 0 for each request at non-sg transfer case to
+> > fix it.
+>=20
+> The patch, however, is *removing* initialization to 0...
+>=20
+> > Cc: Jun Li <jun.li@nxp.com>
+> > Cc: stable <stable@vger.kernel.org>
+> > Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather
+> > buffers")
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > ---
+> >  drivers/usb/gadget/function/f_fs.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/gadget/function/f_fs.c
+> > b/drivers/usb/gadget/function/f_fs.c
+> > index eedd926cc578..b5a1bfc2fc7e 100644
+> > --- a/drivers/usb/gadget/function/f_fs.c
+> > +++ b/drivers/usb/gadget/function/f_fs.c
+> > @@ -1106,7 +1106,6 @@ static ssize_t ffs_epfile_io(struct file *file, s=
+truct
+> ffs_io_data *io_data)
+> >  			req->num_sgs =3D io_data->sgt.nents;
+> >  		} else {
+> >  			req->buf =3D data;
+> > -			req->num_sgs =3D 0;
+>=20
+> ... this doesn't seem to match your commit log. Care to explain?
+>=20
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+Sorry, I did not check the patch when I formatted it. I need to pay more at=
+tention to it next time.
+I will send it again.
 
-> Add a new property to set maximum number of lanes and transfer rated
-                                                                 ^^^^^
-                                                                 rate?
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3x9RYACgkQzL64meEa
-mQZtThAAo+OMckopLC49s+9B+5LJYr9HUklgDOWNbS5sNhH3DQOoWAC+n4SDv3CN
-ml/iHID4obiOBVFaCHqAZj6DRvUBffA12Nv6K7wbaG7GQfmo/iGvpCHl1kSFqH5+
-WZXDOMA5yunAxZ5p7I+8314mM188qwCtTbrhWJXdnUq8Ft1TFon1BDVUt9pnSUpx
-1tWsbfS1ZT8WFEhf6vSqrnktidJufvTpZF4F0skecsF7CDLIsyxko8Q8D2+46Ya/
-CvPf+oFn5DnYvTNQton9MW/TCCduv9twqP+1LaIFASbxqnHXIZetPNfQ8qIkDEDg
-Km2Dp+PBtHJl9mCptXODk/onXQkMbSj0U3jsMGtbHC+tXs3zDu0FRy4/mVjCRirJ
-h0tshMeXDLksM3wN33LWWaExsipqZu8zEAinCuY2RJ+zZZ3zQ2N2TJSZSzt2X/Hf
-n/O/cBZbPykJYMXfrSJucOVvryPqQM4Y3sGSe49q+4HQwQ61wXFwccuTY+Nnfy1y
-w8HNOCLA4ybba65Z5nceZvwwcw4+rqtk9teCAlEy6jyOUA0zcc9ksw2pUvOHsWUK
-G0EUiCjaS/VCvq715SCP3qxa+Mcjw0Cu0/PyuB2QyOWDFs4z3Oin3G2g/pRT2Uk9
-nA17AlxjtclHN0jTRWR20RLS1LK51KZ4UWaJXBX4hnBigC+QOEY=
-=p3RT
------END PGP SIGNATURE-----
---=-=-=--
+Peter
