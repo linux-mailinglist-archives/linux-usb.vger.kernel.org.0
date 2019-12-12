@@ -2,78 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFE911C359
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA8911C387
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:49:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727705AbfLLCjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 21:39:23 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:33137 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727652AbfLLCjW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:39:22 -0500
-Received: by mail-lf1-f67.google.com with SMTP id n25so469612lfl.0
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 18:39:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=282Vk2O0GAasg1b2VVKE2l0IwOAnFE95LqI3UeEiHmA=;
-        b=UNjLvAXvO106VPKp3RphCoJRYYK3Vzcmd6FY1FzJUxT/Y0E5gv9KEYfLNHUXQ2h8Wd
-         VZdSsHvz2jayvCx0SZzltEFAtFVK22xBDGjmDQpxS3p2Sk6YGNRYFyWToJFvZxI+4vAH
-         kJ5Osy5pVoAy0goRHVdPb2iHG2v02k+m6btzdfF4wKsam4SWQHnvhkthrPnlYUPTtUGJ
-         DPIocc79H+Un0m0VxAmKsmLd/4DGgiwtuLiVGGDvBmRTdJzhZMTIrOs2ideZjv8q3mwp
-         EwJHHt4gqlVX2s6wvEOkN3QMmlLsAdc5usHvBwQ2Z6kgB469pjLUGZSqLhRXJYoprTcj
-         0/8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=282Vk2O0GAasg1b2VVKE2l0IwOAnFE95LqI3UeEiHmA=;
-        b=uOE1MQwHuNqjxO7OjdathwwhkMIL6o/zqLgmHyHRss/8NRm+qLy6cQLg18c2Ct/mAg
-         xWQutCc0fQSfAPAgdJ1S7dE1I8LWsaPLa+AOO8JE1CFlm0Xx7YXn2v58DJJlcDdetmqE
-         h0lMDj6GVUK833Kdrmzak6aMKR/uovYJQ+rtuKBBbCr6wGNOfFHfWQr9QnnoIN/q1A3e
-         v8ch9RlPzaFVPX0H+gTncYF7/4jkvivLn6wxqH1ZkHjvvGz6cVVqPdnF9IyPJTtU0Etd
-         QpoFAgbxU9fU41HpPqBY7WdE2Vjzsq1ECpSnATgO7IRPH604FuBTGVj8zpGKc/xv42tu
-         bhhA==
-X-Gm-Message-State: APjAAAVELj9FpAEdd5GScLopO+vaXk3wpZjGa7HQGqPx8rLJ9pErQyOJ
-        lbo5XvnCxALl/pcOHMVp8R0QZsrHuKkWmlZeJ14=
-X-Google-Smtp-Source: APXvYqzbH+gNU1ksJcp+N24MN5ixvFzgDaCEHSX64y6ukM35NX4F6z+HjwllaHm2i+W2PkUXDjglz3YHMcl1yD9+enY=
-X-Received: by 2002:a19:4b87:: with SMTP id y129mr4493540lfa.32.1576118360764;
- Wed, 11 Dec 2019 18:39:20 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a2e:8515:0:0:0:0:0 with HTTP; Wed, 11 Dec 2019 18:39:20
- -0800 (PST)
-From:   "Mr. Asante Richard" <r.a.k.agency.gh@gmail.com>
-Date:   Wed, 11 Dec 2019 18:39:20 -0800
-Message-ID: <CANiiVBvuuyLhhEJfn4kXBjR-rneT4R7vao6StdAv4iw_8XLC1w@mail.gmail.com>
-Subject: ONGOING COMPANIES SUPPLY TENDER IN GHANA
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        id S1727860AbfLLCtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 21:49:04 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:38118 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727599AbfLLCtD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:49:03 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 77709C0084;
+        Thu, 12 Dec 2019 02:49:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1576118942; bh=ta14JiyZFbEKwsXrq3lRZW1hLWDxxcBeGnI5Eswl/WM=;
+        h=Date:From:Subject:To:Cc:From;
+        b=L5q47asllvi0qp+gHokHfXfQagOmAk2EHA6PA2IHcBt0cC3qdTlFMUeERfBz4gS+5
+         +qOZfUuv2kcT1D5YFYHXRnPB7diXW0dpt4kAZuBCi75Q7BcYgTbrLj7cStOC3VlmLV
+         JUcDCOV/nPtjGuqJkOUcBUGDJOohigmdkcHRfEjepG4EgB81tKn8Ln1pyriqUh9yL8
+         cnwas9n/iZ3FcJbCQU8LRynbGypgT7FVwjaVK9eYl6Xec+Yd2H9LPcxthXp3j7gSvC
+         XxpHInvIFcfg+J8NqQdmvx6OMN9rZj9Kojj28vwi8pAKkc3MHuNzmBtxAbzQgmo3lJ
+         c25MVl2PkVbTg==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id F2FBCA007C;
+        Thu, 12 Dec 2019 02:48:58 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 11 Dec 2019 18:48:58 -0800
+Date:   Wed, 11 Dec 2019 18:48:58 -0800
+Message-Id: <cover.1576118671.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [RFC PATCH 00/14] usb: dwc3: Introduce DWC_usb32
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Roger Quadros <rogerq@ti.com>, zhengbin <zhengbin13@huawei.com>
+Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Sir,
+This patch series adds support to Synopsys DWC_usb32 controller which is
+capable of dual-lane and USB speed up to 40 Gbps. In order to support this new
+controller, we need to make a few updates the USB stack and dwc3 driver:
 
-We got your company information through an exhaustive search in the
-internet. We are authorized government/Business agent  based in Accra,
-Ghana.Please can you furnish me in full details about the standard of
-your products. I will appreciate it more if you can give me with
-detail specification.
+1) dwc3 driver needs to update its IP and revision check. The current scheme
+does not support more than 2 controllers.
 
-1) Your company profile
-2) Your price list in CIF
-3) The Technical details of your products
+2) Introduce Lane Speed Mantissa and lane count on the gadget side. Devices
+operating in SuperSpeed Plus can refer to gen2x1, gen1x2, or gen2x2.
 
-As accredited commission agent, I am entitle to 2% commission from the
-total contract sum as soon as the contract money is paid to your bank
-account and I am looking for supplier whose products is of good
-quality, as your products are among the need items which will be
-purchase in a large quantities.
+3) Add a new gadget opts to set the sublink speed for drivers that are
+constrained to certain lane count or lane speed mantissa.
 
-You can reach me for business opportunities for the supply of your products.
+4) Add miscellaneous initialization checks for DWC_usb32.
 
-Best Regard,
-Mr. Asante Richard,
-R. A. K. Global Ghana.
-P. O. Box AN 520
-Accra North, Ghana
+
+Any review comment is highly appreciated.
+
+Thank you,
+Thinh
+
+
+
+
+This patch series depends on the following patches
+
+usb: dwc3: Fix GTXFIFOSIZ.TXFDEP macro name
+usb: dwc3: gadget: Properly set maxpacket limit
+
+https://patchwork.kernel.org/cover/11283761/
+
+
+Thinh Nguyen (14):
+  usb: gadget: Add lane count and lsm
+  usb: gadget: Add callback to set lane and transfer rate
+  usb: composite: Properly report lsm
+  usb: dwc3: Implement new id check for DWC_usb32
+  usb: dwc3: Update IP checks to support DWC_usb32
+  usb: devicetree: dwc3: Add max lane and lsm
+  usb: dwc3: gadget: Set lane count and lsm
+  usb: dwc3: gadget: Track connected lane count and speed
+  usb: dwc3: gadget: Limit the setting of speed
+  usb: dwc3: Update HWPARAMS0.MDWIDTH for DWC_usb32
+  usb: devicetree: dwc3: Add TRB prefetch count
+  usb: dwc3: gadget: Set number of TRB prefetch
+  usb: devicetree: dwc3: Add property to disable mult TRB fetch
+  usb: dwc3: gadget: Implement disabling of mult TRB fetch
+
+ Documentation/devicetree/bindings/usb/dwc3.txt |   9 ++
+ drivers/usb/dwc3/core.c                        |  88 ++++++++----
+ drivers/usb/dwc3/core.h                        |  65 ++++++---
+ drivers/usb/dwc3/debugfs.c                     |  14 +-
+ drivers/usb/dwc3/gadget.c                      | 181 +++++++++++++++++++------
+ drivers/usb/dwc3/host.c                        |   2 +-
+ drivers/usb/gadget/composite.c                 |  16 ++-
+ drivers/usb/gadget/legacy/mass_storage.c       |   2 +
+ drivers/usb/gadget/udc/core.c                  |  38 +++++-
+ include/linux/usb/composite.h                  |   4 +
+ include/linux/usb/gadget.h                     |  15 ++
+ 11 files changed, 344 insertions(+), 90 deletions(-)
+
+-- 
+2.11.0
+
