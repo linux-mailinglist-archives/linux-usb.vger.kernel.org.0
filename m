@@ -2,67 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD5C11C80E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 09:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE0F11C854
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 09:37:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728327AbfLLIXv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 12 Dec 2019 03:23:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57296 "EHLO mail.kernel.org"
+        id S1728247AbfLLIhf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 03:37:35 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:55154 "EHLO inva020.nxp.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728295AbfLLIXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Dec 2019 03:23:51 -0500
-From:   bugzilla-daemon@bugzilla.kernel.org
-Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
-Date:   Thu, 12 Dec 2019 08:23:50 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: heikki.krogerus@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-205841-208809-hk9UBQwetr@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
-References: <bug-205841-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+        id S1728221AbfLLIhf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Dec 2019 03:37:35 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 895681A091F;
+        Thu, 12 Dec 2019 09:37:34 +0100 (CET)
+Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 93B2C1A079F;
+        Thu, 12 Dec 2019 09:37:31 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 99B61402B4;
+        Thu, 12 Dec 2019 16:37:27 +0800 (SGT)
+From:   Peter Chen <peter.chen@nxp.com>
+To:     balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
+        Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH v2 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for non-sg transfer
+Date:   Thu, 12 Dec 2019 16:35:03 +0800
+Message-Id: <1576139703-9409-1-git-send-email-peter.chen@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=205841
+The UDC core uses req->num_sgs to judge if scatter buffer list is used.
+Eg: usb_gadget_map_request_by_dev. For f_fs sync io mode, the request
+is re-used for each request, so if the 1st request->length > PAGE_SIZE,
+and the 2nd request->length is <= PAGE_SIZE, the f_fs uses the 1st
+req->num_sgs for the 2nd request, it causes the UDC core get the wrong
+req->num_sgs value (The 2nd request doesn't use sg). For f_fs async
+io mode, it is not harm to initialize req->num_sgs as 0 either, in case,
+the UDC driver doesn't zeroed request structure.
 
-Heikki Krogerus (heikki.krogerus@linux.intel.com) changed:
+Cc: Jun Li <jun.li@nxp.com>
+Cc: stable <stable@vger.kernel.org>
+Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
+Signed-off-by: Peter Chen <peter.chen@nxp.com>
+---
+Changes for v2:
+- Using the correct patch, and initialize req->num_sgs as 0 for aio too.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |heikki.krogerus@linux.intel
-                   |                            |.com
+ drivers/usb/gadget/function/f_fs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- Comment #4 from Heikki Krogerus (heikki.krogerus@linux.intel.com) ---
-The NULL pointer is coming from UCSI driver, and it should not have any effect
-on audio. UCSI is a firmware interface that we use just for reading the status
-of the USB Type-C connectors. The firmware does all the actual negotiation with
-the partner device, so the Dock in this case. Which dock is it?
-
-I'll see if I can reproduce the NULL pointer dereference, but you can just
-disable the UCSI drivers in your kernel configuration to get rid of it. Any
-issues with the audio should not be related to it.
-
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 59d9d512dcda..ced2581cf99f 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -1062,6 +1062,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 			req->num_sgs = io_data->sgt.nents;
+ 		} else {
+ 			req->buf = data;
++			req->num_sgs = 0;
+ 		}
+ 		req->length = data_len;
+ 
+@@ -1105,6 +1106,7 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+ 			req->num_sgs = io_data->sgt.nents;
+ 		} else {
+ 			req->buf = data;
++			req->num_sgs = 0;
+ 		}
+ 		req->length = data_len;
+ 
 -- 
-You are receiving this mail because:
-You are watching the assignee of the bug.
+2.17.1
+
