@@ -2,103 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2278811D276
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 17:41:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F47711D2C8
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 17:52:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729907AbfLLQlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 11:41:35 -0500
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:36300 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729852AbfLLQlf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 11:41:35 -0500
-Received: by mail-oi1-f196.google.com with SMTP id c16so911263oic.3;
-        Thu, 12 Dec 2019 08:41:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kAhkMJgoZo1BWz+qs5Xno3OsSKZ86r1MkClH94NFChM=;
-        b=ZGBqSKgXkEU8zPLpGwOZI18a87nXD3r2fvq+D0pW0f6ala7KTcbSKdwgARMwzpLDo4
-         /sq6isXWuLTvxs9DS/Od/BRQV71ITatVSEE8jrjkTiQI/F+F6bAy/8MAtD/lKC7CTOvu
-         8yt+sbayYou0QAebyUFWnsK3+qC4E6/QN1h0DJLlpfocwiR+l7Vnz51BvA4nMGtaADPP
-         dJGrGuvRiL2ONf0lcuvqYuw2Zwj9camNbSiRGy8mXJKS4lj2SLgJPOOYxROStCWYZzq5
-         1zhmyYzlD73Fz09SK7yo71qm4vVCFOCALtGbpUxvPPlVEAbVv0fDDm0sLv5YVamB1UD2
-         44zg==
-X-Gm-Message-State: APjAAAXV64tNbqEUDxHk2raeRvNW+E07L16mGZy1zciz+572uUlwJFdh
-        JLHMnQaOXQdnvrepsOLi/1WCPIFCn9o+xe1++jk=
-X-Google-Smtp-Source: APXvYqz/HR4b555gMUmBfIr+En2JhqxAwZmSDSEDPYWP867i+78mHmWSktUG5yszyRCA4BCxfwarPEWTLzzeFMNk+PY=
-X-Received: by 2002:a05:6808:b38:: with SMTP id t24mr5694666oij.110.1576168894436;
- Thu, 12 Dec 2019 08:41:34 -0800 (PST)
+        id S1729980AbfLLQwz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 11:52:55 -0500
+Received: from iolanthe.rowland.org ([192.131.102.54]:52704 "HELO
+        iolanthe.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729762AbfLLQwz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 11:52:55 -0500
+Received: (qmail 2315 invoked by uid 2102); 12 Dec 2019 11:52:54 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 12 Dec 2019 11:52:54 -0500
+Date:   Thu, 12 Dec 2019 11:52:54 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@iolanthe.rowland.org
+To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>
+cc:     andreyknvl@google.com, <hverkuil@xs4all.nl>,
+        <jrdr.linux@gmail.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, <mchehab@kernel.org>,
+        <rfontana@redhat.com>
+Subject: Re: general protection fault in usb_set_interface
+In-Reply-To: <Pine.LNX.4.44L0.1912101513580.1647-100000@iolanthe.rowland.org>
+Message-ID: <Pine.LNX.4.44L0.1912121146090.1352-100000@iolanthe.rowland.org>
 MIME-Version: 1.0
-References: <20191108042225.45391-1-dmitry.torokhov@gmail.com>
- <20191108042225.45391-2-dmitry.torokhov@gmail.com> <CGME20191212111237eucas1p1a278d2d5d2437e3219896367e82604cc@eucas1p1.samsung.com>
- <b3f6ca8b-dbdf-0cec-aa8f-47ffcc5c5307@samsung.com> <20191212112825.GK32742@smile.fi.intel.com>
-In-Reply-To: <20191212112825.GK32742@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Dec 2019 17:41:21 +0100
-Message-ID: <CAJZ5v0i3dSOSa37yWLM+zDVnMKVTkOxbyKD4vo0KVwj_uFB26Q@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] software node: rename is_array to is_inline
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 12:28 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Dec 12, 2019 at 12:12:36PM +0100, Marek Szyprowski wrote:
-> > Dear All,
-> >
-> > On 08.11.2019 05:22, Dmitry Torokhov wrote:
-> > > We do not need a special flag to know if we are dealing with an array,
-> > > as we can get that data from ratio between element length and the data
-> > > size, however we do need a flag to know whether the data is stored
-> > > directly inside property_entry or separately.
-> > >
-> > > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> >
-> > Today I've noticed that this patch got merged to linux-next as commit
-> > e6bff4665c595b5a4aff173848851ed49ac3bfad. Sadly it breaks DWC3/xHCI
-> > driver operation on Samsung Exynos5 SoCs (and probably on other SoCs
-> > which use DWC3 in host mode too). I get the following errors during boot:
-> >
-> > dwc3 12000000.dwc3: failed to add properties to xHCI
-> > dwc3 12000000.dwc3: failed to initialize host
-> > dwc3: probe of 12000000.dwc3 failed with error -61
-> >
-> > Here is a full kernel log from Exynos5250-based Snow Chromebook on KernelCI:
-> >
-> > https://storage.kernelci.org/next/master/next-20191212/arm/exynos_defconfig/gcc-8/lab-collabora/boot-exynos5250-snow.txt
-> >
-> > (lack of 'ref' clk is not related nor fatal to the driver operation).
-> >
-> > The code which fails after this patch is located in
-> > drivers/usb/dwc3/host.c. Let me know if I can help more in locating the bug.
->
-> Thank you for report.
->
-> I think we should not have that patch in the fist place... I used to have
-> a bad feeling about it and then forgot about it existence.
+[CC: list trimmed slightly -- including syzkaller-bugs]
 
-Well, I think you mean the [2/6].
+On Thu, 12 Dec 2019, Andrey Konovalov wrote:
 
-The $subject one really shouldn't change functionality, we must have
-missed something here.
+> Yes, the patch failed due to msleep() being undefined in that source
+> file. I'm not sure why syzbot didn't send a response. Could you try 
+> resending the patch as the reply to that other syzbot report?
 
-Anyway, I'll drop this branch from the linux-next one for now.
+This isn't literally a reply to the other syzbot report because I no 
+longer have any copies of it in my mailbox.  But it uses the same To: 
+and Subject: lines, so hopefully it will be okay.
+
+This version of the patch adds #include <linux/delay.h>, so now
+msleep() should be declared and there won't be any build errors.
+
+If you want me to send the old version that fails to build, let me 
+know.
+
+Alan Stern
+
+#syz test: https://github.com/google/kasan.git 1f22d15c
+
+Index: usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+===================================================================
+--- usb-devel.orig/drivers/media/usb/usbvision/usbvision-video.c
++++ usb-devel/drivers/media/usb/usbvision/usbvision-video.c
+@@ -49,6 +49,7 @@
+ #include <media/tuner.h>
+ 
+ #include <linux/workqueue.h>
++#include <linux/delay.h>
+ 
+ #include "usbvision.h"
+ #include "usbvision-cards.h"
+@@ -1585,6 +1586,7 @@ static void usbvision_disconnect(struct
+ 		wake_up_interruptible(&usbvision->wait_frame);
+ 		wake_up_interruptible(&usbvision->wait_stream);
+ 	} else {
++		msleep(100);
+ 		usbvision_release(usbvision);
+ 	}
+ 
+Index: usb-devel/drivers/media/v4l2-core/v4l2-dev.c
+===================================================================
+--- usb-devel.orig/drivers/media/v4l2-core/v4l2-dev.c
++++ usb-devel/drivers/media/v4l2-core/v4l2-dev.c
+@@ -24,6 +24,7 @@
+ #include <linux/kmod.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
++#include <linux/delay.h>
+ 
+ #include <media/v4l2-common.h>
+ #include <media/v4l2-device.h>
+@@ -419,9 +420,10 @@ static int v4l2_open(struct inode *inode
+ 	video_get(vdev);
+ 	mutex_unlock(&videodev_lock);
+ 	if (vdev->fops->open) {
+-		if (video_is_registered(vdev))
++		if (video_is_registered(vdev)) {
++			msleep(200);
+ 			ret = vdev->fops->open(filp);
+-		else
++		} else
+ 			ret = -ENODEV;
+ 	}
+ 
+
+
