@@ -2,105 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C44FE11CD6D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 13:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B08F311CEA3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 14:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729221AbfLLMtm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 07:49:42 -0500
-Received: from mga06.intel.com ([134.134.136.31]:32452 "EHLO mga06.intel.com"
+        id S1729418AbfLLNoQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 08:44:16 -0500
+Received: from mga17.intel.com ([192.55.52.151]:51603 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729207AbfLLMtm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Dec 2019 07:49:42 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
+        id S1729392AbfLLNoP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Dec 2019 08:44:15 -0500
+X-Amp-Result: UNSCANNABLE
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 04:49:40 -0800
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 05:44:15 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,306,1571727600"; 
-   d="scan'208";a="220686438"
+   d="scan'208";a="220696698"
 Received: from kuha.fi.intel.com ([10.237.72.53])
-  by fmsmga001.fm.intel.com with SMTP; 12 Dec 2019 04:49:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Dec 2019 14:49:37 +0200
-Date:   Thu, 12 Dec 2019 14:49:37 +0200
+  by fmsmga001.fm.intel.com with SMTP; 12 Dec 2019 05:44:13 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Dec 2019 15:44:12 +0200
+Date:   Thu, 12 Dec 2019 15:44:12 +0200
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     zhong jiang <zhongjiang@huawei.com>, linux@roeck-us.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fusb302: Fix an undefined reference to
- 'extcon_get_state'
-Message-ID: <20191212124937.GE31345@kuha.fi.intel.com>
-References: <1576136063-50916-1-git-send-email-zhongjiang@huawei.com>
- <20191212090132.GC31345@kuha.fi.intel.com>
- <5DF20530.2040509@huawei.com>
- <20191212092805.GA1375559@kroah.com>
- <5DF20B18.4020601@huawei.com>
- <20191212111805.GD31345@kuha.fi.intel.com>
- <20191212122053.GA1541203@kroah.com>
+To:     Ajay Gupta <ajaykuee@gmail.com>
+Cc:     linux-usb@vger.kernel.org, Ajay Gupta <ajayg@nvidia.com>
+Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate DP altmode
+ devices
+Message-ID: <20191212134412.GF31345@kuha.fi.intel.com>
+References: <20191123004347.5127-1-ajayg@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191212122053.GA1541203@kroah.com>
+In-Reply-To: <20191123004347.5127-1-ajayg@nvidia.com>
 User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 01:20:53PM +0100, Greg KH wrote:
-> On Thu, Dec 12, 2019 at 01:18:05PM +0200, Heikki Krogerus wrote:
-> > On Thu, Dec 12, 2019 at 05:40:40PM +0800, zhong jiang wrote:
-> > > On 2019/12/12 17:28, Greg KH wrote:
-> > > > On Thu, Dec 12, 2019 at 05:15:28PM +0800, zhong jiang wrote:
-> > > >> On 2019/12/12 17:01, Heikki Krogerus wrote:
-> > > >>> On Thu, Dec 12, 2019 at 03:34:23PM +0800, zhong jiang wrote:
-> > > >>>> Fixes the following compile error:
-> > > >>>>
-> > > >>>> drivers/usb/typec/tcpm/fusb302.o: In function `tcpm_get_current_limit':
-> > > >>>> fusb302.c:(.text+0x3ee): undefined reference to `extcon_get_state'
-> > > >>>> fusb302.c:(.text+0x422): undefined reference to `extcon_get_state'
-> > > >>>> fusb302.c:(.text+0x450): undefined reference to `extcon_get_state'
-> > > >>>> fusb302.c:(.text+0x48c): undefined reference to `extcon_get_state'
-> > > >>>> drivers/usb/typec/tcpm/fusb302.o: In function `fusb302_probe':
-> > > >>>> fusb302.c:(.text+0x980): undefined reference to `extcon_get_extcon_dev'
-> > > >>>> make: *** [vmlinux] Error 1
-> > > >>> There are stubs for those functions so that really should not be
-> > > >>> happening. I can not reproduce that.
-> > > >> It can be reproduced in next branch. you can try it in the latest next branch.
-> > > > Can it be reproduced in 5.5-rc1?
-> > > >
-> > > commit 78adcacd4edbd6795e164bbda9a4b2b7e51666a7
-> > > Author: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Date:   Thu Dec 12 15:48:07 2019 +1100
-> > > 
-> > >     Add linux-next specific files for 20191212
-> > > 
-> > > I  reproduce it  based on this commit.  The related config is attached.
-> > 
-> > OK, now I get what's going on. EXTCON is build as a module, but
-> > FUSB302 is not. This should be explained in the commit message.
-> > 
-> > That does not mean we have to force everybody to enable EXTCON in
-> > order to use this driver. Try something like this:
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> > index 72481bbb2af3..06e026f6325c 100644
-> > --- a/drivers/usb/typec/tcpm/Kconfig
-> > +++ b/drivers/usb/typec/tcpm/Kconfig
-> > @@ -31,6 +31,7 @@ endif # TYPEC_TCPCI
-> > 
-> >  config TYPEC_FUSB302
-> >         tristate "Fairchild FUSB302 Type-C chip driver"
-> > +       depends on EXTCON=n || EXTCON=y || (EXTCON=m && m)
-> 
-> Ugh.  We need a better "pattern" for stuff like this, it's getting more
-> and more frequent.
-> 
-> And no, I don't have a better idea :(
+Hi Ajay,
 
-I think this works:
+On Fri, Nov 22, 2019 at 04:43:47PM -0800, Ajay Gupta wrote:
+> From: Ajay Gupta <ajayg@nvidia.com>
+> 
+> CCGx controller used on NVIDIA GPU card has two separate display
+> altmode for two DP pin assignments. UCSI specification doesn't
+> prohibits using separate display altmode.
+> 
+> Current UCSI Type-C framework expects only one display altmode for
+> all DP pin assignment. This patch squashes two separate display
+> altmode into single altmode to support controllers with separate
+> display altmode. We first read all the alternate modes of connector
+> and then run through it to know if there are separate display
+> altmodes. If so, it prepares a new port altmode set after squashing
+> two or more separate altmodes into one.
 
-        depends on EXTCON || !EXTCON
+I didn't see any major issues with this. There were still few extra
+spaces etc., but I can clean those. Maybe it would have been good to
+mention in the commit message that the reason why we need those two
+separate alt modes, for what is in reality two separate pin
+configurations, is limitations in UCSI specification, but never mind.
+
+I still don't like the approach, but since I'm unable to explain my
+idea, or have time to write something for this myself, I don't want
+block this any longer. It does not add that much code, so once I have
+time, I can always try to improve it myself, right?
+
+Otherwise it's OK by me. I'll queue it up.
 
 thanks,
 
