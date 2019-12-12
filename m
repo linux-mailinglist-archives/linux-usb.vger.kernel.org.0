@@ -2,126 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C1711D1AE
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 17:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7EC11D1DE
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 17:08:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729680AbfLLQBq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 11:01:46 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:45358 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729247AbfLLQBq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 11:01:46 -0500
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBCG1ZEu043856;
-        Thu, 12 Dec 2019 10:01:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576166495;
-        bh=OnhHmDj6730v80P+aisX1kJAhLR/dwQTQne0SU1G23E=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=B95YTL+OcMwcNnUgM+uKJjuP9L/cxfMLW53TGUda3pFDkcbFwT5guS9F9lS+eRbHq
-         +PAGWDdzKgwCO9lCB6z+joc0RlkF1LfeTlJGwew6ujdomis4U2opVzshX0A+Lz/c6Q
-         hbFJ4wCjM11OorxtQyYLyS2am3yQV4na+KKcc92Y=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBCG1Z58086793
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Dec 2019 10:01:35 -0600
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Dec 2019 10:01:35 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Dec 2019 10:01:35 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCG1ZsD023629;
-        Thu, 12 Dec 2019 10:01:35 -0600
-Date:   Thu, 12 Dec 2019 10:00:59 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Tony Lindgren <tony@atomide.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH] usb: musb: fix idling for suspend after disconnect
- interrupt
-Message-ID: <20191212160059.GI16429@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>
-References: <20191126034151.38154-1-tony@atomide.com>
+        id S1729791AbfLLQIN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 11:08:13 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:46838 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729247AbfLLQIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 11:08:13 -0500
+Received: by mail-pj1-f66.google.com with SMTP id z21so1198922pjq.13
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2019 08:08:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=t52ABI4o3xuFzx6iI2FiMXzfLHRG2vXtrOTjLyWwP9Y=;
+        b=X1KkHrFe5+KnHXvDuX3JhEdoMJFSddEV0UBbSMsLqYli/s1pZYiVh+80ScOCfhZHOM
+         mbkNEsocPrMFAgosaX2RG2mHTAM7cIn0BK/k5T4QTjffd623q7TN/9iUQI0AQOfZlTCH
+         czPVYHsiIpszSn9niPFVmY50qxpQICUTky78CnTGdd4NwlcSWUb4Ip7p3KFm6tl3oBFG
+         lgF0SkN3G/CYcDH/Py8VaSZPbmbNjsCt7+ssDRY9JU/t1qonM3t0Opzaq5OX7utarXDk
+         KP8hmVFCFsBIYmi/fJlezeLb+o8+ydOiJihIHxUwtua/q0xGkJs0nlnKeOnfwYsDn2TW
+         y+9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=t52ABI4o3xuFzx6iI2FiMXzfLHRG2vXtrOTjLyWwP9Y=;
+        b=WD0CfLG3GYwh4w3YPOO1jsfY3XIqBcNENEV97Lpv0rZmFXIYVMRq3nPQSN1YEcsGlq
+         g8SzhVtD0phwtBjX4+3sIVRahcanqagHT/lNWztRMz0CigSanHy76mw/u6FzZcJA3R9s
+         Ikd5v6d+EQiusHsciYUtzRr3HjnUlrrj6PUL5kAtMoe+qHsmeXvaJNeJv3IkBIF1QjvX
+         YgvL16CpOGoA8NtA/j3F+KHqoryIq0fur1di2IjAuQCHH7WB7+vkqHHs8T7WIL7Nvrig
+         lM0v3h0BTcjj3Yy4RN5vS91cYL/DgPwI8s8l01ZQmadzAG5mSu35XA/3nOWpXaZGdQxO
+         5H6g==
+X-Gm-Message-State: APjAAAXwWoXI+9N3IlmT0XHwNp66boUuPQg3eyxOA9VRiyzPk26L/wwK
+        A54DQoA0MHS1SALXlJ3muRwW9u7sF6FP4WnOiT4IOQ==
+X-Google-Smtp-Source: APXvYqwASuMpHZLBfrLXn/KYVzEs9kgGnKLeSVpzijPOaYmow5k5SKoXqWmvUXPl8XHgRTNm16UsMpTaUOySri6b+N4=
+X-Received: by 2002:a17:902:9682:: with SMTP id n2mr10050409plp.336.1576166892491;
+ Thu, 12 Dec 2019 08:08:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191126034151.38154-1-tony@atomide.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <CACT4Y+ZSmwr4y2VrUxZSvFCL0Ws4cp6T5FwyVRg_CqhCf354HQ@mail.gmail.com>
+ <Pine.LNX.4.44L0.1912111111510.1549-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912111111510.1549-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 12 Dec 2019 17:08:01 +0100
+Message-ID: <CAAeHK+xVxFGiJGzEv09GtwfU1wBhCsoEukKXUxW0nq-2h9Aasw@mail.gmail.com>
+Subject: Re: KASAN: use-after-free Read in usbvision_v4l2_open
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+c7b0ec009a216143df30@syzkaller.appspotmail.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-media@vger.kernel.org,
+        USB list <linux-usb@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Richard Fontana <rfontana@redhat.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tony,
+On Wed, Dec 11, 2019 at 5:22 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Wed, 11 Dec 2019, Dmitry Vyukov wrote:
+>
+> > > > By the way, do you know why syzbot sent _two_ reply messages?  One with
+> > > > message ID <00000000000031a0af05995eca0b@google.com> and the other with
+> > > > message ID <000000000000441a4205995eca11@google.com>?  It seems like
+> > > > overkill.
+> > >
+> > > Hm, I'm not sure. Dmitry?
+> >
+> > I would assume it received 2 emails (second from syzkaller-bugs@
+> > mailing list) and deduplication logic did not work somehow. So it
+> > replied to both.
+>
+> Does that mean when I send in a test request, it's better to omit
+> syzkaller-bugs from the CC: list?
+>
+> Also, whatever did happen to the most recent test request (the one sent
+> to syzbot+7fa38a608b1075dfd634 even though it was meant to test the
+> bug reported by syzbot+c7b0ec009a216143df30)?  Did it truly fail to
+> build?  I can't find anything about it in the dashboard link for either
+> bug report, and I haven't gotten a reply from syzbot.
 
-Sorry for my late response.
-
-On Mon, Nov 25, 2019 at 07:41:51PM -0800, Tony Lindgren wrote:
-> When disconnected as USB B-device, we sometimes get a suspend interrupt
-> after disconnect interrupt. In that case we have devctl set to 99 with
-> VBUS still valid and musb_pm_runtime_check_session() wrongly things we
-> have an active session. We have no other interrupts after disconnect
-> coming in this case at least with the omap2430 glue.
-
-I don't have an omap2430 platform to test, but its musb doesn't generate
-DISCONNECT interrupt at all when disconnected from USB host in any case?
-It is a surprise, the musb core driver expects the DISCONNECT interrupt
-after VBUS is lost and relies on it to tear down the gadget driver and
-the state machine. I am wondering how its USB is functional without the
-DISCONNECT event...
-
--Bin.
-
-> 
-> Let's fix the issue by checking the interrupt status again with
-> delayed work for the devctl 99 case. In the suspend after disconnect
-> case the devctl session bit has cleared by then and musb can idle.
-> For a typical USB B-device connect case we just continue with normal
-> interrupts.
-> 
-> Cc: Merlijn Wajer <merlijn@wizzup.org>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
->  drivers/usb/musb/musb_core.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
-> --- a/drivers/usb/musb/musb_core.c
-> +++ b/drivers/usb/musb/musb_core.c
-> @@ -1943,6 +1943,9 @@ ATTRIBUTE_GROUPS(musb);
->  #define MUSB_QUIRK_B_INVALID_VBUS_91	(MUSB_DEVCTL_BDEVICE | \
->  					 (2 << MUSB_DEVCTL_VBUS_SHIFT) | \
->  					 MUSB_DEVCTL_SESSION)
-> +#define MUSB_QUIRK_B_DISCONNECT_99	(MUSB_DEVCTL_BDEVICE | \
-> +					 (3 << MUSB_DEVCTL_VBUS_SHIFT) | \
-> +					 MUSB_DEVCTL_SESSION)
->  #define MUSB_QUIRK_A_DISCONNECT_19	((3 << MUSB_DEVCTL_VBUS_SHIFT) | \
->  					 MUSB_DEVCTL_SESSION)
->  
-> @@ -1965,6 +1968,11 @@ static void musb_pm_runtime_check_session(struct musb *musb)
->  	s = MUSB_DEVCTL_FSDEV | MUSB_DEVCTL_LSDEV |
->  		MUSB_DEVCTL_HR;
->  	switch (devctl & ~s) {
-> +	case MUSB_QUIRK_B_DISCONNECT_99:
-> +		musb_dbg(musb, "Poll devctl in case of suspend after disconnect\n");
-> +		schedule_delayed_work(&musb->irq_work,
-> +				      msecs_to_jiffies(1000));
-> +		break;
->  	case MUSB_QUIRK_B_INVALID_VBUS_91:
->  		if (musb->quirk_retries && !musb->flush_irq_work) {
->  			musb_dbg(musb,
-> -- 
-> 2.24.0
+Yes, the patch failed due to msleep() being undefined in that source
+file. I'm not sure why syzbot didn't send a response. Could you try
+resending the patch as the reply to that other syzbot report?
