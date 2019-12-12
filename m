@@ -2,53 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3736611D678
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 19:58:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E6811D7D1
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 21:22:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730543AbfLLS56 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 13:57:58 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:42650 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730261AbfLLS56 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 13:57:58 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5B71E153DFA32;
-        Thu, 12 Dec 2019 10:57:57 -0800 (PST)
-Date:   Thu, 12 Dec 2019 10:57:56 -0800 (PST)
-Message-Id: <20191212.105756.1578737891054881785.davem@davemloft.net>
-To:     cristian.birsan@microchip.com
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usb: lan78xx: Fix suspend/resume PHY register
- access error
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191212115247.26728-1-cristian.birsan@microchip.com>
-References: <20191212115247.26728-1-cristian.birsan@microchip.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 12 Dec 2019 10:57:57 -0800 (PST)
+        id S1730837AbfLLUVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 15:21:33 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:45483 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730707AbfLLUVd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 15:21:33 -0500
+Received: by mail-wr1-f66.google.com with SMTP id j42so4121525wrj.12;
+        Thu, 12 Dec 2019 12:21:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=CPNUf9ZfNsHV45XZGqiBQJlUTUhc2MVRp6BnooBqqSc=;
+        b=I49SI3JMgbdRmcSyXk+TmA97aoRu3zvvMUs0kL/WAdD/Mrv9aw3KtvpsFz/RmoaXZn
+         6AmfJ8t1D8tRGgH+j1qfqxHW4gSIxPW5XAwvR3xdTzJwQ+PsOAPJbTRz7oqzjeLPdL6W
+         ldUBE+4+jEoSTF56cnW//gHXmFWMeUrXtUkJN+2OUxpqkScMo1MG5uKlGst5lqaiak0g
+         tg5xBOLAk92p+bP5sw0S/oBquvj2wKT8DSgupO68wkWgNPHDlcYiAYno5ktNwMox/y8A
+         j15/oMipjfUrZn6XYfv4jmvkbDaJNNdVmFsdmpskEwjxUx3IRDb0xM0HMiyL7UdNMUqM
+         xTWg==
+X-Gm-Message-State: APjAAAXoLiXSoKA8mIBI7hpHu41k+ZS5h7kwPhFxjr/ZwN3sIyGXsM7c
+        xaqv3QYrpLIQO3R7jiE3n0v2lTs+
+X-Google-Smtp-Source: APXvYqzzbodyVYL3FNuaGg6Zp/U+21dUGiWWf3SbMNFJoJ0+vWDhCy4pxUgA9VjNMpaXXox/nvLRBw==
+X-Received: by 2002:a17:906:3953:: with SMTP id g19mr11516560eje.227.1576182089998;
+        Thu, 12 Dec 2019 12:21:29 -0800 (PST)
+Received: from kozik-lap ([194.230.155.234])
+        by smtp.googlemail.com with ESMTPSA id k36sm2772ede.57.2019.12.12.12.21.28
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 12 Dec 2019 12:21:29 -0800 (PST)
+Date:   Thu, 12 Dec 2019 21:21:26 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v2 1/4] ARM: dts: exynos: Correct USB3503 GPIOs polarity
+Message-ID: <20191212202126.GA3534@kozik-lap>
+References: <20191211144638.24676-1-m.szyprowski@samsung.com>
+ <CGME20191211144648eucas1p2065aac523ce190a5c0e6e2b5b11bd5ce@eucas1p2.samsung.com>
+ <20191211144638.24676-2-m.szyprowski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191211144638.24676-2-m.szyprowski@samsung.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Cristian Birsan <cristian.birsan@microchip.com>
-Date: Thu, 12 Dec 2019 13:52:47 +0200
-
-> Lan78xx driver accesses the PHY registers through MDIO bus over USB
-> connection. When performing a suspend/resume, the PHY registers can be
-> accessed before the USB connection is resumed. This will generate an
-> error and will prevent the device to resume correctly.
-> This patch adds the dependency between the MDIO bus and USB device to
-> allow correct handling of suspend/resume.
+On Wed, Dec 11, 2019 at 03:46:35PM +0100, Marek Szyprowski wrote:
+> Current USB3503 driver ignores GPIO polarity and always operates as if the
+> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
+> USB3503 chip applications to match the chip specification and common
+> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
+> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
+> to fix the USB3503 driver to properly use generic GPIO bindings and read
+> polarity from DT.
 > 
-> Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
-> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
 
-Applied and queued up for -stable.
+Thanks, applied (for v5.6).
+
+Best regards,
+Krzysztof
+
