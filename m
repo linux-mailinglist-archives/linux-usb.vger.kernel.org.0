@@ -2,78 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E6811D7D1
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 21:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E9E11D801
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 21:44:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730837AbfLLUVd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 15:21:33 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:45483 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730707AbfLLUVd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 15:21:33 -0500
-Received: by mail-wr1-f66.google.com with SMTP id j42so4121525wrj.12;
-        Thu, 12 Dec 2019 12:21:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CPNUf9ZfNsHV45XZGqiBQJlUTUhc2MVRp6BnooBqqSc=;
-        b=I49SI3JMgbdRmcSyXk+TmA97aoRu3zvvMUs0kL/WAdD/Mrv9aw3KtvpsFz/RmoaXZn
-         6AmfJ8t1D8tRGgH+j1qfqxHW4gSIxPW5XAwvR3xdTzJwQ+PsOAPJbTRz7oqzjeLPdL6W
-         ldUBE+4+jEoSTF56cnW//gHXmFWMeUrXtUkJN+2OUxpqkScMo1MG5uKlGst5lqaiak0g
-         tg5xBOLAk92p+bP5sw0S/oBquvj2wKT8DSgupO68wkWgNPHDlcYiAYno5ktNwMox/y8A
-         j15/oMipjfUrZn6XYfv4jmvkbDaJNNdVmFsdmpskEwjxUx3IRDb0xM0HMiyL7UdNMUqM
-         xTWg==
-X-Gm-Message-State: APjAAAXoLiXSoKA8mIBI7hpHu41k+ZS5h7kwPhFxjr/ZwN3sIyGXsM7c
-        xaqv3QYrpLIQO3R7jiE3n0v2lTs+
-X-Google-Smtp-Source: APXvYqzzbodyVYL3FNuaGg6Zp/U+21dUGiWWf3SbMNFJoJ0+vWDhCy4pxUgA9VjNMpaXXox/nvLRBw==
-X-Received: by 2002:a17:906:3953:: with SMTP id g19mr11516560eje.227.1576182089998;
-        Thu, 12 Dec 2019 12:21:29 -0800 (PST)
-Received: from kozik-lap ([194.230.155.234])
-        by smtp.googlemail.com with ESMTPSA id k36sm2772ede.57.2019.12.12.12.21.28
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 12 Dec 2019 12:21:29 -0800 (PST)
-Date:   Thu, 12 Dec 2019 21:21:26 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
+        id S1730749AbfLLUoO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 15:44:14 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:52064 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726814AbfLLUoO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 15:44:14 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBCKi3Y2006089;
+        Thu, 12 Dec 2019 14:44:03 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576183443;
+        bh=Rj6bMZCQXWRSdvUm+2Ymo8/2uiCXnYfPqaz0iwPtsC4=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=ZvOkcVeStiBP30YNQCjoD5aCwDc4So32pLew34D81SE3ehJzY8h+QLZE9BwtPF19O
+         KTY9vykaxnxvRQOC4Q1rIHU8iXLLsZ8O2cQ8LsTkoUZnVf2PRZczLob7VBOnGJcfKL
+         JmVdA4PnGMvmTUwcxlJwVMc1VKfM2oyne6l3BXtU=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCKi3pL091411;
+        Thu, 12 Dec 2019 14:44:03 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
+ Dec 2019 14:44:01 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 12 Dec 2019 14:44:02 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCKi1tn022097;
+        Thu, 12 Dec 2019 14:44:02 -0600
+Date:   Thu, 12 Dec 2019 14:43:26 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+CC:     <linux-kernel@lists.codethink.co.uk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [PATCH v2 1/4] ARM: dts: exynos: Correct USB3503 GPIOs polarity
-Message-ID: <20191212202126.GA3534@kozik-lap>
-References: <20191211144638.24676-1-m.szyprowski@samsung.com>
- <CGME20191211144648eucas1p2065aac523ce190a5c0e6e2b5b11bd5ce@eucas1p2.samsung.com>
- <20191211144638.24676-2-m.szyprowski@samsung.com>
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: musb: fix __iomem in trace functions
+Message-ID: <20191212204326.GK16429@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        linux-kernel@lists.codethink.co.uk,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191015150309.17364-1-ben.dooks@codethink.co.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20191211144638.24676-2-m.szyprowski@samsung.com>
+In-Reply-To: <20191015150309.17364-1-ben.dooks@codethink.co.uk>
 User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 03:46:35PM +0100, Marek Szyprowski wrote:
-> Current USB3503 driver ignores GPIO polarity and always operates as if the
-> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
-> USB3503 chip applications to match the chip specification and common
-> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
-> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
-> to fix the USB3503 driver to properly use generic GPIO bindings and read
-> polarity from DT.
+Hi,
+
+On Tue, Oct 15, 2019 at 04:03:09PM +0100, Ben Dooks (Codethink) wrote:
+> The trace functions should have __iomem on the addr
+> pointers. Add __iomem to avoid the following warnings
+> from sparse:
 > 
+> drivers/usb/musb/musb_core.c:253:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:253:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:253:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:259:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:259:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:259:56:    got void [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:267:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:267:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:267:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:273:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:273:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:273:56:    got void [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:383:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:383:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:383:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:390:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:390:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:390:56:    got void [noderef] <asn:2> *addr
+> 
+> Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 
-Thanks, applied (for v5.6).
+Thanks for the patch. But checkpatch.pl complains that the author and
+Signed-off-by do not match. Can you please fix it and re-send?
 
-Best regards,
-Krzysztof
-
+-Bin.
