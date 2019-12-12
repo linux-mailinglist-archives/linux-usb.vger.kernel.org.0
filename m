@@ -2,137 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3332711C388
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AD2011C389
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727907AbfLLCtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 21:49:08 -0500
-Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:41508 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727884AbfLLCtI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:49:08 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        id S1727801AbfLLCtO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 21:49:14 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:38140 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727811AbfLLCtO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:49:14 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 93A58404D4;
-        Thu, 12 Dec 2019 02:49:07 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 97B67C000E;
+        Thu, 12 Dec 2019 02:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1576118947; bh=t/deAuAbMnYnljhGvDGBxXW1JNZ/lwC4NZxE3brn1NM=;
+        t=1576118953; bh=+uv0aGizPwuI7iAjKoi6qG7ZIqceYDZDhWw64zlhCm4=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=gplUub9BLipr1LShihOF1dY969/r5ytmxJxg8NlCRrEVnLyBpwznzT97Ts5S4RpXK
-         GaATAMalkKC/lSBBEcL9fr7qL1lMSO3duXft9Xt2qjpjScnRIWcImqUpgPv6SeWKoM
-         Zmfz5leWmKKQcFlQR8Crk0yCgSQW8SRjz7tYWW0NpibkvU88uiPgabs6QvP9kRqB6F
-         ff3WN2gejB1cqR9E3gX/WIV848heDUqE1lsN2UCmoRhNvzV8hBwFulVs0Y76ntRMqa
-         4oEQPnl/Kzc6w+/1US1W4fhHMrN6uBJYm/y4OTibCSSJ+jNEjb/G8prurlOcTlsKGR
-         NfN3YuJXhfRog==
+        b=Wj9go4s2Q4bpsy9gmZGUvwgwSLUse7I1Toblr/G29KgZgRDCzvW8E/DtXjcsNNNXy
+         JyoKsXX5luTsmOZHH7NNt0gWF6LDCFPU/55W3GAWQo5aLsAZvmyS1NWXc/RTM/IG3m
+         jUEwVlh7I7uWalcrJI5tfpRY1BH/nvXhzPpTpCaZeKBpPxBvCi8cRjJeIpT2uqIL5d
+         fa3Q1ERlWsutQXbAFrkocARNaAc9dEerNsrRJYjDE3OjX6W5uZgqi87iTb1stdbhgg
+         B3pRDzbX2+EKASel5GQj5L3Aj4XT4L+L0lUvn50CazFJ7e+GfRuEmBcuA2Ex+tmBZs
+         83U21InYPilyA==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 26CA6A007B;
-        Thu, 12 Dec 2019 02:49:05 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 11 Dec 2019 18:49:05 -0800
-Date:   Wed, 11 Dec 2019 18:49:05 -0800
-Message-Id: <0b9de46d828c4bbd2f1a2e961fcfa6e446bcc60a.1576118671.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 68920A007C;
+        Thu, 12 Dec 2019 02:49:12 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 11 Dec 2019 18:49:12 -0800
+Date:   Wed, 11 Dec 2019 18:49:12 -0800
+Message-Id: <25394a433bb79ddf36d0ec52bc998b164e373bf4.1576118671.git.thinhn@synopsys.com>
 In-Reply-To: <cover.1576118671.git.thinhn@synopsys.com>
 References: <cover.1576118671.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [RFC PATCH 01/14] usb: gadget: Add lane count and lsm
+Subject: [RFC PATCH 02/14] usb: gadget: Add callback to set lane and transfer rate
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
+        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Roger Quadros <rogerq@ti.com>, zhengbin <zhengbin13@huawei.com>
 Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB 3.2 specification supports dual-lane and different transfer
-rates. The speed field is not sufficient to describe the device's
-sublink. Devices operating in SuperSpeed Plus can refer to gen2x1,
-gen1x2, or gen2x2.
-
-The driver may be contrained by a specific sublink attribute. Add max
-lane count and lane speed mantissa in Gbps in usb_gadget_driver to
-provide more contrains for function drivers that support SuperSpeed
-Plus.
-
-Update usb_gadget struct to report the max number of lanes
-support and connected lane count. Also, add lane speed mantissa in
-Gigabits per second to properly describe the device transfer rate.
+Introduce gadget opts udc_set_sublink_speed callback to set the lane
+count and transfer rate (in lane speed mantissa of Gbps) for SuperSpeed
+Plus capable gadgets. In the same way udc_set_speed, this function can
+control the gadget's sublink attributes for SuperSpeed Plus.
 
 Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 ---
- include/linux/usb/composite.h |  4 ++++
- include/linux/usb/gadget.h    | 12 ++++++++++++
- 2 files changed, 16 insertions(+)
+ drivers/usb/gadget/composite.c           |  2 ++
+ drivers/usb/gadget/legacy/mass_storage.c |  2 ++
+ drivers/usb/gadget/udc/core.c            | 38 +++++++++++++++++++++++++++++++-
+ include/linux/usb/gadget.h               |  3 +++
+ 4 files changed, 44 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index 8675e145ea8b..ed3fb9a53c4a 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -356,6 +356,8 @@ enum {
-  *	are predefined. The first entry that may be used is
-  *	USB_GADGET_FIRST_AVAIL_IDX
-  * @max_speed: Highest speed the driver supports.
-+ * @max_lane_count: maximum number of lanes the driver supports (SSP only).
-+ * @max_lsm: maximum lane speed mantissa in Gbps the driver supports (SSP only).
-  * @needs_serial: set to 1 if the gadget needs userspace to provide
-  * 	a serial number.  If one is not provided, warning will be printed.
-  * @bind: (REQUIRED) Used to allocate resources that are shared across the
-@@ -387,6 +389,8 @@ struct usb_composite_driver {
- 	const struct usb_device_descriptor	*dev;
- 	struct usb_gadget_strings		**strings;
- 	enum usb_device_speed			max_speed;
-+	u8					max_lane_count;
-+	u8					max_lsm;
- 	unsigned		needs_serial:1;
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 3b4f67000315..a4de5a8c0f19 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -2353,6 +2353,8 @@ int usb_composite_probe(struct usb_composite_driver *driver)
+ 	gadget_driver->function =  (char *) driver->name;
+ 	gadget_driver->driver.name = driver->name;
+ 	gadget_driver->max_speed = driver->max_speed;
++	gadget_driver->max_lane_count = driver->max_lane_count;
++	gadget_driver->max_lsm = driver->max_lsm;
  
- 	int			(*bind)(struct usb_composite_dev *cdev);
+ 	return usb_gadget_probe_driver(gadget_driver);
+ }
+diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
+index f18f77584fc2..a0912c5afffc 100644
+--- a/drivers/usb/gadget/legacy/mass_storage.c
++++ b/drivers/usb/gadget/legacy/mass_storage.c
+@@ -223,6 +223,8 @@ static struct usb_composite_driver msg_driver = {
+ 	.name		= "g_mass_storage",
+ 	.dev		= &msg_device_desc,
+ 	.max_speed	= USB_SPEED_SUPER_PLUS,
++	.max_lane_count	= 2,
++	.max_lsm	= 10,
+ 	.needs_serial	= 1,
+ 	.strings	= dev_strings,
+ 	.bind		= msg_bind,
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index 51fa614b4079..a3b106a22a6e 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1120,6 +1120,35 @@ static inline void usb_gadget_udc_set_speed(struct usb_udc *udc,
+ 	}
+ }
+ 
++/**
++ * usb_gadget_udc_set_sublink_attr - tells usb device controller the sublink
++ *    attributes supported by the current driver
++ * @udc: The device we want to set maximum speed
++ * @lane_count: The maximum number of lanes to connect
++ * @lsm: The maximum lane speed mantissa in Gbps to run
++ *
++ * In the same way as usb_gadget_udc_set_speed(), this function can set the
++ * gadget's sublink attributes for SuperSpeed Plus.
++ *
++ * This call is issued by the UDC Class driver before calling
++ * usb_gadget_udc_start() in order to make sure that we don't try to
++ * connect on speeds the gadget driver doesn't support.
++ */
++static inline void usb_gadget_udc_set_sublink_attr(struct usb_udc *udc,
++						   unsigned int lane_count,
++						   unsigned int lsm)
++{
++	if (udc->gadget->ops->udc_set_sublink_attr) {
++		unsigned int rate;
++		unsigned int lanes;
++
++		rate = min(lsm, udc->gadget->max_lsm);
++		lanes = min(lane_count, udc->gadget->max_lane_count);
++		udc->gadget->ops->udc_set_sublink_attr(udc->gadget,
++						       lanes, rate);
++	}
++}
++
+ /**
+  * usb_udc_release - release the usb_udc struct
+  * @dev: the dev member within usb_udc
+@@ -1353,7 +1382,14 @@ static int udc_bind_to_driver(struct usb_udc *udc, struct usb_gadget_driver *dri
+ 	udc->dev.driver = &driver->driver;
+ 	udc->gadget->dev.driver = &driver->driver;
+ 
+-	usb_gadget_udc_set_speed(udc, driver->max_speed);
++	if (udc->gadget->ops->udc_set_sublink_attr &&
++	    udc->gadget->max_speed == USB_SPEED_SUPER_PLUS &&
++	    driver->max_lsm && driver->max_lane_count &&
++	    driver->max_speed == USB_SPEED_SUPER_PLUS)
++		usb_gadget_udc_set_sublink_attr(udc, driver->max_lane_count,
++						driver->max_lsm);
++	else
++		usb_gadget_udc_set_speed(udc, driver->max_speed);
+ 
+ 	ret = driver->bind(udc->gadget, driver);
+ 	if (ret)
 diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 124462d65eac..cb7531a6f784 100644
+index cb7531a6f784..a8ee2480b408 100644
 --- a/include/linux/usb/gadget.h
 +++ b/include/linux/usb/gadget.h
-@@ -335,6 +335,10 @@ struct usb_gadget_ops {
-  * @speed: Speed of current connection to USB host.
-  * @max_speed: Maximal speed the UDC can handle.  UDC must support this
-  *      and all slower speeds.
-+ * @lane_count: number of lanes in use.
-+ * @max_lane_count: maximum number of lanes the UDC can handle.
-+ * @lsm: current connection lane speed mantissa in Gbps
-+ * @max_lsm: maximum lane speed mantissa in Gbps
-  * @state: the state we are now (attached, suspended, configured, etc)
-  * @name: Identifies the controller hardware type.  Used in diagnostics
-  *	and sometimes configuration.
-@@ -401,6 +405,10 @@ struct usb_gadget {
- 	struct list_head		ep_list;	/* of usb_ep */
- 	enum usb_device_speed		speed;
- 	enum usb_device_speed		max_speed;
-+	unsigned			lane_count;
-+	unsigned			max_lane_count;
-+	unsigned			lsm;
-+	unsigned			max_lsm;
- 	enum usb_device_state		state;
- 	const char			*name;
- 	struct device			dev;
-@@ -600,6 +608,8 @@ static inline int usb_gadget_activate(struct usb_gadget *gadget)
-  * struct usb_gadget_driver - driver for usb 'slave' devices
-  * @function: String describing the gadget's function
-  * @max_speed: Highest speed the driver handles.
-+ * @max_lane_count: maximum lane count the driver handles (SSP only).
-+ * @max_lsm: maximum lane speed mantissa in Gbps the driver handles (SSP only).
-  * @setup: Invoked for ep0 control requests that aren't handled by
-  *	the hardware level driver. Most calls must be handled by
-  *	the gadget driver, including descriptor and configuration
-@@ -672,6 +682,8 @@ static inline int usb_gadget_activate(struct usb_gadget *gadget)
- struct usb_gadget_driver {
- 	char			*function;
- 	enum usb_device_speed	max_speed;
-+	u8			max_lane_count;
-+	u8			max_lsm;
- 	int			(*bind)(struct usb_gadget *gadget,
- 					struct usb_gadget_driver *driver);
- 	void			(*unbind)(struct usb_gadget *);
+@@ -319,6 +319,9 @@ struct usb_gadget_ops {
+ 			struct usb_gadget_driver *);
+ 	int	(*udc_stop)(struct usb_gadget *);
+ 	void	(*udc_set_speed)(struct usb_gadget *, enum usb_device_speed);
++	void	(*udc_set_sublink_attr)(struct usb_gadget *,
++					unsigned int lane_count,
++					unsigned int lsm);
+ 	struct usb_ep *(*match_ep)(struct usb_gadget *,
+ 			struct usb_endpoint_descriptor *,
+ 			struct usb_ss_ep_comp_descriptor *);
 -- 
 2.11.0
 
