@@ -2,73 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B3D11D0F2
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 16:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9130811D15D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 16:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729217AbfLLPZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 10:25:39 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:35164 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728581AbfLLPZi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 10:25:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576164337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g01sjYUUJQQDIxiuMqLLhsNe/mCACDYdL25mylQpAbw=;
-        b=ZlFXJGbdfEbKmBdrGltuTocGkvUiwu5t05rCHR8F7Amyxk4bsBoLZI6Hts1nKrk/v9Rahn
-        QDE8iPjKuUsX6vuMHeuJ0RTAhhRPEYPshox5tU3LyLzf5Ofk5+VyOrDbcue+aEgCWEWdCm
-        mDHYRDhZSqWjC5h30Fmo+fZxNVpFmQw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-409-0R81b4HTMX-nFTnPzZHP9w-1; Thu, 12 Dec 2019 10:25:34 -0500
-X-MC-Unique: 0R81b4HTMX-nFTnPzZHP9w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E4AEC107ACC7;
-        Thu, 12 Dec 2019 15:25:32 +0000 (UTC)
-Received: from rules.brq.redhat.com (unknown [10.43.2.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C14A95C21B;
-        Thu, 12 Dec 2019 15:25:31 +0000 (UTC)
-From:   Vladis Dronov <vdronov@redhat.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/7] Input: fix USB alsetting bugs
-Date:   Thu, 12 Dec 2019 16:25:18 +0100
-Message-Id: <20191212152518.7117-1-vdronov@redhat.com>
-In-Reply-To: <20191210113737.4016-1-johan@kernel.org>
-References: <20191210113737.4016-1-johan@kernel.org>
+        id S1729260AbfLLPtl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 10:49:41 -0500
+Received: from netrider.rowland.org ([192.131.102.5]:50159 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S1729152AbfLLPtl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 10:49:41 -0500
+Received: (qmail 16616 invoked by uid 500); 12 Dec 2019 10:49:40 -0500
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 12 Dec 2019 10:49:40 -0500
+Date:   Thu, 12 Dec 2019 10:49:40 -0500 (EST)
+From:   Alan Stern <stern@rowland.harvard.edu>
+X-X-Sender: stern@netrider.rowland.org
+To:     Felipe Balbi <balbi@kernel.org>
+cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <linux-usb@vger.kernel.org>, Roger Quadros <rogerq@ti.com>,
+        zhengbin <zhengbin13@huawei.com>,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [RFC PATCH 02/14] usb: gadget: Add callback to set lane and
+ transfer rate
+In-Reply-To: <874ky6x9eh.fsf@kernel.org>
+Message-ID: <Pine.LNX.4.44L0.1912121047120.14053-100000@netrider.rowland.org>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-Content-Transfer-Encoding: quoted-printable
+Content-Type: TEXT/PLAIN; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Thu, 12 Dec 2019, Felipe Balbi wrote:
 
-On 10.12.19 12:37, Johan Hovold wrote:
+> Hi,
+> 
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> > Introduce gadget opts udc_set_sublink_speed callback to set the lane
+> > count and transfer rate (in lane speed mantissa of Gbps) for SuperSpeed
+> > Plus capable gadgets. In the same way udc_set_speed, this function can
+> > control the gadget's sublink attributes for SuperSpeed Plus.
+> >
+> > Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> > ---
+> >  drivers/usb/gadget/composite.c           |  2 ++
+> >  drivers/usb/gadget/legacy/mass_storage.c |  2 ++
+> 
+> I would rather not add new features to the legacy gadgets and focus on
+> our configfs interface for anything new. Moreover, using the feature
+> you introduced could, arguably, be done as a separate patch.
+> 
+> > diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> > index 3b4f67000315..a4de5a8c0f19 100644
+> > --- a/drivers/usb/gadget/composite.c
+> > +++ b/drivers/usb/gadget/composite.c
+> > @@ -2353,6 +2353,8 @@ int usb_composite_probe(struct usb_composite_driver *driver)
+> >  	gadget_driver->function =  (char *) driver->name;
+> >  	gadget_driver->driver.name = driver->name;
+> >  	gadget_driver->max_speed = driver->max_speed;
+> > +	gadget_driver->max_lane_count = driver->max_lane_count;
+> > +	gadget_driver->max_lsm = driver->max_lsm;
+> >  
+> >  	return usb_gadget_probe_driver(gadget_driver);
+> >  }
+> > diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadget/legacy/mass_storage.c
+> > index f18f77584fc2..a0912c5afffc 100644
+> > --- a/drivers/usb/gadget/legacy/mass_storage.c
+> > +++ b/drivers/usb/gadget/legacy/mass_storage.c
+> > @@ -223,6 +223,8 @@ static struct usb_composite_driver msg_driver = {
+> >  	.name		= "g_mass_storage",
+> >  	.dev		= &msg_device_desc,
+> >  	.max_speed	= USB_SPEED_SUPER_PLUS,
+> > +	.max_lane_count	= 2,
+> > +	.max_lsm	= 10,
+> 
+> Right, as mentioned, I'd prefer not touch the legacy gadgets. But in any
+> case, why is it so that the gadget is telling you about max lane count
+> and lsm? That should be abstracted away from the gadget driver. Gadget
+> driver shouldn't have knowledge of number of lanes because, at the end
+> of the day, that doesn't really change anything in practice. Unlike HS
+> vs SS which changes a bunch of things.
 
-> We had quite a few driver using the first alternate setting instead of
-> the current one when doing descriptor sanity checks. This is mostly an
-> issue on kernels with panic_on_warn set due to a WARN() in
-> usb_submit_urn(). Since we've started backporting such fixes (e.g. as
-> reported by syzbot), I've marked these for stable as well.
->=20
-> Included are also a couple of related clean ups to prevent future
-> issues.
+I agree completely.  Furthermore, it isn't at all clear where those two 
+numbers came from.  Why would g-mass-storage care that lane_count <= 2 
+and lsm <= 10?
 
-For the series:
-
-Acked-by: Vladis Dronov <vdronov@redhat.com>
-
-Best regards,
-Vladis Dronov | Red Hat, Inc. | The Core Kernel | Senior Software Enginee=
-r
+Alan Stern
 
