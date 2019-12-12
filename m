@@ -2,114 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA8911C387
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:49:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3332711C388
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 03:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727860AbfLLCtE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 21:49:04 -0500
-Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:38118 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727599AbfLLCtD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:49:03 -0500
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        id S1727907AbfLLCtI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Dec 2019 21:49:08 -0500
+Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:41508 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727884AbfLLCtI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Dec 2019 21:49:08 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 77709C0084;
-        Thu, 12 Dec 2019 02:49:01 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 93A58404D4;
+        Thu, 12 Dec 2019 02:49:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1576118942; bh=ta14JiyZFbEKwsXrq3lRZW1hLWDxxcBeGnI5Eswl/WM=;
-        h=Date:From:Subject:To:Cc:From;
-        b=L5q47asllvi0qp+gHokHfXfQagOmAk2EHA6PA2IHcBt0cC3qdTlFMUeERfBz4gS+5
-         +qOZfUuv2kcT1D5YFYHXRnPB7diXW0dpt4kAZuBCi75Q7BcYgTbrLj7cStOC3VlmLV
-         JUcDCOV/nPtjGuqJkOUcBUGDJOohigmdkcHRfEjepG4EgB81tKn8Ln1pyriqUh9yL8
-         cnwas9n/iZ3FcJbCQU8LRynbGypgT7FVwjaVK9eYl6Xec+Yd2H9LPcxthXp3j7gSvC
-         XxpHInvIFcfg+J8NqQdmvx6OMN9rZj9Kojj28vwi8pAKkc3MHuNzmBtxAbzQgmo3lJ
-         c25MVl2PkVbTg==
+        t=1576118947; bh=t/deAuAbMnYnljhGvDGBxXW1JNZ/lwC4NZxE3brn1NM=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=gplUub9BLipr1LShihOF1dY969/r5ytmxJxg8NlCRrEVnLyBpwznzT97Ts5S4RpXK
+         GaATAMalkKC/lSBBEcL9fr7qL1lMSO3duXft9Xt2qjpjScnRIWcImqUpgPv6SeWKoM
+         Zmfz5leWmKKQcFlQR8Crk0yCgSQW8SRjz7tYWW0NpibkvU88uiPgabs6QvP9kRqB6F
+         ff3WN2gejB1cqR9E3gX/WIV848heDUqE1lsN2UCmoRhNvzV8hBwFulVs0Y76ntRMqa
+         4oEQPnl/Kzc6w+/1US1W4fhHMrN6uBJYm/y4OTibCSSJ+jNEjb/G8prurlOcTlsKGR
+         NfN3YuJXhfRog==
 Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id F2FBCA007C;
-        Thu, 12 Dec 2019 02:48:58 +0000 (UTC)
-Received: by te-lab16 (sSMTP sendmail emulation); Wed, 11 Dec 2019 18:48:58 -0800
-Date:   Wed, 11 Dec 2019 18:48:58 -0800
-Message-Id: <cover.1576118671.git.thinhn@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 26CA6A007B;
+        Thu, 12 Dec 2019 02:49:05 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Wed, 11 Dec 2019 18:49:05 -0800
+Date:   Wed, 11 Dec 2019 18:49:05 -0800
+Message-Id: <0b9de46d828c4bbd2f1a2e961fcfa6e446bcc60a.1576118671.git.thinhn@synopsys.com>
+In-Reply-To: <cover.1576118671.git.thinhn@synopsys.com>
+References: <cover.1576118671.git.thinhn@synopsys.com>
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [RFC PATCH 00/14] usb: dwc3: Introduce DWC_usb32
+Subject: [RFC PATCH 01/14] usb: gadget: Add lane count and lsm
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Roger Quadros <rogerq@ti.com>, zhengbin <zhengbin13@huawei.com>
+        linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch series adds support to Synopsys DWC_usb32 controller which is
-capable of dual-lane and USB speed up to 40 Gbps. In order to support this new
-controller, we need to make a few updates the USB stack and dwc3 driver:
+The USB 3.2 specification supports dual-lane and different transfer
+rates. The speed field is not sufficient to describe the device's
+sublink. Devices operating in SuperSpeed Plus can refer to gen2x1,
+gen1x2, or gen2x2.
 
-1) dwc3 driver needs to update its IP and revision check. The current scheme
-does not support more than 2 controllers.
+The driver may be contrained by a specific sublink attribute. Add max
+lane count and lane speed mantissa in Gbps in usb_gadget_driver to
+provide more contrains for function drivers that support SuperSpeed
+Plus.
 
-2) Introduce Lane Speed Mantissa and lane count on the gadget side. Devices
-operating in SuperSpeed Plus can refer to gen2x1, gen1x2, or gen2x2.
+Update usb_gadget struct to report the max number of lanes
+support and connected lane count. Also, add lane speed mantissa in
+Gigabits per second to properly describe the device transfer rate.
 
-3) Add a new gadget opts to set the sublink speed for drivers that are
-constrained to certain lane count or lane speed mantissa.
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
+ include/linux/usb/composite.h |  4 ++++
+ include/linux/usb/gadget.h    | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
 
-4) Add miscellaneous initialization checks for DWC_usb32.
-
-
-Any review comment is highly appreciated.
-
-Thank you,
-Thinh
-
-
-
-
-This patch series depends on the following patches
-
-usb: dwc3: Fix GTXFIFOSIZ.TXFDEP macro name
-usb: dwc3: gadget: Properly set maxpacket limit
-
-https://patchwork.kernel.org/cover/11283761/
-
-
-Thinh Nguyen (14):
-  usb: gadget: Add lane count and lsm
-  usb: gadget: Add callback to set lane and transfer rate
-  usb: composite: Properly report lsm
-  usb: dwc3: Implement new id check for DWC_usb32
-  usb: dwc3: Update IP checks to support DWC_usb32
-  usb: devicetree: dwc3: Add max lane and lsm
-  usb: dwc3: gadget: Set lane count and lsm
-  usb: dwc3: gadget: Track connected lane count and speed
-  usb: dwc3: gadget: Limit the setting of speed
-  usb: dwc3: Update HWPARAMS0.MDWIDTH for DWC_usb32
-  usb: devicetree: dwc3: Add TRB prefetch count
-  usb: dwc3: gadget: Set number of TRB prefetch
-  usb: devicetree: dwc3: Add property to disable mult TRB fetch
-  usb: dwc3: gadget: Implement disabling of mult TRB fetch
-
- Documentation/devicetree/bindings/usb/dwc3.txt |   9 ++
- drivers/usb/dwc3/core.c                        |  88 ++++++++----
- drivers/usb/dwc3/core.h                        |  65 ++++++---
- drivers/usb/dwc3/debugfs.c                     |  14 +-
- drivers/usb/dwc3/gadget.c                      | 181 +++++++++++++++++++------
- drivers/usb/dwc3/host.c                        |   2 +-
- drivers/usb/gadget/composite.c                 |  16 ++-
- drivers/usb/gadget/legacy/mass_storage.c       |   2 +
- drivers/usb/gadget/udc/core.c                  |  38 +++++-
- include/linux/usb/composite.h                  |   4 +
- include/linux/usb/gadget.h                     |  15 ++
- 11 files changed, 344 insertions(+), 90 deletions(-)
-
+diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
+index 8675e145ea8b..ed3fb9a53c4a 100644
+--- a/include/linux/usb/composite.h
++++ b/include/linux/usb/composite.h
+@@ -356,6 +356,8 @@ enum {
+  *	are predefined. The first entry that may be used is
+  *	USB_GADGET_FIRST_AVAIL_IDX
+  * @max_speed: Highest speed the driver supports.
++ * @max_lane_count: maximum number of lanes the driver supports (SSP only).
++ * @max_lsm: maximum lane speed mantissa in Gbps the driver supports (SSP only).
+  * @needs_serial: set to 1 if the gadget needs userspace to provide
+  * 	a serial number.  If one is not provided, warning will be printed.
+  * @bind: (REQUIRED) Used to allocate resources that are shared across the
+@@ -387,6 +389,8 @@ struct usb_composite_driver {
+ 	const struct usb_device_descriptor	*dev;
+ 	struct usb_gadget_strings		**strings;
+ 	enum usb_device_speed			max_speed;
++	u8					max_lane_count;
++	u8					max_lsm;
+ 	unsigned		needs_serial:1;
+ 
+ 	int			(*bind)(struct usb_composite_dev *cdev);
+diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
+index 124462d65eac..cb7531a6f784 100644
+--- a/include/linux/usb/gadget.h
++++ b/include/linux/usb/gadget.h
+@@ -335,6 +335,10 @@ struct usb_gadget_ops {
+  * @speed: Speed of current connection to USB host.
+  * @max_speed: Maximal speed the UDC can handle.  UDC must support this
+  *      and all slower speeds.
++ * @lane_count: number of lanes in use.
++ * @max_lane_count: maximum number of lanes the UDC can handle.
++ * @lsm: current connection lane speed mantissa in Gbps
++ * @max_lsm: maximum lane speed mantissa in Gbps
+  * @state: the state we are now (attached, suspended, configured, etc)
+  * @name: Identifies the controller hardware type.  Used in diagnostics
+  *	and sometimes configuration.
+@@ -401,6 +405,10 @@ struct usb_gadget {
+ 	struct list_head		ep_list;	/* of usb_ep */
+ 	enum usb_device_speed		speed;
+ 	enum usb_device_speed		max_speed;
++	unsigned			lane_count;
++	unsigned			max_lane_count;
++	unsigned			lsm;
++	unsigned			max_lsm;
+ 	enum usb_device_state		state;
+ 	const char			*name;
+ 	struct device			dev;
+@@ -600,6 +608,8 @@ static inline int usb_gadget_activate(struct usb_gadget *gadget)
+  * struct usb_gadget_driver - driver for usb 'slave' devices
+  * @function: String describing the gadget's function
+  * @max_speed: Highest speed the driver handles.
++ * @max_lane_count: maximum lane count the driver handles (SSP only).
++ * @max_lsm: maximum lane speed mantissa in Gbps the driver handles (SSP only).
+  * @setup: Invoked for ep0 control requests that aren't handled by
+  *	the hardware level driver. Most calls must be handled by
+  *	the gadget driver, including descriptor and configuration
+@@ -672,6 +682,8 @@ static inline int usb_gadget_activate(struct usb_gadget *gadget)
+ struct usb_gadget_driver {
+ 	char			*function;
+ 	enum usb_device_speed	max_speed;
++	u8			max_lane_count;
++	u8			max_lsm;
+ 	int			(*bind)(struct usb_gadget *gadget,
+ 					struct usb_gadget_driver *driver);
+ 	void			(*unbind)(struct usb_gadget *);
 -- 
 2.11.0
 
