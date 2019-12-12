@@ -2,60 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0200211C6BF
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 08:57:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C0211C6C0
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 08:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728144AbfLLH5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 02:57:49 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:46451 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728138AbfLLH5t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 02:57:49 -0500
-Received: by mail-lj1-f196.google.com with SMTP id z17so1135284ljk.13
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 23:57:47 -0800 (PST)
+        id S1728147AbfLLH7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 02:59:02 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:37035 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728138AbfLLH7C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 02:59:02 -0500
+Received: by mail-lj1-f193.google.com with SMTP id u17so1181824lja.4
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 23:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=PQhNofnag2d4VIgcryiDoUFAj/b20yNC9+HGvXikpQk=;
-        b=PSbtbPnVk2rucvxn3GK8J6j2nAF+cNet94vjM7Ude2suGr2wsOAao009JMQgmVsPzM
-         TZK9Q56lf4Lgxqlvd0eyMVlwiG3REjXi8bzAuM5qi91O58XC5cFsW40BWLx0i6vGQUk/
-         F0jsJLG1lNt9YAJVwHbC86ZGrRQ2TUHWEjW8nEaSIaM3PLazt3Si26VB5kYwv9geSDsV
-         Je6k+iWApXO9pcv92JqX+Sr+25GSvUQ9XcXfU5Qy1twlUw43v/nuLanvNbydDT4es3D8
-         Y/mBr3uyEpRLZgb0hIBqJ2XgXQDcOKi6eneFf+K+0IEEbBiZS6CMm2PXIqgfQVzUYocj
-         9Pfg==
+        bh=er7DAcFICx0rKKOlnV9LfdL7A6Gk4GzCPZQpjtzGMDg=;
+        b=H3zbmkfVegTVdP2vPKqSxbRZU3DalQQ956d88IXuBHFdzhGsKq3FHmbN49XtON/GY3
+         P2rvtcYAuHUuetAss4YVqEN8j6XRKP8RcOqIO1D++uLKrzO9lVc3IpFvN2lFZ0m3cHEr
+         LQK3Z+Ex2pl0VLelJnSB3XtiyXnCM9Cbn+bx5abRHp5Acb7Wk/xj86e38bv4OqV6KyAl
+         MuijVRtsadMpz6IS5aL0hXOeImfUbf3PwRCwUyZFxI2iyoP4VBhNq0hMAhc0vV2nKTVc
+         054HmcpopPelecVkpyb/ut/1Q2JEAs6tnnbBTVA4RGAJX/IdmPNPw7Zz2tioKywEI6BT
+         iA7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
          :date:message-id:mime-version;
-        bh=PQhNofnag2d4VIgcryiDoUFAj/b20yNC9+HGvXikpQk=;
-        b=DljJ6KFg77iMfOXCZTtdC3BA690f13Xj4j+Xv//dw571iclgS2UD0MxGY3jf8B9oN7
-         hxal+2hQg0ApjYSwpyXUipZiz/xxevkuZPEdKxIm3TqFwKWEBXDNUkKTE0Sk02Of/WIC
-         X2t+KkuMbnN3neMb+FCdvrJuIR/RyTbQhV3aAVrGKRvd6bRocs/6HaZSsYs8bqurt+6S
-         TvRUdalFDa/0sGoyA8PDagecSe5+7NLOMGi/mnyChvW2YaI47p1ZvbMlYsO+GnO9OPTk
-         t+FxlrVU9QkAHjPqeJY/BZCsQ6V2lD+FzZvny6xP+9oMJwOeFht/hFmnFNyzwKmIHqmc
-         LP/w==
-X-Gm-Message-State: APjAAAVjI0iaLqHAZS7fh0wh7xzDSRqL+eLjXKLepH8jYPP/MLmg/iQx
-        pxVDJJ4DLVVGB8ZyblKmOyI=
-X-Google-Smtp-Source: APXvYqynM+BBs+31xj19OYFuKEZZVXs4YEzFTVnRSGmzxuzXnlc4CUH+3dxS1+RV5pnupn7gnJedew==
-X-Received: by 2002:a2e:9157:: with SMTP id q23mr5058880ljg.196.1576137466290;
-        Wed, 11 Dec 2019 23:57:46 -0800 (PST)
+        bh=er7DAcFICx0rKKOlnV9LfdL7A6Gk4GzCPZQpjtzGMDg=;
+        b=QjqzY7r+FtkXneUEtIaMx6ftyXOqAXvZU952JkLrVQz6CCfyYXUQP4wyl0QQR+wL8X
+         A3D6g5kLqRbXQe+kMPEBmUdLeQ2IpYaimWoL5Fma5FzKbDH/8rpq8eLRri4aJoMsBWxR
+         Zvqgm6sm6WG51YzKYbf+BlV2iFQpVQdzFF+ZbHKnXkC9GHyn7e3Y0Qd4RGIrDQ5q+FY6
+         e5DX5ulcRySQSmiEVrazZ4qK4cM7lscECfQgyLKbuXHNrpufCM1u+AjhN52DnYi96XO2
+         IqgFYXsoA8luVUXT66vKtXJZVqDRe/E8xBCM3wRtg16fPMsvyM5TSPUClpVqtk2pez85
+         9o3w==
+X-Gm-Message-State: APjAAAV0GVSE2cub7r+2879kfc5Cc9w0pN2ySpSsbDOqllepmWRW5oI5
+        E2hr2YZ41w0WyuTZOPmos8pZ4tJQLM4vfQ==
+X-Google-Smtp-Source: APXvYqx287iLhR2F8UJ1yX1VxGIf93w02Q4ema6roArPvAM2QnyVQuOu5BWC0XH6UKT9IZK22AtR2A==
+X-Received: by 2002:a2e:9e55:: with SMTP id g21mr4792102ljk.245.1576137540487;
+        Wed, 11 Dec 2019 23:59:00 -0800 (PST)
 Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id g14sm2511537ljj.37.2019.12.11.23.57.44
+        by smtp.gmail.com with ESMTPSA id l7sm2415260lfc.80.2019.12.11.23.58.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 23:57:45 -0800 (PST)
+        Wed, 11 Dec 2019 23:58:59 -0800 (PST)
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Roger Quadros <rogerq@ti.com>, zhengbin <zhengbin13@huawei.com>
+        linux-usb@vger.kernel.org
 Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [RFC PATCH 02/14] usb: gadget: Add callback to set lane and transfer rate
-In-Reply-To: <25394a433bb79ddf36d0ec52bc998b164e373bf4.1576118671.git.thinhn@synopsys.com>
-References: <cover.1576118671.git.thinhn@synopsys.com> <25394a433bb79ddf36d0ec52bc998b164e373bf4.1576118671.git.thinhn@synopsys.com>
-Date:   Thu, 12 Dec 2019 09:58:30 +0200
-Message-ID: <874ky6x9eh.fsf@kernel.org>
+Subject: Re: [RFC PATCH 03/14] usb: composite: Properly report lsm
+In-Reply-To: <0ff7d475567f10e2f5051554daaa41d2ce03aa35.1576118671.git.thinhn@synopsys.com>
+References: <cover.1576118671.git.thinhn@synopsys.com> <0ff7d475567f10e2f5051554daaa41d2ce03aa35.1576118671.git.thinhn@synopsys.com>
+Date:   Thu, 12 Dec 2019 09:59:45 +0200
+Message-ID: <871rtax9ce.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -72,123 +71,50 @@ Content-Transfer-Encoding: quoted-printable
 Hi,
 
 Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> Introduce gadget opts udc_set_sublink_speed callback to set the lane
-> count and transfer rate (in lane speed mantissa of Gbps) for SuperSpeed
-> Plus capable gadgets. In the same way udc_set_speed, this function can
-> control the gadget's sublink attributes for SuperSpeed Plus.
+> Use the max lane speed mantisa value from the gadget and report to the
+> device descriptor if available.
 >
 > Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
 > ---
->  drivers/usb/gadget/composite.c           |  2 ++
->  drivers/usb/gadget/legacy/mass_storage.c |  2 ++
-
-I would rather not add new features to the legacy gadgets and focus on
-our configfs interface for anything new. Moreover, using the feature
-you introduced could, arguably, be done as a separate patch.
-
+>  drivers/usb/gadget/composite.c | 14 ++++++++++----
+>  1 file changed, 10 insertions(+), 4 deletions(-)
+>
 > diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composit=
 e.c
-> index 3b4f67000315..a4de5a8c0f19 100644
+> index a4de5a8c0f19..cd38078d6a42 100644
 > --- a/drivers/usb/gadget/composite.c
 > +++ b/drivers/usb/gadget/composite.c
-> @@ -2353,6 +2353,8 @@ int usb_composite_probe(struct usb_composite_driver=
- *driver)
->  	gadget_driver->function =3D  (char *) driver->name;
->  	gadget_driver->driver.name =3D driver->name;
->  	gadget_driver->max_speed =3D driver->max_speed;
-> +	gadget_driver->max_lane_count =3D driver->max_lane_count;
-> +	gadget_driver->max_lsm =3D driver->max_lsm;
->=20=20
->  	return usb_gadget_probe_driver(gadget_driver);
->  }
-> diff --git a/drivers/usb/gadget/legacy/mass_storage.c b/drivers/usb/gadge=
-t/legacy/mass_storage.c
-> index f18f77584fc2..a0912c5afffc 100644
-> --- a/drivers/usb/gadget/legacy/mass_storage.c
-> +++ b/drivers/usb/gadget/legacy/mass_storage.c
-> @@ -223,6 +223,8 @@ static struct usb_composite_driver msg_driver =3D {
->  	.name		=3D "g_mass_storage",
->  	.dev		=3D &msg_device_desc,
->  	.max_speed	=3D USB_SPEED_SUPER_PLUS,
-> +	.max_lane_count	=3D 2,
-> +	.max_lsm	=3D 10,
-
-Right, as mentioned, I'd prefer not touch the legacy gadgets. But in any
-case, why is it so that the gadget is telling you about max lane count
-and lsm? That should be abstracted away from the gadget driver. Gadget
-driver shouldn't have knowledge of number of lanes because, at the end
-of the day, that doesn't really change anything in practice. Unlike HS
-vs SS which changes a bunch of things.
-
->  	.needs_serial	=3D 1,
->  	.strings	=3D dev_strings,
->  	.bind		=3D msg_bind,
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index 51fa614b4079..a3b106a22a6e 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1120,6 +1120,35 @@ static inline void usb_gadget_udc_set_speed(struct=
- usb_udc *udc,
->  	}
->  }
->=20=20
-> +/**
-> + * usb_gadget_udc_set_sublink_attr - tells usb device controller the sub=
-link
-> + *    attributes supported by the current driver
-> + * @udc: The device we want to set maximum speed
-> + * @lane_count: The maximum number of lanes to connect
-> + * @lsm: The maximum lane speed mantissa in Gbps to run
-> + *
-> + * In the same way as usb_gadget_udc_set_speed(), this function can set =
-the
-> + * gadget's sublink attributes for SuperSpeed Plus.
-> + *
-> + * This call is issued by the UDC Class driver before calling
-> + * usb_gadget_udc_start() in order to make sure that we don't try to
-> + * connect on speeds the gadget driver doesn't support.
-> + */
-> +static inline void usb_gadget_udc_set_sublink_attr(struct usb_udc *udc,
-> +						   unsigned int lane_count,
-> +						   unsigned int lsm)
-
-do we envision a possibility of future USB spec releases adding more
-data here? How about introducing a struct usb_sublink_attr to be passed
-around? Could be used by both host and gadget stacks.
-
-> +{
-> +	if (udc->gadget->ops->udc_set_sublink_attr) {
-> +		unsigned int rate;
-> +		unsigned int lanes;
+> @@ -682,6 +682,11 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>  	/* The SuperSpeedPlus USB Device Capability descriptor */
+>  	if (gadget_is_superspeed_plus(cdev->gadget)) {
+>  		struct usb_ssp_cap_descriptor *ssp_cap;
+> +		int lsm =3D 10;
 > +
-> +		rate =3D min(lsm, udc->gadget->max_lsm);
-> +		lanes =3D min(lane_count, udc->gadget->max_lane_count);
-
-considering that lsm and lane_count are from 0 to their respective max
-values, do you need a min() here? Might be better to WARN() when either
-in over their max values.
-
-> +		udc->gadget->ops->udc_set_sublink_attr(udc->gadget,
-> +						       lanes, rate);
-
-indentation using spaces? (same above, please fix)
-
-> @@ -1353,7 +1382,14 @@ static int udc_bind_to_driver(struct usb_udc *udc,=
- struct usb_gadget_driver *dri
->  	udc->dev.driver =3D &driver->driver;
->  	udc->gadget->dev.driver =3D &driver->driver;
+> +		if (cdev->gadget->ops->udc_set_sublink_attr &&
+> +		    cdev->gadget->max_lsm)
+> +			lsm =3D cdev->gadget->max_lsm;
 >=20=20
-> -	usb_gadget_udc_set_speed(udc, driver->max_speed);
-> +	if (udc->gadget->ops->udc_set_sublink_attr &&
-> +	    udc->gadget->max_speed =3D=3D USB_SPEED_SUPER_PLUS &&
-> +	    driver->max_lsm && driver->max_lane_count &&
-> +	    driver->max_speed =3D=3D USB_SPEED_SUPER_PLUS)
+>  		ssp_cap =3D cdev->req->buf + le16_to_cpu(bos->wTotalLength);
+>  		bos->bNumDeviceCaps++;
+> @@ -709,20 +714,21 @@ static int bos_desc(struct usb_composite_dev *cdev)
+>  		 *   ST  =3D Symmetric, RX
+>  		 *   LSE =3D  3 (Gbps)
+>  		 *   LP  =3D  1 (SuperSpeedPlus)
+> -		 *   LSM =3D 10 (10 Gbps)
+> +		 *   LSM =3D  5 or 10
+>  		 */
+>  		ssp_cap->bmSublinkSpeedAttr[0] =3D
+> -			cpu_to_le32((3 << 4) | (1 << 14) | (0xa << 16));
+> +			cpu_to_le32((3 << 4) | (1 << 14) | (lsm << 16));
 
-So if driver doesn't provide max_lsm and max_speed you don't set sublink
-attr? Won't this cause problems? Also, the sublink_attr is still,
-conceptually, setting the max speed for the bus, right? So you may want
-to call usb_gadget_udc_set_sublink_attr() from inside
-usb_gadget_udc_set_speed(), then we don't need to modify all the callers.
+while at that, can we get rid of the magic constants?
+
+>  		ssp_cap->bmSublinkSpeedAttr[1] =3D
+>  			cpu_to_le32((3 << 4) | (1 << 14) |
+> -				    (0xa << 16) | (1 << 7));
+> +				    (lsm << 16) | (1 << 7));
+
+ditto.
 
 =2D-=20
 balbi
@@ -198,18 +124,18 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3x8yYACgkQzL64meEa
-mQYZ7g/9H4shX8lwb4VyHhvBZu19pPUeaMg/LzBZugAAh/Z9lu0KpwqKap2N1n82
-ZTWzzmCjou3uZDffzocxRsPi5SNVBx6aMM1jLwcv5XWvZemcxJDmKixDVZl7bsHj
-6BIKGRQcHFj1B41Lhp74UvH2IAkMt0olo6gr3N3H+6lp08RS1hs2hqVc63lBozJE
-UWCO0fY2sA5erlfXlO1LKRLRHn3YbVtacxYCx+PhcFeR4q+2WiXNriB6ELImZ9gL
-1Y4ozcJaaqwEmmTlm+pqLzyBxEYSz5a1fC33I0PSCo4/E8lZ6KfWGOqR6RH+g+La
-loSSLhKjbId+oYCLkwWFhBAN5F8aX0eWoo5l4l5dBbRm0k+bKljr+2SfJ058dhAo
-aULrFMsGdjZ2vc9hn0Co6brzs7Tm4xI0D4r9PmqgrI34SrxzPaj7mmZHcnwuatRI
-FS4zTnugIhtEMvQ0dy8DoQsryGXW1ES43b3gPbrZDIhSQjbqd99zKhc4Bj0Tn7bv
-9JbttZ7hWgorJQ3we2puF3CZx3AL7AHezI39hUMTE30uuKew9A3Bc0vDxcTK5UDX
-lvyLfk8v+Cnjb5QeevrbPrJ9NLQKhCyPN7KYrNSOHVnayApXaa9tOGht6TgOPdXt
-rr9Arp61Od7KTzVSqYXL7naREBrAITuct2/+taI1Kx2aaFdyifA=
-=To+p
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3x83EACgkQzL64meEa
+mQaTXg/+N0tSsEXuOZnZ4ErlvHVmTgdjGwKg+fM1rB9Yrm2fKnfby1lU/imLI1yq
+SmSI90xHU6/6iIt9KkzLZ1WuK153KWWxG/jlhx4dgv+RcqYyU6mDNx1kTAsb3aMk
+rEGNLB9QVcGbzFh1v049e7uvMNOJgm2+X45TIRKKKPW/xYvZr1fmdh4wTfm6ADr9
+z8Euona33NJyPRD7VofmEfy2NtdhpbQ7x2QMQPBSWDmDhgqF1Em/EBpY0ds67y5L
+1Q44YE3fJ1eB3sev9bkrTrgHWm3X4CwZ5UP81zShAWjS2e8C7jTeJOt8IbBUiOZC
+mhS8oO/YXRCkOPi+NobGM7TwSfpiVOF2Lgydl/k1afoyzDwD3RcWFnomYMWGxtMT
+7Ur8k7Lh1zqLjiV2EDvHou/4x7sxDHEZ1Pmcm9fDDUxJ/RyYLWPAKIw5qObHgpyl
+zA0qTSOlcnVXg4AeyuQlsiN2kCxX6doQr6hXnz6O/xDRXaesEEgZP+RkrHRp8R6x
+hksWrLHgmuE6tiPfkAWTUibjBTH3gTK/TsoIKA/v4EGs6Fb1K0K6zrJQgRRahzJ/
++34tOUKxbGs++EJgVIaj5W+pDCQmb5XwXPmm3EOWq2Z+kuOmSqbATqP4+Xl/d7+V
+IGTBjgdRd3NVmLNZV4GS2OEoLZ+HbzeleY0UfBjUo3noDB2iViw=
+=q94D
 -----END PGP SIGNATURE-----
 --=-=-=--
