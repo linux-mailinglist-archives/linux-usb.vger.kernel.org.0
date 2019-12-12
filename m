@@ -2,100 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD9511CD06
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 13:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA5C11CD1B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 13:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729128AbfLLMU5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 07:20:57 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34640 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729118AbfLLMU4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Dec 2019 07:20:56 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9A05321655;
-        Thu, 12 Dec 2019 12:20:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576153256;
-        bh=eBkPCbN+a5nBEtF0cvytYNK/LsEi3MzHof3FZUsKDq8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u6G22sVpPYyowX4nr61saY9ArdC/97JNp7ksn9Inqz71+3YIditDdxZqLa0QpfZR9
-         rzGqMlL32D/2HDztW/hS0jApXo8v0HxbkdoQX6P8oveMJBAkKZtbg2/QWQGIqDeNgn
-         aJPjfPc8puaHGXg2+SzlDdDRhiOx6hXti6EV1xf4=
-Date:   Thu, 12 Dec 2019 13:20:53 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     zhong jiang <zhongjiang@huawei.com>, linux@roeck-us.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fusb302: Fix an undefined reference to
- 'extcon_get_state'
-Message-ID: <20191212122053.GA1541203@kroah.com>
-References: <1576136063-50916-1-git-send-email-zhongjiang@huawei.com>
- <20191212090132.GC31345@kuha.fi.intel.com>
- <5DF20530.2040509@huawei.com>
- <20191212092805.GA1375559@kroah.com>
- <5DF20B18.4020601@huawei.com>
- <20191212111805.GD31345@kuha.fi.intel.com>
+        id S1729158AbfLLM00 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 07:26:26 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38119 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729092AbfLLM00 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 07:26:26 -0500
+Received: by mail-lf1-f68.google.com with SMTP id r14so1561256lfm.5
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2019 04:26:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=SoLlzSMheg6fse+3oNghoYBqKCuOwRgyP29BGtrRpkk=;
+        b=WIubx2XwrhNnGUXF1XSlDEHsCpYfJsFa1LeNgY3+RJqhxrq0izXUpYJHJYFxnGGjK7
+         wiBlWTqoMt4umJqxo4H6/GpqVuZmP7PzjoOmdMd64q4sGKgBaIG5HOFe0XeOaelMBfHo
+         06UJVXfLQ34uXYUazoOTfnmsk40gKxUhe6sq848x2pD9ntz7/OgwJN2xfi9Sq8avgZQD
+         HYLb37fzUiExM/d4nniEtQpKZdTkNq+CWcFfqlOlP9Hz/6j5da2Cv0E6Tgas1qtPBhv0
+         DnrlRsSSIi0tbenaP3dDTwyVh5uPKtWxIrCH0x6gtXnJ8jqLlkcHdUoFKgpEvCN5JtXx
+         sx9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=SoLlzSMheg6fse+3oNghoYBqKCuOwRgyP29BGtrRpkk=;
+        b=Wpm5p8+2V+4tOs6gbMR9q1ykc+OeaBiTdiR2yix88NF6zqrybUjnuAP2L5Iok6j9Ae
+         JA3LWamwFz7q31Qfjvhg/2QzsqoG8R5M9Ujy2uGRNTtQlwnM7CS2jCxAiZSqDu42sQ+m
+         mK6vgLFCcOuvBSOEWhjt73CXkFUejKQMMD4DKfurOC0iKvbQP8t3+gPTzHPjZ8aB3SYu
+         8yD3AcbgLUyGDrH4IbngnNZbG+5a2zrKY/v+inoVYcUezGnNC8cIXb7AQ0eiOsKjjBLd
+         jlyinp+MeAxzgVWGBw5WtyU7f8oARkY8pAJsRd/Q9oI/DJAOitR85M3QLXdZxyMQFWec
+         BOCA==
+X-Gm-Message-State: APjAAAX3TzhiW/+uev83cfwRdlQa1FS74LaBBmxYTRU4G/XZSOVg1PpA
+        AC19z2kgaqqAqi53o89StsMsh0TlwvZ4Dg==
+X-Google-Smtp-Source: APXvYqw3D7xKhiJsRMrCubqPJpjDtazuLqDp+JZC2LihZ935BfAh9Zax1804IU55GjJ9nxaPH8f4Nw==
+X-Received: by 2002:ac2:5dfa:: with SMTP id z26mr5492914lfq.103.1576153584020;
+        Thu, 12 Dec 2019 04:26:24 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id l64sm2902993lfd.30.2019.12.12.04.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2019 04:26:23 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: pci: add ID for the Intel Comet Lake -H variant
+In-Reply-To: <20191212111642.GB1534818@kroah.com>
+References: <20191212093713.60614-1-heikki.krogerus@linux.intel.com> <20191212111642.GB1534818@kroah.com>
+Date:   Thu, 12 Dec 2019 14:27:08 +0200
+Message-ID: <87k171wwyr.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212111805.GD31345@kuha.fi.intel.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 01:18:05PM +0200, Heikki Krogerus wrote:
-> On Thu, Dec 12, 2019 at 05:40:40PM +0800, zhong jiang wrote:
-> > On 2019/12/12 17:28, Greg KH wrote:
-> > > On Thu, Dec 12, 2019 at 05:15:28PM +0800, zhong jiang wrote:
-> > >> On 2019/12/12 17:01, Heikki Krogerus wrote:
-> > >>> On Thu, Dec 12, 2019 at 03:34:23PM +0800, zhong jiang wrote:
-> > >>>> Fixes the following compile error:
-> > >>>>
-> > >>>> drivers/usb/typec/tcpm/fusb302.o: In function `tcpm_get_current_limit':
-> > >>>> fusb302.c:(.text+0x3ee): undefined reference to `extcon_get_state'
-> > >>>> fusb302.c:(.text+0x422): undefined reference to `extcon_get_state'
-> > >>>> fusb302.c:(.text+0x450): undefined reference to `extcon_get_state'
-> > >>>> fusb302.c:(.text+0x48c): undefined reference to `extcon_get_state'
-> > >>>> drivers/usb/typec/tcpm/fusb302.o: In function `fusb302_probe':
-> > >>>> fusb302.c:(.text+0x980): undefined reference to `extcon_get_extcon_dev'
-> > >>>> make: *** [vmlinux] Error 1
-> > >>> There are stubs for those functions so that really should not be
-> > >>> happening. I can not reproduce that.
-> > >> It can be reproduced in next branch. you can try it in the latest next branch.
-> > > Can it be reproduced in 5.5-rc1?
-> > >
-> > commit 78adcacd4edbd6795e164bbda9a4b2b7e51666a7
-> > Author: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date:   Thu Dec 12 15:48:07 2019 +1100
-> > 
-> >     Add linux-next specific files for 20191212
-> > 
-> > I  reproduce it  based on this commit.  The related config is attached.
-> 
-> OK, now I get what's going on. EXTCON is build as a module, but
-> FUSB302 is not. This should be explained in the commit message.
-> 
-> That does not mean we have to force everybody to enable EXTCON in
-> order to use this driver. Try something like this:
-> 
-> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
-> index 72481bbb2af3..06e026f6325c 100644
-> --- a/drivers/usb/typec/tcpm/Kconfig
-> +++ b/drivers/usb/typec/tcpm/Kconfig
-> @@ -31,6 +31,7 @@ endif # TYPEC_TCPCI
-> 
->  config TYPEC_FUSB302
->         tristate "Fairchild FUSB302 Type-C chip driver"
-> +       depends on EXTCON=n || EXTCON=y || (EXTCON=m && m)
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Ugh.  We need a better "pattern" for stuff like this, it's getting more
-and more frequent.
 
-And no, I don't have a better idea :(
+Hi,
 
-thanks,
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+> On Thu, Dec 12, 2019 at 12:37:13PM +0300, Heikki Krogerus wrote:
+>> The original ID that was added for Comet Lake PCH was
+>> actually for the -LP (low power) variant even though the
+>> constant for it said CMLH. Changing that while at it.
+>>=20
+>> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> ---
+>>  drivers/usb/dwc3/dwc3-pci.c | 6 +++++-
+>>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> Felipe, any objection for me just taking this to my tree now?
 
-greg k-h
+none whatsoever :-)
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3yMhwACgkQzL64meEa
+mQbJgg/+NwcrZoiFTBHVkHgo4egngatY+25Hq64wNvkCGm7PkjTuR8PrJ6YO/FtJ
+rwC5rW7sKMAtLsLbgPPezt+7LSAeKC18va8IwJDk/755aXNFAU27TSNxDAjfCepn
+KAQ3euvsmEm03v8zurFhQg6oAcnb8c2Hkg12hzikiu6ZuJCQDf0ewF9tZ7nCGr7n
+fFFoIsyJsYLVgGOFmMSIKGcsVnrjb2NkF3My9gxNvZOlKOeOP1CFNHoZQtGN3CBL
+czY5jq2nk1haYfyDj43hqqlj9yo9ROzfkXB6YjMCTzzSaiQDUCZ/lwoO9IZ9wfHQ
+dxxb3VYJmylZchy5POdV429WPrgqTUxGQkH8NyVYb7un+bYlv1kh9+c++0ZPOxVT
+IVtlo4PWzOhcBRtknoxh4z5Buu88W52bUJL2h1tDSfsXmVGUOnemtgcd5HdtFILh
++a3M42vxjpdhnI8VUCK7FRYB4IEOaUXBe4JDms6LnDCJ7Fupyzs4VUwp44Zhbdom
+n9DK7iRR0oFwJRRRmjm2We0FnDn7qhM/G9Vy3nZ/YXFUobZLhbkJsrh8gewqE+kA
+vepuuaH1cipmbGFzswaRZc92YKdgaZlbxqxNrASdIaw+8HVpAWXV2kPLJkzohpgF
+NUX/A5wOS1dA1EARLBnWMo7Myhnt5F+YINH0fDQx/qC+y/ZuiK8=
+=nHTz
+-----END PGP SIGNATURE-----
+--=-=-=--
