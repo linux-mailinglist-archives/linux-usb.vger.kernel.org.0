@@ -2,172 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE71611C676
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 08:35:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAC611C674
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 08:35:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728139AbfLLHeb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 02:34:31 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45926 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728132AbfLLHea (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 02:34:30 -0500
-Received: by mail-wr1-f67.google.com with SMTP id j42so1505433wrj.12
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2019 23:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=unipv-it.20150623.gappssmtp.com; s=20150623;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=Ouu20+mE9n/tPYHmfkHzcHWK0RTLjVdq3889eJu3VP0=;
-        b=lmtQeDO0RVMVq5UaQ/yHPY07AfXs62TQ590bzWxxhQaAA/OaOB21aNqrC1Zlo45s+i
-         0vqOpszc8Sfm2BBuncYr8tlj7W9bIc7EYH4J1UDr3BBFEYge7eIFNYAJWO2NQIzACRy8
-         sSVzNMIr1hZEY5iikGTDJf2NPrHPoeHl5AG5OylC98AeaeJw96Euvod9mMvblTCJGjD9
-         6qsE8uOYHKRAsu1xmiY5Az/7p9YfDoB1FtlTfUJDUJsN9RxZJ0sIKI+lDVR/bCYUud7F
-         n3m5AqVOLGyqEbqy9t5Cdr6E/ifNMpVhVtWyCb8LVjExB3CRLPxurspWLQshKirl27l9
-         TJtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=Ouu20+mE9n/tPYHmfkHzcHWK0RTLjVdq3889eJu3VP0=;
-        b=pB68+Vp/oHQcfcpIz/jCTpZVkoSHI61Qe3mzJmbcTblrizfcv0AxJxFE2wu58R9Rop
-         mWJX5aJmpcmE5l3TxfpRic/3M9YbNCqupcjoKkyFZGmBIU5b3nUHDQ8gs9zm3ckHD9h2
-         oxiLxVyv7VOZxC0lxwJxqGb7nWtKhxD/ekiqhigcy6YOYD8LZtdb3oR5BZ973m0Sz1Ya
-         KJ4DTki41f8kF2yvIoGfQ/GDcFfZZAhjFXe1+c2gGYzEfYprfiQwYgkO4MtanOpSD9iS
-         lCyDRjXCeUbMqgDvjuDON8Oas96xZQTvfHE68eCbomf0ROhB8OQ5ZtPdywcFG3BlhD2y
-         NkFw==
-X-Gm-Message-State: APjAAAXm6FS9cOpOO41ysTmvbDv/C5W3oqPcHN16o7g6ynRH8Cluy6du
-        IsYOInDu61SQNMjQzK/rdKU0Xw==
-X-Google-Smtp-Source: APXvYqwlTzWP0XWOqGIJf4UvsmxnRFuIxB+FV85xriWGt31SdJo44/OLaYrtTWBOIOO+0sMh8wDsnw==
-X-Received: by 2002:a5d:6802:: with SMTP id w2mr4385600wru.353.1576136068427;
-        Wed, 11 Dec 2019 23:34:28 -0800 (PST)
-Received: from angus.unipv.it (angus.unipv.it. [193.206.67.163])
-        by smtp.gmail.com with ESMTPSA id o66sm1101251wmo.20.2019.12.11.23.34.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 23:34:27 -0800 (PST)
-Message-ID: <430b562eeba371ef3b917193246b9eb6c46be71e.camel@unipv.it>
-Subject: Re: AW: Slow I/O on USB media after commit
- f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
-From:   Andrea Vai <andrea.vai@unipv.it>
-To:     Ming Lei <ming.lei@redhat.com>, "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Finn Thain <fthain@telegraphics.com.au>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        USB list <linux-usb@vger.kernel.org>,
-        SCSI development list <linux-scsi@vger.kernel.org>,
-        Himanshu Madhani <himanshu.madhani@cavium.com>,
-        Hannes Reinecke <hare@suse.com>,
-        Omar Sandoval <osandov@fb.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Hans Holmberg <Hans.Holmberg@wdc.com>,
-        Kernel development list <linux-kernel@vger.kernel.org>,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Date:   Thu, 12 Dec 2019 08:34:26 +0100
-In-Reply-To: <20191211213316.GA14983@ming.t460p>
-References: <f82fd5129e3dcacae703a689be60b20a7fedadf6.camel@unipv.it>
-         <20191129005734.GB1829@ming.t460p> <20191129023555.GA8620@ming.t460p>
-         <320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it>
-         <20191203022337.GE25002@ming.t460p>
-         <8196b014b1a4d91169bf3b0d68905109aeaf2191.camel@unipv.it>
-         <20191210080550.GA5699@ming.t460p> <20191211024137.GB61323@mit.edu>
-         <20191211040058.GC6864@ming.t460p> <20191211160745.GA129186@mit.edu>
-         <20191211213316.GA14983@ming.t460p>
+        id S1728130AbfLLHe3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Thu, 12 Dec 2019 02:34:29 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58186 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728072AbfLLHe3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Dec 2019 02:34:29 -0500
+From:   bugzilla-daemon@bugzilla.kernel.org
+Authentication-Results: mail.kernel.org; dkim=permerror (bad message/signature format)
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 205841] Lenovo USB-C dock audio NULL pointer
+Date:   Thu, 12 Dec 2019 07:34:28 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: owl@ow1.in
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-205841-208809-ZezdkNMlJX@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-205841-208809@https.bugzilla.kernel.org/>
+References: <bug-205841-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.5 (3.32.5-1.fc30) 
+Content-Transfer-Encoding: 8BIT
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Il giorno gio, 12/12/2019 alle 05.33 +0800, Ming Lei ha scritto:
-> On Wed, Dec 11, 2019 at 11:07:45AM -0500, Theodore Y. Ts'o wrote:
-> > On Wed, Dec 11, 2019 at 12:00:58PM +0800, Ming Lei wrote:
-> > > I didn't reproduce the issue in my test environment, and follows
-> > > Andrea's test commands[1]:
-> > > 
-> > >   mount UUID=$uuid /mnt/pendrive 2>&1 |tee -a $logfile
-> > >   SECONDS=0
-> > >   cp $testfile /mnt/pendrive 2>&1 |tee -a $logfile
-> > >   umount /mnt/pendrive 2>&1 |tee -a $logfile
-> > > 
-> > > The 'cp' command supposes to open/close the file just once,
-> however
-> > > ext4_release_file() & write pages is observed to run for 4358
-> times
-> > > when executing the above 'cp' test.
-> > 
-> > Why are we sure the ext4_release_file() / _fput() is coming from
-> the
-> > cp command, as opposed to something else that might be running on
-> the
-> > system under test?  _fput() is called by the kernel when the last
-> 
-> Please see the log:
-> 
-> https://lore.kernel.org/linux-scsi/3af3666920e7d46f8f0c6d88612f143ffabc743c.camel@unipv.it/2-log_ming.zip
-> 
-> Which is collected by:
-> 
-> #!/bin/sh
-> MAJ=$1
-> MIN=$2
-> MAJ=$(( $MAJ << 20 ))
-> DEV=$(( $MAJ | $MIN ))
-> 
-> /usr/share/bcc/tools/trace -t -C \
->     't:block:block_rq_issue (args->dev == '$DEV') "%s %d %d", args-
-> >rwbs, args->sector, args->nr_sector' \
->     't:block:block_rq_insert (args->dev == '$DEV') "%s %d %d", args-
-> >rwbs, args->sector, args->nr_sector'
-> 
-> $MAJ:$MIN points to the USB storage disk.
-> 
-> From the above IO trace, there are two write paths, one is from cp,
-> another is from writeback wq.
-> 
-> The stackcount trace[1] is consistent with the IO trace log since it
-> only shows two IO paths, that is why I concluded that the write done
-> via
-> ext4_release_file() is from 'cp'.
-> 
-> [1] 
-> https://lore.kernel.org/linux-scsi/320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it/2-log_ming_20191129_150609.zip
-> 
-> > reference to a struct file is released.  (Specifically, if you
-> have a
-> > fd which is dup'ed, it's only when the last fd corresponding to
-> the
-> > struct file is closed, and the struct file is about to be
-> released,
-> > does the file system's f_ops->release function get called.)
-> > 
-> > So the first question I'd ask is whether there is anything else
-> going
-> > on the system, and whether the writes are happening to the USB
-> thumb
-> > drive, or to some other storage device.  And if there is something
-> > else which is writing to the pendrive, maybe that's why no one
-> else
-> > has been able to reproduce the OP's complaint....
-> 
-> OK, we can ask Andrea to confirm that via the following trace, which
-> will add pid/comm info in the stack trace:
-> 
-> /usr/share/bcc/tools/stackcount  blk_mq_sched_request_inserted
-> 
-> Andrea, could you collect the above log again when running new/bad
-> kernel for confirming if the write done by ext4_release_file() is
-> from
-> the 'cp' process?
+https://bugzilla.kernel.org/show_bug.cgi?id=205841
 
-Yes, I will try to do it as soon as possible and let you know.
-I will also try xfs or btrfs, as you suggested in another message.
+--- Comment #2 from Ilia Pavlikhin (owl@ow1.in) ---
+Also I booted to old kernel (5.0.21) and sound works perfectly, but problem
+with bandwidth is saved.
 
-Thanks, and bye
-Andrea
+[    4.781746] usb 1-2.4.2.3: new full-speed USB device number 10 using
+xhci_hcd
+[    5.036633] usb 1-2.4.2.3: New USB device found, idVendor=17ef,
+idProduct=3063, bcdDevice= 9.02
+[    5.036634] usb 1-2.4.2.3: New USB device strings: Mfr=1, Product=2,
+SerialNumber=3
+[    5.036634] usb 1-2.4.2.3: Product: ThinkPad USB-C Dock Audio
+[    5.036635] usb 1-2.4.2.3: Manufacturer: Lenovo
+[    5.036636] usb 1-2.4.2.3: SerialNumber: 000000000000
+[    5.105120] input: Lenovo ThinkPad USB-C Dock Audio as
+/devices/pci0000:00/0000:00:14.0/usb1/1-2/1-2.4/1-2.4.2/1-2.4.2.3/1-2.4.2.3:1.3/0003:17EF:3063.0008/input/input14
+[   23.706681] usb 1-2.4.2.3: Not enough bandwidth for new device state.
+[   23.706696] usb 1-2.4.2.3: Not enough bandwidth for altsetting 1
+[   23.706699] usb 1-2.4.2.3: 2:1: usb_set_interface failed (-28)
+[   23.707166] usb 1-2.4.2.3: Not enough bandwidth for new device state.
+[   23.707184] usb 1-2.4.2.3: Not enough bandwidth for altsetting 1
+[   23.707187] usb 1-2.4.2.3: 2:1: usb_set_interface failed (-28)
 
+-- 
+You are receiving this mail because:
+You are watching the assignee of the bug.
