@@ -2,109 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A860011D332
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 18:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40A8F11D37F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 18:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730036AbfLLRJN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 12:09:13 -0500
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:53530 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729804AbfLLRJN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 12:09:13 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBCH951o066318;
-        Thu, 12 Dec 2019 11:09:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576170545;
-        bh=ZfQ53PNcEHYZNdrNFmm1s8ONDRLhV0Hn9oYml18BYAU=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=MOohh74CsEdRJf/e4oT4lBCOaAQ9kIThd1jcfAFlH08MiePtuKzfvbLY+bYKhqzI2
-         +vdsOibywoNHbHEaC/aLSeX7c9l/wXVI3rasl4cvTA7t6g2b+fgSlr7evFOIKrqHQS
-         2hIDqifRucQS8zYWPks/lMBp9/I5oZMGCflwVzm0=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCH95lM105566;
-        Thu, 12 Dec 2019 11:09:05 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Dec 2019 11:09:05 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Dec 2019 11:09:05 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBCH95AF033849;
-        Thu, 12 Dec 2019 11:09:05 -0600
-Date:   Thu, 12 Dec 2019 11:08:29 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     Tony Lindgren <tony@atomide.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-omap@vger.kernel.org>,
-        Merlijn Wajer <merlijn@wizzup.org>,
-        Pavel Machek <pavel@ucw.cz>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH] usb: musb: fix idling for suspend after disconnect
- interrupt
-Message-ID: <20191212170829.GA14499@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>, Tony Lindgren <tony@atomide.com>,
+        id S1730092AbfLLRPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 12:15:48 -0500
+Received: from mail-qk1-f201.google.com ([209.85.222.201]:54595 "EHLO
+        mail-qk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730007AbfLLRPr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 12:15:47 -0500
+Received: by mail-qk1-f201.google.com with SMTP id s9so1794259qkg.21
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2019 09:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=v2c9ZfhsjHl5yHeRsOkptCzwopqKyi8H+GjnL6ViNEI=;
+        b=vrj3NH1ShlxM4YyYe0HqMM/dwIJ/fbhT+APeMTYtYoOG+CRXgaspmBasE4ErJdIIKi
+         jKDBAG0QKul7viwQpYW6XAA0Zjs/OwBkQtBf1K05wZYbMMI0opQwGyzT+YsfLr3OMqla
+         lDjR73vpeODB04Fr5k9u1dyE32YCXQ30LDRoDe1gHq4pwTdmfL8rUSdCJbvdFP3l45dg
+         SR5r6aA/6DzNNbzAod12aErBMfwYaNEoTYiQcLyDBmiLButXvXObMUCU5tGqskbDvrJ2
+         qfdxvJXSBSxcvZeWKiOarc8KAVx2GSe2x7sH+SPYxcSWpwQcQCSL3928o15KVRmxBP0Q
+         KJDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=v2c9ZfhsjHl5yHeRsOkptCzwopqKyi8H+GjnL6ViNEI=;
+        b=LXC1biCbZrT81404pCnxpCE5WC2VnI7IiM1hqmL+LH8WGuDarFmIsaDdnSkiXI+cVx
+         ko8mYwPJTk8wE6vqV11b3w85Syrj9k4aiujItoj4sPMJFKOc4kkboGCYeiWqXAr8p0SQ
+         3Wmor4BFQk80kUqU6P5hYi9zcYE14KTxT1oKhLzC1JgAO+juRAmRM7sGURy+5y92Nweg
+         JOYGzcB7ouPdRHhYcrgDgSjTCpAMS6+PjvEBfVZQg4DGahAQoSc91DgJaSoXsdnwjDGR
+         n6Y8uVyM8P0t5Y44q4iOEK/ihleHmHh5/xsVXWibDM2ACV8QMWAkQtbR5/o9aiWikHtr
+         Avqw==
+X-Gm-Message-State: APjAAAU0LPp/opFdVfy7QqSTzaXCQdfFSVNENs8LZL4QwMfTuaC7Bwf0
+        hwIry5lBEQqE3TqT44nwSXtLv6+vj8/GRTU3
+X-Google-Smtp-Source: APXvYqzGw/ZgJf+JgIA+hGU/h4Uovf7mUvA8SaZcjm27w1n/jWOAvB9sAKZXyMLIHaH8dKOK3BumvDPhvQx5uZWo
+X-Received: by 2002:ac8:6f2d:: with SMTP id i13mr4821925qtv.133.1576170946867;
+ Thu, 12 Dec 2019 09:15:46 -0800 (PST)
+Date:   Thu, 12 Dec 2019 18:15:37 +0100
+Message-Id: <cover.1576170740.git.andreyknvl@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
+Subject: [PATCH RFC 0/2] kcov: collect coverage from usbhid interrupts
+From:   Andrey Konovalov <andreyknvl@google.com>
+To:     Dmitry Vyukov <dvyukov@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        Merlijn Wajer <merlijn@wizzup.org>, Pavel Machek <pavel@ucw.cz>,
-        Sebastian Reichel <sre@kernel.org>
-References: <20191126034151.38154-1-tony@atomide.com>
- <20191212160059.GI16429@iaqt7>
- <20191212160946.GR35479@atomide.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191212160946.GR35479@atomide.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 08:09:46AM -0800, Tony Lindgren wrote:
-> Hi,
-> 
-> * Bin Liu <b-liu@ti.com> [191212 16:02]:
-> > Hi Tony,
-> > 
-> > Sorry for my late response.
-> 
-> No worries.
-> 
-> > On Mon, Nov 25, 2019 at 07:41:51PM -0800, Tony Lindgren wrote:
-> > > When disconnected as USB B-device, we sometimes get a suspend interrupt
-> > > after disconnect interrupt. In that case we have devctl set to 99 with
-> > > VBUS still valid and musb_pm_runtime_check_session() wrongly things we
-> > > have an active session. We have no other interrupts after disconnect
-> > > coming in this case at least with the omap2430 glue.
-> > 
-> > I don't have an omap2430 platform to test, but its musb doesn't generate
-> > DISCONNECT interrupt at all when disconnected from USB host in any case?
-> > It is a surprise, the musb core driver expects the DISCONNECT interrupt
-> > after VBUS is lost and relies on it to tear down the gadget driver and
-> > the state machine. I am wondering how its USB is functional without the
-> > DISCONNECT event...
-> 
-> We do get DISCONNECT, but we can then get a SUSPEND after DISCONNECT
-> has already happened..
+This patchset extends kcov to allow collecting coverage from interrupts
+and then uses the new functionality to collect coverage from usbhid code.
 
-Ahh, I missed the first sentence in the commit log...
-Now I understand the issue. Thanks.
+What I'm not sure yet about this change is if we actually want to
+selectively annotate some parts of the USB stack that are executed in
+interrupt context, or maybe we can do this with some common approach.
 
-> 
-> That will wake up musb waiting for further interrupts thinking it's
-> connected. But after that there are no more interrupts as the cable
-> is disconnected so we need to poll the status again.
-> 
-> If we see SUSPEND before DISCONNECT, then things idle fine.
+For example patch #2 in this patchset annotates all functions that are
+passed as completion callbacks to usb_fill_*() in drivers/hid/usbhid.
+Maybe instead we could redefine usb_fill_*() in a way that would handle
+all such cases without manual annotations.
 
-Does SUSPEND always comes after DISCONNECT on omap2430, or just
-sometimes? I guess the USB connector has some issue - when DP/DM pins
-are disconnected, SUSPEND interrupt is generated; when VBUS/GND pins are
-disconnected, DISCONNECT interrupt is generated. Because DP/DM pins are
-shorter than VBUS/GND, SUSPEND should come before DISCONNECT.
+Any suggestions are welcome.
 
--Bin.
+This has allowed to find at least one new HID bug [1], which was recently
+fixed by Alan [2].
+
+[1] https://syzkaller.appspot.com/bug?extid=09ef48aa58261464b621
+[2] https://patchwork.kernel.org/patch/11283319/
+
+This patchset has been pushed to the public Linux kernel Gerrit instance:
+
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2225
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+
+Andrey Konovalov (2):
+  kcov: collect coverage from interrupts
+  HID: usbhid: kcov: add annotations for coverage collection
+
+ Documentation/dev-tools/kcov.rst   |  16 +--
+ drivers/hid/usbhid/hid-core.c      |  25 +++-
+ drivers/hid/usbhid/usbkbd.c        |  15 ++-
+ drivers/hid/usbhid/usbmouse.c      |   7 +-
+ drivers/usb/gadget/udc/dummy_hcd.c |   1 +
+ include/linux/sched.h              |   3 +
+ kernel/kcov.c                      | 196 +++++++++++++++++++----------
+ lib/Kconfig.debug                  |   9 ++
+ 8 files changed, 192 insertions(+), 80 deletions(-)
+
+-- 
+2.24.1.735.g03f4e72817-goog
+
