@@ -2,92 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E3511CC9C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 12:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E481C11CC9D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 12:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729065AbfLLLxS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 06:53:18 -0500
-Received: from esa6.microchip.iphmx.com ([216.71.154.253]:3304 "EHLO
-        esa6.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726492AbfLLLxR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 06:53:17 -0500
-Received-SPF: Pass (esa6.microchip.iphmx.com: domain of
-  Cristian.Birsan@microchip.com designates 198.175.253.82 as
-  permitted sender) identity=mailfrom;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Cristian.Birsan@microchip.com";
-  x-sender="Cristian.Birsan@microchip.com";
-  x-conformance=spf_only; x-record-type="v=spf1";
-  x-record-text="v=spf1 mx a:ushub1.microchip.com
-  a:smtpout.microchip.com -exists:%{i}.spf.microchip.iphmx.com
-  include:servers.mcsv.net include:mktomail.com
-  include:spf.protection.outlook.com ~all"
-Received-SPF: None (esa6.microchip.iphmx.com: no sender
-  authenticity information available from domain of
-  postmaster@email.microchip.com) identity=helo;
-  client-ip=198.175.253.82; receiver=esa6.microchip.iphmx.com;
-  envelope-from="Cristian.Birsan@microchip.com";
-  x-sender="postmaster@email.microchip.com";
-  x-conformance=spf_only
-Authentication-Results: esa6.microchip.iphmx.com; dkim=none (message not signed) header.i=none; spf=Pass smtp.mailfrom=Cristian.Birsan@microchip.com; spf=None smtp.helo=postmaster@email.microchip.com; dmarc=pass (p=none dis=none) d=microchip.com
-IronPort-SDR: RNxNNSncMJoztrjRlZKmBxNrxReUXbLQOeWPtryVMnosacAQxIdDqSXHv7BwUNjt2W3G5Ptm5h
- 0F1YMjhkkUxcU6Ai608qJMkkHG6gasrR6MxMHi+vy/1301dHQf4obN4EDtOnLe7rplJQWrqNwi
- WeYkkvfhZmoA45bspa7FWhGq4VMOvSaZyYvcXS+LAMAQFVwLa4KU9aNSsENdXNNPENUamyJoJ2
- 8Y2XgyLD8YPkb0DcVSARjGUWO+QlSUG8clt7Z/kK7KOUJsW3z5RaF4oCut1vMnq9kll+Srau26
- Sys=
-X-IronPort-AV: E=Sophos;i="5.69,305,1571727600"; 
-   d="scan'208";a="57492404"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Dec 2019 04:53:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 12 Dec 2019 04:53:21 -0700
-Received: from cristi-W530.mchp-main.com (10.10.85.251) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.1713.5 via Frontend Transport; Thu, 12 Dec 2019 04:53:19 -0700
-From:   Cristian Birsan <cristian.birsan@microchip.com>
-To:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Cristian Birsan <cristian.birsan@microchip.com>
-Subject: [PATCH] net: usb: lan78xx: Fix suspend/resume PHY register access error
-Date:   Thu, 12 Dec 2019 13:52:47 +0200
-Message-ID: <20191212115247.26728-1-cristian.birsan@microchip.com>
-X-Mailer: git-send-email 2.17.1
+        id S1729114AbfLLLx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 06:53:27 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43693 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726492AbfLLLx0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 06:53:26 -0500
+Received: by mail-lj1-f195.google.com with SMTP id a13so1933873ljm.10
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2019 03:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=jPExNZM3mmX+1Ih8VVxmCh7AFIrM8pkRXK2ZyryZhKI=;
+        b=nqYmjqrEyNSnaGGjiTxybhgv/rUYCF4b2vcY201/FwNStvbzyGNOQ2+y4BiT2JTnbr
+         X1ODg5XGYxRQ/nUFhhf7iyIBS2vc8mY5U+3vfSlxJGPjm8Qn8gBiPD5X7xpwkeWVtCaO
+         R/GaxlA//v4RdeLCDTNhlQ/ajb5kWUsJ3AIj5mk+Fqq5eM6Nl2iPVpnqDfNFpgQj2Jcb
+         PyVFwzPqS0XgnqXu4zUs31bsY9raacy0NYm3AoeraGLyBEn0uS/dbnKer6ZCL3BL4qEe
+         r8xRlGACQny39lcxL/mAcar84RA/1N+Dpj2fH0qHv4UV7Fogg+ShxTsHQonbW6o+VhKw
+         y1xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=jPExNZM3mmX+1Ih8VVxmCh7AFIrM8pkRXK2ZyryZhKI=;
+        b=mXTWq+866tHFVByN0HdQgVRe+c7EwG2q+HB06uvmbLiCfECiaKe1wsJW3qHQ4rYVZO
+         ZNWGxHXYDddz9ttbVbwJUaulgRAKzM5ghVSZ0tMaRrdCqsJG6qMyxjDFu9sHKgLlTWVk
+         3nK/FUr9HUF00crtcqL2ViSQzjTIge9sAYwnnqM/O1lO8LudnidyqKyK4ig0CGidt7vb
+         uoJtPY4s7tF3CulMf4Px922+dNiG0w0BQYUP5QmKQSpPUyoXa1LaOyUDTFes4FBF2G+Q
+         LPRS2V2vKSndy2RL049Gjn2jv1oNdImKktOHpbuV9ReVYk8veDPKSoCo/pqUjzvervKu
+         AqgQ==
+X-Gm-Message-State: APjAAAVBNKlUDr+VQV+TQqu/x/BWb9i3fNYD0nn4z7kwdRbRBePikj4P
+        csBgVSYTiVaz78Ji7yleber/KhZNp69MN2+TuL0=
+X-Google-Smtp-Source: APXvYqzzf4x3RKcXxn2lO7uaG6w1OZu1+0Qt0/UIaQR0thAkMPsZeUkgaHfDGOoDxlbClC0/hui7XIFH1ZdyKWyQKh8=
+X-Received: by 2002:a2e:9ad8:: with SMTP id p24mr5637803ljj.148.1576151604314;
+ Thu, 12 Dec 2019 03:53:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+Received: by 2002:ab3:588b:0:0:0:0:0 with HTTP; Thu, 12 Dec 2019 03:53:23
+ -0800 (PST)
+Reply-To: alhajiouttta@gmail.com
+From:   Al Haji Idriss <jb4523194@gmail.com>
+Date:   Thu, 12 Dec 2019 12:53:23 +0100
+Message-ID: <CAK-W6-zViBiDFqD6d9wmV1N=Zqj4AVPyYuBnx24_dTK7AzypTQ@mail.gmail.com>
+Subject: Assalam alaikum,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Lan78xx driver accesses the PHY registers through MDIO bus over USB
-connection. When performing a suspend/resume, the PHY registers can be
-accessed before the USB connection is resumed. This will generate an
-error and will prevent the device to resume correctly.
-This patch adds the dependency between the MDIO bus and USB device to
-allow correct handling of suspend/resume.
+Assalam alaikum,
 
-Fixes: ce85e13ad6ef ("lan78xx: Update to use phylib instead of mii_if_info.")
-Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
----
- drivers/net/usb/lan78xx.c | 1 +
- 1 file changed, 1 insertion(+)
+I am an active banker,  I saw your email address while browsing
+through the bank DTC Screen in my office yesterday. now  I am in a
+better position to transfer about $8.3 million US Dollars into a
+foreign account. If you are willing and capable to work with me to
+receive this fund into a personal or company's account, I will give
+you the full detailed information. No risk is involved as it will pass
+through normal banking procedures.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index cf1f3f0a4b9b..d7bf1918ca62 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -1808,6 +1808,7 @@ static int lan78xx_mdio_init(struct lan78xx_net *dev)
- 	dev->mdiobus->read = lan78xx_mdiobus_read;
- 	dev->mdiobus->write = lan78xx_mdiobus_write;
- 	dev->mdiobus->name = "lan78xx-mdiobus";
-+	dev->mdiobus->parent = &dev->udev->dev;
- 
- 	snprintf(dev->mdiobus->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
- 		 dev->udev->bus->busnum, dev->udev->devnum);
--- 
-2.17.1
+Hence, I am inviting you for a business deal where this money can be
+transfer to your account which we will shared between us in the ratio
+of 50% for me,50% for you and both of us will share any expenses that
+will come during the release/transfer from our bank, if you agree to
+my business proposal. Further details of this Fund release and
+transfer will be forwarded to you as soon as I receive your detail
+Mail.
 
+1)Your Full Names. (2)Your country. (3)Your Telephone
+(4)Your Occupation .(5)Your Age. (6) Your full Address.
+I will use these detail information=E2=80=99s to fill a release/transfer an=
+d
+arrange some documents on your behalf in our bank here as the
+beneficiary owner of this fund abandoned in our bank
+
+Please contact me through my private Email:alhouttta@gmail.com
+
+Thanks
+Alh Idriss Akim Outta
