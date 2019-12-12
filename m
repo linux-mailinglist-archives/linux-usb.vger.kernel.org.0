@@ -2,69 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E9A11C485
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 05:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A620A11C56E
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2019 06:29:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727668AbfLLEBw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Dec 2019 23:01:52 -0500
-Received: from inva020.nxp.com ([92.121.34.13]:60432 "EHLO inva020.nxp.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726769AbfLLEBw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Dec 2019 23:01:52 -0500
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 32BDC1A1075;
-        Thu, 12 Dec 2019 05:01:50 +0100 (CET)
-Received: from invc005.ap-rdc01.nxp.com (invc005.ap-rdc01.nxp.com [165.114.16.14])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 3D3101A08FB;
-        Thu, 12 Dec 2019 05:01:47 +0100 (CET)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by invc005.ap-rdc01.nxp.com (Postfix) with ESMTP id 3AC9B402B1;
-        Thu, 12 Dec 2019 12:01:43 +0800 (SGT)
-From:   Peter Chen <peter.chen@nxp.com>
-To:     balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        Peter Chen <peter.chen@nxp.com>, Jun Li <jun.li@nxp.com>,
-        stable <stable@vger.kernel.org>
-Subject: [PATCH 1/1] usb: gadget: f_fs: set req->num_sgs as 0 for sync io mode
-Date:   Thu, 12 Dec 2019 11:59:20 +0800
-Message-Id: <1576123160-28931-1-git-send-email-peter.chen@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S1726784AbfLLF3E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 00:29:04 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40436 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725980AbfLLF3E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 00:29:04 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k25so526992pgt.7;
+        Wed, 11 Dec 2019 21:29:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cg5lGbhizOwb+tnRA8SvOrnpW+A7N5IliX8lmwh9HY8=;
+        b=lSqx+gVRq1/ReD8YLvPh1EJX6TMuCOCw4qHrpmhLhK0gw9tBhs+ElZVzj/QCu76tsM
+         RyQW5jdL/QR8KEfo5OydmoagfQ+4oyJIiuCmJdr/q32ecpHwBZb93WREXjjbCBz9xDov
+         EQDAIxK9+uj1XKBf4tgrYdpH4qjoNxDap0kkFiL5I66ZPm5Xu4LdqkkkwrEtwFs2bq0M
+         ICF8oZmZSBqo7aTjTy5C9usMsKKRMW9cFD8OaNyKgP2hK0OChOJiF5FwKhsgb+w7JA6e
+         976makL8lvndjiMQn17SgNLbcHPstnc7U8utbo45sj4Ym98AeMQHJsRqZ2Uw6HJpU/hk
+         b8Fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Cg5lGbhizOwb+tnRA8SvOrnpW+A7N5IliX8lmwh9HY8=;
+        b=ETHGPxCUzE4GPufwQyO3+1mttCajJ9IVZyGxh3ZdO0L94vAEHgp9/d4aD3OQ5MuPxQ
+         7PW7lo5ZADgy5GWDJforpp+nTAu9T5U76BcVtSWIdhg5YwdwjDYEnMxhbpwrmJPySSCr
+         HLhQ/Vvx7oasulf4KP1+B8H4EB65dAnJGMm44h3jIGTErgSEFPjcNBLzxFLDBvf5zjo8
+         ILFRolU2wef3spE7TA8eUtI6N5gzSXqXGRTAGij8dGqXi13xPuZkfkBjc1Tjj/29C7kk
+         OfehJUF7JCBVz5IEXey4mx5cgE2H22z+xTbWa8I3ZU1U2u5IEBAX1cG8M8C4oGbk1SgF
+         X7zA==
+X-Gm-Message-State: APjAAAUV0+NionjWEvPrlzaGX1QCwgZXhyxra1Rf+vQjDLu2+JKj1VCO
+        9X5+roFyH5upMlrc54eSw3z8fV1e
+X-Google-Smtp-Source: APXvYqx7AiOlM7CXVuO+TdH4bu5W0Rsf9qS8x6I+B4ZGTmFyxqAj998tZBAZk4Msw9in4QpBaPpywQ==
+X-Received: by 2002:a63:9d07:: with SMTP id i7mr8867378pgd.344.1576128543447;
+        Wed, 11 Dec 2019 21:29:03 -0800 (PST)
+Received: from localhost.localdomain ([163.152.162.99])
+        by smtp.gmail.com with ESMTPSA id h7sm5532289pfq.36.2019.12.11.21.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2019 21:29:02 -0800 (PST)
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, marmarek@invisiblethingslab.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Suwan Kim <suwan.kim027@gmail.com>
+Subject: [PATCH 0/2] usbip: Fix infinite loop in vhci rx
+Date:   Thu, 12 Dec 2019 14:28:39 +0900
+Message-Id: <20191212052841.6734-1-suwan.kim027@gmail.com>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The UDC core uses req->num_sgs to judge if scatter buffer list is used.
-Eg: usb_gadget_map_request_by_dev. For f_fs sync io mode, the request
-is re-used for each request, so if the 1st request->length > PAGE_SIZE,
-and the 2nd request->length is < PAGE_SIZE, the f_fs uses the 1st
-req->num_sgs for the 2nd request, it causes the UDC core get the wrong
-req->num_sgs value (The 2nd request doesn't use sg).
+usbip: Fix infinite loop in vhci rx
 
-We set req->num_sgs as 0 for each request at non-sg transfer case to
-fix it.
+https://lore.kernel.org/linux-usb/20191206032406.GE1208@mail-itl/T/#u
+In this mail thread, it shows system hang when there is receive
+error in vhci. There are two different causes in this bug.
 
-Cc: Jun Li <jun.li@nxp.com>
-Cc: stable <stable@vger.kernel.org>
-Fixes: 772a7a724f69 ("usb: gadget: f_fs: Allow scatter-gather buffers")
-Signed-off-by: Peter Chen <peter.chen@nxp.com>
----
- drivers/usb/gadget/function/f_fs.c | 1 -
- 1 file changed, 1 deletion(-)
+[1] Wrong receive logic in vhci when using scatter-gather
+[2] Wrong error path of vhci_recv_ret_submit()
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index eedd926cc578..b5a1bfc2fc7e 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1106,7 +1106,6 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
- 			req->num_sgs = io_data->sgt.nents;
- 		} else {
- 			req->buf = data;
--			req->num_sgs = 0;
- 		}
- 		req->length = data_len;
- 
+[1] considers normal reception to be an error condition and closes
+connection. And when [1] error situation occurs, wrong error path[2]
+causes the system freeze. So each patch fixes this bugs.
+
+Suwan Kim (2):
+  usbip: Fix receive error in vhci-hcd when using scatter-gather
+  usbip: Fix error path of vhci_recv_ret_submit()
+
+ drivers/usb/usbip/usbip_common.c |  3 +++
+ drivers/usb/usbip/vhci_rx.c      | 13 +++++++++----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
 -- 
-2.17.1
+2.20.1
 
