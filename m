@@ -2,273 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6D911E503
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 14:56:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0AF11E50F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 14:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727551AbfLMN43 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 08:56:29 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:55471 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727490AbfLMN43 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 08:56:29 -0500
-Received: by mail-wm1-f65.google.com with SMTP id q9so6467722wmj.5
-        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 05:56:26 -0800 (PST)
+        id S1727578AbfLMN5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 08:57:32 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37506 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727507AbfLMN5c (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 08:57:32 -0500
+Received: by mail-pf1-f195.google.com with SMTP id p14so1525139pfn.4;
+        Fri, 13 Dec 2019 05:57:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=pygJ7mh0CHTJjUspwcXVaJd4XJbmxhN8/ZL1/uaW1NA=;
-        b=OTwOyRGmdCGz09hjiP9E3+pHNuM1+bicUgZwcerWgnOL6OI+mA/kwK0ktZcG8GNS29
-         BNn89ALuT/0n5F0GldEmDa5y9UMxyUf4OdfvAorGsHrK/spDh3mf3aakiWh6d43esSZU
-         hfzF2DR7SPX/4lqVqQr0v4mV2Ly8Nro8wFOVHRCPJj2zwDhKAT0lpoUi1Pbonnr5cD9G
-         TRPZamRiKsdtSAVt4Hu44CZEi6xgxfGUbQ1dIcjmINh8wKke4VruKZUZb+/WjzwbhslE
-         JixPh+A13Crbh0SsyccJkeJ8yI8lWBThcAHE5CvhFD8MCq/q6K0Gc2VqUB+Wbuw2g+7v
-         1/iA==
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DPtsk1xekHf4rFompFbK+++ywQG55As5vK9YXX25XMc=;
+        b=HcZHnLR1V2y0vLHORQuWaZK6tD618ijiTm+wMIWqy5ttOW+N7ncHscgh5Rpe5dPZrT
+         DN5TbwDanXx3zF0C1n1Isg76VQZ9LDjiHkDa9ChFahhR03hwRxOX5qjlIMnwJY7/uprQ
+         hBNvephzkogku4C0RQC7Vy3L8GIc/hwxtd98zpioMw+5rUen0Tug4tiV5k/Fa5t15Jjn
+         7Fs+HcXsvfjoYjVmXDvoFRweQ45pZCMTvoFyqekuW0+koykZiDBQxAN0cAFFN5RDNFFp
+         HLnYWZjtmfd1Jb6pQCJW0pWLCpogjw39HKPu8CakppP7DsK2nKsethsuR5wstovhgp1+
+         1qjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=pygJ7mh0CHTJjUspwcXVaJd4XJbmxhN8/ZL1/uaW1NA=;
-        b=mRa7gzah2+31rHcNCjq7QHRrorY2I4sGbRkB7Mp4F+kx2bXvrLQzbO2TvMVHeAC2Wn
-         calLO/PVsEVikoDHiSLwOTcUSfn1A9oEOHE8kzztXlgOI8CioDvjcnK2eJwwRqq9CfRK
-         cWNZz/QfUmOrm7G9xzQqhNSqmlDcmD/VhMjb1NV7+GAZ++2R7n1nh0Ig5jcFtdbFrW4B
-         zY70NuHk05OZkJDXKJ/ieAvpBVCUUdOu2N9ZHiUEKeeU6Ajidwbs/wE+MgYJzSnV6MiU
-         jTVX9q0GthgdBz8T34ngTnQ/Qzt9797T0TfiFPtX58Sg5Z47KWXhgb4YUBM1tcHX9/gS
-         ZQ6Q==
-X-Gm-Message-State: APjAAAWl3HbryvxNqosqi9VRjWoFkAutglc/HRSvNfNWTdPMwEAuxvHG
-        /7dEElHZeAk/Ja5sHR74+ndNYZBGPEQ=
-X-Google-Smtp-Source: APXvYqzyy1aZqMCTn2tOjPRHBIJ362slLupYozAh0kFBuIQvTmSGb8Uzue1AvrBpBjFOA/QAice7Kw==
-X-Received: by 2002:a1c:486:: with SMTP id 128mr14002463wme.163.1576245385980;
-        Fri, 13 Dec 2019 05:56:25 -0800 (PST)
-Received: from danielepa-ThinkCentre-M93p.tmt.telital.com (static-82-85-31-68.clienti.tiscali.it. [82.85.31.68])
-        by smtp.gmail.com with ESMTPSA id y139sm11108520wmd.24.2019.12.13.05.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 05:56:25 -0800 (PST)
-From:   Daniele Palmas <dnlplm@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
-Subject: [PATCH 1/1] USB: serial: option: add Telit ME910G1 0x110a composition
-Date:   Fri, 13 Dec 2019 14:56:15 +0100
-Message-Id: <20191213135615.24286-1-dnlplm@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=DPtsk1xekHf4rFompFbK+++ywQG55As5vK9YXX25XMc=;
+        b=DuL5wvfASUAWTfBaZMTr02jeA1XiRFTVp9UmdxTPucQaWsseHh5Xoaa89GpvHCgozh
+         uL0hH0xXxh/5wiAgMmnNRCbNFSn7wUrIUIx/NeiOc1twlUyZ96gGDCr5nO+XEN4R+YvP
+         Jmd9aCll5PXz2rGoGCnnAfEjlVQ2Ce17at9jQzodpdAIJyu+xuudx0lgYTet0x++Ins5
+         FwBS5Whrtfc8xSFvI5uxpwA+K3/9RNEM624mvbTc2/h2HgCJu60D5iuAQ1U/Izm5j+M2
+         IUH8DjpCht9JV3htoHTVBkQG1/kQgxP1Xe2axoe91KvRcIOKoAtwnKWmHtxV2Un9zkX3
+         oQwQ==
+X-Gm-Message-State: APjAAAVexmV0DslrUpVt/TKMcnW/ZTuRNmS1DSQne62Lbw/sAwsZwWbn
+        RmfaGb+FTnDszluG3E2NsFrAhKfh
+X-Google-Smtp-Source: APXvYqy9k2eDNK1J3IVJhR+gbK0hX/ItjAIfIbZD9dhbfVa/+PROIoCleTD5Ir8Ui3woBnQNkNMGYg==
+X-Received: by 2002:a63:de08:: with SMTP id f8mr16905639pgg.107.1576245451363;
+        Fri, 13 Dec 2019 05:57:31 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r68sm12605687pfr.78.2019.12.13.05.57.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2019 05:57:30 -0800 (PST)
+Subject: Re: [PATCH v2] usb: typec: fusb302: Fix an undefined reference to
+ 'extcon_get_state'
+To:     zhong jiang <zhongjiang@huawei.com>,
+        heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191212122053.GA1541203@kroah.com>
+ <1576239378-50795-1-git-send-email-zhongjiang@huawei.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <3dbe90ae-d1df-0714-f797-c6c279bf620c@roeck-us.net>
+Date:   Fri, 13 Dec 2019 05:57:29 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <1576239378-50795-1-git-send-email-zhongjiang@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This patch adds the following Telit ME910G1 composition:
+On 12/13/19 4:16 AM, zhong jiang wrote:
+> Fixes the following compile error:
+> 
+> drivers/usb/typec/tcpm/fusb302.o: In function `tcpm_get_current_limit':
+> fusb302.c:(.text+0x3ee): undefined reference to `extcon_get_state'
+> fusb302.c:(.text+0x422): undefined reference to `extcon_get_state'
+> fusb302.c:(.text+0x450): undefined reference to `extcon_get_state'
+> fusb302.c:(.text+0x48c): undefined reference to `extcon_get_state'
+> drivers/usb/typec/tcpm/fusb302.o: In function `fusb302_probe':
+> fusb302.c:(.text+0x980): undefined reference to `extcon_get_extcon_dev'
+> make: *** [vmlinux] Error 1
+> 
+> It is because EXTCON is build as a module, but FUSB302 is not.
+> 
+> Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: zhong jiang <zhongjiang@huawei.com>
 
-0x110a: tty, tty, tty, rmnet
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
----
-Hello Johan,
-
-following lsusb output:
-
-Bus 003 Device 003: ID 1bc7:110a Telit Wireless Solutions 
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0 (Defined at Interface level)
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  idVendor           0x1bc7 Telit Wireless Solutions
-  idProduct          0x110a 
-  bcdDevice            0.00
-  iManufacturer           3 Telit
-  iProduct                2 Telit ME910
-  iSerial                 4 4ca930d8
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength          122
-    bNumInterfaces          4
-    bConfigurationValue     1
-    iConfiguration          1 Telit Configuration
-    bmAttributes         0xe0
-      Self Powered
-      Remote Wakeup
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    254 
-      bInterfaceProtocol    255 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               5
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Device Qualifier (for other device speed):
-  bLength                10
-  bDescriptorType         6
-  bcdUSB               2.00
-  bDeviceClass            0 (Defined at Interface level)
-  bDeviceSubClass         0 
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  bNumConfigurations      1
-Device Status:     0x0000
-  (Bus Powered)
----
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index e9491d400a24..fea09a3f491f 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -1172,6 +1172,8 @@ static const struct usb_device_id option_ids[] = {
- 	  .driver_info = NCTRL(0) | RSVD(3) },
- 	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x1102, 0xff),	/* Telit ME910 (ECM) */
- 	  .driver_info = NCTRL(0) },
-+	{ USB_DEVICE_INTERFACE_CLASS(TELIT_VENDOR_ID, 0x110a, 0xff),	/* Telit ME910G1 */
-+	  .driver_info = NCTRL(0) | RSVD(3) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910),
- 	  .driver_info = NCTRL(0) | RSVD(1) | RSVD(2) },
- 	{ USB_DEVICE(TELIT_VENDOR_ID, TELIT_PRODUCT_LE910_USBCFG4),
--- 
-2.17.1
+> ---
+>   drivers/usb/typec/tcpm/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/Kconfig b/drivers/usb/typec/tcpm/Kconfig
+> index 72481bb..5b986d6 100644
+> --- a/drivers/usb/typec/tcpm/Kconfig
+> +++ b/drivers/usb/typec/tcpm/Kconfig
+> @@ -32,6 +32,7 @@ endif # TYPEC_TCPCI
+>   config TYPEC_FUSB302
+>   	tristate "Fairchild FUSB302 Type-C chip driver"
+>   	depends on I2C
+> +	depends on EXTCON || !EXTCON
+>   	help
+>   	  The Fairchild FUSB302 Type-C chip driver that works with
+>   	  Type-C Port Controller Manager to provide USB PD and USB
+> 
 
