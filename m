@@ -2,88 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4869511DF16
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 09:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6625D11DF7C
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 09:31:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726705AbfLMIIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 03:08:31 -0500
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:44174 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726774AbfLMII3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 03:08:29 -0500
-Received: by mail-ed1-f65.google.com with SMTP id cm12so1300785edb.11;
-        Fri, 13 Dec 2019 00:08:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8Sb7h+Syw20vysdh92QJjNk/PaKzOiYC6n/84DQf0IY=;
-        b=XH2rMC6I3glDs3DANyDOLWnr2N5KJzJxOOfEqZYko6x12F/NA5ppoahwQ2BOcVpebH
-         lu5hPofdoRszEUF1Puzi3Bjnmbr62wTKDohiqXkhw9jxVQl8jbptVYQtCPQExwB9vDrG
-         XZNuTUI9bMUfKp4xkfGXSf7Ms1nHkL0rMILxSqVXYymif8KDOMb0WmPQ1Nx9MsVAUDGa
-         H0ZKSAxZBnjC3WQGLHdTAdqun3CwwQHC0ZH8uyVoIyoHj/dX17YfixFHcTiCfPDDa3nf
-         fGq2nmKh/954zM6yFCOnVSssqHAzgkgq98MkQMLe3T8y5VUAAM0hCOEzk9vwH7Kq9Pf9
-         s5Vw==
-X-Gm-Message-State: APjAAAU+zScqw12VuBxj8zu5tX5EkGPz5jDd7itREbOb5q2LHdwRHlOb
-        PKLImvJG+/EiVhMEaTQ+8czVlhU+Fgdl+w==
-X-Google-Smtp-Source: APXvYqxL77iUE0AzqbWyWlWllh0lDx8cvi1X6clZbtoF61J/Gh651ONiLGvGa7nICW0nrVOBQqVDqA==
-X-Received: by 2002:a17:906:5808:: with SMTP id m8mr7073600ejq.1.1576224506235;
-        Fri, 13 Dec 2019 00:08:26 -0800 (PST)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id l9sm353417ejr.45.2019.12.13.00.08.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Dec 2019 00:08:25 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id w8so2041719wmd.3;
-        Fri, 13 Dec 2019 00:08:25 -0800 (PST)
-X-Received: by 2002:a1c:6a05:: with SMTP id f5mr11357678wmc.2.1576224505305;
- Fri, 13 Dec 2019 00:08:25 -0800 (PST)
-MIME-Version: 1.0
-References: <CGME20191211145222eucas1p1d761af59e04017ddadbdbd1cceb59b1f@eucas1p1.samsung.com>
- <20191211145054.24835-1-m.szyprowski@samsung.com> <20191211145217.25025-1-m.szyprowski@samsung.com>
-In-Reply-To: <20191211145217.25025-1-m.szyprowski@samsung.com>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Fri, 13 Dec 2019 16:08:12 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65EBb-qvb6XVzvZgqKUbzJJgkXgB5y2uA8Aa1__n9v+qw@mail.gmail.com>
-Message-ID: <CAGb2v65EBb-qvb6XVzvZgqKUbzJJgkXgB5y2uA8Aa1__n9v+qw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] ARM: dts: sun8i: a83t: Correct USB3503 GPIOs polarity
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG EXYNO..." 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        id S1726592AbfLMIb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 03:31:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45898 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725882AbfLMIb0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Dec 2019 03:31:26 -0500
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED03D2465B;
+        Fri, 13 Dec 2019 08:31:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576225885;
+        bh=myyxeypyHriSKbglxnLcS2I3B1e+64R7xW7PX38Q1o0=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=L8veSFtJD+zdDXJsLGDVe4LMCieF8IqYxpfAm+xeOhN/J+8LpWroYBbSh1ypSDU3Y
+         /Uldl2uWaGNKlvqoUpqCApNOuHGYj89amLsGm1cUDrw1osCnxbGTVjgKG9fYCC/RUl
+         leAT3QH0aZmqDRHiasQcI39kM9IuF+lxZo9lTa4A=
+Date:   Fri, 13 Dec 2019 09:31:21 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+cc:     Dmitry Vyukov <dvyukov@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alan Stern <stern@rowland.harvard.edu>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH RFC 2/2] HID: usbhid: kcov: add annotations for coverage
+ collection
+In-Reply-To: <6b4b598d012d981c0c45fcc9f121ba210bd222f9.1576170740.git.andreyknvl@google.com>
+Message-ID: <nycvar.YFH.7.76.1912130930220.4603@cbobk.fhfr.pm>
+References: <cover.1576170740.git.andreyknvl@google.com> <6b4b598d012d981c0c45fcc9f121ba210bd222f9.1576170740.git.andreyknvl@google.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 10:52 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> Current USB3503 driver ignores GPIO polarity and always operates as if the
-> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
-> USB3503 chip applications to match the chip specification and common
-> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
-> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
-> to fix the USB3503 driver to properly use generic GPIO bindings and read
-> polarity from DT.
->
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+On Thu, 12 Dec 2019, Andrey Konovalov wrote:
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+> This patch adds kcov_remote_start/stop() callbacks into usbhid code that
+> is executed in interrupt context. As the result, kcov can be used to
+> collect coverage from those parts of the code, which is used to facilitate
+> coverage-guided fuzzing with syzkaller.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-I assume the dts patch has to go in before or at the same time as the driver
-patch?
+Acked-by: Jiri Kosina <jkosina@suse.cz>
+
+-- 
+Jiri Kosina
+SUSE Labs
+
