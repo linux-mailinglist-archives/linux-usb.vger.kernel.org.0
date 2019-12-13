@@ -2,142 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CB22611DB9D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 02:24:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3663B11DBF2
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 03:03:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731650AbfLMBYR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Dec 2019 20:24:17 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:42022 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731288AbfLMBYR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 20:24:17 -0500
-Received: by mail-pf1-f193.google.com with SMTP id 4so526236pfz.9;
-        Thu, 12 Dec 2019 17:24:16 -0800 (PST)
+        id S1731758AbfLMCD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Dec 2019 21:03:29 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38363 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727084AbfLMCD3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Dec 2019 21:03:29 -0500
+Received: by mail-pg1-f193.google.com with SMTP id a33so727656pgm.5;
+        Thu, 12 Dec 2019 18:03:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=mVYnNLUWDZKpYLFTHOhdx5QMfZ/iaJU8SyrTIrnh1+U=;
-        b=C9vmM3wb6Ku+BwbrsiOw8sJcOapH9ak4S6OvvOJfkUVaVtflB03QO2A3IdCTuIPlw1
-         S0ecyAtDw8qd3a05aw/rdmjBr/xOrkoWb3NnVvNTm39DWW8P2ePVHV0BXKQlg6UNGRfi
-         L4f26CTJ71IIL8zgTDQNb9viGP8uNnLVRvIzmp0qqCS3J1HdUzIbZpXJsTsRAzcnmaDJ
-         gf5XOfBCm2jYtQryLN+pWkD/gTVVJztPbNTnmtbrTyFf//kGwyMRWcckgugnnxlXdu7I
-         tWoXUcQbMSdEng1Tda8UbAfvrXu5sAacDHgOHc3pq20si1CQFu8f1mIS3gKbwGyXw/zK
-         5YBw==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=sbQiyJc/inLjRaokZh7Q8U9UkbILv57sjMdX8isP4Mo=;
+        b=GoJvGU/pGNn2G/E7yRVTN1E+5omlN/INnTODmiCukTeBCtVV93jNiI7auavjP+VNfB
+         LKgnRr0LrIWAlifLg+wn9qlbpcx5pX5DWp5PRQQP7Ls6cKQBjx2LrLq8DLpBk21Fd8ey
+         dsV8/8EZZ61gPmzFEHciUaWIgk1LGUkGxzuPiG+tAPvBE/M5npuCcN3qRIsPPPyRQr7K
+         FUwh1+V/brjSEO4pMmIZXDFGSRd8P5DaZW5m6gMnxaSKJXgjnI41DRCgJqlowmdWrvJ3
+         cyZrZutJtW3mSVFgRujqCTgKJuzeC+ymvIXoRuoz08F3C2DfWGk0PtGXIlRETRyClng3
+         6fcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=mVYnNLUWDZKpYLFTHOhdx5QMfZ/iaJU8SyrTIrnh1+U=;
-        b=PuXgIgYik+HTvvbw8ohhzAxLB+NJq5R+BqI3g6GEU6q/2ZteagsOFWhAXyCttPMzzD
-         pUnjeLeYKJj96aGF66nVFZM3YRCWkxX0k7T3xye8B9ZbSCWV21mk7XH9wxz17WuuBNNQ
-         9h/vzbAuFqCJbnyXT6xCu/1Dc2EIwR7MzdNI3Nu6UcE+UfAPQmgRFR3e+UvltVksXKcW
-         gwzdadHLt3144KqRjHBHs+2JEV/G1f0WoqCA97GKMCxvHJ5gwZCK/uzrZbKc+6Ikt/U7
-         QmfVNUQJNS7KXBsZuBajlMwAeesogaEfuRZrFkAz+KDRy8qWGcebQirkHmaZu0Ow7VIq
-         jxCA==
-X-Gm-Message-State: APjAAAVEiAicRacZAxlJEAsm5hbhfve0vBAIa632IdaprRIMWNB1I+1a
-        Fav5BKoHmcBhgBy7PertG1o=
-X-Google-Smtp-Source: APXvYqzslQWCGhhjC4AVQ3m239kr2s7F0YOheuzUQOjc5GF3xeZkaRbeg83aAHQgMnfEAhySOKU1Mg==
-X-Received: by 2002:a62:1883:: with SMTP id 125mr12979767pfy.166.1576200255999;
-        Thu, 12 Dec 2019 17:24:15 -0800 (PST)
-Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
-        by smtp.gmail.com with ESMTPSA id c18sm8230295pgj.24.2019.12.12.17.24.13
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=sbQiyJc/inLjRaokZh7Q8U9UkbILv57sjMdX8isP4Mo=;
+        b=nPeMmsSuIqPp/qyH3/msJ/1UvooVR6BsmWK34EMt/6hSBseITRbuTj3waCBOqEgShU
+         YzbjyhqCutcJo/KPd3lPtIQwun6PDmeMcaBynqU3hr1vmkwYb/JrZ+MhM0xzKMiV5UbL
+         GR027jF3Uc5SwFkSpTb+9fOdrPLtwTOK0Qup6M2x7SVIWmQgw+Mx34yFDeWIlQEo5ayI
+         CZ00HQCZV7ZVQ9Pn6GvbG52dKiznC6DZ3UC5abi571h/aNmjmUzwFELxZD6+rvHWy/XW
+         0P5fVWM1vMJDBg/bKGKxAof7lFd4sB/CK1oiZydK3v/9aPg7jRDm1H0NdpRovUSbKrMW
+         m38Q==
+X-Gm-Message-State: APjAAAVVXqFIJ9qmrV5obh2CDEFKjZWB2iMj3EpjlS8EMDKKdfsDmcnL
+        hkOIGGD5tA7L/hT2h0ZWIlE=
+X-Google-Smtp-Source: APXvYqyCa8C9agmQfMzONvcN2uCU48yrCEeTvqttPet6mVz18Q2EdYaTOi0HVYAYkNIVj6V22w49kA==
+X-Received: by 2002:a63:5950:: with SMTP id j16mr14651502pgm.314.1576202608242;
+        Thu, 12 Dec 2019 18:03:28 -0800 (PST)
+Received: from localhost.localdomain ([163.152.162.99])
+        by smtp.gmail.com with ESMTPSA id i68sm8886098pfe.173.2019.12.12.18.03.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 17:24:14 -0800 (PST)
-Date:   Thu, 12 Dec 2019 17:24:08 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        'Linux Samsung SOC' <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v8 1/6] software node: rename is_array to is_inline
-Message-ID: <20191213012408.GH101194@dtor-ws>
-References: <20191108042225.45391-1-dmitry.torokhov@gmail.com>
- <20191108042225.45391-2-dmitry.torokhov@gmail.com>
- <CGME20191212111237eucas1p1a278d2d5d2437e3219896367e82604cc@eucas1p1.samsung.com>
- <b3f6ca8b-dbdf-0cec-aa8f-47ffcc5c5307@samsung.com>
+        Thu, 12 Dec 2019 18:03:27 -0800 (PST)
+Date:   Fri, 13 Dec 2019 11:03:17 +0900
+From:   Suwan Kim <suwan.kim027@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     shuah@kernel.org, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, marmarek@invisiblethingslab.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] usbip: Fix error path of vhci_recv_ret_submit()
+Message-ID: <20191213020317.GA3276@localhost.localdomain>
+References: <20191212052841.6734-3-suwan.kim027@gmail.com>
+ <Pine.LNX.4.44L0.1912121050130.14053-100000@netrider.rowland.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b3f6ca8b-dbdf-0cec-aa8f-47ffcc5c5307@samsung.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Pine.LNX.4.44L0.1912121050130.14053-100000@netrider.rowland.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Marek,
+On Thu, Dec 12, 2019 at 10:54:08AM -0500, Alan Stern wrote:
+> On Thu, 12 Dec 2019, Suwan Kim wrote:
+> 
+> > If a transaction error happens in vhci_recv_ret_submit(), event
+> > handler closes connection and changes port status to kick hub_event.
+> > Then hub tries to flush the endpoint URBs, but that causes infinite
+> > loop between usb_hub_flush_endpoint() and vhci_urb_dequeue() because
+> > "vhci_priv" in vhci_urb_dequeue() was already released by
+> > vhci_recv_ret_submit() before a transmission error occurred. Thus,
+> > vhci_urb_dequeue() terminates early and usb_hub_flush_endpoint()
+> > continuously calls vhci_urb_dequeue().
+> > 
+> > The root cause of this issue is that vhci_recv_ret_submit()
+> > terminates early without giving back URB when transaction error
+> > occurs in vhci_recv_ret_submit(). That causes the error URB to still
+> > be linked at endpoint list without “vhci_priv".
+> > 
+> > So, in the case of trasnaction error in vhci_recv_ret_submit(),
+> > unlink URB from the endpoint, insert proper error code in
+> > urb->status and give back URB.
+> > 
+> > Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> > Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> > ---
+> >  drivers/usb/usbip/vhci_rx.c | 13 +++++++++----
+> >  1 file changed, 9 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
+> > index 33f8972ba842..dc26acad6baf 100644
+> > --- a/drivers/usb/usbip/vhci_rx.c
+> > +++ b/drivers/usb/usbip/vhci_rx.c
+> > @@ -77,16 +77,21 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
+> >  	usbip_pack_pdu(pdu, urb, USBIP_RET_SUBMIT, 0);
+> >  
+> >  	/* recv transfer buffer */
+> > -	if (usbip_recv_xbuff(ud, urb) < 0)
+> > -		return;
+> > +	if (usbip_recv_xbuff(ud, urb) < 0) {
+> > +		urb->status = -EPIPE;
+> > +		goto error;
+> > +	}
+> >  
+> >  	/* recv iso_packet_descriptor */
+> > -	if (usbip_recv_iso(ud, urb) < 0)
+> > -		return;
+> > +	if (usbip_recv_iso(ud, urb) < 0) {
+> > +		urb->status = -EPIPE;
+> > +		goto error;
+> > +	}
+> 
+> -EPIPE is used for STALL.  The appropriate error code for transaction 
+> error would be -EPROTO (or -EILSEQ or -ETIME, but people seem to be 
+> settling on -EPROTO).
 
-On Thu, Dec 12, 2019 at 12:12:36PM +0100, Marek Szyprowski wrote:
-> Dear All,
-> 
-> On 08.11.2019 05:22, Dmitry Torokhov wrote:
-> > We do not need a special flag to know if we are dealing with an array,
-> > as we can get that data from ratio between element length and the data
-> > size, however we do need a flag to know whether the data is stored
-> > directly inside property_entry or separately.
-> >
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> 
-> Today I've noticed that this patch got merged to linux-next as commit 
-> e6bff4665c595b5a4aff173848851ed49ac3bfad. Sadly it breaks DWC3/xHCI 
-> driver operation on Samsung Exynos5 SoCs (and probably on other SoCs 
-> which use DWC3 in host mode too). I get the following errors during boot:
-> 
-> dwc3 12000000.dwc3: failed to add properties to xHCI
-> dwc3 12000000.dwc3: failed to initialize host
-> dwc3: probe of 12000000.dwc3 failed with error -61
-> 
-> Here is a full kernel log from Exynos5250-based Snow Chromebook on KernelCI:
-> 
-> https://storage.kernelci.org/next/master/next-20191212/arm/exynos_defconfig/gcc-8/lab-collabora/boot-exynos5250-snow.txt
-> 
-> (lack of 'ref' clk is not related nor fatal to the driver operation).
-> 
-> The code which fails after this patch is located in 
-> drivers/usb/dwc3/host.c. Let me know if I can help more in locating the bug.
+Thanks for the feedback. I will fix it :)
 
-Does the following help? If, as I expect, it does, I'll submit it
-formally.
-
----
-
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index 5567ed2cddbec..fa252870c926f 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -88,10 +88,10 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
- 
- 	if (dwc->usb3_lpm_capable)
--		props[prop_idx++].name = "usb3-lpm-capable";
-+		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
- 
- 	if (dwc->usb2_lpm_disable)
--		props[prop_idx++].name = "usb2-lpm-disable";
-+		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
- 
- 	/**
- 	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
-@@ -103,7 +103,7 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	 * This following flag tells XHCI to do just that.
- 	 */
- 	if (dwc->revision <= DWC3_REVISION_300A)
--		props[prop_idx++].name = "quirk-broken-port-ped";
-+		props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
- 
- 	if (prop_idx) {
- 		ret = platform_device_add_properties(xhci, props);
-
-
--- 
-Dmitry
+Regards,
+Suwan Kim
