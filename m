@@ -2,137 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7432E11DE62
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 08:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F0811DE73
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 08:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726386AbfLMHEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 02:04:14 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:44346 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbfLMHEO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 02:04:14 -0500
-Received: by mail-lf1-f66.google.com with SMTP id v201so1135443lfa.11;
-        Thu, 12 Dec 2019 23:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=eH240sD43iWskdXO7QwdUUcc+Sa2LsEm2jXeYjhezwI=;
-        b=mEO24JaZRKyTk+K6PipxWEABn0ls/zib9DvmbeY3hHz7zZhq5l8oER8RXkj7b/PuW1
-         mKh1OjMhbUWPe6aUUOt0l/2f+6EomEa9Wq9zYlfJfbil0TxaiSY9P0PN8eNRYjLViOXh
-         RFz5aaIp7dNls3jDzfZt/ZBe25QeyQGaJjxKQiWiS0lLfhs/GzGAI4vK8IXm4dltl/JE
-         kAXNEDSjBvLGvSy6tL8mFVYRmNmG2IDoyJLUdYISqk0B8agUwoqpKiW30tko41uBH9Q+
-         J1iX7CIX/8e8aQefdQIn+1CFCgQwXZB+A2pEz5gGvg/91QP6XVj7jWSx5TQky7Wlgxag
-         +rfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=eH240sD43iWskdXO7QwdUUcc+Sa2LsEm2jXeYjhezwI=;
-        b=h4s3zLzmUvBNhgmHzJ0jNykdr9mW/jldvq5zYK+2HayN93lqCD7kScP57D1vM7F891
-         9yVBn8p4I4qJS0tqimBhc6UNkkJPBlKZ81VQer15pHnT3ISH2P2MfGBzmabm5FiQ0neA
-         A9FH01kX2mfBJMV3Ga3ove7+rPk//tHUKUprjkSFYoHIWJBZXjX84zCFxshdxu2+wTQM
-         Mflw0bh0KpV1sqdLcliifJjhF7Q+wzUl0KZjQk5Xwzytz37BX/DN75ORoO6hnukSOHed
-         KCaWTVobFaXIBSk3gGQLSqk4WiTXbC+Yd+RJgNas9iJV5ml2QPRnnHAt2tsHjv013xZr
-         oocg==
-X-Gm-Message-State: APjAAAWB4/RX+GPg8CgU9wng/LbB01SLFZlFdsF0uDHr1/ILvAF5h3ca
-        EFJuwQeu14dQ7vVdcClPJeQ=
-X-Google-Smtp-Source: APXvYqz8AyOKUmi4nJd1RE9+Qmbd5XDuYdIdRs/wc3kynUUkLpVW4tnrZkxUUD9FLdsQzUTPfmTfgQ==
-X-Received: by 2002:a19:c1c1:: with SMTP id r184mr8103756lff.128.1576220652008;
-        Thu, 12 Dec 2019 23:04:12 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id h18sm4210612ljk.94.2019.12.12.23.04.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2019 23:04:10 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     John Youn <John.Youn@synopsys.com>
-Subject: Re: [RFC PATCH 13/14] usb: devicetree: dwc3: Add property to disable mult TRB fetch
-In-Reply-To: <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
-References: <cover.1576118671.git.thinhn@synopsys.com> <b791f032edb8e6a739c342dbd0d2d5faa66ddfb8.1576118671.git.thinhn@synopsys.com> <87mubyvtuh.fsf@kernel.org> <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
-Date:   Fri, 13 Dec 2019 09:04:54 +0200
-Message-ID: <87d0cswvs9.fsf@kernel.org>
+        id S1725924AbfLMHMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 02:12:14 -0500
+Received: from m228-5.mailgun.net ([159.135.228.5]:27744 "EHLO
+        m228-5.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725385AbfLMHMO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 02:12:14 -0500
+X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 02:12:13 EST
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1576221133; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=TM9I4rJRMGS2Z/g+a78Bvn/OtzXKQTFlqms85rGn+48=; b=JeVt1ksw7MEOPjpGy/hvCEd66UCKwofaNzXYCvpVEaAruyUyu8RPdUKtd6GM4jLDSuaqL5rI
+ rtnE7Ss0flz+9Q5uFT7w0mdjPRr2nDu27JsdFRI8La2WYWK9/p/bwOgNmroUhyembUryoitY
+ qipJtcSjD9797A+L5Q2LP87kRzk=
+X-Mailgun-Sending-Ip: 159.135.228.5
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5df3389b.7f19fc6cdd18-smtp-out-n01;
+ Fri, 13 Dec 2019 07:07:07 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id BF487C4479F; Fri, 13 Dec 2019 07:07:07 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.206.24.214] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: mgautam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 584B4C43383;
+        Fri, 13 Dec 2019 07:07:04 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 584B4C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mgautam@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: qcom: Remove useless compatible strings from
+ the match table
+To:     Douglas Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>,
+        Jeffrey Hugo <jhugo@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20191212132122.1.I85a23bdcff04dbce48cc46ddb8f1ffe7a51015eb@changeid>
+From:   Manu Gautam <mgautam@codeaurora.org>
+Message-ID: <3fc8f36f-9ca2-7b56-9f1f-94507481b715@codeaurora.org>
+Date:   Fri, 13 Dec 2019 12:37:01 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <20191212132122.1.I85a23bdcff04dbce48cc46ddb8f1ffe7a51015eb@changeid>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Thanks. Patch looks good to me.
 
-
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>> DWC_usb32 has a feature where it can issue multiple TRB fetch requests.
->>> Add a new property to limit and only do only single TRB fetch request.
->>>
->>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
->>> ---
->>>   Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documenta=
-tion/devicetree/bindings/usb/dwc3.txt
->>> index ff35fa6de2eb..29d6f9b1fc70 100644
->>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
->>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
->>> @@ -108,6 +108,8 @@ Optional properties:
->>>    - snps,num-trb-prefetch: max value to do TRBs cache for DWC_usb32. T=
-he value
->>>   			can be from 1 to DWC_USB32_CACHE_TRBS_PER_TRANSFER.
->>>   			Default value is DWC_USB32_CACHE_TRBS_PER_TRANSFER.
->>> + - snps,dis-mult-trb-fetch: set to issue only single TRB fetch request=
- in
->>> +			DWC_usb32.
->> two questions:
->>
->> - how is this different from passing 1 to the previous DT binding
+On 12/13/2019 2:51 AM, Douglas Anderson wrote:
+> The of match table in dwc3-qcom.c had an entry per Qualcomm SoC known
+> to have dwc3.  That's not needed.  Here's why:
 >
-> The previous DT binding is related to the number TRBs to cache while=20
-> this one is related to whether the controller will send multiple=20
-> (internal) fetch commands to fetch the TRBs.
+> 1. The bindings specify that the compatible string in the device tree
+>    should contain the SoC-specific compatible string followed by the
+>    string "qcom,dwc3".
 >
->> - do we know of anybody having issues with multi-trb prefetch?
+> 2. All known Qualcomm SoC dts files (confirmed via git grep in
+>    mainline Linux) using dwc3 follow the rules and do, in fact,
+>    contain the SoC-specific compatible string followed by the string
+>    "qcom,dwc3".
 >
-> No, we added this for various internal tests.
+> 3. The source code does nothing special with the per-SoC strings--they
+>    are only used to match the node.
+>
+> Let's remove the extra strings from the table.  Doing so will avoid
+> the need to land future useless patches [1] that do nothing more than
+> add yet more strings to the table.
 
-We really a better way for you guys to have your test coverage enabled
-with upstream kernel. I wonder if DT guys would accept a set of bindings
-marked as "for testing purposes". In any case, we really need to enable
-Silicon Validation with upstream kernel.
+Reviewed-by: Manu Gautam <mgautam@codeaurora.org>
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3zOBYACgkQzL64meEa
-mQa/+BAAlFkcIcEqavcePYa5Pe8cqpbuMP2uRZacvCV88KaalWMKKG0fsz3W4Wn8
-BOrxG8ux+gEC+9P68n4JOBJZXISeC42XPBnm4A+3dYwy1Js5p0mSCXeR9+Q4tqZd
-JW5gZtTX+uc3ehgUV3A5NBdTvmfEAif/tLfdxQOx7+euOtLjYDHhvnv1tAXyZ7/T
-zCeq25QIb7+hJl56ZDcS7NK+mO0eK19JpFKvcGhJldFGbhQ9bdMoJaPQqZj7K/J1
-DhPv5q92N6wl67UICuKTp8Nrr8vtKFZxRATXOHU2KrF8PWZklPooL1GedzPf9GDS
-GNPkfaWGhXnJuRq+6AZIj5zFEzhh5sqvKFA8Hn/mV5RgzasLeLok/wb00GtIXMkP
-OBzzBJPEtb05aownQ+Sk/TfSB0eobD6/TDg0Q8C3D+H8G325EhxBncFXpg1bv0b/
-1wtKE/pknHWFsyt0rBMxXYpKO7kwPSAJzIXVE7Q9vP2/zIalT1D1N7dBM/KKlTbq
-xOL7j1x3+JhTKtR+cPAXEvVs1/4AZk6fYA0M/VWjldsavay6udA5zVn5xgkDNUXT
-3gBwj3v8nQTsbNIrqLKQhlNBgGGYgP2NvXfgf+Jy3qxegAAqUY+RoQBklom6zWtP
-zyhfU5GlsA4s6hGV2g3mQGYr56DOjsm73XElUMTe1PAD0b3O0SA=
-=IuyY
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
