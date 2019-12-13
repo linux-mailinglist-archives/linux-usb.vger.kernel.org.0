@@ -2,124 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD8111E8FF
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 18:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE2FB11E964
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 18:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728420AbfLMRMn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 12:12:43 -0500
-Received: from mx02.owlhost.in ([148.251.182.159]:39396 "EHLO mx02.owlhost.in"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728384AbfLMRMn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Dec 2019 12:12:43 -0500
-X-Greylist: delayed 610 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 12:12:41 EST
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=ow1.in;
-        s=main; h=Message-ID:References:In-Reply-To:Subject:Cc:To:From:Date:
-        Content-Type:MIME-Version:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=gZqDGbLNodBHLwIkabmSdnzSr5GEwpvAX3MWf6BVOmI=; b=S4SNFMV8ytSymWTfOAL4TOH+TZ
-        Sop1IwPUNdsiz61CAZ+iile1K0wgJaKd+FoNRmkjOrM/LiZefUZitl6HzDWuzWY2lPFKdrgIvcx9q
-        fgkgK2u+Gd8cRIYqlg/7RvVyklm29N4KhSiCVUUCI4b1PF79UU3qeuIC13X8Z4d5w6qU=;
-Received: from [10.21.1.4] (port=50042 helo=mail.owlhost.in)
-        by mx02.owlhost.in with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (envelope-from <owl@ow1.in>)
-        id 1ifoKj-0007Fh-Q8; Fri, 13 Dec 2019 17:02:29 +0000
+        id S1728521AbfLMRq1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 12:46:27 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:34291 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728203AbfLMRq1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 12:46:27 -0500
+Received: by mail-pg1-f196.google.com with SMTP id r11so176067pgf.1;
+        Fri, 13 Dec 2019 09:46:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=dtBoagETXVh0V7/P97k4Rqz1E496kHkXGXKVFlW3Xbw=;
+        b=gOIaI7+2eAoluHDBShTOls5VEGdzNqNIBmdslR9DmyTjn7b/HUvrlp9zqHJktb8K4H
+         g2GvU2kReI0XtpANkg3fZnYLwn1z5bY+Q6oeI4/PjyJN3MmDz07/pZoPauqN4yKiptJj
+         VYXDf43PfNocaHKVJkYNYh6UAI4qibBIhVIj8m8Mg1aHTtUHBrrpRb3tJpJsUjNQL9tU
+         Xuy3pFkvxLDR1vPfGaFCVD0etxUdGPti5OKb1GcaPbweg99gwql+rHQCWVZ+gMKLu3W2
+         z50+tlMO7omgHqKjwcZhE3TcWakp2FddFqGhZTUjtKhuc0aXvQ8/CCtz2PUU5wY2Cxt3
+         X6/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=dtBoagETXVh0V7/P97k4Rqz1E496kHkXGXKVFlW3Xbw=;
+        b=Fyqld53eZTVCWtTEQTLgIHVfKvirlrfp4zSeiShiYcioYZsgmufHCIemVSlPE3EvYo
+         MDV8EytRmgxHAxMtDU1I+X+COji4CApeNMcvhcVW0lo6b4YIhdC6HeB2vPiaSmPvaVCF
+         Tq2sCGVBqDq+e5iIX/aJDSJDWbOErX77c1hqZGHy8B6UljjDn+ofwgm5jHfh66Db4D/E
+         WJk83r+KNB3zuZNrNwBIAzBaFSxAcT68zb5/nGvsTvGVYBmI4EBnFcEigJ+XQmLj9PzJ
+         AajBsJc43WMPlYADxvuN6gTjtKgBOWloQhlsjKW8fZJgqbWMQDFeG3J9rvKP6tWtCmuM
+         2nNw==
+X-Gm-Message-State: APjAAAW/0uLEPra3mOlRjSID0XD8QHrnIrv68BVeIl5CJ0V58wmgVT3a
+        yiLEJG1rawhoZiE9EEzex4g=
+X-Google-Smtp-Source: APXvYqyKV1E389RBA+UWrCbZt1ojc/ei0DHw5zlvBj3dEBxdxhbeQZ4NCwzp34jjtPT7agMXFqUBnA==
+X-Received: by 2002:aa7:8ad9:: with SMTP id b25mr683869pfd.70.1576259186300;
+        Fri, 13 Dec 2019 09:46:26 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id f18sm12823124pfk.124.2019.12.13.09.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 09:46:25 -0800 (PST)
+Date:   Fri, 13 Dec 2019 09:46:23 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: use proper initializers for property entries
+Message-ID: <20191213174623.GA20267@dtor-ws>
 MIME-Version: 1.0
-Content-Type: multipart/signed;
- protocol="application/pgp-signature";
- boundary="=_a5644ce9324039fac3ddbe08d86ba392"
-Date:   Fri, 13 Dec 2019 17:02:28 +0000
-From:   Ilia Pavlikhin <owl@ow1.in>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: About Bug 205841
-In-Reply-To: <20191213162333.GA19292@kuha.fi.intel.com>
-References: <20191213162333.GA19292@kuha.fi.intel.com>
-User-Agent: Roundcube Webmail/1.4-git
-Message-ID: <4bf56a03d4511319164f0028a283fafe@ow1.in>
-X-Sender: owl@ow1.in
-Organization: OwlHost
-X-SA-Score: 1.6
-X-SA-Report: Spam detection software, running on the system "mx02.owlhost.in",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- the administrator of that system for details.
- Content preview:  Hello. I've got your patch, apply to sources 5.5.0-rc1 and
-    builded with oldconfig from 5.4.2. And... Well, got black screens and blinking
-    CapsLock. It's hard to explain without any output. I'll try building [...]
- Content analysis details:   (1.6 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
- -1.9 BAYES_00               BODY: Bayes spam probability is 0 to 1%
-                             [score: 0.0000]
-  4.5 SPF_NOT_PASS           Not fully validated by SPF.
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+We should not be reaching into property entries and initialize them by
+hand, but rather use proper initializer macros. This way we can alter
+internal representation of property entries with no visible changes to
+their users.
 
---=_a5644ce9324039fac3ddbe08d86ba392
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-
-Hello.
-
-I've got your patch, apply to sources 5.5.0-rc1 and builded with 
-oldconfig from 5.4.2. And... Well, got black screens and blinking 
-CapsLock.
-It's hard to explain without any output. I'll try building 5.5.0-rc1 
-with your patch tomorrow and new config.
-
-Thank you for reply.
-
-P.S.: I have another one dock station from Lenovo at home (like this) 
-and try testing on it.
-
-On 2019-12-13 16:23, Heikki Krogerus wrote:
-> Hi Ilia,
-> 
-> Bugzilla at kernel.org does not respond today, so sending mail.
-> 
-> I can't reproduce the issue with the Lenovo boards we have, but I know
-> there is one problem with the firmware in some Lenovo's. Basically the
-> firmware starts generating notification (interrupts) before they are
-> enabled. That could theoretically cause the issue you are seeing.
-> 
-> Can you test v5.5-rc1 (mainline)? If the problem still happens with
-> mainline, can you test a patch that I've attached (so applied on top
-> of mainline)?
-> 
-> thanks,
-
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
 
-With best regards
-Digital Owl
+It would be good if this could go through Rafael's tree as it is needed
+for the rest of my software_node/property_entry rework patch series
+which I would love not to delay till 5.6.
 
---=_a5644ce9324039fac3ddbe08d86ba392
-Content-Type: application/pgp-signature;
- name=signature.asc
-Content-Disposition: attachment;
- filename=signature.asc;
- size=488
-Content-Description: OpenPGP digital signature
+Thanks!
 
------BEGIN PGP SIGNATURE-----
+ drivers/usb/dwc3/host.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-iQEzBAEBCAAdFiEETWg1A0zsFbHJSwlMkoKgPeEMnUsFAl3zxCUACgkQkoKgPeEM
-nUs9vQf/QiJV3u6qaJ+vIwym2AAYwZQrhFfiJDSSimVq1OeejpwosjNWTsYDoVRW
-JRiVNCoAvak1q4EBWQoqKUop7y9NxhQh1onuNBcc98aPiO9GVBEa3feYpIgIpIUZ
-FovCGjQgDfAk89FoksajyRLouA9uGB/UxOlOLf/OqepS0mjgcZBWkvMOKsxjwDjc
-9ceASV95K/IF3SgeqQbDyK7P0OMBNF8g2ie6KDAyZQjVxIgkEUp1sCCJPPI3YTDX
-LxVHmxwjrBHssRQNdKQk8na/HG4cgwhn212BgLi2aXHw/z76ghSkPqVyMXFotr9F
-Qz0D2LpNF5sJBr8RvgNb2BpMFxeEMQ==
-=EDix
------END PGP SIGNATURE-----
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index 5567ed2cddbec..fa252870c926f 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -88,10 +88,10 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	memset(props, 0, sizeof(struct property_entry) * ARRAY_SIZE(props));
+ 
+ 	if (dwc->usb3_lpm_capable)
+-		props[prop_idx++].name = "usb3-lpm-capable";
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb3-lpm-capable");
+ 
+ 	if (dwc->usb2_lpm_disable)
+-		props[prop_idx++].name = "usb2-lpm-disable";
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("usb2-lpm-disable");
+ 
+ 	/**
+ 	 * WORKAROUND: dwc3 revisions <=3.00a have a limitation
+@@ -103,7 +103,7 @@ int dwc3_host_init(struct dwc3 *dwc)
+ 	 * This following flag tells XHCI to do just that.
+ 	 */
+ 	if (dwc->revision <= DWC3_REVISION_300A)
+-		props[prop_idx++].name = "quirk-broken-port-ped";
++		props[prop_idx++] = PROPERTY_ENTRY_BOOL("quirk-broken-port-ped");
+ 
+ 	if (prop_idx) {
+ 		ret = platform_device_add_properties(xhci, props);
+-- 
+2.24.1.735.g03f4e72817-goog
 
---=_a5644ce9324039fac3ddbe08d86ba392--
+
+-- 
+Dmitry
