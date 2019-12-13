@@ -2,322 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3598011EA9B
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 19:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46ACC11EADD
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 20:03:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728542AbfLMSpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 13:45:55 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:37836 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728473AbfLMSpy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 13:45:54 -0500
-Received: by mail-ot1-f65.google.com with SMTP id k14so248646otn.4;
-        Fri, 13 Dec 2019 10:45:54 -0800 (PST)
+        id S1728656AbfLMTDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 14:03:38 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:42740 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728455AbfLMTDh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 14:03:37 -0500
+Received: by mail-oi1-f195.google.com with SMTP id j22so1637780oij.9;
+        Fri, 13 Dec 2019 11:03:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=n1wf2eteVGZXSC7Mqgl066hg7LQBWqUPacG1DYCVzng=;
-        b=rY3BjVRYql7heo4jgbf7WiKQ8iIFH2cjqf37x8yoENRzioFr0JqkmOgRMGW8Njy5Az
-         yJ6ljDJB6oJKY7mtsM00X9YYY/RwM9QOOgmqGezEXiCR4uUhBhhs2k3uKkqPoJzqHDs/
-         6up91XcMJLhdb9dU7iFtsK0XWphf93T9G3+xfzu3AvuqNshTwjBj+RrOZmj0htspQuH/
-         sHqmTCKlcoYWHI8R7SVRmxWw9j5tlFQEMj0VmfFsUzATahfDTLbEcisN4PKF5NIkSN30
-         vyzHB6o6yrB0U9usU2phjD+mjDrFDxgwp2Yv7+timRttaBbmFw7WB90zzkgfYm6HOehw
-         jRPA==
-X-Gm-Message-State: APjAAAVw0uxh08AW7Ud27d0zp09MNo+wpUJhZkK5ZpzYdlheeJPRHRai
-        qCtvpWSonEH+14hPRAUpTw==
-X-Google-Smtp-Source: APXvYqw02K+Xpj85k8Pc/wTfISnwbcstHJKooxWFlJZLRYP8uQDgJJs9UuhmkvC1AW9kRTIB0iWUeQ==
-X-Received: by 2002:a05:6830:1e37:: with SMTP id t23mr16377291otr.16.1576262753566;
-        Fri, 13 Dec 2019 10:45:53 -0800 (PST)
+        bh=0jLdwo4Gh3BpcLr+x8Y4V1BSkeVDpmaHMCwdlyDbPHI=;
+        b=hF/C1PzzLmW4SyI5BZCh1ATG6HILNW73mJ8mxcNDnMEacNvo8cXpax2KnPq2iA0asi
+         hIwxZis6VxrpzUO2URbJQTnYtDhB0RHauCFpEFcliZUr0uZPfRS59cTRFOtWIpYg5pGE
+         w7F2NwpXXEgP69/CEoASF60IsY31nzuHaTDbLAxAU+kMYvT90qZJz/ziK5Yc6aYJjq6H
+         4FoPwKyDCnyNsbNYC3P0hrIkw83Q4cd6RxW5/Dt69lP+goGOk0l2enbzJ+tFn79E/zjz
+         ineKWJVkVkrgZd/3kbtZ4RAp5XSBL0inMsvjs10OR3zyeD+sRyQVzCA9pLTRBPw0N3H9
+         erGQ==
+X-Gm-Message-State: APjAAAW0jSOtI0zp0ZGTOhbPiOtE5nghsfgpP2yYMDRwQ4MEjc6x2ZOX
+        cousz9uf98OKbbDqYZL+kQ==
+X-Google-Smtp-Source: APXvYqyDYMLhdnJ4CPCzJjTRPxkIRfS51N1GfBOGJw6/3Te72GU1lQmiGGiO0u/xbrXHuLqsxYwijg==
+X-Received: by 2002:aca:3141:: with SMTP id x62mr7090024oix.108.1576263816699;
+        Fri, 13 Dec 2019 11:03:36 -0800 (PST)
 Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u192sm3578273oia.41.2019.12.13.10.45.52
+        by smtp.gmail.com with ESMTPSA id r124sm3612857oie.9.2019.12.13.11.03.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 10:45:52 -0800 (PST)
-Date:   Fri, 13 Dec 2019 12:45:52 -0600
+        Fri, 13 Dec 2019 11:03:35 -0800 (PST)
+Date:   Fri, 13 Dec 2019 13:03:35 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        mark.rutland@arm.com, kishon@ti.com, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/18] dt-bindings: usb: Add NVIDIA Tegra XUSB device
- mode controller binding
-Message-ID: <20191213184552.GA2133@bogus>
-References: <1575629421-7039-1-git-send-email-nkristam@nvidia.com>
- <1575629421-7039-3-git-send-email-nkristam@nvidia.com>
+To:     min.guo@mediatek.com
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        chunfeng.yun@mediatek.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, tony@atomide.com,
+        hdegoede@redhat.com
+Subject: Re: [PATCH v9 1/6] dt-bindings: usb: musb: Add support for MediaTek
+ musb controller
+Message-ID: <20191213190335.GA16897@bogus>
+References: <20191211015446.11477-1-min.guo@mediatek.com>
+ <20191211015446.11477-2-min.guo@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1575629421-7039-3-git-send-email-nkristam@nvidia.com>
+In-Reply-To: <20191211015446.11477-2-min.guo@mediatek.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Dec 06, 2019 at 04:20:05PM +0530, Nagarjuna Kristam wrote:
-> Add device-tree binding documentation for the XUSB device mode controller
-> present on Tegra210 and Tegra186 SoC. This controller supports the USB 3.0
-> specification.
+On Wed, Dec 11, 2019 at 09:54:41AM +0800, min.guo@mediatek.com wrote:
+> From: Min Guo <min.guo@mediatek.com>
 > 
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+> This adds support for MediaTek musb controller in
+> host, peripheral and otg mode.
+> 
+> Signed-off-by: Min Guo <min.guo@mediatek.com>
 > ---
-
-Next time version your patches correctly and include version history 
-here so I don't have to go look up why my R-by is missing.
-
->  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 204 +++++++++++++++++++++
->  1 file changed, 204 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+> changes in v9:
+> 1. Add usb-role-switch
+> 2. Remove label of usb connector child node
+> 3. Change usb connector child node compatible as "gpio-usb-b-connector", "usb-b-connector";
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-> new file mode 100644
-> index 0000000..b23c451
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
-> @@ -0,0 +1,204 @@
-> +# SPDX-License-Identifier: GPL-2.0
-
-Dual license new bindings please:
-
-(GPL-2.0-only OR BSD-2-Clause)
-
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/usb/nvidia,tegra-xudc.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
-> +
-> +description:
-> +  The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
-> +  USB 3.0 SuperSpeed protocols.
-> +
-> +maintainers:
-> +  - Nagarjuna Kristam <nkristam@nvidia.com>
-> +  - JC Kuo <jckuo@nvidia.com>
-> +  - Thierry Reding <treding@nvidia.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +        - const: nvidia,tegra210-xudc # For Tegra210
-> +      - items:
-> +        - const: nvidia,tegra186-xudc # For Tegra186
-
-Use 'enum' instead of oneOf+const.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: Must contain the XUSB device interrupt.
-
-Don't need a description for a single interrupt line.
-
-> +
-> +  power-domains:
-> +    maxItems: 2
-> +    description:
-> +      A list of PM domain specifiers that reference each power-domain
-> +      used by the XUSB device mode controller. This list must comprise of a
-> +      specifier for the XUSBA and XUSBB power-domains.
-> +      See ../power/power_domain.txt and ../arm/tegra/nvidia,tegra20-pmc.txt
-> +      for details.
-
-Just need:
-
-items:
-  - description: XUSBA power-domain
-  - description: XUSBB power-domain
-
-> +
-> +  power-domains-names:
-> +    maxItems: 2
-> +    description:
-> +       A list of names that represent each of the specifiers in
-> +       the 'power-domains' property.
-
-That's every 'power-domains-names'.
-
-> +    items:
-> +      - const: ss
-> +      - const: dev
-
-Okay, but those names don't match up with XUSBA and XUSBB. Names should 
-be meaningful or local to the module, not the provider if that helps.
-
-> +
-> +  nvidia,xusb-padctl:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      phandle to the XUSB pad controller that is used to configure the USB pads
-> +      used by the XUDC controller.
-> +
-> +  phys:
-> +    minItems: 1
-> +    description:
-> +      Must contain an entry for each entry in phy-names.
-> +      See ../phy/phy-bindings.txt for details.
-> +
-> +  phy-names:
-> +    minItems: 1
-> +    items:
-> +      - const: usb2-0
-> +      - const: usb2-1
-> +      - const: usb2-2
-> +      - const: usb2-3
-> +      - const: usb3-0
-> +      - const: usb3-1
-> +      - const: usb3-2
-> +      - const: usb3-3
-> +
-> +  avddio-usb-supply:
-> +    description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
-> +
-> +  hvdd-usb-supply:
-> +    description: USB controller power supply. Must supply 3.3 V.
-> +
-> +required:
-> +  - compatible
-> +  - power-domains
-> +  - power-domain-names
-> +  - nvidia,xusb-padctl
-> +  - phys
-> +  - phy-names
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          items:
-> +            const: nvidia,tegra210-xudc
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 3
-> +          items:
-> +          - description: XUSB device controller registers
-> +          - description: XUSB device PCI Config registers
-> +          - description: XUSB device registers.
-> +        reg-names:
-> +          maxItems: 3
-> +          items:
-> +            - const: base
-> +            - const: fpci
-> +            - const: ipfs
-
-As these are a superset of tegra186, you can move this up and tegra186 
-just needs to define 'maxItems: 2'.
-
-> +        clocks:
-> +          description:
-> +            Must contain an entry for all clocks used. See ../clock/clock-bindings.txt
-> +            for details.
-> +          maxItems: 5
-> +          items:
-> +            - description: Clock to enable core XUSB dev clock.
-> +            - description: Clock to enable XUSB super speed clock.
-> +            - description: Clock to enable XUSB super speed dev clock.
-> +            - description: Clock to enable XUSB high speed dev clock.
-> +            - description: Clock to enable XUSB full speed dev clock.
-> +        clock-names:
-> +          items:
-> +           - const: dev
-> +           - const: ss
-> +           - const: ss_src
-> +           - const: hs_src
-> +           - const: fs_src
-
-I would re-order the last 2 entries so that you can do the same thing as 
-I said for 'reg'.
-
-> +      required:
-> +        - reg
-> +        - reg-names
-> +        - clocks
-> +        - clock-names
-
-No need for these to be under the if. They are always required and 
-don't have to be where defined by 'properties'.
-
-> +        - avddio-usb-supply
-> +        - hvdd-usb-supply
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: nvidia,tegra186-xudc
-> +
-> +    then:
-> +      properties:
-> +        reg:
-> +          maxItems: 2
-> +          items:
-> +          - description: XUSB device controller registers
-> +          - description: XUSB device PCI Config registers
-> +        reg-names:
-> +          maxItems: 2
-> +          items:
-> +            - const: base
-> +            - const: fpci
-> +        clocks:
-> +          description:
-> +            Must contain an entry for all clocks used. See ../clock/clock-bindings.txt
-> +            for details.
-> +          maxItems: 4
-> +          items:
-> +            - description: Clock to enable core XUSB dev clock.
-> +            - description: Clock to enable XUSB super speed clock.
-> +            - description: Clock to enable XUSB super speed dev clock.
-> +            - description: Clock to enable XUSB full speed dev clock.
-> +        clock-names:
-> +          items:
-> +           - const: dev
-> +           - const: ss
-> +           - const: ss_src
-> +           - const: fs_src
-> +      required:
-> +        - reg
-> +        - reg-names
-> +        - clocks
-> +        - clock-names
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/tegra210-car.h>
-> +    #include <dt-bindings/gpio/tegra-gpio.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    usb@700d0000 {
-> +        compatible = "nvidia,tegra210-xudc";
-> +        reg = <0x0 0x700d0000 0x0 0x8000>,
-> +              <0x0 0x700d8000 0x0 0x1000>,
-> +              <0x0 0x700d9000 0x0 0x1000>;
-> +        reg-names = "base", "fpci", "ipfs";
-> +
-> +        interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +        clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
-> +                 <&tegra_car TEGRA210_CLK_XUSB_SS>,
-> +                 <&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
-> +                 <&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
-> +                 <&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
-> +        clock-names = "dev", "ss", "ss_src", "hs_src", "fs_src";
-> +
-> +        power-domains = <&pd_xusbdev>, <&pd_xusbss>;
-> +        power-domain-names = "dev", "ss";
-> +
-> +        nvidia,xusb-padctl = <&padctl>;
-> +
-> +        phys = <&micro_b>;
-> +        phy-names = "usb2-0";
-> +
-> +        avddio-usb-supply = <&vdd_pex_1v05>;
-> +        hvdd-usb-supply = <&vdd_3v3_sys>;
-> +    };
-> -- 
-> 2.7.4
+> changes in v8:
+> 1. Add reviewed by Rob
 > 
+> changes in v7:
+> 1. Modify compatible as
+> - compatible : should be one of:
+>                "mediatek,mt2701-musb"
+>                ...
+>                followed by "mediatek,mtk-musb"
+> 2. Change usb connector child node compatible as "gpio-usb-b-connector" 
+> 
+> changes in v6:
+> 1. Modify usb connector child node
+> 
+> changes in v5:
+> suggested by Rob:
+> 1. Modify compatible as 
+> - compatible : should be one of:
+>                "mediatek,mt-2701"
+>                ...
+>                followed by "mediatek,mtk-musb"
+> 2. Add usb connector child node
+> 
+> changes in v4:
+> suggested by Sergei:
+> 1. String alignment
+> 
+> changes in v3:
+> 1. no changes
+> 
+> changes in v2:
+> suggested by Bin:
+> 1. Modify DRC to DRD
+> suggested by Rob:
+> 2. Drop the "<soc-model>-musb" in compatible
+> 3. Remove phy-names
+> 4. Add space after comma in clock-names
+> ---
+>  .../devicetree/bindings/usb/mediatek,musb.txt | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/mediatek,musb.txt
+
+Reviewed-by: Rob Herring <robh@kernel.org>
