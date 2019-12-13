@@ -2,166 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02CA511DE4D
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 07:47:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7432E11DE62
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 08:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725989AbfLMGrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 01:47:18 -0500
-Received: from mailout1.w1.samsung.com ([210.118.77.11]:33938 "EHLO
-        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725535AbfLMGrP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 01:47:15 -0500
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20191213064714euoutp01f8c80a130efed7503648d210d06d1d7d~f22f79ay_0125101251euoutp01c
-        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 06:47:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20191213064714euoutp01f8c80a130efed7503648d210d06d1d7d~f22f79ay_0125101251euoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1576219634;
-        bh=t1I5hcEKwuXV2m0d6yumfwLKzTFjTTmDrgwb3WQm/xU=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=PnmqBC6uIL2aUaMtaRakD8l1Dvw0AEddm89VzezJFvtFN3hYgcnIYVCQZGxxzOAx1
-         ZiN3tHKZjUeLXXdOX2lWKpfLNwNervgw7/g9G+SeSgXVJWiRmtb5gR6/wfrHoGAkEM
-         DUOXs7PxMyhFxwXIRUnBcbnhg5tR/lRCKHJ8wNG8=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20191213064713eucas1p1e98ee455ccdf6de51019716d4e5439a4~f22fo-CLQ2911829118eucas1p1z;
-        Fri, 13 Dec 2019 06:47:13 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id F4.31.60679.1F333FD5; Fri, 13
-        Dec 2019 06:47:13 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20191213064713eucas1p1508810401752280046aadd43d3058e8c~f22fFQ2A03242832428eucas1p1r;
-        Fri, 13 Dec 2019 06:47:13 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20191213064713eusmtrp2154ee5a2edf9cc3dda1c6be8b0c0cc60~f22fEiHaK1280712807eusmtrp2y;
-        Fri, 13 Dec 2019 06:47:13 +0000 (GMT)
-X-AuditID: cbfec7f4-0cbff7000001ed07-e9-5df333f18d7c
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 97.B1.08375.1F333FD5; Fri, 13
-        Dec 2019 06:47:13 +0000 (GMT)
-Received: from [106.120.51.15] (unknown [106.120.51.15]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20191213064712eusmtip2b7988ba4e33fa3f182d4683597bd8648~f22efyDfz2818728187eusmtip2A;
-        Fri, 13 Dec 2019 06:47:12 +0000 (GMT)
-Subject: Re: [PATCH v8 1/6] software node: rename is_array to is_inline
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <ef1eb8d9-92f3-a4e4-f8d2-a2e247737c97@samsung.com>
-Date:   Fri, 13 Dec 2019 07:47:12 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
-        Thunderbird/60.9.1
+        id S1726386AbfLMHEO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 02:04:14 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:44346 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725991AbfLMHEO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 02:04:14 -0500
+Received: by mail-lf1-f66.google.com with SMTP id v201so1135443lfa.11;
+        Thu, 12 Dec 2019 23:04:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=eH240sD43iWskdXO7QwdUUcc+Sa2LsEm2jXeYjhezwI=;
+        b=mEO24JaZRKyTk+K6PipxWEABn0ls/zib9DvmbeY3hHz7zZhq5l8oER8RXkj7b/PuW1
+         mKh1OjMhbUWPe6aUUOt0l/2f+6EomEa9Wq9zYlfJfbil0TxaiSY9P0PN8eNRYjLViOXh
+         RFz5aaIp7dNls3jDzfZt/ZBe25QeyQGaJjxKQiWiS0lLfhs/GzGAI4vK8IXm4dltl/JE
+         kAXNEDSjBvLGvSy6tL8mFVYRmNmG2IDoyJLUdYISqk0B8agUwoqpKiW30tko41uBH9Q+
+         J1iX7CIX/8e8aQefdQIn+1CFCgQwXZB+A2pEz5gGvg/91QP6XVj7jWSx5TQky7Wlgxag
+         +rfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=eH240sD43iWskdXO7QwdUUcc+Sa2LsEm2jXeYjhezwI=;
+        b=h4s3zLzmUvBNhgmHzJ0jNykdr9mW/jldvq5zYK+2HayN93lqCD7kScP57D1vM7F891
+         9yVBn8p4I4qJS0tqimBhc6UNkkJPBlKZ81VQer15pHnT3ISH2P2MfGBzmabm5FiQ0neA
+         A9FH01kX2mfBJMV3Ga3ove7+rPk//tHUKUprjkSFYoHIWJBZXjX84zCFxshdxu2+wTQM
+         Mflw0bh0KpV1sqdLcliifJjhF7Q+wzUl0KZjQk5Xwzytz37BX/DN75ORoO6hnukSOHed
+         KCaWTVobFaXIBSk3gGQLSqk4WiTXbC+Yd+RJgNas9iJV5ml2QPRnnHAt2tsHjv013xZr
+         oocg==
+X-Gm-Message-State: APjAAAWB4/RX+GPg8CgU9wng/LbB01SLFZlFdsF0uDHr1/ILvAF5h3ca
+        EFJuwQeu14dQ7vVdcClPJeQ=
+X-Google-Smtp-Source: APXvYqz8AyOKUmi4nJd1RE9+Qmbd5XDuYdIdRs/wc3kynUUkLpVW4tnrZkxUUD9FLdsQzUTPfmTfgQ==
+X-Received: by 2002:a19:c1c1:: with SMTP id r184mr8103756lff.128.1576220652008;
+        Thu, 12 Dec 2019 23:04:12 -0800 (PST)
+Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
+        by smtp.gmail.com with ESMTPSA id h18sm4210612ljk.94.2019.12.12.23.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2019 23:04:10 -0800 (PST)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb\@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree\@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [RFC PATCH 13/14] usb: devicetree: dwc3: Add property to disable mult TRB fetch
+In-Reply-To: <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
+References: <cover.1576118671.git.thinhn@synopsys.com> <b791f032edb8e6a739c342dbd0d2d5faa66ddfb8.1576118671.git.thinhn@synopsys.com> <87mubyvtuh.fsf@kernel.org> <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
+Date:   Fri, 13 Dec 2019 09:04:54 +0200
+Message-ID: <87d0cswvs9.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0i3dSOSa37yWLM+zDVnMKVTkOxbyKD4vo0KVwj_uFB26Q@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfUyMcRz3u+e5u6ebaz9X9JWKXWPyUsLm8bLGFm6Y1cYfXo6e9Liiu+yu
-        ImaS9eLStCS5yUvhWrfCzS5XDb3otCiJpryFQ6VD3clMSk9P0X+fz+f7+ez7/WxfipA1Cr2p
-        GE08q9UwsXKRhLTU/2pa2LfEqVxU1hlMZ6WcE9DD3ysRXZ9mF9O1hV2I1pusJN3cfFNM5w4a
-        BbTx7mlEt1ZcENH5zXcFdOH1VILOLa8T06aqLoIucJ0lVrsrrIbXYoW55KRI8aqtSqS42BCu
-        cJr9woTbJaui2NiYRFYbFBIhic60fhMeuI8PZVrck1GlVI/cKMBLoS47V6hHEkqGixHYH/YK
-        eOJC0FCaNUacCCr/mITjkZwvZ0h+YERwpfY8wRMHguOFbxHn8sDrweT6MJKgKE8cCT1GLech
-        cBsJ1vefxJxHhINB79CLOCzFIfC2oJbgMIlng2nwOeKyU7ESMozRvGUKNJy3k5zshsOhb2g5
-        JxN4JpQ7LhA89oIO+6XRowF3i6Hdlk/yR4eC2dkr4rEH9Nhui3nsA8PW8cAJBO+aSsU8OYWg
-        NSUf8a6VUGtrGS1D4AC4URHEy2ugPPUxwcmA3eGFYwp/hDvkWM6NyVLISJPx7jlgsJX9W1v9
-        5CmRjeSGCc0ME+oYJtQx/N97GZElyItN0KlVrG6xhj0YqGPUugSNKnBPnNqMRl6sccjmuoMq
-        BiNrEKaQfLJ0UlS/UiZkEnVJ6hoEFCH3lLLznUqZNIpJOsxq43ZrE2JZXQ2aQZFyL+mSwm6l
-        DKuYeHY/yx5gteNTAeXmnYwkz/p3LMvc1RruP41ed5Rl01VbEmmLh+VWq2OFpq3MQ7BWWtSR
-        HZqZHRL6+XdYZIVvYnuA54av11rypuuVIQ7/gSIy1292/9Z56dS+n9ePvGHezNq8ce8mVeRV
-        85XBBVC9s+DYwAP7I4XvXJL52HS/SB2+rTPLp/ie66V914+IvFQ5qYtmgucRWh3zF7eoMDBe
-        AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHIsWRmVeSWpSXmKPExsVy+t/xe7ofjT/HGrzdJ2TR2zSdyeL/h92M
-        FsfanrBbHF70gtGia/VOFovz5zewW0z5s5zJYvm+fkaLy7vmsFnMOL+PyWLRslZmiynbj7Bb
-        rN7zgtli7pepzA58Hjtn3WX32LSqk83jzrU9bB7zTgZ6fN4kF8AapWdTlF9akqqQkV9cYqsU
-        bWhhpGdoaaFnZGKpZ2hsHmtlZKqkb2eTkpqTWZZapG+XoJfRvfM9a8EBgYrubXwNjLt5uxg5
-        OSQETCQmvZ7M0sXIxSEksJRRYt/yJ8wQCRmJk9MaWCFsYYk/17rYIIpeM0q031zEBJIQFnCX
-        WP3lMViRiECSxLpF68GKmAVusEhMunkYrEhI4COTxJ0zYSA2m4ChRNdbkEmcHLwCdhL35x4G
-        28YioCqx+s9VRhBbVCBW4vvKT4wQNYISJ2c+ATqPg4NTIFDi4z9LkDCzgJnEvM0PmSFseYnt
-        b+dA2eISt57MZ5rAKDQLSfcsJC2zkLTMQtKygJFlFaNIamlxbnpusaFecWJucWleul5yfu4m
-        RmDcbjv2c/MOxksbgw8xCnAwKvHwMqR8ihViTSwrrsw9xCjBwawkwpuq/TlWiDclsbIqtSg/
-        vqg0J7X4EKMp0G8TmaVEk/OBKSWvJN7Q1NDcwtLQ3Njc2MxCSZy3Q+BgjJBAemJJanZqakFq
-        EUwfEwenVAOj3czuCyveSu8wlO23S/k3b4orf4LO2wdZziVr7dpWNXVkpEzappqxo9bZUufb
-        wgMbfy6f+DD1QK9o5+cJatNE30vzfdzj+8xnbY+ovs7yXpH8WypPC0O9cpa71hXIsBqEOKRt
-        c6pt2uiUK2ppweXeYHX8hd5HrnU15vYzLf9XpmbZ1PgsslZiKc5INNRiLipOBAAKvGg28QIA
-        AA==
-X-CMS-MailID: 20191213064713eucas1p1508810401752280046aadd43d3058e8c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20191212111237eucas1p1a278d2d5d2437e3219896367e82604cc
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20191212111237eucas1p1a278d2d5d2437e3219896367e82604cc
-References: <20191108042225.45391-1-dmitry.torokhov@gmail.com>
-        <20191108042225.45391-2-dmitry.torokhov@gmail.com>
-        <CGME20191212111237eucas1p1a278d2d5d2437e3219896367e82604cc@eucas1p1.samsung.com>
-        <b3f6ca8b-dbdf-0cec-aa8f-47ffcc5c5307@samsung.com>
-        <20191212112825.GK32742@smile.fi.intel.com>
-        <CAJZ5v0i3dSOSa37yWLM+zDVnMKVTkOxbyKD4vo0KVwj_uFB26Q@mail.gmail.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rafael,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-On 12.12.2019 17:41, Rafael J. Wysocki wrote:
-> On Thu, Dec 12, 2019 at 12:28 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
->> On Thu, Dec 12, 2019 at 12:12:36PM +0100, Marek Szyprowski wrote:
->>> On 08.11.2019 05:22, Dmitry Torokhov wrote:
->>>> We do not need a special flag to know if we are dealing with an array,
->>>> as we can get that data from ratio between element length and the data
->>>> size, however we do need a flag to know whether the data is stored
->>>> directly inside property_entry or separately.
->>>>
->>>> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
->>> Today I've noticed that this patch got merged to linux-next as commit
->>> e6bff4665c595b5a4aff173848851ed49ac3bfad. Sadly it breaks DWC3/xHCI
->>> driver operation on Samsung Exynos5 SoCs (and probably on other SoCs
->>> which use DWC3 in host mode too). I get the following errors during boot:
+
+Hi,
+
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>> DWC_usb32 has a feature where it can issue multiple TRB fetch requests.
+>>> Add a new property to limit and only do only single TRB fetch request.
 >>>
->>> dwc3 12000000.dwc3: failed to add properties to xHCI
->>> dwc3 12000000.dwc3: failed to initialize host
->>> dwc3: probe of 12000000.dwc3 failed with error -61
+>>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+>>> ---
+>>>   Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+>>>   1 file changed, 2 insertions(+)
 >>>
->>> Here is a full kernel log from Exynos5250-based Snow Chromebook on KernelCI:
->>>
->>> https://storage.kernelci.org/next/master/next-20191212/arm/exynos_defconfig/gcc-8/lab-collabora/boot-exynos5250-snow.txt
->>>
->>> (lack of 'ref' clk is not related nor fatal to the driver operation).
->>>
->>> The code which fails after this patch is located in
->>> drivers/usb/dwc3/host.c. Let me know if I can help more in locating the bug.
->> Thank you for report.
+>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documenta=
+tion/devicetree/bindings/usb/dwc3.txt
+>>> index ff35fa6de2eb..29d6f9b1fc70 100644
+>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+>>> @@ -108,6 +108,8 @@ Optional properties:
+>>>    - snps,num-trb-prefetch: max value to do TRBs cache for DWC_usb32. T=
+he value
+>>>   			can be from 1 to DWC_USB32_CACHE_TRBS_PER_TRANSFER.
+>>>   			Default value is DWC_USB32_CACHE_TRBS_PER_TRANSFER.
+>>> + - snps,dis-mult-trb-fetch: set to issue only single TRB fetch request=
+ in
+>>> +			DWC_usb32.
+>> two questions:
 >>
->> I think we should not have that patch in the fist place... I used to have
->> a bad feeling about it and then forgot about it existence.
-> Well, I think you mean the [2/6].
+>> - how is this different from passing 1 to the previous DT binding
 >
-> The $subject one really shouldn't change functionality, we must have
-> missed something here.
+> The previous DT binding is related to the number TRBs to cache while=20
+> this one is related to whether the controller will send multiple=20
+> (internal) fetch commands to fetch the TRBs.
+>
+>> - do we know of anybody having issues with multi-trb prefetch?
+>
+> No, we added this for various internal tests.
 
-Nope, I was really talking about [1/6]. It looks that it revealed an 
-issue in the DWC3 driver pointed by Dmitry.
+We really a better way for you guys to have your test coverage enabled
+with upstream kernel. I wonder if DT guys would accept a set of bindings
+marked as "for testing purposes". In any case, we really need to enable
+Silicon Validation with upstream kernel.
 
-> Anyway, I'll drop this branch from the linux-next one for now.
+=2D-=20
+balbi
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl3zOBYACgkQzL64meEa
+mQa/+BAAlFkcIcEqavcePYa5Pe8cqpbuMP2uRZacvCV88KaalWMKKG0fsz3W4Wn8
+BOrxG8ux+gEC+9P68n4JOBJZXISeC42XPBnm4A+3dYwy1Js5p0mSCXeR9+Q4tqZd
+JW5gZtTX+uc3ehgUV3A5NBdTvmfEAif/tLfdxQOx7+euOtLjYDHhvnv1tAXyZ7/T
+zCeq25QIb7+hJl56ZDcS7NK+mO0eK19JpFKvcGhJldFGbhQ9bdMoJaPQqZj7K/J1
+DhPv5q92N6wl67UICuKTp8Nrr8vtKFZxRATXOHU2KrF8PWZklPooL1GedzPf9GDS
+GNPkfaWGhXnJuRq+6AZIj5zFEzhh5sqvKFA8Hn/mV5RgzasLeLok/wb00GtIXMkP
+OBzzBJPEtb05aownQ+Sk/TfSB0eobD6/TDg0Q8C3D+H8G325EhxBncFXpg1bv0b/
+1wtKE/pknHWFsyt0rBMxXYpKO7kwPSAJzIXVE7Q9vP2/zIalT1D1N7dBM/KKlTbq
+xOL7j1x3+JhTKtR+cPAXEvVs1/4AZk6fYA0M/VWjldsavay6udA5zVn5xgkDNUXT
+3gBwj3v8nQTsbNIrqLKQhlNBgGGYgP2NvXfgf+Jy3qxegAAqUY+RoQBklom6zWtP
+zyhfU5GlsA4s6hGV2g3mQGYr56DOjsm73XElUMTe1PAD0b3O0SA=
+=IuyY
+-----END PGP SIGNATURE-----
+--=-=-=--
