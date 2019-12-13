@@ -2,94 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F0811DE73
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 08:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4869511DF16
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 09:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbfLMHMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 02:12:14 -0500
-Received: from m228-5.mailgun.net ([159.135.228.5]:27744 "EHLO
-        m228-5.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725385AbfLMHMO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 02:12:14 -0500
-X-Greylist: delayed 304 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Dec 2019 02:12:13 EST
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576221133; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=TM9I4rJRMGS2Z/g+a78Bvn/OtzXKQTFlqms85rGn+48=; b=JeVt1ksw7MEOPjpGy/hvCEd66UCKwofaNzXYCvpVEaAruyUyu8RPdUKtd6GM4jLDSuaqL5rI
- rtnE7Ss0flz+9Q5uFT7w0mdjPRr2nDu27JsdFRI8La2WYWK9/p/bwOgNmroUhyembUryoitY
- qipJtcSjD9797A+L5Q2LP87kRzk=
-X-Mailgun-Sending-Ip: 159.135.228.5
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5df3389b.7f19fc6cdd18-smtp-out-n01;
- Fri, 13 Dec 2019 07:07:07 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BF487C4479F; Fri, 13 Dec 2019 07:07:07 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [10.206.24.214] (blr-c-bdr-fw-01_globalnat_allzones-outside.qualcomm.com [103.229.19.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: mgautam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 584B4C43383;
-        Fri, 13 Dec 2019 07:07:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 584B4C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=mgautam@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: qcom: Remove useless compatible strings from
- the match table
-To:     Douglas Anderson <dianders@chromium.org>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Jeffrey Hugo <jhugo@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20191212132122.1.I85a23bdcff04dbce48cc46ddb8f1ffe7a51015eb@changeid>
-From:   Manu Gautam <mgautam@codeaurora.org>
-Message-ID: <3fc8f36f-9ca2-7b56-9f1f-94507481b715@codeaurora.org>
-Date:   Fri, 13 Dec 2019 12:37:01 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726705AbfLMIIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 03:08:31 -0500
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:44174 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726774AbfLMII3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 03:08:29 -0500
+Received: by mail-ed1-f65.google.com with SMTP id cm12so1300785edb.11;
+        Fri, 13 Dec 2019 00:08:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Sb7h+Syw20vysdh92QJjNk/PaKzOiYC6n/84DQf0IY=;
+        b=XH2rMC6I3glDs3DANyDOLWnr2N5KJzJxOOfEqZYko6x12F/NA5ppoahwQ2BOcVpebH
+         lu5hPofdoRszEUF1Puzi3Bjnmbr62wTKDohiqXkhw9jxVQl8jbptVYQtCPQExwB9vDrG
+         XZNuTUI9bMUfKp4xkfGXSf7Ms1nHkL0rMILxSqVXYymif8KDOMb0WmPQ1Nx9MsVAUDGa
+         H0ZKSAxZBnjC3WQGLHdTAdqun3CwwQHC0ZH8uyVoIyoHj/dX17YfixFHcTiCfPDDa3nf
+         fGq2nmKh/954zM6yFCOnVSssqHAzgkgq98MkQMLe3T8y5VUAAM0hCOEzk9vwH7Kq9Pf9
+         s5Vw==
+X-Gm-Message-State: APjAAAU+zScqw12VuBxj8zu5tX5EkGPz5jDd7itREbOb5q2LHdwRHlOb
+        PKLImvJG+/EiVhMEaTQ+8czVlhU+Fgdl+w==
+X-Google-Smtp-Source: APXvYqxL77iUE0AzqbWyWlWllh0lDx8cvi1X6clZbtoF61J/Gh651ONiLGvGa7nICW0nrVOBQqVDqA==
+X-Received: by 2002:a17:906:5808:: with SMTP id m8mr7073600ejq.1.1576224506235;
+        Fri, 13 Dec 2019 00:08:26 -0800 (PST)
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
+        by smtp.gmail.com with ESMTPSA id l9sm353417ejr.45.2019.12.13.00.08.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2019 00:08:25 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id w8so2041719wmd.3;
+        Fri, 13 Dec 2019 00:08:25 -0800 (PST)
+X-Received: by 2002:a1c:6a05:: with SMTP id f5mr11357678wmc.2.1576224505305;
+ Fri, 13 Dec 2019 00:08:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191212132122.1.I85a23bdcff04dbce48cc46ddb8f1ffe7a51015eb@changeid>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+References: <CGME20191211145222eucas1p1d761af59e04017ddadbdbd1cceb59b1f@eucas1p1.samsung.com>
+ <20191211145054.24835-1-m.szyprowski@samsung.com> <20191211145217.25025-1-m.szyprowski@samsung.com>
+In-Reply-To: <20191211145217.25025-1-m.szyprowski@samsung.com>
+From:   Chen-Yu Tsai <wens@csie.org>
+Date:   Fri, 13 Dec 2019 16:08:12 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65EBb-qvb6XVzvZgqKUbzJJgkXgB5y2uA8Aa1__n9v+qw@mail.gmail.com>
+Message-ID: <CAGb2v65EBb-qvb6XVzvZgqKUbzJJgkXgB5y2uA8Aa1__n9v+qw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] ARM: dts: sun8i: a83t: Correct USB3503 GPIOs polarity
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-usb <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/SAMSUNG EXYNO..." 
+        <linux-samsung-soc@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks. Patch looks good to me.
+On Wed, Dec 11, 2019 at 10:52 PM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> Current USB3503 driver ignores GPIO polarity and always operates as if the
+> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
+> USB3503 chip applications to match the chip specification and common
+> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
+> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
+> to fix the USB3503 driver to properly use generic GPIO bindings and read
+> polarity from DT.
+>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-On 12/13/2019 2:51 AM, Douglas Anderson wrote:
-> The of match table in dwc3-qcom.c had an entry per Qualcomm SoC known
-> to have dwc3.  That's not needed.  Here's why:
->
-> 1. The bindings specify that the compatible string in the device tree
->    should contain the SoC-specific compatible string followed by the
->    string "qcom,dwc3".
->
-> 2. All known Qualcomm SoC dts files (confirmed via git grep in
->    mainline Linux) using dwc3 follow the rules and do, in fact,
->    contain the SoC-specific compatible string followed by the string
->    "qcom,dwc3".
->
-> 3. The source code does nothing special with the per-SoC strings--they
->    are only used to match the node.
->
-> Let's remove the extra strings from the table.  Doing so will avoid
-> the need to land future useless patches [1] that do nothing more than
-> add yet more strings to the table.
+Acked-by: Chen-Yu Tsai <wens@csie.org>
 
-Reviewed-by: Manu Gautam <mgautam@codeaurora.org>
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I assume the dts patch has to go in before or at the same time as the driver
+patch?
