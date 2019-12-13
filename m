@@ -2,95 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 473EC11DFA1
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 09:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB6A11E1EE
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 11:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725948AbfLMIoZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 03:44:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:48360 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725793AbfLMIoY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Dec 2019 03:44:24 -0500
-Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D69F2253D;
-        Fri, 13 Dec 2019 08:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576226664;
-        bh=94LZnf/3s/roV8fMiTLrlu2OFhSW6ztFQ3srFRkny8Y=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=c8dneF8P6KxiTCDkuDcKPSF4/QLN7It98fosYDgzhXcFZDTjPPtxJUHa9azKjA1QA
-         3/8QzuJXFp9B82cFcoo/ZCWX21+L23CrajbtOXuVoSeSxybyZ5+Z4CNrZ8LySiRz/z
-         K+RTGymyKEQTlyNqeIyXkEy/xH5jLSaYyn4sfMYM=
-Date:   Fri, 13 Dec 2019 09:44:21 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [PATCH] HID: Fix slab-out-of-bounds read in hid_field_extract
-In-Reply-To: <Pine.LNX.4.44L0.1912111009080.1549-100000@iolanthe.rowland.org>
-Message-ID: <nycvar.YFH.7.76.1912130941580.4603@cbobk.fhfr.pm>
-References: <Pine.LNX.4.44L0.1912111009080.1549-100000@iolanthe.rowland.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S1725945AbfLMK3w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 05:29:52 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:36902 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbfLMK3w (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 05:29:52 -0500
+Received: by mail-wm1-f66.google.com with SMTP id f129so5994116wmf.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 02:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=GAA9AWcbpfL5wFPcx+vPRQkLnI4DRLbbD+X6sGIxIx8=;
+        b=t7H2V86l6EXFUGJvFrg0x6XI6Cfjt/lMSA9WSH5ic1tPWxxOeoFytr6MoOlwREEtTi
+         zn9+B0WC9auILQ9oKrnxQMg1ybqRGMLy+Gi3jliTvWIyVGAd6v4m3tMXXML/bp8e7JPJ
+         5YswGyvAJqo0KNl5znOByqXKTiJ2ddu6q+oJd+QU3mrHgFiJvv1PZGneVPzN7gpamtY1
+         /8/8byEQaM/m/G2mOekDtm82s0i9sA2OAxgqbNd4R3DosVBfCCCDXrlV59rlTZj/EsvR
+         i1cKQ75Wm2o52mfXhY8QJnaF35l+mKEQWIaXJaphxtWmYBHPa8uXSQIt3AmxwSrKcP5q
+         i2SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=GAA9AWcbpfL5wFPcx+vPRQkLnI4DRLbbD+X6sGIxIx8=;
+        b=YurIJbpQF6tAq8LIJhry4CQ9WvF2cTjADPMwVwt/SLHxEgwgZCJp3rKTeJIOdSxfFt
+         d1Z2jxe9Aw1xRjbWi497/3QxullKANkWwozOYAz3Xqj5/E2SGA64dcpt4ro+YJSJRIRJ
+         TWY98bgGLR81Soewa1tdu1WxKrOzFIvMwnH+qK745A8q0AChnmWVHKrO/nQe4zwffo+8
+         j3hw1DNamFFEyjv/J7HS7j+JwF+aaD5kTRIrDcrNenkLbh4tga1JCFoxziwkD0JEM8JW
+         e4yZJv4A43CFhhgQ50w+U4hd0DkYWmRpPp8ncLYweG2haVpKhl1mcBEchai0v1JdVHos
+         7QUg==
+X-Gm-Message-State: APjAAAVBeJlceJm2eZ4lUhsLzD9vHl9+rEEfDeNmGXXolH+0+nkO2TrR
+        br2gNfDAlw9j62t85b+O76WwlEt/s/4=
+X-Google-Smtp-Source: APXvYqyOWlXzJyCYhuY956ywgpj6P/o8keKCdjuMKBmynoxXLQf1KfQ+/CRIKb/5h2xuBBXE25Me0Q==
+X-Received: by 2002:a1c:f213:: with SMTP id s19mr13329748wmc.42.1576232990436;
+        Fri, 13 Dec 2019 02:29:50 -0800 (PST)
+Received: from dell ([95.149.164.71])
+        by smtp.gmail.com with ESMTPSA id j130sm4981486wmb.18.2019.12.13.02.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Dec 2019 02:29:49 -0800 (PST)
+Date:   Fri, 13 Dec 2019 10:29:46 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] mfd: dln2: more sanity checking for endpoints
+Message-ID: <20191213102946.GA3648@dell>
+References: <20191121102810.27205-1-oneukum@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191121102810.27205-1-oneukum@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Dec 2019, Alan Stern wrote:
+On Thu, 21 Nov 2019, Oliver Neukum wrote:
 
-> > > The syzbot fuzzer found a slab-out-of-bounds bug in the HID report
-> > > handler.  The bug was caused by a report descriptor which included a
-> > > field with size 12 bits and count 4899, for a total size of 7349
-> > > bytes.
-> > > 
-> > > The usbhid driver uses at most a single-page 4-KB buffer for reports.
-> > > In the test there wasn't any problem about overflowing the buffer,
-> > > since only one byte was received from the device.  Rather, the bug
-> > > occurred when the HID core tried to extract the data from the report
-> > > fields, which caused it to try reading data beyond the end of the
-> > > allocated buffer.
-> > > 
-> > > This patch fixes the problem by rejecting any report whose total
-> > > length exceeds the HID_MAX_BUFFER_SIZE limit (minus one byte to allow
-> > > for a possible report index).  In theory a device could have a report
-> > > longer than that, but if there was such a thing we wouldn't handle it 
-> > > correctly anyway.
-> > > 
-> > > Reported-and-tested-by: syzbot+09ef48aa58261464b621@syzkaller.appspotmail.com
-> > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > CC: <stable@vger.kernel.org>
-> > 
-> > Thanks for hunting this down Alan. Applied.
+> It is not enough to check for the number of endpoints.
+> The types must also be correct.
 > 
-> I just noticed this code:
-> 
-> u8 *hid_alloc_report_buf(struct hid_report *report, gfp_t flags)
-> {
-> 	/*
-> 	 * 7 extra bytes are necessary to achieve proper functionality
-> 	 * of implement() working on 8 byte chunks
-> 	 */
-> 
-> 	u32 len = hid_report_len(report) + 7;
-> 
-> 	return kmalloc(len, flags);
-> }
-> 
-> Does this indicate that the upper limit on a report length should 
-> really be HID_MAX_BUFFER_SIZE - 8 instead of HID_MAX_BUFFER_SIZE - 1?
+> Reported-and-tested-by: syzbot+48a2851be24583b864dc@syzkaller.appspotmail.com
+> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+> ---
+>  drivers/mfd/dln2.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
 
-As far as I remember, this is just very lousy way of properly rounding the 
-size up (see 27ce405039bfe). So I believe HID_MAX_BUFFER_SIZE -1 is still 
-functionally correct.
-
-Thanks,
+Applied with Greg's Ack, thanks.
 
 -- 
-Jiri Kosina
-SUSE Labs
-
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog
