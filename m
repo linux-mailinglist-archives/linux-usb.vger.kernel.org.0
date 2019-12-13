@@ -2,86 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F20911E796
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 17:05:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB10811E821
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 17:23:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728304AbfLMQFF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 11:05:05 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:43949 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728301AbfLMQFF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 11:05:05 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a13so3198880ljm.10
-        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 08:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gbf8k5yJ19A5wSZeXVRUlCPqOm3eyldLxkULlc81AFU=;
-        b=ymPQwlgoBu3AuxXxyAS8Pqr3jk0WyzPrXO0bCPOwIOGjnvgBRrGXil4Wbr2ayNyVg0
-         5oHwBqXWHlNYU4H4t0AGAUVusSZhkfHiNJjIj3uc5bx4NxoOqz31/r1rWdCvix34S3ZY
-         2LTTNgxyQ1bi8H8MZq9m+SG3t+rgn5AEU+AoO5VKhdPwcr7tzMRGFhdW9/jc9cvU1N9p
-         yEh3vCXdHeINwcTyiFYrKgZxEzP6mSe5+H8dC7GEWci+dHT6he+jJOMaqoKrHvuaroER
-         O8H3WuM0RCU6HzU+YAsXHI4yTGfj4+7zOW1wJoyn1ns5KWkT3b+TjkHMoaPRnN7i7Mnt
-         wJ2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gbf8k5yJ19A5wSZeXVRUlCPqOm3eyldLxkULlc81AFU=;
-        b=UU57l6DtkcSqaMAAWHXvExfLvZwk5FuKJVmT2I5VmMVPcswTlxQYmYjIz2jQUatb8i
-         IYdi2RcoAGhRmLjd2Ug6im8t3HaL50ZSKvhYlWFJ08llkrk0GL6ItU8GWkCJkKerT9Qk
-         yhKDAiET1NuRuC2gzyL31yqsoUbygkr/lHabyNyxWwOblpTmRUOI+uWNzCULZRke8XOV
-         Xfd1E6h3iAriLHg4e2wO6QHzFu7uqJUTtrlTD5bkvP4AZ7w/K4d2ql3clM3Zk7nXuXha
-         +JrwpY3o/VlTlltcKQtbXly8vxniO/yI8tv01XFSsNLFp7MTzzf2/ZGEW4CtwgvLujjW
-         1BqQ==
-X-Gm-Message-State: APjAAAWHasZESEsR5o+BKDUHcpYaAwZIL33Hx+6yUJ8ppEu6kIxh9OT1
-        2WCOzS3jlFIK88SwVW+iVoKgwHMqi/OXVSKnZaBb0g==
-X-Google-Smtp-Source: APXvYqwqvR2JGdbH6+gDLiMiftLZwqMCeGYmrtZEZ9p/3pwbALJms19uoBQteKErH11ha+LVboridg4Lm1ql8BrOASI=
-X-Received: by 2002:a05:651c:1049:: with SMTP id x9mr9963179ljm.233.1576253102887;
- Fri, 13 Dec 2019 08:05:02 -0800 (PST)
+        id S1728062AbfLMQXg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 11:23:36 -0500
+Received: from mga17.intel.com ([192.55.52.151]:41727 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726404AbfLMQXg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Dec 2019 11:23:36 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 Dec 2019 08:23:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,309,1571727600"; 
+   d="scan'208,223";a="220945436"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 13 Dec 2019 08:23:34 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 13 Dec 2019 18:23:33 +0200
+Date:   Fri, 13 Dec 2019 18:23:33 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     owl@ow1.in
+Cc:     linux-usb@vger.kernel.org
+Subject: About Bug 205841
+Message-ID: <20191213162333.GA19292@kuha.fi.intel.com>
 MIME-Version: 1.0
-References: <CGME20191211145104eucas1p1ce04a26eebcd4c22d72f204e7ae0aa5a@eucas1p1.samsung.com>
- <20191211145054.24835-1-m.szyprowski@samsung.com>
-In-Reply-To: <20191211145054.24835-1-m.szyprowski@samsung.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 13 Dec 2019 17:04:51 +0100
-Message-ID: <CACRpkdbBBjXxftu1fw7H9N+hAe_MfkUPJErN6MPJ8Mxirh1w5A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4 RESEND] USB3503: correct GPIOs polarity and update
- the driver
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb <linux-usb@vger.kernel.org>,
-        linux-samsung-soc <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/mixed; boundary="A6N2fC+uXW/VQSAv"
+Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 3:51 PM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
 
-> Marek Szyprowski (3):
->   ARM: dts: exynos: Correct USB3503 GPIOs polarity
->   ARM: dts: qcom: Correct USB3503 GPIOs polarity
->   ARM: dts: sun8i: a83t: Correct USB3503 GPIOs polarity
+--A6N2fC+uXW/VQSAv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Hi Ilia,
 
-for all these three.
+Bugzilla at kernel.org does not respond today, so sending mail.
 
-Yours,
-Linus Walleij
+I can't reproduce the issue with the Lenovo boards we have, but I know
+there is one problem with the firmware in some Lenovo's. Basically the
+firmware starts generating notification (interrupts) before they are
+enabled. That could theoretically cause the issue you are seeing.
+
+Can you test v5.5-rc1 (mainline)? If the problem still happens with
+mainline, can you test a patch that I've attached (so applied on top
+of mainline)?
+
+thanks,
+
+-- 
+heikki
+
+--A6N2fC+uXW/VQSAv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-usb-typec-ucsi-Store-the-notification-mask.patch"
+
+From 7fd350a603397b507eb01457472091a5651133ad Mon Sep 17 00:00:00 2001
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Date: Fri, 25 Oct 2019 13:35:45 +0300
+Subject: [PATCH] usb: typec: ucsi: Store the notification mask
+
+The driver needs to ignore any Connector Change Events
+before the Connector Change Indication notifications have
+actually been enabled. This adds a check to
+ucsi_connector_change() function to make sure the function
+does not try to process the event unless the Connector
+Change notifications have been enabled.
+
+It is quite common that the firmware representing the "PPM"
+(Platform Policy Manager) starts generating Connector Change
+notifications even when only the Command Completion
+notifications are enabled.
+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 15 ++++++++++-----
+ drivers/usb/typec/ucsi/ucsi.h |  3 +++
+ 2 files changed, 13 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 15efa1f8ede9..a1ccfeab7315 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -189,7 +189,7 @@ int ucsi_resume(struct ucsi *ucsi)
+ 	u64 command;
+ 
+ 	/* Restore UCSI notification enable mask after system resume */
+-	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->notify;
+ 
+ 	return ucsi_send_command(ucsi, command, NULL, 0);
+ }
+@@ -589,6 +589,11 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
+ {
+ 	struct ucsi_connector *con = &ucsi->connector[num - 1];
+ 
++	if (!(ucsi->notify & UCSI_ENABLE_NTFY_CONNECTOR_CHANGE)) {
++		dev_dbg(ucsi->dev, "Bogus connetor change event\n");
++		return;
++	}
++
+ 	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
+ 		schedule_work(&con->work);
+ }
+@@ -656,7 +661,7 @@ static int ucsi_role_cmd(struct ucsi_connector *con, u64 command)
+ 		ucsi_reset_ppm(con->ucsi);
+ 		mutex_unlock(&con->ucsi->ppm_lock);
+ 
+-		c = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
++		c = UCSI_SET_NOTIFICATION_ENABLE | con->ucsi->notify;
+ 		ucsi_send_command(con->ucsi, c, NULL, 0);
+ 
+ 		ucsi_reset_connector(con, true);
+@@ -925,8 +930,8 @@ int ucsi_init(struct ucsi *ucsi)
+ 	}
+ 
+ 	/* Enable basic notifications */
+-	command = UCSI_SET_NOTIFICATION_ENABLE;
+-	command |= UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR;
++	ucsi->notify = UCSI_ENABLE_NTFY_CMD_COMPLETE | UCSI_ENABLE_NTFY_ERROR;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->notify;
+ 	ret = ucsi_run_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+ 		goto err_reset;
+@@ -943,7 +948,7 @@ int ucsi_init(struct ucsi *ucsi)
+ 	}
+ 
+ 	/* Enable all notifications */
+-	command = UCSI_SET_NOTIFICATION_ENABLE | UCSI_ENABLE_NTFY_ALL;
++	command = UCSI_SET_NOTIFICATION_ENABLE | ucsi->notify;
+ 	ret = ucsi_run_command(ucsi, command, NULL, 0);
+ 	if (ret < 0)
+ 		goto err_unregister;
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 8569bbd3762f..3eb0cc246bcd 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -269,6 +269,9 @@ struct ucsi {
+ 	/* PPM Communication lock */
+ 	struct mutex ppm_lock;
+ 
++	/* The latest "Notification Enable" bits (SET_NOTIFICATION_ENABLE) */
++	u64 notify;
++
+ 	/* PPM communication flags */
+ 	unsigned long flags;
+ #define EVENT_PENDING	0
+-- 
+2.24.0
+
+
+--A6N2fC+uXW/VQSAv--
