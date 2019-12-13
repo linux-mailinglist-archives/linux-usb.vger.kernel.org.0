@@ -2,116 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A911E361
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 13:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF0C11E36D
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 13:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726959AbfLMMLi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 07:11:38 -0500
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:44113 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbfLMMLi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 07:11:38 -0500
-Received: by mail-pj1-f65.google.com with SMTP id w5so1116470pjh.11
-        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 04:11:38 -0800 (PST)
+        id S1726921AbfLMMQG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 07:16:06 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:35601 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726851AbfLMMQF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 07:16:05 -0500
+Received: by mail-pj1-f67.google.com with SMTP id w23so1139411pjd.2
+        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2019 04:16:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=9r3y5b2vXMIRb8oNblHHWyiR/x9JBMIKMp7Nl/AMSRg=;
-        b=ftJJ7cj5skjnr4OfwFizJQnyDilL8KDJLUSdnajj31APdfbww2kYdJaC5q7N2wedfa
-         HkoO/nl7SIDvINoANdm2hSw3WnaoPBko5o3vkkgaNBaA9koBKRUPSUQ0ueMwMuAnRSNc
-         g/GE0hCDxB+nXjFmP/aZSP0oYJ22nLzaChBYHTio+9S8oof8F4cYfcYLDNxYFwk+Dyj3
-         NSLGahEYWM7sQbGlFL59techMRpz00kQeHMO4rGpIuWTMVa7dzjE7fzVhBMsUWa7B23o
-         T9D+Wh8sI54DIfEDt7YgD9M5hrEMA/0x4gzlacknbtyZEDeJYyB66MZyeSq2UYTGXfHf
-         QJ3g==
+        bh=vrr04UG+KfMKX87NvSyjtcDc+bdQkAsJjdSsqjzS8hQ=;
+        b=NkjnAAXKYCmVjsu0sxUuu4mBFgDX+5IeqlpJpjmb2Wu31HhFaCfIfdeAsH2aQRmj4t
+         5uFFDVfAQjaJTDrrXdJuSTbSpAtv/sNxJloWdVBXS9IXnnc+AlpU7J2u9oGcOxajhOca
+         Sh4Q51dPAe01009NjltwN/nATZ9nPcMyieAAvYAKzE/4HjNbaCDrYE7F0JmPybs6hiqn
+         suh+VxkvFi6Auz1OOEzjtuRRgQQBGApjkgsNuY+1bs6aF2N1JwuL833vNVvBT8PX9yR0
+         xIvgK6ACtY0aQarZ2ICbW62r2uRpYK4Sed5vK+HHOt0dZZVvQdqhZVEo/+M8Rv7ptOu2
+         JAWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=9r3y5b2vXMIRb8oNblHHWyiR/x9JBMIKMp7Nl/AMSRg=;
-        b=ZuXe5EHODihLAwodlMiPfGORe/p0niNGJdRy5bXxub5HtkivjbSLRcZ7mu+23XHiwJ
-         k7n4jb0MM2xukOPHQTCG7e6RB+IT1YSCUS943213jqVcOwZJ1B0HqIsWOl6otHtvTDeo
-         BAW8ntc7hImiBzAd0dPTxjofLUiycLSSnUS5F3OyAM/7mEhG+08Nw+eotKPF34++I7QJ
-         ZoV03AK2FSpdLnNw/KN4wttqsA3zzyfkj3mbUW1LO3s2DLEfs7uDy9rs7CCNat00XXRU
-         4uB74a27NpTG60qHV3vHnQ+xOWBg0zpjPiL1uVrn3jk5NNTnS+NIKeTfO3AMpqnwm2eb
-         wecQ==
-X-Gm-Message-State: APjAAAUA9a0x/52n3SDh2+hellXaoeI34jGLaOgkrWYbzbBcdAqqP81N
-        F8w9LaCv0nFAYSIt9Wq6AQe3gKza1ystswFv18/C3w==
-X-Google-Smtp-Source: APXvYqzkX7D2D12zjMDASh4roJ/9SPGGMP8O/ZGu02LjcJLBvXA42frjpmL1JwEN3xx2P2+PjH8NqE+WnQngBKa56Yc=
-X-Received: by 2002:a17:90b:150:: with SMTP id em16mr15813824pjb.123.1576239097699;
- Fri, 13 Dec 2019 04:11:37 -0800 (PST)
+        bh=vrr04UG+KfMKX87NvSyjtcDc+bdQkAsJjdSsqjzS8hQ=;
+        b=UHP+cAq4xAHMfWqGY326cCdRYh40hnGFjzmKFjR74wYN91DaPs8pHhpvspa7zELgkG
+         LWwFZX0QAcC32PEC2oja2mRX/EpF03Z8p3NSg1NRyY6N4VtOsfTHDPUWLcVXq85XlWm9
+         +os+UBCgeeMawPeiGpFPd9HmjLeEux5VV9Tyvqj4+s6NHAdUYTj82TwVb/5NQnNz7iVl
+         JNXS/RDkm3pel13K8n7IYQSglgo7IzamY/Mv719SEAOsquLMAq+1hSyoCCnUluIXa7uz
+         PYh51CofDX+AdlfNqH7lWRuCUS5NNkPjOUsrZX4dBOpP+yYfSS2f9cm5bRDazzXRDkQy
+         /wJQ==
+X-Gm-Message-State: APjAAAU+3X3uY+Hgt2KHGc+8KwnLzDe64iD35X42vXKg1BXUiWwhRZiH
+        WXCbcJRUMToTORFsUNiKq61KKdq5D4SvzWxnw7QwqQ==
+X-Google-Smtp-Source: APXvYqwHOLnyCwT34y2Vi+YuMAbTcO9SUfLygFEkacHNTamhSN2E90n8EYZwvVEUGHKexjv//HAvYpqYkYbwpNkgx3k=
+X-Received: by 2002:a17:90a:a4cb:: with SMTP id l11mr15951529pjw.47.1576239363580;
+ Fri, 13 Dec 2019 04:16:03 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1576170740.git.andreyknvl@google.com>
-In-Reply-To: <cover.1576170740.git.andreyknvl@google.com>
+References: <000000000000c2531f0592ab96fb@google.com>
+In-Reply-To: <000000000000c2531f0592ab96fb@google.com>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Fri, 13 Dec 2019 13:11:26 +0100
-Message-ID: <CAAeHK+xkvQ3Jxot15pw1_EHZgZ2i539pLSxgXujDLWO0x0DrRw@mail.gmail.com>
-Subject: Re: [PATCH RFC 0/2] kcov: collect coverage from usbhid interrupts
-To:     Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 13 Dec 2019 13:15:52 +0100
+Message-ID: <CAAeHK+zTprgU-kp3cOL2S6Wo1tgqL-1sCkEi3Bb8o0BAG71y-A@mail.gmail.com>
+Subject: Re: general protection fault in usb_set_interface
+To:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kai Heng Feng <kai.heng.feng@canonical.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, mans@mansr.com,
+        Oliver Neukum <oneukum@suse.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: multipart/mixed; boundary="000000000000596d54059994d3f9"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 6:15 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> This patchset extends kcov to allow collecting coverage from interrupts
-> and then uses the new functionality to collect coverage from usbhid code.
->
-> What I'm not sure yet about this change is if we actually want to
-> selectively annotate some parts of the USB stack that are executed in
-> interrupt context, or maybe we can do this with some common approach.
->
-> For example patch #2 in this patchset annotates all functions that are
-> passed as completion callbacks to usb_fill_*() in drivers/hid/usbhid.
-> Maybe instead we could redefine usb_fill_*() in a way that would handle
-> all such cases without manual annotations.
+--000000000000596d54059994d3f9
+Content-Type: text/plain; charset="UTF-8"
 
-Although looking at this again today, it seems much more logical to
-add kcov annotations around the complete() callback in
-__usb_hcd_giveback_urb(). Don't know why I didn't think of that. Will
-do in the next version.
+On Mon, Sep 16, 2019 at 3:29 PM syzbot
+<syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    f0df5c1b usb-fuzzer: main usb gadget fuzzer driver
+> git tree:       https://github.com/google/kasan.git usb-fuzzer
+> console output: https://syzkaller.appspot.com/x/log.txt?x=158b66f1600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5c6633fa4ed00be5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7fa38a608b1075dfd634
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f57db9600000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127b61a5600000
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com
+>
+> usb 3-1: usbvision_write_reg: failed: error -2
+> usbvision_set_audio: can't write iopin register for audio switching
+> kasan: CONFIG_KASAN_INLINE enabled
+> kasan: GPF could be caused by NULL-ptr deref or user memory access
+> general protection fault: 0000 [#1] SMP KASAN
+> CPU: 1 PID: 1955 Comm: v4l_id Not tainted 5.3.0-rc7+ #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:usb_set_interface+0x34/0xa50 drivers/usb/core/message.c:1362
+> Code: fc 55 53 48 83 ec 40 89 54 24 18 89 74 24 10 e8 22 1c ef fd 49 8d 7c
+> 24 48 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f
+> 85 fb 08 00 00 49 8b 44 24 48 49 8d 7c 24 18 48 89
+> RSP: 0018:ffff8881cb19fd50 EFLAGS: 00010206
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000009 RSI: ffffffff834ebe7e RDI: 0000000000000048
+> RBP: ffff8881cb8e4200 R08: ffffffff88d21878 R09: ffffed103971cb43
+> R10: ffff8881cb19fdc8 R11: ffff8881cb8e5a17 R12: 0000000000000000
+> R13: ffff8881cb8e5a10 R14: ffff8881cb8e4cc8 R15: ffff8881cb8e5178
+> FS:  00007f4f60b6d700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f4f6060c330 CR3: 00000001cc3a8000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>   usbvision_radio_close+0x105/0x250
+> drivers/media/usb/usbvision/usbvision-video.c:1114
+>   v4l2_release+0x2e7/0x390 drivers/media/v4l2-core/v4l2-dev.c:455
+>   __fput+0x2d7/0x840 fs/file_table.c:280
+>   task_work_run+0x13f/0x1c0 kernel/task_work.c:113
+>   tracehook_notify_resume include/linux/tracehook.h:188 [inline]
+>   exit_to_usermode_loop+0x1d2/0x200 arch/x86/entry/common.c:163
+>   prepare_exit_to_usermode arch/x86/entry/common.c:194 [inline]
+>   syscall_return_slowpath arch/x86/entry/common.c:274 [inline]
+>   do_syscall_64+0x45f/0x580 arch/x86/entry/common.c:299
+>   entry_SYSCALL_64_after_hwframe+0x49/0xbe
+> RIP: 0033:0x7f4f6069b2b0
+> Code: 40 75 0b 31 c0 48 83 c4 08 e9 0c ff ff ff 48 8d 3d c5 32 08 00 e8 c0
+> 07 02 00 83 3d 45 a3 2b 00 00 75 10 b8 03 00 00 00 0f 05 <48> 3d 01 f0 ff
+> ff 73 31 c3 48 83 ec 08 e8 ce 8a 01 00 48 89 04 24
+> RSP: 002b:00007ffde2d50ee8 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+> RAX: 0000000000000000 RBX: 0000000000000003 RCX: 00007f4f6069b2b0
+> RDX: 00007f4f60951df0 RSI: 0000000000000001 RDI: 0000000000000003
+> RBP: 0000000000000000 R08: 00007f4f60951df0 R09: 000000000000000a
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000400884
+> R13: 00007ffde2d51040 R14: 0000000000000000 R15: 0000000000000000
+> Modules linked in:
+> ---[ end trace 62bd2b7512ab49ee ]---
+> RIP: 0010:usb_set_interface+0x34/0xa50 drivers/usb/core/message.c:1362
+> Code: fc 55 53 48 83 ec 40 89 54 24 18 89 74 24 10 e8 22 1c ef fd 49 8d 7c
+> 24 48 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f
+> 85 fb 08 00 00 49 8b 44 24 48 49 8d 7c 24 18 48 89
+> RSP: 0018:ffff8881cb19fd50 EFLAGS: 00010206
+> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 0000000000000000
+> RDX: 0000000000000009 RSI: ffffffff834ebe7e RDI: 0000000000000048
+> RBP: ffff8881cb8e4200 R08: ffffffff88d21878 R09: ffffed103971cb43
+> R10: ffff8881cb19fdc8 R11: ffff8881cb8e5a17 R12: 0000000000000000
+> R13: ffff8881cb8e5a10 R14: ffff8881cb8e4cc8 R15: ffff8881cb8e5178
+> FS:  00007f4f60b6d700(0000) GS:ffff8881db300000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f4f6060c330 CR3: 00000001cc3a8000 CR4: 00000000001406e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this bug, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
+Let's retry here:
 
->
-> Any suggestions are welcome.
->
-> This has allowed to find at least one new HID bug [1], which was recently
-> fixed by Alan [2].
->
-> [1] https://syzkaller.appspot.com/bug?extid=09ef48aa58261464b621
-> [2] https://patchwork.kernel.org/patch/11283319/
->
-> This patchset has been pushed to the public Linux kernel Gerrit instance:
->
-> https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2225
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->
-> Andrey Konovalov (2):
->   kcov: collect coverage from interrupts
->   HID: usbhid: kcov: add annotations for coverage collection
->
->  Documentation/dev-tools/kcov.rst   |  16 +--
->  drivers/hid/usbhid/hid-core.c      |  25 +++-
->  drivers/hid/usbhid/usbkbd.c        |  15 ++-
->  drivers/hid/usbhid/usbmouse.c      |   7 +-
->  drivers/usb/gadget/udc/dummy_hcd.c |   1 +
->  include/linux/sched.h              |   3 +
->  kernel/kcov.c                      | 196 +++++++++++++++++++----------
->  lib/Kconfig.debug                  |   9 ++
->  8 files changed, 192 insertions(+), 80 deletions(-)
->
-> --
-> 2.24.1.735.g03f4e72817-goog
->
+#syz test: https://github.com/google/kasan.git f0df5c1b
+
+--000000000000596d54059994d3f9
+Content-Type: text/x-patch; charset="US-ASCII"; name="usbvision.patch"
+Content-Disposition: attachment; filename="usbvision.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k4447kog0>
+X-Attachment-Id: f_k4447kog0
+
+SW5kZXg6IHVzYi1kZXZlbC9kcml2ZXJzL21lZGlhL3VzYi91c2J2aXNpb24vdXNidmlzaW9uLXZp
+ZGVvLmMKPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PQotLS0gdXNiLWRldmVsLm9yaWcvZHJpdmVycy9tZWRpYS91c2IvdXNi
+dmlzaW9uL3VzYnZpc2lvbi12aWRlby5jCisrKyB1c2ItZGV2ZWwvZHJpdmVycy9tZWRpYS91c2Iv
+dXNidmlzaW9uL3VzYnZpc2lvbi12aWRlby5jCkBAIC00OSw2ICs0OSw3IEBACiAjaW5jbHVkZSA8
+bWVkaWEvdHVuZXIuaD4KIAogI2luY2x1ZGUgPGxpbnV4L3dvcmtxdWV1ZS5oPgorI2luY2x1ZGUg
+PGxpbnV4L2RlbGF5Lmg+CiAKICNpbmNsdWRlICJ1c2J2aXNpb24uaCIKICNpbmNsdWRlICJ1c2J2
+aXNpb24tY2FyZHMuaCIKQEAgLTE1ODUsNiArMTU4Niw3IEBAIHN0YXRpYyB2b2lkIHVzYnZpc2lv
+bl9kaXNjb25uZWN0KHN0cnVjdAogCQl3YWtlX3VwX2ludGVycnVwdGlibGUoJnVzYnZpc2lvbi0+
+d2FpdF9mcmFtZSk7CiAJCXdha2VfdXBfaW50ZXJydXB0aWJsZSgmdXNidmlzaW9uLT53YWl0X3N0
+cmVhbSk7CiAJfSBlbHNlIHsKKwkJbXNsZWVwKDEwMCk7CiAJCXVzYnZpc2lvbl9yZWxlYXNlKHVz
+YnZpc2lvbik7CiAJfQogCkluZGV4OiB1c2ItZGV2ZWwvZHJpdmVycy9tZWRpYS92NGwyLWNvcmUv
+djRsMi1kZXYuYwo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09Ci0tLSB1c2ItZGV2ZWwub3JpZy9kcml2ZXJzL21lZGlhL3Y0
+bDItY29yZS92NGwyLWRldi5jCisrKyB1c2ItZGV2ZWwvZHJpdmVycy9tZWRpYS92NGwyLWNvcmUv
+djRsMi1kZXYuYwpAQCAtMjQsNiArMjQsNyBAQAogI2luY2x1ZGUgPGxpbnV4L2ttb2QuaD4KICNp
+bmNsdWRlIDxsaW51eC9zbGFiLmg+CiAjaW5jbHVkZSA8bGludXgvdWFjY2Vzcy5oPgorI2luY2x1
+ZGUgPGxpbnV4L2RlbGF5Lmg+CiAKICNpbmNsdWRlIDxtZWRpYS92NGwyLWNvbW1vbi5oPgogI2lu
+Y2x1ZGUgPG1lZGlhL3Y0bDItZGV2aWNlLmg+CkBAIC00MTksOSArNDIwLDEwIEBAIHN0YXRpYyBp
+bnQgdjRsMl9vcGVuKHN0cnVjdCBpbm9kZSAqaW5vZGUKIAl2aWRlb19nZXQodmRldik7CiAJbXV0
+ZXhfdW5sb2NrKCZ2aWRlb2Rldl9sb2NrKTsKIAlpZiAodmRldi0+Zm9wcy0+b3BlbikgewotCQlp
+ZiAodmlkZW9faXNfcmVnaXN0ZXJlZCh2ZGV2KSkKKwkJaWYgKHZpZGVvX2lzX3JlZ2lzdGVyZWQo
+dmRldikpIHsKKwkJCW1zbGVlcCgyMDApOwogCQkJcmV0ID0gdmRldi0+Zm9wcy0+b3BlbihmaWxw
+KTsKLQkJZWxzZQorCQl9IGVsc2UKIAkJCXJldCA9IC1FTk9ERVY7CiAJfQogCg==
+--000000000000596d54059994d3f9--
