@@ -2,140 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E489511F268
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 16:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D910011F496
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 23:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbfLNP1Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Dec 2019 10:27:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34520 "EHLO mail.kernel.org"
+        id S1727549AbfLNWFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Dec 2019 17:05:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbfLNP1Q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Dec 2019 10:27:16 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4FB81214AF;
-        Sat, 14 Dec 2019 15:27:14 +0000 (UTC)
+        id S1727421AbfLNWFP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 14 Dec 2019 17:05:15 -0500
+Subject: Re: [GIT PULL] USB fixes for 5.5-rc2
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576337234;
-        bh=BSQVMNbCG4fPWQgnA5zQnefINcUCM9LyOPamsJUyTn4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FrfF6ta7pG8uH+lmGTQdjWhywN/vzP2tdnS7wj7SxDGaLDYNjcfDqcMgdktGoOc+9
-         oMiX3oxOc23G4rfssfLsjFZmHKZl1N6/bATKau1MKiBhQi97OByuSirPxF99H35Wsj
-         YuVIl7fSKbycMV1TU69ErD1QQm8IhmdLjQrpcNa4=
-Date:   Sat, 14 Dec 2019 16:27:12 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        s=default; t=1576361114;
+        bh=q/R+NMMKXMDezjZ6ZdJEj4Eom7ojsej7tNeS1Jrlkew=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=AeEL1Ak8L1jwXeWZZnP/99bPj6TDZ4Ybx4Vq5N06FDI5hC6/GYI3SlOOZiAfttXhY
+         LTanarpMMimdrWQicqONNrvCiLXsOx8YOrrnpWHOrCPhwhfmBLbeYouU7xu6EbCCLM
+         ilZph7wYLfPk0koUg8Bq+IF0g+emhvzhViByFuVg=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20191214152712.GA3459916@kroah.com>
+References: <20191214152712.GA3459916@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20191214152712.GA3459916@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc2
+X-PR-Tracked-Commit-Id: 3c3caae4cd6e122472efcf64759ff6392fb6bce2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a1b85b3bf9f9922bdc1428cd2ac4528786a05da7
+Message-Id: <157636111493.10255.8314917323496068827.pr-tracker-bot@kernel.org>
+Date:   Sat, 14 Dec 2019 22:05:14 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.5-rc2
-Message-ID: <20191214152712.GA3459916@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit e42617b825f8073569da76dc4510bfa019b1c35a:
+The pull request you sent on Sat, 14 Dec 2019 16:27:12 +0100:
 
-  Linux 5.5-rc1 (2019-12-08 14:57:55 -0800)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc2
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a1b85b3bf9f9922bdc1428cd2ac4528786a05da7
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc2
+Thank you!
 
-for you to fetch changes up to 3c3caae4cd6e122472efcf64759ff6392fb6bce2:
-
-  usb: dwc3: pci: add ID for the Intel Comet Lake -H variant (2019-12-12 14:02:37 +0100)
-
-----------------------------------------------------------------
-USB driver fixes for 5.5-rc2
-
-Here are some small USB driver fixes for reported issues for 5.5-rc2
-
-There's the usual gadget and xhci fixes, as well as some other problems
-that syzbot has been finding during it's fuzzing runs.  Full details are
-in the shortlog.
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Bryan O'Donoghue (1):
-      usb: common: usb-conn-gpio: Don't log an error on probe deferral
-
-EJ Hsu (1):
-      usb: gadget: fix wrong endpoint desc
-
-Emiliano Ingrassia (1):
-      usb: core: urb: fix URB structure initialization function
-
-Fredrik Noring (1):
-      USB: Fix incorrect DMA allocations for local memory pool drivers
-
-Greg Kroah-Hartman (1):
-      Merge tag 'fixes-for-v5.5-rc2' of git://git.kernel.org/.../balbi/usb into usb-linus
-
-Heikki Krogerus (1):
-      usb: dwc3: pci: add ID for the Intel Comet Lake -H variant
-
-Henry Lin (1):
-      usb: xhci: only set D3hot for pci device
-
-Johan Hovold (4):
-      USB: serial: io_edgeport: fix epic endpoint lookup
-      USB: idmouse: fix interface sanity checks
-      USB: adutux: fix interface sanity check
-      USB: atm: ueagle-atm: add missing endpoint check
-
-Kai-Heng Feng (1):
-      xhci: Increase STS_HALT timeout in xhci_suspend()
-
-Mathias Nyman (3):
-      xhci: fix USB3 device initiated resume race with roothub autosuspend
-      xhci: handle some XHCI_TRUST_TX_LENGTH quirks cases as default behaviour.
-      xhci: make sure interrupts are restored to correct state
-
-Mika Westerberg (1):
-      xhci: Fix memory leak in xhci_add_in_port()
-
-Pete Zaitcev (1):
-      usb: mon: Fix a deadlock in usbmon between mmap and read
-
-Tejas Joglekar (1):
-      usb: dwc3: gadget: Fix logical condition
-
-Thinh Nguyen (2):
-      usb: dwc3: gadget: Clear started flag for non-IOC
-      usb: dwc3: ep0: Clear started flag on completion
-
-Wen Yang (2):
-      usb: roles: fix a potential use after free
-      usb: typec: fix use after free in typec_register_port()
-
- drivers/usb/atm/ueagle-atm.c          | 18 ++++++++++-----
- drivers/usb/common/usb-conn-gpio.c    |  3 ++-
- drivers/usb/core/hcd.c                | 42 +++++++++++++++++------------------
- drivers/usb/core/urb.c                |  1 +
- drivers/usb/dwc3/dwc3-pci.c           |  6 ++++-
- drivers/usb/dwc3/ep0.c                |  8 +++++++
- drivers/usb/dwc3/gadget.c             |  5 ++++-
- drivers/usb/gadget/function/f_ecm.c   |  6 ++++-
- drivers/usb/gadget/function/f_rndis.c |  1 +
- drivers/usb/host/xhci-hub.c           | 22 +++++++++++++-----
- drivers/usb/host/xhci-mem.c           |  4 ++++
- drivers/usb/host/xhci-pci.c           | 13 +++++++++++
- drivers/usb/host/xhci-ring.c          |  6 ++---
- drivers/usb/host/xhci.c               |  9 +++-----
- drivers/usb/host/xhci.h               |  1 +
- drivers/usb/misc/adutux.c             |  2 +-
- drivers/usb/misc/idmouse.c            |  2 +-
- drivers/usb/mon/mon_bin.c             | 32 +++++++++++++++++---------
- drivers/usb/roles/class.c             |  2 +-
- drivers/usb/serial/io_edgeport.c      | 10 +++++----
- drivers/usb/storage/scsiglue.c        |  3 ++-
- drivers/usb/typec/class.c             |  6 +++--
- 22 files changed, 135 insertions(+), 67 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
