@@ -2,34 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 254DC11F4CC
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 23:13:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFE611F4D7
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 23:19:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727324AbfLNWMH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Dec 2019 17:12:07 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:55048 "EHLO
+        id S1727063AbfLNWS0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Dec 2019 17:18:26 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:60876 "EHLO
         crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727002AbfLNWMH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Dec 2019 17:12:07 -0500
+        with ESMTP id S1726803AbfLNWS0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Dec 2019 17:18:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576361496; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1576361904; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TN0+FhuwFIyt1lIZC+35LLQzNXVjGCFlWEFqzkd6TBY=;
-        b=oV+MAQ+xzwE33cGD/vwNaLe1wPsxdmO/yQCKvYPWYbjlmsm5CG2ETbEBVAvQH4limz+Ubr
-        xu8OBL23edKhc/dkdTkuxBEA6BPQv78VzQVYyeAgBKrrOzgY5pCTtIJfPTaDIG3523aKtp
-        CU+RBTak9ZeP2Ag9J7XYg9/hpwS57ok=
+         in-reply-to:references; bh=Lh2mSaV5+GjnTCiZuP3ZS+WfNdWqHzrxBvAloH+axI4=;
+        b=jTfUFpRDIIF3JGnOTH4T18L/QlKLbVlI4JL0ig0jYt9nLr78lDt3DY0woCBkQEXpCliuxf
+        fUaCnct9sNLJStA5eTFH2lS3jFbEl/qGywAt/egMtOAGMRzzIGGKnEyXll2gKizIqRvwFi
+        myImrUaO952cUZ9jOGQzVzSrBBjoHJE=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     od@zcrc.me, linux-usb@vger.kernel.org,
         linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 6/6] usb: musb: jz4740: Whitespace and indentation fixes
-Date:   Sat, 14 Dec 2019 23:11:26 +0100
-Message-Id: <20191214221126.93116-6-paul@crapouillou.net>
-In-Reply-To: <20191214221126.93116-1-paul@crapouillou.net>
-References: <20191214221126.93116-1-paul@crapouillou.net>
+Subject: [PATCH] usb: musb: Disable pullup at init
+Date:   Sat, 14 Dec 2019 23:18:15 +0100
+Message-Id: <20191214221815.97483-1-paul@crapouillou.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
@@ -37,87 +34,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix lines with too much or not enough indentation, and lines which were
-indented with spaces instead of tabs.
+The pullup may be already enabled before the driver is initialized. This
+happens for instance on JZ4740.
+
+It has to be disabled at init time, as we cannot guarantee that a gadget
+driver will be bound to the UDC.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Suggested-by: Bin Liu <b-liu@ti.com>
 ---
- drivers/usb/musb/jz4740.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+ drivers/usb/musb/musb_core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
-index a8cd2ba2ed06..f948eca654f3 100644
---- a/drivers/usb/musb/jz4740.c
-+++ b/drivers/usb/musb/jz4740.c
-@@ -23,9 +23,9 @@ struct jz4740_glue {
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 15cca912c53e..c91d5c2ed4ad 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -2310,6 +2310,9 @@ musb_init_controller(struct device *dev, int nIrq, void __iomem *ctrl)
+ 	musb_disable_interrupts(musb);
+ 	musb_writeb(musb->mregs, MUSB_DEVCTL, 0);
  
- static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
- {
--	unsigned long   flags;
--	irqreturn_t     retval = IRQ_NONE, retval_dma = IRQ_NONE;
--	struct musb     *musb = __hci;
-+	unsigned long	flags;
-+	irqreturn_t	retval = IRQ_NONE, retval_dma = IRQ_NONE;
-+	struct musb	*musb = __hci;
- 
- 	spin_lock_irqsave(&musb->lock, flags);
- 
-@@ -42,7 +42,7 @@ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
- 	 * never see them set
- 	 */
- 	musb->int_usb &= MUSB_INTR_SUSPEND | MUSB_INTR_RESUME |
--	    MUSB_INTR_RESET | MUSB_INTR_SOF;
-+			 MUSB_INTR_RESET | MUSB_INTR_SOF;
- 
- 	if (musb->int_usb || musb->int_tx || musb->int_rx)
- 		retval = musb_interrupt(musb);
-@@ -56,20 +56,20 @@ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
- }
- 
- static struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
--{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
--{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
--{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 64, },
-+	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
-+	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
-+	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 64, },
- };
- 
- static const struct musb_hdrc_config jz4740_musb_config = {
- 	/* Silicon does not implement USB OTG. */
--	.multipoint = 0,
-+	.multipoint	= 0,
- 	/* Max EPs scanned, driver will decide which EP can be used. */
--	.num_eps    = 4,
-+	.num_eps	= 4,
- 	/* RAMbits needed to configure EPs from table */
--	.ram_bits   = 9,
--	.fifo_cfg = jz4740_musb_fifo_cfg,
--	.fifo_cfg_size = ARRAY_SIZE(jz4740_musb_fifo_cfg),
-+	.ram_bits	= 9,
-+	.fifo_cfg	= jz4740_musb_fifo_cfg,
-+	.fifo_cfg_size	= ARRAY_SIZE(jz4740_musb_fifo_cfg),
- };
- 
- static int jz4740_musb_init(struct musb *musb)
-@@ -122,7 +122,7 @@ static int jz4740_probe(struct platform_device *pdev)
- 	const struct musb_hdrc_platform_data *pdata = &jz4740_musb_pdata;
- 	struct platform_device		*musb;
- 	struct jz4740_glue		*glue;
--	struct clk                      *clk;
-+	struct clk			*clk;
- 	int				ret;
- 
- 	glue = devm_kzalloc(dev, sizeof(*glue), GFP_KERNEL);
-@@ -187,7 +187,7 @@ static int jz4740_probe(struct platform_device *pdev)
- 
- static int jz4740_remove(struct platform_device *pdev)
- {
--	struct jz4740_glue	*glue = platform_get_drvdata(pdev);
-+	struct jz4740_glue *glue = platform_get_drvdata(pdev);
- 
- 	platform_device_unregister(glue->pdev);
- 	clk_disable_unprepare(glue->clk);
++	/* MUSB_POWER_SOFTCONN might be already set, JZ4740 does this. */
++	musb_writeb(musb->mregs, MUSB_POWER, 0);
++
+ 	/* Init IRQ workqueue before request_irq */
+ 	INIT_DELAYED_WORK(&musb->irq_work, musb_irq_work);
+ 	INIT_DELAYED_WORK(&musb->deassert_reset_work, musb_deassert_reset);
 -- 
 2.24.0
 
