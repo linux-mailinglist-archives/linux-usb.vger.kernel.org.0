@@ -2,69 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C1BA11ECD3
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2019 22:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D769F11F006
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 03:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbfLMVYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Dec 2019 16:24:22 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:38698 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbfLMVYW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 16:24:22 -0500
-Received: by mail-oi1-f195.google.com with SMTP id b8so1931087oiy.5;
-        Fri, 13 Dec 2019 13:24:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1ydBGATu/G6BCa2T8zgoKRGxjtzBRIPiwmZUK6g3t6E=;
-        b=PhLx/Rx2brwF6UONvsvCn+pC3kq2loPfNNfYIOh0l5VLLZ1C0xxzOuhKRBCbIjKTim
-         4NK7chovqJPzsHToDaB0wpZQOnfpSjQJ8Tb1RFEknSPMvYJ9IJjlbXvr44uFKQSZxCQg
-         +w+k3J+T/cmOMU9eyyWLexeDj5FnMTlDRAMe54w0kFGv45UblBiOcIYtR54AYrkVJWdV
-         vTMFMOp2S4by0POH0vyLvW5JHKHDe7wAlMwN5cSGmXZTnQYrZONq7ALg6BqcC6x4vFHM
-         IvoKdMs9AEXGPPHHndfv9OgLT+/UZrc4rf7FktX67cJemylLdzVj11h1F5hgTldSUD6O
-         Am/A==
-X-Gm-Message-State: APjAAAUlOInfWGCkX/j7+mkgZRA6EOva99Y2wl47qXT1TABFXvIP2dAG
-        iUVy+xvqEtVxUB3plB2CyQ==
-X-Google-Smtp-Source: APXvYqwo0Jh4yTE66y4sJn/aUtkBVXHXEHpW/fP2/UJ9cY5JA7W+Bm1CecnsxiD40w3KgM5ypQ2u7A==
-X-Received: by 2002:a05:6808:56:: with SMTP id v22mr7510316oic.37.1576272261119;
-        Fri, 13 Dec 2019 13:24:21 -0800 (PST)
-Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id 47sm3835989otf.54.2019.12.13.13.24.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 13:24:20 -0800 (PST)
-Date:   Fri, 13 Dec 2019 15:24:20 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S1726690AbfLNClF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Dec 2019 21:41:05 -0500
+Received: from us03-smtprelay2.synopsys.com ([149.117.87.133]:36692 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726422AbfLNClE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Dec 2019 21:41:04 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 9FE00C0113;
+        Sat, 14 Dec 2019 02:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1576291263; bh=88Qy5g8mmejIuLc8nHzm6nl3V2zo5Tx0a3OJdwUXLN8=;
+        h=Date:From:Subject:To:Cc:From;
+        b=OMG9vw/goTmkHjbczZFR2F09sInteaQT4aKIJkDqVdrp+n6x3i40g8D4Js5qBRKZh
+         zXgVEKBgSvJYxWk/ASWxUnj93L92D1ncnDTLZBd+I/9xhWJ2f8K8bVtZpWc1HxTtyr
+         wH3LFzWzBX5Bvg81dEepRtLz+OPyAp/gzKpxjt6J9d08yZ4xUNNYkhrA+Tqi4B0xNz
+         BuDju/bF6mnJO/Zj/6rHcLa7ErTbBfhVTwE8TtFKY/MRltcI84FZfI/C+aJ9REs9R6
+         be3dhUhxiNBDxEd8Nb0o/5A4q99f7i2tA5gBXn1LRtJNv4JPNJEFY11iLXYSHDKw5j
+         uI1vkU2dlto1A==
+Received: from te-lab16 (nanobot.internal.synopsys.com [10.10.186.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 1159BA007C;
+        Sat, 14 Dec 2019 02:40:45 +0000 (UTC)
+Received: by te-lab16 (sSMTP sendmail emulation); Fri, 13 Dec 2019 18:40:45 -0800
+Date:   Fri, 13 Dec 2019 18:40:45 -0800
+Message-Id: <ac5a3593a94fdaa3d92e6352356b5f7a01ccdc7c.1576291140.git.thinhn@synopsys.com>
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: gadget: Fix request complete check
+To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: Re: [PATCH v2 3/3] dt-bindings: usb: qcom,dwc3: Add compatible for
- SC7180
-Message-ID: <20191213212420.GA17181@bogus>
-References: <1574940787-1004-1-git-send-email-sanm@codeaurora.org>
- <1574940787-1004-4-git-send-email-sanm@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1574940787-1004-4-git-send-email-sanm@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        stable@vger.kernel.org
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 28 Nov 2019 17:03:07 +0530, Sandeep Maheswaram wrote:
-> Add compatible for SC7180 in usb dwc3 bindings.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+We can only check for IN direction if the request had completed. For OUT
+direction, it's perfectly fine that the host can send less than the
+setup length. Let's return true fall all cases of OUT direction.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Fixes: e0c42ce590fe ("usb: dwc3: gadget: simplify IOC handling")
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+---
+ drivers/usb/dwc3/gadget.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index b3f8514d1f27..edc478c20846 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2470,6 +2470,13 @@ static int dwc3_gadget_ep_reclaim_trb_linear(struct dwc3_ep *dep,
+ 
+ static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
+ {
++	/*
++	 * For OUT direction, host may send less than the setup
++	 * length. Return true for all OUT requests.
++	 */
++	if (!req->direction)
++		return true;
++
+ 	return req->request.actual == req->request.length;
+ }
+ 
+-- 
+2.11.0
+
