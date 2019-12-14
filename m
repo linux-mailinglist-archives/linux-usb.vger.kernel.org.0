@@ -2,53 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D910011F496
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 23:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DA411F4C2
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2019 23:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727549AbfLNWFP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Dec 2019 17:05:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727421AbfLNWFP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Dec 2019 17:05:15 -0500
-Subject: Re: [GIT PULL] USB fixes for 5.5-rc2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576361114;
-        bh=q/R+NMMKXMDezjZ6ZdJEj4Eom7ojsej7tNeS1Jrlkew=;
-        h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=AeEL1Ak8L1jwXeWZZnP/99bPj6TDZ4Ybx4Vq5N06FDI5hC6/GYI3SlOOZiAfttXhY
-         LTanarpMMimdrWQicqONNrvCiLXsOx8YOrrnpWHOrCPhwhfmBLbeYouU7xu6EbCCLM
-         ilZph7wYLfPk0koUg8Bq+IF0g+emhvzhViByFuVg=
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20191214152712.GA3459916@kroah.com>
-References: <20191214152712.GA3459916@kroah.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20191214152712.GA3459916@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc2
-X-PR-Tracked-Commit-Id: 3c3caae4cd6e122472efcf64759ff6392fb6bce2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: a1b85b3bf9f9922bdc1428cd2ac4528786a05da7
-Message-Id: <157636111493.10255.8314917323496068827.pr-tracker-bot@kernel.org>
-Date:   Sat, 14 Dec 2019 22:05:14 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        id S1727006AbfLNWLe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Dec 2019 17:11:34 -0500
+Received: from outils.crapouillou.net ([89.234.176.41]:54688 "EHLO
+        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727002AbfLNWLd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Dec 2019 17:11:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1576361491; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:references; bh=YGTjqsjkFY5d1JzvIrkAqXwCnX4OlYTC+XoMTNK/XsY=;
+        b=JLRzrQLdCHDbhY2XsOJo63XAS1mqNv9Z69+2UtdLysoWQ5xKroBJ4LEJLurdQRP6lYnoDh
+        /E5QACsw4VmXFdoTPr/IMxfVenRDU0wTGVsc8Iupt9aekmHMLYJ564oZmVxo/287EZQa7X
+        7gcZM9ERcgDqZAq0CwCZ0E3rlxZcJG0=
+From:   Paul Cercueil <paul@crapouillou.net>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     od@zcrc.me, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
+Subject: [PATCH 1/6] usb: musb: jz4740: Suppress useless field in priv structure
+Date:   Sat, 14 Dec 2019 23:11:21 +0100
+Message-Id: <20191214221126.93116-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Sat, 14 Dec 2019 16:27:12 +0100:
+The 'dev' field was never read anywhere.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc2
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+---
+ drivers/usb/musb/jz4740.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/a1b85b3bf9f9922bdc1428cd2ac4528786a05da7
-
-Thank you!
-
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index 5e885fa26829..16d4120ba145 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -17,7 +17,6 @@
+ #include "musb_core.h"
+ 
+ struct jz4740_glue {
+-	struct device           *dev;
+ 	struct platform_device  *musb;
+ 	struct clk		*clk;
+ };
+@@ -150,7 +149,6 @@ static int jz4740_probe(struct platform_device *pdev)
+ 	musb->dev.dma_mask		= &musb->dev.coherent_dma_mask;
+ 	musb->dev.coherent_dma_mask	= DMA_BIT_MASK(32);
+ 
+-	glue->dev			= &pdev->dev;
+ 	glue->musb			= musb;
+ 	glue->clk			= clk;
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.wiki.kernel.org/userdoc/prtracker
+2.24.0
+
