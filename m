@@ -2,91 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF8C511F99D
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2019 18:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B15211FACA
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2019 20:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726219AbfLORSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Dec 2019 12:18:16 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34728 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726130AbfLORSP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Dec 2019 12:18:15 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A79BE2465E;
-        Sun, 15 Dec 2019 17:18:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576430295;
-        bh=lBaXQVDhBlGlffyuK24qEtkZ0lOF2dTznMoC0TZNOCw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vu3jfGDc8TFDJvDRnJUxmulRWlc3HCPyKpGky/PEdRM5M0NmlN+Hyb2fXmyhMwgoC
-         O4GW4bI1A4k4JGcdRQFnPC+/5+C1Igk8nGkOXdxvOK/pJ6iHhyP6MrJOyH8BdVt6KK
-         wBIj3yIuD256oHq+LIrwnLPHDaLXiMV6Xl1/0ocs=
-Date:   Sun, 15 Dec 2019 18:18:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix request complete check
-Message-ID: <20191215171812.GA853060@kroah.com>
-References: <ac5a3593a94fdaa3d92e6352356b5f7a01ccdc7c.1576291140.git.thinhn@synopsys.com>
- <5a7554e4-a12e-d29c-1767-5dd75183922f@synopsys.com>
+        id S1726504AbfLOTcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Dec 2019 14:32:12 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41308 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbfLOTcL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Dec 2019 14:32:11 -0500
+Received: by mail-pf1-f196.google.com with SMTP id s18so4396175pfd.8
+        for <linux-usb@vger.kernel.org>; Sun, 15 Dec 2019 11:32:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=SD6710XuCGfLCRjEaTIYpMnkGtQ6zZzJk7TYgaQ/Siw=;
+        b=xJxXeatCAJCU30I9wwZmedY0avOrIT77KoTok0JQ/JbFO9lmaK+0DfZ89kJwB0PnQH
+         vuqLgph7k+ofwTsPyEL9u2khQekl5nD5+qrkeNIqdcOguBAfTjcQsMOuQ3Gq4fdzpp50
+         2uwVakow0BOR4CG59dBrETZ2NnXytgiVlYinqOvoy8gANeId4a4KH7WxV1aHKvk1zbyT
+         n7LuQeeW+7Y1v1j9HVLAbRjTt0poRRMSVVpQ7lsQUyZL86mK6mCiEzrioyaGxJT9Cs6H
+         y9jM9vZnshGS8Ay/Xhicf9E5k0Kk7JKMW5CvYpLz36LKYETiZL81fF59+LD3MStjEGre
+         dd5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=SD6710XuCGfLCRjEaTIYpMnkGtQ6zZzJk7TYgaQ/Siw=;
+        b=hFyohFh6G1RZgkzf22BGwuxiDXISvSKt/ZB5r9F8AwZs2iJ1ZwbMoLnxY5TztjQTtt
+         8JwRtrq0hte1b8nhp+ATF+to1+xkoBVyxZacOdSgGI7tK79HCb3+n8Oz3A3LBM6+ApEL
+         o+xR1NkBy/XbxtpbHHa9VIxEPV1CLxsBhPQD0aQ/bKRO9NMC1UEEyOo4qMzBKNMp8scQ
+         shLGpo2aCDMBc07lO/NpwCPnBMCIvhMQjM8VB8XjaL2zIoL9NY5xhTk4J5aNAa+1kNKz
+         wT7cFp3r8MKZNnfDy0RRIp3A9GVZJ7pi8m1elvzzzNBQYVN6oV7YqiZLHK4z0CHsnm7w
+         NWIA==
+X-Gm-Message-State: APjAAAXI9w61dm87z7CjPY5xnfXRa3G9acaqMFcWFTxcSLtdWPltsTcy
+        fbpGhXcVORVioxsbvWT+9FpHtQ==
+X-Google-Smtp-Source: APXvYqxYeiVnRfIk5g9EJ6vrTN8Y+jTHPgtnkXSmDuJTA/McKpsjUR7LQKN3ZfU+1S+Sk+mQAszwLg==
+X-Received: by 2002:a62:fc93:: with SMTP id e141mr11845222pfh.262.1576438331400;
+        Sun, 15 Dec 2019 11:32:11 -0800 (PST)
+Received: from cakuba.netronome.com (c-73-202-202-92.hsd1.ca.comcast.net. [73.202.202.92])
+        by smtp.gmail.com with ESMTPSA id d23sm18846406pfo.176.2019.12.15.11.32.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Dec 2019 11:32:11 -0800 (PST)
+Date:   Sun, 15 Dec 2019 11:32:08 -0800
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Cristian Birsan <cristian.birsan@microchip.com>
+Cc:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] net: usb: lan78xx: Fix error message format specifier
+Message-ID: <20191215113208.7378295b@cakuba.netronome.com>
+In-Reply-To: <20191213163311.8319-1-cristian.birsan@microchip.com>
+References: <20191213163311.8319-1-cristian.birsan@microchip.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a7554e4-a12e-d29c-1767-5dd75183922f@synopsys.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Dec 14, 2019 at 03:01:40AM +0000, Thinh Nguyen wrote:
-> Hi Greg and Felipe,
+On Fri, 13 Dec 2019 18:33:11 +0200, Cristian Birsan wrote:
+> Display the return code as decimal integer.
 > 
-> Thinh Nguyen wrote:
-> > We can only check for IN direction if the request had completed. For OUT
-> > direction, it's perfectly fine that the host can send less than the
-> > setup length. Let's return true fall all cases of OUT direction.
-> >
-> > Fixes: e0c42ce590fe ("usb: dwc3: gadget: simplify IOC handling")
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
-> > ---
-> >   drivers/usb/dwc3/gadget.c | 7 +++++++
-> >   1 file changed, 7 insertions(+)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index b3f8514d1f27..edc478c20846 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2470,6 +2470,13 @@ static int dwc3_gadget_ep_reclaim_trb_linear(struct dwc3_ep *dep,
-> >   
-> >   static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
-> >   {
-> > +	/*
-> > +	 * For OUT direction, host may send less than the setup
-> > +	 * length. Return true for all OUT requests.
-> > +	 */
-> > +	if (!req->direction)
-> > +		return true;
-> > +
-> >   	return req->request.actual == req->request.length;
-> >   }
-> >   
-> 
-> Not sure if it's too late, but after Tejas's patch* that fixes the SG 
-> check in dwc3, it exposes another issue. Without this patch, quite a few 
-> function drivers will not work with dwc3.
-> 
-> If we can pick it up before the next merge, it'd be great.
+> Fixes: 55d7de9de6c3 ("Microchip's LAN7800 family USB 2/3 to 10/100/1000 Ethernet device driver")
+> Signed-off-by: Cristian Birsan <cristian.birsan@microchip.com>
 
-What exactly breaks without this patch?  And how was the original patch
-ever tested?
-
-thanks,
-
-greg k-h
+Applied to net, thank you!
