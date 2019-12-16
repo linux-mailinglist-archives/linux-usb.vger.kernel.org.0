@@ -2,159 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A65112089B
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 15:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDBB120917
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 15:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728041AbfLPO2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 09:28:09 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42990 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728008AbfLPO2I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 09:28:08 -0500
-Received: by mail-lf1-f67.google.com with SMTP id y19so4365984lfl.9;
-        Mon, 16 Dec 2019 06:28:07 -0800 (PST)
+        id S1728183AbfLPO7Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 09:59:16 -0500
+Received: from mail-pf1-f175.google.com ([209.85.210.175]:45089 "EHLO
+        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728008AbfLPO7Q (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 09:59:16 -0500
+Received: by mail-pf1-f175.google.com with SMTP id 2so5710644pfg.12
+        for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2019 06:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XzX7HvMfI+FbqPlfhV2QEZ5DIKSU6MexUmhq7WHK0dY=;
+        b=AP+6nl7PXq2jPyHPmfVoAai/3dvZ2JGyHbWEgYA57PvuUUSNGrk9aiHkCoGvOMjEA0
+         7EAhnsqCTnRXchkXmlN7Ql5FE994ua5b2QJuWKTZbLN9R7YSN7F6LboUuZvCNvQawF/z
+         8jsgPl3quzgQzmwCHbJRpWeiruGAFCVBl9cZXV4nQ1L1dyGKgEStEsdhx9VsCS6t+eFA
+         uijFdZcAWu3UEIjszbUfp8XHQA4MmEkzJmBFGwsv0FJZqEWbCWrb3vtk/tPPA3nDha4H
+         dm79PR0l44gSvyyB2kusAPzCDCw4wnfiMdXV+teaCfhrZjAa++jIMtqUpeuH50+rdNY5
+         i7pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WJOIxwAEgnSLXlaUUspSrq6fBSD7PUNiSiO3LHKGtnM=;
-        b=MS/WRumo5Kvdy8oj3sZ5/8y1PVYaU4Nxo/tGhjXuPZND6fMzZ6rfFVU897hT2irA2X
-         7jQO/2DSfG1Zr75nO2tw84aFXIMZiaPzgAG0nPNz7MBTcYUGu8wTWFl+t9sPdXpM0SpA
-         8e4OZONaehswU1pY1C2gUHt/CA0Hr6zNq/TmkG38fF29tXyFL56Etd8KAlHnlBCpbyyr
-         YSqYpqZf7r31KsiFYH55VbQCfeR+qgdlmFVMxxs8bpu91SrfhdDhugClTTfUD7loqeBG
-         bW6h55/p7sz0Y7rMYgq2tRE0MUflgtUeG3La1nYdJ8eNUwPWQ+0u+IUOU6OiPewi2O1q
-         096g==
-X-Gm-Message-State: APjAAAUusSL4UA3kIS6FIXsFvZ/9jZ0J0UKFu6Qmo5xs0JsI9gc3Y/tQ
-        nVU3wR+Kyjy9mzJL08bJTPB9z5qp
-X-Google-Smtp-Source: APXvYqz73aVhhcZZM8O6aBQ30eNTzAltzTPWkKENEtP/XGXwIMdgwgsyCbfHqad60okZX+Btibbwhg==
-X-Received: by 2002:ac2:430d:: with SMTP id l13mr17638281lfh.112.1576506486503;
-        Mon, 16 Dec 2019 06:28:06 -0800 (PST)
-Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
-        by smtp.gmail.com with ESMTPSA id w19sm8891725lfl.55.2019.12.16.06.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2019 06:28:05 -0800 (PST)
-Received: from johan by xi.terra with local (Exim 4.92.3)
-        (envelope-from <johan@kernel.org>)
-        id 1igrLv-0004Fn-FQ; Mon, 16 Dec 2019 15:28:03 +0100
-Date:   Mon, 16 Dec 2019 15:28:03 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Brant Merryman <Brant.Merryman@silabs.com>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] Proper RTS control when buffers fill
-Message-ID: <20191216142803.GE22665@localhost>
-References: <E0F3E0D5-4652-4DF0-B576-3FDB0274A5CD@silabs.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XzX7HvMfI+FbqPlfhV2QEZ5DIKSU6MexUmhq7WHK0dY=;
+        b=KLxwNXR/ney80HysDpfjZVztt2xEAfArnAdvspwKg3Uap4jWc4WsMb8EFNY1nQjWEa
+         3XjcO8h4rS/GZ63CXREkv00dtADP77o8tTPFP0K3FfYJaXvsfdu5PNbFIWSCnAWtf3Fo
+         aW2v+y2gKsLia4B2mPIee515uqhEw/lqdFwuV4pdWgGgCn4oNeZFBu565TtDwlgfoXCG
+         S7ke5VFg/nhyLQ9RpV6gUtlDKIACEm2GIa7/gk0LnEmd0lQaeqH9gR5D8ZZasWfGNlB3
+         jcCrGi4vmSXjTLH5n4G1mTUhtsI6s6nwnMjwfCCnjxChGWgaLa26WVB6Q7vQ+3sPuUS/
+         UW4w==
+X-Gm-Message-State: APjAAAX+X4wkxqMcy8EfV91IyL55iphxFYRY6MGzntKLB5jAfcdSzyZE
+        18IIfUuHnSzLaTkDu9mSY3DjkNPQfZDAyLF9lc0XOQ==
+X-Google-Smtp-Source: APXvYqzAWcJn/GX3RpowzTZXhFl+J7gwVSc0Vb1CNqW2dSxEB0yUnbpdoQqq1NY4OZ+rgF482f6/S7WksE+b5zSKIz4=
+X-Received: by 2002:a62:1d90:: with SMTP id d138mr16122258pfd.93.1576508355707;
+ Mon, 16 Dec 2019 06:59:15 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E0F3E0D5-4652-4DF0-B576-3FDB0274A5CD@silabs.com>
+References: <CAAeHK+xSWEFUA7DQyhm90uiwggx60gYa8q7QqzOWp7DX_xWSWg@mail.gmail.com>
+ <Pine.LNX.4.44L0.1912131448080.1332-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912131448080.1332-100000@iolanthe.rowland.org>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 16 Dec 2019 15:59:04 +0100
+Message-ID: <CAAeHK+yz3dtfx0Jfd4sbOcN8tSxp8+qAvW609sP_yJC5q6vq8A@mail.gmail.com>
+Subject: Re: Re: general protection fault in usb_set_interface
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, mans@mansr.com,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-First of all, please use the common "USB: serial: cp210x: " prefix for
-your changes.
+On Fri, Dec 13, 2019 at 8:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Fri, 13 Dec 2019, Andrey Konovalov wrote:
+>
+> > > > Let's retry here:
+> > >
+> > > > #syz test: https://github.com/google/kasan.git f0df5c1b
+> > >
+> > > This bug is already marked as fixed. No point in testing.
+> > >
+> >
+> > Hm, that explains some of the weirdness. It doesn't explain though
+> > neither why the patch was actually tested when Alan requested it nor
+> > why syzbot sent no reply.
+>
+> In the meantime, is there any way to get syzbot to test the new patch
+> with the old reproducer?  Perhaps tell it to re-open this bug?
 
-On Mon, Dec 09, 2019 at 07:17:26PM +0000, Brant Merryman wrote:
-> Enables usb generic functions for throttle/unthrottle to prevent USB data
-> loss. CP210x hardware disables RTS but leaves CTS when in hardware flow
-> control mode and port is closed. When re-opening the serial port, if CTS
-> is enabled, then RTS must be re-enabled inside the driver.
-
-This took a while to parse, but makes a little more sense after looking
-at the code and remembering that cp210x unlike other drivers is fetching
-the termios settings from the device on every open rather than simply
-reinitialising the device. Perhaps we should change that at some point.  
-
-Please rephrase the above to say "auto-RTS" ("auto-CTS") so it doesn't
-sound like we're controlling the state of the CTS input line (which
-obviously makes no sense). Same for the comment in the code below.
-
-I also think you should split this in two patches since these are
-strictly two distinct issues; the first one fixing the auto-RTS settings
-after reopening the port, and the second adding the throttle callbacks
-so that the device can tell when the application can't keep up.
-
-> Signed-off-by: Brant Merryman <brant.merryman@silabs.com>
-> ---
->  drivers/usb/serial/cp210x.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index f5143eedbc48..fd54181e741b 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -272,6 +272,8 @@ static struct usb_serial_driver cp210x_device = {
->  	.break_ctl		= cp210x_break_ctl,
->  	.set_termios		= cp210x_set_termios,
->  	.tx_empty		= cp210x_tx_empty,
-> +	.throttle		= usb_serial_generic_throttle,
-> +	.unthrottle		= usb_serial_generic_unthrottle,
->  	.tiocmget		= cp210x_tiocmget,
->  	.tiocmset		= cp210x_tiocmset,
->  	.attach			= cp210x_attach,
-> @@ -915,6 +917,7 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	u32 baud;
->  	u16 bits;
->  	u32 ctl_hs;
-> +	u32 flow_repl;
->  
->  	cp210x_read_u32_reg(port, CP210X_GET_BAUDRATE, &baud);
->  
-> @@ -1013,8 +1016,24 @@ static void cp210x_get_termios_port(struct usb_serial_port *port,
->  	cp210x_read_reg_block(port, CP210X_GET_FLOW, &flow_ctl,
->  			sizeof(flow_ctl));
->  	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
-> +	flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
-> +	/* CP210x hardware disables RTS but leaves CTS when in hardware
-> +	 * flow control mode and port is closed.
-> +	 * This allows data to flow out, but new data will not come into
-> +	 * the port. When re-opening the port, if CTS is enabled, then RTS
-> +	 * must be re-enabled. in the driver
-> +	 */
-
-This isn't strictly true since we assert RTS in cp210x_dtr_rts() after
-open() (but auto-RTS would incorrectly be disabled).
-
-Also can you be a bit more specific here; is it the interface-disable
-call in close() that unconditionally sets the RTS mode to "statically
-inactive"?
-
-Nits: Please fix the full-stop in the last sentence and use the right
-format for multi-line comments, which is:
-
-	/*
-	 * blah, blah
-	 */
-
-Perhaps move the comment inside the if block (after dev_dbg()) as well.
-
->  	if (ctl_hs & CP210X_SERIAL_CTS_HANDSHAKE) {
->  		dev_dbg(dev, "%s - flow control = CRTSCTS\n", __func__);
-> +		flow_repl &= ~CP210X_SERIAL_RTS_MASK;
-> +		flow_repl |= CP210X_SERIAL_RTS_SHIFT(
-> +			CP210X_SERIAL_RTS_FLOW_CTL);
-
-Indent continuation lines at least two tabs further, but here I'd
-probably just break the 80-column rule if that's even an issue.
-
-> +
-> +		flow_ctl.ulControlHandshake = cpu_to_le32(ctl_hs);
-
-Not needed, you're only changing flow_repl.
-
-> +		flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-> +		cp210x_write_reg_block(port, CP210X_SET_FLOW,
-> +			&flow_ctl, sizeof(flow_ctl));
-
-At least two tabs here too.
-
-> +
->  		cflag |= CRTSCTS;
->  	} else {
->  		dev_dbg(dev, "%s - flow control = NONE\n", __func__);
-
-Johan
+No, we can only test this manually now. I can run the reproducer for
+you. Should I revert the fix for this bug and then apply your patch?
+What's the expected result?
