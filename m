@@ -2,162 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 011E01202F5
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 11:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD3BA12047D
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 12:56:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727466AbfLPKwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 05:52:14 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:42740 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727099AbfLPKwO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 05:52:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576493531; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tJtKg4YBH/DsNNYyKShEC+cjzAd8qY62spFT3pgBt20=;
-        b=P6aWTboUJ49iR09mjEKD0sd3Jw123RPpiEYdRir1RQrcwtYq/ezKQrhszcaPBdS7A7DVQP
-        phKTilD8m1ja30fBqFmDrw+6BwZgBakNHExJ8ugrmvA3GrzeNUY4xoyEKDi/UYAMYQE5Gp
-        wfMBzqHQjI4GCgur+IiYHqri5cnNqPI=
-Date:   Mon, 16 Dec 2019 11:52:05 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Message-Id: <1576493525.3.0@crapouillou.net>
-In-Reply-To: <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.c
-        om>
-References: <20191211155032.167032-1-paul@crapouillou.net>
-        <20191211155032.167032-3-paul@crapouillou.net>
-        <20191212091814.GA7035@b29397-desktop> <1576270147.3.0@crapouillou.net>
-        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
+        id S1727487AbfLPL4L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 06:56:11 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:42208 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727286AbfLPL4L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 06:56:11 -0500
+Received: by mail-lj1-f196.google.com with SMTP id e28so6456660ljo.9
+        for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2019 03:56:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cymcoWZwZtY1DlrJCl2F/rsYYlQ6eY3w9iDQzuZBCVc=;
+        b=P/RSYLGjesm7By3a3e/phZyD/KWKzvgKjgtarOCZUtpPDSdYEUj00fw94qUqxXczQ0
+         f55RoPRmFZ2yKczy1MrOcw6RFnQQhlOYcF2q8SQ81tgEdaBZfd7pZY5wCJr/0HuuZ8VI
+         sBQBTmWxYNh3n6/1UaZzmCDx6nAvMp2DZPBaEd4raEIK4jWq02njxr45pxcjxwJdobcv
+         H22oo7NYvBk/PF/JPbGuJF1JwHAFhmfbisnYSnEvldpsTo8Anzp22Gj3xdaW1OhGM18P
+         oxrkF3lR5I0/R2w5d7O/vJlkL7BojgT2uG5uKD3lw6yIF9RAPkvbzxIewlL5xgkzJbx5
+         /ZZA==
+X-Gm-Message-State: APjAAAXANq5mx3qvqFK1NDzbGCylGVHyFR6ww2gCLI1V3bSREBqnruEl
+        Np3mQTqXJC4qxWoh4XTfC6E=
+X-Google-Smtp-Source: APXvYqxXNIfJOxb10VlF1g7i5j6eE4mnyPHb8xfDwleKjH7t4UzG8eh+7FPItCx1DnPWjTAoQ6Fpsg==
+X-Received: by 2002:a2e:8416:: with SMTP id z22mr18617070ljg.162.1576497369264;
+        Mon, 16 Dec 2019 03:56:09 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id b17sm8665157lfp.15.2019.12.16.03.56.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 03:56:08 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@kernel.org>)
+        id 1igoys-0003gt-5X; Mon, 16 Dec 2019 12:56:06 +0100
+Date:   Mon, 16 Dec 2019 12:56:06 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Daniele Palmas <dnlplm@gmail.com>
+Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit ME910G1 0x110a
+ composition
+Message-ID: <20191216115606.GB22665@localhost>
+References: <20191213135615.24286-1-dnlplm@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191213135615.24286-1-dnlplm@gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+On Fri, Dec 13, 2019 at 02:56:15PM +0100, Daniele Palmas wrote:
+> This patch adds the following Telit ME910G1 composition:
+> 
+> 0x110a: tty, tty, tty, rmnet
+> 
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
 
+Applied, thanks.
 
-Le lun., d=E9c. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a=20
-=E9crit :
->=20
->>  >>  +
->>  >>  +	desc =3D &charger->desc;
->>  >>  +	desc->name =3D "usb-charger";
->>  >>  +	desc->properties =3D usb_charger_properties;
->>  >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
->>  >>  +	desc->get_property =3D usb_charger_get_property;
->>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
->>  >
->>  > What's your further plan for this generic USB charger?
->>  > To support BC1.2, we need to know charger type, and how we could=20
->> get
->>  > it?
->>  >
->>  > Peter
->>=20
->>  Well I don't really know. The USB role framework does not give any=20
->> info about
->>  what's plugged.
->>=20
->=20
-> What's the use case for this patch set? How it be used?
-
-My devicetree:
-
-usb_otg: usb@13440000 {
-	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
-	reg =3D <0x13440000 0x10000>;
-	[...]
-
-	usb-role-switch;
-
-	connector {
-		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
-		label =3D "mini-USB";
-		type =3D "mini";
-
-		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
-		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
-		[...]
-	};
-
-	usb_charger: usb-charger {
-		compatible =3D "usb-charger";
-	};
-};
-
-The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect in=20
-which state (device, host, unconnected) a OTG connector is. However,=20
-that means I cannot use the standard gpio-charger driver to detect the=20
-presence of a charger based on the state of the VBUS gpio, since it's=20
-already requested here. So the point of this patchset is to provide an=20
-alternative to gpio-charger that works with OTG controllers compatible=20
-with 'usb-role-switch'.
-
-Cheers,
--Paul
-
-
->>  >
->>  >>  +
->>  >>  +	charger->charger =3D devm_power_supply_register(dev, desc,=20
->> &cfg);
->>  >>  +	if (IS_ERR(charger->charger)) {
->>  >>  +		dev_err(dev, "Unable to register charger");
->>  >>  +		return PTR_ERR(charger->charger);
->>  >>  +	}
->>  >>  +
->>  >>  +	err =3D usb_role_switch_register_notifier(charger->role,
->>  >> &charger->nb);
->>  >>  +	if (err) {
->>  >>  +		dev_err(dev, "Unable to register USB role switch notifier");
->>  >>  +		return err;
->>  >>  +	}
->>  >>  +
->>  >>  +	return devm_add_action_or_reset(dev, usb_charger_unregister,
->>  >> charger);
->>  >>  +}
->>  >>  +
->>  >>  +static const struct of_device_id usb_charger_of_match[] =3D {
->>  >>  +	{ .compatible =3D "usb-charger" },
->>  >>  +	{ /* sentinel */ },
->>  >>  +};
->>  >>  +MODULE_DEVICE_TABLE(of, usb_charger_of_match);  +  +static=20
->> struct
->>  >> platform_driver usb_charger_driver =3D {
->>  >>  +	.driver =3D {
->>  >>  +		.name =3D "usb-charger",
->>  >>  +		.of_match_table =3D of_match_ptr(usb_charger_of_match),
->>  >>  +	},
->>  >>  +	.probe =3D usb_charger_probe,
->>  >>  +};
->>  >>  +module_platform_driver(usb_charger_driver);
->>  >>  +
->>  >>  +MODULE_DESCRIPTION("Simple USB charger driver");
->>  >> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
->>  >> +MODULE_LICENSE("GPL");
->>  >>  --
->>  >>  2.24.0
->>  >>
->>  >
->>  > --
->>  >
->>  > Thanks,
->>  > Peter Chen
->>=20
->=20
-
-=
-
+Johan
