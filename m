@@ -2,71 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D2D6121892
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 19:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97499121702
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 19:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728239AbfLPR4e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 12:56:34 -0500
-Received: from mail-wr1-f42.google.com ([209.85.221.42]:41229 "EHLO
-        mail-wr1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbfLPR4b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 12:56:31 -0500
-Received: by mail-wr1-f42.google.com with SMTP id c9so8408951wrw.8
-        for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2019 09:56:30 -0800 (PST)
+        id S1730611AbfLPSdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 13:33:23 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42079 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730473AbfLPSJl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 13:09:41 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 4so6003994pfz.9
+        for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2019 10:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:from:subject:message-id:date:mime-version:content-language
-         :content-transfer-encoding;
-        bh=/s6TihmZ1MJpgPFgkpLUeluSqsFU59M6lwAQBKgb7lw=;
-        b=pPbkUsbYaRvzEvt2gLQ2LrmdmK4esVKUsy5ijFEEDOSlCs0XvwkVQ68kWcnc9qDV7F
-         hO/Sp7PyxrQNaRlG2s68PhghhRgjBN5AaYvX+d2F/ww0OXsqzl3iz0k1hDHKvrmeLj+r
-         O8a3fYeMENrTY9pa2sCxGh6cwCJLM1NFpNquqzSz6SiwMifxkqUnbIcHAUotRzOyBuiF
-         Cpkb8UU4U8tQV3n1NxjJdUz8RXCz9cl3Au5bF5JVOs2eVEEPPqaUwL1WYUrx6+btrCBT
-         WdaELp3EGpxnQA7gtjk1VLlRX+/A/wXudeoL1rNe2nuLqHe83GZH89xhEBUB7pJ5Lhu1
-         iFow==
+        d=chromium.org; s=google;
+        h=message-id:mime-version:content-transfer-encoding:in-reply-to
+         :references:subject:to:from:cc:user-agent:date;
+        bh=uTZ9jD6XcU5csDtmDm0A4lEi/ET7Er5jr9WSb1EMelk=;
+        b=jyyXYbhQgJvFoH/gkE8wmpD3skyYKQ7NOFesPHXGsZrxJc9FUF39kXCisPYSVTzGH5
+         XfprSHFhYdHkCCIcBitR0qWWWt/V9TEhaHrbqEckar9UuCp+Jsl7qVmxq8BZtEsNxyir
+         KSiD+A7sa97Cd257ghc22sKZBvGAGw9UYoEQM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:mime-version
-         :content-language:content-transfer-encoding;
-        bh=/s6TihmZ1MJpgPFgkpLUeluSqsFU59M6lwAQBKgb7lw=;
-        b=XFnbt0f5CdTy21B3NyV4jr+xS9s/P6fWqMcUpNXFfGqcOt4SbWB8VYYuSa77D01mZX
-         ZIyqfsuxZYl8Cn9iJYC5gHN9/Sd6lGDs8M+JL5WptEOyUGA9yUY9HJHEhcQG0cWmRO/i
-         VOfoyfAXzdydluHiZs0twn2M0Lls4XNgUP28350mwQrO9I0m2DEqvzMV2/bTavde4bvq
-         y97YFScB2CCK7742XTUtqDKNnB1uItr79JHknMEuSr0kjp0HzbFw9x9vHnHYpBJDjRgX
-         eF7PMHAv8jK4EMfJcVWXsbcx29rsQdJvH8wozu5OM6z69zxf91GT9MguPyyhWXjRkwrN
-         798w==
-X-Gm-Message-State: APjAAAWCw6xPUcGQaxBnmeK2PQItAClstLaFC7YTyHCrw9MsU6YwHlAe
-        wYbHe79W4IQ6r8iM3RB1/wDgGag=
-X-Google-Smtp-Source: APXvYqyZBmVr17iQdiXNriu5jmRAtPTnc7jczclmok4+AnzhlxWvFXZIn83P5W5r5QB6IXSlJfgn+Q==
-X-Received: by 2002:a5d:4b88:: with SMTP id b8mr31458647wrt.343.1576518989185;
-        Mon, 16 Dec 2019 09:56:29 -0800 (PST)
-Received: from localhost (118.red-88-12-24.staticip.rima-tde.net. [88.12.24.118])
-        by smtp.gmail.com with ESMTPSA id g2sm22282303wrw.76.2019.12.16.09.56.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Dec 2019 09:56:28 -0800 (PST)
-To:     Oliver Neukum <oneukum@suse.com>,
-        Stephanie Wallick <stephanie.s.wallick@intel.com>,
-        "Sean O. Stalley" <sean.stalley@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-From:   Xose Vazquez Perez <xose.vazquez@gmail.com>
-Subject: Re: status of support for Media Agnostic USB
-Message-ID: <91dbbedb-b014-b2c8-d398-b3ee70060e2e@gmail.com>
-Date:   Mon, 16 Dec 2019 18:56:26 +0100
+        h=x-gm-message-state:message-id:mime-version
+         :content-transfer-encoding:in-reply-to:references:subject:to:from:cc
+         :user-agent:date;
+        bh=uTZ9jD6XcU5csDtmDm0A4lEi/ET7Er5jr9WSb1EMelk=;
+        b=W1zE3ioOE+21JeARiCHr79sNl4oBxcGB51GPsGQgMfynDoJj6ldhrE5RLQdfxBTa/O
+         RhHWkZeC2nfLP4bHofVoWi0m3iQuYlPIzRFiYdI10j7+33kxDtK2ho9wvpUcBwfD5C+z
+         LTTB/Q52hXFbEz4Ao/Bth6qQxKz+0pJwrA3xFGBEiRac1jC+gNGad0zoa+cZpUYeKKSO
+         oEqhguDdyaK11uAxMQAbVvCs/ETXHNoQBS3r7DnAI8TeJi0S1gtwLMDvyWP6ipTqHb/c
+         NbY1HP2utfKXo07F4/mJfK8MIWDwjMBfEsBKePEbrvvc7Y3G6sI0LdhOnRllScX0XTU2
+         1XKA==
+X-Gm-Message-State: APjAAAV6TUvsSRJnL6cWjVN52/3Megkg8OWIU2pEvechgyGGLmLVNe9+
+        DAGtUXhEEe94t26iZZqNpS085w==
+X-Google-Smtp-Source: APXvYqwgYd4Qk+VgNW5yogq7vFaECby6SdTTUamWheo+l1m4itfak+lUZHj4qp1Cai9JxJJVFmcP4w==
+X-Received: by 2002:a62:5202:: with SMTP id g2mr17177463pfb.43.1576519780253;
+        Mon, 16 Dec 2019 10:09:40 -0800 (PST)
+Received: from chromium.org ([2620:15c:202:1:fa53:7765:582b:82b9])
+        by smtp.gmail.com with ESMTPSA id k23sm23348452pgg.7.2019.12.16.10.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Dec 2019 10:09:39 -0800 (PST)
+Message-ID: <5df7c863.1c69fb81.91ce4.37b3@mx.google.com>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1576474742-23409-3-git-send-email-sanm@codeaurora.org>
+References: <1576474742-23409-1-git-send-email-sanm@codeaurora.org> <1576474742-23409-3-git-send-email-sanm@codeaurora.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: usb: qcom,dwc3: Add compatible for SC7180
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+User-Agent: alot/0.8.1
+Date:   Mon, 16 Dec 2019 10:09:38 -0800
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oliver Neukum wrote:
+Quoting Sandeep Maheswaram (2019-12-15 21:39:02)
+> Add compatible for SC7180 in usb dwc3 bindings.
+>=20
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
 
-> I recently hit upon some old patches for MA USB on the list.
-> It looks like the discussion never went far. Is there anybody
-> still interested in them? It looks like Windows 10 finally supports it
-> and we are missing a feature.
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 
-Waiting... for internal review since 2014: https://marc.info/?l=linux-usb&m=141568079419684
