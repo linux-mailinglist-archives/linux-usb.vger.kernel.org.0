@@ -2,333 +2,252 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0B711FE71
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 07:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8360012020A
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 11:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726448AbfLPG2a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 01:28:30 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:8291 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726054AbfLPG2a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 01:28:30 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df724030000>; Sun, 15 Dec 2019 22:28:19 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Sun, 15 Dec 2019 22:28:27 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Sun, 15 Dec 2019 22:28:27 -0800
-Received: from [10.24.193.46] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 16 Dec
- 2019 06:28:24 +0000
-Subject: Re: [PATCH 02/18] dt-bindings: usb: Add NVIDIA Tegra XUSB device mode
- controller binding
-To:     Rob Herring <robh@kernel.org>
-CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <mark.rutland@arm.com>, <kishon@ti.com>,
-        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1575629421-7039-1-git-send-email-nkristam@nvidia.com>
- <1575629421-7039-3-git-send-email-nkristam@nvidia.com>
- <20191213184552.GA2133@bogus>
-X-Nvconfidentiality: public
-From:   Nagarjuna Kristam <nkristam@nvidia.com>
-Message-ID: <d78fe56f-4ad2-085d-ba10-174fd1b53107@nvidia.com>
-Date:   Mon, 16 Dec 2019 12:00:09 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+        id S1727283AbfLPKKQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 05:10:16 -0500
+Received: from comms.puri.sm ([159.203.221.185]:45562 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727099AbfLPKKP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Dec 2019 05:10:15 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id CC219DF8DB;
+        Mon, 16 Dec 2019 02:10:13 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NpXRq1Za4Ba2; Mon, 16 Dec 2019 02:10:12 -0800 (PST)
+Subject: Re: suspend problem with dwc3 gadget / g_multi when usb disconnected
+From:   Martin Kepplinger <martin.kepplinger@puri.sm>
+To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     kernel@puri.sm, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+References: <38edc05e-680b-d881-49fc-e8230a93b2c8@puri.sm>
+ <87blsgl88s.fsf@gmail.com> <df4060e1-5ef6-3d2b-5dd4-5a0cb577bb68@puri.sm>
+ <87fthpwwdk.fsf@kernel.org> <62b00952-e7c8-6fae-d7bd-8d2b3e0626e9@puri.sm>
+Autocrypt: addr=martin.kepplinger@puri.sm; keydata=
+ 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
+ ekMtxgNYb/8oDry09UFHbGHLsWn6oBo=
+Message-ID: <912f2196-9780-877b-f54c-16001111a851@puri.sm>
+Date:   Mon, 16 Dec 2019 11:10:10 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
-MIME-Version: 1.0
-In-Reply-To: <20191213184552.GA2133@bogus>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <62b00952-e7c8-6fae-d7bd-8d2b3e0626e9@puri.sm>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576477699; bh=zMJg7pOlVNQuvjr7hzUODavsNLTw1Fqs1KEUhAruvWE=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=Z0gKGAM/qIslQHc6Hd2xCG8gNzW7+9QzaAupOEK+/ei5AihEYR7KNylxeym89vOwk
-         W434yKwjoKpgUgmuQfFRyXxEVW+XbuD++UR5ktqcGrpCF+n0BdaIUJ8HXFzTkU6060
-         Ox0sdoM0gmDdXsdHRDRpAoP6uvhQVq57rkThH1HUxshV+0kkqaGZTiQCS/mpaGdfPA
-         ZAGbeV71Yk2CP5dJiHqCHsHd2AFA4ehfXlGYP5PzKb+cZWMCrqfTyDLGcbe9cPD1pK
-         iD+mLsIeTiT4a0gmcgATb5Ijxa2ct61iis0qW/P9nig1ubb75SUdX2BjeaAqo7wUmO
-         xostv4ViR02pQ==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 13.12.19 13:19, Martin Kepplinger wrote:
 > 
 > 
-> On Fri, Dec 06, 2019 at 04:20:05PM +0530, Nagarjuna Kristam wrote:
->> Add device-tree binding documentation for the XUSB device mode controller
->> present on Tegra210 and Tegra186 SoC. This controller supports the USB 3.0
->> specification.
+> On 12.12.19 13:39, Felipe Balbi wrote:
 >>
->> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
->> ---
-> Next time version your patches correctly and include version history
-> here so I don't have to go look up why my R-by is missing.
-> 
-Since this was a new series, i didnot add version history. But considering that this
-was reviewed in different series, i will take a note to include the reviewed link
-for quick reference.
->>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 204 +++++++++++++++++++++
->>  1 file changed, 204 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
+>> Hi,
 >>
->> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
->> new file mode 100644
->> index 0000000..b23c451
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
->> @@ -0,0 +1,204 @@
->> +# SPDX-License-Identifier: GPL-2.0
-> Dual license new bindings please:
+>> Martin Kepplinger <martin.kepplinger@puri.sm> writes:
 > 
-> (GPL-2.0-only OR BSD-2-Clause)
 > 
-Will update accordingly.
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/usb/nvidia,tegra-xudc.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: Device tree binding for NVIDIA Tegra XUSB device mode controller (XUDC)
->> +
->> +description:
->> +  The Tegra XUDC controller supports both USB 2.0 HighSpeed/FullSpeed and
->> +  USB 3.0 SuperSpeed protocols.
->> +
->> +maintainers:
->> +  - Nagarjuna Kristam <nkristam@nvidia.com>
->> +  - JC Kuo <jckuo@nvidia.com>
->> +  - Thierry Reding <treding@nvidia.com>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +        - const: nvidia,tegra210-xudc # For Tegra210
->> +      - items:
->> +        - const: nvidia,tegra186-xudc # For Tegra186
-> Use 'enum' instead of oneOf+const.
-> 
-Will update
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +    description: Must contain the XUSB device interrupt.
-> Don't need a description for a single interrupt line.
-> 
-Will remove
->> +
->> +  power-domains:
->> +    maxItems: 2
->> +    description:
->> +      A list of PM domain specifiers that reference each power-domain
->> +      used by the XUSB device mode controller. This list must comprise of a
->> +      specifier for the XUSBA and XUSBB power-domains.
->> +      See ../power/power_domain.txt and ../arm/tegra/nvidia,tegra20-pmc.txt
->> +      for details.
-> Just need:
-> 
-> items:
->   - description: XUSBA power-domain
->   - description: XUSBB power-domain
-> 
-Will update including below coments to update as below
-   - description: XUSBA(superSpeed) power-domain
-   - description: XUSBB(device) power-domain
->> +
->> +  power-domains-names:
->> +    maxItems: 2
->> +    description:
->> +       A list of names that represent each of the specifiers in
->> +       the 'power-domains' property.
-> That's every 'power-domains-names'.
-> 
->> +    items:
->> +      - const: ss
->> +      - const: dev
-> Okay, but those names don't match up with XUSBA and XUSBB. Names should
-> be meaningful or local to the module, not the provider if that helps.
-> 
->> +
->> +  nvidia,xusb-padctl:
->> +    $ref: /schemas/types.yaml#/definitions/phandle-array
->> +    description:
->> +      phandle to the XUSB pad controller that is used to configure the USB pads
->> +      used by the XUDC controller.
->> +
->> +  phys:
->> +    minItems: 1
->> +    description:
->> +      Must contain an entry for each entry in phy-names.
->> +      See ../phy/phy-bindings.txt for details.
->> +
->> +  phy-names:
->> +    minItems: 1
->> +    items:
->> +      - const: usb2-0
->> +      - const: usb2-1
->> +      - const: usb2-2
->> +      - const: usb2-3
->> +      - const: usb3-0
->> +      - const: usb3-1
->> +      - const: usb3-2
->> +      - const: usb3-3
->> +
->> +  avddio-usb-supply:
->> +    description: PCIe/USB3 analog logic power supply. Must supply 1.05 V.
->> +
->> +  hvdd-usb-supply:
->> +    description: USB controller power supply. Must supply 3.3 V.
->> +
->> +required:
->> +  - compatible
->> +  - power-domains
->> +  - power-domain-names
->> +  - nvidia,xusb-padctl
->> +  - phys
->> +  - phy-names
->> +
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          items:
->> +            const: nvidia,tegra210-xudc
->> +
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 3
->> +          items:
->> +          - description: XUSB device controller registers
->> +          - description: XUSB device PCI Config registers
->> +          - description: XUSB device registers.
->> +        reg-names:
->> +          maxItems: 3
->> +          items:
->> +            - const: base
->> +            - const: fpci
->> +            - const: ipfs
-> As these are a superset of tegra186, you can move this up and tegra186
-> just needs to define 'maxItems: 2'.
-> 
-Will move Main definitions up and update these sections with minItems and maxItems
-accordingly.
->> +        clocks:
->> +          description:
->> +            Must contain an entry for all clocks used. See ../clock/clock-bindings.txt
->> +            for details.
->> +          maxItems: 5
->> +          items:
->> +            - description: Clock to enable core XUSB dev clock.
->> +            - description: Clock to enable XUSB super speed clock.
->> +            - description: Clock to enable XUSB super speed dev clock.
->> +            - description: Clock to enable XUSB high speed dev clock.
->> +            - description: Clock to enable XUSB full speed dev clock.
->> +        clock-names:
->> +          items:
->> +           - const: dev
->> +           - const: ss
->> +           - const: ss_src
->> +           - const: hs_src
->> +           - const: fs_src
-> I would re-order the last 2 entries so that you can do the same thing as
-> I said for 'reg'.
-> 
->> +      required:
->> +        - reg
->> +        - reg-names
->> +        - clocks
->> +        - clock-names
-> No need for these to be under the if. They are always required and
-> don't have to be where defined by 'properties'.
-> 
-Will move to main "required" section.
->> +        - avddio-usb-supply
->> +        - hvdd-usb-supply
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: nvidia,tegra186-xudc
->> +
->> +    then:
->> +      properties:
->> +        reg:
->> +          maxItems: 2
->> +          items:
->> +          - description: XUSB device controller registers
->> +          - description: XUSB device PCI Config registers
->> +        reg-names:
->> +          maxItems: 2
->> +          items:
->> +            - const: base
->> +            - const: fpci
->> +        clocks:
->> +          description:
->> +            Must contain an entry for all clocks used. See ../clock/clock-bindings.txt
->> +            for details.
->> +          maxItems: 4
->> +          items:
->> +            - description: Clock to enable core XUSB dev clock.
->> +            - description: Clock to enable XUSB super speed clock.
->> +            - description: Clock to enable XUSB super speed dev clock.
->> +            - description: Clock to enable XUSB full speed dev clock.
->> +        clock-names:
->> +          items:
->> +           - const: dev
->> +           - const: ss
->> +           - const: ss_src
->> +           - const: fs_src
->> +      required:
->> +        - reg
->> +        - reg-names
->> +        - clocks
->> +        - clock-names
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/clock/tegra210-car.h>
->> +    #include <dt-bindings/gpio/tegra-gpio.h>
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +
->> +    usb@700d0000 {
->> +        compatible = "nvidia,tegra210-xudc";
->> +        reg = <0x0 0x700d0000 0x0 0x8000>,
->> +              <0x0 0x700d8000 0x0 0x1000>,
->> +              <0x0 0x700d9000 0x0 0x1000>;
->> +        reg-names = "base", "fpci", "ipfs";
->> +
->> +        interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
->> +
->> +        clocks = <&tegra_car TEGRA210_CLK_XUSB_DEV>,
->> +                 <&tegra_car TEGRA210_CLK_XUSB_SS>,
->> +                 <&tegra_car TEGRA210_CLK_XUSB_SSP_SRC>,
->> +                 <&tegra_car TEGRA210_CLK_XUSB_HS_SRC>,
->> +                 <&tegra_car TEGRA210_CLK_XUSB_FS_SRC>;
->> +        clock-names = "dev", "ss", "ss_src", "hs_src", "fs_src";
->> +
->> +        power-domains = <&pd_xusbdev>, <&pd_xusbss>;
->> +        power-domain-names = "dev", "ss";
->> +
->> +        nvidia,xusb-padctl = <&padctl>;
->> +
->> +        phys = <&micro_b>;
->> +        phy-names = "usb2-0";
->> +
->> +        avddio-usb-supply = <&vdd_pex_1v05>;
->> +        hvdd-usb-supply = <&vdd_3v3_sys>;
->> +    };
->> --
->> 2.7.4
+>>> [   64.405226] Modules linked in: rfkill st_magn_spi st_sensors_spi
+>>> mousedev qmi_wwan caam_jr caamhash_desc caamalg_desc cdc_wdm option
+>>> usbnet usb_wwan mii usbserial st_magn_i2c st_magn st_sensors_i2c
+>>> st_sensors industrialio_triggered_buffer goodix kfifo_buf tcpci tcpm
+>>> roles imx2_wdt watchdog aes_ce_blk crypto_simd typec bq25890_charger
+>>> caam imx_sdma virt_dma error crct10dif_ce ghash_ce sha2_ce sha1_ce
+>>> gpio_vibra usb_f_acm u_serial usb_f_rndis g_multi usb_f_mass_storage
+>>> u_ether libcomposite ip_tables x_tables ipv6 nf_defrag_ipv6
+>>> xhci_plat_hcd xhci_hcd usbcore dwc3 snvs_pwrkey ulpi udc_core
+>>> phy_fsl_imx8mq_usb usb_common
+>>> [   64.462126] CPU: 3 PID: 884 Comm: ip Not tainted
+>>> 5.5.0-rc1-next-20191212-librem5-00019-g4fb81fdd9c7d #1
+>>> [   64.471909] Hardware name: Purism Librem 5 devkit (DT)
+>>> [   64.477264] pstate: 60000085 (nZCv daIf -PAN -UAO)
+>>> [   64.482268] pc : dwc3_stop_active_transfer.constprop.38+0xe8/0x100 [dwc3]
+>>> [   64.489351] lr : dwc3_stop_active_transfer.constprop.38+0x64/0x100 [dwc3]
+>>> [   64.496421] sp : ffff00009f213240
+>>> [   64.499874] x29: ffff00009f213240 x28: 0000000000000000
+>>> [   64.505410] x27: ffff00009f2137b0 x26: ffff0000a4e0cc10
+>>> [   64.510946] x25: 0000000000000001 x24: ffff0000a324518c
+>>> [   64.516482] x23: ffff0000a3245193 x22: ffff0000a41f0080
+>>> [   64.522018] x21: 0000000000000000 x20: ffff0000a4176600
+>>> [   64.527553] x19: ffff800010ee87c8 x18: 0000000000000000
+>>> [   64.533089] x17: 0000000000000000 x16: 0000000000000000
+>>> [   64.538625] x15: 0000000000000000 x14: 0000000000000000
+>>> [   64.544160] x13: ffff0000a4176868 x12: ffff0000a4176868
+>>> [   64.549696] x11: ffffffffffff3f08 x10: 0000000000000008
+>>> [   64.555232] x9 : ffffffffffff3f04 x8 : 0000000000000811
+>>> [   64.560767] x7 : ffffffffffff3f00 x6 : ffffffffffff3f0c
+>>> [   64.566303] x5 : 0000000000000000 x4 : ffff80001007483c
+>>> [   64.571839] x3 : 0000000000000808 x2 : ffff00009f21327c
+>>> [   64.577375] x1 : 0000000000000040 x0 : 00000000ffffff92
+>>> [   64.582911] Call trace:
+>>> [   64.585474]  dwc3_stop_active_transfer.constprop.38+0xe8/0x100 [dwc3]
+>>> [   64.592194]  __dwc3_gadget_ep_disable+0x34/0x380 [dwc3]
+>>> [   64.597649]  dwc3_gadget_ep_disable+0x44/0xf8 [dwc3]
+>>> [   64.602841]  usb_ep_disable+0x34/0x100 [udc_core]
+>>> [   64.607749]  eth_stop+0xb4/0x130 [u_ether]
+>>> [   64.612026]  __dev_close_many+0xb4/0x138
+>>> [   64.616116]  __dev_change_flags+0xb8/0x1d0
+>>> [   64.620385]  dev_change_flags+0x28/0x68
+>>> [   64.624384]  do_setlink+0x30c/0xc90
+>>> [   64.628021]  __rtnl_newlink+0x3f8/0x788
+>>> [   64.632018]  rtnl_newlink+0x54/0x80
+>>> [   64.635654]  rtnetlink_rcv_msg+0x128/0x370
+>>> [   64.639926]  netlink_rcv_skb+0x60/0x120
+>>> [   64.643924]  rtnetlink_rcv+0x1c/0x28
+>>> [   64.647650]  netlink_unicast+0x1b8/0x278
+>>> [   64.651739]  netlink_sendmsg+0x1ac/0x3b0
+>>> [   64.655829]  ____sys_sendmsg+0x250/0x298
+>>> [   64.659918]  ___sys_sendmsg+0x88/0xc8
+>>> [   64.663735]  __sys_sendmsg+0x70/0xc0
+>>> [   64.667463]  __arm64_sys_sendmsg+0x28/0x30
+>>> [   64.671736]  el0_svc_common.constprop.3+0x98/0x170
+>>> [   64.676729]  el0_svc_handler+0x20/0x28
+>>> [   64.680638]  el0_sync_handler+0x134/0x1a0
+>>> [   64.684817]  el0_sync+0x140/0x180
+>>> [   64.688271] ---[ end trace 4f6aa846a9c6f20c ]---
+>>>
+>>> ... again. at every shutdown or rmmod.
+>>>
+>>> I hope that this might be already helpful.
 >>
+>> I need to see the trace events for this failure case too. You could add
+>> ftrace_dump_on_oops to your cmdline and change the WARN_ONCE() to a
+>> BUG_ON() or something.
+>>
+> 
+> doing that and having "ftrace=function ftrace_dump_on_oops" dumps way
+> too much to handle and somehow my board resets while printing...
+> 
+> I found I can avoid the above error during shutdown though by keeping a
+> few regulators enabled for now. I'm not entirely sure if that's a dwc3
+> problem now, so let's leave the above for now.
+> 
+> Back to my first issue: disconnected USB and suspend:
+> 
+> I disable all gadget configs now.
+> 
+> "echo mem > /sys/power/state" still only hangs the system - again: all
+> that's in the logs is:
+> 
+> [   97.405251] PM: suspend entry (deep)
+> 
+> and on the console then:
+> 
+> [  118.608738] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [  118.615093] rcu: 	1-...0: (0 ticks this GP)
+> idle=e86/1/0x4000000000000000 softirq=16109/16109 fqs=2626
+> [  181.628739] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [  181.635088] rcu: 	1-...0: (0 ticks this GP)
+> idle=e86/1/0x4000000000000000 softirq=16109/16109 fqs=10503
+> [  244.648738] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [  244.655087] rcu: 	1-...0: (0 ticks this GP)
+> idle=e86/1/0x4000000000000000 softirq=16109/16109 fqs=17402
+> 
+> ... not sure how to further debug that.
+> 
+
+actually I do :)  more logs to this: USB connected / disconnected
+doesn't matter: we stop during resume at:
+
+[  121.997310] dwc3 38100000.usb: driver resume
+
+(then sometimes)
+
+[  173.919770] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[  173.926220] rcu: 	0-...!: (2 ticks this GP)
+idle=f32/1/0x4000000000000000 softirq=9941/9941 fqs=219
+[  173.935809] 	(detected by 1, t=12983 jiffies, g=27649, q=0)
+[  173.941687] Task dump for CPU 0:
+[  173.945122] bash            R  running task        0   834    833
+0x00000008
+[  173.952560] Call trace:
+[  173.955197]  __switch_to+0xc0/0x210
+[  173.958962]  0xf601ec1e0eef7d00
+[  173.962317] rcu: rcu_preempt kthread starved for 12545 jiffies!
+g27649 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=1
+[  173.973347] rcu: RCU grace-period kthread stack dump:
+[  173.978678] rcu_preempt     I    0    10      2 0x00000028
+[  173.984476] Call trace:
+[  173.987103]  __switch_to+0xc0/0x210
+[  173.990820]  __schedule+0x2d4/0x5d0
+[  173.994532]  schedule+0x48/0x100
+[  173.997972]  schedule_timeout+0x1ac/0x410
+[  174.002231]  rcu_gp_kthread+0x484/0x12f8
+[  174.006396]  kthread+0x124/0x128
+[  174.009835]  ret_from_fork+0x10/0x18
