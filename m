@@ -2,165 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9C911213FA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 19:08:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817241214DD
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 19:16:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730058AbfLPSGy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 13:06:54 -0500
-Received: from imap2.colo.codethink.co.uk ([78.40.148.184]:49694 "EHLO
-        imap2.colo.codethink.co.uk" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1729811AbfLPSGx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 13:06:53 -0500
-X-Greylist: delayed 1122 seconds by postgrey-1.27 at vger.kernel.org; Mon, 16 Dec 2019 13:06:52 EST
-Received: from [167.98.27.226] (helo=rainbowdash.codethink.co.uk)
-        by imap2.colo.codethink.co.uk with esmtpsa  (Exim 4.92 #3 (Debian))
-        id 1iguTY-0001XZ-D9; Mon, 16 Dec 2019 17:48:08 +0000
-Received: from ben by rainbowdash.codethink.co.uk with local (Exim 4.92.3)
-        (envelope-from <ben@rainbowdash.codethink.co.uk>)
-        id 1iguTX-006Dwq-TZ; Mon, 16 Dec 2019 17:48:07 +0000
-From:   "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
-To:     ben.dooks@codethink.co.uk
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: musb: fix __iomem in trace functions
-Date:   Mon, 16 Dec 2019 17:48:07 +0000
-Message-Id: <20191216174807.1483538-1-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.24.0
+        id S1731436AbfLPSPu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 13:15:50 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37438 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731246AbfLPSPu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Dec 2019 13:15:50 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 120F5206E0;
+        Mon, 16 Dec 2019 18:15:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576520149;
+        bh=cMLkqMqK+Gd4sTCmmglswR0S3qcdjkuJPxkvMp7nKAs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ke3O/pJu31RCt55oNfkcrDhor6nPp7OADwpDQmK6gLfjxzl8tzXS1q4oUA8aJH5wI
+         u/10IjgWH1mLlH6UaCRaT5vVuGMWE/L2PatSGBKkP0teRQ3sNwaMPljzAfzSx9gRvE
+         rfWmBDgNR6yAgod+KwONj1Eun21RyQixD13Ncp9M=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-usb@vger.kernel.org,
+        Bryan ODonoghue <bryan.odonoghue@linaro.org>
+Subject: [PATCH 5.4 035/177] usb: common: usb-conn-gpio: Dont log an error on probe deferral
+Date:   Mon, 16 Dec 2019 18:48:11 +0100
+Message-Id: <20191216174828.552457581@linuxfoundation.org>
+X-Mailer: git-send-email 2.24.1
+In-Reply-To: <20191216174811.158424118@linuxfoundation.org>
+References: <20191216174811.158424118@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The trace functions should have __iomem on the addr
-pointers. Add __iomem to avoid the following warnings
-from sparse:
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 
-drivers/usb/musb/musb_core.c:253:55: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:253:55:    expected void const *addr
-drivers/usb/musb/musb_core.c:253:55:    got void const [noderef] <asn:2> *addr
-drivers/usb/musb/musb_core.c:259:56: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:259:56:    expected void const *addr
-drivers/usb/musb/musb_core.c:259:56:    got void [noderef] <asn:2> *addr
-drivers/usb/musb/musb_core.c:267:55: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:267:55:    expected void const *addr
-drivers/usb/musb/musb_core.c:267:55:    got void const [noderef] <asn:2> *addr
-drivers/usb/musb/musb_core.c:273:56: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:273:56:    expected void const *addr
-drivers/usb/musb/musb_core.c:273:56:    got void [noderef] <asn:2> *addr
-drivers/usb/musb/musb_core.c:383:55: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:383:55:    expected void const *addr
-drivers/usb/musb/musb_core.c:383:55:    got void const [noderef] <asn:2> *addr
-drivers/usb/musb/musb_core.c:390:56: warning: incorrect type in argument 2 (different address spaces)
-drivers/usb/musb/musb_core.c:390:56:    expected void const *addr
-drivers/usb/musb/musb_core.c:390:56:    got void [noderef] <asn:2> *addr
+commit 59120962e4be4f72be537adb17da6881c4b3797c upstream.
 
-Signed-off-by: Ben Dooks (Codethink) <ben.dooks@codethink.co.uk>
----
-Cc: Bin Liu <b-liu@ti.com>
+This patch makes the printout of the error message for failing to get a
+VBUS regulator handle conditional on the error code being something other
+than -EPROBE_DEFER.
+
+Deferral is a normal thing, we don't need an error message for this.
+
+Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: Nagarjuna Kristam <nkristam@nvidia.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/usb/musb/musb_trace.h | 33 +++++++++++++++++++++------------
- 1 file changed, 21 insertions(+), 12 deletions(-)
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: stable <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20191128134358.3880498-2-bryan.odonoghue@linaro.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-diff --git a/drivers/usb/musb/musb_trace.h b/drivers/usb/musb/musb_trace.h
-index a97d618fe8ff..b193daf69685 100644
---- a/drivers/usb/musb/musb_trace.h
-+++ b/drivers/usb/musb/musb_trace.h
-@@ -38,11 +38,12 @@ TRACE_EVENT(musb_log,
- );
+---
+ drivers/usb/common/usb-conn-gpio.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -156,7 +156,8 @@ static int usb_conn_probe(struct platfor
  
- DECLARE_EVENT_CLASS(musb_regb,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u8 data),
-+	TP_PROTO(void *caller, const void  __iomem *addr,
-+		 unsigned int offset, u8 data),
- 	TP_ARGS(caller, addr, offset, data),
- 	TP_STRUCT__entry(
- 		__field(void *, caller)
--		__field(const void *, addr)
-+		__field(const void __iomem *, addr)
- 		__field(unsigned int, offset)
- 		__field(u8, data)
- 	),
-@@ -57,21 +58,24 @@ DECLARE_EVENT_CLASS(musb_regb,
- );
+ 	info->vbus = devm_regulator_get(dev, "vbus");
+ 	if (IS_ERR(info->vbus)) {
+-		dev_err(dev, "failed to get vbus\n");
++		if (PTR_ERR(info->vbus) != -EPROBE_DEFER)
++			dev_err(dev, "failed to get vbus\n");
+ 		return PTR_ERR(info->vbus);
+ 	}
  
- DEFINE_EVENT(musb_regb, musb_readb,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u8 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u8 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
- DEFINE_EVENT(musb_regb, musb_writeb,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u8 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u8 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
- DECLARE_EVENT_CLASS(musb_regw,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u16 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u16 data),
- 	TP_ARGS(caller, addr, offset, data),
- 	TP_STRUCT__entry(
- 		__field(void *, caller)
--		__field(const void *, addr)
-+		__field(const void __iomem *, addr)
- 		__field(unsigned int, offset)
- 		__field(u16, data)
- 	),
-@@ -86,21 +90,24 @@ DECLARE_EVENT_CLASS(musb_regw,
- );
- 
- DEFINE_EVENT(musb_regw, musb_readw,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u16 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u16 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
- DEFINE_EVENT(musb_regw, musb_writew,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u16 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u16 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
- DECLARE_EVENT_CLASS(musb_regl,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u32 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u32 data),
- 	TP_ARGS(caller, addr, offset, data),
- 	TP_STRUCT__entry(
- 		__field(void *, caller)
--		__field(const void *, addr)
-+		__field(const void __iomem *, addr)
- 		__field(unsigned int, offset)
- 		__field(u32, data)
- 	),
-@@ -115,12 +122,14 @@ DECLARE_EVENT_CLASS(musb_regl,
- );
- 
- DEFINE_EVENT(musb_regl, musb_readl,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u32 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u32 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
- DEFINE_EVENT(musb_regl, musb_writel,
--	TP_PROTO(void *caller, const void *addr, unsigned int offset, u32 data),
-+	TP_PROTO(void *caller, const void __iomem *addr,
-+		 unsigned int offset, u32 data),
- 	TP_ARGS(caller, addr, offset, data)
- );
- 
--- 
-2.24.0
+
 
