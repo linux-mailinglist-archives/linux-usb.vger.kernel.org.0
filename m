@@ -2,134 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFBE0121170
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 18:15:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D77112119C
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 18:20:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726296AbfLPROL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 12:14:11 -0500
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:58078 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725836AbfLPROL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 12:14:11 -0500
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id D5D6B4050A;
-        Mon, 16 Dec 2019 17:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1576516450; bh=Ze4KUxhffmc/MRG7wxI0xDoZKYAmtigmJlJeWv/ELP4=;
-        h=Date:From:Subject:To:Cc:From;
-        b=Ql8kWOycCt0eh28MGwiQcCFKl36rkGboLlVC73xvisPo6SkaqSYftR2r3OAleW69S
-         tXsEpNokf5+RznFDQ+1t0ltJuEqmW4VLwWGM7KGDGFA9fVAdnGYItrANEXrICl63PQ
-         T15yk9+49bJBBOmNUDYtc7WHL8ngEdre+Pe0WKSETsUCteSHx4fISh/xC7JLcRvtYH
-         iw2IUURCrXYr05ar75WvdhZzm9yG/Zw+VEMw2meT7ubWurhCO7QDYwR29CLnh6XYRa
-         Dfv96BCrgx4wyWDv3ggq8QCw9RmS/gKCX5lfuek+k5qGqhmcnDTi7m3Gje6Jrx1+Ov
-         /GPMW6JqwTMvA==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.126.211])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 083ADA0075;
-        Mon, 16 Dec 2019 17:14:05 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Mon, 16 Dec 2019 21:14:04 +0400
-Date:   Mon, 16 Dec 2019 21:14:04 +0400
-Message-Id: <38a93a8deedd76dbc22bb1e41b4fc998f3750c95.1576516371.git.hminas@synopsys.com>
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: Fix SET/CLEAR_FEATURE and GET_STATUS flows
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
-        Jack Mitchell <ml@embed.me.uk>
+        id S1726227AbfLPRUR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 12:20:17 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:50306 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725805AbfLPRUR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 12:20:17 -0500
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBGHKCxn062735;
+        Mon, 16 Dec 2019 11:20:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576516812;
+        bh=nvnLJJLjqEIyErTA7Paag8/mmTBiEQwJM2eiIajEy14=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=sOju6x3aCA5kunLx7hPETyUgL7dbSwZjZbXXiJC5ERtNcYRrGtlGvC6uO8A6OZBOP
+         ryv8slNEWRD4p6W+H0bh6NGMynR7iaSmDEgobPVKVIVs/973mrfUVBBchgN+1CUo95
+         ZRfcp2oHHKNL7cnjB4bkBzY5ZfeAVOY4VzSqTIQw=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBGHKCq4097790
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 16 Dec 2019 11:20:12 -0600
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Mon, 16
+ Dec 2019 11:20:11 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Mon, 16 Dec 2019 11:20:11 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBGHKBhj125463;
+        Mon, 16 Dec 2019 11:20:11 -0600
+Date:   Mon, 16 Dec 2019 11:19:31 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <od@zcrc.me>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/6] usb: musb: jz4740: Suppress useless field in priv
+ structure
+Message-ID: <20191216171931.GC14499@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191214221126.93116-1-paul@crapouillou.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191214221126.93116-1-paul@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SET/CLEAR_FEATURE for Remote Wakeup allowance not handled correctly.
-GET_STATUS handling provided not correct data on DATA Stage.
-Issue seen when gadget's dr_mode set to "otg" mode and connected
-to MacOS.
-Both are fixed and tested using USBCV Ch.9 tests.
+On Sat, Dec 14, 2019 at 11:11:21PM +0100, Paul Cercueil wrote:
+> The 'dev' field was never read anywhere.
+> 
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
-Fixes: fa389a6d7726 ("usb: dwc2: gadget: Add remote_wakeup_allowed flag")
-Tested-by: Jack Mitchell <ml@embed.me.uk>
-Cc: stable@vger.kernel.org
----
-Changes in v2:
-- Add Fixes tag
-- Add Tested-by tag
+The series is queued for -next. Thanks.
 
-Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
----
- drivers/usb/dwc2/gadget.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 6be10e496e10..3a6176c22371 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1632,6 +1632,7 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
- 	struct dwc2_hsotg_ep *ep0 = hsotg->eps_out[0];
- 	struct dwc2_hsotg_ep *ep;
- 	__le16 reply;
-+	u16 status;
- 	int ret;
- 
- 	dev_dbg(hsotg->dev, "%s: USB_REQ_GET_STATUS\n", __func__);
-@@ -1643,11 +1644,10 @@ static int dwc2_hsotg_process_req_status(struct dwc2_hsotg *hsotg,
- 
- 	switch (ctrl->bRequestType & USB_RECIP_MASK) {
- 	case USB_RECIP_DEVICE:
--		/*
--		 * bit 0 => self powered
--		 * bit 1 => remote wakeup
--		 */
--		reply = cpu_to_le16(0);
-+		status = 1 << USB_DEVICE_SELF_POWERED;
-+		status |= hsotg->remote_wakeup_allowed <<
-+			  USB_DEVICE_REMOTE_WAKEUP;
-+		reply = cpu_to_le16(status);
- 		break;
- 
- 	case USB_RECIP_INTERFACE:
-@@ -1758,7 +1758,10 @@ static int dwc2_hsotg_process_req_feature(struct dwc2_hsotg *hsotg,
- 	case USB_RECIP_DEVICE:
- 		switch (wValue) {
- 		case USB_DEVICE_REMOTE_WAKEUP:
--			hsotg->remote_wakeup_allowed = 1;
-+			if (set)
-+				hsotg->remote_wakeup_allowed = 1;
-+			else
-+				hsotg->remote_wakeup_allowed = 0;
- 			break;
- 
- 		case USB_DEVICE_TEST_MODE:
-@@ -1768,16 +1771,17 @@ static int dwc2_hsotg_process_req_feature(struct dwc2_hsotg *hsotg,
- 				return -EINVAL;
- 
- 			hsotg->test_mode = wIndex >> 8;
--			ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
--			if (ret) {
--				dev_err(hsotg->dev,
--					"%s: failed to send reply\n", __func__);
--				return ret;
--			}
- 			break;
- 		default:
- 			return -ENOENT;
- 		}
-+
-+		ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
-+		if (ret) {
-+			dev_err(hsotg->dev,
-+				"%s: failed to send reply\n", __func__);
-+			return ret;
-+		}
- 		break;
- 
- 	case USB_RECIP_ENDPOINT:
--- 
-2.11.0
-
+-Bin.
