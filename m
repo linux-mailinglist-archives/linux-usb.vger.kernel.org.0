@@ -2,82 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DB51206EE
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 14:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A1F120722
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 14:28:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbfLPNSu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 08:18:50 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:58335 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727653AbfLPNSu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Dec 2019 08:18:50 -0500
-Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.145]) with ESMTPA (Nemesis) id
- 1MWAay-1iDpDe1QGw-00XZaa; Mon, 16 Dec 2019 14:18:32 +0100
-From:   Arnd Bergmann <arnd@arndb.de>
-To:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        Thierry Reding <treding@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: udc: tegra: select USB_ROLE_SWITCH
-Date:   Mon, 16 Dec 2019 14:18:18 +0100
-Message-Id: <20191216131831.3228566-1-arnd@arndb.de>
-X-Mailer: git-send-email 2.20.0
+        id S1727859AbfLPN1s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 08:27:48 -0500
+Received: from mga07.intel.com ([134.134.136.100]:46486 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727601AbfLPN1s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Dec 2019 08:27:48 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Dec 2019 05:27:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,321,1571727600"; 
+   d="scan'208";a="297693213"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga001.jf.intel.com with ESMTP; 16 Dec 2019 05:27:45 -0800
+Subject: Re: Regression: USB/xhci issues on some systems with newer kernel
+ versions
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     Bernhard Gebetsberger <bernhard.gebetsberger@gmx.at>,
+        linux-usb@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>,
+        Grant Grundler <grundler@chromium.org>
+References: <3edaf835-7cde-37d9-5a0a-5a9b21a02968@gmx.at>
+ <4dfc2bca-e333-4f05-e795-23cbe481d53e@linux.intel.com>
+ <485bd962-2a2d-1e15-54c6-3685fb7597a3@gmx.at>
+ <50ecb110-8ab6-929b-e33e-025e04a12bc8@linux.intel.com>
+ <CACeCKaezMBWH+cnmOdOc+hizW3SNU+Sb5h5PWXdt9f2GcOVfFQ@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <06beef2f-e1e1-a95e-87d2-597566d1edd3@linux.intel.com>
+Date:   Mon, 16 Dec 2019 15:29:38 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:iBAyh2aepRVjDzUHSRkhSaityaozSfjOvz/3hlx/Mpqhf8J4AxQ
- Uf/0sG2EYK+Lptc9AmPIDXMpN73RgaDRXkidU3rilcVglu/pDHV+5ky76jM+0vrJIqqZzW7
- CGbOpEEFbwv+sPVmBHdal/QDPJknTz0yj9MYJH2fCaveL0F125KvFOM3QIoa4PbOA3eRYaT
- eDi03mKUD2zI8yZRQ0jgQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:M9mEog0+Evw=:bvzboCNou9h8w+yMuyev8P
- 20f8JCS3mlDXYbRm2afgz4pOSUBwrKMHHRdn9fzm7vPDQomhi3PtyYFpMzN7BhyskSqK8HRjK
- e2H1GUldqWV1W+chnMRCgDBywtC16CRUlMgs0GTMknIAoxuTiZtAh1+GE0VKxGc3RHZMvMFP7
- QOr0sr/FiArcneGcpkdKjUbuAGvTfl3RPOAriA1EWNjHhTe/rOiC5QDUUVP+iz8KTQit88gDa
- KWtQfR5SmV2qDT4gSeuDERzLarljQktcW0LX9e2aMWqUDYJuedZjRorp0zkjCLkVy/6UNmB33
- R0GGEJ8b0XEAN94lcjzRsoMLK/bylMkNtivzSe1B7M4bX2Gf2FgQznBtbDUnFhPzHdHW+5xcZ
- MMbvf4MbD/LREL9eBAGqcPmwMffiCklE0YIZD65OI/75rVGhH6jgvCXYqDzAhmdDwZPZ1PdC3
- HSotZXpjjavhCk2GdTwlCgrTPSN5Amy8mcZA4Sht+2KTOi8EaOMvOoxSXpJRgk7TVF5A69gyA
- iOsXGEqhDtzyNW90H2f2ucbE0RaZDbUc+0NACsmZezu88W2hkRr1FyfUvYjOZ9mrgF/HM7VZC
- cPKn9jyIRv1z3KUmjardhi1zNXnz82I9adYOVENBQk9H0TUjiXV9k2x6dvmuJY2gFcSUAt04D
- pyvqFLPsXSh0x4IF1Ofb1cX3u231XSvjU32yc4mbIy04sZjSGKvGKKrCjJF4ACEk+4hw4Smkl
- lHD6f0tMF7WTY8zQkHk4aIi2BcMVhZj5ulGevegYsE9dgz8I9rIps0ypLD+uMtdlXE3DXINty
- 3R9Pp/tXZdNcHx+kN59HZszSFmE2iA+F/wzmsssriJ0Gxm9dwH95xjaP3MzUMYgCegxTYOG+8
- rXr9RGX66hwVaFndPymA==
+In-Reply-To: <CACeCKaezMBWH+cnmOdOc+hizW3SNU+Sb5h5PWXdt9f2GcOVfFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Without this, this new driver fails to link:
+Hi Prashant
 
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_remove':
-tegra-xudc.c:(.text+0x19d4): undefined reference to `usb_role_switch_unregister'
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_probe':
-tegra-xudc.c:(.text+0x2a34): undefined reference to `usb_role_switch_register'
-drivers/usb/gadget/udc/tegra-xudc.o: In function `tegra_xudc_usb_role_sw_work':
-tegra-xudc.c:(.text+0x4b64): undefined reference to `usb_role_switch_get_role'
+On 5.12.2019 22.34, Prashant Malani wrote:
+> Hi Mathias and Bernhard,
+> 
+> I was interested in knowing if this issue was resolved (sounded like
+> this was deemed to be a hardware error, but I'm not sure).
+> The reason I ask is that we've recently noticed a similar error
+> popping up while using Realtek rtl8153a-based ethernet USB dongles
+> (these use the r8152 driver) on kernel 4.19 :
+> " hci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to
+> incorrect slot or ep state."
+> This is generally followed by the dongle getting reset, and the
+> process repeats itself continuously.
 
-Fixes: 49db427232fe ("usb: gadget: Add UDC driver for tegra XUSB device mode controller")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/gadget/udc/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Sorry about the delay, your traces show a transaction error, and the port link
+going to inactive error state.
 
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index a0ddec0bb7fe..435f3597ff20 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -446,6 +446,7 @@ config USB_TEGRA_XUDC
- 	tristate "NVIDIA Tegra Superspeed USB 3.0 Device Controller"
- 	depends on ARCH_TEGRA || COMPILE_TEST
- 	depends on PHY_TEGRA_XUSB
-+	select USB_ROLE_SWITCH
- 	help
- 	 Enables NVIDIA Tegra USB 3.0 device mode controller driver.
- 
--- 
-2.20.0
+xhci driver tries to recover from the transaction error with a soft retry
+(endpoint reset), while hub thread will need to reset the whole device to recover
+from the inactive link error state.
+
+Can you try reverting commit:
+"f8f80be501aa xhci: Use soft retry to recover faster from transaction errors"
+
+If you still see "Transfer error for slot x ep y on endpoint" in dmesg,
+but device is not reset and works normally, then it's possible that the soft retry
+makes things worse.
+
+If not, then the transaction error and the link inactive error are most likely symptoms
+of some other cause.
+
+The hci_hcd 0000:00:14.0: WARN Set TR Deq Ptr cmd failed due to incorrect slot or ep state."
+is as in Bernhard's case due to xhci driver trying to issue a command for a slot in context error
+state, this part needs to be fixed in the driver, but should not matter much. Device must be reset
+anyway to recover from the link inactive error state.
+
+-Mathias
 
