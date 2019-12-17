@@ -2,81 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31329122F7C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 15:56:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3BC5123013
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 16:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728191AbfLQO4j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 09:56:39 -0500
-Received: from mga12.intel.com ([192.55.52.136]:40919 "EHLO mga12.intel.com"
+        id S1728471AbfLQPUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 10:20:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56470 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726560AbfLQO4j (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Dec 2019 09:56:39 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 06:56:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,325,1571727600"; 
-   d="scan'208";a="221779419"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 17 Dec 2019 06:56:33 -0800
-Received: by lahna (sSMTP sendmail emulation); Tue, 17 Dec 2019 16:56:32 +0200
-Date:   Tue, 17 Dec 2019 16:56:32 +0200
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mario.Limonciello@dell.com,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] thunderbolt: Populate PG field in hot plug
- acknowledgment packet
-Message-ID: <20191217145632.GM2913417@lahna.fi.intel.com>
-References: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
- <20191217123345.31850-4-mika.westerberg@linux.intel.com>
- <20191217124745.GC3175457@kroah.com>
+        id S1728276AbfLQPU3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Dec 2019 10:20:29 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 927A82146E;
+        Tue, 17 Dec 2019 15:20:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576596029;
+        bh=vQ/2Y+RGdZ5UonD6kZewB56CrR9lah1YrWL4h7Pxm+4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=wo1qqZbQYTGDvoz5/c1hl0BzEkyD8GhwOZSZVF5rypSxAuUbYoJLC9LKVmzHdsq4L
+         MhDuHDdUsNRhwNFc6SAbQPWc2HRwHgJbw0AcAsTfUYhL8j1MpEO/CruEe5aD8pOBll
+         1gztnWUHMWB8i4Gp9q/ZKGpaxN0MuNjUwyJma7SA=
+Subject: Re: [PATCH v2 1/2] usbip: Fix receive error in vhci-hcd when using
+ scatter-gather
+To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
+        gregkh@linuxfoundation.org, marmarek@invisiblethingslab.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, stern@rowland.harvard.edu,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        shuah <shuah@kernel.org>
+References: <20191213023055.19933-1-suwan.kim027@gmail.com>
+ <20191213023055.19933-2-suwan.kim027@gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <51515368-52e9-7d72-959c-b1f1dd5333f4@kernel.org>
+Date:   Tue, 17 Dec 2019 08:20:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217124745.GC3175457@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <20191213023055.19933-2-suwan.kim027@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 01:47:45PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Dec 17, 2019 at 03:33:39PM +0300, Mika Westerberg wrote:
-> > USB4 1.0 section 6.4.2.7 specifies a new field (PG) in notification
-> > packet that is sent as response of hot plug/unplug events. This field
-> > tells whether the acknowledgment is for plug or unplug event. This needs
-> > to be set accordingly in order the router to send further hot plug
-> > notifications.
-> > 
-> > To make it simpler we fill the field unconditionally. Legacy devices do
-> > not look at this field so there should be no problems with them.
-> > 
-> > While there rename tb_cfg_error() to tb_cfg_ack_plug() and update the
-> > log message accordingly. The function is only used to ack plug/unplug
-> > events.
-> > 
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+On 12/12/19 7:30 PM, Suwan Kim wrote:
+> When vhci uses SG and receives data whose size is smaller than SG
+> buffer size, it tries to receive more data even if it acutally
+> receives all the data from the server. If then, it erroneously adds
+> error event and triggers connection shutdown.
 > 
-> First 3 patches look "trivial" enough for me to take right now, any
-> objection to that?
+> vhci-hcd should check if it received all the data even if there are
+> more SG entries left. So, check if it receivces all the data from
+> the server in for_each_sg() loop.
+> 
+> Fixes: ea44d190764b ("usbip: Implement SG support to vhci-hcd and stub driver")
+> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
+> ---
+>   drivers/usb/usbip/usbip_common.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/usbip/usbip_common.c b/drivers/usb/usbip/usbip_common.c
+> index 6532d68e8808..e4b96674c405 100644
+> --- a/drivers/usb/usbip/usbip_common.c
+> +++ b/drivers/usb/usbip/usbip_common.c
+> @@ -727,6 +727,9 @@ int usbip_recv_xbuff(struct usbip_device *ud, struct urb *urb)
+>   
+>   			copy -= recv;
+>   			ret += recv;
+> +
+> +			if (!copy)
+> +				break;
+>   		}
+>   
+>   		if (ret != size)
+> 
 
-No objections from my side :)
+Thanks Marek and Suwan for taking care of this.
 
-> Should I be using my usb tree for this?
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Yes, I think it makes sense now that this is also under USB IF umbrella.
+thanks,
+-- Shuah
