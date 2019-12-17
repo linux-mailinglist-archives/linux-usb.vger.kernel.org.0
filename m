@@ -2,87 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD443123293
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 17:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCE31233F3
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 18:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728387AbfLQQeG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 11:34:06 -0500
-Received: from mail-io1-f49.google.com ([209.85.166.49]:45847 "EHLO
-        mail-io1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727766AbfLQQeG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 11:34:06 -0500
-Received: by mail-io1-f49.google.com with SMTP id i11so8567440ioi.12
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 08:34:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=aC0PzL17HCkWM7WH7+DqP+etlDvSTGxhc70yYAVW8ig=;
-        b=dgnh2ov+UGstLpleRvJPMXpNNIiwP5grTJyIyc3OkGeADfNKy+sgvFW8mCzLOQsOyc
-         QZ34wiSiML8kkgGTxDt9X3yYnelnSO5Mpk105+g/Uy6lylD7l0abacgUQ+YnX4UJGkHE
-         03jgLZL20C9A2bJTrY8Cp1e8xZK1plzyabuMDjlx7Tu9U182+YP22adtRR5Y2nUpJkW/
-         +y7F5NjqCFV5UwWGNE8kObbbTXOZuRziAFqw6oDvTKIfsk/51viDGHAzE3AT6LaFv4Do
-         bNet8vP/bqeDxNwXdRXluJIDOWbIsylVeQpjBei6EF8TZGkQyMHFemzW9friPIIpgdW5
-         xegA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=aC0PzL17HCkWM7WH7+DqP+etlDvSTGxhc70yYAVW8ig=;
-        b=I+Lvw1vpKdgZxcsMwZvaAQ3nLTp6UQ7QMI40gfqE6xly2rBs2P5ul/lXrTAR9m8N9h
-         75dt4YZZVXz5urwwG+njbUkqnOx4WMqXlMYqe8/4hNd/nK7z4gMZJ/FM0+tumM+/rdPz
-         p2EF5/mQHQ44NKTPFvZX5jDDXhdDh+97ub0sYwMrT3MSYE33XJDA51+nn4vkqyEHi27k
-         zeJIvqkZESijdGzeac2pYj5iBPelja6+Bu8ug4vjcbp2WLZIUz1+76gcpRBFo2YloM+o
-         hrzhUf3cQTkCiNwYvG3LmMvnwxE94JSi2egtj9qEWfQLT0Q4sAl4Ga+yO5gEuPWY7lyg
-         R4Ig==
-X-Gm-Message-State: APjAAAVcaKxcyqUsrUiX+blRMSRofumDSX8tzOlUK6WC/CrB+3TiqMY9
-        lY/3rr3msCwZe6o3KqkJhuDTlvwB9wzjfEXuUnPWPVKYcYU=
-X-Google-Smtp-Source: APXvYqz+Tb9ACs/ArwXnmMZfU6XRO9Wkb0kTTxoWAA60GxkvH0URGcNPMPGsfTSS1WM8iYDwN0C66Ebx0sWymo4nTxU=
-X-Received: by 2002:a5d:97c9:: with SMTP id k9mr4262700ios.297.1576600445536;
- Tue, 17 Dec 2019 08:34:05 -0800 (PST)
+        id S1726939AbfLQRys (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 12:54:48 -0500
+Received: from lelv0142.ext.ti.com ([198.47.23.249]:43490 "EHLO
+        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726722AbfLQRys (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 12:54:48 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBHHscIn105319;
+        Tue, 17 Dec 2019 11:54:38 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576605278;
+        bh=vyv7pT1nMKYd+tq6Ob1AQFfuQnu8TD/iNvS3iuZw51U=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=R/gx6nfV5z8KbGJgo9QjqGQN4UsG1kAAIx0ZdhUgc3WMAKFYSvMcmcvoZX9Wtqkx6
+         BX2jrrZFDe3T7OPQgvWzSd/vyRxRxzseQqoz8HjVZkmMJn3jvjgZrY5pnb9mivixAl
+         hgj4izF/d2EnqwA4ItL3btJn1/6HROu9rrN//xTM=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBHHsciF096887;
+        Tue, 17 Dec 2019 11:54:38 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 17
+ Dec 2019 11:54:38 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 17 Dec 2019 11:54:38 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBHHsce8019256;
+        Tue, 17 Dec 2019 11:54:38 -0600
+Date:   Tue, 17 Dec 2019 11:53:56 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] USB: musb: fix __iomem in trace functions
+Message-ID: <20191217175356.GD14499@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        "Ben Dooks (Codethink)" <ben.dooks@codethink.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191216174807.1483538-1-ben.dooks@codethink.co.uk>
 MIME-Version: 1.0
-From:   Bryan Gillespie <rpgillespie6@gmail.com>
-Date:   Tue, 17 Dec 2019 11:33:55 -0500
-Message-ID: <CAPVsg6LXr-fsz=FG8BDMqOPd73vcgageTk++Bt+fEP4-6DVT6A@mail.gmail.com>
-Subject: Is Duplicate Sequence Number an Issue?
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20191216174807.1483538-1-ben.dooks@codethink.co.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Mon, Dec 16, 2019 at 05:48:07PM +0000, Ben Dooks (Codethink) wrote:
+> The trace functions should have __iomem on the addr
+> pointers. Add __iomem to avoid the following warnings
+> from sparse:
+> 
+> drivers/usb/musb/musb_core.c:253:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:253:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:253:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:259:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:259:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:259:56:    got void [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:267:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:267:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:267:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:273:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:273:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:273:56:    got void [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:383:55: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:383:55:    expected void const *addr
+> drivers/usb/musb/musb_core.c:383:55:    got void const [noderef] <asn:2> *addr
+> drivers/usb/musb/musb_core.c:390:56: warning: incorrect type in argument 2 (different address spaces)
+> drivers/usb/musb/musb_core.c:390:56:    expected void const *addr
+> drivers/usb/musb/musb_core.c:390:56:    got void [noderef] <asn:2> *addr
+> 
+> Signed-off-by: Ben Dooks (Codethink) <ben.dooks@codethink.co.uk>
 
-I am trying to debug a USB 3.0 issue under linux 4.4/4.14 where device
-endpoints become unresponsive when sending small packet iperf traffic
-through them. I have a protocol analyzer (Beagle 5000), and I see the
-following at the moment of breakage:
+Applied. Thanks.
 
-https://i.stack.imgur.com/CrCV7.png
-
-If I expand the packets, I notice that the last good transaction looks
-like this:
-
-https://i.stack.imgur.com/sWxne.png
-
-And the first bad transaction looks like this:
-
-https://i.stack.imgur.com/l85xJ.png
-
-This looks like only a partial transaction? The only thing that stuck
-out to me was that the two data transactions have the exact same
-Sequence Number (SeqNum), which seems like it might be out of spec
-with USB 3.0 (I read that you can only have duplicate sequence numbers
-if it is a retransmission, and it looks like it isn't)? Is xhci under
-linux setting these sequence numbers or is that at the hardware level?
-This issue seems to bubble up the linux usb stack as -EPROTO which has
-no information.
-
-Sorry if I am asking stupid questions, I am definitely a USB novice.
-
-Any insights on how to determine the cause of this breakage would be
-appreciated.
-
-Bryan
--- 
-Bryan Gillespie
-(801) 664-7527
+-Bin.
