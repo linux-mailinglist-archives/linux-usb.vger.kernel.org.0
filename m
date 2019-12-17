@@ -2,92 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6629123853
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 22:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4ED12388F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 22:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728806AbfLQVEx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 16:04:53 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:48736 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728786AbfLQVEw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 16:04:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576616688; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QOCv7eVNMACKKz7lfH6wYRKxNtDZzpuNrspVQ6O0QQ=;
-        b=mKw9XDiMoPdJp+qPGz4pc9mh/sJyqsiCv9+SX2ZpGxifxy5pYgdgWaT7Ytb2a2uuLWHO0R
-        V+97nxHzSFtE9owWbIqk1jz2Z5P5ebHzuUdV5l2WGcIko4h2akD2/lOzxzllWu6bxabJvx
-        DYI899pw4n6b6p9UCOVKXedJCaHaC+I=
-Date:   Tue, 17 Dec 2019 22:04:38 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
+        id S1727717AbfLQVSi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 16:18:38 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:51478 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726891AbfLQVSi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 16:18:38 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBHLITQO018369;
+        Tue, 17 Dec 2019 15:18:29 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1576617509;
+        bh=cOXetxRhSdMOmD9hgbN5M6wHo6EeibOw7ndKZVSYfIc=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=gp8GJTuuj8H965zxI/Yhj3InFqdjc29Wu0HOWe/+i4kURBt86X+Zt3T4lCV7S+xPL
+         YHEKYLlUsrEfz4M2e+Rk1yC3vAr/vSZMxDqs1gD9jS9XFi/1+HuUjlNYMJwaJUxLIw
+         nN4jWbYzyElbJy8w5qzSajucvxJkxzLr4pw+FW2k=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBHLITvM081206
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 17 Dec 2019 15:18:29 -0600
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 17
+ Dec 2019 15:18:29 -0600
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Tue, 17 Dec 2019 15:18:29 -0600
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBHLITpD109627;
+        Tue, 17 Dec 2019 15:18:29 -0600
+Date:   Tue, 17 Dec 2019 15:17:47 -0600
+From:   Bin Liu <b-liu@ti.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <od@zcrc.me>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Artur Rojek <contact@artur-rojek.eu>
 Subject: Re: [PATCH v3 2/7] usb: musb: dma: Add support for shared IRQ
-To:     Bin Liu <b-liu@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+Message-ID: <20191217211747.GG14499@iaqt7>
+Mail-Followup-To: Bin Liu <b-liu@ti.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Artur Rojek <contact@artur-rojek.eu>
-Message-Id: <1576616678.3.0@crapouillou.net>
-In-Reply-To: <20191217144206.GM16429@iaqt7>
 References: <20191210171110.62141-1-paul@crapouillou.net>
-        <20191210171110.62141-2-paul@crapouillou.net> <20191211185224.GD16429@iaqt7>
-        <20191217144206.GM16429@iaqt7>
+ <20191210171110.62141-2-paul@crapouillou.net>
+ <20191211185224.GD16429@iaqt7>
+ <20191217144206.GM16429@iaqt7>
+ <1576616678.3.0@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1576616678.3.0@crapouillou.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bin,
+On Tue, Dec 17, 2019 at 10:04:38PM +0100, Paul Cercueil wrote:
+> Hi Bin,
+> 
+> 
+> Le mar., déc. 17, 2019 at 08:42, Bin Liu <b-liu@ti.com> a écrit :
+> > Hi Paul,
+> > 
+> > On Wed, Dec 11, 2019 at 12:52:24PM -0600, Bin Liu wrote:
+> > >  On Tue, Dec 10, 2019 at 06:11:05PM +0100, Paul Cercueil wrote:
+> > >  > The implementation of the Inventra IP in some of the Ingenic
+> > > JZ47xx SoCs
+> > >  > does not use a separate IRQ line for DMA transfers.
+> > >  >
+> > >  > Allow these SoCs to be supported by adding a flag
+> > > 'dma_share_usb_irq'
+> > >  > in the struct musb. If set, no extra IRQ line is required, and
+> > > the musb
+> > >  > glue will need to call the API function
+> > > musbhs_dma_controller_irq()
+> > >  > within its interrupt handler.
+> > >  >
+> > >  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> > >  > Tested-by: Artur Rojek <contact@artur-rojek.eu>
+> > >  > ---
+> > > 
+> > >  Queued for usb-next. Thanks.
+> > 
+> > I removed this and the next patch [3/7] in this series from my queue.
+> > Sorry. Ming Guo has posted a series "Add MediaTek MUSB Controller
+> > Driver" which has done the similar implementation [1] but without adding
+> > the flag in struct musb. Can you please check if you can use Ming's
+> > implementation instead? The patch of his musb glue driver which uses the
+> > implementation is [2], just for your reference.
+> 
+> Sure. Were these patches merged? What tree do they apply to? They don't
+> apply cleanly on -rc2.
 
+I am currently doing the last round review and test on those patches,
+applying them to Greg's -next branch. Yes, they don't apply cleanly on
+-rc2, but manual apply doesn't have any issue.
 
-Le mar., d=E9c. 17, 2019 at 08:42, Bin Liu <b-liu@ti.com> a =E9crit :
-> Hi Paul,
->=20
-> On Wed, Dec 11, 2019 at 12:52:24PM -0600, Bin Liu wrote:
->>  On Tue, Dec 10, 2019 at 06:11:05PM +0100, Paul Cercueil wrote:
->>  > The implementation of the Inventra IP in some of the Ingenic=20
->> JZ47xx SoCs
->>  > does not use a separate IRQ line for DMA transfers.
->>  >
->>  > Allow these SoCs to be supported by adding a flag=20
->> 'dma_share_usb_irq'
->>  > in the struct musb. If set, no extra IRQ line is required, and=20
->> the musb
->>  > glue will need to call the API function=20
->> musbhs_dma_controller_irq()
->>  > within its interrupt handler.
->>  >
->>  > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  > Tested-by: Artur Rojek <contact@artur-rojek.eu>
->>  > ---
->>=20
->>  Queued for usb-next. Thanks.
->=20
-> I removed this and the next patch [3/7] in this series from my queue.
-> Sorry. Ming Guo has posted a series "Add MediaTek MUSB Controller
-> Driver" which has done the similar implementation [1] but without=20
-> adding
-> the flag in struct musb. Can you please check if you can use Ming's
-> implementation instead? The patch of his musb glue driver which uses=20
-> the
-> implementation is [2], just for your reference.
-
-Sure. Were these patches merged? What tree do they apply to? They don't=20
-apply cleanly on -rc2.
-
--Paul
-
-
->=20
-> [1] https://marc.info/?l=3Dlinux-usb&m=3D157602930627195&w=3D2
-> [2] https://marc.info/?l=3Dlinux-usb&m=3D157602932427210&w=3D2
->=20
-> Thanks,
-> -Bin.
-
-=
-
+-Bin.
