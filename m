@@ -2,54 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22A8C122CAB
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 14:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE7D7122CBD
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 14:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727899AbfLQNPl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 08:15:41 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:39861 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727029AbfLQNPl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 08:15:41 -0500
-Received: by mail-pl1-f195.google.com with SMTP id z3so4571722plk.6
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 05:15:40 -0800 (PST)
+        id S1728208AbfLQNRr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 08:17:47 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:36765 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727202AbfLQNRr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 08:17:47 -0500
+Received: by mail-qt1-f196.google.com with SMTP id q20so3997138qtp.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 05:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=PaUSE0i/E4dAKUPfsxcD2yIPlQcR3DFv2n8z6uzKeUA=;
-        b=aU8hKUArC7YGPpcFfOhvJ1VhZ2D9uXK4x2Gu0P2UMxxReV/EVjOTKD9DCEcxFpc0qm
-         JhB1Jc0j04r4FyqR9A75qkJi4o61xqSbYA/QJJniSniyDMyxa1m1OvqvRNmyJfQzrEY9
-         PU/jWoCpMtp7l4L2zzGEZfoO7bUVfKXuHU2ECXhy8NmgIvLULkoTl28002drQiJqxTeu
-         1LOD3bffSvv+nnWNXYpOM+1DHSgX5RWhcA/5zRrLYhO1k34VpHxLU5/PR5LDcBKoLE6y
-         5Wnqw2zjXGUXkO3o4jbYny8b1LEMiwEpwRt6NATX1Slm7B3qJLJgkSHtou46BR+c/PkU
-         kQdQ==
+        bh=jrOhow0LERvVTgRWMw8HjxYHfftJQbyUzenQeDRKpNw=;
+        b=hVc1G40wmuN29e/V1ueLNufDTB45hvOZ5AF9oM1WAvEa/QR/fTBSORPWG6C+ygzNaV
+         rThxGsF56pUYCA76xBVQl0426ovktTX6Sn0HtZkugW/EqsBY7b1ZIINrUcC46kGWzJ9d
+         PDqZSdpqX0CPn+d57OdicAvLhKDRLrEkLBonFp9s8EvYcnaspQbo8li69dmaxHH8JFew
+         YvvT9sjg8WXmfOCSqaQTb9AKsaCpt3JgAnCL66dKflhei7iJj1z7g3K7tJpoG573SIgF
+         uGkJtLGqVbnkyNGFkKIBWK9hMx0rgpwRnU65W964t8po8Smp4nHg9TFZ1lMIsfFgT/Cp
+         1Qsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=PaUSE0i/E4dAKUPfsxcD2yIPlQcR3DFv2n8z6uzKeUA=;
-        b=WZ/QlpsP4fEXfhtbtccCoTSiJKviU/+dx8MngNnbNVFXhVnDCP2JKjMDBD1jRWLH+M
-         tfxhwlMeEU1r/e0/lEopWDHp7l5x6s47ZWAAU+XY6KCB/fykiMkunPZFJy8tA4Q/eEAO
-         9eqayvNo3CcnYQfn/MtVlMygEmcR9x71tcUuIh9rF1YO1713VqjaeOkehOD4mECNKdQ9
-         yAM/xwWEXRqqZzyeqvgwhFjs2mtSW9QeAM02VTst5oMNv5rfoJolxe4NkD1AXA+rD5Gr
-         ncUfEik0ByZJiKz0ioNq7KWFQIH9aCbrO54rNOXa8xuoWzqE/MnRLREYG92JNWFO4GLR
-         hxJg==
-X-Gm-Message-State: APjAAAU5/7N+p+o3cwTdeMPT0p8wilQV1aZXvZOgDiI42XqDbYpGuMGJ
-        gdrrB7zX0rDIGeCqDa7xSfbi+1b0hzksmbNPofiqHl/88XM=
-X-Google-Smtp-Source: APXvYqySbnyo1U6H2RCB8pDbqOvuRYm9QgEOPUUhy2kDCoMm8Dd5Ss0BoUuE7nRR/WOJ8ht57ESPFePrZwwAUayUEIE=
-X-Received: by 2002:a17:902:6b03:: with SMTP id o3mr1655529plk.252.1576588540116;
- Tue, 17 Dec 2019 05:15:40 -0800 (PST)
+        bh=jrOhow0LERvVTgRWMw8HjxYHfftJQbyUzenQeDRKpNw=;
+        b=DxiBTLqqP9918ab0LTHUF9Ni5sw477kRqQ6B3yKCMgSVxVP9BTSPap6BCbLsJlF/rl
+         fn5QzMpsKtu/lb3jXM/guqUtBg4kRM/0s5VO8iUH5rJ5Xw1PjQJRlpXben1QBPEDcyWv
+         Rv8vaqOOiOwN4Kz7pPjWIAvo2rb5R183ubNbixgsUZx5brJV2VHQZ1C9dtn9f0d/xNXV
+         zQQwUkgYY/XpM74bfWr43ib/CyjLNQoK8EFOvzVYodEpmWRybKa9mGAHJQvH/MuWNo4J
+         LPdbG072fxgxgtq08cxhdCeWuGw/a92CPBQWuEL1wej2gGAF3+rvpsc3d1madZEhcM8r
+         1W+w==
+X-Gm-Message-State: APjAAAW0OP6I7FK5sVr2OCXHF+2oo47Ep80N8H05SqrQw20mBKSpeeUO
+        U6sEq0/1iAlQQqsFtclmKcSlhiXcklMQ0Cscp5WPpw==
+X-Google-Smtp-Source: APXvYqxwtGuGXBWkQlbdxv1qeyjlfPK7XOWDAqVQbUNaEvZbhMfR/yIMHD1HskM9LCBNZgFWCmDonw5xqZVQRSIuCnE=
+X-Received: by 2002:aed:2465:: with SMTP id s34mr4450549qtc.158.1576588665910;
+ Tue, 17 Dec 2019 05:17:45 -0800 (PST)
 MIME-Version: 1.0
-References: <000000000000029d340599e61e11@google.com>
-In-Reply-To: <000000000000029d340599e61e11@google.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 17 Dec 2019 14:15:29 +0100
-Message-ID: <CAAeHK+xOzKuNU0GNtqqdgx=rfrJhu4=yd_knBTBuDA5MKDu10A@mail.gmail.com>
-Subject: Re: BUG: bad host security descriptor; not enough data (3 vs 5 left)
-To:     syzbot <syzbot+7b2f76fab6cdba59689b@syzkaller.appspotmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
+References: <CAAeHK+yz3dtfx0Jfd4sbOcN8tSxp8+qAvW609sP_yJC5q6vq8A@mail.gmail.com>
+ <Pine.LNX.4.44L0.1912161002080.1406-100000@iolanthe.rowland.org>
+In-Reply-To: <Pine.LNX.4.44L0.1912161002080.1406-100000@iolanthe.rowland.org>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 17 Dec 2019 14:17:34 +0100
+Message-ID: <CACT4Y+ZpJ9a8hw4vStUJZDZLh0kvphAKOXCSCYjXxgX4CYmD_g@mail.gmail.com>
+Subject: Re: Re: general protection fault in usb_set_interface
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        syzbot <syzbot+7fa38a608b1075dfd634@syzkaller.appspotmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>, mans@mansr.com,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
@@ -57,48 +60,44 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 2:15 PM syzbot
-<syzbot+7b2f76fab6cdba59689b@syzkaller.appspotmail.com> wrote:
+On Mon, Dec 16, 2019 at 4:05 PM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> Hello,
+> On Mon, 16 Dec 2019, Andrey Konovalov wrote:
 >
-> syzbot found the following crash on:
+> > On Fri, Dec 13, 2019 at 8:51 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Fri, 13 Dec 2019, Andrey Konovalov wrote:
+> > >
+> > > > > > Let's retry here:
+> > > > >
+> > > > > > #syz test: https://github.com/google/kasan.git f0df5c1b
+> > > > >
+> > > > > This bug is already marked as fixed. No point in testing.
+> > > > >
+> > > >
+> > > > Hm, that explains some of the weirdness. It doesn't explain though
+> > > > neither why the patch was actually tested when Alan requested it nor
+> > > > why syzbot sent no reply.
+> > >
+> > > In the meantime, is there any way to get syzbot to test the new patch
+> > > with the old reproducer?  Perhaps tell it to re-open this bug?
+> >
+> > No, we can only test this manually now. I can run the reproducer for
+> > you. Should I revert the fix for this bug and then apply your patch?
+> > What's the expected result?
 >
-> HEAD commit:    4cc037ec usb: gadget: add raw-gadget interface
-> git tree:       https://github.com/google/kasan.git usb-fuzzer
-> console output: https://syzkaller.appspot.com/x/log.txt?x=17597049e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a2d3f61a19fd0cf1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7b2f76fab6cdba59689b
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1724ae99e00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17ed23a6e00000
->
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7b2f76fab6cdba59689b@syzkaller.appspotmail.com
->
-> usb 1-1: config 0 interface 0 altsetting 0 has 3 endpoint descriptors,
-> different from the interface descriptor's value: 4
-> usb 1-1: New USB device found, idVendor=13dc, idProduct=5611,
-> bcdDevice=2f.15
-> usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-> usb 1-1: config 0 descriptor??
-> hwa-hc 1-1:0.0: Wire Adapter v106.52 newer than groked v1.0
-> hwa-hc 1-1:0.0: FIXME: USB_MAXCHILDREN too low for WUSB adapter (194 ports)
-> usb 1-1: BUG: bad host security descriptor; not enough data (3 vs 5 left)
-> usb 1-1: supported encryption types:
-> usb 1-1: E: host doesn't support CCM-1 crypto
-> hwa-hc 1-1:0.0: Wireless USB HWA host controller
-> hwa-hc 1-1:0.0: new USB bus registered, assigned bus number 11
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this bug, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+> Please simply run the patch as it is, with no other changes.  The
+> expected result is a use-after-free Read in usbvision_v4l2_open, just
+> as with c7b0ec009a216143df30.
 
-#syz dup: BUG: bad host security descriptor; not enough data (4 vs 5 left)
+I can't figure this out now.
+According to the database, there was a test job for that bug from you
+on Dec 10, it finished with some error and the result was mailed. But
+I can't find it anywhere as well.
+
+I've filed https://github.com/google/syzkaller/issues/1547
+"dashboard/app: show jobs on bug page", which I think will be useful
+and will shed some light on such cases and make it more transparent
+for you, it will also show the result even if you did not receive it
+over email.
+Thanks
