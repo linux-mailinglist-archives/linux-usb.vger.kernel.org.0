@@ -2,187 +2,215 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C661238A0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 22:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4628B123A35
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 23:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727909AbfLQVYa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 16:24:30 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:38492 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfLQVYa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 16:24:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576617868; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4C9AwKJoFefXH+ToH8CSxGK5C+sj8QnbEUgDjj7IX84=;
-        b=XheFhTOzEWgjztClMj0L64tByp2E6JNkSY03/XUQ97k6wj1JvqbMLoFbROM8AAIeKgguFE
-        uKI5d1OJjevXTsjMS0hOSXrvQUBzbRm7WMJBhEfLdQCKv91MdVKqRzFiOhm/azDXCin5q+
-        Ak/NWKcuO5zRaypR6YsuDEMb7Lj76RI=
-Date:   Tue, 17 Dec 2019 22:24:23 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Message-Id: <1576617863.3.1@crapouillou.net>
-In-Reply-To: <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.c
-        om>
-References: <20191211155032.167032-1-paul@crapouillou.net>
-        <20191211155032.167032-3-paul@crapouillou.net>
-        <20191212091814.GA7035@b29397-desktop> <1576270147.3.0@crapouillou.net>
-        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <1576493525.3.0@crapouillou.net>
-        <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.com>
+        id S1726227AbfLQWuZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 17:50:25 -0500
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43600 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725892AbfLQWuZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 17:50:25 -0500
+Received: by mail-pg1-f195.google.com with SMTP id k197so100466pga.10;
+        Tue, 17 Dec 2019 14:50:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=+TnDTXs1lzMnWtLAgPPWwOLrYNuxW1IXk2XEJQz09/I=;
+        b=IdskijD4Nb9zhzhBU3KpYteX9WG0D9CusGT2Ty8kKstGFm2AsDJz/q4DwEQP0c0U3x
+         vCck7W6tWtBbunVuaBNRj4j/qJFkx9NzqzoRT2ZYuUUohn+lTworcjz8L4iLRub4gEKh
+         2eCrj7UK1/9ghd2i1fQFvWh30chBYW8y7nFgXhR1ToXKebMCPX7adJPlKpKKhYnlYHuT
+         hdu54MoOMCw5QReT9OV6H3chwywjRhvsCb0/1Xcq32V6yZ8Ex0cjTqOEHSgtJc11Oq2R
+         4VFzii5a9HfMMxbLqKLHBGgtGhGPVXZDzlxVLJ56aotrwkqZMEXdW4qio7lbLZTmP5qh
+         hoIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=+TnDTXs1lzMnWtLAgPPWwOLrYNuxW1IXk2XEJQz09/I=;
+        b=ItcSGQ8N5XlOnc/oe6CPBBEIjJLT/Cuq04tgXkchUjldBSnnIsR6UTG4+tOxPqhscr
+         E/u2xIRXoaDjxVxFHE3D4H2sNQR4N2aO2QhvWWNsEueVPNlAmGywgRPydwiM+0tOArAa
+         lnSDVbVi2NuJZlrbAghl50ST98QeE4wYpNw250NrT1Opsn+sCeXY/CDFeQJoDn5hFoGq
+         ctdfXYpV1dhlqNb38CJnLFwqkZThYRLYuj2JNDJSc5L+Vor9loHXSaSo5A39I0rXeATI
+         3T87ZXN+LggZ70A+Lowostl1jyvFGC4nFfs8qcb0Fylr62kuey5cYr3qB9y/JREusSzZ
+         A94A==
+X-Gm-Message-State: APjAAAXcPnyXFLdlrnGv09DOIqBgE03TQhKnlVVATeCqTifeTkVOvu/U
+        jQCPFECMQmkYereKz1nfYY8=
+X-Google-Smtp-Source: APXvYqyIuuevXTJ1358EAR4bTnYcaknv0s9VjaFiC+JwpkXY+9D6bOQOlyHOcGwhDtqtJF1huJyrEg==
+X-Received: by 2002:a62:33c6:: with SMTP id z189mr85248pfz.246.1576623024108;
+        Tue, 17 Dec 2019 14:50:24 -0800 (PST)
+Received: from dtor-ws ([2620:15c:202:201:3adc:b08c:7acc:b325])
+        by smtp.gmail.com with ESMTPSA id w11sm20740pgs.60.2019.12.17.14.50.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 14:50:23 -0800 (PST)
+Date:   Tue, 17 Dec 2019 14:50:21 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] HID: hiddev: fix mess in hiddev_open()
+Message-ID: <20191217225021.GA34258@dtor-ws>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+The open method of hiddev handler fails to bring the device out of
+autosuspend state as was promised in 0361a28d3f9a, as it actually has 2
+blocks that try to start the transport (call hid_hw_open()) with both
+being guarded by the "open" counter, so the 2nd block is never executed as
+the first block increments the counter so it is never at 0 when we check
+it for the second block.
 
-Le mar., d=E9c. 17, 2019 at 01:32, Peter Chen <peter.chen@nxp.com> a=20
-=E9crit :
->=20
->>  Le lun., d=E9c. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a=20
->> =E9crit :
->>  >
->>  >>  >>  +
->>  >>  >>  +	desc =3D &charger->desc;
->>  >>  >>  +	desc->name =3D "usb-charger";
->>  >>  >>  +	desc->properties =3D usb_charger_properties;
->>  >>  >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
->>  >>  >>  +	desc->get_property =3D usb_charger_get_property;
->>  >>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
->>  >>  >
->>  >>  > What's your further plan for this generic USB charger?
->>  >>  > To support BC1.2, we need to know charger type, and how we=20
->> could
->>  >> get  > it?
->>  >>  >
->>  >>  > Peter
->>  >>
->>  >>  Well I don't really know. The USB role framework does not give=20
->> any
->>  >> info about  what's plugged.
->>  >>
->>  >
->>  > What's the use case for this patch set? How it be used?
->>=20
->>  My devicetree:
->>=20
->>  usb_otg: usb@13440000 {
->>  	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
->>  	reg =3D <0x13440000 0x10000>;
->>  	[...]
->>=20
->>  	usb-role-switch;
->>=20
->>  	connector {
->>  		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
->>  		label =3D "mini-USB";
->>  		type =3D "mini";
->>=20
->>  		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
->>  		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
->>  		[...]
->>  	};
->>=20
->>  	usb_charger: usb-charger {
->>  		compatible =3D "usb-charger";
->>  	};
->>  };
->>=20
->>  The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect=20
->> in
->>  which state (device, host, unconnected) a OTG connector is. However,
->>  that means I cannot use the standard gpio-charger driver to detect=20
->> the
->>  presence of a charger based on the state of the VBUS gpio, since=20
->> it's
->>  already requested here. So the point of this patchset is to provide=20
->> an
->>  alternative to gpio-charger that works with OTG controllers=20
->> compatible
->>  with 'usb-role-switch'.
->>=20
->=20
-> Thanks for explaining it.
->=20
-> What's the user for this USB charger,  PMIC or what else? How the=20
-> user uses
-> this USB charger interface?
+Additionally hiddev_open() was leaving counter incremented on errors,
+causing the device to never be reopened properly if there was ever an
+error.
 
-It's exported as a standard charger, so it can be passed to client=20
-drivers through devicetree, and its online status can be retrieved from=20
-sysfs.
+Let's fix all of this by factoring out code that creates client structure
+and powers up the device into a separate function that is being called
+from usbhid_open() with the "existancelock" being held.
 
--Paul
+Fixes: 0361a28d3f9a ("HID: autosuspend support for USB HID")
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
+ drivers/hid/usbhid/hiddev.c | 97 ++++++++++++++++---------------------
+ 1 file changed, 42 insertions(+), 55 deletions(-)
 
->=20
->>=20
->>=20
->>  >>  >
->>  >>  >>  +
->>  >>  >>  +	charger->charger =3D devm_power_supply_register(dev, desc,
->>  >> &cfg);
->>  >>  >>  +	if (IS_ERR(charger->charger)) {
->>  >>  >>  +		dev_err(dev, "Unable to register charger");
->>  >>  >>  +		return PTR_ERR(charger->charger);
->>  >>  >>  +	}
->>  >>  >>  +
->>  >>  >>  +	err =3D usb_role_switch_register_notifier(charger->role,
->>  >>  >> &charger->nb);
->>  >>  >>  +	if (err) {
->>  >>  >>  +		dev_err(dev, "Unable to register USB role switch=20
->> notifier");
->>  >>  >>  +		return err;
->>  >>  >>  +	}
->>  >>  >>  +
->>  >>  >>  +	return devm_add_action_or_reset(dev,=20
->> usb_charger_unregister,
->>  >>  >> charger);
->>  >>  >>  +}
->>  >>  >>  +
->>  >>  >>  +static const struct of_device_id usb_charger_of_match[] =3D {
->>  >>  >>  +	{ .compatible =3D "usb-charger" },
->>  >>  >>  +	{ /* sentinel */ },
->>  >>  >>  +};
->>  >>  >>  +MODULE_DEVICE_TABLE(of, usb_charger_of_match);  +  +static
->>  >> struct
->>  >>  >> platform_driver usb_charger_driver =3D {
->>  >>  >>  +	.driver =3D {
->>  >>  >>  +		.name =3D "usb-charger",
->>  >>  >>  +		.of_match_table =3D of_match_ptr(usb_charger_of_match),
->>  >>  >>  +	},
->>  >>  >>  +	.probe =3D usb_charger_probe,
->>  >>  >>  +};
->>  >>  >>  +module_platform_driver(usb_charger_driver);
->>  >>  >>  +
->>  >>  >>  +MODULE_DESCRIPTION("Simple USB charger driver");
->>  >>  >> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
->>  >>  >> +MODULE_LICENSE("GPL");
->>  >>  >>  --
->>  >>  >>  2.24.0
->>  >>  >>
->>  >>  >
->>  >>  > --
->>  >>  >
->>  >>  > Thanks,
->>  >>  > Peter Chen
->>  >>
->>  >
->>=20
->=20
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index 1f9bc4483465..c879b214a479 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -241,12 +241,51 @@ static int hiddev_release(struct inode * inode, struct file * file)
+ 	return 0;
+ }
+ 
++static int __hiddev_open(struct hiddev *hiddev, struct file *file)
++{
++	struct hiddev_list *list;
++	int error;
++
++	lockdep_assert_held(&hiddev->existancelock);
++
++	list = vzalloc(sizeof(*list));
++	if (!list)
++		return -ENOMEM;
++
++	mutex_init(&list->thread_lock);
++	list->hiddev = hiddev;
++
++	if (!hiddev->open++) {
++		error = hid_hw_power(hiddev->hid, PM_HINT_FULLON);
++		if (error < 0)
++			goto err_drop_count;
++
++		error = hid_hw_open(hiddev->hid);
++		if (error < 0)
++			goto err_normal_power;
++	}
++
++	spin_lock_irq(&hiddev->list_lock);
++	list_add_tail(&list->node, &hiddev->list);
++	spin_unlock_irq(&hiddev->list_lock);
++
++	file->private_data = list;
++
++	return 0;
++
++err_normal_power:
++	hid_hw_power(hiddev->hid, PM_HINT_NORMAL);
++err_drop_count:
++	hiddev->open--;
++	vfree(list);
++	return error;
++}
++
+ /*
+  * open file op
+  */
+ static int hiddev_open(struct inode *inode, struct file *file)
+ {
+-	struct hiddev_list *list;
+ 	struct usb_interface *intf;
+ 	struct hid_device *hid;
+ 	struct hiddev *hiddev;
+@@ -255,66 +294,14 @@ static int hiddev_open(struct inode *inode, struct file *file)
+ 	intf = usbhid_find_interface(iminor(inode));
+ 	if (!intf)
+ 		return -ENODEV;
++
+ 	hid = usb_get_intfdata(intf);
+ 	hiddev = hid->hiddev;
+ 
+-	if (!(list = vzalloc(sizeof(struct hiddev_list))))
+-		return -ENOMEM;
+-	mutex_init(&list->thread_lock);
+-	list->hiddev = hiddev;
+-	file->private_data = list;
+-
+-	/*
+-	 * no need for locking because the USB major number
+-	 * is shared which usbcore guards against disconnect
+-	 */
+-	if (list->hiddev->exist) {
+-		if (!list->hiddev->open++) {
+-			res = hid_hw_open(hiddev->hid);
+-			if (res < 0)
+-				goto bail;
+-		}
+-	} else {
+-		res = -ENODEV;
+-		goto bail;
+-	}
+-
+-	spin_lock_irq(&list->hiddev->list_lock);
+-	list_add_tail(&list->node, &hiddev->list);
+-	spin_unlock_irq(&list->hiddev->list_lock);
+-
+ 	mutex_lock(&hiddev->existancelock);
+-	/*
+-	 * recheck exist with existance lock held to
+-	 * avoid opening a disconnected device
+-	 */
+-	if (!list->hiddev->exist) {
+-		res = -ENODEV;
+-		goto bail_unlock;
+-	}
+-	if (!list->hiddev->open++)
+-		if (list->hiddev->exist) {
+-			struct hid_device *hid = hiddev->hid;
+-			res = hid_hw_power(hid, PM_HINT_FULLON);
+-			if (res < 0)
+-				goto bail_unlock;
+-			res = hid_hw_open(hid);
+-			if (res < 0)
+-				goto bail_normal_power;
+-		}
+-	mutex_unlock(&hiddev->existancelock);
+-	return 0;
+-bail_normal_power:
+-	hid_hw_power(hid, PM_HINT_NORMAL);
+-bail_unlock:
++	res = hiddev->exist ? __hiddev_open(hiddev, file) : -ENODEV;
+ 	mutex_unlock(&hiddev->existancelock);
+ 
+-	spin_lock_irq(&list->hiddev->list_lock);
+-	list_del(&list->node);
+-	spin_unlock_irq(&list->hiddev->list_lock);
+-bail:
+-	file->private_data = NULL;
+-	vfree(list);
+ 	return res;
+ }
+ 
+-- 
+2.24.1.735.g03f4e72817-goog
 
-=
 
+-- 
+Dmitry
