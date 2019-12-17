@@ -2,84 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C5F122965
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 12:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 367FF12299F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 12:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbfLQLAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 06:00:20 -0500
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:49000 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbfLQLAT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 06:00:19 -0500
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBHB0IeJ024842;
-        Tue, 17 Dec 2019 05:00:18 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576580418;
-        bh=WFu2bhCsbcS8Ji82jkf6TOz+cf1OP42p/0gNDCCLLiE=;
-        h=From:To:CC:Subject:Date;
-        b=hN2EmYI6fo8B+cctFerAaiz7Y/5cT2kRgVpERx3LSNeWW4epYL0YwV/pZMYGwr4TJ
-         Mwv4wO71mEDxsAefEvsP2Svv9lFkUNKEOxi9goTj9YJ5hL3WRWDzWl85p6GcPrqZgq
-         LnmWA8VrF0W8LG9Xz4YULh2hPMrH2W+MSfU3Mufc=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBHB0I3D080597
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 17 Dec 2019 05:00:18 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Tue, 17
- Dec 2019 05:00:17 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Tue, 17 Dec 2019 05:00:17 -0600
-Received: from feketebors.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBHB0F7x038240;
-        Tue, 17 Dec 2019 05:00:16 -0600
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-To:     <b-liu@ti.com>, <gregkh@linuxfoundation.org>
-CC:     <vkoul@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] usb: musb/ux500: Use dma_request_chan() instead dma_request_slave_channel()
-Date:   Tue, 17 Dec 2019 13:00:30 +0200
-Message-ID: <20191217110030.26887-1-peter.ujfalusi@ti.com>
-X-Mailer: git-send-email 2.24.0
+        id S1727329AbfLQLQD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 06:16:03 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37668 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726824AbfLQLQC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 06:16:02 -0500
+Received: by mail-pl1-f194.google.com with SMTP id c23so5963630plz.4
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 03:16:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+awUKio9p4Gf8NY2FGLOxx315Fg31QJAQkkFLDdf2qk=;
+        b=vhLu684VYkAnZb2xIOi86+7krc1q5YZ391ygeuZ9ZFGk8CW9UIuDfYWehfwbeiDZJs
+         zE8jqRSy1XKVmGfPq3vfOcQRs72krLoF9Ph8WhX9lmNXeq70KSxDB7TthL4yy0iJg2oT
+         2wfVzqz0V6Hv95ZE2bceCFg06TNpytRoAdLARpOfOHgM4MD+jWg64x7Gwp5vw9P+ge6K
+         AXguuUV8/aAHK7qC5AO4XjFMnxSuqzcC+tNIBYFrKESHtXVtd7fjxGWcWe1orSEY1KAQ
+         XEH9KzcETJBV6kmE4rdCGYaLK69z0UhCnNjlv3v3cT6zgX5DYuVfaY1EItVtJvaFF093
+         HY1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+awUKio9p4Gf8NY2FGLOxx315Fg31QJAQkkFLDdf2qk=;
+        b=WmDTBGVBH4QWAOQ8VAWOd4nav6SO0XfjMn7f7S0fcwwD0TIcMg5T0+phrAn6278r9K
+         iNozQ3qfFfbPpcHW0UisqFkS4T1dXurCd/36uKHZHW1CbNaQkaHu3ifXR5EE4pfOybk5
+         Gv6wYYogv1CjWRTh63Gzo/UGADpvZggOij1hWAABTx9RdxkUuvBF+xlQUSHrVLpP6+1M
+         ITCq4SRvzuKC6xq/2z5x7q3KL/uyh6uBjOr1hU3BN5+FxjTTQV/JT545ssYpu4v1cytf
+         jDSbYthELdeRfmnYpDq+f1VLAHSZh7NLvMD2iG66uJHrJPYtmbfQLMvI40DZeCiZABx+
+         BC1w==
+X-Gm-Message-State: APjAAAVmGmILqy4ht3oYxQYRIh6l/nVP63jKYJ8hbzPOjNW0iGjTg2ir
+        uofOjJ4vMlfunGjQb5/iEK3b1OCEoTypMYtU2UeZOA==
+X-Google-Smtp-Source: APXvYqw1BghZmCWqP60myjxjEs6YuRq3Mo3lYtfOqhdxaPe8CxHGvSNj0WzKtKxsdl9oPTsLP3S4j8Jna1S2/v9ahic=
+X-Received: by 2002:a17:90b:150:: with SMTP id em16mr5195492pjb.123.1576581361710;
+ Tue, 17 Dec 2019 03:16:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <95e7a12ac909e7de584133772efc7ef982a16bbb.1576170740.git.andreyknvl@google.com>
+ <Pine.LNX.4.44L0.1912121313030.1352-100000@iolanthe.rowland.org>
+ <CAAeHK+yOBcNz_iopRs6PEu=1-rZn6Gkm+Urq+iVBFQeSjSXqNA@mail.gmail.com> <CACT4Y+aN20NXxXhe9qv_WRLntAHbL98Shj8NAvg0WafDw8C=jA@mail.gmail.com>
+In-Reply-To: <CACT4Y+aN20NXxXhe9qv_WRLntAHbL98Shj8NAvg0WafDw8C=jA@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 17 Dec 2019 12:15:50 +0100
+Message-ID: <CAAeHK+xyVh6QkbUp6z+fLrv5f9sODkgFuvmBU1jB8borQ9M65g@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/2] kcov: collect coverage from interrupts
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dma_request_slave_channel() is a wrapper on top of dma_request_chan()
-eating up the error code.
+On Tue, Dec 17, 2019 at 12:00 PM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Fri, Dec 13, 2019 at 1:09 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> >
+> > On Thu, Dec 12, 2019 at 7:15 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> > >
+> > > On Thu, 12 Dec 2019, Andrey Konovalov wrote:
+> > >
+> > > > This change extends kcov remote coverage support to allow collecting
+> > > > coverage from interrupts in addition to kernel background threads.
+> > > >
+> > > > To collect coverage from code that is executed in interrupt context, a
+> > > > part of that code has to be annotated with kcov_remote_start/stop() in a
+> > > > similar way as how it is done for global kernel background threads. Then
+> > > > the handle used for the annotations has to be passed to the
+> > > > KCOV_REMOTE_ENABLE ioctl.
+> > > >
+> > > > Internally this patch adjusts the __sanitizer_cov_trace_pc() compiler
+> > > > inserted callback to not bail out when called from interrupt context.
+> > > > kcov_remote_start/stop() are updated to save/restore the current per
+> > > > task kcov state in a per-cpu area (in case the interrupt came when the
+> > > > kernel was already collecting coverage in task context). Coverage from
+> > > > interrupts is collected into pre-allocated per-cpu areas, whose size is
+> > > > controlled by the new CONFIG_KCOV_IRQ_AREA_SIZE.
+> > > >
+> > > > This patch also cleans up some of kcov debug messages.
+> > > >
+> > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > > ---
+> > >
+> > > > diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+> > > > index 4c9d1e49d5ed..faf84ada71a5 100644
+> > > > --- a/drivers/usb/gadget/udc/dummy_hcd.c
+> > > > +++ b/drivers/usb/gadget/udc/dummy_hcd.c
+> > > > @@ -38,6 +38,7 @@
+> > > >  #include <linux/usb/gadget.h>
+> > > >  #include <linux/usb/hcd.h>
+> > > >  #include <linux/scatterlist.h>
+> > > > +#include <linux/kcov.h>
+> > > >
+> > > >  #include <asm/byteorder.h>
+> > > >  #include <linux/io.h>
+> > >
+> > > That's the only change to this driver.  As such, it doesn't appear to
+> > > be needed, judging by the patch description.
+> >
+> > Right, will fix in the next version, thanks!
+>
+> Please also post a github or gerrit link. These small scraps of
+> changes without context and better visualisation are extremely hard to
+> review meaningfully.
 
-Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
----
- drivers/usb/musb/ux500_dma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+The link is in the cover letter:
 
-diff --git a/drivers/usb/musb/ux500_dma.c b/drivers/usb/musb/ux500_dma.c
-index d19bb3e89da6..d5cf5e8bb1ca 100644
---- a/drivers/usb/musb/ux500_dma.c
-+++ b/drivers/usb/musb/ux500_dma.c
-@@ -310,9 +310,9 @@ static int ux500_dma_controller_start(struct ux500_dma_controller *controller)
- 			dma_channel->max_len = SZ_16M;
- 
- 			ux500_channel->dma_chan =
--				dma_request_slave_channel(dev, chan_names[ch_num]);
-+				dma_request_chan(dev, chan_names[ch_num]);
- 
--			if (!ux500_channel->dma_chan)
-+			if (IS_ERR(ux500_channel->dma_chan))
- 				ux500_channel->dma_chan =
- 					dma_request_channel(mask,
- 							    data ?
--- 
-Peter
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
-
+https://linux-review.googlesource.com/c/linux/kernel/git/torvalds/linux/+/2224/1
