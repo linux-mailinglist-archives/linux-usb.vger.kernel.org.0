@@ -2,235 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E24121E8C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2019 23:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1F4122194
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 02:33:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbfLPWuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Dec 2019 17:50:02 -0500
-Received: from nat-hk.nvidia.com ([203.18.50.4]:1846 "EHLO nat-hk.nvidia.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726448AbfLPWuB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Dec 2019 17:50:01 -0500
-Received: from hkpgpgate102.nvidia.com (Not Verified[10.18.92.77]) by nat-hk.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df80a140000>; Tue, 17 Dec 2019 06:49:56 +0800
-Received: from HKMAIL103.nvidia.com ([10.18.16.12])
-  by hkpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 16 Dec 2019 14:49:56 -0800
-X-PGP-Universal: processed;
-        by hkpgpgate102.nvidia.com on Mon, 16 Dec 2019 14:49:56 -0800
-Received: from HKMAIL102.nvidia.com (10.18.16.11) by HKMAIL103.nvidia.com
- (10.18.16.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 16 Dec
- 2019 22:49:56 +0000
-Received: from NAM02-BL2-obe.outbound.protection.outlook.com (104.47.38.55) by
- HKMAIL102.nvidia.com (10.18.16.11) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3 via Frontend Transport; Mon, 16 Dec 2019 22:49:56 +0000
+        id S1726692AbfLQBdH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Dec 2019 20:33:07 -0500
+Received: from mail-eopbgr60076.outbound.protection.outlook.com ([40.107.6.76]:16475
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726016AbfLQBdH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Dec 2019 20:33:07 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FEkZYv5DgjdPDWkSXeA1EP9bRv1dIJnBqmmvwgxeSgFk+4jz9q1FBC9BDzRkD8xUN47DBV9JX2xOsG8cnN3soQIWtyFwlcXTZD0WU6mH+821RYVUI+g6VLkwq6inVfp8K/zjW+25DS/GjiOQ6jfAcg2goB4gcFx/LC1gf/H+IcabDcE3n6B9HNJsvcZoKYognAb95PUuGMoLlvDo71UOOGi6cE0hsilrIC//bitKJP43qNmeY8FM3bFjLRtlSsxSsNXEtZdZd/SBjQVEWBLdkw0ndYywO0lPXLeh1MTpawrKeYcW3f3g18uVhvvUk2TgF28gaMgi7NfJ4S/A4BONXQ==
+ b=DpGMOiV9f/+Y6ciCJ5kAf1khuX4SW6P+jhcTC+MG7i7AhgLzm7vLGEz2N+3P0QpH6ZihDnE5QgaQNzKfTmGaqv2SPIaou4VT2tkXcAU+7SNfHc5uUfQcEFZlFqKDtsUSgbiqVom8bCbIa9ofjhMbIl2AVklvIGtPDHLSdXSiXgdZTG2/txsmKgNenrgep3wqIZpQDgjD7JsI6T+moMlREXQmpFXDSwu9YpwEIhavbTYXSrNcakh1RGngKlkajiJ874jor5opvuPXfx1B7aOhT78TBTYkPcSrqVXWZ/fHy6ZRhTBXFGBF2/VatxtCiq3OKQ4ZUYVmOE+EeTB5vNUIKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Otvg3WLiBI8LyT6g6aDQdp/0W02Dpgf6RY5OYTbmuD0=;
- b=n3IsWbSyfn4WYjmerWhgQIMA5XKJ/RAc2mkJnCQd5mqeksLa38fBdS7xqn2YCjajPj7Y33wO95qAsY5nB/pdxMgv2KXGsm2qII/oj0Hyr82Xl/50YfHHtJqt7zusYBI1RMmUrdSm6wlwbtiipooqxq8oTwuQNu1mPE29ApBh04PlfblWul+CG+XAxNlqvwkbg02Cs5r6flmxdmywXQktqbRF6jaTSfqlxrkazS34I43CR+S6IX3HyMD4q3B9DHbM4wQqGjrbGAHWEMwPyGj6n6BUYaUq88+IAaN9ghxkDFeFWcWHSKQ7GZCZGEHoK1BJ6q7gPG1h6Pnl5stGccRztw==
+ bh=tmodkr6+NhGoXf4aikQiVvsxgOdD3BMoaKluZ1LwlXA=;
+ b=I5+JMMlOVupFpqFvbpHAo3vbTashW6DCnAH9L74mFbQPz1EBOOU/vOmnLLSDul2exhCG1UW1viIky2Zxu1UOnZAXj8TpKNgrl1EJy+70Sb/gkJWJHGI1j+aA0w+59T06KawATQ3/mba3lWRQjCLGG3fXhlsqUkPVlEny16C3O/qo+wRrNiFJCKLG7+nsuIaDEvPUT4RO7GCOxC+gAP1FlMXuh7y0XMgQdPODSaiwhhA/IRRgqk60GbEtTiscVoUCB3QfLu3j6MMggUjjpIQy512vUIK10mvv55FrUCh26vzc5RC2CYAbUxTgDwa0JZCmP46Jx05fkOd4SgIub1Qg1A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com (20.176.253.214) by
- BYAPR12MB2758.namprd12.prod.outlook.com (20.176.254.83) with Microsoft SMTP
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tmodkr6+NhGoXf4aikQiVvsxgOdD3BMoaKluZ1LwlXA=;
+ b=jH2PhbE3BDwDvja9JnZorB07ftgl5Z5Kqw1Q/MefXE80a9SHNiHYEwF2u5Kjg3zfBdwFv+2k43qMzz1anKEp87uHdhC5BnRJrnibxC0ppmhmMWnEtIxvEyYwe33Fkwyu0SNrMYENBrYV0Og+xHXQR1rdRnR81tzfd2kKkofJvTQ=
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
+ VI1PR04MB4496.eurprd04.prod.outlook.com (20.177.54.92) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.18; Mon, 16 Dec 2019 22:49:52 +0000
-Received: from BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::8d3d:d3ba:cb91:c060]) by BYAPR12MB2727.namprd12.prod.outlook.com
- ([fe80::8d3d:d3ba:cb91:c060%5]) with mapi id 15.20.2538.019; Mon, 16 Dec 2019
- 22:49:46 +0000
-From:   Ajay Gupta <ajayg@nvidia.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Ajay Gupta <ajaykuee@gmail.com>,
+ 15.20.2538.14; Tue, 17 Dec 2019 01:32:24 +0000
+Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
+ ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2538.019; Tue, 17 Dec 2019
+ 01:32:24 +0000
+From:   Peter Chen <peter.chen@nxp.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+CC:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "od@zcrc.me" <od@zcrc.me>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v6] usb: typec: ucsi: add support for separate DP altmode
- devices
-Thread-Topic: [PATCH v6] usb: typec: ucsi: add support for separate DP altmode
- devices
-Thread-Index: AQHVoZfAZYEU1Q0sLk61ZBRXTLc1s6e2oUkAgABCE6CAAT26gIAFYLPw
-Date:   Mon, 16 Dec 2019 22:49:46 +0000
-Message-ID: <BYAPR12MB2727CB6BDCD3E76DDB92BB55DC510@BYAPR12MB2727.namprd12.prod.outlook.com>
-References: <20191123004347.5127-1-ajayg@nvidia.com>
- <20191212134412.GF31345@kuha.fi.intel.com>
- <BYAPR12MB27275226F3C815F96257F081DC550@BYAPR12MB2727.namprd12.prod.outlook.com>
- <20191213123753.GH31345@kuha.fi.intel.com>
-In-Reply-To: <20191213123753.GH31345@kuha.fi.intel.com>
+Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
+Thread-Topic: [PATCH v2 3/3] power/supply: Add generic USB charger driver
+Thread-Index: AQHVsDrKPWSbvY6T+0OJ94dLsbCA8qe2ObMAgAJTXYCAA3BKkIAAn/jzgAD0ddA=
+Date:   Tue, 17 Dec 2019 01:32:23 +0000
+Message-ID: <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.com>
+References: <20191211155032.167032-1-paul@crapouillou.net>
+        <20191211155032.167032-3-paul@crapouillou.net>
+        <20191212091814.GA7035@b29397-desktop>
+ <1576270147.3.0@crapouillou.net>
+        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <1576493525.3.0@crapouillou.net>
+In-Reply-To: <1576493525.3.0@crapouillou.net>
 Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Enabled=True;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SiteId=43083d15-7273-40c1-b7db-39efd9ccc17a;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Owner=ajayg@nvidia.com;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_SetDate=2019-12-16T22:49:45.0488584Z;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Name=Unrestricted;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Application=Microsoft Azure
- Information Protection;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_ActionId=305bb137-acec-4963-9516-80a57d7b13df;
- MSIP_Label_6b558183-044c-4105-8d9c-cea02a2a3d86_Extended_MSFT_Method=Automatic
 authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ajayg@nvidia.com; 
-x-originating-ip: [216.228.112.22]
+ smtp.mailfrom=peter.chen@nxp.com; 
+x-originating-ip: [119.31.174.67]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 47a9d0ff-b012-4061-f79b-08d7827a3fda
-x-ms-traffictypediagnostic: BYAPR12MB2758:
-x-microsoft-antispam-prvs: <BYAPR12MB2758325C87E66DC241FA054FDC510@BYAPR12MB2758.namprd12.prod.outlook.com>
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: cadfeda2-5c47-4915-9c77-08d78290f7cd
+x-ms-traffictypediagnostic: VI1PR04MB4496:
+x-microsoft-antispam-prvs: <VI1PR04MB449605E5A354797DA6C784558B500@VI1PR04MB4496.eurprd04.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 02530BD3AA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(346002)(136003)(376002)(39860400002)(366004)(396003)(13464003)(199004)(189003)(4326008)(26005)(6916009)(55016002)(9686003)(7696005)(316002)(71200400001)(478600001)(76116006)(66946007)(33656002)(8936002)(8676002)(66446008)(81166006)(81156014)(66476007)(66556008)(64756008)(52536014)(5660300002)(2906002)(6506007)(54906003)(86362001)(53546011)(186003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB2758;H:BYAPR12MB2727.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: nvidia.com does not designate
+x-forefront-prvs: 02543CD7CD
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(136003)(39860400002)(396003)(199004)(189003)(8676002)(2906002)(8936002)(81156014)(81166006)(6506007)(33656002)(7416002)(5660300002)(86362001)(66446008)(64756008)(66476007)(66556008)(4326008)(76116006)(66946007)(7696005)(52536014)(186003)(6916009)(55016002)(9686003)(44832011)(54906003)(26005)(478600001)(316002)(71200400001)(66574012)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4496;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fZI28wvV8RQelnM3uD9Nz4DslWlC2l2L/K1YUPR0/Khfo48NpHMWKy23DI770Z1JhsioUyy5j0BZThp0Kgsj95HXmSU0DAsT+VQkVW0p4Ko1/q/VHuwqrGJHsiklpzURjHN64AMV4sHAcPd4Y0I7E5kwW9h+ZdH49DFSdlHbHodPuWH1iS7G73bET5zBtRIhEcNrU4hSU84aCXsYvFHYxSscy+ZCODbKyg4EMasJYCV3iDsfLhgfctaVewqYWl7lqLmBcB7Qx2haP/FpdL3bPrRWRMDnaYLJNrP4beqRtkqFs6G1Hixvl/saTgc2OJCDqJefwwZModiJ8O6i6fKMIOmn7kcpNzo8aMUf6Z15TIdMvV8kPIunzRfSCA7pPWJxjf1pXA0EpyVLMYxj/t8drSTgY5tklJBJVlBLnumCyrkERomKr8TfuOPVNXefc96GrX56ka8w8iDEhIGMJ7bL5QlS1wmhtxPQOxjSXTdRz/v7pjHiZ/Tp7HcWChzsDLWM
+x-microsoft-antispam-message-info: /GFpltcX4roxBZAXTbPhSaYUbwSkMV/72W+F95S78GCcRRSeGFnGwDhK2mVh4MhX/5L0iE6k1yvPLn1lWJl/b/PEMorI4tEWyKJZ/1KMDLyTSBQyQTd/UHdC0OHyBSge8vpDwSviQmxs/7ZfamCTj/wsEJcEuuIe3arTWZePRjrrQ3e57K35WK2hHpc7tSvcAiaJwZ2DVu4E4F1//E3C5Lzrh6ye3Ld6sdo7lW6MUXOMvMmmq999LAxRCVtT8SUpwAowQ6PfxtT2/OSBDVe7n/7BloZMDnlZXV3SrfYum52TpNekg2AsqW3r+gr5So/WtN/CDgtlBwZp9j8W4vaCb214BAsOODNRI1FgO/CLq3GEJPORPInX7A+TANo0Pu6s90aTL7oePc0WD2zcG7RbXGyoLZQD59l+llyfIP26X2Ky2HlNB+WrElsXmeLfU45fzfTN39ZRdEd8kV2POKJHcRzhZt7xI8GhIsTn+w0cjfFG+J80eunFCmQcVSvNyfoz
 x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47a9d0ff-b012-4061-f79b-08d7827a3fda
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Dec 2019 22:49:46.3051
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cadfeda2-5c47-4915-9c77-08d78290f7cd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Dec 2019 01:32:23.9214
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JwpdYuShK2P0V6rFBOxYYGS3VyGunYWqNG96wAfqvrv3PWQY3nShLWOHR7fdneKQUpUS1UQVcGk2AoG4bR04ig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2758
-X-OriginatorOrg: Nvidia.com
-Content-Language: en-US
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576536596; bh=Otvg3WLiBI8LyT6g6aDQdp/0W02Dpgf6RY5OYTbmuD0=;
-        h=X-PGP-Universal:ARC-Seal:ARC-Message-Signature:
-         ARC-Authentication-Results:From:To:CC:Subject:Thread-Topic:
-         Thread-Index:Date:Message-ID:References:In-Reply-To:
-         Accept-Language:X-MS-Has-Attach:X-MS-TNEF-Correlator:msip_labels:
-         authentication-results:x-originating-ip:x-ms-publictraffictype:
-         x-ms-office365-filtering-correlation-id:x-ms-traffictypediagnostic:
-         x-microsoft-antispam-prvs:x-ms-oob-tlc-oobclassifiers:
-         x-forefront-prvs:x-forefront-antispam-report:received-spf:
-         x-ms-exchange-senderadcheck:x-microsoft-antispam:
-         x-microsoft-antispam-message-info:x-ms-exchange-transport-forked:
-         MIME-Version:X-MS-Exchange-CrossTenant-Network-Message-Id:
-         X-MS-Exchange-CrossTenant-originalarrivaltime:
-         X-MS-Exchange-CrossTenant-fromentityheader:
-         X-MS-Exchange-CrossTenant-id:X-MS-Exchange-CrossTenant-mailboxtype:
-         X-MS-Exchange-CrossTenant-userprincipalname:
-         X-MS-Exchange-Transport-CrossTenantHeadersStamped:X-OriginatorOrg:
-         Content-Language:Content-Type:Content-Transfer-Encoding;
-        b=ePuM4E566dG8yeVyEsbrDUhJPgCPRTbJugAaDxB789zRJsOpcKtlp4GlUrpLJWjP2
-         Yp2BG1C0cPkNRMFvOP/9nYHlnkd/wsHx6ofXwNzmWJ+K1LLDm3UUs4rUJWXRg+0B74
-         xYfw+Sx+ViH0BT4husq3WLgxdSHc22i865yfHZldid1FvFAB24FUTPu7KBlY1MXU/K
-         BQnspnH62v9z6TrV89eFAg5/zmepnHBmM2kuazlVz9Zb74nBr0FaxCpUqeS+kSMPfn
-         WIs8r20iIanhRBgqDeyefH6tfYZhyCxBBIxWZEi/S0viaaYnrufT0m5h2wws136r9/
-         11qqK/P5U5AoQ==
+X-MS-Exchange-CrossTenant-userprincipalname: 6jOkljhrQPTm1fpB80dj8KrYcbidr6KhTKOWD+VpjnmlmTJokq47WPwT+u1TkfezOW5QkDNYaEIHEv6ScS3/kA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4496
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
-
-> -----Original Message-----
-> From: linux-usb-owner@vger.kernel.org <linux-usb-owner@vger.kernel.org>
-> On Behalf Of Heikki Krogerus
-> Sent: Friday, December 13, 2019 4:38 AM
-> To: Ajay Gupta <ajayg@nvidia.com>
-> Cc: Ajay Gupta <ajaykuee@gmail.com>; linux-usb@vger.kernel.org
-> Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate DP alt=
-mode
-> devices
->=20
-> External email: Use caution opening links or attachments
->=20
->=20
-> On Thu, Dec 12, 2019 at 05:42:28PM +0000, Ajay Gupta wrote:
-> > Hi Heikki,
+=20
+> Le lun., d=E9c. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a =E9c=
+rit :
 > >
-> > > -----Original Message-----
-> > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Sent: Thursday, December 12, 2019 5:44 AM
-> > > To: Ajay Gupta <ajaykuee@gmail.com>
-> > > Cc: linux-usb@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
-> > > Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate
-> > > DP altmode devices
-> > >
-> > >
-> > > Hi Ajay,
-> > >
-> > > On Fri, Nov 22, 2019 at 04:43:47PM -0800, Ajay Gupta wrote:
-> > > > From: Ajay Gupta <ajayg@nvidia.com>
-> > > >
-> > > > CCGx controller used on NVIDIA GPU card has two separate display
-> > > > altmode for two DP pin assignments. UCSI specification doesn't
-> > > > prohibits using separate display altmode.
-> > > >
-> > > > Current UCSI Type-C framework expects only one display altmode for
-> > > > all DP pin assignment. This patch squashes two separate display
-> > > > altmode into single altmode to support controllers with separate
-> > > > display altmode. We first read all the alternate modes of
-> > > > connector and then run through it to know if there are separate
-> > > > display altmodes. If so, it prepares a new port altmode set after
-> > > > squashing two or more separate altmodes into one.
-> > >
-> > > I didn't see any major issues with this. There were still few extra
-> > > spaces etc., but I can clean those. Maybe it would have been good to
-> > > mention in the commit message that the reason why we need those two
-> > > separate alt modes, for what is in reality two separate pin
-> > > configurations, is limitations in UCSI specification, but never mind.
-> > >
-> > > I still don't like the approach, but since I'm unable to explain my
-> > > idea, or have time to write something for this myself, I don't want
-> > > block this any longer. It does not add that much code, so once I
-> > > have time, I can always try to improve it myself, right?
-> > >
-> > > Otherwise it's OK by me. I'll queue it up.
-> > Thanks for reviewing. Please feel free to improve the patch or commit
-> message.
+> >>  >>  +
+> >>  >>  +	desc =3D &charger->desc;
+> >>  >>  +	desc->name =3D "usb-charger";
+> >>  >>  +	desc->properties =3D usb_charger_properties;
+> >>  >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties);
+> >>  >>  +	desc->get_property =3D usb_charger_get_property;
+> >>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
+> >>  >
+> >>  > What's your further plan for this generic USB charger?
+> >>  > To support BC1.2, we need to know charger type, and how we could
+> >> get  > it?
+> >>  >
+> >>  > Peter
+> >>
+> >>  Well I don't really know. The USB role framework does not give any
+> >> info about  what's plugged.
+> >>
+> >
+> > What's the use case for this patch set? How it be used?
 >=20
-> One thing that I do want to do is I want to isolate the changes done to u=
-csi.c.
-> Can you test the attached diff? It applies on top of this patch.
-Tested the diff and it looks good. Please add additional change at [A] on t=
-op of
-your diff..
-
-Thanks
-Ajay
-> nvpublic
-
------------------------ [A] ---------------------------
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -368,11 +368,8 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *c=
-on, u8 recipient)
-                if (!len)
-                        break;
-
--               if (!alt.svid) {
--                       /* break out of outer loop and register */
--                       i =3D max_altmodes;
-+               if (!alt.svid)
-                        break;
--               }
-
-                orig[k].mid =3D alt.mid;
-                orig[k].svid =3D alt.svid;
-@@ -382,7 +379,7 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *co=
-n, u8 recipient)
-         * Update the original altmode table as some ppms may report
-         * multiple DP altmodes.
-         */
--       if (recipient =3D=3D UCSI_RECIPIENT_CON && ucsi->ops->update_altmod=
-es)
-+       if (recipient =3D=3D UCSI_RECIPIENT_CON)
-                multi_dp =3D ucsi->ops->update_altmodes(ucsi, orig, updated=
-);
-
-        /* now register altmodes */
-----------------------------------------------------------
+> My devicetree:
 >=20
-> thanks,
+> usb_otg: usb@13440000 {
+> 	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
+> 	reg =3D <0x13440000 0x10000>;
+> 	[...]
 >=20
-> --
-> heikki
+> 	usb-role-switch;
+>=20
+> 	connector {
+> 		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
+> 		label =3D "mini-USB";
+> 		type =3D "mini";
+>=20
+> 		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
+> 		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
+> 		[...]
+> 	};
+>=20
+> 	usb_charger: usb-charger {
+> 		compatible =3D "usb-charger";
+> 	};
+> };
+>=20
+> The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect in
+> which state (device, host, unconnected) a OTG connector is. However,
+> that means I cannot use the standard gpio-charger driver to detect the
+> presence of a charger based on the state of the VBUS gpio, since it's
+> already requested here. So the point of this patchset is to provide an
+> alternative to gpio-charger that works with OTG controllers compatible
+> with 'usb-role-switch'.
+>=20
+
+Thanks for explaining it.
+
+What's the user for this USB charger,  PMIC or what else? How the user uses
+this USB charger interface?
+
+Peter
+
+>=20
+>=20
+> >>  >
+> >>  >>  +
+> >>  >>  +	charger->charger =3D devm_power_supply_register(dev, desc,
+> >> &cfg);
+> >>  >>  +	if (IS_ERR(charger->charger)) {
+> >>  >>  +		dev_err(dev, "Unable to register charger");
+> >>  >>  +		return PTR_ERR(charger->charger);
+> >>  >>  +	}
+> >>  >>  +
+> >>  >>  +	err =3D usb_role_switch_register_notifier(charger->role,
+> >>  >> &charger->nb);
+> >>  >>  +	if (err) {
+> >>  >>  +		dev_err(dev, "Unable to register USB role switch notifier");
+> >>  >>  +		return err;
+> >>  >>  +	}
+> >>  >>  +
+> >>  >>  +	return devm_add_action_or_reset(dev, usb_charger_unregister,
+> >>  >> charger);
+> >>  >>  +}
+> >>  >>  +
+> >>  >>  +static const struct of_device_id usb_charger_of_match[] =3D {
+> >>  >>  +	{ .compatible =3D "usb-charger" },
+> >>  >>  +	{ /* sentinel */ },
+> >>  >>  +};
+> >>  >>  +MODULE_DEVICE_TABLE(of, usb_charger_of_match);  +  +static
+> >> struct
+> >>  >> platform_driver usb_charger_driver =3D {
+> >>  >>  +	.driver =3D {
+> >>  >>  +		.name =3D "usb-charger",
+> >>  >>  +		.of_match_table =3D of_match_ptr(usb_charger_of_match),
+> >>  >>  +	},
+> >>  >>  +	.probe =3D usb_charger_probe,
+> >>  >>  +};
+> >>  >>  +module_platform_driver(usb_charger_driver);
+> >>  >>  +
+> >>  >>  +MODULE_DESCRIPTION("Simple USB charger driver");
+> >>  >> +MODULE_AUTHOR("Paul Cercueil <paul@crapouillou.net>");
+> >>  >> +MODULE_LICENSE("GPL");
+> >>  >>  --
+> >>  >>  2.24.0
+> >>  >>
+> >>  >
+> >>  > --
+> >>  >
+> >>  > Thanks,
+> >>  > Peter Chen
+> >>
+> >
+>=20
+
