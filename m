@@ -2,87 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4973B1226CE
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 09:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A227812278C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 10:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbfLQIh3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 03:37:29 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40900 "EHLO mail.kernel.org"
+        id S1726967AbfLQJVn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 04:21:43 -0500
+Received: from mga03.intel.com ([134.134.136.65]:60201 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726402AbfLQIh2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Dec 2019 03:37:28 -0500
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5C1B9207FF;
-        Tue, 17 Dec 2019 08:37:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576571847;
-        bh=r3ptfJb3sD1f3kPMFSXcZSbpqwaMLKgnCG8vqFdH40I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pGyVvcxgw7K4EJ86MNOFfl3Ex9Igjw7KGmh1LxAHAbTbTaxVbXG5Qw8K+Yt+lPds3
-         XLyoU5w7PGseGXlJY2v0UYls0xCgqSo6mKX7ZhD0CmpicsHHIFUpVcuL+QSPRbZJtd
-         cHvxz35MmDoDvcdUWdEE/33HQKBmH424Y90Pk66c=
-Date:   Tue, 17 Dec 2019 09:37:24 +0100
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stefan Agner <stefan@agner.ch>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: Re: [PATCH v2 3/4] ARM: dts: sun8i: a83t: Correct USB3503 GPIOs
- polarity
-Message-ID: <20191217083724.6hva5rzvblrsrvlr@gilmour.lan>
-References: <20191211145054.24835-1-m.szyprowski@samsung.com>
- <CGME20191211145222eucas1p1d761af59e04017ddadbdbd1cceb59b1f@eucas1p1.samsung.com>
- <20191211145217.25025-1-m.szyprowski@samsung.com>
+        id S1726612AbfLQJVn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Dec 2019 04:21:43 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 01:21:42 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,325,1571727600"; 
+   d="scan'208";a="221709664"
+Received: from kuha.fi.intel.com ([10.237.72.53])
+  by fmsmga001.fm.intel.com with SMTP; 17 Dec 2019 01:21:40 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Dec 2019 11:21:39 +0200
+Date:   Tue, 17 Dec 2019 11:21:39 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ajay Gupta <ajayg@nvidia.com>
+Cc:     Ajay Gupta <ajaykuee@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate DP altmode
+ devices
+Message-ID: <20191217092139.GA22923@kuha.fi.intel.com>
+References: <20191123004347.5127-1-ajayg@nvidia.com>
+ <20191212134412.GF31345@kuha.fi.intel.com>
+ <BYAPR12MB27275226F3C815F96257F081DC550@BYAPR12MB2727.namprd12.prod.outlook.com>
+ <20191213123753.GH31345@kuha.fi.intel.com>
+ <BYAPR12MB2727CB6BDCD3E76DDB92BB55DC510@BYAPR12MB2727.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="37sxn2mbr4dhx5yw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191211145217.25025-1-m.szyprowski@samsung.com>
+In-Reply-To: <BYAPR12MB2727CB6BDCD3E76DDB92BB55DC510@BYAPR12MB2727.namprd12.prod.outlook.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Mon, Dec 16, 2019 at 10:49:46PM +0000, Ajay Gupta wrote:
+> Hi Heikki,
+> 
+> > -----Original Message-----
+> > From: linux-usb-owner@vger.kernel.org <linux-usb-owner@vger.kernel.org>
+> > On Behalf Of Heikki Krogerus
+> > Sent: Friday, December 13, 2019 4:38 AM
+> > To: Ajay Gupta <ajayg@nvidia.com>
+> > Cc: Ajay Gupta <ajaykuee@gmail.com>; linux-usb@vger.kernel.org
+> > Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate DP altmode
+> > devices
+> > 
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Thu, Dec 12, 2019 at 05:42:28PM +0000, Ajay Gupta wrote:
+> > > Hi Heikki,
+> > >
+> > > > -----Original Message-----
+> > > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > Sent: Thursday, December 12, 2019 5:44 AM
+> > > > To: Ajay Gupta <ajaykuee@gmail.com>
+> > > > Cc: linux-usb@vger.kernel.org; Ajay Gupta <ajayg@nvidia.com>
+> > > > Subject: Re: [PATCH v6] usb: typec: ucsi: add support for separate
+> > > > DP altmode devices
+> > > >
+> > > >
+> > > > Hi Ajay,
+> > > >
+> > > > On Fri, Nov 22, 2019 at 04:43:47PM -0800, Ajay Gupta wrote:
+> > > > > From: Ajay Gupta <ajayg@nvidia.com>
+> > > > >
+> > > > > CCGx controller used on NVIDIA GPU card has two separate display
+> > > > > altmode for two DP pin assignments. UCSI specification doesn't
+> > > > > prohibits using separate display altmode.
+> > > > >
+> > > > > Current UCSI Type-C framework expects only one display altmode for
+> > > > > all DP pin assignment. This patch squashes two separate display
+> > > > > altmode into single altmode to support controllers with separate
+> > > > > display altmode. We first read all the alternate modes of
+> > > > > connector and then run through it to know if there are separate
+> > > > > display altmodes. If so, it prepares a new port altmode set after
+> > > > > squashing two or more separate altmodes into one.
+> > > >
+> > > > I didn't see any major issues with this. There were still few extra
+> > > > spaces etc., but I can clean those. Maybe it would have been good to
+> > > > mention in the commit message that the reason why we need those two
+> > > > separate alt modes, for what is in reality two separate pin
+> > > > configurations, is limitations in UCSI specification, but never mind.
+> > > >
+> > > > I still don't like the approach, but since I'm unable to explain my
+> > > > idea, or have time to write something for this myself, I don't want
+> > > > block this any longer. It does not add that much code, so once I
+> > > > have time, I can always try to improve it myself, right?
+> > > >
+> > > > Otherwise it's OK by me. I'll queue it up.
+> > > Thanks for reviewing. Please feel free to improve the patch or commit
+> > message.
+> > 
+> > One thing that I do want to do is I want to isolate the changes done to ucsi.c.
+> > Can you test the attached diff? It applies on top of this patch.
+> Tested the diff and it looks good. Please add additional change at [A] on top of
+> your diff..
 
---37sxn2mbr4dhx5yw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Done.
 
-On Wed, Dec 11, 2019 at 03:52:17PM +0100, Marek Szyprowski wrote:
-> Current USB3503 driver ignores GPIO polarity and always operates as if the
-> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
-> USB3503 chip applications to match the chip specification and common
-> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
-> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
-> to fix the USB3503 driver to properly use generic GPIO bindings and read
-> polarity from DT.
->
-> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -368,11 +368,8 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+>                 if (!len)
+>                         break;
+> 
+> -               if (!alt.svid) {
+> -                       /* break out of outer loop and register */
+> -                       i = max_altmodes;
+> +               if (!alt.svid)
+>                         break;
+> -               }
+> 
+>                 orig[k].mid = alt.mid;
+>                 orig[k].svid = alt.svid;
+> @@ -382,7 +379,7 @@ ucsi_register_altmodes_nvidia(struct ucsi_connector *con, u8 recipient)
+>          * Update the original altmode table as some ppms may report
+>          * multiple DP altmodes.
+>          */
+> -       if (recipient == UCSI_RECIPIENT_CON && ucsi->ops->update_altmodes)
+> +       if (recipient == UCSI_RECIPIENT_CON)
+>                 multi_dp = ucsi->ops->update_altmodes(ucsi, orig, updated);
+> 
+>         /* now register altmodes */
 
-Applied, thanks
+thanks,
 
-Maxime
-
---37sxn2mbr4dhx5yw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXfiTxAAKCRDj7w1vZxhR
-xcWTAQDDHYrUUmf3Bv5q4dBtplu5iG6rQLy1lGxBQ+bI4Rg//AEAya5NBPixtgql
-ctYP1dwe0l9O3OcFDTjIvoQcg6KsuQI=
-=i22t
------END PGP SIGNATURE-----
-
---37sxn2mbr4dhx5yw--
+-- 
+heikki
