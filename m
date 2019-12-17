@@ -2,109 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DB5512302B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 16:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD443123293
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2019 17:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728593AbfLQPXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 10:23:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57372 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728443AbfLQPXX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Dec 2019 10:23:23 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CB15D2072D;
-        Tue, 17 Dec 2019 15:23:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576596202;
-        bh=AWr53SZL6zU34wrDAuOc2PlBHR0vANdc062K7fLZoIA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=zMuAk80CRLTlgF5FRyg46dH0PWyW0TyFaSPmNu7ODQdpeBYHwNKv/Im1JDoIeMyEc
-         trDdXpMBDaWWzsdE08cgYdIl3dZ+GIrKJSFyND0pqB+pMzi9apL0XRlyvFfHCJyY9m
-         Ed4RniaX0lggCQB6edP3vZ7sYT0OA7v1nw2KCK2s=
-Subject: Re: [PATCH v2 2/2] usbip: Fix error path of vhci_recv_ret_submit()
-To:     Suwan Kim <suwan.kim027@gmail.com>, valentina.manea.m@gmail.com,
-        gregkh@linuxfoundation.org, marmarek@invisiblethingslab.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, stern@rowland.harvard.edu,
-        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20191213023055.19933-1-suwan.kim027@gmail.com>
- <20191213023055.19933-3-suwan.kim027@gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <d72b3f16-3fc4-dd62-b51f-5a9ce68cfb4d@kernel.org>
-Date:   Tue, 17 Dec 2019 08:23:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728387AbfLQQeG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 11:34:06 -0500
+Received: from mail-io1-f49.google.com ([209.85.166.49]:45847 "EHLO
+        mail-io1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727766AbfLQQeG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 11:34:06 -0500
+Received: by mail-io1-f49.google.com with SMTP id i11so8567440ioi.12
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 08:34:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=aC0PzL17HCkWM7WH7+DqP+etlDvSTGxhc70yYAVW8ig=;
+        b=dgnh2ov+UGstLpleRvJPMXpNNIiwP5grTJyIyc3OkGeADfNKy+sgvFW8mCzLOQsOyc
+         QZ34wiSiML8kkgGTxDt9X3yYnelnSO5Mpk105+g/Uy6lylD7l0abacgUQ+YnX4UJGkHE
+         03jgLZL20C9A2bJTrY8Cp1e8xZK1plzyabuMDjlx7Tu9U182+YP22adtRR5Y2nUpJkW/
+         +y7F5NjqCFV5UwWGNE8kObbbTXOZuRziAFqw6oDvTKIfsk/51viDGHAzE3AT6LaFv4Do
+         bNet8vP/bqeDxNwXdRXluJIDOWbIsylVeQpjBei6EF8TZGkQyMHFemzW9friPIIpgdW5
+         xegA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=aC0PzL17HCkWM7WH7+DqP+etlDvSTGxhc70yYAVW8ig=;
+        b=I+Lvw1vpKdgZxcsMwZvaAQ3nLTp6UQ7QMI40gfqE6xly2rBs2P5ul/lXrTAR9m8N9h
+         75dt4YZZVXz5urwwG+njbUkqnOx4WMqXlMYqe8/4hNd/nK7z4gMZJ/FM0+tumM+/rdPz
+         p2EF5/mQHQ44NKTPFvZX5jDDXhdDh+97ub0sYwMrT3MSYE33XJDA51+nn4vkqyEHi27k
+         zeJIvqkZESijdGzeac2pYj5iBPelja6+Bu8ug4vjcbp2WLZIUz1+76gcpRBFo2YloM+o
+         hrzhUf3cQTkCiNwYvG3LmMvnwxE94JSi2egtj9qEWfQLT0Q4sAl4Ga+yO5gEuPWY7lyg
+         R4Ig==
+X-Gm-Message-State: APjAAAVcaKxcyqUsrUiX+blRMSRofumDSX8tzOlUK6WC/CrB+3TiqMY9
+        lY/3rr3msCwZe6o3KqkJhuDTlvwB9wzjfEXuUnPWPVKYcYU=
+X-Google-Smtp-Source: APXvYqz+Tb9ACs/ArwXnmMZfU6XRO9Wkb0kTTxoWAA60GxkvH0URGcNPMPGsfTSS1WM8iYDwN0C66Ebx0sWymo4nTxU=
+X-Received: by 2002:a5d:97c9:: with SMTP id k9mr4262700ios.297.1576600445536;
+ Tue, 17 Dec 2019 08:34:05 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191213023055.19933-3-suwan.kim027@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Bryan Gillespie <rpgillespie6@gmail.com>
+Date:   Tue, 17 Dec 2019 11:33:55 -0500
+Message-ID: <CAPVsg6LXr-fsz=FG8BDMqOPd73vcgageTk++Bt+fEP4-6DVT6A@mail.gmail.com>
+Subject: Is Duplicate Sequence Number an Issue?
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 12/12/19 7:30 PM, Suwan Kim wrote:
-> If a transaction error happens in vhci_recv_ret_submit(), event
-> handler closes connection and changes port status to kick hub_event.
-> Then hub tries to flush the endpoint URBs, but that causes infinite
-> loop between usb_hub_flush_endpoint() and vhci_urb_dequeue() because
-> "vhci_priv" in vhci_urb_dequeue() was already released by
-> vhci_recv_ret_submit() before a transmission error occurred. Thus,
-> vhci_urb_dequeue() terminates early and usb_hub_flush_endpoint()
-> continuously calls vhci_urb_dequeue().
-> 
-> The root cause of this issue is that vhci_recv_ret_submit()
-> terminates early without giving back URB when transaction error
-> occurs in vhci_recv_ret_submit(). That causes the error URB to still
-> be linked at endpoint list without “vhci_priv".
-> 
-> So, in the case of transaction error in vhci_recv_ret_submit(),
-> unlink URB from the endpoint, insert proper error code in
-> urb->status and give back URB.
-> 
-> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> Tested-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> Signed-off-by: Suwan Kim <suwan.kim027@gmail.com>
-> ---
->   drivers/usb/usbip/vhci_rx.c | 13 +++++++++----
->   1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-> index 33f8972ba842..00fc98741c5d 100644
-> --- a/drivers/usb/usbip/vhci_rx.c
-> +++ b/drivers/usb/usbip/vhci_rx.c
-> @@ -77,16 +77,21 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
->   	usbip_pack_pdu(pdu, urb, USBIP_RET_SUBMIT, 0);
->   
->   	/* recv transfer buffer */
-> -	if (usbip_recv_xbuff(ud, urb) < 0)
-> -		return;
-> +	if (usbip_recv_xbuff(ud, urb) < 0) {
-> +		urb->status = -EPROTO;
-> +		goto error;
-> +	}
->   
->   	/* recv iso_packet_descriptor */
-> -	if (usbip_recv_iso(ud, urb) < 0)
-> -		return;
-> +	if (usbip_recv_iso(ud, urb) < 0) {
-> +		urb->status = -EPROTO;
-> +		goto error;
-> +	}
->   
->   	/* restore the padding in iso packets */
->   	usbip_pad_iso(ud, urb);
->   
-> +error:
->   	if (usbip_dbg_flag_vhci_rx)
->   		usbip_dump_urb(urb);
->   
-> 
+Hello,
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+I am trying to debug a USB 3.0 issue under linux 4.4/4.14 where device
+endpoints become unresponsive when sending small packet iperf traffic
+through them. I have a protocol analyzer (Beagle 5000), and I see the
+following at the moment of breakage:
 
-thanks,
--- Shuah
+https://i.stack.imgur.com/CrCV7.png
+
+If I expand the packets, I notice that the last good transaction looks
+like this:
+
+https://i.stack.imgur.com/sWxne.png
+
+And the first bad transaction looks like this:
+
+https://i.stack.imgur.com/l85xJ.png
+
+This looks like only a partial transaction? The only thing that stuck
+out to me was that the two data transactions have the exact same
+Sequence Number (SeqNum), which seems like it might be out of spec
+with USB 3.0 (I read that you can only have duplicate sequence numbers
+if it is a retransmission, and it looks like it isn't)? Is xhci under
+linux setting these sequence numbers or is that at the hardware level?
+This issue seems to bubble up the linux usb stack as -EPROTO which has
+no information.
+
+Sorry if I am asking stupid questions, I am definitely a USB novice.
+
+Any insights on how to determine the cause of this breakage would be
+appreciated.
+
+Bryan
+-- 
+Bryan Gillespie
+(801) 664-7527
