@@ -2,760 +2,428 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D3312436E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 10:38:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05C31243A5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 10:48:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfLRJid convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 18 Dec 2019 04:38:33 -0500
-Received: from mail-oln040092254064.outbound.protection.outlook.com ([40.92.254.64]:25195
-        "EHLO APC01-PU1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725785AbfLRJic (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Dec 2019 04:38:32 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GcKFJ303N6ab5IKlnRz9+rEqeq1BoTX5j6SSM16Ygwfo/GXK5b01/aDWZFUbaqm5u5tgjLVYlepJel1Jq1kvci3uS9/fiiDqWbd6zUom1GdLGWrf/m2w3SvdyXXJojp2FF418BhfQXEB8Kh0L9WZES+9JfLEJWvd3ZGExbO0U+EotqgBv12Goig7StAUD1W6yLsKBOxfF3/YaebwRYiY7GmGvsoYPpICyN1iQZN4QiSlS+OthGGXRnqfDuBfmYO8iBpTWxdnHBGODeDRY1cY/ADDpg5aT0OtwtNtCtCtdDv6zNXDzGUnIZBksHcZ/+HG233OoB3b0/xb8XF0vUIAqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IgJb+NsdCo5HCG2CcDdWmPFhM1ZqQtnbbA1WFy1teB4=;
- b=NvgfJ63ziOmOfZZU/HmXt5Ll9uvoL2xolZAsXAOi+p5lUgPh0KouXS+y2dIh+JIXEnfS+wafKGy4cBoHjBWDAOvKG7r1NeHnGTeEOEPqP3ZMJyw1WwvqVyqoe8xt7HYnTyyQnCl9wIxpQ6czlNNNNNW4VQo/oQHURSCbSAIG55IRulx8epPMKuDmqdXObWdJvDNgfAqxu4yA61D1vfxWPFV6M5/h1oI75F6IdhxdeqctFzMgasPRKrlWDkk6d99pda4ArXABQEfZ0Xvqj9IhhDrIBtd8//y1FpvIminh5TRD48HzQVLl6YxtZoxS+0N+V9B/nA7pp2pguuS4TkL17Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from SG2APC01FT010.eop-APC01.prod.protection.outlook.com
- (10.152.250.52) by SG2APC01HT185.eop-APC01.prod.protection.outlook.com
- (10.152.251.234) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2538.15; Wed, 18 Dec
- 2019 09:38:21 +0000
-Received: from PSXP216MB0438.KORP216.PROD.OUTLOOK.COM (10.152.250.52) by
- SG2APC01FT010.mail.protection.outlook.com (10.152.250.134) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2559.14 via Frontend Transport; Wed, 18 Dec 2019 09:38:21 +0000
-Received: from PSXP216MB0438.KORP216.PROD.OUTLOOK.COM
- ([fe80::20ad:6646:5bcd:63c9]) by PSXP216MB0438.KORP216.PROD.OUTLOOK.COM
- ([fe80::20ad:6646:5bcd:63c9%11]) with mapi id 15.20.2559.012; Wed, 18 Dec
- 2019 09:38:21 +0000
-From:   Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1726676AbfLRJs4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 04:48:56 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:35202 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726360AbfLRJs4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 04:48:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576662533;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QNImMog0y8yTFfskUEXfbj8FpdiINrnYw3QgoUnPIZk=;
+        b=OmeVjEkeZWtETRZX/zfC3EXlTa4rHfIOrZKy3zGW4nlweAcejIseuOR+kVG8ZIVn6n6Ixa
+        cECG6ACOOUOtiXJxnh0D5mv9N2OcxkD/6VmoJ2/f5mclzvMVl0dyRyqEJx+gHn6sdTe9RI
+        zYpw7aA9Ifl2dh2t6VPZK9Mr8osyMZI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-326--2Gz8NE5MiKdA6C-ycqdNA-1; Wed, 18 Dec 2019 04:48:49 -0500
+X-MC-Unique: -2Gz8NE5MiKdA6C-ycqdNA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C6B9E107ACC7;
+        Wed, 18 Dec 2019 09:48:46 +0000 (UTC)
+Received: from ming.t460p (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 886BA675B8;
+        Wed, 18 Dec 2019 09:48:34 +0000 (UTC)
+Date:   Wed, 18 Dec 2019 17:48:30 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Andrea Vai <andrea.vai@unipv.it>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
+        Finn Thain <fthain@telegraphics.com.au>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        "Mario.Limonciello@dell.com" <Mario.Limonciello@dell.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 7/9] thunderbolt: Add support for Time Management Unit
-Thread-Topic: [PATCH v2 7/9] thunderbolt: Add support for Time Management Unit
-Thread-Index: AQHVtNZFQY5A6hbf9EuKz5HGrfBctqe/pAyA
-Date:   Wed, 18 Dec 2019 09:38:21 +0000
-Message-ID: <PSXP216MB0438D5F1AF46C217C71E5C4180530@PSXP216MB0438.KORP216.PROD.OUTLOOK.COM>
-References: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
- <20191217123345.31850-8-mika.westerberg@linux.intel.com>
-In-Reply-To: <20191217123345.31850-8-mika.westerberg@linux.intel.com>
-Accept-Language: en-AU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: SYBPR01CA0098.ausprd01.prod.outlook.com
- (2603:10c6:10:1::14) To PSXP216MB0438.KORP216.PROD.OUTLOOK.COM
- (2603:1096:300:d::20)
-x-incomingtopheadermarker: OriginalChecksum:9A4B31AFA5167F9712976C422FF00AD4ECE2BB0E49637E1C4D35BBBCE134E781;UpperCasedChecksum:B2C44AF73D5B8F65D33122C02134C258E7D05BD19085C1C9DE0D1C9BE9686A84;SizeAsReceived:8158;Count:49
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [yZAyGGzRALBQdqTXzhSqn2PVs31tKTmNgALeBG1R0Zh2DNoUUq7u6vPbCyBweC3q]
-x-microsoft-original-message-id: <20191218093811.GC3499@nicholas-dell-linux>
-x-ms-publictraffictype: Email
-x-incomingheadercount: 49
-x-eopattributedmessage: 0
-x-ms-office365-filtering-correlation-id: 05bb9513-6dec-4710-6eef-08d7839e04c1
-x-ms-traffictypediagnostic: SG2APC01HT185:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: DL5Qn9SzhZD3M59JJeSxSSvF4SAvKbAr4LL2s6sTDINtAY9Xzg8G7BX7BQ3NU4HKlRPXL4NbQRZ8suSiglr/QRTrbAhbykyK1m7g100EkhEmOpQat6ZYaxt13Y6T1CQbi7N3z0TqExYCcz4M7JjrBvqRf+IPMtKNWJ6rVZLb1tWsR0A1zE2b6OEHGG+Vq7pG
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <7489E18DC1EE7A438838893287FE9B79@KORP216.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: 8BIT
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jthumshirn@suse.de>,
+        USB list <linux-usb@vger.kernel.org>,
+        SCSI development list <linux-scsi@vger.kernel.org>,
+        Himanshu Madhani <himanshu.madhani@cavium.com>,
+        Hannes Reinecke <hare@suse.com>,
+        Omar Sandoval <osandov@fb.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Hans Holmberg <Hans.Holmberg@wdc.com>,
+        Kernel development list <linux-kernel@vger.kernel.org>,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Subject: Re: AW: Slow I/O on USB media after commit
+ f664a3cc17b7d0a2bc3b3ab96181e1029b0ec0e6
+Message-ID: <20191218094830.GB30602@ming.t460p>
+References: <20191129023555.GA8620@ming.t460p>
+ <320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it>
+ <20191203022337.GE25002@ming.t460p>
+ <8196b014b1a4d91169bf3b0d68905109aeaf2191.camel@unipv.it>
+ <20191210080550.GA5699@ming.t460p>
+ <20191211024137.GB61323@mit.edu>
+ <20191211040058.GC6864@ming.t460p>
+ <20191211160745.GA129186@mit.edu>
+ <20191211213316.GA14983@ming.t460p>
+ <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
 MIME-Version: 1.0
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05bb9513-6dec-4710-6eef-08d7839e04c1
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 09:38:21.0188
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Internet
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2APC01HT185
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 03:33:43PM +0300, Mika Westerberg wrote:
-> From: Rajmohan Mani <rajmohan.mani@intel.com>
+On Wed, Dec 18, 2019 at 09:25:02AM +0100, Andrea Vai wrote:
+> Il giorno gio, 12/12/2019 alle 05.33 +0800, Ming Lei ha scritto:
+> > On Wed, Dec 11, 2019 at 11:07:45AM -0500, Theodore Y. Ts'o wrote:
+> > > On Wed, Dec 11, 2019 at 12:00:58PM +0800, Ming Lei wrote:
+> > > > I didn't reproduce the issue in my test environment, and follows
+> > > > Andrea's test commands[1]:
+> > > > 
+> > > >   mount UUID=$uuid /mnt/pendrive 2>&1 |tee -a $logfile
+> > > >   SECONDS=0
+> > > >   cp $testfile /mnt/pendrive 2>&1 |tee -a $logfile
+> > > >   umount /mnt/pendrive 2>&1 |tee -a $logfile
+> > > > 
+> > > > The 'cp' command supposes to open/close the file just once,
+> > however
+> > > > ext4_release_file() & write pages is observed to run for 4358
+> > times
+> > > > when executing the above 'cp' test.
+> > > 
+> > > Why are we sure the ext4_release_file() / _fput() is coming from
+> > the
+> > > cp command, as opposed to something else that might be running on
+> > the
+> > > system under test?  _fput() is called by the kernel when the last
+> > 
+> > Please see the log:
+> > 
+> > https://lore.kernel.org/linux-scsi/3af3666920e7d46f8f0c6d88612f143ffabc743c.camel@unipv.it/2-log_ming.zip
+> > 
+> > Which is collected by:
+> > 
+> > #!/bin/sh
+> > MAJ=$1
+> > MIN=$2
+> > MAJ=$(( $MAJ << 20 ))
+> > DEV=$(( $MAJ | $MIN ))
+> > 
+> > /usr/share/bcc/tools/trace -t -C \
+> >     't:block:block_rq_issue (args->dev == '$DEV') "%s %d %d", args-
+> > >rwbs, args->sector, args->nr_sector' \
+> >     't:block:block_rq_insert (args->dev == '$DEV') "%s %d %d", args-
+> > >rwbs, args->sector, args->nr_sector'
+> > 
+> > $MAJ:$MIN points to the USB storage disk.
+> > 
+> > From the above IO trace, there are two write paths, one is from cp,
+> > another is from writeback wq.
+> > 
+> > The stackcount trace[1] is consistent with the IO trace log since it
+> > only shows two IO paths, that is why I concluded that the write done
+> > via
+> > ext4_release_file() is from 'cp'.
+> > 
+> > [1] 
+> > https://lore.kernel.org/linux-scsi/320b315b9c87543d4fb919ecbdf841596c8fbcea.camel@unipv.it/2-log_ming_20191129_150609.zip
+> > 
+> > > reference to a struct file is released.  (Specifically, if you
+> > have a
+> > > fd which is dup'ed, it's only when the last fd corresponding to
+> > the
+> > > struct file is closed, and the struct file is about to be
+> > released,
+> > > does the file system's f_ops->release function get called.)
+> > > 
+> > > So the first question I'd ask is whether there is anything else
+> > going
+> > > on the system, and whether the writes are happening to the USB
+> > thumb
+> > > drive, or to some other storage device.  And if there is something
+> > > else which is writing to the pendrive, maybe that's why no one
+> > else
+> > > has been able to reproduce the OP's complaint....
+> > 
+> > OK, we can ask Andrea to confirm that via the following trace, which
+> > will add pid/comm info in the stack trace:
+> > 
+> > /usr/share/bcc/tools/stackcount blk_mq_sched_request_inserted
+> > 
+> > Andrew, could you collect the above log again when running new/bad
+> > kernel for confirming if the write done by ext4_release_file() is
+> > from
+> > the 'cp' process?
 > 
-> Time Management Unit (TMU) is included in each USB4 router. It is used
-> to synchronize time across the USB4 fabric. By default when USB4 router
-> is plugged to the domain, its TMU is turned off. This differs from
-> Thunderbolt (1, 2 and 3) devices whose TMU is by default configured to
-> bi-directional HiFi mode. Since time synchronization is needed for
-> proper Display Port tunneling this means we need to configure the TMU on
-Nitpick: DisplayPort is a single word.
+> You can find the stackcount log attached. It has been produced by:
+> 
+> - /usr/share/bcc/tools/stackcount blk_mq_sched_request_inserted > trace.log
+> - wait some seconds
+> - run the test (1 copy trial), wait for the test to finish, wait some seconds
+> - stop the trace (ctrl+C)
 
-> USB4 compliant devices.
+Thanks for collecting the log, looks your 'stackcount' doesn't include
+comm/pid info, seems there is difference between your bcc and
+my bcc in fedora 30.
+
+Could you collect above log again via the following command?
+
+/usr/share/bcc/tools/stackcount -P -K t:block:block_rq_insert
+
+which will show the comm/pid info.
+
+Sorry for not seeing the bcc difference.
+
 > 
-> The USB4 spec allows some flexibility on how the TMU can be configured.
-> This makes it possible to enable link power management states (CLx) in
-> certain topologies, where for example DP tunneling is not used. TMU can
-> also be re-configured dynamicaly depending on types of tunnels created
-> over the USB4 fabric.
+> The test took 1994 seconds to complete.
 > 
-> In this patch we simply configure the TMU to be in bi-directional HiFi
-> mode. This way we can tunnel any kind of traffic without need to perform
-> complex steps to re-configure the domain dynamically. We can add more
-> fine-grained TMU configuration later on when we start enabling CLx
-> states.
+> I also tried the usual test with btrfs and xfs. Btrfs behavior looks
+> "good". xfs seems sometimes better, sometimes worse, I would say. I
+> don't know if it matters, anyway you can also find the results of the
+> two tests (100 trials each). Basically, btrfs is always between 68 and
+> 89 seconds, with a cyclicity (?) with "period=2 trials". xfs looks
+> almost always very good (63-65s), but sometimes "bad" (>300s).
+
+If you are interested in digging into this one, the following trace
+should be helpful:
+
+https://lore.kernel.org/linux-scsi/f38db337cf26390f7c7488a0bc2076633737775b.camel@unipv.it/T/#m5aa008626e07913172ad40e1eb8e5f2ffd560fc6
+
+
+Thanks,
+Ming
+
 > 
-> Signed-off-by: Rajmohan Mani <rajmohan.mani@intel.com>
-> Co-developed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> ---
->  drivers/thunderbolt/Makefile  |   2 +-
->  drivers/thunderbolt/switch.c  |   4 +
->  drivers/thunderbolt/tb.c      |  28 +++
->  drivers/thunderbolt/tb.h      |  47 +++++
->  drivers/thunderbolt/tb_regs.h |  20 ++
->  drivers/thunderbolt/tmu.c     | 383 ++++++++++++++++++++++++++++++++++
->  6 files changed, 483 insertions(+), 1 deletion(-)
->  create mode 100644 drivers/thunderbolt/tmu.c
+> Thanks,
+> Andrea
+
+> *** test btrfs *** -> test_btrfs_20191217.txt
 > 
-> diff --git a/drivers/thunderbolt/Makefile b/drivers/thunderbolt/Makefile
-> index 102e9529ee66..eae28dd45250 100644
-> --- a/drivers/thunderbolt/Makefile
-> +++ b/drivers/thunderbolt/Makefile
-> @@ -1,4 +1,4 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-${CONFIG_USB4} := thunderbolt.o
->  thunderbolt-objs := nhi.o nhi_ops.o ctl.o tb.o switch.o cap.o path.o tunnel.o eeprom.o
-> -thunderbolt-objs += domain.o dma_port.o icm.o property.o xdomain.o lc.o usb4.o
-> +thunderbolt-objs += domain.o dma_port.o icm.o property.o xdomain.o lc.o tmu.o usb4.o
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index c1d5cd7e0631..82f45780dc81 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -2338,6 +2338,10 @@ int tb_switch_add(struct tb_switch *sw)
->  		ret = tb_switch_update_link_attributes(sw);
->  		if (ret)
->  			return ret;
-> +
-> +		ret = tb_switch_tmu_init(sw);
-> +		if (ret)
-> +			return ret;
->  	}
->  
->  	ret = device_add(&sw->dev);
-> diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> index 6b99dcd1790c..e446624dd3e7 100644
-> --- a/drivers/thunderbolt/tb.c
-> +++ b/drivers/thunderbolt/tb.c
-> @@ -158,6 +158,25 @@ static void tb_scan_xdomain(struct tb_port *port)
->  	}
->  }
->  
-> +static int tb_enable_tmu(struct tb_switch *sw)
-> +{
-> +	int ret;
-> +
-> +	/* If it is already enabled in correct mode, don't touch it */
-> +	if (tb_switch_tmu_is_enabled(sw))
-> +		return 0;
-> +
-> +	ret = tb_switch_tmu_disable(sw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = tb_switch_tmu_post_time(sw);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return tb_switch_tmu_enable(sw);
-> +}
-> +
->  static void tb_scan_port(struct tb_port *port);
->  
->  /**
-> @@ -257,6 +276,9 @@ static void tb_scan_port(struct tb_port *port)
->  	if (tb_switch_lane_bonding_enable(sw))
->  		tb_sw_warn(sw, "failed to enable lane bonding\n");
->  
-> +	if (tb_enable_tmu(sw))
-> +		tb_sw_warn(sw, "failed to enable TMU\n");
-> +
->  	tb_scan_switch(sw);
->  }
->  
-> @@ -709,6 +731,7 @@ static void tb_handle_hotplug(struct work_struct *work)
->  			tb_sw_set_unplugged(port->remote->sw);
->  			tb_free_invalid_tunnels(tb);
->  			tb_remove_dp_resources(port->remote->sw);
-> +			tb_switch_tmu_disable(port->remote->sw);
->  			tb_switch_lane_bonding_disable(port->remote->sw);
->  			tb_switch_remove(port->remote->sw);
->  			port->remote = NULL;
-> @@ -855,6 +878,8 @@ static int tb_start(struct tb *tb)
->  		return ret;
->  	}
->  
-> +	/* Enable TMU if it is off */
-> +	tb_switch_tmu_enable(tb->root_switch);
->  	/* Full scan to discover devices added before the driver was loaded. */
->  	tb_scan_switch(tb->root_switch);
->  	/* Find out tunnels created by the boot firmware */
-> @@ -886,6 +911,9 @@ static void tb_restore_children(struct tb_switch *sw)
->  {
->  	struct tb_port *port;
->  
-> +	if (tb_enable_tmu(sw))
-> +		tb_sw_warn(sw, "failed to restore TMU configuration\n");
-> +
->  	tb_switch_for_each_port(sw, port) {
->  		if (!tb_port_has_remote(port))
->  			continue;
-> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> index 28dd0e0b1579..63ffb3cbdefe 100644
-> --- a/drivers/thunderbolt/tb.h
-> +++ b/drivers/thunderbolt/tb.h
-> @@ -46,6 +46,38 @@ struct tb_switch_nvm {
->  #define TB_SWITCH_MAX_DEPTH		6
->  #define USB4_SWITCH_MAX_DEPTH		5
->  
-> +/**
-> + * enum tb_switch_tmu_rate - TMU refresh rate
-> + * @TB_SWITCH_TMU_RATE_OFF: %0 (Disable Time Sync handshake)
-> + * @TB_SWITCH_TMU_RATE_HIFI: %16 us time interval between successive
-> + *			     transmission of the Delay Request TSNOS
-> + *			     (Time Sync Notification Ordered Set) on a Link
-> + * @TB_SWITCH_TMU_RATE_NORMAL: %1 ms time interval between successive
-> + *			       transmission of the Delay Request TSNOS on
-> + *			       a Link
-> + */
-> +enum tb_switch_tmu_rate {
-> +	TB_SWITCH_TMU_RATE_OFF = 0,
-> +	TB_SWITCH_TMU_RATE_HIFI = 16,
-> +	TB_SWITCH_TMU_RATE_NORMAL = 1000,
-> +};
-> +
-> +/**
-> + * struct tb_switch_tmu - Structure holding switch TMU configuration
-> + * @cap: Offset to the TMU capability (%0 if not found)
-> + * @has_ucap: Does the switch support uni-directional mode
-> + * @rate: TMU refresh rate related to upstream switch. In case of root
-> + *	  switch this holds the domain rate.
-> + * @unidirectional: Is the TMU in uni-directional or bi-directional mode
-> + *		    related to upstream switch. Don't case for root switch.
-> + */
-> +struct tb_switch_tmu {
-> +	int cap;
-> +	bool has_ucap;
-> +	enum tb_switch_tmu_rate rate;
-> +	bool unidirectional;
-> +};
-> +
->  /**
->   * struct tb_switch - a thunderbolt switch
->   * @dev: Device for the switch
-> @@ -55,6 +87,7 @@ struct tb_switch_nvm {
->   *	      mailbox this will hold the pointer to that (%NULL
->   *	      otherwise). If set it also means the switch has
->   *	      upgradeable NVM.
-> + * @tmu: The switch TMU configuration
->   * @tb: Pointer to the domain the switch belongs to
->   * @uid: Unique ID of the switch
->   * @uuid: UUID of the switch (or %NULL if not supported)
-> @@ -93,6 +126,7 @@ struct tb_switch {
->  	struct tb_regs_switch_header config;
->  	struct tb_port *ports;
->  	struct tb_dma_port *dma_port;
-> +	struct tb_switch_tmu tmu;
->  	struct tb *tb;
->  	u64 uid;
->  	uuid_t *uuid;
-> @@ -129,6 +163,7 @@ struct tb_switch {
->   * @remote: Remote port (%NULL if not connected)
->   * @xdomain: Remote host (%NULL if not connected)
->   * @cap_phy: Offset, zero if not found
-> + * @cap_tmu: Offset of the adapter specific TMU capability (%0 if not present)
->   * @cap_adap: Offset of the adapter specific capability (%0 if not present)
->   * @cap_usb4: Offset to the USB4 port capability (%0 if not present)
->   * @port: Port number on switch
-> @@ -147,6 +182,7 @@ struct tb_port {
->  	struct tb_port *remote;
->  	struct tb_xdomain *xdomain;
->  	int cap_phy;
-> +	int cap_tmu;
->  	int cap_adap;
->  	int cap_usb4;
->  	u8 port;
-> @@ -672,6 +708,17 @@ bool tb_switch_query_dp_resource(struct tb_switch *sw, struct tb_port *in);
->  int tb_switch_alloc_dp_resource(struct tb_switch *sw, struct tb_port *in);
->  void tb_switch_dealloc_dp_resource(struct tb_switch *sw, struct tb_port *in);
->  
-> +int tb_switch_tmu_init(struct tb_switch *sw);
-> +int tb_switch_tmu_post_time(struct tb_switch *sw);
-> +int tb_switch_tmu_disable(struct tb_switch *sw);
-> +int tb_switch_tmu_enable(struct tb_switch *sw);
-> +
-> +static inline bool tb_switch_tmu_is_enabled(const struct tb_switch *sw)
-> +{
-> +	return sw->tmu.rate == TB_SWITCH_TMU_RATE_HIFI &&
-> +	       !sw->tmu.unidirectional;
-> +}
-> +
->  int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged);
->  int tb_port_add_nfc_credits(struct tb_port *port, int credits);
->  int tb_port_set_initial_credits(struct tb_port *port, u32 credits);
-> diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> index 47f73f992412..ec1a5d1f7c94 100644
-> --- a/drivers/thunderbolt/tb_regs.h
-> +++ b/drivers/thunderbolt/tb_regs.h
-> @@ -26,6 +26,7 @@
->  #define TB_MAX_CONFIG_RW_LENGTH 60
->  
->  enum tb_switch_cap {
-> +	TB_SWITCH_CAP_TMU		= 0x03,
->  	TB_SWITCH_CAP_VSE		= 0x05,
->  };
->  
-> @@ -195,6 +196,21 @@ struct tb_regs_switch_header {
->  #define ROUTER_CS_26_ONS			BIT(30)
->  #define ROUTER_CS_26_OV				BIT(31)
->  
-> +/* Router TMU configuration */
-> +#define TMU_RTR_CS_0				0x00
-> +#define TMU_RTR_CS_0_TD				BIT(27)
-> +#define TMU_RTR_CS_0_UCAP			BIT(30)
-> +#define TMU_RTR_CS_1				0x01
-> +#define TMU_RTR_CS_1_LOCAL_TIME_NS_MASK		GENMASK(31, 16)
-> +#define TMU_RTR_CS_1_LOCAL_TIME_NS_SHIFT	16
-> +#define TMU_RTR_CS_2				0x02
-> +#define TMU_RTR_CS_3				0x03
-> +#define TMU_RTR_CS_3_LOCAL_TIME_NS_MASK		GENMASK(15, 0)
-> +#define TMU_RTR_CS_3_TS_PACKET_INTERVAL_MASK	GENMASK(31, 16)
-> +#define TMU_RTR_CS_3_TS_PACKET_INTERVAL_SHIFT	16
-> +#define TMU_RTR_CS_22				0x16
-> +#define TMU_RTR_CS_24				0x18
-> +
->  enum tb_port_type {
->  	TB_TYPE_INACTIVE	= 0x000000,
->  	TB_TYPE_PORT		= 0x000001,
-> @@ -248,6 +264,10 @@ struct tb_regs_port_header {
->  #define ADP_CS_5_LCA_MASK			GENMASK(28, 22)
->  #define ADP_CS_5_LCA_SHIFT			22
->  
-> +/* TMU adapter registers */
-> +#define TMU_ADP_CS_3				0x03
-> +#define TMU_ADP_CS_3_UDM			BIT(29)
-> +
->  /* Lane adapter registers */
->  #define LANE_ADP_CS_0				0x00
->  #define LANE_ADP_CS_0_SUPPORTED_WIDTH_MASK	GENMASK(25, 20)
-> diff --git a/drivers/thunderbolt/tmu.c b/drivers/thunderbolt/tmu.c
-> new file mode 100644
-> index 000000000000..039c42a06000
-> --- /dev/null
-> +++ b/drivers/thunderbolt/tmu.c
-> @@ -0,0 +1,383 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Thunderbolt Time Management Unit (TMU) support
-> + *
-> + * Copyright (C) 2019, Intel Corporation
-> + * Authors: Mika Westerberg <mika.westerberg@linux.intel.com>
-> + *	    Rajmohan Mani <rajmohan.mani@intel.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +
-> +#include "tb.h"
-> +
-> +static const char *tb_switch_tmu_mode_name(const struct tb_switch *sw)
-> +{
-> +	bool root_switch = !tb_route(sw);
-> +
-> +	switch (sw->tmu.rate) {
-> +	case TB_SWITCH_TMU_RATE_OFF:
-> +		return "off";
-> +
-> +	case TB_SWITCH_TMU_RATE_HIFI:
-> +		/* Root switch does not have upstream directionality */
-> +		if (root_switch)
-> +			return "HiFi";
-> +		if (sw->tmu.unidirectional)
-> +			return "uni-directional, HiFi";
-> +		return "bi-directional, HiFi";
-> +
-> +	case TB_SWITCH_TMU_RATE_NORMAL:
-> +		if (root_switch)
-> +			return "normal";
-> +		return "uni-directional, normal";
-> +
-> +	default:
-> +		return "unknown";
-> +	}
-> +}
-> +
-> +static bool tb_switch_tmu_ucap_supported(struct tb_switch *sw)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
-> +			 sw->tmu.cap + TMU_RTR_CS_0, 1);
-> +	if (ret)
-> +		return false;
-> +
-> +	return !!(val & TMU_RTR_CS_0_UCAP);
-> +}
-> +
-> +static int tb_switch_tmu_rate_read(struct tb_switch *sw)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
-> +			 sw->tmu.cap + TMU_RTR_CS_3, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val >>= TMU_RTR_CS_3_TS_PACKET_INTERVAL_SHIFT;
-> +	return val;
-> +}
-> +
-> +static int tb_switch_tmu_rate_write(struct tb_switch *sw, int rate)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
-> +			 sw->tmu.cap + TMU_RTR_CS_3, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	val &= ~TMU_RTR_CS_3_TS_PACKET_INTERVAL_MASK;
-> +	val |= rate << TMU_RTR_CS_3_TS_PACKET_INTERVAL_SHIFT;
-> +
-> +	return tb_sw_write(sw, &val, TB_CFG_SWITCH,
-> +			   sw->tmu.cap + TMU_RTR_CS_3, 1);
-> +}
-> +
-> +static int tb_port_tmu_write(struct tb_port *port, u8 offset, u32 mask,
-> +			     u32 value)
-> +{
-> +	u32 data;
-> +	int ret;
-> +
-> +	ret = tb_port_read(port, &data, TB_CFG_PORT, port->cap_tmu + offset, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	data &= ~mask;
-> +	data |= value;
-> +
-> +	return tb_port_write(port, &data, TB_CFG_PORT,
-> +			     port->cap_tmu + offset, 1);
-> +}
-> +
-> +static int tb_port_tmu_set_unidirectional(struct tb_port *port,
-> +					  bool unidirectional)
-> +{
-> +	u32 val;
-> +
-> +	if (!port->sw->tmu.has_ucap)
-> +		return 0;
-> +
-> +	val = unidirectional ? TMU_ADP_CS_3_UDM : 0;
-> +	return tb_port_tmu_write(port, TMU_ADP_CS_3, TMU_ADP_CS_3_UDM, val);
-> +}
-> +
-> +static inline int tb_port_tmu_unidirectional_disable(struct tb_port *port)
-> +{
-> +	return tb_port_tmu_set_unidirectional(port, false);
-> +}
-> +
-> +static bool tb_port_tmu_is_unidirectional(struct tb_port *port)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = tb_port_read(port, &val, TB_CFG_PORT,
-> +			   port->cap_tmu + TMU_ADP_CS_3, 1);
-> +	if (ret)
-> +		return false;
-> +
-> +	return val & TMU_ADP_CS_3_UDM;
-> +}
-> +
-> +static int tb_switch_tmu_set_time_disruption(struct tb_switch *sw, bool set)
-> +{
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH,
-> +			 sw->tmu.cap + TMU_RTR_CS_0, 1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (set)
-> +		val |= TMU_RTR_CS_0_TD;
-> +	else
-> +		val &= ~TMU_RTR_CS_0_TD;
-> +
-> +	return tb_sw_write(sw, &val, TB_CFG_SWITCH,
-> +			   sw->tmu.cap + TMU_RTR_CS_0, 1);
-> +}
-> +
-> +/**
-> + * tb_switch_tmu_init() - Initialize switch TMU structures
-> + * @sw: Switch to initialized
-> + *
-> + * This function must be called before other TMU related functions to
-> + * makes the internal structures are filled in correctly. Does not
-> + * change any hardware configuration.
-> + */
-> +int tb_switch_tmu_init(struct tb_switch *sw)
-> +{
-> +	struct tb_port *port;
-> +	int ret;
-> +
-> +	if (tb_switch_is_icm(sw))
-> +		return 0;
-> +
-> +	ret = tb_switch_find_cap(sw, TB_SWITCH_CAP_TMU);
-> +	if (ret > 0)
-> +		sw->tmu.cap = ret;
-> +
-> +	tb_switch_for_each_port(sw, port) {
-> +		int cap;
-> +
-> +		cap = tb_port_find_cap(port, TB_PORT_CAP_TIME1);
-> +		if (cap > 0)
-> +			port->cap_tmu = cap;
-> +	}
-> +
-> +	ret = tb_switch_tmu_rate_read(sw);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	sw->tmu.rate = ret;
-> +
-> +	sw->tmu.has_ucap = tb_switch_tmu_ucap_supported(sw);
-> +	if (sw->tmu.has_ucap) {
-> +		tb_sw_dbg(sw, "TMU: supports uni-directional mode\n");
-> +
-> +		if (tb_route(sw)) {
-> +			struct tb_port *up = tb_upstream_port(sw);
-> +
-> +			sw->tmu.unidirectional =
-> +				tb_port_tmu_is_unidirectional(up);
-> +		}
-> +	} else {
-> +		sw->tmu.unidirectional = false;
-> +	}
-> +
-> +	tb_sw_dbg(sw, "TMU: current mode: %s\n", tb_switch_tmu_mode_name(sw));
-> +	return 0;
-> +}
-> +
-> +/**
-> + * tb_switch_tmu_post_time() - Update switch local time
-> + * @sw: Switch whose time to update
-> + *
-> + * Updates switch local time using time posting procedure.
-> + */
-> +int tb_switch_tmu_post_time(struct tb_switch *sw)
-> +{
-> +	unsigned int  post_local_time_offset, post_time_offset;
-> +	struct tb_switch *root_switch = sw->tb->root_switch;
-> +	u64 hi, mid, lo, local_time, post_time;
-> +	int i, ret, retries = 100;
-> +	u32 gm_local_time[3];
-> +
-> +	if (!tb_route(sw))
-> +		return 0;
-> +
-> +	if (!tb_switch_is_usb4(sw))
-> +		return 0;
-> +
-> +	/* Need to be able to read the grand master time */
-> +	if (!root_switch->tmu.cap)
-> +		return 0;
-> +
-> +	ret = tb_sw_read(root_switch, gm_local_time, TB_CFG_SWITCH,
-> +			 root_switch->tmu.cap + TMU_RTR_CS_1,
-> +			 ARRAY_SIZE(gm_local_time));
-> +	if (ret)
-> +		return ret;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(gm_local_time); i++)
-> +		tb_sw_dbg(root_switch, "local_time[%d]=0x%08x\n", i,
-> +			  gm_local_time[i]);
-> +
-> +	/* Convert to nanoseconds (drop fractional part) */
-> +	hi = gm_local_time[2] & TMU_RTR_CS_3_LOCAL_TIME_NS_MASK;
-> +	mid = gm_local_time[1];
-> +	lo = (gm_local_time[0] & TMU_RTR_CS_1_LOCAL_TIME_NS_MASK) >>
-> +		TMU_RTR_CS_1_LOCAL_TIME_NS_SHIFT;
-> +	local_time = hi << 48 | mid << 16 | lo;
-> +
-> +	/* Tell the switch that time sync is disrupted for a while */
-> +	ret = tb_switch_tmu_set_time_disruption(sw, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	post_local_time_offset = sw->tmu.cap + TMU_RTR_CS_22;
-> +	post_time_offset = sw->tmu.cap + TMU_RTR_CS_24;
-> +
-> +	/*
-> +	 * Write the Grandmaster time to the Post Local Time registers
-> +	 * of the new switch.
-> +	 */
-> +	ret = tb_sw_write(sw, &local_time, TB_CFG_SWITCH,
-> +			  post_local_time_offset, 2);
-> +	if (ret)
-> +		goto out;
-> +
-> +	/*
-> +	 * Have the new switch update its local time (by writing 1 to
-> +	 * the post_time registers) and wait for the completion of the
-> +	 * same (post_time register becomes 0). This means the time has
-> +	 * been converged properly.
-> +	 */
-> +	post_time = 1;
-> +
-> +	ret = tb_sw_write(sw, &post_time, TB_CFG_SWITCH, post_time_offset, 2);
-> +	if (ret)
-> +		goto out;
-> +
-> +	do {
-> +		usleep_range(5, 10);
-> +		ret = tb_sw_read(sw, &post_time, TB_CFG_SWITCH,
-> +				 post_time_offset, 2);
-> +		if (ret)
-> +			goto out;
-> +	} while (--retries && post_time);
-> +
-> +	if (!retries) {
-> +		ret = -ETIMEDOUT;
-> +		goto out;
-> +	}
-> +
-> +	tb_sw_dbg(sw, "TMU: updated local time to %#llx\n", local_time);
-> +
-> +out:
-> +	tb_switch_tmu_set_time_disruption(sw, false);
-> +	return ret;
-> +}
-> +
-> +/**
-> + * tb_switch_tmu_disable() - Disable TMU of a switch
-> + * @sw: Switch whose TMU to disable
-> + *
-> + * Turns off TMU of @sw if it is enabled. If not enabled does nothing.
-> + */
-> +int tb_switch_tmu_disable(struct tb_switch *sw)
-> +{
-> +	int ret;
-> +
-> +	if (!tb_switch_is_usb4(sw))
-> +		return 0;
-> +
-> +	/* Already disabled? */
-> +	if (sw->tmu.rate == TB_SWITCH_TMU_RATE_OFF)
-> +		return 0;
-> +
-> +	if (sw->tmu.unidirectional) {
-> +		struct tb_switch *parent = tb_switch_parent(sw);
-> +		struct tb_port *up, *down;
-> +
-> +		up = tb_upstream_port(sw);
-> +		down = tb_port_at(tb_route(sw), parent);
-> +
-> +		/* The switch may be unplugged so ignore any errors */
-> +		tb_port_tmu_unidirectional_disable(up);
-> +		ret = tb_port_tmu_unidirectional_disable(down);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_OFF);
-> +
-> +	sw->tmu.unidirectional = false;
-> +	sw->tmu.rate = TB_SWITCH_TMU_RATE_OFF;
-> +
-> +	tb_sw_dbg(sw, "TMU: disabled\n");
-> +	return 0;
-> +}
-> +
-> +/**
-> + * tb_switch_tmu_enable() - Enable TMU on a switch
-> + * @sw: Switch whose TMU to enable
-> + *
-> + * Enables TMU of a switch to be in bi-directional, HiFi mode. In this mode
-> + * all tunneling should work.
-> + */
-> +int tb_switch_tmu_enable(struct tb_switch *sw)
-> +{
-> +	int ret;
-> +
-> +	if (!tb_switch_is_usb4(sw))
-> +		return 0;
-> +
-> +	if (tb_switch_tmu_is_enabled(sw))
-> +		return 0;
-> +
-> +	ret = tb_switch_tmu_set_time_disruption(sw, true);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Change mode to bi-directional */
-> +	if (tb_route(sw) && sw->tmu.unidirectional) {
-> +		struct tb_switch *parent = tb_switch_parent(sw);
-> +		struct tb_port *up, *down;
-> +
-> +		up = tb_upstream_port(sw);
-> +		down = tb_port_at(tb_route(sw), parent);
-> +
-> +		ret = tb_port_tmu_unidirectional_disable(down);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_HIFI);
-> +		if (ret)
-> +			return ret;
-> +
-> +		ret = tb_port_tmu_unidirectional_disable(up);
-> +		if (ret)
-> +			return ret;
-> +	} else {
-> +		ret = tb_switch_tmu_rate_write(sw, TB_SWITCH_TMU_RATE_HIFI);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	sw->tmu.unidirectional = false;
-> +	sw->tmu.rate = TB_SWITCH_TMU_RATE_HIFI;
-> +	tb_sw_dbg(sw, "TMU: mode set to: %s\n", tb_switch_tmu_mode_name(sw));
-> +
-> +	return tb_switch_tmu_set_time_disruption(sw, false);
-> +}
-> -- 
-> 2.24.0
+> Starting 100 tries with:
+> Linux angus.unipv.it 5.4.0+ #1 SMP Mon Nov 25 11:31:34 CET 2019 x86_64 x86_64 x86_64 GNU/Linux
+> -rw-r--r--. 1 root root 1,0G 25 nov 13.29 /NoBackup/testfile
+> /dev/sda1: LABEL="Fedora30" UUID="a7ca2491-c807-4b10-b33f-ef425699148d" TYPE="ext4" PARTUUID="8b16fbdd-01"
+> /dev/sda2: LABEL="Swap_4GB" UUID="ba020b1e-4cdc-4f94-b92c-bdc11613388d" TYPE="swap" PARTUUID="8b16fbdd-02"
+> /dev/sdf1: LABEL="BAK_ANDVAI" UUID="6ddfec28-3d9a-4676-a726-927fd3fb21e7" UUID_SUB="581c69ab-6758-4662-999a-b6dfe6ee5e69" TYPE="btrfs" PARTUUID="09066b88-01"
+> /dev/sdg1: LABEL="BAK_ANDVAI" UUID="df777e33-8890-4cee-a718-42233f4cafae" TYPE="ext4" PARTUUID="75265898-01"
+> cat /sys/block/sdf/queue/scheduler --> [mq-deadline] none
+> Inizio: mar 17 dic 2019, 13:31:00, CET...fine: mar 17 dic 2019, 13:32:26, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:32:26, CET...fine: mar 17 dic 2019, 13:33:36, CET --> ci ho messo 70 secondi!
+> Inizio: mar 17 dic 2019, 13:33:36, CET...fine: mar 17 dic 2019, 13:35:02, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:35:02, CET...fine: mar 17 dic 2019, 13:36:14, CET --> ci ho messo 72 secondi!
+> Inizio: mar 17 dic 2019, 13:36:14, CET...fine: mar 17 dic 2019, 13:37:40, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:37:40, CET...fine: mar 17 dic 2019, 13:38:51, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:38:51, CET...fine: mar 17 dic 2019, 13:40:18, CET --> ci ho messo 87 secondi!
+> Inizio: mar 17 dic 2019, 13:40:18, CET...fine: mar 17 dic 2019, 13:41:29, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:41:29, CET...fine: mar 17 dic 2019, 13:42:58, CET --> ci ho messo 89 secondi!
+> Inizio: mar 17 dic 2019, 13:42:58, CET...fine: mar 17 dic 2019, 13:44:11, CET --> ci ho messo 73 secondi!
+> Inizio: mar 17 dic 2019, 13:44:11, CET...fine: mar 17 dic 2019, 13:45:40, CET --> ci ho messo 89 secondi!
+> Inizio: mar 17 dic 2019, 13:45:40, CET...fine: mar 17 dic 2019, 13:46:49, CET --> ci ho messo 69 secondi!
+> Inizio: mar 17 dic 2019, 13:46:49, CET...fine: mar 17 dic 2019, 13:48:16, CET --> ci ho messo 87 secondi!
+> Inizio: mar 17 dic 2019, 13:48:16, CET...fine: mar 17 dic 2019, 13:49:27, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:49:27, CET...fine: mar 17 dic 2019, 13:50:53, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:50:53, CET...fine: mar 17 dic 2019, 13:52:04, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:52:04, CET...fine: mar 17 dic 2019, 13:53:30, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:53:30, CET...fine: mar 17 dic 2019, 13:54:41, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:54:41, CET...fine: mar 17 dic 2019, 13:56:07, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 13:56:07, CET...fine: mar 17 dic 2019, 13:57:18, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:57:18, CET...fine: mar 17 dic 2019, 13:58:46, CET --> ci ho messo 88 secondi!
+> Inizio: mar 17 dic 2019, 13:58:46, CET...fine: mar 17 dic 2019, 13:59:57, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 13:59:57, CET...fine: mar 17 dic 2019, 14:01:23, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:01:23, CET...fine: mar 17 dic 2019, 14:02:34, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:02:34, CET...fine: mar 17 dic 2019, 14:04:00, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:04:00, CET...fine: mar 17 dic 2019, 14:05:11, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:05:11, CET...fine: mar 17 dic 2019, 14:06:38, CET --> ci ho messo 87 secondi!
+> Inizio: mar 17 dic 2019, 14:06:38, CET...fine: mar 17 dic 2019, 14:07:49, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:07:49, CET...fine: mar 17 dic 2019, 14:09:15, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:09:15, CET...fine: mar 17 dic 2019, 14:10:26, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:10:26, CET...fine: mar 17 dic 2019, 14:11:52, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:11:52, CET...fine: mar 17 dic 2019, 14:13:03, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:13:03, CET...fine: mar 17 dic 2019, 14:14:29, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:14:29, CET...fine: mar 17 dic 2019, 14:15:41, CET --> ci ho messo 72 secondi!
+> Inizio: mar 17 dic 2019, 14:15:41, CET...fine: mar 17 dic 2019, 14:17:07, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:17:07, CET...fine: mar 17 dic 2019, 14:18:18, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:18:18, CET...fine: mar 17 dic 2019, 14:19:44, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:19:44, CET...fine: mar 17 dic 2019, 14:20:55, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:20:55, CET...fine: mar 17 dic 2019, 14:22:21, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:22:21, CET...fine: mar 17 dic 2019, 14:23:33, CET --> ci ho messo 72 secondi!
+> Inizio: mar 17 dic 2019, 14:23:33, CET...fine: mar 17 dic 2019, 14:24:59, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:24:59, CET...fine: mar 17 dic 2019, 14:26:10, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:26:10, CET...fine: mar 17 dic 2019, 14:27:36, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:27:36, CET...fine: mar 17 dic 2019, 14:28:46, CET --> ci ho messo 70 secondi!
+> Inizio: mar 17 dic 2019, 14:28:46, CET...fine: mar 17 dic 2019, 14:30:12, CET --> ci ho messo 85 secondi!
+> Inizio: mar 17 dic 2019, 14:30:12, CET...fine: mar 17 dic 2019, 14:31:23, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:31:23, CET...fine: mar 17 dic 2019, 14:32:49, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:32:49, CET...fine: mar 17 dic 2019, 14:34:01, CET --> ci ho messo 72 secondi!
+> Inizio: mar 17 dic 2019, 14:34:01, CET...fine: mar 17 dic 2019, 14:35:27, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:35:27, CET...fine: mar 17 dic 2019, 14:36:38, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:36:38, CET...fine: mar 17 dic 2019, 14:38:04, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:38:04, CET...fine: mar 17 dic 2019, 14:39:15, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:39:15, CET...fine: mar 17 dic 2019, 14:40:41, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:40:41, CET...fine: mar 17 dic 2019, 14:41:52, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:41:52, CET...fine: mar 17 dic 2019, 14:43:18, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:43:18, CET...fine: mar 17 dic 2019, 14:44:29, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:44:29, CET...fine: mar 17 dic 2019, 14:45:55, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:45:55, CET...fine: mar 17 dic 2019, 14:47:06, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:47:06, CET...fine: mar 17 dic 2019, 14:48:32, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:48:32, CET...fine: mar 17 dic 2019, 14:49:43, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:49:43, CET...fine: mar 17 dic 2019, 14:51:10, CET --> ci ho messo 87 secondi!
+> Inizio: mar 17 dic 2019, 14:51:10, CET...fine: mar 17 dic 2019, 14:52:23, CET --> ci ho messo 73 secondi!
+> Inizio: mar 17 dic 2019, 14:52:23, CET...fine: mar 17 dic 2019, 14:53:49, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:53:49, CET...fine: mar 17 dic 2019, 14:55:00, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:55:00, CET...fine: mar 17 dic 2019, 14:56:26, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:56:26, CET...fine: mar 17 dic 2019, 14:57:37, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 14:57:37, CET...fine: mar 17 dic 2019, 14:59:03, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 14:59:03, CET...fine: mar 17 dic 2019, 15:00:14, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:00:14, CET...fine: mar 17 dic 2019, 15:01:40, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:01:40, CET...fine: mar 17 dic 2019, 15:02:51, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:02:51, CET...fine: mar 17 dic 2019, 15:04:17, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:04:17, CET...fine: mar 17 dic 2019, 15:05:28, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:05:28, CET...fine: mar 17 dic 2019, 15:06:53, CET --> ci ho messo 85 secondi!
+> Inizio: mar 17 dic 2019, 15:06:53, CET...fine: mar 17 dic 2019, 15:08:04, CET --> ci ho messo 70 secondi!
+> Inizio: mar 17 dic 2019, 15:08:04, CET...fine: mar 17 dic 2019, 15:09:30, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:09:30, CET...fine: mar 17 dic 2019, 15:10:41, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:10:41, CET...fine: mar 17 dic 2019, 15:12:07, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:12:07, CET...fine: mar 17 dic 2019, 15:13:18, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:13:18, CET...fine: mar 17 dic 2019, 15:14:44, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:14:44, CET...fine: mar 17 dic 2019, 15:15:55, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:15:55, CET...fine: mar 17 dic 2019, 15:17:21, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:17:21, CET...fine: mar 17 dic 2019, 15:18:32, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:18:32, CET...fine: mar 17 dic 2019, 15:19:58, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:19:58, CET...fine: mar 17 dic 2019, 15:21:08, CET --> ci ho messo 70 secondi!
+> Inizio: mar 17 dic 2019, 15:21:08, CET...fine: mar 17 dic 2019, 15:22:34, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:22:34, CET...fine: mar 17 dic 2019, 15:23:45, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:23:45, CET...fine: mar 17 dic 2019, 15:25:11, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:25:11, CET...fine: mar 17 dic 2019, 15:26:22, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:26:22, CET...fine: mar 17 dic 2019, 15:27:48, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:27:48, CET...fine: mar 17 dic 2019, 15:28:59, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:28:59, CET...fine: mar 17 dic 2019, 15:30:25, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:30:25, CET...fine: mar 17 dic 2019, 15:31:35, CET --> ci ho messo 70 secondi!
+> Inizio: mar 17 dic 2019, 15:31:35, CET...fine: mar 17 dic 2019, 15:33:03, CET --> ci ho messo 87 secondi!
+> Inizio: mar 17 dic 2019, 15:33:03, CET...fine: mar 17 dic 2019, 15:34:14, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:34:14, CET...fine: mar 17 dic 2019, 15:35:40, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:35:40, CET...fine: mar 17 dic 2019, 15:36:51, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:36:51, CET...fine: mar 17 dic 2019, 15:38:17, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:38:17, CET...fine: mar 17 dic 2019, 15:39:28, CET --> ci ho messo 71 secondi!
+> Inizio: mar 17 dic 2019, 15:39:28, CET...fine: mar 17 dic 2019, 15:40:54, CET --> ci ho messo 86 secondi!
+> Inizio: mar 17 dic 2019, 15:40:54, CET...fine: mar 17 dic 2019, 15:42:05, CET --> ci ho messo 71 secondi!
+
+> *** TEST XFS: *** -> test_xfs_20191217.txt
+> 
+> Starting 100 tries with:
+> Linux angus.unipv.it 5.4.0+ #1 SMP Mon Nov 25 11:31:34 CET 2019 x86_64 x86_64 x86_64 GNU/Linux
+> -rw-r--r--. 1 root root 1,0G 25 nov 13.29 /NoBackup/testfile
+> /dev/sda1: LABEL="Fedora30" UUID="a7ca2491-c807-4b10-b33f-ef425699148d" TYPE="ext4" PARTUUID="8b16fbdd-01"
+> /dev/sda2: LABEL="Swap_4GB" UUID="ba020b1e-4cdc-4f94-b92c-bdc11613388d" TYPE="swap" PARTUUID="8b16fbdd-02"
+> /dev/sdf1: UUID="eb5a4791-5b26-44b6-871e-efd464a3adc5" TYPE="xfs" PARTUUID="09066b88-01"
+> cat /sys/block/sdf/queue/scheduler --> [mq-deadline] none
+> Inizio: mar 17 dic 2019, 23:58:22, CET...fine: mar 17 dic 2019, 23:59:28, CET --> ci ho messo 64 secondi!
+> Inizio: mar 17 dic 2019, 23:59:28, CET...fine: mer 18 dic 2019, 00:00:33, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 00:00:33, CET...fine: mer 18 dic 2019, 00:01:39, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:01:39, CET...fine: mer 18 dic 2019, 00:06:35, CET --> ci ho messo 294 secondi!
+> Inizio: mer 18 dic 2019, 00:06:35, CET...fine: mer 18 dic 2019, 00:07:41, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:07:41, CET...fine: mer 18 dic 2019, 00:08:46, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 00:08:46, CET...fine: mer 18 dic 2019, 00:09:52, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:09:52, CET...fine: mer 18 dic 2019, 00:10:57, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 00:10:57, CET...fine: mer 18 dic 2019, 00:12:03, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:12:03, CET...fine: mer 18 dic 2019, 00:13:08, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 00:13:08, CET...fine: mer 18 dic 2019, 00:14:14, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:14:14, CET...fine: mer 18 dic 2019, 00:15:19, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:15:19, CET...fine: mer 18 dic 2019, 00:21:39, CET --> ci ho messo 379 secondi!
+> Inizio: mer 18 dic 2019, 00:21:39, CET...fine: mer 18 dic 2019, 00:22:44, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:22:44, CET...fine: mer 18 dic 2019, 00:23:50, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:23:50, CET...fine: mer 18 dic 2019, 00:29:16, CET --> ci ho messo 325 secondi!
+> Inizio: mer 18 dic 2019, 00:29:16, CET...fine: mer 18 dic 2019, 00:30:22, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:30:22, CET...fine: mer 18 dic 2019, 00:34:50, CET --> ci ho messo 266 secondi!
+> Inizio: mer 18 dic 2019, 00:34:50, CET...fine: mer 18 dic 2019, 00:35:56, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:35:56, CET...fine: mer 18 dic 2019, 00:37:01, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:37:01, CET...fine: mer 18 dic 2019, 00:43:39, CET --> ci ho messo 397 secondi!
+> Inizio: mer 18 dic 2019, 00:43:39, CET...fine: mer 18 dic 2019, 00:48:31, CET --> ci ho messo 291 secondi!
+> Inizio: mer 18 dic 2019, 00:48:31, CET...fine: mer 18 dic 2019, 00:49:37, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:49:37, CET...fine: mer 18 dic 2019, 00:50:42, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:50:42, CET...fine: mer 18 dic 2019, 00:55:39, CET --> ci ho messo 296 secondi!
+> Inizio: mer 18 dic 2019, 00:55:39, CET...fine: mer 18 dic 2019, 00:56:44, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 00:56:44, CET...fine: mer 18 dic 2019, 00:57:50, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 00:57:50, CET...fine: mer 18 dic 2019, 00:58:54, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 00:58:54, CET...fine: mer 18 dic 2019, 01:00:01, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 01:00:01, CET...fine: mer 18 dic 2019, 01:01:05, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:01:05, CET...fine: mer 18 dic 2019, 01:02:11, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:02:11, CET...fine: mer 18 dic 2019, 01:03:16, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:03:16, CET...fine: mer 18 dic 2019, 01:04:22, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:04:22, CET...fine: mer 18 dic 2019, 01:05:27, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:05:27, CET...fine: mer 18 dic 2019, 01:11:38, CET --> ci ho messo 369 secondi!
+> Inizio: mer 18 dic 2019, 01:11:38, CET...fine: mer 18 dic 2019, 01:12:43, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:12:43, CET...fine: mer 18 dic 2019, 01:18:20, CET --> ci ho messo 336 secondi!
+> Inizio: mer 18 dic 2019, 01:18:20, CET...fine: mer 18 dic 2019, 01:19:25, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:19:25, CET...fine: mer 18 dic 2019, 01:21:01, CET --> ci ho messo 95 secondi!
+> Inizio: mer 18 dic 2019, 01:21:01, CET...fine: mer 18 dic 2019, 01:22:06, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:22:06, CET...fine: mer 18 dic 2019, 01:23:12, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 01:23:12, CET...fine: mer 18 dic 2019, 01:29:43, CET --> ci ho messo 390 secondi!
+> Inizio: mer 18 dic 2019, 01:29:43, CET...fine: mer 18 dic 2019, 01:30:49, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:30:49, CET...fine: mer 18 dic 2019, 01:35:36, CET --> ci ho messo 285 secondi!
+> Inizio: mer 18 dic 2019, 01:35:36, CET...fine: mer 18 dic 2019, 01:36:44, CET --> ci ho messo 66 secondi!
+> Inizio: mer 18 dic 2019, 01:36:44, CET...fine: mer 18 dic 2019, 01:37:48, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:37:48, CET...fine: mer 18 dic 2019, 01:38:55, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 01:38:55, CET...fine: mer 18 dic 2019, 01:44:04, CET --> ci ho messo 308 secondi!
+> Inizio: mer 18 dic 2019, 01:44:04, CET...fine: mer 18 dic 2019, 01:45:10, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 01:45:10, CET...fine: mer 18 dic 2019, 01:49:42, CET --> ci ho messo 270 secondi!
+> Inizio: mer 18 dic 2019, 01:49:42, CET...fine: mer 18 dic 2019, 01:50:48, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 01:50:48, CET...fine: mer 18 dic 2019, 01:51:53, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:51:53, CET...fine: mer 18 dic 2019, 01:58:18, CET --> ci ho messo 383 secondi!
+> Inizio: mer 18 dic 2019, 01:58:18, CET...fine: mer 18 dic 2019, 01:59:23, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 01:59:23, CET...fine: mer 18 dic 2019, 02:00:29, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:00:29, CET...fine: mer 18 dic 2019, 02:01:34, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:01:34, CET...fine: mer 18 dic 2019, 02:02:40, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:02:40, CET...fine: mer 18 dic 2019, 02:03:45, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:03:45, CET...fine: mer 18 dic 2019, 02:04:51, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:04:51, CET...fine: mer 18 dic 2019, 02:05:56, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:05:56, CET...fine: mer 18 dic 2019, 02:07:02, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:07:02, CET...fine: mer 18 dic 2019, 02:08:07, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:08:07, CET...fine: mer 18 dic 2019, 02:09:14, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:09:14, CET...fine: mer 18 dic 2019, 02:13:44, CET --> ci ho messo 269 secondi!
+> Inizio: mer 18 dic 2019, 02:13:44, CET...fine: mer 18 dic 2019, 02:14:51, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:14:51, CET...fine: mer 18 dic 2019, 02:15:56, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:15:56, CET...fine: mer 18 dic 2019, 02:17:02, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:17:02, CET...fine: mer 18 dic 2019, 02:18:07, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:18:07, CET...fine: mer 18 dic 2019, 02:19:13, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:19:13, CET...fine: mer 18 dic 2019, 02:20:18, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:20:18, CET...fine: mer 18 dic 2019, 02:21:24, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:21:24, CET...fine: mer 18 dic 2019, 02:22:29, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:22:29, CET...fine: mer 18 dic 2019, 02:23:35, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:23:35, CET...fine: mer 18 dic 2019, 02:24:40, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:24:40, CET...fine: mer 18 dic 2019, 02:25:46, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:25:46, CET...fine: mer 18 dic 2019, 02:26:51, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:26:51, CET...fine: mer 18 dic 2019, 02:27:57, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:27:57, CET...fine: mer 18 dic 2019, 02:29:02, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:29:02, CET...fine: mer 18 dic 2019, 02:30:08, CET --> ci ho messo 65 secondi!
+> Inizio: mer 18 dic 2019, 02:30:08, CET...fine: mer 18 dic 2019, 02:31:13, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:31:13, CET...fine: mer 18 dic 2019, 02:32:19, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:32:19, CET...fine: mer 18 dic 2019, 02:40:06, CET --> ci ho messo 465 secondi!
+> Inizio: mer 18 dic 2019, 02:40:06, CET...fine: mer 18 dic 2019, 02:41:12, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:41:12, CET...fine: mer 18 dic 2019, 02:42:17, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:42:17, CET...fine: mer 18 dic 2019, 02:43:23, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:43:23, CET...fine: mer 18 dic 2019, 02:44:28, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:44:28, CET...fine: mer 18 dic 2019, 02:45:34, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:45:34, CET...fine: mer 18 dic 2019, 02:46:39, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:46:39, CET...fine: mer 18 dic 2019, 02:47:45, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:47:45, CET...fine: mer 18 dic 2019, 02:48:50, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:48:50, CET...fine: mer 18 dic 2019, 02:54:26, CET --> ci ho messo 334 secondi!
+> Inizio: mer 18 dic 2019, 02:54:26, CET...fine: mer 18 dic 2019, 02:55:31, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:55:31, CET...fine: mer 18 dic 2019, 02:57:11, CET --> ci ho messo 98 secondi!
+> Inizio: mer 18 dic 2019, 02:57:11, CET...fine: mer 18 dic 2019, 02:58:16, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 02:58:16, CET...fine: mer 18 dic 2019, 02:59:22, CET --> ci ho messo 64 secondi!
+> Inizio: mer 18 dic 2019, 02:59:22, CET...fine: mer 18 dic 2019, 03:00:27, CET --> ci ho messo 63 secondi!
+> Inizio: mer 18 dic 2019, 03:00:27, CET...fine: mer 18 dic 2019, 03:05:55, CET --> ci ho messo 326 secondi!
+> Inizio: mer 18 dic 2019, 03:05:55, CET...fine: mer 18 dic 2019, 03:11:49, CET --> ci ho messo 352 secondi!
+> Inizio: mer 18 dic 2019, 03:11:49, CET...fine: mer 18 dic 2019, 03:12:56, CET --> ci ho messo 66 secondi!
+> Inizio: mer 18 dic 2019, 03:12:56, CET...fine: mer 18 dic 2019, 03:14:01, CET --> ci ho messo 63 secondi!
 > 
 
-Kind regards,
-Nicholas
+
+
+-- 
+Ming
+
