@@ -2,107 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6BFA1249ED
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B00124A01
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:45:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfLROnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 09:43:19 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43904 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726856AbfLROnT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Dec 2019 09:43:19 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 13E2721582;
-        Wed, 18 Dec 2019 14:43:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576680198;
-        bh=iO+tOjqXZhOe4UTZKagiax9WLTYHh3JX3Ykh8qcBQNw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cNIE+m65yGEXDIT8q1cCn6jCzz+YbLIi6jcXwozIVcrH4rjlTlTkzfQuLgEvPj5Mx
-         tUJg4m3NqoDIm1arP2yEPR0bI2gfMCcN4xPRjzYU4x1rDwcNCfyV7mYfGgqiRaNq+Z
-         9W7bn8XgTFtaD8dRKDtcpHfAdjF6DUYiwhpBsHWo=
-Date:   Wed, 18 Dec 2019 15:43:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Mario.Limonciello@dell.com,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] thunderbolt: Add support for USB4
-Message-ID: <20191218144316.GA321016@kroah.com>
-References: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
+        id S1727260AbfLROpR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 09:45:17 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:53104 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726856AbfLROpP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 09:45:15 -0500
+Received: by mail-io1-f71.google.com with SMTP id d10so1475086iod.19
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 06:45:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=0bdlNmaxCD5fqq7L78Z2fQzwkj/o9Hs5/Lv+Ota1nxg=;
+        b=TpPRy9x9CLiIwymg1GTrwKY26eBhmZk2sJz5b6NBgnGeIf7JbCLUY04lRGgeLslkRX
+         O3j2ymEmDv6U3U1DT+0Bo/SPeSyxMc53yzs47adTYiKSw4po2nkm87tSW5E56YNS4Tbx
+         Qc34LX7nAf09PfAvaxWA2ziyWBpV+4/VLtOtdg/zAh5blvGnMQ2UwCxW5z4lC8tH2B84
+         +q1Gf9yRZfgIKhY9uDut86Qi8F3RhpOTMHGef3rqneou0PfUyRKyToQYWkngm0zmnOm6
+         WPVuT/A8+3ZYgjV7SMGh0vZmlphbz4sgi+Bm7Z0v+p4ll1opXAp+Z44Xu0rLR70KxUke
+         vR0A==
+X-Gm-Message-State: APjAAAVwt/2WL86c1AvC+Z8zAlOhctT93nAUp4uXKt0pzRNLF0E6r+4z
+        xV+M1BshvscPXA5mP3R5NnGykDGM7WIBG7J6k+xOsxw+yWMl
+X-Google-Smtp-Source: APXvYqybjSYiAZFu7Xg50IBunoKwYwK5lK7Rqh2qMNJUI3t/FMi22e3PBYDNnKJGOQCWh8l6rLjB8I4xhB4jf6mlSAy+b4MqVyNO
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
+X-Received: by 2002:a92:5855:: with SMTP id m82mr2170777ilb.302.1576680310849;
+ Wed, 18 Dec 2019 06:45:10 -0800 (PST)
+Date:   Wed, 18 Dec 2019 06:45:10 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000daea9f0599fb7da6@google.com>
+Subject: KASAN: slab-out-of-bounds Read in hidinput_hid_event
+From:   syzbot <syzbot+00eaa791c74b27f5e7b1@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rydberg@bitmath.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 03:33:36PM +0300, Mika Westerberg wrote:
-> Hi all,
-> 
-> USB4 is the public specification of Thunderbolt 3 protocol and can be
-> downloaded here:
-> 
->   https://www.usb.org/sites/default/files/USB4%20Specification_1.zip
-> 
-> USB4 is about tunneling different protocols over a single cable (in the
-> same way as Thunderbolt). The current USB4 spec supports PCIe, Display Port
-> and USB 3.x, and also software based protocols such as networking between
-> domains (hosts).
-> 
-> So far PCs have been using firmware based Connection Manager (FW CM, ICM)
-> and Apple systems have been using software based one (SW CM, ECM). A
-> Connection Manager is the entity that handles creation of different tunnel
-> types through the USB4 (and Thunderbolt) fabric. With USB4 the plan is to
-> have software based Connection Manager everywhere but some early systems
-> will come with firmware based connection manager.
-> 
-> Current Linux Thunderbolt driver supports both "modes" and can detect which
-> one to use dynamically.
-> 
-> This series extends the Linux Thunderbolt driver to support USB4 compliant
-> hosts and devices (this applies to both firmware and software based
-> connection managers). USB4 Features enabled by this series include:
-> 
->   - PCIe tunneling
->   - Display Port tunneling
->   - USB 3.x tunneling
->   - P2P networking (implemented in drivers/net/thunderbolt.c)
->   - Host and device NVM firmware upgrade
-> 
-> Power management support is still work in progress. It will be submitted
-> later on once properly tested.
-> 
-> The previous versions of the series can be seen here:
-> 
->   v1: https://lore.kernel.org/linux-usb/20191023112154.64235-1-mika.westerberg@linux.intel.com/
->   RFC: https://lore.kernel.org/lkml/20191001113830.13028-1-mika.westerberg@linux.intel.com/
-> 
-> Changes from v1:
-> 
->   * Rebased on top of v5.5-rc2.
->   * Add a new patch to populate PG field in hotplug ack packet.
->   * Rename the networking driver Kconfig symbol to CONFIG_USB4_NET to
->     follow the driver itself (CONFIG_USB4).
+Hello,
 
-At a quick glance, this looks nice and sane, good job.  I've taken all
-of these into my tree, let's see if 0-day has any problems with it :)
+syzbot found the following crash on:
 
-thanks,
+HEAD commit:    d533c992 usb: core: kcov: collect coverage from usb comple..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=11e440aee00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=743b91162e9f9496
+dashboard link: https://syzkaller.appspot.com/bug?extid=00eaa791c74b27f5e7b1
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1445d9fae00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12557049e00000
 
-greg k-h
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+00eaa791c74b27f5e7b1@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in test_bit  
+include/asm-generic/bitops/instrumented-non-atomic.h:110 [inline]
+BUG: KASAN: slab-out-of-bounds in hidinput_hid_event+0x1111/0x15d3  
+drivers/hid/hid-input.c:1381
+Read of size 8 at addr ffff8881cf4d2cd0 by task swapper/1/0
+
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.5.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_address_description.constprop.0+0x16/0x200 mm/kasan/report.c:374
+  __kasan_report.cold+0x37/0x7f mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:639
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
+  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:110 [inline]
+  hidinput_hid_event+0x1111/0x15d3 drivers/hid/hid-input.c:1381
+  hid_process_event+0x4a0/0x580 drivers/hid/hid-core.c:1506
+  hid_input_field drivers/hid/hid-core.c:1550 [inline]
+  hid_report_raw_event+0xabb/0xed0 drivers/hid/hid-core.c:1757
+  hid_input_report+0x315/0x3f0 drivers/hid/hid-core.c:1824
+  hid_irq_in+0x50e/0x690 drivers/hid/usbhid/hid-core.c:284
+
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
