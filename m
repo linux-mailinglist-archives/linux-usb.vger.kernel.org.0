@@ -2,118 +2,230 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B20124BE5
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 16:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F58124C42
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 16:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727150AbfLRPkP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 10:40:15 -0500
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39214 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726932AbfLRPkO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 10:40:14 -0500
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id xBIFdlqg019044;
-        Wed, 18 Dec 2019 09:39:47 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1576683588;
-        bh=isrbKoX0G9x5SGR0XS8wE9i8c+JE3gadbxb2pKknm08=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=jqWjyfLGeRvQwwgyrIyyIvTziBUpN2dqqj6Bi1/V1jtOCGUovSziMNs1rjtKnYANl
-         6tp84BGjaIAUgO4cdONFX9lAJPIOErBgldm5agnsqfH4gED+dWDnaVXO+VvYBQGFd/
-         W1AAVeyJHO2FbWB09mgavO/6WOHXq+9d/kUL9aUM=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id xBIFdldB099895
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 18 Dec 2019 09:39:47 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Wed, 18
- Dec 2019 09:39:47 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Wed, 18 Dec 2019 09:39:47 -0600
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id xBIFdl01079424;
-        Wed, 18 Dec 2019 09:39:47 -0600
-Date:   Wed, 18 Dec 2019 09:39:05 -0600
-From:   Bin Liu <b-liu@ti.com>
-To:     <min.guo@mediatek.com>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        <chunfeng.yun@mediatek.com>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <tony@atomide.com>,
-        <hdegoede@redhat.com>
-Subject: Re: [PATCH v9 2/6] arm: dts: mt2701: Add usb2 device nodes
-Message-ID: <20191218153905.GN16429@iaqt7>
-Mail-Followup-To: Bin Liu <b-liu@ti.com>, min.guo@mediatek.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>, chunfeng.yun@mediatek.com,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, tony@atomide.com,
-        hdegoede@redhat.com
-References: <20191211015446.11477-1-min.guo@mediatek.com>
- <20191211015446.11477-3-min.guo@mediatek.com>
+        id S1727226AbfLRPxo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 10:53:44 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:57696 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727135AbfLRPxn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 10:53:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1576684422;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=unt15VBAcaHjgr4U8q0O2ZKzQ4PmSaIhSP/h0Yo0Lsg=;
+        b=TQMCOlkNMZNgWF4tuPlLRzYc5/1QRPvXzNb0FxdF7fWKUyYMr8apRDZ7xICttgBfWjyVfK
+        ylhEO0EdXxlh+yMAw0G5vmocAPGE+L0BULNIH5jAXzHZ/pv8uI/oV8SGcFFNrMA5fF5w+H
+        jNY3gHIwlY3IQE2uECOIdneXne03GZ8=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-307-Vf1oOLOtPuSI3MOed2mhBA-1; Wed, 18 Dec 2019 10:53:41 -0500
+X-MC-Unique: Vf1oOLOtPuSI3MOed2mhBA-1
+Received: by mail-qv1-f69.google.com with SMTP id ce17so1608208qvb.5
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 07:53:41 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=unt15VBAcaHjgr4U8q0O2ZKzQ4PmSaIhSP/h0Yo0Lsg=;
+        b=RiavwjKIWvH8ygEmw2kn8zyceihl26t2tioV2+VUc83AlW6XLGXV/OayFStE3khocy
+         t9TeG2P2exW6tLbAV0hL8Yv5JgAuCsR1d6QoMBQB0m9dndHfHrM0ktO6GxghUS0e04Ni
+         h7vTo3pZ2trYfyfeMPk2IzE+GvcvPuYvDbmyAxbzYmX80/5vghfo3Fm8CpnkLAJ42+2Y
+         Q3Du7Q3JihN3wDAtQyJJEiyOIxg05O9eW8LX14eAL43GO2qtDEIUNg1DQfat8lIIZHaV
+         VwcTvtgP47kd9flc3XeE4lDY6duWfF6ANnhmDWiKKNOFgFCeCbnH70DJludDdh3c8ZKu
+         e+pQ==
+X-Gm-Message-State: APjAAAXbZFTr/0F8xzmvjkQRAZMpZiHqBQWhHN+0n7nVCH7wpGZxJ3IU
+        aQ7EeWtyGhcAXOn8/cdx6AvHhrLh8Av+84kA7Z9by3dgMSDwJoIs6mL7L73ki8/o5WWFWRBbga7
+        s6tZN6pbrOgrgHHguDAsbGpd9Tw4OBuJOcVxj
+X-Received: by 2002:aed:20e5:: with SMTP id 92mr2769391qtb.294.1576684420712;
+        Wed, 18 Dec 2019 07:53:40 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxhdfn+DJmWSW1rtNfJv+v3JLGnbmcOBsRFVV57rECIvs8fgi+lo+5a3GjmoMIWei9Wj75Fqi5V2OS/6ZuECd8=
+X-Received: by 2002:aed:20e5:: with SMTP id 92mr2769372qtb.294.1576684420468;
+ Wed, 18 Dec 2019 07:53:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20191211015446.11477-3-min.guo@mediatek.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20191217225021.GA34258@dtor-ws>
+In-Reply-To: <20191217225021.GA34258@dtor-ws>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 18 Dec 2019 16:53:29 +0100
+Message-ID: <CAO-hwJJ5JDi9z_nBjo1vLtCMG1XWLn_E_SV+57t3=qAowkmxNQ@mail.gmail.com>
+Subject: Re: [PATCH] HID: hiddev: fix mess in hiddev_open()
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Matthias,
-
-On Wed, Dec 11, 2019 at 09:54:42AM +0800, min.guo@mediatek.com wrote:
-> From: Min Guo <min.guo@mediatek.com>
-> 
-> Add musb nodes and usb2 phy nodes for MT2701
-> 
-> Signed-off-by: Min Guo <min.guo@mediatek.com>
+On Tue, Dec 17, 2019 at 11:50 PM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+>
+> The open method of hiddev handler fails to bring the device out of
+> autosuspend state as was promised in 0361a28d3f9a, as it actually has 2
+> blocks that try to start the transport (call hid_hw_open()) with both
+> being guarded by the "open" counter, so the 2nd block is never executed as
+> the first block increments the counter so it is never at 0 when we check
+> it for the second block.
+>
+> Additionally hiddev_open() was leaving counter incremented on errors,
+> causing the device to never be reopened properly if there was ever an
+> error.
+>
+> Let's fix all of this by factoring out code that creates client structure
+> and powers up the device into a separate function that is being called
+> from usbhid_open() with the "existancelock" being held.
+>
+> Fixes: 0361a28d3f9a ("HID: autosuspend support for USB HID")
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > ---
-> changes in v9:
-> 1. Add usb-role-switch
-> 2. Remove label of usb connector child node
-> 3. Change usb connector child node compatible as "gpio-usb-b-connector", "usb-b-connector";
-> 
-> changes in v8:
-> 1. no changes
-> 
-> changes in v7:
-> 1. Change usb connector child node compatible as "gpio-usb-b-connector" 
-> 
-> changes in v6:
-> 1. Modify usb connector child node
-> 
-> changes in v5:
-> 1. Add usb connector child node
-> 
-> changes in v4:
-> 1. no changes
-> 
-> changes in v3:
-> 1. no changes
-> 
-> changes in v2:
-> 1. Remove phy-names
-> ---
->  arch/arm/boot/dts/mt2701-evb.dts | 21 ++++++++++++++++++++
->  arch/arm/boot/dts/mt2701.dtsi    | 33 ++++++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
 
-Can I have your ACK so I can queue this? or please let me know if you
-want to take it in your tree. Thanks.
+Thanks!
 
--Bin.
+Applied to for-5.5/upstream-fixes
+
+Cheers,
+Benjamin
+
+>  drivers/hid/usbhid/hiddev.c | 97 ++++++++++++++++---------------------
+>  1 file changed, 42 insertions(+), 55 deletions(-)
+>
+> diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+> index 1f9bc4483465..c879b214a479 100644
+> --- a/drivers/hid/usbhid/hiddev.c
+> +++ b/drivers/hid/usbhid/hiddev.c
+> @@ -241,12 +241,51 @@ static int hiddev_release(struct inode * inode, struct file * file)
+>         return 0;
+>  }
+>
+> +static int __hiddev_open(struct hiddev *hiddev, struct file *file)
+> +{
+> +       struct hiddev_list *list;
+> +       int error;
+> +
+> +       lockdep_assert_held(&hiddev->existancelock);
+> +
+> +       list = vzalloc(sizeof(*list));
+> +       if (!list)
+> +               return -ENOMEM;
+> +
+> +       mutex_init(&list->thread_lock);
+> +       list->hiddev = hiddev;
+> +
+> +       if (!hiddev->open++) {
+> +               error = hid_hw_power(hiddev->hid, PM_HINT_FULLON);
+> +               if (error < 0)
+> +                       goto err_drop_count;
+> +
+> +               error = hid_hw_open(hiddev->hid);
+> +               if (error < 0)
+> +                       goto err_normal_power;
+> +       }
+> +
+> +       spin_lock_irq(&hiddev->list_lock);
+> +       list_add_tail(&list->node, &hiddev->list);
+> +       spin_unlock_irq(&hiddev->list_lock);
+> +
+> +       file->private_data = list;
+> +
+> +       return 0;
+> +
+> +err_normal_power:
+> +       hid_hw_power(hiddev->hid, PM_HINT_NORMAL);
+> +err_drop_count:
+> +       hiddev->open--;
+> +       vfree(list);
+> +       return error;
+> +}
+> +
+>  /*
+>   * open file op
+>   */
+>  static int hiddev_open(struct inode *inode, struct file *file)
+>  {
+> -       struct hiddev_list *list;
+>         struct usb_interface *intf;
+>         struct hid_device *hid;
+>         struct hiddev *hiddev;
+> @@ -255,66 +294,14 @@ static int hiddev_open(struct inode *inode, struct file *file)
+>         intf = usbhid_find_interface(iminor(inode));
+>         if (!intf)
+>                 return -ENODEV;
+> +
+>         hid = usb_get_intfdata(intf);
+>         hiddev = hid->hiddev;
+>
+> -       if (!(list = vzalloc(sizeof(struct hiddev_list))))
+> -               return -ENOMEM;
+> -       mutex_init(&list->thread_lock);
+> -       list->hiddev = hiddev;
+> -       file->private_data = list;
+> -
+> -       /*
+> -        * no need for locking because the USB major number
+> -        * is shared which usbcore guards against disconnect
+> -        */
+> -       if (list->hiddev->exist) {
+> -               if (!list->hiddev->open++) {
+> -                       res = hid_hw_open(hiddev->hid);
+> -                       if (res < 0)
+> -                               goto bail;
+> -               }
+> -       } else {
+> -               res = -ENODEV;
+> -               goto bail;
+> -       }
+> -
+> -       spin_lock_irq(&list->hiddev->list_lock);
+> -       list_add_tail(&list->node, &hiddev->list);
+> -       spin_unlock_irq(&list->hiddev->list_lock);
+> -
+>         mutex_lock(&hiddev->existancelock);
+> -       /*
+> -        * recheck exist with existance lock held to
+> -        * avoid opening a disconnected device
+> -        */
+> -       if (!list->hiddev->exist) {
+> -               res = -ENODEV;
+> -               goto bail_unlock;
+> -       }
+> -       if (!list->hiddev->open++)
+> -               if (list->hiddev->exist) {
+> -                       struct hid_device *hid = hiddev->hid;
+> -                       res = hid_hw_power(hid, PM_HINT_FULLON);
+> -                       if (res < 0)
+> -                               goto bail_unlock;
+> -                       res = hid_hw_open(hid);
+> -                       if (res < 0)
+> -                               goto bail_normal_power;
+> -               }
+> -       mutex_unlock(&hiddev->existancelock);
+> -       return 0;
+> -bail_normal_power:
+> -       hid_hw_power(hid, PM_HINT_NORMAL);
+> -bail_unlock:
+> +       res = hiddev->exist ? __hiddev_open(hiddev, file) : -ENODEV;
+>         mutex_unlock(&hiddev->existancelock);
+>
+> -       spin_lock_irq(&list->hiddev->list_lock);
+> -       list_del(&list->node);
+> -       spin_unlock_irq(&list->hiddev->list_lock);
+> -bail:
+> -       file->private_data = NULL;
+> -       vfree(list);
+>         return res;
+>  }
+>
+> --
+> 2.24.1.735.g03f4e72817-goog
+>
+>
+> --
+> Dmitry
+>
+
