@@ -2,155 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 814FC123E14
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 04:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BAFA123F35
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 06:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726492AbfLRDoB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 22:44:01 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38417 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726402AbfLRDoB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 22:44:01 -0500
-Received: by mail-pl1-f194.google.com with SMTP id f20so340282plj.5;
-        Tue, 17 Dec 2019 19:44:00 -0800 (PST)
+        id S1725985AbfLRFm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 00:42:29 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36694 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbfLRFm2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 00:42:28 -0500
+Received: by mail-pf1-f196.google.com with SMTP id x184so584624pfb.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 21:42:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=+y9h4aE08CuPVLDRigUSeMNj0mFN2Iazg3NzEcyF52c=;
-        b=o50VKtgFJWtikhjh86K9Pp/xJL03nCe7uNeHQnLKhET0QZQEmrtcKEpIUAeM5burEi
-         /dLWaajjB6izQNe5N9WCjD+mI4E+LkERBxjpMBaeO5aeNTu0pYm3GKdzaa02JDlVdNna
-         OWZSGSEpX+04ZPPsfpFdobOzz8zK9P2aviZd90PKbnDDDX1aNnII3vKEAgue17Irpp7q
-         3wktnxWRmnb2l4wUmRqtMk6AXhp2P+T/Uo8pDevRzloYXo8dl4o2VkQiuUSOiwaboWzg
-         4wbiZCe1wLcr2nsNglw9j6Lw004zKS5IrLZDUizeeXM6Re2lykgfzHKxi6Q58uIlUQlq
-         ygYA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xV4KfJlK4YlnhchUUwxKnteaYwdyYGzcZQcMfxQtzso=;
+        b=pEEICwashl/t9nYsbZJNVLzXODux5zOMFmXSAptDtsF9vUIfUAI33C2FPralqEaTvY
+         1MlZvXRJ4hKdvSRnd4S8+a9babevrFB/uNOVs0XpWwZIZ96uuWorNIbZ3YqkN35i5qaH
+         SPRYJrHojpcfB2XlcMwpI8elGpnb94JQJ4orUHclz5Y6aXFEPkfiISDLVxJI95F2uDeb
+         tGy4zO4ZbaehRmteUSqEvXYKbcTGCNBMcdcHb0ez7MRkewuR7EOejC0HcZZ+8XsvUPRC
+         pk7grQlH5jvmB3CTeiE6n5qJXboxfhhCFXe8qNNWppwOECUgyfrFu/ykxBxUSaARYREH
+         ZH8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=+y9h4aE08CuPVLDRigUSeMNj0mFN2Iazg3NzEcyF52c=;
-        b=Zbe91KUY0XRYZnL/ED/kyabsIkSCcIFaC5gnjkeJ8KdEbYxFZAyynNFFhlb+Lezzv8
-         TnY7RVRwy7mRY8OiotTM0dEuXC/lIBQzcoAQYbJ+l9p7yqoTT8svs/mLLazkaBzW/ByJ
-         H2sDT+0PJUGuurtD6iQUeeLiKO8BV+1M8aV9ZHdlkN+zdkIF6WfBBBUkjpMoIpbu4SYm
-         6fj9jtgN8mgOnGhw0GTdcKbVZbHGm7wuwTnGh3B23019gJ9DkFmZc8dZ1FAtmMnj2tfB
-         7AiEOJUNPn5glNRLty4qBTC84R01vcbO6nsdTr0gVC3oz4O4QiPFnd7ylN+h/bR8Jl9H
-         yhKQ==
-X-Gm-Message-State: APjAAAUY6NEOIFiJd3PgmxCtDhy5mtSGcaU1UqkYt+Jd/PsTs5mmLKtL
-        o4rJxZ4GkhGD+L5CTML5v0g=
-X-Google-Smtp-Source: APXvYqxbDnldt34tQauFfXHJ9KD9GGYfju4fjtfJwioU9AQjdJDRoygXN3aR7oZ/RlBXPJgQvQEogA==
-X-Received: by 2002:a17:90a:c214:: with SMTP id e20mr142755pjt.98.1576640640300;
-        Tue, 17 Dec 2019 19:44:00 -0800 (PST)
-Received: from oslab.tsinghua.edu.cn ([166.111.139.172])
-        by smtp.gmail.com with ESMTPSA id k29sm630606pfh.104.2019.12.17.19.43.56
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xV4KfJlK4YlnhchUUwxKnteaYwdyYGzcZQcMfxQtzso=;
+        b=mJAGC4Bw2RNyGwdw6dtiaaCc6IbcN7ioCVOKerhL/1J0Kz2dNIKtCEbdPTzyPwsRvZ
+         m4rpFshStEcul45QhAykt/+OvcXbpPICHeze9WSXt2eSIVyywfTtSEXyusADJetYkp+Z
+         xZP76CI0N+0La7hig6+ipYNVvM1FkQXI/OjcGmXFE4FI1fdJ7kFTXirahLSulOHWumkT
+         CIpSQ1f0xMrqIfuZzHQgOuXygwp8hj3TuueV54fQVhTcz4S9fChXmEewwRmTUr6XoRBe
+         tmOKMQL3brh9jayIQELfdTKf5Rqn9gLmYsY4YL5/u5WWkNRxmXLhipVmt8mXKmQK9TwE
+         SyHw==
+X-Gm-Message-State: APjAAAVsc1x8PRkPweOo2WvSC8lVJOYlXR3+oFxLE1Kpg5wl/CNuhKrI
+        Z1Vf5f6y18xCmSwWqQXjR5+jnQ==
+X-Google-Smtp-Source: APXvYqyWesdIIO3qxjlP7JTHe12xBW/M910oPFrSVXRrjw3E1ufF2TfARQMbp5ECnXSXj86QKLMFmg==
+X-Received: by 2002:a63:5d03:: with SMTP id r3mr957260pgb.306.1576647747835;
+        Tue, 17 Dec 2019 21:42:27 -0800 (PST)
+Received: from yoga (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
+        by smtp.gmail.com with ESMTPSA id g7sm1139962pfq.33.2019.12.17.21.42.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 19:43:59 -0800 (PST)
-From:   Jia-Ju Bai <baijiaju1990@gmail.com>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        stern@rowland.harvard.edu, rogerq@ti.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jia-Ju Bai <baijiaju1990@gmail.com>
-Subject: [PATCH] usb: gadget: udc: fix possible sleep-in-atomic-context bugs in gr_probe()
-Date:   Wed, 18 Dec 2019 11:43:49 +0800
-Message-Id: <20191218034349.18919-1-baijiaju1990@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 17 Dec 2019 21:42:27 -0800 (PST)
+Date:   Tue, 17 Dec 2019 21:42:24 -0800
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, Andy Gross <agross@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH v2 2/4] ARM: dts: qcom: Correct USB3503 GPIOs polarity
+Message-ID: <20191218054224.GE448416@yoga>
+References: <20191211145054.24835-1-m.szyprowski@samsung.com>
+ <CGME20191211145213eucas1p2c438f848ba705fa407331bb31b03b626@eucas1p2.samsung.com>
+ <20191211145208.24976-1-m.szyprowski@samsung.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191211145208.24976-1-m.szyprowski@samsung.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver may sleep while holding a spinlock.
-The function call path (from bottom to top) in Linux 4.19 is:
+On Wed 11 Dec 06:52 PST 2019, Marek Szyprowski wrote:
 
-drivers/usb/gadget/udc/core.c, 1175: 
-	kzalloc(GFP_KERNEL) in usb_add_gadget_udc_release
-drivers/usb/gadget/udc/core.c, 1272: 
-	usb_add_gadget_udc_release in usb_add_gadget_udc
-drivers/usb/gadget/udc/gr_udc.c, 2186: 
-	usb_add_gadget_udc in gr_probe
-drivers/usb/gadget/udc/gr_udc.c, 2183: 
-	spin_lock in gr_probe
+> Current USB3503 driver ignores GPIO polarity and always operates as if the
+> GPIO lines were flagged as ACTIVE_HIGH. Fix the polarity for the existing
+> USB3503 chip applications to match the chip specification and common
+> convention for naming the pins. The only pin, which has to be ACTIVE_LOW
+> is the reset pin. The remaining are ACTIVE_HIGH. This change allows later
+> to fix the USB3503 driver to properly use generic GPIO bindings and read
+> polarity from DT.
+> 
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 
-drivers/usb/gadget/udc/core.c, 1195: 
-	mutex_lock in usb_add_gadget_udc_release
-drivers/usb/gadget/udc/core.c, 1272: 
-	usb_add_gadget_udc_release in usb_add_gadget_udc
-drivers/usb/gadget/udc/gr_udc.c, 2186: 
-	usb_add_gadget_udc in gr_probe
-drivers/usb/gadget/udc/gr_udc.c, 2183: 
-	spin_lock in gr_probe
+Acked-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-drivers/usb/gadget/udc/gr_udc.c, 212:
-	debugfs_create_file in gr_probe
-drivers/usb/gadget/udc/gr_udc.c, 2197:
-	gr_dfs_create in gr_probe
-drivers/usb/gadget/udc/gr_udc.c, 2183:
-    spin_lock in gr_probe
-
-drivers/usb/gadget/udc/gr_udc.c, 2114:
-	devm_request_threaded_irq in gr_request_irq
-drivers/usb/gadget/udc/gr_udc.c, 2202:
-	gr_request_irq in gr_probe
-drivers/usb/gadget/udc/gr_udc.c, 2183:
-    spin_lock in gr_probe
-
-kzalloc(GFP_KERNEL), mutex_lock(), debugfs_create_file() and 
-devm_request_threaded_irq() can sleep at runtime.
-
-To fix these possible bugs, usb_add_gadget_udc(), gr_dfs_create() and
-gr_request_irq() are called without handling the spinlock.
-
-These bugs are found by a static analysis tool STCheck written by myself.
-
-Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
----
- drivers/usb/gadget/udc/gr_udc.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
-index 64d80c65bb96..aaf975c809bf 100644
---- a/drivers/usb/gadget/udc/gr_udc.c
-+++ b/drivers/usb/gadget/udc/gr_udc.c
-@@ -2175,8 +2175,6 @@ static int gr_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 	}
- 
--	spin_lock(&dev->lock);
--
- 	/* Inside lock so that no gadget can use this udc until probe is done */
- 	retval = usb_add_gadget_udc(dev->dev, &dev->gadget);
- 	if (retval) {
-@@ -2185,15 +2183,21 @@ static int gr_probe(struct platform_device *pdev)
- 	}
- 	dev->added = 1;
- 
-+	spin_lock(&dev->lock);
-+
- 	retval = gr_udc_init(dev);
--	if (retval)
-+	if (retval) {
-+		spin_unlock(&dev->lock);
- 		goto out;
--
--	gr_dfs_create(dev);
-+	}
- 
- 	/* Clear all interrupt enables that might be left on since last boot */
- 	gr_disable_interrupts_and_pullup(dev);
- 
-+	spin_unlock(&dev->lock);
-+
-+	gr_dfs_create(dev);
-+
- 	retval = gr_request_irq(dev, dev->irq);
- 	if (retval) {
- 		dev_err(dev->dev, "Failed to request irq %d\n", dev->irq);
-@@ -2222,8 +2226,6 @@ static int gr_probe(struct platform_device *pdev)
- 		dev_info(dev->dev, "regs: %p, irq %d\n", dev->regs, dev->irq);
- 
- out:
--	spin_unlock(&dev->lock);
--
- 	if (retval)
- 		gr_remove(pdev);
- 
--- 
-2.17.1
-
+> ---
+>  arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> index 26160c324802..942e3a2cac35 100644
+> --- a/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> +++ b/arch/arm/boot/dts/qcom-mdm9615-wp8548-mangoh-green.dts
+> @@ -143,7 +143,7 @@
+>  				compatible = "smsc,usb3503a";
+>  				reg = <0x8>;
+>  				connect-gpios = <&gpioext2 1 GPIO_ACTIVE_HIGH>;
+> -				intn-gpios = <&gpioext2 0 GPIO_ACTIVE_LOW>;
+> +				intn-gpios = <&gpioext2 0 GPIO_ACTIVE_HIGH>;
+>  				initial-mode = <1>;
+>  			};
+>  		};
+> -- 
+> 2.17.1
+> 
