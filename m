@@ -2,172 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA52123D67
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 03:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 814FC123E14
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 04:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726671AbfLRCq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 21:46:28 -0500
-Received: from mail-eopbgr40087.outbound.protection.outlook.com ([40.107.4.87]:58569
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726496AbfLRCq2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Dec 2019 21:46:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ekcepr6SZf18xiQYFPsgVz6vlFLG19yttotG+gRt2IbovdhhikqO9AMnbWtCbgZdMtCDypM/p5U3N+30024Fzr1m0kuckw3qv/0afHHGzeIaxIaL7RngrL7qBlb1GjO4wkQVuk2CPM/wL2i4ROlyyGHbxY+Xo+ZSuEO2bRUca32MK/Xv418gyOw+9eVLSJEIvMyFegIgryuYt30yxF3MfsrKGhH+ZV6tTYo3l77Ozq6Bt+mLZBHugpgcjEnLoUaCx+liLVjlhDXw/kiiYYVPm+rgoeq0OeJi4O3yPjO2Yd4zZArjQhMu+hHxariP9x+0IbhYazbyCrOK31PGCs9OiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C4nsnySAbjuSRT02GZR66zDBPoFelcxVMeS+O5MNmOs=;
- b=gr8s1p4aODF6X6rmNJjpwpCxF8GK3ZKtcNHXSpzBzcU3zX4EhSiycM/eFaFPPRJP3B/WJ1HrWgABC2jka8QydLCJzQjPZ0Pn6d2wY4xzwKVi7bmxwpEbnsJ8vkWi9UnO6Swzps9ZBN7rbsLG1Bp8QF/WWpf1cqWKnVbOeV5p9OWe6CZRsxtopx6KMu6e9FoC0QDNklT9Fyh+z3jvdKW4jiEL3QuYElY4gMXMcaa5DpZ0/qUtOyzs91zIqQM4XoRFHA70XmzLcCWlEk8Fa+R+hC+wd8JDuQ02LCFfYsJsOHgOUnUnjUlK8ObgpjO6XipPMr7MCNeouJTe8237X6a/1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C4nsnySAbjuSRT02GZR66zDBPoFelcxVMeS+O5MNmOs=;
- b=RjHnSpf0D+K0LTHfVlXFQOfGq7FrbzxI77X2ZJ5+Ss0TpkKBkaDYYQ57OOUjabVsHnEBc5ZywwJPnw4mB+UccWl+HDr8ahvHuqo2r/+K2FcUk87XX301jlp2SUmzxO6vHY2aloCE4vxc7sF8MSXDoqTZ364B4ac8l+/KlGgNIEA=
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com (20.177.51.23) by
- VI1PR04MB5792.eurprd04.prod.outlook.com (20.178.204.10) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2538.18; Wed, 18 Dec 2019 02:46:20 +0000
-Received: from VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9]) by VI1PR04MB5327.eurprd04.prod.outlook.com
- ([fe80::cd33:501f:b25:51a9%7]) with mapi id 15.20.2538.019; Wed, 18 Dec 2019
- 02:46:20 +0000
-From:   Peter Chen <peter.chen@nxp.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-CC:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "od@zcrc.me" <od@zcrc.me>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-Thread-Topic: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-Thread-Index: AQHVsDrKPWSbvY6T+0OJ94dLsbCA8qe2ObMAgAJTXYCAA3BKkIAAn/jzgAD0ddCAAU6BzYAAWE8A
-Date:   Wed, 18 Dec 2019 02:46:20 +0000
-Message-ID: <VI1PR04MB53273342340E350BFFFDE12F8B530@VI1PR04MB5327.eurprd04.prod.outlook.com>
-References: <20191211155032.167032-1-paul@crapouillou.net>
-        <20191211155032.167032-3-paul@crapouillou.net>
-        <20191212091814.GA7035@b29397-desktop> <1576270147.3.0@crapouillou.net>
-        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <1576493525.3.0@crapouillou.net>
-        <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <1576617863.3.1@crapouillou.net>
-In-Reply-To: <1576617863.3.1@crapouillou.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=peter.chen@nxp.com; 
-x-originating-ip: [119.31.174.67]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 6eb970f5-20f8-43e1-d793-08d7836476aa
-x-ms-traffictypediagnostic: VI1PR04MB5792:
-x-microsoft-antispam-prvs: <VI1PR04MB5792D8DD23B35B6E16A0871D8B530@VI1PR04MB5792.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0255DF69B9
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(71200400001)(4326008)(86362001)(478600001)(54906003)(186003)(316002)(6506007)(33656002)(26005)(7696005)(8676002)(81156014)(8936002)(81166006)(64756008)(55016002)(7416002)(6916009)(66556008)(66476007)(66446008)(5660300002)(66946007)(2906002)(9686003)(44832011)(52536014)(76116006)(41533002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB5792;H:VI1PR04MB5327.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ISqJbviy5Nbi16dfdLcfbV3YCEowNII5cuk4hmXGjAzsVSK0xXjTKWieWqnKFgctXgacoxQefMP4NTHPQlNHNjKIDRgWE+VMzVANQnuAo8kQegdYMapiqFJpYwVQ+BR3WftPoUbO8zYKHNL202rHm2mUKXPKxcLqiZ49xeuKAaGZqyZvObRxWEm6Qebm6SpvlkoTlz5RGaXpWpIS2wOTHHqJoxZ955IZeI5UwQfogbDgLdW7RKFJ0+swEeM00xzSdHZBl/5QEZ1OyZAojRNMYQuxL/Yv4Q6BXs5uzyFS2u9G62J+PolRed+5qHk7DwvPMT4ITCn4/n2ENNNOfYTFMOGFrpHLGGW1h52fPbpxyN+zPi9wakp/Ne/sogcoqShBYmUIsM/pb8PUZLjmlFomiTj2fP7Ou6a4WXcarNOx7UFktYmMS+Hzq9mKDPepV8FocQph+fDmyqX7ERtx5uWJopbjp1OnD0kpO4/pxjBElZQ7ceTJNdHWwe8THqlR+/p5
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6eb970f5-20f8-43e1-d793-08d7836476aa
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Dec 2019 02:46:20.5501
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zJzEJ13i8Eh239lTEVpAfS61MCfPqMeb3vvtBNA2hbF8x1kpL3XK9e1ruu4lIWMXagSOyGUiiGl9OE7XrKfhnA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5792
+        id S1726492AbfLRDoB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 22:44:01 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38417 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726402AbfLRDoB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 22:44:01 -0500
+Received: by mail-pl1-f194.google.com with SMTP id f20so340282plj.5;
+        Tue, 17 Dec 2019 19:44:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=+y9h4aE08CuPVLDRigUSeMNj0mFN2Iazg3NzEcyF52c=;
+        b=o50VKtgFJWtikhjh86K9Pp/xJL03nCe7uNeHQnLKhET0QZQEmrtcKEpIUAeM5burEi
+         /dLWaajjB6izQNe5N9WCjD+mI4E+LkERBxjpMBaeO5aeNTu0pYm3GKdzaa02JDlVdNna
+         OWZSGSEpX+04ZPPsfpFdobOzz8zK9P2aviZd90PKbnDDDX1aNnII3vKEAgue17Irpp7q
+         3wktnxWRmnb2l4wUmRqtMk6AXhp2P+T/Uo8pDevRzloYXo8dl4o2VkQiuUSOiwaboWzg
+         4wbiZCe1wLcr2nsNglw9j6Lw004zKS5IrLZDUizeeXM6Re2lykgfzHKxi6Q58uIlUQlq
+         ygYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=+y9h4aE08CuPVLDRigUSeMNj0mFN2Iazg3NzEcyF52c=;
+        b=Zbe91KUY0XRYZnL/ED/kyabsIkSCcIFaC5gnjkeJ8KdEbYxFZAyynNFFhlb+Lezzv8
+         TnY7RVRwy7mRY8OiotTM0dEuXC/lIBQzcoAQYbJ+l9p7yqoTT8svs/mLLazkaBzW/ByJ
+         H2sDT+0PJUGuurtD6iQUeeLiKO8BV+1M8aV9ZHdlkN+zdkIF6WfBBBUkjpMoIpbu4SYm
+         6fj9jtgN8mgOnGhw0GTdcKbVZbHGm7wuwTnGh3B23019gJ9DkFmZc8dZ1FAtmMnj2tfB
+         7AiEOJUNPn5glNRLty4qBTC84R01vcbO6nsdTr0gVC3oz4O4QiPFnd7ylN+h/bR8Jl9H
+         yhKQ==
+X-Gm-Message-State: APjAAAUY6NEOIFiJd3PgmxCtDhy5mtSGcaU1UqkYt+Jd/PsTs5mmLKtL
+        o4rJxZ4GkhGD+L5CTML5v0g=
+X-Google-Smtp-Source: APXvYqxbDnldt34tQauFfXHJ9KD9GGYfju4fjtfJwioU9AQjdJDRoygXN3aR7oZ/RlBXPJgQvQEogA==
+X-Received: by 2002:a17:90a:c214:: with SMTP id e20mr142755pjt.98.1576640640300;
+        Tue, 17 Dec 2019 19:44:00 -0800 (PST)
+Received: from oslab.tsinghua.edu.cn ([166.111.139.172])
+        by smtp.gmail.com with ESMTPSA id k29sm630606pfh.104.2019.12.17.19.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 19:43:59 -0800 (PST)
+From:   Jia-Ju Bai <baijiaju1990@gmail.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        stern@rowland.harvard.edu, rogerq@ti.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Subject: [PATCH] usb: gadget: udc: fix possible sleep-in-atomic-context bugs in gr_probe()
+Date:   Wed, 18 Dec 2019 11:43:49 +0800
+Message-Id: <20191218034349.18919-1-baijiaju1990@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=20
-> >>  >
-> >>  >>  >>  +
-> >>  >>  >>  +	desc =3D &charger->desc;
-> >>  >>  >>  +	desc->name =3D "usb-charger";
-> >>  >>  >>  +	desc->properties =3D usb_charger_properties;
-> >>  >>  >>  +	desc->num_properties =3D ARRAY_SIZE(usb_charger_properties)=
-;
-> >>  >>  >>  +	desc->get_property =3D usb_charger_get_property;
-> >>  >>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
-> >>  >>  >
-> >>  >>  > What's your further plan for this generic USB charger?
-> >>  >>  > To support BC1.2, we need to know charger type, and how we
-> >> could  >> get  > it?
-> >>  >>  >
-> >>  >>  > Peter
-> >>  >>
-> >>  >>  Well I don't really know. The USB role framework does not give
-> >> any  >> info about  what's plugged.
-> >>  >>
-> >>  >
-> >>  > What's the use case for this patch set? How it be used?
-> >>
-> >>  My devicetree:
-> >>
-> >>  usb_otg: usb@13440000 {
-> >>  	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
-> >>  	reg =3D <0x13440000 0x10000>;
-> >>  	[...]
-> >>
-> >>  	usb-role-switch;
-> >>
-> >>  	connector {
-> >>  		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
-> >>  		label =3D "mini-USB";
-> >>  		type =3D "mini";
-> >>
-> >>  		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
-> >>  		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
-> >>  		[...]
-> >>  	};
-> >>
-> >>  	usb_charger: usb-charger {
-> >>  		compatible =3D "usb-charger";
-> >>  	};
-> >>  };
-> >>
-> >>  The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect
-> >> in  which state (device, host, unconnected) a OTG connector is.
-> >> However,  that means I cannot use the standard gpio-charger driver to
-> >> detect the  presence of a charger based on the state of the VBUS
-> >> gpio, since it's  already requested here. So the point of this
-> >> patchset is to provide an  alternative to gpio-charger that works
-> >> with OTG controllers compatible  with 'usb-role-switch'.
-> >>
-> >
-> > Thanks for explaining it.
-> >
-> > What's the user for this USB charger,  PMIC or what else? How the user
-> > uses this USB charger interface?
->=20
-> It's exported as a standard charger, so it can be passed to client driver=
-s through
-> devicetree, and its online status can be retrieved from sysfs.
->=20
-=20
-Hi Paul,
+The driver may sleep while holding a spinlock.
+The function call path (from bottom to top) in Linux 4.19 is:
 
-If you would like to get role from usb-role-switch, the udc driver may prob=
-ably have already worked.
-There is a 'state' entry under the udc device to indicate USB Ch9 state. Tr=
-y to see if it could
-satisfy your requirement.
+drivers/usb/gadget/udc/core.c, 1175: 
+	kzalloc(GFP_KERNEL) in usb_add_gadget_udc_release
+drivers/usb/gadget/udc/core.c, 1272: 
+	usb_add_gadget_udc_release in usb_add_gadget_udc
+drivers/usb/gadget/udc/gr_udc.c, 2186: 
+	usb_add_gadget_udc in gr_probe
+drivers/usb/gadget/udc/gr_udc.c, 2183: 
+	spin_lock in gr_probe
 
-Peter
+drivers/usb/gadget/udc/core.c, 1195: 
+	mutex_lock in usb_add_gadget_udc_release
+drivers/usb/gadget/udc/core.c, 1272: 
+	usb_add_gadget_udc_release in usb_add_gadget_udc
+drivers/usb/gadget/udc/gr_udc.c, 2186: 
+	usb_add_gadget_udc in gr_probe
+drivers/usb/gadget/udc/gr_udc.c, 2183: 
+	spin_lock in gr_probe
+
+drivers/usb/gadget/udc/gr_udc.c, 212:
+	debugfs_create_file in gr_probe
+drivers/usb/gadget/udc/gr_udc.c, 2197:
+	gr_dfs_create in gr_probe
+drivers/usb/gadget/udc/gr_udc.c, 2183:
+    spin_lock in gr_probe
+
+drivers/usb/gadget/udc/gr_udc.c, 2114:
+	devm_request_threaded_irq in gr_request_irq
+drivers/usb/gadget/udc/gr_udc.c, 2202:
+	gr_request_irq in gr_probe
+drivers/usb/gadget/udc/gr_udc.c, 2183:
+    spin_lock in gr_probe
+
+kzalloc(GFP_KERNEL), mutex_lock(), debugfs_create_file() and 
+devm_request_threaded_irq() can sleep at runtime.
+
+To fix these possible bugs, usb_add_gadget_udc(), gr_dfs_create() and
+gr_request_irq() are called without handling the spinlock.
+
+These bugs are found by a static analysis tool STCheck written by myself.
+
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+---
+ drivers/usb/gadget/udc/gr_udc.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index 64d80c65bb96..aaf975c809bf 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -2175,8 +2175,6 @@ static int gr_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	}
+ 
+-	spin_lock(&dev->lock);
+-
+ 	/* Inside lock so that no gadget can use this udc until probe is done */
+ 	retval = usb_add_gadget_udc(dev->dev, &dev->gadget);
+ 	if (retval) {
+@@ -2185,15 +2183,21 @@ static int gr_probe(struct platform_device *pdev)
+ 	}
+ 	dev->added = 1;
+ 
++	spin_lock(&dev->lock);
++
+ 	retval = gr_udc_init(dev);
+-	if (retval)
++	if (retval) {
++		spin_unlock(&dev->lock);
+ 		goto out;
+-
+-	gr_dfs_create(dev);
++	}
+ 
+ 	/* Clear all interrupt enables that might be left on since last boot */
+ 	gr_disable_interrupts_and_pullup(dev);
+ 
++	spin_unlock(&dev->lock);
++
++	gr_dfs_create(dev);
++
+ 	retval = gr_request_irq(dev, dev->irq);
+ 	if (retval) {
+ 		dev_err(dev->dev, "Failed to request irq %d\n", dev->irq);
+@@ -2222,8 +2226,6 @@ static int gr_probe(struct platform_device *pdev)
+ 		dev_info(dev->dev, "regs: %p, irq %d\n", dev->regs, dev->irq);
+ 
+ out:
+-	spin_unlock(&dev->lock);
+-
+ 	if (retval)
+ 		gr_remove(pdev);
+ 
+-- 
+2.17.1
+
