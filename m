@@ -2,94 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3272124B27
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 16:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94062124B4F
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 16:15:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727420AbfLRPOG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 10:14:06 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:33502 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727431AbfLRPOF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 10:14:05 -0500
-Received: by mail-qk1-f194.google.com with SMTP id d71so2201479qkc.0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 07:14:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=RfaUJbE64AqObBUWyZFAX00yFzfv+PMQBeMlfEbyOTSSIZSlP9dNPzblRe9C4/Xp5G
-         OOrfzjlEIPRCszaxaclLviha/Gl6J+8MNE2wJIlQr3g8uWJn+m5NNx6dyOIWXJDzHKAu
-         CFfw6ayoPSChbR+RAE0+B68G/pEf5o1uZqam8GCW/DM3JVJn1rrKg09G5nyaA4x8K46C
-         DidFmOGbhUnnebgzWtKvL2IYqcm0dJ4hRYsroJX5h4wZl5ygcdMBOrPylnEG0iZgtaC4
-         tctA6UVKTV1ZO7eaOpJeM3zJ9lY8Otzi6Az77Sm1wv6CYLTS/yvcKPbBaIHIL7wY9gk+
-         23sQ==
+        id S1726913AbfLRPPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 10:15:11 -0500
+Received: from mail-il1-f199.google.com ([209.85.166.199]:34167 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbfLRPPL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 10:15:11 -0500
+Received: by mail-il1-f199.google.com with SMTP id l13so2013639ils.1
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 07:15:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=R9l9mbjTMtC+3agOxuj88vgGSGUSi1shzIvbtHPQHDA=;
-        b=SILuDVEr+0sFcxmh3IPY02inrmRxR2HR3Tn9bjCcN00003CfzotZa5HEG9+bHAKLMb
-         erUu8ug4vIS35rkl7zppvF2twn6ZQS6qxk0Uy+7wWJggZNfQghjP8tFNpecj7dfAbS7N
-         0wcTLhOQV2JyiGEBwBgFgLc146GiPA7xn2iUday6Rq06aeX+tDtVLHg6BK8IvSu+llwQ
-         kMB63i6tC2PC9JDwuI86c9uoDG3e4PZ7+lW8LorSubixCnOSn5xXMbDOMDCDxlWwW43z
-         HjMEsjg1Ech+HugwwQ2eRNWQUl7AU9SAAIXuqbYwXy+rrdC25ZQOOdnhsxV3tsm4cAc5
-         24wA==
-X-Gm-Message-State: APjAAAUr/sZUbb9tZ3sMv7esP7IY3lHWBjLnvvY41HijxGHD9wPDazxD
-        MgJcT8CKsyMIcadFdUGsg7AKIrdZtJHKb4o8CwhNvrQ=
-X-Google-Smtp-Source: APXvYqyIz9CrpHcrXivylieLEiE1VxRyGUw+E9DXz6VIYz+kYlOCef915g/qsmML8+OoqrwbsBK3G0eW6o6RBALrF/E=
-X-Received: by 2002:a05:6638:950:: with SMTP id f16mr2789501jad.107.1576682043767;
- Wed, 18 Dec 2019 07:14:03 -0800 (PST)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=jSdukNVKN1rb2lDU57Ar/9GWwm2qqaJhHtnd5Wdgw+4=;
+        b=OXF9ivUGV/J1V75r9+vRxLZR93Oy2SSPbM0vy3YCaKlIW3oluGPHQpfYvR3sL5QXl/
+         /Zvl5nSjJOhOJW+/fa1ONrsuWPDzQGY8E7YYXb1i9pBI9BRlTjGHBdQCGSoXbt/gl8U4
+         eWzGDyOrbC8THpDn5rKeTdCZilSkTMiRPdQfcSRrQqfjXYEjEag8FimBfgh8JRA9ZrNM
+         mFTPbLdC4/THqj9pFTygbFfNF3RNS13cFPnYrPxofe0Ldv8/46pm/F3ZwfiIWcgljP3L
+         IOONEbk69SotrefLCf7Zo6KJD+6fX/hJ2OlMCG6+W8JDoO3uNHNmsRY+4cvV3rd2VKwp
+         RQBQ==
+X-Gm-Message-State: APjAAAVhy9him9Ye/XbwO0d32XmP200Vh8dDXO7vbyfS7gfqm6sBW9YB
+        k15qQfyx35nu4dPySMVO0Hct9S4Mgjl9d4H5qetA5vHCEQ4O
+X-Google-Smtp-Source: APXvYqzX8BiTDcFwWOoADIUa/C/W1aNUeW4q5RhSf7rp5KnkYx2nF+BA95bYW/QdzsdpbaLu0DFYyyFA+RBPWauGFLBsYsRahBlT
 MIME-Version: 1.0
-Received: by 2002:a02:6603:0:0:0:0:0 with HTTP; Wed, 18 Dec 2019 07:14:03
- -0800 (PST)
-Reply-To: dhl.expresscourier102156@outlook.fr
-From:   "MS. MARYANNA B. THOMASON" <info.zennitbankplcnigerian@gmail.com>
-Date:   Wed, 18 Dec 2019 16:14:03 +0100
-Message-ID: <CABHzvr=Pq7-TqhY8TPvFCsr+5-DhDQy=XOg-TM13qqbFWeemfQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Urgent_delivery_Notification_of_your_ATM_MASTER_CARD?=
-        =?UTF-8?Q?_Amount=2C=2415=2E800=E2=80=99000=E2=80=9900=2C?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Received: by 2002:a92:4616:: with SMTP id t22mr2292795ila.186.1576682109244;
+ Wed, 18 Dec 2019 07:15:09 -0800 (PST)
+Date:   Wed, 18 Dec 2019 07:15:09 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000b9e820599fbe9a7@google.com>
+Subject: KASAN: use-after-free Read in hidinput_hid_event
+From:   syzbot <syzbot+c961cb836a707f66e2f8@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        rydberg@bitmath.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Attn Dear.
+Hello,
 
-Urgent delivery Notification of your ATM MASTER CARD, Dhl-Benin is
-ready for delivery of your ATM Master card worth $15.800=E2=80=99000=E2=80=
-=9900, as
-approved this morning, Date, 18/12/2019. Through the Intruction from
-INTERNATIONAL MONETARY FUNDS, I.M.F official Directors.
+syzbot found the following crash on:
 
-REGISTRATION NO :EG58945
-PARCEL NUMBER: 140479
-Delivery Schuleded now,
-Finally all we required from you is your ATM Card Proccessing Delivery
-fees $19.00 only which you must send to this DHL service to enable us
-dispatch the parcel to your destination today.
+HEAD commit:    d533c992 usb: core: kcov: collect coverage from usb comple..
+git tree:       https://github.com/google/kasan.git usb-fuzzer
+console output: https://syzkaller.appspot.com/x/log.txt?x=100798b9e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=743b91162e9f9496
+dashboard link: https://syzkaller.appspot.com/bug?extid=c961cb836a707f66e2f8
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15519951e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=166f72fee00000
 
-Here is our receiving payment details.
-You are advised to send it Via Money Gram Service.
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+c961cb836a707f66e2f8@syzkaller.appspotmail.com
 
-Receiver's Name--------Alan Ude
-Country-------Benin Republic.
-City/ Address--------Cotonou
-Test Question--------In God
-Answer-------We Trust
-Amount------------$US19.00 only
-Mtcn-------------
-Sender's Name-------
+==================================================================
+BUG: KASAN: use-after-free in test_bit  
+include/asm-generic/bitops/instrumented-non-atomic.h:110 [inline]
+BUG: KASAN: use-after-free in hidinput_hid_event+0x1111/0x15d3  
+drivers/hid/hid-input.c:1381
+Read of size 8 at addr ffff8881cfb19738 by task swapper/0/0
 
-Your delivery  ATM card worth $15.800=E2=80=99000=E2=80=9900,
-Is Due for delivery to your address today upon confirmation of
-required fee from you asap.
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.5.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
+Google 01/01/2011
+Call Trace:
+  <IRQ>
+  __dump_stack lib/dump_stack.c:77 [inline]
+  dump_stack+0xef/0x16e lib/dump_stack.c:118
+  print_address_description.constprop.0+0x16/0x200 mm/kasan/report.c:374
+  __kasan_report.cold+0x37/0x7f mm/kasan/report.c:506
+  kasan_report+0xe/0x20 mm/kasan/common.c:639
+  check_memory_region_inline mm/kasan/generic.c:185 [inline]
+  check_memory_region+0x152/0x1c0 mm/kasan/generic.c:192
+  test_bit include/asm-generic/bitops/instrumented-non-atomic.h:110 [inline]
+  hidinput_hid_event+0x1111/0x15d3 drivers/hid/hid-input.c:1381
+  hid_process_event+0x4a0/0x580 drivers/hid/hid-core.c:1506
+  hid_input_field drivers/hid/hid-core.c:1550 [inline]
+  hid_report_raw_event+0xabb/0xed0 drivers/hid/hid-core.c:1757
+  hid_input_report+0x315/0x3f0 drivers/hid/hid-core.c:1824
+  hid_irq_in+0x50e/0x690 drivers/hid/usbhid/hid-core.c:284
+  __usb_hcd_giveback
 
-Call us on this phone number for any inquiry. +229 62819378
-Awaiting your urgent response.
 
-MS. MARYANNA B. THOMASON, Shipment director, DHL Express
-Courier Company-Benin
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this bug, for details see:
+https://goo.gl/tpsmEJ#testing-patches
