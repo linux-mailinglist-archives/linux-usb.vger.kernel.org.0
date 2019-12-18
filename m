@@ -2,339 +2,1355 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4FA124818
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 14:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67833124813
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 14:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727190AbfLRNXg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 08:23:36 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:33953 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726788AbfLRNXd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 08:23:33 -0500
-Received: by mail-wr1-f66.google.com with SMTP id t2so2307643wrr.1
-        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 05:23:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:openpgp:autocrypt:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=YeQ4SePjBedpTNW4vmpRQ+EyRFd+KTWAwguB6NVi3Qk=;
-        b=Ai2BHorBDnM1Im/k2r+UldplAQlEBy2KEpm8U6lPq/GkczDrzdbc+QRxUANOtE7dE/
-         D7rroLAkE+Aat15BkerQ8gtROwy+f0ZKSpl5i3+3LnyfjfogmZSgFod5J99WHEnxwQHL
-         UXV4VZTZGuaINjuCSUF7nQR320W8suUiM4e4uOQLi/ir11F84nTonCLo9/lvfGpzZ+Jy
-         aeHRMXg0VV13xqGrsDTu9uRpPngmwGG4oDwcr9aZ+7Q1jlVN10hzBtsQ4LUGTfv65NIT
-         VBo75EcdMDoy8/I9UX27CovuzCeE2mh2F48/iD36YLk83kkS2rYXytoWJtfbeHvoSyxV
-         vqrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
-         :organization:message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=YeQ4SePjBedpTNW4vmpRQ+EyRFd+KTWAwguB6NVi3Qk=;
-        b=LlaQMNMeMEF/UwgPfSrfiW1xcJQuKhfHIyCSk1VweRyL2IiBBf7ePxxexu43d5EYKc
-         pEG1QZkWq8QHkTgEwAquyvDHD5zw7xcMAIXnD4Ldx2wZ4Orsz/S/dzA9TjQUXsfRPwLo
-         4HwCEx/8S2OZmDKAjASNcTYSOvsV9LJysU1/Bq6QivqMTiB2jrGCh4r6Libi3X98/+iH
-         tAS8nkae2tW6avi/9s6nQNIO/qtlX878z5qM4au32GMLe86RcSlFm/9T79jMnGT/BxbP
-         3EN5SmumigHgPdtviB/vJ8nDSFgoAGDh3qfnaZJ8CUTcmJkSBbXKUb2wOoT/aWLL8klc
-         QnMA==
-X-Gm-Message-State: APjAAAVcM3cwtL7K6KbaZtD2KnH+qQUeBDjZJz6fOUekm0wPE4UE2V+f
-        6/BlgStm5bpk6W5cT+5epEpbdA==
-X-Google-Smtp-Source: APXvYqyB1lvmGkWhDquZCxGWZ7+W2A0kYeuDozzm1MPyRe4IM4c5tOYYZrOlk5bg0h0+hhl6hx3bOQ==
-X-Received: by 2002:a5d:6703:: with SMTP id o3mr2976324wru.235.1576675409536;
-        Wed, 18 Dec 2019 05:23:29 -0800 (PST)
-Received: from [10.2.4.229] (lfbn-nic-1-505-157.w90-116.abo.wanadoo.fr. [90.116.92.157])
-        by smtp.gmail.com with ESMTPSA id c15sm2530976wrt.1.2019.12.18.05.23.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Dec 2019 05:23:28 -0800 (PST)
-Subject: Re: [PATCH v2 4/6] usb: dwc3: Add Amlogic A1 DWC3 glue
-To:     Hanjie Lin <hanjie.lin@amlogic.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Yue Wang <yue.wang@amlogic.com>, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com>
- <1576636944-196192-5-git-send-email-hanjie.lin@amlogic.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
- 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
- ZaTUOEkgIor5losDrePdPgE=
-Organization: Baylibre
-Message-ID: <d381f59c-1c28-d281-3218-f47df9f1e757@baylibre.com>
-Date:   Wed, 18 Dec 2019 14:23:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727150AbfLRNXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 08:23:33 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46298 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726969AbfLRNXd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Dec 2019 08:23:33 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 94AF22146E;
+        Wed, 18 Dec 2019 13:23:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576675411;
+        bh=qln2SaDQBH6eRGKMEFggBf25OK6B9Wjfa3/8/uYX8tM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xb23pJeLeuj78VjBP+AElPEHrtEK2aSmefhbZVVgQgHAoezNv+69fLJsnfIKIngww
+         +WRuKLSqrqtxGf3b8trLA0g6BT6h8/3tLet8Dnc0Kb7XK5kspvgh2fN4AFzdnZkEF9
+         4nYdzohNzUqVZIzT85BwScIVsi+TAf/gB00xkMC0=
+Date:   Wed, 18 Dec 2019 14:23:28 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v3 1/1] usb: gadget: add raw-gadget interface
+Message-ID: <20191218132328.GA121143@kroah.com>
+References: <cover.1576087039.git.andreyknvl@google.com>
+ <f45a20db3e5b01002ae8c91b3a8ea58e38b7bb65.1576087039.git.andreyknvl@google.com>
 MIME-Version: 1.0
-In-Reply-To: <1576636944-196192-5-git-send-email-hanjie.lin@amlogic.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f45a20db3e5b01002ae8c91b3a8ea58e38b7bb65.1576087039.git.andreyknvl@google.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Wed, Dec 11, 2019 at 07:02:41PM +0100, Andrey Konovalov wrote:
+> USB Raw Gadget is a kernel module that provides a userspace interface for
+> the USB Gadget subsystem. Essentially it allows to emulate USB devices
+> from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
+> currently a strictly debugging feature and shouldn't be used in
+> production.
+> 
+> Raw Gadget is similar to GadgetFS, but provides a more low-level and
+> direct access to the USB Gadget layer for the userspace. The key
+> differences are:
+> 
+> 1. Every USB request is passed to the userspace to get a response, while
+>    GadgetFS responds to some USB requests internally based on the provided
+>    descriptors. However note, that the UDC driver might respond to some
+>    requests on its own and never forward them to the Gadget layer.
+> 
+> 2. GadgetFS performs some sanity checks on the provided USB descriptors,
+>    while Raw Gadget allows you to provide arbitrary data as responses to
+>    USB requests.
+> 
+> 3. Raw Gadget provides a way to select a UDC device/driver to bind to,
+>    while GadgetFS currently binds to the first available UDC.
+> 
+> 4. Raw Gadget uses predictable endpoint names (handles) across different
+>    UDCs (as long as UDCs have enough endpoints of each required transfer
+>    type).
+> 
+> 5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
 
-On 18/12/2019 03:42, Hanjie Lin wrote:
-> Adds support for Amlogic A1 USB Control Glue HW.
-> 
-> The Amlogic A1 SoC Family embeds 1 USB Controllers:
-> - a DWC3 IP configured as Host for USB2 and USB3
-> 
-> A glue connects the controllers to the USB2 PHY of A1 SoC.
-> 
-> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
-> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+Looks good to me, only minor comments below.
+
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
->  drivers/usb/dwc3/dwc3-meson-g12a.c | 69 +++++++++++++++++++++++++++-----------
->  1 file changed, 49 insertions(+), 20 deletions(-)
+>  Documentation/usb/index.rst         |    1 +
+>  Documentation/usb/raw-gadget.rst    |   59 ++
+>  drivers/usb/gadget/legacy/Kconfig   |    8 +
+>  drivers/usb/gadget/legacy/Makefile  |    1 +
+>  drivers/usb/gadget/legacy/raw.c     | 1070 +++++++++++++++++++++++++++
+>  include/uapi/linux/usb/raw_gadget.h |  167 +++++
+>  6 files changed, 1306 insertions(+)
+>  create mode 100644 Documentation/usb/raw-gadget.rst
+>  create mode 100644 drivers/usb/gadget/legacy/raw.c
+>  create mode 100644 include/uapi/linux/usb/raw_gadget.h
 > 
-> diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> index 8a3ec1a..3817daf 100644
-> --- a/drivers/usb/dwc3/dwc3-meson-g12a.c
-> +++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
-> @@ -107,10 +107,22 @@ static const char *phy_names[PHY_COUNT] = {
->  	"usb2-phy0", "usb2-phy1", "usb3-phy0",
->  };
+> diff --git a/Documentation/usb/index.rst b/Documentation/usb/index.rst
+> index e55386a4abfb..90310e2a0c1f 100644
+> --- a/Documentation/usb/index.rst
+> +++ b/Documentation/usb/index.rst
+> @@ -22,6 +22,7 @@ USB support
+>      misc_usbsevseg
+>      mtouchusb
+>      ohci
+> +    raw-gadget
+>      rio
+>      usbip_protocol
+>      usbmon
+> diff --git a/Documentation/usb/raw-gadget.rst b/Documentation/usb/raw-gadget.rst
+> new file mode 100644
+> index 000000000000..cbedf5451ed3
+> --- /dev/null
+> +++ b/Documentation/usb/raw-gadget.rst
+> @@ -0,0 +1,59 @@
+> +==============
+> +USB Raw Gadget
+> +==============
+> +
+> +USB Raw Gadget is a kernel module that provides a userspace interface for
+> +the USB Gadget subsystem. Essentially it allows to emulate USB devices
+> +from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
+> +currently a strictly debugging feature and shouldn't be used in
+> +production, use GadgetFS instead.
+> +
+> +Comparison to GadgetFS
+> +~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +Raw Gadget is similar to GadgetFS, but provides a more low-level and
+> +direct access to the USB Gadget layer for the userspace. The key
+> +differences are:
+> +
+> +1. Every USB request is passed to the userspace to get a response, while
+> +   GadgetFS responds to some USB requests internally based on the provided
+> +   descriptors. However note, that the UDC driver might respond to some
+> +   requests on its own and never forward them to the Gadget layer.
+> +
+> +2. GadgetFS performs some sanity checks on the provided USB descriptors,
+> +   while Raw Gadget allows you to provide arbitrary data as responses to
+> +   USB requests.
+> +
+> +3. Raw Gadget provides a way to select a UDC device/driver to bind to,
+> +   while GadgetFS currently binds to the first available UDC.
+> +
+> +4. Raw Gadget uses predictable endpoint names (handles) across different
+> +   UDCs (as long as UDCs have enough endpoints of each required transfer
+> +   type).
+> +
+> +5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
+> +
+> +Userspace interface
+> +~~~~~~~~~~~~~~~~~~~
+> +
+> +To create a Raw Gadget instance open /dev/raw-gadget. Multiple raw-gadget
+> +instances (bound to different UDCs) can be used at the same time. The
+> +interaction with the opened file happens through the ioctl() calls, see
+> +comments in include/uapi/linux/usb/raw_gadget.h for details.
+> +
+> +The typical usage of Raw Gadget looks like:
+> +
+> +1. Open Raw Gadget instance via /dev/raw-gadget.
+> +2. Initialize the instance via USB_RAW_IOCTL_INIT.
+> +3. Launch the instance with USB_RAW_IOCTL_RUN.
+> +4. In a loop issue USB_RAW_IOCTL_EVENT_FETCH calls to receive events from
+> +   Raw Gadget and react to those depending on what kind of USB device
+> +   needs to be emulated.
+> +
+> +Potential future improvements
+> +~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +- Implement ioctl's for setting/clearing halt status on endpoints.
+> +
+> +- Reporting more events (suspend, resume, etc.) through
+> +  USB_RAW_IOCTL_EVENT_FETCH.
+> diff --git a/drivers/usb/gadget/legacy/Kconfig b/drivers/usb/gadget/legacy/Kconfig
+> index 119a4e47681f..8c947edf7515 100644
+> --- a/drivers/usb/gadget/legacy/Kconfig
+> +++ b/drivers/usb/gadget/legacy/Kconfig
+> @@ -489,3 +489,11 @@ config USB_G_WEBCAM
 >  
-> +static const struct clk_bulk_data meson_g12a_clocks[] = {
-> +	{ .id = NULL},
+>  	  Say "y" to link the driver statically, or "m" to build a
+>  	  dynamically linked module called "g_webcam".
+> +
+> +config USB_RAW_GADGET
+> +	tristate "USB Raw Gadget"
+> +	help
+> +	  USB Raw Gadget is a kernel module that provides a userspace interface
+> +	  for the USB Gadget subsystem. Essentially it allows to emulate USB
+> +	  devices from userspace. See Documentation/usb/raw-gadget.rst for
+> +	  details.
+
+No help text saying what the module name would be if selected as one?
+
+
+> diff --git a/drivers/usb/gadget/legacy/Makefile b/drivers/usb/gadget/legacy/Makefile
+> index abd0c3e66a05..799feefeee58 100644
+> --- a/drivers/usb/gadget/legacy/Makefile
+> +++ b/drivers/usb/gadget/legacy/Makefile
+> @@ -43,3 +43,4 @@ obj-$(CONFIG_USB_G_WEBCAM)	+= g_webcam.o
+>  obj-$(CONFIG_USB_G_NCM)		+= g_ncm.o
+>  obj-$(CONFIG_USB_G_ACM_MS)	+= g_acm_ms.o
+>  obj-$(CONFIG_USB_GADGET_TARGET)	+= tcm_usb_gadget.o
+> +obj-$(CONFIG_USB_RAW_GADGET)	+= raw.o
+
+raw.ko?  I think we already have a raw.ko in the kernel, shouldn't this
+be usb_raw_gadget.ko or something?
+
+Yeah, we do, look at drivers/char/raw.c.  This needs to be changed,
+I can't take it as-is otherwise the builders will croak on it.
+
+> diff --git a/drivers/usb/gadget/legacy/raw.c b/drivers/usb/gadget/legacy/raw.c
+> new file mode 100644
+> index 000000000000..fcfa2ebc103e
+> --- /dev/null
+> +++ b/drivers/usb/gadget/legacy/raw.c
+> @@ -0,0 +1,1070 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * USB Raw Gadget driver.
+> + * See Documentation/usb/raw-gadget.rst for more details.
+> + *
+> + * Andrey Konovalov <andreyknvl@gmail.com>
+> + */
+> +
+> +#define pr_fmt(fmt) "raw: %s: " fmt, __func__
+
+"raw gadget"?
+
+This a driver, why do you ever need to do a pr_* call and not a dev_*
+instead?
+
+> +
+> +#include <linux/compiler.h>
+> +#include <linux/debugfs.h>
+> +#include <linux/delay.h>
+> +#include <linux/kref.h>
+> +#include <linux/miscdevice.h>
+> +#include <linux/module.h>
+> +#include <linux/semaphore.h>
+> +#include <linux/sched.h>
+> +#include <linux/slab.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/wait.h>
+> +
+> +#include <linux/usb.h>
+> +#include <linux/usb/ch9.h>
+> +#include <linux/usb/ch11.h>
+> +#include <linux/usb/gadget.h>
+> +
+> +#include <uapi/linux/usb/raw_gadget.h>
+> +
+> +#define	DRIVER_DESC "USB Raw Gadget"
+> +#define DRIVER_NAME "raw-gadget"
+
+You only use this in one place.  You can use it in the definition of the
+misc driver name also, right?
+
+
+> +
+> +MODULE_DESCRIPTION(DRIVER_DESC);
+> +MODULE_AUTHOR("Andrey Konovalov");
+> +MODULE_LICENSE("GPL");
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +#define RAW_EVENT_QUEUE_SIZE	128
+> +
+> +struct raw_event_queue {
+> +	spinlock_t		lock;
+> +	struct semaphore	sema;
+
+Two locks for the same structure?  That feels "wrong".  Why is this?
+document the heck out of it if it is required please.
+
+> +	struct usb_raw_event	*events[RAW_EVENT_QUEUE_SIZE];
+> +	int			size;
 > +};
 > +
-> +static const struct clk_bulk_data meson_a1_clocks[] = {
-> +	{ .id = "usb_ctrl"},
-> +	{ .id = "usb_bus"},
-> +	{ .id = "xtal_usb_phy"},
-> +	{ .id = "xtal_usb_ctrl"},
-> +};
+> +static void raw_event_queue_init(struct raw_event_queue *queue)
+> +{
+> +	spin_lock_init(&queue->lock);
+> +	sema_init(&queue->sema, 0);
+> +	queue->size = 0;
+> +}
 > +
->  struct dwc3_meson_g12a {
->  	struct device		*dev;
->  	struct regmap		*regmap;
-> -	struct clk		*clk;
-> +	struct clk_bulk_data    *clks;
-> +	int num_clks;
->  	struct reset_control	*reset;
->  	struct phy		*phys[PHY_COUNT];
->  	enum usb_dr_mode	otg_mode;
-> @@ -151,7 +163,7 @@ static int dwc3_meson_g12a_usb2_init(struct dwc3_meson_g12a *priv)
->  				   U2P_R0_POWER_ON_RESET,
->  				   U2P_R0_POWER_ON_RESET);
->  
-> -		if (i == USB2_OTG_PHY) {
-> +		if (i == USB2_OTG_PHY && priv->otg_mode != USB_DR_MODE_HOST) {
-
-This is wrong for G12A, please use something else to exclude PULLUPP/VBUS to be updated on A1.
-
->  			regmap_update_bits(priv->regmap,
->  				U2P_R0 + (U2P_REG_SIZE * i),
->  				U2P_R0_ID_PULLUP | U2P_R0_DRV_VBUS,
-> @@ -295,7 +307,7 @@ static int dwc3_meson_g12a_otg_mode_set(struct dwc3_meson_g12a *priv,
->  {
->  	int ret;
->  
-> -	if (!priv->phys[USB2_OTG_PHY])
-> +	if (!priv->phys[USB2_OTG_PHY] || priv->otg_mode == USB_DR_MODE_HOST)
-
-Same, this is wrong on G12A since a Host port can be switched to device, use something
-else to disable this for A1, like setting a "otg_supported" flag into the match data,
-and using it in dwc3_meson_g12a_usb2_init(), avoiding registering usb_role_switch, the
-IRQ and updating the priv->otg_mode in probe().
-
->  		return -EINVAL;
->  
->  	if (mode == PHY_MODE_USB_HOST)
-> @@ -409,17 +421,32 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  		priv->vbus = NULL;
->  	}
->  
-> -	priv->clk = devm_clk_get(dev, NULL);
-> -	if (IS_ERR(priv->clk))
-> -		return PTR_ERR(priv->clk);
-> +	priv->dev = dev;
+> +static int raw_event_queue_add(struct raw_event_queue *queue,
+> +	enum usb_raw_event_type type, size_t length, const void *data)
+> +{
+> +	unsigned long flags;
+> +	struct usb_raw_event *event;
 > +
-> +	if (of_device_is_compatible(np, "amlogic,meson-g12a-usb-ctrl")) {
-> +		priv->clks = devm_kmemdup(dev, meson_g12a_clocks,
-> +					  sizeof(meson_g12a_clocks),
-> +					  GFP_KERNEL);
-> +		priv->num_clks = ARRAY_SIZE(meson_g12a_clocks);
-> +	} else if (of_device_is_compatible(np, "amlogic,meson-a1-usb-ctrl")) {
-> +		priv->clks = devm_kmemdup(dev, meson_a1_clocks,
-> +					  sizeof(meson_a1_clocks),
-> +					  GFP_KERNEL);
-> +		priv->num_clks = ARRAY_SIZE(meson_a1_clocks);
-> +	} else {
-> +		return -EINVAL;
-> +	}
+> +	spin_lock_irqsave(&queue->lock, flags);
+> +	if (queue->size >= RAW_EVENT_QUEUE_SIZE) {
+> +		pr_err("too many events\n");
 
-Like the PHY driver, please use of_device_get_match_data() and a match data for each compatible instead.
+What can someone do with this error?
 
-> +
-> +	if (!priv->clks)
+dev_err() to show exactly where it came from?
+
+> +		spin_unlock_irqrestore(&queue->lock, flags);
 > +		return -ENOMEM;
->  
-> -	ret = clk_prepare_enable(priv->clk);
-> +	ret = devm_clk_bulk_get(dev, priv->num_clks, priv->clks);
->  	if (ret)
->  		return ret;
->  
-> -	devm_add_action_or_reset(dev,
-> -				 (void(*)(void *))clk_disable_unprepare,
-> -				 priv->clk);
-> +	ret = clk_bulk_prepare_enable(priv->num_clks, priv->clks);
+> +	}
+> +	event = kmalloc(sizeof(*event) + length, GFP_ATOMIC);
+> +	if (!event) {
+> +		spin_unlock_irqrestore(&queue->lock, flags);
+> +		return -ENOMEM;
+> +	}
+> +	event->type = type;
+> +	event->length = length;
+> +	if (event->length)
+> +		memcpy(&event->data[0], data, length);
+> +	queue->events[queue->size] = event;
+> +	queue->size++;
+> +	up(&queue->sema);
+> +	spin_unlock_irqrestore(&queue->lock, flags);
+> +	return 0;
+> +}
+> +
+> +static struct usb_raw_event *raw_event_queue_fetch(
+> +				struct raw_event_queue *queue)
+> +{
+> +	unsigned long flags;
+> +	struct usb_raw_event *event;
+> +
+> +	if (down_interruptible(&queue->sema))
+> +		return NULL;
+> +	spin_lock_irqsave(&queue->lock, flags);
+
+You just locked twice?
+
+> +	if (WARN_ON(!queue->size))
+> +		return NULL;
+
+It's as if you want to trigger syzbot :)
+
+Just log it and return an error.
+
+> +	event = queue->events[0];
+> +	queue->size--;
+> +	memmove(&queue->events[0], &queue->events[1],
+> +			queue->size * sizeof(queue->events[0]));
+> +	spin_unlock_irqrestore(&queue->lock, flags);
+> +	return event;
+> +}
+> +
+> +static void raw_event_queue_destroy(struct raw_event_queue *queue)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < queue->size; i++)
+> +		kfree(queue->events[i]);
+> +	queue->size = 0;
+
+No locking needed?
+
+> +}
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +struct raw_dev;
+> +
+> +#define USB_RAW_MAX_ENDPOINTS 32
+> +
+> +enum ep_state {
+> +	STATE_EP_DISABLED,
+> +	STATE_EP_ENABLED,
+> +};
+> +
+> +struct raw_ep {
+> +	struct raw_dev		*dev;
+> +	enum ep_state		state;
+> +	struct usb_ep		*ep;
+> +	struct usb_request	*req;
+> +	bool			urb_queued;
+> +	bool			disabling;
+> +	ssize_t			status;
+> +};
+> +
+> +enum dev_state {
+> +	STATE_DEV_INVALID = 0,
+> +	STATE_DEV_OPENED,
+> +	STATE_DEV_INITIALIZED,
+> +	STATE_DEV_RUNNING,
+> +	STATE_DEV_CLOSED,
+> +	STATE_DEV_FAILED
+> +};
+> +
+> +struct raw_dev {
+> +	struct kref			count;
+> +	spinlock_t			lock;
+> +
+> +	const char			*udc_name;
+> +	struct usb_gadget_driver	driver;
+
+A dev embeds a driver?
+
+Not a pointer?
+
+But you have a kref, so the reference count of this object is there,
+right?
+
+> +
+> +	/* Protected by lock: */
+> +	enum dev_state			state;
+> +	bool				gadget_registered;
+> +	struct usb_gadget		*gadget;
+> +	struct usb_request		*req;
+> +	bool				ep0_in_pending;
+> +	bool				ep0_out_pending;
+> +	bool				ep0_urb_queued;
+> +	ssize_t				ep0_status;
+> +	struct raw_ep			eps[USB_RAW_MAX_ENDPOINTS];
+> +
+> +	struct completion		ep0_done;
+> +	struct raw_event_queue		queue;
+
+No pointer to your misc device?  I think you need that for logging.
+
+> +};
+> +
+> +static struct raw_dev *dev_new(void)
+> +{
+> +	struct raw_dev *dev;
+> +
+> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
+> +	if (!dev)
+> +		return NULL;
+> +	/* Matches kref_put() in raw_release(). */
+> +	kref_init(&dev->count);
+> +	spin_lock_init(&dev->lock);
+> +	init_completion(&dev->ep0_done);
+> +	raw_event_queue_init(&dev->queue);
+> +	return dev;
+> +}
+> +
+> +static void dev_free(struct kref *kref)
+> +{
+> +	struct raw_dev *dev = container_of(kref, struct raw_dev, count);
+> +	int i;
+> +
+> +	kfree(dev->udc_name);
+> +	kfree(dev->driver.udc_name);
+> +	if (dev->req) {
+> +		if (dev->ep0_urb_queued)
+> +			usb_ep_dequeue(dev->gadget->ep0, dev->req);
+> +		usb_ep_free_request(dev->gadget->ep0, dev->req);
+> +	}
+> +	raw_event_queue_destroy(&dev->queue);
+> +	for (i = 0; i < USB_RAW_MAX_ENDPOINTS; i++) {
+> +		if (dev->eps[i].state != STATE_EP_ENABLED)
+> +			continue;
+> +		usb_ep_disable(dev->eps[i].ep);
+> +		usb_ep_free_request(dev->eps[i].ep, dev->eps[i].req);
+> +		kfree(dev->eps[i].ep->desc);
+> +		dev->eps[i].state = STATE_EP_DISABLED;
+> +	}
+> +	kfree(dev);
+> +}
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +static int raw_queue_event(struct raw_dev *dev,
+> +	enum usb_raw_event_type type, size_t length, const void *data)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +
+> +	ret = raw_event_queue_add(&dev->queue, type, length, data);
+> +	if (ret < 0) {
+> +		spin_lock_irqsave(&dev->lock, flags);
+> +		dev->state = STATE_DEV_FAILED;
+> +		spin_unlock_irqrestore(&dev->lock, flags);
+> +	}
+> +	return ret;
+> +}
+> +
+> +static void gadget_ep0_complete(struct usb_ep *ep, struct usb_request *req)
+> +{
+> +	struct raw_dev *dev = req->context;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (req->status)
+> +		dev->ep0_status = req->status;
+> +	else
+> +		dev->ep0_status = req->actual;
+> +	if (dev->ep0_in_pending)
+> +		dev->ep0_in_pending = false;
+> +	else
+> +		dev->ep0_out_pending = false;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	complete(&dev->ep0_done);
+> +}
+> +
+> +static int gadget_bind(struct usb_gadget *gadget,
+> +			struct usb_gadget_driver *driver)
+> +{
+> +	int ret = 0;
+> +	struct raw_dev *dev = container_of(driver, struct raw_dev, driver);
+> +	struct usb_request *req;
+> +	unsigned long flags;
+> +
+> +	if (strcmp(gadget->name, dev->udc_name) != 0)
+> +		return -ENODEV;
+> +
+> +	set_gadget_data(gadget, dev);
+> +	req = usb_ep_alloc_request(gadget->ep0, GFP_KERNEL);
+> +	if (!req) {
+> +		pr_err("usb_ep_alloc_request failed\n");
+> +		set_gadget_data(gadget, NULL);
+> +		return -ENOMEM;
+> +	}
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	dev->req = req;
+> +	dev->req->context = dev;
+> +	dev->req->complete = gadget_ep0_complete;
+> +	dev->gadget = gadget;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	/* Matches kref_put() in gadget_unbind(). */
+> +	kref_get(&dev->count);
+> +
+> +	ret = raw_queue_event(dev, USB_RAW_EVENT_CONNECT, 0, NULL);
+> +	if (ret < 0)
+> +		pr_err("failed to queue event\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static void gadget_unbind(struct usb_gadget *gadget)
+> +{
+> +	struct raw_dev *dev = get_gadget_data(gadget);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	set_gadget_data(gadget, NULL);
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	/* Matches kref_get() in gadget_bind(). */
+> +	kref_put(&dev->count, dev_free);
+
+What protects the kref from being called 'put' twice on the same
+pointer at the same time?  There should be some lock somewhere, right?
+
+
+> +}
+> +
+> +static int gadget_setup(struct usb_gadget *gadget,
+> +			const struct usb_ctrlrequest *ctrl)
+> +{
+> +	int ret = 0;
+> +	struct raw_dev *dev = get_gadget_data(gadget);
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_err("ignoring, device is not running\n");
+> +		ret = -ENODEV;
+> +		goto out_unlock;
+> +	}
+> +	if (dev->ep0_in_pending || dev->ep0_out_pending) {
+> +		pr_debug("stalling, already have pending request\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength)
+> +		dev->ep0_in_pending = true;
+> +	else
+> +		dev->ep0_out_pending = true;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	ret = raw_queue_event(dev, USB_RAW_EVENT_CONTROL, sizeof(*ctrl), ctrl);
+> +	if (ret < 0)
+> +		pr_err("failed to queue event\n");
+> +	goto out;
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +out:
+> +	return ret;
+> +}
+> +
+> +/* These are currently ununsed but present in case UDC driver requires them. */
+> +static void gadget_disconnect(struct usb_gadget *gadget) { }
+> +static void gadget_suspend(struct usb_gadget *gadget) { }
+> +static void gadget_resume(struct usb_gadget *gadget) { }
+> +static void gadget_reset(struct usb_gadget *gadget) { }
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +static int raw_open(struct inode *inode, struct file *fd)
+> +{
+> +	struct raw_dev *dev;
+> +
+> +	dev = dev_new();
+> +	if (!dev) {
+> +		pr_err("failed to created device");
+
+You should have access to your misc device here, so dev_err()?
+
+> +		return -ENOMEM;
+> +	}
+> +	fd->private_data = dev;
+> +	dev->state = STATE_DEV_OPENED;
+> +	return 0;
+> +}
+> +
+> +static int raw_release(struct inode *inode, struct file *fd)
+> +{
+> +	int ret = 0;
+> +	struct raw_dev *dev = fd->private_data;
+> +	unsigned long flags;
+> +	bool unregister = false;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	dev->state = STATE_DEV_CLOSED;
+> +	if (!dev->gadget) {
+> +		spin_unlock_irqrestore(&dev->lock, flags);
+> +		goto out_put;
+> +	}
+> +	if (dev->gadget_registered)
+> +		unregister = true;
+> +	dev->gadget_registered = false;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	if (unregister) {
+> +		ret = usb_gadget_unregister_driver(&dev->driver);
+> +		WARN_ON(ret != 0);
+
+you want to crash?  :)
+
+> +		/* Matches kref_get() in raw_ioctl_run(). */
+> +		kref_put(&dev->count, dev_free);
+> +	}
+> +
+> +out_put:
+> +	/* Matches dev_new() in raw_open(). */
+> +	kref_put(&dev->count, dev_free);
+> +	return ret;
+> +}
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +static int raw_ioctl_init(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	struct usb_raw_init arg;
+> +	char *udc_driver_name;
+> +	char *udc_device_name;
+> +	unsigned long flags;
+> +
+> +	ret = copy_from_user(&arg, (void __user *)value, sizeof(arg));
 > +	if (ret)
 > +		return ret;
->  
->  	platform_set_drvdata(pdev, priv);
->  	priv->dev = dev;
-> @@ -433,16 +460,16 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  
->  	ret = reset_control_reset(priv->reset);
->  	if (ret)
-> -		return ret;
-> +		goto err_disable_clks;
->  
->  	ret = dwc3_meson_g12a_get_phys(priv);
->  	if (ret)
-> -		return ret;
-> +		goto err_disable_clks;
->  
->  	if (priv->vbus) {
->  		ret = regulator_enable(priv->vbus);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	/* Get dr_mode */
-> @@ -458,7 +485,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  						dwc3_meson_g12a_irq_thread,
->  						IRQF_ONESHOT, pdev->name, priv);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	dwc3_meson_g12a_usb_init(priv);
-> @@ -467,7 +494,7 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	for (i = 0 ; i < PHY_COUNT ; ++i) {
->  		ret = phy_init(priv->phys[i]);
->  		if (ret)
-> -			return ret;
-> +			goto err_disable_clks;
->  	}
->  
->  	/* Set PHY Power */
-> @@ -478,10 +505,8 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	}
->  
->  	ret = of_platform_populate(np, NULL, NULL, dev);
-> -	if (ret) {
-> -		clk_disable_unprepare(priv->clk);
-> +	if (ret)
->  		goto err_phys_power;
-> -	}
->  
->  	/* Setup OTG mode corresponding to the ID pin */
->  	if (priv->otg_mode == USB_DR_MODE_OTG) {
-> @@ -518,6 +543,9 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
->  	for (i = 0 ; i < PHY_COUNT ; ++i)
->  		phy_exit(priv->phys[i]);
->  
-> +err_disable_clks:
-> +	clk_bulk_disable_unprepare(priv->num_clks, priv->clks);
 > +
->  	return ret;
->  }
->  
-> @@ -547,7 +575,7 @@ static int __maybe_unused dwc3_meson_g12a_runtime_suspend(struct device *dev)
->  {
->  	struct dwc3_meson_g12a	*priv = dev_get_drvdata(dev);
->  
-> -	clk_disable(priv->clk);
-> +	clk_bulk_disable_unprepare(priv->num_clks, priv->clks);
->  
->  	return 0;
->  }
-> @@ -556,7 +584,7 @@ static int __maybe_unused dwc3_meson_g12a_runtime_resume(struct device *dev)
->  {
->  	struct dwc3_meson_g12a	*priv = dev_get_drvdata(dev);
->  
-> -	return clk_enable(priv->clk);
-> +	return clk_bulk_prepare_enable(priv->num_clks, priv->clks);
->  }
->  
->  static int __maybe_unused dwc3_meson_g12a_suspend(struct device *dev)
-> @@ -620,6 +648,7 @@ static const struct dev_pm_ops dwc3_meson_g12a_dev_pm_ops = {
->  
->  static const struct of_device_id dwc3_meson_g12a_match[] = {
->  	{ .compatible = "amlogic,meson-g12a-usb-ctrl" },
-> +	{ .compatible = "amlogic,meson-a1-usb-ctrl" },
->  	{ /* Sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, dwc3_meson_g12a_match);
-> 
+> +	switch (arg.speed) {
+> +	case USB_SPEED_UNKNOWN:
+> +		arg.speed = USB_SPEED_HIGH;
+> +		break;
+> +	case USB_SPEED_LOW:
+> +	case USB_SPEED_FULL:
+> +	case USB_SPEED_HIGH:
+> +	case USB_SPEED_SUPER:
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	udc_driver_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+> +	if (!udc_driver_name)
+> +		return -ENOMEM;
+> +	ret = strscpy(udc_driver_name, &arg.driver_name[0],
+> +				UDC_NAME_LENGTH_MAX);
+> +	if (ret < 0) {
+> +		kfree(udc_driver_name);
+> +		return ret;
+> +	}
+> +	ret = 0;
+> +
+> +	udc_device_name = kmalloc(UDC_NAME_LENGTH_MAX, GFP_KERNEL);
+> +	if (!udc_device_name) {
+> +		kfree(udc_driver_name);
+> +		return -ENOMEM;
+> +	}
+> +	ret = strscpy(udc_device_name, &arg.device_name[0],
+> +				UDC_NAME_LENGTH_MAX);
+> +	if (ret < 0) {
+> +		kfree(udc_driver_name);
+> +		kfree(udc_device_name);
+> +		return ret;
+> +	}
+> +	ret = 0;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_OPENED) {
+> +		pr_debug("fail, device is not opened\n");
 
+dev_dbg().
 
-Thanks,
-Neil
+> +		kfree(udc_driver_name);
+> +		kfree(udc_device_name);
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	dev->udc_name = udc_driver_name;
+> +
+> +	dev->driver.function = DRIVER_DESC;
+> +	dev->driver.max_speed = arg.speed;
+> +	dev->driver.setup = gadget_setup;
+> +	dev->driver.disconnect = gadget_disconnect;
+> +	dev->driver.bind = gadget_bind;
+> +	dev->driver.unbind = gadget_unbind;
+> +	dev->driver.suspend = gadget_suspend;
+> +	dev->driver.resume = gadget_resume;
+> +	dev->driver.reset = gadget_reset;
+> +	dev->driver.driver.name = DRIVER_NAME;
+> +	dev->driver.udc_name = udc_device_name;
+> +	dev->driver.match_existing_only = 1;
+> +
+> +	dev->state = STATE_DEV_INITIALIZED;
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +
+> +	if (value)
+> +		return -EINVAL;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_INITIALIZED) {
+> +		pr_debug("fail, device is not initialized\n");
+
+dev_dbg()
+
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	ret = usb_gadget_probe_driver(&dev->driver);
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (ret) {
+> +		pr_err("fail, usb_gadget_probe_driver returned %d\n", ret);
+
+dev_err()
+
+same goes for everywhere, no need for any pr_* calls in this driver.
+
+> +		dev->state = STATE_DEV_FAILED;
+> +		goto out_unlock;
+> +	}
+> +	dev->gadget_registered = true;
+> +	dev->state = STATE_DEV_RUNNING;
+> +	/* Matches kref_put() in raw_release(). */
+> +	kref_get(&dev->count);
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_event_fetch(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	struct usb_raw_event arg;
+> +	unsigned long flags;
+> +	struct usb_raw_event *event;
+> +	uint32_t length;
+> +
+> +	ret = copy_from_user(&arg, (void __user *)value, sizeof(arg));
+> +	if (ret)
+> +		return ret;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		spin_unlock_irqrestore(&dev->lock, flags);
+> +		return -EINVAL;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		spin_unlock_irqrestore(&dev->lock, flags);
+> +		return -EBUSY;
+> +	}
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	event = raw_event_queue_fetch(&dev->queue);
+> +	if (!event) {
+> +		pr_debug("event fetching interrupted\n");
+> +		return -EINTR;
+> +	}
+> +	length = min(arg.length, event->length);
+> +	ret = copy_to_user((void __user *)value, event,
+> +				sizeof(*event) + length);
+> +	return ret;
+> +}
+> +
+> +static void *raw_alloc_io_data(struct usb_raw_ep_io *io, void __user *ptr,
+> +				bool get_from_user)
+> +{
+> +	int ret;
+> +	void *data;
+> +
+> +	ret = copy_from_user(io, ptr, sizeof(*io));
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +	if (io->ep >= USB_RAW_MAX_ENDPOINTS)
+> +		return ERR_PTR(-EINVAL);
+> +	if (!usb_raw_io_flags_valid(io->flags))
+> +		return ERR_PTR(-EINVAL);
+> +	if (io->length > PAGE_SIZE)
+> +		return ERR_PTR(-EINVAL);
+> +	if (get_from_user)
+> +		data = memdup_user(ptr + sizeof(*io), io->length);
+> +	else {
+> +		data = kmalloc(io->length, GFP_KERNEL);
+> +		if (!data)
+> +			data = ERR_PTR(-ENOMEM);
+> +	}
+> +	return data;
+> +}
+> +
+> +static int raw_process_ep0_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+> +				void *data, bool in)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (dev->ep0_urb_queued) {
+> +		pr_debug("fail, urb already queued\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if ((in && !dev->ep0_in_pending) ||
+> +			(!in && !dev->ep0_out_pending)) {
+> +		pr_debug("fail, wrong direction\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (WARN_ON(in && dev->ep0_out_pending)) {
+> +		ret = -ENODEV;
+> +		dev->state = STATE_DEV_FAILED;
+> +		goto out_done;
+> +	}
+> +	if (WARN_ON(!in && dev->ep0_in_pending)) {
+> +		ret = -ENODEV;
+> +		dev->state = STATE_DEV_FAILED;
+> +		goto out_done;
+> +	}
+> +
+> +	dev->req->buf = data;
+> +	dev->req->length = io->length;
+> +	dev->req->zero = usb_raw_io_flags_zero(io->flags);
+> +	dev->ep0_urb_queued = true;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	ret = usb_ep_queue(dev->gadget->ep0, dev->req, GFP_ATOMIC);
+> +	if (ret) {
+> +		pr_err("fail, usb_ep_queue returned %d\n", ret);
+> +		spin_lock_irqsave(&dev->lock, flags);
+> +		dev->state = STATE_DEV_FAILED;
+> +		goto out_done;
+> +	}
+> +
+> +	ret = wait_for_completion_interruptible(&dev->ep0_done);
+> +	if (ret) {
+> +		pr_debug("wait interrupted\n");
+> +		usb_ep_dequeue(dev->gadget->ep0, dev->req);
+> +		wait_for_completion(&dev->ep0_done);
+> +		spin_lock_irqsave(&dev->lock, flags);
+> +		goto out_done;
+> +	}
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	ret = dev->ep0_status;
+> +
+> +out_done:
+> +	dev->ep0_urb_queued = false;
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_ep0_write(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	void *data;
+> +	struct usb_raw_ep_io io;
+> +
+> +	data = raw_alloc_io_data(&io, (void __user *)value, true);
+> +	if (IS_ERR(data))
+> +		return PTR_ERR(data);
+> +	ret = raw_process_ep0_io(dev, &io, data, true);
+> +	kfree(data);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_ep0_read(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	void *data;
+> +	struct usb_raw_ep_io io;
+> +	unsigned int length;
+> +
+> +	data = raw_alloc_io_data(&io, (void __user *)value, false);
+> +	if (IS_ERR(data))
+> +		return PTR_ERR(data);
+> +	ret = raw_process_ep0_io(dev, &io, data, false);
+> +	if (ret < 0) {
+> +		kfree(data);
+> +		return ret;
+> +	}
+> +	length = min(io.length, (unsigned int)ret);
+> +	ret = copy_to_user((void __user *)(value + sizeof(io)), data, length);
+> +	kfree(data);
+> +	return ret;
+> +}
+> +
+> +static bool check_ep_caps(struct usb_ep *ep,
+> +				struct usb_endpoint_descriptor *desc)
+> +{
+> +	switch (usb_endpoint_type(desc)) {
+> +	case USB_ENDPOINT_XFER_ISOC:
+> +		if (!ep->caps.type_iso)
+> +			return false;
+> +		break;
+> +	case USB_ENDPOINT_XFER_BULK:
+> +		if (!ep->caps.type_bulk)
+> +			return false;
+> +		break;
+> +	case USB_ENDPOINT_XFER_INT:
+> +		if (!ep->caps.type_int)
+> +			return false;
+> +		break;
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	if (usb_endpoint_dir_in(desc) && !ep->caps.dir_in)
+> +		return false;
+> +	if (usb_endpoint_dir_out(desc) && !ep->caps.dir_out)
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> +static int raw_ioctl_ep_enable(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0, i;
+> +	unsigned long flags;
+> +	struct usb_endpoint_descriptor *desc;
+> +	struct usb_ep *ep = NULL;
+> +
+> +	desc = memdup_user((void __user *)value, sizeof(*desc));
+> +	if (IS_ERR(desc))
+> +		return PTR_ERR(desc);
+> +
+> +	/*
+> +	 * Endpoints with a maxpacket length of 0 can cause crashes in UDC
+> +	 * drivers.
+> +	 */
+> +	if (usb_endpoint_maxp(desc) == 0) {
+> +		kfree(desc);
+> +		return -EINVAL;
+> +	}
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_free;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_free;
+> +	}
+> +
+> +	for (i = 0; i < USB_RAW_MAX_ENDPOINTS; i++) {
+> +		if (dev->eps[i].state == STATE_EP_ENABLED)
+> +			continue;
+> +		break;
+> +	}
+> +	if (i == USB_RAW_MAX_ENDPOINTS) {
+> +		pr_debug("fail, no device endpoints available\n");
+> +		ret = -EBUSY;
+> +		goto out_free;
+> +	}
+> +
+> +	gadget_for_each_ep(ep, dev->gadget) {
+> +		if (ep->enabled)
+> +			continue;
+> +		if (!check_ep_caps(ep, desc))
+> +			continue;
+> +		ep->desc = desc;
+> +		ret = usb_ep_enable(ep);
+> +		if (ret < 0) {
+> +			pr_err("fail, usb_ep_enable returned %d\n", ret);
+> +			goto out_free;
+> +		}
+> +		dev->eps[i].req = usb_ep_alloc_request(ep, GFP_ATOMIC);
+> +		if (!dev->eps[i].req) {
+> +			pr_err("fail, usb_ep_alloc_request failed\n");
+> +			usb_ep_disable(ep);
+> +			ret = -ENOMEM;
+> +			goto out_free;
+> +		}
+> +		dev->eps[i].ep = ep;
+> +		dev->eps[i].state = STATE_EP_ENABLED;
+> +		ep->driver_data = &dev->eps[i];
+> +		ret = i;
+> +		goto out_unlock;
+> +	}
+> +
+> +	pr_debug("fail, no gadget endpoints available\n");
+> +	ret = -EBUSY;
+> +
+> +out_free:
+> +	kfree(desc);
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_ep_disable(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0, i = value;
+> +	unsigned long flags;
+> +	const void *desc;
+> +
+> +	if (i < 0 || i >= USB_RAW_MAX_ENDPOINTS)
+> +		return -EINVAL;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (dev->eps[i].state != STATE_EP_ENABLED) {
+> +		pr_debug("fail, endpoint is not enabled\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (dev->eps[i].disabling) {
+> +		pr_debug("fail, disable already in progress\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	dev->eps[i].disabling = true;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	usb_ep_disable(dev->eps[i].ep);
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	usb_ep_free_request(dev->eps[i].ep, dev->eps[i].req);
+> +	desc = dev->eps[i].ep->desc;
+> +	dev->eps[i].ep = NULL;
+> +	dev->eps[i].state = STATE_EP_DISABLED;
+> +	kfree(desc);
+> +	dev->eps[i].disabling = false;
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static void gadget_ep_complete(struct usb_ep *ep, struct usb_request *req)
+> +{
+> +	struct raw_ep *r_ep = (struct raw_ep *)ep->driver_data;
+> +	struct raw_dev *dev = r_ep->dev;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (req->status)
+> +		r_ep->status = req->status;
+> +	else
+> +		r_ep->status = req->actual;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	complete((struct completion *)req->context);
+> +}
+> +
+> +static int raw_process_ep_io(struct raw_dev *dev, struct usb_raw_ep_io *io,
+> +				void *data, bool in)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +	struct raw_ep *ep = &dev->eps[io->ep];
+> +	DECLARE_COMPLETION_ONSTACK(done);
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (ep->state != STATE_EP_ENABLED) {
+> +		pr_debug("fail, endpoint is not enabled\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (ep->disabling) {
+> +		pr_debug("fail, endpoint is being disabled\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if (ep->urb_queued) {
+> +		pr_debug("fail, urb already queued\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	if ((in && !ep->ep->caps.dir_in) || (!in && ep->ep->caps.dir_in)) {
+> +		pr_debug("fail, wrong direction\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +
+> +	ep->dev = dev;
+> +	ep->req->context = &done;
+> +	ep->req->complete = gadget_ep_complete;
+> +	ep->req->buf = data;
+> +	ep->req->length = io->length;
+> +	ep->req->zero = usb_raw_io_flags_zero(io->flags);
+> +	ep->urb_queued = true;
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +
+> +	ret = usb_ep_queue(ep->ep, ep->req, GFP_ATOMIC);
+> +	if (ret) {
+> +		pr_err("fail, usb_ep_queue returned %d\n", ret);
+> +		spin_lock_irqsave(&dev->lock, flags);
+> +		dev->state = STATE_DEV_FAILED;
+> +		goto out_done;
+> +	}
+> +
+> +	ret = wait_for_completion_interruptible(&done);
+> +	if (ret) {
+> +		pr_debug("wait interrupted\n");
+> +		usb_ep_dequeue(ep->ep, ep->req);
+> +		wait_for_completion(&done);
+> +		spin_lock_irqsave(&dev->lock, flags);
+> +		goto out_done;
+> +	}
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	ret = ep->status;
+> +
+> +out_done:
+> +	ep->urb_queued = false;
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_ep_write(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	char *data;
+> +	struct usb_raw_ep_io io;
+> +
+> +	data = raw_alloc_io_data(&io, (void __user *)value, true);
+> +	if (IS_ERR(data))
+> +		return PTR_ERR(data);
+> +	ret = raw_process_ep_io(dev, &io, data, true);
+> +	kfree(data);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_ep_read(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	char *data;
+> +	struct usb_raw_ep_io io;
+> +	unsigned int length;
+> +
+> +	data = raw_alloc_io_data(&io, (void __user *)value, false);
+> +	if (IS_ERR(data))
+> +		return PTR_ERR(data);
+> +	ret = raw_process_ep_io(dev, &io, data, false);
+> +	if (ret < 0) {
+> +		kfree(data);
+> +		return ret;
+> +	}
+> +	length = min(io.length, (unsigned int)ret);
+> +	ret = copy_to_user((void __user *)(value + sizeof(io)), data, length);
+> +	kfree(data);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_configure(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +
+> +	if (value)
+> +		return -EINVAL;
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	usb_gadget_set_state(dev->gadget, USB_STATE_CONFIGURED);
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static int raw_ioctl_vbus_draw(struct raw_dev *dev, unsigned long value)
+> +{
+> +	int ret = 0;
+> +	unsigned long flags;
+> +
+> +	spin_lock_irqsave(&dev->lock, flags);
+> +	if (dev->state != STATE_DEV_RUNNING) {
+> +		pr_debug("fail, device is not running\n");
+> +		ret = -EINVAL;
+> +		goto out_unlock;
+> +	}
+> +	if (!dev->gadget) {
+> +		pr_debug("fail, gadget is not bound\n");
+> +		ret = -EBUSY;
+> +		goto out_unlock;
+> +	}
+> +	usb_gadget_vbus_draw(dev->gadget, 2 * value);
+> +
+> +out_unlock:
+> +	spin_unlock_irqrestore(&dev->lock, flags);
+> +	return ret;
+> +}
+> +
+> +static long raw_ioctl(struct file *fd, unsigned int cmd, unsigned long value)
+> +{
+> +	struct raw_dev *dev = fd->private_data;
+> +	int ret = 0;
+> +
+> +	if (!dev)
+> +		return -EBUSY;
+> +
+> +	switch (cmd) {
+> +	case USB_RAW_IOCTL_INIT:
+> +		ret = raw_ioctl_init(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_RUN:
+> +		ret = raw_ioctl_run(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EVENT_FETCH:
+> +		ret = raw_ioctl_event_fetch(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP0_WRITE:
+> +		ret = raw_ioctl_ep0_write(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP0_READ:
+> +		ret = raw_ioctl_ep0_read(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP_ENABLE:
+> +		ret = raw_ioctl_ep_enable(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP_DISABLE:
+> +		ret = raw_ioctl_ep_disable(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP_WRITE:
+> +		ret = raw_ioctl_ep_write(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_EP_READ:
+> +		ret = raw_ioctl_ep_read(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_CONFIGURE:
+> +		ret = raw_ioctl_configure(dev, value);
+> +		break;
+> +	case USB_RAW_IOCTL_VBUS_DRAW:
+> +		ret = raw_ioctl_vbus_draw(dev, value);
+> +		break;
+> +	default:
+> +		ret = -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +/*----------------------------------------------------------------------*/
+> +
+> +static const struct file_operations raw_fops = {
+> +	.open =			raw_open,
+> +	.unlocked_ioctl =	raw_ioctl,
+> +	.compat_ioctl =		raw_ioctl,
+> +	.release =		raw_release,
+> +	.llseek =		no_llseek,
+> +};
+> +
+> +static struct miscdevice raw_device = {
+> +	.minor = MISC_DYNAMIC_MINOR,
+> +	.name = "raw-gadget",
+
+DRIVER_NAME?
+
+> +	.fops = &raw_fops,
+> +};
+> +
+> +static int __init raw_init(void)
+> +{
+> +	int rv;
+> +
+> +	rv = misc_register(&raw_device);
+> +	if (rv) {
+> +		pr_err("failed to register raw-gadget device with %d\n", rv);
+> +		return rv;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static void __exit raw_exit(void)
+> +{
+> +	misc_deregister(&raw_device);
+> +}
+> +
+> +module_init(raw_init);
+> +module_exit(raw_exit);
+
+module_misc_device()?  :)
+
+Looks good.
+
+thanks,
+
+greg k-h
