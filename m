@@ -2,75 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12AAC1249D2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9511249D7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727114AbfLROgP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 09:36:15 -0500
-Received: from mail.kernel.org ([198.145.29.99]:41970 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727108AbfLROgP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Dec 2019 09:36:15 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BE05021582;
-        Wed, 18 Dec 2019 14:36:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576679774;
-        bh=FpUdA1QKWT2FMoEcuoACKH1w02F3qC9LrxYVeOcepE0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z5JFSoDvpzTAXEgxhZ7iNHCLZuS4ul/I/bJ9fRGugJEaqGuSVh++cYgwa1TfAVnbv
-         vH3NhLDpEGPmGVktvsZcR0DZsrZIb8gKL4o2X/eFyY9ICzUcbTBUhiliW/X6jogrLa
-         puk47+4oaztkf/u+YpulP7S+2dY2IMw+V4FiFy1Y=
-Date:   Wed, 18 Dec 2019 15:36:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>
-Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Mario.Limonciello@dell.com" <Mario.Limonciello@dell.com>,
-        Anthony Wong <anthony.wong@canonical.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/9] thunderbolt: Add initial support for USB4
-Message-ID: <20191218143612.GB262880@kroah.com>
-References: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
- <20191217123345.31850-5-mika.westerberg@linux.intel.com>
- <PSXP216MB043843D1E5E4A65780272FB480530@PSXP216MB0438.KORP216.PROD.OUTLOOK.COM>
+        id S1727186AbfLROiY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 09:38:24 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:52987 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727025AbfLROiX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 09:38:23 -0500
+Received: by mail-wm1-f67.google.com with SMTP id p9so2090744wmc.2
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2019 06:38:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:openpgp:autocrypt:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=yy+FADW4iN0jE8T/SzaOGxnR0Z3+644d/IF/P/DHgTU=;
+        b=knd9bEo54IjnlbaVOJER2OLdn6+y5Xc0Iry1HEq9yXFxd5ogXjT5pKLCMCn+1mQMyh
+         Tsu+/Wc9YPq+P8wTYu34bUPTTd3rLBET6V881DECDUQMF7WoDcOWl0pmbY67/zioVjGa
+         n42pjdY6VFkcb9jXxvodDzr+xo0tnE313O8qeKEwwDAqo/lIhmL9xI3KR2GsOGD6xIuM
+         y2n80rYTrHDmfzfMMH6kxBF9dcBkooJL7KlG1CdiedmTPP8UGA3hNt4ON44jnxhOXDSC
+         PI4zRgIReH6OLNDVEpAk5DjfyYsUzGVapmGzSga7z0jxP+qdJyCHDxRmPAS27ejPd5eS
+         X9mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:autocrypt
+         :organization:message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=yy+FADW4iN0jE8T/SzaOGxnR0Z3+644d/IF/P/DHgTU=;
+        b=e4adCzvKSojqatCTKZZ1/MOO0j3nJlkVEgj+4GysDJAsOmjuicSx5pQrm2EfMQj/fF
+         ND/CLDa6bOWdx8CvoevvPdDEdMSEJUYX44kvKUey2igLyQK5/kZ2+zIJDP+FZFMSr2Xg
+         Yik88BPHiMQD2LfSer8hshe+eU8GdHVP61EJTdOAiDqYRd1omng4imcbPQEJz0m5k8VE
+         +to+yuEdhg1jHrqIV+4YxrrFs05S+pl5mtEjhvVi99FuZ9IHhWX8SHPKvY4CGGRjgPgU
+         e249rlhsBsgLaKFAGV5Nf9VPmOpJxPdSvF12Op682XuKryDqoayTn/A9UmeB0G8MhZ1a
+         tYlQ==
+X-Gm-Message-State: APjAAAWq5TZPWrwkE19v1MgS07bfVVUPLwUVMcFSImRr3E/WOuGACRlc
+        zIXlxUc1qSo7J7atx9jLeg7FWQ==
+X-Google-Smtp-Source: APXvYqxsUceJIcjVgPuOiVZLqMGfVJHnlpAce65+tvQaqB2uenr+OBD0uttpplrmZoEsigBKvcaQ7g==
+X-Received: by 2002:a1c:a404:: with SMTP id n4mr3376304wme.109.1576679901002;
+        Wed, 18 Dec 2019 06:38:21 -0800 (PST)
+Received: from [10.2.4.229] (lfbn-nic-1-505-157.w90-116.abo.wanadoo.fr. [90.116.92.157])
+        by smtp.gmail.com with ESMTPSA id m126sm2686706wmf.7.2019.12.18.06.38.20
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 18 Dec 2019 06:38:20 -0800 (PST)
+Subject: Re: [PATCH] dt-bindings: usb: amlogic, meson-g12a-usb-ctrl: fix clock
+ names
+To:     Benjamin Gaignard <benjamin.gaignard@st.com>,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        mark.rutland@arm.com, khilman@baylibre.com
+Cc:     devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20191218142613.13683-1-benjamin.gaignard@st.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=narmstrong@baylibre.com; prefer-encrypt=mutual; keydata=
+ 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
+ ZaTUOEkgIor5losDrePdPgE=
+Organization: Baylibre
+Message-ID: <675bc964-8dfc-fd89-7f03-af5a83ab3b3c@baylibre.com>
+Date:   Wed, 18 Dec 2019 15:38:19 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PSXP216MB043843D1E5E4A65780272FB480530@PSXP216MB0438.KORP216.PROD.OUTLOOK.COM>
+In-Reply-To: <20191218142613.13683-1-benjamin.gaignard@st.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 09:34:45AM +0000, Nicholas Johnson wrote:
-> On Tue, Dec 17, 2019 at 03:33:40PM +0300, Mika Westerberg wrote:
-> > USB4 is the public specification based on Thunderbolt 3 protocol. There
-> > are some differences in register layouts and flows. In addition to PCIe
-> > and DP tunneling, USB4 supports tunneling of USB 3.x. USB4 is also
-> > backward compatible with Thunderbolt 3 (and older generations but the
-> > spec only talks about 3rd generation). USB4 compliant devices can be
-> > identified by checking USB4 version field in router configuration space.
-> > 
-> > This patch adds initial support for USB4 compliant hosts and devices
-> > which enables following features provided by the existing functionality
-> > in the driver:
-> > 
-> >   - PCIe tunneling
-> >   - Display Port tunneling
-> Nitpick: DisplayPort is a single word.
+On 18/12/2019 15:26, Benjamin Gaignard wrote:
+> dwc2 bindings require clock-names to be "otg".
+> Fix the example in amlogic,meson-g12a-usb-ctrl to follow this requirement.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+> ---
+>  Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> index 4efb77b653ab..267fce165994 100644
+> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
+> @@ -107,7 +107,7 @@ examples:
+>                reg = <0xff400000 0x40000>;
+>                interrupts = <31>;
+>                clocks = <&clkc_usb1>;
+> -              clock-names = "ddr";
+> +              clock-names = "otg";
+>                phys = <&usb2_phy1>;
+>                dr_mode = "peripheral";
+>                g-rx-fifo-size = <192>;
+> 
 
-Please learn to trim replies, it was a pain to read this message :(
-
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
