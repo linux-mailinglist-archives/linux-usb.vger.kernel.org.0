@@ -2,94 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5B1124FEB
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 18:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28272125072
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 19:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727185AbfLRR6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 12:58:55 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:18982 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726960AbfLRR6z (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 12:58:55 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576691935; h=Date: Message-Id: Cc: To: References:
- In-Reply-To: From: Subject: Content-Transfer-Encoding: MIME-Version:
- Content-Type: Sender; bh=3C6L4b2dA8aEQpFcyQGCt4S6TCBt8DWzO/OHKf/+d/Q=;
- b=sjS0HqG9ljt91DXxDWPuhJvCKcG8+ewseIy2bBGLz7Cw0vZxjK/+tqsLO9NibEMA9auj8yXq
- Z9RINFuXO7MBurF0g9cq0bZOi2DKrZLk+3fJS0H2dh4XtxRforeIUV+NrrOGGShyIkpnr5N1
- jEtnfB/mO1rqCloLkH128Xl2uls=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5dfa68d9.7f828cb120d8-smtp-out-n02;
- Wed, 18 Dec 2019 17:58:49 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 79F77C447A0; Wed, 18 Dec 2019 17:58:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=0.5 required=2.0 tests=ALL_TRUSTED,MISSING_DATE,
-        MISSING_MID,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        id S1727031AbfLRST1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 13:19:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726960AbfLRST0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Dec 2019 13:19:26 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 00DB5C433CB;
-        Wed, 18 Dec 2019 17:58:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 00DB5C433CB
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-Content-Type: text/plain; charset="utf-8"
+        by mail.kernel.org (Postfix) with ESMTPSA id EAF3121582;
+        Wed, 18 Dec 2019 18:19:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576693165;
+        bh=W1YWBiNPG9jNM5SC4jK0qOOMJ4yVd5QREeChUcP7gUM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jg0sVF1DOJgtcVcgvECKp5Bby4K4KZq4fXFM0Ugp4ExeyeYtY6K0RG/r/GnDwgUkk
+         gO+8zzfaR7cioH3OBXAYcEA8NHAEc0a2CSWAOQkg16aVQ6eFeVbGssN8z5f1+TWHxk
+         IR9KaDFiaTIv5J8KF8v8fqzX1KGFXUSWv/zl7iuE=
+Date:   Wed, 18 Dec 2019 19:19:21 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>
+Subject: Re: [PATCH v3 1/1] usb: gadget: add raw-gadget interface
+Message-ID: <20191218181921.GA882018@kroah.com>
+References: <cover.1576087039.git.andreyknvl@google.com>
+ <f45a20db3e5b01002ae8c91b3a8ea58e38b7bb65.1576087039.git.andreyknvl@google.com>
+ <20191218132328.GA121143@kroah.com>
+ <CAAeHK+zXegV1GmSKD8Y3-hTbKUQceWdfo+GJPxSSzYr0zQTYKw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 1/7] ath9k: fix storage endpoint lookup
-From:   Kalle Valo <kvalo@codeaurora.org>
-In-Reply-To: <20191210114426.4713-2-johan@kernel.org>
-References: <20191210114426.4713-2-johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     QCA ath9k Development <ath9k-devel@qca.qualcomm.com>,
-        Arend van Spriel <arend@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        Chi-Hsien Lin <chi-hsien.lin@cypress.com>,
-        Wright Feng <wright.feng@cypress.com>,
-        Jes Sorensen <Jes.Sorensen@redhat.com>,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Siva Rebbagondla <siva8118@gmail.com>,
-        Daniel Drake <dsd@gentoo.org>,
-        Ulrich Kunitz <kune@deine-taler.de>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        stable <stable@vger.kernel.org>
-User-Agent: pwcli/0.0.0-git (https://github.com/kvalo/pwcli/) Python/2.7.12
-Message-Id: <20191218175847.79F77C447A0@smtp.codeaurora.org>
-Date:   Wed, 18 Dec 2019 17:58:47 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+zXegV1GmSKD8Y3-hTbKUQceWdfo+GJPxSSzYr0zQTYKw@mail.gmail.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Johan Hovold <johan@kernel.org> wrote:
-
-> Make sure to use the current alternate setting when verifying the
-> storage interface descriptors to avoid submitting an URB to an invalid
-> endpoint.
+On Wed, Dec 18, 2019 at 06:28:19PM +0100, Andrey Konovalov wrote:
+> On Wed, Dec 18, 2019 at 2:23 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Dec 11, 2019 at 07:02:41PM +0100, Andrey Konovalov wrote:
+> > > USB Raw Gadget is a kernel module that provides a userspace interface for
+> > > the USB Gadget subsystem. Essentially it allows to emulate USB devices
+> > > from userspace. Enabled with CONFIG_USB_RAW_GADGET. Raw Gadget is
+> > > currently a strictly debugging feature and shouldn't be used in
+> > > production.
+> > >
+> > > Raw Gadget is similar to GadgetFS, but provides a more low-level and
+> > > direct access to the USB Gadget layer for the userspace. The key
+> > > differences are:
+> > >
+> > > 1. Every USB request is passed to the userspace to get a response, while
+> > >    GadgetFS responds to some USB requests internally based on the provided
+> > >    descriptors. However note, that the UDC driver might respond to some
+> > >    requests on its own and never forward them to the Gadget layer.
+> > >
+> > > 2. GadgetFS performs some sanity checks on the provided USB descriptors,
+> > >    while Raw Gadget allows you to provide arbitrary data as responses to
+> > >    USB requests.
+> > >
+> > > 3. Raw Gadget provides a way to select a UDC device/driver to bind to,
+> > >    while GadgetFS currently binds to the first available UDC.
+> > >
+> > > 4. Raw Gadget uses predictable endpoint names (handles) across different
+> > >    UDCs (as long as UDCs have enough endpoints of each required transfer
+> > >    type).
+> > >
+> > > 5. Raw Gadget has ioctl-based interface instead of a filesystem-based one.
+> >
+> > Looks good to me, only minor comments below.
 > 
-> Failing to do so could cause the driver to misbehave or trigger a WARN()
-> in usb_submit_urb() that kernels with panic_on_warn set would choke on.
+> Great, thanks!
 > 
-> Fixes: 36bcce430657 ("ath9k_htc: Handle storage devices")
-> Cc: stable <stable@vger.kernel.org>     # 2.6.39
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Kalle Valo <kvalo@codeaurora.org>
+> About reworking the logging to use dev_err/dbg(): can I pass the
+> global miscdevice struct into those macros? Or should I pass a pointer
+> to this struct into all of the functions that print log messages? The
+> latter seems unnecessarily complex, unless there's a reason to do
+> that.
 
-Patch applied to ath-next branch of ath.git, thanks.
+Ah, you are right, you only have one misc device here.  No, that's not
+good, but you can use it for some messages (your ioctl errors), but
+ideally you will have a struct device somewhere for each of the
+"instances" you create, right?  That is what you should use for that.
 
-0ef332951e85 ath9k: fix storage endpoint lookup
+> > > +struct raw_dev {
+> > > +     struct kref                     count;
+> > > +     spinlock_t                      lock;
+> > > +
+> > > +     const char                      *udc_name;
+> > > +     struct usb_gadget_driver        driver;
+> >
+> > A dev embeds a driver?
+> >
+> > Not a pointer?
+> >
+> > But you have a kref, so the reference count of this object is there,
+> > right?
+> 
+> I didn't get this comment, could you elaborate? I can make it a
+> pointer, but for each raw_dev we have a unique usb_gadget_driver
+> instance, so embedding it as is is simpler.
 
--- 
-https://patchwork.kernel.org/patch/11282013/
+Ok, that's fine.  But it feels odd creating a driver dynamically to me,
+but it should work (as you show.)  It doesn't give you something to use
+for the dev_* messages directly, ah, but you do have something:
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+> > > +
+> > > +     /* Protected by lock: */
+> > > +     enum dev_state                  state;
+> > > +     bool                            gadget_registered;
+> > > +     struct usb_gadget               *gadget;
+
+There, use that pointer for your dev_* messages, and you should be fine.
+
+> > > +static void gadget_unbind(struct usb_gadget *gadget)
+> > > +{
+> > > +     struct raw_dev *dev = get_gadget_data(gadget);
+> > > +     unsigned long flags;
+> > > +
+> > > +     spin_lock_irqsave(&dev->lock, flags);
+> > > +     set_gadget_data(gadget, NULL);
+> > > +     spin_unlock_irqrestore(&dev->lock, flags);
+> > > +     /* Matches kref_get() in gadget_bind(). */
+> > > +     kref_put(&dev->count, dev_free);
+> >
+> > What protects the kref from being called 'put' twice on the same
+> > pointer at the same time?  There should be some lock somewhere, right?
+> 
+> Hm, kref_put() does refcount_dec_and_test(), which in turns calls
+> atomic_dec_and_test(), so this is protected against concurrent puts
+> (which is the whole idea of kref?), and no locking is needed. Unless I
+> misunderstand something.
+
+It's late, but there should be some lock somewhere to prevent a race
+around this type of thing.  That's why we have kref_put_mutex() and
+kref_put_lock().
+
+Odds are you are fine here, but just something to be aware of...
+
+thanks,
+
+greg k-h
