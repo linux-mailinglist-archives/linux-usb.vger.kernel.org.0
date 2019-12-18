@@ -2,94 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94712123C57
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 02:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE31C123C83
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 02:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726387AbfLRBTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Dec 2019 20:19:15 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:36398 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726072AbfLRBTP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 20:19:15 -0500
-Received: by mail-pj1-f66.google.com with SMTP id n59so78299pjb.1;
-        Tue, 17 Dec 2019 17:19:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=WRq9F02fSNyPBB5Kef/fJ+j1yBJctEoYq/MCWx6Ov/Y=;
-        b=fJCOQs/G2GwXu9Tw+ZPeO/cO19LFkQnaJmRBLvLvqkjS+Z9RnrD2AJVp+9Ybfc1Tqy
-         kq+2uvn3OmIbRSREWEiTm4iM0JjrALFy2ifJe5HwMoxuZamtNZYxsnmzIvCQSLrDkplW
-         8WyIvF+WGcQkwPIKERUZ7ifgz57tTDMCVfhMA4kw0hg1HiFP3Haf/6PjnL2NDyOMFWz0
-         WhY9DrgJzs2u9BJz3ShVSLCpSM6zDQf6qUCBBFp3SPn9gZjGxdx1l6UR8V4xv+1zVQAj
-         vqo+2+w9WqS2342VjOvnFBsKdz/z0juflgoC95kNuMQcQqCTcmC1VWrONbP0vKu5G7U8
-         X65A==
+        id S1726454AbfLRBjI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Dec 2019 20:39:08 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:37348 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726227AbfLRBjI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Dec 2019 20:39:08 -0500
+Received: by mail-oi1-f193.google.com with SMTP id h19so277367oih.4
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2019 17:39:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=WRq9F02fSNyPBB5Kef/fJ+j1yBJctEoYq/MCWx6Ov/Y=;
-        b=UGX7xX/mORGtFSFb/sZeyPhY6EbDW0fwBumbYUc63zTCdynhBi/Ktg2o9X0osUevPY
-         BT6nz1Aemc1VnOl2TNQe2WRzbwNiPYcgnVjdQAsHKHbjzTYk2LnJAXdNgGt51otyD2Ja
-         e7eM/hqDNg0ElQqkGVNEq/W7nqx1vZZgOSsTyZtrJmEF5qtZ9nQ97auPOi+XvHvCPLez
-         byFIBVOkp28/Z3D6Xrar7TWXTrl/Rct8T2BYqN1hFE8v2agOwt+5QtbdEPGM0rZFPLDy
-         Z3rmA9zhUY9VXPjsFhV7LE4rKKeWjyq0ElJsfcI6Vggv5S+dOTifGJPVgYKPhkpQUmnt
-         QMpg==
-X-Gm-Message-State: APjAAAXIh1DSdH/DmEGRwqJ27+nk6x8sl0qY1AkXG6+MROaggdVQALWD
-        kmnb/lrlIXPCzSc3+uBkwkY90+NB
-X-Google-Smtp-Source: APXvYqyuU+DpeC/NKkkzJGfNjsLzfVmRLBror3wABxQqoaMBHiaAt5WNoCqjaOSxZ9Ylrkz+e9Apkg==
-X-Received: by 2002:a17:902:48:: with SMTP id 66mr520374pla.182.1576631954521;
-        Tue, 17 Dec 2019 17:19:14 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x18sm324398pfr.26.2019.12.17.17.19.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 17 Dec 2019 17:19:13 -0800 (PST)
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=fDE5oLQorUiWHo08fFcOyx3XWtSlMwmlj8UIs8onOvI=;
+        b=aPFhtT75w9DnVFB47PBvEyWrQ1ANYsXQhbaIczMb6ghbazM2pcYA+f5r+RgjnPaO79
+         NERv5KRhOkyFiNAfPCSiiPX5Jsiq4asr2YoPADHyvcPvz+3s6IHG1Q+3gT5lE1gmZmVg
+         QErAWe3SE6GpnI7dLIGmrGI2Sv1F4Jt47I4je8jjrOrP7qibfguEPmgR+WmiVmbflqtV
+         kbWL9hJeWhVRuT0O6KFwzKaGH/6dqjSTa+Ku244c1kM0meh4uaToiTBKdlVZjuwERjd8
+         qQ+fwmiArKNkRWaNRJfxrVJga4CMrPKQQLX6zxYjbGOJcT+DSkllPyuaxzCh0OoVbidD
+         Hx5w==
+X-Gm-Message-State: APjAAAV4TnUD2Yi4Kkai7gkpesz3UDMRseEr+ARKVbLYwrz/Cb8FPUBF
+        TgWSVCDh0kgl8QaMzfZJSQ==
+X-Google-Smtp-Source: APXvYqwxzcOHv3IUHgHXN5DwYwMh84wkG0aznk59HmMavhjQVCJWF5p78BNBUlPusKCyG0yZ3hgm7w==
+X-Received: by 2002:aca:2118:: with SMTP id 24mr114797oiz.28.1576633147044;
+        Tue, 17 Dec 2019 17:39:07 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id k17sm207217oic.45.2019.12.17.17.39.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2019 17:39:06 -0800 (PST)
+Date:   Tue, 17 Dec 2019 19:39:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Henry Lin <henryl@nvidia.com>, stable@vger.kernel.org
-Subject: [PATCH] usb: xhci: Fix build warning seen with CONFIG_PM=n
-Date:   Tue, 17 Dec 2019 17:19:11 -0800
-Message-Id: <20191218011911.6907-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        Maxime Ripard <maxime@cerno.tech>
+Subject: Re: [PATCH v2] dt-bindings: usb: Convert Allwinner USB PHY
+ controller to a schema
+Message-ID: <20191218013905.GA25729@bogus>
+References: <20191209093340.50552-1-maxime@cerno.tech>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191209093340.50552-1-maxime@cerno.tech>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following build warning is seen if CONFIG_PM is disabled.
+On Mon,  9 Dec 2019 10:33:40 +0100, Maxime Ripard wrote:
+> The Allwinner SoCs have a USB PHY controller that is supported in Linux,
+> with a matching Device Tree binding.
+> 
+> Now that we have the DT validation in place, let's convert the device tree
+> bindings for that controller over to a YAML schemas.
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> ---
+> 
+> Changes from v1:
+>   - Split the schemas into files of their own to make it more readable
+> ---
+>  .../phy/allwinner,sun4i-a10-usb-phy.yaml      | 105 ++++++++++++++
+>  .../phy/allwinner,sun50i-a64-usb-phy.yaml     | 106 ++++++++++++++
+>  .../phy/allwinner,sun50i-h6-usb-phy.yaml      | 105 ++++++++++++++
+>  .../phy/allwinner,sun5i-a13-usb-phy.yaml      |  93 ++++++++++++
+>  .../phy/allwinner,sun6i-a31-usb-phy.yaml      | 119 +++++++++++++++
+>  .../phy/allwinner,sun8i-a23-usb-phy.yaml      | 102 +++++++++++++
+>  .../phy/allwinner,sun8i-a83t-usb-phy.yaml     | 122 ++++++++++++++++
+>  .../phy/allwinner,sun8i-h3-usb-phy.yaml       | 137 ++++++++++++++++++
+>  .../phy/allwinner,sun8i-r40-usb-phy.yaml      | 119 +++++++++++++++
+>  .../phy/allwinner,sun8i-v3s-usb-phy.yaml      |  86 +++++++++++
+>  .../devicetree/bindings/phy/sun4i-usb-phy.txt |  68 ---------
+>  11 files changed, 1094 insertions(+), 68 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun4i-a10-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun50i-h6-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun5i-a13-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-a23-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-a83t-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-r40-usb-phy.yaml
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-v3s-usb-phy.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/phy/sun4i-usb-phy.txt
+> 
 
-drivers/usb/host/xhci-pci.c:498:13: warning:
-	unused function 'xhci_pci_shutdown'
+Applied, thanks.
 
-Fixes: f2c710f7dca8 ("usb: xhci: only set D3hot for pci device")
-Cc: Henry Lin <henryl@nvidia.com>
-Cc: stable@vger.kernel.org	# all stable releases with 2f23dc86c3f8
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/usb/host/xhci-pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2907fe4d78dd..4917c5b033fa 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -519,7 +519,6 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
- 	retval = xhci_resume(xhci, hibernated);
- 	return retval;
- }
--#endif /* CONFIG_PM */
- 
- static void xhci_pci_shutdown(struct usb_hcd *hcd)
- {
-@@ -532,6 +531,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
- 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
- 		pci_set_power_state(pdev, PCI_D3hot);
- }
-+#endif /* CONFIG_PM */
- 
- /*-------------------------------------------------------------------------*/
- 
--- 
-2.17.1
-
+Rob
