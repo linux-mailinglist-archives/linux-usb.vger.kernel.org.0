@@ -2,84 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA24124985
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2245A1249A8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbfLRO02 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 09:26:28 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:16668 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726856AbfLRO01 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 09:26:27 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBIEOMfW015469;
-        Wed, 18 Dec 2019 15:26:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type; s=STMicroelectronics;
- bh=w4HnMszGdzKynqPVMRC5qZxWn0UBjfQfixyAUj2Vbxw=;
- b=0MiYbdrQcmoCziaitsKGOXGZ4rzbtB85PBP93V11bXTgdMBcrKGUNTKZuK3lA/RgSXys
- hx4oDI3WkBdJhCjDB08H/V+wXy/ZyWpEoRPEW+D0TNhzJWihKXCl3L9pZllLT3KQgbpo
- gS2L5dQf+IdZfG60sRRzy99aB/U5OZZrDLMr52JhKPSdfNCfKWADQ+7Rs1ZlziTojgJ+
- i4Z6xIvnwvAmPMEso2osaD9tFLa/V5ZUkHEUqPmohr3I16h5qV5LRGJmpAHp/l4eljSv
- cyDAeU+3VO9/LwGyp+jq0na/Y+uXpbWTo1rcQyRrXWRzhjY68M+Ehab3W/H3hhiiWHA1 CQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2wvp374vcg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Dec 2019 15:26:15 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 3982910003B;
-        Wed, 18 Dec 2019 15:26:15 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 2691F2BEAF1;
-        Wed, 18 Dec 2019 15:26:15 +0100 (CET)
-Received: from localhost (10.75.127.48) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Wed, 18 Dec 2019 15:26:14
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <khilman@baylibre.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH] dt-bindings: usb: amlogic,meson-g12a-usb-ctrl: fix clock names
-Date:   Wed, 18 Dec 2019 15:26:13 +0100
-Message-ID: <20191218142613.13683-1-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
+        id S1727050AbfLRO3h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 09:29:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40628 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726856AbfLRO3g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Dec 2019 09:29:36 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5FED20716;
+        Wed, 18 Dec 2019 14:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576679376;
+        bh=6TmEszoREjc8yIfDNgzG2vNgMDwZQPO+PjlcW1S5bh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RDHNBfurToKdwV7ffFSdbuHn3zL79IJ87rn+Zbcw216Yx6jJBxvxeODd4nSQAlK+O
+         fNTn2LN9if3KXjonfafq7PQ3pCczWxlmvyPK8cSz2GynnL/F9ErgIhGhcaNJbNYdoh
+         VOUYSQNFIO1qb//yDvvOtqp5UomLqkZbSCkT19y8=
+Date:   Wed, 18 Dec 2019 15:29:32 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Henry Lin <henryl@nvidia.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Fix build warning seen with CONFIG_PM=n
+Message-ID: <20191218142932.GA237894@kroah.com>
+References: <20191218011911.6907-1-linux@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.48]
-X-ClientProxiedBy: SFHDAG8NODE1.st.com (10.75.127.22) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-18_04:2019-12-17,2019-12-18 signatures=0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191218011911.6907-1-linux@roeck-us.net>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-dwc2 bindings require clock-names to be "otg".
-Fix the example in amlogic,meson-g12a-usb-ctrl to follow this requirement.
+On Tue, Dec 17, 2019 at 05:19:11PM -0800, Guenter Roeck wrote:
+> The following build warning is seen if CONFIG_PM is disabled.
+> 
+> drivers/usb/host/xhci-pci.c:498:13: warning:
+> 	unused function 'xhci_pci_shutdown'
+> 
+> Fixes: f2c710f7dca8 ("usb: xhci: only set D3hot for pci device")
+> Cc: Henry Lin <henryl@nvidia.com>
+> Cc: stable@vger.kernel.org	# all stable releases with 2f23dc86c3f8
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+>  drivers/usb/host/xhci-pci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
----
- Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Nice catch.
 
-diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-index 4efb77b653ab..267fce165994 100644
---- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-+++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
-@@ -107,7 +107,7 @@ examples:
-               reg = <0xff400000 0x40000>;
-               interrupts = <31>;
-               clocks = <&clkc_usb1>;
--              clock-names = "ddr";
-+              clock-names = "otg";
-               phys = <&usb2_phy1>;
-               dr_mode = "peripheral";
-               g-rx-fifo-size = <192>;
--- 
-2.15.0
+Mathias, I can queue this up now if you give me an ack.
 
+thanks,
+
+greg k-h
