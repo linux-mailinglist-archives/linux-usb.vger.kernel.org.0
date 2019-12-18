@@ -2,63 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2245A1249A8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:29:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DECC1249CF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 15:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbfLRO3h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 09:29:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40628 "EHLO mail.kernel.org"
+        id S1727165AbfLROfg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 09:35:36 -0500
+Received: from mail.kernel.org ([198.145.29.99]:41830 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726856AbfLRO3g (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Dec 2019 09:29:36 -0500
+        id S1727114AbfLROfg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Dec 2019 09:35:36 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5FED20716;
-        Wed, 18 Dec 2019 14:29:35 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 65F6621582;
+        Wed, 18 Dec 2019 14:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576679376;
-        bh=6TmEszoREjc8yIfDNgzG2vNgMDwZQPO+PjlcW1S5bh4=;
+        s=default; t=1576679735;
+        bh=G9LOa7DDtMFx6fo5UNpdN4LqcfbHJ8Jh2m+0GPeXuW4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RDHNBfurToKdwV7ffFSdbuHn3zL79IJ87rn+Zbcw216Yx6jJBxvxeODd4nSQAlK+O
-         fNTn2LN9if3KXjonfafq7PQ3pCczWxlmvyPK8cSz2GynnL/F9ErgIhGhcaNJbNYdoh
-         VOUYSQNFIO1qb//yDvvOtqp5UomLqkZbSCkT19y8=
-Date:   Wed, 18 Dec 2019 15:29:32 +0100
+        b=EPDQCciNs0RAV9AJVWl23tHKtSKOkMBOLKuP3kEpUcXdTsZtQUwwogVgKAkGL/HS1
+         UQqgpSY/vhYN1FntjSRk3E55/X8RxbOGsn09dgwC0FeiW2G4HomiMTKl66gpXmQmYo
+         oxUbVn3C+jija+IcvpdVLIbt1rJB51EaKgt7Wdtg=
+Date:   Wed, 18 Dec 2019 15:35:33 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Henry Lin <henryl@nvidia.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Fix build warning seen with CONFIG_PM=n
-Message-ID: <20191218142932.GA237894@kroah.com>
-References: <20191218011911.6907-1-linux@roeck-us.net>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Mario.Limonciello@dell.com,
+        Anthony Wong <anthony.wong@canonical.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] thunderbolt: Populate PG field in hot plug
+ acknowledgment packet
+Message-ID: <20191218143533.GA262880@kroah.com>
+References: <20191217123345.31850-1-mika.westerberg@linux.intel.com>
+ <20191217123345.31850-4-mika.westerberg@linux.intel.com>
+ <20191217124745.GC3175457@kroah.com>
+ <20191217145632.GM2913417@lahna.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191218011911.6907-1-linux@roeck-us.net>
+In-Reply-To: <20191217145632.GM2913417@lahna.fi.intel.com>
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 05:19:11PM -0800, Guenter Roeck wrote:
-> The following build warning is seen if CONFIG_PM is disabled.
+On Tue, Dec 17, 2019 at 04:56:32PM +0200, Mika Westerberg wrote:
+> On Tue, Dec 17, 2019 at 01:47:45PM +0100, Greg Kroah-Hartman wrote:
+> > On Tue, Dec 17, 2019 at 03:33:39PM +0300, Mika Westerberg wrote:
+> > > USB4 1.0 section 6.4.2.7 specifies a new field (PG) in notification
+> > > packet that is sent as response of hot plug/unplug events. This field
+> > > tells whether the acknowledgment is for plug or unplug event. This needs
+> > > to be set accordingly in order the router to send further hot plug
+> > > notifications.
+> > > 
+> > > To make it simpler we fill the field unconditionally. Legacy devices do
+> > > not look at this field so there should be no problems with them.
+> > > 
+> > > While there rename tb_cfg_error() to tb_cfg_ack_plug() and update the
+> > > log message accordingly. The function is only used to ack plug/unplug
+> > > events.
+> > > 
+> > > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > 
+> > First 3 patches look "trivial" enough for me to take right now, any
+> > objection to that?
 > 
-> drivers/usb/host/xhci-pci.c:498:13: warning:
-> 	unused function 'xhci_pci_shutdown'
+> No objections from my side :)
 > 
-> Fixes: f2c710f7dca8 ("usb: xhci: only set D3hot for pci device")
-> Cc: Henry Lin <henryl@nvidia.com>
-> Cc: stable@vger.kernel.org	# all stable releases with 2f23dc86c3f8
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> ---
->  drivers/usb/host/xhci-pci.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > Should I be using my usb tree for this?
+> 
+> Yes, I think it makes sense now that this is also under USB IF umbrella.
 
-Nice catch.
-
-Mathias, I can queue this up now if you give me an ack.
-
-thanks,
+Ok, now done, thanks.
 
 greg k-h
