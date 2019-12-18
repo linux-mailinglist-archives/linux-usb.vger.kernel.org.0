@@ -2,96 +2,262 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2008124C52
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 16:59:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15BE6124DED
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2019 17:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfLRP7t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 10:59:49 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36411 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726987AbfLRP7t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 10:59:49 -0500
-Received: by mail-pg1-f193.google.com with SMTP id k3so1510088pgc.3;
-        Wed, 18 Dec 2019 07:59:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=vcRsV+GyYVCdqNxO9/KlH1EXlf/d0/mBnssyXPuxyRY=;
-        b=US4SiMhXMeTy11uj01hBaMlSQs315XYCGkgVIeQHLMGX6H/U+w6mIGFBva/i/Quvqy
-         CFkbsQ0Gur0z8MfkRtYB55qJLnfEuZitL+YauR8voLDv2KA8G6FjZGkcnQ89XLPnh5m2
-         wdcmvpim/2HDb4QzKEHrWItXams2UmKmP9f2DlEljR/+U+3Q30rqqCMLkSmj5atbtK99
-         KNnmzKeEtwDa4/vUPHrp1/zsNwLHtOGVIRNLENwIwu5K37II8F9KQ3T0ptBsfGeUezDT
-         uE1JD7N08KgTD38uyJGYPhBvgduj5q1UIpGAeoMAoN+iMTN7MtQhNzO6Yo2gLUHO7au3
-         8Iqg==
+        id S1727397AbfLRQhl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 11:37:41 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45952 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbfLRQhl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 11:37:41 -0500
+Received: by mail-oi1-f193.google.com with SMTP id v10so1304558oiv.12;
+        Wed, 18 Dec 2019 08:37:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=vcRsV+GyYVCdqNxO9/KlH1EXlf/d0/mBnssyXPuxyRY=;
-        b=U02SW62bBuo7Nu6Q11hefOSOEbBO3MBdaSU076vgYCBd43WqLfIg1FpTlSK3BGy13/
-         11It0btvLglhrlTmKI5wTmOgXlV9cGN1JEL0XGzosA+TXA+ld5n2KIIfc6iba33wrDhS
-         6p7wLxojyzx4spw66kxBu8ScAHTWcpARO5f8gNgYFlEMNFg5iJs4pFggK5Zv6I7oZH33
-         52wqvO+Qmk0KTujcl4pN1Mvmbrht7Jk3sCv68Abal+gOp4FYImjnUegUpBrgbDb39bff
-         1FBtqFe84Qx4fZYxfEkg4n2TJDdSgODCCZcWO3PMaRiOacGsyx3YnAFyUYejErPdQzwc
-         CnzA==
-X-Gm-Message-State: APjAAAXoQKP/NARH+YdMXEU0eaHfM5yzFVZDrxBvzEfwyGViEHODf1Ny
-        +c0NC58y4S65BRTJgYqNZVY=
-X-Google-Smtp-Source: APXvYqzcIk58RSqNhgs226XfFCNdym1HtwnkDO3OOMdo09IDJZgZOiWUbYKCdDNdcomWrmsRyHnizw==
-X-Received: by 2002:a65:66ce:: with SMTP id c14mr3976919pgw.262.1576684788637;
-        Wed, 18 Dec 2019 07:59:48 -0800 (PST)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p16sm3873989pgi.50.2019.12.18.07.59.47
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 18 Dec 2019 07:59:47 -0800 (PST)
-Date:   Wed, 18 Dec 2019 07:59:46 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Henry Lin <henryl@nvidia.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Fix build warning seen with CONFIG_PM=n
-Message-ID: <20191218155946.GA331@roeck-us.net>
-References: <20191218011911.6907-1-linux@roeck-us.net>
- <20191218142932.GA237894@kroah.com>
- <04cef5f6-2bc2-b056-d2c4-e79ba5498225@linux.intel.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=potQJchvmkXdyjD8+YEbMuOtyx2Cyf8SplihkzOTltg=;
+        b=lUkD6SulvgBo0F8+PeOoo3Oe57ZQEagEKAKHgYq8mqtqxg09p1rVlgfZz+62gdInC7
+         xe68d6ahuSli/D+UnQkWMuCYmSnJT6/9lMxPWDiYapDu73Nsma+WUnaXB0zpRAb6vjMR
+         CyRKC6V1fmObWZzAtz4G18RQAAli51UfXx1Sexpo5X93x3VUldmXsojUYBZ35eqV0Vsr
+         9nUymwQPHKuGII+yqM50LDnVxjzd+9WPyd3Fo/hQGtImWnn7kyRGAMPv5TUCfjQjCdO/
+         eNFSkJBz/+JIvfhDsoWp5PACG18VHUmsrUb89oPcf4wPzEdc5+ESmAt28Akubb7+tko3
+         yKAg==
+X-Gm-Message-State: APjAAAViD1hiOObEZAtF9aEgYsNNXt2MhvZ82s3lYe5gP0/KRy5E1VbO
+        NvIez2xMvs/MKLo4zD+Dsw==
+X-Google-Smtp-Source: APXvYqzZOHq9Lp+vs+GL43uPxqZ8cytoIKEEyfyzpRoxn+Fxpe72rj241gvyIDghUD3LuIy2xaZBrQ==
+X-Received: by 2002:aca:ec4d:: with SMTP id k74mr857882oih.64.1576687059959;
+        Wed, 18 Dec 2019 08:37:39 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o101sm950158ota.69.2019.12.18.08.37.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 08:37:39 -0800 (PST)
+Date:   Wed, 18 Dec 2019 10:37:38 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>, Yu Chen <chenyu56@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        ShuFan Lee <shufan_lee@richtek.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <lijun.kernel@gmail.com>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Guillaume Gardet <Guillaume.Gardet@arm.com>,
+        Jack Pham <jackp@codeaurora.org>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v7 7/8] dt-bindings: misc: Add bindings for HiSilicon usb
+ hub and data role switch functionality on HiKey960
+Message-ID: <20191218163738.GA12358@bogus>
+References: <20191212014233.32799-1-john.stultz@linaro.org>
+ <20191212014233.32799-8-john.stultz@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <04cef5f6-2bc2-b056-d2c4-e79ba5498225@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191212014233.32799-8-john.stultz@linaro.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 05:38:06PM +0200, Mathias Nyman wrote:
-> On 18.12.2019 16.29, Greg Kroah-Hartman wrote:
-> > On Tue, Dec 17, 2019 at 05:19:11PM -0800, Guenter Roeck wrote:
-> > > The following build warning is seen if CONFIG_PM is disabled.
-> > > 
-> > > drivers/usb/host/xhci-pci.c:498:13: warning:
-> > > 	unused function 'xhci_pci_shutdown'
-> > > 
-> > > Fixes: f2c710f7dca8 ("usb: xhci: only set D3hot for pci device")
-> > > Cc: Henry Lin <henryl@nvidia.com>
-> > > Cc: stable@vger.kernel.org	# all stable releases with 2f23dc86c3f8
-
-Somehow I messed up the commit sha here. It is f2c710f7dca8, obviously.
-2f23dc86c3f8 is the sha from v4.19.y. Sorry for that.
-
-Guenter
-
-> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > > ---
-> > >   drivers/usb/host/xhci-pci.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > Nice catch.
-> > 
-> > Mathias, I can queue this up now if you give me an ack.
+On Thu, Dec 12, 2019 at 01:42:32AM +0000, John Stultz wrote:
+> From: Yu Chen <chenyu56@huawei.com>
 > 
-> Yes, please
+> This patch adds binding documentation to support usb hub and usb
+> data role switch of Hisilicon HiKey960 Board.
 > 
-> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> CC: ShuFan Lee <shufan_lee@richtek.com>
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> Cc: Yu Chen <chenyu56@huawei.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Jun Li <lijun.kernel@gmail.com>
+> Cc: Valentin Schneider <valentin.schneider@arm.com>
+> Cc: Guillaume Gardet <Guillaume.Gardet@arm.com>
+> Cc: Jack Pham <jackp@codeaurora.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> ---
+> v3: Reworked as usb-role-switch intermediary
+> 
+> v7: Switched over to YAML dt binding description
+> ---
+>  .../bindings/misc/hisilicon-hikey-usb.yaml    | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.yaml b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.yaml
+> new file mode 100644
+> index 000000000000..1fc3b198ef73
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/misc/hisilicon-hikey-usb.yaml
+> @@ -0,0 +1,85 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright 2019 Linaro Ltd.
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/misc/hisilicon-hikey-usb.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: HiKey960 onboard USB GPIO Hub
+> +
+> +maintainers:
+> +  - John Stultz <john.stultz@linaro.org>
+> +
+> +description: |
+> +  Supports the onboard HiKey960 USB GPIO hub, which acts as a
+> +  role-switch intermediary to detect the state of the USB-C
+> +  port, to switch the hub into dual-role USB-C or host mode,
+> +  which enables the onboard USB-A host ports.
+
+Honestly I'm torn between whatever works for you because this is pretty 
+"special" dev board design and it should more accurately match the 
+hardware design. I think we can do the later and it doesn't really need 
+anything new.
+
+> +
+> +  Schematics about the hub can be found here:
+> +    https://github.com/96boards/documentation/raw/master/consumer/hikey/hikey960/hardware-docs/HiKey960_Schematics.pdf
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - const: hisilicon,gpio_hubv1
+
+As a whole this is HiSilicon specific, but really it is not. It's really 
+just a hub, a mux, and connectors for which we have bindings for. I 
+think you need to model the actual hub in DT. We have 2 ways already to 
+describe hubs in DT: a I2C device or USB device. 
+
+AIUI, the board looks something like this:
+
+ctrl -> mux --> hub -> type-a connector
+            +-> type-c connector
+
+If the hub I2C is not used, then you could do something like this:
+
+ctrl {
+    mux-controls = <&usb_gpio_mux>;
+    connector@0 {
+	// type C connector binding
+    };
+    hub@1 {
+	// USB device binding
+    };
+};
+
+Or if I2C is used and the hub is under the I2C controller:
+
+ctrl {
+    port@0 {
+        mux-controls = <&usb_gpio_mux>;
+        endpoint@0 { // mux state 0
+		remote-endpoint = <&usb_c_connector_port>;
+	};
+        endpoint@1 { // mux state 1
+		remote-endpoint = <&usb_hub_port>;
+	};
+};
+
+The only new bindings you really need are adding 'mux-controls' to the 
+USB host controller and the hub binding (we already have a few).
+
+If the USB2 and USB3 signals come from 2 different host controller 
+nodes, then I think it will need to look like the 2nd case regardless 
+of I2C. (It's strange that USB3 was not routed to Type-C connector. Can 
+you do USB2 on Type-C and USB3 on hub simultaneously? You need USB2 to 
+enumerate, right?)
+
+> +
+> +  typec-vbus-gpios:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the typec-vbus gpio
+
+This should be modeled as a GPIO regulator, and belongs as part of a 
+connector node. See bindings/connector/usb-connector.txt.
+
+> +
+> +  otg-switch-gpios:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the otg-switch gpio
+
+This would be the gpio-mux binding instead.
+
+> +
+> +  hub-vdd33-en-gpios:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the hub 3.3v power enablement gpio
+
+This should be modeled as a GPIO regulator. 
+
+What about the reset line on the hub?
+
+> +
+> +  usb-role-switch:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description: Support role switch.
+
+This normally is a controller property. Role switch is foreign to the 
+hub, so doesn't really belong there for sure.
+
+> +
+> +  port:
+> +    description: |
+> +      any connector to the data bus of this controller should be modelled
+> +      using the OF graph bindings specified, if the "usb-role-switch"
+> +      property is used. Note for this driver, two ports are supported,
+> +      the first being the endpoint that will be notified by this driver,
+> +      and the second being the endpoint that notifies this driver of a
+> +      role switch.
+> +
+> +
+> +required:
+> +  - compatible
+> +  - typec-vbus-gpios
+> +  - otg-switch-gpios
+> +  - hub-vdd33-en-gpios
+> +  - usb-role-switch
+> +  - port
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    hisi_hikey_usb: hisi_hikey_usb {
+> +        compatible = "hisilicon,gpio_hubv1";
+> +        typec-vbus-gpios = <&gpio25 2 GPIO_ACTIVE_HIGH>;
+> +        otg-switch-gpios = <&gpio25 6 GPIO_ACTIVE_HIGH>;
+> +        hub-vdd33-en-gpios = <&gpio5 6 GPIO_ACTIVE_HIGH>;
+> +        usb-role-switch;
+> +
+> +        port {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            hikey_usb_ep0: endpoint@0 {
+> +                reg = <0>;
+> +                remote-endpoint = <&dwc3_role_switch>;
+> +            };
+> +            hikey_usb_ep1: endpoint@1 {
+> +                reg = <1>;
+> +                remote-endpoint = <&rt1711h_ep>;
+> +            };
+> +        };
+> +    };
+> -- 
+> 2.17.1
 > 
