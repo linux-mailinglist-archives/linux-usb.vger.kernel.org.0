@@ -2,280 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05105125756
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 00:04:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3566A1257B1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 00:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726571AbfLRXEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Dec 2019 18:04:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39944 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726387AbfLRXEl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Dec 2019 18:04:41 -0500
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 286402465E;
-        Wed, 18 Dec 2019 23:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576710280;
-        bh=45HEpsQaodbLeIzLWZeTebdOakvhshmN/JIrCIvrOBo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1lPq+RnDhwzZ1n2Nbhb1zoeP1ubhK1q1LCpAzxqS/kki98ps317516LWRvOVo9qRP
-         ZO9RqMJQjyc69vyiqJR1OmNOf+nWagvb6eQTbsDwuRW+U+6sR0hOHpPWDCo3Lq4xaw
-         ut5skZ/ftwQqX5RrSEyMl2Lg3aPeOe1yI/MgYIjI=
-Received: by mail-qt1-f169.google.com with SMTP id 38so3344306qtb.13;
-        Wed, 18 Dec 2019 15:04:40 -0800 (PST)
-X-Gm-Message-State: APjAAAUlB/adz6HqLM4CzIwwkZ4ooET1jtx+Nr5r55s4SN7fpZTfs3VW
-        Q4n1F3quBcIzM7BQgmktiSZEFttBSBxOuYsAwQ==
-X-Google-Smtp-Source: APXvYqxOHwJ6E5OVcoiMVSDDC+gN133m0yHx4YjhwS403ykPScEzWD40cqDw4Jl4/Bim36YFYtTqn8b4KIXzWgJS3f8=
-X-Received: by 2002:ac8:59:: with SMTP id i25mr4613283qtg.110.1576710279250;
- Wed, 18 Dec 2019 15:04:39 -0800 (PST)
+        id S1726623AbfLRXYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Dec 2019 18:24:09 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:36134 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726561AbfLRXYI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Dec 2019 18:24:08 -0500
+Received: by mail-ot1-f66.google.com with SMTP id w1so4569060otg.3;
+        Wed, 18 Dec 2019 15:24:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ETUxOpgQ7F0pLVm01ESXed5S9gdzK8r7fuHrkhEgfqk=;
+        b=o5/kvao9waI4YPTxXhoocFJ5jHWlk+Xy7x7zBHoVSNOGea73bgdfahw+oGkHpnhmlm
+         6qoFzJY48EON0Ms9hFirGCYo/60S4LLPw5pZ4TMT4cbWG7+Tcse93tGo+fJATmp/czlp
+         kGc4mNEjMxEZgXQoEzz4GECpS8RBCZnnZAq5o65o37w7oh4hZA/ROdO5++yy3mw9LdJD
+         phMCLbi7PMHlJ2PxAI0do/6Gk6vzbbKhjRuf1V1hu81jUOwK63CzmaC2obQQs0WPIA2a
+         94IRE2y6duLXKcc/7GfPu3JMLn9oRIawmgbFleWmghcIyVmMsBi/Va9ssTQBJhgPrtj5
+         K6yw==
+X-Gm-Message-State: APjAAAX91fSNwq8f5kWzQE0NmDs5UEHCutGYKRXkuviQDoNEXf2rjHHP
+        6TO1Rj5EdHg1hXPfdw21aw==
+X-Google-Smtp-Source: APXvYqyPUOqnsp5Fq28ymg4AaPaisJ5viFWYBbVO4iBHtqnXMTnenHiKbGkM5hdcGBGGYAVNQXwpKQ==
+X-Received: by 2002:a05:6830:1208:: with SMTP id r8mr5372896otp.105.1576711447577;
+        Wed, 18 Dec 2019 15:24:07 -0800 (PST)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id j130sm1339912oia.34.2019.12.18.15.24.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2019 15:24:06 -0800 (PST)
+Date:   Wed, 18 Dec 2019 17:24:06 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nagarjuna Kristam <nkristam@nvidia.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        mark.rutland@arm.com, kishon@ti.com, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [Patch V2 02/18] dt-bindings: usb: Add NVIDIA Tegra XUSB device
+ mode controller binding
+Message-ID: <20191218232406.GA19924@bogus>
+References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
+ <1576660591-10383-3-git-send-email-nkristam@nvidia.com>
 MIME-Version: 1.0
-References: <20191218142455.13542-1-benjamin.gaignard@st.com>
-In-Reply-To: <20191218142455.13542-1-benjamin.gaignard@st.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 18 Dec 2019 17:04:27 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLhahGyk67U9zg1uqticD36aRc5TQQUU0aGb3D7KuMTcg@mail.gmail.com>
-Message-ID: <CAL_JsqLhahGyk67U9zg1uqticD36aRc5TQQUU0aGb3D7KuMTcg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: Convert DWC2 bindings to json-schema
-To:     Benjamin Gaignard <benjamin.gaignard@st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1576660591-10383-3-git-send-email-nkristam@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 8:25 AM Benjamin Gaignard
-<benjamin.gaignard@st.com> wrote:
->
-> Convert DWC2 bindings to DT schema format using json-schema.
-> DWC2 is widely use but a couple of compatibles and properties
-> (vusb_d-supply,vusb_a-supply) were missing in dwc2.txt, the
-> patch add them.
->
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+On Wed, Dec 18, 2019 at 02:46:15PM +0530, Nagarjuna Kristam wrote:
+> Add device-tree binding documentation for the XUSB device mode controller
+> present on Tegra210 and Tegra186 SoC. This controller supports the USB 3.0
+> specification.
+> 
+> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
 > ---
-> Notes:
->  I have put Greg Kroah-Hartman has maintainer of this file
->  because it was the first entry when calling get_maintainers.pl
->  on dwc2.txt. All my apologies if that is an incorrect guess,
->  raise your hands if you know who should be the maintainer(s)
->  for this file.
+> V2:
+>  - used enum instead of oneOf and const.
+>  - Moved reg, reg-names, clocks, clock-names to property section from allOf.
+>  - Limited allOf to min and max items based on soc.
+>  - Updated description for power-domains.
+>  - Added V1 reference
+> ---
+> V1
+>  - This document is yaml version of [1], with difference of usb-role-switch
+>    removal.
+> [1] https://patchwork.kernel.org/patch/11156253/ 
+> ---
+>  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml | 190 +++++++++++++++++++++
+>  1 file changed, 190 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra-xudc.yaml
 
-DWC2 driver maintainer? Someone in ST that knows this h/w? Otherwise,
-you can put me if no one else.
-
->  Documentation/devicetree/bindings/usb/dwc2.txt  |  64 ---------
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 178 ++++++++++++++++++++++++
->  2 files changed, 178 insertions(+), 64 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/dwc2.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/dwc2.yaml
-
-
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> new file mode 100644
-> index 000000000000..2c11626e3bc3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -0,0 +1,178 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/dwc2.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: DesignWare HS OTG USB 2.0 controller Bindings
-> +
-> +maintainers:
-> +  - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - const: brcm,bcm2835-usb
-> +        description: The DWC2 USB controller instance in the BCM2835 SoC
-
-I think it's a bit easier to read if the description is first.
-Personally, I find the description a bit redundant and would just drop
-it.
-
-> +      - const: hisilicon,hi6220-usb
-> +        description: The DWC2 USB controller instance in the hi6220 SoC
-> +      - items:
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rk3066 Soc
-> +      - items:
-> +          - const: rockchip,px30-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the px30 Soc
-> +      - items:
-> +          - const: rockchip,rk3036-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rk3036 Soc
-> +      - items:
-> +          - const: rockchip,rv1108-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rv1108 Soc
-> +      - items:
-> +          - const: rockchip,rk3188-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rk3188 Soc
-> +      - items:
-> +          - const: rockchip,rk3228-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rk3228 Soc
-> +      - items:
-> +          - const: rockchip,rk3288-usb
-> +          - const: rockchip,rk3066-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in the rk3288 Soc
-> +      - const: lantiq,arx100-usb
-> +        description: The DWC2 USB controller instance in Lantiq ARX SoCs
-> +      - const: lantiq,xrx200-usb
-> +        description: The DWC2 USB controller instance in Lantiq XRX SoCs
-> +      - items:
-> +          - const: amlogic,meson8-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in Amlogic Meson8 SoCs
-> +      - items:
-> +          - const: amlogic,meson8b-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in Amlogic Meson8b SoCs
-> +      - const: amlogic,meson-gxbb-usb
-> +        description: The DWC2 USB controller instance in Amlogic S905 SoCs
-> +      - items:
-> +          - const: amlogic,meson-g12a-usb
-> +          - const: snps,dwc2
-> +        description: The DWC2 USB controller instance in Amlogic G12A SoCs
-> +      - const: amcc,dwc-otg
-> +        description: The DWC2 USB controller instance in AMCC Canyonlands 460EX SoCs
-> +      - const: snps,dwc2
-> +        description: generic DWC2 USB controller with default parameters
-> +      - const: st,stm32f4x9-fsotg
-> +        description: The DWC2 USB FS/HS controller instance in STM32F4x9 SoCs configured in FS mode
-> +      - const: st,stm32f4x9-hsotg
-> +        description: The DWC2 USB HS controller instance in STM32F4x9 SoCs configured in HS mode
-> +      - const: st,stm32f7-hsotg
-> +        description: The DWC2 USB HS controller instance in STM32F7 SoCs configured in HS mode
-> +      - items:
-> +          - const: samsung,s3c6400-hsotg
-> +          - const: snps,dwc2
-> +        minItems: 1
-
-This seems like something to fix in dts files rather than work-around.
-Pick whichever one gives fewer errors.
-
-> +        description: The DWC2 USB controller instance in the exynos3250 Soc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    items:
-> +      - const: otg
-> +
-> +  resets:
-> +    items:
-> +     - description: common reset
-> +     - description: ecc reset
-> +    minItems: 1
-> +
-> +  reset-names:
-> +    items:
-> +     - const: dwc2
-> +     - const: dwc2-ecc
-> +    minItems: 1
-> +
-> +  phys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-
-Standard prop, can drop.
-
-> +    description: phy provider specifier
-
-That's all 'phys'. Drop.
-
-> +    maxItems: 1
-> +
-> +  phy-names:
-> +    const: usb2-phy
-> +
-> +  vbus-supply:
-> +    description: reference to the VBUS regulator. Depending on the current mode
-> +      this is enabled (in "host" mode") or disabled (in "peripheral" mode). The
-> +      regulator is updated if the controller is configured in "otg" mode and the
-> +      status changes between "host" and "peripheral".
-> +
-> +  vusb_d-supply:
-> +    description: phandle to voltage regulator of digital section,
-> +
-> +  vusb_a-supply:
-> +    description: phandle to voltage regulator of analog section.
-> +
-> +  dr_mode:
-> +    enum: [host, peripheral, otg]
-> +
-> +  g-rx-fifo-size:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: size of rx fifo size in gadget mode.
-> +
-> +  g-np-tx-fifo-size:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: size of non-periodic tx fifo size in gadget mode.
-> +
-> +  g-tx-fifo-size:
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description: size of periodic tx fifo per endpoint (except ep0) in gadget mode.
-> +
-> +  snps,need-phy-for-wake:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: If present indicates that the phy needs to be left on for remote wakeup during suspend.
-> +
-> +  snps,reset-phy-on-wake:
-> +    $ref: /schemas/types.yaml#/definitions/flag
-> +    description: If present indicates that we need to reset the PHY when we detect a wakeup.
-> +                 This is due to a hardware errata.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +      usb@101c0000 {
-> +        compatible = "ralink,rt3050-usb, snps,dwc2";
-> +        reg = <0x101c0000 40000>;
-> +        interrupts = <18>;
-> +        clocks = <&usb_otg_ahb_clk>;
-> +        clock-names = "otg";
-> +        phys = <&usbphy>;
-> +        phy-names = "usb2-phy";
-> +        snps,need-phy-for-wake;
-> +      };
-> +
-> +...
-> --
-> 2.15.0
->
+Reviewed-by: Rob Herring <robh@kernel.org>
