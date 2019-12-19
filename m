@@ -2,94 +2,268 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7755125DD4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 10:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B76125E04
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 10:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfLSJkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 04:40:09 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:55204 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726713AbfLSJkJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 04:40:09 -0500
-Received: by mail-pj1-f67.google.com with SMTP id ep17so2244539pjb.4
-        for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2019 01:40:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UaU6i9zWU3yr9QJvcRz0VGGzrcUKaBIv86YipeMOKo8=;
-        b=LyDg1/LfFyRwWJTxBF/LnsfrTJSpgla5kvA98Hg+eeijCP9Q4VYEvCBGyN5xVxKn7p
-         eEsQscd3wujq8XMHgepAaRQXBH0E1PQZo9FaDL3lWv8qT+wBABdwjQ6wBRbPQczrwZhV
-         xi1HLrIQxvVPsnnXebX2B39JQ8NlNTXox5+ak=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UaU6i9zWU3yr9QJvcRz0VGGzrcUKaBIv86YipeMOKo8=;
-        b=mp1ljvwIzoxyc6Bt+jDZZRFMFislXkqTJM5Co+GKhuiXkNQ2k6ryQ0roJhDbcSKwPZ
-         akSC33sld2s+aigxRk+n/iSC/ia7ej5d9jSAOZkBLVbJIriHpl7PW3cPIIVX0XLy+gzu
-         ggVQ71zla4u7ApbV5ehm8MDCI/8dWGgVUAbf5niDQJLJTIRbeFY+GDu+I9Pk0cu7jh+J
-         Cl1Ug6CqlYDIT8oXAAsjJfije4f7RG1YXdYdGk+4JlJByjoInTxanXrKrr6LutLDBmPo
-         9dsfMjm/Ec1r20Eaa9zkBYydGMEOz06uQB/MKOC4fxB4PpG9H2qLbZ1oDMhxur1kAcZW
-         bUNw==
-X-Gm-Message-State: APjAAAW6RR8n+akBTE0Z7mZP5hHvkVhK9gmcxQuwd2T44RPXN5Qj6/OB
-        XRPOi4wMWyJul8xYnhOMPnlzeGeoRwqghA==
-X-Google-Smtp-Source: APXvYqzL4Uv3f/vYWiTWGoQqppzSjCV/VAXe3mUM5lmKJDJ2u9Tql+pWQk6EMSv57P1oNg9ofZmndA==
-X-Received: by 2002:a17:902:8bc5:: with SMTP id r5mr8257114plo.189.1576748408099;
-        Thu, 19 Dec 2019 01:40:08 -0800 (PST)
-Received: from tfiga.tok.corp.google.com ([2401:fa00:8f:203:f5fe:2a5e:f953:c0ed])
-        by smtp.gmail.com with ESMTPSA id d22sm7057694pfo.187.2019.12.19.01.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 01:40:07 -0800 (PST)
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
+        id S1726636AbfLSJr5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 04:47:57 -0500
+Received: from mail-sh.amlogic.com ([58.32.228.43]:25753 "EHLO
+        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726618AbfLSJr5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 04:47:57 -0500
+Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 19 Dec
+ 2019 17:48:32 +0800
+Subject: Re: [PATCH v2 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
+To:     Neil Armstrong <narmstrong@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Changqi Hu <Changqi.Hu@mediatek.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Shik Chen <shik@chromium.org>, Tomasz Figa <tfiga@chromium.org>
-Subject: [PATCH] usb: mtk-xhci: Do not explicitly set the DMA mask
-Date:   Thu, 19 Dec 2019 18:39:54 +0900
-Message-Id: <20191219093954.163417-1-tfiga@chromium.org>
-X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
+        Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Kevin Hilman <khilman@baylibre.com>
+CC:     Yue Wang <yue.wang@amlogic.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Carlo Caione <carlo@caione.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Qiufang Dai <qiufang.dai@amlogic.com>,
+        Jian Hu <jian.hu@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        Xingyu Chen <xingyu.chen@amlogic.com>
+References: <1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com>
+ <1576636944-196192-4-git-send-email-hanjie.lin@amlogic.com>
+ <4cbc4216-4f1b-dab2-fccd-4ece7cfedb77@baylibre.com>
+From:   Hanjie Lin <hanjie.lin@amlogic.com>
+Message-ID: <da372dff-4467-5d04-c8ae-055f89a5b11b@amlogic.com>
+Date:   Thu, 19 Dec 2019 17:48:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <4cbc4216-4f1b-dab2-fccd-4ece7cfedb77@baylibre.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.18.38.198]
+X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
+ (10.18.11.5)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The mtk-xhci platform glue sets the DMA mask to 32 bits on its own,
-which was needed before commit fda182d80a0b ("usb: xhci: configure
-32-bit DMA if the controller does not support 64-bit DMA"), but now it
-has no effect, because xhci_gen_setup() sets it up for us according to
-hardware capabilities. Remove the useless code.
 
-Signed-off-by: Tomasz Figa <tfiga@chromium.org>
----
- drivers/usb/host/xhci-mtk.c | 5 -----
- 1 file changed, 5 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index b18a6baef204a..bfbdb3ceed291 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -488,11 +488,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 		goto disable_clk;
- 	}
- 
--	/* Initialize dma_mask and coherent_dma_mask to 32-bits */
--	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
--	if (ret)
--		goto disable_clk;
--
- 	hcd = usb_create_hcd(driver, dev, dev_name(dev));
- 	if (!hcd) {
- 		ret = -ENOMEM;
--- 
-2.24.1.735.g03f4e72817-goog
+On 2019/12/18 21:17, Neil Armstrong wrote:
+> Hi,
+> 
+> On 18/12/2019 03:42, Hanjie Lin wrote:
+>> This adds support for the USB2 PHY found in the Amlogic A1 SoC Family.
+>>
+>> It supports host mode only.
+>>
+>> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+>> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+>> ---
+>>  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 102 ++++++++++++++++++++++--------
+>>  1 file changed, 74 insertions(+), 28 deletions(-)
+>>
+>> diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+>> index 9065ffc..2c242d3 100644
+>> --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+>> +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
+>> @@ -146,11 +146,18 @@
+>>  #define RESET_COMPLETE_TIME					1000
+>>  #define PLL_RESET_COMPLETE_TIME					100
+>>  
+>> +enum {
+>> +	MESON_USB2_PHY_VERSION_10 = 0,
+>> +	MESON_USB2_PHY_VERSION_11,
+> 
+> Are these the real "versions" of the phy or it's made up ?
+> 
 
+This version is made up and only for distinguish a1 and g12a.
+
+>> +	MESON_USB2_PHY_VERSION_COUNT,
+>> +};
+>> +
+>>  struct phy_meson_g12a_usb2_priv {
+>>  	struct device		*dev;
+>>  	struct regmap		*regmap;
+>>  	struct clk		*clk;
+>>  	struct reset_control	*reset;
+>> +	int phy_version;
+>>  };
+>>  
+>>  static const struct regmap_config phy_meson_g12a_usb2_regmap_conf = {
+>> @@ -192,18 +199,33 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+>>  		     FIELD_PREP(PHY_CTRL_R17_MPLL_FILTER_PVT2, 2) |
+>>  		     FIELD_PREP(PHY_CTRL_R17_MPLL_FILTER_PVT1, 9));
+>>  
+>> -	regmap_write(priv->regmap, PHY_CTRL_R18,
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
+>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
+>> -		     PHY_CTRL_R18_MPLL_ACG_RANGE);
+>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10)
+>> +		regmap_write(priv->regmap, PHY_CTRL_R18,
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
+>> +			     PHY_CTRL_R18_MPLL_ACG_RANGE);
+>> +	else if (priv->phy_version == MESON_USB2_PHY_VERSION_11)
+>> +		regmap_write(priv->regmap, PHY_CTRL_R18,
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
+>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
+>> +			     PHY_CTRL_R18_MPLL_ACG_RANGE |
+>> +			     PHY_CTRL_R18_MPLL_DCO_CLK_SEL);
+> 
+> The only difference is PHY_CTRL_R18_MPLL_ACG_RANGE | PHY_CTRL_R18_MPLL_DCO_CLK_SEL,
+> you can easily simplify the code here by using a temp variable.
+> 
+
+Yes, it will looks more clearly.
+
+>>  
+>>  	udelay(PLL_RESET_COMPLETE_TIME);
+>>  
+>> @@ -227,13 +249,24 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+>>  		     FIELD_PREP(PHY_CTRL_R20_USB2_BGR_VREF_4_0, 0) |
+>>  		     FIELD_PREP(PHY_CTRL_R20_USB2_BGR_DBG_1_0, 0));
+>>  
+>> -	regmap_write(priv->regmap, PHY_CTRL_R4,
+>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_7_0, 0xf) |
+>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_15_8, 0xf) |
+>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_23_16, 0xf) |
+>> -		     PHY_CTRL_R4_TEST_BYPASS_MODE_EN |
+>> -		     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_1_0, 0) |
+>> -		     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_3_2, 0));
+>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10)
+>> +		regmap_write(priv->regmap, PHY_CTRL_R4,
+>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_7_0, 0xf) |
+>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_15_8, 0xf) |
+>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_23_16, 0xf) |
+>> +			     PHY_CTRL_R4_TEST_BYPASS_MODE_EN |
+>> +			     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_1_0, 0) |
+>> +			     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_3_2, 0));
+>> +	else if (priv->phy_version == MESON_USB2_PHY_VERSION_11) {
+>> +		regmap_write(priv->regmap, PHY_CTRL_R21,
+>> +			     PHY_CTRL_R21_USB2_CAL_ACK_EN |
+>> +			     PHY_CTRL_R21_USB2_TX_STRG_PD |
+>> +			     FIELD_PREP(PHY_CTRL_R21_USB2_OTG_ACA_TRIM_1_0, 2));
+>> +
+>> +		/* Analog Settings */
+>> +		regmap_write(priv->regmap, PHY_CTRL_R13,
+>> +			     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
+>> +	}
+>>  
+>>  	/* Tuning Disconnect Threshold */
+>>  	regmap_write(priv->regmap, PHY_CTRL_R3,
+>> @@ -241,11 +274,13 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
+>>  		     FIELD_PREP(PHY_CTRL_R3_HSDIC_REF, 1) |
+>>  		     FIELD_PREP(PHY_CTRL_R3_DISC_THRESH, 3));
+>>  
+>> -	/* Analog Settings */
+>> -	regmap_write(priv->regmap, PHY_CTRL_R14, 0);
+>> -	regmap_write(priv->regmap, PHY_CTRL_R13,
+>> -		     PHY_CTRL_R13_UPDATE_PMA_SIGNALS |
+>> -		     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
+>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10) {
+>> +		/* Analog Settings */
+>> +		regmap_write(priv->regmap, PHY_CTRL_R14, 0);
+>> +		regmap_write(priv->regmap, PHY_CTRL_R13,
+>> +			     PHY_CTRL_R13_UPDATE_PMA_SIGNALS |
+>> +			     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
+>> +	}
+>>  
+>>  	return 0;
+>>  }
+>> @@ -271,6 +306,7 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
+>>  	struct resource *res;
+>>  	struct phy_meson_g12a_usb2_priv *priv;
+>>  	struct phy *phy;
+>> +	struct device_node *np = dev->of_node;
+>>  	void __iomem *base;
+>>  	int ret;
+>>  
+>> @@ -286,14 +322,23 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
+>>  	if (IS_ERR(base))
+>>  		return PTR_ERR(base);
+>>  
+>> +	if (of_device_is_compatible(np, "amlogic,g12a-usb2-phy"))
+>> +		priv->phy_version = MESON_USB2_PHY_VERSION_10;
+>> +	else if (of_device_is_compatible(np, "amlogic,a1-usb2-phy"))
+>> +		priv->phy_version = MESON_USB2_PHY_VERSION_11;
+>> +	else
+>> +		return -EINVAL;
+> 
+> Please use of_device_get_match_data() and a match data for each compatible instead.
+> 
+
+OK, I will fix it in next version.
+
+>> +
+>>  	priv->regmap = devm_regmap_init_mmio(dev, base,
+>>  					     &phy_meson_g12a_usb2_regmap_conf);
+>>  	if (IS_ERR(priv->regmap))
+>>  		return PTR_ERR(priv->regmap);
+>>  
+>> -	priv->clk = devm_clk_get(dev, "xtal");
+>> -	if (IS_ERR(priv->clk))
+>> -		return PTR_ERR(priv->clk);
+>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10) {
+>> +		priv->clk = devm_clk_get(dev, "xtal");
+>> +		if (IS_ERR(priv->clk))
+>> +			return PTR_ERR(priv->clk);
+>> +	}
+>>  
+>>  	priv->reset = devm_reset_control_get(dev, "phy");
+>>  	if (IS_ERR(priv->reset))
+>> @@ -322,7 +367,8 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
+>>  
+>>  static const struct of_device_id phy_meson_g12a_usb2_of_match[] = {
+>>  	{ .compatible = "amlogic,g12a-usb2-phy", },
+>> -	{ },
+>> +	{ .compatible = "amlogic,a1-usb2-phy", },
+>> +	{ /* Sentinel */ }
+>>  };
+>>  MODULE_DEVICE_TABLE(of, phy_meson_g12a_usb2_of_match);
+>>  
+>>
+> 
+> Thanks,
+> Neil
+> 
+> .
+> 
+
+Thanks,
+Hanjie.Lin
