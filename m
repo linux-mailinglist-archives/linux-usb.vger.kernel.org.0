@@ -2,151 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 621A0126E18
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 20:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCCE126FCD
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 22:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727402AbfLSTkE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 14:40:04 -0500
-Received: from mail-ot1-f53.google.com ([209.85.210.53]:42791 "EHLO
-        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727269AbfLSTkE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 14:40:04 -0500
-Received: by mail-ot1-f53.google.com with SMTP id 66so8540457otd.9;
-        Thu, 19 Dec 2019 11:40:03 -0800 (PST)
+        id S1727406AbfLSViu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 16:38:50 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:46364 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726880AbfLSViu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 16:38:50 -0500
+Received: by mail-pf1-f194.google.com with SMTP id y14so4005794pfm.13;
+        Thu, 19 Dec 2019 13:38:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4FD4E6VPRHSJlg1OMSyY98hDnZZOWMuHy6UnkVUj/RM=;
-        b=Ft/AdCzKPdyX3oHc5jvZBR4Kaqj4jpE7Q8XzPP0EYcT9xYnuC0/BZxUGrN8jhz8BIO
-         DE98t7yJ+SogBLg95Hag1kDnoZddyigaNdDCBg9H+8JXJ1NmLbAyr217y/9EW2qAT2+T
-         C/PGP32ENKQNE7zIEYfYF2Z3gkJLm8BJb1MFI3an9ZlgJ4XZWZ6MnsyZ+lk7q797Wn1a
-         ML8MbTnqxl8pF8QJltuJVaeCJCHrLn5hzyA1QdN411K43iqS1wBJd5WmRoon8HDDCXeg
-         HEMzuGB5YGI8ZfWMB+mGIvd0XvQjF9A2EnA2aoCYyMFYOUZ9euY4n0bii3QVIw94vISp
-         kqZg==
-X-Gm-Message-State: APjAAAV2kp/deZwL4eO5qNhs/fHla/MiadhUp5MHmhJLcesuzz/7Cr77
-        b+ZaVLwdQfCrfonGmJXNuw==
-X-Google-Smtp-Source: APXvYqxb3mN0ppbQoW8chdIbp9cEdwb9xhDSWxqJaXgyf3uzsInKjRVJLfT7puBtOC0JdkGYGP9ghg==
-X-Received: by 2002:a05:6830:124b:: with SMTP id s11mr10297161otp.333.1576784402776;
-        Thu, 19 Dec 2019 11:40:02 -0800 (PST)
-Received: from localhost ([2607:fb90:20de:fb54:3549:d84c:9720:edb4])
-        by smtp.gmail.com with ESMTPSA id s145sm2333734oie.44.2019.12.19.11.40.02
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=A8qzfXgJqfz0JsylJ7w5yc0iwoDWilLcpVP41fGSaVY=;
+        b=sp6jN/DAYmh1enzLowAxt+CQNyzsEJFI4+AW3rDNa98uIQiqkHydnmsh4uBOi0hujT
+         hM+8ZT5cd1m5ZN7C10poqLosAYdj4Hi2i3bIaYJ3ksj/3Ibko6A/nJeCmwcMM58c3f4V
+         PHvHESWX3AQIOHxMkssH6KXSfZr1g1xwXk8AgBDtkkz2jvGkfe5l0yGqV0AYao8YuUdl
+         KDowwrZsS5ynK6XrZf+Dc/Bty4NpMwCVVxaBnbXXhb13V214oME/1nosB6bFQTrHrCBL
+         PAOl23apfnUVawQ72qrtdc74WHa5c1NmgC9V54FZjDIX2jwdfOXEN7GpZDO7QaeakdzI
+         DUYA==
+X-Gm-Message-State: APjAAAVd2O+lEC7uBWbOsslf5W9RabYx83PsGHK9Mtoi5hrHfWlWP1wf
+        ozyDDNbgp9th1RpaPEhrRw==
+X-Google-Smtp-Source: APXvYqxZh6usqcMuDpjIzx8tWU+6WwnJbiDYBNuEG9Di9Qzpk8aU8oFtnRSoasoMfjjZop8d7zm5Lw==
+X-Received: by 2002:a63:a707:: with SMTP id d7mr10954574pgf.93.1576791529663;
+        Thu, 19 Dec 2019 13:38:49 -0800 (PST)
+Received: from localhost ([172.58.27.162])
+        by smtp.gmail.com with ESMTPSA id p5sm8161313pgs.28.2019.12.19.13.38.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 11:40:02 -0800 (PST)
-Date:   Thu, 19 Dec 2019 13:40:00 -0600
+        Thu, 19 Dec 2019 13:38:48 -0800 (PST)
+Date:   Thu, 19 Dec 2019 13:38:45 -0800
 From:   Rob Herring <robh@kernel.org>
-To:     jassisinghbrar@gmail.com
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, mark.rutland@arm.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jassi Brar <jaswinder.singh@linaro.org>
-Subject: Re: [PATCHv1 1/2] dt-bindings: max3421-udc: add dt bindings for
- MAX3420 UDC
-Message-ID: <20191219194000.GA23698@bogus>
-References: <20191210003124.32376-1-jassisinghbrar@gmail.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Peter Chen <peter.chen@nxp.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] power/supply: Add generic USB charger driver
+Message-ID: <20191219213845.GA3481@bogus>
+References: <20191211155032.167032-1-paul@crapouillou.net>
+ <20191211155032.167032-3-paul@crapouillou.net>
+ <20191212091814.GA7035@b29397-desktop>
+ <1576270147.3.0@crapouillou.net>
+ <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
+ <1576493525.3.0@crapouillou.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20191210003124.32376-1-jassisinghbrar@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1576493525.3.0@crapouillou.net>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 09, 2019 at 06:31:24PM -0600, jassisinghbrar@gmail.com wrote:
-> From: Jassi Brar <jaswinder.singh@linaro.org>
+On Mon, Dec 16, 2019 at 11:52:05AM +0100, Paul Cercueil wrote:
+> Hi Peter,
 > 
-> Add YAML dt bindings for Maxim MAX3420 UDC controller.
 > 
-> Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
-> ---
->  .../bindings/usb/maxim,max3420-udc.yaml       | 60 +++++++++++++++++++
->  1 file changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
+> Le lun., déc. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a écrit :
+> > 
+> > >  >>  +
+> > >  >>  +	desc = &charger->desc;
+> > >  >>  +	desc->name = "usb-charger";
+> > >  >>  +	desc->properties = usb_charger_properties;
+> > >  >>  +	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
+> > >  >>  +	desc->get_property = usb_charger_get_property;
+> > >  >>  +	desc->type = POWER_SUPPLY_TYPE_USB;
+> > >  >
+> > >  > What's your further plan for this generic USB charger?
+> > >  > To support BC1.2, we need to know charger type, and how we could
+> > > get
+> > >  > it?
+> > >  >
+> > >  > Peter
+> > > 
+> > >  Well I don't really know. The USB role framework does not give any
+> > > info about
+> > >  what's plugged.
+> > > 
+> > 
+> > What's the use case for this patch set? How it be used?
 > 
-> diff --git a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-> new file mode 100644
-> index 000000000000..cf4eec8a618e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-> @@ -0,0 +1,60 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-
-Dual license new bindings please:
-
-(GPL-2.0-only OR BSD-2-Clause)
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/maxim,max3420-udc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MAXIM MAX3420/1 USB Peripheral Controller
-> +
-> +maintainers:
-> +  - Jassi Brar <jaswinder.singh@linaro.org>
-> +
-> +description: |
-> +  The controller provices USB2.0 compliant FullSpeed peripheral
-> +  implementation over the  SPI interface.
-
-space                        ^
-
-> +
-> +  Specifications about the part can be found at:
-> +    http://datasheets.maximintegrated.com/en/ds/MAX3420E.pdf
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - maxim,max3420-udc
-> +      - maxim,max3421-udc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    minItems: 1
-> +    maxItems: 2
-> +    items:
-> +      - const: udc
-> +      - const: vbus
-
-interrupts are integers, not strings. Should be interrupt-names?
-
-> +
-> +  spi-max-frequency:
-> +    maximum: 26000000
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - interrupt-names
-
-Add:
-
-additionalProperties: false
-
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/gpio/gpio.h>
-> +      #include <dt-bindings/interrupt-controller/irq.h>
-> +      spi0 {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            udc@0 {
-> +                  compatible = "maxim,max3420-udc";
-> +                  reg = <0>;
-> +                  interrupt-parent = <&gpio>;
-> +                  interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
-> +                  interrupt-names = "udc", "vbus";
-> +                  spi-max-frequency = <12500000>;
-> +            };
-> +      };
-> -- 
-> 2.20.1
+> My devicetree:
 > 
+> usb_otg: usb@13440000 {
+> 	compatible = "ingenic,jz4770-musb", "simple-mfd";
+> 	reg = <0x13440000 0x10000>;
+> 	[...]
+> 
+> 	usb-role-switch;
+> 
+> 	connector {
+> 		compatible = "gpio-usb-b-connector", "usb-b-connector";
+> 		label = "mini-USB";
+> 		type = "mini";
+> 
+> 		id-gpios = <&gpf 18 GPIO_ACTIVE_HIGH>;
+> 		vbus-gpios = <&gpb 5 GPIO_ACTIVE_HIGH>;
+> 		[...]
+> 	};
+> 
+> 	usb_charger: usb-charger {
+> 		compatible = "usb-charger";
+
+What h/w device is this?
+
+> 	};
+> };
+> 
+> The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect in which
+> state (device, host, unconnected) a OTG connector is. However, that means I
+> cannot use the standard gpio-charger driver to detect the presence of a
+> charger based on the state of the VBUS gpio, since it's already requested
+> here. So the point of this patchset is to provide an alternative to
+> gpio-charger that works with OTG controllers compatible with
+> 'usb-role-switch'.
+
+Why not fix gpio-charger or make whatever 'owns' vbus-gpios to register 
+a charger device?
+
+I guess you could have Vbus sensing with no charging capability, but 
+that sounds like a new property, not a node to me.
+
+Rob
