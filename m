@@ -2,143 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 253CA1260E9
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 12:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BBB126239
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 13:35:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726770AbfLSLfr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 06:35:47 -0500
-Received: from outils.crapouillou.net ([89.234.176.41]:47908 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726695AbfLSLfr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 06:35:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1576755342; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ckop6Kqk0CV79KVL4zcYWdYOX/VFrNEJtlGjWhAJS+I=;
-        b=cHB0INpO3f2CogS5CbRHjpHON4couUPO673zqq7Nuzt+0O+Ra3tG1zlgjfXmhQ2Kt3PwMz
-        PHDsiKkqjNju5o4p8QeS2Z3/WPfYnErBSN8CD/X2l05m+WBKnaDH4WED7emxpQl0M3cUd5
-        xAKnVCRlloCicTthjywCisc97X4H6dU=
-Date:   Thu, 19 Dec 2019 12:35:37 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: RE: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-To:     Peter Chen <peter.chen@nxp.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Message-Id: <1576755337.3.0@crapouillou.net>
-In-Reply-To: <VI1PR04MB53273342340E350BFFFDE12F8B530@VI1PR04MB5327.eurprd04.prod.outlook.c
-        om>
-References: <20191211155032.167032-1-paul@crapouillou.net>
-        <20191211155032.167032-3-paul@crapouillou.net>
-        <20191212091814.GA7035@b29397-desktop> <1576270147.3.0@crapouillou.net>
-        <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <1576493525.3.0@crapouillou.net>
-        <VI1PR04MB5327B8EF35340FC4B2D02DE88B500@VI1PR04MB5327.eurprd04.prod.outlook.com>
-        <1576617863.3.1@crapouillou.net>
-        <VI1PR04MB53273342340E350BFFFDE12F8B530@VI1PR04MB5327.eurprd04.prod.outlook.com>
+        id S1726708AbfLSMfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 07:35:23 -0500
+Received: from sv2-smtprelay2.synopsys.com ([149.117.73.133]:46432 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726668AbfLSMfX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 07:35:23 -0500
+Received: from mailhost.synopsys.com (badc-mailhost2.synopsys.com [10.192.0.18])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 032B6405CE;
+        Thu, 19 Dec 2019 12:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1576758922; bh=q9nSCLKN+ybg3Iv5RrQnpSwQkN5PK6SW3QQlu+40y8Q=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=ijzysRJnM3KoTw11JgnW/Lheka3u1nZvAzRtgPam42AWw6G6o0gFHBynITZJwOeYZ
+         5sUS0G/o62LvfN7b5g3xuW7gp0q0/rFzZ9n/zZTMoeBJw6M+Da/X21C9j9hAO3wPE1
+         Zow/7OV2mvJDhd1eNEVwJyLZFRS540jxz96N/FQLBLpR7w13Nm0uNPMcSinZibzbg/
+         WEVHlh4YmqvaSmpH3D9DXFvHvkwrVxLBwKHPc2KOeyTumNIV/8hhKqM2u0GEt8aqfV
+         COEOZQvItgYZ8FFaRQs9vJ3h7gSS/RnpNp5eXCTxL552SRny6sHEEyzH1yWWdHy9F+
+         fiW9GMTtt0uxQ==
+Received: from US01WEHTC3.internal.synopsys.com (us01wehtc3.internal.synopsys.com [10.15.84.232])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 8175BA0067;
+        Thu, 19 Dec 2019 12:35:19 +0000 (UTC)
+Received: from US01HYBRID2.internal.synopsys.com (10.15.246.24) by
+ US01WEHTC3.internal.synopsys.com (10.15.84.232) with Microsoft SMTP Server
+ (TLS) id 14.3.408.0; Thu, 19 Dec 2019 04:35:02 -0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.202.3.67) by
+ mrs.synopsys.com (10.15.246.24) with Microsoft SMTP Server (TLS) id
+ 14.3.408.0; Thu, 19 Dec 2019 04:35:01 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hNqUnUo6nSGxU8c4DLIchKTSnNIv8Jbhy3+/+bvLpytaGGm8gycZbAZhP2IehVy9aSR71Sc+CylKA8Y+XJA5J7SJvesu89AkBkTQtmrqk0hP0qBp0XNZ0BLe+3Zcx/FDEtymU36bTdVtyYcM3fsC+mkyZlIqhF7AvmD9GgH+GoPq+C8G+OnMDQMUZHWnU14lTXdHoaSqc3y9yMsl6V5uqrdGa18ia1bW+k9KlFaav0VVuK91ggQjeYYI5m5jHoVYJyMZ966ES3QKD/o1ohyl2KiSWhPw7miOQI4fuYofMgHefeNzOxuSlBGNyd7IuK3o8smZIKJrIuXGa4IL3ZZpsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q9nSCLKN+ybg3Iv5RrQnpSwQkN5PK6SW3QQlu+40y8Q=;
+ b=BCE6kdljgXiNS/cI8qTRbDr0HolzGKuMFt4Q0q/lcoCygvGb7ESZ0kCLwM6nfwhhDnmVs1JsvZz71p/ZshUChrt3gqhv/jC5atRcyHBpaQoIf+P8CyCp3yCoqNZf1vdiQ0TcU7Y/VN7wgADsks4v4ynpUVLSZYVpA0QhvEN+12rEntqyvTj0A9Awhy7Lygb1vbDUmg8+pizPrldnId3GiQbVr89f6mMk3hJI73pOi3E8QeF5mRlvJPQclm6NpNabXilEFjDnP6PGUSEYNOaofde/czUAyAkDt26nqLTEwbTHwSPOWFe0Juq37vJKoF792O3NVZQMf7oukQqB56rlkQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.onmicrosoft.com; s=selector2-synopsys-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q9nSCLKN+ybg3Iv5RrQnpSwQkN5PK6SW3QQlu+40y8Q=;
+ b=hb22uj3EjAWXY4l0Nhj9Iq7fFW6fz6z4xI4inuxKB0JclDlFe4oBCoZ56hOO3r2jvIgDIC1selULcESeVrf1LqQc3MnLxb2FDDmgNZZ4Wsx5D2z357/hl1oPDxLB8hp2TNg8k79pqd8XanKWTSyxtTylziF1zq+m/h/vnRam9yA=
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com (52.135.51.203) by
+ MN2PR12MB4160.namprd12.prod.outlook.com (10.255.125.83) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2559.15; Thu, 19 Dec 2019 12:34:59 +0000
+Received: from MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::d0e:7272:4a88:ffeb]) by MN2PR12MB4093.namprd12.prod.outlook.com
+ ([fe80::d0e:7272:4a88:ffeb%5]) with mapi id 15.20.2538.019; Thu, 19 Dec 2019
+ 12:34:59 +0000
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     John Keeping <john@metanate.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>
+Subject: Re: [PATCH 1/2] usb: dwc2: Fix IN FIFO allocation
+Thread-Topic: [PATCH 1/2] usb: dwc2: Fix IN FIFO allocation
+Thread-Index: AQHVtmBmfU6CbvSImkS5xZoCE5ywbqfBZLEA
+Date:   Thu, 19 Dec 2019 12:34:59 +0000
+Message-ID: <69ae7364-391d-6075-27d8-7ed7c4aae2ff@synopsys.com>
+References: <20191219113432.1229852-1-john@metanate.com>
+In-Reply-To: <20191219113432.1229852-1-john@metanate.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=hminas@synopsys.com; 
+x-originating-ip: [46.162.196.54]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 70f98fff-6926-43b6-f6e3-08d7847fdcb2
+x-ms-traffictypediagnostic: MN2PR12MB4160:
+x-microsoft-antispam-prvs: <MN2PR12MB41603F65379453B24489297DA7520@MN2PR12MB4160.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0256C18696
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(366004)(346002)(376002)(39860400002)(136003)(396003)(199004)(189003)(6506007)(53546011)(6916009)(26005)(36756003)(76116006)(31686004)(66946007)(66476007)(6486002)(478600001)(186003)(4326008)(8676002)(8936002)(31696002)(86362001)(81156014)(81166006)(2616005)(66446008)(91956017)(316002)(66556008)(64756008)(5660300002)(2906002)(71200400001)(54906003)(6512007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR12MB4160;H:MN2PR12MB4093.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: synopsys.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PMDta/CiIX8t47/Nw1RMlM8IBmGJfMt77xGE8M6hvNEL7nLzyMyLWXtnnpDM9D5uFuBX9BtwOY+rvyt1ZgpMaOrf2PnGBDuSns+MnL5Zn8wSWcZWnh7QsJqGJm4rkqlOD7nH8yri1zAhezGUXu8xFqIYDBiIorlyfGmDrLdZX1U+YAvXyyVq6v5wZDFwq+IJiBU3e3wxMZYJSQuKjmQah+iotc1lZleoYoksymDrrKAOhwhLx5xVYmji1U8OA1RHmHuMw9UBAl7vWTRSK3fzqmGxSTdTeTpN0GZb1BnPO1EKKbvJS9mN9jN85AvWkEY3VvpP94qvXFE1AuGL2U5pSAdW6n0Z4wM95aIKgJhKMIutiB+099QJf/afasgGK98NncDTWuA5HV4q6SZENYcimB4oDU/RVQgEdRHiBvlQBzRezf+wkghxC3Ncfsvtgw5O
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B924C74AF17F794BAA77285C93C9EFC6@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70f98fff-6926-43b6-f6e3-08d7847fdcb2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2019 12:34:59.3319
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: xYR3IguHrlotNSx9SQ9bnnmLRB18/SV8dJIjiyzjDOhfawb+4A60e74xOwdbHRDEFk4hPpaRe5c4IsRbWXzQbQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4160
+X-OriginatorOrg: synopsys.com
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
-
-
-Le mer., d=E9c. 18, 2019 at 02:46, Peter Chen <peter.chen@nxp.com> a=20
-=E9crit :
->=20
->>  >>  >
->>  >>  >>  >>  +
->>  >>  >>  >>  +	desc =3D &charger->desc;
->>  >>  >>  >>  +	desc->name =3D "usb-charger";
->>  >>  >>  >>  +	desc->properties =3D usb_charger_properties;
->>  >>  >>  >>  +	desc->num_properties =3D=20
->> ARRAY_SIZE(usb_charger_properties);
->>  >>  >>  >>  +	desc->get_property =3D usb_charger_get_property;
->>  >>  >>  >>  +	desc->type =3D POWER_SUPPLY_TYPE_USB;
->>  >>  >>  >
->>  >>  >>  > What's your further plan for this generic USB charger?
->>  >>  >>  > To support BC1.2, we need to know charger type, and how we
->>  >> could  >> get  > it?
->>  >>  >>  >
->>  >>  >>  > Peter
->>  >>  >>
->>  >>  >>  Well I don't really know. The USB role framework does not=20
->> give
->>  >> any  >> info about  what's plugged.
->>  >>  >>
->>  >>  >
->>  >>  > What's the use case for this patch set? How it be used?
->>  >>
->>  >>  My devicetree:
->>  >>
->>  >>  usb_otg: usb@13440000 {
->>  >>  	compatible =3D "ingenic,jz4770-musb", "simple-mfd";
->>  >>  	reg =3D <0x13440000 0x10000>;
->>  >>  	[...]
->>  >>
->>  >>  	usb-role-switch;
->>  >>
->>  >>  	connector {
->>  >>  		compatible =3D "gpio-usb-b-connector", "usb-b-connector";
->>  >>  		label =3D "mini-USB";
->>  >>  		type =3D "mini";
->>  >>
->>  >>  		id-gpios =3D <&gpf 18 GPIO_ACTIVE_HIGH>;
->>  >>  		vbus-gpios =3D <&gpb 5 GPIO_ACTIVE_HIGH>;
->>  >>  		[...]
->>  >>  	};
->>  >>
->>  >>  	usb_charger: usb-charger {
->>  >>  		compatible =3D "usb-charger";
->>  >>  	};
->>  >>  };
->>  >>
->>  >>  The new gpio-usb-connector driver uses the ID/VBUS GPIOs to=20
->> detect
->>  >> in  which state (device, host, unconnected) a OTG connector is.
->>  >> However,  that means I cannot use the standard gpio-charger=20
->> driver to
->>  >> detect the  presence of a charger based on the state of the VBUS
->>  >> gpio, since it's  already requested here. So the point of this
->>  >> patchset is to provide an  alternative to gpio-charger that works
->>  >> with OTG controllers compatible  with 'usb-role-switch'.
->>  >>
->>  >
->>  > Thanks for explaining it.
->>  >
->>  > What's the user for this USB charger,  PMIC or what else? How the=20
->> user
->>  > uses this USB charger interface?
->>=20
->>  It's exported as a standard charger, so it can be passed to client=20
->> drivers through
->>  devicetree, and its online status can be retrieved from sysfs.
->>=20
->=20
-> Hi Paul,
->=20
-> If you would like to get role from usb-role-switch, the udc driver=20
-> may probably have already worked.
-> There is a 'state' entry under the udc device to indicate USB Ch9=20
-> state. Try to see if it could
-> satisfy your requirement.
-
-This is not the proper way to retrieve charger status.
-Linux supports chargers through the power supply subsystem, that's=20
-where it should be exported.
-
-Cheers,
--Paul
-
-=
-
+SGkgSm9obiwNCg0KT24gMTIvMTkvMjAxOSAzOjM0IFBNLCBKb2huIEtlZXBpbmcgd3JvdGU6DQo+
+IE9uIGNoaXBzIHdpdGggZmV3ZXIgRklGT3MgdGhhbiBlbmRwb2ludHMgKGZvciBleGFtcGxlIFJL
+MzI4OCB3aGljaCBoYXMgOQ0KPiBlbmRwb2ludHMsIGJ1dCBvbmx5IDYgd2hpY2ggYXJlIGNhYmFi
+bGUgb2YgaW5wdXQpLCB0aGUgRFBUWEZTSVpODQo+IHJlZ2lzdGVycyBhYm92ZSB0aGUgRklGTyBj
+b3VudCBtYXkgcmV0dXJuIGludmFsaWQgdmFsdWVzLg0KPiANCg0KUkszMjg4IChyZXYuMi4yIE1h
+ci4yMDE3KSBkYXRhYm9vayBzYXlzOg0KLSBTdXBwb3J0IHVwIHRvIDkgZGV2aWNlIG1vZGUgZW5k
+cG9pbnRzIGluIGFkZGl0aW9uIHRvIGNvbnRyb2wgZW5kcG9pbnQgMA0KLSBTdXBwb3J0IHVwIHRv
+IDYgZGV2aWNlIG1vZGUgSU4gZW5kcG9pbnRzIGluY2x1ZGluZyBjb250cm9sIGVuZHBvaW50IDAN
+Ci0gRW5kcG9pbnRzIDEvMy81LzcgY2FuIGJlIHVzZWQgb25seSBhcyBkYXRhIElOIGVuZHBvaW50
+DQotIEVuZHBvaW50cyAyLzQvNiBjYW4gYmUgdXNlZCBvbmx5IGFzIGRhdGEgT1VUIGVuZHBvaW50
+DQotIEVuZHBvaW50cyA4LzkgY2FuIGJlIHVzZWQgYXMgZGF0YSBPVVQgYW5kIElOIGVuZHBvaW50
+DQoNCjYgSU4gRVAncyAoaW5jbC5FUDApIG1lYW4gdGhhdCBUeEZJRk8gY291bnQgc2hvdWxkIGJl
+IDUuIEZvciBFUDAgdXNpbmcgDQpOUFRYRklGTy4gT24gb3RoZXIgaGFuZCA2IEVQJ3MgMS8zLzUv
+Ny84LzkgYXJlIElOIGVuZHBvaW50cy4NClNvbWV0aGluZyBub3QgY2xlYXIgdG8gbWUuIENvdWxk
+IHlvdSBwbGVhc2UgcHJvdmlkZSBtZSB5b3VyIEhTT1RHIGNvcmUncyANCkdIV0NGRzEtNCByZWdp
+c3RlcnMgdmFsdWVzLg0KQW5kL09yIHByb3ZpZGUgbWUgbmV3ZXIgZGF0YWJvb2suDQoNCk9uZSBt
+b3JlIHN0dWZmLiBZb3UgZGlkbid0IHNlbmQgcGF0Y2ggc2VyaWVzIGNvdmVyIGxldHRlciAoW1BB
+VENIIDAvMl0pIA0Kb3IgSSBkaWRuJ3QgcmVjZWl2ZWQgaXQ/DQoNClRoYW5rcywNCk1pbmFzDQoN
+Cg0KPiBXaXRoIGxvZ2dpbmcgYWRkZWQgb24gc3RhcnR1cCwgSSBzZWU6DQo+IA0KPiAJZHdjMiBm
+ZjU4MDAwMC51c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD0xIHN6PTI1Ng0KPiAJZHdjMiBm
+ZjU4MDAwMC51c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD0yIHN6PTEyOA0KPiAJZHdjMiBm
+ZjU4MDAwMC51c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD0zIHN6PTEyOA0KPiAJZHdjMiBm
+ZjU4MDAwMC51c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD00IHN6PTY0DQo+IAlkd2MyIGZm
+NTgwMDAwLnVzYjogZHdjMl9oc290Z19pbml0X2ZpZm86IGVwPTUgc3o9NjQNCj4gCWR3YzIgZmY1
+ODAwMDAudXNiOiBkd2MyX2hzb3RnX2luaXRfZmlmbzogZXA9NiBzej0zMg0KPiAJZHdjMiBmZjU4
+MDAwMC51c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD03IHN6PTANCj4gCWR3YzIgZmY1ODAw
+MDAudXNiOiBkd2MyX2hzb3RnX2luaXRfZmlmbzogZXA9OCBzej0wDQo+IAlkd2MyIGZmNTgwMDAw
+LnVzYjogZHdjMl9oc290Z19pbml0X2ZpZm86IGVwPTkgc3o9MA0KPiAJZHdjMiBmZjU4MDAwMC51
+c2I6IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD0xMCBzej0wDQo+IAlkd2MyIGZmNTgwMDAwLnVz
+YjogZHdjMl9oc290Z19pbml0X2ZpZm86IGVwPTExIHN6PTANCj4gCWR3YzIgZmY1ODAwMDAudXNi
+OiBkd2MyX2hzb3RnX2luaXRfZmlmbzogZXA9MTIgc3o9MA0KPiAJZHdjMiBmZjU4MDAwMC51c2I6
+IGR3YzJfaHNvdGdfaW5pdF9maWZvOiBlcD0xMyBzej0wDQo+IAlkd2MyIGZmNTgwMDAwLnVzYjog
+ZHdjMl9oc290Z19pbml0X2ZpZm86IGVwPTE0IHN6PTANCj4gCWR3YzIgZmY1ODAwMDAudXNiOiBk
+d2MyX2hzb3RnX2luaXRfZmlmbzogZXA9MTUgc3o9MA0KPiANCj4gYnV0Og0KPiANCj4gCSMgY2F0
+IC9zeXMva2VybmVsL2RlYnVnL2ZmNTgwMDAwLnVzYi9maWZvDQo+IAlOb24tcGVyaW9kaWMgRklG
+T3M6DQo+IAlSWEZJRk86IFNpemUgMjc1DQo+IAlOUFRYRklGTzogU2l6ZSAxNiwgU3RhcnQgMHgw
+MDAwMDExMw0KPiANCj4gCVBlcmlvZGljIFRYRklGT3M6DQo+IAkJRFBUWEZJRk8gMTogU2l6ZSAy
+NTYsIFN0YXJ0IDB4MDAwMDAxMjMNCj4gCQlEUFRYRklGTyAyOiBTaXplIDEyOCwgU3RhcnQgMHgw
+MDAwMDIyMw0KPiAJCURQVFhGSUZPIDM6IFNpemUgMTI4LCBTdGFydCAweDAwMDAwMmEzDQo+IAkJ
+RFBUWEZJRk8gNDogU2l6ZSA2NCwgU3RhcnQgMHgwMDAwMDMyMw0KPiAJCURQVFhGSUZPIDU6IFNp
+emUgNjQsIFN0YXJ0IDB4MDAwMDAzNjMNCj4gCQlEUFRYRklGTyA2OiBTaXplIDMyLCBTdGFydCAw
+eDAwMDAwM2EzDQo+IAkJRFBUWEZJRk8gNzogU2l6ZSAwLCBTdGFydCAweDAwMDAwM2UzDQo+IAkJ
+RFBUWEZJRk8gODogU2l6ZSAwLCBTdGFydCAweDAwMDAwM2EzDQo+IAkJRFBUWEZJRk8gOTogU2l6
+ZSAyNTYsIFN0YXJ0IDB4MDAwMDAxMjMNCj4gDQo+IHNvIGl0IHNlZW1zIHRoYXQgRklGTyA5IGlz
+IG1pcnJvcmluZyBGSUZPIDEuDQo+IA0KPiBGaXggdGhlIGFsbG9jYXRpb24gYnkgdXNpbmcgdGhl
+IEZJRk8gY291bnQgaW5zdGVhZCBvZiB0aGUgZW5kcG9pbnQgY291bnQNCj4gd2hlbiBzZWxlY3Rp
+bmcgYSBGSUZPIGZvciBhbiBlbmRwb2ludC4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IEpvaG4gS2Vl
+cGluZyA8am9obkBtZXRhbmF0ZS5jb20+DQo+IC0tLQ0KPiAgIGRyaXZlcnMvdXNiL2R3YzIvZ2Fk
+Z2V0LmMgfCAzICsrLQ0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDEgZGVs
+ZXRpb24oLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jIGIv
+ZHJpdmVycy91c2IvZHdjMi9nYWRnZXQuYw0KPiBpbmRleCA5MmU4ZGU5Y2I0NWMuLjkxMWI5NTBl
+ZjI1ZSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMi9nYWRnZXQuYw0KPiArKysgYi9k
+cml2ZXJzL3VzYi9kd2MyL2dhZGdldC5jDQo+IEBAIC00MDU5LDExICs0MDU5LDEyIEBAIHN0YXRp
+YyBpbnQgZHdjMl9oc290Z19lcF9lbmFibGUoc3RydWN0IHVzYl9lcCAqZXAsDQo+ICAgCSAqIGEg
+dW5pcXVlIHR4LWZpZm8gZXZlbiBpZiBpdCBpcyBub24tcGVyaW9kaWMuDQo+ICAgCSAqLw0KPiAg
+IAlpZiAoZGlyX2luICYmIGhzb3RnLT5kZWRpY2F0ZWRfZmlmb3MpIHsNCj4gKwkJdW5zaWduZWQg
+Zmlmb19jb3VudCA9IGR3YzJfaHNvdGdfdHhfZmlmb19jb3VudChoc290Zyk7DQo+ICAgCQl1MzIg
+Zmlmb19pbmRleCA9IDA7DQo+ICAgCQl1MzIgZmlmb19zaXplID0gVUlOVF9NQVg7DQo+ICAgDQo+
+ICAgCQlzaXplID0gaHNfZXAtPmVwLm1heHBhY2tldCAqIGhzX2VwLT5tYzsNCj4gLQkJZm9yIChp
+ID0gMTsgaSA8IGhzb3RnLT5udW1fb2ZfZXBzOyArK2kpIHsNCj4gKwkJZm9yIChpID0gMTsgaSA8
+PSBmaWZvX2NvdW50OyArK2kpIHsNCj4gICAJCQlpZiAoaHNvdGctPmZpZm9fbWFwICYgKDEgPDwg
+aSkpDQo+ICAgCQkJCWNvbnRpbnVlOw0KPiAgIAkJCXZhbCA9IGR3YzJfcmVhZGwoaHNvdGcsIERQ
+VFhGU0laTihpKSk7DQo+IA0K
