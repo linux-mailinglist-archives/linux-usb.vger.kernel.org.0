@@ -2,70 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFBA1265AB
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 16:25:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF391265E1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 16:37:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726866AbfLSPY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 10:24:59 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35546 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbfLSPY6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 10:24:58 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j6so6681206lja.2;
-        Thu, 19 Dec 2019 07:24:56 -0800 (PST)
+        id S1726875AbfLSPhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 10:37:17 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:42908 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726776AbfLSPhR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 10:37:17 -0500
+Received: by mail-lf1-f67.google.com with SMTP id y19so4644209lfl.9;
+        Thu, 19 Dec 2019 07:37:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3yKXPaH8GS879pqXVR/snYWjruJaHyZcREhClQNij3g=;
-        b=gVtkEjgUrkMRB8e7nkrrEaIOsKTs1U/wa+nxCOWiWK2ohBbnpEtzzySkl3TPG5SlH9
-         oap5cxYuqSHChf6p+0P9sLdjWnlaAQl7UBIdJt7ZQHqqB6Qp2Q8TYhWSIHF+J0hNVmH7
-         8IRAQmk9jMu5x16puZ0DQFlhkQBzvQS2NQi2k4ZgC3JNJjq0Pneo4KuhsI0pXpvUWBk+
-         x+/SDePocPlvbP0VYnjCkMoEsA7cJUpLnZxUlA8cYftHpzHAG48S8X6uW6frpB7NkdRv
-         qM3aV8C05fP1WqAJI8hhfI4IK7JMeuppmyTrhkhparmr8KAf5XWxwdFW6F971a8DXqOj
-         ccWA==
+        bh=pld/l8edlik8C/F6nI0tM9RySZZrW4VVQNNmZpZC1jA=;
+        b=nI797VqKqLspJs5Hggp0kqi6l62H2tT8TJxZHoNn+LLYZHEHW1KkiYa7p/gFTmtJII
+         IrheZpDVL/mZbAShCpaRmr1688rHF4isHeE0GG8dHFbznGrxxu462Z3LgnYVXJlT8EQ2
+         /wgJm6srsqRtEcLBvbDU+aaKu7kR72mEaWOemV677IVIeVrhYf37WGSgvctZkE+dplo4
+         fUAl5qjrt5HODuRpHz2DnPVmgQzQwd07WD83f8B2kwAocf/5hU0zacXpSjWuDAwFW1Vp
+         LVdz69iVo91FqOtVkRuCwzW/UZD8rwoMWGJ6CPxjQDNaamz4XHV2jSiWVIDejFmsG5rv
+         euHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3yKXPaH8GS879pqXVR/snYWjruJaHyZcREhClQNij3g=;
-        b=fDhvEButImWQAHKvoGdekvqFA5TEq/h480RuQqe+rZSiE1UWqFrrVnwIbMUaGo4G63
-         VW5VA7hZ0/7krxOzxZfz+kHSpuTVu6/s5b5Rl9Bi+HmNyuugijSi96bbcTdwGH2eO1i6
-         QowhZrSJW/AeydexQkzeFXGfl5bUpwV3VCYRmPqCrCEBCANmUxfomMFoo68thmV5ZTLw
-         M6vB3L/pKj7eSo9VqdWNVPTucF6Gu5R5J6KuVT67JTDuE7nr8beghAcmCzQVx7LTWEH7
-         tCkJJAN6I0nsSljxv1hOelNqgw0SYQ/w74HWdPi2Ui6/ipRDlGuRt3OPqQlBrLGia3bY
-         VpBA==
-X-Gm-Message-State: APjAAAVdM1GW9or+dXhbOo0nnesDJONICt4hJZhbNR3S0Rxt9bcHXx7+
-        NXY17SYBM93DPm+a4IE4UD4C9naj
-X-Google-Smtp-Source: APXvYqyJssPSlz0Dc0X/2QV7w34lCHn5qTLPDN/x0+7lKWei8juRmm7o9Avf0Tmdmr2p9Nl1kh7MFA==
-X-Received: by 2002:a2e:90da:: with SMTP id o26mr6426240ljg.25.1576769095399;
-        Thu, 19 Dec 2019 07:24:55 -0800 (PST)
+        bh=pld/l8edlik8C/F6nI0tM9RySZZrW4VVQNNmZpZC1jA=;
+        b=bYUANCsVfYylRcGvFZgT1b5zRXcfAR8lUKToi2zdVQDma5tTQZ7SstgluoHaCwanV8
+         L25xAnDdU13teishFqJ0DV2glRlw/aZE/X95weBpv7J08j9BiYki2eaKjdyitHEII+Um
+         klq78FAXBVXbA6RtfymGa1/46TVG/MeXUiZ92VX8+JHAeObPm2extYaysKg3YLEjsCYf
+         zp07bavOqexBKZn06nJzTcFj9OZZbtVAte5oZAE+whtV683SJmYkQ0RASDGlU+5FqnGg
+         VGUhkZU/TvXvy8jrX/GfTvCVUc5gWTV/mNzgFrvkrCa+dYf0vklQvlgk9ZdgyTRNtvZa
+         upWw==
+X-Gm-Message-State: APjAAAVVNGq6fECP5FbHBK9M6D268+hc3AwM/NFQlo3t3U9lIBGoHOkJ
+        M2M5w1t96unCro1qOuM8Xzvr6MTj
+X-Google-Smtp-Source: APXvYqywFGR/vYDQ7UPpw+oGuLm/wQUUV95WLpswDyBfRcZMhxGMphKd0daOZmBRut6p3Nj1VXF6IA==
+X-Received: by 2002:ac2:44d9:: with SMTP id d25mr5940423lfm.15.1576769834185;
+        Thu, 19 Dec 2019 07:37:14 -0800 (PST)
 Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id y1sm691185ljm.12.2019.12.19.07.24.54
+        by smtp.googlemail.com with ESMTPSA id l21sm2802849lfh.74.2019.12.19.07.37.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2019 07:24:54 -0800 (PST)
-Subject: Re: [PATCH v1 2/4] usb: phy: tegra: Hook up init/shutdown callbacks
-To:     Peter Chen <peter.chen@nxp.com>
+        Thu, 19 Dec 2019 07:37:13 -0800 (PST)
+Subject: Re: [PATCH v1 3/4] usb: phy: tegra: Perform general clean up of the
+ code
+To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 References: <20191218175313.16235-1-digetx@gmail.com>
- <20191218175313.16235-3-digetx@gmail.com>
- <20191219065619.GA19921@b29397-desktop>
+ <20191218175313.16235-4-digetx@gmail.com> <20191219125437.GB1440537@ulmo>
 From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <d10ca21c-3918-3f2c-f279-c0ce9f37aca5@gmail.com>
-Date:   Thu, 19 Dec 2019 18:24:54 +0300
+Message-ID: <a37a10de-2b40-16af-210c-c69049277f35@gmail.com>
+Date:   Thu, 19 Dec 2019 18:37:12 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20191219065619.GA19921@b29397-desktop>
+In-Reply-To: <20191219125437.GB1440537@ulmo>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -74,93 +72,57 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-19.12.2019 09:56, Peter Chen пишет:
-> On 19-12-18 20:53:11, Dmitry Osipenko wrote:
->> Generic PHY provides init/shutdown callbacks which allow USB-host drivers
->> to abstract PHY's hardware management in a common way. This change allows
->> to remove Tegra-specific PHY handling from the ChipIdea driver.
->>
->> Note that ChipIdea's driver shall be changed at the same time because it
->> turns PHY ON without the PHY's initialization and this doesn't work now,
->> resulting in a NULL dereference of phy->freq because it's set during of
->> the PHY's initialization.
+19.12.2019 15:54, Thierry Reding пишет:
+> On Wed, Dec 18, 2019 at 08:53:12PM +0300, Dmitry Osipenko wrote:
+>> This patch fixes few dozens of legit checkpatch warnings, adds missed
+>> handling of potential error-cases, fixes ULPI clk-prepare refcounting and
+>> prettifies code where makes sense. All these clean-up changes are quite
+>> minor and do not fix any problems.
 >>
 >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 >> ---
->>  drivers/usb/chipidea/ci_hdrc_tegra.c |   9 --
->>  drivers/usb/phy/phy-tegra-usb.c      | 165 +++++++++++++++++----------
->>  2 files changed, 102 insertions(+), 72 deletions(-)
->>
->> diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
->> index 0c9911d44ee5..7455df0ede49 100644
->> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
->> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
->> @@ -83,13 +83,6 @@ static int tegra_udc_probe(struct platform_device *pdev)
->>  		return err;
->>  	}
->>  
->> -	/*
->> -	 * Tegra's USB PHY driver doesn't implement optional phy_init()
->> -	 * hook, so we have to power on UDC controller before ChipIdea
->> -	 * driver initialization kicks in.
->> -	 */
->> -	usb_phy_set_suspend(udc->phy, 0);
->> -
->>  	/* setup and register ChipIdea HDRC device */
->>  	udc->data.name = "tegra-udc";
->>  	udc->data.flags = soc->flags;
->> @@ -109,7 +102,6 @@ static int tegra_udc_probe(struct platform_device *pdev)
->>  	return 0;
->>  
->>  fail_power_off:
->> -	usb_phy_set_suspend(udc->phy, 1);
->>  	clk_disable_unprepare(udc->clk);
->>  	return err;
->>  }
->> @@ -119,7 +111,6 @@ static int tegra_udc_remove(struct platform_device *pdev)
->>  	struct tegra_udc *udc = platform_get_drvdata(pdev);
->>  
->>  	ci_hdrc_remove_device(udc->dev);
->> -	usb_phy_set_suspend(udc->phy, 1);
->>  	clk_disable_unprepare(udc->clk);
->>  
->>  	return 0;
+>>  drivers/usb/phy/phy-tegra-usb.c | 367 +++++++++++++++++---------------
+>>  1 file changed, 197 insertions(+), 170 deletions(-)
+> 
+> This could've been multiple patches to make it easier to review, but
+> either way:
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
+
+Yes, it probably could be separated into 10 patches, but then there is a
+chance that I won't do it because sometimes it takes more time for me to
+write commit message than to make a code change + extra time to re-check
+every patch before sending it out :)
+
+> One minor comment below...
+> 
 >> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
->> index ea7ef1dc0b42..15bd253d53c9 100644
+>> index 15bd253d53c9..76949dbbbdc2 100644
 >> --- a/drivers/usb/phy/phy-tegra-usb.c
 >> +++ b/drivers/usb/phy/phy-tegra-usb.c
->> @@ -238,23 +238,6 @@ static int utmip_pad_open(struct tegra_usb_phy *phy)
->>  {
->>  	int ret;
->>  
->> -	phy->pad_clk = devm_clk_get(phy->u_phy.dev, "utmi-pads");
->> -	if (IS_ERR(phy->pad_clk)) {
->> -		ret = PTR_ERR(phy->pad_clk);
->> -		dev_err(phy->u_phy.dev,
->> -			"Failed to get UTMIP pad clock: %d\n", ret);
->> -		return ret;
->> -	}
->> -
->> -	phy->pad_rst = devm_reset_control_get_optional_shared(
->> -						phy->u_phy.dev, "utmi-pads");
->> -	if (IS_ERR(phy->pad_rst)) {
->> -		ret = PTR_ERR(phy->pad_rst);
->> -		dev_err(phy->u_phy.dev,
->> -			"Failed to get UTMI-pads reset: %d\n", ret);
->> -		return ret;
->> -	}
->> -
->>  	ret = clk_prepare_enable(phy->pad_clk);
->>  	if (ret) {
->>  		dev_err(phy->u_phy.dev,
->> @@ -315,6 +298,18 @@ static int utmip_pad_close(struct tegra_usb_phy *phy)
->>  	return ret;
+> [...]
+>> @@ -310,13 +315,16 @@ static void ulpi_close(struct tegra_usb_phy *phy)
+>>  	}
 >>  }
+>>  
+>> -static void utmip_pad_power_on(struct tegra_usb_phy *phy)
+>> +static int utmip_pad_power_on(struct tegra_usb_phy *phy)
+>>  {
+>> -	unsigned long val, flags;
+>> -	void __iomem *base = phy->pad_regs;
+>>  	struct tegra_utmip_config *config = phy->config;
+>> +	void __iomem *base = phy->pad_regs;
+>> +	unsigned long val, flags;
 > 
-> Acked-by: Peter Chen <peter.chen@nxp.com>
-> 
-> Felipe, would you please queue this series after reviewing for USB PHY
-> changes? If not, Dmitry may need to split the patch.
+> I think technically the "val" variable would have to be u32 because
+> that's what readl() and writel() operate on.
 
-I'll take a closer look whether it is possible to factor out ChipIdea's
-driver change into a separate patch in a sensible way. Thanks!
+I had the same thought and decided it's not worth the extra effort.
+
+> That could be a separate
+> patch, though and isn't really a big problem.
+
+But I'll do it now for complicity, since you're asking about it (in a v2
+perhaps).
+
+Thank you very much for the reviews!
