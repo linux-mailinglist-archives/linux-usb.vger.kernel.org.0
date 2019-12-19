@@ -2,264 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCF21263A8
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 14:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 534BD1264E1
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 15:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726760AbfLSNhN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 08:37:13 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34436 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726695AbfLSNhN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 08:37:13 -0500
-Received: by mail-wr1-f65.google.com with SMTP id t2so6032813wrr.1;
-        Thu, 19 Dec 2019 05:37:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wRKK6aQkbHwNeV0I7+gSsT5iT4e+yP8blqqWWTkBp2g=;
-        b=MoN7GjgFCdL+dP8M0bsD3fajXxpfFXDK33xLbeuEGVm08o8kfJFbP0fGl+TPDdoKtr
-         LGSiFwurRI9QlkWBxeH0VlnVsaVJJVUCUCs02cg4MgEX8V8zP3loe70LfD/zizOT/AT9
-         ybvBBB+cKA1V6nIRDbvtFL4WutAbX/YVHXPEGojFnD8rbEPFM9SgTi6LJ8/Ht6cbQ+qM
-         YPouv8cVRQS9KTQhT5YGeODpmy0LF2X7k/kRbNg+F/0bCXHoDQ6IwFckFumFXLpNBgr7
-         fRVm+ILgLCrmJ7mFsdyVKQy6Ed4I4fUFZa7Q295fkPXxGWpRVWCSYCPvfsnn1bIFM4ez
-         THYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wRKK6aQkbHwNeV0I7+gSsT5iT4e+yP8blqqWWTkBp2g=;
-        b=JzZCJck6aKcP4eHbwgPKLw/n0Cqndk3CnZw0CK5DvozlDooBpcgRyufmppwVmFMO+k
-         Q3hec638YjJh4u+j6wNJ0rdLDPKql5vkWHQE0JEfIcqZ/WIHlbWqT6NLExDAto85vw2g
-         7JY5rEtDnrqeOzx+hVPmblYbzlJpW7O4lqi+DBVQNNeyjxHSEu3j/YMC5go4oWsEiBCR
-         rRqYyWKyY0KumCOi7yzUWS57NIiEqlZzjR5T3eu9cCTA4SrbuAr1d9WDRTxErqnSCV9A
-         SeUFLU+XPGtowNOBERyKkx8cLV8D+SuU3TAFSXPrtsBKRnhiygRJbV7Oyui/ba7FdvyR
-         Drvw==
-X-Gm-Message-State: APjAAAX8OVIrGVlCr5vU/ds1MSZ2AFGVxzby3S4OEmc+woAyFHnjaCQc
-        pPMsixPy5ZA186g8e+q2uik=
-X-Google-Smtp-Source: APXvYqyN0n3ZFoEkN2kG+/+A+dVPTGD/dpwktPLP+Xk4xdo3TzWSGsT9SGlZazuYNwvmtVIgxU+goA==
-X-Received: by 2002:a05:6000:118d:: with SMTP id g13mr10047467wrx.141.1576762629821;
-        Thu, 19 Dec 2019 05:37:09 -0800 (PST)
-Received: from localhost (pD9E518ED.dip0.t-ipconnect.de. [217.229.24.237])
-        by smtp.gmail.com with ESMTPSA id y139sm6649642wmd.24.2019.12.19.05.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 05:37:08 -0800 (PST)
-Date:   Thu, 19 Dec 2019 14:37:07 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Nagarjuna Kristam <nkristam@nvidia.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, jonathanh@nvidia.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, kishon@ti.com,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [Patch V2 04/18] phy: tegra: xusb: Add usb-phy support
-Message-ID: <20191219133707.GK1440537@ulmo>
-References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
- <1576660591-10383-5-git-send-email-nkristam@nvidia.com>
+        id S1726911AbfLSOeb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 09:34:31 -0500
+Received: from szxga04-in.huawei.com ([45.249.212.190]:8154 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726701AbfLSOeb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Dec 2019 09:34:31 -0500
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id BF39BA5643C43FECAB3D;
+        Thu, 19 Dec 2019 22:34:18 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.439.0; Thu, 19 Dec 2019 22:34:09 +0800
+From:   Chen Zhou <chenzhou10@huawei.com>
+To:     <mathias.nyman@linux.intel.com>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chenzhou10@huawei.com>
+Subject: [PATCH] usb: xhci: fix unused function warning
+Date:   Thu, 19 Dec 2019 22:30:50 +0800
+Message-ID: <20191219143050.86205-1-chenzhou10@huawei.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="mPOSj6iWmtyhwOMz"
-Content-Disposition: inline
-In-Reply-To: <1576660591-10383-5-git-send-email-nkristam@nvidia.com>
-User-Agent: Mutt/1.13.1 (2019-12-14)
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.175.113.25]
+X-CFilter-Loop: Reflected
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+xhci_pci_shutdown() function is no longer called outside of the
+CONFIG_PM #ifdef section, causing a harmless warning:
 
---mPOSj6iWmtyhwOMz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+drivers/usb/host/xhci-pci.c:524:13: warning: ‘xhci_pci_shutdown’ defined but not used [-Wunused-function]
+ static void xhci_pci_shutdown(struct usb_hcd *hcd)
 
-On Wed, Dec 18, 2019 at 02:46:17PM +0530, Nagarjuna Kristam wrote:
-> For USB 2 ports that has usb-role-switch enabled, add usb-phy for
-> corresponding USB 2 phy. USB role changes from role switch are then
-> updated to corresponding host and device mode drivers via usb-phy notifier
-> block.
->=20
-> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
-> ---
-> V2:
->  - Added dev_set_drvdata for port->dev.
-> ---
->  drivers/phy/tegra/xusb.c | 71 ++++++++++++++++++++++++++++++++++++++++++=
-++++++
->  drivers/phy/tegra/xusb.h |  2 ++
->  2 files changed, 73 insertions(+)
->=20
-> diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
-> index dc00b42..5bde8f1 100644
-> --- a/drivers/phy/tegra/xusb.c
-> +++ b/drivers/phy/tegra/xusb.c
-> @@ -533,6 +533,8 @@ static int tegra_xusb_port_init(struct tegra_xusb_por=
-t *port,
->  	if (err < 0)
->  		goto unregister;
-> =20
-> +	dev_set_drvdata(&port->dev, port);
-> +
->  	return 0;
-> =20
->  unregister:
-> @@ -545,6 +547,8 @@ static void tegra_xusb_port_unregister(struct tegra_x=
-usb_port *port)
->  	if (!IS_ERR_OR_NULL(port->usb_role_sw)) {
->  		of_platform_depopulate(&port->dev);
->  		usb_role_switch_unregister(port->usb_role_sw);
-> +		cancel_work_sync(&port->usb_phy_work);
-> +		usb_remove_phy(&port->usb_phy);
->  	}
->  	device_unregister(&port->dev);
->  }
-> @@ -556,16 +560,59 @@ static const char *const modes[] =3D {
->  	[USB_DR_MODE_OTG] =3D "otg",
->  };
-> =20
-> +static void tegra_xusb_usb_phy_work(struct work_struct *work)
-> +{
-> +	struct tegra_xusb_port *port =3D container_of(work,
-> +				struct tegra_xusb_port, usb_phy_work);
+This moves the function into the #ifdef to get a clean build again.
 
-Perhaps add a static inline function to cast this? Might not be worth it
-since we only need to cast once. In that case, perhaps make this look a
-little prettier by aligning arguments on subsequent lines with "work" on
-the first line?
+Fixes: f2c710f7dca8 ("usb: xhci: only set D3hot for pci device")
+Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+---
+ drivers/usb/host/xhci-pci.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> +	enum usb_role role =3D usb_role_switch_get_role(port->usb_role_sw);
-> +
-> +	dev_dbg(&port->dev, "%s calling notifier for role %d\n", __func__,
-> +		role);
-> +
-> +	atomic_notifier_call_chain(&port->usb_phy.notifier, role,
-> +				   &port->usb_phy);
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 2907fe4..4917c5b 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -519,7 +519,6 @@ static int xhci_pci_resume(struct usb_hcd *hcd, bool hibernated)
+ 	retval = xhci_resume(xhci, hibernated);
+ 	return retval;
+ }
+-#endif /* CONFIG_PM */
+ 
+ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+ {
+@@ -532,6 +531,7 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
+ 	if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
+ 		pci_set_power_state(pdev, PCI_D3hot);
+ }
++#endif /* CONFIG_PM */
+ 
+ /*-------------------------------------------------------------------------*/
+ 
+-- 
+2.7.4
 
-I'm curious: you use an atomic notifier call chain here but then you
-schedule work to call it. Typically you only need to schedule work if
-you get notified in atomic context and you need to process the event
-outside of the atomic context.
-
-Since these are atomic notifiers, do we really need the work? Or the
-other way around: why not use regular notifiers if we're processing them
-=66rom non-atomic contexts only anyway?
-
-> +}
-> +
->  static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role role)
->  {
-> +	struct tegra_xusb_port *port =3D dev_get_drvdata(dev);
-> +
->  	dev_dbg(dev, "%s calling notifier for role is %d\n", __func__, role);
-> =20
-> +	schedule_work(&port->usb_phy_work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra_xusb_set_peripheral(struct usb_otg *otg,
-> +					struct usb_gadget *gadget)
-> +{
-> +	struct tegra_xusb_port *port =3D container_of(otg->usb_phy,
-> +					struct tegra_xusb_port, usb_phy);
-> +
-> +	if (gadget !=3D NULL)
-> +		schedule_work(&port->usb_phy_work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tegra_xusb_set_host(struct usb_otg *otg, struct usb_bus *host)
-> +{
-> +	struct tegra_xusb_port *port =3D container_of(otg->usb_phy,
-> +					struct tegra_xusb_port, usb_phy);
-> +
-> +	if (host !=3D NULL)
-> +		schedule_work(&port->usb_phy_work);
-> +
->  	return 0;
->  }
-> =20
-> +
->  static int tegra_xusb_setup_usb_role_switch(struct tegra_xusb_port *port)
->  {
->  	int err =3D 0;
-> +	struct tegra_xusb_lane *lane =3D tegra_xusb_find_lane(port->padctl,
-> +							"usb2", port->index);
-
-You're not properly aligning the arguments here.
-
-Thierry
-
->  	struct usb_role_switch_desc role_sx_desc =3D {
->  					.set =3D tegra_xusb_role_sw_set,
->  					.fwnode =3D dev_fwnode(&port->dev),
-> @@ -578,6 +625,30 @@ static int tegra_xusb_setup_usb_role_switch(struct t=
-egra_xusb_port *port)
->  		if (err !=3D EPROBE_DEFER)
->  			dev_err(&port->dev, "Failed to register USB role SW: %d",
->  				err);
-> +		return err;
-> +	}
-> +
-> +	INIT_WORK(&port->usb_phy_work, tegra_xusb_usb_phy_work);
-> +
-> +	port->usb_phy.otg =3D devm_kzalloc(&port->dev,
-> +					 sizeof(struct usb_otg), GFP_KERNEL);
-> +	if (!port->usb_phy.otg)
-> +		return -ENOMEM;
-> +
-> +	/*
-> +	 * Assign phy dev to usb-phy dev. Host/device drivers can use phy
-> +	 * reference to retrieve usb-phy details.
-> +	 */
-> +	port->usb_phy.dev =3D &lane->pad->lanes[port->index]->dev;
-> +	port->usb_phy.dev->driver =3D port->padctl->dev->driver;
-> +	port->usb_phy.otg->usb_phy =3D &port->usb_phy;
-> +	port->usb_phy.otg->set_peripheral =3D tegra_xusb_set_peripheral;
-> +	port->usb_phy.otg->set_host =3D tegra_xusb_set_host;
-> +
-> +	err =3D usb_add_phy_dev(&port->usb_phy);
-> +	if (err < 0) {
-> +		dev_err(&port->dev, "Failed to add usbphy: %d\n", err);
-> +		return err;
->  	}
-> =20
->  	/* populate connector entry */
-> diff --git a/drivers/phy/tegra/xusb.h b/drivers/phy/tegra/xusb.h
-> index 9f27899..2345657 100644
-> --- a/drivers/phy/tegra/xusb.h
-> +++ b/drivers/phy/tegra/xusb.h
-> @@ -268,6 +268,8 @@ struct tegra_xusb_port {
->  	struct device dev;
-> =20
->  	struct usb_role_switch *usb_role_sw;
-> +	struct work_struct usb_phy_work;
-> +	struct usb_phy usb_phy;
-> =20
->  	const struct tegra_xusb_port_ops *ops;
->  };
-> --=20
-> 2.7.4
->=20
-
---mPOSj6iWmtyhwOMz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl37fQEACgkQ3SOs138+
-s6Fv7hAAvExHkWdrmkYkFGItZhn0RkHOADu6gyYBaXUdmmoZpdiDhyHdYqA1NXKg
-8w5wnvxpOB7t5Mam78jpQmKG8CbT2BtrxGY2K21b2B4RSD7ocAMtlGopRXZlEfcF
-8f5N4/uwQdUOEqy93guL7N32cfErmidGhs6ZizTZxPCNhr+xZ/3Xpby+yZobYwLG
-NcmtSEgYSvMxaTHC9q9BfY7Zp00psaUe9L1cHzbaBDwv/MZ2EGfhcky8jtqldvcv
-pxNtuw5wXMGa1PW5RapONA3YavQxvyW5/xDip2kpCQjhLaeZEjNui6poSxtjacAe
-LLutnzm5/ptcKpvzg19Suoco6Akysvf1JybJUrT//mBmiR/bHhmq/1jgXQiG5mkh
-j/RvkrXquTYR+SRbzfdV1smG5NQukv7Bzd5ZclIXjAbbuEDuUQ2wPjsuq2OwaP+p
-KgufXZjj4juLh4AGi+4LpVGkkq7tNJBcOjXYnQq84mu2j0QtZUo1A0AK+Lo/OgKf
-KOFwbA2mFta/OB4G6gmOIeL9lDaRLw/pJYFociyubgGNyON+qm0xFIOUrJ7EyTcJ
-VvhdzRmW8r4Ec1qSl3HnUQaI83TRTUg3mZmcP2rzQ+mgJVirQAMLsuYwYcWOOlMr
-0ZdpG+39vuH5TttVG9XycrS9/RHGR1V36DaInWOkULE3yZhkLjE=
-=U3pb
------END PGP SIGNATURE-----
-
---mPOSj6iWmtyhwOMz--
