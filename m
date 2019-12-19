@@ -2,89 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2549D125F33
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 11:36:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7432126155
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 12:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfLSKgK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 05:36:10 -0500
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:21162 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726891AbfLSKgI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 05:36:08 -0500
-Received: from pps.filterd (m0046037.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xBJAWcHA023188;
-        Thu, 19 Dec 2019 11:35:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-type; s=STMicroelectronics;
- bh=vChJ5etL9fvswVVKX5yEE7E0ExcPkC92Uak/3fYaeRY=;
- b=Lmf4l/51V/pXGjoOU2FOehmY7DTc2Bo1Fmto/fk10QI61Sdzl6EosapWEnJdL+kqR1l3
- bW+JkB+v0n4sBQOVH/tRC1VaQRyeuvMPBnIWoFW0sgricJt6Gtp7KNt643Ld475r7h7w
- uvteyurzvNVL3cr0Cx0eyA+2uRe2F9Ra6ds5OAQc2AO7XcgCCgJ7p8wSz01L5T05/3uK
- RLxgWL8k4OWziKro6wd4va7j8bm/2FfCUQ90Ywxu4M3WMnl1j6jEnCnC8NIQXcuEsecs
- TW9h7jVD7FeAWTmstp/lWrMPB06rBQr3h3IbHywZa+nET0dBJxSp7sPdP4HfScCXgtks mw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2wvpd1s21d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 19 Dec 2019 11:35:50 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 56DC4100049;
-        Thu, 19 Dec 2019 11:35:43 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag3node3.st.com [10.75.127.9])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id AD90D2B6A19;
-        Thu, 19 Dec 2019 11:35:42 +0100 (CET)
-Received: from localhost (10.75.127.46) by SFHDAG3NODE3.st.com (10.75.127.9)
- with Microsoft SMTP Server (TLS) id 15.0.1347.2; Thu, 19 Dec 2019 11:35:42
- +0100
-From:   Benjamin Gaignard <benjamin.gaignard@st.com>
-To:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
-        <mark.rutland@arm.com>, <kgene@kernel.org>, <krzk@kernel.org>,
-        <hminas@synopsys.com>
-CC:     <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>, <m.szyprowski@samsung.com>,
-        <amelie.delaunay@st.com>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>
-Subject: [PATCH v2 2/2] ARM: dts: exynos: Remove unneeded "snps,dwc2" from hsotg node
-Date:   Thu, 19 Dec 2019 11:35:36 +0100
-Message-ID: <20191219103536.25485-3-benjamin.gaignard@st.com>
-X-Mailer: git-send-email 2.15.0
-In-Reply-To: <20191219103536.25485-1-benjamin.gaignard@st.com>
-References: <20191219103536.25485-1-benjamin.gaignard@st.com>
+        id S1726920AbfLSLyg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 06:54:36 -0500
+Received: from dougal.metanate.com ([90.155.101.14]:54058 "EHLO metanate.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726877AbfLSLyc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Dec 2019 06:54:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=simple/simple; d=metanate.com;
+         s=stronger; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
+        :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=tmKdpt8FfuaV6nRnJAttHNQVsa8S40+mibR855aHQJg=; b=wACAMuy2aD0a0GYTT1d2De4df5
+        Osp+Jt0hP6KqVmVaP4NXmXxS2prRPv5FjUW8XIudomRk3VnUCQBbpXyPbFQ0kkRNrxVnjTqwpOsGj
+        oUY5SoF3GZ05cXNgDxNhpVSFanqqcroaox+vRe0JFXequ5RRDnm5nun2VViGeOHXXyShM6uD9erSI
+        jXtWi2fPTtVooOUmTtXLaI/Y88p+GxN9lz7HSQOLmy9ykBdtC6Cr3dSTtv8ribR4ifiLkCWJe/Ead
+        +lIjqdjyybE0XhlRRLRwiQTpuOkd0Xf8sEopsR0K/GRH6DlG4lmSq7haV+BoxWTIVlrf/hIjLLSO6
+        2ws5Curw==;
+Received: from 188-39-28-98.static.enta.net ([188.39.28.98] helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1ihu4j-00024T-UX; Thu, 19 Dec 2019 11:34:38 +0000
+From:   John Keeping <john@metanate.com>
+To:     Minas Harutyunyan <hminas@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        John Keeping <john@metanate.com>
+Subject: [PATCH 1/2] usb: dwc2: Fix IN FIFO allocation
+Date:   Thu, 19 Dec 2019 11:34:31 +0000
+Message-Id: <20191219113432.1229852-1-john@metanate.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG5NODE3.st.com (10.75.127.15) To SFHDAG3NODE3.st.com
- (10.75.127.9)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
- definitions=2019-12-19_01:2019-12-17,2019-12-19 signatures=0
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove "snps,dwc2" from hsotg@12480000 node compatible list because
-"samsung,s3c6400-hsotg" should be enough.
+On chips with fewer FIFOs than endpoints (for example RK3288 which has 9
+endpoints, but only 6 which are cabable of input), the DPTXFSIZN
+registers above the FIFO count may return invalid values.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@st.com>
+With logging added on startup, I see:
+
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=1 sz=256
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=2 sz=128
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=3 sz=128
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=4 sz=64
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=5 sz=64
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=6 sz=32
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=7 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=8 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=9 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=10 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=11 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=12 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=13 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=14 sz=0
+	dwc2 ff580000.usb: dwc2_hsotg_init_fifo: ep=15 sz=0
+
+but:
+
+	# cat /sys/kernel/debug/ff580000.usb/fifo
+	Non-periodic FIFOs:
+	RXFIFO: Size 275
+	NPTXFIFO: Size 16, Start 0x00000113
+
+	Periodic TXFIFOs:
+		DPTXFIFO 1: Size 256, Start 0x00000123
+		DPTXFIFO 2: Size 128, Start 0x00000223
+		DPTXFIFO 3: Size 128, Start 0x000002a3
+		DPTXFIFO 4: Size 64, Start 0x00000323
+		DPTXFIFO 5: Size 64, Start 0x00000363
+		DPTXFIFO 6: Size 32, Start 0x000003a3
+		DPTXFIFO 7: Size 0, Start 0x000003e3
+		DPTXFIFO 8: Size 0, Start 0x000003a3
+		DPTXFIFO 9: Size 256, Start 0x00000123
+
+so it seems that FIFO 9 is mirroring FIFO 1.
+
+Fix the allocation by using the FIFO count instead of the endpoint count
+when selecting a FIFO for an endpoint.
+
+Signed-off-by: John Keeping <john@metanate.com>
 ---
- arch/arm/boot/dts/exynos3250.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/dwc2/gadget.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
-index b016b0b68306..d4866269f4ee 100644
---- a/arch/arm/boot/dts/exynos3250.dtsi
-+++ b/arch/arm/boot/dts/exynos3250.dtsi
-@@ -362,7 +362,7 @@
- 		};
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index 92e8de9cb45c..911b950ef25e 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4059,11 +4059,12 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
+ 	 * a unique tx-fifo even if it is non-periodic.
+ 	 */
+ 	if (dir_in && hsotg->dedicated_fifos) {
++		unsigned fifo_count = dwc2_hsotg_tx_fifo_count(hsotg);
+ 		u32 fifo_index = 0;
+ 		u32 fifo_size = UINT_MAX;
  
- 		hsotg: hsotg@12480000 {
--			compatible = "samsung,s3c6400-hsotg", "snps,dwc2";
-+			compatible = "samsung,s3c6400-hsotg";
- 			reg = <0x12480000 0x20000>;
- 			interrupts = <GIC_SPI 141 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&cmu CLK_USBOTG>;
+ 		size = hs_ep->ep.maxpacket * hs_ep->mc;
+-		for (i = 1; i < hsotg->num_of_eps; ++i) {
++		for (i = 1; i <= fifo_count; ++i) {
+ 			if (hsotg->fifo_map & (1 << i))
+ 				continue;
+ 			val = dwc2_readl(hsotg, DPTXFSIZN(i));
 -- 
-2.15.0
+2.24.1
 
