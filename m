@@ -2,133 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FCCE126FCD
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 22:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21BCE127068
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 23:09:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727406AbfLSViu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 16:38:50 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:46364 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726880AbfLSViu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 16:38:50 -0500
-Received: by mail-pf1-f194.google.com with SMTP id y14so4005794pfm.13;
-        Thu, 19 Dec 2019 13:38:50 -0800 (PST)
+        id S1727002AbfLSWJu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 17:09:50 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33666 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726866AbfLSWJu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 17:09:50 -0500
+Received: by mail-ot1-f67.google.com with SMTP id b18so9110336otp.0;
+        Thu, 19 Dec 2019 14:09:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=A8qzfXgJqfz0JsylJ7w5yc0iwoDWilLcpVP41fGSaVY=;
-        b=sp6jN/DAYmh1enzLowAxt+CQNyzsEJFI4+AW3rDNa98uIQiqkHydnmsh4uBOi0hujT
-         hM+8ZT5cd1m5ZN7C10poqLosAYdj4Hi2i3bIaYJ3ksj/3Ibko6A/nJeCmwcMM58c3f4V
-         PHvHESWX3AQIOHxMkssH6KXSfZr1g1xwXk8AgBDtkkz2jvGkfe5l0yGqV0AYao8YuUdl
-         KDowwrZsS5ynK6XrZf+Dc/Bty4NpMwCVVxaBnbXXhb13V214oME/1nosB6bFQTrHrCBL
-         PAOl23apfnUVawQ72qrtdc74WHa5c1NmgC9V54FZjDIX2jwdfOXEN7GpZDO7QaeakdzI
-         DUYA==
-X-Gm-Message-State: APjAAAVd2O+lEC7uBWbOsslf5W9RabYx83PsGHK9Mtoi5hrHfWlWP1wf
-        ozyDDNbgp9th1RpaPEhrRw==
-X-Google-Smtp-Source: APXvYqxZh6usqcMuDpjIzx8tWU+6WwnJbiDYBNuEG9Di9Qzpk8aU8oFtnRSoasoMfjjZop8d7zm5Lw==
-X-Received: by 2002:a63:a707:: with SMTP id d7mr10954574pgf.93.1576791529663;
-        Thu, 19 Dec 2019 13:38:49 -0800 (PST)
-Received: from localhost ([172.58.27.162])
-        by smtp.gmail.com with ESMTPSA id p5sm8161313pgs.28.2019.12.19.13.38.48
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=U/RsU+PHhomGsnfo9Kn/8bLlHcdkcwPTofimyib2fkg=;
+        b=BMLeNW0InQUQqfM/4MntTroiczI7RL2g2OkifXkRp6Uq414c9O/Qw1Y3M8t86qtwT8
+         WD4U9KwM4vaqRF33qrWlV+XP7r9xyXGJ895Ku2ZhrvE0wqgQZsuQInnXT5N6Ak4C8j2n
+         hBI26ckubhbKHHz5LNJEG+IV+8l7WUCIB10xeNLiCWMSIzYYxMWNBQ32TYtGZO/kXrrb
+         wVnLHts6THkX1ShxgoH5POTVonXvaR8XHUCKT8g53jlDx7IczS3M8zugRyLHBjBv2cZk
+         nB8T1y95TubAX50mXuvdithbPqFImp+UerhHHdGTTEvEgCc0scd7vxltpi3rvwg9wN1n
+         zSBg==
+X-Gm-Message-State: APjAAAV2ISqEYkpnPNbnWFebf46eHN7BYJYDyccihsPQ7w1mnFhg+dAG
+        HTCYCDEUbL2djP47K/4imw==
+X-Google-Smtp-Source: APXvYqw5FQ4e+aIqVsw74a4fj9fZYz5Nsy+tPvDT5b5N8G/g1Ad8B4kx9pwAtrDVKMSqRUmTsoVXSA==
+X-Received: by 2002:a9d:66c1:: with SMTP id t1mr9925887otm.73.1576793389133;
+        Thu, 19 Dec 2019 14:09:49 -0800 (PST)
+Received: from localhost (ip-184-205-0-249.ftwttx.spcsdns.net. [184.205.0.249])
+        by smtp.gmail.com with ESMTPSA id a17sm1700902otp.66.2019.12.19.14.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 13:38:48 -0800 (PST)
-Date:   Thu, 19 Dec 2019 13:38:45 -0800
+        Thu, 19 Dec 2019 14:09:48 -0800 (PST)
+Date:   Thu, 19 Dec 2019 16:09:46 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Peter Chen <peter.chen@nxp.com>,
-        Sebastian Reichel <sre@kernel.org>,
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         Mark Rutland <mark.rutland@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>, od@zcrc.me,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] power/supply: Add generic USB charger driver
-Message-ID: <20191219213845.GA3481@bogus>
-References: <20191211155032.167032-1-paul@crapouillou.net>
- <20191211155032.167032-3-paul@crapouillou.net>
- <20191212091814.GA7035@b29397-desktop>
- <1576270147.3.0@crapouillou.net>
- <VI1PR04MB5327401FFD2D32E937548DD48B510@VI1PR04MB5327.eurprd04.prod.outlook.com>
- <1576493525.3.0@crapouillou.net>
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [RFC PATCH 06/14] usb: devicetree: dwc3: Add max lane and lsm
+Message-ID: <20191219220946.GA24304@bogus>
+References: <cover.1576118671.git.thinhn@synopsys.com>
+ <aa9816c1efcdd492d698b421a94f0771961f414e.1576118671.git.thinhn@synopsys.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1576493525.3.0@crapouillou.net>
+In-Reply-To: <aa9816c1efcdd492d698b421a94f0771961f414e.1576118671.git.thinhn@synopsys.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 11:52:05AM +0100, Paul Cercueil wrote:
-> Hi Peter,
+On Wed, Dec 11, 2019 at 06:49:37PM -0800, Thinh Nguyen wrote:
+> Add a new property to set maximum number of lanes and transfer rated
+> supported for DWC_usb32. By default, the driver will configure the
+> controller to use dual-lane at 10Gbps.
 > 
+> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> ---
+>  Documentation/devicetree/bindings/usb/dwc3.txt | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> Le lun., déc. 16, 2019 at 01:24, Peter Chen <peter.chen@nxp.com> a écrit :
-> > 
-> > >  >>  +
-> > >  >>  +	desc = &charger->desc;
-> > >  >>  +	desc->name = "usb-charger";
-> > >  >>  +	desc->properties = usb_charger_properties;
-> > >  >>  +	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
-> > >  >>  +	desc->get_property = usb_charger_get_property;
-> > >  >>  +	desc->type = POWER_SUPPLY_TYPE_USB;
-> > >  >
-> > >  > What's your further plan for this generic USB charger?
-> > >  > To support BC1.2, we need to know charger type, and how we could
-> > > get
-> > >  > it?
-> > >  >
-> > >  > Peter
-> > > 
-> > >  Well I don't really know. The USB role framework does not give any
-> > > info about
-> > >  what's plugged.
-> > > 
-> > 
-> > What's the use case for this patch set? How it be used?
-> 
-> My devicetree:
-> 
-> usb_otg: usb@13440000 {
-> 	compatible = "ingenic,jz4770-musb", "simple-mfd";
-> 	reg = <0x13440000 0x10000>;
-> 	[...]
-> 
-> 	usb-role-switch;
-> 
-> 	connector {
-> 		compatible = "gpio-usb-b-connector", "usb-b-connector";
-> 		label = "mini-USB";
-> 		type = "mini";
-> 
-> 		id-gpios = <&gpf 18 GPIO_ACTIVE_HIGH>;
-> 		vbus-gpios = <&gpb 5 GPIO_ACTIVE_HIGH>;
-> 		[...]
-> 	};
-> 
-> 	usb_charger: usb-charger {
-> 		compatible = "usb-charger";
+> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> index 66780a47ad85..7da1c4e7d380 100644
+> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> @@ -85,6 +85,10 @@ Optional properties:
+>   - snps,quirk-frame-length-adjustment: Value for GFLADJ_30MHZ field of GFLADJ
+>  	register for post-silicon frame length adjustment when the
+>  	fladj_30mhz_sdbnd signal is invalid or incorrect.
+> + - snps,maximum-lane-count: set to specify the number of lanes to use for
+> +			DWC_usb32 and later. Default is dual-lanes.
 
-What h/w device is this?
+Why do you need this? When is it not the number of lanes the phy has?
 
-> 	};
-> };
+Reuse 'num-lanes' from PCI binding?
+
+> + - snps,maximum-lsm: set to specify the lane speed mantissa to use in Gbps.
+> + 			Default is 10Gbps for SuperSpeed Plus.
+
+So the value is '10' or '10Gbps'. Other valid values?
+
+>   - snps,rx-thr-num-pkt-prd: periodic ESS RX packet threshold count - host mode
+>  			only. Set this and rx-max-burst-prd to a valid,
+>  			non-zero value 1-16 (DWC_usb31 programming guide
+> -- 
+> 2.11.0
 > 
-> The new gpio-usb-connector driver uses the ID/VBUS GPIOs to detect in which
-> state (device, host, unconnected) a OTG connector is. However, that means I
-> cannot use the standard gpio-charger driver to detect the presence of a
-> charger based on the state of the VBUS gpio, since it's already requested
-> here. So the point of this patchset is to provide an alternative to
-> gpio-charger that works with OTG controllers compatible with
-> 'usb-role-switch'.
-
-Why not fix gpio-charger or make whatever 'owns' vbus-gpios to register 
-a charger device?
-
-I guess you could have Vbus sensing with no charging capability, but 
-that sounds like a new property, not a node to me.
-
-Rob
