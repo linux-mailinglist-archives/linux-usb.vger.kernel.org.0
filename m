@@ -2,127 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF391265E1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 16:37:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9AA12666A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 17:10:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726875AbfLSPhR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 10:37:17 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42908 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726776AbfLSPhR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 10:37:17 -0500
-Received: by mail-lf1-f67.google.com with SMTP id y19so4644209lfl.9;
-        Thu, 19 Dec 2019 07:37:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=pld/l8edlik8C/F6nI0tM9RySZZrW4VVQNNmZpZC1jA=;
-        b=nI797VqKqLspJs5Hggp0kqi6l62H2tT8TJxZHoNn+LLYZHEHW1KkiYa7p/gFTmtJII
-         IrheZpDVL/mZbAShCpaRmr1688rHF4isHeE0GG8dHFbznGrxxu462Z3LgnYVXJlT8EQ2
-         /wgJm6srsqRtEcLBvbDU+aaKu7kR72mEaWOemV677IVIeVrhYf37WGSgvctZkE+dplo4
-         fUAl5qjrt5HODuRpHz2DnPVmgQzQwd07WD83f8B2kwAocf/5hU0zacXpSjWuDAwFW1Vp
-         LVdz69iVo91FqOtVkRuCwzW/UZD8rwoMWGJ6CPxjQDNaamz4XHV2jSiWVIDejFmsG5rv
-         euHQ==
+        id S1726801AbfLSQKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 11:10:50 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:34486 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726778AbfLSQKu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 11:10:50 -0500
+Received: by mail-lf1-f66.google.com with SMTP id l18so4767474lfc.1;
+        Thu, 19 Dec 2019 08:10:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pld/l8edlik8C/F6nI0tM9RySZZrW4VVQNNmZpZC1jA=;
-        b=bYUANCsVfYylRcGvFZgT1b5zRXcfAR8lUKToi2zdVQDma5tTQZ7SstgluoHaCwanV8
-         L25xAnDdU13teishFqJ0DV2glRlw/aZE/X95weBpv7J08j9BiYki2eaKjdyitHEII+Um
-         klq78FAXBVXbA6RtfymGa1/46TVG/MeXUiZ92VX8+JHAeObPm2extYaysKg3YLEjsCYf
-         zp07bavOqexBKZn06nJzTcFj9OZZbtVAte5oZAE+whtV683SJmYkQ0RASDGlU+5FqnGg
-         VGUhkZU/TvXvy8jrX/GfTvCVUc5gWTV/mNzgFrvkrCa+dYf0vklQvlgk9ZdgyTRNtvZa
-         upWw==
-X-Gm-Message-State: APjAAAVVNGq6fECP5FbHBK9M6D268+hc3AwM/NFQlo3t3U9lIBGoHOkJ
-        M2M5w1t96unCro1qOuM8Xzvr6MTj
-X-Google-Smtp-Source: APXvYqywFGR/vYDQ7UPpw+oGuLm/wQUUV95WLpswDyBfRcZMhxGMphKd0daOZmBRut6p3Nj1VXF6IA==
-X-Received: by 2002:ac2:44d9:: with SMTP id d25mr5940423lfm.15.1576769834185;
-        Thu, 19 Dec 2019 07:37:14 -0800 (PST)
-Received: from [192.168.2.145] (79-139-233-37.dynamic.spd-mgts.ru. [79.139.233.37])
-        by smtp.googlemail.com with ESMTPSA id l21sm2802849lfh.74.2019.12.19.07.37.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2019 07:37:13 -0800 (PST)
-Subject: Re: [PATCH v1 3/4] usb: phy: tegra: Perform general clean up of the
- code
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Felipe Balbi <balbi@kernel.org>, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20191218175313.16235-1-digetx@gmail.com>
- <20191218175313.16235-4-digetx@gmail.com> <20191219125437.GB1440537@ulmo>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a37a10de-2b40-16af-210c-c69049277f35@gmail.com>
-Date:   Thu, 19 Dec 2019 18:37:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        bh=Q+mWCcB2PjNV8Cf0S7CrD5a7sF3u4PcjJA+VPFUwOwc=;
+        b=f9LjlbQbs8saprawrcF7ocdUvFw/KD3P7iOFeM43L8JGie/fPj/TIhDh/gknI/7JgI
+         Ke/HdQK7lazuyNZugGt4fRL6REp5uIGfkgiLwXtjhivI6H36y8VnKyke+zdL40lCs2/1
+         uUl/k/JVIqOhI9SwOEaU2C3r/LkUYz9g+0qbyyPeI5kbXJr6XersJWLD7yhzyAf4qF0i
+         Dp/IDbNDNuO6VN7n/B8EoIcIIzPrU4l4dJdHVzt7xIT3aEwKdUm10g6+R+KkuAeqLp1A
+         mi+paRivFlqerVooX6BxsSmAgSPhZhoOsUu6a/jfYugTEGCFeBDG0ivyJ5oOWhVDm/2X
+         qmRg==
+X-Gm-Message-State: APjAAAXDOKzrvxNzxHWkiWheFBhEh7fvhJ7J/ONgDKc0HzasVFdXVeXm
+        XLwYaoaBo9wNZMJfqQaBvZ4=
+X-Google-Smtp-Source: APXvYqxtvBGfAe6Dc/6onsWLggo73Oeoxys2KzvUdYqMSyoYVAWxx+JdhRJ+Sml8m43K3PBCpeBqTQ==
+X-Received: by 2002:ac2:420e:: with SMTP id y14mr5960231lfh.145.1576771848251;
+        Thu, 19 Dec 2019 08:10:48 -0800 (PST)
+Received: from xi.terra (c-14b8e655.07-184-6d6c6d4.bbcust.telenor.se. [85.230.184.20])
+        by smtp.gmail.com with ESMTPSA id r21sm3071231ljn.64.2019.12.19.08.10.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 08:10:47 -0800 (PST)
+Received: from johan by xi.terra with local (Exim 4.92.3)
+        (envelope-from <johan@xi.terra>)
+        id 1ihyNw-0001kn-EH; Thu, 19 Dec 2019 17:10:44 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alan Stern <stern@rowland.harvard.edu>, linux-usb@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH] USB: core: fix check for duplicate endpoints
+Date:   Thu, 19 Dec 2019 17:10:16 +0100
+Message-Id: <20191219161016.6695-1-johan@kernel.org>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-In-Reply-To: <20191219125437.GB1440537@ulmo>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-19.12.2019 15:54, Thierry Reding пишет:
-> On Wed, Dec 18, 2019 at 08:53:12PM +0300, Dmitry Osipenko wrote:
->> This patch fixes few dozens of legit checkpatch warnings, adds missed
->> handling of potential error-cases, fixes ULPI clk-prepare refcounting and
->> prettifies code where makes sense. All these clean-up changes are quite
->> minor and do not fix any problems.
->>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/usb/phy/phy-tegra-usb.c | 367 +++++++++++++++++---------------
->>  1 file changed, 197 insertions(+), 170 deletions(-)
-> 
-> This could've been multiple patches to make it easier to review, but
-> either way:
-> 
-> Acked-by: Thierry Reding <treding@nvidia.com>
+Amend the endpoint-descriptor sanity checks to detect all duplicate
+endpoint addresses in a configuration.
 
-Yes, it probably could be separated into 10 patches, but then there is a
-chance that I won't do it because sometimes it takes more time for me to
-write commit message than to make a code change + extra time to re-check
-every patch before sending it out :)
+Commit 0a8fd1346254 ("USB: fix problems with duplicate endpoint
+addresses") added a check for duplicate endpoint addresses within a
+single alternate setting, but did not look for duplicate addresses in
+other interfaces.
 
-> One minor comment below...
-> 
->> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
->> index 15bd253d53c9..76949dbbbdc2 100644
->> --- a/drivers/usb/phy/phy-tegra-usb.c
->> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> [...]
->> @@ -310,13 +315,16 @@ static void ulpi_close(struct tegra_usb_phy *phy)
->>  	}
->>  }
->>  
->> -static void utmip_pad_power_on(struct tegra_usb_phy *phy)
->> +static int utmip_pad_power_on(struct tegra_usb_phy *phy)
->>  {
->> -	unsigned long val, flags;
->> -	void __iomem *base = phy->pad_regs;
->>  	struct tegra_utmip_config *config = phy->config;
->> +	void __iomem *base = phy->pad_regs;
->> +	unsigned long val, flags;
-> 
-> I think technically the "val" variable would have to be u32 because
-> that's what readl() and writel() operate on.
+The current check would also not detect all duplicate addresses when one
+endpoint is as a (bi-directional) control endpoint.
 
-I had the same thought and decided it's not worth the extra effort.
+This specifically avoids overwriting the endpoint entries in struct
+usb_device when enabling a duplicate endpoint, something which could
+potentially lead to crashes or leaks, for example, when endpoints are
+later disabled.
 
-> That could be a separate
-> patch, though and isn't really a big problem.
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
 
-But I'll do it now for complicity, since you're asking about it (in a v2
-perhaps).
+Exploiting this to trigger a crash probably requires a lot more
+malicious intent than the syzbot fuzzer currently possesses, but I think
+we need to plug this nonetheless.
 
-Thank you very much for the reviews!
+Johan
+
+
+ drivers/usb/core/config.c | 70 ++++++++++++++++++++++++++++++++-------
+ 1 file changed, 58 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+index 5f40117e68e7..21291950cc97 100644
+--- a/drivers/usb/core/config.c
++++ b/drivers/usb/core/config.c
+@@ -203,9 +203,58 @@ static const unsigned short super_speed_maxpacket_maxes[4] = {
+ 	[USB_ENDPOINT_XFER_INT] = 1024,
+ };
+ 
+-static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
+-    int asnum, struct usb_host_interface *ifp, int num_ep,
+-    unsigned char *buffer, int size)
++static bool endpoint_is_duplicate(struct usb_endpoint_descriptor *e1,
++		struct usb_endpoint_descriptor *e2)
++{
++	if (e1->bEndpointAddress == e2->bEndpointAddress)
++		return true;
++
++	if (usb_endpoint_xfer_control(e1) || usb_endpoint_xfer_control(e2)) {
++		if (usb_endpoint_num(e1) == usb_endpoint_num(e2))
++			return true;
++	}
++
++	return false;
++}
++
++/*
++ * Check for duplicate endpoint addresses in other interfaces and in the
++ * altsetting currently being parsed.
++ */
++static bool config_endpoint_is_duplicate(struct usb_host_config *config,
++		int inum, int asnum, struct usb_endpoint_descriptor *d)
++{
++	struct usb_endpoint_descriptor *epd;
++	struct usb_interface_cache *intfc;
++	struct usb_host_interface *alt;
++	int i, j, k;
++
++	for (i = 0; i < config->desc.bNumInterfaces; ++i) {
++		intfc = config->intf_cache[i];
++
++		for (j = 0; j < intfc->num_altsetting; ++j) {
++			alt = &intfc->altsetting[j];
++
++			if (alt->desc.bInterfaceNumber == inum &&
++					alt->desc.bAlternateSetting != asnum)
++				continue;
++
++			for (k = 0; k < alt->desc.bNumEndpoints; ++k) {
++				epd = &alt->endpoint[k].desc;
++
++				if (endpoint_is_duplicate(epd, d))
++					return true;
++			}
++		}
++	}
++
++	return false;
++}
++
++static int usb_parse_endpoint(struct device *ddev, int cfgno,
++		struct usb_host_config *config, int inum, int asnum,
++		struct usb_host_interface *ifp, int num_ep,
++		unsigned char *buffer, int size)
+ {
+ 	unsigned char *buffer0 = buffer;
+ 	struct usb_endpoint_descriptor *d;
+@@ -242,13 +291,10 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno, int inum,
+ 		goto skip_to_next_endpoint_or_interface_descriptor;
+ 
+ 	/* Check for duplicate endpoint addresses */
+-	for (i = 0; i < ifp->desc.bNumEndpoints; ++i) {
+-		if (ifp->endpoint[i].desc.bEndpointAddress ==
+-		    d->bEndpointAddress) {
+-			dev_warn(ddev, "config %d interface %d altsetting %d has a duplicate endpoint with address 0x%X, skipping\n",
+-			    cfgno, inum, asnum, d->bEndpointAddress);
+-			goto skip_to_next_endpoint_or_interface_descriptor;
+-		}
++	if (config_endpoint_is_duplicate(config, inum, asnum, d)) {
++		dev_warn(ddev, "config %d interface %d altsetting %d has a duplicate endpoint with address 0x%X, skipping\n",
++				cfgno, inum, asnum, d->bEndpointAddress);
++		goto skip_to_next_endpoint_or_interface_descriptor;
+ 	}
+ 
+ 	endpoint = &ifp->endpoint[ifp->desc.bNumEndpoints];
+@@ -522,8 +568,8 @@ static int usb_parse_interface(struct device *ddev, int cfgno,
+ 		if (((struct usb_descriptor_header *) buffer)->bDescriptorType
+ 		     == USB_DT_INTERFACE)
+ 			break;
+-		retval = usb_parse_endpoint(ddev, cfgno, inum, asnum, alt,
+-		    num_ep, buffer, size);
++		retval = usb_parse_endpoint(ddev, cfgno, config, inum, asnum,
++				alt, num_ep, buffer, size);
+ 		if (retval < 0)
+ 			return retval;
+ 		++n;
+-- 
+2.24.1
+
