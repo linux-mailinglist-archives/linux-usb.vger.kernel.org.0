@@ -2,158 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F4F125CCB
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 09:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7755125DD4
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2019 10:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfLSIiC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Dec 2019 03:38:02 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:13260 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726463AbfLSIiB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 03:38:01 -0500
-Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Thu, 19 Dec
- 2019 16:38:33 +0800
-Subject: Re: [PATCH v2 2/6] dt-bindings: usb: dwc3: Add the Amlogic A1 Family
- DWC3 Glue Bindings
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
+        id S1726880AbfLSJkJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Dec 2019 04:40:09 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:55204 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726713AbfLSJkJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Dec 2019 04:40:09 -0500
+Received: by mail-pj1-f67.google.com with SMTP id ep17so2244539pjb.4
+        for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2019 01:40:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaU6i9zWU3yr9QJvcRz0VGGzrcUKaBIv86YipeMOKo8=;
+        b=LyDg1/LfFyRwWJTxBF/LnsfrTJSpgla5kvA98Hg+eeijCP9Q4VYEvCBGyN5xVxKn7p
+         eEsQscd3wujq8XMHgepAaRQXBH0E1PQZo9FaDL3lWv8qT+wBABdwjQ6wBRbPQczrwZhV
+         xi1HLrIQxvVPsnnXebX2B39JQ8NlNTXox5+ak=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UaU6i9zWU3yr9QJvcRz0VGGzrcUKaBIv86YipeMOKo8=;
+        b=mp1ljvwIzoxyc6Bt+jDZZRFMFislXkqTJM5Co+GKhuiXkNQ2k6ryQ0roJhDbcSKwPZ
+         akSC33sld2s+aigxRk+n/iSC/ia7ej5d9jSAOZkBLVbJIriHpl7PW3cPIIVX0XLy+gzu
+         ggVQ71zla4u7ApbV5ehm8MDCI/8dWGgVUAbf5niDQJLJTIRbeFY+GDu+I9Pk0cu7jh+J
+         Cl1Ug6CqlYDIT8oXAAsjJfije4f7RG1YXdYdGk+4JlJByjoInTxanXrKrr6LutLDBmPo
+         9dsfMjm/Ec1r20Eaa9zkBYydGMEOz06uQB/MKOC4fxB4PpG9H2qLbZ1oDMhxur1kAcZW
+         bUNw==
+X-Gm-Message-State: APjAAAW6RR8n+akBTE0Z7mZP5hHvkVhK9gmcxQuwd2T44RPXN5Qj6/OB
+        XRPOi4wMWyJul8xYnhOMPnlzeGeoRwqghA==
+X-Google-Smtp-Source: APXvYqzL4Uv3f/vYWiTWGoQqppzSjCV/VAXe3mUM5lmKJDJ2u9Tql+pWQk6EMSv57P1oNg9ofZmndA==
+X-Received: by 2002:a17:902:8bc5:: with SMTP id r5mr8257114plo.189.1576748408099;
+        Thu, 19 Dec 2019 01:40:08 -0800 (PST)
+Received: from tfiga.tok.corp.google.com ([2401:fa00:8f:203:f5fe:2a5e:f953:c0ed])
+        by smtp.gmail.com with ESMTPSA id d22sm7057694pfo.187.2019.12.19.01.40.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2019 01:40:07 -0800 (PST)
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>
-CC:     Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com>
- <1576636944-196192-3-git-send-email-hanjie.lin@amlogic.com>
- <daa67976-e2ad-e114-b5fd-87eb5ae00eeb@baylibre.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <c159449b-f266-2b90-fd1b-fc8988bef9e6@amlogic.com>
-Date:   Thu, 19 Dec 2019 16:38:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Changqi Hu <Changqi.Hu@mediatek.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Shik Chen <shik@chromium.org>, Tomasz Figa <tfiga@chromium.org>
+Subject: [PATCH] usb: mtk-xhci: Do not explicitly set the DMA mask
+Date:   Thu, 19 Dec 2019 18:39:54 +0900
+Message-Id: <20191219093954.163417-1-tfiga@chromium.org>
+X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
 MIME-Version: 1.0
-In-Reply-To: <daa67976-e2ad-e114-b5fd-87eb5ae00eeb@baylibre.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.198]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+Content-Transfer-Encoding: 8bit
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The mtk-xhci platform glue sets the DMA mask to 32 bits on its own,
+which was needed before commit fda182d80a0b ("usb: xhci: configure
+32-bit DMA if the controller does not support 64-bit DMA"), but now it
+has no effect, because xhci_gen_setup() sets it up for us according to
+hardware capabilities. Remove the useless code.
 
+Signed-off-by: Tomasz Figa <tfiga@chromium.org>
+---
+ drivers/usb/host/xhci-mtk.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
-On 2019/12/18 21:13, Neil Armstrong wrote:
-> Hi,
-> 
-> On 18/12/2019 03:42, Hanjie Lin wrote:
->> The Amlogic A1 SoC Family embeds 1 USB Controllers:
->>  - a DWC3 IP configured as Host for USB2 and USB3
->>
->> A glue connects the controllers to the USB2 PHY of A1 SoC.
->>
->> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
->> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
->> ---
->>  .../bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml  | 32 ++++++++++++++++++++++
->>  1 file changed, 32 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
->> index 4efb77b..9740027 100644
->> --- a/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
->> +++ b/Documentation/devicetree/bindings/usb/amlogic,meson-g12a-usb-ctrl.yaml
->> @@ -9,6 +9,8 @@ title: Amlogic Meson G12A DWC3 USB SoC Controller Glue
->>  
->>  maintainers:
->>    - Neil Armstrong <narmstrong@baylibre.com>
->> +  - Hanjie Lin <hanjie.lin@amlogic.com>
->> +  - Yue Wang <yue.wang@amlogic.com>
->>  
->>  description: |
->>    The Amlogic G12A embeds a DWC3 USB IP Core configured for USB2 and USB3
->> @@ -22,10 +24,14 @@ description: |
->>    The DWC3 Glue controls the PHY routing and power, an interrupt line is
->>    connected to the Glue to serve as OTG ID change detection.
->>  
->> +  The Amlogic A1 embeds a DWC3 USB IP Core configured for USB2 in
->> +  host-only mode.
->> +
->>  properties:
->>    compatible:
->>      enum:
->>        - amlogic,meson-g12a-usb-ctrl
->> +      - amlogic,meson-a1-usb-ctrl
->>  
->>    ranges: true
->>  
->> @@ -124,4 +130,30 @@ examples:
->>                snps,quirk-frame-length-adjustment;
->>            };
->>      };
->> +  - |
->> +    usb: usb@ffe09000 {
->> +          status = "okay";
->> +          compatible = "amlogic,meson-a1-usb-ctrl";
->> +          reg = <0x0 0xffe09000 0x0 0xa0>;
->> +          #address-cells = <2>;
->> +          #size-cells = <2>;
->> +          ranges;
->>  
->> +          clocks = <&clkc_periphs CLKID_USB_CTRL>,
->> +           <&clkc_periphs CLKID_USB_BUS>,
->> +           <&clkc_periphs CLKID_XTAL_USB_PHY>,
->> +           <&clkc_periphs CLKID_XTAL_USB_CTRL>;
->> +          clock-names = "usb_ctrl", "usb_bus", "xtal_usb_phy", "xtal_usb_ctrl";
->> +          resets = <&reset RESET_USBCTRL>;
->> +          phys = <&usb2_phy0>;
->> +          phy-names = "usb2-phy0";
->> +
->> +          dwc3: usb@ff400000 {
->> +                  compatible = "snps,dwc3";
->> +                  reg = <0x0 0xff400000 0x0 0x100000>;
->> +                  interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
->> +                  dr_mode = "host";
->> +                  snps,dis_u2_susphy_quirk;
->> +                  snps,quirk-frame-length-adjustment = <0x20>;
->> +          };
->> +  };
->>
-> 
-> I doubt this passed the dt_binding_check !
-> 
-> 
-> Please add the clock-names only for amlogic,meson-a1-usb-ctrl,
-> set the phys maxItems to 1 for amlogic,meson-a1-usb-ctrl,
-> and set dr_mode as host in the example or make it required only
-> for amlogic,meson-g12a-usb-ctrl.
-> 
-> Neil
-> 
-> .
-> 
-
-Hi Neil,
-
-It does report errors by dt_binding_check, I will check the list again.
-
-Thanks
-
-Hanjie.lin
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index b18a6baef204a..bfbdb3ceed291 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -488,11 +488,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 		goto disable_clk;
+ 	}
+ 
+-	/* Initialize dma_mask and coherent_dma_mask to 32-bits */
+-	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+-	if (ret)
+-		goto disable_clk;
+-
+ 	hcd = usb_create_hcd(driver, dev, dev_name(dev));
+ 	if (!hcd) {
+ 		ret = -ENOMEM;
+-- 
+2.24.1.735.g03f4e72817-goog
 
