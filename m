@@ -2,290 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B5012769B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 08:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3B81276FD
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 09:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727164AbfLTHiS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 02:38:18 -0500
-Received: from mail-sh.amlogic.com ([58.32.228.43]:56027 "EHLO
-        mail-sh.amlogic.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727084AbfLTHiS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 02:38:18 -0500
-Received: from [10.18.38.198] (10.18.38.198) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1591.10; Fri, 20 Dec
- 2019 15:38:52 +0800
-Subject: Re: [PATCH v2 3/6] phy: amlogic: Add Amlogic A1 USB2 PHY Driver
-To:     Neil Armstrong <narmstrong@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>
-CC:     Yue Wang <yue.wang@amlogic.com>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Carlo Caione <carlo@caione.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Qiufang Dai <qiufang.dai@amlogic.com>,
-        Jian Hu <jian.hu@amlogic.com>,
-        Victor Wan <victor.wan@amlogic.com>,
-        Xingyu Chen <xingyu.chen@amlogic.com>
-References: <1576636944-196192-1-git-send-email-hanjie.lin@amlogic.com>
- <1576636944-196192-4-git-send-email-hanjie.lin@amlogic.com>
- <4cbc4216-4f1b-dab2-fccd-4ece7cfedb77@baylibre.com>
- <da372dff-4467-5d04-c8ae-055f89a5b11b@amlogic.com>
- <e66d35b1-4e85-bde4-abf7-af3f569e64e8@baylibre.com>
-From:   Hanjie Lin <hanjie.lin@amlogic.com>
-Message-ID: <def5256a-a66c-bd46-8765-5cd0cf7fa239@amlogic.com>
-Date:   Fri, 20 Dec 2019 15:38:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.1
+        id S1726327AbfLTIIi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 03:08:38 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3925 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725941AbfLTIIi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 03:08:38 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dfc81640001>; Fri, 20 Dec 2019 00:08:06 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Fri, 20 Dec 2019 00:08:36 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Fri, 20 Dec 2019 00:08:36 -0800
+Received: from [10.19.108.118] (172.20.13.39) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 20 Dec
+ 2019 08:08:32 +0000
+Subject: Re: [Patch V2 01/18] dt-bindings: phy: tegra-xusb: Add
+ usb-role-switch
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Nagarjuna Kristam <nkristam@nvidia.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <jonathanh@nvidia.com>, <mark.rutland@arm.com>,
+        <robh+dt@kernel.org>, <kishon@ti.com>,
+        <devicetree@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1576660591-10383-1-git-send-email-nkristam@nvidia.com>
+ <1576660591-10383-2-git-send-email-nkristam@nvidia.com>
+ <20191219130503.GG1440537@ulmo>
+X-Nvconfidentiality: public
+From:   JC Kuo <jckuo@nvidia.com>
+Message-ID: <fe47fd52-efd0-4f84-d1e4-4bce5571e425@nvidia.com>
+Date:   Fri, 20 Dec 2019 16:08:30 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <e66d35b1-4e85-bde4-abf7-af3f569e64e8@baylibre.com>
+In-Reply-To: <20191219130503.GG1440537@ulmo>
+X-Originating-IP: [172.20.13.39]
+X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
+ HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.38.198]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576829286; bh=LyayuG4FCg05ek5s+CT8p2SyaPPTPq0PabfmeLV6GNk=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=I9taiJ6IKtQQ8y3wM+EAHYxm2958nOsdEBXwHCqpY2JIVHsTwrIS4qYmT2zubSGWT
+         0wgh7PZbYE46aBJuyhFsa9RdnGNdpew+u1IerLA+dQsABZ1LqW6Tk8XjAwD6n0cgbb
+         5jgplE46FS+ZevM7+CIzUgh2qf/Tn071nLBcQOBDWkFToF4HpQX0h/ikYJCc//Nw1v
+         u0EFaLPxSPoBzofu0eLwFUjZC0VcHRRg3v+9WrDE5I/Hp4tzcxQ25pCnC8r776lzHF
+         8TU/zyf08N0Pmf09Q0RS49+8DfF40Ahbju08RQ0NSv3n6EdOqkQssb6LoC3EXWPa3P
+         bBfm/olAahzdA==
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
+On 12/19/19 9:05 PM, Thierry Reding wrote:
+> On Wed, Dec 18, 2019 at 02:46:14PM +0530, Nagarjuna Kristam wrote:
+>> Add usb-role-switch property for Tegra210 and Tegra186 platforms. This
+>> entry is used by XUSB pad controller driver to register for role changes
+>> for OTG/Peripheral capable USB 2 ports.
+>>
+>> Signed-off-by: Nagarjuna Kristam <nkristam@nvidia.com>
+>> ---
+>> V2:
+>>  - Moved usb-role-switch to seperate Required section as suggested by Thierry.
+>>  - Added reference to usb/usb-conn-gpio.txt for connector subnode.
+>> ---
+>>  .../devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt         | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> index 9fb682e..23bf354 100644
+>> --- a/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> +++ b/Documentation/devicetree/bindings/phy/nvidia,tegra124-xusb-padctl.txt
+>> @@ -174,6 +174,12 @@ Required properties:
+>>    - "device": for USB device mode
+>>    - "otg": for USB OTG mode
+>>  
+>> +Required properties for OTG/Peripheral capable USB2 ports:
+>> +- usb-role-switch: Boolean property to indicate that the port support OTG or
+> 
+> "supports", and also, why if it supports OTG *or* peripheral? Doesn't
+> OTG imply peripheral? OTG means it can be either peripheral or host,
+> right? So I think the end of that sentence can be just:
+> 
+> 	"... the port supports OTG."
+An USB OTG port is capable of both USB host and peripheral operations. An USB
+peripheral port can only act as an USB peripheral.
 
-On 2019/12/19 18:12, Neil Armstrong wrote:
-> On 19/12/2019 10:48, Hanjie Lin wrote:
->>
->>
->> On 2019/12/18 21:17, Neil Armstrong wrote:
->>> Hi,
->>>
->>> On 18/12/2019 03:42, Hanjie Lin wrote:
->>>> This adds support for the USB2 PHY found in the Amlogic A1 SoC Family.
->>>>
->>>> It supports host mode only.
->>>>
->>>> Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
->>>> Signed-off-by: Yue Wang <yue.wang@amlogic.com>
->>>> ---
->>>>  drivers/phy/amlogic/phy-meson-g12a-usb2.c | 102 ++++++++++++++++++++++--------
->>>>  1 file changed, 74 insertions(+), 28 deletions(-)
->>>>
->>>> diff --git a/drivers/phy/amlogic/phy-meson-g12a-usb2.c b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->>>> index 9065ffc..2c242d3 100644
->>>> --- a/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->>>> +++ b/drivers/phy/amlogic/phy-meson-g12a-usb2.c
->>>> @@ -146,11 +146,18 @@
->>>>  #define RESET_COMPLETE_TIME					1000
->>>>  #define PLL_RESET_COMPLETE_TIME					100
->>>>  
->>>> +enum {
->>>> +	MESON_USB2_PHY_VERSION_10 = 0,
->>>> +	MESON_USB2_PHY_VERSION_11,
->>>
->>> Are these the real "versions" of the phy or it's made up ?
->>>
->>
->> This version is made up and only for distinguish a1 and g12a.
-> 
-> No problem, in this case simply use the SoC family instead of 10 and 11.
-> 
-> Neil
-> 
-
-Of course, it looks more accurate, I will get rid of phy version in next version.
-
->>
->>>> +	MESON_USB2_PHY_VERSION_COUNT,
->>>> +};
->>>> +
->>>>  struct phy_meson_g12a_usb2_priv {
->>>>  	struct device		*dev;
->>>>  	struct regmap		*regmap;
->>>>  	struct clk		*clk;
->>>>  	struct reset_control	*reset;
->>>> +	int phy_version;
->>>>  };
->>>>  
->>>>  static const struct regmap_config phy_meson_g12a_usb2_regmap_conf = {
->>>> @@ -192,18 +199,33 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
->>>>  		     FIELD_PREP(PHY_CTRL_R17_MPLL_FILTER_PVT2, 2) |
->>>>  		     FIELD_PREP(PHY_CTRL_R17_MPLL_FILTER_PVT1, 9));
->>>>  
->>>> -	regmap_write(priv->regmap, PHY_CTRL_R18,
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
->>>> -		     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
->>>> -		     PHY_CTRL_R18_MPLL_ACG_RANGE);
->>>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10)
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R18,
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
->>>> +			     PHY_CTRL_R18_MPLL_ACG_RANGE);
->>>> +	else if (priv->phy_version == MESON_USB2_PHY_VERSION_11)
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R18,
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LKW_SEL, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_W, 9) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_LK_S, 0x27) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_PFD_GAIN, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ROU, 7) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_DATA_SEL, 3) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BIAS_ADJ, 1) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_BB_MODE, 0) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ALPHA, 3) |
->>>> +			     FIELD_PREP(PHY_CTRL_R18_MPLL_ADJ_LDO, 1) |
->>>> +			     PHY_CTRL_R18_MPLL_ACG_RANGE |
->>>> +			     PHY_CTRL_R18_MPLL_DCO_CLK_SEL);
->>>
->>> The only difference is PHY_CTRL_R18_MPLL_ACG_RANGE | PHY_CTRL_R18_MPLL_DCO_CLK_SEL,
->>> you can easily simplify the code here by using a temp variable.
->>>
->>
->> Yes, it will looks more clearly.
->>
->>>>  
->>>>  	udelay(PLL_RESET_COMPLETE_TIME);
->>>>  
->>>> @@ -227,13 +249,24 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
->>>>  		     FIELD_PREP(PHY_CTRL_R20_USB2_BGR_VREF_4_0, 0) |
->>>>  		     FIELD_PREP(PHY_CTRL_R20_USB2_BGR_DBG_1_0, 0));
->>>>  
->>>> -	regmap_write(priv->regmap, PHY_CTRL_R4,
->>>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_7_0, 0xf) |
->>>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_15_8, 0xf) |
->>>> -		     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_23_16, 0xf) |
->>>> -		     PHY_CTRL_R4_TEST_BYPASS_MODE_EN |
->>>> -		     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_1_0, 0) |
->>>> -		     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_3_2, 0));
->>>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10)
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R4,
->>>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_7_0, 0xf) |
->>>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_15_8, 0xf) |
->>>> +			     FIELD_PREP(PHY_CTRL_R4_CALIB_CODE_23_16, 0xf) |
->>>> +			     PHY_CTRL_R4_TEST_BYPASS_MODE_EN |
->>>> +			     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_1_0, 0) |
->>>> +			     FIELD_PREP(PHY_CTRL_R4_I_C2L_BIAS_TRIM_3_2, 0));
->>>> +	else if (priv->phy_version == MESON_USB2_PHY_VERSION_11) {
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R21,
->>>> +			     PHY_CTRL_R21_USB2_CAL_ACK_EN |
->>>> +			     PHY_CTRL_R21_USB2_TX_STRG_PD |
->>>> +			     FIELD_PREP(PHY_CTRL_R21_USB2_OTG_ACA_TRIM_1_0, 2));
->>>> +
->>>> +		/* Analog Settings */
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R13,
->>>> +			     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
->>>> +	}
->>>>  
->>>>  	/* Tuning Disconnect Threshold */
->>>>  	regmap_write(priv->regmap, PHY_CTRL_R3,
->>>> @@ -241,11 +274,13 @@ static int phy_meson_g12a_usb2_init(struct phy *phy)
->>>>  		     FIELD_PREP(PHY_CTRL_R3_HSDIC_REF, 1) |
->>>>  		     FIELD_PREP(PHY_CTRL_R3_DISC_THRESH, 3));
->>>>  
->>>> -	/* Analog Settings */
->>>> -	regmap_write(priv->regmap, PHY_CTRL_R14, 0);
->>>> -	regmap_write(priv->regmap, PHY_CTRL_R13,
->>>> -		     PHY_CTRL_R13_UPDATE_PMA_SIGNALS |
->>>> -		     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
->>>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10) {
->>>> +		/* Analog Settings */
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R14, 0);
->>>> +		regmap_write(priv->regmap, PHY_CTRL_R13,
->>>> +			     PHY_CTRL_R13_UPDATE_PMA_SIGNALS |
->>>> +			     FIELD_PREP(PHY_CTRL_R13_MIN_COUNT_FOR_SYNC_DET, 7));
->>>> +	}
->>>>  
->>>>  	return 0;
->>>>  }
->>>> @@ -271,6 +306,7 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
->>>>  	struct resource *res;
->>>>  	struct phy_meson_g12a_usb2_priv *priv;
->>>>  	struct phy *phy;
->>>> +	struct device_node *np = dev->of_node;
->>>>  	void __iomem *base;
->>>>  	int ret;
->>>>  
->>>> @@ -286,14 +322,23 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
->>>>  	if (IS_ERR(base))
->>>>  		return PTR_ERR(base);
->>>>  
->>>> +	if (of_device_is_compatible(np, "amlogic,g12a-usb2-phy"))
->>>> +		priv->phy_version = MESON_USB2_PHY_VERSION_10;
->>>> +	else if (of_device_is_compatible(np, "amlogic,a1-usb2-phy"))
->>>> +		priv->phy_version = MESON_USB2_PHY_VERSION_11;
->>>> +	else
->>>> +		return -EINVAL;
->>>
->>> Please use of_device_get_match_data() and a match data for each compatible instead.
->>>
->>
->> OK, I will fix it in next version.
->>
->>>> +
->>>>  	priv->regmap = devm_regmap_init_mmio(dev, base,
->>>>  					     &phy_meson_g12a_usb2_regmap_conf);
->>>>  	if (IS_ERR(priv->regmap))
->>>>  		return PTR_ERR(priv->regmap);
->>>>  
->>>> -	priv->clk = devm_clk_get(dev, "xtal");
->>>> -	if (IS_ERR(priv->clk))
->>>> -		return PTR_ERR(priv->clk);
->>>> +	if (priv->phy_version == MESON_USB2_PHY_VERSION_10) {
->>>> +		priv->clk = devm_clk_get(dev, "xtal");
->>>> +		if (IS_ERR(priv->clk))
->>>> +			return PTR_ERR(priv->clk);
->>>> +	}
->>>>  
->>>>  	priv->reset = devm_reset_control_get(dev, "phy");
->>>>  	if (IS_ERR(priv->reset))
->>>> @@ -322,7 +367,8 @@ static int phy_meson_g12a_usb2_probe(struct platform_device *pdev)
->>>>  
->>>>  static const struct of_device_id phy_meson_g12a_usb2_of_match[] = {
->>>>  	{ .compatible = "amlogic,g12a-usb2-phy", },
->>>> -	{ },
->>>> +	{ .compatible = "amlogic,a1-usb2-phy", },
->>>> +	{ /* Sentinel */ }
->>>>  };
->>>>  MODULE_DEVICE_TABLE(of, phy_meson_g12a_usb2_of_match);
->>>>  
->>>>
->>>
->>> Thanks,
->>> Neil
->>>
->>> .
->>>
->>
->> Thanks,
->> Hanjie.Lin
->>
-> 
-> .
-> 
-
+The micro USB ports found on Jetson TX1/TX2 platforms are micro-AB ports which
+should implement both host and peripheral capabilities. We say such ports
+support OTG. The micro USB port found on Jetson Nano is a micro-B port which
+should implement peripheral capability only. We say such ports support
+peripheral, rather than OTG.
 
 Thanks,
-Hanjie.Lin
+JC
+
+> 
+> Otherwise:
+> 
+> Acked-by: Thierry Reding <treding@nvidia.com>
+> 
