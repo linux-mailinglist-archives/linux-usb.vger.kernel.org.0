@@ -2,102 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 534361283C2
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 22:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D514F12844C
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 23:11:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727732AbfLTVRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 16:17:32 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:34437 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727692AbfLTVRc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Dec 2019 16:17:32 -0500
-Received: by mail-ua1-f68.google.com with SMTP id 1so3760243uao.1
-        for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2019 13:17:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=GO2WaJFp2BJn10wAhz1dDYpMT83EYaH6drA/Rpwtluo=;
-        b=MmU9AaFTQI1s4PmT740X4PjJtayHBrhCcRrTC8cdFEm2zuELvi9WXUrnsdA5Bm4uGr
-         t9lUiGl+yNM2whfPA3vqImJKirXKYqUgbc83lVjHcGwpqeGrJunkOlAY7JV+w1/gkNSn
-         S+y0mTX9DdRX36IPYMPG27GhoL3Z42bQ7bPYDEu9j4ao9im87JmWOqE3IJyhh4IAjHSH
-         kgD2PJqmm91giSRe4CbVeSqOtV95xa+7JDGtdRNZW9EqaiYD5YxZcHgtUpILJ0CLl2oA
-         elXVP22nXgC1mvjo6GYW6SWo42gMuuUD12/B+mbZYZXM884UjbSOsvGae0LsAUDnbfKF
-         vs3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=GO2WaJFp2BJn10wAhz1dDYpMT83EYaH6drA/Rpwtluo=;
-        b=bZ0EpHa1+UftqIytlLqFgwNItoXRjKjK8CrMJFrIj5aT7KevmcDjPdbt+rhiJ602qF
-         LFotb27KbRbQ4iTWzdMunlAkpuwIUsWoAffgTXz+BGcLVPZAGQo+9zfzmx2AiGDAQzIR
-         ZtmUmacM6zmr/9Ro9ai/Ot8StDry2ika9B+WkilKhj1ZLIwj4MIrZSOrxHToNwSU438D
-         BnIRCuIfGPqGKphijERwJH/TdCTmu5bzd3p4GmKv8jqZOdr3pjmTX5jzIoJx2prBKNU9
-         GQV1dwhpPV6285wyDEDxeeJyiS8iYe8aWc2waQ3mKnWsZJ3ycMVo5bKo5XOx6yIGQy/E
-         P0SQ==
-X-Gm-Message-State: APjAAAWklfCc+waVToFko7v2jBIlkHU20RhZWh9XjXck5ftDAN4EnbLa
-        V9tjvFBa0V83KOR5Njp5I7/rin2Dq0nQMTlmMts=
-X-Google-Smtp-Source: APXvYqwaV7JKFKNvxyF/Uk6qG//wtJRMMJAp+ue7tJvzzs8kuIwXF/YOyuNfVEOFcbv84t9JliF/T/fWv64eVAhPI5I=
-X-Received: by 2002:ab0:25c7:: with SMTP id y7mr5771649uan.31.1576876651460;
- Fri, 20 Dec 2019 13:17:31 -0800 (PST)
+        id S1727506AbfLTWLP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 17:11:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35108 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727473AbfLTWLP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Dec 2019 17:11:15 -0500
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 34F43206DA;
+        Fri, 20 Dec 2019 22:11:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576879874;
+        bh=o3HlDsr/siqnvBypoqfes0hM1iU+w9VPO3GGDO30DCY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Bk+/AnavemaMi4clu0XTYMxgz8x2XpfFgSlxqSFF/S1nRrwSuF8yXBq6aNvJ1XzLq
+         BXZY4LONqS80LLzvgCRmnS37q5qmxDt3Z6YlxZ//1p3OjVvaSVUC5qBaGr7xmp171b
+         hnXW70Xm3h2XpCcFk7nrqn030tfE2TaXJCItrEpY=
+Received: by mail-qv1-f53.google.com with SMTP id u10so4140478qvi.2;
+        Fri, 20 Dec 2019 14:11:14 -0800 (PST)
+X-Gm-Message-State: APjAAAWLgh5kEIYExJfOLrtzI1g7XrQ+BiT818QJzSPoNPLdsmdZ6GfY
+        BfiWDuA+gr5/ipuxqLG9YSheFiGUWmRI761EJQ==
+X-Google-Smtp-Source: APXvYqxrgGyYUnVQtwMdPxLJhjvv7v/OzHoM6VSqE3TWWKKTIdvS8IJO01k1ZQwCfgUv7ibbCHD2kx9PtSPl9rbZ9Yc=
+X-Received: by 2002:a0c:f6cd:: with SMTP id d13mr14223740qvo.20.1576879873293;
+ Fri, 20 Dec 2019 14:11:13 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a1f:5f8e:0:0:0:0:0 with HTTP; Fri, 20 Dec 2019 13:17:30
- -0800 (PST)
-Reply-To: inquirysectionbrm1@gmail.com
-From:   BROWN WILLIAMS <marymorgann01@gmail.com>
-Date:   Fri, 20 Dec 2019 13:17:30 -0800
-Message-ID: <CAJqtuEMj+Mm3W0M0Cu8=j7Ot2nRCiHWcLDWPoRFhOHZ++7mkgQ@mail.gmail.com>
-Subject: Greetings Sir/Madam
-To:     undisclosed-recipients:;
+References: <cover.1576118671.git.thinhn@synopsys.com> <b791f032edb8e6a739c342dbd0d2d5faa66ddfb8.1576118671.git.thinhn@synopsys.com>
+ <87mubyvtuh.fsf@kernel.org> <6193f738-03ac-51b5-cdf0-d9b252a50146@synopsys.com>
+ <87d0cswvs9.fsf@kernel.org> <20191219221704.GA29965@bogus> <b48e59f9-5339-b1c9-cc16-604900bd1cc4@synopsys.com>
+In-Reply-To: <b48e59f9-5339-b1c9-cc16-604900bd1cc4@synopsys.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 20 Dec 2019 15:11:00 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqKrRSk0NhqZ5tcus23rWfBzHcxBs8ZR6qv2qR4z_NrD_A@mail.gmail.com>
+Message-ID: <CAL_JsqKrRSk0NhqZ5tcus23rWfBzHcxBs8ZR6qv2qR4z_NrD_A@mail.gmail.com>
+Subject: Re: [RFC PATCH 13/14] usb: devicetree: dwc3: Add property to disable
+ mult TRB fetch
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        John Youn <John.Youn@synopsys.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-GLOBAL FINANCIAL SECURITY MONITORING UNIT
-24/25, The Shard, 32 London Bridge St, London SE1 9SG, UK
-Official E-mail: inquirysectionbrm1@gmail.com
-Phone: +44-7872-201034, Fax: +442039665586
+On Thu, Dec 19, 2019 at 3:52 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>
+> Hi,
+>
+> Rob Herring wrote:
+> > On Fri, Dec 13, 2019 at 09:04:54AM +0200, Felipe Balbi wrote:
+> >> Hi,
+> >>
+> >> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> >>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> >>>>> DWC_usb32 has a feature where it can issue multiple TRB fetch requests.
+> >>>>> Add a new property to limit and only do only single TRB fetch request.
+> >>>>>
+> >>>>> Signed-off-by: Thinh Nguyen <thinhn@synopsys.com>
+> >>>>> ---
+> >>>>>    Documentation/devicetree/bindings/usb/dwc3.txt | 2 ++
+> >>>>>    1 file changed, 2 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc3.txt b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >>>>> index ff35fa6de2eb..29d6f9b1fc70 100644
+> >>>>> --- a/Documentation/devicetree/bindings/usb/dwc3.txt
+> >>>>> +++ b/Documentation/devicetree/bindings/usb/dwc3.txt
+> >>>>> @@ -108,6 +108,8 @@ Optional properties:
+> >>>>>     - snps,num-trb-prefetch: max value to do TRBs cache for DWC_usb32. The value
+> >>>>>                           can be from 1 to DWC_USB32_CACHE_TRBS_PER_TRANSFER.
+> >>>>>                           Default value is DWC_USB32_CACHE_TRBS_PER_TRANSFER.
+> >>>>> + - snps,dis-mult-trb-fetch: set to issue only single TRB fetch request in
+> >>>>> +                 DWC_usb32.
+> >>>> two questions:
+> >>>>
+> >>>> - how is this different from passing 1 to the previous DT binding
+> >>> The previous DT binding is related to the number TRBs to cache while
+> >>> this one is related to whether the controller will send multiple
+> >>> (internal) fetch commands to fetch the TRBs.
+> >>>
+> >>>> - do we know of anybody having issues with multi-trb prefetch?
+> >>> No, we added this for various internal tests.
+> >> We really a better way for you guys to have your test coverage enabled
+> >> with upstream kernel. I wonder if DT guys would accept a set of bindings
+> >> marked as "for testing purposes". In any case, we really need to enable
+> >> Silicon Validation with upstream kernel.
+> > Well, anything would be better than the endless stream of new
+> > properties. Include 'test-mode' in the property names would be fine I
+> > guess.
+> >
+>
+> Generally the properties are for some quirks or configurations that the
+> controller must use to work properly and not for debugging purposes.
+> Unfortunately, this list can be long..
 
+quirks or testing? Now I'm confused, which is it?
 
-Greetings Sir/Madam,
+I'm sure I've said this before (for DWC3), but it is better to have a
+compatible string for each implementation (usually an SoC) so you can
+address new quirks without a dtb change and continually adding new
+properties.
 
-
-We have concluded our global Security careful investigation which revealed
-through our site light radar that you were involved in scam transaction
-perpetrated by some organized syndicates operating from different world,
-World Bank Project Auditors have approved Scam Compensation sum of $4.5
-million United States Dollars global compensation to 800, 00 scam victims,
-your name / email address were among victims approved to receive their scam
-compensation funds this year 2019. Respond to this message for more details
-guiding this process, you will never regret given this opportunity a chance
-hence it will re-position you financially after going through trauma in the
-hands of those crooks.
-
-
-We are going to process your scam compensation according to the World Bank
-scam settlement policy. You have the opportunity to receive your scam
-compensation funds if you respond to this message. Our site light cable
-security devise discovered all the disappointments and extortion you
-suffered in the hands of those crooks operating with impersonated face
-book, hangout, emails, Instagram and other APP devise. You will hear more
-of their antics once you respond to this message. You will hear more
-reveling /shocking antics uses by those crooks, i presumed you may be
-wondering why you have not received any funds as the promised after obeying
-their instructions, give this opportunity the benefit of doubts and see
-what happens next.
-
-
-This scam compensation has legal confirmation documents from necessary
-concerned authorities. Your response is highly imminent. Those crooks have
-no money to pay you, everything is just scam to wreck and make you look
-stupid,and you are not the only person involve in this unprecedented drama.
-You will be surprise what you hear upon your reply to this message.
-(inquirysectionbrm1@gmail.com)
-
-Yours sincerely,
-
-Brown Williams
-
-Coordinating Officer (GFSM
+Rob
