@@ -2,86 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84EAF12762F
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 08:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18485127686
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2019 08:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727165AbfLTHHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Dec 2019 02:07:34 -0500
-Received: from mail.kernel.org ([198.145.29.99]:57426 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726030AbfLTHHe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Dec 2019 02:07:34 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DA83524679;
-        Fri, 20 Dec 2019 07:07:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576825652;
-        bh=DsXW0Gs0MivMncxjTRzFK4LBCsqpOeFEz2Rkne+5NfE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fXeukvU40uyFie6dkYH7y56kHDdbd8KQOw3ROSZuJOw0zDRn1YJanbxxZYtdrNCty
-         aiu+rBTEyQeQG2taT1D/uAafdg99A1yFWCllykAo9T9zd/bM9DfE3lp01e1WMip9iw
-         KlMUv0ae/ufrL45Wq4qCiDRf5BBFaGeQwvuwG5v4=
-Date:   Fri, 20 Dec 2019 08:07:30 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fixes for 5.5-rc3
-Message-ID: <20191220070730.GA2190076@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+        id S1727180AbfLTHfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Dec 2019 02:35:22 -0500
+Received: from smtp25.cstnet.cn ([159.226.251.25]:33806 "EHLO cstnet.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725941AbfLTHfV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Dec 2019 02:35:21 -0500
+X-Greylist: delayed 792 seconds by postgrey-1.27 at vger.kernel.org; Fri, 20 Dec 2019 02:33:15 EST
+Received: from localhost.localdomain (unknown [159.226.5.100])
+        by APP-05 (Coremail) with SMTP id zQCowACXAaENdvxdzOzbAw--.612S3;
+        Fri, 20 Dec 2019 15:19:42 +0800 (CST)
+From:   Xu Wang <vulab@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     pawell@cadence.com, balbi@kernel.org, peter.chen@nxp.com,
+        rogerq@ti.com, colin.king@canonical.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: cdns3: gadget: Remove unneeded variable ret
+Date:   Fri, 20 Dec 2019 07:19:38 +0000
+Message-Id: <1576826378-4387-1-git-send-email-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID: zQCowACXAaENdvxdzOzbAw--.612S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKFyDJF4rKw43KrW7Xr4UCFg_yoWfAFc_Cr
+        109r17Wa4qq3s8Cw1UC3W3G34vk3WDX3WkXFs7Kry3AFyUt34xZryUArWkCFyUZr4UGF1D
+        Cw1xKFZrCF93JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbw8YjsxI4VWDJwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC2
+        0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+        0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+        14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20x
+        vaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+        6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j8GYLUUUUU=
+X-Originating-IP: [159.226.5.100]
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBgMKA10Teec3MgAAsZ
 Sender: linux-usb-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit d1eef1c619749b2a57e514a3fa67d9a516ffa919:
+Remove unneeded variable ret used to store return value,just return 0.
 
-  Linux 5.5-rc2 (2019-12-15 15:16:08 -0800)
+Signed-off-by: Xu Wang <vulab@iscas.ac.cn>
+---
+ drivers/usb/cdns3/gadget.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index 4c1e755..73b75a3 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -2389,7 +2389,6 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+ 	struct cdns3_endpoint *priv_ep;
+ 	u32 bEndpointAddress;
+ 	struct usb_ep *ep;
+-	int ret = 0;
+ 	int val;
+ 
+ 	priv_dev->gadget_driver = NULL;
+@@ -2413,7 +2412,7 @@ static int cdns3_gadget_udc_stop(struct usb_gadget *gadget)
+ 	writel(0, &priv_dev->regs->usb_ien);
+ 	writel(USB_CONF_DEVDS, &priv_dev->regs->usb_conf);
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static const struct usb_gadget_ops cdns3_gadget_ops = {
+-- 
+2.7.4
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.5-rc3
-
-for you to fetch changes up to 6056a0f8ede27b296d10ef46f7f677cc9d715371:
-
-  usb: xhci: Fix build warning seen with CONFIG_PM=n (2019-12-18 19:23:42 +0100)
-
-----------------------------------------------------------------
-USB fixes for 5.5-rc3
-
-Here are some small USB fixes for some reported issues.
-
-Included in here are:
-  - xhci build warning fix
-  - ehci disconnect warning fix
-  - usbip lockup fix and error cleanup fix
-  - typec build fix
-
-All of these have been in linux-next with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Erkka Talvitie (1):
-      USB: EHCI: Do not return -EPIPE when hub is disconnected
-
-Guenter Roeck (1):
-      usb: xhci: Fix build warning seen with CONFIG_PM=n
-
-Suwan Kim (2):
-      usbip: Fix receive error in vhci-hcd when using scatter-gather
-      usbip: Fix error path of vhci_recv_ret_submit()
-
-zhong jiang (1):
-      usb: typec: fusb302: Fix an undefined reference to 'extcon_get_state'
-
- drivers/usb/host/ehci-q.c        | 13 ++++++++++++-
- drivers/usb/host/xhci-pci.c      |  2 +-
- drivers/usb/typec/tcpm/Kconfig   |  1 +
- drivers/usb/usbip/usbip_common.c |  3 +++
- drivers/usb/usbip/vhci_rx.c      | 13 +++++++++----
- 5 files changed, 26 insertions(+), 6 deletions(-)
